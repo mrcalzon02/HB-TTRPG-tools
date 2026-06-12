@@ -8,7 +8,7 @@
     "Rules-facing text should separate open d20 mechanics from setting prose.",
     "Alpha modules are operational campaign aids and are not final balanced rules text.",
     "The seed wiki layer now cross-links lore entries with related tools and generators.",
-    "Staged editors should be fully built one at a time, beginning with the Floating Island / Skyland Editor."
+    "Staged editors should be fully built one at a time. Stage 1 is the Floating Island / Skyland Editor; Stage 2 is the Settlement / Skyport Editor."
   ],
   "modules": [
     {
@@ -50,11 +50,11 @@
     {
       "id": "settlement-generator",
       "section": "generators",
-      "title": "Settlement Generator",
+      "title": "Settlement Generator and Skyport Editor",
       "priority": 5,
-      "status": "alpha",
-      "description": "Creates villages, skyports, fortified outposts, company holdings, farming islands, and frontier towns.",
-      "dataFamilies": ["settlementProfile", "populationProfile", "scarcityProfile", "hookProfile"]
+      "status": "editor-alpha",
+      "description": "Generates and edits detailed settlements with population scale, government, defenses, economy, water, food, trade access, faction presence, social stress, civic assets, local secrets, crisis clocks, and optional island-profile inheritance.",
+      "dataFamilies": ["settlementProfile", "populationProfile", "scarcityProfile", "hookProfile", "wikiDraft", "marketHook", "jobHook"]
     },
     {
       "id": "city-district-generator",
