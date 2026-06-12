@@ -1,0 +1,418 @@
+{
+  "id": "settlement-editor",
+  "title": "Settlement / Skyport Editor",
+  "stage": 2,
+  "status": "editor-alpha",
+  "purpose": "Create a detailed Kaysender settlement profile that can consume island pressure and output civic structure, scarcity, defenses, markets, factions, jobs, crisis clocks, and wiki-ready settlement records.",
+  "sourceThemes": [
+    "Settlements in Kaysender survive inside unstable geography, shifting trade access, food and water scarcity, and unpredictable sky routes.",
+    "Small sky settlements may be agricultural hubs, fortified villages, guild camps, dragon-tithed communities, pirate refuges, or neutral-ground trade stops.",
+    "Dunhallow Roost demonstrates a useful settlement model: small population, agricultural output, weak militia, trade dependence, draconic tithe pressure, and tavern-centered faction observation.",
+    "Population, defenses, leadership, economy, water, food, faction pressure, and crisis state should be generated together because none of them exist separately in a skyborne survival settlement.",
+    "Cultural adaptation should affect civic architecture, emergency planning, defenses, water handling, food security, trade customs, and settlement morale."
+  ],
+  "controls": [
+    { "id": "name", "label": "Settlement Name", "type": "text", "default": "Unnamed Skyport" },
+    {
+      "id": "settlementType",
+      "label": "Settlement Type",
+      "type": "select",
+      "default": "small fortified village",
+      "options": [
+        "temporary sky camp",
+        "small fortified village",
+        "agricultural island town",
+        "minor skyport",
+        "guild extraction camp",
+        "dragon-tithed hamlet",
+        "pilgrim refuge",
+        "military watchpost",
+        "neutral-ground tavern stop",
+        "pirate-tolerated harbor",
+        "crowded trade district",
+        "evacuated ruin settlement"
+      ]
+    },
+    {
+      "id": "populationScale",
+      "label": "Population Scale",
+      "type": "select",
+      "default": "small 150-300",
+      "options": [
+        "tiny 20-80",
+        "small 150-300",
+        "modest 300-800",
+        "large village 800-2000",
+        "town 2000-8000",
+        "crowded skyport 8000-25000",
+        "city district 25000+",
+        "depopulated remnant"
+      ]
+    },
+    {
+      "id": "governmentType",
+      "label": "Government / Authority",
+      "type": "select",
+      "default": "elected mayor and elder council",
+      "options": [
+        "elected mayor and elder council",
+        "guild factor administration",
+        "militia captaincy",
+        "dragon-appointed reeve",
+        "merchant council",
+        "temple stewardship",
+        "clan moot",
+        "pirate compact",
+        "company foreman rule",
+        "noble charter governor",
+        "informal tavern neutrality",
+        "contested leadership"
+      ]
+    },
+    {
+      "id": "defensePosture",
+      "label": "Defense Posture",
+      "type": "select",
+      "default": "poor militia and watch bells",
+      "options": [
+        "no organized defense",
+        "poor militia and watch bells",
+        "trained militia",
+        "wooden palisades and cliff gates",
+        "stone redoubts and shelters",
+        "mercenary contract",
+        "ballista nests and signal towers",
+        "warded gates and magical alarms",
+        "garrisoned skyfort dock",
+        "secret evacuation tunnels",
+        "neutral-ground deterrence",
+        "dragon-enforced obedience"
+      ]
+    },
+    {
+      "id": "economyBase",
+      "label": "Economic Base",
+      "type": "select",
+      "default": "skygrain and airfruit agriculture",
+      "options": [
+        "skygrain and airfruit agriculture",
+        "sheffel wool and textiles",
+        "water trade and cistern control",
+        "airship repair and docking",
+        "ore and skystone extraction",
+        "salvage and wreck breaking",
+        "pilgrimage hosting",
+        "market brokerage and cargo exchange",
+        "alchemical herb cultivation",
+        "smuggling and quiet contraband",
+        "military provisioning",
+        "bare subsistence"
+      ]
+    },
+    {
+      "id": "waterStatus",
+      "label": "Water Status",
+      "type": "select",
+      "default": "rationed cisterns",
+      "options": [
+        "secure reservoir",
+        "rationed cisterns",
+        "rain capture network",
+        "cloud dew collectors",
+        "tainted wells or tanks",
+        "import dependent",
+        "water auction economy",
+        "dragon tithe depleted",
+        "pirate-blockaded supply",
+        "hidden emergency reserve",
+        "recently sabotaged source"
+      ]
+    },
+    {
+      "id": "foodStatus",
+      "label": "Food Status",
+      "type": "select",
+      "default": "tight but stable",
+      "options": [
+        "surplus exports",
+        "tight but stable",
+        "rationed stores",
+        "import dependent",
+        "crop blight",
+        "herd disease",
+        "famine risk",
+        "black-market hoarding",
+        "festival abundance masking debt",
+        "dragon tithe depleted"
+      ]
+    },
+    {
+      "id": "tradeAccess",
+      "label": "Trade Access",
+      "type": "select",
+      "default": "minor route access",
+      "options": [
+        "major trade lane",
+        "minor route access",
+        "seasonal route only",
+        "requires local pilot",
+        "storm-disrupted route",
+        "pirate-watched route",
+        "dragon-permitted route",
+        "guild-controlled docking",
+        "hidden approach",
+        "cut off from trade"
+      ]
+    },
+    {
+      "id": "factionPresence",
+      "label": "Faction Presence",
+      "type": "select",
+      "default": "local merchant guild",
+      "options": [
+        "none obvious",
+        "local merchant guild",
+        "Surveyor's Guild office",
+        "Skyweaver Consortium contract",
+        "Dragon Lord collectors",
+        "Black Fleet informants",
+        "Free Sky Brotherhood cell",
+        "Draconic Empire observer",
+        "mercenary company recruiter",
+        "criminal syndicate broker",
+        "temple agent",
+        "rival settlement delegation"
+      ]
+    },
+    {
+      "id": "socialStress",
+      "label": "Social Stress",
+      "type": "select",
+      "default": "post-tithe resentment",
+      "options": [
+        "post-tithe resentment",
+        "water ration anger",
+        "food price panic",
+        "militia distrust",
+        "guild debt trap",
+        "refugee crowding",
+        "faction paranoia",
+        "labor strike",
+        "neutral-ground tension",
+        "religious schism",
+        "leadership succession dispute",
+        "quiet but exhausted"
+      ]
+    },
+    {
+      "id": "civicAsset",
+      "label": "Civic Asset",
+      "type": "select",
+      "default": "central tavern and message board",
+      "options": [
+        "central tavern and message board",
+        "windmill grainworks",
+        "public cistern hall",
+        "skyship dock crane",
+        "old stone shelter",
+        "signal tower",
+        "healer's house",
+        "guild counting room",
+        "neutral-ground inn",
+        "hidden evacuation skiff",
+        "weather vane observatory",
+        "community sheepfold"
+      ]
+    },
+    {
+      "id": "localSecret",
+      "label": "Local Secret",
+      "type": "select",
+      "default": "someone reports to a distant power",
+      "options": [
+        "someone reports to a distant power",
+        "the water reserve is larger than admitted",
+        "a pirate family is protected locally",
+        "the tithe count was falsified",
+        "a hidden ruin lies under the settlement",
+        "the mayor is losing control",
+        "the militia is underpaid and angry",
+        "the guild owns the debt of half the town",
+        "a dragon informant watches the tavern",
+        "a skybeast nesting site is being concealed",
+        "the trade map is deliberately outdated",
+        "the settlement is preparing to evacuate"
+      ]
+    },
+    {
+      "id": "crisisClock",
+      "label": "Current Crisis Clock",
+      "type": "select",
+      "default": "tithe fleet recently departed",
+      "options": [
+        "tithe fleet recently departed",
+        "water stores will fail within days",
+        "pirates are expected before dawn",
+        "storm season will close the route",
+        "militia refuses unpaid duty",
+        "food convoy is overdue",
+        "disease spreads through herds",
+        "dock crane has collapsed",
+        "faction envoy has vanished",
+        "black-market riot is forming",
+        "dragon collector is returning early",
+        "island drift threatens evacuation"
+      ]
+    }
+  ],
+  "scoring": {
+    "survivability": {
+      "waterStatus": {
+        "secure reservoir": 4,
+        "rain capture network": 3,
+        "cloud dew collectors": 2,
+        "hidden emergency reserve": 2,
+        "rationed cisterns": 0,
+        "water auction economy": -1,
+        "import dependent": -2,
+        "tainted wells or tanks": -3,
+        "dragon tithe depleted": -3,
+        "pirate-blockaded supply": -4,
+        "recently sabotaged source": -4
+      },
+      "foodStatus": {
+        "surplus exports": 4,
+        "tight but stable": 1,
+        "festival abundance masking debt": 0,
+        "rationed stores": -1,
+        "import dependent": -2,
+        "black-market hoarding": -2,
+        "crop blight": -3,
+        "herd disease": -3,
+        "dragon tithe depleted": -3,
+        "famine risk": -4
+      },
+      "defensePosture": {
+        "no organized defense": -4,
+        "poor militia and watch bells": -2,
+        "trained militia": 1,
+        "wooden palisades and cliff gates": 2,
+        "stone redoubts and shelters": 3,
+        "mercenary contract": 2,
+        "ballista nests and signal towers": 3,
+        "warded gates and magical alarms": 3,
+        "garrisoned skyfort dock": 4,
+        "secret evacuation tunnels": 2,
+        "neutral-ground deterrence": 1,
+        "dragon-enforced obedience": 0
+      }
+    },
+    "tradeValue": {
+      "economyBase": {
+        "water trade and cistern control": 5,
+        "airship repair and docking": 5,
+        "market brokerage and cargo exchange": 4,
+        "skygrain and airfruit agriculture": 3,
+        "sheffel wool and textiles": 3,
+        "ore and skystone extraction": 4,
+        "salvage and wreck breaking": 3,
+        "alchemical herb cultivation": 3,
+        "pilgrimage hosting": 2,
+        "military provisioning": 2,
+        "smuggling and quiet contraband": 2,
+        "bare subsistence": -2
+      },
+      "tradeAccess": {
+        "major trade lane": 5,
+        "minor route access": 2,
+        "seasonal route only": 1,
+        "requires local pilot": 1,
+        "guild-controlled docking": 1,
+        "dragon-permitted route": 0,
+        "hidden approach": 0,
+        "storm-disrupted route": -2,
+        "pirate-watched route": -3,
+        "cut off from trade": -5
+      }
+    },
+    "unrestRisk": {
+      "socialStress": {
+        "quiet but exhausted": 1,
+        "post-tithe resentment": 3,
+        "water ration anger": 4,
+        "food price panic": 4,
+        "militia distrust": 3,
+        "guild debt trap": 3,
+        "refugee crowding": 3,
+        "faction paranoia": 4,
+        "labor strike": 4,
+        "neutral-ground tension": 3,
+        "religious schism": 4,
+        "leadership succession dispute": 5
+      },
+      "factionPresence": {
+        "none obvious": 0,
+        "local merchant guild": 1,
+        "Surveyor's Guild office": 1,
+        "Skyweaver Consortium contract": 2,
+        "mercenary company recruiter": 2,
+        "temple agent": 2,
+        "rival settlement delegation": 3,
+        "criminal syndicate broker": 4,
+        "Black Fleet informants": 5,
+        "Free Sky Brotherhood cell": 4,
+        "Draconic Empire observer": 3,
+        "Dragon Lord collectors": 5
+      },
+      "crisisClock": {
+        "tithe fleet recently departed": 3,
+        "water stores will fail within days": 5,
+        "pirates are expected before dawn": 5,
+        "storm season will close the route": 3,
+        "militia refuses unpaid duty": 4,
+        "food convoy is overdue": 4,
+        "disease spreads through herds": 4,
+        "dock crane has collapsed": 3,
+        "faction envoy has vanished": 4,
+        "black-market riot is forming": 5,
+        "dragon collector is returning early": 5,
+        "island drift threatens evacuation": 5
+      }
+    }
+  },
+  "outputTemplates": {
+    "summary": "{name} is a {settlementType} with a {populationScale} population. It is governed by {governmentType}, defended by {defensePosture}, and sustained by {economyBase}. Water status is {waterStatus}; food status is {foodStatus}; trade access is {tradeAccess}.",
+    "gmNoteTemplates": [
+      "The current crisis clock is: {crisisClock}. This should be visible in rumors, prices, guard behavior, and job availability.",
+      "Faction presence is {factionPresence}; use this to decide who watches the docks, controls information, or profits from scarcity.",
+      "The settlement's most important civic asset is {civicAsset}. Put scenes there early.",
+      "Local secret: {localSecret}. This should complicate at least one job, market scene, or negotiation."
+    ],
+    "leadershipHooks": [
+      "Leadership authority comes from {governmentType}, but social stress is currently {socialStress}.",
+      "The leader's first public problem is {crisisClock}; their private problem is {localSecret}.",
+      "If the players help, leadership offers access to {civicAsset} or restricted trade information."
+    ],
+    "marketHooks": [
+      "Market prices should react to {waterStatus}, {foodStatus}, and {tradeAccess}.",
+      "The main export or trade leverage is {economyBase}; the main market distortion is {socialStress}.",
+      "A shopkeeper knows about {localSecret}, but will only talk if the party addresses {crisisClock}."
+    ],
+    "factionHooks": [
+      "The most visible outside pressure is {factionPresence}.",
+      "A faction representative wants control over {civicAsset} because of {economyBase}.",
+      "The crisis clock gives {factionPresence} an excuse to expand influence."
+    ],
+    "defenseHooks": [
+      "Defenses are defined by {defensePosture}; test them against {crisisClock}.",
+      "If violence erupts, the first defensive failure should involve {tradeAccess}, {civicAsset}, or the water supply.",
+      "The militia, guards, or enforcers are politically tied to {governmentType}."
+    ],
+    "jobHooks": [
+      "Recover or protect the settlement's access to {waterStatus} before the crisis clock worsens.",
+      "Investigate {localSecret} while {factionPresence} watches from the edges of town.",
+      "Escort or repair trade access because the settlement relies on {economyBase}.",
+      "Resolve {socialStress} before it turns the population against {governmentType}."
+    ]
+  }
+}
