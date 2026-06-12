@@ -1,0 +1,197 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.2.0",
+  "entries": [
+    {
+      "id": "peoples-of-kaysender",
+      "title": "Peoples of Kaysender",
+      "category": "Peoples",
+      "summary": "Kaysender's peoples shape the setting through survival methods, airship traditions, settlement styles, trade roles, magical practices, and political identities.",
+      "body": [
+        "The peoples of Kaysender are not only ancestry labels. They are settlement logic, construction style, shipbuilding preference, survival method, trade habit, and political force. Each people has a way of responding to [[floating-islands|unstable skylands]], [[scarcity-loop|scarcity]], [[airships|airship travel]], and the dangers of frontier life.",
+        "The core cultural groups currently extracted for the wiki are [[dwager|Dwager]], [[dragon-kin|Dragon Kin]], [[lizzzefaire|Lizzzefaire]], [[hume|Hume]], [[fae|Fae]], [[halflings|Halflings]], and [[gezistack|Gezistack]]. They should eventually influence settlement architecture, ship design, market goods, faction reputation, NPC templates, tool outputs, and local conflicts.",
+        "This page is the parent index for cultural adaptation tags in the editors. When an island or settlement uses a dominant adaptation style, the entry should link back to the people most associated with that response."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Use",
+          "body": [
+            "Island profiles should use peoples as adaptation methods: reinforced stonework, living-root wards, gyro-anchors, mobile survival camps, caravan markets, hybrid frontier engineering, or dragon-command hierarchy.",
+            "Settlement profiles should use peoples to influence government, defenses, market goods, guild presence, militia behavior, trade customs, and local social stress."
+          ]
+        }
+      ],
+      "tags": ["peoples", "cultures", "ancestry", "settlements", "adaptation"],
+      "relatedEntries": ["dwager", "dragon-kin", "lizzzefaire", "hume", "fae", "halflings", "gezistack", "floating-islands", "airships"],
+      "relatedModules": ["settlement-generator", "floating-island-generator", "npc-crew-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "dwager",
+      "title": "Dwager / Dwarves",
+      "category": "Peoples",
+      "summary": "The Dwager are master craftspeople, miners, stoneworkers, fortress builders, and preservers of ancient craft traditions.",
+      "body": [
+        "The Dwager are revered across Kaysender for their skill in crafting, mining, fortress construction, and stonework. Their culture is rooted in strict honor codes, family loyalty, practical endurance, and the preservation of ancient techniques. They treat durable construction as both survival method and cultural expression.",
+        "In a world of unstable landmasses, Dwager settlements should feel like defiance. They carve into stone, brace cliff faces, reinforce foundations, protect halls, and turn dangerous skyland geology into defensible architecture. Even when a Dwager holding is isolated, it should feel built to last longer than the age that made it.",
+        "Dwager craft is not limited to buildings. Their logic carries into [[airships|airships]], industrial workshops, mining operations, fortified docks, siege platforms, metalwork, anchoring systems, and heavy core manufacture. A Dwager solution may be expensive and heavy, but it is meant to survive abuse.",
+        "In play, Dwager influence should show up through stone redoubts, reinforced cistern halls, heavy docks, guild workshops, oath-bound contracts, old grudges, guarded mines, and long-term infrastructure. A Dwager settlement or airship can become a reliable asset, but gaining trust may require honoring contract, craft, kin, and memory."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Island Editor: use Dwager adaptation for reinforced foundations, stone anchors, mine scars, quarry pits, old redoubts, and high stability with high maintenance costs.",
+            "Airship Editor: use Dwager hull or core options for durable, heavy-duty, reliable, less nimble vessels with strong maintenance traditions."
+          ]
+        }
+      ],
+      "tags": ["Dwager", "dwarves", "craft", "mining", "fortresses", "stonework"],
+      "relatedEntries": ["peoples-of-kaysender", "floating-islands", "airships", "dwarven-airship-core"],
+      "relatedModules": ["floating-island-generator", "settlement-generator", "airship-vessel-generator", "airship-core-builder", "crafting-gadget-creator"]
+    },
+    {
+      "id": "dragon-kin",
+      "title": "Dragon Kin / Dragonborn",
+      "category": "Peoples",
+      "summary": "The Dragon Kin are proud, powerful descendants of dragons, associated with strength, leadership, fire, magic, territorial kingdoms, and draconic honor.",
+      "body": [
+        "The Dragon Kin trace their bloodline to the great dragons of Kaysender's skies. They are physically formidable, long-lived, and deeply associated with fire, magic, strength, leadership, and territorial pride. Their societies often reflect the will, symbolism, and discipline of draconic ancestry.",
+        "Dragon Kin cultures are built around honor, command, power, and the defense of territory. They are feared and respected because they can act as warriors, rulers, enforcers, negotiators, and living symbols of draconic legitimacy. Their presence in a region should change how others behave.",
+        "Not every Dragon Kin community must be tyrannical, but their cultural gravity should be intense. Their settlements may be martial, ceremonial, hierarchical, or dominated by obligations to dragon houses and territorial powers. Their airship traditions should lean toward armored profiles, elemental cores, proud silhouettes, and command presence.",
+        "Dragon Kin also connect naturally to [[dragon-lords|Dragon Lords and tribute networks]]. A settlement under Dragon Kin influence may be protected, taxed, controlled, or watched. A Dragon Kin vessel may carry tribute papers, serve a martial patrol, or exist as a diplomatic threat."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Settlement Editor: use Dragon Kin influence for high-defense settlements, tribute politics, martial government, dragon-appointed authorities, and public ceremony.",
+            "Airship Editor: use Dragon Kin hull/core options for elemental identity, armored prow design, high command presence, and legal entanglement with dragon territories."
+          ]
+        }
+      ],
+      "tags": ["Dragon Kin", "dragonborn", "dragons", "honor", "fire", "territory"],
+      "relatedEntries": ["peoples-of-kaysender", "dragon-lords", "airships", "dragon-kin-airship-core"],
+      "relatedModules": ["settlement-generator", "airship-vessel-generator", "airship-core-builder", "draconic-tithe-generator"]
+    },
+    {
+      "id": "lizzzefaire",
+      "title": "Lizzzefaire / Lizardfolk",
+      "category": "Peoples",
+      "summary": "The Lizzzefaire are resilient survivalists, hunters, gatherers, and close-knit tribal communities adapted to harsh skyland environments.",
+      "body": [
+        "The Lizzzefaire are smaller but exceptionally resilient, known for agility, endurance, hunting, gathering, and survival in harsh environments. Their communities often form tight, practical social structures across wild or dangerous floating islands.",
+        "Lizzzefaire culture is deeply connected to the natural world. In Kaysender terms, that means they should understand terrain, water signs, animal movement, edible resources, predator behavior, and unsafe skyland conditions better than many settled groups. They are likely to know when a place is dying before officials admit it.",
+        "Their settlements may be mobile, hidden, seasonal, or distributed rather than monumental. They can thrive where other peoples fail, but that makes them targets for exploitation by guilds, slavers, military scouts, and desperate settlements seeking survival knowledge.",
+        "In play, Lizzzefaire communities are useful as guides, hunters, scouts, ecological interpreters, survival allies, and suspicious witnesses. Their knowledge can be the difference between a route, settlement, or expedition surviving the sky."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Island Editor: use Lizzzefaire adaptation for hidden camps, mobile water routes, hunting pressure, taboo ecology, and survival paths through hostile terrain.",
+            "Encounter Generator: use Lizzzefaire guides, scouts, hunters, or territorial defenders when ecology and survival knowledge matter more than city politics."
+          ]
+        }
+      ],
+      "tags": ["Lizzzefaire", "lizardfolk", "survival", "hunters", "tribes", "ecology"],
+      "relatedEntries": ["peoples-of-kaysender", "sky-ecology", "floating-islands", "scarcity-loop"],
+      "relatedModules": ["floating-island-generator", "sky-ecology-generator", "encounter-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "hume",
+      "title": "Hume / Humans",
+      "category": "Peoples",
+      "summary": "The Hume are ambitious, adaptable, widespread, and politically flexible, found in merchant cities, farming settlements, exploration ventures, and hybrid engineering traditions.",
+      "body": [
+        "The Hume are defined by curiosity, ambition, adaptability, and scale. They are physically less imposing than some peoples, but they compensate through alliance-making, improvisation, technical adoption, settlement spread, diplomacy, and conflict. Hume societies appear across Kaysender in many forms.",
+        "Because Hume communities vary so widely, they are useful as the setting’s connective tissue. They may be farmers, merchants, explorers, settlers, soldiers, engineers, officials, smugglers, or opportunists. They are often catalysts for change because they adopt what works and push into places others avoid.",
+        "Hume engineering is especially important in the airship layer. Human methods frequently blend borrowed Dwager and Gezistack techniques with local improvisation, practical workshops, scavenged components, and whatever magic or metal is available. This makes their solutions accessible, less elegant, and often more failure-prone than older traditions.",
+        "In play, Hume settlements are ideal for mixed populations, frontier compromises, unstable politics, rapid growth, debt pressure, and hybrid technology. A Hume solution may be rough, fast, ambitious, and good enough to survive one more season."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Settlement Editor: use Hume influence for frontier towns, mixed governance, improvised stabilizers, rapid construction, and political flexibility.",
+            "Airship Editor: use Hume hybrid cores for utilitarian, patchwork, relatively affordable vessels with broad availability and greater maintenance risk."
+          ]
+        }
+      ],
+      "tags": ["Hume", "humans", "adaptability", "ambition", "frontier", "hybrid engineering"],
+      "relatedEntries": ["peoples-of-kaysender", "human-airship-core", "floating-islands", "airships"],
+      "relatedModules": ["settlement-generator", "airship-vessel-generator", "airship-core-builder", "organization-operations-tracker"]
+    },
+    {
+      "id": "fae",
+      "title": "Fae / Elves",
+      "category": "Peoples",
+      "summary": "The Fae are ancient, magically adept stewards of nature and old ways, associated with arcane knowledge, living systems, wards, and refined skyland traditions.",
+      "body": [
+        "The Fae bring ancient wisdom, long memory, graceful magic, and deep stewardship of nature into Kaysender. Their lifespans and magical traditions make them natural keepers of old knowledge, old routes, old wards, and sacred relationships with skyland ecology.",
+        "Fae culture should feel reverent, elegant, patient, and difficult for outsiders to fully understand. Their settlements may be built around living roots, natural magic, careful attunement, old guardianship, and a refusal to separate craft from beauty or function from meaning.",
+        "In the airship layer, Fae traditions become especially distinct through Elven-style attuned cores and living-lattice hulls. These are not generic engines. They may require a proper operator, spiritual permission, ancestral rites, and a bond with the Weave or natural magical forces.",
+        "In play, Fae influence can create settlements and ships that are highly capable but politically restrictive. A Fae vessel may be beautiful, efficient, and sacred, but not freely usable by anyone who can pull a lever. A Fae settlement may offer help only if a route, creature, or island spirit is respected."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Island Editor: use Fae adaptation for living-root anchors, old wards, sacred ecology, hidden springs, and taboo terrain.",
+            "Airship Editor: use Fae hull/core options for elegant, high-value, operator-attuned vessels with strong cultural restrictions."
+          ]
+        }
+      ],
+      "tags": ["Fae", "elves", "magic", "nature", "wards", "attunement"],
+      "relatedEntries": ["peoples-of-kaysender", "elven-airship-core", "sky-ecology", "floating-islands"],
+      "relatedModules": ["floating-island-generator", "airship-vessel-generator", "airship-core-builder", "sky-ecology-generator"]
+    },
+    {
+      "id": "halflings",
+      "title": "Halflings",
+      "category": "Peoples",
+      "summary": "Halflings are resilient, practical, hospitable, and community-binding, often thriving as merchants, farmers, innkeepers, caravan families, and social glue across Kaysender.",
+      "body": [
+        "Halflings are small in stature but resilient in spirit, known for warmth, hospitality, practicality, appetite, trade sense, family networks, and an ability to hold mixed communities together. In Kaysender, that makes them more important than their size suggests.",
+        "A Halfling presence in a settlement often means there is a tavern, a market table, a family network, a food connection, a rumor circuit, or a pragmatic solution to a local crisis. They excel as merchants, farmers, innkeepers, caravan operators, and community brokers.",
+        "Halfling adaptation to skyland instability should emphasize mobility, hospitality, portable culture, flexible trade, and survival through relationships. A Halfling caravan deck, inn, or market family may know more about a route than the official guild office.",
+        "In play, Halflings are excellent anchors for local scenes: the tavern that hears everything, the family that feeds refugees, the trader who knows which water barrels are false, or the innkeeper who quietly protects neutral ground."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Settlement Editor: use Halfling influence for taverns, neutral-ground inns, market families, food culture, rumor networks, and community resilience.",
+            "Market Generator: use Halflings for traveling merchants, food sellers, innkeepers, caravan families, and route gossip."
+          ]
+        }
+      ],
+      "tags": ["Halflings", "hospitality", "markets", "innkeepers", "farmers", "community"],
+      "relatedEntries": ["peoples-of-kaysender", "water-trade", "scarcity-loop", "floating-islands"],
+      "relatedModules": ["settlement-generator", "shop-market-generator", "job-board-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "gezistack",
+      "title": "Gezistack / Gnomes",
+      "category": "Peoples",
+      "summary": "The Gezistack are inventive gnomish engineers, experimenters, machine-builders, and magical technicians whose devices combine arcane theory with mechanical ingenuity.",
+      "body": [
+        "The Gezistack are the gnomish inventors and technical experimenters of Kaysender. Their culture is tied to machines, arcane mechanisms, precision, adjustment, and the constant refinement of ideas. They are likely to see a skyland problem as an engineering challenge waiting for a dangerous prototype.",
+        "Gezistack craft is often versatile, compact, intricate, and prone to variation. Their devices may be excellent because they are finely tuned, or terrifying because no two are exactly alike. This makes them perfect for experimental airships, gyro-anchors, clockwork docks, crystal circuits, and improvised stabilizers.",
+        "In airship work, Gezistack traditions produce crystal-gear hybrid cores and mechanical-arcane propulsion systems. These often grant fine control, adaptability, and unusual performance, but they may require constant adjustment and specialized knowledge.",
+        "In play, Gezistack influence should add innovation, technical opportunities, equipment complications, experimental tools, and brilliant failure. A Gezistack device can save the route, explode the dock, or do both in the same afternoon."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Island Editor: use Gezistack adaptation for gyro-anchors, machine stabilizers, crystal systems, and experimental island-control devices.",
+            "Airship Editor: use Gezistack cores for compact, finely controlled, adaptable ships with adjustment requirements and prototype risk."
+          ]
+        }
+      ],
+      "tags": ["Gezistack", "gnomes", "engineering", "machines", "experiments", "airship cores"],
+      "relatedEntries": ["peoples-of-kaysender", "gnomish-airship-core", "airships", "floating-islands"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "crafting-gadget-creator", "floating-island-generator"]
+    }
+  ]
+}
