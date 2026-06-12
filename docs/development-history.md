@@ -97,3 +97,19 @@ Included:
 The sheet is now labeled **AD and D 3.5 - Hypertext D20 compatible character sheet**. The Character Information panel is promoted to a full-width top panel, while Stats/Saves/Combat Basics, Skills, and Weapons/Armor/Equipment sit in a wider three-column row beneath it.
 
 The layout polish adds wider site width, more internal field spacing, broader Character Information columns, more readable Initiative/Speed and combat fields, safer table spacing, and horizontal overflow protection for dense weapon rows. A title migration script updates older local autosave titles from the previous D&D 3.5 wording to the new Hypertext D20-compatible label.
+
+## 2026-06-12 - Airship / Vessel editor-alpha
+
+Added the third staged editor with extra depth.
+
+Included:
+
+- `data/kaysender/editors/airship-editor.json`
+- `data/kaysender/schemas/airship-profile.schema.json`
+- `kaysender-airship-editor.js`
+- `docs/stage-3-airship-editor.md`
+- `docs/stage-3-smoke-test.md`
+
+The Airship and Vessel module is now marked `editor-alpha` and launches a detailed Airship / Vessel Editor. This editor exposes controls for vessel class, hull culture, core type, purpose, legal status, crew quality, crew scale, captain style, cargo, armament, defenses, condition, maintenance pressure, route compatibility, route mandate, faction entanglement, hidden problems, current mission, morale, fuel, and port of call.
+
+The editor can optionally consume pasted Floating Island profile JSON and Settlement profile JSON to inherit route, cargo, port, faction, crisis, and hazard pressure. It derives airworthiness, cargo value, combat threat, maintenance risk, legal risk, crew morale, adventure density, and route compatibility scores. It outputs technical notes, crew hooks, cargo hooks, route hooks, faction hooks, maintenance hooks, encounter hooks, draft wiki-entry JSON, and full airship profile JSON.
