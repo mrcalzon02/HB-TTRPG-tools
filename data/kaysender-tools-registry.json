@@ -1,11 +1,12 @@
 {
   "setting": "Kaysender",
-  "status": "initial extraction scaffold",
+  "status": "alpha tool implementation layer",
   "compatibilityTarget": "open d20 / Hypertext d20-compatible presentation",
   "sourceNotes": [
     "Original setting lore remains Kaysender-specific.",
     "Legacy fifth-edition mechanical phrasing must be converted before reusable public release.",
-    "Rules-facing text should separate open d20 mechanics from setting prose."
+    "Rules-facing text should separate open d20 mechanics from setting prose.",
+    "Alpha modules are operational campaign aids and are not final balanced rules text."
   ],
   "modules": [
     {
@@ -22,7 +23,7 @@
       "section": "utilities",
       "title": "Open d20 Compatibility Scanner",
       "priority": 2,
-      "status": "planned",
+      "status": "alpha",
       "description": "Flags legacy fifth-edition phrasing and suggests open d20 replacement structures.",
       "dataFamilies": ["rulesConversionNote", "termFlag", "replacementPattern"]
     },
@@ -31,7 +32,7 @@
       "section": "generators",
       "title": "Floating Island Generator",
       "priority": 3,
-      "status": "planned",
+      "status": "alpha",
       "description": "Generates drifting islands, ruins, resource outcrops, hazards, settlements, and crisis hooks.",
       "dataFamilies": ["rollTable", "islandProfile", "hazardProfile", "resourceNode"]
     },
@@ -49,7 +50,7 @@
       "section": "generators",
       "title": "Settlement Generator",
       "priority": 5,
-      "status": "planned",
+      "status": "alpha",
       "description": "Creates villages, skyports, fortified outposts, company holdings, farming islands, and frontier towns.",
       "dataFamilies": ["settlementProfile", "populationProfile", "scarcityProfile", "hookProfile"]
     },
@@ -76,7 +77,7 @@
       "section": "generators",
       "title": "Shop and Market Stall Generator",
       "priority": 8,
-      "status": "planned",
+      "status": "alpha",
       "description": "Creates legal shops, traveling merchants, guild vendors, black-market dealers, counterfeiters, and supply shortages.",
       "dataFamilies": ["marketProfile", "itemTable", "scarcityProfile", "merchantProfile"]
     },
@@ -85,7 +86,7 @@
       "section": "generators",
       "title": "Airship and Vessel Generator",
       "priority": 9,
-      "status": "planned",
+      "status": "alpha",
       "description": "Builds encountered ships by hull, culture, core, crew, cargo, weapons, damage, legal status, and mission.",
       "dataFamilies": ["vesselProfile", "crewProfile", "cargoProfile", "shipCondition"]
     },
@@ -112,7 +113,7 @@
       "section": "utilities",
       "title": "Supply, Water, and Survival Planner",
       "priority": 12,
-      "status": "planned",
+      "status": "alpha",
       "description": "Tracks water, food, crew size, livestock, climate pressure, spoilage, rain capture, and shortage events.",
       "dataFamilies": ["supplyProfile", "travelPlan", "scarcityProfile", "eventTable"]
     },
