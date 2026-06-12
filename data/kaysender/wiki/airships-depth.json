@@ -1,0 +1,156 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.2.0",
+  "entries": [
+    {
+      "id": "airships",
+      "title": "Airships and Vessels",
+      "category": "Ships",
+      "summary": "Airships are the connective infrastructure of Kaysender: vessels of trade, war, rescue, piracy, pilgrimage, survey work, tribute, smuggling, and survival.",
+      "body": [
+        "Airships are not optional scenery in Kaysender. They are how settlements remain connected, how water and food move, how trade survives, how pirates strike, how surveyors map drifting geography, how dragon tribute is collected, and how refugees escape disasters.",
+        "Every airship should be treated as a profile with vessel class, hull culture, core type, purpose, legal status, crew quality, crew scale, captain style, cargo, armament, defenses, condition, maintenance pressure, route compatibility, faction entanglement, hidden problem, current mission, morale, fuel or power supply, and port of call.",
+        "Airships should consume context from [[floating-islands|island profiles]] and [[settlement-generator|settlement profiles]]. An island can dictate route hazards and altitude requirements. A settlement can dictate cargo, port pressure, faction entanglement, crisis clocks, and market demand.",
+        "The source material makes airship cores culturally distinct. A [[dwarven-airship-core|Dwarven core]] is not simply a heavier engine. An [[elven-airship-core|Elven core]] is not simply a pretty engine. A [[dragon-kin-airship-core|Dragon Kin core]], [[gnomish-airship-core|Gnomish core]], and [[human-airship-core|Human core]] each imply different construction, cost, operation, maintenance, politics, and story pressure.",
+        "For play, every vessel should create at least one technical problem, one crew problem, one cargo problem, one route problem, and one faction or legal problem. A ship that has no problems is only a taxi. A Kaysender ship should be a moving campaign location."
+      ],
+      "sections": [
+        {
+          "heading": "Vessel Class Use",
+          "body": [
+            "Skiffs and cutters are fast and fragile. Merchant sloops and liners are social and economic spaces. Corvettes and frigates carry patrol pressure. Cruisers and destroyers imply military or political force. Galleons and dreadnought-like ships are floating statements of power. Salvage barges and pirate raiders turn wrecks, cargo, and fear into economy.",
+            "The Airship Editor should use class to shape crew scale, cargo scale, combat threat, legal attention, maintenance cost, and route compatibility."
+          ]
+        }
+      ],
+      "tags": ["airships", "vessels", "routes", "cargo", "crew", "cores", "ships"],
+      "relatedEntries": ["dwarven-airship-core", "elven-airship-core", "dragon-kin-airship-core", "gnomish-airship-core", "human-airship-core", "black-fleet", "surveyors-guild", "water-trade"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "npc-crew-generator", "world-map-route-generator", "shop-market-generator"]
+    },
+    {
+      "id": "dwarven-airship-core",
+      "title": "Dwarven Airship Core",
+      "category": "Ships",
+      "summary": "Dwarven airship cores are compact, robust, heavy-duty systems built for reliability, durability, and long-term power rather than agility.",
+      "body": [
+        "Dwarven airship cores are built around reliability. They are typically compact, robust systems of sturdy metals, enchanted crystals, mechanical reinforcement, and elemental or geothermal force. They are created by blacksmiths, artificers, and enchanters who treat core construction as craft, industry, and oath-bound precision.",
+        "A Dwarven core often appears as a thick cylindrical chamber with structural appendages, reinforcement arms, heat channels, and heavy mechanical logic. It feels engineered to survive weight, heat, strain, and long service. The core’s physical presence should be obvious inside the ship, often requiring a protected chamber and proper structural support.",
+        "These cores are expensive because the materials and labor are expensive. They need magical ores, fire-infused crystals, enchanted molten metals, skilled foundries, and long production schedules. A small core might power a personal or light vessel, but larger vessels may use multiple linked cores to lift heavy cargo, industrial platforms, or fortress-scale structures.",
+        "Functionally, a Dwarven core produces controlled bursts of heat and elemental force that create lift and thrust through heated air, pressure, or fire-driven propulsion. It is durable and long-lasting, but less nimble than more delicate or experimental designs.",
+        "In play, Dwarven cores should provide high airworthiness and low failure chance when maintained, but high weight, high cost, slower responsiveness, and specialized repair needs. They are ideal for cargo, fortresses, industrial vessels, patrol ships, and long-haul reliability."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "Airship Editor: increase airworthiness and maintenance stability, but reduce nimbleness or increase heavy cargo/route limitations.",
+            "Failure hooks: overheated chamber, cracked fire crystal, foundry-sealed component, weight stress, oath-bound engineer refuses improper repair."
+          ]
+        }
+      ],
+      "tags": ["Dwarven core", "Dwager", "airship core", "reliability", "heavy-duty", "elemental fire"],
+      "relatedEntries": ["airships", "dwager", "zarovar-kalthor"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "crafting-gadget-creator"]
+    },
+    {
+      "id": "elven-airship-core",
+      "title": "Elven Airship Core",
+      "category": "Ships",
+      "summary": "Elven airship cores are elegant, sacred, living or semi-living arcane systems that require attunement, operator bond, and cultural permission.",
+      "body": [
+        "Elven airship cores are not ordinary engines. They are marvels of elegance and magical purity, closer to sacred living conduits than mechanical constructs. They are associated with a deep bond between operator, core, vessel, and the Weave or natural magical power that sustains lift and propulsion.",
+        "An Elven core is often crystalline, gemlike, faceted, luminous, and housed in delicate latticework of fine metal, enchanted wood, or living material. The design should echo Elven architecture: graceful, light, intentional, and beautiful as well as functional.",
+        "Manufacture is an art and rite. Skilled enchanters and artisans gather rare natural materials, elemental crystals, precious woods, and magically resonant metals, then bind them through rituals of attunement. The result is a core that may not be fully usable by just anyone. It may require an Elven operator, cultural approval, spiritual compatibility, or a bond formed through ceremony.",
+        "Elven cores are very expensive and politically restricted. Their value is not only monetary; they are works of art, sacred objects, and cultural assets. A ship with such a core may attract reverence, envy, theft, diplomatic complication, or cultural outrage if handled improperly.",
+        "In play, Elven cores should grant elegance, efficiency, subtle control, and high value, but they should also create operator dependency, cultural restriction, attunement risk, and sacred maintenance obligations. A stolen Elven-core vessel is a diplomatic incident, not just stolen property."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "Airship Editor: raise route compatibility, elegance, and special mission value, but add operator requirement, legal/cultural risk, and maintenance ritual pressure.",
+            "Failure hooks: operator illness, rejected attunement, cracked latticework, corrupted natural focus, non-Fae captain violating sacred protocol."
+          ]
+        }
+      ],
+      "tags": ["Elven core", "Fae", "airship core", "attunement", "Weave", "sacred craft"],
+      "relatedEntries": ["airships", "fae", "sky-ecology"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "npc-crew-generator"]
+    },
+    {
+      "id": "dragon-kin-airship-core",
+      "title": "Dragon Kin Airship Core",
+      "category": "Ships",
+      "summary": "Dragon Kin airship cores should express draconic identity through elemental force, pride, intimidation, martial purpose, and territorial legitimacy.",
+      "body": [
+        "Dragon Kin airship cores are best treated as elemental and political engines. They are not just power plants; they are symbols of draconic inheritance, territorial authority, martial identity, and command presence.",
+        "A Dragon Kin core may be built around draconic metals, breath-aspected gems, scale-like housing, elemental chambers, heat channels, or rituals that bind fire, storm, acid, frost, or other draconic force into controlled lift and thrust. The exact form should feel proud, dangerous, and difficult to separate from the culture that made it.",
+        "Ships carrying Dragon Kin cores should feel like declarations. Even a smaller vessel may command respect or fear because the core implies access to draconic craft, Dragon Kin authority, or direct connection to powerful patrons. Such ships may carry tribute, guards, emissaries, enforcers, or elite warriors.",
+        "The strength of a Dragon Kin core should be raw power, intimidation, combat presence, and elemental identity. Its weaknesses should be heat, temperamental behavior, specialist ritual needs, territorial politics, and the danger that any malfunction becomes spectacular.",
+        "In play, a Dragon Kin core connects naturally to [[dragon-kin|Dragon Kin]], [[dragon-lords|Dragon Lords]], tribute papers, martial missions, and route permissions in dragon-influenced airspace."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "Airship Editor: raise combat threat, command presence, and dragon-route access; increase legal/faction risk when outside draconic territories.",
+            "Failure hooks: breath gem fracture, core rage, elemental venting, challenged captain authority, tribute papers questioned."
+          ]
+        }
+      ],
+      "tags": ["Dragon Kin core", "Dragonborn", "draconic", "elemental", "tribute", "warship"],
+      "relatedEntries": ["airships", "dragon-kin", "dragon-lords"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "draconic-tithe-generator"]
+    },
+    {
+      "id": "gnomish-airship-core",
+      "title": "Gnomish Airship Core",
+      "category": "Ships",
+      "summary": "Gnomish airship cores combine clockwork, crystals, runes, experimentation, and fine control, producing versatile but adjustment-hungry propulsion systems.",
+      "body": [
+        "Gnomish airship cores are built from technological ingenuity and magical experimentation. They often combine clockwork mechanisms, gears, levers, crystals, arcane runes, steam, compressed air, and magical circuitry into compact but intricate systems.",
+        "A Gnomish core may be spherical, boxlike, portable, or densely packed with fine mechanisms. The design should feel efficient, clever, adjustable, and slightly alarming to anyone who prefers simple engines. No two cores need to be identical because innovation and refinement are part of the tradition.",
+        "Manufacture uses rare metals, crystals, precision components, arcane regulation, trial, error, and constant adjustment. This makes Gnomish cores versatile and customizable. Smaller cores suit nimble scouting craft and private airships, while larger arrangements can lift factories, experimental vessels, clockwork structures, or specialized cargo platforms.",
+        "The strength of a Gnomish core is fine control, adaptability, compact design, and unusual performance. Its weakness is complexity. It may need constant tuning, rare parts, proper calibration, skilled engineers, and patience with the fact that the designer probably changed something after the manual was written.",
+        "In play, a Gnomish core should create opportunity and chaos. It can solve a route problem no standard core could handle, then demand crystals, alignment, a missing lever, or a panicked engineer before it can do it again."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "Airship Editor: raise route precision and experimental options; increase maintenance pressure, rare part needs, and prototype event risk.",
+            "Failure hooks: crystal misalignment, gear cascade, steam overpressure, arcane circuit feedback, missing engineer notes."
+          ]
+        }
+      ],
+      "tags": ["Gnomish core", "Gezistack", "clockwork", "crystals", "experimentation", "fine control"],
+      "relatedEntries": ["airships", "gezistack", "faelenor-mirathen", "zarovar-kalthor"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "crafting-gadget-creator"]
+    },
+    {
+      "id": "human-airship-core",
+      "title": "Human Airship Core",
+      "category": "Ships",
+      "summary": "Human airship cores are crude but effective hybrid systems that combine borrowed Dwarven and Gnomish techniques with improvisation, patchwork parts, and practical ambition.",
+      "body": [
+        "Human airship cores represent a practical synthesis of Dwarven and Gnomish technologies. They lack the elegance of Elven cores, the ancient craft tradition of Dwarven systems, and the refined precision of Gnomish machinery, but they make up for it through adaptability, speed of production, and pragmatic use of available materials.",
+        "A Human core often looks industrial, bulky, patchwork, and utilitarian: exposed gears, vents, arcane conduits, pistons, metal plates, scavenged crystals, and modifications made for the specific ship or captain rather than a pure tradition. It may not be pretty, but it works well enough to get into the sky.",
+        "Manufacture often happens in busy workshops, makeshift factories, frontier yards, or hybrid shipyards. Human engineers borrow heavy-duty mechanical principles from Dwager craft and arcane-mechanical regulation from Gezistack designs, then bind components together with practical enchantments and local improvisation.",
+        "Human cores are often more affordable and widely available than refined racial cores. That accessibility makes them attractive to merchants, adventurers, explorers, frontier settlements, and military organizations that need function over purity. The tradeoff is inconsistent power output, lower efficiency, and greater failure risk.",
+        "In play, Human cores are ideal for frontier campaigns. They are repairable, hackable, ugly, adaptable, and politically flexible. They also give the GM excuses for smoke, leaks, patched conduits, improvised parts, and engineers insisting that the core is fine unless the sound changes."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "Airship Editor: keep costs and availability favorable, but increase maintenance risk and mechanical failure hooks.",
+            "Failure hooks: piston misfire, scavenged crystal burnout, steam leak, incompatible part, rushed workshop enchantment, field repair with consequences."
+          ]
+        }
+      ],
+      "tags": ["Human core", "Hume", "hybrid", "steam-arcane", "patchwork", "frontier engineering"],
+      "relatedEntries": ["airships", "hume", "dwager", "gezistack"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "crafting-gadget-creator"]
+    }
+  ]
+}
