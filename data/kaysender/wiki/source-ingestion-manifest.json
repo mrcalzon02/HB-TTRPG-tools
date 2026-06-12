@@ -27,7 +27,8 @@
     { "path": "data/kaysender/wiki/source-lore-pass-3-pirates-dragons.json", "status": "source-faithful", "description": "Third ingestion pass importing Black Fleet structure, named pirate ships/leaders, Hellrod, Dragon Lord hierarchy, Wildlands, tithe culture, tithe fleet, and floating vaults." },
     { "path": "data/kaysender/wiki/source-lore-pass-4-merchant-communications.json", "status": "source-faithful", "description": "Fourth ingestion pass importing merchant fleets, trade organizations, Whisper Web, World Whispering Web, Resonant Concord, Locator Glyphs, and Tracker's Beacon." },
     { "path": "data/kaysender/wiki/source-lore-pass-5-criminal-trade-slavery.json", "status": "source-faithful", "description": "Fifth ingestion pass importing unsavory trade groups, slaver organizations, indentured servitude, slavery, oppression, abolition, sanctuary, and resistance material." },
-    { "path": "data/kaysender/wiki/source-lore-pass-6-potions-mercenaries-gear.json", "status": "source-faithful", "description": "Sixth ingestion pass importing potion guilds, mercenary companies, fall-prevention gear, emergency signaling equipment, and airship cargo standards." }
+    { "path": "data/kaysender/wiki/source-lore-pass-6-potions-mercenaries-gear.json", "status": "source-faithful", "description": "Sixth ingestion pass importing potion guilds, mercenary companies, fall-prevention gear, emergency signaling equipment, and airship cargo standards." },
+    { "path": "data/kaysender/wiki/source-lore-pass-7-food-agriculture.json", "status": "source-faithful", "description": "Seventh ingestion pass importing foodways, tavern fare, and agriculture/husbandry/preservation traditions by culture." }
   ],
   "requiredNextPasses": [
     { "id": "source-pass-2-messara-nations", "priority": 1, "scope": "Fully import remaining Messara nation entries: Faelenor, Teralon, Silvalis, Vornak, Rylune, Zarovar, Eldrath, Imbria, and national capitals.", "status": "complete" },
@@ -35,11 +36,12 @@
     { "id": "source-pass-4-merchant-fleets-organizations", "priority": 3, "scope": "Import merchant fleets, communication organizations, guilds, sending stone networks, and long-distance magical infrastructure.", "status": "complete" },
     { "id": "source-pass-5-criminal-trade-slavery", "priority": 4, "scope": "Import unsavory merchant guilds, slaver organizations, criminal trade groups, indentured servitude, slavery, resistance, and abolition material.", "status": "complete" },
     { "id": "source-pass-6-potion-guilds-mercenaries-gear", "priority": 5, "scope": "Import potion guilds, mercenary organizations, fall-prevention gear, air sailor equipment, and emergency/survival equipment.", "status": "complete" },
-    { "id": "source-pass-7-food-rations-agriculture", "priority": 6, "scope": "Import food rations, tavern fare, agriculture, husbandry, food storage, and preservation traditions by people/culture.", "status": "not-started" },
-    { "id": "source-pass-8-regions-locations", "priority": 7, "scope": "Import named locations, settlements, capitals, skyports, ruins, wilderness areas, and regional geography from the manuscript.", "status": "not-started" },
-    { "id": "source-pass-9-airships-equipment-crafting", "priority": 8, "scope": "Import airship construction, core manufacture, gear, alchemy, potions, weather equipment, tools, and market goods.", "status": "not-started" },
-    { "id": "source-pass-10-creatures-diseases-ecology", "priority": 9, "scope": "Import creatures, diseases, sky ecology, materials, valuable creature products, and environmental hazards.", "status": "not-started" },
-    { "id": "source-pass-11-legacy-mechanics-index", "priority": 10, "scope": "Index legacy fifth-edition mechanical material separately as mechanics-legacy and conversion-note entries so it is preserved but not confused with Hypertext d20-compatible rules text.", "status": "not-started" }
+    { "id": "source-pass-7-food-rations-agriculture", "priority": 6, "scope": "Import food rations, tavern fare, agriculture, husbandry, food storage, and preservation traditions by people/culture.", "status": "complete" },
+    { "id": "source-pass-8-water-in-the-skies", "priority": 7, "scope": "Import water scarcity, cloud dew, rain catchment, magical purification/storage, water transport, and water trade details.", "status": "not-started" },
+    { "id": "source-pass-9-regions-locations", "priority": 8, "scope": "Import named locations, settlements, capitals, skyports, ruins, wilderness areas, and regional geography from the manuscript.", "status": "not-started" },
+    { "id": "source-pass-10-airships-equipment-crafting", "priority": 9, "scope": "Import airship construction, core manufacture, gear, alchemy, potions, weather equipment, tools, and market goods.", "status": "not-started" },
+    { "id": "source-pass-11-creatures-diseases-ecology", "priority": 10, "scope": "Import creatures, diseases, sky ecology, materials, valuable creature products, and environmental hazards.", "status": "not-started" },
+    { "id": "source-pass-12-legacy-mechanics-index", "priority": 11, "scope": "Index legacy fifth-edition mechanical material separately as mechanics-legacy and conversion-note entries so it is preserved but not confused with Hypertext d20-compatible rules text.", "status": "not-started" }
   ],
   "knownOpeningOutline": [
     { "title": "Copyright Notice / Permitted Use / Prohibited Use / Disclaimer", "pageStart": 2, "pageEnd": 2, "status": "not-ingested" },
@@ -75,6 +77,7 @@
     { "title": "Mercenaries", "pageStart": 64, "pageEnd": 67, "status": "source-faithful", "wikiEntryIds": ["mercenary-companies"] },
     { "title": "How to stop the fall?", "pageStart": 67, "pageEnd": 72, "status": "source-faithful", "wikiEntryIds": ["fall-prevention-gear"] },
     { "title": "Emergency equipment", "pageStart": 72, "pageEnd": 75, "status": "source-faithful", "wikiEntryIds": ["emergency-signaling-equipment"] },
-    { "title": "Cargo", "pageStart": 75, "pageEnd": 78, "status": "source-faithful", "wikiEntryIds": ["cargo-standards"] }
+    { "title": "Cargo", "pageStart": 75, "pageEnd": 78, "status": "source-faithful", "wikiEntryIds": ["cargo-standards"] },
+    { "title": "Food, Tavern Fare, Agriculture, Husbandry, and Preservation", "pageStart": 78, "pageEnd": 86, "status": "source-faithful", "wikiEntryIds": ["foodways-of-kaysender", "tavern-fare-of-kaysender", "dwarven-agriculture", "elven-agriculture", "human-agriculture", "gnomish-agriculture", "orcish-agriculture", "halfling-agriculture", "dragonborn-agriculture"] }
   ]
 }
