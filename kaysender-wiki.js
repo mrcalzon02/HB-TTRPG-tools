@@ -31,89 +31,24 @@
     const style = document.createElement('style');
     style.id = 'kaysender-wiki-style';
     style.textContent = `
-      .wiki-link-strip {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 8px;
-      }
-      .wiki-chip-button {
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: rgba(255,255,255,0.04);
-        color: var(--muted);
-        padding: 5px 9px;
-        font-size: 0.75rem;
-      }
-      .wiki-chip-button:hover {
-        border-color: var(--accent);
-        color: var(--ink);
-      }
-      .wiki-panel {
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        padding: 22px;
-        margin: 18px 0 28px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
-        box-shadow: var(--shadow);
-      }
-      .wiki-controls {
-        display: grid;
-        grid-template-columns: minmax(220px, 1fr) auto;
-        gap: 12px;
-        align-items: end;
-        margin-bottom: 16px;
-      }
-      .wiki-controls input {
-        background: #10131a;
-        border: 1px solid var(--line);
-        color: var(--ink);
-        border-radius: 12px;
-        padding: 10px 12px;
-      }
-      .wiki-category-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        grid-column: 1 / -1;
-      }
-      .wiki-layout {
-        display: grid;
-        grid-template-columns: 320px 1fr;
-        gap: 16px;
-        align-items: start;
-      }
-      .wiki-list {
-        display: grid;
-        gap: 8px;
-      }
-      .wiki-list button {
-        text-align: left;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: 10px 12px;
-        background: rgba(0,0,0,0.18);
-        color: var(--ink);
-      }
-      .wiki-list button.active,
-      .wiki-list button:hover {
-        border-color: var(--accent);
-        background: rgba(200,138,53,0.12);
-      }
-      .wiki-entry-view {
-        border: 1px solid rgba(200,138,53,0.35);
-        border-radius: 18px;
-        padding: 18px;
-        background: rgba(0,0,0,0.18);
-      }
+      .wiki-link-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+      .wiki-chip-button { border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.04); color: var(--muted); padding: 5px 9px; font-size: 0.75rem; }
+      .wiki-chip-button:hover, .wiki-chip-button.active { border-color: var(--accent); color: var(--ink); }
+      .wiki-panel { border: 1px solid var(--line); border-radius: 24px; padding: 22px; margin: 18px 0 28px; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025)); box-shadow: var(--shadow); }
+      .wiki-controls { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 12px; align-items: end; margin-bottom: 16px; }
+      .wiki-controls input { background: #10131a; border: 1px solid var(--line); color: var(--ink); border-radius: 12px; padding: 10px 12px; }
+      .wiki-category-row { display: flex; flex-wrap: wrap; gap: 8px; grid-column: 1 / -1; }
+      .wiki-layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
+      .wiki-list { display: grid; gap: 8px; }
+      .wiki-list button { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; background: rgba(0,0,0,0.18); color: var(--ink); }
+      .wiki-list button.active, .wiki-list button:hover { border-color: var(--accent); background: rgba(200,138,53,0.12); }
+      .wiki-entry-view { border: 1px solid rgba(200,138,53,0.35); border-radius: 18px; padding: 18px; background: rgba(0,0,0,0.18); }
       .wiki-entry-view h3 { margin-bottom: 6px; }
       .wiki-entry-meta { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; }
       .wiki-entry-view p { color: var(--muted); line-height: 1.55; }
       .wiki-related { margin-top: 18px; }
       .wiki-related h4 { color: var(--accent); }
-      @media (max-width: 900px) {
-        .wiki-controls, .wiki-layout { grid-template-columns: 1fr; }
-      }
+      @media (max-width: 900px) { .wiki-controls, .wiki-layout { grid-template-columns: 1fr; } }
     `;
     document.head.appendChild(style);
   }
@@ -189,6 +124,7 @@
       button.textContent = category === 'all' ? 'All Categories' : category;
       button.addEventListener('click', () => {
         activeCategory = category;
+        categoryTarget.querySelectorAll('button').forEach(categoryButton => categoryButton.classList.toggle('active', categoryButton === button));
         renderWikiList(panel, entries, startEntry.id);
       });
       categoryTarget.appendChild(button);
@@ -225,6 +161,7 @@
     filtered.forEach(entry => {
       const button = document.createElement('button');
       button.type = 'button';
+      button.dataset.entryId = entry.id;
       button.className = entry.id === activeId ? 'active' : '';
       button.innerHTML = `<strong>${entry.title}</strong><br><small>${entry.category}</small>`;
       button.addEventListener('click', () => renderEntry(panel, entries, entry.id));
@@ -238,7 +175,7 @@
     if (!entry || !view) return;
 
     panel.querySelectorAll('#wiki-list button').forEach(button => {
-      button.classList.toggle('active', button.textContent.includes(entry.title));
+      button.classList.toggle('active', button.dataset.entryId === entry.id);
     });
 
     view.innerHTML = '';
@@ -300,10 +237,13 @@
     if (!ids.length) return;
     appendChips(parent, 'Related tools and generators', ids.map(id => id.replace(/-/g, ' ')), label => {
       const moduleId = label.replace(/ /g, '-');
+      const allFilter = document.querySelector('.registry-filter[data-kaysender-filter="all"]');
+      if (allFilter && !allFilter.classList.contains('active')) allFilter.click();
       const search = document.getElementById('kaysender-search');
-      if (search) search.value = moduleId;
-      document.querySelectorAll('.registry-filter').forEach(filter => filter.classList.toggle('active', filter.dataset.kaysenderFilter === 'all'));
-      if (typeof window.renderKaysenderOverview === 'function') window.renderKaysenderOverview();
+      if (search) {
+        search.value = moduleId;
+        search.dispatchEvent(new Event('input', { bubbles: true }));
+      }
       document.getElementById('kaysender-overview-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
@@ -343,7 +283,6 @@
   }
 
   window.openKaysenderWiki = openWiki;
-  window.renderKaysenderOverview = window.renderKaysenderOverview || undefined;
 
   const observer = new MutationObserver(decorateCards);
   observer.observe(document.body, { childList: true, subtree: true });
