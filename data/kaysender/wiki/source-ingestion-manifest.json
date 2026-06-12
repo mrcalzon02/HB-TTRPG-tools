@@ -41,63 +41,23 @@
       "path": "data/kaysender/wiki/source-lore-pass-4-merchant-communications.json",
       "status": "source-faithful",
       "description": "Fourth ingestion pass importing merchant fleets, trade organizations, Whisper Web, World Whispering Web, Resonant Concord, Locator Glyphs, and Tracker's Beacon."
+    },
+    {
+      "path": "data/kaysender/wiki/source-lore-pass-5-criminal-trade-slavery.json",
+      "status": "source-faithful",
+      "description": "Fifth ingestion pass importing unsavory trade groups, slaver organizations, indentured servitude, slavery, oppression, abolition, sanctuary, and resistance material."
     }
   ],
   "requiredNextPasses": [
-    {
-      "id": "source-pass-2-messara-nations",
-      "priority": 1,
-      "scope": "Fully import remaining Messara nation entries: Faelenor, Teralon, Silvalis, Vornak, Rylune, Zarovar, Eldrath, Imbria, and national capitals.",
-      "status": "complete"
-    },
-    {
-      "id": "source-pass-3-pirates-dragons",
-      "priority": 2,
-      "scope": "Import Black Fleet, Dragon Lords, Wildlands, tithe systems, named pirate ships, named Dragon Lords, and draconic power hierarchy.",
-      "status": "complete"
-    },
-    {
-      "id": "source-pass-4-merchant-fleets-organizations",
-      "priority": 3,
-      "scope": "Import merchant fleets, communication organizations, guilds, sending stone networks, and long-distance magical infrastructure.",
-      "status": "complete"
-    },
-    {
-      "id": "source-pass-5-criminal-trade-slavery",
-      "priority": 4,
-      "scope": "Import unsavory merchant guilds, slaver organizations, criminal trade groups, indentured servitude, slavery, resistance, and abolition material.",
-      "status": "not-started"
-    },
-    {
-      "id": "source-pass-6-potion-guilds-mercenaries-gear",
-      "priority": 5,
-      "scope": "Import potion guilds, mercenary organizations, fall-prevention gear, air sailor equipment, and weather/survival equipment.",
-      "status": "not-started"
-    },
-    {
-      "id": "source-pass-7-regions-locations",
-      "priority": 6,
-      "scope": "Import named locations, settlements, capitals, skyports, ruins, wilderness areas, and regional geography from the manuscript.",
-      "status": "not-started"
-    },
-    {
-      "id": "source-pass-8-airships-equipment-crafting",
-      "priority": 7,
-      "scope": "Import airship construction, core manufacture, gear, alchemy, potions, weather equipment, tools, and market goods.",
-      "status": "not-started"
-    },
-    {
-      "id": "source-pass-9-creatures-diseases-ecology",
-      "priority": 8,
-      "scope": "Import creatures, diseases, sky ecology, materials, valuable creature products, and environmental hazards.",
-      "status": "not-started"
-    },
-    {
-      "id": "source-pass-10-legacy-mechanics-index",
-      "priority": 9,
-      "scope": "Index legacy fifth-edition mechanical material separately as mechanics-legacy and conversion-note entries so it is preserved but not confused with Hypertext d20-compatible rules text.",
-      "status": "not-started"
-    }
+    { "id": "source-pass-2-messara-nations", "priority": 1, "scope": "Fully import remaining Messara nation entries: Faelenor, Teralon, Silvalis, Vornak, Rylune, Zarovar, Eldrath, Imbria, and national capitals.", "status": "complete" },
+    { "id": "source-pass-3-pirates-dragons", "priority": 2, "scope": "Import Black Fleet, Dragon Lords, Wildlands, tithe systems, named pirate ships, named Dragon Lords, and draconic power hierarchy.", "status": "complete" },
+    { "id": "source-pass-4-merchant-fleets-organizations", "priority": 3, "scope": "Import merchant fleets, communication organizations, guilds, sending stone networks, and long-distance magical infrastructure.", "status": "complete" },
+    { "id": "source-pass-5-criminal-trade-slavery", "priority": 4, "scope": "Import unsavory merchant guilds, slaver organizations, criminal trade groups, indentured servitude, slavery, resistance, and abolition material.", "status": "complete" },
+    { "id": "source-pass-6-potion-guilds-mercenaries-gear", "priority": 5, "scope": "Import potion guilds, mercenary organizations, fall-prevention gear, air sailor equipment, and weather/survival equipment.", "status": "not-started" },
+    { "id": "source-pass-7-regions-locations", "priority": 6, "scope": "Import named locations, settlements, capitals, skyports, ruins, wilderness areas, and regional geography from the manuscript.", "status": "not-started" },
+    { "id": "source-pass-8-airships-equipment-crafting", "priority": 7, "scope": "Import airship construction, core manufacture, gear, alchemy, potions, weather equipment, tools, and market goods.", "status": "not-started" },
+    { "id": "source-pass-9-creatures-diseases-ecology", "priority": 8, "scope": "Import creatures, diseases, sky ecology, materials, valuable creature products, and environmental hazards.", "status": "not-started" },
+    { "id": "source-pass-10-legacy-mechanics-index", "priority": 9, "scope": "Index legacy fifth-edition mechanical material separately as mechanics-legacy and conversion-note entries so it is preserved but not confused with Hypertext d20-compatible rules text.", "status": "not-started" }
   ],
   "knownOpeningOutline": [
     { "title": "Copyright Notice / Permitted Use / Prohibited Use / Disclaimer", "pageStart": 2, "pageEnd": 2, "status": "not-ingested" },
@@ -126,6 +86,8 @@
     { "title": "Merchant Fleets and Organizations of the World of Kaysender", "pageStart": 42, "pageEnd": 46, "status": "source-faithful", "wikiEntryIds": ["merchant-fleets-of-kaysender", "surveyors-guild", "whisper-web", "skyweaver-consortium", "aetherbound-company", "free-flotilla", "ember-guild", "gilded-current"] },
     { "title": "The World Whispering Web, or Sending Stone Network", "pageStart": 46, "pageEnd": 49, "status": "source-faithful", "wikiEntryIds": ["world-whispering-web", "resonant-concord"] },
     { "title": "Feature: Locator Glyphs", "pageStart": 49, "pageEnd": 50, "status": "source-faithful", "wikiEntryIds": ["locator-glyphs"] },
-    { "title": "Military Sending Stone (Model: Tracker’s Beacon)", "pageStart": 50, "pageEnd": 52, "status": "source-faithful", "wikiEntryIds": ["tracker-beacon"] }
+    { "title": "Military Sending Stone (Model: Tracker’s Beacon)", "pageStart": 50, "pageEnd": 52, "status": "source-faithful", "wikiEntryIds": ["tracker-beacon"] },
+    { "title": "Unsavory Merchant Guilds, Trade Groups, and Slaver Organizations in Kaysender", "pageStart": 53, "pageEnd": 57, "status": "source-faithful", "wikiEntryIds": ["unsavory-trade-of-kaysender", "black-chain-consortium", "rusted-compass-company", "crimson-fog-cartel", "bonehold-syndicate", "broken-coin-guild", "sable-tide", "chainwing-exchange", "tarnished-veil"] },
+    { "title": "Indentured Servitude and Slavery in Kaysender: A Grim Reality", "pageStart": 57, "pageEnd": 60, "status": "source-faithful", "wikiEntryIds": ["indentured-servitude", "slavery-in-kaysender", "abolition-and-sanctuary-movements"] }
   ]
 }
