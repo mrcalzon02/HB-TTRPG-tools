@@ -1,0 +1,54 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "purpose": "Track conversion of source-backed wiki entries into visible Hypertext d20-compatible statistics. Lore-only entries remain incomplete for rules-facing wiki use until their relevant statistics are converted or explicitly marked as non-mechanical.",
+  "rules": [
+    "Creature entries that describe combat-capable beings should receive statBlocks.",
+    "Hazard entries should receive hazard or encounter stat blocks instead of only prose warnings.",
+    "Vehicle and airship entries should receive vessel statistics, crew requirements, cargo, speed, armor, hull, control, and weapon data where source material supports it.",
+    "Equipment entries should receive converted item statistics or clearly marked conversion notes.",
+    "Legacy mechanics should not remain as final output; they must be converted into Hypertext d20-compatible statistics or marked needs-review.",
+    "Converted statistics must be loaded after lore packs in wiki-index.json so they replace placeholder mechanics sections."
+  ],
+  "completedPasses": [
+    {
+      "id": "converted-stats-pass-1-abyss-creatures",
+      "path": "data/kaysender/wiki/converted-stats-pass-1-abyss-creatures.json",
+      "status": "converted-hypertext-d20",
+      "scope": "Beasts of the Abyss creature entry: Abyssal Maw, Shadowwing Leviathan, Sable Tendrils, Blackclaw, Nightmare Hound, and Gloomrider.",
+      "statBlockCount": 6,
+      "entryIds": ["beasts-of-the-abyss"],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:abyssal-maw",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:shadowwing-leviathan",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:sable-tendrils",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:blackclaw",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:nightmare-hound",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:gloomrider"
+      ]
+    }
+  ],
+  "nextTargets": [
+    {
+      "id": "converted-stats-pass-2-abyss-layers-hazards",
+      "scope": "Convert Abyss layer hazards and Infernal Core mechanics into visible Hypertext d20-compatible hazard blocks.",
+      "status": "not-started"
+    },
+    {
+      "id": "converted-stats-pass-3-airships-and-ship-combat",
+      "scope": "Convert airship classes, ship modifications, weapons, cores, tracking, and chase rules into vessel/stat systems.",
+      "status": "not-started"
+    },
+    {
+      "id": "converted-stats-pass-4-aerial-creatures",
+      "scope": "Convert sky creatures, sky whales, sky maws, common aerial hunters, and dangerous aerial encounters into creature stat blocks.",
+      "status": "not-started"
+    },
+    {
+      "id": "converted-stats-pass-5-diseases-plants-and-flora",
+      "scope": "Convert diseases, plant hazards, Bundle Bloom variants, Timber Heart variants, Windweaver Fern variants, and other flora into disease/hazard/item stat blocks.",
+      "status": "not-started"
+    }
+  ]
+}
