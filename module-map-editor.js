@@ -2,6 +2,8 @@
   const DEFAULT_W = 39;
   const DEFAULT_H = 39;
   const PRESET_URL = 'data/modules/map-editor-tests/northern-watchtower-09-from-image-test.json';
+  const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  const PDFJS_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   const TILE_TYPES = [
     { id: 'void', label: 'Void', className: 'tile-void', char: ' ' },
     { id: 'floor', label: 'Floor', className: 'tile-floor', char: '.' },
@@ -15,6 +17,10 @@
   const CHAR_TO_TILE = { '#':'wall', '.':'floor', ' ':'void', 'D':'door', 'S':'secret-door', 'T':'trap', '^':'stairs', 'L':'label' };
   const OPEN_TYPES = new Set(['floor','label','stairs','trap']);
   const CONNECTOR_TYPES = new Set(['door','secret-door']);
+  let pdfJsPromise = null;
+  let state = makeBlank(DEFAULT_W, DEFAULT_H);
+  let selectedType = 'wall';
+  let paintDown = false;
 
   const css = `
     .module-editor-card{margin-top:18px;border:1px solid var(--line);border-radius:22px;padding:16px;background:rgba(255,255,255,.045);box-shadow:var(--shadow)}
@@ -23,10 +29,6 @@
     .module-editor-map-shell{overflow:auto;max-height:72vh;border:1px solid rgba(200,138,53,.35);border-radius:14px;background:#0a0c12;padding:10px}.module-tile-grid{display:grid;gap:0;width:max-content;line-height:1}.module-tile{width:18px;height:18px;border:1px solid rgba(0,0,0,.18);padding:0;margin:0;font:700 10px/1 ui-monospace,Consolas,monospace;display:grid;place-items:center;cursor:pointer}.module-tile:hover{outline:2px solid var(--accent);z-index:2}.tile-void{background:#05070b;color:#05070b}.tile-floor{background:#fff;color:#111}.tile-wall{background:#000;color:#000}.tile-door{background:#fff;color:#d47b46}.tile-secret-door{background:#fff;color:#bd7cff}.tile-trap{background:#fff;color:#d33030}.tile-stairs{background:#fff;color:#111}.tile-label{background:#fff;color:#111;border-color:#8cb7ff}.module-editor-status{color:var(--muted);font-size:.82rem}.module-editor-preview{white-space:pre;overflow:auto;max-height:220px;background:#05070b;border:1px solid var(--line);border-radius:12px;padding:10px;color:#d8d1bf;font-size:.72rem}.module-topology-output{white-space:pre-wrap;max-height:360px;overflow:auto;background:#05070b;border:1px solid var(--line);border-radius:12px;padding:10px;color:#d8d1bf;font-size:.75rem}
     @media(max-width:980px){.module-editor-layout{grid-template-columns:1fr}.module-editor-map-shell{max-height:55vh}.module-tile{width:16px;height:16px}}
   `;
-
-  let state = makeBlank(DEFAULT_W, DEFAULT_H);
-  let selectedType = 'wall';
-  let paintDown = false;
 
   function styleOnce(){ if(document.getElementById('module-map-editor-style')) return; const s=document.createElement('style'); s.id='module-map-editor-style'; s.textContent=css; document.head.appendChild(s); }
   function tileById(id){ return TILE_TYPES.find(t=>t.id===id) || TILE_TYPES[0]; }
@@ -48,8 +50,6 @@
     return next;
   }
 
-  function resizeMap(width,height){ const next=makeBlank(width,height); for(let y=0;y<Math.min(height,state.height);y++) for(let x=0;x<Math.min(width,state.width);x++) next.cells[y][x]=state.cells[y][x]; state=next; }
-
   function init(){
     styleOnce();
     const anchor=document.getElementById('module-viewer-root');
@@ -58,22 +58,24 @@
     root.id='module-map-editor-root';
     root.className='module-editor-card no-print';
     root.innerHTML=`
-      <div class="section-heading"><p class="eyebrow">Module editor</p><h2>Tile-Based Module Map Editor</h2><p>Extract gridded images, create blank maps, load the current module map, clean the grid, then analyze room/corridor/door adjacency.</p></div>
+      <div class="section-heading"><p class="eyebrow">Module editor</p><h2>Tile-Based Module Map Editor</h2><p>Extract gridded images or selected PDF pages, create blank maps, load the current module map, clean the grid, then analyze room/corridor/door adjacency. The display panel above uses this editor output.</p></div>
       <div class="module-editor-layout"><aside class="module-editor-tools">
-        <section class="module-extractor-box"><h3>Extract Map From Image / PDF</h3><label>Map image or PDF page<input id="mme-image" type="file" accept="image/*,.pdf,application/pdf"></label><div class="module-extractor-grid"><label>Grid width<input id="mme-extract-width" type="number" min="1" max="200" value="39"></label><label>Grid height<input id="mme-extract-height" type="number" min="1" max="200" value="39"></label><label>Dark threshold 0-255<input id="mme-threshold" type="number" min="0" max="255" value="150"></label><label>Wall cutoff 0-1<input id="mme-wall-cutoff" type="number" min="0" max="1" step="0.01" value="0.48"></label></div><label><input id="mme-detect-bounds" type="checkbox" checked>Auto-detect non-white map bounds</label><label><input id="mme-invert" type="checkbox">Invert black/white classification</label><label><input id="mme-detect-symbols" type="checkbox" checked>Basic mixed-cell symbol detection</label><div class="module-editor-actions"><button id="mme-extract-image" type="button">Create From PDF / Image</button><button id="mme-new-blank" type="button">Create New Blank</button><button id="mme-load-current" type="button">Load Current Module Map</button></div><canvas id="mme-extract-canvas" hidden></canvas></section>
+        <section class="module-extractor-box"><h3>Extract Map From Image / PDF</h3><label>Map image or PDF<input id="mme-image" type="file" accept="image/*,.pdf,application/pdf"></label><div class="module-extractor-grid"><label>Grid width<input id="mme-extract-width" type="number" min="1" max="200" value="39"></label><label>Grid height<input id="mme-extract-height" type="number" min="1" max="200" value="39"></label><label>Dark threshold 0-255<input id="mme-threshold" type="number" min="0" max="255" value="150"></label><label>Wall cutoff 0-1<input id="mme-wall-cutoff" type="number" min="0" max="1" step="0.01" value="0.48"></label><label>PDF page<input id="mme-pdf-page" type="number" min="1" value="1"></label><label>PDF render scale<input id="mme-pdf-scale" type="number" min="0.5" max="5" step="0.25" value="2"></label></div><label><input id="mme-detect-bounds" type="checkbox" checked>Auto-detect non-white map bounds</label><label><input id="mme-invert" type="checkbox">Invert black/white classification</label><label><input id="mme-detect-symbols" type="checkbox" checked>Basic mixed-cell symbol detection</label><div class="module-editor-actions"><button id="mme-extract-image" type="button">Create From PDF / Image</button><button id="mme-new-blank" type="button">Create New Blank</button><button id="mme-load-current" type="button">Load Current Module Map</button><button id="mme-apply-viewer" type="button">Apply Editor Map To Viewer</button></div><canvas id="mme-extract-canvas" hidden></canvas></section>
         <label class="control-label">Map width<input id="mme-width" type="number" min="1" max="120" value="${DEFAULT_W}"></label><label class="control-label">Map height<input id="mme-height" type="number" min="1" max="120" value="${DEFAULT_H}"></label><label class="control-label">Paint mode<select id="mme-mode"><option value="selected">Paint selected tile</option><option value="cycle">Click cycles tile types</option><option value="label">Room label mode</option></select></label><label class="control-label">Room label<input id="mme-label" type="text" placeholder="1, 2, 15, a..."></label>
         <div class="module-tile-palette" id="mme-palette"></div><div class="module-editor-actions"><button id="mme-load-preset" type="button">Load Northern Watchtower Test Map</button><button id="mme-apply-size" type="button">Apply Size</button><button id="mme-clear" type="button">Clear</button><button id="mme-export-json" type="button">Export JSON</button><button id="mme-export-svg" type="button">Export SVG</button><button id="mme-copy-ascii" type="button">Copy ASCII</button></div><label class="control-label">Import JSON<textarea id="mme-import" placeholder="Paste exported map JSON or compact rows JSON here"></textarea></label><div class="module-editor-actions"><button id="mme-import-json" type="button">Import JSON</button><button id="mme-analyze" type="button">Analyze Topology</button></div><p class="module-editor-status" id="mme-status">39 × 39 grid ready.</p><pre class="module-editor-preview" id="mme-preview"></pre><pre class="module-topology-output" id="mme-topology">Topology output will appear here.</pre>
       </aside><div class="module-editor-map-shell"><div id="mme-grid" class="module-tile-grid" aria-label="Tile map editor"></div></div></div>`;
     anchor.insertAdjacentElement('afterend',root);
-    bind(root); render(root);
+    bind(root);
+    loadCurrentModuleMap(root,{silent:true}).catch(()=>render(root));
   }
 
   function bind(root){
     const palette=root.querySelector('#mme-palette');
     TILE_TYPES.forEach(t=>{ const b=document.createElement('button'); b.type='button'; b.className='module-palette-button'; b.dataset.tileType=t.id; b.textContent=t.label; b.onclick=()=>{selectedType=t.id; updatePalette(root)}; palette.appendChild(b); });
-    root.querySelector('#mme-extract-image').onclick=()=>extractImage(root);
+    root.querySelector('#mme-extract-image').onclick=()=>extractMapFile(root);
     root.querySelector('#mme-new-blank').onclick=()=>{ state=makeBlank(clampInt(root.querySelector('#mme-extract-width').value,1,200),clampInt(root.querySelector('#mme-extract-height').value,1,200)); syncSizeInputs(root); render(root); status(root,'Created new blank map.'); };
     root.querySelector('#mme-load-current').onclick=()=>loadCurrentModuleMap(root);
+    root.querySelector('#mme-apply-viewer').onclick=()=>applyToViewer();
     root.querySelector('#mme-load-preset').onclick=async()=>{ try{ state=normalizeMap(await getJson(PRESET_URL)); syncSizeInputs(root); render(root); status(root,'Loaded Northern Watchtower image-derived test map.'); }catch(e){ status(root,'Preset load failed: '+e.message); } };
     root.querySelector('#mme-apply-size').onclick=()=>{ resizeMap(clampInt(root.querySelector('#mme-width').value,1,120), clampInt(root.querySelector('#mme-height').value,1,120)); render(root); };
     root.querySelector('#mme-clear').onclick=()=>{ state=makeBlank(state.width,state.height); render(root); };
@@ -83,60 +85,65 @@
     root.querySelector('#mme-import-json').onclick=()=>{ try{ state=normalizeMap(JSON.parse(root.querySelector('#mme-import').value)); syncSizeInputs(root); render(root); status(root,'Imported map JSON.'); }catch(e){ status(root,'Import failed: '+e.message); }};
     root.querySelector('#mme-analyze').onclick=()=>{ const report=analyzeTopology(); root.querySelector('#mme-topology').textContent=JSON.stringify(report,null,2); status(root,`Analyzed ${report.regions.length} open regions and ${report.connections.length} door connections.`); };
     document.addEventListener('mouseup',()=>{paintDown=false});
+    document.addEventListener('module-viewer-module-changed',()=>loadCurrentModuleMap(root,{silent:true}).catch(()=>{}));
   }
 
-  async function loadCurrentModuleMap(root){
+  async function loadCurrentModuleMap(root,{silent=false}={}){
     const select=document.querySelector('#module-select');
-    if(!select){ status(root,'No current module selector found.'); return; }
-    try{
-      const module=await getJson(select.value);
-      if(module.mapEditorPath){ state=normalizeMap(await getJson(module.mapEditorPath)); }
-      else if(module.id==='northern-watchtower-09'){ state=normalizeMap(await getJson(PRESET_URL)); }
-      else { const dims=parseGrid(module.map?.grid)||[DEFAULT_W,DEFAULT_H]; state=makeBlank(dims[0],dims[1]); state.moduleId=module.id; state.title=`${module.title} blank editable map`; }
-      syncSizeInputs(root); render(root); status(root,`Loaded editable map for ${module.title || module.id}.`);
-    }catch(e){ status(root,'Current module map load failed: '+e.message); }
+    if(!select){ if(!silent) status(root,'No current module selector found.'); render(root); return; }
+    const module=await getJson(select.value);
+    if(module.mapEditorPath){ state=normalizeMap(await getJson(module.mapEditorPath)); }
+    else if(module.id==='northern-watchtower-09'){ state=normalizeMap(await getJson(PRESET_URL)); }
+    else { const dims=parseGrid(module.map?.grid)||[DEFAULT_W,DEFAULT_H]; state=makeBlank(dims[0],dims[1]); state.moduleId=module.id; state.title=`${module.title} blank editable map`; }
+    syncSizeInputs(root); render(root); if(!silent) status(root,`Loaded editable map for ${module.title || module.id}.`);
   }
   function parseGrid(grid){ const m=String(grid||'').match(/(\d+)\s*x\s*(\d+)/i); return m?[parseInt(m[1],10),parseInt(m[2],10)]:null; }
+  function resizeMap(width,height){ const next=makeBlank(width,height); for(let y=0;y<Math.min(height,state.height);y++) for(let x=0;x<Math.min(width,state.width);x++) next.cells[y][x]=state.cells[y][x]; state=next; }
 
-  function extractImage(root){
+  async function loadPdfJs(){
+    if(window.pdfjsLib){ window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WORKER_URL; return window.pdfjsLib; }
+    if(pdfJsPromise) return pdfJsPromise;
+    pdfJsPromise=new Promise((resolve,reject)=>{ const s=document.createElement('script'); s.src=PDFJS_URL; s.async=true; s.onload=()=>{ if(!window.pdfjsLib) reject(new Error('PDF.js loaded but pdfjsLib was not found.')); else { window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WORKER_URL; resolve(window.pdfjsLib); } }; s.onerror=()=>reject(new Error('Could not load PDF.js from CDN.')); document.head.appendChild(s); });
+    return pdfJsPromise;
+  }
+
+  async function extractMapFile(root){
     const file=root.querySelector('#mme-image').files?.[0]; if(!file){ status(root,'Choose an image or PDF first.'); return; }
-    if(file.type==='application/pdf' || file.name.toLowerCase().endsWith('.pdf')){ status(root,'PDF file selected. Browser-side PDF page rasterization needs a PDF renderer; export the map page as PNG/JPG for this pass.'); return; }
-    const img=new Image();
-    img.onload=()=>{ const w=clampInt(root.querySelector('#mme-extract-width').value,1,200), h=clampInt(root.querySelector('#mme-extract-height').value,1,200); const canvas=root.querySelector('#mme-extract-canvas'), ctx=canvas.getContext('2d',{willReadFrequently:true}); canvas.width=img.width; canvas.height=img.height; ctx.drawImage(img,0,0); const bounds=root.querySelector('#mme-detect-bounds').checked ? detectBounds(ctx,img.width,img.height) : {x0:0,y0:0,x1:img.width,y1:img.height}; const threshold=clampInt(root.querySelector('#mme-threshold').value,0,255), cutoff=clampFloat(root.querySelector('#mme-wall-cutoff').value,0,1,.48), invert=root.querySelector('#mme-invert').checked, symbols=root.querySelector('#mme-detect-symbols').checked; state=imageToGrid(ctx,bounds,w,h,threshold,cutoff,invert,symbols); syncSizeInputs(root); render(root); status(root,`Extracted ${w} × ${h} map from image. Review and clean before analysis.`); URL.revokeObjectURL(img.src); };
-    img.onerror=()=>status(root,'Could not load image.');
-    img.src=URL.createObjectURL(file);
+    const canvas=root.querySelector('#mme-extract-canvas');
+    try{
+      if(file.type==='application/pdf' || file.name.toLowerCase().endsWith('.pdf')){
+        status(root,'Loading PDF renderer and rasterizing selected page…');
+        await renderPdfPageToCanvas(file, canvas, clampInt(root.querySelector('#mme-pdf-page').value,1,9999), clampFloat(root.querySelector('#mme-pdf-scale').value,.5,5,2));
+        extractCanvasToState(root, canvas, `PDF page ${root.querySelector('#mme-pdf-page').value}`);
+      } else {
+        await renderImageToCanvas(file, canvas);
+        extractCanvasToState(root, canvas, 'image');
+      }
+    }catch(e){ status(root,'Extraction failed: '+e.message); }
   }
+  async function renderPdfPageToCanvas(file, canvas, requestedPage, scale){ const pdfjs=await loadPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; const page=await pdf.getPage(Math.max(1,Math.min(requestedPage,pdf.numPages))); const viewport=page.getViewport({scale}); canvas.width=Math.ceil(viewport.width); canvas.height=Math.ceil(viewport.height); await page.render({canvasContext:canvas.getContext('2d',{willReadFrequently:true}),viewport}).promise; }
+  function renderImageToCanvas(file, canvas){ return new Promise((resolve,reject)=>{ const img=new Image(); img.onload=()=>{ canvas.width=img.width; canvas.height=img.height; canvas.getContext('2d',{willReadFrequently:true}).drawImage(img,0,0); URL.revokeObjectURL(img.src); resolve(); }; img.onerror=()=>reject(new Error('Could not load image.')); img.src=URL.createObjectURL(file); }); }
+  function extractCanvasToState(root, canvas, sourceLabel){ const ctx=canvas.getContext('2d',{willReadFrequently:true}); const w=clampInt(root.querySelector('#mme-extract-width').value,1,200), h=clampInt(root.querySelector('#mme-extract-height').value,1,200); const bounds=root.querySelector('#mme-detect-bounds').checked?detectBounds(ctx,canvas.width,canvas.height):{x0:0,y0:0,x1:canvas.width,y1:canvas.height}; const threshold=clampInt(root.querySelector('#mme-threshold').value,0,255), cutoff=clampFloat(root.querySelector('#mme-wall-cutoff').value,0,1,.48), invert=root.querySelector('#mme-invert').checked, symbols=root.querySelector('#mme-detect-symbols').checked; state=imageToGrid(ctx,bounds,w,h,threshold,cutoff,invert,symbols); state.source=`uploaded-${sourceLabel}-extraction`; syncSizeInputs(root); render(root); status(root,`Extracted ${w} × ${h} map from ${sourceLabel}. Review and clean before analysis.`); }
+  function detectBounds(ctx,w,h){ const data=ctx.getImageData(0,0,w,h).data; let x0=w,y0=h,x1=0,y1=0; for(let y=0;y<h;y+=2) for(let x=0;x<w;x+=2){ const i=(y*w+x)*4, avg=(data[i]+data[i+1]+data[i+2])/3; if(data[i+3]>20&&avg<245){ x0=Math.min(x0,x); y0=Math.min(y0,y); x1=Math.max(x1,x); y1=Math.max(y1,y); }} return (x1<=x0||y1<=y0)?{x0:0,y0:0,x1:w,y1:h}:{x0,y0,x1:x1+1,y1:y1+1}; }
+  function imageToGrid(ctx,b,w,h,threshold,cutoff,invert,detectSymbols){ const next=makeBlank(w,h), cw=(b.x1-b.x0)/w, ch=(b.y1-b.y0)/h; for(let gy=0;gy<h;gy++) for(let gx=0;gx<w;gx++){ let dark=0,total=0; const sx0=Math.floor(b.x0+gx*cw), sx1=Math.floor(b.x0+(gx+1)*cw), sy0=Math.floor(b.y0+gy*ch), sy1=Math.floor(b.y0+(gy+1)*ch); const data=ctx.getImageData(sx0,sy0,Math.max(1,sx1-sx0),Math.max(1,sy1-sy0)).data; for(let i=0;i<data.length;i+=4){ const avg=(data[i]+data[i+1]+data[i+2])/3; const isDark=invert?avg>threshold:avg<threshold; if(isDark) dark++; total++; } const ratio=dark/Math.max(1,total); let type=ratio>=cutoff?'wall':'floor'; if(detectSymbols&&ratio>0.08&&ratio<cutoff) type='door'; next.cells[gy][gx]={type,label:''}; } next.notes='First-pass black/white extraction. Correct doors, labels, and special symbols before using topology output as authoritative.'; return next; }
 
-  function detectBounds(ctx,w,h){ const data=ctx.getImageData(0,0,w,h).data; let x0=w,y0=h,x1=0,y1=0; for(let y=0;y<h;y+=2) for(let x=0;x<w;x+=2){ const i=(y*w+x)*4, avg=(data[i]+data[i+1]+data[i+2])/3; if(data[i+3]>20 && avg<245){ x0=Math.min(x0,x); y0=Math.min(y0,y); x1=Math.max(x1,x); y1=Math.max(y1,y); } } return (x1<=x0||y1<=y0)?{x0:0,y0:0,x1:w,y1:h}:{x0,y0,x1:x1+1,y1:y1+1}; }
-  function imageToGrid(ctx,b,w,h,threshold,cutoff,invert,detectSymbols){ const next=makeBlank(w,h), cw=(b.x1-b.x0)/w, ch=(b.y1-b.y0)/h; for(let gy=0;gy<h;gy++) for(let gx=0;gx<w;gx++){ let dark=0,total=0; const sx0=Math.floor(b.x0+gx*cw), sx1=Math.floor(b.x0+(gx+1)*cw), sy0=Math.floor(b.y0+gy*ch), sy1=Math.floor(b.y0+(gy+1)*ch); const data=ctx.getImageData(sx0,sy0,Math.max(1,sx1-sx0),Math.max(1,sy1-sy0)).data; for(let i=0;i<data.length;i+=4){ const avg=(data[i]+data[i+1]+data[i+2])/3; const isDark=invert?avg>threshold:avg<threshold; if(isDark) dark++; total++; } const ratio=dark/Math.max(1,total); let type=ratio>=cutoff?'wall':'floor'; if(detectSymbols && ratio>0.08 && ratio<cutoff) type='door'; next.cells[gy][gx]={type,label:''}; } next.source='uploaded-image-extraction'; next.notes='First-pass black/white extraction. Correct doors, labels, and special symbols before using topology output as authoritative.'; return next; }
-
-  function analyzeTopology(){
-    const regionGrid=Array.from({length:state.height},()=>Array.from({length:state.width},()=>null));
-    const regions=[], dirs=[[1,0],[-1,0],[0,1],[0,-1]];
-    for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++){
-      if(regionGrid[y][x]!==null || !OPEN_TYPES.has(state.cells[y][x].type)) continue;
-      const id=`region-${regions.length+1}`, stack=[[x,y]], tiles=[], labels=[]; regionGrid[y][x]=id;
-      while(stack.length){ const [cx,cy]=stack.pop(); tiles.push([cx,cy]); const c=state.cells[cy][cx]; if(c.type==='label'&&c.label) labels.push(c.label); for(const [dx,dy] of dirs){ const nx=cx+dx, ny=cy+dy; if(nx<0||ny<0||nx>=state.width||ny>=state.height) continue; if(regionGrid[ny][nx]===null && OPEN_TYPES.has(state.cells[ny][nx].type)){ regionGrid[ny][nx]=id; stack.push([nx,ny]); } } }
-      regions.push({id,type:labels.length?'room':'corridor',labels:[...new Set(labels)],tileCount:tiles.length,tiles});
-    }
-    const connections=[];
-    for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++){ const c=state.cells[y][x]; if(!CONNECTOR_TYPES.has(c.type)) continue; const touching=[...new Set(dirs.map(([dx,dy])=>regionGrid[y+dy]?.[x+dx]).filter(Boolean))]; connections.push({id:`${c.type}-${x}-${y}`,kind:c.type,x,y,regions:touching,labels:touching.map(id=>regions.find(r=>r.id===id)).filter(Boolean).flatMap(r=>r.labels.length?r.labels:[r.id])}); }
-    return {schemaVersion:'0.1.0',mapTitle:state.title||'',width:state.width,height:state.height,regions,connections,warnings:connections.filter(c=>c.regions.length<2).map(c=>`${c.id} touches fewer than two open regions`)};
-  }
+  function analyzeTopology(){ const regionGrid=Array.from({length:state.height},()=>Array.from({length:state.width},()=>null)); const regions=[], dirs=[[1,0],[-1,0],[0,1],[0,-1]]; for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++){ if(regionGrid[y][x]!==null||!OPEN_TYPES.has(state.cells[y][x].type)) continue; const id=`region-${regions.length+1}`, stack=[[x,y]], tiles=[], labels=[]; regionGrid[y][x]=id; while(stack.length){ const [cx,cy]=stack.pop(); tiles.push([cx,cy]); const c=state.cells[cy][cx]; if(c.type==='label'&&c.label) labels.push(c.label); for(const [dx,dy] of dirs){ const nx=cx+dx, ny=cy+dy; if(nx<0||ny<0||nx>=state.width||ny>=state.height) continue; if(regionGrid[ny][nx]===null&&OPEN_TYPES.has(state.cells[ny][nx].type)){ regionGrid[ny][nx]=id; stack.push([nx,ny]); }}} regions.push({id,type:labels.length?'room':'corridor',labels:[...new Set(labels)],tileCount:tiles.length,tiles}); } const connections=[]; for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++){ const c=state.cells[y][x]; if(!CONNECTOR_TYPES.has(c.type)) continue; const touching=[...new Set(dirs.map(([dx,dy])=>regionGrid[y+dy]?.[x+dx]).filter(Boolean))]; connections.push({id:`${c.type}-${x}-${y}`,kind:c.type,x,y,regions:touching,labels:touching.map(id=>regions.find(r=>r.id===id)).filter(Boolean).flatMap(r=>r.labels.length?r.labels:[r.id])}); } return {schemaVersion:'0.1.0',mapTitle:state.title||'',width:state.width,height:state.height,regions,connections,warnings:connections.filter(c=>c.regions.length<2).map(c=>`${c.id} touches fewer than two open regions`)}; }
 
   function syncSizeInputs(root){ root.querySelector('#mme-width').value=state.width; root.querySelector('#mme-height').value=state.height; root.querySelector('#mme-extract-width').value=state.width; root.querySelector('#mme-extract-height').value=state.height; }
-  function render(root){ updatePalette(root); drawGrid(root); root.querySelector('#mme-preview').textContent=toAscii(); status(root,`${state.width} × ${state.height} grid ready.`); }
+  function render(root){ updatePalette(root); drawGrid(root); root.querySelector('#mme-preview').textContent=toAscii(); applyToViewer(); status(root,`${state.width} × ${state.height} grid ready.`); }
   function updatePalette(root){ root.querySelectorAll('.module-palette-button').forEach(b=>b.classList.toggle('active',b.dataset.tileType===selectedType)); }
   function drawGrid(root){ const grid=root.querySelector('#mme-grid'); grid.style.gridTemplateColumns=`repeat(${state.width}, 18px)`; grid.innerHTML=''; for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++) grid.appendChild(tileButton(root,x,y)); }
   function tileButton(root,x,y){ const cell=state.cells[y][x], t=tileById(cell.type); const b=document.createElement('button'); b.type='button'; b.className=`module-tile ${t.className}`; b.dataset.x=x; b.dataset.y=y; b.title=`${x},${y} ${t.label}`; b.textContent=cell.type==='label'?cell.label:(['door','secret-door','trap','stairs'].includes(cell.type)?t.char:''); b.onmousedown=e=>{paintDown=true; paint(root,x,y,e.shiftKey)}; b.onmouseenter=e=>{ if(paintDown) paint(root,x,y,e.shiftKey,true); }; return b; }
-  function paint(root,x,y,shiftKey,drag=false){ const mode=root.querySelector('#mme-mode').value, cell=state.cells[y][x]; if(mode==='cycle' && !drag){ const i=TILE_TYPES.findIndex(t=>t.id===cell.type), next=TILE_TYPES[(i+1)%TILE_TYPES.length]; state.cells[y][x]={type:next.id,label:next.id==='label'?(root.querySelector('#mme-label').value||'1'):''}; } else if(mode==='label' || selectedType==='label'){ state.cells[y][x]={type:'label',label:root.querySelector('#mme-label').value||String(nextRoomNumber())}; } else if(shiftKey){ state.cells[y][x]={type:'void',label:''}; } else { state.cells[y][x]={type:selectedType,label:''}; } refreshTile(root,x,y); root.querySelector('#mme-preview').textContent=toAscii(); }
+  function paint(root,x,y,shiftKey,drag=false){ const mode=root.querySelector('#mme-mode').value, cell=state.cells[y][x]; if(mode==='cycle'&&!drag){ const i=TILE_TYPES.findIndex(t=>t.id===cell.type), next=TILE_TYPES[(i+1)%TILE_TYPES.length]; state.cells[y][x]={type:next.id,label:next.id==='label'?(root.querySelector('#mme-label').value||'1'):''}; } else if(mode==='label'||selectedType==='label'){ state.cells[y][x]={type:'label',label:root.querySelector('#mme-label').value||String(nextRoomNumber())}; } else if(shiftKey){ state.cells[y][x]={type:'void',label:''}; } else { state.cells[y][x]={type:selectedType,label:''}; } refreshTile(root,x,y); root.querySelector('#mme-preview').textContent=toAscii(); applyToViewer(); }
   function refreshTile(root,x,y){ const old=root.querySelector(`.module-tile[data-x="${x}"][data-y="${y}"]`); if(old) old.replaceWith(tileButton(root,x,y)); }
   function nextRoomNumber(){ let max=0; state.cells.flat().forEach(c=>{ const n=parseInt(c.label,10); if(c.type==='label'&&!Number.isNaN(n)) max=Math.max(max,n); }); return max+1; }
   function status(root,msg){ root.querySelector('#mme-status').textContent=msg; }
   function toAscii(){ return state.cells.map(row=>row.map(c=>c.type==='label'?(c.label||'L').slice(0,1):tileById(c.type).char).join('')).join('\n'); }
   function toSvg(){ const s=18, w=state.width*s, h=state.height*s; const parts=[`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`,`<rect width="${w}" height="${h}" fill="#fff"/>`]; for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++){ const c=state.cells[y][x], px=x*s, py=y*s; if(c.type==='void'||c.type==='wall') parts.push(`<rect x="${px}" y="${py}" width="${s}" height="${s}" fill="#000"/>`); if(['floor','label','door','secret-door','trap','stairs'].includes(c.type)) parts.push(`<rect x="${px}" y="${py}" width="${s}" height="${s}" fill="#fff" stroke="#d0d0d0" stroke-width="1"/>`); if(c.type==='door') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">D</text>`); if(c.type==='secret-door') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">S</text>`); if(c.type==='trap') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">T</text>`); if(c.type==='stairs') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">^</text>`); if(c.type==='label') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="serif" font-size="12" fill="#000">${esc(c.label)}</text>`); } parts.push('</svg>'); return parts.join('\n'); }
+  function applyToViewer(){ document.dispatchEvent(new CustomEvent('module-map-editor-output',{detail:{svg:toSvg(),state}})); }
   function download(name,content,type){ const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href); }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
   window.initModuleMapEditor = init;
+  window.getModuleMapEditorState = () => state;
 })();
