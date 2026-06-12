@@ -1,7 +1,7 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "0.3.0",
-  "description": "Multi-pack wiki index. Files later in this list can extend or override earlier seed entries by stable entry id. Source lore packs must load last so the visible wiki remains reader-facing.",
+  "schemaVersion": "0.4.0",
+  "description": "Multi-pack wiki index. Files later in this list can extend or override earlier seed entries by stable entry id. Source lore packs must load last so the visible wiki remains reader-facing. Converted statistics packs load after lore packs so real Hypertext d20 stat blocks override legacy mechanics placeholders.",
   "packs": [
     "data/kaysender/wiki/entries.json",
     "data/kaysender/wiki/world-depth.json",
@@ -63,6 +63,7 @@
     "data/kaysender/wiki/source-lore-pass-52-hollows-end-features.json",
     "data/kaysender/wiki/source-lore-pass-53-invention-workflow-depth.json",
     "data/kaysender/wiki/source-lore-pass-54-mass-combat-depth.json",
-    "data/kaysender/wiki/source-lore-pass-55-ship-tracking-depth.json"
+    "data/kaysender/wiki/source-lore-pass-55-ship-tracking-depth.json",
+    "data/kaysender/wiki/converted-stats-pass-1-abyss-creatures.json"
   ]
 }
