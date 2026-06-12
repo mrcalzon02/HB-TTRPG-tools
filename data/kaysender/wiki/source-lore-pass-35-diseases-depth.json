@@ -1,0 +1,533 @@
+﻿{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Individual entries for fungal implant and common diseases.",
+    "entries":  [
+                    {
+                        "id":  "sporeblight",
+                        "title":  "Sporeblight",
+                        "category":  "Hazards",
+                        "summary":  "Windborne spores root in lungs and can collapse the respiratory system of humanoids, dragons, and aerial megafauna.",
+                        "body":  [
+                                     "Moist cloud banks, floating plants, and fog carry spores for miles. Infection causes cough, breathlessness, throat rash, exhaustion, weakness, and eventually bloodstream spread.",
+                                     "Purging magic, antifungal herbs, respiratory filters, and protective wards are the principal responses."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Sporeblight",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:sporeblight",
+                                               "notes":  "Markdown lines 7771-7794."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:sporeblight"
+                                           ],
+                        "tags":  [
+                                     "airborne fungus",
+                                     "respiratory",
+                                     "spores"
+                                 ],
+                        "relatedEntries":  [
+                                               "fungal-implant-diseases",
+                                               "skywhales",
+                                               "aerial-flora"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "settlement-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "skyfungus-growth",
+                        "title":  "Skyfungus Growth",
+                        "category":  "Hazards",
+                        "summary":  "A contagious skin parasite forms painful fungal masses that impair wings, claws, and breathing.",
+                        "body":  [
+                                     "Contact with infected creatures or debris spreads the fungus among Sheffels, Skywhales, and other flying fauna. Redness, swelling, sticky secretion, lumpy masses, weakness, and internal spread follow.",
+                                     "Treatment combines surgical removal with strong salves or magic and is safest before the growth becomes extensive."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Skyfungus Growth",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:skyfungus-growth",
+                                               "notes":  "Markdown lines 7795-7818."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:skyfungus-growth"
+                                           ],
+                        "tags":  [
+                                     "parasitic fungus",
+                                     "flying fauna",
+                                     "surgery"
+                                 ],
+                        "relatedEntries":  [
+                                               "fungal-implant-diseases",
+                                               "sheffels-creature",
+                                               "skywhales"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "undercloud-rot",
+                        "title":  "Undercloud Rot",
+                        "category":  "Hazards",
+                        "summary":  "A necrotic plant-borne fungus destroys the organs and tissue of herbivores grazing near lower islands and the Abyss.",
+                        "body":  [
+                                     "Infected plants transmit abdominal pain, bloating, blackened tissue, wasting, fever, delirium, and visible necrosis. Once bloodstream infection begins, survival is unlikely.",
+                                     "Early herbs and healing magic may halt decay; advanced cases can require amputation."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Undercloud Rot",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:undercloud-rot",
+                                               "notes":  "Markdown lines 7819-7840."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:undercloud-rot"
+                                           ],
+                        "tags":  [
+                                     "necrotic fungus",
+                                     "herbivore",
+                                     "Abyss",
+                                     "infected plants"
+                                 ],
+                        "relatedEntries":  [
+                                               "fungal-implant-diseases",
+                                               "the-abyss",
+                                               "aerial-flora"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "supply-water-planner"
+                                           ]
+                    },
+                    {
+                        "id":  "aerial-mycosis",
+                        "title":  "Aerial Mycosis",
+                        "category":  "Hazards",
+                        "summary":  "A symbiotic fungus improves aerial nutrient absorption while manipulating a host\u0027s movement and behavior.",
+                        "body":  [
+                                     "Fungal patches on islands and abandoned ships infect mounts, Sheffels, and smaller creatures. Visible tendrils, restlessness, aggression, disorientation, lethargy, and body-borne spores indicate infection.",
+                                     "Long-term magical and herbal treatment must sever the relationship, remove tissue, and monitor behavior."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Aerial Mycosis",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:aerial-mycosis",
+                                               "notes":  "Markdown lines 7841-7863."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:aerial-mycosis"
+                                           ],
+                        "tags":  [
+                                     "symbiotic fungus",
+                                     "behavior control",
+                                     "mounts"
+                                 ],
+                        "relatedEntries":  [
+                                               "fungal-implant-diseases",
+                                               "sheffels-creature",
+                                               "airships"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "encounter-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "haze-cap-disease",
+                        "title":  "Haze Cap Disease",
+                        "category":  "Hazards",
+                        "summary":  "High-altitude hallucinogenic spores induce euphoria, paranoia, recklessness, aggression, and fungal caps on the body.",
+                        "body":  [
+                                     "The fungus thrives where magical energy is strong and spreads by inhalation or contaminated surfaces. Victims lose coordination and may become self-destructive under vivid sensory distortion.",
+                                     "Calming and anti-hallucinogenic medicine can control symptoms, but purification or spiritual healing may be necessary to prevent lasting brain injury."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Haze Cap Disease",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:haze-cap-disease",
+                                               "notes":  "Markdown lines 7864-7887."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:haze-cap-disease"
+                                           ],
+                        "tags":  [
+                                     "hallucinogenic fungus",
+                                     "paranoia",
+                                     "euphoria",
+                                     "high altitude"
+                                 ],
+                        "relatedEntries":  [
+                                               "fungal-implant-diseases",
+                                               "potion-guilds",
+                                               "aerial-flora"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "encounter-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "siphon-fungus",
+                        "title":  "Siphon Fungus",
+                        "category":  "Hazards",
+                        "summary":  "Burrowing spores root through veins and consume a host\u0027s blood until it collapses or falls.",
+                        "body":  [
+                                     "Skin growths, thirst, fever, blood loss, wasting, bleeding, and an audible siphoning sound mark the infection. Larger animals are especially vulnerable.",
+                                     "Physical extraction and magical purging must remove roots before organs or limbs are consumed; blood-restoring medicines aid recovery."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Siphon Fungus",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:siphon-fungus",
+                                               "notes":  "Markdown lines 7888-7911."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:siphon-fungus"
+                                           ],
+                        "tags":  [
+                                     "blood fungus",
+                                     "parasite",
+                                     "extraction"
+                                 ],
+                        "relatedEntries":  [
+                                               "fungal-implant-diseases",
+                                               "skywhales",
+                                               "sheffels-creature"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "cloud-fever",
+                        "title":  "Cloud Fever",
+                        "category":  "Hazards",
+                        "summary":  "A highly contagious viral fever worsens in damp cloud banks and can leave lasting weakness or neurological injury.",
+                        "body":  [
+                                     "Droplets and contaminated surfaces spread fever, chills, pain, dizziness, cough, exhaustion, hallucinations, confusion, and respiratory distress among humanoid populations.",
+                                     "Antiviral medicine, fever reducers, healing magic, isolation, and prolonged rest support recovery."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Cloud Fever",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:cloud-fever",
+                                               "notes":  "Markdown lines 7920-7944."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:cloud-fever"
+                                           ],
+                        "tags":  [
+                                     "viral disease",
+                                     "cloud banks",
+                                     "fever",
+                                     "contagion"
+                                 ],
+                        "relatedEntries":  [
+                                               "common-kaysender-diseases",
+                                               "water-in-the-skies"
+                                           ],
+                        "relatedModules":  [
+                                               "settlement-generator",
+                                               "supply-water-planner"
+                                           ]
+                    },
+                    {
+                        "id":  "windblight",
+                        "title":  "Windblight",
+                        "category":  "Hazards",
+                        "summary":  "A damp-weather respiratory fungus infects livestock and people through spores and contaminated vegetation.",
+                        "body":  [
+                                     "Persistent cough, wheezing, oxygen loss, metallic taste, and growth around the mouth mark progressive lung infection in windy fogbound regions.",
+                                     "Antifungal potions, respiratory aids, purification, herbs, and isolation from contaminated areas are standard treatment."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Windblight",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:windblight",
+                                               "notes":  "Markdown lines 7945-7968."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:windblight"
+                                           ],
+                        "tags":  [
+                                     "respiratory fungus",
+                                     "livestock",
+                                     "fog"
+                                 ],
+                        "relatedEntries":  [
+                                               "common-kaysender-diseases",
+                                               "sporeblight",
+                                               "foodways-of-kaysender"
+                                           ],
+                        "relatedModules":  [
+                                               "settlement-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "skyfall-wasting",
+                        "title":  "Skyfall Wasting",
+                        "category":  "Hazards",
+                        "summary":  "A food-, water-, and contact-borne parasite slowly consumes nutrients, muscles, and organs.",
+                        "body":  [
+                                     "Large livestock, mounts, and humans develop fatigue, wasting, appetite loss, jaundice, swollen joints, and uneven breathing. Even survivors may retain lasting damage.",
+                                     "Hydration, rich food, restorative medicine, and powerful healing slow or reverse the disease, but no dependable ordinary cure is known."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Skyfall Wasting",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:skyfall-wasting",
+                                               "notes":  "Markdown lines 7969-7993."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:skyfall-wasting"
+                                           ],
+                        "tags":  [
+                                     "parasite",
+                                     "wasting",
+                                     "livestock",
+                                     "contaminated food"
+                                 ],
+                        "relatedEntries":  [
+                                               "common-kaysender-diseases",
+                                               "water-storage-and-transport",
+                                               "cargo-packaging-and-security"
+                                           ],
+                        "relatedModules":  [
+                                               "supply-water-planner",
+                                               "settlement-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "draconic-pox",
+                        "title":  "Draconic Pox",
+                        "category":  "Hazards",
+                        "summary":  "Contact with infected draconic creatures can spread a blistering viral illness among dragons and humanoids.",
+                        "body":  [
+                                     "Bites, scratches, and direct contact transmit fever, fatigue, painful rash, itching, swollen lymph nodes, respiratory involvement, and frequent scarring.",
+                                     "Antiviral preparations, magical salves, and healing magic reduce severity and duration."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Draconic Pox",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:draconic-pox",
+                                               "notes":  "Markdown lines 7994-8017."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:draconic-pox"
+                                           ],
+                        "tags":  [
+                                     "viral disease",
+                                     "dragonkin",
+                                     "blisters",
+                                     "scarring"
+                                 ],
+                        "relatedEntries":  [
+                                               "common-kaysender-diseases",
+                                               "dragon-kin",
+                                               "dragon-lords",
+                                               "common-aerial-hunters"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "settlement-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "rotroot-disease",
+                        "title":  "Rotroot Disease",
+                        "category":  "Hazards",
+                        "summary":  "Bacteria in contaminated roots, soil, or water cause lethal intestinal illness in grazing livestock.",
+                        "body":  [
+                                     "Tainted grazing near island bases and Abyssal regions produces bloating, pain, vomiting, diarrhea, foul waste, lethargy, dehydration, and organ failure.",
+                                     "Antibiotics, gut-healing medicine, clean feed, and herd separation are necessary; severe animals may be culled to protect the rest."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Rotroot Disease",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:rotroot-disease",
+                                               "notes":  "Markdown lines 8018-8041."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:rotroot-disease"
+                                           ],
+                        "tags":  [
+                                     "bacterial disease",
+                                     "livestock",
+                                     "contaminated roots",
+                                     "dehydration"
+                                 ],
+                        "relatedEntries":  [
+                                               "common-kaysender-diseases",
+                                               "the-abyss",
+                                               "foodways-of-kaysender"
+                                           ],
+                        "relatedModules":  [
+                                               "supply-water-planner",
+                                               "settlement-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "gloom-taint",
+                        "title":  "Gloom Taint",
+                        "category":  "Hazards",
+                        "summary":  "A curse-fungus hybrid drains senses, magic, strength, and mobility while surrounding victims with a gray-blue aura.",
+                        "body":  [
+                                     "Ancient cursed sites contaminate food, water, people, and herd animals. Victims become sensitive to cold and light as their senses and control deteriorate.",
+                                     "Only combined curse removal and fungal purification fully eradicates the condition; quarantine is common while specialists are sought."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Gloom Taint",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:gloom-taint",
+                                               "notes":  "Markdown lines 8042-8066."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:gloom-taint"
+                                           ],
+                        "tags":  [
+                                     "curse",
+                                     "fungus",
+                                     "gray aura",
+                                     "magical drain"
+                                 ],
+                        "relatedEntries":  [
+                                               "common-kaysender-diseases",
+                                               "haze-cap-disease",
+                                               "undead-acropolis"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "settlement-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "marshmaggot-rot",
+                        "title":  "Marshmaggot Rot",
+                        "category":  "Hazards",
+                        "summary":  "Larvae from stagnant water and wet plants burrow into grazing animals and consume living tissue.",
+                        "body":  [
+                                     "Swelling, fever, lethargy, open sores, discharge, maggot pockets, and painful movement identify infestation in humid and marshy regions.",
+                                     "Treatment requires surgical cleaning, parasite removal, medicine, wound care, herd separation, protective sprays, and avoidance of stagnant grazing water."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Marshmaggot Rot",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:marshmaggot-rot",
+                                               "notes":  "Markdown lines 8067-8090."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:marshmaggot-rot"
+                                           ],
+                        "tags":  [
+                                     "parasite",
+                                     "maggots",
+                                     "marsh",
+                                     "livestock"
+                                 ],
+                        "relatedEntries":  [
+                                               "common-kaysender-diseases",
+                                               "lizardfolk-marsh-tavern-fare",
+                                               "water-in-the-skies"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "supply-water-planner"
+                                           ]
+                    }
+                ]
+}

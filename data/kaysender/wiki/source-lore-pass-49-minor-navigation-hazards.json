@@ -1,0 +1,547 @@
+{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Dedicated entries for the twelve minor aerial navigational hazards.",
+    "entries":  [
+                    {
+                        "id":  "updraft-gust",
+                        "title":  "Updraft Gust",
+                        "category":  "Hazards",
+                        "summary":  "A sudden rising current pushes an airship above its intended altitude before the pilot can stabilize it.",
+                        "body":  [
+                                     "Updraft gusts are brief but dangerous near crowded routes, overhead obstacles, storm layers, and islands with irregular wind patterns. A fast pilot response keeps the vessel from climbing into a worse hazard."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Dexterity-based pilot check at DC 12. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Updraft Gust",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:updraft-gust",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:updraft-gust"
+                                           ],
+                        "tags":  [
+                                     "updraft",
+                                     "altitude",
+                                     "piloting",
+                                     "wind"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "airship-travel-roles"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "thermal-sink",
+                        "title":  "Thermal Sink",
+                        "category":  "Hazards",
+                        "summary":  "A cold pocket strips lift from an airship and causes a rapid, unexpected loss of altitude.",
+                        "body":  [
+                                     "Thermal sinks become especially dangerous over obstacles or lower cloud where crews have little room to recover. Pilots must correct the descent before the vessel strikes terrain, wreckage, or another ship."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Dexterity-based pilot check at DC 14. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Thermal Sink",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:thermal-sink",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:thermal-sink"
+                                           ],
+                        "tags":  [
+                                     "cold air",
+                                     "altitude loss",
+                                     "piloting",
+                                     "descent"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "fall-prevention-gear"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "airship-vessel-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "cloud-vortex-hazard",
+                        "title":  "Cloud Vortex",
+                        "category":  "Hazards",
+                        "summary":  "A rotating pocket of cloud obscures visibility and draws vessels toward its turbulent center.",
+                        "body":  [
+                                     "Cloud vortices combine uncertain movement with poor sightlines. Navigators must read the surrounding sky while pilots resist the current pulling the vessel inward."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for an Intelligence-based navigation check at DC 13. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Cloud Vortex",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:cloud-vortex-hazard",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:cloud-vortex-hazard"
+                                           ],
+                        "tags":  [
+                                     "clouds",
+                                     "vortex",
+                                     "navigation",
+                                     "visibility"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "sky-tornado"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "fog-bank-hazard",
+                        "title":  "Fog Bank",
+                        "category":  "Hazards",
+                        "summary":  "A dense wall of fog reduces visibility to only a few feet and conceals obstacles or approaching traffic.",
+                        "body":  [
+                                     "Fog banks transform otherwise ordinary routes into collision risks. Lookouts become the first defense, but reduced warning time forces the entire crew to prepare for abrupt course changes."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Wisdom-based Perception check at DC 12. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Fog Bank",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:fog-bank-hazard",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:fog-bank-hazard"
+                                           ],
+                        "tags":  [
+                                     "fog",
+                                     "visibility",
+                                     "collision",
+                                     "lookout"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "toxic-fog-hazard"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "wind-shear-hazard",
+                        "title":  "Wind Shear",
+                        "category":  "Hazards",
+                        "summary":  "An abrupt change in wind direction throws a vessel off heading and can expose its side to nearby obstacles.",
+                        "body":  [
+                                     "Wind shear offers little warning and can turn a stable course into uncontrolled lateral movement. Recovery depends on quick piloting and a crew ready to secure sails, cargo, and exposed personnel."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Dexterity-based pilot check at DC 15. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Wind Shear",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:wind-shear-hazard",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:wind-shear-hazard"
+                                           ],
+                        "tags":  [
+                                     "wind shear",
+                                     "course change",
+                                     "piloting",
+                                     "crew"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "major-turbulent-winds"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "airship-vessel-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "wandering-debris-hazard",
+                        "title":  "Wandering Debris",
+                        "category":  "Hazards",
+                        "summary":  "Detached wreckage drifts unseen across a route and threatens hulls, sails, and exposed crew.",
+                        "body":  [
+                                     "Debris may have traveled far from the vessel or island that produced it, making familiar routes unsafe without warning. Early detection allows avoidance or controlled salvage; late detection leaves only collision response."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Wisdom-based Perception check at DC 13. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Wandering Debris",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:wandering-debris-hazard",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:wandering-debris-hazard"
+                                           ],
+                        "tags":  [
+                                     "wreckage",
+                                     "collision",
+                                     "lookout",
+                                     "salvage"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "wreck-of-the-sky-strider"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "airship-vessel-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "minor-lightning-strike",
+                        "title":  "Minor Lightning Strike",
+                        "category":  "Hazards",
+                        "summary":  "A nearby bolt can disable equipment or ignite exposed parts of an airship even when the main storm remains distant.",
+                        "body":  [
+                                     "The immediate strike may be less dangerous than the secondary failures it produces. Arcane systems, mechanisms, rigging, and dry materials all require rapid inspection before a small incident becomes a shipboard emergency."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for an Intelligence-based Arcana or tinkering check at DC 15. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Lightning Strike",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:minor-lightning-strike",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:minor-lightning-strike"
+                                           ],
+                        "tags":  [
+                                     "lightning",
+                                     "equipment",
+                                     "fire",
+                                     "tinkering"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "major-lightning-storm"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "airship-vessel-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "minor-turbulent-winds",
+                        "title":  "Minor Turbulent Winds",
+                        "category":  "Hazards",
+                        "summary":  "Erratic gusts unbalance an airship and test the pilot\u0027s ability to prevent damage or instability.",
+                        "body":  [
+                                     "Unlike a sustained storm, minor turbulence may arrive as a short field of conflicting currents. It remains dangerous when the ship is overloaded, damaged, tightly formed with other vessels, or passing close to terrain."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Dexterity-based pilot check at DC 16. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Turbulent Winds",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:minor-turbulent-winds",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:minor-turbulent-winds"
+                                           ],
+                        "tags":  [
+                                     "turbulence",
+                                     "balance",
+                                     "piloting",
+                                     "wind"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "major-turbulent-winds"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "skyfall-dust",
+                        "title":  "Skyfall Dust",
+                        "category":  "Hazards",
+                        "summary":  "A drifting dust cloud obscures landmarks and prevents precise navigation through an otherwise open route.",
+                        "body":  [
+                                     "Skyfall dust can conceal islands, vessels, and changes in wind until a ship is already committed to its course. Lookouts must distinguish true shapes from movement inside the cloud."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Wisdom-based Perception check at DC 12. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Skyfall Dust",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:skyfall-dust",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:skyfall-dust"
+                                           ],
+                        "tags":  [
+                                     "dust cloud",
+                                     "visibility",
+                                     "navigation",
+                                     "lookout"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "fog-bank-hazard"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "sudden-sinkhole-hazard",
+                        "title":  "Sudden Sinkhole",
+                        "category":  "Hazards",
+                        "summary":  "A vessel abruptly loses altitude as though the sky has opened beneath it.",
+                        "body":  [
+                                     "The drop resembles a freefall and can surprise even experienced crews. Pilots must restore lift before the ship reaches lower traffic, terrain, debris, or dangerous cloud layers."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Dexterity-based pilot check at DC 14. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Sudden Sinkhole",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:sudden-sinkhole-hazard",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:sudden-sinkhole-hazard"
+                                           ],
+                        "tags":  [
+                                     "freefall",
+                                     "altitude loss",
+                                     "piloting",
+                                     "air current"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "thermal-sink"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "airship-vessel-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "glinting-sun-hazard",
+                        "title":  "Glinting Sun",
+                        "category":  "Hazards",
+                        "summary":  "Sunlight reflected from a sky crystal blinds crew and disrupts the vessel\u0027s heading.",
+                        "body":  [
+                                     "The glare can arrive suddenly as ship, sun, and crystal align. Temporary blindness and disorientation leave the vessel vulnerable to course errors until the crew shields their vision or changes angle."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Constitution saving throw at DC 13. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Glinting Sun",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:glinting-sun-hazard",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:glinting-sun-hazard"
+                                           ],
+                        "tags":  [
+                                     "sun glare",
+                                     "sky crystal",
+                                     "blindness",
+                                     "navigation"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "crystal-drift"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "crosswinds-hazard",
+                        "title":  "Crosswinds",
+                        "category":  "Hazards",
+                        "summary":  "Opposing air currents intersect and drive an airship into erratic lateral movement.",
+                        "body":  [
+                                     "Crosswinds make a steady heading difficult to maintain and can separate ships traveling in formation. Crews must anticipate repeated corrections rather than treating the first shift as the whole event."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Navigation Procedure",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source calls for a Dexterity-based pilot check at DC 14. This numerical procedure requires conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Aerial Navigational Hazards / Crosswinds",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:crosswinds-hazard",
+                                               "notes":  "Markdown lines 8154-8178."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:crosswinds-hazard"
+                                           ],
+                        "tags":  [
+                                     "crosswinds",
+                                     "formation",
+                                     "heading",
+                                     "piloting"
+                                 ],
+                        "relatedEntries":  [
+                                               "aerial-navigational-hazards",
+                                               "wind-shear-hazard"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "fleet-management"
+                                           ]
+                    }
+                ]
+}

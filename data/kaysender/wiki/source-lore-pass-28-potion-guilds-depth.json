@@ -1,0 +1,240 @@
+﻿{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Dedicated entries for the five potion guilds previously preserved in one overview.",
+    "entries":  [
+                    {
+                        "id":  "gilded-flask-guild",
+                        "title":  "The Gilded Flask Guild",
+                        "category":  "Factions",
+                        "summary":  "Luxury alchemists sell potent, lavishly packaged restoratives and confidence tonics to nobles, wealthy merchants, and adventurers.",
+                        "body":  [
+                                     "The Gilded Flask uses rare herbs, celestial honey, crystal basins, moonlight aging, amber spirits, and warming charms. Its Elixir of Vital Resurgence tastes of honey and citrus, while Liquid Courage resembles spiced apple by a winter hearth.",
+                                     "Gold filigree, gilded corks, wax seals, and lion emblems make its products recognizable status goods as well as medicine."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Potions",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source gives healing, exhaustion, fear, Charisma, and duration values for its potions. Conversion is required."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "The Gilded Flask Guild",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:gilded-flask-guild",
+                                               "notes":  "Markdown lines 1382-1400."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:gilded-flask-guild"
+                                           ],
+                        "tags":  [
+                                     "Gilded Flask",
+                                     "alchemy",
+                                     "luxury",
+                                     "Elixir of Vital Resurgence",
+                                     "Liquid Courage"
+                                 ],
+                        "relatedEntries":  [
+                                               "potion-guilds"
+                                           ],
+                        "relatedModules":  [
+                                               "crafting-gadget-creator",
+                                               "shop-market-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "iron-cauldron-consortium",
+                        "title":  "Iron Cauldron Consortium",
+                        "category":  "Factions",
+                        "summary":  "A practical potion supplier produces affordable, durable brews for soldiers, adventurers, and ordinary workers.",
+                        "body":  [
+                                     "The Consortium boils roots, iron filings, and volcanic ash in cast-iron cauldrons for Ironhide Tonic. Fleetfoot Brew uses windblossom and quicksilver, rapidly infused and cooled in running water.",
+                                     "Riveted iron flasks and blackened steel lightning vials emphasize durability over display."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Potions",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "Armor, speed, agility, and duration values require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Iron Cauldron Consortium",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:iron-cauldron-consortium",
+                                               "notes":  "Markdown lines 1401-1419."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:iron-cauldron-consortium"
+                                           ],
+                        "tags":  [
+                                     "Iron Cauldron",
+                                     "Ironhide Tonic",
+                                     "Fleetfoot Brew",
+                                     "common potions"
+                                 ],
+                        "relatedEntries":  [
+                                               "potion-guilds",
+                                               "mercenary-companies"
+                                           ],
+                        "relatedModules":  [
+                                               "crafting-gadget-creator",
+                                               "shop-market-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "verdant-circle-collective",
+                        "title":  "Verdant Circle Collective",
+                        "category":  "Factions",
+                        "summary":  "Sustainable herbalists serve druids, rangers, and naturalists with restorative and animal-affinity brews.",
+                        "body":  [
+                                     "The Collective uses sun-dried herbs, spring water, growth charms, enchanted sap, berries, pheromones, wooden barrels, recycled glass, biodegradable twine, clay, and beeswax.",
+                                     "Its Verdant Restoration Draught evokes mint and dew-covered grass; Beastbinder\u0027s Tonic smells of berries and forest moss."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Potions",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "Healing and animal-handling bonuses require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Verdant Circle Collective",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:verdant-circle-collective",
+                                               "notes":  "Markdown lines 1420-1438."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:verdant-circle-collective"
+                                           ],
+                        "tags":  [
+                                     "Verdant Circle",
+                                     "herbalism",
+                                     "sustainable alchemy",
+                                     "Beastbinder"
+                                 ],
+                        "relatedEntries":  [
+                                               "potion-guilds",
+                                               "aerial-flora",
+                                               "sky-ecology"
+                                           ],
+                        "relatedModules":  [
+                                               "crafting-gadget-creator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "emberforge-alchemists",
+                        "title":  "Emberforge Alchemists",
+                        "category":  "Factions",
+                        "summary":  "Fire-alchemists produce volatile strength serums and incendiary oils for warriors and demolitionists.",
+                        "body":  [
+                                     "Blazing Fury Serum combines flame orchids, ember powder, molten steel, and heat-resistant packaging. Ignition Oil is mixed through controlled combustion and stored in impact-breaking flasks.",
+                                     "Their products smell of chili, smoke, sulfur, and burning wood and demand careful transport."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Potions",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "Strength, resistance, duration, and fire-damage values require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Emberforge Alchemists",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:emberforge-alchemists",
+                                               "notes":  "Markdown lines 1439-1457."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:emberforge-alchemists"
+                                           ],
+                        "tags":  [
+                                     "Emberforge",
+                                     "Blazing Fury",
+                                     "Ignition Oil",
+                                     "fire alchemy"
+                                 ],
+                        "relatedEntries":  [
+                                               "potion-guilds",
+                                               "ember-guild",
+                                               "ship-based-weapons"
+                                           ],
+                        "relatedModules":  [
+                                               "crafting-gadget-creator",
+                                               "black-market-piracy-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "starlight-elixirs-guild",
+                        "title":  "Starlight Elixirs Guild",
+                        "category":  "Factions",
+                        "summary":  "Arcane brewers serve mages, scholars, and explorers with aura-sight and weightlessness elixirs.",
+                        "body":  [
+                                     "Astral Sight Decoction is brewed beneath starlight from moonflower and stardust, then stirred with crystal. Ethereal Drift Potion suspends cloudberry nectar and levitation crystal in midair glass spheres.",
+                                     "Star-stoppered glowing vials and iridescent spherical bottles make the guild\u0027s wares unmistakable."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Potions",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "Aura range, invisible perception, slow-fall, and duration values require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Starlight Elixirs Guild",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:starlight-elixirs-guild",
+                                               "notes":  "Markdown lines 1458-1474."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:starlight-elixirs-guild"
+                                           ],
+                        "tags":  [
+                                     "Starlight Elixirs",
+                                     "Astral Sight",
+                                     "Ethereal Drift",
+                                     "arcane alchemy"
+                                 ],
+                        "relatedEntries":  [
+                                               "potion-guilds",
+                                               "fall-prevention-gear",
+                                               "aetherbound-company"
+                                           ],
+                        "relatedModules":  [
+                                               "crafting-gadget-creator",
+                                               "shop-market-generator"
+                                           ]
+                    }
+                ]
+}

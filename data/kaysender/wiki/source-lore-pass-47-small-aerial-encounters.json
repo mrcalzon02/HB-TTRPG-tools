@@ -1,0 +1,489 @@
+{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Dedicated locations and situations from the small aerial encounter table.",
+    "entries":  [
+                    {
+                        "id":  "skyfall-rock",
+                        "title":  "Skyfall Rock",
+                        "category":  "Locations",
+                        "summary":  "A moss-covered floating rock shifts constantly in the wind and is rumored to make unattended objects disappear.",
+                        "body":  [
+                                     "A broken statue of an ancient god stands at the center of this restless minor island. Sailors treat the place as cursed because possessions left behind vanish without a trace.",
+                                     "The rock can serve as a brief landing place, a shrine mystery, or a lure for investigators willing to test the disappearance stories."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Skyfall Rock",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:skyfall-rock",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:skyfall-rock"
+                                           ],
+                        "tags":  [
+                                     "minor island",
+                                     "curse",
+                                     "ancient statue",
+                                     "disappearance"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "minor-sky-island-encounters"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "floating-island-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "wreck-of-the-sky-strider",
+                        "title":  "Wreck of the Sky Strider",
+                        "category":  "Locations",
+                        "summary":  "A burned and broken airship wreck shelters delirious survivors who warn of a nearby shadow predator.",
+                        "body":  [
+                                     "The Sky Strider\u0027s sails are torn and scorched, while portions of the crew still wander the wreck in an altered state. Their warnings suggest that whatever destroyed or stalked the vessel remains close.",
+                                     "Rescue, salvage, and investigation all risk attracting the hidden hunter or exposing survivors to further danger."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Wreck of the Sky Strider",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:wreck-sky-strider",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:wreck-sky-strider"
+                                           ],
+                        "tags":  [
+                                     "airship wreck",
+                                     "survivors",
+                                     "shadow predator",
+                                     "salvage"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "ship-to-ship-combat"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "job-board-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "timberheart-grove",
+                        "title":  "Timberheart Grove",
+                        "category":  "Locations",
+                        "summary":  "A drifting grove of gnarled floating trees draws insects, small creatures, and hunters with its sweet scent.",
+                        "body":  [
+                                     "The grove grows on a cluster of small floating rocks. Its twisted, timber-like bark and heavy fragrance make it recognizable from a distance.",
+                                     "Bees fill the air around the trees, and hunters use the grove as a predictable feeding ground while accepting the risks posed by its dense insect life."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Timberheart Grove",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:timberheart-grove",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:timberheart-grove"
+                                           ],
+                        "tags":  [
+                                     "floating grove",
+                                     "hunters",
+                                     "bees",
+                                     "sweet scent"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "timber-hearts",
+                                               "aerial-flora"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "floating-obelisk",
+                        "title":  "The Floating Obelisk",
+                        "category":  "Locations",
+                        "summary":  "A cracked rune-covered obelisk still pulses with energy among scattered magical devices.",
+                        "body":  [
+                                     "The towering stone monument is damaged but active. Arcane runes retain a faint pulse, and broken devices around its base range from inert debris to mechanisms that still function.",
+                                     "The site invites salvage and study, but activating one device may affect the obelisk or awaken systems whose original purpose has been forgotten."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Floating Obelisk",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:floating-obelisk",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:floating-obelisk"
+                                           ],
+                        "tags":  [
+                                     "obelisk",
+                                     "arcane runes",
+                                     "magical devices",
+                                     "ruin"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "invention-system"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "job-board-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "crystal-drift",
+                        "title":  "The Crystal Drift",
+                        "category":  "Locations",
+                        "summary":  "A mobile mass of multicolored crystal carries valuable gems through the path of a recurring deadly windstorm.",
+                        "body":  [
+                                     "Embedded gems attract prospectors and adventurers to the shimmering drift. Its position is unreliable because a periodic storm pushes the entire crystal formation farther across the sky.",
+                                     "Mining crews must balance extraction time against weather signs, route changes, and the risk that the formation will carry them away from their vessel."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Crystal Drift",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:crystal-drift",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:crystal-drift"
+                                           ],
+                        "tags":  [
+                                     "crystal",
+                                     "gems",
+                                     "windstorm",
+                                     "prospecting"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "aerial-navigational-hazards"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "lost-aerie",
+                        "title":  "The Lost Aerie",
+                        "category":  "Locations",
+                        "summary":  "A ruined sky temple carries tattered banners, a distant gong, and ghostly nighttime occupants.",
+                        "body":  [
+                                     "The stone ruins appear to have served as a temple or sacred aerie. No visible keeper rings the gong that echoes from within, and faded banners still move in the high winds.",
+                                     "At night translucent figures cross the grounds, suggesting a surviving ritual, haunting, or memory bound to the complex."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Lost Aerie",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:lost-aerie",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:lost-aerie"
+                                           ],
+                        "tags":  [
+                                     "sky temple",
+                                     "ruins",
+                                     "ghosts",
+                                     "gong"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "whispering-ruins"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "job-board-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "lighthouse-of-the-fallen",
+                        "title":  "Lighthouse of the Fallen",
+                        "category":  "Locations",
+                        "summary":  "A broken lighthouse continues to flash an unmaintained beacon near routes once leading dangerously close to the Abyss.",
+                        "body":  [
+                                     "The tower\u0027s upper structure is shattered, yet its light sometimes returns without any visible keeper. Tradition claims it once warned vessels away from the edge of the [[the-abyss|Abyss]].",
+                                     "The intermittent signal may still mark danger, repeat an ancient duty, or deliberately attract ships toward the route it once guarded."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Lighthouse of the Fallen",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:lighthouse-fallen",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:lighthouse-fallen"
+                                           ],
+                        "tags":  [
+                                     "lighthouse",
+                                     "Abyss",
+                                     "beacon",
+                                     "ruin"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "the-abyss"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "feathered-nest",
+                        "title":  "The Feathered Nest",
+                        "category":  "Locations",
+                        "summary":  "An enormous nest on a small floating island is occupied by intelligent or unusually social predatory birds.",
+                        "body":  [
+                                     "The birds\u0027 large feathers are prized for armor and crafting, drawing hunters and thieves to the island. Approaching the nest can provoke an attack.",
+                                     "Some visitors report that the birds instead offer a trade, making patience and careful observation potentially more valuable than force."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Feathered Nest",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:feathered-nest",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:feathered-nest"
+                                           ],
+                        "tags":  [
+                                     "giant birds",
+                                     "nest",
+                                     "feathers",
+                                     "trade"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "common-aerial-hunters"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "glimmerstone-isle",
+                        "title":  "Glimmerstone Isle",
+                        "category":  "Locations",
+                        "summary":  "A tiny island glows spectacularly at night, though some apparent stones are venomous fungi in disguise.",
+                        "body":  [
+                                     "Natural luminous stones turn the island into a visible landmark after dark. Collectors value the display and the material responsible for it.",
+                                     "The resemblance between true stones and venomous mushrooms makes careless harvesting dangerous, especially under the island\u0027s shifting light."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Glimmerstone Isle",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:glimmerstone-isle",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:glimmerstone-isle"
+                                           ],
+                        "tags":  [
+                                     "glowing stone",
+                                     "venomous mushrooms",
+                                     "minor island",
+                                     "night"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "aerial-flora",
+                                               "fungal-implant-diseases"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "shattered-sundial",
+                        "title":  "The Shattered Sundial",
+                        "category":  "Locations",
+                        "summary":  "A ruined monumental sundial occupies a plateau where sunlight and shadow no longer follow ordinary time.",
+                        "body":  [
+                                     "Stone and metal pieces from the immense instrument lie scattered across the floating plateau. The sun rarely seems to rise or set while viewed from the site.",
+                                     "Unnaturally lengthening shadows and distorted cycles make the ruin a navigational hazard as well as a possible remnant of lost timekeeping magic."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Shattered Sundial",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:shattered-sundial",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:shattered-sundial"
+                                           ],
+                        "tags":  [
+                                     "sundial",
+                                     "time distortion",
+                                     "plateau",
+                                     "ruin"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "floating-obelisk"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "echoing-cavern",
+                        "title":  "The Echoing Cavern",
+                        "category":  "Locations",
+                        "summary":  "Tunnels inside a hollow floating island resonate with strange vibrations and rumors of forgotten vaults.",
+                        "body":  [
+                                     "The cavern\u0027s persistent hum can be felt in the surrounding air and throughout the island\u0027s branching passages. The source of the resonance is unknown.",
+                                     "Stories place sealed vaults deeper in the tunnel network, but the small number of returning explorers makes those claims difficult to verify."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Echoing Cavern",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:echoing-cavern",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:echoing-cavern"
+                                           ],
+                        "tags":  [
+                                     "cavern",
+                                     "resonance",
+                                     "tunnels",
+                                     "vaults"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "minor-sky-island-encounters"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "job-board-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "whispering-ruins",
+                        "title":  "The Whispering Ruins",
+                        "category":  "Locations",
+                        "summary":  "A destroyed cloud settlement carries voices said to belong to inhabitants cursed to remain on the wind.",
+                        "body":  [
+                                     "Only stone piles and rusting ironwork remain of the settlement. Travelers hear whispers moving through the ruins even when no living speaker can be found.",
+                                     "The voices may be lingering souls, a warning embedded in the site, or an effect produced by the wind passing through the old structures."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Small Aerial Encounter Table / Whispering Ruins",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:whispering-ruins",
+                                               "notes":  "Markdown lines 8091-8110."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:whispering-ruins"
+                                           ],
+                        "tags":  [
+                                     "ruined settlement",
+                                     "whispers",
+                                     "curse",
+                                     "clouds"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "lost-aerie"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "settlement-generator"
+                                           ]
+                    }
+                ]
+}

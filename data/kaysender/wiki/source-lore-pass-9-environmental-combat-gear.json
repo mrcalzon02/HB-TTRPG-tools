@@ -1,0 +1,62 @@
+﻿{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Source-lore pass 9 imports environmental clothing and specialized air-sailor, skyguard, raider, and storm-raider equipment.",
+  "entries": [
+    {
+      "id": "environmental-air-sailor-gear",
+      "title": "Environmental Air Sailor Gear",
+      "category": "Equipment",
+      "summary": "Air sailors use warm-weather, cold-weather, and stormproof outfits adapted to scorching routes, icy altitudes, violent winds, and torrential rain.",
+      "body": [
+        "Kaysender's air sailors dress for routes where exposure can be as dangerous as combat. Warm-weather gear uses breathable fabrics, shaded goggles or broad hats, and enchanted cooling wraps for sun-drenched skies. Cold-weather gear combines heavy coats, fur-lined gloves, thermal boots, and warming layers for icy altitude winds.",
+        "Stormproof outfits use reinforced waterproof cloaks, non-slip boots, insulated gloves, and hooded masks. Some incorporate minor enchantments that repel moisture and reduce static buildup, helping crews remain functional during tempests and heavy rain.",
+        "These outfits are practical parts of [[airships|airship]] provisioning. Captains who ignore climate, wind chill, heat, and storm exposure risk exhaustion, increased water use, lost footing, and failed deck work."
+      ],
+      "sections": [{"heading":"Legacy Mechanics Notes","sectionType":"mechanics-legacy","body":["The source prices warm- and cold-weather gear at 25 gp and stormproof gear at 30 gp. It assigns 5e advantages against heat, cold, wind, slippery footing, and storm exhaustion, including reduced hot-climate water consumption and protection down to -50 degrees Fahrenheit.","These values require conversion before final Hypertext d20 use."]}],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Adventuring gear","chunkId":"kaysender-core-pdf-2025-01-20:environmental-air-sailor-gear","notes":"Markdown extraction lines 2432-2453."}],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:environmental-air-sailor-gear"],
+      "tags": ["warm weather gear", "cold weather gear", "stormproof gear", "air sailors", "weather", "survival"],
+      "relatedEntries": ["airships", "water-in-the-skies", "water-harvesting", "fall-prevention-gear"],
+      "relatedModules": ["supply-water-planner", "airship-vessel-generator", "crafting-gadget-creator", "shop-market-generator"]
+    },
+    {
+      "id": "armored-air-sailor-gear",
+      "title": "Armored Air Sailor Gear",
+      "category": "Equipment",
+      "summary": "A mobile padded flight outfit reinforced with metal plates, bracers, gloves, and a harness for aerial skirmishes.",
+      "body": ["Armored Air Sailor Gear is built for crew members who expect combat without giving up deck mobility. A padded flight jacket carries embedded metal plates, while lightweight bracers, reinforced gloves, and an integrated harness help the wearer brace against winds, impacts, and sudden vessel movement.","The design reflects the distinct demands of fighting aboard [[airships|airships]], where armor must protect against weapons while still permitting climbing, line work, and emergency movement."],
+      "sections": [{"heading":"Legacy Mechanics Notes","sectionType":"mechanics-legacy","body":["The source prices this gear at 75 gp, treats it as studded leather, grants a wind-bracing benefit, and reduces falling damage while the wearer remains conscious. Conversion is required."]}],
+      "sourceStatus":"source-faithful","sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Armored Air Sailor Gear","chunkId":"kaysender-core-pdf-2025-01-20:armored-air-sailor-gear","notes":"Markdown extraction lines 2455-2465."}],"sourceChunkIds":["kaysender-core-pdf-2025-01-20:armored-air-sailor-gear"],"tags":["air sailor armor","flight jacket","aerial combat","harness"],"relatedEntries":["airships","fall-prevention-gear","skyguard-battle-gear"],"relatedModules":["crafting-gadget-creator","shop-market-generator","airship-vessel-generator"]
+    },
+    {
+      "id": "skyguard-battle-gear",
+      "title": "Skyguard Battle Gear",
+      "category": "Equipment",
+      "summary": "Heavy air-combat protection combining chain mesh, wind-resistant plating, eye protection, and climbing boots.",
+      "body": ["Skyguard Battle Gear is heavier than standard air-sailor equipment. Its reinforced coat is lined with chain mesh and wind-resistant plates, accompanied by a sturdy helmet with retractable eye protection and boots fitted with climbing grips.","The equipment is designed for defenders who must remain upright and effective through turbulence, impacts, and violent ship movement."],
+      "sections": [{"heading":"Legacy Mechanics Notes","sectionType":"mechanics-legacy","body":["The source prices the gear at 150 gp, treats it as half plate, and gives benefits against nonmagical collision damage and being knocked prone by wind or turbulence. Conversion is required."]}],
+      "sourceStatus":"source-faithful","sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Skyguard Battle Gear","chunkId":"kaysender-core-pdf-2025-01-20:skyguard-battle-gear","notes":"Markdown extraction lines 2467-2477."}],"sourceChunkIds":["kaysender-core-pdf-2025-01-20:skyguard-battle-gear"],"tags":["Skyguard","battle gear","airship armor","turbulence"],"relatedEntries":["airships","armored-air-sailor-gear","fall-prevention-gear"],"relatedModules":["crafting-gadget-creator","shop-market-generator","airship-vessel-generator"]
+    },
+    {
+      "id": "raider-skirmish-gear",
+      "title": "Raider's Skirmish Gear",
+      "category": "Equipment",
+      "summary": "Flexible, concealing light gear made for fog, climbing, thrown weapons, and hit-and-run boarding attacks.",
+      "body": ["Raider's Skirmish Gear uses flexible leather, reinforced stitching, a face-concealing scarf, climbing gloves, and strapped throwing-dagger holsters. It is built for fast attacks, concealment in fog or dim skies, and immediate movement when a boarding action begins.","The design is common to raiders who value surprise and mobility over sustained protection, including crews associated with [[black-fleet|piracy]] and independent sky robbery."],
+      "sections": [{"heading":"Legacy Mechanics Notes","sectionType":"mechanics-legacy","body":["The source prices the gear at 60 gp, treats it as leather armor, grants a stealth benefit in dim light or fog, and permits immediate movement when initiative is rolled. Conversion is required."]}],
+      "sourceStatus":"source-faithful","sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Raider's Skirmish Gear","chunkId":"kaysender-core-pdf-2025-01-20:raider-skirmish-gear","notes":"Markdown extraction lines 2479-2489."}],"sourceChunkIds":["kaysender-core-pdf-2025-01-20:raider-skirmish-gear"],"tags":["raider gear","skirmish armor","boarding","fog","pirates"],"relatedEntries":["black-fleet","storm-raider-assault-gear","airships"],"relatedModules":["black-market-piracy-generator","crafting-gadget-creator","shop-market-generator"]
+    },
+    {
+      "id": "storm-raider-assault-gear",
+      "title": "Storm Raider Assault Gear",
+      "category": "Equipment",
+      "summary": "Reinforced boarding armor with clawed gauntlets, grappling spikes, and a hooked anchor for violent ship-to-ship assaults.",
+      "body": ["Storm Raider Assault Gear is a brutal boarding outfit for high-speed attacks. It combines a reinforced chest guard, clawed gauntlets, a spiked grappling belt, and a hooked anchor intended to move its wearer rapidly between ships.","Its construction prioritizes climbing, grappling, and explosive forward movement during the most dangerous moments of an aerial assault."],
+      "sections": [{"heading":"Legacy Mechanics Notes","sectionType":"mechanics-legacy","body":["The source prices the gear at 120 gp, treats it as a breastplate, improves grappling and climbing, and grants a limited burst of speed when leaping onto an enemy ship. Conversion is required."]}],
+      "sourceStatus":"source-faithful","sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Storm Raider Assault Gear","chunkId":"kaysender-core-pdf-2025-01-20:storm-raider-assault-gear","notes":"Markdown extraction lines 2491-2501."}],"sourceChunkIds":["kaysender-core-pdf-2025-01-20:storm-raider-assault-gear"],"tags":["storm raider","assault gear","boarding armor","grappling"],"relatedEntries":["black-fleet","raider-skirmish-gear","airships"],"relatedModules":["black-market-piracy-generator","crafting-gadget-creator","airship-vessel-generator"]
+    }
+  ]
+}
+

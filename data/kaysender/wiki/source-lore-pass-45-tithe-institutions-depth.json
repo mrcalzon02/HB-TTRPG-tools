@@ -1,0 +1,133 @@
+﻿{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Dedicated entries for regional collectors, ritual tribute, and rebellion marking.",
+    "entries":  [
+                    {
+                        "id":  "minor-lords-regional-collectors",
+                        "title":  "Minor Lords as Regional Collectors",
+                        "category":  "Factions",
+                        "summary":  "Lesser dragons, Wyrmlords, and favored mortals govern local districts and personally enforce tribute collection.",
+                        "body":  [
+                                     "Minor Lords account for goods before forwarding them to the [[tithe-fleet|Tithe Fleet]] or a Dragon Lord\u0027s lair. Warriors, beasts, and magical creatures accompany their circuits.",
+                                     "Bells, drums, or magical signals announce an approaching collector, giving settlements time to prepare offerings, conceal shortages, or flee."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Minor Lords as Regional Collectors",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:minor-lords-regional-collectors",
+                                               "notes":  "Markdown lines 803-816."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:minor-lords-regional-collectors"
+                                           ],
+                        "tags":  [
+                                     "Minor Lords",
+                                     "regional collectors",
+                                     "Wyrmlords",
+                                     "tribute"
+                                 ],
+                        "relatedEntries":  [
+                                               "dragon-tithes",
+                                               "tithe-fleet",
+                                               "dragon-lords",
+                                               "high-lords-of-flame"
+                                           ],
+                        "relatedModules":  [
+                                               "draconic-tithe-generator",
+                                               "faction-guild-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "ritual-tribute-gatherings",
+                        "title":  "Ritual Tribute Gatherings",
+                        "category":  "Culture",
+                        "summary":  "Traditionalist Dragon Lords turn taxation into public ceremony reinforcing their divine or royal status.",
+                        "body":  [
+                                     "Communities gather at temples, platforms, or open fields with music, prayer, and offerings. The Dragon Lord or a magical projection may oversee presentation in person.",
+                                     "The spectacle converts protection, fear, worship, and economic extraction into a single repeated civic ritual."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Ritualistic Tribute Gatherings",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:ritual-tribute-gatherings",
+                                               "notes":  "Markdown lines 817-829."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:ritual-tribute-gatherings"
+                                           ],
+                        "tags":  [
+                                     "tribute ritual",
+                                     "worship",
+                                     "offerings",
+                                     "Dragon Lord"
+                                 ],
+                        "relatedEntries":  [
+                                               "dragon-tithes",
+                                               "dragon-lords",
+                                               "floating-vaults"
+                                           ],
+                        "relatedModules":  [
+                                               "draconic-tithe-generator",
+                                               "settlement-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "mark-of-rebellion",
+                        "title":  "The Mark of Rebellion",
+                        "category":  "Hazards",
+                        "summary":  "An enchanted sky-visible sigil identifies settlements that failed or resisted draconic tribute.",
+                        "body":  [
+                                     "The mark warns dragons, enforcers, and other creatures that a community is condemned, exposing it to destruction, isolation, replacement of leadership, enslavement, or predation.",
+                                     "Its purpose is exemplary terror: punishment continues beyond the original collection failure and makes assistance to the marked settlement dangerous."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Consequences of Failure / Marking of Rebellion",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:mark-of-rebellion",
+                                               "notes":  "Markdown lines 841-854."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:mark-of-rebellion"
+                                           ],
+                        "tags":  [
+                                     "mark of rebellion",
+                                     "tithe failure",
+                                     "enchanted sigil",
+                                     "collective punishment"
+                                 ],
+                        "relatedEntries":  [
+                                               "dragon-tithes",
+                                               "tithe-fleet",
+                                               "slavery-in-kaysender",
+                                               "abolition-and-sanctuary-movements"
+                                           ],
+                        "relatedModules":  [
+                                               "draconic-tithe-generator",
+                                               "settlement-generator",
+                                               "job-board-generator"
+                                           ]
+                    }
+                ]
+}

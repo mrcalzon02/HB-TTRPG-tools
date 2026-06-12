@@ -1,173 +1,159 @@
 {
   "setting": "Kaysender",
   "schemaVersion": "0.3.0",
-  "description": "Source-lore pass 8 imports water scarcity, rain catching, cloud dew, water storage, water transport, water trade, and climate gear as source-backed wiki entries.",
+  "description": "Source-lore pass 8 imports water scarcity, rain and cloud-dew harvesting, mundane and magical storage, water transport, and the political economy of freshwater in the skies.",
   "entries": [
     {
       "id": "water-in-the-skies",
       "title": "Water in the Skies of Kaysender",
       "category": "World",
-      "summary": "Water is one of the defining survival pressures of Kaysender's aerial world, shaping sky travel, settlement planning, merchant routes, politics, and daily life.",
+      "summary": "Fresh water is a constant survival problem in Kaysender because open skies and many floating islands lack dependable rivers, lakes, rainfall, and accessible springs.",
       "body": [
-        "In Kaysender, obtaining water is a constant and critical challenge. The world is filled with [[floating-islands|floating islands]], skyships, and open airspaces, but reliable fresh water is scarce in the skies. This scarcity shapes the lives of air sailors, traders, adventurers, settlements, and entire fleets.",
-        "The sky does not provide rivers, lakes, or oceans. Floating islands may contain streams, waterfalls, or hidden springs, but many are arid, sparsely vegetated, or too small to support large bodies of water. Even when freshwater exists, it may be hidden in jungle canopies, deep ravines, craggy mountain interiors, or guarded settlements.",
-        "For travelers between islands, water planning is as important as navigation. Water connects directly to [[cargo-standards|cargo standards]], [[merchant-fleets-of-kaysender|merchant fleets]], [[water-trade|water trade]], and [[grim-realities-of-survival|the grim realities of survival]]."
+        "Water is one of the defining constraints of life in Kaysender. The aerial world is filled with [[floating-islands|floating islands]], skyships, and immense open distances, but reliable fresh water is scarce. Air sailors, traders, adventurers, settlements, and entire fleets must plan around obtaining, carrying, protecting, and rationing it.",
+        "The lands far below may hold rivers, lakes, and oceans, but the sky itself does not. Many floating islands are arid or sparsely vegetated and cannot support large bodies of water. The rare waterfalls, streams, and springs may lie deep beneath jungle canopies or inside difficult mountain interiors, making discovery and access uncertain.",
+        "Open-sky travel offers little natural relief. Rain is brief and unpredictable, and cloud layers do not automatically yield usable water. Crews that leave port without dependable reserves risk thirst long before they reach another island, especially when storms, route changes, or damaged equipment extend a voyage.",
+        "This scarcity connects water directly to [[grim-realities-of-survival|the grim realities of survival]]. Every settlement and vessel must balance crew size, journey length, cargo weight, collection equipment, storage capacity, contamination risk, and access to [[water-trade|water markets]]."
       ],
       "sections": [],
       "sourceStatus": "source-faithful",
       "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 86, "pageEnd": 89, "outlineTitle": "Water in the Skies of Kaysender", "chunkId": "kaysender-core-pdf-2025-01-20:water-in-the-skies" }
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 86, "pageEnd": 90, "outlineTitle": "Water in the Skies of Kaysender", "chunkId": "kaysender-core-pdf-2025-01-20:water-in-the-skies" }
       ],
       "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:water-in-the-skies"],
-      "tags": ["water", "sky travel", "scarcity", "floating islands", "air sailors", "survival"],
-      "relatedEntries": ["floating-islands", "grim-realities-of-survival", "water-trade", "water-storage-and-transport", "cloud-dew", "rain-catching-apparatus", "merchant-fleets-of-kaysender"],
-      "relatedModules": ["supply-water-planner", "settlement-generator", "airship-vessel-generator", "world-map-route-generator"]
+      "tags": ["water scarcity", "fresh water", "floating islands", "air sailors", "sky travel", "survival", "rationing"],
+      "relatedEntries": ["floating-islands", "grim-realities-of-survival", "scarcity-loop", "water-harvesting", "water-storage-and-transport", "water-trade", "airships"],
+      "relatedModules": ["supply-water-planner", "settlement-generator", "floating-island-generator", "airship-vessel-generator", "world-map-route-generator"]
     },
     {
-      "id": "aerial-water-scarcity",
-      "title": "Aerial Geography and Water Scarcity",
-      "category": "World",
-      "summary": "Kaysender's sky geography lacks reliable natural water sources, forcing ships and settlements to depend on planning, storage, trade, and rare natural collection points.",
+      "id": "water-harvesting",
+      "title": "Rain and Cloud-Dew Harvesting",
+      "category": "Economy",
+      "summary": "Skyships and settlements gather water through unreliable rain-catching apparatus and specialized cloud-dew collection, both constrained by weather, time, equipment, and contamination.",
       "body": [
-        "The aerial geography of Kaysender makes water scarcity unavoidable. Below the sky there may be rivers, lakes, or oceans, but the open sky is largely devoid of dependable sources.",
-        "Floating islands are abundant, but many lack the conditions required for reservoirs, streams, or lakes. Some islands have waterfalls or hidden streams, but these are rare, hard to reach, or located in dangerous terrain.",
-        "Rainfall is brief and unpredictable. Clouds are common, but clouds are not the same thing as drinkable water. Travelers who assume they can simply gather water en route are taking a serious risk."
+        "Some skyships carry rain-catching apparatus, but these systems depend on meeting a storm at the right place and time. A passing shower may provide useful water, yet the amount is often too small for a large crew or a long voyage.",
+        "Storm harvesting carries its own danger. Violent weather threatens rigging, crew, cargo, and the vessel itself, while captured rain may be contaminated or spoil in storage. A desperate crew must decide whether the promise of water justifies entering dangerous skies.",
+        "Several cultures also gather cloud dew by condensing moisture from cloud layers. This process requires specialized tools, magic, preparation, and time. It can supplement reserves, but it is not dependable enough to replace planned storage and resupply.",
+        "Rain catchers and cloud-dew collectors therefore function as survival infrastructure rather than effortless sources. Their value rises sharply in remote regions, aboard small vessels, and in settlements cut off from [[water-trade|water convoys]]."
       ],
       "sections": [],
       "sourceStatus": "source-faithful",
       "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 86, "pageEnd": 87, "outlineTitle": "Aerial Geography and Lack of Natural Water Sources", "chunkId": "kaysender-core-pdf-2025-01-20:aerial-water-scarcity" }
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 86, "pageEnd": 87, "outlineTitle": "Challenges of Harvesting Water", "chunkId": "kaysender-core-pdf-2025-01-20:water-harvesting" }
       ],
-      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:aerial-water-scarcity"],
-      "tags": ["aerial geography", "water scarcity", "streams", "waterfalls", "rainfall", "floating islands"],
-      "relatedEntries": ["water-in-the-skies", "floating-islands", "sky-ecology", "grim-realities-of-survival"],
-      "relatedModules": ["world-map-route-generator", "settlement-generator", "supply-water-planner"]
-    },
-    {
-      "id": "rain-catching-apparatus",
-      "title": "Rain-Catching Apparatus",
-      "category": "Equipment",
-      "summary": "Some skyships use rain-catching apparatus, but rain capture is unreliable, storm-dependent, contamination-prone, and often insufficient for a full crew on long journeys.",
-      "body": [
-        "Some skyships are equipped with rain-catching apparatus designed to capture passing rainfall. These systems may include catchcloths, gutter frames, tanks, roof channels, cistern funnels, or collapsible rigs deployed during storms.",
-        "The problem is reliability. A ship must be in the right storm at the right time, and the water collected may not be enough for the crew or journey. Storms are dangerous to navigate, and rainwater gathered in the sky may be contaminated by ash, spores, magical residue, dust, or debris.",
-        "Rain catchers are useful but not sufficient. They extend reserves rather than replacing [[water-storage-and-transport|planned water storage]] or dedicated resupply stops."
-      ],
-      "sections": [],
-      "sourceStatus": "source-faithful",
-      "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 87, "pageEnd": 87, "outlineTitle": "Challenges of Harvesting Water", "chunkId": "kaysender-core-pdf-2025-01-20:rain-catching-apparatus" }
-      ],
-      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:rain-catching-apparatus"],
-      "tags": ["rain catchers", "skyships", "water harvesting", "storms", "contamination", "cisterns"],
-      "relatedEntries": ["water-in-the-skies", "cloud-dew", "water-storage-and-transport", "weather-gear"],
-      "relatedModules": ["airship-vessel-generator", "supply-water-planner"]
-    },
-    {
-      "id": "cloud-dew",
-      "title": "Cloud Dew Harvesting",
-      "category": "Equipment",
-      "summary": "Cloud dew is condensed moisture gathered from cloud layers through specialized tools or magic; it is valuable but slow, unreliable, and preparation-dependent.",
-      "body": [
-        "Cloud dew is moisture condensed from cloud layers and gathered through specialized tools, prepared rigs, or magic. Some cultures have developed techniques to harvest this resource during long journeys through moisture-rich cloud banks.",
-        "The process is slow and preparation-dependent. A crew cannot rely on cloud dew unless it already has the proper gear, ritual knowledge, or magical equipment in place. Even then, output may be too low to sustain a large crew unless combined with stored reserves.",
-        "Cloud dew is especially important for isolated sky settlements, long-range explorers, and routes where conventional rainstorms are too dangerous or too rare to exploit."
-      ],
-      "sections": [],
-      "sourceStatus": "source-faithful",
-      "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 87, "pageEnd": 87, "outlineTitle": "Challenges of Harvesting Water / Cloud Dew", "chunkId": "kaysender-core-pdf-2025-01-20:cloud-dew" }
-      ],
-      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:cloud-dew"],
-      "tags": ["cloud dew", "water harvesting", "cloud layers", "magic", "moisture", "airship survival"],
-      "relatedEntries": ["water-in-the-skies", "rain-catching-apparatus", "potion-guilds", "aetherbound-company"],
-      "relatedModules": ["supply-water-planner", "crafting-gadget-creator", "sky-ecology-generator"]
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:water-harvesting"],
+      "tags": ["rain catchment", "cloud dew", "water collection", "storms", "contamination", "skyships"],
+      "relatedEntries": ["water-in-the-skies", "water-storage-and-transport", "water-trade", "airships", "sky-ecology"],
+      "relatedModules": ["supply-water-planner", "airship-vessel-generator", "settlement-generator", "crafting-gadget-creator"]
     },
     {
       "id": "water-storage-and-transport",
-      "title": "Water Storage and Transportation",
-      "category": "Equipment",
-      "summary": "Air sailors depend on casks, kegs, barrels, enchanted flasks, and feyborne waterskins, balancing weight, capacity, affordability, and magical reliability.",
+      "title": "Water Storage and Transport",
+      "category": "Economy",
+      "summary": "Kaysender crews move water in heavy casks, kegs, and barrels or in costly enchanted containers that compress large reserves into portable forms.",
       "body": [
-        "Because sky water is difficult to acquire, air sailors and travelers rely heavily on mundane and magical storage. Traditional containers such as casks, kegs, and barrels are common, but they are heavy and consume cargo space.",
-        "Small parties may carry casks. Short expeditions and small crews may use kegs. Larger crews and longer voyages require barrels or shipboard tanks. These mundane systems are reliable but bulky, and they create clear logistical limits on [[airships|airship]] endurance.",
-        "Magical storage is more efficient but expensive. Enchanted flasks and waterskins hold large volumes in compact forms, making them prized by adventurers, officers, elite crews, and wealthy merchants. Their cost means poorer travelers and frontier settlements remain dependent on heavy containers or risky local sources."
+        "Because water cannot be gathered reliably in flight, air sailors and travelers depend on stored reserves. Ordinary casks, kegs, and barrels remain the foundation of water transport, but their bulk and weight consume valuable cargo capacity and make long journeys difficult.",
+        "A small cask is intended to sustain one traveler for several days. A keg supports a small group on a short journey, while a reinforced barrel carries a much larger reserve for crews and extended travel. Kegs and barrels require multiple people, carts, or ships to move safely.",
+        "The logistical burden of mundane containers has created demand for enchanted storage. Compact flasks and waterskins can carry barrel- or keg-sized reserves at a fraction of the weight. These items are prized aboard airships and on expeditions but remain too expensive for many common travelers and crews.",
+        "Storage is inseparable from [[cargo-standards|cargo planning]] and [[water-trade|water supply routes]]. Every container devoted to water displaces profitable freight, food, passengers, or equipment, but insufficient reserves can destroy a voyage or settlement."
       ],
       "sections": [
-        { "heading": "Legacy Mechanics Notes", "sectionType": "mechanics-legacy", "body": ["The source text includes legacy item details for casks, kegs, barrels, Arcane Flasks of Water, and Feyborne Waterskins. These should be converted before final rules use."] }
+        {
+          "heading": "Legacy Container Measures",
+          "sectionType": "mechanics-legacy",
+          "body": [
+            "The source lists a 10 gp cask holding 3 gallons and sustaining one person for approximately 3 days; a 30 gp keg holding 10 gallons and sustaining up to four people for 7 days; and a 50 gp barrel holding 40 gallons and sustaining four people for 14 days.",
+            "The source describes a cask as person-portable, a keg as a two-person load or cart cargo, and a barrel as requiring two or three people or ship or wagon transport. These prices, capacities, and consumption rates are preserved for later rules conversion."
+          ]
+        }
       ],
       "sourceStatus": "source-faithful",
       "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 87, "pageEnd": 89, "outlineTitle": "Water Storage and Transportation / Mundane / Magical", "chunkId": "kaysender-core-pdf-2025-01-20:water-storage-and-transport" }
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 87, "pageEnd": 89, "outlineTitle": "Water Storage and Transportation / Mundane", "chunkId": "kaysender-core-pdf-2025-01-20:water-storage-and-transport" }
       ],
       "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:water-storage-and-transport"],
-      "tags": ["water storage", "casks", "kegs", "barrels", "Arcane Flask of Water", "Feyborne Waterskin", "cargo weight", "magical storage"],
-      "relatedEntries": ["water-in-the-skies", "cargo-standards", "airships", "water-trade", "aetherbound-company", "skyweaver-consortium"],
-      "relatedModules": ["supply-water-planner", "airship-vessel-generator", "shop-market-generator"]
+      "tags": ["water storage", "casks", "kegs", "barrels", "cargo", "water transport", "rationing"],
+      "relatedEntries": ["water-in-the-skies", "water-harvesting", "water-trade", "cargo-standards", "arcane-flask-of-water", "feyborne-waterskin", "airships"],
+      "relatedModules": ["supply-water-planner", "airship-vessel-generator", "shop-market-generator", "settlement-generator"]
     },
     {
       "id": "water-trade",
-      "title": "Water Trade and Water Politics",
+      "title": "Water Trade",
       "category": "Economy",
-      "summary": "Water is a commodity, strategic resource, political pressure point, and survival bottleneck; islands with reliable freshwater can shape routes, prices, alliances, and conflicts.",
+      "summary": "Fresh water is a luxury commodity, settlement lifeline, strategic cargo, and political weapon whose sources and routes shape trade, rivalry, and survival throughout Kaysender.",
       "body": [
-        "Water scarcity creates dedicated trade routes and political pressure throughout Kaysender. Merchant fleets such as [[whisper-web|the Whisper Web]] and [[skyweaver-consortium|the Skyweaver Consortium]] may transport precious water supplies, charging high prices because the resource is scarce, heavy, and essential.",
-        "Some islands and floating cities build entire economies around water collection and distribution. A settlement with reliable freshwater can sell survival to neighbors, passing ships, frontier communities, and fleets.",
-        "Water may function like a luxury commodity even though it is a basic necessity. Rival factions may compete for control of springs, waterfalls, cloud-dew sites, cistern complexes, purification shrines, magical storage workshops, and tanker routes."
+        "The difficulty of acquiring and carrying water has created dedicated supply routes between freshwater sources, floating cities, skyports, and thirsty settlements. Merchant fleets transport barrels and enchanted reserves across the skies and charge high prices because loss, spoilage, piracy, weather, and cargo weight make every shipment risky.",
+        "The source associates this trade with organizations such as [[whisper-web|the Whisper Web]] and [[skyweaver-consortium|the Skyweaver Consortium]]. Their access to routes, information, ships, and storage gives merchant organizations enormous influence over communities that cannot secure their own water.",
+        "Some islands and floating cities build their economies around collection and distribution. A rare freshwater spring, stream, reservoir, or dependable rain corridor can turn an otherwise minor island into a wealthy trade center. Communities without access must buy, ration, bargain, or fight for supply.",
+        "Control of freshwater is therefore political power. Rival factions compete for sources and transport corridors; settlements become vulnerable when cisterns fail or convoys are delayed; and adventurers must plan every journey around reserves, resupply, and the possibility that promised water will be unavailable, contaminated, or unaffordable.",
+        "Water trade links [[grim-realities-of-survival|daily survival]] to markets, diplomacy, piracy, tribute, and war. It shapes settlement resilience, fleet endurance, migration, route planning, and the balance between independent communities and the organizations that keep them alive."
       ],
       "sections": [],
       "sourceStatus": "source-faithful",
       "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 88, "pageEnd": 89, "outlineTitle": "Cultural and Economic Implications", "chunkId": "kaysender-core-pdf-2025-01-20:water-trade" }
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 87, "pageEnd": 88, "outlineTitle": "Water Storage and Transportation / Cultural and Economic Implications", "chunkId": "kaysender-core-pdf-2025-01-20:water-trade" }
       ],
       "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:water-trade"],
-      "tags": ["water trade", "water politics", "scarcity", "merchant fleets", "routes", "freshwater sources", "rationing"],
-      "relatedEntries": ["water-in-the-skies", "water-storage-and-transport", "skyweaver-consortium", "whisper-web", "grim-realities-of-survival", "foodways-of-kaysender"],
-      "relatedModules": ["supply-water-planner", "world-map-route-generator", "shop-market-generator", "settlement-generator"]
+      "tags": ["water", "trade", "scarcity", "freshwater sources", "merchant fleets", "politics", "settlements", "supply routes"],
+      "relatedEntries": ["water-in-the-skies", "water-harvesting", "water-storage-and-transport", "grim-realities-of-survival", "whisper-web", "skyweaver-consortium", "black-fleet", "dragon-lords", "floating-islands"],
+      "relatedModules": ["supply-water-planner", "shop-market-generator", "settlement-generator", "world-map-route-generator", "airship-vessel-generator", "job-board-generator"]
     },
     {
-      "id": "magical-water-storage",
-      "title": "Magical Water Storage",
-      "category": "Magic Items",
-      "summary": "Arcane flasks and feyborne waterskins make water portable, compact, and clean, but their cost reinforces inequality between wealthy travelers and ordinary crews.",
-      "body": [
-        "Magical water storage is one of the most valuable categories of practical magic in Kaysender. Unlike decorative enchantments or luxury conveniences, an enchanted container can determine whether a journey succeeds or fails.",
-        "The Arcane Flask of Water is described as a compact leather-bound flask with the capacity of a full barrel, able to provide clean water while fitting into a backpack. Feyborne Waterskins use fey craftsmanship to contain far more water than their size suggests, glowing faintly with natural energy.",
-        "These items are prized because they reduce weight, protect water quality, and extend the range of small groups. They are also expensive, which means magical water storage increases inequality between wealthy crews and ordinary travelers."
-      ],
-      "sections": [
-        { "heading": "Legacy Mechanics Notes", "sectionType": "mechanics-legacy", "body": ["The source text provides legacy values for capacity, access, refill behavior, and weight. These are preserved for later conversion."] }
-      ],
-      "sourceStatus": "source-faithful",
-      "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 88, "pageEnd": 89, "outlineTitle": "Magical / Arcane Flask of Water / Feyborne Waterskin", "chunkId": "kaysender-core-pdf-2025-01-20:magical-water-storage" }
-      ],
-      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:magical-water-storage"],
-      "tags": ["Arcane Flask of Water", "Feyborne Waterskin", "magical storage", "water magic", "fey craftsmanship", "clean water"],
-      "relatedEntries": ["water-storage-and-transport", "water-trade", "aetherbound-company", "potion-guilds"],
-      "relatedModules": ["crafting-gadget-creator", "supply-water-planner", "shop-market-generator"]
-    },
-    {
-      "id": "weather-gear",
-      "title": "Weather Gear for Sky Travel",
+      "id": "arcane-flask-of-water",
+      "title": "Arcane Flask of Water",
       "category": "Equipment",
-      "summary": "Warm and cold weather gear are practical survival kits for air sailors crossing scorching skies, sun-drenched routes, icy altitudes, and frigid winds.",
+      "summary": "An Arcane Flask of Water is a compact leather-bound enchanted vessel that carries a barrel-sized reserve while remaining light enough for a backpack.",
       "body": [
-        "Weather gear is part of survival infrastructure in Kaysender. Air sailors cross scorching skies, sun-drenched routes, icy altitudes, storm layers, and frigid winds. Clothing must protect against heat, cold, wind chill, glare, and water stress.",
-        "Warm weather gear includes breathable fabrics, shaded hats or goggles, and enchanted cooling wraps. Cold weather gear includes insulated coats, fur-lined gloves, thermal boots, and enchanted warming layers.",
-        "Because weather gear keeps crews functional in severe climates, it ties directly into [[water-in-the-skies|water planning]], [[airships|airship operations]], and [[fall-prevention-gear|sky safety culture]]."
+        "An Arcane Flask of Water looks like a simple, sleek, leather-bound container, but its enchantment gives it the capacity of a full water barrel. It is compact enough for a backpack and provides fresh, clean water when opened.",
+        "The flask is valuable because it replaces a large, heavy barrel with a portable container. For airship crews and expeditions, that reduction in weight and cargo volume can be as important as the water itself.",
+        "Arcane flasks still belong to the economy of scarcity. Their high price keeps them beyond many travelers, while their usefulness makes them valuable cargo and likely targets for theft, salvage, or seizure during a supply crisis."
       ],
       "sections": [
-        { "heading": "Legacy Mechanics Notes", "sectionType": "mechanics-legacy", "body": ["The source text includes legacy mechanical benefits for warm and cold weather gear. These values are preserved for later conversion."] }
+        {
+          "heading": "Legacy Mechanics Notes",
+          "sectionType": "mechanics-legacy",
+          "body": [
+            "The source prices the flask at 150 gp, gives it a 40-gallon capacity, describes it as sufficient for four people for 14 days, permits drawing one gallon per action, states that it refills after 24 hours, and gives it a weight of 5 pounds.",
+            "These values and the refill behavior are preserved as legacy source mechanics and require conversion before use as final Hypertext d20-compatible rules."
+          ]
+        }
       ],
       "sourceStatus": "source-faithful",
       "sourceRefs": [
-        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 89, "pageEnd": 90, "outlineTitle": "Adventuring gear / Warm Weather Gear / Cold Weather Gear", "chunkId": "kaysender-core-pdf-2025-01-20:weather-gear" }
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 89, "pageEnd": 89, "outlineTitle": "Arcane Flask of Water", "chunkId": "kaysender-core-pdf-2025-01-20:arcane-flask-of-water" }
       ],
-      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:weather-gear"],
-      "tags": ["weather gear", "warm weather gear", "cold weather gear", "air sailors", "heat", "cold", "water stress", "wind chill"],
-      "relatedEntries": ["water-in-the-skies", "fall-prevention-gear", "airships", "emergency-signaling-equipment"],
-      "relatedModules": ["supply-water-planner", "crafting-gadget-creator", "airship-vessel-generator"]
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:arcane-flask-of-water"],
+      "tags": ["Arcane Flask of Water", "enchanted water storage", "water barrel", "adventuring equipment", "water scarcity"],
+      "relatedEntries": ["water-in-the-skies", "water-storage-and-transport", "water-trade", "feyborne-waterskin", "skyweaver-consortium"],
+      "relatedModules": ["supply-water-planner", "crafting-gadget-creator", "shop-market-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "feyborne-waterskin",
+      "title": "Feyborne Waterskin",
+      "category": "Equipment",
+      "summary": "A Feyborne Waterskin is a radiant, embroidered canteen crafted by fey artisans to hold a keg-sized water reserve in a small and lightweight vessel.",
+      "body": [
+        "Crafted by [[fae|fey artisans]], a Feyborne Waterskin appears no larger than an ordinary canteen. Its delicate shimmering fabric and embroidered designs glow faintly with natural energy, while enchantment expands its interior capacity.",
+        "The waterskin carries the equivalent of a keg without the keg's bulk. It is especially useful to small parties and airship crews that need meaningful reserves but cannot surrender much cargo space or assign multiple people to moving a container.",
+        "Like other enchanted water vessels, the waterskin is a costly answer to a universal need. Its craftsmanship ties survival equipment to fey trade and makes the item a practical luxury in regions dependent on [[water-trade|imported water]]."
+      ],
+      "sections": [
+        {
+          "heading": "Legacy Mechanics Notes",
+          "sectionType": "mechanics-legacy",
+          "body": [
+            "The source prices the waterskin at 100 gp, gives it a 10-gallon capacity, describes it as sufficient for four people for 7 days, permits drawing one gallon per action, and gives it a weight of 2 pounds.",
+            "These values are preserved as legacy source mechanics and require conversion before use as final Hypertext d20-compatible rules."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 89, "pageEnd": 90, "outlineTitle": "Feyborne Waterskin", "chunkId": "kaysender-core-pdf-2025-01-20:feyborne-waterskin" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:feyborne-waterskin"],
+      "tags": ["Feyborne Waterskin", "fey craftsmanship", "enchanted water storage", "canteen", "water scarcity"],
+      "relatedEntries": ["fae", "water-in-the-skies", "water-storage-and-transport", "water-trade", "arcane-flask-of-water"],
+      "relatedModules": ["supply-water-planner", "crafting-gadget-creator", "shop-market-generator", "airship-vessel-generator"]
     }
   ]
 }

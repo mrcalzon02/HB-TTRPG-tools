@@ -1,0 +1,497 @@
+{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Dedicated threats and locations from the advanced aerial encounter table.",
+    "entries":  [
+                    {
+                        "id":  "roaring-wyrm",
+                        "title":  "The Roaring Wyrm",
+                        "category":  "Creatures",
+                        "summary":  "A colossal dragon-like being of stone and flesh darkens the sky and guards centuries of plundered airship treasure.",
+                        "body":  [
+                                     "The Roaring Wyrm is large enough to partly block the sun. Its voice churns the wind and tears apart nearby clouds, announcing the creature before travelers can see its full scale.",
+                                     "Its hoard is assembled from dozens of fallen vessels, turning its territory into both a graveyard and one of the skies\u0027 most dangerous treasure sites."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Roaring Wyrm",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:roaring-wyrm",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:roaring-wyrm"
+                                           ],
+                        "tags":  [
+                                     "colossal wyrm",
+                                     "stone",
+                                     "airship hoard",
+                                     "dragon-like"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "dragon-lords",
+                                               "skywyrm"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "sky-leviathans-wake",
+                        "title":  "Sky Leviathan\u0027s Wake",
+                        "category":  "Encounters",
+                        "summary":  "Debris, decay, and mutated scavengers mark the recent passage or death of an enormous sky leviathan.",
+                        "body":  [
+                                     "The wake contains wreckage and the lingering smell of decay. Large fish-like creatures once hunted by the leviathan now circle the debris in search of new prey.",
+                                     "Travelers may find salvage or biological remains, but entering the field exposes them to hungry scavengers and uncertainty about whether the leviathan is truly gone."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Sky Leviathan\u0027s Wake",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:sky-leviathan-wake",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:sky-leviathan-wake"
+                                           ],
+                        "tags":  [
+                                     "leviathan",
+                                     "debris",
+                                     "mutated scavengers",
+                                     "decay"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "skywhales",
+                                               "common-aerial-hunters"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "abyssal-rift",
+                        "title":  "The Abyssal Rift",
+                        "category":  "Locations",
+                        "summary":  "A tear in the clouds distorts gravity around unstable islands and exposes dangerous magical energy near the Abyss.",
+                        "body":  [
+                                     "Light fades and the air grows cold toward the rift. Small islands hang precariously around its edge while falling objects and creatures are drawn into a depth from which none are known to return.",
+                                     "Power can be harvested near the boundary, encouraging desperate expeditions despite unstable gravity and the proximity of [[the-abyss|the Abyss]]."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Abyssal Rift",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:abyssal-rift",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:abyssal-rift"
+                                           ],
+                        "tags":  [
+                                     "Abyss",
+                                     "gravity distortion",
+                                     "magical energy",
+                                     "rift"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "the-abyss",
+                                               "gravity-anomaly"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "bloodwind-marauders",
+                        "title":  "The Bloodwind Marauders",
+                        "category":  "Factions",
+                        "summary":  "Red-sailed sky pirates ambush isolated travelers with magical harpoons and wind magic.",
+                        "body":  [
+                                     "The Bloodwind Marauders fly blackened flags beneath red sails and prefer lone or vulnerable targets. Their attacks are designed to stop escape and force a rapid boarding.",
+                                     "Magical harpoons hold vessels in place while wind-working raiders close the distance and seize whatever cargo, supplies, or captives they can carry."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Bloodwind Marauders",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:bloodwind-marauders",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:bloodwind-marauders"
+                                           ],
+                        "tags":  [
+                                     "sky pirates",
+                                     "red sails",
+                                     "harpoons",
+                                     "boarding"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "black-fleet",
+                                               "ship-to-ship-combat"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "black-market-piracy-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "steel-tempest",
+                        "title":  "The Steel Tempest",
+                        "category":  "Hazards",
+                        "summary":  "A magical storm capable of tearing apart airships is driven by a living thunderous presence at its center.",
+                        "body":  [
+                                     "Lightning and violent winds form a storm wall dangerous even to heavily built vessels. Reports identify a thunderbird or storm giant within the heart of the disturbance, its movements sustaining the tempest.",
+                                     "Crossing the storm requires confronting both environmental destruction and the possibility that its central being may notice or pursue intruders."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Steel Tempest",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:steel-tempest",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:steel-tempest"
+                                           ],
+                        "tags":  [
+                                     "magical storm",
+                                     "thunderbird",
+                                     "storm giant",
+                                     "lightning"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "major-lightning-storm",
+                                               "storm-eagle"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "fallen-star-encounter",
+                        "title":  "Fallen Star",
+                        "category":  "Locations",
+                        "summary":  "A celestial impact draws competing sky and undercloud creatures to valuable otherworldly material.",
+                        "body":  [
+                                     "The burning stone sends shockwaves through the surrounding air before striking a floating landmass or vanishing into lower cloud. Its impact zone quickly becomes visible across nearby routes.",
+                                     "Scavengers descend from above and rise from beneath the clouds, turning recovery of celestial resources into a contested and rapidly changing battlefield."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Fallen Star",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:fallen-star-encounter",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:fallen-star-encounter"
+                                           ],
+                        "tags":  [
+                                     "celestial rock",
+                                     "impact",
+                                     "otherworldly resources",
+                                     "scavengers"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "sky-ecology"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "job-board-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "aether-wraiths",
+                        "title":  "The Aether Wraiths",
+                        "category":  "Creatures",
+                        "summary":  "Mist-like spirits seek strong magical auras and drain vitality from living beings and vessels caught in their wake.",
+                        "body":  [
+                                     "Aether Wraiths resemble ghostly forms built from fog and swirling magical energy. Powerful enchanted objects, active spells, and magical propulsion can draw them toward a ship.",
+                                     "They attempt possession or life-draining contact, while vessels lingering near them seem to lose energy and liveliness along with their crews."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Aether Wraiths",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:aether-wraiths",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:aether-wraiths"
+                                           ],
+                        "tags":  [
+                                     "wraiths",
+                                     "aether",
+                                     "possession",
+                                     "magical aura"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "aether-domain",
+                                               "human-airship-core"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "chain-of-fate",
+                        "title":  "The Chain of Fate",
+                        "category":  "Locations",
+                        "summary":  "An immense tangle of enchanted chains hangs from the clouds and leads toward a forgotten guarded city.",
+                        "body":  [
+                                     "The chains remain suspended by the remnants of a dead celestial force. Their paths form both a navigational landmark and a physical route through otherwise open sky.",
+                                     "Following them leads to an ancient city whose treasures are protected by corrupted winged beasts, raising questions about the celestial power that once anchored the structure."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Chain of Fate",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:chain-of-fate",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:chain-of-fate"
+                                           ],
+                        "tags":  [
+                                     "enchanted chains",
+                                     "lost city",
+                                     "celestial force",
+                                     "winged beasts"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "lost-aerie"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "blackthorn-fleet",
+                        "title":  "The Blackthorn Fleet",
+                        "category":  "Factions",
+                        "summary":  "Cursed darkwood warships crewed by undead and dark mages hunt a lost artifact for a vanished kingdom.",
+                        "body":  [
+                                     "Blackthorn vessels are reinforced with cursed metal and resist both ordinary weapons and magic. Their construction and crews preserve the military identity of an ancient kingdom long after its fall.",
+                                     "The fleet\u0027s undead sailors and mages pursue an artifact they believe must be reclaimed, making their attacks purposeful even when their wider history is unknown."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Blackthorn Fleet",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:blackthorn-fleet",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:blackthorn-fleet"
+                                           ],
+                        "tags":  [
+                                     "cursed fleet",
+                                     "undead",
+                                     "darkwood",
+                                     "lost artifact"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "undead-acropolis",
+                                               "black-fleet"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "faction-guild-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "bloodfog",
+                        "title":  "The Bloodfog",
+                        "category":  "Hazards",
+                        "summary":  "A living crimson fog consumes what it overtakes and conceals aberrant predators within its decay-laden depths.",
+                        "body":  [
+                                     "The Bloodfog moves across the sky as a coherent mass rather than ordinary weather. Its color and smell announce it, but its breadth can leave vessels with few escape routes.",
+                                     "Nightmarish creatures hunt inside the fog and attack travelers who penetrate too deeply, while the fog itself appears to consume objects and living beings in its path."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Bloodfog",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:bloodfog",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:bloodfog"
+                                           ],
+                        "tags":  [
+                                     "crimson fog",
+                                     "aberrations",
+                                     "decay",
+                                     "living weather"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "toxic-fog-hazard",
+                                               "sky-miasma"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "world-map-route-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "voidquake",
+                        "title":  "The Voidquake",
+                        "category":  "Hazards",
+                        "summary":  "A sky-wide disturbance destabilizes floating islands, opens rifts, and may originate beneath the Abyss.",
+                        "body":  [
+                                     "Destructive ripples pass through the air and twist the surrounding environment as though the sky itself were shaking. Islands can shift, fracture, or lose stability while new rents form around them.",
+                                     "No confirmed cause is known, though many observers connect Voidquakes to forces moving below [[the-abyss|the Abyss]]."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Voidquake",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:voidquake",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:voidquake"
+                                           ],
+                        "tags":  [
+                                     "catastrophe",
+                                     "rifts",
+                                     "floating islands",
+                                     "Abyss"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "skyquake",
+                                               "the-abyss"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "floating-island-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "celestial-herald",
+                        "title":  "The Celestial Herald",
+                        "category":  "Creatures",
+                        "summary":  "A primordial winged being emerges through a tear in the sky and distorts magic across the horizon.",
+                        "body":  [
+                                     "The Herald\u0027s luminous wings span an immense portion of the visible sky. Its arrival alters nearby magic before its motives or destination become clear.",
+                                     "Religious and secular witnesses interpret the being as divine judgment, a messenger of catastrophe, or one of the first creatures shaped by the gods."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Advanced Aerial Encounter Table / Celestial Herald",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:celestial-herald",
+                                               "notes":  "Markdown lines 8112-8131."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:celestial-herald"
+                                           ],
+                        "tags":  [
+                                     "celestial",
+                                     "primordial being",
+                                     "divine judgment",
+                                     "magic distortion"
+                                 ],
+                        "relatedEntries":  [
+                                               "random-aerial-encounters",
+                                               "magical-null-zone",
+                                               "aelric-skywarden"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "sky-ecology-generator"
+                                           ]
+                    }
+                ]
+}

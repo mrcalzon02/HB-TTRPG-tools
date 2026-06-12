@@ -1,0 +1,289 @@
+﻿{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Individual entries for seven Bundle Bloom varieties.",
+    "entries":  [
+                    {
+                        "id":  "celestial-bundle-bloom",
+                        "title":  "Celestial Bundle Bloom",
+                        "category":  "Ecology",
+                        "summary":  "A glowing high-altitude bloom provides edible citrus nectar and powerful regenerative ingredients.",
+                        "body":  [
+                                     "Pale purple flowers with golden veins float on nearly invisible roots. Brewed petals form a golden pain-soothing liquid, but overharvesting can collapse delicate floating ecosystems."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Celestial Bundle Bloom",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:celestial-bundle-bloom",
+                                               "notes":  "Markdown lines 7349-7368."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:celestial-bundle-bloom"
+                                           ],
+                        "tags":  [
+                                     "Celestial Bloom",
+                                     "healing",
+                                     "nectar",
+                                     "high altitude"
+                                 ],
+                        "relatedEntries":  [
+                                               "bundle-blooms",
+                                               "potion-guilds",
+                                               "aerial-flora"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "crafting-gadget-creator"
+                                           ]
+                    },
+                    {
+                        "id":  "dreamweaver-bundle-bloom",
+                        "title":  "Dreamweaver Bundle Bloom",
+                        "category":  "Ecology",
+                        "summary":  "A fragrant cliff vine supplies perfume and incense but causes hypnosis, hallucination, and dependency.",
+                        "body":  [
+                                     "Deep purple flowers form dense curtains marked by shifting gold and silver veins. Their calming scent becomes dangerously entrancing in enclosed spaces and can leave victims in prolonged trances."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Dreamweaver Bundle Bloom",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:dreamweaver-bundle-bloom",
+                                               "notes":  "Markdown lines 7369-7386."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:dreamweaver-bundle-bloom"
+                                           ],
+                        "tags":  [
+                                     "Dreamweaver",
+                                     "perfume",
+                                     "hallucination",
+                                     "dependency"
+                                 ],
+                        "relatedEntries":  [
+                                               "bundle-blooms",
+                                               "haze-cap-disease",
+                                               "potion-guilds"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "crafting-gadget-creator"
+                                           ]
+                    },
+                    {
+                        "id":  "goldenstrangle-bloom",
+                        "title":  "Goldenstrangle Bloom",
+                        "category":  "Ecology",
+                        "summary":  "An aggressive yellow vine smothers ecosystems and releases toxins capable of paralysis and death.",
+                        "body":  [
+                                     "Thorny growth can cover entire landscapes and eliminate competing plants. Its durable fiber has crafting value, but skin irritation, respiratory distress, and accumulating poison make harvest extremely dangerous."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Goldenstrangle Bloom",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:goldenstrangle-bloom",
+                                               "notes":  "Markdown lines 7387-7405."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:goldenstrangle-bloom"
+                                           ],
+                        "tags":  [
+                                     "Goldenstrangle",
+                                     "invasive vine",
+                                     "toxic spores",
+                                     "fiber"
+                                 ],
+                        "relatedEntries":  [
+                                               "bundle-blooms",
+                                               "sporeblight",
+                                               "aerial-flora"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "encounter-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "driftshade-bloom",
+                        "title":  "Driftshade Bloom",
+                        "category":  "Ecology",
+                        "summary":  "A hovering moisture-fed flower is both staple food and a powerful sleep aid.",
+                        "body":  [
+                                     "Lavender petals glow under moonlight while aerial roots let the plant float above land or water. Its tea eases anxiety and induces rest, but heavy consumption can cause coma or permanent sleep."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Driftshade Bloom",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:driftshade-bloom",
+                                               "notes":  "Markdown lines 7406-7423."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:driftshade-bloom"
+                                           ],
+                        "tags":  [
+                                     "Driftshade",
+                                     "sleep tea",
+                                     "floating plant",
+                                     "food"
+                                 ],
+                        "relatedEntries":  [
+                                               "bundle-blooms",
+                                               "foodways-of-kaysender",
+                                               "water-harvesting"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "crafting-gadget-creator"
+                                           ]
+                    },
+                    {
+                        "id":  "virulent-bloom",
+                        "title":  "Virulent Bloom",
+                        "category":  "Ecology",
+                        "summary":  "A crimson carnivorous vine suffocates regions, traps prey, and can destroy entire settlements.",
+                        "body":  [
+                                     "The plant releases immediately lethal respiratory spores and digests creatures caught in sticky sap. Dense growth overtakes structures and landscapes; burning it may spread the very spores intended for destruction."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Virulent Bloom",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:virulent-bloom",
+                                               "notes":  "Markdown lines 7424-7442."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:virulent-bloom"
+                                           ],
+                        "tags":  [
+                                     "Virulent Bloom",
+                                     "carnivorous plant",
+                                     "toxic spores",
+                                     "settlement threat"
+                                 ],
+                        "relatedEntries":  [
+                                               "bundle-blooms",
+                                               "sporeblight"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "encounter-generator",
+                                               "settlement-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "everbloom-vine",
+                        "title":  "Everbloom Vine",
+                        "category":  "Ecology",
+                        "summary":  "A stable hybrid yields strong flexible structural vines and mild non-addictive healing flowers.",
+                        "body":  [
+                                     "Gold-and-green-veined vines grow slowly into elegant patterns suited to rope and floating-structure reinforcement. The useful hybrid has few direct hazards but is vulnerable to pests that may spread into nearby crops."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Everbloom Vine",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:everbloom-vine",
+                                               "notes":  "Markdown lines 7443-7460."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:everbloom-vine"
+                                           ],
+                        "tags":  [
+                                     "Everbloom",
+                                     "rope",
+                                     "structural vine",
+                                     "healing"
+                                 ],
+                        "relatedEntries":  [
+                                               "bundle-blooms",
+                                               "fall-prevention-gear",
+                                               "floating-islands"
+                                           ],
+                        "relatedModules":  [
+                                               "crafting-gadget-creator",
+                                               "floating-island-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "lurelight-bloom",
+                        "title":  "Lurelight Bloom",
+                        "category":  "Ecology",
+                        "summary":  "A bioluminescent deceptive vine imitates treasure, numbs prey, causes hallucinations, and feeds nearby carnivorous plants.",
+                        "body":  [
+                                     "Pale gold flowers and metallic sweetness lure explorers toward sticky neurotoxic tendrils. Damage releases predator-attracting spores, and prolonged exposure disorients travelers into dangerous terrain.",
+                                     "Diluted sap serves as a paralytic hunting agent, while the flowers are prized decorations and tactical lures despite severe harvesting risk."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Lurelight Bloom",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:lurelight-bloom",
+                                               "notes":  "Markdown lines 7461-7488."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:lurelight-bloom"
+                                           ],
+                        "tags":  [
+                                     "Lurelight",
+                                     "predatory plant",
+                                     "neurotoxin",
+                                     "bioluminescence"
+                                 ],
+                        "relatedEntries":  [
+                                               "bundle-blooms",
+                                               "haze-cap-disease",
+                                               "minor-sky-island-encounters"
+                                           ],
+                        "relatedModules":  [
+                                               "sky-ecology-generator",
+                                               "encounter-generator",
+                                               "crafting-gadget-creator"
+                                           ]
+                    }
+                ]
+}

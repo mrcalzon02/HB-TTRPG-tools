@@ -1,0 +1,277 @@
+{
+    "setting":  "Kaysender",
+    "schemaVersion":  "0.3.0",
+    "description":  "Dedicated reference entries for player influence, support, tracking, and victory in mass combat.",
+    "entries":  [
+                    {
+                        "id":  "mass-combat-direct-involvement",
+                        "title":  "Direct Involvement in Mass Combat",
+                        "category":  "Warfare",
+                        "summary":  "Individuals can alter large battles through frontline attacks, defense, sabotage, duels, spellcasting, and inspiration.",
+                        "body":  [
+                                     "Direct involvement treats heroes as concentrated influence within a much larger conflict. They may fight enemy formations, protect allied units, sabotage equipment, challenge leaders, or rally frightened troops.",
+                                     "Their actions should change force strength, leadership, morale, or access to key battlefield assets rather than merely reproducing an isolated skirmish."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Direct-Action Procedures",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source supplies attack rolls, skill checks, example casualty counts, unit health changes, and morale bonuses. These numerical procedures require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Mass Combat / Influence via Direct Involvement",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:mass-combat-direct-involvement",
+                                               "notes":  "Markdown lines 3544-3569."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:mass-combat-direct-involvement"
+                                           ],
+                        "tags":  [
+                                     "mass combat",
+                                     "heroic action",
+                                     "sabotage",
+                                     "duel"
+                                 ],
+                        "relatedEntries":  [
+                                               "mass-combat-system",
+                                               "ship-to-ship-combat",
+                                               "mass-combat-command-orders"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "organization-operations-tracker"
+                                           ]
+                    },
+                    {
+                        "id":  "mass-combat-command-orders",
+                        "title":  "Command and Orders in Mass Combat",
+                        "category":  "Warfare",
+                        "summary":  "Commanders shape battle through charges, defensive stands, flanking, retreat, fortification, dispersal, and ambush.",
+                        "body":  [
+                                     "Orders change how units apply their strength and accept risk. Aggressive commands can create breakthroughs while exposing troops; defensive commands preserve positions; movement orders trade concentrated power for position or coverage.",
+                                     "Successful command depends on communicating intent and matching the order to terrain, morale, unit capability, and the enemy\u0027s likely response."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Command Procedures",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source provides commanding rolls and numerical attack, defense, health, and advantage effects for seven orders. These procedures require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Mass Combat / Command and Orders",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:mass-combat-command-orders",
+                                               "notes":  "Markdown lines 3570-3589."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:mass-combat-command-orders"
+                                           ],
+                        "tags":  [
+                                     "orders",
+                                     "command",
+                                     "flank",
+                                     "fortify"
+                                 ],
+                        "relatedEntries":  [
+                                               "mass-combat-system",
+                                               "mass-combat-direct-involvement",
+                                               "fleet-control"
+                                           ],
+                        "relatedModules":  [
+                                               "organization-operations-tracker",
+                                               "encounter-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "mass-combat-logistics",
+                        "title":  "Logistical Support in Mass Combat",
+                        "category":  "Warfare",
+                        "summary":  "Food, reinforcements, healing, repairs, rest, and morale support determine whether an army can continue fighting.",
+                        "body":  [
+                                     "Logistics sustains forces beyond the immediate clash. Providing supplies prevents exhaustion and panic, reinforcements replace losses, medicine preserves troops, and repairs keep weapons, armor, vehicles, and airships operational.",
+                                     "Rest and entertainment can restore effectiveness and morale. A force with tactical success but collapsing support may still be compelled to retreat or surrender."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Logistics Procedures",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source assigns checks and example numerical effects for morale, unit health, reinforcements, casualty reduction, and duration. These procedures require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Mass Combat / Logistical Support",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:mass-combat-logistics",
+                                               "notes":  "Markdown lines 3590-3604."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:mass-combat-logistics"
+                                           ],
+                        "tags":  [
+                                     "logistics",
+                                     "supplies",
+                                     "healing",
+                                     "repairs"
+                                 ],
+                        "relatedEntries":  [
+                                               "mass-combat-system",
+                                               "industrial-production",
+                                               "crew-morale"
+                                           ],
+                        "relatedModules":  [
+                                               "organization-operations-tracker",
+                                               "supply-water-planner"
+                                           ]
+                    },
+                    {
+                        "id":  "mass-combat-magical-assistance",
+                        "title":  "Magical Assistance in Mass Combat",
+                        "category":  "Warfare",
+                        "summary":  "Battlefield magic can damage formations, preserve allies, alter capabilities, reshape terrain, or summon reinforcements.",
+                        "body":  [
+                                     "Spellcasters act as force multipliers when their magic is applied to units and battlefield conditions. Area attacks reduce concentrated forces, healing preserves formations, and enhancements or hindrances shift relative effectiveness.",
+                                     "Control magic can change weather, terrain, visibility, and movement, while summoned allies create temporary forces capable of disruption or reinforcement."
+                                 ],
+                        "sections":  [
+                                         {
+                                             "heading":  "Legacy Magical Procedures",
+                                             "sectionType":  "mechanics-legacy",
+                                             "body":  [
+                                                          "The source provides spellcasting rolls and example casualty, health, attack, and defense modifiers. These numerical procedures require conversion."
+                                                      ]
+                                         }
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Mass Combat / Magical Assistance",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:mass-combat-magical-assistance",
+                                               "notes":  "Markdown lines 3605-3619."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:mass-combat-magical-assistance"
+                                           ],
+                        "tags":  [
+                                     "battlefield magic",
+                                     "healing",
+                                     "control",
+                                     "summoning"
+                                 ],
+                        "relatedEntries":  [
+                                               "mass-combat-system",
+                                               "mass-combat-direct-involvement",
+                                               "mass-combat-logistics"
+                                           ],
+                        "relatedModules":  [
+                                               "encounter-generator",
+                                               "organization-operations-tracker"
+                                           ]
+                    },
+                    {
+                        "id":  "mass-combat-tracking",
+                        "title":  "Mass Combat Tracking",
+                        "category":  "Warfare",
+                        "summary":  "Battle resolution follows force strength, morale, resources, weather, and terrain rather than casualties alone.",
+                        "body":  [
+                                     "Force strength records active troops and losses caused by fighting, magic, and sabotage. Morale reflects leadership, reversals, victories, and support, while resources determine how long each side can remain effective.",
+                                     "Weather and terrain can block reinforcements, reduce visibility, create defensive positions, or magnify magical influence. These tracks together describe whether an army remains capable of pursuing its goals."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Mass Combat / Combat Tracking",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:mass-combat-tracking",
+                                               "notes":  "Markdown lines 3620-3630."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:mass-combat-tracking"
+                                           ],
+                        "tags":  [
+                                     "force strength",
+                                     "morale",
+                                     "resources",
+                                     "terrain"
+                                 ],
+                        "relatedEntries":  [
+                                               "mass-combat-system",
+                                               "mass-combat-logistics",
+                                               "mass-combat-victory-conditions"
+                                           ],
+                        "relatedModules":  [
+                                               "organization-operations-tracker",
+                                               "encounter-generator"
+                                           ]
+                    },
+                    {
+                        "id":  "mass-combat-victory-conditions",
+                        "title":  "Mass Combat Victory Conditions",
+                        "category":  "Warfare",
+                        "summary":  "Armies can win through destruction, seizure of key targets, morale collapse, or completion of scenario objectives.",
+                        "body":  [
+                                     "Total elimination is only one path to victory. Capturing commanders, ships, siege engines, or other critical assets may decide a battle before either force is destroyed.",
+                                     "A side whose morale collapses may retreat or surrender. Battles can also be decided by specific objectives such as holding a location, completing a raid, protecting a convoy, or delaying an enemy advance."
+                                 ],
+                        "sections":  [
+
+                                     ],
+                        "sourceStatus":  "source-faithful",
+                        "sourceRefs":  [
+                                           {
+                                               "sourceId":  "kaysender-core-pdf-2025-01-20",
+                                               "fileName":  "Kaysender_ 5th edition D\u0026D campaign Info.pdf",
+                                               "outlineTitle":  "Mass Combat / Victory Conditions",
+                                               "chunkId":  "kaysender-core-pdf-2025-01-20:mass-combat-victory-conditions",
+                                               "notes":  "Markdown lines 3631-3639."
+                                           }
+                                       ],
+                        "sourceChunkIds":  [
+                                               "kaysender-core-pdf-2025-01-20:mass-combat-victory-conditions"
+                                           ],
+                        "tags":  [
+                                     "victory",
+                                     "objectives",
+                                     "morale collapse",
+                                     "key targets"
+                                 ],
+                        "relatedEntries":  [
+                                               "mass-combat-system",
+                                               "mass-combat-tracking",
+                                               "fleet-control"
+                                           ],
+                        "relatedModules":  [
+                                               "organization-operations-tracker",
+                                               "job-board-generator"
+                                           ]
+                    }
+                ]
+}
