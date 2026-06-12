@@ -1,0 +1,214 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Source-lore pass 56 expands the late-manuscript Undead Acropolis material into hard-reference wiki entries, correcting the prior compressed summary from the legends pass.",
+  "entries": [
+    {
+      "id": "undead-acropolis",
+      "title": "The Undead Acropolis",
+      "category": "Locations",
+      "summary": "A cursed, crumbling city suspended beyond the Frozen Glaciers, guarded by intelligent undead air sailors bound to prevent entry, escape, and peace.",
+      "body": [
+        "Beyond the [[frozen-glaciers|Frozen Glaciers]], in the deepest heart of the frozen north, lies a place sailors name only in whispers: the Undead Acropolis. It is described as a vast, crumbling city suspended in the sky, its ancient stone spires buried beneath frost, ice, and the weight of a dead civilization.",
+        "The city belonged to a people who once commanded sky and wind, resembling the lost empire associated with the [[frozen-glaciers|Frozen Glaciers]] but surviving in a far more dreadful form. The living population is gone. Their bodies have become skeletons, wraiths, and restless undead bound to the city by a dark force that refuses them passage into the afterlife.",
+        "The Acropolis is not a tomb of rest. It is a city of duty without release. Its dead do not sleep. They watch, patrol, repair, sail, and guard. Their curse binds them to preserve the city and its airways even though the civilization they served has already fallen.",
+        "The airways leading to the Acropolis form a dangerous labyrinth of ice, storm, frozen mist, and dark magic. Ships that stumble into those routes may be pursued, trapped, or drawn into service among the dead. Sailors who return from the frozen skies often do so shattered by cold, memory, and the knowledge that they glimpsed something that should have remained beyond the living world."
+      ],
+      "sections": [
+        {
+          "heading": "Relationship to the Frozen Glaciers",
+          "sectionType": "geography",
+          "body": [
+            "The Undead Acropolis lies beyond the frozen northern curse rather than merely inside it. The [[cursed-airways|Cursed Airways]] and the [[frozen-glaciers|Frozen Glaciers]] serve as outer barriers, confusing navigation and destroying ordinary routes before travelers can approach the city itself.",
+            "This makes the Acropolis a final destination in a chain of escalating danger: first the living ice and shifting glacier passages, then the frozen mists, then the haunted airways, and finally the undead fleet guarding the city gates."
+          ]
+        },
+        {
+          "heading": "The Bound Dead",
+          "sectionType": "creature",
+          "body": [
+            "The former inhabitants are reduced to skeletons, wraiths, and other restless dead, but they are not mindless. They remember craft, war, wind-lore, and the natural magic that once allowed their people to command sky and storm.",
+            "Their curse is not simple hunger or random haunting. They are bound to an eternal task: guard the Acropolis, patrol its airways, and prevent outsiders from entering or leaving the cursed city. This gives them purpose, discipline, and a terrifying strategic patience."
+          ]
+        },
+        {
+          "heading": "Adventure Use",
+          "sectionType": "builder-note",
+          "body": [
+            "The Undead Acropolis should function as a late-campaign destination, a cursed navigation region, a ghost-fleet encounter zone, and a place where exploration can become entrapment. It is suitable for rescue missions, forbidden-chart expeditions, lost-civilization research, undead diplomacy, skyship pursuit sequences, and high-risk treasure retrieval.",
+            "Generators should treat this location as a compound threat: cold exposure, navigation failure, cursed routes, undead patrols, storm control, airship interdiction, and afterlife horror all operate together rather than as separate isolated encounters."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-acropolis-depth" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:undead-acropolis-depth"],
+      "tags": ["Undead Acropolis", "Frozen Glaciers", "undead sailors", "bone ships", "wraiths", "frozen north", "cursed city", "ghost fleet"],
+      "relatedEntries": ["frozen-glaciers", "cursed-airways", "watchers-of-the-frozen-skies", "undead-air-sailors", "bone-shadow-ships", "eternal-acropolis-captains", "aerial-navigational-hazards"],
+      "relatedModules": ["world-map-route-generator", "encounter-generator", "airship-vessel-generator", "job-board-generator", "city-district-generator"]
+    },
+    {
+      "id": "watchers-of-the-frozen-skies",
+      "title": "The Watchers of the Frozen Skies",
+      "category": "Factions",
+      "summary": "The undead guardians of the Acropolis patrol the frozen airways in silence, enforcing the curse around the dead city.",
+      "body": [
+        "The Watchers of the Frozen Skies are the undead guardians of the [[undead-acropolis|Undead Acropolis]]. Sailors describe them as skeletal or wraithlike air sailors clad in tattered ancient garb, their eyes glowing faintly with eerie light as they move through freezing winds that no longer touch them as they touch the living.",
+        "They patrol the haunted airways around the ruins aboard vessels of bone, ice, frost, and shadow. Their sails flutter as if alive. Their ships glide through cold storms with unnatural grace, and their passage is said to warm the surrounding air in a haunting, hypnotic way.",
+        "The Watchers do not behave like simple marauding undead. They are disciplined custodians, warriors, craftsmen, and navigators. They launch pursuit against ships that approach the ruins, drifting silently through fog until the pressure of their presence makes the sky feel as though it is closing around the intruder.",
+        "Their purpose is absolute: guard the gates, preserve the curse, and prevent passage. Some stories claim they prevent outsiders from entering; others insist they also prevent anyone from leaving. Both may be true."
+      ],
+      "sections": [
+        {
+          "heading": "Craft and Natural Magic",
+          "sectionType": "culture",
+          "body": [
+            "The Watchers retain the ancient craft of natural magic. They know how to manipulate winds, summon storms, call upon spirits of earth and sky, and guide their ships through punishing weather.",
+            "This knowledge makes them different from ordinary undead raiders. They can understand the airways, repair cursed vessels, shape storm conditions, and turn the frozen environment itself into a weapon."
+          ]
+        },
+        {
+          "heading": "Encounter Role",
+          "sectionType": "builder-note",
+          "body": [
+            "Use the Watchers as a patrol faction, pursuit clock, blockade force, or silent warning system. A party may see lanterns in fog, hear no voices, feel pressure changing around the hull, then realize several undead vessels have already surrounded them.",
+            "They can be enemies, tragic guardians, cursed officials still enforcing ancient law, or potential negotiators if the party can learn the dead city's duties and taboos."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:watchers-of-frozen-skies" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:watchers-of-frozen-skies"],
+      "tags": ["Watchers of the Frozen Skies", "undead guardians", "natural magic", "ghost fleet", "patrols"],
+      "relatedEntries": ["undead-acropolis", "undead-air-sailors", "bone-shadow-ships", "eternal-acropolis-captains", "frozen-glaciers"],
+      "relatedModules": ["faction-guild-generator", "encounter-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "undead-air-sailors",
+      "title": "Undead Air Sailors of the Acropolis",
+      "category": "Creatures",
+      "summary": "Intelligent skeletal and wraithlike sailors bound to ancient airships, skilled in natural magic, shipcraft, and pursuit through the frozen skies.",
+      "body": [
+        "The undead air sailors of the Acropolis are the cursed remains of a sky-commanding civilization. Their bodies have been reduced to skeletons, wraiths, or other death-bound forms, but their memories and professional skills remain. They still understand rigging, hull craft, wind-reading, storm patterns, and the hidden laws of the frozen airways.",
+        "They are often seen aboard ships made from bone and shadow, with sails that seem alive. They patrol the ruins and surrounding airways as if following orders issued in a war that never truly ended.",
+        "Unlike mindless undead, these sailors are craftsmen and warriors. Their natural magic lets them manipulate wind, summon storms, call to sky and earth spirits, and keep their ships moving through weather that would destroy ordinary vessels.",
+        "Their silence is part of the terror. They do not need to shout warnings or bargains. Their presence gathers in the air as pressure, cold, fog, and the knowledge that an intruder has crossed into guarded territory."
+      ],
+      "sections": [
+        {
+          "heading": "Rules Conversion Need",
+          "sectionType": "conversion-note",
+          "body": [
+            "This entry needs a later Hypertext d20 stat conversion pass. Likely forms include undead crew, undead helmsman, undead stormcaller, undead boarding marine, and undead repairwright. Ship-scale versions should connect to bone-and-shadow vessel statistics."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-air-sailors" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:undead-air-sailors"],
+      "tags": ["undead air sailors", "skeletons", "wraiths", "natural magic", "airship crew", "frozen skies"],
+      "relatedEntries": ["undead-acropolis", "watchers-of-the-frozen-skies", "bone-shadow-ships", "ship-to-ship-combat", "airship-crew-and-supplies"],
+      "relatedModules": ["npc-crew-generator", "encounter-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "bone-shadow-ships",
+      "title": "Bone-and-Shadow Ships",
+      "category": "Ships",
+      "summary": "Cursed vessels of the Undead Acropolis are built from bone, ice, frost, and shadow, able to glide through storms and perhaps even through solid glacier ice.",
+      "body": [
+        "The vessels of the Undead Acropolis are among the most feared ghost ships in Kaysender. They are described as being made of bone and shadow, or crafted from bone, ice, and frost, with sails that move as though alive. They cross freezing skies with uncanny ease, seemingly untouched by the cold that kills living crews.",
+        "The magic of the ancient city is said to dwell in these ships. Their very passage can warm the cold air, creating an eerie contrast between their dead crews and the strange comfort surrounding their hulls. That warmth makes the sight more disturbing, not less: the ships carry a living echo of a dead civilization.",
+        "Some tales claim the vessels can pass through the solid ice of the [[frozen-glaciers|Frozen Glaciers]], leaving no trace. Others say they can summon storms, shape winds, and turn the sky itself to ice when commanded by the captains of the Acropolis.",
+        "A bone-and-shadow ship is therefore not simply an undead transport. It is a mobile extension of the curse: patrol craft, warship, prison barge, storm engine, and ghostly border marker all at once."
+      ],
+      "sections": [
+        {
+          "heading": "Ship Stat Conversion Need",
+          "sectionType": "conversion-note",
+          "body": [
+            "This entry should receive a later ship-stat conversion. Suggested vessel profiles include patrol skiff, bone frigate, frost galleon, and captain's dread vessel. Rules should connect to ship-to-ship combat, storm control, incorporeal passage, undead crew requirements, and cold-region navigation."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:bone-shadow-ships" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:bone-shadow-ships"],
+      "tags": ["bone ships", "shadow ships", "ghost ships", "frost vessels", "undead fleet", "Frozen Glaciers"],
+      "relatedEntries": ["undead-acropolis", "watchers-of-the-frozen-skies", "undead-air-sailors", "ship-to-ship-combat", "ship-tracking"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "encounter-generator"]
+    },
+    {
+      "id": "eternal-acropolis-captains",
+      "title": "The Eternal Captains of the Acropolis",
+      "category": "NPCs",
+      "summary": "Three undead air-sailor captains command the cursed fleet, each bound from the final battle and empowered by an ancient artifact.",
+      "body": [
+        "The legend of the Undead Acropolis speaks of three undead air-sailor captains. Each was a figure from the ancient past whose soul became bound to the Acropolis during the final battle that destroyed the civilization.",
+        "These captains are the lords of the undead fleet. Their skeletal frames are wrapped in mystical armor, their eyes still glimmer with remnants of past life, and their voices have become hollow echoes of command carried across the wind.",
+        "Each captain bears an ancient artifact of immense power. These artifacts allow them to control the forces of nature that sustain their ships. Under their command, cursed vessels can summon storms, shape winds, pass through the worst weather, and even turn the sky to ice.",
+        "The captains should be treated as legendary commanders rather than ordinary monsters. They are memory, command, curse, and catastrophe concentrated into individual figures. A party may encounter them as distant fleet leaders, final bosses, impossible negotiators, or tragic prisoners of a duty they can no longer lay down."
+      ],
+      "sections": [
+        {
+          "heading": "Artifact Role",
+          "sectionType": "lore",
+          "body": [
+            "The artifacts are not merely treasure. They are engines of command that maintain the fleet's supernatural weather control and perhaps its connection to the Acropolis itself. Stealing, breaking, bargaining for, or cleansing one of these artifacts could alter the entire region."
+          ]
+        },
+        {
+          "heading": "Rules Conversion Need",
+          "sectionType": "conversion-note",
+          "body": [
+            "A later statistics pass should create three captain stat blocks and three artifact entries. Each captain should likely command a different storm, wind, ice, or spirit theme and should interact with bone-and-shadow ship rules."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["undead captains", "ancient artifacts", "storm command", "bone fleet", "final battle", "cursed commanders"],
+      "relatedEntries": ["undead-acropolis", "watchers-of-the-frozen-skies", "bone-shadow-ships", "ship-to-ship-combat", "frozen-glaciers"],
+      "relatedModules": ["npc-crew-generator", "faction-guild-generator", "encounter-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "cursed-airways",
+      "title": "The Cursed Airways",
+      "category": "Regions",
+      "summary": "The frozen approaches to the Acropolis are a shifting labyrinth of ice, mist, storm, ghostly voices, and haunted navigation failure.",
+      "body": [
+        "The Cursed Airways are the treacherous passages through and beyond the [[frozen-glaciers|Frozen Glaciers]] that lead toward the [[undead-acropolis|Undead Acropolis]]. They are narrow, confusing, choked with ice, and prone to changing direction without warning.",
+        "Sailors fear them because they do not behave like normal routes. Ships enter and vanish. Some are pulled into the ice, some have sails torn apart by unseen forces, and some drift through frozen mists until their names are forgotten by everyone except the wind.",
+        "The curse has spread through the air above the glaciers. Once-clear skies now fill with frozen mist, making navigation nearly impossible. Calm nights carry ghostly echoes of lost sailors, suggesting that the dead remain trapped in the cold embrace of the region.",
+        "The Cursed Airways are both a navigational hazard and a mythic border. They warn captains that beyond this point the sky is no longer ordinary sky, but a haunted corridor toward a city that may not permit return."
+      ],
+      "sections": [
+        {
+          "heading": "Generator Use",
+          "sectionType": "builder-note",
+          "body": [
+            "Route generators should treat the Cursed Airways as a high-risk region with shifting paths, delayed exits, cold exposure, ghostly signals, false navigation fixes, undead patrol triggers, and ship-loss clocks."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 387, "pageEnd": 389, "outlineTitle": "Frozen Glaciers and the Cursed Airways / The Undead Acropolis", "chunkId": "kaysender-core-pdf-2025-01-20:cursed-airways" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:cursed-airways"],
+      "tags": ["Cursed Airways", "Frozen Glaciers", "navigation hazard", "frozen mist", "lost sailors", "haunted routes"],
+      "relatedEntries": ["frozen-glaciers", "undead-acropolis", "watchers-of-the-frozen-skies", "aerial-navigational-hazards", "minor-navigation-hazards"],
+      "relatedModules": ["world-map-route-generator", "encounter-generator", "airship-vessel-generator"]
+    }
+  ]
+}
