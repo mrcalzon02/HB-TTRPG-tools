@@ -1,0 +1,445 @@
+{
+  "id": "floating-island-editor",
+  "title": "Floating Island / Skyland Editor",
+  "stage": 1,
+  "status": "editor-alpha",
+  "purpose": "Create a detailed Kaysender skyland profile that can feed settlements, routes, markets, airships, ecology, factions, encounters, and wiki entries.",
+  "sourceThemes": [
+    "Floating continents, islands, and landmasses drift unpredictably and can separate settlements or destroy routes.",
+    "Natural water is scarce in the open sky; rain capture, cloud dew, cisterns, magical storage, and water trade matter.",
+    "Sky ecology includes creatures, materials, magical oils, rare feathers, predators, herds, and disease risk.",
+    "Different peoples adapt to instability through fortification, mobility, magic, engineering, trade networks, or survival craft.",
+    "Settlements must be judged by stability, water, food, route access, defense, faction pressure, and crisis state."
+  ],
+  "controls": [
+    {
+      "id": "name",
+      "label": "Island Name",
+      "type": "text",
+      "default": "Unnamed Skyland"
+    },
+    {
+      "id": "islandRole",
+      "label": "Primary Role",
+      "type": "select",
+      "default": "frontier settlement base",
+      "options": [
+        "frontier settlement base",
+        "water source island",
+        "trade-route waypoint",
+        "ruined city fragment",
+        "dragon tithe holding",
+        "pirate hideout",
+        "guild survey claim",
+        "skybeast nesting ground",
+        "mining and quarry island",
+        "pilgrimage refuge",
+        "military watch island",
+        "abandoned disaster site"
+      ]
+    },
+    {
+      "id": "sizeClass",
+      "label": "Size Class",
+      "type": "select",
+      "default": "village-scale island",
+      "options": [
+        "tiny rocklet",
+        "small pasture isle",
+        "village-scale island",
+        "township island",
+        "fortress island",
+        "city-bearing island",
+        "large regional island",
+        "minor floating continent"
+      ]
+    },
+    {
+      "id": "altitudeBand",
+      "label": "Altitude Band",
+      "type": "select",
+      "default": "trade-wind layer",
+      "options": [
+        "low mist belt",
+        "trade-wind layer",
+        "storm edge",
+        "high bright air",
+        "dragon-route altitude",
+        "abyss-shadowed undercurrent"
+      ]
+    },
+    {
+      "id": "stabilityClass",
+      "label": "Stability",
+      "type": "select",
+      "default": "mostly stable",
+      "options": [
+        "actively crumbling",
+        "fracture-prone",
+        "seasonally unstable",
+        "mostly stable",
+        "anchored by old magic",
+        "engineered stabilization",
+        "geologically stubborn"
+      ]
+    },
+    {
+      "id": "driftPattern",
+      "label": "Drift Pattern",
+      "type": "select",
+      "default": "slow predictable drift",
+      "options": [
+        "fixed relative position",
+        "slow predictable drift",
+        "seasonal migration",
+        "storm-driven drift",
+        "erratic wandering",
+        "split-chain drift",
+        "recently detached",
+        "being pulled by unknown force"
+      ]
+    },
+    {
+      "id": "anchorStatus",
+      "label": "Anchor / Stabilizer Status",
+      "type": "select",
+      "default": "natural anchor veins",
+      "options": [
+        "none",
+        "natural anchor veins",
+        "ancient magical anchor",
+        "dwarven foundation works",
+        "human engineered stabilizers",
+        "gnomish gyro-anchor",
+        "elven living root network",
+        "dragon-bound territorial magic",
+        "failing unknown mechanism"
+      ]
+    },
+    {
+      "id": "terrainCore",
+      "label": "Terrain Core",
+      "type": "select",
+      "default": "terraced farms and wind-cut cliffs",
+      "options": [
+        "terraced farms and wind-cut cliffs",
+        "craggy skystone ridges",
+        "fungal cloud forest",
+        "arid scrub plateau",
+        "sheffel pastureland",
+        "ruined streets and broken towers",
+        "crystal gullies",
+        "jungle canopy with hidden water",
+        "quarry pits and mine scars",
+        "storm-polished mesas",
+        "sacred stone rings",
+        "wreck-strewn salvage fields"
+      ]
+    },
+    {
+      "id": "waterProfile",
+      "label": "Water Profile",
+      "type": "select",
+      "default": "rain cisterns and rationing",
+      "options": [
+        "no reliable water",
+        "rain cisterns and rationing",
+        "cloud dew collectors",
+        "hidden spring",
+        "contested freshwater source",
+        "tainted reservoir",
+        "enchanted water storage",
+        "water-export economy",
+        "import dependent",
+        "recently lost water source"
+      ]
+    },
+    {
+      "id": "foodProfile",
+      "label": "Food Profile",
+      "type": "select",
+      "default": "barely self-sufficient farms",
+      "options": [
+        "starvation risk",
+        "barely self-sufficient farms",
+        "sheffel herds",
+        "airfruit orchards",
+        "skygrain terraces",
+        "import dependent",
+        "hunting and gathering",
+        "fungal cultivation",
+        "seasonal surplus",
+        "crop disease outbreak"
+      ]
+    },
+    {
+      "id": "primaryResource",
+      "label": "Primary Resource",
+      "type": "select",
+      "default": "skystone",
+      "options": [
+        "skystone",
+        "freshwater",
+        "airship timber",
+        "levitation salts",
+        "rare feathers",
+        "magical oils",
+        "arcane moss",
+        "ore veins",
+        "ancient salvage",
+        "alchemical herbs",
+        "sheffel wool",
+        "strategic route position"
+      ]
+    },
+    {
+      "id": "ecologyPressure",
+      "label": "Ecology Pressure",
+      "type": "select",
+      "default": "manageable skybeast migration",
+      "options": [
+        "quiet and overhunted",
+        "manageable skybeast migration",
+        "predator nesting territory",
+        "valuable material-producing creatures",
+        "disease-bearing herds",
+        "weather-shaping entities nearby",
+        "sacred or taboo ecology",
+        "invasive creature bloom",
+        "skywhale migration lane",
+        "Grays activity reports"
+      ]
+    },
+    {
+      "id": "settlementFootprint",
+      "label": "Settlement Footprint",
+      "type": "select",
+      "default": "small fortified village",
+      "options": [
+        "none",
+        "temporary camp",
+        "small fortified village",
+        "freeholder town",
+        "guild extraction camp",
+        "dragon-tithed hamlet",
+        "pirate dockworks",
+        "pilgrim enclave",
+        "military watchpost",
+        "crowded city district",
+        "evacuated ruins"
+      ]
+    },
+    {
+      "id": "factionPressure",
+      "label": "Faction Pressure",
+      "type": "select",
+      "default": "merchant guild interest",
+      "options": [
+        "none obvious",
+        "merchant guild interest",
+        "Surveyor's Guild claim",
+        "Skyweaver Consortium contract",
+        "Black Fleet intimidation",
+        "Dragon Lord tribute demand",
+        "Free Sky Brotherhood cell",
+        "local militia power struggle",
+        "religious claim",
+        "criminal smuggling route",
+        "rival settlement dispute"
+      ]
+    },
+    {
+      "id": "culturalAdaptation",
+      "label": "Dominant Adaptation Style",
+      "type": "select",
+      "default": "mixed frontier adaptation",
+      "options": [
+        "dwarven reinforced foundations",
+        "dragon kin high-defense dominion",
+        "lizardfolk mobile survival camps",
+        "human engineered stabilizers",
+        "elven living-root wards",
+        "gnomish machine-anchor systems",
+        "halfling caravan-market flexibility",
+        "mixed frontier adaptation",
+        "pirate salvage pragmatism",
+        "religious refuge discipline"
+      ]
+    },
+    {
+      "id": "routeAccess",
+      "label": "Route Access",
+      "type": "select",
+      "default": "known but risky trade approach",
+      "options": [
+        "easy marked approach",
+        "known but risky trade approach",
+        "requires local pilot",
+        "storm-blocked approach",
+        "dragon-patrolled airspace",
+        "pirate-observed corridor",
+        "hidden approach only",
+        "moving too fast for old charts",
+        "dock access damaged",
+        "no safe landing zone"
+      ]
+    },
+    {
+      "id": "threatClock",
+      "label": "Current Threat Clock",
+      "type": "select",
+      "default": "water stores are low",
+      "options": [
+        "water stores are low",
+        "island fracture is spreading",
+        "storm season begins soon",
+        "dragon tithe collector is inbound",
+        "pirates have marked the route",
+        "disease is moving through herds",
+        "anchor system is failing",
+        "settlement leadership is splitting",
+        "market prices are spiraling",
+        "survey crew vanished nearby",
+        "skybeasts are nesting in the docks",
+        "old ruin has awakened"
+      ]
+    }
+  ],
+  "scoring": {
+    "habitability": {
+      "waterProfile": {
+        "no reliable water": -4,
+        "recently lost water source": -4,
+        "import dependent": -3,
+        "tainted reservoir": -2,
+        "rain cisterns and rationing": 0,
+        "cloud dew collectors": 1,
+        "hidden spring": 3,
+        "contested freshwater source": 1,
+        "enchanted water storage": 2,
+        "water-export economy": 4
+      },
+      "foodProfile": {
+        "starvation risk": -4,
+        "crop disease outbreak": -3,
+        "import dependent": -2,
+        "barely self-sufficient farms": 0,
+        "hunting and gathering": 0,
+        "fungal cultivation": 1,
+        "sheffel herds": 2,
+        "airfruit orchards": 2,
+        "skygrain terraces": 2,
+        "seasonal surplus": 3
+      },
+      "stabilityClass": {
+        "actively crumbling": -4,
+        "fracture-prone": -3,
+        "seasonally unstable": -1,
+        "mostly stable": 1,
+        "anchored by old magic": 2,
+        "engineered stabilization": 2,
+        "geologically stubborn": 3
+      }
+    },
+    "routeValue": {
+      "islandRole": {
+        "trade-route waypoint": 4,
+        "water source island": 3,
+        "guild survey claim": 3,
+        "military watch island": 2,
+        "mining and quarry island": 2,
+        "frontier settlement base": 1,
+        "pirate hideout": 1,
+        "ruined city fragment": 1,
+        "dragon tithe holding": 1,
+        "pilgrimage refuge": 1,
+        "skybeast nesting ground": 0,
+        "abandoned disaster site": -1
+      },
+      "primaryResource": {
+        "freshwater": 5,
+        "strategic route position": 4,
+        "skystone": 3,
+        "levitation salts": 3,
+        "magical oils": 3,
+        "airship timber": 2,
+        "rare feathers": 2,
+        "ore veins": 2,
+        "ancient salvage": 2,
+        "alchemical herbs": 2,
+        "sheffel wool": 1,
+        "arcane moss": 1
+      },
+      "routeAccess": {
+        "easy marked approach": 3,
+        "known but risky trade approach": 1,
+        "requires local pilot": 0,
+        "hidden approach only": 0,
+        "moving too fast for old charts": -1,
+        "dock access damaged": -2,
+        "storm-blocked approach": -3,
+        "dragon-patrolled airspace": -3,
+        "pirate-observed corridor": -3,
+        "no safe landing zone": -4
+      }
+    },
+    "conflictPressure": {
+      "factionPressure": {
+        "none obvious": 0,
+        "merchant guild interest": 1,
+        "Surveyor's Guild claim": 1,
+        "Skyweaver Consortium contract": 1,
+        "religious claim": 2,
+        "local militia power struggle": 3,
+        "rival settlement dispute": 3,
+        "criminal smuggling route": 4,
+        "Black Fleet intimidation": 5,
+        "Dragon Lord tribute demand": 5,
+        "Free Sky Brotherhood cell": 3
+      },
+      "threatClock": {
+        "water stores are low": 2,
+        "island fracture is spreading": 4,
+        "storm season begins soon": 2,
+        "dragon tithe collector is inbound": 5,
+        "pirates have marked the route": 5,
+        "disease is moving through herds": 3,
+        "anchor system is failing": 4,
+        "settlement leadership is splitting": 3,
+        "market prices are spiraling": 2,
+        "survey crew vanished nearby": 3,
+        "skybeasts are nesting in the docks": 3,
+        "old ruin has awakened": 4
+      }
+    }
+  },
+  "outputTemplates": {
+    "summary": "{name} is a {sizeClass} serving as a {islandRole}. It sits in the {altitudeBand}, with {stabilityClass} stability, {driftPattern}, and {anchorStatus}. Its terrain is defined by {terrainCore}. Water access is {waterProfile}; food support is {foodProfile}; the main valuable resource is {primaryResource}.",
+    "gmNoteTemplates": [
+      "Treat this island as a {islandRole} with {factionPressure}; the island's immediate clock is that {threatClock}.",
+      "The dominant adaptation style is {culturalAdaptation}, which should influence architecture, NPC attitudes, repair methods, and crisis response.",
+      "Route access is {routeAccess}; any airship approach should reflect this in costs, delays, pilot requirements, or encounter risk.",
+      "Ecology pressure is {ecologyPressure}; use this to seed encounters, materials, disease risk, local taboos, or trade goods."
+    ],
+    "settlementHooks": [
+      "The settlement footprint is {settlementFootprint}; decide who controls landing rights, water access, and emergency shelters.",
+      "If the island remains inhabited, its leaders must solve {waterProfile}, {foodProfile}, and {threatClock} before the next route cycle.",
+      "The island's construction style should reflect {culturalAdaptation} and {anchorStatus}."
+    ],
+    "routeHooks": [
+      "Route charts should flag this location as {routeAccess} with {driftPattern}.",
+      "Airship captains care about this island because of {primaryResource}, {waterProfile}, and its role as {islandRole}.",
+      "The next route complication should involve {threatClock}."
+    ],
+    "marketHooks": [
+      "Market pressure should center on {primaryResource}, {waterProfile}, and {foodProfile}.",
+      "If traders arrive, the first dispute should involve {factionPressure} or control of docking access.",
+      "Scarcity pricing should increase if {routeAccess} or {threatClock} worsen."
+    ],
+    "encounterHooks": [
+      "An encounter can begin when {threatClock}. The opposition may be tied to {factionPressure}.",
+      "Use {ecologyPressure} to create a non-humanoid pressure before adding pirates, dragons, or guild agents.",
+      "The terrain encounter map should emphasize {terrainCore}, {altitudeBand}, and the consequences of {stabilityClass}."
+    ]
+  }
+}
