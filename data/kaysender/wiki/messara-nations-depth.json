@@ -1,0 +1,246 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.2.0",
+  "entries": [
+    {
+      "id": "messara",
+      "title": "Messara",
+      "category": "Regions",
+      "summary": "Messara is the first major regional wiki node: a large, densely populated, politically divided continent of fortified settlements, trade routes, conflict, and nation-capital identities.",
+      "body": [
+        "Messara is one of the most important organizing regions for the Kaysender wiki because it can carry geography, nations, capitals, trade lanes, faction influence, military pressure, and editor tags in one place. It should not be handled as a single generic continent entry; it should be treated as the regional parent of multiple political and economic systems.",
+        "The current extracted nation-capital pairs are [[valeria-valthorn|Valeria and Valthorn]], [[faelenor-mirathen|Faelenor and Mirathen]], [[teralon-vorrik|Teralon and Vorrik]], [[silvalis-neylithar|Silvalis and Neylithar]], [[vornak-grimhold|Vornak and Grimhold]], [[rylune-falyris|Rylune and Falyris]], [[zarovar-kalthor|Zarovar and Kalthor]], [[eldrath-druun|Eldrath and Druun]], and [[imbria-solaar|Imbria and Solaar]].",
+        "Messara should feel crowded, contested, and strategically valuable. Fortified communities, rival powers, resource pressure, old grudges, trade constraints, religious claims, and route dependencies should all appear in regional tools. Even when a local island or skyport is small, it may be connected to Messaran politics through debt, trade, migration, conscription, pilgrimage, or faction reach.",
+        "Editors should use Messara as a tag source. A settlement profile can inherit a national affiliation, trade expectation, legal culture, economic pressure, dominant religion, or military posture. A vessel profile can inherit a flag, route license, cargo expectation, inspection risk, or faction entanglement from its Messaran origin."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "The Region / Route Editor should eventually use Messara to generate national borders, safe lanes, contested lanes, pilgrimage routes, military airspace, guild-chartered routes, pirate pressure, and dragon tribute corridors.",
+            "The Settlement Editor should use Messara entries as political tags that affect government, law, markets, militia readiness, trade goods, and social stress."
+          ]
+        }
+      ],
+      "tags": ["Messara", "region", "nations", "capitals", "trade", "conflict"],
+      "relatedEntries": ["valeria-valthorn", "faelenor-mirathen", "teralon-vorrik", "silvalis-neylithar", "vornak-grimhold", "rylune-falyris", "zarovar-kalthor", "eldrath-druun", "imbria-solaar"],
+      "relatedModules": ["world-map-route-generator", "settlement-generator", "city-district-generator", "faction-guild-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "valeria-valthorn",
+      "title": "Valeria and Valthorn",
+      "category": "Nations",
+      "summary": "Valeria is a wealthy, ascendant monarchy associated with trade, agriculture, craftsmanship, and the Great Light religion; Valthorn is its capital node.",
+      "body": [
+        "Valeria should be treated as an ascendant political and economic power within Messara. Its identity is tied to wealth, trade, agriculture, craftsmanship, monarchy, and the Great Light religious tradition. This makes it useful as a patron, market power, diplomatic force, cargo origin, pilgrimage sponsor, and source of formal legitimacy.",
+        "Valthorn, as the capital node, should function as the bureaucratic, religious, and commercial face of Valerian influence. It can generate noble charters, trade paperwork, faith-backed contracts, royal expectations, and pressure on frontier settlements that depend on Valerian grain, coin, or protection.",
+        "In play, Valeria should not be merely good or safe. Its prosperity can create leverage, arrogance, debt obligations, religious pressure, export dependency, political marriages, and conflicts with less stable neighbors. A Valerian cargo ship may carry food, crafted goods, officials, pilgrims, or a royal demand disguised as aid.",
+        "Use Valeria and Valthorn for lawful patrons, expensive commissions, grain contracts, noble disputes, Great Light diplomacy, royal inspections, wealthy markets, and frontier communities that must decide whether Valerian support is protection or control."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: monarchy, Great Light, grain, craft guild, noble charter, royal inspection, prosperous but controlling.",
+            "Airship tags: licensed merchant vessel, diplomatic courier, royal cargo, pilgrimage passage, grain convoy, formal papers."
+          ]
+        }
+      ],
+      "tags": ["Valeria", "Valthorn", "monarchy", "Great Light", "agriculture", "craftsmanship", "trade"],
+      "relatedEntries": ["messara", "water-trade", "skyweaver-consortium", "airships"],
+      "relatedModules": ["settlement-generator", "city-district-generator", "shop-market-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "faelenor-mirathen",
+      "title": "Faelenor and Mirathen",
+      "category": "Nations",
+      "summary": "Faelenor is an ascendant republic associated with agriculture, industry, secular progress, and scientific development; Mirathen is its capital node.",
+      "body": [
+        "Faelenor should be treated as a progressive, ascendant republic whose strength comes from agriculture, industry, scientific development, and secular political identity. It offers a different kind of modernizing pressure than monarchy, theocracy, or tribal power.",
+        "Mirathen should act as the administrative and intellectual center of this republican identity. It can produce survey missions, technical commissions, civic reforms, industrial charters, experimental agriculture, and politically ambitious officials who believe the old systems are too slow for Kaysender’s dangers.",
+        "Faelenor is useful for conflicts between innovation and tradition. It may fund new stabilizers, public works, agricultural projects, airship engineering, and scientific expeditions, but it may also override local customs, underprice traditional crafts, or treat frontier communities as data points.",
+        "In tools, Faelenor should generate engineers, surveyors, reformers, industrial cargo, civic projects, secular schools, public works contracts, experimental routes, and social arguments over whether progress is rescue or exploitation."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: republic, civic council, survey office, agricultural reform, secular academy, industrial project, public works.",
+            "Airship tags: survey expedition, guild-certified specialists, experimental cargo, scientific charter, route-mapping mission."
+          ]
+        }
+      ],
+      "tags": ["Faelenor", "Mirathen", "republic", "science", "industry", "agriculture", "progress"],
+      "relatedEntries": ["messara", "surveyors-guild", "floating-islands", "airships"],
+      "relatedModules": ["settlement-generator", "world-map-route-generator", "airship-vessel-generator", "organization-operations-tracker"]
+    },
+    {
+      "id": "teralon-vorrik",
+      "title": "Teralon and Vorrik",
+      "category": "Nations",
+      "summary": "Teralon is a declining autocratic religious empire associated with mining, gems, authority, extraction, and religious power; Vorrik is its capital node.",
+      "body": [
+        "Teralon should be treated as a declining but still dangerous empire whose authority is autocratic and religious. Its economy is tied to mining and gems, which makes it a strong fit for extraction camps, debt labor, guarded mines, relic claims, and sacred resource politics.",
+        "Vorrik should feel severe, hierarchical, and burdened by old power. It can produce officials, inquisitors, mine charters, temple demands, relic-hunters, and enforcers who insist that decline is not weakness but impurity, disobedience, or divine trial.",
+        "Teralon is useful when a campaign needs extractive authority. A frontier settlement may owe gemstone tithe, labor, religious obedience, or mining access. A vessel may carry guarded ore, temple agents, or prisoners. A guild may quietly profit while publicly condemning Teralon’s methods.",
+        "In play, Teralon should create pressure through law, faith, fear, old wealth, failing legitimacy, guarded tunnels, secret heresies, and desperate attempts to preserve imperial status."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: autocracy, temple authority, mining camp, gem tithe, declining order, harsh law, labor pressure.",
+            "Airship tags: guarded ore, temple papers, wanted refugees, prisoner transfer, relic cargo, imperial inspection."
+          ]
+        }
+      ],
+      "tags": ["Teralon", "Vorrik", "empire", "religion", "mining", "gems", "decline"],
+      "relatedEntries": ["messara", "water-trade", "black-fleet"],
+      "relatedModules": ["settlement-generator", "shop-market-generator", "faction-guild-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "silvalis-neylithar",
+      "title": "Silvalis and Neylithar",
+      "category": "Nations",
+      "summary": "Silvalis is a stable confederacy of city-states associated with artisans, trade, intellectual life, and local autonomy; Neylithar is its capital or chief node.",
+      "body": [
+        "Silvalis should be treated as a stable confederacy or city-state network. Its identity is artisan, mercantile, intellectual, and locally plural. It is not necessarily weak because it is decentralized; its strength comes from negotiated autonomy, trade expertise, skilled production, and cultural prestige.",
+        "Neylithar can function as the diplomatic and intellectual center of the confederacy, a place of agreements, guild standards, fine goods, specialist crafts, and clever politics. It should be useful as a neutral meeting place, arbitration site, or source of high-skill commissions.",
+        "Silvalis is useful when the campaign needs stable markets, city-state diplomacy, trade disputes, guild rivalries, artisan pride, academic politics, or a place where information has value. A Silvalis vessel may be less heavily armed but legally clever and commercially well connected.",
+        "In play, Silvalis should reward negotiation and reputation. The conflict is rarely just violence; it is access, contracts, standards, city privileges, intellectual property, and whether a local community can stay autonomous under outside pressure."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: confederacy, city-state, artisan quarter, guild arbitration, stable trade, intellectual culture, autonomy dispute.",
+            "Airship tags: guild-chartered vessel, legal complexity, fine goods, neutral delegates, specialist cargo."
+          ]
+        }
+      ],
+      "tags": ["Silvalis", "Neylithar", "confederacy", "city-states", "artisans", "trade", "stable"],
+      "relatedEntries": ["messara", "skyweaver-consortium", "surveyors-guild"],
+      "relatedModules": ["city-district-generator", "shop-market-generator", "faction-guild-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "vornak-grimhold",
+      "title": "Vornak and Grimhold",
+      "category": "Nations",
+      "summary": "Vornak is a declining warrior-tribal power associated with raiding, hunting, animism, and hard survival; Grimhold is its chief node.",
+      "body": [
+        "Vornak should be treated as a warrior-tribal power under pressure. Its identity is raiding, hunting, animism, hard survival, and martial prestige. Its decline should not make it irrelevant; it should make it more dangerous, proud, fractured, or desperate.",
+        "Grimhold should feel like a hard place built around strength, memory, and survival. It can produce warriors, hunters, raiders, spiritual leaders, trophy claims, blood-debts, and disputes over whether old traditions can survive the new sky economy.",
+        "Vornak is useful when the campaign needs frontier warbands, honor raids, hunting territories, animist taboos, disputed resources, or groups resisting absorption into merchant, imperial, or religious systems.",
+        "In play, Vornak should complicate the assumption that raiders are simply criminals. A raid may be vengeance, survival, ritual, hunger, political theater, or a response to routes and resources being stolen by more bureaucratic powers."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: clan moot, martial culture, hunting rights, animist taboo, raiding pressure, declining strength.",
+            "Airship tags: raider interception, trophy cargo, frontier patrol, negotiated passage, old feud."
+          ]
+        }
+      ],
+      "tags": ["Vornak", "Grimhold", "warrior tribes", "raiding", "hunting", "animism", "declining"],
+      "relatedEntries": ["messara", "sky-ecology", "black-fleet"],
+      "relatedModules": ["settlement-generator", "encounter-generator", "faction-guild-generator", "job-board-generator"]
+    },
+    {
+      "id": "rylune-falyris",
+      "title": "Rylune and Falyris",
+      "category": "Nations",
+      "summary": "Rylune is a declining agrarian monarchy tied to feudal structures, nature worship, famine, flood, and drought pressures; Falyris is its capital node.",
+      "body": [
+        "Rylune should be treated as a vulnerable agrarian monarchy whose legitimacy is tied to land, food, feudal duty, and nature worship. It faces pressures such as famine, flood, drought, and fragile agricultural systems, which makes it deeply connected to the [[scarcity-loop|scarcity loop]].",
+        "Falyris should serve as a seat of old agrarian authority, religious obligation, and feudal administration. It can produce noble obligations, grain tithe disputes, sacred harvest rites, peasant unrest, famine relief missions, and conflicting claims between landholders and common survival.",
+        "Rylune is useful whenever food security is the center of play. A settlement may need seed grain, herd protection, irrigation, weather omens, or relief cargo. A vessel may be transporting airfruit, skygrain, refugees, or emergency supplies while political factions argue about who deserves them.",
+        "In play, Rylune should create moral pressure. When food fails, everyone becomes political: nobles, priests, merchants, farmers, smugglers, raiders, and relief captains."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: agrarian monarchy, feudal duty, famine risk, harvest rites, nature worship, food convoy, refugee crowding.",
+            "Airship tags: skygrain cargo, famine relief, noble charter, pilgrimage cargo, desperate passengers."
+          ]
+        }
+      ],
+      "tags": ["Rylune", "Falyris", "agrarian", "monarchy", "famine", "nature worship", "declining"],
+      "relatedEntries": ["messara", "scarcity-loop", "water-trade", "sky-ecology"],
+      "relatedModules": ["settlement-generator", "supply-water-planner", "shop-market-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "zarovar-kalthor",
+      "title": "Zarovar and Kalthor",
+      "category": "Nations",
+      "summary": "Zarovar is an ascendant industrial federation associated with mining, steel, heavy industry, social unrest, and Kalthor as its major node.",
+      "body": [
+        "Zarovar should be treated as an ascendant industrial federation whose strength comes from mining, steel, heavy industry, production scale, and federation politics. Its rise creates wealth and power, but also social unrest and labor pressure.",
+        "Kalthor should feel like smoke, steel, ledgers, workshops, loading docks, labor halls, and industrial ambition. It can produce heavy cargo, machine parts, steel shipments, labor disputes, industrial accidents, union conflict, and powerful interests that need routes kept open at any cost.",
+        "Zarovar is useful when the campaign needs production, industrial pressure, social conflict, machinery, labor unrest, and hard bargaining. It can supply airship components, weapons, anchors, dock cranes, core housings, and the political problems that come with those industries.",
+        "In play, Zarovar should create a tension between progress and exploitation. A federation contract may save a settlement with machinery while trapping it in debt. A steel shipment may be vital to repairs while tied to dangerous working conditions or sabotage."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: industrial federation, steel, mine, foundry, labor unrest, machine parts, social pressure.",
+            "Airship tags: heavy cargo, mechanical parts, industrial convoy, union passengers, sabotage risk, repair mission."
+          ]
+        }
+      ],
+      "tags": ["Zarovar", "Kalthor", "industry", "steel", "mining", "social unrest", "ascendant"],
+      "relatedEntries": ["messara", "dwager", "gezistack", "airships"],
+      "relatedModules": ["settlement-generator", "airship-core-builder", "crafting-gadget-creator", "airship-vessel-generator"]
+    },
+    {
+      "id": "eldrath-druun",
+      "title": "Eldrath and Druun",
+      "category": "Nations",
+      "summary": "Eldrath is a stable trade republic tied to commerce, banking, shipbuilding, navy, privateers, and Druun as its capital or chief node.",
+      "body": [
+        "Eldrath should be treated as a stable trade republic whose power comes from commerce, banking, shipbuilding, naval force, and privateering. It is one of the best national tags for airship paperwork, cargo finance, convoy contracts, port law, and disputes over legal piracy.",
+        "Druun should serve as a banking and shipbuilding center. It can produce privateer commissions, naval inspections, ship mortgages, cargo insurance, trade courts, merchant houses, and captains who understand that law and profit are weapons.",
+        "Eldrath is useful when a campaign needs legal ambiguity. A privateer may be a patriot in one port and a pirate in another. A bank may fund rescue ships while quietly owning the debt of the settlement being rescued. A navy may protect trade while forcing smaller ports into dependency.",
+        "In play, Eldrath should create contracts, escorts, inspections, ship loans, banking pressure, commercial rivalries, and naval-privateer entanglements."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: trade republic, banking office, shipyard, port court, privateer politics, cargo insurance.",
+            "Airship tags: licensed merchant vessel, privateer papers, naval commission, ship mortgage, banking debt, convoy escort."
+          ]
+        }
+      ],
+      "tags": ["Eldrath", "Druun", "trade republic", "banking", "shipbuilding", "privateers", "navy"],
+      "relatedEntries": ["messara", "airships", "black-fleet", "water-trade"],
+      "relatedModules": ["airship-vessel-generator", "shop-market-generator", "faction-guild-generator", "organization-operations-tracker"]
+    },
+    {
+      "id": "imbria-solaar",
+      "title": "Imbria and Solaar",
+      "category": "Nations",
+      "summary": "Imbria is an isolated theocracy associated with pilgrimage, sacred artifacts, religious authority, and Solaar as its capital node.",
+      "body": [
+        "Imbria should be treated as an isolated theocracy whose identity is pilgrimage, sacred artifacts, religious authority, separation, and spiritual control over access. Its isolation should make it mysterious, guarded, and difficult to engage without ritual or permission.",
+        "Solaar should function as the sacred capital node: a destination for pilgrim ships, relic missions, guarded temple envoys, doctrinal disputes, and powerful artifact politics. It may not be commercially open in the way a trade republic or market city is; access itself may be sacred privilege.",
+        "Imbria is useful when a campaign needs pilgrimage routes, sacred cargo, protected passengers, relic recovery, closed borders, hidden heresy, ritual law, or conflict between practical survival and religious restriction.",
+        "In play, an Imbrian ship may carry pilgrims, relics, temple guards, forbidden texts, or sealed offerings. A settlement may accept Imbrian aid at the cost of spiritual submission or become a secret refuge for those fleeing the theocracy."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Tags",
+          "body": [
+            "Settlement tags: theocracy, pilgrimage, sacred artifact, temple stewardship, isolation, ritual access, religious dispute.",
+            "Airship tags: pilgrimage vessel, temple bond, sacred cargo, sealed passengers, guarded relic, ritual route."
+          ]
+        }
+      ],
+      "tags": ["Imbria", "Solaar", "theocracy", "pilgrimage", "sacred artifacts", "isolation"],
+      "relatedEntries": ["messara", "water-trade", "airships"],
+      "relatedModules": ["settlement-generator", "airship-vessel-generator", "job-board-generator", "faction-guild-generator"]
+    }
+  ]
+}
