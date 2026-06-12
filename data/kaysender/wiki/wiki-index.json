@@ -1,0 +1,13 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.2.0",
+  "description": "Multi-pack wiki index. Files later in this list can extend or override earlier seed entries by stable entry id.",
+  "packs": [
+    "data/kaysender/wiki/entries.json",
+    "data/kaysender/wiki/world-depth.json",
+    "data/kaysender/wiki/peoples-depth.json",
+    "data/kaysender/wiki/messara-nations-depth.json",
+    "data/kaysender/wiki/factions-economy-depth.json",
+    "data/kaysender/wiki/airships-depth.json"
+  ]
+}
