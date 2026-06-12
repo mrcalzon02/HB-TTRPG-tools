@@ -1,0 +1,591 @@
+{
+  "id": "airship-editor",
+  "title": "Airship / Vessel Editor",
+  "stage": 3,
+  "status": "editor-alpha",
+  "purpose": "Create deep Kaysender airship profiles that connect vessel class, hull culture, core technology, crew, cargo, legal status, route pressure, maintenance burden, faction entanglement, and campaign hooks.",
+  "sourceThemes": [
+    "Airships are campaign infrastructure: trade machine, mobile base, war platform, escape vehicle, smuggling route, rescue craft, and faction asset.",
+    "Airship cores are culturally distinct rather than interchangeable generic engines. Dwarven cores emphasize reliable heavy-duty power, Elven cores are attuned sacred arcane/natural systems, Dragon Kin cores lean into draconic elemental identity, Gnomish cores are hybrid experimental machines, and Human cores blend practical approaches.",
+    "Vessel class matters: scouts, patrol craft, frigates, cruisers, liners, destroyers, galleons, and dreadnought-like ships imply different crews, cargos, risks, weapons, and social meaning.",
+    "Crew quality and morale can determine whether the mission survives pressure, scarcity, command failure, combat, or route disaster.",
+    "Ships should consume and produce other editor outputs: island route pressure, settlement trade access, settlement crisis clocks, faction presence, market cargo, and job-board missions."
+  ],
+  "controls": [
+    { "id": "name", "label": "Vessel Name", "type": "text", "default": "Unnamed Skyship" },
+    {
+      "id": "vesselClass",
+      "label": "Vessel Class",
+      "type": "select",
+      "default": "frigate patrol craft",
+      "options": [
+        "skiff courier",
+        "scout cutter",
+        "merchant sloop",
+        "patrol corvette",
+        "frigate patrol craft",
+        "cruiser support ship",
+        "liner passenger hauler",
+        "destroyer escort",
+        "galleon heavy cargo warship",
+        "dreadnought fortress vessel",
+        "salvage barge",
+        "pirate raider"
+      ]
+    },
+    {
+      "id": "hullCulture",
+      "label": "Hull Culture",
+      "type": "select",
+      "default": "human hybrid practical hull",
+      "options": [
+        "dwarven reinforced ironwood hull",
+        "elven living-lattice hull",
+        "dragon kin armored prow hull",
+        "gnomish machine-ribbed hull",
+        "human hybrid practical hull",
+        "halfling caravan deck hull",
+        "pirate salvage composite hull",
+        "guild-standard modular hull",
+        "military plated hull",
+        "ancient recovered hull"
+      ]
+    },
+    {
+      "id": "coreType",
+      "label": "Core Type",
+      "type": "select",
+      "default": "human hybrid steam-arcane core",
+      "options": [
+        "dwarven elemental combustion core",
+        "elven attuned weave core",
+        "dragon kin draconic elemental core",
+        "gnomish crystal-gear hybrid core",
+        "human hybrid steam-arcane core",
+        "salvaged unknown core",
+        "guild-certified standard core",
+        "experimental unstable prototype core",
+        "aging patched civilian core",
+        "black-market refitted core"
+      ]
+    },
+    {
+      "id": "purpose",
+      "label": "Purpose",
+      "type": "select",
+      "default": "escort and patrol",
+      "options": [
+        "escort and patrol",
+        "cargo transport",
+        "passenger travel",
+        "water convoy",
+        "survey expedition",
+        "salvage recovery",
+        "monster hunting",
+        "piracy and raiding",
+        "smuggling run",
+        "military bombardment",
+        "diplomatic mission",
+        "evacuation lift"
+      ]
+    },
+    {
+      "id": "legalStatus",
+      "label": "Legal Status",
+      "type": "select",
+      "default": "licensed merchant vessel",
+      "options": [
+        "licensed merchant vessel",
+        "guild-chartered vessel",
+        "naval commission",
+        "mercenary letter of service",
+        "unregistered frontier craft",
+        "forged papers",
+        "pirate-marked vessel",
+        "impounded but escaped",
+        "dragon-permitted tribute hauler",
+        "neutral-ground protected vessel",
+        "wanted in three ports",
+        "secret faction asset"
+      ]
+    },
+    {
+      "id": "crewQuality",
+      "label": "Crew Quality",
+      "type": "select",
+      "default": "competent mixed crew",
+      "options": [
+        "green and frightened",
+        "thinly staffed but loyal",
+        "competent mixed crew",
+        "veteran skyhands",
+        "elite military crew",
+        "guild-certified specialists",
+        "pirate-hardened crew",
+        "mutinous underpaid crew",
+        "fanatically loyal crew",
+        "press-ganged survivors"
+      ]
+    },
+    {
+      "id": "crewScale",
+      "label": "Crew Scale",
+      "type": "select",
+      "default": "standard crew 12-25",
+      "options": [
+        "skeleton crew 2-5",
+        "small crew 6-12",
+        "standard crew 12-25",
+        "large crew 25-50",
+        "war crew 50-120",
+        "floating garrison 120+",
+        "overcrowded passenger crew",
+        "under-crewed emergency run"
+      ]
+    },
+    {
+      "id": "captainStyle",
+      "label": "Captain Style",
+      "type": "select",
+      "default": "pragmatic route captain",
+      "options": [
+        "pragmatic route captain",
+        "reckless glory-seeker",
+        "old naval disciplinarian",
+        "merchant negotiator",
+        "pirate gentleman",
+        "quiet smuggler",
+        "guild-certified professional",
+        "religious mission commander",
+        "fugitive captain",
+        "reluctant inherited command"
+      ]
+    },
+    {
+      "id": "cargoProfile",
+      "label": "Cargo Profile",
+      "type": "select",
+      "default": "mixed trade goods",
+      "options": [
+        "mixed trade goods",
+        "water barrels and cistern tanks",
+        "skygrain and airfruit",
+        "sheffel wool and textiles",
+        "ore and skystone",
+        "alchemical herbs and oils",
+        "passengers and pilgrims",
+        "weapon crates",
+        "salvage and wreckage",
+        "contraband under false manifest",
+        "medical supplies",
+        "evacuees and refugees"
+      ]
+    },
+    {
+      "id": "armament",
+      "label": "Armament",
+      "type": "select",
+      "default": "light cannon and swivel guns",
+      "options": [
+        "unarmed civilian hull",
+        "light cannon and swivel guns",
+        "ballista nests",
+        "medium cannon battery",
+        "heavy cannon battery",
+        "anti-air gun mounts",
+        "siege weapon platform",
+        "hidden pirate guns",
+        "magical lance array",
+        "boarding hooks and grapples",
+        "experimental torpedoes",
+        "overarmed unstable loadout"
+      ]
+    },
+    {
+      "id": "defenseSystem",
+      "label": "Defense System",
+      "type": "select",
+      "default": "reinforced hull braces",
+      "options": [
+        "none beyond hull planking",
+        "reinforced hull braces",
+        "armored gondola",
+        "storm shutters and ballast locks",
+        "magical ward plates",
+        "decoy lantern rig",
+        "escape skiffs",
+        "counter-boarding nets",
+        "shielded core room",
+        "military compartment bulkheads",
+        "sacred core sanctum",
+        "jury-rigged emergency patches"
+      ]
+    },
+    {
+      "id": "condition",
+      "label": "Condition",
+      "type": "select",
+      "default": "worn but serviceable",
+      "options": [
+        "pristine and inspected",
+        "well maintained",
+        "worn but serviceable",
+        "battle-scarred",
+        "storm damaged",
+        "patched from salvage",
+        "core sputtering",
+        "structural fatigue",
+        "secretly unsafe",
+        "miraculously held together"
+      ]
+    },
+    {
+      "id": "maintenancePressure",
+      "label": "Maintenance Pressure",
+      "type": "select",
+      "default": "routine repairs overdue",
+      "options": [
+        "fresh from drydock",
+        "routine repairs overdue",
+        "rare part needed",
+        "core ritual required",
+        "engineer missing",
+        "crystal alignment failing",
+        "fuel system fouled",
+        "hull stress spreading",
+        "battle damage hidden",
+        "illegal refit unstable"
+      ]
+    },
+    {
+      "id": "routeAccess",
+      "label": "Route Compatibility",
+      "type": "select",
+      "default": "standard trade-wind capable",
+      "options": [
+        "short-hop island shuttle",
+        "standard trade-wind capable",
+        "storm-edge capable",
+        "high-altitude capable",
+        "dragon-route permitted",
+        "hidden route optimized",
+        "heavy cargo slow route only",
+        "requires expert pilot",
+        "route charts outdated",
+        "unsafe for current route"
+      ]
+    },
+    {
+      "id": "routeMandate",
+      "label": "Route Mandate",
+      "type": "select",
+      "default": "deliver cargo under delay pressure",
+      "options": [
+        "deliver cargo under delay pressure",
+        "escort a vulnerable convoy",
+        "recover a missing survey crew",
+        "avoid a pirate-observed corridor",
+        "break a blockade",
+        "answer a settlement distress call",
+        "evacuate before island fracture",
+        "carry tribute without losing face",
+        "smuggle someone past inspection",
+        "reach a port before storm closure",
+        "hunt a dangerous skybeast",
+        "investigate a false route beacon"
+      ]
+    },
+    {
+      "id": "factionEntanglement",
+      "label": "Faction Entanglement",
+      "type": "select",
+      "default": "local merchant backers",
+      "options": [
+        "local merchant backers",
+        "Surveyor's Guild contract",
+        "Skyweaver Consortium warranty",
+        "Dragon Lord tithe papers",
+        "Black Fleet shadow claim",
+        "Free Sky Brotherhood courier job",
+        "mercenary company charter",
+        "temple pilgrimage bond",
+        "criminal syndicate debt",
+        "naval intelligence interest",
+        "rival captain feud",
+        "secret owner unknown"
+      ]
+    },
+    {
+      "id": "hiddenProblem",
+      "label": "Hidden Problem",
+      "type": "select",
+      "default": "cargo manifest is incomplete",
+      "options": [
+        "cargo manifest is incomplete",
+        "core operator is lying",
+        "captain is under blackmail",
+        "crew plans to desert",
+        "contraband is alive",
+        "core is slowly failing",
+        "ship has a false registry",
+        "passenger is a faction agent",
+        "weapons were sabotaged",
+        "water stores are contaminated",
+        "route beacon was forged",
+        "old wreck spirit follows the hull"
+      ]
+    },
+    {
+      "id": "currentMission",
+      "label": "Current Mission",
+      "type": "select",
+      "default": "urgent supply run",
+      "options": [
+        "urgent supply run",
+        "contracted patrol",
+        "escort duty",
+        "long-distance trade mission",
+        "secret passenger transport",
+        "salvage claim enforcement",
+        "pirate hunt",
+        "faction courier mission",
+        "medical evacuation",
+        "water convoy",
+        "diplomatic courier run",
+        "illegal private raid"
+      ]
+    },
+    {
+      "id": "moraleState",
+      "label": "Morale State",
+      "type": "select",
+      "default": "strained but obedient",
+      "options": [
+        "high confidence",
+        "professional calm",
+        "strained but obedient",
+        "tired and rationed",
+        "angry about pay",
+        "fearful of route",
+        "loyal to captain only",
+        "split by faction politics",
+        "mutiny whispers",
+        "fanatical mission focus"
+      ]
+    },
+    {
+      "id": "fuelSupply",
+      "label": "Fuel / Power Supply",
+      "type": "select",
+      "default": "adequate reserves",
+      "options": [
+        "full reserves",
+        "adequate reserves",
+        "rationed fuel",
+        "rare reagent shortage",
+        "contaminated fuel",
+        "improper core components",
+        "stolen power crystals",
+        "sacred offering required",
+        "emergency reserves only",
+        "unknown consumption spike"
+      ]
+    },
+    {
+      "id": "portOfCall",
+      "label": "Port of Call",
+      "type": "select",
+      "default": "minor skyport",
+      "options": [
+        "minor skyport",
+        "frontier village dock",
+        "guild drydock",
+        "pirate-tolerated harbor",
+        "military watch island",
+        "floating city berth",
+        "neutral-ground tavern stop",
+        "hidden cliff mooring",
+        "storm shelter mast",
+        "dragon tribute landing"
+      ]
+    }
+  ],
+  "scoring": {
+    "airworthiness": {
+      "condition": {
+        "pristine and inspected": 5,
+        "well maintained": 3,
+        "worn but serviceable": 1,
+        "battle-scarred": -1,
+        "storm damaged": -3,
+        "patched from salvage": -2,
+        "core sputtering": -4,
+        "structural fatigue": -4,
+        "secretly unsafe": -5,
+        "miraculously held together": -3
+      },
+      "crewQuality": {
+        "green and frightened": -3,
+        "thinly staffed but loyal": -1,
+        "competent mixed crew": 1,
+        "veteran skyhands": 3,
+        "elite military crew": 4,
+        "guild-certified specialists": 3,
+        "pirate-hardened crew": 2,
+        "mutinous underpaid crew": -4,
+        "fanatically loyal crew": 2,
+        "press-ganged survivors": -3
+      },
+      "coreType": {
+        "dwarven elemental combustion core": 3,
+        "elven attuned weave core": 2,
+        "dragon kin draconic elemental core": 2,
+        "gnomish crystal-gear hybrid core": 1,
+        "human hybrid steam-arcane core": 1,
+        "guild-certified standard core": 2,
+        "salvaged unknown core": -2,
+        "experimental unstable prototype core": -3,
+        "aging patched civilian core": -2,
+        "black-market refitted core": -2
+      }
+    },
+    "cargoValue": {
+      "cargoProfile": {
+        "mixed trade goods": 2,
+        "water barrels and cistern tanks": 5,
+        "skygrain and airfruit": 3,
+        "sheffel wool and textiles": 2,
+        "ore and skystone": 4,
+        "alchemical herbs and oils": 4,
+        "passengers and pilgrims": 2,
+        "weapon crates": 4,
+        "salvage and wreckage": 3,
+        "contraband under false manifest": 5,
+        "medical supplies": 4,
+        "evacuees and refugees": 1
+      },
+      "purpose": {
+        "cargo transport": 3,
+        "water convoy": 4,
+        "passenger travel": 2,
+        "survey expedition": 1,
+        "salvage recovery": 2,
+        "smuggling run": 3,
+        "diplomatic mission": 2,
+        "evacuation lift": 1,
+        "escort and patrol": 0,
+        "monster hunting": 0,
+        "piracy and raiding": 2,
+        "military bombardment": 1
+      }
+    },
+    "combatThreat": {
+      "armament": {
+        "unarmed civilian hull": 0,
+        "light cannon and swivel guns": 2,
+        "ballista nests": 2,
+        "medium cannon battery": 4,
+        "heavy cannon battery": 6,
+        "anti-air gun mounts": 4,
+        "siege weapon platform": 6,
+        "hidden pirate guns": 4,
+        "magical lance array": 5,
+        "boarding hooks and grapples": 3,
+        "experimental torpedoes": 6,
+        "overarmed unstable loadout": 5
+      },
+      "vesselClass": {
+        "skiff courier": 0,
+        "scout cutter": 1,
+        "merchant sloop": 1,
+        "patrol corvette": 3,
+        "frigate patrol craft": 4,
+        "cruiser support ship": 5,
+        "liner passenger hauler": 1,
+        "destroyer escort": 6,
+        "galleon heavy cargo warship": 6,
+        "dreadnought fortress vessel": 8,
+        "salvage barge": 1,
+        "pirate raider": 4
+      }
+    },
+    "risk": {
+      "legalStatus": {
+        "licensed merchant vessel": 0,
+        "guild-chartered vessel": 0,
+        "naval commission": 1,
+        "mercenary letter of service": 2,
+        "unregistered frontier craft": 3,
+        "forged papers": 5,
+        "pirate-marked vessel": 6,
+        "impounded but escaped": 6,
+        "dragon-permitted tribute hauler": 3,
+        "neutral-ground protected vessel": 1,
+        "wanted in three ports": 7,
+        "secret faction asset": 5
+      },
+      "maintenancePressure": {
+        "fresh from drydock": 0,
+        "routine repairs overdue": 1,
+        "rare part needed": 3,
+        "core ritual required": 3,
+        "engineer missing": 4,
+        "crystal alignment failing": 4,
+        "fuel system fouled": 3,
+        "hull stress spreading": 4,
+        "battle damage hidden": 5,
+        "illegal refit unstable": 5
+      },
+      "moraleState": {
+        "high confidence": 4,
+        "professional calm": 3,
+        "strained but obedient": 1,
+        "tired and rationed": -1,
+        "angry about pay": -3,
+        "fearful of route": -2,
+        "loyal to captain only": 0,
+        "split by faction politics": -3,
+        "mutiny whispers": -5,
+        "fanatical mission focus": 2
+      }
+    }
+  },
+  "outputTemplates": {
+    "summary": "{name} is a {vesselClass} with a {hullCulture}, powered by a {coreType}. It currently serves as {purpose}, carries {cargoProfile}, operates under {legalStatus}, and is commanded by a {captainStyle}.",
+    "technicalNotes": [
+      "Core and hull are the heart of this vessel: {coreType} inside a {hullCulture}. Let this shape repairs, crew requirements, cost, and cultural politics.",
+      "Condition is {condition}; maintenance pressure is {maintenancePressure}; fuel or power status is {fuelSupply}.",
+      "Route compatibility is {routeAccess}. A ship that cannot safely match the route should create delay, repair, pilot, or escort complications."
+    ],
+    "crewHooks": [
+      "Crew quality is {crewQuality}; crew scale is {crewScale}; morale is {moraleState}.",
+      "The captain is a {captainStyle}; their command style should affect discipline, route risk, and faction negotiations.",
+      "A crew scene should expose the hidden problem: {hiddenProblem}."
+    ],
+    "cargoHooks": [
+      "The cargo profile is {cargoProfile}; its value, legality, spoilage, weight, or political importance should affect the mission.",
+      "Cargo pressure should interact with {fuelSupply}, {routeMandate}, and {portOfCall}.",
+      "If the cargo is threatened, the crew must choose between mission success, ship survival, and faction obligations."
+    ],
+    "routeHooks": [
+      "The current route mandate is to {routeMandate}.",
+      "The ship's route compatibility is {routeAccess}; the destination pressure is {portOfCall}.",
+      "Route scenes should test weather, charts, pilots, fuel, crew morale, and whether the vessel class can survive the chosen altitude and hazard band."
+    ],
+    "factionHooks": [
+      "Faction entanglement: {factionEntanglement}.",
+      "Legal status is {legalStatus}; this determines whether port officials, pirates, guilds, dragons, or navies can pressure the crew.",
+      "A faction agent should know about {hiddenProblem} and use it to force a concession."
+    ],
+    "maintenanceHooks": [
+      "Maintenance pressure is {maintenancePressure}; the ship needs parts, ritual labor, specialists, tools, drydock time, or secrecy.",
+      "Fuel or power supply is {fuelSupply}; this should create countdown pressure if the route is long or hostile.",
+      "A failed maintenance scene should expose the unique weakness of the {coreType}."
+    ],
+    "encounterHooks": [
+      "Start with the mission: {currentMission}. Then complicate it with {hiddenProblem}.",
+      "Combat, negotiation, or chase scenes should use {armament}, {defenseSystem}, and {routeAccess}.",
+      "The ship's port of call is {portOfCall}; make arrival politically useful, dangerous, or expensive."
+    ]
+  }
+}
