@@ -22,7 +22,23 @@
     "body": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Paragraph blocks. Keep rules-facing mechanics out of lore entries unless marked as conversion material."
+      "description": "Paragraph blocks. Internal wiki hotlinks use [[entry-id|visible text]]. Keep rules-facing mechanics out of lore entries unless marked as conversion material."
+    },
+    "sections": {
+      "type": "array",
+      "description": "Optional titled sections for deeper wiki entries.",
+      "items": {
+        "type": "object",
+        "required": ["heading", "body"],
+        "properties": {
+          "heading": { "type": "string" },
+          "body": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
     },
     "tags": {
       "type": "array",
