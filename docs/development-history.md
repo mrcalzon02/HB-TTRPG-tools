@@ -68,3 +68,19 @@ Included:
 The Floating Island Generator is now marked `editor-alpha` and launches a detailed Skyland Editor. This editor exposes controls for island role, size, altitude, stability, drift, anchor status, terrain, water, food, resource, ecology, settlement footprint, faction pressure, cultural adaptation, route access, and threat clock.
 
 The editor derives habitability, route value, conflict pressure, collapse risk, and GM complexity scores. It outputs GM notes, settlement hooks, route hooks, market hooks, encounter hooks, draft wiki-entry JSON, and full profile JSON.
+
+## 2026-06-12 - Settlement / Skyport editor-alpha
+
+Added the second staged editor.
+
+Included:
+
+- `data/kaysender/editors/settlement-editor.json`
+- `data/kaysender/schemas/settlement-profile.schema.json`
+- `kaysender-settlement-editor.js`
+- `docs/stage-2-settlement-editor.md`
+- `docs/stage-2-smoke-test.md`
+
+The Settlement Generator is now marked `editor-alpha` and launches a detailed Settlement / Skyport Editor. This editor exposes controls for settlement type, population scale, government, defense posture, economy, water status, food status, trade access, faction presence, social stress, civic assets, local secrets, and crisis clocks.
+
+The editor can optionally consume pasted Floating Island profile JSON to inherit island pressure. It derives survivability, trade value, defense readiness, unrest risk, adventure density, and island dependency scores. It outputs GM notes, leadership hooks, market hooks, faction hooks, defense hooks, job hooks, draft wiki-entry JSON, and full settlement profile JSON.
