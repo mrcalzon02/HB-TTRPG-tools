@@ -1,12 +1,13 @@
 {
   "setting": "Kaysender",
-  "status": "alpha tool implementation layer",
+  "status": "alpha tool and wiki cross-link layer",
   "compatibilityTarget": "open d20 / Hypertext d20-compatible presentation",
   "sourceNotes": [
     "Original setting lore remains Kaysender-specific.",
     "Legacy fifth-edition mechanical phrasing must be converted before reusable public release.",
     "Rules-facing text should separate open d20 mechanics from setting prose.",
-    "Alpha modules are operational campaign aids and are not final balanced rules text."
+    "Alpha modules are operational campaign aids and are not final balanced rules text.",
+    "The seed wiki layer now cross-links lore entries with related tools and generators."
   ],
   "modules": [
     {
@@ -14,7 +15,7 @@
       "section": "utilities",
       "title": "Kaysender Hypertext Wiki",
       "priority": 1,
-      "status": "planned",
+      "status": "alpha",
       "description": "Searchable setting index for world lore, peoples, nations, cities, factions, ships, creatures, equipment, and rules notes.",
       "dataFamilies": ["wikiEntry", "crosslink", "category", "visibility"]
     },
