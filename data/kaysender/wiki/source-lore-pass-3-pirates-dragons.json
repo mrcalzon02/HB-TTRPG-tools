@@ -1,0 +1,447 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Source-lore pass 3 imports the Black Fleet, Verek Drakemoor, named Fleet vessels, Spire the Hellrod, the Dragon Lord hierarchy, Wildlands, tithe systems, and notable Dragon Lords as source-backed wiki entries.",
+  "entries": [
+    {
+      "id": "black-fleet",
+      "title": "The Black Fleet",
+      "category": "Factions",
+      "summary": "The Black Fleet is the most infamous pirate and bandit faction in Kaysender's skies: a loose confederation, a feared name, a real core fleet, and a legend claimed by countless rogue captains.",
+      "body": [
+        "The Black Fleet is the most infamous bandit faction in the skies of Kaysender. Its name conjures fear and respect across the floating continents, but the reality of the organization is a chaotic patchwork of vagabonds, opportunists, and ruthless pirates.",
+        "The Fleet is more a banner of convenience than a single centralized organization. Hundreds of airships and rogue captains claim allegiance to the Black Fleet to bolster their reputation, frighten enemies, attract mercenaries, or leverage the terror attached to the name. Most of these so-called members have no true connection to the real Fleet and rarely take orders from its leaders.",
+        "At the center of the legend is a true core fleet of about twenty vessels. These ships answer to [[verek-drakemoor|Sky Captain Verek Drakemoor]], the self-styled Sky Pirate King, and follow his commands and the Fleet's internal rules. This small true fleet is far more disciplined and dangerous than the many false-flag raiders who imitate it.",
+        "False Black Fleet operations are common. Independent pirates use the name to intimidate rivals, confuse enemies, and muddy the Fleet's true influence. This makes every report of a Black Fleet attack uncertain: it may be the true Fleet, a splinter crew, an opportunist, or someone hiding behind the reputation.",
+        "The Black Fleet raids merchant ships, extorts skyports, recruits rogue mages and alchemists, plunders ruins, and uses lightning raids to spread chaos before defenders can organize. It is feared by merchants, nobles, and governments, but among some poor and oppressed communities it is whispered about as a folk-hero force that humiliates tyrants and redistributes stolen goods."
+      ],
+      "sections": [
+        {
+          "heading": "Structure and Weaknesses",
+          "sectionType": "lore",
+          "body": [
+            "The Fleet's looseness is both strength and weakness. Its scattered operations make its movements unpredictable, but the same lack of discipline leaves it vulnerable to infighting, treachery, vague allegiances, and pirate opportunism.",
+            "The drifting nature of [[hellrod|Spire the Hellrod]] also creates logistical challenges. The Fleet must raid frequently to resupply and coordinate, and even loyal ships may struggle to reach the base without magical charts or knowledge of its erratic movement."
+          ]
+        },
+        {
+          "heading": "Named Fleet Assets",
+          "sectionType": "lore",
+          "body": [
+            "The most important known Black Fleet vessels include [[abyss-harbinger|The Abyss Harbinger]], [[shadow-gale|The Shadow Gale]], and [[emberclaw|The Emberclaw]]. These ships embody different aspects of the Fleet: terror, infiltration, and heavy assault."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 31,
+          "pageEnd": 35,
+          "outlineTitle": "The Black Fleet",
+          "chunkId": "kaysender-core-pdf-2025-01-20:black-fleet"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:black-fleet"],
+      "tags": ["Black Fleet", "pirates", "bandits", "false flag", "Verek Drakemoor", "Hellrod", "sky pirates", "airships"],
+      "relatedEntries": ["verek-drakemoor", "abyss-harbinger", "shadow-gale", "emberclaw", "hellrod", "airships", "water-trade", "grim-realities-of-survival"],
+      "relatedModules": ["black-market-piracy-generator", "airship-vessel-generator", "encounter-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "verek-drakemoor",
+      "title": "Sky Captain Verek Drakemoor",
+      "category": "NPCs",
+      "summary": "Verek Drakemoor, the Hellflame King, is the feared Sky Pirate King who commands the true core of the Black Fleet.",
+      "body": [
+        "Sky Captain Verek Drakemoor, called the Hellflame King, is the leader of the true [[black-fleet|Black Fleet]] and the most feared Sky Pirate King in Kaysender's skies. He is charismatic, ruthless, ambitious, and devoted to chaos in the heavens with almost religious intensity.",
+        "Verek is described as a towering man with bronzed skin, jet-black hair streaked with gray, and a smoldering red gaze. He carries the enchanted saber Bloodwake, said to ignite with flame in battle.",
+        "His goal is not mere raiding. Verek wants to create a permanent empire in the skies, seize control of major trade routes, and keep governments, merchants, and rival pirates guessing. To his enemies he is a terrorist and brigand. To some oppressed communities he is a dangerous legend who can make tyrants bleed."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 32,
+          "pageEnd": 32,
+          "outlineTitle": "Key Members and Ships",
+          "chunkId": "kaysender-core-pdf-2025-01-20:verek-drakemoor"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:verek-drakemoor"],
+      "tags": ["Verek Drakemoor", "Hellflame King", "Sky Pirate King", "Bloodwake", "Black Fleet"],
+      "relatedEntries": ["black-fleet", "abyss-harbinger", "hellrod"],
+      "relatedModules": ["npc-crew-generator", "black-market-piracy-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "abyss-harbinger",
+      "title": "The Abyss Harbinger",
+      "category": "Ships",
+      "summary": "The Abyss Harbinger is Verek Drakemoor's massive jet-black flagship, armored in ironwood and enchanted obsidian, armed with explosive mana-cannons.",
+      "body": [
+        "The Abyss Harbinger is the flagship of [[verek-drakemoor|Verek Drakemoor]] and one of the most feared ships of the [[black-fleet|Black Fleet]]. It is a massive jet-black airship built from reinforced ironwood and enchanted obsidian plating.",
+        "Its explosive mana-cannons can rain destruction on floating islands and other airships, making the Harbinger a symbol of terror rather than simple transportation. The crew is known for loyalty and unmatched brutality, living and dying by Verek's orders."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 32,
+          "pageEnd": 32,
+          "outlineTitle": "The Abyss Harbinger",
+          "chunkId": "kaysender-core-pdf-2025-01-20:abyss-harbinger"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:abyss-harbinger"],
+      "tags": ["Abyss Harbinger", "Black Fleet", "flagship", "mana-cannons", "ironwood", "obsidian"],
+      "relatedEntries": ["black-fleet", "verek-drakemoor", "airships"],
+      "relatedModules": ["airship-vessel-generator", "encounter-generator"]
+    },
+    {
+      "id": "shadow-gale",
+      "title": "The Shadow Gale",
+      "category": "Ships",
+      "summary": "The Shadow Gale is a Black Fleet scout and infiltrator ship captained by Ilraya Windshadow, a former noblewoman turned pirate assassin.",
+      "body": [
+        "The Shadow Gale serves as the [[black-fleet|Black Fleet's]] scout and infiltrator vessel. It is captained by Ilraya Windshadow, a former noblewoman turned pirate with a talent for assassinations and precision strikes.",
+        "The Shadow Gale often strikes first during raids, identifying weaknesses, slipping through defenses, and creating the opening that heavier Black Fleet vessels exploit. It represents the surgical edge of the Fleet's violence."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 32,
+          "pageEnd": 33,
+          "outlineTitle": "The Shadow Gale",
+          "chunkId": "kaysender-core-pdf-2025-01-20:shadow-gale"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:shadow-gale"],
+      "tags": ["Shadow Gale", "Ilraya Windshadow", "Black Fleet", "scout ship", "infiltration", "assassination"],
+      "relatedEntries": ["black-fleet", "airships"],
+      "relatedModules": ["airship-vessel-generator", "npc-crew-generator", "encounter-generator"]
+    },
+    {
+      "id": "emberclaw",
+      "title": "The Emberclaw",
+      "category": "Ships",
+      "summary": "The Emberclaw is a Black Fleet heavy assault ship captained by Darrek 'Ironjaw' Blightmoor, a terrifying Dragon Kin pirate.",
+      "body": [
+        "The Emberclaw is one of the heavy assault vessels of the [[black-fleet|Black Fleet]]. It is captained by Darrek 'Ironjaw' Blightmoor, a [[dragon-kin|Dragon Kin]] pirate known for terrifying presence and unmatched strength.",
+        "The Emberclaw specializes in heavy assaults against fortified skyports and merchant flotillas. Where the Shadow Gale opens a wound, the Emberclaw smashes through it."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 33,
+          "pageEnd": 33,
+          "outlineTitle": "The Emberclaw",
+          "chunkId": "kaysender-core-pdf-2025-01-20:emberclaw"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:emberclaw"],
+      "tags": ["Emberclaw", "Darrek Ironjaw Blightmoor", "Dragon Kin", "Black Fleet", "heavy assault", "skyport assault"],
+      "relatedEntries": ["black-fleet", "dragon-kin", "airships"],
+      "relatedModules": ["airship-vessel-generator", "encounter-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "hellrod",
+      "title": "Spire the Hellrod",
+      "category": "Locations",
+      "summary": "Spire the Hellrod is the Black Fleet's cursed drifting sky island: obsidian peaks, volcanic mountains, soot, smoke, hidden docks, forges, and the Blackstone Fortress.",
+      "body": [
+        "Spire the Hellrod is the cursed sky-island base of the [[black-fleet|Black Fleet]]. It is a jagged island of black obsidian peaks and volcanic mountains, constantly cloaked in soot and smoke. A fiery glow radiates from it, visible from miles away when the island reveals itself.",
+        "The Hellrod drifts erratically through the sky, seemingly at random. Only those familiar with its patterns or carrying specific magical charts can reliably find it. This movement helps protect the Fleet, but also creates severe coordination and resupply problems.",
+        "Its highest peak holds the Blackstone Fortress, a sprawling obsidian stronghold serving as the Fleet's main base. Its molten heart powers volcanic forges where weapons, airship parts, and arcane engines are built or repaired. Soot-swept hidden docks carved into the mountains provide anchorage for Fleet ships.",
+        "Legends claim the Hellrod may be alive: a cursed remnant of a dead dragon god whose malevolence still lingers. Others claim it is tethered to an ancient magical device hidden in its depths, allowing [[verek-drakemoor|Verek Drakemoor]] to control its movement."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 33,
+          "pageEnd": 34,
+          "outlineTitle": "Base of Operations: Spire The Hellrod",
+          "chunkId": "kaysender-core-pdf-2025-01-20:hellrod"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:hellrod"],
+      "tags": ["Hellrod", "Black Fleet", "obsidian", "volcanic island", "Blackstone Fortress", "hidden docks", "cursed island"],
+      "relatedEntries": ["black-fleet", "verek-drakemoor", "abyss-harbinger", "floating-islands"],
+      "relatedModules": ["world-map-route-generator", "encounter-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "dragon-lords",
+      "title": "Dragon Lords and Draconic Hierarchy",
+      "category": "Factions",
+      "summary": "The Dragon Lords are an ancient system of rule in Kaysender: protectors, tyrants, territorial rulers, tribute collectors, and servants of the Draconic Emperor Trazintharix.",
+      "body": [
+        "In the chaotic lands of Kaysender, the Dragon Lords represent an ancient and fearsome system of rule. These immensely powerful beings serve as both protectors and tyrants of their territories, enforcing order in brutal and self-serving fashion.",
+        "Even the Dragon Lords bow to a higher authority: [[trazintharix|Emperor Trazintharix the Eternal Flame]], the Draconic Emperor, whose rule stretches across skies and wildlands. The Dragon Lords maintain a delicate balance of chaos and allegiance, dominating mortals while upholding the broader hierarchy of draconic power.",
+        "The hierarchy descends from the Draconic Emperor to the [[high-lords-of-flame|High Lords of Flame]], then to territorial Dragon Lords, then to lesser dragons, wyrmlords, dragonkin, half-dragons, enforcers, emissaries, and mortal servants. Power flows downward; tribute flows upward.",
+        "For mortals caught beneath this rule, a Dragon Lord may be both savior and nightmare. Villages under draconic protection are often spared from outside threats, but heavily taxed, stripped of their best resources, and subject to swift draconic justice with no appeal."
+      ],
+      "sections": [
+        {
+          "heading": "Protector and Tyrant",
+          "sectionType": "lore",
+          "body": [
+            "Some Dragon Lords demand worship, positioning themselves as gods in the eyes of their subjects. Temples and shrines dedicated to them are common in their territories.",
+            "Adventurers and treasure-seekers are drawn to the Wildlands to challenge Dragon Lords or plunder hoards. Such individuals are either crushed or granted audience if their exploits impress the dragon ruler."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 35,
+          "pageEnd": 38,
+          "outlineTitle": "The Dragon Lords and Their Hierarchy",
+          "chunkId": "kaysender-core-pdf-2025-01-20:dragon-lords"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dragon-lords"],
+      "tags": ["Dragon Lords", "Draconic Emperor", "Trazintharix", "High Lords of Flame", "Wildlands", "tithes", "wyrmlords"],
+      "relatedEntries": ["trazintharix", "high-lords-of-flame", "wildlands", "dragon-tithes", "tithe-fleet", "floating-vaults", "dragon-kin"],
+      "relatedModules": ["draconic-tithe-generator", "settlement-generator", "faction-guild-generator", "encounter-generator"]
+    },
+    {
+      "id": "trazintharix",
+      "title": "Emperor Trazintharix the Eternal Flame",
+      "category": "NPCs",
+      "summary": "Trazintharix the Eternal Flame is the colossal ancient red dragon who rules as Draconic Emperor from Skyhold Citadel.",
+      "body": [
+        "Emperor Trazintharix the Eternal Flame is the Draconic Emperor, a colossal ancient red dragon whose power is said to rival the gods. He has ruled for millennia, unchallenged by lesser dragons.",
+        "Trazintharix oversees the territories ruled by the [[dragon-lords|Dragon Lords]], ensuring they pay tithes in wealth, magic, and rare artifacts. He enforces draconic law by sending emissaries or enforcers against rebellious or negligent Dragon Lords.",
+        "His court is held at [[skyhold-citadel|Skyhold Citadel]], a fortress perched atop a floating mountain encased in molten gold and perpetual storms."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 35,
+          "pageEnd": 35,
+          "outlineTitle": "1. The Draconic Emperor",
+          "chunkId": "kaysender-core-pdf-2025-01-20:trazintharix"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:trazintharix"],
+      "tags": ["Trazintharix", "Draconic Emperor", "red dragon", "Skyhold Citadel", "tithes", "draconic law"],
+      "relatedEntries": ["dragon-lords", "skyhold-citadel", "high-lords-of-flame", "dragon-tithes"],
+      "relatedModules": ["draconic-tithe-generator", "faction-guild-generator"]
+    },
+    {
+      "id": "skyhold-citadel",
+      "title": "Skyhold Citadel",
+      "category": "Locations",
+      "summary": "Skyhold Citadel is the Draconic Emperor's storm-wrapped fortress atop a floating mountain encased in molten gold.",
+      "body": [
+        "Skyhold Citadel is the seat of [[trazintharix|Emperor Trazintharix the Eternal Flame]]. It is a fortress perched atop a floating mountain encased in molten gold and perpetual storms.",
+        "The Citadel is the apex of the draconic tribute hierarchy. Wealth, magic, rare artifacts, and obedience ultimately flow toward Skyhold through [[high-lords-of-flame|High Lords]], [[dragon-lords|Dragon Lords]], tithe fleets, vaults, enforcers, and terrified mortal territories."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 35,
+          "pageEnd": 35,
+          "outlineTitle": "Skyhold Citadel",
+          "chunkId": "kaysender-core-pdf-2025-01-20:skyhold-citadel"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:skyhold-citadel"],
+      "tags": ["Skyhold Citadel", "Draconic Emperor", "floating mountain", "molten gold", "storms", "tribute"],
+      "relatedEntries": ["trazintharix", "dragon-lords", "dragon-tithes"],
+      "relatedModules": ["world-map-route-generator", "draconic-tithe-generator"]
+    },
+    {
+      "id": "high-lords-of-flame",
+      "title": "The High Lords of Flame",
+      "category": "Factions",
+      "summary": "The High Lords of Flame are the Draconic Emperor's direct vassals, usually seven to ten dragons ruling vast territories and managing lesser Dragon Lords.",
+      "body": [
+        "The High Lords of Flame are direct lieutenants of [[trazintharix|the Draconic Emperor]]. They rule vast territories and maintain order among lesser [[dragon-lords|Dragon Lords]].",
+        "There are usually seven to ten High Lords, each representing a different elemental or draconic lineage. Known figures include Ixaryth the Storm-Winged, a blue dragon ruling coastal wildlands and oceanic floating islands; Krorithyx the Iron-Hide, an ancient black dragon overseeing marshy corrupted lowlands; and Sylvekar the Verdant Keeper, a green dragon guarding sprawling jungles and hidden treasures."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 35,
+          "pageEnd": 36,
+          "outlineTitle": "2. The High Lords of Flame",
+          "chunkId": "kaysender-core-pdf-2025-01-20:high-lords-of-flame"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:high-lords-of-flame"],
+      "tags": ["High Lords of Flame", "Ixaryth", "Krorithyx", "Sylvekar", "Dragon Lords", "Trazintharix"],
+      "relatedEntries": ["trazintharix", "dragon-lords", "wildlands"],
+      "relatedModules": ["faction-guild-generator", "draconic-tithe-generator"]
+    },
+    {
+      "id": "wildlands",
+      "title": "The Wildlands",
+      "category": "Regions",
+      "summary": "The Wildlands are Dragon Lord territories: chaotic, beautiful, dangerous regions where civilization survives under arbitrary draconic protection and tyranny.",
+      "body": [
+        "The lands ruled by [[dragon-lords|Dragon Lords]] are collectively known as the Wildlands: chaotic, untamed regions where civilization struggles to survive. Despite the chaos, the Dragon Lords provide a tenuous form of stability by upholding certain rules when doing so serves their interests.",
+        "The Wildlands are often breathtaking and perilous. Jagged peaks, sprawling jungles, burning deserts, mysterious ruins, corrupted lowlands, swamps, volcanic fields, and wilderness territories reflect the temperament or elemental affinity of the ruling Dragon Lord.",
+        "Rule in the Wildlands is arbitrary and harsh. Bandits, monsters, and warlords are common threats, but few dare openly challenge a Dragon Lord. Villages, towns, and cities must pay tithes in wealth, rare goods, or labor. In exchange, they receive some protection from raiders, monsters, and rival dragons. Failure can bring destruction."
+      ],
+      "sections": [
+        {
+          "heading": "Draconic Justice",
+          "sectionType": "lore",
+          "body": [
+            "Dragon Lords act as judge, jury, and executioner within their domains. Their justice is swift and absolute, leaving no room for appeal."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 36,
+          "pageEnd": 37,
+          "outlineTitle": "The Wildlands Under Their Rule",
+          "chunkId": "kaysender-core-pdf-2025-01-20:wildlands"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:wildlands"],
+      "tags": ["Wildlands", "Dragon Lords", "tithes", "draconic justice", "raiders", "monsters", "ruins"],
+      "relatedEntries": ["dragon-lords", "dragon-tithes", "notable-dragon-lords", "floating-islands"],
+      "relatedModules": ["world-map-route-generator", "encounter-generator", "settlement-generator"]
+    },
+    {
+      "id": "notable-dragon-lords",
+      "title": "Notable Dragon Lords and Domains",
+      "category": "Factions",
+      "summary": "Known Dragon Lords include Kaldryxis, Vaelyth, Zephyros, Myrilth, and Tharvix, each ruling a domain shaped by elemental force and terror.",
+      "body": [
+        "Several Dragon Lords are named in Kaysender's source lore as examples of the power and variety of draconic domains. Kaldryxis the Infernal Sovereign is a red dragon ruling volcanic badlands filled with molten lava rivers and ash storms.",
+        "Vaelyth the Frostfang is a white dragon ruling a tundra of frozen lakes, glacial peaks, and icy caverns. Zephyros the Stormcaller is a blue dragon ruling a vast desert of perpetual sandstorms and ancient ruins.",
+        "Myrilth the Verdant Tyrant is a green dragon whose domain is a sprawling jungle filled with dangerous wildlife and poisonous flora. Tharvix the Shadow-Wing is a black dragon ruling a murky swamp of acidic waters, hidden bogs, and crumbling ruins.",
+        "Together, these Dragon Lords show how draconic rule transforms landscape into political identity. A dragon's domain is geography, weather, fear, and personality fused into one system of power."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 38,
+          "pageEnd": 38,
+          "outlineTitle": "Notable Dragon Lords and Their Domains",
+          "chunkId": "kaysender-core-pdf-2025-01-20:notable-dragon-lords"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:notable-dragon-lords"],
+      "tags": ["Kaldryxis", "Vaelyth", "Zephyros", "Myrilth", "Tharvix", "Dragon Lords", "domains"],
+      "relatedEntries": ["dragon-lords", "wildlands", "dragon-tithes"],
+      "relatedModules": ["encounter-generator", "world-map-route-generator", "draconic-tithe-generator"]
+    },
+    {
+      "id": "dragon-tithes",
+      "title": "Dragon Tithes and Tribute Culture",
+      "category": "Economy",
+      "summary": "Dragon tithes are the system by which wealth, rare goods, labor, magical artifacts, and obedience flow upward through draconic hierarchy.",
+      "body": [
+        "Dragon tithes are the economic and ritual foundation of draconic rule. [[dragon-lords|Dragon Lords]] must send a portion of their wealth, magical artifacts, and treasures to their [[high-lords-of-flame|High Lords]], and these tributes ultimately reach [[trazintharix|the Draconic Emperor]] at [[skyhold-citadel|Skyhold Citadel]].",
+        "Tributes are typically paid every ten years, though the Emperor may demand additional offerings in times of war or strife. A Dragon Lord who fails to deliver tribute faces dire consequences: enforcer dragons may be sent, the title may be stripped away, execution may follow, and territory may be seized by a rival.",
+        "For mortal communities, the tithe system is both burden and terror. Villages may pay in wealth, rare goods, livestock, labor, magical knowledge, artifacts, or personal service. Some Dragon Lords are pragmatic and accept alternate tribute; others demand symbolic suffering to reinforce dominance.",
+        "Tithing is about control as much as wealth. The act reminds every subject of their place in the hierarchy. Most comply out of fear, while others seek loopholes, manipulation, concealment, resistance, or rebellion."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 37,
+          "pageEnd": 41,
+          "outlineTitle": "Tithes and Allegiance to the Emperor / Key Notes on Tithe Culture",
+          "chunkId": "kaysender-core-pdf-2025-01-20:dragon-tithes"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dragon-tithes"],
+      "tags": ["tithes", "tribute", "Dragon Lords", "Trazintharix", "Skyhold Citadel", "labor", "artifacts", "obedience"],
+      "relatedEntries": ["dragon-lords", "tithe-fleet", "floating-vaults", "wildlands", "grim-realities-of-survival"],
+      "relatedModules": ["draconic-tithe-generator", "settlement-generator", "supply-water-planner"]
+    },
+    {
+      "id": "tithe-fleet",
+      "title": "The Tithe Fleet",
+      "category": "Ships",
+      "summary": "The Tithe Fleet is the skyborne collection network of armed vessels that travels island to island enforcing Dragon Lord tribute demands.",
+      "body": [
+        "The Tithe Fleet is a well-organized network of airships manned by loyal servants of a [[dragon-lords|Dragon Lord]]. These vessels travel from floating island to floating island within the dragon's domain, acting as mobile tax collectors and enforcers.",
+        "Tithe Fleet ships are heavily armed to intimidate reluctant settlements and defend against pirates or rival factions. The largest ship often acts as a flagship draped in the Dragon Lord's colors or sigils, a visible reminder of draconic power.",
+        "Crews are usually composed of [[dragon-kin|dragonkin]], loyal humanoid servants, mercenaries, and at least one lesser dragon or wyrmlord acting as the Dragon Lord's direct enforcer. The fleet follows a schedule, and villages are expected to have tribute ready when it arrives.",
+        "Failure brings severe consequences: confiscated goods, livestock, people taken as punishment, or warning attacks that burn fields or destroy part of a settlement as a message."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 39,
+          "pageEnd": 39,
+          "outlineTitle": "1. The Tithe Fleet: The Skyborne Collectors",
+          "chunkId": "kaysender-core-pdf-2025-01-20:tithe-fleet"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:tithe-fleet"],
+      "tags": ["Tithe Fleet", "airships", "Dragon Lords", "tribute", "dragonkin", "wyrmlords", "collection"],
+      "relatedEntries": ["dragon-tithes", "dragon-lords", "airships", "floating-vaults"],
+      "relatedModules": ["airship-vessel-generator", "draconic-tithe-generator", "settlement-generator"]
+    },
+    {
+      "id": "floating-vaults",
+      "title": "Floating Vaults",
+      "category": "Locations",
+      "summary": "Floating Vaults are immense airships or fortified islands used by Dragon Lords as mobile treasure stores for collected tithes.",
+      "body": [
+        "Once collected, dragon tithes are often stored in massive floating vaults or hidden hoards. Floating Vaults are immense airships or fortified islands guarded by lesser dragons, [[dragon-kin|dragonkin]], and magical wards.",
+        "They act as mobile treasure troves, making them harder to raid than static hoards. Some Dragon Lords prefer these moving vaults; others keep wealth in personal lairs deep in mountains, volcanic caverns, or floating fortresses accessible only to the dragon and trusted servants.",
+        "A Floating Vault is both treasury and political symbol: proof that tribute has been taken, hoarded, guarded, and kept moving beyond the reach of desperate subjects."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 40,
+          "pageEnd": 41,
+          "outlineTitle": "4. The Floating Vaults: Tithes in Storage",
+          "chunkId": "kaysender-core-pdf-2025-01-20:floating-vaults"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:floating-vaults"],
+      "tags": ["Floating Vaults", "tithes", "treasure", "Dragon Lords", "airships", "fortified islands", "hoards"],
+      "relatedEntries": ["dragon-tithes", "tithe-fleet", "dragon-lords", "airships"],
+      "relatedModules": ["draconic-tithe-generator", "airship-vessel-generator", "job-board-generator"]
+    }
+  ]
+}
