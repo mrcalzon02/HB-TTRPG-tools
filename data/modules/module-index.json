@@ -9,6 +9,14 @@
       "system": "Hypertext d20 / D&D 3.5-compatible extraction",
       "sourceFile": "The Northern Watchtower 09.pdf",
       "path": "data/modules/northern-watchtower-09.json"
+    },
+    {
+      "id": "veteck-henrinayea-09",
+      "title": "Veteck Henrina'yea 09",
+      "status": "extracted-shell",
+      "system": "Hypertext d20 / D&D 3.5-compatible extraction",
+      "sourceFile": "Veteck Henrina'yea 09.pdf",
+      "path": "data/modules/veteck-henrinayea-09.json"
     }
   ]
 }
