@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "0.1.0",
+  "moduleId": "northern-watchtower-09",
+  "extractionStatus": {
+    "rooms": "30/30 room records extracted with room-side door listings preserved.",
+    "doorRecords": "90/90 room-side door/entry records extracted from the PDF room listings.",
+    "hotspots": "30 room label hotspots and 90 door hotspots present; reciprocal or duplicate room-side entries may share the same physical map coordinate where the printed map shows one doorway.",
+    "notes": "Corrective pass for the first module: rooms now carry explicit doorIds so the room detail panel shows every door/entry listed under that room instead of only a partial primary-door subset. The map asset has been replaced with a rendered map extracted from page 1."
+  }
+}
