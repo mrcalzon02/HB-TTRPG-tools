@@ -207,3 +207,16 @@ Included:
 - `docs/wiki-source-lore-pass-4-merchant-communications.md`
 
 This pass imports Merchant Fleets and Organizations of Kaysender, Surveyor's Guild, Whisper Web, Skyweaver Consortium, Aetherbound Company, Free Flotilla, Ember Guild, Gilded Current, World Whispering Web, Resonant Concord, Locator Glyphs, and Tracker's Beacon. Tracker's Beacon preserves source mechanics as a `mechanics-legacy` section for later Hypertext d20 conversion.
+
+## 2026-06-12 - Wiki source-lore pass 5: criminal trade, slavery, and abolition
+
+Imported the unsavory trade and bondage source block.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-5-criminal-trade-slavery.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- Updated `data/kaysender/wiki/source-ingestion-manifest.json`
+- `docs/wiki-source-lore-pass-5-criminal-trade-slavery.md`
+
+This pass imports Unsavory Trade in Kaysender, Black Chain Consortium, Rusted Compass Company, Crimson Fog Cartel, Bonehold Syndicate, Broken Coin Guild, Sable Tide, Chainwing Exchange, Tarnished Veil, Indentured Servitude, Slavery in Kaysender, and Abolition and Sanctuary Movements as source-faithful wiki nodes with hotlinks to Dragon Lords, Black Fleet, Free Sky Brotherhood, Aetherbound Company, skybeasts, and related criminal-trade structures.
