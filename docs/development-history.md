@@ -113,3 +113,21 @@ Included:
 The Airship and Vessel module is now marked `editor-alpha` and launches a detailed Airship / Vessel Editor. This editor exposes controls for vessel class, hull culture, core type, purpose, legal status, crew quality, crew scale, captain style, cargo, armament, defenses, condition, maintenance pressure, route compatibility, route mandate, faction entanglement, hidden problems, current mission, morale, fuel, and port of call.
 
 The editor can optionally consume pasted Floating Island profile JSON and Settlement profile JSON to inherit route, cargo, port, faction, crisis, and hazard pressure. It derives airworthiness, cargo value, combat threat, maintenance risk, legal risk, crew morale, adventure density, and route compatibility scores. It outputs technical notes, crew hooks, cargo hooks, route hooks, faction hooks, maintenance hooks, encounter hooks, draft wiki-entry JSON, and full airship profile JSON.
+
+## 2026-06-12 - Wiki depth pass 1
+
+Expanded the Kaysender wiki from short seed entries into multi-pack, source-derived lore packs.
+
+Included:
+
+- `data/kaysender/wiki/wiki-index.json`
+- `data/kaysender/wiki/world-depth.json`
+- `data/kaysender/wiki/peoples-depth.json`
+- `data/kaysender/wiki/messara-nations-depth.json`
+- `data/kaysender/wiki/factions-economy-depth.json`
+- `data/kaysender/wiki/airships-depth.json`
+- Updated `data/kaysender/schemas/wiki-entry.schema.json`
+- Updated `kaysender-wiki.js`
+- `docs/wiki-depth-pass-1.md`
+
+The wiki runtime now loads multiple data packs, merges entries by stable ID, searches body and section text, renders titled sections, and converts `[[entry-id|visible text]]` markup into clickable internal wiki hotlinks. The first deep pass adds expanded entries for world systems, peoples, Messaran nations, factions/economy, Dunhallow Roost, and airship core traditions.
