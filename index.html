@@ -12,12 +12,13 @@
     <div>
       <p class="eyebrow">Homebrew tabletop utility suite</p>
       <h1>HB TTRPG Tools</h1>
-      <p class="subtitle">Tools, utilities, generators, and open d20-compatible campaign frameworks.</p>
+      <p class="subtitle">Tools, utilities, generators, module viewers, and open d20-compatible campaign frameworks.</p>
     </div>
     <nav class="top-nav" aria-label="Primary">
       <button class="nav-button active" data-view="tools">Tools</button>
       <button class="nav-button" data-view="utilities">Utilities</button>
       <button class="nav-button" data-view="generators">Generators</button>
+      <button class="nav-button" data-view="modules">Modules</button>
       <button class="nav-button" data-view="kaysender">Kaysender</button>
     </nav>
   </header>
@@ -42,6 +43,11 @@
           <button class="link-button" data-view="generators">Open Generators</button>
         </article>
         <article class="menu-card">
+          <h3>Module Viewer</h3>
+          <p>Open extracted adventure modules with clickable room numbers, door highlights, traps, monsters, treasures, and source-backed room notes.</p>
+          <button class="link-button" data-view="modules">Open Module Viewer</button>
+        </article>
+        <article class="menu-card">
           <h3>Kaysender Campaign Workspace</h3>
           <p>Registry-driven planning area for the Kaysender wiki, tools, utilities, and generators.</p>
           <button class="link-button" data-view="kaysender">Open Kaysender</button>
@@ -56,6 +62,15 @@
         </div>
         <div id="kaysender-tools-grid" class="module-grid" data-registry-section="tools"></div>
       </section>
+    </section>
+
+    <section id="modules" class="view" aria-labelledby="modules-title">
+      <div class="hero-card no-print">
+        <p class="eyebrow">Module extraction and table viewer</p>
+        <h2 id="modules-title">Module Viewer</h2>
+        <p>Browse standardized module extractions with clickable map overlays. Room numbers open room records; door markers open entry details, locks, secret doors, traps, and linked destinations.</p>
+      </div>
+      <div id="module-viewer-root" class="no-print"></div>
     </section>
 
     <section id="utilities" class="view" aria-labelledby="utilities-title">
@@ -242,6 +257,7 @@
 
   <script src="app.js"></script>
   <script src="character-sheet-title.js"></script>
+  <script src="module-viewer.js"></script>
   <script src="kaysender-wiki.js"></script>
   <script src="kaysender-editors.js"></script>
   <script src="kaysender-settlement-editor.js"></script>
