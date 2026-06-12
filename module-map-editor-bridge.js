@@ -2,6 +2,7 @@
   const FILLER_SCRIPT = 'module-content-filler.js';
   const DUNGEON_SCRIPT = 'module-random-dungeon-generator.js';
   const SPELL_ENTRY_SCRIPT = 'spell-creator-entry.js';
+  const RECORD_BRIDGE_SCRIPT = 'module-viewer-record-bridge.js';
   let injected = false;
   let fillerButtonInjected = false;
   let pendingPdfModule = null;
@@ -23,6 +24,7 @@
     loadScriptOnce(FILLER_SCRIPT);
     loadScriptOnce(DUNGEON_SCRIPT);
     loadScriptOnce(SPELL_ENTRY_SCRIPT);
+    loadScriptOnce(RECORD_BRIDGE_SCRIPT);
   }
 
   function makeModule(detail){
