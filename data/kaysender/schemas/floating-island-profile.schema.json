@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/kaysender/schemas/floating-island-profile.schema.json",
+  "title": "Kaysender Floating Island Profile",
+  "type": "object",
+  "required": [
+    "name",
+    "profileType",
+    "islandRole",
+    "sizeClass",
+    "altitudeBand",
+    "stabilityClass",
+    "driftPattern",
+    "anchorStatus",
+    "terrainCore",
+    "waterProfile",
+    "foodProfile",
+    "primaryResource",
+    "ecologyPressure",
+    "settlementFootprint",
+    "factionPressure",
+    "derivedScores",
+    "outputs"
+  ],
+  "properties": {
+    "name": { "type": "string" },
+    "profileType": { "type": "string", "const": "floating-island-profile" },
+    "islandRole": { "type": "string" },
+    "sizeClass": { "type": "string" },
+    "altitudeBand": { "type": "string" },
+    "stabilityClass": { "type": "string" },
+    "driftPattern": { "type": "string" },
+    "anchorStatus": { "type": "string" },
+    "terrainCore": { "type": "string" },
+    "waterProfile": { "type": "string" },
+    "foodProfile": { "type": "string" },
+    "primaryResource": { "type": "string" },
+    "ecologyPressure": { "type": "string" },
+    "settlementFootprint": { "type": "string" },
+    "factionPressure": { "type": "string" },
+    "culturalAdaptation": { "type": "string" },
+    "routeAccess": { "type": "string" },
+    "threatClock": { "type": "string" },
+    "derivedScores": {
+      "type": "object",
+      "required": ["habitability", "routeValue", "conflictPressure", "collapseRisk", "gmComplexity"],
+      "properties": {
+        "habitability": { "type": "integer" },
+        "routeValue": { "type": "integer" },
+        "conflictPressure": { "type": "integer" },
+        "collapseRisk": { "type": "integer" },
+        "gmComplexity": { "type": "integer" }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["summary", "gmNotes", "settlementHooks", "routeHooks", "marketHooks", "encounterHooks", "wikiDraft"],
+      "properties": {
+        "summary": { "type": "string" },
+        "gmNotes": { "type": "array", "items": { "type": "string" } },
+        "settlementHooks": { "type": "array", "items": { "type": "string" } },
+        "routeHooks": { "type": "array", "items": { "type": "string" } },
+        "marketHooks": { "type": "array", "items": { "type": "string" } },
+        "encounterHooks": { "type": "array", "items": { "type": "string" } },
+        "wikiDraft": { "type": "object" }
+      }
+    }
+  }
+}
