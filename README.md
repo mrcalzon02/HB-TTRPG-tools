@@ -6,11 +6,14 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 
 ## Current structure
 
-- `index.html` — main menu page, character sheet utility, and Kaysender module dashboard.
+- `index.html` — main menu page, character sheet utility, Kaysender module dashboard, and script loading.
 - `styles.css` — shared visual system, responsive panel layouts, registry cards, and print/PDF styling.
 - `app.js` — tab navigation, panel layout controls, character-sheet math, autosave, import/export, print-to-PDF helpers, registry rendering, and loading for the alpha Kaysender tool layer.
 - `kaysender-tools.js` — alpha interactive Kaysender tools attached to the registry cards.
+- `kaysender-wiki.js` — alpha hypertext wiki browser and cross-link layer between lore entries and modules.
 - `data/kaysender-tools-registry.json` — machine-readable registry for planned and alpha Kaysender tools, utilities, and generators.
+- `data/kaysender/wiki/entries.json` — seed Kaysender wiki entries with related-entry and related-module links.
+- `data/kaysender/schemas/wiki-entry.schema.json` — schema for future Kaysender wiki entries.
 - `docs/kaysender-tool-extraction.md` — first extraction framework for converting Kaysender into open d20-compatible campaign utilities.
 - `docs/deployment.md` — GitHub Pages deployment and smoke-test guide.
 - `.github/workflows/pages.yml` — optional GitHub Pages deployment workflow.
@@ -54,6 +57,7 @@ The project should keep original Kaysender lore separate from rules-facing mecha
 
 The following registry cards now launch working alpha tools:
 
+- Kaysender Hypertext Wiki
 - Open d20 Compatibility Scanner
 - Floating Island Generator
 - Settlement Generator
@@ -62,6 +66,14 @@ The following registry cards now launch working alpha tools:
 - Supply, Water, and Survival Planner
 
 These are campaign-operation utilities. They are not final balanced rules text and should be treated as drafting aids until the table data and conversion logic are expanded.
+
+## Cross-linking model
+
+The wiki entries use stable IDs and contain both `relatedEntries` and `relatedModules` arrays.
+
+The dashboard cards also receive quick wiki chips, allowing a GM to jump from a generator card to relevant lore. Inside the wiki browser, related wiki entries open directly, while related tool/generator chips push the dashboard search toward the matching module.
+
+This is the first practical bridge between setting lore, campaign utilities, and generator operations.
 
 ## Panel layout system
 
