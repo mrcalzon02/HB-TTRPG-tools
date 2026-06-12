@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spell Creator · HB TTRPG Tools</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body{min-height:100vh}.spell-workspace-header{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:24px;flex-wrap:wrap}.spell-workspace-header .header-actions{display:flex;gap:8px;flex-wrap:wrap}.spell-workspace-main{padding:0 24px 32px}.spell-workspace-main #spell-creator-root{max-width:1500px;margin:0 auto}.standalone-note{max-width:900px;color:var(--muted);line-height:1.55}.back-link{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--ink);text-decoration:none;background:rgba(255,255,255,.04)}
+  </style>
+</head>
+<body>
+  <header class="site-header spell-workspace-header no-print">
+    <div>
+      <p class="eyebrow">HB TTRPG Tools · Generator module</p>
+      <h1>Spell Creator</h1>
+      <p class="standalone-note">A dedicated workspace for building, reviewing, balancing, copying, and exporting generated spells without mixing the tool into module maps or the main generator bench.</p>
+    </div>
+    <div class="header-actions">
+      <a class="back-link" href="index.html#generators">Return to Generators</a>
+    </div>
+  </header>
+  <main class="spell-workspace-main">
+    <div id="spell-creator-root"><p class="helper-note">Loading Spell Creator…</p></div>
+  </main>
+  <script src="spell-creator-vocabulary.js"></script>
+  <script src="spell-creator-mechanics.js"></script>
+  <script src="module-spell-creator.js"></script>
+</body>
+</html>
