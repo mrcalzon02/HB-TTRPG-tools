@@ -41,24 +41,26 @@
     const complication=pick(['a concealed cache behind loose stonework','an unstable ceiling section','signs that something returns here regularly','a secondary exit hidden by debris','a territorial occupant observing from concealment','a useful object placed in a suspiciously obvious position']);
     return {type:'room',title:`Room ${index+1}: ${cap(pick(purposes))}`,description:`A ${pick(shapes)} built from ${pick(theme.materials)}. It feels ${pick(theme.moods)} and smells of ${pick(theme.smells)}. The room is ${condition}; ${pick(theme.details)} remain visible.`,mechanics:`Primary interaction DC ${diff.dc}. ${cap(complication)}.`,occupant:chance(density==='dense'?.65:density==='sparse'?.25:.45)?`Possible occupants: ${pick(theme.occupants)}.`:'No immediate occupant is apparent.',tags:[theme.label,diff.label,'Room']};
   }
-  function door(theme,diff,index){
+  function door(theme,diff,density,index){
     const forms=['plain wooden door','iron-bound door','stone slab door','bronze double door','portcullis','sliding wall panel'];
     const states=['locked','stuck','barred from the far side','unlocked but swollen in its frame','partially broken','sealed with an old mechanism'];
     const secrets=['concealed behind matching masonry','hidden by a hanging or growth','opened by pressing a worn carving','released by shifting a nearby fixture'];
-    const secret=chance(.28);
-    const trapped=chance(.32);
+    const secret=chance(density==='dense'?.38:density==='sparse'?.18:.28);
+    const trapped=chance(density==='dense'?.46:density==='sparse'?.18:.32);
     return {type:'door',title:`Door ${index+1}: ${cap(pick(forms))}`,description:`A ${pick(forms)} of ${pick(theme.materials)}, currently ${pick(states)}.${secret?' It is '+pick(secrets)+'.':''}`,mechanics:`Open Lock DC ${diff.lock}; Break DC ${diff.break}.${secret?` Search DC ${diff.dc} to locate the mechanism.`:''}${trapped?` Trap: attack ${diff.attack}, ${diff.damage} damage, save DC ${diff.save}.`:''}`,occupant:'',tags:[theme.label,diff.label,'Door',secret?'Secret':'Visible',trapped?'Trapped':'Untrapped']};
   }
-  function trap(theme,diff,index){
+  function trap(theme,diff,density,index){
     const triggers=['pressure plate','tripwire','disturbed seal','false handle','weighted floor tile','magical proximity rune'];
     const effects=['falling stone block','poisoned darts','burst of flame','locking walls','summoned guardian','blinding dust','flooding chamber','necrotic pulse'];
     const clues=['fresh scratches near the trigger','a break in the dust','small holes in the stonework','discolored floor tiles','a faint magical hum','bones lying in a suspicious pattern'];
-    return {type:'trap',title:`Trap ${index+1}: ${cap(pick(effects))}`,description:`A ${pick(triggers)} activates a ${pick(effects)}. A careful observer may notice ${pick(clues)}.`,mechanics:`Detection DC ${diff.dc}; Disable DC ${diff.dc+2}; attack ${diff.attack} or save DC ${diff.save}; ${diff.damage} damage or equivalent ${diff.stakes}.`,occupant:'',tags:[theme.label,diff.label,'Trap']};
+    const scope=density==='dense'?'affects the chamber and its nearest exit':density==='sparse'?'affects one creature or square':'affects a small area';
+    return {type:'trap',title:`Trap ${index+1}: ${cap(pick(effects))}`,description:`A ${pick(triggers)} activates a ${pick(effects)}. A careful observer may notice ${pick(clues)}.`,mechanics:`Detection DC ${diff.dc}; Disable DC ${diff.dc+2}; attack ${diff.attack} or save DC ${diff.save}; ${diff.damage} damage or equivalent ${diff.stakes}; ${scope}.`,occupant:'',tags:[theme.label,diff.label,'Trap']};
   }
-  function feature(theme,diff,index){
+  function feature(theme,diff,density,index){
     const objects=['statue','dry fountain','ritual basin','collapsed balcony','wall relief','mechanical lift','sarcophagus','sealed well','crystal formation','mosaic floor'];
     const uses=['reveals a hidden compartment','provides temporary cover','contains a clue to another room','can be repaired into a useful mechanism','reacts to magic or blood','marks a safe route through the area','conceals an environmental hazard','can be used to bypass a nearby obstacle'];
-    return {type:'feature',title:`Feature ${index+1}: ${cap(pick(objects))}`,description:`A ${pick(objects)} made from ${pick(theme.materials)} dominates the area. It is ${pick(theme.moods)} in character, with ${pick(theme.details)} nearby.`,mechanics:`Interaction or interpretation DC ${diff.dc}. On success it ${pick(uses)}.`,occupant:'',tags:[theme.label,diff.label,'Feature']};
+    const scale=density==='dense'?'surrounded by secondary clutter':density==='sparse'?'standing alone':'integrated into the room';
+    return {type:'feature',title:`Feature ${index+1}: ${cap(pick(objects))}`,description:`A ${pick(objects)} made from ${pick(theme.materials)} dominates the area. It is ${pick(theme.moods)} in character, ${scale}, with ${pick(theme.details)} nearby.`,mechanics:`Interaction or interpretation DC ${diff.dc}. On success it ${pick(uses)}.`,occupant:'',tags:[theme.label,diff.label,'Feature']};
   }
   function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 
@@ -88,7 +90,12 @@
     const density=root.querySelector('#mcf-density').value;
     const themeId=root.querySelector('#mcf-theme').value;
     results=[];
-    for(let i=0;i<count;i++){const kind=selected[i%selected.length];const theme=currentTheme(themeId);results.push(({room,door,trap,feature}[kind])(theme,diff,density,i));}
+    for(let i=0;i<count;i++){
+      const kind=selected[i%selected.length];
+      const theme=currentTheme(themeId);
+      const generator={room,door,trap,feature}[kind];
+      results.push(generator(theme,diff,density,i));
+    }
     render(root);status(root,`Generated ${results.length} entries.`);
     document.dispatchEvent(new CustomEvent('module-content-filler-generated',{detail:{results,seed,theme:themeId,difficulty:diff.label,density}}));
   }
