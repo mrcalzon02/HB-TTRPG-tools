@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/kaysender/schemas/wiki-entry.schema.json",
+  "title": "Kaysender Wiki Entry",
+  "type": "object",
+  "required": ["id", "title", "category", "summary", "body", "tags", "relatedEntries", "relatedModules"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable slug used for wiki links and cross-linking."
+    },
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "description": "World, Regions, Nations, Factions, Ships, Economy, Creatures, GM Tools, Rules, or other future category."
+    },
+    "summary": {
+      "type": "string"
+    },
+    "body": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Paragraph blocks. Keep rules-facing mechanics out of lore entries unless marked as conversion material."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "relatedEntries": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Wiki entry ids."
+    },
+    "relatedModules": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Registry module ids."
+    }
+  },
+  "additionalProperties": false
+}
