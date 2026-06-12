@@ -50,6 +50,11 @@
         "additionalProperties": false
       }
     },
+    "statBlocks": {
+      "type": "array",
+      "description": "Optional Hypertext d20-compatible statistics blocks. Lore entries that describe creatures, hazards, vehicles, factions, settlements, or important equipment can carry converted stat blocks here rather than leaving mechanics as prose placeholders.",
+      "items": { "$ref": "#/$defs/statBlock" }
+    },
     "sourceStatus": {
       "type": "string",
       "enum": ["seed-summary", "partial-source", "source-faithful", "full-source-import", "derived-tool-output"],
@@ -92,6 +97,74 @@
         "outlineTitle": { "type": "string" },
         "chunkId": { "type": "string" },
         "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "statBlock": {
+      "type": "object",
+      "required": ["id", "title", "ruleset", "conversionStatus", "statType", "challengeRating", "hitDice", "initiative", "armorClass", "speed", "saves", "abilities"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "ruleset": { "type": "string", "description": "Example: Hypertext d20 compatible." },
+        "conversionStatus": { "type": "string", "enum": ["converted-hypertext-d20", "draft-conversion", "legacy-source", "needs-review"] },
+        "statType": { "type": "string", "enum": ["creature", "hazard", "vehicle", "settlement", "faction", "item", "template", "other"] },
+        "creatureType": { "type": "string" },
+        "size": { "type": "string" },
+        "alignment": { "type": "string" },
+        "challengeRating": { "type": "string" },
+        "experience": { "type": "string" },
+        "hitDice": { "type": "string" },
+        "hitPoints": { "type": "string" },
+        "initiative": { "type": "string" },
+        "speed": { "type": "array", "items": { "type": "string" } },
+        "armorClass": {
+          "type": "object",
+          "properties": {
+            "total": { "type": "string" },
+            "touch": { "type": "string" },
+            "flatFooted": { "type": "string" },
+            "notes": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "baseAttackGrapple": { "type": "string" },
+        "attack": { "type": "string" },
+        "fullAttack": { "type": "string" },
+        "spaceReach": { "type": "string" },
+        "specialAttacks": { "type": "array", "items": { "type": "string" } },
+        "specialQualities": { "type": "array", "items": { "type": "string" } },
+        "saves": {
+          "type": "object",
+          "properties": {
+            "fortitude": { "type": "string" },
+            "reflex": { "type": "string" },
+            "will": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "abilities": {
+          "type": "object",
+          "properties": {
+            "strength": { "type": "string" },
+            "dexterity": { "type": "string" },
+            "constitution": { "type": "string" },
+            "intelligence": { "type": "string" },
+            "wisdom": { "type": "string" },
+            "charisma": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "feats": { "type": "array", "items": { "type": "string" } },
+        "environment": { "type": "string" },
+        "organization": { "type": "string" },
+        "treasure": { "type": "string" },
+        "advancement": { "type": "string" },
+        "levelAdjustment": { "type": "string" },
+        "tactics": { "type": "array", "items": { "type": "string" } },
+        "conversionNotes": { "type": "array", "items": { "type": "string" } },
+        "sourceRefs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } }
       },
       "additionalProperties": false
     }
