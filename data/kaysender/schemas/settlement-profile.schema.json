@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/kaysender/schemas/settlement-profile.schema.json",
+  "title": "Kaysender Settlement Profile",
+  "type": "object",
+  "required": [
+    "name",
+    "profileType",
+    "settlementType",
+    "populationScale",
+    "governmentType",
+    "defensePosture",
+    "economyBase",
+    "waterStatus",
+    "foodStatus",
+    "tradeAccess",
+    "factionPresence",
+    "socialStress",
+    "crisisClock",
+    "derivedScores",
+    "outputs"
+  ],
+  "properties": {
+    "name": { "type": "string" },
+    "profileType": { "type": "string", "const": "settlement-profile" },
+    "sourceIslandProfile": { "type": ["object", "null"] },
+    "settlementType": { "type": "string" },
+    "populationScale": { "type": "string" },
+    "governmentType": { "type": "string" },
+    "defensePosture": { "type": "string" },
+    "economyBase": { "type": "string" },
+    "waterStatus": { "type": "string" },
+    "foodStatus": { "type": "string" },
+    "tradeAccess": { "type": "string" },
+    "factionPresence": { "type": "string" },
+    "socialStress": { "type": "string" },
+    "civicAsset": { "type": "string" },
+    "localSecret": { "type": "string" },
+    "crisisClock": { "type": "string" },
+    "derivedScores": {
+      "type": "object",
+      "required": ["survivability", "tradeValue", "defenseReadiness", "unrestRisk", "adventureDensity", "islandDependency"],
+      "properties": {
+        "survivability": { "type": "integer" },
+        "tradeValue": { "type": "integer" },
+        "defenseReadiness": { "type": "integer" },
+        "unrestRisk": { "type": "integer" },
+        "adventureDensity": { "type": "integer" },
+        "islandDependency": { "type": "integer" }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["summary", "gmNotes", "leadershipHooks", "marketHooks", "factionHooks", "defenseHooks", "jobHooks", "wikiDraft"],
+      "properties": {
+        "summary": { "type": "string" },
+        "gmNotes": { "type": "array", "items": { "type": "string" } },
+        "leadershipHooks": { "type": "array", "items": { "type": "string" } },
+        "marketHooks": { "type": "array", "items": { "type": "string" } },
+        "factionHooks": { "type": "array", "items": { "type": "string" } },
+        "defenseHooks": { "type": "array", "items": { "type": "string" } },
+        "jobHooks": { "type": "array", "items": { "type": "string" } },
+        "wikiDraft": { "type": "object" }
+      }
+    }
+  }
+}
