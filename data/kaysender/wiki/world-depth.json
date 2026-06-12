@@ -1,0 +1,131 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.2.0",
+  "entries": [
+    {
+      "id": "kaysender-overview",
+      "title": "Kaysender Overview",
+      "category": "World",
+      "summary": "Kaysender is a skyborne campaign realm of floating landmasses, unstable routes, scarce water, airships, dragons, pirates, trade networks, and frontier communities surviving above the abyss.",
+      "body": [
+        "Kaysender is built around the central fact that geography is alive, unstable, and politically valuable. The world is not a fixed land map with roads between towns. It is a realm of [[floating-islands|floating islands]], drifting continents, sky routes, dangerous air currents, and communities that can be separated, ruined, or economically strangled when routes fail.",
+        "The setting’s basic campaign pressure is simple: people need land, water, food, shelter, trade access, and protection, but all of those things are fragile. A village may survive one season because its cisterns are full and collapse the next because a trade wind shifted, a dragon demanded tribute, pirates marked the route, or an island fracture split the pastures from the dockside.",
+        "Airships are the connective tissue of the setting. They move cargo, passengers, soldiers, water, tribute, refugees, smugglers, survey crews, priests, mercenaries, and rumors. A ship is never only transportation; it is a social and economic machine. Every airship implies route access, fuel or core maintenance, crew morale, cargo priority, faction pressure, and risk.",
+        "Kaysender also uses scarcity as a story engine. Water, preserved food, landing rights, repair parts, trained pilots, weather knowledge, safe docks, and reliable charts are all campaign assets. A GM should treat scarcity as a choice generator rather than simple punishment: who controls the cistern, who gets the last berth, what cargo is worth protecting, and what faction profits from delay?",
+        "The current tool suite should therefore treat world entries as operational data. This overview links into [[floating-islands|skyland generation]], [[scarcity-loop|scarcity tracking]], [[water-trade|water economy]], [[airships|airship operations]], [[messara|regional politics]], [[dragon-lords|tribute pressure]], [[black-fleet|piracy]], and [[sky-ecology|creature ecology]]."
+      ],
+      "sections": [
+        {
+          "heading": "Campaign Use",
+          "body": [
+            "Use Kaysender as an engine of logistics, pressure, and hard choices. A single island profile should feed a settlement profile. A settlement should feed market, faction, job-board, and vessel profiles. A vessel should feed route, cargo, crew, and encounter profiles.",
+            "For the editors, the key data families are island stability, water access, food access, route access, faction pressure, settlement footprint, resource nodes, ecological pressure, ship compatibility, and current crisis clocks."
+          ]
+        }
+      ],
+      "tags": ["sky realm", "floating islands", "airships", "scarcity", "routes", "open d20"],
+      "relatedEntries": ["floating-islands", "scarcity-loop", "water-trade", "airships", "messara", "dragon-lords", "black-fleet", "sky-ecology"],
+      "relatedModules": ["floating-island-generator", "settlement-generator", "airship-vessel-generator", "supply-water-planner", "world-map-route-generator"]
+    },
+    {
+      "id": "floating-islands",
+      "title": "Floating Islands and Skylands",
+      "category": "World",
+      "summary": "Floating islands are the fundamental terrain unit of Kaysender: settlements, farms, ruins, pastures, forts, docks, mines, and sacred sites suspended in dangerous airspace.",
+      "body": [
+        "A floating island is not merely a tile of land in the sky. It is a stability problem, a water problem, a route problem, a settlement problem, and often a faction problem. Islands can be stable, anchored, drifting, recently detached, fractured, engineered, magically held, or slowly failing.",
+        "Some skylands can hold cities and fortresses. Others are no more than rocklets, pasture isles, salvage fields, shrine stones, airship moorings, cloud forests, mineral ridges, or wreck-strewn ruins. The scale of an island determines what it can support, but its [[water-trade|water profile]] and [[scarcity-loop|food profile]] determine whether people can remain there.",
+        "An island’s drift pattern is one of its most important campaign facts. A fixed island can support stable routes and long-term infrastructure. A slow predictable drift can be charted. A seasonal migration creates trade calendars. Erratic wandering creates lost settlements, missing convoys, outdated maps, and valuable survey contracts.",
+        "The editor layer should treat every island as a profile with size, altitude, stability, drift, anchor status, terrain, water, food, primary resource, ecology, settlement footprint, faction pressure, cultural adaptation, route access, and current threat clock. These are not decoration; they decide what kind of settlement, route, market, ship, encounter, and crisis can exist there.",
+        "Different peoples adapt differently to unstable skylands. [[dwager|Dwager]] may reinforce foundations, carve into stone, and build heavy anchoring works. [[fae|Fae]] may bind living roots, old wards, and natural magic into the island. [[gezistack|Gezistack]] may stabilize a skyland through machines, gyros, and experimental systems. [[hume|Hume]] communities often improvise mixed methods, while [[halflings|Halfling]] communities make mobility, trade, and hospitality part of survival."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "A Floating Island profile should feed the [[settlement-generator|Settlement / Skyport Editor]], [[airship-vessel-generator|Airship / Vessel Editor]], [[shop-market-generator|Market tools]], [[supply-water-planner|Supply Planner]], [[sky-ecology-generator|Sky Ecology Generator]], and [[world-map-route-generator|Route Generator]].",
+            "Key output fields should include habitability, route value, conflict pressure, collapse risk, GM complexity, settlement hooks, market hooks, route hooks, encounter hooks, and draft wiki entry output."
+          ]
+        }
+      ],
+      "tags": ["islands", "skylands", "terrain", "drift", "routes", "settlements", "resources"],
+      "relatedEntries": ["kaysender-overview", "scarcity-loop", "water-trade", "sky-ecology", "messara", "dwager", "fae", "gezistack", "hume", "halflings"],
+      "relatedModules": ["floating-island-generator", "settlement-generator", "world-map-route-generator", "airship-vessel-generator", "sky-ecology-generator"]
+    },
+    {
+      "id": "scarcity-loop",
+      "title": "The Scarcity Loop",
+      "category": "GM Tools",
+      "summary": "Scarcity in Kaysender is the pressure system connecting water, food, cargo, ships, route access, settlement survival, market prices, and faction leverage.",
+      "body": [
+        "Kaysender should treat scarcity as a campaign loop, not as bookkeeping punishment. The loop begins when a settlement, ship, or faction needs a limited resource. That need creates a route, a price, a dependency, a risk, and a target for pressure.",
+        "Water is the cleanest example. A sky village needs cisterns, rain capture, purification, storage, guards, and trade access. A ship carrying water becomes a strategic cargo vessel. A pirate attack on a water convoy is not just robbery; it can doom a settlement. A dragon tithe that strips water reserves is a political act.",
+        "Food creates a similar loop. Skygrain terraces, airfruit orchards, sheffel herds, fungal cultivation, hunting, imports, and preserved cargo all imply different vulnerabilities. Crop disease, herd sickness, storm closure, pirate disruption, guild hoarding, and tribute demand can all push a stable settlement toward crisis.",
+        "The scarcity loop should always produce choices. A party may choose to carry water instead of profitable cargo, escort a food convoy instead of hunting pirates, expose a faction hoarder instead of fighting monsters, repair a dock crane instead of taking a bounty, or negotiate with an enemy because the settlement will not survive delay.",
+        "For tools, scarcity needs to appear in [[floating-islands|island profiles]], [[settlement-generator|settlement profiles]], [[airship-vessel-generator|vessel cargo]], [[shop-market-generator|market prices]], [[faction-guild-generator|faction leverage]], and [[job-board-generator|job-board missions]]."
+      ],
+      "sections": [
+        {
+          "heading": "Useful Scarcity Fields",
+          "body": [
+            "Water status, food status, storage capacity, current rationing, import dependency, convoy frequency, spoilage risk, faction control, market distortion, and crisis clock should be standard fields on settlement and route outputs.",
+            "Ship profiles should track cargo profile, fuel/power supply, route mandate, cargo value, and whether the mission is relief, profit, tribute, smuggling, evacuation, or military support."
+          ]
+        }
+      ],
+      "tags": ["scarcity", "water", "food", "cargo", "routes", "survival", "markets"],
+      "relatedEntries": ["water-trade", "floating-islands", "airships", "dragon-lords", "black-fleet", "sky-ecology"],
+      "relatedModules": ["supply-water-planner", "settlement-generator", "shop-market-generator", "airship-vessel-generator", "job-board-generator"]
+    },
+    {
+      "id": "water-trade",
+      "title": "Water Trade",
+      "category": "Economy",
+      "summary": "Water is one of the most important strategic goods in Kaysender: cargo, leverage, ration, market force, settlement lifeline, and political weapon.",
+      "body": [
+        "In Kaysender, water is not a background assumption. It is collected, stored, guarded, traded, rationed, purified, stolen, taxed, hoarded, and used as leverage. A reliable water source can make a small island politically important; a failed cistern can turn a peaceful village into a crisis zone.",
+        "Water economies vary by location. Some communities depend on rain cisterns and strict rationing. Others use cloud dew collectors, hidden springs, enchanted storage, imported barrels, reservoir halls, water auctions, temple wells, or guild-controlled cistern contracts. Each version creates a different political structure.",
+        "Water transport creates high-value airship missions. A water convoy may attract pirates, desperate refugees, dragon agents, corrupt dockmasters, or guild inspectors. Cargo space spent on water is cargo space not spent on profit, weapons, passengers, or food, which makes every water mission a logistical choice.",
+        "A settlement’s water status should affect market prices, morale, public order, disease risk, faction behavior, and job-board output. If water is secure, the settlement can bargain. If water is rationed, it becomes vulnerable. If water is contaminated, hidden, sabotaged, or tithed away, the settlement moves into emergency play.",
+        "Water trade cross-links directly to [[scarcity-loop|scarcity]], [[settlement-generator|settlement survival]], [[airship-vessel-generator|airship cargo]], [[shop-market-generator|market generation]], [[black-fleet|piracy]], and [[dragon-lords|tribute systems]]."
+      ],
+      "sections": [
+        {
+          "heading": "Editor Hooks",
+          "body": [
+            "Market generators should create water sellers, cistern contracts, purification salts, rain-capture gear, water auctions, emergency reserves, and counterfeit purification supplies.",
+            "Settlement generators should output whether water is secure, rationed, imported, hidden, contaminated, blockaded, auctioned, or depleted by tribute."
+          ]
+        }
+      ],
+      "tags": ["water", "economy", "cisterns", "convoys", "scarcity", "trade"],
+      "relatedEntries": ["scarcity-loop", "floating-islands", "black-fleet", "dragon-lords", "airships", "skyweaver-consortium"],
+      "relatedModules": ["supply-water-planner", "shop-market-generator", "settlement-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "sky-ecology",
+      "title": "Sky Ecology",
+      "category": "Creatures",
+      "summary": "The living sky of Kaysender supplies danger, food, trade goods, omens, diseases, materials, route hazards, and sacred taboos.",
+      "body": [
+        "Sky ecology should be treated as an operating system of the setting. Creatures and herds do not merely appear as encounters; they affect food, trade, textiles, alchemical ingredients, disease, weather signs, route safety, local taboos, and settlement viability.",
+        "A skyland with sheffel herds implies wool, food, pasture control, herders, predators, disease risk, and market goods. A skywhale migration lane implies awe, danger, pilgrimage, hunting pressure, materials, and route timing. Reports of Grays activity can create mystery, fear, missing crews, and unreliable testimony.",
+        "Ecology should connect to altitude, terrain, resource nodes, and water access. A fungal cloud forest suggests cultivation, spores, disease, alchemical harvests, and visibility problems. Craggy skystone ridges suggest nesting predators, mineral claims, and dangerous climbing. Storm-polished mesas suggest exposure, lightning risk, and sparse shelter.",
+        "The ecology layer should feed the [[floating-island-generator|Floating Island Editor]], [[settlement-generator|Settlement Editor]], [[shop-market-generator|Market tools]], [[encounter-generator|Encounter Generator]], and future bestiary entries. A creature should have behavior, material value, disease risk, relationship to local people, and the reason a faction cares about it.",
+        "Diseases and parasites should not be random punishment. They should reveal trade pressure, poor storage, overhunting, blocked routes, tainted water, crowding, or hidden ecological abuse."
+      ],
+      "sections": [
+        {
+          "heading": "Generator Fields",
+          "body": [
+            "Altitude band, terrain, herd behavior, diet, valuable material, predators, disease risk, taboo status, hunting pressure, faction interest, encounter attitude, and market value should be standard ecology fields.",
+            "A sky ecology output should be able to become a bestiary stub, a market ingredient, a settlement crisis, or an encounter seed."
+          ]
+        }
+      ],
+      "tags": ["ecology", "creatures", "sheffels", "skywhales", "Grays", "disease", "materials"],
+      "relatedEntries": ["floating-islands", "scarcity-loop", "water-trade"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator", "shop-market-generator", "settlement-generator"]
+    }
+  ]
+}
