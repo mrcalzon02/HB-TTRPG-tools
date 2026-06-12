@@ -1,9 +1,5 @@
 (() => {
   const alphaTools = {
-    'kaysender-compatibility-scanner': {
-      label: 'Launch Alpha Scanner',
-      render: renderCompatibilityScanner
-    },
     'floating-island-generator': {
       label: 'Launch Alpha Generator',
       render: renderFloatingIslandGenerator
@@ -43,20 +39,6 @@
     conditions: ['pristine', 'serviceable', 'patched after battle', 'overloaded', 'badly maintained', 'one failure from disaster'],
     missions: ['escort convoy', 'deliver water', 'smuggle relics', 'hunt pirates', 'survey a drifting island', 'collect tithe', 'flee creditors', 'transport pilgrims', 'move refugees', 'track a skybeast herd']
   };
-
-  const scannerRules = [
-    { term: /\badvantage\b|\bdisadvantage\b/gi, replacement: 'Use typed circumstance bonuses, penalties, rerolls, or explicit d20 roll clauses.' },
-    { term: /\bproficiency bonus\b/gi, replacement: 'Use skill ranks, base attack bonus, class level, caster level, or a fixed scaling table.' },
-    { term: /\bbonus action\b/gi, replacement: 'Convert to swift action, immediate action, move action, standard action, full-round action, free action, or attack of opportunity timing.' },
-    { term: /\breaction\b/gi, replacement: 'Convert to immediate action, readied action, attack of opportunity, or a named trigger.' },
-    { term: /\blong rest\b|\bshort rest\b/gi, replacement: 'Convert to daily uses, per-encounter uses, hourly recovery, rest-period recovery, or prepared-resource recovery.' },
-    { term: /\bsubclass\b|\bclass archetype\b/gi, replacement: 'Convert to class feature tree, prestige path, domain, feat chain, or campaign trait package.' },
-    { term: /\bbackground feature\b|\bbackgrounds?\b/gi, replacement: 'Convert to origin, occupation, regional trait, social trait, or starting package.' },
-    { term: /\bChannel Divinity\b/gi, replacement: 'Convert to a domain power, turning feature, daily supernatural ability, or divine class feature.' },
-    { term: /\battunement\b|\battuned\b/gi, replacement: 'Convert to slot restrictions, item activation requirements, command word use, caster-level limits, or body-slot rules.' },
-    { term: /\blegendary action\b|\blair action\b/gi, replacement: 'Convert to initiative-count events, environmental hazards, triggered abilities, or elite monster special actions.' },
-    { term: /\bdeath saving throw\b/gi, replacement: 'Convert to dying, stabilization, negative hit point, or campaign-specific injury rules.' }
-  ];
 
   function injectStyles() {
     if (document.getElementById('kaysender-alpha-style')) return;
@@ -174,51 +156,6 @@
       card.appendChild(row);
     });
     container.appendChild(card);
-  }
-
-  function renderCompatibilityScanner(panel) {
-    const textarea = document.createElement('textarea');
-    textarea.rows = 10;
-    textarea.placeholder = 'Paste Kaysender rules or lore text here to flag legacy fifth-edition phrasing before open d20 conversion...';
-
-    const button = document.createElement('button');
-    button.className = 'primary-action';
-    button.type = 'button';
-    button.textContent = 'Scan Text';
-
-    const output = document.createElement('div');
-    output.className = 'alpha-output';
-
-    button.addEventListener('click', () => {
-      const text = textarea.value || '';
-      const hits = scannerRules.map(rule => {
-        const matches = text.match(rule.term) || [];
-        return { ...rule, count: matches.length, examples: [...new Set(matches)].slice(0, 4) };
-      }).filter(hit => hit.count > 0);
-
-      const density = hits.reduce((sum, hit) => sum + hit.count, 0);
-      const classification = density === 0 ? 'Lore-only or already low-risk' : density <= 3 ? 'Rules-linked conversion needed' : 'Mechanics-heavy conversion needed';
-      const readiness = density === 0 ? 'Public-facing lore pass likely safe after editorial review.' : 'Hold for conversion before public reusable rules release.';
-
-      const rows = [
-        ['Classification', classification],
-        ['Flag count', String(density)],
-        ['Public readiness', readiness]
-      ];
-
-      if (hits.length) {
-        hits.forEach(hit => rows.push([
-          hit.examples.join(', '),
-          hit.replacement
-        ]));
-      } else {
-        rows.push(['Result', 'No tracked fifth-edition conversion terms found by this alpha scanner.']);
-      }
-
-      renderOutput(output, 'Compatibility Scan Result', rows, hits.length ? 'scan-hit' : 'scan-clean');
-    });
-
-    panel.append(textarea, button, output);
   }
 
   function renderFloatingIslandGenerator(panel) {
