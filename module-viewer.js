@@ -1,6 +1,7 @@
 (() => {
   const INDEX_URL = 'data/modules/module-index.json';
   const EDITOR_SCRIPT = 'module-map-editor.js';
+  const MEMORY_PREFIX = 'memory:';
   const MODULE_PATCHES = {
     'northern-watchtower-09': [
       'data/modules/patches/northern-watchtower-09-door-pass-rooms-1-5.json',
@@ -13,8 +14,10 @@
     ]
   };
 
+  const memoryModules = new Map();
   let indexData = null;
   let moduleData = null;
+  let activePath = null;
   let selectedId = null;
   let showRooms = true;
   let showDoors = true;
@@ -28,58 +31,79 @@
   function esc(v){ return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   async function getJson(url){ const r=await fetch(url,{cache:'no-store'}); if(!r.ok) throw new Error(url); return r.json(); }
   async function getText(url){ const r=await fetch(url,{cache:'no-store'}); if(!r.ok) throw new Error(url); return r.text(); }
+  function loadEditorScript(){ if(document.querySelector(`script[src="${EDITOR_SCRIPT}"]`)) return; const s=document.createElement('script'); s.src=EDITOR_SCRIPT; s.defer=true; document.body.appendChild(s); }
+  function moduleOptions(){ return [...(indexData?.modules||[]), ...memoryModules.values()].map(entry=>`<option value="${esc(entry.path)}" ${entry.path===activePath?'selected':''}>${esc(entry.title)}</option>`).join(''); }
 
-  async function loadModule(path){ const data=await getJson(path); for(const patchPath of MODULE_PATCHES[data.id] || []){ try{ applyPatch(data, await getJson(patchPath)); } catch(e){ console.warn('Module patch failed',patchPath,e); } } return data; }
+  async function loadModule(path){
+    activePath = path;
+    if(String(path).startsWith(MEMORY_PREFIX)) return memoryModules.get(path)?.module || null;
+    const data = await getJson(path);
+    for(const patchPath of MODULE_PATCHES[data.id] || []){ try{ applyPatch(data, await getJson(patchPath)); } catch(e){ console.warn('Module patch failed',patchPath,e); } }
+    return data;
+  }
   function applyPatch(data,patch){
     const roomMap=new Map((data.rooms||[]).map(r=>[r.id,r])); (patch.rooms||[]).forEach(r=>roomMap.set(r.id,{...(roomMap.get(r.id)||{}),...r})); data.rooms=Array.from(roomMap.values()).sort((a,b)=>(a.number||0)-(b.number||0));
     const doorMap=new Map((data.doors||[]).map(d=>[d.id,d])); (patch.doors||[]).forEach(d=>doorMap.set(d.id,d)); data.doors=Array.from(doorMap.values());
     const hotMap=new Map((data.hotspots||[]).map(h=>[h.id,h])); (patch.doorHotspots||[]).forEach(h=>hotMap.set(h.id,h)); data.hotspots=Array.from(hotMap.values());
     data.extractionStatus={...(data.extractionStatus||{}),...(patch.extractionStatus||{})};
   }
-  function loadEditorScript(){ if(document.querySelector(`script[src="${EDITOR_SCRIPT}"]`)) return; const s=document.createElement('script'); s.src=EDITOR_SCRIPT; s.defer=true; document.body.appendChild(s); }
 
   async function init(){
     styleOnce(); const root=document.getElementById('module-viewer-root'); if(!root) return; loadEditorScript(); root.innerHTML='<p class="helper-note">Loading module viewer…</p>';
-    try{ indexData=await getJson(INDEX_URL); const first=indexData.modules?.[0]; moduleData=await loadModule(first.path); selectedId=moduleData.rooms?.[0]?.id; render(root); }
+    try{ indexData=await getJson(INDEX_URL); const first=indexData.modules?.[0]; moduleData=await loadModule(first.path); selectedId=moduleData.rooms?.[0]?.id || null; render(root); dispatchModuleChanged(); }
     catch(e){ root.innerHTML='<p class="helper-note">Module viewer could not load. Use GitHub Pages or a local web server so JSON files can be fetched.</p>'; }
   }
 
   function render(root){
     usingEditorMap=false;
-    const opts=(indexData.modules||[]).map(m=>`<option value="${esc(m.path)}">${esc(m.title)}</option>`).join('');
-    root.innerHTML=`<div class="module-viewer-shell"><div class="module-viewer-toolbar no-print"><label class="control-label">Module <select id="module-select">${opts}</select></label><button id="toggle-rooms" class="secondary-action" type="button">Rooms On</button><button id="toggle-doors" class="secondary-action" type="button">Doors On</button></div><div class="module-viewer-layout"><section class="module-map-card"><div class="section-heading"><p class="eyebrow">${esc(moduleData.system)}</p><h2>${esc(moduleData.title)}</h2><p>${esc(moduleData.subtitle)}</p></div><div id="module-map" class="module-map-wrap"></div></section><aside><section id="module-detail" class="module-detail-card"></section><section class="module-list-card"><h3>Rooms and Doors</h3><div id="module-list" class="module-list"></div></section></aside></div></div>`;
-    root.querySelector('#module-select').addEventListener('change',async e=>{ moduleData=await loadModule(e.target.value); selectedId=moduleData.rooms?.[0]?.id; render(root); document.dispatchEvent(new CustomEvent('module-viewer-module-changed',{detail:{module:moduleData}})); });
+    root.innerHTML=`<div class="module-viewer-shell"><div class="module-viewer-toolbar no-print"><label class="control-label">Module <select id="module-select">${moduleOptions()}</select></label><button id="toggle-rooms" class="secondary-action" type="button">Rooms On</button><button id="toggle-doors" class="secondary-action" type="button">Doors On</button></div><div class="module-viewer-layout"><section class="module-map-card"><div class="section-heading"><p class="eyebrow">${esc(moduleData?.system||'Module draft')}</p><h2>${esc(moduleData?.title||'Untitled Module')}</h2><p>${esc(moduleData?.subtitle||moduleData?.source?.notes||'Editable module map')}</p></div><div id="module-map" class="module-map-wrap"></div></section><aside><section id="module-detail" class="module-detail-card"></section><section class="module-list-card"><h3>Rooms and Doors</h3><div id="module-list" class="module-list"></div></section></aside></div></div>`;
+    root.querySelector('#module-select').addEventListener('change',async e=>{ moduleData=await loadModule(e.target.value); selectedId=moduleData?.rooms?.[0]?.id || null; render(root); dispatchModuleChanged(); });
     root.querySelector('#toggle-rooms').addEventListener('click',e=>{ showRooms=!showRooms; e.target.textContent=showRooms?'Rooms On':'Rooms Off'; drawHotspots(root); });
     root.querySelector('#toggle-doors').addEventListener('click',e=>{ showDoors=!showDoors; e.target.textContent=showDoors?'Doors On':'Doors Off'; drawHotspots(root); });
     drawMap(root); detail(root); list(root);
   }
 
+  function dispatchModuleChanged(){ document.dispatchEvent(new CustomEvent('module-viewer-module-changed',{detail:{module:moduleData,path:activePath}})); }
   async function drawMap(root){
     if(usingEditorMap) return drawHotspots(root);
-    const wrap=root.querySelector('#module-map'); const image=moduleData.map?.image || ''; wrap.innerHTML='';
-    if(image.toLowerCase().endsWith('.svg')){ try{ wrap.innerHTML=await getText(image); const svg=wrap.querySelector('svg'); if(svg){ svg.removeAttribute('width'); svg.removeAttribute('height'); svg.setAttribute('preserveAspectRatio','xMidYMid meet'); } } catch(e){ wrap.innerHTML=`<img src="${esc(image)}" alt="${esc(moduleData.title)} map" />`; } }
+    const wrap=root.querySelector('#module-map'); const image=moduleData?.map?.image || ''; wrap.innerHTML='';
+    if(!image){ wrap.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 702 702"><rect width="702" height="702" fill="#05070b"/><text x="351" y="351" text-anchor="middle" fill="#d8d1bf" font-size="20">No map loaded yet. Use the editor below.</text></svg>'; drawHotspots(root); return; }
+    if(image.toLowerCase().endsWith('.svg')){ try{ wrap.innerHTML=await getText(image); normalizeSvg(wrap); } catch(e){ wrap.innerHTML=`<img src="${esc(image)}" alt="${esc(moduleData.title)} map" />`; } }
     else { wrap.innerHTML=`<img src="${esc(image)}" alt="${esc(moduleData.title)} map" />`; }
     drawHotspots(root);
   }
+  function normalizeSvg(wrap){ const svg=wrap.querySelector('svg'); if(svg){ svg.removeAttribute('width'); svg.removeAttribute('height'); svg.setAttribute('preserveAspectRatio','xMidYMid meet'); } }
+  function useEditorMap(svg){ const root=document.getElementById('module-viewer-root'); const wrap=document.getElementById('module-map'); if(!root||!wrap||!svg) return; usingEditorMap=true; wrap.innerHTML=svg; normalizeSvg(wrap); drawHotspots(root); }
 
-  function useEditorMap(svg){ const root=document.getElementById('module-viewer-root'); const wrap=document.getElementById('module-map'); if(!root||!wrap||!svg) return; usingEditorMap=true; wrap.innerHTML=svg; const s=wrap.querySelector('svg'); if(s){ s.removeAttribute('width'); s.removeAttribute('height'); s.setAttribute('preserveAspectRatio','xMidYMid meet'); } drawHotspots(root); }
+  function registerEditorModule(detail){
+    const module = detail.module || buildMemoryModule(detail);
+    const path = module.path || `${MEMORY_PREFIX}${module.id || Date.now()}`;
+    module.path = path;
+    memoryModules.set(path,{path,title:module.title||'Extracted Module',module});
+    activePath = path; moduleData = module; selectedId = module.rooms?.[0]?.id || null;
+    const root=document.getElementById('module-viewer-root'); if(root){ render(root); if(detail.svg) useEditorMap(detail.svg); }
+    dispatchModuleChanged();
+  }
+  function buildMemoryModule(detail){ return { schemaVersion:'0.1.0', id:`extracted-${Date.now()}`, title:detail.title||'Extracted Module Draft', subtitle:'In-memory module extracted in the browser', system:'Module draft', source:{notes:'Created from Module Map Editor extraction.'}, map:{image:'',grid:`${detail.state?.width||39} x ${detail.state?.height||39}`}, hotspots:[], rooms:[], doors:[], mapEditorState:detail.state||null }; }
+
   function doorGroupKey(h){ return `${Math.round(h.box.x*10)/10}|${Math.round(h.box.y*10)/10}`; }
-  function doorGroups(){ const groups=new Map(); (moduleData.hotspots||[]).filter(h=>h.type==='door').forEach(h=>{ const key=doorGroupKey(h); if(!groups.has(key)) groups.set(key,[]); groups.get(key).push(h); }); return groups; }
+  function doorGroups(){ const groups=new Map(); (moduleData?.hotspots||[]).filter(h=>h.type==='door').forEach(h=>{ const key=doorGroupKey(h); if(!groups.has(key)) groups.set(key,[]); groups.get(key).push(h); }); return groups; }
   function doorGroupById(groupId){ return doorGroups().get(groupId.replace('door-group:','')) || []; }
-  function drawHotspots(root){ const m=root.querySelector('#module-map'); if(!m) return; m.querySelectorAll('.module-hotspot').forEach(n=>n.remove()); (moduleData.hotspots||[]).filter(h=>h.type!=='door').forEach(h=>{ if(h.type==='room'&&!showRooms) return; renderHotspot(m,h,h.targetId,h.type==='room'?h.label:''); }); if(!showDoors) return; doorGroups().forEach((group,key)=>{ const h=group[0]; const groupId=group.length>1?`door-group:${key}`:h.targetId; renderHotspot(m,h,groupId,group.length>1?String(group.length):'',group.length>1); }); }
+  function drawHotspots(root){ const m=root.querySelector('#module-map'); if(!m) return; m.querySelectorAll('.module-hotspot').forEach(n=>n.remove()); (moduleData?.hotspots||[]).filter(h=>h.type!=='door').forEach(h=>{ if(h.type==='room'&&!showRooms) return; renderHotspot(m,h,h.targetId,h.type==='room'?h.label:''); }); if(!showDoors) return; doorGroups().forEach((group,key)=>{ const h=group[0]; const groupId=group.length>1?`door-group:${key}`:h.targetId; renderHotspot(m,h,groupId,group.length>1?String(group.length):'',group.length>1); }); }
   function renderHotspot(m,h,targetId,label,grouped=false){ const b=document.createElement('button'); b.type='button'; b.className=`module-hotspot ${h.type} ${grouped?'grouped':''} ${selectedId===targetId?'active':''}`; Object.assign(b.style,{left:h.box.x+'%',top:h.box.y+'%',width:h.box.w+'%',height:h.box.h+'%'}); b.textContent=label; b.title=grouped?`${label} listed entries at this physical doorway`:(h.label||h.targetId); b.onclick=()=>{ selectedId=targetId; const root=document.getElementById('module-viewer-root'); detail(root); list(root); drawHotspots(root); }; m.appendChild(b); }
-
-  function list(root){ const target=root.querySelector('#module-list'); target.innerHTML=''; [...(moduleData.rooms||[]).map(r=>({id:r.id,title:r.title,meta:r.summary,kind:'room'})),...(moduleData.doors||[]).map(d=>({id:d.id,title:d.label,meta:d.kind,kind:'door'}))].forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className=selectedId===x.id?'active':''; b.innerHTML=`<strong>${esc(x.title)}</strong><small>${esc(x.kind)} · ${esc(x.meta||'')}</small>`; b.onclick=()=>{ selectedId=x.id; detail(root); list(root); drawHotspots(root); }; target.appendChild(b); }); }
-  function detail(root){ const t=root.querySelector('#module-detail'); if(String(selectedId||'').startsWith('door-group:')){ const group=doorGroupById(selectedId); t.innerHTML=`<p class="eyebrow">Physical doorway</p><h3>${group.length} listed room-side entries share this map position</h3><p>The printed map shows one doorway here, while the room text lists one or more room-side entries for that same physical position.</p><div class="module-pill-row">${group.map(h=>doorById(h.targetId)).filter(Boolean).map(d=>doorButton(d)).join('')}</div>`; return; } const room=(moduleData.rooms||[]).find(r=>r.id===selectedId); const door=(moduleData.doors||[]).find(d=>d.id===selectedId); if(room){ t.innerHTML=`<p class="eyebrow">Room ${esc(room.number)}</p><h3>${esc(room.title)}</h3><p>${esc(room.summary)}</p>${section('Features',room.features)}${section('Traps',room.traps)}${section('Tricks',room.tricks)}${section('Monsters',room.monsters)}${section('Treasure',room.treasure)}${doorLinks(room)}${rawSection('Source room listing',room.sourceText)}`; return; } if(door){ t.innerHTML=`<p class="eyebrow">Door / Entry</p><h3>${esc(door.label)}</h3><div class="module-pill-row">${(door.tags||[]).map(x=>`<span class="module-pill ${esc(x)}">${esc(x)}</span>`).join('')}</div><div class="module-stat-grid"><div class="module-stat"><strong>From</strong>${esc(roomName(door.from))}</div><div class="module-stat"><strong>To</strong>${esc(roomName(door.to))}</div><div class="module-stat"><strong>Type</strong>${esc(door.kind)}</div><div class="module-stat"><strong>Notes</strong>${esc(door.notes)}</div></div>${rawSection('Source door listing',door.sourceText)}`; return; } t.innerHTML=`<h3>${esc(moduleData.title)}</h3><p>${esc(moduleData.source?.notes||'')}</p>`; }
+  function list(root){ const target=root.querySelector('#module-list'); target.innerHTML=''; [...(moduleData?.rooms||[]).map(r=>({id:r.id,title:r.title,meta:r.summary,kind:'room'})),...(moduleData?.doors||[]).map(d=>({id:d.id,title:d.label,meta:d.kind,kind:'door'}))].forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className=selectedId===x.id?'active':''; b.innerHTML=`<strong>${esc(x.title)}</strong><small>${esc(x.kind)} · ${esc(x.meta||'')}</small>`; b.onclick=()=>{ selectedId=x.id; detail(root); list(root); drawHotspots(root); }; target.appendChild(b); }); }
+  function detail(root){ const t=root.querySelector('#module-detail'); if(String(selectedId||'').startsWith('door-group:')){ const group=doorGroupById(selectedId); t.innerHTML=`<p class="eyebrow">Physical doorway</p><h3>${group.length} listed room-side entries share this map position</h3><p>The printed map shows one doorway here, while the room text lists one or more room-side entries for that same physical position.</p><div class="module-pill-row">${group.map(h=>doorById(h.targetId)).filter(Boolean).map(d=>doorButton(d)).join('')}</div>`; return; } const room=(moduleData?.rooms||[]).find(r=>r.id===selectedId); const door=(moduleData?.doors||[]).find(d=>d.id===selectedId); if(room){ t.innerHTML=`<p class="eyebrow">Room ${esc(room.number)}</p><h3>${esc(room.title)}</h3><p>${esc(room.summary)}</p>${section('Features',room.features)}${section('Traps',room.traps)}${section('Tricks',room.tricks)}${section('Monsters',room.monsters)}${section('Treasure',room.treasure)}${doorLinks(room)}${rawSection('Source room listing',room.sourceText)}`; return; } if(door){ t.innerHTML=`<p class="eyebrow">Door / Entry</p><h3>${esc(door.label)}</h3><div class="module-pill-row">${(door.tags||[]).map(x=>`<span class="module-pill ${esc(x)}">${esc(x)}</span>`).join('')}</div><div class="module-stat-grid"><div class="module-stat"><strong>From</strong>${esc(roomName(door.from))}</div><div class="module-stat"><strong>To</strong>${esc(roomName(door.to))}</div><div class="module-stat"><strong>Type</strong>${esc(door.kind)}</div><div class="module-stat"><strong>Notes</strong>${esc(door.notes)}</div></div>${rawSection('Source door listing',door.sourceText)}`; return; } t.innerHTML=`<h3>${esc(moduleData?.title||'Module Draft')}</h3><p>${esc(moduleData?.source?.notes||'Use the map editor below to create or refine this module map.')}</p>`; }
   function section(title,arr=[]){ return arr.length?`<h4>${esc(title)}</h4><ul>${arr.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''; }
   function rawSection(title,text){ return text?`<h4>${esc(title)}</h4><pre class="module-source-text">${esc(text)}</pre>`:''; }
   function doorButton(d){ return `<button type="button" class="module-pill ${(d.tags||[]).join(' ')}" data-door="${esc(d.id)}">${esc(d.label)}<span class="module-door-summary">${esc(d.kind)}</span></button>`; }
-  function doorLinks(room){ const doorIds=room.doorIds||[]; const exact=doorIds.map(id=>doorById(id)).filter(Boolean); const doors=exact.length?exact:(moduleData.doors||[]).filter(d=>d.from===room.id||d.to===room.id); return `<h4>Listed doors and entries</h4><div class="module-pill-row">${doors.map(d=>doorButton(d)).join('')}</div>`; }
-  function doorById(id){ return (moduleData.doors||[]).find(d=>d.id===id); }
-  function roomName(id){ if(!id) return 'Unlinked / external'; return (moduleData.rooms||[]).find(r=>r.id===id)?.title || id; }
+  function doorLinks(room){ const doorIds=room.doorIds||[]; const exact=doorIds.map(id=>doorById(id)).filter(Boolean); const doors=exact.length?exact:(moduleData?.doors||[]).filter(d=>d.from===room.id||d.to===room.id); return `<h4>Listed doors and entries</h4><div class="module-pill-row">${doors.map(d=>doorButton(d)).join('')}</div>`; }
+  function doorById(id){ return (moduleData?.doors||[]).find(d=>d.id===id); }
+  function roomName(id){ if(!id) return 'Unlinked / external'; return (moduleData?.rooms||[]).find(r=>r.id===id)?.title || id; }
 
   document.addEventListener('click',e=>{ const b=e.target.closest?.('[data-door]'); if(!b) return; const root=document.getElementById('module-viewer-root'); selectedId=b.dataset.door; detail(root); list(root); drawHotspots(root); });
   document.addEventListener('module-map-editor-output',e=>useEditorMap(e.detail?.svg));
+  document.addEventListener('module-map-editor-new-module',e=>registerEditorModule(e.detail||{}));
   document.addEventListener('DOMContentLoaded',init);
   window.initModuleViewer=init;
+  window.getCurrentModuleViewerModule=()=>({module:moduleData,path:activePath});
 })();
