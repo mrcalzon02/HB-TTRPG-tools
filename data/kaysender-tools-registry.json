@@ -8,7 +8,7 @@
     "Rules-facing text should separate open d20 mechanics from setting prose.",
     "Alpha modules are operational campaign aids and are not final balanced rules text.",
     "The seed wiki layer now cross-links lore entries with related tools and generators.",
-    "Staged editors should be fully built one at a time. Stage 1 is the Floating Island / Skyland Editor; Stage 2 is the Settlement / Skyport Editor."
+    "Staged editors should be fully built one at a time. Stage 1 is the Floating Island / Skyland Editor; Stage 2 is the Settlement / Skyport Editor; Stage 3 is the Airship / Vessel Editor."
   ],
   "modules": [
     {
@@ -86,11 +86,11 @@
     {
       "id": "airship-vessel-generator",
       "section": "generators",
-      "title": "Airship and Vessel Generator",
+      "title": "Airship and Vessel Generator and Editor",
       "priority": 9,
-      "status": "alpha",
-      "description": "Builds encountered ships by hull, culture, core, crew, cargo, weapons, damage, legal status, and mission.",
-      "dataFamilies": ["vesselProfile", "crewProfile", "cargoProfile", "shipCondition"]
+      "status": "editor-alpha",
+      "description": "Generates and edits detailed airship profiles with vessel class, hull culture, core type, purpose, legal status, crew, cargo, armament, defenses, condition, maintenance pressure, route compatibility, faction entanglement, hidden problems, missions, and optional island/settlement inheritance.",
+      "dataFamilies": ["vesselProfile", "crewProfile", "cargoProfile", "shipCondition", "coreProfile", "routeHook", "maintenanceHook", "wikiDraft"]
     },
     {
       "id": "airship-core-builder",
