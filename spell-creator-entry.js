@@ -1,77 +1,44 @@
 (() => {
+  const VOCAB_SCRIPT = 'spell-creator-vocabulary.js';
   const SPELL_SCRIPT = 'module-spell-creator.js';
-  const VIEW_ID = 'spells';
 
-  function switchToSpellView(){
-    document.querySelectorAll('.view').forEach(view=>view.classList.toggle('active',view.id===VIEW_ID));
-    document.querySelectorAll('.nav-button').forEach(button=>button.classList.toggle('active',button.dataset.view===VIEW_ID));
-    document.getElementById('spell-creator-root')?.scrollIntoView({block:'start'});
+  function loadScriptOnce(src){
+    if(document.querySelector(`script[src="${src}"]`)) return Promise.resolve();
+    return new Promise((resolve,reject)=>{
+      const script=document.createElement('script');
+      script.src=src;
+      script.defer=true;
+      script.onload=resolve;
+      script.onerror=()=>reject(new Error(`Could not load ${src}`));
+      document.body.appendChild(script);
+    });
   }
 
-  function addNavigation(){
-    const nav=document.querySelector('.top-nav');
-    if(nav&&!nav.querySelector('[data-view="spells"]')){
-      const button=document.createElement('button');
-      button.className='nav-button';
-      button.dataset.view=VIEW_ID;
-      button.textContent='Spell Creator';
-      button.type='button';
-      button.addEventListener('click',switchToSpellView);
-      const modulesButton=nav.querySelector('[data-view="modules"]');
-      if(modulesButton) modulesButton.insertAdjacentElement('afterend',button); else nav.appendChild(button);
+  function ensureGeneratorRoot(){
+    const generators=document.getElementById('generators');
+    if(!generators) return null;
+    let host=document.getElementById('spell-creator-generator-host');
+    if(!host){
+      host=document.createElement('section');
+      host.id='spell-creator-generator-host';
+      host.className='registry-section no-print';
+      host.innerHTML='<div class="section-heading"><p class="eyebrow">General generator</p><h2>Spell Creator</h2><p>Create spells by theme, level, alignment, class, school, competence, complexity, and moral tone. This generator is independent from module maps.</p></div><div id="spell-creator-root"></div>';
+      generators.appendChild(host);
     }
-
-    const toolGrid=document.querySelector('#tools .menu-grid');
-    if(toolGrid&&!toolGrid.querySelector('[data-view="spells"]')){
-      const card=document.createElement('article');
-      card.className='menu-card';
-      card.innerHTML='<h3>Spell Creator</h3><p>Create serious, incompetent, overengineered, saintly, sinister, and cartoonishly evil spells with class, level, alignment, school, and theme controls.</p><button class="link-button" data-view="spells" type="button">Open Spell Creator</button>';
-      card.querySelector('button').addEventListener('click',switchToSpellView);
-      toolGrid.appendChild(card);
-    }
+    return host.querySelector('#spell-creator-root');
   }
 
-  function addView(){
-    const main=document.querySelector('main');
-    if(!main||document.getElementById(VIEW_ID)) return;
-    const section=document.createElement('section');
-    section.id=VIEW_ID;
-    section.className='view';
-    section.setAttribute('aria-labelledby','spells-title');
-    section.innerHTML='<div class="hero-card no-print"><p class="eyebrow">Standalone generator module</p><h2 id="spells-title">Spell Creator</h2><p>Create and export spells independently from module maps, PDF extraction, dungeon generation, and map editing.</p></div><div id="spell-creator-root"></div>';
-    const modules=document.getElementById('modules');
-    if(modules) modules.insertAdjacentElement('afterend',section); else main.appendChild(section);
-  }
-
-  function loadSpellCreator(){
-    if(document.querySelector(`script[src="${SPELL_SCRIPT}"]`)) return;
-    const script=document.createElement('script');
-    script.src=SPELL_SCRIPT;
-    script.defer=true;
-    document.body.appendChild(script);
-  }
-
-  function relocateSpellCreator(){
-    const destination=document.getElementById('spell-creator-root');
-    const creator=document.getElementById('module-spell-creator-root');
-    if(destination&&creator&&creator.parentElement!==destination){
-      creator.classList.remove('no-print');
-      destination.appendChild(creator);
+  async function init(){
+    const root=ensureGeneratorRoot();
+    if(!root) return;
+    try{
+      await loadScriptOnce(VOCAB_SCRIPT);
+      await loadScriptOnce(SPELL_SCRIPT);
+      window.initStandaloneSpellCreator?.();
+    }catch(error){
+      root.innerHTML=`<p class="helper-note">Spell Creator failed to load: ${error.message}</p>`;
     }
   }
 
-  function init(){
-    addNavigation();
-    addView();
-    loadSpellCreator();
-    relocateSpellCreator();
-  }
-
-  const observer=new MutationObserver(()=>{
-    addNavigation();
-    addView();
-    relocateSpellCreator();
-  });
-  observer.observe(document.documentElement,{childList:true,subtree:true});
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
