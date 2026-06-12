@@ -1,0 +1,145 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Source-lore pass 6 imports potion guilds, mercenary companies, fall-prevention gear, emergency signaling equipment, and cargo standards as source-backed wiki entries.",
+  "entries": [
+    {
+      "id": "potion-guilds",
+      "title": "Potion Guilds of Kaysender",
+      "category": "Economy",
+      "summary": "Kaysender's potion economy is shaped by luxury alchemists, practical common suppliers, sustainable herbal collectives, volatile fire-brewers, and arcane elixir guilds.",
+      "body": [
+        "Potion-making in Kaysender is not a single craft but a competitive trade ecosystem. Different guilds serve very different clients: nobles and wealthy merchants, adventurers and soldiers, druids and herbalists, demolitionists and warriors, mages and explorers.",
+        "The Gilded Flask Guild is renowned for luxurious and potent potions marketed to nobility, adventurers, and wealthy merchants. Its products include Elixir of Vital Resurgence, a honeyed restorative aged under moonlight in crystal basins, and Liquid Courage, a spiced apple-flavored brew sold in lion-stamped glass flasks.",
+        "The Iron Cauldron Consortium specializes in affordable, durable potions for adventurers, soldiers, and common folk. Its Ironhide Tonic is boiled with roots, iron filings, and volcanic ash; its Fleetfoot Brew combines windblossom petals and quicksilver in a fast infusion cooled in running water.",
+        "The Verdant Circle Collective produces eco-conscious potions through natural and sustainable methods. Its Verdant Restoration Draught uses sun-dried healing herbs, spring water, and growth charms, while Beastbinder's Tonic uses berries, enchanted tree sap, and animal pheromones to aid communication with animals.",
+        "The Emberforge Alchemists are masters of volatile fire-based concoctions. Their Blazing Fury Serum blends flame orchid petals and volcanic ember powder, while Ignition Oil is made through controlled combustion and stored in shatter-on-impact flasks.",
+        "The Starlight Elixirs Guild serves mages, scholars, and explorers of the unknown. Its Astral Sight Decoction is brewed under starlight with moonflower petals and stardust, while Ethereal Drift Potion uses cloudberry nectar and powdered levitation crystals to grant temporary weightlessness and slow fall."
+      ],
+      "sections": [
+        {
+          "heading": "Legacy Mechanics Notes",
+          "sectionType": "mechanics-legacy",
+          "body": [
+            "The source text gives direct legacy mechanical effects for several potions, including healing dice, fear resistance, temporary AC increases, speed bonuses, animal handling bonuses, fire damage, aura sight ranges, and slow-fall durations.",
+            "These values are preserved as source material, but should be converted before being treated as final Hypertext d20-compatible rules text."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 60, "pageEnd": 63, "outlineTitle": "POTION GUILDS", "chunkId": "kaysender-core-pdf-2025-01-20:potion-guilds" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:potion-guilds"],
+      "tags": ["potion guilds", "alchemy", "Gilded Flask Guild", "Iron Cauldron Consortium", "Verdant Circle Collective", "Emberforge Alchemists", "Starlight Elixirs Guild"],
+      "relatedEntries": ["crimson-fog-cartel", "broken-coin-guild", "ember-guild", "aetherbound-company", "skyweaver-consortium"],
+      "relatedModules": ["crafting-gadget-creator", "shop-market-generator", "supply-water-planner"]
+    },
+    {
+      "id": "mercenary-companies",
+      "title": "Mercenary Companies of Kaysender",
+      "category": "Factions",
+      "summary": "Kaysender's mercenary companies range from disciplined ironclad soldiers and stealth hunters to aerial duelists, defensive dwarven shield-brothers, monster slayers, wandering adventurers, night wardens, and rapid-response escorts.",
+      "body": [
+        "Mercenary work is a major institution in Kaysender because trade routes are dangerous, islands drift, [[black-fleet|pirates]] raid, [[dragon-lords|Dragon Lords]] demand tribute, and governments cannot defend every convoy or frontier settlement.",
+        "The Iron Vanguard operates from Blackstone Keep and specializes in caravan protection, large-scale private security, and monster elimination, especially against giants and dragon threats. It is known for military precision, steel-plated armor, and contracts with governments and powerful merchants.",
+        "The Silver Fangs operate from hidden forests on [[messara|Messara]], specializing in high-risk bounty hunting, assassination, personal protection, scouting, survival, and ruins exploration. Their operatives are marked by silvered daggers and wolf-pelt cloaks.",
+        "The Emberhawks are a sky-focused guild based from Ember's Roost, a drifting skyship base above the trade routes. They specialize in airship protection, piracy deterrence, aerial mercenary battles, and airborne monster hunting, using modified airships and alchemical weaponry.",
+        "The Stone Shields come from the dwarven stronghold of Granite Hearth and provide noble protection, mountain caravan support, fortification, and critical-location defense. Their members are heavy infantry experts using rune-inscribed shields, armor, defensive magic, and engineering.",
+        "The Gilded Gauntlet, Black Scales, Wandering Blades, Night Wardens, and Azure Striders fill other niches: elite personal security, treasure recovery, jungle monster elimination, general adventuring work, cursed-site defense, rapid-response services, urgent delivery, and skyship escort missions."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 64, "pageEnd": 67, "outlineTitle": "Mercenaries", "chunkId": "kaysender-core-pdf-2025-01-20:mercenary-companies" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:mercenary-companies"],
+      "tags": ["mercenaries", "Iron Vanguard", "Silver Fangs", "Emberhawks", "Stone Shields", "Gilded Gauntlet", "Black Scales", "Wandering Blades", "Night Wardens", "Azure Striders"],
+      "relatedEntries": ["black-fleet", "dragon-lords", "messara", "airships", "grim-realities-of-survival"],
+      "relatedModules": ["npc-crew-generator", "job-board-generator", "faction-guild-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "fall-prevention-gear",
+      "title": "Fall-Prevention Gear and Abyss Safety",
+      "category": "Equipment",
+      "summary": "Because the world floats, Kaysender has an entire safety culture built around harnesses, balloons, charms, cloaks, levitation bands, elemental whistles, wyrm gliders, parasols, phoenix pendants, aether wings, drift boots, and rare rescue artifacts.",
+      "body": [
+        "In a world of floating islands and airships, falling is not an inconvenience; it is often death. Kaysender's air sailors, merchants, soldiers, nobles, and common folk rely on a wide range of fall-prevention devices to avoid vanishing into the abyss.",
+        "The Air Sailor's Rope Harness is standard airship equipment: a reinforced leather and canvas harness fitted to the chest, waist, and thighs, connected to a forty-foot enchanted rope lanyard secured to ship anchor points. Many fleets make harness use mandatory, especially in storm corridors or high-altitude combat.",
+        "Common and affordable options include Sky Bloon Harnesses filled with buoyant magical gas, Feather Charms imbued with brief feather-fall and flight magic, and other simple devices that slow or interrupt descent long enough to reach a platform or current.",
+        "Mid-tier gear includes Cloudcatch Cloaks, Levitation Safety Bands, Sky Whistles that summon air elementals, and Parachuting Wyrm Kits that unfold into gliding harnesses. These items are popular among merchants, adventurers, soldiers, and airship officers who can afford more reliability.",
+        "The wealthy use Featherlight Parasols, Phoenix Pendants, Aether Wings Harnesses, and Eternal Drift Boots. Rare artifacts such as Skyweaver's Spheres and Abyssal Amulets can create midair platforms or teleport users to safety, but such items are nearly impossible to replicate and sometimes dangerously unpredictable."
+      ],
+      "sections": [
+        {
+          "heading": "Cultural Significance",
+          "sectionType": "lore",
+          "body": [
+            "Air sailors often develop superstitions around harnesses and rescue devices. A lost or discarded harness is sometimes believed to invite disaster on the crew.",
+            "The quality of fall-prevention gear is also a class marker. Common people may rely on temporary charms or risky bloons, while nobles descend under magical parasols or phoenix-shaped rescue effects."
+          ]
+        },
+        {
+          "heading": "Legacy Mechanics Notes",
+          "sectionType": "mechanics-legacy",
+          "body": [
+            "The source text includes specific legacy rules for harness tethers, climbing and stability bonuses, emergency release, grappling variants, hover effects, levitation durations, glide rates, and rescue speeds.",
+            "These are preserved as source material and should be converted before being used as final Hypertext d20-compatible rules text."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 67, "pageEnd": 72, "outlineTitle": "How to stop the fall?", "chunkId": "kaysender-core-pdf-2025-01-20:fall-prevention-gear" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:fall-prevention-gear"],
+      "tags": ["fall prevention", "Air Sailor's Rope Harness", "Sky Bloon Harness", "Feather Charms", "Cloudcatch Cloaks", "Levitation Safety Band", "Phoenix Pendant", "Aether Wings", "Abyssal Amulet"],
+      "relatedEntries": ["airships", "floating-islands", "skyweaver-consortium", "aetherbound-company", "starlight-elixirs-guild"],
+      "relatedModules": ["crafting-gadget-creator", "airship-vessel-generator", "supply-water-planner"]
+    },
+    {
+      "id": "emergency-signaling-equipment",
+      "title": "Emergency Signaling Equipment",
+      "category": "Equipment",
+      "summary": "Kaysender's peoples use culturally distinct emergency signaling tools, from dwarven flare guns and elven sending stones to dragonkin fire orbs, halfling sky lanterns, orcish war horns, and luxury aether beacons.",
+      "body": [
+        "Kaysender's dangerous skies require emergency signaling tools for rescue, battle coordination, disaster response, and long-distance warning. Each people and social class has developed its own methods of calling for help.",
+        "Dwarven flare guns are compact, rune-etched firearms that launch colored magical flares for danger, medical aid, rescue, and other emergencies. Elven sending stones are palm-sized crystals that transmit short spoken messages and location to paired stones.",
+        "Gnomish safety signal reflectors use foldable mirrored panels and coded flashes of sunlight or moonlight, with enhanced versions containing mana crystals. Human signal flares are practical alchemical torches or flare sticks that produce bright light and loud whistles.",
+        "Dragonkin fire orbs create radiant explosions of light and fire visible for miles. Halfling sky lanterns float upward leaving glowing trails, serving both emergency and celebratory purposes. Orcish war horns rely on thunderous sound patterns to summon allies in dangerous or remote areas.",
+        "Wealthy users may employ Aetherflare Globes, Arcane Beacons, or Windcall Amulets that customize visual displays, relay location to nearby mages, or summon an air elemental to carry a message."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 72, "pageEnd": 75, "outlineTitle": "Emergency equipment", "chunkId": "kaysender-core-pdf-2025-01-20:emergency-signaling-equipment" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:emergency-signaling-equipment"],
+      "tags": ["emergency equipment", "flare guns", "sending stones", "signal reflectors", "fire orbs", "sky lanterns", "war horns", "Aetherflare Globes", "Arcane Beacons", "Windcall Amulets"],
+      "relatedEntries": ["world-whispering-web", "locator-glyphs", "tracker-beacon", "dwager", "fae", "gezistack", "dragon-kin", "halflings"],
+      "relatedModules": ["crafting-gadget-creator", "supply-water-planner", "job-board-generator"]
+    },
+    {
+      "id": "cargo-standards",
+      "title": "Cargo Loads and Airship Shipping Standards",
+      "category": "Economy",
+      "summary": "Kaysender air freight uses practical cargo categories such as one-ton specialty shipments, five-ton standard trade loads, and ten-ton bulk freight, each with its own risks, storage needs, and ship requirements.",
+      "body": [
+        "Airship cargo in Kaysender is carefully measured, wrapped, secured, and protected because flight balance, spoilage, theft, tampering, and storms can turn a trade run into disaster. Standard cargo categories help merchants, captains, and skyports plan shipments.",
+        "A one-ton cargo load usually consists of compact, high-value, or essential goods: luxury textiles, spices, rare metals, magical components, specialty rations, ammunition, medical supplies, magical artifacts, repair kits, or industrial tools. These loads suit fast couriers and high-value merchants.",
+        "A five-ton cargo load is a standard mid-sized trade shipment carrying bulk goods, consumables, water barrels, spirits, textiles, ores, machinery components, ship parts, mana batteries, bottled potions, or simple enchanted items. It is common among merchant fleets, skyports, and small military resupply operations.",
+        "A ten-ton cargo load is major freight for dedicated cargo ships, larger merchant vessels, military transports, or major skyport supply runs. It may include raw ore, lumber, processed metals, livestock, exotic creatures, siege weapons, armor plating, mass water reserves, fuel stores, luxury goods, and significant magical artifacts.",
+        "Cargo is wrapped in burlap sacks, heavy cloth, reinforced crates, barrels, secured chests, heavy chains, containment wards, and false-bottom anti-theft measures. Merchants verify weight before departure and on arrival because differences may reveal theft, substitution, smuggling, or sabotage."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 75, "pageEnd": 78, "outlineTitle": "Cargo", "chunkId": "kaysender-core-pdf-2025-01-20:cargo-standards" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:cargo-standards"],
+      "tags": ["cargo", "shipping", "air freight", "one-ton load", "five-ton load", "ten-ton load", "cargo wrapping", "counterfeit prevention"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "skyweaver-consortium", "ember-guild", "aetherbound-company", "broken-coin-guild", "black-fleet"],
+      "relatedModules": ["airship-vessel-generator", "shop-market-generator", "supply-water-planner"]
+    }
+  ]
+}
