@@ -1,5 +1,15 @@
 (() => {
   const INDEX_URL = 'data/modules/module-index.json';
+  const MODULE_PATCHES = {
+    'northern-watchtower-09': [
+      'data/modules/patches/northern-watchtower-09-door-pass-rooms-1-5.json',
+      'data/modules/patches/northern-watchtower-09-door-pass-rooms-6-10.json',
+      'data/modules/patches/northern-watchtower-09-door-pass-rooms-11-15.json',
+      'data/modules/patches/northern-watchtower-09-door-pass-rooms-16-20.json',
+      'data/modules/patches/northern-watchtower-09-door-pass-rooms-21-25.json',
+      'data/modules/patches/northern-watchtower-09-door-pass-rooms-26-30.json'
+    ]
+  };
   let indexData = null;
   let moduleData = null;
   let selectedId = null;
@@ -12,6 +22,19 @@
 
   function styleOnce(){if(document.getElementById('module-viewer-style'))return;const s=document.createElement('style');s.id='module-viewer-style';s.textContent=css;document.head.appendChild(s)}
   async function getJson(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(url);return r.json()}
+  async function loadModule(path){const data=await getJson(path);for(const patchPath of MODULE_PATCHES[data.id]||[]){try{applyPatch(data,await getJson(patchPath))}catch(e){console.warn('Module patch failed',patchPath,e)}}return data}
+  function applyPatch(data,patch){
+    const roomMap=new Map((data.rooms||[]).map(r=>[r.id,r]));
+    (patch.rooms||[]).forEach(r=>{roomMap.set(r.id,{...(roomMap.get(r.id)||{}),...r})});
+    data.rooms=Array.from(roomMap.values()).sort((a,b)=>(a.number||0)-(b.number||0));
+    const doorMap=new Map((data.doors||[]).map(d=>[d.id,d]));
+    (patch.doors||[]).forEach(d=>doorMap.set(d.id,d));
+    data.doors=Array.from(doorMap.values());
+    const hotMap=new Map((data.hotspots||[]).map(h=>[h.id,h]));
+    (patch.doorHotspots||[]).forEach(h=>hotMap.set(h.id,h));
+    data.hotspots=Array.from(hotMap.values());
+    data.extractionStatus={...(data.extractionStatus||{}),...(patch.extractionStatus||{})};
+  }
   function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
   async function init(){
@@ -19,14 +42,14 @@
     const root=document.getElementById('module-viewer-root');
     if(!root)return;
     root.innerHTML='<p class="helper-note">Loading module viewer…</p>';
-    try{indexData=await getJson(INDEX_URL);const first=indexData.modules?.[0];moduleData=await getJson(first.path);selectedId=moduleData.rooms?.[0]?.id;render(root)}
+    try{indexData=await getJson(INDEX_URL);const first=indexData.modules?.[0];moduleData=await loadModule(first.path);selectedId=moduleData.rooms?.[0]?.id;render(root)}
     catch(e){root.innerHTML='<p class="helper-note">Module viewer could not load. Use GitHub Pages or a local web server so JSON files can be fetched.</p>'}
   }
 
   function render(root){
     const opts=(indexData.modules||[]).map(m=>`<option value="${esc(m.path)}">${esc(m.title)}</option>`).join('');
     root.innerHTML=`<div class="module-viewer-shell"><div class="module-viewer-toolbar no-print"><label class="control-label">Module <select id="module-select">${opts}</select></label><button id="toggle-rooms" class="secondary-action" type="button">Rooms On</button><button id="toggle-doors" class="secondary-action" type="button">Doors On</button></div><div class="module-viewer-layout"><section class="module-map-card"><div class="section-heading"><p class="eyebrow">${esc(moduleData.system)}</p><h2>${esc(moduleData.title)}</h2><p>${esc(moduleData.subtitle)}</p></div><div id="module-map" class="module-map-wrap"></div></section><aside><section id="module-detail" class="module-detail-card"></section><section class="module-list-card"><h3>Rooms and Doors</h3><div id="module-list" class="module-list"></div></section></aside></div></div>`;
-    root.querySelector('#module-select').addEventListener('change',async e=>{moduleData=await getJson(e.target.value);selectedId=moduleData.rooms?.[0]?.id;render(root)});
+    root.querySelector('#module-select').addEventListener('change',async e=>{moduleData=await loadModule(e.target.value);selectedId=moduleData.rooms?.[0]?.id;render(root)});
     root.querySelector('#toggle-rooms').addEventListener('click',e=>{showRooms=!showRooms;e.target.textContent=showRooms?'Rooms On':'Rooms Off';drawHotspots(root)});
     root.querySelector('#toggle-doors').addEventListener('click',e=>{showDoors=!showDoors;e.target.textContent=showDoors?'Doors On':'Doors Off';drawHotspots(root)});
     drawMap(root);detail(root);list(root);
