@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/modules/schemas/module.schema.json",
+  "title": "HB TTRPG Extracted Module",
+  "type": "object",
+  "required": ["schemaVersion", "id", "title", "source", "general", "map", "hotspots", "rooms", "doors"],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "system": { "type": "string" },
+    "source": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "fileName": { "type": "string" },
+        "pageCount": { "type": "integer" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "general": { "type": "object", "additionalProperties": true },
+    "map": {
+      "type": "object",
+      "required": ["image", "width", "height"],
+      "properties": {
+        "image": { "type": "string" },
+        "width": { "type": "integer" },
+        "height": { "type": "integer" },
+        "grid": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "hotspots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "targetId", "box"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "enum": ["room", "door", "feature", "trap"] },
+          "targetId": { "type": "string" },
+          "label": { "type": "string" },
+          "box": {
+            "type": "object",
+            "required": ["x", "y", "w", "h"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "w": { "type": "number" },
+              "h": { "type": "number" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "number", "title", "summary"],
+        "properties": {
+          "id": { "type": "string" },
+          "number": { "type": "integer" },
+          "title": { "type": "string" },
+          "summary": { "type": "string" },
+          "features": { "type": "array", "items": { "type": "string" } },
+          "monsters": { "type": "array", "items": { "type": "string" } },
+          "treasure": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "doors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "kind"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "from": { "type": ["string", "null"] },
+          "to": { "type": ["string", "null"] },
+          "kind": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "wanderingMonsters": { "type": "array", "items": { "type": "string" } },
+    "extractionStatus": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}
