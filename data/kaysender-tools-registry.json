@@ -1,13 +1,14 @@
 {
   "setting": "Kaysender",
-  "status": "alpha tool and wiki cross-link layer",
+  "status": "alpha tool, wiki cross-link, and staged editor layer",
   "compatibilityTarget": "open d20 / Hypertext d20-compatible presentation",
   "sourceNotes": [
     "Original setting lore remains Kaysender-specific.",
     "Legacy fifth-edition mechanical phrasing must be converted before reusable public release.",
     "Rules-facing text should separate open d20 mechanics from setting prose.",
     "Alpha modules are operational campaign aids and are not final balanced rules text.",
-    "The seed wiki layer now cross-links lore entries with related tools and generators."
+    "The seed wiki layer now cross-links lore entries with related tools and generators.",
+    "Staged editors should be fully built one at a time, beginning with the Floating Island / Skyland Editor."
   ],
   "modules": [
     {
@@ -31,11 +32,11 @@
     {
       "id": "floating-island-generator",
       "section": "generators",
-      "title": "Floating Island Generator",
+      "title": "Floating Island Generator and Skyland Editor",
       "priority": 3,
-      "status": "alpha",
-      "description": "Generates drifting islands, ruins, resource outcrops, hazards, settlements, and crisis hooks.",
-      "dataFamilies": ["rollTable", "islandProfile", "hazardProfile", "resourceNode"]
+      "status": "editor-alpha",
+      "description": "Generates and edits detailed floating island profiles with stability, drift, water, food, ecology, faction, route, settlement, market, and encounter outputs.",
+      "dataFamilies": ["rollTable", "islandProfile", "hazardProfile", "resourceNode", "wikiDraft", "routeHook", "settlementHook"]
     },
     {
       "id": "world-map-route-generator",
