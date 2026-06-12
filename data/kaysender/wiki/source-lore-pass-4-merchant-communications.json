@@ -1,0 +1,359 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Source-lore pass 4 imports merchant fleets, trade organizations, magical communications, sending stone infrastructure, locator glyphs, and Tracker's Beacon as source-backed wiki entries.",
+  "entries": [
+    {
+      "id": "merchant-fleets-of-kaysender",
+      "title": "Merchant Fleets and Organizations of Kaysender",
+      "category": "Economy",
+      "summary": "Trade and communication in Kaysender rely on specialized sky fleets and organizations that brave pirates, storms, drifting routes, and abyssal danger to keep the floating islands connected.",
+      "body": [
+        "Trade and communication in Kaysender rely on vast networks of merchant fleets and specialized organizations that traverse the skies. These fleets brave pirates, storms, hostile airspace, and the ever-present dangers of the drifting abyss to keep scattered islands supplied and connected.",
+        "Each major fleet has its own identity, purpose, colors, reputation, and social role. Some map the skies, some move information, some dominate bulk trade, some carry dangerous magical goods, and others serve the wealthy or the desperate. Their movement is part of the living infrastructure of the world.",
+        "The major organizations in this source block are [[surveyors-guild|The Surveyor's Guild]], [[whisper-web|The Whisper Web]], [[skyweaver-consortium|The Skyweaver Consortium]], [[aetherbound-company|The Aetherbound Company]], [[free-flotilla|The Free Flotilla]], [[ember-guild|The Ember Guild]], and [[gilded-current|The Gilded Current]]."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 42,
+          "pageEnd": 46,
+          "outlineTitle": "Merchant Fleets and Organizations of the World of Kaysender",
+          "chunkId": "kaysender-core-pdf-2025-01-20:merchant-fleets"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:merchant-fleets"],
+      "tags": ["merchant fleets", "trade", "communication", "airships", "guilds", "organizations"],
+      "relatedEntries": ["surveyors-guild", "whisper-web", "skyweaver-consortium", "aetherbound-company", "free-flotilla", "ember-guild", "gilded-current", "black-fleet"],
+      "relatedModules": ["shop-market-generator", "airship-vessel-generator", "world-map-route-generator", "organization-operations-tracker"]
+    },
+    {
+      "id": "surveyors-guild",
+      "title": "The Surveyor's Guild",
+      "category": "Factions",
+      "summary": "The Surveyor's Guild is an ancient neutral organization that maps the shifting skies, catalogs resources, discovers new islands, and sells vital charts to those who can afford them.",
+      "body": [
+        "The Surveyor's Guild is an ancient organization tasked with mapping the ever-shifting skies, cataloging resources, and discovering new islands. Their work is essential to navigation, trade-route safety, and the prosperity of the floating islands.",
+        "Guild ships are easily recognized by their green and gold sails, symbolizing the wealth of knowledge and the promise of fertile lands. Their vessels are sleek and agile, equipped with magical instruments capable of detecting changes in air currents, locating hidden islands, and navigating chaotic skies.",
+        "Surveyor crews include cartographers, naturalists, arcanists, and airship engineers. Their captains are revered figures, chosen for their ability to make rapid decisions in uncharted skies.",
+        "The Guild is respected across territories for neutrality and dedication to exploration. However, its maps are often sold at high prices, leaving poorer settlements dependent on outdated routes, rumor, or risky local knowledge while wealthy merchants and lords gain the best charts."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 42,
+          "pageEnd": 42,
+          "outlineTitle": "1. The Surveyor’s Guild",
+          "chunkId": "kaysender-core-pdf-2025-01-20:surveyors-guild"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:surveyors-guild"],
+      "tags": ["Surveyor's Guild", "maps", "cartographers", "naturalists", "arcanists", "airship engineers", "green and gold sails"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "floating-islands", "messara", "world-whispering-web"],
+      "relatedModules": ["world-map-route-generator", "airship-vessel-generator", "npc-crew-generator", "job-board-generator"]
+    },
+    {
+      "id": "whisper-web",
+      "title": "The Whisper Web",
+      "category": "Factions",
+      "summary": "The Whisper Web is a fleet-and-device communication organization that maintains long-distance magical messages, relay towers, and emergency communication across scattered islands.",
+      "body": [
+        "The Whisper Web is a network of airships and magical devices that maintains long-distance communication across the scattered isles. Its operators deliver enchanted messages, maintain magical relay towers, and provide emergency communication services.",
+        "Whisper Web ships are slow, bulky vessels painted orange and blue to symbolize stability and the flow of information. Each ship carries magical amplifiers and communication nodes that allow it to project and receive messages across vast distances.",
+        "Because their machinery is delicate and vital, Whisper Web vessels are heavily shielded. Crews consist of message mages, engineers, relay technicians, and communication experts called Whisperers, who specialize in encoding and deciphering magical signals.",
+        "The Whisper Web is a lifeline for many settlements and fleets. It lets the scattered peoples of Kaysender stay connected, but reliance on rare magical components makes its services expensive, and delays are common during major crises."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 42,
+          "pageEnd": 43,
+          "outlineTitle": "2. The Whisper Web",
+          "chunkId": "kaysender-core-pdf-2025-01-20:whisper-web"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:whisper-web"],
+      "tags": ["Whisper Web", "communication", "Whisperers", "relay towers", "orange and blue ships", "message mages"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "world-whispering-web", "resonant-concord", "tracker-beacon"],
+      "relatedModules": ["organization-operations-tracker", "airship-vessel-generator", "job-board-generator"]
+    },
+    {
+      "id": "skyweaver-consortium",
+      "title": "The Skyweaver Consortium",
+      "category": "Factions",
+      "summary": "The Skyweaver Consortium is the largest merchant fleet in Kaysender, moving everything from luxury goods to basic supplies under red and white striped sails.",
+      "body": [
+        "The Skyweaver Consortium is the largest merchant fleet in Kaysender, handling everything from luxury goods to basic supplies. Its red and white striped sails are recognized throughout the skies as a mark of commercial dominance.",
+        "The Consortium operates vessels of many sizes, from massive freighters carrying tons of cargo to swift couriers transporting high-value items. Its ships carry defensive weapons to fend off pirates and often travel with dedicated escort ships.",
+        "Its crews include merchants, navigators, and mercenary guards. Consortium captains are often shrewd negotiators skilled in both diplomacy and combat.",
+        "The Consortium is respected but not beloved. Its focus on profit has earned it a reputation for opportunism, price gouging during shortages, and accusations of monopolizing certain trade routes."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 43,
+          "pageEnd": 44,
+          "outlineTitle": "3. The Skyweaver Consortium",
+          "chunkId": "kaysender-core-pdf-2025-01-20:skyweaver-consortium"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:skyweaver-consortium"],
+      "tags": ["Skyweaver Consortium", "merchant fleet", "red and white sails", "freighters", "couriers", "mercenary guards", "price gouging"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "black-fleet", "water-trade", "skyweaver-consortium"],
+      "relatedModules": ["shop-market-generator", "airship-vessel-generator", "organization-operations-tracker"]
+    },
+    {
+      "id": "aetherbound-company",
+      "title": "The Aetherbound Company",
+      "category": "Factions",
+      "summary": "The Aetherbound Company is an elite fleet that transports rare magical goods, artifacts, and exotic creatures in enchanted ships with containment units.",
+      "body": [
+        "The Aetherbound Company specializes in transporting rare magical goods, artifacts, and exotic creatures. Its ships carry iridescent sails that shimmer in sunlight, marking their elite status in the sky.",
+        "Aetherbound vessels are usually smaller but heavily enchanted for speed and protection, often surrounded by faint magical auras. Each ship carries specialized containment units to hold volatile magical items or dangerous creatures safely.",
+        "Crews are composed of arcane specialists, beast tamers, and alchemical engineers. Their captains are usually experienced mages with deep understanding of the strange cargo they carry.",
+        "The Aetherbound Company is seen as mysterious and elite. Its services are available only to those who can pay exorbitant fees, but its reliability is unmatched."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 44,
+          "pageEnd": 44,
+          "outlineTitle": "4. The Aetherbound Company",
+          "chunkId": "kaysender-core-pdf-2025-01-20:aetherbound-company"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:aetherbound-company"],
+      "tags": ["Aetherbound Company", "magical goods", "artifacts", "exotic creatures", "containment units", "iridescent sails"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "sky-ecology", "airships", "ember-guild"],
+      "relatedModules": ["airship-vessel-generator", "shop-market-generator", "sky-ecology-generator", "crafting-gadget-creator"]
+    },
+    {
+      "id": "free-flotilla",
+      "title": "The Free Flotilla",
+      "category": "Factions",
+      "summary": "The Free Flotilla is a loose coalition of independent merchants and traders operating outside the control of larger organizations.",
+      "body": [
+        "The Free Flotilla is a loose coalition of independent merchants and traders operating outside the control of larger organizations. Its ships are diverse in appearance, often cobbled together or decorated with unique personal markings.",
+        "Free Flotilla ships are usually small to medium-sized, prioritizing adaptability and speed over cargo capacity. Their vibrant patchwork flags symbolize independence and resourcefulness.",
+        "Crews are made up of freelancers, opportunists, adventurers, and traders seeking a living without being tied to a larger organization. The Flotilla provides cheaper services and can be a lifeline to smaller settlements, but reliability varies sharply because there is little oversight."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 44,
+          "pageEnd": 45,
+          "outlineTitle": "5. The Free Flotilla",
+          "chunkId": "kaysender-core-pdf-2025-01-20:free-flotilla"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:free-flotilla"],
+      "tags": ["Free Flotilla", "independent merchants", "patchwork flags", "freelancers", "small settlements", "adaptability"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "grim-realities-of-survival", "outer-islands", "black-fleet"],
+      "relatedModules": ["airship-vessel-generator", "shop-market-generator", "job-board-generator"]
+    },
+    {
+      "id": "ember-guild",
+      "title": "The Ember Guild",
+      "category": "Factions",
+      "summary": "The Ember Guild transports fuel, explosives, and industrial goods in black-and-orange ships built to contain dangerous cargo.",
+      "body": [
+        "The Ember Guild is a fiery organization focused on transporting fuel, explosives, and industrial goods. Its black and orange sails warn others to keep a safe distance.",
+        "Ember Guild ships are reinforced with heavy plating against accidental explosions. Their specialized cargo holds are enchanted to prevent fires and stabilize volatile materials.",
+        "Crews consist of fireproofed engineers, alchemists, and tinkerers trained to handle hazardous materials. Captains are chosen for cool-headedness and the ability to manage dangerous situations.",
+        "The Ember Guild is respected for efficiency but feared for the danger its ships pose. Many settlements clear their docks when an Ember Guild vessel arrives."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 45,
+          "pageEnd": 45,
+          "outlineTitle": "6. The Ember Guild",
+          "chunkId": "kaysender-core-pdf-2025-01-20:ember-guild"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:ember-guild"],
+      "tags": ["Ember Guild", "fuel", "explosives", "industrial goods", "alchemists", "tinkerers", "hazardous cargo"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "zarovar-kalthor", "aetherbound-company", "airships"],
+      "relatedModules": ["airship-vessel-generator", "crafting-gadget-creator", "shop-market-generator"]
+    },
+    {
+      "id": "gilded-current",
+      "title": "The Gilded Current",
+      "category": "Factions",
+      "summary": "The Gilded Current is a luxury fleet for wealthy passengers and fine goods, known for golden sails, polished hulls, defensive wards, and elite service.",
+      "body": [
+        "The Gilded Current is a luxury fleet catering to the wealthy. It transports fine goods, precious metals, and noble passengers in ships with golden sails and polished hulls that symbolize opulence.",
+        "Its ships are lavishly decorated, with private cabins, dining halls, magical entertainment, defensive wards, and elite mercenary protection.",
+        "Crews are handpicked for professionalism and discretion, ensuring comfort and safety for elite clientele. Captains are often former nobility or retired military officers.",
+        "The Gilded Current is synonymous with wealth and exclusivity. Its services are unattainable to most people, but its ships are admired from afar whenever they pass through the skies."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 45,
+          "pageEnd": 46,
+          "outlineTitle": "7. The Gilded Current",
+          "chunkId": "kaysender-core-pdf-2025-01-20:gilded-current"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:gilded-current"],
+      "tags": ["Gilded Current", "luxury fleet", "golden sails", "nobles", "fine goods", "precious metals", "mercenaries"],
+      "relatedEntries": ["merchant-fleets-of-kaysender", "valeria-valthorn", "eldrath-druun", "airships"],
+      "relatedModules": ["airship-vessel-generator", "shop-market-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "world-whispering-web",
+      "title": "The World Whispering Web",
+      "category": "Infrastructure",
+      "summary": "The World Whispering Web is Kaysender's sending-stone communication network, created by the Resonant Concord to revolutionize long-distance contact across the floating world.",
+      "body": [
+        "The World Whispering Web is a sophisticated network of interconnected sending stones that functions like a magical long-distance communication system across Kaysender. It was invented and funded by [[resonant-concord|the Resonant Concord]], an impartial network of sages, clerics, arcane engineers, and artificers seeking to streamline trade and improve emergency response.",
+        "Large immovable anchor stones called Harmonic Hubs are placed in major cities, towns, and key locations. These hubs amplify and distribute messages across vast distances. Relay Crystals bridge gaps between hubs, mounted on towers, hidden in caves, or placed in ancient ruins to channel magical energy through the network.",
+        "Individual users carry smaller personal sending stones attuned to the network. These stones are carved with unique resonance glyphs that act as magical signatures, allowing users to link stones by exchanging glyphs. Stones are powered by mana batteries recharged by sunlight, moonlight, ley lines, or Arcane Stations in settlements.",
+        "The network allows voice messages and written light-glyph projections. Off-grid stones can still reach nearby stones within limited range. High-tier stones permit emergency scrying or image transmission. The system has helped unite kingdoms and revolutionize communication, but it has also raised fears of surveillance, centralized control, hacking, sabotage, and magical espionage."
+      ],
+      "sections": [
+        {
+          "heading": "Independent Networks and Autonomy",
+          "sectionType": "lore",
+          "body": [
+            "The Resonant Concord grants Charters of Autonomy to kingdoms, guilds, temples, or other entities that wish to build independent sending stone networks. These charters allow private Harmonic Hubs, Relay Crystals, private resonance frequencies, and controlled network traffic within a jurisdiction.",
+            "Independent networks are bound by strict non-interference clauses. Jamming, redirecting, or tampering with the Whispering Web or other private networks can result in fines, dismantling, magical sanctions, revocation of charter, or permanent bans.",
+            "During disasters, invasions, warfare, or magical anomalies, independent networks must integrate with the Whispering Web under emergency protocols so public safety communication can be restored."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 46,
+          "pageEnd": 49,
+          "outlineTitle": "The World Whispering Web, or Sending Stone Network",
+          "chunkId": "kaysender-core-pdf-2025-01-20:world-whispering-web"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:world-whispering-web"],
+      "tags": ["World Whispering Web", "sending stones", "Harmonic Hubs", "Relay Crystals", "Resonant Concord", "communication", "privacy"],
+      "relatedEntries": ["resonant-concord", "whisper-web", "locator-glyphs", "tracker-beacon"],
+      "relatedModules": ["organization-operations-tracker", "job-board-generator", "crafting-gadget-creator"]
+    },
+    {
+      "id": "resonant-concord",
+      "title": "The Resonant Concord",
+      "category": "Factions",
+      "summary": "The Resonant Concord is an impartial body of sages, clerics, arcane engineers, and artificers that created and oversees the World Whispering Web.",
+      "body": [
+        "The Resonant Concord is an impartial group of sages, clerics, arcane engineers, and artificers responsible for creating the [[world-whispering-web|World Whispering Web]]. Its goal was to revolutionize communication for adventurers, merchants, scholars, and rulers across Kaysender.",
+        "The Concord maintains Harmonic Hubs, Relay Crystals, Arcane Stations, and the legal framework governing independent sending stone networks. It issues Charters of Autonomy, regulates private resonance frequencies, enforces non-interference, and monitors privacy protections.",
+        "Its authority is practical and political. While many rely on the Concord for communication and emergency response, isolationist factions and anti-surveillance groups distrust the Web's potential for control. Rumors persist of rogue groups attempting to hack, sabotage, or corrupt the network."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 46,
+          "pageEnd": 49,
+          "outlineTitle": "The Resonant Concord / Independent Networks and Organizational Autonomy",
+          "chunkId": "kaysender-core-pdf-2025-01-20:resonant-concord"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:resonant-concord"],
+      "tags": ["Resonant Concord", "sages", "clerics", "artificers", "Charter of Autonomy", "Concord Council", "communication law"],
+      "relatedEntries": ["world-whispering-web", "locator-glyphs", "tracker-beacon", "whisper-web"],
+      "relatedModules": ["organization-operations-tracker", "crafting-gadget-creator"]
+    },
+    {
+      "id": "locator-glyphs",
+      "title": "Locator Glyphs",
+      "category": "Magic Infrastructure",
+      "summary": "Locator Glyphs are a consent-based World Whispering Web feature that lets two linked sending stones point toward each other for travel, rescue, family contact, or convoy tracking.",
+      "body": [
+        "Locator Glyphs are an optional feature of the [[world-whispering-web|World Whispering Web]]. They allow two users to track one another's location when both parties agree, making them useful for adventurers, merchants, loved ones, and search-and-rescue work.",
+        "Two users exchange a special Center Glyph, linking their sending stones through a unique resonance. Once activated, the stone emits a soft glowing arrow or magical marker pointing toward the linked stone. The marker grows brighter and pulses faster as the user approaches the other stone.",
+        "The feature works within the network's coverage area and has reduced off-network range powered by the stones' internal resonance. Anti-magic fields, wards, and other interference can block the signal. Each stone can maintain only one linked locator connection at a time.",
+        "Locator Glyphs are consent-based. Either party can sever the tracking connection with a simple command, and unauthorized tampering or tracking without consent is classified as arcane trespassing under [[resonant-concord|Concord]] law."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 49,
+          "pageEnd": 50,
+          "outlineTitle": "Feature: Locator Glyphs",
+          "chunkId": "kaysender-core-pdf-2025-01-20:locator-glyphs"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:locator-glyphs"],
+      "tags": ["Locator Glyphs", "Center Glyph", "sending stones", "tracking", "consent", "arcane trespassing", "search and rescue"],
+      "relatedEntries": ["world-whispering-web", "resonant-concord", "tracker-beacon"],
+      "relatedModules": ["crafting-gadget-creator", "job-board-generator", "supply-water-planner"]
+    },
+    {
+      "id": "tracker-beacon",
+      "title": "Tracker's Beacon",
+      "category": "Magic Items",
+      "summary": "Tracker's Beacon is a military-grade sending stone variant that can attempt forced location traces through the Whispering Web, useful for espionage and warfare but slow, expensive, and detectible.",
+      "body": [
+        "Tracker's Beacon is a specialized military-grade variant of the standard sending stone. It was developed for strategic tracking in espionage, warfare, and high-priority operations, allowing an operator to attempt a forced location trace on the sending stone they are communicating with.",
+        "The device sends a magical ping through the [[world-whispering-web|Whispering Web]], attempting to triangulate the target stone's resonance signature. The user must know the target stone's runic number, remain actively connected to the stone, and work within the same network.",
+        "Tracker's Beacon is powerful but slow. Establishing a trace can take from fifteen to forty-five minutes depending on distance and interference. It is best suited for reconnaissance or long-term surveillance rather than immediate battlefield reactions.",
+        "The device has major drawbacks. Magical interference, anti-divination wards, wild magic zones, and ley-line disruptions can interfere with tracking. Skilled targets may detect the trace and scramble their resonance signature. The Beacon also includes an emergency self-destruct enchantment to prevent enemy forces from exploiting the return signal."
+      ],
+      "sections": [
+        {
+          "heading": "Legacy Mechanics Notes",
+          "sectionType": "mechanics-legacy",
+          "body": [
+            "The source version uses Arcana checks to calibrate, triangulate, and narrow a target location. It also includes time costs, partial-progress results, failure complications, optional Perception or Arcana detection by the target, increased difficulty for untrained operators, and expensive maintenance.",
+            "These details are preserved as source material and should be converted before being treated as final Hypertext d20-compatible rules text."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 50,
+          "pageEnd": 52,
+          "outlineTitle": "Military Sending Stone (Model: Tracker's Beacon)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:tracker-beacon"
+        }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:tracker-beacon"],
+      "tags": ["Tracker's Beacon", "military sending stone", "forced tracking", "espionage", "Arcana", "runic number", "self-destruct"],
+      "relatedEntries": ["world-whispering-web", "resonant-concord", "locator-glyphs", "whisper-web"],
+      "relatedModules": ["crafting-gadget-creator", "organization-operations-tracker", "job-board-generator"]
+    }
+  ]
+}
