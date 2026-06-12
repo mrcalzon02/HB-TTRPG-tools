@@ -1,0 +1,45 @@
+(() => {
+  const INDEX_URL = 'data/modules/module-index.json';
+  let indexData = null;
+  let moduleData = null;
+  let selectedId = null;
+  let showRooms = true;
+  let showDoors = true;
+
+  const css = `
+    .module-viewer-shell{display:grid;gap:18px}.module-viewer-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:14px}.module-viewer-toolbar select{background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 12px}.module-viewer-layout{display:grid;grid-template-columns:minmax(320px,1.6fr) minmax(300px,.9fr);gap:18px;align-items:start}.module-map-card,.module-detail-card,.module-list-card{border:1px solid var(--line);border-radius:22px;padding:16px;background:rgba(255,255,255,.045);box-shadow:var(--shadow)}.module-map-wrap{position:relative;max-width:980px;margin:0 auto;overflow:hidden;border-radius:14px;border:1px solid rgba(200,138,53,.35);background:#090b10}.module-map-wrap img{display:block;width:100%;height:auto}.module-hotspot{position:absolute;border:2px solid rgba(200,138,53,.95);background:rgba(200,138,53,.2);color:#fff1ca;border-radius:999px;font-weight:900;font-size:clamp(9px,1.2vw,13px);display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 14px rgba(200,138,53,.35)}.module-hotspot.room{background:rgba(64,132,255,.18);border-color:rgba(115,165,255,.95)}.module-hotspot.door{background:rgba(255,110,88,.16);border-color:rgba(255,143,122,.95);color:transparent}.module-hotspot.door:after{content:'';width:45%;height:45%;border-radius:50%;background:rgba(255,190,132,.95)}.module-hotspot.active{outline:3px solid var(--ink);z-index:5}.module-list{display:grid;gap:8px;max-height:460px;overflow:auto}.module-list button{text-align:left;border:1px solid var(--line);border-radius:12px;padding:9px 10px;background:rgba(0,0,0,.14);color:var(--ink);cursor:pointer}.module-list button.active,.module-list button:hover{border-color:var(--accent);background:rgba(200,138,53,.12)}.module-list small{display:block;color:var(--muted);margin-top:3px}.module-detail-card p,.module-detail-card li{color:var(--muted);line-height:1.55}.module-detail-card h4{color:var(--accent);margin:18px 0 8px}.module-pill-row{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 14px}.module-pill{border:1px solid var(--line);border-radius:999px;padding:5px 9px;color:var(--muted);background:rgba(0,0,0,.18);font-size:.8rem}.module-pill.secret{border-color:#8ed4ff;color:#ccefff}.module-pill.trapped{border-color:#ff8f7a;color:#ffd3ca}.module-pill.locked{border-color:#f3c76b;color:#ffe3a0}.module-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.module-stat{border:1px solid var(--line);border-radius:12px;padding:8px 10px;color:var(--muted);background:rgba(0,0,0,.18)}.module-stat strong{display:block;color:var(--accent);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em}@media(max-width:980px){.module-viewer-layout{grid-template-columns:1fr}.module-stat-grid{grid-template-columns:1fr}}
+  `;
+
+  function styleOnce(){if(document.getElementById('module-viewer-style'))return;const s=document.createElement('style');s.id='module-viewer-style';s.textContent=css;document.head.appendChild(s)}
+  async function getJson(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(url);return r.json()}
+  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+  async function init(){
+    styleOnce();
+    const root=document.getElementById('module-viewer-root');
+    if(!root)return;
+    root.innerHTML='<p class="helper-note">Loading module viewer…</p>';
+    try{indexData=await getJson(INDEX_URL);const first=indexData.modules?.[0];moduleData=await getJson(first.path);selectedId=moduleData.rooms?.[0]?.id;render(root)}
+    catch(e){root.innerHTML='<p class="helper-note">Module viewer could not load. Use GitHub Pages or a local web server so JSON files can be fetched.</p>'}
+  }
+
+  function render(root){
+    const opts=(indexData.modules||[]).map(m=>`<option value="${esc(m.path)}">${esc(m.title)}</option>`).join('');
+    root.innerHTML=`<div class="module-viewer-shell"><div class="module-viewer-toolbar no-print"><label class="control-label">Module <select id="module-select">${opts}</select></label><button id="toggle-rooms" class="secondary-action" type="button">Rooms On</button><button id="toggle-doors" class="secondary-action" type="button">Doors On</button></div><div class="module-viewer-layout"><section class="module-map-card"><div class="section-heading"><p class="eyebrow">${esc(moduleData.system)}</p><h2>${esc(moduleData.title)}</h2><p>${esc(moduleData.subtitle)}</p></div><div id="module-map" class="module-map-wrap"></div></section><aside><section id="module-detail" class="module-detail-card"></section><section class="module-list-card"><h3>Rooms and Doors</h3><div id="module-list" class="module-list"></div></section></aside></div></div>`;
+    root.querySelector('#module-select').addEventListener('change',async e=>{moduleData=await getJson(e.target.value);selectedId=moduleData.rooms?.[0]?.id;render(root)});
+    root.querySelector('#toggle-rooms').addEventListener('click',e=>{showRooms=!showRooms;e.target.textContent=showRooms?'Rooms On':'Rooms Off';drawHotspots(root)});
+    root.querySelector('#toggle-doors').addEventListener('click',e=>{showDoors=!showDoors;e.target.textContent=showDoors?'Doors On':'Doors Off';drawHotspots(root)});
+    drawMap(root);detail(root);list(root);
+  }
+
+  function drawMap(root){root.querySelector('#module-map').innerHTML=`<img src="${esc(moduleData.map.image)}" alt="${esc(moduleData.title)} map" />`;drawHotspots(root)}
+  function drawHotspots(root){const m=root.querySelector('#module-map');m.querySelectorAll('.module-hotspot').forEach(n=>n.remove());(moduleData.hotspots||[]).forEach(h=>{if(h.type==='room'&&!showRooms)return;if(h.type==='door'&&!showDoors)return;const b=document.createElement('button');b.type='button';b.className=`module-hotspot ${h.type} ${selectedId===h.targetId?'active':''}`;Object.assign(b.style,{left:h.box.x+'%',top:h.box.y+'%',width:h.box.w+'%',height:h.box.h+'%'});b.textContent=h.type==='room'?h.label:'';b.title=h.label||h.targetId;b.onclick=()=>{selectedId=h.targetId;detail(root);list(root);drawHotspots(root)};m.appendChild(b)})}
+  function list(root){const target=root.querySelector('#module-list');target.innerHTML='';[...(moduleData.rooms||[]).map(r=>({id:r.id,title:r.title,meta:r.summary,kind:'room'})),...(moduleData.doors||[]).map(d=>({id:d.id,title:d.label,meta:d.kind,kind:'door'}))].forEach(x=>{const b=document.createElement('button');b.type='button';b.className=selectedId===x.id?'active':'';b.innerHTML=`<strong>${esc(x.title)}</strong><small>${esc(x.kind)} · ${esc(x.meta||'')}</small>`;b.onclick=()=>{selectedId=x.id;detail(root);list(root);drawHotspots(root)};target.appendChild(b)})}
+  function detail(root){const t=root.querySelector('#module-detail');const room=(moduleData.rooms||[]).find(r=>r.id===selectedId);const door=(moduleData.doors||[]).find(d=>d.id===selectedId);if(room){t.innerHTML=`<p class="eyebrow">Room ${esc(room.number)}</p><h3>${esc(room.title)}</h3><p>${esc(room.summary)}</p>${section('Features',room.features)}${section('Monsters',room.monsters)}${section('Treasure',room.treasure)}${doorLinks(room.id)}`;return}if(door){t.innerHTML=`<p class="eyebrow">Door / Entry</p><h3>${esc(door.label)}</h3><div class="module-pill-row">${(door.tags||[]).map(x=>`<span class="module-pill ${esc(x)}">${esc(x)}</span>`).join('')}</div><div class="module-stat-grid"><div class="module-stat"><strong>From</strong>${esc(roomName(door.from))}</div><div class="module-stat"><strong>To</strong>${esc(roomName(door.to))}</div><div class="module-stat"><strong>Type</strong>${esc(door.kind)}</div><div class="module-stat"><strong>Notes</strong>${esc(door.notes)}</div></div>`;return}t.innerHTML=`<h3>${esc(moduleData.title)}</h3><p>${esc(moduleData.source?.notes||'')}</p>`}
+  function section(title,arr=[]){return arr.length?`<h4>${esc(title)}</h4><ul>${arr.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+  function doorLinks(roomId){const doors=(moduleData.doors||[]).filter(d=>d.from===roomId||d.to===roomId);return `<h4>Connected doors</h4><div class="module-pill-row">${doors.map(d=>`<button type="button" class="module-pill ${(d.tags||[]).join(' ')}" data-door="${esc(d.id)}">${esc(d.label)}</button>`).join('')}</div>`}
+  function roomName(id){if(!id)return'Unlinked / external';return (moduleData.rooms||[]).find(r=>r.id===id)?.title||id}
+  document.addEventListener('click',e=>{const b=e.target.closest?.('[data-door]');if(!b)return;const root=document.getElementById('module-viewer-root');selectedId=b.dataset.door;detail(root);list(root);drawHotspots(root)});
+  document.addEventListener('DOMContentLoaded',init);
+  window.initModuleViewer=init;
+})();
