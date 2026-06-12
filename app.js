@@ -377,3 +377,8 @@ if (existing) {
   calculateAll();
 }
 loadKaysenderRegistry();
+
+const kaysenderToolScript = document.createElement('script');
+kaysenderToolScript.src = 'kaysender-tools.js';
+kaysenderToolScript.defer = true;
+document.body.appendChild(kaysenderToolScript);
