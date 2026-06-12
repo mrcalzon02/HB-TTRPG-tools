@@ -84,3 +84,16 @@ Included:
 The Settlement Generator is now marked `editor-alpha` and launches a detailed Settlement / Skyport Editor. This editor exposes controls for settlement type, population scale, government, defense posture, economy, water status, food status, trade access, faction presence, social stress, civic assets, local secrets, and crisis clocks.
 
 The editor can optionally consume pasted Floating Island profile JSON to inherit island pressure. It derives survivability, trade value, defense readiness, unrest risk, adventure density, and island dependency scores. It outputs GM notes, leadership hooks, market hooks, faction hooks, defense hooks, job hooks, draft wiki-entry JSON, and full settlement profile JSON.
+
+## 2026-06-12 - Character sheet layout polish
+
+Adjusted the character sheet page before continuing staged editor development.
+
+Included:
+
+- `character-sheet-layout.css`
+- `character-sheet-title.js`
+
+The sheet is now labeled **AD and D 3.5 - Hypertext D20 compatible character sheet**. The Character Information panel is promoted to a full-width top panel, while Stats/Saves/Combat Basics, Skills, and Weapons/Armor/Equipment sit in a wider three-column row beneath it.
+
+The layout polish adds wider site width, more internal field spacing, broader Character Information columns, more readable Initiative/Speed and combat fields, safer table spacing, and horizontal overflow protection for dense weapon rows. A title migration script updates older local autosave titles from the previous D&D 3.5 wording to the new Hypertext D20-compatible label.
