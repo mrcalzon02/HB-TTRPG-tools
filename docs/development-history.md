@@ -246,3 +246,16 @@ Included:
 - `docs/wiki-source-lore-pass-7-food-agriculture.md`
 
 This pass imports Foodways of Kaysender, Tavern Fare of Kaysender, Dwarven Agriculture and Husbandry, Elven Agriculture and Husbandry, Human Agriculture and Husbandry, Gnomish Agriculture and Husbandry, Orcish Agriculture and Husbandry, Halfling Agriculture and Husbandry, and Dragonborn Agriculture and Husbandry. It preserves culture-specific crops, livestock, preservation methods, and tavern dishes as source-faithful wiki nodes for settlement, supply, market, tavern, and cargo generators.
+
+## 2026-06-12 - Wiki source-lore pass 8: water in the skies
+
+Imported the water scarcity and water logistics source block.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-8-water-in-the-skies.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- Updated `data/kaysender/wiki/source-ingestion-manifest.json`
+- `docs/wiki-source-lore-pass-8-water-in-the-skies.md`
+
+This pass imports Water in the Skies of Kaysender, Aerial Geography and Water Scarcity, Rain-Catching Apparatus, Cloud Dew Harvesting, Water Storage and Transportation, Water Trade and Water Politics, Magical Water Storage, and Weather Gear for Sky Travel. Legacy item details are preserved in mechanics-legacy notes where needed for later Hypertext d20 conversion.
