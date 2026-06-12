@@ -6,7 +6,6 @@
 
   const moduleEntryMap = {
     'kaysender-wiki': ['kaysender-overview', 'messara', 'floating-islands'],
-    'kaysender-compatibility-scanner': ['kaysender-overview'],
     'floating-island-generator': ['floating-islands', 'scarcity-loop', 'sky-ecology'],
     'world-map-route-generator': ['messara', 'floating-islands', 'surveyors-guild'],
     'settlement-generator': ['floating-islands', 'scarcity-loop', 'dragon-lords', 'water-trade', 'dunhallow-roost'],
@@ -53,7 +52,17 @@
       .wiki-hotlink:hover { color: var(--ink); }
       .wiki-related { margin-top: 18px; }
       .wiki-related h4 { color: var(--accent); }
-      @media (max-width: 900px) { .wiki-controls, .wiki-layout { grid-template-columns: 1fr; } .wiki-list { max-height: unset; } }
+      .wiki-stat-block { border: 1px solid rgba(200,138,53,0.45); border-radius: 18px; margin: 18px 0; padding: 16px; background: rgba(6,8,12,0.72); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025); }
+      .wiki-stat-block h4 { margin-top: 0; color: var(--ink); }
+      .wiki-stat-subtitle { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; margin-bottom: 10px; }
+      .wiki-stat-line { color: var(--muted); margin: 5px 0; line-height: 1.45; }
+      .wiki-stat-line strong { color: var(--ink); }
+      .wiki-stat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+      .wiki-stat-cell { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; background: rgba(255,255,255,0.035); color: var(--muted); }
+      .wiki-stat-cell strong { display: block; color: var(--accent); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+      .wiki-stat-list { margin: 6px 0 12px 18px; color: var(--muted); }
+      .wiki-stat-list li { margin-bottom: 5px; line-height: 1.45; }
+      @media (max-width: 900px) { .wiki-controls, .wiki-layout { grid-template-columns: 1fr; } .wiki-list { max-height: unset; } .wiki-stat-grid { grid-template-columns: 1fr; } }
     `;
     document.head.appendChild(style);
   }
@@ -131,7 +140,7 @@
       <div class="section-heading">
         <p class="eyebrow">Kaysender hypertext wiki</p>
         <h2>Setting Wiki Browser</h2>
-        <p>Search lore entries and jump through source-derived wiki hotlinks, related entries, and related campaign tools. Entries are loaded from the multi-pack wiki index.</p>
+        <p>Search lore entries, converted Hypertext d20 stat blocks, source-derived hotlinks, related entries, and related campaign tools. Entries are loaded from the multi-pack wiki index.</p>
       </div>
       <div class="wiki-controls">
         <input id="wiki-search" type="search" placeholder="Search Kaysender wiki entries..." />
@@ -180,7 +189,15 @@
     list.innerHTML = '';
     const filtered = entries.filter(entry => {
       const categoryOk = activeCategory === 'all' || entry.category === activeCategory;
-      const searchCorpus = [entry.title, entry.category, entry.summary, ...(entry.tags || []), ...(entry.body || []), ...sectionText(entry.sections)].join(' ').toLowerCase();
+      const searchCorpus = [
+        entry.title,
+        entry.category,
+        entry.summary,
+        ...(entry.tags || []),
+        ...(entry.body || []),
+        ...sectionText(entry.sections),
+        ...statBlockText(entry.statBlocks)
+      ].join(' ').toLowerCase();
       const searchOk = !query || searchCorpus.includes(query);
       return categoryOk && searchOk;
     });
@@ -193,7 +210,8 @@
       button.type = 'button';
       button.dataset.entryId = entry.id;
       button.className = entry.id === activeId ? 'active' : '';
-      button.innerHTML = `<strong>${escapeHtml(entry.title)}</strong><br><small>${escapeHtml(entry.category || 'Uncategorized')}</small>`;
+      const statCount = (entry.statBlocks || []).length;
+      button.innerHTML = `<strong>${escapeHtml(entry.title)}</strong><br><small>${escapeHtml(entry.category || 'Uncategorized')}${statCount ? ` · ${statCount} stat block${statCount === 1 ? '' : 's'}` : ''}</small>`;
       button.addEventListener('click', () => renderEntry(panel, entries, entry.id));
       list.appendChild(button);
     });
@@ -201,6 +219,13 @@
 
   function sectionText(sections) {
     return (sections || []).flatMap(section => [section.heading || '', ...(section.body || [])]);
+  }
+
+  function statBlockText(statBlocks) {
+    return (statBlocks || []).flatMap(stat => [
+      stat.title || '', stat.creatureType || '', stat.challengeRating || '', stat.hitDice || '', stat.hitPoints || '', stat.attack || '', stat.fullAttack || '',
+      ...(stat.specialAttacks || []), ...(stat.specialQualities || []), ...(stat.skills || []), ...(stat.feats || []), ...(stat.tactics || [])
+    ]);
   }
 
   function renderEntry(panel, entries, entryId) {
@@ -231,6 +256,8 @@
       (section.body || []).forEach(paragraph => appendParagraph(view, paragraph, entries));
     });
 
+    renderStatBlocks(view, entry.statBlocks || []);
+
     appendChips(view, 'Tags', entry.tags || [], tag => {
       const search = panel.querySelector('#wiki-search');
       if (search) search.value = tag;
@@ -244,6 +271,100 @@
     const p = document.createElement('p');
     p.innerHTML = renderInlineLinks(text || '', entries);
     parent.appendChild(p);
+  }
+
+  function renderStatBlocks(parent, statBlocks) {
+    if (!statBlocks.length) return;
+    const heading = document.createElement('h4');
+    heading.textContent = 'Hypertext d20 statistics';
+    parent.appendChild(heading);
+    statBlocks.forEach(stat => parent.appendChild(createStatBlock(stat)));
+  }
+
+  function createStatBlock(stat) {
+    const block = document.createElement('section');
+    block.className = 'wiki-stat-block';
+    const title = document.createElement('h4');
+    title.textContent = stat.title || 'Stat Block';
+    const subtitle = document.createElement('div');
+    subtitle.className = 'wiki-stat-subtitle';
+    subtitle.textContent = [stat.ruleset, stat.conversionStatus, stat.statType].filter(Boolean).join(' · ');
+    block.append(title, subtitle);
+
+    appendStatLine(block, 'Type', [stat.size, stat.creatureType, stat.alignment].filter(Boolean).join(' '));
+    appendStatLine(block, 'Challenge Rating', stat.challengeRating);
+    appendStatLine(block, 'Experience', stat.experience);
+    appendStatLine(block, 'Hit Dice', stat.hitDice);
+    appendStatLine(block, 'Hit Points', stat.hitPoints);
+    appendStatLine(block, 'Initiative', stat.initiative);
+    appendStatLine(block, 'Speed', (stat.speed || []).join('; '));
+    appendStatLine(block, 'Armor Class', armorText(stat.armorClass));
+    appendStatLine(block, 'Base Attack/Grapple', stat.baseAttackGrapple);
+    appendStatLine(block, 'Attack', stat.attack);
+    appendStatLine(block, 'Full Attack', stat.fullAttack);
+    appendStatLine(block, 'Space/Reach', stat.spaceReach);
+
+    const grid = document.createElement('div');
+    grid.className = 'wiki-stat-grid';
+    appendStatCell(grid, 'Fortitude', stat.saves?.fortitude);
+    appendStatCell(grid, 'Reflex', stat.saves?.reflex);
+    appendStatCell(grid, 'Will', stat.saves?.will);
+    appendStatCell(grid, 'Strength', stat.abilities?.strength);
+    appendStatCell(grid, 'Dexterity', stat.abilities?.dexterity);
+    appendStatCell(grid, 'Constitution', stat.abilities?.constitution);
+    appendStatCell(grid, 'Intelligence', stat.abilities?.intelligence);
+    appendStatCell(grid, 'Wisdom', stat.abilities?.wisdom);
+    appendStatCell(grid, 'Charisma', stat.abilities?.charisma);
+    block.appendChild(grid);
+
+    appendStatList(block, 'Special Attacks', stat.specialAttacks || []);
+    appendStatList(block, 'Special Qualities', stat.specialQualities || []);
+    appendStatList(block, 'Skills', stat.skills || []);
+    appendStatList(block, 'Feats', stat.feats || []);
+    appendStatLine(block, 'Environment', stat.environment);
+    appendStatLine(block, 'Organization', stat.organization);
+    appendStatLine(block, 'Treasure', stat.treasure);
+    appendStatLine(block, 'Advancement', stat.advancement);
+    appendStatLine(block, 'Level Adjustment', stat.levelAdjustment);
+    appendStatList(block, 'Tactics', stat.tactics || []);
+    appendStatList(block, 'Conversion Notes', stat.conversionNotes || []);
+    return block;
+  }
+
+  function armorText(armorClass) {
+    if (!armorClass) return '';
+    return [`AC ${armorClass.total || '?'}`, `touch ${armorClass.touch || '?'}`, `flat-footed ${armorClass.flatFooted || '?'}`, armorClass.notes || ''].filter(Boolean).join('; ');
+  }
+
+  function appendStatLine(parent, label, value) {
+    if (!value) return;
+    const line = document.createElement('div');
+    line.className = 'wiki-stat-line';
+    line.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}`;
+    parent.appendChild(line);
+  }
+
+  function appendStatCell(parent, label, value) {
+    if (!value) return;
+    const cell = document.createElement('div');
+    cell.className = 'wiki-stat-cell';
+    cell.innerHTML = `<strong>${escapeHtml(label)}</strong>${escapeHtml(value)}`;
+    parent.appendChild(cell);
+  }
+
+  function appendStatList(parent, label, values) {
+    if (!values.length) return;
+    const line = document.createElement('div');
+    line.className = 'wiki-stat-line';
+    line.innerHTML = `<strong>${escapeHtml(label)}:</strong>`;
+    const list = document.createElement('ul');
+    list.className = 'wiki-stat-list';
+    values.forEach(value => {
+      const item = document.createElement('li');
+      item.textContent = value;
+      list.appendChild(item);
+    });
+    parent.append(line, list);
   }
 
   function renderInlineLinks(text, entries) {
@@ -337,6 +458,7 @@
   }
 
   window.openKaysenderWiki = openWiki;
+  window.decorateKaysenderWikiCards = decorateCards;
 
   document.addEventListener('click', event => {
     const link = event.target.closest?.('.wiki-hotlink');
