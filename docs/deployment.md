@@ -50,7 +50,14 @@ After deployment, confirm:
 - The Kaysender dashboard loads module cards from `data/kaysender-tools-registry.json`.
 - The dashboard status line reports that the Kaysender registry loaded.
 - Alpha modules display launch buttons.
+- The **Kaysender Hypertext Wiki** card displays **Launch Alpha Wiki**.
+- Wiki chips appear on registry cards and open related wiki entries.
+- The wiki browser loads entries from `data/kaysender/wiki/entries.json`.
+- Wiki search and category filtering work.
+- Related wiki entry chips open other wiki entries.
+- Related tool/generator chips push the Kaysender dashboard search toward matching modules.
 - The following alpha tools open and produce results:
+  - Kaysender Hypertext Wiki
   - Open d20 Compatibility Scanner
   - Floating Island Generator
   - Settlement Generator
@@ -67,12 +74,15 @@ The compatibility scanner is a keyword-based early warning system. It does not r
 
 The generators currently use client-side JavaScript tables. Their outputs should be treated as quick GM-facing drafts until each generator gets a richer table file and balancing pass.
 
+The wiki entries are seed operational entries. They are not a full manuscript migration and should remain separate from final rules-facing conversion material.
+
 ## Next deployment hardening tasks
 
 - Add a visible version number to the site footer.
 - Add a static smoke-test checklist page.
 - Add richer JSON data tables under `data/kaysender/tables/`.
 - Move generator tables out of JavaScript and into JSON.
+- Move the module-to-wiki cross-link map out of JavaScript and into JSON.
 - Add import/export for generated Kaysender entries.
-- Add a wiki entry schema and first Kaysender wiki data files.
-- Add GitHub issue templates for new modules, bugs, and conversion tasks.
+- Add a richer wiki entry schema and expanded Kaysender wiki data files.
+- Add GitHub issue templates for new modules, bugs, conversion tasks, and generator table requests.
