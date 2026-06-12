@@ -21,7 +21,7 @@ Included:
 
 - `docs/kaysender-tool-extraction.md`
 - `data/kaysender-tools-registry.json`
-- Initial registry modules for wiki, conversion scanning, island generation, route generation, settlement generation, markets, airships, crafting, supply planning, factions, encounters, ecology, NPCs, jobs, tithe crises, and organization operations.
+- Initial registry modules for wiki, island generation, route generation, settlement generation, markets, airships, crafting, supply planning, factions, encounters, ecology, NPCs, jobs, tithe crises, and organization operations.
 
 ## 2026-06-12 - Kaysender dashboard and alpha tools
 
@@ -29,7 +29,6 @@ Added a Kaysender dashboard tab and registry-driven cards.
 
 Added alpha tools:
 
-- Open d20 Compatibility Scanner
 - Floating Island Generator
 - Settlement Generator
 - Shop and Market Stall Generator
@@ -132,3 +131,15 @@ Included:
 - `docs/wiki-depth-smoke-test.md`
 
 The wiki runtime now loads multiple data packs, merges entries by stable ID, searches body and section text, renders titled sections, and converts `[[entry-id|visible text]]` markup into clickable internal wiki hotlinks. The first deep pass adds expanded entries for world systems, peoples, Messaran nations, factions/economy, Dunhallow Roost, and airship core traditions.
+
+## 2026-06-12 - Remove Open d20 Compatibility Scanner
+
+Removed the Open d20 Compatibility Scanner as an active module.
+
+Included:
+
+- Removed `kaysender-compatibility-scanner` from `data/kaysender-tools-registry.json`.
+- Removed the scanner launcher, keyword rules, and scanner rendering code from `kaysender-tools.js`.
+- Removed scanner references from `README.md` and `docs/deployment.md`.
+
+Compatibility cleanup remains documented as an editorial conversion responsibility, but it is no longer exposed as a dashboard utility.
