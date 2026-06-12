@@ -1,5 +1,6 @@
 (() => {
   const FILLER_SCRIPT = 'module-content-filler.js';
+  const DUNGEON_SCRIPT = 'module-random-dungeon-generator.js';
   let injected = false;
   let fillerButtonInjected = false;
   let pendingPdfModule = null;
@@ -9,12 +10,17 @@
     return String(value || 'module').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'module';
   }
 
-  function loadFiller(){
-    if(document.querySelector(`script[src="${FILLER_SCRIPT}"]`)) return;
+  function loadScriptOnce(src){
+    if(document.querySelector(`script[src="${src}"]`)) return;
     const script = document.createElement('script');
-    script.src = FILLER_SCRIPT;
+    script.src = src;
     script.defer = true;
     document.body.appendChild(script);
+  }
+
+  function loadGenerators(){
+    loadScriptOnce(FILLER_SCRIPT);
+    loadScriptOnce(DUNGEON_SCRIPT);
   }
 
   function makeModule(detail){
@@ -108,7 +114,7 @@
   }
 
   function injectButton(){
-    loadFiller();
+    loadGenerators();
     injectFillerButton();
     if(injected) return;
     const root = document.querySelector('#module-map-editor-root');
