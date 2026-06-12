@@ -53,3 +53,18 @@ Included:
 - `docs/cross-linking-plan.md`
 
 The Kaysender Hypertext Wiki is now marked alpha. Registry cards receive wiki chips, wiki entries can link to related entries, and wiki entries can push the dashboard search toward related tools and generators.
+
+## 2026-06-12 - Sequential editor staging and Floating Island editor-alpha
+
+Added the staged editor plan and the first deeper source-derived editor.
+
+Included:
+
+- `docs/kaysender-editor-staging-plan.md`
+- `data/kaysender/editors/floating-island-editor.json`
+- `data/kaysender/schemas/floating-island-profile.schema.json`
+- `kaysender-editors.js`
+
+The Floating Island Generator is now marked `editor-alpha` and launches a detailed Skyland Editor. This editor exposes controls for island role, size, altitude, stability, drift, anchor status, terrain, water, food, resource, ecology, settlement footprint, faction pressure, cultural adaptation, route access, and threat clock.
+
+The editor derives habitability, route value, conflict pressure, collapse risk, and GM complexity scores. It outputs GM notes, settlement hooks, route hooks, market hooks, encounter hooks, draft wiki-entry JSON, and full profile JSON.
