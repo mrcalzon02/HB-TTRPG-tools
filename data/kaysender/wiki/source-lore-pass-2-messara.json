@@ -1,0 +1,552 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Source-lore pass 2 imports Messara nation details, capitals, and grim survival realities as source-backed wiki entries with hotlinks and source references.",
+  "entries": [
+    {
+      "id": "faelenor-mirathen",
+      "title": "Faelenor and Mirathen",
+      "category": "Nations",
+      "summary": "Faelenor is an ascendant republic of forests, agriculture, expanding industry, rational inquiry, civic participation, and scientific progress; Mirathen is its capital of innovation.",
+      "body": [
+        "Faelenor has grown rapidly in recent decades through agriculture, timber, furs, natural resources, and expanding industry. Its vast forests supply valuable exports, while its cities contain factories producing goods for domestic and international markets. This has positioned Faelenor as an emerging industrial power on [[messara|Messara]].",
+        "Faelenor’s culture is built around liberty, progress, intellectual freedom, and egalitarianism. The republic prizes education and rational inquiry, and its cities have become centers of intellectual exchange. Scientific study, urban culture, art, and literature thrive, although traditional customs sometimes clash with the pace of modernization.",
+        "Religiously, Faelenor is secular. The state remains neutral in religious matters, and different religious groups coexist without significant conflict. Much of the population still follows a traditional polytheistic pantheon, while newer spiritual movements gain traction among intellectual elites.",
+        "The republic is governed by an elected council and a democratic political structure with frequent elections and direct citizen participation. Its military is younger than those of older nations, but it has grown quickly in response to outside threats. Faelenor’s strength lies in fortified cities, defensive capabilities, and an army still modernizing into its full potential.",
+        "Mirathen is Faelenor’s capital and intellectual heart: a city of innovation, industry, research institutions, public debate, scientific advancement, and republican civic life. Its streets are lined with stone buildings, open-air markets, factories, research halls, and towers crowned with greenery."
+      ],
+      "sections": [
+        {
+          "heading": "Mirathen: Capital of the Republic",
+          "sectionType": "lore",
+          "body": [
+            "Mirathen is an intellectual hub focused on agriculture, engineering, and mechanical innovation. It embodies the republican spirit through elected leaders, public debates, and a belief that progress can improve society.",
+            "Notable features include the Grand Assembly where elected officials debate and create laws, the Academy of Progress where scientists and engineers develop new technologies, and the Iron Forge District where steam-powered machinery produces goods.",
+            "Mirathen faces tensions between traditionalists and reformists over the republic’s direction, as well as rising economic disparity as industrialization separates wealthy citizens from the poor."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 15,
+          "pageEnd": 25,
+          "outlineTitle": "2. Faelenor (The Republic of Faelenor)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:faelenor-mirathen"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:faelenor-mirathen"
+      ],
+      "tags": [
+        "Faelenor",
+        "Mirathen",
+        "republic",
+        "industry",
+        "science",
+        "agriculture",
+        "rationalism",
+        "democracy"
+      ],
+      "relatedEntries": [
+        "messara",
+        "valeria-valthorn",
+        "zarovar-kalthor",
+        "surveyors-guild"
+      ],
+      "relatedModules": [
+        "settlement-generator",
+        "city-district-generator",
+        "world-map-route-generator",
+        "airship-vessel-generator"
+      ]
+    },
+    {
+      "id": "teralon-vorrik",
+      "title": "Teralon and Vorrik",
+      "category": "Nations",
+      "summary": "Teralon is a declining autocratic empire built on mining, agriculture, precious gems, divine emperors, imperial nobility, clergy, old tactics, and fragile authority.",
+      "body": [
+        "Teralon has a mixed economy rooted in mining, agriculture, and the lucrative trade of precious gems and metals. Its mountain ranges contain rich mineral deposits that have driven its economy for centuries, but over-reliance on extraction has caused environmental degradation and stagnation in some regions.",
+        "The empire survives through trade with other nations, and much of its elite wealth now comes from trade agreements rather than local production. Its culture is deeply rooted in imperial memory, social stratification, and the belief that its nobility inherit the legacy of ancient empires.",
+        "Teralon is highly religious. Worship of the divine emperors takes precedence over other faiths, and the imperial family is considered divinely chosen. The emperor is treated as the earthly representative of the gods, while church and state are deeply intertwined.",
+        "The empire is ruled autocratically by a monarch with absolute power, reinforced by clergy who shape both political and military life. Its army remains large, disciplined, and well-equipped, but its strength is bound to tradition, old tactics, internal struggles, and border pressures.",
+        "Vorrik, the capital, is a grand imperial city and symbol of former glory. Ancient stone walls, imperial palaces, fortress-like architecture, priests, military commanders, and a decaying but still intimidating religious-political order define the city."
+      ],
+      "sections": [
+        {
+          "heading": "Vorrik: Imperial Capital",
+          "sectionType": "lore",
+          "body": [
+            "Vorrik’s architecture is classical, fortress-like, and imposing, reflecting Teralon’s military and religious history. Even as imperial power decays, the city remains a center of tradition and control.",
+            "Notable features include the Imperial Citadel, the Temple of the Divine Fire, and the Barracks of the First Legion. These institutions preserve the image of imperial command even as decline spreads beneath them.",
+            "Vorrik’s challenges include internal decay, outside powers watching the empire weaken, religious strife, rebellion, and growing resentment toward the emperor’s divine mandate."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 16,
+          "pageEnd": 25,
+          "outlineTitle": "3. Teralon (The Empire of Teralon)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:teralon-vorrik"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:teralon-vorrik"
+      ],
+      "tags": [
+        "Teralon",
+        "Vorrik",
+        "empire",
+        "mining",
+        "gems",
+        "divine emperors",
+        "autocracy",
+        "decline"
+      ],
+      "relatedEntries": [
+        "messara",
+        "zarovar-kalthor",
+        "imbria-solaar",
+        "valeria-valthorn"
+      ],
+      "relatedModules": [
+        "settlement-generator",
+        "city-district-generator",
+        "faction-guild-generator",
+        "airship-vessel-generator"
+      ]
+    },
+    {
+      "id": "silvalis-neylithar",
+      "title": "Silvalis and Neylithar",
+      "category": "Nations",
+      "summary": "Silvalis is a stable confederacy of independent city-states known for trade, artisans, intellectual diversity, personal liberty, guilds, and decentralized politics.",
+      "body": [
+        "Silvalis is a coalition of independent city-states united under a loose confederation. Its economy is diversified through agriculture, crafts, and trade, and it is especially known for skilled artisans producing textiles, leatherwork, pottery, and fine goods.",
+        "Though not as wealthy as the greatest empires, Silvalis thrives through merchant guilds and commercial influence. Its culture is rich and diverse because each city-state preserves its own customs, languages, and traditions while sharing respect for art, trade, negotiation, and personal liberty.",
+        "Silvalis is a hub of scholarship and intellectual pursuit. Its universities and academies attract scholars from across the continent, and the confederacy values knowledge and freedom more than strict religious devotion.",
+        "Religiously, Silvalis is polytheistic and tolerant, with temples and shrines scattered across its city-states. Faith is diverse, but religion generally holds less power than trade, personal liberty, and learning.",
+        "Government is decentralized. Councils and assemblies guide the city-states, but no strong central authority commands the entire confederacy. This autonomy lets the cities flourish independently, while also making Silvalis slow to act as a united power. Its military is small and relies on mercenaries and volunteer militias."
+      ],
+      "sections": [
+        {
+          "heading": "Neylithar: City of Free Thinkers",
+          "sectionType": "lore",
+          "body": [
+            "Neylithar is a city of intellectual and cultural diversity, divided into districts representing factions, guilds, schools of thought, and independent traditions. Its streets blend elven, dwarven, and human influences.",
+            "It is a melting pot where scholars, merchants, craftsmen, and travelers exchange ideas and goods. Notable features include the Arcane Forum, the Grand Bazaar, and the Forum of Guilds.",
+            "Neylithar’s greatest challenges come from the lack of centralized leadership and power struggles between guilds, factions, and city-states competing for influence over the confederacy’s wealth and resources."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 17,
+          "pageEnd": 26,
+          "outlineTitle": "4. Silvalis (The Confederacy of Silvalis)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:silvalis-neylithar"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:silvalis-neylithar"
+      ],
+      "tags": [
+        "Silvalis",
+        "Neylithar",
+        "confederacy",
+        "city-states",
+        "guilds",
+        "artisans",
+        "polytheism",
+        "universities"
+      ],
+      "relatedEntries": [
+        "messara",
+        "faelenor-mirathen",
+        "eldrath-druun",
+        "skyweaver-consortium"
+      ],
+      "relatedModules": [
+        "city-district-generator",
+        "shop-market-generator",
+        "faction-guild-generator",
+        "settlement-generator"
+      ]
+    },
+    {
+      "id": "vornak-grimhold",
+      "title": "Vornak and Grimhold",
+      "category": "Nations",
+      "summary": "Vornak is a declining collection of warrior tribes whose economy and culture center on raiding, hunting, natural resources, freedom, strength, shamanism, and clan leadership.",
+      "body": [
+        "Vornak is not a unified nation in the ordinary sense, but a collection of warrior tribes. Its economy is based on raiding, hunting, gathering, and control of territory rich in furs, timber, herbs, and other natural resources.",
+        "Because the Vornak are nomadic, they lack the same trade influence as more settled powers. They are proud, fiercely independent, and shaped by strength, honor, survival, martial prowess, and connection to the land.",
+        "Vornak society is organized around clan leaders and tribal traditions. Each tribe maintains its own rituals, and the people show little interest in luxury or wealth, preferring freedom and personal strength.",
+        "The Vornak believe in spirits and deities connected to nature, strength, and the hunt. Their practices are shamanistic and animistic, with spiritual leaders guiding rituals and maintaining harmony with the land.",
+        "Leadership is determined by strength and respect within each tribe. Their warriors are formidable and can mobilize quickly, striking with overwhelming force. However, their lack of infrastructure and organization has made it difficult to adapt as neighboring nations grow stronger."
+      ],
+      "sections": [
+        {
+          "heading": "Grimhold: Nomadic Stronghold",
+          "sectionType": "lore",
+          "body": [
+            "Grimhold is a nomadic capital built around a central stone fortress. It gathers tribal chieftains and their followers around a symbol of survival, dominance, and barbaric glory.",
+            "The city often shifts location by season or tribal need. Notable features include the Great Arena, the Iron Wastes where weapons and armor are forged, and the High Council Tent where tribal leaders meet.",
+            "Grimhold’s challenges include disunity, internal rebellion, and pressure from neighboring nations as the tribes weaken and outside influence grows."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 18,
+          "pageEnd": 26,
+          "outlineTitle": "5. Vornak (The Vornak Tribes)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:vornak-grimhold"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:vornak-grimhold"
+      ],
+      "tags": [
+        "Vornak",
+        "Grimhold",
+        "tribes",
+        "raiding",
+        "hunting",
+        "shamanism",
+        "animism",
+        "decline"
+      ],
+      "relatedEntries": [
+        "messara",
+        "rylune-falyris",
+        "black-fleet",
+        "sky-ecology"
+      ],
+      "relatedModules": [
+        "faction-guild-generator",
+        "encounter-generator",
+        "settlement-generator",
+        "job-board-generator"
+      ]
+    },
+    {
+      "id": "rylune-falyris",
+      "title": "Rylune and Falyris",
+      "category": "Nations",
+      "summary": "Rylune is a declining agrarian kingdom of fertile plains, livestock, grain exports, feudal duty, nature worship, harvest gods, famine risk, and noble power struggles.",
+      "body": [
+        "Rylune is an agrarian kingdom known for fertile plains and expansive agricultural output. Its economy centers on farming, livestock, and essential foodstuffs, making it a cornerstone for neighboring nations that depend on its grain and meat.",
+        "Recurring droughts and floods have disrupted production, producing periodic famines and weakening the kingdom. Rylune is reliant on trade, but the rise of industrialized nations has further strained its agricultural economy.",
+        "The culture of Rylune is ancient, rural, and deeply tied to the land. Its people revere nature and the seasons, celebrate agricultural festivals, and honor harvest gods. Family, loyalty, duty, and connection to the earth hold the kingdom together.",
+        "Religion is polytheistic and focused on nature, agricultural gods, and ancestral spirits. The monarchy maintains a close relationship with the priesthood, and lords are expected to uphold religious traditions. Younger generations show signs of growing secularism and desire for broader horizons.",
+        "Rylune is a monarchy with a strong feudal structure. The king’s power is constrained by noble families who own large territories. Its military is based largely on peasant conscripts with a small professional core of knights and elite warriors. It is competent at border defense but struggles against modern forces."
+      ],
+      "sections": [
+        {
+          "heading": "Falyris: Agrarian Capital",
+          "sectionType": "lore",
+          "body": [
+            "Falyris is a peaceful agrarian city of rolling hills, lush farmlands, wooden cottages, flower-lined streets, and rural identity. It embodies the land-centered nature of Rylune.",
+            "Despite its idyllic appearance, Falyris is marked by economic instability as food shortages and old customs collide with pressure to modernize.",
+            "Notable features include the Harvest Hall, the Royal Gardens, and the Central Market for grains, livestock, local produce, and artisan goods. Its challenges include famine, unpredictable agriculture, political infighting between old nobility and rising merchants, and debate over industrialization."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 19,
+          "pageEnd": 27,
+          "outlineTitle": "6. Rylune (The Kingdom of Rylune)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:rylune-falyris"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:rylune-falyris"
+      ],
+      "tags": [
+        "Rylune",
+        "Falyris",
+        "agrarian",
+        "feudal",
+        "famine",
+        "harvest gods",
+        "nature worship",
+        "decline"
+      ],
+      "relatedEntries": [
+        "messara",
+        "scarcity-loop",
+        "water-trade",
+        "vornak-grimhold"
+      ],
+      "relatedModules": [
+        "settlement-generator",
+        "supply-water-planner",
+        "shop-market-generator",
+        "airship-vessel-generator"
+      ]
+    },
+    {
+      "id": "zarovar-kalthor",
+      "title": "Zarovar and Kalthor",
+      "category": "Nations",
+      "summary": "Zarovar is an ascendant industrial federation of mining, steel, factories, mechanized war, technocrats, industrial moguls, pollution, inequality, and labor unrest.",
+      "body": [
+        "Zarovar is a rapidly developing industrial power based on mining, steel production, heavy industry, precious metals, coal, factories, and power plants. Mechanized production has made it one of the most economically influential nations on [[messara|Messara]].",
+        "Its success comes with pollution, environmental damage, inequality, and widening division between the industrial elite and the working class. Its cities are filled with factories, railways, smog-filled skies, harsh worker districts, and opulent elite centers.",
+        "Zarovar culture values progress, efficiency, productivity, utilitarianism, machinery, and practical application. Older rural traditions of music and literature still exist, but the cities are dominated by industrial ambition.",
+        "The government is highly secular. Many citizens follow forms of animism that recognize spirits of nature and machines, while atheism grows among urban intellectuals and factory workers. Traditional faiths persist but increasingly clash with rationalist modernity.",
+        "Zarovar is ruled by technocrats and industrial moguls who focus on innovation, economic growth, and social order. Its military invests heavily in mechanized warfare, advanced war machines, airships, and heavy artillery, making it one of the most modern armies on the continent."
+      ],
+      "sections": [
+        {
+          "heading": "Kalthor: Industrial Capital",
+          "sectionType": "lore",
+          "body": [
+            "Kalthor is a bustling industrial city of smokestacks, massive factories, sprawling slums, mining, steel, and manufacturing. Its streets are crowded with workers, merchants, and engineers competing in a society that rewards progress and hard work.",
+            "Notable features include the Foundries, where raw materials become weapons, armor, and tools; the Steel Coliseum, where gladiators and warriors fight for public amusement and working-class honor; and the Merchant’s Guildhall, where industrialists and merchants make deals.",
+            "Kalthor’s challenges include poverty, overcrowding, harsh working conditions, and rising working-class unrest demanding better pay and conditions."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 20,
+          "pageEnd": 27,
+          "outlineTitle": "7. Zarovar (The Federation of Zarovar)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:zarovar-kalthor"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:zarovar-kalthor"
+      ],
+      "tags": [
+        "Zarovar",
+        "Kalthor",
+        "industry",
+        "steel",
+        "mining",
+        "factories",
+        "labor unrest",
+        "technocracy",
+        "airships"
+      ],
+      "relatedEntries": [
+        "messara",
+        "dwager",
+        "gezistack",
+        "eldrath-druun"
+      ],
+      "relatedModules": [
+        "airship-core-builder",
+        "crafting-gadget-creator",
+        "settlement-generator",
+        "organization-operations-tracker"
+      ]
+    },
+    {
+      "id": "eldrath-druun",
+      "title": "Eldrath and Druun",
+      "category": "Nations",
+      "summary": "Eldrath is a stable trade republic of commerce, merchant guilds, diplomacy, cosmopolitan culture, banking-like guild power, naval protection, privateers, and vulnerable trade routes.",
+      "body": [
+        "Eldrath is a trade-based republic whose wealth depends on established trade routes, merchant guilds, maritime commerce, and diplomacy. Its economy remains strong, though over-dependence on trade makes it vulnerable when neighboring instability disrupts its markets.",
+        "Eldrath’s culture is cosmopolitan, shaped by centuries of interaction with foreign peoples. Its citizens value commerce, individualism, innovation, foreign languages, imported goods, art, fashion, and philosophy.",
+        "The merchant class shapes much of Eldrath’s culture and politics. This produces wealth and cultural openness, but also a society that may value profit over tradition, especially among younger generations less attached to ancestral ways.",
+        "Religiously, Eldrath is pluralistic. Pantheistic beliefs, worship of trade gods, and secular citizens coexist. The government is secular and separates religious institutions from political power, though religious groups still influence social and moral issues.",
+        "Eldrath’s government combines elected officials and appointed guild leaders. Its military relies on mercenaries, privateers, and naval forces. The navy is among the most advanced on the continent and often acts to keep trade routes open."
+      ],
+      "sections": [
+        {
+          "heading": "Druun: Commercial Capital",
+          "sectionType": "lore",
+          "body": [
+            "Druun is a thriving commercial hub built on trade, docks, warehouses, merchant routes, and cosmopolitan exchange. It welcomes travelers, adventurers, and goods from distant places.",
+            "Notable features include the Grand Dockyards, the Market of Wonders, and the Hall of Commerce where guildmasters negotiate trade policy.",
+            "Druun’s challenges include piracy, unstable trading routes, and political infighting as guilds and the ruling class struggle over growing wealth and influence."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 21,
+          "pageEnd": 28,
+          "outlineTitle": "8. Eldrath (The Union of Eldrath)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:eldrath-druun"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:eldrath-druun"
+      ],
+      "tags": [
+        "Eldrath",
+        "Druun",
+        "trade republic",
+        "merchant guilds",
+        "privateers",
+        "navy",
+        "cosmopolitan",
+        "commerce"
+      ],
+      "relatedEntries": [
+        "messara",
+        "black-fleet",
+        "silvalis-neylithar",
+        "water-trade"
+      ],
+      "relatedModules": [
+        "airship-vessel-generator",
+        "shop-market-generator",
+        "faction-guild-generator",
+        "organization-operations-tracker"
+      ]
+    },
+    {
+      "id": "imbria-solaar",
+      "title": "Imbria and Solaar",
+      "category": "Nations",
+      "summary": "Imbria is a stable but isolated theocracy centered on pilgrimage, sacred goods, relics, manuscripts, spiritual authority, divine law, priestly rule, and disciplined religious military orders.",
+      "body": [
+        "Imbria is a theocracy whose economy is weaker than many neighboring nations because religious focus limits industrial development. Even so, its position as a religious center supports steady trade in relics, manuscripts, sacred goods, offerings, and pilgrimage-related exchange.",
+        "Imbrian culture is steeped in religious tradition. Its people are devoted to the divine, and daily life revolves around ritual, worship, observance, and spiritual enlightenment. Art, literature, and music are shaped by faith, with devotional works treated as the highest cultural expression.",
+        "The nation is intensely insular. Outsiders are viewed with suspicion, and only those considered worthy may participate in many religious practices. Imbria sees itself as guardian of spiritual balance.",
+        "Religion is everything in Imbria. The High Priest is both spiritual and political leader, believed to represent the divine. Laws and social structures are based on sacred texts, and there is no separation between church and state.",
+        "The military is small but disciplined, serving as both an army and religious order. It enforces divine will and defends spiritual authority. Though smaller than other armies, it possesses powerful divine magic."
+      ],
+      "sections": [
+        {
+          "heading": "Solaar: Cathedral City",
+          "sectionType": "lore",
+          "body": [
+            "Solaar is a devout city where religion governs every aspect of life. Sacred temples, golden towers, gleaming statues, worship, and ritual define the city.",
+            "The city is built around its central temple, where priests dictate law and conduct. Its economy is based on divine offerings, sacred relics, healing potions, and religious texts.",
+            "Notable features include the Eternal Temple, the Sacred Gardens, and the Divine Market. Solaar’s challenges include isolationism, limited technology, vulnerability to outside threats, clerical corruption, and a widening divide between priests and the masses."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 22,
+          "pageEnd": 29,
+          "outlineTitle": "9. Imbria (Theocracy of Imbria)",
+          "chunkId": "kaysender-core-pdf-2025-01-20:imbria-solaar"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:imbria-solaar"
+      ],
+      "tags": [
+        "Imbria",
+        "Solaar",
+        "theocracy",
+        "pilgrimage",
+        "sacred relics",
+        "High Priest",
+        "divine magic",
+        "isolation"
+      ],
+      "relatedEntries": [
+        "messara",
+        "teralon-vorrik",
+        "water-trade"
+      ],
+      "relatedModules": [
+        "settlement-generator",
+        "job-board-generator",
+        "faction-guild-generator",
+        "airship-vessel-generator"
+      ]
+    },
+    {
+      "id": "grim-realities-of-survival",
+      "title": "The Grim Realities of Survival in Kaysender",
+      "category": "World",
+      "summary": "Kaysender's societies are shaped by food scarcity, water dependence, defended safe zones, crowded mainlands, outer-island freedom, and the constant risk that one failed harvest or route disruption can become disaster.",
+      "body": [
+        "Survival in Kaysender is an unrelenting struggle against scarcity, danger, and the unpredictable nature of the floating isles. Food, water, shelter, and security are never guaranteed, and the contrast between crowded mainlands and remote outer islands shapes nearly every society.",
+        "Food scarcity is a constant. Most floating islands are small and lack fertile soil, making large-scale farming difficult. Communities rely on carefully cultivated magical soils, hydroponic systems maintained by alchemists or druids, [[sheffels|sheffels]] and other skybeasts as livestock, and dangerous skyfishing expeditions that hunt buoyant creatures drifting through the air.",
+        "Water is equally fragile. Many islands depend on elaborate rain-catching systems with enchanted cisterns and reservoirs. Wealthier regions can use magical filtration to purify stagnant or brackish supplies, while poorer places suffer from tainted water and disease. Some islands rely entirely on imported water, making them vulnerable to piracy, conflict, and supply disruption.",
+        "Safe islands are rare and fiercely contested. Settlements build fortifications, magical wards, armed militias, and other defenses to protect against sky pirates, bandits, rival factions, and predators. In the sky, safety is never assumed; it must be built, paid for, guarded, and sometimes taken from someone else.",
+        "The major continent of [[messara|Messara]] is the most populous known region because its scale provides more stability than the drifting islands. Its cities, fortified towns, cliffside structures, slums, organized armies, trade networks, and governments make life more predictable, but crowding, class divide, disease, resource competition, and dangerous labor are constant problems.",
+        "The outer islands offer freedom at the cost of security. Settlers cultivate small plots, raise skybeasts, forage floating flora, and build tight communities far from Dragon Lords, guilds, and centralized governments. They escape hierarchy, but face predators, raiders, magical storms, unstable terrain, volcanic activity, abyssal drift, and isolation."
+      ],
+      "sections": [
+        {
+          "heading": "A World Shaped by Necessity",
+          "sectionType": "lore",
+          "body": [
+            "The divide between dense mainlands and remote outer islands reflects the central truth of Kaysender: people choose between safety and freedom, but neither comes cleanly. The majority struggle against scarcity, where a single bad harvest or disrupted route can become disaster.",
+            "Those who thrive are resourceful, ruthless, lucky, communal, or powerful enough to cling to stability. Across every corner of the skies, survival remains fragile and unpredictable, just like the islands themselves."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "pageStart": 29,
+          "pageEnd": 31,
+          "outlineTitle": "The Grim Realities of Survival in Kaysender",
+          "chunkId": "kaysender-core-pdf-2025-01-20:grim-realities-of-survival"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:grim-realities-of-survival"
+      ],
+      "tags": [
+        "survival",
+        "food scarcity",
+        "water scarcity",
+        "safe zones",
+        "outer islands",
+        "mainlands",
+        "Messara",
+        "skybeasts",
+        "poverty",
+        "security"
+      ],
+      "relatedEntries": [
+        "kaysender-overview",
+        "scarcity-loop",
+        "water-trade",
+        "floating-islands",
+        "messara",
+        "sheffels",
+        "black-fleet"
+      ],
+      "relatedModules": [
+        "supply-water-planner",
+        "settlement-generator",
+        "world-map-route-generator",
+        "job-board-generator"
+      ]
+    }
+  ]
+}
