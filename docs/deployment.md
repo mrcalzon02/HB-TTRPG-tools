@@ -56,10 +56,17 @@ After deployment, confirm:
 - Wiki search and category filtering work.
 - Related wiki entry chips open other wiki entries.
 - Related tool/generator chips push the Kaysender dashboard search toward matching modules.
+- The **Floating Island Generator and Skyland Editor** card displays **Launch Detailed Island Editor**.
+- The Floating Island editor loads controls from `data/kaysender/editors/floating-island-editor.json`.
+- The Floating Island editor can randomize controls.
+- The Floating Island editor can build a profile with habitability, route value, conflict pressure, collapse risk, and GM complexity scores.
+- The Floating Island editor displays GM notes, settlement hooks, route hooks, market hooks, and encounter hooks.
+- The Floating Island editor displays draft wiki-entry JSON and full profile JSON.
+- The Floating Island editor can copy and download profile JSON.
 - The following alpha tools open and produce results:
   - Kaysender Hypertext Wiki
   - Open d20 Compatibility Scanner
-  - Floating Island Generator
+  - Floating Island Generator and Skyland Editor
   - Settlement Generator
   - Shop and Market Stall Generator
   - Airship and Vessel Generator
@@ -76,6 +83,8 @@ The generators currently use client-side JavaScript tables. Their outputs should
 
 The wiki entries are seed operational entries. They are not a full manuscript migration and should remain separate from final rules-facing conversion material.
 
+The staged editor layer is deeper than the earlier generators, but still editor-alpha. It should be tested for usability, data completeness, and output shape before additional editors copy the pattern.
+
 ## Next deployment hardening tasks
 
 - Add a visible version number to the site footer.
@@ -85,4 +94,5 @@ The wiki entries are seed operational entries. They are not a full manuscript mi
 - Move the module-to-wiki cross-link map out of JavaScript and into JSON.
 - Add import/export for generated Kaysender entries.
 - Add a richer wiki entry schema and expanded Kaysender wiki data files.
+- Build the next staged editor: Settlement / Skyport Editor.
 - Add GitHub issue templates for new modules, bugs, conversion tasks, and generator table requests.
