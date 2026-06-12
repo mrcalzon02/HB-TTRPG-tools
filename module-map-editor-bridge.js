@@ -1,7 +1,9 @@
 (() => {
   const FILLER_SCRIPT = 'module-content-filler.js';
   let injected = false;
+  let fillerButtonInjected = false;
   let pendingPdfModule = null;
+  let generatedResults = [];
 
   function slugify(value){
     return String(value || 'module').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'module';
@@ -57,8 +59,57 @@
     if(el) el.textContent = message;
   }
 
+  function fillerStatus(message){
+    const el = document.querySelector('#mcf-status');
+    if(el) el.textContent = message;
+  }
+
+  function resultText(result){
+    const lines = [result.title, result.description];
+    if(result.mechanics) lines.push(`Mechanics: ${result.mechanics}`);
+    if(result.occupant) lines.push(`Occupancy: ${result.occupant}`);
+    if(Array.isArray(result.tags) && result.tags.length) lines.push(`Tags: ${result.tags.join(', ')}`);
+    return lines.filter(Boolean).join('\n');
+  }
+
+  function insertGeneratedIntoSelectedTile(){
+    if(!generatedResults.length){ fillerStatus('Generate content first.'); return; }
+    const notes = document.querySelector('#mme-inspector-notes');
+    const type = document.querySelector('#mme-inspector-type');
+    const apply = document.querySelector('#mme-inspector-apply');
+    if(!notes || !type || !apply){ fillerStatus('Select a tile in the map editor first.'); return; }
+
+    const text = generatedResults.map(resultText).join('\n\n---\n\n');
+    notes.value = [notes.value.trim(), text].filter(Boolean).join('\n\n');
+
+    const primary = generatedResults[0]?.type;
+    if(primary === 'room') type.value = 'label';
+    if(primary === 'door') type.value = 'door';
+    if(primary === 'trap') type.value = 'trap';
+
+    apply.click();
+    fillerStatus(`Inserted ${generatedResults.length} generated entr${generatedResults.length === 1 ? 'y' : 'ies'} into the selected tile.`);
+  }
+
+  function injectFillerButton(){
+    if(fillerButtonInjected) return;
+    const root = document.querySelector('#module-content-filler-root');
+    const actions = root?.querySelector('.module-filler-actions');
+    if(!root || !actions) return;
+
+    const button = document.createElement('button');
+    button.id = 'mcf-insert-selected-tile';
+    button.type = 'button';
+    button.textContent = 'Insert Into Selected Tile';
+    button.title = 'Append generated content to the selected tile inspector and apply an appropriate tile type.';
+    button.addEventListener('click', insertGeneratedIntoSelectedTile);
+    actions.insertBefore(button, actions.children[1] || null);
+    fillerButtonInjected = true;
+  }
+
   function injectButton(){
     loadFiller();
+    injectFillerButton();
     if(injected) return;
     const root = document.querySelector('#module-map-editor-root');
     const fileInput = document.querySelector('#mme-image');
@@ -89,6 +140,11 @@
     injected = true;
   }
 
+  document.addEventListener('module-content-filler-generated', event => {
+    generatedResults = event.detail?.results || [];
+    injectFillerButton();
+  });
+
   document.addEventListener('module-map-editor-output', event => {
     if(!pendingPdfModule) return;
     const detail = event.detail || {};
@@ -105,7 +161,10 @@
     pendingPdfModule = null;
   });
 
-  const observer = new MutationObserver(injectButton);
+  const observer = new MutationObserver(() => {
+    injectButton();
+    injectFillerButton();
+  });
   observer.observe(document.documentElement, { childList: true, subtree: true });
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injectButton);
   else injectButton();
