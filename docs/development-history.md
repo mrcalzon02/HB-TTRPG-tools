@@ -168,3 +168,16 @@ Included:
 - `scripts/extract-kaysender-outline.py`
 
 The wiki schema now supports `sourceStatus`, `sourceRefs`, and `sourceChunkIds`. The source ingestion manifest records the core PDF as a 392-page source with hundreds of outline entries and establishes that every source section should become a wiki hard-reference entry or indexed source chunk before downstream generators derive from it.
+
+## 2026-06-12 - Wiki source-lore pass 2: Messara nations and survival conditions
+
+Imported the next source-backed wiki pack.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-2-messara.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- Updated `data/kaysender/wiki/source-ingestion-manifest.json`
+- `docs/wiki-source-lore-pass-2-messara.md`
+
+This pass imports Faelenor/Mirathen, Teralon/Vorrik, Silvalis/Neylithar, Vornak/Grimhold, Rylune/Falyris, Zarovar/Kalthor, Eldrath/Druun, Imbria/Solaar, and The Grim Realities of Survival in Kaysender. Entries are marked `source-faithful`, include `sourceRefs`, carry `sourceChunkIds`, and use wiki hotlinks to connect Messara, sheffels, scarcity, water trade, Black Fleet, and related nation/city nodes.
