@@ -1,0 +1,385 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Second converted statistics pass. Adds Hypertext d20-compatible creature stat blocks for common aerial creatures that previously displayed only legacy-stat placeholders.",
+  "entries": [
+    {
+      "id": "sheffels-creature",
+      "title": "Sheffels",
+      "category": "Creatures",
+      "summary": "Large, placid herd animals drift through the skies and provide food, hide, transport, and livelihood to sky communities, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Sheffels are buoyant herd beasts adapted to open air and floating-island pasture. Their calm temperament permits domestication and aerial herding, while their bodies supply meat, milk, leather, and other necessities.",
+        "Herd movement spreads seeds and nutrients between islands, making Sheffels economically important and ecologically disruptive when overgrazed."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "The source identifies Sheffels as large placid livestock and aerial herd animals. This conversion treats them as domesticated sky megafauna suitable for herding, hauling, food production, and occasional stampede hazards."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "sheffel-statblock",
+          "title": "Sheffel",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Animal",
+          "size": "Huge",
+          "alignment": "Always neutral",
+          "challengeRating": "4",
+          "experience": "1,200",
+          "hitDice": "8d8+40",
+          "hitPoints": "76 hp",
+          "initiative": "-1",
+          "speed": ["Walk 30 ft.", "Fly 40 ft. (clumsy)", "Drift 20 ft. while grazing or resting"],
+          "armorClass": { "total": "16", "touch": "7", "flatFooted": "16", "notes": "-2 size, -1 Dex, +9 natural" },
+          "baseAttackGrapple": "+6/+24",
+          "attack": "Gore +14 melee (2d8+15)",
+          "fullAttack": "Gore +14 melee (2d8+15) and 2 hooves +9 melee (1d8+5)",
+          "spaceReach": "15 ft./10 ft.",
+          "specialAttacks": [
+            "Aerial Trample (Ex): Reflex DC 24 half; 2d8+15 bludgeoning damage to creatures in the Sheffel's path during a panic drift or herd surge. The save DC is Strength-based.",
+            "Herd Crush (Ex): If at least three Sheffels move through the same threatened area in one round, creatures that fail the Aerial Trample save are also knocked prone."
+          ],
+          "specialQualities": ["Low-light vision", "Scent", "Buoyant body", "Domesticated temperament", "Cold endurance", "Sure-footed on floating terrain"],
+          "saves": { "fortitude": "+11", "reflex": "+5", "will": "+3" },
+          "abilities": { "strength": "30", "dexterity": "8", "constitution": "21", "intelligence": "2", "wisdom": "13", "charisma": "8" },
+          "skills": ["Listen +8", "Spot +8", "Survival +5"],
+          "feats": ["Endurance", "Great Fortitude", "Improved Natural Attack (gore)"],
+          "environment": "Open skies, floating-island pasture, pastoral sky routes",
+          "organization": "Domesticated herd (6-60) or wild drift-herd (10-100)",
+          "treasure": "None",
+          "advancement": "9-12 HD (Huge), 13-18 HD (Gargantuan)",
+          "levelAdjustment": "—",
+          "tactics": ["Usually flees or drifts away from danger.", "If cornered or panicked, tramples rather than fighting intelligently.", "Herders exploit their bulk and calm nature for transport, milk, leather, and route marking."],
+          "conversionNotes": ["Converted from source role: large placid aerial herd animal and livestock foundation."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Sheffels", "chunkId": "kaysender-core-pdf-2025-01-20:sheffels-creature" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Sheffels", "chunkId": "kaysender-core-pdf-2025-01-20:sheffels-creature" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:sheffels-creature"],
+      "tags": ["Sheffels", "herd animal", "livestock", "sky ecology", "converted statistics"],
+      "relatedEntries": ["sky-ecology", "foodways-of-kaysender", "minor-sky-island-contents"],
+      "relatedModules": ["sky-ecology-generator", "supply-water-planner", "encounter-generator"]
+    },
+    {
+      "id": "skyflayer",
+      "title": "Skyflayer",
+      "category": "Creatures",
+      "summary": "A feared aerial predator uses speed, concealment, and sudden attacks to hunt travelers and flying animals, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Skyflayers are legendary ambush hunters of the open air. They exploit clouds and poor visibility, striking isolated prey before withdrawing into the sky.",
+        "Their reputation makes sightings significant to pilots, herders, and settlements whose livestock graze beyond defended airspace."
+      ],
+      "sections": [
+        { "heading": "Conversion posture", "sectionType": "conversion-note", "body": ["The source presents the Skyflayer as a fast aerial ambush predator. This conversion emphasizes high mobility, concealment, diving attacks, and hit-and-run predation."] }
+      ],
+      "statBlocks": [
+        {
+          "id": "skyflayer-statblock",
+          "title": "Skyflayer",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast",
+          "size": "Large",
+          "alignment": "Usually neutral evil",
+          "challengeRating": "8",
+          "experience": "4,800",
+          "hitDice": "10d10+40",
+          "hitPoints": "95 hp",
+          "initiative": "+8",
+          "speed": ["Fly 120 ft. (good)", "Climb 20 ft."],
+          "armorClass": { "total": "22", "touch": "13", "flatFooted": "18", "notes": "-1 size, +4 Dex, +9 natural" },
+          "baseAttackGrapple": "+10/+22",
+          "attack": "Talon +17 melee (2d6+8)",
+          "fullAttack": "2 talons +17 melee (2d6+8) and bite +15 melee (1d8+4)",
+          "spaceReach": "10 ft./10 ft.",
+          "specialAttacks": [
+            "Cloud Ambush (Ex): In cloud, fog, mist, heavy rain, smoke, or dim sky conditions, a Skyflayer may make Hide checks even while observed and gains +4d6 precision damage on its first successful attack against a target that failed to detect it.",
+            "Raking Dive (Ex): If the Skyflayer charges while flying at least 60 ft., its talon attack deals double damage and the target must succeed on a DC 23 Reflex save or be knocked prone or forced 20 ft. downward if airborne.",
+            "Snatch Prey (Ex): Against Medium or smaller targets, a Skyflayer that hits with both talons may attempt to start a grapple as a free action without provoking."
+          ],
+          "specialQualities": ["Darkvision 120 ft.", "Low-light vision", "Scent", "Cloud camouflage", "Evasion", "Wind-stable flight"],
+          "saves": { "fortitude": "+11", "reflex": "+11", "will": "+6" },
+          "abilities": { "strength": "26", "dexterity": "19", "constitution": "18", "intelligence": "4", "wisdom": "16", "charisma": "10" },
+          "skills": ["Hide +17 (+27 in clouds or fog)", "Listen +16", "Move Silently +17", "Spot +18", "Survival +10"],
+          "feats": ["Flyby Attack", "Improved Initiative", "Multiattack", "Power Attack"],
+          "environment": "Cloud banks, open sky hunting lanes, remote aerial pasture",
+          "organization": "Solitary, pair, or hunting flight (3-5)",
+          "treasure": "Incidental; scattered equipment from carried-off victims",
+          "advancement": "11-15 HD (Large), 16-24 HD (Huge)",
+          "levelAdjustment": "—",
+          "tactics": ["Uses cloud cover to choose isolated prey.", "Opens with Raking Dive, then climbs out of counterattack range.", "Avoids prolonged combat with prepared crews unless hungry or defending a nest."],
+          "conversionNotes": ["Converted from source role: feared cloud ambush predator and flying-animal hunter."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Skyflayer", "chunkId": "kaysender-core-pdf-2025-01-20:skyflayer" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Skyflayer", "chunkId": "kaysender-core-pdf-2025-01-20:skyflayer" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:skyflayer"],
+      "tags": ["Skyflayer", "predator", "ambush", "cloud hunter", "converted statistics"],
+      "relatedEntries": ["sheffels-creature", "random-aerial-encounters", "sky-ecology"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "flufftrounce",
+      "title": "Flufftrounce",
+      "category": "Creatures",
+      "summary": "A harmless winged rabbit-like creature disperses seeds and is valued as a companion and source of delicate fur, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Flufftrounces travel in small herds between islands, feeding on airborne plants, fruit, insects, and spores. Their buoyant wings and nervous bursts of speed make them difficult to catch.",
+        "Their fur leaves a drifting cloud, and their movements distribute plant life across isolated habitats."
+      ],
+      "sections": [
+        { "heading": "Conversion posture", "sectionType": "conversion-note", "body": ["The source presents the Flufftrounce as a small harmless aerial animal. This conversion makes it evasive, useful as a companion, and ecologically important rather than dangerous."] }
+      ],
+      "statBlocks": [
+        {
+          "id": "flufftrounce-statblock",
+          "title": "Flufftrounce",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Animal",
+          "size": "Tiny",
+          "alignment": "Always neutral",
+          "challengeRating": "1/4",
+          "experience": "100",
+          "hitDice": "1d8",
+          "hitPoints": "4 hp",
+          "initiative": "+4",
+          "speed": ["20 ft.", "Fly 40 ft. (good)", "Hop-glide 60 ft. when descending"],
+          "armorClass": { "total": "16", "touch": "16", "flatFooted": "12", "notes": "+2 size, +4 Dex" },
+          "baseAttackGrapple": "+0/-12",
+          "attack": "Bite +6 melee (1d3-4)",
+          "fullAttack": "Bite +6 melee (1d3-4)",
+          "spaceReach": "2-1/2 ft./0 ft.",
+          "specialAttacks": ["Startle Burst (Ex): As an immediate reaction when first damaged or grabbed, the Flufftrounce may move up to 20 ft. without provoking attacks of opportunity. This movement must end in an unoccupied square."],
+          "specialQualities": ["Low-light vision", "Scent", "Buoyant wings", "Seed-cloud fur", "Evasion"],
+          "saves": { "fortitude": "+2", "reflex": "+6", "will": "+1" },
+          "abilities": { "strength": "3", "dexterity": "19", "constitution": "10", "intelligence": "2", "wisdom": "12", "charisma": "12" },
+          "skills": ["Escape Artist +12", "Hide +20", "Jump +8", "Listen +5", "Spot +5"],
+          "feats": ["Weapon Finesse"],
+          "environment": "Aerial meadows, floating orchards, sky gardens",
+          "organization": "Pair, family (3-8), or drift-herd (9-30)",
+          "treasure": "None",
+          "advancement": "2-3 HD (Tiny)",
+          "levelAdjustment": "—",
+          "tactics": ["Flees from danger and uses Startle Burst to escape grabs.", "Often hides in aerial grasses, flower clouds, or hanging gardens.", "Domesticated specimens bond with gentle handlers."],
+          "conversionNotes": ["Converted from source role: aerial rabbit, companion, seed disperser, and delicate fur source."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Rabbit: Flufftrounce", "chunkId": "kaysender-core-pdf-2025-01-20:flufftrounce" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Rabbit: Flufftrounce", "chunkId": "kaysender-core-pdf-2025-01-20:flufftrounce" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:flufftrounce"],
+      "tags": ["Flufftrounce", "companion", "seed dispersal", "aerial rabbit", "converted statistics"],
+      "relatedEntries": ["aerial-flora", "sky-ecology"],
+      "relatedModules": ["sky-ecology-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "common-aerial-hunters",
+      "title": "Common Aerial Hunters",
+      "category": "Creatures",
+      "summary": "Aetherhawks, Storm Eagles, Sky Vultures, and Skywyrms occupy distinct predatory and scavenging niches, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Aetherhawks manipulate wind and dive at speed. Storm Eagles channel weather and electricity. Sky Vultures track blood and decay across great distances. Skywyrms are small serpentine dragons with lightning breath and unusual stealth.",
+        "Together they form a recognizable group of hazards, hunting animals, omens, and potential trained companions throughout the inhabited skies."
+      ],
+      "sections": [
+        { "heading": "Conversion posture", "sectionType": "conversion-note", "body": ["This entry gathers the common aerial hunter stat blocks for quick encounter reference. Individual lore entries for each creature remain hotlinked and searchable elsewhere in the wiki."] }
+      ],
+      "statBlocks": [
+        {
+          "id": "aetherhawk-statblock",
+          "title": "Aetherhawk",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air)",
+          "size": "Small",
+          "alignment": "Usually neutral",
+          "challengeRating": "3",
+          "experience": "800",
+          "hitDice": "4d10+8",
+          "hitPoints": "30 hp",
+          "initiative": "+4",
+          "speed": ["Fly 90 ft. (perfect)", "Hover 0 ft."],
+          "armorClass": { "total": "19", "touch": "15", "flatFooted": "15", "notes": "+1 size, +4 Dex, +4 natural" },
+          "baseAttackGrapple": "+4/+0",
+          "attack": "Talon +9 melee (1d4 plus 1d6 wind shear)",
+          "fullAttack": "2 talons +9 melee (1d4 plus 1d6 wind shear) and bite +7 melee (1d4)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Elemental Wind (Su): As a swift action, the Aetherhawk gains a +20-ft. enhancement bonus to fly speed until the end of its turn. If it moves at least 40 ft. before attacking, its first talon deals an extra 1d6 slashing wind damage.",
+            "Speed Dive (Ex): When charging downward or through a strong current, the Aetherhawk deals double talon damage and may immediately move 10 ft. after the attack without provoking from the target."
+          ],
+          "specialQualities": ["Darkvision 60 ft.", "Low-light vision", "Aerial agility", "Wind sense", "Evasion"],
+          "saves": { "fortitude": "+6", "reflex": "+8", "will": "+3" },
+          "abilities": { "strength": "10", "dexterity": "19", "constitution": "14", "intelligence": "3", "wisdom": "14", "charisma": "10" },
+          "skills": ["Hide +15", "Listen +9", "Spot +13", "Tumble +9"],
+          "feats": ["Flyby Attack", "Weapon Finesse"],
+          "environment": "Open skies, wind corridors, cloud banks",
+          "organization": "Solitary, pair, or cast (3-12)",
+          "treasure": "None",
+          "advancement": "5-8 HD (Small), 9-12 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": ["Uses Elemental Wind to dart in and out of threat range.", "Targets eyes, hands, and exposed familiars before retreating upward."],
+          "conversionNotes": ["Converted from source abilities: Elemental Wind and Speed Dive."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aetherhawk", "chunkId": "kaysender-core-pdf-2025-01-20:aetherhawk" }
+          ]
+        },
+        {
+          "id": "storm-eagle-statblock",
+          "title": "Storm Eagle",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air, Electricity)",
+          "size": "Medium",
+          "alignment": "Usually neutral",
+          "challengeRating": "6",
+          "experience": "2,400",
+          "hitDice": "8d10+24",
+          "hitPoints": "68 hp",
+          "initiative": "+5",
+          "speed": ["Fly 100 ft. (good)", "Walk 10 ft."],
+          "armorClass": { "total": "22", "touch": "15", "flatFooted": "17", "notes": "+5 Dex, +7 natural" },
+          "baseAttackGrapple": "+8/+12",
+          "attack": "Thunderous talon +13 melee (1d8+4 plus 2d6 electricity)",
+          "fullAttack": "2 thunderous talons +13 melee (1d8+4 plus 2d6 electricity) and bite +11 melee (1d6+2)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Thunderous Talons (Su): Talon hits deal an extra 2d6 electricity damage. A creature hit by both talons in the same round must succeed on a DC 17 Fortitude save or be stunned for 1 round. The save DC is Constitution-based.",
+            "Tempest Roar (Su): 60-ft. cone, once every 1d4 rounds; creatures take 4d6 sonic damage and are shaken for 1d4 rounds. A DC 17 Will save halves the damage and negates the shaken condition.",
+            "Storm Dive (Ex): During natural or magical storms, the Storm Eagle's fly speed increases by 20 ft. and its first talon attack each round deals an extra 1d6 electricity damage."
+          ],
+          "specialQualities": ["Darkvision 60 ft.", "Low-light vision", "Electricity resistance 20", "Wind channeler", "Storm sight", "Evasion"],
+          "saves": { "fortitude": "+9", "reflex": "+11", "will": "+5" },
+          "abilities": { "strength": "18", "dexterity": "21", "constitution": "16", "intelligence": "4", "wisdom": "16", "charisma": "14" },
+          "skills": ["Intimidate +10", "Listen +12", "Spot +16", "Survival +8"],
+          "feats": ["Flyby Attack", "Improved Initiative", "Multiattack"],
+          "environment": "Storm fronts, high-altitude routes, lightning-rich skylands",
+          "organization": "Solitary, pair, or stormflight (3-6)",
+          "treasure": "None",
+          "advancement": "9-12 HD (Medium), 13-18 HD (Large)",
+          "levelAdjustment": "—",
+          "tactics": ["Prefers to fight in storms where its movement and electricity are strongest.", "Uses Tempest Roar to scatter groups before stunning prey with both talons."],
+          "conversionNotes": ["Converted from source abilities: Thunderous Talons, Tempest Roar, and Wind Channeler."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Storm Eagle", "chunkId": "kaysender-core-pdf-2025-01-20:storm-eagle" }
+          ]
+        },
+        {
+          "id": "sky-vulture-statblock",
+          "title": "Sky Vulture",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Animal",
+          "size": "Medium",
+          "alignment": "Always neutral",
+          "challengeRating": "3",
+          "experience": "800",
+          "hitDice": "5d8+15",
+          "hitPoints": "37 hp",
+          "initiative": "+2",
+          "speed": ["Fly 80 ft. (average)", "Walk 10 ft."],
+          "armorClass": { "total": "17", "touch": "12", "flatFooted": "15", "notes": "+2 Dex, +5 natural" },
+          "baseAttackGrapple": "+3/+6",
+          "attack": "Mighty beak +6 melee (1d8+4)",
+          "fullAttack": "Mighty beak +6 melee (1d8+4) and 2 talons +1 melee (1d4+1)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Scavenger's Instinct (Ex): The Sky Vulture gains a +4 bonus on attack and damage rolls against creatures at half hit points or less.",
+            "Mighty Beak (Ex): The Sky Vulture's bite threatens a critical hit on a 19-20 against bleeding, dying, or diseased targets."
+          ],
+          "specialQualities": ["Low-light vision", "Scent", "Blood scent 1 mile", "Eternal circles", "Disease resistance +4"],
+          "saves": { "fortitude": "+7", "reflex": "+6", "will": "+3" },
+          "abilities": { "strength": "16", "dexterity": "15", "constitution": "16", "intelligence": "2", "wisdom": "15", "charisma": "6" },
+          "skills": ["Listen +8", "Spot +18", "Survival +10"],
+          "feats": ["Endurance", "Flyby Attack"],
+          "environment": "Open skies, battle routes, disease-stricken islands, wreck fields",
+          "organization": "Solitary, pair, or kettle (3-20)",
+          "treasure": "None",
+          "advancement": "6-8 HD (Medium), 9-15 HD (Large)",
+          "levelAdjustment": "—",
+          "tactics": ["Circles weakened targets until they are isolated or wounded.", "Flees healthy armed groups but follows damaged ships for days."],
+          "conversionNotes": ["Converted from source abilities: Scavenger's Instinct, Mighty Beak, and Eternal Circles."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Sky Vulture", "chunkId": "kaysender-core-pdf-2025-01-20:sky-vulture" }
+          ]
+        },
+        {
+          "id": "skywyrm-statblock",
+          "title": "Skywyrm",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Dragon (Air)",
+          "size": "Small",
+          "alignment": "Usually neutral or chaotic neutral",
+          "challengeRating": "5",
+          "experience": "1,600",
+          "hitDice": "7d12+14",
+          "hitPoints": "59 hp",
+          "initiative": "+7",
+          "speed": ["Fly 80 ft. (perfect)", "Climb 20 ft."],
+          "armorClass": { "total": "22", "touch": "14", "flatFooted": "19", "notes": "+1 size, +3 Dex, +8 natural" },
+          "baseAttackGrapple": "+7/+4",
+          "attack": "Bite +11 melee (1d6+1 plus 1d6 electricity)",
+          "fullAttack": "Bite +11 melee (1d6+1 plus 1d6 electricity) and tail lash +9 melee (1d4 electricity)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Draconic Wrath (Su): 30-ft. line of lightning every 1d4 rounds; 5d6 electricity damage, Reflex DC 15 half. The save DC is Constitution-based.",
+            "Serpentine Flight (Ex): A Skywyrm may make one turn of up to 180 degrees during a charge or run while flying and gains a +4 dodge bonus against attacks of opportunity provoked by aerial movement.",
+            "Feathered Cunning (Ex): In open sky, cloud, or vegetation, the Skywyrm gains a +8 racial bonus on Hide checks and may attempt Hide checks after moving if it has cover or concealment."
+          ],
+          "specialQualities": ["Darkvision 90 ft.", "Low-light vision", "Immunity to sleep and paralysis", "Electricity resistance 20", "Speak Draconic", "Aerial stealth"],
+          "saves": { "fortitude": "+7", "reflex": "+8", "will": "+7" },
+          "abilities": { "strength": "13", "dexterity": "17", "constitution": "14", "intelligence": "10", "wisdom": "14", "charisma": "13" },
+          "skills": ["Hide +22", "Listen +12", "Move Silently +13", "Spot +12", "Tumble +13"],
+          "feats": ["Flyby Attack", "Improved Initiative", "Multiattack"],
+          "environment": "Open sky, high forest canopies, cloud reefs",
+          "organization": "Solitary, pair, or sparkcoil (3-6)",
+          "treasure": "Half standard; shiny trinkets and small collected objects",
+          "advancement": "8-12 HD (Small), 13-18 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": ["Stays mobile and uses breath before entering melee.", "Uses Serpentine Flight to avoid being pinned down by archers or deck crews.", "Will flee if badly injured unless defending eggs or bonded territory."],
+          "conversionNotes": ["Converted from source abilities: Serpentine Flight, Draconic Wrath, and Feathered Cunning."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Skywyrm", "chunkId": "kaysender-core-pdf-2025-01-20:skywyrm" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aetherhawk, Storm Eagle, Sky Vulture, Skywyrm", "chunkId": "kaysender-core-pdf-2025-01-20:common-aerial-hunters" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:common-aerial-hunters", "kaysender-core-pdf-2025-01-20:aetherhawk", "kaysender-core-pdf-2025-01-20:storm-eagle", "kaysender-core-pdf-2025-01-20:sky-vulture", "kaysender-core-pdf-2025-01-20:skywyrm"],
+      "tags": ["Aetherhawk", "Storm Eagle", "Sky Vulture", "Skywyrm", "converted statistics"],
+      "relatedEntries": ["aetherhawk", "storm-eagle", "sky-vulture", "skywyrm", "random-aerial-encounters", "sky-ecology", "flufftrounce"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    }
+  ]
+}
