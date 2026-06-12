@@ -129,5 +129,6 @@ Included:
 - Updated `data/kaysender/schemas/wiki-entry.schema.json`
 - Updated `kaysender-wiki.js`
 - `docs/wiki-depth-pass-1.md`
+- `docs/wiki-depth-smoke-test.md`
 
 The wiki runtime now loads multiple data packs, merges entries by stable ID, searches body and section text, renders titled sections, and converts `[[entry-id|visible text]]` markup into clickable internal wiki hotlinks. The first deep pass adds expanded entries for world systems, peoples, Messaran nations, factions/economy, Dunhallow Roost, and airship core traditions.
