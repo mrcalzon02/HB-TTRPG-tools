@@ -11,12 +11,13 @@
     <div>
       <p class="eyebrow">Homebrew tabletop utility suite</p>
       <h1>HB TTRPG Tools</h1>
-      <p class="subtitle">Tools, utilities, and generators for homebrew D&D 3.5-compatible play.</p>
+      <p class="subtitle">Tools, utilities, generators, and open d20-compatible campaign frameworks.</p>
     </div>
     <nav class="top-nav" aria-label="Primary">
       <button class="nav-button active" data-view="tools">Tools</button>
       <button class="nav-button" data-view="utilities">Utilities</button>
       <button class="nav-button" data-view="generators">Generators</button>
+      <button class="nav-button" data-view="kaysender">Kaysender</button>
     </nav>
   </header>
 
@@ -36,17 +37,24 @@
         </article>
         <article class="menu-card">
           <h3>Generators</h3>
-          <p>Future randomizers for NPCs, encounters, treasure, settlements, factions, rumors, and homebrew assets.</p>
+          <p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, and homebrew assets.</p>
           <button class="link-button" data-view="generators">Open Generators</button>
         </article>
         <article class="menu-card">
-          <h3>Modular Pages</h3>
-          <p>Shared 2-panel, 3-panel, and 4-panel layouts for consistent tool construction.</p>
-          <div class="layout-preview" aria-hidden="true">
-            <span></span><span></span><span></span><span></span>
-          </div>
+          <h3>Kaysender Campaign Workspace</h3>
+          <p>Registry-driven planning area for the Kaysender wiki, tools, utilities, and generators.</p>
+          <button class="link-button" data-view="kaysender">Open Kaysender</button>
         </article>
       </div>
+
+      <section class="registry-section no-print" aria-labelledby="kaysender-tool-framework-title">
+        <div class="section-heading">
+          <p class="eyebrow">Kaysender tools</p>
+          <h2 id="kaysender-tool-framework-title">Crafting and Operations Frameworks</h2>
+          <p>These tool modules are loaded from the Kaysender registry JSON and kept separate from generic utilities.</p>
+        </div>
+        <div id="kaysender-tools-grid" class="module-grid" data-registry-section="tools"></div>
+      </section>
     </section>
 
     <section id="utilities" class="view" aria-labelledby="utilities-title">
@@ -184,20 +192,46 @@
           </div>
         </form>
       </div>
+
+      <section class="registry-section no-print" aria-labelledby="kaysender-utilities-title">
+        <div class="section-heading">
+          <p class="eyebrow">Kaysender utilities</p>
+          <h2 id="kaysender-utilities-title">Wiki, Compatibility, and Survival Utilities</h2>
+          <p>The Kaysender utility layer keeps open d20 conversion notes, wiki systems, and scarcity trackers organized beside the generic sheet tool.</p>
+        </div>
+        <div id="kaysender-utilities-grid" class="module-grid" data-registry-section="utilities"></div>
+      </section>
     </section>
 
     <section id="generators" class="view" aria-labelledby="generators-title">
       <div class="hero-card no-print">
         <p class="eyebrow">Generators</p>
         <h2 id="generators-title">Generator Bench</h2>
-        <p>This tab is intentionally scaffolded for expansion. NPCs, treasure, settlements, encounters, rumors, factions, and homebrew item generators can be added here as independent modules.</p>
+        <p>Registry-driven generators for Kaysender locations, ships, populations, shops, encounters, factions, crews, and campaign jobs.</p>
       </div>
-      <div class="menu-grid no-print">
-        <article class="menu-card locked"><h3>NPC Generator</h3><p>Placeholder module.</p></article>
-        <article class="menu-card locked"><h3>Treasure Generator</h3><p>Placeholder module.</p></article>
-        <article class="menu-card locked"><h3>Encounter Generator</h3><p>Placeholder module.</p></article>
-        <article class="menu-card locked"><h3>Settlement Generator</h3><p>Placeholder module.</p></article>
+      <div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div>
+    </section>
+
+    <section id="kaysender" class="view" aria-labelledby="kaysender-title">
+      <div class="hero-card no-print">
+        <p class="eyebrow">Kaysender setting workspace</p>
+        <h2 id="kaysender-title">Open d20 Conversion Dashboard</h2>
+        <p>This dashboard is the staging area for turning the Kaysender manuscript into wiki entries, generators, trackers, and open d20-compatible campaign tools. The cards below are loaded from <code>data/kaysender-tools-registry.json</code>.</p>
       </div>
+
+      <div class="registry-controls no-print" aria-label="Kaysender module controls">
+        <label class="control-label" for="kaysender-search">Search modules</label>
+        <input id="kaysender-search" class="tool-input" type="search" placeholder="Search wiki, airships, markets, settlements..." />
+        <div class="segmented-control registry-filter-group" role="group" aria-label="Registry filters">
+          <button class="layout-button registry-filter active" data-kaysender-filter="all">All</button>
+          <button class="layout-button registry-filter" data-kaysender-filter="tools">Tools</button>
+          <button class="layout-button registry-filter" data-kaysender-filter="utilities">Utilities</button>
+          <button class="layout-button registry-filter" data-kaysender-filter="generators">Generators</button>
+        </div>
+      </div>
+
+      <div id="kaysender-status" class="registry-status no-print">Loading Kaysender module registry…</div>
+      <div id="kaysender-overview-grid" class="module-grid no-print" data-registry-section="overview"></div>
     </section>
   </main>
 
