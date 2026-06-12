@@ -1,9 +1,18 @@
 (() => {
+  const FILLER_SCRIPT = 'module-content-filler.js';
   let injected = false;
   let pendingPdfModule = null;
 
   function slugify(value){
     return String(value || 'module').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'module';
+  }
+
+  function loadFiller(){
+    if(document.querySelector(`script[src="${FILLER_SCRIPT}"]`)) return;
+    const script = document.createElement('script');
+    script.src = FILLER_SCRIPT;
+    script.defer = true;
+    document.body.appendChild(script);
   }
 
   function makeModule(detail){
@@ -49,6 +58,7 @@
   }
 
   function injectButton(){
+    loadFiller();
     if(injected) return;
     const root = document.querySelector('#module-map-editor-root');
     const fileInput = document.querySelector('#mme-image');
