@@ -233,3 +233,16 @@ Included:
 - `docs/wiki-source-lore-pass-6-potions-mercenaries-gear.md`
 
 This pass imports Potion Guilds, Mercenary Companies, Fall-Prevention Gear and Abyss Safety, Emergency Signaling Equipment, and Cargo Loads and Airship Shipping Standards. Potion and fall-prevention legacy mechanics are preserved in `mechanics-legacy` sections for later Hypertext d20 conversion.
+
+## 2026-06-12 - Wiki source-lore pass 7: foodways, tavern fare, agriculture, husbandry, and preservation
+
+Imported the food and agriculture source block.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-7-food-agriculture.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- Updated `data/kaysender/wiki/source-ingestion-manifest.json`
+- `docs/wiki-source-lore-pass-7-food-agriculture.md`
+
+This pass imports Foodways of Kaysender, Tavern Fare of Kaysender, Dwarven Agriculture and Husbandry, Elven Agriculture and Husbandry, Human Agriculture and Husbandry, Gnomish Agriculture and Husbandry, Orcish Agriculture and Husbandry, Halfling Agriculture and Husbandry, and Dragonborn Agriculture and Husbandry. It preserves culture-specific crops, livestock, preservation methods, and tavern dishes as source-faithful wiki nodes for settlement, supply, market, tavern, and cargo generators.
