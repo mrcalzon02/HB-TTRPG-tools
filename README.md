@@ -8,9 +8,11 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 
 - `index.html` — main menu page, character sheet utility, and Kaysender module dashboard.
 - `styles.css` — shared visual system, responsive panel layouts, registry cards, and print/PDF styling.
-- `app.js` — tab navigation, panel layout controls, character-sheet math, autosave, import/export, print-to-PDF helpers, and Kaysender registry rendering.
-- `data/kaysender-tools-registry.json` — machine-readable registry for planned Kaysender tools, utilities, and generators.
+- `app.js` — tab navigation, panel layout controls, character-sheet math, autosave, import/export, print-to-PDF helpers, registry rendering, and loading for the alpha Kaysender tool layer.
+- `kaysender-tools.js` — alpha interactive Kaysender tools attached to the registry cards.
+- `data/kaysender-tools-registry.json` — machine-readable registry for planned and alpha Kaysender tools, utilities, and generators.
 - `docs/kaysender-tool-extraction.md` — first extraction framework for converting Kaysender into open d20-compatible campaign utilities.
+- `docs/deployment.md` — GitHub Pages deployment and smoke-test guide.
 - `.github/workflows/pages.yml` — optional GitHub Pages deployment workflow.
 
 ## First included utility
@@ -31,7 +33,7 @@ Use **Print / Save as PDF** in the browser to create a PDF copy. The sheet is de
 
 Kaysender is being migrated from a fifth-edition-framed source manuscript into an open d20 / Hypertext d20-compatible campaign operations suite.
 
-The site now includes a **Kaysender** dashboard that loads module cards from `data/kaysender-tools-registry.json`. The registry currently tracks planned modules for:
+The site includes a **Kaysender** dashboard that loads module cards from `data/kaysender-tools-registry.json`. The registry currently tracks planned and alpha modules for:
 
 - Hypertext wiki support
 - Open d20 compatibility scanning
@@ -48,6 +50,19 @@ The site now includes a **Kaysender** dashboard that loads module cards from `da
 
 The project should keep original Kaysender lore separate from rules-facing mechanical text. Any legacy fifth-edition phrasing should be converted before being treated as reusable public rules content.
 
+## Current alpha Kaysender tools
+
+The following registry cards now launch working alpha tools:
+
+- Open d20 Compatibility Scanner
+- Floating Island Generator
+- Settlement Generator
+- Shop and Market Stall Generator
+- Airship and Vessel Generator
+- Supply, Water, and Survival Planner
+
+These are campaign-operation utilities. They are not final balanced rules text and should be treated as drafting aids until the table data and conversion logic are expanded.
+
 ## Panel layout system
 
 The sheet can be switched between modular 2-panel, 3-panel, and 4-panel layouts. Future tools can reuse the same `.panel-grid`, `.panels-2`, `.panels-3`, and `.panels-4` layout classes.
@@ -56,9 +71,17 @@ The sheet can be switched between modular 2-panel, 3-panel, and 4-panel layouts.
 
 Open `index.html` through a local web server, or publish through GitHub Pages. Directly opening `index.html` from disk may block the JSON registry fetch in some browsers.
 
+```bash
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000/`.
+
 ## GitHub Pages
 
 This repo includes a Pages workflow. Once GitHub Pages is enabled for the repository using GitHub Actions as the source, pushes to `main` will publish the static site.
+
+See `docs/deployment.md` for deployment and smoke-test steps.
 
 ## Roadmap placeholders
 
