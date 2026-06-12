@@ -31,6 +31,11 @@
       "path": "data/kaysender/wiki/source-lore-pass-2-messara.json",
       "status": "source-faithful",
       "description": "Second ingestion pass importing remaining early Messara nation entries, capital/location sections, and the Grim Realities of Survival section with sourceRefs and hotlinks."
+    },
+    {
+      "path": "data/kaysender/wiki/source-lore-pass-3-pirates-dragons.json",
+      "status": "source-faithful",
+      "description": "Third ingestion pass importing Black Fleet structure, named pirate ships/leaders, Hellrod, Dragon Lord hierarchy, Wildlands, tithe culture, tithe fleet, and floating vaults."
     }
   ],
   "requiredNextPasses": [
@@ -41,32 +46,44 @@
       "status": "complete"
     },
     {
-      "id": "source-pass-3-regions-locations",
+      "id": "source-pass-3-pirates-dragons",
       "priority": 2,
+      "scope": "Import Black Fleet, Dragon Lords, Wildlands, tithe systems, named pirate ships, named Dragon Lords, and draconic power hierarchy.",
+      "status": "complete"
+    },
+    {
+      "id": "source-pass-4-merchant-fleets-organizations",
+      "priority": 3,
+      "scope": "Import merchant fleets, communication organizations, guilds, sending stone networks, and long-distance magical infrastructure.",
+      "status": "not-started"
+    },
+    {
+      "id": "source-pass-5-regions-locations",
+      "priority": 4,
       "scope": "Import named locations, settlements, capitals, skyports, ruins, wilderness areas, and regional geography from the manuscript.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-4-factions-organizations",
-      "priority": 3,
-      "scope": "Import factions, guilds, pirate groups, criminal groups, trade organizations, religious powers, and resistance groups as lore-first entries.",
+      "id": "source-pass-6-factions-organizations",
+      "priority": 5,
+      "scope": "Import remaining factions, guilds, pirate groups, criminal groups, trade organizations, religious powers, and resistance groups as lore-first entries.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-5-airships-equipment-crafting",
-      "priority": 4,
+      "id": "source-pass-7-airships-equipment-crafting",
+      "priority": 6,
       "scope": "Import airship construction, core manufacture, gear, alchemy, potions, weather equipment, tools, and market goods.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-6-creatures-diseases-ecology",
-      "priority": 5,
+      "id": "source-pass-8-creatures-diseases-ecology",
+      "priority": 7,
       "scope": "Import creatures, diseases, sky ecology, materials, valuable creature products, and environmental hazards.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-7-legacy-mechanics-index",
-      "priority": 6,
+      "id": "source-pass-9-legacy-mechanics-index",
+      "priority": 8,
       "scope": "Index legacy fifth-edition mechanical material separately as mechanics-legacy and conversion-note entries so it is preserved but not confused with Hypertext d20-compatible rules text.",
       "status": "not-started"
     }
@@ -91,6 +108,9 @@
     { "title": "8. Eldrath (The Union of Eldrath)", "pageStart": 21, "pageEnd": 22, "status": "source-faithful", "wikiEntryIds": ["eldrath-druun"] },
     { "title": "9. Imbria (The Theocracy of Imbria)", "pageStart": 22, "pageEnd": 23, "status": "source-faithful", "wikiEntryIds": ["imbria-solaar"] },
     { "title": "Messara Capitals and National City Nodes", "pageStart": 24, "pageEnd": 29, "status": "source-faithful", "wikiEntryIds": ["faelenor-mirathen", "teralon-vorrik", "silvalis-neylithar", "vornak-grimhold", "rylune-falyris", "zarovar-kalthor", "eldrath-druun", "imbria-solaar"] },
-    { "title": "The Grim Realities of Survival in Kaysender", "pageStart": 29, "pageEnd": 31, "status": "source-faithful", "wikiEntryIds": ["grim-realities-of-survival"] }
+    { "title": "The Grim Realities of Survival in Kaysender", "pageStart": 29, "pageEnd": 31, "status": "source-faithful", "wikiEntryIds": ["grim-realities-of-survival"] },
+    { "title": "The Black Fleet", "pageStart": 31, "pageEnd": 35, "status": "source-faithful", "wikiEntryIds": ["black-fleet", "verek-drakemoor", "abyss-harbinger", "shadow-gale", "emberclaw", "hellrod"] },
+    { "title": "The Dragon Lords and Their Hierarchy", "pageStart": 35, "pageEnd": 38, "status": "source-faithful", "wikiEntryIds": ["dragon-lords", "trazintharix", "skyhold-citadel", "high-lords-of-flame", "wildlands", "notable-dragon-lords"] },
+    { "title": "The Collection of Tithes in the Lands of the Dragon Lords", "pageStart": 38, "pageEnd": 41, "status": "source-faithful", "wikiEntryIds": ["dragon-tithes", "tithe-fleet", "floating-vaults"] }
   ]
 }
