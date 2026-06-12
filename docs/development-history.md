@@ -181,3 +181,29 @@ Included:
 - `docs/wiki-source-lore-pass-2-messara.md`
 
 This pass imports Faelenor/Mirathen, Teralon/Vorrik, Silvalis/Neylithar, Vornak/Grimhold, Rylune/Falyris, Zarovar/Kalthor, Eldrath/Druun, Imbria/Solaar, and The Grim Realities of Survival in Kaysender. Entries are marked `source-faithful`, include `sourceRefs`, carry `sourceChunkIds`, and use wiki hotlinks to connect Messara, sheffels, scarcity, water trade, Black Fleet, and related nation/city nodes.
+
+## 2026-06-12 - Wiki source-lore pass 3: pirates and dragon powers
+
+Imported the Black Fleet and Dragon Lord source block.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-3-pirates-dragons.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- Updated `data/kaysender/wiki/source-ingestion-manifest.json`
+- `docs/wiki-source-lore-pass-3-pirates-dragons.md`
+
+This pass imports the Black Fleet, Verek Drakemoor, Abyss Harbinger, Shadow Gale, Emberclaw, Spire the Hellrod, Dragon Lords, Trazintharix, Skyhold Citadel, High Lords of Flame, Wildlands, notable Dragon Lords, dragon tithes, Tithe Fleet, and Floating Vaults as source-faithful wiki nodes with source references and hotlinks.
+
+## 2026-06-12 - Wiki source-lore pass 4: merchant fleets and communication networks
+
+Imported the merchant and communication infrastructure source block.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-4-merchant-communications.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- Updated `data/kaysender/wiki/source-ingestion-manifest.json`
+- `docs/wiki-source-lore-pass-4-merchant-communications.md`
+
+This pass imports Merchant Fleets and Organizations of Kaysender, Surveyor's Guild, Whisper Web, Skyweaver Consortium, Aetherbound Company, Free Flotilla, Ember Guild, Gilded Current, World Whispering Web, Resonant Concord, Locator Glyphs, and Tracker's Beacon. Tracker's Beacon preserves source mechanics as a `mechanics-legacy` section for later Hypertext d20 conversion.
