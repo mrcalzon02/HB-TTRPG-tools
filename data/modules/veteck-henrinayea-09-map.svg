@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="634" viewBox="0 0 720 634" role="img" aria-labelledby="title desc">
+<title id="title">Veteck Henrina'yea 09 map placeholder</title>
+<desc id="desc">First-pass placeholder for the huge 73 by 65 ice dungeon map. Room and door hotspot calibration is queued for the next pass.</desc>
+<rect width="720" height="634" fill="#05070b"/>
+<rect x="24" y="24" width="672" height="586" rx="18" fill="#10131a" stroke="#c88a35" stroke-width="3"/>
+<text x="360" y="82" text-anchor="middle" font-family="serif" font-size="28" fill="#f3d6a3" font-weight="700">Veteck Henrina&apos;yea 09</text>
+<text x="360" y="118" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#d9c9a3">Level 9 · Huge 73 × 65 · Hewn Ice Dungeon</text>
+<g fill="none" stroke="#d7d7d7" stroke-width="1" opacity="0.18">
+  <path d="M60 160h600M60 220h600M60 280h600M60 340h600M60 400h600M60 460h600M60 520h600"/>
+  <path d="M120 140v420M180 140v420M240 140v420M300 140v420M360 140v420M420 140v420M480 140v420M540 140v420M600 140v420"/>
+</g>
+<g fill="#ffffff" opacity="0.92">
+  <rect x="110" y="165" width="120" height="74"/><rect x="280" y="145" width="92" height="130"/><circle cx="470" cy="210" r="52"/>
+  <rect x="510" y="285" width="105" height="85"/><polygon points="120,340 210,300 270,350 220,430 130,420"/>
+  <rect x="300" y="335" width="150" height="115"/><circle cx="540" cy="470" r="58"/><rect x="160" y="485" width="205" height="52"/>
+</g>
+<text x="360" y="585" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#f1d9ac">Map image extraction/calibration pass pending · 65 room records loaded</text>
+</svg>
