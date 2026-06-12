@@ -36,6 +36,11 @@
       "path": "data/kaysender/wiki/source-lore-pass-3-pirates-dragons.json",
       "status": "source-faithful",
       "description": "Third ingestion pass importing Black Fleet structure, named pirate ships/leaders, Hellrod, Dragon Lord hierarchy, Wildlands, tithe culture, tithe fleet, and floating vaults."
+    },
+    {
+      "path": "data/kaysender/wiki/source-lore-pass-4-merchant-communications.json",
+      "status": "source-faithful",
+      "description": "Fourth ingestion pass importing merchant fleets, trade organizations, Whisper Web, World Whispering Web, Resonant Concord, Locator Glyphs, and Tracker's Beacon."
     }
   ],
   "requiredNextPasses": [
@@ -55,35 +60,41 @@
       "id": "source-pass-4-merchant-fleets-organizations",
       "priority": 3,
       "scope": "Import merchant fleets, communication organizations, guilds, sending stone networks, and long-distance magical infrastructure.",
+      "status": "complete"
+    },
+    {
+      "id": "source-pass-5-criminal-trade-slavery",
+      "priority": 4,
+      "scope": "Import unsavory merchant guilds, slaver organizations, criminal trade groups, indentured servitude, slavery, resistance, and abolition material.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-5-regions-locations",
-      "priority": 4,
+      "id": "source-pass-6-potion-guilds-mercenaries-gear",
+      "priority": 5,
+      "scope": "Import potion guilds, mercenary organizations, fall-prevention gear, air sailor equipment, and weather/survival equipment.",
+      "status": "not-started"
+    },
+    {
+      "id": "source-pass-7-regions-locations",
+      "priority": 6,
       "scope": "Import named locations, settlements, capitals, skyports, ruins, wilderness areas, and regional geography from the manuscript.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-6-factions-organizations",
-      "priority": 5,
-      "scope": "Import remaining factions, guilds, pirate groups, criminal groups, trade organizations, religious powers, and resistance groups as lore-first entries.",
-      "status": "not-started"
-    },
-    {
-      "id": "source-pass-7-airships-equipment-crafting",
-      "priority": 6,
+      "id": "source-pass-8-airships-equipment-crafting",
+      "priority": 7,
       "scope": "Import airship construction, core manufacture, gear, alchemy, potions, weather equipment, tools, and market goods.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-8-creatures-diseases-ecology",
-      "priority": 7,
+      "id": "source-pass-9-creatures-diseases-ecology",
+      "priority": 8,
       "scope": "Import creatures, diseases, sky ecology, materials, valuable creature products, and environmental hazards.",
       "status": "not-started"
     },
     {
-      "id": "source-pass-9-legacy-mechanics-index",
-      "priority": 8,
+      "id": "source-pass-10-legacy-mechanics-index",
+      "priority": 9,
       "scope": "Index legacy fifth-edition mechanical material separately as mechanics-legacy and conversion-note entries so it is preserved but not confused with Hypertext d20-compatible rules text.",
       "status": "not-started"
     }
@@ -111,6 +122,10 @@
     { "title": "The Grim Realities of Survival in Kaysender", "pageStart": 29, "pageEnd": 31, "status": "source-faithful", "wikiEntryIds": ["grim-realities-of-survival"] },
     { "title": "The Black Fleet", "pageStart": 31, "pageEnd": 35, "status": "source-faithful", "wikiEntryIds": ["black-fleet", "verek-drakemoor", "abyss-harbinger", "shadow-gale", "emberclaw", "hellrod"] },
     { "title": "The Dragon Lords and Their Hierarchy", "pageStart": 35, "pageEnd": 38, "status": "source-faithful", "wikiEntryIds": ["dragon-lords", "trazintharix", "skyhold-citadel", "high-lords-of-flame", "wildlands", "notable-dragon-lords"] },
-    { "title": "The Collection of Tithes in the Lands of the Dragon Lords", "pageStart": 38, "pageEnd": 41, "status": "source-faithful", "wikiEntryIds": ["dragon-tithes", "tithe-fleet", "floating-vaults"] }
+    { "title": "The Collection of Tithes in the Lands of the Dragon Lords", "pageStart": 38, "pageEnd": 41, "status": "source-faithful", "wikiEntryIds": ["dragon-tithes", "tithe-fleet", "floating-vaults"] },
+    { "title": "Merchant Fleets and Organizations of the World of Kaysender", "pageStart": 42, "pageEnd": 46, "status": "source-faithful", "wikiEntryIds": ["merchant-fleets-of-kaysender", "surveyors-guild", "whisper-web", "skyweaver-consortium", "aetherbound-company", "free-flotilla", "ember-guild", "gilded-current"] },
+    { "title": "The World Whispering Web, or Sending Stone Network", "pageStart": 46, "pageEnd": 49, "status": "source-faithful", "wikiEntryIds": ["world-whispering-web", "resonant-concord"] },
+    { "title": "Feature: Locator Glyphs", "pageStart": 49, "pageEnd": 50, "status": "source-faithful", "wikiEntryIds": ["locator-glyphs"] },
+    { "title": "Military Sending Stone (Model: Tracker’s Beacon)", "pageStart": 50, "pageEnd": 52, "status": "source-faithful", "wikiEntryIds": ["tracker-beacon"] }
   ]
 }
