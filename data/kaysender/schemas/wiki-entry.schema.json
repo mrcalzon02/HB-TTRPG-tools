@@ -17,16 +17,17 @@
       "description": "World, Regions, Nations, Factions, Ships, Economy, Creatures, GM Tools, Rules, or other future category."
     },
     "summary": {
-      "type": "string"
+      "type": "string",
+      "description": "Reader-facing summary. This must not replace the full source-derived body."
     },
     "body": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Paragraph blocks. Internal wiki hotlinks use [[entry-id|visible text]]. Keep rules-facing mechanics out of lore entries unless marked as conversion material."
+      "description": "Reader-facing lore paragraphs. Internal wiki hotlinks use [[entry-id|visible text]]. Do not reduce source material to only a digest; preserve the full lore substance in body/sections or source chunks."
     },
     "sections": {
       "type": "array",
-      "description": "Optional titled sections for deeper wiki entries.",
+      "description": "Optional titled sections for deeper wiki entries. Sections should preserve source lore first; builder/editor sections should be separated from reader-facing lore.",
       "items": {
         "type": "object",
         "required": ["heading", "body"],
@@ -35,10 +36,34 @@
           "body": {
             "type": "array",
             "items": { "type": "string" }
+          },
+          "sectionType": {
+            "type": "string",
+            "enum": ["lore", "history", "culture", "geography", "economy", "faction", "creature", "mechanics-legacy", "conversion-note", "builder-note"],
+            "description": "Optional classification. Default visible sections should be lore-facing."
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/sourceRef" }
           }
         },
         "additionalProperties": false
       }
+    },
+    "sourceStatus": {
+      "type": "string",
+      "enum": ["seed-summary", "partial-source", "source-faithful", "full-source-import", "derived-tool-output"],
+      "description": "Shows whether this entry is only a stub, partially imported, source-faithful, fully imported, or generated from a tool."
+    },
+    "sourceRefs": {
+      "type": "array",
+      "description": "Hard references to source document pages, outline sections, or extracted source chunks. Generators should use entries with sourceRefs where possible.",
+      "items": { "$ref": "#/$defs/sourceRef" }
+    },
+    "sourceChunkIds": {
+      "type": "array",
+      "description": "Optional IDs of raw or near-raw source chunks that this wiki entry incorporates.",
+      "items": { "type": "string" }
     },
     "tags": {
       "type": "array",
@@ -53,6 +78,22 @@
       "type": "array",
       "items": { "type": "string" },
       "description": "Registry module ids."
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "required": ["sourceId"],
+      "properties": {
+        "sourceId": { "type": "string" },
+        "fileName": { "type": "string" },
+        "pageStart": { "type": "integer", "minimum": 1 },
+        "pageEnd": { "type": "integer", "minimum": 1 },
+        "outlineTitle": { "type": "string" },
+        "chunkId": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false
