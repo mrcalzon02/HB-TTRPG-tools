@@ -1,0 +1,181 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.2.0",
+  "entries": [
+    {
+      "id": "dragon-lords",
+      "title": "Dragon Lords and Tribute Networks",
+      "category": "Factions",
+      "summary": "Dragon Lords are territorial powers whose influence can appear as tribute, fear, protection, draconic law, enforcer fleets, collaborators, and settlement-breaking demands.",
+      "body": [
+        "A Dragon Lord should not be used only as a monster encounter. In Kaysender, a Dragon Lord can be a territorial ruler, a tribute claimant, a political terror, a protector, a tyrant, a patron, or a force that turns ordinary logistics into survival crisis.",
+        "Tribute is the most useful operational form of Dragon Lord power. A tribute demand can strip water, food, coin, livestock, magical components, skilled labor, hostages, sacred objects, or airship service from a settlement. The demand does not need to be reasonable; it needs to be enforceable enough to change local behavior.",
+        "A Dragon Lord network should include the dragon or draconic authority, the collector or enforcer, local collaborators, terrified officials, hidden resistance, people profiting from compliance, and people paying the cost. A recent tithe should alter prices, morale, defenses, leadership trust, and job-board output.",
+        "Dragon pressure should cross-link to [[dragon-kin|Dragon Kin]], [[airships|airship legality]], [[settlement-generator|settlement crisis clocks]], [[water-trade|water depletion]], and [[draconic-tithe-generator|tithe generation]]. A vessel carrying tribute papers may be protected in one sky lane and hated in another.",
+        "Use Dragon Lords to create choices: pay or resist, hide resources or share them, evacuate or fortify, kill a collector or expose collaborators, carry tribute to save a village or sabotage the system that profits from tribute."
+      ],
+      "sections": [
+        {
+          "heading": "Standard Tribute Crisis Fields",
+          "body": [
+            "Demand, deadline, collector, enforcer force, public justification, local collaborator, hidden resister, resource being stripped, immediate harm, long-term consequence, and possible player intervention should be standard fields.",
+            "Settlement profiles should alter water status, food status, social stress, defense posture, and market pressure when dragon tribute is active or recently completed."
+          ]
+        }
+      ],
+      "tags": ["dragons", "tribute", "tithe", "factions", "crisis", "Dragon Lords"],
+      "relatedEntries": ["dragon-kin", "water-trade", "scarcity-loop", "airships", "dunhallow-roost"],
+      "relatedModules": ["draconic-tithe-generator", "settlement-generator", "airship-vessel-generator", "job-board-generator"]
+    },
+    {
+      "id": "black-fleet",
+      "title": "The Black Fleet",
+      "category": "Factions",
+      "summary": "The Black Fleet is a major skyborne pirate pressure: a name, a terror, a confederation, a false flag, a smuggling force, and a route-denial system.",
+      "body": [
+        "The Black Fleet should function as more than a pirate encounter table. It is a pressure on routes, insurance, cargo decisions, settlement morale, faction politics, and airship behavior. Even rumors of the Black Fleet should change what captains are willing to carry and what settlements are willing to risk.",
+        "The name can refer to the true core fleet, imitators, splinter crews, false-flag raiders, mercenaries using the reputation, smugglers hiding behind the fear, or local collaborators who benefit from controlled terror. This lets the GM keep the Black Fleet dangerous without making every black sail the same organization.",
+        "Black Fleet pressure should affect [[water-trade|water convoys]], food shipments, passenger routes, rescue missions, and settlements that lack defenses. A single pirate threat can produce market panic, hoarding, militia recruitment, emergency contracts, forged papers, and faction blame.",
+        "In an editor, Black Fleet activity should produce route risk, cargo theft, ransom, crew recruitment, false beacons, missing ships, hidden informants, and moral complications. The Black Fleet may be villainous, but individual crews can still be desperate, ideological, opportunistic, or trapped by debt.",
+        "Airship profiles should react strongly to Black Fleet entanglement. A vessel may be pirate-marked, secretly protected, falsely accused, carrying stolen cargo, transporting an informant, or being hunted by its former crew."
+      ],
+      "sections": [
+        {
+          "heading": "Generator Use",
+          "body": [
+            "Route outputs should distinguish confirmed Black Fleet activity from copycats, deserters, smugglers, privateers, mercenaries, and false-flag attacks.",
+            "Market outputs should increase prices for water, fuel, weapons, guards, forged papers, route charts, and convoy berths when Black Fleet pressure is active."
+          ]
+        }
+      ],
+      "tags": ["Black Fleet", "pirates", "smuggling", "routes", "false flags", "airships"],
+      "relatedEntries": ["airships", "water-trade", "scarcity-loop", "eldrath-druun"],
+      "relatedModules": ["black-market-piracy-generator", "airship-vessel-generator", "encounter-generator", "shop-market-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "surveyors-guild",
+      "title": "Surveyor's Guild",
+      "category": "Factions",
+      "summary": "The Surveyor's Guild is the natural faction for maps, routes, island claims, drifting geography, missing crews, salvage rights, and dangerous knowledge.",
+      "body": [
+        "The Surveyor's Guild is one of the most important practical factions for a skyborne setting. In a world of drifting islands and unreliable routes, maps are power. The guild can decide what is charted, what is hidden, what is declared safe, and what is worth risking lives to verify.",
+        "Guild work naturally creates adventures: confirm a new island, investigate a missing survey crew, recover a lost chart, map a storm belt, escort a cartographer, verify a water source, hide a resource claim, or expose a false route beacon. Every one of these missions can connect to [[floating-islands|island profiles]], [[airships|airship routes]], and [[settlement-generator|settlement dependence]].",
+        "The guild should not be assumed neutral just because it produces maps. It can have internal politics, rival surveyors, bribes, secret patrons, dangerous omissions, salvage-right disputes, or contracts that condemn a settlement by leaving it off official charts.",
+        "A Surveyor's Guild office in a settlement should be a knowledge hub and a threat. It knows who arrived, who left, what route failed, what island drifted, and which maps are outdated. In a frontier campaign, that information may be worth more than gold.",
+        "Use the guild as a bridge between exploration, economics, and danger. A single chart can create land claims, pirate interest, dragon attention, guild debt, or a race between factions."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "The Route Editor should use Surveyor's Guild data for chart quality, route confidence, missing routes, hidden islands, false beacons, and contract complications.",
+            "The Airship Editor should use Surveyor contracts for survey missions, crew specialists, legal access, and secret route data."
+          ]
+        }
+      ],
+      "tags": ["Surveyor's Guild", "maps", "routes", "exploration", "charts", "survey crews"],
+      "relatedEntries": ["floating-islands", "messara", "airships", "faelenor-mirathen"],
+      "relatedModules": ["world-map-route-generator", "floating-island-generator", "airship-vessel-generator", "job-board-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "skyweaver-consortium",
+      "title": "Skyweaver Consortium",
+      "category": "Factions",
+      "summary": "The Skyweaver Consortium is an economic and technical power suited to airship components, route contracts, market pressure, craft monopolies, and factional leverage.",
+      "body": [
+        "The Skyweaver Consortium should be treated as an economic and technical institution rather than a generic merchant guild. It belongs in the space between airship construction, trade contracts, craft monopolies, rare materials, route access, and market leverage.",
+        "A Consortium contract can save a settlement by providing parts, repairs, cargo support, or dock infrastructure. That same contract can bind the settlement to debt, exclusive trade rights, resource concessions, or political obedience. The Consortium is useful because its help always has terms.",
+        "In the tool layer, the Consortium can influence market legitimacy, airship parts, repair access, warranty disputes, high-value cargo, guild inspections, and who is allowed to build or operate certain technologies. It is especially valuable for linking [[airships|airship editors]], [[shop-market-generator|market tools]], [[crafting-gadget-creator|crafting]], and [[organization-operations-tracker|organization tracking]].",
+        "A Skyweaver presence in a settlement should change the local economy. Prices may become more formal. Inspections may become stricter. Independent craftspeople may be squeezed. Black markets may emerge for parts the Consortium controls.",
+        "Use the Consortium when the campaign needs a powerful organization that can be helpful, exploitative, bureaucratic, visionary, or corrupt depending on who holds the contract."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Airship profiles should use Skyweaver entanglement for warranty disputes, certified parts, restricted repairs, contract obligations, and guild inspectors.",
+            "Market profiles should use Skyweaver presence for legal vendors, controlled components, expensive repair parts, and counterfeit alternatives."
+          ]
+        }
+      ],
+      "tags": ["Skyweaver Consortium", "guild", "airship parts", "contracts", "markets", "crafting"],
+      "relatedEntries": ["airships", "water-trade", "silvalis-neylithar", "zarovar-kalthor"],
+      "relatedModules": ["shop-market-generator", "airship-core-builder", "crafting-gadget-creator", "airship-vessel-generator", "organization-operations-tracker"]
+    },
+    {
+      "id": "black-chain-consortium",
+      "title": "Black Chain Consortium",
+      "category": "Factions",
+      "summary": "The Black Chain Consortium is a darker economic/criminal pressure suited to coercive labor, forced contracts, debt bondage, and settlement exploitation.",
+      "body": [
+        "The Black Chain Consortium should be used for the worst edge of commerce: coerced labor, debt bondage, forced contracts, intimidation, corrupt auctions, and the sale of people or obligations disguised as lawful paperwork.",
+        "In Kaysender, scarcity makes exploitation easier. A settlement short on water, food, defense, or transport may accept terms that slowly turn into control. A family may mortgage its labor for passage. A captured crew may be sold as debtors. A guild may deny responsibility while profiting through intermediaries.",
+        "This faction should create moral pressure and investigation hooks. It may hide behind legal forms, false debts, transport papers, auction houses, labor camps, or respectable brokers. The question is rarely whether something is wrong; the question is how many local authorities are paid to call it legal.",
+        "Use this faction carefully and deliberately. It is best suited for rescue missions, exposure campaigns, labor revolts, hidden ledgers, corrupt officials, and player choices about whether to destroy an entire network or save one group of victims now.",
+        "It should cross-link with [[water-trade|scarcity]], [[black-fleet|piracy]], [[settlement-generator|settlement social stress]], and future criminal-market tools."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Settlement outputs can use Black Chain pressure for guild debt traps, labor strikes, missing people, bribed guards, and hidden auction sites.",
+            "Airship outputs can use it for false passenger manifests, prisoner cargo, forged debt papers, or crews being held under contract."
+          ]
+        }
+      ],
+      "tags": ["Black Chain Consortium", "crime", "debt", "coercion", "labor", "slavery"],
+      "relatedEntries": ["scarcity-loop", "black-fleet", "water-trade"],
+      "relatedModules": ["black-market-piracy-generator", "settlement-generator", "airship-vessel-generator", "job-board-generator"]
+    },
+    {
+      "id": "free-sky-brotherhood",
+      "title": "Free Sky Brotherhood",
+      "category": "Factions",
+      "summary": "The Free Sky Brotherhood is a liberation and resistance pressure suited to anti-slavery action, hidden cells, risky rescue routes, and ideological conflict.",
+      "body": [
+        "The Free Sky Brotherhood should function as a resistance network against coercive systems, debt bondage, slavery, corrupt contracts, and authoritarian control of sky routes. It is especially useful as a counterweight to exploitative factions and tribute systems.",
+        "The Brotherhood can operate through hidden safehouses, sympathetic captains, coded signals, false manifests, rescue routes, dockside contacts, and settlements willing to hide fugitives. Because Kaysender is route-dependent, liberation work is also logistics work.",
+        "This faction should not be frictionless. It may be heroic, desperate, internally divided, infiltrated, reckless, or willing to endanger a whole settlement to save a captured crew. Its enemies will call it criminal; its allies will call it necessary.",
+        "In play, the Brotherhood is ideal for moral complications: carry fugitives or legal cargo, expose a collaborator or preserve the route, protect a safehouse or evacuate the sick, sabotage tribute or negotiate time.",
+        "It cross-links to [[black-chain-consortium|coercive labor networks]], [[dragon-lords|tribute systems]], [[black-fleet|pirate routes]], and [[airships|smuggling or rescue vessels]]."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Airship profiles can use Brotherhood entanglement for secret passengers, false papers, rescue cargo, faction pursuit, and crew disagreement.",
+            "Job Board outputs can generate rescue, extraction, exposure, safehouse defense, forged-route, and anti-tribute missions."
+          ]
+        }
+      ],
+      "tags": ["Free Sky Brotherhood", "resistance", "liberation", "safehouses", "rescue", "smuggling"],
+      "relatedEntries": ["black-chain-consortium", "dragon-lords", "black-fleet", "airships"],
+      "relatedModules": ["airship-vessel-generator", "job-board-generator", "black-market-piracy-generator", "faction-guild-generator"]
+    },
+    {
+      "id": "dunhallow-roost",
+      "title": "Dunhallow Roost",
+      "category": "Settlements",
+      "summary": "Dunhallow Roost is a strong starting settlement model: a remote sky island community recovering from a draconic tithe, with agriculture, weak militia, trade dependence, and tavern-centered play.",
+      "body": [
+        "Dunhallow Roost is a compact and useful model for a Kaysender starting settlement. It is remote, vulnerable, agriculturally important, socially stressed, and recently harmed by a Dragon Lord's tithe. It should be treated as a template for how small settlements survive under skyborne pressure.",
+        "The settlement population is small, around a few hundred residents. Its economy depends on skygrain, airfruits, sheffel wool, windmill grain processing, and trade with passing airships. That gives it enough value to matter, but not enough strength to feel safe.",
+        "Its defenses are weak: a limited militia, poor equipment, and a community that must rely on terrain, warning, negotiation, and outside help. A recent tithe by [[dragon-lords|Dragon Lord]] Zevrikor the Ash-Talon has created trauma, resentment, scarcity, and political pressure.",
+        "Dunhallow Roost’s most useful civic scene is the tavern model: a place like Hollow’s End can serve as rumor hub, neutral ground, job board, refugee shelter, faction observation point, and the social stage where the town’s crisis becomes visible.",
+        "For editors, Dunhallow Roost should inspire settlement defaults: small fortified village, tight but stable food until tithe pressure hits, rationed water or depleted reserves, poor militia, elected mayor or elder council, local merchant dependence, post-tithe resentment, central tavern, and dragon collector crisis clock."
+      ],
+      "sections": [
+        {
+          "heading": "Tool Hooks",
+          "body": [
+            "Settlement Editor: use Dunhallow Roost as the baseline for a remote sky village with agricultural economy, weak defense, social stress, and tithe trauma.",
+            "Job Board: recovery missions, water relief, militia training, dragon collector warnings, airship escort, sheffel herd protection, missing trade ship, and tavern rumors."
+          ]
+        }
+      ],
+      "tags": ["Dunhallow Roost", "settlement", "draconic tithe", "skygrain", "airfruit", "sheffel wool", "militia"],
+      "relatedEntries": ["dragon-lords", "water-trade", "scarcity-loop", "halflings", "airships"],
+      "relatedModules": ["settlement-generator", "draconic-tithe-generator", "job-board-generator", "supply-water-planner", "airship-vessel-generator"]
+    }
+  ]
+}
