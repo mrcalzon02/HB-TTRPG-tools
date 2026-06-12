@@ -24,12 +24,20 @@
     }
   }
 
+  function syncPrintTitle() {
+    const input = document.getElementById('sheet-title');
+    const printTitle = document.getElementById('print-title');
+    if (!input || !printTitle) return;
+    printTitle.textContent = input.value || NEW_TITLE;
+  }
+
   function applyTitle() {
     migrateStoredTitle();
     const input = document.getElementById('sheet-title');
     const printTitle = document.getElementById('print-title');
     if (input && shouldReplace(input.value)) input.value = NEW_TITLE;
     if (printTitle && shouldReplace(printTitle.textContent)) printTitle.textContent = input?.value || NEW_TITLE;
+    input?.addEventListener('input', syncPrintTitle);
   }
 
   applyTitle();
