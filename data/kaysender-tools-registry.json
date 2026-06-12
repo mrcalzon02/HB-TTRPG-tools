@@ -1,0 +1,192 @@
+{
+  "setting": "Kaysender",
+  "status": "initial extraction scaffold",
+  "compatibilityTarget": "open d20 / Hypertext d20-compatible presentation",
+  "sourceNotes": [
+    "Original setting lore remains Kaysender-specific.",
+    "Legacy fifth-edition mechanical phrasing must be converted before reusable public release.",
+    "Rules-facing text should separate open d20 mechanics from setting prose."
+  ],
+  "modules": [
+    {
+      "id": "kaysender-wiki",
+      "section": "utilities",
+      "title": "Kaysender Hypertext Wiki",
+      "priority": 1,
+      "status": "planned",
+      "description": "Searchable setting index for world lore, peoples, nations, cities, factions, ships, creatures, equipment, and rules notes.",
+      "dataFamilies": ["wikiEntry", "crosslink", "category", "visibility"]
+    },
+    {
+      "id": "kaysender-compatibility-scanner",
+      "section": "utilities",
+      "title": "Open d20 Compatibility Scanner",
+      "priority": 2,
+      "status": "planned",
+      "description": "Flags legacy fifth-edition phrasing and suggests open d20 replacement structures.",
+      "dataFamilies": ["rulesConversionNote", "termFlag", "replacementPattern"]
+    },
+    {
+      "id": "floating-island-generator",
+      "section": "generators",
+      "title": "Floating Island Generator",
+      "priority": 3,
+      "status": "planned",
+      "description": "Generates drifting islands, ruins, resource outcrops, hazards, settlements, and crisis hooks.",
+      "dataFamilies": ["rollTable", "islandProfile", "hazardProfile", "resourceNode"]
+    },
+    {
+      "id": "world-map-route-generator",
+      "section": "generators",
+      "title": "World Map and Route Generator",
+      "priority": 4,
+      "status": "planned",
+      "description": "Builds abstract map regions, trade winds, safe lanes, dragon airspace, storm belts, and pirate routes.",
+      "dataFamilies": ["regionProfile", "routeProfile", "hazardProfile", "factionInfluence"]
+    },
+    {
+      "id": "settlement-generator",
+      "section": "generators",
+      "title": "Settlement Generator",
+      "priority": 5,
+      "status": "planned",
+      "description": "Creates villages, skyports, fortified outposts, company holdings, farming islands, and frontier towns.",
+      "dataFamilies": ["settlementProfile", "populationProfile", "scarcityProfile", "hookProfile"]
+    },
+    {
+      "id": "city-district-generator",
+      "section": "generators",
+      "title": "City Center and District Generator",
+      "priority": 6,
+      "status": "planned",
+      "description": "Generates markets, docks, foundries, temples, slums, academies, guild quarters, and noble districts.",
+      "dataFamilies": ["districtProfile", "npcProfile", "marketProfile", "factionPressure"]
+    },
+    {
+      "id": "population-generator",
+      "section": "generators",
+      "title": "Population Generator",
+      "priority": 7,
+      "status": "planned",
+      "description": "Creates ancestry mix, occupations, militia numbers, poverty pressure, specialists, disease risk, and migration pressure.",
+      "dataFamilies": ["populationProfile", "occupationTable", "ancestryMix", "crisisMarker"]
+    },
+    {
+      "id": "shop-market-generator",
+      "section": "generators",
+      "title": "Shop and Market Stall Generator",
+      "priority": 8,
+      "status": "planned",
+      "description": "Creates legal shops, traveling merchants, guild vendors, black-market dealers, counterfeiters, and supply shortages.",
+      "dataFamilies": ["marketProfile", "itemTable", "scarcityProfile", "merchantProfile"]
+    },
+    {
+      "id": "airship-vessel-generator",
+      "section": "generators",
+      "title": "Airship and Vessel Generator",
+      "priority": 9,
+      "status": "planned",
+      "description": "Builds encountered ships by hull, culture, core, crew, cargo, weapons, damage, legal status, and mission.",
+      "dataFamilies": ["vesselProfile", "crewProfile", "cargoProfile", "shipCondition"]
+    },
+    {
+      "id": "airship-core-builder",
+      "section": "tools",
+      "title": "Airship Core and Construction Builder",
+      "priority": 10,
+      "status": "planned",
+      "description": "Framework for building Dwarven, Elven, Dragon Kin, Gnomish, and Human hybrid airship cores.",
+      "dataFamilies": ["itemRecipe", "coreProfile", "maintenanceProfile", "failureTable"]
+    },
+    {
+      "id": "crafting-gadget-creator",
+      "section": "tools",
+      "title": "Crafting, Gadget, and Equipment Creator",
+      "priority": 11,
+      "status": "planned",
+      "description": "Creates potions, alchemical oils, weather gear, communication devices, ship gadgets, and survival devices.",
+      "dataFamilies": ["itemRecipe", "materialTag", "craftDifficulty", "rulesConversionNote"]
+    },
+    {
+      "id": "supply-water-planner",
+      "section": "utilities",
+      "title": "Supply, Water, and Survival Planner",
+      "priority": 12,
+      "status": "planned",
+      "description": "Tracks water, food, crew size, livestock, climate pressure, spoilage, rain capture, and shortage events.",
+      "dataFamilies": ["supplyProfile", "travelPlan", "scarcityProfile", "eventTable"]
+    },
+    {
+      "id": "faction-guild-generator",
+      "section": "generators",
+      "title": "Faction and Guild Generator",
+      "priority": 13,
+      "status": "planned",
+      "description": "Creates public purpose, hidden purpose, fleet details, territory, leadership, rivals, reputation, and hooks.",
+      "dataFamilies": ["factionProfile", "fleetProfile", "rivalryProfile", "hookProfile"]
+    },
+    {
+      "id": "black-market-piracy-generator",
+      "section": "generators",
+      "title": "Black Market and Piracy Generator",
+      "priority": 14,
+      "status": "planned",
+      "description": "Creates criminal groups, cover identities, contraband, hideouts, victims, bribe networks, and evidence trails.",
+      "dataFamilies": ["criminalProfile", "contrabandTable", "hideoutProfile", "moralComplication"]
+    },
+    {
+      "id": "encounter-generator",
+      "section": "generators",
+      "title": "Kaysender Encounter Generator",
+      "priority": 15,
+      "status": "planned",
+      "description": "Creates sky-route, city, skyport, island, storm, abyss, dragon-dominion, and pirate-zone encounters.",
+      "dataFamilies": ["encounterProfile", "zoneProfile", "hazardProfile", "rewardProfile"]
+    },
+    {
+      "id": "sky-ecology-generator",
+      "section": "generators",
+      "title": "Sky Ecology and Bestiary Generator",
+      "priority": 16,
+      "status": "planned",
+      "description": "Generates sky creatures, herd behavior, valuable materials, diseases, predators, and conservation pressure.",
+      "dataFamilies": ["creatureProfile", "diseaseProfile", "materialTag", "ecologyProfile"]
+    },
+    {
+      "id": "npc-crew-generator",
+      "section": "generators",
+      "title": "NPC and Crew Generator",
+      "priority": 17,
+      "status": "planned",
+      "description": "Creates ship crew, faction agents, shopkeepers, settlers, guides, engineers, captains, and specialists.",
+      "dataFamilies": ["npcProfile", "crewRole", "secretProfile", "statStub"]
+    },
+    {
+      "id": "job-board-generator",
+      "section": "generators",
+      "title": "Job Board and Campaign Hook Generator",
+      "priority": 18,
+      "status": "planned",
+      "description": "Creates escort, salvage, rescue, survey, smuggling, monster hunt, water delivery, tithe resistance, and repair jobs.",
+      "dataFamilies": ["jobProfile", "rewardProfile", "patronProfile", "complicationProfile"]
+    },
+    {
+      "id": "draconic-tithe-generator",
+      "section": "generators",
+      "title": "Draconic Tithe and Settlement Crisis Generator",
+      "priority": 19,
+      "status": "planned",
+      "description": "Builds Dragon Lord tribute demands, local shortages, enforcer fleets, collaborators, resistance cells, and crisis clocks.",
+      "dataFamilies": ["titheProfile", "settlementProfile", "crisisClock", "factionPressure"]
+    },
+    {
+      "id": "organization-operations-tracker",
+      "section": "tools",
+      "title": "Organization Operations Tracker",
+      "priority": 20,
+      "status": "planned",
+      "description": "Tracks finance, morale, logistics, security, law pressure, innovation, reputation, staffing, and supply chains.",
+      "dataFamilies": ["organizationProfile", "operationCheck", "crisisProfile", "resourceLedger"]
+    }
+  ]
+}
