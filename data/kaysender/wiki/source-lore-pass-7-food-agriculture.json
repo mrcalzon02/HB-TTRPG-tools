@@ -1,0 +1,196 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Source-lore pass 7 imports tavern fare, food traditions, agriculture, animal husbandry, and preservation systems by culture as source-backed wiki entries.",
+  "entries": [
+    {
+      "id": "foodways-of-kaysender",
+      "title": "Foodways of Kaysender",
+      "category": "Economy",
+      "summary": "Kaysender's food culture is shaped by floating geography, cultural adaptation, limited water, dangerous trade routes, preservation needs, and wildly different peoples with distinct agricultural traditions.",
+      "body": [
+        "Food in Kaysender is never merely flavor. It is survival, culture, trade, identity, and logistics. Floating geography makes farmland precious; unstable routes make preservation essential; and the scarcity of water shapes every kitchen, farm, tavern, and airship galley.",
+        "Different peoples solve the food problem differently. [[dwager|Dwager]] cultivate underground fungi and stone-root crops. [[fae|Fae]] preserve harmony through perennial orchards and herbal terraces. [[hume|Hume]] rely on mixed-crop farming and rotational grain fields. [[gezistack|Gezistack]] optimize small spaces through engineered agriculture. [[halflings|Halflings]] farm for comfort, abundance, and hospitality. [[dragon-kin|Dragon Kin]] favor fiery crops and heat-adapted livestock, while orcish traditions emphasize high-protein foods for harsh survival.",
+        "Taverns and inns reflect these food systems. A skyport tavern might serve smoked fish from preserved cargo barrels, Halfling berry pies, Dwarven mushroom bread, Dragonborn flame-seared meat, or Lizardfolk marsh fare prepared from raw, dried, or nutrient-dense ingredients.",
+        "These foodways are directly tied to [[grim-realities-of-survival|the grim realities of survival]]. A settlement with good preservation traditions can survive a failed route season. A settlement without water, cellars, salt, smokehouses, canning, or magical preservation becomes vulnerable to famine, disease, raiding, or exploitative trade."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 78, "pageEnd": 86, "outlineTitle": "Food, Tavern Fare, Agriculture, Husbandry, and Preservation", "chunkId": "kaysender-core-pdf-2025-01-20:foodways" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:foodways"],
+      "tags": ["food", "agriculture", "taverns", "rations", "preservation", "husbandry", "water scarcity"],
+      "relatedEntries": ["grim-realities-of-survival", "water-trade", "cargo-standards", "halfling-agriculture", "dwarven-agriculture", "elven-agriculture", "human-agriculture", "gnomish-agriculture", "orcish-agriculture", "dragonborn-agriculture"],
+      "relatedModules": ["shop-market-generator", "supply-water-planner", "settlement-generator", "job-board-generator"]
+    },
+    {
+      "id": "tavern-fare-of-kaysender",
+      "title": "Tavern Fare of Kaysender",
+      "category": "Culture",
+      "summary": "Kaysender taverns reflect local ecology and culture, ranging from flame-seared Dragonborn feasts to mysterious Tiefling spice roasts and Lizardfolk marsh meals.",
+      "body": [
+        "Tavern food in Kaysender varies dramatically by people, region, altitude, and available water. In stable trade centers, taverns may import delicacies from several cultures; in remote sky-island villages, the menu is shaped by what can be grown, preserved, hunted, or traded before the next route shift.",
+        "Dragonborn taverns favor heat, smoke, and intensity. Their tables feature flame-seared steak basted with dragonpeppers, smoked ember nuts, inferno fish skewers, volcanic stew, and crisp pepper bread infused with fire salts and molten butter.",
+        "Tiefling dens lean into exotic, spiced, smoky, and mysterious foods: infernal spice roast with dark fruit sauce, ashen flatbread with clove and star anise, darkfruit and goat cheese platters, smoked bean and pepper stew, and honeyed spice nuts glazed with chili honey and citrus zest.",
+        "Lizardfolk marsh taverns focus on raw, foraged, sun-dried, and nutrient-dense meals. Bogfish tartare, crunchy insect cakes, sun-dried reptile strips, gelatinous swampfruit bowls, and bone-broth gourds suit travelers who need calories, salt, protein, and endurance more than delicate presentation."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 78, "pageEnd": 80, "outlineTitle": "Tavern Fare", "chunkId": "kaysender-core-pdf-2025-01-20:tavern-fare" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:tavern-fare"],
+      "tags": ["taverns", "Dragonborn food", "Tiefling food", "Lizardfolk food", "marsh taverns", "spiced food"],
+      "relatedEntries": ["dragonborn-agriculture", "lizzzefaire", "foodways-of-kaysender", "cargo-standards"],
+      "relatedModules": ["shop-market-generator", "settlement-generator", "job-board-generator"]
+    },
+    {
+      "id": "dwarven-agriculture",
+      "title": "Dwarven Agriculture and Husbandry",
+      "category": "Economy",
+      "summary": "Dwarven food systems rely on subterranean cultivation, resilient livestock, salt caves, cheese vaults, fungi farms, rockroot tubers, dark barley, mountain goats, cave boars, rockhens, and magma-fish tanks.",
+      "body": [
+        "Dwarven agriculture is built around underground stability. The [[dwager|Dwager]] cultivate food systems that can survive storms, tremors, siege, and surface instability by moving production into caverns, vaults, and geothermal chambers.",
+        "Their farming includes deep mushroom and fungi farms enriched with compost and mineral dust, rockroot tubers that thrive in rocky soil with little light, and fermenting hops or dark barley used for stout ales and thick breads.",
+        "Their animal husbandry favors hardy subterranean livestock: mountain goats and cave boars for meat, cheese, and leather; burrowing poultry called rockhens for eggs and meat; and geothermal magma-fish tanks that produce rare heat-resistant fish.",
+        "Dwarven preservation systems are equally subterranean. Natural salt caves preserve meat, while cheese-aging vaults wax and mature wheels of cheese for long storage. In unstable skyland conditions, these underground stores can keep a fortress alive long after surface farms fail."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 80, "pageEnd": 81, "outlineTitle": "Dwarven Agriculture & Husbandry – Subterranean Cultivation & Resilient Livestock", "chunkId": "kaysender-core-pdf-2025-01-20:dwarven-agriculture" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dwarven-agriculture"],
+      "tags": ["Dwarven agriculture", "fungi farms", "rockroot", "dark barley", "mountain goats", "cave boars", "rockhens", "magma-fish", "salt caves", "cheese vaults"],
+      "relatedEntries": ["dwager", "foodways-of-kaysender", "grim-realities-of-survival", "cargo-standards"],
+      "relatedModules": ["settlement-generator", "supply-water-planner", "shop-market-generator"]
+    },
+    {
+      "id": "elven-agriculture",
+      "title": "Elven Agriculture and Husbandry",
+      "category": "Economy",
+      "summary": "Elven food systems emphasize sustainable orchards, herbal terraces, wild grains, forest deer, songbirds, butterfly apiaries, leaf-wrapping, and solar drying.",
+      "body": [
+        "Elven agriculture reflects [[fae|Fae]] reverence for harmony with nature. Rather than forcing high-output production through heavy land disturbance, Elven systems emphasize careful land management, perennial growth, and low-impact harvesting.",
+        "Fae farmers cultivate perennial tree orchards bearing mistfruit, figs, elderberries, and other long-lived crops. Herbal terraces grow mint, thyme, moonbloom, healing herbs, and culinary plants. Sylvan grain fields produce wild-growing grains such as golden sylvan wheat without deep plowing.",
+        "Elven husbandry tends toward free-range and symbiotic systems: forest deer and stags provide venison and leather through selective culling, songbirds and doves are raised for eggs and feathers used in art or enchantment, and butterfly apiaries produce nectar-rich honey and edible pollen from rare insects.",
+        "Preservation is gentle but effective. Broad-leaf wrapping protects fresh foods from spoilage, while solar drying racks preserve fruits and nuts for long journeys and lean seasons."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 81, "pageEnd": 82, "outlineTitle": "Elven Agriculture & Husbandry – Sustainable, Wild-Grown & Herbal Cultivation", "chunkId": "kaysender-core-pdf-2025-01-20:elven-agriculture" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:elven-agriculture"],
+      "tags": ["Elven agriculture", "orchards", "herbal terraces", "sylvan grain", "forest deer", "songbirds", "butterfly apiaries", "leaf-wrapping", "solar drying"],
+      "relatedEntries": ["fae", "foodways-of-kaysender", "sky-ecology", "potion-guilds"],
+      "relatedModules": ["settlement-generator", "shop-market-generator", "sky-ecology-generator"]
+    },
+    {
+      "id": "human-agriculture",
+      "title": "Human Agriculture and Husbandry",
+      "category": "Economy",
+      "summary": "Human farming relies on crop rotation, grain fields, root vegetables, vineyards, orchards, cattle, sheep, pigs, chickens, fishing, saltwater farms, smokehouses, salting, pickling, and fermentation.",
+      "body": [
+        "Human agriculture in Kaysender is varied and pragmatic. [[hume|Hume]] communities rely on mixed-crop farming, crop rotation, and adaptable livestock to maintain food security across many environments.",
+        "Their farming systems include wheat, rye, and barley fields for bread, ale, and animal feed; root vegetables and hardy greens such as carrots, cabbage, and potatoes; and vineyards and orchards producing grapes, apples, pears, wine, cider, and preserves.",
+        "Human husbandry favors versatile village animals: cattle and sheep for milk, meat, and wool; pigs and chickens as efficient meat producers; and fishing or saltwater farms that harvest salted fish and shellfish for coastal or island settlements.",
+        "Preservation is practical and widespread. Smokehouses and salt preservation keep meats and fish edible, while pickling and fermentation preserve vegetables in brine through winter, route failures, and siege conditions."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 82, "pageEnd": 83, "outlineTitle": "Human Agriculture & Husbandry – Mixed-Crop Farming & Livestock Rearing", "chunkId": "kaysender-core-pdf-2025-01-20:human-agriculture" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:human-agriculture"],
+      "tags": ["Human agriculture", "crop rotation", "grain fields", "root vegetables", "vineyards", "orchards", "cattle", "sheep", "pigs", "chickens", "smokehouses", "pickling", "fermentation"],
+      "relatedEntries": ["hume", "foodways-of-kaysender", "water-trade", "cargo-standards"],
+      "relatedModules": ["settlement-generator", "supply-water-planner", "shop-market-generator"]
+    },
+    {
+      "id": "gnomish-agriculture",
+      "title": "Gnomish Agriculture and Husbandry",
+      "category": "Economy",
+      "summary": "Gnomish food systems are compact and engineered: mushroom greenhouses, terrace gardens, hybrid crops, miniature livestock, insect farms, tinned fish, canning factories, and vacuum-sealed cheese storage.",
+      "body": [
+        "Gnomish agriculture reflects [[gezistack|Gezistack]] ingenuity: compact, efficient, experimental, and designed for small spaces. In a world where usable land can be limited or unstable, high-yield systems matter as much as flavor.",
+        "Their farms include underground mushroom greenhouses in climate-controlled domes, terrace gardens for root vegetables and herbs, and experimental hybrid crops bred for unusual flavors and higher yield.",
+        "Gnomish husbandry uses miniaturized or compact food animals: small goats, pigs, and birds optimized for tight urban or shipboard spaces; insect farms raising crickets and beetles into high-protein flour; and small fish farms producing canned mushroom-seafood stews.",
+        "Food preservation is inventive and mechanical. Steam-powered canning factories support early industrial food storage, while vacuum-sealed cheese storage uses wax-coating and pressurization for long shelf life."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 83, "pageEnd": 84, "outlineTitle": "Gnomish Agriculture & Husbandry – Compact, Efficient & Innovative", "chunkId": "kaysender-core-pdf-2025-01-20:gnomish-agriculture" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:gnomish-agriculture"],
+      "tags": ["Gnomish agriculture", "mushroom greenhouses", "terrace farming", "hybrid crops", "miniature livestock", "insect farms", "tinned fish", "canning factories", "vacuum-sealed cheese"],
+      "relatedEntries": ["gezistack", "foodways-of-kaysender", "cargo-standards", "potion-guilds"],
+      "relatedModules": ["settlement-generator", "crafting-gadget-creator", "supply-water-planner"]
+    },
+    {
+      "id": "orcish-agriculture",
+      "title": "Orcish Agriculture and Husbandry",
+      "category": "Economy",
+      "summary": "Orcish food traditions emphasize nomadic herding, hardy crops, wild roots, fermented grains, bloodgrain, bison, warboars, giant insects, carrion birds, clay-sealed meat, and bone-broth fermentation.",
+      "body": [
+        "Orcish agriculture emphasizes high-protein, long-lasting foods built for hard travel and harsh conditions. Rather than delicate abundance, the system prizes resilience, mobility, and nourishment that can survive rough handling.",
+        "Farming includes wild root fields of tubers and yams, hardy spice bushes and fermented grains used for both flavor and preservation, and rare bloodgrain fields cultivated in volcanic soil for high protein content.",
+        "Animal husbandry focuses on utility and endurance. Bison and warboars provide meat, leather, and bone tools. Giant insects supply meat, oils, and durable chitin for armor or tools. Carrion birds are trained to clean bones for broth.",
+        "Preservation relies on clay-sealed meat barrels for long-term clay-smoking and bone-broth fermentation that produces concentrated protein drinks for marches, raids, and lean seasons."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 84, "pageEnd": 85, "outlineTitle": "Orcish Agriculture & Husbandry – Nomadic Herding & Hardy Crops", "chunkId": "kaysender-core-pdf-2025-01-20:orcish-agriculture" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:orcish-agriculture"],
+      "tags": ["Orcish agriculture", "wild roots", "bloodgrain", "bison", "warboars", "giant insects", "carrion birds", "clay-sealed meat", "bone-broth fermentation"],
+      "relatedEntries": ["foodways-of-kaysender", "grim-realities-of-survival", "mercenary-companies"],
+      "relatedModules": ["supply-water-planner", "settlement-generator", "encounter-generator"]
+    },
+    {
+      "id": "halfling-agriculture",
+      "title": "Halfling Agriculture and Husbandry",
+      "category": "Economy",
+      "summary": "Halfling food systems are pastoral, small-scale, abundant, and comforting: wheat, oats, orchards, berry patches, honeybees, hearth-hens, rabbit warrens, root cellars, butter churns, jams, and pies.",
+      "body": [
+        "Halfling agriculture is built around comfort, hospitality, abundance, and sustainability. [[halflings|Halflings]] farm not only to survive but to make communities feel whole, fed, and welcomed.",
+        "Their crops include rolling wheat and oat fields for bread, biscuits, and ale; fruit orchards and berry patches growing apples, pears, blackberries, and plums; and honeybee farms producing honey for sweets and preserves.",
+        "Halfling husbandry emphasizes small-scale livestock: cattle, sheep, and fowl for fresh dairy and meat; plump slow-growing hearth-hens prized for rich flavor; and rabbit warrens providing meat and fur.",
+        "Preservation is homey but reliable. Root cellars and butter churns keep dairy and produce fresh, while jams and pie preserves bottle fruit for winter feasts, festivals, and travelers passing through Halfling households or inns."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 85, "pageEnd": 86, "outlineTitle": "Halfling Agriculture & Husbandry – Homey, Pastoral & Small-Scale Farming", "chunkId": "kaysender-core-pdf-2025-01-20:halfling-agriculture" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:halfling-agriculture"],
+      "tags": ["Halfling agriculture", "wheat", "oats", "orchards", "berry patches", "honeybee farms", "hearth-hens", "rabbit warrens", "root cellars", "jam preserves"],
+      "relatedEntries": ["halflings", "foodways-of-kaysender", "tavern-fare-of-kaysender", "dunhallow-roost"],
+      "relatedModules": ["shop-market-generator", "settlement-generator", "supply-water-planner"]
+    },
+    {
+      "id": "dragonborn-agriculture",
+      "title": "Dragonborn Agriculture and Husbandry",
+      "category": "Economy",
+      "summary": "Dragonborn lands cultivate fiery, tough, heat-resistant foods: fire peppers, spice herbs, charred nuts, tough grains, scorch-resistant tubers, lavafish, drake poultry, flame-sheep, fire-cured meat, and volcanic smoking racks.",
+      "body": [
+        "Dragonborn agriculture reflects [[dragon-kin|Dragon Kin]] intensity and volcanic environments. Their foods are fiery, tough, heat-resistant, heavily spiced, and suited to cultures that value strength and endurance.",
+        "Their crops include fire peppers and spice herbs grown in volcanic soil, charred nuts and tough grains rich in protein, and scorch-resistant root vegetables that thrive in ash-laden lands.",
+        "Dragonborn husbandry includes lavafish farms breeding high-temperature aquatic creatures in volcanic lakes, drake poultry that produces rich reptilian meat, and flame-sheep adapted to warm climates with thick wool.",
+        "Preservation uses fire and stone. Fire-cured meat processing relies on heavy spice curing for long-term storage, while stone-oven smoking racks slowly roast meats over volcanic stones."
+      ],
+      "sections": [],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 86, "pageEnd": 86, "outlineTitle": "Dragonborn Agriculture & Husbandry – Fiery, Tough & Spiced Crops", "chunkId": "kaysender-core-pdf-2025-01-20:dragonborn-agriculture" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dragonborn-agriculture"],
+      "tags": ["Dragonborn agriculture", "fire peppers", "spice herbs", "charred nuts", "tough grains", "lavafish", "drake poultry", "flame-sheep", "fire-cured meat", "volcanic smoking"],
+      "relatedEntries": ["dragon-kin", "foodways-of-kaysender", "tavern-fare-of-kaysender", "dragon-lords"],
+      "relatedModules": ["settlement-generator", "shop-market-generator", "supply-water-planner"]
+    }
+  ]
+}
