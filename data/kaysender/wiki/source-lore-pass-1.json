@@ -1,0 +1,290 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.3.0",
+  "description": "Reader-facing source-lore correction pack. This pack overrides earlier editor-heavy entries with lore-first wiki prose drawn from the Kaysender source manuscript.",
+  "entries": [
+    {
+      "id": "kaysender-overview",
+      "title": "Kaysender",
+      "category": "World",
+      "summary": "Kaysender is a realm of boundless skies, colossal floating continents, drifting islands, airships, dragons, pirates, sky creatures, and civilizations struggling for survival above an unknown abyss.",
+      "body": [
+        "Kaysender is a world of colossal floating continents drifting through the heavens. Airships glide through vast reaches of open sky, their crews relying on magic, machinery, and golem-powered systems to keep them on course. Dragons rule personal fiefdoms spread across the floating islands, commanding regions of the sky with power, terror, and territorial certainty.",
+        "Despite the rule of dragons, Kaysender remains wild. Thieves, bandits, pirates, scoundrels, and wandering opportunists survive in the open reaches between settled lands, exploiting the uncertainty of a world that is always in motion. A peaceful village can be safe one season and exposed the next, its route shifted, its defenses isolated, or its docks suddenly vulnerable to brigands and predators.",
+        "The continents are immense beyond easy understanding. Their undersides vanish into depth and myth, and countless attempts to explore what lies below have failed to reveal the true nature of the void beneath the floating realms. Most people live on islands that wander through the skies, some small and fragile, others large enough to hold whole cultures, fortified settlements, and independent traditions.",
+        "Life in Kaysender is a delicate balance. Safety and stability are precious. Small villages can be razed in moments by airship raiders or stalked by creatures adapted to the sky. Shepherds tend flocks of [[sheffels|sheffels]], great floating woolly creatures whose bodies resemble clouds of fur and whose presence seems to stir strange magic in the air around them.",
+        "Below and between the islands, the air itself teems with life. The [[grays|Grays]] drift among plankton-like magical plants, and many sky-dwelling creatures survive through natural levitation, buoyant oils, rare glands, magical fields, or bodies partly sustained by the arcane energies of the world. Kaysender is a place where every journey through the heavens can become discovery, danger, or disaster."
+      ],
+      "sections": [
+        {
+          "heading": "The Floating World",
+          "body": [
+            "The central truth of Kaysender is instability. Land can drift. Routes can fail. Islands can break away. Trade networks can vanish when the sky shifts. Whole communities live with the knowledge that the ground beneath them is not as permanent as stone ought to be.",
+            "This uncertainty shapes every society. Some cultures build fortresses into the rock. Others use magic, machines, portable communities, diplomacy, or migration to survive. The sky is not empty space between locations; it is the living wilderness of the setting."
+          ]
+        }
+      ],
+      "tags": ["Kaysender", "floating continents", "airships", "dragons", "sky islands", "abyss", "sky creatures"],
+      "relatedEntries": ["floating-islands", "sky-ecology", "sheffels", "grays", "airships", "dragon-lords", "black-fleet", "peoples-of-kaysender", "messara"],
+      "relatedModules": ["floating-island-generator", "settlement-generator", "airship-vessel-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "floating-islands",
+      "title": "Floating Islands",
+      "category": "World",
+      "summary": "The islands of Kaysender drift through the sky, carrying villages, fortresses, farms, ruins, herds, cultures, and dangers across routes that are never completely certain.",
+      "body": [
+        "The floating islands are the ordinary ground of Kaysender’s extraordinary world. Many are small and isolated; others are large enough to hold farms, towns, fortresses, forests, mines, and sacred places. Some drift gently along known paths, while others wander unpredictably through storms, high air, or shadowed depths near the abyss.",
+        "People build their lives on these islands knowing that stability is never guaranteed. An island chain can split apart. A familiar route can become unreachable. A city may drift toward unknown territory, and a family may be separated from its neighbors by a shift no one predicted.",
+        "The islands are also homes to strange ecosystems. Floating flora drifts through cloud banks. Magical plants draw sustenance from arcane air. Predators, skybeasts, sheffels, insects, and stranger organisms move through the currents, each adapted in some way to a world where the sky is habitat rather than emptiness.",
+        "For the land-bound peoples, the islands are both refuge and risk. [[dwager|Dwager]] dig into the rock and build for permanence. [[fae|Fae]] use wards and enchantments to harmonize with the living world. [[gezistack|Gezistack]] devise machines to predict or stabilize movement. [[halflings|Halflings]] create portable communities, while [[hume|Hume]] societies explore, negotiate, and build wherever opportunity appears."
+      ],
+      "sections": [
+        {
+          "heading": "Life on Unstable Ground",
+          "body": [
+            "No one in Kaysender can entirely trust geography. The earth may seem solid one moment and drift the next. Trade routes are vulnerable to shifting land, storms, magical forces, and the ambitions of those who control ships, charts, docks, or dragons.",
+            "This produces a culture of adaptation. The successful are not merely strong; they are resourceful, ruthless, lucky, deeply communal, or willing to move when the sky demands it."
+          ]
+        }
+      ],
+      "tags": ["floating islands", "skylands", "drift", "instability", "settlements", "sky ecology"],
+      "relatedEntries": ["kaysender-overview", "sky-ecology", "peoples-of-kaysender", "messara", "black-fleet", "airships"],
+      "relatedModules": ["floating-island-generator", "settlement-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "sky-ecology",
+      "title": "Sky Ecology",
+      "category": "Creatures",
+      "summary": "Kaysender's skies teem with creatures and plants adapted to clouds, currents, magic, levitation, buoyant oils, rare glands, and arcane atmospheric life.",
+      "body": [
+        "The skies of Kaysender are alive. Creatures of many kinds have adapted to the currents, clouds, winds, and magic of the upper world. Some are light and delicate; others are massive enough to challenge imagination, suspended by fields of arcane energy or strange natural forces that bend the air around them.",
+        "Many sky creatures possess natural levitation. Some small insects hum with magical energy. Certain birds and insects produce viscous buoyant substances that help them control altitude and drift. Larger beings, such as floating whales, are supported by vast fields of arcane force that radiate from their bodies and hold them aloft.",
+        "Other beings are more deeply tied to the magical energies of Kaysender itself. For them, the air is not merely something to breathe or fly through; it is a source of life. Their spirits or bodies may be partly composed of magical fields, allowing them to influence wind, current, weather, or the environment around them.",
+        "Some creatures are prized for what they produce: magical oils, rare feathers, buoyant materials, levitation fluids, or substances with potent properties. Others are revered or feared as symbols of the untamed sky. Whether predator, prey, companion, omen, or resource, sky-dwelling life is one of the forces that makes Kaysender wondrous and dangerous."
+      ],
+      "sections": [
+        {
+          "heading": "Known Sky Life",
+          "body": [
+            "[[sheffels|Sheffels]] are floating, woolly herd creatures protected by shepherds for their wool and the strange magic they generate in the air around them.",
+            "[[grays|The Grays]] are tiny floating organisms that live among plankton-like plants sustained by pure magic in the clouds."
+          ]
+        }
+      ],
+      "tags": ["sky creatures", "levitation", "buoyant oils", "skywhales", "sheffels", "Grays", "magical plants"],
+      "relatedEntries": ["sheffels", "grays", "floating-islands", "kaysender-overview"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "sheffels",
+      "title": "Sheffels",
+      "category": "Creatures",
+      "summary": "Sheffels are floating, woolly creatures resembling massive clouds of fur, herded by brave shepherds for their wool and strange sky-magic presence.",
+      "body": [
+        "Sheffels are among the most iconic skyborne herd animals of Kaysender. They resemble massive, ethereal sheep, their forms drifting through the air like great clouds of fur and fuzz. Their grace belies their size, and their wool is valuable enough that shepherds will risk the predators and pirates of the open sky to protect them.",
+        "The creatures are sought not only for wool, but also for the strange magic they seem to generate in the air around them. A sheffel flock can be a source of livelihood, trade, clothing, status, and danger. Herders must remain constantly alert, guarding their flocks against sky predators and raiders who understand the value of living wealth in a world of scarcity."
+      ],
+      "sections": [],
+      "tags": ["sheffels", "skybeasts", "wool", "herding", "floating creatures"],
+      "relatedEntries": ["sky-ecology", "halflings", "dunhallow-roost", "scarcity-loop"],
+      "relatedModules": ["sky-ecology-generator", "settlement-generator", "shop-market-generator"]
+    },
+    {
+      "id": "grays",
+      "title": "The Grays",
+      "category": "Creatures",
+      "summary": "The Grays are tiny floating organisms that dwell among magical plankton-like plants in the lower atmosphere of Kaysender.",
+      "body": [
+        "The Grays are a strange lower-atmosphere lifeform found among the floating clouds of Kaysender. They live alongside plankton-like plants sustained by pure magic, part of an aerial ecology that turns the air itself into a living environment.",
+        "These organisms help establish that the skies of Kaysender are not empty. The lower atmosphere contains small drifting life, magical plants, delicate root systems, and arcane energies that support creatures unlike those of ordinary land or sea. Their presence gives the world a sense of depth beneath the islands and reminds travelers that even the clouds may be inhabited."
+      ],
+      "sections": [],
+      "tags": ["Grays", "lower atmosphere", "magical plants", "sky ecology", "cloud life"],
+      "relatedEntries": ["sky-ecology", "kaysender-overview", "floating-islands"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "peoples-of-kaysender",
+      "title": "Peoples of Kaysender",
+      "category": "Peoples",
+      "summary": "The land-bound peoples of Kaysender are the heart of civilization, each bringing distinct traditions, survival methods, rivalries, and cultural identities to the floating world.",
+      "body": [
+        "Though the skies are filled with strange creatures, the land-bound peoples remain the heart of Kaysender’s civilizations. They carve homes into floating islands and colossal continents, carry traditions across unstable ground, and shape the cultures that endure in a world where even geography can betray them.",
+        "The major peoples include the [[dwager|Dwager]], master crafters and fortress builders; the [[dragon-kin|Dragon Kin]], proud descendants of dragons and rulers of powerful kingdoms; the [[lizzzefaire|Lizzzefaire]], agile survivalists of the wilds; the [[hume|Hume]], ambitious explorers and diplomats; the [[fae|Fae]], ancient stewards of magic and nature; the [[halflings|Halflings]], warm and practical community-builders; and the [[gezistack|Gezistack]], brilliant inventors of machines and magical contraptions.",
+        "Each people has developed its own answer to the chaos of Kaysender. Some seek permanence. Some embrace movement. Some preserve balance. Some conquer. Some invent. Some endure through family, festival, and trade. Their relationships are not always peaceful, and their old wars, grudges, alliances, and misunderstandings continue to shape the present."
+      ],
+      "sections": [],
+      "tags": ["peoples", "cultures", "Dwager", "Dragon Kin", "Lizzzefaire", "Hume", "Fae", "Halflings", "Gezistack"],
+      "relatedEntries": ["dwager", "dragon-kin", "lizzzefaire", "hume", "fae", "halflings", "gezistack"],
+      "relatedModules": ["settlement-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "dwager",
+      "title": "Dwager / Dwarves",
+      "category": "Peoples",
+      "summary": "The Dwager are master builders, miners, stoneworkers, and fortress-makers whose culture values craft, clan, ancestors, honor, permanence, and community resilience.",
+      "body": [
+        "The Dwager are revered throughout Kaysender for their unparalleled skill in crafting and mining. They carve cities and fortresses out of stone and metal, adorning their holds with intricate work that honors both their craft and their ancestors. Their culture is built on family, craftsmanship, strict honor codes, and the preservation of ancient practices.",
+        "Dwager history reaches back to a time before the floating islands were fully formed. Ancient Dwager were among the first to forge cities into the stone of the islands, driven by a desire for permanence in a world that constantly shifted. Their fortresses, often embedded deep into island rock, have made them one of the most resilient peoples of Kaysender.",
+        "The Dwager have endured wars of survival, particularly against forces that sought to plunder their stone and metal resources. Their long conflict with the [[dragon-kin|Dragon Kin]] is especially bitter, rooted in struggles over sacred mountainous regions and fortified strongholds. They have also clashed with the [[lizzzefaire|Lizzzefaire]] over hunting grounds and territorial boundaries in the wilds of the floating islands.",
+        "Dwager society is clan-based, with each clan seeking prominence through skill and honor in craftsmanship. Profession often follows family tradition, and ancestral memory is carved into the halls themselves. Dwager trust is difficult to earn, but once given it becomes a deep and lasting bond. Loyalty and duty are among their highest virtues."
+      ],
+      "sections": [],
+      "tags": ["Dwager", "dwarves", "clans", "fortresses", "craftsmanship", "mining", "honor"],
+      "relatedEntries": ["peoples-of-kaysender", "dragon-kin", "lizzzefaire", "dwarven-airship-core"],
+      "relatedModules": ["settlement-generator", "airship-vessel-generator", "airship-core-builder"]
+    },
+    {
+      "id": "dragon-kin",
+      "title": "Dragon Kin / Dragonborn",
+      "category": "Peoples",
+      "summary": "The Dragon Kin are proud descendants of the dragons, defined by strength, long life, fire, magic, honor, leadership, royal lineage, and fierce territorial ambition.",
+      "body": [
+        "The Dragon Kin trace their bloodline to the great dragons of the skies. They are formidable in body and spirit, possessed of immense strength, long lives, a natural affinity for fire and magic, and a culture deeply shaped by leadership, honor, and pride.",
+        "Once scattered across the sky islands, the Dragon Kin eventually unified under powerful warlords who sought to emulate the strength and majesty of dragons. Their civilizations were built through conquest and consolidation, creating kingdoms centered on ancient bloodlines and the belief that draconic heritage grants both responsibility and authority.",
+        "Their warrior cultures prize adaptability, power, and command. Cities are often raised in stable, defensible regions, high above the clouds or in remote mountain peaks from which they can watch and defend their territories. The Dragon Kin embrace the volatility of Kaysender as a test of strength and leadership, using the sky itself as battlefield and boundary.",
+        "Their relationship with the [[dwager|Dwager]] remains tense after centuries of rivalry over stable mountainous regions and underground strongholds. The Great Sky War nearly devastated both peoples. The Dragon Kin also have a history of conflict with the [[fae|Fae]], whose guardianship of natural balance often clashes with Dragon Kin fire, magic, and expansion."
+      ],
+      "sections": [],
+      "tags": ["Dragon Kin", "dragonborn", "dragons", "bloodline", "honor", "fire", "kingdoms"],
+      "relatedEntries": ["peoples-of-kaysender", "dwager", "fae", "dragon-lords", "dragon-kin-airship-core"],
+      "relatedModules": ["settlement-generator", "draconic-tithe-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "lizzzefaire",
+      "title": "Lizzzefaire / Lizardfolk",
+      "category": "Peoples",
+      "summary": "The Lizzzefaire are nomadic, resilient survivalists whose tribes rely on agility, resourcefulness, cunning, nature knowledge, and the wisdom of Elder Serpents.",
+      "body": [
+        "The Lizzzefaire are a smaller but resilient people known for agility, survival skill, hunting, gathering, and endurance in harsh environments. Their tribes form close-knit communities across the floating islands, deeply connected to the natural world and shaped by resourcefulness, strength, and cunning.",
+        "Their history is one of movement and survival. Ancient legends tell of great floods and storms that shaped their way of life, teaching them to adapt to the ever-changing terrain of Kaysender. Their societies are built around flexibility, migration, and the ability to leave when an island becomes too dangerous or inhospitable.",
+        "The Lizzzefaire can navigate shifting islands with remarkable ease, scaling cliffs, following waters that appear and vanish with the changing tides of the sky, and reading wilderness signs that others miss. Their knowledge makes them invaluable as guides and scouts in times of crisis.",
+        "Their tribes are often led by the wisest and most experienced members, called Elder Serpents. Lizzzefaire culture values strength, resourcefulness, cunning, and balance with the world around them. They place little value on material wealth and are often distrustful of outsiders, but bonds of respect can become fierce loyalty."
+      ],
+      "sections": [],
+      "tags": ["Lizzzefaire", "lizardfolk", "nomads", "Elder Serpents", "survival", "hunting", "nature"],
+      "relatedEntries": ["peoples-of-kaysender", "dwager", "dragon-kin", "sky-ecology"],
+      "relatedModules": ["npc-crew-generator", "encounter-generator", "sky-ecology-generator"]
+    },
+    {
+      "id": "hume",
+      "title": "Hume / Humans",
+      "category": "Peoples",
+      "summary": "The Hume are widespread, ambitious, adaptable, diplomatic, inventive, and often the catalysts of change in Kaysender's shifting world.",
+      "body": [
+        "The Hume are defined by boundless curiosity, ambition, adaptability, and resilience. Though physically less imposing than some other peoples, they have spread throughout nearly every corner of Kaysender, establishing everything from bustling merchant cities to isolated farming communities.",
+        "Human history is filled with exploration, discovery, conquest, colonization, alliance, and conflict. Unlike peoples who remain largely within ancestral territories, Hume societies push outward, adapt quickly, and build wherever they can. Their diversity is one of their greatest strengths and greatest sources of internal strife.",
+        "The Hume face Kaysender’s chaos through innovation. They build floating cities, harness magic and technology to stabilize structures, seek new territories, repair routes when old connections fail, and negotiate alliances in a world where no settlement can survive alone forever.",
+        "They have clashed with both [[dragon-kin|Dragon Kin]] and [[fae|Fae]], particularly over territory, expansion, and resources. Yet they are also skilled diplomats, and even peoples wary of them may rely on Hume ingenuity in times of need. Humans often become the catalysts of change in Kaysender, for good or ill."
+      ],
+      "sections": [],
+      "tags": ["Hume", "humans", "adaptability", "exploration", "diplomacy", "innovation"],
+      "relatedEntries": ["peoples-of-kaysender", "dragon-kin", "fae", "human-airship-core"],
+      "relatedModules": ["settlement-generator", "airship-vessel-generator", "organization-operations-tracker"]
+    },
+    {
+      "id": "fae",
+      "title": "Fae / Elves",
+      "category": "Peoples",
+      "summary": "The Fae are ancient, long-lived scholars of magic and stewards of nature who preserve old ways, balance, wards, and harmony in the shifting world.",
+      "body": [
+        "The Fae are among the oldest peoples of Kaysender. Their long lives give them ancient memory, patience, and a sense of continuity that shorter-lived peoples often lack. They are scholars of the arcane and stewards of nature, blending magic and the natural world in ways few others truly understand.",
+        "Fae culture is one of preservation. Their society is built on knowledge, magic, tradition, and the protection of natural balance. Many Fae retreat from the turmoil of the wider world in order to safeguard ancient ways and maintain harmony between the living world and the magical forces that shape it.",
+        "In the volatile environment of Kaysender, the Fae use powerful wards and enchantments to stabilize floating cities, protect them from storms and tremors, and maintain harmony with island flora and fauna. Their magic is tied to the fabric of nature, and they often wait patiently for the world to realign before acting.",
+        "The Fae have long-standing animosity with the [[dragon-kin|Dragon Kin]], whose destructive nature threatens the balance they protect. They generally respect the [[dwager|Dwager]], though mining and resource extraction cause tension. The [[lizzzefaire|Lizzzefaire]] are often natural allies, sharing a deep respect for the living world."
+      ],
+      "sections": [],
+      "tags": ["Fae", "elves", "magic", "nature", "wards", "balance", "old ways"],
+      "relatedEntries": ["peoples-of-kaysender", "dragon-kin", "dwager", "lizzzefaire", "elven-airship-core"],
+      "relatedModules": ["settlement-generator", "sky-ecology-generator", "airship-core-builder"]
+    },
+    {
+      "id": "halflings",
+      "title": "Halflings",
+      "category": "Peoples",
+      "summary": "Halflings are warm, practical, adaptable community-builders known for hospitality, farming, trade, innkeeping, close families, and portable homes.",
+      "body": [
+        "Halflings are small in stature but resilient in spirit. They bring warmth, hospitality, practicality, hearty appetites, and a jovial nature to the communities they inhabit. They are beloved across Kaysender for their ability to make life feel livable even under uncertain skies.",
+        "Halflings thrive in chaos by staying light, adaptable, and practical. They can make a home almost anywhere, no matter how unstable the ground beneath them may be. Many Halfling communities are portable, able to move when danger, drift, disaster, or opportunity demands it.",
+        "Their skills as merchants, farmers, innkeepers, and community-brokers allow them to establish normalcy wherever they go. They often become the glue that holds diverse settlements together, offering shelter, food, rumor, celebration, and connection to those displaced by disaster.",
+        "Halfling close-knit families and festive traditions make them a stabilizing social force. Though small, their presence is larger than life, and a Halfling inn, farm, caravan, or market table may be one of the most important institutions on a fragile island."
+      ],
+      "sections": [],
+      "tags": ["Halflings", "hospitality", "families", "farmers", "innkeepers", "portable communities"],
+      "relatedEntries": ["peoples-of-kaysender", "sheffels", "dunhallow-roost", "water-trade"],
+      "relatedModules": ["shop-market-generator", "settlement-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "gezistack",
+      "title": "Gezistack / Gnomes",
+      "category": "Peoples",
+      "summary": "The Gezistack are inventive gnomish geniuses of machines, magical contraptions, laboratories, libraries, discovery, and sky-adapted technology.",
+      "body": [
+        "The Gezistack are the inventive geniuses behind many of Kaysender’s greatest technological feats. Though sometimes overlooked because of their size, they are unmatched in their ability to create intricate machines, magical contraptions, and technological marvels.",
+        "Their societies are filled with laboratories, workshops, libraries, and collaborative spaces driven by curiosity and discovery. Gnomish history is one of invention, exploration, and a relentless desire to understand the world through both magic and mechanism.",
+        "The chaotic floating islands present endless puzzles for the Gezistack. They create devices designed to withstand shifting terrain, predict island movement, stabilize dangerous environments, and navigate the skies. Floating cities and airships powered by combinations of magic and engineering are common in Gezistack societies.",
+        "Gezistack people tend to avoid direct warfare when possible, preferring invention, mediation, or technological solutions. Yet their creations have been used as weapons, and unintended consequences have made other peoples cautious. For the Gezistack, the volatility of Kaysender is not merely a threat; it is a problem waiting to be solved."
+      ],
+      "sections": [],
+      "tags": ["Gezistack", "gnomes", "invention", "laboratories", "machines", "magic technology", "airships"],
+      "relatedEntries": ["peoples-of-kaysender", "gnomish-airship-core", "airships", "floating-islands"],
+      "relatedModules": ["airship-core-builder", "crafting-gadget-creator", "airship-vessel-generator"]
+    },
+    {
+      "id": "messara",
+      "title": "Messara",
+      "category": "Regions",
+      "summary": "Messara is the largest known landmass in Kaysender, a jagged, densely populated, war-scarred continent of mountains, mesas, ravines, fortresses, factions, and ceaseless conflict.",
+      "body": [
+        "Messara is the largest known landmass in Kaysender, a continent marked by ceaseless turmoil and strife. Its jagged mountain ranges, towering mesas, treacherous valleys, ravines, and chasms are scarred by centuries of conflict. Oceans and rivers plunge into abyssal depths where they vanish into oblivion, making the land itself feel as perilous as the wars fought upon it.",
+        "In the high reaches of Messara, snow-capped mountains pierce the sky. Deadly predators, harsh climates, elusive hymaces, tigers, and other dangers make survival a constant struggle. The environment is not a passive backdrop; it is one of the continent’s great enemies.",
+        "Messara is also one of the most populous and fiercely contested regions of Kaysender. Its dense population forms a patchwork of conflicting factions, fortified communities, enclave settlements, farmsteads, cities, and villages. Every settlement lives in the shadow of invasion, sabotage, raid, siege, espionage, trade war, or political maneuvering.",
+        "Alliances on Messara form and fracture with the seasons. Temporary ceasefires allow rivals to rebuild, spy, recruit, fortify, and prepare for the next clash. Peace rarely means safety; it often means everyone is sharpening blades behind walls. The people of Messara survive through strength, cleverness, alliance, endurance, and a refusal to yield to a land that has never truly known rest."
+      ],
+      "sections": [
+        {
+          "heading": "Nations of Messara",
+          "body": [
+            "The major nation-capital entries currently indexed are [[valeria-valthorn|Valeria and Valthorn]], [[faelenor-mirathen|Faelenor and Mirathen]], [[teralon-vorrik|Teralon and Vorrik]], [[silvalis-neylithar|Silvalis and Neylithar]], [[vornak-grimhold|Vornak and Grimhold]], [[rylune-falyris|Rylune and Falyris]], [[zarovar-kalthor|Zarovar and Kalthor]], [[eldrath-druun|Eldrath and Druun]], and [[imbria-solaar|Imbria and Solaar]]."
+          ]
+        }
+      ],
+      "tags": ["Messara", "continent", "war", "mountains", "mesas", "ravines", "fortified settlements"],
+      "relatedEntries": ["valeria-valthorn", "faelenor-mirathen", "teralon-vorrik", "silvalis-neylithar", "vornak-grimhold", "rylune-falyris", "zarovar-kalthor", "eldrath-druun", "imbria-solaar"],
+      "relatedModules": ["world-map-route-generator", "settlement-generator", "city-district-generator"]
+    },
+    {
+      "id": "valeria-valthorn",
+      "title": "Valeria and Valthorn",
+      "category": "Nations",
+      "summary": "Valeria is one of Messara's wealthiest ascendant nations, built on trade, agriculture, craftsmanship, textiles, spices, fine metalwork, monarchy, and worship of the Great Light.",
+      "body": [
+        "Valeria is one of the wealthiest nations on Messara, its economy centered on trade, agriculture, craftsmanship, fertile lands, merchant cities, and access to key trade routes. It is known for high-quality textiles, spices, and fine metalwork, and its trade networks make it a major commercial power.",
+        "Culturally, Valeria is prosperous and proud. Its people value education, intellectual pursuit, art, music, literature, academies, festivals, and patronage of the arts. Valeria expands culturally while still holding tightly to traditional customs.",
+        "Valeria worships the Great Light, a deity of justice, order, and knowledge. The priesthood holds significant influence, shaping ethical standards and working with the state to maintain law and order. Religion is woven into public life rather than kept apart from it.",
+        "The government is a monarchy advised by a powerful council. Noble families sometimes threaten stability through internal conflict, but the monarchy remains strong. Valeria’s military is disciplined and well-funded, with a dominant navy and a formidable land force that often relies on mercenaries for large campaigns. Overall, Valeria is ascendant, though internal political struggle may threaten its future."
+      ],
+      "sections": [],
+      "tags": ["Valeria", "Valthorn", "Great Light", "monarchy", "trade", "textiles", "spices", "fine metalwork"],
+      "relatedEntries": ["messara"],
+      "relatedModules": ["settlement-generator", "shop-market-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "black-fleet",
+      "title": "The Black Fleet",
+      "category": "Factions",
+      "summary": "The Black Fleet is the most infamous bandit faction in Kaysender's skies: feared as a pirate power, but in truth a chaotic banner claimed by rogues, opportunists, and a smaller core fleet.",
+      "body": [
+        "The Black Fleet is the most infamous bandit faction in the skies of Kaysender. Its name inspires fear and respect across the floating continents, but the reality is more chaotic than the legend. It is a patchwork of vagabonds, opportunists, and ruthless pirates rather than a single perfectly disciplined navy.",
+        "For many captains, the Black Fleet is a banner of convenience. Hundreds of airships and rogue crews claim allegiance to the Fleet to strengthen their reputation, frighten enemies, and exploit the terror attached to the name. Many such crews have no real connection to the true Fleet and rarely take orders from its leaders.",
+        "At the heart of the Black Fleet is a true core of about twenty vessels that form its backbone. These ships answer to Sky Captain Verek Drakemoor, the self-styled Sky Pirate King, and follow his commands and rules. Around that core swirls a much larger cloud of pretenders, raiders, imitators, smugglers, and criminals who use the name for their own purposes.",
+        "This makes the Black Fleet dangerous in two ways. The true Fleet is organized enough to matter, while the legend is broad enough that any black sail or whispered rumor can disrupt trade, empty docks, raise prices, or send settlements into panic."
+      ],
+      "sections": [],
+      "tags": ["Black Fleet", "pirates", "bandits", "airships", "Verek Drakemoor", "Sky Pirate King"],
+      "relatedEntries": ["airships", "water-trade", "scarcity-loop", "messara"],
+      "relatedModules": ["black-market-piracy-generator", "airship-vessel-generator", "encounter-generator"]
+    }
+  ]
+}
