@@ -1,6 +1,7 @@
 (() => {
   const INDEX_URL = 'data/modules/module-index.json';
   const EDITOR_SCRIPT = 'module-map-editor.js';
+  const BRIDGE_SCRIPT = 'module-map-editor-bridge.js';
   const MEMORY_PREFIX = 'memory:';
   const MODULE_PATCHES = {
     'northern-watchtower-09': [
@@ -31,7 +32,8 @@
   function esc(v){ return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   async function getJson(url){ const r=await fetch(url,{cache:'no-store'}); if(!r.ok) throw new Error(url); return r.json(); }
   async function getText(url){ const r=await fetch(url,{cache:'no-store'}); if(!r.ok) throw new Error(url); return r.text(); }
-  function loadEditorScript(){ if(document.querySelector(`script[src="${EDITOR_SCRIPT}"]`)) return; const s=document.createElement('script'); s.src=EDITOR_SCRIPT; s.defer=true; document.body.appendChild(s); }
+  function loadScriptOnce(src){ if(document.querySelector(`script[src="${src}"]`)) return; const s=document.createElement('script'); s.src=src; s.defer=true; document.body.appendChild(s); }
+  function loadEditorScript(){ loadScriptOnce(EDITOR_SCRIPT); loadScriptOnce(BRIDGE_SCRIPT); }
   function moduleOptions(){ return [...(indexData?.modules||[]), ...memoryModules.values()].map(entry=>`<option value="${esc(entry.path)}" ${entry.path===activePath?'selected':''}>${esc(entry.title)}</option>`).join(''); }
 
   async function loadModule(path){
@@ -74,16 +76,7 @@
   }
   function normalizeSvg(wrap){ const svg=wrap.querySelector('svg'); if(svg){ svg.removeAttribute('width'); svg.removeAttribute('height'); svg.setAttribute('preserveAspectRatio','xMidYMid meet'); } }
   function useEditorMap(svg){ const root=document.getElementById('module-viewer-root'); const wrap=document.getElementById('module-map'); if(!root||!wrap||!svg) return; usingEditorMap=true; wrap.innerHTML=svg; normalizeSvg(wrap); drawHotspots(root); }
-
-  function registerEditorModule(detail){
-    const module = detail.module || buildMemoryModule(detail);
-    const path = module.path || `${MEMORY_PREFIX}${module.id || Date.now()}`;
-    module.path = path;
-    memoryModules.set(path,{path,title:module.title||'Extracted Module',module});
-    activePath = path; moduleData = module; selectedId = module.rooms?.[0]?.id || null;
-    const root=document.getElementById('module-viewer-root'); if(root){ render(root); if(detail.svg) useEditorMap(detail.svg); }
-    dispatchModuleChanged();
-  }
+  function registerEditorModule(detail){ const module = detail.module || buildMemoryModule(detail); const path = module.path || `${MEMORY_PREFIX}${module.id || Date.now()}`; module.path = path; memoryModules.set(path,{path,title:module.title||'Extracted Module',module}); activePath = path; moduleData = module; selectedId = module.rooms?.[0]?.id || null; const root=document.getElementById('module-viewer-root'); if(root){ render(root); if(detail.svg) useEditorMap(detail.svg); } dispatchModuleChanged(); }
   function buildMemoryModule(detail){ return { schemaVersion:'0.1.0', id:`extracted-${Date.now()}`, title:detail.title||'Extracted Module Draft', subtitle:'In-memory module extracted in the browser', system:'Module draft', source:{notes:'Created from Module Map Editor extraction.'}, map:{image:'',grid:`${detail.state?.width||39} x ${detail.state?.height||39}`}, hotspots:[], rooms:[], doors:[], mapEditorState:detail.state||null }; }
 
   function doorGroupKey(h){ return `${Math.round(h.box.x*10)/10}|${Math.round(h.box.y*10)/10}`; }
