@@ -1,0 +1,25 @@
+{
+  "description": "Future source of truth for module-to-wiki quick links. The runtime currently mirrors this map in kaysender-wiki.js until the cross-link loader is moved fully into JSON.",
+  "links": {
+    "kaysender-wiki": ["kaysender-overview", "messara", "floating-islands"],
+    "kaysender-compatibility-scanner": ["kaysender-overview"],
+    "floating-island-generator": ["floating-islands", "scarcity-loop", "sky-ecology"],
+    "world-map-route-generator": ["messara", "floating-islands", "surveyors-guild"],
+    "settlement-generator": ["floating-islands", "scarcity-loop", "dragon-lords", "water-trade"],
+    "city-district-generator": ["messara", "valeria-valthorn", "water-trade"],
+    "population-generator": ["messara", "scarcity-loop"],
+    "shop-market-generator": ["water-trade", "skyweaver-consortium", "black-fleet"],
+    "airship-vessel-generator": ["airships", "black-fleet", "surveyors-guild"],
+    "airship-core-builder": ["airships", "skyweaver-consortium"],
+    "crafting-gadget-creator": ["skyweaver-consortium", "airships"],
+    "supply-water-planner": ["scarcity-loop", "water-trade", "airships"],
+    "faction-guild-generator": ["dragon-lords", "black-fleet", "surveyors-guild", "skyweaver-consortium"],
+    "black-market-piracy-generator": ["black-fleet", "water-trade", "airships"],
+    "encounter-generator": ["floating-islands", "black-fleet", "dragon-lords", "sky-ecology"],
+    "sky-ecology-generator": ["sky-ecology", "floating-islands"],
+    "npc-crew-generator": ["airships", "surveyors-guild"],
+    "job-board-generator": ["surveyors-guild", "scarcity-loop", "black-fleet"],
+    "draconic-tithe-generator": ["dragon-lords", "scarcity-loop", "water-trade"],
+    "organization-operations-tracker": ["skyweaver-consortium", "surveyors-guild", "black-fleet"]
+  }
+}
