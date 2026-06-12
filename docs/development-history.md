@@ -15,7 +15,7 @@ Included:
 
 ## 2026-06-12 - Kaysender extraction framework
 
-Added the first Kaysender extraction framework for moving the setting from a fifth-edition-framed manuscript toward an open d20 / Hypertext d20-compatible campaign operations suite.
+Added the first Kaysender extraction framework for moving the setting manuscript toward a Hypertext d20-compatible campaign operations suite.
 
 Included:
 
@@ -155,3 +155,16 @@ Included:
 - `docs/wiki-source-lore-correction-pass-1.md`
 
 The new source-lore pack loads last so it overrides earlier editor-support entries by stable ID. The first correction pass replaces visible entries for Kaysender overview, floating islands, sky ecology, sheffels, Grays, peoples, Dwager, Dragon Kin, Lizzzefaire, Hume, Fae, Halflings, Gezistack, Messara, Valeria, and the Black Fleet with reader-facing lore based on the source manuscript.
+
+## 2026-06-12 - Wiki hard-reference policy
+
+Added the hard-reference architecture that makes the wiki the canonical source corpus for the project.
+
+Included:
+
+- `docs/wiki-hard-reference-policy.md`
+- `data/kaysender/wiki/source-ingestion-manifest.json`
+- Updated `data/kaysender/schemas/wiki-entry.schema.json`
+- `scripts/extract-kaysender-outline.py`
+
+The wiki schema now supports `sourceStatus`, `sourceRefs`, and `sourceChunkIds`. The source ingestion manifest records the core PDF as a 392-page source with hundreds of outline entries and establishes that every source section should become a wiki hard-reference entry or indexed source chunk before downstream generators derive from it.
