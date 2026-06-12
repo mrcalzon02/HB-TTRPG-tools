@@ -11,10 +11,14 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `app.js` — tab navigation, panel layout controls, character-sheet math, autosave, import/export, print-to-PDF helpers, registry rendering, and loading for the alpha Kaysender tool layer.
 - `kaysender-tools.js` — alpha interactive Kaysender tools attached to the registry cards.
 - `kaysender-wiki.js` — alpha hypertext wiki browser and cross-link layer between lore entries and modules.
-- `data/kaysender-tools-registry.json` — machine-readable registry for planned and alpha Kaysender tools, utilities, and generators.
+- `kaysender-editors.js` — staged deep-editor runtime, beginning with the Floating Island / Skyland Editor.
+- `data/kaysender-tools-registry.json` — machine-readable registry for planned, alpha, and editor-alpha Kaysender tools, utilities, and generators.
 - `data/kaysender/wiki/entries.json` — seed Kaysender wiki entries with related-entry and related-module links.
+- `data/kaysender/editors/floating-island-editor.json` — source-derived configuration for the first staged deep editor.
 - `data/kaysender/schemas/wiki-entry.schema.json` — schema for future Kaysender wiki entries.
+- `data/kaysender/schemas/floating-island-profile.schema.json` — schema for generated floating island profiles.
 - `docs/kaysender-tool-extraction.md` — first extraction framework for converting Kaysender into open d20-compatible campaign utilities.
+- `docs/kaysender-editor-staging-plan.md` — sequential plan for building one detailed editor at a time.
 - `docs/deployment.md` — GitHub Pages deployment and smoke-test guide.
 - `.github/workflows/pages.yml` — optional GitHub Pages deployment workflow.
 
@@ -36,11 +40,11 @@ Use **Print / Save as PDF** in the browser to create a PDF copy. The sheet is de
 
 Kaysender is being migrated from a fifth-edition-framed source manuscript into an open d20 / Hypertext d20-compatible campaign operations suite.
 
-The site includes a **Kaysender** dashboard that loads module cards from `data/kaysender-tools-registry.json`. The registry currently tracks planned and alpha modules for:
+The site includes a **Kaysender** dashboard that loads module cards from `data/kaysender-tools-registry.json`. The registry currently tracks planned, alpha, and editor-alpha modules for:
 
 - Hypertext wiki support
 - Open d20 compatibility scanning
-- Floating island generation
+- Floating island generation and deep skyland editing
 - World map and route generation
 - Settlement and district generation
 - Population generation
@@ -59,13 +63,28 @@ The following registry cards now launch working alpha tools:
 
 - Kaysender Hypertext Wiki
 - Open d20 Compatibility Scanner
-- Floating Island Generator
+- Floating Island Generator and Skyland Editor
 - Settlement Generator
 - Shop and Market Stall Generator
 - Airship and Vessel Generator
 - Supply, Water, and Survival Planner
 
 These are campaign-operation utilities. They are not final balanced rules text and should be treated as drafting aids until the table data and conversion logic are expanded.
+
+## Sequential editor model
+
+The staged editor plan builds one complete editor at a time.
+
+Stage 1 is the **Floating Island / Skyland Editor**. It uses a JSON configuration file to expose manual controls, randomization, derived scores, GM notes, settlement hooks, route hooks, market hooks, encounter hooks, full JSON export, and draft wiki-entry export.
+
+Later editors should follow the same pattern:
+
+1. JSON configuration.
+2. Output schema.
+3. Runtime UI.
+4. Cross-links to wiki entries and modules.
+5. Exportable structured output.
+6. Source-safe lore and open d20-compatible rules-facing language.
 
 ## Cross-linking model
 
