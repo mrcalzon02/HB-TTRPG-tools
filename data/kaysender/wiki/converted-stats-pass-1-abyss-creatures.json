@@ -1,0 +1,301 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "First converted statistics pass. Adds Hypertext d20-compatible creature stat blocks for the Beasts of the Abyss entry instead of leaving the mechanics as a legacy placeholder.",
+  "entries": [
+    {
+      "id": "beasts-of-the-abyss",
+      "title": "Beasts of the Abyss",
+      "category": "Creatures",
+      "summary": "A family of colossal predators, parasites, and warped hunters reported in the lightless reaches below the clouds, now converted into Hypertext d20-compatible creature statistics.",
+      "body": [
+        "The Abyss is not merely empty darkness below the skylands. It is an ecological and supernatural pressure zone where predators, parasites, void-touched hunters, and corrupted survival forms wait for falling ships, lost crews, and reckless explorers.",
+        "Source accounts name the ship-swallowing [[abyssal-maw|Abyssal Maw]], the storm-making [[shadowwing-leviathan|Shadowwing Leviathan]], regenerative [[sable-tendrils|Sable Tendrils]], the web-spinning [[blackclaw|Blackclaw]], the phasing [[nightmare-hound|Nightmare Hound]], and mounted [[gloomrider|Gloomriders]].",
+        "The statistics below are converted Hypertext d20-compatible working stat blocks derived from the source descriptions. They are no longer placeholders. They are meant to be playable, searchable, and usable by encounter, sky-ecology, and airship-threat tools."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "The source text describes major abilities, dangers, and behavior rather than a unified completed d20 stat framework. This pass converts those descriptions into Hypertext d20-compatible statistics using d20-style creature entries, saving throws, armor classes, hit dice, attacks, special attacks, qualities, skills, feats, environment, organization, treasure, and challenge rating.",
+            "Values are intentionally high because these creatures threaten airships and whole crews rather than only single ground-level adventurers. Later balancing passes can tune CR, hit dice, and save DCs after playtesting."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "abyssal-maw-statblock",
+          "title": "Abyssal Maw",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Aberration",
+          "size": "Colossal",
+          "alignment": "Usually neutral evil",
+          "challengeRating": "20",
+          "experience": "307,200",
+          "hitDice": "30d8+270",
+          "hitPoints": "405 hp",
+          "initiative": "-2",
+          "speed": ["Fly 10 ft. (poor)", "Abyssal drift 30 ft. while in void currents"],
+          "armorClass": { "total": "28", "touch": "0", "flatFooted": "28", "notes": "-8 size, -2 Dex, +28 natural" },
+          "baseAttackGrapple": "+22/+62",
+          "attack": "Bite +38 melee (6d8+24 plus improved grab)",
+          "fullAttack": "Bite +38 melee (6d8+24) and 4 pseudopods +33 melee (2d8+16)",
+          "spaceReach": "30 ft./30 ft. (60 ft. with pseudopods)",
+          "specialAttacks": [
+            "Swallow Whole (Ex): If the Abyssal Maw begins its turn grappling a Huge or smaller creature, ship section, or exposed crew cluster, it may attempt a grapple check to swallow. Swallowed creatures take 4d8+16 bludgeoning damage plus 4d8 acid damage each round. Escape requires dealing 60 slashing or piercing damage to the interior AC 18 before the wound seals.",
+            "Ship-Swallowing Maw (Ex): Against vessels, the Maw attacks a ship zone instead of a creature. On a successful bite against a disabled, immobilized, or grappled ship, it deals 8d10 structural damage and may engulf a section at the GM's discretion.",
+            "Void Pull (Su): 300-ft. radius gravity well; flying creatures and vessels must succeed on a DC 34 Reflex save or be pulled 60 ft. toward the Maw. Airships may substitute a piloting or control check at the same DC. The save DC is Constitution-based.",
+            "Abyssal Corruption (Su): Magical items, exposed mechanisms, and airship systems within 120 ft. must succeed on a DC 31 Fortitude save or Engineering/Arcana maintenance check each minute or become degraded. Degraded systems take a -2 penalty to relevant checks; three failed checks disable the system until repaired."
+          ],
+          "specialQualities": ["Blindsight 240 ft.", "Darkvision 300 ft.", "Immunity to acid and poison", "Resistance to cold 20 and electricity 20", "Amorphous body", "Abyssal camouflage (+20 Hide in full darkness while motionless)", "Damage reduction 15/magic and slashing", "Spell resistance 31"],
+          "saves": { "fortitude": "+19", "reflex": "+8", "will": "+22" },
+          "abilities": { "strength": "42", "dexterity": "6", "constitution": "29", "intelligence": "3", "wisdom": "20", "charisma": "18" },
+          "skills": ["Hide -18 (+2 in darkness, +22 motionless in abyssal dark)", "Listen +25", "Spot +25", "Survival +12"],
+          "feats": ["Awesome Blow", "Great Fortitude", "Improved Bull Rush", "Improved Grapple", "Improved Natural Attack (bite)", "Iron Will", "Power Attack", "Snatch", "Toughness", "Weapon Focus (bite)", "Ability Focus (void pull)"],
+          "environment": "Deep Abyss, lowest void currents, abyssal pits",
+          "organization": "Solitary",
+          "treasure": "Incidental; swallowed wreckage, corroded cargo, and partially digested ship relics",
+          "advancement": "31-45 HD (Colossal)",
+          "levelAdjustment": "—",
+          "tactics": ["Waits motionless until a ship or creature comes within gravity-well range.", "Uses Void Pull to drag prey into bite reach, then corrupts ship systems before swallowing or crushing sections.", "Rarely pursues outside its abyssal hunting zone unless drawn by a large magical engine or damaged airship core."],
+          "conversionNotes": ["Converted from source abilities: Swallow Whole, Void Pull, and Abyssal Corruption.", "Designed as an airship-scale apex hazard rather than a routine wandering monster."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Beasts of the Abyss / The Abyssal Maw", "chunkId": "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:abyssal-maw" }
+          ]
+        },
+        {
+          "id": "shadowwing-leviathan-statblock",
+          "title": "Shadowwing Leviathan",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air, Abyssal)",
+          "size": "Colossal",
+          "alignment": "Usually chaotic neutral",
+          "challengeRating": "18",
+          "experience": "153,600",
+          "hitDice": "28d10+196",
+          "hitPoints": "350 hp",
+          "initiative": "+7",
+          "speed": ["Fly 200 ft. (good)", "Abyssal shadow glide 300 ft. in full darkness"],
+          "armorClass": { "total": "31", "touch": "5", "flatFooted": "28", "notes": "-8 size, +3 Dex, +26 natural" },
+          "baseAttackGrapple": "+28/+56",
+          "attack": "Bite +32 melee (4d8+18)",
+          "fullAttack": "Bite +32 melee (4d8+18), 2 wing buffets +30 melee (2d8+9), and tail slap +30 melee (4d6+9)",
+          "spaceReach": "30 ft./20 ft. (30 ft. with tail)",
+          "specialAttacks": [
+            "Dark Gale (Su): 180-ft. cone of abyssal wind; creatures must succeed on a DC 31 Reflex save or take 8d6 cold damage, be pushed 60 ft., and be knocked prone. Airships struck by the gale must succeed on a DC 31 control check or be blown off-course and take 6d10 structural damage.",
+            "Void Screech (Su): 300-ft. spread, once every 1d4 rounds; living creatures must succeed on a DC 30 Will save or be stunned for 1 round and shaken for 1d6 rounds. A successful save negates the stun and halves the shaken duration.",
+            "Shadow Ambush (Ex): In areas of darkness, fog, or abyssal shadow, the Leviathan may make a Hide check even while observed and gains +2d6 damage on the first attack against a target that failed to detect it."
+          ],
+          "specialQualities": ["Blindsense 300 ft.", "Darkvision 500 ft.", "Low-light vision", "Cold resistance 30", "Electricity resistance 20", "Abyssal flight", "Shadow blend", "Damage reduction 10/magic", "Spell resistance 29"],
+          "saves": { "fortitude": "+23", "reflex": "+19", "will": "+15" },
+          "abilities": { "strength": "34", "dexterity": "17", "constitution": "25", "intelligence": "7", "wisdom": "18", "charisma": "20" },
+          "skills": ["Hide +14 (+34 in abyssal darkness)", "Listen +30", "Move Silently +26", "Spot +30", "Survival +20"],
+          "feats": ["Ability Focus (void screech)", "Alertness", "Flyby Attack", "Hover", "Improved Initiative", "Iron Will", "Multiattack", "Power Attack", "Snatch", "Wingover"],
+          "environment": "Middle to Deep Abyss, storm-dark void layers",
+          "organization": "Solitary or pair",
+          "treasure": "None, though lairs may contain wreckage carried by abyss winds",
+          "advancement": "29-42 HD (Colossal)",
+          "levelAdjustment": "—",
+          "tactics": ["Approaches under cover of shadow before using Void Screech to disable crews.", "Uses Dark Gale to force airships into cliffs, gravity wells, or deeper abyssal layers.", "Avoids prolonged melee with heavily armed vessels unless the crew is already stunned or off-course."],
+          "conversionNotes": ["Converted from source abilities: Dark Gale, Void Screech, and Abyssal Flight.", "Built as a mobile abyssal hunter that attacks navigation and crew control before hull integrity."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Beasts of the Abyss / Shadowwing Leviathan", "chunkId": "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:shadowwing-leviathan" }
+          ]
+        },
+        {
+          "id": "sable-tendrils-statblock",
+          "title": "Sable Tendrils",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Aberration (Abyssal)",
+          "size": "Gargantuan",
+          "alignment": "Usually neutral evil",
+          "challengeRating": "15",
+          "experience": "51,200",
+          "hitDice": "22d8+154",
+          "hitPoints": "253 hp",
+          "initiative": "+3",
+          "speed": ["Climb 20 ft.", "Fly 30 ft. (poor) while anchored to abyssal surfaces"],
+          "armorClass": { "total": "27", "touch": "9", "flatFooted": "24", "notes": "-4 size, +3 Dex, +18 natural" },
+          "baseAttackGrapple": "+16/+43",
+          "attack": "Tendril +27 melee (2d8+15 plus grab)",
+          "fullAttack": "6 tendrils +27 melee (2d8+15 plus grab) and 6 mouths +25 melee (1d8+7 plus poison)",
+          "spaceReach": "20 ft./60 ft.",
+          "specialAttacks": [
+            "Grasp of the Abyss (Ex): A Sable Tendril that hits with a tendril attack may attempt to start a grapple without provoking. Grappled targets take 2d8+15 constriction damage each round and may be dragged 30 ft. downward or toward an abyssal surface.",
+            "Airship Snare (Ex): Against a ship, three or more successful tendril hits in the same round force a DC 29 control check. Failure entangles the ship zone, reduces speed by half, and deals 4d10 structural damage each round until the tendrils are severed.",
+            "Poisonous Kiss (Ex): Mouth attack; Fortitude DC 28; initial effect paralysis for 1d4 rounds, secondary effect 1d6 Dexterity damage. The save DC is Constitution-based.",
+            "Severed Tendril Assault (Ex): A severed tendril continues to attack for 1d4 rounds unless destroyed by fire, radiant energy, or consecrated magic."
+          ],
+          "specialQualities": ["Darkvision 240 ft.", "Tremorsense through attached surfaces 120 ft.", "Regeneration 15", "Scent", "Immunity to poison", "Resistance to acid 20 and cold 20", "Damage reduction 10/slashing or magic"],
+          "saves": { "fortitude": "+14", "reflex": "+10", "will": "+18" },
+          "abilities": { "strength": "40", "dexterity": "17", "constitution": "25", "intelligence": "4", "wisdom": "20", "charisma": "12" },
+          "skills": ["Climb +38", "Hide +8 (+28 in abyssal darkness)", "Listen +24", "Spot +24"],
+          "feats": ["Ability Focus (poisonous kiss)", "Combat Reflexes", "Improved Grapple", "Improved Natural Attack (tendril)", "Multiattack", "Power Attack", "Weapon Focus (tendril)", "Toughness"],
+          "environment": "Abyss walls, void crevasses, drifting wreck fields",
+          "organization": "Solitary growth, cluster (2-4), or colony (5-12 tendril masses)",
+          "treasure": "Incidental; tangled wreckage, trapped cargo, and the remains of prior victims",
+          "advancement": "23-33 HD (Gargantuan), 34-44 HD (Colossal)",
+          "levelAdjustment": "—",
+          "tactics": ["Attacks from outside normal sightlines and begins by snaring sails, rudders, exposed crew, or engine struts.", "Regenerates unless crews spend actions burning or consecrating severed tendrils.", "Attempts to drag prey downward rather than fighting fairly."],
+          "conversionNotes": ["Converted from source abilities: Grasp of the Abyss, Poisonous Kiss, and Regeneration.", "Designed as a persistent airship-control and hazard creature."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Beasts of the Abyss / Sable Tendrils", "chunkId": "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:sable-tendrils" }
+          ]
+        },
+        {
+          "id": "blackclaw-statblock",
+          "title": "Blackclaw",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Abyssal)",
+          "size": "Colossal",
+          "alignment": "Usually neutral evil",
+          "challengeRating": "17",
+          "experience": "102,400",
+          "hitDice": "26d10+182",
+          "hitPoints": "325 hp",
+          "initiative": "+8",
+          "speed": ["50 ft.", "Climb 40 ft.", "Leap 100 ft. horizontal or 50 ft. vertical"],
+          "armorClass": { "total": "34", "touch": "6", "flatFooted": "30", "notes": "-8 size, +4 Dex, +28 natural" },
+          "baseAttackGrapple": "+26/+58",
+          "attack": "Claw +34 melee (4d6+16 plus poison)",
+          "fullAttack": "6 claws +34 melee (4d6+16 plus poison) and bite +32 melee (4d8+8)",
+          "spaceReach": "30 ft./20 ft.",
+          "specialAttacks": [
+            "Web of the Void (Su): 120-ft. ranged touch or 60-ft. burst webbing; Reflex DC 29 negates. Entangled targets are anchored, take a -4 penalty to Dexterity, and must succeed on a DC 34 Strength check or DC 30 Escape Artist check to break free. Airship zones caught in the web lose maneuverability and take a -6 penalty on control checks.",
+            "Energy-Draining Web (Su): Creatures or ship systems trapped in Web of the Void take 2d6 negative energy damage each round. Magical engines or devices must succeed on a DC 27 caster level, Arcana, or Engineering check each round or become suppressed for 1 round.",
+            "Claws of Fate (Ex): On a successful claw hit against metal, hull plating, or an unattended object, the Blackclaw ignores the first 10 points of hardness. A leaping full-weight strike deals double claw damage to a ship zone.",
+            "Abyssal Poison (Ex): Claw or bite; Fortitude DC 30; initial effect paralysis for 1d6 rounds and hallucinations for 1 minute; secondary effect 2d6 Constitution damage."
+          ],
+          "specialQualities": ["Darkvision 300 ft.", "Low-light vision", "Tremorsense 120 ft.", "Abyssal web-walking", "Immunity to poison", "Resistance to acid 15 and cold 15", "Damage reduction 10/magic", "Spell resistance 27"],
+          "saves": { "fortitude": "+22", "reflex": "+19", "will": "+13" },
+          "abilities": { "strength": "42", "dexterity": "19", "constitution": "25", "intelligence": "5", "wisdom": "16", "charisma": "14" },
+          "skills": ["Climb +44", "Hide +10 (+30 in abyssal webbing)", "Jump +48", "Listen +24", "Move Silently +20", "Spot +28"],
+          "feats": ["Ability Focus (abyssal poison)", "Alertness", "Improved Initiative", "Improved Natural Attack (claw)", "Multiattack", "Power Attack", "Run", "Snatch", "Weapon Focus (claw)", "Awesome Blow"],
+          "environment": "Dense Abyss, webbed ruins, darkness below trade routes",
+          "organization": "Solitary or brood pair",
+          "treasure": "Half standard; trapped cargo, dissolved wrecks, and webbed remains",
+          "advancement": "27-39 HD (Colossal)",
+          "levelAdjustment": "—",
+          "tactics": ["Fires Web of the Void first, then leaps onto immobilized vessels.", "Targets sails, rudders, elemental rings, and exposed deck crews before cracking the hull.", "Uses poison against officers, pilots, and repair crews to prevent recovery."],
+          "conversionNotes": ["Converted from source abilities: Web of the Void, Claws of Fate, and Abyssal Poison.", "Designed as a ship-disabler and boarding-scale abyss predator."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Beasts of the Abyss / Blackclaw", "chunkId": "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:blackclaw" }
+          ]
+        },
+        {
+          "id": "nightmare-hound-statblock",
+          "title": "Nightmare Hound",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Outsider (Abyssal, Extraplanar)",
+          "size": "Huge",
+          "alignment": "Usually chaotic evil",
+          "challengeRating": "14",
+          "experience": "38,400",
+          "hitDice": "18d8+108",
+          "hitPoints": "189 hp",
+          "initiative": "+9",
+          "speed": ["80 ft.", "Phase step 120 ft. as supernatural movement in darkness"],
+          "armorClass": { "total": "29", "touch": "13", "flatFooted": "24", "notes": "-2 size, +5 Dex, +16 natural" },
+          "baseAttackGrapple": "+18/+38",
+          "attack": "Bite +28 melee (3d8+18 plus soul devour)",
+          "fullAttack": "Bite +28 melee (3d8+18 plus soul devour) and 2 claws +26 melee (2d6+9)",
+          "spaceReach": "15 ft./10 ft.",
+          "specialAttacks": [
+            "Howl of the Void (Su): 240-ft. spread; Will DC 26 negates. Creatures that fail are confused for 1d4 rounds and shaken for 1 minute. Creatures that fail by 5 or more are instead panicked for 1d4 rounds before becoming shaken.",
+            "Phantasmal Pursuit (Su): Once per round as a move action, the Nightmare Hound may teleport up to 120 ft. between areas of dim light or darkness, but must end adjacent to a creature it has tracked, heard, or scented within the last minute.",
+            "Soul Devour (Su): Bite attack; Fortitude DC 25 negates. On a failed save, the target gains one negative level and cannot benefit from natural healing for 24 hours. The save DC is Charisma-based.",
+            "Relentless Quarry (Su): Once the hound damages a target, it gains a +10 insight bonus on Survival checks to track that target across mundane terrain, airship decks, and abyssal distortions for 24 hours."
+          ],
+          "specialQualities": ["Darkvision 240 ft.", "Scent", "See in darkness", "Incorporeal flicker 20% miss chance in dim light", "Immunity to fear", "Resistance to cold 20 and negative energy 20", "Damage reduction 10/silver or magic", "Spell resistance 25"],
+          "saves": { "fortitude": "+17", "reflex": "+16", "will": "+15" },
+          "abilities": { "strength": "34", "dexterity": "21", "constitution": "22", "intelligence": "8", "wisdom": "18", "charisma": "20" },
+          "skills": ["Hide +18 (+28 in darkness)", "Intimidate +26", "Jump +32", "Listen +27", "Move Silently +26", "Spot +27", "Survival +27"],
+          "feats": ["Ability Focus (howl of the void)", "Improved Initiative", "Improved Natural Attack (bite)", "Multiattack", "Power Attack", "Run", "Track"],
+          "environment": "Abyssal hunting routes, wreck shadows, void-choked passes",
+          "organization": "Solitary, pair, or pack (3-6)",
+          "treasure": "None",
+          "advancement": "19-27 HD (Huge), 28-36 HD (Gargantuan)",
+          "levelAdjustment": "—",
+          "tactics": ["Begins with Howl of the Void from beyond easy visibility.", "Uses Phantasmal Pursuit to bypass barricades, ship railings, and defensive formations.", "Focuses on one target until Soul Devour weakens or drops the quarry."],
+          "conversionNotes": ["Converted from source abilities: Howl of the Void, Phantasmal Pursuit, and Soul Devour.", "Designed as a psychic pursuit predator rather than a brute-force hull destroyer."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Beasts of the Abyss / Nightmare Hound", "chunkId": "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:nightmare-hound" }
+          ]
+        },
+        {
+          "id": "gloomrider-statblock",
+          "title": "Gloomrider",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Monstrous Humanoid (Abyssal)",
+          "size": "Large",
+          "alignment": "Usually lawful evil",
+          "challengeRating": "13",
+          "experience": "25,600",
+          "hitDice": "16d8+64",
+          "hitPoints": "136 hp",
+          "initiative": "+8",
+          "speed": ["40 ft.", "Fly 80 ft. (average) on dark steed"],
+          "armorClass": { "total": "27", "touch": "13", "flatFooted": "23", "notes": "-1 size, +4 Dex, +10 natural, +4 armor" },
+          "baseAttackGrapple": "+16/+27",
+          "attack": "Cursed composite longbow +22 ranged (2d6+8 plus curse) or lance +22 melee (2d6+10)",
+          "fullAttack": "Cursed composite longbow +22/+17/+12/+7 ranged (2d6+8 plus curse) or lance +22/+17/+12/+7 melee (2d6+10)",
+          "spaceReach": "10 ft./10 ft.",
+          "specialAttacks": [
+            "Cursed Arrow (Su): A creature damaged by a Gloomrider's arrow must succeed on a DC 23 Will save or become cursed for 24 hours. While cursed, the target takes a -2 penalty on attack rolls, saves, and skill checks and must succeed on a DC 23 Fortitude save each hour or take 1d4 Constitution damage.",
+            "Dark Steed's Charge (Su): Mounted charge; line 120 ft. Airborne creatures and exposed deck crews in the path must succeed on a DC 24 Reflex save or take 6d6 bludgeoning damage plus 4d6 negative energy damage and be knocked prone. Airships struck by the charge must succeed on a DC 24 control check or be forced 60 ft. off-course.",
+            "Hunter's Mark (Su): As a swift action, the Gloomrider marks one creature or ship it can see. It gains a +4 bonus on attack rolls, Survival checks, and damage rolls against the marked target for 1 hour."
+          ],
+          "specialQualities": ["Darkvision 120 ft.", "Shadow cloak", "Mounted bond", "See in darkness", "Resistance to cold 10 and negative energy 10", "Damage reduction 5/magic", "Spell resistance 23"],
+          "saves": { "fortitude": "+9", "reflex": "+14", "will": "+13" },
+          "abilities": { "strength": "24", "dexterity": "19", "constitution": "18", "intelligence": "12", "wisdom": "16", "charisma": "17" },
+          "skills": ["Hide +21 (+31 in shadows)", "Intimidate +22", "Listen +22", "Move Silently +21", "Ride +25", "Spot +22", "Survival +22"],
+          "feats": ["Far Shot", "Improved Initiative", "Mounted Archery", "Mounted Combat", "Point Blank Shot", "Precise Shot", "Ride-By Attack"],
+          "environment": "Abyssal routes, shadowed skies, wreck approaches",
+          "organization": "Solitary, hunting pair, or flight (3-8 plus dark steeds)",
+          "treasure": "Standard; cursed arrows, shadow gear, trophies, and stolen signal gear",
+          "advancement": "By character class or 17-24 HD (Large)",
+          "levelAdjustment": "—",
+          "tactics": ["Marks targets before emerging from shadow cover.", "Uses cursed arrows to soften pilots, officers, and spellcasters before ordering a dark steed charge.", "Withdraws into darkness and returns after the curse has weakened the prey."],
+          "conversionNotes": ["Converted from source abilities: Shadow Cloak, Cursed Arrow, and Dark Steed's Charge.", "The dark steed is treated as part of the Gloomrider encounter package for this stat block; later passes may split it into a separate mount stat block."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Beasts of the Abyss / Gloomrider", "chunkId": "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:gloomrider" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        {
+          "sourceId": "kaysender-core-pdf-2025-01-20",
+          "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf",
+          "outlineTitle": "Beasts of the Abyss",
+          "chunkId": "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss"
+        }
+      ],
+      "sourceChunkIds": [
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:abyssal-maw",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:shadowwing-leviathan",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:sable-tendrils",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:blackclaw",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:nightmare-hound",
+        "kaysender-core-pdf-2025-01-20:beasts-of-the-abyss:gloomrider"
+      ],
+      "tags": ["Abyssal Maw", "Shadowwing Leviathan", "Sable Tendrils", "Blackclaw", "Nightmare Hound", "Gloomrider", "Hypertext d20", "converted statistics"],
+      "relatedEntries": ["the-abyss", "infernal-core", "underwyrms", "airships", "fall-prevention-gear"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator", "airship-vessel-generator"]
+    }
+  ]
+}
