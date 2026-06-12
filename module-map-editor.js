@@ -78,35 +78,16 @@
   function clampInt(v,min,max){ return Math.max(min, Math.min(max, parseInt(v,10)||min)); }
   function render(root){ updatePalette(root); drawGrid(root); root.querySelector('#mme-preview').textContent=toAscii(); status(root,`${state.width} × ${state.height} grid ready.`); }
   function updatePalette(root){ root.querySelectorAll('.module-palette-button').forEach(b=>b.classList.toggle('active',b.dataset.tileType===selectedType)); }
-  function drawGrid(root){
-    const grid=root.querySelector('#mme-grid');
-    grid.style.gridTemplateColumns=`repeat(${state.width}, 18px)`;
-    grid.innerHTML='';
-    for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++) grid.appendChild(tileButton(root,x,y));
-  }
-  function tileButton(root,x,y){
-    const cell=state.cells[y][x]; const t=tileById(cell.type);
-    const b=document.createElement('button'); b.type='button'; b.className=`module-tile ${t.className}`; b.dataset.x=x; b.dataset.y=y; b.title=`${x},${y} ${t.label}`; b.textContent=cell.type==='label'?cell.label:(['door','secret-door','trap','stairs'].includes(cell.type)?t.char:'');
-    b.onmousedown=e=>{paintDown=true; paint(root,x,y,e.shiftKey)};
-    b.onmouseenter=e=>{ if(paintDown) paint(root,x,y,e.shiftKey,true); };
-    return b;
-  }
-  function paint(root,x,y,shiftKey,drag=false){
-    const mode=root.querySelector('#mme-mode').value;
-    const cell=state.cells[y][x];
-    if(mode==='cycle' && !drag){ const i=TILE_TYPES.findIndex(t=>t.id===cell.type); const next=TILE_TYPES[(i+1)%TILE_TYPES.length]; state.cells[y][x]={type:next.id,label:next.id==='label'?(root.querySelector('#mme-label').value||'1'):''}; }
-    else if(mode==='label' || selectedType==='label'){ state.cells[y][x]={type:'label',label:root.querySelector('#mme-label').value||String(nextRoomNumber())}; }
-    else if(shiftKey){ state.cells[y][x]={type:'void',label:''}; }
-    else { state.cells[y][x]={type:selectedType,label:''}; }
-    refreshTile(root,x,y); root.querySelector('#mme-preview').textContent=toAscii();
-  }
+  function drawGrid(root){ const grid=root.querySelector('#mme-grid'); grid.style.gridTemplateColumns=`repeat(${state.width}, 18px)`; grid.innerHTML=''; for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++) grid.appendChild(tileButton(root,x,y)); }
+  function tileButton(root,x,y){ const cell=state.cells[y][x]; const t=tileById(cell.type); const b=document.createElement('button'); b.type='button'; b.className=`module-tile ${t.className}`; b.dataset.x=x; b.dataset.y=y; b.title=`${x},${y} ${t.label}`; b.textContent=cell.type==='label'?cell.label:(['door','secret-door','trap','stairs'].includes(cell.type)?t.char:''); b.onmousedown=e=>{paintDown=true; paint(root,x,y,e.shiftKey)}; b.onmouseenter=e=>{ if(paintDown) paint(root,x,y,e.shiftKey,true); }; return b; }
+  function paint(root,x,y,shiftKey,drag=false){ const mode=root.querySelector('#mme-mode').value; const cell=state.cells[y][x]; if(mode==='cycle' && !drag){ const i=TILE_TYPES.findIndex(t=>t.id===cell.type); const next=TILE_TYPES[(i+1)%TILE_TYPES.length]; state.cells[y][x]={type:next.id,label:next.id==='label'?(root.querySelector('#mme-label').value||'1'):''}; } else if(mode==='label' || selectedType==='label'){ state.cells[y][x]={type:'label',label:root.querySelector('#mme-label').value||String(nextRoomNumber())}; } else if(shiftKey){ state.cells[y][x]={type:'void',label:''}; } else { state.cells[y][x]={type:selectedType,label:''}; } refreshTile(root,x,y); root.querySelector('#mme-preview').textContent=toAscii(); }
   function refreshTile(root,x,y){ const old=root.querySelector(`.module-tile[data-x="${x}"][data-y="${y}"]`); if(old) old.replaceWith(tileButton(root,x,y)); }
   function nextRoomNumber(){ let max=0; state.cells.flat().forEach(c=>{ const n=parseInt(c.label,10); if(c.type==='label'&&!Number.isNaN(n)) max=Math.max(max,n); }); return max+1; }
   function status(root,msg){ root.querySelector('#mme-status').textContent=msg; }
   function toAscii(){ return state.cells.map(row=>row.map(c=>c.type==='label'?(c.label||'L').slice(0,1):tileById(c.type).char).join('')).join('\n'); }
-  function toSvg(){ const s=18, w=state.width*s, h=state.height*s; const parts=[`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`,`<rect width="${w}" height="${h}" fill="#fff"/>`]; for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++){ const c=state.cells[y][x], px=x*s, py=y*s; if(c.type==='void') parts.push(`<rect x="${px}" y="${py}" width="${s}" height="${s}" fill="#000"/>`); if(c.type==='wall') parts.push(`<rect x="${px}" y="${py}" width="${s}" height="${s}" fill="#000"/>`); if(c.type==='floor'||c.type==='label'||c.type==='door'||c.type==='secret-door'||c.type==='trap'||c.type==='stairs') parts.push(`<rect x="${px}" y="${py}" width="${s}" height="${s}" fill="#fff" stroke="#d0d0d0" stroke-width="1"/>`); if(c.type==='door') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">D</text>`); if(c.type==='secret-door') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">S</text>`); if(c.type==='trap') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">T</text>`); if(c.type==='stairs') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">^</text>`); if(c.type==='label') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="serif" font-size="12" fill="#000">${esc(c.label)}</text>`); } parts.push('</svg>'); return parts.join('\n'); }
+  function toSvg(){ const s=18, w=state.width*s, h=state.height*s; const parts=[`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`,`<rect width="${w}" height="${h}" fill="#fff"/>`]; for(let y=0;y<state.height;y++) for(let x=0;x<state.width;x++){ const c=state.cells[y][x], px=x*s, py=y*s; if(c.type==='void'||c.type==='wall') parts.push(`<rect x="${px}" y="${py}" width="${s}" height="${s}" fill="#000"/>`); if(c.type==='floor'||c.type==='label'||c.type==='door'||c.type==='secret-door'||c.type==='trap'||c.type==='stairs') parts.push(`<rect x="${px}" y="${py}" width="${s}" height="${s}" fill="#fff" stroke="#d0d0d0" stroke-width="1"/>`); if(c.type==='door') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">D</text>`); if(c.type==='secret-door') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">S</text>`); if(c.type==='trap') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">T</text>`); if(c.type==='stairs') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="monospace" font-size="12" fill="#000">^</text>`); if(c.type==='label') parts.push(`<text x="${px+s/2}" y="${py+s*.72}" text-anchor="middle" font-family="serif" font-size="12" fill="#000">${esc(c.label)}</text>`); } parts.push('</svg>'); return parts.join('\n'); }
   function download(name,content,type){ const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href); }
 
-  document.addEventListener('DOMContentLoaded', init);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
   window.initModuleMapEditor = init;
 })();
