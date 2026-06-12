@@ -143,3 +143,15 @@ Included:
 - Removed scanner references from `README.md` and `docs/deployment.md`.
 
 Compatibility cleanup remains documented as an editorial conversion responsibility, but it is no longer exposed as a dashboard utility.
+
+## 2026-06-12 - Wiki source-lore correction pass 1
+
+Corrected the visible wiki direction after the first wiki-depth pass leaned too heavily toward editor-support text.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-1.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- `docs/wiki-source-lore-correction-pass-1.md`
+
+The new source-lore pack loads last so it overrides earlier editor-support entries by stable ID. The first correction pass replaces visible entries for Kaysender overview, floating islands, sky ecology, sheffels, Grays, peoples, Dwager, Dragon Kin, Lizzzefaire, Hume, Fae, Halflings, Gezistack, Messara, Valeria, and the Black Fleet with reader-facing lore based on the source manuscript.
