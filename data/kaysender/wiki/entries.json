@@ -1,0 +1,174 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "entries": [
+    {
+      "id": "kaysender-overview",
+      "title": "Kaysender Overview",
+      "category": "World",
+      "summary": "A skyborne campaign realm of floating landmasses, unstable routes, airships, scarcity, dragon tribute, pirate violence, and fragile trade networks.",
+      "body": [
+        "Kaysender is designed as a campaign world where geography is never merely background. Land drifts, routes fail, storms matter, food and water become strategic resources, and safe travel depends on local knowledge, ship quality, faction politics, and weather luck.",
+        "The setting should be presented first as original lore and campaign infrastructure. Rules-facing material should be kept separate and converted into open d20-compatible language before public reuse.",
+        "The first practical tool layer should help a game master create locations, settlements, routes, ships, markets, shortages, faction pressure, and immediate adventure complications."
+      ],
+      "tags": ["sky realm", "floating islands", "airships", "scarcity", "open d20"],
+      "relatedEntries": ["floating-islands", "scarcity-loop", "airships", "messara"],
+      "relatedModules": ["floating-island-generator", "world-map-route-generator", "airship-vessel-generator", "supply-water-planner"]
+    },
+    {
+      "id": "floating-islands",
+      "title": "Floating Islands",
+      "category": "World",
+      "summary": "The basic terrain unit of Kaysender: drifting, anchored, crumbling, cultivated, ruined, contested, or resource-rich land suspended in the sky.",
+      "body": [
+        "Floating islands are not interchangeable platforms. Each island should have size, stability, altitude, terrain, water access, food access, drift behavior, resource nodes, skybeast pressure, pirate risk, faction interest, and a current crisis.",
+        "Some islands are stable enough to hold cities. Others are temporary shelters, salvage sites, hidden docks, dragon tribute farms, or broken ruins slowly falling into the abyss.",
+        "Floating islands cross-link naturally to settlement generation, route generation, ecology generation, supply planning, and faction pressure."
+      ],
+      "tags": ["islands", "terrain", "hazards", "resources", "routes"],
+      "relatedEntries": ["kaysender-overview", "scarcity-loop", "sky-ecology", "messara"],
+      "relatedModules": ["floating-island-generator", "settlement-generator", "sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "scarcity-loop",
+      "title": "The Scarcity Loop",
+      "category": "GM Tools",
+      "summary": "Kaysender campaigns should treat food, water, safe airspace, stable land, ship repair, and route intelligence as active pressures rather than background assumptions.",
+      "body": [
+        "Scarcity is the engine that makes Kaysender operationally different from a normal ground map. Water has weight, food spoils, animals consume supplies, crews need morale, storms create delays, and isolated settlements can collapse under tithe, blockade, disease, or route failure.",
+        "The scarcity loop should not become bookkeeping punishment. It should create choices: detour for water, negotiate with a hostile dockmaster, accept pirate risk, ration the crew, trade cargo space for cisterns, or take a dangerous shortcut through contested airspace.",
+        "Any settlement, ship, market, or route generator should eventually output a scarcity profile."
+      ],
+      "tags": ["supplies", "water", "food", "travel", "survival"],
+      "relatedEntries": ["floating-islands", "water-trade", "airships", "dragon-lords"],
+      "relatedModules": ["supply-water-planner", "settlement-generator", "shop-market-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "airships",
+      "title": "Airships and Vessels",
+      "category": "Ships",
+      "summary": "Airships are the connective tissue of Kaysender: trade platform, home, weapon, lifeline, prison, smuggler craft, guild asset, and survival machine.",
+      "body": [
+        "Airships should be generated as more than hull names. A Kaysender vessel needs hull family, construction culture, core type, propulsion, crew, cargo role, armament, legal status, current mission, hidden problem, maintenance burden, and route capability.",
+        "Different cultures should produce different vessel assumptions. Dwarven craft may emphasize durability and heavy systems. Elven craft may be living, attuned, or subtle. Dragon Kin craft may use elemental cores. Gnomish vessels may be experimental hybrid machines. Human craft may mix steam, salvage, and magic pragmatically.",
+        "Every ship should imply cost, risk, cargo, crew pressure, and a reason for the players to care."
+      ],
+      "tags": ["ships", "airship cores", "crew", "trade", "piracy"],
+      "relatedEntries": ["scarcity-loop", "black-fleet", "skyweaver-consortium", "surveyors-guild"],
+      "relatedModules": ["airship-vessel-generator", "airship-core-builder", "npc-crew-generator", "supply-water-planner"]
+    },
+    {
+      "id": "messara",
+      "title": "Messara",
+      "category": "Regions",
+      "summary": "The first major campaign continent and a top-level wiki node for nations, capitals, trade pressures, faction interests, and generator tags.",
+      "body": [
+        "Messara is the first major campaign region identified for structured extraction. It should become the organizing node for nation entries, capital city entries, faction territory, trade lanes, cultural assumptions, and regional campaign conflicts.",
+        "The primary nation-capital pairs identified for extraction are Valeria and Valthorn, Faelenor and Mirathen, Teralon and Vorrik, Silvalis and Neylithar, Vornak and Grimhold, Rylune and Falyris, Zarovar and Kalthor, Eldrath and Druun, and Imbria and Solaar.",
+        "Each nation should eventually include economy, culture, religion, government, military status, export goods, trade pressure, social tension, and generator tags."
+      ],
+      "tags": ["Messara", "nations", "capitals", "regions", "trade"],
+      "relatedEntries": ["valeria-valthorn", "faelenor-mirathen", "floating-islands", "dragon-lords"],
+      "relatedModules": ["world-map-route-generator", "settlement-generator", "city-district-generator", "faction-guild-generator"]
+    },
+    {
+      "id": "valeria-valthorn",
+      "title": "Valeria and Valthorn",
+      "category": "Nations",
+      "summary": "A first-pass nation and capital node awaiting deeper extraction from the source manuscript.",
+      "body": [
+        "Valeria and its capital Valthorn should be treated as a structured seed entry until the manuscript extraction pass fills in culture, economy, government, military posture, exports, faith, social tension, and faction pressure.",
+        "For generator purposes, this node already works as a destination, origin, faction territory, trade-lane endpoint, diplomatic patron, or settlement tag.",
+        "Future conversion should avoid direct fifth-edition mechanics and keep any rules-facing traits in open d20-compatible language."
+      ],
+      "tags": ["Valeria", "Valthorn", "nation", "capital", "Messara"],
+      "relatedEntries": ["messara", "water-trade", "surveyors-guild"],
+      "relatedModules": ["city-district-generator", "settlement-generator", "shop-market-generator"]
+    },
+    {
+      "id": "dragon-lords",
+      "title": "Dragon Lords and Tribute Networks",
+      "category": "Factions",
+      "summary": "A pressure system for isolated communities: tithe demands, enforcer fleets, collaborators, resistance cells, hostage risks, and political collapse clocks.",
+      "body": [
+        "Dragon Lords should not be used only as monsters. In Kaysender they can become territorial powers, tribute claimants, fear economies, armed patrons, regional tyrants, or strategic forces that shape route access and settlement survival.",
+        "A Dragon Lord crisis should include the demand, the enforcer, the deadline, local collaborators, local resistance, remaining supplies, hostage risk, and possible player interventions.",
+        "This entry should later cross-link to a dedicated tithe crisis generator and to settlement political stress outputs."
+      ],
+      "tags": ["dragons", "tribute", "tithe", "factions", "crisis"],
+      "relatedEntries": ["scarcity-loop", "floating-islands", "messara"],
+      "relatedModules": ["draconic-tithe-generator", "settlement-generator", "encounter-generator", "faction-guild-generator"]
+    },
+    {
+      "id": "black-fleet",
+      "title": "The Black Fleet",
+      "category": "Factions",
+      "summary": "A major skyborne threat and campaign pressure point tied to piracy, smuggling, intimidation, route denial, and black-market logistics.",
+      "body": [
+        "The Black Fleet should function as more than a pirate name. It can be a rumor, an organized navy of criminals, a factional banner used by imitators, or a decentralized terror network that feeds on weak trade lanes and isolated settlements.",
+        "Black Fleet activity should affect market prices, ship insurance, route safety, settlement morale, convoy availability, and faction politics.",
+        "Future generator tables should distinguish confirmed Black Fleet operations from copycats, deserters, smugglers, mercenaries, and false-flag attacks."
+      ],
+      "tags": ["pirates", "Black Fleet", "crime", "routes", "airships"],
+      "relatedEntries": ["airships", "water-trade", "scarcity-loop"],
+      "relatedModules": ["black-market-piracy-generator", "airship-vessel-generator", "encounter-generator", "shop-market-generator"]
+    },
+    {
+      "id": "surveyors-guild",
+      "title": "Surveyor's Guild",
+      "category": "Factions",
+      "summary": "A route, island, and map-intelligence organization that naturally connects exploration tools to wiki geography.",
+      "body": [
+        "The Surveyor's Guild is an ideal cross-link faction because it touches nearly every practical tool: map generation, floating island discovery, route safety, salvage rights, settlement founding, and risk assessment.",
+        "A Surveyor's Guild job might involve confirming a drifting island, recovering a lost crew, mapping a storm belt, escorting a chartmaker, or hiding the discovery of a profitable resource node.",
+        "The guild should eventually have public purpose, hidden purpose, reputation, rivalries, route privileges, and internal rank structures."
+      ],
+      "tags": ["Surveyor's Guild", "maps", "routes", "exploration", "jobs"],
+      "relatedEntries": ["floating-islands", "messara", "airships"],
+      "relatedModules": ["world-map-route-generator", "floating-island-generator", "job-board-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "skyweaver-consortium",
+      "title": "Skyweaver Consortium",
+      "category": "Factions",
+      "summary": "A trade, craft, ship, or arcane-industrial organization seed entry intended to connect markets, airship construction, and faction economics.",
+      "body": [
+        "The Skyweaver Consortium should operate as a setting-facing economic and technical actor. It can provide airship components, route contracts, craft monopolies, political pressure, and rare materials.",
+        "In campaign tools, the Consortium can influence price pressure, shop legitimacy, airship availability, supply contracts, and hidden faction agendas.",
+        "Future extraction should determine whether it is primarily merchant, magical, industrial, political, or a blended guild power."
+      ],
+      "tags": ["Skyweaver Consortium", "trade", "crafting", "airships", "markets"],
+      "relatedEntries": ["airships", "water-trade", "scarcity-loop"],
+      "relatedModules": ["shop-market-generator", "airship-core-builder", "crafting-gadget-creator", "faction-guild-generator"]
+    },
+    {
+      "id": "water-trade",
+      "title": "Water Trade",
+      "category": "Economy",
+      "summary": "Water is not scenery in Kaysender. It is cargo, leverage, survival, tribute, ration, market pressure, and conflict fuel.",
+      "body": [
+        "Water trade is one of the clearest operational systems in the setting. A route with reliable water is politically valuable. A settlement with failing cisterns is vulnerable. A ship carrying water is a strategic target.",
+        "Water sellers, purification salts, rain-capture gear, cistern control, temple wells, tainted reservoirs, storm harvesters, and water auctions should all become market and settlement outputs.",
+        "Water pressure should cross-link with scarcity tracking, market generation, settlement crisis generation, route disruption, and dragon tithe mechanics."
+      ],
+      "tags": ["water", "trade", "scarcity", "markets", "settlements"],
+      "relatedEntries": ["scarcity-loop", "black-fleet", "skyweaver-consortium", "valeria-valthorn"],
+      "relatedModules": ["supply-water-planner", "shop-market-generator", "settlement-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "sky-ecology",
+      "title": "Sky Ecology",
+      "category": "Creatures",
+      "summary": "The living sky includes herds, predators, skywhales, sheffels, Grays, airborne disease vectors, valuable materials, and ecological hazards.",
+      "body": [
+        "Kaysender's ecology should support play, not merely decoration. Creatures affect food, textiles, travel risk, trade value, disease, weather prediction, and settlement viability.",
+        "Sky creatures should be generated with altitude band, herd behavior, diet, valuable materials, predators, symbiotic organisms, disease risk, conservation status, hunting pressure, and encounter attitude.",
+        "The ecology layer should eventually become one of the generators that feeds floating islands, markets, encounters, and settlement economies."
+      ],
+      "tags": ["creatures", "ecology", "sheffels", "Grays", "skywhales"],
+      "relatedEntries": ["floating-islands", "scarcity-loop"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator", "shop-market-generator", "settlement-generator"]
+    }
+  ]
+}
