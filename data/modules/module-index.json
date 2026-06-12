@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "0.1.0",
+  "description": "Registry for standardized extracted adventure modules that can be loaded by module-viewer.js.",
+  "modules": [
+    {
+      "id": "northern-watchtower-09",
+      "title": "The Northern Watchtower 09",
+      "status": "extracted-alpha",
+      "system": "Hypertext d20 / D&D 3.5-compatible extraction",
+      "sourceFile": "The Northern Watchtower 09.pdf",
+      "path": "data/modules/northern-watchtower-09.json"
+    }
+  ]
+}
