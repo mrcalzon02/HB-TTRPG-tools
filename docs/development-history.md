@@ -220,3 +220,16 @@ Included:
 - `docs/wiki-source-lore-pass-5-criminal-trade-slavery.md`
 
 This pass imports Unsavory Trade in Kaysender, Black Chain Consortium, Rusted Compass Company, Crimson Fog Cartel, Bonehold Syndicate, Broken Coin Guild, Sable Tide, Chainwing Exchange, Tarnished Veil, Indentured Servitude, Slavery in Kaysender, and Abolition and Sanctuary Movements as source-faithful wiki nodes with hotlinks to Dragon Lords, Black Fleet, Free Sky Brotherhood, Aetherbound Company, skybeasts, and related criminal-trade structures.
+
+## 2026-06-12 - Wiki source-lore pass 6: potions, mercenaries, safety gear, emergency equipment, and cargo
+
+Imported the next equipment-and-services source block.
+
+Included:
+
+- `data/kaysender/wiki/source-lore-pass-6-potions-mercenaries-gear.json`
+- Updated `data/kaysender/wiki/wiki-index.json`
+- Updated `data/kaysender/wiki/source-ingestion-manifest.json`
+- `docs/wiki-source-lore-pass-6-potions-mercenaries-gear.md`
+
+This pass imports Potion Guilds, Mercenary Companies, Fall-Prevention Gear and Abyss Safety, Emergency Signaling Equipment, and Cargo Loads and Airship Shipping Standards. Potion and fall-prevention legacy mechanics are preserved in `mechanics-legacy` sections for later Hypertext d20 conversion.
