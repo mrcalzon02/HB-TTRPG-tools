@@ -7,7 +7,8 @@
       'data/modules/patches/northern-watchtower-09-door-pass-rooms-11-15.json',
       'data/modules/patches/northern-watchtower-09-door-pass-rooms-16-20.json',
       'data/modules/patches/northern-watchtower-09-door-pass-rooms-21-25.json',
-      'data/modules/patches/northern-watchtower-09-door-pass-rooms-26-30.json'
+      'data/modules/patches/northern-watchtower-09-door-pass-rooms-26-30.json',
+      'data/modules/patches/northern-watchtower-09-extraction-status.json'
     ]
   };
   let indexData = null;
