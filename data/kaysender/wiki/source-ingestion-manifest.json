@@ -26,6 +26,11 @@
       "path": "data/kaysender/wiki/source-lore-pass-1.json",
       "status": "partial-source",
       "description": "First correction pass replacing editor-heavy visible wiki entries with reader-facing source lore for the opening world material, peoples, Messara, Valeria, and Black Fleet."
+    },
+    {
+      "path": "data/kaysender/wiki/source-lore-pass-2-messara.json",
+      "status": "source-faithful",
+      "description": "Second ingestion pass importing remaining early Messara nation entries, capital/location sections, and the Grim Realities of Survival section with sourceRefs and hotlinks."
     }
   ],
   "requiredNextPasses": [
@@ -33,7 +38,7 @@
       "id": "source-pass-2-messara-nations",
       "priority": 1,
       "scope": "Fully import remaining Messara nation entries: Faelenor, Teralon, Silvalis, Vornak, Rylune, Zarovar, Eldrath, Imbria, and national capitals.",
-      "status": "not-started"
+      "status": "complete"
     },
     {
       "id": "source-pass-3-regions-locations",
@@ -77,13 +82,15 @@
     { "title": "Gezistack (Gnomes)", "pageStart": 11, "pageEnd": 13, "status": "partial-source", "wikiEntryIds": ["gezistack"] },
     { "title": "The Continent of Messara", "pageStart": 14, "pageEnd": 14, "status": "partial-source", "wikiEntryIds": ["messara"] },
     { "title": "1. Valeria (The Kingdom of Valeria)", "pageStart": 14, "pageEnd": 15, "status": "partial-source", "wikiEntryIds": ["valeria-valthorn"] },
-    { "title": "2. Faelenor (The Republic of Faelenor)", "pageStart": 15, "pageEnd": 16, "status": "not-started", "wikiEntryIds": ["faelenor-mirathen"] },
-    { "title": "3. Teralon (The Empire of Teralon)", "pageStart": 16, "pageEnd": 17, "status": "not-started", "wikiEntryIds": ["teralon-vorrik"] },
-    { "title": "4. Silvalis (The Confederacy of Silvalis)", "pageStart": 17, "pageEnd": 18, "status": "not-started", "wikiEntryIds": ["silvalis-neylithar"] },
-    { "title": "5. Vornak (The Vornak Tribes)", "pageStart": 18, "pageEnd": 19, "status": "not-started", "wikiEntryIds": ["vornak-grimhold"] },
-    { "title": "6. Rylune (The Kingdom of Rylune)", "pageStart": 19, "pageEnd": 20, "status": "not-started", "wikiEntryIds": ["rylune-falyris"] },
-    { "title": "7. Zarovar (The Federation of Zarovar)", "pageStart": 20, "pageEnd": 21, "status": "not-started", "wikiEntryIds": ["zarovar-kalthor"] },
-    { "title": "8. Eldrath (The Union of Eldrath)", "pageStart": 21, "pageEnd": 22, "status": "not-started", "wikiEntryIds": ["eldrath-druun"] },
-    { "title": "9. Imbria (The Theocracy of Imbria)", "pageStart": 22, "pageEnd": 23, "status": "not-started", "wikiEntryIds": ["imbria-solaar"] }
+    { "title": "2. Faelenor (The Republic of Faelenor)", "pageStart": 15, "pageEnd": 16, "status": "source-faithful", "wikiEntryIds": ["faelenor-mirathen"] },
+    { "title": "3. Teralon (The Empire of Teralon)", "pageStart": 16, "pageEnd": 17, "status": "source-faithful", "wikiEntryIds": ["teralon-vorrik"] },
+    { "title": "4. Silvalis (The Confederacy of Silvalis)", "pageStart": 17, "pageEnd": 18, "status": "source-faithful", "wikiEntryIds": ["silvalis-neylithar"] },
+    { "title": "5. Vornak (The Vornak Tribes)", "pageStart": 18, "pageEnd": 19, "status": "source-faithful", "wikiEntryIds": ["vornak-grimhold"] },
+    { "title": "6. Rylune (The Kingdom of Rylune)", "pageStart": 19, "pageEnd": 20, "status": "source-faithful", "wikiEntryIds": ["rylune-falyris"] },
+    { "title": "7. Zarovar (The Federation of Zarovar)", "pageStart": 20, "pageEnd": 21, "status": "source-faithful", "wikiEntryIds": ["zarovar-kalthor"] },
+    { "title": "8. Eldrath (The Union of Eldrath)", "pageStart": 21, "pageEnd": 22, "status": "source-faithful", "wikiEntryIds": ["eldrath-druun"] },
+    { "title": "9. Imbria (The Theocracy of Imbria)", "pageStart": 22, "pageEnd": 23, "status": "source-faithful", "wikiEntryIds": ["imbria-solaar"] },
+    { "title": "Messara Capitals and National City Nodes", "pageStart": 24, "pageEnd": 29, "status": "source-faithful", "wikiEntryIds": ["faelenor-mirathen", "teralon-vorrik", "silvalis-neylithar", "vornak-grimhold", "rylune-falyris", "zarovar-kalthor", "eldrath-druun", "imbria-solaar"] },
+    { "title": "The Grim Realities of Survival in Kaysender", "pageStart": 29, "pageEnd": 31, "status": "source-faithful", "wikiEntryIds": ["grim-realities-of-survival"] }
   ]
 }
