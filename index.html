@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HB TTRPG Tools</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="character-sheet-layout.css" />
 </head>
 <body>
   <header class="site-header no-print">
@@ -60,7 +61,7 @@
     <section id="utilities" class="view" aria-labelledby="utilities-title">
       <div class="hero-card no-print">
         <p class="eyebrow">Utilities</p>
-        <h2 id="utilities-title">Editable Character Sheet PDF Creator</h2>
+        <h2 id="utilities-title">AD and D 3.5 - Hypertext D20 Character Sheet</h2>
         <p>Fill the browser sheet, auto-calculate common totals, then use the print button to save a clean PDF from your browser.</p>
       </div>
 
@@ -68,7 +69,7 @@
         <aside class="toolbox no-print" aria-label="Character sheet controls">
           <h3>Sheet Controls</h3>
           <label class="control-label" for="sheet-title">Sheet title</label>
-          <input id="sheet-title" class="tool-input" value="D&D 3.5-Compatible Character Sheet" />
+          <input id="sheet-title" class="tool-input" value="AD and D 3.5 - Hypertext D20 compatible character sheet" />
 
           <p class="control-label">Panel layout</p>
           <div class="segmented-control" role="group" aria-label="Panel layout">
@@ -88,7 +89,7 @@
 
         <form id="character-sheet" class="character-sheet" autocomplete="off">
           <header class="sheet-banner">
-            <h2 id="print-title">D&D 3.5-Compatible Character Sheet</h2>
+            <h2 id="print-title">AD and D 3.5 - Hypertext D20 compatible character sheet</h2>
             <p>Homebrew-ready d20 fantasy character record</p>
           </header>
 
@@ -240,6 +241,7 @@
   </footer>
 
   <script src="app.js"></script>
+  <script src="character-sheet-title.js"></script>
   <script src="kaysender-wiki.js"></script>
   <script src="kaysender-editors.js"></script>
   <script src="kaysender-settlement-editor.js"></script>
