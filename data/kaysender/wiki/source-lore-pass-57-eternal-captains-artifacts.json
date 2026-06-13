@@ -1,0 +1,304 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Source-lore pass 57 fills the six explicitly missing Undead Acropolis lore entries implied by the manuscript: three Eternal Captains and the three ancient command artifacts bound to them. Names and detailed distinctions are setting-derived expansions built from the source's storm, wind, ice, spirit, fleet-command, and final-battle themes.",
+  "entries": [
+    {
+      "id": "eternal-acropolis-captains",
+      "title": "The Eternal Captains of the Acropolis",
+      "category": "NPCs",
+      "summary": "Three undead admirals command the Acropolis fleet through artifacts of storm, ice, and spirit-bound passage, each preserving a different fragment of the final battle.",
+      "body": [
+        "The three Eternal Captains are not interchangeable commanders. Each embodies a surviving function of the civilization that died around the [[undead-acropolis|Undead Acropolis]]: fleet command, frozen defense, and the custody of souls and passage.",
+        "Captain Avarra Veyl commands the dead winds and the formation of the fleet. Captain Morcant Rhime governs ice, siege discipline, and the freezing of hostile airways. Captain Sereth Ossuary watches the border between entry and escape, directing spirits, pursuit, and the recovery of those claimed by the curse.",
+        "Together they form a divided admiralty. They obey the same ancient duty but disagree over its meaning. Veyl believes the fleet must preserve order until relieved by legitimate authority. Rhime believes the city survives only through absolute exclusion. Ossuary believes nobody may leave because every soul lost within the Airways has become part of the Acropolis's unfinished dead.",
+        "Their artifacts are command engines rather than ceremonial possessions. The Crown of the Dead Gale binds fleet movement and wind. The Heart of Rimeglass maintains frozen barriers and siege weather. The Lantern of the Last Passage reveals, recalls, and confines spirits moving through the cursed routes. Separating a captain from an artifact weakens both the individual and the wider regional curse."
+      ],
+      "sections": [
+        {
+          "heading": "The Divided Admiralty",
+          "sectionType": "faction-structure",
+          "body": [
+            "The captains rarely gather physically. They command separate patrol regions and communicate through changes in wind, frost patterns on hulls, and ghost lights visible only to the dead or magically sensitive.",
+            "A major intrusion causes the three fleets to converge in stages: Veyl closes routes and organizes interception, Rhime immobilizes or damages the target, and Ossuary attempts to bind survivors, spirits, charts, and memories to the Acropolis."
+          ]
+        },
+        {
+          "heading": "Breaking the Curse",
+          "sectionType": "adventure-use",
+          "body": [
+            "Destroying one captain does not permanently end that captain's office while the associated artifact remains active. Cleansing, stealing, bargaining for, or deliberately misusing an artifact can change the behavior of an entire fleet division.",
+            "A complete release of the Acropolis may require all three artifacts to be brought together at the site of the final battle, willingly surrendered by their captains, or turned against the command law that binds the dead."
+          ]
+        },
+        {
+          "heading": "Expansion Status",
+          "sectionType": "editorial-note",
+          "body": [
+            "The manuscript explicitly establishes three captains and three artifacts but does not provide their names or individual identities. The entries in this pack are setting-derived expansions designed to fill that documented gap while preserving the source themes."
+          ]
+        }
+      ],
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains", "notes": "The source establishes three unnamed undead captains, each bearing an ancient artifact controlling natural forces." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["Eternal Captains", "Undead Acropolis", "ghost fleet", "command artifacts", "setting-derived expansion"],
+      "relatedEntries": ["captain-avarra-veyl", "captain-morcant-rhime", "captain-sereth-ossuary", "crown-of-the-dead-gale", "heart-of-rimeglass", "lantern-of-the-last-passage", "undead-acropolis", "bone-shadow-ships"],
+      "relatedModules": ["npc-crew-generator", "faction-guild-generator", "encounter-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "captain-avarra-veyl",
+      "title": "Captain Avarra Veyl, Admiral of the Dead Gale",
+      "category": "NPCs",
+      "summary": "The first Eternal Captain commands fleet formation, dead winds, pursuit routes, and the ancient legal order of the Acropolis navy.",
+      "body": [
+        "Avarra Veyl was the senior fleet admiral during the final battle. In death, she remains wrapped in layered naval robes and segmented armor whose edges move like sails in a wind nobody else can feel. Her skull is veiled by strips of dark cloth, and blue-white light burns behind them where her eyes once were.",
+        "Veyl is the most willing of the captains to speak with outsiders, but conversation with her resembles a tribunal. She asks for flag, origin, destination, authority, cargo declaration, and reason for entering restricted sky. She still recognizes rank, treaty, and emergency law, though every nation capable of satisfying her regulations vanished centuries ago.",
+        "Her fleet division specializes in interception rather than destruction. Patrol ships appear ahead of intruders regardless of their chosen route, crosswinds force vessels toward designated channels, and ghostly signal pennants demand surrender. Those who comply may survive as detained guests of a dead state. Those who refuse are pursued until the Airways themselves appear to close behind them.",
+        "Veyl privately suspects that the authority she serves no longer exists. She cannot abandon her post without proof, and the Crown of the Dead Gale reinforces every command she gives. A legitimate seal from the lost civilization, evidence of lawful succession, or unanimous testimony from the other captains might persuade her to suspend the blockade."
+      ],
+      "sections": [
+        {
+          "heading": "Command Philosophy",
+          "sectionType": "personality",
+          "body": [
+            "Veyl values discipline, declared intention, rescue law, and orderly surrender. She despises pirates, false flags, and captains who abandon crew.",
+            "She is not merciful in a modern sense, but she distinguishes trespassers, shipwreck survivors, invaders, smugglers, and diplomats according to ancient naval law."
+          ]
+        },
+        {
+          "heading": "Fleet Division",
+          "sectionType": "military",
+          "body": [
+            "Her vessels are the fastest of the ghost fleet. They use coordinated wind shifts, silent lantern codes, and converging pursuit patterns to herd targets toward inspection zones.",
+            "Helmsmen and ordinary undead crew dominate her ships, supported by a smaller number of boarding marines trained to seize helms and charts without destroying the vessel."
+          ]
+        },
+        {
+          "heading": "Adventure Hooks",
+          "sectionType": "adventure-use",
+          "body": [
+            "A living captain may challenge Veyl's authority through an ancient maritime hearing, requiring recovered law tablets and witnesses from multiple dead crews.",
+            "Veyl may secretly permit a party to continue if they can prove another captain has exceeded the original defensive mandate."
+          ]
+        }
+      ],
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains", "notes": "Setting-derived identity for one of the source's three unnamed captains." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["Avarra Veyl", "Eternal Captain", "dead wind", "fleet admiral", "naval law"],
+      "relatedEntries": ["eternal-acropolis-captains", "crown-of-the-dead-gale", "undead-acropolis-helmsman-statblock", "watchers-of-the-frozen-skies"],
+      "relatedModules": ["npc-crew-generator", "faction-guild-generator", "job-board-generator"]
+    },
+    {
+      "id": "crown-of-the-dead-gale",
+      "title": "The Crown of the Dead Gale",
+      "category": "Artifacts",
+      "summary": "A broken naval circlet binds wind, fleet formation, and ancient command authority to Captain Avarra Veyl.",
+      "body": [
+        "The Crown of the Dead Gale is not shaped like a royal crown. It is a segmented circlet of dark silver, blue crystal, and thin vanes resembling miniature ship fins. Several sections are broken, yet invisible wind continues to pass through the gaps.",
+        "When worn by a recognized fleet commander, the Crown connects the bearer to every sworn vessel and helmsman within the cursed airways. Orders can be transmitted through pressure changes, moving frost, and spectral pennants without spoken words.",
+        "The artifact remembers command hierarchy. It rejects wearers who cannot establish authority through oath, succession, conquest, or formal transfer. A rejected wearer is surrounded by contradictory winds and hears the last orders of hundreds of dead officers simultaneously.",
+        "If removed from Veyl, patrol coordination begins to fail. Routes that were perfectly blockaded develop gaps, undead helmsmen receive delayed commands, and separate flotillas begin following the last order they personally remember rather than a unified strategy."
+      ],
+      "sections": [
+        {
+          "heading": "Known Powers",
+          "sectionType": "artifact-lore",
+          "body": [
+            "The Crown commands wind direction, transmits orders across great distance, identifies vessels sworn to the old fleet, and allows coordinated course changes impossible for ordinary formations.",
+            "Its strongest function may be legal rather than elemental: the Crown determines who the ghost fleet recognizes as commander."
+          ]
+        },
+        {
+          "heading": "Cleansing or Corruption",
+          "sectionType": "adventure-use",
+          "body": [
+            "Cleansing the Crown requires the bearer to issue an order that preserves the lives of the fleet while releasing it from an unlawful command. Simply ordering the dead to disperse causes the artifact to reject the bearer.",
+            "A tyrant who successfully claims the Crown could redirect portions of the Acropolis fleet, but every command would also bind the tyrant more deeply to the dead admiralty."
+          ]
+        }
+      ],
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains", "notes": "Setting-derived command artifact based on the source's unnamed captain artifacts and wind-control theme." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["artifact", "dead wind", "fleet command", "Avarra Veyl", "ghost fleet"],
+      "relatedEntries": ["captain-avarra-veyl", "eternal-acropolis-captains", "bone-shadow-ships", "cursed-airways"],
+      "relatedModules": ["treasure-generator", "airship-vessel-generator", "faction-guild-generator"]
+    },
+    {
+      "id": "captain-morcant-rhime",
+      "title": "Captain Morcant Rhime, Warden of the White Siege",
+      "category": "NPCs",
+      "summary": "The second Eternal Captain commands frozen barriers, siege formations, and the harsh doctrine that no living vessel may reach the Acropolis.",
+      "body": [
+        "Morcant Rhime appears as a broad skeletal figure sealed inside translucent armor grown from layered glacier ice. Ancient chains pass through his ribs and connect to the Heart of Rimeglass embedded within his breastplate.",
+        "He commanded the defensive fleet during the civilization's final hours and remembers the battle only as an unending breach. To Rhime, every approaching ship is another assault wave and every request for passage is enemy deception.",
+        "His fleet division patrols the most violent portions of the Frozen Glaciers. Frost galleons hide inside solid ice, emerge behind intruders, and freeze sails, control surfaces, weapons, and exposed crew before boarding. Rhime prefers immobilization followed by methodical destruction.",
+        "Unlike Veyl, Rhime cannot be persuaded by ordinary legal argument. He believes command law failed during the final battle. Only proof that the original enemy is gone, that the city has already fallen beyond recovery, or that continued defense actively serves the enemy can destabilize his certainty."
+      ],
+      "sections": [
+        {
+          "heading": "The White Siege",
+          "sectionType": "history",
+          "body": [
+            "Rhime experiences the present as an extension of the final siege. Changes in weather become enemy artillery, unfamiliar vessels become infiltration craft, and damage to the Acropolis becomes evidence of continuing attack.",
+            "His orders emphasize sealing routes, freezing maneuver space, and preserving defensive positions regardless of casualties."
+          ]
+        },
+        {
+          "heading": "Fleet Division",
+          "sectionType": "military",
+          "body": [
+            "Rhime commands the heaviest bone-and-shadow vessels, including frost galleons and siege barges reinforced with ancient plate and glacier ice.",
+            "Stormcallers and boarding marines dominate his crews. Repairwrights deliberately freeze damaged sections into place rather than restoring them cleanly."
+          ]
+        },
+        {
+          "heading": "Adventure Hooks",
+          "sectionType": "adventure-use",
+          "body": [
+            "A party may need to reconstruct the final battle and show Rhime the exact moment his defensive order became obsolete.",
+            "Breaking the chains connecting Rhime to the Heart of Rimeglass might restore fragments of his original personality while causing the surrounding ice barriers to collapse."
+          ]
+        }
+      ],
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains", "notes": "Setting-derived identity for one of the source's three unnamed captains." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["Morcant Rhime", "Eternal Captain", "frozen siege", "glacier fleet", "undead commander"],
+      "relatedEntries": ["eternal-acropolis-captains", "heart-of-rimeglass", "undead-acropolis-stormcaller-statblock", "frozen-glaciers"],
+      "relatedModules": ["npc-crew-generator", "encounter-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "heart-of-rimeglass",
+      "title": "The Heart of Rimeglass",
+      "category": "Artifacts",
+      "summary": "A crystalline siege engine sustains the Acropolis's frozen barriers and binds Captain Morcant Rhime to the final defense of the city.",
+      "body": [
+        "The Heart of Rimeglass is a many-faceted crystal larger than a human heart, filled with a slowly rotating storm of white sparks. It is usually embedded within Rhime's armor but can be mounted within a ship, fortress, or glacier gate.",
+        "The artifact draws cold from memory as much as from the air. Near it, moments of fear, loss, and determination crystallize as frost patterns that replay fragments of the final battle.",
+        "The Heart maintains many of the impossible ice formations surrounding the Acropolis. It can freeze open air into temporary walls, seal passages through cloud and storm, and allow ghost ships to move through glacier ice as though entering a harbor fog.",
+        "Removing the Heart causes defensive ice to weaken unpredictably. Some trapped routes reopen, while other formations fracture and drift as uncontrolled hazards. Destroying it outright could release centuries of stored cold and memory in a single catastrophic storm."
+      ],
+      "sections": [
+        {
+          "heading": "Known Powers",
+          "sectionType": "artifact-lore",
+          "body": [
+            "The Heart commands ice formation, siege weather, frozen passage, preservation, and the transformation of open sky into solid defensive terrain.",
+            "It also preserves orders and emotional impressions, allowing Rhime to relive the final siege with perfect intensity but incomplete context."
+          ]
+        },
+        {
+          "heading": "Safe Release",
+          "sectionType": "adventure-use",
+          "body": [
+            "A safe cleansing requires the stored battle memories to be witnessed and acknowledged before the Heart is allowed to thaw. Melting it by force risks turning the Cursed Airways into a region-wide blizzard of memory and razor ice.",
+            "The artifact may accept a new warden who willingly takes responsibility for maintaining safe northern routes rather than absolute exclusion."
+          ]
+        }
+      ],
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains", "notes": "Setting-derived command artifact based on the source's unnamed captain artifacts and ice-control theme." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["artifact", "Rimeglass", "frozen siege", "Morcant Rhime", "Cursed Airways"],
+      "relatedEntries": ["captain-morcant-rhime", "eternal-acropolis-captains", "frozen-glaciers", "cursed-airways"],
+      "relatedModules": ["treasure-generator", "world-map-route-generator", "encounter-generator"]
+    },
+    {
+      "id": "captain-sereth-ossuary",
+      "title": "Captain Sereth Ossuary, Keeper of the Last Passage",
+      "category": "NPCs",
+      "summary": "The third Eternal Captain commands spirit pursuit, recovery of the lost, and the law that no soul or vessel may escape the Acropolis's unfinished dead.",
+      "body": [
+        "Sereth Ossuary is the least visibly skeletal of the captains. His form resembles a tall silhouette wrapped in funeral cloth and ancient officer's armor, with countless dim faces moving beneath the fabric as though his body contains a crowd of trapped souls.",
+        "During the final battle, Ossuary commanded evacuation, recovery, and passage through collapsing airways. The curse transformed that responsibility into imprisonment. He now believes every soul lost near the Acropolis remains under his protection and therefore cannot be permitted to leave.",
+        "His vessels are quiet prison barges, recovery cutters, and shadow skiffs. They retrieve bodies, wreckage, charts, names, memories, and ghosts from the Cursed Airways. Survivors captured by his crews may be treated gently while their identities are catalogued and their connection to the outside world is slowly erased.",
+        "Ossuary is calm, patient, and almost compassionate. He regards escape attempts as symptoms of terror or confusion. He may release someone only if convinced that their soul was never placed under the Acropolis's custody, or that true protection now requires passage beyond the dead city."
+      ],
+      "sections": [
+        {
+          "heading": "Custody of the Lost",
+          "sectionType": "belief",
+          "body": [
+            "Ossuary keeps records of names spoken in the frozen mist, ships that vanished without wreckage, and ghosts encountered along the Airways. His archive may contain proof of generations of disappearances.",
+            "He does not distinguish cleanly between rescue, detention, burial, and possession. All are forms of custody performed until the city can complete its final accounting."
+          ]
+        },
+        {
+          "heading": "Fleet Division",
+          "sectionType": "military",
+          "body": [
+            "His ships move through shadow, fog, and solid ice with minimal disturbance. They arrive after battles to recover the dead and during pursuits to cut off routes believed to lead away from Acropolis jurisdiction.",
+            "Wraithlike crew, repairwrights, and helmsmen are common aboard his vessels. Boarding marines serve as retrieval officers rather than shock troops."
+          ]
+        },
+        {
+          "heading": "Adventure Hooks",
+          "sectionType": "adventure-use",
+          "body": [
+            "The Lantern of the Last Passage may contain the spirit of someone the party came to rescue, forcing negotiation rather than destruction.",
+            "Ossuary may cooperate against a threat that destroys souls permanently, because annihilation violates his doctrine of custody."
+          ]
+        }
+      ],
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains", "notes": "Setting-derived identity for one of the source's three unnamed captains." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["Sereth Ossuary", "Eternal Captain", "spirit custody", "ghost fleet", "last passage"],
+      "relatedEntries": ["eternal-acropolis-captains", "lantern-of-the-last-passage", "aether-wraiths", "undead-acropolis"],
+      "relatedModules": ["npc-crew-generator", "job-board-generator", "encounter-generator"]
+    },
+    {
+      "id": "lantern-of-the-last-passage",
+      "title": "The Lantern of the Last Passage",
+      "category": "Artifacts",
+      "summary": "A black-glass signal lantern reveals lost souls, recalls ghost ships, and binds passage through the Cursed Airways to Captain Sereth Ossuary.",
+      "body": [
+        "The Lantern of the Last Passage is built from black glass, pale bone, and a metal frame that casts no reflection. Its flame is not fire but a gathering of tiny distant lights, each associated with a name recorded by the Acropolis dead.",
+        "When opened, the Lantern reveals spirits, hidden routes, erased names, and the wake left by creatures or vessels that passed through the area. Its light can guide a ship safely through deadly fog, but every traveler illuminated by it becomes visible to Ossuary's fleet.",
+        "The Lantern also calls. Ghost ships answer its signal across enormous distances, and spirits caught between death and passage drift toward it even when they resist. Those fully drawn into the Lantern are preserved as memory, voice, and dim light rather than destroyed.",
+        "Ossuary uses the artifact as beacon, prison, archive, and rescue instrument. To him these purposes are identical. To the living, the distinction determines whether the Lantern is a sacred guide or one of the most terrible prisons in the frozen sky."
+      ],
+      "sections": [
+        {
+          "heading": "Known Powers",
+          "sectionType": "artifact-lore",
+          "body": [
+            "The Lantern reveals incorporeal creatures, tracks spiritual and magical wakes, summons ghost vessels, guides travel through supernatural fog, and preserves the names and memories of the dead.",
+            "A name deliberately removed from the Lantern may vanish from Acropolis records and weaken the curse's claim over the associated soul."
+          ]
+        },
+        {
+          "heading": "Release and Risk",
+          "sectionType": "adventure-use",
+          "body": [
+            "Opening every shutter at once could release thousands of preserved spirits, but it would also illuminate the entire Cursed Airways and summon every vessel capable of answering the signal.",
+            "Cleansing the Lantern may require returning names to living descendants, completing unfinished passages, or convincing Ossuary that memory can be preserved without captivity."
+          ]
+        }
+      ],
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 389, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:eternal-acropolis-captains", "notes": "Setting-derived command artifact based on the source's unnamed captain artifacts and spirit-control theme." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:eternal-acropolis-captains"],
+      "tags": ["artifact", "spirit lantern", "last passage", "Sereth Ossuary", "ghost ships"],
+      "relatedEntries": ["captain-sereth-ossuary", "eternal-acropolis-captains", "cursed-airways", "undead-acropolis"],
+      "relatedModules": ["treasure-generator", "world-map-route-generator", "job-board-generator"]
+    }
+  ]
+}
