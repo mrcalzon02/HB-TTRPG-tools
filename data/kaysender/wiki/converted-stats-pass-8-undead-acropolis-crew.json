@@ -1,0 +1,322 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Eighth converted statistics pass. Adds Hypertext d20-compatible role stat blocks for undead crew, helmsmen, stormcallers, boarding marines, and repairwrights of the Undead Acropolis.",
+  "entries": [
+    {
+      "id": "undead-air-sailors",
+      "title": "Undead Air Sailors of the Acropolis",
+      "category": "Creatures",
+      "summary": "Intelligent skeletal and wraithlike sailors bound to ancient airships, skilled in natural magic, shipcraft, pursuit, and frozen-sky warfare, now with converted Hypertext d20-compatible role statistics.",
+      "body": [
+        "The undead air sailors of the Acropolis are the cursed remains of a sky-commanding civilization. Their bodies have become bone, frost, shadow, or half-incorporeal memory, but their professional knowledge remains intact.",
+        "They continue to crew ancient vessels, read wind and pressure, repair cursed hulls, summon storms, board trespassing ships, and enforce the dead city's blockade with disciplined patience."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "The source explicitly proposes five conversion roles: crew, helmsman, stormcaller, boarding marine, and repairwright. This pass treats them as a coordinated undead ship crew package rather than five unrelated monsters.",
+            "All five retain intelligence, professional memory, immunity to cold, and competence aboard bone-and-shadow vessels."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "undead-acropolis-crew-statblock",
+          "title": "Undead Acropolis Crew",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Undead (Cold)",
+          "size": "Medium",
+          "alignment": "Usually lawful neutral",
+          "challengeRating": "3",
+          "experience": "800",
+          "hitDice": "5d12",
+          "hitPoints": "32 hp",
+          "initiative": "+2",
+          "speed": ["30 ft.", "Climb 20 ft. on rigging"],
+          "armorClass": { "total": "19", "touch": "12", "flatFooted": "17", "notes": "+2 Dex, +4 armor, +3 natural" },
+          "baseAttackGrapple": "+2/+5",
+          "attack": "Ancient cutlass +6 melee (1d6+3 plus 1 cold)",
+          "fullAttack": "Ancient cutlass +6 melee (1d6+3 plus 1 cold) or frostbow +5 ranged (1d8 plus 1d4 cold)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Rigging Ambush (Ex): While aboard an airship, the crew member may move through rigging, spars, ladders, and narrow maintenance passages without treating them as difficult terrain. If it begins combat above or behind a target, it gains +2 on its first attack.",
+            "Dead Sailor's Grip (Ex): Gains a +4 racial bonus on Climb, Profession (sailor), and checks made to avoid being thrown, blown, or knocked from a vessel.",
+            "Frozen Cut (Su): Once per round, a successful melee attack deals an additional 1d4 cold damage to a living target."
+          ],
+          "specialQualities": [
+            "Undead traits",
+            "Darkvision 60 ft.",
+            "Immunity to cold",
+            "Resistance to electricity 5",
+            "Turn resistance +2",
+            "Shipboard discipline",
+            "Does not breathe"
+          ],
+          "saves": { "fortitude": "+1", "reflex": "+3", "will": "+6" },
+          "abilities": { "strength": "16", "dexterity": "15", "constitution": "—", "intelligence": "10", "wisdom": "14", "charisma": "8" },
+          "skills": ["Balance +10", "Climb +11", "Listen +8", "Profession (sailor) +10", "Spot +8", "Use Rope +10"],
+          "feats": ["Alertness", "Weapon Focus (cutlass)"],
+          "environment": "Undead Acropolis, cursed airways, bone-and-shadow ships",
+          "organization": "Work detail (4-12), watch (10-30), or full crew (30-100)",
+          "treasure": "Standard equipment, usually ancient and frost-bound",
+          "advancement": "6-9 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Works in disciplined groups to hold decks, rigging, and access points.",
+            "Prioritizes ship duties until specifically ordered into combat.",
+            "Uses elevation and narrow ship passages to isolate boarders."
+          ],
+          "conversionNotes": [
+            "Baseline role for the intelligent skeletal and wraithlike sailors described in the source.",
+            "Designed to function as actual crew with combat capability rather than ordinary skeletons."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-air-sailors" }
+          ]
+        },
+        {
+          "id": "undead-acropolis-helmsman-statblock",
+          "title": "Undead Acropolis Helmsman",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Undead (Air, Cold)",
+          "size": "Medium",
+          "alignment": "Usually lawful neutral",
+          "challengeRating": "6",
+          "experience": "2,400",
+          "hitDice": "9d12",
+          "hitPoints": "58 hp",
+          "initiative": "+4",
+          "speed": ["30 ft.", "Fly 40 ft. (perfect) while aboard its assigned vessel"],
+          "armorClass": { "total": "22", "touch": "14", "flatFooted": "18", "notes": "+4 Dex, +4 armor, +4 deflection" },
+          "baseAttackGrapple": "+4/+6",
+          "attack": "Helm-hook +8 melee (1d8+2 plus 1d6 cold)",
+          "fullAttack": "Helm-hook +8 melee (1d8+2 plus 1d6 cold) or spectral command +8 ranged touch (2d6 force)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Dead Reckoning (Su): The Helmsman always knows the position, facing, speed, and structural condition of its assigned vessel, even while separated by up to 1 mile.",
+            "Command the Wind (Su): As a standard action, the Helmsman alters wind direction and force in a 300-ft. radius by one category for 5 rounds. Hostile vessels must succeed on a DC 21 control check or turn 45 degrees and lose half speed.",
+            "Ghost Helm (Su): While touching a ship's helm, wheel, core cradle, or steering conduit, the Helmsman may control the vessel even if the normal helm is broken, frozen, or unpowered. The ship moves at half normal speed and ignores the first failed control check each round.",
+            "Course Denial (Su): Once every 1d4 rounds, one vessel within 500 ft. must succeed on a DC 22 Will or control check or be unable to move closer to or farther from the Helmsman's vessel for 1 round."
+          ],
+          "specialQualities": [
+            "Undead traits",
+            "Darkvision 120 ft.",
+            "Immunity to cold",
+            "Incorporeal movement through its assigned vessel",
+            "Spell resistance 18",
+            "Turn resistance +4",
+            "Unerring navigation through frozen mist"
+          ],
+          "saves": { "fortitude": "+3", "reflex": "+7", "will": "+10" },
+          "abilities": { "strength": "14", "dexterity": "19", "constitution": "—", "intelligence": "16", "wisdom": "18", "charisma": "16" },
+          "skills": ["Balance +15", "Knowledge (geography) +15", "Knowledge (nature) +15", "Listen +16", "Profession (pilot) +18", "Profession (sailor) +16", "Spot +16"],
+          "feats": ["Improved Initiative", "Iron Will", "Skill Focus (Profession (pilot))", "Wind-rider"],
+          "environment": "Cursed airways and undead fleet vessels",
+          "organization": "Solitary officer with one vessel crew",
+          "treasure": "Double standard, often including a helm token or route chart",
+          "advancement": "10-14 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Remains at the helm unless the vessel is already lost.",
+            "Uses wind control and Course Denial to trap intruders within patrol formations.",
+            "Continues piloting after damage that would disable a living crew."
+          ],
+          "conversionNotes": [
+            "Represents the source's retained wind-reading, navigation, and cursed-ship control knowledge.",
+            "Ghost Helm connects this creature directly to future bone-and-shadow vessel statistics."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-air-sailors" }
+          ]
+        },
+        {
+          "id": "undead-acropolis-stormcaller-statblock",
+          "title": "Undead Acropolis Stormcaller",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Undead (Air, Cold)",
+          "size": "Medium",
+          "alignment": "Usually lawful neutral",
+          "challengeRating": "9",
+          "experience": "6,400",
+          "hitDice": "13d12",
+          "hitPoints": "84 hp",
+          "initiative": "+3",
+          "speed": ["30 ft.", "Fly 50 ft. (good) in storm or fog"],
+          "armorClass": { "total": "24", "touch": "15", "flatFooted": "21", "notes": "+3 Dex, +5 armor, +6 deflection" },
+          "baseAttackGrapple": "+6/+8",
+          "attack": "Storm staff +10 melee (1d6+2 plus 2d6 cold)",
+          "fullAttack": "Storm staff +10/+5 melee (1d6+2 plus 2d6 cold) or frozen lightning +11 ranged touch (6d6 electricity and cold)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Frozen Lightning (Su): 120-ft. line, 6d6 damage divided equally between electricity and cold, Reflex DC 23 half, every 1d4 rounds. Failed saves also reduce movement speed by 10 ft. for 1 round.",
+            "Call Dead Storm (Su): Three times per day, the Stormcaller creates a 500-ft.-radius storm lasting 10 minutes. Visibility falls to 30 ft., exposed living creatures take 1d6 cold damage per round, and hostile flying creatures must make DC 22 Reflex checks each round or lose 20 ft. of altitude.",
+            "Bind Sky Spirit (Su): Once per day, summon a Large air elemental or ice paraelemental for 13 rounds. The summoned spirit has the undead template and obeys the Stormcaller.",
+            "Turn the Sky to Ice (Su): Once per day, the Stormcaller freezes a 60-ft.-radius area of air for 5 rounds. Flying creatures treat the area as solid difficult terrain and take 4d6 cold damage when entering or beginning their turn within it; Reflex DC 23 half."
+          ],
+          "specialQualities": [
+            "Undead traits",
+            "Darkvision 120 ft.",
+            "Immunity to cold and electricity",
+            "Spell resistance 22",
+            "Turn resistance +4",
+            "Storm sight",
+            "Natural-magic casting as a 10th-level druid, restricted to air, cold, weather, and spirit effects"
+          ],
+          "saves": { "fortitude": "+4", "reflex": "+7", "will": "+13" },
+          "abilities": { "strength": "14", "dexterity": "17", "constitution": "—", "intelligence": "17", "wisdom": "22", "charisma": "19" },
+          "skills": ["Concentration +20", "Knowledge (nature) +19", "Knowledge (religion) +19", "Listen +22", "Spellcraft +19", "Spot +22", "Survival +22"],
+          "feats": ["Ability Focus (call dead storm)", "Combat Casting", "Flyby Attack", "Iron Will", "Spell Focus (Evocation)"],
+          "environment": "Frozen skies, cursed airways, undead warships",
+          "organization": "Solitary specialist, pair, or storm cadre (1-3 with 10-30 crew)",
+          "treasure": "Double standard plus ritual implements",
+          "advancement": "14-20 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Creates weather before boarding or pursuit begins.",
+            "Uses Turn the Sky to Ice to block escape corridors and flight lanes.",
+            "Supports helmsmen and boarding marines rather than fighting alone."
+          ],
+          "conversionNotes": [
+            "Represents the source's natural magic, storm summoning, wind shaping, and spirit calling.",
+            "Built as the primary magical specialist aboard Acropolis vessels."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-air-sailors" }
+          ]
+        },
+        {
+          "id": "undead-acropolis-boarding-marine-statblock",
+          "title": "Undead Acropolis Boarding Marine",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Undead (Cold)",
+          "size": "Medium",
+          "alignment": "Usually lawful neutral",
+          "challengeRating": "7",
+          "experience": "3,200",
+          "hitDice": "11d12",
+          "hitPoints": "71 hp",
+          "initiative": "+2",
+          "speed": ["30 ft.", "Climb 30 ft. on vessels and rigging"],
+          "armorClass": { "total": "25", "touch": "12", "flatFooted": "23", "notes": "+2 Dex, +8 ancient plate, +3 shield, +2 natural" },
+          "baseAttackGrapple": "+5/+10",
+          "attack": "Frost boarding axe +12 melee (1d8+6 plus 1d6 cold)",
+          "fullAttack": "Frost boarding axe +12/+7 melee (1d8+6 plus 1d6 cold) or grave harpoon +8 ranged (1d10+5 plus tether)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Grave Harpoon (Ex): Range increment 30 ft. A hit tethers the target to the Marine or vessel. Escaping requires a DC 22 Strength or Escape Artist check. A tethered flying target has its speed reduced by half.",
+            "Boarding Lock (Ex): When the Marine hits a creature adjacent to a ship rail, hatch, or rigging point, it may attempt a bull rush or grapple without provoking.",
+            "Cold Discipline (Su): Allies with the Undead trait within 30 ft. gain +2 on attacks of opportunity and saves against fear while the Marine remains active.",
+            "No Quarter (Ex): Deals +2d6 damage against prone, grappled, tethered, or climbing targets."
+          ],
+          "specialQualities": [
+            "Undead traits",
+            "Darkvision 60 ft.",
+            "Immunity to cold",
+            "Damage reduction 5/bludgeoning and magic",
+            "Turn resistance +3",
+            "Shipboard stability",
+            "Uncanny balance"
+          ],
+          "saves": { "fortitude": "+3", "reflex": "+5", "will": "+10" },
+          "abilities": { "strength": "21", "dexterity": "15", "constitution": "—", "intelligence": "11", "wisdom": "16", "charisma": "10" },
+          "skills": ["Balance +13", "Climb +16", "Intimidate +14", "Jump +14", "Listen +14", "Spot +14"],
+          "feats": ["Combat Reflexes", "Improved Bull Rush", "Power Attack", "Weapon Focus (boarding axe)"],
+          "environment": "Undead warships and frozen boarding zones",
+          "organization": "Fireteam (3-6), boarding section (8-20), or marine company (30-100)",
+          "treasure": "Standard arms and ancient armor",
+          "advancement": "12-18 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Tethers mobile targets before crossing between vessels.",
+            "Controls ladders, hatches, rails, and narrow boarding lanes.",
+            "Works with Stormcallers to force enemies into frozen or unstable positions."
+          ],
+          "conversionNotes": [
+            "Created from the source's retained warfare, shipboard discipline, and pursuit role.",
+            "Intended as the principal boarding-combat specialist of the ghost fleet."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-air-sailors" }
+          ]
+        },
+        {
+          "id": "undead-acropolis-repairwright-statblock",
+          "title": "Undead Acropolis Repairwright",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Undead (Cold)",
+          "size": "Medium",
+          "alignment": "Usually lawful neutral",
+          "challengeRating": "5",
+          "experience": "1,600",
+          "hitDice": "8d12",
+          "hitPoints": "52 hp",
+          "initiative": "+1",
+          "speed": ["30 ft.", "Climb 20 ft. on hulls and rigging"],
+          "armorClass": { "total": "21", "touch": "11", "flatFooted": "20", "notes": "+1 Dex, +6 reinforced work armor, +4 natural" },
+          "baseAttackGrapple": "+4/+7",
+          "attack": "Bone rivet hammer +8 melee (1d8+4 plus 1d4 cold)",
+          "fullAttack": "Bone rivet hammer +8 melee (1d8+4 plus 1d4 cold) or spectral rivet +5 ranged touch (2d6 force)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Emergency Rebuild (Su): As a full-round action, restore 3d8+8 hit points to an undead construct, bone-and-shadow vessel zone, or cursed object. A target may benefit once per round from any number of Repairwrights.",
+            "Frost Weld (Su): The Repairwright seals a breach, broken door, cracked hull, or damaged mechanism within 10 ft. The repair functions for 1 hour and has hardness 10 and 30 hit points.",
+            "Animate Rigging (Su): Once every 1d4 rounds, ropes, chains, sails, or spars in a 20-ft. radius entangle living creatures; Reflex DC 19 negates. The effect lasts 3 rounds.",
+            "Salvage the Fallen (Su): As a standard action adjacent to a destroyed undead ally, the Repairwright extracts usable bone and shadow, gaining 10 temporary hit points or granting 10 temporary hit points to an undead vessel or ally."
+          ],
+          "specialQualities": [
+            "Undead traits",
+            "Darkvision 60 ft.",
+            "Immunity to cold",
+            "Resistance to electricity 10",
+            "Turn resistance +2",
+            "Craft memory",
+            "Master shipwright",
+            "Can repair while exposed to severe weather"
+          ],
+          "saves": { "fortitude": "+2", "reflex": "+3", "will": "+9" },
+          "abilities": { "strength": "16", "dexterity": "13", "constitution": "—", "intelligence": "18", "wisdom": "16", "charisma": "11" },
+          "skills": ["Craft (shipbuilding) +18", "Disable Device +15", "Knowledge (architecture and engineering) +15", "Listen +14", "Profession (shipwright) +18", "Search +15", "Spot +14"],
+          "feats": ["Craft Construct", "Skill Focus (Craft (shipbuilding))", "Skill Focus (Profession (shipwright))"],
+          "environment": "Bone-and-shadow ships, Acropolis drydocks, frozen wreck fields",
+          "organization": "Solitary specialist, repair detail (2-6), or dock crew (10-40)",
+          "treasure": "Double standard tools, salvage, and ancient components",
+          "advancement": "9-13 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Avoids frontline combat and restores vessel zones, doors, and undead allies.",
+            "Uses Animate Rigging to delay boarders while repairs continue.",
+            "Prioritizes helm, propulsion, and hull integrity in that order."
+          ],
+          "conversionNotes": [
+            "Represents the source's retained hull craft, repair knowledge, and ability to keep cursed ships operating through lethal weather.",
+            "Designed as a strategic support creature whose removal materially weakens an undead vessel."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-air-sailors" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 388, "pageEnd": 390, "outlineTitle": "The Undead Acropolis and the Watchers of the Frozen Skies", "chunkId": "kaysender-core-pdf-2025-01-20:undead-air-sailors" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:undead-air-sailors"],
+      "tags": ["undead air sailors", "ghost fleet", "helmsman", "stormcaller", "boarding marine", "repairwright", "converted statistics"],
+      "relatedEntries": ["undead-acropolis", "watchers-of-the-frozen-skies", "bone-shadow-ships", "eternal-acropolis-captains"],
+      "relatedModules": ["npc-crew-generator", "encounter-generator", "airship-vessel-generator"]
+    }
+  ]
+}
