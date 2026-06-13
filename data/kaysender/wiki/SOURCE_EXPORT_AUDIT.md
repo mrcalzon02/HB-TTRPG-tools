@@ -4,28 +4,40 @@
 
 The source document has **not** yet been fully exported to the wiki.
 
-The current wiki has extensive thematic coverage and 58 registered source-lore passes, followed by eight converted-statistics passes. However, it does not yet satisfy a strict one-to-one export standard in which every substantive source heading, named subject, rules subsystem, table, item, creature, location, organization, artifact, and legend is represented by either:
+The current wiki now has 59 registered source-lore passes, followed by eight converted-statistics passes. It still does not satisfy a strict one-to-one export standard in which every substantive source heading, named subject, rules subsystem, table, item, creature, location, organization, artifact, and legend is represented by either:
 
 - a dedicated full wiki entry;
 - a complete subsection inside an explicitly linked parent entry; or
-- a mechanics-complete stat block or operational rules object when the source provides game mechanics.
+- a mechanics-complete stat block or operational rules object when the source provides mechanics.
+
+## Completed exact-export gaps
+
+### The Lost Continent of Azh'Thanar - completed in source-lore pass 59
+
+The final manuscript section has now been exported as a complete linked package rather than a short blurb:
+
+- The Lost Continent of Azh'Thanar
+- The Primeval Beasts of Azh'Thanar
+- The Impossible Cities of Azh'Thanar
+- The Colossal Remains of Azh'Thanar
+- The Suppressed Records of Azh'Thanar
+- Azh'Thanar Expedition Procedures
+
+The reader-facing entries are marked `source-faithful`. Added operating procedures, provisional ecological boundaries, investigation rules, and expedition mechanics are separately marked `setting-derived`.
 
 ## Confirmed missing standalone source entries
 
-The following source headings were checked against the repository and currently have no dedicated wiki entry or source-lore pack match:
+The following checked source headings still have no dedicated complete wiki export:
 
-1. **The Lost Continent of Azh'Thanar**
-   - The unbroken western continent.
-   - Primeval jungles, vast rivers, mountains, prehistoric megafauna, impossible giant-built ruins, colossal bones, vanished elven records, sealed dwarven records, and draconic silence.
-   - This is a substantial final source section and requires a full location/history/ecology entry rather than a short paragraph.
+1. **The Legend of Aelric Skywarden: The First Protector of the Light**
+   - Requires a full NPC/legend entry.
+   - Any described relics, vows, abilities, institutions, opponents, or historical consequences must become linked entries where substantively distinct.
+   - Any creature or NPC mechanics must receive a full Hypertext d20-compatible stat block.
 
-2. **The Legend of Aelric Skywarden: The First Protector of the Light**
-   - This named legend is present in the source heading sequence but no dedicated Aelric entry was found in the wiki.
-   - It requires a full NPC/legend entry and any described relics, vows, abilities, institutions, or historical consequences should be split into linked entries where appropriate.
-
-3. **The Dwarven Lecture on Airflight**
-   - This source heading was not found as a dedicated wiki entry.
-   - It should be exported as a cultural/technical document preserving the dwarven explanation, terminology, operating principles, and any explicit mechanics rather than reduced to a general flight summary.
+2. **The Dwarven Lecture on Airflight**
+   - Requires a complete cultural and technical document.
+   - The export must preserve its terminology, explanations, operating principles, examples, and any source mechanics.
+   - Editor-facing operation must include checks, modifiers, timing, failure effects, and practical use rather than only summarizing dwarven attitudes toward flight.
 
 ## Confirmed exactness problem
 
@@ -45,25 +57,26 @@ A source topic is not considered fully exported merely because a related broad e
 Every new source export must meet these rules:
 
 1. **Full understanding before entry creation**
-   - Read the entire source section and its continuation pages.
+   - Read the entire source section and all continuation pages.
    - Identify whether the subject is lore-only, mechanical, or mixed.
 
 2. **Mechanics completeness**
-   - Creatures receive full Hypertext d20-compatible stat blocks.
-   - Items and artifacts receive complete operation, activation, limits, costs, failure states, and interaction rules.
+   - Creatures and significant NPCs receive full Hypertext d20-compatible stat blocks.
+   - Items and artifacts receive operation, activation, limits, costs, failure states, maintenance, and interaction rules.
    - Classes and backgrounds retain complete progression, prerequisites, proficiencies, features, tables, and choices.
    - Systems retain checks, DCs, modifiers, timing, outcomes, critical results, and examples.
    - Ships and organizations retain complete statistics and operating procedures where supplied.
+   - Lore-only locations receive editor-facing operating profiles when needed to make their scale, hazards, access, evidence, and campaign use comprehensible.
 
 3. **No short-blurb substitution**
    - A short summary may introduce an entry, but it cannot replace the source's substantive description or mechanics.
 
 4. **Source-faithful versus setting-derived labeling**
    - Direct manuscript exports use `source-faithful`.
-   - Added names, inferred systems, or connective lore use `setting-derived` and must be clearly identified.
+   - Added names, inferred systems, provisional profiles, or connective lore use `setting-derived` and must be clearly identified.
 
 5. **Heading-level auditability**
-   - Each substantive source heading should map to a stable wiki entry ID or a named section in a parent entry.
+   - Each substantive source heading must map to a stable wiki entry ID or a named section in a parent entry.
    - Source references should include page ranges, outline titles, and chunk IDs whenever available.
 
 ## Current coverage status
@@ -76,8 +89,7 @@ Every new source export must meet these rules:
 
 ## Next export priority
 
-1. The Lost Continent of Azh'Thanar
-2. The Legend of Aelric Skywarden
-3. The Dwarven Lecture on Airflight
-4. A complete residual heading audit across all 392 source pages
-5. Table-by-table mechanics verification for classes, backgrounds, ships, equipment, crafting, tracking, fleet combat, organization management, training, escape, hazards, diseases, flora, and encounter systems
+1. The Legend of Aelric Skywarden
+2. The Dwarven Lecture on Airflight
+3. A complete residual heading audit across all 392 source pages
+4. Table-by-table mechanics verification for classes, backgrounds, ships, equipment, crafting, tracking, fleet combat, organization management, training, escape, hazards, diseases, flora, and encounter systems
