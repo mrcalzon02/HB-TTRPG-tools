@@ -1,0 +1,282 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Source-lore pass 58 adds the manuscript's missing legend entries for Captain Daeron 'Ironheart' Veld, the origin of neutral ground, his lost tomb and its seekers, the storm-guiding wheel, the Ashen Phoenix, and Dragon Lord Vraxion.",
+  "entries": [
+    {
+      "id": "captain-daeron-ironheart-veld",
+      "title": "Captain Daeron \"Ironheart\" Veld",
+      "category": "NPCs",
+      "summary": "A respected Draconic Empire officer, diplomat, and sky captain whose sacrifice at the Battle of the Shattered Skies inspired the neutral-ground tradition across Kaysender.",
+      "body": [
+        "Captain Daeron \"Ironheart\" Veld was remembered not only as a capable officer of the Draconic Empire but as a leader who had earned trust far beyond his own faction. He maintained friendships with figures in Valeria, the Free Flotilla, and even former Black Fleet pirates who had rejected their earlier lives.",
+        "During the crisis remembered as the [[battle-of-the-shattered-skies|Battle of the Shattered Skies]], Veld sacrificed himself to save others and hold together a coalition that might otherwise have collapsed into mutual destruction. Even former enemies respected the scale of his decision and the discipline with which he carried it out.",
+        "His funeral became a state occasion attended by representatives from rival factions. The ceremony was held on a remote neutral island sanctuary so that enemies could gather without fear of violence. That gathering transformed his death into a political and cultural symbol larger than any single allegiance.",
+        "Veld's battered ship's wheel was set at the head of his tombstone. The rope-woven ouroboros entwined with the wheel became the first widely recognized symbol of neutral ground, representing sacrifice, continuity, and the possibility of peace between enemies."
+      ],
+      "sections": [
+        {
+          "heading": "Diplomat and Officer",
+          "sectionType": "biography",
+          "body": [
+            "Veld's authority came from personal trust rather than rank alone. He was known for seeking peace in chaotic circumstances and for maintaining working relationships across political and criminal boundaries.",
+            "His credibility allowed otherwise hostile factions to cooperate during crisis, which is why his death was recognized even by those who had opposed him."
+          ]
+        },
+        {
+          "heading": "Legacy",
+          "sectionType": "legacy",
+          "body": [
+            "Veld's memory is invoked whenever factions establish protected meeting places, emergency negotiation zones, or sanctuaries where ordinary hostilities are suspended.",
+            "His name is used both sincerely and politically. Some leaders invoke Ironheart as a standard of courage and restraint; others use the symbol of his sacrifice to lend legitimacy to places whose neutrality is partial or self-serving."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Captain Daeron Ironheart Veld / Legacy and Funeral", "chunkId": "kaysender-core-pdf-2025-01-20:captain-daeron-ironheart-veld" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:captain-daeron-ironheart-veld"],
+      "tags": ["Daeron Veld", "Ironheart", "neutral ground", "Draconic Empire", "sacrifice", "diplomacy"],
+      "relatedEntries": ["battle-of-the-shattered-skies", "neutral-ground-symbol", "lost-tomb-of-captain-veld", "seekers-of-velds-tomb"],
+      "relatedModules": ["npc-crew-generator", "faction-guild-generator", "job-board-generator"]
+    },
+    {
+      "id": "battle-of-the-shattered-skies",
+      "title": "The Battle of the Shattered Skies",
+      "category": "History",
+      "summary": "A catastrophic aerial conflict remembered chiefly for Captain Veld's sacrifice and the temporary unity it forced among rival factions.",
+      "body": [
+        "The Battle of the Shattered Skies was a major aerial conflict in which fleets, storms, and factional rivalries converged into a disaster large enough to threaten every force involved.",
+        "Captain Daeron Veld emerged as the central remembered figure because he acted across faction lines and sacrificed himself to preserve lives beyond his own command. His death became the event's moral center even where accounts disagree about strategy, blame, and the battle's exact outcome.",
+        "The battle's aftermath produced one of the rare moments when representatives of the Draconic Empire, Valeria, the Free Flotilla, and former Black Fleet elements gathered under common protection. Veld's funeral and the neutral-ground symbol that emerged from it became the most enduring consequences of the conflict."
+      ],
+      "sections": [
+        {
+          "heading": "Historical Uncertainty",
+          "sectionType": "history",
+          "body": [
+            "Surviving accounts focus more heavily on Veld's sacrifice than on a complete order of battle. Later factions emphasize different causes and victories, but few dispute that the battle demonstrated the danger of factional collapse during a shared crisis."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Captain Veld and the Battle of the Shattered Skies", "chunkId": "kaysender-core-pdf-2025-01-20:battle-of-the-shattered-skies" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:battle-of-the-shattered-skies"],
+      "tags": ["Shattered Skies", "battle", "Captain Veld", "faction conflict", "sacrifice"],
+      "relatedEntries": ["captain-daeron-ironheart-veld", "neutral-ground-symbol", "lost-tomb-of-captain-veld"],
+      "relatedModules": ["mass-combat-generator", "encounter-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "neutral-ground-symbol",
+      "title": "The Neutral-Ground Symbol",
+      "category": "Culture",
+      "summary": "An ouroboros entwined with a ship's wheel marks places where rival factions suspend violence in memory of Captain Veld's sacrifice.",
+      "body": [
+        "The neutral-ground symbol originated at Captain Veld's funeral. His weathered ship's wheel was placed at the head of his tombstone, and a rope-woven ouroboros was used to represent sacrifice, continuity, and peace achieved through restraint.",
+        "The image spread across Kaysender and became a widely recognized marker for protected meeting places, trade sites, sanctuary islands, and diplomatic ground where ordinary hostilities are expected to stop.",
+        "The symbol does not guarantee perfect neutrality. Some locations are genuinely independent, while others are tolerated because multiple factions need access, because the site has symbolic importance, or because a dominant faction benefits from maintaining the appearance of neutrality.",
+        "Violating a recognized neutral-ground symbol is therefore more than a local crime. It can damage reputation across factions, disrupt trade, and mark the offender as someone unwilling to respect even the fragile customs that keep negotiation possible."
+      ],
+      "sections": [
+        {
+          "heading": "Common Uses",
+          "sectionType": "culture",
+          "body": [
+            "The mark appears on sanctuary docks, isolated meeting halls, contested markets, hidden coves, and informal diplomatic sites.",
+            "Organizations such as the Whisper Web, Black Tide, merchant groups, and faction intermediaries may use neutral ground for discreet exchanges or negotiations away from public oversight."
+          ]
+        },
+        {
+          "heading": "Symbolic Limits",
+          "sectionType": "politics",
+          "body": [
+            "A location may be neutral in law but unequal in practice. Access, local geography, nearby faction power, and the interests of whoever maintains the site can all shape how safe the neutrality truly is."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "The Origin and Adoption of Neutral Ground", "chunkId": "kaysender-core-pdf-2025-01-20:neutral-ground-symbol" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:neutral-ground-symbol"],
+      "tags": ["neutral ground", "ouroboros", "ship's wheel", "Captain Veld", "diplomacy"],
+      "relatedEntries": ["captain-daeron-ironheart-veld", "lost-tomb-of-captain-veld", "whisper-web", "black-tide"],
+      "relatedModules": ["faction-guild-generator", "settlement-generator", "job-board-generator"]
+    },
+    {
+      "id": "lost-tomb-of-captain-veld",
+      "title": "The Lost Tomb of Captain Daeron Veld",
+      "category": "Locations",
+      "summary": "A deserted island sanctuary hidden among the tempests of the Shattered Skies is said to hold Captain Veld's tomb, monument, and legendary wheel.",
+      "body": [
+        "Captain Veld was buried on a remote island sanctuary among the Shattered Skies. The location was chosen for its neutrality and symbolic importance, but the tempests that later consumed the region obscured the island's exact position.",
+        "Legend describes a small shrouded isle surrounded by jagged cliffs and winds strong enough to prevent ordinary approach. At its center stands a stone monument marked by a weathered ship's wheel and the rope-woven ouroboros of neutral ground.",
+        "During the fiercest storms, the sky is sometimes said to clear for only a moment, revealing the island's silhouette. Sailors also report hearing the faint echoes of a ghostly crew associated with those who died alongside Veld.",
+        "Ancient maps supposedly record the island's location, but surviving examples are incomplete, stolen, or torn. Those claiming to possess a complete map tend to disappear, become lost in the storms, or return mentally broken after hearing voices insisting the tomb was never meant to be found."
+      ],
+      "sections": [
+        {
+          "heading": "Is the Island Cursed?",
+          "sectionType": "legend",
+          "body": [
+            "Some traditions say the island is protected by a curse. Others say it appears only to those worthy of Veld's legacy, or that the storms are a natural defense strengthened by memory and belief.",
+            "No expedition has returned with proof that it reached the tomb. The uncertainty has preserved the site as both sacred possibility and dangerous obsession."
+          ]
+        },
+        {
+          "heading": "Rumored Contents",
+          "sectionType": "treasure-lore",
+          "body": [
+            "Stories describe artifacts linked to the tempest that claimed Veld, factional tributes from his funeral, and the Captain's mighty wheel.",
+            "The wheel is said to guide ships through violent storms or protect worthy bearers, though no verified modern account confirms these powers."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "The Lost Tomb of Captain Daeron Ironheart Veld", "chunkId": "kaysender-core-pdf-2025-01-20:lost-tomb-of-captain-veld" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:lost-tomb-of-captain-veld"],
+      "tags": ["Captain Veld", "lost tomb", "Shattered Skies", "storm island", "neutral ground"],
+      "relatedEntries": ["captain-daeron-ironheart-veld", "battle-of-the-shattered-skies", "neutral-ground-symbol", "seekers-of-velds-tomb", "ironhearts-wheel"],
+      "relatedModules": ["world-map-route-generator", "encounter-generator", "treasure-generator", "job-board-generator"]
+    },
+    {
+      "id": "seekers-of-velds-tomb",
+      "title": "The Seekers of Veld's Tomb",
+      "category": "Factions",
+      "summary": "Adventurers, treasure hunters, imperial agents, pirates, and devotees continue to search for Captain Veld's lost resting place.",
+      "body": [
+        "The Seekers of Veld's Tomb are not a single formal organization. The name is applied collectively to the many expeditions and private groups drawn toward the legend of the hidden island.",
+        "Their motives vary. Some seek wealth or magical artifacts. Some hope to gain favor with factions that revere Veld. Others believe recovering the tomb would restore a lost standard of honorable leadership or reveal the truth of the Battle of the Shattered Skies.",
+        "Members and sponsors have included independent adventurers, professional treasure hunters, Draconic Empire representatives, and Black Fleet elements. These groups often cooperate long enough to follow a map fragment and then turn against one another as the storms worsen or the possibility of discovery becomes real.",
+        "No recognized seeker has returned with proof of success. Survivors report false routes, impossible weather, voices in the wind, and glimpses of an island that vanishes as soon as a ship changes course toward it."
+      ],
+      "sections": [
+        {
+          "heading": "Common Expeditions",
+          "sectionType": "faction-activity",
+          "body": [
+            "Seekers collect torn maps, funeral records, old faction tributes, weather logs, and testimony from shaken captains who claim to have seen the island.",
+            "Most expeditions require ships capable of operating in violent storms and crews willing to continue after ordinary navigation becomes useless."
+          ]
+        },
+        {
+          "heading": "Conflict Among Seekers",
+          "sectionType": "faction-conflict",
+          "body": [
+            "A faction may want the tomb preserved, opened, claimed, or destroyed. The Draconic Empire may seek Veld's relics as state property, while pirates and independent crews may reject any exclusive claim.",
+            "Devotional seekers often oppose treasure hunters who treat the grave as a hoard rather than a memorial."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "The Seekers of Veld's Tomb", "chunkId": "kaysender-core-pdf-2025-01-20:seekers-of-velds-tomb" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:seekers-of-velds-tomb"],
+      "tags": ["Veld's Tomb", "seekers", "treasure hunters", "Draconic Empire", "Black Fleet"],
+      "relatedEntries": ["lost-tomb-of-captain-veld", "captain-daeron-ironheart-veld", "ironhearts-wheel", "draconic-empire", "black-fleet"],
+      "relatedModules": ["job-board-generator", "faction-guild-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "ironhearts-wheel",
+      "title": "Ironheart's Wheel",
+      "category": "Artifacts",
+      "summary": "Captain Veld's weathered ship's wheel is said to rest at his tomb and may guide worthy ships through the most violent storms.",
+      "body": [
+        "The wheel placed at Captain Veld's tomb was the battered helm wheel of his own ship. It became the central memorial object at his funeral and the visual foundation of the neutral-ground symbol.",
+        "Later legends attribute supernatural properties to it. The wheel is said to turn toward safe passage when ordinary compasses fail, hold a ship steady inside catastrophic winds, or protect those who act with the same courage and restraint associated with Veld.",
+        "No authenticated relic has been recovered. False wheels, ceremonial copies, and factional reproductions are common, especially among neutral-ground keepers and tomb seekers.",
+        "Whether the original wheel was enchanted before Veld's death, transformed by the funeral rites, or empowered by generations of belief remains unknown."
+      ],
+      "sections": [
+        {
+          "heading": "Symbol and Relic",
+          "sectionType": "artifact-lore",
+          "body": [
+            "Even without magic, the original wheel would hold immense political and cultural value. Possession could strengthen a claim to Veld's legacy or undermine trust if treated as ordinary treasure.",
+            "Its rumored power appears tied to worthiness, sacrifice, and protection rather than conquest."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "The Lost Tomb and Captain's Mighty Wheel", "chunkId": "kaysender-core-pdf-2025-01-20:ironhearts-wheel" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:ironhearts-wheel"],
+      "tags": ["Ironheart's Wheel", "Captain Veld", "artifact", "storm guidance", "neutral ground"],
+      "relatedEntries": ["captain-daeron-ironheart-veld", "lost-tomb-of-captain-veld", "neutral-ground-symbol", "seekers-of-velds-tomb"],
+      "relatedModules": ["treasure-generator", "airship-vessel-generator", "world-map-route-generator"]
+    },
+    {
+      "id": "ashen-phoenix",
+      "title": "The Ashen Phoenix",
+      "category": "Ships",
+      "summary": "A legendary obsidian-and-gold flagship of the Draconic Armada became a crewless ghost ship after Dragon Lord Vraxion's defeat.",
+      "body": [
+        "The Ashen Phoenix was one of the crown jewels of the Draconic Armada during the age of the great Dragon Lords. It was a massive airship built from enchanted obsidian and gilded scales, with black sails and a hull that shimmered with forgotten magic.",
+        "The vessel carried a legendary hoard intended for Dragon Lord Vraxion's private treasury: gold, ancient artifacts, and magical relics gathered during war and conquest.",
+        "During a great conflict between the Dragon Lords and their enemies, the Ashen Phoenix was battered by storms and betrayed amid the fighting. Vraxion was defeated, the crew perished, and the ship was left without helmsman or destination.",
+        "Legend says the vessel never fell. Its tattered sails still hold it aloft as it drifts through Kaysender without captain or purpose, carrying its untouched wealth as a permanent temptation."
+      ],
+      "sections": [
+        {
+          "heading": "Ghost-Ship Legend",
+          "sectionType": "legend",
+          "body": [
+            "Sightings describe a dark vessel moving against prevailing wind, its gilded scales visible through cloud and its deck apparently empty.",
+            "The ship's lack of crew does not make it safe. The vessel is commonly described as cursed, and attempts to follow it may end in storms, navigational failure, or unexplained disappearance."
+          ]
+        },
+        {
+          "heading": "The Legendary Hoard",
+          "sectionType": "treasure-lore",
+          "body": [
+            "The promised treasure makes the Ashen Phoenix one of the most persistent sky-salvage legends. Different accounts emphasize imperial gold, relics stolen from defeated cultures, dragon-forged weapons, or objects too dangerous to place in an ordinary hoard.",
+            "No faction agrees who would legally own the cargo if the ship were recovered."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "The Ghost Ship of the Draconic Armada – The Ashen Phoenix", "chunkId": "kaysender-core-pdf-2025-01-20:ashen-phoenix" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:ashen-phoenix"],
+      "tags": ["Ashen Phoenix", "ghost ship", "Draconic Armada", "obsidian airship", "legendary hoard"],
+      "relatedEntries": ["dragon-lord-vraxion", "draconic-empire", "dragon-lords", "airships"],
+      "relatedModules": ["airship-vessel-generator", "treasure-generator", "encounter-generator", "job-board-generator"]
+    },
+    {
+      "id": "dragon-lord-vraxion",
+      "title": "Dragon Lord Vraxion",
+      "category": "NPCs",
+      "summary": "A ruthless Dragon Lord whose defeated power and lost private hoard are remembered through the legend of the Ashen Phoenix.",
+      "body": [
+        "Vraxion was a powerful and ruthless Dragon Lord during the era when the Draconic Armada dominated large portions of the sky. The Ashen Phoenix carried treasure intended for his private hoard.",
+        "He was defeated during the conflict in which the ship was lost. The source remembers his downfall primarily through the disappearance of the Ashen Phoenix and the wealth that never reached him.",
+        "Later treasure hunters sometimes assume Vraxion's defeat ended every claim on the cargo. Draconic authorities and descendants of plundered peoples are unlikely to agree."
+      ],
+      "sections": [
+        {
+          "heading": "Legacy of the Lost Hoard",
+          "sectionType": "legacy",
+          "body": [
+            "Vraxion's name survives as a warning about hoarded wealth, imperial overreach, and the belief that treasure can remain under one ruler's control even after fleets and dynasties collapse."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "The Ghost Ship of the Draconic Armada – The Ashen Phoenix", "chunkId": "kaysender-core-pdf-2025-01-20:dragon-lord-vraxion" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dragon-lord-vraxion"],
+      "tags": ["Vraxion", "Dragon Lord", "Draconic Armada", "Ashen Phoenix", "lost hoard"],
+      "relatedEntries": ["ashen-phoenix", "dragon-lords", "draconic-empire"],
+      "relatedModules": ["npc-crew-generator", "faction-guild-generator", "treasure-generator"]
+    }
+  ]
+}
