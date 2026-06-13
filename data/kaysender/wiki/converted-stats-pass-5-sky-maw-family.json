@@ -1,0 +1,249 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Fifth converted statistics pass. Adds Hypertext d20-compatible progression stat blocks for Small, Standard, and Huge Sky Maws plus the Cloud Maw, Tempest Maw, and Abyss Maw ecological variants.",
+  "entries": [
+    {
+      "id": "sky-maws",
+      "title": "Sky Maws",
+      "category": "Creatures",
+      "summary": "Parasitic aerial predators attach to creatures, ships, and magical objects to drain vitality and power, now with converted Hypertext d20-compatible size progression statistics.",
+      "body": [
+        "Sky Maws wait within clouds, latch onto vulnerable hulls or living prey, and siphon energy over time. They are usually solitary but gather into devastating seasonal swarms able to exhaust fleets or islands.",
+        "The family ranges from hand-sized hatchlings that prey on exposed crew to immense mature parasites capable of crippling an airship. All stages share a powerful clinging body and an instinctive attraction to magical power."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "The source provides small, normal, and huge fifth-edition profiles. This conversion treats the three as a growth progression built around attachment, energy siphoning, magical disruption, and airship predation."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "small-sky-maw-statblock",
+          "title": "Small Sky Maw",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Aberration (Air)",
+          "size": "Small",
+          "alignment": "Always neutral",
+          "challengeRating": "2",
+          "experience": "600",
+          "hitDice": "3d8+6",
+          "hitPoints": "19 hp",
+          "initiative": "+4",
+          "speed": ["Fly 50 ft. (good)", "Climb 20 ft."],
+          "armorClass": { "total": "18", "touch": "15", "flatFooted": "14", "notes": "+1 size, +4 Dex, +3 natural" },
+          "baseAttackGrapple": "+2/-1",
+          "attack": "Clinging bite +7 melee (1d6+1 plus attach)",
+          "fullAttack": "Clinging bite +7 melee (1d6+1 plus attach)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Attach (Ex): If a Small Sky Maw hits with its bite, it may start a grapple as a free action without provoking. While attached, it loses its Dexterity bonus to AC but gains a +8 racial bonus on grapple checks to remain attached.",
+            "Vitality Siphon (Su): At the start of each turn while attached to a living creature, the maw deals 1d4 Constitution damage; Fortitude DC 14 halves the damage to 1 point. Against a magic item, vehicle power conduit, or spellcasting focus, it instead drains one charge, one spell slot of the lowest available level, or 1d6 points of temporary magical power at the GM's discretion.",
+            "Arcane Taste (Su): A Small Sky Maw automatically detects active magic, charged items, spellcasters, and magical engines within 60 ft. as though using detect magic."
+          ],
+          "specialQualities": ["Darkvision 60 ft.", "Cloud camouflage", "Scent magic", "Immune to falling damage", "Resistance to electricity 5"],
+          "saves": { "fortitude": "+3", "reflex": "+5", "will": "+4" },
+          "abilities": { "strength": "12", "dexterity": "19", "constitution": "15", "intelligence": "2", "wisdom": "13", "charisma": "5" },
+          "skills": ["Climb +9", "Hide +16 (+24 in cloud or fog)", "Listen +6", "Spot +6"],
+          "feats": ["Improved Initiative", "Weapon Finesse"],
+          "environment": "Cloud banks, airship routes, floating-island margins",
+          "organization": "Solitary, cluster (2-6), or seasonal swarm (7-30)",
+          "treasure": "None",
+          "advancement": "4-5 HD (Small), 6-8 HD (Medium)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Targets exposed spellcasters, familiars, magical gear, and unsecured crew.",
+            "Attaches quickly and attempts to remain hidden beneath hull projections or clothing.",
+            "Flees once injured unless part of a feeding swarm."
+          ],
+          "conversionNotes": ["Converted from the source's smallest Sky Maw profile and its attachment-and-drain role."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Parasite: Sky Maw / Small", "chunkId": "kaysender-core-pdf-2025-01-20:sky-maws" }
+          ]
+        },
+        {
+          "id": "standard-sky-maw-statblock",
+          "title": "Sky Maw",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Aberration (Air)",
+          "size": "Large",
+          "alignment": "Always neutral",
+          "challengeRating": "7",
+          "experience": "3,200",
+          "hitDice": "10d8+40",
+          "hitPoints": "85 hp",
+          "initiative": "+3",
+          "speed": ["Fly 70 ft. (good)", "Climb 30 ft."],
+          "armorClass": { "total": "22", "touch": "12", "flatFooted": "19", "notes": "-1 size, +3 Dex, +10 natural" },
+          "baseAttackGrapple": "+7/+18",
+          "attack": "Maw +13 melee (2d8+7 plus attach)",
+          "fullAttack": "Maw +13 melee (2d8+7 plus attach) and 4 tendrils +11 melee (1d6+3)",
+          "spaceReach": "10 ft./10 ft.",
+          "specialAttacks": [
+            "Hull Attach (Ex): A Sky Maw that hits a creature, vehicle, or structure may attempt to attach as a free action. It gains a +12 racial bonus to remain attached and ignores ordinary vehicle movement, turbulence, and wind while clinging.",
+            "Power Siphon (Su): While attached, the Sky Maw deals 2d6 damage each round to a living host and heals the same amount. Against a magical vehicle, construct, charged item, or active spell effect, it instead drains 2d6 points of magical power, 1d4 charges, or one prepared spell or spell slot of 1d4th level or lower. A DC 20 Fortitude or Will save, as appropriate to the target, halves the drain.",
+            "Disruptive Pulse (Su): Once every 1d4 rounds, 30-ft. radius; spellcasters must succeed on a DC 18 Concentration check or lose any spell being cast, and unattended magic items are suppressed for 1 round on a failed DC 18 Will save.",
+            "Tendril Snare (Ex): A creature hit by two tendrils in the same round is entangled until it escapes with a DC 20 Escape Artist or Strength check."
+          ],
+          "specialQualities": ["Darkvision 90 ft.", "Cloud camouflage", "Detect magic 120 ft.", "Resistance to electricity 10", "Spell resistance 18", "Wind stability"],
+          "saves": { "fortitude": "+7", "reflex": "+6", "will": "+10" },
+          "abilities": { "strength": "24", "dexterity": "17", "constitution": "18", "intelligence": "3", "wisdom": "16", "charisma": "6" },
+          "skills": ["Climb +18", "Hide +12 (+22 in cloud or fog)", "Listen +13", "Spot +13"],
+          "feats": ["Flyby Attack", "Improved Grapple", "Multiattack", "Power Attack"],
+          "environment": "Dense cloud routes, magical shipping lanes, floating-island understructures",
+          "organization": "Solitary, pair, or feeding cluster (3-8)",
+          "treasure": "Incidental items embedded in its body or retained from damaged vessels",
+          "advancement": "11-15 HD (Large), 16-20 HD (Huge)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Approaches from cloud cover and attaches to the underside or power section of a vessel.",
+            "Uses Disruptive Pulse to interrupt repairs and defensive spellcasting.",
+            "Remains attached until badly wounded or the target's magical power is exhausted."
+          ],
+          "conversionNotes": ["Converted from the source's standard Sky Maw profile as the baseline ship parasite."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Parasite: Sky Maw / Standard", "chunkId": "kaysender-core-pdf-2025-01-20:sky-maws" }
+          ]
+        },
+        {
+          "id": "huge-sky-maw-statblock",
+          "title": "Huge Sky Maw",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Aberration (Air)",
+          "size": "Huge",
+          "alignment": "Always neutral",
+          "challengeRating": "12",
+          "experience": "19,200",
+          "hitDice": "18d8+108",
+          "hitPoints": "189 hp",
+          "initiative": "+2",
+          "speed": ["Fly 60 ft. (average)", "Climb 30 ft."],
+          "armorClass": { "total": "27", "touch": "10", "flatFooted": "25", "notes": "-2 size, +2 Dex, +17 natural" },
+          "baseAttackGrapple": "+13/+33",
+          "attack": "Great maw +23 melee (4d8+18 plus attach)",
+          "fullAttack": "Great maw +23 melee (4d8+18 plus attach) and 6 tendrils +21 melee (2d6+6)",
+          "spaceReach": "15 ft./15 ft. (25 ft. with tendrils)",
+          "specialAttacks": [
+            "Vessel Clamp (Ex): A Huge Sky Maw may attach to a Huge or larger vehicle or creature with a successful maw attack and grapple check. Once attached, removing it requires a successful opposed grapple check, DC 28 Strength check, or dealing 50 points of slashing damage specifically to its anchor tissues.",
+            "Catastrophic Siphon (Su): While attached, it drains 6d6 hit points or magical power each round and heals half the amount drained. A magical vessel reduced to 0 power becomes disabled; a living creature reduced to 0 Constitution by the drain dies. Fortitude or Will DC 25 halves the drain.",
+            "Magic Blackout (Su): 60-ft. radius, once every 1d4 rounds; functions as greater dispel magic at caster level 15th against all active effects and suppresses magic items for 1d4 rounds on a failed DC 23 Will save.",
+            "Hull Rend (Ex): If attached to a vehicle or structure for three consecutive rounds, it deals 8d6 structural damage ignoring the first 10 points of hardness.",
+            "Tendril Sweep (Ex): As a standard action, it attacks every creature in a 25-ft. semicircle with one tendril."
+          ],
+          "specialQualities": ["Darkvision 120 ft.", "Blindsense 60 ft.", "Cloud camouflage", "Detect magic 300 ft.", "Damage reduction 10/adamantine", "Resistance to electricity 20", "Spell resistance 25", "Wind stability"],
+          "saves": { "fortitude": "+12", "reflex": "+8", "will": "+16" },
+          "abilities": { "strength": "34", "dexterity": "15", "constitution": "22", "intelligence": "4", "wisdom": "20", "charisma": "8" },
+          "skills": ["Climb +26", "Hide +7 (+17 in cloud or fog)", "Listen +22", "Spot +22", "Survival +15"],
+          "feats": ["Awesome Blow", "Flyby Attack", "Improved Bull Rush", "Improved Grapple", "Multiattack", "Power Attack", "Snatch"],
+          "environment": "Major cloud oceans, high-magic shipping corridors, island-scale magical currents",
+          "organization": "Solitary or catastrophic feeding pair",
+          "treasure": "Standard; wreckage and magical debris lodged in its body",
+          "advancement": "19-27 HD (Huge), 28-36 HD (Gargantuan)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Targets the primary magical engine or core of the largest vessel present.",
+            "Uses Magic Blackout before crew can organize magical defenses.",
+            "Ignores most individual combatants unless they interfere with its anchor points."
+          ],
+          "conversionNotes": ["Converted from the source's huge Sky Maw profile as a major vessel-disabling encounter."],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Parasite: Sky Maw / Huge", "chunkId": "kaysender-core-pdf-2025-01-20:sky-maws" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Parasite: Sky Maw", "chunkId": "kaysender-core-pdf-2025-01-20:sky-maws" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:sky-maws"],
+      "tags": ["Sky Maw", "parasite", "airship predator", "magical drain", "converted statistics"],
+      "relatedEntries": ["cloud-maw", "tempest-maw", "abyss-maw-sky-parasite", "airships"],
+      "relatedModules": ["sky-ecology-generator", "airship-vessel-generator", "encounter-generator"]
+    },
+    {
+      "id": "cloud-maw",
+      "title": "Cloud Maw",
+      "category": "Creatures",
+      "summary": "An ethereal transparent Sky Maw feeds on elemental sky magic and subtly redirects air currents, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Cloud Maws blend almost perfectly with open sky, making them less physically aggressive but exceptionally difficult to detect or remove.",
+        "Their feeding can alter the currents sustaining nearby travel and floating terrain, causing ships to drift off course long before the parasite is discovered."
+      ],
+      "sections": [{"heading":"Conversion posture","sectionType":"conversion-note","body":["Built as a stealth and navigation-hazard variant rather than a direct bruiser, with current redirection and elemental siphoning."]}],
+      "statBlocks": [{
+        "id": "cloud-maw-statblock",
+        "title": "Cloud Maw",
+        "ruleset": "Hypertext d20 compatible",
+        "conversionStatus": "converted-hypertext-d20",
+        "statType": "creature",
+        "creatureType": "Aberration (Air, Incorporeal)",
+        "size": "Large",
+        "alignment": "Always neutral",
+        "challengeRating": "8",
+        "experience": "4,800",
+        "hitDice": "11d8+33",
+        "hitPoints": "82 hp",
+        "initiative": "+7",
+        "speed": ["Fly 100 ft. (perfect)"],
+        "armorClass": { "total": "23", "touch": "23", "flatFooted": "16", "notes": "-1 size, +7 Dex, +7 deflection" },
+        "baseAttackGrapple": "+8/—",
+        "attack": "Incorporeal siphon +14 touch (2d6 force plus elemental drain)",
+        "fullAttack": "2 incorporeal siphons +14 touch (2d6 force plus elemental drain)",
+        "spaceReach": "10 ft./10 ft.",
+        "specialAttacks": [
+          "Elemental Drain (Su): A successful touch attack drains one active air, weather, flight, or electricity effect from the target as dispel magic, caster level 11th. If no such effect exists, it deals 1d4 Wisdom damage instead.",
+          "Current Redirection (Su): As a standard action, the Cloud Maw bends winds in a 300-ft. radius for 10 minutes. Flight paths, ship movement, and ranged attacks are shifted 45 degrees in a direction chosen by the maw unless the pilot or creature succeeds on a DC 22 Reflex or Profession check.",
+          "Invisible Feeding (Su): While inside natural cloud, fog, or open blue sky, the Cloud Maw is invisible as greater invisibility. See invisibility reveals only a vague distortion; true seeing functions normally."
+        ],
+        "specialQualities": ["Incorporeal traits", "Darkvision 120 ft.", "Immunity to electricity", "Spell resistance 23", "Elemental sense 300 ft.", "Rejuvenation in natural cloud"],
+        "saves": { "fortitude": "+6", "reflex": "+10", "will": "+12" },
+        "abilities": { "strength": "—", "dexterity": "25", "constitution": "16", "intelligence": "6", "wisdom": "20", "charisma": "24" },
+        "skills": ["Hide +22 (+42 in open sky or cloud)", "Listen +17", "Move Silently +20", "Spot +17", "Survival +17"],
+        "feats": ["Flyby Attack", "Improved Initiative", "Iron Will", "Weapon Finesse"],
+        "environment": "Open blue sky, cloud banks, elemental air currents",
+        "organization": "Solitary or drift pair",
+        "treasure": "None",
+        "advancement": "12-18 HD (Large)",
+        "levelAdjustment": "—",
+        "tactics": ["Avoids direct confrontation and feeds on active flight or weather magic.", "Redirects currents to separate ships from escorts.", "Retreats into cloud cover if revealed."],
+        "conversionNotes": ["Converted from the source's transparent elemental-magic-feeding Cloud Maw variant."],
+        "sourceRefs": [{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Sky Maw Variants / Cloud Maw","chunkId":"kaysender-core-pdf-2025-01-20:cloud-maw"}]
+      }],
+      "sourceStatus":"source-faithful","sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Sky Maw Variants / Cloud Maw","chunkId":"kaysender-core-pdf-2025-01-20:cloud-maw"}],"sourceChunkIds":["kaysender-core-pdf-2025-01-20:cloud-maw"],"tags":["Cloud Maw","Sky Maw","elemental magic","air currents","converted statistics"],"relatedEntries":["sky-maws","aerial-navigational-hazards","floating-islands"],"relatedModules":["sky-ecology-generator","encounter-generator"]
+    },
+    {
+      "id": "tempest-maw",
+      "title": "Tempest Maw",
+      "category": "Creatures",
+      "summary": "A large aggressive parasite consumes storms, intensifies turbulence, and releases electrical pulses while feeding, now with converted Hypertext d20-compatible statistics.",
+      "body": ["Tempest Maws thrive where violent weather, magical power, and unstable currents converge.", "Their presence can enlarge an existing storm and transform a navigational hazard into a sustained predatory event."],
+      "sections": [{"heading":"Conversion posture","sectionType":"conversion-note","body":["Built as an aggressive storm-feeding Sky Maw with electrical discharge and escalating weather control."]}],
+      "statBlocks": [{
+        "id":"tempest-maw-statblock","title":"Tempest Maw","ruleset":"Hypertext d20 compatible","conversionStatus":"converted-hypertext-d20","statType":"creature","creatureType":"Aberration (Air, Electricity)","size":"Huge","alignment":"Always neutral","challengeRating":"13","experience":"25,600","hitDice":"19d8+114","hitPoints":"199 hp","initiative":"+5","speed":["Fly 100 ft. (good)"],"armorClass":{"total":"29","touch":"11","flatFooted":"26","notes":"-2 size, +3 Dex, +18 natural"},"baseAttackGrapple":"+14/+35","attack":"Storm maw +25 melee (4d8+19 plus 2d6 electricity)","fullAttack":"Storm maw +25 melee (4d8+19 plus 2d6 electricity) and 4 tendrils +23 melee (2d6+6 plus 1d6 electricity)","spaceReach":"15 ft./15 ft. (25 ft. with tendrils)","specialAttacks":["Storm Feed (Su): While within a natural or magical storm, the Tempest Maw gains fast healing 10 and a +2 bonus on attacks, saves, and ability DCs.","Electrical Pulse (Su): 60-ft. radius every 1d4 rounds; 10d6 electricity damage, Reflex DC 25 half. Magical vehicles and constructs instead take 15d6 damage.","Storm Intensification (Su): As a full-round action, it increases the severity of an existing storm in a 1-mile radius by one category for 10 minutes. It may use this repeatedly, up to hurricane-force conditions.","Vessel Clamp (Ex): As Huge Sky Maw."],"specialQualities":["Darkvision 120 ft.","Blindsense 60 ft.","Immunity to electricity","Damage reduction 10/adamantine","Spell resistance 26","Wind stability","Weather sense"],"saves":{"fortitude":"+13","reflex":"+11","will":"+16"},"abilities":{"strength":"36","dexterity":"17","constitution":"22","intelligence":"5","wisdom":"21","charisma":"12"},"skills":["Hide +9 (+19 in storms)","Listen +24","Spot +24","Survival +24"],"feats":["Awesome Blow","Flyby Attack","Hover","Improved Initiative","Improved Grapple","Multiattack","Power Attack"],"environment":"Severe storms, lightning fronts, unstable magical currents","organization":"Solitary or storm pair","treasure":"Incidental wreckage","advancement":"20-28 HD (Huge), 29-36 HD (Gargantuan)","levelAdjustment":"—","tactics":["Intensifies weather before closing with a vessel.","Uses Electrical Pulse against engines and clustered defenders.","Remains inside the storm to sustain fast healing."],"conversionNotes":["Converted from the source's storm-consuming, turbulence-intensifying, electrical Tempest Maw."],"sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Sky Maw Variants / Tempest Maw","chunkId":"kaysender-core-pdf-2025-01-20:tempest-maw"}]
+      }],
+      "sourceStatus":"source-faithful","sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Sky Maw Variants / Tempest Maw","chunkId":"kaysender-core-pdf-2025-01-20:tempest-maw"}],"sourceChunkIds":["kaysender-core-pdf-2025-01-20:tempest-maw"],"tags":["Tempest Maw","Sky Maw","storm feeder","electrical pulse","converted statistics"],"relatedEntries":["sky-maws","aerial-navigational-hazards","stormtide-fern"],"relatedModules":["sky-ecology-generator","encounter-generator","airship-vessel-generator"]
+    },
+    {
+      "id": "abyss-maw-sky-parasite",
+      "title": "Abyss Maw",
+      "category": "Creatures",
+      "summary": "The largest Sky Maw variant inhabits the boundary of the Abyss and can drain an entire ship nearly at once, now with converted Hypertext d20-compatible statistics.",
+      "body": ["This rare parasite consumes both life and magical vessel power at catastrophic scale. Sailors regard an Abyss Maw sighting as a harbinger of doom rather than an ordinary infestation.", "It is distinct from the amorphous Abyssal Maw despite the similar name used in surviving accounts."],
+      "sections": [{"heading":"Conversion posture","sectionType":"conversion-note","body":["Built as an epic ship-killing parasite with near-instant core drain, fleet blackout, and Abyss-bound survival traits."]}],
+      "statBlocks": [{
+        "id":"abyss-maw-sky-parasite-statblock","title":"Abyss Maw","ruleset":"Hypertext d20 compatible","conversionStatus":"converted-hypertext-d20","statType":"creature","creatureType":"Aberration (Air, Extraplanar)","size":"Gargantuan","alignment":"Always neutral evil","challengeRating":"18","experience":"153,600","hitDice":"26d8+234","hitPoints":"351 hp","initiative":"+4","speed":["Fly 80 ft. (average)","Abyssal drift 120 ft."],"armorClass":{"total":"35","touch":"6","flatFooted":"35","notes":"-4 size, +29 natural"},"baseAttackGrapple":"+19/+49","attack":"Abyssal maw +33 melee (6d8+27 plus catastrophic attach)","fullAttack":"Abyssal maw +33 melee (6d8+27 plus catastrophic attach) and 8 tendrils +31 melee (2d8+9 plus energy drain)","spaceReach":"20 ft./20 ft. (40 ft. with tendrils)","specialAttacks":["Catastrophic Attach (Ex): On a successful maw hit against a Gargantuan or larger vehicle or creature, it attaches automatically unless the target succeeds on a DC 34 Reflex save. Removing it requires an opposed grapple check or dealing 80 points of slashing damage to anchor tissues.","Devour Core (Su): At the start of its turn while attached to a magical vessel, the Abyss Maw drains 20d6 magical power. If the vessel has a discrete core, it must succeed on a DC 32 Fortitude or Will save or become disabled immediately. Living creatures instead take 4d6 Constitution drain, Fortitude DC 32 half.","Fleet Blackout (Su): 300-ft. radius, once every 1d4 rounds; functions as mage's disjunction against vehicle systems, constructs, and active magical propulsion only, caster level 20th. Personal magic items are instead suppressed for 1d4 rounds, Will DC 28 negates.","Abyssal Tendril Drain (Su): A tendril hit bestows one negative level. The maw gains 10 temporary hit points per negative level bestowed.","Rend Hull (Ex): While attached, deals 12d6 structural damage each round ignoring 20 hardness."],"specialQualities":["Darkvision 180 ft.","Blindsight 90 ft.","Damage reduction 15/epic and adamantine","Resistance to acid 20, cold 20, electricity 20, and fire 20","Spell resistance 31","Abyssal adaptation","Vacuum survival","Regeneration 10 overcome by positive energy or epic weapons","Detect magic 1 mile"],"saves":{"fortitude":"+20","reflex":"+12","will":"+23"},"abilities":{"strength":"46","dexterity":"10","constitution":"28","intelligence":"7","wisdom":"24","charisma":"14"},"skills":["Hide +4 (+14 against the Abyss)","Listen +36","Spot +36","Survival +36"],"feats":["Awesome Blow","Cleave","Flyby Attack","Great Cleave","Improved Bull Rush","Improved Grapple","Multiattack","Power Attack","Snatch"],"environment":"Boundary of the Abyss, dead magical currents, wreck routes","organization":"Solitary","treasure":"Double standard in embedded wreckage and magical debris","advancement":"27-39 HD (Gargantuan), 40-52 HD (Colossal)","levelAdjustment":"—","tactics":["Approaches from below or from the dark edge of the Abyss.","Attaches directly to the primary engine or magical core.","Uses Fleet Blackout to prevent escorts and repair crews from intervening.","Ignores most individuals until they threaten its anchor tissues."],"conversionNotes":["Converted from the source's largest Sky Maw variant, described as capable of draining an entire ship nearly at once.","Kept mechanically distinct from the separate Abyssal Maw creature family."],"sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Sky Maw Variants / Abyss Maw","chunkId":"kaysender-core-pdf-2025-01-20:abyss-maw-sky-parasite"}]
+      }],
+      "sourceStatus":"source-faithful","sourceRefs":[{"sourceId":"kaysender-core-pdf-2025-01-20","fileName":"Kaysender_ 5th edition D&D campaign Info.pdf","outlineTitle":"Sky Maw Variants / Abyss Maw","chunkId":"kaysender-core-pdf-2025-01-20:abyss-maw-sky-parasite"}],"sourceChunkIds":["kaysender-core-pdf-2025-01-20:abyss-maw-sky-parasite"],"tags":["Abyss Maw","Sky Maw","ship parasite","harbinger","converted statistics"],"relatedEntries":["sky-maws","the-abyss","abyssal-maw","airships"],"relatedModules":["sky-ecology-generator","encounter-generator","airship-vessel-generator"]
+    }
+  ]
+}
