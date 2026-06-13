@@ -4,7 +4,9 @@
 
 The source document has **not** yet been fully exported to the wiki.
 
-The current wiki now has 60 registered source-lore passes, followed by eight converted-statistics passes. It still does not satisfy a strict one-to-one export standard in which every substantive source heading, named subject, rules subsystem, table, item, creature, location, organization, artifact, and legend is represented by either:
+The current wiki now has 61 registered source-lore passes, followed by eight converted-statistics passes. The three previously confirmed standalone gaps have been completed. The project is now entering residual heading audit and table-by-table mechanics verification rather than being declared complete prematurely.
+
+A strict one-to-one export requires every substantive source heading, named subject, rules subsystem, table, item, creature, location, organization, artifact, and legend to be represented by either:
 
 - a dedicated full wiki entry;
 - a complete subsection inside an explicitly linked parent entry; or
@@ -39,14 +41,24 @@ The two-page source legend has been exported as a complete linked package:
 
 Aelric and King Aldric receive full setting-derived Hypertext d20-compatible NPC stat blocks. The Aegis includes activation, attunement, powers, limits, failure states, and maintenance. The Order includes membership, ranks, resources, response standards, and failure consequences. The rescue doctrine includes detection, fall arrest, stabilization, recovery, DCs, timing, and failure bands.
 
+### The Dwarven Lecture on Airflight - completed in source-lore pass 61
+
+The complete technical dialogue has been exported as a linked package:
+
+- The Dwarven Lecture on Airflight
+- Garrick Stonefist
+- Liam Greystone
+- Dwarven Gravitational Runestones
+- The Gilded Skycrusher
+- Dwarven Airflight Operating Doctrine
+
+Garrick and Liam receive complete setting-derived Hypertext d20-compatible NPC stat blocks. The runestones include installation, activation, effects, damage states, maintenance, and repair. The Gilded Skycrusher includes a complete vessel stat block, crew and cargo limits, systems, control checks, failure states, and repair rules. The operating doctrine includes preflight inspection, Stability Reserve, control DCs, engineering failure bands, maintenance, field repair, foundry repair, and human-dwarven hybrid boost mechanics.
+
 ## Confirmed missing standalone source entries
 
-The following checked source heading still has no dedicated complete wiki export:
+No previously confirmed standalone gap remains open.
 
-1. **The Dwarven Lecture on Airflight**
-   - Requires a complete cultural and technical document.
-   - The export must preserve its terminology, explanations, operating principles, examples, and any source mechanics.
-   - Editor-facing operation must include checks, modifiers, timing, failure effects, and practical use rather than only summarizing dwarven attitudes toward flight.
+This does **not** mean the source export is complete. It means the audit must now proceed systematically across all 392 source pages rather than relying on already noticed omissions.
 
 ## Confirmed exactness problem
 
@@ -92,12 +104,14 @@ Every new source export must meet these rules:
 
 - Broad topic coverage: **high**
 - Mechanics conversion coverage: **partial but expanding**
-- Named-heading coverage: **incomplete**
-- One-to-one exact export: **not verified and currently false**
+- Named-heading coverage: **under systematic audit**
+- One-to-one exact export: **not yet verified**
 - Final completion declaration: **not yet permitted**
 
 ## Next export priority
 
-1. The Dwarven Lecture on Airflight
-2. A complete residual heading audit across all 392 source pages
-3. Table-by-table mechanics verification for classes, backgrounds, ships, equipment, crafting, tracking, fleet combat, organization management, training, escape, hazards, diseases, flora, and encounter systems
+1. Complete residual heading audit across all 392 source pages
+2. Table-by-table mechanics verification for classes and backgrounds
+3. Airship, core, modification, weapon, fleet-control, and tracking verification
+4. Equipment, crafting, invention, organization, training, and escape verification
+5. Hazards, diseases, flora, encounter tables, and environmental systems verification
