@@ -1,0 +1,318 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Source-lore pass 60 exactly exports The Legend of Aelric Skywarden: The First Protector of the Light. It preserves the complete source narrative and separates setting-derived Hypertext d20 mechanics for Aelric, King Aldric, the Aegis of Light, the Order of the Skywardens, and emergency Abyss-rescue operations.",
+  "entries": [
+    {
+      "id": "aelric-skywarden",
+      "title": "Aelric Skywarden, First Protector of the Light",
+      "category": "NPCs",
+      "summary": "A humble mage-cleric of the Highmist Peaks became the first Skywarden after rescuing King Aldric and his falling airship from the Abyss.",
+      "body": [
+        "Aelric Skywarden arose during an early age when magic remained raw, the skies were largely untamed, and the Abyss threatened travelers who ventured too near its edge. Those who fell were believed to be lost forever, their bodies consumed and their souls scattered into oblivion.",
+        "He was born among the clouds of the Highmist Peaks, where the winds howled more loudly than mortal voices and the dark horizon of the Abyss remained constantly visible. He began in humble circumstances rather than as a ruler, dragon, or established religious authority.",
+        "Unlike spellcasters who pursued mastery of nature or personal power, Aelric devoted himself to people trapped by circumstance: those falling, those at risk of falling, and those carried toward the void by forces they could not control. To serve them, he studied both divine and arcane magic and blended the practices of cleric and mage in a manner considered unprecedented by later tradition.",
+        "This vocation earned him the title Skywarden, understood first as a personal description: the protector of those who would fall. Only after his great rescue did it become the name of an institution."
+      ],
+      "sections": [
+        {
+          "heading": "The Rescue of King Aldric",
+          "sectionType": "legend",
+          "body": [
+            "King Aldric of the Skyrealm, remembered as a ruler and pioneer of air travel, undertook a dangerous expedition through the untamed skies. An unnatural storm seized the royal airship and drove it into a spiraling descent toward the Abyss.",
+            "When the crew could no longer arrest the fall, Aelric appeared in a burst of blinding light upon the wing of the ship. He raised his staff, spoke ancient words of the Light, bent the surrounding winds, and caught both king and vessel in an invisible celestial force.",
+            "The force wrenched the airship out of its descent and returned it safely to the sky. The event became the first great public proof of Aelric's calling and the foundational salvation story of the later Skywardens."
+          ]
+        },
+        {
+          "heading": "The Descent of the Aegis",
+          "sectionType": "religious-history",
+          "body": [
+            "Witnesses reported that a great light descended upon Aelric after the rescue. This divine sign became known as the Aegis of Light, a radiant shield associated with protection from the Abyss and with the survival of people living in the sky."
+          ]
+        },
+        {
+          "heading": "Founder of the Skywardens",
+          "sectionType": "legacy",
+          "body": [
+            "Aelric later established the Order of the Skywardens. Its earliest members traveled the heavens as protectors, healers, guides, and rescuers, using divine magic to save those on the brink of falling into the Abyss.",
+            "The order's followers came to worship the Light as an unbreakable beacon within the void. Aelric's rescue was remembered as the first act of salvation and the origin of both the institution and its religious duty."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "aelric-skywarden-statblock",
+          "title": "Aelric Skywarden",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "setting-derived-hypertext-d20",
+          "statType": "unique NPC",
+          "creatureType": "Humanoid (Human)",
+          "size": "Medium",
+          "alignment": "Neutral good",
+          "challengeRating": "18",
+          "experience": "153,600",
+          "hitDice": "Cleric 10 / Wizard 8 / Skywarden 5",
+          "hitPoints": "176 hp",
+          "initiative": "+7",
+          "speed": ["30 ft.", "Fly 60 ft. (good) while the Aegis is active"],
+          "armorClass": { "total": "31", "touch": "19", "flatFooted": "28", "notes": "+3 Dex, +6 armor, +4 deflection, +8 sacred" },
+          "baseAttackGrapple": "+15/+17",
+          "attack": "Staff of the First Light +20 melee (1d6+3 plus 2d6 radiant)",
+          "fullAttack": "Staff of the First Light +20/+15/+10 melee (1d6+3 plus 2d6 radiant)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Celestial Arrest (Su): As an immediate action, Aelric may halt the fall of one creature or vehicle within 500 ft. The target's downward movement becomes 0 and it is held for 1 round. On Aelric's next turn he may move it up to 100 ft. horizontally or vertically. A resisting creature may attempt a DC 30 Will save.",
+            "Bend the Sky (Su): Three times per day, Aelric reshapes wind in a 1,000-ft. radius for 10 minutes, functioning as control winds at caster level 23rd. He may use it reactively to grant a vessel +10 on one control check against storm, spin, stall, or uncontrolled descent.",
+            "Words of the Light (Su): 60-ft. emanation for 10 rounds, once per day. Allies gain immunity to fear, +4 sacred AC and saves, and feather fall. Creatures already falling may immediately make a new save or control check to arrest descent.",
+            "Abyssal Rejection (Su): Extraplanar, shadow, or Abyss-linked creatures struck by Aelric's spells take +50% damage. Once per round he may force such a creature within 60 ft. to make a DC 29 Will save or be pushed 30 ft. away from an endangered creature or vessel."
+          ],
+          "specialQualities": [
+            "Aegis of Light",
+            "Arcane casting as an 8th-level wizard",
+            "Divine casting as a 15th-level cleric",
+            "Domains: Air, Healing, Protection",
+            "Evasion while flying",
+            "Immediate feather fall at will",
+            "Spell resistance 29 against evil or Abyss-linked effects",
+            "Uncanny rescue sense: automatically knows when a creature within 1 mile begins an uncontrolled fall"
+          ],
+          "saves": { "fortitude": "+19", "reflex": "+14", "will": "+24" },
+          "abilities": { "strength": "14", "dexterity": "16", "constitution": "18", "intelligence": "22", "wisdom": "26", "charisma": "20" },
+          "skills": ["Concentration +30", "Fly +24", "Heal +34", "Knowledge (arcana) +32", "Knowledge (planes) +32", "Knowledge (religion) +32", "Profession (sky guide) +28", "Spellcraft +34", "Spot +28", "Survival +28"],
+          "feats": ["Combat Casting", "Craft Wondrous Item", "Extend Spell", "Flyby Attack", "Improved Initiative", "Quicken Spell", "Skill Focus (Heal)", "Spell Focus (Abjuration)", "Still Spell"],
+          "environment": "Highmist Peaks, open skies, Abyss-edge rescue routes",
+          "organization": "Unique, or accompanied by 2-12 Skywardens",
+          "treasure": "Staff of the First Light, Aegis vestments, rescue relics",
+          "advancement": "By character class",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Prioritizes arresting falls and stabilizing vessels before attacking enemies.",
+            "Uses Bend the Sky to convert catastrophic movement into controllable drift.",
+            "Maintains defensive magic and healing while delegating ordinary combat to companions.",
+            "Attempts rescue even for political enemies unless doing so would immediately endanger more lives."
+          ],
+          "conversionNotes": [
+            "The source gives no game statistics. This full stat block is setting-derived from Aelric's combined mage-cleric training, unique vessel rescue, wind control, celestial force, and founder status.",
+            "Celestial Arrest models the specific act of catching King Aldric and the royal airship before impact with the Abyss."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 381, "pageEnd": 382, "outlineTitle": "The Legend of Aelric Skywarden: The First Protector of the Light", "chunkId": "kaysender-core-pdf-2025-01-20:aelric-skywarden" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 381, "pageEnd": 382, "outlineTitle": "The Legend of Aelric Skywarden: The First Protector of the Light", "chunkId": "kaysender-core-pdf-2025-01-20:aelric-skywarden" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:aelric-skywarden"],
+      "tags": ["Aelric Skywarden", "First Protector", "Light", "Abyss rescue", "mage cleric", "exact export"],
+      "relatedEntries": ["king-aldric-of-the-skyrealm", "aegis-of-light", "order-of-the-skywardens", "worship-of-the-light", "draconic-objection-to-the-light", "skywarden-rescue-doctrine"],
+      "relatedModules": ["npc-crew-generator", "encounter-generator", "job-board-generator"]
+    },
+    {
+      "id": "king-aldric-of-the-skyrealm",
+      "title": "King Aldric of the Skyrealm",
+      "category": "NPCs",
+      "summary": "A pioneering ruler of early air travel whose near-fatal expedition became the occasion for Aelric Skywarden's first great rescue.",
+      "body": [
+        "King Aldric ruled the Skyrealm during an early age of dangerous air exploration. The source remembers him as both a great ruler and a pioneer of air travel.",
+        "During a perilous expedition, an unnatural storm seized his royal airship and drove it into a spiraling descent toward the Abyss. The crew was unable to recover the vessel before Aelric intervened.",
+        "Aldric survived together with the ship and crew because Aelric caught the falling vessel in celestial force and returned it to the sky. The king's rescue transformed Aelric from an obscure protector into a public hero and gave the emerging Skywarden vocation royal visibility."
+      ],
+      "sections": [
+        { "heading": "Historical Role", "sectionType": "history", "body": ["The source provides no later reign history, dynasty, policies, or exact date. His confirmed importance lies in pioneering air travel and serving as the rescued ruler in the founding Skywarden legend."] }
+      ],
+      "statBlocks": [
+        {
+          "id": "king-aldric-statblock",
+          "title": "King Aldric",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "setting-derived-hypertext-d20",
+          "statType": "unique NPC",
+          "creatureType": "Humanoid (Human)",
+          "size": "Medium",
+          "alignment": "Lawful good",
+          "challengeRating": "8",
+          "hitDice": "Aristocrat 6 / Expert 4",
+          "hitPoints": "64 hp",
+          "initiative": "+2",
+          "speed": ["30 ft."],
+          "armorClass": { "total": "20", "touch": "13", "flatFooted": "18", "notes": "+2 Dex, +5 armor, +2 shield, +1 dodge" },
+          "baseAttackGrapple": "+7/+8",
+          "attack": "Royal skyblade +11 melee (1d8+2)",
+          "fullAttack": "Royal skyblade +11/+6 melee (1d8+2)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialQualities": ["Air-travel pioneer", "Leadership", "Royal authority", "Profession (pilot) competence", "Inspire crew once per day: allies aboard his vessel gain +2 morale on control and fear checks for 10 rounds"],
+          "saves": { "fortitude": "+6", "reflex": "+7", "will": "+11" },
+          "abilities": { "strength": "12", "dexterity": "15", "constitution": "14", "intelligence": "16", "wisdom": "15", "charisma": "19" },
+          "skills": ["Diplomacy +19", "Knowledge (geography) +16", "Knowledge (nobility) +16", "Profession (pilot) +17", "Profession (sailor) +15", "Ride +13", "Sense Motive +15"],
+          "feats": ["Dodge", "Leadership", "Negotiator", "Skill Focus (Profession (pilot))", "Weapon Focus (skyblade)"],
+          "environment": "Skyrealm court and royal expeditions",
+          "organization": "Unique, with royal crew and retainers",
+          "treasure": "Royal equipment and vessel resources",
+          "advancement": "By character class",
+          "levelAdjustment": "—",
+          "conversionNotes": ["The source provides role but no statistics. This setting-derived block models Aldric as a capable pioneering ruler, pilot, and expedition leader rather than a legendary combatant."],
+          "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 381, "pageEnd": 381, "outlineTitle": "Aelric Skywarden / Rescue of King Aldric", "chunkId": "kaysender-core-pdf-2025-01-20:king-aldric-of-the-skyrealm" }]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 381, "pageEnd": 381, "outlineTitle": "Aelric Skywarden / Rescue of King Aldric", "chunkId": "kaysender-core-pdf-2025-01-20:king-aldric-of-the-skyrealm" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:king-aldric-of-the-skyrealm"],
+      "tags": ["King Aldric", "Skyrealm", "air travel pioneer", "royal airship"],
+      "relatedEntries": ["aelric-skywarden", "aegis-of-light", "order-of-the-skywardens"],
+      "relatedModules": ["npc-crew-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "aegis-of-light",
+      "title": "The Aegis of Light",
+      "category": "Artifacts",
+      "summary": "A radiant divine shield descended upon Aelric after the rescue of King Aldric and became the central symbol of protection from the Abyss.",
+      "body": [
+        "Witnesses to King Aldric's rescue saw a great light descend upon Aelric. The resulting divine symbol became known as the Aegis of Light.",
+        "The source describes the Aegis as a radiant shield protecting those who live in the sky from the terrors of the Abyss. It functions simultaneously as divine manifestation, protective symbol, and the central emblem of the Skywarden tradition.",
+        "The manuscript does not specify whether the Aegis was a physical shield, permanent aura, divine covenant, or later ceremonial object. Its editor-facing mechanics therefore treat it as a unique divine manifestation borne by Aelric and represented symbolically by the Order."
+      ],
+      "artifactMechanics": {
+        "ruleset": "Hypertext d20 compatible",
+        "sourceStatus": "setting-derived",
+        "artifactType": "major divine artifact and covenant",
+        "attunement": "Requires a good-aligned bearer who has knowingly risked their life to rescue another from an uncontrolled fall or the Abyss.",
+        "activation": "Immediate action when the bearer or an ally within 500 ft. begins an uncontrolled fall, or standard action to project the shield deliberately.",
+        "powers": [
+          "Aegis Arrest: stop one falling creature or vehicle for 1 round, then redirect it up to 100 ft.",
+          "Radiant Shelter: 60-ft. radius, allies gain +4 sacred AC and saves, feather fall, and resistance 20 against Abyss-linked damage for 10 rounds, once per day.",
+          "Beacon in the Void: allies within 1 mile always know the direction to the bearer and gain +10 on checks to navigate out of supernatural darkness or void effects.",
+          "Shield of the Skyborn: the bearer may absorb up to 100 points of damage dealt to one vessel or falling group, after which the Aegis becomes dormant for 24 hours."
+        ],
+        "limits": ["Cannot be activated to preserve a deliberate execution, sacrifice, or attack whose primary purpose is killing the falling target.", "Becomes dormant if the bearer knowingly abandons a rescue they could attempt without certainly causing greater loss of life."],
+        "failureStates": ["A selfish or coercive attunement attempt produces only harmless light.", "Using the Aegis to claim political authority grants no command over the Order by itself."],
+        "maintenance": "No material maintenance; covenant restored through a completed rescue, vigil, or act of protection.",
+        "editorNote": "All mechanical details are setting-derived because the source defines symbolism and protective purpose but no game statistics."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 381, "pageEnd": 382, "outlineTitle": "Aelric Skywarden / Aegis of Light", "chunkId": "kaysender-core-pdf-2025-01-20:aegis-of-light" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:aegis-of-light"],
+      "tags": ["Aegis of Light", "artifact", "divine shield", "Abyss protection", "Skywardens"],
+      "relatedEntries": ["aelric-skywarden", "order-of-the-skywardens", "worship-of-the-light", "skywarden-rescue-doctrine"],
+      "relatedModules": ["treasure-generator", "encounter-generator"]
+    },
+    {
+      "id": "order-of-the-skywardens",
+      "title": "The Order of the Skywardens",
+      "category": "Factions",
+      "summary": "Founded by Aelric, the first Skywardens crossed the heavens as protectors, healers, guides, and rescuers of those threatened by the Abyss.",
+      "body": [
+        "Aelric established the Order of the Skywardens after the rescue of King Aldric. The order was dedicated to keeping travelers safe from falls into the Abyss.",
+        "Its earliest members traveled through the skies using divine magic to reach those on the brink of being swallowed by the void. They served as protectors, healers, guides, and emergency rescuers rather than conquerors or territorial rulers.",
+        "The Order became inseparable from worship of the Light. Members understood the Light as a guiding force and unbreakable beacon that could preserve life at the edge of annihilation.",
+        "The source does not provide ranks, headquarters, membership requirements, finances, or current political status. The operating framework below is setting-derived and exists to make the institution playable without confusing added detail for source text."
+      ],
+      "organizationMechanics": {
+        "sourceStatus": "setting-derived",
+        "organizationType": "religious rescue order",
+        "primaryFunctions": ["Abyss rescue", "airship emergency response", "healing", "route guidance", "fall prevention", "escort through dangerous skies"],
+        "entryRequirements": ["Good or neutral alignment", "Training in Heal and either Fly, Profession (pilot), Profession (sailor), or Survival", "Completion of a supervised live rescue", "Oath not to refuse aid solely because of faction allegiance"],
+        "suggestedRanks": ["Beacon Novice", "Skywarden", "Aegis Bearer", "High Warden"],
+        "responseStandard": ["Identify who is falling and what is causing descent", "Stabilize descent before treating injury", "Secure vessel, creature, and loose crew separately", "Establish a safe route away from the Abyss", "Treat survivors and document cause", "Recover bodies only after living rescue options are exhausted"],
+        "failureConsequences": ["Loss of life", "Vessel descent", "Public loss of trust", "Religious dispute over whether rescue was possible", "Draconic accusations of further interference with natural order"],
+        "resources": ["Rescue staves", "fall-arrest harnesses", "healing supplies", "signal lights", "wind-reading instruments", "fast response craft"],
+        "editorNote": "Ranks and institutional procedure are not printed in the source; functions and founding purpose are source-faithful."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 382, "pageEnd": 382, "outlineTitle": "Aelric Skywarden / Order of the Skywardens", "chunkId": "kaysender-core-pdf-2025-01-20:order-of-the-skywardens" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:order-of-the-skywardens"],
+      "tags": ["Order of the Skywardens", "rescue order", "healers", "guides", "Light"],
+      "relatedEntries": ["aelric-skywarden", "aegis-of-light", "worship-of-the-light", "skywarden-rescue-doctrine"],
+      "relatedModules": ["faction-guild-generator", "job-board-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "worship-of-the-light",
+      "title": "The Worship of the Light",
+      "category": "Religion",
+      "summary": "Skywarden belief treats the Light as an unbreakable beacon that preserves those endangered by the Abyss and gives religious meaning to rescue.",
+      "body": [
+        "The worship of the Light developed around Aelric's rescue and the manifestation of the Aegis. Followers believed the Light was the guiding force that kept sky-dwellers safe and an unbreakable beacon within the void.",
+        "Its central moral duty was practical: prevent those about to fall into the Abyss from being lost forever. Protection, healing, guidance, and rescue were therefore sacred actions rather than secondary charitable work.",
+        "Aelric's intervention became the tradition's first act of salvation. The Light remained associated with hope, celestial protection, and the refusal to accept that an uncontrolled fall must end in oblivion.",
+        "The source does not define a complete pantheon, priestly hierarchy, scripture, temples, or cosmological proof that the Light is an independent deity. Those questions remain open."
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 382, "pageEnd": 382, "outlineTitle": "Aelric Skywarden / Worship of the Light", "chunkId": "kaysender-core-pdf-2025-01-20:worship-of-the-light" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:worship-of-the-light"],
+      "tags": ["Light", "Skywarden faith", "salvation", "Abyss", "beacon"],
+      "relatedEntries": ["aelric-skywarden", "aegis-of-light", "order-of-the-skywardens", "draconic-objection-to-the-light"],
+      "relatedModules": ["faction-guild-generator", "npc-crew-generator"]
+    },
+    {
+      "id": "draconic-objection-to-the-light",
+      "title": "The Draconic Objection to Aelric's Light",
+      "category": "Religion",
+      "summary": "Ancient dragons condemned Aelric's rescue as false, blasphemous interference with the Abyss and the natural balance of existence.",
+      "body": [
+        "Draconic kind challenged the Skywarden legend from its beginning. Dragons claimed authority rooted in their ancient rule of the skies and rejected the idea that the Abyss should be treated only as an enemy to be feared.",
+        "They described the Abyss as part of the natural balance of existence: the place where all things end and a necessary darkness woven into the world.",
+        "From this perspective, Aelric's intervention disrupted the natural order. Dragons called the Light a fabrication or deceit intended to rob the skies of their rightful guardianship and to justify mortal interference with forces beyond mortal authority.",
+        "The source does not establish whether the dragons were correct, whether all dragons agreed, or whether their objection concealed political self-interest. It presents an enduring theological conflict between salvation from the Abyss and acceptance of the Abyss as necessary cosmic finality."
+      ],
+      "sections": [
+        { "heading": "Disputed Claims", "sectionType": "theology", "body": ["Draconic statements are part of the source tradition but are not confirmed cosmological facts. The Light's reality, the Abyss's necessity, and the political meaning of guardianship remain contested."] }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 382, "pageEnd": 382, "outlineTitle": "Aelric Skywarden / Draconic Challenge", "chunkId": "kaysender-core-pdf-2025-01-20:draconic-objection-to-the-light" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:draconic-objection-to-the-light"],
+      "tags": ["dragons", "Abyss", "Light", "natural order", "religious dispute"],
+      "relatedEntries": ["aelric-skywarden", "worship-of-the-light", "dragon-lords", "the-abyss"],
+      "relatedModules": ["faction-guild-generator", "job-board-generator"]
+    },
+    {
+      "id": "skywarden-rescue-doctrine",
+      "title": "Skywarden Abyss-Rescue Doctrine",
+      "category": "Rules",
+      "summary": "An editor-facing procedure for running falling-creature and falling-airship rescues according to the full meaning of Aelric's legend.",
+      "body": [
+        "This operating system is setting-derived. It converts the source's rescue narrative and institutional purpose into repeatable editor-facing mechanics.",
+        "A rescue is not resolved by one generic skill check. It has four linked phases: detection, fall arrest, stabilization, and recovery. Failure in one phase changes the next rather than ending the scene immediately."
+      ],
+      "sections": [
+        {
+          "heading": "Phase One: Detection",
+          "sectionType": "rules-procedure",
+          "body": ["Determine distance, current descent rate, number of separate falling bodies or vessel sections, storm visibility, and time until the Abyss threshold. Base detection DC is 15, increased by concealment, distance, darkness, and magical interference."]
+        },
+        {
+          "heading": "Phase Two: Fall Arrest",
+          "sectionType": "rules-procedure",
+          "body": ["Use flight, wind magic, grapples, rescue lines, vessel thrust, telekinesis, or the Aegis. Base DC is 20 for one creature, 25 for a disabled small vessel, 30 for a large vessel, and 35 for a vessel in catastrophic spin or structural breakup.", "Success halts or reduces descent. Failure by 1-4 loses one rescue interval. Failure by 5-9 adds structural damage or separates one target. Failure by 10 or more causes catastrophic acceleration or loss of a rescue asset."]
+        },
+        {
+          "heading": "Phase Three: Stabilization",
+          "sectionType": "rules-procedure",
+          "body": ["Once descent is arrested, stabilize orientation, injuries, power, rigging, and panic. Each unresolved condition imposes -2 on recovery. A vessel may remain stationary but still be unable to climb or maneuver safely."]
+        },
+        {
+          "heading": "Phase Four: Recovery",
+          "sectionType": "rules-procedure",
+          "body": ["Move targets to safe altitude or secure them to a stable craft. Recovery DC equals 15 plus 2 per unresolved condition. Success completes rescue. Failure preserves life temporarily but creates drift, renewed descent, or need for outside assistance."]
+        }
+      ],
+      "mechanics": {
+        "sourceStatus": "setting-derived",
+        "rescueInterval": "1 round in combat or 1 minute in extended disaster scenes",
+        "detectionBaseDC": 15,
+        "fallArrestDCs": { "singleCreature": 20, "smallVessel": 25, "largeVessel": 30, "catastrophicVessel": 35 },
+        "failureBands": { "1to4": "Lose one interval", "5to9": "Damage or separation", "10plus": "Catastrophic acceleration or lost asset" },
+        "stabilizationConditions": ["spin", "structural breach", "failed propulsion", "unsecured crew", "critical injury", "panic", "hostile weather"],
+        "recoveryDC": "15 + 2 per unresolved condition",
+        "priorityRule": "Prevent irreversible descent before treating non-immediate injuries or fighting secondary threats."
+      },
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 381, "pageEnd": 382, "outlineTitle": "The Legend of Aelric Skywarden", "chunkId": "kaysender-core-pdf-2025-01-20:aelric-skywarden", "notes": "Procedure derived from the complete rescue narrative and Order mission; not printed source rules." }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:aelric-skywarden"],
+      "tags": ["Skywarden", "rescue rules", "fall arrest", "Abyss", "airship emergency"],
+      "relatedEntries": ["aelric-skywarden", "aegis-of-light", "order-of-the-skywardens", "fall-prevention-rescue-systems"],
+      "relatedModules": ["encounter-generator", "airship-vessel-generator", "supply-water-planner"]
+    }
+  ]
+}
