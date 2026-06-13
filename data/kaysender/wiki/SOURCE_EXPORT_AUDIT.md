@@ -4,7 +4,7 @@
 
 The source document has **not** yet been fully exported to the wiki.
 
-The current wiki now has 61 registered source-lore passes, followed by eight converted-statistics passes. The three previously confirmed standalone gaps have been completed. The project is now entering residual heading audit and table-by-table mechanics verification rather than being declared complete prematurely.
+The current wiki now has 62 registered source-lore passes, followed by eight converted-statistics passes. The three previously confirmed standalone gaps have been completed, and the front-to-back residual heading audit has begun.
 
 A strict one-to-one export requires every substantive source heading, named subject, rules subsystem, table, item, creature, location, organization, artifact, and legend to be represented by either:
 
@@ -14,51 +14,39 @@ A strict one-to-one export requires every substantive source heading, named subj
 
 ## Completed exact-export gaps
 
-### The Lost Continent of Azh'Thanar - completed in source-lore pass 59
+### The Lost Continent of Azh'Thanar - source-lore pass 59
 
-The final manuscript section has been exported as a complete linked package:
+Exported as a linked package covering the continent, primeval beasts, impossible cities, colossal remains, suppressed records, and expedition procedures.
 
-- The Lost Continent of Azh'Thanar
-- The Primeval Beasts of Azh'Thanar
-- The Impossible Cities of Azh'Thanar
-- The Colossal Remains of Azh'Thanar
-- The Suppressed Records of Azh'Thanar
-- Azh'Thanar Expedition Procedures
+### The Legend of Aelric Skywarden - source-lore pass 60
 
-Reader-facing entries are marked `source-faithful`; added expedition, investigation, ruin-operation, and provisional ecological mechanics are marked `setting-derived`.
+Exported as a linked package covering Aelric, King Aldric, the Aegis of Light, the Order, worship of the Light, draconic objections, and Abyss-rescue procedures.
 
-### The Legend of Aelric Skywarden - completed in source-lore pass 60
+### The Dwarven Lecture on Airflight - source-lore pass 61
 
-The two-page source legend has been exported as a complete linked package:
+Exported as a linked package covering the complete lecture, Garrick Stonefist, Liam Greystone, gravitational runestones, the Gilded Skycrusher, and dwarven airflight operating doctrine.
 
-- Aelric Skywarden, First Protector of the Light
-- King Aldric of the Skyrealm
-- The Aegis of Light
-- The Order of the Skywardens
-- The Worship of the Light
-- The Draconic Objection to Aelric's Light
-- Skywarden Abyss-Rescue Doctrine
+## Residual heading audit progress
 
-Aelric and King Aldric receive full setting-derived Hypertext d20-compatible NPC stat blocks. The Aegis includes activation, attunement, powers, limits, failure states, and maintenance. The Order includes membership, ranks, resources, response standards, and failure consequences. The rescue doctrine includes detection, fall arrest, stabilization, recovery, DCs, timing, and failure bands.
+### Opening sky ecology - source-lore pass 62
 
-### The Dwarven Lecture on Airflight - completed in source-lore pass 61
+The opening manuscript ecology has now been exported as a complete linked package:
 
-The complete technical dialogue has been exported as a linked package:
+- The Living Skies of Kaysender
+- The Grays
+- Airborne Plankton Plants
+- Natural Levitation Fluids and Organs
+- Buoyant Secretions and Magical Particles
+- Sky-Magic Lifeforms
+- Aerial Biological Resource Collection
 
-- The Dwarven Lecture on Airflight
-- Garrick Stonefist
-- Liam Greystone
-- Dwarven Gravitational Runestones
-- The Gilded Skycrusher
-- Dwarven Airflight Operating Doctrine
-
-Garrick and Liam receive complete setting-derived Hypertext d20-compatible NPC stat blocks. The runestones include installation, activation, effects, damage states, maintenance, and repair. The Gilded Skycrusher includes a complete vessel stat block, crew and cargo limits, systems, control checks, failure states, and repair rules. The operating doctrine includes preflight inspection, Stability Reserve, control DCs, engineering failure bands, maintenance, field repair, foundry repair, and human-dwarven hybrid boost mechanics.
+The Grays receive a complete setting-derived Hypertext d20 swarm stat block. Airborne plankton receives field, visibility, collection, navigation, and depletion mechanics. Levitation components and buoyant secretions include collection, preservation, uses, failure states, and value. Sky-magic lifeforms include a bounded provisional template requiring every named species to receive its own full stat block. Resource collection includes identification, collection, preservation, critical outcomes, and ecological depletion.
 
 ## Confirmed missing standalone source entries
 
 No previously confirmed standalone gap remains open.
 
-This does **not** mean the source export is complete. It means the audit must now proceed systematically across all 392 source pages rather than relying on already noticed omissions.
+This does **not** mean the source export is complete. The audit is proceeding sequentially through all 392 pages, and additional gaps may be confirmed as early broad summaries are checked against the manuscript.
 
 ## Confirmed exactness problem
 
@@ -110,7 +98,7 @@ Every new source export must meet these rules:
 
 ## Next export priority
 
-1. Complete residual heading audit across all 392 source pages
+1. Continue the front-of-document residual audit through racial and cultural adaptation sections
 2. Table-by-table mechanics verification for classes and backgrounds
 3. Airship, core, modification, weapon, fleet-control, and tracking verification
 4. Equipment, crafting, invention, organization, training, and escape verification
