@@ -1,0 +1,339 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Source-lore pass 61 exactly exports The Dwarven Lecture on Airflight. It preserves the full Garrick Stonefist and Liam Greystone dialogue, the dwarven philosophy of stability over spectacle, runestone gravitational anchoring, mithril-and-rune construction, steam turbines, the Gilded Skycrusher design example, and a clearly labeled editor-facing mechanics package for operating and maintaining dwarven airships.",
+  "entries": [
+    {
+      "id": "dwarven-lecture-on-airflight",
+      "title": "The Dwarven Lecture on Airflight",
+      "category": "Documents",
+      "summary": "Garrick Stonefist explains to Liam Greystone that reliable airflight depends on stability, precision, endurance, and respect for structural limits rather than raw power alone.",
+      "body": [
+        "The lecture takes place in a forge-lit workshop filled with mechanical parts, unfinished projects, oil, molten metal, and the accumulated tools of dwarven engineering. Garrick Stonefist, a broad-shouldered dwarf with soot-stained hands, works at a complex gear mechanism while the young human engineer Liam Greystone watches.",
+        "Liam asks for the secret of dwarven airships. Garrick answers by criticizing human reliance on aetheric engines, steam power used without sufficient structural discipline, oversized engines, arcane devices, fire, and constant adjustment. He compares such vessels to kites trapped in thunderstorms: capable of flight while conditions remain favorable, but unreliable when the winds turn hostile.",
+        "Garrick's central claim is that flight is not primarily about speed, spectacle, or pushing power to its limit. It is about stability, precision, endurance, and constructing a vessel that remains controllable when the world attempts to knock it out of the sky.",
+        "Human engineering is described as dynamic but dependent on volatile forces and continual maintenance. Dwarven engineering begins with structure and known limits. Power is subordinated to balance rather than allowed to dictate the design.",
+        "The lecture ends with Liam recognizing that durable flight comes from respecting limits and building for long-term survival rather than chasing maximum output. Garrick agrees to teach him, warning that the art includes not only construction but keeping a ship aloft after conditions become dangerous and mistakes begin to compound."
+      ],
+      "sections": [
+        {
+          "heading": "Flight as Stability",
+          "sectionType": "engineering-doctrine",
+          "body": [
+            "Dwarven flight doctrine begins with the assumption that weather, strain, damage, and operator error are inevitable. A successful vessel must continue functioning after those failures begin.",
+            "The ship is not designed around ideal conditions. It is designed around the worst credible storm, the heaviest intended load, repeated operation, and the possibility that one component will fail while others must compensate."
+          ]
+        },
+        {
+          "heading": "Structure Before Power",
+          "sectionType": "engineering-doctrine",
+          "body": [
+            "Garrick rejects the idea that stronger thrust automatically produces better control. In his explanation, control comes from the relationship between structure, weight, balance, anchoring, and measured power.",
+            "This doctrine does not reject magic or steam. It rejects magic and steam used without redundant structural planning."
+          ]
+        },
+        {
+          "heading": "Respect for Limits",
+          "sectionType": "engineering-doctrine",
+          "body": [
+            "The lecture treats known limits as design inputs rather than obstacles to be ignored. A dwarf does not attempt to make a ship infinitely fast, light, or responsive. The goal is a vessel whose limits are understood, tested, and difficult to exceed accidentally."
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 379, "pageEnd": 381, "outlineTitle": "The Dwarven Lecture on Airflight", "chunkId": "kaysender-core-pdf-2025-01-20:dwarven-lecture-on-airflight" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dwarven-lecture-on-airflight"],
+      "tags": ["dwarven engineering", "airflight", "stability", "runestones", "steam turbines", "exact export"],
+      "relatedEntries": ["garrick-stonefist", "liam-greystone", "dwarven-gravity-runestones", "gilded-skycrusher", "dwarven-airflight-operating-doctrine"],
+      "relatedModules": ["airship-vessel-generator", "module-generator", "job-board-generator"]
+    },
+    {
+      "id": "garrick-stonefist",
+      "title": "Garrick Stonefist",
+      "category": "NPCs",
+      "summary": "A veteran dwarven engineer who teaches that airships survive through precision, redundancy, and structural discipline rather than volatile excess.",
+      "body": [
+        "Garrick Stonefist is introduced as a tall, broad-shouldered dwarf working in a forge-lit workshop. His hands are stained with soot and grease, and he handles heavy bronze gears and intricate runestones with equal familiarity.",
+        "His manner is blunt, skeptical, and practical. He mocks human enthusiasm for large engines and arcane spectacle, but his criticism is technical rather than purely cultural. He identifies endurance, storm behavior, maintenance burden, gravitational stability, material strength, and predictable response as the real measures of an airship.",
+        "Garrick is willing to teach Liam once the human begins to understand that engineering is not a contest to push power to its limit. His final warning emphasizes that building an airship and keeping one aloft are separate disciplines."
+      ],
+      "statBlocks": [
+        {
+          "id": "garrick-stonefist-statblock",
+          "title": "Garrick Stonefist",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "setting-derived-hypertext-d20",
+          "statType": "unique NPC",
+          "creatureType": "Humanoid (Dwarf)",
+          "size": "Medium",
+          "alignment": "Lawful neutral",
+          "challengeRating": "9",
+          "hitDice": "Expert 8 / Airship Engineer 5",
+          "hitPoints": "92 hp",
+          "initiative": "+1",
+          "speed": ["20 ft."],
+          "armorClass": { "total": "21", "touch": "11", "flatFooted": "20", "notes": "+1 Dex, +6 reinforced work armor, +4 natural and equipment" },
+          "baseAttackGrapple": "+8/+11",
+          "attack": "Runic forging hammer +13 melee (1d8+4)",
+          "fullAttack": "Runic forging hammer +13/+8 melee (1d8+4)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialQualities": [
+            "Master shipwright",
+            "Runic engineering",
+            "Assess vessel: identify one structural, lift, balance, or propulsion fault as a full-round action with a DC 20 Craft or Knowledge check",
+            "Emergency stabilization: once per encounter grant a dwarven airship +5 on one control, damage-control, or engine-failure check",
+            "Dwarven stability: +4 against bull rush, trip, forced movement, and shipboard balance effects"
+          ],
+          "saves": { "fortitude": "+10", "reflex": "+6", "will": "+12" },
+          "abilities": { "strength": "16", "dexterity": "12", "constitution": "18", "intelligence": "21", "wisdom": "17", "charisma": "13" },
+          "skills": ["Appraise +18", "Craft (airships) +24", "Craft (runestones) +22", "Knowledge (architecture and engineering) +24", "Knowledge (arcana) +18", "Profession (shipwright) +22", "Repair +24", "Search +18"],
+          "feats": ["Craft Magic Arms and Armor", "Craft Wondrous Item", "Diligent", "Skill Focus (Craft (airships))", "Skill Focus (Profession (shipwright))", "Toughness"],
+          "environment": "Dwarven foundries, workshops, shipyards, and heavy airships",
+          "organization": "Unique, with apprentices and engineering crews",
+          "treasure": "Masterwork tools, runestones, plans, and workshop stock",
+          "advancement": "By character class",
+          "levelAdjustment": "—",
+          "conversionNotes": ["The source provides no game statistics. This complete block is setting-derived from Garrick's demonstrated mastery of runestones, steam systems, materials, balance, and airship design."],
+          "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 379, "pageEnd": 381, "outlineTitle": "The Dwarven Lecture on Airflight", "chunkId": "kaysender-core-pdf-2025-01-20:garrick-stonefist" }]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 379, "pageEnd": 381, "outlineTitle": "The Dwarven Lecture on Airflight", "chunkId": "kaysender-core-pdf-2025-01-20:garrick-stonefist" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:garrick-stonefist"],
+      "tags": ["Garrick Stonefist", "dwarf", "airship engineer", "runestones", "shipwright"],
+      "relatedEntries": ["dwarven-lecture-on-airflight", "liam-greystone", "gilded-skycrusher", "dwarven-gravity-runestones"],
+      "relatedModules": ["npc-crew-generator", "airship-vessel-generator"]
+    },
+    {
+      "id": "liam-greystone",
+      "title": "Liam Greystone",
+      "category": "NPCs",
+      "summary": "A young human engineer whose questions frame the lecture and whose willingness to revise his assumptions opens a path toward hybrid human-dwarven airship design.",
+      "body": [
+        "Liam Greystone is a young human engineer described as eager, observant, and fascinated by dwarven flight methods. He arrives believing that human aetheric engines and steam turbines already provide sufficient power, balance, and range.",
+        "Through Garrick's explanation, Liam recognizes that human engineering often prioritizes output and novelty over endurance and that control depends on structure, balance, and known limits.",
+        "The lecture closes with Liam asking to be taught. The final image is a collaborative future in which dwarven stability and human ambition may be combined rather than treated as mutually exclusive traditions."
+      ],
+      "statBlocks": [
+        {
+          "id": "liam-greystone-statblock",
+          "title": "Liam Greystone",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "setting-derived-hypertext-d20",
+          "statType": "unique NPC",
+          "creatureType": "Humanoid (Human)",
+          "size": "Medium",
+          "alignment": "Neutral good",
+          "challengeRating": "3",
+          "hitDice": "Expert 4",
+          "hitPoints": "26 hp",
+          "initiative": "+2",
+          "speed": ["30 ft."],
+          "armorClass": { "total": "15", "touch": "12", "flatFooted": "13", "notes": "+2 Dex, +3 work coat" },
+          "baseAttackGrapple": "+3/+3",
+          "attack": "Engineer’s wrench +4 melee (1d6)",
+          "fullAttack": "Engineer’s wrench +4 melee (1d6)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialQualities": ["Quick study: after observing a successful engineering check, gain +2 on the same task for 24 hours", "Human ingenuity", "Aetheric-engine familiarity"],
+          "saves": { "fortitude": "+2", "reflex": "+5", "will": "+6" },
+          "abilities": { "strength": "10", "dexterity": "15", "constitution": "12", "intelligence": "18", "wisdom": "13", "charisma": "15" },
+          "skills": ["Craft (airships) +12", "Knowledge (arcana) +11", "Knowledge (architecture and engineering) +12", "Profession (engineer) +10", "Repair +12", "Use Magic Device +9"],
+          "feats": ["Diligent", "Skill Focus (Craft (airships))", "Technological Affinity"],
+          "environment": "Human workshops, mixed-race shipyards, training expeditions",
+          "organization": "Unique, usually as student or junior engineer",
+          "treasure": "Engineer’s tools, notes, and prototype parts",
+          "advancement": "By character class",
+          "levelAdjustment": "—",
+          "conversionNotes": ["The source provides no statistics. This setting-derived block models Liam as an intelligent but still-developing human engineer rather than a master shipwright."],
+          "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 379, "pageEnd": 381, "outlineTitle": "The Dwarven Lecture on Airflight", "chunkId": "kaysender-core-pdf-2025-01-20:liam-greystone" }]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 379, "pageEnd": 381, "outlineTitle": "The Dwarven Lecture on Airflight", "chunkId": "kaysender-core-pdf-2025-01-20:liam-greystone" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:liam-greystone"],
+      "tags": ["Liam Greystone", "human engineer", "airship student", "aetheric engines"],
+      "relatedEntries": ["dwarven-lecture-on-airflight", "garrick-stonefist", "dwarven-airflight-operating-doctrine"],
+      "relatedModules": ["npc-crew-generator", "job-board-generator"]
+    },
+    {
+      "id": "dwarven-gravity-runestones",
+      "title": "Dwarven Gravitational Runestones",
+      "category": "Items",
+      "summary": "Ancient runestones align a ship's gravitational field and anchor it to stable world-currents rather than merely lifting it through raw thrust.",
+      "body": [
+        "Garrick identifies runestones as the heart of a dwarven airship. They are carved with ancient runic magic that aligns the gravitational field around the vessel and holds it aloft with precision.",
+        "In his explanation, a dwarven ship is not merely floating. The runestones bind it to the sky by drawing on the stability associated with the earth itself, anchoring the vessel into the world's currents like a mountain fixed within a larger natural order.",
+        "This anchoring explains dwarven resistance to turbulent winds and sudden magical disturbance. It also explains why dwarven ships are less dynamic than lighter aetheric vessels: their strength comes from refusing rapid unwanted movement."
+      ],
+      "itemMechanics": {
+        "ruleset": "Hypertext d20 compatible",
+        "sourceStatus": "setting-derived",
+        "itemType": "major airship lift-and-stability component",
+        "installation": "Requires a reinforced runestone cradle, alignment survey, and 8 hours of calibration per ship size category.",
+        "activation": "Continuous while supplied with steam, elemental heat, or linked core power.",
+        "effects": [
+          "Reduce effective vessel weight by 50% for lift calculations.",
+          "Grant +4 on control checks against storms, forced movement, spin, stall, and sudden magical displacement.",
+          "A vessel may remain aloft for 1d4 rounds after total propulsion loss if at least half its runestones remain active.",
+          "Reduce maximum speed by 20 ft. and maneuverability by one step because the vessel resists rapid course changes."
+        ],
+        "damageStates": [
+          "Misaligned: -2 on control checks and 10% increase in fuel use.",
+          "Fractured: lose half stability bonus and one-quarter lift capacity.",
+          "Cascade failure: if more than half the array fails in one round, the vessel immediately begins controlled descent rather than hovering."
+        ],
+        "maintenance": "Inspect every 7 operating days and after any critical hit, collision, teleportation effect, or severe gravitational anomaly. Calibration requires Craft (runestones) or Knowledge (architecture and engineering) DC 25.",
+        "repair": "A damaged stone requires 4 hours, 500 gp in rune-metal and crystal per size category, and a DC 25 Craft check. Failure by 5 or more creates a hidden misalignment.",
+        "editorNote": "The source defines gravitational alignment and sky anchoring but not numerical effects. All numbers are setting-derived."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 380, "pageEnd": 380, "outlineTitle": "The Dwarven Lecture on Airflight / Runestones", "chunkId": "kaysender-core-pdf-2025-01-20:dwarven-gravity-runestones" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dwarven-gravity-runestones"],
+      "tags": ["runestones", "gravity", "dwarven airship", "lift system", "stability"],
+      "relatedEntries": ["dwarven-lecture-on-airflight", "garrick-stonefist", "gilded-skycrusher", "dwarven-airflight-operating-doctrine"],
+      "relatedModules": ["airship-vessel-generator", "treasure-generator"]
+    },
+    {
+      "id": "gilded-skycrusher",
+      "title": "The Gilded Skycrusher",
+      "category": "Ships",
+      "summary": "Garrick's blueprint example is a fortress-like dwarven airship built from mithril plating, runic reinforcement, balanced weight, and precise steam-driven turbines.",
+      "body": [
+        "The Gilded Skycrusher appears in Garrick's lecture as the design laid across his blueprint table. It is described as sleek but sturdy, resembling a fortress that happens to fly.",
+        "Its hull uses exceptionally strong materials, including mithril plating reinforced with runic sigils intended to prevent wear and tear. Steam-driven turbines provide propulsion, while the design's balance of weight, precision, structure, and gravitational stability allows it to cross rough skies without wobble.",
+        "The example is not presented as the fastest or most agile ship. Its defining quality is reliability under extreme wind and storm conditions. Every curve, gear, plate, and load relationship is deliberately considered."
+      ],
+      "shipStatBlock": {
+        "ruleset": "Hypertext d20 compatible",
+        "conversionStatus": "setting-derived-hypertext-d20",
+        "shipType": "Large dwarven armored airship",
+        "size": "Colossal vehicle",
+        "challengeRating": "Equivalent encounter CR 15 when fully crewed",
+        "armorClass": 28,
+        "touchAC": 2,
+        "hardness": 20,
+        "hitPoints": 420,
+        "damageThreshold": 30,
+        "speed": "Fly 60 ft. (poor); cruise 40 miles per day under ordinary conditions",
+        "maneuverability": "Poor, improved to average with a full trained helm crew",
+        "crew": { "minimum": 18, "standard": 42, "maximum": 90 },
+        "cargo": "300 tons without penalty; 450 tons at -20 ft. speed and -2 control",
+        "controlCheck": "Profession (pilot), Profession (sailor), or vessel-control check DC 18 ordinary / 25 severe weather / 30 catastrophic storm",
+        "systems": [
+          "Gravitational runestone array",
+          "Twin steam-driven turbine banks",
+          "Mithril-plated reinforced hull",
+          "Runic wear-suppression sigils",
+          "Redundant ballast and counterweight network",
+          "Smokeless exhaust treatment",
+          "Defensive shield lattice"
+        ],
+        "qualities": [
+          "+4 on checks against storm displacement, spin, stall, and collision",
+          "Resistance 20 to fire and force damage",
+          "Crew cannot be directly targeted from outside while defensive shield lattice is intact",
+          "At 0 hp the vessel becomes disabled but does not immediately fall; it begins sinking only at -10 hp",
+          "Rune-powered engines reduce engine damage by 20% after hardness"
+        ],
+        "failureStates": [
+          "Runestone misalignment: lose stability bonus and descend 20 ft. per round until corrected.",
+          "Turbine loss: speed halved per disabled bank.",
+          "Ballast failure: maneuverability worsens one step and control DCs increase by 5.",
+          "Shield-lattice collapse: crew become valid external targets and magical save bonus is lost."
+        ],
+        "maintenance": "One 8-hour engineering watch every 7 operating days; after severe storms, collisions, or combat, each major system requires a separate DC 22 inspection.",
+        "repair": "Repairs require dwarven-grade metal, runic materials, and appropriate drydock access. Field repairs restore at most 25% maximum hp without a foundry.",
+        "editorNote": "The source gives design materials, turbines, runes, balance, and reliability but no complete ship statistics. This block is setting-derived and harmonized with existing dwarven-airship traits."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 380, "pageEnd": 381, "outlineTitle": "The Dwarven Lecture on Airflight / Gilded Skycrusher", "chunkId": "kaysender-core-pdf-2025-01-20:gilded-skycrusher" }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:gilded-skycrusher"],
+      "tags": ["Gilded Skycrusher", "dwarven airship", "mithril plating", "steam turbines", "fortress ship"],
+      "relatedEntries": ["dwarven-lecture-on-airflight", "dwarven-gravity-runestones", "garrick-stonefist", "dwarven-airflight-operating-doctrine"],
+      "relatedModules": ["airship-vessel-generator", "encounter-generator"]
+    },
+    {
+      "id": "dwarven-airflight-operating-doctrine",
+      "title": "Dwarven Airflight Operating Doctrine",
+      "category": "Rules",
+      "summary": "A complete editor-facing system for operating, inspecting, stabilizing, and repairing dwarven airships according to Garrick Stonefist's principles.",
+      "body": [
+        "This rules entry is setting-derived from the complete lecture and existing dwarven-airship mechanics. It exists to make the source doctrine operational rather than leaving stability, precision, and endurance as unquantified flavor.",
+        "Dwarven airflight resolves through five linked states: load balance, runestone alignment, propulsion output, structural integrity, and crew response. A vessel can survive failure in one state because the others are deliberately redundant."
+      ],
+      "sections": [
+        {
+          "heading": "Preflight Inspection",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Before departure, make one engineering check for each major state: load balance, runestone alignment, turbines, hull, and controls. Base DC 18. A rushed inspection takes one-quarter normal time but raises all DCs by 5.",
+            "Each failed check begins the voyage with one hidden fault. Failure by 5 or more creates an active degraded state immediately."
+          ]
+        },
+        {
+          "heading": "Stability Reserve",
+          "sectionType": "rules-procedure",
+          "body": [
+            "A dwarven vessel begins each voyage with Stability Reserve equal to 3 plus one per functioning redundant lift or ballast system, usually 5-7 points.",
+            "Spend 1 point after a failed control check to reduce failure severity by one band. Spend 2 points to remain aloft for one additional round after propulsion loss. Reserve returns only after a successful maintenance watch."
+          ]
+        },
+        {
+          "heading": "Control Checks",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Ordinary maneuver DC 15, difficult maneuver DC 20, severe-weather DC 25, emergency stabilization DC 30, and catastrophic storm or cascading-system DC 35.",
+            "Dwarven ships take -1 maneuverability and -20 ft. base speed but gain +4 against involuntary movement, spin, stall, and storm effects."
+          ]
+        },
+        {
+          "heading": "Engineering Failure Bands",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Failure by 1-4 causes strain: lose 1 Stability Reserve or take minor system wear.",
+            "Failure by 5-9 causes degradation: one system takes -2 on related checks until repaired.",
+            "Failure by 10-14 disables one system and forces an immediate stabilization check.",
+            "Failure by 15 or more creates cascade failure: two systems degrade, the vessel descends, and the crew must choose between preserving lift, steering, or structural integrity."
+          ]
+        },
+        {
+          "heading": "Maintenance and Repair",
+          "sectionType": "rules-procedure",
+          "body": [
+            "A maintenance watch requires 8 hours every 7 operating days and a DC 20 Craft (airships), Profession (shipwright), or Repair check. Success restores all Stability Reserve and removes one strain condition. Success by 5 or more removes one degraded state.",
+            "Field repair takes 1 hour per affected system and DC 22. Foundry repair takes 8 hours and DC 18 with proper materials. A disabled runestone array requires DC 25 and cannot be restored fully without rune-compatible stone, metal, or crystal."
+          ]
+        },
+        {
+          "heading": "Human-Dwarven Hybrid Design",
+          "sectionType": "rules-procedure",
+          "body": [
+            "A hybrid vessel may combine human aetheric acceleration with dwarven stability. It gains one temporary speed-boost system but must also include a reinforced load path and runestone buffer.",
+            "When boosted, increase speed by 40 ft. for 5 rounds. At the end of each round after the first, make a DC 22 engineering check. Failure consumes 1 Stability Reserve; failure by 5 or more degrades the propulsion system."
+          ]
+        }
+      ],
+      "mechanics": {
+        "sourceStatus": "setting-derived",
+        "preflightBaseDC": 18,
+        "rushedInspectionModifier": 5,
+        "stabilityReserve": "3 + number of functioning redundant lift or ballast systems",
+        "controlDCs": { "ordinary": 15, "difficult": 20, "severeWeather": 25, "emergency": 30, "catastrophic": 35 },
+        "failureBands": { "1to4": "strain", "5to9": "degraded system", "10to14": "disabled system", "15plus": "cascade failure" },
+        "maintenanceInterval": "Every 7 operating days",
+        "maintenanceDC": 20,
+        "fieldRepairDC": 22,
+        "foundryRepairDC": 18,
+        "runestoneRepairDC": 25
+      },
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [{ "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 379, "pageEnd": 381, "outlineTitle": "The Dwarven Lecture on Airflight", "chunkId": "kaysender-core-pdf-2025-01-20:dwarven-lecture-on-airflight", "notes": "Operational mechanics derived from the complete lecture and existing dwarven airship rules; not printed verbatim in the source." }],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:dwarven-lecture-on-airflight"],
+      "tags": ["dwarven airflight", "engineering rules", "stability reserve", "maintenance", "runestones"],
+      "relatedEntries": ["dwarven-lecture-on-airflight", "dwarven-gravity-runestones", "gilded-skycrusher", "garrick-stonefist", "liam-greystone"],
+      "relatedModules": ["airship-vessel-generator", "encounter-generator", "module-generator"]
+    }
+  ]
+}
