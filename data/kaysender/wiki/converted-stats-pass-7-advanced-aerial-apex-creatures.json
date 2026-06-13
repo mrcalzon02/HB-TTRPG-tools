@@ -1,0 +1,278 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Seventh converted statistics pass. Adds Hypertext d20-compatible creature stat blocks for the Roaring Wyrm, Aether Wraiths, and the Celestial Herald.",
+  "entries": [
+    {
+      "id": "roaring-wyrm",
+      "title": "The Roaring Wyrm",
+      "category": "Creatures",
+      "summary": "A colossal dragon-like being of stone and flesh darkens the sky and guards centuries of plundered airship treasure, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "The Roaring Wyrm is large enough to partly block the sun. Its voice churns the wind and tears apart nearby clouds, announcing the creature before travelers can see its full scale.",
+        "Its hide resembles layered stone fused with living tissue. The creature's territory is a graveyard of broken airships, compressed treasure, and hull fragments collected over centuries."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "Converted as an epic territorial megafauna encounter whose roar, mass, and stone-flesh body threaten entire vessels. Its hoard and wreck field are treated as part of the encounter rather than incidental treasure."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "roaring-wyrm-statblock",
+          "title": "The Roaring Wyrm",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air, Earth)",
+          "size": "Colossal",
+          "alignment": "Usually neutral evil",
+          "challengeRating": "21",
+          "experience": "409,600",
+          "hitDice": "34d10+340",
+          "hitPoints": "527 hp",
+          "initiative": "+1",
+          "speed": ["40 ft.", "Burrow 30 ft. through stone", "Fly 120 ft. (poor)"],
+          "armorClass": { "total": "39", "touch": "3", "flatFooted": "38", "notes": "-8 size, +1 Dex, +36 natural" },
+          "baseAttackGrapple": "+34/+70",
+          "attack": "Bite +47 melee (8d8+30 plus improved grab)",
+          "fullAttack": "Bite +47 melee (8d8+30), 2 claws +45 melee (6d6+15), 2 wing buffets +45 melee (4d8+15), and tail sweep +45 melee (6d8+22)",
+          "spaceReach": "30 ft./30 ft. (50 ft. with tail)",
+          "specialAttacks": [
+            "World-Rending Roar (Su): 500-ft. cone once every 1d4 rounds. Creatures take 16d6 sonic damage, Fortitude DC 35 half. Failed saves also deafen the target for 2d6 rounds and knock it prone. Airships must make a DC 35 control check or become staggered, lose 100 ft. of altitude, and take 10d10 structural damage.",
+            "Cloudbreaker Wake (Ex): Whenever the Wyrm flies at least 100 ft. in a round, it leaves a 100-ft.-wide wake behind it. Creatures and vessels in the wake must succeed on DC 32 Reflex or control checks or be pushed 80 ft. and spun off facing.",
+            "Stone-Flesh Crush (Ex): The Wyrm may land on or pass directly through a ship zone, structure, or Huge or smaller creatures. Creatures take 8d8+30 damage, Reflex DC 37 half; structures and vessels take 12d10 structural damage ignoring 15 hardness.",
+            "Graveyard Avalanche (Su): While within its hoard field, once per encounter the Wyrm hurls a mass of wreckage in a 120-ft. line, dealing 14d6 bludgeoning and piercing damage, Reflex DC 33 half. Failed saves pin creatures beneath debris.",
+            "Improved grab, swallow whole, frightful presence, tail sweep"
+          ],
+          "specialQualities": [
+            "Blindsight 180 ft.",
+            "Darkvision 300 ft.",
+            "Damage reduction 20/epic and adamantine",
+            "Immunity to sonic, paralysis, and sleep",
+            "Resistance to cold 20, electricity 20, and fire 20",
+            "Spell resistance 33",
+            "Stone-flesh regeneration 10, overcome by force effects or epic weapons",
+            "Siege monster",
+            "Tremorsense 120 ft. while touching stone or wreckage"
+          ],
+          "saves": { "fortitude": "+29", "reflex": "+20", "will": "+18" },
+          "abilities": { "strength": "50", "dexterity": "13", "constitution": "30", "intelligence": "8", "wisdom": "18", "charisma": "22" },
+          "skills": ["Intimidate +33", "Listen +35", "Search +26", "Spot +35", "Survival +31"],
+          "feats": ["Awesome Blow", "Cleave", "Epic Fortitude", "Flyby Attack", "Great Cleave", "Hover", "Improved Bull Rush", "Improved Grapple", "Multiattack", "Power Attack", "Snatch", "Wingover"],
+          "environment": "Remote aerial graveyards, stone-cloud ranges, ancient wreck fields",
+          "organization": "Solitary",
+          "treasure": "Quadruple standard, mostly in airship wreckage, compressed cargo, and ancient plunder",
+          "advancement": "35-50 HD (Colossal)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Begins with World-Rending Roar to disable crews and destabilize ships before closing.",
+            "Uses the wreck field as ammunition and partial cover.",
+            "Attempts to crush or swallow disabled vessels rather than pursue scattered individuals.",
+            "Retreats into stone-cloud formations if drawn away from its hoard."
+          ],
+          "conversionNotes": [
+            "Converted from the source's colossal stone-and-flesh dragon, cloud-tearing roar, and airship graveyard hoard.",
+            "Built as a vessel-scale apex encounter rather than a conventional dragon replacement."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Advanced Aerial Encounter Table / Roaring Wyrm", "chunkId": "kaysender-core-pdf-2025-01-20:roaring-wyrm" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Advanced Aerial Encounter Table / Roaring Wyrm", "chunkId": "kaysender-core-pdf-2025-01-20:roaring-wyrm" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:roaring-wyrm"],
+      "tags": ["Roaring Wyrm", "colossal wyrm", "stone flesh", "airship hoard", "converted statistics"],
+      "relatedEntries": ["random-aerial-encounters", "dragon-lords", "skywyrm"],
+      "relatedModules": ["encounter-generator", "sky-ecology-generator"]
+    },
+    {
+      "id": "aether-wraiths",
+      "title": "The Aether Wraiths",
+      "category": "Creatures",
+      "summary": "Mist-like spirits seek strong magical auras and drain vitality from living beings and vessels caught in their wake, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Aether Wraiths resemble ghostly forms built from fog and swirling magical energy. Powerful enchanted objects, active spells, and magical propulsion can draw them toward a ship.",
+        "They attempt possession or life-draining contact, while vessels lingering near them seem to lose energy and liveliness along with their crews."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "Converted as a swarm-capable incorporeal magical predator. The creature is dangerous to both characters and powered vessels through possession, level drain, and aura siphoning."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "aether-wraith-statblock",
+          "title": "Aether Wraith",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Undead (Air, Incorporeal)",
+          "size": "Medium",
+          "alignment": "Usually neutral evil",
+          "challengeRating": "9",
+          "experience": "6,400",
+          "hitDice": "12d12",
+          "hitPoints": "78 hp",
+          "initiative": "+8",
+          "speed": ["Fly 80 ft. (perfect)"],
+          "armorClass": { "total": "24", "touch": "24", "flatFooted": "20", "notes": "+4 Dex, +10 deflection" },
+          "baseAttackGrapple": "+6/—",
+          "attack": "Aether touch +12 melee touch (2d6 cold plus energy drain)",
+          "fullAttack": "2 aether touches +12 melee touch (2d6 cold plus energy drain)",
+          "spaceReach": "5 ft./5 ft.",
+          "specialAttacks": [
+            "Energy Drain (Su): A successful aether touch bestows one negative level. The Fortitude save to remove it after 24 hours is DC 22.",
+            "Magic-Aura Hunger (Su): The Wraith automatically senses active spells, magic items, magical engines, and spellcasters within 500 ft. It gains a +4 bonus on attack rolls and saves against the creature or object with the strongest magical aura in range.",
+            "Possess Crew (Su): Once per day, the Wraith may enter a living humanoid within 5 ft.; Will DC 22 negates. This functions as magic jar except no receptacle is required and the possession lasts up to 10 minutes.",
+            "Drain Vessel (Su): As a full-round action while occupying the same space as a magical vehicle zone, the Wraith drains 4d6 points of magical power and heals the same amount. The affected system takes a cumulative -1 penalty on operation checks per use, to a maximum of -5, until repaired or reconsecrated.",
+            "Wake of Listlessness (Su): Living creatures within 30 ft. take a -2 penalty on Strength- and Dexterity-based checks and must succeed on DC 20 Will saves each round or become fatigued."
+          ],
+          "specialQualities": [
+            "Incorporeal traits",
+            "Undead traits",
+            "Darkvision 120 ft.",
+            "Aether sight",
+            "Rejuvenation near active magical engines",
+            "Spell resistance 24",
+            "Turn resistance +4"
+          ],
+          "saves": { "fortitude": "+4", "reflex": "+8", "will": "+12" },
+          "abilities": { "strength": "—", "dexterity": "19", "constitution": "—", "intelligence": "12", "wisdom": "18", "charisma": "24" },
+          "skills": ["Hide +19", "Intimidate +22", "Listen +19", "Search +16", "Spot +19"],
+          "feats": ["Ability Focus (possess crew)", "Alertness", "Flyby Attack", "Improved Initiative", "Iron Will"],
+          "environment": "Aether-rich cloud banks, magical shipping routes, abandoned vessels",
+          "organization": "Solitary, drift (2-5), or wake (6-20)",
+          "treasure": "None",
+          "advancement": "13-18 HD (Medium), 19-24 HD (Large)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Approaches the strongest magical aura rather than the nearest living creature.",
+            "Possesses pilots, engineers, or spellcasters to sabotage the vessel from within.",
+            "Uses Drain Vessel repeatedly while other Wraiths harass the crew.",
+            "Retreats into cloud or machinery if threatened by positive energy."
+          ],
+          "conversionNotes": [
+            "Converted from the source's mist-like magical spirits, possession behavior, vitality drain, and attraction to magical propulsion.",
+            "A single block supports solitary encounters and larger Wraith wakes."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Advanced Aerial Encounter Table / Aether Wraiths", "chunkId": "kaysender-core-pdf-2025-01-20:aether-wraiths" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Advanced Aerial Encounter Table / Aether Wraiths", "chunkId": "kaysender-core-pdf-2025-01-20:aether-wraiths" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:aether-wraiths"],
+      "tags": ["Aether Wraith", "possession", "energy drain", "magical aura", "converted statistics"],
+      "relatedEntries": ["random-aerial-encounters", "aether-domain", "human-airship-core"],
+      "relatedModules": ["encounter-generator", "sky-ecology-generator"]
+    },
+    {
+      "id": "celestial-herald",
+      "title": "The Celestial Herald",
+      "category": "Creatures",
+      "summary": "A primordial winged being emerges through a tear in the sky and distorts magic across the horizon, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "The Herald's luminous wings span an immense portion of the visible sky. Its arrival alters nearby magic before its motives or destination become clear.",
+        "Religious and secular witnesses interpret the being as divine judgment, a messenger of catastrophe, or one of the first creatures shaped by the gods."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "Converted as an epic celestial world-event creature. It is not automatically hostile; its magic distortion, proclamations, and passage through the sky can form an encounter even without conventional combat."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "celestial-herald-statblock",
+          "title": "Celestial Herald",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Outsider (Celestial, Extraplanar, Good)",
+          "size": "Colossal",
+          "alignment": "Usually neutral good",
+          "challengeRating": "23",
+          "experience": "819,200",
+          "hitDice": "36d8+360",
+          "hitPoints": "522 hp",
+          "initiative": "+8",
+          "speed": ["60 ft.", "Fly 240 ft. (perfect)"],
+          "armorClass": { "total": "42", "touch": "6", "flatFooted": "38", "notes": "-8 size, +4 Dex, +20 natural, +16 sacred" },
+          "baseAttackGrapple": "+36/+68",
+          "attack": "Radiant wing +44 melee (6d8+16 plus 4d6 radiant)",
+          "fullAttack": "2 radiant wings +44 melee (6d8+16 plus 4d6 radiant) and celestial touch +42 melee touch (8d6 radiant or healing)",
+          "spaceReach": "30 ft./30 ft. (60 ft. with wings)",
+          "specialAttacks": [
+            "Horizon Proclamation (Su): Once every 1d4 rounds, the Herald speaks across a 1-mile radius. Hostile creatures must succeed on a DC 34 Will save or become stunned for 1 round and shaken for 2d6 rounds. Non-hostile creatures may instead receive remove fear and a +4 morale bonus on saves for 10 minutes.",
+            "Magic Distortion Field (Su): In a 1,000-ft. radius, all spells and supernatural abilities are visibly altered. Casters must succeed on a DC 30 caster-level check to use teleportation, summoning, planar travel, or invisibility. The Herald may suppress, redirect, or harmlessly reshape any spell of 6th level or lower used within the field as an immediate action.",
+            "Judgment Ray (Su): 500-ft. line, 20d6 radiant damage to evil creatures and 10d6 to neutral creatures; good creatures instead heal 10d6 hit points. Reflex DC 35 half or reduces healing by half. Usable once every 1d4 rounds.",
+            "Wing of the First Sky (Su): As a full-round action, the Herald sweeps one wing across a 300-ft. cone. Hostile creatures take 12d6 force damage and are pushed 150 ft.; allies gain freedom of movement and a fly speed of 90 ft. for 10 minutes.",
+            "Celestial Seal (Su): Once per day, the Herald may close or stabilize a planar rift, magical catastrophe, or major curse as miracle, caster level 25th."
+          ],
+          "specialQualities": [
+            "Blindsight 300 ft.",
+            "Darkvision 300 ft.",
+            "True seeing",
+            "Damage reduction 20/epic and evil",
+            "Immunity to acid, cold, electricity, petrification, paralysis, and sleep",
+            "Resistance to fire 30",
+            "Spell resistance 36",
+            "Fast healing 15",
+            "Regeneration 10 overcome by epic evil weapons",
+            "Telepathy 1 mile",
+            "Tongues",
+            "Celestial casting as a 20th-level cleric"
+          ],
+          "saves": { "fortitude": "+30", "reflex": "+24", "will": "+30" },
+          "abilities": { "strength": "42", "dexterity": "19", "constitution": "30", "intelligence": "28", "wisdom": "30", "charisma": "32" },
+          "skills": ["Concentration +49", "Diplomacy +50", "Knowledge (arcana) +48", "Knowledge (history) +48", "Knowledge (planes) +48", "Knowledge (religion) +48", "Listen +49", "Sense Motive +49", "Spellcraft +48", "Spot +49"],
+          "feats": ["Epic Fortitude", "Epic Reflexes", "Epic Will", "Flyby Attack", "Hover", "Improved Initiative", "Iron Will", "Multiattack", "Quicken Spell-Like Ability", "Wingover"],
+          "environment": "Planar tears, high celestial routes, world-scale magical crises",
+          "organization": "Solitary",
+          "treasure": "None; celestial relics may remain where it intervenes",
+          "advancement": "37-54 HD (Colossal) or by divine rank",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Attempts proclamation and magical suppression before direct violence.",
+            "Uses Judgment Ray only after determining the moral alignment of opposing forces.",
+            "Protects civilians and stabilizes catastrophic magic even while opposed.",
+            "Leaves once its message, judgment, or stabilizing task is complete."
+          ],
+          "conversionNotes": [
+            "Converted from the source's primordial winged being, horizon-scale wings, and magic-distorting arrival.",
+            "Designed to function as divine messenger, neutral world event, ally, or epic opponent depending on campaign context."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Advanced Aerial Encounter Table / Celestial Herald", "chunkId": "kaysender-core-pdf-2025-01-20:celestial-herald" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Advanced Aerial Encounter Table / Celestial Herald", "chunkId": "kaysender-core-pdf-2025-01-20:celestial-herald" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:celestial-herald"],
+      "tags": ["Celestial Herald", "primordial being", "divine judgment", "magic distortion", "converted statistics"],
+      "relatedEntries": ["random-aerial-encounters", "magical-null-zone", "aelric-skywarden"],
+      "relatedModules": ["encounter-generator", "sky-ecology-generator"]
+    }
+  ]
+}
