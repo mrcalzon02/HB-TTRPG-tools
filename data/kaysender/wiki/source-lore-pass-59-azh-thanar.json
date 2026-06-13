@@ -1,0 +1,386 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Source-lore pass 59 exactly exports the final manuscript section, The Lost Continent of Azh'Thanar, into complete reader-facing lore entries and a separately labeled editor-facing exploration framework. Source-faithful entries preserve the manuscript's geography, megafauna, ruins, giant remains, suppressed records, and unanswered fate. Added operating mechanics are explicitly setting-derived.",
+  "entries": [
+    {
+      "id": "lost-continent-of-azh-thanar",
+      "title": "The Lost Continent of Azh'Thanar",
+      "category": "Locations",
+      "summary": "Far beyond the western horizon lies the Unbroken Continent, a primeval land of colossal beasts, impossible ruins, giant bones, and a civilization erased from ordinary memory.",
+      "body": [
+        "Azh'Thanar lies far beyond the western horizons, past the waters commonly crossed by the peoples of Kaysender. It is known in the oldest surviving references as the Unbroken Continent, a name preserved only in forgotten elven tongues, mold-ridden scrolls, and dwarven vaults deliberately sealed against time and inquiry.",
+        "The legends place Azh'Thanar before the modern nations of Kaysender, before the rise of the Dragon Lords, and before the earliest halls of Valeria. It belongs to an age when the western land had not been divided, domesticated, or reduced to the scale of mortal kingdoms.",
+        "Vast jungles cover the continent. Rivers have carved canyons of extraordinary depth, and mountains rise high enough to dwarf the tallest citadels of the Skyweaver Consortium. The landscape is described not merely as wilderness but as a world operating at a scale beyond ordinary civilization.",
+        "The known peoples of Kaysender do not rule this place. The surviving accounts instead describe titanic animals, impossible ruins, and the remains of beings that cannot be identified as dragons or any recognized mortal ancestry.",
+        "No reliable modern expedition has produced a complete map, verified settlement, continuous historical record, or accepted explanation for what happened there. Azh'Thanar survives in scholarship as a suppressed question and in legend as a continent that time itself attempted to forget."
+      ],
+      "sections": [
+        {
+          "heading": "The Unbroken Western Land",
+          "sectionType": "geography",
+          "body": [
+            "The source describes Azh'Thanar as a true western continent rather than a floating island, isolated ruin, or fragment of broken terrain. Its surviving title, Unbroken Continent, emphasizes continuity of land and antiquity of form.",
+            "Its jungles, rivers, canyons, and mountains are all presented at exaggerated natural scale. The comparison to Skyweaver citadels indicates that even familiar monumental construction would appear diminished against its peaks."
+          ]
+        },
+        {
+          "heading": "Before the Nations and Dragon Lords",
+          "sectionType": "history",
+          "body": [
+            "The continent's legendary age predates the recognizable political and architectural history of Kaysender. It existed before the modern nations, before the Dragon Lords, and before the earliest Valerian foundations named in surviving tradition.",
+            "This does not prove that every ruin on the continent belongs to one civilization, but it establishes that the site is older than the historical frameworks normally used by modern scholars."
+          ]
+        },
+        {
+          "heading": "The Question Without an Answer",
+          "sectionType": "mystery",
+          "body": [
+            "The manuscript offers no confirmed cause for the disappearance of Azh'Thanar's builders. War, calamity, and forces beyond mortal understanding are all presented as possibilities rather than answers.",
+            "The intended final impression is unresolved silence: ruins remain, bones remain, wind moves through empty cities, but the event that ended the civilization has not been recovered."
+          ]
+        }
+      ],
+      "operationalProfile": {
+        "profileType": "editor-facing-location",
+        "sourceStatus": "setting-derived",
+        "purpose": "Use Azh'Thanar as a continent-scale expedition environment rather than a single encounter site.",
+        "scale": "continental",
+        "defaultAccess": "Extreme-distance western sea or sky expedition requiring independent supply, navigation, and repair capacity.",
+        "corePressures": [
+          "Unknown routes and unreliable historical charts",
+          "Primeval weather and terrain at continental scale",
+          "Megafauna larger than ordinary aerial or terrestrial predators",
+          "Ruins built for bodies and movement patterns far larger than modern people",
+          "Conflicting elven, dwarven, and draconic knowledge",
+          "No dependable local political authority or rescue structure"
+        ],
+        "recommendedCampaignTier": "high-level exploration or long-form expedition",
+        "editorNote": "These operating procedures are added for playability and are not quoted from the manuscript."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 390, "pageEnd": 392, "outlineTitle": "The Lost Continent of Azh'Thanar", "chunkId": "kaysender-core-pdf-2025-01-20:lost-continent-of-azh-thanar" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:lost-continent-of-azh-thanar"],
+      "tags": ["Azh'Thanar", "Unbroken Continent", "lost continent", "western horizon", "primeval world", "exact export"],
+      "relatedEntries": ["azh-thanar-megafauna", "titan-built-cities-of-azh-thanar", "colossal-remains-of-azh-thanar", "sealed-records-of-azh-thanar", "azh-thanar-expedition-procedures"],
+      "relatedModules": ["world-map-route-generator", "encounter-generator", "sky-ecology-generator", "supply-water-planner"]
+    },
+    {
+      "id": "azh-thanar-megafauna",
+      "title": "The Primeval Beasts of Azh'Thanar",
+      "category": "Creatures",
+      "summary": "The continent is dominated by immense reptilian hunters, forest-backed behemoths, and wool-covered tusked giants whose scale exceeds familiar beasts.",
+      "body": [
+        "The source describes Azh'Thanar as a land ruled by titans of flesh and bone rather than by modern peoples. Their footfalls shake the earth and their calls are powerful enough to be described as splitting the heavens.",
+        "Some are two-legged hunters: swift, cunning, and built for predation at colossal scale. Others move on four limbs and are so large that forests grow across their backs, while their tails strike with the force and mass of living siege engines.",
+        "The continent also supports creatures covered in thick wool, compared to the elephants of Faelenor but substantially larger. Their tusks curve upward like great scythes against the sky.",
+        "The manuscript does not provide individual species names, exact sizes, diets, social structures, or combat statistics. They should therefore be treated as a confirmed ecological category awaiting later species-level development rather than silently converted into familiar dinosaurs or mammoths."
+      ],
+      "sections": [
+        {
+          "heading": "Two-Legged Hunters",
+          "sectionType": "ecology",
+          "body": [
+            "These predators combine speed, cunning, and tremendous physical power. The text presents them as active hunters rather than slow scavengers or merely oversized reptiles."
+          ]
+        },
+        {
+          "heading": "Forest-Backed Behemoths",
+          "sectionType": "ecology",
+          "body": [
+            "The four-legged giants are large enough for vegetation to establish across their backs. Their tails function like battering rams of flesh and sinew, suggesting that their movement alters terrain and threatens structures without deliberate aggression."
+          ]
+        },
+        {
+          "heading": "Woolen Tusk Giants",
+          "sectionType": "ecology",
+          "body": [
+            "These animals resemble Faelenori elephants only in broad form. Their greater scale and sky-curving tusks mark them as distinct primeval megafauna rather than ordinary regional elephants."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "azh-thanar-megafauna-provisional-profile",
+          "title": "Azh'Thanar Megafauna - Provisional Editor Profile",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "provisional-setting-derived",
+          "statType": "ecological-template",
+          "creatureType": "Varies; usually Animal or Magical Beast",
+          "size": "Gargantuan to Colossal",
+          "challengeRating": "Varies by species; recommended CR 12-24",
+          "hitDice": "Species-dependent; recommended 18-40 HD",
+          "specialQualities": [
+            "Siege-scale body",
+            "Terrain-displacing movement",
+            "Exceptional natural armor or mass",
+            "Resistance to ordinary restraint and forced movement",
+            "Environmental rather than automatically hostile behavior"
+          ],
+          "editorRules": [
+            "Do not use this profile as a final creature stat block. It is a boundary preventing the source's unnamed fauna from being reduced to a sentence or incorrectly identified as an existing monster.",
+            "Every named Azh'Thanar species added later must receive an individual full Hypertext d20 stat block, ecology, behavior, encounter role, advancement, and source-status label.",
+            "When an unnamed giant animal appears as an environmental obstacle, treat its occupied space, wake, footfall, or tail path as a moving hazard appropriate to the party's tier rather than requiring the animal to attack."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 391, "pageEnd": 391, "outlineTitle": "The Lost Continent of Azh'Thanar / Primeval Beasts", "chunkId": "kaysender-core-pdf-2025-01-20:azh-thanar-megafauna" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 391, "pageEnd": 391, "outlineTitle": "The Lost Continent of Azh'Thanar / Primeval Beasts", "chunkId": "kaysender-core-pdf-2025-01-20:azh-thanar-megafauna" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:azh-thanar-megafauna"],
+      "tags": ["Azh'Thanar", "megafauna", "titan beasts", "primeval ecology", "provisional mechanics"],
+      "relatedEntries": ["lost-continent-of-azh-thanar", "titan-built-cities-of-azh-thanar", "azh-thanar-expedition-procedures"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "titan-built-cities-of-azh-thanar",
+      "title": "The Impossible Cities of Azh'Thanar",
+      "category": "Locations",
+      "summary": "Vine-choked towers, shattered roads, dragon-sized windows, and colossal doors indicate an urban civilization built for beings far larger than modern peoples.",
+      "body": [
+        "Beneath the vegetation of Azh'Thanar lie roads and cities made at impossible scale. Their towers are wider than castles, not merely taller than ordinary buildings, and their proportions imply inhabitants whose bodies and movements were fundamentally different from those of modern mortals.",
+        "Windows rise high enough for a dragon to perch within them. Doors are large enough for the greatest wyrms to pass without bowing. These details are presented as ordinary design features of the lost city rather than ceremonial exaggeration.",
+        "The ruins are broken, overgrown, and silent. The source does not identify their material, construction method, magical infrastructure, number of cities, or present occupants. Any such details added during adventure design must be labeled setting-derived.",
+        "The roads and structures are direct evidence that Azh'Thanar's vanished builders possessed organized urban civilization, monumental engineering, and an architectural scale unmatched by modern Kaysender."
+      ],
+      "sections": [
+        {
+          "heading": "Architectural Scale",
+          "sectionType": "architecture",
+          "body": [
+            "The buildings were not simply palaces made grand for symbolic reasons. Doorways, windows, road widths, and interior volumes are all consistently suited to enormous inhabitants."
+          ]
+        },
+        {
+          "heading": "Present Condition",
+          "sectionType": "ruin-state",
+          "body": [
+            "Vines cover the surviving works, roadways are shattered, and silence dominates the empty urban spaces. The ruins remain physically recognizable despite their age and damage."
+          ]
+        }
+      ],
+      "siteMechanics": {
+        "profileType": "editor-facing-ruin",
+        "sourceStatus": "setting-derived",
+        "scaleEffects": [
+          "A normal room may function as an open plaza for Medium creatures.",
+          "Stairs, thresholds, controls, furniture, and vertical access points require climbing, rigging, flight, machinery, or magic to use.",
+          "Ordinary search times increase because relevant evidence may be located tens or hundreds of feet above floor level.",
+          "Structural collapse should be treated as a zone-scale hazard rather than a single falling-object attack."
+        ],
+        "recommendedChecks": [
+          "Knowledge (architecture and engineering) to reconstruct intended use",
+          "Climb, Fly, or rigging checks to traverse giant-scale interiors",
+          "Search or Perception checks performed by zone rather than by five-foot square",
+          "Linguistics, Decipher Script, or magical translation for inscriptions if any survive"
+        ],
+        "editorNote": "The source establishes impossible scale and ruined condition but supplies no DCs. Exact DCs must be set by expedition tier and marked setting-derived."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 391, "pageEnd": 391, "outlineTitle": "The Lost Continent of Azh'Thanar / Lost Empire Ruins", "chunkId": "kaysender-core-pdf-2025-01-20:titan-built-cities-of-azh-thanar" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:titan-built-cities-of-azh-thanar"],
+      "tags": ["Azh'Thanar", "giant city", "impossible ruins", "monumental architecture", "exact export"],
+      "relatedEntries": ["lost-continent-of-azh-thanar", "colossal-remains-of-azh-thanar", "sealed-records-of-azh-thanar"],
+      "relatedModules": ["module-generator", "world-map-route-generator", "encounter-generator"]
+    },
+    {
+      "id": "colossal-remains-of-azh-thanar",
+      "title": "The Colossal Remains of Azh'Thanar",
+      "category": "History",
+      "summary": "Banquet-hall skulls, cavernous ribcages, and bridge-like spines preserve evidence of a giant people distinct from dragons and known beasts.",
+      "body": [
+        "The bones found among the ruins are among the strongest evidence that Azh'Thanar's cities belonged to enormous living beings. Their skulls are as wide as banquet halls, and their empty eye sockets are deep enough for a person to stand inside.",
+        "Ribcages form natural caverns. Spines arch through the ruins like the structural frames of fallen bridges. The remains are architectural in their effect even though they are biological in origin.",
+        "The manuscript explicitly rejects identification as dragons or any beast recognized by modern scholars. The remains belong to a race lost to time, described as walking the world before the first rune was etched and before the first starship sailed the sky.",
+        "The source does not establish whether these beings built the nearby cities, whether all remains belong to one ancestry, or whether they died in the event that emptied the continent. Those are open research questions rather than settled facts."
+      ],
+      "sections": [
+        {
+          "heading": "Evidence, Not Identification",
+          "sectionType": "scholarship",
+          "body": [
+            "Modern scholars can establish scale and unfamiliar anatomy, but the text does not provide a confirmed species name, culture name, language, or taxonomy."
+          ]
+        },
+        {
+          "heading": "Deep Antiquity",
+          "sectionType": "history",
+          "body": [
+            "The remains are associated with an age before runic record and before the earliest skyfaring traditions named in the source. This places them outside ordinary historical chronology."
+          ]
+        }
+      ],
+      "researchMechanics": {
+        "profileType": "editor-facing-investigation",
+        "sourceStatus": "setting-derived",
+        "evidenceTracks": [
+          "Anatomy: establish body plan, injury, age, and whether remains belong to one ancestry",
+          "Context: determine whether bones were buried, displayed, transported, or left where death occurred",
+          "Architecture: compare bone dimensions with doors, roads, windows, and interior structures",
+          "Chronology: establish relative age between remains, cities, roads, and later ecological growth",
+          "Arcana: identify magical alteration, preservation, planar influence, or absence thereof"
+        ],
+        "completionRule": "A single successful check should reveal one evidence track, not solve the civilization. Conclusive claims require multiple independent tracks and surviving records.",
+        "editorNote": "This framework prevents one skill roll from collapsing the source's central mystery."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 391, "pageEnd": 392, "outlineTitle": "The Lost Continent of Azh'Thanar / The Bones", "chunkId": "kaysender-core-pdf-2025-01-20:colossal-remains-of-azh-thanar" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:colossal-remains-of-azh-thanar"],
+      "tags": ["Azh'Thanar", "giant bones", "lost race", "ancient remains", "investigation"],
+      "relatedEntries": ["lost-continent-of-azh-thanar", "titan-built-cities-of-azh-thanar", "sealed-records-of-azh-thanar"],
+      "relatedModules": ["encounter-generator", "module-generator", "job-board-generator"]
+    },
+    {
+      "id": "sealed-records-of-azh-thanar",
+      "title": "The Suppressed Records of Azh'Thanar",
+      "category": "History",
+      "summary": "Elven accounts vanished in western fire, dwarves sealed their records, and ancient dragons refuse to speak when the continent is named.",
+      "body": [
+        "The oldest elven traditions once contained written accounts of Azh'Thanar. Those records are said to have vanished when western winds carried fire across the waves. The source does not identify the fire, its target, or whether the loss was accident, warfare, or deliberate destruction.",
+        "Dwarven records survived differently. The dwarves sealed what they knew inside vaults buried beneath mountains and became unwilling to discuss what they had once traded with and what they had once feared.",
+        "The dragons are presented as the eldest living witnesses, yet they do not explain the continent. When Azh'Thanar is named, ancient dragons fall silent and their expressions suggest memories deliberately buried beneath ages of accumulated experience.",
+        "Together, these traditions indicate that knowledge of the continent was not merely lost through distance. It was burned, sealed, withheld, or made culturally dangerous among three of the peoples most capable of preserving ancient history."
+      ],
+      "sections": [
+        {
+          "heading": "Elven Loss",
+          "sectionType": "records",
+          "body": [
+            "The last written elven accounts disappeared in an event remembered as western fire carried across the waves. No surviving text is identified in the source."
+          ]
+        },
+        {
+          "heading": "Dwarven Secrecy",
+          "sectionType": "records",
+          "body": [
+            "Dwarven vaults may still preserve records, but those records were intentionally sealed. The text emphasizes both former trade and former fear, suggesting direct contact rather than distant myth."
+          ]
+        },
+        {
+          "heading": "Draconic Silence",
+          "sectionType": "records",
+          "body": [
+            "Ancient dragons appear to remember something but decline to explain it. Their silence is evidence of concealed memory, not proof of guilt, responsibility, or alliance."
+          ]
+        }
+      ],
+      "operationalProfile": {
+        "profileType": "editor-facing-information-network",
+        "sourceStatus": "setting-derived",
+        "accessRoutes": [
+          "Recover a damaged elven reference descended from the burned western accounts",
+          "Gain entry to a sealed dwarven mountain vault and establish why the record was restricted",
+          "Persuade, compel, bargain with, or observe an ancient dragon without assuming cooperation",
+          "Compare all three traditions to identify deliberate contradictions or shared omissions"
+        ],
+        "failureStates": [
+          "A recovered source is incomplete but treated as conclusive",
+          "A faction edits records to support a modern territorial claim",
+          "Opening a dwarven vault destroys preservation seals or activates ancient defenses",
+          "A dragon supplies a technically true answer designed to redirect inquiry"
+        ],
+        "editorNote": "The source confirms suppression and silence but does not reveal the hidden truth. Editor-facing play should preserve that uncertainty until a later canonical answer is created."
+      },
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 392, "pageEnd": 392, "outlineTitle": "The Lost Continent of Azh'Thanar / Elven, Dwarven, and Draconic Records", "chunkId": "kaysender-core-pdf-2025-01-20:sealed-records-of-azh-thanar" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:sealed-records-of-azh-thanar"],
+      "tags": ["Azh'Thanar", "elven records", "dwarven vaults", "draconic silence", "suppressed history"],
+      "relatedEntries": ["lost-continent-of-azh-thanar", "colossal-remains-of-azh-thanar", "draconic-empire"],
+      "relatedModules": ["job-board-generator", "faction-guild-generator", "module-generator"]
+    },
+    {
+      "id": "azh-thanar-expedition-procedures",
+      "title": "Azh'Thanar Expedition Procedures",
+      "category": "Rules",
+      "summary": "A complete editor-facing framework for running long-range expeditions across the Unbroken Continent without reducing its source lore to disconnected encounter blurbs.",
+      "body": [
+        "This entry is an editor-facing operational framework. It is not presented as manuscript text and is labeled setting-derived throughout.",
+        "Azh'Thanar should operate as a sustained expedition environment. Travel, supply, navigation, evidence collection, giant-scale ruins, and megafauna are interconnected pressures. A single random encounter or short dungeon cannot represent the full subject."
+      ],
+      "sections": [
+        {
+          "heading": "Expedition Cycle",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Each expedition turn represents one day of deliberate progress or one major exploration operation. Resolve route choice, navigation, supply consumption, environmental pressure, discovery, and camp security in that order.",
+            "A party that moves at maximum speed gains distance but takes penalties on discovery and hazard detection. A party that surveys gains less distance but improves mapping and evidence quality."
+          ]
+        },
+        {
+          "heading": "Navigation",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Base navigation DC is 20 in open coastal terrain, 25 in primeval jungle or broken river canyons, and 30 in mountain interiors, storm-obscured regions, or giant-city ruins without landmarks.",
+            "A reliable local landmark, verified ancient route, aerial survey, or multiple independent maps grants +2 to +6. False records, magnetic or magical disturbance, canopy obstruction, and pursuing megafauna impose -2 to -8.",
+            "Failure by 4 or less loses half a day. Failure by 5-9 moves the expedition into an adjacent unintended zone. Failure by 10 or more creates a major separation, supply, or environmental crisis."
+          ]
+        },
+        {
+          "heading": "Supply and Repair",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Each character consumes one daily supply unit plus any setting-specific water requirement. Large mounts, vehicles, and specialist equipment consume their normal expedition costs.",
+            "Foraging may replace up to half ordinary food consumption after successful Survival checks, but unknown plants and animals require identification before use. Failure may introduce poison, disease, parasitic contamination, or attraction of larger predators.",
+            "Every seven expedition turns, ships, vehicles, climbing systems, and camp structures require a maintenance check. Failure creates one degraded system; repeated failure disables that system until repaired."
+          ]
+        },
+        {
+          "heading": "Discovery Quality",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Discoveries are recorded at four evidence grades: rumor, observation, documented evidence, and corroborated conclusion.",
+            "A rumor identifies a lead. Observation confirms presence. Documented evidence records measurable details. A corroborated conclusion requires at least two independent evidence types, such as architecture plus anatomy or dwarven records plus draconic testimony.",
+            "No single skill check should reveal the fate of the lost civilization."
+          ]
+        },
+        {
+          "heading": "Encounter Function",
+          "sectionType": "rules-procedure",
+          "body": [
+            "Every encounter should change at least one expedition state: route, supply, evidence, vehicle condition, local threat, time, or factional knowledge.",
+            "Megafauna encounters need not be fights. Migration, feeding, nesting, territorial movement, and terrain displacement are valid complete encounters.",
+            "Ruin encounters should exploit giant scale, inaccessible controls, structural instability, and incomplete interpretation rather than functioning as ordinary human-sized rooms."
+          ]
+        }
+      ],
+      "mechanics": {
+        "sourceStatus": "setting-derived",
+        "expeditionTurn": "1 day or one major site operation",
+        "navigationDCs": {
+          "openCoast": 20,
+          "jungleOrCanyon": 25,
+          "mountainStormOrGiantRuin": 30
+        },
+        "navigationOutcomes": {
+          "success": "Progress to intended zone and preserve route certainty.",
+          "failure1to4": "Lose half a day and consume normal supplies.",
+          "failure5to9": "Enter an unintended adjacent zone and trigger a route complication.",
+          "failure10plus": "Major crisis: separation, severe damage, lost supplies, or entry into a high-threat zone."
+        },
+        "evidenceGrades": ["rumor", "observation", "documented evidence", "corroborated conclusion"],
+        "maintenanceInterval": "Every 7 expedition turns",
+        "minimumEncounterImpact": "At least one expedition state must change."
+      },
+      "sourceStatus": "setting-derived",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "pageStart": 390, "pageEnd": 392, "outlineTitle": "The Lost Continent of Azh'Thanar", "chunkId": "kaysender-core-pdf-2025-01-20:lost-continent-of-azh-thanar", "notes": "Operational mechanics derived from the complete source section for editor-facing play; not printed source rules." }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:lost-continent-of-azh-thanar"],
+      "tags": ["Azh'Thanar", "expedition rules", "navigation", "exploration", "editor-facing mechanics"],
+      "relatedEntries": ["lost-continent-of-azh-thanar", "azh-thanar-megafauna", "titan-built-cities-of-azh-thanar", "colossal-remains-of-azh-thanar", "sealed-records-of-azh-thanar"],
+      "relatedModules": ["world-map-route-generator", "supply-water-planner", "encounter-generator", "module-generator"]
+    }
+  ]
+}
