@@ -1,0 +1,240 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Third converted statistics pass. Replaces legacy fifth-edition placeholders for Young, Adult, and Elder Skywhales with linked Hypertext d20-compatible progression stat blocks.",
+  "entries": [
+    {
+      "id": "young-skywhale",
+      "title": "Young Skywhale",
+      "category": "Creatures",
+      "summary": "Curious young Skywhales travel in herds, sing across great distances, and embody the beauty of the open sky, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Young Skywhales hover even in turbulent weather and generate powerful pressure shifts simply by passing overhead. Their deep songs fascinate listeners, while their tails can create strong defensive gusts.",
+        "They are generally playful and peaceful, appearing in stories as comforting signs that the aerial ecosystem remains healthy. Their size still makes an alarmed herd dangerous to ships, riders, and exposed settlements."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "The source presents the young Skywhale as a Huge hovering beast with Massive Presence, Whale Song, a defensive gust, and heavy tail and bite attacks. This conversion treats it as a peaceful aerial magical beast whose principal danger comes from mass, pressure displacement, and defensive panic."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "young-skywhale-statblock",
+          "title": "Young Skywhale",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air)",
+          "size": "Huge",
+          "alignment": "Usually neutral",
+          "challengeRating": "8",
+          "experience": "4,800",
+          "hitDice": "12d10+60",
+          "hitPoints": "126 hp",
+          "initiative": "+2",
+          "speed": ["Fly 60 ft. (perfect; hover)", "Drift 30 ft. while resting or singing"],
+          "armorClass": { "total": "22", "touch": "10", "flatFooted": "20", "notes": "-2 size, +2 Dex, +12 natural" },
+          "baseAttackGrapple": "+12/+31",
+          "attack": "Tail slam +21 melee (3d8+16)",
+          "fullAttack": "Tail slam +21 melee (3d8+16) and bite +16 melee (2d8+5)",
+          "spaceReach": "15 ft./15 ft. (20 ft. with tail)",
+          "specialAttacks": [
+            "Massive Presence (Ex): Whenever the young Skywhale flies over or through the threatened area of a Large or smaller creature, that creature must succeed on a DC 21 Reflex save or fall prone and be pushed 10 ft. by displaced air. The save DC is Strength-based.",
+            "Whale Song (Su): Once per hour, the young Skywhale may sing as a full-round action. Creatures within 300 ft. that can hear it must succeed on a DC 18 Will save or become fascinated for 1d4 rounds. Damage or obvious danger ends the effect. This is a sonic, mind-affecting effect.",
+            "Defensive Gust (Su): 30-ft. cone every 1d4 rounds; creatures take 4d6 bludgeoning damage and must succeed on a DC 21 Reflex save or be pushed 20 ft. and knocked prone. A successful save halves the damage and negates the movement."
+          ],
+          "specialQualities": ["Darkvision 60 ft.", "Low-light vision", "Hovering mastery", "Scent", "Wind stability", "Cold endurance", "Cannot be tripped while airborne"],
+          "saves": { "fortitude": "+13", "reflex": "+10", "will": "+8" },
+          "abilities": { "strength": "32", "dexterity": "15", "constitution": "20", "intelligence": "5", "wisdom": "15", "charisma": "13" },
+          "skills": ["Listen +13", "Spot +15", "Survival +12", "Swim +19"],
+          "feats": ["Endurance", "Flyby Attack", "Great Fortitude", "Iron Will", "Power Attack"],
+          "environment": "Open skies, cloud seas, stable aerial migration corridors",
+          "organization": "Solitary, pair, or young herd (3-12)",
+          "treasure": "None",
+          "advancement": "13-18 HD (Huge)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Avoids combat and uses Whale Song when curious or attempting to calm nearby creatures.",
+            "Uses Defensive Gust to clear space around itself before withdrawing upward.",
+            "A frightened herd can create repeated Massive Presence checks without deliberately attacking."
+          ],
+          "conversionNotes": [
+            "Converted from source abilities: Hovering, Massive Presence, Whale Song, Tail Slam, Bite, and Gust of Wind.",
+            "Fifth-edition charm language was converted to the d20 fascinated condition to preserve the non-hostile, trance-like presentation."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Skywhale (Young)", "chunkId": "kaysender-core-pdf-2025-01-20:young-skywhale" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Skywhale (Young)", "chunkId": "kaysender-core-pdf-2025-01-20:young-skywhale" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:young-skywhale"],
+      "tags": ["young Skywhale", "herd", "Whale Song", "gentle giant", "converted statistics"],
+      "relatedEntries": ["skywhales", "adult-skywhale", "skyflayer", "sky-maws"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "adult-skywhale",
+      "title": "Adult Skywhale",
+      "category": "Creatures",
+      "summary": "Solitary adult Skywhales are immensely strong, widely traveled, and sought for their understanding of the sky's rhythms, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Adults move through difficult weather with mastery and resist efforts to redirect or restrain them. Their calls inspire dread, while wing, tail, and tidal movements can reshape the immediate environment.",
+        "Sages treat their migrations as sacred journeys and believe their songs preserve memories of shattered continents and the Abyss. Most adults ignore lesser creatures unless threatened, obstructed, or defending a migration route."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "The source presents the adult as a Gargantuan behemoth with Tidal Call, exceptional aerial control, resistance to forced movement, three heavy natural attacks, and Tsunami Surge. This conversion preserves it as an environmental encounter as much as a combatant."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "adult-skywhale-statblock",
+          "title": "Adult Skywhale",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air, Water)",
+          "size": "Gargantuan",
+          "alignment": "Usually neutral",
+          "challengeRating": "14",
+          "experience": "38,400",
+          "hitDice": "20d10+160",
+          "hitPoints": "270 hp",
+          "initiative": "+3",
+          "speed": ["Fly 80 ft. (perfect; hover)", "Swim 60 ft."],
+          "armorClass": { "total": "29", "touch": "9", "flatFooted": "26", "notes": "-4 size, +3 Dex, +20 natural" },
+          "baseAttackGrapple": "+20/+47",
+          "attack": "Tail slam +31 melee (4d8+22)",
+          "fullAttack": "Tail slam +31 melee (4d8+22), bite +26 melee (3d8+7), and 2 wing buffets +26 melee (2d8+7)",
+          "spaceReach": "20 ft./20 ft. (30 ft. with tail)",
+          "specialAttacks": [
+            "Tidal Call (Su): Once every 1d4 rounds, the adult Skywhale releases a resonant call. Creatures within 600 ft. must succeed on a DC 25 Will save or become shaken for 2d6 rounds; creatures already shaken become frightened for 1d4 rounds. This is a sonic, mind-affecting fear effect.",
+            "Wing Buffet (Ex): A creature hit by a wing buffet must succeed on a DC 29 Reflex save or be pushed 30 ft. and knocked prone. Airborne creatures are instead forced 60 ft. away along the adult's chosen horizontal or downward vector.",
+            "Tsunami Surge (Su): 120-ft. line, 20 ft. wide, recharge 1d4 rounds; 12d6 bludgeoning damage, Reflex DC 29 half. Creatures that fail are pushed 40 ft. and knocked prone. Near a large body of water, the damage increases to 12d8 and the line becomes 30 ft. wide."
+          ],
+          "specialQualities": ["Darkvision 120 ft.", "Low-light vision", "Hovering mastery", "Scent", "Damage reduction 10/adamantine", "Resistance to cold 20", "Spell resistance 25", "Great behemoth", "Freedom of movement in wind and water"],
+          "saves": { "fortitude": "+20", "reflex": "+15", "will": "+14" },
+          "abilities": { "strength": "40", "dexterity": "17", "constitution": "26", "intelligence": "6", "wisdom": "20", "charisma": "16" },
+          "skills": ["Listen +23", "Spot +25", "Survival +23", "Swim +31"],
+          "feats": ["Awesome Blow", "Endurance", "Flyby Attack", "Great Fortitude", "Improved Bull Rush", "Iron Will", "Power Attack"],
+          "environment": "Deep cloud oceans, long-distance migration routes, aerial watersheds",
+          "organization": "Solitary, pair, or migration council (3 adults with 2-12 young)",
+          "treasure": "None; debris and offerings may collect along migration resting sites",
+          "advancement": "21-28 HD (Gargantuan)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Begins with Tidal Call to warn or scatter attackers rather than immediately killing them.",
+            "Uses Wing Buffet and Tsunami Surge to control approach lanes around vulnerable young or damaged travelers.",
+            "If seriously injured, climbs into dense cloud or descends toward water where its movement remains unhindered."
+          ],
+          "conversionNotes": [
+            "Converted from source abilities: Hovering Mastery, Tidal Call, Great Behemoth, Tail Slam, Bite, Wing Buffet, and Tsunami Surge.",
+            "Great Behemoth is represented through very high grapple resistance, freedom of movement in wind and water, damage reduction, and forced-movement control."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Skywhale (Adult)", "chunkId": "kaysender-core-pdf-2025-01-20:adult-skywhale" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Skywhale (Adult)", "chunkId": "kaysender-core-pdf-2025-01-20:adult-skywhale" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:adult-skywhale"],
+      "tags": ["adult Skywhale", "migration", "Tidal Call", "sky wisdom", "converted statistics"],
+      "relatedEntries": ["skywhales", "young-skywhale", "elder-skywhale", "the-shattering"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "elder-skywhale",
+      "title": "Elder Skywhale",
+      "category": "Creatures",
+      "summary": "Ancient Elder Skywhales are living legends believed to guard balance between the sky and the Abyss, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Their presence carries an aura of age, power, and wisdom. Songs may place listeners into profound trances, while their movement can produce world-shaking surges of air and water.",
+        "Many cultures regard elders as celestial protectors who guide lost ships and calm dangerous winds. Draconic factions sometimes view them as unnatural rivals placed by higher powers."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "The source presents the elder as a Colossal legendary creature with Elder's Presence, legendary resistance, broad damage resistance, enormous natural attacks, Tsunami Surge, and a mile-reaching trance song. This conversion treats the elder as an epic environmental guardian whose abilities can affect fleets and migration corridors."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "elder-skywhale-statblock",
+          "title": "Elder Skywhale",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air, Water)",
+          "size": "Colossal",
+          "alignment": "Usually neutral good",
+          "challengeRating": "22",
+          "experience": "614,400",
+          "hitDice": "32d10+320",
+          "hitPoints": "496 hp",
+          "initiative": "+4",
+          "speed": ["Fly 120 ft. (perfect; hover)", "Swim 90 ft."],
+          "armorClass": { "total": "38", "touch": "6", "flatFooted": "34", "notes": "-8 size, +4 Dex, +32 natural" },
+          "baseAttackGrapple": "+32/+68",
+          "attack": "Tail slam +45 melee (6d8+31)",
+          "fullAttack": "2 tail slams +45 melee (6d8+31), bite +40 melee (4d8+10), and 2 wing buffets +40 melee (4d6+10)",
+          "spaceReach": "30 ft./30 ft. (50 ft. with tail)",
+          "specialAttacks": [
+            "Elder's Presence (Su): Creatures with fewer than 16 HD that come within 300 ft. must succeed on a DC 32 Will save or become awed. Hostile creatures are shaken; non-hostile creatures take a -2 penalty on attacks and opposed checks against the elder. A creature that saves is immune for 24 hours. This is a mind-affecting effect.",
+            "World-Tide Surge (Su): 300-ft. line, 40 ft. wide, once every 1d4 rounds; 20d6 bludgeoning damage, Reflex DC 36 half. Failed saves also push creatures 100 ft., knock them prone, and extinguish nonmagical flames. Near a sea, lake, or major cloud-water mass, damage becomes 20d8.",
+            "Song of the Ages (Su): Twice per day as a full-round action, the elder sings across a 1-mile radius. Creatures that hear the song must succeed on a DC 32 Will save or enter a trance for 1d4+1 rounds, becoming fascinated and unable to take hostile actions. Damage ends the trance. The elder may exempt any creatures it chooses. This is a sonic, mind-affecting effect.",
+            "Wing Cataclysm (Ex): When the elder uses both wing buffets as part of a full attack, all Huge or smaller creatures within 60 ft. must succeed on a DC 36 Reflex save or be pushed 60 ft. and knocked prone, whether or not an attack hits."
+          ],
+          "specialQualities": ["Darkvision 150 ft.", "Low-light vision", "Hovering mastery", "Blindsight 120 ft.", "Damage reduction 20/epic and adamantine", "Resistance to acid 20, cold 30, electricity 20, and fire 20", "Spell resistance 34", "Fast healing 10", "Legendary resistance 3/day", "Freedom of movement", "Telepathy 300 ft. with creatures that understand Aquan or Celestial"],
+          "saves": { "fortitude": "+28", "reflex": "+22", "will": "+23" },
+          "abilities": { "strength": "52", "dexterity": "19", "constitution": "30", "intelligence": "10", "wisdom": "28", "charisma": "24" },
+          "skills": ["Knowledge (history) +22", "Knowledge (nature) +22", "Listen +39", "Sense Motive +29", "Spot +39", "Survival +39", "Swim +49"],
+          "feats": ["Awesome Blow", "Cleave", "Endurance", "Epic Fortitude", "Epic Will", "Flyby Attack", "Great Cleave", "Improved Bull Rush", "Improved Initiative", "Iron Will", "Power Attack"],
+          "environment": "Ancient migration routes, world-scale cloud oceans, boundaries above the Abyss",
+          "organization": "Solitary, guardian pair, or celestial migration (1 elder, 1-3 adults, and 4-20 young)",
+          "treasure": "None; cultures may leave major offerings along known elder routes",
+          "advancement": "33-48 HD (Colossal)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Attempts communication, warning, or Song of the Ages before lethal force unless protecting a migration or world-scale balance.",
+            "Uses World-Tide Surge against fleets, clustered dragons, or enemies threatening young Skywhales.",
+            "Relies on reach, forced movement, fast healing, and perfect flight rather than pursuing small individual targets."
+          ],
+          "conversionNotes": [
+            "Converted from source abilities: Elder's Presence, Legendary Resistance, Massive Form, Tail Slam, Bite, Wing Buffet, Tsunami Surge, and Whale Song.",
+            "The source's resistance to nearly all damage was translated into epic damage reduction, broad energy resistance, spell resistance, and fast healing rather than absolute immunity.",
+            "Song of the Ages preserves the source's mile-scale trance while using a d20-compatible fascination effect and explicit immunity window."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Skywhale (Elder)", "chunkId": "kaysender-core-pdf-2025-01-20:elder-skywhale" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Skywhale (Elder)", "chunkId": "kaysender-core-pdf-2025-01-20:elder-skywhale" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:elder-skywhale"],
+      "tags": ["elder Skywhale", "guardian", "celestial protector", "ancient song", "converted statistics"],
+      "relatedEntries": ["skywhales", "adult-skywhale", "the-abyss", "dragon-lords"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator", "world-map-route-generator"]
+    }
+  ]
+}
