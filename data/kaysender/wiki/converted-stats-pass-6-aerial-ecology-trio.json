@@ -1,0 +1,260 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.4.0",
+  "description": "Sixth converted statistics pass. Adds Hypertext d20-compatible creature stat blocks for Sheffels, Skyflayers, and Flufftrounces.",
+  "entries": [
+    {
+      "id": "sheffels-creature",
+      "title": "Sheffels",
+      "category": "Creatures",
+      "summary": "Large, placid herd animals drift through the skies and provide food, hide, transport, and livelihood to sky communities, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Sheffels are buoyant herd beasts adapted to open air and floating-island pasture. Their calm temperament permits domestication and aerial herding, while their bodies supply meat, milk, leather, and other necessities.",
+        "Though rarely aggressive, their mass, herd panic, and defensive shoulder rushes can endanger riders, airships, and exposed structures."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "Converted as a domesticated aerial livestock animal with herd panic, buoyant movement, and defensive trampling rather than as a combat predator."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "sheffel-statblock",
+          "title": "Sheffel",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Animal (Air)",
+          "size": "Large",
+          "alignment": "Always neutral",
+          "challengeRating": "3",
+          "experience": "800",
+          "hitDice": "6d8+24",
+          "hitPoints": "51 hp",
+          "initiative": "+1",
+          "speed": ["30 ft.", "Fly 50 ft. (average; hover only while lightly loaded)"],
+          "armorClass": { "total": "17", "touch": "10", "flatFooted": "16", "notes": "-1 size, +1 Dex, +7 natural" },
+          "baseAttackGrapple": "+4/+15",
+          "attack": "Headbutt +10 melee (1d8+7)",
+          "fullAttack": "Headbutt +10 melee (1d8+7) and 2 hoof kicks +5 melee (1d6+3)",
+          "spaceReach": "10 ft./5 ft.",
+          "specialAttacks": [
+            "Buoyant Rush (Ex): If a Sheffel flies at least 20 ft. in a straight line before making a headbutt, the attack deals 2d8+10 damage and the target must succeed on a DC 20 Reflex save or be pushed 10 ft.",
+            "Herd Panic (Ex): When a Sheffel within 60 ft. is frightened, reduced below half hit points, or killed, each other Sheffel in the herd must succeed on a DC 14 Will save or panic for 1d4 rounds. Panicked Sheffels flee along the herd's direction and make a trample attack against creatures in their path.",
+            "Trample (Ex): 1d8+10 damage, Reflex DC 20 half, against Medium or smaller creatures."
+          ],
+          "specialQualities": [
+            "Low-light vision",
+            "Scent",
+            "Aerial sure-footedness",
+            "Cold tolerance",
+            "Domesticated temperament",
+            "Load-bearing buoyancy"
+          ],
+          "saves": { "fortitude": "+9", "reflex": "+6", "will": "+3" },
+          "abilities": { "strength": "24", "dexterity": "13", "constitution": "19", "intelligence": "2", "wisdom": "13", "charisma": "7" },
+          "skills": ["Listen +7", "Spot +7", "Survival +5"],
+          "feats": ["Endurance", "Great Fortitude", "Run"],
+          "environment": "Floating-island pasture, open sky ranches, agricultural routes",
+          "organization": "Solitary, pair, herd (6-40), or managed drove (20-200)",
+          "treasure": "None",
+          "advancement": "7-10 HD (Large), 11-15 HD (Huge)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Avoids conflict and attempts to follow the herd or handler.",
+            "Uses Buoyant Rush only when cornered or protecting young.",
+            "The real threat in encounters is often herd panic near ships, cliffs, or crowded docks."
+          ],
+          "conversionNotes": [
+            "Converted from the source's aerial livestock role, placid temperament, and economic importance.",
+            "Designed to support herd, transport, ranching, and environmental encounters as well as combat."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Sheffels", "chunkId": "kaysender-core-pdf-2025-01-20:sheffels-creature" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Sheffels", "chunkId": "kaysender-core-pdf-2025-01-20:sheffels-creature" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:sheffels-creature"],
+      "tags": ["Sheffels", "herd animal", "livestock", "sky ecology", "converted statistics"],
+      "relatedEntries": ["sky-ecology", "foodways-of-kaysender", "minor-sky-island-contents"],
+      "relatedModules": ["sky-ecology-generator", "supply-water-planner"]
+    },
+    {
+      "id": "skyflayer",
+      "title": "Skyflayer",
+      "category": "Creatures",
+      "summary": "A feared aerial predator uses speed, concealment, and sudden attacks to hunt travelers and flying animals, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Skyflayers are legendary ambush hunters of the open air. They exploit clouds and poor visibility, striking isolated prey before withdrawing into the sky.",
+        "Their reputation makes sightings significant to pilots, herders, and settlements whose livestock graze beyond defended airspace."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "Converted as a high-speed aerial ambusher whose danger comes from concealment, isolation, and repeated diving attacks rather than prolonged toe-to-toe combat."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "skyflayer-statblock",
+          "title": "Skyflayer",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air)",
+          "size": "Huge",
+          "alignment": "Usually neutral evil",
+          "challengeRating": "10",
+          "experience": "9,600",
+          "hitDice": "15d10+75",
+          "hitPoints": "157 hp",
+          "initiative": "+7",
+          "speed": ["30 ft.", "Fly 160 ft. (good)"],
+          "armorClass": { "total": "25", "touch": "11", "flatFooted": "22", "notes": "-2 size, +3 Dex, +14 natural" },
+          "baseAttackGrapple": "+15/+35",
+          "attack": "Talon +25 melee (2d8+12)",
+          "fullAttack": "2 talons +25 melee (2d8+12) and bite +20 melee (2d6+6)",
+          "spaceReach": "15 ft./10 ft.",
+          "specialAttacks": [
+            "Cloud Ambush (Ex): While in cloud, fog, smoke, rain, or similarly obscured air, the Skyflayer may hide without cover and gains a +10 racial bonus on Hide checks. A target denied its Dexterity bonus to AC takes +4d6 damage from the Skyflayer's first successful attack.",
+            "Flaying Dive (Ex): If the Skyflayer descends at least 40 ft. before attacking, both talons deal double damage. If both hit the same target, the target must succeed on a DC 27 Fortitude save or take 1d4 Constitution damage from severe tearing wounds.",
+            "Snatch and Drop (Ex): Against Large or smaller targets, a successful talon hit permits a free grapple attempt. If the Skyflayer begins its turn airborne while holding a target, it may ascend up to half speed and release the target as a free action.",
+            "Predator's Shriek (Su): 90-ft. cone once every 1d4 rounds; creatures must succeed on a DC 21 Will save or become shaken for 1d6 rounds. Isolated creatures take a -4 penalty on this save."
+          ],
+          "specialQualities": [
+            "Darkvision 90 ft.",
+            "Low-light vision",
+            "Scent",
+            "Blindsense 30 ft.",
+            "Evasion",
+            "Wind stability",
+            "Cloud sight"
+          ],
+          "saves": { "fortitude": "+14", "reflex": "+12", "will": "+8" },
+          "abilities": { "strength": "34", "dexterity": "17", "constitution": "20", "intelligence": "5", "wisdom": "17", "charisma": "14" },
+          "skills": ["Hide +8 (+18 in obscured air)", "Listen +18", "Move Silently +18", "Spot +20", "Survival +13"],
+          "feats": ["Flyby Attack", "Hover", "Improved Initiative", "Multiattack", "Power Attack", "Snatch"],
+          "environment": "Cloud banks, isolated aerial routes, remote grazing skies",
+          "organization": "Solitary, hunting pair, or eclipse (3-5)",
+          "treasure": "Incidental remains and equipment carried from prey",
+          "advancement": "16-22 HD (Huge), 23-30 HD (Gargantuan)",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Stalks travelers from cloud cover and attacks the most isolated target.",
+            "Uses Flaying Dive, then climbs back into concealment rather than remaining in melee.",
+            "Carries vulnerable prey away from allies and drops heavily armored targets."
+          ],
+          "conversionNotes": [
+            "Converted from the source's speed, concealment, and sudden aerial attack identity.",
+            "Built to reward formation discipline and cloud visibility management."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Skyflayer", "chunkId": "kaysender-core-pdf-2025-01-20:skyflayer" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Creatures of the air / Skyflayer", "chunkId": "kaysender-core-pdf-2025-01-20:skyflayer" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:skyflayer"],
+      "tags": ["Skyflayer", "predator", "ambush", "cloud hunter", "converted statistics"],
+      "relatedEntries": ["sheffels-creature", "random-aerial-encounters", "sky-ecology"],
+      "relatedModules": ["sky-ecology-generator", "encounter-generator"]
+    },
+    {
+      "id": "flufftrounce",
+      "title": "Flufftrounce",
+      "category": "Creatures",
+      "summary": "A harmless winged rabbit-like creature disperses seeds and is valued as a companion and source of delicate fur, now with converted Hypertext d20-compatible statistics.",
+      "body": [
+        "Flufftrounces travel in small herds between islands, feeding on airborne plants, fruit, insects, and spores. Their buoyant wings and nervous bursts of speed make them difficult to catch.",
+        "Their fur leaves a drifting cloud, and their movements distribute plant life across isolated habitats."
+      ],
+      "sections": [
+        {
+          "heading": "Conversion posture",
+          "sectionType": "conversion-note",
+          "body": [
+            "Converted as a harmless evasive companion animal and ecological utility creature rather than a combatant."
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "id": "flufftrounce-statblock",
+          "title": "Flufftrounce",
+          "ruleset": "Hypertext d20 compatible",
+          "conversionStatus": "converted-hypertext-d20",
+          "statType": "creature",
+          "creatureType": "Magical Beast (Air)",
+          "size": "Tiny",
+          "alignment": "Always neutral",
+          "challengeRating": "1/4",
+          "experience": "100",
+          "hitDice": "1d10",
+          "hitPoints": "5 hp",
+          "initiative": "+5",
+          "speed": ["20 ft.", "Fly 50 ft. (perfect)"],
+          "armorClass": { "total": "19", "touch": "17", "flatFooted": "14", "notes": "+2 size, +5 Dex, +2 natural" },
+          "baseAttackGrapple": "+1/-10",
+          "attack": "Nibble +8 melee (1d2-3)",
+          "fullAttack": "Nibble +8 melee (1d2-3)",
+          "spaceReach": "2-1/2 ft./0 ft.",
+          "specialAttacks": [
+            "Startle Burst (Ex): When first threatened or when an adjacent creature makes a sudden loud noise, the Flufftrounce may immediately move up to half its fly speed without provoking attacks of opportunity. It may use this once per round.",
+            "Fur Cloud (Ex): Once per minute, the Flufftrounce may shed a 10-ft.-radius cloud of fine fur and spores lasting 1 round. Creatures inside gain concealment, but must succeed on a DC 11 Fortitude save or be dazzled for 1 round from sneezing and watery eyes."
+          ],
+          "specialQualities": [
+            "Low-light vision",
+            "Evasion",
+            "Hover",
+            "Seed carrier",
+            "Sure flight",
+            "Wild empathy affinity"
+          ],
+          "saves": { "fortitude": "+2", "reflex": "+7", "will": "+1" },
+          "abilities": { "strength": "5", "dexterity": "21", "constitution": "10", "intelligence": "4", "wisdom": "13", "charisma": "14" },
+          "skills": ["Escape Artist +11", "Hide +17", "Listen +5", "Move Silently +9", "Spot +5"],
+          "feats": ["Improved Initiative", "Weapon Finesse"],
+          "environment": "Flowering floating islands, orchard routes, quiet cloud meadows",
+          "organization": "Solitary, pair, or bounce (3-20)",
+          "treasure": "None",
+          "advancement": "2-3 HD (Tiny)",
+          "levelAdjustment": "+1 as an improved familiar or companion",
+          "tactics": [
+            "Avoids all combat and flees in unpredictable vertical bursts.",
+            "Uses Fur Cloud to break line of sight and hide among plants or rigging.",
+            "Domesticated individuals return to trusted handlers once danger passes."
+          ],
+          "conversionNotes": [
+            "Converted from the source's harmless aerial rabbit, evasive movement, fur cloud, and seed-dispersal role.",
+            "Suitable as an improved familiar, pet, ecological encounter, or low-stakes chase objective."
+          ],
+          "sourceRefs": [
+            { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Rabbit: Flufftrounce", "chunkId": "kaysender-core-pdf-2025-01-20:flufftrounce" }
+          ]
+        }
+      ],
+      "sourceStatus": "source-faithful",
+      "sourceRefs": [
+        { "sourceId": "kaysender-core-pdf-2025-01-20", "fileName": "Kaysender_ 5th edition D&D campaign Info.pdf", "outlineTitle": "Aerial Rabbit: Flufftrounce", "chunkId": "kaysender-core-pdf-2025-01-20:flufftrounce" }
+      ],
+      "sourceChunkIds": ["kaysender-core-pdf-2025-01-20:flufftrounce"],
+      "tags": ["Flufftrounce", "companion", "seed dispersal", "aerial rabbit", "converted statistics"],
+      "relatedEntries": ["aerial-flora", "sky-ecology"],
+      "relatedModules": ["sky-ecology-generator", "npc-crew-generator"]
+    }
+  ]
+}
