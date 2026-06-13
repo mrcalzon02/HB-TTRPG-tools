@@ -4,7 +4,7 @@
 
 The source document has **not** yet been fully exported to the wiki.
 
-The current wiki now has 59 registered source-lore passes, followed by eight converted-statistics passes. It still does not satisfy a strict one-to-one export standard in which every substantive source heading, named subject, rules subsystem, table, item, creature, location, organization, artifact, and legend is represented by either:
+The current wiki now has 60 registered source-lore passes, followed by eight converted-statistics passes. It still does not satisfy a strict one-to-one export standard in which every substantive source heading, named subject, rules subsystem, table, item, creature, location, organization, artifact, and legend is represented by either:
 
 - a dedicated full wiki entry;
 - a complete subsection inside an explicitly linked parent entry; or
@@ -14,7 +14,7 @@ The current wiki now has 59 registered source-lore passes, followed by eight con
 
 ### The Lost Continent of Azh'Thanar - completed in source-lore pass 59
 
-The final manuscript section has now been exported as a complete linked package rather than a short blurb:
+The final manuscript section has been exported as a complete linked package:
 
 - The Lost Continent of Azh'Thanar
 - The Primeval Beasts of Azh'Thanar
@@ -23,18 +23,27 @@ The final manuscript section has now been exported as a complete linked package 
 - The Suppressed Records of Azh'Thanar
 - Azh'Thanar Expedition Procedures
 
-The reader-facing entries are marked `source-faithful`. Added operating procedures, provisional ecological boundaries, investigation rules, and expedition mechanics are separately marked `setting-derived`.
+Reader-facing entries are marked `source-faithful`; added expedition, investigation, ruin-operation, and provisional ecological mechanics are marked `setting-derived`.
+
+### The Legend of Aelric Skywarden - completed in source-lore pass 60
+
+The two-page source legend has been exported as a complete linked package:
+
+- Aelric Skywarden, First Protector of the Light
+- King Aldric of the Skyrealm
+- The Aegis of Light
+- The Order of the Skywardens
+- The Worship of the Light
+- The Draconic Objection to Aelric's Light
+- Skywarden Abyss-Rescue Doctrine
+
+Aelric and King Aldric receive full setting-derived Hypertext d20-compatible NPC stat blocks. The Aegis includes activation, attunement, powers, limits, failure states, and maintenance. The Order includes membership, ranks, resources, response standards, and failure consequences. The rescue doctrine includes detection, fall arrest, stabilization, recovery, DCs, timing, and failure bands.
 
 ## Confirmed missing standalone source entries
 
-The following checked source headings still have no dedicated complete wiki export:
+The following checked source heading still has no dedicated complete wiki export:
 
-1. **The Legend of Aelric Skywarden: The First Protector of the Light**
-   - Requires a full NPC/legend entry.
-   - Any described relics, vows, abilities, institutions, opponents, or historical consequences must become linked entries where substantively distinct.
-   - Any creature or NPC mechanics must receive a full Hypertext d20-compatible stat block.
-
-2. **The Dwarven Lecture on Airflight**
+1. **The Dwarven Lecture on Airflight**
    - Requires a complete cultural and technical document.
    - The export must preserve its terminology, explanations, operating principles, examples, and any source mechanics.
    - Editor-facing operation must include checks, modifiers, timing, failure effects, and practical use rather than only summarizing dwarven attitudes toward flight.
@@ -89,7 +98,6 @@ Every new source export must meet these rules:
 
 ## Next export priority
 
-1. The Legend of Aelric Skywarden
-2. The Dwarven Lecture on Airflight
-3. A complete residual heading audit across all 392 source pages
-4. Table-by-table mechanics verification for classes, backgrounds, ships, equipment, crafting, tracking, fleet combat, organization management, training, escape, hazards, diseases, flora, and encounter systems
+1. The Dwarven Lecture on Airflight
+2. A complete residual heading audit across all 392 source pages
+3. Table-by-table mechanics verification for classes, backgrounds, ships, equipment, crafting, tracking, fleet combat, organization management, training, escape, hazards, diseases, flora, and encounter systems
