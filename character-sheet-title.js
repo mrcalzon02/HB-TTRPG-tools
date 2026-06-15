@@ -40,6 +40,19 @@
     input?.addEventListener('input', syncPrintTitle);
   }
 
+  function loadSpellGenerators() {
+    if (document.querySelector('script[data-spell-generators]')) return;
+    const script = document.createElement('script');
+    script.src = 'spell-generators.js';
+    script.defer = true;
+    script.dataset.spellGenerators = 'true';
+    document.body.appendChild(script);
+  }
+
   applyTitle();
-  document.addEventListener('DOMContentLoaded', applyTitle);
+  loadSpellGenerators();
+  document.addEventListener('DOMContentLoaded', () => {
+    applyTitle();
+    loadSpellGenerators();
+  });
 })();
