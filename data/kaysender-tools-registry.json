@@ -23,11 +23,11 @@
     {
       "id": "floating-island-generator",
       "section": "generators",
-      "title": "Floating Island Generator and Skyland Editor",
+      "title": "Floating Island Foundation Generator and Skyland Editor",
       "priority": 2,
-      "status": "editor-alpha",
-      "description": "Generates and edits detailed floating island profiles with stability, drift, water, food, ecology, faction, route, settlement, market, and encounter outputs.",
-      "dataFamilies": ["rollTable", "islandProfile", "hazardProfile", "resourceNode", "wikiDraft", "routeHook", "settlementHook"]
+      "status": "foundation-alpha",
+      "description": "Creates a quantitative, mappable floating-landmass foundation with exact dimensions, acreage, thickness, composition, floatstone content, minerals, water, terrain, wildlife, horizontal drift, altitude oscillation, chart reliability, settlement viability, criminal concealment value, regional map cells, and reserved insertion capacity for settlements, dungeons, ruins, wilderness landmarks, resource nodes, lairs, loot sites, wrecks, shrines, and hidden facilities.",
+      "dataFamilies": ["islandFoundationProfile", "geometryProfile", "compositionProfile", "motionProfile", "accessProfile", "resourceProfile", "ecologyProfile", "regionalMap", "siteSlotLedger", "settlementCapacity", "wikiDraft"]
     },
     {
       "id": "world-map-route-generator",
