@@ -151,9 +151,9 @@
       "section": "generators",
       "title": "NPC and Crew Generator",
       "priority": 16,
-      "status": "planned",
-      "description": "Creates ship crew, faction agents, shopkeepers, settlers, guides, engineers, captains, and specialists.",
-      "dataFamilies": ["npcProfile", "crewRole", "secretProfile", "statStub"]
+      "status": "alpha",
+      "description": "Creates individuals from broad civilian, age, trade, government, military, criminal, displaced, expedition, and airship-crew population bands using standard Hypertext d20-compatible player classes, standard NPC classes, and indexed Kaysender custom classes.",
+      "dataFamilies": ["npcProfile", "populationBand", "occupationProfile", "classProfile", "crewRole", "secretProfile", "statStub", "conversionNote"]
     },
     {
       "id": "job-board-generator",
