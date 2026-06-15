@@ -86,20 +86,20 @@
     {
       "id": "airship-core-builder",
       "section": "tools",
-      "title": "Airship Core and Construction Builder",
+      "title": "Airship Core and Ship Module Builder",
       "priority": 9,
-      "status": "planned",
-      "description": "Framework for building Dwarven, Elven, Dragon Kin, Gnomish, and Human hybrid airship cores.",
-      "dataFamilies": ["itemRecipe", "coreProfile", "maintenanceProfile", "failureTable"]
+      "status": "alpha",
+      "description": "Generates Hypertext d20-compatible hull, control, weather, cargo, life-support, navigation, communication, medical, boarding, emergency, weapon, defense, propulsion, and core projects with labor, price, material, maintenance, flaw, testing, and installation profiles.",
+      "dataFamilies": ["craftingProject", "shipModuleRecipe", "coreProfile", "moduleSlot", "constructionSimulation", "maintenanceProfile", "failureTable", "wikiDraft"]
     },
     {
       "id": "crafting-gadget-creator",
       "section": "tools",
       "title": "Crafting, Gadget, and Equipment Creator",
       "priority": 10,
-      "status": "planned",
-      "description": "Creates potions, alchemical oils, weather gear, communication devices, ship gadgets, and survival devices.",
-      "dataFamilies": ["itemRecipe", "materialTag", "craftDifficulty", "rulesConversionNote"]
+      "status": "alpha",
+      "description": "Generates Hypertext d20-compatible personal equipment, survival devices, technical tools, communication systems, alchemical devices, weapons, armor upgrades, crew equipment, and ship systems using the converted invention complexity, work-unit, material-quality, flaw, testing, and improvement rules.",
+      "dataFamilies": ["craftingProject", "equipmentRecipe", "materialTag", "powerSource", "craftDifficulty", "workUnitLedger", "constructionSimulation", "flawProfile", "improvementProfile", "wikiDraft"]
     },
     {
       "id": "supply-water-planner",
