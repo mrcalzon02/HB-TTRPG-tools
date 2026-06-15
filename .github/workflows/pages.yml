@@ -24,6 +24,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate crafting generator data
+        run: node scripts/validate-crafting-data.mjs
+
+      - name: Check generator JavaScript syntax
+        run: |
+          node --check kaysender-crafting-generator.js
+          node --check kaysender-npc-generator.js
+          node --check spell-generators.js
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
