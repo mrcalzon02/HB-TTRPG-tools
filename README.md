@@ -25,6 +25,7 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `data/kaysender/generators/crafting/equipment-templates.json` — personal equipment, technical devices, survival gear, weapons, and armor-upgrade patterns.
 - `data/kaysender/generators/crafting/ship-module-templates.json` — airship hull, support, navigation, weapon, defense, propulsion, and core patterns.
 - `data/kaysender/generators/crafting/crafting-modifiers.json` — manufacturers, materials, power sources, legality, flaws, improvements, and complications.
+- `data/kaysender/schemas/crafting-project.schema.json` — schema for exported crafting projects and later editor imports.
 - `data/kaysender/wiki/wiki-index.json` — multi-pack wiki loader index.
 - `data/kaysender/wiki/entries.json` — seed Kaysender wiki entries with related-entry and related-module links.
 - `data/kaysender/wiki/*-depth.json` — deeper source-derived wiki packs for world, peoples, nations, factions/economy, and airships.
@@ -35,10 +36,11 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `data/kaysender/schemas/floating-island-profile.schema.json` — schema for generated floating island profiles.
 - `data/kaysender/schemas/settlement-profile.schema.json` — schema for generated settlement profiles.
 - `data/kaysender/schemas/airship-profile.schema.json` — schema for generated airship profiles.
+- `scripts/validate-crafting-data.mjs` — dependency-free validator for crafting manifests, template IDs, modes, scales, complexities, materials, power sources, and required fields.
 - `docs/kaysender-tool-extraction.md` — first extraction framework for converting Kaysender into Hypertext d20-compatible campaign utilities.
 - `docs/kaysender-editor-staging-plan.md` — sequential plan for building one detailed editor at a time.
 - `docs/deployment.md` — GitHub Pages deployment and smoke-test guide.
-- `.github/workflows/pages.yml` — optional GitHub Pages deployment workflow.
+- `.github/workflows/pages.yml` — GitHub Pages deployment workflow with crafting-data and generator-syntax validation.
 
 ## First included utility
 
@@ -98,12 +100,12 @@ It draws from eleven standard player classes, five standard NPC classes, and the
 
 ### Crafting, Equipment, and Ship Systems Generator
 
-The crafting engine currently contains 42 reusable project patterns:
+The crafting engine currently contains 43 reusable project patterns:
 
 - 19 personal-equipment, survival, technical, communication, medical, weapon, and armor patterns
 - 13 general ship-module patterns
 - 5 ship-weapon and defense patterns
-- 5 airship-core patterns
+- 6 airship-core patterns
 
 Generated projects include:
 
@@ -165,7 +167,7 @@ Then open `http://localhost:8000/`.
 
 ## GitHub Pages
 
-This repo includes a Pages workflow. Once GitHub Pages is enabled for the repository using GitHub Actions as the source, pushes to `main` will publish the static site.
+This repo includes a Pages workflow. Once GitHub Pages is enabled for the repository using GitHub Actions as the source, pushes to `main` will validate and publish the static site.
 
 See `docs/deployment.md` for deployment and smoke-test steps.
 
