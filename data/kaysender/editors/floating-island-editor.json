@@ -1,445 +1,83 @@
 {
   "id": "floating-island-editor",
-  "title": "Floating Island / Skyland Editor",
+  "title": "Floating Island / Skyland Foundation Editor",
   "stage": 1,
-  "status": "editor-alpha",
-  "purpose": "Create a detailed Kaysender skyland profile that can feed settlements, routes, markets, airships, ecology, factions, encounters, and wiki entries.",
+  "status": "foundation-alpha",
+  "purpose": "Create a quantitative, mappable floating-landmass foundation with exact dimensions, composition, motion, settlement viability, ecology, resources, and reserved adventure-site capacity.",
   "sourceThemes": [
-    "Floating continents, islands, and landmasses drift unpredictably and can separate settlements or destroy routes.",
-    "Natural water is scarce in the open sky; rain capture, cloud dew, cisterns, magical storage, and water trade matter.",
-    "Sky ecology includes creatures, materials, magical oils, rare feathers, predators, herds, and disease risk.",
-    "Different peoples adapt to instability through fortification, mobility, magic, engineering, trade networks, or survival craft.",
-    "Settlements must be judged by stability, water, food, route access, defense, faction pressure, and crisis state."
+    "Floating landmasses range from loose floatstone debris to minor floating subcontinents.",
+    "Horizontal position, average altitude, vertical oscillation, fracture risk, and route reliability are separate characteristics.",
+    "Flat fertile ground is valuable only when stability, water, altitude behavior, and access allow sustained use.",
+    "Unreliable position or altitude can reduce settlement value while increasing concealment and criminal utility.",
+    "A useful generated island must provide measurable room for settlements, dungeons, wilderness sites, resources, lairs, loot, and future adventures."
   ],
   "controls": [
-    {
-      "id": "name",
-      "label": "Island Name",
-      "type": "text",
-      "default": "Unnamed Skyland"
-    },
-    {
-      "id": "islandRole",
-      "label": "Primary Role",
-      "type": "select",
-      "default": "frontier settlement base",
-      "options": [
-        "frontier settlement base",
-        "water source island",
-        "trade-route waypoint",
-        "ruined city fragment",
-        "dragon tithe holding",
-        "pirate hideout",
-        "guild survey claim",
-        "skybeast nesting ground",
-        "mining and quarry island",
-        "pilgrimage refuge",
-        "military watch island",
-        "abandoned disaster site"
-      ]
-    },
-    {
-      "id": "sizeClass",
-      "label": "Size Class",
-      "type": "select",
-      "default": "village-scale island",
-      "options": [
-        "tiny rocklet",
-        "small pasture isle",
-        "village-scale island",
-        "township island",
-        "fortress island",
-        "city-bearing island",
-        "large regional island",
-        "minor floating continent"
-      ]
-    },
-    {
-      "id": "altitudeBand",
-      "label": "Altitude Band",
-      "type": "select",
-      "default": "trade-wind layer",
-      "options": [
-        "low mist belt",
-        "trade-wind layer",
-        "storm edge",
-        "high bright air",
-        "dragon-route altitude",
-        "abyss-shadowed undercurrent"
-      ]
-    },
-    {
-      "id": "stabilityClass",
-      "label": "Stability",
-      "type": "select",
-      "default": "mostly stable",
-      "options": [
-        "actively crumbling",
-        "fracture-prone",
-        "seasonally unstable",
-        "mostly stable",
-        "anchored by old magic",
-        "engineered stabilization",
-        "geologically stubborn"
-      ]
-    },
-    {
-      "id": "driftPattern",
-      "label": "Drift Pattern",
-      "type": "select",
-      "default": "slow predictable drift",
-      "options": [
-        "fixed relative position",
-        "slow predictable drift",
-        "seasonal migration",
-        "storm-driven drift",
-        "erratic wandering",
-        "split-chain drift",
-        "recently detached",
-        "being pulled by unknown force"
-      ]
-    },
-    {
-      "id": "anchorStatus",
-      "label": "Anchor / Stabilizer Status",
-      "type": "select",
-      "default": "natural anchor veins",
-      "options": [
-        "none",
-        "natural anchor veins",
-        "ancient magical anchor",
-        "dwarven foundation works",
-        "human engineered stabilizers",
-        "gnomish gyro-anchor",
-        "elven living root network",
-        "dragon-bound territorial magic",
-        "failing unknown mechanism"
-      ]
-    },
-    {
-      "id": "terrainCore",
-      "label": "Terrain Core",
-      "type": "select",
-      "default": "terraced farms and wind-cut cliffs",
-      "options": [
-        "terraced farms and wind-cut cliffs",
-        "craggy skystone ridges",
-        "fungal cloud forest",
-        "arid scrub plateau",
-        "sheffel pastureland",
-        "ruined streets and broken towers",
-        "crystal gullies",
-        "jungle canopy with hidden water",
-        "quarry pits and mine scars",
-        "storm-polished mesas",
-        "sacred stone rings",
-        "wreck-strewn salvage fields"
-      ]
-    },
-    {
-      "id": "waterProfile",
-      "label": "Water Profile",
-      "type": "select",
-      "default": "rain cisterns and rationing",
-      "options": [
-        "no reliable water",
-        "rain cisterns and rationing",
-        "cloud dew collectors",
-        "hidden spring",
-        "contested freshwater source",
-        "tainted reservoir",
-        "enchanted water storage",
-        "water-export economy",
-        "import dependent",
-        "recently lost water source"
-      ]
-    },
-    {
-      "id": "foodProfile",
-      "label": "Food Profile",
-      "type": "select",
-      "default": "barely self-sufficient farms",
-      "options": [
-        "starvation risk",
-        "barely self-sufficient farms",
-        "sheffel herds",
-        "airfruit orchards",
-        "skygrain terraces",
-        "import dependent",
-        "hunting and gathering",
-        "fungal cultivation",
-        "seasonal surplus",
-        "crop disease outbreak"
-      ]
-    },
-    {
-      "id": "primaryResource",
-      "label": "Primary Resource",
-      "type": "select",
-      "default": "skystone",
-      "options": [
-        "skystone",
-        "freshwater",
-        "airship timber",
-        "levitation salts",
-        "rare feathers",
-        "magical oils",
-        "arcane moss",
-        "ore veins",
-        "ancient salvage",
-        "alchemical herbs",
-        "sheffel wool",
-        "strategic route position"
-      ]
-    },
-    {
-      "id": "ecologyPressure",
-      "label": "Ecology Pressure",
-      "type": "select",
-      "default": "manageable skybeast migration",
-      "options": [
-        "quiet and overhunted",
-        "manageable skybeast migration",
-        "predator nesting territory",
-        "valuable material-producing creatures",
-        "disease-bearing herds",
-        "weather-shaping entities nearby",
-        "sacred or taboo ecology",
-        "invasive creature bloom",
-        "skywhale migration lane",
-        "Grays activity reports"
-      ]
-    },
-    {
-      "id": "settlementFootprint",
-      "label": "Settlement Footprint",
-      "type": "select",
-      "default": "small fortified village",
-      "options": [
-        "none",
-        "temporary camp",
-        "small fortified village",
-        "freeholder town",
-        "guild extraction camp",
-        "dragon-tithed hamlet",
-        "pirate dockworks",
-        "pilgrim enclave",
-        "military watchpost",
-        "crowded city district",
-        "evacuated ruins"
-      ]
-    },
-    {
-      "id": "factionPressure",
-      "label": "Faction Pressure",
-      "type": "select",
-      "default": "merchant guild interest",
-      "options": [
-        "none obvious",
-        "merchant guild interest",
-        "Surveyor's Guild claim",
-        "Skyweaver Consortium contract",
-        "Black Fleet intimidation",
-        "Dragon Lord tribute demand",
-        "Free Sky Brotherhood cell",
-        "local militia power struggle",
-        "religious claim",
-        "criminal smuggling route",
-        "rival settlement dispute"
-      ]
-    },
-    {
-      "id": "culturalAdaptation",
-      "label": "Dominant Adaptation Style",
-      "type": "select",
-      "default": "mixed frontier adaptation",
-      "options": [
-        "dwarven reinforced foundations",
-        "dragon kin high-defense dominion",
-        "lizardfolk mobile survival camps",
-        "human engineered stabilizers",
-        "elven living-root wards",
-        "gnomish machine-anchor systems",
-        "halfling caravan-market flexibility",
-        "mixed frontier adaptation",
-        "pirate salvage pragmatism",
-        "religious refuge discipline"
-      ]
-    },
-    {
-      "id": "routeAccess",
-      "label": "Route Access",
-      "type": "select",
-      "default": "known but risky trade approach",
-      "options": [
-        "easy marked approach",
-        "known but risky trade approach",
-        "requires local pilot",
-        "storm-blocked approach",
-        "dragon-patrolled airspace",
-        "pirate-observed corridor",
-        "hidden approach only",
-        "moving too fast for old charts",
-        "dock access damaged",
-        "no safe landing zone"
-      ]
-    },
-    {
-      "id": "threatClock",
-      "label": "Current Threat Clock",
-      "type": "select",
-      "default": "water stores are low",
-      "options": [
-        "water stores are low",
-        "island fracture is spreading",
-        "storm season begins soon",
-        "dragon tithe collector is inbound",
-        "pirates have marked the route",
-        "disease is moving through herds",
-        "anchor system is failing",
-        "settlement leadership is splitting",
-        "market prices are spiraling",
-        "survey crew vanished nearby",
-        "skybeasts are nesting in the docks",
-        "old ruin has awakened"
-      ]
-    }
+    {"id":"name","label":"Island Name","type":"text","default":"Unnamed Skyland"},
+    {"id":"sizeClass","label":"Landmass Size Class","type":"select","default":"village island","options":["loose floatstone ore cluster","debris raft","rocklet","small isle","village island","township island","fortress island","city-bearing island","regional island","minor floating subcontinent"]},
+    {"id":"shapeProfile","label":"Overall Shape","type":"select","default":"irregular oval","options":["loose cluster","narrow shard","irregular oval","broad tabular plateau","crescent shelf","split twin-mass","terraced cone","ring island","long ridge","fractured archipelago"]},
+    {"id":"lengthKm","label":"Maximum Length (km)","type":"number","default":4,"min":0.05,"max":900,"step":0.05},
+    {"id":"widthKm","label":"Maximum Width (km)","type":"number","default":2.5,"min":0.05,"max":600,"step":0.05},
+    {"id":"meanThicknessM","label":"Mean Thickness (m)","type":"number","default":180,"min":2,"max":12000,"step":1},
+    {"id":"usableSurfacePercent","label":"Usable Surface (%)","type":"number","default":62,"min":0,"max":100,"step":1},
+    {"id":"flatlandPercent","label":"Flat or Gently Sloped Surface (%)","type":"number","default":38,"min":0,"max":100,"step":1},
+    {"id":"arableSoilPercent","label":"Arable Soil within Usable Surface (%)","type":"number","default":34,"min":0,"max":100,"step":1},
+    {"id":"baseRockPercent","label":"Ordinary Rock (%)","type":"number","default":45,"min":0,"max":100,"step":1},
+    {"id":"floatstonePercent","label":"Floatstone-bearing Material (%)","type":"number","default":30,"min":0,"max":100,"step":1},
+    {"id":"soilPercent","label":"Soil and Sediment (%)","type":"number","default":15,"min":0,"max":100,"step":1},
+    {"id":"cavernVoidPercent","label":"Caverns and Internal Voids (%)","type":"number","default":10,"min":0,"max":80,"step":1},
+    {"id":"structuralIntegrity","label":"Structural Integrity","type":"select","default":"stable with local faults","options":["loose unbound fragments","actively crumbling","fracture-prone","seasonally stressed","stable with local faults","geologically stable","exceptionally coherent","artificially reinforced"]},
+    {"id":"fractureRate","label":"Estimated Surface Loss per Century (%)","type":"number","default":1.5,"min":0,"max":100,"step":0.1},
+    {"id":"meanAltitudeM","label":"Mean Altitude above Reference Layer (m)","type":"number","default":3200,"min":-5000,"max":50000,"step":50},
+    {"id":"verticalOscillationM","label":"Vertical Oscillation Range ± (m)","type":"number","default":80,"min":0,"max":10000,"step":10},
+    {"id":"oscillationPeriodHours","label":"Vertical Oscillation Period (hours)","type":"number","default":36,"min":0.25,"max":8760,"step":0.25},
+    {"id":"altitudePredictability","label":"Altitude Predictability","type":"select","default":"predictable cycle","options":["fixed altitude","predictable cycle","seasonally predictable","weather-sensitive","irregular oscillation","violent altitude surges","unknown pattern"]},
+    {"id":"horizontalDriftKpd","label":"Average Horizontal Drift (km/day)","type":"number","default":2,"min":0,"max":500,"step":0.1},
+    {"id":"driftPredictability","label":"Horizontal Drift Predictability","type":"select","default":"charted seasonal route","options":["fixed relative position","precisely charted drift","charted seasonal route","weather-dependent route","loosely predictable wandering","erratic wandering","frequent course reversal","unknown external pull"]},
+    {"id":"nearestCivilizationKm","label":"Distance to Nearest Civilization (km)","type":"number","default":180,"min":0,"max":20000,"step":5},
+    {"id":"routeTraffic","label":"Nearby Route Traffic","type":"select","default":"occasional traffic","options":["major established route","regular regional traffic","occasional traffic","rare survey traffic","uncharted frontier","deliberately avoided region","secret or criminal corridor"]},
+    {"id":"chartQuality","label":"Current Chart Reliability","type":"select","default":"usable with corrections","options":["survey-grade coordinates","reliable seasonal charts","usable with corrections","outdated charts","contradictory reports","rumor only","deliberately falsified"]},
+    {"id":"approachProfile","label":"Approach and Landing","type":"select","default":"two reliable approaches","options":["many safe approaches","two reliable approaches","one narrow approach","requires local pilot","storm-shear approach","no natural landing shelf","underside access only","moving rendezvous required"]},
+    {"id":"waterProfile","label":"Water Availability","type":"select","default":"rain capture and small springs","options":["none","seasonal rain only","rain capture and small springs","reliable spring network","lake or deep reservoir","abundant river system","tainted water system","magically sustained water","import dependent"]},
+    {"id":"annualRainfallMm","label":"Annual Rainfall Equivalent (mm)","type":"number","default":780,"min":0,"max":12000,"step":10},
+    {"id":"primaryTerrain","label":"Primary Surface Terrain","type":"select","default":"mixed plateau and ridges","options":["bare floatstone debris","broken cliffs","mixed plateau and ridges","broad arable plateau","terraced hills","forest canopy","fungal cloud forest","arid scrub","wetland basins","ruined urban surface","mining scarlands","glacial surface"]},
+    {"id":"secondaryTerrain","label":"Secondary Terrain","type":"select","default":"wind-cut ravines","options":["none","wind-cut ravines","cliff shelves","sinkholes and caverns","old ruins","forest belts","pasture","crystal gullies","river valleys","wreck fields","volcanic vents","unstable edge fields"]},
+    {"id":"mineralPresence","label":"Mineral Presence","type":"select","default":"mixed useful deposits","options":["negligible","common stone only","mixed useful deposits","rich iron and base metals","precious-metal veins","floatstone ore concentration","crystal and arcane mineral field","industrial salts and alchemical minerals","ancient worked mine network"]},
+    {"id":"mineralAccessibility","label":"Mineral Accessibility","type":"select","default":"requires ordinary mining","options":["surface exposed","shallow quarrying","requires ordinary mining","deep and dangerous","inside unstable underside","contested by wildlife","sealed behind ruins"]},
+    {"id":"vegetationCoverPercent","label":"Vegetation Cover (%)","type":"number","default":48,"min":0,"max":100,"step":1},
+    {"id":"wildlifeDensity","label":"Wildlife Density","type":"select","default":"established ecosystem","options":["nearly sterile","sparse pioneer species","limited ecosystem","established ecosystem","rich biodiversity","overcrowded migration stop","apex-predator dominated","magically unstable ecology"]},
+    {"id":"dominantWildlife","label":"Dominant Wildlife","type":"select","default":"mixed small sky fauna","options":["none","Gray blooms and plankton","mixed small sky fauna","sheffel-compatible grazers","large herd animals","predatory flyers","skywhale-associated ecology","burrowing cavern fauna","ruin-adapted creatures","magical weather entities"]},
+    {"id":"existingPopulation","label":"Existing Permanent Population","type":"number","default":850,"min":0,"max":5000000,"step":1},
+    {"id":"currentUse","label":"Current Primary Use","type":"select","default":"frontier settlement","options":["unclaimed wilderness","frontier settlement","agricultural colony","mining claim","trade waypoint","military position","religious sanctuary","criminal hideout","pirate harbor","ruin expedition base","wildlife preserve","abandoned disaster site"]},
+    {"id":"knownDungeonCount","label":"Known Dungeon or Ruin Sites","type":"number","default":2,"min":0,"max":500,"step":1},
+    {"id":"hiddenSiteDensity","label":"Hidden Site Density","type":"select","default":"several plausible sites","options":["none expected","one isolated secret","several plausible sites","dense layered history","ruin-saturated landscape","mostly unexplored"]},
+    {"id":"mapGridScale","label":"Foundation Map Grid","type":"select","default":"12 x 8 regional cells","options":["6 x 4 coarse cells","8 x 6 standard cells","12 x 8 regional cells","16 x 12 detailed cells","24 x 16 campaign cells"]}
   ],
-  "scoring": {
-    "habitability": {
-      "waterProfile": {
-        "no reliable water": -4,
-        "recently lost water source": -4,
-        "import dependent": -3,
-        "tainted reservoir": -2,
-        "rain cisterns and rationing": 0,
-        "cloud dew collectors": 1,
-        "hidden spring": 3,
-        "contested freshwater source": 1,
-        "enchanted water storage": 2,
-        "water-export economy": 4
-      },
-      "foodProfile": {
-        "starvation risk": -4,
-        "crop disease outbreak": -3,
-        "import dependent": -2,
-        "barely self-sufficient farms": 0,
-        "hunting and gathering": 0,
-        "fungal cultivation": 1,
-        "sheffel herds": 2,
-        "airfruit orchards": 2,
-        "skygrain terraces": 2,
-        "seasonal surplus": 3
-      },
-      "stabilityClass": {
-        "actively crumbling": -4,
-        "fracture-prone": -3,
-        "seasonally unstable": -1,
-        "mostly stable": 1,
-        "anchored by old magic": 2,
-        "engineered stabilization": 2,
-        "geologically stubborn": 3
-      }
-    },
-    "routeValue": {
-      "islandRole": {
-        "trade-route waypoint": 4,
-        "water source island": 3,
-        "guild survey claim": 3,
-        "military watch island": 2,
-        "mining and quarry island": 2,
-        "frontier settlement base": 1,
-        "pirate hideout": 1,
-        "ruined city fragment": 1,
-        "dragon tithe holding": 1,
-        "pilgrimage refuge": 1,
-        "skybeast nesting ground": 0,
-        "abandoned disaster site": -1
-      },
-      "primaryResource": {
-        "freshwater": 5,
-        "strategic route position": 4,
-        "skystone": 3,
-        "levitation salts": 3,
-        "magical oils": 3,
-        "airship timber": 2,
-        "rare feathers": 2,
-        "ore veins": 2,
-        "ancient salvage": 2,
-        "alchemical herbs": 2,
-        "sheffel wool": 1,
-        "arcane moss": 1
-      },
-      "routeAccess": {
-        "easy marked approach": 3,
-        "known but risky trade approach": 1,
-        "requires local pilot": 0,
-        "hidden approach only": 0,
-        "moving too fast for old charts": -1,
-        "dock access damaged": -2,
-        "storm-blocked approach": -3,
-        "dragon-patrolled airspace": -3,
-        "pirate-observed corridor": -3,
-        "no safe landing zone": -4
-      }
-    },
-    "conflictPressure": {
-      "factionPressure": {
-        "none obvious": 0,
-        "merchant guild interest": 1,
-        "Surveyor's Guild claim": 1,
-        "Skyweaver Consortium contract": 1,
-        "religious claim": 2,
-        "local militia power struggle": 3,
-        "rival settlement dispute": 3,
-        "criminal smuggling route": 4,
-        "Black Fleet intimidation": 5,
-        "Dragon Lord tribute demand": 5,
-        "Free Sky Brotherhood cell": 3
-      },
-      "threatClock": {
-        "water stores are low": 2,
-        "island fracture is spreading": 4,
-        "storm season begins soon": 2,
-        "dragon tithe collector is inbound": 5,
-        "pirates have marked the route": 5,
-        "disease is moving through herds": 3,
-        "anchor system is failing": 4,
-        "settlement leadership is splitting": 3,
-        "market prices are spiraling": 2,
-        "survey crew vanished nearby": 3,
-        "skybeasts are nesting in the docks": 3,
-        "old ruin has awakened": 4
-      }
-    }
+  "sizePresets": {
+    "loose floatstone ore cluster":{"lengthKm":[0.05,0.3],"widthKm":[0.03,0.2],"thicknessM":[2,18],"usableSurfacePercent":[0,10]},
+    "debris raft":{"lengthKm":[0.2,0.8],"widthKm":[0.1,0.6],"thicknessM":[5,35],"usableSurfacePercent":[5,25]},
+    "rocklet":{"lengthKm":[0.5,1.5],"widthKm":[0.3,1.1],"thicknessM":[20,90],"usableSurfacePercent":[15,45]},
+    "small isle":{"lengthKm":[1,4],"widthKm":[0.7,3],"thicknessM":[50,220],"usableSurfacePercent":[25,65]},
+    "village island":{"lengthKm":[3,9],"widthKm":[2,7],"thicknessM":[100,450],"usableSurfacePercent":[35,75]},
+    "township island":{"lengthKm":[8,22],"widthKm":[5,16],"thicknessM":[180,800],"usableSurfacePercent":[40,80]},
+    "fortress island":{"lengthKm":[6,20],"widthKm":[4,14],"thicknessM":[250,1200],"usableSurfacePercent":[25,65]},
+    "city-bearing island":{"lengthKm":[18,55],"widthKm":[12,40],"thicknessM":[300,1800],"usableSurfacePercent":[45,85]},
+    "regional island":{"lengthKm":[50,180],"widthKm":[30,120],"thicknessM":[600,4000],"usableSurfacePercent":[45,90]},
+    "minor floating subcontinent":{"lengthKm":[180,900],"widthKm":[100,600],"thicknessM":[1200,12000],"usableSurfacePercent":[55,95]}
   },
-  "outputTemplates": {
-    "summary": "{name} is a {sizeClass} serving as a {islandRole}. It sits in the {altitudeBand}, with {stabilityClass} stability, {driftPattern}, and {anchorStatus}. Its terrain is defined by {terrainCore}. Water access is {waterProfile}; food support is {foodProfile}; the main valuable resource is {primaryResource}.",
-    "gmNoteTemplates": [
-      "Treat this island as a {islandRole} with {factionPressure}; the island's immediate clock is that {threatClock}.",
-      "The dominant adaptation style is {culturalAdaptation}, which should influence architecture, NPC attitudes, repair methods, and crisis response.",
-      "Route access is {routeAccess}; any airship approach should reflect this in costs, delays, pilot requirements, or encounter risk.",
-      "Ecology pressure is {ecologyPressure}; use this to seed encounters, materials, disease risk, local taboos, or trade goods."
-    ],
-    "settlementHooks": [
-      "The settlement footprint is {settlementFootprint}; decide who controls landing rights, water access, and emergency shelters.",
-      "If the island remains inhabited, its leaders must solve {waterProfile}, {foodProfile}, and {threatClock} before the next route cycle.",
-      "The island's construction style should reflect {culturalAdaptation} and {anchorStatus}."
-    ],
-    "routeHooks": [
-      "Route charts should flag this location as {routeAccess} with {driftPattern}.",
-      "Airship captains care about this island because of {primaryResource}, {waterProfile}, and its role as {islandRole}.",
-      "The next route complication should involve {threatClock}."
-    ],
-    "marketHooks": [
-      "Market pressure should center on {primaryResource}, {waterProfile}, and {foodProfile}.",
-      "If traders arrive, the first dispute should involve {factionPressure} or control of docking access.",
-      "Scarcity pricing should increase if {routeAccess} or {threatClock} worsen."
-    ],
-    "encounterHooks": [
-      "An encounter can begin when {threatClock}. The opposition may be tied to {factionPressure}.",
-      "Use {ecologyPressure} to create a non-humanoid pressure before adding pirates, dragons, or guild agents.",
-      "The terrain encounter map should emphasize {terrainCore}, {altitudeBand}, and the consequences of {stabilityClass}."
-    ]
+  "mapGridPresets": {
+    "6 x 4 coarse cells":[6,4],"8 x 6 standard cells":[8,6],"12 x 8 regional cells":[12,8],"16 x 12 detailed cells":[16,12],"24 x 16 campaign cells":[24,16]
+  },
+  "terrainPalette": ["plateau","ridge","ravine","cliff shelf","forest","scrub","pasture","wet basin","ruins","quarry","cavern mouth","unstable edge"],
+  "siteTypes": ["settlement","dungeon","ruin","wilderness landmark","resource node","creature lair","loot site","hidden facility","shrine","wreck","cave system","watchpoint"],
+  "mineralCatalog": {
+    "negligible":[],
+    "common stone only":["building stone","gravel","clay pockets"],
+    "mixed useful deposits":["iron","copper","tin","coal-like fuel stone","limestone"],
+    "rich iron and base metals":["high-grade iron","copper","lead","zinc","nickel"],
+    "precious-metal veins":["silver","gold","electrum","gem-bearing quartz"],
+    "floatstone ore concentration":["floatstone ore","levitation salts","light crystal","anchor stone"],
+    "crystal and arcane mineral field":["aether crystal","spell quartz","resonance crystal","wardstone"],
+    "industrial salts and alchemical minerals":["levitation salts","sulfur","nitrates","alchemical clay","purification mineral"],
+    "ancient worked mine network":["worked iron seams","sealed precious-metal galleries","unknown alloy deposits","abandoned floatstone shafts"]
   }
 }
