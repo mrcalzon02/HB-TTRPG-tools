@@ -1,69 +1,57 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/kaysender/schemas/floating-island-profile.schema.json",
-  "title": "Kaysender Floating Island Profile",
+  "title": "Kaysender Floating Island Foundation Profile",
   "type": "object",
-  "required": [
-    "name",
-    "profileType",
-    "islandRole",
-    "sizeClass",
-    "altitudeBand",
-    "stabilityClass",
-    "driftPattern",
-    "anchorStatus",
-    "terrainCore",
-    "waterProfile",
-    "foodProfile",
-    "primaryResource",
-    "ecologyPressure",
-    "settlementFootprint",
-    "factionPressure",
-    "derivedScores",
-    "outputs"
-  ],
+  "required": ["schemaVersion","name","profileType","classification","geometry","composition","motion","access","hydrology","terrain","resources","ecology","population","siteInventory","mapFoundation","insertionCapacity","derivedScores","warnings","outputs"],
   "properties": {
-    "name": { "type": "string" },
-    "profileType": { "type": "string", "const": "floating-island-profile" },
-    "islandRole": { "type": "string" },
-    "sizeClass": { "type": "string" },
-    "altitudeBand": { "type": "string" },
-    "stabilityClass": { "type": "string" },
-    "driftPattern": { "type": "string" },
-    "anchorStatus": { "type": "string" },
-    "terrainCore": { "type": "string" },
-    "waterProfile": { "type": "string" },
-    "foodProfile": { "type": "string" },
-    "primaryResource": { "type": "string" },
-    "ecologyPressure": { "type": "string" },
-    "settlementFootprint": { "type": "string" },
-    "factionPressure": { "type": "string" },
-    "culturalAdaptation": { "type": "string" },
-    "routeAccess": { "type": "string" },
-    "threatClock": { "type": "string" },
-    "derivedScores": {
-      "type": "object",
-      "required": ["habitability", "routeValue", "conflictPressure", "collapseRisk", "gmComplexity"],
+    "schemaVersion": {"type":"string"},
+    "name": {"type":"string","minLength":1},
+    "profileType": {"type":"string","const":"floating-island-foundation-profile"},
+    "generatedAt": {"type":"string"},
+    "classification": {
+      "type":"object","required":["sizeClass","shapeProfile","currentUse"],
+      "properties":{"sizeClass":{"type":"string"},"shapeProfile":{"type":"string"},"currentUse":{"type":"string"}}
+    },
+    "geometry": {
+      "type":"object",
+      "required":["lengthKm","widthKm","meanThicknessM","shapeFactor","planAreaKm2","planAreaAcres","usableAreaKm2","usableAreaAcres","flatAreaKm2","flatAreaAcres","arableAreaKm2","arableAreaAcres","grossVolumeKm3","solidVolumeKm3","estimatedMassMillionTons","usableSurfacePercent"],
       "properties": {
-        "habitability": { "type": "integer" },
-        "routeValue": { "type": "integer" },
-        "conflictPressure": { "type": "integer" },
-        "collapseRisk": { "type": "integer" },
-        "gmComplexity": { "type": "integer" }
+        "lengthKm":{"type":"number","exclusiveMinimum":0},"widthKm":{"type":"number","exclusiveMinimum":0},"meanThicknessM":{"type":"number","exclusiveMinimum":0},"shapeFactor":{"type":"number","exclusiveMinimum":0,"maximum":1},
+        "planAreaKm2":{"type":"number","minimum":0},"planAreaAcres":{"type":"integer","minimum":0},"usableAreaKm2":{"type":"number","minimum":0},"usableAreaAcres":{"type":"integer","minimum":0},
+        "flatAreaKm2":{"type":"number","minimum":0},"flatAreaAcres":{"type":"integer","minimum":0},"arableAreaKm2":{"type":"number","minimum":0},"arableAreaAcres":{"type":"integer","minimum":0},
+        "grossVolumeKm3":{"type":"number","minimum":0},"solidVolumeKm3":{"type":"number","minimum":0},"estimatedMassMillionTons":{"type":"number","minimum":0},"usableSurfacePercent":{"type":"number","minimum":0,"maximum":100}
       }
     },
-    "outputs": {
-      "type": "object",
-      "required": ["summary", "gmNotes", "settlementHooks", "routeHooks", "marketHooks", "encounterHooks", "wikiDraft"],
+    "composition": {
+      "type":"object","required":["ordinaryRockPercent","floatstonePercent","soilSedimentPercent","cavernVoidPercent","rawTotalBeforeNormalization"],
+      "properties":{"ordinaryRockPercent":{"type":"number","minimum":0,"maximum":100},"floatstonePercent":{"type":"number","minimum":0,"maximum":100},"soilSedimentPercent":{"type":"number","minimum":0,"maximum":100},"cavernVoidPercent":{"type":"number","minimum":0,"maximum":100},"rawTotalBeforeNormalization":{"type":"number","minimum":0}}
+    },
+    "motion": {
+      "type":"object","required":["meanAltitudeM","verticalOscillationM","minimumAltitudeM","maximumAltitudeM","oscillationPeriodHours","altitudePredictability","horizontalDriftKpd","driftPredictability","altitudeReliability","positionReliability","annualDriftKm"],
+      "properties":{"meanAltitudeM":{"type":"number"},"verticalOscillationM":{"type":"number","minimum":0},"minimumAltitudeM":{"type":"number"},"maximumAltitudeM":{"type":"number"},"oscillationPeriodHours":{"type":"number","exclusiveMinimum":0},"altitudePredictability":{"type":"string"},"horizontalDriftKpd":{"type":"number","minimum":0},"driftPredictability":{"type":"string"},"altitudeReliability":{"type":"integer","minimum":0,"maximum":20},"positionReliability":{"type":"integer","minimum":0,"maximum":20},"annualDriftKm":{"type":"number","minimum":0}}
+    },
+    "access": {
+      "type":"object","required":["nearestCivilizationKm","routeTraffic","chartQuality","approachProfile","civilizationProximity","routeReliability","concealmentValue","estimatedTravelDaysAt120Kpd"],
+      "properties":{"nearestCivilizationKm":{"type":"number","minimum":0},"routeTraffic":{"type":"string"},"chartQuality":{"type":"string"},"approachProfile":{"type":"string"},"civilizationProximity":{"type":"integer","minimum":0,"maximum":20},"routeReliability":{"type":"integer","minimum":0,"maximum":20},"concealmentValue":{"type":"integer","minimum":0,"maximum":20},"estimatedTravelDaysAt120Kpd":{"type":"number","minimum":0}}
+    },
+    "hydrology": {"type":"object","required":["profile","annualRainfallMm"],"properties":{"profile":{"type":"string"},"annualRainfallMm":{"type":"number","minimum":0}}},
+    "terrain": {"type":"object","required":["primary","secondary","flatlandPercent","arableSoilPercent","vegetationCoverPercent"],"properties":{"primary":{"type":"string"},"secondary":{"type":"string"},"flatlandPercent":{"type":"number","minimum":0,"maximum":100},"arableSoilPercent":{"type":"number","minimum":0,"maximum":100},"vegetationCoverPercent":{"type":"number","minimum":0,"maximum":100}}},
+    "resources": {"type":"object","required":["mineralPresence","mineralAccessibility","knownMinerals","depositScale","estimatedFloatstoneBearingVolumeKm3","extractionPressure"],"properties":{"mineralPresence":{"type":"string"},"mineralAccessibility":{"type":"string"},"knownMinerals":{"type":"array","items":{"type":"string"}},"depositScale":{"type":"string"},"estimatedFloatstoneBearingVolumeKm3":{"type":"number","minimum":0},"extractionPressure":{"type":"integer","minimum":0,"maximum":20}}},
+    "ecology": {"type":"object","required":["wildlifeDensity","dominantWildlife","vegetationCoverPercent","habitatAreaKm2","carryingCapacityIndex","expectedDistinctHabitatZones"],"properties":{"wildlifeDensity":{"type":"string"},"dominantWildlife":{"type":"string"},"vegetationCoverPercent":{"type":"number","minimum":0,"maximum":100},"habitatAreaKm2":{"type":"number","minimum":0},"carryingCapacityIndex":{"type":"number","minimum":0},"expectedDistinctHabitatZones":{"type":"integer","minimum":1}}},
+    "population": {"type":"object","required":["permanentPopulation","currentUse"],"properties":{"permanentPopulation":{"type":"number","minimum":0},"currentUse":{"type":"string"}}},
+    "siteInventory": {"type":"object","required":["knownDungeonCount","hiddenSiteDensity"],"properties":{"knownDungeonCount":{"type":"number","minimum":0},"hiddenSiteDensity":{"type":"string"}}},
+    "mapFoundation": {
+      "type":"object","required":["gridLabel","columns","rows","cellWidthKm","cellHeightKm","nominalCellAreaKm2","coordinateOrigin","activeRegionCount","cells","siteSlots"],
       "properties": {
-        "summary": { "type": "string" },
-        "gmNotes": { "type": "array", "items": { "type": "string" } },
-        "settlementHooks": { "type": "array", "items": { "type": "string" } },
-        "routeHooks": { "type": "array", "items": { "type": "string" } },
-        "marketHooks": { "type": "array", "items": { "type": "string" } },
-        "encounterHooks": { "type": "array", "items": { "type": "string" } },
-        "wikiDraft": { "type": "object" }
+        "gridLabel":{"type":"string"},"columns":{"type":"integer","minimum":1},"rows":{"type":"integer","minimum":1},"cellWidthKm":{"type":"number","exclusiveMinimum":0},"cellHeightKm":{"type":"number","exclusiveMinimum":0},"nominalCellAreaKm2":{"type":"number","minimum":0},"coordinateOrigin":{"type":"string"},"activeRegionCount":{"type":"integer","minimum":0},
+        "cells":{"type":"array","items":{"type":"object","required":["id","grid","boundsKm","areaKm2","terrain","elevationM","slopeClass","access","siteCapacity","sites"],"properties":{"id":{"type":"string"},"grid":{"type":"object"},"boundsKm":{"type":"object"},"areaKm2":{"type":"number","minimum":0},"terrain":{"type":"string"},"elevationM":{"type":"number"},"slopeClass":{"type":"string"},"access":{"type":"string"},"siteCapacity":{"type":"integer","minimum":0},"sites":{"type":"array","items":{"type":"string"}}}}},
+        "siteSlots":{"type":"array","items":{"type":"object","required":["id","type","regionId","status","maximumFootprintKm2","access","terrainContext","designPrompt"],"properties":{"id":{"type":"string"},"type":{"type":"string"},"regionId":{"type":"string"},"status":{"type":"string"},"maximumFootprintKm2":{"type":"number","minimum":0},"access":{"type":"string"},"terrainContext":{"type":"string"},"designPrompt":{"type":"string"}}}}
       }
-    }
+    },
+    "insertionCapacity": {"type":"object","required":["totalRegionalSiteCapacity","preallocatedSiteSlots","openSiteCapacity","recommendedSettlementSites","maximumSupportedPopulation","recommendedDungeonSites","wildernessLandmarkCapacity","resourceNodeCapacity"]},
+    "derivedScores": {"type":"object","required":["structuralStability","altitudeReliability","positionReliability","routeReliability","agriculturalPotential","settlementViability","mapUtility","strategicValue","criminalUtility","hazardPressure"]},
+    "warnings": {"type":"array","items":{"type":"string"}},
+    "outputs": {"type":"object","required":["summary","viabilityNote","gmNotes","mapNotes","wikiDraft"]}
   }
 }
