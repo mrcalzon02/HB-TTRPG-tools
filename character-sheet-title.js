@@ -52,6 +52,7 @@
   function loadSupplementalGenerators() {
     loadScriptOnce('spell-generators.js', 'data-spell-generators', 'spellGenerators');
     loadScriptOnce('kaysender-npc-generator.js', 'data-npc-generator', 'npcGenerator');
+    loadScriptOnce('kaysender-crafting-generator.js', 'data-crafting-generator', 'craftingGenerator');
   }
 
   applyTitle();
