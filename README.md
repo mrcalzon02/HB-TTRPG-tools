@@ -19,6 +19,7 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `kaysender-npc-generator.js` — population-band NPC and crew generator runtime.
 - `kaysender-crafting-generator.js` — Hypertext d20-compatible equipment, gadget, ship-module, ship-weapon, and airship-core recipe generator and construction simulator.
 - `data/kaysender-tools-registry.json` — machine-readable registry for planned, alpha, and editor-alpha Kaysender tools, utilities, and generators.
+- `data/kaysender/editors/editor-roadmap.json` — machine-readable production order, dependencies, required inputs, required outputs, and exit gates for all main-line editors.
 - `data/kaysender/generators/npc-crew-generator.json` — NPC class, ancestry, narrative-table manifest, and population-band pack index.
 - `data/kaysender/generators/npc-crew/bands-*.json` — 37 civilian, authority, outlaw, specialist, and airship population bands used by the NPC and Crew Generator.
 - `data/kaysender/generators/crafting/crafting-generator.json` — crafting generator manifest containing complexity, facility, quality, scale, and mode definitions.
@@ -37,10 +38,11 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `data/kaysender/schemas/settlement-profile.schema.json` — schema for generated settlement profiles.
 - `data/kaysender/schemas/airship-profile.schema.json` — schema for generated airship profiles.
 - `scripts/validate-crafting-data.mjs` — dependency-free validator for crafting manifests, template IDs, modes, scales, complexities, materials, power sources, and required fields.
+- `scripts/validate-editor-roadmap.mjs` — validates production-stage numbering, dependencies, registry module coverage, and the single active next-stage rule.
 - `docs/kaysender-tool-extraction.md` — first extraction framework for converting Kaysender into Hypertext d20-compatible campaign utilities.
-- `docs/kaysender-editor-staging-plan.md` — sequential plan for building one detailed editor at a time.
+- `docs/kaysender-editor-staging-plan.md` — human-readable production order and editor completion standards.
 - `docs/deployment.md` — GitHub Pages deployment and smoke-test guide.
-- `.github/workflows/pages.yml` — GitHub Pages deployment workflow with crafting-data and generator-syntax validation.
+- `.github/workflows/pages.yml` — GitHub Pages deployment workflow with crafting-data, editor-roadmap, and JavaScript syntax validation.
 
 ## First included utility
 
@@ -124,24 +126,35 @@ The current complexity model uses Routine, Standard, Complex, Advanced, and Revo
 
 These tools are campaign-operation and playtest utilities. Generated prices, save DCs, structural values, and ship effects should be tuned through campaign play before being treated as final publication-ready balance.
 
-## Sequential editor model
+## Main-line editor production model
 
-The staged editor plan builds one complete editor at a time.
+The original island, settlement, and airship stages are retained as prototype history. Production development now follows the dependency order in `data/kaysender/editors/editor-roadmap.json` and `docs/kaysender-editor-staging-plan.md`.
 
-Stage 1 is the **Floating Island / Skyland Editor**. It uses a JSON configuration file to expose manual controls, randomization, derived scores, GM notes, settlement hooks, route hooks, market hooks, encounter hooks, full JSON export, and draft wiki-entry export.
+Only one main-line editor is implemented at a time. Random generators remain accelerators; they do not count as completed editors.
 
-Stage 2 is the **Settlement / Skyport Editor**. It can inherit island context and produces settlement survival, trade, defense, unrest, job, and wiki outputs.
+The production order is:
 
-Stage 3 is the **Airship / Vessel Editor**. It can inherit island and settlement context and produces vessel, cargo, crew, route, faction, maintenance, encounter, and wiki outputs.
+1. **P0 — Shared Editor Kernel and Profile Contract**
+2. **P1 — Promote Floating Island / Skyland Editor**
+3. **P2 — Population and Demographics Editor**
+4. **P3 — Promote Settlement / Skyport Editor**
+5. **P4 — City District, Civic Site, and Facility Editor**
+6. **P5 — Crafting, Equipment, Ship Module, and Production Editor**
+7. **P6 — NPC, Crew, Household, and Roster Editor**
+8. **P7 — Promote Airship / Vessel Editor**
+9. **P8 — Sky Ecology, Creature, Herd, and Disease Editor**
+10. **P9 — World Region, Route, and Airspace Editor**
+11. **P10 — Market, Supply Chain, Inventory, and Production Editor**
+12. **P11 — Faction, Guild, Government, and Fleet Editor**
+13. **P12 — Organization Operations, Finance, Logistics, and Project Editor**
+14. **P13 — Black Market, Piracy, Smuggling, and Criminal Network Editor**
+15. **P14 — Draconic Tithe, Settlement Crisis, and Intervention Editor**
+16. **P15 — Encounter, Hazard, Chase, and Conflict Editor**
+17. **P16 — Job Board, Mission Packet, and Campaign Hook Editor**
 
-Later editors should follow the same pattern:
+P0 is the required next implementation because the existing alpha editors duplicate shell behavior and use mismatched profile assumptions. The shared kernel will establish stable IDs, schema migration, validated inheritance, dedicated New blank record actions, local draft recovery, selective randomization, canonical exports, provenance, diagnostics, and common accessible controls before another specialized editor is built.
 
-1. JSON configuration.
-2. Output schema.
-3. Runtime UI.
-4. Cross-links to wiki entries and modules.
-5. Exportable structured output.
-6. Source-safe lore and Hypertext d20-compatible rules-facing language.
+Each production editor must clear its documented exit gate before work advances to the next stage.
 
 ## Cross-linking model
 
@@ -173,10 +186,10 @@ See `docs/deployment.md` for deployment and smoke-test steps.
 
 ## Roadmap placeholders
 
-Future additions can fill in:
+Future additions outside the established main-line editor order can fill in:
 
-- Tools: expanded rule references, organization operations, production ledgers, campaign management helpers
-- Utilities: sheet builders, wiki browsing, supply planners, trackers, printable aids
-- Generators: treasure, districts, encounters, dungeons, factions, rumors, routes, markets, and production-contract generators
+- Tools: expanded rule references and campaign reporting helpers
+- Utilities: sheet builders, wiki browsing, printable aids, and migration utilities
+- Generators: optional treasure, rumor, dungeon, and cosmetic-content generators that consume established editor records
 
 This project is for homebrew tabletop use and avoids copying any official proprietary sheet layout or protected rulebook text.
