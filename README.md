@@ -10,15 +10,21 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `styles.css` — shared visual system, responsive panel layouts, registry cards, and print/PDF styling.
 - `character-sheet-layout.css` — readability, spacing, and wide-panel layout polish for the character sheet.
 - `app.js` — tab navigation, panel layout controls, character-sheet math, autosave, import/export, print-to-PDF helpers, registry rendering, and loading for the alpha Kaysender tool layer.
-- `character-sheet-title.js` — migrates older local sheet titles to the current Hypertext D20-compatible sheet label.
+- `character-sheet-title.js` — migrates older local sheet titles and loads supplemental generator runtimes.
 - `kaysender-tools.js` — alpha interactive Kaysender tools attached to the registry cards.
 - `kaysender-wiki.js` — alpha hypertext wiki browser and cross-link layer between lore entries and modules.
 - `kaysender-editors.js` — staged deep-editor runtime, beginning with the Floating Island / Skyland Editor.
 - `kaysender-settlement-editor.js` — staged deep-editor runtime for settlements and skyports.
 - `kaysender-airship-editor.js` — staged deep-editor runtime for airships and vessels.
+- `kaysender-npc-generator.js` — population-band NPC and crew generator runtime.
+- `kaysender-crafting-generator.js` — Hypertext d20-compatible equipment, gadget, ship-module, ship-weapon, and airship-core recipe generator and construction simulator.
 - `data/kaysender-tools-registry.json` — machine-readable registry for planned, alpha, and editor-alpha Kaysender tools, utilities, and generators.
 - `data/kaysender/generators/npc-crew-generator.json` — NPC class, ancestry, narrative-table manifest, and population-band pack index.
 - `data/kaysender/generators/npc-crew/bands-*.json` — 37 civilian, authority, outlaw, specialist, and airship population bands used by the NPC and Crew Generator.
+- `data/kaysender/generators/crafting/crafting-generator.json` — crafting generator manifest containing complexity, facility, quality, scale, and mode definitions.
+- `data/kaysender/generators/crafting/equipment-templates.json` — personal equipment, technical devices, survival gear, weapons, and armor-upgrade patterns.
+- `data/kaysender/generators/crafting/ship-module-templates.json` — airship hull, support, navigation, weapon, defense, propulsion, and core patterns.
+- `data/kaysender/generators/crafting/crafting-modifiers.json` — manufacturers, materials, power sources, legality, flaws, improvements, and complications.
 - `data/kaysender/wiki/wiki-index.json` — multi-pack wiki loader index.
 - `data/kaysender/wiki/entries.json` — seed Kaysender wiki entries with related-entry and related-module links.
 - `data/kaysender/wiki/*-depth.json` — deeper source-derived wiki packs for world, peoples, nations, factions/economy, and airships.
@@ -61,12 +67,12 @@ The site includes a **Kaysender** dashboard that loads module cards from `data/k
 - Population generation
 - Shop and market stall generation
 - Airship and vessel generation and deep vessel editing
-- Airship core and construction frameworks
-- Crafting, gadget, and equipment creation
+- Airship core, ship-module, and construction systems
+- Crafting, gadget, weapon, armor, and equipment creation
 - Supply, water, and survival planning
 - Faction, guild, piracy, encounter, ecology, NPC, crew, job board, and crisis generation
 
-The project should keep original Kaysender lore separate from rules-facing mechanical text. Any legacy fifth-edition phrasing should be converted before being treated as reusable public rules content.
+The project keeps original Kaysender lore separate from rules-facing mechanical text. Legacy fifth-edition mechanics are converted before being treated as reusable public rules content.
 
 ## Current alpha Kaysender tools
 
@@ -77,12 +83,44 @@ The following registry cards now launch working alpha or editor-alpha tools:
 - Settlement Generator and Skyport Editor
 - Shop and Market Stall Generator
 - Airship and Vessel Generator and Editor
+- Airship Core and Ship Module Builder
+- Crafting, Gadget, and Equipment Creator
 - Supply, Water, and Survival Planner
 - NPC and Crew Generator
+- Normal Spell Generator
+- Eccentric Spell Generator
 
-The NPC and Crew Generator supports 37 population bands ranging from children, elderly residents, laborers, farmers, artisans, scribes, government workers, clergy, and merchants through militia, professional soldiers, officers, mercenaries, bandits, criminals, smugglers, pirates, prisoners, refugees, explorers, and specialized airship crews. It can draw from eleven standard player classes, five standard NPC classes, or the indexed Kaysender Airship Engineer, Air Captain, and Sky Warden class concepts. Custom-class numerical mechanics remain explicitly marked conversion-pending.
+### NPC and Crew Generator
 
-These are campaign-operation utilities. They are not final balanced rules text and should be treated as drafting aids until the table data and conversion logic are expanded.
+The NPC and Crew Generator supports 37 population bands ranging from children, elderly residents, laborers, farmers, artisans, scribes, government workers, clergy, and merchants through militia, professional soldiers, officers, mercenaries, bandits, criminals, smugglers, pirates, prisoners, refugees, explorers, and specialized airship crews.
+
+It draws from eleven standard player classes, five standard NPC classes, and the converted Kaysender Airship Engineer, Air Captain, and Sky Warden class families.
+
+### Crafting, Equipment, and Ship Systems Generator
+
+The crafting engine currently contains 42 reusable project patterns:
+
+- 19 personal-equipment, survival, technical, communication, medical, weapon, and armor patterns
+- 13 general ship-module patterns
+- 5 ship-weapon and defense patterns
+- 5 airship-core patterns
+
+Generated projects include:
+
+- Hypertext d20 complexity and project DC
+- Work units, staffing assumptions, and estimated labor days
+- Material quality and facility modifiers
+- Planned raw-material cost and draft market value
+- Construction, research, and testing skills
+- Operating effect, activation, limitations, weight, and module slot
+- Power source and maintenance requirements
+- Legal status, complication, planned improvements, and possible flaws
+- Optional simulation of research, repeated construction checks, exceptional progress, material loss, minor or major failures, and final testing
+- Individual project JSON, batch JSON, and draft wiki-entry export
+
+The current complexity model uses Routine, Standard, Complex, Advanced, and Revolutionary projects with DCs from 10 to 30. Work is scaled from personal equipment through crew-served installations, ship modules, and major core systems.
+
+These tools are campaign-operation and playtest utilities. Generated prices, save DCs, structural values, and ship effects should be tuned through campaign play before being treated as final publication-ready balance.
 
 ## Sequential editor model
 
@@ -109,7 +147,7 @@ The wiki entries use stable IDs and contain both `relatedEntries` and `relatedMo
 
 The dashboard cards also receive quick wiki chips, allowing a GM to jump from a generator card to relevant lore. Inside the wiki browser, related wiki entries open directly, while related tool/generator chips push the dashboard search toward the matching module.
 
-This is the first practical bridge between setting lore, campaign utilities, and generator operations.
+Generated crafting projects can export draft wiki entries containing operation, construction, material, power, and maintenance sections.
 
 ## Panel layout system
 
@@ -135,8 +173,8 @@ See `docs/deployment.md` for deployment and smoke-test steps.
 
 Future additions can fill in:
 
-- Tools: rule references, airship construction, crafting systems, organization operations, campaign management helpers
+- Tools: expanded rule references, organization operations, production ledgers, campaign management helpers
 - Utilities: sheet builders, wiki browsing, supply planners, trackers, printable aids
-- Generators: treasure, settlements, encounters, dungeons, factions, rumors, routes, markets, ships, and homebrew item builders
+- Generators: treasure, districts, encounters, dungeons, factions, rumors, routes, markets, and production-contract generators
 
 This project is for homebrew tabletop use and avoids copying any official proprietary sheet layout or protected rulebook text.
