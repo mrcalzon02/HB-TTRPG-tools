@@ -1,12 +1,13 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.1.1",
   "ruleset": "Hypertext d20 compatible",
   "description": "Data-driven recipe and project generator built from the converted Kaysender invention system.",
   "packs": [
     "data/kaysender/generators/crafting/equipment-templates.json",
     "data/kaysender/generators/crafting/ship-module-templates.json",
-    "data/kaysender/generators/crafting/crafting-modifiers.json"
+    "data/kaysender/generators/crafting/crafting-modifiers.json",
+    "data/kaysender/generators/crafting/crafting-material-aliases.json"
   ],
   "complexities": [
     {"id":"routine","label":"Routine","dc":10,"workUnits":1,"priceMultiplier":0.5,"minimumLevel":1},
