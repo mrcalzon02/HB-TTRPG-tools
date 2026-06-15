@@ -32,11 +32,17 @@ jobs:
       - name: Validate crafting generator data
         run: node scripts/validate-crafting-data.mjs
 
-      - name: Check generator JavaScript syntax
+      - name: Validate main-line editor roadmap
+        run: node scripts/validate-editor-roadmap.mjs
+
+      - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
           node --check kaysender-npc-generator.js
           node --check spell-generators.js
+          node --check kaysender-editors.js
+          node --check kaysender-settlement-editor.js
+          node --check kaysender-airship-editor.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
