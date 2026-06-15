@@ -1,108 +1,263 @@
-# Kaysender Sequential Editor Staging Plan
+# Kaysender Main-Line Editor Production Plan
 
-This plan turns the Kaysender source material into one deep editor at a time instead of trying to build every generator at once.
+This plan establishes the dependency-safe order for promoting the existing alpha demonstrators into complete campaign-operation editors and for constructing every remaining main-line editor.
 
-## Design principle
+The machine-readable source of truth is `data/kaysender/editors/editor-roadmap.json`.
 
-Each editor should be a campaign operations workbench, not a loose random table.
+## Governing rule
 
-A finished editor should provide:
+Only one main-line editor may be the active implementation target at a time. Later editors may receive schema notes, fixtures, and dependency tests, but they should not receive competing runtime implementations until the active editor clears its exit gate.
 
-- Manual controls for deliberate GM design.
-- Randomization buttons for fast play.
-- Derived outputs that connect to other systems.
-- Source-safe lore summaries.
-- Open d20-compatible mechanical hooks where appropriate.
-- Copyable or exportable output.
-- Cross-links to wiki entries and other modules.
-- A clear distinction between lore, GM-only material, and rules-facing conversion material.
+The project continues to use the single active GitHub branch `main`.
 
-## Sequential build order
+A generator is not a finished editor. A complete editor must support deliberate manual construction, safe inheritance, persistent records, validation, revision, export, and downstream use. Randomization is an accelerator inside the editor rather than the editor’s defining feature.
 
-### Stage 1 — Floating Island / Skyland Editor
+## Why the production order differs from the alpha order
 
-Reason: This is the root environment object. It feeds settlement generation, route planning, airship travel, resource scarcity, faction pressure, ecology, markets, and encounters.
+The original alpha sequence was:
 
-Core source themes:
+1. Floating Island / Skyland.
+2. Settlement / Skyport.
+3. Airship / Vessel.
 
-- Floating landmasses are unstable and may drift, fracture, or break trade routes.
-- Water is rare in the open sky and must be stored, transported, gathered from rain, or controlled politically.
-- Sky ecology provides hazards, materials, herds, predators, and magical resources.
-- Settlements survive through fortification, local resources, faction support, trade access, and social adaptation.
-- Different peoples respond to floating instability in different ways: fortified stonework, mobile survival, magical stabilization, technological adaptation, sky warfare, or trade flexibility.
+That was appropriate for proving the concept, but the demonstrators now expose an integration problem. The current island profile exports nested structures such as geometry, hydrology, access, ecology, insertion capacity, and derived scores. The settlement and airship alpha importers still contain compatibility mappings for older flat fields such as `waterProfile`, `routeAccess`, `factionPressure`, and `threatClock`.
 
-Editor outputs:
+Continuing to add separate editor scripts would multiply this mismatch. Production construction therefore begins with a shared editor kernel and canonical profile contract before the individual editors are expanded.
 
-- Island identity and role.
-- Size, altitude, stability, drift, anchor status, and fracture risk.
-- Terrain, biome, resources, and ecology.
-- Water profile, food profile, and supply pressure.
-- Settlement viability and construction notes.
-- Route and airship approach difficulty.
-- Faction pressure and political conflict.
-- Encounter prompts, market prompts, crisis prompts, and wiki draft output.
+## Definition of a production editor
 
-### Stage 2 — Settlement / Skyport Editor
+Every production editor must provide all of the following:
 
-Builds villages, skyports, fortified communities, farming islands, company camps, pilgrimage stops, guild enclaves, and refugee settlements.
+- A dedicated **New blank record** action.
+- Manual controls for deliberate design.
+- Selective randomization that does not overwrite locked fields.
+- Stable record IDs and schema versions.
+- Import validation and schema migration.
+- Local draft saving and recovery.
+- Clone or duplicate record support.
+- Canonical JSON export.
+- Wiki-draft export where applicable.
+- A visible provenance and inheritance ledger.
+- Clear separation of player-facing, GM-only, lore, and rules-facing fields.
+- Diagnostics that explain malformed imports, incompatible profiles, impossible totals, and broken references.
+- Responsive layout, keyboard access, readable labels, and safe error recovery.
+- A schema, runtime, registry integration, wiki links, smoke tests, and development-history entry.
 
-Depends on Stage 1 island outputs.
+No editor is considered complete merely because it can generate a plausible card.
 
-### Stage 3 — Airship / Vessel Editor
+# Production order
 
-Builds ships by hull culture, core, purpose, crew, cargo, armament, condition, maintenance pressure, legality, and travel role.
+## P0 — Shared Editor Kernel and Profile Contract
 
-Depends on Stage 1 routes and Stage 2 ports.
+This is the required next implementation.
 
-### Stage 4 — Market / Supply Editor
+It must provide the reusable shell for every editor:
 
-Builds shops, stalls, water sellers, black-market dealers, repair yards, guild vendors, cargo brokers, and scarcity-driven prices.
+- Common toolbar and action handling.
+- New, load, validate, save, clone, randomize, export, and wiki-export actions.
+- Canonical profile envelope.
+- Stable IDs, schema versions, timestamps, source IDs, and provenance.
+- Import adapters and migrations for existing alpha profiles.
+- Shared diagnostics and validation summaries.
+- Shared inherited-record display.
+- Field locking and selective randomization.
+- Local draft persistence and recovery.
+- Common responsive and accessible form components.
 
-Depends on Stage 1 resources, Stage 2 settlement demand, and Stage 3 ship logistics.
+**Exit gate:** the island, settlement, and airship alpha editors must all open through the shared shell; current island exports must import into settlement and airship without relying on obsolete flat-field assumptions; malformed records must produce actionable errors instead of silent fallback.
 
-### Stage 5 — Faction / Guild Editor
+## P1 — Promote Floating Island / Skyland Editor
 
-Builds public purpose, hidden agenda, fleet assets, territory, leadership, rivals, clients, reputation, corruption, and campaign hooks.
+The skyland remains the root world object.
 
-Depends on all prior editors.
+The production editor must add deliberate map-cell editing, stable site and resource IDs, hydrology, food capacity, altitude and drift timelines, fracture behavior, landing zones, route-node exports, ecology envelopes, and settlement capacity.
 
-### Stage 6 — Route / Region Editor
+**Primary downstream consumers:** Population, Settlement, Ecology, Route, Market, Faction, Crisis, Encounter.
 
-Builds abstract maps, air lanes, storm belts, pirate zones, dragon airspace, water routes, salvage corridors, and survey claims.
+**Exit gate:** all geometry, acreage, water, population capacity, drift, fracture, sites, resources, and map references validate and round-trip without data loss.
 
-Depends on island, settlement, vessel, and faction outputs.
+## P2 — Population and Demographics Editor
 
-### Stage 7 — Ecology / Creature Editor
+Population must become a reusable record rather than a single settlement number.
 
-Builds sky creatures, herds, predators, disease risks, materials, hunting pressure, conservation concerns, and encounter behavior.
+It must model ancestry, age cohorts, households, occupations, class distribution, poverty, specialists, militia, clergy, healers, airship labor, refugees, disease, hunger, and migration.
 
-Depends on terrain, altitude, and scarcity outputs.
+**Primary downstream consumers:** Settlement, District, NPC/Crew, Market, Faction, Organization.
 
-### Stage 8 — Encounter / Job Board Editor
+**Exit gate:** percentages and head counts reconcile exactly, and the NPC generator can consume the resulting population-band weights.
 
-Builds playable mission packets: patron, location, travel problem, faction pressure, reward, complication, timer, and consequences.
+## P3 — Promote Settlement / Skyport Editor
 
-Depends on all earlier editors.
+The settlement editor converts island capacity and population into a functioning civic hub.
 
-## Implementation standard for every editor
+It must add land use, infrastructure, offices, laws, taxes, stocks, production, consumption, docks, defenses, emergency plans, district capacity, faction slots, market demand, and crisis clocks.
 
-Each editor should have:
+**Primary downstream consumers:** District, NPC/Crew, Airship, Route, Market, Faction, Tithe, Encounter, Job.
 
-1. A JSON configuration file under `data/kaysender/editors/`.
-2. A schema or documented output shape under `data/kaysender/schemas/`.
-3. A runtime view in JavaScript.
-4. A related wiki entry or entries.
-5. Registry module integration.
-6. Exportable output.
-7. A smoke-test checklist entry.
-8. Development history entry.
+**Exit gate:** settlement population, land use, water, food, production, consumption, defenses, and dock capacity reconcile with the imported island and population records.
 
-## Current active implementation
+## P4 — City District, Civic Site, and Facility Editor
 
-Stage 1 is now the active workstream:
+Large settlements need persistent internal locations before markets, factions, crimes, encounters, and missions can be anchored.
 
-- `data/kaysender/editors/floating-island-editor.json`
-- `data/kaysender/schemas/floating-island-profile.schema.json`
-- `kaysender-editors.js`
+It must support districts, civic sites, facilities, population assignments, wealth, security, architecture, services, docks, temples, guild halls, foundries, cisterns, military sites, slums, rumors, hazards, and hidden locations.
 
-The initial editor is designed to produce a structured island profile and a draft wiki entry from the selected variables.
+**Primary downstream consumers:** Market, Faction, Black Market, Encounter, Job.
+
+**Exit gate:** district population and footprint reconcile with the parent settlement, and every major civic asset can be referenced by stable district or site ID.
+
+## P5 — Crafting, Equipment, Ship Module, and Production Editor
+
+The current crafting generator is a strong data foundation, but a production editor must permit deliberate recipe editing and production management.
+
+It must add editable recipes, suppliers, materials, facilities, teams, work schedules, prototype testing, certification, batch production, inventory records, upgrade histories, and ship-module installation records.
+
+**Primary downstream consumers:** Airship, Market, Organization, NPC equipment, Job rewards.
+
+**Exit gate:** generated projects can be edited without losing template provenance, exported items validate, ship modules expose mass, slot, power, crew, maintenance, and compatibility fields, and airship fixtures can install them.
+
+## P6 — NPC, Crew, Household, and Roster Editor
+
+The NPC generator must be promoted from disposable outputs into persistent people and teams.
+
+It must add relationships, households, crew roles, shifts, skills, class levels, pay, loyalty, morale, injuries, availability, equipment assignments, employers, factions, secrets, and roster exports.
+
+**Primary downstream consumers:** Airship, Faction, Organization, Black Market, Encounter, Job.
+
+**Exit gate:** generated NPCs can be promoted into persistent records, crew requirements can be compared with qualified personnel, and other profiles can reference stable NPC and roster IDs.
+
+## P7 — Promote Airship / Vessel Editor
+
+A complete vessel must be assembled from quantitative hull, core, module, cargo, crew, damage, maintenance, and legal records.
+
+It must add hull zones, dimensions, mass, payload, module slots, installed systems, power generation and draw, lift, speed, range, maneuverability, altitude limits, weather limits, crew stations, cargo holds, weapons, defenses, damage states, repair states, ownership, registration, and route capability exports.
+
+**Primary downstream consumers:** Route, Market, Faction fleets, Organization assets, Piracy, Tithe, Encounter, Job.
+
+**Exit gate:** mass, payload, slots, power, crew, cargo, damage, maintenance, and installed-module calculations reconcile.
+
+## P8 — Sky Ecology, Creature, Herd, and Disease Editor
+
+Ecology must become persistent world state tied to real terrain and altitude.
+
+It must support species, habitats, herd populations, migration, diet, predators, diseases, harvestable materials, reproduction, depletion, hunting pressure, conservation, and encounter behavior.
+
+**Primary downstream consumers:** Route, Market, Settlement, Encounter, Job.
+
+**Exit gate:** ecological records occupy island cells and route segments, harvested materials feed markets and crafting, and creature records reference converted stat blocks or explicit stat stubs.
+
+## P9 — World Region, Route, and Airspace Editor
+
+Routes must connect real islands and ports and test actual vessel capabilities.
+
+It must add regions, node graphs, route segments, distances, travel time, altitude bands, winds, weather, resupply points, water access, ecological hazards, survey confidence, closures, route capacity, vessel compatibility, disruptions, and territorial overlay slots.
+
+**Primary downstream consumers:** Market, Faction, Organization, Piracy, Tithe, Encounter, Job.
+
+**Exit gate:** every route connects stable node IDs, imported vessels can calculate travel time and supply use, and hazards and closures attach to specific route segments.
+
+## P10 — Market, Supply Chain, Inventory, and Production Editor
+
+Markets should emerge from production, demand, inventory, transport, legality, and scarcity rather than isolated random prices.
+
+This editor absorbs the current Shop/Market alpha and Supply/Water planner into one economic operations surface.
+
+It must add goods catalogs, stock, producers, consumers, prices, quality, scarcity, suppliers, shipping contracts, water and food ledgers, restock schedules, legal access, black-market access, and shortage events.
+
+**Primary downstream consumers:** Faction, Organization, Piracy, Tithe, Encounter, Job.
+
+**Exit gate:** goods can be traced from producer through route and vessel to inventory, settlement stocks reconcile with market records, and prices react to measurable conditions.
+
+## P11 — Faction, Guild, Government, and Fleet Editor
+
+Factions require concrete leaders, members, holdings, fleets, markets, claims, clients, and rivals.
+
+It must add purposes, secrets, ranks, agents, territory, facilities, ships, finance, supply, obligations, reputation, influence, goals, and conflict clocks.
+
+**Primary downstream consumers:** Organization, Piracy, Tithe, Encounter, Job.
+
+**Exit gate:** every claimed asset references a real profile, faction finance and logistics derive from holdings, and influence can be attached to settlements, districts, routes, and regions.
+
+## P12 — Organization Operations, Finance, Logistics, and Project Editor
+
+This is the time-based management layer for guilds, companies, settlements, factions, and player organizations.
+
+It must track periods, cash flow, payroll, inventory, logistics, staff assignments, asset availability, maintenance queues, crafting and research projects, security, law pressure, morale, reputation, crises, and history.
+
+**Primary downstream consumers:** Piracy, Tithe, Encounter, Job.
+
+**Exit gate:** every resource change has a recorded cause, unavailable people or assets cannot be assigned, and advancing time updates finance, maintenance, supply, projects, and crises consistently.
+
+## P13 — Black Market, Piracy, Smuggling, and Criminal Network Editor
+
+Criminal systems must overlay legitimate markets, routes, ships, officials, and factions.
+
+It must add criminal cells, cover businesses, contraband chains, suppliers, buyers, ships, hideouts, bribes, protection, victims, rivals, evidence, heat, law pressure, moral complications, and planned operations.
+
+**Primary downstream consumers:** Encounter, Job, Organization pressure, Market disruption.
+
+**Exit gate:** contraband moves through real supply chains and routes, bribed officials reference persistent records, and evidence and heat can escalate into world-state changes.
+
+## P14 — Draconic Tithe, Settlement Crisis, and Intervention Editor
+
+Major crises must consume real food, water, money, labor, transport, leadership, and time.
+
+It must add demands, legal authority, collection schedules, enforcers, remaining stocks, hostages, collaborators, resistance, public response, countdowns, intervention choices, consequences, and recovery.
+
+**Primary downstream consumers:** Encounter and Job.
+
+**Exit gate:** demands deduct from real ledgers, countdown transitions have explicit triggers, and interventions update settlement, market, faction, organization, route, and fleet state.
+
+## P15 — Encounter, Hazard, Chase, and Conflict Editor
+
+Encounters should assemble persistent locations, participants, hazards, ships, factions, creatures, motives, and consequences.
+
+It must add objectives, zones, participants, morale, tactics, negotiation, hazards, reinforcements, retreat conditions, rewards, evidence, escalation, and explicit resolution effects.
+
+**Primary downstream consumer:** Job/Mission Editor.
+
+**Exit gate:** participants and locations reference persistent records, difficulty can be adjusted without rebuilding the scene, and outcomes export world-state changes.
+
+## P16 — Job Board, Mission Packet, and Campaign Hook Editor
+
+This is the capstone composer.
+
+It must draw patrons, locations, routes, cargo, rewards, clocks, opposition, encounters, expenses, legal effects, faction effects, failure outcomes, and follow-up hooks from completed systems.
+
+It must produce both a player-facing handout and a GM packet.
+
+**Exit gate:** mission records reference existing world objects rather than copying disconnected text, rewards and expenses reconcile with economic ledgers, and success or failure exports explicit campaign-state changes.
+
+# Construction workflow for every stage
+
+Each editor follows the same order of operations:
+
+1. Audit upstream schemas and actual exported examples.
+2. Define the canonical input and output contract.
+3. Add or revise the JSON schema.
+4. Build migration adapters for older alpha records.
+5. Create representative valid, edge-case, and invalid fixtures.
+6. Implement the editor through the shared kernel.
+7. Add manual controls before random generation.
+8. Add derived calculations and reconciliation warnings.
+9. Add selective randomization and presets.
+10. Add canonical JSON, wiki, and downstream exports.
+11. Add accessibility, mobile layout, and keyboard review.
+12. Add automated validation and smoke tests.
+13. Test imports into the next two downstream editor fixtures.
+14. Update registry status, wiki links, README, and development history.
+15. Mark the editor complete only after its exit gate passes.
+
+# Work that should not begin early
+
+The following should remain schema notes or fixtures until their dependencies are complete:
+
+- Route simulation before quantitative vessels and ecological hazards exist.
+- Market economics before settlement demand, production, transport, and inventory exist.
+- Faction operations before assets, routes, markets, fleets, and personnel are persistent records.
+- Piracy before legitimate routes, markets, ships, and law pressure exist.
+- Tithe simulation before settlement and market ledgers exist.
+- Encounter packets before persistent participants and locations exist.
+- Mission packets before encounters, patrons, routes, rewards, and consequences exist.
+
+This order prevents the codebase from filling with attractive but disconnected random tables that later require complete replacement.
