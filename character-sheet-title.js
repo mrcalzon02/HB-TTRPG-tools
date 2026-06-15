@@ -40,19 +40,24 @@
     input?.addEventListener('input', syncPrintTitle);
   }
 
-  function loadSpellGenerators() {
-    if (document.querySelector('script[data-spell-generators]')) return;
+  function loadScriptOnce(src, attributeName, datasetKey) {
+    if (document.querySelector(`script[${attributeName}]`)) return;
     const script = document.createElement('script');
-    script.src = 'spell-generators.js';
+    script.src = src;
     script.defer = true;
-    script.dataset.spellGenerators = 'true';
+    script.dataset[datasetKey] = 'true';
     document.body.appendChild(script);
   }
 
+  function loadSupplementalGenerators() {
+    loadScriptOnce('spell-generators.js', 'data-spell-generators', 'spellGenerators');
+    loadScriptOnce('kaysender-npc-generator.js', 'data-npc-generator', 'npcGenerator');
+  }
+
   applyTitle();
-  loadSpellGenerators();
+  loadSupplementalGenerators();
   document.addEventListener('DOMContentLoaded', () => {
     applyTitle();
-    loadSpellGenerators();
+    loadSupplementalGenerators();
   });
 })();
