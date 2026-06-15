@@ -17,6 +17,8 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `kaysender-settlement-editor.js` — staged deep-editor runtime for settlements and skyports.
 - `kaysender-airship-editor.js` — staged deep-editor runtime for airships and vessels.
 - `data/kaysender-tools-registry.json` — machine-readable registry for planned, alpha, and editor-alpha Kaysender tools, utilities, and generators.
+- `data/kaysender/generators/npc-crew-generator.json` — NPC class, ancestry, narrative-table manifest, and population-band pack index.
+- `data/kaysender/generators/npc-crew/bands-*.json` — 37 civilian, authority, outlaw, specialist, and airship population bands used by the NPC and Crew Generator.
 - `data/kaysender/wiki/wiki-index.json` — multi-pack wiki loader index.
 - `data/kaysender/wiki/entries.json` — seed Kaysender wiki entries with related-entry and related-module links.
 - `data/kaysender/wiki/*-depth.json` — deeper source-derived wiki packs for world, peoples, nations, factions/economy, and airships.
@@ -76,6 +78,9 @@ The following registry cards now launch working alpha or editor-alpha tools:
 - Shop and Market Stall Generator
 - Airship and Vessel Generator and Editor
 - Supply, Water, and Survival Planner
+- NPC and Crew Generator
+
+The NPC and Crew Generator supports 37 population bands ranging from children, elderly residents, laborers, farmers, artisans, scribes, government workers, clergy, and merchants through militia, professional soldiers, officers, mercenaries, bandits, criminals, smugglers, pirates, prisoners, refugees, explorers, and specialized airship crews. It can draw from eleven standard player classes, five standard NPC classes, or the indexed Kaysender Airship Engineer, Air Captain, and Sky Warden class concepts. Custom-class numerical mechanics remain explicitly marked conversion-pending.
 
 These are campaign-operation utilities. They are not final balanced rules text and should be treated as drafting aids until the table data and conversion logic are expanded.
 
@@ -132,6 +137,6 @@ Future additions can fill in:
 
 - Tools: rule references, airship construction, crafting systems, organization operations, campaign management helpers
 - Utilities: sheet builders, wiki browsing, supply planners, trackers, printable aids
-- Generators: NPCs, treasure, settlements, encounters, dungeons, factions, rumors, routes, markets, ships, and homebrew item builders
+- Generators: treasure, settlements, encounters, dungeons, factions, rumors, routes, markets, ships, and homebrew item builders
 
 This project is for homebrew tabletop use and avoids copying any official proprietary sheet layout or protected rulebook text.
