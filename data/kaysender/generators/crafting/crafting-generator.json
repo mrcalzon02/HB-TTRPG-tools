@@ -1,0 +1,44 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "ruleset": "Hypertext d20 compatible",
+  "description": "Data-driven recipe and project generator built from the converted Kaysender invention system.",
+  "packs": [
+    "data/kaysender/generators/crafting/equipment-templates.json",
+    "data/kaysender/generators/crafting/ship-module-templates.json",
+    "data/kaysender/generators/crafting/crafting-modifiers.json"
+  ],
+  "complexities": [
+    {"id":"routine","label":"Routine","dc":10,"workUnits":1,"priceMultiplier":0.5,"minimumLevel":1},
+    {"id":"standard","label":"Standard","dc":15,"workUnits":3,"priceMultiplier":1,"minimumLevel":1},
+    {"id":"complex","label":"Complex","dc":20,"workUnits":6,"priceMultiplier":2,"minimumLevel":3},
+    {"id":"advanced","label":"Advanced","dc":25,"workUnits":12,"priceMultiplier":5,"minimumLevel":7},
+    {"id":"revolutionary","label":"Revolutionary","dc":30,"workUnits":24,"priceMultiplier":12,"minimumLevel":12}
+  ],
+  "qualities": [
+    {"id":"improvised","label":"Improvised / Reclaimed","buildModifier":-2,"testModifier":-2,"materialMultiplier":0.75,"saleMultiplier":0.75,"workMultiplier":1,"automaticFlaws":1},
+    {"id":"common","label":"Common Workshop Quality","buildModifier":0,"testModifier":0,"materialMultiplier":1,"saleMultiplier":1,"workMultiplier":1,"automaticFlaws":0},
+    {"id":"fine","label":"Fine Materials","buildModifier":2,"testModifier":2,"materialMultiplier":1.5,"saleMultiplier":1.5,"workMultiplier":1.25,"automaticFlaws":0},
+    {"id":"exceptional","label":"Exceptional / Purpose-Built","buildModifier":4,"testModifier":4,"materialMultiplier":3,"saleMultiplier":3,"workMultiplier":1.5,"automaticFlaws":0}
+  ],
+  "facilities": [
+    {"id":"improvised","label":"Improvised Worksite","modifier":-2,"description":"Field bench, damaged workshop, moving deck, or incomplete tools."},
+    {"id":"proper","label":"Proper Workshop","modifier":0,"description":"Ordinary equipped workshop suited to the primary Craft skill."},
+    {"id":"specialized","label":"Specialized Facility","modifier":2,"description":"Dedicated laboratory, shipyard bay, enchanting circle, or precision foundry."},
+    {"id":"master","label":"Master Facility","modifier":4,"description":"Rare purpose-built facility with calibrated tools, records, and safe testing space."}
+  ],
+  "scales": [
+    {"id":"personal","label":"Personal Equipment","workMultiplier":1,"priceMultiplier":1,"slotLabel":"carried or worn"},
+    {"id":"crew","label":"Crew-Served Equipment","workMultiplier":2,"priceMultiplier":3,"slotLabel":"deck or room installation"},
+    {"id":"ship","label":"Ship Module","workMultiplier":3,"priceMultiplier":8,"slotLabel":"one standard ship module slot"},
+    {"id":"core","label":"Major Core or Drive System","workMultiplier":6,"priceMultiplier":20,"slotLabel":"one core or major engineering bay"}
+  ],
+  "generatorModes": [
+    {"id":"all","label":"Any Crafting Project"},
+    {"id":"personal-equipment","label":"Personal Equipment and Gadgets"},
+    {"id":"weapon-armor","label":"Weapon and Armor Equipment"},
+    {"id":"ship-module","label":"Airship Modules"},
+    {"id":"ship-weapon","label":"Ship Weapons and Defenses"},
+    {"id":"ship-core","label":"Airship Cores and Drives"}
+  ]
+}
