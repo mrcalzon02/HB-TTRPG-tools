@@ -181,6 +181,24 @@
       "status": "planned",
       "description": "Tracks finance, morale, logistics, security, law pressure, innovation, reputation, staffing, and supply chains.",
       "dataFamilies": ["organizationProfile", "operationCheck", "crisisProfile", "resourceLedger"]
+    },
+    {
+      "id": "normal-spell-generator",
+      "section": "generators",
+      "title": "Normal Spell Generator",
+      "priority": 20,
+      "status": "alpha",
+      "description": "Builds mechanically structured Hypertext d20-compatible spell drafts with spell level, class assignments, school, descriptors, components, casting time, range, target or area, duration, saving throw, spell resistance, scaling effect, and balance guidance.",
+      "dataFamilies": ["spellProfile", "classSpellList", "spellLevel", "school", "descriptor", "targeting", "saveProfile", "balanceNote"]
+    },
+    {
+      "id": "eccentric-spell-generator",
+      "section": "generators",
+      "title": "Eccentric Spell Generator",
+      "priority": 21,
+      "status": "alpha",
+      "description": "Creates flavor-first magical oddities using absurd creators, silly names, bizarre subjects, unnecessary components, humorous manifestations, peculiar side effects, and optional loose mechanics.",
+      "dataFamilies": ["eccentricSpellProfile", "creatorName", "oddityStyle", "nonsenseComponent", "manifestation", "sideEffect", "gmUse"]
     }
   ]
 }
