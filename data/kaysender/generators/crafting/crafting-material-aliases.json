@@ -1,0 +1,20 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.1",
+  "description": "Generator-facing material ID aliases and the explicit unknown-core power profile.",
+  "materialSets": [
+    {"id":"standard-metalwork","label":"tempered steel, brass fittings, hardwood, leather seals","tags":["standard-metalwork","metal","mechanical"]},
+    {"id":"light-airframe","label":"ironwood ribs, stormsilk webbing, brass joints, skystone dust","tags":["light-airframe","lightweight","airship"]},
+    {"id":"aetheric","label":"aether crystal, silver wire, etched brass, insulating ceramic","tags":["aetheric","arcane","power"]},
+    {"id":"ember","label":"emberglass, heat-treated steel, firebrick ceramic, copper channels","tags":["ember","fire","power"]},
+    {"id":"windroot","label":"living windroot, resin seals, stormsilk, carved skystone","tags":["windroot","living","wind"]},
+    {"id":"salvage","label":"reclaimed plates, mismatched gears, patched wire, reused crystal","tags":["salvage","improvised"]},
+    {"id":"alchemical","label":"glass vessels, catalyst salts, treated leather, brass valves","tags":["alchemical","alchemy","consumable"]},
+    {"id":"warded","label":"silver lattice, etched stone, ward ink, aether crystal","tags":["warded","arcane","defense"]},
+    {"id":"marine","label":"tarred ironwood, bronze fittings, weatherproof canvas, sealed rope","tags":["marine","weather","ship"]},
+    {"id":"precision","label":"clockwork brass, jewel bearings, calibrated crystal, fine steel","tags":["precision","navigation"]}
+  ],
+  "powerSources": [
+    {"id":"unknown","label":"unidentified inherited or self-sustaining power source","maintenance":"Record every activation, fluctuation, and shutdown; do not assume the previous operating procedure remains safe."}
+  ]
+}
