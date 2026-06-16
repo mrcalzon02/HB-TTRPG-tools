@@ -1,2 +1,55 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>Eccentric Spell Generator</title></head><body></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eccentric Spell Generator · HB TTRPG Tools</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="eccentric-spell-creator.css" />
+  <style>
+    body{min-height:100vh}.eccentric-workspace-header{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:24px;flex-wrap:wrap}.eccentric-workspace-main{padding:0 24px 32px}.eccentric-workspace-main>section{max-width:1500px;margin:0 auto}.back-link{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--ink);text-decoration:none;background:rgba(255,255,255,.04)}
+  </style>
+</head>
+<body>
+  <header class="site-header eccentric-workspace-header no-print">
+    <div><p class="eyebrow">HB TTRPG Tools · Thematic generator</p><h1>Eccentric Spell Generator</h1><p class="subtitle">Absurd magical concepts powered by restored competence, complexity, and moral-tone systems.</p></div>
+    <a class="back-link" href="index.html#generators">Return to Generators</a>
+  </header>
+  <main class="eccentric-workspace-main">
+    <section id="eccentric-spell-creator-root" class="eccentric-spell-creator">
+      <div class="section-heading"><p class="eyebrow">Purely thematic generator</p><h2>Eccentric Spell Generator</h2><p>Creates ridiculous titles, manifestations, moral behavior, secondary consequences, knock-on effects, and lingering aftermath. Suggested levels describe narrative scale only; exact rules remain the job of the standard Spell Creator.</p></div>
+      <div class="esc-example-grid">
+        <div class="esc-example"><strong>Milk Storm</strong><p>A low-complexity Goody Two-Shoes Good weather spell that offers cups, towels, and a lactose-free alternative before inconveniencing anyone.</p></div>
+        <div class="esc-example"><strong>Necromantic Incantation of the Yarn Giant Banishment Ritual</strong><p>A sinister, massively overcomplicated ritual involving transplanar yarn accounting, seven witnesses, and a declaration that the Yarn Giant is cosmologically unwelcome.</p></div>
+      </div>
+      <div class="esc-thematic-note"><strong>Thematic boundary:</strong> no damage dice, saving throws, or finished mechanics are generated here.</div>
+      <div class="esc-controls">
+        <label>Theme<select id="esc-theme"></select></label>
+        <label>Casting Tradition<select id="esc-class"></select></label>
+        <label>Competence / Complexity<select id="esc-competence"></select></label>
+        <label>Moral Tone<select id="esc-morality"></select></label>
+        <label>Oddity Severity<select id="esc-oddity"></select></label>
+        <label>Concept Bias<select id="esc-bias"></select></label>
+        <label>Quantity<input id="esc-quantity" type="number" min="1" max="20" value="1" /></label>
+      </div>
+      <div class="esc-actions">
+        <button id="esc-generate" type="button">Generate Eccentric Spells</button>
+        <button id="esc-milk" type="button" class="esc-signature">Generate Milk Storm</button>
+        <button id="esc-yarn" type="button" class="esc-signature">Generate Yarn Giant Ritual</button>
+        <button id="esc-copy" type="button">Copy Full Text</button>
+        <button id="esc-export" type="button">Export JSON</button>
+      </div>
+      <p id="esc-status" class="esc-status">Loading eccentric vocabulary…</p>
+      <div id="esc-output"></div>
+    </section>
+  </main>
+  <script src="spell-creator-vocabulary.js"></script>
+  <script src="eccentric-spell-competence.js"></script>
+  <script src="eccentric-spell-morality.js"></script>
+  <script src="eccentric-spell-vocabulary.js"></script>
+  <script src="eccentric-spell-engine.js"></script>
+  <script src="eccentric-spell-view.js"></script>
+  <script src="eccentric-spell-text.js"></script>
+  <script src="eccentric-spell-creator.js"></script>
+</body>
+</html>
