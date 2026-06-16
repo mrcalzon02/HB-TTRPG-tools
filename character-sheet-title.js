@@ -51,6 +51,7 @@
 
   function loadSupplementalGenerators() {
     loadScriptOnce('spell-generators.js', 'data-spell-generators', 'spellGenerators');
+    loadScriptOnce('spell-archive.js', 'data-spell-archive', 'spellArchive');
     loadScriptOnce('kaysender-npc-generator.js', 'data-npc-generator', 'npcGenerator');
     loadScriptOnce('kaysender-crafting-generator.js', 'data-crafting-generator', 'craftingGenerator');
   }
