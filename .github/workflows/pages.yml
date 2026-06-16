@@ -35,6 +35,9 @@ jobs:
       - name: Validate main-line editor roadmap
         run: node scripts/validate-editor-roadmap.mjs
 
+      - name: Validate arcane academic curricula
+        run: node scripts/validate-arcane-academic-generator.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
@@ -53,6 +56,15 @@ jobs:
           node --check eccentric-spell-actions.js
           node --check eccentric-spell-runtime.js
           node --check eccentric-spell-entry.js
+          node --check arcane-academic-domains.js
+          node --check arcane-academic-vocabulary.js
+          node --check arcane-academic-engine.js
+          node --check arcane-academic-view.js
+          node --check arcane-academic-text.js
+          node --check arcane-academic-controller-core.js
+          node --check arcane-academic-actions.js
+          node --check arcane-academic-runtime.js
+          node --check arcane-academic-entry.js
           node --check kaysender-editors.js
           node --check kaysender-settlement-editor.js
           node --check kaysender-airship-editor.js
