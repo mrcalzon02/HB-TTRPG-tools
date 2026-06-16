@@ -11,6 +11,11 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `character-sheet-layout.css` — readability, spacing, and wide-panel layout polish for the character sheet.
 - `app.js` — tab navigation, panel layout controls, character-sheet math, autosave, import/export, print-to-PDF helpers, registry rendering, and loading for the alpha Kaysender tool layer.
 - `character-sheet-title.js` — migrates older local sheet titles and loads supplemental generator runtimes.
+- `spell-creator.html` — standalone workspace for the project-standard Spell Creator.
+- `spell-creator-vocabulary.js` — standard spell themes, class traditions, naming pools, descriptive prose, components, practical uses, and origins.
+- `spell-creator-mechanics.js` — mechanical spell roles, delivery shapes, saves, conditions, ranges, components, damage and healing progression, caster-level scaling, and balance diagnostics.
+- `module-spell-creator.js` — interactive Spell Creator controls, visible spell presentation, copy support, vocabulary auditing, and JSON export.
+- `spell-creator-entry.js` — generator-menu launcher for the standalone Spell Creator.
 - `kaysender-tools.js` — alpha interactive Kaysender tools attached to the registry cards.
 - `kaysender-wiki.js` — alpha hypertext wiki browser and cross-link layer between lore entries and modules.
 - `kaysender-editors.js` — staged deep-editor runtime, beginning with the Floating Island / Skyland Editor.
@@ -91,8 +96,14 @@ The following registry cards now launch working alpha or editor-alpha tools:
 - Crafting, Gadget, and Equipment Creator
 - Supply, Water, and Survival Planner
 - NPC and Crew Generator
-- Normal Spell Generator
-- Eccentric Spell Generator
+
+The general **Generators** page also launches the standalone **Spell Creator**, which is the project’s single standard spell-generation workflow.
+
+### Spell Creator
+
+The Spell Creator builds complete Hypertext d20-compatible spell drafts rather than flavor-only stubs. It provides spell level, class assignment, school, role, delivery shape, damage or energy type, saves or attack resolution, conditions, range, concentration, ritual casting, component burden, spell resistance, target or area, duration, damage or healing progression, caster-level caps, generous manifestation and origin text, practical-use guidance, automatic balance warnings, copyable full spell text, and JSON export.
+
+The former split Normal and Eccentric spell placeholders are not part of the active generator system. All standard spell work is consolidated in `spell-creator.html` and its dedicated vocabulary, mechanics, and module files.
 
 ### NPC and Crew Generator
 
