@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Malefic Academic Studies Generator · HB TTRPG Tools</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="malefic-academic-studies.css" />
+</head>
+<body>
+  <header class="site-header mas-header no-print">
+    <div>
+      <p class="eyebrow">HB TTRPG Tools · Evil-aligned academic worldbuilding</p>
+      <h1>Malefic Academic Studies Generator</h1>
+      <p class="subtitle">Create hidden cult schools, infernal seminaries, abyssal universities, forbidden degrees, condemned syllabi, and academically defensible wickedness.</p>
+    </div>
+    <a class="mas-back" href="index.html#generators">Return to Generators</a>
+  </header>
+
+  <main class="mas-main">
+    <section id="malefic-academic-root" class="malefic-academic-generator">
+      <div class="section-heading">
+        <p class="eyebrow">Complete fictional evil curricula</p>
+        <h2>Generate a School of Demonology and Occult Studies</h2>
+        <p>The generator ranges from a seven-day cult-training course to a Black Doctorate. Every result includes an institution, doctrine, patron, initiation, taboo, term sequence, courses, syllabi, ritual practicals, examinations, forbidden study materials, hazards, and capstone requirements.</p>
+      </div>
+
+      <p class="mas-notice"><strong>Fictional worldbuilding only.</strong> These schools, rituals, doctrines, sacrifices, curses, and academic hazards are invented setting material rather than real-world occult instruction.</p>
+
+      <div class="mas-signatures">
+        <button id="mas-heretics-101" type="button">Generate Heretics Cult Rituals 101</button>
+        <button id="mas-astral-corruption" type="button">Generate Advanced Demonic Soul Corruption</button>
+        <button id="mas-chagoth-manual" type="button">Generate Chagoth’s Manual Curriculum</button>
+      </div>
+
+      <div class="mas-seed-grid">
+        <div class="mas-seed"><strong>Chagoth's Manual of the Insane: Communion of Curses</strong><br />A cognitively hazardous doctoral curriculum in curse theology and impossible spirit psychology.</div>
+        <div class="mas-seed"><strong>Crystaline Enchantment of Cairns</strong><br />Sepulchral wards, grave-memory resonance, crystalline inscriptions, and hostile ancestral review.</div>
+        <div class="mas-seed"><strong>Dying Divnities' Sacrifice of the Labyrinths of Falsehood</strong><br />False miracles, dying-god offerings, labyrinth doctrine, and manufactured revelation.</div>
+        <div class="mas-seed"><strong>High Communion of the Monolith of Horror</strong><br />Architectural dread, black-stone revelation, communal panic, and monolith resonance.</div>
+        <div class="mas-seed"><strong>Summoning of Unspeakable Vorticies</strong><br />Threshold instability, vortex taxonomy, dismissal precedence, and regrettable respondents.</div>
+        <div class="mas-seed"><strong>Unknowable Evocation of the Spirits of Madness</strong><br />Impossible testimony, dream contamination, observer instability, and supervised contradiction.</div>
+      </div>
+
+      <div class="mas-controls">
+        <label>Institution Type<select id="mas-tone"></select></label>
+        <label>Program Type<select id="mas-type"></select></label>
+        <label>Primary Discipline<select id="mas-domain"></select></label>
+        <label>Secondary Discipline<select id="mas-secondary"></select></label>
+        <label>Teaching Orientation<select id="mas-orientation"></select></label>
+        <label>Entry Rank<select id="mas-level"></select></label>
+        <label>Safety Policy<select id="mas-policy"></select></label>
+        <label>Course Count Override<select id="mas-course-count"><option value="0">Use program default</option><option value="1">1 course</option><option value="4">4 courses</option><option value="6">6 courses</option><option value="8">8 courses</option><option value="10">10 courses</option><option value="12">12 courses</option></select></label>
+        <label>Programs to Generate<input id="mas-quantity" type="number" min="1" max="10" value="1" /></label>
+      </div>
+
+      <div class="mas-actions">
+        <button id="mas-generate" type="button">Generate Malefic Programs</button>
+        <button id="mas-copy" type="button">Copy Full Forbidden Curriculum</button>
+        <button id="mas-export" type="button">Export JSON</button>
+      </div>
+      <p id="mas-status" class="mas-status">Opening the condemned catalogue…</p>
+      <div id="mas-output"></div>
+    </section>
+  </main>
+
+  <script src="malefic-academic-domains.js"></script>
+  <script src="malefic-academic-vocabulary.js"></script>
+  <script src="malefic-academic-engine.js"></script>
+  <script src="malefic-academic-view.js"></script>
+  <script src="malefic-academic-text.js"></script>
+  <script src="malefic-academic-controller-core.js"></script>
+  <script src="malefic-academic-actions.js"></script>
+  <script src="dark-academic-runtime.js"></script>
+</body>
+</html>
