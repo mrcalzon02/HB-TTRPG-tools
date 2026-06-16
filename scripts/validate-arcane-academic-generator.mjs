@@ -25,6 +25,18 @@ for (const title of requiredSeeds) {
   if (!Domains.CURATED_TITLES.includes(title)) throw new Error(`Missing supplied seed title: ${title}`);
 }
 
+const mappedSeeds = new Set();
+for (const [domainId, titles] of Object.entries(Domains.TITLE_SEEDS || {})) {
+  if (!Domains.DOMAINS[domainId]) throw new Error(`Title seed map references unknown domain '${domainId}'.`);
+  for (const title of titles) {
+    if (!Domains.CURATED_TITLES.includes(title)) throw new Error(`Title seed map contains unknown title '${title}'.`);
+    mappedSeeds.add(title);
+  }
+}
+for (const title of requiredSeeds) {
+  if (!mappedSeeds.has(title)) throw new Error(`Canonical title '${title}' is not routed to an academic discipline.`);
+}
+
 let programsChecked = 0;
 let coursesChecked = 0;
 const domainIds = Object.keys(Domains.DOMAINS);
@@ -32,6 +44,7 @@ for (const domainId of domainIds) {
   for (const levelId of Object.keys(Vocabulary.LEVELS)) {
     for (const orientationId of Object.keys(Vocabulary.ORIENTATIONS)) {
       const secondaryId = domainIds[(domainIds.indexOf(domainId) + 1) % domainIds.length];
+      const allowedCurated = new Set([...(Domains.TITLE_SEEDS[domainId] || []), ...(Domains.TITLE_SEEDS[secondaryId] || [])]);
       const program = Engine.buildProgram(Domains, Vocabulary, {
         toneId: 'prestigious', typeId: 'certificate', domainId, secondaryId,
         orientationId, levelId, policyId: 'supervised', quantity: 1, courseCount: 4
@@ -46,6 +59,9 @@ for (const domainId of domainIds) {
         for (const field of required) if (!course[field]) throw new Error(`Course '${course.code}' is missing ${field}.`);
         if (course.units.length < 5 || course.learningOutcomes.length < 3 || course.requiredMaterials.length < 3) throw new Error(`Course '${course.code}' has an incomplete syllabus.`);
         if (index > 0 && !course.prerequisite.includes(program.courses[index - 1].code)) throw new Error(`Course '${course.code}' has a broken prerequisite chain.`);
+        if (Domains.CURATED_TITLES.includes(course.title) && !allowedCurated.has(course.title)) {
+          throw new Error(`Curated title '${course.title}' appeared outside its relevant disciplines.`);
+        }
       });
     }
   }
@@ -55,3 +71,4 @@ console.log('Arcane Academic Studies Generator validation passed.');
 console.log(`Programs checked: ${programsChecked}`);
 console.log(`Courses checked: ${coursesChecked}`);
 console.log(`Canonical supplied titles: ${requiredSeeds.length}`);
+console.log(`Discipline-routed canonical titles: ${mappedSeeds.size}`);
