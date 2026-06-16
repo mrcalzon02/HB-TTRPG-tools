@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arcane Academic Studies Generator · HB TTRPG Tools</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="arcane-academic-studies.css" />
+</head>
+<body>
+  <header class="site-header aas-header no-print">
+    <div>
+      <p class="eyebrow">HB TTRPG Tools · Academic worldbuilding generator</p>
+      <h1>Arcane Academic Studies Generator</h1>
+      <p class="subtitle">Build fictional magical departments, programs, course catalogues, syllabi, examinations, laboratories, and study materials.</p>
+    </div>
+    <a class="aas-back" href="index.html#generators">Return to Generators</a>
+  </header>
+
+  <main class="aas-main">
+    <section id="arcane-academic-root" class="arcane-academic-generator">
+      <div class="section-heading">
+        <p class="eyebrow">Complete fictional curricula</p>
+        <h2>Generate a Course of Arcane Study</h2>
+        <p>The generator creates either a single survey course or a complete certificate, minor, major, graduate, or doctoral sequence. Every course includes topics, instructional methods, laboratory work, assignments, examinations, materials, hazards, prerequisites, and passing requirements.</p>
+      </div>
+
+      <div class="aas-seed-grid">
+        <div class="aas-seed"><strong>Analytical Temporal Engineering</strong><br />Causal models, clock divergence, paradox containment, and temporal laboratory work.</div>
+        <div class="aas-seed"><strong>Comparative Pyrotechnic Geomancy</strong><br />Magical combustion studied through ley channels, mineral resonance, and controlled detonation.</div>
+        <div class="aas-seed"><strong>Inadvisable Applied Demonology</strong><br />Restricted seminars, supervised bindings, contract analysis, and emergency banishment examinations.</div>
+        <div class="aas-seed"><strong>Essential Inter-Planar Taxonomy</strong><br />Planar classification, portal environments, specimen cataloguing, and threshold safety.</div>
+        <div class="aas-seed"><strong>Remedial Pyrotechnic Alchemy</strong><br />Corrective laboratory instruction for students who have already set the wrong thing on fire.</div>
+        <div class="aas-seed"><strong>Theoretical Popular Abjuration</strong><br />Public warding traditions examined through formal models, case studies, and hostile peer review.</div>
+      </div>
+
+      <div class="aas-controls">
+        <label>Institution Type<select id="aas-tone"></select></label>
+        <label>Program Type<select id="aas-type"></select></label>
+        <label>Primary Discipline<select id="aas-domain"></select></label>
+        <label>Secondary Discipline<select id="aas-secondary"></select></label>
+        <label>Teaching Orientation<select id="aas-orientation"></select></label>
+        <label>Entry Level<select id="aas-level"></select></label>
+        <label>Safety Policy<select id="aas-policy"></select></label>
+        <label>Course Count Override<select id="aas-course-count"><option value="0">Use program default</option><option value="1">1 course</option><option value="4">4 courses</option><option value="6">6 courses</option><option value="8">8 courses</option><option value="10">10 courses</option><option value="12">12 courses</option></select></label>
+        <label>Programs to Generate<input id="aas-quantity" type="number" min="1" max="10" value="1" /></label>
+      </div>
+
+      <div class="aas-actions">
+        <button id="aas-generate" type="button">Generate Academic Programs</button>
+        <button id="aas-copy" type="button">Copy Full Curriculum</button>
+        <button id="aas-export" type="button">Export JSON</button>
+      </div>
+      <p id="aas-status" class="aas-status">Loading academic departments…</p>
+      <div id="aas-output"></div>
+    </section>
+  </main>
+
+  <script src="arcane-academic-domains.js"></script>
+  <script src="arcane-academic-vocabulary.js"></script>
+  <script src="arcane-academic-engine.js"></script>
+  <script src="arcane-academic-view.js"></script>
+  <script src="arcane-academic-text.js"></script>
+  <script src="arcane-academic-controller-core.js"></script>
+  <script src="arcane-academic-actions.js"></script>
+  <script src="arcane-academic-runtime.js"></script>
+</body>
+</html>
