@@ -43,6 +43,16 @@ jobs:
           node --check spell-creator-mechanics.js
           node --check module-spell-creator.js
           node --check spell-creator-entry.js
+          node --check eccentric-spell-competence.js
+          node --check eccentric-spell-morality.js
+          node --check eccentric-spell-vocabulary.js
+          node --check eccentric-spell-engine.js
+          node --check eccentric-spell-view.js
+          node --check eccentric-spell-text.js
+          node --check eccentric-spell-controller-core.js
+          node --check eccentric-spell-actions.js
+          node --check eccentric-spell-runtime.js
+          node --check eccentric-spell-entry.js
           node --check kaysender-editors.js
           node --check kaysender-settlement-editor.js
           node --check kaysender-airship-editor.js
