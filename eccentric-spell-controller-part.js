@@ -1,0 +1,1 @@
+(() => { window.HBEccentricSpellControllerPart = true; })();
