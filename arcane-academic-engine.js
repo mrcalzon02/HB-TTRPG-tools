@@ -7,7 +7,9 @@
 
   function academicTitle(D,V,domainId,secondaryId,orientationId,levelId,index){
     const domain=D.DOMAINS[domainId],secondary=D.DOMAINS[secondaryId],orientation=V.ORIENTATIONS[orientationId],level=V.LEVELS[levelId];
-    if(index===0 && Math.random()<.35) return pick(D.CURATED_TITLES);
+    const curated=[...(D.TITLE_SEEDS?.[domainId]||[]),...(D.TITLE_SEEDS?.[secondaryId]||[])];
+    const relevantCurated=[...new Set(curated)];
+    if(index===0 && relevantCurated.length && Math.random()<.35) return pick(relevantCurated);
     const forms=[
       ()=>`${pick(orientation.adjectives)} ${pick(domain.nouns)}`,
       ()=>`${level.label} ${pick(domain.nouns)}`,
