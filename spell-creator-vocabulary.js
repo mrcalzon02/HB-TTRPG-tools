@@ -1,95 +1,186 @@
 (() => {
-  const combine=(a,b,c,limit=140)=>{
-    const out=[];
-    for(const x of a) for(const y of b) for(const z of c){
-      const value=`${x} ${y} ${z}`.replace(/\s+/g,' ').trim();
-      if(!out.includes(value)) out.push(value);
-      if(out.length>=limit) return out;
+  const unique = values => [...new Set(values.filter(Boolean))];
+  const combine = (starts, middles, ends, limit = 180) => {
+    const output = [];
+    for (const start of starts) {
+      for (const middle of middles) {
+        for (const end of ends) {
+          output.push(`${start} ${middle} ${end}`.replace(/\s+/g, ' ').trim());
+          if (output.length >= limit) return unique(output);
+        }
+      }
     }
-    return out;
+    return unique(output);
   };
-  const phrase=(starts,middles,ends,limit=140)=>combine(starts,middles,ends,limit);
-  const ensure70=(name,arr)=>{
-    const unique=[...new Set(arr)];
-    if(unique.length<70) throw new Error(`${name} contains only ${unique.length} entries; 70 required.`);
-    return unique;
+  const pick = values => values[Math.floor(Math.random() * values.length)];
+
+  const THEME_SPECS = {
+    arcane: {
+      label: 'Arcane',
+      roots: ['Aegis', 'Lattice', 'Sigil', 'Prism', 'Convergence', 'Cipher', 'Vector', 'Formula', 'Mandala', 'Theorem'],
+      tones: ['Violet', 'Azure', 'Silver', 'Crystalline', 'Rotating', 'Recursive', 'Astral', 'Runic'],
+      subjects: ['ward', 'matrix', 'equation', 'glyph', 'prism', 'conduit', 'sequence', 'geometry', 'pattern'],
+      places: ['academy archive', 'imperial observatory', 'sealed laboratory', 'dueling college', 'planar institute', 'royal athenaeum', 'lost thesis vault', 'wizard senate'],
+      descriptors: ['force', 'light', 'electricity', 'sonic']
+    },
+    divine: {
+      label: 'Divine',
+      roots: ['Benediction', 'Judgment', 'Sanctuary', 'Litany', 'Covenant', 'Radiance', 'Mercy', 'Revelation', 'Vigil', 'Canon'],
+      tones: ['Golden', 'Choir-Borne', 'Consecrated', 'Haloed', 'Dawnlit', 'Sacred', 'Anointed', 'Luminous'],
+      subjects: ['blessing', 'edict', 'prayer', 'seal', 'hymn', 'miracle', 'covenant', 'relic-light', 'holy fire'],
+      places: ['saintly shrine', 'battlefield chapel', 'pilgrim road', 'sun temple', 'monastic archive', 'cathedral crypt', 'oracle cloister', 'knightly reliquary'],
+      descriptors: ['radiant', 'healing', 'light', 'sonic']
+    },
+    necromancy: {
+      label: 'Necromantic',
+      roots: ['Grave', 'Ossuary', 'Dirge', 'Sepulcher', 'Pall', 'Requiem', 'Marrow', 'Epitaph', 'Mausoleum', 'Wake'],
+      tones: ['Ashen', 'Corpse-Lit', 'Funerary', 'Grave-Cold', 'Bone-Wreathed', 'Mournful', 'Black-Veiled', 'Pale'],
+      subjects: ['curse', 'dirge', 'binding', 'pall', 'epitaph', 'shroud', 'grave-light', 'bone seal', 'death current'],
+      places: ['tomb-king court', 'plague crypt', 'mortuary academy', 'forgotten ossuary', 'necropolis archive', 'royal catacomb', 'graveyard chapel', 'sealed mausoleum'],
+      descriptors: ['necrotic', 'cold', 'poison', 'psychic']
+    },
+    elemental: {
+      label: 'Elemental',
+      roots: ['Pyre', 'Torrent', 'Tempest', 'Quake', 'Rime', 'Storm', 'Ember', 'Deluge', 'Zephyr', 'Magma'],
+      tones: ['Blazing', 'Thunderous', 'Glacial', 'Tidal', 'Volcanic', 'Storm-Crowned', 'Crackling', 'Searing'],
+      subjects: ['eruption', 'wave', 'blast', 'surge', 'torrent', 'mantle', 'vortex', 'pressure front', 'elemental crown'],
+      places: ['primordial forge', 'storm giant hall', 'volcanic monastery', 'deep sea shrine', 'icebound observatory', 'desert glass temple', 'sky citadel', 'earthspeaker cavern'],
+      descriptors: ['acid', 'cold', 'fire', 'lightning', 'thunder']
+    },
+    fey: {
+      label: 'Fey',
+      roots: ['Glamour', 'Thorn', 'Moonveil', 'Revel', 'Briar', 'Midsummer', 'Dewdrop', 'Foxglove', 'Masque', 'Twilight'],
+      tones: ['Silver-Pollen', 'Moonlit', 'Laughing', 'Petal-Strewn', 'Briar-Crowned', 'Velvet', 'Dancing', 'Mischievous'],
+      subjects: ['glamour', 'invitation', 'revel', 'bargain', 'dance', 'whisper', 'maze', 'moonbeam', 'thorn oath'],
+      places: ['archfey court', 'moonlit crossing', 'dryad grove', 'midsummer revel', 'glass orchard', 'fox-spirit market', 'twilight pavilion', 'enchanted hedge maze'],
+      descriptors: ['psychic', 'poison', 'light', 'force']
+    },
+    infernal: {
+      label: 'Infernal',
+      roots: ['Brand', 'Contract', 'Cinder', 'Chain', 'Edict', 'Damnation', 'Clause', 'Tribunal', 'Furnace', 'Levy'],
+      tones: ['Molten', 'Sulfurous', 'Brass-Sealed', 'Chain-Bound', 'Red-Legal', 'Furnace-Bright', 'Ash-Signed', 'Barbed'],
+      subjects: ['contract', 'brand', 'clause', 'chain', 'penalty', 'levy', 'injunction', 'writ', 'damnation seal'],
+      places: ['infernal court', 'prison archive', 'devil registry', 'furnace tribunal', 'contract vault', 'brass embassy', 'damnation chancery', 'warden foundry'],
+      descriptors: ['fire', 'necrotic', 'poison', 'psychic']
+    },
+    celestial: {
+      label: 'Celestial',
+      roots: ['Starfall', 'Mercy', 'Dawn', 'Seraphic', 'Halo', 'Ascension', 'Comet', 'Virtue', 'Firmament', 'Grace'],
+      tones: ['Starlit', 'Feathered', 'Harmonic', 'Dawn-Bright', 'Radiant', 'Seraph-Winged', 'Opaline', 'Heavenly'],
+      subjects: ['descent', 'corona', 'grace', 'guidance', 'mercy', 'banishment', 'star path', 'radiant shield', 'angelic chorus'],
+      places: ['upper-plane observatory', 'oracle sanctuary', 'seraphic choir hall', 'knightly basilica', 'starlight monastery', 'celestial embassy', 'dawn chapel', 'firmament gate'],
+      descriptors: ['radiant', 'fire', 'light', 'thunder']
+    },
+    shadow: {
+      label: 'Shadow',
+      roots: ['Umbral', 'Eclipse', 'Nightglass', 'Shade', 'Gloam', 'Black Veil', 'Silhouette', 'Dusk', 'Nocturne', 'Afterimage'],
+      tones: ['Ink-Black', 'Lightless', 'Cold-Grey', 'Moonless', 'Folded', 'Silent', 'Velvet-Dark', 'Eclipsed'],
+      subjects: ['veil', 'duplicate', 'silence', 'blindness', 'step', 'afterimage', 'gloom field', 'shadow key', 'night corridor'],
+      places: ['shadow court', 'thief-mage cellar', 'eclipse observatory', 'lightless archive', 'midnight theater', 'gloam monastery', 'dusk market', 'nightglass laboratory'],
+      descriptors: ['cold', 'necrotic', 'psychic', 'force']
+    },
+    psionic: {
+      label: 'Psionic',
+      roots: ['Mindspike', 'Resonance', 'Ego', 'Thoughtform', 'Synapse', 'Will', 'Cognition', 'Dream', 'Impulse', 'Mnemonic'],
+      tones: ['Silent', 'Violet', 'Crystal-Mental', 'Pressure-Wave', 'Telepathic', 'Focused', 'Lucid', 'Resonant'],
+      subjects: ['projection', 'command', 'link', 'suppression', 'rewrite', 'impulse', 'thoughtform', 'memory lattice', 'psychic echo'],
+      places: ['psionic order', 'alien memory vault', 'mind-palace academy', 'telepathic war college', 'dream archive', 'silent monastery', 'cognition laboratory', 'resonance chamber'],
+      descriptors: ['psychic', 'force', 'thunder', 'lightning']
+    },
+    nature: {
+      label: 'Nature',
+      roots: ['Root', 'Bloom', 'Fang', 'Verdure', 'Wildheart', 'Season', 'Thicket', 'Canopy', 'Spore', 'River'],
+      tones: ['Leaf-Crowned', 'Earth-Breathing', 'Green', 'Root-Woven', 'Seasonal', 'Beast-Marked', 'Rain-Washed', 'Sun-Dappled'],
+      subjects: ['growth', 'awakening', 'entanglement', 'renewal', 'beast call', 'weather turn', 'root path', 'seed oath', 'wild mantle'],
+      places: ['elder grove', 'druidic circle', 'ancient forest shrine', 'beast-speaker lodge', 'seasonal stone ring', 'river sanctuary', 'rootbound archive', 'wild orchard'],
+      descriptors: ['acid', 'cold', 'lightning', 'poison', 'bludgeoning']
+    }
   };
 
-  const THEMES={
-    arcane:{label:'Arcane',roots:['Aegis','Lattice','Sigil','Prism','Convergence','Cipher','Vector','Formula','Mandala','Theorem'],tones:['Violet','Azure','Silver','Crystalline','Rotating','Recursive','Astral','Runic'],subjects:['ward','matrix','equation','glyph','prism','conduit','sequence','geometry','pattern'],places:['academy archive','imperial observatory','sealed laboratory','dueling college','planar institute','royal athenaeum','lost thesis vault','wizard senate']},
-    divine:{label:'Divine',roots:['Benediction','Judgment','Sanctuary','Litany','Covenant','Radiance','Mercy','Revelation','Vigil','Canon'],tones:['Golden','Choir-Borne','Consecrated','Haloed','Dawnlit','Sacred','Anointed','Luminous'],subjects:['blessing','edict','prayer','seal','hymn','miracle','covenant','relic-light','holy fire'],places:['saintly shrine','battlefield chapel','pilgrim road','sun temple','monastic archive','cathedral crypt','oracle cloister','knightly reliquary']},
-    necromancy:{label:'Necromancy',roots:['Grave','Ossuary','Dirge','Sepulcher','Pall','Requiem','Marrow','Epitaph','Mausoleum','Wake'],tones:['Ashen','Corpse-Lit','Funerary','Grave-Cold','Bone-Wreathed','Mournful','Black-Veiled','Pale'],subjects:['curse','dirge','binding','pall','epitaph','shroud','grave-light','bone seal','death current'],places:['tomb-king court','plague crypt','mortuary academy','forgotten ossuary','necropolis archive','royal catacomb','graveyard chapel','sealed mausoleum']},
-    elemental:{label:'Elemental',roots:['Pyre','Torrent','Tempest','Quake','Rime','Storm','Ember','Deluge','Zephyr','Magma'],tones:['Blazing','Thunderous','Glacial','Tidal','Volcanic','Storm-Crowned','Crackling','Searing'],subjects:['eruption','wave','blast','surge','torrent','mantle','vortex','pressure front','elemental crown'],places:['primordial forge','storm giant hall','volcanic monastery','deep sea shrine','icebound observatory','desert glass temple','sky citadel','earthspeaker cavern']},
-    fey:{label:'Fey',roots:['Glamour','Thorn','Moonveil','Revel','Briar','Midsummer','Dewdrop','Foxglove','Masque','Twilight'],tones:['Silver-Pollen','Moonlit','Laughing','Petal-Strewn','Briar-Crowned','Velvet','Dancing','Mischievous'],subjects:['glamour','invitation','revel','bargain','dance','whisper','maze','moonbeam','thorn oath'],places:['archfey court','moonlit crossing','dryad grove','midsummer revel','glass orchard','fox-spirit market','twilight pavilion','enchanted hedge maze']},
-    infernal:{label:'Infernal',roots:['Brand','Contract','Cinder','Chain','Edict','Damnation','Clause','Tribunal','Furnace','Levy'],tones:['Molten','Sulfurous','Brass-Sealed','Chain-Bound','Red-Legal','Furnace-Bright','Ash-Signed','Barbed'],subjects:['contract','brand','clause','chain','penalty','levy','injunction','writ','damnation seal'],places:['infernal court','prison archive','devil registry','furnace tribunal','contract vault','brass embassy','damnation chancery','warden foundry']},
-    celestial:{label:'Celestial',roots:['Starfall','Mercy','Dawn','Seraphic','Halo','Ascension','Comet','Virtue','Firmament','Grace'],tones:['Starlit','Feathered','Harmonic','Dawn-Bright','Radiant','Seraph-Winged','Opaline','Heavenly'],subjects:['descent','corona','grace','guidance','mercy','banishment','star path','radiant shield','angelic chorus'],places:['upper-plane observatory','oracle sanctuary','seraphic choir hall','knightly basilica','starlight monastery','celestial embassy','dawn chapel','firmament gate']},
-    shadow:{label:'Shadow',roots:['Umbral','Eclipse','Nightglass','Shade','Gloam','Black Veil','Silhouette','Dusk','Nocturne','Afterimage'],tones:['Ink-Black','Lightless','Cold-Grey','Moonless','Folded','Silent','Velvet-Dark','Eclipsed'],subjects:['veil','duplicate','silence','blindness','step','afterimage','gloom field','shadow key','night corridor'],places:['shadow court','thief-mage cellar','eclipse observatory','lightless archive','midnight theater','gloam monastery','dusk market','nightglass laboratory']},
-    psionic:{label:'Psionic',roots:['Mindspike','Resonance','Ego','Thoughtform','Synapse','Will','Cognition','Dream','Impulse','Mnemonic'],tones:['Silent','Violet','Crystal-Mental','Pressure-Wave','Telepathic','Focused','Lucid','Resonant'],subjects:['projection','command','link','suppression','rewrite','impulse','thoughtform','memory lattice','psychic echo'],places:['psionic order','alien memory vault','mind-palace academy','telepathic war college','dream archive','silent monastery','cognition laboratory','resonance chamber']},
-    nature:{label:'Nature',roots:['Root','Bloom','Fang','Verdure','Wildheart','Season','Thicket','Canopy','Spore','River'],tones:['Leaf-Crowned','Earth-Breathing','Green','Root-Woven','Seasonal','Beast-Marked','Rain-Washed','Sun-Dappled'],subjects:['growth','awakening','entanglement','renewal','beast call','weather turn','root path','seed oath','wild mantle'],places:['elder grove','druidic circle','ancient forest shrine','beast-speaker lodge','seasonal stone ring','river sanctuary','rootbound archive','wild orchard']}
-  };
-
-  for(const [id,t] of Object.entries(THEMES)){
-    t.names=ensure70(`${id}.names`,combine(t.tones,t.roots,['Ward','Invocation','Burst','Veil','Edict','Step','Seal','Touch','Mantle','Ray'],160));
-    t.visuals=ensure70(`${id}.visuals`,phrase(['The spell manifests as','The caster is surrounded by','The target is marked by','The air fills with','Reality briefly shows'],t.tones.map(x=>x.toLowerCase()),t.subjects.map(x=>`${x} imagery`),160));
-    t.origins=ensure70(`${id}.origins`,phrase(['Developed within','Recovered from','First recorded at','Adapted from','Smuggled out of'],t.places,['during a failed experiment','after a dynastic war','by an anonymous master','under a forbidden charter','following a planar disaster','as part of a secret rite','for use in a lost campaign','during a century of reform'],160));
+  for (const theme of Object.values(THEME_SPECS)) {
+    theme.names = combine(theme.tones, theme.roots, ['Ward', 'Invocation', 'Burst', 'Veil', 'Edict', 'Step', 'Seal', 'Touch', 'Mantle', 'Ray'], 180);
+    theme.visuals = combine(
+      ['The spell manifests as', 'The caster is surrounded by', 'The target is marked by', 'The air fills with', 'Reality briefly reveals'],
+      theme.tones.map(value => value.toLowerCase()),
+      theme.subjects.map(value => `${value} imagery that remains sharply visible for the full resolution of the spell.`),
+      180
+    );
+    theme.descriptions = combine(
+      ['The working gathers around', 'The released magic moves through', 'The spell shapes', 'The effect concentrates upon', 'The completed formula directs'],
+      theme.subjects,
+      ['with disciplined force and a clearly defined magical purpose.', 'into a stable pattern that responds to the chosen target.', 'through the area in a controlled and readable progression.', 'without obscuring the spell’s practical effect or limits.', 'in a form recognizable to trained practitioners of the tradition.'],
+      180
+    );
+    theme.origins = combine(
+      ['Developed within', 'Recovered from', 'First recorded at', 'Adapted from', 'Smuggled out of'],
+      theme.places,
+      ['during a failed experiment.', 'after a dynastic war.', 'by an anonymous master.', 'under a forbidden charter.', 'following a planar disaster.', 'for use in a lost campaign.', 'during a century of magical reform.'],
+      180
+    );
   }
 
-  const CLASS_SPECS={
-    wizard:{label:'Wizard',schools:['Abjuration','Conjuration','Divination','Enchantment','Evocation','Illusion','Necromancy','Transmutation'],approaches:['formulaic','diagrammatic','scholarly','carefully indexed','proof-driven','ritualized','notation-heavy','theoretical'],tools:['spellbook marginalia','chalk geometry','measured syllables','annotated runes','calibrated gestures','astral tables','mnemonic proofs','library citations','counter-signs']},
-    sorcerer:{label:'Sorcerer',schools:['Innate Arcana','Bloodline Manifestation','Elemental Expression','Wild Magic'],approaches:['instinctive','bloodline-driven','emotional','improvised','visceral','resonant','spontaneous','temperamental'],tools:['breath control','ancestral memory','emotional release','pulse rhythm','body heat','eye contact','heartbeats','raw will','untrained gesture']},
-    cleric:{label:'Cleric',schools:['Protection','Healing','Judgment','Revelation','Communion'],approaches:['prayerful','doctrinal','liturgical','devotional','ceremonial','pastoral','reliquary-focused','oath-bound'],tools:['responsive prayer','holy scripture','relic contact','anointed gesture','choral cadence','incense measure','saintly invocation','temple seal','confessional formula']},
-    druid:{label:'Druid',schools:['Weather','Beast','Plant','Stone','Season'],approaches:['organic','seasonal','ecological','totemic','weather-bound','rooted','instinctive','ancestral'],tools:['seed patterns','animal calls','leaf gestures','stone circles','weather signs','river rhythm','bone charms','spore dust','seasonal offerings']},
-    bard:{label:'Bard',schools:['Performance','Glamour','Memory','Courage','Discord'],approaches:['rhythmic','performative','lyrical','dramatic','improvised','audience-aware','harmonic','story-driven'],tools:['metered verse','instrumental phrase','spoken refrain','dance step','dramatic pause','comic timing','choral answer','stage gesture','memorized epic']},
-    warlock:{label:'Warlock',schools:['Pact','Curse','Invocation','Patron Gift','Forbidden Knowledge'],approaches:['contractual','dangerous','patron-mediated','secretive','transactional','borrowed','ritually indebted','forbidden'],tools:['pact clause','patron sigil','blood price','whispered title','borrowed name','debt token','forbidden seal','contract fragment','oath scar']},
-    paladin:{label:'Paladin',schools:['Oath','Smite','Ward','Mercy','Valor'],approaches:['solemn','martial','oath-driven','disciplined','protective','judicial','honor-bound','ceremonial'],tools:['sword salute','shield sign','oath recitation','battle prayer','vow token','standard gesture','judicial command','mercy clause','challenge formula']},
-    ranger:{label:'Ranger',schools:['Hunt','Pathfinding','Beastcraft','Ambush','Wilderness'],approaches:['practical','field-tested','quiet','directional','survival-focused','improvised','tracking-based','terrain-aware'],tools:['trail signs','arrow marks','animal spoor','breath timing','camouflage gesture','field charm','map notation','hunter whistle','weather reading']},
-    artificer:{label:'Artificer',schools:['Infusion','Construct','Alchemical','Ward Device','Arcane Mechanism'],approaches:['engineered','component-driven','calibrated','mechanical','modular','prototype-based','schematic','instrumented'],tools:['etched plates','precision lenses','copper coils','alchemical valves','gear arrays','measuring rods','rune batteries','clockwork relays','component trays']},
-    psion:{label:'Psion',schools:['Telepathy','Psychokinesis','Clairsentience','Metacreativity','Psychometabolism'],approaches:['precise','mentally disciplined','silent','conceptual','resonant','meditative','mnemonic','will-driven'],tools:['visualized geometry','breath counting','memory palaces','silent mantras','thought partitions','emotional locks','focus crystals','cognitive anchors','dream symbols']}
+  const CLASS_SPECS = {
+    wizard: { label: 'Wizard', schools: ['Abjuration', 'Conjuration', 'Divination', 'Enchantment', 'Evocation', 'Illusion', 'Necromancy', 'Transmutation'], approaches: ['formulaic', 'diagrammatic', 'scholarly', 'carefully indexed', 'proof-driven', 'ritualized', 'notation-heavy', 'theoretical'], tools: ['spellbook marginalia', 'chalk geometry', 'measured syllables', 'annotated runes', 'calibrated gestures', 'astral tables', 'mnemonic proofs', 'library citations'] },
+    sorcerer: { label: 'Sorcerer', schools: ['Abjuration', 'Conjuration', 'Divination', 'Enchantment', 'Evocation', 'Illusion', 'Necromancy', 'Transmutation'], approaches: ['instinctive', 'bloodline-driven', 'emotional', 'improvised', 'visceral', 'resonant', 'spontaneous', 'temperamental'], tools: ['breath control', 'ancestral memory', 'emotional release', 'pulse rhythm', 'body heat', 'eye contact', 'heartbeats', 'raw will'] },
+    cleric: { label: 'Cleric', schools: ['Abjuration', 'Conjuration', 'Divination', 'Enchantment', 'Evocation', 'Necromancy', 'Transmutation'], approaches: ['prayerful', 'doctrinal', 'liturgical', 'devotional', 'ceremonial', 'pastoral', 'reliquary-focused', 'oath-bound'], tools: ['responsive prayer', 'holy scripture', 'relic contact', 'anointed gesture', 'choral cadence', 'incense measure', 'saintly invocation', 'temple seal'] },
+    druid: { label: 'Druid', schools: ['Abjuration', 'Conjuration', 'Divination', 'Evocation', 'Necromancy', 'Transmutation'], approaches: ['organic', 'seasonal', 'ecological', 'totemic', 'weather-bound', 'rooted', 'instinctive', 'ancestral'], tools: ['seed patterns', 'animal calls', 'leaf gestures', 'stone circles', 'weather signs', 'river rhythm', 'bone charms', 'spore dust'] },
+    bard: { label: 'Bard', schools: ['Conjuration', 'Divination', 'Enchantment', 'Illusion', 'Transmutation'], approaches: ['rhythmic', 'performative', 'lyrical', 'dramatic', 'improvised', 'audience-aware', 'harmonic', 'story-driven'], tools: ['metered verse', 'instrumental phrase', 'spoken refrain', 'dance step', 'dramatic pause', 'choral answer', 'stage gesture', 'memorized epic'] },
+    warlock: { label: 'Warlock', schools: ['Conjuration', 'Enchantment', 'Evocation', 'Illusion', 'Necromancy'], approaches: ['contractual', 'dangerous', 'patron-mediated', 'secretive', 'transactional', 'borrowed', 'ritually indebted', 'forbidden'], tools: ['pact clause', 'patron sigil', 'blood price', 'whispered title', 'borrowed name', 'debt token', 'forbidden seal', 'contract fragment'] },
+    paladin: { label: 'Paladin', schools: ['Abjuration', 'Conjuration', 'Divination', 'Evocation'], approaches: ['solemn', 'martial', 'oath-driven', 'disciplined', 'protective', 'judicial', 'honor-bound', 'ceremonial'], tools: ['sword salute', 'shield sign', 'oath recitation', 'battle prayer', 'vow token', 'standard gesture', 'judicial command', 'mercy clause'] },
+    ranger: { label: 'Ranger', schools: ['Abjuration', 'Conjuration', 'Divination', 'Transmutation'], approaches: ['practical', 'field-tested', 'quiet', 'directional', 'survival-focused', 'improvised', 'tracking-based', 'terrain-aware'], tools: ['trail signs', 'arrow marks', 'animal spoor', 'breath timing', 'camouflage gesture', 'field charm', 'map notation', 'hunter whistle'] },
+    artificer: { label: 'Artificer', schools: ['Abjuration', 'Conjuration', 'Divination', 'Evocation', 'Transmutation'], approaches: ['engineered', 'component-driven', 'calibrated', 'mechanical', 'modular', 'prototype-based', 'schematic', 'instrumented'], tools: ['etched plates', 'precision lenses', 'copper coils', 'alchemical valves', 'gear arrays', 'measuring rods', 'rune batteries', 'clockwork relays'] },
+    psion: { label: 'Psion', schools: ['Abjuration', 'Conjuration', 'Divination', 'Enchantment', 'Evocation', 'Illusion', 'Transmutation'], approaches: ['precise', 'mentally disciplined', 'silent', 'conceptual', 'resonant', 'meditative', 'mnemonic', 'will-driven'], tools: ['visualized geometry', 'breath counting', 'memory palaces', 'silent mantras', 'thought partitions', 'emotional locks', 'focus crystals', 'cognitive anchors'] }
   };
-  for(const [id,c] of Object.entries(CLASS_SPECS)){
-    c.wording=ensure70(`${id}.wording`,phrase(['The caster employs','The spell depends on','Its tradition favors','The technique combines','Practitioners rely upon'],c.approaches,c.tools,160));
+
+  for (const classSpec of Object.values(CLASS_SPECS)) {
+    classSpec.wording = combine(
+      ['The caster employs', 'The spell depends on', 'Its tradition favors', 'The technique combines', 'Practitioners rely upon'],
+      classSpec.approaches,
+      classSpec.tools.map(value => `${value} to control the spell from invocation through final resolution.`),
+      180
+    );
   }
 
-  const COMPETENCE_SPECS={
-    incompetent:{label:'Hilariously Incompetent',adjectives:['Minor','Dubious','Accidental','Barely Functional','Misfiled','Crooked','Backwards','Unlicensed','Questionable','Budget'],procedures:['after an apologetic pause','while checking the instructions upside down','provided the caster remembers the final syllable','using the wrong hand twice','after loudly asking whether this is correct','with a fifty-percent confidence flourish','following an unnecessary warm-up','after correcting three visible mistakes'],results:['produces the intended effect six inches to the left','works only on something already nearly affected','creates a harmless puff and a disappointing noise','solves a problem too small to matter','affects the caster instead','succeeds in the least useful interpretation','creates paperwork but no magic','conjures a substitute of visibly inferior quality','works perfectly for half a second'],side:['leaves the caster smelling faintly of onions','summons a tiny clerk who criticizes the technique','awards the target a certificate of participation','causes nearby spoons to rotate','makes one shoe squeak dramatically','temporarily misspells the caster’s name in glowing letters','creates a small raincloud over the caster','produces applause from one invisible spectator','changes the caster’s hair part']},
-    clumsy:{label:'Clumsy Apprentice',adjectives:['Unsteady','Improvised','Student’s','Second-Hand','Practice','Wobbly','Approximate','Experimental','Unpolished','Rehearsal'],procedures:['with excessive smoke','using an overlarge gesture','after a DC 10 concentration check','through two redundant syllables','with visible hesitation','after consulting a flash card','using a borrowed focus','while counting aloud'],results:['functions but introduces a minor complication','achieves a reduced version of the intended result','works reliably only under ordinary conditions','creates a delayed but usable effect','requires a second attempt to stabilize','succeeds while attracting attention','delivers the effect with poor precision','works at half the expected range','creates a harmless secondary discharge'],side:['makes the caster’s hair stand on end','causes nearby glassware to hum','leaves soot on both hands','produces an embarrassing echo','turns the focus warm for an hour','causes brief hiccups','makes written text shimmer','changes the caster’s voice pitch','creates a visible error rune']},
-    competent:{label:'Competent',adjectives:['Focused','Reliable','Measured','Disciplined','Refined','Standard','Exact','Professional','Stable','Proven'],procedures:['with one clean gesture','using a practiced cadence','without wasted motion','through a stable focus','with precise timing','using standard components','through a reliable sequence','under ordinary combat pressure'],results:['applies the intended effect cleanly','creates dependable damage or control','resolves the stated magical task','maintains stable duration and targeting','operates within expected parameters','produces a predictable secondary trace','functions without unusual complication','supports tactical use as designed','scales normally with spell level'],side:['leaves a faint thematic residue','produces no unusual side effect','creates a brief harmless afterimage','warms or cools the focus slightly','leaves a standard school aura','causes a soft resonant tone','produces a visible completion sigil','fades without lingering disruption','briefly sharpens nearby shadows']},
-    elaborate:{label:'Needlessly Elaborate',adjectives:['Grand','Sevenfold','Ceremonial','Regulated','Multi-Stage','Annotated','Procedural','Hierarchical','Triple-Sealed','Committee-Approved'],procedures:['after three preparatory clauses','through six redundant magical subsystems','using color-coded component trays','after announcing each operational phase','with a backup gesture for every primary gesture','through a formally witnessed sequence','after validating two contingency circles','using a twelve-step activation rubric'],results:['achieves a normal result with absurd precision','creates nested safeguards around a simple effect','performs a straightforward task through multiple departments','solves the problem only after documenting it','provides three redundant confirmations','delivers the effect through a ceremonial chain','creates both primary and audit copies','uses planar routing for local delivery','measures success to unnecessary decimals'],side:['leaves three explanatory diagrams in the air','announces each completed stage aloud','triggers a contingency confirming another contingency','prints a spectral receipt','summons an auditor for post-cast review','creates a completion certificate','requires the caster to initial the final rune','projects a flowchart of the effect','logs the result in an invisible archive']},
-    impossible:{label:'Massively Overcomplicated',adjectives:['Transplanar Bureaucratic','Thirteen-Layered','Recursive','Hyperdimensional','Cathedral-Scale','Chronologically Indexed','Multiversal','Self-Auditing','Ontologically Redundant','Imperially Certified'],procedures:['after a week of preparatory calculations','using synchronized circles on three planes','after filing component manifests in triplicate','through recursive sub-spells that cast one another','using temporal buffering and legal contingencies','after obtaining signatures from seven summoned witnesses','through a lattice requiring municipal zoning','after calibrating against twelve alternate timelines'],results:['uses kingdom-scale magical architecture for a modest result','routes the effect through several unnecessary realities','creates a recursive chain of summoned sub-effects','performs local magic through continental infrastructure','rewrites the relevant law of physics temporarily','constructs a secondary universe to test the outcome','invokes a celestial appeals process','duplicates the target concept before affecting it','creates eleven fallback realities'],side:['summons a spectral review committee','creates a forty-page appendix','causes a backup spell to argue with the primary spell','requires an after-action hearing','leaves behind a temporary administrative dimension','generates a dissenting opinion from reality itself','creates a miniature bureaucracy in the caster’s pocket','opens a complaint portal to the astral plane','issues everyone nearby a case number']}
-  };
-  for(const [id,c] of Object.entries(COMPETENCE_SPECS)){
-    c.names=ensure70(`${id}.names`,combine(c.adjectives,['Arcane','Mystic','Thaumaturgic','Ritual','Spellbound','Planar','Runic','Aetheric'],['Procedure','Method','Operation','Working','Protocol','Sequence','Application','Instrument'],160));
-    c.casting=ensure70(`${id}.casting`,phrase(['The spell is cast','Activation occurs','The caster proceeds','The procedure begins','Completion follows'],c.procedures,['before the effect resolves','while maintaining concentration','under visible magical strain','with full component expenditure','in accordance with its tradition','before any target is affected','while the focus remains intact','until the final sign appears'],160));
-    c.effects=ensure70(`${id}.effects`,phrase(['The spell','Its primary function','The resulting magic','The completed working','The manifested effect'],c.results,['within the selected area','against the chosen target','for the listed duration','subject to the stated save','with level-appropriate scaling','until concentration ends','without changing its school','according to the caster’s class'],160));
-    c.sideEffects=ensure70(`${id}.sideEffects`,phrase(['As a side effect, it','After resolution, it','The residual magic','A secondary discharge','The spell’s aftermath'],c.side,['for one minute','until the next short rest','within ten feet of the caster','without mechanical consequence','unless dispelled','for the remainder of the scene','until someone comments on it','in a visibly embarrassing fashion'],160));
-  }
-
-  const MORALITY_SPECS={
-    saintly:{label:'Goody Two-Shoes Good',adjectives:['Kindly','Neighborly','Merciful','Wholesome','Responsible','Civic-Minded','Considerate','Gentle','Reassuring','Well-Mannered'],purposes:['protects bystanders before affecting the target','cannot harm anyone who apologizes sincerely','tidies the area and leaves everyone hydrated','offers fair warning and a second chance','marks loose hazards with warning signs','rewards honest cooperation','returns borrowed property automatically','pauses to verify informed consent','provides blankets to frightened witnesses'],flavors:['a tiny halo appears over kind choices','the spell praises civic responsibility','a spectral safety inspector approves the area','nearby flowers briefly bloom','everyone receives a polite thank-you note','the effect apologizes for any inconvenience','a warm voice reminds everyone to communicate','the spell refuses to litter','a faint smell of fresh bread remains']},
-    heroic:{label:'Heroically Good',adjectives:['Radiant','Valiant','Guardian’s','Liberating','Compassionate','Noble','Selfless','Dawn-Bright','Hopeful','Resolute'],purposes:['prioritizes protection and rescue','weakens hostile magic while shielding innocents','rewards mercy and sacrifice','breaks coercion and fear','creates safe passage for allies','restores courage to the threatened','reveals hidden victims','redirects harm toward willing protectors','preserves life whenever possible'],flavors:['the effect brightens when used selflessly','bystanders feel briefly reassured','a distant horn sounds','shadows retreat from the protected','wounds close with golden light','the caster’s oath appears in the air','a protective emblem forms overhead','the spell resists cruel commands','nearby allies hear a heartbeat like a drum']},
-    neutral:{label:'Morally Neutral',adjectives:['Balanced','Unaligned','Pragmatic','Grey','Untethered','Impartial','Measured','Objective','Even-Handed','Axiomatic'],purposes:['operates without moral preference','responds only to stated parameters','treats all creatures by the same rule','prioritizes measurable outcomes','ignores intent in favor of conditions','applies its effect symmetrically','records rather than judges','preserves equilibrium','follows literal targeting criteria'],flavors:['the spell carries no moral resonance','its aura is colorless to divination','the effect produces an even tone','all targets are outlined identically','no symbolic imagery appears','the residue fades without preference','the spell refuses emotional interpretation','its geometry remains perfectly balanced','the result is recorded without commentary']},
-    sinister:{label:'Sinister',adjectives:['Cruel','Dread','Malignant','Pitiless','Black','Spiteful','Baleful','Hollow','Ruinous','Predatory'],purposes:['inflicts unnecessary fear','extracts a price from weakness','leaves a reminder of hostility','turns hesitation into pain','isolates the target from allies','magnifies guilt and dread','feeds on failed saves','marks survivors for later torment','converts mercy into vulnerability'],flavors:['shadows lean toward the victim','the spell whispers private doubts','nearby reflections stop smiling','a cold handprint appears','the target hears distant chains','the air smells of extinguished candles','letters crawl across nearby walls','the caster’s shadow grows horns','a soft laugh follows the effect']},
-    cartoon:{label:'Cartoonishly Evil',adjectives:['Supreme Villain’s','Diabolically Unnecessary','Mustache-Twirling','Orphanage-Cursing','Moon-Stealing','Cape-Billowing','Thunderclap-Approved','Monologue-Powered','Lair-Certified','Doomsday'],purposes:['adds an elaborate evil laugh','targets puppies and flowers first','requires a lever labeled EVIL','makes the caster’s cape billow indoors','pauses for a villainous monologue','projects a map of the secret lair','brands the moon with the caster’s initials','summons disposable henchmen to applaud','creates a countdown clock for no reason'],flavors:['a pipe organ sting plays','lightning silhouettes the caster','a sign reads THIS WAS UNNECESSARY','a spotlight follows the villain','nearby ravens arrange themselves dramatically','the spell displays a skull-shaped logo','an invisible audience gasps','smoke machines activate from nowhere','a narrator announces the phase of the plan']}
-  };
-  for(const [id,m] of Object.entries(MORALITY_SPECS)){
-    m.names=ensure70(`${id}.names`,combine(m.adjectives,['Moral','Ethical','Villainous','Virtuous','Aligned','Judicial','Emotional','Behavioral'],['Edict','Mandate','Impulse','Doctrine','Compulsion','Manifesto','Judgment','Intervention'],160));
-    m.purposesExpanded=ensure70(`${id}.purposes`,phrase(['The spell deliberately','Its moral behavior','When resolving, it','The enchantment also','Its ethical clause'],m.purposes,['before applying its main effect','whenever a creature is targeted','for the entire duration','unless the caster dismisses it','as part of its secondary function','even when tactically inconvenient','according to its alignment','without affecting spell level'],160));
-    m.flavorsExpanded=ensure70(`${id}.flavors`,phrase(['During manifestation,','As the spell resolves,','Its aura ensures that','Witnesses observe that','The lingering magic causes'],m.flavors,['for several seconds','until the end of the round','throughout the affected area','without changing the mechanics','in a theatrically obvious way','as a recognizable alignment signature','before fading completely','whenever the effect is noticed'],160));
-  }
-
-  const GLOBAL={
-    castingTimes:ensure70('global.castingTimes',phrase(['Casting requires','Activation takes','The caster spends','The working consumes','Completion demands'],['one swift gesture','one measured action','a bonus-action flourish','a reactive counter-sign','one full minute','ten ritual minutes','three synchronized rounds','an hour of preparation','a whispered instant'],['before targeting','while holding the focus','under concentration','with both hands free','without interruption','inside the marked area','after naming the target','until the final syllable'],160)),
-    ranges:ensure70('global.ranges',phrase(['The effect reaches','Its targeting extends to','The spell may affect','The working projects across','Its influence covers'],['self','touch range','thirty feet','sixty feet','ninety feet','one hundred twenty feet','line of sight','one mile','the same plane'],['from the caster','from the focus point','through an unobstructed path','around one corner','within the ritual boundary','along a visible line','through a marked conduit','subject to cover'],160)),
-    durations:ensure70('global.durations',phrase(['The effect lasts','Its magic persists','The condition remains','The manifestation endures','The spell continues'],['instantaneously','for one round','for one minute','for ten minutes','for one hour','until concentration ends','until dispelled','until sunrise','until the trigger occurs'],['after casting','unless dismissed','while the target remains valid','within the original area','despite ordinary movement','subject to interruption','with normal scaling','without requiring renewal'],160)),
-    components:ensure70('global.components',phrase(['Material focus:','Required component:','The spell consumes','The caster presents','The ritual employs'],['a marked coin','a glass prism','a pinch of ash','a carved seed','a drop of lamp oil','a silver thread','a bone token','a brass key','a written clause'],['held in the left hand','placed at the target point','destroyed on completion','returned unharmed','inscribed with the caster’s name','wrapped in red cord','cooled in moonlight','warmed by breath'],160)),
-    targets:ensure70('global.targets',phrase(['The spell targets','Its effect selects','The caster chooses','The working identifies','The magic applies to'],['one creature','two adjacent creatures','every hostile creature','one unattended object','a ten-foot cube','a twenty-foot sphere','a visible doorway','a willing ally','the caster'],['within range','inside the marked area','that fails its save','that meets the trigger','visible at casting','connected by the same surface','sharing the same plane','named during casting'],160)),
-    resolutions:ensure70('global.resolutions',phrase(['On resolution,','After a failed save,','When the attack hits,','If the target accepts,','When the trigger occurs,'],['the target takes level-scaled damage','the area becomes difficult terrain','the target gains a temporary condition','the caster receives a tactical benefit','the effect moves the target','the spell reveals hidden information','the target gains protection','the object changes state','the magic creates a summoned feature'],['until the duration ends','with a standard saving throw','without stacking with itself','according to spell level','using the caster’s spell DC','once per round','subject to resistance','before secondary effects'],160)),
-    higherLevels:ensure70('global.higherLevels',phrase(['At higher levels,','When upcast,','For each slot above the base level,','Additional spell energy','Expanded preparation'],['increases damage by one die','adds one target','extends duration by one step','increases range by thirty feet','adds one secondary effect','improves the save outcome','widens the affected area','strengthens the summoned object','adds a contingency'],['without changing school','up to a listed maximum','while preserving concentration','for each additional slot','subject to class restrictions','with proportional component cost','without removing side effects','according to campaign balance'],160))
+  const GLOBAL = {
+    castingTimes: ['1 swift action', '1 standard action', '1 full-round action', '1 round', '10 minutes', '1 hour'],
+    components: combine(
+      ['Material focus:', 'Required component:', 'The spell consumes', 'The caster presents', 'The working employs'],
+      ['a marked coin', 'a glass prism', 'a pinch of ash', 'a carved seed', 'a drop of lamp oil', 'a silver thread', 'a bone token', 'a brass key', 'a written sigil'],
+      ['held in the left hand.', 'placed at the target point.', 'destroyed on completion.', 'returned unharmed.', 'inscribed with the caster’s name.', 'wrapped in red cord.', 'cooled in moonlight.', 'warmed by breath.'],
+      180
+    ),
+    practicalUses: [
+      'In play, the spell is best used to shape positioning before committing the party’s most limited resources.',
+      'The spell rewards careful target selection because its strongest result depends on controlling line of effect and the chosen area.',
+      'Its primary value is reliability: the spell states exactly what it affects, how resistance applies, and when the effect ends.',
+      'The effect is deliberately readable at the table, allowing the caster and the GM to resolve damage, saves, movement, and duration without inventing missing rules.',
+      'The spell can serve as a signature technique, a researched formula, a divine grant, a recovered scroll, or a specialized item effect without changing its core mechanics.'
+    ],
+    origins: [
+      'The surviving formula is written as a practical field spell rather than a theoretical exercise.',
+      'Later copies preserve the original limitations because removing them made the effect unstable during early trials.',
+      'The spell became popular after adventuring companies proved that its clearly defined range and resolution were more valuable than spectacular but unreliable alternatives.',
+      'Most traditions teach the spell only after students can identify its target, resistance, and scaling clauses from memory.',
+      'The spell’s modern form is the result of repeated battlefield revision, with unnecessary flourishes removed and its useful consequences made explicit.'
+    ]
   };
 
-  const counts={};
-  const record=(path,value)=>{if(Array.isArray(value)) counts[path]=value.length; else if(value&&typeof value==='object') for(const [k,v] of Object.entries(value)) record(path?`${path}.${k}`:k,v)};
-  record('themes',THEMES); record('classes',CLASS_SPECS); record('competence',COMPETENCE_SPECS); record('morality',MORALITY_SPECS); record('global',GLOBAL);
+  const counts = {};
+  const record = (path, value) => {
+    if (Array.isArray(value)) counts[path] = value.length;
+    else if (value && typeof value === 'object') {
+      for (const [key, child] of Object.entries(value)) record(path ? `${path}.${key}` : key, child);
+    }
+  };
+  record('themes', THEME_SPECS);
+  record('classes', CLASS_SPECS);
+  record('global', GLOBAL);
 
-  window.HBSpellVocabulary={THEMES,CLASSES:CLASS_SPECS,COMPETENCE:COMPETENCE_SPECS,MORALITY:MORALITY_SPECS,GLOBAL,counts,pick:arr=>arr[Math.floor(Math.random()*arr.length)]};
+  window.HBSpellVocabulary = {
+    THEMES: THEME_SPECS,
+    CLASSES: CLASS_SPECS,
+    GLOBAL,
+    counts,
+    pick
+  };
 })();
