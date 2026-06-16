@@ -20,5 +20,22 @@
     'Alchemical Experimentation','Analytical Temporal Engineering','Comparative Demonic Instruction','Comparative Pyrotechnic Geomancy','Divinatory Experimentation','Essential Enchantment','Essential Inter-Planar Taxonomy','Future Invocation','Future Sorcery','Inadvisable Ancient Geomancy','Inadvisable Applied Demonology','Magical Arts','Military Sorcery','Practical Cabbalism','Relativistic Alchemy','Remedial Pyrotechnic Alchemy','Sorcerous Arts','Temporal Taxonomy','Theoretical Popular Abjuration'
   ];
 
-  window.HBArcaneAcademicDomains = { DOMAINS, CURATED_TITLES };
+  const TITLE_SEEDS = {
+    alchemy:['Alchemical Experimentation','Relativistic Alchemy','Remedial Pyrotechnic Alchemy'],
+    abjuration:['Theoretical Popular Abjuration'],
+    enchantment:['Essential Enchantment'],
+    divination:['Divinatory Experimentation'],
+    demonology:['Comparative Demonic Instruction','Inadvisable Applied Demonology'],
+    geomancy:['Comparative Pyrotechnic Geomancy','Inadvisable Ancient Geomancy'],
+    pyrotechnics:['Comparative Pyrotechnic Geomancy','Remedial Pyrotechnic Alchemy'],
+    temporal:['Analytical Temporal Engineering','Future Sorcery','Temporal Taxonomy'],
+    planar:['Essential Inter-Planar Taxonomy'],
+    invocation:['Future Invocation'],
+    sorcery:['Future Sorcery','Military Sorcery','Sorcerous Arts'],
+    cabbalism:['Practical Cabbalism'],
+    magicalArts:['Magical Arts','Sorcerous Arts'],
+    military:['Military Sorcery']
+  };
+
+  window.HBArcaneAcademicDomains = { DOMAINS, CURATED_TITLES, TITLE_SEEDS };
 })();
