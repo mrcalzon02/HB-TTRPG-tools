@@ -38,6 +38,9 @@ jobs:
       - name: Validate arcane academic curricula
         run: node scripts/validate-arcane-academic-generator.mjs
 
+      - name: Validate malefic academic curricula
+        run: node scripts/validate-malefic-academic-generator.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
@@ -65,6 +68,15 @@ jobs:
           node --check arcane-academic-actions.js
           node --check arcane-academic-runtime.js
           node --check arcane-academic-entry.js
+          node --check malefic-academic-domains.js
+          node --check malefic-academic-vocabulary.js
+          node --check malefic-academic-engine.js
+          node --check malefic-academic-view.js
+          node --check malefic-academic-text.js
+          node --check malefic-academic-controller-core.js
+          node --check malefic-academic-actions.js
+          node --check dark-academic-runtime.js
+          node --check malefic-academic-entry.js
           node --check kaysender-editors.js
           node --check kaysender-settlement-editor.js
           node --check kaysender-airship-editor.js
