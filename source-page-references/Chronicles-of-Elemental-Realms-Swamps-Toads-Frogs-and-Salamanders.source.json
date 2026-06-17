@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "sourceId": "chronicles-elemental-realms-swamps-toads-frogs-salamanders",
   "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
   "originalFilename": "Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf",
@@ -10,7 +10,14 @@
   "sourceStatus": "registered-from-conversation-upload",
   "binaryGitStatus": "not-written-binary-connector-unavailable",
   "intendedRepositoryPath": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
-  "integrationStatus": "dedicated-wiki-creature-reference-pass-1-complete",
+  "integrationStatus": "dedicated-wiki-creature-reference-pass-3-complete",
   "wikiDestination": "data/elemental-realms/wiki/wiki-index.json",
-  "notes": "Canonical source identity receipt. Creature lore has begun a dedicated, provenance-labeled Hypertext d20 conversion pass. The source manuscript, manuscript-adjacent mechanics, index-derived extrapolations, and later canon expansions remain distinct. A future binary-capable repository transfer must verify the PDF against the recorded byte count and SHA-256 digest."
+  "integratedScope": {
+    "creatureReferences": 74,
+    "categories": 12,
+    "leechCatalogueEntries": 15,
+    "leechHostAndPreyEcologies": 14,
+    "sourceDerivedAndNewCanonSeparated": true
+  },
+  "notes": "Canonical source identity receipt. The dedicated Elemental Realms wiki now includes provenance-labeled Hypertext d20 creature references, planar leech taxonomy, parasite and symbiote distinctions, and full-stat host, prey, breeding-ground, and feeding-ground ecologies. The source manuscript, manuscript-adjacent mechanics, index-derived extrapolations, and later canon expansions remain distinct. A future binary-capable repository transfer must verify the PDF against the recorded byte count and SHA-256 digest."
 }
