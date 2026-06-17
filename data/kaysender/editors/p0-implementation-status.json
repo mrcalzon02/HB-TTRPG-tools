@@ -20,6 +20,7 @@
     "sharedJsonImportExport": true,
     "sharedWikiDraftExport": true,
     "validationAndDiagnostics": true,
+    "recoverableErrorBoundary": true,
     "accessibleResponsiveControls": true,
     "browserVerificationHarness": true
   },
@@ -45,13 +46,15 @@
   "runtimeFiles": [
     "kaysender-editor-kernel.js",
     "kaysender-editor-production.js",
+    "kaysender-editor-error-boundary.js",
     "kaysender-editor-live-smoke.js"
   ],
   "schemaFiles": [
     "data/kaysender/schemas/editor-profile-envelope.schema.json"
   ],
   "validationFiles": [
-    "scripts/validate-editor-kernel.mjs"
+    "scripts/validate-editor-kernel.mjs",
+    "scripts/validate-editor-runtime-structure.mjs"
   ],
   "exitCriteria": [
     {
@@ -67,7 +70,7 @@
     {
       "criterion": "Malformed or wrong-profile imports produce actionable errors instead of silent failure",
       "implementationState": "implemented",
-      "verificationState": "covered-by-automated-validator"
+      "verificationState": "covered-by-automated-validator-and-visible-error-boundary"
     },
     {
       "criterion": "Every editor exposes a dedicated New blank record action",
@@ -77,8 +80,8 @@
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
       "implementationState": "implemented",
-      "verificationState": "pages-workflow-gate-and-browser-harness-installed-results-pending"
+      "verificationState": "pages-workflow-gates-and-browser-harness-installed-results-pending"
     }
   ],
-  "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared kernel validator, JavaScript syntax checks, and a live browser verification succeed on main."
+  "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared kernel validators, JavaScript syntax checks, and a live browser verification succeed on main."
 }
