@@ -53,6 +53,9 @@ jobs:
       - name: Validate Solanum Umbra native wiki
         run: node scripts/validate-solanum-umbra-native-wiki.mjs
 
+      - name: Validate Solanum Umbra live workspace
+        run: node scripts/validate-solanum-umbra-ui.mjs
+
       - name: Validate Kaysender Warlock of the Swamp
         run: node scripts/validate-kaysender-warlock-of-the-swamp.mjs
 
