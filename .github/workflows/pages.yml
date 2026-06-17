@@ -50,6 +50,9 @@ jobs:
       - name: Validate Elemental Realms creature wiki
         run: node scripts/validate-elemental-realms-wiki.mjs
 
+      - name: Validate Solanum Umbra native wiki
+        run: node scripts/validate-solanum-umbra-native-wiki.mjs
+
       - name: Validate Kaysender Warlock of the Swamp
         run: node scripts/validate-kaysender-warlock-of-the-swamp.mjs
 
