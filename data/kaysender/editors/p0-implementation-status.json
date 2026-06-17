@@ -1,0 +1,81 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "1.0.0",
+  "stage": "P0",
+  "stageId": "shared-editor-kernel",
+  "title": "Shared Editor Kernel and Profile Contract",
+  "status": "implementation-committed-awaiting-ci-and-live-smoke",
+  "activeBranch": "main",
+  "parallelMainLineEditors": 1,
+  "implementedOutputs": {
+    "sharedEditorShell": true,
+    "canonicalProfileEnvelope": true,
+    "stableProfileIds": true,
+    "profileSchemaVersions": true,
+    "profileAdaptersAndMigrations": true,
+    "provenanceAndInheritanceLedger": true,
+    "fieldLocking": true,
+    "selectiveRandomization": true,
+    "localDraftPersistence": true,
+    "sharedJsonImportExport": true,
+    "sharedWikiDraftExport": true,
+    "validationAndDiagnostics": true,
+    "accessibleResponsiveControls": true
+  },
+  "sharedActions": [
+    "New blank record",
+    "Load or import record",
+    "Validate record",
+    "Save local draft",
+    "Recover local draft",
+    "Clone record",
+    "Randomize unlocked fields",
+    "Copy canonical JSON",
+    "Export canonical JSON",
+    "Export wiki draft",
+    "Show provenance and inheritance",
+    "Show diagnostics and recoverable errors"
+  ],
+  "compatibilityFixtures": [
+    "data/kaysender/editors/fixtures/island-current-nested.json",
+    "data/kaysender/editors/fixtures/island-legacy-flat.json"
+  ],
+  "runtimeFiles": [
+    "kaysender-editor-kernel.js",
+    "kaysender-editor-production.js"
+  ],
+  "schemaFiles": [
+    "data/kaysender/schemas/editor-profile-envelope.schema.json"
+  ],
+  "validationFiles": [
+    "scripts/validate-editor-kernel.mjs"
+  ],
+  "exitCriteria": [
+    {
+      "criterion": "All three existing alpha editors can open through the shared shell",
+      "implementationState": "implemented",
+      "verificationState": "automated-structure-check-installed-live-browser-smoke-pending"
+    },
+    {
+      "criterion": "Current island profiles import into settlement and airship editors without flat-field assumptions",
+      "implementationState": "implemented",
+      "verificationState": "nested-and-flat-fixtures-covered-by-automated-validator"
+    },
+    {
+      "criterion": "Malformed or wrong-profile imports produce actionable errors instead of silent failure",
+      "implementationState": "implemented",
+      "verificationState": "covered-by-automated-validator"
+    },
+    {
+      "criterion": "Every editor exposes a dedicated New blank record action",
+      "implementationState": "implemented",
+      "verificationState": "shared-shell-action-present-and-draft-retention-covered"
+    },
+    {
+      "criterion": "Shared behavior is covered by automated validation and smoke tests",
+      "implementationState": "implemented",
+      "verificationState": "pages-workflow-gate-installed-ci-result-pending"
+    }
+  ],
+  "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared kernel validator, JavaScript syntax checks, and a live browser smoke test succeed on main."
+}
