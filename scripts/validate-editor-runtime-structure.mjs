@@ -8,6 +8,7 @@ const read = relativePath => fs.readFile(path.join(root, relativePath), 'utf8');
 const fail = message => { throw new Error(message); };
 
 const html = await read('index.html');
+const envelopeSchema = await read('data/kaysender/schemas/editor-profile-envelope.schema.json');
 const registry = await read('kaysender-editor-adapter-registry.js');
 const builtins = await read('kaysender-editor-builtins.js');
 const mapping = await read('kaysender-editor-field-mapping.js');
@@ -56,6 +57,14 @@ for (const script of orderedScripts) {
   if (position < 0) fail(`Main page does not load '${script}'.`);
   if (position <= previousPosition) fail(`Editor runtime script '${script}' is loaded out of order.`);
   previousPosition = position;
+}
+
+for (const phrase of [
+  '"required": ["relationship", "profileId", "profileType", "name", "revision", "policy"]',
+  '"policy": { "type": "string", "const": "pinned-revision" }',
+  '"sourceUpdatedAt": { "type": ["string", "null"], "format": "date-time" }'
+]) {
+  if (!envelopeSchema.includes(phrase)) fail(`Canonical envelope schema is missing pinned inheritance marker '${phrase}'.`);
 }
 
 for (const phrase of [
@@ -120,11 +129,18 @@ for (const phrase of [
   'schemaCompatibilityDiagnostics',
   'profile-schema-outdated',
   'profile-schema-future',
+  'normalizeInheritanceReferences',
+  "policy: 'pinned-revision'",
+  'sourceUpdatedAt: envelope.updatedAt',
+  'inheritanceDiagnostics',
+  'inheritance-policy-invalid',
+  'inheritance-revision-invalid',
+  'inheritance-policy-normalized',
   'mapping.apply(form, profileInput, adapter.fieldMap)',
   'mapping.applyFlat(form, profileInput, adapter.flatFieldExclusions',
   'typeof adapter.applyProfileToForm',
   'fallbackNormalizeImportedRecord',
-  'migrations.migrate(result.envelope.data',
+  'migrations.migrate(previous.data',
   'migrationLog: migration.log',
   'normalizeImportedRecord'
 ]) {
@@ -250,6 +266,7 @@ for (const phrase of [
 }
 
 await import('./validate-editor-adapter-integration.mjs');
+await import('./validate-editor-inheritance.mjs');
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified schema-aware adapters, migrations, lifecycle, persistent records, identity-safe saving, inherited-reference health and refresh controls, generic production shell, error boundary, and browser chain.');
+console.log('Verified schema-aware adapters, pinned-revision inheritance, migrations, lifecycle, persistent records, identity-safe saving, inherited-reference health, generic production shell, error boundary, and browser chain.');
