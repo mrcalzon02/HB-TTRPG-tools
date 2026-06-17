@@ -1,0 +1,327 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "description": "Expanded catalogue of condition-bound divine compromise relics recorded through multiplanar whisperings, dream testimony, emissary depositions, contradictory shrine inventories, and other unreliable but recurring sources.",
+  "entries": [
+    {
+      "id": "divine-compromise-artifacts",
+      "relicCatalogueVersion": "1.0.0",
+      "cataloguePolicy": {
+        "status": "provisional-multiplanar-whisper-record",
+        "relicCount": 32,
+        "adjudication": "Unknown conditions remain unknown in play until revealed by dreams, research, an emissary, or a triggered clause. Relics should create telegraphed complications rather than arbitrary irreversible punishment.",
+        "termsWarning": "Several relics were supplied under agreements whose full terms cannot be discussed with mortal recipients. Their warnings are preserved verbatim where possible."
+      },
+      "compromiseArtifacts": [
+        {
+          "name": "Sombrero of Tuesdays",
+          "classification": "Calendrical spell-allocation compromise",
+          "effect": "Every Thursday at local dawn, the attuned wearer gains one additional daily spell slot of the highest spell level they can cast, maximum 5th. The slot expires Friday at dawn. A creature without spell slots instead gains 2 Pact Favor or one additional use of a daily class feature of equivalent power.",
+          "warning": "No Tuesday function has been identified. Attempts to force one have produced strongly worded dream correspondence.",
+          "whisperedTerms": "The name was conceded; the operating day was not."
+        },
+        {
+          "name": "Spleen Warranty Tag",
+          "classification": "Anatomical jurisdiction warranty",
+          "effect": "Once, when overlapping divine effects would deal ability drain, cause bodily dissolution, or transform an organ, the tag negates that portion of the effect.",
+          "warning": "The wearer is nauseated for 1d4 hours while jurisdiction over the spleen is renegotiated. The warranty does not establish ownership.",
+          "whisperedTerms": "Coverage excludes intentional spleen donation, competitive spleen duplication, and acts of maritime spleen law."
+        },
+        {
+          "name": "Earplugs of the Forty-Eighth Hour",
+          "classification": "Auditory covenant firewall",
+          "effect": "The wearer may voluntarily become deaf for up to 48 hours. While deaf, they are immune to language-dependent divine commands and sonic pact clauses.",
+          "warning": "Removing the plugs early causes confusion for 1 round. Their stated purpose is preventing the subsequent cranial-removal clause found in an obsolete compact.",
+          "whisperedTerms": "The forty-ninth hour is not covered and should not be tested."
+        },
+        {
+          "name": "Boots of the Previous Tomorrow",
+          "classification": "Minor temporal-location compromise",
+          "effect": "Once per week, walking backward for a full round returns the wearer to the square occupied at the start of the previous turn and reverses 1d6 hit points of damage taken since then.",
+          "warning": "The wearer becomes physically one age category younger for 10 minutes, with no statistical change. Mirrors may disagree.",
+          "whisperedTerms": "The boots recognize yesterday, tomorrow, and one disputed intermediate weekday."
+        },
+        {
+          "name": "Cradle of Unrequested Continuity",
+          "classification": "Progenation redirection vessel",
+          "effect": "When a blessing conflict would cause sudden progenation, the cradle redirects the event into the creation of 1d4 harmless frog, newt, or lizard familiars bearing symbolic traits of the affected bloodlines.",
+          "warning": "The creatures are not legal heirs unless another deity insists. Local inheritance courts may still disagree.",
+          "whisperedTerms": "Continuity is satisfied by life; resemblance is optional."
+        },
+        {
+          "name": "Parasol of Indoor Rain",
+          "classification": "Weather-jurisdiction concession",
+          "effect": "Once per day the bearer may open the parasol indoors to create gentle rain in a 20-foot radius for 10 minutes.",
+          "warning": "Outside, it produces only the smell of rain and a written notice that weather jurisdiction remains disputed.",
+          "whisperedTerms": "Roofs create jurisdiction. Caves are under appeal."
+        },
+        {
+          "name": "Spoon of Deferred Thunder",
+          "classification": "Meal-timed energy deferral instrument",
+          "effect": "Once per week the spoon may absorb one sonic or electricity effect affecting its bearer. The effect is harmlessly released during the bearer's next breakfast.",
+          "warning": "If breakfast is skipped, the stored effect discharges at noon. Brunch has repeatedly failed to qualify.",
+          "whisperedTerms": "Thunder agreed to breakfast. Lightning did not sign but has complied."
+        },
+        {
+          "name": "Seven-Course Chalupa Reliquary",
+          "classification": "Culinary personhood preservation reliquary",
+          "effect": "If its bearer is transformed into prepared food, the reliquary preserves identity and soul across all courses and permits restoration by break enchantment, remove curse, greater restoration, or direct divine intervention even after ordinary decay.",
+          "warning": "The restored creature smells faintly of toasted masa for 1d6 days. Consumption of any course complicates but does not necessarily prevent restoration.",
+          "whisperedTerms": "Created after the Torm incident. No party member is authorized to taste-test a teammate."
+        },
+        {
+          "name": "Cloak of Uninvisibility",
+          "classification": "Ontological visibility and anchoring garment",
+          "effect": "While worn, the bearer is correctly visible to creatures and effects native to the bearer’s current plane and gains a +4 resistance bonus on saves against involuntary etherealness, incorporeality, plane shift, banishment, reality displacement, or removal from the current timeline.",
+          "warning": "Under certain planar conditions, the bearer may otherwise become untethered from reality. Those conditions are not stated. The recipient is advised to wear the cloak at all times.",
+          "whisperedTerms": "The providers cannot discuss the terms and conditions under which the cloak was supplied. They have confirmed only that removing it is not recommended."
+        },
+        {
+          "name": "Epsom Salts of ‘Do Not Put This in Your Bath Water’",
+          "classification": "Consecrated-ground luck perimeter",
+          "effect": "Before sleeping on ground that is both consecrated and evilly aligned, sprinkle one dose in a 10-foot-radius circle around the sleeping place. Until waking, creatures inside gain +2 luck on saving throws and cannot have beneficial luck bonuses suppressed by the site's alignment.",
+          "warning": "The salts must not be placed in bath water. The Lady warns that failing to establish the circle when required may permanently destroy the recipient’s ability to experience good luck.",
+          "whisperedTerms": "No satisfactory definition of ‘good luck’ was included. The warning was delivered twice and underlined by a wet frog."
+        },
+        {
+          "name": "Lantern of the Last Door That Wasn’t There",
+          "classification": "Emergency exit retrorecognition lantern",
+          "effect": "Once per day, after the bearer becomes trapped in an enclosed or extradimensional location, lighting the lantern reveals the outline of the nearest exit that existed within the previous 24 hours. For 3 rounds, that outline functions as a passwall effect for the bearer and willing allies.",
+          "warning": "The revealed door may no longer lead where it originally led. Do not use if the lantern begins apologizing.",
+          "whisperedTerms": "An exit was present. Continued agreement on destination was not obtained."
+        },
+        {
+          "name": "Gloves of Conditional Left-Handedness",
+          "classification": "Manual dominance arbitration gloves",
+          "effect": "Once per round, the wearer may treat either hand as their primary hand and gains Two-Weapon Fighting while both gloves are worn. They also gain +4 on checks made to operate an object designed for the opposite handedness.",
+          "warning": "Under an undisclosed celestial condition, both hands may become legally left hands for 1d4 hours. This has no anatomical effect but can invalidate signatures, dueling forms, and ritual gestures.",
+          "whisperedTerms": "The right hand retained physical status but surrendered procedural recognition."
+        },
+        {
+          "name": "Bell of One Additional Apology",
+          "classification": "Hostility-resetting etiquette instrument",
+          "effect": "Once per day, ring the bell immediately after failing a Diplomacy check. The speaker may repeat the check with a +5 competence bonus if they begin with a sincere additional apology.",
+          "warning": "The apology becomes metaphysically binding. Repeating the offending conduct within seven days imposes a -4 penalty on Charisma-based checks until amends are made.",
+          "whisperedTerms": "One apology was insufficient. The second was accepted as collateral."
+        },
+        {
+          "name": "Jar of Reserved Weather",
+          "classification": "Portable disputed meteorological allocation",
+          "effect": "The jar stores one hour of natural rain, fog, wind, or sunshine encountered while open. Once per day it may reproduce that weather in a 30-foot radius for 10 minutes.",
+          "warning": "Stored weather retains its original emotional tone. Storms collected during funerals have been known to whisper names.",
+          "whisperedTerms": "Weather may be borrowed but not owned. The jar is technically a waiting room."
+        },
+        {
+          "name": "Key to the Room You Have Not Entered Yet",
+          "classification": "Prospective threshold authorization key",
+          "effect": "Once per week, the key may open one mundane or magical door the bearer has never previously crossed. It functions as knock and grants +10 on one caster-level check against a ward on that door.",
+          "warning": "After use, one previously visited room becomes inaccessible to the bearer for 24 hours. The selected room is not announced in advance.",
+          "whisperedTerms": "Access was granted prospectively and reclaimed retrospectively."
+        },
+        {
+          "name": "Boots of Reciprocal Falling",
+          "classification": "Shared gravitational-liability footwear",
+          "effect": "When the wearer falls, they may choose one willing creature within 60 feet. Falling distance and damage are divided equally between them, and both may drift 5 feet horizontally per 20 feet fallen.",
+          "warning": "If no willing creature is available, the boots may ask the nearest unattended statue. Statues are poor negotiators.",
+          "whisperedTerms": "Gravity demanded that someone fall. It did not specify how many."
+        },
+        {
+          "name": "Teacup of Clerical Neutrality",
+          "classification": "Temporary devotional nonaggression vessel",
+          "effect": "Once per day, two divine casters who share tea from the cup gain +4 on saves against each other’s spells and cannot be compelled by their patrons to attack one another for 10 minutes.",
+          "warning": "The cup does not prevent voluntary violence, passive aggression, theological insults, or poisoned tea.",
+          "whisperedTerms": "Hostilities were suspended for tea. Biscuits remain outside the compact."
+        },
+        {
+          "name": "Ribbon of Thursday Mourning",
+          "classification": "Scheduled grief accommodation ribbon",
+          "effect": "When worn on Thursday, the bearer may delay one fear, despair, or grief effect until sunset. At sunset, the bearer receives a new saving throw with a +4 morale bonus.",
+          "warning": "On all other days, the ribbon appears cheerful and may attract inappropriate condolences.",
+          "whisperedTerms": "Thursday had available grief capacity after the sombrero negotiations."
+        },
+        {
+          "name": "Umbrella of Unrequested Sunshine",
+          "classification": "Inverse weather-protection compromise",
+          "effect": "When opened in rain, the umbrella produces warm sunlight in a 10-foot radius, suppressing ordinary rain and granting +2 on saves against cold and magical darkness.",
+          "warning": "When opened in direct sunlight, it creates a private raincloud above the bearer. The rain is mildly judgmental.",
+          "whisperedTerms": "Sun and rain agreed to exchange complaints rather than territory."
+        },
+        {
+          "name": "Pocketwatch of Mostly Accurate Yesterdays",
+          "classification": "Retrospective temporal testimony device",
+          "effect": "Once per day, the bearer may ask what occurred in their current square during one chosen minute of the previous day. The watch produces a silent visual replay lasting up to 1 minute.",
+          "warning": "One detail in the replay may be metaphorical, temporally displaced, or supplied by a witness who has not yet existed.",
+          "whisperedTerms": "Yesterday agreed to testify but refused perfect recollection."
+        },
+        {
+          "name": "Candle of Deferred Haunting",
+          "classification": "Postponed spiritual-claim candle",
+          "effect": "While lit, incorporeal undead and haunt effects cannot enter a 20-foot radius unless they succeed on a Will save. The protection lasts up to 1 hour per day.",
+          "warning": "Every prevented haunting is rescheduled. Extinguishing the candle without performing a short apology causes the next haunting to gain +2 on its save DC.",
+          "whisperedTerms": "The dead accepted postponement, not cancellation."
+        },
+        {
+          "name": "Socks of Jurisdictional Dryness",
+          "classification": "Localized water-domain exclusion garments",
+          "effect": "The wearer’s feet and footwear remain dry in ordinary water, mud, rain, and shallow planar seepage. The wearer gains +5 competence on Balance checks in wetlands.",
+          "warning": "The dryness applies only below the ankle. Water deities consider deliberate testing discourteous.",
+          "whisperedTerms": "The feet were excluded from the flood. The rest of the person was not discussed."
+        },
+        {
+          "name": "Mirror of Nonbinding Resemblance",
+          "classification": "Identity-dispute evidentiary mirror",
+          "effect": "Once per day, a creature looking into the mirror may compare its current form to its natural or last stable form, gaining a +4 circumstance bonus on one save or check against polymorph, possession, identity theft, or memory alteration.",
+          "warning": "The reflection is not legally binding and may decline to imitate the viewer for 1d6 minutes.",
+          "whisperedTerms": "Resemblance was admitted for evidentiary purposes only."
+        },
+        {
+          "name": "Hatpin of Divine Queue Priority",
+          "classification": "Petition-order advancement instrument",
+          "effect": "Once per week, when casting commune, contact other plane, making an Entreaty, or performing a similar divine petition, the bearer may reduce casting time to 1 minute and gains +2 on the associated check.",
+          "warning": "Using the pin moves another unknown petitioner backward in the queue. That petitioner may eventually discover the bearer’s identity.",
+          "whisperedTerms": "Priority was granted. Privacy was not."
+        },
+        {
+          "name": "Towel of Emergency Incarnation",
+          "classification": "Temporary bodily-continuity cloth",
+          "effect": "Once, wrap the towel around an incorporeal, ethereal, gaseous, disembodied, or recently restored willing creature. For 10 minutes it gains a stable physical body resembling its normal form.",
+          "warning": "The towel does not guarantee correct pockets, scars, fingerprints, or number of elbows.",
+          "whisperedTerms": "A body was required immediately. Specifications arrived after manufacture."
+        },
+        {
+          "name": "Coin of Two-Sided Third Opinions",
+          "classification": "Contradictory divination arbitration coin",
+          "effect": "After receiving two conflicting divinations, flip the coin. It provides a third symbolic answer and grants +4 insight on the next Knowledge, Sense Motive, or Survival check used to determine which answer is safer.",
+          "warning": "The coin has two physical sides but occasionally lands on the third. Do not swallow it to force a decision.",
+          "whisperedTerms": "Neither prior answer would yield, so an additional side was recognized procedurally."
+        },
+        {
+          "name": "Pillow of Dream-Safe Litigation",
+          "classification": "Nocturnal divine-negotiation safety pillow",
+          "effect": "A creature sleeping on the pillow gains +4 on saves against nightmare, dream intrusion, possession, and harmful divine messages. Once per week the sleeper may retain a perfect transcript of one dream negotiation.",
+          "warning": "The transcript may contain redacted sections, amphibian footprints, or clauses written in languages nobody present can read.",
+          "whisperedTerms": "Dream testimony was permitted provided privileged divine discussion remained sealed."
+        },
+        {
+          "name": "Napkin of Restored Personhood",
+          "classification": "Culinary-transformation identity marker",
+          "effect": "When placed upon a creature transformed into food, an object, a collection of portions, or ingredients, the napkin marks every piece as part of the same legal and metaphysical person. Restoration magic treats the complete marked collection as a single body.",
+          "warning": "The napkin does not prevent spoilage, seasoning, plating, or arguments over whether soup is one portion.",
+          "whisperedTerms": "Personhood was preserved across serving boundaries. Garnish remains disputed."
+        },
+        {
+          "name": "Reed Whistle of Nearby but Not Immediate Rescue",
+          "classification": "Delayed emergency-emissary signal",
+          "effect": "Once per day, blowing the whistle sends a planar distress notice. Within 1d4 rounds, an appropriate frog, lizard, familiar, minor outsider, local rescuer, or maintained brood appears within 60 feet and attempts to assist for 5 rounds.",
+          "warning": "The responder is nearby in metaphysical terms, not necessarily in tactical ones. It may arrive wet, confused, or carrying paperwork.",
+          "whisperedTerms": "Rescue was guaranteed. Immediacy exceeded the available budget."
+        },
+        {
+          "name": "Bottle of Rainwater from a Dry Plane",
+          "classification": "Impossible precipitation sample",
+          "effect": "Pouring the bottle creates enough clean water for ten creatures for one day, extinguishes a 20-foot cube of nonmagical fire, or creates a 10-foot-radius shallow pool lasting 1 hour.",
+          "warning": "The dry plane from which it came is seeking return of the water and has filed several increasingly severe complaints.",
+          "whisperedTerms": "The water existed despite local prohibition. Its export authorization is under review."
+        },
+        {
+          "name": "Ring of Temporary Spleen Tenancy",
+          "classification": "Shared-organ occupancy ring",
+          "effect": "Once per week, the wearer may loan the metaphysical function of one healthy internal organ to a willing creature within 30 feet for 10 minutes. Both creatures continue functioning, and the recipient gains +4 on one Fortitude save related to poison, disease, or bodily transformation.",
+          "warning": "No physical organ moves. The ring nevertheless refers to the arrangement as tenancy and may demand a deposit of three copper pieces.",
+          "whisperedTerms": "Function may be sublet. Ownership remains before the divine court."
+        },
+        {
+          "name": "Ledger of Debts Nobody Remembers Incurring",
+          "classification": "Anonymous metaphysical-obligation ledger",
+          "effect": "Once per month, the bearer may write one Pact Debt, geas clause, curse obligation, or divine service into the ledger. For 24 hours the associated penalty is suspended while the obligation is audited.",
+          "warning": "At the end of the audit, the debt returns unless disproven, renegotiated, or transferred with consent. Occasionally a second debt appears in handwriting nobody recognizes.",
+          "whisperedTerms": "Memory was not accepted as evidence that no obligation existed."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Catalogue status: multiplanar whisperings",
+          "sectionType": "builder-note",
+          "body": [
+            "The following relics have been recorded through dream testimony, overheard divine arguments, shrine ledgers, emissary inventories, contradictory clerical depositions, objects discovered after planar storms, and repeated multiplanar whisperings. None of those sources is perfectly reliable, but recurring names and warnings are preserved when several unrelated witnesses report the same object.",
+            "Many relics arrive with incomplete terms. The Lady or her emissaries may state that they cannot discuss the agreement under which an item was provided. Unknown conditions should remain genuine mysteries, but their consequences must be foreshadowed through dreams, visible instability, research, or emissary warnings before they become severe.",
+            "A compromise relic is not simply a joke item. It is evidence that several supernatural authorities reached a narrow agreement after discovering that their powers interacted dangerously around the same mortal creature, party, settlement, bloodline, or sacred site."
+          ]
+        },
+        {
+          "heading": "Ontological anchoring, visibility, and identity relics",
+          "sectionType": "builder-note",
+          "body": [
+            "Cloak of Uninvisibility: Keeps the wearer correctly visible under certain planar conditions and grants +4 on saves against involuntary etherealness, incorporeality, planar displacement, banishment, and timeline removal. The conditions that make the cloak necessary are not stated. The bearer is warned that they may otherwise become untethered from reality and should wear it at all times. The providers cannot discuss the terms under which it was supplied.",
+            "Mirror of Nonbinding Resemblance: Compares the viewer's current body with their natural or last stable form and grants +4 on one resistance check against transformation, possession, identity theft, or memory alteration. The reflection is not legally binding and may temporarily refuse to imitate the viewer.",
+            "Towel of Emergency Incarnation: Gives an incorporeal, gaseous, ethereal, disembodied, or recently restored willing creature a stable body for 10 minutes. Correct pockets, scars, fingerprints, and elbows are not guaranteed.",
+            "Napkin of Restored Personhood: Marks every portion of a creature transformed into food, ingredients, objects, or separate courses as the same metaphysical person so restoration magic can treat the collection as one body.",
+            "Seven-Course Chalupa Reliquary: Preserves identity and soul when a creature becomes prepared food and permits restoration after decay. Created after the recorded Torm blessing incident.",
+            "Spleen Warranty Tag: Negates one instance of ability drain, bodily dissolution, or organ transformation caused by overlapping divine effects while the wearer's spleen jurisdiction is renegotiated.",
+            "Ring of Temporary Spleen Tenancy: Temporarily lends the metaphysical function of an internal organ to a willing ally without physically moving it, granting +4 on one relevant Fortitude save."
+          ]
+        },
+        {
+          "heading": "Consecration, luck, and devotional safety relics",
+          "sectionType": "builder-note",
+          "body": [
+            "Epsom Salts of ‘Do Not Put This in Your Bath Water’: Sprinkle around any place where the bearer intends to sleep upon consecrated, evilly aligned ground. Creatures inside the circle gain +2 luck on saving throws until waking. The salts must not be added to bath water. The Lady warns that failure to use them when required may permanently eliminate the recipient's ability to experience good luck.",
+            "Teacup of Clerical Neutrality: Two divine casters sharing tea gain +4 on saves against one another's magic and cannot be compelled by patrons to attack each other for 10 minutes. Voluntary violence and poisoned tea remain possible.",
+            "Bell of One Additional Apology: Repeats a failed Diplomacy check with +5 after a sincere extra apology. Repeating the offense within seven days creates a binding social penalty until amends are made.",
+            "Hatpin of Divine Queue Priority: Once per week shortens a divine petition, commune, contact, or Entreaty to 1 minute and grants +2 on the check, but moves an unknown petitioner backward in the queue.",
+            "Pillow of Dream-Safe Litigation: Grants +4 against nightmares, possession, dream intrusion, and harmful divine messages and can retain a perfect but possibly redacted transcript of one dream negotiation each week.",
+            "Ledger of Debts Nobody Remembers Incurring: Suspends one Pact Debt, curse obligation, geas clause, or divine service for 24 hours while it is audited. Memory loss is not accepted as proof that the debt never existed."
+          ]
+        },
+        {
+          "heading": "Temporal, causal, and threshold relics",
+          "sectionType": "builder-note",
+          "body": [
+            "Boots of the Previous Tomorrow: Walk backward for one full round to return to the previous-turn square and reverse 1d6 recent damage once per week. Temporary age reversion accompanies the effect.",
+            "Pocketwatch of Mostly Accurate Yesterdays: Replays one chosen minute that occurred in the current square during the previous day. One detail may be metaphorical, displaced, or supplied by a witness who does not yet exist.",
+            "Key to the Room You Have Not Entered Yet: Opens one door the bearer has never crossed, functioning as knock and assisting against magical wards. One previously entered room becomes inaccessible for 24 hours.",
+            "Lantern of the Last Door That Wasn’t There: Reveals an exit that existed within the previous 24 hours and briefly reopens it as passwall. The exit's former destination is not guaranteed.",
+            "Coin of Two-Sided Third Opinions: Produces a third symbolic answer after two conflicting divinations and grants +4 insight on the next check used to determine which answer is safer.",
+            "Boots of Reciprocal Falling: Divide a fall and its damage between the wearer and a willing creature within 60 feet. Gravity required someone to fall but did not specify how many."
+          ]
+        },
+        {
+          "heading": "Weather, travel, haunting, and environmental relics",
+          "sectionType": "builder-note",
+          "body": [
+            "Parasol of Indoor Rain: Creates gentle indoor rain. Outdoors it produces only rain scent and a jurisdictional notice.",
+            "Umbrella of Unrequested Sunshine: Produces warm sunlight when opened in rain and a private raincloud when opened in direct sun.",
+            "Jar of Reserved Weather: Stores one hour of natural weather and reproduces it in a 30-foot radius. Weather collected during emotionally charged events may retain whispers.",
+            "Bottle of Rainwater from a Dry Plane: Creates clean water, extinguishes ordinary fire, or forms a temporary shallow pool. The plane from which it was removed is demanding its return.",
+            "Socks of Jurisdictional Dryness: Keep the wearer's feet dry and grant +5 on wetland Balance checks. The compact stops at the ankle.",
+            "Reed Whistle of Nearby but Not Immediate Rescue: Calls an appropriate minor rescuer within 1d4 rounds. Rescue is guaranteed; tactical immediacy was not funded.",
+            "Candle of Deferred Haunting: Prevents hauntings from entering its light, but every rejected haunting is rescheduled unless the candle is extinguished with an apology."
+          ]
+        },
+        {
+          "heading": "Calendrical, bodily, and domestic compromise relics",
+          "sectionType": "builder-note",
+          "body": [
+            "Sombrero of Tuesdays: Grants its extra spell slot every Thursday. The contradiction has survived every known attempt at clarification.",
+            "Ribbon of Thursday Mourning: Delays fear, despair, or grief until sunset on Thursday and then grants a new save with +4 morale. On other days it attracts confused condolences.",
+            "Earplugs of the Forty-Eighth Hour: Provide up to 48 hours of voluntary deafness and protection against language-dependent divine commands. The forty-ninth hour is specifically excluded.",
+            "Gloves of Conditional Left-Handedness: Let either hand count as primary and grant Two-Weapon Fighting. Under an unknown celestial condition both hands may become legally left-handed.",
+            "Cradle of Unrequested Continuity: Redirects sudden progenation into harmless swamp familiars. Their legal inheritance status remains unsettled.",
+            "Spoon of Deferred Thunder: Stores one sonic or electrical effect until breakfast. Skipping breakfast causes a noon discharge.",
+            "Parasol, spoon, sombrero, ribbon, and several other household-form relics demonstrate that domestic objects are frequently used when multiple deities cannot agree on the shape of a formal sacred implement."
+          ]
+        },
+        {
+          "heading": "Use, warnings, and unknown clauses",
+          "sectionType": "conversion-note",
+          "body": [
+            "Relics with undisclosed conditions should not become arbitrary instant-death traps. Before a hidden clause threatens permanent harm, provide multiple warnings through dreams, planar flickering, clerical research, contradictory labels, or direct emissary intervention.",
+            "Warnings such as permanent loss of good luck, untethering from reality, cranial removal, or sudden progenation are setting-level dangers. They create urgency and negotiation; they are not permission to erase a character without meaningful choices.",
+            "Most relics are unique, nonmarket, and tied to a specific compact. When the associated divine dispute ends, the item may become mundane, vanish, request return, acquire a different contradiction, or remain as an inert historical artifact.",
+            "A recipient may refuse a relic. Refusal can produce another offer, a narrower ward, a debt, an appeal, or a warning that the unmediated overlap remains dangerous."
+          ]
+        }
+      ]
+    }
+  ]
+}
