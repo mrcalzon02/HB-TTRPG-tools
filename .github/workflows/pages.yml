@@ -41,6 +41,9 @@ jobs:
       - name: Validate malefic academic curricula
         run: node scripts/validate-malefic-academic-generator.mjs
 
+      - name: Validate magical syllabus library catalogue
+        run: node scripts/validate-magical-library-generator.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
@@ -77,6 +80,14 @@ jobs:
           node --check malefic-academic-actions.js
           node --check dark-academic-runtime.js
           node --check malefic-academic-entry.js
+          node --check magical-library-vocabulary.js
+          node --check magical-library-engine.js
+          node --check magical-library-view.js
+          node --check magical-library-text.js
+          node --check magical-library-controller-core.js
+          node --check magical-library-actions.js
+          node --check magical-library-runtime.js
+          node --check magical-library-entry.js
           node --check kaysender-editors.js
           node --check kaysender-settlement-editor.js
           node --check kaysender-airship-editor.js
