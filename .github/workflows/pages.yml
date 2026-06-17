@@ -18,7 +18,6 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,6 +39,9 @@ jobs:
 
       - name: Validate shared editor browser runtime
         run: node scripts/validate-editor-runtime-structure.mjs
+
+      - name: Validate P0 browser verification contract
+        run: node scripts/validate-p0-browser-verification.mjs
 
       - name: Validate arcane academic curricula
         run: node scripts/validate-arcane-academic-generator.mjs
