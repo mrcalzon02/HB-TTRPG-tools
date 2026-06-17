@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "2.0.0",
+  "name": "Aster Reach",
+  "profileType": "floating-island-foundation-profile",
+  "classification": {
+    "sizeClass": "regional skyland",
+    "shapeProfile": "broad tabular plateau",
+    "currentUse": "settled agricultural hub"
+  },
+  "geometry": {
+    "lengthKm": 18.4,
+    "widthKm": 11.2,
+    "meanThicknessM": 740,
+    "usableSurfacePercent": 66,
+    "arableAreaKm2": 34.6
+  },
+  "composition": {
+    "ordinaryRockPercent": 47,
+    "floatstonePercent": 28,
+    "soilSedimentPercent": 17,
+    "cavernVoidPercent": 8
+  },
+  "motion": {
+    "meanAltitudeM": 4200,
+    "verticalOscillationM": 280,
+    "horizontalDriftKpd": 34,
+    "altitudePredictability": "seasonally predictable",
+    "driftPredictability": "charted seasonal route"
+  },
+  "access": {
+    "routeTraffic": "regular regional traffic",
+    "approachProfile": "two reliable approaches",
+    "routeReliability": 16
+  },
+  "hydrology": {
+    "profile": "reliable spring network",
+    "annualRainfallMm": 880
+  },
+  "terrain": {
+    "primary": "pasture plateau",
+    "secondary": "wet basin",
+    "flatlandPercent": 62,
+    "arableSoilPercent": 49,
+    "vegetationCoverPercent": 58
+  },
+  "resources": {
+    "mineralPresence": "mixed industrial minerals",
+    "knownMinerals": ["skystone", "iron", "copper"],
+    "mineralAccessibility": "shallow seams"
+  },
+  "ecology": {
+    "wildlifeDensity": "established ecosystem",
+    "dominantWildlife": "sheffel herds"
+  },
+  "population": {
+    "permanentPopulation": 6400,
+    "currentUse": "settled agricultural hub"
+  },
+  "siteInventory": {
+    "knownDungeonCount": 3,
+    "hiddenSiteDensity": "moderate"
+  },
+  "derivedScores": {
+    "structuralStability": 15,
+    "routeReliability": 16,
+    "agriculturalPotential": 17,
+    "settlementViability": 16,
+    "hazardPressure": 5
+  },
+  "warnings": [],
+  "outputs": {
+    "summary": "Aster Reach is a stable agricultural skyland on a charted regional route.",
+    "gmNotes": ["Dragon tithe collectors are expected within the month."],
+    "factionHooks": ["The Surveyor's Guild controls the newest route charts."],
+    "wikiDraft": {
+      "id": "aster-reach",
+      "title": "Aster Reach",
+      "category": "Floating Islands"
+    }
+  }
+}
