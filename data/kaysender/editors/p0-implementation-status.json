@@ -24,6 +24,7 @@
     "identitySafeUpdateExisting": true,
     "explicitSaveAsNewClone": true,
     "profileSchemaVersions": true,
+    "profileAdaptersAndMigrations": true,
     "versionedMigrationRegistry": true,
     "legacyFlatIslandMigrationTo2_0_0": true,
     "migrationFixtureValidation": true,
@@ -136,9 +137,9 @@
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
       "implementationState": "kernel-migration-adapter-inheritance-and-structural-validation-present",
-      "verificationState": "final-browser-runtime-check-remains"
+      "verificationState": "final-live-browser-verification-remains"
     }
   ],
-  "nextFrameworkStep": "Run the final integrated Island to Settlement to Airship runtime gate against the completed shared framework. Promote P0 and begin P1 only if that gate passes.",
-  "promotionRule": "P0 may change to complete and P1 may become required-next only after the three registered editors operate through the complete shared lifecycle on main and the final runtime check passes."
+  "nextFrameworkStep": "Run the final integrated Island to Settlement to Airship live browser verification against the completed shared framework. Promote P0 and begin P1 only if that gate passes.",
+  "promotionRule": "P0 may change to complete and P1 may become required-next only after the three registered editors operate through the complete shared lifecycle on main and live browser verification passes."
 }
