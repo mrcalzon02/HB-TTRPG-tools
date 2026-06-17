@@ -385,9 +385,20 @@
   }
 
   async function saveCurrentDraft(adapter, panel) {
+    const saveVersion = Lifecycle.checkpoint(adapter.id);
     const result = await persistDraft(adapter, panel);
-    renderDiagnostics([Kernel.diagnostic(result.ok ? 'info' : 'error', result.ok ? 'draft-saved' : 'draft-save-failed', result.message)]);
-    if (result.ok) Lifecycle.markClean(adapter.id, 'Local recovery draft saved manually.');
+    if (!result.ok) {
+      renderDiagnostics([Kernel.diagnostic('error', 'draft-save-failed', result.message)]);
+      return;
+    }
+    const cleanResult = Lifecycle.markCleanIfUnchanged(adapter.id, saveVersion, 'Local recovery draft saved manually.');
+    renderDiagnostics([
+      Kernel.diagnostic(
+        cleanResult.ok ? 'info' : 'warning',
+        cleanResult.ok ? 'draft-saved' : 'draft-saved-newer-edits-remain',
+        cleanResult.ok ? result.message : `${result.message} Newer edits remain unsaved.`
+      )
+    ]);
   }
 
   function recoverDraft(adapter, panel) {
