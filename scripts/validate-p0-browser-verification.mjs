@@ -10,6 +10,7 @@ const fail = message => { throw new Error(message); };
 const schema = await readJson('data/kaysender/editors/p0-browser-verification.schema.json');
 const smoke = await readText('kaysender-editor-live-smoke.js');
 const runner = await readText('scripts/run-p0-browser-verification.mjs');
+const ledgerWriter = await readText('scripts/record-p0-browser-verification.mjs');
 const workflow = await readText('.github/workflows/pages.yml');
 
 const requiredReceiptFields = [
@@ -77,10 +78,26 @@ for (const marker of [
 }
 
 for (const marker of [
+  "crypto.createHash('sha256')",
+  "ledgerVersion: '1.0.0'",
+  'sourceCommit',
+  'workflowRunId',
+  'receiptSha256',
+  "mode === 'record'",
+  "mode === 'check'"
+]) {
+  if (!ledgerWriter.includes(marker)) fail(`Verification ledger writer is missing '${marker}'.`);
+}
+
+for (const marker of [
+  'contents: write',
   'playwright@1.60.0',
   'npx playwright install --with-deps chromium',
   'node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json',
   'node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json',
+  'node scripts/record-p0-browser-verification.mjs record artifacts/p0-browser-verification.json',
+  'node scripts/record-p0-browser-verification.mjs check data/kaysender/editors/verification/p0-browser-verification.latest.json',
+  'git push origin HEAD:main',
   'name: p0-browser-verification',
   'path: artifacts/',
   'rm -rf node_modules'
@@ -143,5 +160,5 @@ if (receiptPath) {
   console.log(`P0 browser verification receipt passed: ${receiptPath}`);
 } else {
   console.log('P0 browser verification contract validation passed.');
-  console.log('Verified receipt schema, harness field coverage, Chromium runner, Pages workflow wiring, evidence retention, and optional receipt validation rules.');
+  console.log('Verified receipt schema, harness, Chromium runner, durable SHA-256 ledger, Pages workflow wiring, evidence retention, and optional receipt rules.');
 }
