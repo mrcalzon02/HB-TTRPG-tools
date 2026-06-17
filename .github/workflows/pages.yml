@@ -47,6 +47,9 @@ jobs:
       - name: Validate registered source references
         run: node scripts/validate-source-references.mjs
 
+      - name: Validate Elemental Realms creature wiki
+        run: node scripts/validate-elemental-realms-wiki.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
