@@ -46,6 +46,29 @@
     return `${typeStem}-${slugify(name, 'unnamed').slice(0, 42)}-${randomHex(12)}`;
   }
 
+  function stableNormalize(value) {
+    if (Array.isArray(value)) return value.map(stableNormalize);
+    if (value && typeof value === 'object') {
+      return Object.keys(value).sort().reduce((result, key) => {
+        if (value[key] !== undefined) result[key] = stableNormalize(value[key]);
+        return result;
+      }, {});
+    }
+    return value;
+  }
+
+  function stableStringify(value) {
+    return JSON.stringify(stableNormalize(value));
+  }
+
+  function profileFingerprint(data, locks = [], inheritance = []) {
+    return stableStringify({
+      data,
+      locks: Array.from(new Set(locks || [])).sort(),
+      inheritance: inheritance || []
+    });
+  }
+
   function diagnostic(severity, code, message, path = '') {
     return { severity, code, message, path };
   }
@@ -110,6 +133,12 @@
     if (profileType && !data.profileType) data.profileType = profileType;
     const previous = options.existingEnvelope && isEnvelope(options.existingEnvelope) ? options.existingEnvelope : null;
     const timestamp = nowIso();
+    const inheritance = deepClone(options.inheritance || previous?.inheritance || []);
+    const locks = Array.from(new Set(options.locks || previous?.locks || [])).sort();
+    const previousFingerprint = previous ? profileFingerprint(previous.data, previous.locks, previous.inheritance) : '';
+    const nextFingerprint = profileFingerprint(data, locks, inheritance);
+    const changed = !previous || previousFingerprint !== nextFingerprint;
+    const incrementRevision = previous && options.incrementRevision !== false && changed;
     const migrationLog = [
       ...(previous?.provenance?.migrationLog || []),
       ...(options.migrationLog || [])
@@ -120,9 +149,9 @@
       profileId: previous?.profileId || options.profileId || createProfileId(profileType, data?.name),
       profileType,
       profileSchemaVersion: String(data?.schemaVersion || options.profileSchemaVersion || '1.0.0'),
-      revision: previous ? previous.revision + (options.incrementRevision === false ? 0 : 1) : 1,
+      revision: previous ? previous.revision + (incrementRevision ? 1 : 0) : 1,
       createdAt: previous?.createdAt || timestamp,
-      updatedAt: timestamp,
+      updatedAt: previous && !changed ? previous.updatedAt : timestamp,
       name: String(data?.name || 'Unnamed Profile'),
       provenance: {
         editorId: options.editorId || previous?.provenance?.editorId || 'unknown-editor',
@@ -132,8 +161,8 @@
         clonedFromProfileId: options.clonedFromProfileId || previous?.provenance?.clonedFromProfileId || null,
         migrationLog
       },
-      inheritance: deepClone(options.inheritance || previous?.inheritance || []),
-      locks: Array.from(new Set(options.locks || previous?.locks || [])).sort(),
+      inheritance,
+      locks,
       diagnostics,
       data
     };
@@ -416,6 +445,9 @@
     deepClone,
     slugify,
     createProfileId,
+    stableNormalize,
+    stableStringify,
+    profileFingerprint,
     isEnvelope,
     unwrap,
     inferProfileType,
