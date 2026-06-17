@@ -5,6 +5,7 @@ import process from 'node:process';
 import vm from 'node:vm';
 
 const root = process.cwd();
+const normalize = value => JSON.parse(JSON.stringify(value));
 const source = await fs.readFile(path.join(root, 'kaysender-surface-grid-editor.js'), 'utf8');
 const styles = await fs.readFile(path.join(root, 'kaysender-surface-grid-editor.css'), 'utf8');
 const fixture = JSON.parse(await fs.readFile(path.join(root, 'data/kaysender/editors/fixtures/p1-floating-island-production-valid.json'), 'utf8'));
@@ -34,7 +35,7 @@ const model = api.createModelFromProfile(fixture);
 assert.equal(model.columns, fixture.map.columns);
 assert.equal(model.rows, fixture.map.rows);
 assert.deepEqual(
-  model.toMap().activeCellIds,
+  normalize(model.toMap().activeCellIds),
   fixture.map.activeCellIds,
   'Active Island surface cells were not preserved.'
 );
@@ -58,7 +59,7 @@ const erased = model.eraseCell(1, 0);
 assert.equal(erased.id, originalId, 'Erasing a surface cell did not preserve its stable ID.');
 assert.equal(erased.active, false);
 assert.equal(erased.terrainType, 'unassigned');
-assert.deepEqual(erased.siteIds, []);
+assert.deepEqual(normalize(erased.siteIds), []);
 
 const restored = model.setCell(1, 0, {
   terrainType: 'pasture plateau',
@@ -80,12 +81,12 @@ unsubscribe();
 const invalid = model.setCell(0, 0, { usablePercent: 20, arablePercent: 60 });
 assert.equal(invalid.id, 'cell-western-port');
 assert.ok(
-  model.validate().some(item => item.code === 'arable-exceeds-usable'),
+  normalize(model.validate()).some(item => item.code === 'arable-exceeds-usable'),
   'Grid model did not diagnose arable area exceeding usable area.'
 );
 model.setCell(0, 0, { usablePercent: 74, arablePercent: 8 });
 
-const removed = model.resize(1, 2, { preserve: true });
+const removed = normalize(model.resize(1, 2, { preserve: true }));
 assert.equal(model.columns, 1);
 assert.equal(model.rows, 2);
 assert.ok(removed.some(cell => cell.id === 'cell-central-pasture'));
@@ -102,7 +103,7 @@ model.setCell(1, 0, {
   usablePercent: 88,
   arablePercent: 64
 });
-const exported = model.toMap();
+const exported = normalize(model.toMap());
 assert.equal(exported.columns, 2);
 assert.equal(exported.rows, 2);
 assert.ok(exported.activeCellIds.includes('cell-central-pasture'));
