@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceId": "solanum-umbra-ttrpg",
+  "title": "Solanum Umbra TTRPG",
+  "originalFilename": "Solanum-Umbra-TTRPG.pdf",
+  "mediaType": "application/pdf",
+  "pages": 248,
+  "bytes": 1325003,
+  "sha256": "2f1d5d0df591b4d637e4845645370946568cb6aecc786a4bbef5411e4e82f9ff",
+  "sourceStatus": "registered-from-conversation-upload",
+  "binaryGitStatus": "not-written-binary-connector-unavailable",
+  "intendedRepositoryPath": "source-page-references/Solanum-Umbra-TTRPG.pdf",
+  "integrationStatus": "dedicated-wiki-staged-multi-pass-integration-deferred",
+  "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json",
+  "notes": "Canonical source identity receipt for the independent post-apocalyptic science-fantasy setting. No wiki pack should be populated from this manuscript until dedicated chronology, technology, magic, faction, ecology, bestiary, character, equipment, rules, and adventure passes are completed with page-level provenance."
+}
