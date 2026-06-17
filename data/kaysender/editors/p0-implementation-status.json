@@ -22,7 +22,8 @@
     "validationAndDiagnostics": true,
     "recoverableErrorBoundary": true,
     "accessibleResponsiveControls": true,
-    "browserVerificationHarness": true
+    "browserVerificationHarness": true,
+    "browserVerificationReceiptContract": true
   },
   "sharedActions": [
     "New blank record",
@@ -50,17 +51,19 @@
     "kaysender-editor-live-smoke.js"
   ],
   "schemaFiles": [
-    "data/kaysender/schemas/editor-profile-envelope.schema.json"
+    "data/kaysender/schemas/editor-profile-envelope.schema.json",
+    "data/kaysender/editors/p0-browser-verification.schema.json"
   ],
   "validationFiles": [
     "scripts/validate-editor-kernel.mjs",
-    "scripts/validate-editor-runtime-structure.mjs"
+    "scripts/validate-editor-runtime-structure.mjs",
+    "scripts/validate-p0-browser-verification.mjs"
   ],
   "exitCriteria": [
     {
       "criterion": "All three existing alpha editors can open through the shared shell",
       "implementationState": "implemented",
-      "verificationState": "automated-structure-check-and-browser-harness-installed-execution-pending"
+      "verificationState": "automated-structure-check-browser-harness-and-receipt-contract-installed-execution-pending"
     },
     {
       "criterion": "Current island profiles import into settlement and airship editors without flat-field assumptions",
@@ -80,7 +83,7 @@
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
       "implementationState": "implemented",
-      "verificationState": "pages-workflow-gates-and-browser-harness-installed-results-pending"
+      "verificationState": "pages-workflow-gates-browser-harness-and-receipt-validator-installed-live-result-pending"
     }
   ],
   "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared kernel validators, JavaScript syntax checks, and a live browser verification succeed on main."
