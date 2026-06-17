@@ -104,6 +104,12 @@ for (const phrase of ['outsider','clerics','ongoing relationship','bargains with
 const baseArtifactEntry = entries.get('divine-compromise-artifacts');
 if (!Array.isArray(baseArtifactEntry.compromiseArtifacts) || baseArtifactEntry.compromiseArtifacts.length !== 8) throw new Error('Expected the eight founding structured divine compromise artifacts in the primary class pack.');
 for (const artifact of baseArtifactEntry.compromiseArtifacts) if (!artifact.name || !artifact.effect) throw new Error('Founding divine compromise artifact is incomplete.');
+const baseArtifactText = [
+  baseArtifactEntry.summary,
+  ...(baseArtifactEntry.body || []),
+  ...(baseArtifactEntry.sections || []).flatMap(section => [section.heading,...(section.body || [])]),
+  ...baseArtifactEntry.compromiseArtifacts.flatMap(artifact => [artifact.name,artifact.effect])
+].join(' ');
 
 if (displayPack.setting !== 'Kaysender' || displayPack.schemaVersion !== '0.1.0') throw new Error('Unexpected display-override pack schema.');
 const displayEntries = new Map((displayPack.entries || []).map(entry => [entry.id,entry]));
@@ -112,6 +118,8 @@ for (const id of ['warlock-of-the-swamp-invocations','divine-compromise-artifact
   if (!entry || !Array.isArray(entry.sections) || entry.sections.length < 5) throw new Error(`Display override '${id}' is incomplete.`);
   if (entry.sections.some(section => !section.heading || !Array.isArray(section.body) || section.body.length === 0)) throw new Error(`Display override '${id}' has an empty section.`);
 }
+const displayArtifactEntry = displayEntries.get('divine-compromise-artifacts');
+const displayArtifactText = displayArtifactEntry.sections.flatMap(section => [section.heading,...section.body]).join(' ');
 
 if (relicCatalogue.setting !== 'Kaysender' || relicCatalogue.schemaVersion !== '0.1.0') throw new Error('Unexpected expanded relic catalogue schema.');
 if (!Array.isArray(relicCatalogue.entries) || relicCatalogue.entries.length !== 1 || relicCatalogue.entries[0].id !== 'divine-compromise-artifacts') throw new Error('Expanded relic catalogue must override exactly the divine-compromise-artifacts entry.');
@@ -136,6 +144,8 @@ for (const requiredArtifact of [
 ]) if (!relicNames.has(requiredArtifact)) throw new Error(`Missing expanded compromise relic '${requiredArtifact}'.`);
 
 const relicText = [
+  baseArtifactText,
+  displayArtifactText,
   expandedArtifactEntry.cataloguePolicy.adjudication,
   expandedArtifactEntry.cataloguePolicy.termsWarning,
   ...expandedArtifactEntry.compromiseArtifacts.flatMap(relic => [relic.name,relic.classification,relic.effect,relic.warning,relic.whisperedTerms]),
@@ -154,7 +164,7 @@ for (const phrase of [
   'must not be placed in bath water',
   'permanently destroy the recipient’s ability to experience good luck',
   'cannot discuss the terms and conditions'
-]) if (!relicText.includes(phrase)) throw new Error(`Expanded relic record is missing '${phrase}'.`);
+]) if (!relicText.includes(phrase)) throw new Error(`Merged relic record is missing '${phrase}'.`);
 
 for (const entry of classPack.entries) {
   if (!entry.id || !entry.title || !entry.category || !entry.summary) throw new Error('Warlock pack entry lacks core wiki fields.');
