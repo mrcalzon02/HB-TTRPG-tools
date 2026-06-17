@@ -84,6 +84,7 @@ async function main() {
     'sharedJsonImportExport',
     'sharedWikiDraftExport',
     'validationAndDiagnostics',
+    'recoverableErrorBoundary',
     'accessibleResponsiveControls',
     'browserVerificationHarness'
   ];
