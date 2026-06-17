@@ -333,8 +333,11 @@
     return result.ok ? result.envelope : null;
   }
 
-  function clearDraft(editorId) {
-    root.localStorage?.removeItem(draftKey(editorId));
+  function clearDraft(editorId, explicit = false) {
+    if (!explicit) return { ok: false, message: 'Draft retained. Clearing a recovery draft requires an explicit clear action.' };
+    if (!root.localStorage) return { ok: false, message: 'Local storage is unavailable.' };
+    root.localStorage.removeItem(draftKey(editorId));
+    return { ok: true, message: `Cleared local draft for ${editorId}.` };
   }
 
   function snapshotFields(form, fieldNames) {
