@@ -1,0 +1,291 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-d20-conversion",
+  "description": "First native-system import pass covering character creation, attributes, derived statistics, origins, careers, skills, motivations, ancestry options, cyborg variants, the full-cyberization threshold, and pre-cyberization data seizures. Source ambiguities are recorded rather than replaced with another RPG system.",
+  "entries": [
+    {
+      "id": "solanum-character-creation-system",
+      "title": "Character Creation System",
+      "category": "Character Creation",
+      "summary": "Solanum Umbra characters are built through six 1d20 attributes, four derived statistics, an origin, a career path, career benefits and skills, a personal motivation, ancestry choices, and optional cyberization.",
+      "body": [
+        "The source presents character creation as a sequence of direct rolls and selections rather than a point-buy or borrowed class framework. Each of the six attributes is rolled on 1d20 and used at its rolled value.",
+        "The character then records four derived statistics: Health, Armor, Initiative, and SKILL. Origin, career, career benefits, career skills, and personal motivation establish the character’s practical identity in the post-collapse world.",
+        "Advanced creation allows Pre-Fall Human, Post-Fall Human, Fae, and cyberized variants. Characters exceeding 49% cybernetic replacement must undergo full cyberization or begin accumulating escalating data seizures and systemic errors.",
+        "This wiki preserves the native Solanum Umbra procedures. It does not convert the system into Hypertext d20, 3.5, or another rules chassis."
+      ],
+      "creationSequence": [
+        "Roll 1d20 for Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma.",
+        "Calculate Health = Constitution + Strength.",
+        "Calculate Armor = Constitution + Dexterity.",
+        "Calculate Initiative = Dexterity + Intelligence.",
+        "Calculate SKILL = Intelligence + Wisdom.",
+        "Roll or choose an origin from the source origin table.",
+        "Determine a career path and its benefits.",
+        "Determine career skills or abilities.",
+        "Roll or choose a personal history or motivation.",
+        "Apply final adjustments arising from career and history.",
+        "For advanced creation, select ancestry and any cyborg variant.",
+        "Record cybernetic body percentage and full-cyberization status when applicable."
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [
+        {
+          "sourceId": "solanum-umbra-ttrpg",
+          "fileName": "Solanum-Umbra-TTRPG.pdf",
+          "pageStart": 104,
+          "pageEnd": 116,
+          "chunkId": "solanum-native-rules:p104-116",
+          "notes": "Character creation, attributes, derived statistics, origins, careers, skills, motivations, ancestry comparisons, cyborg variants, full-cyberization requirement, and data-seizure progression."
+        }
+      ],
+      "tags": ["character creation","native system","attributes","derived statistics","origin","career","motivation","cyberization"],
+      "relatedEntries": ["solanum-core-attributes-derived-statistics","solanum-origins-careers-skills-motivations","solanum-ancestries-and-cyborg-variants","solanum-full-cyberization-threshold","solanum-data-seizure-progression","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-core-attributes-derived-statistics",
+      "title": "Core Attributes and Derived Statistics",
+      "category": "Core System",
+      "summary": "Six attributes are rolled on 1d20 and combined into Health, Armor, Initiative, and SKILL using the native Solanum Umbra formulas.",
+      "body": [
+        "Strength measures physical power and endurance. Dexterity measures agility, reflexes, and precision. Constitution measures health, stamina, and resilience. Intelligence measures knowledge and problem solving. Wisdom measures perception, intuition, and common sense. Charisma measures persuasion and leadership.",
+        "The source uses the rolled attribute value directly. It also supplies a broad bonus and penalty table. The 9–11 range is printed as ‘-1 to +1’ rather than assigning one exact value to each score; this remains marked as a source ambiguity pending a later native-system editorial ruling."
+      ],
+      "tables": [
+        {
+          "id": "solanum-six-attributes",
+          "title": "Six core attributes",
+          "columns": ["Attribute","Abbreviation","Native Description","Generation"],
+          "rows": [
+            ["Strength","STR","Physical power and endurance","Roll 1d20"],
+            ["Dexterity","DEX","Agility, reflexes, and precision","Roll 1d20"],
+            ["Constitution","CON","Health, stamina, and resilience","Roll 1d20"],
+            ["Intelligence","INT","Problem-solving ability and knowledge","Roll 1d20"],
+            ["Wisdom","WIS","Perception, intuition, and common sense","Roll 1d20"],
+            ["Charisma","CHA","Persuasiveness and leadership skills","Roll 1d20"]
+          ]
+        },
+        {
+          "id": "solanum-derived-statistics",
+          "title": "Derived statistics",
+          "columns": ["Statistic","Formula","Function"],
+          "rows": [
+            ["Health","CON + STR","Overall vitality and endurance"],
+            ["Armor","CON + DEX","Physical resilience combined with agility and damage avoidance"],
+            ["Initiative","DEX + INT","Reaction speed, reflexes, and quick thinking"],
+            ["SKILL","INT + WIS","Effectiveness when applying knowledge and intuition"]
+          ]
+        },
+        {
+          "id": "solanum-attribute-bonus-penalty",
+          "title": "Attribute bonus and penalty ranges",
+          "columns": ["Attribute Value","Bonus or Penalty","Source Description","Editorial Status"],
+          "rows": [
+            ["1–4","-4","Very poor attribute; severe limitations and difficulties","Defined"],
+            ["5–8","-2","Below average; struggles with related tasks","Defined"],
+            ["9–11","-1 to +1","Average; no significant bonuses or penalties","Ambiguous within range"],
+            ["12–15","+1","Above average; performs tasks more effectively","Defined"],
+            ["16–19","+2","High attribute; excels with increased efficiency","Defined"],
+            ["20–23","+3","Very high; exceptional performance with significant advantages","Defined"],
+            ["24+","+4","Exceptional attribute; near mastery in related tasks","Defined"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":104,"pageEnd":109,"chunkId":"solanum-attributes:p104-109","notes":"Attribute rolls, four native formulas, worked examples, and bonus/penalty ranges."}],
+      "tags": ["attributes","Health","Armor","Initiative","SKILL","formulas","1d20"],
+      "relatedEntries": ["solanum-character-creation-system","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-origins-careers-skills-motivations",
+      "title": "Origins, Careers, Skills, and Motivations",
+      "category": "Roles and Careers",
+      "summary": "A character’s place in the wasteland is established by an origin, a career path, career-specific benefits and skills, and a personal motivation.",
+      "body": [
+        "The origin and motivation tables have explicit 1d20 ranges. The source lists six career paths but gives only one example roll producing a Mechanic and does not publish a complete career roll-range table. The wiki therefore preserves the career list and marks the missing mapping as unresolved instead of inventing one.",
+        "Career benefits and additional skills are intended to use career-specific 1d20 tables. Pages 106–107 provide the Mechanic as the complete example. Other careers will be indexed from later source sections before any missing benefit table is authored."
+      ],
+      "tables": [
+        {
+          "id": "solanum-origin-table",
+          "title": "Origin roll",
+          "columns": ["1d20","Origin"],
+          "rows": [
+            ["1–4","Wasteland Nomad"],
+            ["5–8","Ruined City Dweller"],
+            ["9–12","Underground Dweller"],
+            ["13–16","Mutant Survivor"],
+            ["17–20","Scavenger"]
+          ]
+        },
+        {
+          "id": "solanum-career-list",
+          "title": "Source career paths",
+          "columns": ["Career","Primary Description","Roll Mapping"],
+          "rows": [
+            ["Hunter","Tracking, survival, and combat","Not fully specified in this section"],
+            ["Mechanic","Repairing and modifying technology","Example result: a roll of 10 may produce Mechanic"],
+            ["Medic","First aid and medical treatment","Not fully specified in this section"],
+            ["Scavenger","Finding and repurposing resources","Not fully specified in this section"],
+            ["Trader","Bartering and social navigation","Not fully specified in this section"],
+            ["Warlord","Leadership and combat strategy","Not fully specified in this section"]
+          ]
+        },
+        {
+          "id": "solanum-mechanic-benefits",
+          "title": "Mechanic career benefits example",
+          "columns": ["1d20","Benefit"],
+          "rows": [
+            ["1–5","Proficient in repairing machinery and vehicles"],
+            ["6–10","Can craft basic gadgets and weapons"],
+            ["11–15","Knowledgeable about advanced technology"],
+            ["16–20","Access to a network of mechanics and engineers"]
+          ]
+        },
+        {
+          "id": "solanum-mechanic-skills",
+          "title": "Mechanic additional skills example",
+          "columns": ["1d20","Skill","Scope"],
+          "rows": [
+            ["1–5","Repair","Mechanical items"],
+            ["6–10","Engineering","Advanced machinery"],
+            ["11–15","Improvisation","Creating useful tools from scraps"],
+            ["16–20","Field Repairs","Quick fixes in the field"]
+          ]
+        },
+        {
+          "id": "solanum-motivation-table",
+          "title": "Personal history and motivation",
+          "columns": ["1d20","Motivation"],
+          "rows": [
+            ["1–4","Seeking revenge for a lost loved one"],
+            ["5–8","Searching for a mythical safe haven"],
+            ["9–12","Driven by a sense of duty or honor"],
+            ["13–16","Pursuing personal enrichment or power"],
+            ["17–20","Trying to rebuild or create a new community"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":105,"pageEnd":107,"chunkId":"solanum-backgrounds:p105-107","notes":"Origin table, six careers, Mechanic benefit and skill examples, motivation table, final adjustments, and example character."}],
+      "tags": ["origin","career","roles","skills","motivation","Mechanic","Hunter","Medic","Scavenger","Trader","Warlord"],
+      "relatedEntries": ["solanum-character-creation-system","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-ancestries-and-cyborg-variants",
+      "title": "Ancestries and Cyborg Variants",
+      "category": "Character Options",
+      "summary": "Advanced character creation distinguishes Pre-Fall Humans, Post-Fall Humans, Fae, and cyberized variants of each ancestry through qualitative attribute tendencies.",
+      "body": [
+        "The source describes ancestry tendencies qualitatively rather than assigning a complete numerical modifier package in pages 109–112. The wiki preserves those descriptions as guidance and does not invent bonuses.",
+        "Pre-Fall Humans are balanced baselines. Post-Fall Humans are adaptive survivors emphasizing Dexterity, Wisdom, social alliance-building, and environmental resilience. Fae emphasize Dexterity, Intelligence, Wisdom, and Charisma but possess lower physical resilience. Cyborg variants combine ancestry with cybernetic reinforcement and processing."
+      ],
+      "tables": [
+        {
+          "id": "solanum-ancestry-comparison",
+          "title": "Ancestry attribute tendencies",
+          "columns": ["Attribute","Pre-Fall Human","Post-Fall Human","Fae"],
+          "rows": [
+            ["STR","Average physical power and endurance","Generally lower; adapted to harsh conditions","Typically lower due to ethereal nature"],
+            ["DEX","Average agility and reflexes","Enhanced for survival challenges","High agility and precision"],
+            ["CON","Average health and stamina","Lower stamina but greater environmental resilience","Lower physical resilience"],
+            ["INT","Average knowledge and problem solving","Increased through necessary adaptation","High magical knowledge and mystical understanding"],
+            ["WIS","Average perception and intuition","Enhanced through survival experience","Very high connection to magical realms and ancient wisdom"],
+            ["CHA","Average persuasion and leadership","Often higher through alliance-building necessity","Very high enchanting presence and influence"]
+          ]
+        },
+        {
+          "id": "solanum-cyborg-variant-comparison",
+          "title": "Cyborg ancestry tendencies",
+          "columns": ["Attribute","Pre-Fall Human Cyborg","Post-Fall Human Cyborg","Fae Cyborg"],
+          "rows": [
+            ["STR","Significantly increased through cybernetics","Increased for combat or labor","Enhanced, though often below human cyborg strength"],
+            ["DEX","Enhanced agility and reflexes","Improved for survival and combat","High precision, though less agile than non-cyborg Fae"],
+            ["CON","Increased health and stamina","Improved environmental resilience","Increased resilience with magical-mechanical vulnerabilities"],
+            ["INT","Potentially enhanced processing","Increased by cybernetics and survival adaptation","Highly advanced magical-technological cognition"],
+            ["WIS","Moderate analytical increase","Enhanced by experience and integration","High magical insight and cybernetic analysis"],
+            ["CHA","Depends on integration level","Higher through interaction and negotiation necessity","Very high mystical charm and cybernetic influence"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":109,"pageEnd":112,"chunkId":"solanum-ancestries:p109-112","notes":"Qualitative ancestry and cyborg-variant comparison tables."}],
+      "tags": ["Pre-Fall Human","Post-Fall Human","Fae","Cyborg","ancestry","advanced character creation"],
+      "relatedEntries": ["solanum-character-creation-system","solanum-full-cyberization-threshold","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-full-cyberization-threshold",
+      "title": "The 49% Full-Cyberization Threshold",
+      "category": "Cyberization",
+      "summary": "A character replacing more than 49% of the body with cybernetics must complete full cyberization or suffer escalating interface conflicts, data seizures, and systemic decline.",
+      "body": [
+        "The threshold is explicit: more than 49% cybernetic replacement requires comprehensive integration into a cohesive system. The process aligns interfaces, updates control architecture, calibrates components, and reduces conflict between disparate implants.",
+        "Postponement causes glitches, loss of control, disrupted sensory input, malfunctioning limbs, failed interfaces, cognitive decline, and eventually catastrophic system failure or death.",
+        "The rule is also a character-development engine. Securing full cyberization may require specialized technicians, protected facilities, rare power systems, calibration software, and difficult choices about identity and dependence."
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":112,"pageEnd":116,"chunkId":"solanum-full-cyberization:p112-116","notes":"49% threshold, data seizures, integration purpose and outcome, consequences of postponement, and roleplaying considerations."}],
+      "tags": ["cyberization","49 percent","implants","integration","data seizures","system errors"],
+      "relatedEntries": ["solanum-ancestries-and-cyborg-variants","solanum-data-seizure-progression","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-data-seizure-progression",
+      "title": "Pre-Cyberization Data Seizures and Errors",
+      "category": "Cyberization",
+      "summary": "Six escalating stages track the consequences of remaining above 49% replacement without full cyberization, from minor glitches during the first week to fatal system collapse after eighteen months.",
+      "body": [
+        "The source combines skill penalties, percentage performance loss, increased error rates, and action-failure chances. These values are recorded as separate native-system consequences and should not be translated into another game’s conditions.",
+        "The table’s wording occasionally overlaps percentage error rate and action failure. The wiki preserves both because the manuscript treats them as distinct measurements, even where the precise resolution sequence will require later native-system editing."
+      ],
+      "tables": [
+        {
+          "id": "solanum-data-seizure-stages",
+          "title": "Data-seizure progression",
+          "columns": ["Time Without Full Cyberization","Severity","Skill Penalty","Performance Decrease","Error Rate Increase","Action Failure","Primary Effects"],
+          "rows": [
+            ["0–1 weeks","Minor Errors","+2 penalty","5%","10%","Not separately stated","Intermittent glitches, reduced sensory precision, mild disorientation"],
+            ["1–2 months","Moderate Errors","+4 penalty","10%","20%","25%","Disrupted actions, reduced precision, slower reactions"],
+            ["2–6 months","Significant Errors","+6 penalty","15%","40%","50%","Persistent malfunctions, major agility and control loss, frequent seizures"],
+            ["6–12 months","Severe Errors","+8 penalty","20%","60%","75%","Severe data corruption, loss of control, system crashes, inability to perform complex tasks"],
+            ["12–18 months","Critical Errors","+10 penalty","30%","80%","90%","Constant instability, full seizures, cognitive and motor loss, severe implant malfunction"],
+            ["18+ months","Fatal Errors","+12 penalty","50%","100%","100%","Total system failure, uncontrollable seizures, complete functional loss, imminent death"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":113,"pageEnd":116,"chunkId":"solanum-data-seizures:p113-116","notes":"Six-stage native progression of errors, skill penalties, performance loss, error rates, action failure, and final collapse."}],
+      "tags": ["data seizure","cybernetic failure","Minor Errors","Moderate Errors","Significant Errors","Severe Errors","Critical Errors","Fatal Errors"],
+      "relatedEntries": ["solanum-full-cyberization-threshold","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-character-sheet-schema",
+      "title": "Native Character Sheet Fields",
+      "category": "Character Sheet",
+      "summary": "A structured field map for recording the native character-creation information already defined in the source, without adding foreign statistics.",
+      "body": [
+        "This field map is a wiki and future-tool schema, not a replacement rules system. It records only elements present in or directly required by the native character-creation text.",
+        "Later passes will append equipment, cybernetic replacement details, biotic power requirements, combat values, progression, role features, and crafting records from their own source sections."
+      ],
+      "characterSheetFields": [
+        {"group":"Identity","fields":["Character Name","Player","Pronouns","Concept","Personal History","Motivation"]},
+        {"group":"Background","fields":["Origin","Career Path","Career Benefit","Career Skills","Allies or Career Network"]},
+        {"group":"Attributes","fields":["STR","DEX","CON","INT","WIS","CHA","Attribute Bonus or Penalty"]},
+        {"group":"Derived Statistics","fields":["Health","Armor","Initiative","SKILL"]},
+        {"group":"Ancestry","fields":["Ancestry","Pre-Fall or Post-Fall Status","Fae Status","Cyborg Variant"]},
+        {"group":"Cyberization","fields":["Cybernetic Body Percentage","Full Cyberization Complete","Time Above 49%","Current Error Severity","Skill Penalty","Performance Decrease","Error Rate","Action Failure Chance"]},
+        {"group":"Notes","fields":["Final Adjustments","Source Ambiguities","Technician or Facility Requirements","Identity and Humanity Notes"]}
+      ],
+      "formulaFields": [
+        {"field":"Health","formula":"CON + STR"},
+        {"field":"Armor","formula":"CON + DEX"},
+        {"field":"Initiative","formula":"DEX + INT"},
+        {"field":"SKILL","formula":"INT + WIS"}
+      ],
+      "sourceStatus": "source-structured-interface",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":104,"pageEnd":116,"chunkId":"solanum-character-sheet:p104-116","notes":"Sheet field structure derived strictly from native character-creation and cyberization records."}],
+      "tags": ["character sheet","fields","formulas","origin","career","cyberization","native interface"],
+      "relatedEntries": ["solanum-character-creation-system","solanum-core-attributes-derived-statistics","solanum-origins-careers-skills-motivations","solanum-ancestries-and-cyborg-variants","solanum-full-cyberization-threshold","solanum-data-seizure-progression"]
+    }
+  ]
+}
