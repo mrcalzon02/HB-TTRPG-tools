@@ -12,7 +12,7 @@
     <div>
       <p class="eyebrow">HB TTRPG Tools · Combined arcane and malefic scholarship</p>
       <h1>Magical Syllabus Library Generator</h1>
-      <p class="subtitle">Generate absurdly specific magical study publications ranging from disposable liturgical pamphlets to six-hundred-page devotional tomes heavy enough to qualify as defensive architecture.</p>
+      <p class="subtitle">Generate absurdly specific magical publications, their physical histories, and their actual syllabus-ready contents—from disposable pamphlets to the architecture of six-hundred-page devotional tomes.</p>
     </div>
     <a class="ml-back" href="index.html#generators">Return to Generators</a>
   </header>
@@ -25,15 +25,15 @@
         <p>The default catalogue draws from all thirty-two disciplines in the Arcane and Malefic Academic Studies generators and creates ten publications for every discipline: 320 pamphlets, study packets, manuals, atlases, tomes, and concordances in one profoundly unreasonable library order.</p>
       </div>
 
-      <p class="ml-notice"><strong>Current development phase:</strong> complete publication profiles. Every generated item now receives a summary, physical description, author biography and origin, price, composition, condition, rarity, circulation rule, and rated confidence, usefulness, readability, practical utility, scholarly value, authenticity, and safety. Scent, aura, marginalia, provenance, and magical quirks appear only when the publication’s format and history justify them.</p>
+      <p class="ml-notice"><strong>Current development phase:</strong> systematic publication contents. Pamphlets and loose-leaf study guides now receive complete editable drafts with introductions, prose sections, procedures, warnings, exercises, and review material. Field guides and handbooks receive structured drafts. Textbooks, monographs, atlases, ritual manuals, devotional tomes, and concordances receive full production architectures with front matter, formatting plans, tables of contents, chapter summaries, objectives, subsections, page budgets, appendices, and sample chapter openings.</p>
 
       <div class="ml-example-grid">
-        <div class="ml-example"><strong>A Brief Liturgy Concerning Ward Geometry</strong><br />A single folded sheet produced by the student arts-and-crafts club, sold for a few copper pieces, and entirely innocent of carved obsidian covers.</div>
-        <div class="ml-example"><strong>The 487 Official Distinctions Between Temporal Anchors and Lost Minutes</strong><br />Seventh Edition, chronologically earlier, with confidence and readability ratings that disagree about when it was written.</div>
-        <div class="ml-example"><strong>Six Hundred Pages of Devotions Upon Infernal Rhetoric and Its Most Petty Consequences</strong><br />Undead Publishing Cooperative, iron-cornered, faintly hostile, and priced accordingly.</div>
-        <div class="ml-example"><strong>Companion Readings for Practical Cabbalism</strong><br />A student-made loose-leaf guide with notes from three semesters and no claim to monumental antiquity.</div>
-        <div class="ml-example"><strong>Why Summoning Echo Is Not a Substitute for Dismissal Precedence</strong><br />A practical manual with a rated safety score, acquisition history, known scent, and a binding built for laboratory use.</div>
-        <div class="ml-example"><strong>Proceedings of the Ninth Symposium on Cairn Geometry</strong><br />A specialist monograph whose provenance may be longer than its summary and whose aura is optional rather than mandatory.</div>
+        <div class="ml-example"><strong>Complete Pamphlet Draft</strong><br />A folded classroom handout now contains its actual introduction, definitions, practical method, warning signs, corrective procedure, and final review questions.</div>
+        <div class="ml-example"><strong>Complete Study Packet</strong><br />Loose-leaf guides contain full lessons, learning objectives, exercises, examination prompts, and an answer-oriented review sequence.</div>
+        <div class="ml-example"><strong>Structured Field Guide</strong><br />A portable guide receives a field-use introduction, hazard legend, detailed chapter summaries, objectives, subsections, and page allocations.</div>
+        <div class="ml-example"><strong>Collegiate Textbook Architecture</strong><br />Every textbook receives a formal front-matter plan, chapter progression, worked-example placement, laboratory appendices, reviews, glossary, bibliography, and index.</div>
+        <div class="ml-example"><strong>Devotional Tome Architecture</strong><br />The 600-page work is divided into books, chapters, devotions, commentaries, illuminated plates, recurring refrains, and expansion-ready page budgets.</div>
+        <div class="ml-example"><strong>Concordance Architecture</strong><br />The monumental reference work receives nested divisions, classification keys, cross-reference systems, taxonomic tables, bibliographies, and multiple indices.</div>
       </div>
 
       <div class="ml-controls">
@@ -51,8 +51,8 @@
       </div>
 
       <div class="ml-actions">
-        <button id="ml-generate" type="button">Generate Magical Library Catalogue</button>
-        <button id="ml-copy" type="button">Copy Complete Catalogue</button>
+        <button id="ml-generate" type="button">Generate Magical Library Contents</button>
+        <button id="ml-copy" type="button">Copy Complete Catalogue and Contents</button>
         <button id="ml-export" type="button">Export JSON</button>
       </div>
       <p id="ml-status" class="ml-status">Opening the combined syllabus stacks…</p>
@@ -65,6 +65,8 @@
   <script src="magical-library-vocabulary.js"></script>
   <script src="magical-library-engine.js"></script>
   <script src="magical-library-profile-engine.js"></script>
+  <script src="magical-library-content-vocabulary.js"></script>
+  <script src="magical-library-content-engine.js"></script>
   <script src="magical-library-view.js"></script>
   <script src="magical-library-text.js"></script>
   <script src="magical-library-controller-core.js"></script>
