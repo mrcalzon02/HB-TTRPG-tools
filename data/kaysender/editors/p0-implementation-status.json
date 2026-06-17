@@ -16,9 +16,14 @@
     "outdatedAndFutureSchemaDiagnostics": true,
     "genericEditorLifecycle": true,
     "dirtyStateTracking": true,
+    "saveGenerationTracking": true,
+    "staleAutosaveCompletionProtection": true,
+    "staleManualSaveCompletionProtection": true,
+    "lifecycleRaceValidation": true,
     "recoveryDraftAutosave": true,
     "unsavedChangeProtection": true,
     "blankRecordUnsavedConfirmation": true,
+    "savedRecordOpenUnsavedConfirmation": true,
     "reopenRestoresActiveRecord": true,
     "canonicalProfileEnvelope": true,
     "stableProfileIds": true,
@@ -73,13 +78,14 @@
     "New blank record with unsaved-change confirmation",
     "Load or import record",
     "Validate record",
-    "Save local draft",
+    "Save local draft without clearing newer edits",
     "Recover local draft",
     "Save new persistent record",
     "Update existing record without changing profile ID",
     "Reject stale or conflicting saved revisions",
+    "Keep newer edits dirty when a persistent save finishes",
     "Save as new clone with a new profile ID",
-    "Open saved record",
+    "Open saved record with unsaved-change confirmation",
     "Restore the active record when reopening an editor",
     "Delete saved record with explicit confirmation",
     "Repair local record index and report rejected malformed records",
@@ -95,8 +101,8 @@
     "Export wiki draft",
     "Show provenance and inheritance",
     "Show diagnostics and recoverable errors",
-    "Track unsaved changes",
-    "Autosave recovery drafts",
+    "Track unsaved changes by edit generation",
+    "Autosave recovery drafts without clearing newer edits",
     "Warn before abandoning unsaved records"
   ],
   "compatibilityFixtures": [
@@ -127,6 +133,7 @@
     "scripts/validate-editor-migrations.mjs",
     "scripts/validate-editor-adapter-integration.mjs",
     "scripts/validate-editor-inheritance.mjs",
+    "scripts/validate-editor-lifecycle.mjs",
     "scripts/validate-editor-repository.mjs",
     "scripts/validate-editor-runtime-structure.mjs",
     "scripts/validate-p0-browser-verification.mjs"
@@ -155,12 +162,12 @@
     },
     {
       "criterion": "Every editor exposes deliberate construction identity-safe persistence and pinned inheritance actions",
-      "implementationState": "implemented-through-shared-lifecycle-conflict-safe-record-library-parent-library-and-canonical-inheritance-policy",
-      "verificationState": "functional-inheritance-and-repository-validation-present"
+      "implementationState": "implemented-through-generation-safe-lifecycle-conflict-safe-record-library-parent-library-and-canonical-inheritance-policy",
+      "verificationState": "functional-lifecycle-inheritance-and-repository-validation-present"
     },
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
-      "implementationState": "kernel-migration-adapter-inheritance-repository-structural-receipt-and-workflow-validation-present",
+      "implementationState": "kernel-migration-adapter-lifecycle-inheritance-repository-structural-receipt-and-workflow-validation-present",
       "verificationState": "final-live-browser-verification-remains"
     }
   ],
