@@ -20,6 +20,7 @@ function numericOrder(order) {
 
 async function main() {
   const roadmap = await readJson('data/kaysender/editors/editor-roadmap.json');
+  const implementation = await readJson('data/kaysender/editors/p0-implementation-status.json');
   const registry = await readJson('data/kaysender-tools-registry.json');
   const stages = roadmap.productionOrder || [];
   const registryIds = new Set((registry.modules || []).map(module => module.id));
@@ -66,6 +67,31 @@ async function main() {
   if (activeNext.length !== 1) fail(`Expected exactly one required-next stage; found ${activeNext.length}.`);
   if (activeNext[0].order !== 'P0') fail(`The required-next stage must currently be P0; found ${activeNext[0].order}.`);
 
+  if (implementation.schemaVersion !== '1.0.0') fail('Unexpected P0 implementation status schema.');
+  if (implementation.stage !== 'P0' || implementation.stageId !== activeNext[0].id) fail('P0 implementation status does not match the active roadmap stage.');
+  if (implementation.activeBranch !== 'main' || implementation.parallelMainLineEditors !== 1) fail('P0 implementation status violates the one-branch, one-editor policy.');
+  if (implementation.status !== 'implementation-committed-awaiting-ci-and-live-smoke') fail(`Unexpected P0 implementation status '${implementation.status}'.`);
+  const requiredP0Outputs = [
+    'sharedEditorShell',
+    'canonicalProfileEnvelope',
+    'stableProfileIds',
+    'profileSchemaVersions',
+    'profileAdaptersAndMigrations',
+    'provenanceAndInheritanceLedger',
+    'fieldLocking',
+    'selectiveRandomization',
+    'localDraftPersistence',
+    'sharedJsonImportExport',
+    'sharedWikiDraftExport',
+    'validationAndDiagnostics',
+    'accessibleResponsiveControls'
+  ];
+  for (const output of requiredP0Outputs) {
+    if (implementation.implementedOutputs?.[output] !== true) fail(`P0 implemented output '${output}' is not recorded as complete.`);
+  }
+  if (!Array.isArray(implementation.exitCriteria) || implementation.exitCriteria.length !== activeNext[0].exitCriteria.length) fail('P0 exit-criteria status count does not match the roadmap.');
+  if (!implementation.promotionRule?.includes('live browser smoke test')) fail('P0 promotion rule must require a live browser smoke test before P1 opens.');
+
   const coveredModules = new Set(stages.flatMap(stage => stage.moduleIds || []));
   const expectedMainLineModules = [
     'floating-island-generator',
@@ -95,6 +121,7 @@ async function main() {
   console.log('Editor roadmap validation passed.');
   console.log(`Production stages: ${stages.length}`);
   console.log(`Required next stage: ${activeNext[0].order} — ${activeNext[0].title}`);
+  console.log(`P0 implementation state: ${implementation.status}`);
   console.log(`Covered main-line modules: ${coveredModules.size}`);
 }
 
