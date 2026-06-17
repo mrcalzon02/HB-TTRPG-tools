@@ -246,6 +246,15 @@
     return true;
   }
 
+  function loadParentLibraryScript() {
+    if (window.KaysenderEditorParentLibrary || document.querySelector('script[data-kaysender-parent-library]')) return;
+    const script = document.createElement('script');
+    script.src = 'kaysender-editor-parent-library.js';
+    script.async = false;
+    script.dataset.kaysenderParentLibrary = 'true';
+    document.head.appendChild(script);
+  }
+
   function injectStyles() {
     if (document.getElementById('kaysender-editor-record-library-style')) return;
     const style = document.createElement('style');
@@ -276,6 +285,7 @@
   function install() {
     injectStyles();
     ensureControls();
+    loadParentLibraryScript();
     const observer = new MutationObserver(() => {
       if (ensureControls()) refresh();
     });
