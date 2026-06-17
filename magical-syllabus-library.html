@@ -12,7 +12,7 @@
     <div>
       <p class="eyebrow">HB TTRPG Tools · Combined arcane and malefic scholarship</p>
       <h1>Magical Syllabus Library Generator</h1>
-      <p class="subtitle">Generate absurdly specific magical study titles ranging from disposable liturgical pamphlets to six-hundred-page devotional tomes heavy enough to qualify as defensive architecture.</p>
+      <p class="subtitle">Generate absurdly specific magical study publications ranging from disposable liturgical pamphlets to six-hundred-page devotional tomes heavy enough to qualify as defensive architecture.</p>
     </div>
     <a class="ml-back" href="index.html#generators">Return to Generators</a>
   </header>
@@ -22,18 +22,18 @@
       <div class="section-heading">
         <p class="eyebrow">Magical Library · Undead Publishing · Interplanar Scholastics</p>
         <h2>Build a Complete Light-and-Dark Syllabus Catalogue</h2>
-        <p>The default catalogue draws from all thirty-two disciplines in the Arcane and Malefic Academic Studies generators and creates ten titles for every discipline: 320 books, pamphlets, manuals, atlases, tomes, and concordances in one profoundly unreasonable library order.</p>
+        <p>The default catalogue draws from all thirty-two disciplines in the Arcane and Malefic Academic Studies generators and creates ten publications for every discipline: 320 pamphlets, study packets, manuals, atlases, tomes, and concordances in one profoundly unreasonable library order.</p>
       </div>
 
-      <p class="ml-notice"><strong>Current development phase:</strong> bibliographic title generation. The tool creates titles and catalogue metadata rather than complete book contents. All authors, publishers, magical methods, hazards, and institutions are fictional worldbuilding material.</p>
+      <p class="ml-notice"><strong>Current development phase:</strong> complete publication profiles. Every generated item now receives a summary, physical description, author biography and origin, price, composition, condition, rarity, circulation rule, and rated confidence, usefulness, readability, practical utility, scholarly value, authenticity, and safety. Scent, aura, marginalia, provenance, and magical quirks appear only when the publication’s format and history justify them.</p>
 
       <div class="ml-example-grid">
-        <div class="ml-example"><strong>A Brief Liturgy Concerning Ward Geometry</strong><br />With Particular Attention to the ward that protects everything except the object inside it.</div>
-        <div class="ml-example"><strong>The 487 Official Distinctions Between Temporal Anchors and Lost Minutes</strong><br />Seventh Edition, chronologically earlier.</div>
-        <div class="ml-example"><strong>Six Hundred Pages of Devotions Upon Infernal Rhetoric and Its Most Petty Consequences</strong><br />Undead Publishing Cooperative, iron-cornered edition.</div>
-        <div class="ml-example"><strong>Companion Readings for Practical Cabbalism</strong><br />Including a necessary appendix on the footnote that achieved independent tenure.</div>
-        <div class="ml-example"><strong>Why Summoning Echo Is Not a Substitute for Dismissal Precedence</strong><br />A manual for irresponsible summoners seeking tenure.</div>
-        <div class="ml-example"><strong>Proceedings of the Ninth Symposium on Cairn Geometry</strong><br />Containing a foldout decision tree for determining whether the memorial is sentient.</div>
+        <div class="ml-example"><strong>A Brief Liturgy Concerning Ward Geometry</strong><br />A single folded sheet produced by the student arts-and-crafts club, sold for a few copper pieces, and entirely innocent of carved obsidian covers.</div>
+        <div class="ml-example"><strong>The 487 Official Distinctions Between Temporal Anchors and Lost Minutes</strong><br />Seventh Edition, chronologically earlier, with confidence and readability ratings that disagree about when it was written.</div>
+        <div class="ml-example"><strong>Six Hundred Pages of Devotions Upon Infernal Rhetoric and Its Most Petty Consequences</strong><br />Undead Publishing Cooperative, iron-cornered, faintly hostile, and priced accordingly.</div>
+        <div class="ml-example"><strong>Companion Readings for Practical Cabbalism</strong><br />A student-made loose-leaf guide with notes from three semesters and no claim to monumental antiquity.</div>
+        <div class="ml-example"><strong>Why Summoning Echo Is Not a Substitute for Dismissal Precedence</strong><br />A practical manual with a rated safety score, acquisition history, known scent, and a binding built for laboratory use.</div>
+        <div class="ml-example"><strong>Proceedings of the Ninth Symposium on Cairn Geometry</strong><br />A specialist monograph whose provenance may be longer than its summary and whose aura is optional rather than mandatory.</div>
       </div>
 
       <div class="ml-controls">
@@ -45,7 +45,7 @@
           <select id="ml-shelf"><option value="all">Mixed light and dark shelves</option><option value="luminous">Luminous and Responsible</option><option value="neutral">Neutral Scholastic</option><option value="dubious">Dubious Academic</option><option value="malefic">Malefic and Forbidden</option></select>
         </label>
         <label>Publication Scale
-          <select id="ml-scale"><option value="all">Complete range</option><option value="brief">Pamphlets and lecture notes</option><option value="course">Course books and monographs</option><option value="substantial">Atlases and ritual manuals</option><option value="monumental">Devotional tomes and concordances</option></select>
+          <select id="ml-scale"><option value="all">Complete range</option><option value="brief">Pamphlets and study packets</option><option value="course">Course books and monographs</option><option value="substantial">Atlases and ritual manuals</option><option value="monumental">Devotional tomes and concordances</option></select>
         </label>
         <label>Titles Per Discipline<input id="ml-count" type="number" min="10" max="30" value="10" /></label>
       </div>
@@ -64,6 +64,7 @@
   <script src="malefic-academic-domains.js"></script>
   <script src="magical-library-vocabulary.js"></script>
   <script src="magical-library-engine.js"></script>
+  <script src="magical-library-profile-engine.js"></script>
   <script src="magical-library-view.js"></script>
   <script src="magical-library-text.js"></script>
   <script src="magical-library-controller-core.js"></script>
