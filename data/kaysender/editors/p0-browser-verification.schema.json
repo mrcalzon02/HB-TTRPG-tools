@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/kaysender/editors/p0-browser-verification.schema.json",
+  "title": "Kaysender P0 Browser Verification Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "stage",
+    "stageId",
+    "testedAt",
+    "browser",
+    "result",
+    "editorChain",
+    "stageResults",
+    "profiles"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "stage": { "const": "P0" },
+    "stageId": { "const": "shared-editor-kernel" },
+    "testedAt": { "type": "string", "format": "date-time" },
+    "browser": { "type": "string", "minLength": 1 },
+    "result": { "const": "passed" },
+    "editorChain": {
+      "type": "array",
+      "prefixItems": [
+        { "const": "floating-island-editor" },
+        { "const": "settlement-editor" },
+        { "const": "airship-editor" }
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "stageResults": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stage", "ok", "message"],
+        "properties": {
+          "stage": { "type": "string", "minLength": 1 },
+          "ok": { "const": true },
+          "message": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["editorId", "profileId", "profileType", "revision", "inheritance"],
+        "properties": {
+          "editorId": {
+            "enum": ["floating-island-editor", "settlement-editor", "airship-editor"]
+          },
+          "profileId": { "type": "string", "minLength": 8 },
+          "profileType": {
+            "enum": ["floating-island-foundation-profile", "settlement-profile", "airship-profile"]
+          },
+          "revision": { "type": "integer", "minimum": 1 },
+          "inheritance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["relationship", "profileId", "profileType", "revision"],
+              "properties": {
+                "relationship": { "type": "string", "minLength": 1 },
+                "profileId": { "type": "string", "minLength": 8 },
+                "profileType": { "type": "string", "minLength": 1 },
+                "revision": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
