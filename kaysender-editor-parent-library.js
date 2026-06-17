@@ -3,9 +3,10 @@
 
   const Registry = window.KaysenderEditorAdapters;
   const Repository = window.KaysenderEditorRepository;
+  const Lifecycle = window.KaysenderEditorLifecycle;
   const Production = () => window.KaysenderMainlineEditorProduction;
-  if (!Registry || !Repository) {
-    console.error('Kaysender parent record library could not start: adapter registry or record repository is missing.');
+  if (!Registry || !Repository || !Lifecycle) {
+    console.error('Kaysender parent record library could not start: adapter registry, record repository, or lifecycle is missing.');
     return;
   }
 
@@ -14,7 +15,7 @@
     const editorId = production?.getActiveEditorId?.() || '';
     const adapter = editorId ? Registry.resolve(editorId) : null;
     const panel = adapter ? document.getElementById(adapter.panelId) : null;
-    return { production, adapter, panel };
+    return { production, editorId, adapter, panel };
   }
 
   function recordsFor(definition) {
@@ -123,6 +124,7 @@
     renderLinkedStatus(container, panel, definition);
     populateSelect(container, definition, panel);
     Production()?.rebuildActive?.();
+    Lifecycle.markDirty(adapter.id, `Cleared inherited ${definition.id} record.`, { autosave: true });
   }
 
   function createControl(adapter, panel, definition) {
@@ -179,6 +181,16 @@
       @media(max-width:850px){.mainline-parent-library-row{grid-template-columns:1fr}.mainline-parent-library-row label{grid-column:auto}.mainline-parent-library-row button{width:100%}}
     `;
     document.head.appendChild(style);
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[character]));
   }
 
   function install() {
