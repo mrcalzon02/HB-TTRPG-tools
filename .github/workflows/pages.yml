@@ -40,6 +40,9 @@ jobs:
       - name: Validate editor profile migrations
         run: node scripts/validate-editor-migrations.mjs
 
+      - name: Validate editor lifecycle save races
+        run: node scripts/validate-editor-lifecycle.mjs
+
       - name: Validate persistent editor repository
         run: node scripts/validate-editor-repository.mjs
 
@@ -100,6 +103,7 @@ jobs:
           node --check scripts/validate-editor-migrations.mjs
           node --check scripts/validate-editor-adapter-integration.mjs
           node --check scripts/validate-editor-inheritance.mjs
+          node --check scripts/validate-editor-lifecycle.mjs
           node --check scripts/validate-editor-repository.mjs
           node --check scripts/run-p0-browser-verification.mjs
           node --check scripts/validate-p0-browser-verification.mjs
