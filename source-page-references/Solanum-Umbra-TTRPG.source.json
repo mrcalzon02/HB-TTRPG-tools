@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "sourceId": "solanum-umbra-ttrpg",
   "title": "Solanum Umbra TTRPG",
   "originalFilename": "Solanum-Umbra-TTRPG.pdf",
@@ -14,9 +14,9 @@
   "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json",
   "mechanicsPolicy": "preserve-native-system-no-external-conversion",
   "integratedScope": {
-    "nativeWikiEntries": 25,
-    "nativePacks": 6,
-    "sourcePageRanges": ["82-116","131-144","151-188","228-232"],
+    "nativeWikiEntries": 29,
+    "nativePacks": 7,
+    "sourcePageRanges": ["82-144","151-188","228-232"],
     "characterCreation": true,
     "characterSheetSchema": true,
     "coreAttributes": 6,
@@ -25,6 +25,10 @@
     "listedCareers": 6,
     "careerTalentFamilies": 5,
     "backgroundTables": 6,
+    "cyberneticTechnologyLevels": 5,
+    "cyberneticBodyParts": 8,
+    "bioticEnhancements": 12,
+    "degradationOutcomes": 21,
     "craftingSubsystem": true,
     "combatSubsystem": true,
     "entityGeneratorTables": 7,
@@ -39,7 +43,9 @@
     "The attribute bonus band for values 9-11 is printed as -1 to +1 without an exact mapping.",
     "Crafting positive difficulty modifiers are added to the success roll in the worked example.",
     "The melee chapter presents both direct raw-stat formulas and a primary-stat bonus method.",
-    "Base Defensive Value and Advanced Tech range falloff are not fully defined in the imported section."
+    "Base Defensive Value and Advanced Tech range falloff are not fully defined in the imported section.",
+    "The cybernetic cost formula conflicts with its Elite upper-arm worked example.",
+    "Zone-of-control ties and tactical-to-catalog vehicle speed conversion are not defined."
   ],
-  "notes": "The PDF in SRC matches the registered byte count and SHA-256 digest. Solanum Umbra is imported as its own native system. Current wiki packs cover foundational character rules, careers, backgrounds, crafting, resources, combat, cover, vehicles, supernatural entity generation, and qualitative Synthesis force profiles without translating them into another RPG system."
+  "notes": "The PDF in SRC matches the registered byte count and SHA-256 digest. Solanum Umbra is imported as its own native system. Current wiki packs cover foundational character rules, careers, backgrounds, cybernetic replacement and degradation, crafting, resources, combat, cover, vehicles, supernatural entity generation, and qualitative Synthesis force profiles without translating them into another RPG system."
 }
