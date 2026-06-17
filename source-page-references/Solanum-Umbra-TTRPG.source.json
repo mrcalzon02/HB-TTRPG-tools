@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "sourceId": "solanum-umbra-ttrpg",
   "title": "Solanum Umbra TTRPG",
   "originalFilename": "Solanum-Umbra-TTRPG.pdf",
@@ -7,10 +7,26 @@
   "pages": 248,
   "bytes": 1325003,
   "sha256": "2f1d5d0df591b4d637e4845645370946568cb6aecc786a4bbef5411e4e82f9ff",
-  "sourceStatus": "registered-from-conversation-upload",
-  "binaryGitStatus": "not-written-binary-connector-unavailable",
-  "intendedRepositoryPath": "source-page-references/Solanum-Umbra-TTRPG.pdf",
-  "integrationStatus": "dedicated-wiki-staged-multi-pass-integration-deferred",
+  "sourceStatus": "verified-repository-binary",
+  "binaryGitStatus": "present-and-identity-verified",
+  "repositoryPath": "SRC/Solanum-Umbra-TTRPG.pdf",
+  "integrationStatus": "native-system-character-creation-pass-1-complete",
   "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json",
-  "notes": "Canonical source identity receipt for the independent post-apocalyptic science-fantasy setting. No wiki pack should be populated from this manuscript until dedicated chronology, technology, magic, faction, ecology, bestiary, character, equipment, rules, and adventure passes are completed with page-level provenance."
+  "mechanicsPolicy": "preserve-native-system-no-external-conversion",
+  "integratedScope": {
+    "nativeWikiEntries": 7,
+    "sourcePagesIntegrated": "104-116",
+    "characterCreation": true,
+    "characterSheetSchema": true,
+    "coreAttributes": 6,
+    "derivedStatistics": 4,
+    "origins": 5,
+    "listedCareers": 6,
+    "ancestryFamilies": 3,
+    "cyborgVariantFamilies": 3,
+    "fullCyberizationThresholdPercent": 49,
+    "dataSeizureStages": 6,
+    "externalRulesConversion": false
+  },
+  "notes": "Canonical source identity receipt for the independent post-apocalyptic science-fantasy setting. The PDF is present in SRC and matches the registered byte count and SHA-256 digest. Import preserves Solanum Umbra’s native mechanics and terminology. The first rules pass indexes pages 104-116 without translating attributes, derived statistics, careers, cyberization, or data-seizure rules into another RPG system."
 }
