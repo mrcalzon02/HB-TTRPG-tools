@@ -77,22 +77,6 @@
     return diagnostics;
   }
 
-  function validateEnvelope(envelope, expectedTypes = []) {
-    return [
-      ...fallbackValidateEnvelope(envelope, expectedTypes),
-      ...inheritanceDiagnostics(envelope)
-    ];
-  }
-
-  function createEnvelope(dataInput, options = {}) {
-    const sourceInheritance = options.inheritance ?? options.existingEnvelope?.inheritance ?? [];
-    const normalized = normalizeInheritanceReferences(sourceInheritance);
-    return fallbackCreateEnvelope(dataInput, {
-      ...options,
-      inheritance: normalized.references
-    });
-  }
-
   function schemaCompatibilityDiagnostics(envelope) {
     const adapter = adapterForProfileType(envelope?.profileType);
     if (!adapter) return [];
@@ -109,6 +93,23 @@
       return [kernel.diagnostic('error', 'profile-schema-future', `Profile schema ${received} is newer than the supported ${adapter.label.replace(/^Open /, '')} contract ${expected}.`, 'profileSchemaVersion')];
     }
     return [];
+  }
+
+  function validateEnvelope(envelope, expectedTypes = []) {
+    return [
+      ...fallbackValidateEnvelope(envelope, expectedTypes),
+      ...inheritanceDiagnostics(envelope),
+      ...schemaCompatibilityDiagnostics(envelope)
+    ];
+  }
+
+  function createEnvelope(dataInput, options = {}) {
+    const sourceInheritance = options.inheritance ?? options.existingEnvelope?.inheritance ?? [];
+    const normalized = normalizeInheritanceReferences(sourceInheritance);
+    return fallbackCreateEnvelope(dataInput, {
+      ...options,
+      inheritance: normalized.references
+    });
   }
 
   function applyProfileToForm(form, profileType, profileInput) {
@@ -183,10 +184,7 @@
         })
       : previous;
 
-    const diagnostics = [
-      ...validateEnvelope(envelope, options.expectedTypes || []),
-      ...schemaCompatibilityDiagnostics(envelope)
-    ];
+    const diagnostics = validateEnvelope(envelope, options.expectedTypes || []);
     if (migration.changed) {
       diagnostics.push(kernel.diagnostic('info', 'profile-schema-migrated', `Applied ${migration.applied.length} registered migration${migration.applied.length === 1 ? '' : 's'} and upgraded the profile to schema ${envelope.profileSchemaVersion}.`, 'profileSchemaVersion'));
     }
