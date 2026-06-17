@@ -13,6 +13,7 @@
   "preparedArtifacts": {
     "domainSchemaDraft": "data/kaysender/schemas/floating-island-production-profile.schema.json",
     "validProductionFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-valid.json",
+    "fracturedIslandEdgeFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-edge-fractured.json",
     "semanticFailureCases": "data/kaysender/editors/fixtures/p1-floating-island-reference-cases.json",
     "productionContract": "docs/p1-floating-island-production-contract.md"
   },
@@ -32,7 +33,9 @@
     "ecology habitats and species slots",
     "pinned downstream references through the shared envelope",
     "player-safe and GM-only visibility separation",
-    "downstream export bundles for population settlement ecology route market faction crisis and encounter consumers"
+    "downstream export bundles for population settlement ecology route market faction crisis and encounter consumers",
+    "inhabitable developed skyland coverage",
+    "fractured zero-sustainability expedition-only skyland coverage"
   ],
   "semanticRulesPrepared": [
     "nested ID uniqueness",
