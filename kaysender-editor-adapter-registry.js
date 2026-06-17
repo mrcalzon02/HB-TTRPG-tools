@@ -61,7 +61,9 @@
         input.randomizeButtonId,
         ...(input.hiddenLegacyActionIds || [])
       ].filter(isText)))),
-      parentImports: Object.freeze(parentImports)
+      parentImports: Object.freeze(parentImports),
+      fieldMap: Object.freeze({ ...(input.fieldMap || {}) }),
+      flatFieldExclusions: Object.freeze([...(input.flatFieldExclusions || [])].filter(isText))
     });
   }
 
