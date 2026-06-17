@@ -68,12 +68,16 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["relationship", "profileId", "profileType", "revision"],
+              "additionalProperties": false,
+              "required": ["relationship", "profileId", "profileType", "name", "revision", "policy"],
               "properties": {
                 "relationship": { "type": "string", "minLength": 1 },
                 "profileId": { "type": "string", "minLength": 8 },
                 "profileType": { "type": "string", "minLength": 1 },
-                "revision": { "type": "integer", "minimum": 1 }
+                "name": { "type": "string" },
+                "revision": { "type": "integer", "minimum": 1 },
+                "policy": { "const": "pinned-revision" },
+                "sourceUpdatedAt": { "type": ["string", "null"], "format": "date-time" }
               }
             }
           }
