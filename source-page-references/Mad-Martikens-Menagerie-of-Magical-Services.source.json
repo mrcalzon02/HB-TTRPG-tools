@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "sourceId": "mad-martikens-menagerie-of-magical-services",
   "title": "Mad Martiken’s Menagerie of Magical Services",
   "originalFilename": "Mad Martiken’s Menagerie of Magical Services.pdf",
@@ -7,9 +7,9 @@
   "pages": 14,
   "bytes": 212449,
   "sha256": "3ce56fc43563b00a8a9cd34e828f4e2e0c0e2e7a0a66c4767f80d155d293e8dc",
-  "sourceStatus": "registered-from-conversation-upload",
-  "binaryGitStatus": "not-written-binary-connector-unavailable",
-  "intendedRepositoryPath": "source-page-references/Mad-Martikens-Menagerie-of-Magical-Services.pdf",
+  "sourceStatus": "verified-repository-binary",
+  "binaryGitStatus": "present-and-identity-verified",
+  "repositoryPath": "SRC/Mad Martiken’s Menagerie of Magical Services.pdf",
   "integrationStatus": "kaysender-locations-of-note-complete",
   "wikiDestination": "data/kaysender/wiki/wiki-index.json",
   "integratedEntryId": "mad-martikens-menagerie-of-magical-services",
@@ -22,5 +22,5 @@
     "sourceCaseStudies": 2,
     "sourceDerivedAndExpandedRulesSeparated": true
   },
-  "notes": "Canonical source identity receipt for the fourteen-page Mad Martiken location manuscript. The Kaysender wiki integration preserves the wizard, storefront, illusory building, accumulated real debris, interior oddities, magical service tiers, visualization process, risky lineages, mutation outcomes, trigger rules, quick-reference procedure, Dolomedes and Soba case files, and the final building investigation. Expanded Hypertext d20 pricing, DCs, functional modifications, stabilization services, and mechanics are labeled as conversion material rather than manuscript quotations."
+  "notes": "Canonical source identity receipt for the fourteen-page Mad Martiken location manuscript. The verified PDF is present in SRC and matches the registered byte count and SHA-256 digest. The Kaysender wiki integration preserves the source location and marks expanded pricing, DCs, functional modifications, stabilization services, and later conversation material separately."
 }
