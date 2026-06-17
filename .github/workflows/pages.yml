@@ -82,6 +82,8 @@ jobs:
           node --check kaysender-editor-production.js
           node --check kaysender-editor-error-boundary.js
           node --check kaysender-editor-live-smoke.js
+          node --check scripts/run-p0-browser-verification.mjs
+          node --check scripts/validate-p0-browser-verification.mjs
           node --check spell-creator-vocabulary.js
           node --check spell-creator-mechanics.js
           node --check module-spell-creator.js
@@ -137,6 +139,30 @@ jobs:
           node --check kaysender-editors.js
           node --check kaysender-settlement-editor.js
           node --check kaysender-airship-editor.js
+
+      - name: Install Chromium verification runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.60.0
+          npx playwright install --with-deps chromium
+
+      - name: Run P0 browser verification
+        run: node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png
+
+      - name: Validate P0 browser verification receipt
+        run: node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json
+
+      - name: Upload P0 browser verification evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: p0-browser-verification
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Remove browser test dependencies from Pages payload
+        if: ${{ always() }}
+        run: rm -rf node_modules
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
