@@ -1,7 +1,7 @@
 {
   "setting": "Kaysender",
   "schemaVersion": "0.7.0",
-  "description": "Multi-pack wiki index. Files later in this list extend or override earlier entries by stable id. Source lore loads before converted statistics and converted player-facing rules so playable Hypertext d20 material replaces legacy mechanics placeholders while retaining the original source references. The current rules layer includes the Warlock of the Swamp, its evolving Lady of the Swamp pact system, an expanded catalogue of thirty-two divine compromise relics, and a source-complete Locations of Note entry for Mad Martiken’s Menagerie of Magical Services.",
+  "description": "Multi-pack wiki index. Files later in this list extend or override earlier entries by stable id. Source lore loads before converted statistics and converted player-facing rules so playable Hypertext d20 material replaces legacy mechanics placeholders while retaining the original source references. The current rules layer includes the Warlock of the Swamp, its evolving Lady of the Swamp pact system, an expanded catalogue of thirty-two divine compromise relics, and a source-complete Locations of Note entry for Mad Martiken’s Menagerie of Magical Services with rendered reference tables and a new-canon proprietor conversation archive.",
   "sourceDocuments": [
     "source-page-references/Mad-Martikens-Menagerie-of-Magical-Services.source.json"
   ],
@@ -98,6 +98,7 @@
     "data/kaysender/wiki/converted-rules-pass-5b-warlock-of-the-swamp-display.json",
     "data/kaysender/wiki/converted-rules-pass-5c-divine-compromise-relic-catalogue.json",
     "data/kaysender/wiki/locations-of-note-mad-martikens-menagerie.json",
-    "data/kaysender/wiki/locations-of-note-mad-martikens-menagerie-tables.json"
+    "data/kaysender/wiki/locations-of-note-mad-martikens-menagerie-tables.json",
+    "data/kaysender/wiki/locations-of-note-mad-martikens-menagerie-conversations.json"
   ]
 }
