@@ -1,12 +1,12 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "storage": "canonical-source-receipts",
   "binaryTransferStatus": "pending-binary-capable-repository-transfer",
   "documents": [
     {
       "id": "chronicles-elemental-realms-swamps-toads-frogs-salamanders",
       "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
-      "setting": "General fantasy and elemental realms",
+      "setting": "Chronicles of the Elemental Realms",
       "genre": "fantasy planar ecology",
       "pages": 21,
       "bytes": 333084,
@@ -14,8 +14,8 @@
       "receipt": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json",
       "intendedBinaryPath": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
       "binaryPresentInGit": false,
-      "integrationStatus": "source-registered-integration-deferred",
-      "wikiDestination": "general fantasy wiki corpus"
+      "integrationStatus": "dedicated-wiki-creature-reference-pass-1-complete",
+      "wikiDestination": "data/elemental-realms/wiki/wiki-index.json"
     },
     {
       "id": "solanum-umbra-ttrpg",
