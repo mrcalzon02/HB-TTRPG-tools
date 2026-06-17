@@ -44,6 +44,9 @@ jobs:
       - name: Validate magical syllabus library catalogue
         run: node scripts/validate-magical-library-generator.mjs
 
+      - name: Validate registered source references
+        run: node scripts/validate-source-references.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
@@ -91,6 +94,7 @@ jobs:
           node --check magical-library-actions.js
           node --check magical-library-runtime.js
           node --check magical-library-entry.js
+          node --check solanum-umbra-entry.js
           node --check kaysender-editors.js
           node --check kaysender-settlement-editor.js
           node --check kaysender-airship-editor.js
