@@ -53,7 +53,11 @@
     "builtInAdapterFieldMapsDefined": true,
     "adapterFieldMapsAppliedByRuntime": true,
     "browserVerificationHarness": true,
-    "browserVerificationReceiptContract": true
+    "browserVerificationReceiptContract": true,
+    "browserReceiptPinnedInheritanceSchema": true,
+    "directBlockingPagesGate": true,
+    "verificationArtifactRetention": true,
+    "documentationHandoffComplete": true
   },
   "sharedActions": [
     "New blank record",
@@ -113,6 +117,12 @@
     "scripts/validate-editor-runtime-structure.mjs",
     "scripts/validate-p0-browser-verification.mjs"
   ],
+  "documentationFiles": [
+    "README.md",
+    "docs/deployment.md",
+    "docs/kaysender-editor-staging-plan.md",
+    "docs/development-history.md"
+  ],
   "exitCriteria": [
     {
       "criterion": "All three existing alpha editors can open through the shared shell",
@@ -136,7 +146,7 @@
     },
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
-      "implementationState": "kernel-migration-adapter-inheritance-and-structural-validation-present",
+      "implementationState": "kernel-migration-adapter-inheritance-structural-receipt-and-workflow-validation-present",
       "verificationState": "final-live-browser-verification-remains"
     }
   ],
