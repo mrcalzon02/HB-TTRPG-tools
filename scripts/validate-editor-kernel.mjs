@@ -8,7 +8,7 @@ const readText = relativePath => fs.readFile(path.join(root, relativePath), 'utf
 const readJson = async relativePath => JSON.parse(await readText(relativePath));
 const fail = message => { throw new Error(message); };
 
-await import(`${pathToFileURL(path.join(root, 'kaysender-editor-kernel.js')).href}?validation=${Date.now()}`);
+await import(pathToFileURL(path.join(root, 'kaysender-editor-kernel.js')).href);
 const Kernel = globalThis.KaysenderEditorKernel;
 if (!Kernel) fail('Shared editor kernel did not register on globalThis.');
 if (Kernel.ENVELOPE_VERSION !== '1.0.0') fail('Unexpected editor envelope version.');
