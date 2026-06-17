@@ -15,6 +15,9 @@
   const fallbackCreateEnvelope = kernel.createEnvelope;
   const fallbackValidateEnvelope = kernel.validateEnvelope;
   const fallbackInheritanceReference = kernel.inheritanceReference;
+  const fallbackSaveDraft = kernel.saveDraft;
+  const fallbackLoadDraft = kernel.loadDraft;
+  const fallbackClearDraft = kernel.clearDraft;
 
   function adapterForProfileType(profileType) {
     return registry.list().find(adapter => adapter.profileType === profileType) || null;
@@ -101,6 +104,40 @@
       ...inheritanceDiagnostics(envelope),
       ...schemaCompatibilityDiagnostics(envelope)
     ];
+  }
+
+  function saveDraft(editorId, envelope) {
+    const diagnostics = validateEnvelope(envelope, envelope?.profileType ? [envelope.profileType] : []);
+    const errors = diagnostics.filter(item => item.severity === 'error');
+    if (errors.length) {
+      return {
+        ok: false,
+        message: `Recovery draft was not saved: ${errors.map(item => item.message).join('; ')}`,
+        diagnostics
+      };
+    }
+    try {
+      return fallbackSaveDraft(editorId, envelope);
+    } catch (error) {
+      return { ok: false, message: `Recovery draft save failed: ${error.message}` };
+    }
+  }
+
+  function loadDraft(editorId) {
+    try {
+      return fallbackLoadDraft(editorId);
+    } catch (error) {
+      console.error(`Recovery draft load failed for ${editorId}:`, error);
+      return null;
+    }
+  }
+
+  function clearDraft(editorId, explicit = false) {
+    try {
+      return fallbackClearDraft(editorId, explicit);
+    } catch (error) {
+      return { ok: false, message: `Recovery draft clear failed: ${error.message}` };
+    }
   }
 
   function createEnvelope(dataInput, options = {}) {
@@ -253,10 +290,13 @@
 
   window.KaysenderEditorKernel = Object.freeze(Object.assign({}, kernel, {
     applyProfileToForm,
+    clearDraft,
     createEnvelope,
     inheritanceReference,
+    loadDraft,
     normalizeImportedRecord,
     restoreInheritedEnvelope,
+    saveDraft,
     validateEnvelope
   }));
 })();
