@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceId": "chronicles-elemental-realms-swamps-toads-frogs-salamanders",
+  "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
+  "originalFilename": "Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf",
+  "mediaType": "application/pdf",
+  "pages": 21,
+  "bytes": 333084,
+  "sha256": "3fe1b910779a2b799305b52fb7005f72e18392d62198824708f1e6a48e434f0f",
+  "sourceStatus": "registered-from-conversation-upload",
+  "binaryGitStatus": "not-written-binary-connector-unavailable",
+  "intendedRepositoryPath": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
+  "integrationStatus": "deferred-multi-pass",
+  "wikiDestination": "general fantasy wiki corpus",
+  "notes": "Canonical source identity receipt. Do not treat this record as extracted or normalized wiki content. A future binary-capable repository transfer must verify the PDF against the recorded byte count and SHA-256 digest before replacing this receipt as the primary source object."
+}
