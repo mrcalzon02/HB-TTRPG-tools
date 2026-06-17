@@ -40,9 +40,10 @@
     const target = container.querySelector('[data-parent-library-status]');
     if (!target) return;
     const parent = currentParent(panel, definition);
-    target.textContent = parent
+    const nextText = parent
       ? `Linked ${parent.name || parent.data?.name || definition.id} · ${parent.profileId} · revision ${parent.revision}`
       : `No saved ${definition.id} record is linked.`;
+    if (target.textContent !== nextText) target.textContent = nextText;
     target.dataset.linked = String(Boolean(parent));
   }
 
@@ -180,21 +181,9 @@
     document.head.appendChild(style);
   }
 
-  function escapeHtml(value) {
-    return String(value ?? '').replace(/[&<>"']/g, character => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[character]));
-  }
-
   function install() {
     injectStyles();
     refresh();
-    const observer = new MutationObserver(refresh);
-    observer.observe(document.body, { childList: true, subtree: true });
     window.addEventListener('storage', refresh);
     window.addEventListener('kaysender-editor-lifecycle-change', refresh);
     window.setInterval(refresh, 1000);
