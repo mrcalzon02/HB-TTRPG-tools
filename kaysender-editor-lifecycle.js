@@ -13,6 +13,8 @@
         message: 'Ready.',
         changedAt: null,
         savedAt: null,
+        changeVersion: 0,
+        savedVersion: 0,
         autosaveTimer: null,
         autosave: null
       });
@@ -27,7 +29,9 @@
       status: state.status,
       message: state.message,
       changedAt: state.changedAt,
-      savedAt: state.savedAt
+      savedAt: state.savedAt,
+      changeVersion: state.changeVersion,
+      savedVersion: state.savedVersion
     };
   }
 
@@ -42,39 +46,8 @@
     state.autosaveTimer = null;
   }
 
-  function scheduleAutosave(editorId, delay = DEFAULT_AUTOSAVE_DELAY) {
-    const state = stateFor(editorId);
-    cancelAutosave(state);
-    if (typeof state.autosave !== 'function') return;
-    state.status = 'autosave-pending';
-    state.message = 'Unsaved changes. Recovery draft autosave pending.';
-    emit(state);
-    state.autosaveTimer = window.setTimeout(async () => {
-      state.autosaveTimer = null;
-      state.status = 'autosaving';
-      state.message = 'Saving recovery draft…';
-      emit(state);
-      try {
-        const result = await state.autosave();
-        if (result?.ok === false) throw new Error(result.message || 'Autosave failed.');
-        markClean(editorId, 'Recovery draft autosaved.');
-      } catch (error) {
-        state.status = 'autosave-failed';
-        state.message = `Recovery draft autosave failed: ${error.message}`;
-        emit(state);
-      }
-    }, delay);
-  }
-
-  function markDirty(editorId, message = 'Unsaved changes.', options = {}) {
-    const state = stateFor(editorId);
-    state.dirty = true;
-    state.status = 'dirty';
-    state.message = message;
-    state.changedAt = new Date().toISOString();
-    emit(state);
-    if (options.autosave !== false) scheduleAutosave(editorId, options.delay);
-    return publicState(state);
+  function checkpoint(editorId) {
+    return stateFor(editorId).changeVersion;
   }
 
   function markClean(editorId, message = 'All changes saved to the local recovery draft.') {
@@ -84,7 +57,59 @@
     state.status = 'saved';
     state.message = message;
     state.savedAt = new Date().toISOString();
+    state.savedVersion = state.changeVersion;
     emit(state);
+    return publicState(state);
+  }
+
+  function markCleanIfUnchanged(editorId, savedVersion, message = 'All changes saved to the local recovery draft.') {
+    const state = stateFor(editorId);
+    if (state.changeVersion !== savedVersion) {
+      state.dirty = true;
+      state.status = 'dirty';
+      state.message = 'Newer changes were made while saving. Recovery autosave remains pending.';
+      emit(state);
+      scheduleAutosave(editorId);
+      return { ok: false, state: publicState(state) };
+    }
+    return { ok: true, state: markClean(editorId, message) };
+  }
+
+  function scheduleAutosave(editorId, delay = DEFAULT_AUTOSAVE_DELAY) {
+    const state = stateFor(editorId);
+    cancelAutosave(state);
+    if (typeof state.autosave !== 'function') return;
+    state.status = 'autosave-pending';
+    state.message = 'Unsaved changes. Recovery draft autosave pending.';
+    emit(state);
+    state.autosaveTimer = window.setTimeout(async () => {
+      state.autosaveTimer = null;
+      const savingVersion = state.changeVersion;
+      state.status = 'autosaving';
+      state.message = 'Saving recovery draft…';
+      emit(state);
+      try {
+        const result = await state.autosave();
+        if (result?.ok === false) throw new Error(result.message || 'Autosave failed.');
+        markCleanIfUnchanged(editorId, savingVersion, 'Recovery draft autosaved.');
+      } catch (error) {
+        state.dirty = true;
+        state.status = 'autosave-failed';
+        state.message = `Recovery draft autosave failed: ${error.message}`;
+        emit(state);
+      }
+    }, delay);
+  }
+
+  function markDirty(editorId, message = 'Unsaved changes.', options = {}) {
+    const state = stateFor(editorId);
+    state.changeVersion += 1;
+    state.dirty = true;
+    state.status = 'dirty';
+    state.message = message;
+    state.changedAt = new Date().toISOString();
+    emit(state);
+    if (options.autosave !== false) scheduleAutosave(editorId, options.delay);
     return publicState(state);
   }
 
@@ -111,6 +136,8 @@
     state.message = message;
     state.changedAt = null;
     state.savedAt = null;
+    state.changeVersion = 0;
+    state.savedVersion = 0;
     emit(state);
     return publicState(state);
   }
@@ -138,9 +165,11 @@
     bind,
     markDirty,
     markClean,
+    markCleanIfUnchanged,
     reset,
     confirmLeave,
     getState,
+    checkpoint,
     hasDirtyRecords,
     scheduleAutosave,
     autosaveDelay: DEFAULT_AUTOSAVE_DELAY
