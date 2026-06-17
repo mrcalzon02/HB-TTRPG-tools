@@ -1,11 +1,12 @@
 (() => {
   'use strict';
 
+  const Kernel = window.KaysenderEditorKernel;
   const Repository = window.KaysenderEditorRepository;
   const Lifecycle = window.KaysenderEditorLifecycle;
   const Production = () => window.KaysenderMainlineEditorProduction;
-  if (!Repository || !Lifecycle) {
-    console.error('Kaysender editor record library could not start: repository or lifecycle is missing.');
+  if (!Kernel || !Repository || !Lifecycle) {
+    console.error('Kaysender editor record library could not start: kernel, repository, or lifecycle is missing.');
     return;
   }
 
@@ -17,7 +18,8 @@
     const production = Production();
     const editorId = production?.getActiveEditorId?.() || '';
     const adapter = editorId ? production?.getAdapter?.(editorId) : null;
-    return { production, editorId, adapter };
+    const envelope = production?.getActiveEnvelope?.() || null;
+    return { production, editorId, adapter, envelope };
   }
 
   function setStatus(message, severity = 'info') {
@@ -31,11 +33,36 @@
     return `${record.name} · r${record.revision}`;
   }
 
+  function savedMetadata(profileId) {
+    if (!profileId) return null;
+    return Repository.list().find(item => item.profileId === profileId) || null;
+  }
+
+  function setIdentityField(id, value) {
+    const target = document.getElementById(id);
+    if (target) target.textContent = value;
+  }
+
+  function renderIdentity(envelope) {
+    const saved = savedMetadata(envelope?.profileId);
+    setIdentityField('mainline-editor-identity-id', envelope?.profileId || 'No active record');
+    setIdentityField('mainline-editor-identity-type', envelope?.profileType || '—');
+    setIdentityField('mainline-editor-identity-schema', envelope?.profileSchemaVersion || envelope?.data?.schemaVersion || '—');
+    setIdentityField('mainline-editor-identity-revision', envelope?.revision ? String(envelope.revision) : '—');
+    setIdentityField('mainline-editor-identity-storage', envelope ? saved ? 'Saved record' : 'Not yet saved' : '—');
+    const storage = document.getElementById('mainline-editor-identity-storage');
+    if (storage) storage.dataset.saved = String(Boolean(saved));
+    const saveButton = document.getElementById('mainline-editor-record-save');
+    if (saveButton) saveButton.textContent = saved ? 'Update Existing Record' : 'Save New Record';
+    const cloneButton = document.getElementById('mainline-editor-record-clone-save');
+    if (cloneButton) cloneButton.disabled = !envelope;
+  }
+
   function refresh() {
     const select = document.getElementById('mainline-editor-record-library');
     if (!select) return;
     const previous = select.value;
-    const { adapter } = activeContext();
+    const { adapter, envelope } = activeContext();
     const records = adapter ? Repository.list({ profileType: adapter.profileType }) : [];
     select.replaceChildren();
     const placeholder = document.createElement('option');
@@ -51,36 +78,74 @@
       option.title = `${record.profileId} · ${record.profileType}`;
       select.appendChild(option);
     });
-    if (records.some(record => record.profileId === previous)) select.value = previous;
+    const preferred = records.some(record => record.profileId === envelope?.profileId)
+      ? envelope.profileId
+      : previous;
+    if (records.some(record => record.profileId === preferred)) select.value = preferred;
     select.disabled = !adapter || !records.length;
-    const openButton = document.getElementById('mainline-editor-record-open');
-    const deleteButton = document.getElementById('mainline-editor-record-delete');
-    const saveButton = document.getElementById('mainline-editor-record-save');
-    if (openButton) openButton.disabled = !select.value;
-    if (deleteButton) deleteButton.disabled = !select.value;
-    if (saveButton) saveButton.disabled = !adapter;
+    renderIdentity(envelope);
+    refreshButtons();
+  }
+
+  async function rebuildEnvelope() {
+    const { production } = activeContext();
+    production?.rebuildActive?.();
+    await wait(40);
+    return Production()?.getActiveEnvelope?.() || null;
   }
 
   async function saveActiveRecord() {
-    const { production, editorId, adapter } = activeContext();
-    if (!production || !editorId || !adapter) {
+    const { editorId, adapter } = activeContext();
+    if (!editorId || !adapter) {
       setStatus('Open an editor before saving a record.', 'warning');
       return;
     }
-    production.rebuildActive();
-    await wait(40);
-    const envelope = production.getActiveEnvelope();
+    const envelope = await rebuildEnvelope();
     if (!envelope) {
       setStatus('No canonical record is available to save.', 'error');
       return;
     }
+    const existed = Boolean(savedMetadata(envelope.profileId));
     const result = Repository.save(envelope);
-    setStatus(result.message, result.ok ? 'success' : 'error');
-    if (result.ok) Lifecycle.markClean(editorId, `Saved ${envelope.name} to the local record library.`);
+    setStatus(
+      result.ok
+        ? `${existed ? 'Updated' : 'Saved'} ${envelope.name} without changing profile ID ${envelope.profileId}.`
+        : result.message,
+      result.ok ? 'success' : 'error'
+    );
+    if (result.ok) Lifecycle.markClean(editorId, `${existed ? 'Updated' : 'Saved'} ${envelope.name} in the local record library.`);
     refresh();
-    const select = document.getElementById('mainline-editor-record-library');
-    if (result.ok && select) select.value = envelope.profileId;
-    refreshButtons();
+  }
+
+  async function saveAsNewClone() {
+    const { production, editorId, adapter } = activeContext();
+    if (!production || !editorId || !adapter) {
+      setStatus('Open an editor before cloning a record.', 'warning');
+      return;
+    }
+    const source = await rebuildEnvelope();
+    if (!source) {
+      setStatus('No canonical record is available to clone.', 'error');
+      return;
+    }
+    const clone = Kernel.cloneEnvelope(source, {
+      editorId: adapter.id,
+      moduleId: adapter.moduleId
+    });
+    const imported = production.importIntoActive(clone);
+    if (!imported) {
+      setStatus('The cloned record could not be loaded into the active editor.', 'error');
+      return;
+    }
+    const result = Repository.save(clone);
+    setStatus(
+      result.ok
+        ? `Saved a new clone with profile ID ${clone.profileId}; original ${source.profileId} was not overwritten.`
+        : result.message,
+      result.ok ? 'success' : 'error'
+    );
+    if (result.ok) Lifecycle.markClean(editorId, `Saved cloned record ${clone.name}.`);
+    refresh();
   }
 
   function openSelectedRecord() {
@@ -99,7 +164,7 @@
       return;
     }
     Lifecycle.markClean(editorId, `Opened saved record ${result.envelope.name}.`);
-    setStatus(result.message, 'success');
+    setStatus(`Opened ${result.envelope.name} with stable profile ID ${result.envelope.profileId}.`, 'success');
     refresh();
   }
 
@@ -123,11 +188,16 @@
 
   function refreshButtons() {
     const select = document.getElementById('mainline-editor-record-library');
+    const { adapter, envelope } = activeContext();
     const hasSelection = Boolean(select?.value);
     const openButton = document.getElementById('mainline-editor-record-open');
     const deleteButton = document.getElementById('mainline-editor-record-delete');
+    const saveButton = document.getElementById('mainline-editor-record-save');
+    const cloneButton = document.getElementById('mainline-editor-record-clone-save');
     if (openButton) openButton.disabled = !hasSelection;
     if (deleteButton) deleteButton.disabled = !hasSelection;
+    if (saveButton) saveButton.disabled = !adapter;
+    if (cloneButton) cloneButton.disabled = !envelope;
   }
 
   function ensureControls() {
@@ -143,10 +213,20 @@
       <div class="mainline-editor-record-library-heading">
         <div>
           <h3 id="mainline-editor-record-library-title">Saved Record Library</h3>
-          <p id="mainline-editor-library-status" class="helper-note" data-severity="info">Records are stored locally in this browser by stable profile ID.</p>
+          <p id="mainline-editor-library-status" class="helper-note" data-severity="info">Saving updates the current stable profile ID. Cloning always creates a new profile ID.</p>
         </div>
-        <button id="mainline-editor-record-save" class="primary-action" type="button">Save Record</button>
+        <div class="mainline-editor-record-library-primary-actions">
+          <button id="mainline-editor-record-save" class="primary-action" type="button">Save New Record</button>
+          <button id="mainline-editor-record-clone-save" class="secondary-action" type="button">Save as New Clone</button>
+        </div>
       </div>
+      <dl class="mainline-editor-record-identity" aria-label="Active record identity">
+        <div><dt>Profile ID</dt><dd id="mainline-editor-identity-id">No active record</dd></div>
+        <div><dt>Profile Type</dt><dd id="mainline-editor-identity-type">—</dd></div>
+        <div><dt>Schema</dt><dd id="mainline-editor-identity-schema">—</dd></div>
+        <div><dt>Revision</dt><dd id="mainline-editor-identity-revision">—</dd></div>
+        <div><dt>Library State</dt><dd id="mainline-editor-identity-storage" data-saved="false">—</dd></div>
+      </dl>
       <div class="mainline-editor-record-library-row">
         <label for="mainline-editor-record-library">Saved records for the active editor</label>
         <select id="mainline-editor-record-library" class="tool-input"></select>
@@ -157,6 +237,7 @@
     toolbar.insertAdjacentElement('afterend', controls);
 
     controls.querySelector('#mainline-editor-record-save').addEventListener('click', saveActiveRecord);
+    controls.querySelector('#mainline-editor-record-clone-save').addEventListener('click', saveAsNewClone);
     controls.querySelector('#mainline-editor-record-open').addEventListener('click', openSelectedRecord);
     controls.querySelector('#mainline-editor-record-delete').addEventListener('click', deleteSelectedRecord);
     controls.querySelector('#mainline-editor-record-repair').addEventListener('click', repairLibrary);
@@ -174,12 +255,20 @@
       .mainline-editor-record-library-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
       .mainline-editor-record-library-heading h3{margin:0;color:var(--accent)}
       .mainline-editor-record-library-heading p{margin:.35rem 0 0}
+      .mainline-editor-record-library-primary-actions{display:flex;gap:8px;flex-wrap:wrap}
+      .mainline-editor-record-identity{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:8px;margin:12px 0}
+      .mainline-editor-record-identity div{padding:8px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025);min-width:0}
+      .mainline-editor-record-identity dt{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+      .mainline-editor-record-identity dd{margin:.25rem 0 0;overflow-wrap:anywhere;font-weight:700}
+      #mainline-editor-identity-storage[data-saved="true"]{color:#9ed6a4}
+      #mainline-editor-identity-storage[data-saved="false"]{color:#e7bf73}
       .mainline-editor-record-library-row{display:grid;grid-template-columns:minmax(220px,1fr) repeat(3,auto);gap:8px;align-items:end;margin-top:12px}
       .mainline-editor-record-library-row label{grid-column:1/-1;color:var(--muted);font-weight:700}
       #mainline-editor-library-status[data-severity="error"]{color:#ff8b8b}
       #mainline-editor-library-status[data-severity="warning"]{color:#e7bf73}
       #mainline-editor-library-status[data-severity="success"]{color:#9ed6a4}
-      @media(max-width:900px){.mainline-editor-record-library-row{grid-template-columns:1fr}.mainline-editor-record-library-row label{grid-column:auto}.mainline-editor-record-library-row button{width:100%}}
+      @media(max-width:1100px){.mainline-editor-record-identity{grid-template-columns:repeat(2,minmax(160px,1fr))}}
+      @media(max-width:900px){.mainline-editor-record-library-row,.mainline-editor-record-identity{grid-template-columns:1fr}.mainline-editor-record-library-row label{grid-column:auto}.mainline-editor-record-library-row button,.mainline-editor-record-library-primary-actions button{width:100%}.mainline-editor-record-library-primary-actions{width:100%}}
     `;
     document.head.appendChild(style);
   }
@@ -199,6 +288,7 @@
   window.KaysenderEditorRecordLibrary = Object.freeze({
     refresh,
     saveActiveRecord,
+    saveAsNewClone,
     openSelectedRecord,
     deleteSelectedRecord,
     repairLibrary
