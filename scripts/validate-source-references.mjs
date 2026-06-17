@@ -15,7 +15,7 @@ if (manifest.unassignedInventory?.path !== 'source-page-references/unassigned-sr
 
 const expected = new Map([
   ['chronicles-elemental-realms-swamps-toads-frogs-salamanders',{pages:21,bytes:333084,sha256:'3fe1b910779a2b799305b52fb7005f72e18392d62198824708f1e6a48e434f0f',receipt:'source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json',receiptSchema:'1.3.0',binaryPath:'SRC/Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf',wikiDestination:'data/elemental-realms/wiki/wiki-index.json',integrationStatus:'dedicated-wiki-creature-reference-pass-3-complete'}],
-  ['solanum-umbra-ttrpg',{pages:248,bytes:1325003,sha256:'2f1d5d0df591b4d637e4845645370946568cb6aecc786a4bbef5411e4e82f9ff',receipt:'source-page-references/Solanum-Umbra-TTRPG.source.json',receiptSchema:'1.2.0',binaryPath:'SRC/Solanum-Umbra-TTRPG.pdf',wikiDestination:'data/solanum-umbra/wiki/wiki-index.json',integrationStatus:'native-foundation-import-active'}],
+  ['solanum-umbra-ttrpg',{pages:248,bytes:1325003,sha256:'2f1d5d0df591b4d637e4845645370946568cb6aecc786a4bbef5411e4e82f9ff',receipt:'source-page-references/Solanum-Umbra-TTRPG.source.json',receiptSchema:'1.3.0',binaryPath:'SRC/Solanum-Umbra-TTRPG.pdf',wikiDestination:'data/solanum-umbra/wiki/wiki-index.json',integrationStatus:'native-foundation-import-active'}],
   ['mad-martikens-menagerie-of-magical-services',{pages:14,bytes:212449,sha256:'3ce56fc43563b00a8a9cd34e828f4e2e0c0e2e7a0a66c4767f80d155d293e8dc',receipt:'source-page-references/Mad-Martikens-Menagerie-of-Magical-Services.source.json',receiptSchema:'1.1.0',binaryPath:'SRC/Mad Martiken’s Menagerie of Magical Services.pdf',wikiDestination:'data/kaysender/wiki/wiki-index.json',integrationStatus:'kaysender-locations-of-note-complete'}]
 ]);
 
@@ -44,9 +44,10 @@ for (const document of manifest.documents) {
 
   if (document.id === 'solanum-umbra-ttrpg') {
     if (receipt.mechanicsPolicy !== 'preserve-native-system-no-external-conversion') throw new Error('Solanum native mechanics policy is incorrect.');
-    if (receipt.integratedScope?.nativeWikiEntries !== 25 || receipt.integratedScope?.nativePacks !== 6 || receipt.integratedScope?.externalRulesConversion !== false) throw new Error('Solanum import scope is incomplete.');
+    if (receipt.integratedScope?.nativeWikiEntries !== 29 || receipt.integratedScope?.nativePacks !== 7 || receipt.integratedScope?.externalRulesConversion !== false) throw new Error('Solanum import scope is incomplete.');
     if (receipt.integratedScope?.careerTalentFamilies !== 5 || receipt.integratedScope?.entityGeneratorTables !== 7 || receipt.integratedScope?.namedForceRoles !== 36) throw new Error('Solanum imported system counts are incorrect.');
-    if (!Array.isArray(receipt.recordedSourceGaps) || receipt.recordedSourceGaps.length < 5) throw new Error('Solanum source gaps are not documented.');
+    if (receipt.integratedScope?.cyberneticTechnologyLevels !== 5 || receipt.integratedScope?.cyberneticBodyParts !== 8 || receipt.integratedScope?.bioticEnhancements !== 12 || receipt.integratedScope?.degradationOutcomes !== 21) throw new Error('Solanum cybernetics scope is incomplete.');
+    if (!Array.isArray(receipt.recordedSourceGaps) || receipt.recordedSourceGaps.length < 7) throw new Error('Solanum source gaps are not documented.');
   }
 
   if (document.id === 'mad-martikens-menagerie-of-magical-services') {
@@ -69,8 +70,8 @@ const elementalIndex = JSON.parse(await fs.readFile(path.join(root,'data','eleme
 if (elementalIndex.setting !== 'Chronicles of the Elemental Realms' || elementalIndex.status !== 'creature-reference-pass-3-complete') throw new Error('Elemental Realms wiki state is incorrect.');
 
 const solanumIndex = JSON.parse(await fs.readFile(path.join(root,'data','solanum-umbra','wiki','wiki-index.json'),'utf8'));
-if (solanumIndex.setting !== 'Solanum Umbra' || solanumIndex.schemaVersion !== '0.3.0' || solanumIndex.status !== 'native-foundation-import-active') throw new Error('Solanum wiki state is incorrect.');
-if (solanumIndex.mechanicsPolicy?.conversion !== 'none' || solanumIndex.packs?.length !== 6) throw new Error('Solanum pack count or native mechanics policy is incorrect.');
+if (solanumIndex.setting !== 'Solanum Umbra' || solanumIndex.schemaVersion !== '0.4.0' || solanumIndex.status !== 'native-foundation-import-active') throw new Error('Solanum wiki state is incorrect.');
+if (solanumIndex.mechanicsPolicy?.conversion !== 'none' || solanumIndex.packs?.length !== 7) throw new Error('Solanum pack count or native mechanics policy is incorrect.');
 
 const kaysenderIndex = JSON.parse(await fs.readFile(path.join(root,'data','kaysender','wiki','wiki-index.json'),'utf8'));
 if (kaysenderIndex.setting !== 'Kaysender' || !kaysenderIndex.packs?.includes('data/kaysender/wiki/locations-of-note-mad-martikens-menagerie.json')) throw new Error('Kaysender source assignment is incorrect.');
