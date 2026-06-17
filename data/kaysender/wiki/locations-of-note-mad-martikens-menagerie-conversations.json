@@ -1,0 +1,322 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "description": "New-canon conversation archive for Mad Martiken’s Menagerie, recording the proprietor’s explanations of noble party work, adult-only revel packages, minor past clients, price construction, limited magical reserves, house-bound components, customer-supplied ingredients, permanent-modification counseling, and the dangers of repeated visualization or layered grafts.",
+  "entries": [
+    {
+      "id": "mad-martikens-menagerie-of-magical-services",
+      "conversationExpansionVersion": "1.0.0",
+      "conversationProvenance": "new-canon-expansion",
+      "servicePolicies": {
+        "adultEventRule": "Adult-themed event services are available only to consenting adults. Martiken refuses youth disguises for adult revels, magical compulsion, removal of consent, and modifications intended to defeat recognition by an unwilling participant.",
+        "permanenceRule": "A permanent modification normally requires a seventy-two-hour reflection period after final visualization. Waiving that period is treated as rush work and increases the first mutation chance by ten percentage points.",
+        "componentRule": "Components stored anywhere within the Menagerie may be reached through the house’s sympathetic inventory conduit even when the client does not see Martiken physically handle them.",
+        "customerComponentRule": "A client who supplies verified components receives a price reduction equal to seventy-five percent of their accepted market value, to a maximum reduction of forty percent of the base service price.",
+        "layeringRule": "Repeated visualization and additional permanent grafts impose cumulative compatibility penalties. Martiken strongly discourages layering prominent effects before the prior work has remained stable for at least thirty days."
+      },
+      "conversationRecords": [
+        {
+          "id": "martiken-conversation-illicit-parties",
+          "title": "Conversation I: What the Nobility Buys After Midnight",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "The Chronicler asks why temporary transformations account for so much of the Menagerie’s income when permanent alterations attract the greater legends.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"You speak endlessly of wings, gills, claws, and destinies written into marrow. Yet your appointment book shows far more temporary work than permanent. Who pays five hundred gold to wear another body for a single evening?"},
+            {"speaker":"Mad Martiken","text":"People with five hundred gold and an evening they do not intend to explain. Nobles, mostly. The wealthy are forever paying to be recognized and then paying twice as much not to be. A duke spends all year commissioning portraits of his face and one night commissioning a face that cannot be painted into evidence."},
+            {"speaker":"The Chronicler","text":"Costume parties?"},
+            {"speaker":"Mad Martiken","text":"Costume parties, forbidden masquerades, private hunts in which nobody wishes to resemble the hunter, salons where every guest arrives as an allegorical beast, and adult revels at which the hosts have decided ordinary anatomy lacks imagination. All consenting adults, I insist. I do not sell compulsion, stolen identity, youth, helplessness, or the pretense that a body removes responsibility. If someone wants enchantment to make refusal impossible, I make their exit from my shop extremely possible."},
+            {"speaker":"The Chronicler","text":"And they pay a premium."},
+            {"speaker":"Mad Martiken","text":"Of course. Privacy is not free. Secrecy is not the absence of work; it is additional work performed where nobody may observe it. I close the front gallery, quiet the furniture, blind the beholder head, assign false appointment names, prepare synchronized reversals, and reserve enough of the house’s strength to restore twenty peacocks, satyrs, serpent courtiers, or moonlit wolves before breakfast. A single temporary change is five hundred. A noble’s secret is never a single temporary change."}
+          ],
+          "mechanicalNotes": [
+            "Private after-hours service adds a 50% secrecy surcharge unless included in a listed event package.",
+            "Adult-themed services require consenting adult participants and cannot provide compulsion, immunity to consent withdrawal, or deceptive replication of a specific unwilling person.",
+            "Temporary event modifications normally end after 8 hours or at the contracted dawn, whichever comes first."
+          ]
+        },
+        {
+          "id": "martiken-conversation-premium-revels",
+          "title": "Conversation II: The Difference Between a Masquerade and a Scandal",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "Martiken distinguishes ordinary costume work from the premium services purchased by wealthy hosts.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"What does the premium purchase beyond a locked door?"},
+            {"speaker":"Mad Martiken","text":"Coordination. A masquerade is one person asking to look like a fox. A scandal is fourteen people asking to represent the phases of the moon as foxes while retaining individual voices, fitting into tailored clothing, remaining identifiable to one another, appearing anonymous to everyone else, and returning to ordinary bodies in the correct order before the household staff changes shift."},
+            {"speaker":"The Chronicler","text":"You make that sound more difficult than permanent wings."},
+            {"speaker":"Mad Martiken","text":"It often is. Wings merely argue with gravity. Parties argue with schedules, alcohol, vanity, locked bedrooms, jealous spouses, secret doors, rival illusionists, and guests who decide at the seventh hour that they would rather be antlered. Temporary work must fail on time. Permanent work has the remainder of the client’s life in which to become somebody else’s problem."},
+            {"speaker":"The Chronicler","text":"And adult events?"},
+            {"speaker":"Mad Martiken","text":"Adult events receive a consent ledger, private fitting rooms, an agreed safe word that dismisses concealment magic, and an attendant whose only duty is restoring anyone who asks to leave. I am mad, not irresponsible. There is a distinction, and I charge substantially to maintain it."}
+          ],
+          "mechanicalNotes": [
+            "An adult revel package includes a consent ward: any participant may speak the contracted dismissal phrase to end their own temporary alteration as an immediate action.",
+            "The package does not alter alignment, loyalty, memory, willingness, or legal responsibility.",
+            "A synchronized group reversal reduces the first post-event Minor trigger chance by 5 percentage points."
+          ]
+        },
+        {
+          "id": "martiken-conversation-price-justification",
+          "title": "Conversation III: Why Five Hundred Gold Is Not Merely Five Hundred Gold",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "The Chronicler challenges Martiken’s prices and receives a long explanation of risk, preparation, magical reserve, and liability.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"Five hundred gold for a night’s disguise would feed a village. One thousand for scales that provide no protection. Five thousand merely to breathe water. How do you justify it?"},
+            {"speaker":"Mad Martiken","text":"By not drowning the client. You are pricing the visible result. I am pricing the hour spent discovering that the client imagines gills but fears water, the reagents that convince lungs not to reject a second method of breathing, the house’s power used to hold two biological truths together, the reserved energy required to reverse the work, and the possibility that a sea god believes I have infringed upon a proprietary arrangement."},
+            {"speaker":"The Chronicler","text":"Still, the magic lasts only hours in the least expensive package."},
+            {"speaker":"Mad Martiken","text":"Then it must be stronger, not weaker. Permanent work can settle. Temporary work must become complete at sunset and cease completely at dawn without leaving a fin in the liver. You pay for the beginning and the ending. Clients notice only one of those because a successful ending looks like nothing happened."},
+            {"speaker":"The Chronicler","text":"So the price purchases risk."},
+            {"speaker":"Mad Martiken","text":"Risk, scarcity, ingredients, privacy, consultation, unused emergency power, and my willingness to stand between the client and anything divine that objects. If I charged only for the spell, every corpse would owe me money and none would pay."}
+          ],
+          "mechanicalNotes": [
+            "At least 20% of every service price represents reserved stabilization and reversal capacity rather than visible transformation.",
+            "Waiving aftercare or emergency reserve can reduce the price by 10%, but increases the first trigger chance by 10 percentage points and is never offered for competing divine lineages.",
+            "Premium privacy, group synchronization, and hostile-jurisdiction protection are separate cost categories."
+          ]
+        },
+        {
+          "id": "martiken-conversation-house-inventory",
+          "title": "Conversation IV: The House Uses What the Hand Does Not Hold",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "The Chronicler notices that Martiken performs elaborate transformations without visibly collecting many of the organs, powders, hides, or essences he claims are required.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"You say copper scale, salamander oil, powdered pearl, and preserved wing-root are required. I watched the entire ritual. You touched none of them."},
+            {"speaker":"Mad Martiken","text":"I touched the house. The house touched them. You continue to imagine the Menagerie as rooms containing shelves. It is closer to a thought containing rooms, and every properly catalogued ingredient is a word inside that thought."},
+            {"speaker":"The Chronicler","text":"You can use anything stored anywhere in the building?"},
+            {"speaker":"Mad Martiken","text":"Anything bound into inventory. A jar under the cellar stair, a scale in the northern cabinet, a vial that fell behind an illusionary wall twenty-three years ago—if the house recognizes it as mine and I know what it is, I can draw upon its sympathetic quality from the ritual chamber. The client sees smoke. The ingredient sees invoices."},
+            {"speaker":"The Chronicler","text":"Is the ingredient consumed?"},
+            {"speaker":"Mad Martiken","text":"Sometimes physically, sometimes symbolically, sometimes it remains exactly where it was but becomes useless for every purpose except proving that it once mattered. Do not open a jar merely because it still appears full. That is how apprentices discover metaphysical emptiness with their fingers."},
+            {"speaker":"The Chronicler","text":"And you are bound to the house as well."},
+            {"speaker":"Mad Martiken","text":"Bound is a melodramatic word. I prefer professionally inseparable. Outside the Menagerie I remain an excellent wizard and an alarming sorcerer. Inside it, I am also the inventory, the operating theater, the emergency reserve, and occasionally the plumbing."}
+          ],
+          "mechanicalNotes": [
+            "Menagerie Inventory Conduit: while inside the Menagerie, Martiken may consume, drain, or employ any catalogued component stored within the demiplane without line of sight or physical contact.",
+            "A component must be owned or formally entrusted to the Menagerie, identified, and stored for at least 10 minutes before the conduit can reach it.",
+            "Antimagic suppresses the conduit. Physically inaccessible components remain inaccessible to anyone except Martiken until the suppression ends."
+          ]
+        },
+        {
+          "id": "martiken-conversation-customer-components",
+          "title": "Conversation V: Bring Your Own Monster",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "Martiken explains what happens when the Menagerie lacks a required organ, essence, mineral, or symbolic reagent.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"What if the house lacks the required ingredient?"},
+            {"speaker":"Mad Martiken","text":"Then I tell the client. I do not substitute griffon tendon for dragon wing-root and call the resulting theological argument a surprise. I provide a list: species, age if relevant, condition, acceptable preservation, and whether the donor must have surrendered it willingly, died naturally, been defeated in honest combat, or merely signed a receipt."},
+            {"speaker":"The Chronicler","text":"You make clients gather their own components?"},
+            {"speaker":"Mad Martiken","text":"Adventurers enjoy errands when they believe the errand will become part of their body. Nobles employ adventurers and enjoy the same thing at a safer distance. If they provide a verified component, I reduce the price. It would be indecent to charge them for a dragon scale they already stole themselves."},
+            {"speaker":"The Chronicler","text":"How much is the reduction?"},
+            {"speaker":"Mad Martiken","text":"Seventy-five percent of the ingredient’s value, but no more than forty percent of the service. I still supply the house, the reserve, the ritual, my expertise, and the part where the client wakes with the correct number of important organs. A rare component can also improve compatibility when it comes from the exact lineage being requested."},
+            {"speaker":"The Chronicler","text":"And counterfeit ingredients?"},
+            {"speaker":"Mad Martiken","text":"Become educational. I test everything. If a merchant sells a basilisk eyelid as a dragon’s nictitating membrane, the client receives no discount, the merchant receives an invoice, and the eyelid goes into a drawer labeled ‘Future Irony.’"}
+          ],
+          "mechanicalNotes": [
+            "Verified client-supplied components reduce the final price by 75% of accepted component value, capped at 40% of the base service price before privacy and rush surcharges.",
+            "An exact-lineage component worth at least 10% of the base service price grants +2 on Martiken’s Heal or Spellcraft compatibility check, chosen when the ritual begins.",
+            "Incorrect, cursed, unwillingly harvested, or metaphysically incompatible components may be rejected without discount."
+          ]
+        },
+        {
+          "id": "martiken-conversation-peacock-client",
+          "title": "Conversation VI: Lady Auvrena’s Peacock Winter",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "Martiken offers a low-severity past client as evidence that not every transformation becomes a catastrophe.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"Give me an example that did not end in divine wrath, extra limbs, or a client becoming dinner."},
+            {"speaker":"Mad Martiken","text":"Lady Auvrena. Winter masquerade. She wished to appear as a white peacock from throat to ankle while retaining her own face, hands, speech, and ability to dance in shoes designed by an enemy."},
+            {"speaker":"The Chronicler","text":"A temporary cosmetic package?"},
+            {"speaker":"Mad Martiken","text":"Premium cosmetic. Feathers that moved with music, a tail that opened when she entered a room, eyespots that reflected the house colors of whichever noble was currently speaking to her. Technically three effects, but all belonged to one coherent image. Coherence matters."},
+            {"speaker":"The Chronicler","text":"What went wrong?"},
+            {"speaker":"Mad Martiken","text":"Almost nothing. She sneezed six feathers the following morning and could not look at millet for a week. She paid an additional two hundred gold for me to tell everyone this was a deliberate symbol of renewal. It became fashionable by supper."},
+            {"speaker":"The Chronicler","text":"Your warning?"},
+            {"speaker":"Mad Martiken","text":"I told her not to add a swan’s neck halfway through the visualization. She asked three times. I told her three times that a peacock with sudden swan intentions is how one invents a new curse. Eventually the price of my patience exceeded the price of the feathers, and she became reasonable."}
+          ],
+          "mechanicalNotes": [
+            "Coherent cosmetic effects sharing one body plan count as one layer for compatibility.",
+            "Changing the requested body plan after the final visualization requires a new check and adds +5 to the consultation DC.",
+            "Lady Auvrena’s residual feather-sneezing was a harmless Minor mutation lasting one day."
+          ]
+        },
+        {
+          "id": "martiken-conversation-moon-pool",
+          "title": "Conversation VII: The Three Gentlemen of the Moon Pool",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "Martiken describes a private aquatic costume party involving three wealthy clients and only modest complications.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"Another successful case."},
+            {"speaker":"Mad Martiken","text":"Three shipping heirs rented a moonlit bathhouse and wished to attend as elegant river creatures. One chose silver gills, one chose translucent fins, and one chose the eyes of a deep-water fish because he believed darkness would improve his personality."},
+            {"speaker":"The Chronicler","text":"Did it?"},
+            {"speaker":"Mad Martiken","text":"No magic is that powerful. Their changes lasted eight hours. They could breathe water, swim gracefully, and remain recognizable to one another. I charged double because the host demanded complete privacy and because transforming intoxicated aristocrats around deep water is a profession with obvious actuarial burdens."},
+            {"speaker":"The Chronicler","text":"Complications?"},
+            {"speaker":"Mad Martiken","text":"The gentleman with the black eyes refused to leave the fountain after dawn because ordinary vision seemed vulgar. The finned gentleman developed a temporary craving for salted beetles. The third discovered his gills whistled when he lied. All resolved within two days. They booked the bathhouse again the following month and paid in advance."},
+            {"speaker":"The Chronicler","text":"You accepted repeat work?"},
+            {"speaker":"Mad Martiken","text":"Temporary repetition after full resolution is not the same as layering permanent anatomy. The body remembers, but it does not necessarily argue. I still examined all three first. Wealth is not a saving throw."}
+          ],
+          "mechanicalNotes": [
+            "A repeated temporary package performed after all prior effects and mutations have ended does not count as a permanent layer.",
+            "Repeating the same temporary package within seven days adds +2 to the visualization DC and +5 percentage points to the Minor trigger chance.",
+            "Water-event packages require an attendant capable of immediate reversal or water rescue."
+          ]
+        },
+        {
+          "id": "martiken-conversation-borrowed-horns",
+          "title": "Conversation VIII: The Marquis and the Borrowed Horns",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "A theatrical noble requests intimidation without the physical power implied by the costume.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"You mentioned a marquis who wanted to become a minotaur."},
+            {"speaker":"Mad Martiken","text":"He wanted to look like one. A distinction he discovered only after I asked whether he intended to acquire the appetite, mass, balance, neck musculature, labyrinthine intuition, and religious consequences commonly omitted from portraiture."},
+            {"speaker":"The Chronicler","text":"What did you give him?"},
+            {"speaker":"Mad Martiken","text":"Horns, bovine ears, a broader shadow, a voice that carried across a ballroom, and the smell of clean hay. Cosmetic structure with one auditory enhancement. No additional Strength. He was delighted until he attempted to enter his carriage."},
+            {"speaker":"The Chronicler","text":"You warned him?"},
+            {"speaker":"Mad Martiken","text":"For forty minutes. I measured the carriage door. I measured his hat. I explained turning radius, horn leverage, chandeliers, dancing partners, and the social consequences of lowering one’s head while angry. He signed beneath each warning and then struck the carriage roof exactly where I had marked it in red chalk."},
+            {"speaker":"The Chronicler","text":"Did he blame you?"},
+            {"speaker":"Mad Martiken","text":"Naturally. He also paid for reinforced upholstery and booked me for the next year. Nobility considers preventable embarrassment a traditional service surcharge."}
+          ],
+          "mechanicalNotes": [
+            "A cosmetic body plan does not grant the extraordinary Strength, natural attacks, instincts, racial abilities, or supernatural traits associated with the imitated creature unless separately purchased.",
+            "Oversized cosmetic features can impose penalties in confined spaces even when they provide no combat benefit.",
+            "Martiken’s signed dimensional warnings can defeat claims for damage caused by explicitly measured doors, ceilings, furniture, or vehicles."
+          ]
+        },
+        {
+          "id": "martiken-conversation-blessing-or-graft",
+          "title": "Conversation IX: Enhancement, Blessing, or Trespass",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "The Chronicler asks why some modifications attract divine attention while nearly identical blessings do not.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"A priest grants wings and calls it a blessing. You grant wings and call it a service. Why does one invite divine retaliation?"},
+            {"speaker":"Mad Martiken","text":"Because the priest files through the owner. I file through the body. A blessing arrives with authority, domain, symbolism, and a god prepared to claim responsibility. My work arrives with anatomy, magic, and an invoice. The wing may look identical. The paperwork is metaphysically opposite."},
+            {"speaker":"The Chronicler","text":"Then why not seek permission?"},
+            {"speaker":"Mad Martiken","text":"Sometimes I do. Sometimes the relevant god has no office hours, three contradictory churches, and a doctrine stating that dwarves should not request avian appendages on behalf of a tiefling. Sometimes the client serves another power already. Sometimes the Lady of the Swamp negotiates a temporary tolerance. Sometimes every deity agrees until the client receives a second blessing and the spleen becomes a disputed border."},
+            {"speaker":"The Chronicler","text":"Your long warnings are theological as much as biological."},
+            {"speaker":"Mad Martiken","text":"Biology is theology that has had time to become habitual. Dragon blood remembers gods. Fae features remember promises. Shark teeth remember oceans. Even a harmless luminous eye may become troublesome when a patron believes it is being used to look somewhere forbidden."},
+            {"speaker":"The Chronicler","text":"And minor changes?"},
+            {"speaker":"Mad Martiken","text":"Most gods do not convene a tribunal over cat eyes. But ‘most’ is not a warranty, and I refuse to write ‘probably beneath divine concern’ in letters large enough for clients to mistake it for certainty."}
+          ],
+          "mechanicalNotes": [
+            "A graft derived from a strongly divine lineage gains the claimed-lineage trigger even if its immediate mechanical benefit is minor.",
+            "A patron-approved or deity-approved component may reduce one divine-attention trigger by 5 percentage points, but competing blessings can restore or increase that risk.",
+            "Compromise relics or the Warlock of the Swamp’s Compromise Ward may stabilize overlapping effects but do not erase ownership disputes."
+          ]
+        },
+        {
+          "id": "martiken-conversation-layering",
+          "title": "Conversation X: The Second Visualization Is Not a Correction",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "Martiken delivers his most severe warning concerning repeated applications, revised visualizations, and layered permanent effects.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"Why do you object so strongly when a client wants to improve an earlier modification?"},
+            {"speaker":"Mad Martiken","text":"Because the body does not hear ‘improve.’ It hears a second set of instructions disputing the first. The first visualization says: this is the shape of the self. The second says: the previous truth was incomplete. The third says: truth is apparently a voting matter. Flesh is wonderfully adaptable until it begins counting ballots."},
+            {"speaker":"The Chronicler","text":"What happens when effects conflict?"},
+            {"speaker":"Mad Martiken","text":"Sometimes nothing dramatic. Scales grow beneath feathers. Gills open only when wings are folded. A tail develops an opinion about balance. Sometimes one lineage eats the other. Sometimes both retreat and leave a hole where certainty used to be. The phrase ‘conflicting effects’ is polite language for the body attempting to satisfy mutually exclusive promises."},
+            {"speaker":"The Chronicler","text":"Your recommendation?"},
+            {"speaker":"Mad Martiken","text":"Wait thirty days after a permanent alteration has become stable. Live in it. Sleep in it. Become angry, frightened, sick, drunk if you insist, healed, exhausted, and surprised. Learn whether the feature behaves when you are not performing for the mirror. Then return for a stability audit. Only then do we discuss another prominent effect."},
+            {"speaker":"The Chronicler","text":"And if the client refuses to wait?"},
+            {"speaker":"Mad Martiken","text":"I increase the price, increase the warnings, increase the compatibility DC, reserve more of the house, and occasionally refuse. Gold is persuasive, but it cannot bribe two incompatible anatomies into agreeing that there is only one spine."}
+          ],
+          "mechanicalNotes": [
+            "Revisualizing or materially changing a permanent graft within 30 days adds +5 to the consultation DC and triggers a Minor check after the procedure even on success.",
+            "A second unrelated permanent graft adds +5 to the compatibility DC and +5 percentage points to all future mutation trigger chances.",
+            "A third unrelated permanent graft adds an additional +10 DC and +10 percentage points; Extreme mutations trigger on a natural 1–2 rather than only 1.",
+            "Directly conflicting body plans automatically require a Major trigger check when the new procedure ends."
+          ]
+        },
+        {
+          "id": "martiken-conversation-permanence",
+          "title": "Conversation XI: Permanent Means Your Future Self Must Live There",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "Martiken explains why permanent work requires reflection even when the client is wealthy, certain, and impatient.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"You sell permanent transformation, yet you sound determined to persuade customers against purchasing it."},
+            {"speaker":"Mad Martiken","text":"I persuade them to understand it. Desire is not invalid because it is intense, but intensity is not the same thing as durability. A client imagines wings in a ballroom and forgets beds, armor, doors, rain, grooming, children, illness, age, imprisonment, and the fact that future clothing will be designed by people who did not attend the consultation."},
+            {"speaker":"The Chronicler","text":"So you impose a waiting period."},
+            {"speaker":"Mad Martiken","text":"Seventy-two hours after the final visualization. They leave with an illusion of the proposed form, sleep in ordinary rooms, attempt daily tasks, and return with revisions. If the request concerns identity, mobility, breathing, pain, or another enduring need, I do not mock it by calling it vanity. I simply insist the future self be invited to the meeting."},
+            {"speaker":"The Chronicler","text":"Can the period be waived?"},
+            {"speaker":"Mad Martiken","text":"Emergencies, imminent travel, medical necessity, or foolishness backed by substantial payment. Waiving it becomes rush service. The first mutation chance rises because the body receives instructions before the mind has finished arguing with them."},
+            {"speaker":"The Chronicler","text":"Do you ever refuse permanent work entirely?"},
+            {"speaker":"Mad Martiken","text":"Yes. When the client cannot describe what they want except by naming someone else. When the requested form exists to evade an unwilling person’s recognition. When the visualizations contradict each other. When a patron is visibly shouting through the client’s dreams. When the house furniture begins whispering ‘no’ in unison. I am willing to ignore one chair. Not all of them."}
+          ],
+          "mechanicalNotes": [
+            "Permanent procedures normally require a 72-hour reflection period with an illusory trial form.",
+            "Completing the reflection period grants +2 on the client’s final visualization check.",
+            "Waiving the reflection period removes that bonus and adds +10 percentage points to the first mutation trigger chance."
+          ]
+        },
+        {
+          "id": "martiken-conversation-energy-reserve",
+          "title": "Conversation XII: The Evening Ledger and the Limits of the House",
+          "participants": ["The Chronicler", "Mad Martiken"],
+          "context": "The Chronicler discovers that Martiken’s apparent abundance is constrained by a finite daily reserve of stabilized transformational power.",
+          "exchanges": [
+            {"speaker":"The Chronicler","text":"If the house can reach every ingredient and stabilize impossible grafts, why not serve every customer immediately?"},
+            {"speaker":"Mad Martiken","text":"Because the house has appetite, not infinity. Each dawn it has a reserve: accumulated illusion, planar tension, my own spellcraft, yesterday’s unused endings, and the faint contribution of every visitor who believed the walls were real. I can spend that reserve on transformations or keep it available to prevent transformations from becoming funerals."},
+            {"speaker":"The Chronicler","text":"You account for magical energy like a merchant accounts for coin."},
+            {"speaker":"Mad Martiken","text":"A merchant who spends all his coin merely becomes poor. A transfigurer who spends all his reserve discovers at midnight that a countess has become twelve percent additional mantis and there is no power left to negotiate with the elbows."},
+            {"speaker":"The Chronicler","text":"Is that why party bookings cost so much?"},
+            {"speaker":"Mad Martiken","text":"Precisely. A host is not purchasing twenty transformations. The host is purchasing twenty transformations, twenty endings, a reserve for three foreseeable mistakes, privacy wards, staff, clean rooms, component access, and my refusal to accept another appointment until every guest has left with the anatomy listed beside their name."},
+            {"speaker":"The Chronicler","text":"And when wealthy clients demand more than the reserve permits?"},
+            {"speaker":"Mad Martiken","text":"They choose another night, pay for me to close the Menagerie and devote the entire house to them, or accept increased risk in writing. Most choose another night after I explain what ‘increased risk’ did to the parliamentary spider lady."}
+          ],
+          "mechanicalNotes": [
+            "The Menagerie begins each day with 12 Transfiguration Reserve points.",
+            "Martiken normally refuses to spend the final 3 points except on reversal, containment, or emergency stabilization.",
+            "Overdrawing the reserve increases all mutation trigger chances for subsequent work that day by 5 percentage points per point below zero and prevents Stability Warranty benefits."
+          ]
+        }
+      ],
+      "supplementalTables": [
+        {
+          "id": "martiken-premium-event-packages",
+          "title": "Premium temporary-event packages",
+          "columns": ["Package","Price","Guests","Included Services","Risk"],
+          "rows": [
+            ["Private costume appointment","750 gp per guest","1–3","Temporary cosmetic overlay, private fitting, ordinary reversal","Minor"],
+            ["Noble masquerade booking","1,000 gp per guest, six-guest minimum","6–20","Eight-hour cosmetic forms, synchronized reveal and reversal, appointment aliases","Minor; -5% first trigger after synchronized reversal"],
+            ["Adult revel package","1,500 gp per guest, four-guest minimum","4–16 consenting adults","Cosmetic or one minor function, consent-dismissal phrase, private rooms, reversal attendant","Minor; no compulsion or identity theft"],
+            ["Grand beast court","2,500 gp per guest, eight-guest minimum","8–24","Coherent hybrid overlays, one minor function, heraldic coordination, dawn reversal","Minor +5% due complexity"],
+            ["Closed-house exclusive","10,000 gp venue fee plus package prices","Up to 30","Menagerie closed to public, false appointment ledger, silenced furniture, dedicated emergency reserve","Normal if reserve remains; +5% if overbooked"]
+          ]
+        },
+        {
+          "id": "martiken-component-discount-rules",
+          "title": "Customer-supplied component valuation",
+          "columns": ["Component Status","Price Adjustment","Compatibility Effect","Notes"],
+          "rows": [
+            ["Verified ordinary component","75% of accepted market value credited","None","Total credit capped at 40% of base service price"],
+            ["Exact-lineage component worth at least 10% of base price","Normal credit","+2 on Martiken’s Heal or Spellcraft check","Choose one check when ritual begins"],
+            ["Willingly donated sentient component","Normal credit","Reduce one divine-attention trigger by 5 percentage points","Donation must be informed and documented"],
+            ["Counterfeit or misidentified component","No credit","-2 if used before discovery","Normally rejected during inspection"],
+            ["Cursed or disputed component","No automatic credit","GM-determined increased risk","Martiken may accept only with a separate containment contract"],
+            ["Component already bound into Menagerie inventory","Included in listed price","House conduit permits remote use","May be physically consumed, sympathetically drained, or left metaphysically empty"]
+          ]
+        },
+        {
+          "id": "martiken-layering-compatibility",
+          "title": "Repeated visualization and permanent-layer compatibility",
+          "columns": ["Condition","Consultation DC","Trigger Adjustment","Additional Consequence"],
+          "rows": [
+            ["First coherent permanent graft","Normal","Normal","72-hour reflection grants +2 client visualization"],
+            ["Revision within 30 days","+5","Automatic Minor check after procedure","Applies even when all checks succeed"],
+            ["Second unrelated permanent graft","+5","+5 percentage points to future trigger chances","Stability audit strongly recommended"],
+            ["Third unrelated permanent graft","+15 total","+15 percentage points to future trigger chances","Extreme triggers on natural 1–2"],
+            ["Directly conflicting body plans","At least +10","Major check automatically after procedure","GM identifies the mutually exclusive promises"],
+            ["Waived reflection period","No +2 reflection bonus","+10 percentage points to first trigger","Counts as rush work"]
+          ]
+        },
+        {
+          "id": "martiken-transfiguration-reserve",
+          "title": "Daily Menagerie transfiguration reserve",
+          "columns": ["Service","Reserve Cost","Usual Scheduling","Notes"],
+          "rows": [
+            ["Temporary cosmetic alteration","1 point","Same day","Includes planned reversal"],
+            ["Temporary functional alteration","2 points","Same day if reserve permits","Complex group work may cost +1 total"],
+            ["Permanent cosmetic alteration","2 points","After reflection period","One point remains committed until first examination"],
+            ["Permanent minor function","4 points","Scheduled","Includes emergency stabilization reserve"],
+            ["Integrated or exceptional function","6 points","Dedicated appointment","Dragon or divine lineage may cost 8"],
+            ["Major reversal or containment","3–6 points","Emergency priority","Martiken reserves the final 3 daily points for this purpose"],
+            ["Reserve overdraw","1 point per required point","Only by signed exception","Each point below zero adds +5% to later trigger chances"]
+          ]
+        }
+      ]
+    }
+  ]
+}
