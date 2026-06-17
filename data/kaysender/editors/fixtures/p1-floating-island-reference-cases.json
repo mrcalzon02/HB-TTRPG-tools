@@ -1,0 +1,288 @@
+{
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "profileSchemaVersion": "3.0.0",
+  "baseFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-valid.json",
+  "status": "contract-fixtures-only",
+  "cases": [
+    {
+      "id": "duplicate-cell-id",
+      "description": "Two map cells use the same stable ID.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/map/cells/1/id",
+        "value": "cell-western-port"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "duplicate-entity-id",
+          "path": "map.cells[1].id"
+        }
+      ]
+    },
+    {
+      "id": "active-cell-reference-missing",
+      "description": "The active cell list references a cell that does not exist.",
+      "mutation": {
+        "operation": "add",
+        "path": "/map/activeCellIds/-",
+        "value": "cell-missing-southern-shelf"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "broken-cell-reference",
+          "path": "map.activeCellIds"
+        }
+      ]
+    },
+    {
+      "id": "site-cell-reference-missing",
+      "description": "A site points to a nonexistent map cell.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/sites/2/mapCellId",
+        "value": "cell-missing-observatory"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "broken-cell-reference",
+          "path": "sites[2].mapCellId"
+        }
+      ]
+    },
+    {
+      "id": "cell-site-reference-missing",
+      "description": "A cell lists a site ID that is absent from the site ledger.",
+      "mutation": {
+        "operation": "add",
+        "path": "/map/cells/0/siteIds/-",
+        "value": "site-missing-customs-house"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "broken-site-reference",
+          "path": "map.cells[0].siteIds"
+        }
+      ]
+    },
+    {
+      "id": "resource-cell-reference-missing",
+      "description": "A resource node points to a nonexistent map cell.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/resources/nodes/1/mapCellId",
+        "value": "cell-missing-mine"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "broken-cell-reference",
+          "path": "resources.nodes[1].mapCellId"
+        }
+      ]
+    },
+    {
+      "id": "approach-landing-reference-missing",
+      "description": "An approach corridor points to a landing zone that does not exist.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/approaches/approachCorridors/0/landingZoneId",
+        "value": "landing-missing-northern-dock"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "broken-landing-zone-reference",
+          "path": "approaches.approachCorridors[0].landingZoneId"
+        }
+      ]
+    },
+    {
+      "id": "route-default-node-missing",
+      "description": "The default route node is not present in the route-node ledger.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/routeNodeExport/defaultNodeId",
+        "value": "route-node-missing-east-port"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "broken-route-node-reference",
+          "path": "routeNodeExport.defaultNodeId"
+        }
+      ]
+    },
+    {
+      "id": "composition-total-invalid",
+      "description": "Composition percentages total more than one hundred percent.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/composition/ordinaryRockPercent",
+        "value": 60
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "composition-total-invalid",
+          "path": "composition"
+        }
+      ]
+    },
+    {
+      "id": "map-area-mismatch",
+      "description": "Active map-cell area no longer reconciles with plan area.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/map/cells/3/areaKm2",
+        "value": 12
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "map-area-mismatch",
+          "path": "map.cells"
+        }
+      ]
+    },
+    {
+      "id": "reservoir-over-capacity",
+      "description": "A reservoir contains more water than its physical capacity.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/hydrology/reservoirs/0/currentVolumeM3",
+        "value": 90000
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "reservoir-over-capacity",
+          "path": "hydrology.reservoirs[0].currentVolumeM3"
+        }
+      ]
+    },
+    {
+      "id": "settlement-capacity-not-binding-minimum",
+      "description": "Sustainable population exceeds the lowest water, food, or land limit without an exception.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/settlementCapacity/sustainablePopulation",
+        "value": 9800
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "settlement-capacity-mismatch",
+          "path": "settlementCapacity.sustainablePopulation"
+        }
+      ]
+    },
+    {
+      "id": "unsafe-resource-extraction",
+      "description": "Current extraction exceeds the declared safe extraction total.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/resources/currentAnnualExtractionTons",
+        "value": 9100
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "warning",
+          "code": "resource-overextraction",
+          "path": "resources.currentAnnualExtractionTons"
+        },
+        {
+          "severity": "warning",
+          "code": "fracture-pressure-increased",
+          "path": "stability.faultZones[0]"
+        }
+      ]
+    },
+    {
+      "id": "altitude-timeline-overlap",
+      "description": "Altitude timeline segments overlap instead of forming deliberate forecast periods.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/motion/altitudeTimeline/1/startDay",
+        "value": 80
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "timeline-segment-overlap",
+          "path": "motion.altitudeTimeline[1]"
+        }
+      ]
+    },
+    {
+      "id": "drift-segment-invalid-range",
+      "description": "A drift segment ends before it starts.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/motion/driftTimeline/1/endDay",
+        "value": 70
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "timeline-range-invalid",
+          "path": "motion.driftTimeline[1]"
+        }
+      ]
+    },
+    {
+      "id": "visibility-conflict-site",
+      "description": "A site is simultaneously player-known and GM-only.",
+      "mutation": {
+        "operation": "add",
+        "path": "/visibility/playerKnownSiteIds/-",
+        "value": "site-eastern-sealed-ruin"
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "visibility-classification-conflict",
+          "path": "visibility.playerKnownSiteIds"
+        }
+      ]
+    },
+    {
+      "id": "visibility-conflict-hazard",
+      "description": "A hazard is simultaneously player-known and GM-only.",
+      "mutations": [
+        {
+          "operation": "add",
+          "path": "/visibility/gmOnlyHazardIds/-",
+          "value": "hazard-eastern-fracture"
+        }
+      ],
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "visibility-classification-conflict",
+          "path": "visibility.gmOnlyHazardIds"
+        }
+      ]
+    },
+    {
+      "id": "player-output-leaks-gm-secret",
+      "description": "The player-safe summary contains exact GM-only secret text.",
+      "mutation": {
+        "operation": "replace",
+        "path": "/outputs/playerSafeSummary",
+        "value": "The sealed eastern observatory contains instruments that can alter local drift."
+      },
+      "expectedDiagnostics": [
+        {
+          "severity": "error",
+          "code": "gm-secret-leaked-to-player-output",
+          "path": "outputs.playerSafeSummary"
+        }
+      ]
+    }
+  ]
+}
