@@ -55,6 +55,7 @@
     loadScriptOnce('arcane-academic-entry.js','data-arcane-academic-entry','arcaneAcademicEntry');
     loadScriptOnce('malefic-academic-entry.js','data-malefic-academic-entry','maleficAcademicEntry');
     loadScriptOnce('magical-library-entry.js','data-magical-library-entry','magicalLibraryEntry');
+    loadScriptOnce('elemental-realms-entry.js','data-elemental-realms-entry','elementalRealmsEntry');
     loadScriptOnce('solanum-umbra-entry.js','data-solanum-umbra-entry','solanumUmbraEntry');
     loadScriptOnce('kaysender-npc-generator.js','data-npc-generator','npcGenerator');
     loadScriptOnce('kaysender-crafting-generator.js','data-crafting-generator','craftingGenerator');
