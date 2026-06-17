@@ -1,0 +1,153 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-external-conversion",
+  "description": "Complete native seven-table generator for Fay entities, spirits, beasts, and magical creatures from pages 228-232.",
+  "entries": [
+    {
+      "id": "solanum-fay-entity-generator",
+      "title": "Fay Entity, Spirit, and Magical Creature Generator",
+      "category": "Entities",
+      "summary": "Roll or choose creature type, size, appearance, behavior, powers, weakness, and motivation to create a native Solanum Umbra supernatural entity.",
+      "body": [
+        "The source presents this as a narrative generator for diverse Fay entities, beasts, spirits, and magical creatures. It does not provide combat statistics or convert results into another system.",
+        "Roll once on each table or choose results to match the story. Generated entities may later receive native combat records when the manuscript’s enemy and creature statistics are imported.",
+        "Minor typographical issues such as ‘Formles s’ and inconsistent Fay/Fae spelling are normalized for display while the source meaning remains unchanged."
+      ],
+      "generationSequence": [
+        "Roll 1d10 for creature type.",
+        "Roll 1d8 for size.",
+        "Roll 1d12 for appearance.",
+        "Roll 1d10 for behavior or personality.",
+        "Roll 1d12 for ability or power.",
+        "Roll 1d8 for weakness.",
+        "Roll 1d10 for alignment or motivation."
+      ],
+      "tables": [
+        {
+          "id": "solanum-entity-type",
+          "title": "Entity Type",
+          "columns": ["1d10","Type","Description"],
+          "rows": [
+            ["1","Ethereal Spirit","Pure energy or light; barely visible and not fully corporeal"],
+            ["2","Elemental Beast","Bound to fire, water, earth, or air"],
+            ["3","Fey Guardian","Protector of sacred groves or ancient sites"],
+            ["4","Shapeshifter","Changes form and blends into the environment"],
+            ["5","Trickster Entity","Mischievous being that tests or deceives travelers"],
+            ["6","Dark Fay","Malevolent Fay associated with death or decay"],
+            ["7","Sylvan Beast","Mystical forest animal such as deer, bear, or wolf"],
+            ["8","Winged Fay","Flying entity with wings of light or darkness"],
+            ["9","Spirit of the Wild","Part animal, part plant, and part elemental"],
+            ["10","Ancient Fay","Old and wise being tied to ancient land magic"]
+          ]
+        },
+        {
+          "id": "solanum-entity-size",
+          "title": "Entity Size",
+          "columns": ["1d8","Size","Description"],
+          "rows": [
+            ["1","Tiny","Insect-sized and easily overlooked"],
+            ["2","Small","Cat or small-dog sized"],
+            ["3","Medium","Wolf or human-child sized"],
+            ["4","Large","Bear or large-horse sized"],
+            ["5","Huge","Elephant or small-house sized"],
+            ["6","Colossal","Towers over trees as a moving force of nature"],
+            ["7","Variable","Changes size according to need"],
+            ["8","Formless","Constantly changes size and shape"]
+          ]
+        },
+        {
+          "id": "solanum-entity-appearance",
+          "title": "Appearance Traits",
+          "columns": ["1d12","Trait","Description"],
+          "rows": [
+            ["1","Luminous Glow","Emits soft magical light"],
+            ["2","Thorny Skin","Covered in thorns or sharp protrusions"],
+            ["3","Eyes Like Stars","Eyes contain starlight, galaxies, or a night sky"],
+            ["4","Leafy or Mossy Exterior","Body partly covered in leaves, moss, or bark"],
+            ["5","Shifting Colors","Skin or fur changes color and blends with surroundings"],
+            ["6","Translucent Body","Partially transparent like a ghost"],
+            ["7","Crystalline Features","Body contains crystal or gemstone structures"],
+            ["8","Insectoid Limbs","Legs, wings, or appendages resemble insects"],
+            ["9","Multiple Eyes","More than two eyes in unusual patterns"],
+            ["10","Fiery Aura","Constant flame or heat surrounds the creature"],
+            ["11","Watery Form","Body appears liquid or constantly drips"],
+            ["12","Ethereal Veil","Mystical mist or haze obscures its shape"]
+          ]
+        },
+        {
+          "id": "solanum-entity-behavior",
+          "title": "Behavior and Personality",
+          "columns": ["1d10","Behavior","Description"],
+          "rows": [
+            ["1","Curious","Follows newcomers and investigates them"],
+            ["2","Hostile","Treats outsiders as threats"],
+            ["3","Playful","Enjoys pranks and harmless games"],
+            ["4","Protective","Defends a place or object fiercely"],
+            ["5","Melancholic","Mourns a loss or past event"],
+            ["6","Trickster","Causes confusion or mischief without necessarily seeking harm"],
+            ["7","Vengeful","Seeks retribution against trespassers or old enemies"],
+            ["8","Mysterious","Communicates through riddles, silence, or elusive behavior"],
+            ["9","Benevolent","Guides or assists those in need"],
+            ["10","Chaotic","Acts unpredictably and erratically"]
+          ]
+        },
+        {
+          "id": "solanum-entity-abilities",
+          "title": "Abilities and Powers",
+          "columns": ["1d12","Power","Description"],
+          "rows": [
+            ["1","Elemental Mastery","Controls fire, water, earth, or air"],
+            ["2","Illusion Crafting","Creates powerful deceptions and disorientation"],
+            ["3","Shapeshifting","Assumes animals, objects, or people"],
+            ["4","Invisibility","Vanishes from sight at will"],
+            ["5","Healing Touch","Heals wounds or ailments by touch"],
+            ["6","Teleportation","Moves instantly through space"],
+            ["7","Dreamwalking","Enters and manipulates dreams"],
+            ["8","Time Manipulation","Slows, accelerates, or temporarily stops time nearby"],
+            ["9","Weather Control","Summons storms, wind, or calm"],
+            ["10","Life Drain","Steals life force to strengthen itself"],
+            ["11","Plant Control","Causes plants to grow, wither, or move"],
+            ["12","Reality Warping","Bends natural law subtly or dramatically"]
+          ]
+        },
+        {
+          "id": "solanum-entity-weakness",
+          "title": "Weakness",
+          "columns": ["1d8","Weakness","Description"],
+          "rows": [
+            ["1","Iron","Repelled or harmed by iron"],
+            ["2","Sunlight","Weakened or banished by sunlight"],
+            ["3","Silence","Disoriented or powerless without sound"],
+            ["4","Sacred Symbols","Specific symbols, rites, or objects ward or harm it"],
+            ["5","True Name","Knowledge of its true name grants power over it"],
+            ["6","Fire","Fire burns away or weakens its essence"],
+            ["7","Water","Water contact or immersion drains its power"],
+            ["8","Binding Rites","Specific rites or spells restrict its movement"]
+          ]
+        },
+        {
+          "id": "solanum-entity-motivation",
+          "title": "Alignment and Motivation",
+          "columns": ["1d10","Motivation","Description"],
+          "rows": [
+            ["1","Guardian of Nature","Protects nature and balance"],
+            ["2","Seeker of Knowledge","Craves knowledge for altruistic or private purposes"],
+            ["3","Vengeful Spirit","Seeks to right an old wrong through revenge"],
+            ["4","Chaos Incarnate","Spreads chaos and disorder"],
+            ["5","Trickster and Teacher","Uses tests and tricks to teach or judge worth"],
+            ["6","Guardian of a Lost Realm","Last protector of a forgotten place"],
+            ["7","Benevolent Protector","Actively aids and protects worthy people"],
+            ["8","Dark Destroyer","Seeks destruction, death, or corruption"],
+            ["9","Wandering Nomad","Roams without a permanent home"],
+            ["10","Curious Observer","Watches and learns about the world"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-generator",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":228,"pageEnd":232,"chunkId":"solanum-entity-generator:p228-232","notes":"Seven complete generation tables for Fay entities, spirits, beasts, and magical creatures."}],
+      "tags": ["entity generator","Fay","Fae","spirit","magical creature","weakness","motivation","powers"],
+      "relatedEntries": ["solanum-core-combat-system","solanum-ranged-cover-camouflage"]
+    }
+  ]
+}
