@@ -101,6 +101,7 @@ jobs:
           node --check elemental-realms-creatures-primary.js
           node --check elemental-realms-creatures-secondary.js
           node --check elemental-realms-creatures-expansions.js
+          node --check elemental-realms-creatures-leeches.js
           node --check elemental-realms-creatures-context.js
           node --check elemental-realms-entry.js
           node --check solanum-umbra-entry.js
