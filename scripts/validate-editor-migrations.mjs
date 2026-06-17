@@ -27,8 +27,9 @@ const nested = await readJson('data/kaysender/editors/fixtures/island-current-ne
 
 const migrated = normalize(migrations.migrate(legacy, profileType));
 assert.equal(migrated.changed, true, 'Legacy flat island fixture was not migrated.');
-assert.deepEqual(migrated.applied, ['island-legacy-flat-to-1.0.0']);
-assert.equal(migrated.data.schemaVersion, '1.0.0');
+assert.deepEqual(migrated.applied, ['island-legacy-flat-to-2.0.0']);
+assert.equal(migrated.data.schemaVersion, nested.schemaVersion);
+assert.equal(migrated.data.schemaVersion, '2.0.0');
 assert.equal(migrated.data.profileType, profileType);
 assert.equal(migrated.data.name, legacy.name);
 assert.equal(migrated.data.classification.currentUse, legacy.settlementFootprint);
@@ -46,7 +47,7 @@ assert.equal('lengthKm' in migrated.data, false, 'Migrated profile retained obso
 assert.equal('waterProfile' in migrated.data, false, 'Migrated profile retained obsolete flat hydrology fields.');
 assert.equal('routeAccess' in migrated.data, false, 'Migrated profile retained obsolete flat access fields.');
 assert.equal(migrated.log[0].fromVersion, 'legacy-flat');
-assert.equal(migrated.log[0].toVersion, '1.0.0');
+assert.equal(migrated.log[0].toVersion, '2.0.0');
 
 const idempotent = normalize(migrations.migrate(migrated.data, profileType));
 assert.equal(idempotent.changed, false, 'Canonical migrated profile was migrated a second time.');
@@ -57,7 +58,7 @@ assert.equal(current.changed, false, 'Current nested island fixture should not b
 assert.deepEqual(current.data, nested);
 
 const catalogue = normalize(migrations.list(profileType));
-assert.ok(catalogue.some(item => item.id === 'island-legacy-flat-to-1.0.0'));
+assert.ok(catalogue.some(item => item.id === 'island-legacy-flat-to-2.0.0' && item.toVersion === '2.0.0'));
 
 console.log('Editor migration validation passed.');
-console.log('Verified flat Island conversion, canonical nested preservation, migration logging, field cleanup, and idempotence.');
+console.log('Verified flat Island conversion into schema 2.0.0, canonical nested preservation, migration logging, field cleanup, and idempotence.');
