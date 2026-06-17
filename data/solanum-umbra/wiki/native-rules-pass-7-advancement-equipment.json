@@ -1,0 +1,156 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-external-conversion",
+  "description": "Native profession advancement and general equipment catalogues from pages 143-157.",
+  "entries": [
+    {
+      "id": "solanum-profession-advancement-tree",
+      "title": "Profession Advancement Tree",
+      "category": "Advancement",
+      "summary": "Characters progress from Novice to Expert and then Master by purchasing alternating Minor and Major Talents and completing profession-transition milestones.",
+      "body": [
+        "A Beginner begins in the Novice profession with Minor Talent 1: Basic Skill and Major Talent 1: Core Competency.",
+        "The Novice path ends at 38,500 cumulative XP and transitions into Expert. The Expert path ends at 60,500 cumulative XP within that profession and transitions into Master.",
+        "The source concludes that experience values may be adjusted to fit campaign balance and pacing. The wiki records the printed values as the default native progression."
+      ],
+      "tables": [
+        {
+          "id": "solanum-novice-progression",
+          "title": "Novice to Expert Progression",
+          "columns": ["Step","XP Cost","Cumulative XP","Gain"],
+          "rows": [
+            ["Starting Profession","—","0","Minor Talent 1: Basic Skill; Major Talent 1: Core Competency"],
+            ["First Advancement","1,000","1,000","Minor Talent 2"],
+            ["Second Advancement","2,500","3,500","Major Talent 2"],
+            ["Third Advancement","5,000","8,500","Minor Talent 3"],
+            ["Fourth Advancement","10,000","18,500","Major Talent 3"],
+            ["Fifth Advancement","20,000","38,500","Transition to Expert; gain Minor Talent 1: Advanced Skill and Major Talent 1: Specialized Competency"]
+          ]
+        },
+        {
+          "id": "solanum-expert-progression",
+          "title": "Expert to Master Progression",
+          "columns": ["Step","XP Cost","Cumulative XP Within Expert","Gain"],
+          "rows": [
+            ["Expert Entry","—","0","Minor Talent 1: Advanced Skill; Major Talent 1: Specialized Competency"],
+            ["First Advancement","2,000","2,000","Minor Talent 2"],
+            ["Second Advancement","4,500","6,500","Major Talent 2"],
+            ["Third Advancement","8,000","14,500","Minor Talent 3"],
+            ["Fourth Advancement","16,000","30,500","Major Talent 3"],
+            ["Fifth Advancement","30,000","60,500","Transition to Master; gain Minor Talent 1: Expert Skill and Major Talent 1: Master Competency"]
+          ]
+        },
+        {
+          "id": "solanum-advancement-summary",
+          "title": "Printed Experience Summary",
+          "columns": ["Summary","Printed Total"],
+          "rows": [
+            ["Minor Talent Progression from Novice to Expert","14,000 XP: 1,000 + 5,000 + 8,000"],
+            ["Major Talent Progression from Novice to Expert","28,500 XP: 2,500 + 10,000 + 16,000"],
+            ["Novice to Expert Profession Transition","38,500 XP"],
+            ["Expert to Master Profession Transition","60,500 XP"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-advancement-system",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":143,"pageEnd":145,"chunkId":"solanum-advancement:p143-145","notes":"Novice and Expert talent progression, profession transitions, and printed XP summary."}],
+      "tags": ["advancement","XP","Novice","Expert","Master","Minor Talent","Major Talent"],
+      "relatedEntries": ["solanum-career-talent-system","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-knife-catalogue",
+      "title": "Knife Technology Catalogue",
+      "category": "Equipment",
+      "summary": "Knives progress from damaged scavenged blades to Advanced Tech monomolecular weapons, increasing damage, durability, and melee defense.",
+      "body": ["Each knife tier records description, credit value, native damage dice, effects, and any defensive bonus."],
+      "tables": [{"id":"solanum-knives","title":"Knives","columns":["Tier","Description","Credits","Damage","Effects","Defensive Bonus"],"rows":[["Scavenged","Rusty blade with mismatched handle","5","1d4","Low durability and prone to dulling","None"],["Improvised","Makeshift scrap-metal blade with wrapped handle","10","1d6","Improved durability and modest effectiveness","None"],["Modern","High-quality steel with ergonomic handle","50","1d8","Sharp, reliable, and durable","None"],["Recovered","Military-grade tactical knife","100","1d10","High durability and included sheath","+1 melee defense"],["Reclaimed","Rare custom-forged enhanced blade","200","1d12","Excellent balance and sharpness","+2 melee defense"],["Advanced Tech","Self-sharpening monomolecular edge","500","2d6","Clean cuts and minimal maintenance","+3 melee defense"]]}],
+      "sourceStatus": "source-native-equipment-catalogue",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":145,"pageEnd":146,"chunkId":"solanum-knives:p145-146","notes":"Six knife technology tiers."}],
+      "tags": ["knife","melee weapon","damage","credits","technology tier"],
+      "relatedEntries": ["solanum-melee-combat-modes","solanum-profession-advancement-tree"]
+    },
+    {
+      "id": "solanum-firearms-catalogue",
+      "title": "Pistol and Rifle Technology Catalogue",
+      "category": "Equipment",
+      "summary": "Pistols and rifles use six technology tiers with escalating credit value, damage dice, reliability, range, targeting, and ranged defense.",
+      "body": ["The catalogue preserves source damage values and defensive bonuses without converting them into another weapon framework."],
+      "tables": [
+        {"id":"solanum-pistols","title":"Pistols","columns":["Tier","Description","Credits","Damage","Effects","Defensive Bonus"],"rows":[["Scavenged","Old, rusty, and unreliable","15","1d6","Frequent misfires and low accuracy","None"],["Improvised","Homemade pistol from scavenged parts","30","1d8","Unstable but functional","None"],["Modern","Standard semi-automatic pistol","150","2d6","Reliable and accurate","None"],["Recovered","High-precision military sidearm","250","2d8","Excellent accuracy and reliability","+1 ranged defense"],["Reclaimed","Custom-modified enhanced pistol","400","2d10","Enhanced range and firing rate","+2 ranged defense"],["Advanced Tech","Energy pistol with smart targeting","800","3d6","High accuracy, rechargeable energy weapon","+3 ranged defense"]]},
+        {"id":"solanum-rifles","title":"Rifles","columns":["Tier","Description","Credits","Damage","Effects","Defensive Bonus"],"rows":[["Scavenged","Worn but functional hunting rifle","30","2d6","Inconsistent accuracy and limited range","None"],["Improvised","Patchwork homemade rifle","60","2d8","Better range than scavenged but less reliable","None"],["Modern","Standard semi-automatic military rifle","300","3d6","Reliable and effective at long range","None"],["Recovered","High-precision military sniper rifle","500","3d8","Excellent range, accuracy, and included scope","+1 ranged defense"],["Reclaimed","High-tech rifle with optics and modifications","750","3d10","Enhanced accuracy and firing rate","+2 ranged defense"],["Advanced Tech","Railgun or plasma rifle","1,500","4d6","Superior range, accuracy, and damage","+3 ranged defense"]]}
+      ],
+      "sourceStatus": "source-native-equipment-catalogue",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":146,"pageEnd":148,"chunkId":"solanum-firearms:p146-148","notes":"Six pistol and six rifle technology tiers."}],
+      "tags": ["pistol","rifle","firearm","damage","ranged defense","credits"],
+      "relatedEntries": ["solanum-ranged-cover-camouflage","solanum-native-action-and-equipment-requirements"]
+    },
+    {
+      "id": "solanum-healing-items-catalogue",
+      "title": "Healing Item Catalogue",
+      "category": "Equipment",
+      "summary": "Healing items progress from scavenged first-aid kits healing 1d4 HP to Advanced Tech nanobot devices healing 5d6 HP with recovery bonuses.",
+      "body": ["The catalogue records direct healing dice and recovery-rate bonuses exactly as printed."],
+      "tables": [{"id":"solanum-healing-items","title":"Healing Items","columns":["Tier","Description","Credits","Effects","Defensive or Recovery Bonus"],"rows":[["Scavenged","Minimal first-aid kit","10","Heals 1d4 HP; basic bandages and antiseptic","None"],["Improvised","Homemade salves and bandages","25","Heals 1d6 HP","None"],["Modern","Standard medical kit with medication and sutures","100","Heals 2d6 HP","+1 recovery rate"],["Recovered","Military-grade medkit with automated treatment","200","Heals 3d6 HP","+2 recovery rate"],["Reclaimed","High-efficiency injector or regenerative kit","350","Heals 4d6 HP","+3 recovery rate"],["Advanced Tech","Nanobot healing device or medical drone","700","Heals 5d6 HP","+4 recovery rate"]]}],
+      "sourceStatus": "source-native-equipment-catalogue",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":148,"pageEnd":149,"chunkId":"solanum-healing-items:p148-149","notes":"Six healing-item technology tiers."}],
+      "tags": ["healing","medical kit","HP","recovery","nanobot"],
+      "relatedEntries": ["solanum-medic-minor-talents","solanum-medic-major-talents"]
+    },
+    {
+      "id": "solanum-armor-and-pack-catalogue",
+      "title": "Armor Locations and Pack Catalogue",
+      "category": "Equipment",
+      "summary": "Head, body, arm, hand, and foot armor plus packs each use six technology tiers with location-specific defense, utility, and environmental features.",
+      "body": [
+        "Armor is location-specific rather than a single unified suit value in this catalogue. Head, body, arms, hands, and feet each carry separate costs and defense bonuses.",
+        "Pack tiers increase carrying capacity and eventually add hydration, energy, climate control, and drone support."
+      ],
+      "tables": [
+        {"id":"solanum-head-armor","title":"Head Armor","columns":["Tier","Credits","Defense and Effects"],"rows":[["Scavenged","15","+1 head defense"],["Improvised","30","+2 head defense"],["Modern","100","+3 head defense"],["Recovered","200","+4 head defense; +1 communication"],["Reclaimed","350","+5 head defense; HUD and situational awareness"],["Advanced Tech","700","+6 head defense; advanced sensory enhancements"]]},
+        {"id":"solanum-body-armor","title":"Body Armor","columns":["Tier","Credits","Defense and Effects"],"rows":[["Scavenged","25","+2 body defense"],["Improvised","50","+3 body defense"],["Modern","150","+4 body defense"],["Recovered","300","+5 body defense"],["Reclaimed","500","+6 body defense; energy absorption"],["Advanced Tech","1,000","+7 body defense; active shields and environmental protection"]]},
+        {"id":"solanum-arm-armor","title":"Arm Armor","columns":["Tier","Credits","Defense and Effects"],"rows":[["Scavenged","10","+1 arm defense"],["Improvised","25","+2 arm defense"],["Modern","80","+3 arm defense"],["Recovered","150","+4 arm defense and improved mobility"],["Reclaimed","300","+5 arm defense and energy deflection"],["Advanced Tech","600","+6 arm defense, increased strength, and energy shielding"]]},
+        {"id":"solanum-hand-armor","title":"Hand Armor","columns":["Tier","Credits","Defense and Effects"],"rows":[["Scavenged","5","+1 hand defense"],["Improvised","15","+2 hand defense"],["Modern","50","+3 hand defense and improved grip"],["Recovered","100","+4 hand defense, grip, and sensor feedback"],["Reclaimed","200","+5 hand defense and temperature control"],["Advanced Tech","400","+6 hand defense, enhanced strength, and haptic sensing"]]},
+        {"id":"solanum-foot-armor","title":"Foot Armor","columns":["Tier","Credits","Defense and Effects"],"rows":[["Scavenged","15","+1 foot defense"],["Improvised","30","+2 foot defense"],["Modern","75","+3 foot defense"],["Recovered","150","+4 foot defense"],["Reclaimed","300","+5 foot defense, shock absorption, and adaptation"],["Advanced Tech","600","+6 foot defense, mobility, shock absorption, and environmental shielding"]]},
+        {"id":"solanum-packs","title":"Packs","columns":["Tier","Credits","Effects"],"rows":[["Scavenged","10","Basic carrying capacity"],["Improvised","25","Improved capacity and organization"],["Modern","60","High capacity and modular attachments"],["Recovered","120","Hydration system and modular compartments"],["Reclaimed","250","Energy supply and climate control"],["Advanced Tech","500","Maximum capacity, environmental adaptation, energy supply, and assistance drones"]]}
+      ],
+      "sourceStatus": "source-native-equipment-catalogue",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":149,"pageEnd":154,"chunkId":"solanum-armor-packs:p149-154","notes":"Six tiers each for head, body, arm, hand, foot armor and packs."}],
+      "tags": ["armor","head defense","body defense","arm defense","hand defense","foot defense","pack"],
+      "relatedEntries": ["solanum-ranged-cover-camouflage","solanum-cybernetic-replacement-framework"]
+    },
+    {
+      "id": "solanum-communications-and-resource-catalogue",
+      "title": "Communications and Sorted Resource Catalogue",
+      "category": "Equipment and Resources",
+      "summary": "Six communication tiers and six sorted-resource tiers define costs, reliability, security, repair value, and advanced technological utility.",
+      "body": ["This detailed equipment entry duplicates and expands the earlier crafting-resource reference so that the values are browsable from both equipment and crafting categories."],
+      "tables": [
+        {"id":"solanum-detailed-communications","title":"Communications","columns":["Tier","Credits","Effects"],"rows":[["Scavenged","20","Short range and prone to interference"],["Improvised","50","Improved range with signal problems"],["Modern","150","Reliable clear communication"],["Recovered","300","Encrypted extended-range communication"],["Reclaimed","500","Satellite link, GPS, encryption, and data transfer"],["Advanced Tech","1,000","High range, real-time translation, secure communication, and AI assistance"]]},
+        {"id":"solanum-detailed-resources","title":"Sorted Resource Items","columns":["Tier","Credits","Effects"],"rows":[["Scavenged","5","Minor repairs and crafting"],["Improvised","15","Improvised repairs and crafting"],["Modern","50","High-quality repair and modification"],["Recovered","100","Specialized high-quality repairs"],["Reclaimed","200","High-tech repair and crafting"],["Advanced Tech","400","Advanced upgrades and experimental projects"]]}
+      ],
+      "sourceStatus": "source-native-equipment-catalogue",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":154,"pageEnd":155,"chunkId":"solanum-communications-resources:p154-155","notes":"Detailed communication and sorted-resource tiers."}],
+      "tags": ["communications","radio","encryption","GPS","resources","repair","crafting"],
+      "relatedEntries": ["solanum-resource-and-communications-tiers","solanum-item-creation-system"]
+    },
+    {
+      "id": "solanum-trade-and-synthesis-salvage",
+      "title": "Trade Goods and Synthesis Salvage",
+      "category": "Equipment and Resources",
+      "summary": "General valuables and components reclaimed from Synthesis units use six tiers of credit value and practical or technological utility.",
+      "body": [
+        "Trade items range from sentimental pre-apocalypse valuables to advanced prototypes. Synthesis salvage ranges from scrap components to cutting-edge technology with integrated AI or unusual capabilities.",
+        "The catalogue records credit ranges and source descriptions but does not define market fluctuation or legal restrictions."
+      ],
+      "tables": [
+        {"id":"solanum-trade-goods","title":"Items of Trade Value","columns":["Tier","Credits","Description"],"rows":[["Scavenged","10-50","Common valuables, coins, or jewelry"],["Improvised","50-100","Preserved food, makeshift tools, and practical goods"],["Modern","200-500","Designer clothing, electronics, and high-quality goods"],["Recovered","500-1,000","Collectible pre-apocalypse artifacts"],["Reclaimed","1,000-2,000","Rare or historically significant items"],["Advanced Tech","2,000-5,000","Cutting-edge technology or prototypes"]]},
+        {"id":"solanum-synthesis-salvage","title":"Items Reclaimed from Enemy Synthesis Units","columns":["Tier","Credits","Effects"],"rows":[["Scavenged","20","Basic components for minor repair and modification"],["Improvised","50","Functional but unreliable parts and weapons"],["Modern","200","Advanced weaponry and reusable technology"],["Recovered","400","Superior high-tech equipment"],["Reclaimed","800","Rare components with unique capabilities"],["Advanced Tech","1,500","Top-tier technology, often with integrated AI or advanced functions"]]}
+      ],
+      "sourceStatus": "source-native-equipment-catalogue",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":155,"pageEnd":157,"chunkId":"solanum-trade-salvage:p155-157","notes":"Six trade-value tiers and six Synthesis salvage tiers."}],
+      "tags": ["trade goods","salvage","Synthesis","credits","artifacts","components"],
+      "relatedEntries": ["solanum-synthesis-enemy-role-roster","solanum-item-creation-system"]
+    }
+  ]
+}
