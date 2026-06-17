@@ -10,11 +10,7 @@ Unclear, missing, duplicated, or conflicting source rules remain visible for lat
 
 ## Source identity
 
-The authoritative source is:
-
-`SRC/Solanum-Umbra-TTRPG.pdf`
-
-Verified identity:
+The authoritative source is `SRC/Solanum-Umbra-TTRPG.pdf`.
 
 - Pages: 248
 - Bytes: 1,325,003
@@ -22,108 +18,43 @@ Verified identity:
 
 ## Current foundation import
 
-Six packs and twenty-five wiki entries are registered.
+Seven packs and twenty-nine wiki entries are registered.
 
 ### Pack 1: Character creation and sheet foundation
 
 Source pages 104–116.
 
-Includes:
-
-- Six attributes rolled on 1d20
-- Health = CON + STR
-- Armor = CON + DEX
-- Initiative = DEX + INT
-- SKILL = INT + WIS
-- Five origins
-- Six listed careers
-- Mechanic benefit and skill examples
-- Motivation table
-- Pre-Fall Human, Post-Fall Human, and Fae guidance
-- Cyborg ancestry variants
-- More-than-49% full-cyberization threshold
-- Six stages of data seizures and system errors
-- Native character-sheet field schema
+Includes six 1d20 attributes; Health, Armor, Initiative, and SKILL formulas; five origins; six listed careers; motivations; ancestry guidance; cyborg variants; the more-than-49% full-cyberization threshold; six data-seizure stages; and a native character-sheet field schema.
 
 ### Pack 2: Career talents and backgrounds
 
 Source pages 131–144.
 
-Includes:
+Includes Minor and Major Talent tables for Hunter, Mechanic, Medic, Scavenger, and Warlord; sixty total career-talent results; six optional background tables; the default -4 untrained penalty; and profession, talent, and minimum-attribute equipment requirements.
 
-- Hunter Minor and Major Talents
-- Mechanic Minor and Major Talents
-- Medic Minor and Major Talents
-- Scavenger Minor and Major Talents
-- Warlord Minor and Major Talents
-- Sixty total career-talent results
-- Six optional background-generation tables
-- General talent resolution
-- Default -4 penalty when no relevant talent or training applies
-- Equipment profession, talent, and minimum-attribute requirements
-
-Trader is listed as a career in character creation, but no Trader talent tables were found. The omission remains explicit.
+Trader is listed as a career but no Trader talent tables were found. The omission remains explicit.
 
 ### Pack 3: Crafting and resources
 
 Source pages 151–167.
 
-Includes:
+Includes communications and resource tiers, technology modifiers, resource availability, complexity and time, the five-result outcome ladder, mentor and tool support, crafter skill, workshop quality, material quality, and worked examples.
 
-- Communications technology tiers
-- Sorted resource tiers
-- Technology-level modifiers
-- Resource-availability modifiers
-- Complexity and crafting-time table
-- Five-result crafting outcome ladder
-- Mentor modifiers
-- Tool and component modifiers
-- Crafter skill modifiers
-- Workshop quality modifiers
-- Material quality modifiers
-- Worked Modern-weapon example
-
-The source calls several positive values “difficulty modifiers” while adding them to the d20 result. The wiki preserves this printed procedure and records the terminology conflict.
+The source calls several positive values “difficulty modifiers” while adding them to the d20 result. The printed procedure and contradiction are both preserved.
 
 ### Pack 4: Combat, cover, and vehicles
 
 Source pages 167–188.
 
-Includes:
+Includes initiative, one-action turns, twenty skill/action pairings, five-foot grid movement, zones of control, melee modes, ranged falloff, point-blank penalties, camouflage, cover values, ballistic and energy interactions, line of sight, large-entity cover, and the vehicle-combat framework.
 
-- Initiative roll and persistent turn order
-- One-action turns
-- Twenty native skill/action attribute pairings
-- Five-foot tactical grid
-- Standard 30-foot movement
-- Adjacent-square zones of control
-- Opposed Strength movement checks
-- Close Combat, Wrestling, and Unarmed Combat
-- Ranged technology and range falloff
-- Point-blank penalties
-- Camouflage modifiers
-- Cover Defensive Values
-- Ballistic and energy cover interactions
-- Line of sight and large-entity cover
-- Vehicle movement, cover, armor, mounted weapons, critical systems, and maintenance
-
-The source presents two overlapping melee calculation methods. Base Defensive Value, ties in zone-of-control checks, Advanced Tech range falloff, and tactical-to-catalog vehicle speed conversion remain unresolved.
+The source presents two overlapping melee methods. Base Defensive Value, zone-of-control ties, Advanced Tech falloff, and tactical-to-catalog vehicle speed conversion remain unresolved.
 
 ### Pack 5: Fay entity generator
 
 Source pages 228–232.
 
-Seven complete generation tables cover:
-
-1. Entity type
-2. Size
-3. Appearance
-4. Behavior
-5. Abilities and powers
-6. Weakness
-7. Alignment or motivation
-
-The generator remains narrative and native. Combat statistics are not invented.
+Seven complete generation tables cover type, size, appearance, behavior, powers, weakness, and motivation. The generator remains narrative; combat statistics are not invented.
 
 ### Pack 6: Synthesis enemy forces
 
@@ -136,54 +67,49 @@ Four force families are indexed:
 - Bio-Machine Juggernauts
 - The Anarchic Swarm
 
-Each family has nine recurring battlefield roles:
+Each family has Foot Soldier, Scout, Tank, Brute, Grenadier, Leader, Fortress, Abomination, and Infiltrator roles. The roster contains thirty-six named profiles with design, strength, and weakness. Numerical combat statistics are not invented where the source gives only qualitative descriptions.
 
-- Foot Soldier
-- Scout
-- Tank
-- Brute
-- Grenadier
-- Leader
-- Fortress
-- Abomination
-- Infiltrator
+### Pack 7: Cybernetics, biotics, and degradation
 
-The roster contains thirty-six named enemy profiles with faction, role, visual design, principal strength, and principal weakness. Numerical Health, Armor, attacks, damage, or encounter ratings are not invented where the source supplies only qualitative descriptions.
+Source pages 117–130.
+
+Includes:
+
+- Five cybernetic technology levels
+- Eight body-part cost rows across all five technology levels
+- Installation time, complexity, and risk
+- Prosthetic performance modifiers from -4 through +4
+- Five cybernetic body-percentage bands and cost multipliers
+- Five biotic power-unit requirements
+- Twelve named biotic enhancements and augmentations
+- Hardwired interface and isolated-terminal security doctrine
+- Full-cyborg social stigma and integration concerns
+- Twenty-one long-term degradation outcomes
+- Decade-based d100 degradation and recurring rolls every 1d6 years after forty years
+
+The printed cybernetic cost formula conflicts with its worked example. The source example gives an Elite upper arm a listed cost of 7,500 credits, a multiplier of 1, and a final cost of 7,500 credits. The wiki preserves that result and marks the formula unresolved rather than squaring the body-part price.
 
 ## Recorded source gaps
 
 The current receipt and validators preserve these issues:
 
-- Attribute values 9–11 are printed as providing “-1 to +1” without an exact mapping.
-- Trader is listed as a career but lacks Minor and Major Talent tables.
-- Crafting positive “difficulty” values are added to the success roll.
-- Melee combat is described through both direct raw-stat formulas and a primary-stat bonus method.
+- Attribute values 9–11 are printed as “-1 to +1” without an exact mapping.
+- Trader lacks Minor and Major Talent tables.
+- Positive crafting “difficulty” values are added to the success roll.
+- Melee combat has both direct formulas and a primary-stat bonus method.
 - Zone-of-control ties are undefined.
-- Base Defensive Value is not defined in the imported combat section.
-- Advanced Tech range falloff is printed ambiguously.
-- Tactical vehicle movement and catalog speeds use different units without a conversion rule.
+- Base Defensive Value is undefined in the imported combat section.
+- Advanced Tech range falloff is ambiguous.
+- Tactical vehicle movement and catalog speeds use different units without conversion.
+- The cybernetic cost formula conflicts with its worked example.
 
 ## Wiki interface
 
-The Solanum workspace now displays and searches:
-
-- Narrative entries
-- Ordered creation, generation, and procedure sequences
-- Native formulas
-- Reference tables
-- Character-sheet field groups
-- Worked examples
-- Enemy role profiles
-- Related-entry links
-- Page-level source references
+The Solanum workspace displays and searches narrative entries, ordered procedures, native formulas, reference tables, sheet fields, worked examples, enemy role profiles, related entries, and page-level sources. The generic renderer also displays the new cybernetic tables and degradation procedure without additional subsystem-specific code.
 
 ## Source inventory isolation
 
-Twelve additional files are present in `SRC/` but remain unassigned. Their exact paths are stored in:
-
-`source-page-references/unassigned-src-inventory.json`
-
-They are not treated as Solanum sources until their intended settings are reviewed.
+Twelve additional files are present in `SRC/` but remain unassigned. Their exact paths are stored in `source-page-references/unassigned-src-inventory.json`. They are not treated as Solanum sources until their intended settings are reviewed.
 
 ## Validation
 
@@ -193,7 +119,7 @@ The Pages workflow runs:
 - `node scripts/validate-solanum-umbra-native-wiki.mjs`
 - `node --check solanum-umbra-entry.js`
 
-The validators check the verified source binary, all six pack paths, twenty-five unique entries, native formulas, career and background counts, crafting and combat tables, explicit source ambiguities, seven entity-generator tables, four force families, and thirty-six enemy roles.
+The validators check the verified source binary, seven pack paths, twenty-nine unique entries, native formulas, career and background counts, crafting and combat tables, explicit source ambiguities, seven entity-generator tables, four force families, thirty-six enemy roles, five cybernetic tiers, eight body parts, twelve enhancements, and twenty-one degradation outcomes.
 
 ## Files
 
@@ -204,6 +130,7 @@ The validators check the verified source binary, all six pack paths, twenty-five
 - `data/solanum-umbra/wiki/native-rules-pass-4-combat-cover-vehicles.json`
 - `data/solanum-umbra/wiki/native-rules-pass-5-entity-generator.json`
 - `data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json`
+- `data/solanum-umbra/wiki/native-rules-pass-6-cybernetics-biotics-degradation.json`
 - `scripts/validate-solanum-umbra-native-wiki.mjs`
 - `solanum-umbra-entry.js`
 - `source-page-references/Solanum-Umbra-TTRPG.source.json`
