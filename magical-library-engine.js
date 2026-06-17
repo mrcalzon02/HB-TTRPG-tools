@@ -27,7 +27,7 @@
   }
 
   function shelvesFor(source) {
-    return source === 'malefic' ? ['malefic','malefic','dubious','neutral'] : ['luminous','neutral','neutral','dubious'];
+    return source === 'malefic' ? ['malefic','dubious','neutral'] : ['luminous','neutral','dubious'];
   }
 
   function formatIds(V, count, scale) {
@@ -44,9 +44,10 @@
     return randint(format.minPages, format.maxPages);
   }
 
-  function selectShelf(V, source, requestedShelf) {
+  function selectShelf(source, requestedShelf, index) {
     if (requestedShelf && requestedShelf !== 'all') return requestedShelf;
-    return pick(shelvesFor(source));
+    const sequence = shelvesFor(source);
+    return sequence[index] || pick(sequence);
   }
 
   function specificSubject(domain) {
@@ -104,7 +105,7 @@
     } while (usedTitles.has(title) && attempts < 30);
     if (usedTitles.has(title)) title = `${title} — Departmental Variant ${index + 1}`;
     usedTitles.add(title);
-    const shelfId = selectShelf(V, domain.source, controls.shelfId);
+    const shelfId = selectShelf(domain.source, controls.shelfId, index);
     const publisher = pick(V.PUBLISHERS[shelfId]);
     const pages = pageCount(format);
     return {
