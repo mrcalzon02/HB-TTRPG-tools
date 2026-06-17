@@ -82,6 +82,7 @@ jobs:
           node --check malefic-academic-entry.js
           node --check magical-library-vocabulary.js
           node --check magical-library-engine.js
+          node --check magical-library-profile-engine.js
           node --check magical-library-view.js
           node --check magical-library-text.js
           node --check magical-library-controller-core.js
