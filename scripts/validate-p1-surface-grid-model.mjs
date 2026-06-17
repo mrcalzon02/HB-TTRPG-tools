@@ -6,6 +6,7 @@ import vm from 'node:vm';
 
 const root = process.cwd();
 const source = await fs.readFile(path.join(root, 'kaysender-surface-grid-editor.js'), 'utf8');
+const styles = await fs.readFile(path.join(root, 'kaysender-surface-grid-editor.css'), 'utf8');
 const fixture = JSON.parse(await fs.readFile(path.join(root, 'data/kaysender/editors/fixtures/p1-floating-island-production-valid.json'), 'utf8'));
 const context = {
   window: {},
@@ -113,10 +114,20 @@ for (const marker of [
   "button.addEventListener('contextmenu'",
   "event.key === 'Delete' || event.key === 'Backspace'",
   'this.compatibility(cell, brush)',
-  'grid-template-columns'
+  'this.onSelectionChange?.(this.model.getCell(x, y))'
 ]) {
   if (!source.includes(marker)) throw new Error(`Surface grid view is missing reuse marker '${marker}'.`);
 }
 
+for (const marker of [
+  'grid-template-columns: repeat(var(--surface-grid-columns)',
+  '.kaysender-surface-cell.selected',
+  '.kaysender-surface-cell.incompatible',
+  '.kaysender-surface-cell.inactive',
+  '.surface-cell-coordinate'
+]) {
+  if (!styles.includes(marker)) throw new Error(`Surface grid styles are missing '${marker}'.`);
+}
+
 console.log('P1 surface-grid model validation passed.');
-console.log('Verified Island fixture loading, stable IDs, editing, erasure, reactivation, resize preservation, diagnostics, map export, brush compatibility, mouse controls, and keyboard controls.');
+console.log('Verified Island fixture loading, stable IDs, editing, erasure, reactivation, resize preservation, diagnostics, map export, brush compatibility, mouse controls, keyboard controls, and grid styling.');
