@@ -10,6 +10,7 @@ const html = await read('index.html');
 const registry = await read('kaysender-editor-adapter-registry.js');
 const builtins = await read('kaysender-editor-builtins.js');
 const mapping = await read('kaysender-editor-field-mapping.js');
+const migrations = await read('kaysender-editor-migrations.js');
 const kernelAdapters = await read('kaysender-editor-kernel-adapters.js');
 const lifecycle = await read('kaysender-editor-lifecycle.js');
 const repository = await read('kaysender-editor-repository.js');
@@ -35,6 +36,7 @@ const orderedScripts = [
   'kaysender-editor-field-mapping.js',
   'kaysender-editor-adapter-registry.js',
   'kaysender-editor-builtins.js',
+  'kaysender-editor-migrations.js',
   'kaysender-editor-kernel-adapters.js',
   'kaysender-editor-lifecycle.js',
   'kaysender-editor-repository.js',
@@ -56,7 +58,9 @@ for (const script of orderedScripts) {
 
 for (const phrase of [
   "'id', 'moduleId', 'label', 'profileType', 'panelId', 'formId'",
+  'optionalHooks',
   'normalizeParentImport',
+  'normalizeHooks',
   'fieldMap: Object.freeze',
   'flatFieldExclusions: Object.freeze',
   'register',
@@ -92,10 +96,25 @@ for (const phrase of [
 }
 
 for (const phrase of [
+  'function register(definition)',
+  'function migrate(dataInput, profileType',
+  'island-legacy-flat-to-1.0.0',
+  'removeLegacyIslandFields',
+  'legacy-flat',
+  'window.KaysenderEditorMigrations'
+]) {
+  if (!migrations.includes(phrase)) fail(`Shared editor migration registry is missing '${phrase}'.`);
+}
+
+for (const phrase of [
   'adapterForProfileType',
   'mapping.apply(form, profileInput, adapter.fieldMap)',
   'mapping.applyFlat(form, profileInput, adapter.flatFieldExclusions',
-  'applyProfileToForm'
+  'typeof adapter.applyProfileToForm',
+  'fallbackNormalizeImportedRecord',
+  'migrations.migrate(result.envelope.data',
+  'migrationLog: migration.log',
+  'normalizeImportedRecord'
 ]) {
   if (!kernelAdapters.includes(phrase)) fail(`Kernel adapter activation is missing '${phrase}'.`);
 }
@@ -185,4 +204,4 @@ for (const phrase of [
 }
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified adapter registry, field mapping, lifecycle, persistent record repository, generic production shell, record-library controls, error boundary, and browser chain.');
+console.log('Verified adapter registry and hooks, field mapping, migrations, lifecycle, persistent record repository, generic production shell, record-library controls, error boundary, and browser chain.');
