@@ -8,12 +8,13 @@ Files and receipts in this folder are source records, not automatically normaliz
 
 - **Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders** — 21-page fantasy planar-ecology manuscript. It now has a dedicated Elemental Realms wiki and three completed creature and ecology passes: provenance-labeled Hypertext d20 creatures, planar leech taxonomy, and full-stat host, prey, breeding-ground, and feeding-ground ecologies.
 - **Solanum Umbra TTRPG** — 248-page post-apocalyptic science-fantasy manuscript. Registered for a dedicated Solanum Umbra wiki and tool section separate from Kaysender and the fantasy corpus.
+- **Mad Martiken’s Menagerie of Magical Services** — 14-page Kaysender location manuscript. It is integrated under **Locations of Note** with the complete shop description, proprietor, illusionary reality bubble, service procedure, advertised prices, expanded 3.5 pricing, mutation triggers, six source mutation tables, treatment rules, and both source case studies.
 
 Exact filenames, byte counts, page counts, SHA-256 checksums, intended binary paths, integration states, and receipt paths are recorded in `source-manifest.json`.
 
 ## Source receipts and binary status
 
-The repository connector used for this intake can write UTF-8 source records but cannot transfer the uploaded binary PDF bytes directly into Git. The folder therefore contains canonical `.source.json` receipts for both manuscripts.
+The repository connector used for this intake can write UTF-8 source records but cannot transfer the uploaded binary PDF bytes directly into Git. The folder therefore contains canonical `.source.json` receipts for all registered manuscripts.
 
 Each receipt records:
 
@@ -28,10 +29,12 @@ Each receipt records:
 
 The receipts make the source identity auditable and prevent a nonexistent or corrupted PDF from being represented as complete. The raw PDFs remain pending a binary-capable repository transfer. When that transfer is performed, the resulting files must match the recorded byte counts and SHA-256 checksums before `binaryPresentInGit` is changed to `true`.
 
-`node scripts/validate-source-references.mjs` verifies the manifest, both canonical receipts, the dedicated Elemental Realms assignment and pass-three scope, and the intentionally empty Solanum Umbra wiki staging index.
+`node scripts/validate-source-references.mjs` verifies the manifest, all canonical receipts, the Elemental Realms assignment and pass-three scope, the intentionally empty Solanum Umbra staging index, and the Mad Martiken assignment to Kaysender Locations of Note.
 
 ## Integration policy
 
-The Elemental Realms wiki distinguishes detailed manuscript creatures, manuscript-adjacent conversions, index-derived extrapolations, and later canon expansions. Its completed passes record full combat statistics, diet, ecological function, parasite and symbiote classifications, host relationships, feeding grounds, breeding strategies, migration cycles, and predator pressure so planar amphibians, giant insects, arachnoids, spirits, predators, prey, leeches, and their hosts operate as connected food webs.
+The Elemental Realms wiki distinguishes detailed manuscript creatures, manuscript-adjacent conversions, index-derived extrapolations, and later canon expansions. Its completed passes record full combat statistics, diet, ecological function, parasite and symbiote classifications, host relationships, feeding grounds, breeding strategies, migration cycles, and predator pressure so planar amphibians, giant insects, arachnids, spirits, predators, prey, leeches, and their hosts operate as connected food webs.
+
+The Mad Martiken location preserves manuscript facts and marks conversion additions separately. Quoted 500 gp, 1,000 gp, and 5,000 gp service tiers remain intact, while permanent flight, venom, extra limbs, compatibility checks, stabilization, reversibility, and other 3.5-facing procedures are identified as expanded rules rather than source claims.
 
 Solanum Umbra still intentionally contains no integrated content packs. Its source will later be separated into chronology, cosmology, technology, magic, factions, settlements, hazards, bestiary, characters, equipment, rules, and adventure material before final cross-linking.
