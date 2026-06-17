@@ -164,10 +164,19 @@ if (production.includes('const editorSpecs =')) fail('Shared production runtime 
 for (const phrase of [
   'Saved Record Library',
   'saveActiveRecord',
+  'saveAsNewClone',
   'openSelectedRecord',
   'deleteSelectedRecord',
   'repairLibrary',
+  'mainline-editor-identity-id',
+  'mainline-editor-identity-schema',
+  'mainline-editor-identity-revision',
+  'Update Existing Record',
+  'Save as New Clone',
+  'Kernel.cloneEnvelope(source',
+  'original ${source.profileId} was not overwritten',
   'Repository.save(envelope)',
+  'Repository.save(clone)',
   'Repository.load(profileId)',
   'Repository.remove(profileId, true)',
   'Production()',
@@ -204,4 +213,4 @@ for (const phrase of [
 }
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified adapter registry and hooks, field mapping, migrations, lifecycle, persistent record repository, generic production shell, record-library controls, error boundary, and browser chain.');
+console.log('Verified adapter hooks, field mapping, migrations, lifecycle, persistent records, explicit identity-safe saving, generic production shell, error boundary, and browser chain.');
