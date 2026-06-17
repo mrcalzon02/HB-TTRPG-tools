@@ -5,6 +5,7 @@
     'elemental-realms-creatures-primary.js',
     'elemental-realms-creatures-secondary.js',
     'elemental-realms-creatures-expansions.js',
+    'elemental-realms-creatures-leeches.js',
     'elemental-realms-creatures-context.js'
   ];
 
@@ -71,16 +72,31 @@
     return `<span class="badge ${cls}">${esc(label)}</span>`;
   }
 
+  function leechClassification(entry) {
+    if (entry.catalogClass !== 'leech') return '';
+    return `<section class="elemental-creature-section elemental-leech-note">
+      <h4>Leech Catalogue Classification</h4>
+      <div class="elemental-stat-grid">
+        <div><strong>Feeding Mode</strong>${esc(entry.feedingMode)}</div>
+        <div><strong>Planar Affinity</strong>${esc(entry.planeAffinity)}</div>
+        <div><strong>Morphology</strong>${esc(entry.morphology)}</div>
+      </div>
+      <p><strong>Primary sustenance:</strong> ${esc(entry.sustenance)}</p>
+      <p><strong>Cataloguing dispute:</strong> ${esc(entry.catalogNotes)}</p>
+    </section>`;
+  }
+
   function creatureCard(entry,categoryName) {
     const pages = entry.sourcePages?.length ? `Source pages: ${entry.sourcePages.join(', ')}` : 'Added after manuscript intake';
     return `<details class="elemental-creature-card" data-name="${esc(entry.name.toLowerCase())}" data-category="${esc(entry.category)}" data-provenance="${esc(entry.provenance)}">
       <summary>
-        <div class="elemental-creature-meta">${provenanceBadge(entry)}<span class="badge confidence-${esc(entry.confidence)}">${esc(entry.confidence)} confidence</span><span class="badge">CR ${esc(entry.cr)}</span></div>
+        <div class="elemental-creature-meta">${provenanceBadge(entry)}<span class="badge confidence-${esc(entry.confidence)}">${esc(entry.confidence)} confidence</span><span class="badge">CR ${esc(entry.cr)}</span>${entry.catalogClass === 'leech' ? `<span class="badge">${esc(entry.feedingMode)} leech</span>` : ''}</div>
         <h3>${esc(entry.name)}</h3>
         <p>${esc(entry.summary)}</p>
       </summary>
       <div class="elemental-creature-body">
         <div class="elemental-source-note"><strong>${esc(categoryName)}</strong><br>${esc(pages)}<br>${esc(entry.sourceBasis)}</div>
+        ${leechClassification(entry)}
         <div><strong>${esc(entry.size)} ${esc(entry.type)}${entry.subtypes?.length ? ` (${entry.subtypes.map(esc).join(', ')})` : ''}</strong><br><span class="elemental-statline">${esc(entry.alignment)}</span></div>
         <div class="elemental-stat-grid">
           <div><strong>Initiative</strong>${esc(entry.initiative)}</div><div><strong>Senses</strong>${esc(entry.senses)}</div><div><strong>Languages</strong>${esc(entry.languages)}</div>
@@ -112,16 +128,18 @@
     section.setAttribute('aria-labelledby','elemental-realms-title');
     const sourceCount = wiki.entries.filter(entry => entry.provenance === 'manuscript-creature').length;
     const expansionCount = wiki.entries.filter(entry => entry.provenance === 'new-canon-expansion').length;
+    const leechCount = wiki.entries.filter(entry => entry.catalogClass === 'leech').length;
     section.innerHTML = `<div class="elemental-wiki-shell">
       <div class="hero-card no-print">
         <p class="eyebrow">Chronicles of the Elemental Realms</p>
         <h2 id="elemental-realms-title">Planar Swamp Wiki and Hypertext d20 Creature References</h2>
-        <p>A dedicated setting wiki for elemental swamps, amphibious beasts, guardians, spirits, arthropods, predators, and prey. Source lore and derived mechanics remain visibly separated.</p>
-        <div class="elemental-wiki-summary"><span class="badge status-active">${wiki.entries.length} creature references</span><span class="badge">${sourceCount} detailed manuscript creatures</span><span class="badge">${expansionCount} new canon expansions</span><span class="badge">${wiki.categories.length} categories</span></div>
+        <p>A dedicated setting wiki for elemental swamps, amphibious beasts, guardians, spirits, arthropods, predators, prey, parasites, and symbiotes. Source lore and derived mechanics remain visibly separated.</p>
+        <div class="elemental-wiki-summary"><span class="badge status-active">${wiki.entries.length} creature references</span><span class="badge">${sourceCount} detailed manuscript creatures</span><span class="badge">${expansionCount} new canon expansions</span><span class="badge">${leechCount} leech catalogue entries</span><span class="badge">${wiki.categories.length} categories</span></div>
       </div>
       <article class="elemental-ecology"><h3>${esc(wiki.ecologyOverview.title)}</h3>${wiki.ecologyOverview.body.map(paragraph => `<p>${esc(paragraph)}</p>`).join('')}</article>
+      ${wiki.leechTreatise ? `<article class="elemental-ecology elemental-leech-treatise"><h3>${esc(wiki.leechTreatise.title)}</h3>${wiki.leechTreatise.body.map(paragraph => `<p>${esc(paragraph)}</p>`).join('')}</article>` : ''}
       <div class="elemental-wiki-toolbar no-print">
-        <label>Search creatures<input id="elemental-search" type="search" placeholder="frog, magnetic, astral, insect…"></label>
+        <label>Search creatures<input id="elemental-search" type="search" placeholder="frog, magnetic, astral, leech, symbiote…"></label>
         <label>Wiki category<select id="elemental-category"><option value="all">All categories</option>${wiki.categories.map(category => `<option value="${esc(category.id)}">${esc(category.name)}</option>`).join('')}</select></label>
         <label>Provenance<select id="elemental-provenance"><option value="all">All provenance</option><option value="manuscript-creature">Manuscript creatures</option><option value="manuscript-adjacent-conversion">Manuscript-adjacent conversions</option><option value="index-derived-conversion">Index-derived conversions</option><option value="new-canon-expansion">New canon expansions</option></select></label>
       </div>
@@ -140,7 +158,7 @@
     function render() {
       const query = search.value.trim().toLowerCase();
       const filtered = wiki.entries.filter(entry => {
-        const haystack = [entry.name,entry.summary,entry.category,entry.diet,entry.ecology,...(entry.aliases||[])].join(' ').toLowerCase();
+        const haystack = [entry.name,entry.summary,entry.category,entry.diet,entry.ecology,entry.feedingMode,entry.planeAffinity,entry.sustenance,entry.catalogNotes,...(entry.aliases||[])].filter(Boolean).join(' ').toLowerCase();
         return (!query || haystack.includes(query)) && (category.value === 'all' || entry.category === category.value) && (provenance.value === 'all' || entry.provenance === provenance.value);
       }).sort((a,b) => (categoryNames[a.category]||'').localeCompare(categoryNames[b.category]||'') || a.name.localeCompare(b.name));
       count.textContent = `${filtered.length} of ${wiki.entries.length} creature references shown.`;
@@ -156,7 +174,7 @@
       const card = document.createElement('article');
       card.className = 'menu-card';
       card.id = 'open-elemental-realms-card';
-      card.innerHTML = `<h3>Elemental Realms Wiki</h3><p>${wiki.entries.length} Hypertext d20 creature references across planar swamps and their food webs.</p><button class="link-button" type="button">Open Elemental Realms</button>`;
+      card.innerHTML = `<h3>Elemental Realms Wiki</h3><p>${wiki.entries.length} Hypertext d20 creature references across planar swamps and their food webs, including ${leechCount} leech catalogue entries.</p><button class="link-button" type="button">Open Elemental Realms</button>`;
       card.querySelector('button').addEventListener('click',() => switchView(button));
       toolMenu.appendChild(card);
     }
