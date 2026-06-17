@@ -146,14 +146,33 @@ for (const phrase of [
 }
 if (productionScript.includes('Kernel.clearDraft(spec.id, true)')) fail('New Blank Record must not explicitly delete the recovery draft.');
 
+const smokeScript = await readText('kaysender-editor-live-smoke.js');
+for (const phrase of [
+  'Run P0 Live Smoke Test',
+  'launchIsland',
+  'launchSettlement',
+  'launchAirship',
+  'kaysender-editor-panel',
+  'kaysender-settlement-editor-panel',
+  'kaysender-airship-editor-panel',
+  'settlement-island-import',
+  'airship-island-import',
+  'airship-settlement-import',
+  'inheritanceReference',
+  'hb-ttrpg-tools:p0-live-smoke:last-pass'
+]) {
+  if (!smokeScript.includes(phrase)) fail(`Live browser smoke harness is missing '${phrase}'.`);
+}
+
 const html = await readText('index.html');
 const kernelPosition = html.indexOf('<script src="kaysender-editor-kernel.js"></script>');
 const islandPosition = html.indexOf('<script src="kaysender-editors.js"></script>');
 const settlementPosition = html.indexOf('<script src="kaysender-settlement-editor.js"></script>');
 const airshipPosition = html.indexOf('<script src="kaysender-airship-editor.js"></script>');
 const productionPosition = html.indexOf('<script src="kaysender-editor-production.js"></script>');
-if ([kernelPosition, islandPosition, settlementPosition, airshipPosition, productionPosition].some(position => position < 0)) fail('Main page does not load the complete P0 editor runtime.');
-if (!(kernelPosition < islandPosition && islandPosition < settlementPosition && settlementPosition < airshipPosition && airshipPosition < productionPosition)) fail('P0 editor scripts are loaded in the wrong order.');
+const smokePosition = html.indexOf('<script src="kaysender-editor-live-smoke.js"></script>');
+if ([kernelPosition, islandPosition, settlementPosition, airshipPosition, productionPosition, smokePosition].some(position => position < 0)) fail('Main page does not load the complete P0 editor runtime.');
+if (!(kernelPosition < islandPosition && islandPosition < settlementPosition && settlementPosition < airshipPosition && airshipPosition < productionPosition && productionPosition < smokePosition)) fail('P0 editor scripts are loaded in the wrong order.');
 
 console.log('Shared editor kernel validation passed.');
-console.log('Verified canonical envelopes, stable and change-sensitive revisions, volatile timestamp handling, deduplicated migrations, explicit-only draft deletion, nested and flat island adapters, wrong-profile diagnostics, malformed JSON diagnostics, shared actions, all three alpha editor panels, and main-page script ordering.');
+console.log('Verified canonical envelopes, stable and change-sensitive revisions, volatile timestamp handling, deduplicated migrations, explicit-only draft deletion, nested and flat island adapters, wrong-profile diagnostics, malformed JSON diagnostics, shared actions, all three alpha editor panels, the live browser smoke harness, and main-page script ordering.');
