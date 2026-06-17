@@ -57,10 +57,14 @@ for (const phrase of [
   'launchAirship',
   'sourceIslandEnvelope',
   'sourceSettlementEnvelope',
-  'hb-ttrpg-tools:p0-live-smoke:last-pass'
+  'hb-ttrpg-tools:p0-live-smoke:last-pass',
+  'Copy Verification Receipt',
+  'Download Verification Receipt',
+  'p0-live-smoke-receipt',
+  'getKaysenderEditorSmokeReceipt'
 ]) {
   if (!smoke.includes(phrase)) fail(`P0 browser verification harness is missing '${phrase}'.`);
 }
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified application anchors, editor script order, visible error boundary, and browser verification chain.');
+console.log('Verified application anchors, editor script order, visible error boundary, browser verification chain, and receipt export controls.');
