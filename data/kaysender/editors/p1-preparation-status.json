@@ -15,7 +15,19 @@
     "validProductionFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-valid.json",
     "fracturedIslandEdgeFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-edge-fractured.json",
     "semanticFailureCases": "data/kaysender/editors/fixtures/p1-floating-island-reference-cases.json",
-    "productionContract": "docs/p1-floating-island-production-contract.md"
+    "productionContract": "docs/p1-floating-island-production-contract.md",
+    "surfaceGridReuseContract": "data/kaysender/editors/p1-surface-grid-reuse-contract.json",
+    "surfaceGridReuseGuide": "docs/p1-island-surface-grid-reuse.md",
+    "surfaceGridModelAndView": "kaysender-surface-grid-editor.js",
+    "surfaceGridStyles": "kaysender-surface-grid-editor.css",
+    "surfaceGridValidator": "scripts/validate-p1-surface-grid-model.mjs"
+  },
+  "sourceReuse": {
+    "repository": "mrcalzon02/Fleet-designer",
+    "component": "src/components/VehicleAssemblyPanel.jsx",
+    "model": "src/game/vehicleSlotSystem.js",
+    "styles": "src/vehicleSlots.css",
+    "reuseMode": "framework-free port of the grid state and interaction model; React is not imported into HB-TTRPG-tools"
   },
   "profileContract": {
     "profileType": "floating-island-foundation-profile",
@@ -25,6 +37,12 @@
   },
   "preparedCapabilities": [
     "deliberately editable map cells with stable IDs",
+    "Fleet module-grid interaction reuse for Island surface mapping",
+    "separate framework-free surface-grid model and browser view",
+    "left-click brush placement and right-click erasure",
+    "keyboard placement erasure and arrow-key navigation",
+    "brush compatibility filtering",
+    "grid resizing with in-bounds preservation and removed-cell reporting",
     "stable site hazard resource water fault landing habitat settlement-slot and route-node IDs",
     "quantitative water food resource settlement and route-capacity ledgers",
     "altitude and drift timelines",
@@ -48,14 +66,17 @@
     "timeline range and overlap validation",
     "route default-node integrity",
     "player and GM visibility conflict prevention",
-    "GM-secret leakage prevention"
+    "GM-secret leakage prevention",
+    "surface-cell stable identity through edit erase and reactivation",
+    "surface-grid export without view-only state"
   ],
   "activationBlockers": [
     "P0 live-browser gate has not been observed passing",
     "P0 has not been promoted to complete",
     "P1 has not been changed to required-next",
     "Island 2.0.0 to 3.0.0 migration is documented but not registered",
+    "Surface-grid files are not loaded by index.html or the active Island adapter",
     "No P1 runtime panels or adapter version changes are permitted yet"
   ],
-  "activationRule": "After P0 passes and the roadmap promotes P1, register the Island 2.0.0 to 3.0.0 migration, change the Island adapter current schema to 3.0.0, implement production panels through the shared shell, and validate against the prepared fixtures."
+  "activationRule": "After P0 passes and the roadmap promotes P1, register the Island 2.0.0 to 3.0.0 migration, change the Island adapter current schema to 3.0.0, load the prepared surface-grid model and styles through the Island adapter, bind grid changes to the shared lifecycle, implement the production panels, and validate against the prepared fixtures."
 }
