@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "1.0.0",
-  "storage": "lossless-base64-source-bundles",
-  "materializeCommand": "node scripts/materialize-source-pdfs.mjs",
+  "schemaVersion": "1.1.0",
+  "storage": "canonical-source-receipts",
+  "binaryTransferStatus": "pending-binary-capable-repository-transfer",
   "documents": [
     {
       "id": "chronicles-elemental-realms-swamps-toads-frogs-salamanders",
@@ -11,12 +11,11 @@
       "pages": 21,
       "bytes": 333084,
       "sha256": "3fe1b910779a2b799305b52fb7005f72e18392d62198824708f1e6a48e434f0f",
-      "destination": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
-      "integrationStatus": "source-retained-integration-deferred",
-      "wikiDestination": "general fantasy wiki corpus",
-      "parts": [
-        "source-page-references/encoded/chronicles-elemental-realms-swamps-toads-frogs-salamanders.pdf.b64.part01"
-      ]
+      "receipt": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json",
+      "intendedBinaryPath": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
+      "binaryPresentInGit": false,
+      "integrationStatus": "source-registered-integration-deferred",
+      "wikiDestination": "general fantasy wiki corpus"
     },
     {
       "id": "solanum-umbra-ttrpg",
@@ -26,15 +25,11 @@
       "pages": 248,
       "bytes": 1325003,
       "sha256": "2f1d5d0df591b4d637e4845645370946568cb6aecc786a4bbef5411e4e82f9ff",
-      "destination": "source-page-references/Solanum-Umbra-TTRPG.pdf",
+      "receipt": "source-page-references/Solanum-Umbra-TTRPG.source.json",
+      "intendedBinaryPath": "source-page-references/Solanum-Umbra-TTRPG.pdf",
+      "binaryPresentInGit": false,
       "integrationStatus": "dedicated-wiki-staged-multi-pass-integration-deferred",
-      "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json",
-      "parts": [
-        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part01",
-        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part02",
-        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part03",
-        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part04"
-      ]
+      "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json"
     }
   ]
 }
