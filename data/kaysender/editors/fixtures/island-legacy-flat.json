@@ -1,0 +1,27 @@
+{
+  "name": "Old Lantern Isle",
+  "profileType": "floating-island-foundation-profile",
+  "settlementFootprint": "minor settled skyland",
+  "waterProfile": "rain capture and small springs",
+  "foodProfile": "tight but stable",
+  "routeAccess": "major established route",
+  "factionPressure": "Surveyor's Guild office",
+  "threatClock": "storm season will close the route",
+  "primaryResource": "freshwater",
+  "altitudeBand": "middle altitude",
+  "lengthKm": 4.2,
+  "widthKm": 2.6,
+  "derivedScores": {
+    "habitability": 13,
+    "collapseRisk": 4,
+    "routeValue": 15,
+    "conflictPressure": 6
+  },
+  "outputs": {
+    "wikiDraft": {
+      "id": "old-lantern-isle",
+      "title": "Old Lantern Isle",
+      "category": "Floating Islands"
+    }
+  }
+}
