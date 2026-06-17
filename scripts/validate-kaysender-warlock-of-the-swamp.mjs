@@ -91,7 +91,7 @@ for (const requiredName of ["Swarmkeeper's Hand","Leechkeeper's Mercy","Brood Ga
 }
 
 const ladyEntry = entries.get('lady-of-the-swamp');
-const ladyText = [ladyEntry.summary,...(ladyEntry.body || []),...(ladyEntry.sections || []).flatMap(section => section.body || [])].join(' ');
+const ladyText = [ladyEntry.summary,...(ladyEntry.body || []),...(ladyEntry.sections || []).flatMap(section => [section.heading,...(section.body || [])])].join(' ');
 for (const phrase of ['outsider','clerics','ongoing relationship','bargains with resident gods','Divine bargaining dreams']) {
   if (!ladyText.toLowerCase().includes(phrase.toLowerCase())) throw new Error(`Lady of the Swamp lore is missing '${phrase}'.`);
 }
@@ -102,7 +102,7 @@ for (const artifact of artifactEntry.compromiseArtifacts) if (!artifact.name || 
 for (const requiredArtifact of ['Sombrero of Tuesdays','Seven-Course Chalupa Reliquary','Spleen Warranty Tag']) {
   if (!artifactEntry.compromiseArtifacts.some(artifact => artifact.name === requiredArtifact)) throw new Error(`Missing compromise artifact '${requiredArtifact}'.`);
 }
-const artifactText = [artifactEntry.summary,...(artifactEntry.body || []),...(artifactEntry.sections || []).flatMap(section => section.body || []),...artifactEntry.compromiseArtifacts.flatMap(artifact => [artifact.name,artifact.effect])].join(' ');
+const artifactText = [artifactEntry.summary,...(artifactEntry.body || []),...(artifactEntry.sections || []).flatMap(section => [section.heading,...(section.body || [])]),...artifactEntry.compromiseArtifacts.flatMap(artifact => [artifact.name,artifact.effect])].join(' ');
 for (const phrase of ['Every Thursday','war priest of Torm','seven-course assortment','total ego dissolution','sudden progenation','cranial removal']) {
   if (!artifactText.includes(phrase)) throw new Error(`Divine-overlap record is missing '${phrase}'.`);
 }
