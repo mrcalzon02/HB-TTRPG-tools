@@ -1,0 +1,517 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/kaysender/schemas/floating-island-production-profile.schema.json",
+  "title": "Kaysender Floating Island Production Profile",
+  "description": "Draft P1 domain contract for a deliberately editable floating island. This schema is preparatory only until P0 clears its runtime gate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileType",
+    "name",
+    "classification",
+    "geometry",
+    "composition",
+    "map",
+    "hydrology",
+    "foodCapacity",
+    "resources",
+    "motion",
+    "stability",
+    "approaches",
+    "sites",
+    "hazards",
+    "ecology",
+    "settlementCapacity",
+    "routeNodeExport",
+    "derived",
+    "visibility",
+    "outputs"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "3.0.0" },
+    "profileType": { "const": "floating-island-foundation-profile" },
+    "name": { "type": "string", "minLength": 1 },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sizeClass", "shapeProfile", "currentUse", "sovereignty", "surveyStatus"],
+      "properties": {
+        "sizeClass": { "type": "string", "minLength": 1 },
+        "shapeProfile": { "type": "string", "minLength": 1 },
+        "currentUse": { "type": "string", "minLength": 1 },
+        "sovereignty": { "type": "string", "minLength": 1 },
+        "surveyStatus": { "enum": ["unmapped", "partial", "operational", "survey-grade"] }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lengthKm", "widthKm", "meanThicknessM", "planAreaKm2", "usableAreaKm2",
+        "flatAreaKm2", "arableAreaKm2", "grossVolumeKm3", "estimatedMassMillionTons",
+        "coordinateSystem", "mapScaleKmPerCell"
+      ],
+      "properties": {
+        "lengthKm": { "type": "number", "exclusiveMinimum": 0 },
+        "widthKm": { "type": "number", "exclusiveMinimum": 0 },
+        "meanThicknessM": { "type": "number", "exclusiveMinimum": 0 },
+        "planAreaKm2": { "type": "number", "exclusiveMinimum": 0 },
+        "usableAreaKm2": { "type": "number", "minimum": 0 },
+        "flatAreaKm2": { "type": "number", "minimum": 0 },
+        "arableAreaKm2": { "type": "number", "minimum": 0 },
+        "grossVolumeKm3": { "type": "number", "minimum": 0 },
+        "estimatedMassMillionTons": { "type": "number", "minimum": 0 },
+        "coordinateSystem": { "const": "local-grid-v1" },
+        "mapScaleKmPerCell": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinaryRockPercent", "floatstonePercent", "soilSedimentPercent", "cavernVoidPercent"],
+      "properties": {
+        "ordinaryRockPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "floatstonePercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "soilSedimentPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "cavernVoidPercent": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns", "rows", "activeCellIds", "cells"],
+      "properties": {
+        "columns": { "type": "integer", "minimum": 1 },
+        "rows": { "type": "integer", "minimum": 1 },
+        "activeCellIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/cellId" }
+        },
+        "cells": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/mapCell" }
+        }
+      }
+    },
+    "hydrology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annualRainfallMm", "sources", "reservoirs", "annualRenewableM3",
+        "dailySustainableLiters", "storedWaterM3", "reserveDaysAtCurrentUse", "systemLossPercent"
+      ],
+      "properties": {
+        "annualRainfallMm": { "type": "number", "minimum": 0 },
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/waterSource" } },
+        "reservoirs": { "type": "array", "items": { "$ref": "#/$defs/reservoir" } },
+        "annualRenewableM3": { "type": "number", "minimum": 0 },
+        "dailySustainableLiters": { "type": "number", "minimum": 0 },
+        "storedWaterM3": { "type": "number", "minimum": 0 },
+        "reserveDaysAtCurrentUse": { "type": "number", "minimum": 0 },
+        "systemLossPercent": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "foodCapacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arableAreaKm2", "pastureAreaKm2", "forageAreaKm2", "annualFoodUnits",
+        "sustainablePopulation", "emergencyPopulation90Days", "importDependencyPercent"
+      ],
+      "properties": {
+        "arableAreaKm2": { "type": "number", "minimum": 0 },
+        "pastureAreaKm2": { "type": "number", "minimum": 0 },
+        "forageAreaKm2": { "type": "number", "minimum": 0 },
+        "annualFoodUnits": { "type": "number", "minimum": 0 },
+        "sustainablePopulation": { "type": "integer", "minimum": 0 },
+        "emergencyPopulation90Days": { "type": "integer", "minimum": 0 },
+        "importDependencyPercent": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodes", "annualSafeExtractionTons", "currentAnnualExtractionTons"],
+      "properties": {
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/resourceNode" } },
+        "annualSafeExtractionTons": { "type": "number", "minimum": 0 },
+        "currentAnnualExtractionTons": { "type": "number", "minimum": 0 }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["meanAltitudeM", "altitudeTimeline", "driftTimeline", "forecastHorizonDays"],
+      "properties": {
+        "meanAltitudeM": { "type": "number" },
+        "altitudeTimeline": { "type": "array", "items": { "$ref": "#/$defs/altitudeSegment" } },
+        "driftTimeline": { "type": "array", "items": { "$ref": "#/$defs/driftSegment" } },
+        "forecastHorizonDays": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "stability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "structuralIntegrity", "overallRisk", "annualSurfaceLossPercent", "faultZones",
+        "fractureEvents", "emergencyThreshold"
+      ],
+      "properties": {
+        "structuralIntegrity": { "type": "string", "minLength": 1 },
+        "overallRisk": { "enum": ["minimal", "low", "guarded", "high", "critical"] },
+        "annualSurfaceLossPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "faultZones": { "type": "array", "items": { "$ref": "#/$defs/faultZone" } },
+        "fractureEvents": { "type": "array", "items": { "$ref": "#/$defs/fractureEvent" } },
+        "emergencyThreshold": { "type": "string", "minLength": 1 }
+      }
+    },
+    "approaches": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["landingZones", "approachCorridors"],
+      "properties": {
+        "landingZones": { "type": "array", "items": { "$ref": "#/$defs/landingZone" } },
+        "approachCorridors": { "type": "array", "items": { "$ref": "#/$defs/approachCorridor" } }
+      }
+    },
+    "sites": { "type": "array", "items": { "$ref": "#/$defs/site" } },
+    "hazards": { "type": "array", "items": { "$ref": "#/$defs/hazard" } },
+    "ecology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["habitats", "speciesSlots", "carryingCapacityIndex", "currentPressure"],
+      "properties": {
+        "habitats": { "type": "array", "items": { "$ref": "#/$defs/habitat" } },
+        "speciesSlots": { "type": "array", "items": { "$ref": "#/$defs/speciesSlot" } },
+        "carryingCapacityIndex": { "type": "number", "minimum": 0 },
+        "currentPressure": { "enum": ["recovering", "stable", "strained", "degrading", "collapse"] }
+      }
+    },
+    "settlementCapacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "waterLimitedPopulation", "foodLimitedPopulation", "landLimitedPopulation",
+        "sustainablePopulation", "emergencyPopulation", "settlementSlots"
+      ],
+      "properties": {
+        "waterLimitedPopulation": { "type": "integer", "minimum": 0 },
+        "foodLimitedPopulation": { "type": "integer", "minimum": 0 },
+        "landLimitedPopulation": { "type": "integer", "minimum": 0 },
+        "sustainablePopulation": { "type": "integer", "minimum": 0 },
+        "emergencyPopulation": { "type": "integer", "minimum": 0 },
+        "settlementSlots": { "type": "array", "items": { "$ref": "#/$defs/settlementSlot" } }
+      }
+    },
+    "routeNodeExport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodes", "defaultNodeId", "routeCapability"],
+      "properties": {
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/routeNode" } },
+        "defaultNodeId": { "$ref": "#/$defs/routeNodeId" },
+        "routeCapability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maximumDailyArrivals", "resupplyWater", "resupplyFood", "repairCapability", "chartConfidence"],
+          "properties": {
+            "maximumDailyArrivals": { "type": "integer", "minimum": 0 },
+            "resupplyWater": { "type": "boolean" },
+            "resupplyFood": { "type": "boolean" },
+            "repairCapability": { "enum": ["none", "emergency", "routine", "major"] },
+            "chartConfidence": { "enum": ["rumor", "poor", "usable", "reliable", "survey-grade"] }
+          }
+        }
+      }
+    },
+    "derived": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "geometryReconciles", "compositionReconciles", "mapAreaReconciles",
+        "waterCapacityReconciles", "foodCapacityReconciles", "settlementCapacityReconciles",
+        "brokenReferenceIds", "warnings"
+      ],
+      "properties": {
+        "geometryReconciles": { "type": "boolean" },
+        "compositionReconciles": { "type": "boolean" },
+        "mapAreaReconciles": { "type": "boolean" },
+        "waterCapacityReconciles": { "type": "boolean" },
+        "foodCapacityReconciles": { "type": "boolean" },
+        "settlementCapacityReconciles": { "type": "boolean" },
+        "brokenReferenceIds": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "visibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["playerKnownSiteIds", "gmOnlySiteIds", "playerKnownHazardIds", "gmOnlyHazardIds", "publicFacts", "gmSecrets"],
+      "properties": {
+        "playerKnownSiteIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/siteId" } },
+        "gmOnlySiteIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/siteId" } },
+        "playerKnownHazardIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/hazardId" } },
+        "gmOnlyHazardIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/hazardId" } },
+        "publicFacts": { "type": "array", "items": { "type": "string" } },
+        "gmSecrets": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["playerSafeSummary", "gmBrief", "wikiDraft", "downstreamExports"],
+      "properties": {
+        "playerSafeSummary": { "type": "string", "minLength": 1 },
+        "gmBrief": { "type": "string", "minLength": 1 },
+        "wikiDraft": { "type": "object" },
+        "downstreamExports": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["population", "settlement", "ecology", "route", "market", "faction", "crisis", "encounter"],
+          "properties": {
+            "population": { "type": "object" },
+            "settlement": { "type": "object" },
+            "ecology": { "type": "object" },
+            "route": { "type": "object" },
+            "market": { "type": "object" },
+            "faction": { "type": "object" },
+            "crisis": { "type": "object" },
+            "encounter": { "type": "object" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "cellId": { "type": "string", "pattern": "^cell-[a-z0-9][a-z0-9-]*$" },
+    "siteId": { "type": "string", "pattern": "^site-[a-z0-9][a-z0-9-]*$" },
+    "hazardId": { "type": "string", "pattern": "^hazard-[a-z0-9][a-z0-9-]*$" },
+    "routeNodeId": { "type": "string", "pattern": "^route-node-[a-z0-9][a-z0-9-]*$" },
+    "mapCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "x", "y", "areaKm2", "terrainType", "elevationM", "slopeClass", "usablePercent", "arablePercent", "siteIds", "resourceNodeIds", "hazardIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/cellId" },
+        "x": { "type": "integer", "minimum": 0 },
+        "y": { "type": "integer", "minimum": 0 },
+        "areaKm2": { "type": "number", "minimum": 0 },
+        "terrainType": { "type": "string", "minLength": 1 },
+        "elevationM": { "type": "number" },
+        "slopeClass": { "type": "string", "minLength": 1 },
+        "usablePercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "arablePercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "waterCatchmentId": { "type": ["string", "null"] },
+        "siteIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/siteId" } },
+        "resourceNodeIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^resource-[a-z0-9][a-z0-9-]*$" } },
+        "hazardIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/hazardId" } }
+      }
+    },
+    "waterSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mapCellId", "type", "potable", "averageDailyLiters", "seasonality", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^water-[a-z0-9][a-z0-9-]*$" },
+        "mapCellId": { "$ref": "#/$defs/cellId" },
+        "type": { "type": "string", "minLength": 1 },
+        "potable": { "type": "boolean" },
+        "averageDailyLiters": { "type": "number", "minimum": 0 },
+        "seasonality": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["active", "restricted", "contaminated", "dry", "unknown"] }
+      }
+    },
+    "reservoir": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mapCellId", "capacityM3", "currentVolumeM3", "potable", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^reservoir-[a-z0-9][a-z0-9-]*$" },
+        "mapCellId": { "$ref": "#/$defs/cellId" },
+        "capacityM3": { "type": "number", "minimum": 0 },
+        "currentVolumeM3": { "type": "number", "minimum": 0 },
+        "potable": { "type": "boolean" },
+        "status": { "enum": ["operational", "damaged", "contaminated", "offline"] }
+      }
+    },
+    "resourceNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mapCellId", "resourceType", "quality", "estimatedReserveTons", "annualSafeExtractionTons", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^resource-[a-z0-9][a-z0-9-]*$" },
+        "mapCellId": { "$ref": "#/$defs/cellId" },
+        "resourceType": { "type": "string", "minLength": 1 },
+        "quality": { "type": "string", "minLength": 1 },
+        "estimatedReserveTons": { "type": "number", "minimum": 0 },
+        "annualSafeExtractionTons": { "type": "number", "minimum": 0 },
+        "status": { "enum": ["untapped", "surveyed", "active", "depleted", "sealed", "contested"] }
+      }
+    },
+    "altitudeSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "startDay", "endDay", "minimumAltitudeM", "maximumAltitudeM", "confidence"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^altitude-segment-[a-z0-9][a-z0-9-]*$" },
+        "startDay": { "type": "integer", "minimum": 0 },
+        "endDay": { "type": "integer", "minimum": 1 },
+        "minimumAltitudeM": { "type": "number" },
+        "maximumAltitudeM": { "type": "number" },
+        "confidence": { "enum": ["unknown", "low", "moderate", "high", "survey-grade"] }
+      }
+    },
+    "driftSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "startDay", "endDay", "bearingDegrees", "averageKmPerDay", "confidence"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^drift-segment-[a-z0-9][a-z0-9-]*$" },
+        "startDay": { "type": "integer", "minimum": 0 },
+        "endDay": { "type": "integer", "minimum": 1 },
+        "bearingDegrees": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "averageKmPerDay": { "type": "number", "minimum": 0 },
+        "confidence": { "enum": ["unknown", "low", "moderate", "high", "survey-grade"] }
+      }
+    },
+    "faultZone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "cellIds", "risk", "status", "trigger", "estimatedLossKm2"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^fault-[a-z0-9][a-z0-9-]*$" },
+        "cellIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/cellId" } },
+        "risk": { "enum": ["minimal", "low", "guarded", "high", "critical"] },
+        "status": { "enum": ["dormant", "monitored", "active", "stabilized", "failed"] },
+        "trigger": { "type": "string", "minLength": 1 },
+        "estimatedLossKm2": { "type": "number", "minimum": 0 }
+      }
+    },
+    "fractureEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "day", "faultZoneId", "severity", "surfaceLossKm2", "notes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^fracture-event-[a-z0-9][a-z0-9-]*$" },
+        "day": { "type": "integer", "minimum": 0 },
+        "faultZoneId": { "type": "string", "pattern": "^fault-[a-z0-9][a-z0-9-]*$" },
+        "severity": { "enum": ["minor", "moderate", "major", "catastrophic"] },
+        "surfaceLossKm2": { "type": "number", "minimum": 0 },
+        "notes": { "type": "string" }
+      }
+    },
+    "landingZone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "mapCellId", "type", "maximumVesselClass", "dailyCapacity", "weatherLimit", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^landing-[a-z0-9][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "mapCellId": { "$ref": "#/$defs/cellId" },
+        "type": { "enum": ["open-field", "cliff-dock", "tower-mooring", "underside-dock", "moving-rendezvous"] },
+        "maximumVesselClass": { "type": "string", "minLength": 1 },
+        "dailyCapacity": { "type": "integer", "minimum": 0 },
+        "weatherLimit": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["operational", "restricted", "damaged", "closed", "secret"] }
+      }
+    },
+    "approachCorridor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "landingZoneId", "bearingDegrees", "minimumAltitudeM", "maximumAltitudeM", "hazardIds", "pilotRequirement"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^approach-[a-z0-9][a-z0-9-]*$" },
+        "landingZoneId": { "type": "string", "pattern": "^landing-[a-z0-9][a-z0-9-]*$" },
+        "bearingDegrees": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "minimumAltitudeM": { "type": "number" },
+        "maximumAltitudeM": { "type": "number" },
+        "hazardIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/hazardId" } },
+        "pilotRequirement": { "type": "string", "minLength": 1 }
+      }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "type", "mapCellId", "status", "visibility", "maximumFootprintKm2", "tags"],
+      "properties": {
+        "id": { "$ref": "#/$defs/siteId" },
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 },
+        "mapCellId": { "$ref": "#/$defs/cellId" },
+        "status": { "enum": ["planned", "active", "abandoned", "ruined", "sealed", "unknown"] },
+        "visibility": { "enum": ["public", "known-locally", "rumored", "gm-only"] },
+        "maximumFootprintKm2": { "type": "number", "minimum": 0 },
+        "tags": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+      }
+    },
+    "hazard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "type", "cellIds", "severity", "visibility", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/hazardId" },
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 },
+        "cellIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/cellId" } },
+        "severity": { "enum": ["minor", "moderate", "major", "critical"] },
+        "visibility": { "enum": ["public", "known-locally", "rumored", "gm-only"] },
+        "status": { "enum": ["dormant", "active", "seasonal", "contained", "resolved"] }
+      }
+    },
+    "habitat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "cellIds", "areaKm2", "condition", "capacityIndex"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^habitat-[a-z0-9][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "cellIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/cellId" } },
+        "areaKm2": { "type": "number", "minimum": 0 },
+        "condition": { "enum": ["pristine", "healthy", "strained", "degraded", "collapsed"] },
+        "capacityIndex": { "type": "number", "minimum": 0 }
+      }
+    },
+    "speciesSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "habitatId", "role", "populationBand", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^species-slot-[a-z0-9][a-z0-9-]*$" },
+        "habitatId": { "type": "string", "pattern": "^habitat-[a-z0-9][a-z0-9-]*$" },
+        "role": { "type": "string", "minLength": 1 },
+        "populationBand": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["vacant", "stable", "declining", "invasive", "migratory"] }
+      }
+    },
+    "settlementSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mapCellId", "maximumPopulation", "maximumFootprintKm2", "waterSourceIds", "landingZoneIds", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^settlement-slot-[a-z0-9][a-z0-9-]*$" },
+        "mapCellId": { "$ref": "#/$defs/cellId" },
+        "maximumPopulation": { "type": "integer", "minimum": 0 },
+        "maximumFootprintKm2": { "type": "number", "minimum": 0 },
+        "waterSourceIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^water-[a-z0-9][a-z0-9-]*$" } },
+        "landingZoneIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^landing-[a-z0-9][a-z0-9-]*$" } },
+        "status": { "enum": ["open", "reserved", "occupied", "unsafe", "closed"] }
+      }
+    },
+    "routeNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "mapCellId", "landingZoneIds", "altitudeBand", "services", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/routeNodeId" },
+        "name": { "type": "string", "minLength": 1 },
+        "mapCellId": { "$ref": "#/$defs/cellId" },
+        "landingZoneIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^landing-[a-z0-9][a-z0-9-]*$" } },
+        "altitudeBand": { "type": "string", "minLength": 1 },
+        "services": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "status": { "enum": ["active", "restricted", "seasonal", "closed", "secret"] }
+      }
+    }
+  }
+}
