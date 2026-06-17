@@ -12,17 +12,25 @@
     "editorAdapterContract": true,
     "editorAdapterRegistry": true,
     "optionalAdapterHooks": true,
+    "adapterCurrentSchemaVersions": true,
+    "outdatedAndFutureSchemaDiagnostics": true,
     "genericEditorLifecycle": true,
     "dirtyStateTracking": true,
     "recoveryDraftAutosave": true,
     "unsavedChangeProtection": true,
     "canonicalProfileEnvelope": true,
     "stableProfileIds": true,
+    "visibleRecordIdentity": true,
+    "identitySafeUpdateExisting": true,
+    "explicitSaveAsNewClone": true,
     "profileSchemaVersions": true,
     "versionedMigrationRegistry": true,
-    "legacyFlatIslandMigration": true,
+    "legacyFlatIslandMigrationTo2_0_0": true,
     "migrationFixtureValidation": true,
+    "adapterIntegrationValidation": true,
     "provenanceAndInheritanceLedger": true,
+    "directSavedParentInheritance": true,
+    "parentLinkClearLifecycleTracking": true,
     "fieldLocking": true,
     "selectiveRandomization": true,
     "localDraftPersistence": true,
@@ -47,11 +55,14 @@
     "Validate record",
     "Save local draft",
     "Recover local draft",
-    "Save persistent record",
+    "Save new persistent record",
+    "Update existing record without changing profile ID",
+    "Save as new clone with a new profile ID",
     "Open saved record",
     "Delete saved record with explicit confirmation",
     "Repair local record index",
-    "Clone record",
+    "Load saved parent records directly into downstream editors",
+    "Clear inherited parent links",
     "Randomize unlocked fields",
     "Copy canonical JSON",
     "Export canonical JSON",
@@ -77,6 +88,7 @@
     "kaysender-editor-repository.js",
     "kaysender-editor-production.js",
     "kaysender-editor-record-library.js",
+    "kaysender-editor-parent-library.js",
     "kaysender-editor-error-boundary.js",
     "kaysender-editor-live-smoke.js"
   ],
@@ -87,6 +99,7 @@
   "validationFiles": [
     "scripts/validate-editor-kernel.mjs",
     "scripts/validate-editor-migrations.mjs",
+    "scripts/validate-editor-adapter-integration.mjs",
     "scripts/validate-editor-runtime-structure.mjs",
     "scripts/validate-p0-browser-verification.mjs"
   ],
@@ -98,25 +111,25 @@
     },
     {
       "criterion": "Current island profiles import into settlement and airship without obsolete flat-field assumptions",
-      "implementationState": "implemented-through-adapter-owned-field-maps-and-versioned-migrations",
-      "verificationState": "current-nested-and-legacy-flat-fixtures-covered"
+      "implementationState": "implemented-through-adapter-owned-field-maps-versioned-migrations-and-direct-saved-parent-selection",
+      "verificationState": "current-nested-legacy-flat-outdated-and-future-cases-covered"
     },
     {
-      "criterion": "Malformed or wrong-profile imports produce actionable errors instead of silent failure",
-      "implementationState": "implemented-through-shared-normalization-migration-and-diagnostics",
-      "verificationState": "visible-error-boundary-present"
+      "criterion": "Malformed wrong-profile outdated and future imports produce actionable errors instead of silent failure",
+      "implementationState": "implemented-through-shared-normalization-migration-schema-compatibility-and-diagnostics",
+      "verificationState": "functional-adapter-integration-validation-present"
     },
     {
-      "criterion": "Every editor exposes deliberate construction and persistent record actions",
-      "implementationState": "implemented-through-shared-lifecycle-and-record-library",
+      "criterion": "Every editor exposes deliberate construction identity-safe persistence and inheritance actions",
+      "implementationState": "implemented-through-shared-lifecycle-record-library-and-parent-library",
       "verificationState": "shared-actions-present"
     },
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
-      "implementationState": "structural-kernel-and-migration-validation-present",
+      "implementationState": "kernel-migration-adapter-and-structural-validation-present",
       "verificationState": "final-browser-runtime-check-remains"
     }
   ],
-  "nextFrameworkStep": "Expose the active stable profile ID, revision, schema version, and saved-record state directly in the shared shell, then add explicit Save As Clone versus Update Existing Record behavior so record identity cannot be changed accidentally.",
+  "nextFrameworkStep": "Detect inherited references whose saved parent record is missing or has advanced to a newer revision, show that state in the parent selector, and provide an explicit refresh-to-latest-parent action.",
   "promotionRule": "P0 may change to complete and P1 may become required-next only after the three registered editors operate through the complete shared lifecycle on main and the final runtime check passes."
 }
