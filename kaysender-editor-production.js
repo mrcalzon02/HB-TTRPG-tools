@@ -327,6 +327,47 @@
     return envelope.inheritance?.find(reference => reference.relationship === definition.relationship) || null;
   }
 
+  function unresolvedParentEnvelope(reference) {
+    const sourceAdapter = adapters().find(adapter => adapter.profileType === reference.profileType);
+    const timestamp = reference.sourceUpdatedAt || new Date().toISOString();
+    return {
+      editorEnvelopeVersion: Kernel.ENVELOPE_VERSION,
+      profileId: reference.profileId,
+      profileType: reference.profileType,
+      profileSchemaVersion: sourceAdapter?.currentSchemaVersion || '1.0.0',
+      revision: reference.revision,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      name: reference.name || 'Unavailable Parent',
+      provenance: {
+        editorId: sourceAdapter?.id || 'unresolved-parent-reference',
+        moduleId: sourceAdapter?.moduleId || 'unresolved-parent-reference',
+        origin: 'unresolved-inheritance-reference',
+        importedAt: null,
+        clonedFromProfileId: null,
+        migrationLog: []
+      },
+      inheritance: [],
+      locks: [],
+      diagnostics: [Kernel.diagnostic('warning', 'inherited-source-data-missing', `Embedded context for ${reference.profileId} is unavailable.`)],
+      data: {
+        name: reference.name || 'Unavailable Parent',
+        profileType: reference.profileType,
+        schemaVersion: sourceAdapter?.currentSchemaVersion || '1.0.0'
+      }
+    };
+  }
+
+  function preserveUnresolvedParent(panel, definition, reference) {
+    const placeholder = unresolvedParentEnvelope(reference);
+    panel.dataset[definition.contextDatasetKey] = '';
+    panel.dataset[definition.envelopeDatasetKey] = JSON.stringify(placeholder);
+    const textarea = panel.querySelector(`#${definition.textareaId}`);
+    if (textarea) textarea.value = JSON.stringify(placeholder, null, 2);
+    const status = definition.statusId ? panel.querySelector(`#${definition.statusId}`) : null;
+    if (status) status.textContent = `Pinned ${definition.id} ${reference.profileId} revision ${reference.revision} is retained, but its embedded context is unavailable.`;
+  }
+
   function applyEnvelope(adapter, panel, envelope) {
     const form = panel.querySelector(`#${adapter.formId}`);
     Kernel.applyProfileToForm(form, adapter.profileType, envelope.data);
@@ -337,13 +378,14 @@
       if (sourceRecord) {
         const restored = applyParentRecord(panel, definition, sourceRecord, reference);
         if (!restored && reference) {
-          restorationDiagnostics.push(Kernel.diagnostic('error', 'pinned-parent-restore-failed', `Could not restore pinned ${definition.id} ${reference.profileId}.`, 'inheritance'));
+          preservationUnresolvedParent(panel, definition, reference);
+          restorationDiagnostics.push(Kernel.diagnostic('error', 'pinned-parent-restore-failed', `Could not restore pinned ${definition.id} ${reference.profileId}; its reference was retained.`, 'inheritance'));
         }
+      } else if (reference) {
+        preserveUnresolvedParent(panel, definition, reference);
+        restorationDiagnostics.push(Kernel.diagnostic('warning', 'inherited-source-data-missing', `The record retains a ${definition.relationship} reference to ${reference.profileId}, but its embedded parent context is missing.`, 'inheritance'));
       } else {
         clearParentImport(panel, definition);
-        if (reference) {
-          restorationDiagnostics.push(Kernel.diagnostic('warning', 'inherited-source-data-missing', `The record retains a ${definition.relationship} reference to ${reference.profileId}, but its embedded parent context is missing.`, 'inheritance'));
-        }
       }
     });
     panel.querySelectorAll('[data-editor-lock]').forEach(item => {
@@ -456,7 +498,7 @@
       triggerBuild(adapter, panel);
       buildEnvelope(adapter, panel);
       Lifecycle.markDirty(adapter.id, `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`);
-      renderDiagnostics([Kernel.diagnostic('info', 'selective-randomization-complete', `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`)]);
+      renderDiagnostics([Kernel.diagnostic('info', 'selective-randomization-complete', `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`) ]);
     }, 0);
   }
 
