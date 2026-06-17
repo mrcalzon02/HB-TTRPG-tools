@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "storage": "lossless-base64-source-bundles",
+  "materializeCommand": "node scripts/materialize-source-pdfs.mjs",
+  "documents": [
+    {
+      "id": "chronicles-elemental-realms-swamps-toads-frogs-salamanders",
+      "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
+      "setting": "General fantasy and elemental realms",
+      "genre": "fantasy planar ecology",
+      "pages": 21,
+      "bytes": 333084,
+      "sha256": "3fe1b910779a2b799305b52fb7005f72e18392d62198824708f1e6a48e434f0f",
+      "destination": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
+      "integrationStatus": "source-retained-integration-deferred",
+      "wikiDestination": "general fantasy wiki corpus",
+      "parts": [
+        "source-page-references/encoded/chronicles-elemental-realms-swamps-toads-frogs-salamanders.pdf.b64.part01"
+      ]
+    },
+    {
+      "id": "solanum-umbra-ttrpg",
+      "title": "Solanum Umbra TTRPG",
+      "setting": "Solanum Umbra",
+      "genre": "post-apocalyptic science-fantasy",
+      "pages": 248,
+      "bytes": 1325003,
+      "sha256": "2f1d5d0df591b4d637e4845645370946568cb6aecc786a4bbef5411e4e82f9ff",
+      "destination": "source-page-references/Solanum-Umbra-TTRPG.pdf",
+      "integrationStatus": "dedicated-wiki-staged-multi-pass-integration-deferred",
+      "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json",
+      "parts": [
+        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part01",
+        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part02",
+        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part03",
+        "source-page-references/encoded/solanum-umbra-ttrpg.pdf.b64.part04"
+      ]
+    }
+  ]
+}
