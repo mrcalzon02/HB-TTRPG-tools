@@ -94,6 +94,12 @@ jobs:
           node --check magical-library-actions.js
           node --check magical-library-runtime.js
           node --check magical-library-entry.js
+          node --check elemental-realms-creature-core.js
+          node --check elemental-realms-creatures-primary.js
+          node --check elemental-realms-creatures-secondary.js
+          node --check elemental-realms-creatures-expansions.js
+          node --check elemental-realms-creatures-context.js
+          node --check elemental-realms-entry.js
           node --check solanum-umbra-entry.js
           node --check kaysender-editors.js
           node --check kaysender-settlement-editor.js
