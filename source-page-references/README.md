@@ -1,29 +1,34 @@
 # Source Page References
 
-Canonical source documents retained for page-level provenance and later multi-pass wiki integration.
+Canonical source manuscripts registered for page-level provenance and later multi-pass wiki integration.
 
-Files in this folder are reference manuscripts, not automatically normalized or rules-converted content. Each large source should be integrated through documented passes that preserve source provenance, distinguish lore from mechanics, and avoid silently replacing the original text.
+Files and receipts in this folder are source records, not automatically normalized or rules-converted content. Each large source should be integrated through documented passes that preserve provenance, distinguish lore from mechanics, and avoid silently replacing the original text.
 
 ## Registered source manuscripts
 
-- **Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders** — 21-page fantasy planar-ecology manuscript. Retained for later integration into the general fantasy wiki corpus.
-- **Solanum Umbra TTRPG** — 248-page post-apocalyptic science-fantasy manuscript. Retained for a dedicated Solanum Umbra wiki and tool section separate from Kaysender and the fantasy corpus.
+- **Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders** — 21-page fantasy planar-ecology manuscript. Registered for later integration into the general fantasy wiki corpus.
+- **Solanum Umbra TTRPG** — 248-page post-apocalyptic science-fantasy manuscript. Registered for a dedicated Solanum Umbra wiki and tool section separate from Kaysender and the fantasy corpus.
 
-Exact filenames, byte counts, page counts, SHA-256 checksums, integration states, and encoded source-part paths are recorded in `source-manifest.json`.
+Exact filenames, byte counts, page counts, SHA-256 checksums, intended binary paths, integration states, and receipt paths are recorded in `source-manifest.json`.
 
-## Lossless source storage
+## Source receipts and binary status
 
-The repository connector used for source intake writes UTF-8 files rather than raw binary objects. The PDFs are therefore retained losslessly as base64 source bundles under `encoded/`. This is storage encoding only; it does not alter or extract the documents.
+The repository connector used for this intake can write UTF-8 source records but cannot transfer the uploaded binary PDF bytes directly into Git. The folder therefore contains canonical `.source.json` receipts for both manuscripts.
 
-Run:
+Each receipt records:
 
-```bash
-node scripts/materialize-source-pdfs.mjs
-```
+- Original filename
+- Media type
+- Page count
+- Exact byte count
+- SHA-256 checksum
+- Intended repository PDF path
+- Integration destination
+- Current binary-transfer status
 
-The materializer reconstructs the original `.pdf` files at their registered destinations and refuses to write them unless both the exact byte count and SHA-256 checksum match the uploaded sources.
+The receipts make the source identity auditable and prevent a nonexistent or corrupted PDF from being represented as complete. The raw PDFs remain pending a binary-capable repository transfer. When that transfer is performed, the resulting files must match the recorded byte counts and SHA-256 checksums before `binaryPresentInGit` is changed to `true`.
 
-`node scripts/validate-source-references.mjs` independently verifies the stored bundles, PDF signatures, checksums, manifest, and deferred Solanum Umbra wiki state.
+`node scripts/validate-source-references.mjs` verifies the manifest, both canonical receipts, the recorded source identities, and the intentionally empty Solanum Umbra wiki staging index.
 
 ## Integration policy
 
