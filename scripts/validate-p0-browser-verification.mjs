@@ -10,7 +10,6 @@ const fail = message => { throw new Error(message); };
 const schema = await readJson('data/kaysender/editors/p0-browser-verification.schema.json');
 const smoke = await readText('kaysender-editor-live-smoke.js');
 const runner = await readText('scripts/run-p0-browser-verification.mjs');
-const ledgerWriter = await readText('scripts/record-p0-browser-verification.mjs');
 const workflow = await readText('.github/workflows/pages.yml');
 
 const requiredReceiptFields = [
@@ -72,38 +71,29 @@ for (const marker of [
   'window.runKaysenderEditorSmokeTest()',
   'window.getKaysenderEditorSmokeReceipt()',
   'p0-browser-verification-failure.png',
+  'p0-browser-verification-failure.json',
   "receipt.result !== 'passed'"
 ]) {
   if (!runner.includes(marker)) fail(`Automated browser runner is missing '${marker}'.`);
 }
 
 for (const marker of [
-  "crypto.createHash('sha256')",
-  "ledgerVersion: '1.0.0'",
-  'sourceCommit',
-  'workflowRunId',
-  'receiptSha256',
-  "mode === 'record'",
-  "mode === 'check'"
-]) {
-  if (!ledgerWriter.includes(marker)) fail(`Verification ledger writer is missing '${marker}'.`);
-}
-
-for (const marker of [
-  'contents: write',
+  'contents: read',
   'playwright@1.60.0',
   'npx playwright install --with-deps chromium',
   'node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json',
   'node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json',
-  'node scripts/record-p0-browser-verification.mjs record artifacts/p0-browser-verification.json',
-  'node scripts/record-p0-browser-verification.mjs check data/kaysender/editors/verification/p0-browser-verification.latest.json',
-  'git push origin HEAD:main',
+  'if: ${{ always() }}',
   'name: p0-browser-verification',
   'path: artifacts/',
-  'rm -rf node_modules'
+  'rm -rf node_modules',
+  'actions/deploy-pages@v4'
 ]) {
   if (!workflow.includes(marker)) fail(`Pages workflow is missing P0 browser gate marker '${marker}'.`);
 }
+if (workflow.includes('continue-on-error: true')) fail('P0 browser verification must fail the deployment job directly.');
+if (workflow.includes('git stash push --include-untracked')) fail('P0 browser verification must not stash the installed browser runtime.');
+if (workflow.includes('git push origin HEAD:main')) fail('P0 browser verification must not mutate main to record proof.');
 
 function validateInheritanceReference(reference, label) {
   if (!reference || typeof reference !== 'object') fail(`${label} inheritance reference must be an object.`);
@@ -111,6 +101,7 @@ function validateInheritanceReference(reference, label) {
   if (!String(reference.profileId || '').trim()) fail(`${label} inheritance reference is missing profileId.`);
   if (!String(reference.profileType || '').trim()) fail(`${label} inheritance reference is missing profileType.`);
   if (!Number.isInteger(reference.revision) || reference.revision < 1) fail(`${label} inheritance reference has an invalid revision.`);
+  if (reference.policy !== 'pinned-revision') fail(`${label} inheritance reference is not pinned to an explicit revision.`);
 }
 
 function validateReceipt(receipt) {
@@ -160,5 +151,5 @@ if (receiptPath) {
   console.log(`P0 browser verification receipt passed: ${receiptPath}`);
 } else {
   console.log('P0 browser verification contract validation passed.');
-  console.log('Verified receipt schema, harness, Chromium runner, durable SHA-256 ledger, Pages workflow wiring, evidence retention, and optional receipt rules.');
+  console.log('Verified receipt schema, smoke harness, Chromium runner, pinned inheritance, direct workflow failure, artifact retention, and Pages deployment ordering.');
 }
