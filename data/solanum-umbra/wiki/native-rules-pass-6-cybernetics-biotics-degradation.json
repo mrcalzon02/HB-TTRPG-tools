@@ -1,0 +1,227 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-external-conversion",
+  "description": "Native cybernetic replacement, biotic enhancement, secure interface, social consequence, and long-term degradation systems from pages 117-130.",
+  "entries": [
+    {
+      "id": "solanum-cybernetic-replacement-framework",
+      "title": "Cybernetic Replacement Framework",
+      "category": "Cybernetics",
+      "summary": "Cybernetic replacement uses five technology levels, body-part-specific credit costs, installation time and risk, performance modifiers, body-percentage multipliers, and biotic power requirements.",
+      "body": [
+        "Technology ranges from Basic prosthetics to Supreme near-organic systems. Higher technology improves performance but raises cost, installation complexity, power requirements, and maintenance burden.",
+        "Body percentage determines a separate cost multiplier and minimum technology range. Replacing more than 49% of the body also invokes the full-cyberization requirement described elsewhere.",
+        "The source prints a cost formula that appears to multiply a listed body-part cost by itself, but its Elite upper-arm example uses the listed 7,500-credit cost with a multiplier of 1 and produces 7,500 credits. The wiki preserves both and marks the written formula unresolved rather than applying a squared cost."
+      ],
+      "tables": [
+        {
+          "id": "solanum-cybernetic-tech-levels",
+          "title": "Cybernetic Technology Levels",
+          "columns": ["Technology","Description","Power Unit Requirement","Complexity","General Cost Range"],
+          "rows": [
+            ["Basic","Wooden or rudimentary prosthetics","Low","Very Low","100-500 credits"],
+            ["Intermediate","Functional but rudimentary technology","Moderate","Low","500-2,000 credits"],
+            ["Advanced","High-functioning mechanical parts","High","Moderate","2,000-10,000 credits"],
+            ["Elite","Highly advanced precision technology","Very High","High","10,000-50,000 credits"],
+            ["Supreme","Cutting-edge near-organic technology","Extreme","Very High","50,000-200,000 credits"]
+          ]
+        },
+        {
+          "id": "solanum-cybernetic-body-part-costs",
+          "title": "Body-Part Replacement Costs",
+          "columns": ["Body Part","Basic","Intermediate","Advanced","Elite","Supreme"],
+          "rows": [
+            ["Head","500","1,000","4,000","15,000","75,000"],
+            ["Torso","1,000","2,000","8,000","25,000","100,000"],
+            ["Upper Arm","250","500","2,000","7,500","30,000"],
+            ["Lower Arm","200","400","1,500","5,000","20,000"],
+            ["Hand","150","300","1,200","4,000","15,000"],
+            ["Upper Leg","300","600","2,500","8,000","35,000"],
+            ["Lower Leg","250","500","2,000","6,000","25,000"],
+            ["Feet","200","400","1,800","5,500","22,000"]
+          ]
+        },
+        {
+          "id": "solanum-cybernetic-installation",
+          "title": "Installation Time, Complexity, and Risk",
+          "columns": ["Technology","Installation Time","Complexity","Risk"],
+          "rows": [
+            ["Basic","1-2 days","Very Low","Minimal"],
+            ["Intermediate","3-5 days","Low","Low"],
+            ["Advanced","1-2 weeks","Moderate","Moderate"],
+            ["Elite","2-4 weeks","High","High"],
+            ["Supreme","1-2 months","Very High","Very High"]
+          ]
+        },
+        {
+          "id": "solanum-prosthetic-performance",
+          "title": "Prosthetic Performance Modifiers",
+          "columns": ["Type","Functionality","Performance Modifier"],
+          "rows": [
+            ["Basic","Wooden peg legs and rudimentary prosthetics","-4"],
+            ["Intermediate","Basic technological prosthetics","-2"],
+            ["Advanced","High-functioning mechanical prosthetics","0"],
+            ["Elite","Highly advanced prosthetics","+2"],
+            ["Supreme","Cutting-edge near-organic prosthetics","+4"]
+          ]
+        },
+        {
+          "id": "solanum-cybernetic-body-percentage",
+          "title": "Cybernetic Body Percentage",
+          "columns": ["Replacement Percentage","Description","Cost Multiplier","Technology Needed"],
+          "rows": [
+            ["0-10%","Minor replacements such as hand or foot","x1","Basic to Advanced"],
+            ["10-30%","Multiple limbs or smaller body parts","x1.5","Intermediate to Elite"],
+            ["30-50%","Major body parts including limbs and torso","x2","Elite to Supreme"],
+            ["50-70%","Extensive cybernetics including major organs","x2.5","Supreme"],
+            ["70-100%","Full or near-full cyberization","x3","Supreme"]
+          ]
+        },
+        {
+          "id": "solanum-biotic-power-requirements",
+          "title": "Biotic Power Unit Requirements",
+          "columns": ["Technology","Requirement","Description"],
+          "rows": [
+            ["Basic","Low","Minimal biotic power; mostly manual function"],
+            ["Intermediate","Moderate","Some biotic power for moderate enhancements"],
+            ["Advanced","High","Significant power for advanced functions"],
+            ["Elite","Very High","High power demand for elite enhancements"],
+            ["Supreme","Extreme","Maximum power demand for supreme enhancements"]
+          ]
+        }
+      ],
+      "workedExample": {
+        "replacement": "Elite upper arm",
+        "listedBodyPartCost": "7,500 credits",
+        "statedTechMultiplier": "1",
+        "sourceFinalCost": "7,500 credits",
+        "formulaStatus": "Printed formula is inconsistent with the worked result and remains unresolved"
+      },
+      "sourceStatus": "source-native-mechanics-with-explicit-conflict",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":117,"pageEnd":122,"chunkId":"solanum-cybernetic-replacement:p117-122","notes":"Technology levels, body-part costs, installation, performance, body percentage, biotic power, and contradictory sample formula."}],
+      "tags": ["cybernetics","prosthetics","body replacement","installation","credits","performance modifier","biotic power"],
+      "relatedEntries": ["solanum-full-cyberization-threshold","solanum-biotic-enhancement-catalogue","solanum-long-term-cybernetic-degradation","solanum-character-sheet-schema"]
+    },
+    {
+      "id": "solanum-biotic-enhancement-catalogue",
+      "title": "Biotic Enhancement and Augmentation Catalogue",
+      "category": "Cybernetics",
+      "summary": "Twelve enhancements define technology level, power demand, benefits, disadvantages, body-replacement percentage, credit range, and installation complexity.",
+      "body": [
+        "Enhancements range from Basic vision and healing units to Supreme sensory, camouflage, and temporal systems. Every benefit carries limitations involving power demand, maintenance, biological strain, cognitive overload, calibration, disorientation, or overheating.",
+        "The catalogue is descriptive. Where the source states an improvement without assigning a numeric bonus, the wiki does not invent one."
+      ],
+      "tables": [
+        {
+          "id": "solanum-biotic-enhancements",
+          "title": "Biotic Enhancements and Augmentations",
+          "columns": ["Enhancement","Technology","Power","Advantages","Disadvantages","Body Replacement","Cost","Complexity"],
+          "rows": [
+            ["Enhanced Vision Module","Basic","Low","Night vision and increased visual range","Limited to basic improvements","0-5%","1,000-2,000","Low"],
+            ["Neural Processor Upgrade","Intermediate","Moderate","Faster reflexes and improved mental processing","Stress or headaches","5-10%","3,000-6,000","Moderate"],
+            ["Cognitive Interface Implant","Advanced","High","Problem-solving and advanced memory","Data overload and cognitive dissonance","10-20%","8,000-15,000","High"],
+            ["Biotic Energy Reserves","Elite","Very High","Greater energy capacity and endurance","Energy drain and fatigue","20-30%","20,000-40,000","Very High"],
+            ["Adaptive Camouflage","Supreme","Extreme","Near-invisibility and environmental adaptation","Complex maintenance and high power use","30-50%","50,000-100,000","Extreme"],
+            ["Advanced Healing Unit","Basic","Low","Accelerated healing and recovery","Limited to basic injuries and declining effectiveness","0-5%","2,000-4,000","Low"],
+            ["Augmented Strength Module","Intermediate","Moderate","Increased strength and lifting capacity","Joint strain and muscle fatigue","5-10%","5,000-10,000","Moderate"],
+            ["Neural Firewall","Advanced","High","Resistance to hacking and improved mental security","May interfere with cognitive function","10-20%","10,000-20,000","High"],
+            ["Biotic Shield Generator","Elite","Very High","Temporary energy shield and improved defense","High power consumption and limited duration","20-30%","25,000-50,000","Very High"],
+            ["Enhanced Sensory Suite","Supreme","Extreme","Superior sight, hearing, smell, and sensory perception","Overwhelming input and frequent calibration","30-50%","60,000-120,000","Extreme"],
+            ["Temporal Manipulator","Supreme","Extreme","Slow or accelerate time perception","Temporal disorientation and severe power drain","30-50%","75,000-150,000","Extreme"],
+            ["Quantum Processor Unit","Elite","Very High","Major processing and data-handling improvement","Energy consumption and overheating","20-30%","30,000-60,000","Very High"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-equipment-catalogue",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":121,"pageEnd":124,"chunkId":"solanum-biotic-enhancements:p121-124","notes":"Twelve enhancement and augmentation records with benefits, drawbacks, replacement percentage, costs, and complexity."}],
+      "tags": ["biotic enhancement","augmentation","vision","neural processor","camouflage","healing","strength","shield","temporal manipulator"],
+      "relatedEntries": ["solanum-cybernetic-replacement-framework","solanum-secure-cybernetic-interfaces","solanum-long-term-cybernetic-degradation"]
+    },
+    {
+      "id": "solanum-secure-cybernetic-interfaces",
+      "title": "Secure Cybernetic Interfaces and Social Stigma",
+      "category": "Cybernetics and Society",
+      "summary": "Wireless cybernetic connections are avoided because unstable AI can intercept, corrupt, or seize systems; installation and maintenance rely on isolated hardwired terminals in controlled facilities.",
+      "body": [
+        "Wireless connections are treated as an extreme security risk in a world of rogue and unstable AI. Cybernetic systems therefore use direct physical cables and isolated data-interface terminals for installation, programming, diagnosis, and maintenance.",
+        "Secure facilities prioritize physical and digital isolation over convenience. Wireless functions are limited, heavily regulated, or attempted only by unusually skilled or dangerously reckless operators.",
+        "Full cyborgs face distrust because extensive modifications are perceived as vulnerable to Synthesis Commander corruption, instability, and loss of control. This produces social stigma, isolation, restricted access, difficult integration, ethical conflict, and a persistent divide between cyberization and ideas of human integrity.",
+        "The source presents both genuine technological danger and social prejudice. The wiki records both without treating discrimination as proof that every cyberized person is corrupted."
+      ],
+      "tables": [
+        {
+          "id": "solanum-cybernetic-security-practices",
+          "title": "Cybernetic Security Practices",
+          "columns": ["Practice","Purpose","Trade-off"],
+          "rows": [
+            ["No routine wireless interface","Avoid interception and AI corruption","Reduced convenience and capability"],
+            ["Direct cable connection","Contain data transfer within a controlled link","Requires physical access"],
+            ["Isolated interface terminal","Minimize external connectivity","Limited integration with wider systems"],
+            ["Secure installation facility","Protect surgery, calibration, and programming","Expensive and difficult to access"],
+            ["Strict regulation","Restrict high-risk connectivity and maintenance","Creates barriers and dependence"],
+            ["Security-first design","Favor stability over advanced network features","Slower and less flexible systems"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-setting-and-system-policy",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":124,"pageEnd":127,"chunkId":"solanum-cybernetic-security:p124-127","notes":"Wireless AI-corruption risks, hardwired maintenance, controlled facilities, regulations, and societal stigma surrounding full cyborgs."}],
+      "tags": ["wireless","AI corruption","hardwired interface","maintenance","full cyborg","stigma","Synthesis Commander"],
+      "relatedEntries": ["solanum-cybernetic-replacement-framework","solanum-full-cyberization-threshold","solanum-synthesis-enemy-role-roster"]
+    },
+    {
+      "id": "solanum-long-term-cybernetic-degradation",
+      "title": "Long-Term Cybernetic Degradation",
+      "category": "Cybernetics",
+      "summary": "Fully cyberized characters roll for degradation by decade, with escalating biological, cognitive, peripheral, and systemic failure; after forty years, rolls recur every 1d6 years.",
+      "body": [
+        "The degradation system models the long-term cost of extensive cyberization. The first ten years have no significant degradation. Later decades use d100 outcome bands that become increasingly severe.",
+        "After forty or more years as a cyborg, the source instructs the player to roll once every 1d6 years rather than once per decade.",
+        "A result of 01-20 at later ages can produce a dangerous equilibrium in which no further degradation occurs. Other results progress through biological rejection, cognitive decline, peripheral failure, shutdown, and fatal collapse.",
+        "Fatal results may be survivable only through immediate hospitalization in state-of-the-art facilities; the source does not define a complete recovery procedure."
+      ],
+      "tables": [
+        {
+          "id": "solanum-cybernetic-degradation",
+          "title": "Cybernetic Degradation by Years of Cyberization",
+          "columns": ["Years","d100","Effect","Severity","Description"],
+          "rows": [
+            ["0-10","—","No significant degradation","—","Initial systems function within normal parameters"],
+            ["10-20","01-20","Minor System Errors","Low","Occasional glitches and minor data corruption"],
+            ["10-20","21-40","Minor Biological Rejection","Low","Minor discomfort or sensitivity"],
+            ["10-20","41-60","Cognitive Dissonance","Medium","Reduced cognitive function and difficulty with complex tasks"],
+            ["10-20","61-80","Peripheral Malfunctions","Medium","Reduced limb or sensory efficiency"],
+            ["10-20","81-100","Intermediate Data Corruption","High","Intermittent processing and cybernetic failures"],
+            ["20-30","01-20","No Further Errors","—","Dangerous equilibrium"],
+            ["20-30","21-40","Advanced Biological Rejection","High","Chronic pain or loss of biological function"],
+            ["20-30","41-60","Severe Cognitive Decline","Severe","Memory loss and processing difficulty"],
+            ["20-30","61-80","Critical Peripheral Failures","Severe","Loss of mobility or sensation"],
+            ["20-30","81-100","Systemic Shutdowns","Critical","Frequent shutdowns requiring immediate repair"],
+            ["30-40","01-20","No Further Errors","—","Dangerous equilibrium"],
+            ["30-40","21-40","Severe Biological Integration Failure","Critical","Potential organ failure"],
+            ["30-40","41-60","Extreme Cognitive Decline","Critical","Inability to perform essential mental functions"],
+            ["30-40","61-80","Total Peripheral Failure","Critical","Complete loss of cybernetic limbs or senses"],
+            ["30-40","81-100","Total System Collapse","Fatal","Critical life-support failure"],
+            ["40+","01-20","No Further Degradation","—","Dangerous equilibrium"],
+            ["40+","21-40","Biological Rejection at Critical Levels","Fatal","Imminent systemic failure"],
+            ["40+","41-60","Permanent Cognitive Loss","Fatal","Irreversible cognitive shutdown"],
+            ["40+","61-80","Total Sensory and Motor Loss","Fatal","Severe impairment of basic life functions"],
+            ["40+","81-100","Fatal System Failure","Fatal","Complete irreversible failure and imminent death"]
+          ]
+        }
+      ],
+      "procedure": [
+        "During the first 10 years, no degradation roll is required.",
+        "At each decade from 10 through 40 years, roll d100 on the appropriate age band.",
+        "After 40 years, roll once every 1d6 years using the 40+ band.",
+        "Apply the listed biological, cognitive, peripheral, or systemic effect.",
+        "Low through Critical results require increasing maintenance, repair, and intervention.",
+        "Fatal results require immediate state-of-the-art hospitalization to avoid death or total collapse."
+      ],
+      "sourceStatus": "source-native-long-term-consequence-system",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":127,"pageEnd":130,"chunkId":"solanum-cybernetic-degradation:p127-130","notes":"Long-term degradation by decade, d100 outcomes, severity descriptions, and recurring 1d6-year rolls after forty years."}],
+      "tags": ["cybernetic degradation","d100","biological rejection","cognitive decline","system failure","full cyborg","maintenance"],
+      "relatedEntries": ["solanum-cybernetic-replacement-framework","solanum-full-cyberization-threshold","solanum-data-seizure-progression","solanum-secure-cybernetic-interfaces"]
+    }
+  ]
+}
