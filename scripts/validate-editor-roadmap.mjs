@@ -70,7 +70,7 @@ async function main() {
   if (implementation.schemaVersion !== '1.0.0') fail('Unexpected P0 implementation status schema.');
   if (implementation.stage !== 'P0' || implementation.stageId !== activeNext[0].id) fail('P0 implementation status does not match the active roadmap stage.');
   if (implementation.activeBranch !== 'main' || implementation.parallelMainLineEditors !== 1) fail('P0 implementation status violates the one-branch, one-editor policy.');
-  if (implementation.status !== 'implementation-committed-awaiting-ci-and-live-smoke') fail(`Unexpected P0 implementation status '${implementation.status}'.`);
+  if (implementation.status !== 'implementation-committed-awaiting-ci-and-browser-verification') fail(`Unexpected P0 implementation status '${implementation.status}'.`);
   const requiredP0Outputs = [
     'sharedEditorShell',
     'canonicalProfileEnvelope',
@@ -84,13 +84,14 @@ async function main() {
     'sharedJsonImportExport',
     'sharedWikiDraftExport',
     'validationAndDiagnostics',
-    'accessibleResponsiveControls'
+    'accessibleResponsiveControls',
+    'browserVerificationHarness'
   ];
   for (const output of requiredP0Outputs) {
     if (implementation.implementedOutputs?.[output] !== true) fail(`P0 implemented output '${output}' is not recorded as complete.`);
   }
   if (!Array.isArray(implementation.exitCriteria) || implementation.exitCriteria.length !== activeNext[0].exitCriteria.length) fail('P0 exit-criteria status count does not match the roadmap.');
-  if (!implementation.promotionRule?.includes('live browser smoke test')) fail('P0 promotion rule must require a live browser smoke test before P1 opens.');
+  if (!implementation.promotionRule?.includes('live browser verification')) fail('P0 promotion rule must require live browser verification before P1 opens.');
 
   const coveredModules = new Set(stages.flatMap(stage => stage.moduleIds || []));
   const expectedMainLineModules = [
