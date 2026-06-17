@@ -1,0 +1,193 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-external-conversion",
+  "description": "Native Solanum Umbra career talents, background generation, general talent use, and equipment requirement rules from pages 131-144.",
+  "entries": [
+    {
+      "id": "solanum-career-talent-system",
+      "title": "Career Talent System",
+      "category": "Roles and Careers",
+      "summary": "Professional careers grant Minor and Major talents governed by native attributes; actions without a relevant talent are attempted at a default -4 penalty.",
+      "body": [
+        "The source provides complete talent tables for Hunter, Mechanic, Medic, Scavenger, and Warlord. Each talent identifies a governing statistic and a specific capability.",
+        "When an action involves a possessed professional talent, the GM applies the relevant talent bonus or benefit. When no relevant talent or specialized training applies, the action is performed at a default -4 penalty.",
+        "Trader appears in the earlier career list, but no Trader Minor or Major Talent table appears in this chapter or elsewhere in the manuscript search. The wiki records that omission rather than creating replacement talents."
+      ],
+      "tables": [
+        {
+          "id": "solanum-hunter-minor-talents",
+          "title": "Hunter Minor Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-3","Stealth","DEX","Move quietly, avoid detection, and aid others with stealth checks"],
+            ["4-6","Trap Crafting","INT","Set up and disarm basic traps; craft improvised traps from raw materials"],
+            ["7-9","Wilderness Navigation","WIS","Read natural signs and maps; navigation and map-reading checks at +5"],
+            ["10-12","Basic Survival Skills","CON","Automatically pass Difficulty 15 survival checks or lower"],
+            ["13-15","Marksmanship","DEX","Improved ranged accuracy; reroll one failed shot per session"],
+            ["16-18","Animal Handling","CHA","Attempt to train and control wild animals"],
+            ["19-20","Camouflage","DEX","Blend into natural surroundings and attempt natural-environment disguise"]
+          ]
+        },
+        {
+          "id": "solanum-hunter-major-talents",
+          "title": "Hunter Major Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-4","Expert Tracker","WIS","Track targets across long distances and complex terrain"],
+            ["5-8","Master of Survival","CON","Survive extreme conditions and improvise solutions"],
+            ["9-12","Sniper","DEX","Long-range precision; reroll ranged damage once per session"],
+            ["13-16","Tactical Awareness","INT","Anticipate enemy actions; anticipated enemy action suffers -1"],
+            ["17-20","Beast Whisperer","CHA","Communicate and form bonds with wild creatures"]
+          ]
+        },
+        {
+          "id": "solanum-mechanic-minor-talents",
+          "title": "Mechanic Minor Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-3","Basic Repairs","INT","Fix simple mechanical issues"],
+            ["4-6","Electrical Knowledge","INT","Work with electrical systems and wiring"],
+            ["7-9","Fabrication","DEX","Construct small tools or gadgets"],
+            ["10-12","Salvage Operation","WIS","Efficiently extract useful parts from junk"],
+            ["13-15","Tool Proficiency","DEX","Expertise with a wide variety of tools"],
+            ["16-18","Equipment Modification","INT","Modify and improve existing technology"],
+            ["19-20","Improvised Engineering","INT","Create functional devices from scrap"]
+          ]
+        },
+        {
+          "id": "solanum-mechanic-major-talents",
+          "title": "Mechanic Major Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-4","Advanced Machinery Specialist","INT","Deep understanding of complex machinery and systems"],
+            ["5-8","Combat Engineering","DEX","Design and build weaponry and defenses"],
+            ["9-12","System Integration Expert","INT","Combine multiple technological systems into functional units"],
+            ["13-16","Techno Savant","INT","Quickly learn and adapt to new technologies"],
+            ["17-20","Field Engineer","CON","Perform high-stakes repairs and modifications in the field"]
+          ]
+        },
+        {
+          "id": "solanum-medic-minor-talents",
+          "title": "Medic Minor Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-3","First Aid","WIS","Treat minor injuries and wounds"],
+            ["4-6","Herbal Remedies","INT","Use medicinal plants and natural treatments"],
+            ["7-9","Diagnostic Skills","INT","Identify symptoms and causes of illness"],
+            ["10-12","Basic Surgery","DEX","Perform simple surgical procedures"],
+            ["13-15","Emergency Response","WIS","React efficiently to medical emergencies"],
+            ["16-18","Infection Control","CON","Prevent and manage infections"],
+            ["19-20","Trauma Management","CON","Handle severe injuries and high-stress treatment"]
+          ]
+        },
+        {
+          "id": "solanum-medic-major-talents",
+          "title": "Medic Major Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-4","Field Surgeon","INT","Use advanced surgery in harsh conditions"],
+            ["5-8","Advanced Diagnostics","INT","Diagnose complex and rare conditions"],
+            ["9-12","Medical Innovation","INT","Develop new medical treatments and technologies"],
+            ["13-16","Crisis Management","WIS","Manage large-scale medical emergencies"],
+            ["17-20","Trauma Specialist","CON","Treat severe trauma and stabilize critical patients"]
+          ]
+        },
+        {
+          "id": "solanum-scavenger-minor-talents",
+          "title": "Scavenger Minor Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-3","Resource Identification","WIS","Identify valuable items and resources"],
+            ["4-6","Salvage Expertise","INT","Extract and repurpose parts"],
+            ["7-9","Negotiation Skills","CHA","Barter and obtain better deals"],
+            ["10-12","Foraging","WIS","Find food and useful materials in the wild"],
+            ["13-15","Makeshift Repairs","DEX","Quickly repair and adapt items using found materials"],
+            ["16-18","Hidden Cache Finder","WIS","Locate hidden or buried resources"],
+            ["19-20","Junk Crafting","INT","Create functional items from scrap"]
+          ]
+        },
+        {
+          "id": "solanum-scavenger-major-talents",
+          "title": "Scavenger Major Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-4","Master Scavenger","WIS","Find and evaluate high-value items"],
+            ["5-8","Resourceful Engineer","INT","Create advanced devices from found materials"],
+            ["9-12","Elite Negotiator","CHA","Master trading and valuable-item negotiation"],
+            ["13-16","Hidden Knowledge","INT","Access secret or rare knowledge about resources and technology"],
+            ["17-20","Survivalist Expert","CON","Thrive in the harshest environments"]
+          ]
+        },
+        {
+          "id": "solanum-warlord-minor-talents",
+          "title": "Warlord Minor Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-3","Tactical Planning","INT","Devise effective strategies and plans"],
+            ["4-6","Leadership","CHA","Command and inspire followers"],
+            ["7-9","Combat Training","DEX","Proficiency in varied combat techniques"],
+            ["10-12","Fortification Design","INT","Construct and improve defenses"],
+            ["13-15","Resource Management","CON","Allocate and manage resources efficiently"],
+            ["16-18","Psychological Warfare","CHA","Manipulate and intimidate opponents"],
+            ["19-20","Strategic Diplomacy","CHA","Form and maintain alliances"]
+          ]
+        },
+        {
+          "id": "solanum-warlord-major-talents",
+          "title": "Warlord Major Talents",
+          "columns": ["1d20","Talent","Governing Stat","Effect"],
+          "rows": [
+            ["1-4","Battlefield Commander","INT","Lead and direct troops in combat"],
+            ["5-8","Siege Warfare Specialist","INT","Assault and defend fortified positions"],
+            ["9-12","War Strategist","INT","Develop and execute complex war strategies"],
+            ["13-16","Charismatic Leader","CHA","Rally and inspire large groups"],
+            ["17-20","Total War Tactics","INT","Master warfare across psychological and tactical dimensions"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":131,"pageEnd":139,"chunkId":"solanum-career-talents:p131-139","notes":"Five complete career talent families; Trader remains listed elsewhere but lacks a talent table."}],
+      "tags": ["career talents","Hunter","Mechanic","Medic","Scavenger","Warlord","Trader omission","untrained penalty"],
+      "relatedEntries": ["solanum-origins-careers-skills-motivations","solanum-background-generation-system","solanum-native-action-and-equipment-requirements"]
+    },
+    {
+      "id": "solanum-background-generation-system",
+      "title": "In-Depth Character Background Generation",
+      "category": "Character Creation",
+      "summary": "Six 1d20 tables generate upbringing, key life events, relationships, motivations, fears or flaws, and significant possessions.",
+      "body": [
+        "The background generator is optional and intended to enrich history, hooks, relationships, and motivations rather than replace the earlier origin and motivation tables.",
+        "Roll once on each table or choose results that fit the intended character."
+      ],
+      "tables": [
+        {"id":"solanum-upbringing","title":"Upbringing","columns":["1d20","Result","Description"],"rows":[["1-3","Orphaned and Raised by Strangers","Makeshift family or community without biological ties"],["4-6","Raised in a Strict Community","Rigid, rule-bound settlement or faction"],["7-9","Wealthy Family, Now Lost","Privileged background now ruined or gone"],["10-12","Nomadic Tribe","Constant travel with a nomadic group"],["13-15","Underground Bunker","Protected underground upbringing"],["16-18","Isolated in a Remote Location","Secluded from central conflicts"],["19-20","Raised by Mercenaries","Combat and survival learned early"]]},
+        {"id":"solanum-key-life-events","title":"Key Life Events","columns":["1d20","Result","Description"],"rows":[["1-3","Witnessed a Catastrophic Disaster","Major event reshaped worldview"],["4-6","Lost a Loved One","Death or disappearance of someone close"],["7-9","Major Achievement","Gained fame or respect"],["10-12","Betrayed by a Close Ally","Profound betrayal changed trust"],["13-15","Survived a Major Conflict","Major battle shaped combat experience"],["16-18","Found a Valuable Artifact","Critical or powerful discovery"],["19-20","Led a Community or Group","Leadership role with mixed possible outcome"]]},
+        {"id":"solanum-personal-relationships","title":"Personal Relationships","columns":["1d20","Relationship","Description"],"rows":[["1-3","Mentor or Teacher","Influential guide"],["4-6","Rival or Enemy","Contentious former rival"],["7-9","Romantic Partner","Significant past or present relationship"],["10-12","Close Friend","Trusted support or ally"],["13-15","Family Member","Important surviving relative"],["16-18","Lost Contact","Missing or unreachable former connection"],["19-20","Benefactor or Patron","Powerful or influential supporter"]]},
+        {"id":"solanum-deep-motivations","title":"Personal Motivations","columns":["1d20","Motivation","Description"],"rows":[["1-4","Seeking Revenge","Revenge against those who wronged the character"],["5-8","Pursuing Knowledge","Quest for lost knowledge or understanding"],["9-12","Rebuilding Society","Create or restore society"],["13-16","Personal Redemption","Atone for mistakes or sins"],["17-20","Survival and Self-Preservation","Prioritize personal survival and well-being"]]},
+        {"id":"solanum-fears-flaws","title":"Fears and Flaws","columns":["1d20","Fear or Flaw","Description"],"rows":[["1-4","Fear of the Dark","Severe anxiety in darkness or confined spaces"],["5-8","Paranoia","Persistent suspicion of betrayal"],["9-12","Overconfidence","Overestimates ability and takes risks"],["13-16","Trauma from Past Events","Unresolved psychological scars"],["17-20","Impulsive Behavior","Acts without considering consequences"]]},
+        {"id":"solanum-significant-possessions","title":"Significant Possessions","columns":["1d20","Possession","Description"],"rows":[["1-3","Family Heirloom","Sentimental item from the past"],["4-6","Rare Technological Device","Rare or powerful technology"],["7-9","Combat Gear","Specialized survival equipment or weapon"],["10-12","Medical Supplies","Valuable medical or first-aid collection"],["13-15","Map or Journal","Important information or clues"],["16-18","Personal Memento","Object carrying memories"],["19-20","Resource Cache","Accumulated stash of supplies"]]}
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":139,"pageEnd":142,"chunkId":"solanum-backgrounds:p139-142","notes":"Optional six-part character background generator."}],
+      "tags": ["background","upbringing","life event","relationship","motivation","fear","flaw","possession"],
+      "relatedEntries": ["solanum-character-creation-system","solanum-career-talent-system"]
+    },
+    {
+      "id": "solanum-native-action-and-equipment-requirements",
+      "title": "Talent Rolls and Equipment Requirements",
+      "category": "Core System",
+      "summary": "The GM selects relevant attributes or professional talents; lacking relevant training imposes -4, while advanced equipment may require a profession, talent, or minimum attribute.",
+      "body": [
+        "When a player attempts an action or is subjected to one, the GM determines the relevant statistic or professional talent and applies its bonus or penalty.",
+        "If no relevant talent or specialized training exists, the action suffers a default -4 penalty.",
+        "Advanced gear may require a named talent, profession, or minimum attribute. The GM may deny use, impose penalties, or allow an improvised alternative when requirements are not met.",
+        "Examples include Expert Marksman for high-tech weapons, Tech Specialist for drone maintenance, and Strength 15 for heavy melee weapons."
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":142,"pageEnd":144,"chunkId":"solanum-action-equipment:p142-144","notes":"General talent resolution, -4 untrained penalty, and profession/talent/attribute equipment requirements."}],
+      "tags": ["talent roll","untrained","-4 penalty","equipment requirements","minimum attributes"],
+      "relatedEntries": ["solanum-career-talent-system","solanum-core-combat-system","solanum-item-creation-system"]
+    }
+  ]
+}
