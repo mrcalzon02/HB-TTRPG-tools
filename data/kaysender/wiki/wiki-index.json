@@ -1,7 +1,7 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "0.6.0",
-  "description": "Multi-pack wiki index. Files later in this list extend or override earlier entries by stable id. Source lore loads before converted statistics and converted player-facing rules so playable Hypertext d20 material replaces legacy mechanics placeholders while retaining the original source references. The current rules layer also includes the user-directed Warlock of the Swamp class and its evolving Lady of the Swamp pact system.",
+  "schemaVersion": "0.7.0",
+  "description": "Multi-pack wiki index. Files later in this list extend or override earlier entries by stable id. Source lore loads before converted statistics and converted player-facing rules so playable Hypertext d20 material replaces legacy mechanics placeholders while retaining the original source references. The current rules layer includes the Warlock of the Swamp, its evolving Lady of the Swamp pact system, and an expanded catalogue of thirty-two divine compromise relics recorded through multiplanar whisperings.",
   "packs": [
     "data/kaysender/wiki/entries.json",
     "data/kaysender/wiki/world-depth.json",
@@ -92,6 +92,7 @@
     "data/kaysender/wiki/converted-rules-pass-4c-crafted-navigation-items.json",
     "data/kaysender/wiki/converted-rules-pass-2d-class-path-link-fixes.json",
     "data/kaysender/wiki/converted-rules-pass-5-warlock-of-the-swamp.json",
-    "data/kaysender/wiki/converted-rules-pass-5b-warlock-of-the-swamp-display.json"
+    "data/kaysender/wiki/converted-rules-pass-5b-warlock-of-the-swamp-display.json",
+    "data/kaysender/wiki/converted-rules-pass-5c-divine-compromise-relic-catalogue.json"
   ]
 }
