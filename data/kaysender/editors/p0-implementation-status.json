@@ -18,6 +18,8 @@
     "dirtyStateTracking": true,
     "recoveryDraftAutosave": true,
     "unsavedChangeProtection": true,
+    "blankRecordUnsavedConfirmation": true,
+    "reopenRestoresActiveRecord": true,
     "canonicalProfileEnvelope": true,
     "stableProfileIds": true,
     "visibleRecordIdentity": true,
@@ -33,6 +35,8 @@
     "pinnedRevisionInheritancePolicy": true,
     "legacyInheritancePolicyNormalization": true,
     "inheritanceReferenceValidation": true,
+    "pinnedParentIdentityRehydration": true,
+    "inheritanceClearRemovesLedger": true,
     "directSavedParentInheritance": true,
     "parentReferenceHealthStates": true,
     "explicitRefreshToLatestParent": true,
@@ -42,6 +46,12 @@
     "localDraftPersistence": true,
     "persistentMultiRecordRepository": true,
     "savedRecordLibraryControls": true,
+    "staleRevisionConflictProtection": true,
+    "sameRevisionForkProtection": true,
+    "transactionalRecordWrites": true,
+    "liveIndexPruning": true,
+    "malformedRecordRepairReporting": true,
+    "repositoryConflictValidation": true,
     "recordIndexRepair": true,
     "blankRecordClearsRecoveryDraft": true,
     "sharedJsonImportExport": true,
@@ -60,22 +70,25 @@
     "documentationHandoffComplete": true
   },
   "sharedActions": [
-    "New blank record",
+    "New blank record with unsaved-change confirmation",
     "Load or import record",
     "Validate record",
     "Save local draft",
     "Recover local draft",
     "Save new persistent record",
     "Update existing record without changing profile ID",
+    "Reject stale or conflicting saved revisions",
     "Save as new clone with a new profile ID",
     "Open saved record",
+    "Restore the active record when reopening an editor",
     "Delete saved record with explicit confirmation",
-    "Repair local record index",
+    "Repair local record index and report rejected malformed records",
     "Load saved parent records directly into downstream editors",
     "Pin inherited records to explicit revisions",
+    "Restore pinned parent identity when reopening child records",
     "Show current stale unavailable and locally older parent-reference states",
     "Refresh an inherited record deliberately to its latest saved revision",
-    "Clear inherited parent links",
+    "Clear inherited parent links from both context and canonical ledger",
     "Randomize unlocked fields",
     "Copy canonical JSON",
     "Export canonical JSON",
@@ -114,6 +127,7 @@
     "scripts/validate-editor-migrations.mjs",
     "scripts/validate-editor-adapter-integration.mjs",
     "scripts/validate-editor-inheritance.mjs",
+    "scripts/validate-editor-repository.mjs",
     "scripts/validate-editor-runtime-structure.mjs",
     "scripts/validate-p0-browser-verification.mjs"
   ],
@@ -126,13 +140,13 @@
   "exitCriteria": [
     {
       "criterion": "All three existing alpha editors can open through the shared shell",
-      "implementationState": "implemented-through-registered-adapters",
+      "implementationState": "implemented-through-registered-adapters-with-active-record-restoration",
       "verificationState": "pending-final-runtime-check"
     },
     {
       "criterion": "Current island profiles import into settlement and airship without obsolete flat-field assumptions",
-      "implementationState": "implemented-through-adapter-owned-field-maps-versioned-migrations-and-direct-saved-parent-selection",
-      "verificationState": "current-nested-legacy-flat-outdated-and-future-cases-covered"
+      "implementationState": "implemented-through-adapter-owned-field-maps-versioned-migrations-direct-saved-parent-selection-and-pinned-parent-rehydration",
+      "verificationState": "current-nested-legacy-flat-outdated-future-and-reopen-cases-covered"
     },
     {
       "criterion": "Malformed wrong-profile outdated and future imports produce actionable errors instead of silent failure",
@@ -141,12 +155,12 @@
     },
     {
       "criterion": "Every editor exposes deliberate construction identity-safe persistence and pinned inheritance actions",
-      "implementationState": "implemented-through-shared-lifecycle-record-library-parent-library-and-canonical-inheritance-policy",
-      "verificationState": "functional-inheritance-validation-present"
+      "implementationState": "implemented-through-shared-lifecycle-conflict-safe-record-library-parent-library-and-canonical-inheritance-policy",
+      "verificationState": "functional-inheritance-and-repository-validation-present"
     },
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
-      "implementationState": "kernel-migration-adapter-inheritance-structural-receipt-and-workflow-validation-present",
+      "implementationState": "kernel-migration-adapter-inheritance-repository-structural-receipt-and-workflow-validation-present",
       "verificationState": "final-live-browser-verification-remains"
     }
   ],
