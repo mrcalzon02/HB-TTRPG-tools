@@ -70,17 +70,37 @@ async function main() {
   if (implementation.schemaVersion !== '1.0.0') fail('Unexpected P0 implementation status schema.');
   if (implementation.stage !== 'P0' || implementation.stageId !== activeNext[0].id) fail('P0 implementation status does not match the active roadmap stage.');
   if (implementation.activeBranch !== 'main' || implementation.parallelMainLineEditors !== 1) fail('P0 implementation status violates the one-branch, one-editor policy.');
-  if (implementation.status !== 'implementation-committed-awaiting-ci-and-browser-verification') fail(`Unexpected P0 implementation status '${implementation.status}'.`);
+  if (implementation.status !== 'framework-implementation-complete-pending-runtime-gate') {
+    fail(`Unexpected P0 implementation status '${implementation.status}'.`);
+  }
+
   const requiredP0Outputs = [
     'sharedEditorShell',
+    'editorAdapterContract',
+    'editorAdapterRegistry',
+    'genericEditorLifecycle',
     'canonicalProfileEnvelope',
     'stableProfileIds',
     'profileSchemaVersions',
     'profileAdaptersAndMigrations',
+    'adapterFieldMapsAppliedByRuntime',
+    'outdatedAndFutureSchemaDiagnostics',
+    'versionedMigrationRegistry',
+    'legacyFlatIslandMigrationTo2_0_0',
     'provenanceAndInheritanceLedger',
+    'pinnedRevisionInheritancePolicy',
+    'inheritanceReferenceValidation',
+    'directSavedParentInheritance',
+    'parentReferenceHealthStates',
+    'explicitRefreshToLatestParent',
     'fieldLocking',
     'selectiveRandomization',
     'localDraftPersistence',
+    'persistentMultiRecordRepository',
+    'savedRecordLibraryControls',
+    'visibleRecordIdentity',
+    'identitySafeUpdateExisting',
+    'explicitSaveAsNewClone',
     'sharedJsonImportExport',
     'sharedWikiDraftExport',
     'validationAndDiagnostics',
@@ -92,21 +112,31 @@ async function main() {
   for (const output of requiredP0Outputs) {
     if (implementation.implementedOutputs?.[output] !== true) fail(`P0 implemented output '${output}' is not recorded as complete.`);
   }
+
   for (const schemaFile of [
     'data/kaysender/schemas/editor-profile-envelope.schema.json',
     'data/kaysender/editors/p0-browser-verification.schema.json'
   ]) {
     if (!implementation.schemaFiles?.includes(schemaFile)) fail(`P0 implementation status does not record schema '${schemaFile}'.`);
   }
+
   for (const validationFile of [
     'scripts/validate-editor-kernel.mjs',
+    'scripts/validate-editor-migrations.mjs',
+    'scripts/validate-editor-adapter-integration.mjs',
+    'scripts/validate-editor-inheritance.mjs',
     'scripts/validate-editor-runtime-structure.mjs',
     'scripts/validate-p0-browser-verification.mjs'
   ]) {
     if (!implementation.validationFiles?.includes(validationFile)) fail(`P0 implementation status does not record validator '${validationFile}'.`);
   }
-  if (!Array.isArray(implementation.exitCriteria) || implementation.exitCriteria.length !== activeNext[0].exitCriteria.length) fail('P0 exit-criteria status count does not match the roadmap.');
-  if (!implementation.promotionRule?.includes('live browser verification')) fail('P0 promotion rule must require live browser verification before P1 opens.');
+
+  if (!Array.isArray(implementation.exitCriteria) || implementation.exitCriteria.length !== activeNext[0].exitCriteria.length) {
+    fail('P0 exit-criteria status count does not match the roadmap.');
+  }
+  if (!implementation.promotionRule?.includes('live browser verification')) {
+    fail('P0 promotion rule must require live browser verification before P1 opens.');
+  }
 
   const coveredModules = new Set(stages.flatMap(stage => stage.moduleIds || []));
   const expectedMainLineModules = [
