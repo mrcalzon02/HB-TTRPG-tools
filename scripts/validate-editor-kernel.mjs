@@ -113,7 +113,7 @@ if (!saveResult.ok) fail('Kernel could not save a local recovery draft.');
 const protectedClear = Kernel.clearDraft('floating-island-editor');
 if (protectedClear.ok) fail('A non-explicit draft clear unexpectedly succeeded.');
 const recoveredDraft = Kernel.loadDraft('floating-island-editor');
-if (!recoveredDraft || recoveredDraft.profileId !== revision.profileId) fail('Recovery draft did not survive the non-explicit clear used by New Blank Record.');
+if (!recoveredDraft || recoveredDraft.profileId !== revision.profileId) fail('Recovery draft did not survive a non-explicit clear.');
 const explicitClear = Kernel.clearDraft('floating-island-editor', true);
 if (!explicitClear.ok || Kernel.loadDraft('floating-island-editor')) fail('Explicit draft clear did not remove the saved draft.');
 
@@ -135,16 +135,16 @@ for (const phrase of [
   'Export Wiki Draft',
   'Provenance and Inheritance',
   'Diagnostics',
-  'kaysender-editor-panel',
-  'kaysender-settlement-editor-panel',
-  'kaysender-airship-editor-panel',
-  'settlement-load-island',
-  'airship-load-island',
-  'airship-load-settlement'
+  'const Registry = window.KaysenderEditorAdapters',
+  'const Lifecycle = window.KaysenderEditorLifecycle',
+  'async function launch(editorIdOrAlias)',
+  'adapter.parentImports.forEach',
+  'Kernel.clearDraft(adapter.id, true)',
+  'getActiveEnvelope:'
 ]) {
   if (!productionScript.includes(phrase)) fail(`Production shell is missing '${phrase}'.`);
 }
-if (productionScript.includes('Kernel.clearDraft(spec.id, true)')) fail('New Blank Record must not explicitly delete the recovery draft.');
+if (productionScript.includes('const editorSpecs =')) fail('Production shell still contains the removed hardcoded editor specification table.');
 
 const smokeScript = await readText('kaysender-editor-live-smoke.js');
 for (const phrase of [
@@ -166,13 +166,31 @@ for (const phrase of [
 
 const html = await readText('index.html');
 const kernelPosition = html.indexOf('<script src="kaysender-editor-kernel.js"></script>');
+const mappingPosition = html.indexOf('<script src="kaysender-editor-field-mapping.js"></script>');
+const adapterPosition = html.indexOf('<script src="kaysender-editor-adapter-registry.js"></script>');
+const builtinsPosition = html.indexOf('<script src="kaysender-editor-builtins.js"></script>');
+const migrationPosition = html.indexOf('<script src="kaysender-editor-migrations.js"></script>');
+const kernelAdaptersPosition = html.indexOf('<script src="kaysender-editor-kernel-adapters.js"></script>');
 const islandPosition = html.indexOf('<script src="kaysender-editors.js"></script>');
 const settlementPosition = html.indexOf('<script src="kaysender-settlement-editor.js"></script>');
 const airshipPosition = html.indexOf('<script src="kaysender-airship-editor.js"></script>');
 const productionPosition = html.indexOf('<script src="kaysender-editor-production.js"></script>');
 const smokePosition = html.indexOf('<script src="kaysender-editor-live-smoke.js"></script>');
-if ([kernelPosition, islandPosition, settlementPosition, airshipPosition, productionPosition, smokePosition].some(position => position < 0)) fail('Main page does not load the complete P0 editor runtime.');
-if (!(kernelPosition < islandPosition && islandPosition < settlementPosition && settlementPosition < airshipPosition && airshipPosition < productionPosition && productionPosition < smokePosition)) fail('P0 editor scripts are loaded in the wrong order.');
+const positions = [
+  kernelPosition,
+  mappingPosition,
+  adapterPosition,
+  builtinsPosition,
+  migrationPosition,
+  kernelAdaptersPosition,
+  islandPosition,
+  settlementPosition,
+  airshipPosition,
+  productionPosition,
+  smokePosition
+];
+if (positions.some(position => position < 0)) fail('Main page does not load the complete P0 editor runtime.');
+if (!positions.every((position, index) => index === 0 || position > positions[index - 1])) fail('P0 editor scripts are loaded in the wrong order.');
 
 console.log('Shared editor kernel validation passed.');
-console.log('Verified canonical envelopes, stable and change-sensitive revisions, volatile timestamp handling, deduplicated migrations, explicit-only draft deletion, nested and flat island adapters, wrong-profile diagnostics, malformed JSON diagnostics, shared actions, all three alpha editor panels, the live browser smoke harness, and main-page script ordering.');
+console.log('Verified base envelope behavior, stable revisions, explicit-only draft deletion, nested and flat context adapters, generic production actions, adapter-driven script ordering, wrong-profile diagnostics, malformed JSON diagnostics, and the live browser smoke harness.');
