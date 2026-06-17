@@ -259,3 +259,35 @@ Included:
 - `docs/wiki-source-lore-pass-8-water-in-the-skies.md`
 
 This pass imports Water in the Skies of Kaysender, Aerial Geography and Water Scarcity, Rain-Catching Apparatus, Cloud Dew Harvesting, Water Storage and Transportation, Water Trade and Water Politics, Magical Water Storage, and Weather Gear for Sky Travel. Legacy item details are preserved in mechanics-legacy notes where needed for later Hypertext d20 conversion.
+
+## 2026-06-17 - P0 Shared Editor Kernel and Profile Contract
+
+P0 was implemented directly on the single active branch, `main`. No parallel feature branch or competing editor runtime was created.
+
+The Floating Island, Settlement, and Airship editors remain separate domain editors. P0 did not create one central editor; it created shared infrastructure used by those editors through registered adapters.
+
+The completed framework provides:
+
+- A generic adapter-driven editor shell instead of a hardcoded central editor.
+- A canonical profile envelope with stable IDs, revisions, schema versions, provenance, inheritance, field locks, diagnostics, and domain data.
+- Explicit adapter schema versions: Island `2.0.0`, Settlement `1.0.0`, and Airship `1.0.0`.
+- Adapter-owned field mapping for nested and flat profile compatibility.
+- A versioned migration registry, including legacy flat Island migration into Island schema `2.0.0`.
+- Actionable diagnostics for malformed JSON, wrong profile types, invalid schema strings, unsupported old schemas, and unsupported future schemas.
+- Shared dirty-state tracking, recovery autosave, unsaved-change protection, and deliberate blank-record creation.
+- Persistent multi-record browser storage with index repair and explicit deletion confirmation.
+- Visible record identity showing profile ID, profile type, schema version, revision, and saved state.
+- Separate identity-safe actions for updating an existing record and saving a new clone with a new profile ID.
+- Direct saved-parent selection for downstream editors without manual JSON copy and paste.
+- Pinned-revision inheritance. A child keeps the exact parent revision it inherited until the user deliberately refreshes it.
+- Visible current, stale, unavailable, and locally older parent-reference states.
+- Shared canonical JSON export, wiki-draft export, provenance display, diagnostics, field locking, and selective randomization.
+- Recoverable runtime error reporting and responsive, keyboard-accessible shared controls.
+
+P0 also added dependency-free validation for the base kernel, production roadmap, adapter registration, schema declarations, migrations, current and legacy fixtures, unsupported old and future schemas, wrong-profile imports, pinned inheritance, runtime structure, script ordering, and the Island → Settlement → Airship browser chain.
+
+The GitHub Pages workflow now runs validators and syntax checks, installs Playwright Chromium, runs the integrated P0 browser verification, validates its receipt, uploads evidence as a workflow artifact, and deploys only when the gate succeeds.
+
+An earlier experiment attempted to commit browser-verification evidence back into `main`. That mechanism was removed because it introduced unnecessary proof commits, repository mutation, stashing, and possible interference from installed browser dependencies. Verification evidence now remains a workflow artifact; deployment success is the gate signal.
+
+P0 framework implementation is complete, but P0 is not promoted until the integrated live-browser gate passes on `main`. Until that result exists, `shared-editor-kernel` remains the sole `required-next` roadmap stage and P1 remains closed.
