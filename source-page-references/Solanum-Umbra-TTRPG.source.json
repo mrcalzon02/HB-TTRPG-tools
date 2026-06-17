@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "sourceId": "solanum-umbra-ttrpg",
   "title": "Solanum Umbra TTRPG",
   "originalFilename": "Solanum-Umbra-TTRPG.pdf",
@@ -10,23 +10,36 @@
   "sourceStatus": "verified-repository-binary",
   "binaryGitStatus": "present-and-identity-verified",
   "repositoryPath": "SRC/Solanum-Umbra-TTRPG.pdf",
-  "integrationStatus": "native-system-character-creation-pass-1-complete",
+  "integrationStatus": "native-foundation-import-active",
   "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json",
   "mechanicsPolicy": "preserve-native-system-no-external-conversion",
   "integratedScope": {
-    "nativeWikiEntries": 7,
-    "sourcePagesIntegrated": "104-116",
+    "nativeWikiEntries": 25,
+    "nativePacks": 6,
+    "sourcePageRanges": ["82-116","131-144","151-188","228-232"],
     "characterCreation": true,
     "characterSheetSchema": true,
     "coreAttributes": 6,
     "derivedStatistics": 4,
     "origins": 5,
     "listedCareers": 6,
-    "ancestryFamilies": 3,
-    "cyborgVariantFamilies": 3,
+    "careerTalentFamilies": 5,
+    "backgroundTables": 6,
+    "craftingSubsystem": true,
+    "combatSubsystem": true,
+    "entityGeneratorTables": 7,
+    "synthesisForceFamilies": 4,
+    "namedForceRoles": 36,
     "fullCyberizationThresholdPercent": 49,
     "dataSeizureStages": 6,
     "externalRulesConversion": false
   },
-  "notes": "Canonical source identity receipt for the independent post-apocalyptic science-fantasy setting. The PDF is present in SRC and matches the registered byte count and SHA-256 digest. Import preserves Solanum Umbra’s native mechanics and terminology. The first rules pass indexes pages 104-116 without translating attributes, derived statistics, careers, cyberization, or data-seizure rules into another RPG system."
+  "recordedSourceGaps": [
+    "Trader is listed as a career but no Trader talent tables were found.",
+    "The attribute bonus band for values 9-11 is printed as -1 to +1 without an exact mapping.",
+    "Crafting positive difficulty modifiers are added to the success roll in the worked example.",
+    "The melee chapter presents both direct raw-stat formulas and a primary-stat bonus method.",
+    "Base Defensive Value and Advanced Tech range falloff are not fully defined in the imported section."
+  ],
+  "notes": "The PDF in SRC matches the registered byte count and SHA-256 digest. Solanum Umbra is imported as its own native system. Current wiki packs cover foundational character rules, careers, backgrounds, crafting, resources, combat, cover, vehicles, supernatural entity generation, and qualitative Synthesis force profiles without translating them into another RPG system."
 }
