@@ -204,8 +204,15 @@ for (const phrase of [
   'recordsFor(definition)',
   'definition.expectedTypes.flatMap',
   'currentParent(panel, definition)',
+  'savedParentMetadata(parent)',
+  'parentReferenceState(panel, definition)',
+  "state: 'unavailable'",
+  "state: 'stale'",
+  "state: 'ahead'",
+  'Refresh to Latest Parent',
   'Repository.load(profileId)',
   'existingLoadButton.click()',
+  'Lifecycle.markDirty(adapter.id',
   'Load Saved Parent',
   'Clear Parent Link',
   'definition.envelopeDatasetKey',
@@ -245,4 +252,4 @@ for (const phrase of [
 await import('./validate-editor-adapter-integration.mjs');
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified schema-aware adapters, migrations, lifecycle, persistent records, identity-safe saving, direct saved-parent inheritance, generic production shell, error boundary, and browser chain.');
+console.log('Verified schema-aware adapters, migrations, lifecycle, persistent records, identity-safe saving, inherited-reference health and refresh controls, generic production shell, error boundary, and browser chain.');
