@@ -32,14 +32,14 @@
       <div class="hero-card no-print">
         <p class="eyebrow">Solanum Umbra science-fiction workspace</p>
         <h2 id="solanum-umbra-title">Source Intake and Wiki Staging</h2>
-        <p>Solanum Umbra is maintained as its own post-apocalyptic science-fantasy setting rather than being folded into the project’s fantasy corpus. Its 248-page source manuscript is retained intact while the dedicated wiki remains staged for later multi-pass extraction.</p>
+        <p>Solanum Umbra is maintained as its own post-apocalyptic science-fantasy setting rather than being folded into the project’s fantasy corpus. Its 248-page manuscript is registered as the canonical source while the dedicated wiki remains staged for later multi-pass extraction.</p>
       </div>
       <div class="module-grid no-print">
         <article class="module-card">
-          <div class="module-meta"><span class="badge status-active">source retained</span><span class="badge">248 pages</span></div>
+          <div class="module-meta"><span class="badge status-active">source registered</span><span class="badge">248 pages</span><span class="badge status-planned">binary transfer pending</span></div>
           <h3>Solanum Umbra TTRPG Manuscript</h3>
-          <p>The canonical source document for the shattered post-Synthesis world, its ruined civilizations, rogue synthetic commanders, unstable magic, hermetic orders, paranormal entities, and survival systems.</p>
-          <a class="primary-action" href="source-page-references/Solanum-Umbra-TTRPG.pdf" target="_blank" rel="noopener">Open Source PDF</a>
+          <p>The source receipt preserves the original filename, page count, byte count, SHA-256 checksum, intended repository path, and deferred integration status. The raw PDF is not falsely represented as present until a binary-capable transfer is completed.</p>
+          <a class="primary-action" href="source-page-references/Solanum-Umbra-TTRPG.source.json" target="_blank" rel="noopener">Open Source Receipt</a>
         </article>
         <article class="module-card">
           <div class="module-meta"><span class="badge status-planned">wiki staged</span><span class="badge">integration deferred</span></div>
