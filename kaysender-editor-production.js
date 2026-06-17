@@ -3,8 +3,9 @@
 
   const Kernel = window.KaysenderEditorKernel;
   const Registry = window.KaysenderEditorAdapters;
-  if (!Kernel || !Registry) {
-    console.error('Kaysender editor production runtime could not start: shared kernel or adapter registry is missing.');
+  const Lifecycle = window.KaysenderEditorLifecycle;
+  if (!Kernel || !Registry || !Lifecycle) {
+    console.error('Kaysender editor production runtime could not start: shared kernel, adapter registry, or lifecycle is missing.');
     return;
   }
 
@@ -31,6 +32,7 @@
       .mainline-editor-toolbar button{width:auto}.mainline-editor-status-grid{display:grid;grid-template-columns:minmax(260px,1fr) minmax(260px,1fr);gap:12px;margin:12px 0}
       .mainline-editor-status-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:rgba(0,0,0,.18)}
       .mainline-editor-status-card h3{margin-top:0;color:var(--accent)}.mainline-editor-status-card ul{margin:0;padding-left:20px;color:var(--muted)}
+      .mainline-editor-record-state{margin:.5rem 0 0;color:var(--muted);font-weight:700}.mainline-editor-record-state[data-dirty="true"]{color:#e7bf73}
       .editor-diagnostic-error{color:#ff8b8b}.editor-diagnostic-warning{color:#e7bf73}.editor-diagnostic-info{color:var(--muted)}
       .editor-field-lock{display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--muted);font-size:.7rem}.editor-field-lock input{width:auto!important;padding:0!important}
       .production-hidden{display:none!important}.mainline-editor-body>.editor-panel{margin:0;border-color:rgba(255,255,255,.1);box-shadow:none;background:rgba(0,0,0,.08)}
@@ -57,6 +59,7 @@
           <div class="mainline-editor-stage">P0 Shared Editor Framework</div>
           <h2 id="mainline-editor-title">Kaysender Production Editor</h2>
           <p id="mainline-editor-description" class="helper-note">Shared profile contract, drafts, validation, inheritance, locks, diagnostics, and canonical exports.</p>
+          <p id="mainline-editor-record-state" class="mainline-editor-record-state" data-dirty="false">Ready.</p>
         </div>
         <button id="mainline-editor-close" class="secondary-action" type="button">Close Editor</button>
       </div>
@@ -71,6 +74,7 @@
     if (status) status.insertAdjacentElement('afterend', shell);
     else document.getElementById('kaysender')?.prepend(shell);
     shell.querySelector('#mainline-editor-close')?.addEventListener('click', () => {
+      if (activeEditorId && !Lifecycle.confirmLeave(activeEditorId)) return;
       shell.hidden = true;
       activeEditorId = '';
     });
@@ -94,6 +98,9 @@
     const adapter = resolveAdapter(editorIdOrAlias);
     if (!adapter) {
       renderDiagnostics([Kernel.diagnostic('error', 'editor-adapter-missing', `No shared editor adapter is registered for ${editorIdOrAlias}.`)]);
+      return null;
+    }
+    if (activeEditorId && activeEditorId !== adapter.id && !Lifecycle.confirmLeave(activeEditorId, 'The current editor has unsaved changes. Switch editors anyway?')) {
       return null;
     }
     switchKaysenderView();
@@ -128,6 +135,8 @@
     bindParentImports(adapter, panel);
     hideDuplicatedLegacyActions(adapter, panel);
     renderToolbar(adapter, panel);
+    Lifecycle.bind(adapter, panel, { autosave: () => autosaveDraft(adapter, panel) });
+    renderLifecycleState(Lifecycle.getState(adapter.id));
     renderDiagnostics([Kernel.diagnostic('info', 'editor-ready', `${adapter.label.replace(/^Open /, '')} is running through the shared adapter runtime.`)]);
     refreshProvenance(adapter, panel);
   }
@@ -222,8 +231,10 @@
     adapter.parentImports.forEach(definition => clearParentImport(panel, definition));
     activeEnvelopes.delete(adapter.id);
     Kernel.clearDraft(adapter.id, true);
+    Lifecycle.reset(adapter.id, 'Old recovery draft cleared. New blank record has not been saved.');
+    Lifecycle.markDirty(adapter.id, 'New blank record has unsaved changes.', { autosave: false });
     rebuild(adapter, panel);
-    renderDiagnostics([Kernel.diagnostic('info', 'blank-record-created', 'Created a new blank record with fresh profile identity and cleared its recovery draft.')]);
+    renderDiagnostics([Kernel.diagnostic('info', 'blank-record-created', 'Created a new blank record with fresh profile identity and cleared its previous recovery draft.')]);
   }
 
   function readRawProfile(adapter, panel) {
@@ -280,6 +291,7 @@
     if (!result.ok) return null;
     activeEnvelopes.set(adapter.id, result.envelope);
     applyEnvelope(adapter, panel, result.envelope);
+    Lifecycle.markClean(adapter.id, `Imported ${result.envelope.name}. Recovery state synchronized.`);
     return result.envelope;
   }
 
@@ -332,14 +344,22 @@
     }, 0);
   }
 
-  function saveCurrentDraft(adapter, panel) {
+  async function persistDraft(adapter, panel) {
+    triggerBuild(adapter, panel);
+    await new Promise(resolve => window.setTimeout(resolve, 0));
     const envelope = buildEnvelope(adapter, panel);
-    if (!envelope) {
-      renderDiagnostics([Kernel.diagnostic('error', 'draft-save-failed', 'No profile is available to save.')]);
-      return;
-    }
-    const result = Kernel.saveDraft(adapter.id, envelope);
+    if (!envelope) return { ok: false, message: 'No profile is available to save.' };
+    return Kernel.saveDraft(adapter.id, envelope);
+  }
+
+  async function autosaveDraft(adapter, panel) {
+    return persistDraft(adapter, panel);
+  }
+
+  async function saveCurrentDraft(adapter, panel) {
+    const result = await persistDraft(adapter, panel);
     renderDiagnostics([Kernel.diagnostic(result.ok ? 'info' : 'error', result.ok ? 'draft-saved' : 'draft-save-failed', result.message)]);
+    if (result.ok) Lifecycle.markClean(adapter.id, 'Local recovery draft saved manually.');
   }
 
   function recoverDraft(adapter, panel) {
@@ -350,6 +370,7 @@
     }
     activeEnvelopes.set(adapter.id, envelope);
     applyEnvelope(adapter, panel, envelope);
+    Lifecycle.markClean(adapter.id, `Recovered local draft ${envelope.name}.`);
   }
 
   function cloneCurrent(adapter, panel) {
@@ -361,6 +382,7 @@
     const clone = Kernel.cloneEnvelope(envelope, { editorId: adapter.id, moduleId: adapter.moduleId });
     activeEnvelopes.set(adapter.id, clone);
     applyEnvelope(adapter, panel, clone);
+    Lifecycle.markDirty(adapter.id, `Cloned ${envelope.name}; the new record has not been saved.`, { autosave: false });
   }
 
   function randomizeUnlocked(adapter, panel) {
@@ -372,6 +394,7 @@
       Kernel.restoreFields(form, snapshot);
       triggerBuild(adapter, panel);
       buildEnvelope(adapter, panel);
+      Lifecycle.markDirty(adapter.id, `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`);
       renderDiagnostics([Kernel.diagnostic('info', 'selective-randomization-complete', `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`)]);
     }, 0);
   }
@@ -429,6 +452,7 @@
       }
       panel.dataset[definition.envelopeDatasetKey] = JSON.stringify(result.envelope);
       textarea.value = JSON.stringify(result.context, null, 2);
+      Lifecycle.markDirty(adapter.id, `Loaded ${definition.id} parent ${result.envelope.name}.`);
       window.setTimeout(() => refreshProvenance(adapter, panel), 0);
     }, true);
   }
@@ -442,6 +466,15 @@
     inheritance.forEach(item => items.push(`${escapeHtml(item.relationship)}: ${escapeHtml(item.name)} (${escapeHtml(item.profileId)}).`));
     envelope?.provenance?.migrationLog?.forEach(item => items.push(`Migration: ${escapeHtml(item.message)}.`));
     list.innerHTML = items.length ? items.map(item => `<li>${item}</li>`).join('') : '<li>No inherited records loaded.</li>';
+  }
+
+  function renderLifecycleState(state) {
+    if (!state || state.editorId !== activeEditorId) return;
+    const target = getShell().querySelector('#mainline-editor-record-state');
+    if (!target) return;
+    target.dataset.dirty = String(state.dirty);
+    target.dataset.status = state.status;
+    target.textContent = state.message;
   }
 
   function renderDiagnostics(diagnostics) {
@@ -483,6 +516,7 @@
     injectStyles();
     getShell();
     decorateCards();
+    window.addEventListener('kaysender-editor-lifecycle-change', event => renderLifecycleState(event.detail));
     const observer = new MutationObserver(decorateCards);
     observer.observe(document.body, { childList: true, subtree: true });
     window.setInterval(decorateCards, 1000);
@@ -500,6 +534,10 @@
       getAdapter: editorIdOrAlias => resolveAdapter(editorIdOrAlias),
       getActiveEditorId: () => activeEditorId,
       getActiveEnvelope: () => Kernel.deepClone(activeEnvelopes.get(activeEditorId) || null),
+      getRecordState: editorIdOrAlias => {
+        const adapter = resolveAdapter(editorIdOrAlias || activeEditorId);
+        return adapter ? Lifecycle.getState(adapter.id) : null;
+      },
       rebuildActive: () => {
         const { adapter, panel } = activeAdapterAndPanel();
         if (adapter && panel) rebuild(adapter, panel);
