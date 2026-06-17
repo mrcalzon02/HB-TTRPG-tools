@@ -203,7 +203,7 @@ for (const phrase of [
   'synchronizeLoadedEnvelope',
   'loaded-record-identity-changed',
   'loaded-record-roundtrip-changed',
-  'import-draft-sync-failed',
+  'loaded-record-draft-sync-failed',
   'unresolvedParentEnvelope',
   "origin: 'unresolved-inheritance-reference'",
   'preserveUnresolvedParent',
@@ -307,8 +307,9 @@ for (const phrase of [
 
 await import('./validate-editor-adapter-integration.mjs');
 await import('./validate-editor-inheritance.mjs');
+await import('./validate-editor-drafts.mjs');
 await import('./validate-editor-lifecycle.mjs');
 await import('./validate-editor-repository.mjs');
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified schema-aware adapters, safe drafts, generation-aware lifecycle, conflict-safe persistence, pinned-parent rehydration, unresolved-reference repair, identity-safe saving, loaded-record round trips, and the expanded persistent browser chain.');
+console.log('Verified schema-aware adapters, failure-safe drafts, generation-aware lifecycle, conflict-safe persistence, pinned-parent rehydration, unresolved-reference repair, identity-safe saving, loaded-record round trips, and the expanded persistent browser chain.');
