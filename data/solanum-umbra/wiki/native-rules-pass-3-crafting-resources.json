@@ -1,0 +1,136 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-external-conversion",
+  "description": "Native Solanum Umbra item creation, resource tiers, crafting result ladder, and support modifiers from pages 151-167.",
+  "entries": [
+    {
+      "id": "solanum-item-creation-system",
+      "title": "Item Creation System",
+      "category": "Crafting",
+      "summary": "Crafting combines technology level, resource availability, item complexity, mentors, tools, skill, workshops, and materials into a modified d20 roll compared against a five-result success ladder.",
+      "body": [
+        "The source calls several positive values ‘difficulty modifiers’ but then adds them to the d20 result, making advanced technology and complexity increase the final result. The wiki preserves that printed procedure and flags the terminology as a native-system ambiguity rather than reversing the signs.",
+        "The printed sequence is: choose technology level, choose resource availability, choose item complexity and time, apply support modifiers, roll d20, add the total modifier, and compare the final result to the outcome table.",
+        "A result above 20 is treated as Exceptional Success in the worked example."
+      ],
+      "tables": [
+        {
+          "id": "solanum-crafting-technology",
+          "title": "Technology Level and Complexity",
+          "columns": ["Technology Level","Description","Printed Modifier","Complexity Rating"],
+          "rows": [
+            ["Scavenged","Scrap or rudimentary parts","+2","Low"],
+            ["Improvised","Basic or unconventional materials","+4","Moderate"],
+            ["Modern","Contemporary functional materials","+6","High"],
+            ["Recovered","Repurposed advanced technology","+8","Very High"],
+            ["Reclaimed","Near-future or rare technology","+10","Extreme"],
+            ["Advanced","Cutting-edge or experimental technology","+12","Legendary"]
+          ]
+        },
+        {
+          "id": "solanum-crafting-resource-availability",
+          "title": "Resource Availability and Complexity",
+          "columns": ["Availability","Description","Modifier","Resource Quality"],
+          "rows": [
+            ["Abundant","Common and easily accessible","-2","High"],
+            ["Scarce","Limited and requires careful sourcing","+0","Medium"],
+            ["Rare","Difficult to find and requires extensive search","+2","Low"],
+            ["Exotic","Unique or distant-source materials","+4","Very Low"],
+            ["Mythic","Nearly impossible to find; often quest material","+6","Variable"]
+          ]
+        },
+        {
+          "id": "solanum-crafting-complexity-time",
+          "title": "Crafting Complexity and Time",
+          "columns": ["Complexity","Description","Time to Craft","Modifier"],
+          "rows": [
+            ["Simple","Basic function with minimal components","1d6 hours","+0"],
+            ["Intermediate","Moderate complexity and several moving parts","1d6 days","+4"],
+            ["Complex","Intricate high-complexity design","1d6 weeks","+8"],
+            ["Advanced","Highly intricate cutting-edge technology","1d6 months","+12"],
+            ["Legendary","Near-mythical complexity and rare resources","1d6 months + 1d6 weeks","+16"]
+          ]
+        },
+        {
+          "id": "solanum-crafting-outcomes",
+          "title": "Crafting Failure and Success",
+          "columns": ["Modified d20 Result","Outcome"],
+          "rows": [
+            ["1-5","Failure: item unusable or resources may be lost"],
+            ["6-10","Partial Success: functional with minor issues"],
+            ["11-15","Success: completed as intended"],
+            ["16-19","Superior Success: exceeds expectations with bonuses or features"],
+            ["20+","Exceptional Success: extraordinary item with unique attributes or powers"]
+          ]
+        }
+      ],
+      "procedure": [
+        "Select Technology Level and record its printed modifier.",
+        "Select Resource Availability and record its modifier.",
+        "Select Item Complexity, time, and modifier.",
+        "Apply mentor, item, skill, workshop, and material modifiers.",
+        "Roll 1d20 and add the total modifier exactly as printed in the source.",
+        "Compare the final result to the crafting outcome table."
+      ],
+      "workedExample": {
+        "project": "Modern Weapon",
+        "technology": "Modern +6",
+        "resources": "Scarce +0",
+        "complexity": "Intermediate +4",
+        "baseTotalModifier": "+10",
+        "d20Roll": "12",
+        "finalResult": "22",
+        "outcome": "Exceptional Success"
+      },
+      "sourceStatus": "source-native-mechanics-with-explicit-ambiguity",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":160,"pageEnd":167,"chunkId":"solanum-crafting:p160-167","notes":"Core item-creation tables, worked example, and all support modifiers."}],
+      "tags": ["crafting","item creation","technology level","resource availability","complexity","d20 result","native ambiguity"],
+      "relatedEntries": ["solanum-crafting-support-modifiers","solanum-resource-and-communications-tiers","solanum-native-action-and-equipment-requirements"]
+    },
+    {
+      "id": "solanum-crafting-support-modifiers",
+      "title": "Crafting Support Modifiers",
+      "category": "Crafting",
+      "summary": "Mentors, tools, skill level, workshop quality, and material quality modify the native crafting roll.",
+      "body": [
+        "Mentors must be physically present and commit significant time. Tools and components affect precision and function. Skill reflects the crafter’s training. Workshop and material quality can reduce or increase the final modifier.",
+        "The source describes negative values as reductions in difficulty and positive values as increases, even though the core example adds positive technology and complexity values to the success roll. This contradiction remains visible."
+      ],
+      "tables": [
+        {"id":"solanum-crafting-mentors","title":"Mentor Modifiers","columns":["Mentor","Effect","Modifier","Notes"],"rows":[["Expert Mentor","Advanced techniques and shortcuts","-4","Reduces time and difficulty"],["Skilled Mentor","Useful advice and guidance","-2","Improves insight and success"],["Apprentice Mentor","Basic limited guidance","-1","Small reduction"],["No Mentor","No assistance","+0","Standard process"]]},
+        {"id":"solanum-crafting-tools","title":"Tool and Item Modifiers","columns":["Item Type","Effect","Modifier","Notes"],"rows":[["Advanced Tools","High-quality precision tools","-3","Improves efficiency and success"],["Special Components","Unique functionality-enhancing parts","-2","May add bonuses or features"],["Basic Tools","Standard equipment","+0","Normal process"],["Damaged Tools","Worn or broken tools","+2","Increases difficulty and time"]]},
+        {"id":"solanum-crafting-skill-level","title":"Crafting Skill Modifiers","columns":["Skill Level","Effect","Modifier","Notes"],"rows":[["Expert","Extensive knowledge","-5","Large difficulty reduction"],["Advanced","Specialized training","-3","Reduces difficulty and time"],["Proficient","Competent and experienced","-2","Moderate reduction"],["Novice","Limited experience","+2","Increases difficulty and time"],["Untrained","No necessary skill","+4","Major increase in difficulty and time"]]},
+        {"id":"solanum-crafting-workshops","title":"Workshop Quality Modifiers","columns":["Workshop","Effect","Modifier","Notes"],"rows":[["State-of-the-Art","Cutting-edge technology and safety","-4","Improves efficiency and safety"],["Well-Equipped","Good tools and environment","-2","Improves quality and time"],["Basic","Essential equipment","+0","Standard conditions"],["Dilapidated","Poor and limited equipment","+2","Increases difficulty and time"],["Hazardous","Unsafe and severely lacking","+4","Major impact on success and quality"]]},
+        {"id":"solanum-crafting-materials","title":"Material Quality Modifiers","columns":["Material","Effect","Modifier","Notes"],"rows":[["Premium","Rare, high-quality, or specially treated","-4","Improves quality and reduces difficulty"],["Standard","Common and widely available","+0","Normal quality"],["Substandard","Damaged or poor quality","+2","Increases difficulty and lowers quality"],["Scarcity","Extremely limited or exotic","+4","Major difficulty increase"],["Toxic/Degraded","Dangerous or unstable","+6","Very high difficulty and failure risk"]]}
+      ],
+      "workedExample": {
+        "base": "Modern +6, Scarce +0, Intermediate +4",
+        "support": "Skilled Mentor -2, Advanced Tools -3, Proficient Skill -2, Well-Equipped Workshop -2, Premium Materials -4",
+        "finalModifier": "+1"
+      },
+      "sourceStatus": "source-native-mechanics-with-explicit-ambiguity",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":162,"pageEnd":167,"chunkId":"solanum-crafting-support:p162-167","notes":"Mentor, tool, skill, workshop, and material modifiers and integrated example."}],
+      "tags": ["mentor","tools","skill","workshop","materials","crafting modifiers"],
+      "relatedEntries": ["solanum-item-creation-system","solanum-resource-and-communications-tiers"]
+    },
+    {
+      "id": "solanum-resource-and-communications-tiers",
+      "title": "Communications and Resource Item Tiers",
+      "category": "Equipment and Resources",
+      "summary": "Communication equipment and sorted resources use Scavenged through Advanced Tech tiers with escalating credit values and capabilities.",
+      "body": [
+        "The source uses the same technological vocabulary across communications, resource items, trade goods, reclaimed synthesis components, weapons, armor, and crafting.",
+        "This entry imports the communication and general resource tiers visible immediately before the item-creation chapter."
+      ],
+      "tables": [
+        {"id":"solanum-communications-tier","title":"Communications","columns":["Tier","Description","Credits","Effects"],"rows":[["Scavenged","Basic limited-range radio","20","Short range and prone to interference"],["Improvised","Homemade communicator with better range","50","Improved range but signal issues"],["Modern","Standard walkie-talkie or radio","150","Reliable range and clear communication"],["Recovered","Military-grade encrypted radio","300","Secure extended-range communication"],["Reclaimed","Satellite-linked advanced communicator","500","Long-range secure communication, GPS and data transfer"],["Advanced Tech","Exosuit communicator with AI and holographic interface","1,000","High range, translation, secure communication and AI assistance"]]},
+        {"id":"solanum-sorted-resources-tier","title":"Sorted Resource Items","columns":["Tier","Description","Credits","Effects"],"rows":[["Scavenged","Basic scrap and small components","5","Minor repair and crafting"],["Improvised","Salvaged parts and tools","15","Improvised repair and crafting"],["Modern","Standard parts and components","50","High-quality general repair and modification"],["Recovered","Advanced military or industrial components","100","Specialized high-quality repair"],["Reclaimed","Rare high-value components","200","Advanced technology and high-grade crafting"],["Advanced Tech","Cutting-edge parts","400","Advanced and experimental projects"]]}
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":151,"pageEnd":152,"chunkId":"solanum-resources:p151-152","notes":"Communications and sorted resource item tier tables."}],
+      "tags": ["communications","resource items","credits","Scavenged","Improvised","Modern","Recovered","Reclaimed","Advanced Tech"],
+      "relatedEntries": ["solanum-item-creation-system","solanum-crafting-support-modifiers"]
+    }
+  ]
+}
