@@ -105,6 +105,20 @@ const rejectedFuture = normalize(kernel.normalizeImportedRecord(futureIsland, {
 assert.equal(rejectedFuture.ok, false, 'Future Island schema was silently accepted.');
 assert.ok(rejectedFuture.diagnostics.some(item => item.code === 'profile-schema-future' && item.severity === 'error'));
 
+const locallyCreatedFutureEnvelope = normalize(kernel.createEnvelope(futureIsland, {
+  profileType: 'floating-island-foundation-profile',
+  editorId: 'floating-island-editor',
+  moduleId: 'floating-island-generator'
+}));
+const localFutureDiagnostics = normalize(kernel.validateEnvelope(
+  locallyCreatedFutureEnvelope,
+  ['floating-island-foundation-profile']
+));
+assert.ok(
+  localFutureDiagnostics.some(item => item.code === 'profile-schema-future' && item.severity === 'error'),
+  'Locally created future-schema envelope bypassed shared compatibility validation.'
+);
+
 const settlement = {
   name: 'Test Skyport',
   profileType: 'settlement-profile',
@@ -126,4 +140,4 @@ assert.equal(wrongEditor.ok, false, 'Wrong-profile import was silently accepted.
 assert.ok(wrongEditor.diagnostics.some(item => item.code === 'profile-type-mismatch'));
 
 console.log('Editor adapter integration validation passed.');
-console.log('Verified adapter schema declarations, legacy migration, current imports, outdated rejection, future rejection, default 1.0.0 wrapping, and wrong-profile diagnostics.');
+console.log('Verified adapter schemas, migrations, current/outdated/future imports, local-envelope schema validation, default 1.0.0 wrapping, and wrong-profile diagnostics.');
