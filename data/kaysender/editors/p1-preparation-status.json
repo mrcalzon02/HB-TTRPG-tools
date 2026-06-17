@@ -1,0 +1,58 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "stageId": "floating-island-production-editor",
+  "title": "Promote Floating Island / Skyland Editor",
+  "status": "contract-prepared-runtime-inactive",
+  "dependsOn": ["shared-editor-kernel"],
+  "dependencyState": "P0 framework implementation complete; final live-browser gate pending",
+  "activeBranch": "main",
+  "runtimeActivated": false,
+  "roadmapPromotionRequested": false,
+  "preparedArtifacts": {
+    "domainSchemaDraft": "data/kaysender/schemas/floating-island-production-profile.schema.json",
+    "validProductionFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-valid.json",
+    "semanticFailureCases": "data/kaysender/editors/fixtures/p1-floating-island-reference-cases.json",
+    "productionContract": "docs/p1-floating-island-production-contract.md"
+  },
+  "profileContract": {
+    "profileType": "floating-island-foundation-profile",
+    "currentActiveVersion": "2.0.0",
+    "preparedP1Version": "3.0.0",
+    "sharedEnvelopeVersion": "1.0.0"
+  },
+  "preparedCapabilities": [
+    "deliberately editable map cells with stable IDs",
+    "stable site hazard resource water fault landing habitat settlement-slot and route-node IDs",
+    "quantitative water food resource settlement and route-capacity ledgers",
+    "altitude and drift timelines",
+    "fault zones and fracture-event history",
+    "landing zones and approach corridors",
+    "ecology habitats and species slots",
+    "pinned downstream references through the shared envelope",
+    "player-safe and GM-only visibility separation",
+    "downstream export bundles for population settlement ecology route market faction crisis and encounter consumers"
+  ],
+  "semanticRulesPrepared": [
+    "nested ID uniqueness",
+    "cross-reference integrity",
+    "composition total reconciliation",
+    "active map area reconciliation",
+    "reservoir capacity reconciliation",
+    "binding settlement population limit",
+    "resource overextraction warnings",
+    "timeline range and overlap validation",
+    "route default-node integrity",
+    "player and GM visibility conflict prevention",
+    "GM-secret leakage prevention"
+  ],
+  "activationBlockers": [
+    "P0 live-browser gate has not been observed passing",
+    "P0 has not been promoted to complete",
+    "P1 has not been changed to required-next",
+    "Island 2.0.0 to 3.0.0 migration is documented but not registered",
+    "No P1 runtime panels or adapter version changes are permitted yet"
+  ],
+  "activationRule": "After P0 passes and the roadmap promotes P1, register the Island 2.0.0 to 3.0.0 migration, change the Island adapter current schema to 3.0.0, implement production panels through the shared shell, and validate against the prepared fixtures."
+}
