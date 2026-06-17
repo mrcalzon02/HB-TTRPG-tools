@@ -13,6 +13,11 @@
     'id', 'moduleId', 'label', 'profileType', 'panelId', 'formId',
     'outputId', 'buildButtonId', 'randomizeButtonId', 'open'
   ]);
+  const optionalHooks = Object.freeze([
+    'readProfile',
+    'applyProfileToForm',
+    'getWikiDraft'
+  ]);
 
   const isText = value => typeof value === 'string' && value.trim().length > 0;
 
@@ -35,6 +40,18 @@
     });
   }
 
+  function normalizeHooks(input) {
+    const hooks = {};
+    optionalHooks.forEach(name => {
+      const hook = input.hooks?.[name] ?? input[name];
+      if (hook !== undefined && typeof hook !== 'function') {
+        throw new Error(`Adapter ${input.id || 'unknown'} hook ${name} must be a function.`);
+      }
+      hooks[name] = hook || null;
+    });
+    return Object.freeze(hooks);
+  }
+
   function normalizeAdapter(input) {
     if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Adapter registration requires an object.');
     requiredFields.forEach(field => {
@@ -53,6 +70,7 @@
       parentIds.add(item.id);
       loadActions.add(item.loadButtonId);
     });
+    const hooks = normalizeHooks(input);
     return Object.freeze({
       ...input,
       aliases: Object.freeze([...(input.aliases || [])].filter(isText)),
@@ -63,7 +81,11 @@
       ].filter(isText)))),
       parentImports: Object.freeze(parentImports),
       fieldMap: Object.freeze({ ...(input.fieldMap || {}) }),
-      flatFieldExclusions: Object.freeze([...(input.flatFieldExclusions || [])].filter(isText))
+      flatFieldExclusions: Object.freeze([...(input.flatFieldExclusions || [])].filter(isText)),
+      hooks,
+      readProfile: hooks.readProfile,
+      applyProfileToForm: hooks.applyProfileToForm,
+      getWikiDraft: hooks.getWikiDraft
     });
   }
 
@@ -96,6 +118,7 @@
     resolve,
     list,
     getParentImport,
-    requiredFields
+    requiredFields,
+    optionalHooks
   });
 })();
