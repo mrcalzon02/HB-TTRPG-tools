@@ -296,8 +296,30 @@
     renderDiagnostics(result.diagnostics);
     if (!result.ok) return null;
     activeEnvelopes.set(adapter.id, result.envelope);
+    Lifecycle.reset(adapter.id, `Loaded ${result.envelope.name}. Synchronizing recovery state.`);
+    const synchronizationVersion = Lifecycle.checkpoint(adapter.id);
     applyEnvelope(adapter, panel, result.envelope);
-    Lifecycle.markClean(adapter.id, `Imported ${result.envelope.name}. Recovery state synchronized.`);
+    window.setTimeout(() => {
+      const synchronizedEnvelope = activeEnvelopes.get(adapter.id) || result.envelope;
+      const draftResult = Kernel.saveDraft(adapter.id, synchronizedEnvelope);
+      if (draftResult.ok) {
+        Lifecycle.markCleanIfUnchanged(
+          adapter.id,
+          synchronizationVersion,
+          `Loaded ${synchronizedEnvelope.name}. Recovery draft synchronized.`
+        );
+        return;
+      }
+      Lifecycle.markDirty(
+        adapter.id,
+        `Loaded ${synchronizedEnvelope.name}, but its recovery draft could not be synchronized.`,
+        { autosave: false }
+      );
+      renderDiagnostics([
+        ...Kernel.validateEnvelope(synchronizedEnvelope, [adapter.profileType]),
+        Kernel.diagnostic('error', 'import-draft-sync-failed', draftResult.message)
+      ]);
+    }, 0);
     return result.envelope;
   }
 
