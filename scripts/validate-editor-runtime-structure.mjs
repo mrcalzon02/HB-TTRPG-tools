@@ -57,10 +57,12 @@ for (const script of orderedScripts) {
 }
 
 for (const phrase of [
-  "'id', 'moduleId', 'label', 'profileType', 'panelId', 'formId'",
+  "'id', 'moduleId', 'label', 'profileType', 'currentSchemaVersion'",
   'optionalHooks',
+  'isVersion',
   'normalizeParentImport',
   'normalizeHooks',
+  'currentSchemaVersion must use major.minor.patch format',
   'fieldMap: Object.freeze',
   'flatFieldExclusions: Object.freeze',
   'register',
@@ -74,6 +76,8 @@ for (const phrase of [
   "id: 'floating-island-editor'",
   "id: 'settlement-editor'",
   "id: 'airship-editor'",
+  "currentSchemaVersion: '2.0.0'",
+  "currentSchemaVersion: '1.0.0'",
   "relationship: 'parent-island'",
   "relationship: 'parent-settlement'",
   "profileType: 'floating-island-foundation-profile'",
@@ -109,6 +113,11 @@ for (const phrase of [
 
 for (const phrase of [
   'adapterForProfileType',
+  'parseVersion',
+  'compareVersions',
+  'schemaCompatibilityDiagnostics',
+  'profile-schema-outdated',
+  'profile-schema-future',
   'mapping.apply(form, profileInput, adapter.fieldMap)',
   'mapping.applyFlat(form, profileInput, adapter.flatFieldExclusions',
   'typeof adapter.applyProfileToForm',
@@ -213,5 +222,7 @@ for (const phrase of [
   if (!smoke.includes(phrase)) fail(`P0 browser verification harness is missing '${phrase}'.`);
 }
 
+await import('./validate-editor-adapter-integration.mjs');
+
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified adapter hooks, field mapping, Island 2.0.0 migration, lifecycle, persistent records, explicit identity-safe saving, generic production shell, error boundary, and browser chain.');
+console.log('Verified adapter schema contracts, functional compatibility enforcement, field mapping, migrations, lifecycle, persistent records, identity-safe saving, generic production shell, error boundary, and browser chain.');
