@@ -10,6 +10,7 @@ const screenshotPath = path.resolve(root, process.argv[3] || 'artifacts/p0-brows
 const failurePath = path.resolve(root, process.argv[4] || 'artifacts/p0-browser-verification-failure.json');
 const host = '127.0.0.1';
 const port = Number(process.env.P0_BROWSER_PORT || 4173);
+const smokeTimeoutMs = Number(process.env.P0_BROWSER_SMOKE_TIMEOUT || 60000);
 const baseUrl = `http://${host}:${port}`;
 
 const mimeTypes = new Map([
@@ -109,26 +110,42 @@ try {
     typeof window.runKaysenderEditorSmokeTest === 'function' &&
     typeof window.getKaysenderEditorSmokeReceipt === 'function' &&
     Boolean(window.KaysenderEditorKernel) &&
+    Boolean(window.KaysenderEditorRepository) &&
     Boolean(window.KaysenderMainlineEditorProduction)
   ), null, { timeout: 15000 });
 
-  await page.evaluate(() => window.runKaysenderEditorSmokeTest());
-  await page.waitForFunction(() => Boolean(window.getKaysenderEditorSmokeReceipt?.()), null, { timeout: 30000 });
+  await page.evaluate(async timeoutMs => {
+    await Promise.race([
+      window.runKaysenderEditorSmokeTest(),
+      new Promise((_, reject) => window.setTimeout(() => reject(new Error(`P0 browser smoke exceeded ${timeoutMs} ms.`)), timeoutMs))
+    ]);
+  }, smokeTimeoutMs);
 
   const receipt = await page.evaluate(() => window.getKaysenderEditorSmokeReceipt());
-  if (!receipt || receipt.result !== 'passed') throw new Error('Browser verification did not produce a passing receipt.');
+  if (!receipt || receipt.result !== 'passed') {
+    const diagnostics = await page.locator('#p0-live-smoke-results li').allTextContents().catch(() => []);
+    throw new Error(`Browser smoke completed without a passing receipt.${diagnostics.length ? ` ${diagnostics.join(' | ')}` : ''}`);
+  }
+
+  const remainingRecords = await page.evaluate(() => window.KaysenderEditorRepository.list());
+  if (remainingRecords.length) {
+    throw new Error(`Browser smoke left ${remainingRecords.length} temporary saved record${remainingRecords.length === 1 ? '' : 's'} behind: ${remainingRecords.map(item => item.profileId).join(', ')}.`);
+  }
   if (pageErrors.length) throw new Error(`Uncaught page errors: ${pageErrors.join(' | ')}`);
 
   await fs.writeFile(outputPath, `${JSON.stringify(receipt, null, 2)}\n`, 'utf8');
   console.log('P0 browser verification passed in Chromium.');
   console.log(`Receipt written to ${path.relative(root, outputPath)}.`);
+  console.log('Temporary persistent records were cleaned up successfully.');
   if (consoleErrors.length) console.warn(`Non-fatal browser console errors: ${consoleErrors.join(' | ')}`);
 } catch (error) {
   let diagnostics = [];
   let pageUrl = '';
+  let remainingRecords = [];
   if (page) {
     pageUrl = page.url();
     diagnostics = await page.locator('#p0-live-smoke-results li').allTextContents().catch(() => []);
+    remainingRecords = await page.evaluate(() => window.KaysenderEditorRepository?.list?.() || []).catch(() => []);
     try {
       await fs.mkdir(path.dirname(screenshotPath), { recursive: true });
       await page.screenshot({ path: screenshotPath, fullPage: true });
@@ -145,6 +162,7 @@ try {
     message: error.message,
     url: pageUrl,
     diagnostics,
+    remainingRecords,
     pageErrors,
     consoleErrors
   };
@@ -152,6 +170,7 @@ try {
     console.error(`Could not write browser failure report: ${writeError.message}`);
   });
   if (diagnostics.length) console.error(`Browser diagnostics: ${diagnostics.join(' | ')}`);
+  if (remainingRecords.length) console.error(`Remaining temporary records: ${remainingRecords.map(item => item.profileId).join(', ')}`);
   if (pageErrors.length) console.error(`Page errors: ${pageErrors.join(' | ')}`);
   if (consoleErrors.length) console.error(`Console errors: ${consoleErrors.join(' | ')}`);
   console.error(`P0 browser verification failed: ${error.message}`);
