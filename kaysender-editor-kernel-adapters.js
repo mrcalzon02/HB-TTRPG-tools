@@ -12,6 +12,9 @@
 
   const fallbackApplyProfileToForm = kernel.applyProfileToForm;
   const fallbackNormalizeImportedRecord = kernel.normalizeImportedRecord;
+  const fallbackCreateEnvelope = kernel.createEnvelope;
+  const fallbackValidateEnvelope = kernel.validateEnvelope;
+  const fallbackInheritanceReference = kernel.inheritanceReference;
 
   function adapterForProfileType(profileType) {
     return registry.list().find(adapter => adapter.profileType === profileType) || null;
@@ -31,6 +34,63 @@
       if (leftParts[index] < rightParts[index]) return -1;
     }
     return 0;
+  }
+
+  function normalizeInheritanceReferences(references = []) {
+    let changed = false;
+    const normalized = (Array.isArray(references) ? references : []).map(reference => {
+      const next = kernel.deepClone(reference || {});
+      if (!next.policy) {
+        next.policy = 'pinned-revision';
+        changed = true;
+      }
+      return next;
+    });
+    return { changed, references: normalized };
+  }
+
+  function inheritanceReference(envelope, relationship) {
+    const reference = fallbackInheritanceReference(envelope, relationship);
+    if (!reference) return null;
+    return {
+      ...reference,
+      policy: 'pinned-revision',
+      sourceUpdatedAt: envelope.updatedAt || null
+    };
+  }
+
+  function inheritanceDiagnostics(envelope) {
+    const diagnostics = [];
+    if (!Array.isArray(envelope?.inheritance)) return diagnostics;
+    envelope.inheritance.forEach((reference, index) => {
+      const path = `inheritance[${index}]`;
+      if (!reference || typeof reference !== 'object' || Array.isArray(reference)) {
+        diagnostics.push(kernel.diagnostic('error', 'inheritance-reference-invalid', 'Inheritance reference must be an object.', path));
+        return;
+      }
+      if (!String(reference.relationship || '').trim()) diagnostics.push(kernel.diagnostic('error', 'inheritance-relationship-missing', 'Inheritance relationship is required.', `${path}.relationship`));
+      if (!String(reference.profileId || '').trim()) diagnostics.push(kernel.diagnostic('error', 'inheritance-profile-id-missing', 'Inherited profile ID is required.', `${path}.profileId`));
+      if (!String(reference.profileType || '').trim()) diagnostics.push(kernel.diagnostic('error', 'inheritance-profile-type-missing', 'Inherited profile type is required.', `${path}.profileType`));
+      if (!Number.isInteger(reference.revision) || reference.revision < 1) diagnostics.push(kernel.diagnostic('error', 'inheritance-revision-invalid', 'Inherited profile revision must be a positive integer.', `${path}.revision`));
+      if (reference.policy !== 'pinned-revision') diagnostics.push(kernel.diagnostic('error', 'inheritance-policy-invalid', 'Inheritance must explicitly use the pinned-revision policy.', `${path}.policy`));
+    });
+    return diagnostics;
+  }
+
+  function validateEnvelope(envelope, expectedTypes = []) {
+    return [
+      ...fallbackValidateEnvelope(envelope, expectedTypes),
+      ...inheritanceDiagnostics(envelope)
+    ];
+  }
+
+  function createEnvelope(dataInput, options = {}) {
+    const sourceInheritance = options.inheritance ?? options.existingEnvelope?.inheritance ?? [];
+    const normalized = normalizeInheritanceReferences(sourceInheritance);
+    return fallbackCreateEnvelope(dataInput, {
+      ...options,
+      inheritance: normalized.references
+    });
   }
 
   function schemaCompatibilityDiagnostics(envelope) {
@@ -86,16 +146,29 @@
     const result = fallbackNormalizeImportedRecord(input, options);
     if (!result?.envelope?.profileType) return result;
 
-    let migration;
-    try {
-      migration = migrations.migrate(result.envelope.data, result.envelope.profileType);
-    } catch (error) {
-      return migrationFailure(result, error);
+    const previous = kernel.deepClone(result.envelope);
+    const normalizedInheritance = normalizeInheritanceReferences(previous.inheritance);
+    if (normalizedInheritance.changed) {
+      previous.inheritance = normalizedInheritance.references;
+      previous.provenance = previous.provenance || {};
+      previous.provenance.migrationLog = [
+        ...(previous.provenance.migrationLog || []),
+        {
+          code: 'inheritance-policy-normalized',
+          message: 'Normalized inherited profile references to explicit pinned-revision policy.'
+        }
+      ];
     }
 
-    const previous = result.envelope;
+    let migration;
+    try {
+      migration = migrations.migrate(previous.data, previous.profileType);
+    } catch (error) {
+      return migrationFailure({ ...result, envelope: previous }, error);
+    }
+
     const envelope = migration.changed
-      ? kernel.createEnvelope(migration.data, {
+      ? createEnvelope(migration.data, {
           existingEnvelope: previous,
           profileType: previous.profileType,
           profileSchemaVersion: migration.data.schemaVersion,
@@ -111,7 +184,7 @@
       : previous;
 
     const diagnostics = [
-      ...kernel.validateEnvelope(envelope, options.expectedTypes || []),
+      ...validateEnvelope(envelope, options.expectedTypes || []),
       ...schemaCompatibilityDiagnostics(envelope)
     ];
     if (migration.changed) {
@@ -130,6 +203,9 @@
 
   window.KaysenderEditorKernel = Object.freeze(Object.assign({}, kernel, {
     applyProfileToForm,
-    normalizeImportedRecord
+    createEnvelope,
+    inheritanceReference,
+    normalizeImportedRecord,
+    validateEnvelope
   }));
 })();
