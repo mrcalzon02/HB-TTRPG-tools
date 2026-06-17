@@ -6,8 +6,8 @@ import vm from 'node:vm';
 const root = process.cwd();
 const indexPath = path.join(root,'data','elemental-realms','wiki','wiki-index.json');
 const index = JSON.parse(await fs.readFile(indexPath,'utf8'));
-if (index.schemaVersion !== '1.2.0') throw new Error('Unexpected Elemental Realms wiki index schema.');
-if (index.status !== 'creature-reference-pass-2-complete') throw new Error('Elemental Realms second creature pass is not marked complete.');
+if (index.schemaVersion !== '1.3.0') throw new Error('Unexpected Elemental Realms wiki index schema.');
+if (index.status !== 'creature-reference-pass-3-complete') throw new Error('Elemental Realms third creature pass is not marked complete.');
 if (!index.sourceDocuments?.includes('source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json')) throw new Error('Elemental Realms source receipt is not registered.');
 
 const expectedPacks = [
@@ -16,6 +16,7 @@ const expectedPacks = [
   'elemental-realms-creatures-secondary.js',
   'elemental-realms-creatures-expansions.js',
   'elemental-realms-creatures-leeches.js',
+  'elemental-realms-creatures-leech-hosts.js',
   'elemental-realms-creatures-context.js'
 ];
 if (JSON.stringify(index.packs) !== JSON.stringify(expectedPacks)) throw new Error('Elemental Realms pack order or membership is incorrect.');
@@ -26,11 +27,12 @@ for (const pack of expectedPacks) {
   vm.runInContext(source,context,{filename:pack});
 }
 const wiki = context.window.HBElementalRealmsWiki;
-if (!wiki || wiki.schemaVersion !== '1.1.0') throw new Error('Elemental Realms creature registry did not initialize.');
-if (!Array.isArray(wiki.categories) || wiki.categories.length !== 11) throw new Error('Expected eleven Elemental Realms wiki categories.');
-if (!Array.isArray(wiki.entries) || wiki.entries.length !== 60) throw new Error(`Expected 60 creature references, found ${wiki.entries?.length ?? 0}.`);
+if (!wiki || wiki.schemaVersion !== '1.2.0') throw new Error('Elemental Realms creature registry did not initialize.');
+if (!Array.isArray(wiki.categories) || wiki.categories.length !== 12) throw new Error('Expected twelve Elemental Realms wiki categories.');
+if (!Array.isArray(wiki.entries) || wiki.entries.length !== 74) throw new Error(`Expected 74 creature references, found ${wiki.entries?.length ?? 0}.`);
 if (!wiki.ecologyOverview?.body || wiki.ecologyOverview.body.length < 3) throw new Error('Planar swamp ecology overview is incomplete.');
 if (!wiki.leechTreatise?.body || wiki.leechTreatise.body.length < 5) throw new Error('Historical leech classification treatise is incomplete.');
+if (!wiki.hostEcologyOverview?.body || wiki.hostEcologyOverview.body.length < 3) throw new Error('Host and feeding-ground ecology overview is incomplete.');
 
 const allowedProvenance = new Set(['manuscript-creature','manuscript-adjacent-conversion','index-derived-conversion','new-canon-expansion']);
 const allowedConfidence = new Set(['high','medium','low']);
@@ -81,17 +83,38 @@ const flameCount = planeCounts['Plane of Fire'] || 0;
 const largestNonFlame = Math.max(...Object.entries(planeCounts).filter(([plane]) => plane !== 'Plane of Fire').map(([,count]) => count));
 if (flameCount < largestNonFlame * 2) throw new Error(`Flame-aligned leech multiplicity is insufficient: ${flameCount} versus non-flame maximum ${largestNonFlame}.`);
 
+const requiredHostIds = [
+  'reedhorn-marsh-grazer','tideglass-leviathan-calf','orehide-delver','cloudgill-ray','astral-pathrunner','brinehide-sumpwalker','somnolent-lotusback-toad',
+  'furnace-reed-strider','cinderhide-brood-salamander','slagback-marsh-behemoth','ashwing-reed-drake','magmafin-fire-eel','hearthhorn-caravan-beast','slagbloom-flame-toad'
+];
+for (const requiredId of requiredHostIds) if (!ids.has(requiredId)) throw new Error(`Required host ecology expansion '${requiredId}' is missing.`);
+const hosts = wiki.entries.filter(entry => entry.hostClass === 'leech-host');
+if (hosts.length !== 14) throw new Error(`Expected 14 leech host ecology entries, found ${hosts.length}.`);
+const hostFields = ['ecologicalNiche','feedingGrounds','breeding','seasonalCycle','predatorPressure','leechRelations'];
+for (const entry of hosts) {
+  if (entry.category !== 'host-prey-ecologies') throw new Error(`${entry.id}: host ecology entry is outside the host-prey category.`);
+  if (!Array.isArray(entry.associatedLeeches) || entry.associatedLeeches.length === 0) throw new Error(`${entry.id}: associatedLeeches must be a nonempty array.`);
+  for (const field of hostFields) if (!entry[field] || !entry[field].includes(' ')) throw new Error(`${entry.id}: host ecology field '${field}' is missing or too thin.`);
+  for (const leechId of entry.associatedLeeches) if (!requiredLeechIds.includes(leechId)) throw new Error(`${entry.id}: references unknown leech '${leechId}'.`);
+}
+const representedLeeches = new Set(hosts.flatMap(entry => entry.associatedLeeches));
+for (const leechId of requiredLeechIds) if (!representedLeeches.has(leechId)) throw new Error(`Leech '${leechId}' lacks a represented host or prey relationship.`);
+
 const provenanceCounts = Object.fromEntries([...allowedProvenance].map(value => [value,wiki.entries.filter(entry => entry.provenance === value).length]));
 if (provenanceCounts['manuscript-creature'] !== 10) throw new Error('Expected ten detailed manuscript creatures.');
-if (provenanceCounts['new-canon-expansion'] !== 25) throw new Error('Expected twenty-five new canon expansion creatures.');
+if (provenanceCounts['new-canon-expansion'] !== 39) throw new Error('Expected thirty-nine new canon expansion creatures.');
 if (wiki.entries.filter(entry => entry.category === 'arthropod-ecologies').length !== 7) throw new Error('Expected seven fully statted arthropod ecology entries.');
 if (wiki.entries.filter(entry => entry.category === 'leech-ecologies').length !== 15) throw new Error('Expected fifteen fully statted leech ecology entries.');
+if (wiki.entries.filter(entry => entry.category === 'host-prey-ecologies').length !== 14) throw new Error('Expected fourteen fully statted host and prey ecology entries.');
 if (!index.featuredCanonExpansions?.every(id => ids.has(id))) throw new Error('Wiki index references a missing featured canon expansion.');
 if (!index.featuredLeechExpansions?.every(id => ids.has(id))) throw new Error('Wiki index references a missing featured leech expansion.');
+if (!index.featuredHostEcologies?.every(id => ids.has(id))) throw new Error('Wiki index references a missing featured host ecology.');
 if (!index.leechCatalogPolicy?.definition || !index.leechCatalogPolicy?.classificationModel) throw new Error('Leech catalogue policy is incomplete.');
+if (JSON.stringify(index.hostEcologyPolicy?.requiredFields) !== JSON.stringify(hostFields)) throw new Error('Host ecology policy fields are incomplete or out of order.');
 
 console.log('Elemental Realms wiki validation passed.');
 console.log(`Verified ${wiki.entries.length} creature references across ${wiki.categories.length} categories.`);
 console.log(`Provenance: ${JSON.stringify(provenanceCounts)}.`);
 console.log(`Verified ${leeches.length} leech catalogue entries with feeding modes ${JSON.stringify(feedingModeCounts)}.`);
 console.log(`Planar leech multiplicity: ${JSON.stringify(planeCounts)}.`);
+console.log(`Verified ${hosts.length} host and prey ecologies representing every registered leech relationship.`);
