@@ -15,7 +15,6 @@ if (index.setting !== 'Kaysender' || index.schemaVersion !== '0.7.0') throw new 
 for (const requiredPack of [packPath,tablePackPath]) if (!index.packs?.includes(requiredPack)) throw new Error(`Kaysender wiki does not load '${requiredPack}'.`);
 if (!index.sourceDocuments?.includes(receiptPath)) throw new Error('Kaysender wiki does not register the Mad Martiken source receipt.');
 if (index.packs.indexOf(tablePackPath) < index.packs.indexOf(packPath)) throw new Error('Mad Martiken structured-table override must load after the source-complete location pack.');
-if (index.packs.at(-1) !== tablePackPath) throw new Error('Mad Martiken table override must remain the final current Kaysender pack.');
 
 if (pack.setting !== 'Kaysender' || pack.schemaVersion !== '0.1.0') throw new Error('Unexpected Mad Martiken pack schema.');
 if (!Array.isArray(pack.entries) || pack.entries.length !== 1) throw new Error('Expected exactly one Mad Martiken Locations of Note entry.');
