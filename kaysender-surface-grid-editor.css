@@ -1,0 +1,119 @@
+.kaysender-surface-grid {
+  --surface-grid-cell-size: 42px;
+  display: grid;
+  grid-template-columns: repeat(var(--surface-grid-columns), var(--surface-grid-cell-size));
+  gap: 3px;
+  width: max-content;
+  max-width: 100%;
+  padding: 10px;
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 38%, transparent);
+  border-radius: 12px;
+  background: rgba(5, 7, 10, 0.86);
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+}
+
+.kaysender-surface-cell {
+  position: relative;
+  width: var(--surface-grid-cell-size);
+  height: var(--surface-grid-cell-size);
+  min-height: var(--surface-grid-cell-size);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(122, 145, 153, 0.28);
+  border-radius: 4px;
+  font: inherit;
+  line-height: 1;
+  cursor: crosshair;
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.kaysender-surface-cell:hover,
+.kaysender-surface-cell:focus-visible {
+  z-index: 1;
+  outline: none;
+  border-color: var(--accent, #c88a35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #c88a35) 32%, transparent);
+  transform: translateY(-1px);
+}
+
+.kaysender-surface-cell.inactive {
+  color: rgba(122, 145, 153, 0.45);
+  background: rgba(122, 145, 153, 0.04);
+  border-color: rgba(122, 145, 153, 0.14);
+}
+
+.kaysender-surface-cell.active {
+  color: #ecf7f4;
+  background: rgba(50, 104, 87, 0.34);
+  border-color: rgba(111, 203, 169, 0.55);
+}
+
+.kaysender-surface-cell.selected {
+  border-color: var(--accent, #c88a35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #c88a35) 45%, transparent), inset 0 0 0 2px rgba(5, 7, 10, 0.45);
+}
+
+.kaysender-surface-cell.incompatible {
+  color: #ffd3d3;
+  background-image: repeating-linear-gradient(135deg, rgba(178, 48, 48, 0.3) 0 5px, rgba(83, 25, 25, 0.18) 5px 10px);
+  border-color: rgba(255, 91, 91, 0.75);
+  cursor: not-allowed;
+}
+
+.kaysender-surface-cell.terrain-pasture,
+.kaysender-surface-cell.terrain-pasture-plateau,
+.kaysender-surface-cell.terrain-grassland {
+  background-color: rgba(67, 135, 72, 0.48);
+}
+
+.kaysender-surface-cell.terrain-wet-basin,
+.kaysender-surface-cell.terrain-wetland,
+.kaysender-surface-cell.terrain-lake {
+  background-color: rgba(42, 105, 145, 0.52);
+}
+
+.kaysender-surface-cell.terrain-forest,
+.kaysender-surface-cell.terrain-forest-canopy {
+  background-color: rgba(30, 91, 59, 0.58);
+}
+
+.kaysender-surface-cell.terrain-cliff,
+.kaysender-surface-cell.terrain-cliff-shelf,
+.kaysender-surface-cell.terrain-fractured-ridge {
+  background-color: rgba(102, 90, 78, 0.58);
+}
+
+.kaysender-surface-cell.terrain-ruins,
+.kaysender-surface-cell.terrain-ruin-field {
+  background-color: rgba(104, 74, 124, 0.54);
+}
+
+.kaysender-surface-cell.terrain-quarry,
+.kaysender-surface-cell.terrain-mining-scarlands {
+  background-color: rgba(125, 91, 49, 0.58);
+}
+
+.surface-cell-code {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.surface-cell-coordinate {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  color: rgba(235, 244, 241, 0.58);
+  font-size: 0.48rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .kaysender-surface-grid {
+    --surface-grid-cell-size: 36px;
+  }
+}
