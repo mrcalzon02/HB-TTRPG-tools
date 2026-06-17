@@ -137,8 +137,14 @@
     renderToolbar(adapter, panel);
     Lifecycle.bind(adapter, panel, { autosave: () => autosaveDraft(adapter, panel) });
     renderLifecycleState(Lifecycle.getState(adapter.id));
-    renderDiagnostics([Kernel.diagnostic('info', 'editor-ready', `${adapter.label.replace(/^Open /, '')} is running through the shared adapter runtime.`)]);
-    refreshProvenance(adapter, panel);
+    const existing = activeEnvelopes.get(adapter.id);
+    if (existing) {
+      applyEnvelope(adapter, panel, existing);
+      Lifecycle.markClean(adapter.id, `Restored open record ${existing.name}.`);
+    } else {
+      renderDiagnostics([Kernel.diagnostic('info', 'editor-ready', `${adapter.label.replace(/^Open /, '')} is running through the shared adapter runtime.`)]);
+      refreshProvenance(adapter, panel);
+    }
   }
 
   function hideDuplicatedLegacyActions(adapter, panel) {
@@ -226,6 +232,7 @@
   }
 
   function newBlankRecord(adapter, panel) {
+    if (!Lifecycle.confirmLeave(adapter.id, 'This record has unsaved changes. Create a new blank record anyway?')) return;
     panel.querySelector(`#${adapter.formId}`)?.reset();
     panel.querySelectorAll('[data-editor-lock]').forEach(item => { item.checked = false; });
     adapter.parentImports.forEach(definition => clearParentImport(panel, definition));
@@ -262,8 +269,7 @@
         renderDiagnostics([Kernel.diagnostic('warning', 'parent-envelope-unreadable', `Could not read ${definition.id} provenance: ${error.message}`)]);
       }
     });
-    const previous = activeEnvelopes.get(adapter.id);
-    return references.length ? references : (previous?.inheritance || []);
+    return references;
   }
 
   function buildEnvelope(adapter, panel) {
@@ -295,13 +301,28 @@
     return result.envelope;
   }
 
+  function inheritanceFor(envelope, definition) {
+    return envelope.inheritance?.find(reference => reference.relationship === definition.relationship) || null;
+  }
+
   function applyEnvelope(adapter, panel, envelope) {
     const form = panel.querySelector(`#${adapter.formId}`);
     Kernel.applyProfileToForm(form, adapter.profileType, envelope.data);
+    const restorationDiagnostics = [];
     adapter.parentImports.forEach(definition => {
       const sourceRecord = envelope.data?.[definition.sourceProfileField];
-      if (sourceRecord) applyParentRecord(panel, definition, sourceRecord);
-      else clearParentImport(panel, definition);
+      const reference = inheritanceFor(envelope, definition);
+      if (sourceRecord) {
+        const restored = applyParentRecord(panel, definition, sourceRecord, reference);
+        if (!restored && reference) {
+          restorationDiagnostics.push(Kernel.diagnostic('error', 'pinned-parent-restore-failed', `Could not restore pinned ${definition.id} ${reference.profileId}.`, 'inheritance'));
+        }
+      } else {
+        clearParentImport(panel, definition);
+        if (reference) {
+          restorationDiagnostics.push(Kernel.diagnostic('warning', 'inherited-source-data-missing', `The record retains a ${definition.relationship} reference to ${reference.profileId}, but its embedded parent context is missing.`, 'inheritance'));
+        }
+      }
     });
     panel.querySelectorAll('[data-editor-lock]').forEach(item => {
       item.checked = envelope.locks?.includes(item.dataset.editorLock) || false;
@@ -309,12 +330,15 @@
     rebuild(adapter, panel);
     renderDiagnostics([
       ...Kernel.validateEnvelope(envelope, [adapter.profileType]),
+      ...restorationDiagnostics,
       Kernel.diagnostic('info', 'record-loaded', `Loaded ${envelope.name} (${envelope.profileId}).`)
     ]);
   }
 
-  function applyParentRecord(panel, definition, record) {
-    const result = Kernel.normalizeImportedRecord(record, { expectedTypes: definition.expectedTypes });
+  function applyParentRecord(panel, definition, record, reference = null) {
+    const result = reference
+      ? Kernel.restoreInheritedEnvelope(record, reference, { expectedTypes: definition.expectedTypes })
+      : Kernel.normalizeImportedRecord(record, { expectedTypes: definition.expectedTypes });
     if (!result.ok) {
       renderDiagnostics(result.diagnostics);
       return false;
@@ -324,7 +348,11 @@
     const textarea = panel.querySelector(`#${definition.textareaId}`);
     if (textarea) textarea.value = JSON.stringify(result.envelope, null, 2);
     const status = definition.statusId ? panel.querySelector(`#${definition.statusId}`) : null;
-    if (status) status.textContent = `Loaded ${result.envelope.name} (${result.envelope.profileId}).`;
+    if (status) {
+      status.textContent = reference
+        ? `Restored ${result.envelope.name} (${result.envelope.profileId}) at pinned revision ${result.envelope.revision}.`
+        : `Loaded ${result.envelope.name} (${result.envelope.profileId}).`;
+    }
     return true;
   }
 
@@ -463,7 +491,7 @@
     const inheritance = collectInheritance(adapter, panel);
     const items = [];
     if (envelope) items.push(`Current record: ${escapeHtml(envelope.profileId)} revision ${envelope.revision}.`);
-    inheritance.forEach(item => items.push(`${escapeHtml(item.relationship)}: ${escapeHtml(item.name)} (${escapeHtml(item.profileId)}).`));
+    inheritance.forEach(item => items.push(`${escapeHtml(item.relationship)}: ${escapeHtml(item.name)} (${escapeHtml(item.profileId)}) revision ${item.revision}.`));
     envelope?.provenance?.migrationLog?.forEach(item => items.push(`Migration: ${escapeHtml(item.message)}.`));
     list.innerHTML = items.length ? items.map(item => `<li>${item}</li>`).join('') : '<li>No inherited records loaded.</li>';
   }
