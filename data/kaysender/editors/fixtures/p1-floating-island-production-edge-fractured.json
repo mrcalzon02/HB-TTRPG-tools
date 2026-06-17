@@ -1,0 +1,369 @@
+{
+  "schemaVersion": "3.0.0",
+  "profileType": "floating-island-foundation-profile",
+  "name": "The Cinder Shards",
+  "classification": {
+    "sizeClass": "fractured archipelago",
+    "shapeProfile": "split drifting fragments",
+    "currentUse": "abandoned disaster site",
+    "sovereignty": "unclaimed",
+    "surveyStatus": "partial"
+  },
+  "geometry": {
+    "lengthKm": 4.8,
+    "widthKm": 3.1,
+    "meanThicknessM": 95,
+    "planAreaKm2": 6,
+    "usableAreaKm2": 1.2,
+    "flatAreaKm2": 0.2,
+    "arableAreaKm2": 0.05,
+    "grossVolumeKm3": 0.57,
+    "estimatedMassMillionTons": 820,
+    "coordinateSystem": "local-grid-v1",
+    "mapScaleKmPerCell": 1.5
+  },
+  "composition": {
+    "ordinaryRockPercent": 60,
+    "floatstonePercent": 30,
+    "soilSedimentPercent": 5,
+    "cavernVoidPercent": 5
+  },
+  "map": {
+    "columns": 3,
+    "rows": 3,
+    "activeCellIds": ["cell-west-shard", "cell-core-shard", "cell-east-shard"],
+    "cells": [
+      {
+        "id": "cell-west-shard",
+        "x": 0,
+        "y": 1,
+        "areaKm2": 2,
+        "terrainType": "cinder shelf",
+        "elevationM": 8120,
+        "slopeClass": "broken",
+        "usablePercent": 18,
+        "arablePercent": 0,
+        "waterCatchmentId": null,
+        "siteIds": [],
+        "resourceNodeIds": [],
+        "hazardIds": ["hazard-shard-collision"]
+      },
+      {
+        "id": "cell-core-shard",
+        "x": 1,
+        "y": 1,
+        "areaKm2": 2,
+        "terrainType": "burned ruin field",
+        "elevationM": 8260,
+        "slopeClass": "irregular",
+        "usablePercent": 32,
+        "arablePercent": 2.5,
+        "waterCatchmentId": "water-cinder-condensate",
+        "siteIds": ["site-cinder-observatory-wreck"],
+        "resourceNodeIds": ["resource-cinder-sulfur"],
+        "hazardIds": ["hazard-ash-lightning"]
+      },
+      {
+        "id": "cell-east-shard",
+        "x": 2,
+        "y": 1,
+        "areaKm2": 2,
+        "terrainType": "exposed floatstone ribs",
+        "elevationM": 7980,
+        "slopeClass": "vertical fracture",
+        "usablePercent": 10,
+        "arablePercent": 0,
+        "waterCatchmentId": null,
+        "siteIds": [],
+        "resourceNodeIds": [],
+        "hazardIds": ["hazard-shard-collision", "hazard-ash-lightning"]
+      }
+    ]
+  },
+  "hydrology": {
+    "annualRainfallMm": 90,
+    "sources": [
+      {
+        "id": "water-cinder-condensate",
+        "mapCellId": "cell-core-shard",
+        "type": "ash-tainted condensate",
+        "potable": false,
+        "averageDailyLiters": 180,
+        "seasonality": "intermittent storm formation",
+        "status": "contaminated"
+      }
+    ],
+    "reservoirs": [],
+    "annualRenewableM3": 66,
+    "dailySustainableLiters": 0,
+    "storedWaterM3": 0,
+    "reserveDaysAtCurrentUse": 0,
+    "systemLossPercent": 100
+  },
+  "foodCapacity": {
+    "arableAreaKm2": 0.05,
+    "pastureAreaKm2": 0,
+    "forageAreaKm2": 0.08,
+    "annualFoodUnits": 8,
+    "sustainablePopulation": 0,
+    "emergencyPopulation90Days": 12,
+    "importDependencyPercent": 100
+  },
+  "resources": {
+    "nodes": [
+      {
+        "id": "resource-cinder-sulfur",
+        "mapCellId": "cell-core-shard",
+        "resourceType": "sulfur and alchemical ash",
+        "quality": "hazardous",
+        "estimatedReserveTons": 4200,
+        "annualSafeExtractionTons": 25,
+        "status": "untapped"
+      }
+    ],
+    "annualSafeExtractionTons": 25,
+    "currentAnnualExtractionTons": 0
+  },
+  "motion": {
+    "meanAltitudeM": 8120,
+    "altitudeTimeline": [
+      {
+        "id": "altitude-segment-cinder-unstable",
+        "startDay": 0,
+        "endDay": 30,
+        "minimumAltitudeM": 7300,
+        "maximumAltitudeM": 9100,
+        "confidence": "low"
+      }
+    ],
+    "driftTimeline": [
+      {
+        "id": "drift-segment-cinder-reversal",
+        "startDay": 0,
+        "endDay": 30,
+        "bearingDegrees": 42,
+        "averageKmPerDay": 118,
+        "confidence": "low"
+      }
+    ],
+    "forecastHorizonDays": 30
+  },
+  "stability": {
+    "structuralIntegrity": "three fragments held in unstable mutual resonance",
+    "overallRisk": "critical",
+    "annualSurfaceLossPercent": 4.8,
+    "faultZones": [
+      {
+        "id": "fault-cinder-core",
+        "cellIds": ["cell-west-shard", "cell-core-shard", "cell-east-shard"],
+        "risk": "critical",
+        "status": "active",
+        "trigger": "fragment collision or rapid altitude reversal",
+        "estimatedLossKm2": 2.1
+      }
+    ],
+    "fractureEvents": [
+      {
+        "id": "fracture-event-cinder-catastrophe",
+        "day": 0,
+        "faultZoneId": "fault-cinder-core",
+        "severity": "catastrophic",
+        "surfaceLossKm2": 14,
+        "notes": "The original island divided into the three surviving shards."
+      }
+    ],
+    "emergencyThreshold": "withdraw immediately if any two fragments close within 250 metres"
+  },
+  "approaches": {
+    "landingZones": [
+      {
+        "id": "landing-cinder-rendezvous",
+        "name": "Cinder Survey Rendezvous",
+        "mapCellId": "cell-core-shard",
+        "type": "moving-rendezvous",
+        "maximumVesselClass": "light survey cutter",
+        "dailyCapacity": 1,
+        "weatherLimit": "daylight only with live fragment tracking",
+        "status": "restricted"
+      }
+    ],
+    "approachCorridors": [
+      {
+        "id": "approach-cinder-rendezvous",
+        "landingZoneId": "landing-cinder-rendezvous",
+        "bearingDegrees": 225,
+        "minimumAltitudeM": 7000,
+        "maximumAltitudeM": 9400,
+        "hazardIds": ["hazard-shard-collision", "hazard-ash-lightning"],
+        "pilotRequirement": "survey-grade live telemetry and an emergency tow vessel"
+      }
+    ]
+  },
+  "sites": [
+    {
+      "id": "site-cinder-observatory-wreck",
+      "name": "Cinder Observatory Wreck",
+      "type": "ruined research station",
+      "mapCellId": "cell-core-shard",
+      "status": "ruined",
+      "visibility": "gm-only",
+      "maximumFootprintKm2": 0.08,
+      "tags": ["wreck", "research", "catastrophe", "hidden"]
+    }
+  ],
+  "hazards": [
+    {
+      "id": "hazard-shard-collision",
+      "name": "Fragment Collision Envelope",
+      "type": "moving structural hazard",
+      "cellIds": ["cell-west-shard", "cell-east-shard"],
+      "severity": "critical",
+      "visibility": "known-locally",
+      "status": "active"
+    },
+    {
+      "id": "hazard-ash-lightning",
+      "name": "Charged Ash Lightning",
+      "type": "magical weather",
+      "cellIds": ["cell-core-shard", "cell-east-shard"],
+      "severity": "major",
+      "visibility": "rumored",
+      "status": "seasonal"
+    }
+  ],
+  "ecology": {
+    "habitats": [
+      {
+        "id": "habitat-cinder-extremophile",
+        "name": "Ash-crust Extremophile Patches",
+        "cellIds": ["cell-core-shard"],
+        "areaKm2": 0.08,
+        "condition": "degraded",
+        "capacityIndex": 2
+      }
+    ],
+    "speciesSlots": [
+      {
+        "id": "species-slot-cinder-migratory-scavenger",
+        "habitatId": "habitat-cinder-extremophile",
+        "role": "migratory scavenger",
+        "populationBand": "rare transient individuals",
+        "status": "migratory"
+      }
+    ],
+    "carryingCapacityIndex": 1,
+    "currentPressure": "collapse"
+  },
+  "settlementCapacity": {
+    "waterLimitedPopulation": 0,
+    "foodLimitedPopulation": 0,
+    "landLimitedPopulation": 12,
+    "sustainablePopulation": 0,
+    "emergencyPopulation": 12,
+    "settlementSlots": [
+      {
+        "id": "settlement-slot-cinder-expedition",
+        "mapCellId": "cell-core-shard",
+        "maximumPopulation": 12,
+        "maximumFootprintKm2": 0.05,
+        "waterSourceIds": [],
+        "landingZoneIds": ["landing-cinder-rendezvous"],
+        "status": "unsafe"
+      }
+    ]
+  },
+  "routeNodeExport": {
+    "nodes": [
+      {
+        "id": "route-node-cinder-survey",
+        "name": "Cinder Shards Survey Rendezvous",
+        "mapCellId": "cell-core-shard",
+        "landingZoneIds": ["landing-cinder-rendezvous"],
+        "altitudeBand": "7300-9100 metres",
+        "services": [],
+        "status": "restricted"
+      }
+    ],
+    "defaultNodeId": "route-node-cinder-survey",
+    "routeCapability": {
+      "maximumDailyArrivals": 1,
+      "resupplyWater": false,
+      "resupplyFood": false,
+      "repairCapability": "none",
+      "chartConfidence": "poor"
+    }
+  },
+  "derived": {
+    "geometryReconciles": true,
+    "compositionReconciles": true,
+    "mapAreaReconciles": true,
+    "waterCapacityReconciles": true,
+    "foodCapacityReconciles": true,
+    "settlementCapacityReconciles": true,
+    "brokenReferenceIds": [],
+    "warnings": [
+      "The island cannot support permanent habitation.",
+      "All expedition water and food must be imported.",
+      "The three fragments may collide during unforecast altitude reversals.",
+      "The survey rendezvous is not a conventional landing zone."
+    ]
+  },
+  "visibility": {
+    "playerKnownSiteIds": [],
+    "gmOnlySiteIds": ["site-cinder-observatory-wreck"],
+    "playerKnownHazardIds": ["hazard-shard-collision", "hazard-ash-lightning"],
+    "gmOnlyHazardIds": [],
+    "publicFacts": [
+      "The Cinder Shards are three unstable fragments moving at high altitude.",
+      "No permanent settlement can survive without complete imported support.",
+      "Survey vessels use a moving rendezvous rather than a fixed dock."
+    ],
+    "gmSecrets": [
+      "The observatory wreck contains records suggesting the original fracture was deliberate.",
+      "One fragment changes course when the observatory instruments are powered."
+    ]
+  },
+  "outputs": {
+    "playerSafeSummary": "The Cinder Shards are an unstable high-altitude disaster site suitable only for short, fully supplied survey expeditions.",
+    "gmBrief": "The shattered observatory links the island's catastrophic fracture to an experiment capable of altering fragment drift.",
+    "wikiDraft": {
+      "id": "the-cinder-shards",
+      "title": "The Cinder Shards",
+      "category": "Floating Islands",
+      "sourceStatus": "editor-draft"
+    },
+    "downstreamExports": {
+      "population": {
+        "sustainablePopulation": 0,
+        "emergencyPopulation": 12
+      },
+      "settlement": {
+        "settlementSlotIds": ["settlement-slot-cinder-expedition"],
+        "maximumPopulation": 0
+      },
+      "ecology": {
+        "habitatIds": ["habitat-cinder-extremophile"],
+        "pressure": "collapse"
+      },
+      "route": {
+        "routeNodeIds": ["route-node-cinder-survey"],
+        "forecastHorizonDays": 30
+      },
+      "market": {
+        "exportCapacityTons": 0,
+        "importDependencyPercent": 100
+      },
+      "faction": {
+        "claimableSiteIds": ["site-cinder-observatory-wreck"]
+      },
+      "crisis": {
+        "faultZoneIds": ["fault-cinder-core"],
+        "reserveDaysAtCurrentUse": 0
+      },
+      "encounter": {
+        "siteIds": ["site-cinder-observatory-wreck"],
+        "hazardIds": ["hazard-shard-collision", "hazard-ash-lightning"]
+      }
+    }
+  }
+}
