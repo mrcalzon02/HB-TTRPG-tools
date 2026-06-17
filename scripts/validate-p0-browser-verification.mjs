@@ -65,6 +65,10 @@ for (const marker of [
   "profileReceipt('floating-island-editor'",
   "profileReceipt('settlement-editor'",
   "profileReceipt('airship-editor'",
+  'saveAndReload',
+  'reopenActiveRecord',
+  'Inheritance clear',
+  'Inheritance restore',
   'Copy Verification Receipt',
   'Download Verification Receipt',
   'getKaysenderEditorSmokeReceipt'
@@ -112,6 +116,19 @@ function validateInheritanceReference(reference, label) {
   if (reference.policy !== 'pinned-revision') fail(`${label} inheritance reference is not pinned to an explicit revision.`);
 }
 
+function requireExactReference(child, parent, relationship, label) {
+  const reference = child.inheritance.find(item => (
+    item.profileId === parent.profileId && item.relationship === relationship
+  ));
+  if (!reference) fail(`${label} does not contain ${relationship} reference ${parent.profileId}.`);
+  if (reference.profileType !== parent.profileType) {
+    fail(`${label} reference ${parent.profileId} has profile type ${reference.profileType}, expected ${parent.profileType}.`);
+  }
+  if (reference.revision !== parent.revision) {
+    fail(`${label} reference ${parent.profileId} pins revision ${reference.revision}, but the verified parent receipt records revision ${parent.revision}.`);
+  }
+}
+
 function validateReceipt(receipt) {
   if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) fail('Browser verification receipt must be a JSON object.');
   if (receipt.schemaVersion !== '1.0.0') fail('Browser verification receipt has an unsupported schemaVersion.');
@@ -146,9 +163,9 @@ function validateReceipt(receipt) {
   const settlement = profilesByEditor.get('settlement-editor');
   const airship = profilesByEditor.get('airship-editor');
   if (island.inheritance.length !== 0) fail('The root island verification profile must not inherit another profile.');
-  if (!settlement.inheritance.some(reference => reference.profileId === island.profileId)) fail('Settlement verification profile does not inherit the verified island profile.');
-  if (!airship.inheritance.some(reference => reference.profileId === island.profileId)) fail('Airship verification profile does not inherit the verified island profile.');
-  if (!airship.inheritance.some(reference => reference.profileId === settlement.profileId)) fail('Airship verification profile does not inherit the verified settlement profile.');
+  requireExactReference(settlement, island, 'parent-island', 'Settlement verification profile');
+  requireExactReference(airship, island, 'parent-island', 'Airship verification profile');
+  requireExactReference(airship, settlement, 'parent-settlement', 'Airship verification profile');
 }
 
 const receiptPath = process.argv[2];
@@ -159,5 +176,5 @@ if (receiptPath) {
   console.log(`P0 browser verification receipt passed: ${receiptPath}`);
 } else {
   console.log('P0 browser verification contract validation passed.');
-  console.log('Verified receipt schema, smoke harness, Chromium runner, pinned inheritance, direct workflow failure, artifact retention, and Pages deployment ordering.');
+  console.log('Verified receipt schema, expanded persistent browser smoke, exact pinned parent revisions, Chromium runner, direct workflow failure, artifact retention, and Pages deployment ordering.');
 }
