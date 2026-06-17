@@ -1,0 +1,118 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "description": "Display-complete section overrides for structured Warlock of the Swamp invocation and compromise-artifact data.",
+  "entries": [
+    {
+      "id": "warlock-of-the-swamp-invocations",
+      "sections": [
+        {
+          "heading": "Least invocations",
+          "sectionType": "builder-note",
+          "body": [
+            "Bogskin (2nd): Gain +2 enhancement to natural armor, +4 on saves against poison and disease, and water breathing for 24 hours.",
+            "Call the Little Ones (1st): Speak with amphibians, reptiles, and vermin. Call harmless local frogs, lizards, newts, leeches, or insects to scout a 20-foot area, carry a tiny object, or create a minor distraction.",
+            "Mireborn Blast (2nd, eldritch essence): Half the blast damage becomes acid. A damaged creature must pass Reflex or have all speeds reduced by 10 feet for 1 round.",
+            "Mists Below the Reeds (2nd): Create a 20-foot-radius fog cloud for 1 minute per level. The warlock and pact familiar can see through it out to 10 feet.",
+            "Swarmkeeper's Hand (2nd): Use summon swarm, appearing as frogs, biting midges, leeches, beetles, lizards, or similar Tiny swamp creatures. Direct its movement as a move action.",
+            "Tongue of the Newt (2nd): Gain scent, a swim speed equal to land speed, and +6 competence on Swim and Survival checks in wetlands for 24 hours."
+          ]
+        },
+        {
+          "heading": "Lesser invocations",
+          "sectionType": "builder-note",
+          "body": [
+            "Amphibious Procession (3rd): For 24 hours, the warlock and one touched creature per three levels gain water breathing, swim 30 feet, and ignore ordinary movement penalties from mud, reeds, and shallow water.",
+            "Croaking Chorus (4th): Creatures in a 30-foot cone take 4d6 sonic damage and must pass Will or become shaken for 1 round. Amphibians and the warlock's summons are unaffected.",
+            "Familiar Through the Keyhole (4th): Teleport the pact familiar to a described or previously seen location within 400 feet that contains moisture, vegetation, fungus, shadow, or a sleeping creature.",
+            "Grasping Reedbed (4th): Create a 20-foot-radius field for 1 round per level. Creatures entering or beginning there must pass Reflex or become entangled; a second failed save leaves them grappled.",
+            "Leechkeeper's Mercy (4th): Touch a creature to stop bleeding, stabilize it, and grant a new save against one poison or disease. A failed effect may be transferred to a willing maintained summon, which saves using its own bonus.",
+            "Mire Body (4th): For 1 minute per level become semi-fluid, gaining 20 percent concealment, immunity to nonmagical critical hits, Tiny-creature squeezing, and unrestricted movement through ordinary mud and water."
+          ]
+        },
+        {
+          "heading": "Greater invocations",
+          "sectionType": "builder-note",
+          "body": [
+            "Brood Gate (5th): Teleport any number of maintained broods on the same plane into legal spaces within 30 feet, or return them temporarily to their origins without releasing the maintenance reservation.",
+            "Dream Bog Made Real (6th): Create a 40-foot-radius illusory swamp for 1 minute per level. Enemies treat it as difficult terrain and take 2d6 psychic damage when moving more than 10 feet in a round; taking damage permits Will disbelief.",
+            "Negotiated Dispelling (6th): Use targeted greater dispel magic. Dispelling a divine, pact, curse, or blessing effect grants 1 temporary Favor that expires after 1 minute and cannot exceed maximum Favor.",
+            "Plague of Little Mouths (6th): Create three controlled swarms of frogs, leeches, midges, or lizards for 1 minute per level. They count as magic weapons and ignore creatures designated when invoked.",
+            "Swamp's Borrowed Shape (6th): For 1 minute per level assume the form of a Large or smaller amphibian, reptile, vermin, ooze, or swamp magical beast with no more Hit Dice than class level, following polymorph limits."
+          ]
+        },
+        {
+          "heading": "Dark invocations",
+          "sectionType": "builder-note",
+          "body": [
+            "Blackwater Procession (8th): Use shadow walk through an endless moonlit swamp. Natural healing during the journey is doubled and maintained broods travel automatically.",
+            "Emissary's Shadow (8th): For 1 minute per level become a swarm-shaped shadow of frogs, moths, leeches, or lizards. Gain swarm traits, fly 40 feet with perfect maneuverability, and deal swarm damage equal to one-third eldritch-blast dice, rounded up.",
+            "Pact Rewritten (8th): After ten minutes of negotiation, exchange one known invocation for another of the same or lower grade until the next full rest. Usable once per 24 hours.",
+            "Swamp Without Shore (9th): Create a 60-foot-radius extraplanar mire for 1 minute per level. Enemies move at half speed, cannot teleport without a caster-level check, and take 2d6 acid damage each round. Allies and pact creatures ignore it.",
+            "The Lady Arbitrates (9th): Use greater dispel magic in a 20-foot burst. Divine, pact, curse, domain, or blessing effects may be suppressed for 1 round per level instead of ended; willing effects resume with remaining duration."
+          ]
+        },
+        {
+          "heading": "Invocation adjudication",
+          "sectionType": "conversion-note",
+          "body": [
+            "Unless stated otherwise, durations, spell resistance, concentration, dispelling, equivalent spell levels, and arcane spell failure use ordinary warlock invocation rules.",
+            "Creature forms and summon substitutions require campaign-appropriate statistics and must not import abilities above the intended equivalent spell level. Swamp appearance alone never changes a creature's rules unless the invocation expressly says it does."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "divine-compromise-artifacts",
+      "sections": [
+        {
+          "heading": "The nature of compromise artifacts",
+          "sectionType": "builder-note",
+          "body": [
+            "These artifacts are narrow ceasefires between competing divine jurisdictions. They are generally unique, cannot be purchased by ordinary market value, and cease functioning when the agreement that created them is dissolved.",
+            "Their contradictory names and activation conditions are intentional evidence that several powers negotiated different portions of the same object."
+          ]
+        },
+        {
+          "heading": "Known compromise artifacts",
+          "sectionType": "builder-note",
+          "body": [
+            "Sombrero of Tuesdays: Every Thursday at local dawn, the attuned wearer gains one additional daily spell slot of their highest castable spell level, maximum 5th. It expires Friday at dawn. A creature without spell slots gains 2 Pact Favor or one extra use of a daily class feature of equivalent power. No Tuesday function has been identified.",
+            "Spleen Warranty Tag: Once, negate the portion of an overlapping divine effect that would deal ability drain, dissolve the body, or transform an organ. The wearer is nauseated for 1d4 hours while jurisdiction over the spleen is renegotiated.",
+            "Earplugs of the Forty-Eighth Hour: Voluntarily become deaf for up to 48 hours and gain immunity to language-dependent divine commands and sonic pact clauses. Removing them early causes confusion for 1 round. They were created to prevent an obsolete cranial-removal clause.",
+            "Boots of the Previous Tomorrow: Once per week, walking backward for a full round returns the wearer to their previous-turn square and reverses 1d6 hit points of damage. The wearer becomes physically one age category younger for 10 minutes without statistical change.",
+            "Cradle of Unrequested Continuity: When a blessing conflict would cause sudden progenation, redirect it into 1d4 harmless frog, newt, or lizard familiars bearing symbolic traits of the affected bloodlines. They are not legal heirs unless another deity insists.",
+            "Parasol of Indoor Rain: Once per day, open indoors to create gentle rain in a 20-foot radius for 10 minutes. Outside it produces only the smell of rain and a written notice that weather jurisdiction remains disputed.",
+            "Spoon of Deferred Thunder: Once per week, absorb one sonic or electricity effect affecting the bearer. It is released harmlessly during the next breakfast, or discharges at noon if breakfast is skipped.",
+            "Seven-Course Chalupa Reliquary: If the bearer is transformed into prepared food, preserve identity and soul across every course. Restoration remains possible after ordinary decay. The restored creature smells faintly of toasted masa for 1d6 days."
+          ]
+        },
+        {
+          "heading": "Documented overlap consequences",
+          "sectionType": "builder-note",
+          "body": [
+            "Unmediated overlap has produced total ego dissolution, spleen dissolution, deafness lasting more than forty-eight hours followed by cranial removal, temporal disjunction, age reversion, rapid aging, sudden progenation, unrequested species changes, and contradictory simultaneous resurrection states.",
+            "These are historical and plot-level consequences rather than a default random punishment table. Establish the danger and provide investigation, negotiation, prevention, or restoration before using one against a player character."
+          ]
+        },
+        {
+          "heading": "The Seven-Course Chalupa Incident",
+          "sectionType": "builder-note",
+          "body": [
+            "A follower of the Lady received the blessing of a war priest of Torm and immediately became a seven-course assortment of differently flavored chalupas arranged in the exact shape of the former teammate.",
+            "The party feared that eating, moving, burying, or preserving any course might count as murder or sacrilege and left the arrangement untouched. Several days later, after decay began, the Lady intervened personally and restored the follower.",
+            "The restored follower remembered the event. Accounts disagree about whether they retained knowledge of being seven different flavors. The incident is why emissaries now carry a Seven-Course Chalupa Reliquary when another deity proposes a blessing compact."
+          ]
+        },
+        {
+          "heading": "Use in play",
+          "sectionType": "conversion-note",
+          "body": [
+            "A compromise artifact should solve one metaphysical collision while adding a visible, narrow, usually absurd limitation. Its terms should be stated before a player accepts attunement or obligation.",
+            "The humor works because the divine bureaucracy is genuinely dangerous while the characters retain meaningful ways to argue, investigate, refuse, renegotiate, or seek a different patron's intervention."
+          ]
+        }
+      ]
+    }
+  ]
+}
