@@ -1,0 +1,119 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-external-conversion",
+  "description": "Native qualitative enemy profiles for four Synthesis force families and their thirty-six named battlefield roles from pages 82-104.",
+  "entries": [
+    {
+      "id": "solanum-unit-zero-forces",
+      "title": "Unit 0 Forces",
+      "category": "Enemy Factions",
+      "summary": "A varied synthesis army combining skeletal energy infantry, cloaked scouts, massive armored platforms, battlefield command networks, fortresses, infiltrators, and unstable bio-mechanical abominations.",
+      "body": [
+        "Unit 0 forces are visually role-coded, from sleek skeletal Echoes to grotesque Devourers. Their tactical range spans direct assault, long-range armor, command and coordination, stealth, sabotage, area denial, and stationary defense.",
+        "Source vulnerabilities include overheating, lightweight construction, slow movement, exposed joints, explosive feedback, network dependence, fixed positions, unstable bio-mechanical fusion, maintenance burden, and cloaking drain."
+      ],
+      "sourceStatus": "source-native-enemy-profile",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":82,"pageEnd":87,"chunkId":"solanum-unit-zero:p82-87","notes":"Nine Unit 0 battlefield roles with appearance, strengths, and weaknesses."}],
+      "tags": ["Unit 0","Synthesis","Echoes","Phantom Shades","Iron Colossi","The Conduit"],
+      "relatedEntries": ["solanum-synthesis-enemy-role-roster","solanum-core-combat-system"]
+    },
+    {
+      "id": "solanum-techno-phantom-collective",
+      "title": "Techno-Phantom Collective",
+      "category": "Enemy Factions",
+      "summary": "The Void Seer’s force combines advanced technology with arcane and illusionary influence, emphasizing stealth, sensor deception, energy systems, reality distortion, and spectral battlefield identities.",
+      "body": [
+        "The Techno-Phantom Collective fields Spectral Wraiths, Ethereal Stalkers, Phantom Juggernauts, Void Titans, Void Shapers, the Void Seer, Ethereal Bastions, Nihilants, and Specter Weavers.",
+        "Their roles range from reconnaissance and infiltration to heavy assault, command, fortress defense, and reality-distorting abomination deployment. Common limitations include fragility, energy drain, slow heavy units, network or command dependence, stationary defenses, and unstable hybrid systems."
+      ],
+      "sourceStatus": "source-native-enemy-profile",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":87,"pageEnd":93,"chunkId":"solanum-techno-phantom:p87-93","notes":"Nine Techno-Phantom battlefield roles and faction summary."}],
+      "tags": ["Techno-Phantom Collective","Void Seer","Spectral Wraiths","Nihilants","illusion","arcane technology"],
+      "relatedEntries": ["solanum-synthesis-enemy-role-roster","solanum-fay-entity-generator"]
+    },
+    {
+      "id": "solanum-bio-machine-juggernauts",
+      "title": "Bio-Machine Juggernauts",
+      "category": "Enemy Factions",
+      "summary": "The Biomech Tyrant’s faction fuses advanced robotics with organic systems to create adaptable infantry, stealth organisms, siege bodies, commanders, fortresses, and unstable regenerative horrors.",
+      "body": [
+        "Bio-Machine Juggernauts visibly combine dark machinery, armor, living tissue, biotic systems, and organic weaponry. Their battlefield roles include Bio-Sentries, Flesh-Wraiths, Titanium Behemoths, Colossal Juggernauts, Biotic Demolishers, the Biomech Tyrant, Goliath Fortresses, Devourers, and Shadow Stalkers.",
+        "Their strengths center on integrated biological resilience, heavy firepower, stealth, regeneration, command authority, and specialized ordnance. Weaknesses include exposed organic systems, maintenance demand, size, limited maneuverability, heavy energy consumption, stationary defense, and unstable hybrid construction."
+      ],
+      "sourceStatus": "source-native-enemy-profile",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":93,"pageEnd":99,"chunkId":"solanum-biomech:p93-99","notes":"Nine Bio-Machine Juggernaut roles and faction summary."}],
+      "tags": ["Bio-Machine Juggernauts","Biomech Tyrant","Bio-Sentries","Flesh-Wraiths","Goliath Fortresses"],
+      "relatedEntries": ["solanum-synthesis-enemy-role-roster","solanum-full-cyberization-threshold"]
+    },
+    {
+      "id": "solanum-anarchic-swarm",
+      "title": "The Anarchic Swarm",
+      "category": "Enemy Factions",
+      "summary": "The Hive Sovereign commands an insectoid bio-mechanical army built around numerical superiority, hive coordination, rapid adaptation, modular bodies, and relentless assault.",
+      "body": [
+        "The Anarchic Swarm fields Swarm Drones, Recon Beetles, Colossus Drones, Warlord Behemoths, Infestation Grenadiers, the Hive Sovereign, Hive Fortresses, Swarm Lords, and Shadow Stingers.",
+        "The faction’s strengths are mobility, swarm tactics, adaptive armor, heavy firepower, coordinated command, automated defenses, regeneration, psychic influence, and biotic camouflage. Its recurring weaknesses include isolation, low durability, reduced mobility in heavy forms, energy dependence, finite munitions, stationary fortresses, unstable hybrid design, and cloaking drain."
+      ],
+      "sourceStatus": "source-native-enemy-profile",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":99,"pageEnd":104,"chunkId":"solanum-anarchic-swarm:p99-104","notes":"Nine Anarchic Swarm roles and faction summary."}],
+      "tags": ["Anarchic Swarm","Hive Sovereign","Swarm Drones","Recon Beetles","Swarm Lords","hive mind"],
+      "relatedEntries": ["solanum-synthesis-enemy-role-roster","solanum-action-economy-grid-zoc"]
+    },
+    {
+      "id": "solanum-synthesis-enemy-role-roster",
+      "title": "Synthesis Enemy Role Roster",
+      "category": "Enemies",
+      "summary": "Thirty-six named enemy types map four Synthesis force families across nine recurring battlefield roles.",
+      "body": [
+        "The roster is qualitative. It is intended for identification, encounter composition, tactical expectations, and later cross-linking to native stat records.",
+        "The name ‘The Devourers’ is used for both Unit 0 and Bio-Machine Juggernaut abomination classes. They remain separate faction records rather than being merged."
+      ],
+      "enemyProfiles": [
+        {"faction":"Unit 0","role":"Foot Soldier","name":"Echoes","design":"Skeletal humanoids with exposed circuitry, reflective armor, modular energy rifles, and forearm blades","strength":"Adaptive combat algorithms and enhanced strength","weakness":"Overheating and analyzable combat patterns"},
+        {"faction":"Unit 0","role":"Scout","name":"Phantom Shades","design":"Lightweight cloaked scouts with multispectral optics, silenced plasma pistols, and grappling hooks","strength":"Stealth and speed","weakness":"Fragility and cloaking drain"},
+        {"faction":"Unit 0","role":"Tank","name":"Iron Colossi","design":"Quadrupedal reactive-plated heavy platforms with railguns, plasma cannons, and mine layers","strength":"Heavy firepower and fortified armor","weakness":"Slow mobility and overheating"},
+        {"faction":"Unit 0","role":"Brute","name":"Warlord Titans","design":"Hulking bipedal shock units with oversized melee weapons and shoulder rockets","strength":"Physical prowess and frontline disruption","weakness":"Poor precision and vulnerable joints"},
+        {"faction":"Unit 0","role":"Grenadier","name":"Rift Throwers","design":"Modular ordnance carriers with grenade launchers, plasma grenades, and EMP charges","strength":"Explosive versatility and area denial","weakness":"Heavy load and explosive feedback"},
+        {"faction":"Unit 0","role":"Leader","name":"The Conduit","design":"Integrated command hub with holographic projector, antennae, plasma staff, and energy shield","strength":"Tactical coordination and advanced sensors","weakness":"High-value target and network dependence"},
+        {"faction":"Unit 0","role":"Fortress","name":"Titan Bastions","design":"Stationary armored bunkers with railguns, anti-air missiles, automated defenses, and barriers","strength":"Defense and automated fire","weakness":"Immobility and system overload"},
+        {"faction":"Unit 0","role":"Abomination","name":"The Devourers","design":"Grotesque organic-machine hybrids with tendrils, acid sprays, and experimental weapons","strength":"Regeneration, adaptation, and terror","weakness":"Unstable fusion and maintenance dependence"},
+        {"faction":"Unit 0","role":"Infiltrator","name":"Shadow Weavers","design":"Flexible cloaked covert units with energy blades, disruptors, and infiltration drones","strength":"Cloaking, sabotage, assassination, and intelligence gathering","weakness":"Limited open-combat firepower and cloaking drain"},
+
+        {"faction":"Techno-Phantom Collective","role":"Foot Soldier","name":"Spectral Wraiths","design":"Spectral infantry combining advanced technology and arcane visual signatures","strength":"Adaptive energy combat and illusion-supported assault","weakness":"Energy demand and role-specific fragility"},
+        {"faction":"Techno-Phantom Collective","role":"Scout","name":"Ethereal Stalkers","design":"Streamlined adaptive-armor scouts with covert sensor systems","strength":"Stealth, agility, and reconnaissance","weakness":"Fragility and power drain"},
+        {"faction":"Techno-Phantom Collective","role":"Tank","name":"Phantom Juggernauts","design":"Large armored energy-combat platforms","strength":"Heavy firepower, armor, and long-range attacks","weakness":"Slow movement and shield overload"},
+        {"faction":"Techno-Phantom Collective","role":"Brute","name":"Void Titans","design":"Heavy spectral assault bodies built for close destruction","strength":"Physical destruction and shock assault","weakness":"Large target profile and limited precision"},
+        {"faction":"Techno-Phantom Collective","role":"Grenadier","name":"Void Shapers","design":"Reality- and temporal-munition specialists","strength":"Versatile munitions and area control","weakness":"Heavy load and limited mobility"},
+        {"faction":"Techno-Phantom Collective","role":"Leader","name":"The Void Seer","design":"Faction commander and arcane-technological coordination node","strength":"Strategic command and reality-aware sensing","weakness":"Command dependency and high target priority"},
+        {"faction":"Techno-Phantom Collective","role":"Fortress","name":"Ethereal Bastions","design":"Stationary defensive structures using energy barriers and spectral technology","strength":"Layered defense and automated systems","weakness":"Immobility and energy demand"},
+        {"faction":"Techno-Phantom Collective","role":"Abomination","name":"The Nihilants","design":"Unstable spectral-machine horrors","strength":"Unpredictable attacks and reality distortion","weakness":"Instability and systemic failure"},
+        {"faction":"Techno-Phantom Collective","role":"Infiltrator","name":"Specter Weavers","design":"Covert illusionary units for sabotage and assassination","strength":"Advanced stealth and sensor deception","weakness":"Low durability and limited direct combat capacity"},
+
+        {"faction":"Bio-Machine Juggernauts","role":"Foot Soldier","name":"Bio-Sentries","design":"Standard bio-mechanical infantry with integrated organic systems","strength":"Balanced combat adaptability and biological reinforcement","weakness":"Exposed organic systems and maintenance"},
+        {"faction":"Bio-Machine Juggernauts","role":"Scout","name":"Flesh-Wraiths","design":"Stealth scouts using biotic camouflage and enhanced sensors","strength":"Reconnaissance, stealth, and biotic sensing","weakness":"Fragility and biological vulnerabilities"},
+        {"faction":"Bio-Machine Juggernauts","role":"Tank","name":"Titanium Behemoths","design":"Heavily armored long-range bio-machine tanks","strength":"Heavy firepower and armor","weakness":"Slow movement and energy demand"},
+        {"faction":"Bio-Machine Juggernauts","role":"Brute","name":"Colossal Juggernauts","design":"Enormous augmented assault units","strength":"Crushing power and durability","weakness":"Prominent target and limited maneuverability"},
+        {"faction":"Bio-Machine Juggernauts","role":"Grenadier","name":"Biotic Demolishers","design":"Ordnance units combining explosives and biotic munitions","strength":"Versatile destructive payloads","weakness":"Heavy load and finite ordnance"},
+        {"faction":"Bio-Machine Juggernauts","role":"Leader","name":"The Biomech Tyrant","design":"Imposing commander blending dark machinery, armor, living tissue, and integrated weaponry","strength":"Command authority and enhanced faction coordination","weakness":"Complex systems and command centrality"},
+        {"faction":"Bio-Machine Juggernauts","role":"Fortress","name":"Goliath Fortresses","design":"Massive stationary bio-mechanical defense platforms","strength":"Heavy protection and automated defense","weakness":"Fixed position and high resource demand"},
+        {"faction":"Bio-Machine Juggernauts","role":"Abomination","name":"The Devourers","design":"Regenerative organic-machine horrors","strength":"Adaptation, regeneration, and terror","weakness":"Unstable construction and maintenance needs"},
+        {"faction":"Bio-Machine Juggernauts","role":"Infiltrator","name":"Shadow Stalkers","design":"Adaptive covert bio-machine operatives","strength":"Cloaking, biotic camouflage, and infiltration","weakness":"Low durability and power dependence"},
+
+        {"faction":"Anarchic Swarm","role":"Foot Soldier","name":"Swarm Drones","design":"Small segmented insectoid units with micro-lasers and small explosives","strength":"Swarm tactics and mobility","weakness":"Low durability and isolation"},
+        {"faction":"Anarchic Swarm","role":"Scout","name":"Recon Beetles","design":"Small camouflaged insectoid reconnaissance units","strength":"Camouflage and advanced sensors","weakness":"Limited combat ability and fragility"},
+        {"faction":"Anarchic Swarm","role":"Tank","name":"Colossus Drones","design":"Heavy segmented drones with rotating energy cannon, shockwave systems, and minefields","strength":"Sustained firepower and reinforced armor","weakness":"Reduced mobility and resource consumption"},
+        {"faction":"Anarchic Swarm","role":"Brute","name":"Warlord Behemoths","design":"Massive insectoid bio-mechanical shock units with claws and plasma cannon","strength":"Exceptional strength and durable structure","weakness":"Large target and energy dependency"},
+        {"faction":"Anarchic Swarm","role":"Grenadier","name":"Infestation Grenadiers","design":"Adaptive modular units with explosive, chemical, and biological ordnance","strength":"Versatile ordnance and adaptive armor","weakness":"Heavy load and finite munitions"},
+        {"faction":"Anarchic Swarm","role":"Leader","name":"The Hive Sovereign","design":"Towering hive commander with command staff, energy weapon, sensory interfaces, and runic armor","strength":"Command authority and precise hive-mind control","weakness":"High-value target and disruptable complex systems"},
+        {"faction":"Anarchic Swarm","role":"Fortress","name":"Hive Fortresses","design":"Layered hive structures with beam emitters, drones, barriers, and central command node","strength":"Formidable defense and automation","weakness":"Stationary and resource intensive"},
+        {"faction":"Anarchic Swarm","role":"Abomination","name":"The Swarm Lords","design":"Shifting nightmare hybrids with tendrils, corrosive sprays, disruptors, and psychic presence","strength":"Regeneration, adaptation, and psychic influence","weakness":"Unstable design and energy overload"},
+        {"faction":"Anarchic Swarm","role":"Infiltrator","name":"Shadow Stingers","design":"Agile cloaked bio-machine operatives with silent stingers and probes","strength":"Stealth technology and biotic camouflage","weakness":"Low durability and cloaking power drain"}
+      ],
+      "sourceStatus": "source-native-enemy-roster",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":82,"pageEnd":104,"chunkId":"solanum-synthesis-enemies:p82-104","notes":"Four Synthesis force families and thirty-six recurring battlefield roles."}],
+      "tags": ["enemies","Synthesis","enemy roles","Foot Soldier","Scout","Tank","Brute","Grenadier","Leader","Fortress","Abomination","Infiltrator"],
+      "relatedEntries": ["solanum-unit-zero-forces","solanum-techno-phantom-collective","solanum-bio-machine-juggernauts","solanum-anarchic-swarm","solanum-core-combat-system"]
+    }
+  ]
+}
