@@ -11,17 +11,17 @@
     'settlement-generator': ['floating-islands', 'scarcity-loop', 'dragon-lords', 'water-trade', 'dunhallow-roost'],
     'city-district-generator': ['messara', 'valeria-valthorn', 'water-trade'],
     'population-generator': ['messara', 'peoples-of-kaysender', 'scarcity-loop'],
-    'shop-market-generator': ['water-trade', 'skyweaver-consortium', 'black-fleet'],
+    'shop-market-generator': ['mad-martikens-menagerie-of-magical-services', 'water-trade', 'skyweaver-consortium', 'black-fleet'],
     'airship-vessel-generator': ['airships', 'black-fleet', 'surveyors-guild', 'dwarven-airship-core'],
     'airship-core-builder': ['airships', 'dwarven-airship-core', 'elven-airship-core', 'gnomish-airship-core'],
-    'crafting-gadget-creator': ['skyweaver-consortium', 'airships', 'gnomish-airship-core'],
+    'crafting-gadget-creator': ['mad-martikens-menagerie-of-magical-services', 'skyweaver-consortium', 'airships', 'gnomish-airship-core'],
     'supply-water-planner': ['scarcity-loop', 'water-trade', 'airships'],
     'faction-guild-generator': ['dragon-lords', 'black-fleet', 'surveyors-guild', 'skyweaver-consortium'],
     'black-market-piracy-generator': ['black-fleet', 'black-chain-consortium', 'free-sky-brotherhood'],
-    'encounter-generator': ['floating-islands', 'black-fleet', 'dragon-lords', 'sky-ecology'],
+    'encounter-generator': ['mad-martikens-menagerie-of-magical-services', 'floating-islands', 'black-fleet', 'dragon-lords', 'sky-ecology'],
     'sky-ecology-generator': ['sky-ecology', 'floating-islands'],
-    'npc-crew-generator': ['airships', 'surveyors-guild', 'peoples-of-kaysender'],
-    'job-board-generator': ['surveyors-guild', 'scarcity-loop', 'black-fleet', 'free-sky-brotherhood'],
+    'npc-crew-generator': ['mad-martikens-menagerie-of-magical-services', 'airships', 'surveyors-guild', 'peoples-of-kaysender'],
+    'job-board-generator': ['mad-martikens-menagerie-of-magical-services', 'surveyors-guild', 'scarcity-loop', 'black-fleet', 'free-sky-brotherhood'],
     'draconic-tithe-generator': ['dragon-lords', 'dunhallow-roost', 'water-trade'],
     'organization-operations-tracker': ['skyweaver-consortium', 'surveyors-guild', 'black-fleet']
   };
@@ -45,6 +45,7 @@
       .wiki-entry-view { border: 1px solid rgba(200,138,53,0.35); border-radius: 18px; padding: 20px; background: rgba(0,0,0,0.18); }
       .wiki-entry-view h3 { margin-bottom: 6px; }
       .wiki-entry-view h4 { color: var(--accent); margin: 20px 0 8px; }
+      .wiki-entry-view h5 { color: var(--ink); margin: 14px 0 8px; font-size: 1rem; }
       .wiki-entry-meta { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; }
       .wiki-entry-view p { color: var(--muted); line-height: 1.62; margin: 0 0 12px; }
       .wiki-entry-summary { color: var(--ink) !important; }
@@ -52,6 +53,21 @@
       .wiki-hotlink:hover { color: var(--ink); }
       .wiki-related { margin-top: 18px; }
       .wiki-related h4 { color: var(--accent); }
+      .wiki-policy-card { border: 1px solid rgba(200,138,53,0.32); border-radius: 16px; padding: 14px 16px; margin: 12px 0; background: rgba(200,138,53,0.07); }
+      .wiki-policy-list { margin: 0 0 0 18px; color: var(--muted); }
+      .wiki-policy-list li { margin-bottom: 8px; line-height: 1.5; }
+      .wiki-conversation { border: 1px solid rgba(200,138,53,0.32); border-radius: 18px; margin: 16px 0; padding: 16px; background: rgba(8,10,15,0.66); }
+      .wiki-conversation-context { font-style: italic; color: var(--muted); }
+      .wiki-dialogue-line { border-left: 3px solid rgba(200,138,53,0.55); padding: 8px 0 8px 12px; margin: 8px 0; color: var(--muted); line-height: 1.55; }
+      .wiki-dialogue-speaker { color: var(--accent); font-weight: 800; display: block; margin-bottom: 3px; }
+      .wiki-conversation-notes { margin: 10px 0 0 18px; color: var(--muted); }
+      .wiki-conversation-notes li { margin-bottom: 6px; line-height: 1.45; }
+      .wiki-table-card { border: 1px solid rgba(200,138,53,0.36); border-radius: 18px; margin: 16px 0; padding: 14px; background: rgba(6,8,12,0.62); }
+      .wiki-table-scroll { overflow-x: auto; }
+      .wiki-reference-table { width: 100%; border-collapse: collapse; min-width: 640px; color: var(--muted); font-size: 0.88rem; }
+      .wiki-reference-table th, .wiki-reference-table td { border: 1px solid var(--line); padding: 9px 10px; text-align: left; vertical-align: top; line-height: 1.4; }
+      .wiki-reference-table th { color: var(--ink); background: rgba(200,138,53,0.12); }
+      .wiki-reference-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.025); }
       .wiki-stat-block { border: 1px solid rgba(200,138,53,0.45); border-radius: 18px; margin: 18px 0; padding: 16px; background: rgba(6,8,12,0.72); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025); }
       .wiki-stat-block h4 { margin-top: 0; color: var(--ink); }
       .wiki-stat-subtitle { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; margin-bottom: 10px; }
@@ -140,7 +156,7 @@
       <div class="section-heading">
         <p class="eyebrow">Kaysender hypertext wiki</p>
         <h2>Setting Wiki Browser</h2>
-        <p>Search lore entries, converted Hypertext d20 stat blocks, source-derived hotlinks, related entries, and related campaign tools. Entries are loaded from the multi-pack wiki index.</p>
+        <p>Search lore entries, dialogue archives, reference tables, converted Hypertext d20 stat blocks, source-derived hotlinks, related entries, and related campaign tools. Entries are loaded from the multi-pack wiki index.</p>
       </div>
       <div class="wiki-controls">
         <input id="wiki-search" type="search" placeholder="Search Kaysender wiki entries..." />
@@ -196,6 +212,10 @@
         ...(entry.tags || []),
         ...(entry.body || []),
         ...sectionText(entry.sections),
+        ...tableText(entry.tables),
+        ...tableText(entry.supplementalTables),
+        ...conversationText(entry.conversationRecords),
+        ...servicePolicyText(entry.servicePolicies),
         ...statBlockText(entry.statBlocks)
       ].join(' ').toLowerCase();
       const searchOk = !query || searchCorpus.includes(query);
@@ -211,7 +231,13 @@
       button.dataset.entryId = entry.id;
       button.className = entry.id === activeId ? 'active' : '';
       const statCount = (entry.statBlocks || []).length;
-      button.innerHTML = `<strong>${escapeHtml(entry.title)}</strong><br><small>${escapeHtml(entry.category || 'Uncategorized')}${statCount ? ` · ${statCount} stat block${statCount === 1 ? '' : 's'}` : ''}</small>`;
+      const tableCount = (entry.tables || []).length + (entry.supplementalTables || []).length;
+      const conversationCount = (entry.conversationRecords || []).length;
+      const detailBits = [];
+      if (statCount) detailBits.push(`${statCount} stat block${statCount === 1 ? '' : 's'}`);
+      if (tableCount) detailBits.push(`${tableCount} table${tableCount === 1 ? '' : 's'}`);
+      if (conversationCount) detailBits.push(`${conversationCount} conversation${conversationCount === 1 ? '' : 's'}`);
+      button.innerHTML = `<strong>${escapeHtml(entry.title)}</strong><br><small>${escapeHtml(entry.category || 'Uncategorized')}${detailBits.length ? ` · ${detailBits.map(escapeHtml).join(' · ')}` : ''}</small>`;
       button.addEventListener('click', () => renderEntry(panel, entries, entry.id));
       list.appendChild(button);
     });
@@ -219,6 +245,24 @@
 
   function sectionText(sections) {
     return (sections || []).flatMap(section => [section.heading || '', ...(section.body || [])]);
+  }
+
+  function tableText(tables) {
+    return (tables || []).flatMap(table => [table.title || '', ...(table.columns || []), ...(table.rows || []).flat()]);
+  }
+
+  function conversationText(records) {
+    return (records || []).flatMap(record => [
+      record.title || '',
+      record.context || '',
+      ...(record.participants || []),
+      ...(record.exchanges || []).flatMap(exchange => [exchange.speaker || '', exchange.text || '']),
+      ...(record.mechanicalNotes || [])
+    ]);
+  }
+
+  function servicePolicyText(policy) {
+    return Object.entries(policy || {}).flatMap(([key, value]) => [key, value]);
   }
 
   function statBlockText(statBlocks) {
@@ -249,6 +293,7 @@
     view.append(meta, title, summary);
 
     (entry.body || []).forEach(paragraph => appendParagraph(view, paragraph, entries));
+    renderServicePolicies(view, entry.servicePolicies || {});
     (entry.sections || []).forEach(section => {
       const heading = document.createElement('h4');
       heading.textContent = section.heading || 'Section';
@@ -256,6 +301,8 @@
       (section.body || []).forEach(paragraph => appendParagraph(view, paragraph, entries));
     });
 
+    renderConversations(view, entry.conversationRecords || []);
+    renderTables(view, [...(entry.tables || []), ...(entry.supplementalTables || [])]);
     renderStatBlocks(view, entry.statBlocks || []);
 
     appendChips(view, 'Tags', entry.tags || [], tag => {
@@ -271,6 +318,109 @@
     const p = document.createElement('p');
     p.innerHTML = renderInlineLinks(text || '', entries);
     parent.appendChild(p);
+  }
+
+  function renderServicePolicies(parent, policies) {
+    const records = Object.entries(policies || {});
+    if (!records.length) return;
+    const heading = document.createElement('h4');
+    heading.textContent = 'Current service policies';
+    const card = document.createElement('section');
+    card.className = 'wiki-policy-card';
+    const list = document.createElement('ul');
+    list.className = 'wiki-policy-list';
+    records.forEach(([key, value]) => {
+      const item = document.createElement('li');
+      const label = key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/[-_]/g, ' ');
+      item.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}`;
+      list.appendChild(item);
+    });
+    card.appendChild(list);
+    parent.append(heading, card);
+  }
+
+  function renderConversations(parent, records) {
+    if (!records.length) return;
+    const heading = document.createElement('h4');
+    heading.textContent = 'Conversations with the proprietor';
+    parent.appendChild(heading);
+    records.forEach(record => {
+      const article = document.createElement('section');
+      article.className = 'wiki-conversation';
+      const title = document.createElement('h5');
+      title.textContent = record.title || 'Recorded conversation';
+      article.appendChild(title);
+      if (record.context) {
+        const context = document.createElement('p');
+        context.className = 'wiki-conversation-context';
+        context.textContent = record.context;
+        article.appendChild(context);
+      }
+      (record.exchanges || []).forEach(exchange => {
+        const line = document.createElement('div');
+        line.className = 'wiki-dialogue-line';
+        const speaker = document.createElement('span');
+        speaker.className = 'wiki-dialogue-speaker';
+        speaker.textContent = exchange.speaker || 'Speaker';
+        const text = document.createElement('span');
+        text.textContent = exchange.text || '';
+        line.append(speaker, text);
+        article.appendChild(line);
+      });
+      if ((record.mechanicalNotes || []).length) {
+        const notesHeading = document.createElement('h5');
+        notesHeading.textContent = 'Mechanical notes';
+        const notes = document.createElement('ul');
+        notes.className = 'wiki-conversation-notes';
+        record.mechanicalNotes.forEach(note => {
+          const item = document.createElement('li');
+          item.textContent = note;
+          notes.appendChild(item);
+        });
+        article.append(notesHeading, notes);
+      }
+      parent.appendChild(article);
+    });
+  }
+
+  function renderTables(parent, tables) {
+    if (!tables.length) return;
+    const heading = document.createElement('h4');
+    heading.textContent = 'Reference tables';
+    parent.appendChild(heading);
+    tables.forEach(tableData => {
+      const card = document.createElement('section');
+      card.className = 'wiki-table-card';
+      const title = document.createElement('h5');
+      title.textContent = tableData.title || 'Reference table';
+      const scroll = document.createElement('div');
+      scroll.className = 'wiki-table-scroll';
+      const table = document.createElement('table');
+      table.className = 'wiki-reference-table';
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      (tableData.columns || []).forEach(column => {
+        const th = document.createElement('th');
+        th.scope = 'col';
+        th.textContent = column;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      const tbody = document.createElement('tbody');
+      (tableData.rows || []).forEach(row => {
+        const tr = document.createElement('tr');
+        row.forEach(value => {
+          const td = document.createElement('td');
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.append(thead, tbody);
+      scroll.appendChild(table);
+      card.append(title, scroll);
+      parent.appendChild(card);
+    });
   }
 
   function renderStatBlocks(parent, statBlocks) {
