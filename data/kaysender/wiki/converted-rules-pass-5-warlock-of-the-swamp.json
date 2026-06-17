@@ -1,0 +1,307 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "description": "A complete Hypertext d20 custom class and supporting pact lore for the Warlock of the Swamp, servant of the Lady of the Swamp.",
+  "entries": [
+    {
+      "id": "warlock-of-the-swamp-class",
+      "title": "Warlock of the Swamp",
+      "category": "Rules",
+      "summary": "A complete twenty-level Hypertext d20 warlock class that retains the standard eldritch chassis while specializing in amphibian broods, swarms, sustained summons, Dream Step, planar transit, and an evolving pact negotiated with the Lady of the Swamp.",
+      "body": [
+        "A Warlock of the Swamp is not chained to a single bargain made once and obeyed forever. Their pact is a living ledger of favors, contributions, exceptions, debts, and concessions negotiated with the [[lady-of-the-swamp|Lady of the Swamp]].",
+        "The Lady is usually an outsider to the world in which her followers operate. Her servants therefore dream of divine arguments, jurisdictional bargaining, and hurried compromises with local gods whose blessings overlap those of the swamp pact.",
+        "Mechanically, the class preserves the standard warlock's eldritch blast, invocations, detect magic, damage reduction, item mastery, resilience, energy resistance, and imbue item. Its additional powers are constrained by Pact Favor, Pact Debt, active-summon Hit Dice, maintenance commitments, restricted creature themes, and negotiated consequences."
+      ],
+      "classProgression": [
+        {"level":1,"baseAttack":"+0","fortitude":"+0","reflex":"+0","will":"+2","eldritchBlast":"1d6","invocationsKnown":1,"maximumBrood":"summon nature's ally I","special":["Lady's Covenant","Pact Ledger","Brood Familiar","Call Swamp Brood"]},
+        {"level":2,"baseAttack":"+1","fortitude":"+0","reflex":"+0","will":"+3","eldritchBlast":"1d6","invocationsKnown":2,"maximumBrood":"summon nature's ally I","special":["Detect magic","Amphibian empathy"]},
+        {"level":3,"baseAttack":"+2","fortitude":"+1","reflex":"+1","will":"+3","eldritchBlast":"2d6","invocationsKnown":2,"maximumBrood":"summon nature's ally II","special":["Damage reduction 1/cold iron","Brood link"]},
+        {"level":4,"baseAttack":"+3","fortitude":"+1","reflex":"+1","will":"+4","eldritchBlast":"2d6","invocationsKnown":3,"maximumBrood":"summon nature's ally II","special":["Deceive item","Renegotiated invocation"]},
+        {"level":5,"baseAttack":"+3","fortitude":"+1","reflex":"+1","will":"+4","eldritchBlast":"3d6","invocationsKnown":3,"maximumBrood":"summon nature's ally III","special":["Dream Step"]},
+        {"level":6,"baseAttack":"+4","fortitude":"+2","reflex":"+2","will":"+5","eldritchBlast":"3d6","invocationsKnown":4,"maximumBrood":"summon nature's ally III","special":["Lesser invocations","Brood resilience"]},
+        {"level":7,"baseAttack":"+5","fortitude":"+2","reflex":"+2","will":"+5","eldritchBlast":"4d6","invocationsKnown":4,"maximumBrood":"summon nature's ally IV","special":["Damage reduction 2/cold iron","Mire Passage"]},
+        {"level":8,"baseAttack":"+6/+1","fortitude":"+2","reflex":"+2","will":"+6","eldritchBlast":"4d6","invocationsKnown":5,"maximumBrood":"summon nature's ally IV","special":["Fiendish resilience 1","Sustained brood"]},
+        {"level":9,"baseAttack":"+6/+1","fortitude":"+3","reflex":"+3","will":"+6","eldritchBlast":"5d6","invocationsKnown":5,"maximumBrood":"summon nature's ally V","special":["Minor entreaty"]},
+        {"level":10,"baseAttack":"+7/+2","fortitude":"+3","reflex":"+3","will":"+7","eldritchBlast":"5d6","invocationsKnown":6,"maximumBrood":"summon nature's ally V","special":["Energy resistance 5","Divine jurisdiction dreams","Compromise ward"]},
+        {"level":11,"baseAttack":"+8/+3","fortitude":"+3","reflex":"+3","will":"+7","eldritchBlast":"6d6","invocationsKnown":7,"maximumBrood":"summon nature's ally VI","special":["Damage reduction 3/cold iron","Greater invocations","Bog Between Worlds"]},
+        {"level":12,"baseAttack":"+9/+4","fortitude":"+4","reflex":"+4","will":"+8","eldritchBlast":"6d6","invocationsKnown":7,"maximumBrood":"summon nature's ally VI","special":["Imbue item","Pact-bound summons"]},
+        {"level":13,"baseAttack":"+9/+4","fortitude":"+4","reflex":"+4","will":"+8","eldritchBlast":"6d6","invocationsKnown":8,"maximumBrood":"summon nature's ally VII","special":["Fiendish resilience 2","Negotiated exception"]},
+        {"level":14,"baseAttack":"+10/+5","fortitude":"+4","reflex":"+4","will":"+9","eldritchBlast":"7d6","invocationsKnown":8,"maximumBrood":"summon nature's ally VII","special":["Dream Procession"]},
+        {"level":15,"baseAttack":"+11/+6/+1","fortitude":"+5","reflex":"+5","will":"+9","eldritchBlast":"7d6","invocationsKnown":9,"maximumBrood":"summon nature's ally VIII","special":["Damage reduction 4/cold iron","Greater entreaty"]},
+        {"level":16,"baseAttack":"+12/+7/+2","fortitude":"+5","reflex":"+5","will":"+10","eldritchBlast":"7d6","invocationsKnown":10,"maximumBrood":"summon nature's ally VIII","special":["Dark invocations","Reedway Transit"]},
+        {"level":17,"baseAttack":"+12/+7/+2","fortitude":"+5","reflex":"+5","will":"+10","eldritchBlast":"8d6","invocationsKnown":10,"maximumBrood":"summon nature's ally IX","special":["Many bodies, one pact"]},
+        {"level":18,"baseAttack":"+13/+8/+3","fortitude":"+6","reflex":"+6","will":"+11","eldritchBlast":"8d6","invocationsKnown":11,"maximumBrood":"summon nature's ally IX","special":["Fiendish resilience 5","Dream Court audience"]},
+        {"level":19,"baseAttack":"+14/+9/+4","fortitude":"+6","reflex":"+6","will":"+11","eldritchBlast":"8d6","invocationsKnown":11,"maximumBrood":"summon nature's ally IX","special":["Damage reduction 5/cold iron","Covenant revision"]},
+        {"level":20,"baseAttack":"+15/+10/+5","fortitude":"+6","reflex":"+6","will":"+12","eldritchBlast":"9d6","invocationsKnown":12,"maximumBrood":"summon nature's ally IX","special":["Energy resistance 10","Living pact","Lady's emissary"]}
+      ],
+      "sections": [
+        {
+          "heading": "Class chassis",
+          "sectionType": "conversion-note",
+          "body": [
+            "Alignment: Any nonlawful. A lawful character may enter only through a specific negotiated exception approved by the GM and begins with 1 Pact Debt.",
+            "Hit Die d6; average base attack; good Will save; poor Fortitude and Reflex saves; 4 + Intelligence modifier skill points per level, multiplied by four at 1st level.",
+            "Class skills: Bluff, Concentration, Craft, Diplomacy, Handle Animal, Heal, Hide, Knowledge (arcana), Knowledge (nature), Knowledge (the planes), Knowledge (religion), Listen, Profession, Sense Motive, Spellcraft, Spot, Survival, Swim, and Use Magic Device.",
+            "Proficient with all simple weapons and light armor, but not shields. Swamp invocations may be used in light armor without arcane spell failure. Charisma governs invocation save DCs, Pact Favor, entreaties, and class-feature DCs unless stated otherwise."
+          ]
+        },
+        {
+          "heading": "Twenty-level progression",
+          "sectionType": "builder-note",
+          "body": [
+            "1st — BAB +0; Fort +0, Ref +0, Will +2; eldritch blast 1d6; 1 invocation; Lady's Covenant, Pact Ledger, Brood Familiar, Call Swamp Brood; maximum brood equivalent summon nature's ally I.",
+            "2nd — BAB +1; Fort +0, Ref +0, Will +3; 2 invocations; detect magic; Amphibian Empathy.",
+            "3rd — BAB +2; Fort +1, Ref +1, Will +3; eldritch blast 2d6; damage reduction 1/cold iron; Brood Link; maximum brood II.",
+            "4th — BAB +3; Fort +1, Ref +1, Will +4; 3 invocations; deceive item; Renegotiated Invocation.",
+            "5th — BAB +3; Fort +1, Ref +1, Will +4; eldritch blast 3d6; Dream Step; maximum brood III.",
+            "6th — BAB +4; Fort +2, Ref +2, Will +5; 4 invocations; lesser invocations; Brood Resilience.",
+            "7th — BAB +5; Fort +2, Ref +2, Will +5; eldritch blast 4d6; damage reduction 2/cold iron; Mire Passage; maximum brood IV.",
+            "8th — BAB +6/+1; Fort +2, Ref +2, Will +6; 5 invocations; fiendish resilience 1; Sustained Brood.",
+            "9th — BAB +6/+1; Fort +3, Ref +3, Will +6; eldritch blast 5d6; Minor Entreaty; maximum brood V.",
+            "10th — BAB +7/+2; Fort +3, Ref +3, Will +7; 6 invocations; energy resistance 5; Divine Jurisdiction Dreams; Compromise Ward.",
+            "11th — BAB +8/+3; Fort +3, Ref +3, Will +7; eldritch blast 6d6; 7 invocations; damage reduction 3/cold iron; greater invocations; Bog Between Worlds; maximum brood VI.",
+            "12th — BAB +9/+4; Fort +4, Ref +4, Will +8; imbue item; Pact-Bound Summons.",
+            "13th — BAB +9/+4; Fort +4, Ref +4, Will +8; 8 invocations; fiendish resilience 2; Negotiated Exception; maximum brood VII.",
+            "14th — BAB +10/+5; Fort +4, Ref +4, Will +9; eldritch blast 7d6; Dream Procession.",
+            "15th — BAB +11/+6/+1; Fort +5, Ref +5, Will +9; 9 invocations; damage reduction 4/cold iron; Greater Entreaty; maximum brood VIII.",
+            "16th — BAB +12/+7/+2; Fort +5, Ref +5, Will +10; 10 invocations; dark invocations; Reedway Transit.",
+            "17th — BAB +12/+7/+2; Fort +5, Ref +5, Will +10; eldritch blast 8d6; Many Bodies, One Pact; maximum brood IX.",
+            "18th — BAB +13/+8/+3; Fort +6, Ref +6, Will +11; 11 invocations; fiendish resilience 5; Dream Court Audience.",
+            "19th — BAB +14/+9/+4; Fort +6, Ref +6, Will +11; damage reduction 5/cold iron; Covenant Revision.",
+            "20th — BAB +15/+10/+5; Fort +6, Ref +6, Will +12; eldritch blast 9d6; 12 invocations; energy resistance 10; Living Pact; Lady's Emissary."
+          ]
+        },
+        {
+          "heading": "Standard warlock inheritance",
+          "sectionType": "conversion-note",
+          "body": [
+            "Invocations remain at-will spell-like abilities. Caster level equals class level, and save DC equals 10 + equivalent spell level + Charisma modifier. Grades become available at 1st, 6th, 11th, and 16th level. A Warlock of the Swamp may choose ordinary warlock invocations or the additions in [[warlock-of-the-swamp-invocations|Swamp Pact Invocations]].",
+            "Eldritch blast is a 60-foot ranged touch attack usable at will. Damage advances from 1d6 to 9d6 according to the class progression and remains compatible with blast-shape and eldritch-essence invocations.",
+            "The class retains detect magic at 2nd level; damage reduction/cold iron at 3rd, 7th, 11th, 15th, and 19th; deceive item at 4th; fiendish resilience at 8th, 13th, and 18th; energy resistance at 10th and 20th; and imbue item at 12th.",
+            "Prestige classes that advance an existing arcane spellcasting class may advance caster level, eldritch blast, and invocations as they do for an ordinary warlock, but do not advance Pact Favor, Brood Call, maintained summons, entreaties, or planar-transit class features unless explicitly stated."
+          ]
+        },
+        {
+          "heading": "Lady's Covenant and Pact Ledger",
+          "sectionType": "builder-note",
+          "body": [
+            "At 1st level, establish a living covenant with the Lady. Record Contributions, Concessions, Pact Favor, Pact Debt, active exceptions, maintained summons, and unresolved promises in a Pact Ledger.",
+            "Maximum Pact Favor equals 3 + Charisma modifier + one-half class level, minimum 1. Pact Favor powers only the swamp-specific features in this class; ordinary invocations and eldritch blast remain at will.",
+            "After eight hours of rest, recover one-half maximum Favor, rounded up. Recover the full amount instead if the warlock completed a meaningful Contribution since the previous recovery. A Contribution may protect a wetland for eight hours, release a protected creature, establish or repair a shrine, complete a negotiated service, surrender an appropriate magic item, or offer valuables worth at least 100 gp per class level. The GM and player may approve equivalent sacrifices of time, memory, treasure, service, safety, or opportunity.",
+            "Pact Debt ranges from 0 to 6. The warlock may borrow 1 Favor when empty by accepting 1 Debt. Each point of Debt reduces maximum Favor by 1. A meaningful Contribution may reduce Debt by 1 instead of restoring Favor. At 6 Debt, Entreaty and planar-transit features are suspended until at least 1 Debt is resolved; eldritch blast, invocations, and the retained standard-warlock abilities continue functioning.",
+            "A Concession is an ongoing clause accepted in exchange for a boon. Examples include protecting a clutch of eggs, transporting an emissary, refusing to drain a specific wetland, carrying a message to another deity's clergy, establishing a shrine in hostile territory, or allowing the Lady to speak through the warlock during one future negotiation. Concessions should create adventures, not erase player agency."
+          ]
+        },
+        {
+          "heading": "Brood Familiar",
+          "sectionType": "builder-note",
+          "body": [
+            "At 1st level choose a Tiny frog, toad, newt, salamander, lizard, leech, snail, dragonfly, or similarly minor swamp creature. It uses familiar rules with effective wizard level equal to class level and may be celestial, fiendish, fey, dream-touched, or bog-touched according to the negotiated pact.",
+            "Replacing a destroyed or dismissed familiar requires twenty-four hours, 1 Pact Favor, and a small offering. The warlock loses no experience points. At 3rd level the familiar becomes amphibious, gains a swim speed equal to its land speed, and may inhabit the warlock's maintained brood without being harmed by it.",
+            "At 5th level the familiar may speak with its master and with ordinary amphibians and reptiles. At 11th level it can deliver touch invocations through any maintained summon within 30 feet. At 17th level it gains Many Bodies, One Pact."
+          ]
+        },
+        {
+          "heading": "Call Swamp Brood",
+          "sectionType": "builder-note",
+          "body": [
+            "As a standard action, spend Pact Favor to call creatures as a summon nature's ally effect with caster level equal to class level. The maximum equivalent spell rises from I at 1st level to II at 3rd, III at 5th, IV at 7th, V at 9th, VI at 11th, VII at 13th, VIII at 15th, and IX at 17th.",
+            "Favor cost is 1 for equivalent levels I-II, 2 for III-IV, 3 for V-VI, 4 for VII-VIII, and 5 for IX. Duration is 1 minute per class level. The total Hit Dice of all active creatures called by this feature cannot exceed class level + Charisma modifier, minimum class level.",
+            "Eligible summons must be amphibians, reptiles, swarms, vermin, oozes, plants, aquatic animals, or swamp-associated magical beasts, fey, elementals, or outsiders approved by the GM. Ordinary creatures from the summon nature's ally lists may be reskinned as frogs, lizards, newts, salamanders, leeches, dragonflies, mud crabs, or other fitting broods without changing their statistics.",
+            "When an eligible summoned creature would normally be celestial or fiendish, the warlock may instead apply a bog-touched description. This changes appearance and origin but not statistics unless a later feature says otherwise.",
+            "Brood Link at 3rd level grants telepathic commands to called creatures within 100 feet and permits the warlock to perceive through one called creature as a standard action. Brood Resilience at 6th grants called creatures +2 resistance on saves against poison, disease, fear, dismissal, and banishment."
+          ]
+        },
+        {
+          "heading": "Maintaining summoned creatures",
+          "sectionType": "builder-note",
+          "body": [
+            "At 8th level, when a Swamp Brood would expire, the warlock may reserve Pact Favor equal to its original cost instead of dismissing it. Reserved Favor is not spent but cannot be used or recovered while the brood remains. One brood may be maintained this way until the warlock's next full rest.",
+            "At 11th level maintain two broods, at 16th maintain three, and at 17th maintain any number of broods within the total active-Hit-Dice limit. Each brood still reserves its cost. A maintained creature reduced to 0 hit points returns to its origin rather than dying unless it was a called native creature rather than a summoned one.",
+            "Pact-Bound Summons at 12th level permits maintained broods and the familiar to accompany the warlock through Dream Step, Mire Passage, Bog Between Worlds, Reedway Transit, shadow walk, plane shift, and similar movement without being dismissed by planar boundaries.",
+            "Many Bodies, One Pact at 17th level allows the familiar, as a full-round action, to divide into a swarm of Tiny versions of itself for 1 minute per class level once per day. Use an appropriate swarm of the familiar's Hit Dice or lower. It retains familiar intelligence, telepathy, and allegiance and may reform as a full-round action."
+          ]
+        },
+        {
+          "heading": "Dream Step and planar transit",
+          "sectionType": "builder-note",
+          "body": [
+            "Dream Step at 5th level: as a move action, spend 1 Favor to teleport 20 feet + 5 feet per two class levels to a space the warlock can see. Departure and arrival must touch or contain water, mud, mist, shadow, thick vegetation, fungus, reeds, or sleeping creatures. This movement does not provoke attacks of opportunity.",
+            "Mire Passage at 7th level: as a full-round action, spend 2 Favor to travel as dimension door between two known wet, overgrown, muddy, misty, or dream-touched locations within 400 feet + 40 feet per class level. The warlock may carry the familiar and maintained broods but no other creatures.",
+            "Bog Between Worlds at 11th level: spend 3 Favor and perform a ten-minute rite to use a restricted plane shift. The destination must be a known wetland, waterway, fungus forest, dream crossing, mudflat, volcanic marsh, cloud bog, or shrine recognized by the Lady. Arrival is 5d100 miles from the intended location unless a functioning shrine anchors the passage.",
+            "Dream Procession at 14th level permits Dream Step to carry one willing adjacent creature per five class levels for 1 additional Favor. All travelers must arrive together.",
+            "Reedway Transit at 16th level: spend 5 Favor and perform a ten-minute rite to transport up to one willing creature per class level to a known Lady-recognized planar node. Arrival is 1d10 miles from an unanchored destination or within the shrine when both ends contain functioning shrines.",
+            "Dream Court Audience at 18th level allows the warlock, after eight hours of rest, to seek the Lady's court in dreams. The character may ask three questions as commune or negotiate one pact clause. The Lady may be delayed, evasive, or forced to consult another deity when the question falls inside another power's jurisdiction."
+          ]
+        },
+        {
+          "heading": "Entreating the Lady",
+          "sectionType": "builder-note",
+          "body": [
+            "Minor Entreaty at 9th level: once per day, spend 1 Favor and perform a ten-minute petition. Make a Charisma check against DC 15 + current Pact Debt. On success choose one minor favor: borrow one least or lesser invocation for 1 hour; call one otherwise ineligible creature of an allowed summon level; reroll a failed planar-transit arrival; gain a new save against one curse, poison, disease, or fear effect; or receive a temporary exception to one minor pact clause for 24 hours.",
+            "On a failed Minor Entreaty, the Favor is spent and the Lady may offer the same boon in exchange for 1 Debt or a specific Concession. The player may refuse.",
+            "Greater Entreaty at 15th level: once per week, spend 3 Favor and make a Charisma check against DC 20 + Pact Debt after a one-hour rite. Appropriate favors include transporting a stranded party to a recognized shrine, restoring a dismissed or slain pact familiar without delay, borrowing one greater invocation for 24 hours, suppressing one divine or pact curse for one day per class level, or commissioning a minor [[divine-compromise-artifacts|divine compromise artifact]].",
+            "A Greater Entreaty cannot duplicate wish, grant permanent ability increases, erase campaign-scale consequences, compel another deity, or provide an artifact without a negotiated limitation. Failed checks normally produce a counteroffer rather than silence.",
+            "Negotiated Exception at 13th level: once per day spend 2 Favor and accept 1 Debt to choose one exception for a single use: treat an off-list creature as an eligible brood; carry one extra willing creature through Mire Passage; ignore one source of planar impedance; or use one known invocation as though its equivalent level were one lower for concentration and countering purposes.",
+            "Covenant Revision at 19th level permits two invocations rather than one to be exchanged during Renegotiated Invocation, and once per level the warlock may permanently replace one accepted Concession with another of comparable weight after a Dream Court negotiation.",
+            "Living Pact at 20th level permits Minor Entreaty three times per day and Greater Entreaty once per day. Once per week the warlock may rewrite one invocation, one maintained-brood restriction, or one pact clause until the next weekly negotiation, subject to GM approval and an explicit Contribution or Concession."
+          ]
+        },
+        {
+          "heading": "Divine jurisdiction dreams and Compromise Ward",
+          "sectionType": "builder-note",
+          "body": [
+            "Beginning at 10th level, the warlock frequently dreams of the Lady arguing, bargaining, or drafting compact language with deities connected to nearby party members, communities, relics, or active blessings. These dreams explain why overlapping magic sometimes behaves like negotiated law rather than impersonal physics.",
+            "Compromise Ward grants the warlock and allies within 30 feet a +2 pact bonus on saving throws and caster-level checks made specifically to resist dispelling, suppression, possession, transformation, or harmful interaction caused by overlapping divine, pact, domain, curse, or blessing effects.",
+            "Once per day as an immediate action, spend 1 Favor when such an overlap affects a willing creature within 30 feet. Choose one: Stabilize, granting a reroll of the failed save; Separate, suppressing one willing beneficial effect for up to 1 minute per class level and restoring its remaining duration afterward; or Petition, delaying the new effect until the end of the target's next turn so the party can remove or alter one of the interacting effects.",
+            "When the GM determines that two divine jurisdictions cannot coexist cleanly, the Lady may send an emissary with an object from [[divine-compromise-artifacts|Divine Compromise Artifacts]]. Such objects are not ordinary treasure. They are evidence that several powers reached a strange agreement intended to keep everyone from exploding like the last ones."
+          ]
+        },
+        {
+          "heading": "Lady's Emissary",
+          "sectionType": "builder-note",
+          "body": [
+            "At 20th level, once per day the warlock may spend 5 Favor and one full-round action to call an emissary of the Lady for 10 minutes per class level. Use one eligible creature from summon nature's ally IX, a powerful swamp outsider of comparable challenge, or a unique emissary approved by the GM.",
+            "The emissary is not mindless property. It obeys the current covenant, refuses orders that directly violate active Concessions, and may arrive carrying instructions, a counteroffer, a frog, an inexplicable legal document, or a compromise artifact whose relevance is not immediately apparent.",
+            "If the emissary is destroyed, it returns to the Lady and this feature cannot be used again for seven days."
+          ]
+        },
+        {
+          "heading": "Conversion and balance status",
+          "sectionType": "conversion-note",
+          "body": [
+            "Converted and ready for homebrew playtesting. The base chassis follows the referenced 3.5 warlock progression, while all Lady-of-the-Swamp features are new Kaysender-compatible homebrew.",
+            "The class is intentionally broader than an ordinary warlock, but its added powers are limited by a separate daily Favor pool, Debt penalties, Contributions, Concessions, active-summon Hit Dice, reserved maintenance Favor, creature-theme restrictions, travel-node restrictions, and GM-reviewed entreaties.",
+            "The Pact Ledger should be visible to the entire table. Costs and counteroffers should be stated before acceptance. Ongoing negotiations are intended to create choices and adventures, not retroactively remove class features or punish a player without warning."
+          ]
+        }
+      ],
+      "sourceStatus": "derived-tool-output",
+      "sourceRefs": [
+        {
+          "sourceId": "external-warlock-reference",
+          "fileName": "SRD - Warlock",
+          "url": "https://srd.dndtools.org/srd/classes/baseCarc/warlock.html",
+          "outlineTitle": "Warlock class chassis and progression",
+          "chunkId": "external-warlock-reference:base-class",
+          "notes": "Used as the mechanical reference for the retained blast, invocation, resistance, resilience, item-use, and item-creation chassis. All swamp pact mechanics are original homebrew."
+        }
+      ],
+      "sourceChunkIds": ["external-warlock-reference:base-class"],
+      "tags": ["Warlock of the Swamp","player class","Lady of the Swamp","summoning","swarms","amphibians","Dream Step","planar travel","invocations","Hypertext d20"],
+      "relatedEntries": ["lady-of-the-swamp","warlock-of-the-swamp-invocations","divine-compromise-artifacts","airship-engineer-class","air-captain-class","sky-warden-class"],
+      "relatedModules": ["npc-crew-generator","encounter-generator","sky-ecology-generator","job-board-generator"]
+    },
+    {
+      "id": "warlock-of-the-swamp-invocations",
+      "title": "Swamp Pact Invocations",
+      "category": "Rules",
+      "summary": "Original least, lesser, greater, and dark invocations available to a Warlock of the Swamp alongside the ordinary warlock invocation list.",
+      "body": [
+        "These invocations are spell-like abilities and follow the Warlock of the Swamp's ordinary invocation rules. Their names, effects, and pact imagery are original homebrew.",
+        "A summoned creature produced by an invocation still counts against any active-Hit-Dice limit stated by the class unless the invocation explicitly says otherwise."
+      ],
+      "invocationGrades": {
+        "least": [
+          {"name":"Bogskin","equivalentLevel":2,"effect":"Gain +2 enhancement to natural armor, +4 on saves against poison and disease, and the ability to breathe water for 24 hours."},
+          {"name":"Call the Little Ones","equivalentLevel":1,"effect":"Speak with amphibians, reptiles, and vermin. As a full-round action call harmless local frogs, lizards, newts, leeches, or insects sufficient to scout a 20-foot area, carry a tiny object, or create a minor distraction."},
+          {"name":"Mireborn Blast","equivalentLevel":2,"effect":"Eldritch essence. Half the blast damage becomes acid; a creature damaged must pass Reflex or have all speeds reduced by 10 feet for 1 round."},
+          {"name":"Mists Below the Reeds","equivalentLevel":2,"effect":"Create a 20-foot-radius fog cloud for 1 minute per level. The warlock and pact familiar can see through this fog out to 10 feet."},
+          {"name":"Swarmkeeper's Hand","equivalentLevel":2,"effect":"Use summon swarm, but the swarm may appear as frogs, biting midges, leeches, beetles, lizards, or other Tiny swamp creatures and can be directed to move as a move action."},
+          {"name":"Tongue of the Newt","equivalentLevel":2,"effect":"Gain scent, a swim speed equal to land speed, and +6 competence on Swim and Survival checks in wetlands for 24 hours."}
+        ],
+        "lesser": [
+          {"name":"Amphibious Procession","equivalentLevel":3,"effect":"For 24 hours, the warlock and one touched creature per three levels gain water breathing, a 30-foot swim speed, and freedom from movement penalties caused by ordinary mud, reeds, and shallow water."},
+          {"name":"Croaking Chorus","equivalentLevel":4,"effect":"Creatures in a 30-foot cone take 4d6 sonic damage and must pass Will or become shaken for 1 round. Amphibians and the warlock's summons are unaffected."},
+          {"name":"Familiar Through the Keyhole","equivalentLevel":4,"effect":"Teleport the pact familiar to any space within 400 feet that the warlock has seen or can describe, provided the destination contains moisture, vegetation, shadow, fungus, or a sleeping creature."},
+          {"name":"Grasping Reedbed","equivalentLevel":4,"effect":"Create a 20-foot-radius field of supernatural reeds and tongues for 1 round per level. Creatures entering or beginning there must pass Reflex or become entangled; a second failed save leaves them grappled."},
+          {"name":"Leechkeeper's Mercy","equivalentLevel":4,"effect":"Touch a creature to end bleeding, stabilize it, and grant a new save against one poison or disease. The warlock may transfer the failed effect to a willing maintained summon, which attempts the save using its own bonus."},
+          {"name":"Mire Body","equivalentLevel":4,"effect":"For 1 minute per level become semi-fluid: gain 20 percent concealment, immunity to critical hits from nonmagical weapons, squeeze through openings as a Tiny creature, and move through mud or water without penalty."}
+        ],
+        "greater": [
+          {"name":"Brood Gate","equivalentLevel":5,"effect":"As a standard action teleport any number of the warlock's maintained broods on the same plane into legal spaces within 30 feet. The gate may instead return them to their origins without ending the maintenance reservation until the next rest."},
+          {"name":"Dream Bog Made Real","equivalentLevel":6,"effect":"Create a 40-foot-radius illusory swamp for 1 minute per level. Enemies treat it as difficult terrain, take 2d6 psychic damage when they move more than 10 feet in a round, and may attempt Will disbelief after taking damage."},
+          {"name":"Negotiated Dispelling","equivalentLevel":6,"effect":"Use targeted greater dispel magic. When the removed effect is divine, pact-based, a curse, or a blessing, gain 1 temporary Favor that expires after 1 minute and cannot exceed normal maximum."},
+          {"name":"Plague of Little Mouths","equivalentLevel":6,"effect":"Create three controlled swarms of frogs, leeches, midges, or lizards for 1 minute per level. They are magical swarms, count as magic weapons, and do not attack creatures designated when invoked."},
+          {"name":"Swamp's Borrowed Shape","equivalentLevel":6,"effect":"Assume the form of a Large or smaller amphibian, reptile, vermin, ooze, or swamp magical beast of no more Hit Dice than class level for 1 minute per level, following polymorph limits."}
+        ],
+        "dark": [
+          {"name":"Blackwater Procession","equivalentLevel":8,"effect":"Use shadow walk, but travelers appear to move through an endless moonlit swamp. Natural healing during the journey is doubled and maintained broods travel automatically."},
+          {"name":"Emissary's Shadow","equivalentLevel":8,"effect":"For 1 minute per level become a swarm-shaped shadow of frogs, moths, leeches, or lizards. Gain swarm traits, fly 40 feet with perfect maneuverability, and deal swarm damage equal to eldritch blast dice divided by three, rounded up."},
+          {"name":"Pact Rewritten","equivalentLevel":8,"effect":"After ten minutes of negotiation, exchange one known invocation for another of the same or lower grade until the next full rest. Usable once per 24 hours."},
+          {"name":"Swamp Without Shore","equivalentLevel":9,"effect":"Create a 60-foot-radius extraplanar mire for 1 minute per level. Enemies move at half speed, cannot teleport without a caster-level check, and take 2d6 acid damage each round; allies and pact creatures ignore the terrain."},
+          {"name":"The Lady Arbitrates","equivalentLevel":9,"effect":"Use greater dispel magic in a 20-foot burst. For each divine, pact, curse, domain, or blessing effect dispelled, choose to suppress rather than end it for 1 round per level. Suppressed willing effects resume with remaining duration."}
+        ]
+      },
+      "sections": [
+        {"heading":"Least invocations","sectionType":"builder-note","body":["Bogskin; Call the Little Ones; Mireborn Blast; Mists Below the Reeds; Swarmkeeper's Hand; Tongue of the Newt."]},
+        {"heading":"Lesser invocations","sectionType":"builder-note","body":["Amphibious Procession; Croaking Chorus; Familiar Through the Keyhole; Grasping Reedbed; Leechkeeper's Mercy; Mire Body."]},
+        {"heading":"Greater invocations","sectionType":"builder-note","body":["Brood Gate; Dream Bog Made Real; Negotiated Dispelling; Plague of Little Mouths; Swamp's Borrowed Shape."]},
+        {"heading":"Dark invocations","sectionType":"builder-note","body":["Blackwater Procession; Emissary's Shadow; Pact Rewritten; Swamp Without Shore; The Lady Arbitrates."]},
+        {"heading":"Invocation adjudication","sectionType":"conversion-note","body":["Unless stated otherwise, durations, spell resistance, concentration, dispelling, and equivalent-level interactions use ordinary invocation rules. Creature forms and summon substitutions require creatures appropriate to the campaign and must not import abilities above the intended equivalent spell level."]}
+      ],
+      "sourceStatus": "derived-tool-output",
+      "sourceRefs": [{"sourceId":"external-warlock-reference","fileName":"SRD - Warlock Invocation List","url":"https://srd.dndtools.org/srd/magic/invocations/classInvocationLists/warlockInvocations.html","outlineTitle":"Invocation grades and invocation behavior","chunkId":"external-warlock-reference:invocations","notes":"Used only as a grade and interaction reference. Listed swamp invocations are original homebrew."}],
+      "sourceChunkIds": ["external-warlock-reference:invocations"],
+      "tags": ["Warlock of the Swamp","invocations","eldritch blast","summoning","swarms","Dream Step","Hypertext d20"],
+      "relatedEntries": ["warlock-of-the-swamp-class","lady-of-the-swamp","divine-compromise-artifacts"],
+      "relatedModules": ["encounter-generator","sky-ecology-generator"]
+    },
+    {
+      "id": "lady-of-the-swamp",
+      "title": "The Lady of the Swamp",
+      "category": "Religion",
+      "summary": "A migratory demi-deity of wetlands, bargains, renewal, amphibious life, dreams, and negotiated divine jurisdiction whose pacts evolve through reciprocal contributions and concessions.",
+      "body": [
+        "The Lady of the Swamp is rarely native to the cosmology in which she is worshiped. She arrives as an outsider with a following of warlocks, clerics, druids, sages, healers, broodkeepers, ferrymen, and ordinary devotees who establish shrines wherever water, mud, fungus, reeds, decay, birth, and renewal meet.",
+        "Because she lacks uncontested jurisdiction in most worlds, she bargains with resident gods rather than pretending their claims do not exist. Her followers frequently witness these negotiations in dreams, especially when several party members bear blessings, domains, pacts, curses, sacred vows, inherited magic, or divine protections that affect the same body or soul.",
+        "Her pact is treated as an ongoing relationship rather than immutable contract language. Contributions earn latitude. Sacrifices demonstrate seriousness. Concessions create obligations. Exceptions can be purchased, borrowed, argued, inherited, rescinded, or replaced as the relationship matures."
+      ],
+      "sections": [
+        {"heading":"Portfolio and worship","sectionType":"builder-note","body":["Portfolio: swamps, wetlands, amphibians, reptiles, vermin, healing through consumption, parasitism, symbiosis, dreams, thresholds, planar crossings, reciprocal bargains, and renewal after decay.","Suggested cleric domains: Animal, Plant, Travel, Water, Dream, and Pact. Individual worlds may substitute locally recognized domains after negotiation with resident deities.","Favored weapon: hooked staff, net, or another tool used to pull travelers from mud and water. Common symbols include a crowned frog beneath a crescent lily, a reed-ring surrounding an open eye, or a leech tied into the shape of an unclosed knot."]},
+        {"heading":"Clerics and devout followers","sectionType":"builder-note","body":["Clerics tend shrines, oversee wetland law, arbitrate between parasite and host communities, perform births and funerals, and negotiate the use of the Lady's influence inside another god's territory.","Devout noncasters may keep brood pools, maintain frog roads, cultivate medicinal leeches, protect spawning grounds, carry offerings between shrines, or serve as witnesses when a pact is amended.","Warlocks are not automatically senior to clerics. Warlocks negotiate personal clauses; clerics maintain public worship and collective agreements. Their authority overlaps but is not identical."]},
+        {"heading":"Divine bargaining dreams","sectionType":"builder-note","body":["A follower may dream of the Lady arguing across a table, shouting through a reed wall, exchanging documents with a celestial bureaucracy, or offering a frog in settlement of a metaphysical dispute.","The deity on the other side is often connected to a nearby ally, settlement, relic, oath, or inherited blessing. The dream may reveal the terms under discussion without guaranteeing that either side will accept them.","Strange artifacts often arrive after these dreams. Their conditions may seem unrelated to the dispute because the visible item is only the mortal residue of a much larger compromise."]},
+        {"heading":"Conduct of the Lady","sectionType":"conversion-note","body":["She prefers bargains that preserve life cycles, wetlands, migration, birth, mutual dependence, and the possibility of renewal. She is capable of frightening or grotesque solutions when incompatible magic threatens to tear a follower apart.","The Lady should not be used as an excuse for arbitrary GM control. Her counteroffers are stated, her debts are recorded, and her interventions preserve the ongoing negotiation even when the result is inconvenient, absurd, or alarming."]}
+      ],
+      "sourceStatus": "new-canon-expansion",
+      "sourceRefs": [{"sourceId":"user-directed-lady-of-the-swamp-canon","fileName":"Conversation-directed setting canon","outlineTitle":"Lady of the Swamp pact and divine jurisdiction","chunkId":"user-directed-lady-of-the-swamp-canon:patron","notes":"Original Kaysender-compatible patron lore supplied and expanded through user direction."}],
+      "sourceChunkIds": ["user-directed-lady-of-the-swamp-canon:patron"],
+      "tags": ["Lady of the Swamp","demi-deity","religion","clerics","warlocks","dreams","divine bargaining","pacts"],
+      "relatedEntries": ["warlock-of-the-swamp-class","warlock-of-the-swamp-invocations","divine-compromise-artifacts"],
+      "relatedModules": ["faction-guild-generator","npc-crew-generator","job-board-generator"]
+    },
+    {
+      "id": "divine-compromise-artifacts",
+      "title": "Divine Compromise Artifacts and Thaumaturgical Overlap",
+      "category": "Equipment",
+      "summary": "Esoteric objects produced when the Lady of the Swamp and other divine powers negotiate contradictory blessings, pacts, curses, domains, or metaphysical claims affecting the same people.",
+      "body": [
+        "These objects are not designed in the ordinary sense. They are the material punctuation of a divine argument. Emissaries deliver them with incomplete instructions and insist that the compromise is necessary to keep various party members from exploding like the last ones.",
+        "Their names, activation days, users, and effects often contradict each other. This is not necessarily a mistake. Several deities may have agreed to different portions of the object's behavior at different moments in the negotiation."
+      ],
+      "compromiseArtifacts": [
+        {"name":"Sombrero of Tuesdays","effect":"Every Thursday at local dawn, the attuned wearer gains one additional daily spell slot of the highest spell level they can cast, maximum 5th. The slot expires Friday at dawn. A character without spell slots instead gains 2 Pact Favor or one extra use of a daily class feature of equivalent power. The sombrero has no known Tuesday function."},
+        {"name":"Spleen Warranty Tag","effect":"Once, when overlapping divine effects would deal ability drain, cause bodily dissolution, or transform an organ, the tag negates that portion of the effect. The wearer is nauseated for 1d4 hours while the Lady and the other power renegotiate ownership of the spleen."},
+        {"name":"Earplugs of the Forty-Eighth Hour","effect":"The wearer may voluntarily become deaf for up to 48 hours. While deaf, they are immune to language-dependent divine commands and sonic pact clauses. Removing the plugs early causes one round of confusion. Their documented purpose is preventing the subsequent cranial-removal clause found in one obsolete compact."},
+        {"name":"Boots of the Previous Tomorrow","effect":"Once per week, walking backward for a full round returns the wearer to the square occupied at the start of the previous turn and reverses 1d6 hit points of damage taken since then. The wearer becomes physically one age category younger for 10 minutes, with no statistical change."},
+        {"name":"Cradle of Unrequested Continuity","effect":"When a blessing conflict would cause sudden progenation, the cradle redirects the event into the creation of 1d4 harmless frog, newt, or lizard familiars bearing symbolic traits of the affected bloodlines. The creatures are not legal heirs unless another deity insists."},
+        {"name":"Parasol of Indoor Rain","effect":"Once per day the bearer may open the parasol indoors to create gentle rain in a 20-foot radius for 10 minutes. Outside, it produces only the smell of rain and a written notice that weather jurisdiction remains disputed."},
+        {"name":"Spoon of Deferred Thunder","effect":"Once per week the spoon may absorb one sonic or electricity effect affecting its bearer. The effect is harmlessly released during the bearer's next breakfast unless breakfast is skipped, in which case it discharges at noon."},
+        {"name":"Seven-Course Chalupa Reliquary","effect":"If its bearer is transformed into prepared food, the reliquary preserves identity and soul across all courses and permits restoration by break enchantment, remove curse, greater restoration, or direct divine intervention even after ordinary decay. The restored creature smells faintly of toasted masa for 1d6 days."}
+      ],
+      "sections": [
+        {"heading":"The Sombrero of Tuesdays","sectionType":"builder-note","body":["Despite its name, the documented effect occurs every Thursday. The Lady's emissaries have declined to explain whether the name was conceded to another deity, translated incorrectly, or refers to a Tuesday in a different cosmology.","The additional slot is temporary and cannot satisfy item-creation prerequisites after Friday dawn. Prepared casters may prepare into it during Thursday preparation; spontaneous casters treat it as one additional slot of the appropriate level."]},
+        {"heading":"Documented overlap consequences","sectionType":"builder-note","body":["Unmediated divine overlap has been associated with total ego dissolution, dissolution of the spleen, complete deafness lasting more than forty-eight hours followed by cranial removal, temporal disjunction, age reversion, rapid aging, sudden progenation, unrequested changes of species, and simultaneous contradictory resurrection states.","These are historical and plot-level consequences, not a default random-punishment table. A GM using them should establish the danger, allow investigation or negotiation, and provide routes of prevention, compromise, or restoration."]},
+        {"heading":"The Seven-Course Chalupa Incident","sectionType":"builder-note","body":["The most frequently cited case involved a follower of the Lady receiving the blessing of a war priest of Torm and immediately becoming a seven-course assortment of differently flavored chalupas arranged in the exact shape of the former teammate.","The party, terrified that eating, moving, burying, or preserving any course might count as murder or sacrilege, left the arrangement untouched. Several days later, after ordinary decay had begun, the Lady intervened personally and restored the follower to their prior form.","The restored follower retained their memories. Accounts disagree about whether they retained knowledge of being seven distinct flavors. The incident is the reason many emissaries now carry a Seven-Course Chalupa Reliquary whenever another deity proposes a new blessing compact."]},
+        {"heading":"Use in play","sectionType":"conversion-note","body":["Compromise artifacts should solve one collision while introducing a narrow, visible, often absurd limitation. They are generally unique, nonmarket items and cease functioning when the associated divine compact ends.","The Lady, her clerics, her warlocks, allied clergy, and affected players should all be able to argue about the terms. The joke works best when the metaphysical bureaucracy is genuinely dangerous but the players retain meaningful choices."]}
+      ],
+      "sourceStatus": "new-canon-expansion",
+      "sourceRefs": [{"sourceId":"user-directed-lady-of-the-swamp-canon","fileName":"Conversation-directed setting canon","outlineTitle":"Divine compromise artifacts and overlap incidents","chunkId":"user-directed-lady-of-the-swamp-canon:compromises","notes":"Original setting lore and artifact concepts supplied and expanded through user direction."}],
+      "sourceChunkIds": ["user-directed-lady-of-the-swamp-canon:compromises"],
+      "tags": ["Lady of the Swamp","artifacts","Sombrero of Tuesdays","divine overlap","Torm","chalupas","thaumaturgical hazards"],
+      "relatedEntries": ["warlock-of-the-swamp-class","lady-of-the-swamp","warlock-of-the-swamp-invocations"],
+      "relatedModules": ["shop-market-generator","encounter-generator","job-board-generator"]
+    }
+  ]
+}
