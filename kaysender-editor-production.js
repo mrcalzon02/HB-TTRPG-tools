@@ -100,8 +100,11 @@
       renderDiagnostics([Kernel.diagnostic('error', 'editor-adapter-missing', `No shared editor adapter is registered for ${editorIdOrAlias}.`)]);
       return null;
     }
-    if (activeEditorId && activeEditorId !== adapter.id && !Lifecycle.confirmLeave(activeEditorId, 'The current editor has unsaved changes. Switch editors anyway?')) {
-      return null;
+    if (activeEditorId) {
+      const message = activeEditorId === adapter.id
+        ? 'This editor has unsaved changes. Reload it and restore the last active envelope anyway?'
+        : 'The current editor has unsaved changes. Switch editors anyway?';
+      if (!Lifecycle.confirmLeave(activeEditorId, message)) return null;
     }
     switchKaysenderView();
     const shell = getShell();
@@ -202,6 +205,7 @@
       const file = event.target.files?.[0];
       event.target.value = '';
       if (!file) return;
+      if (!Lifecycle.confirmLeave(adapter.id, 'The current record has unsaved changes. Import the selected file anyway?')) return;
       try {
         importRecord(adapter, panel, await file.text());
       } catch (error) {
@@ -233,11 +237,15 @@
 
   function newBlankRecord(adapter, panel) {
     if (!Lifecycle.confirmLeave(adapter.id, 'This record has unsaved changes. Create a new blank record anyway?')) return;
+    const clearResult = Kernel.clearDraft(adapter.id, true);
+    if (!clearResult.ok) {
+      renderDiagnostics([Kernel.diagnostic('error', 'blank-record-draft-clear-failed', clearResult.message)]);
+      return;
+    }
     panel.querySelector(`#${adapter.formId}`)?.reset();
     panel.querySelectorAll('[data-editor-lock]').forEach(item => { item.checked = false; });
     adapter.parentImports.forEach(definition => clearParentImport(panel, definition));
     activeEnvelopes.delete(adapter.id);
-    Kernel.clearDraft(adapter.id, true);
     Lifecycle.reset(adapter.id, 'Old recovery draft cleared. New blank record has not been saved.');
     Lifecycle.markDirty(adapter.id, 'New blank record has unsaved changes.', { autosave: false });
     rebuild(adapter, panel);
@@ -471,6 +479,7 @@
       renderDiagnostics([Kernel.diagnostic('warning', 'draft-not-found', 'No recoverable local draft exists for this editor.')]);
       return;
     }
+    if (!Lifecycle.confirmLeave(adapter.id, 'The current record has unsaved changes. Recover the saved local draft anyway?')) return;
     activeEnvelopes.set(adapter.id, envelope);
     applyEnvelope(adapter, panel, envelope);
     Lifecycle.markClean(adapter.id, `Recovered local draft ${envelope.name}.`);
@@ -498,7 +507,7 @@
       triggerBuild(adapter, panel);
       buildEnvelope(adapter, panel);
       Lifecycle.markDirty(adapter.id, `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`);
-      renderDiagnostics([Kernel.diagnostic('info', 'selective-randomization-complete', `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`) ]);
+      renderDiagnostics([Kernel.diagnostic('info', 'selective-randomization-complete', `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`)]);
     }, 0);
   }
 
