@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "title": "Shared Editor Kernel and Profile Contract",
-  "status": "framework-implementation-active",
+  "status": "framework-implementation-complete-pending-runtime-gate",
   "activeBranch": "main",
   "parallelMainLineEditors": 1,
   "implementedOutputs": {
@@ -29,7 +29,12 @@
     "migrationFixtureValidation": true,
     "adapterIntegrationValidation": true,
     "provenanceAndInheritanceLedger": true,
+    "pinnedRevisionInheritancePolicy": true,
+    "legacyInheritancePolicyNormalization": true,
+    "inheritanceReferenceValidation": true,
     "directSavedParentInheritance": true,
+    "parentReferenceHealthStates": true,
+    "explicitRefreshToLatestParent": true,
     "parentLinkClearLifecycleTracking": true,
     "fieldLocking": true,
     "selectiveRandomization": true,
@@ -62,6 +67,9 @@
     "Delete saved record with explicit confirmation",
     "Repair local record index",
     "Load saved parent records directly into downstream editors",
+    "Pin inherited records to explicit revisions",
+    "Show current stale unavailable and locally older parent-reference states",
+    "Refresh an inherited record deliberately to its latest saved revision",
     "Clear inherited parent links",
     "Randomize unlocked fields",
     "Copy canonical JSON",
@@ -100,6 +108,7 @@
     "scripts/validate-editor-kernel.mjs",
     "scripts/validate-editor-migrations.mjs",
     "scripts/validate-editor-adapter-integration.mjs",
+    "scripts/validate-editor-inheritance.mjs",
     "scripts/validate-editor-runtime-structure.mjs",
     "scripts/validate-p0-browser-verification.mjs"
   ],
@@ -120,16 +129,16 @@
       "verificationState": "functional-adapter-integration-validation-present"
     },
     {
-      "criterion": "Every editor exposes deliberate construction identity-safe persistence and inheritance actions",
-      "implementationState": "implemented-through-shared-lifecycle-record-library-and-parent-library",
-      "verificationState": "shared-actions-present"
+      "criterion": "Every editor exposes deliberate construction identity-safe persistence and pinned inheritance actions",
+      "implementationState": "implemented-through-shared-lifecycle-record-library-parent-library-and-canonical-inheritance-policy",
+      "verificationState": "functional-inheritance-validation-present"
     },
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
-      "implementationState": "kernel-migration-adapter-and-structural-validation-present",
+      "implementationState": "kernel-migration-adapter-inheritance-and-structural-validation-present",
       "verificationState": "final-browser-runtime-check-remains"
     }
   ],
-  "nextFrameworkStep": "Detect inherited references whose saved parent record is missing or has advanced to a newer revision, show that state in the parent selector, and provide an explicit refresh-to-latest-parent action.",
+  "nextFrameworkStep": "Run the final integrated Island to Settlement to Airship runtime gate against the completed shared framework. Promote P0 and begin P1 only if that gate passes.",
   "promotionRule": "P0 may change to complete and P1 may become required-next only after the three registered editors operate through the complete shared lifecycle on main and the final runtime check passes."
 }
