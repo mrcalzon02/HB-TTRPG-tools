@@ -8,6 +8,13 @@ const readText = relativePath => fs.readFile(path.join(root, relativePath), 'utf
 const readJson = async relativePath => JSON.parse(await readText(relativePath));
 const fail = message => { throw new Error(message); };
 
+const memoryStorage = new Map();
+globalThis.localStorage = {
+  getItem(key) { return memoryStorage.has(key) ? memoryStorage.get(key) : null; },
+  setItem(key, value) { memoryStorage.set(key, String(value)); },
+  removeItem(key) { memoryStorage.delete(key); }
+};
+
 await import(pathToFileURL(path.join(root, 'kaysender-editor-kernel.js')).href);
 const Kernel = globalThis.KaysenderEditorKernel;
 if (!Kernel) fail('Shared editor kernel did not register on globalThis.');
@@ -66,12 +73,20 @@ if (envelopeDiagnostics.some(item => item.severity === 'error')) fail(`Created e
 if (!/^island-[a-z0-9-]+-[a-f0-9]{8,}$/.test(envelope.profileId)) fail('Stable island profile ID does not match the canonical pattern.');
 if (envelope.revision !== 1 || envelope.locks.join(',') !== 'name,sizeClass') fail('Initial revision or field locks are incorrect.');
 
-const revision = Kernel.createEnvelope({ ...nestedIsland, name: 'Aster Reach Revised' }, {
+const unchanged = Kernel.createEnvelope(JSON.parse(JSON.stringify(nestedIsland)), {
   existingEnvelope: envelope,
+  editorId: 'floating-island-editor',
+  moduleId: 'floating-island-generator',
+  locks: ['sizeClass', 'name']
+});
+if (unchanged.revision !== 1 || unchanged.updatedAt !== envelope.updatedAt) fail('Unchanged profile validation or export advanced its revision or update timestamp.');
+
+const revision = Kernel.createEnvelope({ ...nestedIsland, name: 'Aster Reach Revised' }, {
+  existingEnvelope: unchanged,
   editorId: 'floating-island-editor',
   moduleId: 'floating-island-generator'
 });
-if (revision.profileId !== envelope.profileId || revision.revision !== 2 || revision.createdAt !== envelope.createdAt) fail('Envelope revision did not preserve stable identity and creation time.');
+if (revision.profileId !== envelope.profileId || revision.revision !== 2 || revision.createdAt !== envelope.createdAt) fail('Changed envelope did not preserve stable identity and advance exactly one revision.');
 
 const clone = Kernel.cloneEnvelope(revision, {
   editorId: 'floating-island-editor',
@@ -84,6 +99,15 @@ const canonicalReload = Kernel.normalizeImportedRecord(JSON.stringify(revision),
   expectedTypes: ['floating-island-foundation-profile']
 });
 if (!canonicalReload.ok || canonicalReload.envelope.profileId !== revision.profileId) fail('Canonical envelope did not round-trip through import.');
+
+const saveResult = Kernel.saveDraft('floating-island-editor', revision);
+if (!saveResult.ok) fail('Kernel could not save a local recovery draft.');
+const protectedClear = Kernel.clearDraft('floating-island-editor');
+if (protectedClear.ok) fail('A non-explicit draft clear unexpectedly succeeded.');
+const recoveredDraft = Kernel.loadDraft('floating-island-editor');
+if (!recoveredDraft || recoveredDraft.profileId !== revision.profileId) fail('Recovery draft did not survive the non-explicit clear used by New Blank Record.');
+const explicitClear = Kernel.clearDraft('floating-island-editor', true);
+if (!explicitClear.ok || Kernel.loadDraft('floating-island-editor')) fail('Explicit draft clear did not remove the saved draft.');
 
 const wrongType = Kernel.normalizeImportedRecord(nestedIsland, { expectedTypes: ['settlement-profile'] });
 if (wrongType.ok || !wrongType.diagnostics.some(item => item.code === 'profile-type-mismatch')) fail('Wrong-profile import did not produce an actionable mismatch error.');
@@ -112,6 +136,7 @@ for (const phrase of [
 ]) {
   if (!productionScript.includes(phrase)) fail(`Production shell is missing '${phrase}'.`);
 }
+if (productionScript.includes('Kernel.clearDraft(spec.id, true)')) fail('New Blank Record must not explicitly delete the recovery draft.');
 
 const html = await readText('index.html');
 const kernelPosition = html.indexOf('<script src="kaysender-editor-kernel.js"></script>');
@@ -123,4 +148,4 @@ if ([kernelPosition, islandPosition, settlementPosition, airshipPosition, produc
 if (!(kernelPosition < islandPosition && islandPosition < settlementPosition && settlementPosition < airshipPosition && airshipPosition < productionPosition)) fail('P0 editor scripts are loaded in the wrong order.');
 
 console.log('Shared editor kernel validation passed.');
-console.log('Verified canonical envelopes, stable IDs, revisions, cloning, nested and flat island adapters, wrong-profile diagnostics, malformed JSON diagnostics, shared actions, all three alpha editor panels, and main-page script ordering.');
+console.log('Verified canonical envelopes, stable and change-sensitive revisions, explicit-only draft deletion, nested and flat island adapters, wrong-profile diagnostics, malformed JSON diagnostics, shared actions, all three alpha editor panels, and main-page script ordering.');
