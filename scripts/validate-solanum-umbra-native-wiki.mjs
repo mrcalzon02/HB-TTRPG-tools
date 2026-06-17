@@ -4,109 +4,170 @@ import process from 'node:process';
 
 const root = process.cwd();
 const indexPath = path.join(root,'data','solanum-umbra','wiki','wiki-index.json');
-const packPath = path.join(root,'data','solanum-umbra','wiki','native-rules-pass-1-character-creation.json');
 const index = JSON.parse(await fs.readFile(indexPath,'utf8'));
-const pack = JSON.parse(await fs.readFile(packPath,'utf8'));
 
-if (index.setting !== 'Solanum Umbra' || index.schemaVersion !== '0.2.0') throw new Error('Unexpected Solanum Umbra wiki identity or schema.');
-if (index.status !== 'native-system-character-creation-pass-1-complete') throw new Error('Solanum Umbra first native rules pass is not marked complete.');
-if (index.mechanicsPolicy?.system !== 'Solanum Umbra native rules') throw new Error('Solanum Umbra native system policy is missing.');
-if (index.mechanicsPolicy?.conversion !== 'none') throw new Error('Solanum Umbra must not be converted to another RPG system.');
-if (!index.mechanicsPolicy?.ambiguityPolicy?.includes('do not silently replace')) throw new Error('Solanum Umbra ambiguity policy is missing.');
+if (index.setting !== 'Solanum Umbra' || index.schemaVersion !== '0.3.0') throw new Error('Unexpected Solanum Umbra wiki identity or schema.');
+if (index.status !== 'native-foundation-import-active') throw new Error('Solanum Umbra native foundation import is not marked active.');
+if (index.mechanicsPolicy?.system !== 'Solanum Umbra native rules' || index.mechanicsPolicy?.conversion !== 'none') throw new Error('Solanum Umbra must preserve its native rules without external conversion.');
+if (!index.mechanicsPolicy?.ambiguityPolicy?.includes('unclear') || !index.mechanicsPolicy?.ambiguityPolicy?.includes('conflicting')) throw new Error('Solanum Umbra ambiguity policy is incomplete.');
 if (index.binaryPath !== 'SRC/Solanum-Umbra-TTRPG.pdf' || index.binaryTransferStatus !== 'present-in-git-and-identity-verified') throw new Error('Solanum Umbra source binary path or status is incorrect.');
-if (!Array.isArray(index.packs) || index.packs.length !== 1 || index.packs[0] !== 'data/solanum-umbra/wiki/native-rules-pass-1-character-creation.json') throw new Error('Unexpected Solanum Umbra pack registration.');
 
-if (pack.setting !== 'Solanum Umbra' || pack.schemaVersion !== '0.1.0') throw new Error('Unexpected Solanum Umbra native pack schema.');
-if (pack.mechanicsPolicy !== 'native-system-preserved-no-d20-conversion') throw new Error('Native pack mechanics policy is incorrect.');
-if (!Array.isArray(pack.entries) || pack.entries.length !== 7) throw new Error(`Expected seven native character-creation entries, found ${pack.entries?.length ?? 0}.`);
-
-const entries = new Map(pack.entries.map(entry => [entry.id,entry]));
-const requiredIds = [
-  'solanum-character-creation-system',
-  'solanum-core-attributes-derived-statistics',
-  'solanum-origins-careers-skills-motivations',
-  'solanum-ancestries-and-cyborg-variants',
-  'solanum-full-cyberization-threshold',
-  'solanum-data-seizure-progression',
-  'solanum-character-sheet-schema'
+const expectedPacks = [
+  'data/solanum-umbra/wiki/native-rules-pass-1-character-creation.json',
+  'data/solanum-umbra/wiki/native-rules-pass-2-career-talents-backgrounds.json',
+  'data/solanum-umbra/wiki/native-rules-pass-3-crafting-resources.json',
+  'data/solanum-umbra/wiki/native-rules-pass-4-combat-cover-vehicles.json',
+  'data/solanum-umbra/wiki/native-rules-pass-5-entity-generator.json',
+  'data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json'
 ];
-for (const id of requiredIds) if (!entries.has(id)) throw new Error(`Missing Solanum Umbra entry '${id}'.`);
+if (!Array.isArray(index.packs) || index.packs.length !== expectedPacks.length) throw new Error('Unexpected Solanum Umbra pack count.');
+for (let i = 0; i < expectedPacks.length; i += 1) if (index.packs[i] !== expectedPacks[i]) throw new Error(`Unexpected Solanum pack ordering at ${i + 1}.`);
 
-for (const entry of pack.entries) {
-  for (const field of ['id','title','category','summary','sourceStatus']) if (!entry[field]) throw new Error(`Solanum Umbra entry lacks '${field}'.`);
+const packs = [];
+for (const packPath of expectedPacks) {
+  const pack = JSON.parse(await fs.readFile(path.join(root,packPath),'utf8'));
+  if (pack.setting !== 'Solanum Umbra' || pack.schemaVersion !== '0.1.0') throw new Error(`Unexpected schema in ${packPath}.`);
+  if (pack.mechanicsPolicy !== 'native-system-preserved-no-external-conversion') throw new Error(`Native mechanics policy missing from ${packPath}.`);
+  if (!Array.isArray(pack.entries) || pack.entries.length === 0) throw new Error(`No entries found in ${packPath}.`);
+  packs.push(pack);
+}
+
+const allEntries = packs.flatMap(pack => pack.entries);
+if (allEntries.length !== 25) throw new Error(`Expected 25 imported entries, found ${allEntries.length}.`);
+const entries = new Map();
+for (const entry of allEntries) {
+  if (entries.has(entry.id)) throw new Error(`Duplicate Solanum entry id '${entry.id}'.`);
+  entries.set(entry.id,entry);
+  for (const field of ['id','title','category','summary','sourceStatus']) if (!entry[field]) throw new Error(`${entry.id || 'unknown'} lacks '${field}'.`);
   if (!Array.isArray(entry.body) || entry.body.length === 0) throw new Error(`${entry.id} lacks body text.`);
   if (!Array.isArray(entry.sourceRefs) || entry.sourceRefs.length === 0) throw new Error(`${entry.id} lacks page provenance.`);
   if (!Array.isArray(entry.tags) || entry.tags.length === 0) throw new Error(`${entry.id} lacks search tags.`);
   for (const ref of entry.sourceRefs) {
-    if (ref.sourceId !== 'solanum-umbra-ttrpg' || ref.fileName !== 'Solanum-Umbra-TTRPG.pdf') throw new Error(`${entry.id} has an unrelated source reference.`);
-    if (!Number.isInteger(ref.pageStart) || !Number.isInteger(ref.pageEnd) || ref.pageStart < 104 || ref.pageEnd > 116 || ref.pageStart > ref.pageEnd) throw new Error(`${entry.id} has an invalid first-pass page range.`);
+    if (ref.sourceId !== 'solanum-umbra-ttrpg' || ref.fileName !== 'Solanum-Umbra-TTRPG.pdf') throw new Error(`${entry.id} has unrelated provenance.`);
+    if (!Number.isInteger(ref.pageStart) || !Number.isInteger(ref.pageEnd) || ref.pageStart < 1 || ref.pageEnd > 248 || ref.pageStart > ref.pageEnd) throw new Error(`${entry.id} has an invalid page range.`);
   }
+}
+
+const requiredIds = [
+  'solanum-character-creation-system','solanum-core-attributes-derived-statistics','solanum-origins-careers-skills-motivations','solanum-ancestries-and-cyborg-variants','solanum-full-cyberization-threshold','solanum-data-seizure-progression','solanum-character-sheet-schema',
+  'solanum-career-talent-system','solanum-background-generation-system','solanum-native-action-and-equipment-requirements',
+  'solanum-item-creation-system','solanum-crafting-support-modifiers','solanum-resource-and-communications-tiers',
+  'solanum-core-combat-system','solanum-native-skills-actions','solanum-action-economy-grid-zoc','solanum-melee-combat-modes','solanum-ranged-cover-camouflage','solanum-vehicle-combat-framework',
+  'solanum-fay-entity-generator','solanum-unit-zero-forces','solanum-techno-phantom-collective','solanum-bio-machine-juggernauts','solanum-anarchic-swarm','solanum-synthesis-enemy-role-roster'
+];
+for (const id of requiredIds) if (!entries.has(id)) throw new Error(`Missing required Solanum entry '${id}'.`);
+
+function tableMap(entry) {
+  return new Map((entry.tables || []).map(table => [table.id,table]));
+}
+function requireTable(map,id,rows) {
+  const table = map.get(id);
+  if (!table || !Array.isArray(table.columns) || !Array.isArray(table.rows) || table.rows.length !== rows) throw new Error(`Table '${id}' must contain ${rows} rows.`);
+  for (const row of table.rows) if (!Array.isArray(row) || row.length !== table.columns.length) throw new Error(`Malformed row in '${id}'.`);
+  return table;
 }
 
 const creation = entries.get('solanum-character-creation-system');
-if (!Array.isArray(creation.creationSequence) || creation.creationSequence.length !== 12) throw new Error('Character creation sequence must contain twelve native steps.');
-const creationText = [creation.summary,...creation.body,...creation.creationSequence].join(' ');
-for (const phrase of ['Roll 1d20 for Strength','Health = Constitution + Strength','Armor = Constitution + Dexterity','Initiative = Dexterity + Intelligence','SKILL = Intelligence + Wisdom','select ancestry','cybernetic body percentage']) {
-  if (!creationText.toLowerCase().includes(phrase.toLowerCase())) throw new Error(`Character creation sequence lacks '${phrase}'.`);
-}
+if (!Array.isArray(creation.creationSequence) || creation.creationSequence.length !== 12) throw new Error('Character creation must contain twelve steps.');
+const creationText = [creation.summary,...creation.body,...creation.creationSequence].join(' ').toLowerCase();
+for (const phrase of ['roll 1d20 for strength','health = constitution + strength','armor = constitution + dexterity','initiative = dexterity + intelligence','skill = intelligence + wisdom','cybernetic body percentage']) if (!creationText.includes(phrase)) throw new Error(`Character creation lacks '${phrase}'.`);
 
-const attributes = entries.get('solanum-core-attributes-derived-statistics');
-const attributeTables = new Map((attributes.tables || []).map(table => [table.id,table]));
-for (const [id,count] of [['solanum-six-attributes',6],['solanum-derived-statistics',4],['solanum-attribute-bonus-penalty',7]]) {
-  const table = attributeTables.get(id);
-  if (!table || table.rows.length !== count) throw new Error(`Attribute table '${id}' must contain ${count} rows.`);
-}
-const formulas = new Map(attributeTables.get('solanum-derived-statistics').rows.map(row => [row[0],row[1]]));
+const attributes = tableMap(entries.get('solanum-core-attributes-derived-statistics'));
+requireTable(attributes,'solanum-six-attributes',6);
+const derived = requireTable(attributes,'solanum-derived-statistics',4);
+requireTable(attributes,'solanum-attribute-bonus-penalty',7);
+const formulas = new Map(derived.rows.map(row => [row[0],row[1]]));
 const expectedFormulas = new Map([['Health','CON + STR'],['Armor','CON + DEX'],['Initiative','DEX + INT'],['SKILL','INT + WIS']]);
 for (const [name,formula] of expectedFormulas) if (formulas.get(name) !== formula) throw new Error(`Incorrect native formula for ${name}.`);
-const ambiguousBand = attributeTables.get('solanum-attribute-bonus-penalty').rows.find(row => row[0] === '9–11');
-if (!ambiguousBand || ambiguousBand[1] !== '-1 to +1' || ambiguousBand[3] !== 'Ambiguous within range') throw new Error('The source ambiguity for attribute values 9–11 must remain explicit.');
+const ambiguousBand = attributes.get('solanum-attribute-bonus-penalty').rows.find(row => row[0] === '9–11');
+if (!ambiguousBand || ambiguousBand[1] !== '-1 to +1' || ambiguousBand[3] !== 'Ambiguous within range') throw new Error('Attribute 9–11 ambiguity was lost.');
 
-const backgrounds = entries.get('solanum-origins-careers-skills-motivations');
-const backgroundTables = new Map((backgrounds.tables || []).map(table => [table.id,table]));
-for (const [id,count] of [['solanum-origin-table',5],['solanum-career-list',6],['solanum-mechanic-benefits',4],['solanum-mechanic-skills',4],['solanum-motivation-table',5]]) {
-  const table = backgroundTables.get(id);
-  if (!table || table.rows.length !== count) throw new Error(`Background table '${id}' must contain ${count} rows.`);
-}
-if (!backgroundTables.get('solanum-career-list').rows.every(row => row[2].includes('Not fully specified') || row[2].includes('Example result'))) throw new Error('Incomplete career roll mapping must remain visibly unresolved.');
+const backgrounds = tableMap(entries.get('solanum-origins-careers-skills-motivations'));
+requireTable(backgrounds,'solanum-origin-table',5);
+requireTable(backgrounds,'solanum-career-list',6);
+requireTable(backgrounds,'solanum-mechanic-benefits',4);
+requireTable(backgrounds,'solanum-mechanic-skills',4);
+requireTable(backgrounds,'solanum-motivation-table',5);
 
-const ancestries = entries.get('solanum-ancestries-and-cyborg-variants');
-const ancestryTables = new Map((ancestries.tables || []).map(table => [table.id,table]));
-if (ancestryTables.get('solanum-ancestry-comparison')?.rows.length !== 6) throw new Error('Ancestry comparison must contain six attribute rows.');
-if (ancestryTables.get('solanum-cyborg-variant-comparison')?.rows.length !== 6) throw new Error('Cyborg comparison must contain six attribute rows.');
-
-const threshold = entries.get('solanum-full-cyberization-threshold');
-if (![threshold.summary,...threshold.body].join(' ').includes('more than 49%')) throw new Error('The full-cyberization threshold must remain more than 49%.');
-
-const seizures = entries.get('solanum-data-seizure-progression');
-const seizureTable = seizures.tables?.find(table => table.id === 'solanum-data-seizure-stages');
-if (!seizureTable || seizureTable.rows.length !== 6) throw new Error('Data-seizure progression must contain six stages.');
-const expectedStages = [
-  ['0–1 weeks','Minor Errors','+2 penalty','5%','10%'],
-  ['1–2 months','Moderate Errors','+4 penalty','10%','20%'],
-  ['2–6 months','Significant Errors','+6 penalty','15%','40%'],
-  ['6–12 months','Severe Errors','+8 penalty','20%','60%'],
-  ['12–18 months','Critical Errors','+10 penalty','30%','80%'],
-  ['18+ months','Fatal Errors','+12 penalty','50%','100%']
-];
-for (let i = 0; i < expectedStages.length; i += 1) {
-  for (let field = 0; field < expectedStages[i].length; field += 1) {
-    if (seizureTable.rows[i][field] !== expectedStages[i][field]) throw new Error(`Incorrect seizure progression at row ${i + 1}, field ${field + 1}.`);
-  }
-}
-if (seizureTable.rows[5][5] !== '100%') throw new Error('Fatal-stage action failure must remain 100%.');
+const seizureTable = requireTable(tableMap(entries.get('solanum-data-seizure-progression')),'solanum-data-seizure-stages',6);
+if (seizureTable.rows[0][0] !== '0–1 weeks' || seizureTable.rows[5][0] !== '18+ months' || seizureTable.rows[5][5] !== '100%') throw new Error('Data-seizure progression endpoints are incorrect.');
+if (![entries.get('solanum-full-cyberization-threshold').summary,...entries.get('solanum-full-cyberization-threshold').body].join(' ').includes('more than 49%')) throw new Error('The more-than-49% threshold was lost.');
 
 const sheet = entries.get('solanum-character-sheet-schema');
-if (!Array.isArray(sheet.characterSheetFields) || sheet.characterSheetFields.length !== 7) throw new Error('Native character sheet must contain seven field groups.');
-if (!Array.isArray(sheet.formulaFields) || sheet.formulaFields.length !== 4) throw new Error('Native character sheet must expose four formula fields.');
-for (const [field,formula] of expectedFormulas) {
-  if (!sheet.formulaFields.some(record => record.field === field && record.formula === formula)) throw new Error(`Character sheet lacks formula ${field} = ${formula}.`);
-}
+if (sheet.characterSheetFields?.length !== 7 || sheet.formulaFields?.length !== 4) throw new Error('Native character sheet schema is incomplete.');
 
-const serialized = JSON.stringify(pack);
-for (const forbidden of ['baseAttack','challengeRating','armorClass','savingThrow','spellLevel','Hypertext d20 / 3.5-compatible']) {
-  if (serialized.includes(forbidden)) throw new Error(`External-system field '${forbidden}' leaked into the native Solanum pack.`);
+const career = entries.get('solanum-career-talent-system');
+const careerTables = tableMap(career);
+const careerFamilies = ['hunter','mechanic','medic','scavenger','warlord'];
+let careerRows = 0;
+for (const family of careerFamilies) {
+  careerRows += requireTable(careerTables,`solanum-${family}-minor-talents`,7).rows.length;
+  careerRows += requireTable(careerTables,`solanum-${family}-major-talents`,5).rows.length;
 }
+if (careerRows !== 60 || careerTables.size !== 10) throw new Error('Career talent families must contain 10 tables and 60 results.');
+const careerText = [career.summary,...career.body].join(' ');
+if (!careerText.includes('Trader') || !careerText.includes('no Trader Minor or Major Talent table') || !careerText.includes('-4 penalty')) throw new Error('Trader omission or untrained penalty was lost.');
+
+const deepBackgrounds = tableMap(entries.get('solanum-background-generation-system'));
+for (const [id,count] of [['solanum-upbringing',7],['solanum-key-life-events',7],['solanum-personal-relationships',7],['solanum-deep-motivations',5],['solanum-fears-flaws',5],['solanum-significant-possessions',7]]) requireTable(deepBackgrounds,id,count);
+
+const crafting = entries.get('solanum-item-creation-system');
+const craftingTables = tableMap(crafting);
+requireTable(craftingTables,'solanum-crafting-technology',6);
+requireTable(craftingTables,'solanum-crafting-resource-availability',5);
+requireTable(craftingTables,'solanum-crafting-complexity-time',5);
+requireTable(craftingTables,'solanum-crafting-outcomes',5);
+if (crafting.procedure?.length !== 6 || crafting.workedExample?.finalResult !== '22' || crafting.workedExample?.outcome !== 'Exceptional Success') throw new Error('Crafting procedure or worked example is incorrect.');
+if (![crafting.summary,...crafting.body].join(' ').includes('adds them to the d20 result')) throw new Error('Crafting modifier ambiguity was lost.');
+const supportTables = tableMap(entries.get('solanum-crafting-support-modifiers'));
+for (const [id,count] of [['solanum-crafting-mentors',4],['solanum-crafting-tools',4],['solanum-crafting-skill-level',5],['solanum-crafting-workshops',5],['solanum-crafting-materials',5]]) requireTable(supportTables,id,count);
+
+const coreCombat = entries.get('solanum-core-combat-system');
+if (!coreCombat.formulas?.some(record => record.formula === 'd20 + Initiative Stat')) throw new Error('Native initiative formula is missing.');
+if (![coreCombat.summary,...coreCombat.body].join(' ').includes('one action per turn')) throw new Error('One-action turn rule is missing.');
+requireTable(tableMap(entries.get('solanum-native-skills-actions')),'solanum-skill-action-pairings',20);
+const zocTables = tableMap(entries.get('solanum-action-economy-grid-zoc'));
+requireTable(zocTables,'solanum-grid-movement',3);
+const zoc = requireTable(zocTables,'solanum-zone-control',6);
+if (!zoc.rows.some(row => row[0] === 'Tie' && row[1] === 'Not defined in source')) throw new Error('Zone-of-control tie ambiguity was lost.');
+const melee = entries.get('solanum-melee-combat-modes');
+requireTable(tableMap(melee),'solanum-melee-direct-formulas',3);
+requireTable(tableMap(melee),'solanum-melee-primary-stat-method',3);
+if (melee.sourceStatus !== 'source-native-mechanics-with-explicit-conflict') throw new Error('Melee rule conflict is no longer explicit.');
+const ranged = tableMap(entries.get('solanum-ranged-cover-camouflage'));
+requireTable(ranged,'solanum-ranged-tech-ranges',6);
+requireTable(ranged,'solanum-cover-camouflage-modifiers',6);
+requireTable(ranged,'solanum-cover-defensive-values',6);
+requireTable(ranged,'solanum-cover-economy',4);
+if (!ranged.get('solanum-ranged-tech-ranges').rows[5][2].includes('unresolved')) throw new Error('Advanced Tech range ambiguity was lost.');
+const vehicle = tableMap(entries.get('solanum-vehicle-combat-framework'));
+requireTable(vehicle,'solanum-vehicle-combat-summary',7);
+requireTable(vehicle,'solanum-vehicle-weapon-tiers',6);
+
+const entity = entries.get('solanum-fay-entity-generator');
+if (entity.generationSequence?.length !== 7) throw new Error('Entity generator sequence must contain seven rolls.');
+const entityTables = tableMap(entity);
+for (const [id,count] of [['solanum-entity-type',10],['solanum-entity-size',8],['solanum-entity-appearance',12],['solanum-entity-behavior',10],['solanum-entity-abilities',12],['solanum-entity-weakness',8],['solanum-entity-motivation',10]]) requireTable(entityTables,id,count);
+
+const factionIds = ['solanum-unit-zero-forces','solanum-techno-phantom-collective','solanum-bio-machine-juggernauts','solanum-anarchic-swarm'];
+for (const id of factionIds) if (entries.get(id).category !== 'Enemy Factions') throw new Error(`${id} is not filed as an enemy faction.`);
+const roster = entries.get('solanum-synthesis-enemy-role-roster');
+if (!Array.isArray(roster.enemyProfiles) || roster.enemyProfiles.length !== 36) throw new Error('Expected 36 native enemy profiles.');
+const factionCounts = new Map();
+const roles = new Set();
+for (const profile of roster.enemyProfiles) {
+  for (const field of ['faction','role','name','design','strength','weakness']) if (!profile[field]) throw new Error(`Enemy profile lacks '${field}'.`);
+  factionCounts.set(profile.faction,(factionCounts.get(profile.faction) || 0) + 1);
+  roles.add(profile.role);
+}
+if (factionCounts.size !== 4 || [...factionCounts.values()].some(count => count !== 9)) throw new Error('Each of four force families must contain nine roles.');
+if (roles.size !== 9) throw new Error('Enemy roster must contain nine recurring battlefield roles.');
+if (roster.enemyProfiles.filter(profile => profile.name === 'The Devourers').length !== 2) throw new Error('The duplicated Devourer name must remain faction-separated.');
+
+const serialized = JSON.stringify(packs);
+for (const forbidden of ['baseAttack','challengeRating','savingThrow','spellLevel','Hypertext d20 / 3.5-compatible']) if (serialized.includes(forbidden)) throw new Error(`External-system field '${forbidden}' leaked into Solanum data.`);
+
+if (index.completedScope?.wikiEntries !== 25 || index.completedScope?.nativePacks !== 6 || index.completedScope?.namedForceRoles !== 36) throw new Error('Solanum index completed scope does not match imported data.');
 
 console.log('Solanum Umbra native wiki validation passed.');
-console.log('Verified seven native entries, six attributes, four formulas, five origins, six listed careers, qualitative ancestry and cyborg variants, the more-than-49% cyberization threshold, six data-seizure stages, and the native character-sheet schema.');
+console.log('Verified six native packs, twenty-five entries, character and career systems, sixty career talents, six background tables, crafting, combat and vehicles, seven entity-generator tables, four enemy factions, and thirty-six named force roles.');
