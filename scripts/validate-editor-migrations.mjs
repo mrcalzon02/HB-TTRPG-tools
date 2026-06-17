@@ -6,6 +6,7 @@ import vm from 'node:vm';
 
 const root = process.cwd();
 const readJson = async relativePath => JSON.parse(await fs.readFile(path.join(root, relativePath), 'utf8'));
+const normalize = value => JSON.parse(JSON.stringify(value));
 const source = await fs.readFile(path.join(root, 'kaysender-editor-migrations.js'), 'utf8');
 const context = {
   window: {},
@@ -24,7 +25,7 @@ const profileType = 'floating-island-foundation-profile';
 const legacy = await readJson('data/kaysender/editors/fixtures/island-legacy-flat.json');
 const nested = await readJson('data/kaysender/editors/fixtures/island-current-nested.json');
 
-const migrated = migrations.migrate(legacy, profileType);
+const migrated = normalize(migrations.migrate(legacy, profileType));
 assert.equal(migrated.changed, true, 'Legacy flat island fixture was not migrated.');
 assert.deepEqual(migrated.applied, ['island-legacy-flat-to-1.0.0']);
 assert.equal(migrated.data.schemaVersion, '1.0.0');
@@ -47,15 +48,15 @@ assert.equal('routeAccess' in migrated.data, false, 'Migrated profile retained o
 assert.equal(migrated.log[0].fromVersion, 'legacy-flat');
 assert.equal(migrated.log[0].toVersion, '1.0.0');
 
-const idempotent = migrations.migrate(migrated.data, profileType);
+const idempotent = normalize(migrations.migrate(migrated.data, profileType));
 assert.equal(idempotent.changed, false, 'Canonical migrated profile was migrated a second time.');
 assert.deepEqual(idempotent.data, migrated.data);
 
-const current = migrations.migrate(nested, profileType);
+const current = normalize(migrations.migrate(nested, profileType));
 assert.equal(current.changed, false, 'Current nested island fixture should not be rewritten.');
 assert.deepEqual(current.data, nested);
 
-const catalogue = migrations.list(profileType);
+const catalogue = normalize(migrations.list(profileType));
 assert.ok(catalogue.some(item => item.id === 'island-legacy-flat-to-1.0.0'));
 
 console.log('Editor migration validation passed.');
