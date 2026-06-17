@@ -1,9 +1,9 @@
 {
   "setting": "Chronicles of the Elemental Realms",
-  "schemaVersion": "1.0.0",
-  "status": "creature-reference-pass-1",
+  "schemaVersion": "1.1.0",
+  "status": "creature-reference-pass-1-complete",
   "genre": "elemental fantasy and planar ecology",
-  "description": "Dedicated wiki index for the Chronicles of the Elemental Realms source. This section is independent from Kaysender and Solanum Umbra and begins with Hypertext d20 creature references organized by planar category.",
+  "description": "Dedicated wiki index for the Chronicles of the Elemental Realms source. This section is independent from Kaysender and Solanum Umbra and begins with Hypertext d20 creature references organized by planar and ecological category.",
   "sourceDocuments": [
     "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json"
   ],
@@ -16,15 +16,26 @@
     {"id":"air-plane","name":"Plane of Air"},
     {"id":"para-elemental","name":"Para-Elemental Quagmire"},
     {"id":"unconventional-planes","name":"Unconventional Planes"},
+    {"id":"arthropod-ecologies","name":"Swamp Arthropods and Adjacent Fauna"},
     {"id":"contextual-fauna","name":"Contextual Fauna and Prey"}
   ],
   "packs": [
-    "elemental-realms-creatures.js"
+    "elemental-realms-creature-core.js",
+    "elemental-realms-creatures-primary.js",
+    "elemental-realms-creatures-secondary.js",
+    "elemental-realms-creatures-expansions.js",
+    "elemental-realms-creatures-context.js"
+  ],
+  "featuredCanonExpansions": [
+    "cinder-frog",
+    "magnetic-frog-beast",
+    "snode"
   ],
   "conversionPolicy": {
     "system": "Hypertext d20 / 3.5-compatible",
     "sourceLorePreserved": true,
     "derivedMechanicsLabeled": true,
+    "newCanonExpansionsLabeled": true,
     "confidenceLevels": ["high","medium","low"]
   }
 }
