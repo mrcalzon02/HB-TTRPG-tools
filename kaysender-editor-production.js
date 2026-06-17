@@ -142,8 +142,9 @@
     renderLifecycleState(Lifecycle.getState(adapter.id));
     const existing = activeEnvelopes.get(adapter.id);
     if (existing) {
+      Lifecycle.reset(adapter.id, `Restoring open record ${existing.name}.`);
       applyEnvelope(adapter, panel, existing);
-      Lifecycle.markClean(adapter.id, `Restored open record ${existing.name}.`);
+      synchronizeLoadedEnvelope(adapter, existing, `Restored open record ${existing.name}.`);
     } else {
       renderDiagnostics([Kernel.diagnostic('info', 'editor-ready', `${adapter.label.replace(/^Open /, '')} is running through the shared adapter runtime.`)]);
       refreshProvenance(adapter, panel);
@@ -295,6 +296,43 @@
     return envelope;
   }
 
+  function synchronizeLoadedEnvelope(adapter, sourceEnvelope, cleanMessage) {
+    const synchronizationVersion = Lifecycle.checkpoint(adapter.id);
+    window.setTimeout(() => {
+      const synchronizedEnvelope = activeEnvelopes.get(adapter.id) || sourceEnvelope;
+      const draftResult = Kernel.saveDraft(adapter.id, synchronizedEnvelope);
+      if (!draftResult.ok) {
+        Lifecycle.markDirty(
+          adapter.id,
+          `Loaded ${synchronizedEnvelope.name}, but its recovery draft could not be synchronized.`,
+          { autosave: false }
+        );
+        renderDiagnostics([
+          ...Kernel.validateEnvelope(synchronizedEnvelope, [adapter.profileType]),
+          Kernel.diagnostic('error', 'loaded-record-draft-sync-failed', draftResult.message)
+        ]);
+        return;
+      }
+      if (synchronizedEnvelope.profileId !== sourceEnvelope.profileId) {
+        Lifecycle.markDirty(adapter.id, 'The editor replaced the loaded record identity during form reconstruction.', { autosave: false });
+        renderDiagnostics([
+          ...Kernel.validateEnvelope(synchronizedEnvelope, [adapter.profileType]),
+          Kernel.diagnostic('error', 'loaded-record-identity-changed', `Loaded profile ${sourceEnvelope.profileId} became ${synchronizedEnvelope.profileId}.`)
+        ]);
+        return;
+      }
+      if (synchronizedEnvelope.revision !== sourceEnvelope.revision) {
+        Lifecycle.markDirty(adapter.id, 'The editor normalized the loaded record. Review and save the new revision deliberately.', { autosave: false });
+        renderDiagnostics([
+          ...Kernel.validateEnvelope(synchronizedEnvelope, [adapter.profileType]),
+          Kernel.diagnostic('warning', 'loaded-record-roundtrip-changed', `Form reconstruction changed revision ${sourceEnvelope.revision} to ${synchronizedEnvelope.revision}.`)
+        ]);
+        return;
+      }
+      Lifecycle.markCleanIfUnchanged(adapter.id, synchronizationVersion, cleanMessage);
+    }, 0);
+  }
+
   function importRecord(adapter, panel, input) {
     const result = Kernel.normalizeImportedRecord(input, {
       expectedTypes: [adapter.profileType],
@@ -305,29 +343,8 @@
     if (!result.ok) return null;
     activeEnvelopes.set(adapter.id, result.envelope);
     Lifecycle.reset(adapter.id, `Loaded ${result.envelope.name}. Synchronizing recovery state.`);
-    const synchronizationVersion = Lifecycle.checkpoint(adapter.id);
     applyEnvelope(adapter, panel, result.envelope);
-    window.setTimeout(() => {
-      const synchronizedEnvelope = activeEnvelopes.get(adapter.id) || result.envelope;
-      const draftResult = Kernel.saveDraft(adapter.id, synchronizedEnvelope);
-      if (draftResult.ok) {
-        Lifecycle.markCleanIfUnchanged(
-          adapter.id,
-          synchronizationVersion,
-          `Loaded ${synchronizedEnvelope.name}. Recovery draft synchronized.`
-        );
-        return;
-      }
-      Lifecycle.markDirty(
-        adapter.id,
-        `Loaded ${synchronizedEnvelope.name}, but its recovery draft could not be synchronized.`,
-        { autosave: false }
-      );
-      renderDiagnostics([
-        ...Kernel.validateEnvelope(synchronizedEnvelope, [adapter.profileType]),
-        Kernel.diagnostic('error', 'import-draft-sync-failed', draftResult.message)
-      ]);
-    }, 0);
+    synchronizeLoadedEnvelope(adapter, result.envelope, `Loaded ${result.envelope.name}. Recovery draft synchronized.`);
     return result.envelope;
   }
 
@@ -481,8 +498,9 @@
     }
     if (!Lifecycle.confirmLeave(adapter.id, 'The current record has unsaved changes. Recover the saved local draft anyway?')) return;
     activeEnvelopes.set(adapter.id, envelope);
+    Lifecycle.reset(adapter.id, `Recovering local draft ${envelope.name}.`);
     applyEnvelope(adapter, panel, envelope);
-    Lifecycle.markClean(adapter.id, `Recovered local draft ${envelope.name}.`);
+    synchronizeLoadedEnvelope(adapter, envelope, `Recovered local draft ${envelope.name}.`);
   }
 
   function cloneCurrent(adapter, panel) {
