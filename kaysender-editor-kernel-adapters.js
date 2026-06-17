@@ -17,6 +17,40 @@
     return registry.list().find(adapter => adapter.profileType === profileType) || null;
   }
 
+  function parseVersion(value) {
+    const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(String(value || ''));
+    return match ? match.slice(1).map(Number) : null;
+  }
+
+  function compareVersions(left, right) {
+    const leftParts = parseVersion(left);
+    const rightParts = parseVersion(right);
+    if (!leftParts || !rightParts) return null;
+    for (let index = 0; index < 3; index += 1) {
+      if (leftParts[index] > rightParts[index]) return 1;
+      if (leftParts[index] < rightParts[index]) return -1;
+    }
+    return 0;
+  }
+
+  function schemaCompatibilityDiagnostics(envelope) {
+    const adapter = adapterForProfileType(envelope?.profileType);
+    if (!adapter) return [];
+    const received = String(envelope.profileSchemaVersion || envelope.data?.schemaVersion || '1.0.0');
+    const expected = adapter.currentSchemaVersion;
+    const comparison = compareVersions(received, expected);
+    if (comparison === null) {
+      return [kernel.diagnostic('error', 'profile-schema-version-invalid', `Profile schema version '${received}' is invalid. Expected ${expected}.`, 'profileSchemaVersion')];
+    }
+    if (comparison < 0) {
+      return [kernel.diagnostic('error', 'profile-schema-outdated', `Profile schema ${received} is older than the ${adapter.label.replace(/^Open /, '')} contract ${expected}, and no registered migration completed the upgrade.`, 'profileSchemaVersion')];
+    }
+    if (comparison > 0) {
+      return [kernel.diagnostic('error', 'profile-schema-future', `Profile schema ${received} is newer than the supported ${adapter.label.replace(/^Open /, '')} contract ${expected}.`, 'profileSchemaVersion')];
+    }
+    return [];
+  }
+
   function applyProfileToForm(form, profileType, profileInput) {
     const adapter = adapterForProfileType(profileType);
     if (!adapter) return fallbackApplyProfileToForm(form, profileType, profileInput);
@@ -58,23 +92,31 @@
     } catch (error) {
       return migrationFailure(result, error);
     }
-    if (!migration.changed) return result;
 
     const previous = result.envelope;
-    const envelope = kernel.createEnvelope(migration.data, {
-      existingEnvelope: previous,
-      profileType: previous.profileType,
-      profileSchemaVersion: migration.data.schemaVersion,
-      editorId: options.editorId || previous.provenance?.editorId,
-      moduleId: options.moduleId || previous.provenance?.moduleId,
-      origin: previous.provenance?.origin,
-      importedAt: previous.provenance?.importedAt,
-      migrationLog: migration.log,
-      inheritance: previous.inheritance,
-      locks: previous.locks,
-      incrementRevision: false
-    });
-    const diagnostics = kernel.validateEnvelope(envelope, options.expectedTypes || []);
+    const envelope = migration.changed
+      ? kernel.createEnvelope(migration.data, {
+          existingEnvelope: previous,
+          profileType: previous.profileType,
+          profileSchemaVersion: migration.data.schemaVersion,
+          editorId: options.editorId || previous.provenance?.editorId,
+          moduleId: options.moduleId || previous.provenance?.moduleId,
+          origin: previous.provenance?.origin,
+          importedAt: previous.provenance?.importedAt,
+          migrationLog: migration.log,
+          inheritance: previous.inheritance,
+          locks: previous.locks,
+          incrementRevision: false
+        })
+      : previous;
+
+    const diagnostics = [
+      ...kernel.validateEnvelope(envelope, options.expectedTypes || []),
+      ...schemaCompatibilityDiagnostics(envelope)
+    ];
+    if (migration.changed) {
+      diagnostics.push(kernel.diagnostic('info', 'profile-schema-migrated', `Applied ${migration.applied.length} registered migration${migration.applied.length === 1 ? '' : 's'} and upgraded the profile to schema ${envelope.profileSchemaVersion}.`, 'profileSchemaVersion'));
+    }
     envelope.diagnostics = diagnostics;
     return {
       ok: !diagnostics.some(item => item.severity === 'error'),
