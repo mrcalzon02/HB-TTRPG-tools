@@ -49,6 +49,13 @@ if (chainSchema?.minItems !== 3 || chainSchema?.maxItems !== 3 || chainSchema?.i
   fail('Browser verification schema must require exactly the three P0 prototype editors.');
 }
 
+const inheritanceSchema = schema.properties?.profiles?.items?.properties?.inheritance?.items;
+for (const field of ['relationship', 'profileId', 'profileType', 'name', 'revision', 'policy']) {
+  if (!inheritanceSchema?.required?.includes(field)) fail(`Browser verification inheritance schema does not require '${field}'.`);
+}
+if (inheritanceSchema?.additionalProperties !== false) fail('Browser verification inheritance references must reject unknown fields.');
+if (inheritanceSchema?.properties?.policy?.const !== 'pinned-revision') fail('Browser verification inheritance policy must be pinned-revision.');
+
 for (const marker of [
   "const RECEIPT_SCHEMA_VERSION = '1.0.0'",
   "const RECEIPT_STAGE = 'P0'",
@@ -100,6 +107,7 @@ function validateInheritanceReference(reference, label) {
   if (!String(reference.relationship || '').trim()) fail(`${label} inheritance reference is missing relationship.`);
   if (!String(reference.profileId || '').trim()) fail(`${label} inheritance reference is missing profileId.`);
   if (!String(reference.profileType || '').trim()) fail(`${label} inheritance reference is missing profileType.`);
+  if (!String(reference.name ?? '').trim()) fail(`${label} inheritance reference is missing name.`);
   if (!Number.isInteger(reference.revision) || reference.revision < 1) fail(`${label} inheritance reference has an invalid revision.`);
   if (reference.policy !== 'pinned-revision') fail(`${label} inheritance reference is not pinned to an explicit revision.`);
 }
