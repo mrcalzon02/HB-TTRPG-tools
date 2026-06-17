@@ -103,11 +103,11 @@
   }
 
   register({
-    id: 'island-legacy-flat-to-1.0.0',
+    id: 'island-legacy-flat-to-2.0.0',
     profileType: 'floating-island-foundation-profile',
     fromVersion: 'legacy-flat',
-    toVersion: '1.0.0',
-    message: 'Migrated the legacy flat floating-island profile into the nested canonical island structure.',
+    toVersion: '2.0.0',
+    message: 'Migrated the legacy flat floating-island profile into the current nested Island 2.0.0 structure.',
     applies: data => (
       !data.geometry &&
       !data.classification &&
