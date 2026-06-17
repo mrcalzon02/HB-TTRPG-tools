@@ -35,6 +35,7 @@ for (const relativePath of [
 
 const kernel = context.window.KaysenderEditorKernel;
 assert.ok(kernel, 'Adapted editor kernel was not exposed.');
+assert.equal(typeof kernel.restoreInheritedEnvelope, 'function', 'Pinned parent restoration helper was not exposed.');
 
 const island = await readJson('data/kaysender/editors/fixtures/island-current-nested.json');
 const parentResult = normalize(kernel.normalizeImportedRecord(island, {
@@ -48,6 +49,23 @@ assert.equal(reference.profileId, parentResult.envelope.profileId);
 assert.equal(reference.profileType, 'floating-island-foundation-profile');
 assert.equal(reference.revision, parentResult.envelope.revision);
 assert.equal(reference.sourceUpdatedAt, parentResult.envelope.updatedAt);
+
+const embeddedContext = normalize(kernel.adaptContext(parentResult.envelope, parentResult.envelope.profileType));
+const pinnedReference = {
+  ...reference,
+  revision: 7,
+  sourceUpdatedAt: '2026-06-17T12:00:00.000Z'
+};
+const restoredParent = normalize(kernel.restoreInheritedEnvelope(embeddedContext, pinnedReference, {
+  expectedTypes: ['floating-island-foundation-profile']
+}));
+assert.equal(restoredParent.ok, true, 'Embedded parent context could not be restored as a pinned envelope.');
+assert.equal(restoredParent.envelope.profileId, pinnedReference.profileId, 'Pinned parent profile ID changed during rehydration.');
+assert.equal(restoredParent.envelope.revision, 7, 'Pinned parent revision changed during rehydration.');
+assert.equal(restoredParent.envelope.updatedAt, pinnedReference.sourceUpdatedAt, 'Pinned parent source timestamp changed during rehydration.');
+assert.equal(restoredParent.envelope.profileType, pinnedReference.profileType);
+assert.equal(restoredParent.context.waterProfile, embeddedContext.waterProfile);
+assert.ok(restoredParent.diagnostics.some(item => item.code === 'pinned-parent-identity-restored'));
 
 const settlement = {
   name: 'Inheritance Test Skyport',
@@ -93,4 +111,4 @@ assert.equal(normalizedLegacy.envelope.inheritance[0].policy, 'pinned-revision')
 assert.ok(normalizedLegacy.envelope.provenance.migrationLog.some(item => item.code === 'inheritance-policy-normalized'));
 
 console.log('Editor inheritance validation passed.');
-console.log('Verified pinned references, source revisions, invalid policy rejection, invalid revision rejection, and legacy reference normalization.');
+console.log('Verified pinned references, embedded-context identity restoration, source revisions, invalid policy rejection, invalid revision rejection, and legacy reference normalization.');
