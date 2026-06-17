@@ -2,7 +2,7 @@
 
 A lightweight, browser-based toolkit for homebrew tabletop RPG tools, utilities, generators, and campaign-setting support.
 
-The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It can run directly from GitHub Pages without a build step.
+The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It can run directly from GitHub Pages without an application build step.
 
 ## Current structure
 
@@ -18,13 +18,28 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `spell-creator-entry.js` — generator-menu launcher for the standalone Spell Creator.
 - `kaysender-tools.js` — alpha interactive Kaysender tools attached to the registry cards.
 - `kaysender-wiki.js` — alpha hypertext wiki browser and cross-link layer between lore entries and modules.
-- `kaysender-editors.js` — staged deep-editor runtime, beginning with the Floating Island / Skyland Editor.
-- `kaysender-settlement-editor.js` — staged deep-editor runtime for settlements and skyports.
-- `kaysender-airship-editor.js` — staged deep-editor runtime for airships and vessels.
+- `kaysender-editors.js` — Floating Island / Skyland domain editor runtime.
+- `kaysender-settlement-editor.js` — Settlement / Skyport domain editor runtime.
+- `kaysender-airship-editor.js` — Airship / Vessel domain editor runtime.
+- `kaysender-editor-kernel.js` — canonical profile envelope, stable IDs, revisions, locks, drafts, context adaptation, and base diagnostics.
+- `kaysender-editor-field-mapping.js` — shared nested and flat profile-to-form mapping service.
+- `kaysender-editor-adapter-registry.js` — adapter contract and registry used by separate domain editors.
+- `kaysender-editor-builtins.js` — registered Island, Settlement, and Airship adapters and current schema versions.
+- `kaysender-editor-migrations.js` — versioned profile migration registry, including legacy flat Island migration to schema `2.0.0`.
+- `kaysender-editor-kernel-adapters.js` — schema compatibility, adapter activation, pinned inheritance, and import normalization.
+- `kaysender-editor-lifecycle.js` — dirty-state tracking, autosave, recovery, and unsaved-change protection.
+- `kaysender-editor-repository.js` — persistent multi-record browser repository and index repair.
+- `kaysender-editor-production.js` — generic shared editor shell and lifecycle actions.
+- `kaysender-editor-record-library.js` — identity-safe record saving, cloning, opening, deletion, and visible record identity.
+- `kaysender-editor-parent-library.js` — direct saved-parent selection, pinned revision health, and deliberate parent refresh.
+- `kaysender-editor-error-boundary.js` — recoverable runtime diagnostics.
+- `kaysender-editor-live-smoke.js` — integrated Island → Settlement → Airship browser smoke chain and receipt generation.
 - `kaysender-npc-generator.js` — population-band NPC and crew generator runtime.
 - `kaysender-crafting-generator.js` — Hypertext d20-compatible equipment, gadget, ship-module, ship-weapon, and airship-core recipe generator and construction simulator.
 - `data/kaysender-tools-registry.json` — machine-readable registry for planned, alpha, and editor-alpha Kaysender tools, utilities, and generators.
 - `data/kaysender/editors/editor-roadmap.json` — machine-readable production order, dependencies, required inputs, required outputs, and exit gates for all main-line editors.
+- `data/kaysender/editors/p0-implementation-status.json` — machine-readable P0 implementation and promotion state.
+- `data/kaysender/schemas/editor-profile-envelope.schema.json` — canonical shared editor envelope with pinned-revision inheritance.
 - `data/kaysender/generators/npc-crew-generator.json` — NPC class, ancestry, narrative-table manifest, and population-band pack index.
 - `data/kaysender/generators/npc-crew/bands-*.json` — 37 civilian, authority, outlaw, specialist, and airship population bands used by the NPC and Crew Generator.
 - `data/kaysender/generators/crafting/crafting-generator.json` — crafting generator manifest containing complexity, facility, quality, scale, and mode definitions.
@@ -35,19 +50,27 @@ The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It c
 - `data/kaysender/wiki/wiki-index.json` — multi-pack wiki loader index.
 - `data/kaysender/wiki/entries.json` — seed Kaysender wiki entries with related-entry and related-module links.
 - `data/kaysender/wiki/*-depth.json` — deeper source-derived wiki packs for world, peoples, nations, factions/economy, and airships.
-- `data/kaysender/editors/floating-island-editor.json` — source-derived configuration for the first staged deep editor.
-- `data/kaysender/editors/settlement-editor.json` — source-derived configuration for the second staged deep editor.
-- `data/kaysender/editors/airship-editor.json` — source-derived configuration for the third staged deep editor.
+- `data/kaysender/editors/floating-island-editor.json` — source-derived configuration for the Floating Island editor.
+- `data/kaysender/editors/settlement-editor.json` — source-derived configuration for the Settlement editor.
+- `data/kaysender/editors/airship-editor.json` — source-derived configuration for the Airship editor.
 - `data/kaysender/schemas/wiki-entry.schema.json` — schema for future Kaysender wiki entries.
 - `data/kaysender/schemas/floating-island-profile.schema.json` — schema for generated floating island profiles.
 - `data/kaysender/schemas/settlement-profile.schema.json` — schema for generated settlement profiles.
 - `data/kaysender/schemas/airship-profile.schema.json` — schema for generated airship profiles.
 - `scripts/validate-crafting-data.mjs` — dependency-free validator for crafting manifests, template IDs, modes, scales, complexities, materials, power sources, and required fields.
-- `scripts/validate-editor-roadmap.mjs` — validates production-stage numbering, dependencies, registry module coverage, and the single active next-stage rule.
+- `scripts/validate-editor-roadmap.mjs` — validates production-stage numbering, dependencies, registry coverage, P0 outputs, and the single active next-stage rule.
+- `scripts/validate-editor-kernel.mjs` — validates base envelope behavior, revisions, draft protection, domain context adaptation, and generic shell markers.
+- `scripts/validate-editor-migrations.mjs` — functionally validates legacy Island migration and idempotence.
+- `scripts/validate-editor-adapter-integration.mjs` — validates current, legacy, outdated, future, and wrong-profile behavior through the complete adapter import path.
+- `scripts/validate-editor-inheritance.mjs` — validates pinned inheritance references and legacy-reference normalization.
+- `scripts/validate-editor-runtime-structure.mjs` — validates shared runtime structure and runs the adapter and inheritance integration tests.
+- `scripts/run-p0-browser-verification.mjs` — runs the integrated P0 browser gate in Playwright Chromium.
+- `scripts/validate-p0-browser-verification.mjs` — validates the P0 receipt, smoke harness, runner, and Pages workflow contract.
 - `docs/kaysender-tool-extraction.md` — first extraction framework for converting Kaysender into Hypertext d20-compatible campaign utilities.
 - `docs/kaysender-editor-staging-plan.md` — human-readable production order and editor completion standards.
-- `docs/deployment.md` — GitHub Pages deployment and smoke-test guide.
-- `.github/workflows/pages.yml` — GitHub Pages deployment workflow with crafting-data, editor-roadmap, and JavaScript syntax validation.
+- `docs/development-history.md` — architecture and implementation milestones.
+- `docs/deployment.md` — GitHub Pages deployment, Chromium gate, artifacts, and smoke-test guide.
+- `.github/workflows/pages.yml` — blocking validation, Chromium smoke, artifact upload, and GitHub Pages deployment workflow.
 
 ## First included utility
 
@@ -139,9 +162,9 @@ These tools are campaign-operation and playtest utilities. Generated prices, sav
 
 ## Main-line editor production model
 
-The original island, settlement, and airship stages are retained as prototype history. Production development now follows the dependency order in `data/kaysender/editors/editor-roadmap.json` and `docs/kaysender-editor-staging-plan.md`.
+The original Island, Settlement, and Airship stages are retained as prototype history. Production development follows the dependency order in `data/kaysender/editors/editor-roadmap.json` and `docs/kaysender-editor-staging-plan.md`.
 
-Only one main-line editor is implemented at a time. Random generators remain accelerators; they do not count as completed editors.
+Only one main-line editor is implemented at a time on the single active branch `main`. Random generators remain accelerators; they do not count as completed editors.
 
 The production order is:
 
@@ -163,7 +186,24 @@ The production order is:
 16. **P15 — Encounter, Hazard, Chase, and Conflict Editor**
 17. **P16 — Job Board, Mission Packet, and Campaign Hook Editor**
 
-P0 is the required next implementation because the existing alpha editors duplicate shell behavior and use mismatched profile assumptions. The shared kernel will establish stable IDs, schema migration, validated inheritance, dedicated New blank record actions, local draft recovery, selective randomization, canonical exports, provenance, diagnostics, and common accessible controls before another specialized editor is built.
+### P0 shared framework status
+
+The P0 framework implementation is complete and recorded as `framework-implementation-complete-pending-runtime-gate`.
+
+The shared infrastructure now supplies separate registered editors with:
+
+- stable record identity and revision behavior;
+- explicit schema versions and versioned migrations;
+- nested and legacy-flat field mapping;
+- malformed, wrong-profile, outdated, and future-schema diagnostics;
+- recovery drafts, dirty-state tracking, and unsaved-change protection;
+- persistent multi-record storage;
+- explicit **Update Existing Record** and **Save as New Clone** behavior;
+- pinned-revision inheritance with current, stale, unavailable, and locally older reference states;
+- direct saved-parent selection and deliberate **Refresh to Latest Parent** behavior;
+- canonical JSON, wiki drafts, provenance, locks, validation, and recoverable diagnostics.
+
+P0 is not promoted by code completion alone. The integrated Island → Settlement → Airship Chromium gate must pass on `main`, produce a valid P0 verification receipt, and reach deployment successfully. Until that occurs, P0 remains the sole `required-next` stage and P1 remains closed.
 
 Each production editor must clear its documented exit gate before work advances to the next stage.
 
@@ -191,9 +231,9 @@ Then open `http://localhost:8000/`.
 
 ## GitHub Pages
 
-This repo includes a Pages workflow. Once GitHub Pages is enabled for the repository using GitHub Actions as the source, pushes to `main` will validate and publish the static site.
+This repository includes a blocking Pages workflow. Pushes to `main` run all validators, install Playwright Chromium, execute the integrated P0 browser gate, validate its receipt, upload the `p0-browser-verification` artifact, and deploy only after success.
 
-See `docs/deployment.md` for deployment and smoke-test steps.
+See `docs/deployment.md` for the pipeline, artifact contents, local commands, and promotion rules.
 
 ## Roadmap placeholders
 
