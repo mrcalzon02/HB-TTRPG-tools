@@ -1,14 +1,14 @@
 {
   "setting": "Solanum Umbra",
-  "schemaVersion": "0.2.0",
-  "status": "native-system-character-creation-pass-1-complete",
+  "schemaVersion": "0.3.0",
+  "status": "native-foundation-import-active",
   "genre": "post-apocalyptic science-fantasy",
-  "description": "Dedicated Solanum Umbra wiki index. The setting preserves its own native mechanics and terminology; no Hypertext d20, 3.5, or other external-system conversion layer is applied. The first import pass covers character creation, character-sheet fields, attributes, derived statistics, origins, careers, skills, motivations, ancestry and cyborg variants, the 49% full-cyberization threshold, and data-seizure progression.",
+  "description": "Dedicated native-system wiki. Current packs cover character creation, professional talents, backgrounds, crafting, resources, combat, tactical movement, cover, vehicles, supernatural entity generation, and Synthesis force profiles. No external rules conversion is used.",
   "mechanicsPolicy": {
     "system": "Solanum Umbra native rules",
     "conversion": "none",
-    "normalization": "structure, indexing, cross-linking, provenance, and interface fields only",
-    "ambiguityPolicy": "Record unclear or incomplete source mechanics for later native-system adjudication; do not silently replace them with rules from another game."
+    "normalization": "structure, indexing, cross-linking, provenance, interface fields, and visible ambiguity notes only",
+    "ambiguityPolicy": "Record unclear, missing, duplicated, or conflicting source mechanics for later native-system adjudication."
   },
   "sourceDocuments": [
     "source-page-references/Solanum-Umbra-TTRPG.source.json"
@@ -16,17 +16,30 @@
   "binaryPath": "SRC/Solanum-Umbra-TTRPG.pdf",
   "binaryTransferStatus": "present-in-git-and-identity-verified",
   "packs": [
-    "data/solanum-umbra/wiki/native-rules-pass-1-character-creation.json"
+    "data/solanum-umbra/wiki/native-rules-pass-1-character-creation.json",
+    "data/solanum-umbra/wiki/native-rules-pass-2-career-talents-backgrounds.json",
+    "data/solanum-umbra/wiki/native-rules-pass-3-crafting-resources.json",
+    "data/solanum-umbra/wiki/native-rules-pass-4-combat-cover-vehicles.json",
+    "data/solanum-umbra/wiki/native-rules-pass-5-entity-generator.json",
+    "data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json"
   ],
-  "plannedNativePasses": [
-    "character-sheets-and-advancement",
-    "core-resolution-and-skills",
-    "combat-cover-vehicles-and-initiative",
-    "crafting-materials-complexity-and-quality",
-    "roles-careers-and-specializations",
-    "classes-and-progression",
-    "cybernetics-biotics-and-equipment",
-    "enemies-factions-and-combat-roles",
-    "entities-paranormal-bestiary-and-soul-hazards"
+  "completedScope": {
+    "wikiEntries": 25,
+    "nativePacks": 6,
+    "careerTalentFamilies": 5,
+    "backgroundTables": 6,
+    "entityGeneratorTables": 7,
+    "synthesisForceFamilies": 4,
+    "namedForceRoles": 36,
+    "pageRanges": ["82-116","131-144","151-188","228-232"]
+  },
+  "nextImportAreas": [
+    "advancement",
+    "cybernetic installation and biotic requirements",
+    "equipment and vehicle catalogues",
+    "remaining professional structures",
+    "settlements and services",
+    "named creatures and anomalies",
+    "commander and army generation"
   ]
 }
