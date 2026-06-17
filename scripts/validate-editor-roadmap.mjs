@@ -86,10 +86,24 @@ async function main() {
     'validationAndDiagnostics',
     'recoverableErrorBoundary',
     'accessibleResponsiveControls',
-    'browserVerificationHarness'
+    'browserVerificationHarness',
+    'browserVerificationReceiptContract'
   ];
   for (const output of requiredP0Outputs) {
     if (implementation.implementedOutputs?.[output] !== true) fail(`P0 implemented output '${output}' is not recorded as complete.`);
+  }
+  for (const schemaFile of [
+    'data/kaysender/schemas/editor-profile-envelope.schema.json',
+    'data/kaysender/editors/p0-browser-verification.schema.json'
+  ]) {
+    if (!implementation.schemaFiles?.includes(schemaFile)) fail(`P0 implementation status does not record schema '${schemaFile}'.`);
+  }
+  for (const validationFile of [
+    'scripts/validate-editor-kernel.mjs',
+    'scripts/validate-editor-runtime-structure.mjs',
+    'scripts/validate-p0-browser-verification.mjs'
+  ]) {
+    if (!implementation.validationFiles?.includes(validationFile)) fail(`P0 implementation status does not record validator '${validationFile}'.`);
   }
   if (!Array.isArray(implementation.exitCriteria) || implementation.exitCriteria.length !== activeNext[0].exitCriteria.length) fail('P0 exit-criteria status count does not match the roadmap.');
   if (!implementation.promotionRule?.includes('live browser verification')) fail('P0 promotion rule must require live browser verification before P1 opens.');
@@ -128,6 +142,6 @@ async function main() {
 }
 
 main().catch(error => {
-  console.error(`Editor roadmap validation failed: ${error.message}`);
+  console.error(error.message);
   process.exitCode = 1;
 });
