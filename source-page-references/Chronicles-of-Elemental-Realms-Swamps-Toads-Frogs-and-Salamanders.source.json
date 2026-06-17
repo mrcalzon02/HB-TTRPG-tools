@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "sourceId": "chronicles-elemental-realms-swamps-toads-frogs-salamanders",
   "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
   "originalFilename": "Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf",
@@ -10,7 +10,7 @@
   "sourceStatus": "registered-from-conversation-upload",
   "binaryGitStatus": "not-written-binary-connector-unavailable",
   "intendedRepositoryPath": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
-  "integrationStatus": "deferred-multi-pass",
-  "wikiDestination": "general fantasy wiki corpus",
-  "notes": "Canonical source identity receipt. Do not treat this record as extracted or normalized wiki content. A future binary-capable repository transfer must verify the PDF against the recorded byte count and SHA-256 digest before replacing this receipt as the primary source object."
+  "integrationStatus": "dedicated-wiki-creature-reference-pass-1-complete",
+  "wikiDestination": "data/elemental-realms/wiki/wiki-index.json",
+  "notes": "Canonical source identity receipt. Creature lore has begun a dedicated, provenance-labeled Hypertext d20 conversion pass. The source manuscript, manuscript-adjacent mechanics, index-derived extrapolations, and later canon expansions remain distinct. A future binary-capable repository transfer must verify the PDF against the recorded byte count and SHA-256 digest."
 }
