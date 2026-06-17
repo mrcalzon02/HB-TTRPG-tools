@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import vm from 'node:vm';
 
 const root = process.cwd();
 const read = relativePath => fs.readFile(path.join(root, relativePath), 'utf8');
@@ -16,6 +17,7 @@ const lifecycle = await read('kaysender-editor-lifecycle.js');
 const repository = await read('kaysender-editor-repository.js');
 const production = await read('kaysender-editor-production.js');
 const recordLibrary = await read('kaysender-editor-record-library.js');
+const parentLibrary = await read('kaysender-editor-parent-library.js');
 const boundary = await read('kaysender-editor-error-boundary.js');
 const smoke = await read('kaysender-editor-live-smoke.js');
 
@@ -189,11 +191,29 @@ for (const phrase of [
   'Repository.save(clone)',
   'Repository.load(profileId)',
   'Repository.remove(profileId, true)',
+  'loadParentLibraryScript',
+  "script.src = 'kaysender-editor-parent-library.js'",
+  'data-kaysender-parent-library',
   'Production()',
   'window.KaysenderEditorRecordLibrary'
 ]) {
   if (!recordLibrary.includes(phrase)) fail(`Shared editor record library is missing '${phrase}'.`);
 }
+
+for (const phrase of [
+  'recordsFor(definition)',
+  'definition.expectedTypes.flatMap',
+  'currentParent(panel, definition)',
+  'Repository.load(profileId)',
+  'existingLoadButton.click()',
+  'Load Saved Parent',
+  'Clear Parent Link',
+  'definition.envelopeDatasetKey',
+  'window.KaysenderEditorParentLibrary'
+]) {
+  if (!parentLibrary.includes(phrase)) fail(`Shared parent record library is missing '${phrase}'.`);
+}
+new vm.Script(parentLibrary, { filename: 'kaysender-editor-parent-library.js' });
 
 for (const phrase of [
   "window.addEventListener('error'",
@@ -225,4 +245,4 @@ for (const phrase of [
 await import('./validate-editor-adapter-integration.mjs');
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified adapter schema contracts, functional compatibility enforcement, field mapping, migrations, lifecycle, persistent records, identity-safe saving, generic production shell, error boundary, and browser chain.');
+console.log('Verified schema-aware adapters, migrations, lifecycle, persistent records, identity-safe saving, direct saved-parent inheritance, generic production shell, error boundary, and browser chain.');
