@@ -6,18 +6,23 @@ const root = process.cwd();
 const indexPath = path.join(root,'data','kaysender','wiki','wiki-index.json');
 const classPackPath = path.join(root,'data','kaysender','wiki','converted-rules-pass-5-warlock-of-the-swamp.json');
 const displayPackPath = path.join(root,'data','kaysender','wiki','converted-rules-pass-5b-warlock-of-the-swamp-display.json');
+const relicCataloguePath = path.join(root,'data','kaysender','wiki','converted-rules-pass-5c-divine-compromise-relic-catalogue.json');
 
 const index = JSON.parse(await fs.readFile(indexPath,'utf8'));
 const classPack = JSON.parse(await fs.readFile(classPackPath,'utf8'));
 const displayPack = JSON.parse(await fs.readFile(displayPackPath,'utf8'));
+const relicCatalogue = JSON.parse(await fs.readFile(relicCataloguePath,'utf8'));
 
-if (index.setting !== 'Kaysender' || index.schemaVersion !== '0.6.0') throw new Error('Unexpected Kaysender wiki index identity or schema.');
+if (index.setting !== 'Kaysender' || index.schemaVersion !== '0.7.0') throw new Error('Unexpected Kaysender wiki index identity or schema.');
 const requiredPacks = [
   'data/kaysender/wiki/converted-rules-pass-5-warlock-of-the-swamp.json',
-  'data/kaysender/wiki/converted-rules-pass-5b-warlock-of-the-swamp-display.json'
+  'data/kaysender/wiki/converted-rules-pass-5b-warlock-of-the-swamp-display.json',
+  'data/kaysender/wiki/converted-rules-pass-5c-divine-compromise-relic-catalogue.json'
 ];
 for (const pack of requiredPacks) if (!index.packs?.includes(pack)) throw new Error(`Kaysender wiki index is missing '${pack}'.`);
-if (index.packs.indexOf(requiredPacks[1]) < index.packs.indexOf(requiredPacks[0])) throw new Error('Warlock display overrides must load after the primary class pack.');
+for (let i = 1; i < requiredPacks.length; i += 1) {
+  if (index.packs.indexOf(requiredPacks[i]) < index.packs.indexOf(requiredPacks[i - 1])) throw new Error('Warlock class, display, and relic catalogue packs are in the wrong order.');
+}
 
 if (classPack.setting !== 'Kaysender' || classPack.schemaVersion !== '0.1.0') throw new Error('Unexpected Warlock of the Swamp pack schema.');
 if (!Array.isArray(classPack.entries) || classPack.entries.length !== 4) throw new Error('Expected four primary Warlock of the Swamp wiki entries.');
@@ -96,16 +101,9 @@ for (const phrase of ['outsider','clerics','ongoing relationship','bargains with
   if (!ladyText.toLowerCase().includes(phrase.toLowerCase())) throw new Error(`Lady of the Swamp lore is missing '${phrase}'.`);
 }
 
-const artifactEntry = entries.get('divine-compromise-artifacts');
-if (!Array.isArray(artifactEntry.compromiseArtifacts) || artifactEntry.compromiseArtifacts.length !== 8) throw new Error('Expected eight structured divine compromise artifacts.');
-for (const artifact of artifactEntry.compromiseArtifacts) if (!artifact.name || !artifact.effect) throw new Error('Divine compromise artifact is incomplete.');
-for (const requiredArtifact of ['Sombrero of Tuesdays','Seven-Course Chalupa Reliquary','Spleen Warranty Tag']) {
-  if (!artifactEntry.compromiseArtifacts.some(artifact => artifact.name === requiredArtifact)) throw new Error(`Missing compromise artifact '${requiredArtifact}'.`);
-}
-const artifactText = [artifactEntry.summary,...(artifactEntry.body || []),...(artifactEntry.sections || []).flatMap(section => [section.heading,...(section.body || [])]),...artifactEntry.compromiseArtifacts.flatMap(artifact => [artifact.name,artifact.effect])].join(' ');
-for (const phrase of ['Every Thursday','war priest of Torm','seven-course assortment','total ego dissolution','sudden progenation','cranial removal']) {
-  if (!artifactText.includes(phrase)) throw new Error(`Divine-overlap record is missing '${phrase}'.`);
-}
+const baseArtifactEntry = entries.get('divine-compromise-artifacts');
+if (!Array.isArray(baseArtifactEntry.compromiseArtifacts) || baseArtifactEntry.compromiseArtifacts.length !== 8) throw new Error('Expected the eight founding structured divine compromise artifacts in the primary class pack.');
+for (const artifact of baseArtifactEntry.compromiseArtifacts) if (!artifact.name || !artifact.effect) throw new Error('Founding divine compromise artifact is incomplete.');
 
 if (displayPack.setting !== 'Kaysender' || displayPack.schemaVersion !== '0.1.0') throw new Error('Unexpected display-override pack schema.');
 const displayEntries = new Map((displayPack.entries || []).map(entry => [entry.id,entry]));
@@ -115,6 +113,49 @@ for (const id of ['warlock-of-the-swamp-invocations','divine-compromise-artifact
   if (entry.sections.some(section => !section.heading || !Array.isArray(section.body) || section.body.length === 0)) throw new Error(`Display override '${id}' has an empty section.`);
 }
 
+if (relicCatalogue.setting !== 'Kaysender' || relicCatalogue.schemaVersion !== '0.1.0') throw new Error('Unexpected expanded relic catalogue schema.');
+if (!Array.isArray(relicCatalogue.entries) || relicCatalogue.entries.length !== 1 || relicCatalogue.entries[0].id !== 'divine-compromise-artifacts') throw new Error('Expanded relic catalogue must override exactly the divine-compromise-artifacts entry.');
+const expandedArtifactEntry = relicCatalogue.entries[0];
+if (expandedArtifactEntry.relicCatalogueVersion !== '1.0.0') throw new Error('Unexpected relic catalogue version.');
+if (expandedArtifactEntry.cataloguePolicy?.relicCount !== 32) throw new Error('Relic catalogue policy must record thirty-two relics.');
+if (!expandedArtifactEntry.cataloguePolicy?.adjudication || !expandedArtifactEntry.cataloguePolicy?.termsWarning) throw new Error('Relic catalogue policy lacks adjudication or unknown-terms guidance.');
+if (!Array.isArray(expandedArtifactEntry.compromiseArtifacts) || expandedArtifactEntry.compromiseArtifacts.length !== 32) throw new Error(`Expected 32 expanded divine compromise relics, found ${expandedArtifactEntry.compromiseArtifacts?.length ?? 0}.`);
+if (!Array.isArray(expandedArtifactEntry.sections) || expandedArtifactEntry.sections.length < 7) throw new Error('Expanded relic catalogue lacks rendered thematic sections.');
+const relicNames = new Set();
+for (const relic of expandedArtifactEntry.compromiseArtifacts) {
+  for (const field of ['name','classification','effect','warning','whisperedTerms']) if (!relic[field]) throw new Error(`Expanded relic '${relic.name || 'unknown'}' lacks '${field}'.`);
+  if (relicNames.has(relic.name)) throw new Error(`Duplicate expanded relic '${relic.name}'.`);
+  relicNames.add(relic.name);
+}
+for (const requiredArtifact of [
+  'Sombrero of Tuesdays',
+  'Seven-Course Chalupa Reliquary',
+  'Spleen Warranty Tag',
+  'Cloak of Uninvisibility',
+  'Epsom Salts of ‘Do Not Put This in Your Bath Water’'
+]) if (!relicNames.has(requiredArtifact)) throw new Error(`Missing expanded compromise relic '${requiredArtifact}'.`);
+
+const relicText = [
+  expandedArtifactEntry.cataloguePolicy.adjudication,
+  expandedArtifactEntry.cataloguePolicy.termsWarning,
+  ...expandedArtifactEntry.compromiseArtifacts.flatMap(relic => [relic.name,relic.classification,relic.effect,relic.warning,relic.whisperedTerms]),
+  ...expandedArtifactEntry.sections.flatMap(section => [section.heading,...section.body])
+].join(' ');
+for (const phrase of [
+  'Every Thursday',
+  'war priest of Torm',
+  'seven-course assortment',
+  'total ego dissolution',
+  'sudden progenation',
+  'cranial removal',
+  'correctly visible',
+  'untethered from reality',
+  'wear it at all times',
+  'must not be placed in bath water',
+  'permanently destroy the recipient’s ability to experience good luck',
+  'cannot discuss the terms and conditions'
+]) if (!relicText.includes(phrase)) throw new Error(`Expanded relic record is missing '${phrase}'.`);
+
 for (const entry of classPack.entries) {
   if (!entry.id || !entry.title || !entry.category || !entry.summary) throw new Error('Warlock pack entry lacks core wiki fields.');
   if (!Array.isArray(entry.sections) || entry.sections.length === 0) throw new Error(`${entry.id} lacks rendered sections.`);
@@ -123,4 +164,4 @@ for (const entry of classPack.entries) {
 }
 
 console.log('Kaysender Warlock of the Swamp validation passed.');
-console.log('Verified twenty levels, retained warlock progression, Pact Favor and Debt, brood maintenance, Dream Step, four invocation grades, Lady patron lore, and eight divine compromise artifacts.');
+console.log('Verified twenty levels, retained warlock progression, Pact Favor and Debt, brood maintenance, Dream Step, four invocation grades, Lady patron lore, and thirty-two divine compromise relics.');
