@@ -75,6 +75,7 @@ jobs:
           node --check kaysender-npc-generator.js
           node --check kaysender-editor-kernel.js
           node --check kaysender-editor-production.js
+          node --check kaysender-editor-live-smoke.js
           node --check spell-creator-vocabulary.js
           node --check spell-creator-mechanics.js
           node --check module-spell-creator.js
