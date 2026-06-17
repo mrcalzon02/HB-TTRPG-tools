@@ -40,6 +40,9 @@ jobs:
       - name: Validate editor profile migrations
         run: node scripts/validate-editor-migrations.mjs
 
+      - name: Validate persistent editor repository
+        run: node scripts/validate-editor-repository.mjs
+
       - name: Validate shared editor browser runtime
         run: node scripts/validate-editor-runtime-structure.mjs
 
@@ -97,6 +100,7 @@ jobs:
           node --check scripts/validate-editor-migrations.mjs
           node --check scripts/validate-editor-adapter-integration.mjs
           node --check scripts/validate-editor-inheritance.mjs
+          node --check scripts/validate-editor-repository.mjs
           node --check scripts/run-p0-browser-verification.mjs
           node --check scripts/validate-p0-browser-verification.mjs
           node --check spell-creator-vocabulary.js
