@@ -79,6 +79,11 @@ jobs:
           node --check kaysender-crafting-generator.js
           node --check kaysender-npc-generator.js
           node --check kaysender-editor-kernel.js
+          node --check kaysender-editor-field-mapping.js
+          node --check kaysender-editor-adapter-registry.js
+          node --check kaysender-editor-builtins.js
+          node --check kaysender-editor-kernel-adapters.js
+          node --check kaysender-editor-lifecycle.js
           node --check kaysender-editor-production.js
           node --check kaysender-editor-error-boundary.js
           node --check kaysender-editor-live-smoke.js
