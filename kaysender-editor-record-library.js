@@ -100,6 +100,7 @@
       setStatus('Open an editor before saving a record.', 'warning');
       return;
     }
+    const saveVersion = Lifecycle.checkpoint(editorId);
     const envelope = await rebuildEnvelope();
     if (!envelope) {
       setStatus('No canonical record is available to save.', 'error');
@@ -107,13 +108,21 @@
     }
     const existed = Boolean(savedMetadata(envelope.profileId));
     const result = Repository.save(envelope);
-    setStatus(
-      result.ok
-        ? `${existed ? 'Updated' : 'Saved'} ${envelope.name} without changing profile ID ${envelope.profileId}.`
-        : result.message,
-      result.ok ? 'success' : 'error'
+    if (!result.ok) {
+      setStatus(result.message, 'error');
+      refresh();
+      return;
+    }
+    const cleanResult = Lifecycle.markCleanIfUnchanged(
+      editorId,
+      saveVersion,
+      `${existed ? 'Updated' : 'Saved'} ${envelope.name} in the local record library.`
     );
-    if (result.ok) Lifecycle.markClean(editorId, `${existed ? 'Updated' : 'Saved'} ${envelope.name} in the local record library.`);
+    if (cleanResult.ok) {
+      setStatus(`${existed ? 'Updated' : 'Saved'} ${envelope.name} without changing profile ID ${envelope.profileId}.`, 'success');
+    } else {
+      setStatus(`Saved ${envelope.name} revision ${envelope.revision}, but newer edits remain unsaved.`, 'warning');
+    }
     refresh();
   }
 
@@ -153,6 +162,7 @@
     const profileId = select?.value;
     if (!profileId) return;
     const { production, editorId } = activeContext();
+    if (!Lifecycle.confirmLeave(editorId, 'The current record has unsaved changes. Open the selected saved record anyway?')) return;
     const result = Repository.load(profileId);
     if (!result.ok) {
       setStatus(result.message, 'error');
