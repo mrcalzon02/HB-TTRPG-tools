@@ -18,6 +18,15 @@
   function applyProfileToForm(form, profileType, profileInput) {
     const adapter = adapterForProfileType(profileType);
     if (!adapter) return fallbackApplyProfileToForm(form, profileType, profileInput);
+    if (typeof adapter.applyProfileToForm === 'function') {
+      return adapter.applyProfileToForm({
+        form,
+        profileType,
+        profile: profileInput,
+        mapping,
+        fallback: fallbackApplyProfileToForm
+      });
+    }
     if (Object.keys(adapter.fieldMap || {}).length) {
       return mapping.apply(form, profileInput, adapter.fieldMap);
     }
