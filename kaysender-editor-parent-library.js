@@ -51,6 +51,26 @@
     }
     const saved = savedParentMetadata(parent);
     const label = parent.name || parent.data?.name || definition.id;
+    const unresolved = parent.provenance?.origin === 'unresolved-inheritance-reference';
+    if (unresolved) {
+      if (saved) {
+        const revisionNote = saved.revision === parent.revision
+          ? `saved revision ${saved.revision} is available`
+          : `saved revision ${saved.revision} differs from pinned revision ${parent.revision}`;
+        return {
+          state: 'unresolved',
+          parent,
+          saved,
+          message: `Pinned ${label} · ${parent.profileId} · revision ${parent.revision} is retained without embedded context; ${revisionNote}. Restore deliberately from the saved record.`
+        };
+      }
+      return {
+        state: 'unavailable',
+        parent,
+        saved: null,
+        message: `Pinned ${label} · ${parent.profileId} · revision ${parent.revision} is retained without embedded context, and its source record is unavailable in this browser's saved library.`
+      };
+    }
     if (!saved) {
       return {
         state: 'unavailable',
@@ -128,9 +148,13 @@
     select.disabled = !records.length;
     const reference = renderLinkedStatus(container, panel, definition);
     loadButton.disabled = !select.value;
-    loadButton.textContent = reference.state === 'stale' && select.value === reference.parent?.profileId
-      ? 'Refresh to Latest Parent'
-      : 'Load Saved Parent';
+    if (reference.state === 'unresolved' && select.value === reference.parent?.profileId) {
+      loadButton.textContent = 'Restore Parent Context';
+    } else if (reference.state === 'stale' && select.value === reference.parent?.profileId) {
+      loadButton.textContent = 'Refresh to Latest Parent';
+    } else {
+      loadButton.textContent = 'Load Saved Parent';
+    }
     clearButton.disabled = !current;
   }
 
@@ -138,7 +162,8 @@
     const select = container.querySelector('select');
     const profileId = select?.value;
     if (!profileId) return;
-    const previous = currentParent(panel, definition);
+    const previousReference = parentReferenceState(panel, definition);
+    const previous = previousReference.parent;
     const result = Repository.load(profileId);
     const status = container.querySelector('[data-parent-library-status]');
     if (!result.ok) {
@@ -160,9 +185,14 @@
     window.setTimeout(() => {
       renderLinkedStatus(container, panel, definition);
       Production()?.rebuildActive?.();
-      const action = previous?.profileId === result.envelope.profileId
-        ? `Refreshed inherited ${definition.id} from revision ${previous.revision} to revision ${result.envelope.revision}.`
-        : `Linked inherited ${definition.id} record ${result.envelope.name}.`;
+      let action;
+      if (previousReference.state === 'unresolved' && previous?.profileId === result.envelope.profileId) {
+        action = `Restored embedded context for inherited ${definition.id} ${result.envelope.name} at revision ${result.envelope.revision}.`;
+      } else if (previous?.profileId === result.envelope.profileId) {
+        action = `Refreshed inherited ${definition.id} from revision ${previous.revision} to revision ${result.envelope.revision}.`;
+      } else {
+        action = `Linked inherited ${definition.id} record ${result.envelope.name}.`;
+      }
       Lifecycle.markDirty(adapter.id, action, { autosave: true });
     }, 0);
   }
@@ -236,9 +266,9 @@
       .mainline-parent-library-heading strong{color:var(--accent);text-transform:capitalize}
       .mainline-parent-library-heading p{margin:.35rem 0;color:var(--muted);overflow-wrap:anywhere}
       .mainline-parent-library-heading p[data-reference-state="current"]{color:#9ed6a4}
-      .mainline-parent-library-heading p[data-reference-state="stale"]{color:#e7bf73}
+      .mainline-parent-library-heading p[data-reference-state="stale"],.mainline-parent-library-heading p[data-reference-state="unresolved"]{color:#e7bf73}
       .mainline-parent-library-heading p[data-reference-state="unavailable"],.mainline-parent-library-heading p[data-reference-state="ahead"],.mainline-parent-library-heading p[data-reference-state="error"]{color:#ff9b8b}
-      .mainline-parent-library-control[data-reference-state="stale"]{border-color:#e7bf73}
+      .mainline-parent-library-control[data-reference-state="stale"],.mainline-parent-library-control[data-reference-state="unresolved"]{border-color:#e7bf73}
       .mainline-parent-library-control[data-reference-state="unavailable"],.mainline-parent-library-control[data-reference-state="ahead"]{border-color:#ff9b8b}
       .mainline-parent-library-row{display:grid;grid-template-columns:minmax(240px,1fr) auto auto;gap:8px;align-items:end;margin-top:8px}
       .mainline-parent-library-row label{grid-column:1/-1;color:var(--muted);font-size:.76rem;font-weight:700;text-transform:capitalize}
