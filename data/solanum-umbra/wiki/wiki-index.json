@@ -1,13 +1,32 @@
 {
   "setting": "Solanum Umbra",
-  "schemaVersion": "0.1.1",
-  "status": "source-ingested-integration-deferred",
+  "schemaVersion": "0.2.0",
+  "status": "native-system-character-creation-pass-1-complete",
   "genre": "post-apocalyptic science-fantasy",
-  "description": "Dedicated wiki staging index for the Solanum Umbra TTRPG. The source manuscript is registered before multi-pass extraction, lore normalization, rules conversion, cross-linking, and tool development.",
+  "description": "Dedicated Solanum Umbra wiki index. The setting preserves its own native mechanics and terminology; no Hypertext d20, 3.5, or other external-system conversion layer is applied. The first import pass covers character creation, character-sheet fields, attributes, derived statistics, origins, careers, skills, motivations, ancestry and cyborg variants, the 49% full-cyberization threshold, and data-seizure progression.",
+  "mechanicsPolicy": {
+    "system": "Solanum Umbra native rules",
+    "conversion": "none",
+    "normalization": "structure, indexing, cross-linking, provenance, and interface fields only",
+    "ambiguityPolicy": "Record unclear or incomplete source mechanics for later native-system adjudication; do not silently replace them with rules from another game."
+  },
   "sourceDocuments": [
     "source-page-references/Solanum-Umbra-TTRPG.source.json"
   ],
-  "intendedBinaryPath": "source-page-references/Solanum-Umbra-TTRPG.pdf",
-  "binaryTransferStatus": "pending-binary-capable-repository-transfer",
-  "packs": []
+  "binaryPath": "SRC/Solanum-Umbra-TTRPG.pdf",
+  "binaryTransferStatus": "present-in-git-and-identity-verified",
+  "packs": [
+    "data/solanum-umbra/wiki/native-rules-pass-1-character-creation.json"
+  ],
+  "plannedNativePasses": [
+    "character-sheets-and-advancement",
+    "core-resolution-and-skills",
+    "combat-cover-vehicles-and-initiative",
+    "crafting-materials-complexity-and-quality",
+    "roles-careers-and-specializations",
+    "classes-and-progression",
+    "cybernetics-biotics-and-equipment",
+    "enemies-factions-and-combat-roles",
+    "entities-paranormal-bestiary-and-soul-hazards"
+  ]
 }
