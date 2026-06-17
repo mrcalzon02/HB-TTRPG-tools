@@ -64,6 +64,16 @@
     if (!panel.dataset[datasetEnvelopeKey]) throw new Error(`Canonical parent provenance was not stored in ${datasetEnvelopeKey}.`);
   }
 
+  function saveSessionReport(report) {
+    try {
+      window.sessionStorage?.setItem('hb-ttrpg-tools:p0-live-smoke:last-pass', JSON.stringify(report));
+      return true;
+    } catch (error) {
+      addResult('Session report', true, `Verification passed; browser storage declined the optional report: ${error.message}`);
+      return false;
+    }
+  }
+
   async function runSmokeTest() {
     if (!Kernel || !Production()) {
       addResult('Kernel', false, 'Shared kernel or production shell is unavailable.');
@@ -131,7 +141,7 @@
           inheritance: envelope.inheritance
         }))
       };
-      window.sessionStorage?.setItem('hb-ttrpg-tools:p0-live-smoke:last-pass', JSON.stringify(report));
+      saveSessionReport(report);
       addResult('P0 live smoke', true, 'All three editors opened through the shared shell and completed the inherited profile chain.');
     } catch (error) {
       addResult('P0 live smoke', false, error.message);
