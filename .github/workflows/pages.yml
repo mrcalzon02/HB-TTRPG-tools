@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -147,31 +147,46 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Run P0 browser verification
-        run: node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png
+        id: browser_verification
+        continue-on-error: true
+        run: node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png artifacts/p0-browser-verification-failure.json
 
       - name: Validate P0 browser verification receipt
+        if: ${{ steps.browser_verification.outcome == 'success' }}
         run: node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json
 
-      - name: Record passing P0 verification ledger
+      - name: Prepare durable P0 verification evidence
+        if: ${{ steps.browser_verification.outcome == 'success' || steps.browser_verification.outcome == 'failure' }}
         env:
+          BROWSER_OUTCOME: ${{ steps.browser_verification.outcome }}
           SOURCE_COMMIT: ${{ github.sha }}
           WORKFLOW_RUN_ID: ${{ github.run_id }}
         run: |
-          node scripts/record-p0-browser-verification.mjs record artifacts/p0-browser-verification.json data/kaysender/editors/verification/p0-browser-verification.latest.json "$SOURCE_COMMIT" "$WORKFLOW_RUN_ID"
-          node scripts/record-p0-browser-verification.mjs check data/kaysender/editors/verification/p0-browser-verification.latest.json
+          mkdir -p data/kaysender/editors/verification
+          if [ "$BROWSER_OUTCOME" = "success" ]; then
+            node scripts/record-p0-browser-verification.mjs record artifacts/p0-browser-verification.json data/kaysender/editors/verification/p0-browser-verification.latest.json "$SOURCE_COMMIT" "$WORKFLOW_RUN_ID"
+            node scripts/record-p0-browser-verification.mjs check data/kaysender/editors/verification/p0-browser-verification.latest.json
+          else
+            cp artifacts/p0-browser-verification-failure.json data/kaysender/editors/verification/p0-browser-verification.latest-failure.json
+          fi
 
-      - name: Commit passing P0 verification ledger
+      - name: Commit durable P0 verification evidence
+        if: ${{ steps.browser_verification.outcome == 'success' || steps.browser_verification.outcome == 'failure' }}
         env:
+          BROWSER_OUTCOME: ${{ steps.browser_verification.outcome }}
           SOURCE_COMMIT: ${{ github.sha }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/kaysender/editors/verification/p0-browser-verification.latest.json
+          git stash push --include-untracked -m p0-verification-evidence
+          git pull --rebase origin main
+          git stash pop
+          git add data/kaysender/editors/verification/
           if git diff --cached --quiet; then
-            echo "Verification ledger is unchanged."
+            echo "Verification evidence is unchanged."
             exit 0
           fi
-          git commit -m "Record passing P0 browser verification for ${SOURCE_COMMIT:0:12} [skip ci]"
+          git commit -m "Record ${BROWSER_OUTCOME} P0 browser verification for ${SOURCE_COMMIT:0:12} [skip ci]"
           git push origin HEAD:main
 
       - name: Upload P0 browser verification evidence
@@ -182,6 +197,12 @@ jobs:
           path: artifacts/
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Enforce P0 browser verification result
+        if: ${{ steps.browser_verification.outcome == 'failure' }}
+        run: |
+          echo "P0 browser verification failed. See durable failure evidence and uploaded artifacts."
+          exit 1
 
       - name: Remove browser test dependencies from Pages payload
         if: ${{ always() }}
