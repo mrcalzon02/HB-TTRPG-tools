@@ -75,7 +75,7 @@ for (const phrase of [
   'Seventy-five percent of the ingredient’s value',
   'Lady Auvrena',
   'Three Gentlemen of the Moon Pool',
-  'The second visualization says',
+  'The second says: the previous truth was incomplete',
   'Wait thirty days',
   'Seventy-two hours after the final visualization',
   '12 Transfiguration Reserve points'
