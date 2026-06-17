@@ -46,7 +46,9 @@ if (nestedResult.context.altitudeBand !== 'high altitude') fail('Nested island a
 if (nestedResult.context.derivedScores.habitability !== 16) fail('Nested island settlement viability was not adapted to habitability.');
 if (nestedResult.context.derivedScores.collapseRisk !== 5) fail('Nested island hazard pressure was not adapted to collapseRisk.');
 if (nestedResult.context.derivedScores.routeValue !== 16) fail('Nested island route reliability was not adapted to routeValue.');
-if (!nestedResult.envelope.provenance.migrationLog.some(item => item.code === 'nested-island-adapter')) fail('Nested island migration was not recorded.');
+const nestedMigrationCodes = nestedResult.envelope.provenance.migrationLog.map(item => item.code);
+if (nestedMigrationCodes.filter(code => code === 'nested-island-adapter').length !== 1) fail('Nested island adapter migration must be recorded exactly once.');
+if (nestedMigrationCodes.filter(code => code === 'legacy-profile-wrapped').length !== 1) fail('Legacy wrapping migration must be recorded exactly once.');
 
 const legacyResult = Kernel.normalizeImportedRecord(legacyIsland, {
   expectedTypes: ['floating-island-foundation-profile']
@@ -61,7 +63,8 @@ for (const [field, expected] of [
 ]) {
   if (legacyResult.context[field] !== expected) fail(`Legacy island field '${field}' was not preserved.`);
 }
-if (!legacyResult.envelope.provenance.migrationLog.some(item => item.code === 'flat-island-adapter')) fail('Legacy island migration was not recorded.');
+const legacyMigrationCodes = legacyResult.envelope.provenance.migrationLog.map(item => item.code);
+if (legacyMigrationCodes.filter(code => code === 'flat-island-adapter').length !== 1) fail('Legacy island adapter migration must be recorded exactly once.');
 
 const envelope = Kernel.createEnvelope(nestedIsland, {
   editorId: 'floating-island-editor',
@@ -73,13 +76,18 @@ if (envelopeDiagnostics.some(item => item.severity === 'error')) fail(`Created e
 if (!/^island-[a-z0-9-]+-[a-f0-9]{8,}$/.test(envelope.profileId)) fail('Stable island profile ID does not match the canonical pattern.');
 if (envelope.revision !== 1 || envelope.locks.join(',') !== 'name,sizeClass') fail('Initial revision or field locks are incorrect.');
 
-const unchanged = Kernel.createEnvelope(JSON.parse(JSON.stringify(nestedIsland)), {
+const volatileRebuild = {
+  ...JSON.parse(JSON.stringify(nestedIsland)),
+  generatedAt: '2099-01-01T00:00:00.000Z'
+};
+const unchanged = Kernel.createEnvelope(volatileRebuild, {
   existingEnvelope: envelope,
   editorId: 'floating-island-editor',
   moduleId: 'floating-island-generator',
   locks: ['sizeClass', 'name']
 });
 if (unchanged.revision !== 1 || unchanged.updatedAt !== envelope.updatedAt) fail('Unchanged profile validation or export advanced its revision or update timestamp.');
+if (unchanged.data.generatedAt !== envelope.data.generatedAt) fail('Volatile rebuild timestamp replaced canonical data without a substantive revision.');
 
 const revision = Kernel.createEnvelope({ ...nestedIsland, name: 'Aster Reach Revised' }, {
   existingEnvelope: unchanged,
@@ -148,4 +156,4 @@ if ([kernelPosition, islandPosition, settlementPosition, airshipPosition, produc
 if (!(kernelPosition < islandPosition && islandPosition < settlementPosition && settlementPosition < airshipPosition && airshipPosition < productionPosition)) fail('P0 editor scripts are loaded in the wrong order.');
 
 console.log('Shared editor kernel validation passed.');
-console.log('Verified canonical envelopes, stable and change-sensitive revisions, explicit-only draft deletion, nested and flat island adapters, wrong-profile diagnostics, malformed JSON diagnostics, shared actions, all three alpha editor panels, and main-page script ordering.');
+console.log('Verified canonical envelopes, stable and change-sensitive revisions, volatile timestamp handling, deduplicated migrations, explicit-only draft deletion, nested and flat island adapters, wrong-profile diagnostics, malformed JSON diagnostics, shared actions, all three alpha editor panels, and main-page script ordering.');
