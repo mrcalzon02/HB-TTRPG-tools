@@ -1,0 +1,11 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "status": "source-ingested-integration-deferred",
+  "genre": "post-apocalyptic science-fantasy",
+  "description": "Dedicated wiki staging index for the Solanum Umbra TTRPG. The source manuscript is retained intact before multi-pass extraction, lore normalization, rules conversion, cross-linking, and tool development.",
+  "sourceDocuments": [
+    "source-page-references/Solanum-Umbra-TTRPG.pdf"
+  ],
+  "packs": []
+}
