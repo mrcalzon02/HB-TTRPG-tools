@@ -6,7 +6,7 @@ const root = process.cwd();
 const indexPath = path.join(root,'data','solanum-umbra','wiki','wiki-index.json');
 const index = JSON.parse(await fs.readFile(indexPath,'utf8'));
 
-if (index.setting !== 'Solanum Umbra' || index.schemaVersion !== '0.3.0') throw new Error('Unexpected Solanum Umbra wiki identity or schema.');
+if (index.setting !== 'Solanum Umbra' || index.schemaVersion !== '0.4.0') throw new Error('Unexpected Solanum Umbra wiki identity or schema.');
 if (index.status !== 'native-foundation-import-active') throw new Error('Solanum Umbra native foundation import is not marked active.');
 if (index.mechanicsPolicy?.system !== 'Solanum Umbra native rules' || index.mechanicsPolicy?.conversion !== 'none') throw new Error('Solanum Umbra must preserve its native rules without external conversion.');
 if (!index.mechanicsPolicy?.ambiguityPolicy?.includes('unclear') || !index.mechanicsPolicy?.ambiguityPolicy?.includes('conflicting')) throw new Error('Solanum Umbra ambiguity policy is incomplete.');
@@ -18,7 +18,8 @@ const expectedPacks = [
   'data/solanum-umbra/wiki/native-rules-pass-3-crafting-resources.json',
   'data/solanum-umbra/wiki/native-rules-pass-4-combat-cover-vehicles.json',
   'data/solanum-umbra/wiki/native-rules-pass-5-entity-generator.json',
-  'data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json'
+  'data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json',
+  'data/solanum-umbra/wiki/native-rules-pass-6-cybernetics-biotics-degradation.json'
 ];
 if (!Array.isArray(index.packs) || index.packs.length !== expectedPacks.length) throw new Error('Unexpected Solanum Umbra pack count.');
 for (let i = 0; i < expectedPacks.length; i += 1) if (index.packs[i] !== expectedPacks[i]) throw new Error(`Unexpected Solanum pack ordering at ${i + 1}.`);
@@ -33,7 +34,7 @@ for (const packPath of expectedPacks) {
 }
 
 const allEntries = packs.flatMap(pack => pack.entries);
-if (allEntries.length !== 25) throw new Error(`Expected 25 imported entries, found ${allEntries.length}.`);
+if (allEntries.length !== 29) throw new Error(`Expected 29 imported entries, found ${allEntries.length}.`);
 const entries = new Map();
 for (const entry of allEntries) {
   if (entries.has(entry.id)) throw new Error(`Duplicate Solanum entry id '${entry.id}'.`);
@@ -53,7 +54,8 @@ const requiredIds = [
   'solanum-career-talent-system','solanum-background-generation-system','solanum-native-action-and-equipment-requirements',
   'solanum-item-creation-system','solanum-crafting-support-modifiers','solanum-resource-and-communications-tiers',
   'solanum-core-combat-system','solanum-native-skills-actions','solanum-action-economy-grid-zoc','solanum-melee-combat-modes','solanum-ranged-cover-camouflage','solanum-vehicle-combat-framework',
-  'solanum-fay-entity-generator','solanum-unit-zero-forces','solanum-techno-phantom-collective','solanum-bio-machine-juggernauts','solanum-anarchic-swarm','solanum-synthesis-enemy-role-roster'
+  'solanum-fay-entity-generator','solanum-unit-zero-forces','solanum-techno-phantom-collective','solanum-bio-machine-juggernauts','solanum-anarchic-swarm','solanum-synthesis-enemy-role-roster',
+  'solanum-cybernetic-replacement-framework','solanum-biotic-enhancement-catalogue','solanum-secure-cybernetic-interfaces','solanum-long-term-cybernetic-degradation'
 ];
 for (const id of requiredIds) if (!entries.has(id)) throw new Error(`Missing required Solanum entry '${id}'.`);
 
@@ -164,10 +166,39 @@ if (factionCounts.size !== 4 || [...factionCounts.values()].some(count => count 
 if (roles.size !== 9) throw new Error('Enemy roster must contain nine recurring battlefield roles.');
 if (roster.enemyProfiles.filter(profile => profile.name === 'The Devourers').length !== 2) throw new Error('The duplicated Devourer name must remain faction-separated.');
 
+const cyber = entries.get('solanum-cybernetic-replacement-framework');
+const cyberTables = tableMap(cyber);
+requireTable(cyberTables,'solanum-cybernetic-tech-levels',5);
+const bodyParts = requireTable(cyberTables,'solanum-cybernetic-body-part-costs',8);
+requireTable(cyberTables,'solanum-cybernetic-installation',5);
+requireTable(cyberTables,'solanum-prosthetic-performance',5);
+requireTable(cyberTables,'solanum-cybernetic-body-percentage',5);
+requireTable(cyberTables,'solanum-biotic-power-requirements',5);
+const eliteUpperArm = bodyParts.rows.find(row => row[0] === 'Upper Arm');
+if (!eliteUpperArm || eliteUpperArm[4] !== '7,500') throw new Error('Elite upper-arm cost must remain 7,500 credits.');
+if (cyber.workedExample?.sourceFinalCost !== '7,500 credits' || !cyber.workedExample?.formulaStatus?.includes('inconsistent')) throw new Error('Cybernetic cost conflict or worked example was lost.');
+if (cyber.sourceStatus !== 'source-native-mechanics-with-explicit-conflict') throw new Error('Cybernetic formula conflict must remain explicit.');
+
+const enhancements = requireTable(tableMap(entries.get('solanum-biotic-enhancement-catalogue')),'solanum-biotic-enhancements',12);
+if (!enhancements.rows.some(row => row[0] === 'Temporal Manipulator' && row[6] === '75,000-150,000')) throw new Error('Temporal Manipulator catalogue record is incorrect.');
+if (!enhancements.rows.some(row => row[0] === 'Quantum Processor Unit' && row[1] === 'Elite')) throw new Error('Quantum Processor catalogue record is missing.');
+
+const security = entries.get('solanum-secure-cybernetic-interfaces');
+requireTable(tableMap(security),'solanum-cybernetic-security-practices',6);
+const securityText = [security.summary,...security.body].join(' ').toLowerCase();
+for (const phrase of ['wireless','direct physical cables','isolated data-interface terminals','social stigma']) if (!securityText.includes(phrase)) throw new Error(`Cybernetic security entry lacks '${phrase}'.`);
+
+const degradation = entries.get('solanum-long-term-cybernetic-degradation');
+const degradationTable = requireTable(tableMap(degradation),'solanum-cybernetic-degradation',21);
+if (degradation.procedure?.length !== 6) throw new Error('Cybernetic degradation procedure must contain six steps.');
+if (degradationTable.rows[0][0] !== '0-10' || degradationTable.rows[20][2] !== 'Fatal System Failure') throw new Error('Cybernetic degradation endpoints are incorrect.');
+if (!degradation.body.join(' ').includes('once every 1d6 years')) throw new Error('The 40+ recurring degradation schedule was lost.');
+if (degradationTable.rows.filter(row => row[0] === '40+').length !== 5) throw new Error('The 40+ degradation band must contain five outcomes.');
+
 const serialized = JSON.stringify(packs);
 for (const forbidden of ['baseAttack','challengeRating','savingThrow','spellLevel','Hypertext d20 / 3.5-compatible']) if (serialized.includes(forbidden)) throw new Error(`External-system field '${forbidden}' leaked into Solanum data.`);
 
-if (index.completedScope?.wikiEntries !== 25 || index.completedScope?.nativePacks !== 6 || index.completedScope?.namedForceRoles !== 36) throw new Error('Solanum index completed scope does not match imported data.');
+if (index.completedScope?.wikiEntries !== 29 || index.completedScope?.nativePacks !== 7 || index.completedScope?.namedForceRoles !== 36 || index.completedScope?.bioticEnhancements !== 12 || index.completedScope?.degradationOutcomes !== 21) throw new Error('Solanum index completed scope does not match imported data.');
 
 console.log('Solanum Umbra native wiki validation passed.');
-console.log('Verified six native packs, twenty-five entries, character and career systems, sixty career talents, six background tables, crafting, combat and vehicles, seven entity-generator tables, four enemy factions, and thirty-six named force roles.');
+console.log('Verified seven native packs, twenty-nine entries, character and career systems, crafting, combat and vehicles, entity generation, four enemy factions, thirty-six force roles, cybernetic replacement, twelve enhancements, and twenty-one long-term degradation outcomes.');
