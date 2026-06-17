@@ -146,14 +146,22 @@
       setStatus('The cloned record could not be loaded into the active editor.', 'error');
       return;
     }
-    const result = Repository.save(clone);
+    const saveVersion = Lifecycle.checkpoint(editorId);
+    await wait(40);
+    const activeClone = Production()?.getActiveEnvelope?.() || imported || clone;
+    const result = Repository.save(activeClone);
+    if (!result.ok) {
+      setStatus(result.message, 'error');
+      refresh();
+      return;
+    }
+    const cleanResult = Lifecycle.markCleanIfUnchanged(editorId, saveVersion, `Saved cloned record ${activeClone.name}.`);
     setStatus(
-      result.ok
-        ? `Saved a new clone with profile ID ${clone.profileId}; original ${source.profileId} was not overwritten.`
-        : result.message,
-      result.ok ? 'success' : 'error'
+      cleanResult.ok
+        ? `Saved a new clone with profile ID ${activeClone.profileId}; original ${source.profileId} was not overwritten.`
+        : `Saved clone ${activeClone.profileId}, but newer edits remain unsaved.`,
+      cleanResult.ok ? 'success' : 'warning'
     );
-    if (result.ok) Lifecycle.markClean(editorId, `Saved cloned record ${clone.name}.`);
     refresh();
   }
 
@@ -173,8 +181,7 @@
       setStatus('The saved record could not be loaded into the active editor.', 'error');
       return;
     }
-    Lifecycle.markClean(editorId, `Opened saved record ${result.envelope.name}.`);
-    setStatus(`Opened ${result.envelope.name} with stable profile ID ${result.envelope.profileId}.`, 'success');
+    setStatus(`Opened ${result.envelope.name} with stable profile ID ${result.envelope.profileId}. Recovery draft synchronization is in progress.`, 'success');
     refresh();
   }
 
