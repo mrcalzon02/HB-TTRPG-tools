@@ -35,6 +35,9 @@ jobs:
       - name: Validate main-line editor roadmap
         run: node scripts/validate-editor-roadmap.mjs
 
+      - name: Validate shared editor kernel
+        run: node scripts/validate-editor-kernel.mjs
+
       - name: Validate arcane academic curricula
         run: node scripts/validate-arcane-academic-generator.mjs
 
@@ -70,6 +73,8 @@ jobs:
           node --check kaysender-wiki.js
           node --check kaysender-crafting-generator.js
           node --check kaysender-npc-generator.js
+          node --check kaysender-editor-kernel.js
+          node --check kaysender-editor-production.js
           node --check spell-creator-vocabulary.js
           node --check spell-creator-mechanics.js
           node --check module-spell-creator.js
