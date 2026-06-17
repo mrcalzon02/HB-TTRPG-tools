@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "storage": "canonical-source-receipts",
   "binaryTransferStatus": "pending-binary-capable-repository-transfer",
   "documents": [
@@ -14,7 +14,7 @@
       "receipt": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json",
       "intendedBinaryPath": "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.pdf",
       "binaryPresentInGit": false,
-      "integrationStatus": "dedicated-wiki-creature-reference-pass-1-complete",
+      "integrationStatus": "dedicated-wiki-creature-reference-pass-3-complete",
       "wikiDestination": "data/elemental-realms/wiki/wiki-index.json"
     },
     {
