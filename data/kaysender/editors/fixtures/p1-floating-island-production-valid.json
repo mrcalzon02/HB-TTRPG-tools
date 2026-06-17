@@ -1,0 +1,459 @@
+{
+  "schemaVersion": "3.0.0",
+  "profileType": "floating-island-foundation-profile",
+  "name": "Aster Reach Production Draft",
+  "classification": {
+    "sizeClass": "regional island",
+    "shapeProfile": "broad tabular plateau",
+    "currentUse": "settled agricultural hub",
+    "sovereignty": "Aster Reach civic compact",
+    "surveyStatus": "survey-grade"
+  },
+  "geometry": {
+    "lengthKm": 18.4,
+    "widthKm": 11.2,
+    "meanThicknessM": 740,
+    "planAreaKm2": 164,
+    "usableAreaKm2": 108.2,
+    "flatAreaKm2": 78,
+    "arableAreaKm2": 34.6,
+    "grossVolumeKm3": 121.36,
+    "estimatedMassMillionTons": 254856,
+    "coordinateSystem": "local-grid-v1",
+    "mapScaleKmPerCell": 6
+  },
+  "composition": {
+    "ordinaryRockPercent": 47,
+    "floatstonePercent": 28,
+    "soilSedimentPercent": 17,
+    "cavernVoidPercent": 8
+  },
+  "map": {
+    "columns": 2,
+    "rows": 2,
+    "activeCellIds": [
+      "cell-western-port",
+      "cell-central-pasture",
+      "cell-northern-basin",
+      "cell-eastern-rim"
+    ],
+    "cells": [
+      {
+        "id": "cell-western-port",
+        "x": 0,
+        "y": 0,
+        "areaKm2": 41,
+        "terrainType": "cliff shelf and worked harbor",
+        "elevationM": 4210,
+        "slopeClass": "mixed shelf",
+        "usablePercent": 74,
+        "arablePercent": 8,
+        "waterCatchmentId": "water-western-springs",
+        "siteIds": ["site-western-skyport"],
+        "resourceNodeIds": [],
+        "hazardIds": ["hazard-western-shear"]
+      },
+      {
+        "id": "cell-central-pasture",
+        "x": 1,
+        "y": 0,
+        "areaKm2": 41,
+        "terrainType": "pasture plateau",
+        "elevationM": 4240,
+        "slopeClass": "gentle",
+        "usablePercent": 88,
+        "arablePercent": 64,
+        "waterCatchmentId": "water-central-catchment",
+        "siteIds": ["site-central-cistern"],
+        "resourceNodeIds": ["resource-central-iron"],
+        "hazardIds": []
+      },
+      {
+        "id": "cell-northern-basin",
+        "x": 0,
+        "y": 1,
+        "areaKm2": 41,
+        "terrainType": "wet basin and orchard terraces",
+        "elevationM": 4160,
+        "slopeClass": "basin",
+        "usablePercent": 71,
+        "arablePercent": 54,
+        "waterCatchmentId": "water-northern-lake",
+        "siteIds": [],
+        "resourceNodeIds": [],
+        "hazardIds": []
+      },
+      {
+        "id": "cell-eastern-rim",
+        "x": 1,
+        "y": 1,
+        "areaKm2": 41,
+        "terrainType": "fractured ridge and exposed seams",
+        "elevationM": 4380,
+        "slopeClass": "steep",
+        "usablePercent": 31,
+        "arablePercent": 5,
+        "waterCatchmentId": null,
+        "siteIds": ["site-eastern-sealed-ruin"],
+        "resourceNodeIds": ["resource-eastern-skystone"],
+        "hazardIds": ["hazard-eastern-fracture"]
+      }
+    ]
+  },
+  "hydrology": {
+    "annualRainfallMm": 880,
+    "sources": [
+      {
+        "id": "water-western-springs",
+        "mapCellId": "cell-western-port",
+        "type": "spring network",
+        "potable": true,
+        "averageDailyLiters": 720000,
+        "seasonality": "stable year-round",
+        "status": "active"
+      },
+      {
+        "id": "water-central-catchment",
+        "mapCellId": "cell-central-pasture",
+        "type": "roof and field catchment",
+        "potable": true,
+        "averageDailyLiters": 480000,
+        "seasonality": "reduced during dry quarter",
+        "status": "active"
+      },
+      {
+        "id": "water-northern-lake",
+        "mapCellId": "cell-northern-basin",
+        "type": "perched lake",
+        "potable": true,
+        "averageDailyLiters": 900000,
+        "seasonality": "stable with storm overflow",
+        "status": "active"
+      }
+    ],
+    "reservoirs": [
+      {
+        "id": "reservoir-central-cistern",
+        "mapCellId": "cell-central-pasture",
+        "capacityM3": 72000,
+        "currentVolumeM3": 61000,
+        "potable": true,
+        "status": "operational"
+      }
+    ],
+    "annualRenewableM3": 766500,
+    "dailySustainableLiters": 2100000,
+    "storedWaterM3": 61000,
+    "reserveDaysAtCurrentUse": 29,
+    "systemLossPercent": 11
+  },
+  "foodCapacity": {
+    "arableAreaKm2": 34.6,
+    "pastureAreaKm2": 21,
+    "forageAreaKm2": 18,
+    "annualFoodUnits": 9400,
+    "sustainablePopulation": 8100,
+    "emergencyPopulation90Days": 12800,
+    "importDependencyPercent": 14
+  },
+  "resources": {
+    "nodes": [
+      {
+        "id": "resource-central-iron",
+        "mapCellId": "cell-central-pasture",
+        "resourceType": "iron and copper seams",
+        "quality": "commercial",
+        "estimatedReserveTons": 920000,
+        "annualSafeExtractionTons": 7600,
+        "status": "active"
+      },
+      {
+        "id": "resource-eastern-skystone",
+        "mapCellId": "cell-eastern-rim",
+        "resourceType": "skystone and floatstone-bearing ore",
+        "quality": "high but structurally sensitive",
+        "estimatedReserveTons": 210000,
+        "annualSafeExtractionTons": 800,
+        "status": "surveyed"
+      }
+    ],
+    "annualSafeExtractionTons": 8400,
+    "currentAnnualExtractionTons": 6100
+  },
+  "motion": {
+    "meanAltitudeM": 4200,
+    "altitudeTimeline": [
+      {
+        "id": "altitude-segment-dry-quarter",
+        "startDay": 0,
+        "endDay": 90,
+        "minimumAltitudeM": 4050,
+        "maximumAltitudeM": 4280,
+        "confidence": "high"
+      },
+      {
+        "id": "altitude-segment-storm-quarter",
+        "startDay": 91,
+        "endDay": 180,
+        "minimumAltitudeM": 4140,
+        "maximumAltitudeM": 4480,
+        "confidence": "moderate"
+      }
+    ],
+    "driftTimeline": [
+      {
+        "id": "drift-segment-westward",
+        "startDay": 0,
+        "endDay": 90,
+        "bearingDegrees": 274,
+        "averageKmPerDay": 31,
+        "confidence": "high"
+      },
+      {
+        "id": "drift-segment-southward",
+        "startDay": 91,
+        "endDay": 180,
+        "bearingDegrees": 191,
+        "averageKmPerDay": 37,
+        "confidence": "moderate"
+      }
+    ],
+    "forecastHorizonDays": 180
+  },
+  "stability": {
+    "structuralIntegrity": "stable plateau with monitored eastern fault",
+    "overallRisk": "guarded",
+    "annualSurfaceLossPercent": 0.06,
+    "faultZones": [
+      {
+        "id": "fault-eastern-rim",
+        "cellIds": ["cell-eastern-rim"],
+        "risk": "high",
+        "status": "monitored",
+        "trigger": "rapid altitude surge or excessive skystone extraction",
+        "estimatedLossKm2": 3.2
+      }
+    ],
+    "fractureEvents": [
+      {
+        "id": "fracture-event-east-shelf-12",
+        "day": 12,
+        "faultZoneId": "fault-eastern-rim",
+        "severity": "minor",
+        "surfaceLossKm2": 0.03,
+        "notes": "An abandoned quarry lip detached during an altitude surge."
+      }
+    ],
+    "emergencyThreshold": "evacuate the eastern rim if displacement exceeds 0.4 metres in seven days"
+  },
+  "approaches": {
+    "landingZones": [
+      {
+        "id": "landing-western-skyport",
+        "name": "Western Skyport",
+        "mapCellId": "cell-western-port",
+        "type": "cliff-dock",
+        "maximumVesselClass": "regional freighter",
+        "dailyCapacity": 18,
+        "weatherLimit": "closed during crosswinds above 70 km/h",
+        "status": "operational"
+      }
+    ],
+    "approachCorridors": [
+      {
+        "id": "approach-western-lane",
+        "landingZoneId": "landing-western-skyport",
+        "bearingDegrees": 262,
+        "minimumAltitudeM": 3900,
+        "maximumAltitudeM": 4650,
+        "hazardIds": ["hazard-western-shear"],
+        "pilotRequirement": "local chart certification during storm quarter"
+      }
+    ]
+  },
+  "sites": [
+    {
+      "id": "site-western-skyport",
+      "name": "Western Skyport",
+      "type": "transport hub",
+      "mapCellId": "cell-western-port",
+      "status": "active",
+      "visibility": "public",
+      "maximumFootprintKm2": 1.8,
+      "tags": ["dock", "market", "customs"]
+    },
+    {
+      "id": "site-central-cistern",
+      "name": "Central Cistern Works",
+      "type": "water infrastructure",
+      "mapCellId": "cell-central-pasture",
+      "status": "active",
+      "visibility": "known-locally",
+      "maximumFootprintKm2": 0.4,
+      "tags": ["water", "infrastructure", "critical"]
+    },
+    {
+      "id": "site-eastern-sealed-ruin",
+      "name": "Sealed Eastern Observatory",
+      "type": "ruin",
+      "mapCellId": "cell-eastern-rim",
+      "status": "sealed",
+      "visibility": "gm-only",
+      "maximumFootprintKm2": 0.7,
+      "tags": ["ruin", "hidden", "fault-zone"]
+    }
+  ],
+  "hazards": [
+    {
+      "id": "hazard-western-shear",
+      "name": "Western Crosswind Shear",
+      "type": "approach weather",
+      "cellIds": ["cell-western-port"],
+      "severity": "moderate",
+      "visibility": "public",
+      "status": "seasonal"
+    },
+    {
+      "id": "hazard-eastern-fracture",
+      "name": "Eastern Rim Fracture Zone",
+      "type": "structural fault",
+      "cellIds": ["cell-eastern-rim"],
+      "severity": "major",
+      "visibility": "known-locally",
+      "status": "active"
+    }
+  ],
+  "ecology": {
+    "habitats": [
+      {
+        "id": "habitat-central-pasture",
+        "name": "Central Pasture Mosaic",
+        "cellIds": ["cell-central-pasture", "cell-northern-basin"],
+        "areaKm2": 52,
+        "condition": "healthy",
+        "capacityIndex": 76
+      }
+    ],
+    "speciesSlots": [
+      {
+        "id": "species-slot-sheffel-herds",
+        "habitatId": "habitat-central-pasture",
+        "role": "primary grazer",
+        "populationBand": "large managed herds",
+        "status": "stable"
+      }
+    ],
+    "carryingCapacityIndex": 72,
+    "currentPressure": "stable"
+  },
+  "settlementCapacity": {
+    "waterLimitedPopulation": 10500,
+    "foodLimitedPopulation": 8100,
+    "landLimitedPopulation": 9600,
+    "sustainablePopulation": 8100,
+    "emergencyPopulation": 12800,
+    "settlementSlots": [
+      {
+        "id": "settlement-slot-western-port",
+        "mapCellId": "cell-western-port",
+        "maximumPopulation": 7600,
+        "maximumFootprintKm2": 8.4,
+        "waterSourceIds": ["water-western-springs", "water-central-catchment"],
+        "landingZoneIds": ["landing-western-skyport"],
+        "status": "occupied"
+      }
+    ]
+  },
+  "routeNodeExport": {
+    "nodes": [
+      {
+        "id": "route-node-western-skyport",
+        "name": "Aster Reach Western Skyport",
+        "mapCellId": "cell-western-port",
+        "landingZoneIds": ["landing-western-skyport"],
+        "altitudeBand": "4000-4600 metres",
+        "services": ["water", "food", "routine repair", "cargo exchange", "charts"],
+        "status": "active"
+      }
+    ],
+    "defaultNodeId": "route-node-western-skyport",
+    "routeCapability": {
+      "maximumDailyArrivals": 18,
+      "resupplyWater": true,
+      "resupplyFood": true,
+      "repairCapability": "routine",
+      "chartConfidence": "survey-grade"
+    }
+  },
+  "derived": {
+    "geometryReconciles": true,
+    "compositionReconciles": true,
+    "mapAreaReconciles": true,
+    "waterCapacityReconciles": true,
+    "foodCapacityReconciles": true,
+    "settlementCapacityReconciles": true,
+    "brokenReferenceIds": [],
+    "warnings": [
+      "The eastern skystone deposit must remain below its annual safe extraction limit.",
+      "Food capacity, not water or land, is the current population constraint."
+    ]
+  },
+  "visibility": {
+    "playerKnownSiteIds": ["site-western-skyport", "site-central-cistern"],
+    "gmOnlySiteIds": ["site-eastern-sealed-ruin"],
+    "playerKnownHazardIds": ["hazard-western-shear", "hazard-eastern-fracture"],
+    "gmOnlyHazardIds": [],
+    "publicFacts": [
+      "Aster Reach is a major agricultural stop on a charted regional route.",
+      "The Western Skyport closes during severe crosswinds.",
+      "The eastern rim is under structural monitoring."
+    ],
+    "gmSecrets": [
+      "The sealed eastern observatory contains instruments that can alter local drift.",
+      "The Surveyor's Guild has concealed a worsening displacement reading from the civic council."
+    ]
+  },
+  "outputs": {
+    "playerSafeSummary": "Aster Reach is a broad agricultural skyland with a reliable western skyport, abundant water, and a monitored eastern fault zone.",
+    "gmBrief": "Food capacity is the immediate growth limit. Eastern skystone extraction and the sealed observatory can turn the monitored fault into a campaign crisis.",
+    "wikiDraft": {
+      "id": "aster-reach-production",
+      "title": "Aster Reach",
+      "category": "Floating Islands",
+      "sourceStatus": "editor-draft"
+    },
+    "downstreamExports": {
+      "population": {
+        "sustainablePopulation": 8100,
+        "emergencyPopulation": 12800
+      },
+      "settlement": {
+        "settlementSlotIds": ["settlement-slot-western-port"],
+        "maximumPopulation": 8100
+      },
+      "ecology": {
+        "habitatIds": ["habitat-central-pasture"],
+        "pressure": "stable"
+      },
+      "route": {
+        "routeNodeIds": ["route-node-western-skyport"],
+        "forecastHorizonDays": 180
+      },
+      "market": {
+        "exportCapacityTons": 6100,
+        "importDependencyPercent": 14
+      },
+      "faction": {
+        "claimableSiteIds": ["site-western-skyport", "site-eastern-sealed-ruin"]
+      },
+      "crisis": {
+        "faultZoneIds": ["fault-eastern-rim"],
+        "reserveDaysAtCurrentUse": 29
+      },
+      "encounter": {
+        "siteIds": ["site-eastern-sealed-ruin"],
+        "hazardIds": ["hazard-western-shear", "hazard-eastern-fracture"]
+      }
+    }
+  }
+}
