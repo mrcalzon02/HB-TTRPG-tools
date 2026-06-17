@@ -17,7 +17,7 @@
       const data = JSON.parse(raw);
       if (shouldReplace(data.title)) {
         data.title = NEW_TITLE;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
       }
     } catch (_) {
       // Leave unreadable local storage alone.
@@ -37,10 +37,10 @@
     const printTitle = document.getElementById('print-title');
     if (input && shouldReplace(input.value)) input.value = NEW_TITLE;
     if (printTitle && shouldReplace(printTitle.textContent)) printTitle.textContent = input?.value || NEW_TITLE;
-    input?.addEventListener('input', syncPrintTitle);
+    input?.addEventListener('input',syncPrintTitle);
   }
 
-  function loadScriptOnce(src, attributeName, datasetKey) {
+  function loadScriptOnce(src,attributeName,datasetKey) {
     if (document.querySelector(`script[${attributeName}]`)) return;
     const script = document.createElement('script');
     script.src = src;
@@ -50,18 +50,19 @@
   }
 
   function loadSupplementalGenerators() {
-    loadScriptOnce('spell-creator-entry.js', 'data-spell-creator-entry', 'spellCreatorEntry');
-    loadScriptOnce('eccentric-spell-entry.js', 'data-eccentric-spell-entry', 'eccentricSpellEntry');
-    loadScriptOnce('arcane-academic-entry.js', 'data-arcane-academic-entry', 'arcaneAcademicEntry');
-    loadScriptOnce('malefic-academic-entry.js', 'data-malefic-academic-entry', 'maleficAcademicEntry');
-    loadScriptOnce('magical-library-entry.js', 'data-magical-library-entry', 'magicalLibraryEntry');
-    loadScriptOnce('kaysender-npc-generator.js', 'data-npc-generator', 'npcGenerator');
-    loadScriptOnce('kaysender-crafting-generator.js', 'data-crafting-generator', 'craftingGenerator');
+    loadScriptOnce('spell-creator-entry.js','data-spell-creator-entry','spellCreatorEntry');
+    loadScriptOnce('eccentric-spell-entry.js','data-eccentric-spell-entry','eccentricSpellEntry');
+    loadScriptOnce('arcane-academic-entry.js','data-arcane-academic-entry','arcaneAcademicEntry');
+    loadScriptOnce('malefic-academic-entry.js','data-malefic-academic-entry','maleficAcademicEntry');
+    loadScriptOnce('magical-library-entry.js','data-magical-library-entry','magicalLibraryEntry');
+    loadScriptOnce('solanum-umbra-entry.js','data-solanum-umbra-entry','solanumUmbraEntry');
+    loadScriptOnce('kaysender-npc-generator.js','data-npc-generator','npcGenerator');
+    loadScriptOnce('kaysender-crafting-generator.js','data-crafting-generator','craftingGenerator');
   }
 
   applyTitle();
   loadSupplementalGenerators();
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded',() => {
     applyTitle();
     loadSupplementalGenerators();
   });
