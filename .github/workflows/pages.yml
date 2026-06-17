@@ -50,6 +50,9 @@ jobs:
       - name: Validate Elemental Realms creature wiki
         run: node scripts/validate-elemental-realms-wiki.mjs
 
+      - name: Validate Kaysender Warlock of the Swamp
+        run: node scripts/validate-kaysender-warlock-of-the-swamp.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
