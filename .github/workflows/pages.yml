@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -84,6 +84,7 @@ jobs:
           node --check kaysender-editor-live-smoke.js
           node --check scripts/run-p0-browser-verification.mjs
           node --check scripts/validate-p0-browser-verification.mjs
+          node --check scripts/record-p0-browser-verification.mjs
           node --check spell-creator-vocabulary.js
           node --check spell-creator-mechanics.js
           node --check module-spell-creator.js
@@ -150,6 +151,28 @@ jobs:
 
       - name: Validate P0 browser verification receipt
         run: node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json
+
+      - name: Record passing P0 verification ledger
+        env:
+          SOURCE_COMMIT: ${{ github.sha }}
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+        run: |
+          node scripts/record-p0-browser-verification.mjs record artifacts/p0-browser-verification.json data/kaysender/editors/verification/p0-browser-verification.latest.json "$SOURCE_COMMIT" "$WORKFLOW_RUN_ID"
+          node scripts/record-p0-browser-verification.mjs check data/kaysender/editors/verification/p0-browser-verification.latest.json
+
+      - name: Commit passing P0 verification ledger
+        env:
+          SOURCE_COMMIT: ${{ github.sha }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/kaysender/editors/verification/p0-browser-verification.latest.json
+          if git diff --cached --quiet; then
+            echo "Verification ledger is unchanged."
+            exit 0
+          fi
+          git commit -m "Record passing P0 browser verification for ${SOURCE_COMMIT:0:12} [skip ci]"
+          git push origin HEAD:main
 
       - name: Upload P0 browser verification evidence
         if: ${{ !cancelled() }}
