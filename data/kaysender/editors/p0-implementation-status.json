@@ -4,11 +4,14 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "title": "Shared Editor Kernel and Profile Contract",
-  "status": "implementation-committed-awaiting-ci-and-browser-verification",
+  "status": "framework-implementation-active",
   "activeBranch": "main",
   "parallelMainLineEditors": 1,
   "implementedOutputs": {
     "sharedEditorShell": true,
+    "editorAdapterContract": true,
+    "editorAdapterRegistry": true,
+    "genericEditorLifecycle": true,
     "canonicalProfileEnvelope": true,
     "stableProfileIds": true,
     "profileSchemaVersions": true,
@@ -17,6 +20,7 @@
     "fieldLocking": true,
     "selectiveRandomization": true,
     "localDraftPersistence": true,
+    "blankRecordClearsRecoveryDraft": true,
     "sharedJsonImportExport": true,
     "sharedWikiDraftExport": true,
     "validationAndDiagnostics": true,
@@ -37,8 +41,7 @@
     "Export canonical JSON",
     "Export wiki draft",
     "Show provenance and inheritance",
-    "Show diagnostics and recoverable errors",
-    "Run P0 browser verification"
+    "Show diagnostics and recoverable errors"
   ],
   "compatibilityFixtures": [
     "data/kaysender/editors/fixtures/island-current-nested.json",
@@ -46,6 +49,8 @@
   ],
   "runtimeFiles": [
     "kaysender-editor-kernel.js",
+    "kaysender-editor-adapter-registry.js",
+    "kaysender-editor-builtins.js",
     "kaysender-editor-production.js",
     "kaysender-editor-error-boundary.js",
     "kaysender-editor-live-smoke.js"
@@ -62,29 +67,30 @@
   "exitCriteria": [
     {
       "criterion": "All three existing alpha editors can open through the shared shell",
-      "implementationState": "implemented",
-      "verificationState": "automated-structure-check-browser-harness-and-receipt-contract-installed-execution-pending"
+      "implementationState": "implemented-through-registered-adapters",
+      "verificationState": "pending-final-runtime-check"
     },
     {
       "criterion": "Current island profiles import into settlement and airship editors without flat-field assumptions",
-      "implementationState": "implemented",
-      "verificationState": "nested-and-flat-fixtures-covered-by-automated-validator-and-browser-chain"
+      "implementationState": "implemented-through-generic-parent-import-contract",
+      "verificationState": "nested-and-flat-fixtures-covered"
     },
     {
       "criterion": "Malformed or wrong-profile imports produce actionable errors instead of silent failure",
-      "implementationState": "implemented",
-      "verificationState": "covered-by-automated-validator-and-visible-error-boundary"
+      "implementationState": "implemented-through-shared-normalization-and-diagnostics",
+      "verificationState": "visible-error-boundary-present"
     },
     {
       "criterion": "Every editor exposes a dedicated New blank record action",
-      "implementationState": "implemented",
-      "verificationState": "shared-shell-action-present-and-draft-retention-covered"
+      "implementationState": "implemented-and-now-clears-recovery-draft-explicitly",
+      "verificationState": "shared-lifecycle-action-present"
     },
     {
       "criterion": "Shared behavior is covered by automated validation and browser verification",
-      "implementationState": "implemented",
-      "verificationState": "pages-workflow-gates-browser-harness-and-receipt-validator-installed-live-result-pending"
+      "implementationState": "supporting-harness-present",
+      "verificationState": "not-the-active-development-focus"
     }
   ],
-  "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared kernel validators, JavaScript syntax checks, and a live browser verification succeed on main."
+  "nextFrameworkStep": "Move shared dirty-state, autosave, and unsaved-change protection into the adapter runtime so every current and future editor receives the same record lifecycle without editor-specific duplication.",
+  "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared framework lifecycle is complete and the three registered editors operate through it on main."
 }
