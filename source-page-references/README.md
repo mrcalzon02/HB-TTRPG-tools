@@ -1,20 +1,39 @@
 # Source Page References
 
-Canonical source manuscripts registered for page-level provenance and later multi-pass wiki integration.
+Canonical source manuscripts registered for page-level provenance and multi-pass wiki integration.
 
-Files and receipts in this folder are source records, not automatically normalized or rules-converted content. Each large source is integrated through documented passes that preserve provenance, distinguish lore from mechanics, and avoid silently replacing the original text.
+Receipts in this folder preserve source identity, while verified PDF binaries now live in `SRC/`. Each source is integrated through documented passes that preserve provenance, distinguish manuscript material from later expansion, and avoid silently replacing the original text.
 
 ## Registered source manuscripts
 
-- **Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders** — 21-page fantasy planar-ecology manuscript. It now has a dedicated Elemental Realms wiki and three completed creature and ecology passes: provenance-labeled Hypertext d20 creatures, planar leech taxonomy, and full-stat host, prey, breeding-ground, and feeding-ground ecologies.
-- **Solanum Umbra TTRPG** — 248-page post-apocalyptic science-fantasy manuscript. Registered for a dedicated Solanum Umbra wiki and tool section separate from Kaysender and the fantasy corpus.
-- **Mad Martiken’s Menagerie of Magical Services** — 14-page Kaysender location manuscript. It is integrated under **Locations of Note** with the complete shop description, proprietor, illusionary reality bubble, service procedure, advertised prices, expanded 3.5 pricing, mutation triggers, six source mutation tables, treatment rules, and both source case studies.
+- **Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders** — 21-page fantasy planar-ecology manuscript. It has a dedicated Elemental Realms wiki and three completed creature and ecology passes.
+- **Solanum Umbra TTRPG** — 248-page post-apocalyptic science-fantasy manuscript. Its dedicated wiki is now importing the game as its own native system. The first pass covers character creation, sheet fields, attributes, derived statistics, origins, careers, skills, motivations, ancestry and cyborg variants, the 49% cyberization threshold, and six stages of data seizures.
+- **Mad Martiken’s Menagerie of Magical Services** — 14-page Kaysender location manuscript integrated under **Locations of Note** with its source material and separately labeled rules expansion.
 
-Exact filenames, byte counts, page counts, SHA-256 checksums, intended binary paths, integration states, and receipt paths are recorded in `source-manifest.json`.
+Exact filenames, byte counts, page counts, SHA-256 checksums, repository paths, integration states, and receipt paths are recorded in `source-manifest.json`.
 
-## Source receipts and binary status
+## Verified PDF binaries
 
-The repository connector used for this intake can write UTF-8 source records but cannot transfer the uploaded binary PDF bytes directly into Git. The folder therefore contains canonical `.source.json` receipts for all registered manuscripts.
+The three registered PDFs are present in `SRC/` and match their recorded byte counts and SHA-256 checksums:
+
+- `SRC/Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf`
+- `SRC/Solanum-Umbra-TTRPG.pdf`
+- `SRC/Mad Martiken’s Menagerie of Magical Services.pdf`
+
+The source validator reads and hashes these files during the Pages workflow. A binary cannot be represented as verified merely because a similarly named file exists.
+
+Six additional source PDFs are currently inventoried but unassigned to a setting destination:
+
+- `SRC/Caves of Whispering wild 10.pdf`
+- `SRC/The Northern Watchtower 09.pdf`
+- `SRC/The Secret Chambers of Sabiesha the Enchantress 10.pdf`
+- `SRC/The Secret Prison of Souls 10.pdf`
+- `SRC/Tomb of Antwig 05.pdf`
+- `SRC/Veteck Henrina'yea 09.pdf`
+
+They remain outside Solanum Umbra until their provenance and intended wiki placement are reviewed.
+
+## Receipt fields
 
 Each receipt records:
 
@@ -23,18 +42,38 @@ Each receipt records:
 - Page count
 - Exact byte count
 - SHA-256 checksum
-- Intended repository PDF path
+- Verified repository path
 - Integration destination
-- Current binary-transfer status
+- Current import state
+- Imported scope and provenance policy where applicable
 
-The receipts make the source identity auditable and prevent a nonexistent or corrupted PDF from being represented as complete. The raw PDFs remain pending a binary-capable repository transfer. When that transfer is performed, the resulting files must match the recorded byte counts and SHA-256 checksums before `binaryPresentInGit` is changed to `true`.
-
-`node scripts/validate-source-references.mjs` verifies the manifest, all canonical receipts, the Elemental Realms assignment and pass-three scope, the intentionally empty Solanum Umbra staging index, and the Mad Martiken assignment to Kaysender Locations of Note.
+`node scripts/validate-source-references.mjs` verifies the manifest, receipts, binary file identities, setting assignments, and current wiki state.
 
 ## Integration policy
 
-The Elemental Realms wiki distinguishes detailed manuscript creatures, manuscript-adjacent conversions, index-derived extrapolations, and later canon expansions. Its completed passes record full combat statistics, diet, ecological function, parasite and symbiote classifications, host relationships, feeding grounds, breeding strategies, migration cycles, and predator pressure so planar amphibians, giant insects, arachnids, spirits, predators, prey, leeches, and their hosts operate as connected food webs.
+### Elemental Realms
 
-The Mad Martiken location preserves manuscript facts and marks conversion additions separately. Quoted 500 gp, 1,000 gp, and 5,000 gp service tiers remain intact, while permanent flight, venom, extra limbs, compatibility checks, stabilization, reversibility, and other 3.5-facing procedures are identified as expanded rules rather than source claims.
+The Elemental Realms wiki distinguishes manuscript creatures, manuscript-adjacent conversions, index-derived extrapolations, and later canon expansions. Its completed passes record combat statistics, diet, ecological function, parasite and symbiote classifications, host relationships, feeding grounds, breeding strategies, migration cycles, and predator pressure.
 
-Solanum Umbra still intentionally contains no integrated content packs. Its source will later be separated into chronology, cosmology, technology, magic, factions, settlements, hazards, bestiary, characters, equipment, rules, and adventure material before final cross-linking.
+### Mad Martiken
+
+The Mad Martiken location preserves manuscript facts and marks conversion additions separately. Quoted service tiers remain intact, while added pricing, checks, stabilization, reversibility, and conversation material remain visibly identified as expansion.
+
+### Solanum Umbra
+
+Solanum Umbra is an entirely separate native rules system. It is **not** converted into Hypertext d20, 3.5, or another game.
+
+Solanum import work may normalize:
+
+- JSON structure
+- Wiki categories
+- Cross-links
+- Search fields
+- Character-sheet fields
+- Table presentation
+- Page-level provenance
+- Explicit ambiguity notes
+
+It must not replace native attributes, formulas, careers, skills, combat resolution, cyberization, crafting, classes, enemies, or entities with mechanics from another system.
+
+The first native pass imports pages 104–116. Later passes will cover advancement, resolution, combat, cover, vehicles, crafting, roles, classes, cybernetics, equipment, enemies, factions, paranormal entities, and soul hazards.
