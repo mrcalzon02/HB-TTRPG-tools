@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.5.0",
+  "schemaVersion": "1.6.0",
   "storage": "canonical-source-receipts-with-verified-src-binaries",
   "binaryTransferStatus": "registered-binaries-present-and-identity-verified",
   "documents": [
@@ -28,7 +28,7 @@
       "receipt": "source-page-references/Solanum-Umbra-TTRPG.source.json",
       "binaryPath": "SRC/Solanum-Umbra-TTRPG.pdf",
       "binaryPresentInGit": true,
-      "integrationStatus": "native-system-character-creation-pass-1-complete",
+      "integrationStatus": "native-foundation-import-active",
       "wikiDestination": "data/solanum-umbra/wiki/wiki-index.json"
     },
     {
@@ -46,12 +46,9 @@
       "wikiDestination": "data/kaysender/wiki/wiki-index.json"
     }
   ],
-  "unassignedSrcInventory": [
-    "SRC/Caves of Whispering wild 10.pdf",
-    "SRC/The Northern Watchtower 09.pdf",
-    "SRC/The Secret Chambers of Sabiesha the Enchantress 10.pdf",
-    "SRC/The Secret Prison of Souls 10.pdf",
-    "SRC/Tomb of Antwig 05.pdf",
-    "SRC/Veteck Henrina'yea 09.pdf"
-  ]
+  "unassignedInventory": {
+    "path": "source-page-references/unassigned-src-inventory.json",
+    "count": 12,
+    "status": "present-in-src-awaiting-setting-assignment"
+  }
 }
