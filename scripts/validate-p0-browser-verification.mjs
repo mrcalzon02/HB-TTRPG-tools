@@ -9,6 +9,8 @@ const fail = message => { throw new Error(message); };
 
 const schema = await readJson('data/kaysender/editors/p0-browser-verification.schema.json');
 const smoke = await readText('kaysender-editor-live-smoke.js');
+const runner = await readText('scripts/run-p0-browser-verification.mjs');
+const workflow = await readText('.github/workflows/pages.yml');
 
 const requiredReceiptFields = [
   'schemaVersion',
@@ -61,6 +63,29 @@ for (const marker of [
   'getKaysenderEditorSmokeReceipt'
 ]) {
   if (!smoke.includes(marker)) fail(`Browser verification harness is missing contract marker '${marker}'.`);
+}
+
+for (const marker of [
+  "import { chromium } from 'playwright'",
+  'chromium.launch({ headless: true })',
+  'window.runKaysenderEditorSmokeTest()',
+  'window.getKaysenderEditorSmokeReceipt()',
+  'p0-browser-verification-failure.png',
+  "receipt.result !== 'passed'"
+]) {
+  if (!runner.includes(marker)) fail(`Automated browser runner is missing '${marker}'.`);
+}
+
+for (const marker of [
+  'playwright@1.60.0',
+  'npx playwright install --with-deps chromium',
+  'node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json',
+  'node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json',
+  'name: p0-browser-verification',
+  'path: artifacts/',
+  'rm -rf node_modules'
+]) {
+  if (!workflow.includes(marker)) fail(`Pages workflow is missing P0 browser gate marker '${marker}'.`);
 }
 
 function validateInheritanceReference(reference, label) {
@@ -118,5 +143,5 @@ if (receiptPath) {
   console.log(`P0 browser verification receipt passed: ${receiptPath}`);
 } else {
   console.log('P0 browser verification contract validation passed.');
-  console.log('Verified receipt schema, harness field coverage, export controls, editor chain, and optional receipt validation rules.');
+  console.log('Verified receipt schema, harness field coverage, Chromium runner, Pages workflow wiring, evidence retention, and optional receipt validation rules.');
 }
