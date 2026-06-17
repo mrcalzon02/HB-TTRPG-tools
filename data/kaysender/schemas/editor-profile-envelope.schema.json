@@ -29,7 +29,7 @@
         "airship-profile"
       ]
     },
-    "profileSchemaVersion": { "type": "string", "minLength": 1 },
+    "profileSchemaVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
     "revision": { "type": "integer", "minimum": 1 },
     "createdAt": { "type": "string", "format": "date-time" },
     "updatedAt": { "type": "string", "format": "date-time" },
@@ -60,13 +60,15 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["relationship", "profileId", "profileType", "name"],
+        "required": ["relationship", "profileId", "profileType", "name", "revision", "policy"],
         "properties": {
-          "relationship": { "type": "string" },
-          "profileId": { "type": "string" },
-          "profileType": { "type": "string" },
+          "relationship": { "type": "string", "minLength": 1 },
+          "profileId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*-[a-f0-9]{8,}$" },
+          "profileType": { "type": "string", "minLength": 1 },
           "name": { "type": "string" },
-          "revision": { "type": "integer", "minimum": 1 }
+          "revision": { "type": "integer", "minimum": 1 },
+          "policy": { "type": "string", "const": "pinned-revision" },
+          "sourceUpdatedAt": { "type": ["string", "null"], "format": "date-time" }
         }
       }
     },
