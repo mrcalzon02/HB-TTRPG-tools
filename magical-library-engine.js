@@ -87,6 +87,11 @@
     return `${domain.source === 'malefic' ? 'ML-D' : 'ML-L'}-${prefix}-${formatPrefix}-${String(index + 1).padStart(2, '0')}`;
   }
 
+  function callPrefix(value, fallback) {
+    const cleaned = value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
+    return cleaned || fallback;
+  }
+
   function buildBook(V, libraryName, domain, controls, formatId, index, usedTitles) {
     const format = V.FORMATS[formatId];
     let subject;
@@ -97,6 +102,7 @@
       title = titleFor(V, domain, formatId, subject, index + attempts);
       attempts += 1;
     } while (usedTitles.has(title) && attempts < 30);
+    if (usedTitles.has(title)) title = `${title} — Departmental Variant ${index + 1}`;
     usedTitles.add(title);
     const shelfId = selectShelf(V, domain.source, controls.shelfId);
     const publisher = pick(V.PUBLISHERS[shelfId]);
@@ -118,7 +124,7 @@
       intendedAudience:pick(V.AUDIENCES),
       subject:{ topic:subject.topic, exercise:subject.exercise, hazard:subject.hazard },
       contents:contentNote(V, domain, subject),
-      callNumber:`${libraryName.slice(0, 3).toUpperCase().replace(/[^A-Z]/g,'LIB')}.${domain.label.slice(0, 3).toUpperCase().replace(/[^A-Z]/g,'MAG')}.${pages}`,
+      callNumber:`${callPrefix(libraryName, 'LIB')}.${callPrefix(domain.label, 'MAG')}.${pages}`,
       circulation: shelfId === 'malefic' ? pick(['Restricted stacks','Chains requested','Faculty permission required','May leave only with a supervising exorcist']) : shelfId === 'dubious' ? pick(['Graduate reserve','Desk copy only','Circulates with waiver','Available after dusk']) : pick(['General stacks','Course reserve','Reference room','Student lending shelf'])
     };
   }
