@@ -33,19 +33,69 @@
     }
   }
 
+  function savedParentMetadata(parent) {
+    if (!parent?.profileId) return null;
+    return Repository.list({ profileType: parent.profileType })
+      .find(record => record.profileId === parent.profileId) || null;
+  }
+
+  function parentReferenceState(panel, definition) {
+    const parent = currentParent(panel, definition);
+    if (!parent) {
+      return {
+        state: 'none',
+        parent: null,
+        saved: null,
+        message: `No saved ${definition.id} record is linked.`
+      };
+    }
+    const saved = savedParentMetadata(parent);
+    const label = parent.name || parent.data?.name || definition.id;
+    if (!saved) {
+      return {
+        state: 'unavailable',
+        parent,
+        saved: null,
+        message: `Linked ${label} · ${parent.profileId} · revision ${parent.revision}. The inherited snapshot is retained, but its source record is unavailable in this browser's saved library.`
+      };
+    }
+    if (saved.revision > parent.revision) {
+      return {
+        state: 'stale',
+        parent,
+        saved,
+        message: `Linked ${label} at revision ${parent.revision}; saved revision ${saved.revision} is available. Refresh deliberately to adopt the newer parent.`
+      };
+    }
+    if (saved.revision < parent.revision) {
+      return {
+        state: 'ahead',
+        parent,
+        saved,
+        message: `Linked ${label} at revision ${parent.revision}; the local saved library only has revision ${saved.revision}. The inherited snapshot is newer than the local source.`
+      };
+    }
+    return {
+      state: 'current',
+      parent,
+      saved,
+      message: `Linked ${label} · ${parent.profileId} · current revision ${parent.revision}.`
+    };
+  }
+
   function controlId(adapter, definition) {
     return `mainline-parent-library-${adapter.id}-${definition.id}`;
   }
 
   function renderLinkedStatus(container, panel, definition) {
     const target = container.querySelector('[data-parent-library-status]');
-    if (!target) return;
-    const parent = currentParent(panel, definition);
-    const nextText = parent
-      ? `Linked ${parent.name || parent.data?.name || definition.id} · ${parent.profileId} · revision ${parent.revision}`
-      : `No saved ${definition.id} record is linked.`;
-    if (target.textContent !== nextText) target.textContent = nextText;
-    target.dataset.linked = String(Boolean(parent));
+    if (!target) return parentReferenceState(panel, definition);
+    const reference = parentReferenceState(panel, definition);
+    if (target.textContent !== reference.message) target.textContent = reference.message;
+    target.dataset.linked = String(Boolean(reference.parent));
+    target.dataset.referenceState = reference.state;
+    container.dataset.referenceState = reference.state;
+    return reference;
   }
 
   function populateSelect(container, definition, panel) {
@@ -76,21 +126,26 @@
     }
     if (records.some(record => record.profileId === desiredValue)) select.value = desiredValue;
     select.disabled = !records.length;
+    const reference = renderLinkedStatus(container, panel, definition);
     loadButton.disabled = !select.value;
+    loadButton.textContent = reference.state === 'stale' && select.value === reference.parent?.profileId
+      ? 'Refresh to Latest Parent'
+      : 'Load Saved Parent';
     clearButton.disabled = !current;
-    renderLinkedStatus(container, panel, definition);
   }
 
   function loadSelected(adapter, panel, definition, container) {
     const select = container.querySelector('select');
     const profileId = select?.value;
     if (!profileId) return;
+    const previous = currentParent(panel, definition);
     const result = Repository.load(profileId);
     const status = container.querySelector('[data-parent-library-status]');
     if (!result.ok) {
       if (status) {
         status.textContent = result.message;
         status.dataset.linked = 'false';
+        status.dataset.referenceState = 'error';
       }
       return;
     }
@@ -105,6 +160,10 @@
     window.setTimeout(() => {
       renderLinkedStatus(container, panel, definition);
       Production()?.rebuildActive?.();
+      const action = previous?.profileId === result.envelope.profileId
+        ? `Refreshed inherited ${definition.id} from revision ${previous.revision} to revision ${result.envelope.revision}.`
+        : `Linked inherited ${definition.id} record ${result.envelope.name}.`;
+      Lifecycle.markDirty(adapter.id, action, { autosave: true });
     }, 0);
   }
 
@@ -137,11 +196,12 @@
     container.id = id;
     container.className = 'mainline-parent-library-control';
     container.dataset.parentImportId = definition.id;
+    container.dataset.referenceState = 'none';
     container.innerHTML = `
       <div class="mainline-parent-library-heading">
         <div>
           <strong>Saved ${escapeHtml(definition.id)} inheritance</strong>
-          <p data-parent-library-status data-linked="false">No saved ${escapeHtml(definition.id)} record is linked.</p>
+          <p data-parent-library-status data-linked="false" data-reference-state="none">No saved ${escapeHtml(definition.id)} record is linked.</p>
         </div>
       </div>
       <div class="mainline-parent-library-row">
@@ -175,7 +235,11 @@
       .mainline-parent-library-control{grid-column:1/-1;padding:12px;border:1px solid rgba(200,138,53,.4);border-radius:14px;background:rgba(200,138,53,.06)}
       .mainline-parent-library-heading strong{color:var(--accent);text-transform:capitalize}
       .mainline-parent-library-heading p{margin:.35rem 0;color:var(--muted);overflow-wrap:anywhere}
-      .mainline-parent-library-heading p[data-linked="true"]{color:#9ed6a4}
+      .mainline-parent-library-heading p[data-reference-state="current"]{color:#9ed6a4}
+      .mainline-parent-library-heading p[data-reference-state="stale"]{color:#e7bf73}
+      .mainline-parent-library-heading p[data-reference-state="unavailable"],.mainline-parent-library-heading p[data-reference-state="ahead"],.mainline-parent-library-heading p[data-reference-state="error"]{color:#ff9b8b}
+      .mainline-parent-library-control[data-reference-state="stale"]{border-color:#e7bf73}
+      .mainline-parent-library-control[data-reference-state="unavailable"],.mainline-parent-library-control[data-reference-state="ahead"]{border-color:#ff9b8b}
       .mainline-parent-library-row{display:grid;grid-template-columns:minmax(240px,1fr) auto auto;gap:8px;align-items:end;margin-top:8px}
       .mainline-parent-library-row label{grid-column:1/-1;color:var(--muted);font-size:.76rem;font-weight:700;text-transform:capitalize}
       @media(max-width:850px){.mainline-parent-library-row{grid-template-columns:1fr}.mainline-parent-library-row label{grid-column:auto}.mainline-parent-library-row button{width:100%}}
@@ -204,7 +268,8 @@
   window.KaysenderEditorParentLibrary = Object.freeze({
     refresh,
     loadSelected,
-    clearLinked
+    clearLinked,
+    parentReferenceState
   });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install);
