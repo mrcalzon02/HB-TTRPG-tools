@@ -220,6 +220,7 @@
     const active = Production().getActiveEnvelope();
     if (!active) throw new Error(`No active envelope was available after reopening ${envelope.profileId}.`);
     if (active.profileId !== envelope.profileId) throw new Error(`Reopening ${envelope.profileId} changed its stable profile ID to ${active.profileId}.`);
+    if (active.revision !== envelope.revision) throw new Error(`Reopening ${envelope.profileId} changed revision ${envelope.revision} to ${active.revision}.`);
     return active;
   }
 
@@ -267,7 +268,7 @@
 
       const reopenedSettlement = await reopenActiveRecord('settlement', storedSettlement);
       requireReference(reopenedSettlement, storedIsland.profileId, storedIsland.revision, 'Reopened Settlement');
-      addResult('Settlement reopen', true, `Reopened ${reopenedSettlement.profileId} without changing its pinned island identity or revision.`);
+      addResult('Settlement reopen', true, `Reopened ${reopenedSettlement.profileId} without changing its own revision or pinned island identity.`);
 
       await Production().launchAirship();
       const airshipPanel = await waitFor('#kaysender-airship-editor-panel');
@@ -292,7 +293,7 @@
       let reopenedAirship = await reopenActiveRecord('airship', storedAirship);
       requireReference(reopenedAirship, storedIsland.profileId, storedIsland.revision, 'Reopened Airship');
       requireReference(reopenedAirship, storedSettlement.profileId, storedSettlement.revision, 'Reopened Airship');
-      addResult('Airship reopen', true, `Reopened ${reopenedAirship.profileId} without replacing either pinned parent identity.`);
+      addResult('Airship reopen', true, `Reopened ${reopenedAirship.profileId} without changing its own revision or replacing either pinned parent identity.`);
 
       const settlementTextarea = airshipPanel.querySelector('#airship-settlement-import');
       airshipPanel.dataset.sourceSettlement = '';
@@ -315,7 +316,7 @@
       requireReference(reopenedAirship, storedSettlement.profileId, storedSettlement.revision, 'Airship after restore');
       addResult('Inheritance restore', true, 'Restored the saved Settlement parent deliberately and recovered both pinned references.');
 
-      addResult('P0 live smoke', true, 'Shared shell, persistent records, pinned reopen behavior, inheritance clearing, and parent restoration all passed.');
+      addResult('P0 live smoke', true, 'Shared shell, persistent records, exact child revisions, pinned reopen behavior, inheritance clearing, and parent restoration all passed.');
       const report = createReceipt([
         profileReceipt('floating-island-editor', storedIsland),
         profileReceipt('settlement-editor', reopenedSettlement),
@@ -338,7 +339,7 @@
     card.className = 'editor-card no-print';
     card.innerHTML = `
       <h3>P0 Shared Editor Live Smoke</h3>
-      <p>Runs the real browser path through Floating Island, Settlement, and Airship, including persistent save/load, child-record reopen, pinned parent identity, inheritance clearing, and deliberate parent restoration. A successful run produces a schema-versioned verification receipt but does not promote P1 automatically.</p>
+      <p>Runs the real browser path through Floating Island, Settlement, and Airship, including persistent save/load, child-record reopen without revision drift, pinned parent identity, inheritance clearing, and deliberate parent restoration. A successful run produces a schema-versioned verification receipt but does not promote P1 automatically.</p>
       <div class="editor-action-row">
         <button id="p0-live-smoke-run" class="secondary-action" type="button">Run P0 Live Smoke Test</button>
         <button id="p0-live-smoke-copy" class="secondary-action" type="button" disabled>Copy Verification Receipt</button>
@@ -347,7 +348,7 @@
       <ul id="p0-live-smoke-results"><li>No live smoke test has run in this browser session.</li></ul>
       <label for="p0-live-smoke-receipt">Last successful verification receipt</label>
       <textarea id="p0-live-smoke-receipt" class="json-export" rows="12" readonly aria-describedby="p0-live-smoke-receipt-help"></textarea>
-      <p id="p0-live-smoke-receipt-help" class="field-help">The receipt records the browser, editor chain, stage results, stable profile IDs, revisions, and pinned inheritance references needed to verify the P0 exit gate.</p>`;
+      <p id="p0-live-smoke-receipt-help" class="field-help">The receipt records the browser, editor chain, stage results, stable profile IDs, exact revisions, and pinned inheritance references needed to verify the P0 exit gate.</p>`;
     status.insertAdjacentElement('afterend', card);
     card.querySelector('#p0-live-smoke-run').addEventListener('click', runSmokeTest);
     card.querySelector('#p0-live-smoke-copy').addEventListener('click', copyReceipt);
