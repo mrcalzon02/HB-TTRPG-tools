@@ -4,7 +4,9 @@ Solanum Umbra is a dedicated post-apocalyptic science-fantasy TTRPG setting. It 
 
 ## Current status
 
-The complete source manuscript is retained in `source-page-references/Solanum-Umbra-TTRPG.pdf` and registered through `source-page-references/source-manifest.json`.
+The 248-page source manuscript is registered through `source-page-references/source-manifest.json`. Its canonical identity receipt is retained at `source-page-references/Solanum-Umbra-TTRPG.source.json`, including the original filename, byte count, page count, SHA-256 checksum, intended PDF destination, and integration state.
+
+The raw PDF binary is not yet present in Git because the available repository connector cannot write binary attachments. Its intended destination remains `source-page-references/Solanum-Umbra-TTRPG.pdf`, and a later binary-capable transfer must match the recorded checksum before the manifest can mark it present.
 
 The dedicated wiki index exists at `data/solanum-umbra/wiki/wiki-index.json`, but its `packs` list remains empty. No source-derived wiki material should be treated as integrated until it has passed through deliberate extraction and review.
 
