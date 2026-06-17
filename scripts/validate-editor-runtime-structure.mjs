@@ -136,6 +136,14 @@ for (const phrase of [
   'inheritance-policy-invalid',
   'inheritance-revision-invalid',
   'inheritance-policy-normalized',
+  'fallbackSaveDraft',
+  'fallbackLoadDraft',
+  'fallbackClearDraft',
+  'Recovery draft save failed',
+  'Recovery draft clear failed',
+  'restoreInheritedEnvelope',
+  "origin: 'inherited-snapshot'",
+  'pinned-parent-identity-restored',
   'mapping.apply(form, profileInput, adapter.fieldMap)',
   'mapping.applyFlat(form, profileInput, adapter.flatFieldExclusions',
   'typeof adapter.applyProfileToForm',
@@ -149,10 +157,15 @@ for (const phrase of [
 
 for (const phrase of [
   'DEFAULT_AUTOSAVE_DELAY',
+  'changeVersion',
+  'savedVersion',
+  'checkpoint(editorId)',
+  'markCleanIfUnchanged',
   'scheduleAutosave',
   'markDirty',
   'markClean',
   'confirmLeave',
+  'Newer changes were made while saving',
   "window.addEventListener('beforeunload'",
   'window.KaysenderEditorLifecycle'
 ]) {
@@ -162,11 +175,17 @@ for (const phrase of [
 for (const phrase of [
   'INDEX_KEY',
   'RECORD_PREFIX',
+  'recordFingerprint',
+  'revisionConflict',
+  'newer saved revision',
+  'different content at revision',
+  'was rolled back',
   'function save(envelope)',
   'function load(profileId)',
   'function remove(profileId, explicit = false)',
   'function list(options = {})',
   'function repairIndex()',
+  'rejected',
   'window.KaysenderEditorRepository'
 ]) {
   if (!repository.includes(phrase)) fail(`Shared editor repository is missing '${phrase}'.`);
@@ -177,9 +196,19 @@ for (const phrase of [
   'const Lifecycle = window.KaysenderEditorLifecycle',
   'async function launch(editorIdOrAlias)',
   'Registry.resolve(editorIdOrAlias)',
+  'Lifecycle.confirmLeave(activeEditorId',
   'Lifecycle.bind(adapter, panel',
   'autosaveDraft(adapter, panel)',
   'Kernel.clearDraft(adapter.id, true)',
+  'synchronizeLoadedEnvelope',
+  'loaded-record-identity-changed',
+  'loaded-record-roundtrip-changed',
+  'import-draft-sync-failed',
+  'unresolvedParentEnvelope',
+  "origin: 'unresolved-inheritance-reference'",
+  'preserveUnresolvedParent',
+  'inherited-source-data-missing',
+  'Kernel.restoreInheritedEnvelope',
   'adapter.parentImports.forEach',
   'adapter.hiddenLegacyActionIds.forEach',
   'listEditors:',
@@ -201,10 +230,14 @@ for (const phrase of [
   'mainline-editor-identity-revision',
   'Update Existing Record',
   'Save as New Clone',
+  'Lifecycle.checkpoint(editorId)',
+  'Lifecycle.markCleanIfUnchanged',
+  'Lifecycle.confirmLeave(editorId',
   'Kernel.cloneEnvelope(source',
+  'activeClone',
   'original ${source.profileId} was not overwritten',
   'Repository.save(envelope)',
-  'Repository.save(clone)',
+  'Repository.save(activeClone)',
   'Repository.load(profileId)',
   'Repository.remove(profileId, true)',
   'loadParentLibraryScript',
@@ -225,6 +258,8 @@ for (const phrase of [
   "state: 'unavailable'",
   "state: 'stale'",
   "state: 'ahead'",
+  "state: 'unresolved'",
+  'Restore Parent Context',
   'Refresh to Latest Parent',
   'Repository.load(profileId)',
   'existingLoadButton.click()',
@@ -254,6 +289,11 @@ for (const phrase of [
   'launchIsland',
   'launchSettlement',
   'launchAirship',
+  'saveAndReload',
+  'reopenActiveRecord',
+  'changed revision ${envelope.revision}',
+  'Inheritance clear',
+  'Inheritance restore',
   'sourceIslandEnvelope',
   'sourceSettlementEnvelope',
   'hb-ttrpg-tools:p0-live-smoke:last-pass',
@@ -267,6 +307,8 @@ for (const phrase of [
 
 await import('./validate-editor-adapter-integration.mjs');
 await import('./validate-editor-inheritance.mjs');
+await import('./validate-editor-lifecycle.mjs');
+await import('./validate-editor-repository.mjs');
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified schema-aware adapters, pinned-revision inheritance, migrations, lifecycle, persistent records, identity-safe saving, inherited-reference health, generic production shell, error boundary, and browser chain.');
+console.log('Verified schema-aware adapters, safe drafts, generation-aware lifecycle, conflict-safe persistence, pinned-parent rehydration, unresolved-reference repair, identity-safe saving, loaded-record round trips, and the expanded persistent browser chain.');
