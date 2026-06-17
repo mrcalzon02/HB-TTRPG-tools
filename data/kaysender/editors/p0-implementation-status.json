@@ -12,6 +12,9 @@
     "editorAdapterContract": true,
     "editorAdapterRegistry": true,
     "genericEditorLifecycle": true,
+    "dirtyStateTracking": true,
+    "recoveryDraftAutosave": true,
+    "unsavedChangeProtection": true,
     "canonicalProfileEnvelope": true,
     "stableProfileIds": true,
     "profileSchemaVersions": true,
@@ -26,6 +29,9 @@
     "validationAndDiagnostics": true,
     "recoverableErrorBoundary": true,
     "accessibleResponsiveControls": true,
+    "adapterFieldMappingService": true,
+    "builtInAdapterFieldMapsDefined": true,
+    "adapterFieldMapsAppliedByRuntime": false,
     "browserVerificationHarness": true,
     "browserVerificationReceiptContract": true
   },
@@ -41,7 +47,10 @@
     "Export canonical JSON",
     "Export wiki draft",
     "Show provenance and inheritance",
-    "Show diagnostics and recoverable errors"
+    "Show diagnostics and recoverable errors",
+    "Track unsaved changes",
+    "Autosave recovery drafts",
+    "Warn before abandoning unsaved records"
   ],
   "compatibilityFixtures": [
     "data/kaysender/editors/fixtures/island-current-nested.json",
@@ -51,6 +60,8 @@
     "kaysender-editor-kernel.js",
     "kaysender-editor-adapter-registry.js",
     "kaysender-editor-builtins.js",
+    "kaysender-editor-lifecycle.js",
+    "kaysender-editor-field-mapping.js",
     "kaysender-editor-production.js",
     "kaysender-editor-error-boundary.js",
     "kaysender-editor-live-smoke.js"
@@ -91,6 +102,6 @@
       "verificationState": "not-the-active-development-focus"
     }
   ],
-  "nextFrameworkStep": "Move shared dirty-state, autosave, and unsaved-change protection into the adapter runtime so every current and future editor receives the same record lifecycle without editor-specific duplication.",
+  "nextFrameworkStep": "Connect the adapter-owned field maps to the production runtime, then move editor-specific output reading and wiki-draft extraction behind optional adapter hooks so P1 can extend the framework without adding profile-specific branches to shared code.",
   "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared framework lifecycle is complete and the three registered editors operate through it on main."
 }
