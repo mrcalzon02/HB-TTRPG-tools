@@ -98,7 +98,8 @@ for (const phrase of [
 for (const phrase of [
   'function register(definition)',
   'function migrate(dataInput, profileType',
-  'island-legacy-flat-to-1.0.0',
+  'island-legacy-flat-to-2.0.0',
+  "toVersion: '2.0.0'",
   'removeLegacyIslandFields',
   'legacy-flat',
   'window.KaysenderEditorMigrations'
@@ -213,4 +214,4 @@ for (const phrase of [
 }
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified adapter hooks, field mapping, migrations, lifecycle, persistent records, explicit identity-safe saving, generic production shell, error boundary, and browser chain.');
+console.log('Verified adapter hooks, field mapping, Island 2.0.0 migration, lifecycle, persistent records, explicit identity-safe saving, generic production shell, error boundary, and browser chain.');
