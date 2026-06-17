@@ -4,7 +4,7 @@ The Chronicles of the Elemental Realms has a dedicated top-level wiki section in
 
 ## Current creature-reference pass
 
-The registry contains 60 creature references across eleven categories:
+The registry contains 74 creature references across twelve categories:
 
 - Primordial Swamps and Guardians
 - Plane of Water
@@ -16,6 +16,7 @@ The registry contains 60 creature references across eleven categories:
 - Unconventional Planes
 - Swamp Arthropods and Adjacent Fauna
 - Planar Leeches, Parasites, and Symbiotes
+- Leech Hosts, Prey, and Feeding Grounds
 - Contextual Fauna and Prey
 
 Every entry includes armor class, touch and flat-footed AC, hit points, Hit Dice, saves, movement, base attack and grapple, space and reach, abilities, skills, feats, attacks, special attacks, special qualities, environment, organization, treasure, advancement, challenge rating, combat behavior, diet, and ecological function.
@@ -69,9 +70,48 @@ Seven of the fifteen entries are flame-aligned. This is at least twice the large
 
 Every leech card includes morphology, feeding mode, planar affinity, primary sustenance, and a cataloguing-dispute note in addition to the standard creature statistics.
 
+## Hosts, prey, and feeding grounds
+
+The third ecology pass adds fourteen fully statted creatures that sustain, cultivate, transport, resist, or fall prey to the leech catalogue. Every registered leech appears in at least one explicit host relationship.
+
+These are not presented as sacks of hit points placed beside parasites. Each entry records:
+
+- Ecological niche
+- Primary feeding grounds
+- Breeding strategy and nursery conditions
+- Seasonal, migratory, or reproductive cycle
+- Predator pressure
+- Specific parasitic, symbiotic, or facultative relationship with one or more leeches
+
+### Primordial and non-fire hosts
+
+- **Reedhorn Marsh Grazer** — reed-bed browser and herd animal supporting Bloodreed and Mire-Mender leeches.
+- **Tideglass Leviathan Calf** — migratory water-plane filter feeder and mobile reef carrying cleaner bands.
+- **Orehide Delver** — earth-plane tunnel grazer infested by Stoneblood Burrowers.
+- **Cloudgill Ray** — aerial plankton feeder whose gills can host helpful or suffocating Breathwicks.
+- **Astral Pathrunner** — migratory guide-beast whose remembered routes are consumed by Memory Leeches.
+- **Brinehide Sumpwalker** — toxin-bearing para-elemental grazer using Brine-Sump cleaning wallows.
+- **Somnolent Lotusback Toad** — dream-producing mobile nursery supporting Dream Leeches and oneiric plants.
+
+### Fire-swamp hosts and prey
+
+- **Furnace Reed Strider** — heat-rich browser and principal Ember Vein feeding host.
+- **Cinderhide Brood Salamander** — communal nest-builder that cultivates Cinder-Suture leeches around wounds and nurseries.
+- **Slagback Marsh Behemoth** — colossal channel-forming herbivore hunted by Furnace-Maw Leeches.
+- **Ashwing Reed Drake** — migratory scavenger carrying Ashen Brood swarms between fire wetlands.
+- **Magmafin Fire Eel** — lava-channel grazer supporting Pyroclast Lampreys during spawning runs.
+- **Hearthhorn Caravan Beast** — domesticated migratory animal permanently paired with Hearthshare Leeches.
+- **Slagbloom Flame Toad** — mobile garden and facultative host of Slag-Bloom colonies.
+
+### Why feeding grounds matter
+
+A leech encounter begins before attachment. Herd routes pass beneath overhanging parasites. Leviathans return to cleaning bands. Mineral grazers establish abrasive wallows. Cloud rays follow predictable storm fronts. Astral herds preserve migratory memories. Sumpwalkers alternate between poisonous feeding areas and freshwater cleaning pools. Fire eels compress into spawning channels. Salamanders cultivate medicinal feeders near communal nests.
+
+Reproduction often creates the greatest parasite density. Birth wounds attract tissue feeders, eggs gather protective adults in confined areas, spawning runs compress entire populations, and nurseries shelter immature parasites beside future hosts. Consequently, destroying a breeding site, migration path, cleaning station, or mutualist colony can damage several trophic levels simultaneously.
+
 ## Deep swamp food webs
 
-The setting treats amphibious beasts as varied in diet as they are in form. Herbivores, filter feeders, scavengers, mineral eaters, insect hunters, carrion feeders, ambush predators, parasites, symbiotes, and apex guardians coexist across the planes.
+The setting treats amphibious beasts as varied in diet as they are in form. Herbivores, filter feeders, scavengers, mineral eaters, insect hunters, carrion feeders, ambush predators, parasites, symbiotes, hosts, and apex guardians coexist across the planes.
 
 Seven full arthropod ecology references establish the supporting food web:
 
@@ -83,7 +123,7 @@ Seven full arthropod ecology references establish the supporting food web:
 - Astral Threadmite Swarm
 - Quagmire Mud Crab
 
-These creatures pollinate, decompose, aerate sediment, spread spores, process carrion, prey upon amphibians, and serve as prey for larger frogs, toads, salamanders, planar guardians, and leech-like feeders.
+These creatures pollinate, decompose, aerate sediment, spread spores, process carrion, prey upon amphibians, and serve as prey for larger frogs, toads, salamanders, planar guardians, leech-like feeders, and the new host species.
 
 ## Files
 
@@ -93,6 +133,7 @@ These creatures pollinate, decompose, aerate sediment, spread spores, process ca
 - `elemental-realms-creatures-secondary.js`
 - `elemental-realms-creatures-expansions.js`
 - `elemental-realms-creatures-leeches.js`
+- `elemental-realms-creatures-leech-hosts.js`
 - `elemental-realms-creatures-context.js`
 - `elemental-realms-entry.js`
 - `elemental-realms-wiki.css`
@@ -100,4 +141,4 @@ These creatures pollinate, decompose, aerate sediment, spread spores, process ca
 
 ## Validation
 
-The validator checks the exact 60-entry registry, eleven categories, unique IDs, required statistics, diets, ecology text, source-page discipline, provenance labels, confidence labels, the three original featured canon expansions, fifteen leech catalogue entries, all leech classification fields, all three feeding modes, the fire-plane multiplicity rule, ten detailed manuscript creatures, and seven statted arthropod entries.
+The validator checks the exact 74-entry registry, twelve categories, unique IDs, required statistics, diets, ecology text, source-page discipline, provenance labels, confidence labels, fifteen leech catalogue entries, all leech classification fields, all three feeding modes, the fire-plane multiplicity rule, fourteen host and prey entries, every host ecology field, valid leech relationships, complete relationship coverage for all fifteen leeches, ten detailed manuscript creatures, and seven statted arthropod entries.
