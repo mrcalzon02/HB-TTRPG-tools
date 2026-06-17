@@ -2,55 +2,22 @@
   'use strict';
 
   const Kernel = window.KaysenderEditorKernel;
-  if (!Kernel) {
-    console.error('Kaysender editor production shell could not start: shared kernel is missing.');
+  const Registry = window.KaysenderEditorAdapters;
+  if (!Kernel || !Registry) {
+    console.error('Kaysender editor production runtime could not start: shared kernel or adapter registry is missing.');
     return;
   }
 
   const activeEnvelopes = new Map();
-  let activeSpecId = '';
+  let activeEditorId = '';
 
-  const editorSpecs = {
-    island: {
-      id: 'floating-island-editor',
-      moduleId: 'floating-island-generator',
-      label: 'Open Production Island Editor',
-      profileType: 'floating-island-foundation-profile',
-      panelId: 'kaysender-editor-panel',
-      formId: 'floating-island-editor-form',
-      outputId: 'floating-island-editor-output',
-      buildButtonId: 'island-build-profile',
-      randomizeButtonId: 'island-randomize',
-      legacyButtonSelector: '.editor-launch',
-      open: () => window.openFloatingIslandEditor?.()
-    },
-    settlement: {
-      id: 'settlement-editor',
-      moduleId: 'settlement-generator',
-      label: 'Open Production Settlement Editor',
-      profileType: 'settlement-profile',
-      panelId: 'kaysender-settlement-editor-panel',
-      formId: 'settlement-editor-form',
-      outputId: 'settlement-editor-output',
-      buildButtonId: 'settlement-build-profile',
-      randomizeButtonId: 'settlement-randomize',
-      legacyButtonSelector: '.settlement-editor-launch',
-      open: () => window.openSettlementEditor?.()
-    },
-    airship: {
-      id: 'airship-editor',
-      moduleId: 'airship-vessel-generator',
-      label: 'Open Production Airship Editor',
-      profileType: 'airship-profile',
-      panelId: 'kaysender-airship-editor-panel',
-      formId: 'airship-editor-form',
-      outputId: 'airship-editor-output',
-      buildButtonId: 'airship-build-profile',
-      randomizeButtonId: 'airship-randomize',
-      legacyButtonSelector: '.airship-editor-launch',
-      open: () => window.openAirshipEditor?.()
-    }
-  };
+  function adapters() {
+    return Registry.list();
+  }
+
+  function resolveAdapter(editorIdOrAlias) {
+    return Registry.resolve(editorIdOrAlias);
+  }
 
   function injectStyles() {
     if (document.getElementById('kaysender-mainline-editor-style')) return;
@@ -87,7 +54,7 @@
     shell.innerHTML = `
       <div class="mainline-editor-shell-header">
         <div>
-          <div class="mainline-editor-stage">P0 Shared Editor Kernel</div>
+          <div class="mainline-editor-stage">P0 Shared Editor Framework</div>
           <h2 id="mainline-editor-title">Kaysender Production Editor</h2>
           <p id="mainline-editor-description" class="helper-note">Shared profile contract, drafts, validation, inheritance, locks, diagnostics, and canonical exports.</p>
         </div>
@@ -105,7 +72,7 @@
     else document.getElementById('kaysender')?.prepend(shell);
     shell.querySelector('#mainline-editor-close')?.addEventListener('click', () => {
       shell.hidden = true;
-      activeSpecId = '';
+      activeEditorId = '';
     });
     return shell;
   }
@@ -123,25 +90,32 @@
     });
   }
 
-  async function launchEditor(spec) {
+  async function launch(editorIdOrAlias) {
+    const adapter = resolveAdapter(editorIdOrAlias);
+    if (!adapter) {
+      renderDiagnostics([Kernel.diagnostic('error', 'editor-adapter-missing', `No shared editor adapter is registered for ${editorIdOrAlias}.`)]);
+      return null;
+    }
     switchKaysenderView();
     const shell = getShell();
     shell.hidden = false;
-    shell.querySelector('#mainline-editor-title').textContent = spec.label.replace(/^Open /, '').replace(/ Editor$/, ' Editor');
-    shell.querySelector('#mainline-editor-description').textContent = 'Shared production shell with canonical envelope, stable identity, recoverable drafts, field locks, migrations, provenance, and actionable diagnostics.';
-    renderDiagnostics([Kernel.diagnostic('info', 'editor-loading', `Opening ${spec.label.replace(/^Open /, '')}.`)]);
-    spec.open();
+    shell.querySelector('#mainline-editor-title').textContent = adapter.label.replace(/^Open /, '');
+    shell.querySelector('#mainline-editor-description').textContent = `Adapter-driven ${adapter.profileType} editor with shared lifecycle, canonical identity, imports, drafts, locks, provenance, and diagnostics.`;
+    renderDiagnostics([Kernel.diagnostic('info', 'editor-loading', `Opening ${adapter.label.replace(/^Open /, '')}.`)]);
+    adapter.open();
     try {
-      const panel = await waitForPanel(spec.panelId);
-      activeSpecId = spec.id;
-      adoptPanel(spec, panel);
+      const panel = await waitForPanel(adapter.panelId);
+      activeEditorId = adapter.id;
+      adoptPanel(adapter, panel);
       shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return panel;
     } catch (error) {
       renderDiagnostics([Kernel.diagnostic('error', 'editor-open-failed', error.message)]);
+      return null;
     }
   }
 
-  function adoptPanel(spec, panel) {
+  function adoptPanel(adapter, panel) {
     const shell = getShell();
     const body = shell.querySelector('#mainline-editor-body');
     document.querySelectorAll('.editor-panel').forEach(item => {
@@ -149,25 +123,21 @@
     });
     panel.hidden = false;
     body.replaceChildren(panel);
-    panel.dataset.productionEditorId = spec.id;
-    decorateLockControls(spec, panel);
-    bindContextAdapters(spec, panel);
-    hideDuplicatedLegacyActions(spec, panel);
-    renderToolbar(spec, panel);
-    renderDiagnostics([Kernel.diagnostic('info', 'editor-ready', `${spec.label.replace(/^Open /, '')} is running through the P0 shared shell.`)]);
-    refreshProvenance(spec, panel);
+    panel.dataset.productionEditorId = adapter.id;
+    decorateLockControls(adapter, panel);
+    bindParentImports(adapter, panel);
+    hideDuplicatedLegacyActions(adapter, panel);
+    renderToolbar(adapter, panel);
+    renderDiagnostics([Kernel.diagnostic('info', 'editor-ready', `${adapter.label.replace(/^Open /, '')} is running through the shared adapter runtime.`)]);
+    refreshProvenance(adapter, panel);
   }
 
-  function hideDuplicatedLegacyActions(spec, panel) {
-    const ids = [spec.randomizeButtonId];
-    if (spec.id === 'floating-island-editor') ids.push('island-copy-json', 'island-download-json');
-    if (spec.id === 'settlement-editor') ids.push('settlement-copy-json', 'settlement-download-json');
-    if (spec.id === 'airship-editor') ids.push('airship-copy-json', 'airship-download-json');
-    ids.forEach(id => panel.querySelector(`#${id}`)?.classList.add('production-hidden'));
+  function hideDuplicatedLegacyActions(adapter, panel) {
+    adapter.hiddenLegacyActionIds.forEach(id => panel.querySelector(`#${id}`)?.classList.add('production-hidden'));
   }
 
-  function decorateLockControls(spec, panel) {
-    const form = panel.querySelector(`#${spec.formId}`);
+  function decorateLockControls(adapter, panel) {
+    const form = panel.querySelector(`#${adapter.formId}`);
     if (!form) return;
     form.querySelectorAll('label').forEach(label => {
       const field = label.querySelector('input[name],select[name],textarea[name]');
@@ -180,10 +150,12 @@
   }
 
   function lockedFields(panel) {
-    return Array.from(panel.querySelectorAll('[data-editor-lock]:checked')).map(item => item.dataset.editorLock).filter(Boolean);
+    return Array.from(panel.querySelectorAll('[data-editor-lock]:checked'))
+      .map(item => item.dataset.editorLock)
+      .filter(Boolean);
   }
 
-  function renderToolbar(spec, panel) {
+  function renderToolbar(adapter, panel) {
     const toolbar = getShell().querySelector('#mainline-editor-toolbar');
     toolbar.innerHTML = `
       <button class="primary-action" type="button" data-action="rebuild">Rebuild Record</button>
@@ -198,17 +170,17 @@
       <button class="secondary-action" type="button" data-action="export">Export Canonical JSON</button>
       <button class="secondary-action" type="button" data-action="wiki">Export Wiki Draft</button>`;
 
-    toolbar.querySelector('[data-action="rebuild"]').addEventListener('click', () => rebuild(spec, panel));
-    toolbar.querySelector('[data-action="new"]').addEventListener('click', () => newBlankRecord(spec, panel));
+    toolbar.querySelector('[data-action="rebuild"]').addEventListener('click', () => rebuild(adapter, panel));
+    toolbar.querySelector('[data-action="new"]').addEventListener('click', () => newBlankRecord(adapter, panel));
     toolbar.querySelector('[data-action="import"]').addEventListener('click', () => getShell().querySelector('#mainline-editor-import-file').click());
-    toolbar.querySelector('[data-action="recover"]').addEventListener('click', () => recoverDraft(spec, panel));
-    toolbar.querySelector('[data-action="validate"]').addEventListener('click', () => validateCurrent(spec, panel));
-    toolbar.querySelector('[data-action="save"]').addEventListener('click', () => saveCurrentDraft(spec, panel));
-    toolbar.querySelector('[data-action="clone"]').addEventListener('click', () => cloneCurrent(spec, panel));
-    toolbar.querySelector('[data-action="randomize"]').addEventListener('click', () => randomizeUnlocked(spec, panel));
-    toolbar.querySelector('[data-action="copy"]').addEventListener('click', () => copyCurrent(spec, panel));
-    toolbar.querySelector('[data-action="export"]').addEventListener('click', () => exportCurrent(spec, panel));
-    toolbar.querySelector('[data-action="wiki"]').addEventListener('click', () => exportWikiDraft(spec, panel));
+    toolbar.querySelector('[data-action="recover"]').addEventListener('click', () => recoverDraft(adapter, panel));
+    toolbar.querySelector('[data-action="validate"]').addEventListener('click', () => validateCurrent(adapter, panel));
+    toolbar.querySelector('[data-action="save"]').addEventListener('click', () => saveCurrentDraft(adapter, panel));
+    toolbar.querySelector('[data-action="clone"]').addEventListener('click', () => cloneCurrent(adapter, panel));
+    toolbar.querySelector('[data-action="randomize"]').addEventListener('click', () => randomizeUnlocked(adapter, panel));
+    toolbar.querySelector('[data-action="copy"]').addEventListener('click', () => copyCurrent(adapter, panel));
+    toolbar.querySelector('[data-action="export"]').addEventListener('click', () => exportCurrent(adapter, panel));
+    toolbar.querySelector('[data-action="wiki"]').addEventListener('click', () => exportWikiDraft(adapter, panel));
 
     const fileInput = getShell().querySelector('#mainline-editor-import-file');
     fileInput.onchange = async event => {
@@ -216,176 +188,200 @@
       event.target.value = '';
       if (!file) return;
       try {
-        const text = await file.text();
-        importRecord(spec, panel, text);
+        importRecord(adapter, panel, await file.text());
       } catch (error) {
         renderDiagnostics([Kernel.diagnostic('error', 'file-read-failed', `Could not read ${file.name}: ${error.message}`)]);
       }
     };
   }
 
-  function rebuild(spec, panel) {
-    panel.querySelector(`#${spec.buildButtonId}`)?.click();
+  function triggerBuild(adapter, panel) {
+    panel.querySelector(`#${adapter.buildButtonId}`)?.click();
+  }
+
+  function rebuild(adapter, panel) {
+    triggerBuild(adapter, panel);
     window.setTimeout(() => {
-      buildEnvelope(spec, panel);
-      refreshProvenance(spec, panel);
+      buildEnvelope(adapter, panel);
+      refreshProvenance(adapter, panel);
     }, 0);
   }
 
-  function newBlankRecord(spec, panel) {
-    const form = panel.querySelector(`#${spec.formId}`);
-    form?.reset();
+  function clearParentImport(panel, definition) {
+    panel.dataset[definition.contextDatasetKey] = '';
+    panel.dataset[definition.envelopeDatasetKey] = '';
+    const textarea = panel.querySelector(`#${definition.textareaId}`);
+    if (textarea) textarea.value = '';
+    const status = definition.statusId ? panel.querySelector(`#${definition.statusId}`) : null;
+    if (status) status.textContent = definition.emptyStatus;
+  }
+
+  function newBlankRecord(adapter, panel) {
+    panel.querySelector(`#${adapter.formId}`)?.reset();
     panel.querySelectorAll('[data-editor-lock]').forEach(item => { item.checked = false; });
-    clearContext(panel, 'island');
-    clearContext(panel, 'settlement');
-    activeEnvelopes.delete(spec.id);
-    Kernel.clearDraft(spec.id);
-    rebuild(spec, panel);
-    renderDiagnostics([Kernel.diagnostic('info', 'blank-record-created', 'Created a new blank record with fresh profile identity.')]);
+    adapter.parentImports.forEach(definition => clearParentImport(panel, definition));
+    activeEnvelopes.delete(adapter.id);
+    Kernel.clearDraft(adapter.id, true);
+    rebuild(adapter, panel);
+    renderDiagnostics([Kernel.diagnostic('info', 'blank-record-created', 'Created a new blank record with fresh profile identity and cleared its recovery draft.')]);
   }
 
-  function clearContext(panel, type) {
-    const datasetKey = type === 'island' ? 'sourceIsland' : 'sourceSettlement';
-    const envelopeKey = type === 'island' ? 'sourceIslandEnvelope' : 'sourceSettlementEnvelope';
-    panel.dataset[datasetKey] = '';
-    panel.dataset[envelopeKey] = '';
-    panel.querySelector(`#settlement-${type}-import`)?.replaceChildren();
-    const textareas = [panel.querySelector(`#settlement-${type}-import`), panel.querySelector(`#airship-${type}-import`)];
-    textareas.filter(Boolean).forEach(item => { item.value = ''; });
-    const statuses = [panel.querySelector(`#settlement-${type}-status`), panel.querySelector(`#airship-${type}-status`)];
-    statuses.filter(Boolean).forEach(item => { item.textContent = `No ${type} profile loaded.`; });
-  }
-
-  function readRawProfile(spec, panel) {
-    const output = panel.querySelector(`#${spec.outputId}`);
-    const textareas = output ? Array.from(output.querySelectorAll('textarea.json-export')) : [];
-    const target = textareas.at(-1);
+  function readRawProfile(adapter, panel) {
+    if (typeof adapter.readProfile === 'function') return adapter.readProfile(panel);
+    const output = panel.querySelector(`#${adapter.outputId}`);
+    const target = output ? Array.from(output.querySelectorAll('textarea.json-export')).at(-1) : null;
     if (!target?.value?.trim()) return null;
-    try { return JSON.parse(target.value); } catch (_) { return null; }
+    try {
+      return JSON.parse(target.value);
+    } catch (error) {
+      renderDiagnostics([Kernel.diagnostic('error', 'editor-output-invalid', `Editor output is not valid JSON: ${error.message}`)]);
+      return null;
+    }
   }
 
-  function collectInheritance(spec, panel) {
-    const refs = [];
-    const pairs = [
-      ['sourceIslandEnvelope', 'parent-island'],
-      ['sourceSettlementEnvelope', 'parent-settlement']
-    ];
-    pairs.forEach(([key, relationship]) => {
-      if (!panel.dataset[key]) return;
+  function collectInheritance(adapter, panel) {
+    const references = [];
+    adapter.parentImports.forEach(definition => {
+      const serialized = panel.dataset[definition.envelopeDatasetKey];
+      if (!serialized) return;
       try {
-        const envelope = JSON.parse(panel.dataset[key]);
-        const reference = Kernel.inheritanceReference(envelope, relationship);
-        if (reference) refs.push(reference);
-      } catch (_) { /* diagnostics already surfaced during import */ }
+        const reference = Kernel.inheritanceReference(JSON.parse(serialized), definition.relationship);
+        if (reference) references.push(reference);
+      } catch (error) {
+        renderDiagnostics([Kernel.diagnostic('warning', 'parent-envelope-unreadable', `Could not read ${definition.id} provenance: ${error.message}`)]);
+      }
     });
-    const previous = activeEnvelopes.get(spec.id);
-    return refs.length ? refs : (previous?.inheritance || []);
+    const previous = activeEnvelopes.get(adapter.id);
+    return references.length ? references : (previous?.inheritance || []);
   }
 
-  function buildEnvelope(spec, panel) {
-    const raw = readRawProfile(spec, panel);
+  function buildEnvelope(adapter, panel) {
+    const raw = readRawProfile(adapter, panel);
     if (!raw) return null;
     const envelope = Kernel.createEnvelope(raw, {
-      existingEnvelope: activeEnvelopes.get(spec.id),
-      editorId: spec.id,
-      moduleId: spec.moduleId,
-      origin: activeEnvelopes.has(spec.id) ? undefined : 'editor-created',
-      inheritance: collectInheritance(spec, panel),
+      existingEnvelope: activeEnvelopes.get(adapter.id),
+      editorId: adapter.id,
+      moduleId: adapter.moduleId,
+      origin: activeEnvelopes.has(adapter.id) ? undefined : 'editor-created',
+      inheritance: collectInheritance(adapter, panel),
       locks: lockedFields(panel)
     });
-    activeEnvelopes.set(spec.id, envelope);
+    activeEnvelopes.set(adapter.id, envelope);
     return envelope;
   }
 
-  function importRecord(spec, panel, input) {
+  function importRecord(adapter, panel, input) {
     const result = Kernel.normalizeImportedRecord(input, {
-      expectedTypes: [spec.profileType],
-      editorId: spec.id,
-      moduleId: spec.moduleId
+      expectedTypes: [adapter.profileType],
+      editorId: adapter.id,
+      moduleId: adapter.moduleId
     });
     renderDiagnostics(result.diagnostics);
-    if (!result.ok) return;
-    activeEnvelopes.set(spec.id, result.envelope);
-    applyEnvelope(spec, panel, result.envelope);
+    if (!result.ok) return null;
+    activeEnvelopes.set(adapter.id, result.envelope);
+    applyEnvelope(adapter, panel, result.envelope);
+    return result.envelope;
   }
 
-  function applyEnvelope(spec, panel, envelope) {
-    const form = panel.querySelector(`#${spec.formId}`);
-    Kernel.applyProfileToForm(form, spec.profileType, envelope.data);
-    applyInheritedContext(panel, envelope.data?.sourceIslandProfile, 'island');
-    applyInheritedContext(panel, envelope.data?.sourceSettlementProfile, 'settlement');
+  function applyEnvelope(adapter, panel, envelope) {
+    const form = panel.querySelector(`#${adapter.formId}`);
+    Kernel.applyProfileToForm(form, adapter.profileType, envelope.data);
+    adapter.parentImports.forEach(definition => {
+      const sourceRecord = envelope.data?.[definition.sourceProfileField];
+      if (sourceRecord) applyParentRecord(panel, definition, sourceRecord);
+      else clearParentImport(panel, definition);
+    });
     panel.querySelectorAll('[data-editor-lock]').forEach(item => {
       item.checked = envelope.locks?.includes(item.dataset.editorLock) || false;
     });
-    rebuild(spec, panel);
+    rebuild(adapter, panel);
     renderDiagnostics([
-      ...Kernel.validateEnvelope(envelope, [spec.profileType]),
+      ...Kernel.validateEnvelope(envelope, [adapter.profileType]),
       Kernel.diagnostic('info', 'record-loaded', `Loaded ${envelope.name} (${envelope.profileId}).`)
     ]);
   }
 
-  function applyInheritedContext(panel, record, type) {
-    if (!record) return;
-    const expected = type === 'island' ? ['floating-island-foundation-profile'] : ['settlement-profile'];
-    const result = Kernel.normalizeImportedRecord(record, { expectedTypes: expected });
-    if (!result.ok) return;
-    const datasetKey = type === 'island' ? 'sourceIsland' : 'sourceSettlement';
-    const envelopeKey = type === 'island' ? 'sourceIslandEnvelope' : 'sourceSettlementEnvelope';
-    panel.dataset[datasetKey] = JSON.stringify(result.context);
-    panel.dataset[envelopeKey] = JSON.stringify(result.envelope);
-    const textarea = panel.querySelector(`#settlement-${type}-import`) || panel.querySelector(`#airship-${type}-import`);
+  function applyParentRecord(panel, definition, record) {
+    const result = Kernel.normalizeImportedRecord(record, { expectedTypes: definition.expectedTypes });
+    if (!result.ok) {
+      renderDiagnostics(result.diagnostics);
+      return false;
+    }
+    panel.dataset[definition.contextDatasetKey] = JSON.stringify(result.context);
+    panel.dataset[definition.envelopeDatasetKey] = JSON.stringify(result.envelope);
+    const textarea = panel.querySelector(`#${definition.textareaId}`);
     if (textarea) textarea.value = JSON.stringify(result.envelope, null, 2);
+    const status = definition.statusId ? panel.querySelector(`#${definition.statusId}`) : null;
+    if (status) status.textContent = `Loaded ${result.envelope.name} (${result.envelope.profileId}).`;
+    return true;
   }
 
-  function validateCurrent(spec, panel) {
-    rebuild(spec, panel);
+  function validateCurrent(adapter, panel) {
+    triggerBuild(adapter, panel);
     window.setTimeout(() => {
-      const envelope = buildEnvelope(spec, panel);
-      if (!envelope) return renderDiagnostics([Kernel.diagnostic('error', 'profile-unavailable', 'No profile JSON is available to validate.')]);
-      const diagnostics = Kernel.validateEnvelope(envelope, [spec.profileType]);
-      if (!diagnostics.some(item => item.severity === 'error')) diagnostics.push(Kernel.diagnostic('info', 'validation-passed', `Record ${envelope.profileId} passed shared envelope and profile-type validation.`));
+      const envelope = buildEnvelope(adapter, panel);
+      if (!envelope) {
+        renderDiagnostics([Kernel.diagnostic('error', 'profile-unavailable', 'No profile JSON is available to validate.')]);
+        return;
+      }
+      const diagnostics = Kernel.validateEnvelope(envelope, [adapter.profileType]);
+      if (!diagnostics.some(item => item.severity === 'error')) {
+        diagnostics.push(Kernel.diagnostic('info', 'validation-passed', `Record ${envelope.profileId} passed shared envelope and profile-type validation.`));
+      }
       renderDiagnostics(diagnostics);
     }, 0);
   }
 
-  function saveCurrentDraft(spec, panel) {
-    const envelope = buildEnvelope(spec, panel);
-    if (!envelope) return renderDiagnostics([Kernel.diagnostic('error', 'draft-save-failed', 'No profile is available to save.')]);
-    const result = Kernel.saveDraft(spec.id, envelope);
+  function saveCurrentDraft(adapter, panel) {
+    const envelope = buildEnvelope(adapter, panel);
+    if (!envelope) {
+      renderDiagnostics([Kernel.diagnostic('error', 'draft-save-failed', 'No profile is available to save.')]);
+      return;
+    }
+    const result = Kernel.saveDraft(adapter.id, envelope);
     renderDiagnostics([Kernel.diagnostic(result.ok ? 'info' : 'error', result.ok ? 'draft-saved' : 'draft-save-failed', result.message)]);
   }
 
-  function recoverDraft(spec, panel) {
-    const envelope = Kernel.loadDraft(spec.id);
-    if (!envelope) return renderDiagnostics([Kernel.diagnostic('warning', 'draft-not-found', 'No recoverable local draft exists for this editor.')]);
-    activeEnvelopes.set(spec.id, envelope);
-    applyEnvelope(spec, panel, envelope);
+  function recoverDraft(adapter, panel) {
+    const envelope = Kernel.loadDraft(adapter.id);
+    if (!envelope) {
+      renderDiagnostics([Kernel.diagnostic('warning', 'draft-not-found', 'No recoverable local draft exists for this editor.')]);
+      return;
+    }
+    activeEnvelopes.set(adapter.id, envelope);
+    applyEnvelope(adapter, panel, envelope);
   }
 
-  function cloneCurrent(spec, panel) {
-    const envelope = buildEnvelope(spec, panel);
-    if (!envelope) return renderDiagnostics([Kernel.diagnostic('error', 'clone-failed', 'No profile is available to clone.')]);
-    const clone = Kernel.cloneEnvelope(envelope, { editorId: spec.id, moduleId: spec.moduleId });
-    activeEnvelopes.set(spec.id, clone);
-    applyEnvelope(spec, panel, clone);
+  function cloneCurrent(adapter, panel) {
+    const envelope = buildEnvelope(adapter, panel);
+    if (!envelope) {
+      renderDiagnostics([Kernel.diagnostic('error', 'clone-failed', 'No profile is available to clone.')]);
+      return;
+    }
+    const clone = Kernel.cloneEnvelope(envelope, { editorId: adapter.id, moduleId: adapter.moduleId });
+    activeEnvelopes.set(adapter.id, clone);
+    applyEnvelope(adapter, panel, clone);
   }
 
-  function randomizeUnlocked(spec, panel) {
-    const form = panel.querySelector(`#${spec.formId}`);
+  function randomizeUnlocked(adapter, panel) {
+    const form = panel.querySelector(`#${adapter.formId}`);
     const locked = lockedFields(panel);
     const snapshot = Kernel.snapshotFields(form, locked);
-    panel.querySelector(`#${spec.randomizeButtonId}`)?.click();
+    panel.querySelector(`#${adapter.randomizeButtonId}`)?.click();
     window.setTimeout(() => {
       Kernel.restoreFields(form, snapshot);
-      panel.querySelector(`#${spec.buildButtonId}`)?.click();
-      buildEnvelope(spec, panel);
+      triggerBuild(adapter, panel);
+      buildEnvelope(adapter, panel);
       renderDiagnostics([Kernel.diagnostic('info', 'selective-randomization-complete', `Randomized unlocked fields while preserving ${locked.length} lock${locked.length === 1 ? '' : 's'}.`)]);
     }, 0);
   }
 
-  async function copyCurrent(spec, panel) {
-    const envelope = buildEnvelope(spec, panel);
-    if (!envelope) return renderDiagnostics([Kernel.diagnostic('error', 'copy-failed', 'No profile is available to copy.')]);
+  async function copyCurrent(adapter, panel) {
+    const envelope = buildEnvelope(adapter, panel);
+    if (!envelope) {
+      renderDiagnostics([Kernel.diagnostic('error', 'copy-failed', 'No profile is available to copy.')]);
+      return;
+    }
     try {
       const copied = await Kernel.copyJson(envelope);
       renderDiagnostics([Kernel.diagnostic(copied ? 'info' : 'warning', copied ? 'canonical-json-copied' : 'clipboard-unavailable', copied ? 'Canonical profile JSON copied.' : 'Clipboard API is unavailable; use Export Canonical JSON.')]);
@@ -394,85 +390,89 @@
     }
   }
 
-  function exportCurrent(spec, panel) {
-    const envelope = buildEnvelope(spec, panel);
-    if (!envelope) return renderDiagnostics([Kernel.diagnostic('error', 'export-failed', 'No profile is available to export.')]);
-    Kernel.downloadJson(envelope, `${Kernel.slugify(envelope.name)}.${spec.profileType}.json`);
+  function exportCurrent(adapter, panel) {
+    const envelope = buildEnvelope(adapter, panel);
+    if (!envelope) {
+      renderDiagnostics([Kernel.diagnostic('error', 'export-failed', 'No profile is available to export.')]);
+      return;
+    }
+    Kernel.downloadJson(envelope, `${Kernel.slugify(envelope.name)}.${adapter.profileType}.json`);
     renderDiagnostics([Kernel.diagnostic('info', 'canonical-json-exported', `Exported ${envelope.profileId} revision ${envelope.revision}.`)]);
   }
 
-  function exportWikiDraft(spec, panel) {
-    const raw = readRawProfile(spec, panel);
-    const draft = raw?.outputs?.wikiDraft;
-    if (!draft) return renderDiagnostics([Kernel.diagnostic('error', 'wiki-export-failed', 'This record has no wiki draft output.')]);
+  function exportWikiDraft(adapter, panel) {
+    const raw = readRawProfile(adapter, panel);
+    const draft = typeof adapter.getWikiDraft === 'function' ? adapter.getWikiDraft(raw) : raw?.outputs?.wikiDraft;
+    if (!draft) {
+      renderDiagnostics([Kernel.diagnostic('error', 'wiki-export-failed', 'This record has no wiki draft output.')]);
+      return;
+    }
     Kernel.downloadJson(draft, `${Kernel.slugify(draft.title || raw.name)}.wiki-draft.json`);
     renderDiagnostics([Kernel.diagnostic('info', 'wiki-draft-exported', `Exported wiki draft for ${draft.title || raw.name}.`)]);
   }
 
-  function bindContextAdapters(spec, panel) {
-    if (panel.dataset.productionContextBound === 'true') return;
-    panel.dataset.productionContextBound = 'true';
+  function bindParentImports(adapter, panel) {
+    if (panel.dataset.productionContextBound === adapter.id) return;
+    panel.dataset.productionContextBound = adapter.id;
     panel.addEventListener('click', event => {
       const target = event.target.closest('button');
-      const definitions = {
-        'settlement-load-island': { type: 'island', expected: ['floating-island-foundation-profile'], textareaId: 'settlement-island-import' },
-        'airship-load-island': { type: 'island', expected: ['floating-island-foundation-profile'], textareaId: 'airship-island-import' },
-        'airship-load-settlement': { type: 'settlement', expected: ['settlement-profile'], textareaId: 'airship-settlement-import' }
-      };
-      const definition = definitions[target?.id];
+      const definition = Registry.getParentImport(adapter, target?.id);
       if (!definition) return;
       const textarea = panel.querySelector(`#${definition.textareaId}`);
       if (!textarea?.value?.trim()) return;
-      const result = Kernel.normalizeImportedRecord(textarea.value, { expectedTypes: definition.expected });
+      const result = Kernel.normalizeImportedRecord(textarea.value, { expectedTypes: definition.expectedTypes });
       renderDiagnostics(result.diagnostics);
       if (!result.ok) {
         event.preventDefault();
         event.stopImmediatePropagation();
         return;
       }
-      const datasetKey = definition.type === 'island' ? 'sourceIslandEnvelope' : 'sourceSettlementEnvelope';
-      panel.dataset[datasetKey] = JSON.stringify(result.envelope);
+      panel.dataset[definition.envelopeDatasetKey] = JSON.stringify(result.envelope);
       textarea.value = JSON.stringify(result.context, null, 2);
-      window.setTimeout(() => refreshProvenance(spec, panel), 0);
+      window.setTimeout(() => refreshProvenance(adapter, panel), 0);
     }, true);
   }
 
-  function refreshProvenance(spec, panel) {
+  function refreshProvenance(adapter, panel) {
     const list = getShell().querySelector('#mainline-editor-provenance');
-    const envelope = activeEnvelopes.get(spec.id);
-    const inheritance = collectInheritance(spec, panel);
+    const envelope = activeEnvelopes.get(adapter.id);
+    const inheritance = collectInheritance(adapter, panel);
     const items = [];
     if (envelope) items.push(`Current record: ${escapeHtml(envelope.profileId)} revision ${envelope.revision}.`);
     inheritance.forEach(item => items.push(`${escapeHtml(item.relationship)}: ${escapeHtml(item.name)} (${escapeHtml(item.profileId)}).`));
-    if (envelope?.provenance?.migrationLog?.length) {
-      envelope.provenance.migrationLog.forEach(item => items.push(`Migration: ${escapeHtml(item.message)}.`));
-    }
+    envelope?.provenance?.migrationLog?.forEach(item => items.push(`Migration: ${escapeHtml(item.message)}.`));
     list.innerHTML = items.length ? items.map(item => `<li>${item}</li>`).join('') : '<li>No inherited records loaded.</li>';
   }
 
   function renderDiagnostics(diagnostics) {
     const list = getShell().querySelector('#mainline-editor-diagnostics');
-    const records = Array.isArray(diagnostics) && diagnostics.length ? diagnostics : [Kernel.diagnostic('info', 'no-diagnostics', 'No diagnostics reported.')];
+    const records = Array.isArray(diagnostics) && diagnostics.length
+      ? diagnostics
+      : [Kernel.diagnostic('info', 'no-diagnostics', 'No diagnostics reported.')];
     list.innerHTML = records.map(item => `<li class="editor-diagnostic-${escapeHtml(item.severity)}"><strong>${escapeHtml(item.code)}</strong>: ${escapeHtml(item.message)}${item.path ? ` <code>${escapeHtml(item.path)}</code>` : ''}</li>`).join('');
   }
 
   function decorateCards() {
-    Object.values(editorSpecs).forEach(spec => {
-      document.querySelectorAll(`.module-card[data-module-id="${spec.moduleId}"]`).forEach(card => {
-        card.querySelectorAll(spec.legacyButtonSelector).forEach(button => button.remove());
-        if (spec.id === 'floating-island-editor') card.dataset.editorLinked = 'true';
-        if (spec.id === 'settlement-editor') card.dataset.settlementEditorLinked = 'true';
-        if (spec.id === 'airship-editor') card.dataset.airshipEditorLinked = 'true';
-        if (card.querySelector(`[data-production-editor="${spec.id}"]`)) return;
+    adapters().forEach(adapter => {
+      document.querySelectorAll(`.module-card[data-module-id="${adapter.moduleId}"]`).forEach(card => {
+        adapter.legacyButtonSelectors.forEach(selector => card.querySelectorAll(selector).forEach(button => button.remove()));
+        if (adapter.cardLinkFlag) card.dataset[adapter.cardLinkFlag] = 'true';
+        if (card.querySelector(`[data-production-editor="${adapter.id}"]`)) return;
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'primary-action production-editor-launch';
-        button.dataset.productionEditor = spec.id;
-        button.textContent = spec.label;
-        button.addEventListener('click', () => launchEditor(spec));
+        button.dataset.productionEditor = adapter.id;
+        button.textContent = adapter.label;
+        button.addEventListener('click', () => launch(adapter.id));
         card.appendChild(button);
       });
     });
+  }
+
+  function activeAdapterAndPanel() {
+    const adapter = resolveAdapter(activeEditorId);
+    const panel = adapter ? document.getElementById(adapter.panelId) : null;
+    return { adapter, panel };
   }
 
   function escapeHtml(value) {
@@ -487,10 +487,31 @@
     observer.observe(document.body, { childList: true, subtree: true });
     window.setInterval(decorateCards, 1000);
     window.KaysenderMainlineEditorProduction = Object.freeze({
-      launchIsland: () => launchEditor(editorSpecs.island),
-      launchSettlement: () => launchEditor(editorSpecs.settlement),
-      launchAirship: () => launchEditor(editorSpecs.airship),
-      getActiveEditorId: () => activeSpecId
+      launch,
+      launchIsland: () => launch('island'),
+      launchSettlement: () => launch('settlement'),
+      launchAirship: () => launch('airship'),
+      listEditors: () => adapters().map(adapter => ({
+        id: adapter.id,
+        moduleId: adapter.moduleId,
+        profileType: adapter.profileType,
+        parentProfileTypes: adapter.parentImports.flatMap(item => item.expectedTypes)
+      })),
+      getAdapter: editorIdOrAlias => resolveAdapter(editorIdOrAlias),
+      getActiveEditorId: () => activeEditorId,
+      getActiveEnvelope: () => Kernel.deepClone(activeEnvelopes.get(activeEditorId) || null),
+      rebuildActive: () => {
+        const { adapter, panel } = activeAdapterAndPanel();
+        if (adapter && panel) rebuild(adapter, panel);
+      },
+      newBlankActive: () => {
+        const { adapter, panel } = activeAdapterAndPanel();
+        if (adapter && panel) newBlankRecord(adapter, panel);
+      },
+      importIntoActive: input => {
+        const { adapter, panel } = activeAdapterAndPanel();
+        return adapter && panel ? importRecord(adapter, panel, input) : null;
+      }
     });
   }
 
