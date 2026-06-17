@@ -10,8 +10,8 @@
   const adapters = new Map();
   const aliases = new Map();
   const requiredFields = Object.freeze([
-    'id', 'moduleId', 'label', 'profileType', 'panelId', 'formId',
-    'outputId', 'buildButtonId', 'randomizeButtonId', 'open'
+    'id', 'moduleId', 'label', 'profileType', 'currentSchemaVersion',
+    'panelId', 'formId', 'outputId', 'buildButtonId', 'randomizeButtonId', 'open'
   ]);
   const optionalHooks = Object.freeze([
     'readProfile',
@@ -20,6 +20,7 @@
   ]);
 
   const isText = value => typeof value === 'string' && value.trim().length > 0;
+  const isVersion = value => /^\d+\.\d+\.\d+$/.test(String(value || ''));
 
   function normalizeParentImport(definition, editorId) {
     const required = [
@@ -58,6 +59,9 @@
       const valid = field === 'open' ? typeof input[field] === 'function' : isText(input[field]);
       if (!valid) throw new Error(`Adapter is missing required field ${field}.`);
     });
+    if (!isVersion(input.currentSchemaVersion)) {
+      throw new Error(`Adapter ${input.id} currentSchemaVersion must use major.minor.patch format.`);
+    }
     if (!Kernel.PROFILE_TYPES.includes(input.profileType)) {
       throw new Error(`Adapter ${input.id} uses unsupported profile type ${input.profileType}.`);
     }
