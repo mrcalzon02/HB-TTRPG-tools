@@ -53,6 +53,9 @@ jobs:
       - name: Validate Kaysender Warlock of the Swamp
         run: node scripts/validate-kaysender-warlock-of-the-swamp.mjs
 
+      - name: Validate Kaysender Locations of Note
+        run: node scripts/validate-kaysender-locations-of-note.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check kaysender-crafting-generator.js
