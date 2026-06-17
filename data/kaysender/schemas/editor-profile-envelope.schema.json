@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/kaysender/schemas/editor-profile-envelope.schema.json",
+  "title": "Kaysender Canonical Editor Profile Envelope",
+  "description": "Shared P0 envelope for all main-line editor records. Domain-specific profile data remains in data while identity, versioning, provenance, inheritance, field locks, and diagnostics use a stable common contract.",
+  "type": "object",
+  "required": [
+    "editorEnvelopeVersion",
+    "profileId",
+    "profileType",
+    "profileSchemaVersion",
+    "revision",
+    "createdAt",
+    "updatedAt",
+    "provenance",
+    "inheritance",
+    "locks",
+    "diagnostics",
+    "data"
+  ],
+  "properties": {
+    "editorEnvelopeVersion": { "type": "string", "const": "1.0.0" },
+    "profileId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*-[a-f0-9]{8,}$" },
+    "profileType": {
+      "type": "string",
+      "enum": [
+        "floating-island-foundation-profile",
+        "settlement-profile",
+        "airship-profile"
+      ]
+    },
+    "profileSchemaVersion": { "type": "string", "minLength": 1 },
+    "revision": { "type": "integer", "minimum": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "name": { "type": "string" },
+    "provenance": {
+      "type": "object",
+      "required": ["editorId", "moduleId", "origin", "migrationLog"],
+      "properties": {
+        "editorId": { "type": "string" },
+        "moduleId": { "type": "string" },
+        "origin": { "type": "string" },
+        "importedAt": { "type": ["string", "null"], "format": "date-time" },
+        "clonedFromProfileId": { "type": ["string", "null"] },
+        "migrationLog": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["code", "message"],
+            "properties": {
+              "code": { "type": "string" },
+              "message": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "inheritance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["relationship", "profileId", "profileType", "name"],
+        "properties": {
+          "relationship": { "type": "string" },
+          "profileId": { "type": "string" },
+          "profileType": { "type": "string" },
+          "name": { "type": "string" },
+          "revision": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "locks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "code", "message"],
+        "properties": {
+          "severity": { "type": "string", "enum": ["info", "warning", "error"] },
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "path": { "type": "string" }
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "required": ["name", "profileType"]
+    }
+  }
+}
