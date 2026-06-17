@@ -12,7 +12,9 @@ const builtins = await read('kaysender-editor-builtins.js');
 const mapping = await read('kaysender-editor-field-mapping.js');
 const kernelAdapters = await read('kaysender-editor-kernel-adapters.js');
 const lifecycle = await read('kaysender-editor-lifecycle.js');
+const repository = await read('kaysender-editor-repository.js');
 const production = await read('kaysender-editor-production.js');
+const recordLibrary = await read('kaysender-editor-record-library.js');
 const boundary = await read('kaysender-editor-error-boundary.js');
 const smoke = await read('kaysender-editor-live-smoke.js');
 
@@ -35,10 +37,12 @@ const orderedScripts = [
   'kaysender-editor-builtins.js',
   'kaysender-editor-kernel-adapters.js',
   'kaysender-editor-lifecycle.js',
+  'kaysender-editor-repository.js',
   'kaysender-editors.js',
   'kaysender-settlement-editor.js',
   'kaysender-airship-editor.js',
   'kaysender-editor-production.js',
+  'kaysender-editor-record-library.js',
   'kaysender-editor-error-boundary.js',
   'kaysender-editor-live-smoke.js'
 ];
@@ -109,6 +113,19 @@ for (const phrase of [
 }
 
 for (const phrase of [
+  'INDEX_KEY',
+  'RECORD_PREFIX',
+  'function save(envelope)',
+  'function load(profileId)',
+  'function remove(profileId, explicit = false)',
+  'function list(options = {})',
+  'function repairIndex()',
+  'window.KaysenderEditorRepository'
+]) {
+  if (!repository.includes(phrase)) fail(`Shared editor repository is missing '${phrase}'.`);
+}
+
+for (const phrase of [
   'const Registry = window.KaysenderEditorAdapters',
   'const Lifecycle = window.KaysenderEditorLifecycle',
   'async function launch(editorIdOrAlias)',
@@ -124,6 +141,21 @@ for (const phrase of [
   if (!production.includes(phrase)) fail(`Shared production runtime is missing '${phrase}'.`);
 }
 if (production.includes('const editorSpecs =')) fail('Shared production runtime still contains the removed hardcoded editorSpecs table.');
+
+for (const phrase of [
+  'Saved Record Library',
+  'saveActiveRecord',
+  'openSelectedRecord',
+  'deleteSelectedRecord',
+  'repairLibrary',
+  'Repository.save(envelope)',
+  'Repository.load(profileId)',
+  'Repository.remove(profileId, true)',
+  'Production()',
+  'window.KaysenderEditorRecordLibrary'
+]) {
+  if (!recordLibrary.includes(phrase)) fail(`Shared editor record library is missing '${phrase}'.`);
+}
 
 for (const phrase of [
   "window.addEventListener('error'",
@@ -153,4 +185,4 @@ for (const phrase of [
 }
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified adapter registry, built-in editor contracts, field mapping activation, shared lifecycle, generic production shell, error boundary, and browser chain.');
+console.log('Verified adapter registry, field mapping, lifecycle, persistent record repository, generic production shell, record-library controls, error boundary, and browser chain.');
