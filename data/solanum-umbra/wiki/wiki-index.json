@@ -1,9 +1,9 @@
 {
   "setting": "Solanum Umbra",
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.4.0",
   "status": "native-foundation-import-active",
   "genre": "post-apocalyptic science-fantasy",
-  "description": "Dedicated native-system wiki. Current packs cover character creation, professional talents, backgrounds, crafting, resources, combat, tactical movement, cover, vehicles, supernatural entity generation, and Synthesis force profiles. No external rules conversion is used.",
+  "description": "Dedicated native-system wiki. Current packs cover character creation, professional talents, backgrounds, cybernetic replacement and degradation, crafting, resources, combat, tactical movement, cover, vehicles, supernatural entity generation, and Synthesis force profiles. No external rules conversion is used.",
   "mechanicsPolicy": {
     "system": "Solanum Umbra native rules",
     "conversion": "none",
@@ -21,22 +21,26 @@
     "data/solanum-umbra/wiki/native-rules-pass-3-crafting-resources.json",
     "data/solanum-umbra/wiki/native-rules-pass-4-combat-cover-vehicles.json",
     "data/solanum-umbra/wiki/native-rules-pass-5-entity-generator.json",
-    "data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json"
+    "data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json",
+    "data/solanum-umbra/wiki/native-rules-pass-6-cybernetics-biotics-degradation.json"
   ],
   "completedScope": {
-    "wikiEntries": 25,
-    "nativePacks": 6,
+    "wikiEntries": 29,
+    "nativePacks": 7,
     "careerTalentFamilies": 5,
     "backgroundTables": 6,
+    "cyberneticTechnologyLevels": 5,
+    "cyberneticBodyParts": 8,
+    "bioticEnhancements": 12,
+    "degradationOutcomes": 21,
     "entityGeneratorTables": 7,
     "synthesisForceFamilies": 4,
     "namedForceRoles": 36,
-    "pageRanges": ["82-116","131-144","151-188","228-232"]
+    "pageRanges": ["82-144","151-188","228-232"]
   },
   "nextImportAreas": [
     "advancement",
-    "cybernetic installation and biotic requirements",
-    "equipment and vehicle catalogues",
+    "detailed equipment and vehicle catalogues",
     "remaining professional structures",
     "settlements and services",
     "named creatures and anomalies",
