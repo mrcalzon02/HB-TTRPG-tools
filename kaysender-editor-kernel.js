@@ -4,6 +4,7 @@
   const root = typeof window !== 'undefined' ? window : globalThis;
   const ENVELOPE_VERSION = '1.0.0';
   const STORAGE_PREFIX = 'hb-ttrpg-tools:kaysender-editor-draft:';
+  const VOLATILE_FINGERPRINT_KEYS = new Set(['generatedAt', 'updatedAt', 'exportedAt', 'lastRenderedAt']);
   const PROFILE_TYPES = new Set([
     'floating-island-foundation-profile',
     'settlement-profile',
@@ -57,16 +58,29 @@
     return value;
   }
 
+  function normalizeForFingerprint(value) {
+    if (Array.isArray(value)) return value.map(normalizeForFingerprint);
+    if (value && typeof value === 'object') {
+      return Object.keys(value).sort().reduce((result, key) => {
+        if (value[key] !== undefined && !VOLATILE_FINGERPRINT_KEYS.has(key)) {
+          result[key] = normalizeForFingerprint(value[key]);
+        }
+        return result;
+      }, {});
+    }
+    return value;
+  }
+
   function stableStringify(value) {
     return JSON.stringify(stableNormalize(value));
   }
 
   function profileFingerprint(data, locks = [], inheritance = []) {
-    return stableStringify({
+    return JSON.stringify(normalizeForFingerprint({
       data,
       locks: Array.from(new Set(locks || [])).sort(),
       inheritance: inheritance || []
-    });
+    }));
   }
 
   function diagnostic(severity, code, message, path = '') {
@@ -139,20 +153,21 @@
     const nextFingerprint = profileFingerprint(data, locks, inheritance);
     const changed = !previous || previousFingerprint !== nextFingerprint;
     const incrementRevision = previous && options.incrementRevision !== false && changed;
+    const canonicalData = previous && !changed ? deepClone(previous.data) : data;
     const migrationLog = [
       ...(previous?.provenance?.migrationLog || []),
       ...(options.migrationLog || [])
     ];
-    const diagnostics = validateDomainData(data, profileType ? [profileType] : []);
+    const diagnostics = validateDomainData(canonicalData, profileType ? [profileType] : []);
     return {
       editorEnvelopeVersion: ENVELOPE_VERSION,
-      profileId: previous?.profileId || options.profileId || createProfileId(profileType, data?.name),
+      profileId: previous?.profileId || options.profileId || createProfileId(profileType, canonicalData?.name),
       profileType,
-      profileSchemaVersion: String(data?.schemaVersion || options.profileSchemaVersion || '1.0.0'),
+      profileSchemaVersion: String(canonicalData?.schemaVersion || options.profileSchemaVersion || '1.0.0'),
       revision: previous ? previous.revision + (incrementRevision ? 1 : 0) : 1,
       createdAt: previous?.createdAt || timestamp,
       updatedAt: previous && !changed ? previous.updatedAt : timestamp,
-      name: String(data?.name || 'Unnamed Profile'),
+      name: String(canonicalData?.name || 'Unnamed Profile'),
       provenance: {
         editorId: options.editorId || previous?.provenance?.editorId || 'unknown-editor',
         moduleId: options.moduleId || previous?.provenance?.moduleId || 'unknown-module',
@@ -164,7 +179,7 @@
       inheritance,
       locks,
       diagnostics,
-      data
+      data: canonicalData
     };
   }
 
@@ -269,7 +284,8 @@
     const importedAt = nowIso();
     let envelope;
     const migrationLog = [];
-    if (isEnvelope(parsed)) {
+    const canonicalInput = isEnvelope(parsed);
+    if (canonicalInput) {
       envelope = deepClone(parsed);
       migrationLog.push({ code: 'canonical-envelope-loaded', message: `Loaded canonical envelope ${envelope.profileId}.` });
     } else {
@@ -292,7 +308,9 @@
 
     envelope.provenance = envelope.provenance || {};
     envelope.provenance.importedAt = envelope.provenance.importedAt || importedAt;
-    envelope.provenance.migrationLog = [...(envelope.provenance.migrationLog || []), ...migrationLog];
+    if (canonicalInput) {
+      envelope.provenance.migrationLog = [...(envelope.provenance.migrationLog || []), ...migrationLog];
+    }
     const diagnostics = validateEnvelope(envelope, expectedTypes);
     envelope.diagnostics = diagnostics;
     return {
