@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "title": "Shared Editor Kernel and Profile Contract",
-  "status": "implementation-committed-awaiting-ci-and-live-smoke",
+  "status": "implementation-committed-awaiting-ci-and-browser-verification",
   "activeBranch": "main",
   "parallelMainLineEditors": 1,
   "implementedOutputs": {
@@ -20,7 +20,8 @@
     "sharedJsonImportExport": true,
     "sharedWikiDraftExport": true,
     "validationAndDiagnostics": true,
-    "accessibleResponsiveControls": true
+    "accessibleResponsiveControls": true,
+    "browserVerificationHarness": true
   },
   "sharedActions": [
     "New blank record",
@@ -34,7 +35,8 @@
     "Export canonical JSON",
     "Export wiki draft",
     "Show provenance and inheritance",
-    "Show diagnostics and recoverable errors"
+    "Show diagnostics and recoverable errors",
+    "Run P0 browser verification"
   ],
   "compatibilityFixtures": [
     "data/kaysender/editors/fixtures/island-current-nested.json",
@@ -42,7 +44,8 @@
   ],
   "runtimeFiles": [
     "kaysender-editor-kernel.js",
-    "kaysender-editor-production.js"
+    "kaysender-editor-production.js",
+    "kaysender-editor-live-smoke.js"
   ],
   "schemaFiles": [
     "data/kaysender/schemas/editor-profile-envelope.schema.json"
@@ -54,12 +57,12 @@
     {
       "criterion": "All three existing alpha editors can open through the shared shell",
       "implementationState": "implemented",
-      "verificationState": "automated-structure-check-installed-live-browser-smoke-pending"
+      "verificationState": "automated-structure-check-and-browser-harness-installed-execution-pending"
     },
     {
       "criterion": "Current island profiles import into settlement and airship editors without flat-field assumptions",
       "implementationState": "implemented",
-      "verificationState": "nested-and-flat-fixtures-covered-by-automated-validator"
+      "verificationState": "nested-and-flat-fixtures-covered-by-automated-validator-and-browser-chain"
     },
     {
       "criterion": "Malformed or wrong-profile imports produce actionable errors instead of silent failure",
@@ -72,10 +75,10 @@
       "verificationState": "shared-shell-action-present-and-draft-retention-covered"
     },
     {
-      "criterion": "Shared behavior is covered by automated validation and smoke tests",
+      "criterion": "Shared behavior is covered by automated validation and browser verification",
       "implementationState": "implemented",
-      "verificationState": "pages-workflow-gate-installed-ci-result-pending"
+      "verificationState": "pages-workflow-gate-and-browser-harness-installed-results-pending"
     }
   ],
-  "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared kernel validator, JavaScript syntax checks, and a live browser smoke test succeed on main."
+  "promotionRule": "P0 may change to complete and P1 may become required-next only after the shared kernel validator, JavaScript syntax checks, and a live browser verification succeed on main."
 }
