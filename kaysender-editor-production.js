@@ -378,7 +378,7 @@
       if (sourceRecord) {
         const restored = applyParentRecord(panel, definition, sourceRecord, reference);
         if (!restored && reference) {
-          preservationUnresolvedParent(panel, definition, reference);
+          preserveUnresolvedParent(panel, definition, reference);
           restorationDiagnostics.push(Kernel.diagnostic('error', 'pinned-parent-restore-failed', `Could not restore pinned ${definition.id} ${reference.profileId}; its reference was retained.`, 'inheritance'));
         }
       } else if (reference) {
