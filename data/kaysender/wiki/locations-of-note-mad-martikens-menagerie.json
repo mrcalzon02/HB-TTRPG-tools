@@ -1,0 +1,454 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "0.1.0",
+  "description": "Complete source-backed Locations of Note entry for Mad Martiken’s Menagerie of Magical Services, including Hypertext d20 pricing, mutation mechanics, source tables, expanded service rules, case files, and a proprietor stat block.",
+  "entries": [
+    {
+      "id": "mad-martikens-menagerie-of-magical-services",
+      "title": "Mad Martiken’s Menagerie of Magical Services",
+      "category": "Locations of Note",
+      "summary": "A migratory illusion-built shop and emergent minor demiplane where the dwarf transfigurer Mad Martiken sells temporary disguises, permanent cosmetic alterations, functional grafts, and dangerously unstable transformations under the slogan ‘Be whatever you want to be.’",
+      "body": [
+        "Mad Martiken’s Menagerie of Magical Services advertises one promise: ‘Be whatever you want to be.’ Martiken can alter a client into a creature, hybrid, monstrosity, or imitation godling. His transformations genuinely function. Their stability, divine acceptability, and long-term ownership of the client’s body are separate questions.",
+        "The Menagerie appears along crooked streets in settlements capable of supporting wealthy adventurers, extravagant nobles, desperate outcasts, forbidden revelers, and people seeking a body that better reflects their identity. Its exterior is impossible to overlook, and its mounted chimerae, manticores, owlbears, and apparent infant-kraken skull give the location the atmosphere of a carnival, shrine, taxidermy gallery, and blasphemous surgical theater at once.",
+        "This entry preserves the complete fourteen-page location manuscript while translating its services, mutation checks, prices, risks, and case studies into playable Hypertext d20 / 3.5-compatible procedures. Manuscript facts and conversion expansions remain identified separately."
+      ],
+      "locationProfile": {
+        "locationType": "Mobile magical service shop, illusionary structure, and emergent minor demiplane",
+        "usualPlacement": "A crooked commercial street in a settlement with affluent or desperate customers",
+        "slogan": "Be whatever you want to be.",
+        "proprietor": "Mad Martiken",
+        "publicReputation": "Miracle-worker, flesh artisan, blasphemer, heretic, dangerous visionary",
+        "primaryServices": "Temporary transformation, permanent cosmetic alteration, permanent functional grafts, concealment clauses, reversibility clauses, stabilization, and aftercare",
+        "planarTraits": "Normal time and gravity; mildly morphic within Martiken’s working chambers; illusion-dominant structure; real accumulated matter; transformation magic is stabilized but not made safe"
+      },
+      "sections": [
+        {
+          "heading": "Mad Martiken, the wizard",
+          "sectionType": "source-lore",
+          "body": [
+            "Mad Martiken is a dwarf of ambiguous age. His wiry beard appears rust-red or slate-grey depending upon the lamplight, and his eyes possess the unsettling vitality of someone who has looked beyond sanity and chosen to lean farther rather than retreat.",
+            "His speech combines carnival barker, philosopher, stage magician, and trickster. Every sentence appears chosen for effect rather than truth. He insists that anyone can become anything for a price, and the shop’s continued operation proves that he is substantially correct.",
+            "Martiken is a self-taught mixture of wizard, sorcerer, alchemist, fleshcrafter, illusionist, and planar dabbler. He believes he exercises perfect control. In practice, the Menagerie itself absorbs, stabilizes, and recirculates the excess magic that would otherwise destroy his clients immediately."
+          ]
+        },
+        {
+          "heading": "Storefront and atmosphere",
+          "sectionType": "source-lore",
+          "body": [
+            "The exterior walls display preserved heads from chimerae, manticores, owlbears, and what appears to be a baby kraken. Some passersby swear that the eyes track them.",
+            "Inside, full-body taxidermy displays are posed mid-battle, mid-flight, mid-roar, or in the instant before impact. Incense, embalming oil, metal, and possible blood mingle in the air. Colored illumination shifts as customers move, producing twitching, breathing, and stirring illusions among the specimens.",
+            "The Menagerie is always busy. Adventurers seek power, nobles purchase spectacle, revelers buy temporary disguises, and outcasts seek identities or bodies unavailable through ordinary magic."
+          ]
+        },
+        {
+          "heading": "The illusionary structure and the reality bubble",
+          "sectionType": "source-lore",
+          "body": [
+            "True seeing reveals that the building is entirely illusionary. Its walls are memories of wood, its windows imitations of glass, and its foundation a convincing statement rather than masonry. The structure nevertheless feels heavy enough to occupy and anchor an entire street frontage.",
+            "Real matter has accumulated inside the fiction over decades: dust, rats, nails, screws, spilled potions, scraps of paper, dried blood, viscera, mud, insects, bird droppings, and water. The pipes are illusionary, but the water inside them is real because visitors have poured enough into the system. One side of the sign is held up by real screws driven into nothing.",
+            "The upper apartment includes a sewer line that connects to the sewer of whatever settlement currently hosts the Menagerie. It contains entirely real waste. Roof cavities hold decades of bird droppings, while nooks and false wall spaces have collected insects, gore, debris, and muck. X-ray sight or similar vision exposes the unpleasant internal details normally hidden by walls and plumbing.",
+            "The intersection of false architecture and accumulated real matter has created a half-demiplane or reality bubble. Martiken does not fully understand that the Menagerie has become a minor plane feeding upon his unstable genius. This planar quality is why his grafts function and why they continue changing afterward.",
+            "One field report refers to ‘Matt Martin’s menagerie.’ The wiki treats this as a transcription error for Mad Martiken rather than a separate proprietor."
+          ]
+        },
+        {
+          "heading": "Interior oddities",
+          "sectionType": "source-lore",
+          "body": [
+            "Stuffed Displays: Preserved cockatrices, nightmare steeds, and other creatures occupy lifelike poses. Some blink only when unobserved; others breathe as though suspended between taxidermy and undeath.",
+            "The Glass Menagerie: Cases hold a mummified pixie, a child-fist-sized kraken beak, dragon blood that refuses to remain one color, and similar curiosities.",
+            "The Gallery of Heads: A beholder head twitches when customers mention true seeing. A unicorn’s horn has blackened. Another unidentified head provokes fear without offering recognizable anatomy.",
+            "Whispering Furniture: Chairs and tables murmur advice during consultations. Martiken insists he hears nothing.",
+            "The Mirror of Becoming: A full-length mirror shows the viewer as they wish to become. It occasionally shows what they most fear becoming instead. Martiken uses it to direct the visualization ritual.",
+            "Odd Stock: Jars of claws, screaming bound grimoires, oil-slick insect carapaces, anatomical preparations, reagents, embalming oils, and unfinished grafts fill the shelves."
+          ]
+        },
+        {
+          "heading": "Consultation and visualization ritual",
+          "sectionType": "conversion-note",
+          "body": [
+            "Every client completes a smoky visualization ritual. Martiken requires the client to imagine shape, texture, balance, sensation, movement, appetite, and the physical experience of inhabiting the requested body. The clarity of that vision influences the finished graft.",
+            "A standard consultation takes 1 hour. The client attempts a DC 15 Concentration, Craft, Disguise, Knowledge (nature), or Perform check chosen to fit the visualization. Cosmetic changes add +0 to the DC; minor functional changes add +3; major changes such as sustained flight, extra limbs, or integrated poison add +7; combining unrelated lineages adds +5 per additional lineage.",
+            "Martiken simultaneously attempts Spellcraft and Heal checks against the same DC. If all three checks succeed, reduce the first relevant mutation trigger chance by 5 percentage points. If the client fails but Martiken succeeds, use normal risk. If either Martiken check fails, increase the first trigger chance by 5 points. If both fail, increase it by 10 points and roll once on the General Mutagenic Effects table immediately after the procedure.",
+            "Martiken coaches biological feasibility. Insect wings cannot lift a human frame without magic and reinforced anatomy. Extra arms need anchors, nerves, muscle, and skeletal support. Dragon wings are especially dangerous because draconic essences resist sharing a body with other lineages.",
+            "When preparation ends, Martiken touches the client’s head or shoulder. Smoke, fog, and glittering motes engulf them. The final form appears when the cloud clears, whether beautiful, functional, grotesque, or all three."
+          ]
+        },
+        {
+          "heading": "Advertised service prices and standard 3.5 coinage",
+          "sectionType": "builder-note",
+          "body": [
+            "Temporary Transformation — 500 gp. The source advertises a change lasting a few hours or at most one day, suitable for disguises, intimidation, forbidden parties, and short missions. The 3.5 conversion uses 1d4+4 hours unless the contract specifies otherwise.",
+            "Permanent Cosmetic Modification — 1,000 gp. The source calls this ‘1 platinum (1,000 gold).’ Standard 3.5 coinage values 1 platinum piece at 10 gp, so the wiki treats 1,000 gp as the controlling price and interprets ‘platinum’ as Martiken’s private large-accounting token. Cosmetic modifications provide no numerical combat benefit.",
+            "Permanent Functional Modification — advertised from 5,000 gp. The source calls this ‘5 platinum.’ The gold total is again controlling. The 5,000 gp price is the consultation, fleshcraft, and basic-function minimum; mechanically powerful benefits require the surcharges listed below.",
+            "All payments are normally half in advance and half after the client can demonstrate the requested function. Martiken accepts rare monster parts, services, memories, unusual bodies, and divine favors at values determined by negotiation."
+          ]
+        },
+        {
+          "heading": "Expanded service and surcharge price table",
+          "sectionType": "builder-note",
+          "body": [
+            "Temporary cosmetic overlay, 500 gp: disguise-quality physical alteration for 1d4+4 hours; +10 circumstance bonus on Disguise checks to appear as the selected body plan, but no copied extraordinary abilities.",
+            "Temporary functional graft, 1,500 gp: one minor function for 1d4+4 hours, such as darkvision 60 feet, water breathing, a 20-foot swim speed, scent, or one 1d4 natural attack.",
+            "Permanent cosmetic alteration, 1,000 gp: scales, exotic eyes, visible gills, firelike hair, harmless horns, changed coloration, or similar nonmechanical features.",
+            "Permanent minor function, 5,000 gp: darkvision 60 feet, scent, water breathing, one 1d4 natural attack, +2 on one narrow physical skill, or equivalent benefit.",
+            "Permanent integrated function, 12,000 gp: water breathing plus swim 30 feet, two 1d4 natural attacks, climb 20 feet, tremorsense 10 feet, functional spinnerets, or another bundled physiological system.",
+            "Permanent exceptional function, 25,000 gp: flight 40 feet with average maneuverability, a venom attack usable once per day, extra manipulator limbs that do not grant extra attacks, or another ability approximating a continuous 3rd-level spell.",
+            "Dragon wings or competing divine lineage, 35,000 gp minimum: includes structural reinforcement but automatically raises mutation risk one severity step whenever divine attention, resurrection, or overuse triggers a check.",
+            "Reversibility clause, +1,500 gp for cosmetic or +25% for functional work: permits Martiken to reverse the graft during a 1-hour procedure without additional spell components, provided the feature has not become autonomous or catastrophic.",
+            "Hidden-until-revealed enchantment, +2,000 gp: the modification is concealed as disguise self until voluntarily revealed; true seeing and similar magic perceive the underlying graft.",
+            "Extended temporary duration, +250 gp per additional day: maximum one week without converting the procedure into a permanent graft.",
+            "Stability warranty, +25%: reduces the first three Minor trigger chances by 5 percentage points. It does not protect against divine wrath, incompatible lineage, or deliberate overuse.",
+            "Rush service, +50%: reduces consultation and procedure to 10 minutes, increases the first trigger chance by 10 percentage points, and voids ordinary aftercare."
+          ]
+        },
+        {
+          "heading": "Functional modification benchmarks",
+          "sectionType": "builder-note",
+          "body": [
+            "Feline eyes — 5,000 gp: darkvision 60 feet and faint reflective eye-shine. Low-risk unless combined with heavy divination or patronal conflict.",
+            "Aquatic gills — 5,000 gp: water breathing. Add 7,000 gp for a swim speed of 30 feet and the ability to breathe both air and water without transition distress.",
+            "Claws or bite — 5,000 gp: one or two primary natural attacks dealing 1d4 damage for a Medium creature; damage changes normally with size.",
+            "Venomous stinger — 12,000 gp: secondary natural attack dealing 1d4 damage and poison once per day; Fortitude DC 10 + one-half Hit Dice + Constitution modifier; initial and secondary damage 1d4 Dexterity unless a different poison is negotiated.",
+            "Gliding wings — 8,000 gp: negate falling damage and move 20 feet horizontally for each 10 feet descended; no powered flight.",
+            "Powered wings — 25,000 gp: fly speed 40 feet with average maneuverability. Heavy armor reduces speed to 20 feet and poor maneuverability unless reinforced for an additional 5,000 gp.",
+            "Dragon wings — 35,000 gp: fly speed 50 feet with average maneuverability and +2 circumstance on Intimidate checks; draconic risk lineage and divine attention always apply.",
+            "Extra arms — 25,000 gp per pair: may hold, manipulate, reload, climb, and perform tasks, but do not independently grant additional attacks or actions. Multiweapon Fighting may be selected normally if the anatomy remains stable.",
+            "Spinnerets — 12,000 gp: produce 50 feet of silk rope per day or use a web attack once per day as a monstrous spider of the client’s size; arachnid risk lineage applies.",
+            "Firelike hair or luminous skin — 1,000 gp cosmetic, or 5,000 gp if bright enough to illuminate as a torch. Functional illumination can be suppressed or resumed as a standard action."
+          ]
+        },
+        {
+          "heading": "The price beyond gold and risky lineages",
+          "sectionType": "source-lore",
+          "body": [
+            "Martiken warns that some creature essences are too assertive to graft quietly. Gods and primordial creators guard their designs, and meddling with a protected body plan can draw cosmic interference.",
+            "Dragonkind: Draconic biology may overtake the client, erase the graft, develop compulsions, or rewrite the host into a draconic creature. Dragons, in Martiken’s words, do not share well.",
+            "Arachnids: Additional eyes, mandibles, hairs, spinnerets, carapace, and entire legs may bloom unexpectedly. A noblewoman reportedly developed spider limbs during a parliamentary speech.",
+            "Pixies and Fae: Fey alterations produce capricious shrinking, spontaneous illusions, wild-magic effects, personality drift, and reality-bending changes.",
+            "Sharks and Aquatic Essences: A requested shark feature may branch into eel, crab, squid, fin, gill, or other sea-creature traits rather than remaining species-specific.",
+            "Any lineage strongly claimed by a creator deity can be equally dangerous. Martiken summarizes the principle as: ‘Gods are jealous of their toys, and sometimes they break you to spite me.’"
+          ]
+        },
+        {
+          "heading": "Mutation trigger procedure",
+          "sectionType": "conversion-note",
+          "body": [
+            "Step 1 — Identify the trigger: first daily use, stress, dreams, mirror exposure, overuse, divine attention, near death, raw magic, stacked grafts, lineage conflict, prolonged Menagerie exposure, or deliberate pushing beyond the feature’s limits.",
+            "Step 2 — Roll 1d20 against the applicable trigger chance. Minor triggers occur on 1–5, Major triggers on 1–3, and Extreme triggers on a natural 1. Major or Extreme checks may become automatic when the listed circumstances are severe or when divine or planar wrath directly intervenes.",
+            "Step 3 — Choose the outcome table. Minor results normally use General Mutagenic Effects and last until treated or for the stated duration. Major results use the relevant lineage table and are normally permanent until reversed. Extreme results use Rare Catastrophic Mutation and may also require a lineage roll.",
+            "Step 4 — Record the mutation in the client’s long-term notes. Restoration does not automatically erase the graft’s history, divine claim, dreams, or future trigger conditions."
+          ]
+        },
+        {
+          "heading": "Mutation trigger quick-reference table",
+          "sectionType": "builder-note",
+          "body": [
+            "Minor — Daily use, combat stress, fear, exhaustion, intoxication, antimagic, dispelling, weekly dreams, mirrors, scrying, and self-visualization. Chance: 25%, or 1–5 on 1d20. Example: using a breath weapon for intimidation.",
+            "Major — Divine or patronal notice, feature overuse, critical success or failure involving the graft, recovery from 0 hit points, resurrection, restoration, rage, grief, or ecstasy. Chance: 15%, or 1–3 on 1d20; automatic when circumstances are extreme. Example: returning from death with a grafted bloodline.",
+            "Extreme — Wild-magic surges, ley lines, unstable artifacts, adding second or third modifications to an unstable body, soul or lineage conflict, divine wrath, months within the Menagerie demiplane, or deliberate attempts to exceed limits. Chance: 5%, natural 1 on 1d20; automatic for direct divine or planar wrath. Example: grafting dragon wings onto a fae-blooded sorcerer."
+          ]
+        },
+        {
+          "heading": "General Mutagenic Effects — d20",
+          "sectionType": "source-table",
+          "body": [
+            "1 — Stable: The feature remains stable and produces no side effect.",
+            "2 — Fading: The feature loses function over one week and vanishes unless stabilized; temporary grafts end immediately after that week.",
+            "3 — Uncontrolled covering: Scales, feathers, or hair spread in random patches; -2 on Disguise checks until removed or incorporated into the intended appearance.",
+            "4 — Additional eye: An eye appears in an inconvenient location; +2 on Spot checks but -2 on Disguise checks and on saves against gaze attacks until adapted.",
+            "5 — Warped voice: The voice hisses, booms, echoes, or develops a second tone; +2 Intimidate and -2 on vocal Disguise checks.",
+            "6 — Altered appetite: The client craves raw meat, insects, minerals, or blood. Ignoring the craving for 24 hours requires DC 12 Fortitude or causes fatigue until the craving is satisfied.",
+            "7 — Prophetic nightmares: Sleep produces disturbing symbolic information. Once per week the GM may provide an augury-like omen; the client must pass DC 15 Will or awaken fatigued.",
+            "8 — Oversized feature: The graft doubles in apparent size. Armor or clothing must be refitted at 10% of its price, and narrow-space checks suffer -2.",
+            "9 — Movement beneath skin: The skin ripples as though something travels underneath; -2 on Diplomacy with observers unfamiliar with fleshcraft.",
+            "10 — Spreading feature: Claws become talons, scales spread, or eyes multiply. Roll once on the relevant lineage table; treat purely cosmetic results as Minor.",
+            "11 — Emotional surge: Strong emotion forces a DC 15 Will save or activates, enlarges, or partially manifests the feature for 1d4 rounds.",
+            "12 — Autonomous appendage: One limb, head, or appendage twitches independently. Concentration checks made while it resists suffer -2; a DC 15 Will save suppresses it for 1 hour.",
+            "13 — Instinctive behavior: Nesting, hoarding, hunting, territoriality, or predation appears. Resisting a relevant opportunity requires DC 15 Will.",
+            "14 — Uncontrolled aura: Sparks, frost, whispers, motes, or odors flare. The client loses concealment and suffers -5 on Hide for 1 round when the aura triggers.",
+            "15 — Equipment fusion: A worn mundane item fuses with the graft. Removing it requires remove curse, Martiken’s reversal process, or 1d6 damage per item hardness point to the client.",
+            "16 — Growth seizure: The client takes nonlethal damage equal to Hit Dice and must pass DC 15 Fortitude or become stunned for 1 round before new tissue develops.",
+            "17 — Altered blood: Blood glows, smells wrong, stains, or corrodes. Acidic blood deals 1 point of damage per round to unattended nonmagical metal it coats.",
+            "18 — Lagging shadow: The shadow reacts late or displays a more transformed body. Divinations concerning the client gain +2 caster level, while the client gains +2 on saves against shadow illusions.",
+            "19 — Uncontrolled transformation surge: The GM activates or expands the graft immediately and selects an effect consistent with the lineage for 1d4 rounds.",
+            "20 — Catastrophic escalation: Roll twice on this table, apply both results, and treat their severity as one step higher. If either roll is 20, also roll on Rare Catastrophic Mutation."
+          ]
+        },
+        {
+          "heading": "Draconic Modifications — d12",
+          "sectionType": "source-table",
+          "body": [
+            "1 — Horns thicken and grow uncontrollably; headgear must be refitted and gore damage may increase one die step at the GM’s discretion.",
+            "2 — Eyes become reptilian and faintly luminous; gain low-light vision or extend existing darkvision by 30 feet, but suffer -2 on Disguise.",
+            "3 — Breath smokes or sparks without intent; the client cannot fully conceal draconic ancestry and may ignite unattended tinder on a natural 1 during stress.",
+            "4 — Scales spread unpredictably; gain +1 natural armor, but ordinary clothing and armor require refitting.",
+            "5 — A tail stub begins growing; Balance gains +2 after one month, but the tail may continue developing on future triggers.",
+            "6 — Hunger for raw meat and treasure; resisting a conspicuous hoard requires DC 15 Will.",
+            "7 — Dragon-gods whisper orders in dreams; DC 17 Will prevents fatigue and one temporary compulsion chosen by the GM.",
+            "8 — Hoarding compulsion develops toward coins, stones, bones, books, or another category; resisting an unattended opportunity requires DC 15 Will.",
+            "9 — Stress discharges a breath weapon in a 15-foot cone for 1d6 damage per four Hit Dice, Reflex half, DC 10 + one-half Hit Dice + Constitution modifier. Energy type follows lineage.",
+            "10 — Limbs elongate and body proportions become increasingly draconic; speed increases by 5 feet but armor must be replaced.",
+            "11 — Partial wings spasm violently; DC 15 Reflex or fall prone when surprised, struck by a critical hit, or exposed to fear.",
+            "12 — A draconic persona takes root as an alternate identity. During stress the client must pass DC 18 Will or the persona controls behavior for 1d4 rounds."
+          ]
+        },
+        {
+          "heading": "Arachnid Modifications — d10",
+          "sectionType": "source-table",
+          "body": [
+            "1 — An extra set of eyes opens only at night; gain +2 Spot in darkness and -2 against gaze attacks while open.",
+            "2 — Fine sensory hairs spread across the skin; gain +2 on checks to notice air movement but -2 Disguise.",
+            "3 — Craving for insects intensifies; resisting available insects during hunger requires DC 12 Will.",
+            "4 — Spinnerets develop and produce webbing unconsciously; each night there is a 25% chance the client wakes entangled in a 5-foot patch of web.",
+            "5 — Skin segments and carapace forms; gain +1 natural armor and -1 on Swim checks.",
+            "6 — Mandibles erupt painfully; gain a 1d4 bite but take nonlethal damage equal to Hit Dice when they first emerge.",
+            "7 — Vestigial extra arms bud; they can hold Tiny objects but provide no attacks or manipulation until upgraded.",
+            "8 — The client must pass DC 15 Will to sleep outside a dark enclosed corner when one is available.",
+            "9 — Eyes cloud with multiple reflections; gain +2 against visual illusions but suffer 20% miss chance for 1 round after exposure to bright light.",
+            "10 — The body attempts full arachnid conversion. Treat as a Major result and roll on Rare Catastrophic Mutation if another arachnid result is already active."
+          ]
+        },
+        {
+          "heading": "Pixie and Fae Modifications — d8",
+          "sectionType": "source-table",
+          "body": [
+            "1 — Glittering motes trail behind; -5 Hide and +2 on checks to impress or distract creatures attracted to spectacle.",
+            "2 — The voice becomes musical and subtly hypnotic; +2 Perform (sing) and Diplomacy, but silence and countersong effects treat the client as a magical vocal source.",
+            "3 — Touched objects undergo harmless polymorphic shifts for 1d4 minutes on a natural 1 during item use.",
+            "4 — Ears grow elongated and leaflike; +2 Listen and -2 Disguise.",
+            "5 — Minor illusions manifest spontaneously within 10 feet during strong emotion; observers receive a Will save DC 10 + one-half Hit Dice + Charisma modifier to disbelieve.",
+            "6 — Personality shifts toward chaotic whimsy; resisting a tempting but harmless impulse requires DC 15 Will.",
+            "7 — The client shrinks one size category for 1d4 rounds during a trigger; equipment changes with them but reach and space adjust normally.",
+            "8 — Wild magic surges. Roll on an appropriate campaign wild-magic table or produce a spell effect of 0th–3rd level centered on the client."
+          ]
+        },
+        {
+          "heading": "Aquatic and Shark Modifications — d8",
+          "sectionType": "source-table",
+          "body": [
+            "1 — Teeth continually fall out and regrow; gain a 1d4 bite if none exists, but evidence and shed teeth are difficult to conceal.",
+            "2 — Eyes become broad, black, and apparently soulless; gain +2 Spot underwater and -2 Diplomacy with surface dwellers.",
+            "3 — Gills ache away from water; after 24 hours without immersion the client becomes fatigued until soaked for 10 minutes.",
+            "4 — Fins sprout unpredictably; gain +5 Swim but armor requires refitting.",
+            "5 — Skin becomes rubbery and slick; +4 Escape Artist and -2 on checks to grip or climb dry surfaces.",
+            "6 — Predatory rage erupts when a bleeding creature is within 30 feet; DC 15 Will or the client must move toward or attack a bleeding enemy for 1 round.",
+            "7 — Dreams fill with oceans, drowning, and pursuit; DC 15 Will or awaken fatigued, but gain +2 Survival at sea that day.",
+            "8 — The body branches into eel, crab, squid, shark, or mixed aquatic traits. Roll twice on this table and apply both results, rerolling additional 8s."
+          ]
+        },
+        {
+          "heading": "Rare Catastrophic Mutation — d6",
+          "sectionType": "source-table",
+          "body": [
+            "1 — Partial full-creature transformation: The client assumes a hybrid or uncontrolled creature form for 1d6 hours. Use polymorph limits based on Hit Dice; identity remains but voluntary control requires DC 20 Will each hour.",
+            "2 — Infectious mutation: Allies within 10 feet make DC 18 Fortitude saves or acquire a Minor version of one active feature for 1d6 days.",
+            "3 — Soul fusion: Part of the creature essence joins the client’s soul. Raise dead and resurrection require a DC 20 caster-level check until the fusion is negotiated, exorcised, or accepted.",
+            "4 — Divine wrath: A creator deity or patron imposes a curse, deformity, prohibition, geas, or visible mark. Remove curse can suppress it for one day, but permanent resolution requires atonement, negotiation, or adventure.",
+            "5 — Parasitic graft: The feature develops its own Intelligence 6, Wisdom 12, and Charisma 10 and contests control during relevant actions with opposed Charisma checks.",
+            "6 — Reality warp: The client and a 20-foot radius mutate chaotically. Creatures make DC 18 Fortitude saves against one Minor mutation; unattended organic terrain remains altered until remove curse, break enchantment, or restoration repairs it."
+          ]
+        },
+        {
+          "heading": "Aftercare, stabilization, and reversal",
+          "sectionType": "conversion-note",
+          "body": [
+            "Routine examination — 50 gp, credited toward later treatment: Martiken identifies current trigger categories and one active mutation with Spellcraft opposed by DC 15 + mutation severity.",
+            "Minor stabilization — 500 gp: suppress one Minor mutation for 30 days or grant a new save against it. Lesser restoration, remove disease, or remove curse may substitute when thematically appropriate.",
+            "Major stabilization — 2,500 gp plus 100 gp per character level: halt progression for 30 days and prevent one listed trigger category from causing checks. Break enchantment, heal, limited wish, or a negotiated divine intervention may permanently resolve the mutation.",
+            "Extreme containment — 10,000 gp minimum and usually a quest component: prevents immediate spread or reality damage for 24 hours. Permanent treatment may require greater restoration, miracle, wish, divine arbitration, destruction of the asserting essence, or acceptance of a new stable form.",
+            "Standard reversal — original price plus 25%: available only when purchased in advance or when the graft has not become autonomous, divinely claimed, soul-fused, or catastrophic.",
+            "Martiken does not guarantee that reversing anatomy reverses memories, instincts, patron attention, dreams, social consequences, or divine ownership disputes."
+          ]
+        },
+        {
+          "heading": "Case file: Dolomedes and the feline eyes",
+          "sectionType": "source-case-study",
+          "body": [
+            "Dolomedes, called Dolo, received feline eyes granting darkvision 60 feet and a faint glow in dim light. The procedure overlays feline traits upon humanoid physiology rather than rewriting the soul and is considerably less invasive than wings, additional limbs, or divine bloodline work.",
+            "Martiken dismissed the danger: ‘Cat’s eyes? Pah. Easy work. Not even the gods bother with the little things. Unless, of course, your swamp mistress is the jealous sort—but then again, she seems the type to enjoy watching.’",
+            "Risk is Minor and unusually low. Roll only when Dolomedes abuses vision-related magic through constant eldritch sight, hostile illusion work, forbidden scrying, or similar excess. Possible signs include pupils narrowing in torchlight, reflected swamp lights, perception of spirits, and dreams in which the swamp watches through the new eyes.",
+            "The Lady of the Swamp is aware of the modification but considers it beneath direct objection and potentially aligned with the lesson of seeing the world from another perspective."
+          ]
+        },
+        {
+          "heading": "Case file: Soba, copper wings, and red draconic lineage",
+          "sectionType": "source-case-study",
+          "body": [
+            "Soba possesses red half-dragon heritage and received copper-dragon wings. Martiken warned that the competing draconic lineages had invited two divine claims into the same marrow and that within twenty to fifty years something would give: Soba might become less himself and more entirely dragon.",
+            "The red lineage carries the wrathful divine echo associated with Tiamat, while the copper graft carries an ancient trickster-breath. The body may yield to one lineage, alternate between them, fuse them, or create an unprecedented draconic form.",
+            "The timeline is deliberately long enough for an adventurer to dismiss as a future problem, but the GM may foreshadow or accelerate it through trigger events. Mechanical signs should begin as Draconic Modifications before advancing to full dragonification or Rare Catastrophic Mutation.",
+            "Roleplaying hooks include Soba’s deliberate denial, allies questioning whether he will remain himself, dragonborn prophecy surrounding the ‘copper-winged red,’ and Martiken’s warning becoming a repeated omen. The source uses the misspelling ‘Darconic Scion’; the wiki preserves it as an in-world transcription or prophetic title."
+          ]
+        },
+        {
+          "heading": "Using the Menagerie as a campaign location",
+          "sectionType": "new-expansion",
+          "body": [
+            "Consultation encounter: Clients, rivals, divine agents, activists, fleshcraft victims, and curious nobles all meet in the same waiting room while the furniture whispers contradictory advice.",
+            "Investigation encounter: True seeing reveals a building made from fiction and decades of accumulated biological reality. Recovering an object may require navigating real debris resting on nonexistent floors.",
+            "Planar emergency: Antimagic, dispelling, or Martiken’s absence causes rooms to misalign. Characters may need to secure real pipes, sewer contents, specimens, and customers before the illusionary architecture reasserts itself.",
+            "Mutation dispute: A creator deity, patron, or lineage spirit demands the return of a bodily feature already purchased and integrated by a client.",
+            "Identity story: A client seeks a body for reasons unrelated to combat. The Menagerie can grant the request, while the adventure concerns payment, safe visualization, social recognition, and preventing the shop’s instability from turning affirmation into horror.",
+            "The Menagerie should offer genuine miracles as well as danger. Its horror comes from unstable magic, divine jurisdiction, and Martiken’s confidence, not from treating every desire for bodily change as inherently corrupt."
+          ]
+        }
+      ],
+      "tables": [
+        {
+          "id": "martiken-advertised-services",
+          "title": "Advertised service tiers",
+          "columns": ["Service","Duration","Advertised Price","3.5 Treatment","Base Risk"],
+          "rows": [
+            ["Temporary change","A few hours to one day","500 gp","1d4+4 hours; cosmetic or one limited function","Minor"],
+            ["Permanent cosmetic modification","Permanent","1,000 gp","No numerical combat benefit","Minor"],
+            ["Permanent functional modification","Permanent","5,000 gp minimum","One minor function; stronger abilities add surcharges","Major"]
+          ]
+        },
+        {
+          "id": "martiken-expanded-pricing",
+          "title": "Expanded transformation pricing",
+          "columns": ["Package","Price","Mechanical Result","Risk Adjustment"],
+          "rows": [
+            ["Temporary functional graft","1,500 gp","One minor function for 1d4+4 hours","Minor"],
+            ["Permanent minor function","5,000 gp","Darkvision, scent, water breathing, 1d4 natural attack, or equivalent","Major"],
+            ["Permanent integrated function","12,000 gp","Bundled physiology such as water breathing plus swim 30 ft.","Major"],
+            ["Permanent exceptional function","25,000 gp","Flight, venom, extra manipulators, or continuous 3rd-level-equivalent benefit","Major +5%"],
+            ["Dragon wings or competing divine lineage","35,000 gp minimum","Flight 50 ft. average plus reinforcement","Raise severity one step on divine, resurrection, or overuse triggers"],
+            ["Reversibility clause","1,500 gp cosmetic or +25% functional","Allows standard reversal before autonomous or catastrophic progression","No change"],
+            ["Hidden-until-revealed enchantment","+2,000 gp","Disguise-self concealment until revealed","No change"],
+            ["Stability warranty","+25%","First three Minor trigger chances reduced by 5 percentage points","-5% Minor only"],
+            ["Rush service","+50%","10-minute consultation and procedure","+10% first trigger"]
+          ]
+        },
+        {
+          "id": "martiken-trigger-reference",
+          "title": "Mutation trigger quick reference",
+          "columns": ["Severity","Conditions","Chance","Example"],
+          "rows": [
+            ["Minor","Daily use, stress, dreams, mirrors, antimagic","25% (1–5 on d20)","Breath weapon used for intimidation"],
+            ["Major","Divine notice, overuse, criticals, near death, extreme emotion","15% (1–3 on d20) or automatic","Resurrected after death"],
+            ["Extreme","Wild magic, stacked modifications, lineage conflict, divine wrath, prolonged demiplane exposure","5% (natural 1) or automatic","Dragon wings grafted onto fae-blooded sorcerer"]
+          ]
+        },
+        {
+          "id": "martiken-source-table-index",
+          "title": "Source mutation table index",
+          "columns": ["Table","Die","Purpose"],
+          "rows": [
+            ["General Mutagenic Effects","d20","Universal instability and progressive body changes"],
+            ["Draconic Modifications","d12","Draconic physiology, compulsion, divine claim, and persona"],
+            ["Arachnid Modifications","d10","Eyes, hairs, webs, carapace, mandibles, limbs, and nesting"],
+            ["Pixie/Fae Modifications","d8","Motes, voice, polymorphic bleed, illusions, shrinking, and wild magic"],
+            ["Aquatic/Shark Modifications","d8","Teeth, eyes, gills, fins, slick skin, rage, dreams, and hybridization"],
+            ["Rare Catastrophic Mutation","d6","Creature conversion, infection, soul fusion, wrath, parasitic autonomy, and reality warp"]
+          ]
+        }
+      ],
+      "statBlocks": [
+        {
+          "title": "Mad Martiken, Menagerie Proprietor",
+          "ruleset": "Hypertext d20 / 3.5-compatible",
+          "conversionStatus": "Source-derived unique NPC",
+          "statType": "Named NPC",
+          "size": "Medium",
+          "creatureType": "Humanoid (Dwarf)",
+          "alignment": "Chaotic Neutral",
+          "challengeRating": "15",
+          "experience": "—",
+          "hitDice": "16d4+48",
+          "hitPoints": "88",
+          "initiative": "+6",
+          "speed": ["20 ft."],
+          "armorClass": {"total":"22","touch":"14","flatFooted":"20","notes":"+2 Dex, +4 mage armor, +4 shield, +2 deflection"},
+          "baseAttackGrapple": "+8/+8",
+          "attack": "+1 quarterstaff +9 melee (1d6+1) or ray +10 ranged touch",
+          "fullAttack": "+1 quarterstaff +9/+4 melee (1d6+1)",
+          "spaceReach": "5 ft./5 ft.",
+          "saves": {"fortitude":"+9","reflex":"+8","will":"+15"},
+          "abilities": {"strength":"10","dexterity":"14","constitution":"16","intelligence":"22","wisdom":"12","charisma":"20"},
+          "specialAttacks": [
+            "Dual tradition spellcasting: outside the Menagerie, casts as wizard 8 and sorcerer 8; save DC 16 + spell level for Intelligence-based prepared spells and 15 + spell level for Charisma-based spontaneous spells.",
+            "Menagerie transfiguration: inside the Menagerie, Martiken treats his caster level as 16 for transmutation, illusion, polymorph, fleshcraft, curse removal, and planar-binding checks associated with his services.",
+            "Unstable graft: after a successful 1-hour ritual, Martiken may apply one purchased service. The client then uses the location’s mutation rules."
+          ],
+          "specialQualities": [
+            "Dwarf traits, darkvision 60 ft., stability, stonecunning, +2 on saves against poison and spells.",
+            "Reality-bubble master: inside the Menagerie, Martiken gains +4 on Spellcraft, Heal, Craft (alchemy), and caster-level checks and may interact normally with the illusionary architecture.",
+            "Mad certainty: +4 on saves against confusion and insanity; -4 Sense Motive when admitting that one of his transformations is failing.",
+            "Shop-bound stabilization: if the Menagerie is completely suppressed or destroyed, Martiken loses Menagerie transfiguration until he establishes another reality bubble."
+          ],
+          "skills": ["Bluff +24","Concentration +22","Craft (alchemy) +27","Diplomacy +14","Disguise +15","Heal +12","Knowledge (arcana) +27","Knowledge (nature) +17","Knowledge (the planes) +27","Knowledge (religion) +18","Sense Motive +8","Spellcraft +29","Use Magic Device +24"],
+          "feats": ["Brew Potion","Craft Wondrous Item","Greater Spell Focus (transmutation)","Improved Initiative","Scribe Scroll","Skill Focus (Spellcraft)","Spell Focus (illusion)","Spell Focus (transmutation)"],
+          "environment": "Mad Martiken’s Menagerie of Magical Services",
+          "organization": "Unique, usually with 1d4 clients, 1d3 assistants or victims, and numerous preserved specimens",
+          "treasure": "Double standard plus shop inventory, monster components, service contracts, and unstable grafts",
+          "advancement": "By character class",
+          "levelAdjustment": "—",
+          "tactics": [
+            "Martiken avoids lethal combat inside the shop, using illusions, fog, polymorph, summoned specimens, and shifting rooms to separate intruders.",
+            "He bargains before fighting, offering repairs, transformations, secrets, or reversal clauses.",
+            "If cornered, he attempts plane shift or dimension door through the Menagerie and may abandon the current storefront rather than risk the reality bubble."
+          ],
+          "conversionNotes": [
+            "The manuscript identifies Martiken as a self-taught blend of wizard and sorcerer without exact levels. The dual 8th-level traditions and CR 15 are conversion choices.",
+            "His effective caster level 16 applies only to Menagerie services and shop-related transmutation, illusion, and stabilization, preventing the multiclass chassis from making the signature location nonfunctional."
+          ]
+        }
+      ],
+      "sourceStatus": "source-integrated-conversion",
+      "sourceRefs": [
+        {
+          "sourceId": "mad-martikens-menagerie-of-magical-services",
+          "fileName": "Mad Martiken’s Menagerie of Magical Services.pdf",
+          "outlineTitle": "The Wizard, storefront, services, process, reputation, and illusory shop",
+          "pageStart": 1,
+          "pageEnd": 4,
+          "chunkId": "mad-martikens-menagerie:p1-4",
+          "notes": "Primary location description, advertised prices, mutagenic lineages, visualization ritual, reputation, demiplane structure, and interior oddities."
+        },
+        {
+          "sourceId": "mad-martikens-menagerie-of-magical-services",
+          "fileName": "Mad Martiken’s Menagerie of Magical Services.pdf",
+          "outlineTitle": "Mutagenic tables",
+          "pageStart": 5,
+          "pageEnd": 8,
+          "chunkId": "mad-martikens-menagerie:p5-8",
+          "notes": "General d20, draconic d12, arachnid d10, pixie/fae d8, aquatic/shark d8, and catastrophic d6 results."
+        },
+        {
+          "sourceId": "mad-martikens-menagerie-of-magical-services",
+          "fileName": "Mad Martiken’s Menagerie of Magical Services.pdf",
+          "outlineTitle": "Mutation trigger rules and quick reference",
+          "pageStart": 8,
+          "pageEnd": 10,
+          "chunkId": "mad-martikens-menagerie:p8-10",
+          "notes": "Minor, Major, and Extreme trigger conditions, chances, and DM procedure."
+        },
+        {
+          "sourceId": "mad-martikens-menagerie-of-magical-services",
+          "fileName": "Mad Martiken’s Menagerie of Magical Services.pdf",
+          "outlineTitle": "Dolomedes and Soba case files",
+          "pageStart": 11,
+          "pageEnd": 13,
+          "chunkId": "mad-martikens-menagerie:p11-13",
+          "notes": "Cat-eye low-risk case and competing red/copper draconic lineage case."
+        },
+        {
+          "sourceId": "mad-martikens-menagerie-of-magical-services",
+          "fileName": "Mad Martiken’s Menagerie of Magical Services.pdf",
+          "outlineTitle": "Nature of the offices and buildings",
+          "pageStart": 14,
+          "pageEnd": 14,
+          "chunkId": "mad-martikens-menagerie:p14",
+          "notes": "Entirely illusionary building, real accumulated debris and biological material, sewer connection, birds, insects, gore, dust, mud, and unpleasant internal details revealed by penetrating vision."
+        }
+      ],
+      "sourceChunkIds": ["mad-martikens-menagerie:p1-4","mad-martikens-menagerie:p5-8","mad-martikens-menagerie:p8-10","mad-martikens-menagerie:p11-13","mad-martikens-menagerie:p14"],
+      "tags": ["Locations of Note","Mad Martiken","Menagerie","magical services","transformation","fleshcraft","mutation","demiplane","illusionary building","pricing","dragon wings","Lady of the Swamp"],
+      "relatedEntries": ["warlock-of-the-swamp-class","lady-of-the-swamp","divine-compromise-artifacts"],
+      "relatedModules": ["shop-market-generator","encounter-generator","npc-crew-generator","crafting-gadget-creator","job-board-generator"]
+    }
+  ]
+}
