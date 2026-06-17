@@ -7,38 +7,39 @@ P0 — **Shared Editor Kernel and Profile Contract** is implemented on the singl
 It is not promoted to complete yet. Promotion requires:
 
 1. The editor roadmap validator to pass.
-2. The shared kernel smoke validator to pass.
+2. The shared kernel validator to pass.
 3. JavaScript syntax checks to pass.
-4. A live browser smoke test of Island, Settlement, and Airship through the production shell.
+4. The in-site browser verification to pass through Island, Settlement, and Airship.
 
 P1 remains blocked until those gates succeed.
 
-The machine-readable implementation state is stored in:
+Machine-readable state:
 
 `data/kaysender/editors/p0-implementation-status.json`
 
-## Architecture
+## Runtime architecture
 
-P0 is additive. It does not discard the working domain calculations inside the existing alpha editors.
+P0 is additive. The existing alpha editors remain the domain calculation engines while the shared layer owns production lifecycle and profile transport.
 
-The production stack is:
+Load order:
 
 1. `kaysender-editor-kernel.js`
-2. `kaysender-editors.js` — Floating Island calculation engine
-3. `kaysender-settlement-editor.js` — Settlement calculation engine
-4. `kaysender-airship-editor.js` — Airship calculation engine
-5. `kaysender-editor-production.js` — Shared production shell and lifecycle integration
+2. `kaysender-editors.js` — Floating Island calculations
+3. `kaysender-settlement-editor.js` — Settlement calculations
+4. `kaysender-airship-editor.js` — Airship calculations
+5. `kaysender-editor-production.js` — shared production shell
+6. `kaysender-editor-live-smoke.js` — in-site browser verification harness
 
-The kernel loads before the domain engines. The production shell loads after them and adopts their existing panels.
+The kernel loads before every domain editor. The production shell and browser harness load after all three.
 
 ## Shared kernel responsibilities
 
-The kernel owns editor behavior that must remain consistent across all main-line editors:
+The kernel owns behavior that must remain consistent across all main-line editors:
 
 - Canonical profile envelope
 - Stable profile IDs
 - Profile schema versions
-- Revision and timestamp behavior
+- Change-sensitive revisions and timestamps
 - Legacy and current profile adapters
 - Migration history
 - Provenance and inheritance references
@@ -50,15 +51,15 @@ The kernel owns editor behavior that must remain consistent across all main-line
 - Shared validation and diagnostics
 - Mapping canonical records back into existing forms
 
-The kernel does **not** calculate island geology, settlement pressures, or vessel capabilities. Those remain inside the relevant domain engine until each editor reaches its own production-promotion stage.
+The kernel does **not** calculate island geology, settlement pressure, or vessel performance. Those rules remain inside the relevant domain engine until that editor reaches its own production stage.
 
 ## Canonical profile envelope
 
-The schema is:
+Schema:
 
 `data/kaysender/schemas/editor-profile-envelope.schema.json`
 
-Every canonical editor record contains:
+Required fields:
 
 - `editorEnvelopeVersion`
 - `profileId`
@@ -74,9 +75,9 @@ Every canonical editor record contains:
 - `diagnostics`
 - `data`
 
-Domain-specific fields remain inside `data`.
+Domain fields remain inside `data`.
 
-### Stable identity
+### Stable identity and revision behavior
 
 A record receives one stable profile ID. Rebuilding, validating, copying, or exporting an unchanged record does not create a new ID or revision.
 
@@ -84,15 +85,11 @@ A substantive change to domain data, field locks, or inheritance advances the re
 
 A clone receives a new profile ID, begins at revision 1, and records the source profile ID in provenance.
 
-### Volatile fields
-
-Render and export timestamps such as `generatedAt` do not count as substantive changes. When only a volatile timestamp changes, the existing canonical data and revision are preserved.
+Render/export timestamps such as `generatedAt` are ignored by the change fingerprint. When only a volatile timestamp changes, the previous canonical data, revision, and `updatedAt` are preserved.
 
 ## Compatibility adapters
 
 P0 addresses the prototype mismatch between the current nested island profile and the older flat fields expected by Settlement and Airship.
-
-### Current nested island shape
 
 Current island exports use structures such as:
 
@@ -105,8 +102,6 @@ Current island exports use structures such as:
 - `derivedScores.settlementViability`
 - `derivedScores.routeReliability`
 - `derivedScores.hazardPressure`
-
-### Legacy flat island shape
 
 Older downstream importers expect fields such as:
 
@@ -122,7 +117,7 @@ Older downstream importers expect fields such as:
 - `derivedScores.routeValue`
 - `derivedScores.collapseRisk`
 
-The island context adapter exposes the compatibility fields while retaining the complete nested source profile inside the canonical envelope.
+The island adapter exposes compatibility fields while retaining the complete nested source profile inside the canonical envelope.
 
 Fixtures:
 
@@ -131,9 +126,9 @@ Fixtures:
 
 ## Shared production shell
 
-The production shell replaces the three prototype launch buttons with one production launcher per editor.
+The production shell replaces the prototype launch buttons with one production launcher per editor.
 
-Each editor receives the same actions:
+Shared actions:
 
 - Rebuild Record
 - New Blank Record
@@ -157,13 +152,13 @@ The shell also displays:
 
 ## Draft behavior
 
-A saved local draft is a recovery object.
+A saved local draft is a recovery object. Creating a new blank record does not delete it.
 
-Creating a new blank record does not delete it. The kernel requires an explicit clear operation before removing a saved draft. This prevents accidental loss during experimentation or import recovery.
+The kernel requires an explicit clear operation before removing a saved draft, preventing accidental loss during experimentation or failed imports.
 
 ## Import behavior
 
-The shared importer accepts:
+Accepted input:
 
 - Canonical P0 envelopes
 - Current nested island profiles
@@ -171,15 +166,15 @@ The shared importer accepts:
 - Existing settlement profiles
 - Existing airship profiles
 
-Malformed JSON returns a `json-parse-failed` diagnostic.
+Malformed JSON returns `json-parse-failed`.
 
-A valid but wrong profile type returns a `profile-type-mismatch` diagnostic rather than silently loading incompatible data.
+A valid but wrong profile type returns `profile-type-mismatch` instead of silently loading incompatible data.
 
-Imported parent records are converted to compatibility context before the original Settlement or Airship inheritance handler reads them. Their canonical profile IDs and revisions are retained in the inheritance ledger.
+Parent records are converted to compatibility context before the original Settlement or Airship inheritance handler reads them. Canonical parent profile IDs and revisions remain in the inheritance ledger.
 
-## Validation
+## Automated validation
 
-The executable validator is:
+Validator:
 
 `scripts/validate-editor-kernel.mjs`
 
@@ -197,15 +192,34 @@ It checks:
 - Wrong-profile diagnostics
 - Malformed JSON diagnostics
 - Draft save, protection, recovery, and explicit clearing
-- Presence of every shared action
-- Availability of all three alpha editor panels
+- Every shared production action
+- All three alpha editor panels
 - Parent import interception points
+- Browser verification harness structure
 - Main-page script order
 
-GitHub Pages runs both the roadmap validator and the kernel validator before deployment.
+GitHub Pages runs the roadmap validator, kernel validator, and syntax checks before deployment.
+
+## In-site browser verification
+
+`kaysender-editor-live-smoke.js` adds **Run P0 Live Smoke Test** to the Kaysender workspace.
+
+The test warns before replacing unsaved form state, then:
+
+1. Opens Floating Island through the production shell.
+2. Builds and validates a canonical island envelope.
+3. Opens Settlement through the same shell.
+4. Imports the canonical island as its parent.
+5. Builds and validates the settlement and its inheritance ID.
+6. Opens Airship through the same shell.
+7. Imports both island and settlement parents.
+8. Builds and validates the airship and both inheritance references.
+9. Stores a session-local pass report.
+
+The harness does not modify the roadmap and cannot promote P1 automatically.
 
 ## Production boundary
 
-P0 standardizes editor lifecycle and profile transport. It does not declare the Island, Settlement, or Airship domain model production-complete.
+P0 standardizes editor lifecycle and profile transport. It does not declare Island, Settlement, or Airship domain content production-complete.
 
-After P0 clears its exit gate, P1 promotes Floating Island / Skyland into the first full production domain editor. That work will add deliberate map-cell editing, stable site/resource/hazard IDs, quantitative derived validation, and downstream fixtures for population, settlement, ecology, and routes.
+After P0 clears its exit gate, P1 promotes Floating Island / Skyland into the first full production domain editor with deliberate map-cell editing, stable site/resource/hazard IDs, quantitative derived validation, and downstream fixtures for population, settlement, ecology, and routes.
