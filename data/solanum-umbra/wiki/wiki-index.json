@@ -1,9 +1,9 @@
 {
   "setting": "Solanum Umbra",
-  "schemaVersion": "0.4.0",
+  "schemaVersion": "0.5.0",
   "status": "native-foundation-import-active",
   "genre": "post-apocalyptic science-fantasy",
-  "description": "Dedicated native-system wiki. Current packs cover character creation, professional talents, backgrounds, cybernetic replacement and degradation, crafting, resources, combat, tactical movement, cover, vehicles, supernatural entity generation, and Synthesis force profiles. No external rules conversion is used.",
+  "description": "Dedicated native-system wiki. Current packs cover character creation, advancement, professional talents, backgrounds, cybernetics, crafting, general equipment, resources, combat, cover, vehicles, supernatural entity generation, and Synthesis force profiles. No external rules conversion is used.",
   "mechanicsPolicy": {
     "system": "Solanum Umbra native rules",
     "conversion": "none",
@@ -22,25 +22,28 @@
     "data/solanum-umbra/wiki/native-rules-pass-4-combat-cover-vehicles.json",
     "data/solanum-umbra/wiki/native-rules-pass-5-entity-generator.json",
     "data/solanum-umbra/wiki/native-enemies-pass-1-synthesis-forces.json",
-    "data/solanum-umbra/wiki/native-rules-pass-6-cybernetics-biotics-degradation.json"
+    "data/solanum-umbra/wiki/native-rules-pass-6-cybernetics-biotics-degradation.json",
+    "data/solanum-umbra/wiki/native-rules-pass-7-advancement-equipment.json"
   ],
   "completedScope": {
-    "wikiEntries": 29,
-    "nativePacks": 7,
+    "wikiEntries": 36,
+    "nativePacks": 8,
     "careerTalentFamilies": 5,
     "backgroundTables": 6,
+    "professionAdvancementTracks": 2,
     "cyberneticTechnologyLevels": 5,
     "cyberneticBodyParts": 8,
     "bioticEnhancements": 12,
     "degradationOutcomes": 21,
+    "generalEquipmentEntries": 7,
     "entityGeneratorTables": 7,
     "synthesisForceFamilies": 4,
     "namedForceRoles": 36,
-    "pageRanges": ["82-144","151-188","228-232"]
+    "pageRanges": ["82-188","228-232"]
   },
   "nextImportAreas": [
-    "advancement",
-    "detailed equipment and vehicle catalogues",
+    "pharmaceuticals and addiction",
+    "detailed vehicle catalogues",
     "remaining professional structures",
     "settlements and services",
     "named creatures and anomalies",
