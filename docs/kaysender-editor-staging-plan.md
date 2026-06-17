@@ -20,9 +20,9 @@ The original alpha sequence was:
 2. Settlement / Skyport.
 3. Airship / Vessel.
 
-That was appropriate for proving the concept, but the demonstrators now expose an integration problem. The current island profile exports nested structures such as geometry, hydrology, access, ecology, insertion capacity, and derived scores. The settlement and airship alpha importers still contain compatibility mappings for older flat fields such as `waterProfile`, `routeAccess`, `factionPressure`, and `threatClock`.
+That was appropriate for proving the concept, but the demonstrators exposed an integration problem. The Island profile exports nested structures such as geometry, hydrology, access, ecology, insertion capacity, and derived scores. The Settlement and Airship alpha importers retained compatibility assumptions for older flat fields such as `waterProfile`, `routeAccess`, `factionPressure`, and `threatClock`.
 
-Continuing to add separate editor scripts would multiply this mismatch. Production construction therefore begins with a shared editor kernel and canonical profile contract before the individual editors are expanded.
+Continuing to add separate editor infrastructure would multiply this mismatch. Production construction therefore begins with a shared editor kernel and canonical profile contract before the individual editors are expanded.
 
 ## Definition of a production editor
 
@@ -49,22 +49,39 @@ No editor is considered complete merely because it can generate a plausible card
 
 ## P0 — Shared Editor Kernel and Profile Contract
 
-This is the required next implementation.
+**Current state:** framework implementation complete; final integrated live-browser gate pending.
 
-It must provide the reusable shell for every editor:
+P0 does not create one central domain editor. The Floating Island, Settlement, and Airship editors remain separate editors. P0 supplies the shared infrastructure and profile contract they use through registered adapters.
 
-- Common toolbar and action handling.
-- New, load, validate, save, clone, randomize, export, and wiki-export actions.
-- Canonical profile envelope.
-- Stable IDs, schema versions, timestamps, source IDs, and provenance.
-- Import adapters and migrations for existing alpha profiles.
-- Shared diagnostics and validation summaries.
-- Shared inherited-record display.
-- Field locking and selective randomization.
-- Local draft persistence and recovery.
-- Common responsive and accessible form components.
+The implemented framework provides:
 
-**Exit gate:** the island, settlement, and airship alpha editors must all open through the shared shell; current island exports must import into settlement and airship without relying on obsolete flat-field assumptions; malformed records must produce actionable errors instead of silent fallback.
+- A generic adapter-driven shell and common toolbar.
+- New, load/import, validate, local-draft, recover, clone, selective-randomize, canonical-export, and wiki-export actions.
+- A canonical profile envelope with stable profile IDs, revisions, schema versions, timestamps, provenance, inheritance, locks, diagnostics, and domain data.
+- Explicit current adapter schemas: Island `2.0.0`, Settlement `1.0.0`, and Airship `1.0.0`.
+- Adapter-owned nested and flat field mapping.
+- A versioned migration registry, including legacy flat Island migration into Island schema `2.0.0`.
+- Actionable diagnostics for malformed JSON, wrong profile types, invalid schema strings, unsupported old schemas, and unsupported future schemas.
+- Shared dirty-state tracking, autosave recovery drafts, unsaved-change protection, and explicit blank-record draft clearing.
+- Persistent multi-record browser storage, explicit deletion confirmation, and record-index repair.
+- Visible profile ID, type, schema version, revision, and saved state.
+- Separate **Update Existing Record** and **Save as New Clone** actions so identity cannot be replaced accidentally.
+- Pinned-revision inheritance. Downstream records retain the exact inherited parent revision until the user deliberately refreshes it.
+- Direct saved-parent selection for Settlement and Airship without manual JSON copy and paste.
+- Current, stale, unavailable, and locally older parent-reference states plus **Refresh to Latest Parent** and **Clear Parent Link** actions.
+- Shared provenance, inheritance, diagnostics, field locking, selective randomization, canonical JSON, and wiki-draft output.
+- Recoverable runtime error reporting and responsive, keyboard-accessible shared controls.
+
+P0 validation covers the kernel, roadmap policy, schema declarations, migrations, adapter integration, pinned inheritance, runtime structure, script ordering, and the Island → Settlement → Airship browser chain.
+
+**Exit gate:** a GitHub Actions run on `main` must pass every static and functional validator, complete the integrated Island → Settlement → Airship smoke path in Playwright Chromium, produce a receipt accepted by `scripts/validate-p0-browser-verification.mjs`, and reach GitHub Pages deployment successfully.
+
+Until that gate passes:
+
+- `shared-editor-kernel` remains the sole `required-next` stage.
+- P0 remains `framework-implementation-complete-pending-runtime-gate`.
+- P1 remains closed.
+- No Floating Island P1 runtime implementation may begin.
 
 ## P1 — Promote Floating Island / Skyland Editor
 
@@ -258,6 +275,3 @@ The following should remain schema notes or fixtures until their dependencies ar
 - Piracy before legitimate routes, markets, ships, and law pressure exist.
 - Tithe simulation before settlement and market ledgers exist.
 - Encounter packets before persistent participants and locations exist.
-- Mission packets before encounters, patrons, routes, rewards, and consequences exist.
-
-This order prevents the codebase from filling with attractive but disconnected random tables that later require complete replacement.
