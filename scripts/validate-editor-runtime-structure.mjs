@@ -7,6 +7,12 @@ const read = relativePath => fs.readFile(path.join(root, relativePath), 'utf8');
 const fail = message => { throw new Error(message); };
 
 const html = await read('index.html');
+const registry = await read('kaysender-editor-adapter-registry.js');
+const builtins = await read('kaysender-editor-builtins.js');
+const mapping = await read('kaysender-editor-field-mapping.js');
+const kernelAdapters = await read('kaysender-editor-kernel-adapters.js');
+const lifecycle = await read('kaysender-editor-lifecycle.js');
+const production = await read('kaysender-editor-production.js');
 const boundary = await read('kaysender-editor-error-boundary.js');
 const smoke = await read('kaysender-editor-live-smoke.js');
 
@@ -24,6 +30,11 @@ for (const marker of [
 
 const orderedScripts = [
   'kaysender-editor-kernel.js',
+  'kaysender-editor-field-mapping.js',
+  'kaysender-editor-adapter-registry.js',
+  'kaysender-editor-builtins.js',
+  'kaysender-editor-kernel-adapters.js',
+  'kaysender-editor-lifecycle.js',
   'kaysender-editors.js',
   'kaysender-settlement-editor.js',
   'kaysender-airship-editor.js',
@@ -38,6 +49,81 @@ for (const script of orderedScripts) {
   if (position <= previousPosition) fail(`Editor runtime script '${script}' is loaded out of order.`);
   previousPosition = position;
 }
+
+for (const phrase of [
+  "'id', 'moduleId', 'label', 'profileType', 'panelId', 'formId'",
+  'normalizeParentImport',
+  'fieldMap: Object.freeze',
+  'flatFieldExclusions: Object.freeze',
+  'register',
+  'resolve',
+  'getParentImport'
+]) {
+  if (!registry.includes(phrase)) fail(`Shared editor adapter registry is missing '${phrase}'.`);
+}
+
+for (const phrase of [
+  "id: 'floating-island-editor'",
+  "id: 'settlement-editor'",
+  "id: 'airship-editor'",
+  "relationship: 'parent-island'",
+  "relationship: 'parent-settlement'",
+  "profileType: 'floating-island-foundation-profile'",
+  "profileType: 'settlement-profile'",
+  "profileType: 'airship-profile'",
+  'fieldMap: {',
+  'flatFieldExclusions:'
+]) {
+  if (!builtins.includes(phrase)) fail(`Built-in editor adapters are missing '${phrase}'.`);
+}
+
+for (const phrase of [
+  'function readPath',
+  'function writeField',
+  'function apply(',
+  'function applyFlat',
+  'window.KaysenderEditorFieldMapping'
+]) {
+  if (!mapping.includes(phrase)) fail(`Shared editor field mapping service is missing '${phrase}'.`);
+}
+
+for (const phrase of [
+  'adapterForProfileType',
+  'mapping.apply(form, profileInput, adapter.fieldMap)',
+  'mapping.applyFlat(form, profileInput, adapter.flatFieldExclusions',
+  'applyProfileToForm'
+]) {
+  if (!kernelAdapters.includes(phrase)) fail(`Kernel adapter activation is missing '${phrase}'.`);
+}
+
+for (const phrase of [
+  'DEFAULT_AUTOSAVE_DELAY',
+  'scheduleAutosave',
+  'markDirty',
+  'markClean',
+  'confirmLeave',
+  "window.addEventListener('beforeunload'",
+  'window.KaysenderEditorLifecycle'
+]) {
+  if (!lifecycle.includes(phrase)) fail(`Shared editor lifecycle is missing '${phrase}'.`);
+}
+
+for (const phrase of [
+  'const Registry = window.KaysenderEditorAdapters',
+  'const Lifecycle = window.KaysenderEditorLifecycle',
+  'async function launch(editorIdOrAlias)',
+  'Registry.resolve(editorIdOrAlias)',
+  'Lifecycle.bind(adapter, panel',
+  'autosaveDraft(adapter, panel)',
+  'Kernel.clearDraft(adapter.id, true)',
+  'adapter.parentImports.forEach',
+  'adapter.hiddenLegacyActionIds.forEach',
+  'listEditors:',
+  'getRecordState:'
+]) {
+  if (!production.includes(phrase)) fail(`Shared production runtime is missing '${phrase}'.`);
+}
+if (production.includes('const editorSpecs =')) fail('Shared production runtime still contains the removed hardcoded editorSpecs table.');
 
 for (const phrase of [
   "window.addEventListener('error'",
@@ -67,4 +153,4 @@ for (const phrase of [
 }
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified application anchors, editor script order, visible error boundary, browser verification chain, and receipt export controls.');
+console.log('Verified adapter registry, built-in editor contracts, field mapping activation, shared lifecycle, generic production shell, error boundary, and browser chain.');
