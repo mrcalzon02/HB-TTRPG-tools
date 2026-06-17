@@ -1,0 +1,150 @@
+{
+  "setting": "Solanum Umbra",
+  "schemaVersion": "0.1.0",
+  "mechanicsPolicy": "native-system-preserved-no-external-conversion",
+  "description": "Native combat, action economy, skills, tactical grid, zones of control, melee modes, ranged combat, cover, camouflage, line of sight, large-entity cover, and vehicle combat framework from pages 167-188.",
+  "entries": [
+    {
+      "id": "solanum-core-combat-system",
+      "title": "Core Combat, Initiative, and Turns",
+      "category": "Combat",
+      "summary": "Combat begins with d20 + Initiative, proceeds from highest to lowest result, and normally grants each participant one action per turn without rerolling initiative each round.",
+      "body": [
+        "At combat start, every player and enemy rolls d20 and adds the Initiative statistic. Higher totals act first.",
+        "Each participant normally receives one action per turn. Attacking, moving, using an item, and activating a special ability are all examples of actions. Extra actions require an ability, buff, or other specific rule.",
+        "After everyone acts, a new round begins. Initiative is not rerolled unless another rule explicitly requires it."
+      ],
+      "formulas": [
+        {"name":"Initiative Roll","formula":"d20 + Initiative Stat"},
+        {"name":"Initiative Stat","formula":"DEX + INT","crossReference":"solanum-core-attributes-derived-statistics"}
+      ],
+      "sourceStatus": "source-native-mechanics",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":167,"pageEnd":168,"chunkId":"solanum-combat-turns:p167-168","notes":"Initiative, action allocation, turn resolution, and worked example."}],
+      "tags": ["combat","initiative","turn order","one action","rounds"],
+      "relatedEntries": ["solanum-native-skills-actions","solanum-action-economy-grid-zoc","solanum-melee-combat-modes","solanum-ranged-cover-camouflage"]
+    },
+    {
+      "id": "solanum-native-skills-actions",
+      "title": "Native Skills and Action Attribute Pairings",
+      "category": "Core System",
+      "summary": "Common actions identify two relevant native attributes, with examples such as STR + DEX for melee and INT + DEX for hacking.",
+      "body": [
+        "The source lists paired relevant attributes for skills and actions. Example text instructs players to roll the paired attributes for Melee Combat, Stealth, Hacking, and Medicine.",
+        "This section does not fully define whether every skill always adds both raw attributes, both bonus values, or a primary value plus secondary contribution. That resolution remains a native-system editorial issue."
+      ],
+      "tables": [
+        {
+          "id": "solanum-skill-action-pairings",
+          "title": "Skill and Action Pairings",
+          "columns": ["Skill or Action","Relevant Attributes","Function"],
+          "rows": [
+            ["Melee Combat","STR + DEX","Close-range weapons and physical fighting"],
+            ["Ranged Combat","DEX + INT","Firearms and ranged accuracy"],
+            ["Stealth","DEX + WIS","Move unseen and unheard"],
+            ["Hacking","INT + DEX","Breach systems and bypass security"],
+            ["Medicine","INT + WIS","Treat injury and illness"],
+            ["Survival","WIS + CON","Find resources and endure harsh conditions"],
+            ["Negotiation","CHA + INT","Persuade and make deals"],
+            ["Engineering","INT + DEX","Repair and modify technology"],
+            ["Athletics","STR + DEX","Climb, run, and jump"],
+            ["Perception","WIS + INT","Notice details and hidden dangers"],
+            ["Leadership","CHA + INT","Manage and direct others"],
+            ["Firearms Training","DEX + INT","Use firearms accurately"],
+            ["Tracking","WIS + DEX","Follow tracks and environmental signs"],
+            ["Diplomacy","CHA + INT","Handle political or sensitive negotiations"],
+            ["Crafting","INT + DEX","Create and modify items"],
+            ["Escape Artist","DEX + INT","Escape restraints and traps"],
+            ["Cooking","INT + DEX","Prepare food affecting health or morale"],
+            ["Intimidation","CHA + STR","Coerce through presence and force"],
+            ["Streetwise","CHA + INT","Navigate urban environments"],
+            ["Research","INT + WIS","Gather and analyze information"]
+          ]
+        }
+      ],
+      "sourceStatus": "source-native-mechanics-with-explicit-ambiguity",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":168,"pageEnd":170,"chunkId":"solanum-skills-actions:p168-170","notes":"Twenty skill/action pairings and four explicit roll examples."}],
+      "tags": ["skills","actions","attribute pairings","Melee","Hacking","Medicine","Crafting"],
+      "relatedEntries": ["solanum-core-combat-system","solanum-native-action-and-equipment-requirements","solanum-item-creation-system"]
+    },
+    {
+      "id": "solanum-action-economy-grid-zoc",
+      "title": "Action Economy, Tactical Grid, and Zones of Control",
+      "category": "Combat",
+      "summary": "One-action turns make numerical superiority dangerous; tactical combat uses 5-foot squares, 30-foot standard movement, and adjacent-square zones of control resolved through opposed Strength checks.",
+      "body": [
+        "Action economy measures the number and efficiency of actions available to each side. Being outnumbered exposes a character to multiple enemy actions for each action of their own. Extra actions and effects that delay or remove enemy actions are therefore extremely valuable.",
+        "The battlefield uses 5-foot by 5-foot squares. A human-sized entity generally moves 30 feet, or six squares, with a movement action. Faster, injured, and unusual entities adjust this distance.",
+        "Every entity controls all adjacent lateral and diagonal squares. Moving through an enemy-controlled square requires opposed Strength checks. The mover proceeds only if their result is higher; the source does not define ties."
+      ],
+      "tables": [
+        {"id":"solanum-grid-movement","title":"Grid Movement Examples","columns":["Entity","Speed","Squares per Movement Action"],"rows":[["Standard human-sized entity","30 feet","6"],["Fast creature","60 feet","12"],["Injured entity","15 feet","3"]]},
+        {"id":"solanum-zone-control","title":"Zone of Control Resolution","columns":["Step","Native Rule"],"rows":[["Area","All adjacent and diagonal squares"],["Attempt","Mover enters or passes through controlled square"],["Check","Mover STR check versus controlling entity STR check"],["Success","Mover result is higher and movement succeeds"],["Failure","Mover result is lower and remains in place"],["Tie","Not defined in source"]]}
+      ],
+      "sourceStatus": "source-native-mechanics-with-explicit-ambiguity",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":170,"pageEnd":173,"chunkId":"solanum-action-grid-zoc:p170-173","notes":"Action economy, 5-foot grid, movement examples, and opposed Strength zone-of-control rules."}],
+      "tags": ["action economy","grid","movement","zone of control","opposed Strength"],
+      "relatedEntries": ["solanum-core-combat-system","solanum-melee-combat-modes","solanum-ranged-cover-camouflage"]
+    },
+    {
+      "id": "solanum-melee-combat-modes",
+      "title": "Close Combat, Wrestling, and Unarmed Combat",
+      "category": "Combat",
+      "summary": "The manuscript presents two overlapping melee-resolution descriptions: raw-stat formulas on pages 173-174 and primary-stat bonus selection on page 175.",
+      "body": [
+        "The first description gives direct formulas: Close Combat = STR + DEX - Armor Penalty; Wrestling = STR + DEX; Unarmed Combat = STR + 2 x DEX.",
+        "The following page says players choose Strength or Dexterity as the primary statistic, while other relevant statistics contribute partial bonuses ranging from -4 to +4. It retains armor penalties for Close Combat, no armor penalty for Wrestling, and doubled Dexterity benefit for Unarmed Combat.",
+        "These are not silently merged. Until a native-system ruling determines precedence, the wiki presents both methods as printed."
+      ],
+      "tables": [
+        {"id":"solanum-melee-direct-formulas","title":"Direct Formula Method","columns":["Mode","Formula","Armor Interaction"],"rows":[["Close Combat","STR + DEX - Armor Penalty","Armor reduces attack"],["Wrestling","STR + DEX","No armor penalty"],["Unarmed Combat","STR + (2 x DEX)","Double Dexterity contribution"]]},
+        {"id":"solanum-melee-primary-stat-method","title":"Primary Stat Method","columns":["Mode","Primary Choice","Secondary Treatment","Other Rule"],"rows":[["Close Combat","STR or DEX","Other relevant stats provide partial bonus","Armor penalty applies"],["Wrestling","STR or DEX","Other relevant stats provide partial bonus","No armor penalty"],["Unarmed Combat","STR or DEX","DEX offers doubled bonus","Bonuses generally range -4 to +4"]]}
+      ],
+      "sourceStatus": "source-native-mechanics-with-explicit-conflict",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":173,"pageEnd":175,"chunkId":"solanum-melee:p173-175","notes":"Two overlapping melee calculation descriptions retained separately."}],
+      "tags": ["close combat","wrestling","unarmed","armor penalty","conflicting rules"],
+      "relatedEntries": ["solanum-core-combat-system","solanum-native-skills-actions"]
+    },
+    {
+      "id": "solanum-ranged-cover-camouflage",
+      "title": "Ranged Combat, Camouflage, and Cover Economy",
+      "category": "Combat",
+      "summary": "Ranged attacks use DEX and INT, technology defines effective range and falloff, camouflage penalizes attacks, and ballistic and energy cover interact differently with weapon types.",
+      "body": [
+        "Ranged attacks roll d20 and add relevant Dexterity and Intelligence contributions. Defensive Value is described as Base DV + Agility Modifiers + Cover Modifiers + Camouflage Modifiers, but Base DV and exact agility conversion are not defined in this section.",
+        "Partial cover and partial camouflage each suggest -2 to hit. Full camouflage suggests -4 or complete invisibility depending on conditions. Most ranged weapons suffer -4 at point blank; shotguns and close-quarters weapons are exceptions.",
+        "Full cover blocks direct targeting but may be punched through. Ballistic weapons can penetrate ballistic cover at -4; ballistic weapons cannot penetrate energy cover. Energy weapons can penetrate energy cover without penalty but cannot penetrate ballistic barriers according to the later interaction example.",
+        "The Advanced Tech range-falloff cell is printed ambiguously as ‘Negligible 50% per 2.’ It is preserved as unresolved source text."
+      ],
+      "tables": [
+        {"id":"solanum-ranged-tech-ranges","title":"Weapon Technology and Effective Range","columns":["Technology","Effective Range","Falloff per 5 Feet"],"rows":[["Scavenged","10-20 feet","-5"],["Improvised","20-50 feet","-4"],["Modern","50-100 feet","-3"],["Recovered","100-200 feet","-2"],["Reclaimed","200-500 feet","-1"],["Advanced Tech","500+ feet","Printed as 'Negligible 50% per 2' - unresolved"]]},
+        {"id":"solanum-cover-camouflage-modifiers","title":"Cover, Camouflage, and Point Blank","columns":["Condition","Effect"],"rows":[["Partial Cover","Suggested -2 to hit"],["Full Cover","Cannot directly target from blocked direction; punch-through may be attempted"],["Partial Camouflage","Suggested -2 to hit"],["Full Camouflage","Suggested -4 to hit or no visibility"],["Point Blank Ranged Weapon","Suggested -4 to hit"],["Shotgun or Close-Quarter Weapon","No point-blank penalty"]]},
+        {"id":"solanum-cover-defensive-values","title":"Example Cover Defensive Values","columns":["Cover","DV"],"rows":[["Natural Barrier, such as trees","7"],["Heavy Concrete Wall","10"],["Metal Shield","12"],["Ballistic Armor","8"],["Basic Energy Shield","11"],["Advanced Force Field","14"]]},
+        {"id":"solanum-cover-economy","title":"Weapon and Cover Interaction","columns":["Weapon","Barrier","Result"],"rows":[["Ballistic","Ballistic","Punch-through allowed at -4"],["Ballistic","Energy","Cannot penetrate"],["Energy","Energy","Punch-through allowed without penalty"],["Energy","Ballistic","Later example says ineffective or cannot penetrate"]]}
+      ],
+      "sourceStatus": "source-native-mechanics-with-explicit-ambiguity",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":176,"pageEnd":182,"chunkId":"solanum-ranged-cover:p176-182","notes":"Ranged attacks, range falloff, camouflage, cover, punch-through, DV examples, line of sight, and large-entity cover."}],
+      "tags": ["ranged combat","cover","camouflage","point blank","Defensive Value","ballistic","energy","line of sight"],
+      "relatedEntries": ["solanum-core-combat-system","solanum-action-economy-grid-zoc","solanum-vehicle-combat-framework"]
+    },
+    {
+      "id": "solanum-vehicle-combat-framework",
+      "title": "Vehicle Combat Framework",
+      "category": "Vehicles and Combat",
+      "summary": "Vehicles occupy multiple grid squares, generally move 30 feet per round before modifiers, provide cover, possess armor and Health, and mount weapons whose performance follows technology tiers.",
+      "body": [
+        "Vehicle movement depends on type, technology, terrain, and damage. The general text gives 30 feet per round as a baseline even though the following catalog records vehicle speed in miles per hour; conversion between these measures is not defined here.",
+        "Vehicles may provide partial or full cover depending on size and line of sight. Their armor may interact differently with ballistic and energy attacks.",
+        "Mounted weapon quality runs from Scavenged and Improvised through Modern, Recovered, Reclaimed, and Advanced Tech. Moving fire may incur accuracy penalties; critical hits can damage individual systems; repairs and maintenance are required.",
+        "Detailed vehicle catalogs continue through pages 185-188 and will be imported in the dedicated equipment and vehicle pass rather than flattened into this framework entry."
+      ],
+      "tables": [
+        {"id":"solanum-vehicle-combat-summary","title":"Vehicle Combat Summary","columns":["Topic","Native Rule"],"rows":[["Grid Size","Vehicle covers multiple squares according to dimensions"],["Baseline Movement","Generally 30 feet per round before type, terrain, technology, or damage modifiers"],["Cover","Entities behind or inside may gain partial or full cover"],["Armor","Vehicle-specific and may vary by ballistic or energy attack"],["Moving Fire","May impose accuracy penalties by speed and weapon type"],["Critical Hits","May damage specific systems or components"],["Maintenance","Required during or between encounters"]]},
+        {"id":"solanum-vehicle-weapon-tiers","title":"Vehicle-Mounted Weapon Technology","columns":["Tier","Native Description"],"rows":[["Scavenged","Limited range, accuracy, reliability, and mounting quality"],["Improvised","Variable performance and crude mounting"],["Modern","Balanced, reliable range and damage"],["Recovered","Enhanced range, accuracy, and reliability"],["Reclaimed","Superior restored or upgraded technology"],["Advanced Tech","Exceptional range, targeting, stabilization, and damage"]]}
+      ],
+      "sourceStatus": "source-native-mechanics-with-explicit-ambiguity",
+      "sourceRefs": [{"sourceId":"solanum-umbra-ttrpg","fileName":"Solanum-Umbra-TTRPG.pdf","pageStart":182,"pageEnd":188,"chunkId":"solanum-vehicle-combat:p182-188","notes":"Large-entity cover, vehicle movement, cover, damage, mounted weapons, and beginning of vehicle catalog."}],
+      "tags": ["vehicles","mounted weapons","movement","cover","armor","maintenance","technology tiers"],
+      "relatedEntries": ["solanum-ranged-cover-camouflage","solanum-resource-and-communications-tiers"]
+    }
+  ]
+}
