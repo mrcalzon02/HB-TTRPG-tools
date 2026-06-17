@@ -7,6 +7,7 @@ import { chromium } from 'playwright';
 const root = process.cwd();
 const outputPath = path.resolve(root, process.argv[2] || 'artifacts/p0-browser-verification.json');
 const screenshotPath = path.resolve(root, process.argv[3] || 'artifacts/p0-browser-verification-failure.png');
+const failurePath = path.resolve(root, process.argv[4] || 'artifacts/p0-browser-verification-failure.json');
 const host = '127.0.0.1';
 const port = Number(process.env.P0_BROWSER_PORT || 4173);
 const baseUrl = `http://${host}:${port}`;
@@ -60,7 +61,12 @@ async function listen(server) {
 }
 
 async function close(server) {
+  if (!server.listening) return;
   await new Promise(resolve => server.close(() => resolve()));
+}
+
+async function removeIfPresent(filePath) {
+  await fs.rm(filePath, { force: true }).catch(() => undefined);
 }
 
 const server = http.createServer((request, response) => {
@@ -77,6 +83,10 @@ const consoleErrors = [];
 
 try {
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
+  await fs.mkdir(path.dirname(failurePath), { recursive: true });
+  await removeIfPresent(outputPath);
+  await removeIfPresent(failurePath);
+  await removeIfPresent(screenshotPath);
   await listen(server);
 
   browser = await chromium.launch({ headless: true });
@@ -110,20 +120,38 @@ try {
   if (pageErrors.length) throw new Error(`Uncaught page errors: ${pageErrors.join(' | ')}`);
 
   await fs.writeFile(outputPath, `${JSON.stringify(receipt, null, 2)}\n`, 'utf8');
-  console.log(`P0 browser verification passed in Chromium.`);
+  console.log('P0 browser verification passed in Chromium.');
   console.log(`Receipt written to ${path.relative(root, outputPath)}.`);
   if (consoleErrors.length) console.warn(`Non-fatal browser console errors: ${consoleErrors.join(' | ')}`);
 } catch (error) {
+  let diagnostics = [];
+  let pageUrl = '';
   if (page) {
+    pageUrl = page.url();
+    diagnostics = await page.locator('#p0-live-smoke-results li').allTextContents().catch(() => []);
     try {
       await fs.mkdir(path.dirname(screenshotPath), { recursive: true });
       await page.screenshot({ path: screenshotPath, fullPage: true });
-      const diagnostics = await page.locator('#p0-live-smoke-results').allTextContents().catch(() => []);
-      if (diagnostics.length) console.error(`Browser diagnostics: ${diagnostics.join(' | ')}`);
     } catch (screenshotError) {
       console.error(`Could not capture failure screenshot: ${screenshotError.message}`);
     }
   }
+  const failure = {
+    schemaVersion: '1.0.0',
+    stage: 'P0',
+    stageId: 'shared-editor-kernel',
+    failedAt: new Date().toISOString(),
+    result: 'failed',
+    message: error.message,
+    url: pageUrl,
+    diagnostics,
+    pageErrors,
+    consoleErrors
+  };
+  await fs.writeFile(failurePath, `${JSON.stringify(failure, null, 2)}\n`, 'utf8').catch(writeError => {
+    console.error(`Could not write browser failure report: ${writeError.message}`);
+  });
+  if (diagnostics.length) console.error(`Browser diagnostics: ${diagnostics.join(' | ')}`);
   if (pageErrors.length) console.error(`Page errors: ${pageErrors.join(' | ')}`);
   if (consoleErrors.length) console.error(`Console errors: ${consoleErrors.join(' | ')}`);
   console.error(`P0 browser verification failed: ${error.message}`);
