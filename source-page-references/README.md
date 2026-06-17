@@ -7,7 +7,7 @@ Receipts in this folder preserve source identity, while verified binaries live i
 ## Assigned and verified sources
 
 - **Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders** — 21-page fantasy planar-ecology manuscript with a dedicated Elemental Realms wiki and three completed creature and ecology passes.
-- **Solanum Umbra TTRPG** — 248-page post-apocalyptic science-fantasy manuscript with an active native-system wiki import. Six packs now cover character creation, character-sheet foundations, career talents, backgrounds, crafting, resources, combat, cover, vehicles, supernatural entity generation, four Synthesis force families, and thirty-six named enemy roles.
+- **Solanum Umbra TTRPG** — 248-page post-apocalyptic science-fantasy manuscript with an active native-system wiki import. Eight packs and thirty-six entries now cover character creation and sheets, careers and talents, profession advancement, backgrounds, cybernetics and biotic enhancements, crafting, general equipment, resources, combat, cover, vehicles, supernatural entity generation, four Synthesis force families, and thirty-six named enemy roles.
 - **Mad Martiken’s Menagerie of Magical Services** — 14-page Kaysender location manuscript integrated under **Locations of Note**, with source material and later rules or conversation expansions kept distinct.
 
 Exact filenames, byte counts, page counts, SHA-256 checksums, repository paths, integration states, and receipt paths are recorded in `source-manifest.json`.
@@ -72,13 +72,13 @@ Solanum import work may normalize:
 - Page-level provenance
 - Explicit ambiguity and conflict notes
 
-It must not replace native attributes, formulas, careers, talents, combat resolution, cyberization, crafting, equipment, enemies, or entities with mechanics from another system.
+It must not replace native attributes, formulas, careers, talents, profession advancement, combat resolution, cyberization, crafting, equipment, enemies, or entities with mechanics from another system.
 
 Current native import ranges are:
 
-- Pages 82–116: Synthesis forces and character creation
-- Pages 131–144: career talents, backgrounds, and equipment requirements
-- Pages 151–188: resources, crafting, combat, cover, and vehicles
+- Pages 82–188: Synthesis forces, character creation, cybernetics, career talents, profession advancement, equipment, resources, crafting, combat, cover, and vehicles
 - Pages 228–232: supernatural entity generator
 
-The active Solanum roadmap continues with advancement, cybernetic installation, biotic requirements, detailed equipment and vehicle catalogues, remaining professional structures, settlements and services, named creatures and anomalies, and army construction.
+The manuscript does not define a separate player-class subsystem. Native player structure uses origin, career, Minor and Major Talents, and Novice-to-Expert-to-Master profession advancement.
+
+The active Solanum roadmap continues with pharmaceuticals and addiction, detailed vehicle catalogues, remaining professional structures, settlements and services, named creatures and anomalies, and commander or army generation.
