@@ -199,11 +199,64 @@
     };
   }
 
+  function restoreInheritedEnvelope(sourceInput, reference, options = {}) {
+    const expectedTypes = options.expectedTypes?.length
+      ? options.expectedTypes
+      : reference?.profileType ? [reference.profileType] : [];
+    const result = normalizeImportedRecord(sourceInput, { ...options, expectedTypes });
+    if (!result.ok || !reference) return result;
+
+    const base = result.envelope;
+    const restoredIdentity = {
+      ...base,
+      profileId: reference.profileId,
+      profileType: reference.profileType || base.profileType,
+      revision: reference.revision,
+      updatedAt: reference.sourceUpdatedAt || base.updatedAt,
+      provenance: {
+        ...(base.provenance || {}),
+        origin: 'inherited-snapshot',
+        migrationLog: [
+          ...(base.provenance?.migrationLog || []),
+          {
+            code: 'pinned-parent-identity-restored',
+            message: `Restored pinned parent identity ${reference.profileId} revision ${reference.revision}.`
+          }
+        ]
+      }
+    };
+
+    const envelope = createEnvelope(result.data, {
+      existingEnvelope: restoredIdentity,
+      profileType: restoredIdentity.profileType,
+      profileSchemaVersion: base.profileSchemaVersion,
+      editorId: base.provenance?.editorId,
+      moduleId: base.provenance?.moduleId,
+      origin: 'inherited-snapshot',
+      importedAt: base.provenance?.importedAt,
+      inheritance: base.inheritance,
+      locks: base.locks,
+      incrementRevision: false
+    });
+    const diagnostics = validateEnvelope(envelope, expectedTypes);
+    diagnostics.push(kernel.diagnostic('info', 'pinned-parent-identity-restored', `Restored ${reference.relationship || 'parent'} ${reference.profileId} at revision ${reference.revision}.`, 'inheritance'));
+    envelope.diagnostics = diagnostics;
+    return {
+      ok: !diagnostics.some(item => item.severity === 'error'),
+      envelope,
+      data: kernel.deepClone(envelope.data),
+      context: kernel.adaptContext(envelope, envelope.profileType),
+      diagnostics,
+      migrations: result.migrations || []
+    };
+  }
+
   window.KaysenderEditorKernel = Object.freeze(Object.assign({}, kernel, {
     applyProfileToForm,
     createEnvelope,
     inheritanceReference,
     normalizeImportedRecord,
+    restoreInheritedEnvelope,
     validateEnvelope
   }));
 })();
