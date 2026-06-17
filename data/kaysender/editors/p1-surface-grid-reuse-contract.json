@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "stageId": "floating-island-production-editor",
+  "status": "prepared-runtime-inactive",
+  "sourceImplementation": {
+    "repository": "mrcalzon02/Fleet-designer",
+    "component": "src/components/VehicleAssemblyPanel.jsx",
+    "model": "src/game/vehicleSlotSystem.js",
+    "styles": "src/vehicleSlots.css"
+  },
+  "targetImplementation": {
+    "modelAndView": "kaysender-surface-grid-editor.js",
+    "styles": "kaysender-surface-grid-editor.css",
+    "validator": "scripts/validate-p1-surface-grid-model.mjs",
+    "profileMapPath": "map"
+  },
+  "reusePrinciple": "Reuse the Fleet Designer grid interaction and state pattern while replacing ship-specific slot and module semantics with Island surface-cell and brush semantics. Do not import React into HB-TTRPG-tools.",
+  "conceptMapping": [
+    {
+      "source": "hullSlotTemplate.grid",
+      "target": "Island map columns rows and active outline",
+      "rule": "The rectangular grid is the editable coordinate envelope; inactive coordinates represent open air outside the Island outline."
+    },
+    {
+      "source": "dot or disabled hull cell",
+      "target": "inactive Island coordinate",
+      "rule": "The coordinate remains addressable but is excluded from activeCellIds and surface calculations."
+    },
+    {
+      "source": "typed hull slot",
+      "target": "active Island surface cell",
+      "rule": "Each active cell has a stable ID coordinates area terrain elevation slope usable percentage and arable percentage."
+    },
+    {
+      "source": "slot code and allowedCategories",
+      "target": "surface-zone category and brush compatibility",
+      "rule": "Terrain site resource water hazard or infrastructure brushes may be restricted by cell state slope terrain or editor mode."
+    },
+    {
+      "source": "module assignment record",
+      "target": "cell patch or linked entity placement",
+      "rule": "A brush changes terrain or assigns a stable entity ID without replacing the cell stable ID."
+    },
+    {
+      "source": "selected slot state",
+      "target": "selected surface cell state",
+      "rule": "Selecting a cell opens the Island cell inspector and preserves keyboard focus."
+    },
+    {
+      "source": "install compatible module",
+      "target": "apply compatible surface brush",
+      "rule": "Left click Enter or Space applies the selected brush only when compatibility rules pass."
+    },
+    {
+      "source": "clear slot",
+      "target": "erase or deactivate surface cell",
+      "rule": "Right click Delete or Backspace erases the surface content while preserving the stable cell ID unless the user explicitly creates a new cell identity."
+    },
+    {
+      "source": "autofill compatible",
+      "target": "seed Island outline or populate selected blank cells",
+      "rule": "Autofill may initialize compatible blank cells but must not overwrite locked or manually edited cells."
+    },
+    {
+      "source": "reset hull",
+      "target": "reset selected region or create new map",
+      "rule": "Reset must require confirmation and must not silently replace the entire active Island record."
+    },
+    {
+      "source": "calculateVehicleAssembly issues",
+      "target": "Island map reconciliation diagnostics",
+      "rule": "Derived diagnostics cover invalid references duplicate IDs active-cell area composition usable versus arable area and downstream capacity mismatches."
+    }
+  ],
+  "requiredInteractions": [
+    "left click applies the selected compatible brush",
+    "right click erases or deactivates the selected cell",
+    "Enter or Space applies the selected brush",
+    "Delete or Backspace erases the selected cell",
+    "arrow keys move cell focus",
+    "cell selection updates an external inspector",
+    "grid resize preserves in-bounds cells and reports removed cells",
+    "cell edits preserve stable IDs",
+    "model changes emit events and repaint the view",
+    "profile export omits internal view-only active flags"
+  ],
+  "islandBrushFamilies": [
+    "surface activation and outline",
+    "terrain",
+    "elevation and slope",
+    "water catchment",
+    "site placement",
+    "resource placement",
+    "hazard placement",
+    "landing and infrastructure placement",
+    "visibility classification"
+  ],
+  "activationRule": "Load the surface-grid JavaScript and CSS through the Floating Island adapter only after P0 promotion and P1 activation. Until then the files remain inert preparation artifacts."
+}
