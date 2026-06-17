@@ -1,9 +1,9 @@
 {
   "setting": "Chronicles of the Elemental Realms",
-  "schemaVersion": "1.1.0",
-  "status": "creature-reference-pass-1-complete",
+  "schemaVersion": "1.2.0",
+  "status": "creature-reference-pass-2-complete",
   "genre": "elemental fantasy and planar ecology",
-  "description": "Dedicated wiki index for the Chronicles of the Elemental Realms source. This section is independent from Kaysender and Solanum Umbra and begins with Hypertext d20 creature references organized by planar and ecological category.",
+  "description": "Dedicated wiki index for the Chronicles of the Elemental Realms source. This section is independent from Kaysender and Solanum Umbra and contains Hypertext d20 creature references organized by planar and ecological category, including a second-pass catalogue of planar leeches, parasites, and symbiotes.",
   "sourceDocuments": [
     "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json"
   ],
@@ -17,6 +17,7 @@
     {"id":"para-elemental","name":"Para-Elemental Quagmire"},
     {"id":"unconventional-planes","name":"Unconventional Planes"},
     {"id":"arthropod-ecologies","name":"Swamp Arthropods and Adjacent Fauna"},
+    {"id":"leech-ecologies","name":"Planar Leeches, Parasites, and Symbiotes"},
     {"id":"contextual-fauna","name":"Contextual Fauna and Prey"}
   ],
   "packs": [
@@ -24,6 +25,7 @@
     "elemental-realms-creatures-primary.js",
     "elemental-realms-creatures-secondary.js",
     "elemental-realms-creatures-expansions.js",
+    "elemental-realms-creatures-leeches.js",
     "elemental-realms-creatures-context.js"
   ],
   "featuredCanonExpansions": [
@@ -31,6 +33,16 @@
     "magnetic-frog-beast",
     "snode"
   ],
+  "featuredLeechExpansions": [
+    "ember-vein-leech",
+    "mire-mender-leech",
+    "memory-leech"
+  ],
+  "leechCatalogPolicy": {
+    "definition": "Any creature whose primary sustenance is obtained by feeding upon another creature, regardless of whether the relationship is parasitic, symbiotic, or facultative.",
+    "classificationModel": "Relational and topological rather than strictly anatomical.",
+    "flameMultiplicityMinimum": "Flame-aligned leech varieties must remain at least twice as numerous as the largest non-flame planar grouping in this catalogue pass."
+  },
   "conversionPolicy": {
     "system": "Hypertext d20 / 3.5-compatible",
     "sourceLorePreserved": true,
