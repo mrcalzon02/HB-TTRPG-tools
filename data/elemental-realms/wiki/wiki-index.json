@@ -1,0 +1,30 @@
+{
+  "setting": "Chronicles of the Elemental Realms",
+  "schemaVersion": "1.0.0",
+  "status": "creature-reference-pass-1",
+  "genre": "elemental fantasy and planar ecology",
+  "description": "Dedicated wiki index for the Chronicles of the Elemental Realms source. This section is independent from Kaysender and Solanum Umbra and begins with Hypertext d20 creature references organized by planar category.",
+  "sourceDocuments": [
+    "source-page-references/Chronicles-of-Elemental-Realms-Swamps-Toads-Frogs-and-Salamanders.source.json"
+  ],
+  "categories": [
+    {"id":"primordial-swamp","name":"Primordial Swamps and Guardians"},
+    {"id":"water-plane","name":"Plane of Water"},
+    {"id":"fire-plane","name":"Plane of Fire"},
+    {"id":"earth-plane","name":"Plane of Earth"},
+    {"id":"ethereal-astral","name":"Ethereal and Astral Bogs"},
+    {"id":"air-plane","name":"Plane of Air"},
+    {"id":"para-elemental","name":"Para-Elemental Quagmire"},
+    {"id":"unconventional-planes","name":"Unconventional Planes"},
+    {"id":"contextual-fauna","name":"Contextual Fauna and Prey"}
+  ],
+  "packs": [
+    "elemental-realms-creatures.js"
+  ],
+  "conversionPolicy": {
+    "system": "Hypertext d20 / 3.5-compatible",
+    "sourceLorePreserved": true,
+    "derivedMechanicsLabeled": true,
+    "confidenceLevels": ["high","medium","low"]
+  }
+}
