@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "stageId": "floating-island-production-editor",
+  "status": "prepared-not-applied",
+  "activeBranch": "main",
+  "prerequisites": [
+    "P0 integrated Island Settlement Airship Chromium receipt passes",
+    "P0 roadmap state is complete",
+    "P1 roadmap state is required-next"
+  ],
+  "cssAssets": [
+    "styles.css",
+    "character-sheet-layout.css",
+    "kaysender-surface-grid-editor.css",
+    "kaysender-surface-grid-resize.css",
+    "kaysender-island-v3-adapter.css"
+  ],
+  "kaysenderScriptOrder": [
+    "kaysender-wiki.js",
+    "kaysender-editor-kernel.js",
+    "kaysender-editor-field-mapping.js",
+    "kaysender-editor-adapter-registry.js",
+    "kaysender-editor-migrations.js",
+    "kaysender-editor-kernel-adapters.js",
+    "kaysender-editor-lifecycle.js",
+    "kaysender-editor-repository.js",
+    "kaysender-surface-grid-editor.js",
+    "kaysender-surface-grid-brushes.js",
+    "kaysender-surface-cell-inspector.js",
+    "kaysender-surface-grid-toolbar.js",
+    "kaysender-surface-grid-resize.js",
+    "kaysender-island-v3-domain.js",
+    "kaysender-island-v3-transformers.js",
+    "kaysender-island-v3-consumer-builders.js",
+    "kaysender-island-surface-grid-controller.js",
+    "kaysender-island-v3-adapter-factory.js",
+    "kaysender-editors.js",
+    "kaysender-settlement-editor.js",
+    "kaysender-airship-editor.js",
+    "kaysender-editor-builtins-v3-prepared.js",
+    "kaysender-editor-production.js",
+    "kaysender-editor-record-library.js",
+    "kaysender-editor-error-boundary.js",
+    "kaysender-editor-live-smoke.js"
+  ],
+  "replacementSteps": [
+    {
+      "path": "index.html",
+      "action": "add prepared P1 CSS assets and replace the Kaysender script segment with kaysenderScriptOrder"
+    },
+    {
+      "path": "index.html",
+      "action": "remove kaysender-editor-builtins.js and load kaysender-editor-builtins-v3-prepared.js instead"
+    },
+    {
+      "path": "kaysender-editor-builtins.js",
+      "action": "retain as rollback source until P1 browser gate passes; do not load both built-ins files"
+    },
+    {
+      "path": "kaysender-editor-builtins-v3-prepared.js",
+      "action": "register the factory-created Island 3.0.0 adapter and Island 2.0.0 to 3.0.0 migration exactly once, then register unchanged Settlement and Airship adapters"
+    }
+  ],
+  "registrationExpectations": {
+    "adapterCount": 3,
+    "migrationId": "island-2.0.0-to-3.0.0",
+    "islandAdapterId": "floating-island-editor",
+    "islandSchemaVersion": "3.0.0",
+    "settlementSchemaVersion": "1.0.0",
+    "airshipSchemaVersion": "1.0.0",
+    "duplicateIslandRegistrationForbidden": true,
+    "primitiveTransformerRegistrationForbidden": true,
+    "finalWrappedTransformerRequired": true
+  },
+  "blockingValidatorsAfterActivation": [
+    "scripts/validate-p1-surface-grid-model.mjs",
+    "scripts/validate-p1-surface-grid-resize.mjs",
+    "scripts/validate-p1-island-domain.mjs",
+    "scripts/validate-p1-migration-and-consumers.mjs",
+    "scripts/validate-p1-consumer-builders.mjs",
+    "scripts/validate-p1-island-v3-adapter-factory.mjs",
+    "scripts/validate-p1-island-activation-manifest.mjs"
+  ],
+  "browserScenariosAfterActivation": [
+    "open the Island editor through the shared production launcher",
+    "migrate a canonical Island 2.0.0 envelope and retain identity revision locks and provenance",
+    "edit a grid cell and one JSON ledger block and observe shared dirty and recovery autosave behavior",
+    "preview cancel and confirm a cell-removing resize",
+    "reload the saved draft and preserve the resized map stable IDs and ledgers",
+    "clone the record and preserve nested domain IDs while changing envelope identity",
+    "export canonical Island 3.0.0 JSON and player-safe downstream payloads",
+    "load the Island into Settlement and then load Island plus Settlement into Airship",
+    "verify pinned parent revisions remain unchanged through child edits",
+    "exercise the valid fractured renamed migrated and cell-removal fixtures"
+  ],
+  "rollback": {
+    "restoreBuiltins": "kaysender-editor-builtins.js",
+    "removeCssAssets": [
+      "kaysender-surface-grid-editor.css",
+      "kaysender-surface-grid-resize.css",
+      "kaysender-island-v3-adapter.css"
+    ],
+    "removeScriptAssets": [
+      "kaysender-surface-grid-editor.js",
+      "kaysender-surface-grid-brushes.js",
+      "kaysender-surface-cell-inspector.js",
+      "kaysender-surface-grid-toolbar.js",
+      "kaysender-surface-grid-resize.js",
+      "kaysender-island-v3-domain.js",
+      "kaysender-island-v3-transformers.js",
+      "kaysender-island-v3-consumer-builders.js",
+      "kaysender-island-surface-grid-controller.js",
+      "kaysender-island-v3-adapter-factory.js",
+      "kaysender-editor-builtins-v3-prepared.js"
+    ],
+    "dataPolicy": "Do not downgrade or overwrite canonical Island 3.0.0 records. Rollback affects runtime loading only and requires restoring from retained Island 2.0.0 records or recovery exports."
+  },
+  "currentRuntimeMustRemain": {
+    "islandAdapterSchemaVersion": "2.0.0",
+    "loadedBuiltins": "kaysender-editor-builtins.js",
+    "preparedBuiltinsLoaded": false,
+    "preparedAdapterLoaded": false,
+    "migrationRegistered": false
+  }
+}
