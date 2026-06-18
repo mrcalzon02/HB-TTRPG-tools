@@ -4,6 +4,17 @@
   const root = typeof window !== 'undefined' ? window : globalThis;
   const clone = value => JSON.parse(JSON.stringify(value));
 
+  const BRUSH_FIELDS = Object.freeze({
+    outline: ['active'],
+    terrain: ['terrainType', 'slopeClass', 'usablePercent', 'arablePercent'],
+    elevation: ['elevationM'],
+    slope: ['slopeClass'],
+    water: ['waterCatchmentId'],
+    site: ['siteIds'],
+    resource: ['resourceNodeIds'],
+    hazard: ['hazardIds']
+  });
+
   function normalizeLockPath(path) {
     return String(path || '')
       .replace(/^data\./, '')
@@ -12,12 +23,21 @@
       .replace(/^\.|\.$/g, '');
   }
 
+  function normalizedLocks(locks = []) {
+    return [...new Set((locks || []).map(normalizeLockPath).filter(Boolean))];
+  }
+
   function createLockMatcher(locks = []) {
-    const normalized = [...new Set((locks || []).map(normalizeLockPath).filter(Boolean))];
+    const normalized = normalizedLocks(locks);
     return path => {
       const target = normalizeLockPath(path);
       return normalized.some(lock => target === lock || target.startsWith(`${lock}.`) || lock.startsWith(`${target}.`));
     };
+  }
+
+  function hasParentLock(locks = [], path = '') {
+    const target = normalizeLockPath(path);
+    return normalizedLocks(locks).some(lock => target === lock || target.startsWith(`${lock}.`));
   }
 
   function ensureDependencies() {
@@ -49,6 +69,7 @@
       this.onProfileChange = typeof options.onProfileChange === 'function' ? options.onProfileChange : null;
       this.onDiagnostics = typeof options.onDiagnostics === 'function' ? options.onDiagnostics : null;
       this.onSelectionChange = typeof options.onSelectionChange === 'function' ? options.onSelectionChange : null;
+      this.onInspectorChange = typeof options.onInspectorChange === 'function' ? options.onInspectorChange : null;
       this.compatibilityContext = typeof options.compatibilityContext === 'function'
         ? options.compatibilityContext
         : () => options.compatibilityContext || {};
@@ -64,19 +85,29 @@
       this.lockMatcher = createLockMatcher(this.getLocks());
     }
 
-    #cellLocked(cell) {
-      return this.lockMatcher(`map.cells.${cell.id}`);
+    #explicitCellLock(cell) {
+      return hasParentLock(this.getLocks(), `map.cells.${cell.id}`);
+    }
+
+    #lockedBrushPaths(cell, brush) {
+      this.#refreshLocks();
+      return (BRUSH_FIELDS[brush.family] || [])
+        .map(field => `map.cells.${cell.id}.${field}`)
+        .filter(path => this.lockMatcher(path));
     }
 
     #compatibility(cell, brush) {
-      this.#refreshLocks();
-      const context = {
-        ...clone(this.compatibilityContext() || {}),
-        lockedCellIds: this.model.listCells({ includeInactive: true })
-          .filter(item => this.#cellLocked(item))
-          .map(item => item.id)
-      };
-      const result = this.deps.brushes.evaluateCompatibility(cell, brush, context);
+      const lockedPaths = this.#lockedBrushPaths(cell, brush);
+      if (lockedPaths.length) {
+        this.onDiagnostics?.(lockedPaths.map(path => ({
+          severity: 'warning',
+          code: 'surface-brush-field-locked',
+          message: `The selected ${brush.family || 'surface'} brush would change a locked field.`,
+          path
+        })));
+        return false;
+      }
+      const result = this.deps.brushes.evaluateCompatibility(cell, brush, clone(this.compatibilityContext() || {}));
       if (!result.compatible) this.onDiagnostics?.(result.reasons.map(message => ({
         severity: 'warning',
         code: 'surface-brush-incompatible',
@@ -93,10 +124,10 @@
 
     #diagnosticsForCell(cell) {
       const diagnostics = this.model.validate().filter(item => item.path.includes(`[${cell.x},${cell.y}]`));
-      if (this.#cellLocked(cell)) diagnostics.unshift({
+      if (this.#explicitCellLock(cell)) diagnostics.unshift({
         severity: 'info',
         code: 'surface-cell-locked',
-        message: 'This cell or one of its parent paths is locked in the active profile envelope.',
+        message: 'This cell is locked by the active profile envelope.',
         path: `map.cells.${cell.id}`
       });
       return diagnostics;
@@ -141,14 +172,16 @@
         selected: this.selectedCell,
         isFieldLocked: path => this.#fieldLocked(path),
         diagnosticsProvider: cell => this.#diagnosticsForCell(cell),
-        onChange: event => this.#writeProfile(event, 'Island surface cell inspector changed.')
+        onChange: event => {
+          this.selectedCell = clone(event.cell);
+          this.onInspectorChange?.(clone(event));
+        }
       });
     }
 
     addReferenceBrush(options = {}) {
       const brush = this.deps.brushes.createReferenceBrush(options);
       this.palette = [...this.palette.filter(item => item.id !== brush.id), brush];
-      this.view.setPalette(this.palette, brush.id);
       this.toolbar.setPalette(this.palette, brush.id);
       return brush;
     }
@@ -156,7 +189,6 @@
     removeReferenceBrush(options = {}) {
       const brush = this.deps.brushes.createUnlinkBrush(options);
       this.palette = [...this.palette.filter(item => item.id !== brush.id), brush];
-      this.view.setPalette(this.palette, brush.id);
       this.toolbar.setPalette(this.palette, brush.id);
       return brush;
     }
@@ -168,8 +200,12 @@
 
     resize(columns, rows, options = {}) {
       const removed = this.model.resize(columns, rows, { preserve: options.preserve !== false });
-      const payload = this.#writeProfile({ type: 'controller-resize', removed }, 'Island surface grid dimensions changed.');
-      return { removed: clone(removed), ...payload };
+      return {
+        removed: clone(removed),
+        profile: this.getProfile(),
+        map: this.getMap(),
+        diagnostics: this.validate()
+      };
     }
 
     replaceProfile(profile, options = {}) {
@@ -211,8 +247,11 @@
   }
 
   root.KaysenderIslandSurfaceGridController = Object.freeze({
+    BRUSH_FIELDS,
     IslandSurfaceGridController,
     createLockMatcher,
-    normalizeLockPath
+    hasParentLock,
+    normalizeLockPath,
+    normalizedLocks
   });
 })();
