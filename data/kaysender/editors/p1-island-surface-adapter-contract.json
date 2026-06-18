@@ -1,11 +1,11 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "stage": "P1",
   "editorId": "floating-island-editor",
   "profileType": "floating-island-foundation-profile",
   "preparedProfileSchemaVersion": "3.0.0",
   "status": "prepared-runtime-inactive",
-  "purpose": "Define how the reusable surface-grid stack, confirmed resize recovery, Island v3 semantic engine, migration transformer, and downstream payload builders attach to the shared editor shell after P0 promotion without creating a second lifecycle, persistence path, or profile identity system.",
+  "purpose": "Define how the reusable surface-grid stack, confirmed resize recovery, Island v3 semantic engine, migration transformer, generic downstream consumer builders, and shared lifecycle attach after P0 promotion.",
   "loadOrder": [
     "kaysender-surface-grid-editor.css",
     "kaysender-surface-grid-resize.css",
@@ -16,6 +16,7 @@
     "kaysender-surface-grid-resize.js",
     "kaysender-island-v3-domain.js",
     "kaysender-island-v3-transformers.js",
+    "kaysender-island-v3-consumer-builders.js",
     "kaysender-island-surface-grid-controller.js"
   ],
   "requiredGlobals": [
@@ -81,7 +82,7 @@
     "replace profile map with IslandSurfaceGridController.getMap",
     "build or update all quantitative ledgers",
     "call KaysenderIslandV3Domain.applyDerived on the complete profile",
-    "call KaysenderIslandV3Transformers.buildDownstreamExports on the reconciled profile",
+    "call the final wrapped KaysenderIslandV3Transformers.buildDownstreamExports implementation",
     "validate the final profile",
     "return one canonical Island domain profile to the shared envelope builder"
   ],
@@ -89,7 +90,7 @@
     "run the Island 3.0.0 JSON schema validator",
     "run KaysenderIslandV3Domain.validate",
     "merge IslandSurfaceGridController.validate diagnostics",
-    "run downstream consumer reference and visibility checks",
+    "run downstream consumer reference visibility and generic-constraint checks",
     "deduplicate diagnostics by severity code path and referenceId",
     "render all results through the shared diagnostics surface",
     "block canonical save or export on errors while allowing recovery autosave"
@@ -130,7 +131,7 @@
     ],
     "importRecord": [
       "normalize the imported envelope through the shared kernel",
-      "run the registered pure 2.0.0 to 3.0.0 transformer when required",
+      "run the registered final wrapped 2.0.0 to 3.0.0 transformer when required",
       "reject future or unsupported schema versions",
       "apply the imported profile to the form and controller",
       "show provisional migration warnings without treating placeholder zeros as confirmed negative findings"
@@ -144,7 +145,7 @@
     ],
     "exportCanonicalJson": [
       "flush controller.getMap into the active profile",
-      "recalculate derived data and downstream exports",
+      "recalculate derived data and generic downstream exports",
       "build one shared canonical envelope",
       "exclude resize preview and recovery metadata from canonical domain data",
       "export no view-only state"
@@ -163,17 +164,21 @@
   },
   "migrationRegistration": {
     "migrationId": "island-2.0.0-to-3.0.0",
-    "implementation": "KaysenderIslandV3Transformers.migrateV2ToV3",
+    "primitiveImplementation": "kaysender-island-v3-transformers.js",
+    "finalImplementation": "KaysenderIslandV3Transformers.migrateV2ToV3 after kaysender-island-v3-consumer-builders.js wraps the API",
     "registry": "KaysenderEditorMigrations",
-    "registrationTiming": "only after P0 promotion and P1 activation",
-    "idempotenceRequirement": "repeated transformation of the same source data produces identical migrated domain data crosswalks and migration log",
+    "registrationTiming": "only after all transformer and consumer-builder files load during P1 activation",
+    "idempotenceRequirement": "repeated transformation of the same source data produces identical migrated domain data crosswalks migration log and generic downstream exports",
     "sourceMutationForbidden": true
   },
   "downstreamExports": {
-    "builder": "KaysenderIslandV3Transformers.buildDownstreamExports",
+    "primitiveBuilder": "kaysender-island-v3-transformers.js",
+    "genericConstraintBuilder": "kaysender-island-v3-consumer-builders.js",
+    "finalBuilder": "KaysenderIslandV3Transformers.buildDownstreamExports after wrapper load",
     "consumerEnvelopes": "KaysenderIslandV3Transformers.buildDownstreamPayloads",
     "consumerContract": "data/kaysender/editors/p1-downstream-consumer-contract.json",
     "standardConsumers": ["population", "settlement", "ecology", "route"],
+    "languageRule": "constraint prose is derived from the current profile and may not contain Aster Reach fixture assumptions",
     "visibilityRule": "standard consumer payloads exclude GM-only source IDs and gmSecrets text"
   },
   "lockSemantics": {
@@ -205,10 +210,10 @@
     "P0 integrated Island Settlement Airship browser receipt passes",
     "P0 roadmap state is promoted to complete",
     "P1 roadmap state becomes required-next",
-    "Island 2.0.0 to 3.0.0 pure transformer is registered with the existing migration registry",
+    "all transformer layers load before migration registration",
     "Island built-in adapter current schema version is changed to 3.0.0",
-    "surface-grid resize domain and transformer files are added to the Island adapter load path",
+    "surface-grid resize domain transformer and generic consumer-builder files are added to the Island adapter load path",
     "all P1 validators are added to the blocking workflow",
-    "valid migrated fractured and destructive-resize fixtures pass live Chromium interaction tests"
+    "valid renamed migrated fractured and cell-removal fixtures pass live Chromium interaction tests"
   ]
 }
