@@ -112,8 +112,182 @@
   pointer-events: none;
 }
 
+.kaysender-surface-toolbar {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.surface-brush-family {
+  display: grid;
+  gap: 7px;
+  padding: 9px;
+  border: 1px solid rgba(122, 145, 153, 0.2);
+  border-radius: 10px;
+  background: rgba(8, 12, 15, 0.5);
+}
+
+.surface-brush-family-heading,
+.surface-inspector-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+  text-transform: uppercase;
+}
+
+.surface-brush-family-heading small,
+.surface-inspector-heading small {
+  color: rgba(220, 232, 228, 0.64);
+}
+
+.surface-brush-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: 6px;
+}
+
+.surface-brush-button {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 7px;
+  border: 1px solid rgba(122, 145, 153, 0.28);
+  border-radius: 7px;
+  background: rgba(19, 28, 31, 0.72);
+  color: inherit;
+  text-align: left;
+}
+
+.surface-brush-button:hover,
+.surface-brush-button:focus-visible,
+.surface-brush-button.selected {
+  outline: none;
+  border-color: var(--accent, #c88a35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #c88a35) 26%, transparent);
+}
+
+.surface-brush-button.selected {
+  background: color-mix(in srgb, var(--accent, #c88a35) 18%, rgba(19, 28, 31, 0.72));
+}
+
+.surface-brush-code {
+  display: grid;
+  place-items: center;
+  min-height: 2rem;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.28);
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+  font-weight: 900;
+}
+
+.surface-brush-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kaysender-surface-inspector {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 28%, transparent);
+  border-radius: 12px;
+  background: rgba(8, 12, 15, 0.72);
+}
+
+.surface-inspector-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.surface-inspector-field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.surface-inspector-field > span {
+  color: rgba(220, 232, 228, 0.74);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.surface-inspector-field input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(122, 145, 153, 0.3);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.24);
+  color: inherit;
+}
+
+.surface-inspector-field input:focus-visible {
+  outline: none;
+  border-color: var(--accent, #c88a35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #c88a35) 24%, transparent);
+}
+
+.surface-inspector-field.locked {
+  opacity: 0.68;
+}
+
+.surface-inspector-field.locked small {
+  color: #e4b76c;
+}
+
+.surface-inspector-field.field-active {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.surface-inspector-field.field-active input {
+  width: auto;
+}
+
+.surface-inspector-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.surface-inspector-diagnostics {
+  display: grid;
+  gap: 7px;
+  padding: 9px;
+  border: 1px solid rgba(122, 145, 153, 0.2);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.surface-inspector-diagnostics ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.surface-inspector-diagnostics .severity-error {
+  color: #ff9b9b;
+}
+
+.surface-inspector-diagnostics .severity-warning {
+  color: #e4b76c;
+}
+
 @media (max-width: 720px) {
   .kaysender-surface-grid {
     --surface-grid-cell-size: 36px;
+  }
+
+  .surface-inspector-form {
+    grid-template-columns: 1fr;
   }
 }
