@@ -228,7 +228,9 @@ for (const marker of [
   "button.addEventListener('contextmenu'",
   "event.key === 'Delete' || event.key === 'Backspace'",
   'this.compatibility(cell, brush)',
-  'this.onSelectionChange?.(this.model.getCell(x, y))'
+  'this.onSelectionChange?.(this.model.getCell(x, y))',
+  "code.textContent = cell.active",
+  'coordinate.textContent = `${x},${y}`'
 ]) {
   if (!source.includes(marker)) throw new Error(`Surface grid view is missing reuse marker '${marker}'.`);
 }
@@ -248,7 +250,9 @@ for (const marker of [
   'Erase Cell Content',
   'Locked by the active profile envelope',
   'applyInspectorPatch',
-  'diagnosticsProvider'
+  'diagnosticsProvider',
+  'identity.textContent = cell.id',
+  'coordinate.textContent = `coordinate ${cell.x},${cell.y}'
 ]) {
   if (!inspectorSource.includes(marker)) throw new Error(`Surface cell inspector is missing '${marker}'.`);
 }
@@ -257,9 +261,19 @@ for (const marker of [
   'surface-brush-family',
   'aria-pressed',
   'this.view.setBrush',
-  'groupPalette'
+  'groupPalette',
+  'title.textContent = family',
+  'label.textContent = brush.label'
 ]) {
   if (!toolbarSource.includes(marker)) throw new Error(`Surface grid toolbar is missing '${marker}'.`);
+}
+
+for (const [label, renderSource] of [
+  ['surface grid', source],
+  ['surface toolbar', toolbarSource],
+  ['surface inspector', inspectorSource]
+]) {
+  if (renderSource.includes('.innerHTML')) throw new Error(`${label} still interpolates imported profile data through innerHTML.`);
 }
 
 for (const marker of [
@@ -291,4 +305,4 @@ for (const marker of [
 }
 
 console.log('P1 surface-grid validation passed.');
-console.log('Verified Island fixture loading, stable IDs, editing, erasure, reactivation, resize preservation, diagnostics, map export, terrain and reference brushes, compatibility rules, exact-value inspector patches, precise field locks, grouped toolbar controls, single lifecycle dirty marking, mouse controls, keyboard controls, and styling.');
+console.log('Verified Island fixture loading, stable IDs, editing, erasure, reactivation, resize preservation, diagnostics, map export, terrain and reference brushes, compatibility rules, exact-value inspector patches, precise field locks, grouped toolbar controls, single lifecycle dirty marking, safe text rendering, mouse controls, keyboard controls, and styling.');
