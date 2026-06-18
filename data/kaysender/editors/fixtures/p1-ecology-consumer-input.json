@@ -85,9 +85,9 @@
       "currentEcologicalPressure": "stable"
     },
     "ecologicalConstraints": [
-      "Habitat generation must retain the source habitat and species-slot IDs.",
-      "The pasture and basin cells form one connected managed habitat in the source profile.",
-      "Resource extraction pressure must remain below the parent Island safe extraction total.",
+      "Retain habitat IDs habitat-central-pasture and species-slot IDs species-slot-sheffel-herds.",
+      "Habitat coverage is limited to source cells cell-central-pasture and cell-northern-basin.",
+      "Current extraction is 6100 of 8400 safe annual tons; downstream ecology must preserve that pressure context.",
       "Hidden parent sites and secrets are excluded from this standard ecology payload."
     ]
   }
