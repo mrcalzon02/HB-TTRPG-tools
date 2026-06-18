@@ -1,46 +1,38 @@
 {
-  "schemaVersion": "1.4.0",
+  "schemaVersion": "1.5.0",
   "stage": "P1",
   "editorId": "floating-island-editor",
   "profileType": "floating-island-foundation-profile",
   "preparedProfileSchemaVersion": "3.0.0",
   "status": "prepared-runtime-inactive",
-  "purpose": "Define the exact prepared Island 3.0.0 adapter, migration, grid, resize, domain, and downstream integration against the existing Kaysender adapter registry and production runtime.",
+  "purpose": "Define the exact prepared Island 3.0.0 adapter, synchronous schema gate, migration, grid, resize, semantic domain, and downstream integration against the existing Kaysender registry and production runtime.",
   "authoritativeArtifacts": {
+    "schemaContract": "data/kaysender/schemas/floating-island-production-profile.schema.json",
+    "schemaValidator": "kaysender-island-v3-schema-validator.js",
     "adapterFactory": "kaysender-island-v3-adapter-factory.js",
+    "schemaBridge": "kaysender-island-v3-adapter-schema-bridge.js",
     "adapterStyles": "kaysender-island-v3-adapter.css",
     "preparedBuiltinsReplacement": "kaysender-editor-builtins-v3-prepared.js",
     "activationManifest": "data/kaysender/editors/p1-island-activation-manifest.json",
+    "schemaValidatorTest": "scripts/validate-p1-island-schema.mjs",
     "adapterValidator": "scripts/validate-p1-island-v3-adapter-factory.mjs",
     "activationValidator": "scripts/validate-p1-island-activation-manifest.mjs"
   },
   "registryInterface": {
     "requiredFields": [
-      "id",
-      "moduleId",
-      "label",
-      "profileType",
-      "currentSchemaVersion",
-      "panelId",
-      "formId",
-      "outputId",
-      "buildButtonId",
-      "randomizeButtonId",
-      "open"
+      "id", "moduleId", "label", "profileType", "currentSchemaVersion",
+      "panelId", "formId", "outputId", "buildButtonId", "randomizeButtonId", "open"
     ],
-    "optionalHooks": [
-      "readProfile",
-      "applyProfileToForm",
-      "getWikiDraft"
-    ],
-    "preparedDefinitionSource": "KaysenderIslandV3AdapterFactory.createDefinition",
+    "optionalHooks": ["readProfile", "applyProfileToForm", "getWikiDraft"],
+    "baseDefinitionSource": "kaysender-island-v3-adapter-factory.js",
+    "finalDefinitionSource": "KaysenderIslandV3AdapterFactory.createDefinition after kaysender-island-v3-adapter-schema-bridge.js replaces the global factory",
     "preparedMigrationSource": "KaysenderIslandV3AdapterFactory.createMigrationDefinition"
   },
   "runtimeOwnership": {
     "sharedProductionRuntimeOwns": [
       "canonical envelope identity and revision",
       "local drafts and recovery",
-      "import normalization",
+      "import normalization and registered migrations",
       "clone behavior",
       "toolbar actions",
       "parent inheritance",
@@ -52,7 +44,8 @@
       "legacy Island 2.0.0 scalar seed bridge",
       "surface-grid controller",
       "exact JSON ledger block editors",
-      "Island domain diagnostics",
+      "synchronous schema diagnostics",
+      "Island semantic diagnostics",
       "derived reconciliation",
       "downstream export construction"
     ]
@@ -66,11 +59,13 @@
     "kaysender-surface-cell-inspector.js",
     "kaysender-surface-grid-toolbar.js",
     "kaysender-surface-grid-resize.js",
+    "kaysender-island-v3-schema-validator.js",
     "kaysender-island-v3-domain.js",
     "kaysender-island-v3-transformers.js",
     "kaysender-island-v3-consumer-builders.js",
     "kaysender-island-surface-grid-controller.js",
     "kaysender-island-v3-adapter-factory.js",
+    "kaysender-island-v3-adapter-schema-bridge.js",
     "kaysender-editors.js",
     "kaysender-settlement-editor.js",
     "kaysender-airship-editor.js",
@@ -86,101 +81,84 @@
     "inspectorRoot": "floating-island-surface-inspector",
     "resizeRoot": "floating-island-surface-resize",
     "nonMapBlocks": [
-      "classification",
-      "geometry",
-      "composition",
-      "hydrology",
-      "foodCapacity",
-      "resources",
-      "motion",
-      "stability",
-      "approaches",
-      "sites",
-      "hazards",
-      "ecology",
-      "settlementCapacity",
-      "routeNodeExport",
-      "visibility",
-      "outputs"
+      "classification", "geometry", "composition", "hydrology", "foodCapacity", "resources",
+      "motion", "stability", "approaches", "sites", "hazards", "ecology",
+      "settlementCapacity", "routeNodeExport", "visibility", "outputs"
     ],
     "editingRule": "The legacy form seeds scalar values; the surface grid and exact JSON blocks are authoritative for Island 3.0.0."
   },
   "hookBehavior": {
     "open": [
       "open the existing Island panel",
-      "wait for the legacy form and output to exist",
+      "wait for the legacy form and output",
       "mount one Island 3.0.0 session workspace"
     ],
     "readProfile": [
       "synchronize changed legacy scalar seed values before parsing block editors",
       "parse all sixteen non-map JSON blocks",
-      "read the authoritative map from IslandSurfaceGridController",
-      "recalculate derived data with KaysenderIslandV3Domain.applyDerived",
+      "read the authoritative controller map",
+      "recalculate derived data",
       "rebuild final wrapped downstream exports",
-      "merge structural domain and grid diagnostics",
-      "return null when any error prevents canonical envelope creation"
+      "merge structural semantic and grid diagnostics",
+      "run the synchronous closed-object schema validator through the final schema bridge",
+      "append schema errors to the Island diagnostics surface",
+      "return null when any structural semantic grid or schema error prevents envelope creation"
     ],
     "applyProfileToForm": [
-      "apply mapped scalar values to the existing legacy form",
+      "apply mapped scalar values to the legacy form",
       "replace or create the Island 3.0.0 session",
       "replace the surface controller profile",
-      "rewrite all exact ledger blocks",
+      "rewrite every exact ledger block",
       "ignore the immediate legacy rebuild so imported deliberate v3 data is not overwritten"
     ],
-    "getWikiDraft": [
-      "return outputs.wikiDraft from the current canonical Island profile"
-    ]
+    "getWikiDraft": ["return outputs.wikiDraft from the current canonical Island profile"]
+  },
+  "schemaGate": {
+    "implementation": "KaysenderIslandV3Schema.validate",
+    "bridge": "kaysender-island-v3-adapter-schema-bridge.js",
+    "synchronous": true,
+    "checks": [
+      "required properties",
+      "closed-object additional property rejection",
+      "primitive and integer types",
+      "constants",
+      "enums",
+      "minimum maximum and exclusive bounds",
+      "ID patterns",
+      "minimum array cardinality",
+      "unique array items"
+    ],
+    "failureBehavior": "append schema diagnostics and return null from the final readProfile hook"
   },
   "seedPolicy": {
-    "signatureIncludes": [
-      "name",
-      "classification",
-      "geometry",
-      "composition",
-      "motion",
-      "access",
-      "hydrology",
-      "terrain",
-      "resources",
-      "ecology",
-      "population",
-      "siteInventory"
-    ],
-    "signatureExcludes": [
-      "generatedAt",
-      "rendered outputs",
-      "generated mapFoundation"
-    ],
-    "ordinarySeedChange": "update name classification geometry composition rainfall and mean altitude while preserving deliberate map ledgers stable IDs visibility and downstream structures",
-    "sharedRuntimeFormReset": "replace the complete session with a newly migrated seed and discard old transient resize recovery",
+    "signatureExcludes": ["generatedAt", "rendered outputs", "generated mapFoundation"],
+    "ordinarySeedChange": "update form-backed scalar fields while preserving deliberate map ledgers stable IDs and visibility",
+    "sharedRuntimeFormReset": "replace the complete session with a newly migrated seed",
     "importedProfileRoundtrip": "ignore the first legacy rebuild after applyProfileToForm"
   },
   "sharedLifecycleRules": [
     {
       "event": "trusted input or change in exact ledger textareas",
-      "action": "the existing panel lifecycle marks the editor dirty and schedules shared recovery autosave"
+      "action": "the existing panel lifecycle marks dirty and schedules recovery autosave"
     },
     {
       "event": "surface model cell change erase move or confirmed resize",
-      "action": "the surface controller writes the map and calls shared markDirty exactly once"
+      "action": "the surface controller calls shared markDirty exactly once"
     },
     {
-      "event": "surface resize preview or cancellation",
-      "action": "do not mutate or dirty the profile"
-    },
-    {
-      "event": "cell selection brush selection or focus movement",
-      "action": "change interaction state only"
+      "event": "surface resize preview cancellation cell selection brush selection or focus movement",
+      "action": "do not dirty the profile"
     }
   ],
   "canonicalBuildPipeline": [
     "synchronize legacy scalar seed",
     "parse exact JSON ledger blocks",
     "read controller map",
-    "force profileType floating-island-foundation-profile and schemaVersion 3.0.0",
+    "force profile type and schema version",
     "recalculate derived data",
     "rebuild final generic downstream exports",
-    "run structural domain and grid diagnostics",
+    "run structural semantic and grid diagnostics",
+    "run synchronous schema validation in the final adapter bridge",
     "return the domain profile to the shared envelope runtime only when error-free"
   ],
   "migrationRegistration": {
@@ -188,7 +166,7 @@
     "registry": "KaysenderEditorMigrations",
     "implementation": "the final wrapped KaysenderIslandV3Transformers.migrateV2ToV3",
     "registrationSource": "kaysender-editor-builtins-v3-prepared.js",
-    "registrationTiming": "after both transformer layers and the adapter factory load",
+    "registrationTiming": "after transformer layers schema validator factory and schema bridge load",
     "selfRegistrationForbidden": true
   },
   "builtinsReplacement": {
@@ -214,6 +192,6 @@
     "index uses the activation-manifest asset order",
     "active built-ins is replaced rather than loaded beside prepared built-ins",
     "all P1 validators become blocking",
-    "valid renamed migrated fractured blank-working and cell-removal scenarios pass Chromium"
+    "valid malformed renamed migrated fractured blank-working and cell-removal scenarios pass Chromium"
   ]
 }
