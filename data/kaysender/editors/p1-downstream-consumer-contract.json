@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "status": "prepared-runtime-inactive",
+  "sourceProfileType": "floating-island-foundation-profile",
+  "sourceSchemaVersion": "3.0.0",
+  "purpose": "Define stable, minimal Island exports for downstream generators and editors without granting every consumer unrestricted access to the full Island profile.",
+  "commonEnvelope": {
+    "required": ["consumer", "contractVersion", "source", "payload"],
+    "sourceFields": [
+      "profileType",
+      "schemaVersion",
+      "name",
+      "profileId when available",
+      "revision when available"
+    ],
+    "identityRule": "When produced from a canonical editor envelope, profileId and revision must be copied and consumed as a pinned-revision source reference.",
+    "stableIdRule": "All nested IDs remain the source Island IDs. Consumers may reference them but must not silently rename them.",
+    "visibilityRule": "Player-safe consumers receive only public or player-known sites and hazards. GM-only IDs and gmSecrets are excluded unless the consumer explicitly declares gmScope true.",
+    "copyRule": "Consumer payloads are detached copies. A downstream editor cannot mutate the parent Island by editing its imported payload.",
+    "freshnessRule": "A consumer must display the source revision and warn when a newer parent revision exists; it must not silently replace a pinned parent snapshot."
+  },
+  "consumers": {
+    "population": {
+      "fixture": "data/kaysender/editors/fixtures/p1-population-consumer-input.json",
+      "gmScope": false,
+      "requiredSourceSections": ["map", "hydrology", "foodCapacity", "settlementCapacity", "hazards", "routeNodeExport"],
+      "payloadSections": [
+        "capacityLimits",
+        "habitableCells",
+        "settlementSlots",
+        "supplyPressure",
+        "knownHazards",
+        "routeAccess",
+        "constraints"
+      ],
+      "forbiddenFields": ["visibility.gmSecrets", "visibility.gmOnlySiteIds", "visibility.gmOnlyHazardIds", "outputs.gmBrief"]
+    },
+    "settlement": {
+      "fixture": "data/kaysender/editors/fixtures/p1-settlement-consumer-input.json",
+      "gmScope": false,
+      "requiredSourceSections": ["map", "hydrology", "foodCapacity", "settlementCapacity", "approaches", "sites", "hazards", "routeNodeExport"],
+      "payloadSections": [
+        "selectedSettlementSlot",
+        "hostCell",
+        "referencedWaterSources",
+        "referencedLandingZones",
+        "availableRouteNodes",
+        "publicSites",
+        "knownHazards",
+        "capacityLimits",
+        "designConstraints"
+      ],
+      "forbiddenFields": ["visibility.gmSecrets", "sites where visibility is gm-only", "hazards where visibility is gm-only"]
+    },
+    "ecology": {
+      "fixture": "data/kaysender/editors/fixtures/p1-ecology-consumer-input.json",
+      "gmScope": false,
+      "requiredSourceSections": ["map", "hydrology", "resources", "ecology", "settlementCapacity", "hazards"],
+      "payloadSections": [
+        "habitats",
+        "speciesSlots",
+        "habitatCells",
+        "waterContext",
+        "knownHazards",
+        "humanPressure",
+        "ecologicalConstraints"
+      ],
+      "forbiddenFields": ["visibility.gmSecrets", "gm-only sites", "gm-only hazards"]
+    },
+    "route": {
+      "fixture": "data/kaysender/editors/fixtures/p1-route-consumer-input.json",
+      "gmScope": false,
+      "requiredSourceSections": ["motion", "approaches", "hazards", "routeNodeExport", "hydrology", "foodCapacity"],
+      "payloadSections": [
+        "defaultNodeId",
+        "nodes",
+        "landingZones",
+        "approachCorridors",
+        "motionForecast",
+        "knownApproachHazards",
+        "routeCapability",
+        "resupplyContext",
+        "routingConstraints"
+      ],
+      "forbiddenFields": ["visibility.gmSecrets", "gm-only route nodes", "gm-only hazards"]
+    }
+  },
+  "reconciliationRules": [
+    "Every exported cell ID must exist in source map.cells.",
+    "Every exported settlement slot ID must exist in source settlementCapacity.settlementSlots.",
+    "Every water source and landing zone included for a settlement slot must be referenced by that slot.",
+    "Every exported habitat cell must be referenced by the exported habitat.",
+    "Every route node landingZoneId must resolve to an exported landing zone.",
+    "Every approach corridor landingZoneId must resolve to an exported landing zone.",
+    "Every exported approach hazard must be referenced by an exported corridor or node context.",
+    "Population sustainable capacity must equal the binding minimum represented by the source settlementCapacity contract.",
+    "No downstream fixture may contain the literal source gmSecrets text."
+  ],
+  "activationRule": "After P1 activation, downstreamExports in the Island profile must be produced from these boundaries and validated before a consumer editor accepts them."
+}
