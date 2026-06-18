@@ -1,0 +1,7 @@
+{
+  "requestType": "p1-island-preparation-verification",
+  "requestVersion": "1.0.0",
+  "requestedSourceCommit": "121495ad42c81f0cb6761027783625085b2087a3",
+  "reason": "Verify the corrected resize dependency alignment and the complete prepared Island editor suite on GitHub Actions.",
+  "branch": "main"
+}
