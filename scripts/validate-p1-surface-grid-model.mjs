@@ -10,6 +10,7 @@ const source = await fs.readFile(path.join(root, 'kaysender-surface-grid-editor.
 const brushSource = await fs.readFile(path.join(root, 'kaysender-surface-grid-brushes.js'), 'utf8');
 const inspectorSource = await fs.readFile(path.join(root, 'kaysender-surface-cell-inspector.js'), 'utf8');
 const toolbarSource = await fs.readFile(path.join(root, 'kaysender-surface-grid-toolbar.js'), 'utf8');
+const controllerSource = await fs.readFile(path.join(root, 'kaysender-island-surface-grid-controller.js'), 'utf8');
 const styles = await fs.readFile(path.join(root, 'kaysender-surface-grid-editor.css'), 'utf8');
 const fixture = JSON.parse(await fs.readFile(path.join(root, 'data/kaysender/editors/fixtures/p1-floating-island-production-valid.json'), 'utf8'));
 const context = {
@@ -30,19 +31,23 @@ vm.runInContext(source, context, { filename: 'kaysender-surface-grid-editor.js' 
 vm.runInContext(brushSource, context, { filename: 'kaysender-surface-grid-brushes.js' });
 vm.runInContext(inspectorSource, context, { filename: 'kaysender-surface-cell-inspector.js' });
 vm.runInContext(toolbarSource, context, { filename: 'kaysender-surface-grid-toolbar.js' });
+vm.runInContext(controllerSource, context, { filename: 'kaysender-island-surface-grid-controller.js' });
 
 const api = context.window.KaysenderSurfaceGridEditor;
 const brushApi = context.window.KaysenderSurfaceGridBrushes;
 const inspectorApi = context.window.KaysenderSurfaceCellInspector;
 const toolbarApi = context.window.KaysenderSurfaceGridToolbar;
+const controllerApi = context.window.KaysenderIslandSurfaceGridController;
 assert.ok(api, 'Surface grid editor did not register its API.');
 assert.ok(brushApi, 'Surface grid brush catalog did not register its API.');
 assert.ok(inspectorApi, 'Surface cell inspector did not register its API.');
 assert.ok(toolbarApi, 'Surface grid toolbar did not register its API.');
+assert.ok(controllerApi, 'Island surface-grid controller did not register its API.');
 assert.equal(typeof api.SurfaceGridModel, 'function');
 assert.equal(typeof api.SurfaceGridView, 'function');
 assert.equal(typeof api.createModelFromProfile, 'function');
 assert.equal(typeof toolbarApi.SurfaceGridToolbar, 'function');
+assert.equal(typeof controllerApi.IslandSurfaceGridController, 'function');
 
 const model = api.createModelFromProfile(fixture);
 assert.equal(model.columns, fixture.map.columns);
@@ -185,6 +190,15 @@ assert.deepEqual(normalize(inspectorEdited.siteIds), ['site-a', 'site-b']);
 inspectorApi.applyInspectorPatch(model, inspectorEdited, { active: true });
 assert.equal(model.getCell(1, 1).active, true, 'Inspector could not reactivate a surface cell.');
 
+assert.equal(controllerApi.normalizeLockPath('data.map.cells[0].areaKm2'), 'map.cells.0.areaKm2');
+const fieldLock = controllerApi.createLockMatcher(['data.map.cells.cell-western-port.areaKm2']);
+assert.equal(fieldLock('map.cells.cell-western-port.areaKm2'), true);
+assert.equal(fieldLock('map.cells.cell-western-port.terrainType'), false, 'An area lock incorrectly blocked an unrelated terrain field.');
+assert.equal(controllerApi.hasParentLock(['map.cells'], 'map.cells.cell-western-port'), true);
+assert.equal(controllerApi.hasParentLock(['map.cells.cell-western-port.areaKm2'], 'map.cells.cell-western-port'), false, 'A child field lock was incorrectly treated as a whole-cell lock.');
+assert.deepEqual(normalize(controllerApi.BRUSH_FIELDS.terrain), ['terrainType', 'slopeClass', 'usablePercent', 'arablePercent']);
+assert.deepEqual(normalize(controllerApi.BRUSH_FIELDS.water), ['waterCatchmentId']);
+
 const removed = normalize(model.resize(1, 2, { preserve: true }));
 assert.equal(model.columns, 1);
 assert.equal(model.rows, 2);
@@ -249,6 +263,22 @@ for (const marker of [
 }
 
 for (const marker of [
+  'this.deps.lifecycle.markDirty(this.editorId, message)',
+  'onCellChange: event => this.#writeProfile(event)',
+  'surface-brush-field-locked',
+  'BRUSH_FIELDS[brush.family]',
+  'this.onInspectorChange?.(clone(event))'
+]) {
+  if (!controllerSource.includes(marker)) throw new Error(`Island surface-grid controller is missing '${marker}'.`);
+}
+if (controllerSource.includes("onChange: event => this.#writeProfile")) {
+  throw new Error('Inspector changes would mark the Island editor dirty twice.');
+}
+if (controllerSource.includes("const payload = this.#writeProfile({ type: 'controller-resize'")) {
+  throw new Error('Grid resize would mark the Island editor dirty twice.');
+}
+
+for (const marker of [
   'grid-template-columns: repeat(var(--surface-grid-columns)',
   '.kaysender-surface-cell.selected',
   '.kaysender-surface-cell.incompatible',
@@ -261,4 +291,4 @@ for (const marker of [
 }
 
 console.log('P1 surface-grid validation passed.');
-console.log('Verified Island fixture loading, stable IDs, editing, erasure, reactivation, resize preservation, diagnostics, map export, terrain and reference brushes, compatibility rules, exact-value inspector patches, field locks, grouped toolbar controls, mouse controls, keyboard controls, and styling.');
+console.log('Verified Island fixture loading, stable IDs, editing, erasure, reactivation, resize preservation, diagnostics, map export, terrain and reference brushes, compatibility rules, exact-value inspector patches, precise field locks, grouped toolbar controls, single lifecycle dirty marking, mouse controls, keyboard controls, and styling.');
