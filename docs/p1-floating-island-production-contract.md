@@ -2,185 +2,285 @@
 
 ## Stage state
 
-This document prepares P1 without activating it.
+This document defines the prepared P1 implementation without activating it.
 
-P0 remains the sole `required-next` stage until the integrated Island → Settlement → Airship Chromium gate passes. Nothing described here may be loaded by the active Island adapter, added to `index.html`, registered as a runtime migration, or promoted into the blocking workflow before P0 promotion.
+P0 remains the sole `required-next` stage until the integrated Island → Settlement → Airship Chromium gate passes. None of the prepared P1 assets may be added to `index.html`, registered as runtime migrations, loaded beside the active built-ins file, or promoted into the blocking workflow before P0 promotion.
 
-The P1 domain profile remains:
-
-```text
-floating-island-foundation-profile
-```
-
-The prepared P1 domain schema version is:
+Prepared profile contract:
 
 ```text
-3.0.0
+profileType: floating-island-foundation-profile
+schemaVersion: 3.0.0
+envelopeVersion: 1.0.0
 ```
 
-The canonical editor envelope remains version `1.0.0`.
+The active runtime remains Island `2.0.0`.
 
-## Authoritative contract files
+## Runtime ownership
 
-### Domain contract
+The prepared Island editor uses one shared application lifecycle and two coordinated domain models.
+
+### Shared Kaysender production runtime
+
+The existing shared runtime continues to own:
+
+- Canonical envelope identity and revision
+- Record library and active-record selection
+- Recovery drafts and autosave timing
+- Import normalization and migration invocation
+- Clone behavior and provenance
+- Parent inheritance and pinned revisions
+- Canonical copy, download, and export
+- Unsaved-change confirmation
+
+P1 does not create a second persistence, identity, or recovery system.
+
+### Structured Island production model
+
+`KaysenderIslandV3ProfileModel.IslandProfileModel` owns the complete working Island profile except for live map interaction.
+
+It provides:
+
+- Atomic scalar field batches
+- Normalized numeric, boolean, enum, list, line-array, and JSON values
+- Fifteen stable-record collections
+- Deterministic record IDs with local numeric collision suffixes
+- Stable-ID protection after creation
+- Precise section, record, and field locks
+- Reference discovery before deletion
+- Canonical derived-data and downstream-export rebuilding
+
+### Surface-grid model
+
+`IslandSurfaceGridController` owns live editing of `profile.map`.
+
+After a surface mutation, the surface controller performs the one shared lifecycle dirty transition. Its map is then merged into the structured production model under dirty suppression. This synchronization must never create a second dirty mark.
+
+### Legacy Island form
+
+The existing Island `2.0.0` form remains a scalar seed and compatibility projection surface.
+
+It may initialize or update supported scalar values, but it is not authoritative for deliberate v3 records. Legacy projection maps arbitrary v3 classifications and domain states into supported select options without rewriting authoritative v3 values.
+
+## Authoritative implementation files
+
+### Schema, semantic domain, and canonical transformation
 
 - `data/kaysender/schemas/floating-island-production-profile.schema.json`
-- `data/kaysender/editors/fixtures/p1-floating-island-production-valid.json`
-- `data/kaysender/editors/fixtures/p1-floating-island-production-edge-fractured.json`
-- `data/kaysender/editors/fixtures/p1-floating-island-reference-cases.json`
+- `kaysender-island-v3-schema-validator.js`
+- `kaysender-island-v3-domain.js`
+- `kaysender-island-v3-transformers.js`
+- `kaysender-island-v3-consumer-builders.js`
 
-### Reusable surface editor
+### Structured production editor
+
+- `kaysender-island-v3-profile-model.js`
+- `kaysender-island-v3-panels.js`
+- `kaysender-island-v3-panels-lifecycle.js`
+- `kaysender-island-v3-panels-atomic.js`
+- `kaysender-island-v3-panels.css`
+- `data/kaysender/editors/p1-island-production-panels-contract.json`
+- `scripts/validate-p1-island-production-panels.mjs`
+- `scripts/validate-p1-island-profile-locks.mjs`
+
+### Surface editor and resize recovery
 
 - `kaysender-surface-grid-editor.js`
 - `kaysender-surface-grid-brushes.js`
 - `kaysender-surface-grid-toolbar.js`
 - `kaysender-surface-cell-inspector.js`
+- `kaysender-surface-grid-resize.js`
 - `kaysender-island-surface-grid-controller.js`
 - `kaysender-surface-grid-editor.css`
+- `kaysender-surface-grid-resize.css`
 - `data/kaysender/editors/p1-surface-grid-reuse-contract.json`
+- `data/kaysender/editors/fixtures/p1-island-surface-resize-case.json`
+
+### Final adapter chain
+
+The adapter factory is layered in this exact order:
+
+1. `kaysender-island-v3-adapter-factory.js`
+2. `kaysender-island-v3-adapter-schema-bridge.js`
+3. `kaysender-island-v3-legacy-projection.js`
+4. `kaysender-island-v3-adapter-panels-bridge.js`
+
+The panel bridge is the final factory wrapper before `kaysender-editor-builtins-v3-prepared.js` registers the adapter.
+
+Additional activation artifacts:
+
+- `kaysender-island-v3-adapter.css`
 - `data/kaysender/editors/p1-island-surface-adapter-contract.json`
-- `docs/p1-island-surface-grid-reuse.md`
-- `scripts/validate-p1-surface-grid-model.mjs`
+- `data/kaysender/editors/p1-island-activation-manifest.json`
+- `docs/p1-island-activation-runbook.md`
+- `scripts/validate-p1-island-panel-bridge.mjs`
+- `scripts/validate-p1-island-v3-adapter-factory.mjs`
+- `scripts/validate-p1-island-activation-manifest.mjs`
 
-### Migration preparation
+## Structured production panels
 
-- `data/kaysender/editors/fixtures/p1-island-v2-migration-source.json`
-- `data/kaysender/editors/p1-island-v2-to-v3-migration-contract.json`
-- `data/kaysender/editors/fixtures/p1-island-v2-to-v3-expected-core.json`
+The prepared browser editor contains fourteen scalar panels:
 
-### Downstream consumer preparation
+1. Identity and Classification
+2. Geometry
+3. Composition
+4. Hydrology Ledger
+5. Food Capacity
+6. Resource Extraction
+7. Motion Forecast
+8. Stability Summary
+9. Ecology Summary
+10. Settlement Capacity
+11. Route Capability
+12. Visibility
+13. Outputs
+14. Derived Reconciliation
 
-- `data/kaysender/editors/p1-downstream-consumer-contract.json`
-- `data/kaysender/editors/fixtures/p1-population-consumer-input.json`
-- `data/kaysender/editors/fixtures/p1-settlement-consumer-input.json`
-- `data/kaysender/editors/fixtures/p1-ecology-consumer-input.json`
-- `data/kaysender/editors/fixtures/p1-route-consumer-input.json`
-- `scripts/validate-p1-migration-and-consumers.mjs`
+It also contains fifteen stable-record collection panels:
 
-The valid Aster Reach fixture is the complete implementation target. The fractured Cinder Shards fixture ensures the contract also supports zero-sustainability, expedition-only, unstable Islands.
+1. Water Sources
+2. Reservoirs
+3. Resource Nodes
+4. Altitude Timeline
+5. Drift Timeline
+6. Fault Zones
+7. Fracture Events
+8. Landing Zones
+9. Approach Corridors
+10. Sites
+11. Hazards
+12. Habitats
+13. Species Slots
+14. Settlement Slots
+15. Route Nodes
 
-## Core design principles
+Map cells are intentionally excluded from these panels because they belong to the surface-grid editor.
 
-### Deliberate editing over regeneration
+Derived reconciliation and downstream exports are generated values. Derived values are displayed read-only; downstream export objects are not manually editable.
 
-Map cells and nested entities are persistent records with stable IDs. Random generation may seed a new draft or selected blank cells, but it must never regenerate an entire existing Island because one field changed.
+## Advanced JSON mirror
 
-### One shared lifecycle
+The base adapter’s sixteen JSON block editors remain available only as a collapsed, read-only advanced inspection view.
 
-The Island surface grid does not own a second dirty-state, autosave, import, clone, or export system. Its controller writes `profile.map`, marks the existing shared lifecycle dirty exactly once per model mutation, and relies on the shared recovery draft path.
+The structured production model rewrites these mirrors after changes. They do not accept authoritative edits and cannot bypass typed controls, stable-ID protections, precise locks, semantic validation, or schema validation.
 
-### Stable references
+## Deliberate editing rules
 
-Every map cell, site, hazard, resource node, water source, reservoir, fault zone, landing zone, approach corridor, habitat, species slot, settlement slot, and route node has a stable ID.
+### Atomic scalar changes
 
-Renaming a record does not change its ID. Deleting or deactivating a referenced entity must produce a diagnostic before canonical save or export.
+A scalar-panel submission is intercepted by the final atomic wrapper and submitted through one `setFields` call.
 
-### Quantitative ledgers
+All locks are checked before mutation. If one submitted path is locked, the entire batch aborts without partially changing unlocked fields.
 
-Water, food, land, resources, settlement capacity, landing capacity, and route capacity are explicit ledgers. Sustainable population must identify its binding limit rather than presenting one unsupported number.
+One successful scalar submission creates one profile-model event and one shared lifecycle dirty transition.
 
-### Explicit movement
+### Stable record identity
 
-Altitude and horizontal drift are timelines with stable segment IDs, quantitative ranges, start and end days, and confidence. Unknown forecast periods remain explicit gaps.
+Nested records use stable prefixed IDs.
 
-### Player and GM separation
+Examples:
 
-Public facts, player-known sites, and player-known hazards are exported separately from GM-only IDs and secrets. Standard downstream consumer payloads exclude GM-only source IDs and secret text.
+```text
+water-western-springs
+resource-central-iron
+fault-eastern-rim
+landing-western-skyport
+site-central-cistern
+habitat-central-pasture
+settlement-slot-western-port
+route-node-western-skyport
+```
 
-## Required runtime panels
+A record’s ID becomes read-only after creation. Renaming its display name never changes its ID.
 
-After activation, the shared Island editor exposes:
+New records receive deterministic IDs from their collection prefix and preferred label. Local collisions use numeric suffixes rather than random values or timestamps.
 
-1. Identity and classification
-2. Geometry and composition
-3. Editable surface grid
-4. Hydrology ledger
-5. Food-capacity ledger
-6. Resource nodes
-7. Motion timeline
-8. Stability and fracture history
-9. Landing zones and approach corridors
-10. Sites and hazards
-11. Ecology envelope
-12. Settlement capacity
-13. Route-node export
-14. Visibility and outputs
+### Reference-guarded deletion
 
-The surface grid provides spatial selection and rapid brush placement. Exact values and reference lists remain editable through the selected-cell inspector.
+Removing a nested record is blocked while another profile path references it.
+
+The model returns every referencing path, allowing the UI to explain exactly what must be repaired. A future dedicated repair workflow may perform a deliberate forced deletion, but ordinary panel removal may not silently break references.
+
+### Precise locks
+
+Lock matching follows these rules:
+
+- A top-level section lock blocks all descendants.
+- A whole-record lock blocks all fields and deletion of that record.
+- A child field lock blocks only that field.
+- A child field lock does not disable sibling fields.
+- A child field lock does not disable unrelated record insertion into the collection.
+- Record deletion checks both ancestor and descendant locks because deletion would remove every field.
 
 ## Surface-grid obligations
 
-The reusable Fleet Designer grid pattern becomes the Island surface editor.
+The Fleet Designer grid interaction pattern becomes the Island surface editor without importing React.
 
 - Inactive coordinates represent open air outside the Island outline.
 - Active cells retain stable `cell-*` IDs.
 - Left click, Enter, or Space applies a compatible brush.
 - Right click, Delete, or Backspace erases cell content while retaining identity.
 - Arrow keys move focus.
-- Cell selection updates the inspector without dirtying the profile.
-- Brush selection changes interaction state without dirtying the profile.
-- Each actual model mutation produces one lifecycle dirty mark.
-- Grid resize preserves in-bounds records and returns removed records for confirmation and recovery.
+- Cell and brush selection do not dirty the profile.
+- Exact cell values remain editable through the selected-cell inspector.
+- Imported values render through `textContent` or form values rather than interpreted HTML.
 
-Field locks are precise. A lock on `map.cells.<id>.areaKm2` does not block unrelated terrain or hazard changes. Whole-map and whole-cell locks block their descendants.
+### Resize preview and recovery
+
+Grid resizing is a previewed operation.
+
+Before destructive resize, the editor reports:
+
+- Removed cells and active cells
+- Removed surface area
+- Outgoing cell water, site, resource, and hazard links
+- Direct ledger records anchored to removed cells
+- Dependent records that rely on affected water sources, landing zones, fault zones, or habitats
+
+Destructive resize requires explicit in-panel confirmation. Browser `confirm()` is not used.
+
+Preview and cancellation do not mutate or dirty the profile. Confirmed resize uses the model’s existing resize event for the one dirty transition and retains a transient recovery snapshot outside canonical domain data.
+
+Stale plans are rejected if dimensions, cell IDs, or cell coordinates changed after preview.
+
+## Canonical build pipeline
+
+Canonical save or export performs the following sequence:
+
+1. Flush queued structured production events.
+2. Merge the latest surface-controller map into the production model under dirty suppression.
+3. Mirror the structured profile into the read-only advanced JSON blocks.
+4. Synchronize supported legacy scalar seed changes without replacing deliberate v3 records.
+5. Force `profileType` and schema version.
+6. Recalculate the `derived` block with `KaysenderIslandV3Domain.applyDerived`.
+7. Rebuild downstream exports with the final wrapped generic consumer builder.
+8. Run structural diagnostics.
+9. Run semantic and reference diagnostics.
+10. Run surface-grid diagnostics.
+11. Run synchronous closed-object schema validation.
+12. Return the detached domain profile to the shared envelope runtime only when no error remains.
+
+Canonical rebuilding does not mark the editor dirty by itself.
 
 ## Semantic reconciliation
 
-### Identity
+The domain engine validates:
 
-- Nested IDs are unique within their entity class.
-- `activeCellIds` identifies existing cells only.
-- `defaultNodeId` identifies an existing route node.
+- Nested ID uniqueness
+- Active-cell and default-route-node integrity
+- Every cell, water, resource, fault, landing, site, hazard, habitat, settlement, route, and visibility reference
+- Geometry ordering and active map-area reconciliation
+- Composition totals
+- Reservoir volume versus capacity
+- Binding water, food, and land population limits
+- Resource overextraction and fault-zone pressure
+- Timeline ranges, overlap, and unknown gaps
+- Player and GM visibility conflicts
+- GM-secret and non-public-ID leakage into player-safe output
 
-### References
+Warnings are retained in `derived.warnings`. Missing references are retained in `derived.brokenReferenceIds`.
 
-Every referenced ID must resolve, including:
-
-- Cell site, resource, water, and hazard references
-- Water-source and reservoir cell references
-- Fault-zone cell references
-- Fracture-event fault references
-- Landing-zone cell references
-- Approach landing-zone and hazard references
-- Habitat cell references
-- Species-slot habitat references
-- Settlement-slot cell, water, and landing references
-- Route-node cell and landing references
-- Visibility site and hazard references
-- Downstream export references
-
-### Geometry and composition
-
-- Active cell area reconciles with plan area within a declared tolerance.
-- Usable area does not exceed plan area.
-- Flat area does not exceed usable area.
-- Arable area does not exceed flat area without a recorded exception.
-- Composition totals `100` within rounding tolerance.
-
-### Water, food, and settlement
-
-- Reservoir volume does not exceed capacity.
-- Sustainable water reconciles with source yield, storage policy, and losses.
-- `settlementCapacity.sustainablePopulation` equals the lowest binding water, food, or land limit unless an explicit supported-import exception exists.
-- Emergency population exceeds sustainable population only for a defined emergency period.
-
-### Resources and stability
-
-- Extraction above safe annual extraction produces a warning.
-- Extraction from a fault-zone cell exposes structural risk.
-- Fracture events reference existing fault zones.
-
-### Timelines
-
-- Segment end day exceeds start day.
-- Segments do not overlap.
-- Gaps remain unknown rather than being silently interpolated.
-- Altitude minimum does not exceed maximum.
-
-### Visibility
-
-- No site or hazard is both player-known and GM-only.
-- Player-safe outputs contain no GM-only IDs or secret text.
+The synchronous schema gate additionally rejects missing required properties, unknown properties in closed objects, wrong primitive types, invalid enums, malformed IDs, numeric-bound failures, insufficient array cardinality, and duplicate unique-array entries.
 
 ## Island 2.0.0 → 3.0.0 migration
 
@@ -190,143 +290,64 @@ The authoritative migration specification is:
 data/kaysender/editors/p1-island-v2-to-v3-migration-contract.json
 ```
 
-It is prepared but deliberately unregistered.
+The migration is executable in isolation but deliberately unregistered.
 
-### Preservation policy
-
-The migration copies every unambiguous v2 value and creates deterministic crosswalks:
+It copies every unambiguous v2 value and creates deterministic region and site-slot crosswalks:
 
 ```text
-R001      → cell-r001
-RUIN-01   → site-ruin-01
+R001    → cell-r001
+RUIN-01 → site-ruin-01
 ```
 
-Repeated migration of the same v2 record therefore produces the same nested IDs. Cell and site crosswalks come from source region and source slot IDs rather than random values or runtime timestamps.
+V2 generated site slots become planned or unknown records, not falsely completed sites. Quantitative information absent from v2 becomes visible conservative placeholders with warnings rather than invented precision.
 
-### Generated site-slot policy
+The v2 maximum supported population becomes a land-limited estimate only. Sustainable population remains zero until water and food limits are quantified.
 
-V2 `mapFoundation.siteSlots` were generated capacity placeholders, not completed world objects.
-
-- `known` slots migrate as `unknown` sites with `known-locally` visibility.
-- `unassigned` slots migrate as `planned` sites with `gm-only` visibility.
-- Every migrated slot receives a `migrated-v2-slot` tag.
-- Migration does not claim the site is active, occupied, or fully designed.
-
-### Conservative provisional values
-
-V2 did not retain enough evidence for several v3 ledgers. The migration must not fabricate precision.
-
-The prepared contract uses zero or empty conservative placeholders for:
-
-- Water throughput, potability certainty, storage, and reserve days
-- Food units and sustainable food population
-- Resource reserves and safe extraction tonnage
-- Drift bearing
-- Fault locations and fracture history
-- Landing daily capacity and supported vessel class
-- Route arrivals, services, repair, and resupply
-
-Each placeholder produces an explicit warning.
-
-The v2 `maximumSupportedPopulation` becomes only `landLimitedPopulation`. Water- and food-limited populations remain zero until reviewed, so migrated sustainable population remains zero.
-
-### Migration completion condition
-
-A migrated Island may open with warnings, but it is not production-ready until:
-
-- all broken references are resolved;
-- map area and composition reconcile;
-- water, food, and settlement capacities are quantified and reconcile;
-- drift bearing and landing details are reviewed;
-- route services and capacity are reviewed;
-- visibility classification is complete; and
-- provisional values are deliberately accepted or replaced.
-
-The expected deterministic outcome for the Morrow Shelf fixture is recorded in:
-
-```text
-data/kaysender/editors/fixtures/p1-island-v2-to-v3-expected-core.json
-```
+Migration registration occurs only after primitive transformers, the generic consumer wrapper, schema and projection layers, structured panel layers, and the final panel bridge have loaded.
 
 ## Downstream consumer boundaries
 
-The authoritative consumer specification is:
+The final wrapped transformer generates detached payloads for:
 
-```text
-data/kaysender/editors/p1-downstream-consumer-contract.json
-```
+- Population
+- Settlement
+- Ecology
+- Route planning
 
-Consumers receive detached, minimal payloads rather than unrestricted access to the entire parent Island profile.
+Consumer constraints are derived from the current profile. They may not contain Aster Reach-specific assumptions when another Island is edited or migrated.
 
-When exported from a canonical envelope, every consumer stores the parent `profileId` and `revision` as a pinned-revision reference.
-
-### Population consumer
-
-Receives:
-
-- Water-, food-, and land-limited population
-- Sustainable and emergency population
-- Habitable cell summaries
-- Settlement-slot summaries
-- Supply and extraction pressure
-- Known hazards
-- Route-access capacity
-
-### Settlement consumer
-
-Receives:
-
-- One selected settlement slot
-- Its host cell
-- Only the water sources and landing zones referenced by that slot
-- Available route nodes
-- Public or locally known sites and hazards
-- Island and slot capacity limits
-
-### Ecology consumer
-
-Receives:
-
-- Habitats and species slots
-- Habitat-covered cells
-- Water context
-- Public hazards
-- Settlement, extraction, and food pressure
-
-### Route consumer
-
-Receives:
-
-- Route nodes and default node
-- Referenced landing zones
-- Approach corridors
-- Altitude and drift forecasts
-- Referenced public approach hazards
-- Route capability and resupply context
-
-Standard consumer payloads exclude GM-only IDs and secret text. Imported payloads are detached copies and cannot mutate the parent Island.
+Standard consumer payloads exclude non-public parent records and secret text. When exported from a canonical envelope, consumers retain pinned parent profile and revision references.
 
 ## Activation sequence
 
 After P0 passes and P1 becomes `required-next`:
 
-1. Register `island-2.0.0-to-3.0.0` in the existing migration registry.
-2. Change the built-in Island adapter’s current schema version to `3.0.0`.
-3. Load the complete surface-grid stack through the Island adapter.
-4. Construct the surface controller from the active envelope data and locks.
-5. Bind all production panels to one canonical Island profile.
-6. Emit downstream payloads through the prepared consumer boundaries.
-7. Add both P1 validators to the blocking workflow.
-8. Exercise valid, migrated, and fractured fixtures through live Chromium interaction tests.
+1. Apply `p1-island-activation-manifest.json` exactly once.
+2. Add all prepared CSS assets.
+3. Replace the Kaysender script segment with the declared order.
+4. Remove `kaysender-editor-builtins.js` from the page.
+5. Load `kaysender-editor-builtins-v3-prepared.js`; never load both built-ins files.
+6. Register the final wrapped Island migration exactly once.
+7. Register the final structured, schema-enforcing Island adapter exactly once.
+8. Keep Settlement and Airship at schema `1.0.0`.
+9. Add every manifest-listed P1 validator to the blocking workflow.
+10. Run the complete Chromium scenario matrix.
 
 ## P1 exit gate
 
-P1 is complete only when:
+P1 is complete only when observed browser receipts prove that:
 
-- the Island editor deliberately edits every required v3 section;
-- surface-grid changes survive save, recovery, import, clone, and export;
-- the v2 source fixture migrates to the expected deterministic v3 core;
-- player-safe output and standard consumer payloads contain no GM-only source content;
-- Population, Settlement, Ecology, and Route payloads reconcile with the active Island revision;
-- the valid and fractured fixtures pass the live-browser workflow; and
-- the roadmap explicitly promotes P1 before P2 begins runtime work.
+- Structured scalar and collection editing covers every v3 section.
+- Atomic submissions create one dirty transition.
+- Precise locks affect only intended paths.
+- Referenced records cannot be silently removed.
+- The advanced JSON view remains read-only and synchronized.
+- Surface changes synchronize without duplicate dirty transitions.
+- Resize preview, cancellation, confirmation, and recovery work correctly.
+- Recovery, import, migration, clone, save, and export preserve stable nested IDs.
+- The v2 source fixture migrates to the expected deterministic v3 core.
+- Schema and semantic errors block canonical envelope creation.
+- Player-safe and standard consumer payloads exclude non-public source content.
+- Island loads into Settlement and Island plus Settlement load into Airship as pinned revisions.
+- Valid, malformed, projected, structured-edit, referenced-removal, locked-field, renamed, migrated, fractured, blank-working, and cell-removal scenarios pass Chromium.
+- The roadmap explicitly promotes P1 before P2 begins runtime work.
