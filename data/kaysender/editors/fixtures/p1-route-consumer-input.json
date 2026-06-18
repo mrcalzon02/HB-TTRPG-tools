@@ -1,0 +1,120 @@
+{
+  "consumer": "route-generator",
+  "contractVersion": "1.0.0",
+  "source": {
+    "profileType": "floating-island-foundation-profile",
+    "schemaVersion": "3.0.0",
+    "name": "Aster Reach Production Draft",
+    "profileId": null,
+    "revision": null,
+    "referencePolicy": "pinned-revision-required-when-enveloped"
+  },
+  "payload": {
+    "defaultNodeId": "route-node-western-skyport",
+    "nodes": [
+      {
+        "id": "route-node-western-skyport",
+        "name": "Aster Reach Western Skyport",
+        "mapCellId": "cell-western-port",
+        "landingZoneIds": ["landing-western-skyport"],
+        "altitudeBand": "4000-4600 metres",
+        "services": ["water", "food", "routine repair", "cargo exchange", "charts"],
+        "status": "active"
+      }
+    ],
+    "landingZones": [
+      {
+        "id": "landing-western-skyport",
+        "name": "Western Skyport",
+        "mapCellId": "cell-western-port",
+        "type": "cliff-dock",
+        "maximumVesselClass": "regional freighter",
+        "dailyCapacity": 18,
+        "weatherLimit": "closed during crosswinds above 70 km/h",
+        "status": "operational"
+      }
+    ],
+    "approachCorridors": [
+      {
+        "id": "approach-western-lane",
+        "landingZoneId": "landing-western-skyport",
+        "bearingDegrees": 262,
+        "minimumAltitudeM": 3900,
+        "maximumAltitudeM": 4650,
+        "hazardIds": ["hazard-western-shear"],
+        "pilotRequirement": "local chart certification during storm quarter"
+      }
+    ],
+    "motionForecast": {
+      "meanAltitudeM": 4200,
+      "forecastHorizonDays": 180,
+      "altitudeTimeline": [
+        {
+          "id": "altitude-segment-dry-quarter",
+          "startDay": 0,
+          "endDay": 90,
+          "minimumAltitudeM": 4050,
+          "maximumAltitudeM": 4280,
+          "confidence": "high"
+        },
+        {
+          "id": "altitude-segment-storm-quarter",
+          "startDay": 91,
+          "endDay": 180,
+          "minimumAltitudeM": 4140,
+          "maximumAltitudeM": 4480,
+          "confidence": "moderate"
+        }
+      ],
+      "driftTimeline": [
+        {
+          "id": "drift-segment-westward",
+          "startDay": 0,
+          "endDay": 90,
+          "bearingDegrees": 274,
+          "averageKmPerDay": 31,
+          "confidence": "high"
+        },
+        {
+          "id": "drift-segment-southward",
+          "startDay": 91,
+          "endDay": 180,
+          "bearingDegrees": 191,
+          "averageKmPerDay": 37,
+          "confidence": "moderate"
+        }
+      ]
+    },
+    "knownApproachHazards": [
+      {
+        "id": "hazard-western-shear",
+        "name": "Western Crosswind Shear",
+        "type": "approach weather",
+        "cellIds": ["cell-western-port"],
+        "severity": "moderate",
+        "visibility": "public",
+        "status": "seasonal"
+      }
+    ],
+    "routeCapability": {
+      "maximumDailyArrivals": 18,
+      "resupplyWater": true,
+      "resupplyFood": true,
+      "repairCapability": "routine",
+      "chartConfidence": "survey-grade"
+    },
+    "resupplyContext": {
+      "dailySustainableWaterLiters": 2100000,
+      "reserveDaysAtCurrentUse": 29,
+      "foodImportDependencyPercent": 14,
+      "currentAnnualExtractionTons": 6100
+    },
+    "routingConstraints": [
+      "The Western Skyport is the only active route node in this payload.",
+      "Use the source altitude and drift timelines rather than treating the Island as stationary.",
+      "The western lane is seasonally constrained by crosswind shear.",
+      "Maximum daily arrivals cannot exceed 18 without a parent Island revision.",
+      "Hidden parent records are excluded from this standard route payload."
+    ]
+  }
+}
