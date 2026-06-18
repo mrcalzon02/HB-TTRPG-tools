@@ -78,7 +78,7 @@
     const habitatById = new Map((profile.ecology?.habitats || []).map(item => [item.id, item]));
 
     (profile.settlementCapacity?.settlementSlots || []).forEach((item, index) => {
-      const waterDependencies = (item.waterSourceIds || []).map(id => waterById.get(id)).filter(Boolean);
+      const waterDependencies = (item.waterSourceIds || []).map(id => waterById.get(id)).filter(entry => entry && cellIds.has(entry.mapCellId));
       addDependent(
         'settlement-slot-water-dependency',
         item,
@@ -87,7 +87,7 @@
         waterDependencies.map(entry => entry.mapCellId),
         'depends-on-water-source-anchored-in-removed-cell'
       );
-      const landingDependencies = (item.landingZoneIds || []).map(id => landingById.get(id)).filter(Boolean);
+      const landingDependencies = (item.landingZoneIds || []).map(id => landingById.get(id)).filter(entry => entry && cellIds.has(entry.mapCellId));
       addDependent(
         'settlement-slot-landing-dependency',
         item,
@@ -99,7 +99,7 @@
     });
 
     (profile.routeNodeExport?.nodes || []).forEach((item, index) => {
-      const landingDependencies = (item.landingZoneIds || []).map(id => landingById.get(id)).filter(Boolean);
+      const landingDependencies = (item.landingZoneIds || []).map(id => landingById.get(id)).filter(entry => entry && cellIds.has(entry.mapCellId));
       addDependent(
         'route-node-landing-dependency',
         item,
