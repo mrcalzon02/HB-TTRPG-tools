@@ -1,0 +1,127 @@
+{
+  "consumer": "settlement-generator",
+  "contractVersion": "1.0.0",
+  "source": {
+    "profileType": "floating-island-foundation-profile",
+    "schemaVersion": "3.0.0",
+    "name": "Aster Reach Production Draft",
+    "profileId": null,
+    "revision": null,
+    "referencePolicy": "pinned-revision-required-when-enveloped"
+  },
+  "payload": {
+    "selectedSettlementSlot": {
+      "id": "settlement-slot-western-port",
+      "mapCellId": "cell-western-port",
+      "maximumPopulation": 7600,
+      "maximumFootprintKm2": 8.4,
+      "waterSourceIds": ["water-western-springs", "water-central-catchment"],
+      "landingZoneIds": ["landing-western-skyport"],
+      "status": "occupied"
+    },
+    "hostCell": {
+      "id": "cell-western-port",
+      "x": 0,
+      "y": 0,
+      "areaKm2": 41,
+      "terrainType": "cliff shelf and worked harbor",
+      "elevationM": 4210,
+      "slopeClass": "mixed shelf",
+      "usablePercent": 74,
+      "arablePercent": 8,
+      "siteIds": ["site-western-skyport"],
+      "hazardIds": ["hazard-western-shear"]
+    },
+    "referencedWaterSources": [
+      {
+        "id": "water-western-springs",
+        "mapCellId": "cell-western-port",
+        "type": "spring network",
+        "potable": true,
+        "averageDailyLiters": 720000,
+        "seasonality": "stable year-round",
+        "status": "active"
+      },
+      {
+        "id": "water-central-catchment",
+        "mapCellId": "cell-central-pasture",
+        "type": "roof and field catchment",
+        "potable": true,
+        "averageDailyLiters": 480000,
+        "seasonality": "reduced during dry quarter",
+        "status": "active"
+      }
+    ],
+    "referencedLandingZones": [
+      {
+        "id": "landing-western-skyport",
+        "name": "Western Skyport",
+        "mapCellId": "cell-western-port",
+        "type": "cliff-dock",
+        "maximumVesselClass": "regional freighter",
+        "dailyCapacity": 18,
+        "weatherLimit": "closed during crosswinds above 70 km/h",
+        "status": "operational"
+      }
+    ],
+    "availableRouteNodes": [
+      {
+        "id": "route-node-western-skyport",
+        "name": "Aster Reach Western Skyport",
+        "mapCellId": "cell-western-port",
+        "landingZoneIds": ["landing-western-skyport"],
+        "altitudeBand": "4000-4600 metres",
+        "services": ["water", "food", "routine repair", "cargo exchange", "charts"],
+        "status": "active"
+      }
+    ],
+    "publicSites": [
+      {
+        "id": "site-western-skyport",
+        "name": "Western Skyport",
+        "type": "transport hub",
+        "mapCellId": "cell-western-port",
+        "status": "active",
+        "visibility": "public",
+        "maximumFootprintKm2": 1.8,
+        "tags": ["dock", "market", "customs"]
+      },
+      {
+        "id": "site-central-cistern",
+        "name": "Central Cistern Works",
+        "type": "water infrastructure",
+        "mapCellId": "cell-central-pasture",
+        "status": "active",
+        "visibility": "known-locally",
+        "maximumFootprintKm2": 0.4,
+        "tags": ["water", "infrastructure", "critical"]
+      }
+    ],
+    "knownHazards": [
+      {
+        "id": "hazard-western-shear",
+        "name": "Western Crosswind Shear",
+        "type": "approach weather",
+        "cellIds": ["cell-western-port"],
+        "severity": "moderate",
+        "visibility": "public",
+        "status": "seasonal"
+      }
+    ],
+    "capacityLimits": {
+      "slotMaximumPopulation": 7600,
+      "islandSustainablePopulation": 8100,
+      "islandEmergencyPopulation": 12800,
+      "waterLimitedPopulation": 10500,
+      "foodLimitedPopulation": 8100,
+      "landLimitedPopulation": 9600,
+      "bindingIslandConstraint": "food"
+    },
+    "designConstraints": [
+      "Keep the settlement within the selected slot footprint unless the parent Island adds another slot.",
+      "Use only water sources and landing zones referenced by the selected slot.",
+      "Reflect seasonal skyport closure in import and trade assumptions.",
+      "Exclude hidden parent records from this standard settlement payload."
+    ]
+  }
+}
