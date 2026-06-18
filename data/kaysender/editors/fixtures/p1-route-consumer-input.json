@@ -110,9 +110,9 @@
       "currentAnnualExtractionTons": 6100
     },
     "routingConstraints": [
-      "The Western Skyport is the only active route node in this payload.",
+      "This payload exposes 1 route node: Aster Reach Western Skyport.",
       "Use the source altitude and drift timelines rather than treating the Island as stationary.",
-      "The western lane is seasonally constrained by crosswind shear.",
+      "Approach hazards: Western Crosswind Shear (moderate, seasonal).",
       "Maximum daily arrivals cannot exceed 18 without a parent Island revision.",
       "Hidden parent records are excluded from this standard route payload."
     ]
