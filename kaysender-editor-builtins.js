@@ -30,6 +30,7 @@
     'kaysender-island-v3-legacy-projection.js',
     'kaysender-island-v3-profile-model.js',
     'kaysender-island-v3-panels.js',
+    'kaysender-island-v3-reference-suggestions.js',
     'kaysender-island-v3-panels-lifecycle.js',
     'kaysender-island-v3-panels-atomic.js',
     'kaysender-island-v3-adapter-panels-bridge.js'
