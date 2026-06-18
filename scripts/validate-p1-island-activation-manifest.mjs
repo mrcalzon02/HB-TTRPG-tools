@@ -86,6 +86,7 @@ for (const required of [
   'scripts/validate-p1-island-schema.mjs',
   'scripts/validate-p1-island-legacy-projection.mjs',
   'scripts/validate-p1-island-production-panels.mjs',
+  'scripts/validate-p1-island-profile-locks.mjs',
   'scripts/validate-p1-island-panel-bridge.mjs'
 ]) assert.ok(manifest.blockingValidatorsAfterActivation.includes(required), `Manifest omits blocking validator ${required}.`);
 assert.ok(manifest.cssAssets.includes('kaysender-island-v3-panels.css'));
@@ -120,7 +121,9 @@ assert.ok(legacyProjection.includes('shapeProfile: projectShape'));
 assert.ok(legacyProjection.includes('mapping.apply(form, profile, LEGACY_FIELD_MAP)'));
 assert.ok(profileModel.includes('class IslandProfileModel'));
 assert.ok(profileModel.includes('setFields(changes = [])'));
-assert.ok(profileModel.includes('removeRecord(collectionId, recordId'));
+assert.ok(profileModel.includes('function hasOverlappingLock'));
+assert.ok(profileModel.includes('target === lock || target.startsWith(`${lock}.`)'));
+assert.ok(profileModel.includes('this.#assertRecordUnlocked(`${definition.path}.${recordId}`)'));
 assert.ok(panels.includes('class IslandProductionPanels'));
 assert.ok(panelLifecycle.includes('production-change-batch'));
 assert.ok(atomicPanels.includes('AtomicIslandProductionController'));
@@ -164,6 +167,7 @@ assert.equal(manifest.registrationExpectations.schemaBridgeRequired, true);
 assert.equal(manifest.registrationExpectations.legacyProjectionRequired, true);
 assert.equal(manifest.registrationExpectations.structuredPanelsRequired, true);
 assert.equal(manifest.registrationExpectations.panelBridgeRequired, true);
+assert.equal(manifest.registrationExpectations.preciseProfileLocksRequired, true);
 
 console.log('P1 Island activation manifest validation passed.');
-console.log('Verified every prepared asset exists, final factory and structured-panel layering order, single built-ins replacement, registration counts, unchanged child contracts, current 2.0.0 state, and absence of prepared P1 assets from the active runtime.');
+console.log('Verified every prepared asset exists, final factory and structured-panel layering order, precise lock requirements, single built-ins replacement, registration counts, unchanged child contracts, current 2.0.0 state, and absence of prepared P1 assets from the active runtime.');
