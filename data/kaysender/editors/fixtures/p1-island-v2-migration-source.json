@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "2.0.0",
+  "profileType": "floating-island-foundation-profile",
+  "name": "Morrow Shelf Legacy Foundation",
+  "generatedAt": "2026-06-01T12:00:00.000Z",
+  "classification": {
+    "sizeClass": "large island",
+    "shapeProfile": "long ridge",
+    "currentUse": "surveyed frontier"
+  },
+  "geometry": {
+    "lengthKm": 9.6,
+    "widthKm": 4.8,
+    "meanThicknessM": 510,
+    "shapeFactor": 0.44,
+    "planAreaKm2": 20.275,
+    "planAreaAcres": 50101,
+    "usableAreaKm2": 13.179,
+    "usableAreaAcres": 32566,
+    "flatAreaKm2": 5.535,
+    "flatAreaAcres": 13677,
+    "arableAreaKm2": 1.993,
+    "arableAreaAcres": 4925,
+    "grossVolumeKm3": 10.34,
+    "solidVolumeKm3": 9.306,
+    "estimatedMassMillionTons": 18972.4,
+    "usableSurfacePercent": 65
+  },
+  "composition": {
+    "ordinaryRockPercent": 52,
+    "floatstonePercent": 24,
+    "soilSedimentPercent": 14,
+    "cavernVoidPercent": 10,
+    "rawTotalBeforeNormalization": 100
+  },
+  "motion": {
+    "meanAltitudeM": 3600,
+    "verticalOscillationM": 180,
+    "minimumAltitudeM": 3420,
+    "maximumAltitudeM": 3780,
+    "oscillationPeriodHours": 48,
+    "altitudePredictability": "seasonally predictable",
+    "horizontalDriftKpd": 18,
+    "driftPredictability": "charted seasonal route",
+    "altitudeReliability": 16,
+    "positionReliability": 17,
+    "annualDriftKm": 6570
+  },
+  "access": {
+    "nearestCivilizationKm": 620,
+    "routeTraffic": "occasional traffic",
+    "chartQuality": "usable with corrections",
+    "approachProfile": "one narrow approach",
+    "civilizationProximity": 13,
+    "routeReliability": 13,
+    "concealmentValue": 9,
+    "estimatedTravelDaysAt120Kpd": 5.2
+  },
+  "hydrology": {
+    "profile": "rain capture and small springs",
+    "annualRainfallMm": 760
+  },
+  "terrain": {
+    "primary": "ridge and plateau",
+    "secondary": "forest and wet basin",
+    "flatlandPercent": 42,
+    "arableSoilPercent": 36,
+    "vegetationCoverPercent": 58
+  },
+  "resources": {
+    "mineralPresence": "iron, copper, and floatstone traces",
+    "mineralAccessibility": "mixed exposed and deep seams",
+    "knownMinerals": ["iron", "copper", "floatstone"],
+    "depositScale": "local",
+    "estimatedFloatstoneBearingVolumeKm3": 2.233,
+    "extractionPressure": 8
+  },
+  "ecology": {
+    "wildlifeDensity": "established ecosystem",
+    "dominantWildlife": "sheffel herds and cliff raptors",
+    "vegetationCoverPercent": 58,
+    "habitatAreaKm2": 7.644,
+    "carryingCapacityIndex": 76.4,
+    "expectedDistinctHabitatZones": 5
+  },
+  "population": {
+    "permanentPopulation": 430,
+    "currentUse": "surveyed frontier"
+  },
+  "siteInventory": {
+    "knownDungeonCount": 1,
+    "hiddenSiteDensity": "several plausible sites"
+  },
+  "mapFoundation": {
+    "gridLabel": "regional detail",
+    "columns": 3,
+    "rows": 2,
+    "cellWidthKm": 3.2,
+    "cellHeightKm": 2.4,
+    "nominalCellAreaKm2": 4.693,
+    "coordinateOrigin": "northwest corner",
+    "activeRegionCount": 3,
+    "cells": [
+      {
+        "id": "R001",
+        "grid": { "x": 0, "y": 0 },
+        "boundsKm": { "west": 0, "east": 3.2, "north": 0, "south": 2.4 },
+        "areaKm2": 6.7,
+        "terrain": "plateau",
+        "elevationM": 220,
+        "slopeClass": "gentle",
+        "access": "edge-access",
+        "siteCapacity": 2,
+        "sites": []
+      },
+      {
+        "id": "R002",
+        "grid": { "x": 1, "y": 0 },
+        "boundsKm": { "west": 3.2, "east": 6.4, "north": 0, "south": 2.4 },
+        "areaKm2": 6.5,
+        "terrain": "ridge",
+        "elevationM": 310,
+        "slopeClass": "steep",
+        "access": "interior",
+        "siteCapacity": 1,
+        "sites": ["RUIN-01"]
+      },
+      {
+        "id": "R003",
+        "grid": { "x": 1, "y": 1 },
+        "boundsKm": { "west": 3.2, "east": 6.4, "north": 2.4, "south": 4.8 },
+        "areaKm2": 7.075,
+        "terrain": "wet basin",
+        "elevationM": 110,
+        "slopeClass": "gentle",
+        "access": "interior",
+        "siteCapacity": 3,
+        "sites": ["SHRINE-01"]
+      }
+    ],
+    "siteSlots": [
+      {
+        "id": "RUIN-01",
+        "type": "ruin",
+        "regionId": "R002",
+        "status": "known",
+        "maximumFootprintKm2": 0.9,
+        "access": "interior",
+        "terrainContext": "ridge",
+        "designPrompt": "A known ruin occupies the high central ridge."
+      },
+      {
+        "id": "SHRINE-01",
+        "type": "shrine",
+        "regionId": "R003",
+        "status": "unassigned",
+        "maximumFootprintKm2": 0.45,
+        "access": "interior",
+        "terrainContext": "wet basin",
+        "designPrompt": "A possible shrine site overlooks the basin catchment."
+      }
+    ]
+  },
+  "insertionCapacity": {
+    "totalRegionalSiteCapacity": 6,
+    "preallocatedSiteSlots": 2,
+    "openSiteCapacity": 4,
+    "recommendedSettlementSites": 1,
+    "maximumSupportedPopulation": 1674,
+    "recommendedDungeonSites": 2,
+    "wildernessLandmarkCapacity": 0,
+    "resourceNodeCapacity": 2
+  },
+  "derivedScores": {
+    "structuralStability": 12,
+    "altitudeReliability": 16,
+    "positionReliability": 17,
+    "routeReliability": 13,
+    "agriculturalPotential": 9,
+    "settlementViability": 13,
+    "mapUtility": 12,
+    "strategicValue": 12,
+    "criminalUtility": 8,
+    "hazardPressure": 7
+  },
+  "warnings": [
+    "This v2 profile contains generated map foundations rather than deliberately edited production ledgers."
+  ],
+  "outputs": {
+    "summary": "Morrow Shelf is a large long-ridge skyland with 13.179 km² of usable surface, a narrow charted approach, rain capture, and a small permanent survey population.",
+    "viabilityNote": "The island can support a modest settlement, but v2 does not quantify water throughput, food production, or infrastructure.",
+    "gmNotes": [
+      "The central ruin is known but undeveloped.",
+      "The basin shrine slot is only a generated possibility and is not yet a confirmed site."
+    ],
+    "mapNotes": [
+      "Coordinates begin at the northwest corner.",
+      "Generated site slots are foundations, not completed sites."
+    ],
+    "wikiDraft": {
+      "id": "morrow-shelf",
+      "title": "Morrow Shelf",
+      "category": "Locations",
+      "tags": ["floating island", "large island", "ridge", "surveyed frontier"]
+    }
+  }
+}
