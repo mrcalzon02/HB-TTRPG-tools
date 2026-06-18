@@ -1,10 +1,10 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "title": "Promote Floating Island / Skyland Editor",
-  "status": "contract-grid-migration-and-consumers-prepared-runtime-inactive",
+  "status": "contract-grid-transformers-migration-and-consumers-prepared-runtime-inactive",
   "dependsOn": ["shared-editor-kernel"],
   "dependencyState": "P0 framework implementation complete; final live-browser gate pending",
   "activeBranch": "main",
@@ -29,6 +29,7 @@
     "v2MigrationSourceFixture": "data/kaysender/editors/fixtures/p1-island-v2-migration-source.json",
     "v2ToV3MigrationContract": "data/kaysender/editors/p1-island-v2-to-v3-migration-contract.json",
     "v2ToV3ExpectedCore": "data/kaysender/editors/fixtures/p1-island-v2-to-v3-expected-core.json",
+    "inertV3Transformers": "kaysender-island-v3-transformers.js",
     "downstreamConsumerContract": "data/kaysender/editors/p1-downstream-consumer-contract.json",
     "populationConsumerFixture": "data/kaysender/editors/fixtures/p1-population-consumer-input.json",
     "settlementConsumerFixture": "data/kaysender/editors/fixtures/p1-settlement-consumer-input.json",
@@ -51,11 +52,28 @@
   },
   "migrationPreparation": {
     "migrationId": "island-2.0.0-to-3.0.0",
-    "status": "prepared-not-registered",
+    "status": "executable-in-isolation-not-registered",
     "sourceVersion": "2.0.0",
     "targetVersion": "3.0.0",
+    "implementation": "kaysender-island-v3-transformers.js#migrateV2ToV3",
     "policy": "preserve known values, generate deterministic nested IDs, use conservative placeholders for absent quantitative data, and emit review warnings",
     "runtimeRegistrationPermitted": false
+  },
+  "transformerPreparation": {
+    "status": "inert-callable-library",
+    "loadedByIndex": false,
+    "registeredWithMigrationRegistry": false,
+    "usedByActiveIslandAdapter": false,
+    "functions": [
+      "migrateV2ToV3",
+      "buildPopulationPayload",
+      "buildSettlementPayload",
+      "buildEcologyPayload",
+      "buildRoutePayload",
+      "buildDownstreamPayloads",
+      "buildDownstreamExports"
+    ],
+    "validationIntent": "The P1 migration-and-consumer validator executes these pure functions against prepared fixtures without activating P1."
   },
   "preparedCapabilities": [
     "deliberately editable map cells with stable IDs",
@@ -64,14 +82,17 @@
     "grouped outline terrain elevation slope water site resource and hazard brushes",
     "exact-value selected-cell inspector",
     "field-lock-aware brush and inspector behavior",
+    "safe text rendering without imported-data innerHTML in the prepared surface UI",
     "single shared lifecycle dirty mark per model mutation",
     "shared recovery autosave integration contract",
     "left-click brush placement and right-click erasure",
     "keyboard placement erasure and arrow-key navigation",
     "brush compatibility filtering with actionable reasons",
     "grid resizing with in-bounds preservation and removed-cell reporting",
+    "deterministic executable Island 2.0.0 to 3.0.0 transformation",
     "deterministic Island 2.0.0 region and site-slot ID crosswalks",
     "conservative provisional migration defaults for missing water food resource motion stability landing and route details",
+    "executable population settlement ecology and route payload builders",
     "pinned-revision downstream consumer boundaries",
     "population settlement ecology and route consumer fixtures",
     "player-safe downstream exports that exclude GM-only IDs and secret text",
@@ -101,6 +122,7 @@
     "GM-secret leakage prevention",
     "surface-cell stable identity through edit erase deactivation and reactivation",
     "surface-grid export without view-only state",
+    "surface UI imported labels render as text rather than interpreted HTML",
     "child field locks do not block unrelated brush families",
     "inspector and resize mutations do not double-mark lifecycle state",
     "separate ledgers are not misrepresented as cell-native properties",
@@ -114,11 +136,11 @@
     "P0 live-browser gate has not been observed passing",
     "P0 has not been promoted to complete",
     "P1 has not been changed to required-next",
-    "Island 2.0.0 to 3.0.0 migration is prepared but not registered",
-    "Surface-grid files are not loaded by index.html or the active Island adapter",
+    "Island 2.0.0 to 3.0.0 transformer exists but is not registered",
+    "Surface-grid and transformer files are not loaded by index.html or the active Island adapter",
     "P1 validators are not part of the blocking workflow",
-    "Downstream consumer exports are fixtures only and are not emitted by the active Island adapter",
+    "Downstream consumer builders are not called by the active Island adapter",
     "No P1 runtime panels or adapter version changes are permitted yet"
   ],
-  "activationRule": "After P0 passes and the roadmap promotes P1, register the prepared Island 2.0.0 to 3.0.0 migration, change the Island adapter current schema to 3.0.0, load the complete surface-grid stack through the Island adapter, bind it to the active envelope and shared lifecycle, emit downstream payloads through the prepared consumer boundaries, add both P1 validators to the blocking workflow, and exercise valid migrated and fractured fixtures in Chromium."
+  "activationRule": "After P0 passes and the roadmap promotes P1, register the prepared pure migration transformer with the existing migration registry, change the Island adapter current schema to 3.0.0, load the complete surface-grid and transformer stack through the Island adapter, bind it to the active envelope and shared lifecycle, emit downstream payloads through the prepared builders, add both P1 validators to the blocking workflow, and exercise valid migrated and fractured fixtures in Chromium."
 }
