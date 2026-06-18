@@ -10,7 +10,7 @@ The machine-readable source is `data/kaysender/editors/p1-island-activation-mani
 
 ## Activation
 
-1. Add `kaysender-surface-grid-editor.css`, `kaysender-surface-grid-resize.css`, and `kaysender-island-v3-adapter.css`.
+1. Add `kaysender-surface-grid-editor.css`, `kaysender-surface-grid-resize.css`, `kaysender-island-v3-adapter.css`, and `kaysender-island-v3-panels.css`.
 2. Replace the Kaysender script segment with the manifest's `kaysenderScriptOrder`.
 3. Remove `kaysender-editor-builtins.js` from the page.
 4. Load `kaysender-editor-builtins-v3-prepared.js` instead. Never load both built-ins files.
@@ -31,12 +31,19 @@ adapter registry
 → base adapter factory
 → schema bridge
 → legacy seed projection
-→ editor panels
+→ production profile model
+→ structured production panels
+→ panel lifecycle wrapper
+→ atomic scalar-submit wrapper
+→ structured-panel adapter bridge
+→ legacy editor modules
 → prepared built-ins
 → production runtime
 ```
 
-The legacy projection layer must load last among the adapter layers. It maps arbitrary v3 classifications, route state, terrain, ecology, and resource descriptions into valid options for the old scalar seed form without changing authoritative v3 records.
+The schema bridge must wrap the base factory before legacy projection. Legacy projection must then establish the final compatibility mapping for the old scalar seed form. The structured-panel layers load after projection, and `kaysender-island-v3-adapter-panels-bridge.js` must be the final factory wrapper before prepared built-ins register the Island adapter.
+
+The structured production model owns the complete working profile. The surface controller owns live map interaction. Before canonical read, the panel bridge merges only the latest surface map into the production model, mirrors structured values into the read-only advanced JSON view, and then runs the existing semantic and synchronous schema gates.
 
 The prepared built-ins file must register exactly three adapters and one Island migration. Island becomes `3.0.0`; Settlement and Airship remain `1.0.0`.
 
@@ -44,19 +51,24 @@ The prepared built-ins file must register exactly three adapters and one Island 
 
 Verify all of the following:
 
-- The shared launcher opens one Island 3.0.0 workspace.
-- Grid and exact-ledger edits use the shared dirty and autosave lifecycle.
+- The shared launcher opens one Island 3.0.0 workspace with structured production panels and one surface-grid workspace.
+- Scalar panel submission changes multiple fields through one atomic model batch and one shared dirty transition.
+- Stable collection records can be added and edited without changing their IDs.
+- Removing a referenced water source, resource, landing zone, site, hazard, habitat, fault zone, or route node is blocked and displays every referencing path.
+- Whole-section and precise field locks disable only affected structured controls.
+- The advanced JSON ledger section is read-only and mirrors structured edits.
+- Surface edits use the shared dirty and recovery lifecycle once, then synchronize into the production model without a second dirty transition.
 - Importing Island 2.0.0 runs one deterministic migration and retains envelope identity, revision, locks, provenance, and migration log.
 - The immediate legacy-form rebuild does not overwrite imported v3 records.
 - Valid, fractured, migrated, and blank v3 profiles project every legacy seed select to a supported option.
-- Invalid JSON, missing fields, unknown properties, wrong types, invalid enums, malformed IDs, duplicate unique entries, and invalid ranges block canonical envelope creation.
+- Missing fields, unknown properties, wrong types, invalid enums, malformed IDs, duplicate unique entries, invalid ranges, broken references, and semantic conflicts block canonical envelope creation.
 - Resize expansion previews without dirtying; destructive resize reports affected records, requires confirmation, and retains recovery data.
 - Draft recovery and clone preserve nested domain IDs while clone changes envelope identity.
-- Canonical exports exclude transient editor state.
+- Canonical exports exclude transient panel, selection, resize-preview, and resize-recovery state.
 - Island loads into Settlement, then Island and Settlement load into Airship as pinned revisions.
-- Standard consumer payloads exclude GM-only IDs and secret text.
+- Standard consumer payloads exclude non-public parent records.
 
-Exercise valid, renamed, migrated, fractured, blank-working, malformed, projection, and destructive-resize cases.
+Exercise valid, structured-edit, referenced-removal, locked-field, renamed, migrated, fractured, blank-working, malformed, projection, and destructive-resize cases.
 
 ## Completion
 
