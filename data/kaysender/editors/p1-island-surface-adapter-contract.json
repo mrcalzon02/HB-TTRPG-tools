@@ -1,17 +1,19 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "stage": "P1",
   "editorId": "floating-island-editor",
   "profileType": "floating-island-foundation-profile",
   "preparedProfileSchemaVersion": "3.0.0",
   "status": "prepared-runtime-inactive",
-  "purpose": "Define how the reusable surface-grid stack, Island v3 semantic engine, migration transformer, and downstream payload builders attach to the shared editor shell after P0 promotion without creating a second lifecycle, persistence path, or profile identity system.",
+  "purpose": "Define how the reusable surface-grid stack, confirmed resize recovery, Island v3 semantic engine, migration transformer, and downstream payload builders attach to the shared editor shell after P0 promotion without creating a second lifecycle, persistence path, or profile identity system.",
   "loadOrder": [
     "kaysender-surface-grid-editor.css",
+    "kaysender-surface-grid-resize.css",
     "kaysender-surface-grid-editor.js",
     "kaysender-surface-grid-brushes.js",
     "kaysender-surface-cell-inspector.js",
     "kaysender-surface-grid-toolbar.js",
+    "kaysender-surface-grid-resize.js",
     "kaysender-island-v3-domain.js",
     "kaysender-island-v3-transformers.js",
     "kaysender-island-surface-grid-controller.js"
@@ -24,6 +26,7 @@
     "KaysenderSurfaceGridBrushes",
     "KaysenderSurfaceCellInspector",
     "KaysenderSurfaceGridToolbar",
+    "KaysenderSurfaceGridResize",
     "KaysenderIslandV3Domain",
     "KaysenderIslandV3Transformers",
     "KaysenderIslandSurfaceGridController"
@@ -42,13 +45,20 @@
     "locksSource": "active editor envelope locks",
     "compatibilityContextSource": "active Island composition stability and override controls",
     "profileChangeDestination": "active editor envelope data map block",
-    "diagnosticsDestination": "shared editor diagnostics surface"
+    "diagnosticsDestination": "shared editor diagnostics surface",
+    "resizePreviewDestination": "surface resize preview panel and optional adapter callback",
+    "resizeRecoveryDestination": "controller lastResizeRecovery state until canonical save or explicit clear"
   },
   "sharedLifecycleRules": [
     {
-      "event": "surface model cell change erase move or resize",
+      "event": "surface model cell change erase move or confirmed resize",
       "action": "write controller map into the active Island profile and call KaysenderEditorLifecycle.markDirty exactly once",
       "autosave": "use the existing shared lifecycle recovery autosave delay and callback"
+    },
+    {
+      "event": "surface resize preview or cancellation",
+      "action": "calculate removed cells direct ledger references and dependent ledger references without changing the model or active profile",
+      "autosave": "do not mark dirty and do not schedule autosave"
     },
     {
       "event": "surface inspector submit",
@@ -87,17 +97,18 @@
   "adapterHooks": {
     "open": [
       "render the existing Island form and production panels",
-      "create the surface panel mount points",
+      "create toolbar grid inspector and resize mount points",
       "construct one IslandSurfaceGridController from the active profile"
     ],
     "buildProfile": [
       "execute canonicalBuildPipeline",
       "never preserve stale derived flags from an earlier revision",
-      "never export view-only selected brush selected cell or active flags"
+      "never export view-only selected brush selected cell resize preview or active flags"
     ],
     "applyProfileToForm": [
       "apply non-map fields through the existing field mapping",
       "call controller.replaceProfile with the imported migrated or recovered profile",
+      "clear prior resize recovery because it belongs to the replaced profile",
       "preserve the nearest valid selected coordinate"
     ],
     "validate": [
@@ -108,12 +119,13 @@
     "newBlankRecord": [
       "clear the prior active envelope and recovery draft through the shared runtime",
       "construct a blank Island 3.0.0 profile with a default inactive grid envelope",
-      "replace the controller profile without retaining old linked IDs"
+      "replace the controller profile without retaining old linked IDs or resize recovery"
     ],
     "recoverDraft": [
       "normalize and migrate the recovered envelope through the shared kernel",
       "apply the recovered profile to the form and controller",
       "preserve recovered stable cell IDs and references",
+      "restore resize recovery metadata when it is present in the recovery draft",
       "recalculate derived data before canonical save"
     ],
     "importRecord": [
@@ -134,16 +146,18 @@
       "flush controller.getMap into the active profile",
       "recalculate derived data and downstream exports",
       "build one shared canonical envelope",
+      "exclude resize preview and recovery metadata from canonical domain data",
       "export no view-only state"
     ],
     "cloneRecord": [
       "clone the shared envelope identity through the existing kernel",
       "retain nested cell and entity IDs inside the cloned domain record unless collision policy requires deterministic remapping",
+      "do not clone transient resize recovery",
       "record clonedFromProfileId in provenance"
     ],
     "close": [
       "honor shared unsaved-change confirmation",
-      "destroy the controller view toolbar and inspector subscriptions",
+      "destroy resize inspector toolbar and view subscriptions",
       "retain the active envelope and recovery draft through existing runtime behavior"
     ]
   },
@@ -174,11 +188,18 @@
     "rule": "A field lock blocks only brushes or inspector controls that would change that field. A child field lock does not automatically block unrelated cell fields."
   },
   "resizePolicy": {
+    "implementation": "KaysenderSurfaceGridResize and IslandSurfaceGridController previewResize applyResizePlan getResizeRecovery clearResizeRecovery",
     "previewRequired": true,
+    "previewMutationForbidden": true,
     "confirmationRequiredWhenCellsRemoved": true,
-    "removedRecords": "returned by SurfaceGridModel.resize and retained in the current recovery state until save",
-    "linkedEntityCheck": "warn when a removed cell is referenced by water resources sites hazards landing zones habitats settlement slots or route nodes",
-    "cancelBehavior": "leave dimensions and records unchanged"
+    "browserConfirmForbidden": true,
+    "stalePlanPolicy": "reject a plan when dimensions cell IDs or cell coordinates changed after preview",
+    "removedRecords": "returned by SurfaceGridModel.resize and retained as lastResizeRecovery until canonical save explicit clear or profile replacement",
+    "directReferenceCheck": "report water sources reservoirs resource nodes fault zones landing zones sites hazards habitats settlement slots and route nodes whose spatial fields reference removed cells",
+    "dependentReferenceCheck": "report settlement and route landing dependencies settlement water dependencies fracture-event fault dependencies approach-corridor landing dependencies and species-slot habitat dependencies",
+    "outgoingCellLinks": "retain removed cell water site resource and hazard IDs in the recovery snapshot",
+    "cancelBehavior": "leave dimensions records dirty state and recovery state unchanged",
+    "canonicalExportBehavior": "exclude transient preview and recovery state from the Island domain profile"
   },
   "activationGate": [
     "P0 integrated Island Settlement Airship browser receipt passes",
@@ -186,8 +207,8 @@
     "P1 roadmap state becomes required-next",
     "Island 2.0.0 to 3.0.0 pure transformer is registered with the existing migration registry",
     "Island built-in adapter current schema version is changed to 3.0.0",
-    "surface-grid domain and transformer files are added to the Island adapter load path",
+    "surface-grid resize domain and transformer files are added to the Island adapter load path",
     "all P1 validators are added to the blocking workflow",
-    "valid migrated and fractured fixtures pass live Chromium interaction tests"
+    "valid migrated fractured and destructive-resize fixtures pass live Chromium interaction tests"
   ]
 }
