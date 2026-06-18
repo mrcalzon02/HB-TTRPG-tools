@@ -103,10 +103,12 @@ jobs:
           node --check scripts/validate-editor-migrations.mjs
           node --check scripts/validate-editor-adapter-integration.mjs
           node --check scripts/validate-editor-inheritance.mjs
+          node --check scripts/validate-editor-drafts.mjs
           node --check scripts/validate-editor-lifecycle.mjs
           node --check scripts/validate-editor-repository.mjs
           node --check scripts/run-p0-browser-verification.mjs
           node --check scripts/validate-p0-browser-verification.mjs
+          node --check scripts/publish-p0-runtime-status.mjs
           node --check spell-creator-vocabulary.js
           node --check spell-creator-mechanics.js
           node --check module-spell-creator.js
@@ -174,12 +176,17 @@ jobs:
       - name: Validate P0 browser verification receipt
         run: node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json
 
+      - name: Publish P0 runtime status into Pages payload
+        run: node scripts/publish-p0-runtime-status.mjs artifacts/p0-browser-verification.json p0-runtime-status.json
+
       - name: Upload P0 browser verification evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@v5
         with:
           name: p0-browser-verification
-          path: artifacts/
+          path: |
+            artifacts/
+            p0-runtime-status.json
           if-no-files-found: warn
           retention-days: 30
 
