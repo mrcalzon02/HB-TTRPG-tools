@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "editorId": "floating-island-editor",
+  "profileType": "floating-island-foundation-profile",
+  "preparedProfileSchemaVersion": "3.0.0",
+  "status": "prepared-runtime-inactive",
+  "purpose": "Define how the reusable surface-grid stack will attach to the shared editor shell after P0 promotion without creating a second lifecycle, persistence path, or profile identity system.",
+  "loadOrder": [
+    "kaysender-surface-grid-editor.css",
+    "kaysender-surface-grid-editor.js",
+    "kaysender-surface-grid-brushes.js",
+    "kaysender-surface-cell-inspector.js",
+    "kaysender-surface-grid-toolbar.js",
+    "kaysender-island-surface-grid-controller.js"
+  ],
+  "requiredGlobals": [
+    "KaysenderEditorKernel",
+    "KaysenderEditorLifecycle",
+    "KaysenderSurfaceGridEditor",
+    "KaysenderSurfaceGridBrushes",
+    "KaysenderSurfaceCellInspector",
+    "KaysenderSurfaceGridToolbar",
+    "KaysenderIslandSurfaceGridController"
+  ],
+  "mountPoints": {
+    "surfacePanel": "floating-island-surface-panel",
+    "toolbarRoot": "floating-island-surface-toolbar",
+    "gridRoot": "floating-island-surface-grid",
+    "inspectorRoot": "floating-island-surface-inspector",
+    "resizeControls": "floating-island-surface-resize",
+    "sharedDiagnostics": "mainline-editor-diagnostics"
+  },
+  "controllerConstruction": {
+    "editorId": "floating-island-editor",
+    "profileSource": "active editor envelope data",
+    "locksSource": "active editor envelope locks",
+    "compatibilityContextSource": "active Island composition stability and override controls",
+    "profileChangeDestination": "active editor envelope data map block",
+    "diagnosticsDestination": "shared editor diagnostics surface"
+  },
+  "sharedLifecycleRules": [
+    {
+      "event": "surface model cell change erase move or resize",
+      "action": "write controller map into the active Island profile and call KaysenderEditorLifecycle.markDirty exactly once",
+      "autosave": "use the existing shared lifecycle recovery autosave delay and callback"
+    },
+    {
+      "event": "surface inspector submit",
+      "action": "change the surface model only",
+      "autosave": "the resulting model event performs the single dirty mark and autosave scheduling"
+    },
+    {
+      "event": "surface toolbar brush selection",
+      "action": "change editor interaction state only",
+      "autosave": "do not mark the Island profile dirty until a brush changes a cell"
+    },
+    {
+      "event": "cell selection or keyboard focus movement",
+      "action": "update inspector selection only",
+      "autosave": "do not mark the Island profile dirty"
+    }
+  ],
+  "adapterHooks": {
+    "open": [
+      "render the existing Island form and production panel",
+      "create the surface panel mount points",
+      "construct one IslandSurfaceGridController from the active profile"
+    ],
+    "buildProfile": [
+      "read existing form fields",
+      "replace the profile map block with controller.getMap",
+      "derive map totals and downstream capacities",
+      "return one canonical Island domain profile"
+    ],
+    "applyProfileToForm": [
+      "apply non-map fields through the existing field mapping",
+      "call controller.replaceProfile with the imported migrated or recovered profile",
+      "preserve the nearest valid selected coordinate"
+    ],
+    "validate": [
+      "run the Island schema validator",
+      "run the Island semantic reference validator",
+      "merge controller.validate diagnostics",
+      "render all results through the shared diagnostics surface"
+    ],
+    "newBlankRecord": [
+      "clear the prior active envelope and recovery draft through the shared runtime",
+      "construct a blank Island profile with a default inactive grid envelope",
+      "replace the controller profile without retaining old linked IDs"
+    ],
+    "recoverDraft": [
+      "normalize and migrate the recovered envelope through the shared kernel",
+      "apply the recovered profile to the form and controller",
+      "preserve recovered stable cell IDs and references"
+    ],
+    "importRecord": [
+      "normalize and migrate the imported envelope through the shared kernel",
+      "reject future or unsupported schema versions",
+      "apply the imported profile to the form and controller"
+    ],
+    "randomizeUnlocked": [
+      "read envelope locks",
+      "operate only on selected blank or explicitly targeted cells",
+      "skip brush field families whose target paths are locked",
+      "never replace stable cell IDs",
+      "never regenerate the entire map because one field changed"
+    ],
+    "exportCanonicalJson": [
+      "flush controller.getMap into the active profile",
+      "build one shared canonical envelope",
+      "export no view-only selected brush selected cell or active flag state"
+    ],
+    "cloneRecord": [
+      "clone the shared envelope identity through the existing kernel",
+      "retain nested cell and entity IDs inside the cloned domain record unless collision policy requires deterministic remapping",
+      "record clonedFromProfileId in provenance"
+    ],
+    "close": [
+      "honor shared unsaved-change confirmation",
+      "destroy the controller view toolbar and inspector subscriptions",
+      "retain the active envelope and recovery draft through existing runtime behavior"
+    ]
+  },
+  "lockSemantics": {
+    "wholeMap": "map",
+    "wholeCell": "map.cells.<cellId>",
+    "cellField": "map.cells.<cellId>.<field>",
+    "examples": [
+      "map.cells.cell-western-port.areaKm2",
+      "map.cells.cell-central-pasture.terrainType",
+      "map.cells.cell-eastern-rim.hazardIds"
+    ],
+    "rule": "A field lock blocks only brushes or inspector controls that would change that field. A child field lock does not automatically block unrelated cell fields."
+  },
+  "resizePolicy": {
+    "previewRequired": true,
+    "confirmationRequiredWhenCellsRemoved": true,
+    "removedRecords": "returned by SurfaceGridModel.resize and retained in the current recovery state until save",
+    "linkedEntityCheck": "warn when a removed cell is referenced by water resources sites hazards landing zones habitats settlement slots or route nodes",
+    "cancelBehavior": "leave dimensions and records unchanged"
+  },
+  "activationGate": [
+    "P0 integrated Island Settlement Airship browser receipt passes",
+    "P0 roadmap state is promoted to complete",
+    "P1 roadmap state becomes required-next",
+    "Island 2.0.0 to 3.0.0 migration is registered",
+    "surface-grid files are added to the Island adapter load path",
+    "surface-grid validator is added to the blocking workflow",
+    "valid and fractured fixtures pass live Chromium interaction tests"
+  ]
+}
