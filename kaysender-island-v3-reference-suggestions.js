@@ -56,6 +56,14 @@
     }));
   }
 
+  function submitReferenceForm(input) {
+    const form = input.form;
+    if (!form || input.disabled) return;
+    root.queueMicrotask(() => {
+      if (form.isConnected && typeof form.requestSubmit === 'function') form.requestSubmit();
+    });
+  }
+
   function addDatalist(model, panel, panelId, fieldName, source) {
     panel.querySelectorAll(`[name="${fieldName}"]`).forEach((input, index) => {
       if (input.dataset.referenceSuggestions === 'true') return;
@@ -69,6 +77,7 @@
       });
       input.dataset.referenceSuggestions = 'true';
       input.setAttribute('list', list.id);
+      input.addEventListener('change', () => submitReferenceForm(input));
       input.insertAdjacentElement('afterend', list);
     });
   }
@@ -81,6 +90,7 @@
     input.value = unique(ids).join(', ');
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new Event('change', { bubbles: true }));
+    submitReferenceForm(input);
   }
 
   function addPicker(model, panel, fieldName, source) {
