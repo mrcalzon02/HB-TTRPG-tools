@@ -303,7 +303,15 @@
           button.dataset.cellId = cell.id;
           button.setAttribute('aria-label', `${cell.id}, ${cell.terrainType}, ${cell.active ? 'active surface' : 'inactive space'}, coordinate ${x},${y}`);
           button.title = `${cell.id} [${x},${y}] · ${cell.terrainType} · ${cell.areaKm2} km²${compatible ? '' : ' · selected brush is incompatible'}`;
-          button.innerHTML = `<span class="surface-cell-code">${cell.active ? String(cell.terrainType || '?').slice(0, 2).toUpperCase() : '·'}</span><span class="surface-cell-coordinate">${x},${y}</span>`;
+
+          const code = document.createElement('span');
+          code.className = 'surface-cell-code';
+          code.textContent = cell.active ? String(cell.terrainType || '?').slice(0, 2).toUpperCase() : '·';
+          const coordinate = document.createElement('span');
+          coordinate.className = 'surface-cell-coordinate';
+          coordinate.textContent = `${x},${y}`;
+          button.append(code, coordinate);
+
           button.addEventListener('click', () => this.applyBrush(x, y));
           button.addEventListener('contextmenu', event => {
             event.preventDefault();
