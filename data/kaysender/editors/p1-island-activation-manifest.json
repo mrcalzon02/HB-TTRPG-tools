@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "status": "prepared-not-applied",
@@ -88,7 +88,8 @@
     "schemaBridgeRequired": true,
     "legacyProjectionRequired": true,
     "structuredPanelsRequired": true,
-    "panelBridgeRequired": true
+    "panelBridgeRequired": true,
+    "preciseProfileLocksRequired": true
   },
   "blockingValidatorsAfterActivation": [
     "scripts/validate-p1-surface-grid-model.mjs",
@@ -99,6 +100,7 @@
     "scripts/validate-p1-migration-and-consumers.mjs",
     "scripts/validate-p1-consumer-builders.mjs",
     "scripts/validate-p1-island-production-panels.mjs",
+    "scripts/validate-p1-island-profile-locks.mjs",
     "scripts/validate-p1-island-panel-bridge.mjs",
     "scripts/validate-p1-island-v3-adapter-factory.mjs",
     "scripts/validate-p1-island-activation-manifest.mjs"
@@ -110,7 +112,8 @@
     "edit one structured scalar panel and one stable collection record and observe one shared dirty transition and recovery autosave",
     "verify the advanced JSON ledger view is read-only and mirrors structured edits",
     "block removal of a record that remains referenced and show each referencing path",
-    "apply precise field locks without disabling unrelated structured fields",
+    "apply a child field lock without disabling unrelated sibling fields or collection insertion",
+    "apply whole-record and whole-section locks to all descendants",
     "reject unknown properties invalid IDs invalid enums out-of-range values and semantic conflicts before envelope creation",
     "preview cancel and confirm a cell-removing resize",
     "reload the saved draft and preserve resized map stable IDs and ledgers",
