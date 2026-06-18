@@ -1,10 +1,10 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "title": "Promote Floating Island / Skyland Editor",
-  "status": "contract-grid-transformers-migration-and-consumers-prepared-runtime-inactive",
+  "status": "contract-grid-transformers-domain-migration-and-consumers-prepared-runtime-inactive",
   "dependsOn": ["shared-editor-kernel"],
   "dependencyState": "P0 framework implementation complete; final live-browser gate pending",
   "activeBranch": "main",
@@ -26,6 +26,8 @@
     "surfaceGridLifecycleController": "kaysender-island-surface-grid-controller.js",
     "surfaceGridStyles": "kaysender-surface-grid-editor.css",
     "surfaceGridValidator": "scripts/validate-p1-surface-grid-model.mjs",
+    "islandV3DomainEngine": "kaysender-island-v3-domain.js",
+    "islandV3DomainValidator": "scripts/validate-p1-island-domain.mjs",
     "v2MigrationSourceFixture": "data/kaysender/editors/fixtures/p1-island-v2-migration-source.json",
     "v2ToV3MigrationContract": "data/kaysender/editors/p1-island-v2-to-v3-migration-contract.json",
     "v2ToV3ExpectedCore": "data/kaysender/editors/fixtures/p1-island-v2-to-v3-expected-core.json",
@@ -75,6 +77,23 @@
     ],
     "validationIntent": "The P1 migration-and-consumer validator executes these pure functions against prepared fixtures without activating P1."
   },
+  "domainPreparation": {
+    "status": "inert-callable-library",
+    "implementation": "kaysender-island-v3-domain.js",
+    "loadedByIndex": false,
+    "usedByActiveIslandAdapter": false,
+    "functions": [
+      "validate",
+      "recalculateDerived",
+      "applyDerived",
+      "referenceDiagnostics",
+      "duplicateDiagnostics",
+      "timelineDiagnostics",
+      "visibilityDiagnostics"
+    ],
+    "coveredFailureCases": 17,
+    "canonicalUse": "recalculate derived values and validate the complete Island profile immediately before canonical save or export"
+  },
   "preparedCapabilities": [
     "deliberately editable map cells with stable IDs",
     "Fleet module-grid interaction reuse for Island surface mapping",
@@ -89,6 +108,9 @@
     "keyboard placement erasure and arrow-key navigation",
     "brush compatibility filtering with actionable reasons",
     "grid resizing with in-bounds preservation and removed-cell reporting",
+    "executable duplicate-ID and cross-reference validation",
+    "executable geometry composition hydrology capacity resource timeline and visibility reconciliation",
+    "derived reconciliation recalculation before canonical save and export",
     "deterministic executable Island 2.0.0 to 3.0.0 transformation",
     "deterministic Island 2.0.0 region and site-slot ID crosswalks",
     "conservative provisional migration defaults for missing water food resource motion stability landing and route details",
@@ -116,10 +138,11 @@
     "reservoir capacity reconciliation",
     "binding settlement population limit",
     "resource overextraction warnings",
-    "timeline range and overlap validation",
+    "fault-zone pressure warning when aggregate overextraction cannot be assigned to a specific node",
+    "timeline range overlap and unknown-gap validation",
     "route default-node integrity",
     "player and GM visibility conflict prevention",
-    "GM-secret leakage prevention",
+    "GM-secret and GM-only-ID leakage prevention",
     "surface-cell stable identity through edit erase deactivation and reactivation",
     "surface-grid export without view-only state",
     "surface UI imported labels render as text rather than interpreted HTML",
@@ -137,10 +160,10 @@
     "P0 has not been promoted to complete",
     "P1 has not been changed to required-next",
     "Island 2.0.0 to 3.0.0 transformer exists but is not registered",
-    "Surface-grid and transformer files are not loaded by index.html or the active Island adapter",
+    "Surface-grid domain and transformer files are not loaded by index.html or the active Island adapter",
     "P1 validators are not part of the blocking workflow",
     "Downstream consumer builders are not called by the active Island adapter",
     "No P1 runtime panels or adapter version changes are permitted yet"
   ],
-  "activationRule": "After P0 passes and the roadmap promotes P1, register the prepared pure migration transformer with the existing migration registry, change the Island adapter current schema to 3.0.0, load the complete surface-grid and transformer stack through the Island adapter, bind it to the active envelope and shared lifecycle, emit downstream payloads through the prepared builders, add both P1 validators to the blocking workflow, and exercise valid migrated and fractured fixtures in Chromium."
+  "activationRule": "After P0 passes and the roadmap promotes P1, register the prepared pure migration transformer with the existing migration registry, change the Island adapter current schema to 3.0.0, load the complete surface-grid domain and transformer stack through the Island adapter, bind it to the active envelope and shared lifecycle, recalculate derived data before canonical save and export, emit downstream payloads through the prepared builders, add all P1 validators to the blocking workflow, and exercise valid migrated and fractured fixtures in Chromium."
 }
