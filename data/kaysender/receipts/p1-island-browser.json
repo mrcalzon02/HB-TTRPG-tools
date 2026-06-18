@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "stageId": "floating-island-production-editor",
+  "result": "passed",
+  "completedAt": "2026-06-18T17:03:37.592Z",
+  "checks": [
+    {
+      "id": "controllers-mounted",
+      "status": "passed",
+      "detail": "Structured production panels and the reusable surface grid mounted in the same browser document."
+    },
+    {
+      "id": "prepared-runtime-unregistered",
+      "status": "passed",
+      "detail": "The test harness loaded prepared components without registering or activating the production adapter."
+    },
+    {
+      "id": "atomic-scalar-edit",
+      "status": "passed",
+      "detail": "One structured scalar submission changed multiple values through one dirty transition."
+    },
+    {
+      "id": "safe-text-rendering",
+      "status": "passed",
+      "detail": "Imported-looking markup remained literal text and never became an element or event handler."
+    },
+    {
+      "id": "stable-record-add",
+      "status": "passed",
+      "detail": "The Water Sources panel created a deterministic stable ID."
+    },
+    {
+      "id": "stable-record-update",
+      "status": "passed",
+      "detail": "Record editing preserved identity while normalizing typed values."
+    },
+    {
+      "id": "unreferenced-record-remove",
+      "status": "passed",
+      "detail": "An unreferenced test record was removed through the rendered collection panel."
+    },
+    {
+      "id": "referenced-record-protection",
+      "status": "passed",
+      "detail": "A referenced resource remained intact and produced actionable reference diagnostics without dirtying the profile."
+    },
+    {
+      "id": "precise-field-lock",
+      "status": "passed",
+      "detail": "A child field lock disabled only its own control."
+    },
+    {
+      "id": "deliberate-surface-edit",
+      "status": "passed",
+      "detail": "A real toolbar and cell click changed terrain and synchronized the map with one shared dirty transition."
+    },
+    {
+      "id": "destructive-resize-preview",
+      "status": "passed",
+      "detail": "Destructive resize preview required explicit confirmation without mutating or dirtying the map."
+    },
+    {
+      "id": "non-destructive-expansion",
+      "status": "passed",
+      "detail": "Non-destructive expansion preserved existing cells and synchronized the larger map."
+    },
+    {
+      "id": "canonical-validation",
+      "status": "passed",
+      "detail": "The browser-edited profile passed the closed schema and semantic domain validators."
+    },
+    {
+      "id": "downstream-consumers",
+      "status": "passed",
+      "detail": "Canonical browser output included the required standard downstream consumer payloads."
+    },
+    {
+      "id": "lossless-round-trip",
+      "status": "passed",
+      "detail": "Canonical JSON round-trip retained deliberate fields, map edits, and stable record IDs."
+    }
+  ],
+  "dirtyTransitions": [
+    {
+      "editorId": "floating-island-editor",
+      "message": "Island production profile changed."
+    },
+    {
+      "editorId": "floating-island-editor",
+      "message": "Island production profile changed."
+    },
+    {
+      "editorId": "floating-island-editor",
+      "message": "Island production profile changed."
+    },
+    {
+      "editorId": "floating-island-editor",
+      "message": "Island production profile changed."
+    },
+    {
+      "editorId": "floating-island-editor",
+      "message": "Island surface map changed."
+    },
+    {
+      "editorId": "floating-island-editor",
+      "message": "Island surface map changed."
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "island-record-still-referenced",
+      "path": "resources.nodes",
+      "message": "resource-central-iron is still referenced by map.cells[1].resourceNodeIds.",
+      "references": [
+        {
+          "path": "map.cells[1].resourceNodeIds",
+          "collection": null,
+          "recordId": "cell-central-pasture",
+          "entityId": "resource-central-iron"
+        }
+      ]
+    }
+  ],
+  "canonicalSummary": {
+    "profileType": "floating-island-foundation-profile",
+    "schemaVersion": "3.0.0",
+    "mapDimensions": "3x3",
+    "mapCellCount": 9,
+    "downstreamConsumers": [
+      "crisis",
+      "ecology",
+      "encounter",
+      "faction",
+      "market",
+      "population",
+      "route",
+      "settlement"
+    ]
+  }
+}
