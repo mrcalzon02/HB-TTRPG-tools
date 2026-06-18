@@ -140,6 +140,101 @@
     });
   }
 
+  function captureNavigatorState(panelRoot) {
+    const panels = [...panelRoot.querySelectorAll(':scope > .island-production-panel')];
+    if (!panels.length) return { query: '', openPanels: null, selectedPanel: '' };
+    return {
+      query: panelRoot.querySelector('.island-production-search')?.value || '',
+      openPanels: panels.filter(panel => panel.open).map(panel => panel.dataset.panelId),
+      selectedPanel: panelRoot.querySelector('.island-production-jump')?.value || ''
+    };
+  }
+
+  function createPanelNavigator(panelRoot, state = {}) {
+    const panels = [...panelRoot.querySelectorAll(':scope > .island-production-panel')];
+    const navigator = document.createElement('div');
+    navigator.className = 'island-production-navigator';
+
+    const summary = document.createElement('div');
+    summary.className = 'island-production-navigator-summary';
+    const title = document.createElement('strong');
+    title.textContent = 'Production Navigator';
+    const count = document.createElement('span');
+    count.textContent = `${panels.length} systems and ledgers`;
+    summary.append(title, count);
+
+    const search = document.createElement('input');
+    search.type = 'search';
+    search.className = 'island-production-search';
+    search.placeholder = 'Filter panels or record names';
+    search.setAttribute('aria-label', 'Filter Island production panels');
+    search.value = state.query || '';
+
+    const jump = document.createElement('select');
+    jump.className = 'island-production-jump';
+    jump.setAttribute('aria-label', 'Jump to Island production panel');
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Jump to a panel…';
+    jump.appendChild(placeholder);
+    panels.forEach(panel => {
+      const option = document.createElement('option');
+      option.value = panel.dataset.panelId;
+      option.textContent = panel.querySelector('summary')?.textContent || panel.dataset.panelId;
+      jump.appendChild(option);
+    });
+    jump.value = state.selectedPanel || '';
+
+    const actions = document.createElement('div');
+    actions.className = 'island-production-navigator-actions';
+    const expand = document.createElement('button');
+    expand.type = 'button';
+    expand.textContent = 'Open visible';
+    const collapse = document.createElement('button');
+    collapse.type = 'button';
+    collapse.textContent = 'Close all';
+    const reset = document.createElement('button');
+    reset.type = 'button';
+    reset.textContent = 'Show all';
+    actions.append(expand, collapse, reset);
+
+    const applyFilter = () => {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+      panels.forEach(panel => {
+        const matches = !query || panel.textContent.toLowerCase().includes(query);
+        panel.hidden = !matches;
+        if (matches) visible += 1;
+      });
+      count.textContent = query ? `${visible} of ${panels.length} panels shown` : `${panels.length} systems and ledgers`;
+    };
+
+    search.addEventListener('input', applyFilter);
+    jump.addEventListener('change', () => {
+      const panel = panels.find(item => item.dataset.panelId === jump.value);
+      if (!panel) return;
+      panel.hidden = false;
+      panel.open = true;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      panel.querySelector('summary')?.focus();
+    });
+    expand.addEventListener('click', () => panels.filter(panel => !panel.hidden).forEach(panel => { panel.open = true; }));
+    collapse.addEventListener('click', () => panels.forEach(panel => { panel.open = false; }));
+    reset.addEventListener('click', () => {
+      search.value = '';
+      jump.value = '';
+      applyFilter();
+    });
+
+    navigator.append(summary, search, jump, actions);
+    panelRoot.prepend(navigator);
+
+    if (Array.isArray(state.openPanels)) {
+      panels.forEach(panel => { panel.open = state.openPanels.includes(panel.dataset.panelId); });
+    }
+    applyFilter();
+  }
+
   function focusTarget(element) {
     if (!element) return false;
     element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -174,6 +269,7 @@
       if (!record) return false;
       const panel = session.productionRoot?.querySelector?.(`[data-panel-id="${panelId}"]`);
       if (!panel) return false;
+      panel.hidden = false;
       panel.open = true;
       const card = panel.querySelector(`[data-record-id="${record.id}"]`);
       return focusTarget(card?.querySelector?.(`[name="${fieldName}"]`) || card || panel);
@@ -186,6 +282,7 @@
     if (!definition) return false;
     const panel = session.productionRoot?.querySelector?.(`[data-panel-id="${definition.id}"]`);
     if (!panel) return false;
+    panel.hidden = false;
     panel.open = true;
     return focusTarget(panel.querySelector(`[name="${path}"]`) || panel);
   }
@@ -243,7 +340,7 @@
     const note = heading?.querySelector('.helper-note');
     if (eyebrow) eyebrow.textContent = 'P1 Production Profile 3.0.0';
     if (title) title.textContent = 'Floating Island Production Editor';
-    if (note) note.textContent = 'Structured ledgers and the surface grid are authoritative. Linked-record controls and diagnostic navigation replace manual ID hunting.';
+    if (note) note.textContent = 'Structured ledgers and the surface grid are authoritative. Use the navigator, linked-record controls, and diagnostic repair actions instead of hunting through raw IDs.';
     const stage = document.querySelector('#kaysender-mainline-editor-shell .mainline-editor-stage');
     if (stage) stage.textContent = 'P1 Floating Island Production Editor';
   }
@@ -293,6 +390,7 @@
 
   class LiveReferencePanels extends panelsApi.IslandProductionPanels {
     render() {
+      const navigatorState = captureNavigatorState(this.root);
       super.render();
       markLiveWorkspace(this.root);
       Object.entries(SINGLE).forEach(([panelId, fields]) => {
@@ -303,6 +401,7 @@
         const panel = this.root.querySelector(`[data-panel-id="${panelId}"]`);
         if (panel) Object.entries(fields).forEach(([field, source]) => addPicker(this.model, panel, field, source));
       });
+      createPanelNavigator(this.root, navigatorState);
       installDiagnosticNavigation(this.root);
       document.dispatchEvent(new CustomEvent('kaysender-island-profile-records-changed', {
         detail: { profile: clone(this.model.getProfile()) }
