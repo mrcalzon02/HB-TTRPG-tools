@@ -50,6 +50,8 @@ jobs:
           node --check kaysender-island-v3-panels-lifecycle.js
           node --check kaysender-island-v3-panels-atomic.js
           node --check kaysender-island-v3-adapter-panels-bridge.js
+          node --check scripts/run-p1-island-browser-verification.mjs
+          node --check scripts/validate-p1-island-browser-verification.mjs
 
       - name: Validate surface grid model
         id: grid
@@ -115,6 +117,27 @@ jobs:
         continue-on-error: true
         run: node scripts/validate-p1-island-activation-manifest.mjs
 
+      - name: Install Chromium verification runtime
+        id: browser_runtime
+        continue-on-error: true
+        run: |
+          npm install --no-save --package-lock=false playwright@1.60.0
+          npx playwright install --with-deps chromium
+
+      - name: Run prepared Island browser verification
+        id: browser
+        continue-on-error: true
+        run: node scripts/run-p1-island-browser-verification.mjs data/kaysender/receipts/p1-island-browser.json data/kaysender/receipts/p1-island-browser-failure.json artifacts/p1-island-browser-failure.png
+
+      - name: Validate prepared Island browser receipt
+        id: browser_receipt
+        continue-on-error: true
+        run: node scripts/validate-p1-island-browser-verification.mjs data/kaysender/receipts/p1-island-browser.json
+
+      - name: Remove browser dependencies from repository payload
+        if: ${{ always() }}
+        run: rm -rf node_modules
+
       - name: Write machine-readable receipt
         id: receipt
         shell: bash
@@ -134,14 +157,17 @@ jobs:
             "${{ steps.locks.outcome }}" \
             "${{ steps.bridge.outcome }}" \
             "${{ steps.adapter.outcome }}" \
-            "${{ steps.manifest.outcome }}"
+            "${{ steps.manifest.outcome }}" \
+            "${{ steps.browser_runtime.outcome }}" \
+            "${{ steps.browser.outcome }}" \
+            "${{ steps.browser_receipt.outcome }}"
           do
             if [ "$OUTCOME" != "success" ]; then PASSED=false; fi
           done
           cat > data/kaysender/receipts/p1-island-preparation.json <<EOF
           {
             "receiptType": "p1-island-preparation-verification",
-            "receiptVersion": "1.0.0",
+            "receiptVersion": "1.1.0",
             "generatedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "repository": "${GITHUB_REPOSITORY}",
             "branch": "${GITHUB_REF_NAME}",
@@ -163,21 +189,24 @@ jobs:
               "profileLocks": "${{ steps.locks.outcome }}",
               "panelBridge": "${{ steps.bridge.outcome }}",
               "adapterFactory": "${{ steps.adapter.outcome }}",
-              "activationManifest": "${{ steps.manifest.outcome }}"
+              "activationManifest": "${{ steps.manifest.outcome }}",
+              "browserRuntime": "${{ steps.browser_runtime.outcome }}",
+              "browserInteraction": "${{ steps.browser.outcome }}",
+              "browserReceipt": "${{ steps.browser_receipt.outcome }}"
             }
           }
           EOF
 
-      - name: Commit verification receipt to main
+      - name: Commit verification receipts to main
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/kaysender/receipts/
           if git diff --cached --quiet; then
-            echo "Receipt is unchanged."
+            echo "Receipts are unchanged."
           else
-            git commit -m "Record P1 Island verification receipt [p1-receipt]"
+            git commit -m "Record P1 Island verification receipts [p1-receipt]"
             git push origin HEAD:main
           fi
 
