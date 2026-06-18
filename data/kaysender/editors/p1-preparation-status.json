@@ -1,10 +1,10 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "1.7.0",
+  "schemaVersion": "1.8.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "title": "Promote Floating Island / Skyland Editor",
-  "status": "contract-grid-resize-adapter-transformers-generic-consumers-domain-migration-prepared-runtime-inactive",
+  "status": "contract-grid-resize-schema-adapter-transformers-generic-consumers-domain-migration-prepared-runtime-inactive",
   "dependsOn": ["shared-editor-kernel"],
   "dependencyState": "P0 framework implementation complete; final live-browser gate pending",
   "activeBranch": "main",
@@ -18,6 +18,9 @@
   },
   "preparedArtifacts": {
     "schema": "data/kaysender/schemas/floating-island-production-profile.schema.json",
+    "schemaValidator": "kaysender-island-v3-schema-validator.js",
+    "schemaBridge": "kaysender-island-v3-adapter-schema-bridge.js",
+    "schemaValidatorTest": "scripts/validate-p1-island-schema.mjs",
     "validFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-valid.json",
     "fracturedFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-edge-fractured.json",
     "semanticCases": "data/kaysender/editors/fixtures/p1-floating-island-reference-cases.json",
@@ -57,23 +60,31 @@
     "migrationConsumerValidator": "scripts/validate-p1-migration-and-consumers.mjs",
     "genericConsumerValidator": "scripts/validate-p1-consumer-builders.mjs"
   },
-  "sourceReuse": {
-    "repository": "mrcalzon02/Fleet-designer",
-    "component": "src/components/VehicleAssemblyPanel.jsx",
-    "model": "src/game/vehicleSlotSystem.js",
-    "styles": "src/vehicleSlots.css",
-    "reuseMode": "framework-free port; shared Kaysender lifecycle remains authoritative"
-  },
   "adapterPreparation": {
-    "status": "complete-factory-and-activation-bundle-inert",
+    "status": "complete-factory-schema-bridge-and-activation-bundle-inert",
     "factory": "KaysenderIslandV3AdapterFactory",
-    "registryRequiredFields": 11,
     "registryOptionalHooks": ["readProfile", "applyProfileToForm", "getWikiDraft"],
     "exactLedgerBlocks": 16,
     "legacyFormRole": "scalar seed only",
     "authoritativeEditing": "surface grid plus exact JSON ledger blocks",
-    "canonicalPipeline": "parse blocks, read map, apply derived reconciliation, rebuild final downstream exports, reject errors",
+    "canonicalPipeline": "parse blocks, read map, apply derived reconciliation, rebuild final downstream exports, run schema gate, reject errors",
     "selfRegistration": false,
+    "loadedByIndex": false
+  },
+  "schemaPreparation": {
+    "status": "inert-synchronous-closed-object-validator",
+    "implementation": "KaysenderIslandV3Schema",
+    "finalHook": "schema-enforcing readProfile supplied by kaysender-island-v3-adapter-schema-bridge.js",
+    "checks": [
+      "required fields",
+      "unknown properties",
+      "types and integers",
+      "constants and enums",
+      "numeric bounds",
+      "ID patterns",
+      "array minimums and uniqueness"
+    ],
+    "malformedCases": 14,
     "loadedByIndex": false
   },
   "activationPreparation": {
@@ -82,6 +93,7 @@
     "adapterRegistrations": 3,
     "migrationRegistrations": 1,
     "activeAndPreparedBuiltinsMayLoadTogether": false,
+    "schemaBridgeMustLoadBeforePreparedBuiltins": true,
     "settlementSchemaVersion": "1.0.0",
     "airshipSchemaVersion": "1.0.0",
     "currentRollbackBuiltins": "kaysender-editor-builtins.js"
@@ -89,43 +101,38 @@
   "migrationPreparation": {
     "migrationId": "island-2.0.0-to-3.0.0",
     "status": "executable-in-isolation-not-registered",
-    "primitiveImplementation": "kaysender-island-v3-transformers.js",
     "finalImplementation": "KaysenderIslandV3Transformers.migrateV2ToV3 after generic consumer wrapper load",
     "runtimeRegistrationPermitted": false
   },
   "transformerPreparation": {
     "status": "inert-layered-callable-library",
     "loadedByIndex": false,
-    "usedByActiveIslandAdapter": false,
-    "loadOrder": ["kaysender-island-v3-transformers.js", "kaysender-island-v3-consumer-builders.js"],
     "languagePolicy": "consumer constraint prose is derived from the current profile"
   },
   "domainPreparation": {
     "status": "inert-callable-library",
     "loadedByIndex": false,
-    "usedByActiveIslandAdapter": false,
     "coveredFailureCases": 17
   },
   "resizePreparation": {
     "status": "inert-callable-library-and-panel",
     "loadedByIndex": false,
-    "usedByActiveIslandAdapter": false,
     "fixtureExpectation": "2x2 Aster Reach to 1x1 removes three active cells, 123 km2, ten direct references, and three dependent references",
     "lifecyclePolicy": "preview and cancellation do not mark dirty; one confirmed model resize event performs the only dirty mark"
   },
   "preparedCapabilities": [
     "stable editable surface cells with brush toolbar exact inspector and safe rendering",
     "non-dirty destructive-resize preview confirmation stale-plan rejection and recovery",
-    "direct and dependent ledger reference reporting",
     "sixteen exact non-map Island 3.0.0 ledger editors",
     "real adapter registry metadata and three optional hooks",
+    "synchronous closed-object schema rejection before envelope creation",
     "legacy Island 2.0.0 scalar seed bridge that preserves deliberate v3 records",
     "schema-shaped blank working profile that remains blocked until reconciled",
     "derived semantic reconciliation and final downstream export rebuilding",
     "deterministic Island 2.0.0 to 3.0.0 migration",
     "generic population settlement ecology and route payload builders",
     "prepared one-for-one built-ins replacement and machine-readable activation order",
-    "valid renamed migrated fractured blank-working and cell-removal coverage"
+    "valid malformed renamed migrated fractured blank-working and cell-removal coverage"
   ],
   "activationBlockers": [
     "P0 live-browser gate has not been observed passing",
@@ -133,9 +140,9 @@
     "P1 has not become required-next",
     "The prepared built-ins replacement is not loaded",
     "The final wrapped migration is not registered",
-    "Prepared Island v3 assets are absent from index.html",
+    "Prepared Island v3 schema grid domain transformer adapter and bridge assets are absent from index.html",
     "P1 validators are not part of the blocking workflow",
     "The active Island adapter remains schema version 2.0.0"
   ],
-  "activationRule": "After P0 promotion, apply the activation manifest exactly once, replace rather than supplement the active built-ins file, load both transformer layers before migration registration, switch Island to 3.0.0, add all P1 validators to the blocking workflow, and pass the valid renamed migrated fractured blank-working cell-removal and Island-to-Settlement-to-Airship Chromium scenarios."
+  "activationRule": "After P0 promotion, apply the activation manifest exactly once, replace rather than supplement the active built-ins file, load schema validation and the final bridge before prepared built-ins, switch Island to 3.0.0, add all P1 validators to the blocking workflow, and pass the valid malformed renamed migrated fractured blank-working cell-removal and Island-to-Settlement-to-Airship Chromium scenarios."
 }
