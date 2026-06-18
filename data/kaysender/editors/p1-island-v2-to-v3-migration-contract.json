@@ -1,0 +1,347 @@
+{
+  "schemaVersion": "1.0.0",
+  "migrationId": "island-2.0.0-to-3.0.0",
+  "profileType": "floating-island-foundation-profile",
+  "fromVersion": "2.0.0",
+  "toVersion": "3.0.0",
+  "status": "prepared-not-registered",
+  "registrationBlockedBy": [
+    "P0 live-browser gate has not passed",
+    "P0 has not been promoted to complete",
+    "P1 has not become required-next"
+  ],
+  "sourceFixture": "data/kaysender/editors/fixtures/p1-island-v2-migration-source.json",
+  "targetSchema": "data/kaysender/schemas/floating-island-production-profile.schema.json",
+  "principles": [
+    "Preserve every v2 value that has an unambiguous v3 destination.",
+    "Generate deterministic nested IDs so repeated migration of the same source produces the same result.",
+    "Do not invent quantitative throughput, reserves, fault history, bearings, or infrastructure capacity that v2 never recorded.",
+    "Use conservative zero or empty placeholders where the v3 schema requires a value but v2 contains no evidence.",
+    "Add explicit migration warnings for every provisional or conservative placeholder.",
+    "Generated v2 site slots remain planned or unknown placeholders rather than being promoted into fully realized active sites.",
+    "Do not register or execute this migration until P1 activation."
+  ],
+  "appliesWhen": {
+    "schemaVersion": "2.0.0",
+    "profileType": "floating-island-foundation-profile",
+    "requiredSourceBlocks": ["classification", "geometry", "composition", "motion", "mapFoundation"]
+  },
+  "deterministicIds": {
+    "slugRule": "lowercase; replace non-alphanumeric runs with hyphens; trim hyphens",
+    "cell": "cell-<slug(v2 mapFoundation cell id)>",
+    "site": "site-<slug(v2 site slot id)>",
+    "waterSource": "water-migrated-summary",
+    "resourceNode": "resource-migrated-summary",
+    "altitudeSegment": "altitude-segment-migrated-baseline",
+    "driftSegment": "drift-segment-migrated-baseline",
+    "landingZone": "landing-migrated-primary-approach",
+    "approachCorridor": "approach-migrated-primary-lane",
+    "habitat": "habitat-migrated-primary",
+    "speciesSlot": "species-slot-migrated-dominant",
+    "settlementSlot": "settlement-slot-migrated-primary",
+    "routeNode": "route-node-migrated-primary"
+  },
+  "crosswalkRules": {
+    "regionIdToCellId": "Map each v2 mapFoundation.cells[].id through deterministicIds.cell.",
+    "siteSlotIdToSiteId": "Map each v2 mapFoundation.siteSlots[].id through deterministicIds.site.",
+    "cellSiteLinks": "Translate each v2 cell.sites slot ID through the site crosswalk and assign the resulting IDs to map.cells[].siteIds.",
+    "siteCellLinks": "Translate each site slot regionId through the region crosswalk and assign it to sites[].mapCellId."
+  },
+  "fieldMappings": [
+    { "source": "name", "target": "name", "transform": "copy" },
+    { "source": "classification.sizeClass", "target": "classification.sizeClass", "transform": "copy" },
+    { "source": "classification.shapeProfile", "target": "classification.shapeProfile", "transform": "copy" },
+    { "source": "classification.currentUse", "target": "classification.currentUse", "transform": "copy" },
+    { "source": null, "target": "classification.sovereignty", "transform": "set 'unclaimed or not recorded in v2'", "provisional": true },
+    { "source": "access.chartQuality", "target": "classification.surveyStatus", "transform": "map chart quality to unmapped partial operational or survey-grade" },
+    { "source": "geometry.lengthKm", "target": "geometry.lengthKm", "transform": "copy" },
+    { "source": "geometry.widthKm", "target": "geometry.widthKm", "transform": "copy" },
+    { "source": "geometry.meanThicknessM", "target": "geometry.meanThicknessM", "transform": "copy" },
+    { "source": "geometry.planAreaKm2", "target": "geometry.planAreaKm2", "transform": "copy" },
+    { "source": "geometry.usableAreaKm2", "target": "geometry.usableAreaKm2", "transform": "copy" },
+    { "source": "geometry.flatAreaKm2", "target": "geometry.flatAreaKm2", "transform": "copy" },
+    { "source": "geometry.arableAreaKm2", "target": "geometry.arableAreaKm2", "transform": "copy" },
+    { "source": "geometry.grossVolumeKm3", "target": "geometry.grossVolumeKm3", "transform": "copy" },
+    { "source": "geometry.estimatedMassMillionTons", "target": "geometry.estimatedMassMillionTons", "transform": "copy" },
+    { "source": null, "target": "geometry.coordinateSystem", "transform": "set local-grid-v1" },
+    { "source": "mapFoundation.cellWidthKm and mapFoundation.cellHeightKm", "target": "geometry.mapScaleKmPerCell", "transform": "maximum of width and height; fall back to square root of nominalCellAreaKm2" },
+    { "source": "composition.ordinaryRockPercent", "target": "composition.ordinaryRockPercent", "transform": "copy" },
+    { "source": "composition.floatstonePercent", "target": "composition.floatstonePercent", "transform": "copy" },
+    { "source": "composition.soilSedimentPercent", "target": "composition.soilSedimentPercent", "transform": "copy" },
+    { "source": "composition.cavernVoidPercent", "target": "composition.cavernVoidPercent", "transform": "copy" }
+  ],
+  "mapMigration": {
+    "columns": "copy mapFoundation.columns",
+    "rows": "copy mapFoundation.rows",
+    "activeCellIds": "all migrated v2 region IDs in source order",
+    "cells": {
+      "id": "region crosswalk result",
+      "x": "source grid.x",
+      "y": "source grid.y",
+      "areaKm2": "source areaKm2",
+      "terrainType": "source terrain",
+      "elevationM": "source motion.meanAltitudeM plus source cell elevationM because v2 elevation is local relief",
+      "slopeClass": "source slopeClass",
+      "usablePercent": "gentle 80; moderate 55; steep 25; otherwise global geometry usableSurfacePercent",
+      "arablePercent": "minimum of usablePercent and global terrain.arableSoilPercent for gentle cells; zero for steep cells; half the global value otherwise",
+      "waterCatchmentId": "water-migrated-summary only on the selected water-anchor cell; null elsewhere",
+      "siteIds": "translated source cell.sites",
+      "resourceNodeIds": "resource-migrated-summary only on the selected resource-anchor cell when v2 mineralPresence is non-empty",
+      "hazardIds": []
+    },
+    "waterAnchorSelection": "prefer the first cell whose terrain contains basin wet lake spring or river; otherwise use the first active cell",
+    "resourceAnchorSelection": "prefer the first ridge quarry cliff or exposed cell; otherwise use the first active cell",
+    "primarySettlementCellSelection": "prefer the active cell with the highest estimated usable area; break ties by source order",
+    "primaryApproachCellSelection": "prefer the first source cell with access edge-access; otherwise use the first active cell"
+  },
+  "siteMigration": {
+    "source": "mapFoundation.siteSlots",
+    "record": {
+      "id": "site crosswalk result",
+      "name": "humanized source slot ID plus source type",
+      "type": "source type",
+      "mapCellId": "translated source regionId",
+      "status": "planned for unassigned slots; unknown for known slots",
+      "visibility": "known-locally for known slots; gm-only for unassigned slots",
+      "maximumFootprintKm2": "source maximumFootprintKm2",
+      "tags": ["migrated-v2-slot", "source access", "source terrainContext"]
+    },
+    "warning": "V2 site slots were generated capacity placeholders. Migration does not assert that they are completed or active sites."
+  },
+  "requiredSectionDefaults": {
+    "hydrology": {
+      "sources": "Create one provisional water source only when v2 hydrology.profile is not none or empty.",
+      "waterSourceRecord": {
+        "id": "water-migrated-summary",
+        "mapCellId": "selected water-anchor cell",
+        "type": "copy v2 hydrology.profile prefixed with migrated summary",
+        "potable": false,
+        "averageDailyLiters": 0,
+        "seasonality": "not quantified in v2",
+        "status": "unknown"
+      },
+      "reservoirs": [],
+      "annualRenewableM3": 0,
+      "dailySustainableLiters": 0,
+      "storedWaterM3": 0,
+      "reserveDaysAtCurrentUse": 0,
+      "systemLossPercent": 0,
+      "warning": "Potability and throughput were not recorded in v2; false and zero values are conservative placeholders, not negative findings."
+    },
+    "foodCapacity": {
+      "arableAreaKm2": "copy geometry.arableAreaKm2",
+      "pastureAreaKm2": 0,
+      "forageAreaKm2": 0,
+      "annualFoodUnits": 0,
+      "sustainablePopulation": 0,
+      "emergencyPopulation90Days": "copy current permanent population",
+      "importDependencyPercent": 100,
+      "warning": "V2 estimated settlement population but did not quantify food production."
+    },
+    "resources": {
+      "nodes": "Create one provisional node when v2 resources.mineralPresence is non-empty.",
+      "resourceNodeRecord": {
+        "id": "resource-migrated-summary",
+        "mapCellId": "selected resource-anchor cell",
+        "resourceType": "copy v2 resources.mineralPresence",
+        "quality": "copy depositScale and mineralAccessibility as descriptive text",
+        "estimatedReserveTons": 0,
+        "annualSafeExtractionTons": 0,
+        "status": "surveyed"
+      },
+      "annualSafeExtractionTons": 0,
+      "currentAnnualExtractionTons": 0,
+      "warning": "V2 resource presence did not provide tonnage or safe extraction limits."
+    },
+    "motion": {
+      "meanAltitudeM": "copy v2 motion.meanAltitudeM",
+      "forecastHorizonDays": 30,
+      "altitudeTimeline": [{
+        "id": "altitude-segment-migrated-baseline",
+        "startDay": 0,
+        "endDay": 30,
+        "minimumAltitudeM": "copy v2 motion.minimumAltitudeM or mean minus oscillation",
+        "maximumAltitudeM": "copy v2 motion.maximumAltitudeM or mean plus oscillation",
+        "confidence": "map altitudePredictability to unknown low moderate high or survey-grade"
+      }],
+      "driftTimeline": [{
+        "id": "drift-segment-migrated-baseline",
+        "startDay": 0,
+        "endDay": 30,
+        "bearingDegrees": 0,
+        "averageKmPerDay": "copy v2 motion.horizontalDriftKpd",
+        "confidence": "map driftPredictability to unknown low moderate high or survey-grade"
+      }],
+      "warning": "V2 recorded drift speed but not bearing. Zero degrees is a visible placeholder that must be reviewed."
+    },
+    "stability": {
+      "structuralIntegrity": "describe the migrated v2 derivedScores.structuralStability value and state that the source descriptor was not retained",
+      "overallRisk": "map structuralStability score: 18-20 minimal; 15-17 low; 11-14 guarded; 6-10 high; 0-5 critical",
+      "annualSurfaceLossPercent": 0,
+      "faultZones": [],
+      "fractureEvents": [],
+      "emergencyThreshold": "not established during v2 migration",
+      "warning": "V2 did not retain fault locations, fracture history, or annual loss rate."
+    },
+    "approaches": {
+      "landingZones": [{
+        "id": "landing-migrated-primary-approach",
+        "name": "Migrated Primary Approach",
+        "mapCellId": "selected primary-approach cell",
+        "type": "map v2 approachProfile to open-field cliff-dock underside-dock or moving-rendezvous; default open-field",
+        "maximumVesselClass": "not recorded in v2",
+        "dailyCapacity": 0,
+        "weatherLimit": "copy v2 access.approachProfile as descriptive limitation",
+        "status": "restricted"
+      }],
+      "approachCorridors": [{
+        "id": "approach-migrated-primary-lane",
+        "landingZoneId": "landing-migrated-primary-approach",
+        "bearingDegrees": 0,
+        "minimumAltitudeM": "copy v2 motion.minimumAltitudeM",
+        "maximumAltitudeM": "copy v2 motion.maximumAltitudeM",
+        "hazardIds": [],
+        "pilotRequirement": "copy v2 access.approachProfile"
+      }],
+      "warning": "Landing capacity, vessel class, and approach bearing were not recorded in v2."
+    },
+    "hazards": [],
+    "ecology": {
+      "habitats": "Create one provisional habitat covering all active cells when v2 ecology.habitatAreaKm2 is greater than zero.",
+      "habitatRecord": {
+        "id": "habitat-migrated-primary",
+        "name": "Migrated Primary Habitat",
+        "cellIds": "all active cell IDs",
+        "areaKm2": "copy v2 ecology.habitatAreaKm2",
+        "condition": "map wildlifeDensity to pristine healthy strained degraded or collapsed",
+        "capacityIndex": "copy v2 ecology.carryingCapacityIndex"
+      },
+      "speciesSlots": "Create one dominant species slot when v2 ecology.dominantWildlife is non-empty.",
+      "speciesSlotRecord": {
+        "id": "species-slot-migrated-dominant",
+        "habitatId": "habitat-migrated-primary",
+        "role": "dominant wildlife summary",
+        "populationBand": "copy v2 ecology.dominantWildlife",
+        "status": "stable"
+      },
+      "carryingCapacityIndex": "copy v2 ecology.carryingCapacityIndex",
+      "currentPressure": "map wildlifeDensity conservatively; default stable"
+    },
+    "settlementCapacity": {
+      "waterLimitedPopulation": 0,
+      "foodLimitedPopulation": 0,
+      "landLimitedPopulation": "copy v2 insertionCapacity.maximumSupportedPopulation",
+      "sustainablePopulation": 0,
+      "emergencyPopulation": "copy current permanent population",
+      "settlementSlots": "Create one provisional primary slot when permanent population is greater than zero or recommendedSettlementSites is greater than zero.",
+      "settlementSlotRecord": {
+        "id": "settlement-slot-migrated-primary",
+        "mapCellId": "selected primary-settlement cell",
+        "maximumPopulation": "copy v2 insertionCapacity.maximumSupportedPopulation",
+        "maximumFootprintKm2": "minimum of selected cell area times 0.5 and v2 geometry.flatAreaKm2",
+        "waterSourceIds": "water-migrated-summary when created",
+        "landingZoneIds": ["landing-migrated-primary-approach"],
+        "status": "occupied when permanentPopulation is greater than zero; otherwise open"
+      },
+      "warning": "The v2 maximum population becomes a land-limited estimate only. Sustainable capacity remains zero until food and water are quantified."
+    },
+    "routeNodeExport": {
+      "nodes": [{
+        "id": "route-node-migrated-primary",
+        "name": "<profile name> Migrated Route Node",
+        "mapCellId": "selected primary-approach cell",
+        "landingZoneIds": ["landing-migrated-primary-approach"],
+        "altitudeBand": "<minimum>-<maximum> metres",
+        "services": [],
+        "status": "restricted"
+      }],
+      "defaultNodeId": "route-node-migrated-primary",
+      "routeCapability": {
+        "maximumDailyArrivals": 0,
+        "resupplyWater": false,
+        "resupplyFood": false,
+        "repairCapability": "none",
+        "chartConfidence": "map v2 access.chartQuality to rumor poor usable reliable or survey-grade"
+      },
+      "warning": "The v2 route summary did not quantify arrivals or services."
+    },
+    "visibility": {
+      "playerKnownSiteIds": "migrated site IDs whose source status was known",
+      "gmOnlySiteIds": "migrated site IDs whose source status was unassigned",
+      "playerKnownHazardIds": [],
+      "gmOnlyHazardIds": [],
+      "publicFacts": "include v2 outputs.summary when present",
+      "gmSecrets": []
+    }
+  },
+  "derivedRules": {
+    "geometryReconciles": "true when copied plan and derived geometry values are non-negative and internally ordered",
+    "compositionReconciles": "true when the four copied percentages total 100 within 0.1",
+    "mapAreaReconciles": "true when migrated active-cell area total differs from geometry.planAreaKm2 by no more than max(0.1 km², 2 percent)",
+    "waterCapacityReconciles": false,
+    "foodCapacityReconciles": false,
+    "settlementCapacityReconciles": false,
+    "brokenReferenceIds": [],
+    "warnings": "combine source warnings with every provisional warning in this contract"
+  },
+  "outputRules": {
+    "playerSafeSummary": "copy v2 outputs.summary or generate a summary from copied classification and geometry",
+    "gmBrief": "join v2 outputs.gmNotes and migration warnings without leaking generated unassigned slots into the player summary",
+    "wikiDraft": "copy v2 outputs.wikiDraft when it is an object; otherwise create a minimal draft",
+    "downstreamExports": {
+      "population": "export conservative sustainable and emergency population values",
+      "settlement": "export migrated settlement slot IDs and land-limited maximum",
+      "ecology": "export migrated habitat IDs and pressure",
+      "route": "export migrated route node ID and 30-day forecast horizon",
+      "market": "export zero extraction capacity and 100 percent food import dependency until reviewed",
+      "faction": "export migrated known and gm-only site IDs as claimable placeholders",
+      "crisis": "export no fault IDs and zero reserve days, with migration warnings retained in the parent profile",
+      "encounter": "export migrated site IDs and no hazard IDs"
+    }
+  },
+  "confidenceMappings": {
+    "surveyStatusFromChartQuality": {
+      "survey-grade coordinates": "survey-grade",
+      "reliable seasonal charts": "operational",
+      "usable with corrections": "operational",
+      "outdated charts": "partial",
+      "contradictory reports": "partial",
+      "rumor only": "unmapped",
+      "deliberately falsified": "unmapped",
+      "default": "partial"
+    },
+    "timelineConfidence": {
+      "fixed altitude": "survey-grade",
+      "precisely charted drift": "survey-grade",
+      "predictable cycle": "high",
+      "charted seasonal route": "high",
+      "seasonally predictable": "moderate",
+      "weather-dependent route": "moderate",
+      "weather-sensitive": "low",
+      "loosely predictable wandering": "low",
+      "irregular oscillation": "low",
+      "erratic wandering": "low",
+      "violent altitude surges": "unknown",
+      "frequent course reversal": "unknown",
+      "unknown pattern": "unknown",
+      "unknown external pull": "unknown",
+      "default": "unknown"
+    },
+    "routeChartConfidence": {
+      "survey-grade coordinates": "survey-grade",
+      "reliable seasonal charts": "reliable",
+      "usable with corrections": "usable",
+      "outdated charts": "poor",
+      "contradictory reports": "poor",
+      "rumor only": "rumor",
+      "deliberately falsified": "rumor",
+      "default": "poor"
+    }
+  },
+  "requiredMigrationLogEntry": {
+    "code": "island-2.0.0-to-3.0.0",
+    "fromVersion": "2.0.0",
+    "toVersion": "3.0.0",
+    "message": "Migrated the generated Island 2.0.0 foundation into the deliberately editable Island 3.0.0 production contract. Quantitative systems absent from v2 remain conservative provisional placeholders and require review."
+  }
+}
