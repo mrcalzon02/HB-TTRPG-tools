@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "status": "prepared-runtime-inactive",
@@ -11,11 +11,16 @@
   },
   "targetImplementation": {
     "modelAndView": "kaysender-surface-grid-editor.js",
+    "brushCatalog": "kaysender-surface-grid-brushes.js",
+    "toolbar": "kaysender-surface-grid-toolbar.js",
+    "cellInspector": "kaysender-surface-cell-inspector.js",
+    "lifecycleController": "kaysender-island-surface-grid-controller.js",
     "styles": "kaysender-surface-grid-editor.css",
     "validator": "scripts/validate-p1-surface-grid-model.mjs",
+    "adapterContract": "data/kaysender/editors/p1-island-surface-adapter-contract.json",
     "profileMapPath": "map"
   },
-  "reusePrinciple": "Reuse the Fleet Designer grid interaction and state pattern while replacing ship-specific slot and module semantics with Island surface-cell and brush semantics. Do not import React into HB-TTRPG-tools.",
+  "reusePrinciple": "Reuse the Fleet Designer grid interaction and state pattern while replacing ship-specific slot and module semantics with Island surface-cell and brush semantics. Do not import React into HB-TTRPG-tools and do not create a second persistence or lifecycle system.",
   "conceptMapping": [
     {
       "source": "hullSlotTemplate.grid",
@@ -35,22 +40,22 @@
     {
       "source": "slot code and allowedCategories",
       "target": "surface-zone category and brush compatibility",
-      "rule": "Terrain site resource water hazard or infrastructure brushes may be restricted by cell state slope terrain or editor mode."
+      "rule": "Terrain site resource water or hazard brushes are restricted by cell state slope terrain and precise envelope locks."
     },
     {
       "source": "module assignment record",
-      "target": "cell patch or linked entity placement",
-      "rule": "A brush changes terrain or assigns a stable entity ID without replacing the cell stable ID."
+      "target": "cell patch or stable reference link",
+      "rule": "A brush changes terrain or links an existing stable entity ID without replacing the cell stable ID. Separate ledgers such as landing zones remain explicit records rather than fake cell fields."
     },
     {
       "source": "selected slot state",
       "target": "selected surface cell state",
-      "rule": "Selecting a cell opens the Island cell inspector and preserves keyboard focus."
+      "rule": "Selecting a cell opens the exact-value Island cell inspector and preserves keyboard focus."
     },
     {
       "source": "install compatible module",
       "target": "apply compatible surface brush",
-      "rule": "Left click Enter or Space applies the selected brush only when compatibility rules pass."
+      "rule": "Left click Enter or Space applies the selected brush only when compatibility and field-lock rules pass."
     },
     {
       "source": "clear slot",
@@ -73,6 +78,32 @@
       "rule": "Derived diagnostics cover invalid references duplicate IDs active-cell area composition usable versus arable area and downstream capacity mismatches."
     }
   ],
+  "preparedLayers": [
+    {
+      "layer": "SurfaceGridModel",
+      "responsibility": "Coordinate records stable IDs editing erasure movement resizing events diagnostics and P1 map export."
+    },
+    {
+      "layer": "SurfaceGridView",
+      "responsibility": "Accessible pointer and keyboard interaction selection focus compatibility display and repainting."
+    },
+    {
+      "layer": "SurfaceGridBrushes",
+      "responsibility": "Outline terrain elevation slope water site resource and hazard brushes with explicit compatibility reasons."
+    },
+    {
+      "layer": "SurfaceGridToolbar",
+      "responsibility": "Grouped brush-family controls and selected-brush state without changing the Island profile."
+    },
+    {
+      "layer": "SurfaceCellInspector",
+      "responsibility": "Exact numeric and reference editing field-lock presentation and cell-specific diagnostics."
+    },
+    {
+      "layer": "IslandSurfaceGridController",
+      "responsibility": "Bind the reusable grid stack to the shared editor lifecycle locks profile map diagnostics recovery autosave and adapter callbacks."
+    }
+  ],
   "requiredInteractions": [
     "left click applies the selected compatible brush",
     "right click erases or deactivates the selected cell",
@@ -80,21 +111,33 @@
     "Delete or Backspace erases the selected cell",
     "arrow keys move cell focus",
     "cell selection updates an external inspector",
+    "exact inspector changes preserve stable identity",
     "grid resize preserves in-bounds cells and reports removed cells",
     "cell edits preserve stable IDs",
     "model changes emit events and repaint the view",
-    "profile export omits internal view-only active flags"
+    "one model mutation produces one shared lifecycle dirty mark",
+    "field locks block only affected brush families and inspector controls",
+    "profile export omits internal view-only active selected-cell and selected-brush state"
   ],
   "islandBrushFamilies": [
     "surface activation and outline",
     "terrain",
-    "elevation and slope",
-    "water catchment",
-    "site placement",
-    "resource placement",
-    "hazard placement",
-    "landing and infrastructure placement",
-    "visibility classification"
+    "elevation",
+    "slope",
+    "water catchment links",
+    "site links",
+    "resource links",
+    "hazard links"
   ],
-  "activationRule": "Load the surface-grid JavaScript and CSS through the Floating Island adapter only after P0 promotion and P1 activation. Until then the files remain inert preparation artifacts."
+  "separateLedgerPlacement": [
+    "landing zones",
+    "approach corridors",
+    "water sources",
+    "reservoirs",
+    "fault zones",
+    "habitats",
+    "settlement slots",
+    "route nodes"
+  ],
+  "activationRule": "Load the complete surface-grid stack through the Floating Island adapter only after P0 promotion and P1 activation. Until then the files remain inert preparation artifacts and are not added to index.html or the blocking P0 workflow."
 }
