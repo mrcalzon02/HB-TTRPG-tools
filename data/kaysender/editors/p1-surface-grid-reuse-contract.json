@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "status": "prepared-runtime-inactive",
@@ -14,9 +14,11 @@
     "brushCatalog": "kaysender-surface-grid-brushes.js",
     "toolbar": "kaysender-surface-grid-toolbar.js",
     "cellInspector": "kaysender-surface-cell-inspector.js",
+    "resizePreviewAndRecovery": "kaysender-surface-grid-resize.js",
     "lifecycleController": "kaysender-island-surface-grid-controller.js",
-    "styles": "kaysender-surface-grid-editor.css",
-    "validator": "scripts/validate-p1-surface-grid-model.mjs",
+    "styles": ["kaysender-surface-grid-editor.css", "kaysender-surface-grid-resize.css"],
+    "validators": ["scripts/validate-p1-surface-grid-model.mjs", "scripts/validate-p1-surface-grid-resize.mjs"],
+    "resizeFixture": "data/kaysender/editors/fixtures/p1-island-surface-resize-case.json",
     "adapterContract": "data/kaysender/editors/p1-island-surface-adapter-contract.json",
     "profileMapPath": "map"
   },
@@ -69,8 +71,8 @@
     },
     {
       "source": "reset hull",
-      "target": "reset selected region or create new map",
-      "rule": "Reset must require confirmation and must not silently replace the entire active Island record."
+      "target": "confirmed resize reset selected region or create new map",
+      "rule": "Destructive resize or reset requires a preview, explicit confirmation, and a retained recovery report. It must not silently replace the entire active Island record."
     },
     {
       "source": "calculateVehicleAssembly issues",
@@ -85,7 +87,7 @@
     },
     {
       "layer": "SurfaceGridView",
-      "responsibility": "Accessible pointer and keyboard interaction selection focus compatibility display and repainting."
+      "responsibility": "Accessible pointer and keyboard interaction selection focus compatibility display safe text rendering and repainting."
     },
     {
       "layer": "SurfaceGridBrushes",
@@ -100,8 +102,12 @@
       "responsibility": "Exact numeric and reference editing field-lock presentation and cell-specific diagnostics."
     },
     {
+      "layer": "SurfaceGridResize",
+      "responsibility": "Pure resize planning removed-cell analysis direct and dependent ledger reference reporting stale-plan detection explicit confirmation and recovery snapshot presentation without dirtying preview state."
+    },
+    {
       "layer": "IslandSurfaceGridController",
-      "responsibility": "Bind the reusable grid stack to the shared editor lifecycle locks profile map diagnostics recovery autosave and adapter callbacks."
+      "responsibility": "Bind the reusable grid stack to the shared editor lifecycle locks profile map diagnostics recovery autosave resize confirmation and adapter callbacks."
     }
   ],
   "requiredInteractions": [
@@ -112,12 +118,17 @@
     "arrow keys move cell focus",
     "cell selection updates an external inspector",
     "exact inspector changes preserve stable identity",
-    "grid resize preserves in-bounds cells and reports removed cells",
+    "resize preview does not mutate or dirty the profile",
+    "destructive resize reports removed cells outgoing links direct references and dependent references",
+    "destructive resize requires an explicit in-panel confirmation rather than browser confirm",
+    "stale resize plans are rejected after coordinate identity changes",
+    "confirmed grid resize preserves in-bounds cells and stores a transient recovery snapshot",
+    "resize cancellation leaves dimensions records dirty state and recovery state unchanged",
     "cell edits preserve stable IDs",
     "model changes emit events and repaint the view",
     "one model mutation produces one shared lifecycle dirty mark",
     "field locks block only affected brush families and inspector controls",
-    "profile export omits internal view-only active selected-cell and selected-brush state"
+    "profile export omits internal view-only active selected-cell selected-brush resize-preview and resize-recovery state"
   ],
   "islandBrushFamilies": [
     "surface activation and outline",
@@ -139,5 +150,5 @@
     "settlement slots",
     "route nodes"
   ],
-  "activationRule": "Load the complete surface-grid stack through the Floating Island adapter only after P0 promotion and P1 activation. Until then the files remain inert preparation artifacts and are not added to index.html or the blocking P0 workflow."
+  "activationRule": "Load the complete surface-grid and resize stack through the Floating Island adapter only after P0 promotion and P1 activation. Until then the files remain inert preparation artifacts and are not added to index.html or the blocking P0 workflow."
 }
