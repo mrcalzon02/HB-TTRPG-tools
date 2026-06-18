@@ -6,6 +6,7 @@ import process from 'node:process';
 const root = process.cwd();
 const read = file => fs.readFile(path.join(root, file), 'utf8');
 const readJson = async file => JSON.parse(await read(file));
+const exists = file => fs.stat(path.join(root, file)).then(() => true, () => false);
 
 const [manifest, index, activeBuiltins, preparedBuiltins, adapterFactory, schemaBridge, migrations, registry] = await Promise.all([
   readJson('data/kaysender/editors/p1-island-activation-manifest.json'),
@@ -48,15 +49,15 @@ assert.ok(position('kaysender-editor-builtins-v3-prepared.js') < position('kayse
 assert.equal(scripts.includes('kaysender-editor-builtins.js'), false, 'Activation manifest loads both active and prepared built-ins.');
 assert.equal(new Set(scripts).size, scripts.length, 'Activation manifest contains duplicate scripts.');
 
-for (const asset of [
-  'kaysender-surface-grid-editor.css',
-  'kaysender-surface-grid-resize.css',
-  'kaysender-island-v3-adapter.css'
-]) assert.ok(manifest.cssAssets.includes(asset));
-
+for (const asset of manifest.cssAssets) {
+  assert.ok(await exists(asset), `Activation CSS asset does not exist: ${asset}`);
+}
+for (const asset of scripts) {
+  assert.ok(await exists(asset), `Activation script asset does not exist: ${asset}`);
+}
 for (const file of manifest.blockingValidatorsAfterActivation) {
   assert.ok(file.startsWith('scripts/validate-p1-'));
-  assert.ok(await fs.stat(path.join(root, file)).then(() => true, () => false), `Activation validator does not exist: ${file}`);
+  assert.ok(await exists(file), `Activation validator does not exist: ${file}`);
 }
 assert.ok(manifest.blockingValidatorsAfterActivation.includes('scripts/validate-p1-island-schema.mjs'));
 
@@ -125,4 +126,4 @@ assert.equal(manifest.registrationExpectations.finalWrappedTransformerRequired, 
 assert.equal(manifest.registrationExpectations.schemaBridgeRequired, true);
 
 console.log('P1 Island activation manifest validation passed.');
-console.log('Verified dependency and schema-bridge order, single built-ins replacement, exact adapter and migration registration counts, unchanged Settlement and Airship contracts, current 2.0.0 rollback state, validator existence, and absence of prepared P1 assets from the active runtime.');
+console.log('Verified every listed asset exists, dependency and schema-bridge order, single built-ins replacement, exact registration counts, unchanged Settlement and Airship contracts, current 2.0.0 rollback state, and absence of prepared P1 assets from the active runtime.');
