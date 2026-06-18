@@ -3,6 +3,16 @@
   gap: 12px;
 }
 
+.island-v3-production-heading {
+  margin-top: 16px;
+}
+
+.island-v3-production-panels-root {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
 .island-production-panel {
   border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 26%, transparent);
   border-radius: 12px;
@@ -126,6 +136,39 @@
   color: rgba(220, 232, 228, 0.48);
   font-size: 0.68rem;
   font-weight: 500;
+}
+
+.island-v3-advanced-json {
+  margin-top: 14px;
+  border: 1px dashed rgba(122, 145, 153, 0.28);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.14);
+  opacity: 0.82;
+}
+
+.island-v3-advanced-json > summary {
+  padding: 10px 12px;
+  cursor: pointer;
+  color: rgba(220, 232, 228, 0.7);
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.island-v3-advanced-json .section-heading {
+  margin: 0;
+  padding: 10px 12px 0;
+}
+
+.island-v3-advanced-json .island-v3-block-grid {
+  padding: 10px 12px 12px;
+}
+
+.island-v3-advanced-json textarea[readonly] {
+  cursor: text;
+  opacity: 0.78;
+  background: rgba(0, 0, 0, 0.32);
 }
 
 @media (max-width: 720px) {
