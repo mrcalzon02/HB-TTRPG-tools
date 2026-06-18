@@ -118,9 +118,9 @@
       "bindingIslandConstraint": "food"
     },
     "designConstraints": [
-      "Keep the settlement within the selected slot footprint unless the parent Island adds another slot.",
-      "Use only water sources and landing zones referenced by the selected slot.",
-      "Reflect seasonal skyport closure in import and trade assumptions.",
+      "Keep settlement-slot-western-port within its 8.4 km² footprint unless the parent Island adds or revises a slot.",
+      "Use only referenced water sources water-western-springs and water-central-catchment and landing zones landing-western-skyport.",
+      "Landing constraints: Western Skyport — closed during crosswinds above 70 km/h.",
       "Exclude hidden parent records from this standard settlement payload."
     ]
   }
