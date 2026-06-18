@@ -1,0 +1,94 @@
+{
+  "consumer": "ecology-generator",
+  "contractVersion": "1.0.0",
+  "source": {
+    "profileType": "floating-island-foundation-profile",
+    "schemaVersion": "3.0.0",
+    "name": "Aster Reach Production Draft",
+    "profileId": null,
+    "revision": null,
+    "referencePolicy": "pinned-revision-required-when-enveloped"
+  },
+  "payload": {
+    "habitats": [
+      {
+        "id": "habitat-central-pasture",
+        "name": "Central Pasture Mosaic",
+        "cellIds": ["cell-central-pasture", "cell-northern-basin"],
+        "areaKm2": 52,
+        "condition": "healthy",
+        "capacityIndex": 76
+      }
+    ],
+    "speciesSlots": [
+      {
+        "id": "species-slot-sheffel-herds",
+        "habitatId": "habitat-central-pasture",
+        "role": "primary grazer",
+        "populationBand": "large managed herds",
+        "status": "stable"
+      }
+    ],
+    "habitatCells": [
+      {
+        "id": "cell-central-pasture",
+        "areaKm2": 41,
+        "terrainType": "pasture plateau",
+        "elevationM": 4240,
+        "slopeClass": "gentle",
+        "usablePercent": 88,
+        "arablePercent": 64,
+        "waterCatchmentId": "water-central-catchment",
+        "resourceNodeIds": ["resource-central-iron"],
+        "hazardIds": []
+      },
+      {
+        "id": "cell-northern-basin",
+        "areaKm2": 41,
+        "terrainType": "wet basin and orchard terraces",
+        "elevationM": 4160,
+        "slopeClass": "basin",
+        "usablePercent": 71,
+        "arablePercent": 54,
+        "waterCatchmentId": "water-northern-lake",
+        "resourceNodeIds": [],
+        "hazardIds": []
+      }
+    ],
+    "waterContext": [
+      {
+        "id": "water-central-catchment",
+        "mapCellId": "cell-central-pasture",
+        "type": "roof and field catchment",
+        "potable": true,
+        "averageDailyLiters": 480000,
+        "seasonality": "reduced during dry quarter",
+        "status": "active"
+      },
+      {
+        "id": "water-northern-lake",
+        "mapCellId": "cell-northern-basin",
+        "type": "perched lake",
+        "potable": true,
+        "averageDailyLiters": 900000,
+        "seasonality": "stable with storm overflow",
+        "status": "active"
+      }
+    ],
+    "knownHazards": [],
+    "humanPressure": {
+      "islandSustainablePopulation": 8100,
+      "occupiedSettlementSlotIds": ["settlement-slot-western-port"],
+      "currentAnnualExtractionTons": 6100,
+      "annualSafeExtractionTons": 8400,
+      "foodImportDependencyPercent": 14,
+      "currentEcologicalPressure": "stable"
+    },
+    "ecologicalConstraints": [
+      "Habitat generation must retain the source habitat and species-slot IDs.",
+      "The pasture and basin cells form one connected managed habitat in the source profile.",
+      "Resource extraction pressure must remain below the parent Island safe extraction total.",
+      "Hidden parent sites and secrets are excluded from this standard ecology payload."
+    ]
+  }
+}
