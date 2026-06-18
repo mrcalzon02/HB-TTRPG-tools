@@ -7,62 +7,88 @@
     return;
   }
 
-  Registry.register({
-    id: 'floating-island-editor',
-    aliases: ['island'],
-    moduleId: 'floating-island-generator',
-    label: 'Open Production Island Editor',
-    profileType: 'floating-island-foundation-profile',
-    currentSchemaVersion: '2.0.0',
-    panelId: 'kaysender-editor-panel',
-    formId: 'floating-island-editor-form',
-    outputId: 'floating-island-editor-output',
-    buildButtonId: 'island-build-profile',
-    randomizeButtonId: 'island-randomize',
-    legacyButtonSelectors: ['.editor-launch'],
-    hiddenLegacyActionIds: ['island-copy-json', 'island-download-json'],
-    cardLinkFlag: 'editorLinked',
-    fieldMap: {
-      name: 'name',
-      sizeClass: 'classification.sizeClass',
-      shapeProfile: 'classification.shapeProfile',
-      currentUse: 'classification.currentUse',
-      lengthKm: 'geometry.lengthKm',
-      widthKm: 'geometry.widthKm',
-      meanThicknessM: 'geometry.meanThicknessM',
-      usableSurfacePercent: 'geometry.usableSurfacePercent',
-      baseRockPercent: 'composition.ordinaryRockPercent',
-      floatstonePercent: 'composition.floatstonePercent',
-      soilPercent: 'composition.soilSedimentPercent',
-      cavernVoidPercent: 'composition.cavernVoidPercent',
-      meanAltitudeM: 'motion.meanAltitudeM',
-      verticalOscillationM: 'motion.verticalOscillationM',
-      oscillationPeriodHours: 'motion.oscillationPeriodHours',
-      altitudePredictability: 'motion.altitudePredictability',
-      horizontalDriftKpd: 'motion.horizontalDriftKpd',
-      driftPredictability: 'motion.driftPredictability',
-      nearestCivilizationKm: 'access.nearestCivilizationKm',
-      routeTraffic: 'access.routeTraffic',
-      chartQuality: 'access.chartQuality',
-      approachProfile: 'access.approachProfile',
-      waterProfile: data => data.hydrology?.profile ?? data.waterProfile,
-      annualRainfallMm: 'hydrology.annualRainfallMm',
-      primaryTerrain: 'terrain.primary',
-      secondaryTerrain: 'terrain.secondary',
-      flatlandPercent: 'terrain.flatlandPercent',
-      arableSoilPercent: 'terrain.arableSoilPercent',
-      vegetationCoverPercent: 'terrain.vegetationCoverPercent',
-      mineralPresence: 'resources.mineralPresence',
-      mineralAccessibility: 'resources.mineralAccessibility',
-      wildlifeDensity: 'ecology.wildlifeDensity',
-      dominantWildlife: 'ecology.dominantWildlife',
-      existingPopulation: 'population.permanentPopulation',
-      knownDungeonCount: 'siteInventory.knownDungeonCount',
-      hiddenSiteDensity: 'siteInventory.hiddenSiteDensity'
-    },
-    parentImports: [],
-    open: () => window.openFloatingIslandEditor?.()
-  });
+  const islandStyles = [
+    'kaysender-surface-grid-editor.css',
+    'kaysender-surface-grid-resize.css',
+    'kaysender-island-v3-adapter.css',
+    'kaysender-island-v3-panels.css'
+  ];
+
+  const islandScripts = [
+    'kaysender-surface-grid-editor.js',
+    'kaysender-surface-grid-brushes.js',
+    'kaysender-surface-cell-inspector.js',
+    'kaysender-surface-grid-toolbar.js',
+    'kaysender-surface-grid-resize.js',
+    'kaysender-island-v3-schema-validator.js',
+    'kaysender-island-v3-domain.js',
+    'kaysender-island-v3-transformers.js',
+    'kaysender-island-v3-consumer-builders.js',
+    'kaysender-island-surface-grid-controller.js',
+    'kaysender-island-v3-adapter-factory.js',
+    'kaysender-island-v3-adapter-schema-bridge.js',
+    'kaysender-island-v3-legacy-projection.js',
+    'kaysender-island-v3-profile-model.js',
+    'kaysender-island-v3-panels.js',
+    'kaysender-island-v3-panels-lifecycle.js',
+    'kaysender-island-v3-panels-atomic.js',
+    'kaysender-island-v3-adapter-panels-bridge.js'
+  ];
+
+  function ensureStyle(href) {
+    if (document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function loadScript(src) {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing?.dataset.loaded === 'true') return Promise.resolve();
+    if (existing) {
+      return new Promise((resolve, reject) => {
+        existing.addEventListener('load', resolve, { once: true });
+        existing.addEventListener('error', () => reject(new Error(`Could not load ${src}.`)), { once: true });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = false;
+      script.addEventListener('load', () => {
+        script.dataset.loaded = 'true';
+        resolve();
+      }, { once: true });
+      script.addEventListener('error', () => reject(new Error(`Could not load ${src}.`)), { once: true });
+      document.head.appendChild(script);
+    });
+  }
+
+  async function activateIslandV3() {
+    try {
+      islandStyles.forEach(ensureStyle);
+      for (const src of islandScripts) await loadScript(src);
+
+      const Factory = window.KaysenderIslandV3AdapterFactory;
+      const Migrations = window.KaysenderEditorMigrations;
+      if (!Factory || !Migrations) throw new Error('Island 3.0.0 adapter dependencies did not initialize.');
+
+      if (!Migrations.list('floating-island-foundation-profile').some(item => item.id === 'island-2.0.0-to-3.0.0')) {
+        Migrations.register(Factory.createMigrationDefinition());
+      }
+      if (!Registry.resolve('floating-island-editor')) Registry.register(Factory.createDefinition());
+
+      document.dispatchEvent(new CustomEvent('kaysender-editor-adapters-changed', {
+        detail: { editorId: 'floating-island-editor', schemaVersion: '3.0.0' }
+      }));
+      console.info('Kaysender Island 3.0.0 production editor activated.');
+    } catch (error) {
+      console.error(`Kaysender Island 3.0.0 activation failed: ${error.message}`);
+      const status = document.getElementById('kaysender-status');
+      if (status) status.textContent = `Island editor activation failed: ${error.message}`;
+    }
+  }
 
   Registry.register({
     id: 'settlement-editor',
@@ -141,4 +167,7 @@
     ],
     open: () => window.openAirshipEditor?.()
   });
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', activateIslandV3, { once: true });
+  else activateIslandV3();
 })();
