@@ -112,6 +112,10 @@
       if (Array.isArray(value)) return unique(value.map(item => String(item).trim()));
       return unique(String(value || '').split(',').map(item => item.trim()));
     }
+    if (type === 'lines') {
+      if (Array.isArray(value)) return value.map(item => String(item).trim()).filter(Boolean);
+      return String(value || '').split(/\r?\n/).map(item => item.trim()).filter(Boolean);
+    }
     if (type === 'json') {
       if (typeof value === 'string') return JSON.parse(value || '{}');
       return clone(value || {});
@@ -211,13 +215,27 @@
     }
 
     setField(path, value, definition = {}) {
-      this.#assertUnlocked(path);
-      const previous = clone(getAt(this.profile, path));
-      const normalized = normalizeValue(value, definition);
-      if (JSON.stringify(previous) === JSON.stringify(normalized)) return { changed: false, path, value: clone(normalized), previous };
-      setAt(this.profile, path, normalized);
-      this.#emit('field-changed', { path, value: normalized, previous });
-      return { changed: true, path, value: clone(normalized), previous };
+      const result = this.setFields([{ path, value, definition }]);
+      const change = result.changes[0];
+      return change || { changed: false, path, value: clone(getAt(this.profile, path)), previous: clone(getAt(this.profile, path)) };
+    }
+
+    setFields(changes = []) {
+      const prepared = changes.map(change => {
+        this.#assertUnlocked(change.path);
+        const previous = clone(getAt(this.profile, change.path));
+        const normalized = normalizeValue(change.value, change.definition || {});
+        return {
+          path: change.path,
+          previous,
+          value: normalized,
+          changed: JSON.stringify(previous) !== JSON.stringify(normalized)
+        };
+      }).filter(change => change.changed);
+      if (!prepared.length) return { changed: false, changes: [] };
+      prepared.forEach(change => setAt(this.profile, change.path, clone(change.value)));
+      this.#emit('fields-changed', { changes: prepared });
+      return { changed: true, changes: clone(prepared) };
     }
 
     listRecords(collectionId) {
