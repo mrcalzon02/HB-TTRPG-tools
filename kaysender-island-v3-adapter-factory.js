@@ -53,7 +53,12 @@
     altitudePredictability: data => data.motion?.altitudeTimeline?.[0]?.confidence,
     horizontalDriftKpd: data => data.motion?.driftTimeline?.[0]?.averageKmPerDay,
     driftPredictability: data => data.motion?.driftTimeline?.[0]?.confidence,
-    chartQuality: 'classification.surveyStatus',
+    chartQuality: data => ({
+      unmapped: 'rumor only',
+      partial: 'usable with corrections',
+      operational: 'reliable seasonal charts',
+      'survey-grade': 'survey-grade coordinates'
+    })[data.classification?.surveyStatus],
     approachProfile: data => data.approaches?.landingZones?.[0]?.type,
     waterProfile: data => (data.hydrology?.sources || []).map(item => item.type).filter(Boolean).join('; '),
     annualRainfallMm: 'hydrology.annualRainfallMm',
@@ -215,19 +220,31 @@
         importDependencyPercent: 100
       },
       resources: { nodes: [], annualSafeExtractionTons: 0, currentAnnualExtractionTons: 0 },
-      motion: { meanAltitudeM: 0, altitudeTimeline: [], driftTimeline: [], forecastHorizonDays: 0 },
+      motion: { meanAltitudeM: 0, altitudeTimeline: [], driftTimeline: [], forecastHorizonDays: 1 },
       stability: {
         structuralIntegrity: 'not surveyed',
-        overallRisk: 'unknown',
+        overallRisk: 'critical',
         annualSurfaceLossPercent: 0,
         faultZones: [],
         fractureEvents: [],
-        emergencyThreshold: 'not established'
+        emergencyThreshold: 'complete structural survey before habitation'
       },
-      approaches: { landingZones: [], approachCorridors: [] },
+      approaches: {
+        landingZones: [{
+          id: 'landing-unassigned',
+          name: 'Unassigned Landing Record',
+          mapCellId: 'cell-0-0',
+          type: 'open-field',
+          maximumVesselClass: 'unassigned',
+          dailyCapacity: 0,
+          weatherLimit: 'not surveyed',
+          status: 'closed'
+        }],
+        approachCorridors: []
+      },
       sites: [],
       hazards: [],
-      ecology: { habitats: [], speciesSlots: [], carryingCapacityIndex: 0, currentPressure: 'unknown' },
+      ecology: { habitats: [], speciesSlots: [], carryingCapacityIndex: 0, currentPressure: 'recovering' },
       settlementCapacity: {
         waterLimitedPopulation: 0,
         foodLimitedPopulation: 0,
@@ -237,14 +254,22 @@
         settlementSlots: []
       },
       routeNodeExport: {
-        nodes: [],
-        defaultNodeId: null,
+        nodes: [{
+          id: 'route-node-unassigned',
+          name: 'Unassigned Route Node',
+          mapCellId: 'cell-0-0',
+          landingZoneIds: ['landing-unassigned'],
+          altitudeBand: 'unknown',
+          services: [],
+          status: 'closed'
+        }],
+        defaultNodeId: 'route-node-unassigned',
         routeCapability: {
           maximumDailyArrivals: 0,
           resupplyWater: false,
           resupplyFood: false,
           repairCapability: 'none',
-          chartConfidence: 'unknown'
+          chartConfidence: 'rumor'
         }
       },
       derived: {
@@ -279,25 +304,24 @@
   function mergeLegacySeed(currentInput, migratedInput) {
     const current = clone(currentInput || {});
     const migrated = clone(migratedInput || {});
-    const next = current;
-    next.name = migrated.name;
-    next.classification = {
+    current.name = migrated.name;
+    current.classification = {
       ...(current.classification || {}),
       sizeClass: migrated.classification?.sizeClass,
       shapeProfile: migrated.classification?.shapeProfile,
       currentUse: migrated.classification?.currentUse
     };
-    next.geometry = clone(migrated.geometry || current.geometry || {});
-    next.composition = clone(migrated.composition || current.composition || {});
-    next.hydrology = {
+    current.geometry = clone(migrated.geometry || current.geometry || {});
+    current.composition = clone(migrated.composition || current.composition || {});
+    current.hydrology = {
       ...(current.hydrology || {}),
       annualRainfallMm: number(migrated.hydrology?.annualRainfallMm, current.hydrology?.annualRainfallMm)
     };
-    next.motion = {
+    current.motion = {
       ...(current.motion || {}),
       meanAltitudeM: number(migrated.motion?.meanAltitudeM, current.motion?.meanAltitudeM)
     };
-    return next;
+    return current;
   }
 
   function checkedLocks(panel) {
@@ -339,6 +363,10 @@
     BLOCKS.forEach(block => writeBlock(session, block.id, session.profile[block.id]));
   }
 
+  function writeSeedBlocks(session) {
+    ['classification', 'geometry', 'composition', 'hydrology', 'motion'].forEach(blockId => writeBlock(session, blockId, session.profile[blockId]));
+  }
+
   function parseBlocks(session) {
     const values = {};
     const diagnostics = [];
@@ -370,6 +398,7 @@
       const valid = block.kind === 'array' ? Array.isArray(value) : isObject(value);
       if (!valid) diagnostics.push(diagnostic('error', 'island-v3-block-missing', `${block.label} is missing or has the wrong type.`, block.id));
     });
+    if (number(profile.motion?.forecastHorizonDays) < 1) diagnostics.push(diagnostic('error', 'island-v3-forecast-horizon-invalid', 'Forecast horizon must be at least one day.', 'motion.forecastHorizonDays'));
     return diagnostics;
   }
 
@@ -388,43 +417,46 @@
     return profile;
   }
 
+  function synchronizeLegacySeed(session) {
+    const legacy = readLegacyOutput(session.panel);
+    if (legacy?.schemaVersion !== '2.0.0') return;
+    const signature = legacySeedSignature(legacy);
+    if (!signature || signature === session.legacySignature) return;
+
+    const migrated = toV3(legacy);
+    if (session.ignoreNextLegacySeed) {
+      session.ignoreNextLegacySeed = false;
+    } else if (session.resetRequested) {
+      session.profile = clone(migrated);
+      session.controller.replaceProfile(migrated);
+      session.resetRequested = false;
+      writeAllBlocks(session);
+    } else {
+      session.profile = mergeLegacySeed(session.profile, migrated);
+      writeSeedBlocks(session);
+    }
+    session.legacySignature = signature;
+  }
+
   function buildSessionProfile(session) {
+    synchronizeLegacySeed(session);
     const parsed = parseBlocks(session);
     if (!parsed.ok) {
       renderDiagnostics(session, parsed.diagnostics);
       return { ok: false, profile: null, diagnostics: parsed.diagnostics };
     }
 
-    const legacy = readLegacyOutput(session.panel);
-    const signature = legacy?.schemaVersion === '2.0.0' ? legacySeedSignature(legacy) : '';
-    let baseProfile = clone(session.profile);
-    if (signature && signature !== session.legacySignature) {
-      if (session.ignoreNextLegacySeed) {
-        session.ignoreNextLegacySeed = false;
-      } else if (session.resetRequested) {
-        baseProfile = toV3(legacy);
-        session.controller.replaceProfile(baseProfile);
-        session.resetRequested = false;
-      } else {
-        baseProfile = mergeLegacySeed(baseProfile, toV3(legacy));
-      }
-      session.legacySignature = signature;
-    }
-
-    const profile = buildCanonicalProfileData(baseProfile, parsed.values, session.controller.getMap());
+    const profile = buildCanonicalProfileData(session.profile, parsed.values, session.controller.getMap());
     const diagnostics = [
       ...structuralDiagnostics(profile),
       ...dependencies().domain.validate(profile),
       ...session.controller.validate()
     ];
     renderDiagnostics(session, diagnostics);
-    if (diagnostics.some(item => item.severity === 'error')) {
-      session.preview.value = JSON.stringify(profile, null, 2);
-      return { ok: false, profile, diagnostics };
-    }
+    session.preview.value = JSON.stringify(profile, null, 2);
+    if (diagnostics.some(item => item.severity === 'error')) return { ok: false, profile, diagnostics };
 
     session.profile = clone(profile);
-    session.preview.value = JSON.stringify(profile, null, 2);
     writeBlock(session, 'outputs', profile.outputs);
     return { ok: true, profile: clone(profile), diagnostics };
   }
@@ -551,8 +583,9 @@
   }
 
   function ensureSession(panel, profileInput = null) {
-    const session = sessions.get(panel) || createWorkspace(panel, profileInput);
-    if (profileInput && sessions.has(panel)) replaceSessionProfile(session, profileInput);
+    let session = sessions.get(panel);
+    if (!session) return createWorkspace(panel, profileInput);
+    if (profileInput) session = replaceSessionProfile(session, profileInput);
     return session;
   }
 
@@ -667,6 +700,7 @@
     readProfile,
     replaceSessionProfile,
     structuralDiagnostics,
+    synchronizeLegacySeed,
     toV3
   });
 })();
