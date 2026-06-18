@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "status": "prepared-not-applied",
@@ -14,7 +14,8 @@
     "character-sheet-layout.css",
     "kaysender-surface-grid-editor.css",
     "kaysender-surface-grid-resize.css",
-    "kaysender-island-v3-adapter.css"
+    "kaysender-island-v3-adapter.css",
+    "kaysender-island-v3-panels.css"
   ],
   "kaysenderScriptOrder": [
     "kaysender-wiki.js",
@@ -38,6 +39,11 @@
     "kaysender-island-v3-adapter-factory.js",
     "kaysender-island-v3-adapter-schema-bridge.js",
     "kaysender-island-v3-legacy-projection.js",
+    "kaysender-island-v3-profile-model.js",
+    "kaysender-island-v3-panels.js",
+    "kaysender-island-v3-panels-lifecycle.js",
+    "kaysender-island-v3-panels-atomic.js",
+    "kaysender-island-v3-adapter-panels-bridge.js",
     "kaysender-editors.js",
     "kaysender-settlement-editor.js",
     "kaysender-airship-editor.js",
@@ -61,8 +67,12 @@
       "action": "retain as rollback source until P1 browser gate passes; do not load both built-ins files"
     },
     {
+      "path": "kaysender-island-v3-adapter-panels-bridge.js",
+      "action": "load after legacy projection and before prepared built-ins so the registered Island definition uses structured panels and the schema-enforcing readProfile chain"
+    },
+    {
       "path": "kaysender-editor-builtins-v3-prepared.js",
-      "action": "register the final schema-enforcing and legacy-projecting Island 3.0.0 adapter and migration exactly once, then register unchanged Settlement and Airship adapters"
+      "action": "register the final structured schema-enforcing legacy-projecting Island 3.0.0 adapter and migration exactly once, then register unchanged Settlement and Airship adapters"
     }
   ],
   "registrationExpectations": {
@@ -76,7 +86,9 @@
     "primitiveTransformerRegistrationForbidden": true,
     "finalWrappedTransformerRequired": true,
     "schemaBridgeRequired": true,
-    "legacyProjectionRequired": true
+    "legacyProjectionRequired": true,
+    "structuredPanelsRequired": true,
+    "panelBridgeRequired": true
   },
   "blockingValidatorsAfterActivation": [
     "scripts/validate-p1-surface-grid-model.mjs",
@@ -86,6 +98,8 @@
     "scripts/validate-p1-island-domain.mjs",
     "scripts/validate-p1-migration-and-consumers.mjs",
     "scripts/validate-p1-consumer-builders.mjs",
+    "scripts/validate-p1-island-production-panels.mjs",
+    "scripts/validate-p1-island-panel-bridge.mjs",
     "scripts/validate-p1-island-v3-adapter-factory.mjs",
     "scripts/validate-p1-island-activation-manifest.mjs"
   ],
@@ -93,22 +107,26 @@
     "open the Island editor through the shared production launcher",
     "migrate a canonical Island 2.0.0 envelope and retain identity revision locks and provenance",
     "apply valid v3 records back into every legacy seed select without unsupported option values",
-    "edit a grid cell and one JSON ledger block and observe shared dirty and recovery autosave behavior",
-    "reject malformed JSON blocks unknown properties invalid IDs invalid enums and out-of-range values before envelope creation",
+    "edit one structured scalar panel and one stable collection record and observe one shared dirty transition and recovery autosave",
+    "verify the advanced JSON ledger view is read-only and mirrors structured edits",
+    "block removal of a record that remains referenced and show each referencing path",
+    "apply precise field locks without disabling unrelated structured fields",
+    "reject unknown properties invalid IDs invalid enums out-of-range values and semantic conflicts before envelope creation",
     "preview cancel and confirm a cell-removing resize",
     "reload the saved draft and preserve resized map stable IDs and ledgers",
     "clone the record and preserve nested domain IDs while changing envelope identity",
     "export canonical Island 3.0.0 JSON and player-safe downstream payloads",
     "load the Island into Settlement and then load Island plus Settlement into Airship",
     "verify pinned parent revisions remain unchanged through child edits",
-    "exercise valid fractured renamed migrated blank-working and cell-removal fixtures"
+    "exercise valid structured-edit projected renamed migrated fractured blank-working and cell-removal fixtures"
   ],
   "rollback": {
     "restoreBuiltins": "kaysender-editor-builtins.js",
     "removeCssAssets": [
       "kaysender-surface-grid-editor.css",
       "kaysender-surface-grid-resize.css",
-      "kaysender-island-v3-adapter.css"
+      "kaysender-island-v3-adapter.css",
+      "kaysender-island-v3-panels.css"
     ],
     "removeScriptAssets": [
       "kaysender-surface-grid-editor.js",
@@ -124,6 +142,11 @@
       "kaysender-island-v3-adapter-factory.js",
       "kaysender-island-v3-adapter-schema-bridge.js",
       "kaysender-island-v3-legacy-projection.js",
+      "kaysender-island-v3-profile-model.js",
+      "kaysender-island-v3-panels.js",
+      "kaysender-island-v3-panels-lifecycle.js",
+      "kaysender-island-v3-panels-atomic.js",
+      "kaysender-island-v3-adapter-panels-bridge.js",
       "kaysender-editor-builtins-v3-prepared.js"
     ],
     "dataPolicy": "Do not downgrade or overwrite canonical Island 3.0.0 records. Rollback affects runtime loading only."
@@ -135,6 +158,8 @@
     "preparedAdapterLoaded": false,
     "schemaBridgeLoaded": false,
     "legacyProjectionLoaded": false,
+    "structuredPanelsLoaded": false,
+    "panelBridgeLoaded": false,
     "migrationRegistered": false
   }
 }
