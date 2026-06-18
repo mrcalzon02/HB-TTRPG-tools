@@ -71,6 +71,21 @@
     return record.name || record.type || record.resourceType || record.id;
   }
 
+  function markLiveWorkspace(panelRoot) {
+    const workspace = panelRoot.closest('.island-v3-workspace');
+    if (!workspace) return;
+    workspace.dataset.preparedRuntime = 'active-production';
+    const heading = workspace.querySelector(':scope > .section-heading');
+    const eyebrow = heading?.querySelector('.eyebrow');
+    const title = heading?.querySelector('h3');
+    const note = heading?.querySelector('.helper-note');
+    if (eyebrow) eyebrow.textContent = 'P1 Production Profile 3.0.0';
+    if (title) title.textContent = 'Floating Island Production Editor';
+    if (note) note.textContent = 'The structured ledgers and surface grid are authoritative. The legacy form remains available only for compatible scalar seeding.';
+    const shellStage = document.querySelector('#kaysender-mainline-editor-shell .mainline-editor-stage');
+    if (shellStage) shellStage.textContent = 'P1 Floating Island Production Editor';
+  }
+
   class RecordBrushSurfaceController extends surfaceBase.IslandSurfaceGridController {
     constructor(options = {}) {
       super(options);
@@ -116,6 +131,7 @@
   class ReferenceSuggestionPanels extends panelBase.IslandProductionPanels {
     render() {
       super.render();
+      markLiveWorkspace(this.root);
       Object.entries(SOURCES).forEach(([panelId, fields]) => {
         const panel = this.root.querySelector(`[data-panel-id="${panelId}"]`);
         if (!panel) return;
