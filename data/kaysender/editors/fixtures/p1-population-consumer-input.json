@@ -95,9 +95,9 @@
     },
     "constraints": [
       "Food capacity is the binding population limit at 8100 people.",
-      "The occupied western settlement slot is locally capped at 7600 people.",
+      "Occupied settlement slots are locally capped as follows: settlement-slot-western-port — 7600 people.",
       "Emergency population above 8100 requires temporary stores, imports, rationing, or displacement into non-settlement areas.",
-      "The eastern rim should not be treated as normal residential expansion land while its structural hazard remains active."
+      "Residential expansion requires explicit mitigation in cells affected by active major or critical hazards: cell-eastern-rim."
     ]
   }
 }
