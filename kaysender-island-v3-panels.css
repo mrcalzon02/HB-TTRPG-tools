@@ -208,6 +208,43 @@
   padding: 6px 9px;
 }
 
+.island-reference-repair-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.island-reference-repair-button {
+  padding: 5px 8px;
+  border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 55%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent, #c88a35) 12%, rgba(0, 0, 0, 0.18));
+  color: inherit;
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.7rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.island-reference-repair-button:hover,
+.island-reference-repair-button:focus-visible {
+  border-color: var(--accent, #c88a35);
+  background: color-mix(in srgb, var(--accent, #c88a35) 22%, rgba(0, 0, 0, 0.18));
+}
+
+.island-reference-target {
+  outline: 2px solid var(--accent, #c88a35) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent, #c88a35) 18%, transparent) !important;
+  animation: island-reference-target-pulse 0.55s ease-in-out 2 alternate;
+}
+
+@keyframes island-reference-target-pulse {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.35); }
+}
+
 .island-v3-advanced-json {
   margin-top: 14px;
   border: 1px dashed rgba(122, 145, 153, 0.28);
@@ -239,6 +276,12 @@
   cursor: text;
   opacity: 0.78;
   background: rgba(0, 0, 0, 0.32);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .island-reference-target {
+    animation: none;
+  }
 }
 
 @media (max-width: 720px) {
