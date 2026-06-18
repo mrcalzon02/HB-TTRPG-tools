@@ -43,9 +43,14 @@
       orderedFamilies.forEach(family => {
         const section = document.createElement('section');
         section.className = `surface-brush-family family-${family}`;
+
         const heading = document.createElement('div');
         heading.className = 'surface-brush-family-heading';
-        heading.innerHTML = `<strong>${family}</strong><small>${groups[family].length} brushes</small>`;
+        const title = document.createElement('strong');
+        title.textContent = family;
+        const count = document.createElement('small');
+        count.textContent = `${groups[family].length} brushes`;
+        heading.append(title, count);
         section.appendChild(heading);
 
         const controls = document.createElement('div');
@@ -57,7 +62,15 @@
           button.dataset.brushId = brush.id;
           button.title = brush.description || brush.label;
           button.setAttribute('aria-pressed', this.view.brushId === brush.id ? 'true' : 'false');
-          button.innerHTML = `<span class="surface-brush-code">${brush.code || brush.label.slice(0, 2).toUpperCase()}</span><span class="surface-brush-label">${brush.label}</span>`;
+
+          const code = document.createElement('span');
+          code.className = 'surface-brush-code';
+          code.textContent = brush.code || String(brush.label || '?').slice(0, 2).toUpperCase();
+          const label = document.createElement('span');
+          label.className = 'surface-brush-label';
+          label.textContent = brush.label;
+          button.append(code, label);
+
           button.addEventListener('click', () => this.selectBrush(brush.id));
           controls.appendChild(button);
         });
