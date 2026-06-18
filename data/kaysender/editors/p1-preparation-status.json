@@ -1,10 +1,10 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "1.9.0",
+  "schemaVersion": "2.0.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "title": "Promote Floating Island / Skyland Editor",
-  "status": "contract-grid-resize-schema-adapter-projection-transformers-consumers-domain-migration-prepared-runtime-inactive",
+  "status": "contract-grid-resize-schema-adapter-projection-structured-panels-transformers-consumers-domain-migration-prepared-runtime-inactive",
   "dependsOn": ["shared-editor-kernel"],
   "dependencyState": "P0 framework implementation complete; final live-browser gate pending",
   "activeBranch": "main",
@@ -21,6 +21,15 @@
     "schemaValidator": "kaysender-island-v3-schema-validator.js",
     "schemaBridge": "kaysender-island-v3-adapter-schema-bridge.js",
     "legacyProjection": "kaysender-island-v3-legacy-projection.js",
+    "profileModel": "kaysender-island-v3-profile-model.js",
+    "panelRenderer": "kaysender-island-v3-panels.js",
+    "panelLifecycle": "kaysender-island-v3-panels-lifecycle.js",
+    "atomicPanelWrapper": "kaysender-island-v3-panels-atomic.js",
+    "panelAdapterBridge": "kaysender-island-v3-adapter-panels-bridge.js",
+    "panelContract": "data/kaysender/editors/p1-island-production-panels-contract.json",
+    "panelStyles": "kaysender-island-v3-panels.css",
+    "panelValidator": "scripts/validate-p1-island-production-panels.mjs",
+    "panelBridgeValidator": "scripts/validate-p1-island-panel-bridge.mjs",
     "schemaValidatorTest": "scripts/validate-p1-island-schema.mjs",
     "legacyProjectionTest": "scripts/validate-p1-island-legacy-projection.mjs",
     "validFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-valid.json",
@@ -64,29 +73,44 @@
     "genericConsumerValidator": "scripts/validate-p1-consumer-builders.mjs"
   },
   "adapterPreparation": {
-    "status": "complete-layered-factory-inert",
+    "status": "complete-layered-structured-factory-inert",
     "finalFactoryLayerOrder": [
       "kaysender-island-v3-adapter-factory.js",
       "kaysender-island-v3-adapter-schema-bridge.js",
-      "kaysender-island-v3-legacy-projection.js"
+      "kaysender-island-v3-legacy-projection.js",
+      "kaysender-island-v3-adapter-panels-bridge.js"
     ],
     "registryOptionalHooks": ["readProfile", "applyProfileToForm", "getWikiDraft"],
-    "exactLedgerBlocks": 16,
+    "scalarPanels": 14,
+    "collectionPanels": 15,
+    "advancedJsonMirrors": 16,
     "legacyFormRole": "scalar seed and projected compatibility surface",
-    "authoritativeEditing": "surface grid plus exact JSON ledger blocks",
-    "canonicalPipeline": "parse blocks, read map, reconcile derived data, rebuild exports, enforce schema, reject errors",
+    "authoritativeEditing": "structured production panels plus surface grid",
+    "advancedJsonRole": "read-only synchronized inspection",
+    "canonicalPipeline": "merge map, mirror structured state, synchronize seed, reconcile derived data, rebuild exports, enforce schema, reject errors",
     "selfRegistration": false,
+    "loadedByIndex": false
+  },
+  "structuredPanelPreparation": {
+    "status": "inert-structured-editor-and-final-factory-bridge",
+    "workingProfileOwner": "IslandProductionController.model",
+    "mapOwner": "IslandSurfaceGridController.model",
+    "atomicScalarMethod": "setFields",
+    "stableRecordMethods": ["addRecord", "updateRecord", "removeRecord"],
+    "referenceGuard": "record removal returns referencing paths and refuses mutation until repaired",
+    "dirtyPolicy": "same-task panel events coalesce to one shared lifecycle dirty mark",
+    "mapSyncPolicy": "surface map merges into production profile under dirty suppression",
     "loadedByIndex": false
   },
   "schemaPreparation": {
     "status": "inert-synchronous-closed-object-validator",
     "implementation": "KaysenderIslandV3Schema",
-    "finalHook": "schema-enforcing readProfile supplied before legacy projection",
+    "finalHook": "schema-enforcing readProfile remains inside the final structured panel bridge chain",
     "malformedCases": 14,
     "loadedByIndex": false
   },
   "legacyProjectionPreparation": {
-    "status": "inert-final-adapter-wrapper",
+    "status": "inert-compatibility-wrapper-before-structured-bridge",
     "coverage": "all legacy select controls",
     "profileMatrix": ["valid", "fractured", "migrated", "blank-working"],
     "authorityRule": "project display-compatible seed values without rewriting authoritative v3 data",
@@ -98,7 +122,7 @@
     "adapterRegistrations": 3,
     "migrationRegistrations": 1,
     "activeAndPreparedBuiltinsMayLoadTogether": false,
-    "finalProjectionMustLoadBeforePreparedBuiltins": true,
+    "finalPanelBridgeMustLoadBeforePreparedBuiltins": true,
     "settlementSchemaVersion": "1.0.0",
     "airshipSchemaVersion": "1.0.0",
     "currentRollbackBuiltins": "kaysender-editor-builtins.js"
@@ -117,7 +141,12 @@
   "preparedCapabilities": [
     "stable editable surface cells with brush toolbar exact inspector and safe rendering",
     "non-dirty destructive-resize preview confirmation stale-plan rejection and recovery",
-    "sixteen exact non-map Island 3.0.0 ledger editors",
+    "fourteen structured scalar production panels",
+    "fifteen stable-record collection panels",
+    "atomic scalar batches and coalesced lifecycle dirty marking",
+    "deterministic nested IDs with stable-ID protection",
+    "reference-guarded record removal with exact referencing paths",
+    "sixteen synchronized read-only JSON ledger mirrors",
     "real adapter registry metadata and three optional hooks",
     "synchronous closed-object schema rejection before envelope creation",
     "valid legacy seed option projection for valid fractured migrated and blank v3 profiles",
@@ -127,17 +156,17 @@
     "deterministic Island 2.0.0 to 3.0.0 migration",
     "generic population settlement ecology and route payload builders",
     "prepared one-for-one built-ins replacement and machine-readable activation order",
-    "valid malformed projected renamed migrated fractured blank-working and cell-removal coverage"
+    "valid malformed projected structured-edit referenced-removal renamed migrated fractured blank-working and cell-removal coverage"
   ],
   "activationBlockers": [
     "P0 live-browser gate has not been observed passing",
     "P0 has not been promoted to complete",
     "P1 has not become required-next",
     "The prepared built-ins replacement is not loaded",
-    "The final wrapped migration is not registered",
+    "The final structured panel adapter and wrapped migration are not registered",
     "Prepared Island v3 assets are absent from index.html",
     "P1 validators are not part of the blocking workflow",
     "The active Island adapter remains schema version 2.0.0"
   ],
-  "activationRule": "After P0 promotion, apply the activation manifest exactly once, replace rather than supplement active built-ins, load transformer schema bridge and legacy-projection layers before prepared built-ins, switch Island to 3.0.0, add all P1 validators to the blocking workflow, and pass valid malformed projected renamed migrated fractured blank-working cell-removal and Island-to-Settlement-to-Airship Chromium scenarios."
+  "activationRule": "After P0 promotion, apply the activation manifest exactly once, replace rather than supplement active built-ins, load transformer schema bridge legacy-projection structured-panel and final panel-bridge layers before prepared built-ins, switch Island to 3.0.0, add all P1 validators to the blocking workflow, and pass valid malformed projected structured-edit referenced-removal renamed migrated fractured blank-working cell-removal and Island-to-Settlement-to-Airship Chromium scenarios."
 }
