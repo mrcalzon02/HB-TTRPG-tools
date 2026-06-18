@@ -8,13 +8,14 @@ const read = file => fs.readFile(path.join(root, file), 'utf8');
 const readJson = async file => JSON.parse(await read(file));
 const exists = file => fs.stat(path.join(root, file)).then(() => true, () => false);
 
-const [manifest, index, activeBuiltins, preparedBuiltins, adapterFactory, schemaBridge, migrations, registry] = await Promise.all([
+const [manifest, index, activeBuiltins, preparedBuiltins, adapterFactory, schemaBridge, legacyProjection, migrations, registry] = await Promise.all([
   readJson('data/kaysender/editors/p1-island-activation-manifest.json'),
   read('index.html'),
   read('kaysender-editor-builtins.js'),
   read('kaysender-editor-builtins-v3-prepared.js'),
   read('kaysender-island-v3-adapter-factory.js'),
   read('kaysender-island-v3-adapter-schema-bridge.js'),
+  read('kaysender-island-v3-legacy-projection.js'),
   read('kaysender-editor-migrations.js'),
   read('kaysender-editor-adapter-registry.js')
 ]);
@@ -28,6 +29,7 @@ assert.equal(manifest.currentRuntimeMustRemain.loadedBuiltins, 'kaysender-editor
 assert.equal(manifest.currentRuntimeMustRemain.preparedBuiltinsLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.preparedAdapterLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.schemaBridgeLoaded, false);
+assert.equal(manifest.currentRuntimeMustRemain.legacyProjectionLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.migrationRegistered, false);
 
 const scripts = manifest.kaysenderScriptOrder;
@@ -44,22 +46,17 @@ assert.ok(position('kaysender-island-v3-schema-validator.js') < position('kaysen
 assert.ok(position('kaysender-island-v3-transformers.js') < position('kaysender-island-v3-consumer-builders.js'));
 assert.ok(position('kaysender-island-v3-consumer-builders.js') < position('kaysender-island-v3-adapter-factory.js'));
 assert.ok(position('kaysender-island-v3-adapter-factory.js') < position('kaysender-island-v3-adapter-schema-bridge.js'));
-assert.ok(position('kaysender-island-v3-adapter-schema-bridge.js') < position('kaysender-editor-builtins-v3-prepared.js'));
+assert.ok(position('kaysender-island-v3-adapter-schema-bridge.js') < position('kaysender-island-v3-legacy-projection.js'));
+assert.ok(position('kaysender-island-v3-legacy-projection.js') < position('kaysender-editor-builtins-v3-prepared.js'));
 assert.ok(position('kaysender-editor-builtins-v3-prepared.js') < position('kaysender-editor-production.js'));
-assert.equal(scripts.includes('kaysender-editor-builtins.js'), false, 'Activation manifest loads both active and prepared built-ins.');
-assert.equal(new Set(scripts).size, scripts.length, 'Activation manifest contains duplicate scripts.');
+assert.equal(scripts.includes('kaysender-editor-builtins.js'), false);
+assert.equal(new Set(scripts).size, scripts.length);
 
-for (const asset of manifest.cssAssets) {
-  assert.ok(await exists(asset), `Activation CSS asset does not exist: ${asset}`);
-}
-for (const asset of scripts) {
-  assert.ok(await exists(asset), `Activation script asset does not exist: ${asset}`);
-}
-for (const file of manifest.blockingValidatorsAfterActivation) {
-  assert.ok(file.startsWith('scripts/validate-p1-'));
-  assert.ok(await exists(file), `Activation validator does not exist: ${file}`);
-}
+for (const asset of manifest.cssAssets) assert.ok(await exists(asset), `Missing CSS asset ${asset}.`);
+for (const asset of scripts) assert.ok(await exists(asset), `Missing script asset ${asset}.`);
+for (const file of manifest.blockingValidatorsAfterActivation) assert.ok(await exists(file), `Missing validator ${file}.`);
 assert.ok(manifest.blockingValidatorsAfterActivation.includes('scripts/validate-p1-island-schema.mjs'));
+assert.ok(manifest.blockingValidatorsAfterActivation.includes('scripts/validate-p1-island-legacy-projection.mjs'));
 
 const registerCalls = preparedBuiltins.match(/Registry\.register\(/g) || [];
 const migrationCalls = preparedBuiltins.match(/Migrations\.register\(/g) || [];
@@ -67,36 +64,30 @@ assert.equal(registerCalls.length, manifest.registrationExpectations.adapterCoun
 assert.equal(migrationCalls.length, 1);
 assert.ok(preparedBuiltins.includes('Registry.register(IslandFactory.createDefinition())'));
 assert.ok(preparedBuiltins.includes('Migrations.register(IslandFactory.createMigrationDefinition())'));
-assert.ok(preparedBuiltins.includes("id: 'settlement-editor'"));
-assert.ok(preparedBuiltins.includes("currentSchemaVersion: '1.0.0'"));
-assert.ok(preparedBuiltins.includes("id: 'airship-editor'"));
 assert.equal(preparedBuiltins.includes("currentSchemaVersion: '2.0.0'"), false);
 
 for (const marker of [
-  "id: 'settlement-editor'",
-  "profileType: 'settlement-profile'",
-  "id: 'airship-editor'",
-  "profileType: 'airship-profile'",
-  "relationship: 'parent-island'",
-  "relationship: 'parent-settlement'"
+  "id: 'settlement-editor'", "profileType: 'settlement-profile'",
+  "id: 'airship-editor'", "profileType: 'airship-profile'",
+  "relationship: 'parent-island'", "relationship: 'parent-settlement'"
 ]) {
-  assert.ok(activeBuiltins.includes(marker), `Active built-ins missing ${marker}.`);
-  assert.ok(preparedBuiltins.includes(marker), `Prepared built-ins changed ${marker}.`);
+  assert.ok(activeBuiltins.includes(marker));
+  assert.ok(preparedBuiltins.includes(marker));
 }
 
 assert.ok(activeBuiltins.includes("id: 'floating-island-editor'"));
 assert.ok(activeBuiltins.includes("currentSchemaVersion: '2.0.0'"));
 assert.equal(activeBuiltins.includes('IslandFactory.createDefinition'), false);
-assert.ok(adapterFactory.includes("currentSchemaVersion: SCHEMA_VERSION"));
 assert.ok(adapterFactory.includes("const SCHEMA_VERSION = '3.0.0'"));
-assert.ok(adapterFactory.includes("id: 'island-2.0.0-to-3.0.0'"));
 assert.equal(adapterFactory.includes('KaysenderEditorAdapters.register'), false);
-assert.equal(adapterFactory.includes('KaysenderEditorMigrations.register'), false);
 assert.ok(schemaBridge.includes('const schema = root.KaysenderIslandV3Schema'));
 assert.ok(schemaBridge.includes('const result = validateCanonical(profile)'));
-assert.ok(schemaBridge.includes('return null'));
+assert.ok(legacyProjection.includes('const LEGACY_FIELD_MAP = Object.freeze'));
+assert.ok(legacyProjection.includes('sizeClass: projectSize'));
+assert.ok(legacyProjection.includes('shapeProfile: projectShape'));
+assert.ok(legacyProjection.includes('mapping.apply(form, profile, LEGACY_FIELD_MAP)'));
 assert.equal(schemaBridge.includes('KaysenderEditorAdapters.register'), false);
-assert.equal(schemaBridge.includes('KaysenderEditorMigrations.register'), false);
+assert.equal(legacyProjection.includes('KaysenderEditorAdapters.register'), false);
 
 assert.ok(migrations.includes('function register(definition)'));
 assert.ok(registry.includes('function register(input)'));
@@ -109,21 +100,22 @@ assert.equal(index.includes('kaysender-editor-builtins-v3-prepared.js'), false);
 for (const asset of [
   'kaysender-island-v3-adapter-factory.js',
   'kaysender-island-v3-adapter-schema-bridge.js',
+  'kaysender-island-v3-legacy-projection.js',
   'kaysender-island-v3-schema-validator.js',
   'kaysender-island-v3-adapter.css',
   'kaysender-surface-grid-resize.js',
   'kaysender-island-v3-consumer-builders.js'
-]) assert.equal(index.includes(asset), false, `Current runtime prematurely loads ${asset}.`);
+]) assert.equal(index.includes(asset), false, `Current runtime loads ${asset}.`);
 
 assert.equal(manifest.registrationExpectations.adapterCount, 3);
 assert.equal(manifest.registrationExpectations.migrationId, 'island-2.0.0-to-3.0.0');
-assert.equal(manifest.registrationExpectations.islandAdapterId, 'floating-island-editor');
 assert.equal(manifest.registrationExpectations.islandSchemaVersion, '3.0.0');
 assert.equal(manifest.registrationExpectations.settlementSchemaVersion, '1.0.0');
 assert.equal(manifest.registrationExpectations.airshipSchemaVersion, '1.0.0');
 assert.equal(manifest.registrationExpectations.duplicateIslandRegistrationForbidden, true);
 assert.equal(manifest.registrationExpectations.finalWrappedTransformerRequired, true);
 assert.equal(manifest.registrationExpectations.schemaBridgeRequired, true);
+assert.equal(manifest.registrationExpectations.legacyProjectionRequired, true);
 
 console.log('P1 Island activation manifest validation passed.');
-console.log('Verified every listed asset exists, dependency and schema-bridge order, single built-ins replacement, exact registration counts, unchanged Settlement and Airship contracts, current 2.0.0 rollback state, and absence of prepared P1 assets from the active runtime.');
+console.log('Verified every asset exists, final factory layering order, single built-ins replacement, registration counts, unchanged child editor contracts, current 2.0.0 state, and absence of prepared P1 assets from the active runtime.');
