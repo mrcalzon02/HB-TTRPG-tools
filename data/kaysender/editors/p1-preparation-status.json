@@ -1,10 +1,10 @@
 {
   "setting": "Kaysender",
-  "schemaVersion": "1.5.0",
+  "schemaVersion": "1.6.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "title": "Promote Floating Island / Skyland Editor",
-  "status": "contract-grid-resize-transformers-domain-migration-and-consumers-prepared-runtime-inactive",
+  "status": "contract-grid-resize-transformers-generic-consumers-domain-migration-prepared-runtime-inactive",
   "dependsOn": ["shared-editor-kernel"],
   "dependencyState": "P0 framework implementation complete; final live-browser gate pending",
   "activeBranch": "main",
@@ -41,13 +41,15 @@
     "migrationSource": "data/kaysender/editors/fixtures/p1-island-v2-migration-source.json",
     "migrationContract": "data/kaysender/editors/p1-island-v2-to-v3-migration-contract.json",
     "migrationExpected": "data/kaysender/editors/fixtures/p1-island-v2-to-v3-expected-core.json",
-    "transformers": "kaysender-island-v3-transformers.js",
+    "primitiveTransformers": "kaysender-island-v3-transformers.js",
+    "genericConsumerBuilders": "kaysender-island-v3-consumer-builders.js",
     "consumerContract": "data/kaysender/editors/p1-downstream-consumer-contract.json",
     "populationFixture": "data/kaysender/editors/fixtures/p1-population-consumer-input.json",
     "settlementFixture": "data/kaysender/editors/fixtures/p1-settlement-consumer-input.json",
     "ecologyFixture": "data/kaysender/editors/fixtures/p1-ecology-consumer-input.json",
     "routeFixture": "data/kaysender/editors/fixtures/p1-route-consumer-input.json",
-    "migrationConsumerValidator": "scripts/validate-p1-migration-and-consumers.mjs"
+    "migrationConsumerValidator": "scripts/validate-p1-migration-and-consumers.mjs",
+    "genericConsumerValidator": "scripts/validate-p1-consumer-builders.mjs"
   },
   "sourceReuse": {
     "repository": "mrcalzon02/Fleet-designer",
@@ -59,14 +61,19 @@
   "migrationPreparation": {
     "migrationId": "island-2.0.0-to-3.0.0",
     "status": "executable-in-isolation-not-registered",
-    "implementation": "kaysender-island-v3-transformers.js#migrateV2ToV3",
+    "primitiveImplementation": "kaysender-island-v3-transformers.js",
+    "finalImplementation": "KaysenderIslandV3Transformers.migrateV2ToV3 after generic consumer wrapper load",
     "runtimeRegistrationPermitted": false
   },
   "transformerPreparation": {
-    "status": "inert-callable-library",
+    "status": "inert-layered-callable-library",
     "loadedByIndex": false,
     "usedByActiveIslandAdapter": false,
-    "functions": [
+    "loadOrder": [
+      "kaysender-island-v3-transformers.js",
+      "kaysender-island-v3-consumer-builders.js"
+    ],
+    "finalFunctions": [
       "migrateV2ToV3",
       "buildPopulationPayload",
       "buildSettlementPayload",
@@ -74,7 +81,8 @@
       "buildRoutePayload",
       "buildDownstreamPayloads",
       "buildDownstreamExports"
-    ]
+    ],
+    "languagePolicy": "consumer constraint prose must be derived from the current profile and must not contain fixture-specific assumptions"
   },
   "domainPreparation": {
     "status": "inert-callable-library",
@@ -112,26 +120,25 @@
     "lifecyclePolicy": "preview and cancellation do not mark dirty; one confirmed model resize event performs the only dirty mark"
   },
   "preparedCapabilities": [
-    "stable editable surface cells with brush toolbar and exact inspector",
-    "safe text rendering without imported-data HTML interpretation",
+    "stable editable surface cells with brush toolbar exact inspector and safe text rendering",
     "precise envelope field locks and one dirty mark per model mutation",
-    "non-dirty resize preview with explicit confirmation",
-    "removed-cell outgoing links and direct and dependent ledger reference reports",
-    "stale resize-plan rejection and transient recovery retention",
+    "non-dirty resize preview confirmation stale-plan rejection and recovery retention",
+    "direct and dependent ledger reference reporting before cell removal",
     "executable Island v3 semantic reconciliation",
     "deterministic executable Island 2.0.0 to 3.0.0 transformation",
-    "population settlement ecology and route payload builders",
+    "generic population settlement ecology and route payload builders",
+    "renamed and migrated Islands receive profile-derived constraint prose",
     "player-safe downstream payload separation",
-    "valid settled and fractured Island coverage"
+    "valid settled fractured migration and cell-removal coverage"
   ],
   "activationBlockers": [
     "P0 live-browser gate has not been observed passing",
     "P0 has not been promoted to complete",
     "P1 has not become required-next",
-    "The migration transformer is not registered",
-    "Prepared grid resize domain and transformer files are not loaded by index.html or the active adapter",
+    "The final wrapped migration transformer is not registered",
+    "Prepared grid resize domain transformer and consumer-builder files are not loaded by index.html or the active adapter",
     "P1 validators are not part of the blocking workflow",
     "The active Island adapter still uses schema version 2.0.0"
   ],
-  "activationRule": "After P0 promotion, register the migration, change the Island adapter to 3.0.0, load the complete grid resize domain and transformer stack, bind it to the shared lifecycle, add all P1 validators to the blocking workflow, and exercise valid migrated fractured and cell-removal fixtures in Chromium."
+  "activationRule": "After P0 promotion, load both transformer layers before migration registration, change the Island adapter to 3.0.0, load the complete grid resize and domain stack, bind it to the shared lifecycle, add all P1 validators to the blocking workflow, and exercise valid renamed migrated fractured and cell-removal cases in Chromium."
 }
