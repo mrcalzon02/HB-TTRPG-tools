@@ -1,26 +1,31 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "stage": "P1",
   "editorId": "floating-island-editor",
   "profileType": "floating-island-foundation-profile",
   "preparedProfileSchemaVersion": "3.0.0",
   "status": "prepared-runtime-inactive",
-  "purpose": "Define how the reusable surface-grid stack will attach to the shared editor shell after P0 promotion without creating a second lifecycle, persistence path, or profile identity system.",
+  "purpose": "Define how the reusable surface-grid stack, Island v3 semantic engine, migration transformer, and downstream payload builders attach to the shared editor shell after P0 promotion without creating a second lifecycle, persistence path, or profile identity system.",
   "loadOrder": [
     "kaysender-surface-grid-editor.css",
     "kaysender-surface-grid-editor.js",
     "kaysender-surface-grid-brushes.js",
     "kaysender-surface-cell-inspector.js",
     "kaysender-surface-grid-toolbar.js",
+    "kaysender-island-v3-domain.js",
+    "kaysender-island-v3-transformers.js",
     "kaysender-island-surface-grid-controller.js"
   ],
   "requiredGlobals": [
     "KaysenderEditorKernel",
     "KaysenderEditorLifecycle",
+    "KaysenderEditorMigrations",
     "KaysenderSurfaceGridEditor",
     "KaysenderSurfaceGridBrushes",
     "KaysenderSurfaceCellInspector",
     "KaysenderSurfaceGridToolbar",
+    "KaysenderIslandV3Domain",
+    "KaysenderIslandV3Transformers",
     "KaysenderIslandSurfaceGridController"
   ],
   "mountPoints": {
@@ -61,17 +66,34 @@
       "autosave": "do not mark the Island profile dirty"
     }
   ],
+  "canonicalBuildPipeline": [
+    "read non-map form fields",
+    "replace profile map with IslandSurfaceGridController.getMap",
+    "build or update all quantitative ledgers",
+    "call KaysenderIslandV3Domain.applyDerived on the complete profile",
+    "call KaysenderIslandV3Transformers.buildDownstreamExports on the reconciled profile",
+    "validate the final profile",
+    "return one canonical Island domain profile to the shared envelope builder"
+  ],
+  "validationPipeline": [
+    "run the Island 3.0.0 JSON schema validator",
+    "run KaysenderIslandV3Domain.validate",
+    "merge IslandSurfaceGridController.validate diagnostics",
+    "run downstream consumer reference and visibility checks",
+    "deduplicate diagnostics by severity code path and referenceId",
+    "render all results through the shared diagnostics surface",
+    "block canonical save or export on errors while allowing recovery autosave"
+  ],
   "adapterHooks": {
     "open": [
-      "render the existing Island form and production panel",
+      "render the existing Island form and production panels",
       "create the surface panel mount points",
       "construct one IslandSurfaceGridController from the active profile"
     ],
     "buildProfile": [
-      "read existing form fields",
-      "replace the profile map block with controller.getMap",
-      "derive map totals and downstream capacities",
-      "return one canonical Island domain profile"
+      "execute canonicalBuildPipeline",
+      "never preserve stale derived flags from an earlier revision",
+      "never export view-only selected brush selected cell or active flags"
     ],
     "applyProfileToForm": [
       "apply non-map fields through the existing field mapping",
@@ -79,37 +101,40 @@
       "preserve the nearest valid selected coordinate"
     ],
     "validate": [
-      "run the Island schema validator",
-      "run the Island semantic reference validator",
-      "merge controller.validate diagnostics",
-      "render all results through the shared diagnostics surface"
+      "execute validationPipeline",
+      "include broken nested IDs in recalculated derived.brokenReferenceIds",
+      "include warning diagnostics in recalculated derived.warnings"
     ],
     "newBlankRecord": [
       "clear the prior active envelope and recovery draft through the shared runtime",
-      "construct a blank Island profile with a default inactive grid envelope",
+      "construct a blank Island 3.0.0 profile with a default inactive grid envelope",
       "replace the controller profile without retaining old linked IDs"
     ],
     "recoverDraft": [
       "normalize and migrate the recovered envelope through the shared kernel",
       "apply the recovered profile to the form and controller",
-      "preserve recovered stable cell IDs and references"
+      "preserve recovered stable cell IDs and references",
+      "recalculate derived data before canonical save"
     ],
     "importRecord": [
-      "normalize and migrate the imported envelope through the shared kernel",
+      "normalize the imported envelope through the shared kernel",
+      "run the registered pure 2.0.0 to 3.0.0 transformer when required",
       "reject future or unsupported schema versions",
-      "apply the imported profile to the form and controller"
+      "apply the imported profile to the form and controller",
+      "show provisional migration warnings without treating placeholder zeros as confirmed negative findings"
     ],
     "randomizeUnlocked": [
       "read envelope locks",
-      "operate only on selected blank or explicitly targeted cells",
+      "operate only on selected blank or explicitly targeted cells and ledgers",
       "skip brush field families whose target paths are locked",
-      "never replace stable cell IDs",
+      "never replace stable nested IDs",
       "never regenerate the entire map because one field changed"
     ],
     "exportCanonicalJson": [
       "flush controller.getMap into the active profile",
+      "recalculate derived data and downstream exports",
       "build one shared canonical envelope",
-      "export no view-only selected brush selected cell or active flag state"
+      "export no view-only state"
     ],
     "cloneRecord": [
       "clone the shared envelope identity through the existing kernel",
@@ -121,6 +146,21 @@
       "destroy the controller view toolbar and inspector subscriptions",
       "retain the active envelope and recovery draft through existing runtime behavior"
     ]
+  },
+  "migrationRegistration": {
+    "migrationId": "island-2.0.0-to-3.0.0",
+    "implementation": "KaysenderIslandV3Transformers.migrateV2ToV3",
+    "registry": "KaysenderEditorMigrations",
+    "registrationTiming": "only after P0 promotion and P1 activation",
+    "idempotenceRequirement": "repeated transformation of the same source data produces identical migrated domain data crosswalks and migration log",
+    "sourceMutationForbidden": true
+  },
+  "downstreamExports": {
+    "builder": "KaysenderIslandV3Transformers.buildDownstreamExports",
+    "consumerEnvelopes": "KaysenderIslandV3Transformers.buildDownstreamPayloads",
+    "consumerContract": "data/kaysender/editors/p1-downstream-consumer-contract.json",
+    "standardConsumers": ["population", "settlement", "ecology", "route"],
+    "visibilityRule": "standard consumer payloads exclude GM-only source IDs and gmSecrets text"
   },
   "lockSemantics": {
     "wholeMap": "map",
@@ -144,9 +184,10 @@
     "P0 integrated Island Settlement Airship browser receipt passes",
     "P0 roadmap state is promoted to complete",
     "P1 roadmap state becomes required-next",
-    "Island 2.0.0 to 3.0.0 migration is registered",
-    "surface-grid files are added to the Island adapter load path",
-    "surface-grid validator is added to the blocking workflow",
-    "valid and fractured fixtures pass live Chromium interaction tests"
+    "Island 2.0.0 to 3.0.0 pure transformer is registered with the existing migration registry",
+    "Island built-in adapter current schema version is changed to 3.0.0",
+    "surface-grid domain and transformer files are added to the Island adapter load path",
+    "all P1 validators are added to the blocking workflow",
+    "valid migrated and fractured fixtures pass live Chromium interaction tests"
   ]
 }
