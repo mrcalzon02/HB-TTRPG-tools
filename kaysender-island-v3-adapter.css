@@ -1,0 +1,117 @@
+.island-v3-workspace {
+  display: grid;
+  gap: 18px;
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 42%, transparent);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(200, 138, 53, 0.07), rgba(0, 0, 0, 0.2));
+}
+
+.island-v3-surface-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(320px, 1.3fr);
+  grid-template-areas:
+    "toolbar grid"
+    "inspector resize";
+  gap: 14px;
+  align-items: start;
+}
+
+.island-v3-toolbar { grid-area: toolbar; min-width: 0; }
+.island-v3-grid { grid-area: grid; min-width: 0; overflow: auto; }
+.island-v3-inspector { grid-area: inspector; min-width: 0; }
+.island-v3-resize { grid-area: resize; min-width: 0; }
+
+.island-v3-block-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.island-v3-block {
+  min-width: 0;
+  border: 1px solid rgba(122, 145, 153, 0.24);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.island-v3-block summary {
+  padding: 10px 12px;
+  color: var(--accent, #c88a35);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.island-v3-block-json,
+.island-v3-canonical-preview {
+  width: calc(100% - 20px);
+  min-width: 0;
+  margin: 0 10px 10px;
+  padding: 10px;
+  border: 1px solid rgba(122, 145, 153, 0.3);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.34);
+  color: inherit;
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  resize: vertical;
+  tab-size: 2;
+}
+
+.island-v3-block-json:focus-visible {
+  outline: none;
+  border-color: var(--accent, #c88a35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #c88a35) 24%, transparent);
+}
+
+.island-v3-diagnostics,
+.island-v3-preview-card {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid rgba(122, 145, 153, 0.24);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.island-v3-diagnostics h3,
+.island-v3-preview-card h3 {
+  margin: 0;
+  color: var(--accent, #c88a35);
+}
+
+.island-v3-diagnostics ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.island-v3-diagnostics .severity-error { color: #ff9b9b; }
+.island-v3-diagnostics .severity-warning { color: #e4b76c; }
+.island-v3-diagnostics .severity-info { color: rgba(220, 232, 228, 0.72); }
+
+.island-v3-canonical-preview {
+  width: 100%;
+  margin: 0;
+  min-height: 24rem;
+}
+
+@media (max-width: 1100px) {
+  .island-v3-surface-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "toolbar"
+      "grid"
+      "inspector"
+      "resize";
+  }
+}
+
+@media (max-width: 780px) {
+  .island-v3-block-grid { grid-template-columns: 1fr; }
+  .island-v3-workspace { padding: 10px; }
+}
