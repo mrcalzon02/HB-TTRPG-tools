@@ -158,10 +158,10 @@
     if (number(profile.resources?.currentAnnualExtractionTons) > number(profile.resources?.annualSafeExtractionTons)) {
       diagnostics.push(diagnostic('warning', 'resource-overextraction', 'resources.currentAnnualExtractionTons', 'Current extraction exceeds the declared annual safe extraction total.'));
       const faultCells = new Set((profile.stability?.faultZones || []).flatMap(zone => zone.cellIds || []));
-      const stressedCells = new Set((profile.resources?.nodes || []).filter(node => faultCells.has(node.mapCellId) && node.status === 'active').map(node => node.mapCellId));
+      const stressedCells = new Set((profile.resources?.nodes || []).filter(node => faultCells.has(node.mapCellId)).map(node => node.mapCellId));
       (profile.stability?.faultZones || []).forEach((zone, index) => {
         if ((zone.cellIds || []).some(id => stressedCells.has(id))) {
-          diagnostics.push(diagnostic('warning', 'fracture-pressure-increased', `stability.faultZones[${index}]`, `Overextraction increases pressure on fault zone ${zone.id}.`, zone.id));
+          diagnostics.push(diagnostic('warning', 'fracture-pressure-increased', `stability.faultZones[${index}]`, `Overextraction may increase pressure on fault zone ${zone.id}; the aggregate v3 extraction ledger does not identify which node absorbed the excess.`, zone.id));
         }
       });
     }
