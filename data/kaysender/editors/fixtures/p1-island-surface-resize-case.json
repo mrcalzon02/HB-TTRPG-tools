@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceFixture": "data/kaysender/editors/fixtures/p1-floating-island-production-valid.json",
+  "operation": {
+    "columns": 1,
+    "rows": 1,
+    "preserve": true
+  },
+  "expected": {
+    "sourceDimensions": { "columns": 2, "rows": 2 },
+    "targetDimensions": { "columns": 1, "rows": 1 },
+    "direction": "shrink-or-reshape",
+    "changed": true,
+    "requiresConfirmation": true,
+    "removedCellIds": [
+      "cell-central-pasture",
+      "cell-northern-basin",
+      "cell-eastern-rim"
+    ],
+    "removedActiveCellIds": [
+      "cell-central-pasture",
+      "cell-northern-basin",
+      "cell-eastern-rim"
+    ],
+    "removedAreaKm2": 123,
+    "removedOutgoingReferences": {
+      "waterSourceIds": ["water-central-catchment", "water-northern-lake"],
+      "siteIds": ["site-central-cistern", "site-eastern-sealed-ruin"],
+      "resourceNodeIds": ["resource-central-iron", "resource-eastern-skystone"],
+      "hazardIds": ["hazard-eastern-fracture"]
+    },
+    "directReferences": [
+      {
+        "kind": "water-source",
+        "entityId": "water-central-catchment",
+        "path": "hydrology.sources[1].mapCellId",
+        "affectedCellIds": ["cell-central-pasture"]
+      },
+      {
+        "kind": "water-source",
+        "entityId": "water-northern-lake",
+        "path": "hydrology.sources[2].mapCellId",
+        "affectedCellIds": ["cell-northern-basin"]
+      },
+      {
+        "kind": "reservoir",
+        "entityId": "reservoir-central-cistern",
+        "path": "hydrology.reservoirs[0].mapCellId",
+        "affectedCellIds": ["cell-central-pasture"]
+      },
+      {
+        "kind": "resource-node",
+        "entityId": "resource-central-iron",
+        "path": "resources.nodes[0].mapCellId",
+        "affectedCellIds": ["cell-central-pasture"]
+      },
+      {
+        "kind": "resource-node",
+        "entityId": "resource-eastern-skystone",
+        "path": "resources.nodes[1].mapCellId",
+        "affectedCellIds": ["cell-eastern-rim"]
+      },
+      {
+        "kind": "fault-zone",
+        "entityId": "fault-eastern-rim",
+        "path": "stability.faultZones[0].cellIds",
+        "affectedCellIds": ["cell-eastern-rim"]
+      },
+      {
+        "kind": "site",
+        "entityId": "site-central-cistern",
+        "path": "sites[1].mapCellId",
+        "affectedCellIds": ["cell-central-pasture"]
+      },
+      {
+        "kind": "site",
+        "entityId": "site-eastern-sealed-ruin",
+        "path": "sites[2].mapCellId",
+        "affectedCellIds": ["cell-eastern-rim"]
+      },
+      {
+        "kind": "hazard",
+        "entityId": "hazard-eastern-fracture",
+        "path": "hazards[1].cellIds",
+        "affectedCellIds": ["cell-eastern-rim"]
+      },
+      {
+        "kind": "habitat",
+        "entityId": "habitat-central-pasture",
+        "path": "ecology.habitats[0].cellIds",
+        "affectedCellIds": ["cell-central-pasture", "cell-northern-basin"]
+      }
+    ],
+    "dependentReferences": [
+      {
+        "kind": "settlement-slot-water-dependency",
+        "entityId": "settlement-slot-western-port",
+        "path": "settlementCapacity.settlementSlots[0].waterSourceIds",
+        "dependencyIds": ["water-central-catchment"],
+        "affectedCellIds": ["cell-central-pasture"]
+      },
+      {
+        "kind": "fracture-event-fault-dependency",
+        "entityId": "fracture-event-east-shelf-12",
+        "path": "stability.fractureEvents[0].faultZoneId",
+        "dependencyIds": ["fault-eastern-rim"],
+        "affectedCellIds": ["cell-eastern-rim"]
+      },
+      {
+        "kind": "species-slot-habitat-dependency",
+        "entityId": "species-slot-sheffel-herds",
+        "path": "ecology.speciesSlots[0].habitatId",
+        "dependencyIds": ["habitat-central-pasture"],
+        "affectedCellIds": ["cell-central-pasture", "cell-northern-basin"]
+      }
+    ],
+    "affectedEntityIds": [
+      "water-central-catchment",
+      "water-northern-lake",
+      "reservoir-central-cistern",
+      "resource-central-iron",
+      "resource-eastern-skystone",
+      "fault-eastern-rim",
+      "site-central-cistern",
+      "site-eastern-sealed-ruin",
+      "hazard-eastern-fracture",
+      "habitat-central-pasture",
+      "settlement-slot-western-port",
+      "fracture-event-east-shelf-12",
+      "species-slot-sheffel-herds"
+    ],
+    "summary": {
+      "removedCellCount": 3,
+      "removedActiveCellCount": 3,
+      "removedAreaKm2": 123,
+      "directReferenceCount": 10,
+      "dependentReferenceCount": 3,
+      "affectedEntityCount": 13,
+      "requiresConfirmation": true
+    }
+  }
+}
