@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "stage": "P1",
   "stageId": "floating-island-production-editor",
   "status": "prepared-not-applied",
@@ -37,6 +37,7 @@
     "kaysender-island-surface-grid-controller.js",
     "kaysender-island-v3-adapter-factory.js",
     "kaysender-island-v3-adapter-schema-bridge.js",
+    "kaysender-island-v3-legacy-projection.js",
     "kaysender-editors.js",
     "kaysender-settlement-editor.js",
     "kaysender-airship-editor.js",
@@ -61,7 +62,7 @@
     },
     {
       "path": "kaysender-editor-builtins-v3-prepared.js",
-      "action": "register the final schema-enforcing factory-created Island 3.0.0 adapter and Island 2.0.0 to 3.0.0 migration exactly once, then register unchanged Settlement and Airship adapters"
+      "action": "register the final schema-enforcing and legacy-projecting Island 3.0.0 adapter and migration exactly once, then register unchanged Settlement and Airship adapters"
     }
   ],
   "registrationExpectations": {
@@ -74,12 +75,14 @@
     "duplicateIslandRegistrationForbidden": true,
     "primitiveTransformerRegistrationForbidden": true,
     "finalWrappedTransformerRequired": true,
-    "schemaBridgeRequired": true
+    "schemaBridgeRequired": true,
+    "legacyProjectionRequired": true
   },
   "blockingValidatorsAfterActivation": [
     "scripts/validate-p1-surface-grid-model.mjs",
     "scripts/validate-p1-surface-grid-resize.mjs",
     "scripts/validate-p1-island-schema.mjs",
+    "scripts/validate-p1-island-legacy-projection.mjs",
     "scripts/validate-p1-island-domain.mjs",
     "scripts/validate-p1-migration-and-consumers.mjs",
     "scripts/validate-p1-consumer-builders.mjs",
@@ -89,15 +92,16 @@
   "browserScenariosAfterActivation": [
     "open the Island editor through the shared production launcher",
     "migrate a canonical Island 2.0.0 envelope and retain identity revision locks and provenance",
+    "apply valid v3 records back into every legacy seed select without unsupported option values",
     "edit a grid cell and one JSON ledger block and observe shared dirty and recovery autosave behavior",
-    "reject malformed JSON blocks, unknown properties, invalid IDs, invalid enums, and out-of-range values before envelope creation",
+    "reject malformed JSON blocks unknown properties invalid IDs invalid enums and out-of-range values before envelope creation",
     "preview cancel and confirm a cell-removing resize",
-    "reload the saved draft and preserve the resized map stable IDs and ledgers",
+    "reload the saved draft and preserve resized map stable IDs and ledgers",
     "clone the record and preserve nested domain IDs while changing envelope identity",
     "export canonical Island 3.0.0 JSON and player-safe downstream payloads",
     "load the Island into Settlement and then load Island plus Settlement into Airship",
     "verify pinned parent revisions remain unchanged through child edits",
-    "exercise the valid fractured renamed migrated blank-working and cell-removal fixtures"
+    "exercise valid fractured renamed migrated blank-working and cell-removal fixtures"
   ],
   "rollback": {
     "restoreBuiltins": "kaysender-editor-builtins.js",
@@ -119,9 +123,10 @@
       "kaysender-island-surface-grid-controller.js",
       "kaysender-island-v3-adapter-factory.js",
       "kaysender-island-v3-adapter-schema-bridge.js",
+      "kaysender-island-v3-legacy-projection.js",
       "kaysender-editor-builtins-v3-prepared.js"
     ],
-    "dataPolicy": "Do not downgrade or overwrite canonical Island 3.0.0 records. Rollback affects runtime loading only and requires restoring from retained Island 2.0.0 records or recovery exports."
+    "dataPolicy": "Do not downgrade or overwrite canonical Island 3.0.0 records. Rollback affects runtime loading only."
   },
   "currentRuntimeMustRemain": {
     "islandAdapterSchemaVersion": "2.0.0",
@@ -129,6 +134,7 @@
     "preparedBuiltinsLoaded": false,
     "preparedAdapterLoaded": false,
     "schemaBridgeLoaded": false,
+    "legacyProjectionLoaded": false,
     "migrationRegistered": false
   }
 }
