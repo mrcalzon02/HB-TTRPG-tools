@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "editorId": "floating-island-editor",
+  "profileType": "floating-island-foundation-profile",
+  "preparedProfileSchemaVersion": "3.0.0",
+  "status": "prepared-runtime-inactive",
+  "implementation": {
+    "profileModel": "kaysender-island-v3-profile-model.js",
+    "panelRenderer": "kaysender-island-v3-panels.js",
+    "lifecycleWrapper": "kaysender-island-v3-panels-lifecycle.js",
+    "styles": "kaysender-island-v3-panels.css",
+    "validator": "scripts/validate-p1-island-production-panels.mjs"
+  },
+  "ownership": {
+    "workingProfile": "IslandProductionController.model",
+    "mapEditor": "IslandSurfaceGridController.model",
+    "derivedBuilder": "KaysenderIslandV3Domain.applyDerived",
+    "exportBuilder": "KaysenderIslandV3Transformers.buildDownstreamExports",
+    "envelopeOwner": "shared Kaysender editor runtime"
+  },
+  "mapSynchronization": {
+    "rule": "The production model owns the complete working profile. Surface changes replace only its map block under dirty suppression because the surface controller already marked the shared lifecycle dirty.",
+    "fullReplacement": "Import recovery new-record and full profile replacement update both controllers.",
+    "canonicalSource": "Canonical build reads the synchronized profile from the production model."
+  },
+  "scalarPanels": [
+    "Identity and Classification",
+    "Geometry",
+    "Composition",
+    "Hydrology Ledger",
+    "Food Capacity",
+    "Resource Extraction",
+    "Motion Forecast",
+    "Stability Summary",
+    "Ecology Summary",
+    "Settlement Capacity",
+    "Route Capability",
+    "Visibility",
+    "Outputs",
+    "Derived Reconciliation"
+  ],
+  "collectionPanels": [
+    "Water Sources",
+    "Reservoirs",
+    "Resource Nodes",
+    "Altitude Timeline",
+    "Drift Timeline",
+    "Fault Zones",
+    "Fracture Events",
+    "Landing Zones",
+    "Approach Corridors",
+    "Sites",
+    "Hazards",
+    "Habitats",
+    "Species Slots",
+    "Settlement Slots",
+    "Route Nodes"
+  ],
+  "editingRules": [
+    "Map cells remain exclusive to the surface-grid editor.",
+    "Derived fields are read-only and rebuilt before canonical save or export.",
+    "Generated downstream exports are not manually editable.",
+    "Stable record IDs are read-only after creation.",
+    "New IDs are deterministic within each collection.",
+    "Referenced records cannot be removed until references are repaired.",
+    "Field locks disable only affected controls.",
+    "Multiline arrays remain arrays.",
+    "Imported values are rendered as text or form values rather than interpreted markup."
+  ],
+  "lifecycleRules": [
+    "One scalar panel submission uses one atomic field batch.",
+    "Each record add update or removal uses one model event.",
+    "Same-task events produce one shared lifecycle dirty mark and one adapter callback.",
+    "Profile replacement and canonical rebuild do not mark dirty."
+  ],
+  "activationGate": [
+    "P0 browser receipt passes and P1 becomes required-next",
+    "Panel files load after domain and transformer dependencies",
+    "Surface and production controllers synchronize without duplicate dirty marks",
+    "Panel validation joins the blocking P1 workflow",
+    "Prepared profile cases pass Chromium interaction tests"
+  ]
+}
