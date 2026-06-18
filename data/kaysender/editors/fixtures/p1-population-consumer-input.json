@@ -1,0 +1,103 @@
+{
+  "consumer": "population-generator",
+  "contractVersion": "1.0.0",
+  "source": {
+    "profileType": "floating-island-foundation-profile",
+    "schemaVersion": "3.0.0",
+    "name": "Aster Reach Production Draft",
+    "profileId": null,
+    "revision": null,
+    "referencePolicy": "pinned-revision-required-when-enveloped"
+  },
+  "payload": {
+    "capacityLimits": {
+      "waterLimitedPopulation": 10500,
+      "foodLimitedPopulation": 8100,
+      "landLimitedPopulation": 9600,
+      "sustainablePopulation": 8100,
+      "emergencyPopulation": 12800,
+      "bindingConstraint": "food"
+    },
+    "habitableCells": [
+      {
+        "id": "cell-western-port",
+        "areaKm2": 41,
+        "terrainType": "cliff shelf and worked harbor",
+        "usablePercent": 74,
+        "arablePercent": 8
+      },
+      {
+        "id": "cell-central-pasture",
+        "areaKm2": 41,
+        "terrainType": "pasture plateau",
+        "usablePercent": 88,
+        "arablePercent": 64
+      },
+      {
+        "id": "cell-northern-basin",
+        "areaKm2": 41,
+        "terrainType": "wet basin and orchard terraces",
+        "usablePercent": 71,
+        "arablePercent": 54
+      },
+      {
+        "id": "cell-eastern-rim",
+        "areaKm2": 41,
+        "terrainType": "fractured ridge and exposed seams",
+        "usablePercent": 31,
+        "arablePercent": 5
+      }
+    ],
+    "settlementSlots": [
+      {
+        "id": "settlement-slot-western-port",
+        "mapCellId": "cell-western-port",
+        "maximumPopulation": 7600,
+        "maximumFootprintKm2": 8.4,
+        "status": "occupied"
+      }
+    ],
+    "supplyPressure": {
+      "dailySustainableWaterLiters": 2100000,
+      "storedWaterM3": 61000,
+      "reserveDaysAtCurrentUse": 29,
+      "annualFoodUnits": 9400,
+      "foodImportDependencyPercent": 14,
+      "ecologicalPressure": "stable",
+      "currentAnnualExtractionTons": 6100,
+      "annualSafeExtractionTons": 8400
+    },
+    "knownHazards": [
+      {
+        "id": "hazard-western-shear",
+        "name": "Western Crosswind Shear",
+        "type": "approach weather",
+        "severity": "moderate",
+        "status": "seasonal",
+        "cellIds": ["cell-western-port"]
+      },
+      {
+        "id": "hazard-eastern-fracture",
+        "name": "Eastern Rim Fracture Zone",
+        "type": "structural fault",
+        "severity": "major",
+        "status": "active",
+        "cellIds": ["cell-eastern-rim"]
+      }
+    ],
+    "routeAccess": {
+      "defaultNodeId": "route-node-western-skyport",
+      "maximumDailyArrivals": 18,
+      "resupplyWater": true,
+      "resupplyFood": true,
+      "repairCapability": "routine",
+      "chartConfidence": "survey-grade"
+    },
+    "constraints": [
+      "Food capacity is the binding population limit at 8100 people.",
+      "The occupied western settlement slot is locally capped at 7600 people.",
+      "Emergency population above 8100 requires temporary stores, imports, rationing, or displacement into non-settlement areas.",
+      "The eastern rim should not be treated as normal residential expansion land while its structural hazard remains active."
+    ]
+  }
+}
