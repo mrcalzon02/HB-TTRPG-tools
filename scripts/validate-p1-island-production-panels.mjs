@@ -5,7 +5,7 @@ import process from 'node:process';
 import vm from 'node:vm';
 
 const root = process.cwd();
-const clone = value => JSON.parse(JSON.stringify(value));
+const normalize = value => JSON.parse(JSON.stringify(value));
 const read = relativePath => fs.readFile(path.join(root, relativePath), 'utf8');
 const readJson = async relativePath => JSON.parse(await read(relativePath));
 
@@ -17,6 +17,7 @@ const [
   modelSource,
   panelsSource,
   lifecycleSource,
+  atomicSource,
   styles,
   indexSource
 ] = await Promise.all([
@@ -27,6 +28,7 @@ const [
   read('kaysender-island-v3-profile-model.js'),
   read('kaysender-island-v3-panels.js'),
   read('kaysender-island-v3-panels-lifecycle.js'),
+  read('kaysender-island-v3-panels-atomic.js'),
   read('kaysender-island-v3-panels.css'),
   read('index.html')
 ]);
@@ -47,8 +49,7 @@ const context = {
   Array,
   Error,
   Promise,
-  queueMicrotask,
-  KaysenderEditorLifecycle: null
+  queueMicrotask
 };
 context.globalThis = context;
 context.window.KaysenderEditorLifecycle = {
@@ -63,6 +64,7 @@ vm.runInContext(consumerSource, context, { filename: 'kaysender-island-v3-consum
 vm.runInContext(modelSource, context, { filename: 'kaysender-island-v3-profile-model.js' });
 vm.runInContext(panelsSource, context, { filename: 'kaysender-island-v3-panels.js' });
 vm.runInContext(lifecycleSource, context, { filename: 'kaysender-island-v3-panels-lifecycle.js' });
+vm.runInContext(atomicSource, context, { filename: 'kaysender-island-v3-panels-atomic.js' });
 
 const modelApi = context.window.KaysenderIslandV3ProfileModel;
 const panelApi = context.window.KaysenderIslandV3Panels;
@@ -74,30 +76,32 @@ assert.equal(typeof modelApi.IslandProfileModel, 'function');
 assert.equal(typeof panelApi.IslandProductionController, 'function');
 assert.equal(panelApi.SCALAR_PANELS.length, 14);
 assert.equal(panelApi.COLLECTION_PANELS.length, 15);
-assert.deepEqual(Object.keys(modelApi.COLLECTIONS).sort(), panelApi.COLLECTION_PANELS.map(panel => panel.id).sort());
+assert.deepEqual(
+  normalize(Object.keys(modelApi.COLLECTIONS).sort()),
+  normalize(panelApi.COLLECTION_PANELS.map(panel => panel.id).sort())
+);
 
-const original = clone(profile);
+const original = normalize(profile);
 const events = [];
 const model = new modelApi.IslandProfileModel(profile);
-model.subscribe(event => events.push(event));
-const batch = model.setFields([
+model.subscribe(event => events.push(normalize(event)));
+const batch = normalize(model.setFields([
   { path: 'classification.currentUse', value: 'regional refuge', definition: { type: 'text' } },
   { path: 'geometry.usableAreaKm2', value: '109.4', definition: { type: 'number', minimum: 0 } },
   { path: 'visibility.publicFacts', value: ['Fact one', 'Fact two'], definition: { type: 'lines' } }
-]);
+]));
 assert.equal(batch.changed, true);
 assert.equal(batch.changes.length, 3);
 assert.equal(events.length, 1, 'Atomic scalar update emitted more than one model event.');
 assert.equal(events[0].type, 'fields-changed');
 assert.equal(model.get('classification.currentUse'), 'regional refuge');
 assert.equal(model.get('geometry.usableAreaKm2'), 109.4);
-assert.deepEqual(model.get('visibility.publicFacts'), ['Fact one', 'Fact two']);
-assert.deepEqual(modelApi.normalizeValue('First\nSecond\n', { type: 'lines' }), ['First', 'Second']);
-assert.deepEqual(modelApi.normalizeValue('a, a, b', { type: 'list' }), ['a', 'b']);
+assert.deepEqual(normalize(model.get('visibility.publicFacts')), ['Fact one', 'Fact two']);
+assert.deepEqual(normalize(modelApi.normalizeValue('First\nSecond\n', { type: 'lines' })), ['First', 'Second']);
+assert.deepEqual(normalize(modelApi.normalizeValue('a, a, b', { type: 'list' })), ['a', 'b']);
 assert.equal(modelApi.normalizeValue('140', { type: 'percent' }), 100);
 
-const lockedProfile = clone(profile);
-const lockedModel = new modelApi.IslandProfileModel(lockedProfile, { locks: ['geometry.planAreaKm2'] });
+const lockedModel = new modelApi.IslandProfileModel(profile, { locks: ['geometry.planAreaKm2'] });
 assert.throws(() => lockedModel.setFields([
   { path: 'geometry.usableAreaKm2', value: 100, definition: { type: 'number' } },
   { path: 'geometry.planAreaKm2', value: 200, definition: { type: 'number' } }
@@ -108,49 +112,49 @@ assert.equal(lockedModel.isLocked('geometry.planAreaKm2'), true);
 assert.equal(lockedModel.isLocked('geometry.widthKm'), false);
 
 const idModel = new modelApi.IslandProfileModel(profile);
-const spring1 = idModel.addRecord('waterSources', {
+const spring1 = normalize(idModel.addRecord('waterSources', {
   mapCellId: 'cell-western-port', type: 'test spring', potable: true,
   averageDailyLiters: 10, seasonality: 'stable', status: 'active'
-}, { preferredId: 'Spring' });
-const spring2 = idModel.addRecord('waterSources', {
+}, { preferredId: 'Spring' }));
+const spring2 = normalize(idModel.addRecord('waterSources', {
   mapCellId: 'cell-western-port', type: 'test spring', potable: true,
   averageDailyLiters: 10, seasonality: 'stable', status: 'active'
-}, { preferredId: 'Spring' });
+}, { preferredId: 'Spring' }));
 assert.equal(spring1.id, 'water-spring');
 assert.equal(spring2.id, 'water-spring-2');
 assert.throws(() => idModel.updateRecord('waterSources', spring1.id, { id: 'water-renamed' }, { id: { type: 'text' } }), /Stable ID/);
-const update = idModel.updateRecord('waterSources', spring1.id, {
+const update = normalize(idModel.updateRecord('waterSources', spring1.id, {
   averageDailyLiters: '25', potable: false
 }, {
   averageDailyLiters: { type: 'number', minimum: 0 }, potable: { type: 'boolean' }
-});
+}));
 assert.equal(update.changed, true);
 assert.equal(update.record.averageDailyLiters, 25);
 assert.equal(update.record.potable, false);
 
-const resourceReferences = idModel.findReferences('resource-central-iron');
+const resourceReferences = normalize(idModel.findReferences('resource-central-iron'));
 assert.ok(resourceReferences.some(reference => reference.path === 'map.cells[1].resourceNodeIds'));
-const blockedRemoval = idModel.removeRecord('resourceNodes', 'resource-central-iron');
+const blockedRemoval = normalize(idModel.removeRecord('resourceNodes', 'resource-central-iron'));
 assert.equal(blockedRemoval.removed, false);
 assert.equal(blockedRemoval.reason, 'referenced');
 assert.ok(blockedRemoval.references.some(reference => reference.path === 'map.cells[1].resourceNodeIds'));
-const unreferencedSite = idModel.addRecord('sites', {
+const unreferencedSite = normalize(idModel.addRecord('sites', {
   name: 'Unlinked Test Site', type: 'test', mapCellId: 'cell-western-port',
   status: 'planned', visibility: 'gm-only', maximumFootprintKm2: 0, tags: []
-}, { preferredId: 'unlinked-test' });
+}, { preferredId: 'unlinked-test' }));
 assert.equal(idModel.removeRecord('sites', unreferencedSite.id).removed, true);
-assert.equal(idModel.removeRecord('sites', 'site-western-skyport').removed, false, 'Referenced public site was removed without force.');
+assert.equal(idModel.removeRecord('sites', 'site-western-skyport').removed, false, 'Referenced public site was removed without repair.');
 
-const canonicalSource = clone(profile);
+const canonicalSource = normalize(profile);
 canonicalSource.geometry.usableAreaKm2 = 200;
 canonicalSource.outputs.downstreamExports = {};
 const canonicalModel = new modelApi.IslandProfileModel(canonicalSource);
-const canonical = canonicalModel.buildCanonical({ domain, transformers });
+const canonical = normalize(canonicalModel.buildCanonical({ domain, transformers }));
 assert.deepEqual(canonicalSource.map, profile.map, 'Canonical build changed the source map.');
 assert.equal(canonical.derived.geometryReconciles, false);
 assert.ok(canonical.outputs.downstreamExports.population.capacityLimits);
 assert.ok(canonical.outputs.downstreamExports.route.routingConstraints.some(item => item.includes('Aster Reach Western Skyport')));
-assert.deepEqual(canonicalModel.getProfile(), canonicalSource, 'Canonical build mutated the working profile.');
+assert.deepEqual(normalize(canonicalModel.getProfile()), canonicalSource, 'Canonical build mutated the working profile.');
 canonicalModel.commitCanonical({ domain, transformers });
 assert.equal(canonicalModel.get('derived.geometryReconciles'), false);
 assert.ok(canonicalModel.get('outputs.downstreamExports.population.capacityLimits'));
@@ -159,16 +163,16 @@ const callbacks = [];
 const controller = new panelApi.IslandProductionController({
   editorId: 'floating-island-editor',
   profile,
-  onProfileChange: payload => callbacks.push(payload)
+  onProfileChange: payload => callbacks.push(normalize(payload))
 });
 controller.model.setField('name', 'Aster Reach Revised', { type: 'text' });
 controller.model.setField('classification.currentUse', 'trade and agricultural hub', { type: 'text' });
 assert.equal(dirtyCalls.length, 0, 'Lifecycle dirty mark occurred before the queued panel batch flushed.');
-const flushed = controller.flush();
+const flushed = normalize(controller.flush());
 assert.equal(flushed.type, 'production-change-batch');
 assert.equal(flushed.events.length, 2);
 assert.equal(flushed.dirty, true);
-assert.equal(dirtyCalls.length, 1, 'Two same-batch field edits caused more than one lifecycle dirty mark.');
+assert.equal(dirtyCalls.length, 1, 'Two same-task field edits caused more than one lifecycle dirty mark.');
 assert.equal(callbacks.length, 1);
 controller.replaceProfile(profile);
 assert.equal(dirtyCalls.length, 1, 'Profile replacement dirtied the editor.');
@@ -176,7 +180,7 @@ controller.commitCanonical({ domain, transformers });
 assert.equal(dirtyCalls.length, 1, 'Canonical rebuild dirtied the editor.');
 controller.destroy();
 
-const scalarPaths = new Set(panelApi.SCALAR_PANELS.flatMap(panel => panel.fields.map(field => field.path)));
+const scalarPaths = new Set(normalize(panelApi.SCALAR_PANELS).flatMap(panel => panel.fields.map(field => field.path)));
 for (const requiredPath of [
   'name',
   'classification.surveyStatus',
@@ -207,6 +211,13 @@ for (const marker of ['production-change-batch', 'DIRTY_EVENTS', 'this.lifecycle
   assert.ok(lifecycleSource.includes(marker), `Panel lifecycle wrapper is missing '${marker}'.`);
 }
 for (const marker of [
+  'AtomicIslandProductionController',
+  "addEventListener('submit', this.atomicHandler, true)",
+  'this.model.setFields(changes)',
+  'island-panel-batch-apply-failed'
+]) assert.ok(atomicSource.includes(marker), `Atomic panel wrapper is missing '${marker}'.`);
+assert.equal(atomicSource.includes('.innerHTML'), false, 'Atomic panel wrapper interprets imported markup.');
+for (const marker of [
   '.kaysender-island-production-panels', '.island-production-panel',
   '.island-production-fields', '.island-production-record', '.island-production-field.locked'
 ]) assert.ok(styles.includes(marker), `Production panel styles are missing '${marker}'.`);
@@ -215,9 +226,10 @@ for (const file of [
   'kaysender-island-v3-profile-model.js',
   'kaysender-island-v3-panels.js',
   'kaysender-island-v3-panels-lifecycle.js',
+  'kaysender-island-v3-panels-atomic.js',
   'kaysender-island-v3-panels.css'
 ]) assert.equal(indexSource.includes(file), false, `${file} was loaded before P1 activation.`);
 assert.deepEqual(profile, original, 'Production model validation mutated the source fixture.');
 
 console.log('P1 Island production panel validation passed.');
-console.log('Verified structured scalar and collection coverage, atomic normalized edits, newline arrays, precise lock rollback, deterministic nested IDs, stable-ID protection, guarded deletion, canonical derived/export rebuilding, coalesced lifecycle dirty marking, safe text rendering, responsive styles, and inactive runtime state.');
+console.log('Verified structured scalar and collection coverage, atomic normalized edits, multiline arrays, precise lock rollback, deterministic nested IDs, stable-ID protection, guarded deletion, canonical derived/export rebuilding, coalesced lifecycle dirty marking, final atomic panel interception, safe text rendering, responsive styles, and inactive runtime state.');
