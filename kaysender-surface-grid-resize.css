@@ -1,0 +1,110 @@
+.kaysender-surface-resize {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 28%, transparent);
+  border-radius: 12px;
+  background: rgba(8, 12, 15, 0.72);
+}
+
+.surface-resize-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+  text-transform: uppercase;
+}
+
+.surface-resize-heading small {
+  color: rgba(220, 232, 228, 0.64);
+}
+
+.surface-resize-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.surface-resize-form label {
+  display: grid;
+  gap: 5px;
+  color: rgba(220, 232, 228, 0.74);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.surface-resize-form input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(122, 145, 153, 0.3);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.24);
+  color: inherit;
+}
+
+.surface-resize-form input[type="number"]:focus-visible {
+  outline: none;
+  border-color: var(--accent, #c88a35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #c88a35) 24%, transparent);
+}
+
+.surface-resize-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.surface-resize-preview {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(122, 145, 153, 0.24);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.surface-resize-preview.destructive {
+  border-color: rgba(228, 183, 108, 0.62);
+  background: rgba(78, 48, 12, 0.2);
+}
+
+.surface-resize-preview p,
+.surface-resize-status {
+  margin: 0;
+}
+
+.surface-resize-preview ul {
+  display: grid;
+  gap: 4px;
+  max-height: 14rem;
+  margin: 0;
+  padding-left: 1.2rem;
+  overflow: auto;
+}
+
+.surface-resize-confirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.surface-resize-confirmation input {
+  margin-top: 0.2rem;
+}
+
+.surface-resize-status {
+  color: rgba(220, 232, 228, 0.7);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 720px) {
+  .surface-resize-form {
+    grid-template-columns: 1fr;
+  }
+}
