@@ -7,12 +7,13 @@ const root = process.cwd();
 const read = file => fs.readFile(path.join(root, file), 'utf8');
 const readJson = async file => JSON.parse(await read(file));
 
-const [manifest, index, activeBuiltins, preparedBuiltins, adapterFactory, migrations, registry] = await Promise.all([
+const [manifest, index, activeBuiltins, preparedBuiltins, adapterFactory, schemaBridge, migrations, registry] = await Promise.all([
   readJson('data/kaysender/editors/p1-island-activation-manifest.json'),
   read('index.html'),
   read('kaysender-editor-builtins.js'),
   read('kaysender-editor-builtins-v3-prepared.js'),
   read('kaysender-island-v3-adapter-factory.js'),
+  read('kaysender-island-v3-adapter-schema-bridge.js'),
   read('kaysender-editor-migrations.js'),
   read('kaysender-editor-adapter-registry.js')
 ]);
@@ -25,6 +26,7 @@ assert.equal(manifest.currentRuntimeMustRemain.islandAdapterSchemaVersion, '2.0.
 assert.equal(manifest.currentRuntimeMustRemain.loadedBuiltins, 'kaysender-editor-builtins.js');
 assert.equal(manifest.currentRuntimeMustRemain.preparedBuiltinsLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.preparedAdapterLoaded, false);
+assert.equal(manifest.currentRuntimeMustRemain.schemaBridgeLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.migrationRegistered, false);
 
 const scripts = manifest.kaysenderScriptOrder;
@@ -37,9 +39,11 @@ const position = file => {
 assert.ok(position('kaysender-editor-adapter-registry.js') < position('kaysender-editor-migrations.js'));
 assert.ok(position('kaysender-editor-migrations.js') < position('kaysender-editor-kernel-adapters.js'));
 assert.ok(position('kaysender-editor-migrations.js') < position('kaysender-editor-builtins-v3-prepared.js'));
+assert.ok(position('kaysender-island-v3-schema-validator.js') < position('kaysender-island-v3-adapter-schema-bridge.js'));
 assert.ok(position('kaysender-island-v3-transformers.js') < position('kaysender-island-v3-consumer-builders.js'));
 assert.ok(position('kaysender-island-v3-consumer-builders.js') < position('kaysender-island-v3-adapter-factory.js'));
-assert.ok(position('kaysender-island-v3-adapter-factory.js') < position('kaysender-editor-builtins-v3-prepared.js'));
+assert.ok(position('kaysender-island-v3-adapter-factory.js') < position('kaysender-island-v3-adapter-schema-bridge.js'));
+assert.ok(position('kaysender-island-v3-adapter-schema-bridge.js') < position('kaysender-editor-builtins-v3-prepared.js'));
 assert.ok(position('kaysender-editor-builtins-v3-prepared.js') < position('kaysender-editor-production.js'));
 assert.equal(scripts.includes('kaysender-editor-builtins.js'), false, 'Activation manifest loads both active and prepared built-ins.');
 assert.equal(new Set(scripts).size, scripts.length, 'Activation manifest contains duplicate scripts.');
@@ -54,6 +58,7 @@ for (const file of manifest.blockingValidatorsAfterActivation) {
   assert.ok(file.startsWith('scripts/validate-p1-'));
   assert.ok(await fs.stat(path.join(root, file)).then(() => true, () => false), `Activation validator does not exist: ${file}`);
 }
+assert.ok(manifest.blockingValidatorsAfterActivation.includes('scripts/validate-p1-island-schema.mjs'));
 
 const registerCalls = preparedBuiltins.match(/Registry\.register\(/g) || [];
 const migrationCalls = preparedBuiltins.match(/Migrations\.register\(/g) || [];
@@ -86,6 +91,11 @@ assert.ok(adapterFactory.includes("const SCHEMA_VERSION = '3.0.0'"));
 assert.ok(adapterFactory.includes("id: 'island-2.0.0-to-3.0.0'"));
 assert.equal(adapterFactory.includes('KaysenderEditorAdapters.register'), false);
 assert.equal(adapterFactory.includes('KaysenderEditorMigrations.register'), false);
+assert.ok(schemaBridge.includes('const schema = root.KaysenderIslandV3Schema'));
+assert.ok(schemaBridge.includes('const result = validateCanonical(profile)'));
+assert.ok(schemaBridge.includes('return null'));
+assert.equal(schemaBridge.includes('KaysenderEditorAdapters.register'), false);
+assert.equal(schemaBridge.includes('KaysenderEditorMigrations.register'), false);
 
 assert.ok(migrations.includes('function register(definition)'));
 assert.ok(registry.includes('function register(input)'));
@@ -97,6 +107,8 @@ assert.ok(index.includes('<script src="kaysender-editor-builtins.js"></script>')
 assert.equal(index.includes('kaysender-editor-builtins-v3-prepared.js'), false);
 for (const asset of [
   'kaysender-island-v3-adapter-factory.js',
+  'kaysender-island-v3-adapter-schema-bridge.js',
+  'kaysender-island-v3-schema-validator.js',
   'kaysender-island-v3-adapter.css',
   'kaysender-surface-grid-resize.js',
   'kaysender-island-v3-consumer-builders.js'
@@ -110,6 +122,7 @@ assert.equal(manifest.registrationExpectations.settlementSchemaVersion, '1.0.0')
 assert.equal(manifest.registrationExpectations.airshipSchemaVersion, '1.0.0');
 assert.equal(manifest.registrationExpectations.duplicateIslandRegistrationForbidden, true);
 assert.equal(manifest.registrationExpectations.finalWrappedTransformerRequired, true);
+assert.equal(manifest.registrationExpectations.schemaBridgeRequired, true);
 
 console.log('P1 Island activation manifest validation passed.');
-console.log('Verified dependency order, single built-ins replacement, exact adapter and migration registration counts, unchanged Settlement and Airship contracts, current 2.0.0 rollback state, validator existence, and absence of prepared P1 assets from the active runtime.');
+console.log('Verified dependency and schema-bridge order, single built-ins replacement, exact adapter and migration registration counts, unchanged Settlement and Airship contracts, current 2.0.0 rollback state, validator existence, and absence of prepared P1 assets from the active runtime.');
