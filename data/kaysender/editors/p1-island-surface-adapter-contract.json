@@ -1,20 +1,23 @@
 {
-  "schemaVersion": "1.5.0",
+  "schemaVersion": "1.6.0",
   "stage": "P1",
   "editorId": "floating-island-editor",
   "profileType": "floating-island-foundation-profile",
   "preparedProfileSchemaVersion": "3.0.0",
   "status": "prepared-runtime-inactive",
-  "purpose": "Define the exact prepared Island 3.0.0 adapter, synchronous schema gate, migration, grid, resize, semantic domain, and downstream integration against the existing Kaysender registry and production runtime.",
+  "purpose": "Define the exact prepared Island 3.0.0 adapter, synchronous schema gate, legacy seed projection, migration, grid, resize, semantic domain, and downstream integration against the existing Kaysender registry and production runtime.",
   "authoritativeArtifacts": {
     "schemaContract": "data/kaysender/schemas/floating-island-production-profile.schema.json",
     "schemaValidator": "kaysender-island-v3-schema-validator.js",
     "adapterFactory": "kaysender-island-v3-adapter-factory.js",
     "schemaBridge": "kaysender-island-v3-adapter-schema-bridge.js",
+    "legacyProjection": "kaysender-island-v3-legacy-projection.js",
     "adapterStyles": "kaysender-island-v3-adapter.css",
     "preparedBuiltinsReplacement": "kaysender-editor-builtins-v3-prepared.js",
     "activationManifest": "data/kaysender/editors/p1-island-activation-manifest.json",
+    "activationRunbook": "docs/p1-island-activation-runbook.md",
     "schemaValidatorTest": "scripts/validate-p1-island-schema.mjs",
+    "legacyProjectionTest": "scripts/validate-p1-island-legacy-projection.mjs",
     "adapterValidator": "scripts/validate-p1-island-v3-adapter-factory.mjs",
     "activationValidator": "scripts/validate-p1-island-activation-manifest.mjs"
   },
@@ -25,7 +28,8 @@
     ],
     "optionalHooks": ["readProfile", "applyProfileToForm", "getWikiDraft"],
     "baseDefinitionSource": "kaysender-island-v3-adapter-factory.js",
-    "finalDefinitionSource": "KaysenderIslandV3AdapterFactory.createDefinition after kaysender-island-v3-adapter-schema-bridge.js replaces the global factory",
+    "schemaDefinitionSource": "kaysender-island-v3-adapter-schema-bridge.js",
+    "finalDefinitionSource": "KaysenderIslandV3AdapterFactory.createDefinition after kaysender-island-v3-legacy-projection.js replaces the global factory",
     "preparedMigrationSource": "KaysenderIslandV3AdapterFactory.createMigrationDefinition"
   },
   "runtimeOwnership": {
@@ -47,7 +51,8 @@
       "synchronous schema diagnostics",
       "Island semantic diagnostics",
       "derived reconciliation",
-      "downstream export construction"
+      "downstream export construction",
+      "projection of v3 data into supported legacy seed controls"
     ]
   },
   "loadOrder": [
@@ -66,6 +71,7 @@
     "kaysender-island-surface-grid-controller.js",
     "kaysender-island-v3-adapter-factory.js",
     "kaysender-island-v3-adapter-schema-bridge.js",
+    "kaysender-island-v3-legacy-projection.js",
     "kaysender-editors.js",
     "kaysender-settlement-editor.js",
     "kaysender-airship-editor.js",
@@ -100,12 +106,13 @@
       "recalculate derived data",
       "rebuild final wrapped downstream exports",
       "merge structural semantic and grid diagnostics",
-      "run the synchronous closed-object schema validator through the final schema bridge",
+      "run synchronous schema validation through the schema bridge",
       "append schema errors to the Island diagnostics surface",
       "return null when any structural semantic grid or schema error prevents envelope creation"
     ],
     "applyProfileToForm": [
-      "apply mapped scalar values to the legacy form",
+      "project every v3-backed legacy select into an option supported by the legacy form",
+      "apply mapped scalar values through KaysenderEditorFieldMapping",
       "replace or create the Island 3.0.0 session",
       "replace the surface controller profile",
       "rewrite every exact ledger block",
@@ -118,17 +125,18 @@
     "bridge": "kaysender-island-v3-adapter-schema-bridge.js",
     "synchronous": true,
     "checks": [
-      "required properties",
-      "closed-object additional property rejection",
-      "primitive and integer types",
-      "constants",
-      "enums",
-      "minimum maximum and exclusive bounds",
-      "ID patterns",
-      "minimum array cardinality",
-      "unique array items"
+      "required properties", "closed-object additional property rejection", "primitive and integer types",
+      "constants", "enums", "numeric bounds", "ID patterns", "minimum array cardinality", "unique array items"
     ],
     "failureBehavior": "append schema diagnostics and return null from the final readProfile hook"
+  },
+  "legacyProjection": {
+    "implementation": "kaysender-island-v3-legacy-projection.js",
+    "loadsAfter": "kaysender-island-v3-adapter-schema-bridge.js",
+    "loadsBefore": "kaysender-editor-builtins-v3-prepared.js",
+    "coverage": "all legacy select controls",
+    "profileMatrix": ["valid", "fractured", "migrated", "blank-working"],
+    "authorityRule": "projection changes the seed form display only and never rewrites authoritative v3 records"
   },
   "seedPolicy": {
     "signatureExcludes": ["generatedAt", "rendered outputs", "generated mapFoundation"],
@@ -158,7 +166,7 @@
     "recalculate derived data",
     "rebuild final generic downstream exports",
     "run structural semantic and grid diagnostics",
-    "run synchronous schema validation in the final adapter bridge",
+    "run synchronous schema validation in the schema bridge",
     "return the domain profile to the shared envelope runtime only when error-free"
   ],
   "migrationRegistration": {
@@ -166,7 +174,7 @@
     "registry": "KaysenderEditorMigrations",
     "implementation": "the final wrapped KaysenderIslandV3Transformers.migrateV2ToV3",
     "registrationSource": "kaysender-editor-builtins-v3-prepared.js",
-    "registrationTiming": "after transformer layers schema validator factory and schema bridge load",
+    "registrationTiming": "after transformer schema factory bridge and legacy-projection layers load",
     "selfRegistrationForbidden": true
   },
   "builtinsReplacement": {
@@ -192,6 +200,6 @@
     "index uses the activation-manifest asset order",
     "active built-ins is replaced rather than loaded beside prepared built-ins",
     "all P1 validators become blocking",
-    "valid malformed renamed migrated fractured blank-working and cell-removal scenarios pass Chromium"
+    "valid malformed projected renamed migrated fractured blank-working and cell-removal scenarios pass Chromium"
   ]
 }
