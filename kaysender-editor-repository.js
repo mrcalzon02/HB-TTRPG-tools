@@ -128,20 +128,31 @@
       };
     }
 
+    if (
+      existing.envelope &&
+      existing.envelope.revision === envelope.revision &&
+      recordFingerprint(existing.envelope) === recordFingerprint(envelope)
+    ) {
+      const existingMetadata = metadata(existing.envelope);
+      return {
+        ok: true,
+        unchanged: true,
+        message: `${existingMetadata.name} revision ${existingMetadata.revision} was already current; stored timestamps and provenance were preserved.`,
+        record: existingMetadata
+      };
+    }
+
     try {
       target.setItem(key, JSON.stringify(envelope));
       const nextMetadata = metadata(envelope);
       const entries = previousIndex.filter(item => item.profileId !== envelope.profileId);
       entries.push(nextMetadata);
       writeIndex(sortEntries(entries));
-      const unchanged = Boolean(existing.envelope && existing.envelope.revision === envelope.revision);
       return {
         ok: true,
-        message: unchanged
-          ? `${nextMetadata.name} revision ${nextMetadata.revision} was already current.`
-          : `Saved ${nextMetadata.name} revision ${nextMetadata.revision}.`,
+        message: `Saved ${nextMetadata.name} revision ${nextMetadata.revision}.`,
         record: nextMetadata,
-        unchanged
+        unchanged: false
       };
     } catch (error) {
       try {
