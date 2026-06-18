@@ -159,7 +159,11 @@
 
       const heading = document.createElement('div');
       heading.className = 'surface-inspector-heading';
-      heading.innerHTML = `<strong>${cell.id}</strong><small>coordinate ${cell.x},${cell.y} · ${cell.active ? 'active surface' : 'inactive space'}</small>`;
+      const identity = document.createElement('strong');
+      identity.textContent = cell.id;
+      const coordinate = document.createElement('small');
+      coordinate.textContent = `coordinate ${cell.x},${cell.y} · ${cell.active ? 'active surface' : 'inactive space'}`;
+      heading.append(identity, coordinate);
       this.root.appendChild(heading);
 
       const form = document.createElement('form');
