@@ -30,10 +30,13 @@ adapter registry
 → surface controller
 → base adapter factory
 → schema bridge
+→ legacy seed projection
 → editor panels
 → prepared built-ins
 → production runtime
 ```
+
+The legacy projection layer must load last among the adapter layers. It maps arbitrary v3 classifications, route state, terrain, ecology, and resource descriptions into valid options for the old scalar seed form without changing authoritative v3 records.
 
 The prepared built-ins file must register exactly three adapters and one Island migration. Island becomes `3.0.0`; Settlement and Airship remain `1.0.0`.
 
@@ -45,6 +48,7 @@ Verify all of the following:
 - Grid and exact-ledger edits use the shared dirty and autosave lifecycle.
 - Importing Island 2.0.0 runs one deterministic migration and retains envelope identity, revision, locks, provenance, and migration log.
 - The immediate legacy-form rebuild does not overwrite imported v3 records.
+- Valid, fractured, migrated, and blank v3 profiles project every legacy seed select to a supported option.
 - Invalid JSON, missing fields, unknown properties, wrong types, invalid enums, malformed IDs, duplicate unique entries, and invalid ranges block canonical envelope creation.
 - Resize expansion previews without dirtying; destructive resize reports affected records, requires confirmation, and retains recovery data.
 - Draft recovery and clone preserve nested domain IDs while clone changes envelope identity.
@@ -52,7 +56,7 @@ Verify all of the following:
 - Island loads into Settlement, then Island and Settlement load into Airship as pinned revisions.
 - Standard consumer payloads exclude GM-only IDs and secret text.
 
-Exercise valid, renamed, migrated, fractured, blank-working, malformed, and destructive-resize cases.
+Exercise valid, renamed, migrated, fractured, blank-working, malformed, projection, and destructive-resize cases.
 
 ## Completion
 
