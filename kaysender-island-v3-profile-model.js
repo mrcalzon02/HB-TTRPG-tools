@@ -86,12 +86,21 @@
     return pathParts(path).join('.');
   }
 
+  function normalizedLocks(locks = []) {
+    return unique(locks.map(normalizeLockPath));
+  }
+
   function createLockMatcher(locks = []) {
-    const normalized = unique(locks.map(normalizeLockPath));
+    const normalized = normalizedLocks(locks);
     return path => {
       const target = normalizeLockPath(path);
-      return normalized.some(lock => target === lock || target.startsWith(`${lock}.`) || lock.startsWith(`${target}.`));
+      return normalized.some(lock => target === lock || target.startsWith(`${lock}.`));
     };
+  }
+
+  function hasOverlappingLock(locks = [], path = '') {
+    const target = normalizeLockPath(path);
+    return normalizedLocks(locks).some(lock => target === lock || target.startsWith(`${lock}.`) || lock.startsWith(`${target}.`));
   }
 
   function normalizeValue(value, definition = {}) {
@@ -183,6 +192,10 @@
       if (this.lockMatcher(path)) throw new Error(`Profile path ${path} is locked.`);
     }
 
+    #assertRecordUnlocked(path) {
+      if (hasOverlappingLock(this.getLocks(), path)) throw new Error(`Profile record ${path} is locked.`);
+    }
+
     #emit(type, detail = {}) {
       const event = Object.freeze({ type, profile: this.getProfile(), ...clone(detail) });
       this.listeners.forEach(listener => listener(event));
@@ -212,6 +225,10 @@
     isLocked(path) {
       this.#refreshLocks();
       return this.lockMatcher(path);
+    }
+
+    isRecordLocked(path) {
+      return hasOverlappingLock(this.getLocks(), path);
     }
 
     setField(path, value, definition = {}) {
@@ -278,7 +295,7 @@
 
     removeRecord(collectionId, recordId, options = {}) {
       const definition = resolveCollection(collectionId);
-      this.#assertUnlocked(definition.path);
+      this.#assertRecordUnlocked(`${definition.path}.${recordId}`);
       const records = this.listRecords(collectionId);
       const index = records.findIndex(record => record[definition.idField] === recordId);
       if (index < 0) return { removed: false, reason: 'not-found', references: [] };
@@ -319,10 +336,12 @@
     REFERENCE_FIELDS,
     createLockMatcher,
     getAt,
+    hasOverlappingLock,
     listReferences,
     nextStableId,
     normalizeLockPath,
     normalizeValue,
+    normalizedLocks,
     setAt
   });
 })();
