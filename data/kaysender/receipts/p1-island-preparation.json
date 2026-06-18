@@ -1,11 +1,11 @@
 {
   "receiptType": "p1-island-preparation-verification",
-  "receiptVersion": "1.1.0",
-  "generatedAt": "2026-06-18T21:11:38Z",
+  "receiptVersion": "1.0.0",
+  "generatedAt": "2026-06-18T21:14:53Z",
   "repository": "mrcalzon02/HB-TTRPG-tools",
   "branch": "main",
-  "sourceCommit": "3f8e2f7d05f23e89d7cd623d2d8a23672dd835a1",
-  "workflowRunId": "27789545248",
+  "sourceCommit": "4fa9903eeb0b0fc9ed3b949855008b18672db39d",
+  "workflowRunId": "27789749270",
   "workflowRunAttempt": "1",
   "nodeVersion": "v20.20.2",
   "passed": false,
@@ -22,9 +22,6 @@
     "profileLocks": "success",
     "panelBridge": "success",
     "adapterFactory": "failure",
-    "activationManifest": "failure",
-    "browserRuntime": "success",
-    "browserInteraction": "success",
-    "browserReceipt": "success"
+    "activationManifest": "failure"
   }
 }
