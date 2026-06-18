@@ -5,8 +5,9 @@
   const panelsApi = root.KaysenderIslandV3Panels;
   const surfaceApi = root.KaysenderIslandSurfaceGridController;
   const brushApi = root.KaysenderSurfaceGridBrushes;
+  const modelApi = root.KaysenderIslandV3ProfileModel;
   if (!panelsApi?.IslandProductionPanels) throw new Error('Island production panels are unavailable.');
-  if (!surfaceApi?.IslandSurfaceGridController || !brushApi) throw new Error('Island surface dependencies are unavailable.');
+  if (!surfaceApi?.IslandSurfaceGridController || !brushApi || !modelApi) throw new Error('Island reference dependencies are unavailable.');
 
   const SINGLE = Object.freeze({
     'route-capability': { 'routeNodeExport.defaultNodeId': 'routeNodes' },
@@ -40,6 +41,7 @@
   const referenceFamilies = new Set(['water', 'site', 'resource', 'hazard']);
   const clone = value => JSON.parse(JSON.stringify(value));
   const unique = values => [...new Set((values || []).map(value => String(value).trim()).filter(Boolean))];
+  const pathPattern = /\b[a-z][A-Za-z0-9]*(?:(?:\.[A-Za-z][A-Za-z0-9]*)|(?:\[\d+\]))+\b/g;
 
   function sourceRecords(model, source) {
     if (source === 'mapCells') {
@@ -128,6 +130,99 @@
     });
   }
 
+  function focusTarget(element) {
+    if (!element) return false;
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (typeof element.focus === 'function') element.focus({ preventScroll: true });
+    element.classList.add('island-reference-target');
+    root.setTimeout(() => element.classList.remove('island-reference-target'), 1800);
+    return true;
+  }
+
+  function focusMapPath(session, path) {
+    const match = path.match(/^map\.cells\[(\d+)\](?:\.(.+))?$/);
+    if (!match) return false;
+    const profile = session.productionController?.getProfile?.() || session.profile || {};
+    const cell = profile.map?.cells?.[Number(match[1])];
+    if (!cell) return false;
+    session.controller?.select?.(cell.id);
+    const inspector = session.controller?.inspector?.root || session.workspace?.querySelector?.('.kaysender-surface-inspector');
+    return focusTarget(inspector?.querySelector?.(`[name="${match[2] || 'id'}"]`) || inspector);
+  }
+
+  function focusCollectionPath(session, path) {
+    const profile = session.productionController?.getProfile?.() || session.profile || {};
+    for (const [panelId, definition] of Object.entries(modelApi.COLLECTIONS)) {
+      const prefix = `${definition.path}[`;
+      if (!path.startsWith(prefix)) continue;
+      const remainder = path.slice(prefix.length);
+      const closing = remainder.indexOf(']');
+      if (closing < 0) return false;
+      const index = Number(remainder.slice(0, closing));
+      const fieldName = remainder.slice(closing + 1).replace(/^\./, '') || definition.idField;
+      const record = modelApi.getAt(profile, definition.path, [])[index];
+      if (!record) return false;
+      const panel = session.productionRoot?.querySelector?.(`[data-panel-id="${panelId}"]`);
+      if (!panel) return false;
+      panel.open = true;
+      const card = panel.querySelector(`[data-record-id="${record.id}"]`);
+      return focusTarget(card?.querySelector?.(`[name="${fieldName}"]`) || card || panel);
+    }
+    return false;
+  }
+
+  function focusScalarPath(session, path) {
+    const definition = panelsApi.SCALAR_PANELS?.find(panel => panel.fields.some(field => field.path === path));
+    if (!definition) return false;
+    const panel = session.productionRoot?.querySelector?.(`[data-panel-id="${definition.id}"]`);
+    if (!panel) return false;
+    panel.open = true;
+    return focusTarget(panel.querySelector(`[name="${path}"]`) || panel);
+  }
+
+  function focusReferencePath(session, path) {
+    return focusMapPath(session, path) || focusCollectionPath(session, path) || focusScalarPath(session, path);
+  }
+
+  function enhanceDiagnosticEntry(entry, session) {
+    if (!(entry instanceof HTMLElement) || entry.dataset.referenceNavigation === 'true') return;
+    const paths = unique((entry.textContent.match(pathPattern) || []).filter(path => path.includes('.') || path.includes('[')));
+    if (!paths.length) return;
+    entry.dataset.referenceNavigation = 'true';
+    const actions = document.createElement('div');
+    actions.className = 'island-reference-repair-actions';
+    paths.forEach(path => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'island-reference-repair-button';
+      button.textContent = `Go to ${path}`;
+      button.addEventListener('click', () => {
+        if (!focusReferencePath(session, path)) {
+          button.disabled = true;
+          button.textContent = `Unavailable: ${path}`;
+        }
+      });
+      actions.appendChild(button);
+    });
+    entry.appendChild(actions);
+  }
+
+  function installDiagnosticNavigation(panelRoot) {
+    const editorPanel = panelRoot.closest('.editor-panel') || document.getElementById('kaysender-editor-panel');
+    const session = root.KaysenderIslandV3AdapterFactory?.getSession?.(editorPanel);
+    if (!session?.diagnosticList || session.diagnosticList.dataset.referenceObserver === 'true') return;
+    session.diagnosticList.dataset.referenceObserver = 'true';
+    session.diagnosticList.querySelectorAll('li').forEach(entry => enhanceDiagnosticEntry(entry, session));
+    const observer = new MutationObserver(records => {
+      records.forEach(record => record.addedNodes.forEach(node => {
+        if (node instanceof HTMLElement && node.matches('li')) enhanceDiagnosticEntry(node, session);
+        node.querySelectorAll?.('li').forEach(entry => enhanceDiagnosticEntry(entry, session));
+      }));
+    });
+    observer.observe(session.diagnosticList, { childList: true, subtree: true });
+    session.referenceNavigationObserver = observer;
+  }
+
   function markLiveWorkspace(panelRoot) {
     const workspace = panelRoot.closest('.island-v3-workspace');
     if (!workspace) return;
@@ -138,7 +233,7 @@
     const note = heading?.querySelector('.helper-note');
     if (eyebrow) eyebrow.textContent = 'P1 Production Profile 3.0.0';
     if (title) title.textContent = 'Floating Island Production Editor';
-    if (note) note.textContent = 'Structured ledgers and the surface grid are authoritative. Use the linked-record controls instead of typing IDs by hand.';
+    if (note) note.textContent = 'Structured ledgers and the surface grid are authoritative. Linked-record controls and diagnostic navigation replace manual ID hunting.';
     const stage = document.querySelector('#kaysender-mainline-editor-shell .mainline-editor-stage');
     if (stage) stage.textContent = 'P1 Floating Island Production Editor';
   }
@@ -198,6 +293,7 @@
         const panel = this.root.querySelector(`[data-panel-id="${panelId}"]`);
         if (panel) Object.entries(fields).forEach(([field, source]) => addPicker(this.model, panel, field, source));
       });
+      installDiagnosticNavigation(this.root);
       document.dispatchEvent(new CustomEvent('kaysender-island-profile-records-changed', {
         detail: { profile: clone(this.model.getProfile()) }
       }));
@@ -209,6 +305,7 @@
     ...panelsApi,
     IslandProductionPanels: LiveReferencePanels,
     REFERENCE_SOURCES: SINGLE,
-    REFERENCE_PICKERS: MANY
+    REFERENCE_PICKERS: MANY,
+    focusReferencePath
   });
 })();
