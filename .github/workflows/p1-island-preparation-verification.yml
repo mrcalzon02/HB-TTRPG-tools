@@ -1,0 +1,183 @@
+name: Verify prepared P1 Island editor
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - "data/kaysender/receipts/p1-island-preparation.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: p1-island-preparation-verification
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check prepared JavaScript syntax
+        id: syntax
+        continue-on-error: true
+        run: |
+          node --check kaysender-surface-grid-editor.js
+          node --check kaysender-surface-grid-brushes.js
+          node --check kaysender-surface-cell-inspector.js
+          node --check kaysender-surface-grid-toolbar.js
+          node --check kaysender-surface-grid-resize.js
+          node --check kaysender-island-surface-grid-controller.js
+          node --check kaysender-island-v3-schema-validator.js
+          node --check kaysender-island-v3-domain.js
+          node --check kaysender-island-v3-transformers.js
+          node --check kaysender-island-v3-consumer-builders.js
+          node --check kaysender-island-v3-adapter-factory.js
+          node --check kaysender-island-v3-adapter-schema-bridge.js
+          node --check kaysender-island-v3-legacy-projection.js
+          node --check kaysender-island-v3-profile-model.js
+          node --check kaysender-island-v3-panels.js
+          node --check kaysender-island-v3-panels-lifecycle.js
+          node --check kaysender-island-v3-panels-atomic.js
+          node --check kaysender-island-v3-adapter-panels-bridge.js
+
+      - name: Validate surface grid model
+        id: grid
+        continue-on-error: true
+        run: node scripts/validate-p1-surface-grid-model.mjs
+
+      - name: Validate surface grid resize
+        id: resize
+        continue-on-error: true
+        run: node scripts/validate-p1-surface-grid-resize.mjs
+
+      - name: Validate Island schema
+        id: schema
+        continue-on-error: true
+        run: node scripts/validate-p1-island-schema.mjs
+
+      - name: Validate legacy projection
+        id: projection
+        continue-on-error: true
+        run: node scripts/validate-p1-island-legacy-projection.mjs
+
+      - name: Validate Island domain
+        id: domain
+        continue-on-error: true
+        run: node scripts/validate-p1-island-domain.mjs
+
+      - name: Validate migration and consumers
+        id: migration
+        continue-on-error: true
+        run: node scripts/validate-p1-migration-and-consumers.mjs
+
+      - name: Validate generic consumer builders
+        id: consumers
+        continue-on-error: true
+        run: node scripts/validate-p1-consumer-builders.mjs
+
+      - name: Validate structured production panels
+        id: panels
+        continue-on-error: true
+        run: node scripts/validate-p1-island-production-panels.mjs
+
+      - name: Validate precise profile locks
+        id: locks
+        continue-on-error: true
+        run: node scripts/validate-p1-island-profile-locks.mjs
+
+      - name: Validate structured panel bridge
+        id: bridge
+        continue-on-error: true
+        run: node scripts/validate-p1-island-panel-bridge.mjs
+
+      - name: Validate final adapter factory chain
+        id: adapter
+        continue-on-error: true
+        run: node scripts/validate-p1-island-v3-adapter-factory.mjs
+
+      - name: Validate activation manifest
+        id: manifest
+        continue-on-error: true
+        run: node scripts/validate-p1-island-activation-manifest.mjs
+
+      - name: Write machine-readable receipt
+        id: receipt
+        shell: bash
+        run: |
+          mkdir -p data/kaysender/receipts
+          PASSED=true
+          for OUTCOME in \
+            "${{ steps.syntax.outcome }}" \
+            "${{ steps.grid.outcome }}" \
+            "${{ steps.resize.outcome }}" \
+            "${{ steps.schema.outcome }}" \
+            "${{ steps.projection.outcome }}" \
+            "${{ steps.domain.outcome }}" \
+            "${{ steps.migration.outcome }}" \
+            "${{ steps.consumers.outcome }}" \
+            "${{ steps.panels.outcome }}" \
+            "${{ steps.locks.outcome }}" \
+            "${{ steps.bridge.outcome }}" \
+            "${{ steps.adapter.outcome }}" \
+            "${{ steps.manifest.outcome }}"
+          do
+            if [ "$OUTCOME" != "success" ]; then PASSED=false; fi
+          done
+          cat > data/kaysender/receipts/p1-island-preparation.json <<EOF
+          {
+            "receiptType": "p1-island-preparation-verification",
+            "receiptVersion": "1.0.0",
+            "generatedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "repository": "${GITHUB_REPOSITORY}",
+            "branch": "${GITHUB_REF_NAME}",
+            "sourceCommit": "${GITHUB_SHA}",
+            "workflowRunId": "${GITHUB_RUN_ID}",
+            "workflowRunAttempt": "${GITHUB_RUN_ATTEMPT}",
+            "nodeVersion": "$(node --version)",
+            "passed": ${PASSED},
+            "outcomes": {
+              "syntax": "${{ steps.syntax.outcome }}",
+              "surfaceGrid": "${{ steps.grid.outcome }}",
+              "surfaceResize": "${{ steps.resize.outcome }}",
+              "schema": "${{ steps.schema.outcome }}",
+              "legacyProjection": "${{ steps.projection.outcome }}",
+              "domain": "${{ steps.domain.outcome }}",
+              "migrationAndConsumers": "${{ steps.migration.outcome }}",
+              "genericConsumers": "${{ steps.consumers.outcome }}",
+              "productionPanels": "${{ steps.panels.outcome }}",
+              "profileLocks": "${{ steps.locks.outcome }}",
+              "panelBridge": "${{ steps.bridge.outcome }}",
+              "adapterFactory": "${{ steps.adapter.outcome }}",
+              "activationManifest": "${{ steps.manifest.outcome }}"
+            }
+          }
+          EOF
+
+      - name: Commit verification receipt to main
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/kaysender/receipts/p1-island-preparation.json
+          if git diff --cached --quiet; then
+            echo "Receipt is unchanged."
+          else
+            git commit -m "Record P1 Island verification receipt [p1-receipt]"
+            git push origin HEAD:main
+          fi
+
+      - name: Enforce verification result
+        shell: bash
+        run: |
+          node -e "const r=require('./data/kaysender/receipts/p1-island-preparation.json'); if(!r.passed){console.error(r.outcomes); process.exit(1)}"
