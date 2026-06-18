@@ -1,0 +1,175 @@
+{
+  "migrationId": "island-2.0.0-to-3.0.0",
+  "sourceFixture": "data/kaysender/editors/fixtures/p1-island-v2-migration-source.json",
+  "targetSchemaVersion": "3.0.0",
+  "expectedCrosswalks": {
+    "regions": {
+      "R001": "cell-r001",
+      "R002": "cell-r002",
+      "R003": "cell-r003"
+    },
+    "siteSlots": {
+      "RUIN-01": "site-ruin-01",
+      "SHRINE-01": "site-shrine-01"
+    }
+  },
+  "expectedClassification": {
+    "sizeClass": "large island",
+    "shapeProfile": "long ridge",
+    "currentUse": "surveyed frontier",
+    "sovereignty": "unclaimed or not recorded in v2",
+    "surveyStatus": "operational"
+  },
+  "expectedGeometry": {
+    "coordinateSystem": "local-grid-v1",
+    "mapScaleKmPerCell": 3.2
+  },
+  "expectedMap": {
+    "columns": 3,
+    "rows": 2,
+    "activeCellIds": ["cell-r001", "cell-r002", "cell-r003"],
+    "cells": [
+      {
+        "id": "cell-r001",
+        "x": 0,
+        "y": 0,
+        "areaKm2": 6.7,
+        "terrainType": "plateau",
+        "elevationM": 3820,
+        "slopeClass": "gentle",
+        "usablePercent": 80,
+        "arablePercent": 36,
+        "waterCatchmentId": null,
+        "siteIds": [],
+        "resourceNodeIds": [],
+        "hazardIds": []
+      },
+      {
+        "id": "cell-r002",
+        "x": 1,
+        "y": 0,
+        "areaKm2": 6.5,
+        "terrainType": "ridge",
+        "elevationM": 3910,
+        "slopeClass": "steep",
+        "usablePercent": 25,
+        "arablePercent": 0,
+        "waterCatchmentId": null,
+        "siteIds": ["site-ruin-01"],
+        "resourceNodeIds": ["resource-migrated-summary"],
+        "hazardIds": []
+      },
+      {
+        "id": "cell-r003",
+        "x": 1,
+        "y": 1,
+        "areaKm2": 7.075,
+        "terrainType": "wet basin",
+        "elevationM": 3710,
+        "slopeClass": "gentle",
+        "usablePercent": 80,
+        "arablePercent": 36,
+        "waterCatchmentId": "water-migrated-summary",
+        "siteIds": ["site-shrine-01"],
+        "resourceNodeIds": [],
+        "hazardIds": []
+      }
+    ]
+  },
+  "expectedSites": [
+    {
+      "id": "site-ruin-01",
+      "mapCellId": "cell-r002",
+      "type": "ruin",
+      "status": "unknown",
+      "visibility": "known-locally",
+      "maximumFootprintKm2": 0.9,
+      "requiredTags": ["migrated-v2-slot", "interior", "ridge"]
+    },
+    {
+      "id": "site-shrine-01",
+      "mapCellId": "cell-r003",
+      "type": "shrine",
+      "status": "planned",
+      "visibility": "gm-only",
+      "maximumFootprintKm2": 0.45,
+      "requiredTags": ["migrated-v2-slot", "interior", "wet basin"]
+    }
+  ],
+  "expectedAnchors": {
+    "waterCellId": "cell-r003",
+    "resourceCellId": "cell-r002",
+    "primarySettlementCellId": "cell-r003",
+    "primaryApproachCellId": "cell-r001"
+  },
+  "expectedProvisionalRecords": {
+    "waterSourceId": "water-migrated-summary",
+    "resourceNodeId": "resource-migrated-summary",
+    "altitudeSegmentId": "altitude-segment-migrated-baseline",
+    "driftSegmentId": "drift-segment-migrated-baseline",
+    "landingZoneId": "landing-migrated-primary-approach",
+    "approachCorridorId": "approach-migrated-primary-lane",
+    "habitatId": "habitat-migrated-primary",
+    "speciesSlotId": "species-slot-migrated-dominant",
+    "settlementSlotId": "settlement-slot-migrated-primary",
+    "routeNodeId": "route-node-migrated-primary"
+  },
+  "expectedCapacity": {
+    "foodCapacity": {
+      "arableAreaKm2": 1.993,
+      "pastureAreaKm2": 0,
+      "forageAreaKm2": 0,
+      "annualFoodUnits": 0,
+      "sustainablePopulation": 0,
+      "emergencyPopulation90Days": 430,
+      "importDependencyPercent": 100
+    },
+    "settlementCapacity": {
+      "waterLimitedPopulation": 0,
+      "foodLimitedPopulation": 0,
+      "landLimitedPopulation": 1674,
+      "sustainablePopulation": 0,
+      "emergencyPopulation": 430,
+      "primarySlot": {
+        "id": "settlement-slot-migrated-primary",
+        "mapCellId": "cell-r003",
+        "maximumPopulation": 1674,
+        "maximumFootprintKm2": 3.5375,
+        "waterSourceIds": ["water-migrated-summary"],
+        "landingZoneIds": ["landing-migrated-primary-approach"],
+        "status": "occupied"
+      }
+    }
+  },
+  "expectedVisibility": {
+    "playerKnownSiteIds": ["site-ruin-01"],
+    "gmOnlySiteIds": ["site-shrine-01"],
+    "playerKnownHazardIds": [],
+    "gmOnlyHazardIds": [],
+    "gmSecrets": []
+  },
+  "expectedDerived": {
+    "geometryReconciles": true,
+    "compositionReconciles": true,
+    "mapAreaReconciles": true,
+    "waterCapacityReconciles": false,
+    "foodCapacityReconciles": false,
+    "settlementCapacityReconciles": false,
+    "brokenReferenceIds": []
+  },
+  "requiredWarningFragments": [
+    "potability and throughput were not recorded",
+    "did not quantify food production",
+    "did not provide tonnage or safe extraction limits",
+    "recorded drift speed but not bearing",
+    "did not retain fault locations",
+    "landing capacity, vessel class, and approach bearing were not recorded",
+    "land-limited estimate only",
+    "route summary did not quantify arrivals or services"
+  ],
+  "requiredMigrationLogEntry": {
+    "code": "island-2.0.0-to-3.0.0",
+    "fromVersion": "2.0.0",
+    "toVersion": "3.0.0"
+  }
+}
