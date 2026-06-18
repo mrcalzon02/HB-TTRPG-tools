@@ -8,7 +8,22 @@ const read = file => fs.readFile(path.join(root, file), 'utf8');
 const readJson = async file => JSON.parse(await read(file));
 const exists = file => fs.stat(path.join(root, file)).then(() => true, () => false);
 
-const [manifest, index, activeBuiltins, preparedBuiltins, adapterFactory, schemaBridge, legacyProjection, migrations, registry] = await Promise.all([
+const [
+  manifest,
+  index,
+  activeBuiltins,
+  preparedBuiltins,
+  adapterFactory,
+  schemaBridge,
+  legacyProjection,
+  profileModel,
+  panels,
+  panelLifecycle,
+  atomicPanels,
+  panelBridge,
+  migrations,
+  registry
+] = await Promise.all([
   readJson('data/kaysender/editors/p1-island-activation-manifest.json'),
   read('index.html'),
   read('kaysender-editor-builtins.js'),
@@ -16,6 +31,11 @@ const [manifest, index, activeBuiltins, preparedBuiltins, adapterFactory, schema
   read('kaysender-island-v3-adapter-factory.js'),
   read('kaysender-island-v3-adapter-schema-bridge.js'),
   read('kaysender-island-v3-legacy-projection.js'),
+  read('kaysender-island-v3-profile-model.js'),
+  read('kaysender-island-v3-panels.js'),
+  read('kaysender-island-v3-panels-lifecycle.js'),
+  read('kaysender-island-v3-panels-atomic.js'),
+  read('kaysender-island-v3-adapter-panels-bridge.js'),
   read('kaysender-editor-migrations.js'),
   read('kaysender-editor-adapter-registry.js')
 ]);
@@ -30,6 +50,8 @@ assert.equal(manifest.currentRuntimeMustRemain.preparedBuiltinsLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.preparedAdapterLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.schemaBridgeLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.legacyProjectionLoaded, false);
+assert.equal(manifest.currentRuntimeMustRemain.structuredPanelsLoaded, false);
+assert.equal(manifest.currentRuntimeMustRemain.panelBridgeLoaded, false);
 assert.equal(manifest.currentRuntimeMustRemain.migrationRegistered, false);
 
 const scripts = manifest.kaysenderScriptOrder;
@@ -47,7 +69,12 @@ assert.ok(position('kaysender-island-v3-transformers.js') < position('kaysender-
 assert.ok(position('kaysender-island-v3-consumer-builders.js') < position('kaysender-island-v3-adapter-factory.js'));
 assert.ok(position('kaysender-island-v3-adapter-factory.js') < position('kaysender-island-v3-adapter-schema-bridge.js'));
 assert.ok(position('kaysender-island-v3-adapter-schema-bridge.js') < position('kaysender-island-v3-legacy-projection.js'));
-assert.ok(position('kaysender-island-v3-legacy-projection.js') < position('kaysender-editor-builtins-v3-prepared.js'));
+assert.ok(position('kaysender-island-v3-legacy-projection.js') < position('kaysender-island-v3-profile-model.js'));
+assert.ok(position('kaysender-island-v3-profile-model.js') < position('kaysender-island-v3-panels.js'));
+assert.ok(position('kaysender-island-v3-panels.js') < position('kaysender-island-v3-panels-lifecycle.js'));
+assert.ok(position('kaysender-island-v3-panels-lifecycle.js') < position('kaysender-island-v3-panels-atomic.js'));
+assert.ok(position('kaysender-island-v3-panels-atomic.js') < position('kaysender-island-v3-adapter-panels-bridge.js'));
+assert.ok(position('kaysender-island-v3-adapter-panels-bridge.js') < position('kaysender-editor-builtins-v3-prepared.js'));
 assert.ok(position('kaysender-editor-builtins-v3-prepared.js') < position('kaysender-editor-production.js'));
 assert.equal(scripts.includes('kaysender-editor-builtins.js'), false);
 assert.equal(new Set(scripts).size, scripts.length);
@@ -55,8 +82,13 @@ assert.equal(new Set(scripts).size, scripts.length);
 for (const asset of manifest.cssAssets) assert.ok(await exists(asset), `Missing CSS asset ${asset}.`);
 for (const asset of scripts) assert.ok(await exists(asset), `Missing script asset ${asset}.`);
 for (const file of manifest.blockingValidatorsAfterActivation) assert.ok(await exists(file), `Missing validator ${file}.`);
-assert.ok(manifest.blockingValidatorsAfterActivation.includes('scripts/validate-p1-island-schema.mjs'));
-assert.ok(manifest.blockingValidatorsAfterActivation.includes('scripts/validate-p1-island-legacy-projection.mjs'));
+for (const required of [
+  'scripts/validate-p1-island-schema.mjs',
+  'scripts/validate-p1-island-legacy-projection.mjs',
+  'scripts/validate-p1-island-production-panels.mjs',
+  'scripts/validate-p1-island-panel-bridge.mjs'
+]) assert.ok(manifest.blockingValidatorsAfterActivation.includes(required), `Manifest omits blocking validator ${required}.`);
+assert.ok(manifest.cssAssets.includes('kaysender-island-v3-panels.css'));
 
 const registerCalls = preparedBuiltins.match(/Registry\.register\(/g) || [];
 const migrationCalls = preparedBuiltins.match(/Migrations\.register\(/g) || [];
@@ -86,8 +118,16 @@ assert.ok(legacyProjection.includes('const LEGACY_FIELD_MAP = Object.freeze'));
 assert.ok(legacyProjection.includes('sizeClass: projectSize'));
 assert.ok(legacyProjection.includes('shapeProfile: projectShape'));
 assert.ok(legacyProjection.includes('mapping.apply(form, profile, LEGACY_FIELD_MAP)'));
-assert.equal(schemaBridge.includes('KaysenderEditorAdapters.register'), false);
-assert.equal(legacyProjection.includes('KaysenderEditorAdapters.register'), false);
+assert.ok(profileModel.includes('class IslandProfileModel'));
+assert.ok(profileModel.includes('setFields(changes = [])'));
+assert.ok(profileModel.includes('removeRecord(collectionId, recordId'));
+assert.ok(panels.includes('class IslandProductionPanels'));
+assert.ok(panelLifecycle.includes('production-change-batch'));
+assert.ok(atomicPanels.includes('AtomicIslandProductionController'));
+assert.ok(panelBridge.includes('Advanced Read-Only JSON Ledger View'));
+assert.ok(panelBridge.includes('profile.map = clone(session.controller?.getMap?.()'));
+assert.ok(panelBridge.includes('root.KaysenderIslandV3AdapterFactory = Object.freeze'));
+for (const source of [schemaBridge, legacyProjection, panelBridge]) assert.equal(source.includes('KaysenderEditorAdapters.register'), false);
 
 assert.ok(migrations.includes('function register(definition)'));
 assert.ok(registry.includes('function register(input)'));
@@ -101,8 +141,14 @@ for (const asset of [
   'kaysender-island-v3-adapter-factory.js',
   'kaysender-island-v3-adapter-schema-bridge.js',
   'kaysender-island-v3-legacy-projection.js',
+  'kaysender-island-v3-profile-model.js',
+  'kaysender-island-v3-panels.js',
+  'kaysender-island-v3-panels-lifecycle.js',
+  'kaysender-island-v3-panels-atomic.js',
+  'kaysender-island-v3-adapter-panels-bridge.js',
   'kaysender-island-v3-schema-validator.js',
   'kaysender-island-v3-adapter.css',
+  'kaysender-island-v3-panels.css',
   'kaysender-surface-grid-resize.js',
   'kaysender-island-v3-consumer-builders.js'
 ]) assert.equal(index.includes(asset), false, `Current runtime loads ${asset}.`);
@@ -116,6 +162,8 @@ assert.equal(manifest.registrationExpectations.duplicateIslandRegistrationForbid
 assert.equal(manifest.registrationExpectations.finalWrappedTransformerRequired, true);
 assert.equal(manifest.registrationExpectations.schemaBridgeRequired, true);
 assert.equal(manifest.registrationExpectations.legacyProjectionRequired, true);
+assert.equal(manifest.registrationExpectations.structuredPanelsRequired, true);
+assert.equal(manifest.registrationExpectations.panelBridgeRequired, true);
 
 console.log('P1 Island activation manifest validation passed.');
-console.log('Verified every asset exists, final factory layering order, single built-ins replacement, registration counts, unchanged child editor contracts, current 2.0.0 state, and absence of prepared P1 assets from the active runtime.');
+console.log('Verified every prepared asset exists, final factory and structured-panel layering order, single built-ins replacement, registration counts, unchanged child contracts, current 2.0.0 state, and absence of prepared P1 assets from the active runtime.');
