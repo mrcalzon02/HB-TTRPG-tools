@@ -13,6 +13,69 @@
   min-width: 0;
 }
 
+.island-production-navigator {
+  position: sticky;
+  top: 8px;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(220px, 1.2fr) minmax(220px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 36%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, #10161a 94%, transparent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(10px);
+}
+
+.island-production-navigator-summary {
+  display: grid;
+  gap: 2px;
+}
+
+.island-production-navigator-summary strong {
+  font-family: "Roboto Mono", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.island-production-navigator-summary span {
+  color: rgba(220, 232, 228, 0.62);
+  font-size: 0.72rem;
+}
+
+.island-production-search,
+.island-production-jump {
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(122, 145, 153, 0.3);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.28);
+  color: inherit;
+  font: inherit;
+}
+
+.island-production-search:focus-visible,
+.island-production-jump:focus-visible {
+  outline: none;
+  border-color: var(--accent, #c88a35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #c88a35) 22%, transparent);
+}
+
+.island-production-navigator-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.island-production-navigator-actions button {
+  padding: 7px 9px;
+  white-space: nowrap;
+}
+
 .island-production-panel {
   border: 1px solid color-mix(in srgb, var(--accent, #c88a35) 26%, transparent);
   border-radius: 12px;
@@ -284,10 +347,25 @@
   }
 }
 
+@media (max-width: 1100px) {
+  .island-production-navigator {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .island-production-navigator-actions {
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 720px) {
+  .island-production-navigator,
   .island-production-fields,
   .island-reference-picker-choices {
     grid-template-columns: 1fr;
+  }
+
+  .island-production-navigator {
+    position: static;
   }
 
   .island-production-record > header {
