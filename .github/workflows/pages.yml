@@ -46,7 +46,7 @@ jobs:
       - name: Build local Crewman's Primer source JSON
         run: node scripts/build-barotrauma-primer-source.mjs
 
-      - name: Install immediate Primer button response guard
+      - name: Install native Primer viewer links
         shell: bash
         run: |
           python - <<'PY'
@@ -66,6 +66,7 @@ jobs:
         run: |
           node --check barotrauma-entry.js
           node --check barotrauma-primer-click-fix.js
+          node --check barotrauma-primer-page.js
           node --check scripts/build-barotrauma-primer-source.mjs
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
@@ -78,7 +79,7 @@ jobs:
           npm install --no-save --package-lock=false playwright@1.60.0
           npx playwright install --with-deps chromium
 
-      - name: Verify both Primer buttons in a browser
+      - name: Verify native Primer viewer links
         run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json artifacts/barotrauma-primer-browser-verification-failure.png artifacts/barotrauma-primer-browser-verification-failure.json
 
       - name: Upload Primer browser verification evidence
