@@ -46,9 +46,26 @@ jobs:
       - name: Build local Crewman's Primer source JSON
         run: node scripts/build-barotrauma-primer-source.mjs
 
+      - name: Install immediate Primer button response guard
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          marker = '  <script src="barotrauma-entry.js"></script>'
+          guard = '  <script src="barotrauma-primer-click-fix.js"></script>'
+          if guard not in text:
+              if marker not in text:
+                  raise SystemExit('barotrauma-entry.js script marker not found in index.html')
+              text = text.replace(marker, marker + '\n' + guard, 1)
+              path.write_text(text, encoding='utf-8')
+          PY
+
       - name: Check Primer JavaScript syntax
         run: |
           node --check barotrauma-entry.js
+          node --check barotrauma-primer-click-fix.js
           node --check scripts/build-barotrauma-primer-source.mjs
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
