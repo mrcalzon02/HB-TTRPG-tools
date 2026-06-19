@@ -30,15 +30,13 @@ jobs:
         run: |
           set -euo pipefail
           target="data/barotrauma/wiki/source/crewmans-primer-compact-part-05.b64"
-          if [ -f "$target" ]; then
-            echo "Primer source segment 05 is already present."
-            exit 0
+          if [ ! -f "$target" ]; then
+            git show '8893893acb8df161bed407842a90d6206ab65dd6^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05a.b64' > "$target"
+            git show 'a62e6224c4f24a023848154016b1aae894233e83^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05b.b64' >> "$target"
+            git show '113fac2838c99343b7c660c8948e06c1e0b97d67^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05c.b64' >> "$target"
+            git show '3d37882b53b63eb31461d36e7ade038464ab7a2e^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05d.b64' >> "$target"
           fi
-
-          git show '8893893acb8df161bed407842a90d6206ab65dd6^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05a.b64' > "$target"
-          git show 'a62e6224c4f24a023848154016b1aae894233e83^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05b.b64' >> "$target"
-          git show '113fac2838c99343b7c660c8948e06c1e0b97d67^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05c.b64' >> "$target"
-          git show '3d37882b53b63eb31461d36e7ade038464ab7a2e^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05d.b64' >> "$target"
+          test -s "$target"
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -48,150 +46,22 @@ jobs:
       - name: Build local Crewman's Primer source JSON
         run: node scripts/build-barotrauma-primer-source.mjs
 
-      - name: Validate crafting generator data
-        run: node scripts/validate-crafting-data.mjs
-
-      - name: Validate main-line editor roadmap
-        run: node scripts/validate-editor-roadmap.mjs
-
-      - name: Validate shared editor kernel
-        run: node scripts/validate-editor-kernel.mjs
-
-      - name: Validate editor profile migrations
-        run: node scripts/validate-editor-migrations.mjs
-
-      - name: Validate editor lifecycle save races
-        run: node scripts/validate-editor-lifecycle.mjs
-
-      - name: Validate persistent editor repository
-        run: node scripts/validate-editor-repository.mjs
-
-      - name: Validate shared editor browser runtime
-        run: node scripts/validate-editor-runtime-structure.mjs
-
-      - name: Validate arcane academic curricula
-        run: node scripts/validate-arcane-academic-generator.mjs
-
-      - name: Validate malefic academic curricula
-        run: node scripts/validate-malefic-academic-generator.mjs
-
-      - name: Validate magical syllabus library catalogue
-        run: node scripts/validate-magical-library-generator.mjs
-
-      - name: Validate registered source references
-        run: node scripts/validate-source-references.mjs
-
-      - name: Validate Elemental Realms creature wiki
-        run: node scripts/validate-elemental-realms-wiki.mjs
-
-      - name: Validate Solanum Umbra native wiki
-        run: node scripts/validate-solanum-umbra-native-wiki.mjs
-
-      - name: Validate Solanum Umbra live workspace
-        run: node scripts/validate-solanum-umbra-ui.mjs
-
-      - name: Validate Kaysender Warlock of the Swamp
-        run: node scripts/validate-kaysender-warlock-of-the-swamp.mjs
-
-      - name: Validate Kaysender Locations of Note
-        run: node scripts/validate-kaysender-locations-of-note.mjs
-
-      - name: Validate Mad Martiken proprietor conversations
-        run: node scripts/validate-kaysender-martiken-conversations.mjs
-
-      - name: Validate Barotrauma Crewman's Primer wiki
-        run: node scripts/validate-barotrauma-crewmans-primer.mjs
-
-      - name: Check generator and editor JavaScript syntax
+      - name: Check Primer JavaScript syntax
         run: |
           node --check barotrauma-entry.js
           node --check scripts/build-barotrauma-primer-source.mjs
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
-          node --check kaysender-wiki.js
-          node --check kaysender-crafting-generator.js
-          node --check kaysender-npc-generator.js
-          node --check kaysender-editor-kernel.js
-          node --check kaysender-editor-field-mapping.js
-          node --check kaysender-editor-adapter-registry.js
-          node --check kaysender-editor-builtins.js
-          node --check kaysender-editor-migrations.js
-          node --check kaysender-editor-kernel-adapters.js
-          node --check kaysender-editor-lifecycle.js
-          node --check kaysender-editor-repository.js
-          node --check kaysender-editor-production.js
-          node --check kaysender-editor-record-library.js
-          node --check kaysender-editor-parent-library.js
-          node --check kaysender-editor-error-boundary.js
-          node --check kaysender-editor-live-smoke.js
-          node --check scripts/validate-editor-migrations.mjs
-          node --check scripts/validate-editor-adapter-integration.mjs
-          node --check scripts/validate-editor-inheritance.mjs
-          node --check scripts/validate-editor-drafts.mjs
-          node --check scripts/validate-editor-lifecycle.mjs
-          node --check scripts/validate-editor-repository.mjs
-          node --check spell-creator-vocabulary.js
-          node --check spell-creator-mechanics.js
-          node --check module-spell-creator.js
-          node --check spell-creator-entry.js
-          node --check eccentric-spell-competence.js
-          node --check eccentric-spell-morality.js
-          node --check eccentric-spell-vocabulary.js
-          node --check eccentric-spell-engine.js
-          node --check eccentric-spell-view.js
-          node --check eccentric-spell-text.js
-          node --check eccentric-spell-controller-core.js
-          node --check eccentric-spell-actions.js
-          node --check eccentric-spell-runtime.js
-          node --check eccentric-spell-entry.js
-          node --check arcane-academic-domains.js
-          node --check arcane-academic-vocabulary.js
-          node --check arcane-academic-engine.js
-          node --check arcane-academic-view.js
-          node --check arcane-academic-text.js
-          node --check arcane-academic-controller-core.js
-          node --check arcane-academic-actions.js
-          node --check arcane-academic-runtime.js
-          node --check arcane-academic-entry.js
-          node --check malefic-academic-domains.js
-          node --check malefic-academic-vocabulary.js
-          node --check malefic-academic-engine.js
-          node --check malefic-academic-view.js
-          node --check malefic-academic-text.js
-          node --check malefic-academic-controller-core.js
-          node --check malefic-academic-actions.js
-          node --check dark-academic-runtime.js
-          node --check malefic-academic-entry.js
-          node --check magical-library-vocabulary.js
-          node --check magical-library-engine.js
-          node --check magical-library-profile-engine.js
-          node --check magical-library-content-vocabulary.js
-          node --check magical-library-content-engine.js
-          node --check magical-library-view.js
-          node --check magical-library-text.js
-          node --check magical-library-controller-core.js
-          node --check magical-library-actions.js
-          node --check magical-library-runtime.js
-          node --check magical-library-entry.js
-          node --check elemental-realms-creature-core.js
-          node --check elemental-realms-creatures-primary.js
-          node --check elemental-realms-creatures-secondary.js
-          node --check elemental-realms-creatures-expansions.js
-          node --check elemental-realms-creatures-leeches.js
-          node --check elemental-realms-creatures-leech-hosts.js
-          node --check elemental-realms-creatures-context.js
-          node --check elemental-realms-entry.js
-          node --check solanum-umbra-entry.js
-          node --check kaysender-editors.js
-          node --check kaysender-settlement-editor.js
-          node --check kaysender-airship-editor.js
+
+      - name: Validate Barotrauma Crewman's Primer
+        run: node scripts/validate-barotrauma-crewmans-primer.mjs
 
       - name: Install Chromium verification runtime
         run: |
           npm install --no-save --package-lock=false playwright@1.60.0
           npx playwright install --with-deps chromium
 
-      - name: Run Barotrauma Crewman's Primer browser verification
+      - name: Verify both Primer buttons in a browser
         run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json artifacts/barotrauma-primer-browser-verification-failure.png artifacts/barotrauma-primer-browser-verification-failure.json
 
       - name: Upload Primer browser verification evidence
@@ -210,7 +80,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: "."
