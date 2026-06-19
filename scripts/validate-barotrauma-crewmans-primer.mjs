@@ -9,6 +9,7 @@ const fail = message => { throw new Error(message); };
 const hash = text => crypto.createHash('sha256').update(text).digest('hex');
 
 const indexPath = 'data/barotrauma/wiki/crewmans-primer-index.json';
+const sourceJsonPath = 'data/barotrauma/wiki/crewmans-primer-source.json';
 const index = json(indexPath);
 if (index.id !== 'barotrauma-crewmans-primer') fail('Unexpected Primer id.');
 if (index.schemaVersion !== '2.1.0') fail('Primer must use schema 2.1.0.');
@@ -21,10 +22,15 @@ if (index.textSequenceSha256 !== 'd1b84f0c414bd28dac5d83735822966f2a55d3091a74c2
 const parts = Array.from({ length: 8 }, (_, i) => `data/barotrauma/wiki/source/crewmans-primer-compact-part-${String(i).padStart(2, '0')}.b64`);
 const encoded = parts.map(file => {
   if (!fs.existsSync(path.join(root, file))) fail(`Missing Primer source segment: ${file}`);
-  return read(file).trim();
+  return read(file).replace(/\s+/g, '');
 }).join('');
 if (encoded.length !== 95872) fail(`Primer source bundle has unexpected length ${encoded.length}.`);
 if (hash(encoded) !== '8f56d15084d4a1b48d26931cc8e1f54fceea2d2273b978ed4e33debd57d6c0b7') fail('Primer source bundle checksum is incorrect.');
+
+if (!fs.existsSync(path.join(root, sourceJsonPath))) fail(`Missing generated Primer source file: ${sourceJsonPath}`);
+const source = json(sourceJsonPath);
+if (!Array.isArray(source.entries) || source.entries.length !== 198) fail(`Generated Primer source must contain 198 entries; found ${source.entries?.length ?? 'none'}.`);
+if (source.entries[0]?.id !== 'foreword' || source.entries.at(-1)?.id !== 'final-caution') fail('Generated Primer source order is incomplete.');
 
 const registry = json('data/barotrauma-tools-registry.json');
 const module = registry.modules?.find(item => item.id === index.id);
@@ -34,8 +40,7 @@ if (!Array.isArray(module.viewerModes) || !module.viewerModes.includes('wikiEntr
 
 const runtime = read('barotrauma-entry.js');
 for (const marker of [
-  'crewmans-primer-compact-part-',
-  'bzip2-wasm@1.0.1',
+  'crewmans-primer-source.json',
   'Expected 198 source-titled entries',
   'function renderBlocks(',
   'function renderSourceViewer(',
@@ -47,6 +52,12 @@ for (const marker of [
   'function printSourceDocument('
 ]) {
   if (!runtime.includes(marker)) fail(`Primer runtime is missing ${marker}.`);
+}
+if (runtime.includes('bzip2-wasm') || runtime.includes('cdn.jsdelivr.net')) fail('Primer runtime must not depend on an external decompression CDN.');
+
+const builder = read('scripts/build-barotrauma-primer-source.mjs');
+for (const marker of ['bzip2', 'crewmans-primer-source.json', 'Expected ${expectedEntries} Primer entries']) {
+  if (!builder.includes(marker)) fail(`Primer source builder is missing ${marker}.`);
 }
 
 const browserVerification = read('scripts/run-barotrauma-primer-browser-verification.mjs');
@@ -63,4 +74,4 @@ for (const marker of [
 const site = read('index.html');
 if (!site.includes('id="barotrauma"') || !site.includes('<script src="barotrauma-entry.js"></script>')) fail('Barotrauma workspace or runtime include is missing.');
 
-console.log(`Validated Crewman's Primer: 198 titled wiki entries, 8 source segments, ${index.sourceNonEmptyParagraphCount} preserved source text units, and a continuous source document viewer.`);
+console.log(`Validated Crewman's Primer: 198 titled wiki entries, local source JSON, 8 verified source segments, ${index.sourceNonEmptyParagraphCount} preserved source text units, and a continuous source document viewer.`);
