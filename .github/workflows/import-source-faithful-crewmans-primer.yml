@@ -1,0 +1,129 @@
+name: Import source-faithful Crewman's Primer
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/import-source-faithful-crewmans-primer.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-source-faithful-crewmans-primer
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Rebuild source-faithful Primer wiki
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          SUPPORT_BUNDLE="data/barotrauma/wiki/source/crewmans-primer-support.b64"
+          if [ ! -f "$SUPPORT_BUNDLE" ]; then
+            echo "The one-use Primer import payload has already been consumed."
+            exit 0
+          fi
+
+          mkdir -p /tmp/primer-import
+          cat data/barotrauma/wiki/source/crewmans-primer-compact-part-*.b64 > /tmp/primer-source.b64
+          echo "8f56d15084d4a1b48d26931cc8e1f54fceea2d2273b978ed4e33debd57d6c0b7  /tmp/primer-source.b64" | sha256sum -c -
+          base64 --decode /tmp/primer-source.b64 | bzip2 -d > /tmp/primer-source.json
+
+          base64 --decode "$SUPPORT_BUNDLE" > /tmp/primer-support.tar.xz
+          echo "bf37d4065a0d503c1295b503b1afcbdd0e301e931f116b1f92fd5656b97857fa  /tmp/primer-support.tar.xz" | sha256sum -c -
+          tar -xJf /tmp/primer-support.tar.xz -C .
+
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const source = JSON.parse(fs.readFileSync('/tmp/primer-source.json', 'utf8'));
+          const entries = source.entries;
+          const index = source.index;
+          if (!Array.isArray(entries) || entries.length !== 198) {
+            throw new Error(`Expected 198 source-title entries, found ${entries?.length ?? 'none'}.`);
+          }
+
+          const outputDirectory = 'data/barotrauma/wiki';
+          fs.mkdirSync(outputDirectory, { recursive: true });
+          const packSizes = [27, 32, 24, 27, 29, 24, 29, 6];
+          const packFiles = [];
+          let offset = 0;
+          packSizes.forEach((size, packIndex) => {
+            const number = String(packIndex + 1).padStart(2, '0');
+            const file = `crewmans-primer-source-pack-${number}.json`;
+            const packEntries = entries.slice(offset, offset + size);
+            if (packEntries.length !== size) {
+              throw new Error(`Pack ${number} expected ${size} entries, found ${packEntries.length}.`);
+            }
+            offset += size;
+            packFiles.push(file);
+            const pack = {
+              primerId: 'barotrauma-crewmans-primer',
+              schemaVersion: '2.1.0',
+              sourceMode: 'full-manuscript-transcription',
+              sourceFaithful: true,
+              pack: packIndex + 1,
+              entries: packEntries
+            };
+            fs.writeFileSync(path.join(outputDirectory, file), `${JSON.stringify(pack, null, 2)}\n`, 'utf8');
+          });
+          if (offset !== entries.length) throw new Error(`Pack allocation consumed ${offset} of ${entries.length} entries.`);
+
+          const canonicalIndex = {
+            ...index,
+            schemaVersion: '2.1.0',
+            edition: 'Complete source-faithful wiki conversion',
+            status: 'source-transcription-alpha',
+            sourceMode: 'full-manuscript-transcription',
+            sourceFaithful: true,
+            entryCount: 198,
+            blockCount: 2321,
+            bodyTextUnitCount: 3751,
+            sourceNonEmptyParagraphCount: 3952,
+            textSequenceSha256: 'd1b84f0c414bd28dac5d83735822966f2a55d3091a74c2be81e7387582bda129',
+            packs: packFiles,
+            description: 'A complete source-faithful wiki conversion of THE EUROPAN CREWMAN’S PRIMER. Every titled section in the source manuscript is a separate wiki entry, with every original paragraph and list item beneath that title preserved until the next source title.'
+          };
+          fs.writeFileSync(path.join(outputDirectory, 'crewmans-primer-index.json'), `${JSON.stringify(canonicalIndex, null, 2)}\n`, 'utf8');
+          NODE
+
+          rm -f data/barotrauma/wiki/crewmans-primer-pack-1.json
+          rm -f data/barotrauma/wiki/crewmans-primer-pack-2.json
+          rm -f data/barotrauma/wiki/crewmans-primer-pack-3.json
+          rm -f data/barotrauma/wiki/source/crewmans-primer-source-part-*.b64
+          rm -f data/barotrauma/wiki/source/crewmans-primer-compact-part-*.b64
+          rm -f "$SUPPORT_BUNDLE"
+          rmdir data/barotrauma/wiki/source 2>/dev/null || true
+          rm -f .github/workflows/import-source-faithful-crewmans-primer.yml
+
+          node --check barotrauma-entry.js
+          node --check scripts/validate-barotrauma-crewmans-primer.mjs
+          node --check scripts/run-barotrauma-primer-browser-verification.mjs
+          node scripts/validate-barotrauma-crewmans-primer.mjs
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No Primer import changes remained to commit."
+          else
+            git commit -m "Replace Primer summaries with source-defined wiki entries"
+            git push origin HEAD:main
+          fi
