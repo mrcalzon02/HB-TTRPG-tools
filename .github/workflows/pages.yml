@@ -22,43 +22,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Reconstruct exact source segment
-        shell: bash
-        run: |
-          set -euo pipefail
-          target="data/barotrauma/wiki/source/crewmans-primer-compact-part-05.b64"
-          git show '8893893acb8df161bed407842a90d6206ab65dd6^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05a.b64' > "$target"
-          git show 'a62e6224c4f24a023848154016b1aae894233e83^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05b.b64' >> "$target"
-          git show '113fac2838c99343b7c660c8948e06c1e0b97d67^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05c.b64' >> "$target"
-          git show '3d37882b53b63eb31461d36e7ade038464ab7a2e^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05d.b64' >> "$target"
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - name: Create one plain Primer file
-        run: |
-          node scripts/build-barotrauma-primer-source.mjs
-          mv data/barotrauma/wiki/crewmans-primer-source.json data/barotrauma/wiki/crewmans-primer.json
-          node -e "const d=require('./data/barotrauma/wiki/crewmans-primer.json'); if(d.entries.length!==198) process.exit(1);"
-
-      - name: Install dashboard links
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('index.html')
-          text = path.read_text(encoding='utf-8')
-          marker = '  <script src="barotrauma-entry.js"></script>'
-          guard = '  <script src="barotrauma-primer-click-fix.js"></script>'
-          if guard not in text:
-              text = text.replace(marker, marker + '\n' + guard, 1)
-              path.write_text(text, encoding='utf-8')
-          PY
 
       - name: Check Primer JavaScript
         run: |
@@ -72,7 +40,7 @@ jobs:
           npm install --no-save --package-lock=false playwright@1.60.0
           npx playwright install --with-deps chromium
 
-      - name: Verify Wiki and Source Viewer
+      - name: Verify 198 Markdown entries in both viewers
         run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json
 
       - name: Remove browser dependencies
