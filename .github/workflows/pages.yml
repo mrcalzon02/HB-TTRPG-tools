@@ -45,6 +45,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Build local Crewman's Primer source JSON
+        run: node scripts/build-barotrauma-primer-source.mjs
+
       - name: Validate crafting generator data
         run: node scripts/validate-crafting-data.mjs
 
@@ -102,6 +105,7 @@ jobs:
       - name: Check generator and editor JavaScript syntax
         run: |
           node --check barotrauma-entry.js
+          node --check scripts/build-barotrauma-primer-source.mjs
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
           node --check kaysender-wiki.js
