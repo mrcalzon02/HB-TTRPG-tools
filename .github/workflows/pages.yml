@@ -98,7 +98,7 @@ jobs:
           rmdir data/barotrauma/wiki/source 2>/dev/null || true
           rm -f .github/workflows/import-source-faithful-crewmans-primer.yml
 
-          git show HEAD^:.github/workflows/pages.yml > .github/workflows/pages.yml
+          git show 19aa7c58c1206a1504ffa433be3db5bfa3626560:.github/workflows/pages.yml > .github/workflows/pages.yml
 
           node --check barotrauma-entry.js
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
@@ -111,4 +111,4 @@ jobs:
           git commit -m "Replace Primer summaries with 198 source-defined wiki entries"
           git push origin HEAD:main
 
-# Retry after removing duplicated payload fragments.
+# Restore the exact pre-import Pages workflow after conversion.
