@@ -38,22 +38,46 @@ if (!module || module.status !== 'available' || module.launchTarget !== 'crewman
 if (module.sourceActionLabel !== 'Open Source Document Viewer') fail('Primer source viewer action is not registered.');
 if (!Array.isArray(module.viewerModes) || !module.viewerModes.includes('wikiEntries') || !module.viewerModes.includes('sourceDocument')) fail('Primer viewer modes are not registered.');
 
-const runtime = read('barotrauma-entry.js');
+const dashboardRuntime = read('barotrauma-entry.js');
 for (const marker of [
   'crewmans-primer-source.json',
   'Expected 198 source-titled entries',
-  'function renderBlocks(',
-  'function renderSourceViewer(',
-  'function renderSourceDocument(',
-  'Source Document Viewer',
-  'primer-source-toc',
-  'Open as Wiki Entry',
-  'Locate in Source Document',
-  'function printSourceDocument('
+  'Source Document Viewer'
 ]) {
-  if (!runtime.includes(marker)) fail(`Primer runtime is missing ${marker}.`);
+  if (!dashboardRuntime.includes(marker)) fail(`Primer dashboard runtime is missing ${marker}.`);
 }
-if (runtime.includes('bzip2-wasm') || runtime.includes('cdn.jsdelivr.net')) fail('Primer runtime must not depend on an external decompression CDN.');
+if (dashboardRuntime.includes('bzip2-wasm') || dashboardRuntime.includes('cdn.jsdelivr.net')) fail('Primer dashboard runtime must not depend on an external decompression CDN.');
+
+const standalonePage = read('barotrauma-primer.html');
+for (const marker of [
+  'barotrauma-primer.html?mode=wiki',
+  'barotrauma-primer.html?mode=source',
+  'barotrauma-primer-page.js',
+  'THE EUROPAN CREWMAN’S PRIMER'
+]) {
+  if (!standalonePage.includes(marker)) fail(`Standalone Primer page is missing ${marker}.`);
+}
+
+const standaloneRuntime = read('barotrauma-primer-page.js');
+for (const marker of [
+  'crewmans-primer-source.json',
+  'Expected 198 source-defined entries',
+  'function renderWiki(',
+  'function renderSource(',
+  'THE CROUCHING FALLACY'
+]) {
+  if (!standaloneRuntime.includes(marker)) fail(`Standalone Primer runtime is missing ${marker}.`);
+}
+
+const nativeLinkGuard = read('barotrauma-primer-click-fix.js');
+for (const marker of [
+  'barotrauma-primer.html?mode=wiki',
+  'barotrauma-primer.html?mode=source',
+  'data-primer-native-link',
+  'replaceWith(link)'
+]) {
+  if (!nativeLinkGuard.includes(marker)) fail(`Primer native-link upgrade is missing ${marker}.`);
+}
 
 const builder = read('scripts/build-barotrauma-primer-source.mjs');
 for (const marker of ['bzip2', 'crewmans-primer-source.json', 'Expected ${expectedEntries} Primer entries']) {
@@ -62,6 +86,8 @@ for (const marker of ['bzip2', 'crewmans-primer-source.json', 'Expected ${expect
 
 const browserVerification = read('scripts/run-barotrauma-primer-browser-verification.mjs');
 for (const marker of [
+  'nativeWikiLink',
+  'nativeSourceLink',
   'Expected 198 continuous source sections',
   'Expected 198 source table-of-contents entries',
   'THE CROUCHING FALLACY',
@@ -72,6 +98,6 @@ for (const marker of [
 }
 
 const site = read('index.html');
-if (!site.includes('id="barotrauma"') || !site.includes('<script src="barotrauma-entry.js"></script>')) fail('Barotrauma workspace or runtime include is missing.');
+if (!site.includes('id="barotrauma"') || !site.includes('<script src="barotrauma-entry.js"></script>')) fail('Barotrauma workspace or dashboard runtime include is missing.');
 
-console.log(`Validated Crewman's Primer: 198 titled wiki entries, local source JSON, 8 verified source segments, ${index.sourceNonEmptyParagraphCount} preserved source text units, and a continuous source document viewer.`);
+console.log(`Validated Crewman's Primer: 198 titled entries, native dashboard links, standalone wiki and source pages, local source JSON, 8 verified source segments, and ${index.sourceNonEmptyParagraphCount} preserved source text units.`);
