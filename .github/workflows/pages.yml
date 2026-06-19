@@ -61,6 +61,7 @@ jobs:
           node --check barotrauma-entry.js
           node --check barotrauma-primer-click-fix.js
           node --check barotrauma-primer-page.js
+          node --check vendor/bzip2-browser.js
           node --check scripts/build-barotrauma-primer-source.mjs
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
@@ -73,7 +74,7 @@ jobs:
           npm install --no-save --package-lock=false playwright@1.60.0
           npx playwright install --with-deps chromium
 
-      - name: Verify native Primer viewer links
+      - name: Verify Primer documents survive missing generated JSON
         run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json artifacts/barotrauma-primer-browser-verification-failure.png artifacts/barotrauma-primer-browser-verification-failure.json
 
       - name: Upload Primer browser verification evidence
