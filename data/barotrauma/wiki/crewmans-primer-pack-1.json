@@ -1,0 +1,362 @@
+{
+  "primerId": "barotrauma-crewmans-primer",
+  "edition": "Working Field Edition 1.0",
+  "pack": 1,
+  "entries": [
+    {
+      "id": "primer-purpose-and-use",
+      "sectionNumber": "I",
+      "category": "Foundation",
+      "title": "Purpose, Scope, and the First Rule",
+      "subtitle": "A field manual is written for the moment when nobody has time to read one.",
+      "summary": "The Primer establishes the habits that keep a submarine crew alive when distance, pressure, machinery, fear, and human error begin working together.",
+      "body": [
+        "Europa does not need to hate you. The ocean, the ice, the pressure, the cold, and the creatures beneath the crust are dangerous without intent. A submarine survives only because its crew continuously interrupts the natural sequence by which a damaged machine becomes a flooded compartment, a flooded compartment becomes a power failure, and a power failure becomes a grave.",
+        "This manual is not a substitute for vessel-specific training, posted emergency procedures, or a captain who knows the boat. It is the common language beneath those things: the expected conduct of a person who has accepted that every careless action may become another crew member's emergency.",
+        "Read each section before you need it. During an emergency, use the checklists, callouts, and priority rules. Afterward, return to the explanations and determine which mistake began the chain."
+      ],
+      "doctrine": [
+        "Preserve life before property, but understand that on a submarine the systems preserving life are property.",
+        "Report what is happening, what you are doing, and what remains unresolved.",
+        "Never create a second casualty while trying to reach the first."
+      ],
+      "procedures": [
+        {
+          "title": "Before departure",
+          "steps": [
+            "Identify your watch station, emergency station, pressure-suit location, nearest extinguishers, nearest medical supplies, and two routes to command.",
+            "Learn the vessel's alarm language and radio channels.",
+            "Confirm who may authorize reactor changes, weapons release, diving operations, and compartment abandonment."
+          ]
+        },
+        {
+          "title": "When doctrine conflicts",
+          "steps": [
+            "Follow the immediate lawful order of the responsible officer unless it would plainly create an unnecessary fatal hazard.",
+            "State the conflict clearly and briefly.",
+            "Record the discrepancy after the emergency rather than arguing while the hull is open."
+          ]
+        }
+      ],
+      "warnings": [
+        "A crew member who has not learned the boat is cargo with opinions."
+      ],
+      "fieldNotes": [
+        "The ocean receives every argument eventually. It rarely rules in your favor."
+      ],
+      "relatedEntries": [
+        "crew-compact",
+        "emergency-priority-ladder",
+        "incident-reports-and-memory"
+      ],
+      "footnotes": []
+    },
+    {
+      "id": "the-hull-and-the-ocean",
+      "sectionNumber": "II",
+      "category": "Foundation",
+      "title": "The Hull and the Ocean",
+      "subtitle": "The ocean is always present; the hull merely negotiates the terms.",
+      "summary": "Explains pressure, compartment boundaries, flooding behavior, and why small breaches become organizational failures.",
+      "body": [
+        "A submarine is not a room moving through water. It is a pressure boundary containing air, heat, electricity, fuel, people, and a limited amount of time. Every door, hatch, pump, duct, cable opening, and maintenance panel participates in that boundary.",
+        "Flooding is not only incoming water. It changes buoyancy, electrical safety, movement, visibility, weapon access, medical access, and the ability to reach other failures. A shallow leak ignored beside a junction box may be more dangerous than a dramatic breach in an empty compartment.",
+        "Treat every unexplained sound, pressure change, wet deck, and cycling pump as information. The experienced crew member does not panic at every noise; the experienced crew member knows which noises require immediate confirmation."
+      ],
+      "doctrine": [
+        "Keep compartment doors closed unless movement or ventilation requires otherwise.",
+        "Do not stand beneath active flooding to admire it.",
+        "Report location and rate before beginning repair when radio contact is available."
+      ],
+      "procedures": [
+        {
+          "title": "Initial flooding report",
+          "steps": [
+            "Name the compartment.",
+            "State whether the breach is visible, whether water is rising, and whether electrical equipment is exposed.",
+            "State whether you can repair it, need a pump, need isolation, or need evacuation."
+          ]
+        },
+        {
+          "title": "Compartment isolation",
+          "steps": [
+            "Remove conscious personnel and mobile casualties.",
+            "Close doors and hatches without trapping responders.",
+            "Cut local power when electrical exposure makes continued energization unsafe.",
+            "Mark the compartment as unresolved until inspected after pumping."
+          ]
+        }
+      ],
+      "warnings": [
+        "A closed door is not cowardice. It is a bulkhead performing its profession."
+      ],
+      "fieldNotes": [
+        "Do not reopen a stabilized compartment merely because someone left a wrench inside."
+      ],
+      "relatedEntries": [
+        "damage-control",
+        "mechanical-hull-and-ballast",
+        "emergency-priority-ladder"
+      ],
+      "footnotes": []
+    },
+    {
+      "id": "crew-compact",
+      "sectionNumber": "III",
+      "category": "Crew Conduct",
+      "title": "The Crew Compact",
+      "subtitle": "Competence is collective or it is temporary.",
+      "summary": "Defines the minimum social contract expected aboard a working submarine.",
+      "body": [
+        "Every crew member depends on machinery maintained by people they may not like, medical care delivered by people they may not understand, and decisions made with incomplete information. Personal dislike does not suspend professional obligation.",
+        "The Compact requires truthful reporting, respect for assigned responsibilities, protection of incapacitated personnel, and the refusal to turn practical jokes into operational hazards. It does not require affection. It requires that resentment never be allowed to open the hull, poison the air, misroute power, hide an infection, or place a loaded weapon behind a crew mate.",
+        "Discipline is not silence. A crew member must report unsafe orders, concealed damage, missing supplies, sabotage indicators, and signs of infection. Discipline is the ability to do so clearly, through the proper channel when time permits, and without converting a warning into a performance."
+      ],
+      "doctrine": [
+        "Do not conceal damage to avoid blame.",
+        "Do not tamper with another station's controls without coordination.",
+        "Do not deprive another crew member of protective equipment, medicine, tools, or access as a joke.",
+        "Do not use rank to demand secrecy about a hazard."
+      ],
+      "procedures": [
+        {
+          "title": "Resolving an operational dispute",
+          "steps": [
+            "State the hazard in one sentence.",
+            "State the immediate consequence in one sentence.",
+            "Offer the safest workable alternative.",
+            "Escalate to the watch officer if the conflict remains unresolved."
+          ]
+        },
+        {
+          "title": "Handling misconduct during crisis",
+          "steps": [
+            "Stop the dangerous act if this can be done safely.",
+            "Restore the affected system or access route.",
+            "Report facts, not motive.",
+            "Secure evidence and defer punishment until immediate survival is restored."
+          ]
+        }
+      ],
+      "warnings": [
+        "The fastest way to lose the crew's trust is to make them wonder whether you will report the truth when you are at fault."
+      ],
+      "fieldNotes": [
+        "You are permitted to dislike your shipmates. You are not permitted to make the ocean's case for it."
+      ],
+      "relatedEntries": [
+        "command-and-accountability",
+        "assistant-and-clown-question",
+        "incident-reports-and-memory"
+      ],
+      "footnotes": []
+    },
+    {
+      "id": "command-and-accountability",
+      "sectionNumber": "IV",
+      "category": "Command",
+      "title": "Command, Orders, and Accountability",
+      "subtitle": "Authority exists to concentrate responsibility, not to distribute blame.",
+      "summary": "Explains command channels, emergency authority, lawful refusal, and the obligation to close the loop.",
+      "body": [
+        "Submarine command must be legible. Crew members should know who holds the watch, who controls movement, who controls weapons, who controls the reactor, and who may declare evacuation or compartment abandonment. Confusion over authority is itself a casualty risk.",
+        "An order is incomplete until it has been heard, understood, and either carried out or reported impossible. Silence is not confirmation. A captain who gives six orders without receiving acknowledgements has not commanded six tasks; the captain has released six rumors into the boat.",
+        "Accountability travels both directions. Junior crew must report honestly. Senior crew must avoid impossible promises, hidden priorities, and punishment for bad news delivered promptly."
+      ],
+      "doctrine": [
+        "Use closed-loop communication for critical orders.",
+        "Name the person or station receiving the order.",
+        "State when an order cannot be completed and why.",
+        "Transfer command explicitly."
+      ],
+      "procedures": [
+        {
+          "title": "Closed-loop order",
+          "steps": [
+            "Sender names receiver and gives one clear task.",
+            "Receiver repeats the task and any critical limit.",
+            "Sender confirms or corrects.",
+            "Receiver reports completion, failure, or changed conditions."
+          ]
+        },
+        {
+          "title": "Emergency succession",
+          "steps": [
+            "Announce that the responsible officer is incapacitated or unreachable.",
+            "Identify the next qualified authority under vessel policy.",
+            "State which critical controls have transferred.",
+            "Record the transfer after stabilization."
+          ]
+        }
+      ],
+      "warnings": [
+        "Do not imitate command authority over the radio for humor, convenience, or revenge."
+      ],
+      "fieldNotes": [
+        "A delayed report can be an honest mistake. A falsified completion report is sabotage by vocabulary."
+      ],
+      "relatedEntries": [
+        "communications-and-alarms",
+        "watchstanding-and-handover",
+        "incident-reports-and-memory"
+      ],
+      "footnotes": []
+    },
+    {
+      "id": "watchstanding-and-handover",
+      "sectionNumber": "V",
+      "category": "Operations",
+      "title": "Watchstanding and Handover",
+      "subtitle": "A watch is not time spent near a console. It is custody of a system.",
+      "summary": "Provides a standard for assuming, holding, and transferring responsibility for submarine stations.",
+      "body": [
+        "Most disasters do not begin with a monster. They begin with an unattended gauge, a half-finished repair, a battery nobody mentioned, a cabinet emptied on the previous watch, or a quiet alarm assumed to belong to someone else.",
+        "A proper handover transfers current state, unusual behavior, temporary workarounds, depleted supplies, standing orders, unresolved alarms, and tasks already in progress. The incoming watch should know not only what is broken, but what has been made to appear functional.",
+        "Fatigue degrades judgment before it removes consciousness. A crew member too exhausted to track alarms must report that condition before the system reports it for them."
+      ],
+      "doctrine": [
+        "Do not leave a critical station unrelieved.",
+        "Temporary fixes must be labeled and reported.",
+        "An unresolved alarm belongs to the watch until formally transferred."
+      ],
+      "procedures": [
+        {
+          "title": "Minimum handover",
+          "steps": [
+            "State normal and abnormal system conditions.",
+            "Identify disabled safeguards, bypasses, and temporary repairs.",
+            "List remaining consumables and missing tools.",
+            "Repeat standing orders and known external threats.",
+            "Receive acknowledgement from the incoming watch."
+          ]
+        },
+        {
+          "title": "Abandoning a station during emergency",
+          "steps": [
+            "Notify command or the nearest responsible watch stander.",
+            "Leave controls in the safest achievable state.",
+            "Take only equipment required for the emergency task.",
+            "Return or formally transfer the station when conditions permit."
+          ]
+        }
+      ],
+      "warnings": [
+        "Never write 'fine' in a handover record. Name the system and its condition."
+      ],
+      "fieldNotes": [
+        "The outgoing watch remembers the last six hours. The incoming watch may otherwise inherit only the last six seconds."
+      ],
+      "relatedEntries": [
+        "command-and-accountability",
+        "communications-and-alarms",
+        "reactor-and-electrical-systems"
+      ],
+      "footnotes": []
+    },
+    {
+      "id": "communications-and-alarms",
+      "sectionNumber": "VI",
+      "category": "Operations",
+      "title": "Communications, Alarms, and Useful Brevity",
+      "subtitle": "During crisis, speech is a life-support system.",
+      "summary": "Defines radio discipline, alarm acknowledgement, location naming, and emergency reports.",
+      "body": [
+        "A good emergency transmission tells the crew where the problem is, what kind of problem it is, how fast it is changing, and what help is required. Everything else can wait.",
+        "Radio channels become unusable when everyone explains, speculates, curses, and asks whether anyone heard them. Use plain language. Repeat critical locations. Avoid private nicknames for compartments unless every watch uses the same name.",
+        "Alarms are not background music. Acknowledging an alarm means someone has accepted responsibility for investigating it. Silencing an alarm without assigning that responsibility converts warning into decoration."
+      ],
+      "doctrine": [
+        "Location first, condition second, need third.",
+        "Do not transmit over an active casualty report unless your message concerns a more immediate threat.",
+        "Repeat orders involving weapons, reactor output, docking, pressure doors, and evacuation."
+      ],
+      "procedures": [
+        {
+          "title": "Emergency call format",
+          "steps": [
+            "Call the receiving station or say 'All crew.'",
+            "State the compartment or external bearing.",
+            "State the hazard and whether it is spreading.",
+            "State the response already underway.",
+            "Request specific help."
+          ]
+        },
+        {
+          "title": "Lost communications",
+          "steps": [
+            "Attempt the alternate channel or wired station.",
+            "Send a runner only when the route is safer than the delay.",
+            "Use posted alarm signals and local authority.",
+            "Restore communications as an emergency repair priority."
+          ]
+        }
+      ],
+      "warnings": [
+        "Do not shout 'we are all going to die' unless you have been assigned to morale."
+      ],
+      "fieldNotes": [
+        "The phrase 'somewhere aft' has killed enough people."
+      ],
+      "relatedEntries": [
+        "command-and-accountability",
+        "watchstanding-and-handover",
+        "emergency-priority-ladder"
+      ],
+      "footnotes": []
+    },
+    {
+      "id": "weapons-and-line-of-fire",
+      "sectionNumber": "VII",
+      "category": "Safety",
+      "title": "Weapons and the Line-of-Fire Doctrine",
+      "subtitle": "If a crew member is between you and the target, you do not have a shot.",
+      "summary": "Establishes strict fire discipline for cramped compartments, boarding actions, exterior defense, and heavy weapons.",
+      "body": [
+        "Inside a submarine, every weapon is also a hull hazard, an equipment hazard, and a crew hazard. The presence of an enemy does not remove the need to identify what lies beyond it. Missed shots enter walls, machinery, pressure boundaries, medical spaces, fuel stores, or the person who moved half a step after you decided to fire.",
+        "The line-of-fire doctrine is absolute: if a crew member is between the shooter and the hostile target, the shooter does not fire. Crouching does not make the arrangement safe. A target that appears elevated, offset, or partially clear can change position faster than the shooter can correct.",
+        "Reposition, change elevation, hold fire, or order the forward crew member to clear the line. The person crossing an established firing line must announce the movement when possible, but the weapon operator retains responsibility for every shot."
+      ],
+      "doctrine": [
+        "Identify target, foreground, and background before firing.",
+        "Never fire through a crew member's occupied space.",
+        "Automatic fire is controlled fire, not permission to sweep the compartment.",
+        "Shotguns, harpoons, explosives, and heavy weapons require greater—not lesser—clearance."
+      ],
+      "procedures": [
+        {
+          "title": "Boarder engagement",
+          "steps": [
+            "Announce contact and compartment.",
+            "Establish one primary firing direction.",
+            "Move noncombatants and casualties behind cover.",
+            "Shoot only with a clear foreground and acceptable background.",
+            "Cease fire immediately when the target is down, obscured, or entangled with crew."
+          ]
+        },
+        {
+          "title": "Accidental friendly fire",
+          "steps": [
+            "Call cease fire.",
+            "Secure or holster the weapon.",
+            "Report the casualty and weapon involved.",
+            "Begin medical response without concealing the cause.",
+            "Preserve the scene and ammunition state for review."
+          ]
+        }
+      ],
+      "warnings": [
+        "Never fire because the person ahead of you 'will probably stay crouched.'",
+        "Do not use explosives to solve a problem standing beside the reactor, ballast controls, fuel, or the only surviving medic."
+      ],
+      "fieldNotes": [
+        "A missed shot continues to possess a career."
+      ],
+      "relatedEntries": [
+        "hostile-boarding-and-internal-security",
+        "medical-and-biosecurity",
+        "incident-reports-and-memory"
+      ],
+      "footnotes": []
+    }
+  ]
+}
