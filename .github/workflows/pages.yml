@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -43,8 +43,24 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Build local Crewman's Primer source JSON
+      - name: Build complete Crewman's Primer source JSON
         run: node scripts/build-barotrauma-primer-source.mjs
+
+      - name: Persist complete Primer document to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            data/barotrauma/wiki/source/crewmans-primer-compact-part-05.b64 \
+            data/barotrauma/wiki/crewmans-primer-source.json
+          if git diff --cached --quiet; then
+            echo "Complete Primer document is already tracked."
+          else
+            git commit -m "Persist complete Crewman's Primer source document [skip ci]"
+            git push origin HEAD:main
+          fi
 
       - name: Install native Primer viewer links
         shell: bash
@@ -64,6 +80,7 @@ jobs:
 
       - name: Check Primer JavaScript syntax
         run: |
+          node --check character-sheet-title.js
           node --check barotrauma-entry.js
           node --check barotrauma-primer-click-fix.js
           node --check barotrauma-primer-page.js
