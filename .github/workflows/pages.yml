@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -40,23 +40,11 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Create the plain Primer file
+      - name: Create one plain Primer file
         run: |
           node scripts/build-barotrauma-primer-source.mjs
           mv data/barotrauma/wiki/crewmans-primer-source.json data/barotrauma/wiki/crewmans-primer.json
           node -e "const d=require('./data/barotrauma/wiki/crewmans-primer.json'); if(d.entries.length!==198) process.exit(1);"
-
-      - name: Commit the plain Primer file
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/barotrauma/wiki/crewmans-primer.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Add plain Crewman's Primer data [skip ci]"
-            git push origin HEAD:main
-          fi
 
       - name: Install dashboard links
         shell: bash
