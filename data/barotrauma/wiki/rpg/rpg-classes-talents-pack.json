@@ -1,0 +1,194 @@
+{
+  "wikiId": "barotrauma-rpg-rules-wiki",
+  "sourceVersion": "Test v0.10",
+  "pack": 2,
+  "entries": [
+    {
+      "id": "basic-classes",
+      "sectionNumber": "5",
+      "category": "Classes",
+      "title": "Basic Classes",
+      "subtitle": "The basic classes establish the crew's first division of labor.",
+      "summary": "Presents the four level-4 basic classes described by the manuscript.",
+      "body": [
+        "Basic classes have a stated maximum level of 4 and provide the broad starting roles from which most crew members enter play."
+      ],
+      "groups": [
+        {
+          "title": "Engineer",
+          "summary": "Repairs, maintains, modifies, and sometimes sabotages systems; generally less capable in direct combat."
+        },
+        {
+          "title": "Medic",
+          "summary": "Treats injuries, disease, poison, and crisis casualties; generally less capable in heavy physical tasks."
+        },
+        {
+          "title": "Scientist",
+          "summary": "Conducts research, analysis, laboratory work, and technical interpretation; may struggle in social situations."
+        },
+        {
+          "title": "Security Officer",
+          "summary": "Handles weapons, combat, tactical planning, area security, intimidation, and team defense; lacks the technical depth of specialist engineers."
+        }
+      ],
+      "editorialNotes": [
+        "The source alternates between 'Security officer' and title case. The wiki standardizes the display name as Security Officer."
+      ],
+      "relatedEntries": [
+        "basic-class-talents",
+        "advanced-classes",
+        "character-creation-sequence"
+      ]
+    },
+    {
+      "id": "basic-class-talents",
+      "sectionNumber": "6",
+      "category": "Talents",
+      "title": "Basic Class Talents",
+      "subtitle": "Talents provide bonuses, permissions, rerolls, recovery effects, and role-specific advantages.",
+      "summary": "Converts the seven listed talents for each basic class into searchable groups.",
+      "body": [
+        "A character chooses one Talent at creation and may select additional Talents when gaining levels, subject to class and campaign limits."
+      ],
+      "talentGroups": [
+        {
+          "title": "Engineer",
+          "talents": [
+            {"name": "Quick Fix", "effect": "Roll an additional die during repair work and retain the best applicable result."},
+            {"name": "MacGyver", "effect": "Perform improvised repairs when proper replacement materials are unavailable."},
+            {"name": "Tech Wizard", "effect": "Gain +2 on Intelligence rolls involving technology or complex systems."},
+            {"name": "Demolition Expert", "effect": "Gain +2 on Strength rolls involving deliberate destruction or sabotage of systems."},
+            {"name": "Tinkerer", "effect": "Gain +2 on Intelligence rolls involving modification or improvement of existing systems."},
+            {"name": "Gadgeteer", "effect": "Create original gadgets or devices through technical skill and improvisation."},
+            {"name": "Backup Plan", "effect": "Receive a second attempt after an initial system-related failure."}
+          ]
+        },
+        {
+          "title": "Medic",
+          "talents": [
+            {"name": "First Aid", "effect": "Gain +2 on Agility rolls for medical treatment. A crew member reduced to 0 or fewer stat points may be stabilized if treated within one turn; further damage still kills them."},
+            {"name": "Trauma Specialist", "effect": "Gain +2 on Intelligence rolls for complex treatment; a successful treatment restores 1d6 lost stat points."},
+            {"name": "Healing Hands", "effect": "Restore 1 lost stat point to a target crew member."},
+            {"name": "Poison Resistance", "effect": "Gain +2 on Strength rolls involving toxins or poisons affecting the Medic or nearby crew."},
+            {"name": "Diagnostician", "effect": "Gain +2 on Intelligence rolls for diagnosis and restore 1 stat point on a successful treatment."},
+            {"name": "Medical Expert", "effect": "Gain +1 on rolls involving medicine and medical matters."},
+            {"name": "Emergency Response", "effect": "Gain +2 on Agility rolls during crisis treatment; injured crew recover 1 stat point for two turns while the Medic takes no other action."}
+          ]
+        },
+        {
+          "title": "Scientist",
+          "talents": [
+            {"name": "Research Prodigy", "effect": "Gain +2 on Intelligence rolls involving scientific study."},
+            {"name": "Analytical Mind", "effect": "Gain +2 on Intelligence rolls involving data analysis."},
+            {"name": "Creative Thinker", "effect": "Gain +2 on Intelligence rolls involving creative problem-solving."},
+            {"name": "Scientific Communication", "effect": "Gain +2 on Charisma rolls involving presentation of scientific findings."},
+            {"name": "Laboratory Technician", "effect": "Gain +2 on Agility rolls involving laboratory work."},
+            {"name": "Field Researcher", "effect": "Gain +2 on Agility rolls involving field research."},
+            {"name": "Scientific Leadership", "effect": "Gain +2 on Charisma rolls involving leadership of researchers."}
+          ]
+        },
+        {
+          "title": "Security Officer",
+          "talents": [
+            {"name": "Combat Training", "effect": "Gain +2 on Strength rolls involving physical combat."},
+            {"name": "Quick Reflexes", "effect": "Gain +2 on Agility rolls involving dodging and evasion."},
+            {"name": "Tactical Thinking", "effect": "Gain +2 on Intelligence rolls involving combat strategy and planning."},
+            {"name": "Weapons Expert", "effect": "Gain +2 on Strength rolls involving weapon use."},
+            {"name": "Security Specialist", "effect": "Gain +2 on Intelligence rolls involving security measures."},
+            {"name": "Intimidation", "effect": "Gain +2 on Charisma rolls involving intimidation, persuasion, or negotiation through authority."},
+            {"name": "Leadership", "effect": "Gain +2 on Charisma rolls involving command and team leadership."}
+          ]
+        }
+      ],
+      "editorialNotes": [
+        "Several medical effects use 'lost stat points' as a unified injury resource. The exact relationship between attribute loss, health, stabilization, and death remains to be normalized in the damage chapter."
+      ],
+      "relatedEntries": [
+        "basic-classes",
+        "task-resolution",
+        "advancement-and-gameplay-order"
+      ]
+    },
+    {
+      "id": "advanced-classes",
+      "sectionNumber": "7",
+      "category": "Classes",
+      "title": "Advanced Classes",
+      "subtitle": "Advanced roles concentrate command, maintenance, and navigation power at the cost of sharper failure consequences.",
+      "summary": "Presents the Captain, Mechanic, and Navigator, each with a stated maximum level of 6.",
+      "body": [
+        "Advanced classes have a stated maximum level of 6 and offer talents that can strongly affect the whole crew or submarine."
+      ],
+      "groups": [
+        {"title": "Captain", "summary": "Leads the vessel, maintains order, manages resources, and controls crew-wide responses."},
+        {"title": "Mechanic", "summary": "Specializes in keeping the submarine functional, draining flooded spaces, modifying systems, and salvaging usable material."},
+        {"title": "Navigator", "summary": "Plans routes, controls movement, manages communications, leads dives, predicts currents, and locates salvage."}
+      ],
+      "editorialNotes": [
+        "The source refers to both 'Mechanic' and 'Mechanics'. The singular class name is used here."
+      ],
+      "relatedEntries": [
+        "advanced-class-talents",
+        "basic-classes",
+        "advancement-and-gameplay-order"
+      ]
+    },
+    {
+      "id": "advanced-class-talents",
+      "sectionNumber": "8",
+      "category": "Talents",
+      "title": "Advanced Class Talents",
+      "subtitle": "Powerful specialist abilities often consume Supply, operate once per route or mission, and punish failure.",
+      "summary": "Converts the Captain, Mechanic, and Navigator talent lists while preserving stated costs and drawbacks.",
+      "body": [
+        "Advanced talents commonly affect multiple crew members, the submarine, event cards, route length, or major emergencies. Many have explicit limits such as once per mission or once before reaching the next station."
+      ],
+      "talentGroups": [
+        {
+          "title": "Captain",
+          "talents": [
+            {"name": "Leadership", "effect": "Spend 1 Supply to grant the crew +2 to stats for one round. A failed roll imposes -2 for one round and gives the Captain 1 Lost Sanity."},
+            {"name": "Crisis Management", "effect": "Spend 1 Supply and make an Intelligence roll to discard an event card; the talent grants a temporary +4 Intelligence. Failure imposes -2 Intelligence for the mission and 1 Lost Sanity."},
+            {"name": "Resource Management", "effect": "Grant the crew +1 Strength and Agility for one round. Failure imposes -2 Strength and Agility until reaching a station."},
+            {"name": "People Person", "effect": "Gain a temporary +5 for negotiation or persuasion. Failure imposes -5 for the negotiation and gives 1 Lost Sanity."},
+            {"name": "Strategic Planning", "effect": "Before drawing events, gain +6 Agility for one event. Failure imposes -6 Agility for that event."},
+            {"name": "Decision Making", "effect": "Spend 1 Supply to gain +3 Strength for one round. Failure imposes -3 Strength for one round."},
+            {"name": "Emotional Control", "effect": "Spend 1 Supply to gain +4 Intelligence and remove crew Lost Sanity. Failure imposes -5 Intelligence until reaching a station and instead gives each crew member Lost Sanity."}
+          ]
+        },
+        {
+          "title": "Mechanic",
+          "talents": [
+            {"name": "Quick Fixes", "effect": "Spend 1 Supply to gain +2 Agility for one round while fixing a small ship problem. Failure imposes -2 Agility for one round."},
+            {"name": "Trick Repair Work", "effect": "Spend 1 Supply to gain +4 Strength for one round while repairing a major problem. Failure imposes -4 Strength for one round."},
+            {"name": "Customization", "effect": "Spend 1 Supply to grant the submarine +3 Defense for one round. Failure instead imposes -3 Defense for one round."},
+            {"name": "Scrap King", "effect": "Spend 1 Supply to gain +5 Strength and Agility for one salvage round. Failure imposes -5 to both for one round."},
+            {"name": "Innovative Thinking", "effect": "Spend 1 Supply to gain +6 Intelligence for an improvised solution. The manuscript's failure penalty requires later clarification."},
+            {"name": "Uncommon Expertise", "effect": "Spend 1 Supply to gain +5 Intelligence for troubleshooting and repairs for one round. Failure imposes -5 Strength and Agility for one round."},
+            {"name": "Emergency Pump", "effect": "Spend 1 Supply to grant the submarine +2 Agility for one round through emergency drainage. Failure instead imposes -2 Agility for one round."}
+          ]
+        },
+        {
+          "title": "Navigator",
+          "talents": [
+            {"name": "Navigation Expert", "effect": "Gain +3 Intelligence for route calculation and reduce required travel events. Usable once before the next station."},
+            {"name": "Quick Thinker", "effect": "Roll twice and keep the better result for one crisis roll. Usable once before the next station."},
+            {"name": "Mapmaker", "effect": "Draw two event cards and choose which result to resolve. Usable once per mission."},
+            {"name": "Deep Sea Diver", "effect": "Roll twice and keep the better result for underwater exploration. Usable once before the next station."},
+            {"name": "Deep Sea Weather Watcher", "effect": "Roll twice and keep the better result when moving the submarine. Usable once per mission."},
+            {"name": "Distress Signal Expert", "effect": "Roll twice and keep the better result for vessel communications, then suffer -1 Intelligence until the next station."},
+            {"name": "Salvage Hunter", "effect": "Roll twice and keep the better result for salvage operations. Usable once before the next station."}
+          ]
+        }
+      ],
+      "editorialNotes": [
+        "Some source entries use an attribute that does not match the described action, and one Mechanic failure clause is incomplete. These are retained as editorial warnings rather than silently corrected."
+      ],
+      "relatedEntries": [
+        "advanced-classes",
+        "task-resolution",
+        "advancement-and-gameplay-order"
+      ]
+    }
+  ]
+}
