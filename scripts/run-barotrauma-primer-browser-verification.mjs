@@ -92,12 +92,33 @@ try {
   const card = page.locator('[data-module-id="barotrauma-crewmans-primer"]');
   await card.waitFor({ state: 'visible', timeout: 10000 });
   await expectText(card, 'source document viewer', 'Primer registry card');
-  await card.getByRole('button', { name: 'Open Source Document Viewer' }).click();
 
   const primer = page.locator('#barotrauma-primer-browser');
+  const wikiButton = card.getByRole('button', { name: "Open Crewman's Primer Wiki" });
+  const sourceButton = card.getByRole('button', { name: 'Open Source Document Viewer' });
+
+  await wikiButton.click();
+  await primer.waitFor({ state: 'visible', timeout: 10000 });
+  const panelBeforeGrid = await page.evaluate(() => {
+    const panel = document.getElementById('barotrauma-primer-browser');
+    const grid = document.getElementById('barotrauma-overview-grid');
+    return Boolean(panel && grid && panel.nextElementSibling === grid);
+  });
+  if (!panelBeforeGrid) throw new Error('Primer panel was not placed directly above the Barotrauma module grid.');
+
+  const wikiTab = primer.getByRole('tab', { name: 'Wiki Entries' });
+  if ((await wikiTab.getAttribute('aria-selected')) !== 'true') throw new Error('Wiki Entries button did not open the wiki mode.');
+  const wikiEntryCount = await primer.locator('#primer-list button').count();
+  if (wikiEntryCount !== 198) throw new Error(`Wiki button opened ${wikiEntryCount} entries instead of 198.`);
+  await expectText(primer.locator('#primer-entry h3'), 'FOREWORD', 'Initial wiki entry');
+
+  await primer.getByRole('button', { name: 'Close Primer' }).click();
+  if (await primer.isVisible()) throw new Error('Close Primer did not hide the Primer panel.');
+
+  await sourceButton.click();
   await primer.waitFor({ state: 'visible', timeout: 10000 });
   const sourceTab = primer.getByRole('tab', { name: 'Source Document Viewer' });
-  if ((await sourceTab.getAttribute('aria-selected')) !== 'true') throw new Error('Source Document Viewer tab did not open as the active mode.');
+  if ((await sourceTab.getAttribute('aria-selected')) !== 'true') throw new Error('Source Document Viewer button did not open the source mode.');
 
   const sourceSections = primer.locator('.primer-source-section');
   const sourceToc = primer.locator('#primer-source-toc button');
@@ -121,7 +142,6 @@ try {
   await expectText(primer.locator('#primer-source-status'), '1 of 198 source sections match', 'Source search status');
 
   await sourceSections.first().getByRole('button', { name: 'Open as Wiki Entry' }).click();
-  const wikiTab = primer.getByRole('tab', { name: 'Wiki Entries' });
   if ((await wikiTab.getAttribute('aria-selected')) !== 'true') throw new Error('Open as Wiki Entry did not switch to wiki mode.');
   await expectText(primer.locator('#primer-entry h3'), 'THE CROUCHING FALLACY', 'Returned wiki entry title');
 
@@ -138,13 +158,16 @@ try {
   if (pageErrors.length) throw new Error(`Uncaught page errors: ${pageErrors.join(' | ')}`);
 
   const receipt = {
-    schemaVersion: '2.2.0',
+    schemaVersion: '2.3.0',
     workspace: 'barotrauma',
     moduleId: 'barotrauma-crewmans-primer',
     verifiedAt: new Date().toISOString(),
     result: 'passed',
     checks: {
-      sourceViewerLaunch: 'passed',
+      wikiButtonLaunch: 'passed',
+      wikiEntryCount,
+      immediatePanelPlacement: 'passed',
+      sourceViewerButtonLaunch: 'passed',
       sourceSectionCount: sourceCount,
       sourceTocCount: tocCount,
       firstSourceTitle: 'FOREWORD',
@@ -158,13 +181,13 @@ try {
     }
   };
   await fs.writeFile(outputPath, `${JSON.stringify(receipt, null, 2)}\n`, 'utf8');
-  console.log(`Barotrauma Crewman's Primer source document viewer passed with ${sourceCount} continuous sections.`);
+  console.log(`Both Crewman's Primer buttons passed: ${wikiEntryCount} wiki entries and ${sourceCount} continuous source sections.`);
 } catch (error) {
   if (page) {
     try { await page.screenshot({ path: screenshotPath, fullPage: true }); } catch {}
   }
   await fs.writeFile(failurePath, `${JSON.stringify({
-    schemaVersion: '2.2.0',
+    schemaVersion: '2.3.0',
     workspace: 'barotrauma',
     moduleId: 'barotrauma-crewmans-primer',
     failedAt: new Date().toISOString(),
