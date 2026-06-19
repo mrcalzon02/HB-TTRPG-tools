@@ -82,8 +82,13 @@ jobs:
       - name: Validate Mad Martiken proprietor conversations
         run: node scripts/validate-kaysender-martiken-conversations.mjs
 
+      - name: Validate Barotrauma Crewman's Primer wiki
+        run: node scripts/validate-barotrauma-crewmans-primer.mjs
+
       - name: Check generator and editor JavaScript syntax
         run: |
+          node --check barotrauma-entry.js
+          node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check kaysender-wiki.js
           node --check kaysender-crafting-generator.js
           node --check kaysender-npc-generator.js
