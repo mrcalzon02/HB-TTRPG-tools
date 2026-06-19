@@ -1,45 +1,49 @@
 (() => {
-  const panelId = 'barotrauma-primer-browser';
   const moduleSelector = '[data-module-id="barotrauma-crewmans-primer"]';
-
-  function placeAndRevealPanel() {
-    const grid = document.getElementById('barotrauma-overview-grid');
-    const panel = document.getElementById(panelId);
-    if (!grid || !panel) return false;
-
-    if (panel.parentNode !== grid.parentNode || panel.nextElementSibling !== grid) {
-      grid.parentNode.insertBefore(panel, grid);
+  const links = [
+    {
+      label: "Open Crewman's Primer Wiki",
+      href: 'barotrauma-primer.html?mode=wiki',
+      className: 'primary-action'
+    },
+    {
+      label: 'Open Source Document Viewer',
+      href: 'barotrauma-primer.html?mode=source',
+      className: 'secondary-action'
     }
+  ];
 
-    panel.hidden = false;
-    panel.setAttribute('aria-live', 'polite');
-    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function upgradePrimerControls() {
+    const card = document.querySelector(moduleSelector);
+    if (!card) return false;
+    const actions = card.querySelector('.module-actions') || card;
+
+    links.forEach(definition => {
+      const existingLink = [...actions.querySelectorAll('a')].find(link => link.textContent.trim() === definition.label);
+      if (existingLink) return;
+
+      const oldButton = [...actions.querySelectorAll('button')].find(button => button.textContent.trim() === definition.label);
+      const link = document.createElement('a');
+      link.href = definition.href;
+      link.className = definition.className;
+      link.textContent = definition.label;
+      link.setAttribute('data-primer-native-link', definition.href.includes('mode=source') ? 'source' : 'wiki');
+      link.style.display = 'inline-flex';
+      link.style.alignItems = 'center';
+      link.style.justifyContent = 'center';
+      link.style.textDecoration = 'none';
+
+      if (oldButton) oldButton.replaceWith(link);
+      else actions.appendChild(link);
+    });
+
     return true;
   }
 
-  document.addEventListener('click', event => {
-    const button = event.target.closest(`${moduleSelector} button`);
-    if (!button) return;
-
-    requestAnimationFrame(placeAndRevealPanel);
-    window.setTimeout(placeAndRevealPanel, 40);
-    window.setTimeout(placeAndRevealPanel, 200);
-  }, true);
-
-  const observer = new MutationObserver(() => {
-    const panel = document.getElementById(panelId);
-    const grid = document.getElementById('barotrauma-overview-grid');
-    if (panel && grid && (panel.parentNode !== grid.parentNode || panel.nextElementSibling !== grid)) {
-      grid.parentNode.insertBefore(panel, grid);
-    }
-  });
-
+  const observer = new MutationObserver(() => upgradePrimerControls());
   observer.observe(document.documentElement, { childList: true, subtree: true });
-  window.setTimeout(() => {
-    const panel = document.getElementById(panelId);
-    const grid = document.getElementById('barotrauma-overview-grid');
-    if (panel && grid && (panel.parentNode !== grid.parentNode || panel.nextElementSibling !== grid)) {
-      grid.parentNode.insertBefore(panel, grid);
-    }
-  }, 0);
+  document.addEventListener('DOMContentLoaded', upgradePrimerControls, { once: true });
+  window.setTimeout(upgradePrimerControls, 0);
+  window.setTimeout(upgradePrimerControls, 100);
+  window.setTimeout(upgradePrimerControls, 500);
 })();
