@@ -1,0 +1,170 @@
+{
+  "wikiId": "barotrauma-rpg-rules-wiki",
+  "sourceVersion": "Test v0.10",
+  "pack": 1,
+  "entries": [
+    {
+      "id": "rpg-premise",
+      "sectionNumber": "1",
+      "category": "Introduction",
+      "title": "Game Premise and Europan Campaign",
+      "subtitle": "Keep the submarine operating, finish the job, and reach the next station with enough crew left to matter.",
+      "summary": "Introduces the manuscript's campaign premise: a crew-operated submarine crossing Europa's subsurface ocean between isolated colonies, outposts, and hazards.",
+      "body": [
+        "Humanity has established colonies beyond Earth, including settlements beneath Europa's irradiated ice. The moon's subsurface ocean serves as transportation corridor, resource frontier, and the primary battlefield against environmental failure, hostile fauna, pirates, and scarcity.",
+        "Player characters form the working crew of a submarine. Their shared responsibilities include keeping the vessel operational, completing paid assignments, defending the crew, managing supplies, and reaching stations where they can trade, recover, recruit, and advance.",
+        "The manuscript supports both individual crew roles and collective submarine management. Personal competence matters, but every character ultimately depends on the vessel and on the other people keeping it alive."
+      ],
+      "ruleBlocks": [
+        {
+          "title": "Core campaign pressures",
+          "items": [
+            "Submarine condition and repair",
+            "Limited supplies and replacement parts",
+            "Crew recruitment and survival",
+            "Jobs and event resolution",
+            "Hostile creatures and vessels",
+            "Travel between stations"
+          ]
+        }
+      ],
+      "editorialNotes": [
+        "This entry consolidates repeated introductory passages without changing their campaign premise."
+      ],
+      "relatedEntries": [
+        "character-creation-sequence",
+        "advancement-and-gameplay-order",
+        "personal-combat-basics"
+      ]
+    },
+    {
+      "id": "character-creation-sequence",
+      "sectionNumber": "2",
+      "category": "Character Creation",
+      "title": "Character Creation Sequence",
+      "subtitle": "Choose what you are good at, what you do aboard the boat, and what part of your past will eventually become everyone else's problem.",
+      "summary": "Organizes the manuscript's character-building elements into a repeatable order.",
+      "body": [
+        "Every player creates a crew member by selecting a class, assigning S.A.I.C. attributes, choosing a background with a Fate and disadvantage, and selecting an initial Talent.",
+        "Basic classes support broad entry roles and normally advance to level 4. Advanced classes represent command and specialist roles and normally advance to level 6.",
+        "After the crew is assembled, the group chooses a submarine and a starting station. Vessel choice determines the group's available space, systems, weapons, and shared logistical limits."
+      ],
+      "procedures": [
+        {
+          "title": "Creation order",
+          "steps": [
+            "Choose a basic or advanced class.",
+            "Begin with 3 points in each S.A.I.C. attribute and distribute 10 additional points.",
+            "Choose a background, Fate, and disadvantage.",
+            "Choose one available Talent.",
+            "Record personal carrying capacity and relevant class limits.",
+            "As a group, select the starting submarine and station."
+          ]
+        }
+      ],
+      "editorialNotes": [
+        "The source uses both 'background' and 'Fate' as linked concepts. The wiki treats the background as the origin package and Fate as its once-per-mission ability."
+      ],
+      "relatedEntries": [
+        "saic-attributes",
+        "basic-classes",
+        "advanced-classes",
+        "backgrounds-fates-and-disadvantages"
+      ]
+    },
+    {
+      "id": "saic-attributes",
+      "sectionNumber": "3",
+      "category": "Character Creation",
+      "title": "S.A.I.C. Attributes",
+      "subtitle": "Strength, Agility, Intelligence, and Charisma describe how a crew member solves problems.",
+      "summary": "Defines the four player attributes and the manuscript's starting allocation.",
+      "body": [
+        "Every crew member has four primary attributes: Strength, Agility, Intelligence, and Charisma, collectively abbreviated S.A.I.C.",
+        "Characters begin with 3 points in every attribute and distribute 10 additional points among them. Class, Talent, background, equipment, injury, and temporary effects can modify these values."
+      ],
+      "ruleBlocks": [
+        {
+          "title": "Strength",
+          "items": [
+            "Physical force and endurance",
+            "Close combat and heavy work",
+            "Some repair, demolition, and weapon tasks",
+            "Personal carrying capacity"
+          ]
+        },
+        {
+          "title": "Agility",
+          "items": [
+            "Movement, reflexes, and evasion",
+            "Rapid technical or medical actions",
+            "Some diving, laboratory, and navigation work"
+          ]
+        },
+        {
+          "title": "Intelligence",
+          "items": [
+            "Diagnosis, analysis, research, and planning",
+            "Operation and repair of complex systems",
+            "Navigation, crisis management, and technical problem-solving"
+          ]
+        },
+        {
+          "title": "Charisma",
+          "items": [
+            "Leadership, negotiation, persuasion, and intimidation",
+            "Maintaining cooperation with crew and factions"
+          ]
+        }
+      ],
+      "editorialNotes": [
+        "Later manuscript sections introduce additional vessel-facing values such as Defense and Endurance. Those will be separated from the four personal S.A.I.C. attributes during later conversion."
+      ],
+      "relatedEntries": [
+        "character-creation-sequence",
+        "task-resolution",
+        "personal-combat-basics"
+      ]
+    },
+    {
+      "id": "task-resolution",
+      "sectionNumber": "4",
+      "category": "Core Rules",
+      "title": "Task Resolution",
+      "subtitle": "The draft establishes a 2d6 engine but does not yet state one internally consistent comparison formula.",
+      "summary": "Records the source manuscript's basic 2d6 concept while explicitly flagging a contradiction that must be resolved before stable publication.",
+      "body": [
+        "The manuscript uses two six-sided dice for ordinary tests and associates each task with one of the four S.A.I.C. attributes.",
+        "The draft examples describe rolling 2d6, applying an attribute, and comparing the result against a difficulty. However, the written arithmetic and the stated success results conflict with one another. The wiki therefore preserves the components of the test without silently selecting a formula the source does not consistently support."
+      ],
+      "ruleBlocks": [
+        {
+          "title": "Confirmed components",
+          "items": [
+            "Roll 2d6 for a basic task.",
+            "Choose the attribute relevant to the action.",
+            "The task has a difficulty.",
+            "Higher attributes are intended to improve the chance of success.",
+            "Talents and equipment can add dice, bonuses, rerolls, or special permissions."
+          ]
+        },
+        {
+          "title": "Unresolved formula",
+          "items": [
+            "One passage describes subtracting the attribute from difficulty.",
+            "The accompanying examples do not consistently apply that method.",
+            "A stable comparison rule must be selected during mechanical revision."
+          ]
+        }
+      ],
+      "editorialNotes": [
+        "Conversion status: requires design decision. No new core formula has been invented in this alpha entry."
+      ],
+      "relatedEntries": [
+        "saic-attributes",
+        "basic-class-talents",
+        "personal-combat-basics"
+      ]
+    }
+  ]
+}
