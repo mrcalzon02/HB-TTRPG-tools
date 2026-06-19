@@ -91,45 +91,48 @@ try {
 
   const card = page.locator('[data-module-id="barotrauma-crewmans-primer"]');
   await card.waitFor({ state: 'visible', timeout: 10000 });
-  await expectText(card, 'source document viewer', 'Primer registry card');
+  const wikiLink = card.locator('a[data-primer-native-link="wiki"]');
+  const sourceLink = card.locator('a[data-primer-native-link="source"]');
+  await wikiLink.waitFor({ state: 'visible', timeout: 10000 });
+  await sourceLink.waitFor({ state: 'visible', timeout: 10000 });
 
-  const primer = page.locator('#barotrauma-primer-browser');
-  const wikiButton = card.getByRole('button', { name: "Open Crewman's Primer Wiki" });
-  const sourceButton = card.getByRole('button', { name: 'Open Source Document Viewer' });
+  const wikiHref = await wikiLink.getAttribute('href');
+  const sourceHref = await sourceLink.getAttribute('href');
+  if (wikiHref !== 'barotrauma-primer.html?mode=wiki') throw new Error(`Wiki control has incorrect href: ${wikiHref}`);
+  if (sourceHref !== 'barotrauma-primer.html?mode=source') throw new Error(`Source control has incorrect href: ${sourceHref}`);
 
-  await wikiButton.click();
-  await primer.waitFor({ state: 'visible', timeout: 10000 });
-  const panelBeforeGrid = await page.evaluate(() => {
-    const panel = document.getElementById('barotrauma-primer-browser');
-    const grid = document.getElementById('barotrauma-overview-grid');
-    return Boolean(panel && grid && panel.nextElementSibling === grid);
-  });
-  if (!panelBeforeGrid) throw new Error('Primer panel was not placed directly above the Barotrauma module grid.');
+  await wikiLink.click();
+  await page.waitForURL('**/barotrauma-primer.html?mode=wiki', { timeout: 10000 });
+  await page.waitForSelector('#primer-root .primer-layout', { timeout: 10000 });
+  const wikiEntryCount = await page.locator('#primer-nav button').count();
+  if (wikiEntryCount !== 198) throw new Error(`Standalone wiki opened ${wikiEntryCount} entries instead of 198.`);
+  await expectText(page.locator('#primer-article h2'), 'FOREWORD', 'Initial standalone wiki entry');
+  if (!await page.locator('#primer-wiki-tab').evaluate(element => element.classList.contains('active'))) {
+    throw new Error('Standalone wiki tab was not active.');
+  }
 
-  const wikiTab = primer.getByRole('tab', { name: 'Wiki Entries' });
-  if ((await wikiTab.getAttribute('aria-selected')) !== 'true') throw new Error('Wiki Entries button did not open the wiki mode.');
-  const wikiEntryCount = await primer.locator('#primer-list button').count();
-  if (wikiEntryCount !== 198) throw new Error(`Wiki button opened ${wikiEntryCount} entries instead of 198.`);
-  await expectText(primer.locator('#primer-entry h3'), 'FOREWORD', 'Initial wiki entry');
+  await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle', timeout: 30000 });
+  await page.locator('.nav-button[data-view="barotrauma"]').click();
+  await page.waitForSelector('#barotrauma.view.active', { timeout: 10000 });
+  const sourceDashboardLink = page.locator('[data-module-id="barotrauma-crewmans-primer"] a[data-primer-native-link="source"]');
+  await sourceDashboardLink.waitFor({ state: 'visible', timeout: 10000 });
+  await sourceDashboardLink.click();
+  await page.waitForURL('**/barotrauma-primer.html?mode=source', { timeout: 10000 });
+  await page.waitForSelector('#primer-root .primer-layout', { timeout: 10000 });
 
-  await primer.getByRole('button', { name: 'Close Primer' }).click();
-  if (await primer.isVisible()) throw new Error('Close Primer did not hide the Primer panel.');
-
-  await sourceButton.click();
-  await primer.waitFor({ state: 'visible', timeout: 10000 });
-  const sourceTab = primer.getByRole('tab', { name: 'Source Document Viewer' });
-  if ((await sourceTab.getAttribute('aria-selected')) !== 'true') throw new Error('Source Document Viewer button did not open the source mode.');
-
-  const sourceSections = primer.locator('.primer-source-section');
-  const sourceToc = primer.locator('#primer-source-toc button');
+  const sourceSections = page.locator('.primer-document-section');
+  const sourceToc = page.locator('#primer-nav button');
   const sourceCount = await sourceSections.count();
   const tocCount = await sourceToc.count();
   if (sourceCount !== 198) throw new Error(`Expected 198 continuous source sections, found ${sourceCount}.`);
   if (tocCount !== 198) throw new Error(`Expected 198 source table-of-contents entries, found ${tocCount}.`);
   await expectText(sourceSections.first().locator('h2,h3,h4'), 'FOREWORD', 'First source title');
   await expectText(sourceSections.last().locator('h2,h3,h4'), 'FINAL CAUTION', 'Last source title');
+  if (!await page.locator('#primer-source-tab').evaluate(element => element.classList.contains('active'))) {
+    throw new Error('Standalone source tab was not active.');
+  }
 
-  const sourceSearch = primer.locator('#primer-source-search');
+  const sourceSearch = page.locator('#primer-search');
   await sourceSearch.fill('THE CROUCHING FALLACY');
   await page.waitForTimeout(80);
   if (await sourceSections.count() !== 1) throw new Error('Source document search did not reduce to one Crouching Fallacy section.');
@@ -139,34 +142,29 @@ try {
     'If a friendly crew member is crouching between you and the target, the line of fire remains obstructed.',
     'Source search full text'
   );
-  await expectText(primer.locator('#primer-source-status'), '1 of 198 source sections match', 'Source search status');
+  await expectText(page.locator('#primer-status'), '1 of 198 source sections match', 'Source search status');
 
-  await sourceSections.first().getByRole('button', { name: 'Open as Wiki Entry' }).click();
-  if ((await wikiTab.getAttribute('aria-selected')) !== 'true') throw new Error('Open as Wiki Entry did not switch to wiki mode.');
-  await expectText(primer.locator('#primer-entry h3'), 'THE CROUCHING FALLACY', 'Returned wiki entry title');
+  await sourceSearch.fill('THE CHILDREN OF THE HONKMOTHER');
+  await page.waitForTimeout(80);
+  if (await sourceSections.count() !== 1) throw new Error('Honkmother source search did not reduce to one section.');
+  await expectText(sourceSections.first(), 'grease paint', 'Honkmother source section');
 
-  await sourceTab.click();
-  await primer.locator('#primer-source-clear').click();
-  const restoredSourceCount = await primer.locator('.primer-source-section').count();
-  if (restoredSourceCount !== 198) throw new Error(`Expected 198 restored source sections, found ${restoredSourceCount}.`);
-
-  const honkmotherToc = primer.locator('#primer-source-toc button').filter({ hasText: 'THE CHILDREN OF THE HONKMOTHER' });
-  if (await honkmotherToc.count() !== 1) throw new Error('Honkmother source section was not present in the document table of contents.');
-  await honkmotherToc.click();
-  await expectText(primer.locator('#primer-source-the-children-of-the-honkmother'), 'grease paint', 'Honkmother source section');
+  const sourceToWikiHref = await page.locator('#primer-wiki-tab').getAttribute('href');
+  if (sourceToWikiHref !== 'barotrauma-primer.html?mode=wiki') throw new Error('Source-to-wiki navigation link is incorrect.');
 
   if (pageErrors.length) throw new Error(`Uncaught page errors: ${pageErrors.join(' | ')}`);
 
   const receipt = {
-    schemaVersion: '2.3.0',
+    schemaVersion: '2.4.0',
     workspace: 'barotrauma',
     moduleId: 'barotrauma-crewmans-primer',
     verifiedAt: new Date().toISOString(),
     result: 'passed',
     checks: {
+      nativeWikiLink: wikiHref,
+      nativeSourceLink: sourceHref,
       wikiButtonLaunch: 'passed',
       wikiEntryCount,
-      immediatePanelPlacement: 'passed',
       sourceViewerButtonLaunch: 'passed',
       sourceSectionCount: sourceCount,
       sourceTocCount: tocCount,
@@ -174,20 +172,19 @@ try {
       lastSourceTitle: 'FINAL CAUTION',
       sourceSearch: 'passed',
       sourceToWikiNavigation: 'passed',
-      restoredSourceCount,
-      honkmotherTocNavigation: 'passed',
+      honkmotherSearch: 'passed',
       pageErrors: pageErrors.length,
       consoleErrors: consoleErrors.length
     }
   };
   await fs.writeFile(outputPath, `${JSON.stringify(receipt, null, 2)}\n`, 'utf8');
-  console.log(`Both Crewman's Primer buttons passed: ${wikiEntryCount} wiki entries and ${sourceCount} continuous source sections.`);
+  console.log(`Both native Primer links passed: ${wikiEntryCount} wiki entries and ${sourceCount} continuous source sections.`);
 } catch (error) {
   if (page) {
     try { await page.screenshot({ path: screenshotPath, fullPage: true }); } catch {}
   }
   await fs.writeFile(failurePath, `${JSON.stringify({
-    schemaVersion: '2.3.0',
+    schemaVersion: '2.4.0',
     workspace: 'barotrauma',
     moduleId: 'barotrauma-crewmans-primer',
     failedAt: new Date().toISOString(),
