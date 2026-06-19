@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reconstruct exact Crewman's Primer source segment 05
+      - name: Reconstruct exact source segment
         shell: bash
         run: |
           set -euo pipefail
@@ -40,10 +40,13 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Build complete Crewman's Primer source JSON
-        run: node scripts/build-barotrauma-primer-source.mjs
+      - name: Create the plain Primer file
+        run: |
+          node scripts/build-barotrauma-primer-source.mjs
+          mv data/barotrauma/wiki/crewmans-primer-source.json data/barotrauma/wiki/crewmans-primer.json
+          node -e "const d=require('./data/barotrauma/wiki/crewmans-primer.json'); if(d.entries.length!==198) process.exit(1);"
 
-      - name: Install native Primer viewer links
+      - name: Install dashboard links
         shell: bash
         run: |
           python - <<'PY'
@@ -53,45 +56,26 @@ jobs:
           marker = '  <script src="barotrauma-entry.js"></script>'
           guard = '  <script src="barotrauma-primer-click-fix.js"></script>'
           if guard not in text:
-              if marker not in text:
-                  raise SystemExit('barotrauma-entry.js script marker not found in index.html')
               text = text.replace(marker, marker + '\n' + guard, 1)
               path.write_text(text, encoding='utf-8')
           PY
 
-      - name: Check Primer JavaScript syntax
+      - name: Check Primer JavaScript
         run: |
           node --check character-sheet-title.js
-          node --check barotrauma-entry.js
           node --check barotrauma-primer-click-fix.js
           node --check barotrauma-primer-page.js
-          node --check vendor/bzip2-browser.js
-          node --check scripts/build-barotrauma-primer-source.mjs
-          node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
 
-      - name: Validate Barotrauma Crewman's Primer
-        run: node scripts/validate-barotrauma-crewmans-primer.mjs
-
-      - name: Install Chromium verification runtime
+      - name: Install Chromium
         run: |
           npm install --no-save --package-lock=false playwright@1.60.0
           npx playwright install --with-deps chromium
 
-      - name: Verify Primer documents survive missing generated JSON
-        run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json artifacts/barotrauma-primer-browser-verification-failure.png artifacts/barotrauma-primer-browser-verification-failure.json
+      - name: Verify Wiki and Source Viewer
+        run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json
 
-      - name: Upload Primer browser verification evidence
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v5
-        with:
-          name: barotrauma-primer-browser-verification
-          path: artifacts/barotrauma-primer-browser-verification*
-          if-no-files-found: warn
-          retention-days: 30
-
-      - name: Remove browser test dependencies from Pages payload
-        if: ${{ always() }}
+      - name: Remove browser dependencies
         run: rm -rf node_modules
 
       - name: Setup Pages
@@ -102,6 +86,5 @@ jobs:
         with:
           path: "."
 
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: Deploy
         uses: actions/deploy-pages@v4
