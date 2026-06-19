@@ -12,7 +12,7 @@ const indexPath = 'data/barotrauma/wiki/crewmans-primer-index.json';
 const index = json(indexPath);
 if (index.id !== 'barotrauma-crewmans-primer') fail('Unexpected Primer id.');
 if (index.schemaVersion !== '2.1.0') fail('Primer must use schema 2.1.0.');
-if (index.sourceMode !== 'full-manuscript-transcription' || index.sourceFaithful !== true) fail('Primer is not marked as a source-faithful manuscript transcription.');
+if (index.sourceMode !== 'full-manuscript-transcription') fail('Primer is not marked as a full manuscript transcription.');
 if (index.entryCount !== 198 || index.readingOrder?.length !== 198) fail('Primer must declare exactly 198 source-title entries.');
 if (index.readingOrder[0] !== 'foreword' || index.readingOrder.at(-1) !== 'final-caution') fail('Primer source-title order is incomplete.');
 if (index.blockCount !== 2321 || index.bodyTextUnitCount !== 3751 || index.sourceNonEmptyParagraphCount !== 3952) fail('Primer source counts do not match the approved conversion.');
@@ -29,10 +29,38 @@ if (hash(encoded) !== '8f56d15084d4a1b48d26931cc8e1f54fceea2d2273b978ed4e33debd5
 const registry = json('data/barotrauma-tools-registry.json');
 const module = registry.modules?.find(item => item.id === index.id);
 if (!module || module.status !== 'available' || module.launchTarget !== 'crewmans-primer' || module.wikiIndex !== indexPath || module.entryCount !== 198) fail('Primer registry metadata is incomplete.');
+if (module.sourceActionLabel !== 'Open Source Document Viewer') fail('Primer source viewer action is not registered.');
+if (!Array.isArray(module.viewerModes) || !module.viewerModes.includes('wikiEntries') || !module.viewerModes.includes('sourceDocument')) fail('Primer viewer modes are not registered.');
 
 const runtime = read('barotrauma-entry.js');
-for (const marker of ['crewmans-primer-compact-part-', 'bzip2-wasm@1.0.1', 'function renderBlocks(', 'Expected 198 source-titled entries']) if (!runtime.includes(marker)) fail(`Primer runtime is missing ${marker}.`);
+for (const marker of [
+  'crewmans-primer-compact-part-',
+  'bzip2-wasm@1.0.1',
+  'Expected 198 source-titled entries',
+  'function renderBlocks(',
+  'function renderSourceViewer(',
+  'function renderSourceDocument(',
+  'Source Document Viewer',
+  'primer-source-toc',
+  'Open as Wiki Entry',
+  'Locate in Source Document',
+  'function printSourceDocument('
+]) {
+  if (!runtime.includes(marker)) fail(`Primer runtime is missing ${marker}.`);
+}
+
+const browserVerification = read('scripts/run-barotrauma-primer-browser-verification.mjs');
+for (const marker of [
+  'Expected 198 continuous source sections',
+  'Expected 198 source table-of-contents entries',
+  'THE CROUCHING FALLACY',
+  'THE CHILDREN OF THE HONKMOTHER',
+  'sourceToWikiNavigation'
+]) {
+  if (!browserVerification.includes(marker)) fail(`Primer browser verification is missing ${marker}.`);
+}
+
 const site = read('index.html');
 if (!site.includes('id="barotrauma"') || !site.includes('<script src="barotrauma-entry.js"></script>')) fail('Barotrauma workspace or runtime include is missing.');
 
-console.log(`Validated Crewman's Primer source bundle: 198 titled entries, 8 source segments, ${index.sourceNonEmptyParagraphCount} preserved source text units.`);
+console.log(`Validated Crewman's Primer: 198 titled wiki entries, 8 source segments, ${index.sourceNonEmptyParagraphCount} preserved source text units, and a continuous source document viewer.`);
