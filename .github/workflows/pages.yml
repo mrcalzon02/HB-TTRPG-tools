@@ -89,6 +89,7 @@ jobs:
         run: |
           node --check barotrauma-entry.js
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
+          node --check scripts/run-barotrauma-primer-browser-verification.mjs
           node --check kaysender-wiki.js
           node --check kaysender-crafting-generator.js
           node --check kaysender-npc-generator.js
@@ -175,6 +176,9 @@ jobs:
           npm install --no-save --package-lock=false playwright@1.60.0
           npx playwright install --with-deps chromium
 
+      - name: Run Barotrauma Crewman's Primer browser verification
+        run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json artifacts/barotrauma-primer-browser-verification-failure.png artifacts/barotrauma-primer-browser-verification-failure.json
+
       - name: Run P0 browser verification
         run: node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png artifacts/p0-browser-verification-failure.json
 
@@ -184,11 +188,11 @@ jobs:
       - name: Publish P0 runtime status into Pages payload
         run: node scripts/publish-p0-runtime-status.mjs artifacts/p0-browser-verification.json p0-runtime-status.json
 
-      - name: Upload P0 browser verification evidence
+      - name: Upload browser verification evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@v5
         with:
-          name: p0-browser-verification
+          name: browser-verification
           path: |
             artifacts/
             p0-runtime-status.json
