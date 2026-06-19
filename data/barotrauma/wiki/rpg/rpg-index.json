@@ -1,0 +1,64 @@
+{
+  "id": "barotrauma-rpg-rules-wiki",
+  "title": "Barotrauma RPG Rules Wiki",
+  "displayTitle": "BAROTRAUMA RPG",
+  "edition": "Test v0.10 Conversion Alpha",
+  "status": "alpha-foundation",
+  "description": "A structured wiki conversion of the Barotrauma RPG manuscript, separating core rules, character creation, classes, talents, combat, advancement, campaign procedures, equipment, submarines, events, sanity, salvage, and reference material into searchable entries.",
+  "source": {
+    "title": "Barotrauma RPG",
+    "documentId": "1O-PuIi9_lsAPAZQzeEG83Zecm4Wm5Z4o99Pzv0yU2-g",
+    "sourceVersion": "Test v0.10",
+    "created": "2023-01-06",
+    "lastModified": "2023-01-14",
+    "conversionPolicy": "Preserve the manuscript's intent, identify unresolved contradictions, normalize presentation, and do not silently invent missing rules."
+  },
+  "disclaimer": "Unofficial fan-made tabletop material inspired by Barotrauma. This project is not affiliated with or endorsed by the creators or publishers of Barotrauma.",
+  "categories": [
+    "Introduction",
+    "Character Creation",
+    "Core Rules",
+    "Classes",
+    "Talents",
+    "Combat",
+    "Campaign Procedure"
+  ],
+  "readingOrder": [
+    "rpg-premise",
+    "character-creation-sequence",
+    "saic-attributes",
+    "task-resolution",
+    "basic-classes",
+    "basic-class-talents",
+    "advanced-classes",
+    "advanced-class-talents",
+    "personal-combat-basics",
+    "advancement-and-gameplay-order",
+    "backgrounds-fates-and-disadvantages"
+  ],
+  "entryCount": 11,
+  "coverage": {
+    "convertedEntries": 11,
+    "sourceSectionsMapped": 7,
+    "sourceSectionsRemaining": [
+      "Stuff, Mine, Yours, Ours",
+      "Submarines",
+      "Upgrades",
+      "Alien Salvage",
+      "Jobs, Events and Stations",
+      "Upkeep",
+      "Personal Combat, Damage, Repairs, Disease and Death",
+      "Death Is Not the End",
+      "Sanity and Losing Your Mind",
+      "Game Flow",
+      "Sample Stations",
+      "Captain Quotes",
+      "Submarine Weapons Systems",
+      "Sample Pirate Encounter",
+      "Salvaging a Wreck"
+    ]
+  },
+  "packs": [
+    "rpg-core-pack.json"
+  ]
+}
