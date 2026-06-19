@@ -1,11 +1,11 @@
 {
   "setting": "Barotrauma",
-  "status": "foundation registry and campaign workspace",
+  "status": "foundation registry with active Crewman's Primer wiki",
   "projectType": "unofficial fan-made campaign support",
   "sourceNotes": [
     "This workspace is an unofficial fan project and is not affiliated with or endorsed by the creators or publishers of Barotrauma.",
     "Original campaign prose, tables, and utilities should remain clearly separated from copied game text or extracted proprietary assets.",
-    "The initial registry establishes development targets; individual modules remain planned until their working data and interfaces are committed."
+    "The Crewman's Primer is an active original wiki reference; other registry modules remain planned until their working data and interfaces are committed."
   ],
   "modules": [
     {
@@ -13,10 +13,14 @@
       "section": "reference",
       "title": "The Crewman's Primer",
       "priority": 1,
-      "status": "foundation",
-      "description": "An expandable in-world handbook for submarine work, crew culture, depth psychology, survival doctrine, common hazards, and the terrible habits people develop while living beneath Europa's ice.",
-      "tags": ["lore", "handbook", "crew culture", "survival"],
-      "dataFamilies": ["primerEntry", "footnote", "crewDoctrine", "hazardNote"]
+      "status": "alpha",
+      "description": "A searchable, cross-linked, 21-section in-world field manual for submarine work, command, crew culture, depth psychology, survival doctrine, weapons safety, engineering, medicine, exterior operations, emergency response, and the two major cult movements beneath Europa's ice.",
+      "launchTarget": "crewmans-primer",
+      "actionLabel": "Open Crewman's Primer Wiki",
+      "wikiIndex": "data/barotrauma/wiki/crewmans-primer-index.json",
+      "entryCount": 21,
+      "tags": ["lore", "wiki", "handbook", "crew culture", "survival", "doctrine"],
+      "dataFamilies": ["primerEntry", "footnote", "crewDoctrine", "fieldProcedure", "hazardNote", "relatedEntry"]
     },
     {
       "id": "barotrauma-cult-faction-dossiers",
