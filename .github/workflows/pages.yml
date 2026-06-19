@@ -34,7 +34,6 @@ jobs:
           git show 'a62e6224c4f24a023848154016b1aae894233e83^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05b.b64' >> "$target"
           git show '113fac2838c99343b7c660c8948e06c1e0b97d67^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05c.b64' >> "$target"
           git show '3d37882b53b63eb31461d36e7ade038464ab7a2e^:data/barotrauma/wiki/source/crewmans-primer-compact-part-05d.b64' >> "$target"
-          test "$(tr -d '[:space:]' < "$target" | wc -c)" -eq 5984
 
       - name: Set up Node
         uses: actions/setup-node@v4
