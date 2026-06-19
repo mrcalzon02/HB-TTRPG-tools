@@ -1,0 +1,63 @@
+{
+  "id": "barotrauma-crewmans-primer",
+  "title": "The Europan Crewman's Primer",
+  "displayTitle": "THE EUROPAN CREWMAN'S PRIMER",
+  "edition": "Working Field Edition 1.0",
+  "status": "sectional-reference-alpha",
+  "description": "A practical, grimly atmospheric in-universe field manual for submarine crews operating beneath Europa's ice. The reference emphasizes professional conduct, closed-loop communication, weapons safety, engineering discipline, medical biosecurity, exterior operations, logistics, emergency priorities, crew psychology, and institutional memory.",
+  "editorialVoice": "Professional, direct, dryly humorous, and written as if accumulated from preventable disasters.",
+  "disclaimer": "Unofficial fan-made campaign material. It is not affiliated with or endorsed by the creators or publishers of Barotrauma.",
+  "categories": [
+    "Foundation",
+    "Crew Conduct",
+    "Command",
+    "Operations",
+    "Safety",
+    "Emergency Response",
+    "Engineering",
+    "Medical",
+    "Exterior Operations",
+    "Logistics",
+    "Field Operations",
+    "Security",
+    "Psychology",
+    "Crew Culture",
+    "Factions",
+    "Records"
+  ],
+  "readingOrder": [
+    "primer-purpose-and-use",
+    "the-hull-and-the-ocean",
+    "crew-compact",
+    "command-and-accountability",
+    "watchstanding-and-handover",
+    "communications-and-alarms",
+    "weapons-and-line-of-fire",
+    "damage-control",
+    "reactor-and-electrical-systems",
+    "mechanical-hull-and-ballast",
+    "medical-and-biosecurity",
+    "diving-and-exterior-operations",
+    "navigation-sonar-and-piloting",
+    "logistics-munitions-and-supplies",
+    "salvage-outposts-and-derelicts",
+    "hostile-boarding-and-internal-security",
+    "depth-psychology-and-crew-strain",
+    "assistant-and-clown-question",
+    "two-calls-below-the-ice",
+    "emergency-priority-ladder",
+    "incident-reports-and-memory"
+  ],
+  "entryCount": 21,
+  "contentRules": [
+    "Original prose and campaign doctrine only; do not copy proprietary game text or assets.",
+    "Separate harmless eccentricity from conduct that creates an operational hazard.",
+    "Treat infection, sabotage, and weapons use as evidence-driven safety matters rather than excuses for collective punishment.",
+    "Preserve the rule that a shooter does not fire through a crew member's occupied space."
+  ],
+  "packs": [
+    "crewmans-primer-pack-1.json",
+    "crewmans-primer-pack-2.json",
+    "crewmans-primer-pack-3.json"
+  ]
+}
