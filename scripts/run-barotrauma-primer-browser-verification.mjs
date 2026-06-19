@@ -11,11 +11,13 @@ const failurePath = path.resolve(root, process.argv[4] || 'artifacts/barotrauma-
 const host = '127.0.0.1';
 const port = Number(process.env.BAROTRAUMA_PRIMER_BROWSER_PORT || 4174);
 const baseUrl = `http://${host}:${port}`;
+const fallbackLabel = 'rebuilt from tracked source';
 const mimeTypes = new Map([
   ['.css', 'text/css; charset=utf-8'],
   ['.html', 'text/html; charset=utf-8'],
   ['.js', 'text/javascript; charset=utf-8'],
   ['.json', 'application/json; charset=utf-8'],
+  ['.b64', 'text/plain; charset=utf-8'],
   ['.png', 'image/png'],
   ['.svg', 'image/svg+xml']
 ]);
@@ -63,10 +65,21 @@ const expectText = async (locator, expected, label) => {
   if (!value.includes(expected)) throw new Error(`${label} did not contain ${expected}`);
 };
 
+async function forceMissingGeneratedJson(page) {
+  await page.route('**/data/barotrauma/wiki/crewmans-primer-source.json', async route => {
+    await route.fulfill({
+      status: 404,
+      contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ error: 'Generated Primer JSON fallback verification' })
+    });
+  });
+}
+
 let browser;
 let page;
 const pageErrors = [];
 const consoleErrors = [];
+const consoleWarnings = [];
 
 try {
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
@@ -83,7 +96,9 @@ try {
   page.on('pageerror', error => pageErrors.push(error.message));
   page.on('console', message => {
     if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() === 'warning') consoleWarnings.push(message.text());
   });
+  await forceMissingGeneratedJson(page);
 
   await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle', timeout: 30000 });
   await page.locator('.nav-button[data-view="barotrauma"]').click();
@@ -103,12 +118,16 @@ try {
 
   await wikiLink.click();
   await page.waitForURL('**/barotrauma-primer.html?mode=wiki', { timeout: 10000 });
-  await page.waitForSelector('#primer-root .primer-layout', { timeout: 10000 });
+  await page.waitForSelector('#primer-root .primer-layout', { timeout: 30000 });
   const wikiEntryCount = await page.locator('#primer-nav button').count();
-  if (wikiEntryCount !== 198) throw new Error(`Standalone wiki opened ${wikiEntryCount} entries instead of 198.`);
+  if (wikiEntryCount !== 198) throw new Error(`Standalone wiki fallback opened ${wikiEntryCount} entries instead of 198.`);
   await expectText(page.locator('#primer-article h2'), 'FOREWORD', 'Initial standalone wiki entry');
+  await expectText(page.locator('#primer-status'), '198 of 198 entries', 'Wiki fallback status');
   if (!await page.locator('#primer-wiki-tab').evaluate(element => element.classList.contains('active'))) {
     throw new Error('Standalone wiki tab was not active.');
+  }
+  if (!consoleWarnings.some(message => message.includes('Generated Primer JSON unavailable'))) {
+    throw new Error('Wiki did not report that it used the tracked source fallback after the forced JSON 404.');
   }
 
   await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle', timeout: 30000 });
@@ -118,16 +137,17 @@ try {
   await sourceDashboardLink.waitFor({ state: 'visible', timeout: 10000 });
   await sourceDashboardLink.click();
   await page.waitForURL('**/barotrauma-primer.html?mode=source', { timeout: 10000 });
-  await page.waitForSelector('#primer-root .primer-layout', { timeout: 10000 });
+  await page.waitForSelector('#primer-root .primer-layout', { timeout: 30000 });
 
   const sourceSections = page.locator('.primer-document-section');
   const sourceToc = page.locator('#primer-nav button');
   const sourceCount = await sourceSections.count();
   const tocCount = await sourceToc.count();
-  if (sourceCount !== 198) throw new Error(`Expected 198 continuous source sections, found ${sourceCount}.`);
-  if (tocCount !== 198) throw new Error(`Expected 198 source table-of-contents entries, found ${tocCount}.`);
+  if (sourceCount !== 198) throw new Error(`Expected 198 continuous source sections from fallback, found ${sourceCount}.`);
+  if (tocCount !== 198) throw new Error(`Expected 198 source table-of-contents entries from fallback, found ${tocCount}.`);
   await expectText(sourceSections.first().locator('h2,h3,h4'), 'FOREWORD', 'First source title');
   await expectText(sourceSections.last().locator('h2,h3,h4'), 'FINAL CAUTION', 'Last source title');
+  await expectText(page.locator('#primer-status'), 'Showing all 198 source sections', 'Source fallback status');
   if (!await page.locator('#primer-source-tab').evaluate(element => element.classList.contains('active'))) {
     throw new Error('Standalone source tab was not active.');
   }
@@ -155,17 +175,20 @@ try {
   if (pageErrors.length) throw new Error(`Uncaught page errors: ${pageErrors.join(' | ')}`);
 
   const receipt = {
-    schemaVersion: '2.4.0',
+    schemaVersion: '2.5.0',
     workspace: 'barotrauma',
     moduleId: 'barotrauma-crewmans-primer',
     verifiedAt: new Date().toISOString(),
     result: 'passed',
+    forcedCondition: 'crewmans-primer-source.json returned 404',
+    recoveryMode: fallbackLabel,
     checks: {
+      forceMissingGeneratedJson: 'passed',
       nativeWikiLink: wikiHref,
       nativeSourceLink: sourceHref,
-      wikiButtonLaunch: 'passed',
+      wikiFallbackLaunch: 'passed',
       wikiEntryCount,
-      sourceViewerButtonLaunch: 'passed',
+      sourceFallbackLaunch: 'passed',
       sourceSectionCount: sourceCount,
       sourceTocCount: tocCount,
       firstSourceTitle: 'FOREWORD',
@@ -174,27 +197,30 @@ try {
       sourceToWikiNavigation: 'passed',
       honkmotherSearch: 'passed',
       pageErrors: pageErrors.length,
-      consoleErrors: consoleErrors.length
+      consoleErrors: consoleErrors.length,
+      consoleWarnings: consoleWarnings.length
     }
   };
   await fs.writeFile(outputPath, `${JSON.stringify(receipt, null, 2)}\n`, 'utf8');
-  console.log(`Both native Primer links passed: ${wikiEntryCount} wiki entries and ${sourceCount} continuous source sections.`);
+  console.log(`Generated Primer JSON fallback passed: ${wikiEntryCount} wiki entries and ${sourceCount} continuous source sections were ${fallbackLabel}.`);
 } catch (error) {
   if (page) {
     try { await page.screenshot({ path: screenshotPath, fullPage: true }); } catch {}
   }
   await fs.writeFile(failurePath, `${JSON.stringify({
-    schemaVersion: '2.4.0',
+    schemaVersion: '2.5.0',
     workspace: 'barotrauma',
     moduleId: 'barotrauma-crewmans-primer',
     failedAt: new Date().toISOString(),
     result: 'failed',
+    forcedCondition: 'crewmans-primer-source.json returned 404',
     message: error.message,
     url: page?.url() || '',
     pageErrors,
-    consoleErrors
+    consoleErrors,
+    consoleWarnings
   }, null, 2)}\n`, 'utf8').catch(() => undefined);
-  console.error(`Barotrauma Crewman's Primer browser verification failed: ${error.message}`);
+  console.error(`Barotrauma Crewman's Primer fallback verification failed: ${error.message}`);
   process.exitCode = 1;
 } finally {
   if (browser) await browser.close();
