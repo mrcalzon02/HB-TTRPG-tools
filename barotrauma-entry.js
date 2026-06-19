@@ -1,10 +1,7 @@
 (() => {
   const registryUrl = 'data/barotrauma-tools-registry.json';
   const indexUrl = 'data/barotrauma/wiki/crewmans-primer-index.json';
-  const sourceParts = Array.from(
-    { length: 8 },
-    (_, index) => `source/crewmans-primer-compact-part-${String(index).padStart(2, '0')}.b64`
-  );
+  const sourceUrl = 'data/barotrauma/wiki/crewmans-primer-source.json';
 
   const search = document.getElementById('barotrauma-search');
   const status = document.getElementById('barotrauma-status');
@@ -161,14 +158,10 @@
 
   async function loadPrimer() {
     if (primer) return primer;
-    const index = await fetchJson(indexUrl);
-    const base = indexUrl.slice(0, indexUrl.lastIndexOf('/') + 1);
-    const encoded = (await Promise.all(sourceParts.map(part => fetchText(base + part)))).join('').replace(/\s+/g, '');
-    const compressed = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
-    const { default: BZip2 } = await import('https://cdn.jsdelivr.net/npm/bzip2-wasm@1.0.1/+esm');
-    const decoder = new BZip2();
-    await decoder.init();
-    const source = JSON.parse(new TextDecoder().decode(decoder.decompress(compressed, 393184)));
+    const [index, source] = await Promise.all([
+      fetchJson(indexUrl),
+      fetchJson(sourceUrl)
+    ]);
     const entries = source.entries || [];
     if (entries.length !== 198) throw new Error(`Expected 198 source-titled entries; loaded ${entries.length}.`);
     primer = { index, entries };
