@@ -1,8 +1,8 @@
 name: Import source-faithful Crewman's Primer
 
 on:
-  push:
-    branches: ["main"]
+  issues:
+    types: [opened]
   workflow_dispatch:
 
 permissions:
@@ -14,6 +14,7 @@ concurrency:
 
 jobs:
   import:
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == 'Run Crewman Primer source import'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
@@ -110,5 +111,3 @@ jobs:
           git add -A
           git commit -m "Replace Primer summaries with 198 source-defined wiki entries"
           git push origin HEAD:main
-
-# Restore the exact pre-import Pages workflow after conversion.
