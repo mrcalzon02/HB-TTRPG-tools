@@ -1,4 +1,4 @@
-name: Deploy static site to GitHub Pages
+name: Import source-faithful Crewman's Primer
 
 on:
   push:
@@ -6,211 +6,107 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: primer-source-import
+  cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
+  import:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Validate crafting generator data
-        run: node scripts/validate-crafting-data.mjs
-
-      - name: Validate main-line editor roadmap
-        run: node scripts/validate-editor-roadmap.mjs
-
-      - name: Validate shared editor kernel
-        run: node scripts/validate-editor-kernel.mjs
-
-      - name: Validate editor profile migrations
-        run: node scripts/validate-editor-migrations.mjs
-
-      - name: Validate editor lifecycle save races
-        run: node scripts/validate-editor-lifecycle.mjs
-
-      - name: Validate persistent editor repository
-        run: node scripts/validate-editor-repository.mjs
-
-      - name: Validate shared editor browser runtime
-        run: node scripts/validate-editor-runtime-structure.mjs
-
-      - name: Validate P0 browser verification contract
-        run: node scripts/validate-p0-browser-verification.mjs
-
-      - name: Validate arcane academic curricula
-        run: node scripts/validate-arcane-academic-generator.mjs
-
-      - name: Validate malefic academic curricula
-        run: node scripts/validate-malefic-academic-generator.mjs
-
-      - name: Validate magical syllabus library catalogue
-        run: node scripts/validate-magical-library-generator.mjs
-
-      - name: Validate registered source references
-        run: node scripts/validate-source-references.mjs
-
-      - name: Validate Elemental Realms creature wiki
-        run: node scripts/validate-elemental-realms-wiki.mjs
-
-      - name: Validate Solanum Umbra native wiki
-        run: node scripts/validate-solanum-umbra-native-wiki.mjs
-
-      - name: Validate Solanum Umbra live workspace
-        run: node scripts/validate-solanum-umbra-ui.mjs
-
-      - name: Validate Kaysender Warlock of the Swamp
-        run: node scripts/validate-kaysender-warlock-of-the-swamp.mjs
-
-      - name: Validate Kaysender Locations of Note
-        run: node scripts/validate-kaysender-locations-of-note.mjs
-
-      - name: Validate Mad Martiken proprietor conversations
-        run: node scripts/validate-kaysender-martiken-conversations.mjs
-
-      - name: Validate Barotrauma Crewman's Primer wiki
-        run: node scripts/validate-barotrauma-crewmans-primer.mjs
-
-      - name: Check generator and editor JavaScript syntax
+      - name: Replace summaries with source-title entries
+        shell: bash
         run: |
+          set -euo pipefail
+          SUPPORT_BUNDLE="data/barotrauma/wiki/source/crewmans-primer-support.b64"
+          test -f "$SUPPORT_BUNDLE"
+
+          cat data/barotrauma/wiki/source/crewmans-primer-compact-part-*.b64 > /tmp/primer-source.b64
+          echo "8f56d15084d4a1b48d26931cc8e1f54fceea2d2273b978ed4e33debd57d6c0b7  /tmp/primer-source.b64" | sha256sum -c -
+          base64 --decode /tmp/primer-source.b64 | bzip2 -d > /tmp/primer-source.json
+
+          base64 --decode "$SUPPORT_BUNDLE" > /tmp/primer-support.tar.xz
+          echo "bf37d4065a0d503c1295b503b1afcbdd0e301e931f116b1f92fd5656b97857fa  /tmp/primer-support.tar.xz" | sha256sum -c -
+          tar -xJf /tmp/primer-support.tar.xz -C .
+
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const source = JSON.parse(fs.readFileSync('/tmp/primer-source.json', 'utf8'));
+          const entries = source.entries;
+          const index = source.index;
+          if (!Array.isArray(entries) || entries.length !== 198) throw new Error(`Expected 198 entries, found ${entries?.length}.`);
+
+          const directory = 'data/barotrauma/wiki';
+          const sizes = [27, 32, 24, 27, 29, 24, 29, 6];
+          const packs = [];
+          let offset = 0;
+          sizes.forEach((size, position) => {
+            const number = String(position + 1).padStart(2, '0');
+            const filename = `crewmans-primer-source-pack-${number}.json`;
+            const selected = entries.slice(offset, offset + size);
+            if (selected.length !== size) throw new Error(`Pack ${number} is incomplete.`);
+            offset += size;
+            packs.push(filename);
+            fs.writeFileSync(path.join(directory, filename), `${JSON.stringify({
+              primerId: 'barotrauma-crewmans-primer',
+              schemaVersion: '2.1.0',
+              sourceMode: 'full-manuscript-transcription',
+              sourceFaithful: true,
+              pack: position + 1,
+              entries: selected
+            }, null, 2)}\n`);
+          });
+          if (offset !== 198) throw new Error(`Allocated ${offset} entries instead of 198.`);
+
+          fs.writeFileSync(path.join(directory, 'crewmans-primer-index.json'), `${JSON.stringify({
+            ...index,
+            schemaVersion: '2.1.0',
+            edition: 'Complete source-faithful wiki conversion',
+            status: 'source-transcription-alpha',
+            sourceMode: 'full-manuscript-transcription',
+            sourceFaithful: true,
+            entryCount: 198,
+            blockCount: 2321,
+            bodyTextUnitCount: 3751,
+            sourceNonEmptyParagraphCount: 3952,
+            textSequenceSha256: 'd1b84f0c414bd28dac5d83735822966f2a55d3091a74c2be81e7387582bda129',
+            packs,
+            description: 'A complete source-faithful wiki conversion of THE EUROPAN CREWMAN’S PRIMER. Every titled section in the source manuscript is a separate wiki entry, with every original paragraph and list item beneath that title preserved until the next source title.'
+          }, null, 2)}\n`);
+          NODE
+
+          rm -f data/barotrauma/wiki/crewmans-primer-pack-1.json
+          rm -f data/barotrauma/wiki/crewmans-primer-pack-2.json
+          rm -f data/barotrauma/wiki/crewmans-primer-pack-3.json
+          rm -f data/barotrauma/wiki/source/crewmans-primer-source-part-*.b64
+          rm -f data/barotrauma/wiki/source/crewmans-primer-compact-part-*.b64
+          rm -f "$SUPPORT_BUNDLE"
+          rmdir data/barotrauma/wiki/source 2>/dev/null || true
+          rm -f .github/workflows/import-source-faithful-crewmans-primer.yml
+
+          git show HEAD^:.github/workflows/pages.yml > .github/workflows/pages.yml
+
           node --check barotrauma-entry.js
           node --check scripts/validate-barotrauma-crewmans-primer.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
-          node --check kaysender-wiki.js
-          node --check kaysender-crafting-generator.js
-          node --check kaysender-npc-generator.js
-          node --check kaysender-editor-kernel.js
-          node --check kaysender-editor-field-mapping.js
-          node --check kaysender-editor-adapter-registry.js
-          node --check kaysender-editor-builtins.js
-          node --check kaysender-editor-migrations.js
-          node --check kaysender-editor-kernel-adapters.js
-          node --check kaysender-editor-lifecycle.js
-          node --check kaysender-editor-repository.js
-          node --check kaysender-editor-production.js
-          node --check kaysender-editor-record-library.js
-          node --check kaysender-editor-parent-library.js
-          node --check kaysender-editor-error-boundary.js
-          node --check kaysender-editor-live-smoke.js
-          node --check scripts/validate-editor-migrations.mjs
-          node --check scripts/validate-editor-adapter-integration.mjs
-          node --check scripts/validate-editor-inheritance.mjs
-          node --check scripts/validate-editor-drafts.mjs
-          node --check scripts/validate-editor-lifecycle.mjs
-          node --check scripts/validate-editor-repository.mjs
-          node --check scripts/run-p0-browser-verification.mjs
-          node --check scripts/validate-p0-browser-verification.mjs
-          node --check scripts/publish-p0-runtime-status.mjs
-          node --check spell-creator-vocabulary.js
-          node --check spell-creator-mechanics.js
-          node --check module-spell-creator.js
-          node --check spell-creator-entry.js
-          node --check eccentric-spell-competence.js
-          node --check eccentric-spell-morality.js
-          node --check eccentric-spell-vocabulary.js
-          node --check eccentric-spell-engine.js
-          node --check eccentric-spell-view.js
-          node --check eccentric-spell-text.js
-          node --check eccentric-spell-controller-core.js
-          node --check eccentric-spell-actions.js
-          node --check eccentric-spell-runtime.js
-          node --check eccentric-spell-entry.js
-          node --check arcane-academic-domains.js
-          node --check arcane-academic-vocabulary.js
-          node --check arcane-academic-engine.js
-          node --check arcane-academic-view.js
-          node --check arcane-academic-text.js
-          node --check arcane-academic-controller-core.js
-          node --check arcane-academic-actions.js
-          node --check arcane-academic-runtime.js
-          node --check arcane-academic-entry.js
-          node --check malefic-academic-domains.js
-          node --check malefic-academic-vocabulary.js
-          node --check malefic-academic-engine.js
-          node --check malefic-academic-view.js
-          node --check malefic-academic-text.js
-          node --check malefic-academic-controller-core.js
-          node --check malefic-academic-actions.js
-          node --check dark-academic-runtime.js
-          node --check malefic-academic-entry.js
-          node --check magical-library-vocabulary.js
-          node --check magical-library-engine.js
-          node --check magical-library-profile-engine.js
-          node --check magical-library-content-vocabulary.js
-          node --check magical-library-content-engine.js
-          node --check magical-library-view.js
-          node --check magical-library-text.js
-          node --check magical-library-controller-core.js
-          node --check magical-library-actions.js
-          node --check magical-library-runtime.js
-          node --check magical-library-entry.js
-          node --check elemental-realms-creature-core.js
-          node --check elemental-realms-creatures-primary.js
-          node --check elemental-realms-creatures-secondary.js
-          node --check elemental-realms-creatures-expansions.js
-          node --check elemental-realms-creatures-leeches.js
-          node --check elemental-realms-creatures-leech-hosts.js
-          node --check elemental-realms-creatures-context.js
-          node --check elemental-realms-entry.js
-          node --check solanum-umbra-entry.js
-          node --check kaysender-editors.js
-          node --check kaysender-settlement-editor.js
-          node --check kaysender-airship-editor.js
+          node scripts/validate-barotrauma-crewmans-primer.mjs
 
-      - name: Install Chromium verification runtime
-        run: |
-          npm install --no-save --package-lock=false playwright@1.60.0
-          npx playwright install --with-deps chromium
-
-      - name: Run Barotrauma Crewman's Primer browser verification
-        run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json artifacts/barotrauma-primer-browser-verification-failure.png artifacts/barotrauma-primer-browser-verification-failure.json
-
-      - name: Run P0 browser verification
-        run: node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png artifacts/p0-browser-verification-failure.json
-
-      - name: Validate P0 browser verification receipt
-        run: node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json
-
-      - name: Publish P0 runtime status into Pages payload
-        run: node scripts/publish-p0-runtime-status.mjs artifacts/p0-browser-verification.json p0-runtime-status.json
-
-      - name: Upload browser verification evidence
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v5
-        with:
-          name: browser-verification
-          path: |
-            artifacts/
-            p0-runtime-status.json
-          if-no-files-found: warn
-          retention-days: 30
-
-      - name: Remove browser test dependencies from Pages payload
-        if: ${{ always() }}
-        run: rm -rf node_modules
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "."
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Replace Primer summaries with 198 source-defined wiki entries"
+          git push origin HEAD:main
