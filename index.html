@@ -19,6 +19,7 @@
       <button class="nav-button" data-view="utilities">Utilities</button>
       <button class="nav-button" data-view="generators">Generators</button>
       <button class="nav-button" data-view="modules">Modules</button>
+      <button class="nav-button" data-view="barotrauma">Barotrauma</button>
       <button class="nav-button" data-view="kaysender">Kaysender</button>
     </nav>
   </header>
@@ -35,6 +36,7 @@
         <article class="menu-card"><h3>Utilities</h3><p>Reusable helpers, printable pages, editable sheets, trackers, and table-side aids.</p><button class="link-button" data-view="utilities">Open Utilities</button></article>
         <article class="menu-card"><h3>Generators</h3><p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, and homebrew assets.</p><button class="link-button" data-view="generators">Open Generators</button></article>
         <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, door highlights, traps, monsters, treasures, and source-backed room notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button></article>
+        <article class="menu-card"><h3>Barotrauma Campaign Workspace</h3><p>Registry-backed planning area for crew lore, submarine operations, missions, threats, investigations, wrecks, and campaign records.</p><button class="link-button" data-view="barotrauma">Open Barotrauma</button></article>
         <article class="menu-card"><h3>Kaysender Campaign Workspace</h3><p>Registry-driven planning area for the Kaysender wiki, tools, utilities, and generators.</p><button class="link-button" data-view="kaysender">Open Kaysender</button></article>
         <article class="menu-card"><h3>Solanum Umbra Workspace</h3><p>Dedicated native-system wiki for characters, professions, cybernetics, crafting, equipment, combat, enemies, and entities.</p><button class="link-button" data-view="solanum-umbra">Open Solanum Umbra</button></article>
       </div>
@@ -60,6 +62,27 @@
 
     <section id="generators" class="view" aria-labelledby="generators-title"><div class="hero-card no-print"><p class="eyebrow">Generators</p><h2 id="generators-title">Generator Bench</h2><p>Registry-driven generators for Kaysender locations, ships, populations, shops, encounters, factions, crews, and campaign jobs.</p></div><div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div></section>
 
+    <section id="barotrauma" class="view" aria-labelledby="barotrauma-title">
+      <div class="hero-card no-print">
+        <p class="eyebrow">Barotrauma campaign workspace</p>
+        <h2 id="barotrauma-title">Europa Operations and Lore Dashboard</h2>
+        <p>A registry-backed foundation for original campaign tools, in-world documents, submarine operations, crew generation, missions, investigations, threats, wrecks, and voyage records. This is an unofficial fan workspace and is not affiliated with or endorsed by the creators or publishers of Barotrauma.</p>
+      </div>
+      <div class="registry-controls no-print" aria-label="Barotrauma module controls">
+        <label class="control-label" for="barotrauma-search">Search Barotrauma modules</label>
+        <input id="barotrauma-search" class="tool-input" type="search" placeholder="Search crew, submarines, missions, cults, threats, wrecks, investigations..." />
+        <div class="segmented-control registry-filter-group" role="group" aria-label="Barotrauma registry filters">
+          <button class="layout-button registry-filter active" data-barotrauma-filter="all">All</button>
+          <button class="layout-button registry-filter" data-barotrauma-filter="reference">Reference</button>
+          <button class="layout-button registry-filter" data-barotrauma-filter="tools">Tools</button>
+          <button class="layout-button registry-filter" data-barotrauma-filter="generators">Generators</button>
+          <button class="layout-button registry-filter" data-barotrauma-filter="campaign">Campaign</button>
+        </div>
+      </div>
+      <div id="barotrauma-status" class="registry-status no-print">Loading Barotrauma module registry…</div>
+      <div id="barotrauma-overview-grid" class="module-grid no-print"></div>
+    </section>
+
     <section id="kaysender" class="view" aria-labelledby="kaysender-title"><div class="hero-card no-print"><p class="eyebrow">Kaysender setting workspace</p><h2 id="kaysender-title">Open d20 Conversion Dashboard</h2><p>This dashboard is the staging area for turning the Kaysender manuscript into wiki entries, generators, trackers, and open d20-compatible campaign tools. The cards below are loaded from <code>data/kaysender-tools-registry.json</code>.</p></div><div class="registry-controls no-print" aria-label="Kaysender module controls"><label class="control-label" for="kaysender-search">Search modules</label><input id="kaysender-search" class="tool-input" type="search" placeholder="Search wiki, airships, markets, settlements..." /><div class="segmented-control registry-filter-group" role="group" aria-label="Registry filters"><button class="layout-button registry-filter active" data-kaysender-filter="all">All</button><button class="layout-button registry-filter" data-kaysender-filter="tools">Tools</button><button class="layout-button registry-filter" data-kaysender-filter="utilities">Utilities</button><button class="layout-button registry-filter" data-kaysender-filter="generators">Generators</button></div></div><div id="kaysender-status" class="registry-status no-print">Loading Kaysender module registry…</div><div id="kaysender-overview-grid" class="module-grid no-print" data-registry-section="overview"></div></section>
   </main>
 
@@ -68,6 +91,7 @@
   <script src="app.js"></script>
   <script src="character-sheet-title.js"></script>
   <script src="module-viewer.js"></script>
+  <script src="barotrauma-entry.js"></script>
   <script src="solanum-umbra-entry.js"></script>
   <script src="kaysender-wiki.js"></script>
   <script src="kaysender-editor-kernel.js"></script>
