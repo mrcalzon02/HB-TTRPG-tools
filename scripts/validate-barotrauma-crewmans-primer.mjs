@@ -64,7 +64,7 @@ for (const marker of [
   'Expected 198 source-defined entries',
   'function renderWiki(',
   'function renderSource(',
-  'THE CROUCHING FALLACY'
+  'function appendBlocks('
 ]) {
   if (!standaloneRuntime.includes(marker)) fail(`Standalone Primer runtime is missing ${marker}.`);
 }
