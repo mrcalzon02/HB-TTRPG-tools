@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Barotrauma RPG Operations Suite</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{--tool-panel:rgba(0,0,0,.22);--tool-panel-strong:rgba(0,0,0,.34);--tool-good:#75c58e;--tool-warn:#d6aa54;--tool-bad:#df7777}
+    body{min-height:100vh}
+    .ops-page{max-width:1680px;margin:0 auto;padding:22px}
+    .ops-header{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:16px}
+    .ops-header h1{margin:.2rem 0}
+    .ops-header-actions,.ops-tabs,.button-row,.inline-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .ops-header-actions a{text-decoration:none}
+    .ops-tabs{position:sticky;top:0;z-index:5;padding:10px;margin:0 0 18px;border:1px solid var(--line);border-radius:16px;background:#0f1218;box-shadow:var(--shadow)}
+    .ops-tab{border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.035);color:var(--muted);font-weight:800}
+    .ops-tab:hover,.ops-tab.active{border-color:var(--accent);color:var(--ink);background:rgba(200,138,53,.12)}
+    .tool-shell{display:grid;gap:16px}
+    .tool-hero,.tool-panel,.tool-card{border:1px solid var(--line);border-radius:18px;background:var(--tool-panel);padding:18px}
+    .tool-hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-color:rgba(200,138,53,.36)}
+    .tool-hero h2,.tool-panel h3,.tool-card h3{margin:.2rem 0 .75rem}
+    .tool-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+    .span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-7{grid-column:span 7}.span-6{grid-column:span 6}.span-5{grid-column:span 5}.span-4{grid-column:span 4}.span-3{grid-column:span 3}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .field-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.field-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .field{display:grid;gap:5px;color:var(--muted);font-size:.84rem;font-weight:800;letter-spacing:.02em}
+    .field input,.field select,.field textarea,.tool-input,.tool-select{width:100%;box-sizing:border-box;background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px 10px;font:inherit}
+    .field textarea{min-height:92px;resize:vertical}
+    .stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .stat-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:rgba(255,255,255,.025)}
+    .stat-card strong{display:block;color:var(--accent);font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px}
+    .stat-values{display:grid;grid-template-columns:1fr 1fr;gap:6px}.stat-values label{font-size:.72rem;color:var(--muted)}
+    .stat-values input{width:100%;box-sizing:border-box;background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px}
+    .metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+    .metric{border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(255,255,255,.025)}
+    .metric span{display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em}.metric strong{font-size:1.25rem}
+    .good{color:var(--tool-good)!important}.warn{color:var(--tool-warn)!important}.bad{color:var(--tool-bad)!important}
+    .rules-note,.status-line,.small-note{color:var(--muted);line-height:1.55}.small-note{font-size:.86rem}
+    .rules-link{color:var(--accent);font-weight:800;text-decoration:none}.rules-link:hover{text-decoration:underline}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
+    .tool-table{width:100%;border-collapse:collapse;min-width:720px}.tool-table th,.tool-table td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.tool-table th{color:var(--accent);font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;background:rgba(255,255,255,.035)}.tool-table tr:last-child td{border-bottom:0}
+    .tool-table input,.tool-table select{width:100%;box-sizing:border-box;background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px}
+    .tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);font-size:.75rem;margin:2px}
+    .card-list{display:grid;gap:10px}.encounter-card,.route-card{border:1px solid var(--line);border-radius:14px;padding:13px;background:rgba(255,255,255,.025)}
+    .encounter-card header,.route-card header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.encounter-card h4,.route-card h4{margin:0 0 .45rem}.encounter-card p,.route-card p{margin:.35rem 0;color:var(--muted);line-height:1.5}
+    .status-pill{border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+    .status-pending{color:var(--tool-warn)}.status-success{color:var(--tool-good)}.status-failure{color:var(--tool-bad)}
+    .check-list{display:grid;gap:8px}.check-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:9px}.check-row input[type=checkbox]{width:18px;height:18px}
+    .system-row{display:grid;grid-template-columns:minmax(140px,1fr) minmax(160px,2fr) 80px;gap:10px;align-items:center;margin:8px 0}.system-row input[type=range]{width:100%}
+    .map-frame{border:1px solid var(--line);border-radius:16px;min-height:680px;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.28) 55%,rgba(0,0,0,.5));overflow:auto;position:relative}
+    .map-frame svg{display:block;width:100%;height:680px;min-width:760px}.map-edge{stroke:rgba(200,210,220,.28);stroke-width:2}.map-edge.danger{stroke:rgba(223,119,119,.48);stroke-dasharray:6 5}.map-node{cursor:pointer}.map-node circle{stroke-width:2}.map-node text{fill:#e8edf2;font-size:11px;font-weight:700;pointer-events:none}.map-node.station circle{fill:#21364a;stroke:#70a7c7}.map-node.outpost circle{fill:#35351f;stroke:#c7b570}.map-node.wreck circle{fill:#3d2525;stroke:#bd7474}.map-node.ruins circle{fill:#392d47;stroke:#a985c7}.map-node.hazard circle{fill:#421f28;stroke:#d36378}.map-node.anomaly circle{fill:#5a431d;stroke:#e0b45f;stroke-width:4}.map-node.selected circle{stroke:#fff;stroke-width:4}
+    .map-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid currentColor}
+    .notice{border:1px dashed var(--line);border-radius:12px;padding:12px;color:var(--muted)}
+    .danger-button{border:1px solid #8b4141;background:rgba(139,65,65,.15);color:#ffb9b9;border-radius:10px;padding:9px 12px;font-weight:800}
+    .compact-button{border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--ink);border-radius:9px;padding:7px 9px;font-weight:700}
+    .compact-button:hover{border-color:var(--accent)}
+    .file-action{cursor:pointer}
+    .hidden{display:none!important}
+    @media(max-width:1100px){.span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column:span 12}.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:700px){.ops-header,.tool-hero{display:grid}.field-grid,.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:1fr}.ops-page{padding:12px}.map-frame{min-height:560px}.map-frame svg{height:560px}}
+    @media print{.no-print,.ops-tabs,.ops-header-actions{display:none!important}.ops-page{max-width:none;padding:0}.tool-panel,.tool-card,.tool-hero{break-inside:avoid;background:white;color:black;border-color:#777}.field input,.field select,.field textarea{color:black;background:white}.map-frame{background:white}}
+  </style>
+</head>
+<body>
+  <main class="ops-page">
+    <header class="ops-header no-print">
+      <div>
+        <p class="eyebrow">Rules-derived campaign utilities</p>
+        <h1>Barotrauma RPG Operations Suite</h1>
+        <p class="subtitle">Character, submarine, encounter, route, and Europa campaign-map tools built directly around the imported Barotrauma RPG systems.</p>
+      </div>
+      <div class="ops-header-actions">
+        <button id="export-suite" class="secondary-action" type="button">Export Suite JSON</button>
+        <label class="secondary-action file-action" for="import-suite">Import Suite JSON</label>
+        <input id="import-suite" type="file" accept="application/json" hidden />
+        <button id="print-tool" class="secondary-action" type="button">Print Current Tool</button>
+        <a class="secondary-action" href="barotrauma-rpg.html">Open Rules Wiki</a>
+        <a class="secondary-action" href="index.html#barotrauma">Dashboard</a>
+      </div>
+    </header>
+
+    <nav class="ops-tabs no-print" aria-label="Barotrauma RPG tools">
+      <button class="ops-tab" data-tool="character" type="button">Character Sheet</button>
+      <button class="ops-tab" data-tool="submarine" type="button">Submarine Manager</button>
+      <button class="ops-tab" data-tool="encounters" type="button">Encounter Planner</button>
+      <button class="ops-tab" data-tool="route" type="button">Route Planner</button>
+      <button class="ops-tab" data-tool="world" type="button">World Map Generator</button>
+    </nav>
+
+    <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
+  </main>
+  <script src="barotrauma-rpg-tools.js?v=001"></script>
+</body>
+</html>
