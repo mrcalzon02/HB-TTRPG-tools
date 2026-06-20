@@ -2,63 +2,45 @@
   "id": "barotrauma-rpg-rules-wiki",
   "title": "Barotrauma RPG Rules Wiki",
   "displayTitle": "BAROTRAUMA RPG",
-  "edition": "Test v0.10 Conversion Alpha",
-  "status": "alpha-foundation",
-  "description": "A structured wiki conversion of the Barotrauma RPG manuscript, separating core rules, character creation, classes, talents, combat, advancement, campaign procedures, equipment, submarines, events, sanity, salvage, and reference material into searchable entries.",
+  "edition": "Test v0.10 Exact Source Conversion",
+  "status": "source-faithful-complete",
+  "description": "An exact wiki conversion of the Barotrauma RPG Test v0.10 source document. The opening material and every source paragraph styled as a document title begin separate wiki entries; all following source text remains attached to that entry until the next source title.",
   "source": {
     "title": "Barotrauma RPG",
     "documentId": "1O-PuIi9_lsAPAZQzeEG83Zecm4Wm5Z4o99Pzv0yU2-g",
     "sourceVersion": "Test v0.10",
     "created": "2023-01-06",
     "lastModified": "2023-01-14",
-    "conversionPolicy": "Preserve the manuscript's intent, identify unresolved contradictions, normalize presentation, and do not silently invent missing rules."
+    "conversionPolicy": "Preserve source spelling, punctuation, wording, repetition, contradictions, and paragraph order without summarization or editorial normalization."
   },
   "disclaimer": "Unofficial fan-made tabletop material inspired by Barotrauma. This project is not affiliated with or endorsed by the creators or publishers of Barotrauma.",
-  "categories": [
-    "Introduction",
-    "Character Creation",
-    "Core Rules",
-    "Classes",
-    "Talents",
-    "Combat",
-    "Campaign Procedure"
-  ],
   "readingOrder": [
-    "rpg-premise",
-    "character-creation-sequence",
-    "saic-attributes",
-    "task-resolution",
-    "basic-classes",
-    "basic-class-talents",
-    "advanced-classes",
-    "advanced-class-talents",
-    "personal-combat-basics",
-    "advancement-and-gameplay-order",
-    "backgrounds-fates-and-disadvantages"
+    "001-barotrauma-rpg-test-v-0-10",
+    "002-stats",
+    "003-gaining-a-level-and-gameplay-order",
+    "004-stuff-mine-yours-ours",
+    "005-backgrounds",
+    "006-submarines",
+    "007-upgrades",
+    "008-alien-salvage",
+    "009-jobs-events-and-stations",
+    "010-upkeep",
+    "011-personal-combat-damage-repairs-disease-and-death",
+    "012-death-is-not-the-end",
+    "013-sanity-and-losing-your-mind",
+    "014-game-flow",
+    "015-sample-stations",
+    "016-12-quotes-of-famous-europan-sea-captains-to-live-by",
+    "017-submarine-weapons-systems",
+    "018-sample-pirate-encounter",
+    "019-salvaging-a-wreck"
   ],
-  "entryCount": 11,
+  "entryCount": 19,
   "coverage": {
-    "convertedEntries": 11,
-    "sourceSectionsMapped": 7,
-    "sourceSectionsRemaining": [
-      "Stuff, Mine, Yours, Ours",
-      "Submarines",
-      "Upgrades",
-      "Alien Salvage",
-      "Jobs, Events and Stations",
-      "Upkeep",
-      "Personal Combat, Damage, Repairs, Disease and Death",
-      "Death Is Not the End",
-      "Sanity and Losing Your Mind",
-      "Game Flow",
-      "Sample Stations",
-      "Captain Quotes",
-      "Submarine Weapons Systems",
-      "Sample Pirate Encounter",
-      "Salvaging a Wreck"
-    ]
+    "convertedEntries": 19,
+    "sourceSectionsMapped": 19,
+    "sourceSectionsRemaining": []
   },
-  "packs": [
-    "rpg-core-pack.json"
-  ]
+  "entryDirectory": "data/barotrauma/wiki/rpg/entries",
+  "viewer": "barotrauma-rpg.html"
 }
