@@ -1,0 +1,180 @@
+    { id: 'cleaning-filters', name: 'Cleaning the Filters', category: 'Maintenance', stat: 'Agility', dc: 6, description: 'Clean the filters to keep the air fresh and breathable.', reward: 'Air quality maintained.', failure: 'Crew suffers -1 to all stats until filters are cleaned.' },
+    { id: 'calibrating-sonar', name: 'Calibrating the Sonar', category: 'Maintenance', stat: 'Intelligence', dc: 7, description: 'Calibrate sonar to restore accurate readings.', reward: 'Reliable navigation readings.', failure: 'Crew suffers -2 to navigation until calibrated.' },
+    { id: 'inaccurate-charts', name: 'Inaccurate Charts', category: 'Navigation', stat: 'Intelligence', dc: 10, description: 'Treacherous caves are mapped incorrectly. Rely on judgment to avoid hazards.', reward: 'The caves are navigated safely.', failure: 'The submarine strikes a hazard and takes damage.' },
+    { id: 'repairing-engine', name: 'Repairing the Engine', category: 'Maintenance', stat: 'Strength', dc: 7, description: 'The engine is making dangerous noises and must be repaired.', reward: 'Strength +2 and Agility +1 for the event outcome.', failure: 'Strength -2 and Agility -1.' },
+    { id: 'malfunctioning-equipment', name: 'Malfunctioning Equipment', category: 'Maintenance', stat: 'Intelligence', dc: 6, description: 'Repair malfunctioning equipment before it affects the voyage.', reward: 'Intelligence +2.', failure: 'Intelligence -2.' },
+    { id: 'ancient-ruins', name: 'Ancient Ruins', category: 'Exploration', stat: 'Intelligence', dc: 10, description: 'Explore ruins on the ocean floor while avoiding traps and ancient guardians.', reward: 'Credits, salvage, and possible alien relics.', failure: 'Submarine damage and Lost Sanity.' },
+    { id: 'abandoned-research', name: 'Abandoned Research Facility', category: 'Exploration', stat: 'Intelligence', dc: 9, description: 'Search an abandoned research facility for information and resources.', reward: 'Research data and rare resources.', failure: 'Traps or system malfunctions damage submarine and crew.' },
+    { id: 'broken-pump', name: 'Broken Pump', category: 'Maintenance', stat: 'Intelligence', dc: 7, description: 'Repair a failed pump before the compartment floods.', reward: '50 credits.', failure: 'Take 1 damage and the pump remains broken.' },
+    { id: 'lost-expedition', name: 'Lost Expedition', category: 'Exploration', stat: 'Intelligence', dc: 9, description: 'Explore an undiscovered cave system for minerals or artifacts.', reward: 'A rare mineral or valuable artifact.', failure: 'Become lost and spend extra time and resources escaping.' },
+    { id: 'flooded-shaft', name: 'The Flooded Shaft', category: 'Navigation', stat: 'Strength', dc: 10, description: 'Clear a flooded transportation shaft blocking the route.', reward: '50 credits and continued travel.', failure: 'Lose 10 credits, lose one turn, and turn back.' },
+    { id: 'abandoned-outpost', name: 'Abandoned Outpost Blocks the Path', category: 'Station', stat: 'Intelligence', dc: 9, description: 'Navigate a crumbling outpost and avoid cave-ins and malfunctioning equipment.', reward: '2 salvage and 250 credits.', failure: '2 submarine damage and 1 Lost Sanity.' },
+    { id: 'pirate-salvage', name: 'Pirate Salvage Operation', category: 'Pirate', stat: 'Intelligence', dc: 9, description: 'Pirates contest a wreck. Outmaneuver them and salvage what remains.', reward: 'Resources and supplies.', failure: 'Resource loss and submarine damage.' },
+    { id: 'salvaging-wrecks', name: 'Salvaging Wrecks', category: 'Salvage', stat: 'Intelligence', dc: 8, description: 'Search an abandoned shipwreck while balancing value against danger.', reward: 'Parts, resources, and reputation.', failure: 'Resource loss, danger, and possible vessel damage.' },
+    { id: 'station-sabotage', name: 'Station Sabotage', category: 'Station', stat: 'Intelligence', dc: 9, description: 'Identify and repair tampered submarine systems before the damage spreads.', reward: 'Additional funds and reputation.', failure: 'Submarine damage, lost resources, and faction reputation loss.' },
+    { id: 'facility-sabotage', name: 'Rival Facility Sabotage', category: 'Pirate', stat: 'Agility', dc: 10, description: 'Sabotage a rival corporation facility and gather intelligence without being caught.', reward: 'Valuable intelligence and faction reputation.', failure: 'Capture, lost time, and lost resources.' },
+    { id: 'unstable-insomnia', name: 'Unstable Insomnia', category: 'Sanity', stat: 'Intelligence', dc: 8, description: 'Sleeplessness causes fatigue and decreased performance.', reward: 'Resist the episode.', failure: '-2 Strength, Agility, and Intelligence; worsens with Lost Sanity.' },
+    { id: 'six-legged-nightmares', name: 'Six Legged Nightmares', category: 'Sanity', stat: 'Intelligence', dc: 9, description: 'Vivid nightmares make the target vulnerable to fear and anxiety.', reward: 'Resist the episode.', failure: '-3 Strength, Agility, and Intelligence until station.' },
+    { id: 'delusion-ineptitude', name: 'Delusion of Ineptitude', category: 'Sanity', stat: 'Intelligence', dc: 10, description: 'The target cannot distinguish reality from their own beliefs.', reward: 'Resist the delusion.', failure: '-4 Strength, Agility, and Intelligence until station.' },
+    { id: 'hallucination-gas', name: 'Hallucination Gas', category: 'Sanity', stat: 'Strength', dc: 9, description: 'Vivid hallucinations distract the target.', reward: 'Resist the hallucination.', failure: '-3 Strength, Agility, and Intelligence until station.' },
+    { id: 'porous-paranoia', name: 'Porous Paranoia', category: 'Sanity', stat: 'Charisma', dc: 10, description: 'Paranoia and mistrust make cooperation difficult.', reward: 'Maintain trust.', failure: '-4 Strength, Agility, and Intelligence until station.' },
+    { id: 'paranormal-anxiety', name: 'Paranormal Anxiety', category: 'Sanity', stat: 'Intelligence', dc: 11, description: 'The target becomes anxious and prone to panic.', reward: 'Keep control.', failure: '-5 Strength, Agility, and Intelligence, worsened by Lost Sanity.' },
+    { id: 'screaming-dark', name: 'Screaming in the Dark', category: 'Sanity', stat: 'Intelligence', dc: 7, description: 'A haunting scream echoes through the submarine, but only in the target’s head.', reward: 'Recognize the illusion.', failure: '-1 Strength, Agility, and Intelligence until station.' },
+    { id: 'watcher', name: 'The Watcher', category: 'Sanity', stat: 'Intelligence', dc: 7, description: 'The target feels watched and becomes uneasy and paranoid.', reward: 'Dismiss the feeling.', failure: '-1 Strength, Agility, and Intelligence until station.' },
+    { id: 'delusions-grandeur', name: 'Delusions of Grandeur', category: 'Sanity', stat: 'Charisma', dc: 7, description: 'The target becomes convinced they are a powerful being.', reward: 'Remain grounded.', failure: '-1 Strength, Agility, and Intelligence until station.' },
+    { id: 'abyss-stares-back', name: 'The Abyss Stares Back', category: 'Sanity', stat: 'Intelligence', dc: 8, description: 'The darkness outside becomes an obsessive fixation.', reward: 'Break the fixation.', failure: '-1 Strength, Agility, and Intelligence until station.' }
+  ];
+
+  const UPKEEP_TASKS = [
+    ['restock', 'Restocking supplies', 'Intelligence', 'Failure: -1 to all stats.'],
+    ['clean', 'Cleaning the submarine', 'Agility', 'Failure: -1 to the entire crew’s stats.'],
+    ['maintenance', 'Daily maintenance checks', 'Strength', 'Failure: -1 to all submarine stats.'],
+    ['repairs', 'Upkeep repairs', 'Intelligence', 'Failure: -1 to all stats.'],
+    ['batteries', 'Recharging equipment batteries', 'Agility', 'Failure: -1 to all submarine stats.'],
+    ['reactor', 'Refueling reactor', 'Strength', 'Failure: -1 to all submarine stats.']
+  ];
+
+  const SYSTEMS = ['Propulsion', 'Life Support', 'Communications', 'Weapons', 'Sonar', 'Reactor', 'Ballast', 'Medical Bay'];
+  const EVENT_CATEGORIES = [...new Set(EVENTS.map(event => event.category))];
+  const MAP_PREFIX = ['Abyssal', 'Benthos', 'Blackwater', 'Caligo', 'Crown', 'Deep', 'Erebus', 'Frost', 'Grave', 'Hadopelagic', 'Icefall', 'Jovian', 'Kelp', 'Luminous', 'Morrow', 'Nadir', 'Orpheus', 'Pressure', 'Quiet', 'Rift', 'Stygian', 'Thalassa', 'Umbral', 'Vesper'];
+  const MAP_SUFFIX = ['Gate', 'Reach', 'Station', 'Shaft', 'Trench', 'Crossing', 'Hollow', 'Basin', 'Spine', 'Vault', 'Passage', 'Scar', 'Deep', 'Refuge', 'Array', 'Relay'];
+
+  function defaultState() {
+    return {
+      character: {
+        name: '', player: '', className: 'Engineer', level: 1, background: 'Military man of action', talent: 'Quick Fix',
+        fateUsed: false, lostSanity: 0, morale: 0, credits: 0,
+        stats: { Strength: 3, Agility: 3, Intelligence: 3, Charisma: 3 },
+        current: { Strength: 3, Agility: 3, Intelligence: 3, Charisma: 3 },
+        inventory: '', conditions: '', notes: '', rollLog: []
+      },
+      submarine: {
+        name: '', model: 'Barsuk', hullCurrent: 8, manual: { speed: 0, maneuverability: 0, defense: 0, capacity: 0, hull: 0 },
+        resources: { crew: 4, cargo: 0, supplies: 10, food: 5, water: 5, medical: 2, credits: 0 },
+        systems: Object.fromEntries(SYSTEMS.map(name => [name, { condition: 100, note: '' }])),
+        upgrades: [], weapons: SUBMARINES.Barsuk.weapons.map(item => ({ ...item })), upkeep: {}, notes: ''
+      },
+      encounters: { category: 'All', count: 3, plan: [], custom: { name: '', category: 'Custom', stat: 'Intelligence', dc: 8, description: '', reward: '', failure: '' } },
+      route: {
+        start: 'Aurora Station', end: 'Leviathan Station', distance: 3, routePressure: 0, jobs: [], navigationExpert: false, navigationReduction: 1,
+        mapmaker: false, sanityEnabled: true, table: Object.fromEntries(EVENT_CATEGORIES.map(category => [category, category === 'Sanity' ? 1 : 3])), plan: []
+      },
+      world: { seed: 'EUROPA-001', rings: 5, nodes: 28, branching: 35, map: null, selected: [] }
+    };
+  }
+
+  function deepMerge(base, incoming) {
+    if (!incoming || typeof incoming !== 'object') return base;
+    for (const [key, value] of Object.entries(incoming)) {
+      if (Array.isArray(value)) base[key] = value;
+      else if (value && typeof value === 'object') base[key] = deepMerge(base[key] && typeof base[key] === 'object' ? base[key] : {}, value);
+      else base[key] = value;
+    }
+    return base;
+  }
+
+  let state = (() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? deepMerge(defaultState(), JSON.parse(stored)) : defaultState();
+    } catch (error) {
+      console.warn('Could not load Barotrauma RPG suite state.', error);
+      return defaultState();
+    }
+  })();
+
+  const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+  const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, number(value, min)));
+  const d6 = () => Math.floor(Math.random() * 6) + 1;
+  const uid = prefix => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch (error) { console.warn('Could not save Barotrauma RPG suite state.', error); }
+  }
+
+  function download(name, text, type = 'application/json') {
+    const blob = new Blob([text], { type });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = name;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function optionList(values, selected, label = value => value) {
+    return values.map(value => `<option value="${escapeHtml(value)}" ${value === selected ? 'selected' : ''}>${escapeHtml(label(value))}</option>`).join('');
+  }
+
+  function activeTool() {
+    const value = window.location.hash.replace(/^#/, '');
+    return ['character', 'submarine', 'encounters', 'route', 'world'].includes(value) ? value : 'character';
+  }
+
+  function setTool(tool) {
+    history.replaceState(null, '', `#${tool}`);
+    render();
+  }
+
+  function bindTextInput(selector, callback, eventName = 'input') {
+    const element = root.querySelector(selector);
+    if (!element) return;
+    element.addEventListener(eventName, event => { callback(event.target); save(); });
+  }
+
+  function renderCharacter() {
+    const character = state.character;
+    const classData = CLASSES[character.className] || CLASSES.Engineer;
+    if (!classData.talents.some(([name]) => name === character.talent)) character.talent = classData.talents[0][0];
+    character.level = clamp(character.level, 1, classData.maxLevel);
+    const background = BACKGROUNDS.find(item => item.name === character.background) || BACKGROUNDS[0];
+    const allocated = Object.values(character.stats).reduce((sum, value) => sum + Math.max(0, number(value) - 3), 0);
+    const remaining = 10 - allocated;
+    const carried = character.inventory.split(/\n|,/).map(item => item.trim()).filter(Boolean).length;
+
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div><p class="eyebrow">S.A.I.C. crew record</p><h2>Character Sheet</h2><p class="rules-note">Build a crew member from Strength, Agility, Intelligence, and Charisma; select a class, Talent, Background, Fate, and disadvantage; then resolve 2d6 tasks from the sheet.</p></div>
+          <a class="rules-link no-print" href="barotrauma-rpg.html#stats">Open STATS in the exact-source wiki →</a>
+        </section>
+        <div class="tool-grid">
+          <section class="tool-panel span-8">
+            <h3>Identity and Career</h3>
+            <div class="field-grid three">
+              <label class="field">Character name<input id="char-name" value="${escapeHtml(character.name)}"></label>
+              <label class="field">Player<input id="char-player" value="${escapeHtml(character.player)}"></label>
+              <label class="field">Class<select id="char-class">${optionList(Object.keys(CLASSES), character.className)}</select></label>
+              <label class="field">Level<input id="char-level" type="number" min="1" max="${classData.maxLevel}" value="${character.level}"></label>
+              <label class="field">Background<select id="char-background">${optionList(BACKGROUNDS.map(item => item.name), character.background)}</select></label>
+              <label class="field">Talent<select id="char-talent">${optionList(classData.talents.map(item => item[0]), character.talent)}</select></label>
+            </div>
+            <p class="small-note"><strong>${escapeHtml(character.className)}:</strong> ${escapeHtml(classData.description)} Maximum level ${classData.maxLevel}.</p>
+            <div class="tool-grid">
+              <div class="tool-card span-6"><strong>Fate: ${escapeHtml(background.fate)}</strong><p class="small-note">Once per mission.</p><label><input id="char-fate-used" type="checkbox" ${character.fateUsed ? 'checked' : ''}> Fate used this mission</label></div>
+              <div class="tool-card span-6"><strong>Disadvantage: ${escapeHtml(background.disadvantage)}</strong><p class="small-note">The Background’s significant drawback remains active as a role-playing and resolution pressure.</p></div>
+            </div>
+          </section>
+
+          <section class="tool-panel span-4">
+            <h3>Mission State</h3>
+            <div class="field-grid">
+              <label class="field">Lost Sanity<input id="char-sanity" type="number" min="0" value="${character.lostSanity}"></label>
+              <label class="field">Morale<input id="char-morale" type="number" value="${character.morale}"></label>
+              <label class="field">Credits<input id="char-credits" type="number" min="0" value="${character.credits}"></label>
+              <label class="field">Carry limit<input readonly value="${number(character.current.Strength)} items"></label>
+            </div>
+            <div class="metric-row" style="margin-top:10px">
+              <div class="metric"><span>Inventory entries</span><strong class="${carried > number(character.current.Strength) ? 'bad' : 'good'}">${carried}</strong></div>
+              <div class="metric"><span>Fate</span><strong>${character.fateUsed ? 'Used' : 'Ready'}</strong></div>
+            </div>
+          </section>
+
+          <section class="tool-panel span-12">
+            <div class="tool-hero" style="padding:0;border:0;background:none">
+              <div><h3>S.A.I.C. Statistics</h3><p class="small-note">Each stat begins at 3. Allocate 10 additional points across the four permanent scores. Current scores can fall independently through damage, conditions, or Lost Sanity.</p></div>
+              <div class="metric"><span>Points remaining</span><strong class="${remaining < 0 ? 'bad' : remaining === 0 ? 'good' : 'warn'}">${remaining}</strong></div>
