@@ -52,22 +52,27 @@ try {
   browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 
-  await page.goto(`${baseUrl}/barotrauma-primer.html?mode=wiki`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/barotrauma-primer.html`, { waitUntil: 'networkidle' });
   await page.waitForSelector('#primer-nav a');
+
   const wikiCount = await page.locator('#primer-nav a').count();
   if (wikiCount !== expectedCount) throw new Error(`Wiki displayed ${wikiCount} entries instead of ${expectedCount}.`);
-  const wikiFirst = await page.locator('#primer-article h2').textContent();
-  if (wikiFirst !== 'FOREWORD') throw new Error(`Wiki opened on ${wikiFirst || 'nothing'} instead of FOREWORD.`);
 
-  await page.goto(`${baseUrl}/barotrauma-primer.html?mode=source`, { waitUntil: 'networkidle' });
-  await page.waitForSelector('.primer-document-section');
-  const sourceCount = await page.locator('.primer-document-section').count();
-  if (sourceCount !== expectedCount) throw new Error(`Source viewer displayed ${sourceCount} sections instead of ${expectedCount}.`);
-  const first = await page.locator('.primer-document-section').first().locator('h2,h3,h4').textContent();
-  const last = await page.locator('.primer-document-section').last().locator('h2,h3,h4').textContent();
-  if (first !== 'FOREWORD') throw new Error(`Source viewer begins with ${first || 'nothing'} instead of FOREWORD.`);
+  const firstTitle = await page.locator('#primer-article h2').textContent();
+  if (firstTitle !== 'FOREWORD') throw new Error(`Wiki opened on ${firstTitle || 'nothing'} instead of FOREWORD.`);
 
-  await fs.writeFile(outputPath, `${JSON.stringify({ result: 'passed', expectedCount, wikiCount, sourceCount, first, last }, null, 2)}\n`);
+  if (expectedCount >= 2) {
+    await page.locator('#primer-nav a').nth(1).click();
+    const secondTitle = await page.locator('#primer-article h2').textContent();
+    if (secondTitle !== 'REGARD EVERY CONTROL AS LOADED') {
+      throw new Error(`Second wiki entry opened as ${secondTitle || 'nothing'} instead of REGARD EVERY CONTROL AS LOADED.`);
+    }
+  }
+
+  const sourceButtonCount = await page.locator('#primer-source-tab').count();
+  if (sourceButtonCount !== 0) throw new Error('Obsolete Source Document Viewer button is still present.');
+
+  await fs.writeFile(outputPath, `${JSON.stringify({ result: 'passed', expectedCount, wikiCount, firstTitle }, null, 2)}\n`);
   console.log(`Crewman's Primer verification passed for ${expectedCount} attached wiki ${expectedCount === 1 ? 'entry' : 'entries'}.`);
 } finally {
   if (browser) await browser.close();
