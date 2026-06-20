@@ -1,10 +1,10 @@
 (() => {
   const root = document.getElementById('primer-root');
-  const mode = new URLSearchParams(window.location.search).get('mode') === 'source' ? 'source' : 'wiki';
 
-  // Entries are attached here one at a time.
+  // Entries are attached here one at a time, in manuscript order.
   const wikiEntryFiles = [
-    'data/barotrauma/wiki/entries/001-foreword.md'
+    'data/barotrauma/wiki/entries/001-foreword.md',
+    'data/barotrauma/wiki/entries/002-regard-every-control-as-loaded.md'
   ];
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -28,7 +28,7 @@
     return response.text();
   }
 
-  function parseEntry(documentText, file) {
+  function parseEntry(documentText, file, usedIds) {
     const lines = documentText.replace(/\r\n?/g, '\n').split('\n');
     let title = '';
     const blocks = [];
@@ -54,18 +54,21 @@
 
     if (!title) throw new Error(`${file} does not contain a wiki-entry title.`);
 
-    return {
-      id: slugify(title),
-      title,
-      blocks,
-      file
-    };
+    const baseId = slugify(title);
+    let id = baseId;
+    let suffix = 2;
+    while (usedIds.has(id)) id = `${baseId}-${suffix++}`;
+    usedIds.add(id);
+
+    return { id, title, blocks, file };
   }
 
   async function loadEntries() {
-    root.innerHTML = `<div class="primer-loading">Loading ${wikiEntryFiles.length} attached wiki entry…</div>`;
+    const count = wikiEntryFiles.length;
+    root.innerHTML = `<div class="primer-loading">Loading ${count} attached wiki ${count === 1 ? 'entry' : 'entries'}…</div>`;
     const documents = await Promise.all(wikiEntryFiles.map(fetchText));
-    return documents.map((documentText, index) => parseEntry(documentText, wikiEntryFiles[index]));
+    const usedIds = new Set();
+    return documents.map((documentText, index) => parseEntry(documentText, wikiEntryFiles[index], usedIds));
   }
 
   function entryText(entry) {
@@ -101,7 +104,7 @@
     root.innerHTML = `
       <div class="primer-controls">
         <input id="primer-search" type="search" placeholder="Search attached wiki entries…" aria-label="Search Primer wiki">
-        <span id="primer-status" class="primer-status">${total} attached ${total === 1 ? 'entry' : 'entries'}</span>
+        <span id="primer-status" class="primer-status">${total} attached entries</span>
       </div>
       <div class="primer-layout">
         <nav id="primer-nav" class="primer-nav" aria-label="Primer entries"></nav>
@@ -132,7 +135,7 @@
       const query = search.value.trim().toLowerCase();
       const matches = query ? entries.filter(entry => entryText(entry).includes(query)) : entries;
 
-      status.textContent = `${matches.length} of ${total} attached ${total === 1 ? 'entry' : 'entries'}`;
+      status.textContent = `${matches.length} of ${total} attached entries`;
       nav.innerHTML = '';
 
       for (const entry of matches) {
@@ -162,69 +165,11 @@
     openEntry(activeId, false);
   }
 
-  function renderSource(entries) {
-    const total = entries.length;
-
-    root.innerHTML = `
-      <div class="primer-controls">
-        <input id="primer-search" type="search" placeholder="Search attached source entries…" aria-label="Search source entries">
-        <span id="primer-status" class="primer-status">Showing ${total} attached ${total === 1 ? 'section' : 'sections'}</span>
-      </div>
-      <div class="primer-layout">
-        <nav id="primer-nav" class="primer-nav" aria-label="Source table of contents"></nav>
-        <article id="primer-document" class="primer-article primer-document"></article>
-      </div>`;
-
-    const nav = document.getElementById('primer-nav');
-    const documentTarget = document.getElementById('primer-document');
-    const search = document.getElementById('primer-search');
-    const status = document.getElementById('primer-status');
-
-    function renderDocument() {
-      const query = search.value.trim().toLowerCase();
-      const matches = query ? entries.filter(entry => entryText(entry).includes(query)) : entries;
-
-      status.textContent = `${matches.length} of ${total} attached ${total === 1 ? 'section' : 'sections'}`;
-      nav.innerHTML = '';
-      documentTarget.innerHTML = `<header><p class="primer-meta">Attached source entries</p><h2>THE EUROPAN CREWMAN’S PRIMER</h2></header>`;
-
-      for (const entry of matches) {
-        const link = document.createElement('a');
-        link.href = `#source-${entry.id}`;
-        link.className = 'secondary-action';
-        link.innerHTML = `<strong>${String(entries.indexOf(entry) + 1).padStart(3, '0')}. ${escapeHtml(entry.title)}</strong>`;
-        nav.appendChild(link);
-
-        const section = document.createElement('section');
-        section.className = 'primer-document-section';
-        section.id = `source-${entry.id}`;
-
-        const heading = document.createElement('h3');
-        heading.textContent = entry.title;
-        section.appendChild(heading);
-        appendBlocks(section, entry.blocks);
-        documentTarget.appendChild(section);
-      }
-
-      if (!matches.length) {
-        nav.innerHTML = '<div class="primer-error">No attached source entries match this search.</div>';
-        documentTarget.innerHTML = '<div class="primer-error">No attached source entries match this search.</div>';
-      }
-    }
-
-    search.addEventListener('input', renderDocument);
-    renderDocument();
-  }
-
   async function start() {
-    document.getElementById(mode === 'source' ? 'primer-source-tab' : 'primer-wiki-tab').classList.add('active');
-
     try {
       const entries = await loadEntries();
       if (!entries.length) throw new Error('No wiki entries are attached yet.');
-
-      if (mode === 'source') renderSource(entries);
-      else renderWiki(entries);
+      renderWiki(entries);
     } catch (error) {
       root.innerHTML = `<div class="primer-error"><strong>The Crewman's Primer could not be loaded.</strong><br>${escapeHtml(error.message)}</div>`;
       console.error(error);
