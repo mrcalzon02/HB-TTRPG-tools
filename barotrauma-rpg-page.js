@@ -1,26 +1,9 @@
 (() => {
   const root = document.getElementById('rpg-root');
 
+  // Source sections are attached here one at a time in document order.
   const wikiEntryFiles = [
-    'data/barotrauma/wiki/rpg/entries/001-barotrauma-rpg-test-v-0-10.md',
-    'data/barotrauma/wiki/rpg/entries/002-stats.md',
-    'data/barotrauma/wiki/rpg/entries/003-gaining-a-level-and-gameplay-order.md',
-    'data/barotrauma/wiki/rpg/entries/004-stuff-mine-yours-ours.md',
-    'data/barotrauma/wiki/rpg/entries/005-backgrounds.md',
-    'data/barotrauma/wiki/rpg/entries/006-submarines.md',
-    'data/barotrauma/wiki/rpg/entries/007-upgrades.md',
-    'data/barotrauma/wiki/rpg/entries/008-alien-salvage.md',
-    'data/barotrauma/wiki/rpg/entries/009-jobs-events-and-stations.md',
-    'data/barotrauma/wiki/rpg/entries/010-upkeep.md',
-    'data/barotrauma/wiki/rpg/entries/011-personal-combat-damage-repairs-disease-and-death.md',
-    'data/barotrauma/wiki/rpg/entries/012-death-is-not-the-end.md',
-    'data/barotrauma/wiki/rpg/entries/013-sanity-and-losing-your-mind.md',
-    'data/barotrauma/wiki/rpg/entries/014-game-flow.md',
-    'data/barotrauma/wiki/rpg/entries/015-sample-stations.md',
-    'data/barotrauma/wiki/rpg/entries/016-12-quotes-of-famous-europan-sea-captains-to-live-by.md',
-    'data/barotrauma/wiki/rpg/entries/017-submarine-weapons-systems.md',
-    'data/barotrauma/wiki/rpg/entries/018-sample-pirate-encounter.md',
-    'data/barotrauma/wiki/rpg/entries/019-salvaging-a-wreck.md'
+    'data/barotrauma/wiki/rpg/entries/001-barotrauma-rpg-test-v-0-10.md'
   ];
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -48,11 +31,13 @@
     for (const rawLine of lines) {
       const line = rawLine.trimEnd();
       const heading = line.match(/^##\s+(.+?)\s*$/);
+
       if (heading) {
         if (title) throw new Error(`${file} contains more than one wiki entry.`);
         title = heading[1].trim();
         continue;
       }
+
       if (title && line.trim()) paragraphs.push(line);
     }
 
@@ -64,11 +49,12 @@
     while (usedIds.has(id)) id = `${baseId}-${suffix++}`;
     usedIds.add(id);
 
-    return { id, title, paragraphs, file };
+    return { id, title, paragraphs };
   }
 
   async function loadEntries() {
-    root.innerHTML = '<div class="rpg-loading">Loading 19 exact source entries…</div>';
+    const count = wikiEntryFiles.length;
+    root.innerHTML = `<div class="rpg-loading">Loading ${count} converted wiki ${count === 1 ? 'entry' : 'entries'}…</div>`;
     const documents = await Promise.all(wikiEntryFiles.map(fetchText));
     const usedIds = new Set();
     return documents.map((documentText, index) => parseEntry(documentText, wikiEntryFiles[index], usedIds));
@@ -84,8 +70,8 @@
 
     root.innerHTML = `
       <div class="rpg-controls">
-        <input id="rpg-search" type="search" placeholder="Search all RPG source entries…" aria-label="Search Barotrauma RPG wiki">
-        <span id="rpg-status" class="rpg-status">${total} exact source entries</span>
+        <input id="rpg-search" type="search" placeholder="Search converted RPG entries…" aria-label="Search Barotrauma RPG wiki">
+        <span id="rpg-status" class="rpg-status">${total} converted ${total === 1 ? 'entry' : 'entries'}</span>
       </div>
       <div class="rpg-layout">
         <nav id="rpg-nav" class="rpg-nav" aria-label="Barotrauma RPG entries"></nav>
@@ -109,7 +95,7 @@
     function renderList() {
       const query = search.value.trim().toLowerCase();
       const matches = query ? entries.filter(entry => entryText(entry).includes(query)) : entries;
-      status.textContent = `${matches.length} of ${total} exact source entries`;
+      status.textContent = `${matches.length} of ${total} converted ${total === 1 ? 'entry' : 'entries'}`;
       nav.innerHTML = '';
 
       for (const entry of matches) {
@@ -125,7 +111,7 @@
         nav.appendChild(link);
       }
 
-      if (!matches.length) nav.innerHTML = '<div class="rpg-error">No entries match this search.</div>';
+      if (!matches.length) nav.innerHTML = '<div class="rpg-error">No converted entries match this search.</div>';
       else if (!matches.some(entry => entry.id === activeId)) openEntry(matches[0].id);
     }
 
@@ -138,7 +124,7 @@
   async function start() {
     try {
       const entries = await loadEntries();
-      if (entries.length !== 19) throw new Error(`Expected 19 source entries but loaded ${entries.length}.`);
+      if (!entries.length) throw new Error('No Barotrauma RPG wiki entries are attached yet.');
       render(entries);
     } catch (error) {
       root.innerHTML = `<div class="rpg-error"><strong>The Barotrauma RPG wiki could not be loaded.</strong><br>${escapeHtml(error.message)}</div>`;
