@@ -1,0 +1,180 @@
+    return { selectedJobs, jobEvents, routeEvents, total: jobEvents + routeEvents, payment: selectedJobs.reduce((sum, job) => sum + job.payment, 0) };
+  }
+
+  function drawWeightedEvent(route) {
+    const category = weightedCategory(route.table, route.sanityEnabled);
+    const pool = eligibleEvents(category, route.sanityEnabled);
+    return { ...(pool[Math.floor(Math.random() * pool.length)] || EVENTS[0]) };
+  }
+
+  function renderRoute() {
+    const route = state.route;
+    const totals = routeTotals();
+    const stationNames = [...new Set([...STATIONS.map(item => item.name), route.start, route.end].filter(Boolean))];
+
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div><p class="eyebrow">Station-to-station voyage construction</p><h2>Route Planner and Encounter Tables</h2><p class="rules-note">Build the route in imported gameplay order: choose jobs at the station, complete upkeep, resolve job events first, then resolve the route-distance events sequentially before arrival.</p></div>
+          <a class="rules-link no-print" href="barotrauma-rpg.html#game-flow">Open GAME FLOW →</a>
+        </section>
+        <div class="tool-grid">
+          <section class="tool-panel span-7">
+            <h3>Voyage</h3>
+            <div class="field-grid three">
+              <label class="field">Departure<input id="route-start" list="station-list" value="${escapeHtml(route.start)}"></label>
+              <label class="field">Destination<input id="route-end" list="station-list" value="${escapeHtml(route.end)}"></label>
+              <label class="field">Route distance / event cards<input id="route-distance" type="number" min="0" max="50" value="${route.distance}"></label>
+              <label class="field">Route pressure modifier<input id="route-pressure" type="number" min="0" max="20" value="${route.routePressure}"></label>
+              <label class="field">Navigation reduction<input id="route-reduction" type="number" min="0" max="10" value="${route.navigationReduction}"></label>
+              <label class="field">Sanity events<select id="route-sanity"><option value="true" ${route.sanityEnabled ? 'selected' : ''}>Enabled</option><option value="false" ${!route.sanityEnabled ? 'selected' : ''}>Disabled</option></select></label>
+            </div>
+            <datalist id="station-list">${stationNames.map(name => `<option value="${escapeHtml(name)}"></option>`).join('')}</datalist>
+            <div class="check-list" style="margin-top:12px">
+              <label class="check-row"><input id="route-navigation-expert" type="checkbox" ${route.navigationExpert ? 'checked' : ''}><span><strong>Navigator: Navigation Expert</strong><br><span class="small-note">Reduce the number of travel event cards. The manuscript does not assign a fixed reduction, so the field above remains editable.</span></span><span>${route.navigationExpert ? `-${route.navigationReduction}` : 'Off'}</span></label>
+              <label class="check-row"><input id="route-mapmaker" type="checkbox" ${route.mapmaker ? 'checked' : ''}><span><strong>Navigator: Mapmaker</strong><br><span class="small-note">For each generated slot, draw two candidates so the crew can choose the desired event.</span></span><span>${route.mapmaker ? 'On' : 'Off'}</span></label>
+            </div>
+          </section>
+
+          <section class="tool-panel span-5">
+            <h3>Voyage Totals</h3>
+            <div class="metric-row">
+              <div class="metric"><span>Job events</span><strong>${totals.jobEvents}</strong></div>
+              <div class="metric"><span>Route events</span><strong>${totals.routeEvents}</strong></div>
+              <div class="metric"><span>Total events</span><strong>${totals.total}</strong></div>
+              <div class="metric"><span>Potential payment</span><strong>${totals.payment}c</strong></div>
+            </div>
+            <div class="button-row no-print" style="margin-top:12px"><button id="generate-route" class="primary-action" type="button">Generate Voyage Events</button><button id="clear-route" class="danger-button" type="button">Clear Route Plan</button></div>
+            <p class="small-note">Capacity remaining: <strong class="${calculateSubmarine().remainingCapacity < 0 ? 'bad' : 'good'}">${calculateSubmarine().remainingCapacity}</strong>. Station upkeep complete: <strong class="${UPKEEP_TASKS.every(([id]) => state.submarine.upkeep[id]?.complete) ? 'good' : 'warn'}">${UPKEEP_TASKS.every(([id]) => state.submarine.upkeep[id]?.complete) ? 'Yes' : 'No'}</strong>.</p>
+          </section>
+
+          <section class="tool-panel span-6">
+            <h3>Job Cards</h3>
+            <div class="check-list">
+              ${JOBS.map(job => `<label class="check-row"><input class="route-job" data-job="${job.id}" type="checkbox" ${route.jobs.includes(job.id) ? 'checked' : ''}><span><strong>${escapeHtml(job.name)}</strong><br><span class="small-note">${escapeHtml(job.difficulty)} · ${job.events} event card${job.events === 1 ? '' : 's'}</span></span><strong>${job.payment}c</strong></label>`).join('')}
+            </div>
+          </section>
+
+          <section class="tool-panel span-6">
+            <h3>Weighted Encounter Table</h3>
+            <p class="small-note">Weights determine which source-event category is selected for each generated slot. A weight of zero disables a category.</p>
+            <div class="table-wrap"><table class="tool-table" style="min-width:480px"><thead><tr><th>Category</th><th>Weight</th><th>Available cards</th></tr></thead><tbody>
+              ${EVENT_CATEGORIES.map(category => `<tr><td>${escapeHtml(category)}</td><td><input class="route-weight" data-category="${escapeHtml(category)}" type="number" min="0" max="100" value="${number(route.table[category], 0)}"></td><td>${EVENTS.filter(event => event.category === category).length}</td></tr>`).join('')}
+            </tbody></table></div>
+            <button id="reset-route-table" class="secondary-action no-print" type="button" style="margin-top:10px">Reset Default Weights</button>
+          </section>
+
+          <section class="tool-panel span-12">
+            <h3>Sequential Voyage Plan</h3>
+            <div class="card-list">
+              ${route.plan.map((slot, index) => {
+                const choices = slot.choices || [slot.event];
+                return `<article class="route-card"><header><div><span class="tag">${escapeHtml(slot.phase)}</span><h4>${index + 1}. ${escapeHtml(slot.label)}</h4></div><span class="status-pill status-${escapeHtml(slot.status || 'pending')}">${escapeHtml(slot.status || 'pending')}</span></header>
+                  ${choices.map((event, choiceIndex) => `<div class="tool-card" style="margin-top:8px"><strong>${choices.length > 1 ? `Choice ${choiceIndex + 1}: ` : ''}${escapeHtml(event.name)}</strong><p>${escapeHtml(event.description)}</p><span class="tag">${escapeHtml(event.category)}</span><span class="tag">${escapeHtml(event.stat)} vs ${event.dc}</span></div>`).join('')}
+                  <div class="button-row no-print" style="margin-top:8px"><button class="compact-button route-resolve-success" data-id="${slot.id}" type="button">Resolve Success</button><button class="compact-button route-resolve-failure" data-id="${slot.id}" type="button">Resolve Failure</button><button class="compact-button route-redraw" data-id="${slot.id}" type="button">Redraw</button></div>
+                </article>`;
+              }).join('') || '<div class="notice">No voyage generated. Configure jobs, distance, and encounter weights, then generate the route.</div>'}
+            </div>
+          </section>
+        </div>
+      </div>`;
+
+    bindTextInput('#route-start', element => { route.start = element.value; });
+    bindTextInput('#route-end', element => { route.end = element.value; });
+    bindTextInput('#route-distance', element => { route.distance = clamp(element.value, 0, 50); save(); renderRoute(); }, 'change');
+    bindTextInput('#route-pressure', element => { route.routePressure = clamp(element.value, 0, 20); save(); renderRoute(); }, 'change');
+    bindTextInput('#route-reduction', element => { route.navigationReduction = clamp(element.value, 0, 10); save(); renderRoute(); }, 'change');
+    bindTextInput('#route-sanity', element => { route.sanityEnabled = element.value === 'true'; save(); renderRoute(); }, 'change');
+    bindTextInput('#route-navigation-expert', element => { route.navigationExpert = element.checked; save(); renderRoute(); }, 'change');
+    bindTextInput('#route-mapmaker', element => { route.mapmaker = element.checked; save(); renderRoute(); }, 'change');
+
+    root.querySelectorAll('.route-job').forEach(input => input.addEventListener('change', event => {
+      const id = event.target.dataset.job;
+      route.jobs = event.target.checked ? [...new Set([...route.jobs, id])] : route.jobs.filter(item => item !== id);
+      save(); renderRoute();
+    }));
+    root.querySelectorAll('.route-weight').forEach(input => input.addEventListener('change', event => { route.table[event.target.dataset.category] = clamp(event.target.value, 0, 100); save(); }));
+    root.querySelector('#reset-route-table').addEventListener('click', () => { route.table = Object.fromEntries(EVENT_CATEGORIES.map(category => [category, category === 'Sanity' ? 1 : 3])); save(); renderRoute(); });
+    root.querySelector('#clear-route').addEventListener('click', () => { route.plan = []; save(); renderRoute(); });
+    root.querySelector('#generate-route').addEventListener('click', () => {
+      route.plan = [];
+      const currentTotals = routeTotals();
+      let sequence = 1;
+      for (const job of currentTotals.selectedJobs) {
+        for (let count = 0; count < job.events; count += 1) {
+          const choices = route.mapmaker ? [drawWeightedEvent(route), drawWeightedEvent(route)] : [drawWeightedEvent(route)];
+          route.plan.push({ id: uid('route'), phase: 'Job', label: `${job.name} — event ${count + 1} of ${job.events}`, choices, status: 'pending', sequence: sequence++ });
+        }
+      }
+      for (let count = 0; count < currentTotals.routeEvents; count += 1) {
+        const choices = route.mapmaker ? [drawWeightedEvent(route), drawWeightedEvent(route)] : [drawWeightedEvent(route)];
+        route.plan.push({ id: uid('route'), phase: 'Travel', label: `${route.start} to ${route.end} — route event ${count + 1} of ${currentTotals.routeEvents}`, choices, status: 'pending', sequence: sequence++ });
+      }
+      save(); renderRoute();
+    });
+    const findSlot = id => route.plan.find(slot => slot.id === id);
+    root.querySelectorAll('.route-resolve-success').forEach(button => button.addEventListener('click', event => { const slot = findSlot(event.target.dataset.id); if (slot) slot.status = 'success'; save(); renderRoute(); }));
+    root.querySelectorAll('.route-resolve-failure').forEach(button => button.addEventListener('click', event => { const slot = findSlot(event.target.dataset.id); if (slot) slot.status = 'failure'; save(); renderRoute(); }));
+    root.querySelectorAll('.route-redraw').forEach(button => button.addEventListener('click', event => { const slot = findSlot(event.target.dataset.id); if (slot) { slot.choices = route.mapmaker ? [drawWeightedEvent(route), drawWeightedEvent(route)] : [drawWeightedEvent(route)]; slot.status = 'pending'; } save(); renderRoute(); }));
+  }
+
+  function seedHash(text) {
+    let hash = 2166136261;
+    for (let index = 0; index < String(text).length; index += 1) {
+      hash ^= String(text).charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+  }
+
+  function seededRandom(seedText) {
+    let value = seedHash(seedText) || 1;
+    return () => {
+      value += 0x6D2B79F5;
+      let result = value;
+      result = Math.imul(result ^ (result >>> 15), result | 1);
+      result ^= result + Math.imul(result ^ (result >>> 7), result | 61);
+      return ((result ^ (result >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function mapName(rng, used) {
+    let name;
+    do {
+      name = `${MAP_PREFIX[Math.floor(rng() * MAP_PREFIX.length)]} ${MAP_SUFFIX[Math.floor(rng() * MAP_SUFFIX.length)]}`;
+    } while (used.has(name));
+    used.add(name);
+    return name;
+  }
+
+  function generateWorldMap() {
+    const world = state.world;
+    const rng = seededRandom(`${world.seed}|${world.rings}|${world.nodes}|${world.branching}`);
+    const rings = clamp(world.rings, 3, 8);
+    const requestedNodes = clamp(world.nodes, rings * 3 + 1, 60);
+    const width = 1100;
+    const height = 680;
+    const center = { x: width / 2, y: height / 2 };
+    const maxRadius = Math.min(width, height) * .43;
+    const nodes = [{ id: 'anomaly', name: 'The Central Anomaly', type: 'anomaly', ring: 0, x: center.x, y: center.y, details: 'The campaign’s ultimate destination at Europa’s center.' }];
+    const usedNames = new Set(nodes.map(node => node.name));
+    const stationQueue = STATIONS.map(item => ({ ...item }));
+    const ringCounts = [];
+    let remaining = requestedNodes - 1;
+    let circumferenceWeight = 0;
+    for (let ring = 1; ring <= rings; ring += 1) circumferenceWeight += ring;
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const minimumRemaining = (rings - ring) * 3;
+      let count = ring === rings ? remaining : Math.max(3, Math.round((requestedNodes - 1) * ring / circumferenceWeight));
+      count = Math.min(count, remaining - minimumRemaining);
+      ringCounts.push(count);
+      remaining -= count;
+    }
+    if (remaining > 0) ringCounts[ringCounts.length - 1] += remaining;
+
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const count = ringCounts[ring - 1];
+      const radius = maxRadius * ring / rings;
+      const phase = rng() * Math.PI * 2;
+      for (let index = 0; index < count; index += 1) {
+        const angle = phase + (Math.PI * 2 * index / count) + (rng() - .5) * .18;
