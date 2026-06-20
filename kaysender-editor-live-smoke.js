@@ -1,13 +1,19 @@
 (() => {
   'use strict';
 
-  // The old Primer card still generates a legacy source-viewer action.
-  // Remove that action whenever the Barotrauma registry renders or re-renders.
   const removeLegacyPrimerSourceButton = () => {
     const card = document.querySelector('[data-module-id="barotrauma-crewmans-primer"]');
     const actions = card?.querySelector('.module-actions');
     const buttons = actions ? [...actions.querySelectorAll('button')] : [];
     buttons.slice(1).forEach(button => button.remove());
+  };
+
+  const loadRpgWikiAction = () => {
+    if (document.querySelector('script[data-barotrauma-rpg-entry]')) return;
+    const script = document.createElement('script');
+    script.src = 'barotrauma-rpg-entry.js?v=exact-19';
+    script.dataset.barotraumaRpgEntry = 'true';
+    document.body.appendChild(script);
   };
 
   const grid = document.getElementById('barotrauma-overview-grid');
@@ -19,4 +25,5 @@
   });
 
   removeLegacyPrimerSourceButton();
+  loadRpgWikiAction();
 })();
