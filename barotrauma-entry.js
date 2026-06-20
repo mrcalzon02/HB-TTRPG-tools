@@ -1,11 +1,22 @@
 (() => {
+  'use strict';
+
   const preservedPrimerScript = document.createElement('script');
   preservedPrimerScript.src = 'barotrauma-primer-entry.js?v=preserved-20260620';
   preservedPrimerScript.async = false;
 
-  function attachRpgLaunchButton() {
-    const card = document.querySelector('[data-module-id="barotrauma-rpg-rules-wiki"]');
-    if (!card || card.querySelector('[data-open-barotrauma-rpg]')) return Boolean(card);
+  const launchModules = [
+    ['barotrauma-rpg-rules-wiki', 'barotrauma-rpg.html', 'Open Barotrauma RPG Wiki'],
+    ['barotrauma-rpg-character-sheet', 'barotrauma-rpg-tools.html#character', 'Open Character Sheet'],
+    ['barotrauma-submarine-manager', 'barotrauma-rpg-tools.html#submarine', 'Open Submarine Manager'],
+    ['barotrauma-encounter-planner', 'barotrauma-rpg-tools.html#encounters', 'Open Encounter Planner'],
+    ['barotrauma-route-planner', 'barotrauma-rpg-tools.html#route', 'Open Route Planner'],
+    ['barotrauma-world-map-generator', 'barotrauma-rpg-tools.html#world', 'Open World Map Generator']
+  ];
+
+  function attachLaunchButton(moduleId, href, label) {
+    const card = document.querySelector(`[data-module-id="${moduleId}"]`);
+    if (!card || card.querySelector(`[data-open-module="${moduleId}"]`)) return Boolean(card);
 
     let actions = card.querySelector('.module-actions');
     if (!actions) {
@@ -14,25 +25,29 @@
       card.appendChild(actions);
     }
 
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'primary-action';
-    button.dataset.openBarotraumaRpg = 'true';
-    button.textContent = 'Open Barotrauma RPG Wiki';
-    button.addEventListener('click', () => {
-      window.location.href = 'barotrauma-rpg.html';
-    });
-    actions.appendChild(button);
+    const anchor = document.createElement('a');
+    anchor.className = 'primary-action';
+    anchor.dataset.openModule = moduleId;
+    anchor.href = href;
+    anchor.textContent = label;
+    anchor.style.textDecoration = 'none';
+    actions.appendChild(anchor);
     return true;
+  }
+
+  function attachAllLaunchButtons() {
+    let attached = 0;
+    for (const module of launchModules) attached += attachLaunchButton(...module) ? 1 : 0;
+    return attached;
   }
 
   preservedPrimerScript.addEventListener('load', () => {
     const grid = document.getElementById('barotrauma-overview-grid');
-    attachRpgLaunchButton();
+    attachAllLaunchButtons();
     if (!grid) return;
 
     const observer = new MutationObserver(() => {
-      attachRpgLaunchButton();
+      attachAllLaunchButtons();
     });
     observer.observe(grid, { childList: true, subtree: true });
   });
