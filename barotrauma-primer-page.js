@@ -1,19 +1,18 @@
 (() => {
   const root = document.getElementById('primer-root');
 
-  // Entries are attached here in manuscript order.
   const wikiEntryFiles = [
     'data/barotrauma/wiki/entries/001-foreword.md',
     'data/barotrauma/wiki/entries/002-regard-every-control-as-loaded.md',
     'data/barotrauma/wiki/entries/003-report-aboard-ready-to-learn.md',
     'data/barotrauma/wiki/entries/004-the-general-crewman.md',
     'data/barotrauma/wiki/entries/005-you-are-not-the-leftover-role.md',
-    'data/barotrauma/wiki/entries/006-the-assistant-s-true-specialty.md',
+    'data/barotrauma/wiki/entries/006-the-assistants-true-specialty.md',
     'data/barotrauma/wiki/entries/007-you-are-not-useless.md',
     'data/barotrauma/wiki/entries/008-the-multiplier-of-people-who-already-look-busy.md',
     'data/barotrauma/wiki/entries/009-the-sacred-duty-of-fetching-things.md',
     'data/barotrauma/wiki/entries/010-learn-the-boat-before-the-boat-learns-you.md',
-    'data/barotrauma/wiki/entries/011-the-assistant-s-universal-response-kit.md',
+    'data/barotrauma/wiki/entries/011-the-assistants-universal-response-kit.md',
     'data/barotrauma/wiki/entries/012-ask-what-needs-doing.md',
     'data/barotrauma/wiki/entries/013-do-not-help-so-hard-that-you-become-the-problem.md',
     'data/barotrauma/wiki/entries/014-shadowing-specialists-without-becoming-their-shadow.md',
@@ -27,7 +26,7 @@
     'data/barotrauma/wiki/entries/022-when-all-specialist-roles-are-taken.md',
     'data/barotrauma/wiki/entries/023-finding-your-future-specialty.md',
     'data/barotrauma/wiki/entries/024-the-veteran-assistant.md',
-    'data/barotrauma/wiki/entries/025-the-assistant-s-private-superpower.md',
+    'data/barotrauma/wiki/entries/025-the-assistants-private-superpower.md',
     'data/barotrauma/wiki/entries/026-final-rule-of-the-general-crewman.md',
     'data/barotrauma/wiki/entries/027-the-carrying-of-arms.md',
     'data/barotrauma/wiki/entries/028-lines-of-fire.md',
@@ -42,9 +41,9 @@
     'data/barotrauma/wiki/entries/037-fire-discipline.md',
     'data/barotrauma/wiki/entries/038-final-rule-of-the-firing-line.md',
     'data/barotrauma/wiki/entries/039-communication-aboard-ship.md',
-    'data/barotrauma/wiki/entries/040-the-medical-officer-s-charge.md',
+    'data/barotrauma/wiki/entries/040-the-medical-officers-charge.md',
     'data/barotrauma/wiki/entries/041-the-purpose-of-medical-treatment.md',
-    'data/barotrauma/wiki/entries/042-common-conditions-of-the-submariner-s-trade.md',
+    'data/barotrauma/wiki/entries/042-common-conditions-of-the-submariners-trade.md',
     'data/barotrauma/wiki/entries/043-gunshot-wounds.md',
     'data/barotrauma/wiki/entries/044-blood-loss.md',
     'data/barotrauma/wiki/entries/045-blunt-force-trauma.md',
@@ -101,20 +100,20 @@
     'data/barotrauma/wiki/entries/096-returning-aboard.md',
     'data/barotrauma/wiki/entries/097-final-rule-of-the-away-team.md',
     'data/barotrauma/wiki/entries/098-the-oxygen-generator.md',
-    'data/barotrauma/wiki/entries/099-the-submarine-s-acoustic-beacon.md',
+    'data/barotrauma/wiki/entries/099-the-submarines-acoustic-beacon.md',
     'data/barotrauma/wiki/entries/100-why-oxygen-production-is-so-noticeable.md',
     'data/barotrauma/wiki/entries/101-silent-running.md',
     'data/barotrauma/wiki/entries/102-the-no-oxygen-alarm.md',
     'data/barotrauma/wiki/entries/103-acoustic-noise-and-sonar-detection.md',
     'data/barotrauma/wiki/entries/104-when-to-depower-the-generator.md',
     'data/barotrauma/wiki/entries/105-when-not-to-depower-it.md',
-    'data/barotrauma/wiki/entries/106-the-captain-s-oxygen-clock.md',
+    'data/barotrauma/wiki/entries/106-the-captains-oxygen-clock.md',
     'data/barotrauma/wiki/entries/107-crew-conduct-during-oxygen-conservation.md',
     'data/barotrauma/wiki/entries/108-engineering-responsibilities.md',
     'data/barotrauma/wiki/entries/109-medical-responsibilities.md',
     'data/barotrauma/wiki/entries/110-the-limits-of-silence.md',
     'data/barotrauma/wiki/entries/111-final-rule-of-oxygen-silence.md',
-    'data/barotrauma/wiki/entries/112-the-captain-s-charge.md',
+    'data/barotrauma/wiki/entries/112-the-captains-charge.md',
     'data/barotrauma/wiki/entries/113-i-the-fundamental-responsibility-of-command.md',
     'data/barotrauma/wiki/entries/114-ii-know-your-department-heads.md',
     'data/barotrauma/wiki/entries/115-iii-keep-a-roster-or-begin-collecting-ghosts.md',
@@ -126,7 +125,7 @@
     'data/barotrauma/wiki/entries/121-ix-hazard-avoidance.md',
     'data/barotrauma/wiki/entries/122-x-speed-and-the-science-of-arriving-in-one-piece.md',
     'data/barotrauma/wiki/entries/123-xi-reactor-and-fuel-awareness.md',
-    'data/barotrauma/wiki/entries/124-xii-supplies-and-the-captain-s-broadly-informed-anxiety.md',
+    'data/barotrauma/wiki/entries/124-xii-supplies-and-the-captains-broadly-informed-anxiety.md',
     'data/barotrauma/wiki/entries/125-xiii-mission-selection.md',
     'data/barotrauma/wiki/entries/126-xiv-communication-from-the-helm.md',
     'data/barotrauma/wiki/entries/127-xv-morale-and-the-maintenance-of-a-crew-that-does-not-hate-you.md',
@@ -173,7 +172,7 @@
     'data/barotrauma/wiki/entries/168-xxvi-injury-disability-and-death-benefits.md',
     'data/barotrauma/wiki/entries/169-xxvii-debt-and-forced-labor.md',
     'data/barotrauma/wiki/entries/170-xxviii-contract-extension.md',
-    'data/barotrauma/wiki/entries/171-xxix-captain-s-rights-under-union-208.md',
+    'data/barotrauma/wiki/entries/171-xxix-captains-rights-under-union-208.md',
     'data/barotrauma/wiki/entries/172-xxx-crew-obligations.md',
     'data/barotrauma/wiki/entries/173-xxxi-union-arbitration.md',
     'data/barotrauma/wiki/entries/174-xxxii-the-red-registry.md',
@@ -192,7 +191,7 @@
     'data/barotrauma/wiki/entries/187-xlv-the-union-and-the-dead.md',
     'data/barotrauma/wiki/entries/188-xlvi-the-union-motto.md',
     'data/barotrauma/wiki/entries/189-xlvii-final-declaration.md',
-    'data/barotrauma/wiki/entries/190-the-mariner-s-pledge.md',
+    'data/barotrauma/wiki/entries/190-the-mariners-pledge.md',
     'data/barotrauma/wiki/entries/191-extended-footnote-concerning-cults-clowns-parasites-and-other-consequences-of-prolonged-human-isolation.md',
     'data/barotrauma/wiki/entries/192-the-children-of-the-honkmother.md',
     'data/barotrauma/wiki/entries/193-the-church-of-the-husk.md',
@@ -204,11 +203,7 @@
   ];
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[character]));
 
   const slugify = value => value
@@ -232,20 +227,14 @@
     for (const rawLine of lines) {
       const line = rawLine.trimEnd();
       const heading = line.match(/^##\s+(.+?)\s*$/);
-
       if (heading) {
         if (title) throw new Error(`${file} contains more than one wiki entry.`);
         title = heading[1].trim();
         continue;
       }
-
       if (!title || !line.trim()) continue;
-
-      if (/^[-*]\s+/.test(line)) {
-        blocks.push({ type: 'listItem', text: line.replace(/^[-*]\s+/, '').trim() });
-      } else {
-        blocks.push({ type: 'paragraph', text: line.trim() });
-      }
+      if (/^[-*]\s+/.test(line)) blocks.push({ type: 'listItem', text: line.replace(/^[-*]\s+/, '').trim() });
+      else blocks.push({ type: 'paragraph', text: line.trim() });
     }
 
     if (!title) throw new Error(`${file} does not contain a wiki-entry title.`);
@@ -255,13 +244,11 @@
     let suffix = 2;
     while (usedIds.has(id)) id = `${baseId}-${suffix++}`;
     usedIds.add(id);
-
-    return { id, title, blocks, file };
+    return { id, title, blocks };
   }
 
   async function loadEntries() {
-    const count = wikiEntryFiles.length;
-    root.innerHTML = `<div class="primer-loading">Loading ${count} attached wiki entries…</div>`;
+    root.innerHTML = '<div class="primer-loading">Loading 198 attached wiki entries…</div>';
     const documents = await Promise.all(wikiEntryFiles.map(fetchText));
     const usedIds = new Set();
     return documents.map((documentText, index) => parseEntry(documentText, wikiEntryFiles[index], usedIds));
@@ -273,14 +260,12 @@
 
   function appendBlocks(target, blocks) {
     let activeList = null;
-
     for (const block of blocks) {
       if (block.type === 'listItem') {
         if (!activeList) {
           activeList = document.createElement('ul');
           target.appendChild(activeList);
         }
-
         const item = document.createElement('li');
         item.textContent = block.text;
         activeList.appendChild(item);
@@ -296,16 +281,7 @@
   function renderWiki(entries) {
     const total = entries.length;
     let activeId = window.location.hash.replace(/^#/, '') || entries[0].id;
-
-    root.innerHTML = `
-      <div class="primer-controls">
-        <input id="primer-search" type="search" placeholder="Search attached wiki entries…" aria-label="Search Primer wiki">
-        <span id="primer-status" class="primer-status">${total} attached entries</span>
-      </div>
-      <div class="primer-layout">
-        <nav id="primer-nav" class="primer-nav" aria-label="Primer entries"></nav>
-        <article id="primer-article" class="primer-article"></article>
-      </div>`;
+    root.innerHTML = `<div class="primer-controls"><input id="primer-search" type="search" placeholder="Search attached wiki entries…" aria-label="Search Primer wiki"><span id="primer-status" class="primer-status">${total} attached entries</span></div><div class="primer-layout"><nav id="primer-nav" class="primer-nav" aria-label="Primer entries"></nav><article id="primer-article" class="primer-article"></article></div>`;
 
     const nav = document.getElementById('primer-nav');
     const article = document.getElementById('primer-article');
@@ -315,48 +291,33 @@
     function openEntry(id, updateHash = true) {
       const entry = entries.find(item => item.id === id) || entries[0];
       activeId = entry.id;
-
-      nav.querySelectorAll('a').forEach(link => {
-        link.classList.toggle('active', link.dataset.entryId === activeId);
-      });
-
+      nav.querySelectorAll('a').forEach(link => link.classList.toggle('active', link.dataset.entryId === activeId));
       const position = entries.indexOf(entry) + 1;
       article.innerHTML = `<div class="primer-meta">Wiki entry ${position} of ${total}</div><h2>${escapeHtml(entry.title)}</h2>`;
       appendBlocks(article, entry.blocks);
-
       if (updateHash) history.replaceState(null, '', `#${entry.id}`);
     }
 
     function renderList() {
       const query = search.value.trim().toLowerCase();
       const matches = query ? entries.filter(entry => entryText(entry).includes(query)) : entries;
-
       status.textContent = `${matches.length} of ${total} attached entries`;
       nav.innerHTML = '';
-
       for (const entry of matches) {
         const link = document.createElement('a');
         link.href = `#${entry.id}`;
         link.dataset.entryId = entry.id;
         link.className = `secondary-action${entry.id === activeId ? ' active' : ''}`;
         link.innerHTML = `<strong>${String(entries.indexOf(entry) + 1).padStart(3, '0')}. ${escapeHtml(entry.title)}</strong>`;
-        link.addEventListener('click', event => {
-          event.preventDefault();
-          openEntry(entry.id);
-        });
+        link.addEventListener('click', event => { event.preventDefault(); openEntry(entry.id); });
         nav.appendChild(link);
       }
-
-      if (!matches.length) {
-        nav.innerHTML = '<div class="primer-error">No attached entries match this search.</div>';
-      } else if (!matches.some(entry => entry.id === activeId)) {
-        openEntry(matches[0].id);
-      }
+      if (!matches.length) nav.innerHTML = '<div class="primer-error">No attached entries match this search.</div>';
+      else if (!matches.some(entry => entry.id === activeId)) openEntry(matches[0].id);
     }
 
     search.addEventListener('input', renderList);
     window.addEventListener('hashchange', () => openEntry(window.location.hash.replace(/^#/, ''), false));
-
     renderList();
     openEntry(activeId, false);
   }
