@@ -1,0 +1,180 @@
+        const jitter = (rng() - .5) * Math.min(24, radius * .08);
+        const outerBias = ring / rings;
+        let type;
+        const roll = rng();
+        if (ring === rings && roll < .52) type = 'station';
+        else if (roll < .22) type = 'outpost';
+        else if (roll < .43) type = 'wreck';
+        else if (roll < .62) type = 'ruins';
+        else if (roll < .82) type = 'hazard';
+        else type = 'station';
+        let name;
+        let details;
+        if (type === 'station' && stationQueue.length) {
+          const source = stationQueue.shift();
+          name = source.name;
+          details = `${source.faction}. ${source.specialty}. Important locals: ${source.locals}.`;
+          usedNames.add(name);
+        } else {
+          name = mapName(rng, usedNames);
+          details = type === 'station' ? 'Friendly or contested station generated for trade, jobs, resupply, and upkeep.'
+            : type === 'outpost' ? 'A small pressure outpost with limited stores and uncertain loyalties.'
+            : type === 'wreck' ? 'A wreck or salvage site whose value may exceed its safety.'
+            : type === 'ruins' ? 'Ancient structures or abandoned research installations.'
+            : 'A route hazard: currents, storms, cave pressure, fauna, or unstable ice.';
+        }
+        nodes.push({
+          id: `node-${ring}-${index}`,
+          name, type, ring,
+          x: center.x + Math.cos(angle) * (radius + jitter),
+          y: center.y + Math.sin(angle) * (radius + jitter),
+          details,
+          pressure: Math.max(1, rings - ring + 1),
+          outerBias
+        });
+      }
+    }
+
+    const edges = [];
+    const edgeKeys = new Set();
+    const addEdge = (a, b, extraDanger = false) => {
+      if (!a || !b || a.id === b.id) return;
+      const key = [a.id, b.id].sort().join('|');
+      if (edgeKeys.has(key)) return;
+      edgeKeys.add(key);
+      const distance = 1 + Math.floor(rng() * 5);
+      const danger = extraDanger || a.type === 'hazard' || b.type === 'hazard' || rng() < .16;
+      edges.push({ id: `edge-${edges.length + 1}`, a: a.id, b: b.id, distance, danger });
+    };
+
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const current = nodes.filter(node => node.ring === ring);
+      const inward = nodes.filter(node => node.ring === ring - 1);
+      for (const node of current) {
+        const nearest = [...inward].sort((left, right) => Math.hypot(node.x - left.x, node.y - left.y) - Math.hypot(node.x - right.x, node.y - right.y));
+        addEdge(node, nearest[0]);
+        if (nearest[1] && rng() < number(world.branching) / 100) addEdge(node, nearest[1]);
+      }
+      for (let index = 0; index < current.length; index += 1) {
+        if (rng() < number(world.branching) / 100) addEdge(current[index], current[(index + 1) % current.length]);
+      }
+    }
+
+    const outerStations = nodes.filter(node => node.ring === rings && node.type === 'station');
+    const start = outerStations[0] || nodes.find(node => node.ring === rings) || nodes[nodes.length - 1];
+    start.start = true;
+    world.map = { seed: world.seed, width, height, rings, nodes, edges, startId: start.id, generatedAt: new Date().toISOString() };
+    world.selected = [start.id, 'anomaly'];
+    save();
+  }
+
+  function shortestPath(map, startId, endId) {
+    if (!map || !startId || !endId) return null;
+    const distances = Object.fromEntries(map.nodes.map(node => [node.id, Infinity]));
+    const previous = {};
+    const unvisited = new Set(map.nodes.map(node => node.id));
+    distances[startId] = 0;
+    while (unvisited.size) {
+      let current = null;
+      let best = Infinity;
+      for (const id of unvisited) if (distances[id] < best) { best = distances[id]; current = id; }
+      if (current === null || best === Infinity) break;
+      unvisited.delete(current);
+      if (current === endId) break;
+      for (const edge of map.edges.filter(item => item.a === current || item.b === current)) {
+        const neighbor = edge.a === current ? edge.b : edge.a;
+        if (!unvisited.has(neighbor)) continue;
+        const alternative = distances[current] + number(edge.distance, 1) + (edge.danger ? 1 : 0);
+        if (alternative < distances[neighbor]) { distances[neighbor] = alternative; previous[neighbor] = current; }
+      }
+    }
+    if (!Number.isFinite(distances[endId])) return null;
+    const ids = [];
+    let cursor = endId;
+    while (cursor) { ids.unshift(cursor); if (cursor === startId) break; cursor = previous[cursor]; }
+    if (ids[0] !== startId) return null;
+    return { ids, distance: distances[endId] };
+  }
+
+  function mapSvg(map, selected = []) {
+    if (!map) return '';
+    const nodeById = Object.fromEntries(map.nodes.map(node => [node.id, node]));
+    const path = selected.length === 2 ? shortestPath(map, selected[0], selected[1]) : null;
+    const pathEdges = new Set();
+    if (path) for (let index = 0; index < path.ids.length - 1; index += 1) pathEdges.add([path.ids[index], path.ids[index + 1]].sort().join('|'));
+    return `<svg id="world-map-svg" viewBox="0 0 ${map.width} ${map.height}" role="img" aria-label="Generated Europa campaign route map">
+      <defs><radialGradient id="anomalyGlow"><stop offset="0" stop-color="#efcb7e" stop-opacity=".55"/><stop offset="1" stop-color="#efcb7e" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="${map.width / 2}" cy="${map.height / 2}" r="92" fill="url(#anomalyGlow)"/>
+      ${map.edges.map(edge => {
+        const a = nodeById[edge.a]; const b = nodeById[edge.b]; const key = [edge.a, edge.b].sort().join('|');
+        return `<g><line class="map-edge ${edge.danger ? 'danger' : ''}" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" ${pathEdges.has(key) ? 'style="stroke:#e9c36d;stroke-width:5"' : ''}/><text x="${((a.x+b.x)/2).toFixed(1)}" y="${((a.y+b.y)/2).toFixed(1)}" fill="#929aa4" font-size="10">${edge.distance}</text></g>`;
+      }).join('')}
+      ${map.nodes.map(node => `<g class="map-node ${escapeHtml(node.type)} ${selected.includes(node.id) ? 'selected' : ''}" data-node-id="${escapeHtml(node.id)}" transform="translate(${node.x.toFixed(1)} ${node.y.toFixed(1)})"><circle r="${node.type === 'anomaly' ? 15 : node.start ? 12 : 9}"/><text x="${node.type === 'anomaly' ? 20 : 14}" y="4">${escapeHtml(node.start ? `START: ${node.name}` : node.name)}</text></g>`).join('')}
+    </svg>`;
+  }
+
+  function renderWorld() {
+    const world = state.world;
+    if (!world.map) generateWorldMap();
+    const map = world.map;
+    const selectedNodes = world.selected.map(id => map.nodes.find(node => node.id === id)).filter(Boolean);
+    const path = selectedNodes.length === 2 ? shortestPath(map, selectedNodes[0].id, selectedNodes[1].id) : null;
+
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div><p class="eyebrow">Radial Europa campaign graph</p><h2>World Map Generator</h2><p class="rules-note">Generate a connected station-and-route campaign map that begins in the outer colonies and guarantees navigable paths toward the central anomaly. Routes carry event-card distances and danger markers.</p></div>
+          <div class="inline-actions no-print"><a class="rules-link" href="barotrauma-rpg.html#sample-stations">SAMPLE STATIONS →</a><a class="rules-link" href="barotrauma-rpg.html#game-flow">GAME FLOW →</a></div>
+        </section>
+        <div class="tool-grid">
+          <section class="tool-panel span-4">
+            <h3>Generation Controls</h3>
+            <div class="field-grid">
+              <label class="field">Seed<input id="world-seed" value="${escapeHtml(world.seed)}"></label>
+              <label class="field">Depth rings<input id="world-rings" type="number" min="3" max="8" value="${world.rings}"></label>
+              <label class="field">Total locations<input id="world-nodes" type="number" min="10" max="60" value="${world.nodes}"></label>
+              <label class="field">Branching %<input id="world-branching" type="number" min="0" max="100" value="${world.branching}"></label>
+            </div>
+            <div class="button-row no-print" style="margin-top:10px"><button id="generate-world" class="primary-action" type="button">Generate Map</button><button id="randomize-seed" class="secondary-action" type="button">Random Seed</button></div>
+            <div class="button-row no-print" style="margin-top:10px"><button id="export-map-json" class="secondary-action" type="button">Export Map JSON</button><button id="export-map-svg" class="secondary-action" type="button">Export SVG</button></div>
+            <p class="small-note">Click one location for the route start and a second for the destination. A highlighted shortest route will be calculated using distance plus one additional cost for dangerous connections.</p>
+          </section>
+
+          <section class="tool-panel span-8">
+            <h3>Selected Route</h3>
+            ${selectedNodes.length ? `<p><strong>${escapeHtml(selectedNodes.map(node => node.name).join(' → '))}</strong></p>` : '<p class="small-note">No locations selected.</p>'}
+            ${path ? `<div class="metric-row"><div class="metric"><span>Route distance</span><strong>${path.distance}</strong></div><div class="metric"><span>Locations</span><strong>${path.ids.length}</strong></div><div class="metric"><span>Event cards</span><strong>${path.distance}</strong></div></div><p class="small-note">${path.ids.map(id => escapeHtml(map.nodes.find(node => node.id === id)?.name || id)).join(' → ')}</p><button id="send-map-route" class="primary-action no-print" type="button">Use This Route in Route Planner</button>` : '<div class="notice">Select two connected locations to calculate a route.</div>'}
+            ${selectedNodes.map(node => `<div class="tool-card" style="margin-top:10px"><strong>${escapeHtml(node.name)}</strong><br><span class="tag">${escapeHtml(node.type)}</span><span class="tag">Depth ring ${node.ring}</span><p>${escapeHtml(node.details)}</p></div>`).join('')}
+          </section>
+
+          <section class="tool-panel span-12">
+            <div class="map-frame">${mapSvg(map, world.selected)}</div>
+            <div class="map-legend"><span><i class="legend-dot" style="background:#21364a;color:#70a7c7"></i>Station</span><span><i class="legend-dot" style="background:#35351f;color:#c7b570"></i>Outpost</span><span><i class="legend-dot" style="background:#3d2525;color:#bd7474"></i>Wreck</span><span><i class="legend-dot" style="background:#392d47;color:#a985c7"></i>Ruins</span><span><i class="legend-dot" style="background:#421f28;color:#d36378"></i>Hazard</span><span><i class="legend-dot" style="background:#5a431d;color:#e0b45f"></i>Anomaly</span></div>
+          </section>
+        </div>
+      </div>`;
+
+    bindTextInput('#world-seed', element => { world.seed = element.value; });
+    bindTextInput('#world-rings', element => { world.rings = clamp(element.value, 3, 8); }, 'change');
+    bindTextInput('#world-nodes', element => { world.nodes = clamp(element.value, 10, 60); }, 'change');
+    bindTextInput('#world-branching', element => { world.branching = clamp(element.value, 0, 100); }, 'change');
+    root.querySelector('#generate-world').addEventListener('click', () => { generateWorldMap(); renderWorld(); });
+    root.querySelector('#randomize-seed').addEventListener('click', () => { world.seed = `EUROPA-${Math.random().toString(36).slice(2, 8).toUpperCase()}`; generateWorldMap(); renderWorld(); });
+    root.querySelector('#export-map-json').addEventListener('click', () => download(`barotrauma-world-${world.seed}.json`, JSON.stringify(map, null, 2)));
+    root.querySelector('#export-map-svg').addEventListener('click', () => download(`barotrauma-world-${world.seed}.svg`, mapSvg(map, world.selected), 'image/svg+xml'));
+    root.querySelectorAll('.map-node').forEach(node => node.addEventListener('click', event => {
+      const id = event.currentTarget.dataset.nodeId;
+      if (world.selected.includes(id)) world.selected = world.selected.filter(item => item !== id);
+      else if (world.selected.length < 2) world.selected.push(id);
+      else world.selected = [id];
+      save(); renderWorld();
+    }));
+    root.querySelector('#send-map-route')?.addEventListener('click', () => {
+      if (!path || selectedNodes.length !== 2) return;
+      state.route.start = selectedNodes[0].name;
+      state.route.end = selectedNodes[1].name;
+      state.route.distance = path.distance;
+      state.route.plan = [];
+      save(); setTool('route');
+    });
+  }
