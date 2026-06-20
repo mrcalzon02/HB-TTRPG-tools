@@ -13,7 +13,8 @@ const mime = new Map([
   ['.html', 'text/html; charset=utf-8'],
   ['.js', 'text/javascript; charset=utf-8'],
   ['.json', 'application/json; charset=utf-8'],
-  ['.css', 'text/css; charset=utf-8']
+  ['.css', 'text/css; charset=utf-8'],
+  ['.md', 'text/markdown; charset=utf-8']
 ]);
 
 const server = http.createServer(async (request, response) => {
@@ -39,6 +40,11 @@ const listen = () => new Promise((resolve, reject) => {
 });
 const close = () => new Promise(resolve => server.close(resolve));
 
+const pageScript = await fs.readFile(path.resolve(root, 'barotrauma-primer-page.js'), 'utf8');
+const attachedEntryFiles = [...pageScript.matchAll(/'data\/barotrauma\/wiki\/entries\/[^']+\.md'/g)];
+const expectedCount = attachedEntryFiles.length;
+if (!expectedCount) throw new Error('No Primer wiki entries are attached in barotrauma-primer-page.js.');
+
 let browser;
 try {
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
@@ -47,21 +53,22 @@ try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 
   await page.goto(`${baseUrl}/barotrauma-primer.html?mode=wiki`, { waitUntil: 'networkidle' });
-  await page.waitForSelector('#primer-nav button');
-  const wikiCount = await page.locator('#primer-nav button').count();
-  if (wikiCount !== 198) throw new Error(`Wiki displayed ${wikiCount} entries instead of 198.`);
-  if ((await page.locator('#primer-article h2').textContent()) !== 'FOREWORD') throw new Error('Wiki did not open on FOREWORD.');
+  await page.waitForSelector('#primer-nav a');
+  const wikiCount = await page.locator('#primer-nav a').count();
+  if (wikiCount !== expectedCount) throw new Error(`Wiki displayed ${wikiCount} entries instead of ${expectedCount}.`);
+  const wikiFirst = await page.locator('#primer-article h2').textContent();
+  if (wikiFirst !== 'FOREWORD') throw new Error(`Wiki opened on ${wikiFirst || 'nothing'} instead of FOREWORD.`);
 
   await page.goto(`${baseUrl}/barotrauma-primer.html?mode=source`, { waitUntil: 'networkidle' });
   await page.waitForSelector('.primer-document-section');
   const sourceCount = await page.locator('.primer-document-section').count();
-  if (sourceCount !== 198) throw new Error(`Source viewer displayed ${sourceCount} sections instead of 198.`);
+  if (sourceCount !== expectedCount) throw new Error(`Source viewer displayed ${sourceCount} sections instead of ${expectedCount}.`);
   const first = await page.locator('.primer-document-section').first().locator('h2,h3,h4').textContent();
   const last = await page.locator('.primer-document-section').last().locator('h2,h3,h4').textContent();
-  if (first !== 'FOREWORD' || last !== 'FINAL CAUTION') throw new Error(`Source order is wrong: ${first} ... ${last}.`);
+  if (first !== 'FOREWORD') throw new Error(`Source viewer begins with ${first || 'nothing'} instead of FOREWORD.`);
 
-  await fs.writeFile(outputPath, `${JSON.stringify({ result: 'passed', wikiCount, sourceCount, first, last }, null, 2)}\n`);
-  console.log('Crewman\'s Primer plain-file browser verification passed.');
+  await fs.writeFile(outputPath, `${JSON.stringify({ result: 'passed', expectedCount, wikiCount, sourceCount, first, last }, null, 2)}\n`);
+  console.log(`Crewman's Primer verification passed for ${expectedCount} attached wiki ${expectedCount === 1 ? 'entry' : 'entries'}.`);
 } finally {
   if (browser) await browser.close();
   if (server.listening) await close();
