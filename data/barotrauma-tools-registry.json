@@ -1,12 +1,11 @@
 {
   "setting": "Barotrauma",
-  "status": "foundation registry with source-faithful Crewman's Primer wiki and source document viewer",
+  "status": "foundation registry with source-faithful Crewman's Primer wiki",
   "projectType": "unofficial fan-made campaign support",
   "sourceNotes": [
     "This workspace is an unofficial fan project and is not affiliated with or endorsed by the creators or publishers of Barotrauma.",
     "Original campaign prose, tables, and utilities should remain clearly separated from copied game text or extracted proprietary assets.",
-    "The Crewman's Primer is a source-faithful wiki conversion in which every titled document section is a separate entry and the complete source text is preserved without summarization.",
-    "The source document viewer presents those same 198 entries continuously in original title order; it does not maintain a second rewritten copy of the manuscript."
+    "The Crewman's Primer is a source-faithful wiki conversion in which every titled document section is a separate entry and the complete source text is preserved without summarization."
   ],
   "modules": [
     {
@@ -15,16 +14,15 @@
       "title": "The Crewman's Primer",
       "priority": 1,
       "status": "available",
-      "description": "A searchable, source-faithful conversion of THE EUROPAN CREWMAN’S PRIMER. All 198 titled sections remain separate wiki entries, while the source document viewer presents the complete manuscript continuously in original order with a table of contents, full-text search, printing, and links back to individual entries.",
+      "description": "A searchable, source-faithful conversion of THE EUROPAN CREWMAN’S PRIMER. All 198 titled sections remain separate wiki entries in original manuscript order.",
       "launchTarget": "crewmans-primer",
       "actionLabel": "Open Crewman's Primer Wiki",
-      "sourceActionLabel": "Open Source Document Viewer",
       "wikiIndex": "data/barotrauma/wiki/crewmans-primer-index.json",
       "entryCount": 198,
       "sourceParagraphCount": 3952,
-      "viewerModes": ["wikiEntries", "sourceDocument"],
-      "tags": ["lore", "wiki", "handbook", "crew culture", "survival", "source transcription", "source viewer"],
-      "dataFamilies": ["sourceEntry", "sourceBlock", "sourceHeading", "sourceParagraph", "sourceList"]
+      "viewerModes": ["wikiEntries"],
+      "tags": ["lore", "wiki", "handbook", "crew culture", "survival", "source transcription"],
+      "dataFamilies": ["wikiEntry", "wikiHeading", "wikiParagraph", "wikiList"]
     },
     {
       "id": "barotrauma-cult-faction-dossiers",
