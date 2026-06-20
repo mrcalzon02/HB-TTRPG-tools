@@ -68,13 +68,13 @@ Submarine: The Barsuk
 
 Crew:
 
-Captain - Name: Sarah, Background: Military, Stats: Strength 8, Agility 6, Intelligence 9, Charisma 7
+1. Captain - Name: Sarah, Background: Military, Stats: Strength 8, Agility 6, Intelligence 9, Charisma 7
 
-Engineer - Name: Jack, Background: Engineer, Stats: Strength 6, Agility 7, Intelligence 10, Charisma 5
+2. Engineer - Name: Jack, Background: Engineer, Stats: Strength 6, Agility 7, Intelligence 10, Charisma 5
 
-Scientist - Name: Rachel, Background: Scientist, Stats: Strength 5, Agility 5, Intelligence 10, Charisma 8
+3. Scientist - Name: Rachel, Background: Scientist, Stats: Strength 5, Agility 5, Intelligence 10, Charisma 8
 
-Medic - Name: Tom, Background: Medics, Stats: Strength 7, Agility 9, Intelligence 6, Charisma 6
+4. Medic - Name: Tom, Background: Medics, Stats: Strength 7, Agility 9, Intelligence 6, Charisma 6
 
 This submarine and crew are well-equipped to navigate and explore the subsurface ocean, with Sarah's military background providing leadership and combat skills, Jack's engineering skills useful for repair and modification, Rachel's scientific expertise for analyzing data and solving problems, and Tom's medical training for treating injuries and ailments. However, Sarah's tendency towards violence and Jack's ineptitude in other areas may cause problems for the crew, and Rachel's naivety and Tom's confidence may lead to mistakes. It will be up to the player to balance the strengths and weaknesses of their crew and make strategic decisions to ensure the success of their mission.
 

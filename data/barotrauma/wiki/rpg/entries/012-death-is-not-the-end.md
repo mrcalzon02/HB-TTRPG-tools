@@ -8,13 +8,13 @@ When a player character dies, they have the option to respawn at the last friend
 
 Cost:
 
-10 credits per level or one supply.
+- 10 credits per level or one supply.
 
 Negatives:
 
-All surviving crew members suffer a -1 to morale
+- All surviving crew members suffer a -1 to morale
 
-The respawned player has a -2 penalty to all stats for the next 2 turns
+- The respawned player has a -2 penalty to all stats for the next 2 turns
 
 The respawn system can only be used once per mission. If a player dies again, they are permanently removed from the game. Players can also choose to permanently retire their character and create a new one, but this comes with a -3 penalty to all stats for the rest of the mission.
 

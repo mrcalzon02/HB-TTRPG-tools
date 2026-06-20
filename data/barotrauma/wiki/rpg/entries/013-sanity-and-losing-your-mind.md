@@ -36,17 +36,17 @@ In addition to the Lost Sanity event cards, there are also "Sanity Boost" event 
 
 Sample include,
 
-"Mindfulness Meditation": This event card allows the player to take a few moments to focus on their breath and clear their mind, reducing their lost sanity by 1 point.
+1. "Mindfulness Meditation": This event card allows the player to take a few moments to focus on their breath and clear their mind, reducing their lost sanity by 1 point.
 
-"Positive Thinking": This event card allows the player to practice positive affirmations and reframe their thoughts, reducing their lost sanity by 1 point.
+2. "Positive Thinking": This event card allows the player to practice positive affirmations and reframe their thoughts, reducing their lost sanity by 1 point.
 
-"Nature Walk": This event card allows the player to take a short walk outside and appreciate the beauty of nature, reducing their lost sanity by 2 points.
+3. "Nature Walk": This event card allows the player to take a short walk outside and appreciate the beauty of nature, reducing their lost sanity by 2 points.
 
-"Art Therapy": This event card allows the player to engage in creative expression through art, reducing their lost sanity by 2 points.
+4. "Art Therapy": This event card allows the player to engage in creative expression through art, reducing their lost sanity by 2 points.
 
-"Support Group": This event card allows the player to attend a support group and talk about their struggles with others, reducing their lost sanity by 3 points.
+5. "Support Group": This event card allows the player to attend a support group and talk about their struggles with others, reducing their lost sanity by 3 points.
 
-"Therapy Session": This event card allows the player to attend a professional therapy session and work through their issues, reducing their lost sanity by 4 points.
+6. "Therapy Session": This event card allows the player to attend a professional therapy session and work through their issues, reducing their lost sanity by 4 points.
 
 The Sanity system in Barotrauma adds an additional layer of challenge and strategy for the player to manage, as they must balance the risks and rewards of taking on tasks and dealing with their Lost Sanity. Sanity is an optional system that players can choose to use or not at the start of the game in Barotrauma. This means that players can choose to play with or without the added challenge and strategy of managing their Lost Sanity and dealing with the effects of Lost Sanity event cards.
 

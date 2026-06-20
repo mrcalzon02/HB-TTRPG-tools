@@ -24,13 +24,13 @@ Example of combat:
 
 Round 1: Players attack with laser cannon (damage: 8)
 
-2d6 roll: 6 + agility (3) = 9 (successful attack) Pirate 1 attacks with missiles (damage: 10)
+- 2d6 roll: 6 + agility (3) = 9 (successful attack) Pirate 1 attacks with missiles (damage: 10)
 
-2d6 roll: 4 + strength (2) = 6 (unsuccessful attack)
+- 2d6 roll: 4 + strength (2) = 6 (unsuccessful attack)
 
 Round 2: Players attack with torpedoes (damage: 12)
 
-2d6 roll: 4 + agility (4) = 8 (unsuccessful attack) Pirate 2 flees
+- 2d6 roll: 4 + agility (4) = 8 (unsuccessful attack) Pirate 2 flees
 
 In this example, the players were able to defeat the pirates, but took some damage to their own submarine in the process. They will need to repair and resupply before continuing their mission.
 
@@ -54,36 +54,36 @@ all, the goal of Barotrauma is to reach the center of the planet and the anomaly
 
 In Barotrauma, the player has the choice to start the game with one of four different submarines, each with their own strengths and weaknesses.
 
-The Barsuk - This submarine is smaller and more agile, making it easier to navigate through tight spaces and avoid dangers. However, it has less room for crew members and resources, and its defense systems are weaker.
+1. The Barsuk - This submarine is smaller and more agile, making it easier to navigate through tight spaces and avoid dangers. However, it has less room for crew members and resources, and its defense systems are weaker.
 
-Stats: Speed 8, Maneuverability 10, Defense 5, Capacity 5 Hull 8:Torpedoes - MK-1
+    a. Stats: Speed 8, Maneuverability 10, Defense 5, Capacity 5 Hull 8:Torpedoes - MK-1
 
-Strengths: Quick and agile, able to navigate through tight spaces and avoid dangers easily.
+    b. Strengths: Quick and agile, able to navigate through tight spaces and avoid dangers easily.
 
-Weaknesses: Low defense and capacity, vulnerable to attacks and limited in resources.
+    c. Weaknesses: Low defense and capacity, vulnerable to attacks and limited in resources.
 
-The Humpback - This submarine is larger and can carry more crew members and resources, making it a good choice for longer missions. However, it is slower and less agile, making it more vulnerable to dangers and attacks.
+2. The Humpback - This submarine is larger and can carry more crew members and resources, making it a good choice for longer missions. However, it is slower and less agile, making it more vulnerable to dangers and attacks.
 
-Stats: Speed 5, Maneuverability 6, Defense 8, Capacity 10 Hull 12:Torpedoes - MK-1 T-1.
+    d. Stats: Speed 5, Maneuverability 6, Defense 8, Capacity 10 Hull 12:Torpedoes - MK-1 T-1.
 
-Strengths: Large capacity for crew members and resources, good for long missions.
+    e. Strengths: Large capacity for crew members and resources, good for long missions.
 
-Weaknesses: Slow and less agile, vulnerable to dangers and attacks.
+    f. Weaknesses: Slow and less agile, vulnerable to dangers and attacks.
 
-The Dugong - This submarine is designed specifically for combat, with strong weapons and defense systems. However, it is less efficient in other areas, such as exploration and resource management.
+3. The Dugong - This submarine is designed specifically for combat, with strong weapons and defense systems. However, it is less efficient in other areas, such as exploration and resource management.
 
-Stats: Speed 6, Maneuverability 7, Defense 10, Capacity 7,Hull 16:Torpedoes - MK-1 T-1,Laser-Cannons - LS-1,T-1
+    g. Stats: Speed 6, Maneuverability 7, Defense 10, Capacity 7,Hull 16:Torpedoes - MK-1 T-1,Laser-Cannons - LS-1,T-1
 
-Strengths: Strong weapons and defense systems, well-equipped for combat.
+    h. Strengths: Strong weapons and defense systems, well-equipped for combat.
 
-Weaknesses: Less efficient in other areas such as exploration and resource management.
+    i. Weaknesses: Less efficient in other areas such as exploration and resource management.
 
-The Orca - This submarine has a balanced design, with average stats in all areas. It is a good choice for players who want a well-rounded vessel. 
+4. The Orca - This submarine has a balanced design, with average stats in all areas. It is a good choice for players who want a well-rounded vessel. 
 
-Stats: Speed 6, Maneuverability 7, Defense 7, Capacity 7, Hull 10:Laser-Cannons - LS-1 T- 2
+    j. Stats: Speed 6, Maneuverability 7, Defense 7, Capacity 7, Hull 10:Laser-Cannons - LS-1 T- 2
 
-Strengths: Balanced stats in all areas, good for a well-rounded vessel. 
+    k. Strengths: Balanced stats in all areas, good for a well-rounded vessel. 
 
-Weaknesses: None significant, but may not excel in any specific area.
+    l. Weaknesses: None significant, but may not excel in any specific area.
 
 Ultimately, the player must choose the submarine that best fits their playstyle and goals for the game. Each submarine has its own strengths and weaknesses, and it is up to the player to decide which one will be the most effective for their mission.
