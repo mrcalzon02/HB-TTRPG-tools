@@ -1,0 +1,36 @@
+
+  function render() {
+    const tool = activeTool();
+    document.querySelectorAll('.ops-tab').forEach(button => button.classList.toggle('active', button.dataset.tool === tool));
+    if (tool === 'submarine') renderSubmarine();
+    else if (tool === 'encounters') renderEncounters();
+    else if (tool === 'route') renderRoute();
+    else if (tool === 'world') renderWorld();
+    else renderCharacter();
+  }
+
+  document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
+  window.addEventListener('hashchange', render);
+  document.getElementById('print-tool')?.addEventListener('click', () => window.print());
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), state }, null, 2)));
+  document.getElementById('import-suite')?.addEventListener('change', event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        const imported = parsed.state || parsed;
+        state = deepMerge(defaultState(), imported);
+        save(); render();
+      } catch (error) {
+        alert(`The selected JSON could not be imported: ${error.message}`);
+      } finally {
+        event.target.value = '';
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  render();
+})();
