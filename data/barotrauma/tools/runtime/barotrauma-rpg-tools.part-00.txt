@@ -1,0 +1,180 @@
+(() => {
+  'use strict';
+
+  const STORAGE_KEY = 'hb-barotrauma-rpg-operations-suite-v1';
+  const root = document.getElementById('ops-root');
+
+  const CLASSES = {
+    Engineer: {
+      maxLevel: 4,
+      description: 'Skilled in repairing and maintaining systems, but may lack in combat abilities.',
+      talents: [
+        ['Quick Fix', 'Roll an extra die on repair work and take the highest result.'],
+        ['MacGyver', 'Use improvised materials when proper repair parts are unavailable.'],
+        ['Tech Wizard', '+2 Intelligence on tasks involving technology.'],
+        ['Demolition Expert', '+2 Strength on tasks involving sabotage or destruction.'],
+        ['Tinkerer', '+2 Intelligence on modification tasks.'],
+        ['Gadgeteer', 'Create gadgets and devices from technical skill and creativity.'],
+        ['Backup Plan', 'Gain a second chance when the initial system-failure roll fails.']
+      ]
+    },
+    Medic: {
+      maxLevel: 4,
+      description: 'Proficient in healing and treating injuries, but less capable in physical tasks.',
+      talents: [
+        ['First Aid', '+2 Agility on medical treatment; can stabilize a crewman at or below 0 within one turn.'],
+        ['Trauma Specialist', '+2 Intelligence on complex treatment; successful treatment recovers 1d6 lost stat points.'],
+        ['Healing Hands', 'Target crewman regains one lost stat point.'],
+        ['Poison Resistance', '+2 Strength on toxic-substance tasks for the Medic or nearby crew.'],
+        ['Diagnostician', '+2 Intelligence on diagnosis; recover +1 stat point on successful treatment.'],
+        ['Medical Expert', '+1 on medicine and medical-matter rolls.'],
+        ['Emergency Response', '+2 Agility in crises; injured crew recover +1 stat point for two turns while the Medic takes no other action.']
+      ]
+    },
+    Scientist: {
+      maxLevel: 4,
+      description: 'Knowledgeable in research and analysis, but may not excel in social situations.',
+      talents: [
+        ['Research Prodigy', '+2 Intelligence on scientific study.'],
+        ['Analytical Mind', '+2 Intelligence on data analysis.'],
+        ['Creative Thinker', '+2 Intelligence on creative problem-solving.'],
+        ['Scientific Communication', '+2 Charisma on scientific presentations.'],
+        ['Laboratory Technician', '+2 Agility on laboratory work.'],
+        ['Field Researcher', '+2 Agility on fieldwork.'],
+        ['Scientific Leadership', '+2 Charisma on scientific leadership.']
+      ]
+    },
+    'Security officer': {
+      maxLevel: 4,
+      description: 'Trained in combat and defense, but may lack the technical skills of other classes.',
+      talents: [
+        ['Combat Training', '+2 Strength on physical combat.'],
+        ['Quick Reflexes', '+2 Agility when dodging and evading.'],
+        ['Tactical Thinking', '+2 Intelligence on strategy and planning.'],
+        ['Weapons Expert', '+2 Strength on weapon-use tasks.'],
+        ['Security Specialist', '+2 Intelligence on security measures.'],
+        ['Intimidation', '+2 Charisma on intimidation, persuasion, and negotiation.'],
+        ['Leadership', '+2 Charisma when leading or commanding a team.']
+      ]
+    },
+    Captain: {
+      maxLevel: 6,
+      description: 'Leads the ship and excels at surviving and maintaining order.',
+      talents: [
+        ['Leadership', 'Spend one supply to increase crew stats by +2 for one round; a failed roll imposes -2 and adds Lost Sanity.'],
+        ['Crisis Management', 'Spend one supply for +4 Intelligence for one round and attempt to discard an event card.'],
+        ['Resource Management', 'Increase the crew’s Strength and Agility by +1 for one round; failure imposes -2 until station.'],
+        ['People Person', '+5 Intelligence for one negotiation; failure imposes -5 and adds Lost Sanity.'],
+        ['Strategic Planning', '+6 Agility for one event when used before drawing events; failure imposes -6 for that event.'],
+        ['Decision Making', 'Spend one supply for +3 Strength for one round; failure imposes -3 for one round.'],
+        ['Emotional Control', 'Spend one supply for +4 Intelligence and remove crew Lost Sanity; failure reverses the effect.']
+      ]
+    },
+    Mechanic: {
+      maxLevel: 6,
+      description: 'Focused on keeping the ship running and little else.',
+      talents: [
+        ['Quick Fixes', 'Spend one supply for +2 Agility for one round; failure imposes -2.'],
+        ['Trick Repair Work', 'Spend one supply for +4 Strength for one round; failure imposes -4.'],
+        ['Customization', 'Spend one supply for +3 submarine Defense for one round; failure imposes -3.'],
+        ['Scrap King', 'Spend one supply for +5 Strength and Agility during one salvage round; failure imposes -5.'],
+        ['Innovative Thinking', 'Spend one supply for +6 Intelligence on a creative repair; failure imposes -5 Strength and Agility.'],
+        ['Uncommon Expertise', 'Spend one supply for +5 Intelligence for one troubleshooting round; failure imposes -5 Strength and Agility.'],
+        ['Emergency pump', 'Spend one supply for +2 submarine Agility for one round; failure instead imposes -2.']
+      ]
+    },
+    Navigator: {
+      maxLevel: 6,
+      description: 'Gets the ship where it needs to go, no questions asked.',
+      talents: [
+        ['Navigation Expert', '+3 Intelligence for route calculation and reduce event cards needed for travel once before the next station.'],
+        ['Quick Thinker', 'Roll twice and choose the better result once before the next station.'],
+        ['Mapmaker', 'Draw two event cards and choose the desired result once per mission.'],
+        ['Deep Sea Diver', 'Roll twice on underwater-exploration rolls once before the next station.'],
+        ['Deep sea Weather Watcher', 'Roll twice on submarine-movement rolls once per mission.'],
+        ['Distress Signal Expert', 'Roll twice on vessel-communication rolls, then suffer -1 Intelligence until the next station.'],
+        ['Salvage Hunter', 'Roll twice on salvage-operation rolls once before the next station.']
+      ]
+    }
+  };
+
+  const BACKGROUNDS = [
+    { name: 'Military man of action', fate: 'Commanding Presence', disadvantage: 'Brutality' },
+    { name: 'Master Engineer', fate: 'Quick Fix', disadvantage: 'Ineptitude' },
+    { name: 'Scientist of new thought', fate: 'Insight', disadvantage: 'Naivety' },
+    { name: 'Explorer of all things', fate: "Adventurer's Spirit", disadvantage: 'Greed' },
+    { name: 'Medics to the masses', fate: "Healer's Touch", disadvantage: 'Confidence' },
+    { name: 'Diplomatic ties', fate: 'Negotiator', disadvantage: 'Cowardice' },
+    { name: 'Mechanical man', fate: 'MacGyver', disadvantage: 'Laziness' },
+    { name: 'Mostly Law Enforcement', fate: 'Authority', disadvantage: 'Rigidity' },
+    { name: 'Treasure Hunter', fate: 'Looter', disadvantage: 'Greed' },
+    { name: 'Pirate hunter', fate: "Corsair's Courage", disadvantage: 'Disrespect' },
+    { name: 'Custom', fate: 'Custom Fate', disadvantage: 'Custom Disadvantage' }
+  ];
+
+  const SUBMARINES = {
+    Barsuk: { speed: 8, maneuverability: 10, defense: 5, capacity: 5, hull: 8, weapons: [{ name: 'Torpedoes - MK-1', tier: 1, ammo: 4 }], strengths: 'Quick and agile; suited to tight spaces and avoiding danger.', weaknesses: 'Low defense and capacity.' },
+    Humpback: { speed: 5, maneuverability: 6, defense: 8, capacity: 10, hull: 12, weapons: [{ name: 'Torpedoes - MK-1', tier: 1, ammo: 4 }], strengths: 'Large capacity for long missions.', weaknesses: 'Slow and less agile.' },
+    Dugong: { speed: 6, maneuverability: 7, defense: 10, capacity: 7, hull: 16, weapons: [{ name: 'Torpedoes - MK-1', tier: 1, ammo: 4 }, { name: 'Laser-Cannons - LS-1', tier: 1, ammo: 8 }], strengths: 'Strong weapons and defense systems.', weaknesses: 'Less efficient for exploration and resource management.' },
+    Orca: { speed: 6, maneuverability: 7, defense: 7, capacity: 7, hull: 10, weapons: [{ name: 'Laser-Cannons - LS-1', tier: 1, ammo: 8 }, { name: 'Laser-Cannons - LS-1', tier: 1, ammo: 8 }], strengths: 'Balanced in all areas.', weaknesses: 'Does not excel in a single specialty.' }
+  };
+
+  const UPGRADES = [
+    { id: 'propulsion', name: 'Propulsion System Upgrade', price: 500, effects: { speed: 2, maneuverability: -1 }, note: '+2 Speed; -1 Maneuverability.' },
+    { id: 'life-support', name: 'Life Support System Upgrade', price: 400, effects: { defense: -1 }, note: 'Improves crew/resource capacity; -1 Defense. The source gives no numeric capacity increase.' },
+    { id: 'weapons-system', name: 'Weapons System Upgrade', price: 600, effects: { defense: 2, speed: -1, maneuverability: -1 }, note: '+2 Defense in combat; -1 Speed and Maneuverability.' },
+    { id: 'navigation-system', name: 'Navigation System Upgrade', price: 300, effects: { maneuverability: 2, defense: -1 }, note: '+2 Maneuverability; -1 Defense.' },
+    { id: 'hull-reinforcement', name: 'Hull Reinforcement', price: 400, effects: { defense: 2, hull: 4, speed: -1, maneuverability: -1 }, note: '+2 Defense, +4 Hull; -1 Speed and Maneuverability.' },
+    { id: 'oxygen-tank', name: 'Oxygen Tank Upgrade', price: 200, effects: { speed: -1, maneuverability: -1 }, note: 'Longer oxygen endurance; -1 Speed and Maneuverability.' },
+    { id: 'medical-bay', name: 'Medical Bay Upgrade', price: 300, effects: { defense: -1 }, note: 'Allows non-Medics to use the bay; -1 Defense.' },
+    { id: 'power-panel', name: 'Power Panel Upgrade', price: 100, effects: { speed: -1, maneuverability: -1 }, note: 'Improves energy endurance; -1 Speed and Maneuverability.' },
+    { id: 'visual-sensor', name: 'Visual Sensor Array Upgrade', price: 200, effects: { defense: -1 }, note: 'Improves hazard detection; -1 Defense.' },
+    { id: 'salvage-rig', name: 'Salvage Rig Upgrade', price: 300, effects: { speed: -1, maneuverability: -1 }, note: 'Improves salvage; -1 Speed and Maneuverability.' },
+    { id: 'water-purification', name: 'Water Purification System', price: 200, effects: { defense: -1 }, note: 'Provides 5 Water per mission; -1 Defense.' },
+    { id: 'environmental-control', name: 'Environmental Control System', price: 400, effects: { speed: -1, maneuverability: -1 }, note: 'Improves air and temperature; -1 Speed and Maneuverability.' },
+    { id: 'sonar-control', name: 'Sonar Control System', price: 250, effects: { speed: -1, maneuverability: -1 }, note: 'Improves threat detection; -1 Speed and Maneuverability.' },
+    { id: 'torpedo-launcher', name: 'Torpedo Launcher Upgrade', price: 500, effects: { defense: -1 }, note: 'Improves torpedo damage and range; -1 Defense.' },
+    { id: 'power-generator', name: 'Power Generator Upgrade', price: 350, effects: { speed: -1, maneuverability: -1 }, note: 'Improves power reliability; -1 Speed and Maneuverability.' },
+    { id: 'hull-plating', name: 'Hull Plating Upgrade', price: 450, effects: { hull: 3, speed: -1, maneuverability: -1 }, note: '+3 Hull; -1 Speed and Maneuverability.' },
+    { id: 'armored-windows', name: 'Armored Windows Upgrade', price: 300, effects: { speed: -1, maneuverability: -1 }, note: 'Raises breach difficulty; -1 Speed and Maneuverability.' },
+    { id: 'reinforced-hull', name: 'Reinforced Hull Upgrade', price: 500, effects: { hull: 5, speed: -2, maneuverability: -2 }, note: '+5 Hull; -2 Speed and Maneuverability.' },
+    { id: 'damage-control', name: 'Damage Control Compartment', price: 100, effects: { capacity: -1 }, note: 'Repair +3 Hull once per mission; -1 Capacity.' },
+    { id: 'hull-foam', name: 'Emergency Hull Foam Patch Kit', price: 550, effects: {}, note: 'Single use: instantly patch +2 Hull damage.' }
+  ];
+
+  const WEAPONS = [
+    { name: 'Torpedoes - MK-1', damage: [3, 6, 9], range: 'Medium', type: 'Guided', ammo: [4, 6, 8], storage: 1 },
+    { name: 'Laser-Cannons - LS-1', damage: [1, 3, 5], range: 'Short', type: 'Energy', ammo: [8, 12, 16], storage: 1 },
+    { name: 'Mini-Missiles - MM-1', damage: [6, 9, 12], range: 'Medium', type: 'Guided', ammo: [6, 10, 14], storage: 1 },
+    { name: 'Depth Charges - DC-1', damage: [7, 9, 11], range: 'Short', type: 'Proximity', ammo: [4, 6, 8], storage: 1 },
+    { name: 'Mines - M-1', damage: [9, 11, 13], range: 'Point Blank', type: 'Proximity', ammo: [2, 4, 6], storage: 1 },
+    { name: 'Torpedo Launchers - TL-1', damage: [4, 7, 10], range: 'Long', type: 'Guided', ammo: [3, 5, 7], storage: 2 },
+    { name: 'Missile Launchers - ML-1', damage: [8, 11, 14], range: 'Very Long', type: 'Guided', ammo: [4, 6, 8], storage: 2 },
+    { name: 'Laser Cannons - LC-1', damage: [5, 8, 11], range: 'Long', type: 'Energy', ammo: [6, 10, 14], storage: 2 },
+    { name: 'Plasma Cannons - PC-1', damage: [8, 11, 14], range: 'Long', type: 'Energy', ammo: [5, 8, 11], storage: 2 },
+    { name: 'ELF Cannon - GC-1', damage: [10, 13, 16], range: 'Very Long', type: 'Energy', ammo: [4, 6, 8], storage: 2 },
+    { name: 'Railgun - RG-1', damage: [6, 9, 12], range: 'Long', type: 'Energy', ammo: [8, 12, 16], storage: 2 },
+    { name: 'Ion Cannon - IC-1', damage: [7, 10, 13], range: 'Long', type: 'Energy', ammo: [7, 10, 13], storage: 2 }
+  ];
+
+  const JOBS = [
+    { id: 'supply-delivery', name: 'Supply Delivery', payment: 100, events: 1, difficulty: 'Easy' },
+    { id: 'system-repair', name: 'System Repair', payment: 200, events: 3, difficulty: 'Moderate' },
+    { id: 'trade-agreement', name: 'Negotiate Trade Agreement', payment: 300, events: 5, difficulty: 'Hard' },
+    { id: 'defend-station', name: 'Defend Station from Attack', payment: 400, events: 7, difficulty: 'Very Hard' },
+    { id: 'lost-artifact', name: 'Retrieve Lost Artifact', payment: 500, events: 10, difficulty: 'Extreme' }
+  ];
+
+  const STATIONS = [
+    { name: 'Aurora Station', faction: 'The Alliance', specialty: 'Weapons, clothing, equipment', locals: 'Captain Marcus; Dr. Elizabeth' },
+    { name: 'Leviathan Station', faction: 'The Alliance', specialty: 'Technology and survival gear', locals: 'Captain James; Dr. Sarah' },
+    { name: 'Hydra Station', faction: 'The Syndicate', specialty: 'Salvage and engineering', locals: 'Captain Anna; Dr. John' },
+    { name: 'Nautilus Station', faction: 'The Syndicate', specialty: 'Trade and fabrication', locals: 'Captain Thomas; Dr. Rachel' },
+    { name: 'Deepsea Station', faction: 'The Confederacy', specialty: 'Diving and neutral markets', locals: 'Captain Rebecca; Dr. David' }
+  ];
+
+  const EVENTS = [
+    { id: 'underwater-currents', name: 'Underwater Currents', category: 'Hazard', stat: 'Intelligence', dc: 8, description: 'Powerful currents threaten to push the submarine off course. Navigate through the flow and avoid obstacles.', reward: 'Credits and salvage.', failure: 'Submarine damage and a Lost Sanity check.' },
+    { id: 'lost-in-storm', name: 'Lost in a Storm', category: 'Hazard', stat: 'Intelligence', dc: 9, description: 'A violent storm damages the vessel and obscures navigation. Recover the intended course.', reward: 'Credits and salvage.', failure: 'Submarine damage and a Lost Sanity check.' },
+    { id: 'kraken-attack', name: 'Kraken Attack!', category: 'Creature', stat: 'Strength', dc: 11, description: 'A giant kraken attacks the submarine. Fight it off, flee, or distract it before it destroys the vessel.', reward: 'Salvage and credits.', failure: 'Severe submarine damage, possible crew loss, and Lost Sanity.' },
+    { id: 'repairing-leak', name: 'Repairing a Leak', category: 'Maintenance', stat: 'Intelligence', dc: 7, description: 'A hull leak must be repaired before flooding spreads.', reward: 'Leak sealed.', failure: 'Ongoing 1 Hull damage per turn until repaired.' },
