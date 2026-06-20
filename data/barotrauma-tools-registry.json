@@ -1,11 +1,12 @@
 {
   "setting": "Barotrauma",
-  "status": "foundation registry with source-faithful Crewman's Primer and Barotrauma RPG wikis",
+  "status": "foundation registry with source-faithful Crewman's Primer wiki and staged Barotrauma RPG wiki conversion",
   "projectType": "unofficial fan-made campaign support",
   "sourceNotes": [
     "This workspace is an unofficial fan project and is not affiliated with or endorsed by the creators or publishers of Barotrauma.",
     "Original campaign prose, tables, and utilities should remain clearly separated from copied game text or extracted proprietary assets.",
-    "The Crewman's Primer and Barotrauma RPG are source-faithful wiki conversions in which source-titled sections remain separate entries without summarization."
+    "The Crewman's Primer is a source-faithful wiki conversion in which source-titled sections remain separate entries without summarization.",
+    "Barotrauma RPG.docx is being transferred into separate wiki entries one source section at a time without rewriting or summarization."
   ],
   "modules": [
     {
@@ -29,12 +30,12 @@
       "section": "reference",
       "title": "Barotrauma RPG",
       "priority": 2,
-      "status": "available",
-      "description": "An exact wiki conversion of the Barotrauma RPG Test v0.10 manuscript. The opening material and all 18 source-title sections are preserved as 19 consecutive wiki entries without rewriting or summarization.",
+      "status": "conversion-in-progress",
+      "description": "An exact wiki conversion of Barotrauma RPG.docx performed one source section at a time. Stage 1 contains the opening Test v 0.10 material; later sections remain unattached until their conversion stage is completed.",
       "launchTarget": "barotrauma-rpg",
       "actionLabel": "Open Barotrauma RPG Wiki",
       "wikiIndex": "data/barotrauma/wiki/rpg/rpg-index.json",
-      "entryCount": 19,
+      "entryCount": 1,
       "viewerModes": ["wikiEntries"],
       "tags": ["RPG", "rules", "wiki", "source transcription", "submarines", "campaign"],
       "dataFamilies": ["wikiEntry", "wikiHeading", "wikiParagraph"]
