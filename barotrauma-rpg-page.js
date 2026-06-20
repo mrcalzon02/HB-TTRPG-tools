@@ -3,7 +3,8 @@
 
   // Source sections are attached here one at a time in document order.
   const wikiEntryFiles = [
-    'data/barotrauma/wiki/rpg/entries/001-barotrauma-rpg-test-v-0-10.md'
+    'data/barotrauma/wiki/rpg/entries/001-barotrauma-rpg-test-v-0-10.md',
+    'data/barotrauma/wiki/rpg/entries/002-stats.md'
   ];
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
