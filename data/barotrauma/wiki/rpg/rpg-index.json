@@ -1,29 +1,233 @@
 {
   "id": "barotrauma-rpg-rules-wiki",
+  "schemaVersion": "2.0.0",
   "title": "Barotrauma RPG Rules Wiki",
   "displayTitle": "BAROTRAUMA RPG",
-  "edition": "Test v 0.10 Exact Source Conversion",
-  "status": "conversion-in-progress",
-  "description": "An exact wiki conversion of Barotrauma RPG.docx performed one source section at a time. Stage 1 contains the opening Test v 0.10 material; later source sections remain unattached until their conversion stage is completed.",
+  "edition": "Test v 0.10 Complete Exact Source Conversion",
+  "status": "available",
+  "description": "A complete exact-source wiki conversion of Barotrauma RPG.docx. All 19 source-defined sections are stored as separate Markdown entries and attached directly to the wiki in original document order.",
   "source": {
     "title": "Barotrauma RPG",
+    "file": "Barotrauma RPG.docx",
     "documentId": "1O-PuIi9_lsAPAZQzeEG83Zecm4Wm5Z4o99Pzv0yU2-g",
     "sourceVersion": "Test v 0.10",
     "created": "2023-01-06",
     "lastModified": "2023-01-14",
-    "conversionPolicy": "Preserve source spelling, punctuation, wording, repetition, contradictions, and paragraph order without summarization or editorial normalization."
+    "paragraphCount": 948,
+    "nonEmptyParagraphCount": 823,
+    "imageCount": 5,
+    "conversionPolicy": "Preserve source headings, paragraph text, list membership and numbering, punctuation, emphasis, repetition, contradictions, and original order without rewriting, summarization, bundling, or editorial normalization."
   },
   "disclaimer": "Unofficial fan-made tabletop material inspired by Barotrauma. This project is not affiliated with or endorsed by the creators or publishers of Barotrauma.",
-  "readingOrder": [
-    "001-barotrauma-rpg-test-v-0-10"
-  ],
-  "entryCount": 1,
-  "coverage": {
-    "convertedEntries": 1,
-    "sourceSectionsMapped": 1,
-    "nextSourceSection": "STATS",
-    "sourceSectionsRemaining": "Conversion continues one section at a time."
-  },
   "entryDirectory": "data/barotrauma/wiki/rpg/entries",
-  "viewer": "barotrauma-rpg.html"
+  "viewer": "barotrauma-rpg.html",
+  "entryCount": 19,
+  "bodyTextUnitCount": 804,
+  "sourceHeadingCount": 19,
+  "sourceListItemCount": 272,
+  "sourceImageCount": 5,
+  "wordCount": 16764,
+  "textSequenceSha256": "eb6064f45dda4c7ad5a0097c1b4a78e0a9f1de939bc1630929a0cdcbb1b7303e",
+  "readingOrder": [
+    "001-barotrauma-rpg-test-v-0-10",
+    "002-stats",
+    "003-gaining-a-level-and-gameplay-order",
+    "004-stuff-mine-yours-ours",
+    "005-backgrounds",
+    "006-submarines",
+    "007-upgrades",
+    "008-alien-salvage",
+    "009-jobs-events-and-stations",
+    "010-upkeep",
+    "011-personal-combat-damage-repairs-disease-and-death",
+    "012-death-is-not-the-end",
+    "013-sanity-and-losing-your-mind",
+    "014-game-flow",
+    "015-sample-stations",
+    "016-12-quotes-of-famous-europan-sea-captains-to-live-by",
+    "017-submarine-weapons-systems",
+    "018-sample-pirate-encounter",
+    "019-salvaging-a-wreck"
+  ],
+  "entries": [
+    {
+      "id": "001-barotrauma-rpg-test-v-0-10",
+      "file": "data/barotrauma/wiki/rpg/entries/001-barotrauma-rpg-test-v-0-10.md",
+      "title": "Test v 0.10",
+      "sourceTitleParagraph": 0,
+      "sourceStartParagraph": 1,
+      "sourceEndParagraph": 11,
+      "textUnitCount": 9
+    },
+    {
+      "id": "002-stats",
+      "file": "data/barotrauma/wiki/rpg/entries/002-stats.md",
+      "title": "STATS",
+      "sourceTitleParagraph": 12,
+      "sourceStartParagraph": 13,
+      "sourceEndParagraph": 96,
+      "textUnitCount": 78
+    },
+    {
+      "id": "003-gaining-a-level-and-gameplay-order",
+      "file": "data/barotrauma/wiki/rpg/entries/003-gaining-a-level-and-gameplay-order.md",
+      "title": "Gaining a Level and gameplay order.",
+      "sourceTitleParagraph": 97,
+      "sourceStartParagraph": 98,
+      "sourceEndParagraph": 112,
+      "textUnitCount": 14
+    },
+    {
+      "id": "004-stuff-mine-yours-ours",
+      "file": "data/barotrauma/wiki/rpg/entries/004-stuff-mine-yours-ours.md",
+      "title": "STUFF, MINE, YOURS, OURS.",
+      "sourceTitleParagraph": 113,
+      "sourceStartParagraph": 114,
+      "sourceEndParagraph": 218,
+      "textUnitCount": 103
+    },
+    {
+      "id": "005-backgrounds",
+      "file": "data/barotrauma/wiki/rpg/entries/005-backgrounds.md",
+      "title": "BACKGROUNDS",
+      "sourceTitleParagraph": 219,
+      "sourceStartParagraph": 220,
+      "sourceEndParagraph": 236,
+      "textUnitCount": 14
+    },
+    {
+      "id": "006-submarines",
+      "file": "data/barotrauma/wiki/rpg/entries/006-submarines.md",
+      "title": "SUBMARINES",
+      "sourceTitleParagraph": 237,
+      "sourceStartParagraph": 238,
+      "sourceEndParagraph": 287,
+      "textUnitCount": 44
+    },
+    {
+      "id": "007-upgrades",
+      "file": "data/barotrauma/wiki/rpg/entries/007-upgrades.md",
+      "title": "UPGRADES",
+      "sourceTitleParagraph": 288,
+      "sourceStartParagraph": 289,
+      "sourceEndParagraph": 354,
+      "textUnitCount": 63
+    },
+    {
+      "id": "008-alien-salvage",
+      "file": "data/barotrauma/wiki/rpg/entries/008-alien-salvage.md",
+      "title": "ALIEN SALVAGE",
+      "sourceTitleParagraph": 355,
+      "sourceStartParagraph": 356,
+      "sourceEndParagraph": 406,
+      "textUnitCount": 42
+    },
+    {
+      "id": "009-jobs-events-and-stations",
+      "file": "data/barotrauma/wiki/rpg/entries/009-jobs-events-and-stations.md",
+      "title": "JOBS, EVENTS AND STATIONS",
+      "sourceTitleParagraph": 407,
+      "sourceStartParagraph": 408,
+      "sourceEndParagraph": 511,
+      "textUnitCount": 94
+    },
+    {
+      "id": "010-upkeep",
+      "file": "data/barotrauma/wiki/rpg/entries/010-upkeep.md",
+      "title": "UPKEEP ",
+      "sourceTitleParagraph": 512,
+      "sourceStartParagraph": 513,
+      "sourceEndParagraph": 520,
+      "textUnitCount": 7
+    },
+    {
+      "id": "011-personal-combat-damage-repairs-disease-and-death",
+      "file": "data/barotrauma/wiki/rpg/entries/011-personal-combat-damage-repairs-disease-and-death.md",
+      "title": "Personal Combat, damage, repairs disease and death.",
+      "sourceTitleParagraph": 521,
+      "sourceStartParagraph": 522,
+      "sourceEndParagraph": 577,
+      "textUnitCount": 53
+    },
+    {
+      "id": "012-death-is-not-the-end",
+      "file": "data/barotrauma/wiki/rpg/entries/012-death-is-not-the-end.md",
+      "title": "Death is not the end",
+      "sourceTitleParagraph": 578,
+      "sourceStartParagraph": 579,
+      "sourceEndParagraph": 597,
+      "textUnitCount": 17
+    },
+    {
+      "id": "013-sanity-and-losing-your-mind",
+      "file": "data/barotrauma/wiki/rpg/entries/013-sanity-and-losing-your-mind.md",
+      "title": "SANITY AND LOSING YOUR MIND",
+      "sourceTitleParagraph": 598,
+      "sourceStartParagraph": 599,
+      "sourceEndParagraph": 638,
+      "textUnitCount": 28
+    },
+    {
+      "id": "014-game-flow",
+      "file": "data/barotrauma/wiki/rpg/entries/014-game-flow.md",
+      "title": "GAME FLOW",
+      "sourceTitleParagraph": 639,
+      "sourceStartParagraph": 640,
+      "sourceEndParagraph": 651,
+      "textUnitCount": 10
+    },
+    {
+      "id": "015-sample-stations",
+      "file": "data/barotrauma/wiki/rpg/entries/015-sample-stations.md",
+      "title": "Sample Stations.",
+      "sourceTitleParagraph": 652,
+      "sourceStartParagraph": 653,
+      "sourceEndParagraph": 695,
+      "textUnitCount": 41
+    },
+    {
+      "id": "016-12-quotes-of-famous-europan-sea-captains-to-live-by",
+      "file": "data/barotrauma/wiki/rpg/entries/016-12-quotes-of-famous-europan-sea-captains-to-live-by.md",
+      "title": "12 Quotes of famous Europan sea captains to live by",
+      "sourceTitleParagraph": 696,
+      "sourceStartParagraph": 697,
+      "sourceEndParagraph": 709,
+      "textUnitCount": 12
+    },
+    {
+      "id": "017-submarine-weapons-systems",
+      "file": "data/barotrauma/wiki/rpg/entries/017-submarine-weapons-systems.md",
+      "title": "Submarine Weapons Systems",
+      "sourceTitleParagraph": 710,
+      "sourceStartParagraph": 711,
+      "sourceEndParagraph": 922,
+      "textUnitCount": 158
+    },
+    {
+      "id": "018-sample-pirate-encounter",
+      "file": "data/barotrauma/wiki/rpg/entries/018-sample-pirate-encounter.md",
+      "title": "Sample Pirate encounter",
+      "sourceTitleParagraph": 923,
+      "sourceStartParagraph": 924,
+      "sourceEndParagraph": 931,
+      "textUnitCount": 6
+    },
+    {
+      "id": "019-salvaging-a-wreck",
+      "file": "data/barotrauma/wiki/rpg/entries/019-salvaging-a-wreck.md",
+      "title": "SALVAGING A WRECK",
+      "sourceTitleParagraph": 932,
+      "sourceStartParagraph": 933,
+      "sourceEndParagraph": 947,
+      "textUnitCount": 11
+    }
+  ],
+  "conversionRules": [
+    "Store every source-defined section in its own Markdown file.",
+    "Preserve every non-empty source text paragraph in original order.",
+    "Preserve source list type, displayed numbering, nesting level, and item order.",
+    "Preserve source punctuation, spelling, wording, spacing, emphasis, repetition, and contradictions.",
+    "Attach every Markdown entry explicitly to the wiki interface.",
+    "Do not replace source prose with summaries, bundles, generated content payloads, or an alternate source-document viewer."
+  ]
 }
