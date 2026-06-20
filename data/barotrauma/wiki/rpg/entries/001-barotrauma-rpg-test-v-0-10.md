@@ -1,6 +1,4 @@
-## BAROTRAUMA RPG — TEST V 0.10
-
-Test v 0.10
+## Test v 0.10
 
 Barotrauma takes place several hundred years in the future. In this time, humanity has established various colonies on multiple planets. The game takes place on Europa, one of Jupiter’s orbiting moons. 
 
@@ -18,4 +16,4 @@ As the player navigates the ocean, they must not only keep the submarine operati
 
 In this game, each player has a set of stats that determine their abilities in different tasks. These stats include strength, agility, intelligence, and charisma. Strength determines a player's ability to perform physical tasks, such as repairing equipment or fighting off monsters. Agility affects a player's movement and reflexes, useful for evading danger or completing tasks quickly. Intelligence determines a player's problem-solving skills and ability to understand and operate complex systems. Charisma determines a player's ability to communicate and work with others, useful for negotiating with other factions or persuading crew members to follow orders.
 
-There are several different player classes to choose from, each with their own strengths and weaknesses.
+There are several different player classes to choose from, each with their own strengths and weaknesses. 
