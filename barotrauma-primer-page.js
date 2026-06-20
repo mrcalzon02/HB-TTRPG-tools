@@ -1,7 +1,10 @@
 (() => {
   const root = document.getElementById('primer-root');
   const mode = new URLSearchParams(window.location.search).get('mode') === 'source' ? 'source' : 'wiki';
-  const manuscriptFiles = [
+
+  // These files are used only to preserve the manuscript's established 198-entry order.
+  // The text displayed by the wiki is loaded from the individual entry files below.
+  const manuscriptIndexFiles = [
     'data/barotrauma/wiki/canonical/crewmans-primer-01.md',
     'data/barotrauma/wiki/canonical/crewmans-primer-02.md',
     'data/barotrauma/wiki/canonical/crewmans-primer-03.md',
@@ -56,10 +59,8 @@
     return response.text();
   }
 
-  function parseMarkdownFiles(documents) {
+  function parseMarkdownDocuments(documents) {
     const entries = [];
-    const titleKeys = new Set();
-    const usedIds = new Set();
 
     for (const documentText of documents) {
       const lines = documentText.replace(/\r\n?/g, '\n').split('\n');
@@ -67,16 +68,7 @@
 
       const finish = () => {
         if (!current) return;
-        const key = current.title.trim().toLocaleUpperCase();
-        if (!titleKeys.has(key)) {
-          titleKeys.add(key);
-          let id = slugify(current.title);
-          let suffix = 2;
-          while (usedIds.has(id)) id = `${slugify(current.title)}-${suffix++}`;
-          usedIds.add(id);
-          current.id = id;
-          entries.push(current);
-        }
+        entries.push(current);
         current = null;
       };
 
@@ -89,8 +81,8 @@
           continue;
         }
         if (!current || !line.trim()) continue;
-        if (/^-\s+/.test(line)) {
-          current.blocks.push({ type: 'listItem', text: line.replace(/^-\s+/, '').trim() });
+        if (/^[-*]\s+/.test(line)) {
+          current.blocks.push({ type: 'listItem', text: line.replace(/^[-*]\s+/, '').trim() });
         } else {
           current.blocks.push({ type: 'paragraph', text: line.trim() });
         }
@@ -98,19 +90,63 @@
       finish();
     }
 
-    if (entries.length !== 198) {
-      throw new Error(`The committed Markdown manuscript contains ${entries.length} titled entries instead of 198.`);
-    }
-    if (entries[0]?.title !== 'FOREWORD' || entries.at(-1)?.title !== 'FINAL CAUTION') {
-      throw new Error(`The committed Markdown manuscript is out of order: ${entries[0]?.title || 'missing'} through ${entries.at(-1)?.title || 'missing'}.`);
-    }
     return entries;
   }
 
+  function buildEntryFileList(indexEntries) {
+    const titleCounts = new Map();
+
+    return indexEntries.map((entry, index) => {
+      const baseName = slugify(entry.title);
+      const occurrence = (titleCounts.get(baseName) || 0) + 1;
+      titleCounts.set(baseName, occurrence);
+      const duplicateSuffix = occurrence > 1 ? `-${occurrence}` : '';
+      return `data/barotrauma/wiki/entries/${String(index + 1).padStart(3, '0')}-${baseName}${duplicateSuffix}.md`;
+    });
+  }
+
   async function loadEntries() {
-    root.innerHTML = `<div class="primer-loading">Loading 198 entries from ${manuscriptFiles.length} plain Markdown files…</div>`;
-    const documents = await Promise.all(manuscriptFiles.map(fetchText));
-    return parseMarkdownFiles(documents);
+    root.innerHTML = '<div class="primer-loading">Loading 198 attached wiki entries…</div>';
+
+    const indexDocuments = await Promise.all(manuscriptIndexFiles.map(fetchText));
+    const indexEntries = parseMarkdownDocuments(indexDocuments);
+
+    if (indexEntries.length !== 198) {
+      throw new Error(`The manuscript index contains ${indexEntries.length} titled entries instead of 198.`);
+    }
+
+    const entryFiles = buildEntryFileList(indexEntries);
+    const entryDocuments = await Promise.all(entryFiles.map(fetchText));
+    const usedIds = new Set();
+
+    const entries = entryDocuments.map((documentText, index) => {
+      const parsed = parseMarkdownDocuments([documentText]);
+      const file = entryFiles[index];
+
+      if (parsed.length !== 1) {
+        throw new Error(`${file} contains ${parsed.length} titled sections instead of exactly one.`);
+      }
+
+      const entry = parsed[0];
+      const expectedTitle = indexEntries[index].title;
+      if (entry.title !== expectedTitle) {
+        throw new Error(`${file} is titled "${entry.title}" instead of "${expectedTitle}".`);
+      }
+
+      const baseId = slugify(entry.title);
+      let id = baseId;
+      let suffix = 2;
+      while (usedIds.has(id)) id = `${baseId}-${suffix++}`;
+      usedIds.add(id);
+      entry.id = id;
+      return entry;
+    });
+
+    if (entries[0]?.title !== 'FOREWORD' || entries.at(-1)?.title !== 'FINAL CAUTION') {
+      throw new Error(`The attached wiki entries are out of order: ${entries[0]?.title || 'missing'} through ${entries.at(-1)?.title || 'missing'}.`);
+    }
+
+    return entries;
   }
 
   function entryText(entry) {
