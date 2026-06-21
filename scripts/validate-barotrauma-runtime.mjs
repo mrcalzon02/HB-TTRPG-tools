@@ -21,12 +21,13 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-scale-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-commerce-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-seeding.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-stability.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
 ];
 const orderIndexes = requiredOrder.map(relativePath => runtimePaths.indexOf(relativePath));
-if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-scale, faction, research, or integration runtime fragments are not registered.');
+if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-scale, faction, stability, research, or integration runtime fragments are not registered.');
 for (let index = 1; index < orderIndexes.length; index += 1) {
   if (orderIndexes[index] <= orderIndexes[index - 1]) throw new Error(`Runtime fragment order is invalid near ${requiredOrder[index]}.`);
 }
