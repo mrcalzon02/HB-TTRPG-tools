@@ -82,7 +82,7 @@
       <div>
         <p class="eyebrow">Rules-derived campaign utilities</p>
         <h1>Barotrauma RPG Operations Suite</h1>
-        <p class="subtitle">The active-submarine dashboard now operates in two states: At Station for preparation and adjacent-route filing, and In Route for sequential event cards, crew turns, initiative, transit consequences, and arrival.</p>
+        <p class="subtitle">Open the integrated Active Submarine Dashboard for live campaign management, or launch Character, Submarine, Encounter, Route, World, and Workshop modules independently as standalone tools.</p>
       </div>
       <div class="ops-header-actions">
         <button id="export-suite" class="secondary-action" type="button">Export Suite JSON</button>
@@ -90,18 +90,22 @@
         <input id="import-suite" type="file" accept="application/json" hidden />
         <button id="print-tool" class="secondary-action" type="button">Print Current Tool</button>
         <a class="secondary-action" href="barotrauma-rpg.html">Open Rules Wiki</a>
-        <a class="secondary-action" href="index.html#barotrauma">Dashboard</a>
+        <a class="secondary-action" href="index.html#barotrauma">Barotrauma Menu</a>
       </div>
     </header>
 
     <nav class="ops-tabs no-print" aria-label="Barotrauma RPG tools">
-      <button class="ops-tab" data-tool="character" type="button">Character Sheet</button>
-      <button class="ops-tab" data-tool="submarine" type="button">Active Submarine Dashboard</button>
-      <button class="ops-tab" data-tool="encounters" type="button">Encounter Planner</button>
+      <button class="ops-tab" data-tool="dashboard" type="button">Active Submarine Dashboard</button>
+      <button class="ops-tab" data-tool="character" type="button">Standalone Character</button>
+      <button class="ops-tab" data-tool="submarine" type="button">Standalone Submarine</button>
+      <button class="ops-tab" data-tool="encounters" type="button">Standalone Encounters</button>
+      <button class="ops-tab" data-tool="route" type="button">Standalone Route</button>
+      <button class="ops-tab" data-tool="world" type="button">Standalone World</button>
+      <button class="ops-tab" data-tool="workshop" type="button">Standalone Workshop</button>
     </nav>
 
     <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
   </main>
-  <script src="barotrauma-rpg-tools-loader.js?v=022"></script>
+  <script src="barotrauma-rpg-tools-loader.js?v=023"></script>
 </body>
 </html>
