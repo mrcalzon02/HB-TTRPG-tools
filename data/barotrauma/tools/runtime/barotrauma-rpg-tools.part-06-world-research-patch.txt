@@ -1,0 +1,33 @@
+
+  const renderCustomWorkshopBeforeResearchHostPatch = renderCustomWorkshop;
+  renderCustomWorkshop = function renderCustomWorkshopWithResearchHostPatch() {
+    renderCustomWorkshopBeforeResearchHostPatch();
+    if (!root.querySelector('.research-development-panel')) {
+      const shell = root.querySelector('.tool-shell');
+      if (shell) {
+        const host = document.createElement('div');
+        host.className = 'tool-grid research-workshop-grid';
+        shell.appendChild(host);
+        renderResearchPanel();
+      }
+    }
+  };
+
+  const renderSubmarineBeforeValidatedModelSelect = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithValidatedModelSelect() {
+    renderSubmarineBeforeValidatedModelSelect();
+    const original = root.querySelector('#sub-model');
+    if (!original) return;
+    const replacement = original.cloneNode(true);
+    original.replaceWith(replacement);
+    replacement.addEventListener('change', event => {
+      const selectedName = event.target.value;
+      const profile = state.submarineLibrary.custom.find(item => item.name === selectedName);
+      if (profile && !designDeployable('custom-submarine', profile.id)) {
+        event.target.value = state.submarine.model;
+        alert('This custom submarine is still an R&D design and cannot become the active vessel until development is complete.');
+        return;
+      }
+      useSubmarineModel(selectedName);
+    });
+  };
