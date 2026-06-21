@@ -1,0 +1,151 @@
+
+  const spendTrackedUseBeforeSuitability = spendTrackedUse;
+  spendTrackedUse = function spendTrackedUseWithThrowableStacks(entry, item) {
+    const throwable = item?.subcategory === 'Throwable' || item?.secondaryRoles?.includes('Throwable');
+    if (!throwable) return spendTrackedUseBeforeSuitability(entry, item);
+    if (number(entry.usesRemaining) <= 0) return false;
+    entry.usesRemaining = Math.max(0, number(entry.usesRemaining) - 1);
+    if (entry.usesRemaining <= 0 && entry.quantity > 1) {
+      entry.quantity -= 1;
+      entry.usesRemaining = Math.max(1, number(entry.maxUses, 1));
+    }
+    addConsumptionLog(item, itemUseEffect(item) || `Expended one ${item.name}.`);
+    return true;
+  };
+
+  const moveCargoToCharacterBeforeSuitability = moveCargoToCharacter;
+  moveCargoToCharacter = function moveCargoToCompatibleDestination(cargoId) {
+    const entry = normalizeCargoManagement().entries.find(item => item.cargoId === cargoId);
+    const item = entry && cargoItem(entry);
+    if (entry && item?.category === 'Submarine Ammunition') {
+      addSubmarineAmmo(entry.id, 1);
+      removeCargoQuantity(cargoId, 1);
+      save();
+      return true;
+    }
+    return moveCargoToCharacterBeforeSuitability(cargoId);
+  };
+
+  const normalizeStationRecordBeforeVendorReputation = normalizeStationRecord;
+  normalizeStationRecord = function normalizeStationRecordWithVendorReputation(raw, station) {
+    const record = normalizeStationRecordBeforeVendorReputation(raw, station);
+    record.vendors = record.vendors.map(vendor => ({ ...vendor, reputation: clamp(vendor.reputation ?? 0, -100, 100) }));
+    return record;
+  };
+
+  const generateStationMarketBeforeVendorReputation = generateStationMarket;
+  generateStationMarket = function generateStationMarketWithVendorReputation(stationRecord) {
+    generateStationMarketBeforeVendorReputation(stationRecord);
+    stationRecord.vendors = stationRecord.vendors.map(vendor => ({ ...vendor, reputation: 0 }));
+    save();
+  };
+
+  stationBuyPrice = function stationBuyPriceWithIndividualVendorReputation(stationRecord, vendor, stock) {
+    const faction = number(state.stationCommerce.factionReputation[stationRecord.faction]);
+    const vendorReputation = vendor?.machine ? 0 : number(vendor?.reputation, stationRecord.ownerReputation);
+    const reputation = faction * 0.5 + number(stationRecord.stationReputation) * 0.3 + vendorReputation * 0.2;
+    const reputationFactor = clamp(1 - reputation / 250, 0.6, 1.6);
+    return Math.max(1, Math.round(number(stock.basePrice, 1) * number(vendor.markup, 1.1) * reputationFactor));
+  };
+
+  const buyStationStockBeforeVendorReputation = buyStationStock;
+  buyStationStock = function buyStationStockWithVendorReputation(stationRecord, vendorId, stockId) {
+    const result = buyStationStockBeforeVendorReputation(stationRecord, vendorId, stockId);
+    if (result.ok) {
+      const vendor = stationRecord.vendors.find(item => item.vendorId === vendorId);
+      if (vendor && !vendor.machine) vendor.reputation = clamp(number(vendor.reputation) + 0.25, -100, 100);
+      save();
+    }
+    return result;
+  };
+
+  const deliverTradePurchaseBeforeSuitability = deliverTradePurchase;
+  deliverTradePurchase = function deliverTradePurchaseWithoutDuplicateUpgrade(record, destination, stationRecord) {
+    if (record?.kind === 'upgrade' && state.submarine.upgrades.includes(record.id)) return false;
+    return deliverTradePurchaseBeforeSuitability(record, destination, stationRecord);
+  };
+
+  const renderStationCommercePanelBeforeVendorReputation = renderStationCommercePanel;
+  renderStationCommercePanel = function renderStationCommercePanelWithVendorReputation() {
+    renderStationCommercePanelBeforeVendorReputation();
+    const station = activeStationRecord();
+    if (!station) return;
+    root.querySelectorAll('.station-vendor-grid > .tool-card').forEach(card => {
+      const vendorId = card.querySelector('.commerce-buy')?.dataset.vendor;
+      const vendor = station.vendors.find(item => item.vendorId === vendorId);
+      if (!vendor || vendor.machine) return;
+      const hero = card.querySelector('.tool-hero');
+      if (!hero || hero.querySelector('.vendor-reputation-field')) return;
+      const label = document.createElement('label');
+      label.className = 'field vendor-reputation-field';
+      label.style.minWidth = '150px';
+      label.innerHTML = `Individual proprietor reputation<input type="number" min="-100" max="100" value="${number(vendor.reputation)}">`;
+      hero.appendChild(label);
+      label.querySelector('input').addEventListener('change', event => {
+        vendor.reputation = clamp(event.target.value, -100, 100);
+        save();
+        renderSubmarine();
+      });
+    });
+  };
+
+  const enhanceSubmarineCatalogueBeforeSuitability = enhanceSubmarineCatalogue;
+  enhanceSubmarineCatalogue = function enhanceSubmarineCatalogueWithWeaponUse() {
+    enhanceSubmarineCatalogueBeforeSuitability();
+    root.querySelectorAll('.wiki-weapon-ammo').forEach(select => {
+      const row = select.closest('tr');
+      const instanceId = select.dataset.instance;
+      const entry = state.submarine.wikiWeapons.find(item => item.instanceId === instanceId);
+      const weapon = entry && catalogueWeapon(entry.id);
+      const ammo = weapon?.ammo?.find(item => item.name === entry.ammoName);
+      const loadedInput = row?.querySelector('.wiki-weapon-loaded');
+      if (loadedInput && ammo) loadedInput.max = Math.max(0, number(ammo.magazineSize));
+      const actionCell = row?.querySelector('td:last-child');
+      if (!actionCell || actionCell.querySelector('.wiki-weapon-spend')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'compact-button wiki-weapon-spend';
+      button.textContent = 'Fire / Spend 1';
+      actionCell.prepend(button);
+      button.addEventListener('click', () => {
+        const current = state.submarine.wikiWeapons.find(item => item.instanceId === instanceId);
+        if (!current || number(current.loaded) <= 0) {
+          button.textContent = 'Empty';
+          return;
+        }
+        current.loaded = Math.max(0, number(current.loaded) - 1);
+        save();
+        renderSubmarine();
+      });
+    });
+  };
+
+  function patchRpgWeaponUseButtons() {
+    root.querySelectorAll('.weapon-ammo').forEach(input => {
+      const row = input.closest('tr');
+      const actionCell = row?.querySelector('td:last-child');
+      if (!actionCell || actionCell.querySelector('.rpg-weapon-spend')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'compact-button rpg-weapon-spend';
+      button.textContent = 'Fire / Spend 1';
+      actionCell.prepend(button);
+      button.addEventListener('click', () => {
+        const index = number(input.dataset.index);
+        const mount = state.submarine.weapons[index];
+        if (!mount || number(mount.ammo) <= 0) {
+          button.textContent = 'Empty';
+          return;
+        }
+        mount.ammo = Math.max(0, number(mount.ammo) - 1);
+        save();
+        renderSubmarine();
+      });
+    });
+  }
+
+  const renderSubmarineBeforeSuitability = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithSuitabilityControls() {
+    renderSubmarineBeforeSuitability();
+    patchRpgWeaponUseButtons();
+  };
