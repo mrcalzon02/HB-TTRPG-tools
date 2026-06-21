@@ -13,7 +13,8 @@
     "Crew participation uses portable player-submission and vessel-roster JSON files; no player account, automatic upload, or central campaign server is implied.",
     "Item functionality, cargo, and station-commerce behavior are maintained as an operational layer around the source-backed catalogue rather than rewriting official catalogue identities.",
     "The unified public world state is a portable shared-authority save file: submissions update the host's canonical save when pushed, but the static site does not claim a live network service or central server.",
-    "The campaign-scale Europa map now uses forty-eight mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, and a 7,008-unit shell radius while preserving older small-world maps in a migration archive.",
+    "The campaign-scale Europa map uses forty-eight mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, and a 7,008-unit shell radius while preserving older small-world maps in a migration archive.",
+    "Faction seeding distinguishes Primer-backed institutions from newly named campaign organizations. The world uses eight operational districts, eight umbrella factions, thirty-four operational organizations, cross-border Union 208 representation, corporate and material-distribution networks, criminal influence, and concealed cult cells.",
     "Custom items and submarines are validated against current official measurable ceilings. Designs exceeding those ceilings remain undeployable until their station-based research project has consumed the required Marks, supplies, capability, and canonical real time."
   ],
   "modules": [
@@ -68,11 +69,11 @@
       "title": "Submarine Manager",
       "priority": 4,
       "status": "available",
-      "description": "A table-side vessel manager for all 16 official-wiki submarines and custom designs, with crew submissions, cargo manifests, compatible ammunition, station stores, generated vendors, player-station treasuries, and a validator that prevents above-ceiling custom submarines, systems, weapons, or modules from deployment until their station R&D projects are fully funded and completed.",
+      "description": "A table-side vessel manager for all 16 official-wiki submarines and custom designs, with crew submissions, cargo manifests, compatible ammunition, faction-aware station stores, generated vendors, player-station treasuries, and a validator that prevents above-ceiling custom submarines, systems, weapons, or modules from deployment until their station R&D projects are fully funded and completed.",
       "launchUrl": "barotrauma-rpg-tools.html#submarine",
       "actionLabel": "Open Submarine Manager",
-      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "cargo manifest", "station stores", "vendors", "vending machines", "reputation", "player stations", "R&D", "validation", "weapons", "ammunition", "upgrades", "upkeep"],
-      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "designValidation", "researchProject", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "cargoManifest", "cargoLot", "stationMarket", "vendorProfile", "vendorStock", "factionReputation", "stationReputation", "proprietorReputation", "transactionRecord", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
+      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "cargo manifest", "station stores", "vendors", "vending machines", "faction reputation", "player stations", "R&D", "validation", "weapons", "ammunition", "upgrades", "upkeep"],
+      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "designValidation", "researchProject", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "cargoManifest", "cargoLot", "stationMarket", "vendorProfile", "vendorStock", "factionReputation", "umbrellaFactionReputation", "stationReputation", "proprietorReputation", "transactionRecord", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
     },
     {
       "id": "barotrauma-custom-content-workshop",
@@ -116,11 +117,11 @@
       "title": "Expanded Europa Public World State",
       "priority": 8,
       "status": "available",
-      "description": "Creates a uniquely identified seeded Europa world with 48 mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, a 7,008-unit shell radius, randomized outer-ring starts for multiple groups, real-time canonical dating beginning in 2175, route mapping, checkpoint saves, and one unified public registry updated by pushed crew, submarine, location, trade, route, research, and full game-state submissions.",
+      "description": "Creates a uniquely identified seeded Europa world with 48 mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, and eight operational districts. Stations are divided among eight umbrella factions and thirty-four operational organizations, including Coalition departments, Separatist blocs, Union 208 chapters, corporations, material distributors, independent authorities, criminal cartels, and hidden cult cells. Factions persist through world saves, affect station commerce and reputation, and can be transported as multiplayer submissions.",
       "launchUrl": "barotrauma-rpg-tools.html#world",
       "actionLabel": "Open World State",
-      "tags": ["Europa", "public world state", "48 voyages", "960 locations", "180 stations", "world ID", "saved states", "multiplayer submissions", "2175", "real-time clock", "groups", "routes", "trades", "research", "seeded generation"],
-      "dataFamilies": ["worldIdentity", "worldSave", "savedCheckpoint", "worldSubmission", "submissionJournal", "publicWorldRegistry", "multiplayerGroup", "randomizedStart", "canonicalClock", "worldMap", "depthRingProfile", "voyageDepth", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
+      "tags": ["Europa", "public world state", "48 voyages", "960 locations", "180 stations", "operational districts", "faction seeding", "Europan Coalition", "Jovian Separatists", "Union 208", "corporations", "material distributors", "criminal cartels", "Honkmother", "Church of the Husk", "world ID", "saved states", "multiplayer submissions", "2175", "real-time clock", "routes", "trades", "research"],
+      "dataFamilies": ["worldIdentity", "worldSave", "savedCheckpoint", "worldSubmission", "factionSubmission", "submissionJournal", "publicWorldRegistry", "multiplayerGroup", "randomizedStart", "canonicalClock", "worldMap", "depthRingProfile", "voyageDepth", "operationalDistrict", "umbrellaFaction", "operationalOrganization", "stationInfluence", "hiddenFactionCell", "factionRelationship", "factionJournal", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
     },
     {
       "id": "barotrauma-cult-faction-dossiers",
@@ -128,9 +129,9 @@
       "title": "Cult and Faction Dossiers",
       "priority": 9,
       "status": "planned",
-      "description": "Tracks organizations, ideologies, recruitment methods, public reputations, internal contradictions, operational risks, and campaign hooks, including the Children of the Honkmother and the Church of the Husk.",
-      "tags": ["factions", "cults", "Honkmother", "Church of the Husk"],
-      "dataFamilies": ["factionProfile", "beliefProfile", "recruitmentPattern", "incidentHook"]
+      "description": "Expands the seeded world organizations into long-form ideology, recruitment, leadership, internal contradiction, incident, and campaign-hook dossiers, including the Children of the Honkmother, Church of the Husk, Coalition departments, Separatist blocs, Union chapters, corporations, and criminal cartels.",
+      "tags": ["factions", "cults", "Coalition", "Separatists", "Union 208", "corporations", "cartels", "Honkmother", "Church of the Husk"],
+      "dataFamilies": ["factionProfile", "beliefProfile", "recruitmentPattern", "leadershipProfile", "incidentHook"]
     },
     {
       "id": "barotrauma-crew-roster-generator",
