@@ -60,6 +60,10 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-00.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-01.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
