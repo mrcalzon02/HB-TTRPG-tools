@@ -18,6 +18,7 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-commerce-stability.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-suitability-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-state.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-commerce-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
@@ -61,7 +62,7 @@ if (worldSchema.mapDefaults?.totalLocations < 140) throw new Error('The expanded
 if (!worldSchema.submissionKinds?.includes('research') || !worldSchema.submissionKinds?.includes('game-state')) throw new Error('World submissions must include research and full game-state records.');
 if (worldSchema.researchRules?.minimumMarks < 25000 || worldSchema.researchRules?.minimumSupplies < 50) throw new Error('Over-limit R&D must retain exorbitant minimum funding requirements.');
 
-const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, inventory rules, five-times world expansion, unified submissions, and controlled R&D configuration.`;
+const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, inventory rules, five-times world expansion, generated-station commerce, unified submissions, and controlled R&D configuration.`;
 console.log(message);
 
 if (process.env.VALIDATION_RECEIPT) {
