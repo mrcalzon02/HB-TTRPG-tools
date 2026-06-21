@@ -42,8 +42,10 @@
     .tool-table{width:100%;border-collapse:collapse;min-width:720px}.tool-table th,.tool-table td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.tool-table th{color:var(--accent);font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;background:rgba(255,255,255,.035)}.tool-table tr:last-child td{border-bottom:0}
     .tool-table input,.tool-table select,.tool-table textarea{width:100%;box-sizing:border-box;background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px;font:inherit}
     .tool-table textarea{min-height:74px;resize:vertical}
-    .inventory-table{min-width:1320px}.inventory-counter-block{display:grid;gap:6px;min-width:190px}.inventory-counter-row{display:grid;grid-template-columns:minmax(70px,1fr) auto minmax(70px,1fr);gap:6px;align-items:center}.inventory-table .check-row{padding:6px;margin-bottom:6px}
+    .inventory-table{min-width:1320px}.inventory-counter-block{display:grid;gap:6px;min-width:190px}.inventory-counter-row{display:grid;grid-template-columns:minmax(70px,1fr) auto minmax(70px,1fr);gap:6px;align-items:center}.inventory-table .check-row{padding:6px;margin-bottom:6px}.item-function-note{margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
     .crew-roster-table{min-width:1880px}.crew-roster-table td{min-width:150px}.crew-roster-table td:nth-child(7){min-width:260px}.crew-inventory-summary{max-height:150px;overflow:auto;line-height:1.45;color:var(--muted);font-size:.84rem;white-space:normal}
+    .cargo-manifest-table{min-width:1550px}.cargo-quantity-controls{display:grid;grid-template-columns:auto minmax(70px,1fr) auto;gap:5px;align-items:center}.cargo-quantity-controls .compact-button{padding:7px 10px}
+    .station-vendor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:14px}.vendor-stock-table{min-width:790px}.vendor-stock-table td:nth-child(3){min-width:250px}
     .tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);font-size:.75rem;margin:2px}
     .card-list{display:grid;gap:10px}.encounter-card,.route-card{border:1px solid var(--line);border-radius:14px;padding:13px;background:rgba(255,255,255,.025)}
     .encounter-card header,.route-card header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.encounter-card h4,.route-card h4{margin:0 0 .45rem}.encounter-card p,.route-card p{margin:.35rem 0;color:var(--muted);line-height:1.5}
@@ -60,7 +62,7 @@
     .compact-button:hover{border-color:var(--accent)}
     .file-action{cursor:pointer}
     .hidden{display:none!important}
-    @media(max-width:1100px){.span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column:span 12}.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:1100px){.span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column:span 12}.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.station-vendor-grid{grid-template-columns:1fr}}
     @media(max-width:700px){.ops-header,.tool-hero{display:grid}.field-grid,.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:1fr}.ops-page{padding:12px}.map-frame{min-height:560px}.map-frame svg{height:560px}}
     @media print{.no-print,.ops-tabs,.ops-header-actions{display:none!important}.ops-page{max-width:none;padding:0}.tool-panel,.tool-card,.tool-hero{break-inside:avoid;background:white;color:black;border-color:#777}.field input,.field select,.field textarea{color:black;background:white}.map-frame{background:white}}
   </style>
@@ -71,7 +73,7 @@
       <div>
         <p class="eyebrow">Rules-derived campaign utilities</p>
         <h1>Barotrauma RPG Operations Suite</h1>
-        <p class="subtitle">Character, crew, player, submarine, custom-content, item, encounter, route, and Europa campaign-map tools built around the imported Barotrauma RPG systems and source-backed operational catalogues.</p>
+        <p class="subtitle">Character, crew, cargo, station commerce, submarine, custom-content, item, encounter, route, and Europa campaign-map tools built around the imported Barotrauma RPG systems and source-backed operational catalogues.</p>
       </div>
       <div class="ops-header-actions">
         <button id="export-suite" class="secondary-action" type="button">Export Suite JSON</button>
@@ -93,6 +95,6 @@
 
     <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
   </main>
-  <script src="barotrauma-rpg-tools-loader.js?v=005"></script>
+  <script src="barotrauma-rpg-tools-loader.js?v=006"></script>
 </body>
 </html>
