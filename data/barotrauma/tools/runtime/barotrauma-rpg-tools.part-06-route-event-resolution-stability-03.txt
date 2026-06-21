@@ -1,0 +1,18 @@
+
+  const commitRouteEventResolutionBeforeAtomicRollback = commitRouteEventResolution;
+  commitRouteEventResolution = function commitRouteEventResolutionAtomically() {
+    const snapshot = cloneRouteResolutionData(state);
+    try {
+      const result = commitRouteEventResolutionBeforeAtomicRollback();
+      if (!result?.ok) {
+        state = snapshot;
+        save();
+      }
+      return result;
+    } catch (error) {
+      state = snapshot;
+      save();
+      console.error('Route event resolution commit rolled back.',error);
+      return {ok:false,message:`Outcome commitment failed and all campaign changes were rolled back: ${error.message||error}`};
+    }
+  };
