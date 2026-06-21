@@ -7,7 +7,8 @@
     "Original campaign prose, tables, and utilities remain clearly separated from copied game text or extracted proprietary assets.",
     "The Crewman's Primer is a source-faithful wiki conversion in which source-titled sections remain separate entries without summarization.",
     "Barotrauma RPG.docx has been transferred into 19 separate Markdown wiki entries with source headings, paragraphs, lists, punctuation, emphasis, and original order preserved.",
-    "The RPG operations suite derives editable utilities from the imported rules while leaving the exact-source Markdown wiki unchanged."
+    "The RPG operations suite derives editable utilities from the imported rules while leaving the exact-source Markdown wiki unchanged.",
+    "The submarine manager uses a source-attributed official-wiki roster while deriving tabletop statistics from the original four RPG submarine anchors."
   ],
   "modules": [
     {
@@ -61,11 +62,11 @@
       "title": "Submarine Manager",
       "priority": 4,
       "status": "available",
-      "description": "A table-side vessel manager for the Barsuk, Humpback, Dugong, and Orca, including source statistics, hull, capacity, stores, weapons, upgrades, system condition, station upkeep, and damage control.",
+      "description": "A table-side vessel manager for all 16 purchasable official-wiki submarines and persistent custom derived designs, including calibrated RPG statistics, hull, capacity, stores, official weapon installations, ammunition, upgrades, system condition, station upkeep, and damage control.",
       "launchUrl": "barotrauma-rpg-tools.html#submarine",
       "actionLabel": "Open Submarine Manager",
-      "tags": ["submarine", "operations", "hull", "capacity", "weapons", "upgrades", "upkeep"],
-      "dataFamilies": ["vesselState", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
+      "tags": ["submarine", "official roster", "custom submarines", "operations", "hull", "capacity", "weapons", "upgrades", "upkeep"],
+      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
     },
     {
       "id": "barotrauma-encounter-planner",
