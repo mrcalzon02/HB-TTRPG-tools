@@ -9,6 +9,7 @@
     ['barotrauma-rpg-rules-wiki', 'barotrauma-rpg.html', 'Open Barotrauma RPG Wiki'],
     ['barotrauma-rpg-character-sheet', 'barotrauma-rpg-tools.html#character', 'Open Character Sheet'],
     ['barotrauma-submarine-manager', 'barotrauma-rpg-tools.html#submarine', 'Open Submarine Manager'],
+    ['barotrauma-custom-content-workshop', 'barotrauma-rpg-tools.html#workshop', 'Open Custom Content Workshop'],
     ['barotrauma-encounter-planner', 'barotrauma-rpg-tools.html#encounters', 'Open Encounter Planner'],
     ['barotrauma-route-planner', 'barotrauma-rpg-tools.html#route', 'Open Route Planner'],
     ['barotrauma-world-map-generator', 'barotrauma-rpg-tools.html#world', 'Open World Map Generator']
