@@ -54,6 +54,20 @@
     return changed;
   }
 
+  function revalidateLocationGroupStarts() {
+    const hub = normalizeWorldHub();
+    const outerIds = new Set(worldOuterStations().map(node => node.id));
+    const used = new Set();
+    for (const group of Object.values(hub.publicState.groups || {})) {
+      const previousStart = group.startingNodeId;
+      if (!outerIds.has(group.startingNodeId)) group.startingNodeId = randomizedGroupStart(group.groupId, used);
+      used.add(group.startingNodeId);
+      if (!state.world.map?.nodes?.some(node => node.id === group.currentNodeId) || group.currentNodeId === previousStart && previousStart !== group.startingNodeId) group.currentNodeId = group.startingNodeId;
+      hub.publicState.locations[group.groupId] = { groupId: group.groupId, nodeId: group.currentNodeId, updatedAt: new Date().toISOString() };
+    }
+    assignMissingGroupStarts();
+  }
+
   const assignWorldLocationLevelsBeforeStability = assignWorldLocationLevels;
   assignWorldLocationLevels = function assignWorldLocationLevelsStable(map = state.world?.map, force = false) {
     const result = assignWorldLocationLevelsBeforeStability(map, force);
@@ -79,6 +93,7 @@
     const changed = reconcileWorldStationLevels(state.world.map);
     if (changed) seedWorldFactions(state.world.map, true);
     assignWorldLocationLevels(state.world.map, true);
+    revalidateLocationGroupStarts();
     syncWorldMapStations();
     normalizeStationCommerce();
     save();
@@ -90,6 +105,7 @@
     const changed = reconcileWorldStationLevels(state.world.map);
     if (changed) seedWorldFactions(state.world.map, true);
     assignWorldLocationLevels(state.world.map, false);
+    revalidateLocationGroupStarts();
     syncWorldMapStations();
     normalizeStationCommerce();
     save();
@@ -143,8 +159,10 @@
       }
       state.world.locationLevelSeedSalt = number(payload.locationLevelSeedSalt, state.world.locationLevelSeedSalt || 0);
       state.world.map.locationLevelVersion = payload.locationLevelRegistryVersion || LOCATION_LEVEL_VERSION;
-      reconcileWorldStationLevels(state.world.map);
+      const changed = reconcileWorldStationLevels(state.world.map);
+      if (changed) seedWorldFactions(state.world.map, true);
       assignWorldLocationLevels(state.world.map, false);
+      revalidateLocationGroupStarts();
       syncWorldMapStations();
       normalizeStationCommerce();
       save();
@@ -156,6 +174,7 @@
     const changed = reconcileWorldStationLevels(state.world.map);
     if (changed) seedWorldFactions(state.world.map, true);
     assignWorldLocationLevels(state.world.map, false);
+    revalidateLocationGroupStarts();
     syncWorldMapStations();
     normalizeStationCommerce();
     save();
