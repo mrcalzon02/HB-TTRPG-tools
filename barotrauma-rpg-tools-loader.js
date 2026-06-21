@@ -23,6 +23,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-state.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-scale-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-commerce-patch.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-seeding.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
@@ -32,6 +33,7 @@
   const customContentSchemaUrl = 'data/barotrauma/tools/custom/custom-content-schema.json';
   const itemFunctionalityUrl = 'data/barotrauma/tools/items/item-functionality.json';
   const worldStateSchemaUrl = 'data/barotrauma/tools/world/world-state-schema.json';
+  const factionRegistryUrl = 'data/barotrauma/tools/factions/faction-registry.json';
 
   async function fetchText(path) {
     const response = await fetch(path, { cache: 'no-store' });
@@ -55,12 +57,13 @@
   }
 
   async function load() {
-    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, sourceParts] = await Promise.all([
+    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, sourceParts] = await Promise.all([
       loadCatalog(),
       fetchJson(submarineRosterUrl),
       fetchJson(customContentSchemaUrl),
       fetchJson(itemFunctionalityUrl),
       fetchJson(worldStateSchemaUrl),
+      fetchJson(factionRegistryUrl),
       Promise.all(runtimeParts.map(fetchText))
     ]);
     window.BAROTRAUMA_WIKI_CATALOG = catalog;
@@ -68,6 +71,7 @@
     window.BAROTRAUMA_CUSTOM_CONTENT_SCHEMA = customContentSchema;
     window.BAROTRAUMA_ITEM_FUNCTIONALITY = itemFunctionality;
     window.BAROTRAUMA_WORLD_STATE_SCHEMA = worldStateSchema;
+    window.BAROTRAUMA_FACTION_REGISTRY = factionRegistry;
     const source = sourceParts.join('');
     new Function(`${source}\n//# sourceURL=barotrauma-rpg-tools.runtime.js`)();
   }
