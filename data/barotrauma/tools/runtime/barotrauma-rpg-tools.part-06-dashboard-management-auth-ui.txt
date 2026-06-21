@@ -1,0 +1,117 @@
+
+  function dashboardManagementGateHtml(){
+    const hub=normalizeWorldHub();
+    const vessels=dashboardManagementVessels();
+    let selectedId=dashboardManagementSelectedVesselId();
+    if(!vessels.some(vessel=>vessel.vesselId===selectedId))selectedId=vessels[0]?.vesselId||'';
+    const selected=vessels.find(vessel=>vessel.vesselId===selectedId)||null;
+    const credential=selected?dashboardManagementCredential(selected.vesselId):null;
+    if(dashboardManagementRuntime.status==='checking'){
+      return `<div class="tool-shell"><section class="tool-hero"><div><p class="eyebrow">Submarine management authorization</p><h2>Checking Local Management Session</h2><p class="rules-note">The dashboard is verifying the local session receipt against the selected world save. No password is stored in the browser state.</p></div><span class="status-pill warn">CHECKING</span></section></div>`;
+    }
+    return `<div class="tool-shell">
+      <section class="tool-hero"><div><p class="eyebrow">Master-world submarine authorization</p><h2>Log In to a Managed Submarine</h2><p class="rules-note">Selecting a vessel does not grant control. Each submarine has its own salted password verifier in the world save and its own locally remembered management receipt.</p></div><div class="metric-row"><div class="metric"><span>World ID</span><strong>${escapeHtml(hub.worldId)}</strong></div><div class="metric"><span>Manageable submarines</span><strong>${vessels.length}</strong></div></div></section>
+      <section class="tool-panel" style="border-color:rgba(111,143,214,.72)"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Submarine Management Login</h3><p class="small-note">The plaintext password exists only while you type it. The remembered cookie contains a random bearer receipt, never the password or its verifier.</p></div><span class="status-pill ${selected?.claimed?'good':'warn'}">${selected?.claimed?'PASSWORD PROTECTED':'UNCLAIMED'}</span></div>
+      ${vessels.length?`<div class="field-grid three" style="margin-top:12px"><label class="field">Submarine to manage<select id="dashboard-management-vessel">${vessels.map(vessel=>`<option value="${escapeHtml(vessel.vesselId)}" ${vessel.vesselId===selectedId?'selected':''}>${escapeHtml(vessel.name)} · ${escapeHtml(vessel.vesselId)}</option>`).join('')}</select></label><label class="field">Expedition group<input readonly value="${escapeHtml(selected?.groupName||'Unassigned expedition')}"></label><label class="field">World status<input readonly value="${escapeHtml(`${selected?.status||'unknown'} · ${selected?.model||'unknown model'}`)}"></label></div>`:'<div class="notice warn" style="margin-top:12px">No submitted player submarine exists in this world save yet.</div>'}
+      ${selected?selected.claimed?`<div class="tool-card" style="margin-top:12px"><h4>Enter Management Password</h4><div class="field-grid three"><label class="field">Password<input id="dashboard-management-password" type="password" autocomplete="current-password"></label><label class="check-row" style="align-self:end"><input id="dashboard-management-remember" type="checkbox"><span>Remember this device for ${DASHBOARD_MANAGEMENT_REMEMBER_DAYS} days</span></label><div class="button-row" style="align-self:end"><button id="dashboard-management-login" class="primary-action" type="button">Log In and Manage</button></div></div></div>`:`<div class="tool-card" style="margin-top:12px"><h4>Claim This Submarine</h4><p class="small-note">This vessel has no management credential. Set its first password to bind future dashboard sessions to this vessel ID.</p><div class="field-grid four"><label class="field">Manager name<input id="dashboard-management-manager-name" value="${escapeHtml(state.character.player||'')}"></label><label class="field">New password<input id="dashboard-management-new-password" type="password" autocomplete="new-password"></label><label class="field">Confirm password<input id="dashboard-management-confirm-password" type="password" autocomplete="new-password"></label><label class="check-row"><input id="dashboard-management-remember" type="checkbox" checked><span>Remember this device</span></label></div><div class="button-row" style="margin-top:10px"><button id="dashboard-management-claim" class="primary-action" type="button">Set Password and Manage</button></div></div>`:''}
+      ${!vessels.length?'<div class="button-row" style="margin-top:12px"><button id="dashboard-management-register-current" class="primary-action" type="button">Register Current Local Submarine</button></div>':''}
+      <div id="dashboard-management-message" class="notice ${/incorrect|expired|invalid|another world/i.test(dashboardManagementRuntime.message)?'bad':''}" style="margin-top:12px">${escapeHtml(dashboardManagementRuntime.message||'Choose a submarine to continue.')}</div>
+      </section>
+      <section class="tool-panel"><h3>Security Boundary</h3><p class="small-note">This is a static GitHub Pages application. The credential prevents accidental or ordinary unauthorized dashboard use, but it is not server-enforced security: someone with full browser developer access or the ability to edit the world-save JSON can alter local campaign data. The implementation therefore stores no plaintext password and treats cookies only as revocable local session receipts.</p></section>
+    </div>`;
+  }
+
+  function dashboardManagementMessage(message,isError=false){
+    dashboardManagementRuntime.message=String(message||'');
+    const output=root.querySelector('#dashboard-management-message');
+    if(output){output.textContent=dashboardManagementRuntime.message;output.classList.toggle('bad',isError);output.classList.toggle('good',!isError);}
+  }
+
+  function bindDashboardManagementGate(){
+    const selector=root.querySelector('#dashboard-management-vessel');
+    selector?.addEventListener('change',event=>{dashboardManagementSetSelectedVesselId(event.target.value);dashboardManagementRuntime.message='Enter the selected submarine’s management password.';renderActiveSubmarineDashboard();});
+    root.querySelector('#dashboard-management-register-current')?.addEventListener('click',()=>{try{registerCurrentSubmarineForDashboardManagement();dashboardManagementRuntime.message='Current submarine registered. Set its management password.';renderActiveSubmarineDashboard();}catch(error){dashboardManagementMessage(error.message,true);}});
+    root.querySelector('#dashboard-management-login')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const password=root.querySelector('#dashboard-management-password');
+      button.disabled=true;
+      dashboardManagementMessage('Verifying password…');
+      try{
+        const vesselId=root.querySelector('#dashboard-management-vessel')?.value||'';
+        await authenticateDashboardManagementPassword(vesselId,password?.value||'',Boolean(root.querySelector('#dashboard-management-remember')?.checked));
+        if(password)password.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){if(password)password.value='';dashboardManagementMessage(error.message,true);button.disabled=false;}
+    });
+    root.querySelector('#dashboard-management-claim')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const password=root.querySelector('#dashboard-management-new-password');
+      const confirmation=root.querySelector('#dashboard-management-confirm-password');
+      const value=password?.value||'';
+      if(value!==(confirmation?.value||'')){dashboardManagementMessage('The new password and confirmation do not match.',true);return;}
+      button.disabled=true;
+      dashboardManagementMessage('Creating the submarine credential…');
+      try{
+        const vesselId=root.querySelector('#dashboard-management-vessel')?.value||'';
+        await createDashboardManagementCredential(vesselId,value,root.querySelector('#dashboard-management-manager-name')?.value||'',Boolean(root.querySelector('#dashboard-management-remember')?.checked));
+        if(password)password.value='';if(confirmation)confirmation.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){if(password)password.value='';if(confirmation)confirmation.value='';dashboardManagementMessage(error.message,true);button.disabled=false;}
+    });
+  }
+
+  function dashboardManagementSessionPanelHtml(){
+    const credential=dashboardManagementCredential(dashboardManagementRuntime.vesselId);
+    const vessel=dashboardManagementVessels().find(item=>item.vesselId===dashboardManagementRuntime.vesselId);
+    return `<section id="dashboard-management-session" class="tool-panel" style="border-color:rgba(117,197,142,.72)"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Authenticated submarine manager</p><h3>${escapeHtml(vessel?.name||dashboardManagementRuntime.vesselId)}</h3><p class="small-note">This dashboard session is fixed to <code>${escapeHtml(dashboardManagementRuntime.vesselId)}</code> and expedition <strong>${escapeHtml(vessel?.groupName||'Unknown group')}</strong>.</p></div><span class="status-pill good">LOGGED IN</span></div><div class="metric-row" style="margin-top:12px"><div class="metric"><span>Manager</span><strong>${escapeHtml(credential?.managerName||credential?.managerPlayerId||'Local manager')}</strong></div><div class="metric"><span>Credential revision</span><strong>${number(credential?.revision,1)}</strong></div><div class="metric"><span>Session expires</span><strong>${escapeHtml(new Date(dashboardManagementRuntime.expiresAt).toLocaleString())}</strong></div><div class="metric"><span>Session storage</span><strong>${dashboardManagementRuntime.remembered?'Remembered cookie':'Browser session only'}</strong></div></div><div class="button-row no-print" style="margin-top:12px"><button id="dashboard-management-logout" class="danger-button" type="button">Log Out of This Submarine</button></div><details style="margin-top:12px"><summary><strong>Change management password</strong></summary><div class="field-grid three" style="margin-top:10px"><label class="field">Current password<input id="dashboard-management-current-password" type="password" autocomplete="current-password"></label><label class="field">New password<input id="dashboard-management-change-password" type="password" autocomplete="new-password"></label><label class="field">Confirm new password<input id="dashboard-management-change-confirm" type="password" autocomplete="new-password"></label></div><div class="button-row" style="margin-top:10px"><button id="dashboard-management-change" class="secondary-action" type="button">Change Password</button></div><div id="dashboard-management-session-message" class="small-note" style="margin-top:8px"></div></details></section>`;
+  }
+
+  function bindDashboardManagementSessionPanel(){
+    root.querySelector('#dashboard-management-logout')?.addEventListener('click',()=>{logoutDashboardManagementSession('manual dashboard logout');renderActiveSubmarineDashboard();});
+    root.querySelector('#dashboard-management-change')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const current=root.querySelector('#dashboard-management-current-password');
+      const next=root.querySelector('#dashboard-management-change-password');
+      const confirm=root.querySelector('#dashboard-management-change-confirm');
+      const output=root.querySelector('#dashboard-management-session-message');
+      if((next?.value||'')!==(confirm?.value||'')){if(output){output.textContent='The new passwords do not match.';output.classList.add('bad');}return;}
+      button.disabled=true;
+      if(output){output.textContent='Changing password and revoking older receipts…';output.classList.remove('bad');}
+      try{
+        await changeDashboardManagementPassword(current?.value||'',next?.value||'');
+        if(current)current.value='';if(next)next.value='';if(confirm)confirm.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){if(current)current.value='';if(next)next.value='';if(confirm)confirm.value='';if(output){output.textContent=error.message;output.classList.add('bad');}button.disabled=false;}
+    });
+  }
+
+  function enforceDashboardManagementSessionBoundary(){
+    const groupSelector=root.querySelector('#dashboard-active-group');
+    if(groupSelector){groupSelector.disabled=true;groupSelector.title='The active expedition group is fixed by the authenticated submarine session.';}
+    const createGroup=root.querySelector('#dashboard-create-group');
+    if(createGroup){createGroup.disabled=true;createGroup.title='Create expedition groups from the standalone World tool, then assign submarines before logging in.';}
+    const syncButton=root.querySelector('#dashboard-force-sync');
+    if(syncButton)syncButton.title='Synchronize the currently authenticated vessel only.';
+  }
+
+  const renderActiveSubmarineDashboardBeforeManagementAuth=renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard=function renderActiveSubmarineDashboardWithManagementAuth(requestedFocus=activeDashboardRawFocus()){
+    if(dashboardManagementRuntime.status!=='authenticated'){
+      root.innerHTML=dashboardManagementGateHtml();
+      bindDashboardManagementGate();
+      return;
+    }
+    if(!dashboardManagementAuthorized(dashboardManagementRuntime.vesselId)){
+      logoutDashboardManagementSession('expired or invalid session');
+      root.innerHTML=dashboardManagementGateHtml();
+      bindDashboardManagementGate();
+      return;
+    }
+    if(state.submarine?.worldSubmarineId!==dashboardManagementRuntime.vesselId)activateDashboardManagedVessel(dashboardManagementRuntime.vesselId);
+    const result=renderActiveSubmarineDashboardBeforeManagementAuth(requestedFocus);
+    const command=root.querySelector('#active-dashboard-command');
+    command?.insertAdjacentHTML('beforebegin',dashboardManagementSessionPanelHtml());
+    bindDashboardManagementSessionPanel();
+    enforceDashboardManagementSessionBoundary();
+    return result;
+  };
