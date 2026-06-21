@@ -1,0 +1,78 @@
+name: Validate Barotrauma World Economy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-*.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
+      - '.github/workflows/validate-barotrauma-world-economy.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-*.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
+      - '.github/workflows/validate-barotrauma-world-economy.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-world-economy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate assembled economy runtime
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const loader = fs.readFileSync('barotrauma-rpg-tools-loader.js', 'utf8');
+          const runtimeMatch = loader.match(/const runtimeParts = \[([\s\S]*?)\n  \];/);
+          assert(runtimeMatch, 'runtimeParts array missing');
+          const paths = [...runtimeMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
+          assert.deepStrictEqual(paths.filter(path => !fs.existsSync(path)), [], 'Loader references missing runtime fragments');
+          new Function(paths.map(path => fs.readFileSync(path, 'utf8')).join(''));
+
+          const required = [
+            'barotrauma-rpg-tools.part-06-world-economy-core-00.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-core-01.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-core-02.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-commerce-00.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-commerce-01.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-scheduler.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-ui.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-ui-stability.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-commissioning.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-stability-03.txt'
+          ];
+          required.forEach(name => assert(loader.includes(name), `${name} is not loaded`));
+
+          const core = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-02.txt', 'utf8');
+          const commerce = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commerce-00.txt', 'utf8');
+          const commissioning = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commissioning.txt', 'utf8');
+          const viewer = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-ui-stability.txt', 'utf8');
+          const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
+
+          assert(core.includes("15+(seededHash") && core.includes('%91'), 'NPC transit is not 15–105 minutes');
+          assert(core.includes("inputs:{rawMaterials:12,industrialGoods:4,components:4,fuel:2}"), 'Delivery Goods recipe is not materially expensive');
+          assert(core.includes("outputs:{deliveryGoods:8}"), 'Factories do not produce Delivery Goods');
+          assert(commerce.includes('generateVendorStock=function generateVendorStockFromPersistentEconomy() { return []; }'), 'Spontaneous vendor stock generation remains enabled');
+          assert(commerce.includes('worldEconomyUnpackDeliveryGoods'), 'Delivered freight cannot replenish vendor shelves');
+          assert(commissioning.includes('commissionWorldEconomyVessel'), 'Players cannot commission shipyard vessels');
+          assert(commissioning.includes('seedWorldEconomyNpcFleetUsingManufacturedVessels'), 'NPC freight guilds do not use shipyard vessels');
+          assert(commissioning.includes('world-economy-commission-vessel'), 'World registry lacks a commission action');
+          assert(viewer.includes('populateStandaloneWorldMapProgressively'), 'Standalone map is not progressively rendered');
+          assert(viewer.includes('populateDashboardStationNetworkProgressively'), 'Dashboard map is not progressively rendered');
+          assert(finalRuntime.includes('version: 20'), 'Suite version is not 20');
+          assert(finalRuntime.includes('worldEconomyVersion: WORLD_ECONOMY_VERSION'), 'Suite export omits economy version');
+
+          console.log(`Validated ${paths.length} assembled fragments and the complete persistent world-economy contract.`);
+          NODE
