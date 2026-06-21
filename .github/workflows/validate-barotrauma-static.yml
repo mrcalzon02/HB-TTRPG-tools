@@ -64,6 +64,7 @@ jobs:
           assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt'), 'Dashboard boundary UI is not loaded');
           assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt'), 'Dashboard boundary stability is not loaded');
           assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-commissioning.txt'), 'Master-world commissioning is not loaded');
+          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt'), 'Station-only crew transition stability is not loaded');
 
           const boundaryCore = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt', 'utf8');
           assert(boundaryCore.includes("return ['character','submarine','encounters','route','world','catalog','workshop'].includes(raw)"), 'Standalone hash dispatch contract is missing');
@@ -79,6 +80,10 @@ jobs:
           assert(commissioning.includes('Add Crew at Station'), 'Dashboard station crew-add control is missing');
           assert(commissioning.includes('Additional crew cannot be added while the submarine is In Route.'), 'In-route crew-add guard is missing');
           assert(commissioning.includes('physically docked at a station'), 'Physical-station crew-add requirement is missing');
+
+          const commissioningStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt', 'utf8');
+          assert(commissioningStability.includes("!['Reserve','Away'].includes(record.status)"), 'Reserve and away personnel are still counted as active submarine crew');
+          assert(commissioningStability.includes('if (statusControl && !alreadyAboard)'), 'Non-onboard status activation is not locked during transit');
 
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
           assert(finalRuntime.includes('version: 18'), 'Suite export version was not advanced for master-world commissioning');
