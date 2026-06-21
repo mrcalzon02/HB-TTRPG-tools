@@ -70,6 +70,7 @@ jobs:
             'barotrauma-rpg-tools.part-06-route-event-resolution-core-01.txt',
             'barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt',
             'barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-ui-polish.txt',
             'barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt',
             'barotrauma-rpg-tools.part-06-route-event-resolution-stability-02.txt',
             'barotrauma-rpg-tools.part-06-route-event-resolution-stability-03.txt'
@@ -94,6 +95,7 @@ jobs:
           const resolution01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-01.txt', 'utf8');
           const resolution02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt', 'utf8');
           const resolutionUi = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt', 'utf8');
+          const resolutionUiPolish = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-ui-polish.txt', 'utf8');
           const resolutionStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt', 'utf8');
           const resolutionStability02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability-02.txt', 'utf8');
           const resolutionStability03 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability-03.txt', 'utf8');
@@ -112,6 +114,8 @@ jobs:
           assert(resolutionUi.includes('Select an Alternative Solution'), 'Alternative solution UI is missing');
           assert(resolutionUi.includes('Assign Supporting Crew Roles'), 'Crew role assignment UI is missing');
           assert(resolutionUi.includes('Available Outcomes'), 'Outcome preview UI is missing');
+          assert(resolutionUiPolish.includes('Select the Event Variant'), 'Mapmaker event variant selection is missing');
+          assert(resolutionUiPolish.includes('selectCrossingChoice'), 'Event variant selection is not connected to the route card choice');
           assert(resolutionStability.includes('Controlled Withdrawal and Reassessment'), 'Fallback alternative solution is missing');
           assert(resolutionStability.includes('BAROTRAUMA_ROUTE_EVENT_RESOLUTION_DIAGNOSTICS'), 'Route resolution diagnostics are missing');
           assert(resolutionStability02.includes('normalizeRouteResolutionSessionWithFallbackMigration'), 'Saved one-option session migration is missing');
@@ -133,5 +137,5 @@ jobs:
           assert(html.includes('data-tool="dashboard"'), 'Dashboard tool tab is missing');
           assert(html.includes('data-tool="route"'), 'Standalone route tab is missing');
 
-          console.log(`Validated ${paths.length} runtime fragments, explicit route-event turns, alternative solutions, crew roles, outcomes, atomic effects, contracts, migrations, and dashboard/standalone navigation.`);
+          console.log(`Validated ${paths.length} runtime fragments, event variants, explicit route-event turns, alternative solutions, crew roles, outcomes, atomic effects, contracts, migrations, and dashboard/standalone navigation.`);
           NODE
