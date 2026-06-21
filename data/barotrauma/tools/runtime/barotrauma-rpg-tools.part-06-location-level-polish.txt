@@ -1,11 +1,24 @@
 
+  const NON_STATION_FACTION_KEYS = ['factionId','faction','parentFactionId','parentFaction','factionColor','organizationType','locals','visibleInfluences','hiddenInfluences'];
+  const LOCATION_PROFILE_KEYS = ['locationLevel','locationLevelName','locationLevelSubtitle','locationTypeId','locationTypeName','locationLore','locationAvailability','locationShops','locationServices','locationHazards','locationFactions','locationDanger','locationLevelColor','encounterLocation','stationLocation','availabilityTier'];
+
+  function clearNonStationFactionData(map = state.world?.map) {
+    if (!map?.nodes) return;
+    for (const node of map.nodes) {
+      if (node.type === 'station') continue;
+      for (const key of NON_STATION_FACTION_KEYS) delete node[key];
+    }
+  }
+
   function locationProfileMatchesNode(node, map = state.world?.map) {
     if (!node || !map) return false;
     const expectedLevel = locationLevelForRing(node.ring, map.rings);
     const profile = LOCATION_TYPE_MAP[node.locationTypeId];
     if (!profile || number(node.locationLevel) !== expectedLevel || number(profile.level) !== expectedLevel) return false;
+    if (expectedLevel === 10) return Boolean(profile.unique && node.type === 'anomaly');
+    if (profile.unique) return false;
     if (node.type === 'station' && !profile.stationEligible) return false;
-    if (node.type !== 'station' && profile.unique !== (expectedLevel === 10)) return expectedLevel !== 10;
+    if (node.type !== 'station' && NON_STATION_FACTION_KEYS.some(key => node[key] !== undefined)) return false;
     return true;
   }
 
@@ -29,17 +42,23 @@
 
   const assignWorldLocationLevelsBeforePolish = assignWorldLocationLevels;
   assignWorldLocationLevels = function assignWorldLocationLevelsWithKindRefresh(map = state.world?.map, force = false) {
-    return assignWorldLocationLevelsBeforePolish(map, force || locationAssignmentsNeedRefresh(map));
+    const refresh = force || locationAssignmentsNeedRefresh(map);
+    clearNonStationFactionData(map);
+    return assignWorldLocationLevelsBeforePolish(map, refresh);
   };
 
   const reconcileWorldStationLevelsBeforePolish = reconcileWorldStationLevels;
   reconcileWorldStationLevels = function reconcileWorldStationLevelsWithoutStaleFactionData(map = state.world?.map) {
+    const previousTypes = new Map((map?.nodes || []).map(node => [node.id, node.type]));
     const changed = reconcileWorldStationLevelsBeforePolish(map);
     if (!map?.nodes) return changed;
     for (const node of map.nodes) {
-      if (node.type === 'station') continue;
-      for (const key of ['factionId','faction','parentFactionId','parentFaction','factionColor','organizationType','locals','visibleInfluences','hiddenInfluences']) delete node[key];
+      if (previousTypes.get(node.id) !== node.type) {
+        if (node.type !== 'station' && !node.locationBaseName) node.locationBaseName = node.name;
+        for (const key of LOCATION_PROFILE_KEYS) delete node[key];
+      }
     }
+    clearNonStationFactionData(map);
     return changed;
   };
 
@@ -67,12 +86,14 @@
         label.setAttribute('x', '0');
         label.setAttribute('y', '3');
         label.setAttribute('text-anchor', 'middle');
-        label.setAttribute('font-size', node.locationLevel === 10 ? '7' : '6');
-        label.setAttribute('font-weight', '900');
-        label.setAttribute('fill', '#ffffff');
         label.setAttribute('pointer-events', 'none');
         element.insertBefore(label, element.querySelector('text'));
       }
+      label.style.fill = '#ffffff';
+      label.style.fontSize = node.locationLevel === 10 ? '7px' : '6px';
+      label.style.fontWeight = '900';
+      label.style.textAnchor = 'middle';
+      label.style.pointerEvents = 'none';
       label.textContent = String(node.locationLevel || '?');
     }
     const mapFrame = root.querySelector('.expanded-map-frame, .map-frame');
