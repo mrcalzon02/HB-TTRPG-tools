@@ -30,14 +30,17 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-core.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-ui.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-stability.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-creature-encounters-core.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-creature-encounters-ui.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-core.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-map-ui.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-stability.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-fix.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-group-stability.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
 ];
 const orderIndexes = requiredOrder.map(relativePath => runtimePaths.indexOf(relativePath));
-if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world, faction, location, research, crossing, expedition, or integration runtime fragments are not registered.');
+if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world, faction, location, research, crossing, creature, expedition, or integration runtime fragments are not registered.');
 for (let index = 1; index < orderIndexes.length; index += 1) {
   if (orderIndexes[index] <= orderIndexes[index - 1]) throw new Error(`Runtime fragment order is invalid near ${requiredOrder[index]}.`);
 }
@@ -59,7 +62,12 @@ const requiredRuntimeMarkers = [
   ['stationDetailsHtml', 'Station click-detail information is missing.'],
   ['declareManagedSubmarineLostWithAllHands', 'Lost-with-all-hands handling is missing.'],
   ['selectQuarterSalvage', 'Deterministic quarter-salvage selection is missing.'],
-  ['recoverableMarks', 'Wreck value recovery is missing.']
+  ['recoverableMarks', 'Wreck value recovery is missing.'],
+  ['creaturePoolForLevel', 'Depth-gated creature pools are missing.'],
+  ['drawCreatureEncounter', 'Creature encounter generation is missing.'],
+  ['creatureSeverityProfile', 'Creature severity progression is missing.'],
+  ['creatureFailureApplied', 'Creature failure consequences are missing.'],
+  ['Enable Level 10 ending creatures', 'The endgame creature-pool control is missing.']
 ];
 for (const [marker, error] of requiredRuntimeMarkers) if (!source.includes(marker)) throw new Error(error);
 
@@ -71,6 +79,7 @@ const jsonPaths = [
   'data/barotrauma/tools/world/world-state-schema.json',
   'data/barotrauma/tools/factions/faction-registry.json',
   'data/barotrauma/tools/locations/location-level-registry.json',
+  'data/barotrauma/tools/creatures/creature-registry.json',
   'data/barotrauma-tools-registry.json'
 ];
 for (const relativePath of jsonPaths) JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
@@ -122,7 +131,30 @@ if (levelForRing(48, 48) !== 1) throw new Error('The outermost ring must be Leve
 if (levelForRing(1, 48) !== 9) throw new Error('The innermost non-core ring must be Level 9.');
 if (levelForRing(0, 48) !== 10) throw new Error('Ring zero must be Level 10.');
 
-const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} stations, ${factions.districts.length} districts, ${factions.umbrellas.length} umbrella factions, ${factions.organizations.length} operational organizations, ${locations.levels.length} location levels, ${locations.locations.length} station/encounter types, linked managed expeditions, pointer-centered map zoom, route inspection, lost-with-all-hands wrecks, quarter-salvage, unified submissions, and controlled R&D.`;
+const creatures = JSON.parse(fs.readFileSync(path.join(root, 'data/barotrauma/tools/creatures/creature-registry.json'), 'utf8'));
+const allowedCreatureClasses = new Set(['small','large','abyssal','ending']);
+if (creatures.source?.url !== 'https://barotraumagame.com/wiki/Creatures') throw new Error('Creature registry must retain the official wiki source URL.');
+if (!Array.isArray(creatures.creatures) || creatures.creatures.length < 35) throw new Error('Creature encounter registry must contain a substantial official-wiki selection.');
+if (!Array.isArray(creatures.progression) || creatures.progression.length < 6) throw new Error('Creature severity progression must cover all ten location levels.');
+const creatureIds = creatures.creatures.map(item => item.id);
+if (new Set(creatureIds).size !== creatureIds.length) throw new Error('Creature identifiers must be unique.');
+for (const creature of creatures.creatures) {
+  if (!creature.id || !creature.name || !creature.wikiTitle) throw new Error(`Incomplete creature identity: ${creature.id || creature.name || 'unknown'}`);
+  if (!allowedCreatureClasses.has(creature.officialClass)) throw new Error(`Unsupported official creature class: ${creature.officialClass}`);
+  if (creature.minLevel < 1 || creature.maxLevel > 10 || creature.minLevel > creature.maxLevel) throw new Error(`Invalid creature level range: ${creature.name}`);
+  if (creature.officialClass === 'small' && creature.canEnterSubmarine !== true) throw new Error(`Official Small creature must remain boarding-capable: ${creature.name}`);
+  if (['large','abyssal'].includes(creature.officialClass) && creature.canEnterSubmarine !== false) throw new Error(`Official ${creature.officialClass} creature must remain external-only: ${creature.name}`);
+  if (creature.officialClass === 'abyssal' && creature.minLevel < 8) throw new Error(`Abyssal creature unlocked before Level 8: ${creature.name}`);
+  if (creature.officialClass === 'ending' && (!creature.endingOnly || creature.minLevel !== 10 || creature.maxLevel !== 10)) throw new Error(`Ending creature is not hard-locked to Level 10: ${creature.name}`);
+}
+for (let level = 1; level <= 10; level += 1) {
+  if (!creatures.progression.some(item => level >= item.minLevel && level <= item.maxLevel)) throw new Error(`Creature severity progression does not cover Level ${level}.`);
+  const available = creatures.creatures.filter(item => level >= item.minLevel && level <= item.maxLevel && (!item.endingOnly || level === 10));
+  if (!available.length) throw new Error(`No creatures are available at Level ${level}.`);
+  if (level < 10 && available.some(item => item.officialClass === 'ending' || item.endingOnly)) throw new Error(`Ending creatures leaked into Level ${level}.`);
+}
+
+const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} stations, ${factions.districts.length} districts, ${factions.umbrellas.length} umbrella factions, ${factions.organizations.length} operational organizations, ${locations.levels.length} location levels, ${locations.locations.length} station/encounter types, ${creatures.creatures.length} creature profiles, six depth-severity bands, Level 10 ending locks, linked managed expeditions, pointer-centered map zoom, route inspection, lost-with-all-hands wrecks, quarter-salvage, unified submissions, and controlled R&D.`;
 console.log(message);
 
 if (process.env.VALIDATION_RECEIPT) {
@@ -139,6 +171,11 @@ if (process.env.VALIDATION_RECEIPT) {
     worldStateSchema: worldSchema.schemaVersion || '',
     factionRegistrySchema: factions.schemaVersion || '',
     locationLevelRegistrySchema: locations.schemaVersion || '',
+    creatureRegistrySchema: creatures.schemaVersion || '',
+    creatureProfiles: creatures.creatures.length,
+    creatureSeverityBands: creatures.progression.length,
+    endingCreatureProfiles: creatures.creatures.filter(item => item.endingOnly).length,
+    abyssalCreatureProfiles: creatures.creatures.filter(item => item.officialClass === 'abyssal').length,
     canonicalStart: worldSchema.canonicalStart,
     realEpoch: worldSchema.realEpoch,
     defaultRings: worldSchema.mapDefaults.rings,
