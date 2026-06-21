@@ -1,0 +1,133 @@
+    if (category === 'Location' && targetNode?.locationTypeId && LOCATION_TYPE_MAP[targetNode.locationTypeId]) return locationEncounterEvent(LOCATION_TYPE_MAP[targetNode.locationTypeId], targetNode);
+    const pool = EVENTS.filter(event => event.category === category && (route.sanityEnabled || event.category !== 'Sanity'));
+    const fallback = EVENTS.filter(event => route.sanityEnabled || event.category !== 'Sanity');
+    const source = pool[Math.floor(rng() * Math.max(1, pool.length))] || fallback[Math.floor(rng() * Math.max(1, fallback.length))] || drawCrossingEventBeforeGeneralEncounters(route, targetNode, rng);
+    return { ...source, routeNodeId: targetNode?.id || '', routeNodeName: targetNode?.name || '', routeLocationLevel: level };
+  };
+
+  function encounterEffectsText(effects = {}) {
+    const parts = [];
+    if (number(effects.hull)) parts.push(`Hull ${number(effects.hull) > 0 ? '+' : ''}${number(effects.hull)}`);
+    if (effects.resources) for (const [key, value] of Object.entries(effects.resources)) if (number(value)) parts.push(`${key} ${number(value) > 0 ? '+' : ''}${number(value)}`);
+    if (effects.systems) for (const [key, value] of Object.entries(effects.systems)) if (number(value)) parts.push(`${key} ${number(value) > 0 ? '+' : ''}${number(value)}%`);
+    if (number(effects.systemRandom)) parts.push(`random system ${number(effects.systemRandom)}%`);
+    if (effects.stats) for (const [key, value] of Object.entries(effects.stats)) if (number(value)) parts.push(`${key} ${number(value) > 0 ? '+' : ''}${number(value)}`);
+    if (number(effects.routePressure)) parts.push(`route pressure ${number(effects.routePressure) > 0 ? '+' : ''}${number(effects.routePressure)}`);
+    if (number(effects.lostSanity)) parts.push(`Lost Sanity +${Math.max(0, number(effects.lostSanity))}`);
+    return parts.join(' · ') || 'No automatic state changes';
+  }
+
+  function applyGeneralEncounterEffects(holder, event, status, scope = 'encounter') {
+    if (!holder || !event?.encounterTemplateId || !['success','failure'].includes(status)) return '';
+    if (holder.encounterEffectsApplied) return holder.encounterEffectsSummary || '';
+    const effects = status === 'success' ? event.successEffects || {} : event.failureEffects || {};
+    const applied = [];
+    if (number(effects.hull)) {
+      const maximum = typeof calculateSubmarine === 'function' ? calculateSubmarine().totals.hull : Math.max(number(state.submarine.hullCurrent), 1);
+      state.submarine.hullCurrent = clamp(number(state.submarine.hullCurrent) + number(effects.hull), 0, maximum);
+      applied.push(`Hull ${number(effects.hull) > 0 ? '+' : ''}${number(effects.hull)}`);
+    }
+    if (effects.resources && typeof effects.resources === 'object') {
+      state.submarine.resources = state.submarine.resources && typeof state.submarine.resources === 'object' ? state.submarine.resources : {};
+      for (const [key, value] of Object.entries(effects.resources)) {
+        if (!number(value)) continue;
+        state.submarine.resources[key] = Math.max(0, number(state.submarine.resources[key]) + number(value));
+        applied.push(`${key} ${number(value) > 0 ? '+' : ''}${number(value)}`);
+      }
+    }
+    if (effects.systems && typeof effects.systems === 'object') {
+      for (const [key, value] of Object.entries(effects.systems)) {
+        if (!state.submarine.systems?.[key] || !number(value)) continue;
+        state.submarine.systems[key].condition = clamp(number(state.submarine.systems[key].condition, 100) + number(value), 0, 100);
+        applied.push(`${key} ${number(value) > 0 ? '+' : ''}${number(value)}%`);
+      }
+    }
+    if (number(effects.systemRandom)) {
+      const systems = Object.keys(state.submarine.systems || {});
+      if (systems.length) {
+        const key = systems[Math.abs(typeof seededHash === 'function' ? seededHash(`${event.id}|${holder.id}|general-effect`) : 0) % systems.length];
+        state.submarine.systems[key].condition = clamp(number(state.submarine.systems[key].condition, 100) + number(effects.systemRandom), 0, 100);
+        applied.push(`${key} ${number(effects.systemRandom) > 0 ? '+' : ''}${number(effects.systemRandom)}%`);
+      }
+    }
+    if (effects.stats && typeof effects.stats === 'object') {
+      for (const [key, value] of Object.entries(effects.stats)) {
+        if (!(key in state.character.current) || !number(value)) continue;
+        state.character.current[key] = Math.max(0, number(state.character.current[key]) + number(value));
+        applied.push(`${key} ${number(value) > 0 ? '+' : ''}${number(value)}`);
+      }
+    }
+    if (number(effects.routePressure)) {
+      state.route.routePressure = Math.max(0, number(state.route.routePressure) + number(effects.routePressure));
+      applied.push(`route pressure ${number(effects.routePressure) > 0 ? '+' : ''}${number(effects.routePressure)}`);
+    }
+    if (number(effects.lostSanity) && state.route.sanityEnabled !== false) {
+      state.character.lostSanity = Math.max(0, number(state.character.lostSanity) + Math.max(0, number(effects.lostSanity)));
+      applied.push(`Lost Sanity +${Math.max(0, number(effects.lostSanity))}`);
+    }
+    holder.encounterEffectsApplied = status;
+    holder.encounterEffectsSummary = applied.join(' · ') || 'No automatic state changes';
+    if (scope === 'crossing' && typeof crossingLog === 'function') crossingLog(normalizeRouteCrossing(), `${event.name}: ${holder.encounterEffectsSummary}.`);
+    save();
+    return holder.encounterEffectsSummary;
+  }
+
+  function setGeneralEncounterApproach(item, approachIndex) {
+    const event = item?.event || item;
+    if (!event?.encounterTemplateId || !Array.isArray(event.encounterApproaches) || !event.encounterApproaches.length) return false;
+    const index = clamp(approachIndex, 0, event.encounterApproaches.length - 1);
+    const approach = event.encounterApproaches[index];
+    event.selectedApproachIndex = index;
+    event.stat = approach.stat || 'Intelligence';
+    event.dc = number(approach.dc, event.dc);
+    return true;
+  }
+
+  if (!root.dataset.generalEncounterEngineBound) {
+    root.dataset.generalEncounterEngineBound = 'true';
+    root.addEventListener('change', event => {
+      const select = event.target.closest('.general-encounter-approach');
+      if (!select) return;
+      const item = state.encounters.plan.find(entry => entry.id === select.dataset.itemId);
+      if (setGeneralEncounterApproach(item, number(select.value))) save();
+    });
+    root.addEventListener('click', event => {
+      const button = event.target.closest('.encounter-roll, .encounter-success, .encounter-failure');
+      if (!button) return;
+      const item = state.encounters.plan.find(entry => entry.id === button.dataset.id);
+      if (!item?.event?.encounterTemplateId) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      let status = '';
+      let roll = item.roll || '';
+      if (button.classList.contains('encounter-roll')) {
+        const stat = item.event.stat in state.character.current ? item.event.stat : 'Intelligence';
+        const dice = [d6(), d6()];
+        const modifier = number(state.character.current[stat]);
+        const total = dice[0] + dice[1] + modifier;
+        status = total >= number(item.event.dc, 8) ? 'success' : 'failure';
+        roll = `${dice[0]} + ${dice[1]} + ${modifier} ${stat} = ${total} vs ${item.event.dc}`;
+      } else status = button.classList.contains('encounter-success') ? 'success' : 'failure';
+      item.status = status;
+      item.roll = roll;
+      applyGeneralEncounterEffects(item, item.event, status, 'encounter');
+      save();
+      renderEncounters();
+    }, true);
+  }
+
+  const resolveCrossingEventBeforeGeneralEffects = resolveCrossingEvent;
+  resolveCrossingEvent = function resolveCrossingEventWithGeneralEffects(slotId, status, roll = '') {
+    const slot = state.route.plan.find(item => item.id === slotId);
+    const event = crossingSelectedEvent(slot);
+    const shouldApply = Boolean(slot && event?.encounterTemplateId && !slot.encounterEffectsApplied);
+    const result = resolveCrossingEventBeforeGeneralEffects(slotId, status, roll);
+    if (result && shouldApply) {
+      applyGeneralEncounterEffects(slot, event, status, 'crossing');
+      syncCrossingPublicRoute();
+      save();
+    }
+    return result;
+  };
+
+  normalizeGeneralEncounterState();
