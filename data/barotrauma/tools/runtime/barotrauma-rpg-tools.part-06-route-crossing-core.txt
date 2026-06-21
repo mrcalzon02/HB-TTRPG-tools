@@ -1,0 +1,512 @@
+
+  const ROUTE_CROSSING_VERSION = '1.0.0';
+  const ROUTE_CROSSING_DEFAULTS = {
+    fuelPerDistance: 1,
+    foodPerLeg: 1,
+    waterPerLeg: 1,
+    suppliesPerDangerousLeg: 1,
+    dangerEventBonus: 1
+  };
+
+  function defaultRouteCrossing() {
+    return {
+      version: ROUTE_CROSSING_VERSION,
+      crossingId: '',
+      worldId: '',
+      groupId: '',
+      status: 'none',
+      mode: 'balanced',
+      departureNodeId: '',
+      destinationNodeId: '',
+      currentNodeId: '',
+      pathNodeIds: [],
+      legs: [],
+      activeLegIndex: 0,
+      createdAt: '',
+      startedAt: '',
+      completedAt: '',
+      abortedAt: '',
+      message: '',
+      log: [],
+      initialResources: {},
+      spentResources: { fuel: 0, food: 0, water: 0, supplies: 0 }
+    };
+  }
+
+  function normalizeRouteCrossing() {
+    state.route = state.route && typeof state.route === 'object' ? state.route : {};
+    const route = state.route;
+    route.plan = Array.isArray(route.plan) ? route.plan : [];
+    route.jobs = Array.isArray(route.jobs) ? route.jobs : [];
+    route.table = route.table && typeof route.table === 'object' ? route.table : Object.fromEntries(EVENT_CATEGORIES.map(category => [category, category === 'Sanity' ? 1 : 3]));
+    route.crossingConfig = route.crossingConfig && typeof route.crossingConfig === 'object' ? route.crossingConfig : {};
+    for (const [key, value] of Object.entries(ROUTE_CROSSING_DEFAULTS)) route.crossingConfig[key] = Math.max(0, number(route.crossingConfig[key], value));
+    route.routeMode = ['balanced','fastest','safest','fewest-legs'].includes(route.routeMode) ? route.routeMode : 'balanced';
+    route.startNodeId = String(route.startNodeId || '');
+    route.endNodeId = String(route.endNodeId || '');
+    route.crossingMessage = String(route.crossingMessage || '');
+    const defaults = defaultRouteCrossing();
+    route.crossing = route.crossing && typeof route.crossing === 'object' ? route.crossing : defaults;
+    for (const [key, value] of Object.entries(defaults)) if (!(key in route.crossing)) route.crossing[key] = Array.isArray(value) ? [] : value && typeof value === 'object' ? { ...value } : value;
+    route.crossing.pathNodeIds = Array.isArray(route.crossing.pathNodeIds) ? route.crossing.pathNodeIds : [];
+    route.crossing.legs = Array.isArray(route.crossing.legs) ? route.crossing.legs : [];
+    route.crossing.log = Array.isArray(route.crossing.log) ? route.crossing.log : [];
+    route.crossing.spentResources = route.crossing.spentResources && typeof route.crossing.spentResources === 'object' ? route.crossing.spentResources : { fuel: 0, food: 0, water: 0, supplies: 0 };
+    route.crossing.activeLegIndex = Math.max(0, number(route.crossing.activeLegIndex, 0));
+    state.submarine.resources = state.submarine.resources && typeof state.submarine.resources === 'object' ? state.submarine.resources : {};
+    if (!('fuel' in state.submarine.resources)) state.submarine.resources.fuel = 10;
+    for (const key of ['fuel','food','water','supplies']) state.submarine.resources[key] = Math.max(0, number(state.submarine.resources[key]));
+    const map = state.world?.map;
+    if (map?.nodes?.length) {
+      assignMissingGroupStarts();
+      const group = activeWorldGroup();
+      const current = map.nodes.find(node => node.id === group?.currentNodeId);
+      const firstStation = map.nodes.find(node => node.type === 'station');
+      if (!route.startNodeId) route.startNodeId = current?.type === 'station' ? current.id : firstStation?.id || '';
+      const namedStart = map.nodes.find(node => node.name === route.start && node.type === 'station');
+      if (namedStart) route.startNodeId = namedStart.id;
+      if (!route.endNodeId || route.endNodeId === route.startNodeId) route.endNodeId = map.nodes.find(node => node.type === 'station' && node.id !== route.startNodeId)?.id || '';
+      const namedEnd = map.nodes.find(node => node.name === route.end && node.type === 'station');
+      if (namedEnd) route.endNodeId = namedEnd.id;
+      const start = map.nodes.find(node => node.id === route.startNodeId);
+      const end = map.nodes.find(node => node.id === route.endNodeId);
+      if (start) route.start = start.name;
+      if (end) route.end = end.name;
+    }
+    return route.crossing;
+  }
+
+  function crossingStationNodes(map = state.world?.map) {
+    return (map?.nodes || []).filter(node => node.type === 'station').sort((left, right) => right.ring - left.ring || left.name.localeCompare(right.name));
+  }
+
+  function crossingNode(nodeId, map = state.world?.map) {
+    return map?.nodes?.find(node => node.id === nodeId) || null;
+  }
+
+  function crossingEdgeBetween(leftId, rightId, map = state.world?.map) {
+    return map?.edges?.find(edge => (edge.a === leftId && edge.b === rightId) || (edge.a === rightId && edge.b === leftId)) || null;
+  }
+
+  function crossingEdgeCost(edge, mode, map) {
+    const target = crossingNode(edge.b, map);
+    const levelRisk = Math.max(0, number(target?.locationLevel, 1) - 1) / 4;
+    if (mode === 'fastest') return Math.max(1, number(edge.distance, 1));
+    if (mode === 'safest') return Math.max(1, number(edge.distance, 1)) + (edge.danger ? 12 : 0) + levelRisk;
+    if (mode === 'fewest-legs') return 1 + (edge.danger ? 0.15 : 0);
+    return Math.max(1, number(edge.distance, 1)) + (edge.danger ? 3 : 0) + levelRisk * 0.5;
+  }
+
+  function crossingPath(map, startId, endId, mode = 'balanced') {
+    if (!map?.nodes?.length || !startId || !endId || startId === endId) return null;
+    const nodeIds = new Set(map.nodes.map(node => node.id));
+    if (!nodeIds.has(startId) || !nodeIds.has(endId)) return null;
+    const distances = Object.fromEntries(map.nodes.map(node => [node.id, Infinity]));
+    const previous = {};
+    const previousEdge = {};
+    const unvisited = new Set(nodeIds);
+    distances[startId] = 0;
+    while (unvisited.size) {
+      let current = '';
+      let best = Infinity;
+      for (const id of unvisited) if (distances[id] < best) { current = id; best = distances[id]; }
+      if (!current || !Number.isFinite(best)) break;
+      unvisited.delete(current);
+      if (current === endId) break;
+      for (const edge of map.edges.filter(item => item.a === current || item.b === current)) {
+        const neighbor = edge.a === current ? edge.b : edge.a;
+        if (!unvisited.has(neighbor)) continue;
+        const oriented = edge.a === current ? edge : { ...edge, a: edge.b, b: edge.a };
+        const alternative = distances[current] + crossingEdgeCost(oriented, mode, map);
+        if (alternative < distances[neighbor]) {
+          distances[neighbor] = alternative;
+          previous[neighbor] = current;
+          previousEdge[neighbor] = edge.id;
+        }
+      }
+    }
+    if (!Number.isFinite(distances[endId])) return null;
+    const ids = [];
+    const edgeIds = [];
+    let cursor = endId;
+    while (cursor) {
+      ids.unshift(cursor);
+      if (cursor === startId) break;
+      edgeIds.unshift(previousEdge[cursor]);
+      cursor = previous[cursor];
+    }
+    if (ids[0] !== startId || edgeIds.some(id => !id)) return null;
+    return { ids, edgeIds, score: distances[endId] };
+  }
+
+  function crossingLegCosts(edge) {
+    const config = state.route.crossingConfig;
+    return {
+      fuel: Math.ceil(Math.max(1, number(edge.distance, 1)) * Math.max(0, number(config.fuelPerDistance, 1))),
+      food: Math.ceil(Math.max(0, number(config.foodPerLeg, 1))),
+      water: Math.ceil(Math.max(0, number(config.waterPerLeg, 1))),
+      supplies: edge.danger ? Math.ceil(Math.max(0, number(config.suppliesPerDangerousLeg, 1))) : 0
+    };
+  }
+
+  function crossingCostTotal(legs = normalizeRouteCrossing().legs) {
+    return legs.reduce((totals, leg) => {
+      for (const key of ['fuel','food','water','supplies']) totals[key] += Math.max(0, number(leg.costs?.[key]));
+      return totals;
+    }, { fuel: 0, food: 0, water: 0, supplies: 0 });
+  }
+
+  function crossingRemainingCosts(crossing = normalizeRouteCrossing()) {
+    return crossingCostTotal(crossing.legs.filter(leg => leg.status !== 'complete'));
+  }
+
+  function drawCrossingEvent(route, targetNode, rng) {
+    const category = weightedCategory(route.table, route.sanityEnabled, rng);
+    if (category === 'Location' && targetNode?.locationTypeId && LOCATION_TYPE_MAP[targetNode.locationTypeId]) return locationEncounterEvent(LOCATION_TYPE_MAP[targetNode.locationTypeId], targetNode);
+    const pool = EVENTS.filter(event => event.category === category && (route.sanityEnabled || event.category !== 'Sanity'));
+    const fallback = EVENTS.filter(event => route.sanityEnabled || event.category !== 'Sanity');
+    const source = pool[Math.floor(rng() * Math.max(1, pool.length))] || fallback[Math.floor(rng() * Math.max(1, fallback.length))] || EVENTS[0];
+    return { ...source, routeNodeId: targetNode?.id || '', routeNodeName: targetNode?.name || '', routeLocationLevel: targetNode?.locationLevel || 1 };
+  }
+
+  function crossingEventChoices(route, targetNode, rng) {
+    const count = route.mapmaker ? 2 : 1;
+    return Array.from({ length: count }, () => drawCrossingEvent(route, targetNode, rng));
+  }
+
+  function distributeCrossingEventCounts(legs) {
+    const route = state.route;
+    const counts = legs.map(leg => Math.max(0, number(leg.distance, 1)) + (leg.danger ? Math.max(0, number(route.crossingConfig.dangerEventBonus, 1)) : 0));
+    let pressure = Math.max(0, number(route.routePressure));
+    let pressureIndex = 0;
+    while (pressure > 0 && counts.length) {
+      counts[pressureIndex % counts.length] += 1;
+      pressureIndex += 1;
+      pressure -= 1;
+    }
+    let reduction = route.navigationExpert ? Math.max(0, number(route.navigationReduction, 1)) : 0;
+    while (reduction > 0 && counts.some(value => value > 0)) {
+      const index = counts.reduce((best, value, current) => value > counts[best] ? current : best, 0);
+      counts[index] = Math.max(0, counts[index] - 1);
+      reduction -= 1;
+    }
+    return counts;
+  }
+
+  function crossingLog(crossing, text) {
+    crossing.log.unshift({ id: uid('crossing-log'), at: new Date().toISOString(), canonicalAt: typeof worldGameDate === 'function' ? worldGameDate().toISOString() : '', text });
+    crossing.log = crossing.log.slice(0, 200);
+  }
+
+  function syncCrossingPublicRoute() {
+    const crossing = normalizeRouteCrossing();
+    if (!crossing.crossingId) return;
+    const hub = normalizeWorldHub();
+    const group = activeWorldGroup();
+    crossing.worldId = hub.worldId;
+    crossing.groupId = group?.groupId || crossing.groupId || '';
+    hub.publicState.routes[crossing.crossingId] = {
+      routeId: crossing.crossingId,
+      groupId: crossing.groupId,
+      status: crossing.status,
+      departureNodeId: crossing.departureNodeId,
+      destinationNodeId: crossing.destinationNodeId,
+      currentNodeId: crossing.currentNodeId,
+      route: cloneWorldData(state.route),
+      updatedAt: new Date().toISOString()
+    };
+    if (group) group.routeId = crossing.crossingId;
+    hub.updatedAt = new Date().toISOString();
+  }
+
+  function generateValidCrossing() {
+    normalizeRouteCrossing();
+    const route = state.route;
+    const map = state.world?.map;
+    const start = crossingNode(route.startNodeId, map);
+    const end = crossingNode(route.endNodeId, map);
+    if (!map?.nodes?.length) throw new Error('Generate or import a Europa world before creating a crossing.');
+    if (!start || start.type !== 'station') throw new Error('The departure must be a mapped station.');
+    if (!end || end.type !== 'station') throw new Error('The destination must be a mapped station.');
+    if (start.id === end.id) throw new Error('Departure and destination must be different stations.');
+    const path = crossingPath(map, start.id, end.id, route.routeMode);
+    if (!path || path.ids.length < 2) throw new Error('No connected station-to-station path exists between the selected locations.');
+    const group = activeWorldGroup();
+    const crossingId = uid('crossing');
+    const rng = seededRandom(`${map.seed}|${start.id}|${end.id}|${route.routeMode}|${crossingId}`);
+    const crossing = defaultRouteCrossing();
+    crossing.crossingId = crossingId;
+    crossing.worldId = normalizeWorldHub().worldId;
+    crossing.groupId = group?.groupId || '';
+    crossing.status = 'prepared';
+    crossing.mode = route.routeMode;
+    crossing.departureNodeId = start.id;
+    crossing.destinationNodeId = end.id;
+    crossing.currentNodeId = start.id;
+    crossing.pathNodeIds = [...path.ids];
+    crossing.createdAt = new Date().toISOString();
+    crossing.initialResources = cloneWorldData(state.submarine.resources);
+    crossing.legs = path.edgeIds.map((edgeId, index) => {
+      const edge = map.edges.find(item => item.id === edgeId) || crossingEdgeBetween(path.ids[index], path.ids[index + 1], map);
+      const from = crossingNode(path.ids[index], map);
+      const to = crossingNode(path.ids[index + 1], map);
+      return {
+        legId: uid('leg'),
+        index,
+        fromNodeId: from.id,
+        toNodeId: to.id,
+        edgeId: edge?.id || '',
+        distance: Math.max(1, number(edge?.distance, 1)),
+        danger: Boolean(edge?.danger),
+        fromLevel: number(from.locationLevel, 1),
+        toLevel: number(to.locationLevel, 1),
+        costs: crossingLegCosts(edge || { distance: 1, danger: false }),
+        eventIds: [],
+        status: 'pending',
+        startedAt: '',
+        completedAt: ''
+      };
+    });
+    const eventCounts = distributeCrossingEventCounts(crossing.legs);
+    route.plan = [];
+    let sequence = 1;
+    const selectedJobs = JOBS.filter(job => route.jobs.includes(job.id));
+    for (const job of selectedJobs) {
+      for (let count = 0; count < job.events; count += 1) {
+        route.plan.push({ id: uid('route-job'), phase: 'Job', label: `${job.name} — event ${count + 1} of ${job.events}`, choices: crossingEventChoices(route, start, rng), selectedChoiceIndex: 0, status: 'pending', sequence: sequence++, legIndex: -1, worldNodeId: start.id });
+      }
+    }
+    crossing.legs.forEach((leg, legIndex) => {
+      const from = crossingNode(leg.fromNodeId, map);
+      const to = crossingNode(leg.toNodeId, map);
+      if (to.type !== 'station' && to.locationTypeId && LOCATION_TYPE_MAP[to.locationTypeId]) {
+        const slot = { id: uid('route-location'), phase: 'Location', label: `Leg ${legIndex + 1} arrival — ${to.name}`, choices: [locationEncounterEvent(LOCATION_TYPE_MAP[to.locationTypeId], to)], selectedChoiceIndex: 0, status: 'pending', sequence: sequence++, legIndex, fromNodeId: from.id, toNodeId: to.id, worldNodeId: to.id };
+        route.plan.push(slot);
+        leg.eventIds.push(slot.id);
+      }
+      for (let count = 0; count < eventCounts[legIndex]; count += 1) {
+        const slot = { id: uid('route-travel'), phase: 'Travel', label: `Leg ${legIndex + 1}: ${from.name} → ${to.name} — event ${count + 1} of ${eventCounts[legIndex]}`, choices: crossingEventChoices(route, to, rng), selectedChoiceIndex: 0, status: 'pending', sequence: sequence++, legIndex, fromNodeId: from.id, toNodeId: to.id, worldNodeId: to.id };
+        route.plan.push(slot);
+        leg.eventIds.push(slot.id);
+      }
+    });
+    route.crossing = crossing;
+    route.start = start.name;
+    route.end = end.name;
+    route.distance = crossing.legs.reduce((sum, leg) => sum + leg.distance, 0);
+    state.world.selected = [start.id, end.id];
+    crossingLog(crossing, `Prepared a ${crossing.legs.length}-leg ${crossing.mode} crossing from ${start.name} to ${end.name}.`);
+    route.crossingMessage = 'Valid connected crossing generated.';
+    syncCrossingPublicRoute();
+    save();
+    return crossing;
+  }
+
+  function crossingReadiness(crossing = normalizeRouteCrossing()) {
+    const issues = [];
+    const map = state.world?.map;
+    const start = crossingNode(crossing.departureNodeId, map);
+    const end = crossingNode(crossing.destinationNodeId, map);
+    if (!crossing.crossingId || !crossing.legs.length) issues.push('No generated crossing.');
+    if (!start || start.type !== 'station') issues.push('Departure is not a valid station.');
+    if (!end || end.type !== 'station') issues.push('Destination is not a valid station.');
+    const group = activeWorldGroup();
+    if (group && group.currentNodeId !== crossing.departureNodeId) issues.push(`Active group is currently at ${crossingNode(group.currentNodeId, map)?.name || group.currentNodeId}, not the selected departure.`);
+    if (!UPKEEP_TASKS.every(([id]) => state.submarine.upkeep[id]?.complete)) issues.push('Station upkeep is incomplete.');
+    if (number(state.submarine.hullCurrent) <= 0) issues.push('The submarine has no remaining hull integrity.');
+    if (number(state.submarine.systems?.Propulsion?.condition, 100) <= 0) issues.push('Propulsion is inoperative.');
+    if (number(state.submarine.systems?.Reactor?.condition, 100) <= 0) issues.push('The reactor is inoperative.');
+    if (calculateSubmarine().remainingCapacity < 0) issues.push('The submarine exceeds its carrying capacity.');
+    const remaining = crossingRemainingCosts(crossing);
+    for (const key of ['fuel','food','water','supplies']) if (number(state.submarine.resources[key]) < remaining[key]) issues.push(`Insufficient ${key}: ${number(state.submarine.resources[key])}/${remaining[key]} required.`);
+    return { ready: !issues.length, issues };
+  }
+
+  function startCrossing() {
+    const crossing = normalizeRouteCrossing();
+    const readiness = crossingReadiness(crossing);
+    if (!readiness.ready) {
+      state.route.crossingMessage = readiness.issues.join(' ');
+      return false;
+    }
+    crossing.status = 'underway';
+    crossing.startedAt = crossing.startedAt || new Date().toISOString();
+    crossing.activeLegIndex = Math.max(0, crossing.legs.findIndex(leg => leg.status !== 'complete'));
+    if (crossing.legs[crossing.activeLegIndex]) {
+      crossing.legs[crossing.activeLegIndex].status = 'underway';
+      crossing.legs[crossing.activeLegIndex].startedAt = new Date().toISOString();
+    }
+    crossingLog(crossing, `Crossing departed ${crossingNode(crossing.departureNodeId)?.name || crossing.departureNodeId}.`);
+    state.route.crossingMessage = 'Crossing underway.';
+    syncCrossingPublicRoute();
+    save();
+    return true;
+  }
+
+  function crossingSelectedEvent(slot) {
+    const choices = Array.isArray(slot?.choices) ? slot.choices : slot?.event ? [slot.event] : [];
+    const index = clamp(slot?.selectedChoiceIndex, 0, Math.max(0, choices.length - 1));
+    return choices[index] || choices[0] || null;
+  }
+
+  function selectCrossingChoice(slotId, choiceIndex) {
+    const slot = state.route.plan.find(item => item.id === slotId);
+    if (!slot || slot.status !== 'pending') return;
+    slot.selectedChoiceIndex = clamp(choiceIndex, 0, Math.max(0, (slot.choices || []).length - 1));
+    state.route.crossingMessage = `Selected ${crossingSelectedEvent(slot)?.name || 'encounter choice'}.`;
+    syncCrossingPublicRoute();
+    save();
+  }
+
+  function resolveCrossingEvent(slotId, status, roll = '') {
+    const crossing = normalizeRouteCrossing();
+    const slot = state.route.plan.find(item => item.id === slotId);
+    if (!slot) return false;
+    slot.status = status;
+    slot.roll = roll;
+    slot.resolvedAt = new Date().toISOString();
+    const event = crossingSelectedEvent(slot);
+    crossingLog(crossing, `${status === 'success' ? 'Succeeded' : 'Failed'}: ${event?.name || slot.label}.`);
+    state.route.crossingMessage = `${event?.name || slot.label} marked ${status}.`;
+    syncCrossingPublicRoute();
+    save();
+    return true;
+  }
+
+  function rollCrossingEvent(slotId) {
+    const slot = state.route.plan.find(item => item.id === slotId);
+    const event = crossingSelectedEvent(slot);
+    if (!slot || !event) return false;
+    const stat = event.stat in state.character.current ? event.stat : 'Intelligence';
+    const dice = [d6(), d6()];
+    const modifier = number(state.character.current[stat]);
+    const total = dice[0] + dice[1] + modifier;
+    const dc = number(event.dc, 8);
+    return resolveCrossingEvent(slotId, total >= dc ? 'success' : 'failure', `${dice[0]} + ${dice[1]} + ${modifier} ${stat} = ${total} vs ${dc}`);
+  }
+
+  function redrawCrossingEvent(slotId) {
+    const slot = state.route.plan.find(item => item.id === slotId);
+    if (!slot || slot.status !== 'pending') return false;
+    const node = crossingNode(slot.worldNodeId) || crossingNode(state.route.crossing.currentNodeId);
+    const rng = seededRandom(`${state.world?.seed}|${state.route.crossing.crossingId}|${slot.id}|${Date.now()}`);
+    slot.choices = crossingEventChoices(state.route, node, rng);
+    slot.selectedChoiceIndex = 0;
+    state.route.crossingMessage = 'Encounter redrawn.';
+    syncCrossingPublicRoute();
+    save();
+    return true;
+  }
+
+  function nextPendingCrossingSlot() {
+    return state.route.plan.find(slot => slot.status === 'pending') || null;
+  }
+
+  function activeCrossingLeg(crossing = normalizeRouteCrossing()) {
+    return crossing.legs[crossing.activeLegIndex] || crossing.legs.find(leg => leg.status === 'underway') || crossing.legs.find(leg => leg.status !== 'complete') || null;
+  }
+
+  function crossingLegCanComplete(leg, crossing = normalizeRouteCrossing()) {
+    if (!leg || crossing.status !== 'underway') return { ready: false, issue: 'Crossing is not underway.' };
+    const blockingJobs = state.route.plan.filter(slot => slot.phase === 'Job' && slot.status === 'pending');
+    if (blockingJobs.length) return { ready: false, issue: `${blockingJobs.length} job encounter${blockingJobs.length === 1 ? '' : 's'} remain unresolved.` };
+    const pending = state.route.plan.filter(slot => leg.eventIds.includes(slot.id) && slot.status === 'pending');
+    if (pending.length) return { ready: false, issue: `${pending.length} leg encounter${pending.length === 1 ? '' : 's'} remain unresolved.` };
+    for (const key of ['fuel','food','water','supplies']) if (number(state.submarine.resources[key]) < number(leg.costs[key])) return { ready: false, issue: `Insufficient ${key} for this leg.` };
+    return { ready: true, issue: '' };
+  }
+
+  function updateGroupCrossingLocation(nodeId) {
+    const hub = normalizeWorldHub();
+    const group = activeWorldGroup();
+    if (!group || !state.world?.map?.nodes?.some(node => node.id === nodeId)) return;
+    group.currentNodeId = nodeId;
+    hub.publicState.locations[group.groupId] = { groupId: group.groupId, nodeId, updatedAt: new Date().toISOString() };
+  }
+
+  function completeCrossingLeg() {
+    const crossing = normalizeRouteCrossing();
+    const leg = activeCrossingLeg(crossing);
+    const check = crossingLegCanComplete(leg, crossing);
+    if (!check.ready) {
+      state.route.crossingMessage = check.issue;
+      return false;
+    }
+    for (const key of ['fuel','food','water','supplies']) {
+      const amount = Math.max(0, number(leg.costs[key]));
+      state.submarine.resources[key] = Math.max(0, number(state.submarine.resources[key]) - amount);
+      crossing.spentResources[key] = Math.max(0, number(crossing.spentResources[key])) + amount;
+    }
+    leg.status = 'complete';
+    leg.completedAt = new Date().toISOString();
+    crossing.currentNodeId = leg.toNodeId;
+    updateGroupCrossingLocation(leg.toNodeId);
+    crossingLog(crossing, `Completed leg ${leg.index + 1}: ${crossingNode(leg.fromNodeId)?.name || leg.fromNodeId} → ${crossingNode(leg.toNodeId)?.name || leg.toNodeId}.`);
+    const nextIndex = crossing.legs.findIndex(item => item.status !== 'complete');
+    if (nextIndex >= 0) {
+      crossing.activeLegIndex = nextIndex;
+      crossing.legs[nextIndex].status = 'underway';
+      crossing.legs[nextIndex].startedAt = new Date().toISOString();
+      state.route.crossingMessage = `Leg ${leg.index + 1} complete. Leg ${nextIndex + 1} underway.`;
+    } else {
+      crossing.status = 'arrived';
+      crossing.completedAt = new Date().toISOString();
+      crossing.activeLegIndex = crossing.legs.length;
+      const destination = crossingNode(crossing.destinationNodeId);
+      syncWorldMapStations();
+      const station = STATIONS.find(item => item.worldNodeId === destination?.id || item.name === destination?.name);
+      const commerce = normalizeStationCommerce();
+      if (station) commerce.activeStationId = stationIdentity(station);
+      state.submarine.upkeep = {};
+      state.route.crossingMessage = `Arrived at ${destination?.name || crossing.destinationNodeId}. Station upkeep has been reset for the next departure.`;
+      crossingLog(crossing, `Arrived at ${destination?.name || crossing.destinationNodeId}.`);
+    }
+    syncCrossingPublicRoute();
+    save();
+    return true;
+  }
+
+  function abortCrossing() {
+    const crossing = normalizeRouteCrossing();
+    if (!crossing.crossingId || crossing.status === 'arrived') return false;
+    crossing.status = 'aborted';
+    crossing.abortedAt = new Date().toISOString();
+    crossingLog(crossing, `Crossing aborted at ${crossingNode(crossing.currentNodeId)?.name || crossing.currentNodeId}.`);
+    state.route.crossingMessage = 'Crossing aborted. The active group remains at its current mapped node.';
+    syncCrossingPublicRoute();
+    save();
+    return true;
+  }
+
+  function clearRouteCrossing() {
+    state.route.crossing = defaultRouteCrossing();
+    state.route.plan = [];
+    state.route.crossingMessage = 'Crossing cleared. Select two mapped stations to prepare another route.';
+    save();
+  }
+
+  function applyCrossingQuickEffect(effect) {
+    const crossing = normalizeRouteCrossing();
+    if (effect === 'hull') state.submarine.hullCurrent = Math.max(0, number(state.submarine.hullCurrent) - 1);
+    else if (['fuel','food','water','supplies'].includes(effect)) state.submarine.resources[effect] = Math.max(0, number(state.submarine.resources[effect]) - 1);
+    else if (effect === 'repair') state.submarine.hullCurrent = Math.min(calculateSubmarine().totals.hull, number(state.submarine.hullCurrent) + 1);
+    crossingLog(crossing, effect === 'repair' ? 'Applied 1 hull repair during crossing.' : `Applied crossing cost: -1 ${effect}.`);
+    syncCrossingPublicRoute();
+    save();
+  }
+
+  const applyWorldSubmissionBeforeRouteCrossing = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithActiveRoute(raw, allowForeign = false) {
+    const submission = normalizeWorldSubmission(raw);
+    const result = applyWorldSubmissionBeforeRouteCrossing(submission, allowForeign);
+    const activeGroupId = normalizeWorldHub().activeGroupId;
+    if (submission.kind === 'route' && submission.payload?.route && (!submission.payload.groupId || submission.payload.groupId === activeGroupId)) {
+      state.route = deepMerge(state.route && typeof state.route === 'object' ? state.route : {}, cloneWorldData(submission.payload.route));
+      normalizeRouteCrossing();
+      syncCrossingPublicRoute();
+      save();
+    }
+    return result;
+  };
+
+  normalizeRouteCrossing();
