@@ -69,7 +69,8 @@ jobs:
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-00.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-01.txt',
-            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt'
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt'
           ];
           requiredRecovery.forEach(name => assert(recoveryLoader.includes(name), `${name} is not dynamically loaded`));
 
@@ -93,6 +94,7 @@ jobs:
           const recoveryUi00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-00.txt', 'utf8');
           const recoveryUi01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-01.txt', 'utf8');
           const recoveryUi02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt', 'utf8');
+          const recoveryPostload = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt', 'utf8');
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
 
           assert(core00.includes("algorithm='PBKDF2-SHA-256'") || core00.includes("credential.algorithm='PBKDF2-SHA-256'"), 'Credential algorithm is not PBKDF2-SHA-256');
@@ -107,6 +109,7 @@ jobs:
           assert(migration.includes('migratedFromPublicWorld:true'), 'Older submarine state migration is missing');
           assert(firstClaim.includes('registerCurrentSubmarineForDashboardManagement'), 'First claim does not register an unassigned local submarine');
           assert(groupBinding.includes('hub.activeGroupId=group.groupId'), 'Authenticated group ID is not enforced during normalization');
+          assert(groupBinding.includes('eval(source)'), 'Recovery modules are not evaluated in the campaign runtime scope');
 
           assert(recoveryCore.includes('createNewManageableSubmarine'), 'New manageable submarine creation is missing');
           assert(recoveryCore.includes('dashboardManagementBuildSubmarineState'), 'New submarine state construction is missing');
@@ -124,6 +127,7 @@ jobs:
           assert(recoveryUi01.includes('resetDashboardManagementPassword'), 'Reset controls are not bound');
           assert(recoveryUi02.includes('Save this recovery code now.'), 'One-time recovery-code presentation is missing');
           assert(recoveryUi02.includes("pendingRecoveryCode=''"), 'One-time recovery code cannot be cleared from runtime memory');
+          assert(recoveryPostload.includes('legacy-recovery-issued-after-session-restore'), 'Restored legacy sessions do not receive a recovery code');
 
           assert(!/credential\.recovery\.(code|recoveryCode)\s*=/.test(recoveryCore), 'A plaintext recovery code is written into the credential');
           assert(!/receipt\.token\s*=/.test(core01), 'A raw receipt token appears to be written into world state');
