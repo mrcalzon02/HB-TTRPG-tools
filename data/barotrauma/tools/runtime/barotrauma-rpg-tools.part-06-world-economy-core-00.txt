@@ -1,0 +1,169 @@
+
+  const WORLD_ECONOMY_VERSION = '1.0.0';
+  const WORLD_ECONOMY_COMMODITIES = ['credits','food','water','rawMaterials','radioactives','fuel','industrialGoods','components','medicalSupplies','ammunition'];
+  const WORLD_ECONOMY_DEFAULTS = { stationCycleMinutes:60, catchupCycleLimit:24, npcFleetMinimum:12, npcFleetMaximum:60, viewerBatchSize:40 };
+  const WORLD_STATION_PROCESS_PROFILES = {
+    colony:{label:'Colony Economy',inputs:{food:4,water:2},outputs:{credits:90},notes:'Population and civil administration consume food and water while generating taxes, rents, wages, and service demand.'},
+    hydroponics:{label:'Hydroponic Agriculture',inputs:{rawMaterials:2,water:3},outputs:{food:8,medicalSupplies:1},notes:'Nutrients, minerals, and recycled water become food and botanical medicine.'},
+    hydrothermal:{label:'Hydrothermal Extraction',inputs:{industrialGoods:1},outputs:{radioactives:4,fuel:2,rawMaterials:2},notes:'Thermal and vent installations extract radioactive and geothermal feedstocks.'},
+    mine:{label:'Bulk Mining',inputs:{food:1,fuel:1},outputs:{rawMaterials:7,radioactives:1},notes:'Mining stations consume provisions and fuel to produce bulk ore and occasional reactor feedstock.'},
+    factory:{label:'Industrial Fabrication',inputs:{rawMaterials:5,fuel:1},outputs:{industrialGoods:4,components:3,ammunition:1},notes:'Factories convert bulk resources into machinery, pressure components, tools, and ammunition.'},
+    shipyard:{label:'Shipyard Construction',inputs:{rawMaterials:8,industrialGoods:5,components:4,fuel:1},outputs:{credits:40},vesselProgress:25,notes:'Shipyards consume industrial inputs and progressively construct commissionable submarines.'},
+    medical:{label:'Medical Production',inputs:{rawMaterials:2,food:1},outputs:{medicalSupplies:4,credits:30},notes:'Clinics and hospitals convert biological and industrial inputs into treatment capacity and medical stock.'},
+    military:{label:'Military Supply',inputs:{industrialGoods:3,components:2,food:1},outputs:{ammunition:4,credits:35},notes:'Fortified stations consume industry and provisions to produce ammunition and regional security services.'},
+    research:{label:'Research Complex',inputs:{components:2,radioactives:1,food:1},outputs:{industrialGoods:2,medicalSupplies:1,credits:55},notes:'Research stations consume specialized inputs and produce prototypes, medicine, and intellectual property.'},
+    general:{label:'General Station Economy',inputs:{food:2,water:1},outputs:{credits:35,industrialGoods:1},notes:'General ports consume life-support stock and produce local services and limited manufactured goods.'}
+  };
+
+  function defaultWorldEconomyState() {
+    return {version:WORLD_ECONOMY_VERSION,simulation:{lastSimulatedAt:new Date().toISOString(),tickSequence:0,lastSummary:'',viewerVesselLimit:WORLD_ECONOMY_DEFAULTS.viewerBatchSize,viewerStationLimit:WORLD_ECONOMY_DEFAULTS.viewerBatchSize},stationEconomies:{},vessels:{},economyJournal:[],tradeJournal:[]};
+  }
+
+  function worldEconomyClone(value) { return value===undefined?undefined:JSON.parse(JSON.stringify(value)); }
+
+  function worldEconomyPublicState() {
+    const hub = normalizeWorldHub();
+    const defaults = defaultWorldEconomyState();
+    const publicState = hub.publicState;
+    publicState.worldEconomy = publicState.worldEconomy&&typeof publicState.worldEconomy==='object'?publicState.worldEconomy:defaults;
+    const economy = publicState.worldEconomy;
+    economy.version = WORLD_ECONOMY_VERSION;
+    economy.simulation = economy.simulation&&typeof economy.simulation==='object'?economy.simulation:defaults.simulation;
+    economy.stationEconomies = economy.stationEconomies&&typeof economy.stationEconomies==='object'&&!Array.isArray(economy.stationEconomies)?economy.stationEconomies:{};
+    economy.vessels = economy.vessels&&typeof economy.vessels==='object'&&!Array.isArray(economy.vessels)?economy.vessels:{};
+    economy.economyJournal = Array.isArray(economy.economyJournal)?economy.economyJournal.slice(0,500):[];
+    economy.tradeJournal = Array.isArray(economy.tradeJournal)?economy.tradeJournal.slice(0,1000):[];
+    economy.simulation.viewerVesselLimit = Math.max(WORLD_ECONOMY_DEFAULTS.viewerBatchSize,number(economy.simulation.viewerVesselLimit,WORLD_ECONOMY_DEFAULTS.viewerBatchSize));
+    economy.simulation.viewerStationLimit = Math.max(WORLD_ECONOMY_DEFAULTS.viewerBatchSize,number(economy.simulation.viewerStationLimit,WORLD_ECONOMY_DEFAULTS.viewerBatchSize));
+    return economy;
+  }
+
+  function worldEconomyStationProfileId(node) {
+    const text = [node?.locationTypeId,node?.locationTypeName,node?.name,node?.specialty,node?.locationAvailability,...(node?.locationServices||[]),...(node?.locationShops||[])].join(' ').toLowerCase();
+    if (/shipyard|submarine construction|drydock/.test(text)) return 'shipyard';
+    if (/hydropon|agricultur|biodome|farm/.test(text)) return 'hydroponics';
+    if (/hydrothermal|thermal vent|geothermal|reactor tap/.test(text)) return 'hydrothermal';
+    if (/factory|fabrication|industrial|construction site/.test(text)) return 'factory';
+    if (/mine|mining|ore|materials exchange/.test(text)) return 'mine';
+    if (/colony|city|settlement|slum/.test(text)) return 'colony';
+    if (/hospital|clinic|medical/.test(text)) return 'medical';
+    if (/military|fortress|blockade|base|armory/.test(text)) return 'military';
+    if (/research|laboratory|institute/.test(text)) return 'research';
+    return 'general';
+  }
+
+  function worldEconomyInitialInventory(node,profileId) {
+    const rng = seededRandom(`${state.world?.seed||''}|${node.id}|world-economy-inventory|${WORLD_ECONOMY_VERSION}`);
+    const level = Math.max(1,number(node.locationLevel,1));
+    const inventory = {catalogue:{}};
+    for (const key of WORLD_ECONOMY_COMMODITIES) inventory[key] = Math.floor(8+rng()*18+Math.max(0,4-level));
+    inventory.credits = Math.floor(1500+rng()*4500+level*250);
+    const profile = WORLD_STATION_PROCESS_PROFILES[profileId]||WORLD_STATION_PROCESS_PROFILES.general;
+    for (const [key,value] of Object.entries(profile.outputs||{})) inventory[key] = Math.max(inventory[key]||0,number(value)*3);
+    for (const [key,value] of Object.entries(profile.inputs||{})) inventory[key] = Math.max(inventory[key]||0,number(value)*4);
+    return inventory;
+  }
+
+  function normalizeWorldStationEconomy(node) {
+    if (!node||node.type!=='station') return null;
+    const economy = worldEconomyPublicState();
+    const profileId = worldEconomyStationProfileId(node);
+    const raw = economy.stationEconomies[node.id]&&typeof economy.stationEconomies[node.id]==='object'?economy.stationEconomies[node.id]:{};
+    const station = {
+      stationNodeId:node.id,name:node.name,faction:node.faction||'Independent',locationTypeId:node.locationTypeId||'',profileId,
+      inventory:raw.inventory&&typeof raw.inventory==='object'?raw.inventory:worldEconomyInitialInventory(node,profileId),
+      production:raw.production&&typeof raw.production==='object'?raw.production:{lastProcessedAt:new Date().toISOString(),cyclesCompleted:0,cyclesBlocked:0,lastCycleSummary:''},
+      construction:raw.construction&&typeof raw.construction==='object'?raw.construction:{progress:0,completedVesselIds:[],lastCompletedAt:''},
+      shortages:raw.shortages&&typeof raw.shortages==='object'?raw.shortages:{},
+      playerSales:Array.isArray(raw.playerSales)?raw.playerSales.slice(0,250):[],
+      updatedAt:raw.updatedAt||new Date().toISOString()
+    };
+    station.inventory.catalogue = station.inventory.catalogue&&typeof station.inventory.catalogue==='object'?station.inventory.catalogue:{};
+    for (const key of WORLD_ECONOMY_COMMODITIES) station.inventory[key] = Math.max(0,number(station.inventory[key]));
+    economy.stationEconomies[node.id] = station;
+    return station;
+  }
+
+  function normalizeWorldEconomyState() {
+    const economy = worldEconomyPublicState();
+    const map = state.world?.map;
+    if (map?.nodes) for (const node of map.nodes) if (node.type==='station') normalizeWorldStationEconomy(node);
+    const validStations = new Set((map?.nodes||[]).filter(node=>node.type==='station').map(node=>node.id));
+    for (const station of Object.values(economy.stationEconomies)) if (!validStations.has(station.stationNodeId)) station.archived = true;
+    return economy;
+  }
+
+  function worldStationEconomy(nodeId) {
+    const node = state.world?.map?.nodes?.find(item=>item.id===nodeId);
+    return node?.type==='station'?normalizeWorldStationEconomy(node):null;
+  }
+
+  function worldEconomyJournal(text,type='economy',details={}) {
+    const economy = worldEconomyPublicState();
+    const entry = {id:uid('world-economy-log'),type,text,details:worldEconomyClone(details),at:new Date().toISOString(),canonicalAt:worldGameDate().toISOString()};
+    economy.economyJournal.unshift(entry);
+    economy.economyJournal = economy.economyJournal.slice(0,500);
+    return entry;
+  }
+
+  function worldEconomyTradeJournal(text,details={}) {
+    const economy = worldEconomyPublicState();
+    const entry = {id:uid('world-trade-log'),text,details:worldEconomyClone(details),at:new Date().toISOString(),canonicalAt:worldGameDate().toISOString()};
+    economy.tradeJournal.unshift(entry);
+    economy.tradeJournal = economy.tradeJournal.slice(0,1000);
+    return entry;
+  }
+
+  function worldEconomyTradeCommodity(record) {
+    const text = [record?.key,record?.name,record?.category,record?.item?.subcategory,record?.item?.description].join(' ').toLowerCase();
+    if (/food|ration|produce|seed|nutrient/.test(text)) return 'food';
+    if (/water|saline|hydration/.test(text)) return 'water';
+    if (/uranium|thorium|radioactive|reactor fuel|fuel rod/.test(text)) return 'radioactives';
+    if (/fuel|battery|energy cell/.test(text)) return 'fuel';
+    if (/ore|metal|mineral|raw material|steel|titanium/.test(text)) return 'rawMaterials';
+    if (/medical|medicine|blood|antidote|surgical|drug/.test(text)) return 'medicalSupplies';
+    if (/ammunition|ammo|shell|round|torpedo|depth charge|weapon/.test(text)) return 'ammunition';
+    if (/component|junction|pump|motor|circuit|module|upgrade/.test(text)) return 'components';
+    return 'industrialGoods';
+  }
+
+  function worldEconomyStationNodeId(stationRecord) {
+    const station = STATIONS.find(item=>stationIdentity(item)===stationRecord?.id);
+    return station?.worldNodeId||state.world?.map?.nodes?.find(node=>node.type==='station'&&node.name===stationRecord?.name)?.id||'';
+  }
+
+  function worldEconomyAddStationStock(nodeId,record,quantity=1,source='trade') {
+    const station = worldStationEconomy(nodeId);
+    if (!station||!record) return false;
+    const amount = Math.max(1,number(quantity,1));
+    const commodity = worldEconomyTradeCommodity(record);
+    station.inventory[commodity] = Math.max(0,number(station.inventory[commodity]))+amount;
+    const key = record.key||`manual:${stationSlug(record.name||'cargo')}`;
+    const existing = station.inventory.catalogue[key]&&typeof station.inventory.catalogue[key]==='object'?station.inventory.catalogue[key]:{tradeKey:key,name:record.name||'Cargo',quantity:0,basePrice:tradeBasePrice(record),commodity};
+    existing.quantity = Math.max(0,number(existing.quantity))+amount;
+    existing.lastSource = source;
+    existing.updatedAt = new Date().toISOString();
+    station.inventory.catalogue[key] = existing;
+    station.updatedAt = new Date().toISOString();
+    return true;
+  }
+
+  function worldEconomyRemoveStationStock(nodeId,tradeKey,quantity=1) {
+    const station = worldStationEconomy(nodeId);
+    const stock = station?.inventory?.catalogue?.[tradeKey];
+    if (!station||!stock||number(stock.quantity)<=0) return false;
+    const amount = Math.min(Math.max(1,number(quantity,1)),number(stock.quantity));
+    stock.quantity -= amount;
+    const commodity = stock.commodity||'industrialGoods';
+    station.inventory[commodity] = Math.max(0,number(station.inventory[commodity])-amount);
+    stock.updatedAt = new Date().toISOString();
+    station.updatedAt = new Date().toISOString();
+    return true;
+  }
+
+  function worldEconomyProfile(nodeId) {
+    const station = worldStationEconomy(nodeId);
+    return WORLD_STATION_PROCESS_PROFILES[station?.profileId]||WORLD_STATION_PROCESS_PROFILES.general;
+  }
+
+  normalizeWorldEconomyState();
