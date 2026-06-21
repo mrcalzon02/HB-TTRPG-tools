@@ -1,10 +1,8 @@
 name: Verify prepared P1 Island editor
 
+# P1 Island work is currently paused. This workflow is intentionally manual-only
+# so unrelated main-branch work does not generate Kaysender verification commits.
 on:
-  push:
-    branches: ["main"]
-    paths-ignore:
-      - "data/kaysender/receipts/**"
   workflow_dispatch:
 
 permissions:

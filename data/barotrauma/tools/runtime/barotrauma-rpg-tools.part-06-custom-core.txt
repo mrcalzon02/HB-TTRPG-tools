@@ -1,0 +1,321 @@
+
+  const CUSTOM_CONTENT_SCHEMA = globalThis.BAROTRAUMA_CUSTOM_CONTENT_SCHEMA || { types: [], sources: {}, installationAnchors: [], powerAnchors: [], stationAnchors: [], upgradeAnchors: [] };
+  const CUSTOM_TYPE_MAP = Object.fromEntries((CUSTOM_CONTENT_SCHEMA.types || []).map(item => [item.id, item]));
+  const CUSTOM_RPG_STATS = ['None', 'speed', 'maneuverability', 'defense', 'capacity', 'hull'];
+
+  function defaultCustomContentDraft(type = 'equipment') {
+    return {
+      id: '', type, name: '', anchorId: '', tier: 1,
+      quality: 3, scale: 3, complexity: 3, effect: 3, power: 2, reliability: 3,
+      capacity: 6, volatility: 1, primaryStat: 'Intelligence', targetStat: 'None', secondaryStat: 'None', drawbackStat: 'None',
+      rangeBand: 'Short', mount: 'Turret', compatibility: '', functionName: '', faction: '', specialty: '', locals: '',
+      description: '', drawback: '', tags: '', notes: ''
+    };
+  }
+
+  state.customContent = state.customContent && typeof state.customContent === 'object'
+    ? state.customContent
+    : { entries: [], draft: defaultCustomContentDraft(), query: '', filterType: 'All' };
+  state.customContent.entries = Array.isArray(state.customContent.entries) ? state.customContent.entries : [];
+  state.customContent.draft = deepMerge(defaultCustomContentDraft(state.customContent.draft?.type || 'equipment'), state.customContent.draft || {});
+  state.submarine.customModules = Array.isArray(state.submarine.customModules) ? state.submarine.customModules : [];
+
+  const customWorkshopTab = document.createElement('button');
+  customWorkshopTab.className = 'ops-tab';
+  customWorkshopTab.dataset.tool = 'workshop';
+  customWorkshopTab.type = 'button';
+  customWorkshopTab.textContent = 'Custom Content Workshop';
+  document.querySelector('.ops-tabs')?.appendChild(customWorkshopTab);
+
+  const activeToolBeforeWorkshop = activeTool;
+  activeTool = function activeToolWithWorkshop() {
+    const value = window.location.hash.replace(/^#/, '');
+    return value === 'workshop' ? 'workshop' : activeToolBeforeWorkshop();
+  };
+
+  function customType(typeId) {
+    return CUSTOM_TYPE_MAP[typeId] || CUSTOM_TYPE_MAP.equipment || CUSTOM_CONTENT_SCHEMA.types?.[0] || { id: typeId, name: typeId, destination: 'library' };
+  }
+
+  function customEntry(id) {
+    return state.customContent.entries.find(item => item.id === id);
+  }
+
+  function csvValues(value) {
+    return String(value || '').split(',').map(item => item.trim()).filter(Boolean);
+  }
+
+  function customAnchorOptions(typeId) {
+    const family = customType(typeId).anchorFamily;
+    if (family === 'catalogueWeapons') return WIKI_CATALOG.items.filter(item => item.category === 'Weapons').map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'submarineWeapons') return WIKI_CATALOG.submarineWeapons.map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'personalAmmunition') return WIKI_CATALOG.items.filter(item => item.category === 'Ammunition').map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'submarineAmmunition') return WIKI_CATALOG.items.filter(item => item.category === 'Submarine Ammunition').map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'equipment') return WIKI_CATALOG.items.filter(item => ['Tools','Gear','Medical'].includes(item.category)).map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'consumables') return WIKI_CATALOG.items.filter(item => ['Consumables','Medical'].includes(item.category)).map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'allItems') return WIKI_CATALOG.items.filter(item => item.category !== 'Submarine Ammunition').map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'installationAnchors') return (CUSTOM_CONTENT_SCHEMA.installationAnchors || []).map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'powerAnchors') return (CUSTOM_CONTENT_SCHEMA.powerAnchors || []).map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'stationAnchors') return (CUSTOM_CONTENT_SCHEMA.stationAnchors || []).map(item => ({ id: item.id, name: item.name, source: item }));
+    if (family === 'upgradeAnchors') return (CUSTOM_CONTENT_SCHEMA.upgradeAnchors || []).map(item => ({ id: item.id, name: item.name, source: item }));
+    return [{ id: 'generic', name: 'Generic Campaign Record', source: { id: 'generic', name: 'Generic Campaign Record' } }];
+  }
+
+  function customAnchor(typeId, anchorId) {
+    const options = customAnchorOptions(typeId);
+    return options.find(item => item.id === anchorId) || options[0] || { id: 'generic', name: 'Generic', source: {} };
+  }
+
+  function rating(value, fallback = 3) {
+    return clamp(value, 1, 5) || fallback;
+  }
+
+  function deriveModifierSet(draft, bonus) {
+    const modifiers = {};
+    if (draft.targetStat && draft.targetStat !== 'None') modifiers[draft.targetStat] = bonus;
+    if (draft.secondaryStat && draft.secondaryStat !== 'None' && draft.secondaryStat !== draft.targetStat) modifiers[draft.secondaryStat] = Math.max(1, Math.floor(bonus / 2));
+    if (draft.drawbackStat && draft.drawbackStat !== 'None') modifiers[draft.drawbackStat] = number(modifiers[draft.drawbackStat]) - Math.max(1, Math.ceil((rating(draft.complexity) + rating(draft.power) - rating(draft.reliability)) / 3));
+    return modifiers;
+  }
+
+  function deriveCustomContent(draftInput) {
+    const draft = { ...defaultCustomContentDraft(draftInput.type), ...draftInput };
+    const type = customType(draft.type);
+    const anchor = customAnchor(draft.type, draft.anchorId);
+    const source = anchor.source || {};
+    const tier = clamp(draft.tier, 1, 3);
+    const quality = rating(draft.quality);
+    const scale = rating(draft.scale);
+    const complexity = rating(draft.complexity);
+    const effect = rating(draft.effect);
+    const power = rating(draft.power);
+    const reliability = rating(draft.reliability);
+    const volatility = rating(draft.volatility, 1);
+    const tierDelta = tier - 1;
+    const qualityDelta = quality - 3;
+    const scaleDelta = scale - 3;
+    const effectDelta = effect - 3;
+    const reliabilityDelta = reliability - 3;
+    const basePrice = Math.max(10, Math.round((tier * 75 + quality * 30 + complexity * 24 + effect * 36 + scale * 18) * (1 + power * 0.06)));
+    const common = {
+      anchorId: anchor.id,
+      anchorName: anchor.name,
+      tier, quality, scale, complexity, effect, power, reliability, volatility,
+      price: basePrice,
+      rarity: clamp(tier + Math.max(0, qualityDelta) + Math.max(0, complexity - 3), 1, 7),
+      repairDC: clamp(5 + complexity + tierDelta + Math.max(0, power - reliability), 6, 14),
+      suggestedStat: draft.primaryStat || source.suggestedStat || 'Intelligence',
+      tags: csvValues(draft.tags),
+      compatibility: csvValues(draft.compatibility),
+      modifiers: {}, metrics: {}
+    };
+
+    if (draft.type === 'handheld-weapon') {
+      const baseCarry = number(source.carryUnits, 2);
+      const baseFireRate = number(source.fireRate, 1);
+      const magazine = Math.max(1, number(draft.capacity, source.maxAmmo || 1));
+      return { ...common,
+        category: 'Weapons', subcategory: draft.rangeBand === 'Melee' ? 'Melee' : draft.rangeBand === 'Throwable' ? 'Throwable' : 'Ranged',
+        carryUnits: clamp(baseCarry + Math.round(scaleDelta / 2), 1, 4),
+        offense: clamp(effect + tier + qualityDelta, 1, 10),
+        handling: clamp(reliability + 5 - scale, 1, 10),
+        fireRate: Math.max(0.1, Number((baseFireRate * (1 + effectDelta * 0.12 + qualityDelta * 0.06)).toFixed(2))),
+        maxAmmo: magazine, rangeBand: draft.rangeBand,
+        metrics: { Offense: clamp(effect + tier + qualityDelta, 1, 10), Handling: clamp(reliability + 5 - scale, 1, 10), Magazine: magazine, 'Carry units': clamp(baseCarry + Math.round(scaleDelta / 2), 1, 4), 'Fire rate': Math.max(0.1, Number((baseFireRate * (1 + effectDelta * 0.12 + qualityDelta * 0.06)).toFixed(2))) }
+      };
+    }
+
+    if (draft.type === 'submarine-weapon') {
+      const baseMagazine = number(source.ammo?.[0]?.magazineSize, 40);
+      const baseRate = number(source.fireRate, 1);
+      const mount = draft.mount || source.mount || 'Turret';
+      const storageUnits = clamp((mount === 'Large Turret' ? 2 : 1) + Math.max(0, Math.round(scaleDelta / 2)), 1, 4);
+      const magazine = Math.max(1, number(draft.capacity, baseMagazine));
+      return { ...common,
+        mount, loader: source.loader || `${draft.name || 'Custom'} Loader`, storageUnits,
+        offense: clamp(effect + tier + qualityDelta + (mount === 'Large Turret' ? 2 : 0), 1, 12),
+        fireRate: Math.max(0.05, Number((baseRate * (1 + effectDelta * 0.1 + qualityDelta * 0.05)).toFixed(2))),
+        magazineSize: magazine, powerDraw: clamp(power + scale - 2, 1, 8),
+        price: basePrice * 5,
+        metrics: { Offense: clamp(effect + tier + qualityDelta + (mount === 'Large Turret' ? 2 : 0), 1, 12), 'Fire rate': Math.max(0.05, Number((baseRate * (1 + effectDelta * 0.1 + qualityDelta * 0.05)).toFixed(2))), Magazine: magazine, 'Storage units': storageUnits, 'Power draw': clamp(power + scale - 2, 1, 8) }
+      };
+    }
+
+    if (['personal-ammunition','submarine-ammunition'].includes(draft.type)) {
+      const baseCapacity = number(source.capacity, draft.type === 'submarine-ammunition' ? 40 : 1);
+      const capacity = Math.max(1, number(draft.capacity, baseCapacity));
+      return { ...common,
+        category: draft.type === 'submarine-ammunition' ? 'Submarine Ammunition' : 'Ammunition',
+        subcategory: source.subcategory || 'Custom Ammunition', carryUnits: draft.type === 'submarine-ammunition' ? 1 : clamp(Math.ceil(scale / 3), 1, 2),
+        capacity, impact: clamp(effect + tier + qualityDelta, 1, 10), penetration: clamp(effect + complexity - 3, 1, 10),
+        volatility: clamp(volatility + Math.max(0, effectDelta) + tierDelta, 1, 10),
+        metrics: { Capacity: capacity, Impact: clamp(effect + tier + qualityDelta, 1, 10), Penetration: clamp(effect + complexity - 3, 1, 10), Volatility: clamp(volatility + Math.max(0, effectDelta) + tierDelta, 1, 10) }
+      };
+    }
+
+    if (['equipment','general-item','consumable'].includes(draft.type)) {
+      const baseCarry = number(source.carryUnits, 1);
+      const category = draft.type === 'equipment' ? (source.category === 'Medical' ? 'Medical' : source.category === 'Tools' ? 'Tools' : 'Gear') : draft.type === 'consumable' ? 'Consumables' : 'Miscellaneous';
+      const carryUnits = clamp(baseCarry + Math.round(scaleDelta / 2), 1, 4);
+      return { ...common,
+        category, subcategory: source.subcategory || customType(draft.type).name, carryUnits,
+        utility: clamp(effect + quality + tier - 2, 1, 12), durability: clamp(reliability + quality - 2, 1, 8),
+        charges: draft.type === 'consumable' ? Math.max(1, number(draft.capacity, 1)) : 0,
+        price: Math.round(basePrice * (draft.type === 'general-item' ? 0.7 : 1)),
+        metrics: { Utility: clamp(effect + quality + tier - 2, 1, 12), Durability: clamp(reliability + quality - 2, 1, 8), 'Carry units': carryUnits, ...(draft.type === 'consumable' ? { Charges: Math.max(1, number(draft.capacity, 1)) } : {}) }
+      };
+    }
+
+    if (draft.type === 'submarine-system') {
+      const capacityCost = clamp(number(source.capacityCost, 1) + Math.max(0, Math.round(scaleDelta / 2)), 0, 5);
+      const bonus = clamp(Math.ceil((effect + quality + tier - 5) / 2), 1, 4);
+      const modifiers = deriveModifierSet(draft, bonus);
+      return { ...common,
+        functionName: draft.functionName || source.function || anchor.name,
+        capacityCost, powerDraw: clamp(number(source.power, 2) + power - 3 + Math.max(0, scaleDelta), 0, 9),
+        systemRating: clamp(number(source.effect, 3) + effectDelta + qualityDelta + tierDelta, 1, 10),
+        reliabilityRating: clamp(number(source.reliability, 3) + reliabilityDelta + qualityDelta, 1, 8),
+        modifiers, price: basePrice * 4,
+        metrics: { 'System rating': clamp(number(source.effect, 3) + effectDelta + qualityDelta + tierDelta, 1, 10), Reliability: clamp(number(source.reliability, 3) + reliabilityDelta + qualityDelta, 1, 8), 'Power draw': clamp(number(source.power, 2) + power - 3 + Math.max(0, scaleDelta), 0, 9), 'Capacity cost': capacityCost }
+      };
+    }
+
+    if (draft.type === 'power-source') {
+      const capacityCost = clamp(number(source.capacityCost, 2) + Math.max(0, Math.round(scaleDelta / 2)), 1, 6);
+      const output = clamp(number(source.output, 3) + effectDelta + tierDelta + qualityDelta, 1, 10);
+      const storage = clamp(number(source.storage, 3) + scaleDelta + qualityDelta, 0, 10);
+      const recharge = clamp(number(source.recharge, 3) + power - 3 + qualityDelta, 1, 10);
+      const risk = clamp(number(source.volatility, 2) + volatility - reliability + complexity - 2, 1, 10);
+      return { ...common,
+        mode: source.mode || 'Generation', capacityCost, output, storage, recharge, risk,
+        modifiers: deriveModifierSet(draft, Math.max(1, Math.floor(output / 4))), price: basePrice * 6,
+        metrics: { Output: output, Storage: storage, Recharge: recharge, Risk: risk, 'Capacity cost': capacityCost }
+      };
+    }
+
+    if (draft.type === 'submarine-module') {
+      const capacityCost = clamp(number(source.capacityCost, 1) + Math.max(0, Math.round(scaleDelta / 2)), 0, 5);
+      const bonus = clamp(Math.ceil((effect + tier + quality - 5) / 2), 1, 5);
+      const modifiers = deriveModifierSet({ ...draft, targetStat: draft.targetStat === 'None' ? source.primaryStat || 'capacity' : draft.targetStat, secondaryStat: draft.secondaryStat === 'None' ? source.secondaryStat || 'None' : draft.secondaryStat }, bonus);
+      return { ...common,
+        capacityCost, powerDraw: clamp(number(source.power, 2) + power - 3, 0, 8), modifiers,
+        upgradeRating: clamp(effect + quality + tier - 2, 1, 12), price: basePrice * 5,
+        metrics: { 'Upgrade rating': clamp(effect + quality + tier - 2, 1, 12), 'Capacity cost': capacityCost, 'Power draw': clamp(number(source.power, 2) + power - 3, 0, 8), Modifiers: Object.entries(modifiers).map(([key, value]) => `${key} ${value >= 0 ? '+' : ''}${value}`).join(', ') || 'Special only' }
+      };
+    }
+
+    if (draft.type === 'station') {
+      const stationDelta = Math.round((scale - 3 + tierDelta + qualityDelta) / 2);
+      const stationStat = key => clamp(number(source[key], 3) + stationDelta + (draft.functionName.toLowerCase().includes(key) ? 1 : 0), 1, 10);
+      const security = stationStat('security');
+      return { ...common,
+        stationType: anchor.name, population: stationStat('population'), trade: stationStat('trade'), industry: stationStat('industry'), research: stationStat('research'), medical: stationStat('medical'), security, docking: stationStat('docking'),
+        missions: clamp(number(source.missions, 3) + tierDelta, 1, 6), routePressure: clamp(7 - security + complexity - reliability, 0, 10),
+        price: 0,
+        metrics: { Population: stationStat('population'), Trade: stationStat('trade'), Industry: stationStat('industry'), Research: stationStat('research'), Medical: stationStat('medical'), Security: security, Docking: stationStat('docking'), Missions: clamp(number(source.missions, 3) + tierDelta, 1, 6) }
+      };
+    }
+
+    return { ...common, category: 'Custom', carryUnits: clamp(Math.ceil(scale / 2), 1, 3), utility: clamp(effect + quality + tier - 2, 1, 12), metrics: { Rating: clamp(effect + quality + tier - 2, 1, 12), Scale: scale, Complexity: complexity } };
+  }
+
+  function derivedCustomEntry(entry) {
+    return deriveCustomContent(entry);
+  }
+
+  function customEntryAsItem(entry) {
+    const derived = derivedCustomEntry(entry);
+    return {
+      id: entry.id, name: entry.name, category: derived.category || 'Miscellaneous', subcategory: derived.subcategory || customType(entry.type).name,
+      description: entry.description || `${customType(entry.type).name} derived from ${derived.anchorName}.`,
+      suggestedStat: derived.suggestedStat, carryUnits: number(derived.carryUnits, 1), capacity: derived.capacity || derived.charges || 0,
+      compatibleWith: derived.compatibility || [], compatibleAmmo: entry.type === 'handheld-weapon' ? derived.compatibility || [] : undefined,
+      fireRate: derived.fireRate, maxAmmo: derived.maxAmmo, medicalUse: entry.functionName || '', source: 'custom', custom: true
+    };
+  }
+
+  function customEntryAsWeapon(entry) {
+    const derived = derivedCustomEntry(entry);
+    const ammoName = derived.compatibility?.[0] || `${entry.name} Ammunition`;
+    return {
+      id: entry.id, name: entry.name, mount: derived.mount || 'Turret', loader: derived.loader || `${entry.name} Loader`, fireRate: derived.fireRate,
+      ammo: [{ name: ammoName, magazineSize: derived.magazineSize || Math.max(1, number(entry.capacity, 1)), summary: entry.description || `Custom ammunition for ${entry.name}.` }],
+      notes: `${entry.description || 'Custom submarine weapon.'} Derived from ${derived.anchorName}.`, source: 'custom', custom: true, storageUnits: derived.storageUnits || 1
+    };
+  }
+
+  const catalogueItemBeforeCustom = catalogueItem;
+  catalogueItem = function catalogueItemWithCustom(id) {
+    const official = catalogueItemBeforeCustom(id);
+    if (official) return official;
+    const entry = customEntry(id);
+    return entry && ['handheld-weapon','personal-ammunition','submarine-ammunition','equipment','general-item','consumable'].includes(entry.type) ? customEntryAsItem(entry) : undefined;
+  };
+
+  const catalogueWeaponBeforeCustom = catalogueWeapon;
+  catalogueWeapon = function catalogueWeaponWithCustom(id) {
+    const official = catalogueWeaponBeforeCustom(id);
+    if (official) return official;
+    const entry = customEntry(id);
+    return entry?.type === 'submarine-weapon' ? customEntryAsWeapon(entry) : undefined;
+  };
+
+  function syncCustomStations() {
+    for (let index = STATIONS.length - 1; index >= 0; index -= 1) if (STATIONS[index]?.customWorkshop) STATIONS.splice(index, 1);
+    for (const entry of state.customContent.entries.filter(item => item.type === 'station')) {
+      const derived = derivedCustomEntry(entry);
+      STATIONS.push({
+        name: entry.name,
+        faction: entry.faction || 'Independent',
+        specialty: entry.specialty || entry.functionName || derived.stationType,
+        locals: entry.locals || 'Custom station personnel',
+        customWorkshop: true,
+        derived
+      });
+    }
+  }
+
+  syncCustomStations();
+
+  const calculateSubmarineBeforeCustomModules = calculateSubmarine;
+  calculateSubmarine = function calculateSubmarineWithCustomModules() {
+    const result = calculateSubmarineBeforeCustomModules();
+    let capacityCost = 0;
+    let powerOutput = 0;
+    let powerStorage = 0;
+    let powerDemand = 0;
+    const applied = {};
+    for (const installed of state.submarine.customModules) {
+      if (installed.enabled === false) continue;
+      const entry = customEntry(installed.id);
+      if (!entry || !['submarine-system','power-source','submarine-module'].includes(entry.type)) continue;
+      const derived = derivedCustomEntry(entry);
+      const quantity = Math.max(1, number(installed.quantity, 1));
+      capacityCost += number(derived.capacityCost) * quantity;
+      powerDemand += number(derived.powerDraw) * quantity;
+      powerOutput += number(derived.output) * quantity;
+      powerStorage += number(derived.storage) * quantity;
+      for (const [stat, modifier] of Object.entries(derived.modifiers || {})) {
+        if (!(stat in result.totals)) continue;
+        result.totals[stat] += number(modifier) * quantity;
+        applied[stat] = number(applied[stat]) + number(modifier) * quantity;
+      }
+    }
+    result.customModuleCapacity = capacityCost;
+    result.customPowerOutput = powerOutput;
+    result.customPowerStorage = powerStorage;
+    result.customPowerDemand = powerDemand;
+    result.customModifiers = applied;
+    result.usedCapacity += capacityCost;
+    result.remainingCapacity = result.totals.capacity - result.usedCapacity;
+    return result;
+  };
+
+  function installCustomModule(id) {
+    const entry = customEntry(id);
+    if (!entry || !['submarine-system','power-source','submarine-module'].includes(entry.type)) return;
+    const existing = state.submarine.customModules.find(item => item.id === id);
+    if (existing) existing.quantity = Math.max(1, number(existing.quantity, 1) + 1);
+    else state.submarine.customModules.push({ id, quantity: 1, enabled: true });
+    save();
+  }

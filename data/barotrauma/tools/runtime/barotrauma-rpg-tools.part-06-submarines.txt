@@ -1,0 +1,509 @@
+
+  const SUBMARINE_ROSTER_DATA = globalThis.BAROTRAUMA_SUBMARINE_ROSTER || { submarines: [], derivation: {}, source: {} };
+  const OFFICIAL_SUBMARINE_PROFILES = SUBMARINE_ROSTER_DATA.submarines || [];
+  const OFFICIAL_SUBMARINE_NAMES = new Set(OFFICIAL_SUBMARINE_PROFILES.map(item => item.name));
+  const RPG_SUBMARINE_ANCHORS = {
+    Barsuk: { speed: 8, maneuverability: 10, defense: 5, capacity: 5, hull: 8 },
+    Dugong: { speed: 6, maneuverability: 7, defense: 10, capacity: 7, hull: 16 },
+    Orca: { speed: 6, maneuverability: 7, defense: 7, capacity: 7, hull: 10 },
+    Humpback: { speed: 5, maneuverability: 6, defense: 8, capacity: 10, hull: 12 }
+  };
+  const SUBMARINE_STAT_LIMITS = SUBMARINE_ROSTER_DATA.derivation?.ranges || {
+    speed: [3, 10],
+    maneuverability: [3, 10],
+    defense: [5, 16],
+    capacity: [4, 30],
+    hull: [6, 30]
+  };
+
+  function symmetricRound(value) {
+    return value >= 0 ? Math.floor(value + 0.5) : Math.ceil(value - 0.5);
+  }
+
+  function profileNumber(profile, key, fallback = 0) {
+    return number(profile?.[key], fallback);
+  }
+
+  function submarineWeaponWeight(profile) {
+    return profileNumber(profile, 'smallFixed')
+      + (profileNumber(profile, 'smallHardpoints') * 0.5)
+      + (profileNumber(profile, 'largeFixed') * 2)
+      + profileNumber(profile, 'largeHardpoints')
+      + (profileNumber(profile, 'utilitySystems') * 0.5);
+  }
+
+  function selectSubmarineAnchor(profile) {
+    if (profile.class === 'Attack') return profileNumber(profile, 'tier', 1) === 1 ? 'Barsuk' : 'Humpback';
+    if (profile.class === 'Scout') return profileNumber(profile, 'horizontal') >= 23 || profileNumber(profile, 'utilitySystems') >= 2 ? 'Orca' : 'Dugong';
+    return 'Humpback';
+  }
+
+  function deriveSubmarineStats(profile) {
+    if (profile.official && RPG_SUBMARINE_ANCHORS[profile.name]) {
+      return { ...RPG_SUBMARINE_ANCHORS[profile.name], anchor: profile.name, exactAnchor: true };
+    }
+    const anchorName = selectSubmarineAnchor(profile);
+    const anchorProfile = OFFICIAL_SUBMARINE_PROFILES.find(item => item.name === anchorName) || OFFICIAL_SUBMARINE_PROFILES[0] || {};
+    const anchorStats = RPG_SUBMARINE_ANCHORS[anchorName] || RPG_SUBMARINE_ANCHORS.Humpback;
+    let speed = anchorStats.speed + symmetricRound((profileNumber(profile, 'horizontal') - profileNumber(anchorProfile, 'horizontal')) / 6);
+    if (profileNumber(profile, 'crewMax') - profileNumber(anchorProfile, 'crewMax') >= 6) speed -= 1;
+    let maneuverability = anchorStats.maneuverability
+      + symmetricRound((profileNumber(profile, 'descent') - profileNumber(anchorProfile, 'descent')) / 4)
+      - symmetricRound(Math.max(0, profileNumber(profile, 'crewMax') - profileNumber(anchorProfile, 'crewMax')) / 4)
+      - (profileNumber(profile, 'cargo') >= 60 ? 1 : 0);
+    let defense = anchorStats.defense
+      + symmetricRound((submarineWeaponWeight(profile) - submarineWeaponWeight(anchorProfile)) * 1.2)
+      + (profileNumber(profile, 'tier', 1) - profileNumber(anchorProfile, 'tier', 1))
+      + (profile.class === 'Transport' ? -1 : 0);
+    let capacity = anchorStats.capacity
+      + symmetricRound((profileNumber(profile, 'cargo') - profileNumber(anchorProfile, 'cargo')) / 12)
+      + symmetricRound((profileNumber(profile, 'crewMax') - profileNumber(anchorProfile, 'crewMax')) / 3)
+      + (profile.class === 'Transport' ? 2 : 0);
+    let hull = anchorStats.hull
+      + (2 * (profileNumber(profile, 'tier', 1) - profileNumber(anchorProfile, 'tier', 1)))
+      + symmetricRound((profileNumber(profile, 'crewMax') - profileNumber(anchorProfile, 'crewMax')) / 2)
+      + symmetricRound((profileNumber(profile, 'cargo') - profileNumber(anchorProfile, 'cargo')) / 24)
+      + symmetricRound((submarineWeaponWeight(profile) - submarineWeaponWeight(anchorProfile)) / 2);
+
+    const bounded = {};
+    for (const [stat, value] of Object.entries({ speed, maneuverability, defense, capacity, hull })) {
+      const [minimum, maximum] = SUBMARINE_STAT_LIMITS[stat] || [-999, 999];
+      bounded[stat] = clamp(value, minimum, maximum);
+    }
+    return { ...bounded, anchor: anchorName, exactAnchor: false };
+  }
+
+  function submarineProfileSummary(profile, stats) {
+    const strongest = Object.entries(stats).filter(([key]) => ['speed','maneuverability','defense','capacity','hull'].includes(key)).sort((a, b) => b[1] - a[1])[0];
+    const weakest = Object.entries(stats).filter(([key]) => ['speed','maneuverability','defense','capacity','hull'].includes(key)).sort((a, b) => a[1] - b[1])[0];
+    const classText = profile.class === 'Transport'
+      ? `Transport frame with ${profileNumber(profile, 'cargo')} crate capacity.`
+      : profile.class === 'Attack'
+        ? `Attack frame carrying weapon weight ${submarineWeaponWeight(profile).toFixed(1)}.`
+        : `Scout frame rated for ${profileNumber(profile, 'horizontal')} km/h horizontal travel.`;
+    return {
+      strengths: `${classText} Highest derived RPG statistic: ${strongest?.[0] || 'capacity'} ${strongest?.[1] ?? ''}.`,
+      weaknesses: `Lowest derived RPG statistic: ${weakest?.[0] || 'speed'} ${weakest?.[1] ?? ''}; crew requirement ${profileNumber(profile, 'crewMin')}-${profileNumber(profile, 'crewMax')}.`
+    };
+  }
+
+  function defaultCustomSubmarineDraft() {
+    return {
+      id: '',
+      name: '',
+      class: 'Scout',
+      tier: 1,
+      crewMin: 3,
+      crewMax: 5,
+      cargo: 8,
+      horizontal: 22,
+      descent: 14,
+      smallFixed: 1,
+      smallHardpoints: 1,
+      largeFixed: 0,
+      largeHardpoints: 0,
+      utilitySystems: 1,
+      notes: ''
+    };
+  }
+
+  state.submarineLibrary = state.submarineLibrary && typeof state.submarineLibrary === 'object'
+    ? state.submarineLibrary
+    : { custom: [], draft: defaultCustomSubmarineDraft() };
+  state.submarineLibrary.custom = Array.isArray(state.submarineLibrary.custom) ? state.submarineLibrary.custom : [];
+  state.submarineLibrary.draft = deepMerge(defaultCustomSubmarineDraft(), state.submarineLibrary.draft || {});
+
+  function genericSystemsForProfile(profile) {
+    if (Array.isArray(profile.defaultSystems) && profile.defaultSystems.length) return [...profile.defaultSystems];
+    return [
+      ...Array(Math.max(0, profileNumber(profile, 'smallFixed'))).fill('coilgun'),
+      ...Array(Math.max(0, profileNumber(profile, 'largeFixed'))).fill('railgun'),
+      ...Array(Math.max(0, profileNumber(profile, 'utilitySystems'))).fill('electrical-discharge-coil')
+    ];
+  }
+
+  function makeWikiWeaponMount(systemId) {
+    const weapon = catalogueWeapon(systemId);
+    return weapon ? {
+      instanceId: uid('wiki-weapon'),
+      id: systemId,
+      ammoName: weapon.ammo?.[0]?.name || '',
+      loaded: weapon.ammo?.[0]?.magazineSize || 0
+    } : null;
+  }
+
+  function installDefaultWikiWeapons(profile) {
+    state.submarine.wikiWeapons = genericSystemsForProfile(profile).map(makeWikiWeaponMount).filter(Boolean);
+    state.submarine.wikiAmmo = [];
+  }
+
+  function registerOfficialSubmarines() {
+    for (const rawProfile of OFFICIAL_SUBMARINE_PROFILES) {
+      const profile = { ...rawProfile, official: true };
+      const stats = deriveSubmarineStats(profile);
+      const summary = submarineProfileSummary(profile, stats);
+      if (SUBMARINES[profile.name]) {
+        Object.assign(SUBMARINES[profile.name], {
+          ...stats,
+          profile,
+          source: 'Official Barotrauma Wiki',
+          custom: false
+        });
+      } else {
+        SUBMARINES[profile.name] = {
+          ...stats,
+          weapons: [],
+          strengths: summary.strengths,
+          weaknesses: summary.weaknesses,
+          profile,
+          source: 'Official Barotrauma Wiki',
+          custom: false
+        };
+      }
+      if (!SUBMARINES[profile.name].strengths) SUBMARINES[profile.name].strengths = summary.strengths;
+      if (!SUBMARINES[profile.name].weaknesses) SUBMARINES[profile.name].weaknesses = summary.weaknesses;
+    }
+  }
+
+  function syncCustomSubmarines() {
+    for (const [name, model] of Object.entries(SUBMARINES)) {
+      if (model?.custom) delete SUBMARINES[name];
+    }
+    for (const profile of state.submarineLibrary.custom) {
+      if (!profile?.name || OFFICIAL_SUBMARINE_NAMES.has(profile.name)) continue;
+      const stats = deriveSubmarineStats({ ...profile, official: false });
+      const summary = submarineProfileSummary(profile, stats);
+      SUBMARINES[profile.name] = {
+        ...stats,
+        weapons: [],
+        strengths: summary.strengths,
+        weaknesses: summary.weaknesses,
+        profile,
+        source: 'Custom derived submarine',
+        custom: true
+      };
+    }
+  }
+
+  registerOfficialSubmarines();
+  syncCustomSubmarines();
+
+  if (state.submarine.wikiDefaultsInitialized == null) {
+    const initialProfile = SUBMARINES[state.submarine.model]?.profile;
+    if (initialProfile && !state.submarine.wikiWeapons.length) installDefaultWikiWeapons(initialProfile);
+    state.submarine.wikiDefaultsInitialized = true;
+    save();
+  }
+
+  const baseCalculateSubmarineWithCatalogue = calculateSubmarine;
+  calculateSubmarine = function calculateSubmarineWithOfficialSystems() {
+    const result = baseCalculateSubmarineWithCatalogue();
+    const wikiWeaponCapacity = state.submarine.wikiWeapons.reduce((sum, entry) => {
+      const weapon = catalogueWeapon(entry.id);
+      if (!weapon) return sum;
+      return sum + (weapon.mount === 'Large Turret' ? 2 : 1);
+    }, 0);
+    result.wikiWeaponCapacity = wikiWeaponCapacity;
+    result.weaponCapacity += wikiWeaponCapacity;
+    result.usedCapacity += wikiWeaponCapacity;
+    result.remainingCapacity = result.totals.capacity - result.usedCapacity;
+    return result;
+  };
+
+  function useSubmarineModel(name) {
+    syncCustomSubmarines();
+    const model = SUBMARINES[name];
+    if (!model) return;
+    state.submarine.model = name;
+    state.submarine.weapons = (model.weapons || []).map(item => ({ ...item }));
+    state.submarine.hullCurrent = model.hull;
+    if (model.profile) {
+      state.submarine.resources.crew = model.profile.crewMin;
+      installDefaultWikiWeapons(model.profile);
+    }
+    state.submarine.wikiDefaultsInitialized = true;
+    save();
+    renderSubmarine();
+  }
+
+  function cloneProfileIntoDraft(profile, suffix = ' Custom') {
+    const draft = {
+      ...defaultCustomSubmarineDraft(),
+      ...profile,
+      id: '',
+      name: `${profile.name || 'Custom Submarine'}${suffix}`,
+      notes: profile.notes || ''
+    };
+    delete draft.official;
+    delete draft.wikiSlug;
+    delete draft.price;
+    delete draft.experience;
+    delete draft.drone;
+    delete draft.defaultSystems;
+    state.submarineLibrary.draft = draft;
+    save();
+    renderSubmarine();
+  }
+
+  function draftInputRow(label, key, options = {}) {
+    const draft = state.submarineLibrary.draft;
+    if (options.type === 'select') {
+      return `<label class="field">${escapeHtml(label)}<select class="custom-sub-field" data-key="${escapeHtml(key)}">${optionList(options.values, draft[key])}</select></label>`;
+    }
+    return `<label class="field">${escapeHtml(label)}<input class="custom-sub-field" data-key="${escapeHtml(key)}" type="${options.type || 'number'}" ${options.min != null ? `min="${options.min}"` : ''} ${options.max != null ? `max="${options.max}"` : ''} ${options.step != null ? `step="${options.step}"` : ''} value="${escapeHtml(draft[key])}"></label>`;
+  }
+
+  function enhanceSubmarineRoster() {
+    syncCustomSubmarines();
+    const submarine = state.submarine;
+    const model = SUBMARINES[submarine.model] || SUBMARINES.Barsuk;
+    const profile = model.profile;
+    const calculated = calculateSubmarine();
+
+    const heroNote = root.querySelector('.tool-hero .rules-note');
+    if (heroNote) heroNote.textContent = 'Track the full official-wiki submarine roster or a custom derived vessel, together with upgrades, weapon systems, hull state, stores, and mandatory station upkeep.';
+
+    const modelSelect = root.querySelector('#sub-model');
+    if (modelSelect) {
+      const orderedNames = [
+        ...OFFICIAL_SUBMARINE_PROFILES.map(item => item.name),
+        ...state.submarineLibrary.custom.map(item => item.name)
+      ].filter(name => SUBMARINES[name]);
+      modelSelect.innerHTML = optionList(orderedNames, submarine.model, name => {
+        const item = SUBMARINES[name];
+        const itemProfile = item?.profile;
+        return item?.custom
+          ? `Custom — ${name}`
+          : `Tier ${itemProfile?.tier || '?'} ${itemProfile?.class || 'Submarine'} — ${name}`;
+      });
+      modelSelect.addEventListener('change', event => {
+        const selected = SUBMARINES[event.target.value];
+        if (!selected?.profile) return;
+        submarine.wikiWeapons = [];
+        submarine.wikiAmmo = [];
+        submarine.resources.crew = selected.profile.crewMin;
+        installDefaultWikiWeapons(selected.profile);
+        submarine.wikiDefaultsInitialized = true;
+        save();
+        renderSubmarine();
+      });
+    }
+
+    if (profile) {
+      const vesselPanel = root.querySelector('.tool-panel.span-8');
+      if (vesselPanel) {
+        const sourceUrl = profile.official && profile.wikiSlug
+          ? `https://barotraumagame.com/wiki/${encodeURIComponent(profile.wikiSlug).replace(/%2F/g, '/')}`
+          : '';
+        const info = document.createElement('div');
+        info.className = 'notice';
+        info.style.marginTop = '12px';
+        info.innerHTML = `
+          <strong>${profile.official ? 'Official wiki profile' : 'Custom derived profile'}:</strong>
+          ${escapeHtml(profile.class)} Tier ${profile.tier} · Crew ${profile.crewMin}-${profile.crewMax} · Cargo ${profile.cargo} crates ·
+          Wiki mobility ${profile.horizontal} km/h horizontal / ${profile.descent} km/h descent ·
+          Derived from ${escapeHtml(model.anchor || calculated.base.anchor || 'Humpback')}
+          ${model.exactAnchor ? ' without modification' : ' with calibrated deltas'}.
+          ${sourceUrl ? `<br><a class="rules-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener">Open this submarine on the official wiki ↗</a>` : ''}
+        `;
+        vesselPanel.appendChild(info);
+      }
+    }
+
+    const rosterPanel = document.createElement('section');
+    rosterPanel.className = 'tool-panel span-12';
+    const draft = state.submarineLibrary.draft;
+    const preview = deriveSubmarineStats({ ...draft, official: false });
+    const customNames = state.submarineLibrary.custom.map(item => item.name);
+
+    rosterPanel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div>
+          <p class="eyebrow">Official roster and derived designs</p>
+          <h3>Submarine Catalogue</h3>
+          <p class="small-note">The official comparison data supplies class, tier, crew range, cargo, horizontal and descent speed, hardpoints, and installed systems. The RPG statistics below are calculated from those fields using the original four vessels as immutable anchors.</p>
+        </div>
+        <a class="rules-link" href="${escapeHtml(SUBMARINE_ROSTER_DATA.source?.url || 'https://barotraumagame.com/wiki/Submarines')}" target="_blank" rel="noopener">Official submarine comparison ↗</a>
+      </div>
+      <div class="table-wrap">
+        <table class="tool-table">
+          <thead><tr><th>Submarine</th><th>Class</th><th>Tier</th><th>Crew</th><th>Cargo</th><th>Wiki speed</th><th>Derived RPG statistics</th><th></th></tr></thead>
+          <tbody>
+            ${OFFICIAL_SUBMARINE_PROFILES.map(item => {
+              const stats = deriveSubmarineStats({ ...item, official: true });
+              return `<tr>
+                <td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${item.price.toLocaleString()} mk · ${escapeHtml(item.experience)}${item.drone ? ' · Drone equipped' : ''}</span></td>
+                <td>${escapeHtml(item.class)}</td>
+                <td>${item.tier}</td>
+                <td>${item.crewMin}-${item.crewMax}</td>
+                <td>${item.cargo}</td>
+                <td>${item.horizontal} / ${item.descent} km/h</td>
+                <td>S ${stats.speed} · M ${stats.maneuverability} · D ${stats.defense} · C ${stats.capacity} · H ${stats.hull}<br><span class="small-note">${stats.exactAnchor ? 'Exact original anchor' : `Anchor: ${stats.anchor}`}</span></td>
+                <td><div class="button-row"><button class="compact-button official-sub-use" data-name="${escapeHtml(item.name)}" type="button">Use</button><button class="compact-button official-sub-clone" data-name="${escapeHtml(item.name)}" type="button">Clone as Custom</button></div></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin-top:12px">
+        <strong>Derivation model:</strong> ${escapeHtml(SUBMARINE_ROSTER_DATA.derivation?.description || '')}
+        <br><span class="small-note">${escapeHtml(SUBMARINE_ROSTER_DATA.source?.warning || '')}</span>
+      </div>
+
+      <div class="tool-hero" style="padding:18px 0 0;border:0;background:none">
+        <div><h3>Custom Submarine Builder</h3><p class="small-note">Enter the same factual profile fields used by the official roster. The preview and saved model use the identical anchor-and-delta calculation.</p></div>
+        <div class="metric-row">
+          <div class="metric"><span>Anchor</span><strong>${escapeHtml(preview.anchor)}</strong></div>
+          <div class="metric"><span>Speed</span><strong>${preview.speed}</strong></div>
+          <div class="metric"><span>Maneuver</span><strong>${preview.maneuverability}</strong></div>
+          <div class="metric"><span>Defense</span><strong>${preview.defense}</strong></div>
+          <div class="metric"><span>Capacity</span><strong>${preview.capacity}</strong></div>
+          <div class="metric"><span>Hull</span><strong>${preview.hull}</strong></div>
+        </div>
+      </div>
+      <div class="field-grid three">
+        <label class="field">Design name<input class="custom-sub-field" data-key="name" type="text" value="${escapeHtml(draft.name)}" placeholder="Unique submarine name"></label>
+        ${draftInputRow('Class', 'class', { type: 'select', values: ['Scout','Attack','Transport'] })}
+        ${draftInputRow('Tier', 'tier', { min: 1, max: 3 })}
+        ${draftInputRow('Minimum crew', 'crewMin', { min: 1, max: 30 })}
+        ${draftInputRow('Maximum crew', 'crewMax', { min: 1, max: 30 })}
+        ${draftInputRow('Cargo crates', 'cargo', { min: 0, max: 150 })}
+        ${draftInputRow('Horizontal speed km/h', 'horizontal', { min: 5, max: 40, step: 0.1 })}
+        ${draftInputRow('Descent speed km/h', 'descent', { min: 4, max: 25, step: 0.1 })}
+        ${draftInputRow('Fixed small turrets', 'smallFixed', { min: 0, max: 8 })}
+        ${draftInputRow('Small hardpoints', 'smallHardpoints', { min: 0, max: 8 })}
+        ${draftInputRow('Fixed large turrets', 'largeFixed', { min: 0, max: 6 })}
+        ${draftInputRow('Large hardpoints', 'largeHardpoints', { min: 0, max: 4 })}
+        ${draftInputRow('Utility defenses', 'utilitySystems', { min: 0, max: 8 })}
+      </div>
+      <label class="field" style="margin-top:10px">Design notes<textarea id="custom-sub-notes">${escapeHtml(draft.notes || '')}</textarea></label>
+      <div class="button-row no-print" style="margin-top:10px">
+        <button id="custom-sub-preview" class="secondary-action" type="button">Recalculate Preview</button>
+        <button id="custom-sub-save" class="primary-action" type="button">${draft.id ? 'Update Custom Submarine' : 'Save Custom Submarine'}</button>
+        <button id="custom-sub-reset" class="secondary-action" type="button">Clear Builder</button>
+      </div>
+      <h3 style="margin-top:20px">Custom Submarine Listing</h3>
+      <div class="table-wrap">
+        <table class="tool-table">
+          <thead><tr><th>Design</th><th>Profile</th><th>Derived RPG statistics</th><th>Notes</th><th></th></tr></thead>
+          <tbody>
+            ${state.submarineLibrary.custom.map(item => {
+              const stats = deriveSubmarineStats({ ...item, official: false });
+              return `<tr>
+                <td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">Derived from ${escapeHtml(stats.anchor)}</span></td>
+                <td>${escapeHtml(item.class)} T${item.tier} · Crew ${item.crewMin}-${item.crewMax} · Cargo ${item.cargo}</td>
+                <td>S ${stats.speed} · M ${stats.maneuverability} · D ${stats.defense} · C ${stats.capacity} · H ${stats.hull}</td>
+                <td>${escapeHtml(item.notes || '—')}</td>
+                <td><div class="button-row">
+                  <button class="compact-button custom-sub-use" data-id="${escapeHtml(item.id)}" type="button">Use</button>
+                  <button class="compact-button custom-sub-edit" data-id="${escapeHtml(item.id)}" type="button">Edit</button>
+                  <button class="compact-button custom-sub-duplicate" data-id="${escapeHtml(item.id)}" type="button">Duplicate</button>
+                  <button class="compact-button custom-sub-delete" data-id="${escapeHtml(item.id)}" type="button">Delete</button>
+                </div></td>
+              </tr>`;
+            }).join('') || '<tr><td colspan="5">No custom submarines saved.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
+    root.querySelector('.tool-grid')?.appendChild(rosterPanel);
+
+    rosterPanel.querySelectorAll('.official-sub-use').forEach(button => button.addEventListener('click', event => useSubmarineModel(event.target.dataset.name)));
+    rosterPanel.querySelectorAll('.official-sub-clone').forEach(button => button.addEventListener('click', event => {
+      const source = OFFICIAL_SUBMARINE_PROFILES.find(item => item.name === event.target.dataset.name);
+      if (source) cloneProfileIntoDraft(source);
+    }));
+
+    rosterPanel.querySelectorAll('.custom-sub-field').forEach(input => {
+      const eventName = input.tagName === 'SELECT' ? 'change' : input.type === 'text' ? 'input' : 'change';
+      input.addEventListener(eventName, event => {
+        const key = event.target.dataset.key;
+        state.submarineLibrary.draft[key] = event.target.type === 'number' ? number(event.target.value) : event.target.value;
+        if (key === 'crewMin' && state.submarineLibrary.draft.crewMax < state.submarineLibrary.draft.crewMin) state.submarineLibrary.draft.crewMax = state.submarineLibrary.draft.crewMin;
+        save();
+      });
+    });
+    rosterPanel.querySelector('#custom-sub-notes')?.addEventListener('input', event => {
+      state.submarineLibrary.draft.notes = event.target.value;
+      save();
+    });
+    rosterPanel.querySelector('#custom-sub-preview')?.addEventListener('click', () => renderSubmarine());
+    rosterPanel.querySelector('#custom-sub-reset')?.addEventListener('click', () => {
+      state.submarineLibrary.draft = defaultCustomSubmarineDraft();
+      save();
+      renderSubmarine();
+    });
+    rosterPanel.querySelector('#custom-sub-save')?.addEventListener('click', () => {
+      const pending = { ...state.submarineLibrary.draft };
+      pending.name = String(pending.name || '').trim();
+      if (!pending.name) {
+        alert('Enter a unique submarine name before saving.');
+        return;
+      }
+      if (OFFICIAL_SUBMARINE_NAMES.has(pending.name)) {
+        alert('That name belongs to an official submarine. Choose a distinct custom name.');
+        return;
+      }
+      const conflict = state.submarineLibrary.custom.find(item => item.name === pending.name && item.id !== pending.id);
+      if (conflict) {
+        alert('A custom submarine with that name already exists.');
+        return;
+      }
+      pending.crewMin = clamp(pending.crewMin, 1, 30);
+      pending.crewMax = clamp(pending.crewMax, pending.crewMin, 30);
+      pending.tier = clamp(pending.tier, 1, 3);
+      pending.id = pending.id || uid('custom-sub');
+      const existingIndex = state.submarineLibrary.custom.findIndex(item => item.id === pending.id);
+      if (existingIndex >= 0) state.submarineLibrary.custom[existingIndex] = pending;
+      else state.submarineLibrary.custom.push(pending);
+      state.submarineLibrary.draft = defaultCustomSubmarineDraft();
+      syncCustomSubmarines();
+      save();
+      renderSubmarine();
+    });
+
+    const customById = id => state.submarineLibrary.custom.find(item => item.id === id);
+    rosterPanel.querySelectorAll('.custom-sub-use').forEach(button => button.addEventListener('click', event => {
+      const item = customById(event.target.dataset.id);
+      if (item) useSubmarineModel(item.name);
+    }));
+    rosterPanel.querySelectorAll('.custom-sub-edit').forEach(button => button.addEventListener('click', event => {
+      const item = customById(event.target.dataset.id);
+      if (item) {
+        state.submarineLibrary.draft = { ...defaultCustomSubmarineDraft(), ...item };
+        save();
+        renderSubmarine();
+      }
+    }));
+    rosterPanel.querySelectorAll('.custom-sub-duplicate').forEach(button => button.addEventListener('click', event => {
+      const item = customById(event.target.dataset.id);
+      if (item) {
+        const clone = { ...item, id: uid('custom-sub'), name: `${item.name} Copy` };
+        while (OFFICIAL_SUBMARINE_NAMES.has(clone.name) || customNames.includes(clone.name)) clone.name += ' Copy';
+        state.submarineLibrary.custom.push(clone);
+        syncCustomSubmarines();
+        save();
+        renderSubmarine();
+      }
+    }));
+    rosterPanel.querySelectorAll('.custom-sub-delete').forEach(button => button.addEventListener('click', event => {
+      const item = customById(event.target.dataset.id);
+      if (!item) return;
+      state.submarineLibrary.custom = state.submarineLibrary.custom.filter(entry => entry.id !== item.id);
+      if (state.submarine.model === item.name) useSubmarineModel('Barsuk');
+      else {
+        syncCustomSubmarines();
+        save();
+        renderSubmarine();
+      }
+    }));
+  }
+
+  const renderSubmarineWithCatalogue = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithExpandedRoster() {
+    registerOfficialSubmarines();
+    syncCustomSubmarines();
+    if (!SUBMARINES[state.submarine.model]) state.submarine.model = 'Barsuk';
+    renderSubmarineWithCatalogue();
+    enhanceSubmarineRoster();
+  };

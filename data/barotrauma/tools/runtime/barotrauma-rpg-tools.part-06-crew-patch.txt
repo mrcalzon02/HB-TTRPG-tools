@@ -1,0 +1,30 @@
+
+  mergeCrewRecord = function mergeCrewRecordStable(incomingRaw) {
+    const management = normalizeCrewManagement();
+    const incoming = normalizeCrewRecord(incomingRaw);
+    let existing = management.roster.find(record => crewIdentityMatch(record, incoming) || (incoming.rosterId && record.rosterId === incoming.rosterId));
+    if (!existing) {
+      management.roster.push(incoming);
+      existing = incoming;
+    } else {
+      const preserved = {
+        rosterId: existing.rosterId,
+        duty: existing.duty,
+        shift: existing.shift,
+        status: existing.status,
+        approval: existing.approval,
+        active: existing.active,
+        gmNotes: existing.gmNotes
+      };
+      Object.assign(existing, incoming, preserved, { updatedAt: incoming.updatedAt || new Date().toISOString() });
+    }
+    const rosterId = existing.rosterId;
+    syncCrewResourceIfEnabled();
+    return state.submarine.crewManagement.roster.find(record => record.rosterId === rosterId) || existing;
+  };
+
+  const renderSubmarineBeforeCrewCapacitySync = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCrewCapacitySync() {
+    syncCrewResourceIfEnabled();
+    renderSubmarineBeforeCrewCapacitySync();
+  };

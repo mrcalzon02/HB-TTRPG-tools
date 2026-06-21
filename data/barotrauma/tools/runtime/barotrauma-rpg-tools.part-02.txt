@@ -1,0 +1,180 @@
+            </div>
+            <div class="stat-grid">
+              ${Object.keys(character.stats).map(stat => `
+                <div class="stat-card">
+                  <strong>${escapeHtml(stat)}</strong>
+                  <div class="stat-values">
+                    <label>Permanent<input class="char-stat" data-stat="${escapeHtml(stat)}" type="number" min="0" value="${number(character.stats[stat])}"></label>
+                    <label>Current<input class="char-current" data-stat="${escapeHtml(stat)}" type="number" value="${number(character.current[stat])}"></label>
+                  </div>
+                </div>`).join('')}
+            </div>
+            <div class="button-row no-print" style="margin-top:10px"><button id="restore-stats" class="secondary-action" type="button">Restore Current to Permanent</button></div>
+          </section>
+
+          <section class="tool-panel span-5">
+            <h3>Task Resolver</h3>
+            <div class="field-grid">
+              <label class="field">Statistic<select id="roll-stat">${optionList(Object.keys(character.current), 'Intelligence')}</select></label>
+              <label class="field">Difficulty<input id="roll-dc" type="number" value="8"></label>
+            </div>
+            <button id="roll-task" class="primary-action no-print" type="button" style="margin-top:10px">Roll 2d6 + Stat</button>
+            <div id="roll-result" class="notice" style="margin-top:10px">Select a statistic and difficulty, then roll.</div>
+            <div class="card-list" style="margin-top:10px">
+              ${character.rollLog.slice(0, 5).map(item => `<div class="small-note"><strong>${escapeHtml(item.result)}</strong> — ${escapeHtml(item.detail)}</div>`).join('') || '<div class="small-note">No recorded rolls.</div>'}
+            </div>
+          </section>
+
+          <section class="tool-panel span-7">
+            <h3>Inventory, Conditions, and Notes</h3>
+            <div class="field-grid">
+              <label class="field">Inventory; one item per line<textarea id="char-inventory">${escapeHtml(character.inventory)}</textarea></label>
+              <label class="field">Conditions and injuries<textarea id="char-conditions">${escapeHtml(character.conditions)}</textarea></label>
+            </div>
+            <label class="field" style="margin-top:10px">Character notes<textarea id="char-notes">${escapeHtml(character.notes)}</textarea></label>
+          </section>
+        </div>
+      </div>`;
+
+    bindTextInput('#char-name', element => { character.name = element.value; });
+    bindTextInput('#char-player', element => { character.player = element.value; });
+    bindTextInput('#char-inventory', element => { character.inventory = element.value; });
+    bindTextInput('#char-conditions', element => { character.conditions = element.value; });
+    bindTextInput('#char-notes', element => { character.notes = element.value; });
+    bindTextInput('#char-sanity', element => { character.lostSanity = number(element.value); }, 'change');
+    bindTextInput('#char-morale', element => { character.morale = number(element.value); }, 'change');
+    bindTextInput('#char-credits', element => { character.credits = number(element.value); }, 'change');
+    bindTextInput('#char-level', element => { character.level = clamp(element.value, 1, classData.maxLevel); renderCharacter(); }, 'change');
+    bindTextInput('#char-class', element => { character.className = element.value; character.talent = CLASSES[element.value].talents[0][0]; character.level = Math.min(character.level, CLASSES[element.value].maxLevel); renderCharacter(); }, 'change');
+    bindTextInput('#char-background', element => { character.background = element.value; renderCharacter(); }, 'change');
+    bindTextInput('#char-talent', element => { character.talent = element.value; }, 'change');
+    bindTextInput('#char-fate-used', element => { character.fateUsed = element.checked; }, 'change');
+
+    root.querySelectorAll('.char-stat').forEach(input => input.addEventListener('change', event => {
+      character.stats[event.target.dataset.stat] = number(event.target.value);
+      save(); renderCharacter();
+    }));
+    root.querySelectorAll('.char-current').forEach(input => input.addEventListener('change', event => {
+      character.current[event.target.dataset.stat] = number(event.target.value);
+      save(); renderCharacter();
+    }));
+    root.querySelector('#restore-stats').addEventListener('click', () => { character.current = { ...character.stats }; save(); renderCharacter(); });
+    root.querySelector('#roll-task').addEventListener('click', () => {
+      const stat = root.querySelector('#roll-stat').value;
+      const dc = number(root.querySelector('#roll-dc').value, 8);
+      const dice = [d6(), d6()];
+      const modifier = number(character.current[stat]);
+      const total = dice[0] + dice[1] + modifier;
+      const success = total >= dc;
+      const entry = { result: success ? 'SUCCESS' : 'FAILURE', detail: `${dice[0]} + ${dice[1]} + ${modifier} ${stat} = ${total} vs ${dc}` };
+      character.rollLog.unshift(entry);
+      character.rollLog = character.rollLog.slice(0, 20);
+      save();
+      const result = root.querySelector('#roll-result');
+      result.innerHTML = `<strong class="${success ? 'good' : 'bad'}">${entry.result}</strong><br>${escapeHtml(entry.detail)}`;
+    });
+  }
+
+  function calculateSubmarine() {
+    const submarine = state.submarine;
+    const base = SUBMARINES[submarine.model] || SUBMARINES.Barsuk;
+    const totals = {
+      speed: base.speed + number(submarine.manual.speed),
+      maneuverability: base.maneuverability + number(submarine.manual.maneuverability),
+      defense: base.defense + number(submarine.manual.defense),
+      capacity: base.capacity + number(submarine.manual.capacity),
+      hull: base.hull + number(submarine.manual.hull)
+    };
+    for (const id of submarine.upgrades) {
+      const upgrade = UPGRADES.find(item => item.id === id);
+      if (!upgrade) continue;
+      for (const [stat, modifier] of Object.entries(upgrade.effects)) totals[stat] = number(totals[stat]) + number(modifier);
+    }
+    const weaponCapacity = submarine.weapons.reduce((sum, mount) => sum + (WEAPONS.find(item => item.name === mount.name)?.storage || 0), 0);
+    const usedCapacity = number(submarine.resources.crew) + number(submarine.resources.cargo) + Math.ceil(Math.max(0, number(submarine.resources.supplies)) / 10) + weaponCapacity;
+    return { base, totals, weaponCapacity, usedCapacity, remainingCapacity: totals.capacity - usedCapacity };
+  }
+
+  function renderSubmarine() {
+    const submarine = state.submarine;
+    const calculated = calculateSubmarine();
+    submarine.hullCurrent = clamp(submarine.hullCurrent, 0, Math.max(0, calculated.totals.hull));
+    const upgradeCost = submarine.upgrades.reduce((sum, id) => sum + (UPGRADES.find(item => item.id === id)?.price || 0), 0);
+
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div><p class="eyebrow">Vessel, systems, stores, and upkeep</p><h2>Submarine Manager</h2><p class="rules-note">Track one of the four source submarines, its installed upgrades and weapons, hull state, capacity, systems, mission stores, and mandatory station upkeep.</p></div>
+          <div class="inline-actions no-print"><a class="rules-link" href="barotrauma-rpg.html#submarines">SUBMARINES →</a><a class="rules-link" href="barotrauma-rpg.html#upgrades">UPGRADES →</a><a class="rules-link" href="barotrauma-rpg.html#submarine-weapons-systems">WEAPONS →</a></div>
+        </section>
+        <div class="tool-grid">
+          <section class="tool-panel span-8">
+            <h3>Vessel Record</h3>
+            <div class="field-grid three">
+              <label class="field">Vessel name<input id="sub-name" value="${escapeHtml(submarine.name)}" placeholder="Crew designation"></label>
+              <label class="field">Base submarine<select id="sub-model">${optionList(Object.keys(SUBMARINES), submarine.model)}</select></label>
+              <label class="field">Current Hull<input id="sub-hull-current" type="number" min="0" max="${calculated.totals.hull}" value="${submarine.hullCurrent}"></label>
+            </div>
+            <div class="metric-row" style="margin-top:12px">
+              <div class="metric"><span>Speed</span><strong>${calculated.totals.speed}</strong></div>
+              <div class="metric"><span>Maneuverability</span><strong>${calculated.totals.maneuverability}</strong></div>
+              <div class="metric"><span>Defense</span><strong>${calculated.totals.defense}</strong></div>
+              <div class="metric"><span>Capacity</span><strong>${calculated.usedCapacity}/${calculated.totals.capacity}</strong></div>
+              <div class="metric"><span>Hull</span><strong class="${submarine.hullCurrent <= calculated.totals.hull * .25 ? 'bad' : submarine.hullCurrent <= calculated.totals.hull * .6 ? 'warn' : 'good'}">${submarine.hullCurrent}/${calculated.totals.hull}</strong></div>
+            </div>
+            <p class="small-note"><strong>Strength:</strong> ${escapeHtml(calculated.base.strengths)} <strong>Weakness:</strong> ${escapeHtml(calculated.base.weaknesses)}</p>
+            <div class="button-row no-print"><button id="sub-damage" class="danger-button" type="button">Take 1 Hull Damage</button><button id="sub-repair" class="secondary-action" type="button">Repair 1 Hull</button><button id="sub-full-repair" class="secondary-action" type="button">Full Station Repair</button></div>
+          </section>
+
+          <section class="tool-panel span-4">
+            <h3>Manual Stat Modifiers</h3>
+            <p class="small-note">Use for temporary effects, custom equipment, or GM rulings. Source-defined numeric upgrade modifiers are applied automatically.</p>
+            <div class="field-grid">
+              ${Object.keys(submarine.manual).map(stat => `<label class="field">${escapeHtml(stat)}<input class="sub-manual" data-stat="${escapeHtml(stat)}" type="number" value="${number(submarine.manual[stat])}"></label>`).join('')}
+            </div>
+          </section>
+
+          <section class="tool-panel span-7">
+            <h3>Stores and Capacity</h3>
+            <div class="field-grid three">
+              ${Object.entries(submarine.resources).map(([resource, value]) => `<label class="field">${escapeHtml(resource)}<input class="sub-resource" data-resource="${escapeHtml(resource)}" type="number" min="0" value="${number(value)}"></label>`).join('')}
+            </div>
+            <div class="metric-row" style="margin-top:10px">
+              <div class="metric"><span>Capacity used</span><strong>${calculated.usedCapacity}</strong></div>
+              <div class="metric"><span>Remaining</span><strong class="${calculated.remainingCapacity < 0 ? 'bad' : 'good'}">${calculated.remainingCapacity}</strong></div>
+              <div class="metric"><span>Weapon storage</span><strong>${calculated.weaponCapacity}</strong></div>
+              <div class="metric"><span>Upgrade cost</span><strong>${upgradeCost}c</strong></div>
+            </div>
+            <p class="small-note">Capacity uses the imported rule: Crew 1:1, Cargo 1:1, Supplies 10 per capacity, plus each installed weapon’s listed submarine storage capacity.</p>
+          </section>
+
+          <section class="tool-panel span-5">
+            <h3>Systems Condition</h3>
+            ${SYSTEMS.map(system => {
+              const data = submarine.systems[system] || { condition: 100, note: '' };
+              return `<div class="system-row"><strong>${escapeHtml(system)}</strong><input class="system-condition" data-system="${escapeHtml(system)}" type="range" min="0" max="100" step="5" value="${number(data.condition, 100)}"><span class="${data.condition <= 25 ? 'bad' : data.condition <= 60 ? 'warn' : 'good'}">${number(data.condition, 100)}%</span></div>`;
+            }).join('')}
+          </section>
+
+          <section class="tool-panel span-12">
+            <h3>Installed Weapons</h3>
+            <div class="table-wrap"><table class="tool-table"><thead><tr><th>System</th><th>Tier</th><th>Damage</th><th>Range</th><th>Ammo</th><th>Capacity</th><th></th></tr></thead><tbody>
+              ${submarine.weapons.map((mount, index) => {
+                const weapon = WEAPONS.find(item => item.name === mount.name) || WEAPONS[0];
+                const tier = clamp(mount.tier, 1, 3);
+                return `<tr><td><select class="weapon-name" data-index="${index}">${optionList(WEAPONS.map(item => item.name), mount.name)}</select></td><td><select class="weapon-tier" data-index="${index}">${[1,2,3].map(value => `<option ${value === tier ? 'selected' : ''}>${value}</option>`).join('')}</select></td><td>${weapon.damage[tier - 1]}</td><td>${escapeHtml(weapon.range)}</td><td><input class="weapon-ammo" data-index="${index}" type="number" min="0" max="${weapon.ammo[tier - 1]}" value="${number(mount.ammo)}"> / ${weapon.ammo[tier - 1]}</td><td>${weapon.storage}</td><td><button class="compact-button remove-weapon" data-index="${index}" type="button">Remove</button></td></tr>`;
+              }).join('') || '<tr><td colspan="7">No weapons installed.</td></tr>'}
+            </tbody></table></div>
+            <button id="add-weapon" class="secondary-action no-print" type="button" style="margin-top:10px">Add Weapon Mount</button>
+          </section>
+
+          <section class="tool-panel span-7">
+            <h3>Upgrades</h3>
+            <div class="card-list">
+              ${UPGRADES.map(upgrade => `<label class="check-row"><input class="upgrade-check" data-upgrade="${upgrade.id}" type="checkbox" ${submarine.upgrades.includes(upgrade.id) ? 'checked' : ''}><span><strong>${escapeHtml(upgrade.name)}</strong><br><span class="small-note">${escapeHtml(upgrade.note)}</span></span><strong>${upgrade.price}c</strong></label>`).join('')}
+            </div>
+          </section>
+
+          <section class="tool-panel span-5">
+            <h3>Station Upkeep</h3>
+            <p class="small-note">All upkeep tasks must be completed before departure. Each source task uses 2d6 + the listed statistic against 8.</p>

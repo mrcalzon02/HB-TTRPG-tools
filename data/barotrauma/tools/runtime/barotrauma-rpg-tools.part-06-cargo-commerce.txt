@@ -1,0 +1,515 @@
+
+  function defaultCargoManagement() {
+    return {
+      entries: [],
+      autoSync: false,
+      draftName: '',
+      draftQuantity: 1,
+      draftUnitSize: 1,
+      draftOwner: 'Submarine',
+      draftLocation: 'Cargo Bay',
+      notes: ''
+    };
+  }
+
+  function normalizeCargoEntry(raw = {}) {
+    const item = raw.id ? catalogueItem(raw.id) : null;
+    return {
+      cargoId: raw.cargoId || uid('cargo'),
+      id: raw.id || '',
+      customName: raw.customName || item?.name || 'Unnamed Cargo',
+      quantity: Math.max(1, number(raw.quantity, 1)),
+      unitSize: Math.max(0, number(raw.unitSize, item?.category === 'Submarine Ammunition' ? 1 : item?.carryUnits || 1)),
+      owner: raw.owner || 'Submarine',
+      location: raw.location || 'Cargo Bay',
+      condition: clamp(raw.condition ?? 100, 0, 100),
+      notes: raw.notes || '',
+      acquiredFrom: raw.acquiredFrom || ''
+    };
+  }
+
+  function normalizeCargoManagement() {
+    const existing = state.submarine.cargoManagement && typeof state.submarine.cargoManagement === 'object'
+      ? state.submarine.cargoManagement
+      : {};
+    state.submarine.cargoManagement = deepMerge(defaultCargoManagement(), existing);
+    state.submarine.cargoManagement.entries = Array.isArray(state.submarine.cargoManagement.entries)
+      ? state.submarine.cargoManagement.entries.map(normalizeCargoEntry)
+      : [];
+    return state.submarine.cargoManagement;
+  }
+
+  function cargoItem(entry) {
+    return entry.id ? catalogueItem(entry.id) : {
+      id: '', name: entry.customName || 'Unnamed Cargo', category: 'Cargo', subcategory: 'Manual Entry',
+      description: entry.notes || '', carryUnits: number(entry.unitSize, 1)
+    };
+  }
+
+  function cargoUnits() {
+    return normalizeCargoManagement().entries.reduce((sum, entry) => sum + Math.max(0, number(entry.unitSize, 1)) * Math.max(1, number(entry.quantity, 1)), 0);
+  }
+
+  function syncCargoResourceIfEnabled() {
+    const cargo = normalizeCargoManagement();
+    if (cargo.autoSync) state.submarine.resources.cargo = Math.ceil(cargoUnits());
+  }
+
+  function addCargoItem(id, quantity = 1, options = {}) {
+    const cargo = normalizeCargoManagement();
+    const item = id ? catalogueItem(id) : null;
+    const name = options.customName || item?.name || 'Unnamed Cargo';
+    const existing = cargo.entries.find(entry => entry.id === (id || '') && entry.customName === name && entry.owner === (options.owner || 'Submarine') && entry.location === (options.location || 'Cargo Bay'));
+    if (existing) existing.quantity += Math.max(1, number(quantity, 1));
+    else cargo.entries.push(normalizeCargoEntry({
+      id: id || '', customName: name, quantity,
+      unitSize: options.unitSize ?? (item?.category === 'Submarine Ammunition' ? 1 : item?.carryUnits || 1),
+      owner: options.owner || 'Submarine', location: options.location || 'Cargo Bay', notes: options.notes || '', acquiredFrom: options.acquiredFrom || ''
+    }));
+    syncCargoResourceIfEnabled();
+    save();
+  }
+
+  function removeCargoQuantity(cargoId, quantity = 1) {
+    const cargo = normalizeCargoManagement();
+    const entry = cargo.entries.find(item => item.cargoId === cargoId);
+    if (!entry) return false;
+    entry.quantity -= Math.max(1, number(quantity, 1));
+    if (entry.quantity <= 0) cargo.entries = cargo.entries.filter(item => item.cargoId !== cargoId);
+    syncCargoResourceIfEnabled();
+    save();
+    return true;
+  }
+
+  function moveCharacterInventoryToCargo(instanceId) {
+    const entry = inventoryEntry(instanceId);
+    if (!entry) return false;
+    const item = inventoryDefinition(entry);
+    addCargoItem(entry.id, 1, {
+      customName: item.name,
+      unitSize: item.carryUnits || entry.carryUnits || 1,
+      owner: state.character.name || state.character.player || 'Crew',
+      location: 'Cargo Bay',
+      notes: entry.notes || '',
+      acquiredFrom: 'Character inventory'
+    });
+    if (entry.quantity > 1) entry.quantity -= 1;
+    else state.character.catalogInventory = state.character.catalogInventory.filter(itemEntry => itemEntry.instanceId !== instanceId);
+    save();
+    return true;
+  }
+
+  function moveCargoToCharacter(cargoId) {
+    const entry = normalizeCargoManagement().entries.find(item => item.cargoId === cargoId);
+    if (!entry) return false;
+    if (entry.id) addCharacterCatalogueItem(entry.id, 1);
+    else state.character.catalogInventory.push(normalizeInventoryEntry({
+      customName: entry.customName, customCategory: 'Cargo', customDescription: entry.notes, carryUnits: entry.unitSize,
+      quantity: 1, tracker: 'none', notes: `Transferred from ${entry.location}.`
+    }));
+    removeCargoQuantity(cargoId, 1);
+    save();
+    return true;
+  }
+
+  function stationSlug(value) {
+    return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'station';
+  }
+
+  function stationIdentity(station) {
+    return `${stationSlug(station.name)}--${stationSlug(station.faction || 'independent')}`;
+  }
+
+  function defaultStationCommerce() {
+    return {
+      activeStationId: '',
+      wallet: 'submarine',
+      destination: 'cargo',
+      factionReputation: {},
+      stations: {},
+      transactionLog: []
+    };
+  }
+
+  function defaultStationRecord(station) {
+    const firstLocal = String(station.locals || '').split(';')[0].trim();
+    return {
+      id: stationIdentity(station),
+      name: station.name,
+      faction: station.faction || 'Independent',
+      specialty: station.specialty || 'General trade',
+      locals: station.locals || '',
+      stationReputation: 0,
+      ownerName: firstLocal || `${station.name} Quartermaster`,
+      ownerReputation: 0,
+      playerStation: false,
+      stationOwner: '',
+      treasury: 2500,
+      marketRevision: 0,
+      vendors: [],
+      notes: ''
+    };
+  }
+
+  function normalizeStationRecord(raw, station) {
+    const base = defaultStationRecord(station || raw || {});
+    const record = deepMerge(base, raw || {});
+    record.vendors = Array.isArray(record.vendors) ? record.vendors : [];
+    record.stationReputation = clamp(record.stationReputation, -100, 100);
+    record.ownerReputation = clamp(record.ownerReputation, -100, 100);
+    record.treasury = Math.max(0, number(record.treasury, 2500));
+    return record;
+  }
+
+  function normalizeStationCommerce() {
+    const existing = state.stationCommerce && typeof state.stationCommerce === 'object' ? state.stationCommerce : {};
+    state.stationCommerce = deepMerge(defaultStationCommerce(), existing);
+    state.stationCommerce.factionReputation = state.stationCommerce.factionReputation && typeof state.stationCommerce.factionReputation === 'object' ? state.stationCommerce.factionReputation : {};
+    state.stationCommerce.stations = state.stationCommerce.stations && typeof state.stationCommerce.stations === 'object' ? state.stationCommerce.stations : {};
+    state.stationCommerce.transactionLog = Array.isArray(state.stationCommerce.transactionLog) ? state.stationCommerce.transactionLog : [];
+    syncCustomStations();
+    for (const station of STATIONS) {
+      const id = stationIdentity(station);
+      state.stationCommerce.stations[id] = normalizeStationRecord(state.stationCommerce.stations[id], station);
+      if (!(station.faction in state.stationCommerce.factionReputation)) state.stationCommerce.factionReputation[station.faction] = 0;
+    }
+    const validIds = STATIONS.map(stationIdentity);
+    if (!validIds.includes(state.stationCommerce.activeStationId)) {
+      const routeStation = STATIONS.find(station => station.name === state.route.end) || STATIONS[0];
+      state.stationCommerce.activeStationId = routeStation ? stationIdentity(routeStation) : '';
+    }
+    return state.stationCommerce;
+  }
+
+  function activeStationRecord() {
+    const commerce = normalizeStationCommerce();
+    return commerce.stations[commerce.activeStationId] || null;
+  }
+
+  function seededHash(text) {
+    let hash = 2166136261;
+    for (const character of String(text)) {
+      hash ^= character.charCodeAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+  }
+
+  function seededRandom(seedText) {
+    let seed = seededHash(seedText) || 1;
+    return () => {
+      seed += 0x6D2B79F5;
+      let value = seed;
+      value = Math.imul(value ^ value >>> 15, value | 1);
+      value ^= value + Math.imul(value ^ value >>> 7, value | 61);
+      return ((value ^ value >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  function allTradeRecords() {
+    const records = [];
+    for (const item of WIKI_CATALOG.items) records.push({ key: `item:${item.id}`, kind: 'item', id: item.id, name: item.name, category: item.category, item });
+    for (const weapon of WIKI_CATALOG.submarineWeapons) records.push({ key: `submarineWeapon:${weapon.id}`, kind: 'submarineWeapon', id: weapon.id, name: weapon.name, category: 'Submarine Weapon', item: weapon });
+    for (const upgrade of UPGRADES) records.push({ key: `upgrade:${upgrade.id}`, kind: 'upgrade', id: upgrade.id, name: upgrade.name, category: 'Upgrade', item: upgrade });
+    for (const entry of state.customContent.entries) {
+      const derived = derivedCustomEntry(entry);
+      if (['handheld-weapon','personal-ammunition','submarine-ammunition','equipment','general-item','consumable'].includes(entry.type)) {
+        const item = customEntryAsItem(entry);
+        records.push({ key: `item:${entry.id}`, kind: 'item', id: entry.id, name: entry.name, category: item.category, item, customEntry: entry, derived });
+      } else if (entry.type === 'submarine-weapon') {
+        records.push({ key: `submarineWeapon:${entry.id}`, kind: 'submarineWeapon', id: entry.id, name: entry.name, category: 'Submarine Weapon', item: customEntryAsWeapon(entry), customEntry: entry, derived });
+      } else if (['submarine-system','power-source','submarine-module'].includes(entry.type)) {
+        records.push({ key: `module:${entry.id}`, kind: 'module', id: entry.id, name: entry.name, category: 'Submarine Module', item: entry, customEntry: entry, derived });
+      }
+    }
+    return records;
+  }
+
+  function tradeRecordByKey(key) {
+    return allTradeRecords().find(record => record.key === key);
+  }
+
+  function tradeBasePrice(record) {
+    if (!record) return 1;
+    if (record.derived?.price) return Math.max(1, Math.round(record.derived.price));
+    if (record.kind === 'upgrade') return Math.max(1, number(record.item.price, 100));
+    if (record.kind === 'submarineWeapon') {
+      const mountFactor = record.item.mount === 'Large Turret' ? 1800 : record.item.mount === 'Depth Charge' ? 1000 : 1200;
+      return Math.round(mountFactor + number(record.item.fireRate, 1) * 120 + (record.item.ammo?.[0]?.magazineSize || 0) * 4);
+    }
+    const item = record.item || {};
+    const categoryBase = {
+      Weapons: 260, Ammunition: 25, Tools: 110, Gear: 180, Medical: 70, Consumables: 45,
+      'Submarine Ammunition': 180, Miscellaneous: 65
+    }[record.category] || 80;
+    return Math.max(5, Math.round(categoryBase + number(item.carryUnits, 1) * 35 + number(item.capacity, 0) * (record.category === 'Ammunition' ? 2 : 4) + number(item.maxAmmo, 0) * 3 + number(item.fireRate, 0) * 15));
+  }
+
+  function vendorArchetype(id) {
+    return (ITEM_FUNCTIONALITY.vendorArchetypes || []).find(item => item.id === id) || ITEM_FUNCTIONALITY.vendorArchetypes?.[0] || { id: 'general', name: 'General Trader', categories: [], stock: 8, markup: 1.1 };
+  }
+
+  function stationSpecialtyVendorIds(station) {
+    const specialty = String(station.specialty || '').toLowerCase();
+    const ids = [];
+    if (/weapon|security|military/.test(specialty)) ids.push('arms-dealer');
+    if (/medical|research/.test(specialty)) ids.push('medical-supplier');
+    if (/engineering|salvage|fabrication|technology/.test(specialty)) ids.push('engineering-broker');
+    if (/submarine|technology|fabrication/.test(specialty)) ids.push('systems-dealer');
+    if (/diving|survival|equipment|clothing/.test(specialty)) ids.push('quartermaster');
+    ids.push('general-trader');
+    return [...new Set(ids)];
+  }
+
+  function randomOwnerName(rng, archetypeName) {
+    const first = ['Avery','Mara','Jonas','Kira','Tomas','Rhea','Niko','Sera','Viktor','Elena','Pavel','Nadia','Ilya','Mina','Corin','Ada'];
+    const last = ['Voss','Rook','Calder','Morrow','Kessler','Vale','Orlov','Dane','Sato','Kade','Marin','Holt','Renn','Bauer','Quill','Stroud'];
+    return `${first[Math.floor(rng() * first.length)]} ${last[Math.floor(rng() * last.length)]}, ${archetypeName}`;
+  }
+
+  function generateVendorStock(archetype, rng) {
+    const pool = allTradeRecords().filter(record => !archetype.categories?.length || archetype.categories.includes(record.category));
+    const shuffled = [...pool].sort(() => rng() - 0.5);
+    return shuffled.slice(0, Math.min(pool.length, Math.max(1, number(archetype.stock, 8)))).map(record => ({
+      stockId: uid('stock'),
+      tradeKey: record.key,
+      quantity: archetype.machine ? 1 + Math.floor(rng() * 4) : 1 + Math.floor(rng() * 6),
+      basePrice: tradeBasePrice(record)
+    }));
+  }
+
+  function generateStationMarket(stationRecord) {
+    stationRecord.marketRevision = Math.max(0, number(stationRecord.marketRevision)) + 1;
+    const rng = seededRandom(`${stationRecord.id}:${stationRecord.marketRevision}`);
+    const preferred = stationSpecialtyVendorIds(stationRecord);
+    const normalPool = (ITEM_FUNCTIONALITY.vendorArchetypes || []).filter(item => !item.machine);
+    const machinePool = (ITEM_FUNCTIONALITY.vendorArchetypes || []).filter(item => item.machine);
+    const selectedIds = [...preferred];
+    while (selectedIds.length < 3 && normalPool.length) {
+      const candidate = normalPool[Math.floor(rng() * normalPool.length)]?.id;
+      if (candidate && !selectedIds.includes(candidate)) selectedIds.push(candidate);
+    }
+    const machine = machinePool[Math.floor(rng() * machinePool.length)];
+    stationRecord.vendors = [...selectedIds.slice(0, 3).map(id => vendorArchetype(id)), ...(machine ? [machine] : [])].map(archetype => ({
+      vendorId: uid('vendor'),
+      archetypeId: archetype.id,
+      name: archetype.machine ? archetype.name : randomOwnerName(rng, archetype.name),
+      machine: Boolean(archetype.machine),
+      markup: number(archetype.markup, 1.1),
+      stock: generateVendorStock(archetype, rng)
+    }));
+    save();
+  }
+
+  function combinedStationReputation(stationRecord) {
+    const faction = number(state.stationCommerce.factionReputation[stationRecord.faction]);
+    return faction * 0.5 + number(stationRecord.stationReputation) * 0.3 + number(stationRecord.ownerReputation) * 0.2;
+  }
+
+  function stationBuyPrice(stationRecord, vendor, stock) {
+    const reputation = combinedStationReputation(stationRecord);
+    const reputationFactor = clamp(1 - reputation / 250, 0.6, 1.6);
+    return Math.max(1, Math.round(number(stock.basePrice, 1) * number(vendor.markup, 1.1) * reputationFactor));
+  }
+
+  function stationSellPrice(stationRecord, record) {
+    const reputation = combinedStationReputation(stationRecord);
+    return Math.max(1, Math.round(tradeBasePrice(record) * clamp(0.42 + reputation / 500, 0.2, 0.7)));
+  }
+
+  function commerceWalletCredits() {
+    const commerce = normalizeStationCommerce();
+    return commerce.wallet === 'character' ? Math.max(0, number(state.character.credits)) : Math.max(0, number(state.submarine.resources.credits));
+  }
+
+  function setCommerceWalletCredits(value) {
+    const commerce = normalizeStationCommerce();
+    if (commerce.wallet === 'character') state.character.credits = Math.max(0, number(value));
+    else state.submarine.resources.credits = Math.max(0, number(value));
+  }
+
+  function recordTransaction(text) {
+    state.stationCommerce.transactionLog.unshift({ id: uid('transaction'), text, at: new Date().toISOString() });
+    state.stationCommerce.transactionLog = state.stationCommerce.transactionLog.slice(0, 40);
+  }
+
+  function deliverTradePurchase(record, destination, stationRecord) {
+    if (record.kind === 'item') {
+      if (record.category === 'Submarine Ammunition') addSubmarineAmmo(record.id, 1);
+      else if (destination === 'character') addCharacterCatalogueItem(record.id, 1);
+      else addCargoItem(record.id, 1, { acquiredFrom: stationRecord.name });
+      return true;
+    }
+    if (record.kind === 'submarineWeapon') { addSubmarineWeapon(record.id); return true; }
+    if (record.kind === 'upgrade') {
+      if (!state.submarine.upgrades.includes(record.id)) state.submarine.upgrades.push(record.id);
+      return true;
+    }
+    if (record.kind === 'module') { installCustomModule(record.id); return true; }
+    return false;
+  }
+
+  function buyStationStock(stationRecord, vendorId, stockId) {
+    const vendor = stationRecord.vendors.find(item => item.vendorId === vendorId);
+    const stock = vendor?.stock?.find(item => item.stockId === stockId);
+    const record = stock && tradeRecordByKey(stock.tradeKey);
+    if (!vendor || !stock || !record || stock.quantity <= 0) return { ok: false, message: 'Out of stock' };
+    const price = stationBuyPrice(stationRecord, vendor, stock);
+    if (commerceWalletCredits() < price) return { ok: false, message: 'Insufficient credits' };
+    if (!deliverTradePurchase(record, state.stationCommerce.destination, stationRecord)) return { ok: false, message: 'No compatible destination' };
+    setCommerceWalletCredits(commerceWalletCredits() - price);
+    stock.quantity -= 1;
+    if (stationRecord.playerStation) stationRecord.treasury += price;
+    stationRecord.ownerReputation = clamp(number(stationRecord.ownerReputation) + 0.25, -100, 100);
+    recordTransaction(`Bought ${record.name} from ${vendor.name} at ${stationRecord.name} for ${price} credits.`);
+    save();
+    return { ok: true, message: `Bought for ${price}` };
+  }
+
+  function sellableRecords() {
+    const cargo = normalizeCargoManagement().entries.map(entry => ({
+      sourceKey: `cargo:${entry.cargoId}`, source: 'cargo', sourceId: entry.cargoId,
+      name: cargoItem(entry).name, record: entry.id ? tradeRecordByKey(`item:${entry.id}`) : { key: `manual:${entry.cargoId}`, kind: 'manual', id: '', name: entry.customName, category: 'Miscellaneous', item: cargoItem(entry) }, quantity: entry.quantity
+    }));
+    const character = state.character.catalogInventory.map(entry => ({
+      sourceKey: `character:${entry.instanceId}`, source: 'character', sourceId: entry.instanceId,
+      name: inventoryDefinition(entry).name, record: entry.id ? tradeRecordByKey(`item:${entry.id}`) : { key: `manual-character:${entry.instanceId}`, kind: 'manual', id: '', name: entry.customName, category: 'Miscellaneous', item: inventoryDefinition(entry) }, quantity: entry.quantity
+    }));
+    return [...cargo, ...character].filter(item => item.record);
+  }
+
+  function sellToStation(sourceKey, stationRecord) {
+    const sellable = sellableRecords().find(item => item.sourceKey === sourceKey);
+    if (!sellable) return { ok: false, message: 'Item unavailable' };
+    const price = stationSellPrice(stationRecord, sellable.record);
+    if (stationRecord.playerStation && stationRecord.treasury < price) return { ok: false, message: 'Station treasury cannot afford this item' };
+    if (sellable.source === 'cargo') removeCargoQuantity(sellable.sourceId, 1);
+    else {
+      const entry = inventoryEntry(sellable.sourceId);
+      if (!entry) return { ok: false, message: 'Item unavailable' };
+      if (entry.quantity > 1) entry.quantity -= 1;
+      else state.character.catalogInventory = state.character.catalogInventory.filter(item => item.instanceId !== sellable.sourceId);
+    }
+    setCommerceWalletCredits(commerceWalletCredits() + price);
+    if (stationRecord.playerStation) stationRecord.treasury -= price;
+    stationRecord.stationReputation = clamp(number(stationRecord.stationReputation) + 0.1, -100, 100);
+    const receivingVendor = stationRecord.vendors.find(vendor => !vendor.machine && vendorArchetype(vendor.archetypeId).categories.includes(sellable.record.category));
+    if (receivingVendor && sellable.record.key && !sellable.record.key.startsWith('manual')) {
+      const existing = receivingVendor.stock.find(stock => stock.tradeKey === sellable.record.key);
+      if (existing) existing.quantity += 1;
+      else receivingVendor.stock.push({ stockId: uid('stock'), tradeKey: sellable.record.key, quantity: 1, basePrice: tradeBasePrice(sellable.record) });
+    }
+    recordTransaction(`Sold ${sellable.name} at ${stationRecord.name} for ${price} credits.`);
+    save();
+    return { ok: true, message: `Sold for ${price}` };
+  }
+
+  function enhanceCharacterCargoTransfer() {
+    const panel = [...root.querySelectorAll('.tool-panel')].find(item => item.querySelector('h3')?.textContent.includes('Tracked Inventory and Loadout'));
+    if (!panel) return;
+    panel.querySelectorAll('[data-inventory-instance]').forEach(row => {
+      const actionCell = row.querySelector('td:last-child');
+      if (!actionCell || actionCell.querySelector('.inventory-to-cargo')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'compact-button inventory-to-cargo';
+      button.dataset.instance = row.dataset.inventoryInstance;
+      button.textContent = 'Stow in Cargo';
+      actionCell.prepend(button);
+      button.addEventListener('click', () => {
+        if (moveCharacterInventoryToCargo(button.dataset.instance)) renderCharacter();
+      });
+    });
+  }
+
+  const enhanceCharacterCatalogueBeforeCargo = enhanceCharacterCatalogue;
+  enhanceCharacterCatalogue = function enhanceCharacterCatalogueWithCargoTransfer() {
+    enhanceCharacterCatalogueBeforeCargo();
+    enhanceCharacterCargoTransfer();
+  };
+
+  function renderCargoManagementPanel() {
+    const cargo = normalizeCargoManagement();
+    const total = cargoUnits();
+    const catalogueOptions = allTradeRecords().filter(record => record.kind === 'item').map(record => record.id);
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>General Cargo Manifest</h3><p class="small-note">Track individual cargo lots, owners, locations, condition, and capacity footprint. Cargo can be added, subtracted, transferred to the current character, bought from stations, or sold to vendors.</p></div><div class="metric-row"><div class="metric"><span>Manifest lots</span><strong>${cargo.entries.length}</strong></div><div class="metric"><span>Cargo units</span><strong>${total}</strong></div><div class="metric"><span>Capacity cargo value</span><strong>${number(state.submarine.resources.cargo)}</strong></div></div></div>
+      <div class="field-grid three" style="margin-top:12px"><label class="field">Catalogue item<select id="cargo-add-item">${optionList(catalogueOptions, catalogueOptions[0] || '', id => catalogueItem(id)?.name || customEntry(id)?.name || id)}</select></label><label class="field">Quantity<input id="cargo-add-quantity" type="number" min="1" max="9999" value="1"></label><div class="button-row" style="align-self:end"><button id="cargo-add-catalogue" class="primary-action no-print" type="button">Add Cargo</button></div><label class="check-row" style="align-self:end"><input id="cargo-auto-sync" type="checkbox" ${cargo.autoSync ? 'checked' : ''}><span><strong>Synchronize cargo capacity</strong><br><span class="small-note">Sets Stores and Capacity cargo to the rounded manifest total.</span></span></label><div class="button-row" style="align-self:end"><button id="cargo-sync-now" class="secondary-action no-print" type="button">Use Manifest Total Now</button></div></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table cargo-manifest-table"><thead><tr><th>Cargo</th><th>Quantity</th><th>Unit size</th><th>Total</th><th>Owner</th><th>Location</th><th>Condition</th><th>Notes</th><th></th></tr></thead><tbody>${cargo.entries.map(entry => { const item = cargoItem(entry); return `<tr><td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${escapeHtml(item.category || 'Cargo')} · ${escapeHtml(item.subcategory || '')}</span></td><td><div class="cargo-quantity-controls"><button class="compact-button cargo-subtract" data-id="${escapeHtml(entry.cargoId)}" type="button">−</button><input class="cargo-quantity" data-id="${escapeHtml(entry.cargoId)}" type="number" min="1" max="9999" value="${entry.quantity}"><button class="compact-button cargo-add-one" data-id="${escapeHtml(entry.cargoId)}" type="button">+</button></div></td><td><input class="cargo-unit-size" data-id="${escapeHtml(entry.cargoId)}" type="number" min="0" step="0.25" value="${entry.unitSize}"></td><td>${number(entry.quantity) * number(entry.unitSize)}</td><td><input class="cargo-owner" data-id="${escapeHtml(entry.cargoId)}" value="${escapeHtml(entry.owner)}"></td><td><input class="cargo-location" data-id="${escapeHtml(entry.cargoId)}" value="${escapeHtml(entry.location)}"></td><td><input class="cargo-condition" data-id="${escapeHtml(entry.cargoId)}" type="number" min="0" max="100" value="${entry.condition}"></td><td><textarea class="cargo-notes" data-id="${escapeHtml(entry.cargoId)}">${escapeHtml(entry.notes)}</textarea></td><td><div class="button-row"><button class="compact-button cargo-to-character" data-id="${escapeHtml(entry.cargoId)}" type="button">Give to Character</button><button class="compact-button cargo-remove" data-id="${escapeHtml(entry.cargoId)}" type="button">Remove Lot</button></div></td></tr>`; }).join('') || '<tr><td colspan="9">No cargo lots are recorded.</td></tr>'}</tbody></table></div>
+      <details style="margin-top:12px"><summary><strong>Add manual or unlisted cargo</strong></summary><div class="field-grid three" style="margin-top:10px"><label class="field">Cargo name<input id="cargo-manual-name" value="${escapeHtml(cargo.draftName)}"></label><label class="field">Quantity<input id="cargo-manual-quantity" type="number" min="1" value="${cargo.draftQuantity}"></label><label class="field">Unit size<input id="cargo-manual-size" type="number" min="0" step="0.25" value="${cargo.draftUnitSize}"></label><label class="field">Owner<input id="cargo-manual-owner" value="${escapeHtml(cargo.draftOwner)}"></label><label class="field">Location<input id="cargo-manual-location" value="${escapeHtml(cargo.draftLocation)}"></label></div><button id="cargo-add-manual" class="secondary-action no-print" type="button" style="margin-top:10px">Add Manual Cargo</button></details>
+      <label class="field" style="margin-top:12px">Manifest notes<textarea id="cargo-manifest-notes">${escapeHtml(cargo.notes)}</textarea></label>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    const cargoEntry = id => cargo.entries.find(entry => entry.cargoId === id);
+    const update = (id, callback, rerender = false) => { const entry = cargoEntry(id); if (!entry) return; callback(entry); syncCargoResourceIfEnabled(); save(); if (rerender) renderSubmarine(); };
+    panel.querySelector('#cargo-add-catalogue')?.addEventListener('click', () => { const id = panel.querySelector('#cargo-add-item').value; if (id) addCargoItem(id, panel.querySelector('#cargo-add-quantity').value); renderSubmarine(); });
+    panel.querySelector('#cargo-auto-sync')?.addEventListener('change', event => { cargo.autoSync = event.target.checked; syncCargoResourceIfEnabled(); save(); renderSubmarine(); });
+    panel.querySelector('#cargo-sync-now')?.addEventListener('click', () => { state.submarine.resources.cargo = Math.ceil(cargoUnits()); save(); renderSubmarine(); });
+    panel.querySelectorAll('.cargo-subtract').forEach(button => button.addEventListener('click', event => { removeCargoQuantity(event.target.dataset.id, 1); renderSubmarine(); }));
+    panel.querySelectorAll('.cargo-add-one').forEach(button => button.addEventListener('click', event => update(event.target.dataset.id, entry => { entry.quantity += 1; }, true)));
+    panel.querySelectorAll('.cargo-quantity').forEach(input => input.addEventListener('change', event => update(event.target.dataset.id, entry => { entry.quantity = clamp(event.target.value, 1, 9999); }, true)));
+    panel.querySelectorAll('.cargo-unit-size').forEach(input => input.addEventListener('change', event => update(event.target.dataset.id, entry => { entry.unitSize = Math.max(0, number(event.target.value)); }, true)));
+    for (const [selector, key] of [['.cargo-owner','owner'],['.cargo-location','location'],['.cargo-notes','notes']]) panel.querySelectorAll(selector).forEach(input => input.addEventListener('input', event => update(event.target.dataset.id, entry => { entry[key] = event.target.value; })));
+    panel.querySelectorAll('.cargo-condition').forEach(input => input.addEventListener('change', event => update(event.target.dataset.id, entry => { entry.condition = clamp(event.target.value, 0, 100); })));
+    panel.querySelectorAll('.cargo-to-character').forEach(button => button.addEventListener('click', event => { if (moveCargoToCharacter(event.target.dataset.id)) renderSubmarine(); }));
+    panel.querySelectorAll('.cargo-remove').forEach(button => button.addEventListener('click', event => { cargo.entries = cargo.entries.filter(entry => entry.cargoId !== event.target.dataset.id); syncCargoResourceIfEnabled(); save(); renderSubmarine(); }));
+    for (const [selector, key, numeric] of [['#cargo-manual-name','draftName'],['#cargo-manual-quantity','draftQuantity',true],['#cargo-manual-size','draftUnitSize',true],['#cargo-manual-owner','draftOwner'],['#cargo-manual-location','draftLocation']]) panel.querySelector(selector)?.addEventListener(numeric ? 'change' : 'input', event => { cargo[key] = numeric ? number(event.target.value) : event.target.value; save(); });
+    panel.querySelector('#cargo-add-manual')?.addEventListener('click', () => { if (!cargo.draftName.trim()) return alert('Enter a cargo name.'); addCargoItem('', cargo.draftQuantity, { customName: cargo.draftName, unitSize: cargo.draftUnitSize, owner: cargo.draftOwner, location: cargo.draftLocation }); cargo.draftName = ''; save(); renderSubmarine(); });
+    panel.querySelector('#cargo-manifest-notes')?.addEventListener('input', event => { cargo.notes = event.target.value; save(); });
+  }
+
+  function renderStationCommercePanel() {
+    const commerce = normalizeStationCommerce();
+    const station = activeStationRecord();
+    if (!station) return;
+    if (!station.vendors.length) generateStationMarket(station);
+    const stationIds = STATIONS.map(stationIdentity);
+    const factionRep = number(commerce.factionReputation[station.faction]);
+    const sellables = sellableRecords();
+    const combinedRep = combinedStationReputation(station);
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Station commerce and reputation</p><h3>Station Stores, Vendors, and Vending Machines</h3><p class="small-note">Generated markets draw from the official catalogue, custom workshop records, submarine systems, ammunition, and upgrades. Prices are derived RPG values modified by faction, station, and proprietor reputation.</p></div><div class="button-row no-print"><button id="station-use-route-end" class="secondary-action" type="button">Use Route Destination</button><button id="station-regenerate-market" class="secondary-action" type="button">Generate New Vendors</button></div></div>
+      <div class="field-grid four" style="margin-top:12px"><label class="field">Current station<select id="commerce-station">${optionList(stationIds, commerce.activeStationId, id => commerce.stations[id]?.name || id)}</select></label><label class="field">Payment wallet<select id="commerce-wallet">${optionList(['submarine','character'], commerce.wallet, value => value === 'submarine' ? `Submarine credits (${number(state.submarine.resources.credits)})` : `Character credits (${number(state.character.credits)})`)}</select></label><label class="field">Portable purchase destination<select id="commerce-destination">${optionList(['cargo','character'], commerce.destination, value => value === 'cargo' ? 'Submarine cargo' : 'Current character')}</select></label><div class="metric"><span>Available wallet</span><strong>${commerceWalletCredits()}</strong></div></div>
+      <div class="field-grid four" style="margin-top:12px"><label class="field">Faction<input value="${escapeHtml(station.faction)}" readonly></label><label class="field">Faction reputation<input id="commerce-faction-rep" type="number" min="-100" max="100" value="${factionRep}"></label><label class="field">Station reputation<input id="commerce-station-rep" type="number" min="-100" max="100" value="${station.stationReputation}"></label><label class="field">Store owner reputation<input id="commerce-owner-rep" type="number" min="-100" max="100" value="${station.ownerReputation}"></label><label class="field">Primary proprietor<input id="commerce-owner-name" value="${escapeHtml(station.ownerName)}"></label><label class="field">Station owner<input id="commerce-station-owner" value="${escapeHtml(station.stationOwner)}" placeholder="Player, faction, corporation…"></label><label class="check-row" style="align-self:end"><input id="commerce-player-station" type="checkbox" ${station.playerStation ? 'checked' : ''}><span><strong>Player-controlled station</strong><br><span class="small-note">Transactions use the station treasury.</span></span></label><label class="field">Station treasury<input id="commerce-treasury" type="number" min="0" value="${station.treasury}"></label></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Combined reputation</span><strong class="${combinedRep < 0 ? 'bad' : combinedRep > 0 ? 'good' : ''}">${combinedRep.toFixed(1)}</strong></div><div class="metric"><span>Market revision</span><strong>${station.marketRevision}</strong></div><div class="metric"><span>Vendors</span><strong>${station.vendors.filter(vendor => !vendor.machine).length}</strong></div><div class="metric"><span>Vending machines</span><strong>${station.vendors.filter(vendor => vendor.machine).length}</strong></div></div>
+      <div class="station-vendor-grid" style="margin-top:14px">${station.vendors.map(vendor => `<article class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><span class="tag">${vendor.machine ? 'Vending machine' : escapeHtml(vendorArchetype(vendor.archetypeId).name)}</span><h3>${escapeHtml(vendor.name)}</h3><p class="small-note">Markup ${number(vendor.markup, 1).toFixed(2)}× · ${vendor.stock.reduce((sum, stock) => sum + Math.max(0, stock.quantity), 0)} units in stock</p></div></div><div class="table-wrap"><table class="tool-table vendor-stock-table"><thead><tr><th>Stock</th><th>Type</th><th>Effect / compatibility</th><th>Qty</th><th>Price</th><th></th></tr></thead><tbody>${vendor.stock.map(stock => { const record = tradeRecordByKey(stock.tradeKey); if (!record) return ''; const effect = record.kind === 'item' ? itemUseEffect(record.item) || record.item.description : record.kind === 'submarineWeapon' ? record.item.notes : record.kind === 'upgrade' ? record.item.note : record.customEntry?.description || ''; const price = stationBuyPrice(station, vendor, stock); return `<tr><td><strong>${escapeHtml(record.name)}</strong></td><td>${escapeHtml(record.category)}</td><td><span class="small-note">${escapeHtml(effect || '')}</span></td><td>${stock.quantity}</td><td>${price}</td><td><button class="compact-button commerce-buy" data-vendor="${escapeHtml(vendor.vendorId)}" data-stock="${escapeHtml(stock.stockId)}" type="button" ${stock.quantity <= 0 ? 'disabled' : ''}>Buy</button></td></tr>`; }).join('') || '<tr><td colspan="6">No stock.</td></tr>'}</tbody></table></div></article>`).join('')}</div>
+      <section class="tool-card" style="margin-top:14px"><h3>Sell to Station</h3><div class="field-grid three"><label class="field">Cargo or character item<select id="commerce-sell-item">${optionList(sellables.map(item => item.sourceKey), sellables[0]?.sourceKey || '', key => { const item = sellables.find(candidate => candidate.sourceKey === key); return item ? `${item.name} ×${item.quantity} — ${stationSellPrice(station, item.record)} credits` : key; })}</select></label><div class="button-row" style="align-self:end"><button id="commerce-sell" class="primary-action no-print" type="button" ${sellables.length ? '' : 'disabled'}>Sell One</button></div></div><p class="small-note">Player-controlled stations can only buy items when their treasury can cover the sale price.</p></section>
+      <label class="field" style="margin-top:12px">Station commerce notes<textarea id="commerce-station-notes">${escapeHtml(station.notes)}</textarea></label>
+      <details style="margin-top:12px"><summary><strong>Recent transactions</strong></summary><div class="card-list" style="margin-top:10px">${commerce.transactionLog.slice(0, 15).map(entry => `<div class="small-note">${escapeHtml(entry.text)}<br>${escapeHtml(new Date(entry.at).toLocaleString())}</div>`).join('') || '<div class="small-note">No transactions recorded.</div>'}</div></details>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#commerce-station')?.addEventListener('change', event => { commerce.activeStationId = event.target.value; save(); renderSubmarine(); });
+    panel.querySelector('#commerce-wallet')?.addEventListener('change', event => { commerce.wallet = event.target.value; save(); renderSubmarine(); });
+    panel.querySelector('#commerce-destination')?.addEventListener('change', event => { commerce.destination = event.target.value; save(); });
+    panel.querySelector('#station-use-route-end')?.addEventListener('click', () => { const routeStation = STATIONS.find(item => item.name === state.route.end); if (routeStation) commerce.activeStationId = stationIdentity(routeStation); save(); renderSubmarine(); });
+    panel.querySelector('#station-regenerate-market')?.addEventListener('click', () => { generateStationMarket(station); renderSubmarine(); });
+    panel.querySelector('#commerce-faction-rep')?.addEventListener('change', event => { commerce.factionReputation[station.faction] = clamp(event.target.value, -100, 100); save(); renderSubmarine(); });
+    panel.querySelector('#commerce-station-rep')?.addEventListener('change', event => { station.stationReputation = clamp(event.target.value, -100, 100); save(); renderSubmarine(); });
+    panel.querySelector('#commerce-owner-rep')?.addEventListener('change', event => { station.ownerReputation = clamp(event.target.value, -100, 100); save(); renderSubmarine(); });
+    panel.querySelector('#commerce-owner-name')?.addEventListener('input', event => { station.ownerName = event.target.value; save(); });
+    panel.querySelector('#commerce-station-owner')?.addEventListener('input', event => { station.stationOwner = event.target.value; save(); });
+    panel.querySelector('#commerce-player-station')?.addEventListener('change', event => { station.playerStation = event.target.checked; save(); renderSubmarine(); });
+    panel.querySelector('#commerce-treasury')?.addEventListener('change', event => { station.treasury = Math.max(0, number(event.target.value)); save(); });
+    panel.querySelector('#commerce-station-notes')?.addEventListener('input', event => { station.notes = event.target.value; save(); });
+    panel.querySelectorAll('.commerce-buy').forEach(button => button.addEventListener('click', event => { const result = buyStationStock(station, event.target.dataset.vendor, event.target.dataset.stock); if (result.ok) renderSubmarine(); else event.target.textContent = result.message; }));
+    panel.querySelector('#commerce-sell')?.addEventListener('click', event => { const result = sellToStation(panel.querySelector('#commerce-sell-item').value, station); if (result.ok) renderSubmarine(); else event.target.textContent = result.message; });
+  }
+
+  const calculateSubmarineBeforeCargo = calculateSubmarine;
+  calculateSubmarine = function calculateSubmarineWithCargoManifest() {
+    syncCargoResourceIfEnabled();
+    return calculateSubmarineBeforeCargo();
+  };
+
+  const renderSubmarineBeforeCargoCommerce = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCargoCommerce() {
+    syncCargoResourceIfEnabled();
+    renderSubmarineBeforeCargoCommerce();
+    renderCargoManagementPanel();
+    renderStationCommercePanel();
+  };
+
+  normalizeCargoManagement();
+  normalizeStationCommerce();

@@ -1,0 +1,76 @@
+
+  normalizeCargoManagement = function normalizeCargoManagementStable() {
+    if (!state.submarine.cargoManagement || typeof state.submarine.cargoManagement !== 'object') state.submarine.cargoManagement = defaultCargoManagement();
+    const cargo = state.submarine.cargoManagement;
+    const defaults = defaultCargoManagement();
+    for (const [key, value] of Object.entries(defaults)) if (!(key in cargo)) cargo[key] = Array.isArray(value) ? [...value] : value;
+    cargo.entries = Array.isArray(cargo.entries) ? cargo.entries.map(normalizeCargoEntry) : [];
+    return cargo;
+  };
+
+  normalizeStationRecord = function normalizeStationRecordStable(raw, station) {
+    const record = raw && typeof raw === 'object' ? raw : {};
+    const defaults = defaultStationRecord(station || raw || {});
+    for (const [key, value] of Object.entries(defaults)) if (!(key in record)) record[key] = Array.isArray(value) ? [...value] : value;
+    if (station) {
+      record.id = stationIdentity(station);
+      record.name = station.name;
+      record.faction = station.faction || record.faction || 'Independent';
+      record.specialty = station.specialty || record.specialty || 'General trade';
+      record.locals = station.locals || record.locals || '';
+    }
+    record.vendors = Array.isArray(record.vendors) ? record.vendors : [];
+    record.stationReputation = clamp(record.stationReputation, -100, 100);
+    record.ownerReputation = clamp(record.ownerReputation, -100, 100);
+    record.treasury = Math.max(0, number(record.treasury, 2500));
+    return record;
+  };
+
+  normalizeStationCommerce = function normalizeStationCommerceStable() {
+    if (!state.stationCommerce || typeof state.stationCommerce !== 'object') state.stationCommerce = defaultStationCommerce();
+    const commerce = state.stationCommerce;
+    const defaults = defaultStationCommerce();
+    for (const [key, value] of Object.entries(defaults)) if (!(key in commerce)) commerce[key] = Array.isArray(value) ? [...value] : value && typeof value === 'object' ? { ...value } : value;
+    commerce.factionReputation = commerce.factionReputation && typeof commerce.factionReputation === 'object' ? commerce.factionReputation : {};
+    commerce.stations = commerce.stations && typeof commerce.stations === 'object' ? commerce.stations : {};
+    commerce.transactionLog = Array.isArray(commerce.transactionLog) ? commerce.transactionLog : [];
+    syncCustomStations();
+    for (const station of STATIONS) {
+      const id = stationIdentity(station);
+      commerce.stations[id] = normalizeStationRecord(commerce.stations[id], station);
+      if (!(station.faction in commerce.factionReputation)) commerce.factionReputation[station.faction] = 0;
+    }
+    const validIds = STATIONS.map(stationIdentity);
+    if (!validIds.includes(commerce.activeStationId)) {
+      const routeStation = STATIONS.find(station => station.name === state.route.end) || STATIONS[0];
+      commerce.activeStationId = routeStation ? stationIdentity(routeStation) : '';
+    }
+    return commerce;
+  };
+
+  commerceWalletCredits = function commerceWalletCreditsStable() {
+    const commerce = state.stationCommerce || normalizeStationCommerce();
+    return commerce.wallet === 'character' ? Math.max(0, number(state.character.credits)) : Math.max(0, number(state.submarine.resources.credits));
+  };
+
+  setCommerceWalletCredits = function setCommerceWalletCreditsStable(value) {
+    const commerce = state.stationCommerce || normalizeStationCommerce();
+    if (commerce.wallet === 'character') state.character.credits = Math.max(0, number(value));
+    else state.submarine.resources.credits = Math.max(0, number(value));
+  };
+
+  const characterInventoryCapacityBeforeSuitabilityCorrection = characterInventoryCapacity;
+  characterInventoryCapacity = function characterInventoryCapacityWithoutInventedOverloadPenalty() {
+    const result = characterInventoryCapacityBeforeSuitabilityCorrection();
+    return { ...result, overloadPenalty: 0, mobilityPenalty: result.backpackPenalty };
+  };
+
+  const normalizeCrewRecordBeforeInventoryEffects = normalizeCrewRecord;
+  normalizeCrewRecord = function normalizeCrewRecordWithInventoryEffects(raw = {}) {
+    const record = normalizeCrewRecordBeforeInventoryEffects(raw);
+    record.inventoryEffects = raw.inventoryEffects && typeof raw.inventoryEffects === 'object' ? { ...raw.inventoryEffects } : {};
+    return record;
+  };
+
+  normalizeCargoManagement();
+  normalizeStationCommerce();
