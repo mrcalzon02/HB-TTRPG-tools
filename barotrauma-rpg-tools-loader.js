@@ -33,6 +33,10 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-core.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-map-ui.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-fix.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
