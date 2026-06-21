@@ -1,0 +1,48 @@
+
+  async function claimExistingDashboardSubmarine(vesselId,password,managerName,options={}){
+    const record=dashboardManagementSubmarineRecord(vesselId);
+    if(!record)throw new Error('The selected public-world submarine record no longer exists.');
+    if(dashboardManagementCredential(vesselId)?.verifier)throw new Error('This submarine is already claimed.');
+    const group=dashboardManagementResolveGroup(options.groupId,options.newGroupName);
+    dashboardManagementPairVesselToGroup(vesselId,group);
+    const authority=normalizeDashboardManagementAuthority();
+    if(!authority.vesselSnapshots[vesselId]){
+      const requestedModel=record.model||record.submarine?.model||'Barsuk';
+      const modelName=SUBMARINES[requestedModel]?requestedModel:'Barsuk';
+      const submarine=dashboardManagementBuildSubmarineState(vesselId,record.name||record.submarine?.name||modelName,modelName,group);
+      const route=deepMerge(defaultState().route,{});
+      route.activeSubmarineId=vesselId;
+      route.activeGroupId=group.groupId;
+      const operationsDashboard=defaultActiveSubmarineDashboard();
+      operationsDashboard.activeSubmarineId=vesselId;
+      operationsDashboard.activeGroupId=group.groupId;
+      operationsDashboard.activeNodeId=group.currentNodeId||group.startingNodeId||'';
+      authority.vesselSnapshots[vesselId]={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:normalizeWorldHub().worldId,vesselId,groupId:group.groupId,submarine,route,operationsDashboard,character:cloneWorldData(state.character||{}),capturedAt:new Date().toISOString(),claimedFromExistingPublicRecord:true};
+    }
+    save();
+    return createDashboardManagementCredential(vesselId,password,managerName,Boolean(options.remember));
+  }
+
+  const dashboardManagementAuthDiagnosticsBeforeRecovery=dashboardManagementAuthDiagnostics;
+  dashboardManagementAuthDiagnostics=function dashboardManagementAuthDiagnosticsWithRecovery(){
+    const result=dashboardManagementAuthDiagnosticsBeforeRecovery();
+    const authority=normalizeDashboardManagementAuthority();
+    let recoveryReadyCount=0;
+    let legacyCredentialCount=0;
+    for(const [vesselId,credential] of Object.entries(authority.submarineCredentials||{})){
+      const recovery=credential.recovery;
+      if(recovery?.verifier){
+        recoveryReadyCount+=1;
+        if(!recovery.salt)result.issues.push(`Submarine ${vesselId} has a recovery verifier without a salt.`);
+        if(number(recovery.iterations)<100000)result.issues.push(`Submarine ${vesselId} uses too few recovery-code derivation iterations.`);
+        if('code' in recovery||'recoveryCode' in recovery)result.issues.push(`Submarine ${vesselId} stores a plaintext recovery code in the world save.`);
+      }else legacyCredentialCount+=1;
+    }
+    result.recoveryVersion=DASHBOARD_MANAGEMENT_RECOVERY_VERSION;
+    result.recoveryReadyCount=recoveryReadyCount;
+    result.legacyCredentialCount=legacyCredentialCount;
+    result.valid=!result.issues.length;
+    return result;
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_AUTH_DIAGNOSTICS=dashboardManagementAuthDiagnostics();
