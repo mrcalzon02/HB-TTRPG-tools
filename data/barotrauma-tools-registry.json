@@ -10,7 +10,8 @@
     "The RPG operations suite derives editable utilities from the imported rules while leaving the exact-source Markdown wiki unchanged.",
     "The submarine manager uses a source-attributed official-wiki roster while deriving tabletop statistics from the original four RPG submarine anchors.",
     "The Custom Content Workshop creates persistent source-anchored homebrew records without overwriting official catalogue or exact-source wiki data.",
-    "Crew participation uses portable player-submission and vessel-roster JSON files; no player account, automatic upload, or central campaign server is implied."
+    "Crew participation uses portable player-submission and vessel-roster JSON files; no player account, automatic upload, or central campaign server is implied.",
+    "Item functionality, cargo, and station-commerce behavior are maintained as an operational layer around the source-backed catalogue rather than rewriting official catalogue identities."
   ],
   "modules": [
     {
@@ -52,11 +53,11 @@
       "title": "Barotrauma RPG Character Sheet",
       "priority": 3,
       "status": "available",
-      "description": "A persistent S.A.I.C. character record for classes, levels, Talents, Backgrounds, Fates, disadvantages, current and permanent statistics, Lost Sanity, tracked inventory, ammunition, item uses, conditions, task resolution, and portable player submissions to a submarine roster.",
+      "description": "A persistent S.A.I.C. character record with source-compatible weapons, ammunition reserves, repair-tool uses, consumable effects, item condition, tracked inventory slots, Toolbelt and Backpack expansion, Backpack mobility reduction, conditions, task resolution, and portable player submissions.",
       "launchUrl": "barotrauma-rpg-tools.html#character",
       "actionLabel": "Open Character Sheet",
-      "tags": ["character", "S.A.I.C.", "classes", "Talents", "Backgrounds", "Lost Sanity", "tracked inventory", "crew submission"],
-      "dataFamilies": ["characterRecord", "statBlock", "classProfile", "talentProfile", "backgroundProfile", "inventoryItemInstance", "playerSubmission", "taskRoll"]
+      "tags": ["character", "S.A.I.C.", "tracked inventory", "Toolbelt", "Backpack", "ammunition", "consumables", "repair tools", "crew submission"],
+      "dataFamilies": ["characterRecord", "statBlock", "classProfile", "talentProfile", "backgroundProfile", "inventoryItemInstance", "inventoryExpansion", "itemEffect", "ammunitionReserve", "playerSubmission", "taskRoll"]
     },
     {
       "id": "barotrauma-submarine-manager",
@@ -64,11 +65,11 @@
       "title": "Submarine Manager",
       "priority": 4,
       "status": "available",
-      "description": "A table-side vessel manager for all 16 purchasable official-wiki submarines and persistent custom derived designs, including crew and player submissions, approvals, assignments, shifts, roll operators, calibrated RPG statistics, hull, capacity, stores, official weapon installations, ammunition, upgrades, system condition, station upkeep, and damage control.",
+      "description": "A table-side vessel manager for all 16 official-wiki submarines and custom derived designs, with crew submissions, cargo manifests, compatible weapon ammunition, station stores, generated vendors, vending machines, faction/station/proprietor reputation, player-controlled station treasuries, upgrades, system condition, upkeep, and damage control.",
       "launchUrl": "barotrauma-rpg-tools.html#submarine",
       "actionLabel": "Open Submarine Manager",
-      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "player submissions", "approvals", "shifts", "assignments", "operations", "hull", "capacity", "weapons", "upgrades", "upkeep"],
-      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
+      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "cargo manifest", "station stores", "vendors", "vending machines", "reputation", "player stations", "weapons", "ammunition", "upgrades", "upkeep"],
+      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "cargoManifest", "cargoLot", "stationMarket", "vendorProfile", "vendorStock", "factionReputation", "stationReputation", "proprietorReputation", "transactionRecord", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
     },
     {
       "id": "barotrauma-custom-content-workshop",
