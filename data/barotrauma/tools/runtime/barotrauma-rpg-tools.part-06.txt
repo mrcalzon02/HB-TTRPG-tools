@@ -13,7 +13,7 @@
   document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
   window.addEventListener('hashchange', render);
   document.getElementById('print-tool')?.addEventListener('click', () => window.print());
-  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 2, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, state }, null, 2)));
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 3, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, state }, null, 2)));
   document.getElementById('import-suite')?.addEventListener('change', event => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -27,6 +27,14 @@
         state.submarine.wikiWeapons = Array.isArray(state.submarine.wikiWeapons) ? state.submarine.wikiWeapons : [];
         state.submarine.wikiAmmo = Array.isArray(state.submarine.wikiAmmo) ? state.submarine.wikiAmmo : [];
         state.catalog = state.catalog || { query: '', category: 'All' };
+        state.submarineLibrary = state.submarineLibrary && typeof state.submarineLibrary === 'object'
+          ? state.submarineLibrary
+          : { custom: [], draft: defaultCustomSubmarineDraft() };
+        state.submarineLibrary.custom = Array.isArray(state.submarineLibrary.custom) ? state.submarineLibrary.custom : [];
+        state.submarineLibrary.draft = deepMerge(defaultCustomSubmarineDraft(), state.submarineLibrary.draft || {});
+        registerOfficialSubmarines();
+        syncCustomSubmarines();
+        if (!SUBMARINES[state.submarine.model]) state.submarine.model = 'Barsuk';
         save(); render();
       } catch (error) {
         alert(`The selected JSON could not be imported: ${error.message}`);
