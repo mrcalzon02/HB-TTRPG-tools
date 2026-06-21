@@ -36,6 +36,11 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-creature-encounters-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-creature-encounters-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-creature-encounters-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-core-00.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-core-01.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-core-02.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-ui.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-map-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-stability.txt',
@@ -51,6 +56,7 @@
   const factionRegistryUrl = 'data/barotrauma/tools/factions/faction-registry.json';
   const locationLevelRegistryUrl = 'data/barotrauma/tools/locations/location-level-registry.json';
   const creatureRegistryUrl = 'data/barotrauma/tools/creatures/creature-registry.json';
+  const encounterRegistryIndexUrl = 'data/barotrauma/tools/encounters/encounter-index.json';
 
   async function fetchText(path) {
     const response = await fetch(path, { cache: 'no-store' });
@@ -73,8 +79,19 @@
     return { ...index, items, submarineWeapons };
   }
 
+  async function loadEncounterRegistry() {
+    const index = await fetchJson(encounterRegistryIndexUrl);
+    const parts = await Promise.all((index.parts || []).map(fetchJson));
+    const templates = parts.flatMap(part => part.templates || []);
+    const duplicateTemplateIds = templates
+      .filter((template, position) => templates.findIndex(other => other.id === template.id) !== position)
+      .map(template => template.id);
+    if (duplicateTemplateIds.length) throw new Error(`Duplicate encounter template identifiers: ${[...new Set(duplicateTemplateIds)].join(', ')}`);
+    return { ...index, templates };
+  }
+
   async function load() {
-    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, locationLevelRegistry, creatureRegistry, sourceParts] = await Promise.all([
+    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, locationLevelRegistry, creatureRegistry, encounterRegistry, sourceParts] = await Promise.all([
       loadCatalog(),
       fetchJson(submarineRosterUrl),
       fetchJson(customContentSchemaUrl),
@@ -83,6 +100,7 @@
       fetchJson(factionRegistryUrl),
       fetchJson(locationLevelRegistryUrl),
       fetchJson(creatureRegistryUrl),
+      loadEncounterRegistry(),
       Promise.all(runtimeParts.map(fetchText))
     ]);
     window.BAROTRAUMA_WIKI_CATALOG = catalog;
@@ -93,6 +111,7 @@
     window.BAROTRAUMA_FACTION_REGISTRY = factionRegistry;
     window.BAROTRAUMA_LOCATION_LEVEL_REGISTRY = locationLevelRegistry;
     window.BAROTRAUMA_CREATURE_REGISTRY = creatureRegistry;
+    window.BAROTRAUMA_ENCOUNTER_REGISTRY = encounterRegistry;
     const source = sourceParts.join('');
     new Function(`${source}\n//# sourceURL=barotrauma-rpg-tools.runtime.js`)();
   }
