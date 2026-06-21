@@ -1,0 +1,61 @@
+
+  const currentManagedGroupBeforeOwnershipStability = currentManagedGroup;
+  currentManagedGroup = function currentManagedGroupWithStableOwnership() {
+    const hub = normalizeWorldHub();
+    const managedGroupId = state.submarine?.managedExpedition?.groupId || '';
+    if (managedGroupId && hub.publicState.groups[managedGroupId]) return hub.publicState.groups[managedGroupId];
+    return hub.publicState.groups[hub.activeGroupId] || currentManagedGroupBeforeOwnershipStability();
+  };
+
+  function activateManagedExpeditionGroup() {
+    const hub = normalizeWorldHub();
+    const group = currentManagedGroup();
+    if (group) hub.activeGroupId = group.groupId;
+    return group;
+  }
+
+  const renderRouteBeforeManagedOwnershipStability = renderRoute;
+  renderRoute = function renderRouteForManagedExpedition() {
+    activateManagedExpeditionGroup();
+    renderRouteBeforeManagedOwnershipStability();
+  };
+
+  const renderSubmarineBeforeManagedOwnershipStability = renderSubmarine;
+  renderSubmarine = function renderSubmarineForManagedExpedition() {
+    activateManagedExpeditionGroup();
+    renderSubmarineBeforeManagedOwnershipStability();
+  };
+
+  const startCrossingBeforeManagedOwnershipStability = startCrossing;
+  startCrossing = function startManagedExpeditionCrossing() {
+    activateManagedExpeditionGroup();
+    return startCrossingBeforeManagedOwnershipStability();
+  };
+
+  const completeCrossingLegBeforeManagedOwnershipStability = completeCrossingLeg;
+  completeCrossingLeg = function completeManagedExpeditionCrossingLegStable() {
+    activateManagedExpeditionGroup();
+    return completeCrossingLegBeforeManagedOwnershipStability();
+  };
+
+  const currentWorldSubmissionBeforeManagedOwnershipStability = currentWorldSubmission;
+  currentWorldSubmission = function currentWorldSubmissionForManagedExpedition(kind) {
+    const group = currentManagedGroup();
+    const submission = currentWorldSubmissionBeforeManagedOwnershipStability(kind);
+    if (!group) return submission;
+    submission.groupId = group.groupId;
+    if (submission.payload && typeof submission.payload === 'object') submission.payload.groupId = group.groupId;
+    if (kind === 'location') {
+      submission.payload.nodeId = group.currentNodeId;
+      submission.payload.node = crossingNode(group.currentNodeId) || null;
+    }
+    if (kind === 'submarine') submission.sourceId = managedSubmarineIdentity();
+    return submission;
+  };
+
+  const canActiveGroupScavengeWreckBeforeOwnershipStability = canActiveGroupScavengeWreck;
+  canActiveGroupScavengeWreck = function canManagedExpeditionScavengeWreck(wreck) {
+    const expedition = state.submarine?.managedExpedition;
+    if (!expedition || expedition.status !== 'active') return false;
+    return canActiveGroupScavengeWreckBeforeOwnershipStability(wreck);
+  };
