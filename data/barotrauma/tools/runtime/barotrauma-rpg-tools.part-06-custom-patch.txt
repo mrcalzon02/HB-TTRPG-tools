@@ -1,0 +1,46 @@
+
+  const deriveCustomContentBeforeNormalization = deriveCustomContent;
+  deriveCustomContent = function deriveCustomContentNormalized(draft) {
+    return deriveCustomContentBeforeNormalization({
+      ...draft,
+      functionName: String(draft?.functionName || ''),
+      compatibility: String(draft?.compatibility || ''),
+      tags: String(draft?.tags || '')
+    });
+  };
+
+  const calculateSubmarineBeforeCustomWeaponCorrection = calculateSubmarine;
+  calculateSubmarine = function calculateSubmarineWithCustomWeaponStorage() {
+    const result = calculateSubmarineBeforeCustomWeaponCorrection();
+    let correction = 0;
+    let customWeaponPowerDemand = 0;
+    for (const installed of state.submarine.wikiWeapons) {
+      const entry = customEntry(installed.id);
+      if (!entry || entry.type !== 'submarine-weapon') continue;
+      const weapon = catalogueWeapon(installed.id);
+      const derived = derivedCustomEntry(entry);
+      const defaultStorage = weapon?.mount === 'Large Turret' ? 2 : 1;
+      correction += number(weapon?.storageUnits, defaultStorage) - defaultStorage;
+      customWeaponPowerDemand += number(derived.powerDraw);
+    }
+    result.weaponCapacity += correction;
+    result.usedCapacity += correction;
+    result.remainingCapacity = result.totals.capacity - result.usedCapacity;
+    result.customPowerDemand = number(result.customPowerDemand) + customWeaponPowerDemand;
+    result.customWeaponPowerDemand = customWeaponPowerDemand;
+    return result;
+  };
+
+  const renderCustomWorkshopBeforeSearchPatch = renderCustomWorkshop;
+  renderCustomWorkshop = function renderCustomWorkshopWithStableSearch() {
+    renderCustomWorkshopBeforeSearchPatch();
+    const original = root.querySelector('#custom-content-query');
+    if (!original) return;
+    const replacement = original.cloneNode(true);
+    original.replaceWith(replacement);
+    replacement.addEventListener('change', event => {
+      state.customContent.query = event.target.value;
+      save();
+      renderCustomWorkshop();
+    });
+  };
