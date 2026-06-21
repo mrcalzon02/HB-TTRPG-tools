@@ -1,0 +1,33 @@
+
+  const activateDashboardManagedVesselBeforeLegacySnapshotMigration=activateDashboardManagedVessel;
+  activateDashboardManagedVessel=function activateDashboardManagedVesselWithLegacySnapshotMigration(vesselId){
+    const authority=normalizeDashboardManagementAuthority();
+    if(!authority.vesselSnapshots[vesselId]){
+      const hub=normalizeWorldHub();
+      const record=hub.publicState.submarines?.[vesselId]||{};
+      const vessel=typeof worldVesselRegistry==='function'?worldVesselRegistry()?.[vesselId]:null;
+      const group=dashboardManagementGroupForVessel(vesselId);
+      if(group){
+        const routeRecord=typeof worldPublicRouteForGroup==='function'?worldPublicRouteForGroup(group.groupId):null;
+        const source=record.submarine&&typeof record.submarine==='object'?record.submarine:{};
+        const modelName=source.model||record.model||vessel?.modelId||vessel?.modelName||state.submarine?.model||'Barsuk';
+        const model=SUBMARINES[modelName]||SUBMARINES.Barsuk||{};
+        const submarine=deepMerge(defaultState().submarine,cloneWorldData(source));
+        submarine.worldSubmarineId=vesselId;
+        submarine.model=SUBMARINES[modelName]?modelName:submarine.model;
+        submarine.name=source.name||record.name||vessel?.name||submarine.name||modelName;
+        submarine.weapons=Array.isArray(source.weapons)?cloneWorldData(source.weapons):(model.weapons||[]).map(item=>({...item}));
+        submarine.hullCurrent=Math.max(0,number(source.hullCurrent,number(record.hullCurrent,number(model.hull,8))));
+        const route=deepMerge(defaultState().route,cloneWorldData(routeRecord?.route||{}));
+        route.activeSubmarineId=vesselId;
+        route.activeGroupId=group.groupId;
+        const operationsDashboard=defaultActiveSubmarineDashboard();
+        operationsDashboard.activeSubmarineId=vesselId;
+        operationsDashboard.activeGroupId=group.groupId;
+        operationsDashboard.activeRouteId=route.crossing?.crossingId||group.routeId||'';
+        operationsDashboard.activeNodeId=group.currentNodeId||'';
+        authority.vesselSnapshots[vesselId]={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:hub.worldId,vesselId,groupId:group.groupId,submarine,route,operationsDashboard,character:cloneWorldData(state.character||{}),capturedAt:new Date().toISOString(),migratedFromPublicWorld:true};
+      }
+    }
+    return activateDashboardManagedVesselBeforeLegacySnapshotMigration(vesselId);
+  };
