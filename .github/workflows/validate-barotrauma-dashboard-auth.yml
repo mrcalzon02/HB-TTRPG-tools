@@ -1,0 +1,97 @@
+name: Validate Barotrauma Dashboard Authentication
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-*.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
+      - '.github/workflows/validate-barotrauma-dashboard-auth.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-*.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
+      - '.github/workflows/validate-barotrauma-dashboard-auth.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-dashboard-auth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate assembled authentication runtime
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const loader = fs.readFileSync('barotrauma-rpg-tools-loader.js', 'utf8');
+          const runtimeMatch = loader.match(/const runtimeParts = \[([\s\S]*?)\n  \];/);
+          assert(runtimeMatch, 'runtimeParts array missing');
+          const paths = [...runtimeMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
+          assert.deepStrictEqual(paths.filter(path => !fs.existsSync(path)), [], 'Loader references missing runtime fragments');
+          new Function(paths.map(path => fs.readFileSync(path, 'utf8')).join(''));
+
+          const required = [
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-prelude.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-bootstrap.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-core-00.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-core-01.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-ui.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-02.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt'
+          ];
+          required.forEach(name => assert(loader.includes(name), `${name} is not loaded`));
+
+          const indexOf = name => paths.findIndex(path => path.endsWith(name));
+          assert(indexOf(required[0]) < indexOf('barotrauma-rpg-tools.part-06-active-submarine-dashboard-core.txt'), 'Pre-auth snapshot is not loaded before dashboard initialization');
+          assert(indexOf(required[1]) < indexOf(required[2]), 'Pre-auth campaign identity is not restored before authentication initializes');
+          assert(indexOf(required[7]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'Legacy snapshot migration is not loaded before final runtime');
+
+          const core00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-00.txt', 'utf8');
+          const core01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-01.txt', 'utf8');
+          const ui = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-ui.txt', 'utf8');
+          const stability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt', 'utf8');
+          const bootstrap = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-bootstrap.txt', 'utf8');
+          const migration = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt', 'utf8');
+          const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
+
+          assert(core00.includes("algorithm='PBKDF2-SHA-256'") || core00.includes("credential.algorithm='PBKDF2-SHA-256'"), 'Credential algorithm is not PBKDF2-SHA-256');
+          assert(core00.includes('DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS=210000'), 'PBKDF2 iteration count is not 210000');
+          assert(core00.includes("crypto.subtle.deriveBits"), 'Password verifier is not derived through Web Crypto');
+          assert(core00.includes('verifier') && core00.includes('salt'), 'Credential salt or verifier is missing');
+          assert(core01.includes('tokenHash:await dashboardManagementSha256(token)'), 'World save does not store a hash of the session receipt');
+          assert(core01.includes('dashboardManagementWriteStoredSession'), 'Local session receipt is not stored');
+          assert(core01.includes('logoutDashboardManagementSession'), 'Logout and receipt revocation are missing');
+          assert(core01.includes('changeDashboardManagementPassword'), 'Password change and old receipt revocation are missing');
+          assert(ui.includes('Log In to a Managed Submarine'), 'Dashboard login gate is missing');
+          assert(ui.includes('Log Out of This Submarine'), 'Dashboard logout control is missing');
+          assert(ui.includes('groupSelector.disabled=true'), 'Authenticated submarine is not fixed to its expedition group');
+          assert(ui.includes('The plaintext password exists only while you type it'), 'Credential storage explanation is missing');
+          assert(stability.includes('generateValidCrossing=dashboardManagementGuardFunction'), 'Route filing is not authorization guarded');
+          assert(stability.includes('buyStationStock=dashboardManagementGuardFunction'), 'Station purchasing is not authorization guarded');
+          assert(stability.includes('assignCrewToActiveDashboard=dashboardManagementGuardFunction'), 'Crew assignment is not authorization guarded');
+          assert(stability.includes("if('token' in receipt)"), 'Raw session-token diagnostic is missing');
+          assert(bootstrap.includes('restorePreAuthDashboardCampaignIdentity'), 'Startup identity mutation rollback is missing');
+          assert(migration.includes('migratedFromPublicWorld:true'), 'Older submarine state migration is missing');
+          assert(finalRuntime.includes('version: 21'), 'Suite export version is not 21');
+          assert(finalRuntime.includes('dashboardManagementAuthVersion: DASHBOARD_MANAGEMENT_AUTH_VERSION'), 'Suite export omits authentication version');
+          assert(finalRuntime.includes("logoutDashboardManagementSession('suite import')"), 'Suite import does not revoke the old management session');
+
+          for (const source of [core00, core01]) {
+            assert(!/password\s*:\s*String\(/.test(source), 'A plaintext password field appears to be persisted');
+            assert(!/receipt\.token\s*=/.test(source), 'A raw receipt token appears to be written into world state');
+          }
+
+          console.log(`Validated ${paths.length} assembled fragments and the complete per-submarine dashboard authentication contract.`);
+          NODE
