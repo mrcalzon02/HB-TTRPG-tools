@@ -88,6 +88,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-02.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
