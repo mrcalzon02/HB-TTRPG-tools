@@ -7,8 +7,8 @@
     dashboardManagementPairVesselToGroup(vesselId,group);
     const authority=normalizeDashboardManagementAuthority();
     if(!authority.vesselSnapshots[vesselId]){
-      const requestedModel=record.model||record.submarine?.model||'Barsuk';
-      const modelName=SUBMARINES[requestedModel]?requestedModel:'Barsuk';
+      const rawModel=record.submarine?.model||(typeof record.model==='string'?record.model:record.model?.name||record.model?.id)||'Barsuk';
+      const modelName=SUBMARINES[rawModel]?rawModel:'Barsuk';
       const submarine=dashboardManagementBuildSubmarineState(vesselId,record.name||record.submarine?.name||modelName,modelName,group);
       const route=deepMerge(defaultState().route,{});
       route.activeSubmarineId=vesselId;
