@@ -1,0 +1,69 @@
+
+  const sellToStationBeforePersistentWorldEconomy=sellToStation;
+  sellToStation=function sellToStationWithPersistentWorldInventory(sourceKey,stationRecord) {
+    const sellable=sellableRecords().find(item=>item.sourceKey===sourceKey);
+    const nodeId=worldEconomyStationNodeId(stationRecord);
+    const result=sellToStationBeforePersistentWorldEconomy(sourceKey,stationRecord);
+    if (result.ok&&sellable&&nodeId) {
+      worldEconomyAddStationStock(nodeId,sellable.record,1,'player-sale');
+      const station=worldStationEconomy(nodeId);
+      station.playerSales.unshift({id:uid('player-sale'),tradeKey:sellable.record.key,name:sellable.name,quantity:1,soldAt:new Date().toISOString(),sellerGroupId:normalizeWorldHub().activeGroupId||''});
+      station.playerSales=station.playerSales.slice(0,250);
+      worldEconomySyncVendorsFromStationInventory(stationRecord);
+      worldEconomyTradeJournal(`Player sale added ${sellable.name} permanently to ${stationRecord.name} inventory.`,{stationNodeId:nodeId,tradeKey:sellable.record.key,quantity:1,source:'player-sale'});
+      save();
+    }
+    return result;
+  };
+
+  const buyStationStockBeforePersistentWorldEconomy=buyStationStock;
+  buyStationStock=function buyStationStockFromPersistentWorldInventory(stationRecord,vendorId,stockId) {
+    const vendor=stationRecord?.vendors?.find(item=>item.vendorId===vendorId);
+    const stock=vendor?.stock?.find(item=>item.stockId===stockId);
+    const tradeKey=stock?.tradeKey||'';
+    const nodeId=worldEconomyStationNodeId(stationRecord);
+    const result=buyStationStockBeforePersistentWorldEconomy(stationRecord,vendorId,stockId);
+    if (result.ok&&nodeId&&tradeKey) {
+      worldEconomyRemoveStationStock(nodeId,tradeKey,1);
+      worldEconomySyncVendorsFromStationInventory(stationRecord);
+      worldEconomyTradeJournal(`Vendor sale removed one ${tradeKey} from ${stationRecord.name} persistent inventory.`,{stationNodeId:nodeId,tradeKey,quantity:1,source:'vendor-sale'});
+      save();
+    }
+    return result;
+  };
+
+  const normalizeStationCommerceBeforePersistentWorldEconomy=normalizeStationCommerce;
+  normalizeStationCommerce=function normalizeStationCommerceWithPersistentWorldInventory() {
+    const commerce=normalizeStationCommerceBeforePersistentWorldEconomy();
+    const active=commerce.stations?.[commerce.activeStationId]||null;
+    if (active) {
+      worldEconomyEnsureVendorShells(active);
+      worldEconomySyncVendorsFromStationInventory(active);
+    }
+    return commerce;
+  };
+
+  function patchPersistentStationCommercePanel() {
+    const panel=[...root.querySelectorAll('.tool-panel')].find(item=>item.querySelector('h3')?.textContent.includes('Station Stores, Vendors'));
+    if (!panel) return;
+    const station=activeStationRecord();
+    const nodeId=worldEconomyStationNodeId(station);
+    const economy=worldStationEconomy(nodeId);
+    const button=panel.querySelector('#station-regenerate-market');
+    if (button) {
+      button.textContent='Reconcile Delivered Stock';
+      button.title='This cannot generate goods. It only rebuilds vendor shelves from persistent station inventory and accepted freight deliveries.';
+    }
+    const heroText=panel.querySelector('.tool-hero .small-note');
+    if (heroText) heroText.textContent='Vendors never generate stock. Shelves contain only persistent player sales, station production converted through trade, and Delivery Goods accepted from completed freight arrivals.';
+    panel.querySelector('.metric-row')?.insertAdjacentHTML('beforeend',`<div class="metric"><span>Delivery Goods</span><strong>${number(economy?.inventory?.deliveryGoods)}</strong></div><div class="metric"><span>Persistent stock lines</span><strong>${Object.values(economy?.inventory?.catalogue||{}).filter(stock=>number(stock.quantity)>0).length}</strong></div>`);
+  }
+
+  const renderSubmarineBeforePersistentWorldCommerce=renderSubmarine;
+  renderSubmarine=function renderSubmarineWithPersistentWorldCommerce() {
+    const result=renderSubmarineBeforePersistentWorldCommerce();
+    patchPersistentStationCommercePanel();
+    return result;
+  };
+
+  normalizeStationCommerce();
