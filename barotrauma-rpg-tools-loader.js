@@ -39,7 +39,9 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-core-00.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-core-01.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-core-02.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-lethality-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-ui.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-lethality-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-general-encounters-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-map-ui.txt',
@@ -81,13 +83,21 @@
 
   async function loadEncounterRegistry() {
     const index = await fetchJson(encounterRegistryIndexUrl);
-    const parts = await Promise.all((index.parts || []).map(fetchJson));
+    const [parts, lethalityParts] = await Promise.all([
+      Promise.all((index.parts || []).map(fetchJson)),
+      Promise.all((index.lethalityParts || []).map(fetchJson))
+    ]);
     const templates = parts.flatMap(part => part.templates || []);
-    const duplicateTemplateIds = templates
-      .filter((template, position) => templates.findIndex(other => other.id === template.id) !== position)
-      .map(template => template.id);
+    const profiles = lethalityParts.flatMap(part => part.profiles || []);
+    const duplicateTemplateIds = templates.filter((template, position) => templates.findIndex(other => other.id === template.id) !== position).map(template => template.id);
+    const duplicateProfileIds = profiles.filter((profile, position) => profiles.findIndex(other => other.id === profile.id) !== position).map(profile => profile.id);
     if (duplicateTemplateIds.length) throw new Error(`Duplicate encounter template identifiers: ${[...new Set(duplicateTemplateIds)].join(', ')}`);
-    return { ...index, templates };
+    if (duplicateProfileIds.length) throw new Error(`Duplicate encounter lethality identifiers: ${[...new Set(duplicateProfileIds)].join(', ')}`);
+    const profileIds = new Set(profiles.map(profile => profile.id));
+    const missingProfiles = templates.filter(template => !profileIds.has(template.id)).map(template => template.id);
+    const orphanProfiles = profiles.filter(profile => !templates.some(template => template.id === profile.id)).map(profile => profile.id);
+    if (missingProfiles.length || orphanProfiles.length) throw new Error(`Encounter lethality registry mismatch. Missing: ${missingProfiles.join(', ') || 'none'}. Orphaned: ${orphanProfiles.join(', ') || 'none'}.`);
+    return { ...index, templates, lethality: { schemaVersion: index.schemaVersion, profiles } };
   }
 
   async function load() {
@@ -112,6 +122,7 @@
     window.BAROTRAUMA_LOCATION_LEVEL_REGISTRY = locationLevelRegistry;
     window.BAROTRAUMA_CREATURE_REGISTRY = creatureRegistry;
     window.BAROTRAUMA_ENCOUNTER_REGISTRY = encounterRegistry;
+    window.BAROTRAUMA_ENCOUNTER_LETHALITY = encounterRegistry.lethality;
     const source = sourceParts.join('');
     new Function(`${source}\n//# sourceURL=barotrauma-rpg-tools.runtime.js`)();
   }
