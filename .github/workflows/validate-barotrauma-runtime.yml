@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'barotrauma-rpg-tools-loader.js'
+      - 'barotrauma-rpg-tools.html'
       - 'data/barotrauma/tools/runtime/**'
       - 'data/barotrauma/tools/catalog/**'
       - 'data/barotrauma/tools/submarines/**'
       - 'data/barotrauma/tools/custom/**'
+      - 'data/barotrauma/tools/items/**'
       - 'data/barotrauma-tools-registry.json'
       - 'scripts/validate-barotrauma-runtime.mjs'
       - '.github/workflows/validate-barotrauma-runtime.yml'
