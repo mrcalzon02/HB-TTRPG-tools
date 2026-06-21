@@ -40,7 +40,9 @@
     .rules-link{color:var(--accent);font-weight:800;text-decoration:none}.rules-link:hover{text-decoration:underline}
     .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
     .tool-table{width:100%;border-collapse:collapse;min-width:720px}.tool-table th,.tool-table td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.tool-table th{color:var(--accent);font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;background:rgba(255,255,255,.035)}.tool-table tr:last-child td{border-bottom:0}
-    .tool-table input,.tool-table select{width:100%;box-sizing:border-box;background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px}
+    .tool-table input,.tool-table select,.tool-table textarea{width:100%;box-sizing:border-box;background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px;font:inherit}
+    .tool-table textarea{min-height:74px;resize:vertical}
+    .inventory-table{min-width:1320px}.inventory-counter-block{display:grid;gap:6px;min-width:190px}.inventory-counter-row{display:grid;grid-template-columns:minmax(70px,1fr) auto minmax(70px,1fr);gap:6px;align-items:center}.inventory-table .check-row{padding:6px;margin-bottom:6px}
     .tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);font-size:.75rem;margin:2px}
     .card-list{display:grid;gap:10px}.encounter-card,.route-card{border:1px solid var(--line);border-radius:14px;padding:13px;background:rgba(255,255,255,.025)}
     .encounter-card header,.route-card header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.encounter-card h4,.route-card h4{margin:0 0 .45rem}.encounter-card p,.route-card p{margin:.35rem 0;color:var(--muted);line-height:1.5}
@@ -90,6 +92,6 @@
 
     <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
   </main>
-  <script src="barotrauma-rpg-tools-loader.js?v=003"></script>
+  <script src="barotrauma-rpg-tools-loader.js?v=004"></script>
 </body>
 </html>
