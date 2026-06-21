@@ -17,10 +17,12 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-cargo-commerce.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-commerce-stability.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-suitability-patch.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-state.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
 ];
 const orderIndexes = requiredOrder.map(relativePath => runtimePaths.indexOf(relativePath));
-if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, or suitability runtime fragments are not registered.');
+if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-state, or research runtime fragments are not registered.');
 for (let index = 1; index < orderIndexes.length; index += 1) {
   if (orderIndexes[index] <= orderIndexes[index - 1]) throw new Error(`Runtime fragment order is invalid near ${requiredOrder[index]}.`);
 }
@@ -38,6 +40,7 @@ const jsonPaths = [
   'data/barotrauma/tools/submarines/submarine-roster.json',
   'data/barotrauma/tools/custom/custom-content-schema.json',
   'data/barotrauma/tools/items/item-functionality.json',
+  'data/barotrauma/tools/world/world-state-schema.json',
   'data/barotrauma-tools-registry.json'
 ];
 for (const relativePath of jsonPaths) JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
@@ -48,7 +51,16 @@ if (functionality.inventoryRules?.backpackSlots !== 4) throw new Error('Backpack
 if (functionality.inventoryRules?.backpackMobilityPenalty !== 1) throw new Error('Backpack must impose a one-point mobility penalty.');
 if (!Array.isArray(functionality.vendorArchetypes) || !functionality.vendorArchetypes.some(vendor => vendor.machine)) throw new Error('At least one vending-machine archetype is required.');
 
-const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, inventory expansion rules, and station-vendor configuration.`;
+const worldSchema = JSON.parse(fs.readFileSync(path.join(root, 'data/barotrauma/tools/world/world-state-schema.json'), 'utf8'));
+if (worldSchema.canonicalStart !== '2175-01-01T00:00:00.000Z') throw new Error('The canonical world start must remain 2175-01-01.');
+if (worldSchema.realEpoch !== '2026-06-20T08:00:00.000Z') throw new Error('The real-time epoch must remain the beginning of June 20, 2026 in Sitka.');
+if (worldSchema.mapDefaults?.stationTarget < 25) throw new Error('The expanded world must guarantee at least 25 stations.');
+if (worldSchema.mapDefaults?.shellRadiusMultiplier !== 5) throw new Error('The expanded world shell radius multiplier must remain five.');
+if (worldSchema.mapDefaults?.totalLocations < 140) throw new Error('The expanded world must default to at least 140 locations.');
+if (!worldSchema.submissionKinds?.includes('research') || !worldSchema.submissionKinds?.includes('game-state')) throw new Error('World submissions must include research and full game-state records.');
+if (worldSchema.researchRules?.minimumMarks < 25000 || worldSchema.researchRules?.minimumSupplies < 50) throw new Error('Over-limit R&D must retain exorbitant minimum funding requirements.');
+
+const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, inventory rules, five-times world expansion, unified submissions, and controlled R&D configuration.`;
 console.log(message);
 
 if (process.env.VALIDATION_RECEIPT) {
@@ -62,6 +74,15 @@ if (process.env.VALIDATION_RECEIPT) {
     runtimeCharacters: source.length,
     jsonRegistries: jsonPaths.length,
     itemFunctionalitySchema: functionality.schemaVersion || '',
+    worldStateSchema: worldSchema.schemaVersion || '',
+    canonicalStart: worldSchema.canonicalStart,
+    realEpoch: worldSchema.realEpoch,
+    defaultLocations: worldSchema.mapDefaults.totalLocations,
+    guaranteedStations: worldSchema.mapDefaults.stationTarget,
+    shellRadius: worldSchema.mapDefaults.shellRadius,
+    shellRadiusMultiplier: worldSchema.mapDefaults.shellRadiusMultiplier,
+    researchMinimumMarks: worldSchema.researchRules.minimumMarks,
+    researchMinimumSupplies: worldSchema.researchRules.minimumSupplies,
     toolbeltSlots: functionality.inventoryRules.toolbeltSlots,
     backpackSlots: functionality.inventoryRules.backpackSlots,
     backpackMobilityPenalty: functionality.inventoryRules.backpackMobilityPenalty,
