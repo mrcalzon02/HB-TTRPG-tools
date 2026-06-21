@@ -1,0 +1,61 @@
+
+  advanceDashboardTurn = function advanceDashboardTurnWithoutSkippingCasualties(reason = '') {
+    const turnOrder = normalizeDashboardTurnOrder();
+    const previousOrder = [...turnOrder.order];
+    const previousIndex = clamp(turnOrder.activeIndex, 0, Math.max(0, previousOrder.length - 1));
+    const livingSet = new Set(dashboardTurnActors().map(actor => actor.ref));
+    let nextRef = '';
+    let wrapped = false;
+    for (let offset = 1; offset <= previousOrder.length; offset += 1) {
+      const candidateIndex = (previousIndex + offset) % Math.max(1, previousOrder.length);
+      const candidate = previousOrder[candidateIndex];
+      if (!livingSet.has(candidate)) continue;
+      nextRef = candidate;
+      wrapped = candidateIndex <= previousIndex;
+      break;
+    }
+    turnOrder.order = previousOrder.filter(ref => livingSet.has(ref));
+    if (!turnOrder.order.length) {
+      turnOrder.activeIndex = 0;
+      turnOrder.encounterId = '';
+      save();
+      return null;
+    }
+    if (!nextRef) nextRef = turnOrder.order[0];
+    turnOrder.activeIndex = Math.max(0, turnOrder.order.indexOf(nextRef));
+    if (wrapped) turnOrder.round += 1;
+    turnOrder.turn += 1;
+    turnOrder.encounterId = '';
+    if (reason) turnOrder.history.unshift({ at: new Date().toISOString(), round: turnOrder.round, turn: turnOrder.turn, reason });
+    turnOrder.history = turnOrder.history.slice(0, 100);
+    stampDashboardEncounterTurn(true);
+    save();
+    return activeDashboardTurnActor();
+  };
+
+  function activeTransitDiagnostics() {
+    const turnOrder = normalizeDashboardTurnOrder();
+    const actors = dashboardTurnActors();
+    const actorRefs = new Set(actors.map(actor => actor.ref));
+    const context = normalizeActiveSubmarineDashboard(false);
+    const current = crossingNode(context.group.currentNodeId);
+    const adjacent = current?.type === 'station' ? dashboardAdjacentStationRoutes(current.id) : [];
+    const issues = [];
+    if (!['at-station','in-route'].includes(state.operationsDashboard.operationalState)) issues.push('Invalid operational dashboard state.');
+    if (normalizeRouteCrossing().status === 'underway' && state.operationsDashboard.operationalState !== 'in-route') issues.push('Underway crossing is not in In Route state.');
+    if (normalizeRouteCrossing().status !== 'underway' && state.operationsDashboard.operationalState !== 'at-station') issues.push('Non-underway crossing is not in At Station state.');
+    for (const ref of turnOrder.order) if (!actorRefs.has(ref)) issues.push(`Turn order contains unavailable crew reference ${ref}.`);
+    if (current?.type === 'station' && state.operationsDashboard.operationalState === 'at-station' && !adjacent.length) issues.push('Current station has no computed adjacent station corridors.');
+    return {
+      valid: !issues.length,
+      issues,
+      version: ACTIVE_TRANSIT_TURN_VERSION,
+      operationalState: state.operationsDashboard.operationalState,
+      actorCount: actors.length,
+      adjacentStationCount: adjacent.length,
+      initiativeMode: turnOrder.mode
+    };
+  }
+
+  globalThis.BAROTRAUMA_ACTIVE_TRANSIT_DIAGNOSTICS = activeTransitDiagnostics();
+  if (!globalThis.BAROTRAUMA_ACTIVE_TRANSIT_DIAGNOSTICS.valid) console.warn('Barotrauma active transit diagnostics found issues.', globalThis.BAROTRAUMA_ACTIVE_TRANSIT_DIAGNOSTICS.issues);
