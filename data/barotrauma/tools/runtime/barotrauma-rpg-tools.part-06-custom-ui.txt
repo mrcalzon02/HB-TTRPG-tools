@@ -1,0 +1,242 @@
+
+  function customMetricHtml(derived) {
+    return Object.entries(derived.metrics || {}).map(([label, value]) => `<div class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
+  }
+
+  function customDestinationAction(entry) {
+    const destination = customType(entry.type).destination;
+    if (destination === 'character') return { label: 'Add to Character', className: 'custom-add-character' };
+    if (destination === 'submarineWeapon') return { label: 'Install Weapon', className: 'custom-install-weapon' };
+    if (destination === 'submarineAmmo') return { label: 'Add Ammunition', className: 'custom-add-sub-ammo' };
+    if (destination === 'submarineModule') return { label: 'Install Module', className: 'custom-install-module' };
+    if (destination === 'station') return { label: 'Route Here', className: 'custom-route-station' };
+    return { label: 'Library Only', className: 'custom-library-only' };
+  }
+
+  function customDraftField(label, key, options = {}) {
+    const draft = state.customContent.draft;
+    if (options.values) return `<label class="field">${escapeHtml(label)}<select class="custom-workshop-field" data-key="${escapeHtml(key)}">${optionList(options.values, draft[key])}</select></label>`;
+    return `<label class="field">${escapeHtml(label)}<input class="custom-workshop-field" data-key="${escapeHtml(key)}" type="${options.type || 'number'}" ${options.min != null ? `min="${options.min}"` : ''} ${options.max != null ? `max="${options.max}"` : ''} ${options.step != null ? `step="${options.step}"` : ''} value="${escapeHtml(draft[key])}" ${options.placeholder ? `placeholder="${escapeHtml(options.placeholder)}"` : ''}></label>`;
+  }
+
+  function renderCustomWorkshop() {
+    const library = state.customContent;
+    const draft = library.draft;
+    const types = CUSTOM_CONTENT_SCHEMA.types || [];
+    if (!CUSTOM_TYPE_MAP[draft.type]) draft.type = types[0]?.id || 'equipment';
+    const anchors = customAnchorOptions(draft.type);
+    if (!anchors.some(item => item.id === draft.anchorId)) draft.anchorId = anchors[0]?.id || 'generic';
+    const derived = deriveCustomContent(draft);
+    const query = String(library.query || '').toLowerCase().trim();
+    const filtered = library.entries.filter(entry =>
+      (library.filterType === 'All' || entry.type === library.filterType) &&
+      (!query || [entry.name, entry.type, entry.description, entry.tags, entry.notes, derivedCustomEntry(entry).anchorName].join(' ').toLowerCase().includes(query))
+    );
+
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div>
+            <p class="eyebrow">Source-anchored homebrew registry</p>
+            <h2>Custom Content Workshop</h2>
+            <p class="rules-note">Create derived weapons, ammunition, systems, power sources, equipment, items, consumables, stations, and submarine modules without overwriting official catalogue data or the exact-source RPG wiki.</p>
+          </div>
+          <div class="metric-row">
+            <div class="metric"><span>Custom records</span><strong>${library.entries.length}</strong></div>
+            <div class="metric"><span>Content families</span><strong>${types.length}</strong></div>
+            <div class="metric"><span>Schema</span><strong>${escapeHtml(CUSTOM_CONTENT_SCHEMA.schemaVersion || '1.0')}</strong></div>
+          </div>
+        </section>
+
+        <section class="tool-panel">
+          <div class="tool-hero" style="padding:0;border:0;background:none">
+            <div><h3>${draft.id ? 'Edit Custom Record' : 'Create Custom Record'}</h3><p class="small-note">Every record retains its selected anchor and a reproducible derivation profile.</p></div>
+            <div class="button-row no-print">
+              <button id="custom-export-library" class="secondary-action" type="button">Export Custom Library</button>
+              <label class="secondary-action file-action" for="custom-import-library">Import Custom Library</label>
+              <input id="custom-import-library" type="file" accept="application/json" hidden>
+            </div>
+          </div>
+          <div class="field-grid three">
+            <label class="field">Content family<select id="custom-content-type">${optionList(types.map(item => item.id), draft.type, id => customType(id).name)}</select></label>
+            <label class="field">Record name<input id="custom-content-name" value="${escapeHtml(draft.name)}" placeholder="Unique custom name"></label>
+            <label class="field">Derivation anchor<select id="custom-content-anchor">${optionList(anchors.map(item => item.id), draft.anchorId, id => anchors.find(item => item.id === id)?.name || id)}</select></label>
+            ${customDraftField('Tier', 'tier', { min: 1, max: 3 })}
+            ${customDraftField('Quality', 'quality', { min: 1, max: 5 })}
+            ${customDraftField('Scale / Size', 'scale', { min: 1, max: 5 })}
+            ${customDraftField('Complexity', 'complexity', { min: 1, max: 5 })}
+            ${customDraftField('Effect Strength', 'effect', { min: 1, max: 5 })}
+            ${customDraftField('Power Demand', 'power', { min: 1, max: 5 })}
+            ${customDraftField('Reliability', 'reliability', { min: 1, max: 5 })}
+            ${customDraftField('Capacity / Charges', 'capacity', { min: 0, max: 1000 })}
+            ${customDraftField('Volatility', 'volatility', { min: 1, max: 5 })}
+            ${customDraftField('Suggested Character Stat', 'primaryStat', { values: ['Strength','Agility','Intelligence','Charisma'] })}
+            ${customDraftField('Primary RPG Modifier', 'targetStat', { values: CUSTOM_RPG_STATS })}
+            ${customDraftField('Secondary RPG Modifier', 'secondaryStat', { values: CUSTOM_RPG_STATS })}
+            ${customDraftField('Drawback RPG Stat', 'drawbackStat', { values: CUSTOM_RPG_STATS })}
+            ${customDraftField('Range Band', 'rangeBand', { values: ['Melee','Point Blank','Short','Medium','Long','Very Long','Throwable'] })}
+            ${customDraftField('Weapon Mount', 'mount', { values: ['Turret','Large Turret','Other'] })}
+            ${customDraftField('Primary Function', 'functionName', { type: 'text', placeholder: 'Propulsion, medical, salvage…' })}
+            ${customDraftField('Compatible With / Ammunition', 'compatibility', { type: 'text', placeholder: 'Comma-separated names' })}
+            ${customDraftField('Faction', 'faction', { type: 'text', placeholder: 'Station or manufacturer faction' })}
+            ${customDraftField('Specialty', 'specialty', { type: 'text', placeholder: 'Station market or system specialty' })}
+            ${customDraftField('Notable Locals', 'locals', { type: 'text', placeholder: 'Station personnel' })}
+            ${customDraftField('Tags', 'tags', { type: 'text', placeholder: 'Comma-separated tags' })}
+          </div>
+          <div class="field-grid" style="margin-top:10px">
+            <label class="field">Description<textarea id="custom-content-description">${escapeHtml(draft.description)}</textarea></label>
+            <label class="field">Drawback or Failure Mode<textarea id="custom-content-drawback">${escapeHtml(draft.drawback)}</textarea></label>
+          </div>
+          <label class="field" style="margin-top:10px">Designer Notes<textarea id="custom-content-notes">${escapeHtml(draft.notes)}</textarea></label>
+
+          <div class="tool-hero" style="margin-top:14px">
+            <div>
+              <span class="tag">${escapeHtml(customType(draft.type).name)}</span><span class="tag">Anchor: ${escapeHtml(derived.anchorName)}</span><span class="tag">Tier ${derived.tier}</span>
+              <h3>${escapeHtml(draft.name || 'Unnamed Custom Record')}</h3>
+              <p class="small-note">${escapeHtml(customType(draft.type).description || '')}</p>
+            </div>
+            <div class="metric-row">${customMetricHtml(derived)}</div>
+          </div>
+          <div class="notice" style="margin-top:10px"><strong>Derived price:</strong> ${number(derived.price).toLocaleString()} marks · <strong>Rarity:</strong> ${derived.rarity} · <strong>Repair/operation DC:</strong> ${derived.repairDC}${Object.keys(derived.modifiers || {}).length ? ` · <strong>RPG modifiers:</strong> ${escapeHtml(Object.entries(derived.modifiers).map(([key, value]) => `${key} ${value >= 0 ? '+' : ''}${value}`).join(', '))}` : ''}</div>
+          <div class="button-row no-print" style="margin-top:10px">
+            <button id="custom-content-preview" class="secondary-action" type="button">Recalculate Preview</button>
+            <button id="custom-content-save" class="primary-action" type="button">${draft.id ? 'Update Record' : 'Save Record'}</button>
+            <button id="custom-content-reset" class="secondary-action" type="button">Clear Builder</button>
+          </div>
+        </section>
+
+        <section class="tool-panel">
+          <div class="field-grid three">
+            <label class="field">Search custom library<input id="custom-content-query" type="search" value="${escapeHtml(library.query)}"></label>
+            <label class="field">Filter family<select id="custom-content-filter">${optionList(['All', ...types.map(item => item.id)], library.filterType, id => id === 'All' ? 'All content families' : customType(id).name)}</select></label>
+            <div class="metric" style="align-self:end"><span>Visible records</span><strong>${filtered.length}</strong></div>
+          </div>
+          <div class="table-wrap" style="margin-top:12px">
+            <table class="tool-table">
+              <thead><tr><th>Record</th><th>Family / Anchor</th><th>Derived Profile</th><th>Integration</th><th></th></tr></thead>
+              <tbody>
+                ${filtered.map(entry => {
+                  const itemDerived = derivedCustomEntry(entry);
+                  const action = customDestinationAction(entry);
+                  return `<tr>
+                    <td><strong>${escapeHtml(entry.name)}</strong><br><span class="small-note">${escapeHtml(entry.description || entry.notes || 'Custom content record')}</span></td>
+                    <td>${escapeHtml(customType(entry.type).name)}<br><span class="small-note">${escapeHtml(itemDerived.anchorName)} · Tier ${itemDerived.tier}</span></td>
+                    <td>${Object.entries(itemDerived.metrics || {}).slice(0, 5).map(([key, value]) => `<span class="tag">${escapeHtml(key)}: ${escapeHtml(value)}</span>`).join('')}<br><span class="small-note">${number(itemDerived.price).toLocaleString()} marks · rarity ${itemDerived.rarity}</span></td>
+                    <td><button class="compact-button ${action.className}" data-id="${escapeHtml(entry.id)}" type="button" ${action.className === 'custom-library-only' ? 'disabled' : ''}>${escapeHtml(action.label)}</button></td>
+                    <td><div class="button-row"><button class="compact-button custom-content-edit" data-id="${escapeHtml(entry.id)}" type="button">Edit</button><button class="compact-button custom-content-duplicate" data-id="${escapeHtml(entry.id)}" type="button">Duplicate</button><button class="compact-button custom-content-export" data-id="${escapeHtml(entry.id)}" type="button">Export</button><button class="compact-button custom-content-delete" data-id="${escapeHtml(entry.id)}" type="button">Delete</button></div></td>
+                  </tr>`;
+                }).join('') || '<tr><td colspan="5">No custom records match this view.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+          <div class="button-row" style="margin-top:12px">
+            ${Object.values(CUSTOM_CONTENT_SCHEMA.sources || {}).map(source => `<a class="compact-button" href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(source.title)} ↗</a>`).join('')}
+          </div>
+        </section>
+      </div>`;
+
+    const updateDraft = (key, value) => { library.draft[key] = value; save(); };
+    root.querySelector('#custom-content-type')?.addEventListener('change', event => {
+      const preservedName = library.draft.name;
+      library.draft = { ...defaultCustomContentDraft(event.target.value), name: preservedName };
+      library.draft.anchorId = customAnchorOptions(event.target.value)[0]?.id || 'generic';
+      save(); renderCustomWorkshop();
+    });
+    root.querySelector('#custom-content-name')?.addEventListener('input', event => updateDraft('name', event.target.value));
+    root.querySelector('#custom-content-anchor')?.addEventListener('change', event => { updateDraft('anchorId', event.target.value); renderCustomWorkshop(); });
+    root.querySelectorAll('.custom-workshop-field').forEach(input => {
+      const eventName = input.tagName === 'SELECT' ? 'change' : input.type === 'text' ? 'input' : 'change';
+      input.addEventListener(eventName, event => updateDraft(event.target.dataset.key, event.target.type === 'number' ? number(event.target.value) : event.target.value));
+    });
+    for (const [selector, key] of [['#custom-content-description','description'],['#custom-content-drawback','drawback'],['#custom-content-notes','notes']]) root.querySelector(selector)?.addEventListener('input', event => updateDraft(key, event.target.value));
+    root.querySelector('#custom-content-preview')?.addEventListener('click', renderCustomWorkshop);
+    root.querySelector('#custom-content-reset')?.addEventListener('click', () => { library.draft = defaultCustomContentDraft(); save(); renderCustomWorkshop(); });
+    root.querySelector('#custom-content-save')?.addEventListener('click', () => {
+      const pending = { ...library.draft, name: String(library.draft.name || '').trim() };
+      if (!pending.name) return alert('Enter a unique name before saving the custom record.');
+      const conflict = library.entries.find(item => item.name.toLowerCase() === pending.name.toLowerCase() && item.id !== pending.id);
+      if (conflict) return alert('A custom record with that name already exists.');
+      pending.id = pending.id || uid('custom-content');
+      pending.anchorId = customAnchor(pending.type, pending.anchorId).id;
+      pending.derivedVersion = CUSTOM_CONTENT_SCHEMA.schemaVersion || '1.0.0';
+      const index = library.entries.findIndex(item => item.id === pending.id);
+      if (index >= 0) library.entries[index] = pending;
+      else library.entries.push(pending);
+      library.draft = defaultCustomContentDraft(pending.type);
+      syncCustomStations(); save(); renderCustomWorkshop();
+    });
+    bindTextInput('#custom-content-query', element => { library.query = element.value; save(); renderCustomWorkshop(); });
+    bindTextInput('#custom-content-filter', element => { library.filterType = element.value; save(); renderCustomWorkshop(); }, 'change');
+
+    root.querySelectorAll('.custom-add-character').forEach(button => button.addEventListener('click', event => { addCharacterCatalogueItem(event.target.dataset.id); event.target.textContent = 'Added'; }));
+    root.querySelectorAll('.custom-install-weapon').forEach(button => button.addEventListener('click', event => { addSubmarineWeapon(event.target.dataset.id); event.target.textContent = 'Installed'; }));
+    root.querySelectorAll('.custom-add-sub-ammo').forEach(button => button.addEventListener('click', event => { addSubmarineAmmo(event.target.dataset.id); event.target.textContent = 'Added'; }));
+    root.querySelectorAll('.custom-install-module').forEach(button => button.addEventListener('click', event => { installCustomModule(event.target.dataset.id); event.target.textContent = 'Installed'; }));
+    root.querySelectorAll('.custom-route-station').forEach(button => button.addEventListener('click', event => { const entry = customEntry(event.target.dataset.id); if (entry) { state.route.end = entry.name; save(); setTool('route'); } }));
+    root.querySelectorAll('.custom-content-edit').forEach(button => button.addEventListener('click', event => { const entry = customEntry(event.target.dataset.id); if (entry) { library.draft = { ...defaultCustomContentDraft(entry.type), ...entry }; save(); renderCustomWorkshop(); } }));
+    root.querySelectorAll('.custom-content-duplicate').forEach(button => button.addEventListener('click', event => { const entry = customEntry(event.target.dataset.id); if (!entry) return; let name = `${entry.name} Copy`; while (library.entries.some(item => item.name.toLowerCase() === name.toLowerCase())) name += ' Copy'; library.entries.push({ ...entry, id: uid('custom-content'), name }); syncCustomStations(); save(); renderCustomWorkshop(); }));
+    root.querySelectorAll('.custom-content-export').forEach(button => button.addEventListener('click', event => { const entry = customEntry(event.target.dataset.id); if (entry) download(`${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'custom-content'}.json`, JSON.stringify({ schemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, entry }, null, 2)); }));
+    root.querySelectorAll('.custom-content-delete').forEach(button => button.addEventListener('click', event => {
+      const id = event.target.dataset.id;
+      library.entries = library.entries.filter(item => item.id !== id);
+      state.character.catalogInventory = state.character.catalogInventory.filter(item => item.id !== id);
+      state.submarine.wikiWeapons = state.submarine.wikiWeapons.filter(item => item.id !== id);
+      state.submarine.wikiAmmo = state.submarine.wikiAmmo.filter(item => item.id !== id);
+      state.submarine.customModules = state.submarine.customModules.filter(item => item.id !== id);
+      syncCustomStations(); save(); renderCustomWorkshop();
+    }));
+    root.querySelector('#custom-export-library')?.addEventListener('click', () => download('barotrauma-custom-content-library.json', JSON.stringify({ schemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, exportedAt: new Date().toISOString(), entries: library.entries }, null, 2)));
+    root.querySelector('#custom-import-library')?.addEventListener('change', event => {
+      const file = event.target.files?.[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          const imported = Array.isArray(parsed) ? parsed : parsed.entries ? parsed.entries : parsed.entry ? [parsed.entry] : [];
+          for (const raw of imported) {
+            if (!raw?.name || !CUSTOM_TYPE_MAP[raw.type]) continue;
+            const existing = library.entries.find(item => item.id === raw.id || item.name.toLowerCase() === String(raw.name).toLowerCase());
+            const normalized = { ...defaultCustomContentDraft(raw.type), ...raw, id: raw.id || uid('custom-content') };
+            if (existing) Object.assign(existing, normalized, { id: existing.id }); else library.entries.push(normalized);
+          }
+          syncCustomStations(); save(); renderCustomWorkshop();
+        } catch (error) { alert(`The custom library could not be imported: ${error.message}`); }
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  function enhanceSubmarineCustomModules() {
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    const calculated = calculateSubmarine();
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div><h3>Custom Systems, Power Sources, and Modules</h3><p class="small-note">Installed workshop records apply their derived RPG modifiers and capacity costs to the active submarine.</p></div>
+        <button id="open-custom-workshop" class="primary-action no-print" type="button">Open Workshop</button>
+      </div>
+      <div class="metric-row" style="margin-bottom:12px">
+        <div class="metric"><span>Module capacity</span><strong>${number(calculated.customModuleCapacity)}</strong></div>
+        <div class="metric"><span>Power output</span><strong>${number(calculated.customPowerOutput)}</strong></div>
+        <div class="metric"><span>Power storage</span><strong>${number(calculated.customPowerStorage)}</strong></div>
+        <div class="metric"><span>Power demand</span><strong>${number(calculated.customPowerDemand)}</strong></div>
+      </div>
+      <div class="table-wrap"><table class="tool-table"><thead><tr><th>Module</th><th>Type</th><th>Quantity</th><th>Enabled</th><th>Derived Effect</th><th></th></tr></thead><tbody>
+        ${state.submarine.customModules.map(installed => {
+          const entry = customEntry(installed.id); if (!entry) return '';
+          const derived = derivedCustomEntry(entry);
+          return `<tr><td><strong>${escapeHtml(entry.name)}</strong><br><span class="small-note">Anchor: ${escapeHtml(derived.anchorName)}</span></td><td>${escapeHtml(customType(entry.type).name)}</td><td><input class="custom-module-quantity" data-id="${escapeHtml(entry.id)}" type="number" min="1" max="20" value="${Math.max(1, number(installed.quantity, 1))}"></td><td><input class="custom-module-enabled" data-id="${escapeHtml(entry.id)}" type="checkbox" ${installed.enabled === false ? '' : 'checked'}></td><td>${escapeHtml(Object.entries(derived.modifiers || {}).map(([key, value]) => `${key} ${value >= 0 ? '+' : ''}${value}`).join(', ') || `${derived.functionName || derived.mode || 'Special system'} rating ${derived.systemRating || derived.output || derived.upgradeRating || derived.effect}`)}<br><span class="small-note">Capacity ${number(derived.capacityCost)} · Power ${number(derived.powerDraw)}</span></td><td><button class="compact-button custom-module-remove" data-id="${escapeHtml(entry.id)}" type="button">Remove</button></td></tr>`;
+        }).join('') || '<tr><td colspan="6">No custom systems or modules installed.</td></tr>'}
+      </tbody></table></div>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#open-custom-workshop')?.addEventListener('click', () => setTool('workshop'));
+    panel.querySelectorAll('.custom-module-quantity').forEach(input => input.addEventListener('change', event => { const installed = state.submarine.customModules.find(item => item.id === event.target.dataset.id); if (installed) installed.quantity = clamp(event.target.value, 1, 20); save(); renderSubmarine(); }));
+    panel.querySelectorAll('.custom-module-enabled').forEach(input => input.addEventListener('change', event => { const installed = state.submarine.customModules.find(item => item.id === event.target.dataset.id); if (installed) installed.enabled = event.target.checked; save(); renderSubmarine(); }));
+    panel.querySelectorAll('.custom-module-remove').forEach(button => button.addEventListener('click', event => { state.submarine.customModules = state.submarine.customModules.filter(item => item.id !== event.target.dataset.id); save(); renderSubmarine(); }));
+  }
+
+  const renderSubmarineBeforeCustomWorkshop = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCustomWorkshop() {
+    renderSubmarineBeforeCustomWorkshop();
+    enhanceSubmarineCustomModules();
+  };
