@@ -1,0 +1,79 @@
+name: Validate Barotrauma Static Tools
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-entry.js'
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma-tools-registry.json'
+      - 'data/barotrauma/**'
+      - '.github/workflows/validate-barotrauma-static.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-entry.js'
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma-tools-registry.json'
+      - 'data/barotrauma/**'
+      - '.github/workflows/validate-barotrauma-static.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check standalone JavaScript syntax
+        run: |
+          node --check barotrauma-entry.js
+          node --check barotrauma-rpg-tools-loader.js
+
+      - name: Validate runtime assembly and registries
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const loader = fs.readFileSync('barotrauma-rpg-tools-loader.js', 'utf8');
+          const runtimeMatch = loader.match(/const runtimeParts = \[([\s\S]*?)\n  \];/);
+          assert(runtimeMatch, 'runtimeParts array was not found in the loader');
+          const paths = [...runtimeMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
+          assert(paths.length > 40, `Expected the complete runtime list; found ${paths.length} fragments`);
+          const missing = paths.filter(path => !fs.existsSync(path));
+          assert.deepStrictEqual(missing, [], `Missing runtime fragments: ${missing.join(', ')}`);
+
+          const source = paths.map(path => fs.readFileSync(path, 'utf8')).join('');
+          new Function(source);
+
+          JSON.parse(fs.readFileSync('data/barotrauma-tools-registry.json', 'utf8'));
+          JSON.parse(fs.readFileSync('data/barotrauma/tools/encounters/encounter-index.json', 'utf8'));
+
+          assert(loader.includes('barotrauma-rpg-tools.part-06-standalone-module-captures.txt'), 'Standalone module captures are not loaded');
+          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt'), 'Dashboard boundary core is not loaded');
+          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt'), 'Dashboard boundary UI is not loaded');
+
+          const entry = fs.readFileSync('barotrauma-entry.js', 'utf8');
+          assert(entry.includes("barotrauma-rpg-tools.html#dashboard"), 'Main Barotrauma menu does not link the Active Submarine Dashboard');
+          assert(entry.includes("barotrauma-rpg-tools.html#submarine"), 'Standalone Submarine Manager link is missing');
+          assert(entry.includes("barotrauma-rpg-tools.html#route"), 'Standalone Route Planner link is missing');
+          assert(entry.includes("barotrauma-rpg-tools.html#world"), 'Standalone World State link is missing');
+
+          const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
+          assert(html.includes('data-tool="dashboard"'), 'Dashboard tool tab is missing');
+          assert(html.includes('data-tool="submarine"'), 'Standalone submarine tab is missing');
+          assert(html.includes('data-tool="route"'), 'Standalone route tab is missing');
+          assert(html.includes('data-tool="world"'), 'Standalone world tab is missing');
+
+          console.log(`Validated ${paths.length} runtime fragments and the Barotrauma standalone/dashboard navigation contract.`);
+          NODE
