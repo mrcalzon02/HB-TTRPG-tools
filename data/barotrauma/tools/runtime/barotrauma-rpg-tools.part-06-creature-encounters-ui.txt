@@ -1,0 +1,78 @@
+
+  function creatureEventDetailHtml(event) {
+    if (!event?.creatureId) return '';
+    const sourceLink = event.wikiUrl ? `<a class="rules-link" href="${escapeHtml(event.wikiUrl)}" target="_blank" rel="noopener">Official creature page →</a>` : '';
+    return `<div class="notice creature-encounter-detail"><strong>${escapeHtml(event.creatureClassLabel || event.creatureClass)} · ${escapeHtml(event.creatureSeverity)} · Level ${number(event.creatureLevel)}</strong><br><strong>Attackers:</strong> ${number(event.creatureCount, 1)} · <strong>Threat:</strong> ${number(event.creatureThreat)} · <strong>Profile:</strong> ${escapeHtml(event.creatureAttackProfile || '')}<br><strong>Submarine entry:</strong> ${event.canEnterSubmarine ? 'Boarding capable' : 'External attack only'} · <strong>Failure:</strong> Hull −${number(event.hullDamage)}, system condition −${number(event.systemConditionDamage)}%${event.canEnterSubmarine ? `, active ${escapeHtml(event.stat)} −${number(event.crewDamage)}` : ''}<br>${sourceLink}</div>`;
+  }
+
+  const encounterCardHtmlBeforeCreatureEncounters = encounterCardHtml;
+  encounterCardHtml = function encounterCardHtmlWithCreatureDetails(item, index, prefix = 'encounter') {
+    let html = encounterCardHtmlBeforeCreatureEncounters(item, index, prefix);
+    const event = item.event || item;
+    if (!event.creatureId) return html;
+    const tags = `<span class="tag">${escapeHtml(event.creatureClassLabel)}</span><span class="tag">${escapeHtml(event.creatureSeverity)}</span><span class="tag">Level ${number(event.creatureLevel)}</span><span class="tag">${number(event.creatureCount)} attacker${number(event.creatureCount) === 1 ? '' : 's'}</span>`;
+    html = html.replace('<h4>', `${tags}<h4>`);
+    return html.replace('<div class="button-row no-print">', `${creatureEventDetailHtml(event)}<div class="button-row no-print">`);
+  };
+
+  const crossingEventDetailsBeforeCreatureEncounters = crossingEventDetails;
+  crossingEventDetails = function crossingEventDetailsWithCreatures(event) {
+    return `${creatureEventDetailHtml(event)}${crossingEventDetailsBeforeCreatureEncounters(event)}`;
+  };
+
+  function creatureClassCounts(pool) {
+    return Object.fromEntries(['small','large','abyssal','ending'].map(className => [className, pool.filter(creature => creature.officialClass === className).length]));
+  }
+
+  function creatureLevelSummaryHtml(level, allowEndingCreatures) {
+    const severity = creatureSeverityProfile(level);
+    const pool = creaturePoolForLevel(level, allowEndingCreatures);
+    const counts = creatureClassCounts(pool);
+    return `<div class="metric-row"><div class="metric"><span>Location level</span><strong>${number(level)}</strong></div><div class="metric"><span>Severity</span><strong>${escapeHtml(severity.severity)}</strong></div><div class="metric"><span>Available species</span><strong>${pool.length}</strong></div><div class="metric"><span>Small / Large</span><strong>${counts.small} / ${counts.large}</strong></div><div class="metric"><span>Abyssal</span><strong>${counts.abyssal}</strong></div><div class="metric"><span>Ending</span><strong>${counts.ending}</strong></div></div><div class="small-note" style="margin-top:8px">${escapeHtml(severity.description || '')}</div>`;
+  }
+
+  function creaturePoolListHtml(level, allowEndingCreatures) {
+    const pool = creaturePoolForLevel(level, allowEndingCreatures);
+    return `<div class="card-list creature-pool-list">${pool.map(creature => `<div class="small-note"><strong>${escapeHtml(creature.name)}</strong> · ${escapeHtml(CREATURE_CLASS_LABELS[creature.officialClass] || creature.officialClass)} · threat ${number(creature.baseThreat)} · ${creature.canEnterSubmarine ? 'boarding capable' : 'external only'}${creature.endingOnly ? ' · ENDGAME ONLY' : ''}</div>`).join('') || '<div class="small-note">No creatures are configured for this pool.</div>'}</div>`;
+  }
+
+  const renderEncountersBeforeCreatureEncounters = renderEncounters;
+  renderEncounters = function renderEncountersWithCreaturePools() {
+    normalizeCreatureEncounterState();
+    renderEncountersBeforeCreatureEncounters();
+    const planner = state.encounters;
+    const drawPanel = root.querySelector('#enc-count')?.closest('.tool-panel');
+    if (!drawPanel) return;
+    const selectedNode = planner.useSelectedWorldLocation && typeof selectedWorldLocationNode === 'function' ? selectedWorldLocationNode() : null;
+    const level = encounterPlannerCreatureLevel();
+    drawPanel.insertAdjacentHTML('afterend', `<section class="tool-panel span-8 creature-encounter-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Official-wiki creature pools</p><h3>Depth-Scaled Creature Encounters</h3><p class="small-note">The official Small, Large, Abyssal, and Ending classifications drive pool access. TTRPG level gates, severity, group size, DC, and failure effects are campaign adaptations.</p></div><a class="rules-link" href="${escapeHtml(CREATURE_ENCOUNTER_REGISTRY.source?.url || 'https://barotraumagame.com/wiki/Creatures')}" target="_blank" rel="noopener">OFFICIAL CREATURE INDEX →</a></div><div class="field-grid" style="margin-top:12px"><label class="field">Creature pool level<select id="enc-creature-level" ${selectedNode ? 'disabled' : ''}>${optionList(Array.from({ length: 10 }, (_, index) => String(index + 1)), String(level), value => `Level ${value}: ${creatureSeverityProfile(value).severity}`)}</select></label><label class="check-row"><input id="enc-ending-creatures" type="checkbox" ${planner.allowEndingCreatures ? 'checked' : ''}><span><strong>Enable Level 10 ending creatures</strong><br><span class="small-note">Ending-spoiler species remain impossible below Level 10.</span></span></label></div>${selectedNode ? `<div class="notice" style="margin-top:10px">Using mapped destination: <strong>Level ${selectedNode.locationLevel} — ${escapeHtml(selectedNode.name)}</strong></div>` : ''}<div style="margin-top:12px">${creatureLevelSummaryHtml(level, planner.allowEndingCreatures)}</div><details style="margin-top:10px"><summary><strong>Available Level ${level} pool</strong></summary><div style="margin-top:8px">${creaturePoolListHtml(level, planner.allowEndingCreatures)}</div></details><button id="draw-creature-attack" class="primary-action no-print" type="button" style="margin-top:12px">Add Creature Attack</button></section>`);
+    root.querySelector('#enc-creature-level')?.addEventListener('change', event => { planner.creatureLevel = clamp(event.target.value, 1, 10); save(); renderEncounters(); });
+    root.querySelector('#enc-ending-creatures')?.addEventListener('change', event => { planner.allowEndingCreatures = event.target.checked; save(); renderEncounters(); });
+    root.querySelector('#draw-creature-attack')?.addEventListener('click', () => {
+      planner.plan.push({ id: uid('creature'), event: drawCreatureEncounter(encounterPlannerCreatureLevel(), Math.random, { allowEndingCreatures: planner.allowEndingCreatures, targetNode: selectedNode }), status: 'pending', roll: '' });
+      save(); renderEncounters();
+    });
+  };
+
+  function crossingCreatureLevel() {
+    const crossing = normalizeRouteCrossing();
+    if (crossing.legs.length) return clamp(Math.max(...crossing.legs.flatMap(leg => [number(leg.fromLevel, 1), number(leg.toLevel, 1)])), 1, 10);
+    return routeCreatureLevel(state.route);
+  }
+
+  const renderRouteBeforeCreatureEncounters = renderRoute;
+  renderRoute = function renderRouteWithCreaturePools() {
+    normalizeCreatureEncounterState();
+    renderRouteBeforeCreatureEncounters();
+    const weightedHeading = [...root.querySelectorAll('.tool-panel h3')].find(element => element.textContent.includes('Weighted Route Encounter Table'));
+    const weightedPanel = weightedHeading?.closest('.tool-panel');
+    if (!weightedPanel) return;
+    const route = state.route;
+    const level = crossingCreatureLevel();
+    const settings = route.creatureSettings;
+    const locked = normalizeRouteCrossing().status === 'underway';
+    const creatureRow = [...weightedPanel.querySelectorAll('tbody tr')].find(row => row.firstElementChild?.textContent.trim() === 'Creature');
+    if (creatureRow?.lastElementChild) creatureRow.lastElementChild.textContent = String(creaturePoolForLevel(level, settings.allowEndingCreatures).length);
+    weightedPanel.insertAdjacentHTML('afterend', `<section class="tool-panel span-12 creature-route-pool"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Route-depth threat progression</p><h3>Creature Attack Pool</h3><p class="small-note">Every Creature-category route draw uses the target node’s actual level. Dangerous routes increase severity but never unlock ending creatures below Level 10.</p></div><label class="check-row"><input id="route-ending-creatures" type="checkbox" ${settings.allowEndingCreatures ? 'checked' : ''} ${locked ? 'disabled' : ''}><span><strong>Enable Level 10 ending creatures</strong><br><span class="small-note">Applies to new or redrawn Level 10 events.</span></span></label></div><div style="margin-top:12px">${creatureLevelSummaryHtml(level, settings.allowEndingCreatures)}</div><div class="table-wrap" style="margin-top:12px"><table class="tool-table" style="min-width:980px"><thead><tr><th>Levels</th><th>Severity</th><th>Pool rule</th><th>Base failure</th></tr></thead><tbody>${(CREATURE_ENCOUNTER_REGISTRY.progression || []).map(profile => `<tr><td>${profile.minLevel === profile.maxLevel ? `Level ${profile.minLevel}` : `Levels ${profile.minLevel}–${profile.maxLevel}`}</td><td><strong>${escapeHtml(profile.severity)}</strong></td><td>${escapeHtml(profile.description)}</td><td>${number(profile.hullDamage)} Hull · ${number(profile.crewDamage)} crew-stat damage when boarding occurs</td></tr>`).join('')}</tbody></table></div><details style="margin-top:10px"><summary><strong>Current route pool: ${creaturePoolForLevel(level, settings.allowEndingCreatures).length} species</strong></summary><div style="margin-top:8px">${creaturePoolListHtml(level, settings.allowEndingCreatures)}</div></details></section>`);
+    root.querySelector('#route-ending-creatures')?.addEventListener('change', event => { settings.allowEndingCreatures = event.target.checked; save(); renderRoute(); });
+  };
