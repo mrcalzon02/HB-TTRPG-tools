@@ -25,6 +25,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-commerce-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-seeding.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-levels.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
@@ -35,6 +36,7 @@
   const itemFunctionalityUrl = 'data/barotrauma/tools/items/item-functionality.json';
   const worldStateSchemaUrl = 'data/barotrauma/tools/world/world-state-schema.json';
   const factionRegistryUrl = 'data/barotrauma/tools/factions/faction-registry.json';
+  const locationLevelRegistryUrl = 'data/barotrauma/tools/locations/location-level-registry.json';
 
   async function fetchText(path) {
     const response = await fetch(path, { cache: 'no-store' });
@@ -58,13 +60,14 @@
   }
 
   async function load() {
-    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, sourceParts] = await Promise.all([
+    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, locationLevelRegistry, sourceParts] = await Promise.all([
       loadCatalog(),
       fetchJson(submarineRosterUrl),
       fetchJson(customContentSchemaUrl),
       fetchJson(itemFunctionalityUrl),
       fetchJson(worldStateSchemaUrl),
       fetchJson(factionRegistryUrl),
+      fetchJson(locationLevelRegistryUrl),
       Promise.all(runtimeParts.map(fetchText))
     ]);
     window.BAROTRAUMA_WIKI_CATALOG = catalog;
@@ -73,6 +76,7 @@
     window.BAROTRAUMA_ITEM_FUNCTIONALITY = itemFunctionality;
     window.BAROTRAUMA_WORLD_STATE_SCHEMA = worldStateSchema;
     window.BAROTRAUMA_FACTION_REGISTRY = factionRegistry;
+    window.BAROTRAUMA_LOCATION_LEVEL_REGISTRY = locationLevelRegistry;
     const source = sourceParts.join('');
     new Function(`${source}\n//# sourceURL=barotrauma-rpg-tools.runtime.js`)();
   }
