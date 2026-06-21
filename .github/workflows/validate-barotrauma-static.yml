@@ -77,7 +77,8 @@ jobs:
             'barotrauma-rpg-tools.part-06-world-economy-core-00.txt',
             'barotrauma-rpg-tools.part-06-world-economy-core-01.txt',
             'barotrauma-rpg-tools.part-06-world-economy-core-02.txt',
-            'barotrauma-rpg-tools.part-06-world-economy-core-03.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-commerce-00.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-commerce-01.txt',
             'barotrauma-rpg-tools.part-06-world-economy-stability.txt',
             'barotrauma-rpg-tools.part-06-world-economy-scheduler.txt',
             'barotrauma-rpg-tools.part-06-world-economy-stability-02.txt',
@@ -85,6 +86,7 @@ jobs:
             'barotrauma-rpg-tools.part-06-world-economy-ui-stability.txt',
             'barotrauma-rpg-tools.part-06-world-economy-stability-03.txt'
           ]) assert(loader.includes(required), `${required} is not loaded`);
+          assert(!loader.includes('barotrauma-rpg-tools.part-06-world-economy-core-03.txt'), 'The superseded monolithic commerce fragment is still loaded');
 
           const boundaryCore = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt', 'utf8');
           assert(boundaryCore.includes("return ['character','submarine','encounters','route','world','catalog','workshop'].includes(raw)"), 'Standalone hash dispatch contract is missing');
@@ -137,7 +139,8 @@ jobs:
           const economy00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-00.txt', 'utf8');
           const economy01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-01.txt', 'utf8');
           const economy02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-02.txt', 'utf8');
-          const economy03 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-03.txt', 'utf8');
+          const economyCommerce00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commerce-00.txt', 'utf8');
+          const economyCommerce01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commerce-01.txt', 'utf8');
           const economyScheduler = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-scheduler.txt', 'utf8');
           const economyStability02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-stability-02.txt', 'utf8');
           const economyUi = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-ui.txt', 'utf8');
@@ -155,10 +158,11 @@ jobs:
           assert(economy02.includes('processWorldStationEconomyCycle'), 'Station production cycles are missing');
           assert(economy02.includes('worldEconomyCompleteShipyardVessel'), 'Shipyard vessel production is missing');
           assert(economy02.includes('departWorldEconomyFreighter') && economy02.includes('arriveWorldEconomyFreighter'), 'NPC freight departure or arrival is missing');
-          assert(economy03.includes('generateVendorStock=function generateVendorStockFromPersistentEconomy() { return []; }'), 'Legacy spontaneous vendor stock generation is not disabled');
-          assert(economy03.includes('worldEconomyUnpackDeliveryGoods'), 'Delivery Goods cannot restock vendor inventory');
-          assert(economy03.includes('sellToStationWithPersistentWorldInventory'), 'Player sales are not persisted to station inventory');
-          assert(economy03.includes('buyStationStockFromPersistentWorldInventory'), 'Vendor sales do not consume persistent station inventory');
+          assert(economyCommerce00.includes('generateVendorStock=function generateVendorStockFromPersistentEconomy() { return []; }'), 'Legacy spontaneous vendor stock generation is not disabled');
+          assert(economyCommerce00.includes('worldEconomyUnpackDeliveryGoods'), 'Delivery Goods cannot restock vendor inventory');
+          assert(economyCommerce01.includes('sellToStationWithPersistentWorldInventory'), 'Player sales are not persisted to station inventory');
+          assert(economyCommerce01.includes('buyStationStockFromPersistentWorldInventory'), 'Vendor sales do not consume persistent station inventory');
+          assert(economyCommerce01.includes('const active=commerce.stations?.[commerce.activeStationId]'), 'Vendor projection is not lazy to the active station');
           assert(economyScheduler.includes('setTimeout(processStations,0)'), 'Station catch-up is not processed progressively');
           assert(economyScheduler.includes('setTimeout(processVessels,0)'), 'NPC freight catch-up is not processed progressively');
           assert(economyStability02.includes('lastStationCycleAt'), 'Hourly production does not use an independent cycle clock');
@@ -169,7 +173,7 @@ jobs:
           assert(economyUiStability.includes('populateStandaloneWorldMapProgressively'), 'Standalone world network is not progressively rendered');
           assert(economyUiStability.includes('populateDashboardStationNetworkProgressively'), 'Dashboard station network is not progressively rendered');
           assert(economyStability03.includes('worldEconomyStationRecordForNodeWithUnopenedStationSupport'), 'Unopened stations cannot accept scheduled freight');
-          assert(economyStability03.includes('BAROTRAUMA_WORLD_ECONOMY_DIAGNOSTICS') || economyStability03.includes('dashboardBoundaryDiagnosticsWithWorldEconomy'), 'World economy diagnostics are not integrated');
+          assert(economyStability03.includes('dashboardBoundaryDiagnosticsWithWorldEconomy'), 'World economy diagnostics are not integrated');
 
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
           assert(finalRuntime.includes('version: 20'), 'Suite export version was not advanced for persistent world economy');
