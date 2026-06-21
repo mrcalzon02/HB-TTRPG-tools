@@ -1,7 +1,8 @@
 
   function generalEncounterLethalityRosterSummary() {
     normalizeGeneralEncounterLifeState();
-    const roster = typeof normalizeCrewManagement === 'function' ? normalizeCrewManagement().roster.filter(record => record.active && record.approval === 'Accepted') : [];
+    const localCharacterId = typeof normalizePlayerSubmissionSettings === 'function' ? normalizePlayerSubmissionSettings().characterId : '';
+    const roster = typeof normalizeCrewManagement === 'function' ? normalizeCrewManagement().roster.filter(record => record.active && record.approval === 'Accepted' && (!localCharacterId || record.sourceCharacterId !== localCharacterId)) : [];
     const records = [{ name: state.character.name || 'Current Character', status: state.character.status, current: state.character.current }, ...roster.map(record => ({ name: record.characterName, status: record.status, current: record.current }))];
     return {
       records,
@@ -16,7 +17,7 @@
     const html = generalEncounterDetailHtmlBeforeLethality(event, item, compact);
     if (!event?.failureCasualties?.length) return html;
     const casualtyOutcome = item?.encounterCasualtySummary ? `<br><strong>Casualties applied:</strong> ${escapeHtml(item.encounterCasualtySummary)}` : '';
-    return html.replace('</div>', `<div class="notice bad" style="margin-top:8px"><strong>Failure casualty exposure</strong><br>${escapeHtml(generalEncounterCasualtyText(event))}${casualtyOutcome}</div></div>`);
+    return html.replace(/<\/div>$/, `<div class="notice bad" style="margin-top:8px"><strong>Failure casualty exposure</strong><br>${escapeHtml(generalEncounterCasualtyText(event))}${casualtyOutcome}</div></div>`);
   };
 
   const renderCharacterBeforeGeneralLethality = renderCharacter;
