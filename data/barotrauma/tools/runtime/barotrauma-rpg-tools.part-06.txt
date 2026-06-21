@@ -7,13 +7,14 @@
     else if (tool === 'route') renderRoute();
     else if (tool === 'world') renderWorld();
     else if (tool === 'catalog') renderCatalogue();
+    else if (tool === 'workshop') renderCustomWorkshop();
     else renderCharacter();
   }
 
   document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
   window.addEventListener('hashchange', render);
   document.getElementById('print-tool')?.addEventListener('click', () => window.print());
-  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 3, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, state }, null, 2)));
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 4, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, state }, null, 2)));
   document.getElementById('import-suite')?.addEventListener('change', event => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -26,14 +27,21 @@
         state.character.catalogInventory = Array.isArray(state.character.catalogInventory) ? state.character.catalogInventory : [];
         state.submarine.wikiWeapons = Array.isArray(state.submarine.wikiWeapons) ? state.submarine.wikiWeapons : [];
         state.submarine.wikiAmmo = Array.isArray(state.submarine.wikiAmmo) ? state.submarine.wikiAmmo : [];
+        state.submarine.customModules = Array.isArray(state.submarine.customModules) ? state.submarine.customModules : [];
         state.catalog = state.catalog || { query: '', category: 'All' };
         state.submarineLibrary = state.submarineLibrary && typeof state.submarineLibrary === 'object'
           ? state.submarineLibrary
           : { custom: [], draft: defaultCustomSubmarineDraft() };
         state.submarineLibrary.custom = Array.isArray(state.submarineLibrary.custom) ? state.submarineLibrary.custom : [];
         state.submarineLibrary.draft = deepMerge(defaultCustomSubmarineDraft(), state.submarineLibrary.draft || {});
+        state.customContent = state.customContent && typeof state.customContent === 'object'
+          ? state.customContent
+          : { entries: [], draft: defaultCustomContentDraft(), query: '', filterType: 'All' };
+        state.customContent.entries = Array.isArray(state.customContent.entries) ? state.customContent.entries : [];
+        state.customContent.draft = deepMerge(defaultCustomContentDraft(state.customContent.draft?.type || 'equipment'), state.customContent.draft || {});
         registerOfficialSubmarines();
         syncCustomSubmarines();
+        syncCustomStations();
         if (!SUBMARINES[state.submarine.model]) state.submarine.model = 'Barsuk';
         save(); render();
       } catch (error) {
