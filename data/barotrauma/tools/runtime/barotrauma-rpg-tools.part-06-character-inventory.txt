@@ -1,0 +1,230 @@
+
+  const INVENTORY_TRACKERS = ['none', 'ammo', 'uses', 'condition'];
+
+  function inventoryDefinition(entry) {
+    if (entry?.id) {
+      const item = catalogueItem(entry.id);
+      if (item) return item;
+    }
+    return {
+      id: '',
+      name: entry?.customName || 'Unnamed Item',
+      category: entry?.customCategory || 'Custom',
+      subcategory: entry?.customSubcategory || 'Manual Entry',
+      description: entry?.customDescription || '',
+      carryUnits: Math.max(0, number(entry?.carryUnits, 1)),
+      compatibleAmmo: csvValues(entry?.compatibleAmmo || ''),
+      capacity: Math.max(0, number(entry?.capacity)),
+      source: 'character',
+      custom: true
+    };
+  }
+
+  function inferInventoryTracker(item) {
+    if (!item) return 'none';
+    if (item.category === 'Weapons') {
+      if (item.subcategory === 'Ranged' || item.compatibleAmmo?.length || number(item.maxAmmo) > 0) return 'ammo';
+      if (item.subcategory === 'Throwable') return 'uses';
+      return 'condition';
+    }
+    if (item.category === 'Tools') return 'uses';
+    if (item.category === 'Ammunition' || item.category === 'Consumables' || item.category === 'Medical') return 'uses';
+    if (item.category === 'Gear') return 'condition';
+    return 'none';
+  }
+
+  function ammoDefinitionByName(name) {
+    const normalized = String(name || '').trim().toLowerCase();
+    if (!normalized) return null;
+    return WIKI_CATALOG.items.find(item => String(item.name || '').trim().toLowerCase() === normalized)
+      || state.customContent?.entries?.map(customEntryAsItem).find(item => String(item.name || '').trim().toLowerCase() === normalized)
+      || null;
+  }
+
+  function inferredMagazineCapacity(item, ammoName, fallback = 1) {
+    const weaponCapacity = Math.max(0, number(item?.maxAmmo));
+    const ammoCapacity = Math.max(0, number(ammoDefinitionByName(ammoName)?.capacity));
+    if (weaponCapacity > 1) return weaponCapacity;
+    if (ammoCapacity > 1) return ammoCapacity;
+    if (weaponCapacity > 0) return weaponCapacity;
+    if (ammoCapacity > 0) return ammoCapacity;
+    return Math.max(1, number(fallback, 1));
+  }
+
+  function defaultUsesForItem(item) {
+    const capacity = Math.max(0, number(item?.capacity));
+    return capacity || 1;
+  }
+
+  function individualInventoryTracking(item, tracker) {
+    return ['Weapons', 'Tools', 'Gear'].includes(item?.category) || tracker === 'ammo' || tracker === 'condition';
+  }
+
+  function normalizeInventoryEntry(raw, itemOverride = null) {
+    const item = itemOverride || inventoryDefinition(raw);
+    const tracker = INVENTORY_TRACKERS.includes(raw?.tracker) ? raw.tracker : inferInventoryTracker(item);
+    const compatibleAmmo = item?.compatibleAmmo || [];
+    const ammoName = raw?.ammoName || compatibleAmmo[0] || '';
+    const magazineCapacity = Math.max(1, number(raw?.magazineCapacity, inferredMagazineCapacity(item, ammoName, 1)));
+    const maxUses = Math.max(1, number(raw?.maxUses, defaultUsesForItem(item)));
+    return {
+      instanceId: raw?.instanceId || uid('inventory'),
+      id: raw?.id || '',
+      quantity: Math.max(1, number(raw?.quantity, 1)),
+      customName: raw?.customName || '',
+      customCategory: raw?.customCategory || 'Custom',
+      customSubcategory: raw?.customSubcategory || 'Manual Entry',
+      customDescription: raw?.customDescription || '',
+      carryUnits: Math.max(0, number(raw?.carryUnits, item?.carryUnits ?? 1)),
+      compatibleAmmo: raw?.compatibleAmmo || '',
+      tracker,
+      ammoName,
+      currentAmmo: clamp(raw?.currentAmmo ?? magazineCapacity, 0, magazineCapacity),
+      magazineCapacity,
+      usesRemaining: clamp(raw?.usesRemaining ?? maxUses, 0, maxUses),
+      maxUses,
+      condition: clamp(raw?.condition ?? 100, 0, 100),
+      equipped: Boolean(raw?.equipped),
+      location: raw?.location || '',
+      notes: raw?.notes || ''
+    };
+  }
+
+  function normalizeCharacterInventory() {
+    const original = Array.isArray(state.character.catalogInventory) ? state.character.catalogInventory : [];
+    const normalized = [];
+    for (const raw of original) {
+      const item = inventoryDefinition(raw);
+      const tracker = INVENTORY_TRACKERS.includes(raw?.tracker) ? raw.tracker : inferInventoryTracker(item);
+      const quantity = Math.max(1, number(raw?.quantity, 1));
+      if (!raw?.instanceId && quantity > 1 && individualInventoryTracking(item, tracker)) {
+        for (let index = 0; index < quantity; index += 1) normalized.push(normalizeInventoryEntry({ ...raw, quantity: 1 }, item));
+      } else {
+        normalized.push(normalizeInventoryEntry(raw, item));
+      }
+    }
+    state.character.catalogInventory = normalized;
+    return normalized;
+  }
+
+  normalizeCharacterInventory();
+
+  function inventoryEntry(instanceId) {
+    return state.character.catalogInventory.find(entry => entry.instanceId === instanceId);
+  }
+
+  function stackableInventoryItem(item, tracker) {
+    return !individualInventoryTracking(item, tracker);
+  }
+
+  addCharacterCatalogueItem = function addTrackedCharacterCatalogueItem(id, quantity = 1) {
+    const item = catalogueItem(id);
+    if (!item || item.category === 'Submarine Ammunition') return;
+    const tracker = inferInventoryTracker(item);
+    const count = Math.max(1, number(quantity, 1));
+    if (stackableInventoryItem(item, tracker)) {
+      const existing = state.character.catalogInventory.find(entry => entry.id === id && entry.tracker === tracker);
+      if (existing) existing.quantity = Math.max(1, number(existing.quantity, 1) + count);
+      else state.character.catalogInventory.push(normalizeInventoryEntry({ id, quantity: count, tracker }, item));
+    } else {
+      for (let index = 0; index < count; index += 1) state.character.catalogInventory.push(normalizeInventoryEntry({ id, quantity: 1, tracker }, item));
+    }
+    save();
+  };
+
+  structuredCarry = function structuredTrackedCarry() {
+    normalizeCharacterInventory();
+    return state.character.catalogInventory.reduce((sum, entry) => {
+      const item = inventoryDefinition(entry);
+      return sum + Math.max(0, number(item.carryUnits, entry.carryUnits || 1)) * Math.max(1, number(entry.quantity, 1));
+    }, 0);
+  };
+
+  function trackerLabel(tracker) {
+    return ({ none: 'No counter', ammo: 'Loaded ammunition', uses: 'Uses / charges', condition: 'Condition' })[tracker] || tracker;
+  }
+
+  function inventoryCounterHtml(entry, item) {
+    if (entry.tracker === 'ammo') {
+      const compatible = item.compatibleAmmo || csvValues(entry.compatibleAmmo);
+      const ammoControl = compatible.length
+        ? `<select class="inventory-ammo-name" data-instance="${escapeHtml(entry.instanceId)}">${optionList(compatible, entry.ammoName || compatible[0])}</select>`
+        : `<input class="inventory-ammo-name" data-instance="${escapeHtml(entry.instanceId)}" value="${escapeHtml(entry.ammoName)}" placeholder="Ammunition type">`;
+      return `<div class="inventory-counter-block"><span class="small-note">Ammunition / magazine</span>${ammoControl}<div class="inventory-counter-row"><input class="inventory-current-ammo" data-instance="${escapeHtml(entry.instanceId)}" type="number" min="0" max="${entry.magazineCapacity}" value="${entry.currentAmmo}"><span>/</span><input class="inventory-magazine-capacity" data-instance="${escapeHtml(entry.instanceId)}" type="number" min="1" max="9999" value="${entry.magazineCapacity}"></div><div class="button-row no-print"><button class="compact-button inventory-spend-ammo" data-instance="${escapeHtml(entry.instanceId)}" type="button">Fire / Spend 1</button><button class="compact-button inventory-reload" data-instance="${escapeHtml(entry.instanceId)}" type="button">Reload</button></div></div>`;
+    }
+    if (entry.tracker === 'uses') {
+      return `<div class="inventory-counter-block"><span class="small-note">Uses / charges remaining</span><div class="inventory-counter-row"><input class="inventory-uses-remaining" data-instance="${escapeHtml(entry.instanceId)}" type="number" min="0" max="${entry.maxUses}" value="${entry.usesRemaining}"><span>/</span><input class="inventory-max-uses" data-instance="${escapeHtml(entry.instanceId)}" type="number" min="1" max="9999" value="${entry.maxUses}"></div><div class="button-row no-print"><button class="compact-button inventory-spend-use" data-instance="${escapeHtml(entry.instanceId)}" type="button">Use 1</button><button class="compact-button inventory-refill" data-instance="${escapeHtml(entry.instanceId)}" type="button">Refill</button></div></div>`;
+    }
+    if (entry.tracker === 'condition') {
+      return `<div class="inventory-counter-block"><span class="small-note">Condition</span><div class="inventory-counter-row"><input class="inventory-condition" data-instance="${escapeHtml(entry.instanceId)}" type="number" min="0" max="100" value="${entry.condition}"><span>/ 100</span></div><div class="button-row no-print"><button class="compact-button inventory-damage" data-instance="${escapeHtml(entry.instanceId)}" type="button">Damage 10</button><button class="compact-button inventory-repair" data-instance="${escapeHtml(entry.instanceId)}" type="button">Repair</button></div></div>`;
+    }
+    return '<span class="small-note">No consumable counter assigned.</span>';
+  }
+
+  enhanceCharacterCatalogue = function enhanceTrackedCharacterInventory() {
+    normalizeCharacterInventory();
+    const character = state.character;
+    const freeform = character.inventory.split(/\n|,/).map(item => item.trim()).filter(Boolean).length;
+    const structured = structuredCarry();
+    const total = freeform + structured;
+    const weapons = character.catalogInventory.filter(entry => inventoryDefinition(entry).category === 'Weapons').length;
+    const depleted = character.catalogInventory.filter(entry => (entry.tracker === 'ammo' && entry.currentAmmo <= 0) || (entry.tracker === 'uses' && entry.usesRemaining <= 0) || (entry.tracker === 'condition' && entry.condition <= 0)).length;
+    const availableItems = WIKI_CATALOG.items.filter(item => item.category !== 'Submarine Ammunition');
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div><h3>Tracked Inventory and Loadout</h3><p class="small-note">Each weapon can track its loaded ammunition and magazine capacity. Repair tools, medicine, batteries, tanks, throwables, and other consumables can track remaining uses or charges. Gear and melee weapons can track condition. Counters are editable for campaign-specific rulings.</p></div>
+        <div class="button-row no-print"><button id="character-open-catalogue" class="secondary-action" type="button">Browse Catalogue</button><button id="character-add-blank-item" class="secondary-action" type="button">Add Blank Item</button></div>
+      </div>
+      <div class="field-grid" style="margin:12px 0"><label class="field">Add catalogue item<select id="character-quick-item">${optionList(availableItems.map(item => item.id), availableItems[0]?.id || '', id => catalogueItem(id)?.name || id)}</select></label><div class="button-row" style="align-self:end"><button id="character-quick-add" class="primary-action no-print" type="button">Add to Inventory</button></div></div>
+      <div class="metric-row" style="margin-bottom:12px"><div class="metric"><span>Tracked entries</span><strong>${character.catalogInventory.length}</strong></div><div class="metric"><span>Weapons</span><strong>${weapons}</strong></div><div class="metric"><span>Depleted / broken</span><strong class="${depleted ? 'warn' : 'good'}">${depleted}</strong></div><div class="metric"><span>Catalogue carry</span><strong>${structured}</strong></div><div class="metric"><span>Total carried</span><strong class="${total > number(character.current.Strength) ? 'bad' : 'good'}">${total}/${number(character.current.Strength)}</strong></div></div>
+      <div class="table-wrap"><table class="tool-table inventory-table"><thead><tr><th>Item</th><th>Qty / carried</th><th>Counter type</th><th>Ammunition, uses, or condition</th><th>Equipped / location</th><th>Notes</th><th></th></tr></thead><tbody>
+        ${character.catalogInventory.map(entry => {
+          const item = inventoryDefinition(entry);
+          const manual = !entry.id;
+          const quantity = Math.max(1, number(entry.quantity, 1));
+          const carry = Math.max(0, number(item.carryUnits, entry.carryUnits || 1)) * quantity;
+          return `<tr data-inventory-instance="${escapeHtml(entry.instanceId)}"><td>${manual ? `<input class="inventory-custom-name" data-instance="${escapeHtml(entry.instanceId)}" value="${escapeHtml(entry.customName)}" placeholder="Item name"><input class="inventory-custom-category" data-instance="${escapeHtml(entry.instanceId)}" value="${escapeHtml(entry.customCategory)}" placeholder="Category">` : `<strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${escapeHtml(item.category)} · ${escapeHtml(item.subcategory || '')}</span>`}<br><span class="small-note">${escapeHtml(item.description || entry.customDescription || '')}</span></td><td><input class="inventory-quantity" data-instance="${escapeHtml(entry.instanceId)}" type="number" min="1" max="999" value="${quantity}"><span class="small-note">Carry ${carry}</span></td><td><select class="inventory-tracker" data-instance="${escapeHtml(entry.instanceId)}">${optionList(INVENTORY_TRACKERS, entry.tracker, trackerLabel)}</select></td><td>${inventoryCounterHtml(entry, item)}</td><td><label class="check-row" style="grid-template-columns:auto 1fr"><input class="inventory-equipped" data-instance="${escapeHtml(entry.instanceId)}" type="checkbox" ${entry.equipped ? 'checked' : ''}><span>Equipped</span></label><input class="inventory-location" data-instance="${escapeHtml(entry.instanceId)}" value="${escapeHtml(entry.location)}" placeholder="Belt, backpack, locker…"></td><td><textarea class="inventory-notes" data-instance="${escapeHtml(entry.instanceId)}" placeholder="Modifications, damage, ownership…">${escapeHtml(entry.notes)}</textarea></td><td><button class="compact-button inventory-remove" data-instance="${escapeHtml(entry.instanceId)}" type="button">Remove</button></td></tr>`;
+        }).join('') || '<tr><td colspan="7">No tracked inventory items. Add a catalogue item or a blank campaign item.</td></tr>'}
+      </tbody></table></div>
+      <p class="small-note" style="margin-top:10px">The original freeform inventory box remains above for quick notes and legacy campaign entries. Move important equipment into this table when ammunition, uses, condition, location, or individual ownership must be tracked.</p>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+
+    const update = (instanceId, callback, rerender = false) => {
+      const entry = inventoryEntry(instanceId);
+      if (!entry) return;
+      callback(entry);
+      save();
+      if (rerender) renderCharacter();
+    };
+    panel.querySelector('#character-open-catalogue')?.addEventListener('click', () => setTool('catalog'));
+    panel.querySelector('#character-quick-add')?.addEventListener('click', () => { const id = panel.querySelector('#character-quick-item')?.value; if (id) addCharacterCatalogueItem(id); renderCharacter(); });
+    panel.querySelector('#character-add-blank-item')?.addEventListener('click', () => { character.catalogInventory.push(normalizeInventoryEntry({ customName: '', customCategory: 'Custom', quantity: 1, tracker: 'none' })); save(); renderCharacter(); });
+    panel.querySelectorAll('.inventory-quantity').forEach(input => input.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.quantity = clamp(event.target.value, 1, 999); }, true)));
+    panel.querySelectorAll('.inventory-tracker').forEach(select => select.addEventListener('change', event => update(event.target.dataset.instance, entry => {
+      entry.tracker = event.target.value;
+      const item = inventoryDefinition(entry);
+      if (entry.tracker === 'ammo') { entry.ammoName = entry.ammoName || item.compatibleAmmo?.[0] || ''; entry.magazineCapacity = inferredMagazineCapacity(item, entry.ammoName, entry.magazineCapacity); entry.currentAmmo = clamp(entry.currentAmmo || entry.magazineCapacity, 0, entry.magazineCapacity); }
+      if (entry.tracker === 'uses') { entry.maxUses = Math.max(1, number(entry.maxUses, defaultUsesForItem(item))); entry.usesRemaining = clamp(entry.usesRemaining || entry.maxUses, 0, entry.maxUses); }
+      if (entry.tracker === 'condition') entry.condition = clamp(entry.condition || 100, 0, 100);
+    }, true)));
+    panel.querySelectorAll('.inventory-ammo-name').forEach(control => control.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.ammoName = event.target.value; const item = inventoryDefinition(entry); entry.magazineCapacity = inferredMagazineCapacity(item, entry.ammoName, entry.magazineCapacity); entry.currentAmmo = Math.min(entry.currentAmmo, entry.magazineCapacity); }, true)));
+    panel.querySelectorAll('.inventory-current-ammo').forEach(input => input.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.currentAmmo = clamp(event.target.value, 0, entry.magazineCapacity); }, true)));
+    panel.querySelectorAll('.inventory-magazine-capacity').forEach(input => input.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.magazineCapacity = clamp(event.target.value, 1, 9999); entry.currentAmmo = Math.min(entry.currentAmmo, entry.magazineCapacity); }, true)));
+    panel.querySelectorAll('.inventory-spend-ammo').forEach(button => button.addEventListener('click', event => update(event.target.dataset.instance, entry => { entry.currentAmmo = Math.max(0, entry.currentAmmo - 1); }, true)));
+    panel.querySelectorAll('.inventory-reload').forEach(button => button.addEventListener('click', event => update(event.target.dataset.instance, entry => { entry.currentAmmo = entry.magazineCapacity; }, true)));
+    panel.querySelectorAll('.inventory-uses-remaining').forEach(input => input.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.usesRemaining = clamp(event.target.value, 0, entry.maxUses); }, true)));
+    panel.querySelectorAll('.inventory-max-uses').forEach(input => input.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.maxUses = clamp(event.target.value, 1, 9999); entry.usesRemaining = Math.min(entry.usesRemaining, entry.maxUses); }, true)));
+    panel.querySelectorAll('.inventory-spend-use').forEach(button => button.addEventListener('click', event => update(event.target.dataset.instance, entry => { entry.usesRemaining = Math.max(0, entry.usesRemaining - 1); }, true)));
+    panel.querySelectorAll('.inventory-refill').forEach(button => button.addEventListener('click', event => update(event.target.dataset.instance, entry => { entry.usesRemaining = entry.maxUses; }, true)));
+    panel.querySelectorAll('.inventory-condition').forEach(input => input.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.condition = clamp(event.target.value, 0, 100); }, true)));
+    panel.querySelectorAll('.inventory-damage').forEach(button => button.addEventListener('click', event => update(event.target.dataset.instance, entry => { entry.condition = Math.max(0, entry.condition - 10); }, true)));
+    panel.querySelectorAll('.inventory-repair').forEach(button => button.addEventListener('click', event => update(event.target.dataset.instance, entry => { entry.condition = 100; }, true)));
+    panel.querySelectorAll('.inventory-equipped').forEach(input => input.addEventListener('change', event => update(event.target.dataset.instance, entry => { entry.equipped = event.target.checked; })));
+    panel.querySelectorAll('.inventory-location').forEach(input => input.addEventListener('input', event => update(event.target.dataset.instance, entry => { entry.location = event.target.value; })));
+    panel.querySelectorAll('.inventory-notes').forEach(input => input.addEventListener('input', event => update(event.target.dataset.instance, entry => { entry.notes = event.target.value; })));
+    panel.querySelectorAll('.inventory-custom-name').forEach(input => input.addEventListener('input', event => update(event.target.dataset.instance, entry => { entry.customName = event.target.value; })));
+    panel.querySelectorAll('.inventory-custom-category').forEach(input => input.addEventListener('input', event => update(event.target.dataset.instance, entry => { entry.customCategory = event.target.value; })));
+    panel.querySelectorAll('.inventory-remove').forEach(button => button.addEventListener('click', event => { character.catalogInventory = character.catalogInventory.filter(entry => entry.instanceId !== event.target.dataset.instance); save(); renderCharacter(); }));
+  };
