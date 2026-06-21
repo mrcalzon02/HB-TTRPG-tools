@@ -13,6 +13,7 @@ on:
       - 'data/barotrauma/tools/items/**'
       - 'data/barotrauma/tools/world/**'
       - 'data/barotrauma/tools/factions/**'
+      - 'data/barotrauma/tools/locations/**'
       - 'data/barotrauma-tools-registry.json'
       - 'scripts/validate-barotrauma-runtime.mjs'
       - '.github/workflows/validate-barotrauma-runtime.yml'
