@@ -12,6 +12,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-submarines.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-custom-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-custom-ui.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-custom-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
