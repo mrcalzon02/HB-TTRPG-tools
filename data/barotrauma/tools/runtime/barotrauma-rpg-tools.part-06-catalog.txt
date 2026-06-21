@@ -1,0 +1,375 @@
+
+  const WIKI_CATALOG = globalThis.BAROTRAUMA_WIKI_CATALOG || { items: [], submarineWeapons: [], sources: {} };
+
+  state.character.catalogInventory = Array.isArray(state.character.catalogInventory) ? state.character.catalogInventory : [];
+  state.submarine.wikiWeapons = Array.isArray(state.submarine.wikiWeapons) ? state.submarine.wikiWeapons : [];
+  state.submarine.wikiAmmo = Array.isArray(state.submarine.wikiAmmo) ? state.submarine.wikiAmmo : [];
+  state.catalog = state.catalog && typeof state.catalog === 'object'
+    ? state.catalog
+    : { query: '', category: 'All', subcategory: 'All' };
+
+  const catalogueTab = document.createElement('button');
+  catalogueTab.className = 'ops-tab';
+  catalogueTab.dataset.tool = 'catalog';
+  catalogueTab.type = 'button';
+  catalogueTab.textContent = 'Item & Weapon Catalogue';
+  document.querySelector('.ops-tabs')?.appendChild(catalogueTab);
+
+  const originalActiveTool = activeTool;
+  activeTool = function activeToolWithCatalogue() {
+    const value = window.location.hash.replace(/^#/, '');
+    return value === 'catalog' ? 'catalog' : originalActiveTool();
+  };
+
+  function catalogueItem(id) {
+    return WIKI_CATALOG.items.find(item => item.id === id);
+  }
+
+  function catalogueWeapon(id) {
+    return WIKI_CATALOG.submarineWeapons.find(item => item.id === id);
+  }
+
+  function sourceRecord(key) {
+    return WIKI_CATALOG.sources?.[key] || null;
+  }
+
+  function sourceLink(key, label = 'Official wiki source') {
+    const source = sourceRecord(key);
+    if (!source?.url) return '';
+    return `<a class="rules-link" href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`;
+  }
+
+  function addCharacterCatalogueItem(id, quantity = 1) {
+    const item = catalogueItem(id);
+    if (!item || item.category === 'Submarine Ammunition') return;
+    const existing = state.character.catalogInventory.find(entry => entry.id === id);
+    if (existing) existing.quantity = Math.max(1, number(existing.quantity, 1) + quantity);
+    else state.character.catalogInventory.push({ id, quantity: Math.max(1, quantity) });
+    save();
+  }
+
+  function addSubmarineAmmo(id, quantity = 1) {
+    const item = catalogueItem(id);
+    if (!item || item.category !== 'Submarine Ammunition') return;
+    const existing = state.submarine.wikiAmmo.find(entry => entry.id === id);
+    if (existing) existing.quantity = Math.max(1, number(existing.quantity, 1) + quantity);
+    else state.submarine.wikiAmmo.push({ id, quantity: Math.max(1, quantity) });
+    save();
+  }
+
+  function addSubmarineWeapon(id) {
+    const weapon = catalogueWeapon(id);
+    if (!weapon) return;
+    state.submarine.wikiWeapons.push({
+      instanceId: uid('wiki-weapon'),
+      id,
+      ammoName: weapon.ammo?.[0]?.name || '',
+      loaded: weapon.ammo?.[0]?.magazineSize || 0
+    });
+    save();
+  }
+
+  function structuredCarry() {
+    return state.character.catalogInventory.reduce((sum, entry) => {
+      const item = catalogueItem(entry.id);
+      return sum + (item ? number(item.carryUnits, 1) * Math.max(0, number(entry.quantity, 0)) : 0);
+    }, 0);
+  }
+
+  function enhanceCharacterCatalogue() {
+    const character = state.character;
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    const freeform = character.inventory.split(/\n|,/).map(item => item.trim()).filter(Boolean).length;
+    const structured = structuredCarry();
+    const total = freeform + structured;
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div>
+          <h3>Catalogue Loadout</h3>
+          <p class="small-note">Structured equipment drawn from the Barotrauma Wiki catalogue. Quantities and carry units are included in the character’s load calculation; the original freeform inventory remains available for custom campaign items.</p>
+        </div>
+        <div class="button-row no-print">
+          <button id="character-open-catalogue" class="primary-action" type="button">Browse Available Items</button>
+        </div>
+      </div>
+      <div class="metric-row" style="margin-bottom:12px">
+        <div class="metric"><span>Catalogue units</span><strong>${structured}</strong></div>
+        <div class="metric"><span>Freeform entries</span><strong>${freeform}</strong></div>
+        <div class="metric"><span>Total carried</span><strong class="${total > number(character.current.Strength) ? 'bad' : 'good'}">${total}/${number(character.current.Strength)}</strong></div>
+        <div class="metric"><span>Catalogue entries</span><strong>${character.catalogInventory.length}</strong></div>
+      </div>
+      <div class="table-wrap">
+        <table class="tool-table">
+          <thead><tr><th>Item</th><th>Category</th><th>Quantity</th><th>Carry</th><th>Operational information</th><th></th></tr></thead>
+          <tbody>
+            ${character.catalogInventory.map(entry => {
+              const item = catalogueItem(entry.id);
+              if (!item) return '';
+              const quantity = Math.max(1, number(entry.quantity, 1));
+              const extra = item.compatibleAmmo?.length
+                ? `Ammo: ${item.compatibleAmmo.join(', ')}`
+                : item.medicalUse
+                  ? `Use: ${item.medicalUse}`
+                  : item.compatibleWith?.length
+                    ? `Compatible with: ${item.compatibleWith.join(', ')}`
+                    : item.suggestedStat
+                      ? `Suggested stat: ${item.suggestedStat}`
+                      : '';
+              return `<tr>
+                <td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${escapeHtml(item.subcategory || '')}</span></td>
+                <td>${escapeHtml(item.category)}</td>
+                <td><input class="catalogue-character-quantity" data-id="${escapeHtml(item.id)}" type="number" min="1" max="99" value="${quantity}"></td>
+                <td>${number(item.carryUnits, 1) * quantity}</td>
+                <td>${escapeHtml(extra || item.description)}</td>
+                <td><button class="compact-button catalogue-character-remove" data-id="${escapeHtml(item.id)}" type="button">Remove</button></td>
+              </tr>`;
+            }).join('') || '<tr><td colspan="6">No structured catalogue items selected.</td></tr>'}
+          </tbody>
+        </table>
+      </div>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#character-open-catalogue')?.addEventListener('click', () => setTool('catalog'));
+    panel.querySelectorAll('.catalogue-character-quantity').forEach(input => input.addEventListener('change', event => {
+      const entry = character.catalogInventory.find(item => item.id === event.target.dataset.id);
+      if (entry) entry.quantity = clamp(event.target.value, 1, 99);
+      save();
+      renderCharacter();
+    }));
+    panel.querySelectorAll('.catalogue-character-remove').forEach(button => button.addEventListener('click', event => {
+      character.catalogInventory = character.catalogInventory.filter(item => item.id !== event.target.dataset.id);
+      save();
+      renderCharacter();
+    }));
+  }
+
+  function enhanceSubmarineCatalogue() {
+    const submarine = state.submarine;
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div>
+          <h3>Barotrauma Wiki Weapon Installations</h3>
+          <p class="small-note">Official-game turret, large-turret, depth-charge, and electrical-defense systems are tracked separately from the original RPG document’s fictional tiered weapon list.</p>
+        </div>
+        <button id="submarine-open-catalogue" class="primary-action no-print" type="button">Browse Weapon Catalogue</button>
+      </div>
+      <div class="field-grid" style="margin-bottom:12px">
+        <label class="field">Install weapon system
+          <select id="wiki-weapon-add">${optionList(WIKI_CATALOG.submarineWeapons.map(item => item.id), WIKI_CATALOG.submarineWeapons[0]?.id || '', id => catalogueWeapon(id)?.name || id)}</select>
+        </label>
+        <div class="button-row" style="align-self:end"><button id="wiki-weapon-add-button" class="secondary-action no-print" type="button">Add Installation</button></div>
+      </div>
+      <div class="table-wrap">
+        <table class="tool-table">
+          <thead><tr><th>Installation</th><th>Mount / Loader</th><th>Fire rate</th><th>Loaded ammunition</th><th>Loaded rounds</th><th></th></tr></thead>
+          <tbody>
+            ${submarine.wikiWeapons.map(entry => {
+              const weapon = catalogueWeapon(entry.id);
+              if (!weapon) return '';
+              const ammo = weapon.ammo || [];
+              return `<tr>
+                <td><strong>${escapeHtml(weapon.name)}</strong><br><span class="small-note">${escapeHtml(weapon.notes || '')}</span></td>
+                <td>${escapeHtml(weapon.mount || '')}<br><span class="small-note">${escapeHtml(weapon.loader || 'No loader')}</span></td>
+                <td>${weapon.fireRate == null ? '—' : `${number(weapon.fireRate)} / sec`}</td>
+                <td>${ammo.length ? `<select class="wiki-weapon-ammo" data-instance="${escapeHtml(entry.instanceId)}">${optionList(ammo.map(item => item.name), entry.ammoName)}</select>` : 'No ammunition'}</td>
+                <td>${ammo.length ? `<input class="wiki-weapon-loaded" data-instance="${escapeHtml(entry.instanceId)}" type="number" min="0" value="${Math.max(0, number(entry.loaded))}">` : '—'}</td>
+                <td><button class="compact-button wiki-weapon-remove" data-instance="${escapeHtml(entry.instanceId)}" type="button">Remove</button></td>
+              </tr>`;
+            }).join('') || '<tr><td colspan="6">No official-wiki weapon installations added.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+      <h3 style="margin-top:18px">Submarine Ammunition Stores</h3>
+      <div class="table-wrap">
+        <table class="tool-table">
+          <thead><tr><th>Ammunition</th><th>Compatible system</th><th>Rounds per box</th><th>Boxes</th><th>Total rounds</th><th></th></tr></thead>
+          <tbody>
+            ${submarine.wikiAmmo.map(entry => {
+              const item = catalogueItem(entry.id);
+              if (!item) return '';
+              const quantity = Math.max(1, number(entry.quantity, 1));
+              return `<tr>
+                <td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${escapeHtml(item.description)}</span></td>
+                <td>${escapeHtml((item.compatibleWith || []).join(', '))}</td>
+                <td>${number(item.capacity, 1)}</td>
+                <td><input class="wiki-ammo-quantity" data-id="${escapeHtml(item.id)}" type="number" min="1" max="999" value="${quantity}"></td>
+                <td>${number(item.capacity, 1) * quantity}</td>
+                <td><button class="compact-button wiki-ammo-remove" data-id="${escapeHtml(item.id)}" type="button">Remove</button></td>
+              </tr>`;
+            }).join('') || '<tr><td colspan="6">No official-wiki ammunition boxes stored.</td></tr>'}
+          </tbody>
+        </table>
+      </div>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#submarine-open-catalogue')?.addEventListener('click', () => setTool('catalog'));
+    panel.querySelector('#wiki-weapon-add-button')?.addEventListener('click', () => {
+      addSubmarineWeapon(panel.querySelector('#wiki-weapon-add').value);
+      renderSubmarine();
+    });
+    panel.querySelectorAll('.wiki-weapon-ammo').forEach(select => select.addEventListener('change', event => {
+      const entry = submarine.wikiWeapons.find(item => item.instanceId === event.target.dataset.instance);
+      const weapon = entry && catalogueWeapon(entry.id);
+      const ammo = weapon?.ammo?.find(item => item.name === event.target.value);
+      if (entry) {
+        entry.ammoName = event.target.value;
+        entry.loaded = ammo?.magazineSize || 0;
+      }
+      save();
+      renderSubmarine();
+    }));
+    panel.querySelectorAll('.wiki-weapon-loaded').forEach(input => input.addEventListener('change', event => {
+      const entry = submarine.wikiWeapons.find(item => item.instanceId === event.target.dataset.instance);
+      if (entry) entry.loaded = Math.max(0, number(event.target.value));
+      save();
+    }));
+    panel.querySelectorAll('.wiki-weapon-remove').forEach(button => button.addEventListener('click', event => {
+      submarine.wikiWeapons = submarine.wikiWeapons.filter(item => item.instanceId !== event.target.dataset.instance);
+      save();
+      renderSubmarine();
+    }));
+    panel.querySelectorAll('.wiki-ammo-quantity').forEach(input => input.addEventListener('change', event => {
+      const entry = submarine.wikiAmmo.find(item => item.id === event.target.dataset.id);
+      if (entry) entry.quantity = clamp(event.target.value, 1, 999);
+      save();
+      renderSubmarine();
+    }));
+    panel.querySelectorAll('.wiki-ammo-remove').forEach(button => button.addEventListener('click', event => {
+      submarine.wikiAmmo = submarine.wikiAmmo.filter(item => item.id !== event.target.dataset.id);
+      save();
+      renderSubmarine();
+    }));
+  }
+
+  const baseRenderCharacter = renderCharacter;
+  renderCharacter = function renderCharacterWithCatalogue() {
+    baseRenderCharacter();
+    enhanceCharacterCatalogue();
+  };
+
+  const baseRenderSubmarine = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCatalogue() {
+    baseRenderSubmarine();
+    enhanceSubmarineCatalogue();
+  };
+
+  function renderCatalogue() {
+    const catalogueState = state.catalog;
+    const categories = ['All', ...new Set(WIKI_CATALOG.items.map(item => item.category))];
+    if (!categories.includes(catalogueState.category)) catalogueState.category = 'All';
+    const query = String(catalogueState.query || '').trim().toLowerCase();
+    const filtered = WIKI_CATALOG.items.filter(item =>
+      (catalogueState.category === 'All' || item.category === catalogueState.category) &&
+      (!query || [item.name, item.category, item.subcategory, item.description, item.medicalUse, ...(item.compatibleAmmo || []), ...(item.compatibleWith || [])].join(' ').toLowerCase().includes(query))
+    );
+    const categoryCounts = Object.fromEntries(categories.filter(category => category !== 'All').map(category => [category, WIKI_CATALOG.items.filter(item => item.category === category).length]));
+
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div>
+            <p class="eyebrow">Source-backed operational reference</p>
+            <h2>Item and Weapon Systems Catalogue</h2>
+            <p class="rules-note">${escapeHtml(WIKI_CATALOG.scope || '')}</p>
+            <p class="small-note">${escapeHtml(WIKI_CATALOG.caveat || '')}</p>
+          </div>
+          <div class="metric-row">
+            <div class="metric"><span>Items</span><strong>${WIKI_CATALOG.items.length}</strong></div>
+            <div class="metric"><span>Sub systems</span><strong>${WIKI_CATALOG.submarineWeapons.length}</strong></div>
+            <div class="metric"><span>Wiki version shown</span><strong>${escapeHtml(WIKI_CATALOG.currentGameVersionShown || '—')}</strong></div>
+          </div>
+        </section>
+        <section class="tool-panel">
+          <div class="field-grid three">
+            <label class="field">Search catalogue<input id="catalogue-search" type="search" value="${escapeHtml(catalogueState.query || '')}" placeholder="Item, role, ammunition, treatment…"></label>
+            <label class="field">Category<select id="catalogue-category">${optionList(categories, catalogueState.category, category => category === 'All' ? `All (${WIKI_CATALOG.items.length})` : `${category} (${categoryCounts[category] || 0})`)}</select></label>
+            <div class="button-row" style="align-self:end"><button id="catalogue-clear" class="secondary-action" type="button">Clear Filters</button></div>
+          </div>
+          <div class="button-row" style="margin-top:10px">
+            ${Object.entries(WIKI_CATALOG.sources || {}).map(([key, source]) => source?.url ? `<a class="compact-button" href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(source.title || key)} ↗</a>` : '').join('')}
+          </div>
+        </section>
+        <section class="tool-panel">
+          <h3>Submarine Weapon Installations</h3>
+          <div class="card-list">
+            ${WIKI_CATALOG.submarineWeapons.map(weapon => `<article class="tool-card">
+              <div class="tool-hero" style="padding:0;border:0;background:none">
+                <div>
+                  <span class="tag">${escapeHtml(weapon.mount || '')}</span>
+                  <h3>${escapeHtml(weapon.name)}</h3>
+                  <p class="small-note">${escapeHtml(weapon.notes || '')}</p>
+                </div>
+                <button class="secondary-action catalogue-add-system no-print" data-id="${escapeHtml(weapon.id)}" type="button">Add to Submarine</button>
+              </div>
+              <p class="small-note"><strong>Loader:</strong> ${escapeHtml(weapon.loader || 'None')} · <strong>Fire rate:</strong> ${weapon.fireRate == null ? '—' : `${weapon.fireRate}/sec`}</p>
+              <div class="table-wrap"><table class="tool-table"><thead><tr><th>Ammunition</th><th>Magazine</th><th>Effect summary</th></tr></thead><tbody>
+                ${(weapon.ammo || []).map(ammo => `<tr><td>${escapeHtml(ammo.name)}</td><td>${number(ammo.magazineSize, 0)}</td><td>${escapeHtml(ammo.summary || '')}</td></tr>`).join('') || '<tr><td colspan="3">No ammunition required.</td></tr>'}
+              </tbody></table></div>
+              <p>${sourceLink(weapon.source)}</p>
+            </article>`).join('')}
+          </div>
+        </section>
+        <section class="tool-panel">
+          <h3>Available Items <span class="small-note">— ${filtered.length} shown</span></h3>
+          <div class="table-wrap">
+            <table class="tool-table">
+              <thead><tr><th>Item</th><th>Category</th><th>Operational use</th><th>Capacity / compatibility</th><th>Source</th><th></th></tr></thead>
+              <tbody>
+                ${filtered.map(item => {
+                  const compatibility = item.compatibleAmmo?.length
+                    ? `Uses: ${item.compatibleAmmo.join(', ')}`
+                    : item.compatibleWith?.length
+                      ? `For: ${item.compatibleWith.join(', ')}`
+                      : item.capacity
+                        ? `Capacity: ${item.capacity}`
+                        : item.medicalUse
+                          ? `Medical use: ${item.medicalUse}`
+                          : item.suggestedStat
+                            ? `Suggested stat: ${item.suggestedStat}`
+                            : '';
+                  const submarineAmmo = item.category === 'Submarine Ammunition';
+                  return `<tr>
+                    <td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${escapeHtml(item.subcategory || '')}</span></td>
+                    <td>${escapeHtml(item.category)}</td>
+                    <td>${escapeHtml(item.description || '')}</td>
+                    <td>${escapeHtml(compatibility)}</td>
+                    <td>${sourceLink(item.source, sourceRecord(item.source)?.title || 'Wiki')}</td>
+                    <td><button class="compact-button ${submarineAmmo ? 'catalogue-add-ammo' : 'catalogue-add-character'}" data-id="${escapeHtml(item.id)}" type="button">${submarineAmmo ? 'Add to Submarine' : 'Add to Character'}</button></td>
+                  </tr>`;
+                }).join('') || '<tr><td colspan="6">No items match the current filter.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>`;
+
+    bindTextInput('#catalogue-search', element => {
+      catalogueState.query = element.value;
+      save();
+      renderCatalogue();
+    });
+    bindTextInput('#catalogue-category', element => {
+      catalogueState.category = element.value;
+      save();
+      renderCatalogue();
+    }, 'change');
+    root.querySelector('#catalogue-clear')?.addEventListener('click', () => {
+      catalogueState.query = '';
+      catalogueState.category = 'All';
+      save();
+      renderCatalogue();
+    });
+    root.querySelectorAll('.catalogue-add-character').forEach(button => button.addEventListener('click', event => {
+      addCharacterCatalogueItem(event.target.dataset.id);
+      event.target.textContent = 'Added';
+    }));
+    root.querySelectorAll('.catalogue-add-ammo').forEach(button => button.addEventListener('click', event => {
+      addSubmarineAmmo(event.target.dataset.id);
+      event.target.textContent = 'Added';
+    }));
+    root.querySelectorAll('.catalogue-add-system').forEach(button => button.addEventListener('click', event => {
+      addSubmarineWeapon(event.target.dataset.id);
+      event.target.textContent = 'Installed';
+    }));
+  }
