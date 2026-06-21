@@ -68,6 +68,8 @@
     .hidden{display:none!important}
     .active-dashboard-command{border-color:rgba(117,197,142,.62)}
     .dashboard-focused-panel{border-color:var(--accent)!important;box-shadow:0 0 0 2px rgba(200,138,53,.2),var(--shadow)}
+    .dashboard-active-turn-row{background:rgba(117,197,142,.12)}
+    .dashboard-station-panel-locked{opacity:.58}
     code{overflow-wrap:anywhere;color:#c9d7e5}
     @media(max-width:1100px){.span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column:span 12}.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.station-vendor-grid{grid-template-columns:1fr}.expanded-map-frame svg{width:5000px;height:5000px}}
     @media(max-width:700px){.ops-header,.tool-hero{display:grid}.field-grid,.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:1fr}.ops-page{padding:12px}.map-frame{min-height:0}.map-frame svg{height:480px;min-width:0}.expanded-map-frame{height:760px}.expanded-map-frame svg{width:3800px;height:3800px}}
@@ -80,7 +82,7 @@
       <div>
         <p class="eyebrow">Rules-derived campaign utilities</p>
         <h1>Barotrauma RPG Operations Suite</h1>
-        <p class="subtitle">Character management, lethal encounters, vessel systems, ID-linked crew, route crossings, and world position are unified through one active-submarine management dashboard.</p>
+        <p class="subtitle">The active-submarine dashboard now operates in two states: At Station for preparation and adjacent-route filing, and In Route for sequential event cards, crew turns, initiative, transit consequences, and arrival.</p>
       </div>
       <div class="ops-header-actions">
         <button id="export-suite" class="secondary-action" type="button">Export Suite JSON</button>
@@ -100,6 +102,6 @@
 
     <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
   </main>
-  <script src="barotrauma-rpg-tools-loader.js?v=020"></script>
+  <script src="barotrauma-rpg-tools-loader.js?v=021"></script>
 </body>
 </html>
