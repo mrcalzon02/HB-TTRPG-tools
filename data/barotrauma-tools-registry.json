@@ -15,6 +15,7 @@
     "The unified public world state is a portable shared-authority save file: submissions update the host's canonical save when pushed, but the static site does not claim a live network service or central server.",
     "The campaign-scale Europa map uses forty-eight mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, and a 7,008-unit shell radius while preserving older small-world maps in a migration archive.",
     "Faction seeding distinguishes Primer-backed institutions from newly named campaign organizations. The world uses eight operational districts, eight umbrella factions, thirty-four operational organizations, cross-border Union 208 representation, corporate and material-distribution networks, criminal influence, and concealed cult cells.",
+    "A shared ten-level location registry maps the outermost ring to Level 1, the innermost non-core ring to Level 9, and the unique center to the Level 10 Eye of Europa. Its forty-eight profiles drive NPC stations, player-created stations, shops, services, availability, hazards, world nodes, and encounter generation.",
     "Custom items and submarines are validated against current official measurable ceilings. Designs exceeding those ceilings remain undeployable until their station-based research project has consumed the required Marks, supplies, capability, and canonical real time."
   ],
   "modules": [
@@ -69,11 +70,11 @@
       "title": "Submarine Manager",
       "priority": 4,
       "status": "available",
-      "description": "A table-side vessel manager for all 16 official-wiki submarines and custom designs, with crew submissions, cargo manifests, compatible ammunition, faction-aware station stores, generated vendors, player-station treasuries, and a validator that prevents above-ceiling custom submarines, systems, weapons, or modules from deployment until their station R&D projects are fully funded and completed.",
+      "description": "A table-side vessel manager for all 16 official-wiki submarines and custom designs, with crew submissions, cargo manifests, compatible ammunition, faction-aware and level-aware station stores, generated vendors, player-station treasuries, station lore and service profiles, and a validator that prevents above-ceiling custom designs from deployment until station R&D is completed.",
       "launchUrl": "barotrauma-rpg-tools.html#submarine",
       "actionLabel": "Open Submarine Manager",
-      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "cargo manifest", "station stores", "vendors", "vending machines", "faction reputation", "player stations", "R&D", "validation", "weapons", "ammunition", "upgrades", "upkeep"],
-      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "designValidation", "researchProject", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "cargoManifest", "cargoLot", "stationMarket", "vendorProfile", "vendorStock", "factionReputation", "umbrellaFactionReputation", "stationReputation", "proprietorReputation", "transactionRecord", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
+      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "cargo manifest", "station stores", "location levels", "shops", "services", "vendors", "vending machines", "faction reputation", "player stations", "R&D", "validation", "weapons", "ammunition", "upgrades", "upkeep"],
+      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "designValidation", "researchProject", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "cargoManifest", "cargoLot", "stationMarket", "stationLocationProfile", "vendorProfile", "vendorStock", "factionReputation", "umbrellaFactionReputation", "stationReputation", "proprietorReputation", "transactionRecord", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
     },
     {
       "id": "barotrauma-custom-content-workshop",
@@ -81,11 +82,11 @@
       "title": "Custom Content Workshop and R&D",
       "priority": 5,
       "status": "available",
-      "description": "Creates source-anchored custom weapons, ammunition, systems, power sources, equipment, consumables, stations, and modules. Measurable statistics are checked against existing official ceilings; superior designs become locked research projects requiring great sums of Marks, supplies, a player- or faction-owned station with sufficient research capability, and real canonical development time before deployment.",
+      "description": "Creates source-anchored custom weapons, ammunition, systems, power sources, equipment, consumables, stations, and modules. Player-created stations select a valid habitable location level and type, inheriting the corresponding lore, shops, services, hazards, and market availability. Superior designs remain locked research projects requiring funding, supplies, capability, and canonical development time.",
       "launchUrl": "barotrauma-rpg-tools.html#workshop",
       "actionLabel": "Open Custom Content Workshop",
-      "tags": ["custom content", "homebrew", "validation", "research", "development", "Marks", "supplies", "stations", "weapons", "systems", "power sources", "equipment", "modules"],
-      "dataFamilies": ["customContentRecord", "derivationAnchor", "derivedProfile", "designValidation", "officialCeiling", "researchProject", "researchFunding", "developmentSchedule", "customWeapon", "customAmmunition", "customSystem", "customPowerSource", "customItem", "customStation", "customUpgradeModule"]
+      "tags": ["custom content", "homebrew", "player stations", "location levels", "station types", "shops", "services", "validation", "research", "development", "Marks", "supplies", "weapons", "systems", "power sources", "equipment", "modules"],
+      "dataFamilies": ["customContentRecord", "derivationAnchor", "derivedProfile", "designValidation", "officialCeiling", "researchProject", "researchFunding", "developmentSchedule", "customWeapon", "customAmmunition", "customSystem", "customPowerSource", "customItem", "customStation", "stationLocationProfile", "customUpgradeModule"]
     },
     {
       "id": "barotrauma-encounter-planner",
@@ -93,11 +94,11 @@
       "title": "Encounter Planner",
       "priority": 6,
       "status": "available",
-      "description": "Draw, customize, sequence, and resolve maintenance failures, hazards, exploration, station, pirate, creature, salvage, navigation, and optional Lost Sanity event cards against the current character sheet.",
+      "description": "Draw, customize, sequence, and resolve maintenance failures, hazards, exploration, station, pirate, creature, salvage, navigation, and optional Lost Sanity event cards. The planner also draws from all forty-eight levelled location profiles, filters by level or exact type, and can turn the current mapped destination directly into a lore-rich encounter.",
       "launchUrl": "barotrauma-rpg-tools.html#encounters",
       "actionLabel": "Open Encounter Planner",
-      "tags": ["events", "encounters", "event cards", "sanity", "hazards", "resolution"],
-      "dataFamilies": ["encounterCard", "eventSequence", "difficultyProfile", "rewardProfile", "failureConsequence"]
+      "tags": ["events", "encounters", "location encounters", "ten levels", "Eye of Europa", "event cards", "sanity", "hazards", "resolution"],
+      "dataFamilies": ["encounterCard", "locationEncounter", "locationLevel", "locationType", "worldDestinationEncounter", "eventSequence", "difficultyProfile", "rewardProfile", "failureConsequence"]
     },
     {
       "id": "barotrauma-route-planner",
@@ -105,11 +106,11 @@
       "title": "Route Planner and Encounter Tables",
       "priority": 7,
       "status": "available",
-      "description": "Plan station-to-station voyages in source gameplay order, combine Job-card event requirements with route distance, apply Navigator abilities, edit weighted encounter tables, and generate sequential voyage events.",
+      "description": "Plan station-to-station voyages in source gameplay order, combine Job-card event requirements with route distance, apply Navigator abilities, edit weighted encounter tables, and generate sequential voyage events including levelled location encounters.",
       "launchUrl": "barotrauma-rpg-tools.html#route",
       "actionLabel": "Open Route Planner",
-      "tags": ["routes", "jobs", "stations", "event tables", "Navigator", "voyages"],
-      "dataFamilies": ["routePlan", "jobCard", "encounterTable", "voyageSequence", "navigationModifier"]
+      "tags": ["routes", "jobs", "stations", "location levels", "event tables", "Navigator", "voyages"],
+      "dataFamilies": ["routePlan", "jobCard", "encounterTable", "locationEncounter", "voyageSequence", "navigationModifier"]
     },
     {
       "id": "barotrauma-world-map-generator",
@@ -117,11 +118,11 @@
       "title": "Expanded Europa Public World State",
       "priority": 8,
       "status": "available",
-      "description": "Creates a uniquely identified seeded Europa world with 48 mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, and eight operational districts. Stations are divided among eight umbrella factions and thirty-four operational organizations, including Coalition departments, Separatist blocs, Union 208 chapters, corporations, material distributors, independent authorities, criminal cartels, and hidden cult cells. Factions persist through world saves, affect station commerce and reputation, and can be transported as multiplayer submissions.",
+      "description": "Creates a uniquely identified seeded Europa world with 48 mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, eight operational districts, and a visible ten-level radial geography. Level 1 occupies the frontier shell, Levels 2–9 grade inward through logistics, cities, military zones, contested territory, derelicts, infected grounds, thermal vents, and precursor dead zones, and the unique Level 10 Eye of Europa occupies the exact center. Forty-eight location profiles supply lore, shops, services, availability, hazards, factions, and encounter hooks. Station placement is reconciled into habitable bands without reducing the guaranteed count, while faction ownership, player stations, saves, and multiplayer submissions preserve the level assignments.",
       "launchUrl": "barotrauma-rpg-tools.html#world",
       "actionLabel": "Open World State",
-      "tags": ["Europa", "public world state", "48 voyages", "960 locations", "180 stations", "operational districts", "faction seeding", "Europan Coalition", "Jovian Separatists", "Union 208", "corporations", "material distributors", "criminal cartels", "Honkmother", "Church of the Husk", "world ID", "saved states", "multiplayer submissions", "2175", "real-time clock", "routes", "trades", "research"],
-      "dataFamilies": ["worldIdentity", "worldSave", "savedCheckpoint", "worldSubmission", "factionSubmission", "submissionJournal", "publicWorldRegistry", "multiplayerGroup", "randomizedStart", "canonicalClock", "worldMap", "depthRingProfile", "voyageDepth", "operationalDistrict", "umbrellaFaction", "operationalOrganization", "stationInfluence", "hiddenFactionCell", "factionRelationship", "factionJournal", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
+      "tags": ["Europa", "public world state", "48 voyages", "960 locations", "180 stations", "ten levels", "48 location types", "Eye of Europa", "Frontier", "Abyss", "Thermal Vents", "Precursor Ruins", "operational districts", "faction seeding", "shops", "services", "availability", "encounter geography", "world ID", "saved states", "multiplayer submissions", "2175", "real-time clock", "routes", "trades", "research"],
+      "dataFamilies": ["worldIdentity", "worldSave", "savedCheckpoint", "worldSubmission", "factionSubmission", "locationAssignmentSubmission", "submissionJournal", "publicWorldRegistry", "multiplayerGroup", "randomizedStart", "canonicalClock", "worldMap", "depthRingProfile", "voyageDepth", "locationLevel", "locationLevelGradient", "locationType", "locationLore", "locationShopProfile", "locationServiceProfile", "locationAvailability", "locationHazardProfile", "uniqueCoreLocation", "operationalDistrict", "umbrellaFaction", "operationalOrganization", "stationInfluence", "hiddenFactionCell", "factionRelationship", "factionJournal", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
     },
     {
       "id": "barotrauma-cult-faction-dossiers",
