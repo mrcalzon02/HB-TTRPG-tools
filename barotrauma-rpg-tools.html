@@ -57,7 +57,7 @@
     .check-list{display:grid;gap:8px}.check-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:9px}.check-row input[type=checkbox],.check-row input[type=radio]{width:18px;height:18px}
     .system-row{display:grid;grid-template-columns:minmax(140px,1fr) minmax(160px,2fr) 80px;gap:10px;align-items:center;margin:8px 0}.system-row input[type=range]{width:100%}
     .map-frame{border:1px solid var(--line);border-radius:16px;min-height:680px;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.28) 55%,rgba(0,0,0,.5));overflow:auto;position:relative;overscroll-behavior:contain}
-    .map-frame svg{display:block;width:100%;height:680px;min-width:760px}.expanded-map-frame{height:1050px}.expanded-map-frame svg{width:6000px;height:6000px;max-width:none}.map-edge{stroke:rgba(200,210,220,.28);stroke-width:2}.map-edge.danger{stroke:rgba(223,119,119,.48);stroke-dasharray:6 5}.map-edge-group,.map-node{cursor:pointer}.map-node circle{stroke-width:2}.map-node text{fill:#e8edf2;font-size:11px;font-weight:700;pointer-events:none}.map-node.station circle{fill:#21364a;stroke:#70a7c7}.map-node.outpost circle{fill:#35351f;stroke:#c7b570}.map-node.wreck circle{fill:#3d2525;stroke:#bd7474}.map-node.ruins circle{fill:#392d47;stroke:#a985c7}.map-node.hazard circle{fill:#421f28;stroke:#d36378}.map-node.anomaly circle{fill:#5a431d;stroke:#e0b45f;stroke-width:4}.map-node.selected circle{stroke:#fff;stroke-width:4}.map-node.map-focused circle{filter:drop-shadow(0 0 12px rgba(255,255,255,.9))}.managed-sub-location-marker{animation:managed-sub-pulse 1.8s ease-in-out infinite}
+    .map-frame svg{display:block;width:100%;height:680px;min-width:760px}.expanded-map-frame{height:1050px}.expanded-map-frame svg{width:6000px;height:6000px;max-width:none}.map-edge{stroke:rgba(200,210,220,.28);stroke-width:2}.map-edge.danger{stroke:rgba(223,119,119,.48);stroke-dasharray:6 5}.map-edge-group,.map-node{cursor:pointer}.map-node circle{stroke-width:2}.map-node text{fill:#e8edf2;font-size:11px;font-weight:700;pointer-events:none}.map-node.station circle{fill:#21364a;stroke:#70a7c7}.map-node.outpost circle{fill:#35351f;stroke:#c7b570}.map-node.wreck circle{fill:#3d2525;stroke:#bd7474}.map-node.ruins circle{fill:#392d47;stroke:#a985c7}.map-node.hazard circle{fill:#421f28;stroke:#d36378}.map-node.anomaly circle{fill:#5a431d;stroke:#e0b45f;stroke-width:4}.map-node.selected circle{stroke:#fff;stroke-width:4}.map-node.map-focused circle{filter:drop-shadow(0 0 12px rgba(255,255,255,.9))}.managed-sub-location-marker{animation:managed-sub-pulse 1.8s ease-in-out infinite}.world-economy-vessel-marker.map-focused circle{filter:drop-shadow(0 0 14px rgba(255,255,255,.95));stroke:#fff;stroke-width:5}
     @keyframes managed-sub-pulse{0%,100%{opacity:.62}50%{opacity:1}}
     .map-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid currentColor}
     .notice{border:1px dashed var(--line);border-radius:12px;padding:12px;color:var(--muted)}
@@ -82,7 +82,7 @@
       <div>
         <p class="eyebrow">Rules-derived campaign utilities</p>
         <h1>Barotrauma RPG Operations Suite</h1>
-        <p class="subtitle">Commission a vessel and crew against one master world ID, then resolve route events through explicit crew turns, alternative plans, role-based statistical checks, missions, contracts, rewards, side effects, and five outcome bands. Character, Submarine, Encounter, Route, World, and Workshop modules remain independently available.</p>
+        <p class="subtitle">Operate one persistent master world where submitted player submarines, NPC freight vessels, station production, Delivery Goods, vendor inventories, trade routes, and shipyard construction remain active across saves. Player travel stays event-driven while passive NPC commerce advances on real-time schedules.</p>
       </div>
       <div class="ops-header-actions">
         <button id="export-suite" class="secondary-action" type="button">Export Suite JSON</button>
@@ -106,6 +106,6 @@
 
     <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
   </main>
-  <script src="barotrauma-rpg-tools-loader.js?v=029"></script>
+  <script src="barotrauma-rpg-tools-loader.js?v=030"></script>
 </body>
 </html>
