@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "worldSaveSchema": "barotrauma-public-world-save",
   "submissionSchema": "barotrauma-world-submission",
   "canonicalStart": "2175-01-01T00:00:00.000Z",
@@ -28,6 +28,7 @@
     "route",
     "trade",
     "research",
+    "faction",
     "game-state"
   ],
   "researchRules": {
