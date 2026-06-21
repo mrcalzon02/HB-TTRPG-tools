@@ -1,0 +1,325 @@
+
+  function activeSubmarineDashboardContext() {
+    const raw = window.location.hash.replace(/^#/, '');
+    return ['dashboard','active-submarine-dashboard','submarine-dashboard'].includes(raw);
+  }
+
+  const renderActiveSubmarineDashboardModule = renderSubmarine;
+  const renderActiveRouteDashboardModule = renderRoute;
+  const renderActiveWorldDashboardModule = renderWorld;
+
+  const generateValidCrossingActiveDashboardModule = generateValidCrossing;
+  const startCrossingActiveDashboardModule = startCrossing;
+  const resolveCrossingEventActiveDashboardModule = resolveCrossingEvent;
+  const rollCrossingEventActiveDashboardModule = rollCrossingEvent;
+  const redrawCrossingEventActiveDashboardModule = redrawCrossingEvent;
+  const completeCrossingLegActiveDashboardModule = completeCrossingLeg;
+  const abortCrossingActiveDashboardModule = abortCrossing;
+  const clearRouteCrossingActiveDashboardModule = clearRouteCrossing;
+  const generalEncounterRollOperatorActiveDashboardModule = generalEncounterRollOperator;
+
+  const buyStationStockBeforeDashboardBoundaries = buyStationStock;
+  const sellToStationBeforeDashboardBoundaries = sellToStation;
+  const renderStationCommercePanelBeforeDashboardBoundaries = renderStationCommercePanel;
+  const generateStationMarketBeforeDashboardBoundaries = generateStationMarket;
+
+  function dashboardOperationalState() {
+    normalizeDashboardTurnOrder();
+    return state.operationsDashboard.operationalState;
+  }
+
+  function dashboardCurrentWorldStation() {
+    if (!state.world?.map?.nodes?.length) return null;
+    const context = normalizeActiveSubmarineDashboard(false);
+    const node = crossingNode(context.group.currentNodeId, state.world.map);
+    if (!node || node.type !== 'station') return null;
+    syncWorldMapStations();
+    return STATIONS.find(station => station.worldNodeId === node.id || station.name === node.name) || null;
+  }
+
+  function synchronizeDashboardCommerceStation() {
+    if (!activeSubmarineDashboardContext() || dashboardOperationalState() !== 'at-station') return null;
+    const station = dashboardCurrentWorldStation();
+    if (!station) return null;
+    const commerce = normalizeStationCommerce();
+    commerce.activeStationId = stationIdentity(station);
+    return commerce.stations[commerce.activeStationId] || null;
+  }
+
+  function defaultDashboardStartingLocationState() {
+    return {
+      worldKey: '',
+      revision: 0,
+      optionNodeIds: [],
+      selectedNodeId: '',
+      confirmedNodeId: '',
+      locked: false,
+      everDeparted: false,
+      updatedAt: ''
+    };
+  }
+
+  function dashboardWorldIdentityKey() {
+    const map = state.world?.map;
+    return map ? `${map.worldId || map.seed || state.world.seed || ''}|${map.generatedAt || ''}|${map.nodes?.length || 0}` : '';
+  }
+
+  function normalizeDashboardStartingLocationState() {
+    const dashboard = state.operationsDashboard || (state.operationsDashboard = defaultActiveSubmarineDashboard());
+    dashboard.startingLocation = dashboard.startingLocation && typeof dashboard.startingLocation === 'object'
+      ? dashboard.startingLocation
+      : defaultDashboardStartingLocationState();
+    const start = dashboard.startingLocation;
+    const defaults = defaultDashboardStartingLocationState();
+    for (const [key, value] of Object.entries(defaults)) if (!(key in start)) start[key] = Array.isArray(value) ? [] : value;
+    start.optionNodeIds = Array.isArray(start.optionNodeIds) ? start.optionNodeIds : [];
+    const worldKey = dashboardWorldIdentityKey();
+    if (worldKey && start.worldKey !== worldKey) {
+      Object.assign(start, defaultDashboardStartingLocationState(), { worldKey });
+    }
+    if (normalizeRouteCrossing().startedAt) {
+      start.everDeparted = true;
+      start.locked = true;
+    }
+    return start;
+  }
+
+  function randomizedDashboardStartingStations(refresh = false, count = 12) {
+    const start = normalizeDashboardStartingLocationState();
+    const map = state.world?.map;
+    if (!map?.nodes?.length) return [];
+    const stations = map.nodes.filter(node => node.type === 'station');
+    const validIds = new Set(stations.map(node => node.id));
+    start.optionNodeIds = start.optionNodeIds.filter(id => validIds.has(id));
+    if (refresh || !start.optionNodeIds.length) {
+      start.revision = Math.max(0, number(start.revision)) + 1;
+      const rng = seededRandom(`${dashboardWorldIdentityKey()}|${state.submarine.worldSubmarineId || ''}|starting-locations|${start.revision}|${Date.now()}`);
+      const shuffled = [...stations].map(node => ({ node, value: rng() })).sort((left, right) => left.value - right.value).map(entry => entry.node);
+      start.optionNodeIds = shuffled.slice(0, Math.min(stations.length, Math.max(4, count))).map(node => node.id);
+      const context = normalizeActiveSubmarineDashboard(false);
+      if (context.group.currentNodeId && validIds.has(context.group.currentNodeId) && !start.optionNodeIds.includes(context.group.currentNodeId)) start.optionNodeIds.unshift(context.group.currentNodeId);
+      start.selectedNodeId = start.optionNodeIds.includes(start.selectedNodeId) ? start.selectedNodeId : start.optionNodeIds[0] || '';
+      start.updatedAt = new Date().toISOString();
+      save();
+    }
+    return start.optionNodeIds.map(id => crossingNode(id, map)).filter(Boolean);
+  }
+
+  function synchronizeActiveDashboardMechanics(reason = '', options = {}) {
+    if (!activeSubmarineDashboardContext()) return null;
+    const context = normalizeActiveSubmarineDashboard(false);
+    const start = normalizeDashboardStartingLocationState();
+    const crossing = normalizeRouteCrossing();
+    state.operationsDashboard.operationalState = crossing.status === 'underway' ? 'in-route' : 'at-station';
+    if (crossing.startedAt) {
+      start.everDeparted = true;
+      start.locked = true;
+    }
+    if (options.rebuildTurnOrder) buildDashboardTurnOrder(normalizeDashboardTurnOrder().mode === 'initiative');
+    else if (state.operationsDashboard.operationalState === 'in-route') stampDashboardEncounterTurn(false);
+    if (state.operationsDashboard.operationalState === 'at-station') synchronizeDashboardCommerceStation();
+    context.group.crewIds = [...context.crewIds];
+    context.group.primarySubmarineId = context.submarineId;
+    if (crossing.crossingId) {
+      crossing.submarineId = context.submarineId;
+      crossing.groupId = context.group.groupId;
+      for (const slot of state.route.plan || []) {
+        slot.submarineId = context.submarineId;
+        slot.groupId = context.group.groupId;
+      }
+    }
+    if (reason) state.operationsDashboard.lastSynchronization = { reason, at: new Date().toISOString() };
+    normalizeActiveSubmarineDashboard(false);
+    save();
+    return context;
+  }
+
+  function applyDashboardStartingLocation(nodeId) {
+    if (!activeSubmarineDashboardContext()) return { ok: false, message: 'Starting locations are managed only by the Active Submarine Dashboard.' };
+    const start = normalizeDashboardStartingLocationState();
+    if (dashboardOperationalState() !== 'at-station') return { ok: false, message: 'The submarine cannot be repositioned while In Route.' };
+    if (start.locked || start.everDeparted) return { ok: false, message: 'The starting station is locked after the submarine’s first departure.' };
+    const map = state.world?.map;
+    const node = crossingNode(nodeId, map);
+    if (!node || node.type !== 'station') return { ok: false, message: 'Choose a valid station from the randomized starting-location list.' };
+    const context = normalizeActiveSubmarineDashboard(false);
+    state.route.crossing = defaultRouteCrossing();
+    state.route.plan = [];
+    state.route.crossingMessage = `Submarine positioned at ${node.name}. Select an immediately adjacent station route.`;
+    context.group.startingNodeId = node.id;
+    context.group.currentNodeId = node.id;
+    context.group.routeId = '';
+    state.operationsDashboard.activeNodeId = node.id;
+    state.operationsDashboard.focusedNodeId = node.id;
+    state.world.selected = [node.id];
+    state.route.startNodeId = node.id;
+    state.route.start = node.name;
+    const adjacent = dashboardAdjacentStationRoutes(node.id, map);
+    state.route.endNodeId = adjacent[0]?.stationId || '';
+    state.route.end = adjacent[0]?.station?.name || '';
+    start.selectedNodeId = node.id;
+    start.confirmedNodeId = node.id;
+    start.updatedAt = new Date().toISOString();
+    state.submarine.managedExpedition.startingNodeId = node.id;
+    state.submarine.managedExpedition.currentNodeId = node.id;
+    const commerceStation = dashboardCurrentWorldStation();
+    if (commerceStation) normalizeStationCommerce().activeStationId = stationIdentity(commerceStation);
+    synchronizeActiveDashboardMechanics('Starting station selected', { rebuildTurnOrder: true });
+    return { ok: true, message: `The active submarine now begins at ${node.name}.` };
+  }
+
+  activeTool = function activeToolWithStandaloneModules() {
+    const raw = window.location.hash.replace(/^#/, '');
+    if (['dashboard','active-submarine-dashboard','submarine-dashboard'].includes(raw)) return 'dashboard';
+    return ['character','submarine','encounters','route','world','catalog','workshop'].includes(raw) ? raw : 'character';
+  };
+
+  activeDashboardRawFocus = function activeDashboardRawFocusStandaloneSafe() {
+    if (!activeSubmarineDashboardContext()) return 'overview';
+    const focus = state.operationsDashboard?.dashboardFocus;
+    return ['overview','route','world'].includes(focus) ? focus : 'overview';
+  };
+
+  setTool = function setToolWithDashboardInternalFocus(tool) {
+    if (activeSubmarineDashboardContext() && ['submarine','route','world'].includes(tool)) {
+      state.operationsDashboard.dashboardFocus = tool === 'submarine' ? 'overview' : tool;
+      history.replaceState(null, '', '#dashboard');
+      save();
+      render();
+      return;
+    }
+    history.replaceState(null, '', `#${tool}`);
+    render();
+  };
+
+  renderSubmarine = function renderSubmarineByModuleContext() {
+    return activeSubmarineDashboardContext() ? renderActiveSubmarineDashboardModule() : renderStandaloneSubmarineModule();
+  };
+
+  renderRoute = function renderRouteByModuleContext() {
+    return activeSubmarineDashboardContext() ? renderActiveRouteDashboardModule() : renderStandaloneRouteModule();
+  };
+
+  renderWorld = function renderWorldByModuleContext() {
+    return activeSubmarineDashboardContext() ? renderActiveWorldDashboardModule() : renderStandaloneWorldModule();
+  };
+
+  generateValidCrossing = function generateValidCrossingByModuleContext() {
+    const result = activeSubmarineDashboardContext() ? generateValidCrossingActiveDashboardModule() : generateValidCrossingStandaloneModule();
+    if (activeSubmarineDashboardContext()) synchronizeActiveDashboardMechanics('Adjacent route generated', { rebuildTurnOrder: true });
+    return result;
+  };
+
+  startCrossing = function startCrossingByModuleContext() {
+    const result = activeSubmarineDashboardContext() ? startCrossingActiveDashboardModule() : startCrossingStandaloneModule();
+    if (activeSubmarineDashboardContext() && result) {
+      const start = normalizeDashboardStartingLocationState();
+      start.everDeparted = true;
+      start.locked = true;
+      synchronizeActiveDashboardMechanics('Transit started');
+    }
+    return result;
+  };
+
+  resolveCrossingEvent = function resolveCrossingEventByModuleContext(slotId, status, roll = '') {
+    const result = activeSubmarineDashboardContext()
+      ? resolveCrossingEventActiveDashboardModule(slotId, status, roll)
+      : resolveCrossingEventStandaloneModule(slotId, status, roll);
+    if (activeSubmarineDashboardContext() && result) synchronizeActiveDashboardMechanics('Consequential event resolved');
+    return result;
+  };
+
+  rollCrossingEvent = function rollCrossingEventByModuleContext(slotId) {
+    return activeSubmarineDashboardContext() ? rollCrossingEventActiveDashboardModule(slotId) : rollCrossingEventStandaloneModule(slotId);
+  };
+
+  redrawCrossingEvent = function redrawCrossingEventByModuleContext(slotId) {
+    const result = activeSubmarineDashboardContext() ? redrawCrossingEventActiveDashboardModule(slotId) : redrawCrossingEventStandaloneModule(slotId);
+    if (activeSubmarineDashboardContext() && result) {
+      stampDashboardEncounterTurn(false);
+      synchronizeActiveDashboardMechanics('Consequential event redrawn');
+    }
+    return result;
+  };
+
+  completeCrossingLeg = function completeCrossingLegByModuleContext() {
+    const result = activeSubmarineDashboardContext() ? completeCrossingLegActiveDashboardModule() : completeCrossingLegStandaloneModule();
+    if (activeSubmarineDashboardContext() && result) synchronizeActiveDashboardMechanics('Route leg completed');
+    return result;
+  };
+
+  abortCrossing = function abortCrossingByModuleContext() {
+    const result = activeSubmarineDashboardContext() ? abortCrossingActiveDashboardModule() : abortCrossingStandaloneModule();
+    if (activeSubmarineDashboardContext() && result) synchronizeActiveDashboardMechanics('Transit aborted');
+    return result;
+  };
+
+  clearRouteCrossing = function clearRouteCrossingByModuleContext() {
+    const result = activeSubmarineDashboardContext() ? clearRouteCrossingActiveDashboardModule() : clearRouteCrossingStandaloneModule();
+    if (activeSubmarineDashboardContext()) synchronizeActiveDashboardMechanics('Filed route cleared', { rebuildTurnOrder: true });
+    return result;
+  };
+
+  generalEncounterRollOperator = function generalEncounterRollOperatorByModuleContext() {
+    return activeSubmarineDashboardContext() ? generalEncounterRollOperatorActiveDashboardModule() : generalEncounterRollOperatorStandaloneModule();
+  };
+
+  generateStationMarket = function generateStationMarketByDashboardState(stationRecord) {
+    if (activeSubmarineDashboardContext()) {
+      if (dashboardOperationalState() !== 'at-station') return false;
+      const current = synchronizeDashboardCommerceStation();
+      if (!current || current.id !== stationRecord?.id) return false;
+    }
+    generateStationMarketBeforeDashboardBoundaries(stationRecord);
+    return true;
+  };
+
+  buyStationStock = function buyStationStockByDashboardState(stationRecord, vendorId, stockId) {
+    if (activeSubmarineDashboardContext()) {
+      if (dashboardOperationalState() !== 'at-station') return { ok: false, message: 'Purchasing is unavailable while In Route.' };
+      const current = synchronizeDashboardCommerceStation();
+      if (!current || current.id !== stationRecord?.id) return { ok: false, message: 'Only the current station market is accessible.' };
+    }
+    return buyStationStockBeforeDashboardBoundaries(stationRecord, vendorId, stockId);
+  };
+
+  sellToStation = function sellToStationByDashboardState(sourceKey, stationRecord) {
+    if (activeSubmarineDashboardContext()) {
+      if (dashboardOperationalState() !== 'at-station') return { ok: false, message: 'Selling is unavailable while In Route.' };
+      const current = synchronizeDashboardCommerceStation();
+      if (!current || current.id !== stationRecord?.id) return { ok: false, message: 'Only the current station can purchase cargo.' };
+    }
+    return sellToStationBeforeDashboardBoundaries(sourceKey, stationRecord);
+  };
+
+  renderStationCommercePanel = function renderStationCommercePanelByDashboardState() {
+    if (!activeSubmarineDashboardContext()) return renderStationCommercePanelBeforeDashboardBoundaries();
+    const grid = root.querySelector('.tool-grid');
+    if (!grid) return;
+    if (dashboardOperationalState() !== 'at-station') {
+      const panel = document.createElement('section');
+      panel.className = 'tool-panel span-12 dashboard-commerce-unavailable';
+      panel.innerHTML = '<div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Commerce state</p><h3>Station Sales Unavailable While In Route</h3><p class="small-note">The active submarine is between stations. No buying, selling, vendor regeneration, treasury editing, or station-market switching is available until arrival.</p></div><span class="status-pill warn">IN ROUTE</span></div>';
+      grid.appendChild(panel);
+      return;
+    }
+    const current = synchronizeDashboardCommerceStation();
+    if (!current) {
+      const panel = document.createElement('section');
+      panel.className = 'tool-panel span-12';
+      panel.innerHTML = '<h3>Station Commerce Unavailable</h3><p class="small-note">Position the active submarine at a valid world station before using sales or vendors.</p>';
+      grid.appendChild(panel);
+      return;
+    }
+    renderStationCommercePanelBeforeDashboardBoundaries();
+    const panel = [...root.querySelectorAll('.tool-panel')].find(item => item.querySelector('h3')?.textContent.includes('Station Stores, Vendors'));
+    if (!panel) return;
+    const stationSelect = panel.querySelector('#commerce-station');
+    if (stationSelect) {
+      stationSelect.value = current.id;
+      stationSelect.disabled = true;
+      stationSelect.closest('.field')?.insertAdjacentHTML('beforeend', '<span class="small-note">Locked to the active submarine’s current station.</span>');
+    }
+    panel.querySelector('#station-use-route-end')?.remove();
+    panel.querySelector('.eyebrow')?.insertAdjacentHTML('afterend', '<span class="tag good">CURRENT STATION ONLY</span>');
+  };
