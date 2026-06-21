@@ -1,0 +1,155 @@
+
+  function routeResolutionOutcomeLabel(outcome) {
+    return ({'critical-success':'Critical Success',success:'Success',mixed:'Mixed Success',failure:'Failure','critical-failure':'Critical Failure'})[outcome] || outcome;
+  }
+
+  function routeResolutionOutcomeTone(outcome) {
+    return outcome==='critical-success'||outcome==='success'?'good':outcome==='mixed'?'warn':'bad';
+  }
+
+  function routeResolutionExpandedEffectsText(effects={}) {
+    const parts = [encounterEffectsText(effects)];
+    if (number(effects.crewMorale)) parts.push(`all-crew Morale ${number(effects.crewMorale)>0?'+':''}${number(effects.crewMorale)}`);
+    if (number(effects.injuryCount)) parts.push(`${number(effects.injuryCount)} crew injury`);
+    return parts.filter(part => part&&part!=='No automatic state changes').join(' · ')||'Narrative consequence only';
+  }
+
+  function routeResolutionOutcomeDescription(session,event,outcome) {
+    const solution = routeResolutionSelectedSolution(session);
+    if (outcome==='critical-success') return `${solution.successText} The crew also gains exceptional control of the route and converts the incident into a lasting advantage.`;
+    if (outcome==='success') return solution.successText;
+    if (outcome==='mixed') return solution.mixedText;
+    if (outcome==='critical-failure') return `${solution.failureText} The failure cascades into a severe vessel-wide or crew-wide consequence.`;
+    return solution.failureText;
+  }
+
+  function routeResolutionStepRowsHtml(session) {
+    return session.steps.map((step,index) => {
+      const active = index===session.activeStepIndex&&step.status==='pending';
+      const tone = step.status==='success'?'good':step.status==='failure'?'bad':active?'warn':'';
+      return `<tr class="${active?'dashboard-active-turn-row':''}"><td>${index+1}</td><td><strong>${escapeHtml(step.phase)}</strong><br><span class="small-note">${escapeHtml(step.description)}</span></td><td>${escapeHtml(step.requiredRole)}</td><td>${escapeHtml(step.stat)} vs ${number(step.dc)}</td><td><strong class="${tone}">${step.status==='pending'?(active?'ACTIVE STEP':'Pending'):step.status}</strong>${step.actorName?`<br><span class="small-note">${escapeHtml(step.actorName)} · ${escapeHtml(step.actorDuty)}</span>`:''}</td><td>${step.rollText?escapeHtml(step.rollText):'—'}</td></tr>`;
+    }).join('');
+  }
+
+  function routeResolutionSolutionsHtml(session) {
+    const locked = session.steps.some(step => step.status!=='pending');
+    return session.solutions.map(solution => `<label class="tool-card" style="display:block;border-color:${solution.id===session.selectedSolutionId?'var(--accent)':'var(--line)'}"><div class="check-row" style="grid-template-columns:auto 1fr"><input class="route-resolution-solution" type="radio" name="route-resolution-solution" value="${escapeHtml(solution.id)}" ${solution.id===session.selectedSolutionId?'checked':''} ${locked?'disabled':''}><span><strong>${escapeHtml(solution.label)}</strong><br><span class="small-note">Lead role: ${escapeHtml(solution.leadRole)} · ${escapeHtml(solution.stat)} vs ${number(solution.dc)} · Supports: ${escapeHtml(solution.supportRoles.join(', '))}</span></span></div><p>${escapeHtml(solution.description)}</p><div class="notice good"><strong>Success:</strong> ${escapeHtml(solution.successText)}</div><div class="notice warn" style="margin-top:6px"><strong>Mixed:</strong> ${escapeHtml(solution.mixedText)}</div><div class="notice bad" style="margin-top:6px"><strong>Failure:</strong> ${escapeHtml(solution.failureText)}</div></label>`).join('');
+  }
+
+  function routeResolutionSupportHtml(session) {
+    const locked = session.steps.some(step => step.status!=='pending');
+    return dashboardTurnActors().map(actor => {
+      const duty = routeResolutionActorDuty(actor);
+      return `<label class="check-row" style="grid-template-columns:auto 1fr"><input class="route-resolution-support" type="checkbox" value="${escapeHtml(actor.ref)}" ${session.supportCrewRefs.includes(actor.ref)?'checked':''} ${locked?'disabled':''}><span><strong>${escapeHtml(actor.name)}</strong><br><span class="small-note">${escapeHtml(duty)} · ${escapeHtml(actor.status)} · can contribute up to +1 when role/stat matches</span></span></label>`;
+    }).join('')||'<div class="notice bad">No living commissioned crew are available.</div>';
+  }
+
+  function routeResolutionOutcomeCardsHtml(session,event) {
+    return ROUTE_RESOLUTION_OUTCOMES.map(outcome => {
+      const effects = routeResolutionEffectsForOutcome(session,event,outcome);
+      const selected = (session.outcomeOverride||session.provisionalOutcome)===outcome;
+      return `<div class="tool-card" style="border-color:${selected?'var(--accent)':'var(--line)'}"><div class="tool-hero" style="padding:0;border:0;background:none"><strong class="${routeResolutionOutcomeTone(outcome)}">${routeResolutionOutcomeLabel(outcome)}</strong>${selected?'<span class="status-pill warn">CURRENT</span>':''}</div><p class="small-note">${escapeHtml(routeResolutionOutcomeDescription(session,event,outcome))}</p><div class="notice"><strong>Applied state changes:</strong> ${escapeHtml(routeResolutionExpandedEffectsText(effects))}</div></div>`;
+    }).join('');
+  }
+
+  function routeEventResolutionHtml(context,mode='dashboard') {
+    const {slot,event,session} = context;
+    const template = routeResolutionTemplate(event);
+    const solution = routeResolutionSelectedSolution(session);
+    const activeActor = activeDashboardTurnActor();
+    const activeStep = session.steps[session.activeStepIndex];
+    const activeDuty = routeResolutionActorDuty(activeActor);
+    const roleMatch = activeStep&&activeActor?routeResolutionRoleBonus(activeActor,activeStep,solution):0;
+    const planningLocked = session.steps.some(step => step.status!=='pending');
+    const canCommit = session.state==='awaiting-commit';
+    const offer = session.missionOffer;
+    const message = normalizeRouteEventResolutionState().lastMessage||state.route.crossingMessage||'';
+    return `<section id="explicit-route-event-resolution" class="tool-panel" data-slot-id="${escapeHtml(slot.id)}" style="border-color:rgba(200,138,53,.85);margin-top:12px">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Explicit turn-based event resolution · ${mode==='dashboard'?'Active Dashboard':'Standalone Route Planner'}</p><h3>${escapeHtml(event.name||slot.label)}</h3><p class="rules-note">Choose a solution, assign support, then resolve one operational phase per crew turn. No vessel or crew effects are applied until the calculated outcome is committed.</p></div><span class="status-pill ${session.state==='awaiting-commit'?'warn':session.state==='resolved'?'good':''}">${escapeHtml(session.state.replace(/-/g,' '))}</span></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Round / turn</span><strong>${number(normalizeDashboardTurnOrder().round)} / ${number(normalizeDashboardTurnOrder().turn)}</strong></div><div class="metric"><span>Active crewman</span><strong>${escapeHtml(activeActor?.name||'None')}</strong></div><div class="metric"><span>Crew duty</span><strong>${escapeHtml(activeDuty)}</strong></div><div class="metric"><span>Active role</span><strong class="${roleMatch?'good':'warn'}">${escapeHtml(activeStep?.requiredRole||'Complete')}</strong></div><div class="metric"><span>Role bonus</span><strong>${roleMatch?`+${roleMatch}`:'+0'}</strong></div><div class="metric"><span>Calculated outcome</span><strong class="${routeResolutionOutcomeTone(session.provisionalOutcome)}">${escapeHtml(session.provisionalOutcome?routeResolutionOutcomeLabel(session.provisionalOutcome):'Pending')}</strong></div></div>
+
+      <div class="tool-card" style="margin-top:12px"><h4>Situation and Consequences</h4><p>${escapeHtml(template?.setup||event.description||'A route incident requires immediate action.')}</p>${template?.stages?`<div class="field-grid three"><div class="notice"><strong>Contact</strong><br>${escapeHtml(template.stages.contact||'')}</div><div class="notice warn"><strong>Crisis</strong><br>${escapeHtml(template.stages.crisis||'')}</div><div class="notice"><strong>Aftermath</strong><br>${escapeHtml(template.stages.aftermath||'')}</div></div>`:''}<div class="field-grid three" style="margin-top:8px"><div class="notice"><strong>Complication</strong><br>${escapeHtml(event.encounterComplication||template?.complications?.[0]||'Conditions may escalate.')}</div><div class="notice good"><strong>Opportunity</strong><br>${escapeHtml(event.encounterOpportunity||template?.opportunities?.[0]||event.reward||'No additional opportunity identified.')}</div><div class="notice warn"><strong>Persistent consequence</strong><br>${escapeHtml(event.encounterPersistent||template?.persistent||'No persistent consequence specified.')}</div></div></div>
+
+      <div class="tool-card" style="margin-top:12px"><h4>1. Select an Alternative Solution</h4><div class="card-list">${routeResolutionSolutionsHtml(session)}</div></div>
+
+      <div class="tool-card" style="margin-top:12px"><h4>2. Assign Supporting Crew Roles</h4><p class="small-note">The active turn crewman always makes the roll. Up to three selected crew can contribute support; matching the phase role or statistic adds +1 each, capped at +2.</p><div class="check-list">${routeResolutionSupportHtml(session)}</div></div>
+
+      <div class="tool-card" style="margin-top:12px"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h4>3. Optional Mission, Contract, or Opportunity</h4><p class="small-note">Pursuing the opportunity adds a final check. Accepting the contract records the result in the master-world public game state.</p></div><span class="tag">${escapeHtml(offer.type)}</span></div><h4>${escapeHtml(offer.title)}</h4><p><strong>Issuer:</strong> ${escapeHtml(offer.issuer)}<br><strong>Objective:</strong> ${escapeHtml(offer.objective)}<br><strong>Completion:</strong> ${escapeHtml(offer.completion)}</p><div class="field-grid"><label class="check-row"><input id="route-resolution-opportunity" type="checkbox" ${session.pursueOpportunity?'checked':''} ${planningLocked?'disabled':''}><span><strong>Pursue the opportunity</strong><br><span class="small-note">Reward: ${escapeHtml(offer.rewardText)}</span></span></label><label class="check-row"><input id="route-resolution-contract" type="checkbox" ${session.acceptContract?'checked':''} ${planningLocked?'disabled':''}><span><strong>Accept and record the contract</strong><br><span class="small-note">Risk: ${escapeHtml(offer.riskText)}</span></span></label></div></div>
+
+      <div class="tool-card" style="margin-top:12px"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h4>4. Resolve Consecutive Crew Turns</h4><p class="small-note">Each completed phase advances to the next crewman in rotation or initiative order. The final phase waits for outcome commitment so the next event does not skip a crew turn.</p></div><button id="route-resolution-roll-step" class="primary-action no-print" type="button" ${activeStep?.status==='pending'?'':'disabled'}>Resolve ${escapeHtml(activeStep?.phase||'Completed Event')} as ${escapeHtml(activeActor?.name||'Active Crew')}</button></div><div class="table-wrap" style="margin-top:10px"><table class="tool-table"><thead><tr><th>#</th><th>Phase and description</th><th>Required role</th><th>Check</th><th>Result / crewman</th><th>Roll</th></tr></thead><tbody>${routeResolutionStepRowsHtml(session)}</tbody></table></div></div>
+
+      <div class="tool-card" style="margin-top:12px"><h4>5. Available Outcomes</h4><div class="card-list">${routeResolutionOutcomeCardsHtml(session,event)}</div>${canCommit?`<div class="field-grid" style="margin-top:10px"><label class="field">GM outcome adjudication<select id="route-resolution-outcome-override"><option value="" ${!session.outcomeOverride?'selected':''}>Use calculated outcome</option>${ROUTE_RESOLUTION_OUTCOMES.map(outcome=>`<option value="${outcome}" ${session.outcomeOverride===outcome?'selected':''}>${routeResolutionOutcomeLabel(outcome)}</option>`).join('')}</select></label><div class="button-row" style="align-self:end"><button id="route-resolution-commit" class="primary-action no-print" type="button">Commit Outcome and Apply Effects</button></div></div>`:'<div class="notice" style="margin-top:10px">Complete all resolution phases to calculate and commit an outcome.</div>'}</div>
+
+      <div id="route-resolution-message" class="notice ${/cannot|could not|no |unavailable|failed/i.test(message)?'bad':''}" style="margin-top:12px">${escapeHtml(message||'Select the plan and supporting crew, then begin the first phase.')}</div>
+      <div class="button-row no-print" style="margin-top:10px"><button id="route-resolution-reset" class="secondary-action" type="button" ${session.effectsAppliedAt?'disabled':''}>Reset Resolution Plan</button><button id="route-resolution-redraw" class="danger-button" type="button" ${planningLocked?'disabled':''}>Redraw Event Card</button></div>
+      ${session.log.length?`<details style="margin-top:12px"><summary><strong>Resolution log</strong></summary><div class="card-list" style="margin-top:8px">${session.log.map(entry=>`<div class="notice"><strong>${escapeHtml(new Date(entry.at).toLocaleString())}</strong><br>${escapeHtml(entry.text)}</div>`).join('')}</div></details>`:''}
+    </section>`;
+  }
+
+  function renderCurrentRouteEventResolution() {
+    if (normalizeRouteCrossing().status!=='underway') return;
+    const context = activeRouteResolutionContext();
+    if (!context||root.querySelector('#explicit-route-event-resolution')) return;
+    const dashboardCard = root.querySelector('#dashboard-roll-next')?.closest('.tool-card');
+    const standaloneCard = root.querySelector(`.current-crossing-event[data-id="${context.slot.id}"]`);
+    const target = dashboardCard||standaloneCard;
+    if (!target) return;
+    target.insertAdjacentHTML('beforebegin',routeEventResolutionHtml(context,activeSubmarineDashboardContext()?'dashboard':'standalone'));
+    target.remove();
+    bindCurrentRouteEventResolution();
+  }
+
+  function rerenderRouteResolutionView() {
+    if (activeSubmarineDashboardContext()) renderSubmarine();
+    else renderRoute();
+  }
+
+  function routeResolutionSetMessage(message,isError=false) {
+    normalizeRouteEventResolutionState().lastMessage = String(message||'');
+    const output = root.querySelector('#route-resolution-message');
+    if (output) { output.textContent=message; output.classList.toggle('bad',isError); output.classList.toggle('good',!isError); }
+    save();
+  }
+
+  function bindCurrentRouteEventResolution() {
+    const panel = root.querySelector('#explicit-route-event-resolution');
+    if (!panel) return;
+    panel.querySelectorAll('.route-resolution-solution').forEach(input=>input.addEventListener('change',event=>{ selectRouteResolutionSolution(event.target.value); rerenderRouteResolutionView(); }));
+    panel.querySelectorAll('.route-resolution-support').forEach(input=>input.addEventListener('change',()=>{ const refs=[...panel.querySelectorAll('.route-resolution-support:checked')].map(item=>item.value); setRouteResolutionSupportCrew(refs); rerenderRouteResolutionView(); }));
+    panel.querySelector('#route-resolution-opportunity')?.addEventListener('change',event=>{ setRouteResolutionOpportunity(event.target.checked); rerenderRouteResolutionView(); });
+    panel.querySelector('#route-resolution-contract')?.addEventListener('change',event=>{ setRouteResolutionContract(event.target.checked); rerenderRouteResolutionView(); });
+    panel.querySelector('#route-resolution-roll-step')?.addEventListener('click',()=>{ const result=rollRouteResolutionStep(); if (result.ok) rerenderRouteResolutionView(); else routeResolutionSetMessage(result.message,true); });
+    panel.querySelector('#route-resolution-outcome-override')?.addEventListener('change',event=>{ const context=activeRouteResolutionContext(); if (!context) return; context.session.outcomeOverride=event.target.value; save(); rerenderRouteResolutionView(); });
+    panel.querySelector('#route-resolution-commit')?.addEventListener('click',()=>{ const result=commitRouteEventResolution(); if (result.ok) rerenderRouteResolutionView(); else routeResolutionSetMessage(result.message,true); });
+    panel.querySelector('#route-resolution-reset')?.addEventListener('click',()=>{ const context=activeRouteResolutionContext(); if (!context) return; resetRouteResolutionSteps(context.session,context.event); rerenderRouteResolutionView(); });
+    panel.querySelector('#route-resolution-redraw')?.addEventListener('click',()=>{ if (resetActiveRouteResolution(true)) rerenderRouteResolutionView(); });
+  }
+
+  function routeResolutionContractLedgerHtml() {
+    const contracts = normalizeRouteEventResolutionState().contracts.slice(0,12);
+    if (!contracts.length) return '';
+    return `<section class="tool-panel" style="margin-top:12px"><h3>Route Mission and Contract Ledger</h3><div class="table-wrap"><table class="tool-table"><thead><tr><th>Contract</th><th>Issuer</th><th>Objective</th><th>Outcome</th><th>Effects</th></tr></thead><tbody>${contracts.map(contract=>`<tr><td><strong>${escapeHtml(contract.title)}</strong><br><code>${escapeHtml(contract.id)}</code></td><td>${escapeHtml(contract.issuer)}</td><td>${escapeHtml(contract.objective)}</td><td><strong class="${routeResolutionOutcomeTone(contract.outcome)}">${escapeHtml(routeResolutionOutcomeLabel(contract.outcome))}</strong><br>${escapeHtml(contract.status)}</td><td>${escapeHtml(contract.effectSummary||'Pending')}</td></tr>`).join('')}</tbody></table></div></section>`;
+  }
+
+  function injectRouteResolutionContractLedger() {
+    if (root.querySelector('#explicit-route-event-resolution')||!normalizeRouteEventResolutionState().contracts.length) return;
+    root.querySelector('.tool-shell')?.insertAdjacentHTML('beforeend',routeResolutionContractLedgerHtml());
+  }
+
+  const renderActiveSubmarineDashboardBeforeExplicitRouteResolution = renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard = function renderActiveSubmarineDashboardWithExplicitRouteResolution(requestedFocus=activeDashboardRawFocus()) {
+    const result = renderActiveSubmarineDashboardBeforeExplicitRouteResolution(requestedFocus);
+    renderCurrentRouteEventResolution();
+    injectRouteResolutionContractLedger();
+    return result;
+  };
+
+  const renderRouteBeforeExplicitRouteResolution = renderRoute;
+  renderRoute = function renderStandaloneRouteWithExplicitResolution() {
+    const result = renderRouteBeforeExplicitRouteResolution();
+    if (!activeSubmarineDashboardContext()) {
+      renderCurrentRouteEventResolution();
+      injectRouteResolutionContractLedger();
+    }
+    return result;
+  };
