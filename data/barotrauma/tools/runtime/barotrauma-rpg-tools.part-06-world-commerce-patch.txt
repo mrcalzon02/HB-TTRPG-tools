@@ -1,0 +1,56 @@
+
+  function syncWorldMapStations() {
+    for (let index = STATIONS.length - 1; index >= 0; index -= 1) if (STATIONS[index]?.worldGenerated) STATIONS.splice(index, 1);
+    const map = state.world?.map;
+    if (!map?.nodes) return;
+    const existingKeys = new Set(STATIONS.map(station => `${station.name}|${station.faction || 'Independent'}`.toLowerCase()));
+    for (const node of map.nodes.filter(item => item.type === 'station')) {
+      const station = {
+        name: node.name,
+        faction: node.faction || 'Independent',
+        specialty: node.specialty || 'General trade and resupply',
+        locals: node.locals || `${node.name} Administrator; ${node.name} Quartermaster`,
+        worldGenerated: true,
+        worldNodeId: node.id,
+        surface: Boolean(node.surface),
+        ring: node.ring
+      };
+      const key = `${station.name}|${station.faction}`.toLowerCase();
+      if (!existingKeys.has(key)) {
+        STATIONS.push(station);
+        existingKeys.add(key);
+      }
+    }
+  }
+
+  const generateWorldMapBeforeCommerceSync = generateWorldMap;
+  generateWorldMap = function generateWorldMapWithCommerceStations() {
+    generateWorldMapBeforeCommerceSync();
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const importWorldSaveBeforeCommerceSync = importWorldSave;
+  importWorldSave = function importWorldSaveWithCommerceStations(raw) {
+    importWorldSaveBeforeCommerceSync(raw);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const createNewUnifiedWorldBeforeCommerceSync = createNewUnifiedWorld;
+  createNewUnifiedWorld = function createNewUnifiedWorldWithCommerceStations() {
+    createNewUnifiedWorldBeforeCommerceSync();
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const renderWorldBeforeCommerceSync = renderWorld;
+  renderWorld = function renderWorldWithCommerceStations() {
+    syncWorldMapStations();
+    renderWorldBeforeCommerceSync();
+  };
+
+  syncWorldMapStations();
