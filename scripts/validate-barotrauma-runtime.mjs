@@ -20,12 +20,13 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-state.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-scale-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-commerce-patch.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-seeding.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
 ];
 const orderIndexes = requiredOrder.map(relativePath => runtimePaths.indexOf(relativePath));
-if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-scale, research, or integration runtime fragments are not registered.');
+if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-scale, faction, research, or integration runtime fragments are not registered.');
 for (let index = 1; index < orderIndexes.length; index += 1) {
   if (orderIndexes[index] <= orderIndexes[index - 1]) throw new Error(`Runtime fragment order is invalid near ${requiredOrder[index]}.`);
 }
@@ -44,6 +45,7 @@ const jsonPaths = [
   'data/barotrauma/tools/custom/custom-content-schema.json',
   'data/barotrauma/tools/items/item-functionality.json',
   'data/barotrauma/tools/world/world-state-schema.json',
+  'data/barotrauma/tools/factions/faction-registry.json',
   'data/barotrauma-tools-registry.json'
 ];
 for (const relativePath of jsonPaths) JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
@@ -63,10 +65,21 @@ if (worldSchema.mapDefaults?.stationTarget < 180) throw new Error('The campaign-
 if (worldSchema.mapDefaults?.shellRadiusMultiplier < 24) throw new Error('The campaign-scale shell must remain at least twenty-four times the original baseline.');
 if (worldSchema.mapDefaults?.totalLocations < 960) throw new Error('The campaign-scale world must default to at least 960 locations.');
 if (worldSchema.mapDefaults?.minimumNodesPerRing < 8) throw new Error('Each depth ring must retain at least eight generated locations.');
-if (!worldSchema.submissionKinds?.includes('research') || !worldSchema.submissionKinds?.includes('game-state')) throw new Error('World submissions must include research and full game-state records.');
+if (!worldSchema.submissionKinds?.includes('research') || !worldSchema.submissionKinds?.includes('faction') || !worldSchema.submissionKinds?.includes('game-state')) throw new Error('World submissions must include research, faction, and full game-state records.');
 if (worldSchema.researchRules?.minimumMarks < 25000 || worldSchema.researchRules?.minimumSupplies < 50) throw new Error('Over-limit R&D must retain exorbitant minimum funding requirements.');
 
-const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, inventory rules, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} generated stations, unified submissions, and controlled R&D configuration.`;
+const factions = JSON.parse(fs.readFileSync(path.join(root, 'data/barotrauma/tools/factions/faction-registry.json'), 'utf8'));
+if (!Array.isArray(factions.districts) || factions.districts.length < 8) throw new Error('Faction seeding requires at least eight operational districts.');
+if (!Array.isArray(factions.umbrellas) || factions.umbrellas.length < 8) throw new Error('Faction seeding requires Coalition, Separatist, Union, corporate, independent, criminal, and cult umbrellas.');
+if (!Array.isArray(factions.organizations) || factions.organizations.length < 30) throw new Error('Faction seeding requires at least thirty operational organizations.');
+const requiredUmbrellas = ['europan-coalition', 'jovian-separatists', 'standard-union-208', 'corporate-enclaves', 'criminal-cartels', 'children-of-the-honkmother', 'church-of-the-husk'];
+for (const id of requiredUmbrellas) if (!factions.umbrellas.some(item => item.id === id)) throw new Error(`Missing required umbrella faction: ${id}`);
+if (!factions.organizations.some(item => item.id === 'the-combine')) throw new Error('The Primer-backed Combine must remain in the criminal faction seed.');
+if (!factions.organizations.some(item => item.parent === 'standard-union-208' && item.station)) throw new Error('Union 208 must retain station-based chapters and representation.');
+if (!factions.organizations.some(item => item.parent === 'corporate-enclaves' && item.type.includes('distributor'))) throw new Error('Material distributors must remain represented in the faction registry.');
+if (!factions.organizations.some(item => item.parent === 'children-of-the-honkmother' && item.hidden) || !factions.organizations.some(item => item.parent === 'church-of-the-husk' && item.hidden)) throw new Error('Both cults require hidden operational subsets.');
+
+const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} stations, ${factions.districts.length} districts, ${factions.umbrellas.length} umbrella factions, ${factions.organizations.length} operational organizations, unified submissions, and controlled R&D.`;
 console.log(message);
 
 if (process.env.VALIDATION_RECEIPT) {
@@ -81,6 +94,7 @@ if (process.env.VALIDATION_RECEIPT) {
     jsonRegistries: jsonPaths.length,
     itemFunctionalitySchema: functionality.schemaVersion || '',
     worldStateSchema: worldSchema.schemaVersion || '',
+    factionRegistrySchema: factions.schemaVersion || '',
     canonicalStart: worldSchema.canonicalStart,
     realEpoch: worldSchema.realEpoch,
     defaultRings: worldSchema.mapDefaults.rings,
@@ -89,7 +103,9 @@ if (process.env.VALIDATION_RECEIPT) {
     guaranteedStations: worldSchema.mapDefaults.stationTarget,
     shellRadius: worldSchema.mapDefaults.shellRadius,
     shellRadiusMultiplier: worldSchema.mapDefaults.shellRadiusMultiplier,
-    minimumNodesPerRing: worldSchema.mapDefaults.minimumNodesPerRing,
+    operationalDistricts: factions.districts.length,
+    umbrellaFactions: factions.umbrellas.length,
+    operationalOrganizations: factions.organizations.length,
     researchMinimumMarks: worldSchema.researchRules.minimumMarks,
     researchMinimumSupplies: worldSchema.researchRules.minimumSupplies,
     toolbeltSlots: functionality.inventoryRules.toolbeltSlots,
