@@ -19,6 +19,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-compatibility.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-cargo-commerce.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-commerce-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-suitability-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
