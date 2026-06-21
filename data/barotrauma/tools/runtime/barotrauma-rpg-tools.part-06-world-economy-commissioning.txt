@@ -1,0 +1,93 @@
+
+  function worldEconomyCommissionPermission(vessel) {
+    if (!vessel||vessel.status!=='available'||!vessel.availableForCommission) return {allowed:false,message:'This vessel is not available for commission.'};
+    const group=activeWorldGroup();
+    const currentNodeId=group?.currentNodeId||'';
+    const stationNodeId=vessel.location?.stationNodeId||vessel.location?.currentNodeId||'';
+    if (!currentNodeId||currentNodeId!==stationNodeId) return {allowed:false,message:'The active expedition must be docked at the vessel’s station.'};
+    if (normalizeRouteCrossing().status==='underway') return {allowed:false,message:'A vessel cannot be commissioned while the active expedition is in route.'};
+    return {allowed:true,message:'Available for commission.'};
+  }
+
+  function commissionWorldEconomyVessel(vesselId) {
+    const registry=worldVesselRegistry();
+    const vessel=registry[vesselId];
+    const permission=worldEconomyCommissionPermission(vessel);
+    if (!permission.allowed) return {ok:false,message:permission.message};
+    const group=activeWorldGroup();
+    const previousId=state.submarine.worldSubmarineId||'';
+    const previous=registry[previousId];
+    if (previous&&previous.vesselId!==vesselId) {
+      previous.role='player-reserve-vessel';
+      previous.status='docked';
+      previous.location={mode:'station',stationNodeId:group.currentNodeId,currentNodeId:group.currentNodeId,arrivedAt:new Date().toISOString(),decisionState:'reserve-vessel'};
+      previous.updatedAt=new Date().toISOString();
+    }
+    const model=SUBMARINES[vessel.modelId]||SUBMARINES[vessel.modelName]||SUBMARINES.Barsuk||{};
+    state.submarine.worldSubmarineId=vessel.vesselId;
+    state.submarine.model=SUBMARINES[vessel.modelId]?vessel.modelId:(SUBMARINES[vessel.modelName]?vessel.modelName:state.submarine.model);
+    state.submarine.name=vessel.name;
+    state.submarine.weapons=(model.weapons||[]).map(item=>({...item}));
+    state.submarine.hullCurrent=Math.max(1,number(model.hull,calculateSubmarine().totals.hull||1));
+    state.submarine.upkeep={};
+    vessel.kind='player';
+    vessel.role='player-expedition';
+    vessel.ownerGroupId=group?.groupId||'';
+    vessel.status='docked';
+    vessel.active=true;
+    vessel.availableForCommission=false;
+    vessel.commissionedAt=new Date().toISOString();
+    vessel.updatedAt=vessel.commissionedAt;
+    vessel.location={mode:'station',stationNodeId:group.currentNodeId,currentNodeId:group.currentNodeId,arrivedAt:vessel.commissionedAt,decisionState:'commissioned-by-player'};
+    if (group&&!group.submarineIds.includes(vessel.vesselId)) group.submarineIds.push(vessel.vesselId);
+    syncActivePlayerVesselRegistry('Shipyard vessel commissioned by active player expedition');
+    normalizeActiveSubmarineDashboard(false);
+    worldEconomyJournal(`${vessel.name} was commissioned by ${group?.name||'the active expedition'}.`,'commissioning',{vesselId:vessel.vesselId,groupId:group?.groupId||'',stationNodeId:group?.currentNodeId||''});
+    save();
+    return {ok:true,message:`${vessel.name} is now the active submarine.`};
+  }
+
+  const seedWorldEconomyNpcFleetBeforeManufacturedUse=seedWorldEconomyNpcFleet;
+  seedWorldEconomyNpcFleet=function seedWorldEconomyNpcFleetUsingManufacturedVessels() {
+    const economy=normalizeWorldEconomyState();
+    const target=worldEconomyNpcFleetTargetCount();
+    let active=Object.values(economy.vessels).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+    const available=Object.values(economy.vessels).filter(vessel=>vessel.status==='available'&&vessel.availableForCommission);
+    while (active.length<target&&available.length) {
+      const vessel=available.shift();
+      vessel.kind='npc';
+      vessel.role='trade-freighter';
+      vessel.status='docked';
+      vessel.availableForCommission=false;
+      vessel.ownerGroupId='npc-freight-guild';
+      vessel.commissionedAt=new Date().toISOString();
+      vessel.updatedAt=vessel.commissionedAt;
+      vessel.nextActionAt=new Date(Date.now()+(5+seededHash(`${vessel.vesselId}|npc-commission-dwell`)%11)*60000).toISOString();
+      vessel.location.decisionState='commissioned-by-npc-freight-guild';
+      active.push(vessel);
+      worldEconomyJournal(`${vessel.name} was commissioned by an NPC freight guild.`,'commissioning',{vesselId:vessel.vesselId,stationNodeId:vessel.location.stationNodeId||''});
+    }
+    return seedWorldEconomyNpcFleetBeforeManufacturedUse();
+  };
+
+  worldEconomyVesselRowsHtml=function worldEconomyVesselRowsHtmlWithCommissioning(limit) {
+    const vessels=Object.values(worldVesselRegistry()).filter(vessel=>vessel.active!==false).sort((left,right)=>{
+      const priority=value=>value.kind==='player'?0:value.status==='available'?1:value.status==='in-transit'?2:3;
+      return priority(left)-priority(right)||left.name.localeCompare(right.name);
+    });
+    return {total:vessels.length,html:vessels.slice(0,limit).map(vessel=>{
+      const permission=worldEconomyCommissionPermission(vessel);
+      return `<tr><td><strong>${escapeHtml(vessel.name)}</strong><br><code>${escapeHtml(vessel.vesselId)}</code></td><td>${escapeHtml(vessel.kind)}<br><span class="small-note">${escapeHtml(vessel.role)}</span></td><td><strong class="${vessel.status==='in-transit'?'warn':vessel.status==='available'?'good':''}">${escapeHtml(vessel.status)}</strong></td><td>${escapeHtml(worldEconomyVesselLocationLabel(vessel))}</td><td>${escapeHtml(worldEconomyCargoLabel(vessel))}</td><td>${vessel.nextActionAt?escapeHtml(new Date(vessel.nextActionAt).toLocaleString()):'Player/event driven'}</td><td><div class="button-row"><button class="compact-button world-economy-focus-vessel" data-vessel-id="${escapeHtml(vessel.vesselId)}" type="button">Locate</button>${vessel.status==='available'?`<button class="compact-button world-economy-commission-vessel" data-vessel-id="${escapeHtml(vessel.vesselId)}" type="button" ${permission.allowed?'':`disabled title="${escapeHtml(permission.message)}"`}>Commission</button>`:''}</div></td></tr>`;
+    }).join('')||'<tr><td colspan="7">No active vessels registered.</td></tr>'};
+  };
+
+  const bindWorldEconomyMasterRegistryBeforeCommissioning=bindWorldEconomyMasterRegistry;
+  bindWorldEconomyMasterRegistry=function bindWorldEconomyMasterRegistryWithCommissioning() {
+    bindWorldEconomyMasterRegistryBeforeCommissioning();
+    root.querySelectorAll('.world-economy-commission-vessel').forEach(button=>button.addEventListener('click',event=>{
+      const result=commissionWorldEconomyVessel(event.currentTarget.dataset.vesselId);
+      const output=root.querySelector('#world-economy-simulation-message');
+      if (!result.ok) { if (output) { output.textContent=result.message;output.classList.add('bad'); } return; }
+      if (activeTool()==='world') renderWorld(); else renderSubmarine();
+    }));
+  };
