@@ -1,0 +1,74 @@
+
+  function generalEncounterDiagnostics() {
+    const issues = [];
+    const ids = new Set();
+    const familyIds = new Set(GENERAL_ENCOUNTER_FAMILIES.map(item => item.id));
+    for (const template of GENERAL_ENCOUNTER_TEMPLATES) {
+      if (!template.id) issues.push('Encounter template without an id.');
+      else if (ids.has(template.id)) issues.push(`Duplicate encounter template id: ${template.id}.`);
+      else ids.add(template.id);
+      if (!familyIds.has(template.family)) issues.push(`${template.id || 'Unknown template'} uses missing family ${template.family}.`);
+      if (number(template.minLevel, 1) < 1 || number(template.maxLevel, 10) > 10 || number(template.minLevel, 1) > number(template.maxLevel, 10)) issues.push(`${template.id || 'Unknown template'} has an invalid level range.`);
+      if (!Array.isArray(template.approaches) || !template.approaches.length) issues.push(`${template.id || 'Unknown template'} has no resolution approaches.`);
+      if (GENERAL_ENCOUNTER_FAMILY_MAP[template.family]?.category !== template.category) issues.push(`${template.id || 'Unknown template'} category does not match its family.`);
+    }
+    for (const family of GENERAL_ENCOUNTER_FAMILIES) if (!GENERAL_ENCOUNTER_TEMPLATES.some(template => template.family === family.id)) issues.push(`Encounter family ${family.id} has no templates.`);
+    return {
+      valid: !issues.length,
+      issues,
+      familyCount: GENERAL_ENCOUNTER_FAMILIES.length,
+      templateCount: GENERAL_ENCOUNTER_TEMPLATES.length,
+      version: GENERAL_ENCOUNTER_VERSION
+    };
+  }
+
+  function escalateGeneralEncounterChoicesForDangerousLeg(slot, crossing = normalizeRouteCrossing()) {
+    if (!slot || slot.legIndex < 0 || !Array.isArray(slot.choices)) return false;
+    const leg = crossing.legs[slot.legIndex];
+    if (!leg?.danger) return false;
+    const targetNode = crossingNode(slot.worldNodeId || leg.toNodeId);
+    let changed = false;
+    slot.choices = slot.choices.map((event, choiceIndex) => {
+      if (!event?.encounterTemplateId || event.dangerousRoute) return event;
+      const template = GENERAL_ENCOUNTER_TEMPLATES.find(item => item.id === event.encounterTemplateId);
+      if (!template) return event;
+      const rng = seededRandom(`${state.world?.seed}|${crossing.crossingId}|${slot.id}|${choiceIndex}|dangerous-general-encounter`);
+      changed = true;
+      return buildGeneralEncounter(template, targetNode?.locationLevel || event.encounterLevel || leg.toLevel || 1, rng, {
+        targetNode,
+        dangerous: true,
+        stage: event.encounterStage || 'challenge',
+        scenarioId: event.scenarioId || ''
+      });
+    });
+    return changed;
+  }
+
+  const generateValidCrossingBeforeGeneralEncounterStability = generateValidCrossing;
+  generateValidCrossing = function generateValidCrossingWithGeneralEncounterSeverity() {
+    const crossing = generateValidCrossingBeforeGeneralEncounterStability();
+    let changed = false;
+    for (const slot of state.route.plan) if (escalateGeneralEncounterChoicesForDangerousLeg(slot, crossing)) changed = true;
+    if (changed) {
+      crossingLog(crossing, 'Dangerous route legs increased non-creature encounter severity by one step without changing encounter-family access.');
+      syncCrossingPublicRoute();
+      save();
+    }
+    return crossing;
+  };
+
+  const redrawCrossingEventBeforeGeneralEncounterStability = redrawCrossingEvent;
+  redrawCrossingEvent = function redrawCrossingEventWithGeneralEncounterSeverity(slotId) {
+    const result = redrawCrossingEventBeforeGeneralEncounterStability(slotId);
+    if (!result) return result;
+    const slot = state.route.plan.find(item => item.id === slotId);
+    if (escalateGeneralEncounterChoicesForDangerousLeg(slot)) {
+      state.route.crossingMessage = 'Encounter redrawn with dangerous-leg challenge severity applied.';
+      syncCrossingPublicRoute();
+      save();
+    }
+    return result;
+  };
+
+  globalThis.BAROTRAUMA_GENERAL_ENCOUNTER_DIAGNOSTICS = generalEncounterDiagnostics();
+  if (!globalThis.BAROTRAUMA_GENERAL_ENCOUNTER_DIAGNOSTICS.valid) console.warn('Barotrauma general encounter registry diagnostics failed.', globalThis.BAROTRAUMA_GENERAL_ENCOUNTER_DIAGNOSTICS.issues);
