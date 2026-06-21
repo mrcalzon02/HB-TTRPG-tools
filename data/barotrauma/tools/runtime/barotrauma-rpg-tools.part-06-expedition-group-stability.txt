@@ -7,6 +7,10 @@
     return hub.publicState.groups[hub.activeGroupId] || currentManagedGroupBeforeOwnershipStability();
   };
 
+  managedCrewRecords = function managedCrewRecordsAboardVessel() {
+    return normalizeCrewManagement().roster.filter(record => record.approval === 'Accepted' && record.active && ['Onboard','Injured'].includes(record.status));
+  };
+
   const normalizeManagedExpeditionBeforeRegistryMerge = normalizeManagedExpedition;
   normalizeManagedExpedition = function normalizeManagedExpeditionWithoutRegistryLoss() {
     const hub = normalizeWorldHub();
@@ -74,4 +78,26 @@
     const expedition = state.submarine?.managedExpedition;
     if (!expedition || expedition.status !== 'active') return false;
     return canActiveGroupScavengeWreckBeforeOwnershipStability(wreck);
+  };
+
+  const declareManagedSubmarineLostWithAllHandsBeforeManifestStability = declareManagedSubmarineLostWithAllHands;
+  declareManagedSubmarineLostWithAllHands = function declareManagedSubmarineLostWithAboardManifest() {
+    const roster = normalizeCrewManagement().roster;
+    const aboardIds = new Set(managedCrewRecords().map(managedCrewIdentity));
+    const protectedRecords = roster.filter(record => !aboardIds.has(managedCrewIdentity(record))).map(record => ({ rosterId: record.rosterId, snapshot: cloneWorldData(record) }));
+    const wreck = declareManagedSubmarineLostWithAllHandsBeforeManifestStability();
+    if (!wreck) return wreck;
+    const hub = normalizeWorldHub();
+    for (const crewId of wreck.crewIds || []) {
+      const record = roster.find(item => managedCrewIdentity(item) === crewId);
+      if (!record) continue;
+      hub.publicState.crews[crewId] = cloneWorldData({ ...(hub.publicState.crews[crewId] || {}), ...record, crewId, groupId: wreck.sourceGroupId, submarineId: wreck.sourceSubmarineId, updatedAt: new Date().toISOString() });
+    }
+    for (const protectedRecord of protectedRecords) {
+      const record = roster.find(item => item.rosterId === protectedRecord.rosterId);
+      if (record) Object.assign(record, protectedRecord.snapshot);
+    }
+    normalizeManagedExpedition();
+    save();
+    return wreck;
   };
