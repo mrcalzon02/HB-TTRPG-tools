@@ -8,6 +8,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-03.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-04.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-05.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-catalog.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
