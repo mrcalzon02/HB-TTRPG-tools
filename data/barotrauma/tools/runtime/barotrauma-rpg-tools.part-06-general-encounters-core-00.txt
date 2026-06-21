@@ -1,0 +1,140 @@
+
+  const GENERAL_ENCOUNTER_REGISTRY = globalThis.BAROTRAUMA_ENCOUNTER_REGISTRY || { schemaVersion: '0', progression: [], families: [], templates: [] };
+  const GENERAL_ENCOUNTER_VERSION = GENERAL_ENCOUNTER_REGISTRY.schemaVersion || '1.0.0';
+  const GENERAL_ENCOUNTER_FAMILIES = Array.isArray(GENERAL_ENCOUNTER_REGISTRY.families) ? GENERAL_ENCOUNTER_REGISTRY.families : [];
+  const GENERAL_ENCOUNTER_TEMPLATES = Array.isArray(GENERAL_ENCOUNTER_REGISTRY.templates) ? GENERAL_ENCOUNTER_REGISTRY.templates : [];
+  const GENERAL_ENCOUNTER_FAMILY_MAP = Object.fromEntries(GENERAL_ENCOUNTER_FAMILIES.map(item => [item.id, item]));
+  const GENERAL_ENCOUNTER_CATEGORY_MAP = Object.fromEntries(GENERAL_ENCOUNTER_FAMILIES.map(item => [item.category, item]));
+  const GENERAL_ENCOUNTER_STAGE_LABELS = { challenge: 'Challenge', contact: 'Contact', crisis: 'Crisis', aftermath: 'Aftermath' };
+  const GENERAL_ENCOUNTER_STAGE_DC = { challenge: 0, contact: -1, crisis: 0, aftermath: 1 };
+  const GENERAL_ENCOUNTER_STAGE_EFFECT = { challenge: 1, contact: 0, crisis: 1, aftermath: 0.5 };
+
+  for (const family of GENERAL_ENCOUNTER_FAMILIES) {
+    if (!EVENT_CATEGORIES.includes(family.category)) EVENT_CATEGORIES.push(family.category);
+    if (!(family.category in state.route.table)) state.route.table[family.category] = Math.max(0, number(family.defaultWeight, 2));
+  }
+
+  function cloneEncounterData(value) {
+    if (typeof cloneWorldData === 'function') return cloneWorldData(value);
+    return value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+  }
+
+  function normalizeGeneralEncounterState() {
+    state.encounters = state.encounters && typeof state.encounters === 'object' ? state.encounters : {};
+    state.encounters.generalFamily = GENERAL_ENCOUNTER_FAMILY_MAP[state.encounters.generalFamily] ? state.encounters.generalFamily : 'All';
+    state.encounters.generalLevel = clamp(state.encounters.generalLevel || 1, 1, 10);
+    state.encounters.generalContext = ['any','travel','location','station','job'].includes(state.encounters.generalContext) ? state.encounters.generalContext : 'any';
+    state.encounters.generalRegistryVersion = GENERAL_ENCOUNTER_VERSION;
+    state.route = state.route && typeof state.route === 'object' ? state.route : {};
+    state.route.encounterEngine = state.route.encounterEngine && typeof state.route.encounterEngine === 'object' ? state.route.encounterEngine : {};
+    state.route.encounterEngine.version = GENERAL_ENCOUNTER_VERSION;
+    state.route.encounterEngine.enabled = state.route.encounterEngine.enabled !== false;
+    for (const family of GENERAL_ENCOUNTER_FAMILIES) {
+      if (!(family.category in state.route.table)) state.route.table[family.category] = Math.max(0, number(family.defaultWeight, 2));
+    }
+    return state.route.encounterEngine;
+  }
+
+  function generalEncounterSeverityProfile(level) {
+    const safeLevel = clamp(level, 1, 10);
+    return (GENERAL_ENCOUNTER_REGISTRY.progression || []).find(item => safeLevel >= number(item.minLevel) && safeLevel <= number(item.maxLevel)) || {
+      severity: `Level ${safeLevel}`,
+      dcBonus: Math.max(0, safeLevel - 2),
+      effectScale: 1,
+      description: 'Depth-scaled challenge.'
+    };
+  }
+
+  function generalEncounterFamilyLabel(familyId) {
+    return GENERAL_ENCOUNTER_FAMILY_MAP[familyId]?.name || familyId || 'Encounter';
+  }
+
+  function generalEncounterContextForNode(node, fallback = 'travel') {
+    if (!node) return fallback;
+    if (node.type === 'station' || node.stationLocation) return 'station';
+    return 'location';
+  }
+
+  function generalEncounterPool(level, familyId = 'All', context = 'any', options = {}) {
+    const safeLevel = clamp(level, 1, 10);
+    const category = options.category || '';
+    const sanityEnabled = options.sanityEnabled !== false;
+    const node = options.targetNode || null;
+    return GENERAL_ENCOUNTER_TEMPLATES
+      .filter(template => safeLevel >= number(template.minLevel, 1) && safeLevel <= number(template.maxLevel, 10))
+      .filter(template => familyId === 'All' || template.family === familyId)
+      .filter(template => !category || template.category === category)
+      .filter(template => sanityEnabled || !template.optionalSanity)
+      .filter(template => context === 'any' || !(template.contexts || []).length || template.contexts.includes(context))
+      .filter(template => {
+        if (!node || !(template.nodeTypes || []).length) return true;
+        return template.nodeTypes.includes(node.type) || template.nodeTypes.includes(node.locationTypeId);
+      })
+      .sort((left, right) => left.category.localeCompare(right.category) || number(left.baseDC) - number(right.baseDC) || left.name.localeCompare(right.name));
+  }
+
+  function weightedGeneralEncounterChoice(pool, rng = Math.random, level = 1) {
+    if (!pool.length) return null;
+    const weighted = pool.map(template => ({
+      template,
+      weight: Math.max(0.1, number(template.weight, 1)) * Math.max(0.45, 1.3 - Math.abs(number(level) - number(template.minLevel, 1)) * 0.08)
+    }));
+    let roll = rng() * weighted.reduce((sum, item) => sum + item.weight, 0);
+    for (const item of weighted) {
+      roll -= item.weight;
+      if (roll <= 0) return item.template;
+    }
+    return weighted[weighted.length - 1].template;
+  }
+
+  function scaledEncounterEffects(effects, scale = 1) {
+    const source = effects && typeof effects === 'object' ? effects : {};
+    const scaled = {};
+    for (const [key, value] of Object.entries(source)) {
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        scaled[key] = {};
+        for (const [nestedKey, nestedValue] of Object.entries(value)) {
+          const amount = number(nestedValue);
+          scaled[key][nestedKey] = amount === 0 ? 0 : Math.sign(amount) * Math.max(1, Math.round(Math.abs(amount) * scale));
+        }
+      } else {
+        const amount = number(value);
+        scaled[key] = amount === 0 ? 0 : Math.sign(amount) * Math.max(1, Math.round(Math.abs(amount) * scale));
+      }
+    }
+    return scaled;
+  }
+
+  function buildGeneralEncounter(template, level, rng = Math.random, options = {}) {
+    if (!template) return null;
+    const actualLevel = clamp(level, 1, 10);
+    const severityLevel = clamp(actualLevel + (options.dangerous ? 1 : 0), 1, 10);
+    const severity = generalEncounterSeverityProfile(severityLevel);
+    const stage = GENERAL_ENCOUNTER_STAGE_LABELS[options.stage] ? options.stage : 'challenge';
+    const stageNarrative = stage === 'challenge' ? template.stages?.crisis || template.setup : template.stages?.[stage] || template.setup;
+    const complicationPool = Array.isArray(template.complications) ? template.complications : [];
+    const opportunityPool = Array.isArray(template.opportunities) ? template.opportunities : [];
+    const complication = complicationPool.length ? complicationPool[Math.floor(rng() * complicationPool.length)] : '';
+    const opportunity = opportunityPool.length ? opportunityPool[Math.floor(rng() * opportunityPool.length)] : '';
+    const stageDc = number(GENERAL_ENCOUNTER_STAGE_DC[stage]);
+    const approaches = (template.approaches || [{ stat: 'Intelligence', label: 'Resolve the challenge', dcMod: 0 }]).map((approach, index) => ({
+      ...cloneEncounterData(approach),
+      id: `${template.id}-approach-${index}`,
+      dc: clamp(number(template.baseDC, 8) + number(severity.dcBonus) + stageDc + number(approach.dcMod), 6, 18)
+    }));
+    const selectedApproach = approaches[0];
+    const effectScale = Math.max(0, number(severity.effectScale, 1) * number(GENERAL_ENCOUNTER_STAGE_EFFECT[stage], 1));
+    const successEffects = stage === 'contact' ? {} : scaledEncounterEffects(template.successEffects, effectScale);
+    const failureEffects = stage === 'contact'
+      ? { routePressure: 1 }
+      : scaledEncounterEffects(template.failureEffects, effectScale);
+    return {
+      id: `challenge-${template.id}-${actualLevel}-${Math.floor(rng() * 1000000)}`,
+      category: template.category,
+      stat: selectedApproach.stat || 'Intelligence',
+      dc: selectedApproach.dc,
+      name: `${severity.severity}: ${template.name}${stage === 'challenge' ? '' : ` — ${GENERAL_ENCOUNTER_STAGE_LABELS[stage]}`}`,
+      description: `${template.setup} ${stageNarrative}${complication ? ` Complication: ${complication}` : ''}`,
+      reward: `${template.reward}${opportunity ? ` Opportunity: ${opportunity}` : ''}`,
+      failure: `${template.failure}${template.persistent ? ` Persistent consequence: ${template.persistent}` : ''}`,
+      encounterTemplateId: template.id,
