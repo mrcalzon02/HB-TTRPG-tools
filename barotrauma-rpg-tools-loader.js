@@ -22,6 +22,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-suitability-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-state.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
