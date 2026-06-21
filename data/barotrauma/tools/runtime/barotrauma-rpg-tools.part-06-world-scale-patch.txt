@@ -62,20 +62,18 @@
   };
 
   expandedRingCounts = function expandedFortyEightVoyageRingCounts(rings, requestedNodes) {
-    const result = [];
     const minimumPerRing = WORLD_MAP_DEFAULTS.minimumNodesPerRing || 8;
-    let remaining = requestedNodes - 1;
-    let weight = 0;
-    for (let ring = 1; ring <= rings; ring += 1) weight += ring;
-    for (let ring = 1; ring <= rings; ring += 1) {
-      const minimumRemaining = (rings - ring) * minimumPerRing;
-      let count = ring === rings ? remaining : Math.max(minimumPerRing, Math.round((requestedNodes - 1) * ring / weight));
-      count = Math.max(minimumPerRing, Math.min(count, remaining - minimumRemaining));
-      result.push(count);
-      remaining -= count;
-    }
-    if (remaining > 0) result[result.length - 1] += remaining;
-    return result;
+    const baselineTotal = rings * minimumPerRing;
+    const available = Math.max(0, requestedNodes - 1 - baselineTotal);
+    const totalWeight = rings * (rings + 1) / 2;
+    const rawExtras = Array.from({ length: rings }, (_, index) => available * (index + 1) / totalWeight);
+    const extras = rawExtras.map(value => Math.floor(value));
+    let remainder = available - extras.reduce((sum, value) => sum + value, 0);
+    const fractionalOrder = rawExtras
+      .map((value, index) => ({ index, fraction: value - extras[index] }))
+      .sort((left, right) => right.fraction - left.fraction || right.index - left.index);
+    for (let index = 0; index < fractionalOrder.length && remainder > 0; index += 1, remainder -= 1) extras[fractionalOrder[index].index] += 1;
+    return extras.map(value => minimumPerRing + value);
   };
 
   generateWorldMap = function generateFortyEightVoyageWorldMap() {
