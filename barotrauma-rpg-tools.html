@@ -66,8 +66,11 @@
     .compact-button:hover{border-color:var(--accent)}
     .file-action{cursor:pointer}
     .hidden{display:none!important}
+    .active-dashboard-command{border-color:rgba(117,197,142,.62)}
+    .dashboard-focused-panel{border-color:var(--accent)!important;box-shadow:0 0 0 2px rgba(200,138,53,.2),var(--shadow)}
+    code{overflow-wrap:anywhere;color:#c9d7e5}
     @media(max-width:1100px){.span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column:span 12}.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.station-vendor-grid{grid-template-columns:1fr}.expanded-map-frame svg{width:5000px;height:5000px}}
-    @media(max-width:700px){.ops-header,.tool-hero{display:grid}.field-grid,.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:1fr}.ops-page{padding:12px}.map-frame{min-height:560px}.map-frame svg{height:560px}.expanded-map-frame{height:760px}.expanded-map-frame svg{width:3800px;height:3800px}}
+    @media(max-width:700px){.ops-header,.tool-hero{display:grid}.field-grid,.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:1fr}.ops-page{padding:12px}.map-frame{min-height:0}.map-frame svg{height:480px;min-width:0}.expanded-map-frame{height:760px}.expanded-map-frame svg{width:3800px;height:3800px}}
     @media print{.no-print,.ops-tabs,.ops-header-actions{display:none!important}.ops-page{max-width:none;padding:0}.tool-panel,.tool-card,.tool-hero{break-inside:avoid;background:white;color:black;border-color:#777}.field input,.field select,.field textarea{color:black;background:white}.map-frame{background:white}.expanded-map-frame{height:auto}.expanded-map-frame svg{width:100%;height:auto}.managed-sub-location-marker{animation:none}}
   </style>
 </head>
@@ -77,7 +80,7 @@
       <div>
         <p class="eyebrow">Rules-derived campaign utilities</p>
         <h1>Barotrauma RPG Operations Suite</h1>
-        <p class="subtitle">Character, crew, cargo, station commerce, controlled R&amp;D, linked expeditions, graph-validated crossings, depth-scaled creature attacks, lethal data-driven challenges, independent crew casualties, interactive world tracking, wreck salvage, and a faction-seeded 48-voyage Europa world.</p>
+        <p class="subtitle">Character management, lethal encounters, vessel systems, ID-linked crew, route crossings, and world position are unified through one active-submarine management dashboard.</p>
       </div>
       <div class="ops-header-actions">
         <button id="export-suite" class="secondary-action" type="button">Export Suite JSON</button>
@@ -91,14 +94,12 @@
 
     <nav class="ops-tabs no-print" aria-label="Barotrauma RPG tools">
       <button class="ops-tab" data-tool="character" type="button">Character Sheet</button>
-      <button class="ops-tab" data-tool="submarine" type="button">Submarine Manager</button>
+      <button class="ops-tab" data-tool="submarine" type="button">Active Submarine Dashboard</button>
       <button class="ops-tab" data-tool="encounters" type="button">Encounter Planner</button>
-      <button class="ops-tab" data-tool="route" type="button">Route Crossing</button>
-      <button class="ops-tab" data-tool="world" type="button">World State</button>
     </nav>
 
     <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
   </main>
-  <script src="barotrauma-rpg-tools-loader.js?v=019"></script>
+  <script src="barotrauma-rpg-tools-loader.js?v=020"></script>
 </body>
 </html>
