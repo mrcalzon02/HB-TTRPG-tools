@@ -1,0 +1,98 @@
+
+  function normalizeWorldEconomySimulationClocks() {
+    const simulation=worldEconomyPublicState().simulation;
+    simulation.lastSimulatedAt=simulation.lastSimulatedAt||new Date().toISOString();
+    simulation.lastStationCycleAt=simulation.lastStationCycleAt||simulation.lastSimulatedAt;
+    return simulation;
+  }
+
+  const processWorldStationEconomyCycleBeforeTreasury=processWorldStationEconomyCycle;
+  processWorldStationEconomyCycle=function processWorldStationEconomyCycleWithTreasury(station,cycleAt=new Date().toISOString()) {
+    const beforeCredits=number(station?.inventory?.credits);
+    const result=processWorldStationEconomyCycleBeforeTreasury(station,cycleAt);
+    if (result) {
+      const delta=number(station.inventory.credits)-beforeCredits;
+      if (delta) {
+        const stationRecord=worldEconomyStationRecordForNode(station.stationNodeId);
+        if (stationRecord) stationRecord.treasury=Math.max(0,number(stationRecord.treasury)+delta);
+      }
+    }
+    return result;
+  };
+
+  scheduleWorldEconomyProgressiveSimulation=function scheduleWorldEconomyProgressiveSimulationWithSeparateCycleClock(now=new Date(),reason='background catch-up') {
+    if (globalThis.__BAROTRAUMA_WORLD_ECONOMY_SIMULATION_RUNNING) return false;
+    const economy=normalizeWorldEconomyState();
+    const simulation=normalizeWorldEconomySimulationClocks();
+    syncAllWorldPlayerVessels();
+    seedWorldEconomyNpcFleet();
+    const stationList=Object.values(economy.stationEconomies).filter(station=>!station.archived);
+    const lastCycle=Date.parse(simulation.lastStationCycleAt||now.toISOString());
+    const cycleBase=Number.isFinite(lastCycle)?lastCycle:now.getTime();
+    const elapsed=Math.max(0,now.getTime()-cycleBase);
+    const cycles=Math.min(WORLD_ECONOMY_DEFAULTS.catchupCycleLimit,Math.floor(elapsed/(WORLD_ECONOMY_DEFAULTS.stationCycleMinutes*60000)));
+    const vessels=Object.values(economy.vessels).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+    let cycleIndex=0,stationIndex=0,vesselIndex=0,processedStations=0,departedTrades=0,completedTrades=0;
+    globalThis.__BAROTRAUMA_WORLD_ECONOMY_SIMULATION_RUNNING=true;
+
+    const finish=()=>{
+      simulation.lastSimulatedAt=now.toISOString();
+      if (cycles>0) simulation.lastStationCycleAt=new Date(cycleBase+cycles*WORLD_ECONOMY_DEFAULTS.stationCycleMinutes*60000).toISOString();
+      simulation.tickSequence=Math.max(0,number(simulation.tickSequence))+1;
+      simulation.lastSummary=`${reason}: processed ${cycles} station cycle${cycles===1?'':'s'}, ${departedTrades} freight departures, and ${completedTrades} completed trades.`;
+      syncAllWorldPlayerVessels();
+      publishWorldEconomyDiagnostics();
+      normalizeWorldHub().updatedAt=now.toISOString();
+      save();
+      globalThis.__BAROTRAUMA_WORLD_ECONOMY_SIMULATION_RUNNING=false;
+      globalThis.dispatchEvent?.(new CustomEvent('barotrauma-world-economy-updated',{detail:{cycles,processedStations,departedTrades,completedTrades}}));
+    };
+
+    const processVessels=()=>{
+      const batch=vessels.slice(vesselIndex,vesselIndex+12);
+      for (const vessel of batch) {
+        const due=Date.parse(vessel.nextActionAt||0);
+        if (!Number.isFinite(due)||due>now.getTime()) continue;
+        if (vessel.status==='in-transit') { if (arriveWorldEconomyFreighter(vessel,new Date(due))) completedTrades+=1; }
+        else if (vessel.status==='docked') { if (departWorldEconomyFreighter(vessel,new Date(Math.max(due,Date.parse(vessel.lastActionAt||0)||now.getTime())))) departedTrades+=1; }
+      }
+      vesselIndex+=12;
+      if (vesselIndex<vessels.length) setTimeout(processVessels,0); else finish();
+    };
+
+    const processStations=()=>{
+      if (!cycles||!stationList.length) return processVessels();
+      let processed=0;
+      while (cycleIndex<cycles&&processed<40) {
+        const station=stationList[stationIndex];
+        const cycleAt=new Date(cycleBase+(cycleIndex+1)*WORLD_ECONOMY_DEFAULTS.stationCycleMinutes*60000).toISOString();
+        processWorldStationEconomyCycle(station,cycleAt);
+        stationIndex+=1;processed+=1;processedStations+=1;
+        if (stationIndex>=stationList.length) { stationIndex=0;cycleIndex+=1; }
+      }
+      if (cycleIndex<cycles) setTimeout(processStations,0); else processVessels();
+    };
+
+    setTimeout(processStations,0);
+    return true;
+  };
+
+  const worldPlayerRouteLocationBeforeWaitingFix=worldPlayerRouteLocation;
+  worldPlayerRouteLocation=function worldPlayerRouteLocationWithMidRouteWaiting(groupId,routeRecord=null) {
+    const result=worldPlayerRouteLocationBeforeWaitingFix(groupId,routeRecord);
+    const group=normalizeWorldHub().publicState.groups[groupId];
+    const currentId=result.location.currentNodeId||group?.currentNodeId||'';
+    const currentNode=state.world?.map?.nodes?.find(node=>node.id===currentId);
+    if (result.status==='docked'&&currentId&&currentNode&&currentNode.type!=='station') {
+      result.status='awaiting-decision';
+      result.location.mode='route';
+      result.location.fromNodeId=currentId;
+      result.location.toNodeId=result.location.destinationNodeId||'';
+      result.location.stationNodeId='';
+      result.location.progress=.5;
+      result.location.decisionState='mid-route-awaiting-decision';
+    }
+    return result;
+  };
+
+  normalizeWorldEconomySimulationClocks();
