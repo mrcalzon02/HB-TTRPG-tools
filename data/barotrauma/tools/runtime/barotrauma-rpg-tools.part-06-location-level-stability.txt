@@ -1,0 +1,162 @@
+
+  function stationCapableLocationLevels() {
+    return (LOCATION_LEVEL_REGISTRY.levels || []).map(item => number(item.level)).filter(level => locationProfilesForLevel(level, 'station').length > 0 && level < 10);
+  }
+
+  function nearestStationCapableLevel(value) {
+    const levels = stationCapableLocationLevels();
+    const requested = clamp(value, 1, 9);
+    return levels.sort((left, right) => Math.abs(left - requested) - Math.abs(right - requested) || left - right)[0] || 1;
+  }
+
+  function reconcileWorldStationLevels(map = state.world?.map) {
+    if (!map?.nodes) return false;
+    const target = Math.max(0, number(map.stationTarget, state.world.stationTarget || map.stationCount || 0));
+    const rng = seededRandom(`${map.seed}|station-level-reconciliation|${LOCATION_LEVEL_VERSION}|${number(state.world.locationLevelSeedSalt, 0)}`);
+    let changed = false;
+    for (const node of map.nodes) {
+      const level = locationLevelForRing(node.ring, map.rings);
+      const permitted = locationProfilesForLevel(level, 'station').length > 0;
+      if (node.type === 'station' && !permitted) {
+        node.type = 'hazard';
+        node.start = false;
+        changed = true;
+      }
+    }
+    let stationCount = map.nodes.filter(node => node.type === 'station').length;
+    if (stationCount < target) {
+      const candidates = map.nodes
+        .filter(node => node.ring > 0 && node.type !== 'station' && locationProfilesForLevel(locationLevelForRing(node.ring, map.rings), 'station').length)
+        .map(node => ({ node, score: rng() }))
+        .sort((left, right) => left.score - right.score);
+      for (const candidate of candidates) {
+        if (stationCount >= target) break;
+        const node = candidate.node;
+        node.type = 'station';
+        const prefix = MAP_PREFIX[Math.floor(rng() * MAP_PREFIX.length)];
+        const suffix = MAP_SUFFIX[Math.floor(rng() * MAP_SUFFIX.length)];
+        node.name = `${prefix} ${suffix}`;
+        node.details = '';
+        stationCount += 1;
+        changed = true;
+      }
+    }
+    map.stationCount = stationCount;
+    const outerStations = map.nodes.filter(node => node.ring === map.rings && node.type === 'station');
+    if (!map.nodes.some(node => node.id === map.startId && node.type === 'station')) {
+      const start = outerStations[0] || map.nodes.filter(node => node.type === 'station').sort((left, right) => right.ring - left.ring)[0];
+      if (start) {
+        map.nodes.forEach(node => { node.start = node.id === start.id; });
+        map.startId = start.id;
+        changed = true;
+      }
+    }
+    return changed;
+  }
+
+  const assignWorldLocationLevelsBeforeStability = assignWorldLocationLevels;
+  assignWorldLocationLevels = function assignWorldLocationLevelsStable(map = state.world?.map, force = false) {
+    const result = assignWorldLocationLevelsBeforeStability(map, force);
+    if (!map?.nodes) return result;
+    for (const node of map.nodes) {
+      const profile = LOCATION_TYPE_MAP[node.locationTypeId];
+      if (!profile) continue;
+      applyLocationProfileToNode(node, profile, locationLevelProfile(profile.level), map);
+    }
+    return result;
+  };
+
+  const decorateStandaloneStationBeforeStability = decorateStandaloneStation;
+  decorateStandaloneStation = function decorateStandaloneStationStable(station, entry = null) {
+    if (entry) entry.locationLevel = nearestStationCapableLevel(entry.locationLevel || 1);
+    if (station) station.locationLevel = nearestStationCapableLevel(entry?.locationLevel || station.locationLevel || 1);
+    return decorateStandaloneStationBeforeStability(station, entry);
+  };
+
+  const generateWorldMapBeforeLocationStability = generateWorldMap;
+  generateWorldMap = function generateWorldMapWithStableLocationStations() {
+    generateWorldMapBeforeLocationStability();
+    const changed = reconcileWorldStationLevels(state.world.map);
+    if (changed) seedWorldFactions(state.world.map, true);
+    assignWorldLocationLevels(state.world.map, true);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const importWorldSaveBeforeLocationStability = importWorldSave;
+  importWorldSave = function importWorldSaveWithStableLocationStations(raw) {
+    importWorldSaveBeforeLocationStability(raw);
+    const changed = reconcileWorldStationLevels(state.world.map);
+    if (changed) seedWorldFactions(state.world.map, true);
+    assignWorldLocationLevels(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const renderCustomWorkshopBeforeLocationStability = renderCustomWorkshop;
+  renderCustomWorkshop = function renderCustomWorkshopWithHabitableStationLevels() {
+    if (state.customContent?.draft?.type === 'station') {
+      state.customContent.draft.locationLevel = nearestStationCapableLevel(state.customContent.draft.locationLevel || 1);
+      const profiles = locationProfilesForLevel(state.customContent.draft.locationLevel, 'station');
+      if (!profiles.some(item => item.id === state.customContent.draft.locationTypeId)) state.customContent.draft.locationTypeId = profiles[0]?.id || 'frontier-outpost';
+    }
+    renderCustomWorkshopBeforeLocationStability();
+    const select = root.querySelector('#custom-station-location-level');
+    if (!select) return;
+    const allowed = stationCapableLocationLevels();
+    select.innerHTML = optionList(allowed.map(String), String(state.customContent.draft.locationLevel), value => `Level ${value}: ${locationLevelProfile(value).name}`);
+  };
+
+  const currentWorldSubmissionBeforeLocationLevels = currentWorldSubmission;
+  currentWorldSubmission = function currentWorldSubmissionWithLocationLevels(kind) {
+    const submission = currentWorldSubmissionBeforeLocationLevels(kind);
+    if (kind !== 'game-state' && kind !== 'location' && kind !== 'faction') return submission;
+    submission.payload = submission.payload || {};
+    submission.payload.locationLevelRegistryVersion = LOCATION_LEVEL_VERSION;
+    submission.payload.locationLevelSeedSalt = number(state.world.locationLevelSeedSalt, 0);
+    submission.payload.locationAssignments = cloneWorldData((state.world.map?.nodes || []).map(node => ({
+      nodeId: node.id,
+      locationLevel: node.locationLevel,
+      locationLevelName: node.locationLevelName,
+      locationTypeId: node.locationTypeId,
+      locationTypeName: node.locationTypeName,
+      locationLore: node.locationLore,
+      locationAvailability: node.locationAvailability,
+      locationShops: node.locationShops || [],
+      locationServices: node.locationServices || [],
+      locationHazards: node.locationHazards || []
+    })));
+    return submission;
+  };
+
+  const applyWorldSubmissionBeforeLocationLevels = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithLocationLevels(raw, allowForeign = false) {
+    const submission = normalizeWorldSubmission(raw);
+    const result = applyWorldSubmissionBeforeLocationLevels(submission, allowForeign);
+    const payload = submission.payload || {};
+    if (Array.isArray(payload.locationAssignments) && state.world?.map?.nodes) {
+      for (const assignment of payload.locationAssignments) {
+        const node = state.world.map.nodes.find(item => item.id === assignment.nodeId);
+        if (node) Object.assign(node, cloneWorldData(assignment));
+      }
+      state.world.locationLevelSeedSalt = number(payload.locationLevelSeedSalt, state.world.locationLevelSeedSalt || 0);
+      state.world.map.locationLevelVersion = payload.locationLevelRegistryVersion || LOCATION_LEVEL_VERSION;
+      reconcileWorldStationLevels(state.world.map);
+      assignWorldLocationLevels(state.world.map, false);
+      syncWorldMapStations();
+      normalizeStationCommerce();
+      save();
+    }
+    return result;
+  };
+
+  if (state.world?.map) {
+    const changed = reconcileWorldStationLevels(state.world.map);
+    if (changed) seedWorldFactions(state.world.map, true);
+    assignWorldLocationLevels(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  }
