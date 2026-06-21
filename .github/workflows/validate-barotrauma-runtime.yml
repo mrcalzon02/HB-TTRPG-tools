@@ -16,6 +16,9 @@ on:
       - '.github/workflows/validate-barotrauma-runtime.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -25,4 +28,16 @@ jobs:
         with:
           node-version: '22'
       - name: Validate assembled runtime
+        env:
+          VALIDATION_RECEIPT: data/barotrauma/validation/runtime-validation.json
         run: node scripts/validate-barotrauma-runtime.mjs
+      - name: Commit validation receipt
+        run: |
+          if git diff --quiet -- data/barotrauma/validation/runtime-validation.json; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/barotrauma/validation/runtime-validation.json
+          git commit -m "Record Barotrauma runtime validation"
+          git push origin HEAD:main
