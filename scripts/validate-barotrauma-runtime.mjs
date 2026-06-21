@@ -16,10 +16,11 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-compatibility.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-cargo-commerce.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-commerce-stability.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-suitability-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
 ];
 const orderIndexes = requiredOrder.map(relativePath => runtimePaths.indexOf(relativePath));
-if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, or commerce runtime fragments are not registered.');
+if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, or suitability runtime fragments are not registered.');
 for (let index = 1; index < orderIndexes.length; index += 1) {
   if (orderIndexes[index] <= orderIndexes[index - 1]) throw new Error(`Runtime fragment order is invalid near ${requiredOrder[index]}.`);
 }
