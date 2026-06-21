@@ -1,0 +1,207 @@
+
+  const DASHBOARD_MANAGEMENT_RECOVERY_VERSION='1.0.0';
+  const DASHBOARD_MANAGEMENT_RECOVERY_ITERATIONS=240000;
+  dashboardManagementRuntime.pendingRecoveryCode=dashboardManagementRuntime.pendingRecoveryCode||'';
+  dashboardManagementRuntime.pendingRecoveryVesselId=dashboardManagementRuntime.pendingRecoveryVesselId||'';
+
+  function dashboardManagementGenerateRecoveryCode(){
+    const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const bytes=new Uint8Array(24);
+    crypto.getRandomValues(bytes);
+    const characters=[...bytes].map(byte=>alphabet[byte%alphabet.length]);
+    return Array.from({length:6},(_,index)=>characters.slice(index*4,index*4+4).join('')).join('-');
+  }
+
+  function dashboardManagementNormalizeRecoveryCode(value){
+    return String(value||'').toUpperCase().replace(/[^A-Z2-9]/g,'');
+  }
+
+  async function dashboardManagementIssueRecoveryCode(credential){
+    const code=dashboardManagementGenerateRecoveryCode();
+    const salt=dashboardManagementRandomToken(16);
+    credential.recovery={
+      version:DASHBOARD_MANAGEMENT_RECOVERY_VERSION,
+      algorithm:'PBKDF2-SHA-256',
+      iterations:DASHBOARD_MANAGEMENT_RECOVERY_ITERATIONS,
+      salt,
+      verifier:await dashboardManagementDeriveVerifier(dashboardManagementNormalizeRecoveryCode(code),salt,DASHBOARD_MANAGEMENT_RECOVERY_ITERATIONS),
+      issuedAt:new Date().toISOString(),
+      revision:Math.max(1,number(credential.recovery?.revision,0)+1)
+    };
+    dashboardManagementRuntime.pendingRecoveryCode=code;
+    dashboardManagementRuntime.pendingRecoveryVesselId=credential.vesselId;
+    return code;
+  }
+
+  async function dashboardManagementVerifyRecoveryCode(credential,recoveryCode){
+    const recovery=credential?.recovery;
+    if(!recovery?.salt||!recovery?.verifier)throw new Error('This legacy credential has no recovery code yet. Log in with the current password or repair its pairing with the current password to issue one.');
+    const verifier=await dashboardManagementDeriveVerifier(dashboardManagementNormalizeRecoveryCode(recoveryCode),recovery.salt,recovery.iterations||DASHBOARD_MANAGEMENT_RECOVERY_ITERATIONS);
+    return dashboardManagementConstantTimeEqual(verifier,recovery.verifier);
+  }
+
+  function dashboardManagementResolveGroup(groupId,newGroupName=''){
+    const hub=normalizeWorldHub();
+    if(groupId&&hub.publicState.groups?.[groupId])return hub.publicState.groups[groupId];
+    const cleanName=String(newGroupName||'').trim();
+    if(!cleanName)throw new Error('Choose an expedition group or enter a name for a new expedition group.');
+    return createWorldGroup(cleanName);
+  }
+
+  function dashboardManagementPairVesselToGroup(vesselId,group){
+    const hub=normalizeWorldHub();
+    for(const candidate of Object.values(hub.publicState.groups||{})){
+      candidate.submarineIds=(candidate.submarineIds||[]).filter(id=>id!==vesselId);
+      if(candidate.primarySubmarineId===vesselId)candidate.primarySubmarineId=candidate.submarineIds[0]||'';
+    }
+    group.submarineIds=[...new Set([...(group.submarineIds||[]),vesselId])];
+    if(!group.primarySubmarineId)group.primarySubmarineId=vesselId;
+    const record=hub.publicState.submarines?.[vesselId]||{submarineId:vesselId};
+    record.groupId=group.groupId;
+    record.currentNodeId=record.currentNodeId||group.currentNodeId||group.startingNodeId||'';
+    record.updatedAt=new Date().toISOString();
+    hub.publicState.submarines[vesselId]=record;
+    const authority=normalizeDashboardManagementAuthority();
+    const snapshot=authority.vesselSnapshots?.[vesselId];
+    if(snapshot){
+      snapshot.groupId=group.groupId;
+      snapshot.operationsDashboard=snapshot.operationsDashboard&&typeof snapshot.operationsDashboard==='object'?snapshot.operationsDashboard:defaultActiveSubmarineDashboard();
+      snapshot.operationsDashboard.activeGroupId=group.groupId;
+      snapshot.operationsDashboard.activeNodeId=group.currentNodeId||snapshot.operationsDashboard.activeNodeId||'';
+      snapshot.route=snapshot.route&&typeof snapshot.route==='object'?snapshot.route:deepMerge(defaultState().route,{});
+      snapshot.route.activeGroupId=group.groupId;
+      if(snapshot.submarine?.managedExpedition){
+        snapshot.submarine.managedExpedition.groupId=group.groupId;
+        snapshot.submarine.managedExpedition.currentNodeId=group.currentNodeId||snapshot.submarine.managedExpedition.currentNodeId||'';
+      }
+    }
+    if(typeof worldVesselRegistry==='function'){
+      const vessel=worldVesselRegistry()?.[vesselId];
+      if(vessel){vessel.ownerGroupId=group.groupId;vessel.location=vessel.location||{};vessel.location.currentNodeId=group.currentNodeId||vessel.location.currentNodeId||'';vessel.updatedAt=new Date().toISOString();}
+    }
+    return group;
+  }
+
+  function dashboardManagementBuildSubmarineState(vesselId,name,modelName,group){
+    const profile=SUBMARINES[modelName];
+    if(!profile)throw new Error('Choose a valid submarine model.');
+    const submarine=deepMerge(defaultState().submarine,{});
+    submarine.worldSubmarineId=vesselId;
+    submarine.model=modelName;
+    submarine.name=String(name||modelName).trim()||modelName;
+    submarine.weapons=(profile.weapons||[]).map(item=>({...item}));
+    submarine.hullCurrent=number(profile.hull,submarine.hullCurrent);
+    submarine.resources=submarine.resources&&typeof submarine.resources==='object'?submarine.resources:{};
+    submarine.resources.crew=Math.max(1,number(submarine.resources.crew,1));
+    submarine.managedExpedition={
+      version:DASHBOARD_MANAGEMENT_AUTH_VERSION,
+      status:'active',
+      groupId:group.groupId,
+      submarineId:vesselId,
+      currentNodeId:group.currentNodeId||group.startingNodeId||'',
+      startingNodeId:group.startingNodeId||group.currentNodeId||'',
+      crewIds:[],
+      filedCrossingId:''
+    };
+    return submarine;
+  }
+
+  async function createNewManageableSubmarine(options={}){
+    const cleanName=String(options.name||'').trim();
+    if(!cleanName)throw new Error('Enter a name for the new submarine.');
+    const modelName=String(options.modelName||'Barsuk');
+    if(!SUBMARINES[modelName])throw new Error('Choose a valid submarine model.');
+    const password=String(options.password||'');
+    if(password.length<10)throw new Error('Use a management password of at least 10 characters.');
+    const group=dashboardManagementResolveGroup(options.groupId,options.newGroupName);
+    const hub=normalizeWorldHub();
+    const authority=normalizeDashboardManagementAuthority();
+    const vesselId=uid('world-submarine');
+    const submarine=dashboardManagementBuildSubmarineState(vesselId,cleanName,modelName,group);
+    const route=deepMerge(defaultState().route,{});
+    route.activeSubmarineId=vesselId;
+    route.activeGroupId=group.groupId;
+    const operationsDashboard=defaultActiveSubmarineDashboard();
+    operationsDashboard.activeSubmarineId=vesselId;
+    operationsDashboard.activeGroupId=group.groupId;
+    operationsDashboard.activeNodeId=group.currentNodeId||group.startingNodeId||'';
+    operationsDashboard.dashboardFocus='overview';
+    const capturedAt=new Date().toISOString();
+    authority.vesselSnapshots[vesselId]={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:hub.worldId,vesselId,groupId:group.groupId,submarine:cloneWorldData(submarine),route:cloneWorldData(route),operationsDashboard:cloneWorldData(operationsDashboard),character:cloneWorldData(state.character||{}),capturedAt,createdAsManageableSubmarine:true};
+    hub.publicState.submarines[vesselId]={submarineId:vesselId,groupId:group.groupId,name:submarine.name,model:modelName,status:'active',managed:true,currentNodeId:operationsDashboard.activeNodeId,startingNodeId:group.startingNodeId||operationsDashboard.activeNodeId,crewIds:[],routeId:'',submarine:cloneWorldData(submarine),createdAt:capturedAt,updatedAt:capturedAt};
+    dashboardManagementPairVesselToGroup(vesselId,group);
+    if(typeof syncAllWorldPlayerVessels==='function')syncAllWorldPlayerVessels();
+    dashboardManagementAudit('manageable-submarine-created',vesselId,{groupId:group.groupId,name:submarine.name,model:modelName});
+    save();
+    await createDashboardManagementCredential(vesselId,password,String(options.managerName||'').trim(),Boolean(options.remember));
+    return vesselId;
+  }
+
+  async function resetDashboardManagementPassword(vesselId,recoveryCode,newPassword,options={}){
+    const credential=dashboardManagementCredential(vesselId);
+    if(!credential?.verifier)throw new Error('This submarine does not have a management credential.');
+    if(!await dashboardManagementVerifyRecoveryCode(credential,recoveryCode)){
+      dashboardManagementAudit('password-reset-failed',vesselId,{reason:'invalid recovery code'});
+      save();
+      throw new Error('The recovery code is incorrect.');
+    }
+    const cleanPassword=String(newPassword||'');
+    if(cleanPassword.length<10)throw new Error('Use a new password of at least 10 characters.');
+    let group=dashboardManagementGroupForVessel(vesselId);
+    if(!group){
+      group=dashboardManagementResolveGroup(options.groupId,options.newGroupName);
+      dashboardManagementPairVesselToGroup(vesselId,group);
+    }
+    const salt=dashboardManagementRandomToken(16);
+    credential.salt=salt;
+    credential.verifier=await dashboardManagementDeriveVerifier(cleanPassword,salt,DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS);
+    credential.iterations=DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS;
+    credential.updatedAt=new Date().toISOString();
+    credential.revision=Math.max(1,number(credential.revision,1))+1;
+    credential.receipts={};
+    await dashboardManagementIssueRecoveryCode(credential);
+    dashboardManagementClearStoredSession();
+    dashboardManagementRuntime.status='locked';
+    dashboardManagementAudit('password-reset',vesselId,{groupId:group.groupId,credentialRevision:credential.revision,recoveryRevision:credential.recovery.revision});
+    save();
+    return establishDashboardManagementSession(vesselId,Boolean(options.remember));
+  }
+
+  async function repairDashboardManagementPairing(vesselId,currentPassword,options={}){
+    const credential=dashboardManagementCredential(vesselId);
+    if(!credential?.verifier)throw new Error('This submarine has not been claimed. Use Create New Manageable Submarine or claim it normally.');
+    const derived=await dashboardManagementDeriveVerifier(String(currentPassword||''),credential.salt,credential.iterations);
+    if(!dashboardManagementConstantTimeEqual(derived,credential.verifier))throw new Error('The current management password is incorrect.');
+    const group=dashboardManagementResolveGroup(options.groupId,options.newGroupName);
+    dashboardManagementPairVesselToGroup(vesselId,group);
+    credential.receipts={};
+    await dashboardManagementIssueRecoveryCode(credential);
+    dashboardManagementAudit('pairing-repaired',vesselId,{groupId:group.groupId,recoveryRevision:credential.recovery.revision});
+    save();
+    return establishDashboardManagementSession(vesselId,Boolean(options.remember));
+  }
+
+  const establishDashboardManagementSessionBeforeRecovery=establishDashboardManagementSession;
+  establishDashboardManagementSession=async function establishDashboardManagementSessionWithRecovery(vesselId,remember=false){
+    if(!dashboardManagementGroupForVessel(vesselId))throw new Error('This submarine has a login credential but is not paired to an expedition group. Use Repair Pairing with the current password or reset it with the recovery code.');
+    const result=await establishDashboardManagementSessionBeforeRecovery(vesselId,remember);
+    const credential=dashboardManagementCredential(vesselId);
+    if(!credential.recovery?.verifier){
+      await dashboardManagementIssueRecoveryCode(credential);
+      dashboardManagementAudit('legacy-recovery-issued',vesselId,{recoveryRevision:credential.recovery.revision});
+      save();
+    }
+    return result;
+  };
+
+  const createDashboardManagementCredentialBeforeRecovery=createDashboardManagementCredential;
+  createDashboardManagementCredential=async function createDashboardManagementCredentialWithRecovery(vesselId,password,managerName='',remember=false){
+    const result=await createDashboardManagementCredentialBeforeRecovery(vesselId,password,managerName,remember);
+    const credential=dashboardManagementCredential(vesselId);
+    if(!credential.recovery?.verifier){
+      await dashboardManagementIssueRecoveryCode(credential);
+      dashboardManagementAudit('recovery-issued',vesselId,{recoveryRevision:credential.recovery.revision});
+      save();
+    }
+    return result;
+  };
