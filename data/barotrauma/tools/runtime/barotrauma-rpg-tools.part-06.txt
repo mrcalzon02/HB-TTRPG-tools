@@ -14,7 +14,7 @@
   document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
   window.addEventListener('hashchange', render);
   document.getElementById('print-tool')?.addEventListener('click', () => window.print());
-  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 12, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, worldStateSchemaVersion: WORLD_STATE_SCHEMA.schemaVersion, factionRegistryVersion: FACTION_REGISTRY.schemaVersion, locationLevelRegistryVersion: LOCATION_LEVEL_REGISTRY.schemaVersion, routeCrossingVersion: ROUTE_CROSSING_VERSION, worldScaleVersion: state.world?.worldScaleVersion || '', state }, null, 2)));
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 13, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, worldStateSchemaVersion: WORLD_STATE_SCHEMA.schemaVersion, factionRegistryVersion: FACTION_REGISTRY.schemaVersion, locationLevelRegistryVersion: LOCATION_LEVEL_REGISTRY.schemaVersion, routeCrossingVersion: ROUTE_CROSSING_VERSION, expeditionIntegrationVersion: EXPEDITION_INTEGRATION_VERSION, worldScaleVersion: state.world?.worldScaleVersion || '', state }, null, 2)));
   document.getElementById('import-suite')?.addEventListener('change', event => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -63,6 +63,7 @@
         validateAllCustomDesigns();
         assignMissingGroupStarts();
         normalizeRouteCrossing();
+        normalizeManagedExpedition();
         syncCrewResourceIfEnabled();
         syncCargoResourceIfEnabled();
         if (!SUBMARINES[state.submarine.model]) state.submarine.model = 'Barsuk';
