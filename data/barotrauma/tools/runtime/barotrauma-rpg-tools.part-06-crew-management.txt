@@ -1,0 +1,519 @@
+
+  const CREW_DUTIES = ['Unassigned','Command','Navigation','Engineering','Reactor','Mechanical','Medical','Security','Weapons','Sonar','Logistics','Diving / Salvage','Research','Passenger'];
+  const CREW_SHIFTS = ['Unassigned','Alpha','Beta','Gamma','Day','Night','Relief'];
+  const CREW_STATUSES = ['Onboard','Reserve','Away','Injured','Missing','Dead'];
+  const CREW_APPROVALS = ['Pending','Accepted','Rejected'];
+  const PARTICIPANT_ROLES = ['Player','Co-GM','Observer','NPC'];
+
+  function defaultPlayerSubmissionSettings() {
+    return {
+      playerId: uid('player'),
+      characterId: uid('character'),
+      contact: '',
+      availability: '',
+      preferredDuty: 'Unassigned',
+      preferredShift: 'Unassigned',
+      participantRole: 'Player',
+      includeInventory: true,
+      notes: '',
+      lastExportedAt: ''
+    };
+  }
+
+  function normalizePlayerSubmissionSettings() {
+    const existing = state.character.playerSubmission && typeof state.character.playerSubmission === 'object'
+      ? state.character.playerSubmission
+      : {};
+    state.character.playerSubmission = deepMerge(defaultPlayerSubmissionSettings(), existing);
+    if (!state.character.playerSubmission.playerId) state.character.playerSubmission.playerId = uid('player');
+    if (!state.character.playerSubmission.characterId) state.character.playerSubmission.characterId = uid('character');
+    return state.character.playerSubmission;
+  }
+
+  function defaultCrewManagement() {
+    return {
+      roster: [],
+      activeCrewId: 'local',
+      autoSyncCrewResource: false,
+      vesselNotes: '',
+      pasteBuffer: '',
+      draft: {
+        playerName: '',
+        characterName: '',
+        participantRole: 'NPC',
+        className: 'Engineer',
+        level: 1,
+        duty: 'Unassigned',
+        shift: 'Unassigned'
+      }
+    };
+  }
+
+  function normalizeCrewRecord(raw = {}) {
+    const stats = raw.stats && typeof raw.stats === 'object' ? raw.stats : { Strength: 3, Agility: 3, Intelligence: 3, Charisma: 3 };
+    const current = raw.current && typeof raw.current === 'object' ? raw.current : { ...stats };
+    return {
+      rosterId: raw.rosterId || uid('crew'),
+      sourcePlayerId: raw.sourcePlayerId || '',
+      sourceCharacterId: raw.sourceCharacterId || '',
+      source: raw.source || 'manual',
+      playerName: raw.playerName || '',
+      contact: raw.contact || '',
+      availability: raw.availability || '',
+      participantRole: PARTICIPANT_ROLES.includes(raw.participantRole) ? raw.participantRole : (raw.playerName ? 'Player' : 'NPC'),
+      characterName: raw.characterName || 'Unnamed Crew Member',
+      className: raw.className || 'Engineer',
+      level: clamp(raw.level, 1, 99),
+      background: raw.background || '',
+      talent: raw.talent || '',
+      duty: CREW_DUTIES.includes(raw.duty) ? raw.duty : 'Unassigned',
+      preferredDuty: CREW_DUTIES.includes(raw.preferredDuty) ? raw.preferredDuty : 'Unassigned',
+      shift: CREW_SHIFTS.includes(raw.shift) ? raw.shift : 'Unassigned',
+      preferredShift: CREW_SHIFTS.includes(raw.preferredShift) ? raw.preferredShift : 'Unassigned',
+      status: CREW_STATUSES.includes(raw.status) ? raw.status : 'Onboard',
+      approval: CREW_APPROVALS.includes(raw.approval) ? raw.approval : (raw.source === 'submission' ? 'Pending' : 'Accepted'),
+      active: raw.active !== false,
+      stats: {
+        Strength: number(stats.Strength, 3),
+        Agility: number(stats.Agility, 3),
+        Intelligence: number(stats.Intelligence, 3),
+        Charisma: number(stats.Charisma, 3)
+      },
+      current: {
+        Strength: number(current.Strength, number(stats.Strength, 3)),
+        Agility: number(current.Agility, number(stats.Agility, 3)),
+        Intelligence: number(current.Intelligence, number(stats.Intelligence, 3)),
+        Charisma: number(current.Charisma, number(stats.Charisma, 3))
+      },
+      lostSanity: Math.max(0, number(raw.lostSanity)),
+      morale: number(raw.morale),
+      conditions: raw.conditions || '',
+      inventory: Array.isArray(raw.inventory) ? raw.inventory : [],
+      inventoryText: raw.inventoryText || '',
+      characterNotes: raw.characterNotes || '',
+      playerNotes: raw.playerNotes || '',
+      gmNotes: raw.gmNotes || '',
+      submittedAt: raw.submittedAt || '',
+      updatedAt: raw.updatedAt || raw.submittedAt || new Date().toISOString()
+    };
+  }
+
+  function normalizeCrewManagement() {
+    const existing = state.submarine.crewManagement && typeof state.submarine.crewManagement === 'object'
+      ? state.submarine.crewManagement
+      : {};
+    state.submarine.crewManagement = deepMerge(defaultCrewManagement(), existing);
+    state.submarine.crewManagement.roster = Array.isArray(state.submarine.crewManagement.roster)
+      ? state.submarine.crewManagement.roster.map(normalizeCrewRecord)
+      : [];
+    if (state.submarine.crewManagement.activeCrewId !== 'local' && !state.submarine.crewManagement.roster.some(item => item.rosterId === state.submarine.crewManagement.activeCrewId)) {
+      state.submarine.crewManagement.activeCrewId = 'local';
+    }
+    return state.submarine.crewManagement;
+  }
+
+  normalizePlayerSubmissionSettings();
+  normalizeCrewManagement();
+
+  function cloneJson(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function inventorySubmissionSummary(entries) {
+    return (entries || []).map(entry => {
+      const item = inventoryDefinition(entry);
+      const counter = entry.tracker === 'ammo'
+        ? `${entry.currentAmmo}/${entry.magazineCapacity} ${entry.ammoName || 'ammo'}`
+        : entry.tracker === 'uses'
+          ? `${entry.usesRemaining}/${entry.maxUses} uses`
+          : entry.tracker === 'condition'
+            ? `${entry.condition}% condition`
+            : '';
+      return `${item.name} x${Math.max(1, number(entry.quantity, 1))}${counter ? ` (${counter})` : ''}`;
+    }).join('; ');
+  }
+
+  function buildCrewSubmission() {
+    normalizeCharacterInventory();
+    const settings = normalizePlayerSubmissionSettings();
+    const submittedAt = new Date().toISOString();
+    const inventory = settings.includeInventory ? cloneJson(state.character.catalogInventory) : [];
+    return {
+      schema: 'barotrauma-crew-submission',
+      version: 1,
+      submittedAt,
+      player: {
+        id: settings.playerId,
+        name: state.character.player || '',
+        contact: settings.contact || '',
+        availability: settings.availability || '',
+        participantRole: settings.participantRole || 'Player',
+        notes: settings.notes || ''
+      },
+      character: {
+        id: settings.characterId,
+        name: state.character.name || '',
+        className: state.character.className,
+        level: state.character.level,
+        background: state.character.background,
+        talent: state.character.talent,
+        fateUsed: state.character.fateUsed,
+        lostSanity: state.character.lostSanity,
+        morale: state.character.morale,
+        stats: cloneJson(state.character.stats),
+        current: cloneJson(state.character.current),
+        conditions: state.character.conditions || '',
+        inventory,
+        inventoryText: state.character.inventory || '',
+        inventorySummary: inventorySubmissionSummary(inventory),
+        notes: state.character.notes || ''
+      },
+      preferences: {
+        duty: settings.preferredDuty || 'Unassigned',
+        shift: settings.preferredShift || 'Unassigned'
+      }
+    };
+  }
+
+  function submissionFileName(submission) {
+    const base = `${submission.player?.name || 'player'}-${submission.character?.name || 'character'}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'crew-submission';
+    return `${base}-crew-submission.json`;
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+    return Promise.resolve();
+  }
+
+  function crewRecordFromSubmission(submission) {
+    if (!submission || submission.schema !== 'barotrauma-crew-submission' || !submission.character) throw new Error('This is not a Barotrauma crew submission file.');
+    const player = submission.player || {};
+    const character = submission.character || {};
+    const preferences = submission.preferences || {};
+    return normalizeCrewRecord({
+      sourcePlayerId: player.id || '',
+      sourceCharacterId: character.id || '',
+      source: 'submission',
+      playerName: player.name || '',
+      contact: player.contact || '',
+      availability: player.availability || '',
+      participantRole: player.participantRole || 'Player',
+      characterName: character.name || 'Unnamed Crew Member',
+      className: character.className || 'Engineer',
+      level: character.level || 1,
+      background: character.background || '',
+      talent: character.talent || '',
+      duty: preferences.duty || 'Unassigned',
+      preferredDuty: preferences.duty || 'Unassigned',
+      shift: preferences.shift || 'Unassigned',
+      preferredShift: preferences.shift || 'Unassigned',
+      status: 'Onboard',
+      approval: 'Pending',
+      active: true,
+      stats: character.stats,
+      current: character.current,
+      lostSanity: character.lostSanity,
+      morale: character.morale,
+      conditions: character.conditions || '',
+      inventory: character.inventory || [],
+      inventoryText: character.inventoryText || '',
+      characterNotes: character.notes || '',
+      playerNotes: player.notes || '',
+      submittedAt: submission.submittedAt || new Date().toISOString(),
+      updatedAt: submission.submittedAt || new Date().toISOString()
+    });
+  }
+
+  function crewIdentityMatch(record, incoming) {
+    if (incoming.sourceCharacterId && record.sourceCharacterId === incoming.sourceCharacterId) return true;
+    if (incoming.sourcePlayerId && record.sourcePlayerId === incoming.sourcePlayerId && record.characterName.toLowerCase() === incoming.characterName.toLowerCase()) return true;
+    return false;
+  }
+
+  function mergeCrewRecord(incomingRaw) {
+    const management = normalizeCrewManagement();
+    const incoming = normalizeCrewRecord(incomingRaw);
+    const existing = management.roster.find(record => crewIdentityMatch(record, incoming) || (incoming.rosterId && record.rosterId === incoming.rosterId));
+    if (!existing) {
+      management.roster.push(incoming);
+      syncCrewResourceIfEnabled();
+      return incoming;
+    }
+    const preserved = {
+      rosterId: existing.rosterId,
+      duty: existing.duty,
+      shift: existing.shift,
+      status: existing.status,
+      approval: existing.approval,
+      active: existing.active,
+      gmNotes: existing.gmNotes
+    };
+    Object.assign(existing, incoming, preserved, { updatedAt: incoming.updatedAt || new Date().toISOString() });
+    syncCrewResourceIfEnabled();
+    return existing;
+  }
+
+  function mergeCrewSubmission(submission) {
+    return mergeCrewRecord(crewRecordFromSubmission(submission));
+  }
+
+  function importedCrewPayloads(parsed) {
+    if (parsed?.schema === 'barotrauma-crew-submission') return [{ kind: 'submission', value: parsed }];
+    if (parsed?.schema === 'barotrauma-crew-roster' && Array.isArray(parsed.roster)) return parsed.roster.map(value => ({ kind: 'record', value }));
+    if (Array.isArray(parsed?.submissions)) return parsed.submissions.map(value => ({ kind: 'submission', value }));
+    if (Array.isArray(parsed?.roster)) return parsed.roster.map(value => ({ kind: 'record', value }));
+    if (Array.isArray(parsed)) return parsed.map(value => value?.schema === 'barotrauma-crew-submission' ? ({ kind: 'submission', value }) : ({ kind: 'record', value }));
+    return [];
+  }
+
+  function importCrewPayload(parsed) {
+    const payloads = importedCrewPayloads(parsed);
+    if (!payloads.length) throw new Error('No crew submissions or roster records were found.');
+    for (const payload of payloads) {
+      if (payload.kind === 'submission') mergeCrewSubmission(payload.value);
+      else mergeCrewRecord(payload.value);
+    }
+    save();
+    return payloads.length;
+  }
+
+  function acceptedOnboardCrew() {
+    return normalizeCrewManagement().roster.filter(record => record.active && record.approval === 'Accepted' && record.status === 'Onboard');
+  }
+
+  function syncCrewResourceIfEnabled() {
+    const management = normalizeCrewManagement();
+    if (management.autoSyncCrewResource) state.submarine.resources.crew = acceptedOnboardCrew().length;
+  }
+
+  function crewRollOperator() {
+    const management = normalizeCrewManagement();
+    if (management.activeCrewId === 'local') return {
+      rosterId: 'local',
+      characterName: state.character.name || 'Current Character',
+      playerName: state.character.player || '',
+      current: state.character.current,
+      status: 'Local record'
+    };
+    return management.roster.find(record => record.rosterId === management.activeCrewId) || {
+      rosterId: 'local', characterName: state.character.name || 'Current Character', playerName: state.character.player || '', current: state.character.current, status: 'Local record'
+    };
+  }
+
+  function enhanceCharacterPlayerSubmission() {
+    const settings = normalizePlayerSubmissionSettings();
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div><h3>Player Submission</h3><p class="small-note">Package this character into a portable crew-submission file for the person managing the submarine. Re-importing a later submission updates the same player character while preserving the submarine runner’s duty, shift, approval, status, and GM notes.</p></div>
+        <div class="button-row no-print"><button id="crew-submit-download" class="primary-action" type="button">Download Crew Submission</button><button id="crew-submit-copy" class="secondary-action" type="button">Copy Submission JSON</button><button id="crew-submit-local" class="secondary-action" type="button">Add / Update Local Roster</button></div>
+      </div>
+      <div class="field-grid three" style="margin-top:12px">
+        <label class="field">Player contact<input id="crew-submit-contact" value="${escapeHtml(settings.contact)}" placeholder="Discord, email, or other contact"></label>
+        <label class="field">Availability<input id="crew-submit-availability" value="${escapeHtml(settings.availability)}" placeholder="Usual sessions or time restrictions"></label>
+        <label class="field">Participant role<select id="crew-submit-role">${optionList(PARTICIPANT_ROLES, settings.participantRole)}</select></label>
+        <label class="field">Preferred duty<select id="crew-submit-duty">${optionList(CREW_DUTIES, settings.preferredDuty)}</select></label>
+        <label class="field">Preferred shift<select id="crew-submit-shift">${optionList(CREW_SHIFTS, settings.preferredShift)}</select></label>
+        <label class="check-row" style="align-self:end"><input id="crew-submit-inventory" type="checkbox" ${settings.includeInventory ? 'checked' : ''}><span><strong>Include tracked inventory</strong><br><span class="small-note">Includes ammunition, uses, condition, equipped state, and item notes.</span></span></label>
+      </div>
+      <label class="field" style="margin-top:10px">Message to submarine runner<textarea id="crew-submit-notes">${escapeHtml(settings.notes)}</textarea></label>
+      <div class="notice" style="margin-top:10px"><strong>Submission identity:</strong> ${escapeHtml(settings.playerId)} / ${escapeHtml(settings.characterId)}${settings.lastExportedAt ? ` · <strong>Last exported:</strong> ${escapeHtml(new Date(settings.lastExportedAt).toLocaleString())}` : ''}<br><span class="small-note">There is no network account or automatic upload. The generated JSON must be sent to the submarine runner through your normal file-sharing or chat service.</span></div>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    const updateSettings = (key, value) => { settings[key] = value; save(); };
+    panel.querySelector('#crew-submit-contact')?.addEventListener('input', event => updateSettings('contact', event.target.value));
+    panel.querySelector('#crew-submit-availability')?.addEventListener('input', event => updateSettings('availability', event.target.value));
+    panel.querySelector('#crew-submit-role')?.addEventListener('change', event => updateSettings('participantRole', event.target.value));
+    panel.querySelector('#crew-submit-duty')?.addEventListener('change', event => updateSettings('preferredDuty', event.target.value));
+    panel.querySelector('#crew-submit-shift')?.addEventListener('change', event => updateSettings('preferredShift', event.target.value));
+    panel.querySelector('#crew-submit-inventory')?.addEventListener('change', event => updateSettings('includeInventory', event.target.checked));
+    panel.querySelector('#crew-submit-notes')?.addEventListener('input', event => updateSettings('notes', event.target.value));
+    panel.querySelector('#crew-submit-download')?.addEventListener('click', () => {
+      const submission = buildCrewSubmission();
+      settings.lastExportedAt = submission.submittedAt;
+      save();
+      download(submissionFileName(submission), JSON.stringify(submission, null, 2));
+      enhanceSubmissionTimestamp(panel, settings.lastExportedAt);
+    });
+    panel.querySelector('#crew-submit-copy')?.addEventListener('click', async event => {
+      const submission = buildCrewSubmission();
+      settings.lastExportedAt = submission.submittedAt;
+      save();
+      await copyText(JSON.stringify(submission, null, 2));
+      event.target.textContent = 'Copied';
+    });
+    panel.querySelector('#crew-submit-local')?.addEventListener('click', event => {
+      const submission = buildCrewSubmission();
+      const record = mergeCrewSubmission(submission);
+      record.approval = 'Accepted';
+      settings.lastExportedAt = submission.submittedAt;
+      syncCrewResourceIfEnabled();
+      save();
+      event.target.textContent = 'Roster Updated';
+    });
+  }
+
+  function enhanceSubmissionTimestamp(panel, timestamp) {
+    const notice = panel.querySelector('.notice');
+    if (notice) notice.dataset.lastExportedAt = timestamp;
+  }
+
+  function crewStatsSummary(record) {
+    return `S ${number(record.current.Strength)} · A ${number(record.current.Agility)} · I ${number(record.current.Intelligence)} · C ${number(record.current.Charisma)}`;
+  }
+
+  function crewInventorySummary(record) {
+    if (record.inventory?.length) return inventorySubmissionSummary(record.inventory);
+    return record.inventoryText || 'No submitted inventory';
+  }
+
+  function crewRecommendedRange() {
+    const model = SUBMARINES[state.submarine.model] || SUBMARINES.Barsuk;
+    const profile = model.profile || {};
+    return {
+      min: Math.max(0, number(profile.crewMin, 0)),
+      max: Math.max(0, number(profile.crewMax, 0))
+    };
+  }
+
+  function patchUpkeepRollOperators() {
+    const operator = crewRollOperator();
+    const resultBox = root.querySelector('#upkeep-result');
+    if (resultBox && !resultBox.dataset.crewPatched) {
+      resultBox.dataset.crewPatched = 'true';
+      resultBox.innerHTML = `Upkeep rolls use <strong>${escapeHtml(operator.characterName)}</strong>${operator.playerName ? ` (${escapeHtml(operator.playerName)})` : ''}. Select another roll operator in Crew Management.`;
+    }
+    root.querySelectorAll('.upkeep-roll').forEach(original => {
+      const replacement = original.cloneNode(true);
+      original.replaceWith(replacement);
+      replacement.addEventListener('click', event => {
+        const selected = crewRollOperator();
+        const stat = event.target.dataset.stat;
+        const dice = [d6(), d6()];
+        const modifier = number(selected.current?.[stat]);
+        const total = dice[0] + dice[1] + modifier;
+        const success = total >= 8;
+        const task = event.target.dataset.task;
+        state.submarine.upkeep[task] = { complete: success, roll: total, operator: selected.characterName };
+        save();
+        const output = root.querySelector('#upkeep-result');
+        if (output) output.innerHTML = `<strong class="${success ? 'good' : 'bad'}">${success ? 'UPKEEP COMPLETE' : 'UPKEEP FAILED'}</strong><br>${escapeHtml(selected.characterName)}: ${dice[0]} + ${dice[1]} + ${modifier} ${escapeHtml(stat)} = ${total} vs 8.`;
+        const checkbox = root.querySelector(`.upkeep-check[data-task="${task}"]`);
+        if (checkbox) checkbox.checked = success;
+      });
+    });
+  }
+
+  function enhanceSubmarineCrewManagement() {
+    const management = normalizeCrewManagement();
+    const roster = management.roster;
+    const onboard = acceptedOnboardCrew();
+    const recommended = crewRecommendedRange();
+    const uniquePlayers = new Set(roster.filter(record => record.participantRole !== 'NPC' && record.playerName).map(record => record.sourcePlayerId || record.playerName.toLowerCase())).size;
+    const pending = roster.filter(record => record.approval === 'Pending').length;
+    const dutiesCovered = new Set(onboard.map(record => record.duty).filter(duty => duty && duty !== 'Unassigned')).size;
+    const crewStateClass = recommended.min && onboard.length < recommended.min ? 'bad' : recommended.max && onboard.length > recommended.max ? 'warn' : 'good';
+    const rollOptions = ['local', ...roster.map(record => record.rosterId)];
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div><h3>Crew and Player Management</h3><p class="small-note">Import player-submitted character files, approve them, preserve their latest character data, assign vessel duties and shifts, and select which crew member performs submarine upkeep rolls. This is a portable file workflow; it does not require accounts or a central server.</p></div>
+        <div class="button-row no-print"><label class="secondary-action file-action" for="crew-import-files">Import Player Submissions</label><input id="crew-import-files" type="file" accept="application/json" multiple hidden><button id="crew-export-roster" class="secondary-action" type="button">Export Crew Roster</button><button id="crew-add-current" class="secondary-action" type="button">Add Current Character</button></div>
+      </div>
+      <div class="metric-row" style="margin:12px 0"><div class="metric"><span>Accepted onboard</span><strong class="${crewStateClass}">${onboard.length}</strong></div><div class="metric"><span>Recommended</span><strong>${recommended.min || '—'}–${recommended.max || '—'}</strong></div><div class="metric"><span>Players</span><strong>${uniquePlayers}</strong></div><div class="metric"><span>Pending</span><strong class="${pending ? 'warn' : 'good'}">${pending}</strong></div><div class="metric"><span>Duties covered</span><strong>${dutiesCovered}</strong></div><div class="metric"><span>Capacity crew value</span><strong>${number(state.submarine.resources.crew)}</strong></div></div>
+      <div class="field-grid three">
+        <label class="field">Upkeep roll operator<select id="crew-roll-operator">${optionList(rollOptions, management.activeCrewId, id => id === 'local' ? `${state.character.name || 'Current Character'} (local sheet)` : `${roster.find(record => record.rosterId === id)?.characterName || id} — ${roster.find(record => record.rosterId === id)?.duty || 'Unassigned'}`)}</select></label>
+        <label class="check-row" style="align-self:end"><input id="crew-auto-sync" type="checkbox" ${management.autoSyncCrewResource ? 'checked' : ''}><span><strong>Automatically synchronize crew capacity</strong><br><span class="small-note">Accepted, active, onboard crew become the Stores and Capacity crew value.</span></span></label>
+        <div class="button-row" style="align-self:end"><button id="crew-sync-now" class="secondary-action no-print" type="button">Use Onboard Count Now</button></div>
+      </div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table crew-roster-table"><thead><tr><th>Player / access</th><th>Character</th><th>Assignment</th><th>Approval / status</th><th>Current statistics</th><th>Condition</th><th>Submitted inventory</th><th>Runner notes</th><th></th></tr></thead><tbody>
+        ${roster.map(record => `<tr>
+          <td><input class="crew-player-name" data-id="${escapeHtml(record.rosterId)}" value="${escapeHtml(record.playerName)}" placeholder="Player or owner"><input class="crew-contact" data-id="${escapeHtml(record.rosterId)}" value="${escapeHtml(record.contact)}" placeholder="Contact"><select class="crew-participant-role" data-id="${escapeHtml(record.rosterId)}">${optionList(PARTICIPANT_ROLES, record.participantRole)}</select><span class="small-note">${escapeHtml(record.availability || 'No availability submitted')}</span></td>
+          <td><input class="crew-character-name" data-id="${escapeHtml(record.rosterId)}" value="${escapeHtml(record.characterName)}"><div class="inventory-counter-row"><select class="crew-class" data-id="${escapeHtml(record.rosterId)}">${optionList(Object.keys(CLASSES), record.className)}</select><input class="crew-level" data-id="${escapeHtml(record.rosterId)}" type="number" min="1" max="99" value="${record.level}"></div><span class="small-note">${escapeHtml(record.background || '')}${record.talent ? ` · ${escapeHtml(record.talent)}` : ''}</span></td>
+          <td><select class="crew-duty" data-id="${escapeHtml(record.rosterId)}">${optionList(CREW_DUTIES, record.duty)}</select><select class="crew-shift" data-id="${escapeHtml(record.rosterId)}">${optionList(CREW_SHIFTS, record.shift)}</select><span class="small-note">Preferred: ${escapeHtml(record.preferredDuty)} / ${escapeHtml(record.preferredShift)}</span></td>
+          <td><select class="crew-approval" data-id="${escapeHtml(record.rosterId)}">${optionList(CREW_APPROVALS, record.approval)}</select><select class="crew-status" data-id="${escapeHtml(record.rosterId)}">${optionList(CREW_STATUSES, record.status)}</select><label class="check-row" style="grid-template-columns:auto 1fr;padding:5px"><input class="crew-active" data-id="${escapeHtml(record.rosterId)}" type="checkbox" ${record.active ? 'checked' : ''}><span>Operational roster</span></label></td>
+          <td><strong>${escapeHtml(crewStatsSummary(record))}</strong><br><span class="small-note">Permanent: S ${record.stats.Strength} · A ${record.stats.Agility} · I ${record.stats.Intelligence} · C ${record.stats.Charisma}</span></td>
+          <td><span class="tag">Lost Sanity ${record.lostSanity}</span><span class="tag">Morale ${record.morale}</span><br><span class="small-note">${escapeHtml(record.conditions || 'No submitted conditions')}</span></td>
+          <td><div class="crew-inventory-summary">${escapeHtml(crewInventorySummary(record))}</div></td>
+          <td><textarea class="crew-gm-notes" data-id="${escapeHtml(record.rosterId)}" placeholder="Orders, permissions, disciplinary notes, injuries…">${escapeHtml(record.gmNotes)}</textarea><span class="small-note">Updated ${record.updatedAt ? escapeHtml(new Date(record.updatedAt).toLocaleString()) : '—'}</span></td>
+          <td><div class="button-row"><button class="compact-button crew-set-operator" data-id="${escapeHtml(record.rosterId)}" type="button">Use for Rolls</button><button class="compact-button crew-export-one" data-id="${escapeHtml(record.rosterId)}" type="button">Export</button><button class="compact-button crew-remove" data-id="${escapeHtml(record.rosterId)}" type="button">Remove</button></div></td>
+        </tr>`).join('') || '<tr><td colspan="9">No crew submissions have been imported. Players can export submissions from their Character Sheets.</td></tr>'}
+      </tbody></table></div>
+      <details style="margin-top:12px"><summary><strong>Add a manual crew member or NPC</strong></summary><div class="field-grid three" style="margin-top:10px"><label class="field">Player / owner<input id="crew-draft-player" value="${escapeHtml(management.draft.playerName)}"></label><label class="field">Character name<input id="crew-draft-character" value="${escapeHtml(management.draft.characterName)}"></label><label class="field">Participant role<select id="crew-draft-role">${optionList(PARTICIPANT_ROLES, management.draft.participantRole)}</select></label><label class="field">Class<select id="crew-draft-class">${optionList(Object.keys(CLASSES), management.draft.className)}</select></label><label class="field">Level<input id="crew-draft-level" type="number" min="1" max="99" value="${management.draft.level}"></label><label class="field">Duty<select id="crew-draft-duty">${optionList(CREW_DUTIES, management.draft.duty)}</select></label><label class="field">Shift<select id="crew-draft-shift">${optionList(CREW_SHIFTS, management.draft.shift)}</select></label></div><button id="crew-add-manual" class="primary-action no-print" type="button" style="margin-top:10px">Add Manual Crew Member</button></details>
+      <details style="margin-top:12px"><summary><strong>Paste a submission or roster JSON</strong></summary><label class="field" style="margin-top:10px">Submission JSON<textarea id="crew-paste-json" placeholder="Paste a crew-submission or crew-roster JSON document">${escapeHtml(management.pasteBuffer)}</textarea></label><button id="crew-import-paste" class="secondary-action no-print" type="button" style="margin-top:10px">Import Pasted JSON</button></details>
+      <label class="field" style="margin-top:12px">Crew management notes<textarea id="crew-vessel-notes">${escapeHtml(management.vesselNotes)}</textarea></label>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+
+    const updateRecord = (id, callback, rerender = false) => {
+      const record = management.roster.find(item => item.rosterId === id);
+      if (!record) return;
+      callback(record);
+      record.updatedAt = new Date().toISOString();
+      syncCrewResourceIfEnabled();
+      save();
+      if (rerender) renderSubmarine();
+    };
+    panel.querySelector('#crew-roll-operator')?.addEventListener('change', event => { management.activeCrewId = event.target.value; save(); patchUpkeepRollOperators(); });
+    panel.querySelector('#crew-auto-sync')?.addEventListener('change', event => { management.autoSyncCrewResource = event.target.checked; syncCrewResourceIfEnabled(); save(); renderSubmarine(); });
+    panel.querySelector('#crew-sync-now')?.addEventListener('click', () => { state.submarine.resources.crew = onboard.length; save(); renderSubmarine(); });
+    panel.querySelector('#crew-export-roster')?.addEventListener('click', () => download(`${(state.submarine.name || state.submarine.model || 'submarine').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-crew-roster.json`, JSON.stringify({ schema: 'barotrauma-crew-roster', version: 1, exportedAt: new Date().toISOString(), vessel: { name: state.submarine.name, model: state.submarine.model }, roster: management.roster }, null, 2)));
+    panel.querySelector('#crew-add-current')?.addEventListener('click', () => { const record = mergeCrewSubmission(buildCrewSubmission()); record.approval = 'Accepted'; syncCrewResourceIfEnabled(); save(); renderSubmarine(); });
+    panel.querySelector('#crew-import-files')?.addEventListener('change', async event => {
+      const files = [...(event.target.files || [])];
+      let imported = 0;
+      const errors = [];
+      for (const file of files) {
+        try { imported += importCrewPayload(JSON.parse(await file.text())); }
+        catch (error) { errors.push(`${file.name}: ${error.message}`); }
+      }
+      event.target.value = '';
+      save(); renderSubmarine();
+      if (errors.length) alert(`Imported ${imported} record(s). Some files failed:\n${errors.join('\n')}`);
+    });
+    panel.querySelector('#crew-import-paste')?.addEventListener('click', () => {
+      try { importCrewPayload(JSON.parse(panel.querySelector('#crew-paste-json').value)); management.pasteBuffer = ''; save(); renderSubmarine(); }
+      catch (error) { alert(`Crew data could not be imported: ${error.message}`); }
+    });
+    panel.querySelector('#crew-paste-json')?.addEventListener('input', event => { management.pasteBuffer = event.target.value; save(); });
+    panel.querySelector('#crew-vessel-notes')?.addEventListener('input', event => { management.vesselNotes = event.target.value; save(); });
+    for (const [selector, key, numeric] of [['.crew-player-name','playerName'],['.crew-contact','contact'],['.crew-character-name','characterName'],['.crew-level','level',true],['.crew-gm-notes','gmNotes']]) {
+      panel.querySelectorAll(selector).forEach(input => input.addEventListener(numeric ? 'change' : 'input', event => updateRecord(event.target.dataset.id, record => { record[key] = numeric ? clamp(event.target.value, 1, 99) : event.target.value; })));
+    }
+    for (const [selector, key] of [['.crew-participant-role','participantRole'],['.crew-class','className'],['.crew-duty','duty'],['.crew-shift','shift'],['.crew-approval','approval'],['.crew-status','status']]) {
+      panel.querySelectorAll(selector).forEach(select => select.addEventListener('change', event => updateRecord(event.target.dataset.id, record => { record[key] = event.target.value; }, ['approval','status'].includes(key))));
+    }
+    panel.querySelectorAll('.crew-active').forEach(input => input.addEventListener('change', event => updateRecord(event.target.dataset.id, record => { record.active = event.target.checked; }, true)));
+    panel.querySelectorAll('.crew-set-operator').forEach(button => button.addEventListener('click', event => { management.activeCrewId = event.target.dataset.id; save(); renderSubmarine(); }));
+    panel.querySelectorAll('.crew-export-one').forEach(button => button.addEventListener('click', event => { const record = management.roster.find(item => item.rosterId === event.target.dataset.id); if (record) download(`${record.characterName.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'crew-member'}-roster-record.json`, JSON.stringify({ schema: 'barotrauma-crew-roster', version: 1, roster: [record] }, null, 2)); }));
+    panel.querySelectorAll('.crew-remove').forEach(button => button.addEventListener('click', event => { management.roster = management.roster.filter(record => record.rosterId !== event.target.dataset.id); if (management.activeCrewId === event.target.dataset.id) management.activeCrewId = 'local'; syncCrewResourceIfEnabled(); save(); renderSubmarine(); }));
+    const draftBindings = [['#crew-draft-player','playerName'],['#crew-draft-character','characterName'],['#crew-draft-role','participantRole'],['#crew-draft-class','className'],['#crew-draft-level','level'],['#crew-draft-duty','duty'],['#crew-draft-shift','shift']];
+    for (const [selector, key] of draftBindings) panel.querySelector(selector)?.addEventListener(selector.includes('level') ? 'change' : selector.includes('player') || selector.includes('character') ? 'input' : 'change', event => { management.draft[key] = key === 'level' ? clamp(event.target.value, 1, 99) : event.target.value; save(); });
+    panel.querySelector('#crew-add-manual')?.addEventListener('click', () => {
+      if (!String(management.draft.characterName || '').trim()) return alert('Enter a character or NPC name.');
+      management.roster.push(normalizeCrewRecord({ ...management.draft, source: 'manual', approval: 'Accepted', status: 'Onboard', active: true }));
+      management.draft = defaultCrewManagement().draft;
+      syncCrewResourceIfEnabled(); save(); renderSubmarine();
+    });
+    patchUpkeepRollOperators();
+  }
+
+  const renderCharacterBeforeCrewManagement = renderCharacter;
+  renderCharacter = function renderCharacterWithPlayerSubmission() {
+    renderCharacterBeforeCrewManagement();
+    enhanceCharacterPlayerSubmission();
+  };
+
+  const renderSubmarineBeforeCrewManagement = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCrewManagement() {
+    renderSubmarineBeforeCrewManagement();
+    enhanceSubmarineCrewManagement();
+  };
