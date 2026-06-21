@@ -11,7 +11,9 @@
     "The submarine manager uses a source-attributed official-wiki roster while deriving tabletop statistics from the original four RPG submarine anchors.",
     "The Custom Content Workshop creates persistent source-anchored homebrew records without overwriting official catalogue or exact-source wiki data.",
     "Crew participation uses portable player-submission and vessel-roster JSON files; no player account, automatic upload, or central campaign server is implied.",
-    "Item functionality, cargo, and station-commerce behavior are maintained as an operational layer around the source-backed catalogue rather than rewriting official catalogue identities."
+    "Item functionality, cargo, and station-commerce behavior are maintained as an operational layer around the source-backed catalogue rather than rewriting official catalogue identities.",
+    "The unified public world state is a portable shared-authority save file: submissions update the host's canonical save when pushed, but the static site does not claim a live network service or central server.",
+    "Custom items and submarines are validated against current official measurable ceilings. Designs exceeding those ceilings remain undeployable until their station-based research project has consumed the required Marks, supplies, capability, and canonical real time."
   ],
   "modules": [
     {
@@ -65,23 +67,23 @@
       "title": "Submarine Manager",
       "priority": 4,
       "status": "available",
-      "description": "A table-side vessel manager for all 16 official-wiki submarines and custom derived designs, with crew submissions, cargo manifests, compatible weapon ammunition, station stores, generated vendors, vending machines, faction/station/proprietor reputation, player-controlled station treasuries, upgrades, system condition, upkeep, and damage control.",
+      "description": "A table-side vessel manager for all 16 official-wiki submarines and custom designs, with crew submissions, cargo manifests, compatible ammunition, station stores, generated vendors, player-station treasuries, and a validator that prevents above-ceiling custom submarines, systems, weapons, or modules from deployment until their station R&D projects are fully funded and completed.",
       "launchUrl": "barotrauma-rpg-tools.html#submarine",
       "actionLabel": "Open Submarine Manager",
-      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "cargo manifest", "station stores", "vendors", "vending machines", "reputation", "player stations", "weapons", "ammunition", "upgrades", "upkeep"],
-      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "cargoManifest", "cargoLot", "stationMarket", "vendorProfile", "vendorStock", "factionReputation", "stationReputation", "proprietorReputation", "transactionRecord", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
+      "tags": ["submarine", "official roster", "custom submarines", "crew roster", "cargo manifest", "station stores", "vendors", "vending machines", "reputation", "player stations", "R&D", "validation", "weapons", "ammunition", "upgrades", "upkeep"],
+      "dataFamilies": ["vesselState", "submarineProfile", "customSubmarineProfile", "statDerivation", "designValidation", "researchProject", "crewRoster", "playerSubmission", "crewAssignment", "crewStatus", "cargoManifest", "cargoLot", "stationMarket", "vendorProfile", "vendorStock", "factionReputation", "stationReputation", "proprietorReputation", "transactionRecord", "systemState", "resourceLedger", "weaponMount", "upgradeProfile", "upkeepTask"]
     },
     {
       "id": "barotrauma-custom-content-workshop",
       "section": "tools",
-      "title": "Custom Content Workshop",
+      "title": "Custom Content Workshop and R&D",
       "priority": 5,
       "status": "available",
-      "description": "Creates source-anchored custom handheld and submarine weapons, ammunition, submarine systems, power sources, equipment, general items, consumables, stations, and upgrade modules. Every record retains its derivation anchor, bounded tabletop profile, drawbacks, provenance, and direct integration destination.",
+      "description": "Creates source-anchored custom weapons, ammunition, systems, power sources, equipment, consumables, stations, and modules. Measurable statistics are checked against existing official ceilings; superior designs become locked research projects requiring great sums of Marks, supplies, a player- or faction-owned station with sufficient research capability, and real canonical development time before deployment.",
       "launchUrl": "barotrauma-rpg-tools.html#workshop",
       "actionLabel": "Open Custom Content Workshop",
-      "tags": ["custom content", "homebrew", "weapons", "systems", "power sources", "equipment", "stations", "modules"],
-      "dataFamilies": ["customContentRecord", "derivationAnchor", "derivedProfile", "customWeapon", "customAmmunition", "customSystem", "customPowerSource", "customItem", "customStation", "customUpgradeModule"]
+      "tags": ["custom content", "homebrew", "validation", "research", "development", "Marks", "supplies", "stations", "weapons", "systems", "power sources", "equipment", "modules"],
+      "dataFamilies": ["customContentRecord", "derivationAnchor", "derivedProfile", "designValidation", "officialCeiling", "researchProject", "researchFunding", "developmentSchedule", "customWeapon", "customAmmunition", "customSystem", "customPowerSource", "customItem", "customStation", "customUpgradeModule"]
     },
     {
       "id": "barotrauma-encounter-planner",
@@ -110,14 +112,14 @@
     {
       "id": "barotrauma-world-map-generator",
       "section": "generators",
-      "title": "Europa World Map Generator",
+      "title": "Expanded Europa Public World State",
       "priority": 8,
       "status": "available",
-      "description": "Generate seeded, connected radial campaign maps from the outer colonies toward Europa’s central anomaly, with source sample stations, outposts, wrecks, ruins, hazards, route distances, shortest-path selection, and SVG or JSON export.",
+      "description": "Creates a uniquely identified seeded Europa world with a five-times shell radius, 140 default locations, at least 25 stations, randomized outer-ring starts for multiple groups, real-time canonical dating beginning in 2175, route mapping, checkpoint saves, and one unified public registry updated by pushed crew, submarine, location, trade, route, research, and full game-state submissions.",
       "launchUrl": "barotrauma-rpg-tools.html#world",
-      "actionLabel": "Open World Map Generator",
-      "tags": ["Europa", "world map", "stations", "routes", "anomaly", "seeded generation"],
-      "dataFamilies": ["worldMap", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
+      "actionLabel": "Open World State",
+      "tags": ["Europa", "public world state", "world ID", "saved states", "multiplayer submissions", "2175", "real-time clock", "stations", "groups", "routes", "trades", "research", "seeded generation"],
+      "dataFamilies": ["worldIdentity", "worldSave", "savedCheckpoint", "worldSubmission", "submissionJournal", "publicWorldRegistry", "multiplayerGroup", "randomizedStart", "canonicalClock", "worldMap", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
     },
     {
       "id": "barotrauma-cult-faction-dossiers",
