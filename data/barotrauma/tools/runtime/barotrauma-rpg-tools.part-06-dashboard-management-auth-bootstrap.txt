@@ -1,0 +1,26 @@
+
+  function restorePreAuthDashboardCampaignIdentity(){
+    const snapshot=globalThis.__BAROTRAUMA_DASHBOARD_PREAUTH_SNAPSHOT;
+    if(!snapshot)return false;
+    state.submarine=cloneWorldData(snapshot.submarine||state.submarine||{});
+    state.route=cloneWorldData(snapshot.route||state.route||{});
+    if(snapshot.operationsDashboard)state.operationsDashboard=cloneWorldData(snapshot.operationsDashboard);
+    else delete state.operationsDashboard;
+    state.world=state.world&&typeof state.world==='object'?state.world:{};
+    state.world.activeSubmarineId=snapshot.worldActiveSubmarineId||'';
+    if(snapshot.hub){
+      const hub=normalizeWorldHub();
+      hub.activeGroupId=snapshot.hub.activeGroupId||'';
+      hub.activeSubmarineId=snapshot.hub.activeSubmarineId||'';
+      hub.publicState.groups=cloneWorldData(snapshot.hub.groups||{});
+      hub.publicState.crews=cloneWorldData(snapshot.hub.crews||{});
+      hub.publicState.submarines=cloneWorldData(snapshot.hub.submarines||{});
+      hub.publicState.locations=cloneWorldData(snapshot.hub.locations||{});
+      hub.publicState.routes=cloneWorldData(snapshot.hub.routes||{});
+    }
+    if(typeof syncAllWorldPlayerVessels==='function')syncAllWorldPlayerVessels();
+    delete globalThis.__BAROTRAUMA_DASHBOARD_PREAUTH_SNAPSHOT;
+    return true;
+  }
+
+  restorePreAuthDashboardCampaignIdentity();
