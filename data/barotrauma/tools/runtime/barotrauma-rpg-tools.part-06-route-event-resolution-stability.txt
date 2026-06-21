@@ -1,0 +1,70 @@
+
+  function routeResolutionEffectsPresent(effects={}) {
+    return Object.entries(effects||{}).some(([,value]) => value&&typeof value==='object'&&!Array.isArray(value)
+      ? Object.values(value).some(nested => number(nested)!==0)
+      : number(value)!==0);
+  }
+
+  const routeResolutionSolutionsBeforeStability = routeResolutionSolutions;
+  routeResolutionSolutions = function routeResolutionSolutionsWithFallbacks(event) {
+    const solutions = routeResolutionSolutionsBeforeStability(event);
+    if (solutions.length>=2) return solutions;
+    const profile = routeResolutionProfile(event);
+    const primary = solutions[0]||{id:`${event?.id||'event'}-primary`,label:'Direct Response',stat:event?.stat||'Intelligence',dc:number(event?.dc,8),leadRole:profile.leadRoles[0],supportRoles:profile.supportRoles,description:event?.description||'Resolve the incident directly.',successText:event?.reward||'The incident is controlled.',mixedText:event?.encounterPersistent||'The incident is controlled at a cost.',failureText:event?.failure||'The incident worsens.'};
+    const fallbackStat = primary.stat==='Agility'?'Intelligence':primary.stat==='Charisma'?'Agility':'Charisma';
+    const fallbackRole = routeResolutionDutyForStat(fallbackStat,profile,1);
+    return [...solutions,{id:`${event?.id||'event'}-fallback-withdrawal`,label:'Controlled Withdrawal and Reassessment',stat:fallbackStat,dc:clamp(number(primary.dc,8)+1,6,20),leadRole:fallbackRole,supportRoles:[...new Set([...(profile.supportRoles||[]),...(ROUTE_RESOLUTION_STAT_ROLES[fallbackStat]||[])])].filter(role=>role!==fallbackRole).slice(0,4),description:`Break immediate contact, protect the submarine, and rebuild the operational picture before committing again. ${event?.encounterComplication||event?.description||''}`.trim(),successText:`The crew disengages cleanly and preserves enough control to continue. ${event?.reward||'The route remains viable.'}`,mixedText:`The withdrawal succeeds but consumes time, supplies, trust, or position. ${event?.encounterPersistent||'The event remains an unresolved campaign lead.'}`,failureText:`The attempted withdrawal exposes the submarine to the event at its worst moment. ${event?.failure||'Vessel and crew consequences follow.'}`}];
+  };
+
+  const routeResolutionEffectsForOutcomeBeforeStability = routeResolutionEffectsForOutcome;
+  routeResolutionEffectsForOutcome = function routeResolutionEffectsForOutcomeWithLegacyDefaults(session,event,outcome) {
+    const profile = routeResolutionProfile(event);
+    const normalizedEvent = {...event};
+    if (!routeResolutionEffectsPresent(normalizedEvent.successEffects)) normalizedEvent.successEffects = scaleRouteResolutionEffects(profile.opportunityReward,0.5);
+    if (!routeResolutionEffectsPresent(normalizedEvent.failureEffects)) normalizedEvent.failureEffects = cloneRouteResolutionData(profile.opportunityRisk);
+    return routeResolutionEffectsForOutcomeBeforeStability(session,normalizedEvent,outcome);
+  };
+
+  function routeEventResolutionDiagnostics() {
+    const resolution = normalizeRouteEventResolutionState();
+    const issues = [];
+    const crossing = normalizeRouteCrossing();
+    const context = crossing.status==='underway'?activeRouteResolutionContext():null;
+    if (context) {
+      if (context.session.solutions.length<2) issues.push('Active route event does not expose at least two alternative solutions.');
+      if (context.session.steps.length<2) issues.push('Active route event does not contain a turn-based phase sequence.');
+      if (context.session.masterWorldId!==synchronizeMasterWorldId(false)) issues.push('Active event resolution is not linked to the master world ID.');
+      if (context.session.submarineId!==state.submarine.worldSubmarineId) issues.push('Active event resolution is not linked to the active submarine ID.');
+      if (!context.session.missionOffer?.title) issues.push('Active event does not provide a mission or contract offer.');
+    }
+    const directControls = root.querySelectorAll('#dashboard-roll-next,#dashboard-success-next,#dashboard-failure-next,.current-crossing-event .crossing-roll,.current-crossing-event .crossing-success,.current-crossing-event .crossing-failure');
+    if (crossing.status==='underway'&&context&&root.querySelector('#explicit-route-event-resolution')&&directControls.length) issues.push('Legacy direct-resolution controls remain visible beside the explicit resolver.');
+    const duplicateContracts = resolution.contracts.filter((contract,index,all) => all.findIndex(other => other.id===contract.id)!==index);
+    if (duplicateContracts.length) issues.push('Duplicate route contract IDs exist.');
+    return {valid:!issues.length,issues,version:ROUTE_EVENT_RESOLUTION_VERSION,activeSessionId:context?.session.id||'',activeSolutionCount:context?.session.solutions.length||0,activeStepCount:context?.session.steps.length||0,contractCount:resolution.contracts.length,historyCount:resolution.history.length};
+  }
+
+  function publishRouteEventResolutionDiagnostics() {
+    globalThis.BAROTRAUMA_ROUTE_EVENT_RESOLUTION_DIAGNOSTICS = routeEventResolutionDiagnostics();
+    if (!globalThis.BAROTRAUMA_ROUTE_EVENT_RESOLUTION_DIAGNOSTICS.valid) console.warn('Route event resolution diagnostics found issues.',globalThis.BAROTRAUMA_ROUTE_EVENT_RESOLUTION_DIAGNOSTICS.issues);
+    return globalThis.BAROTRAUMA_ROUTE_EVENT_RESOLUTION_DIAGNOSTICS;
+  }
+
+  const renderCurrentRouteEventResolutionBeforeStability = renderCurrentRouteEventResolution;
+  renderCurrentRouteEventResolution = function renderCurrentRouteEventResolutionStable() {
+    const result = renderCurrentRouteEventResolutionBeforeStability();
+    publishRouteEventResolutionDiagnostics();
+    return result;
+  };
+
+  const dashboardBoundaryDiagnosticsBeforeRouteResolution = dashboardBoundaryDiagnostics;
+  dashboardBoundaryDiagnostics = function dashboardBoundaryDiagnosticsWithRouteResolution() {
+    const result = dashboardBoundaryDiagnosticsBeforeRouteResolution();
+    const resolution = routeEventResolutionDiagnostics();
+    result.routeEventResolution = resolution;
+    if (!resolution.valid) result.issues.push(...resolution.issues);
+    result.valid = !result.issues.length;
+    return result;
+  };
+
+  publishRouteEventResolutionDiagnostics();
