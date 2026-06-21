@@ -1,0 +1,268 @@
+
+  function dashboardStatusClass(value) {
+    return ['arrived','active','success','Onboard'].includes(value) ? 'good' : ['underway','prepared','Injured','pending'].includes(value) ? 'warn' : ['lost','aborted','failure','Dead'].includes(value) ? 'bad' : '';
+  }
+
+  function dashboardCrewRows(context) {
+    const local = {
+      id: context.localCrewId,
+      name: state.character.name || 'Current Character',
+      duty: 'Player character',
+      status: state.character.status || 'Onboard',
+      current: state.character.current
+    };
+    const roster = context.acceptedCrew.map(record => ({
+      id: activeDashboardCrewId(record),
+      name: record.characterName || 'Unnamed Crew Member',
+      duty: record.duty || 'Unassigned',
+      status: record.status || 'Onboard',
+      current: record.current || {}
+    }));
+    return [local, ...roster].filter((record, index, records) => record.id && records.findIndex(other => other.id === record.id) === index);
+  }
+
+  function dashboardCrewTableHtml(context) {
+    const records = dashboardCrewRows(context);
+    return `<div class="table-wrap"><table class="tool-table" style="min-width:900px"><thead><tr><th>Character</th><th>Crew ID</th><th>Duty</th><th>Status</th><th>Current S.A.I.C.</th></tr></thead><tbody>${records.map(record => `<tr><td><strong>${escapeHtml(record.name)}</strong></td><td><code>${escapeHtml(record.id)}</code></td><td>${escapeHtml(record.duty)}</td><td><strong class="${dashboardStatusClass(record.status)}">${escapeHtml(record.status)}</strong></td><td>S ${number(record.current.Strength)} · A ${number(record.current.Agility)} · I ${number(record.current.Intelligence)} · C ${number(record.current.Charisma)}</td></tr>`).join('') || '<tr><td colspan="5">No linked crew records.</td></tr>'}</tbody></table></div>`;
+  }
+
+  function dashboardStationOptions(stations, selectedId) {
+    return stations.map(node => `<option value="${escapeHtml(node.id)}" ${node.id === selectedId ? 'selected' : ''}>L${number(node.locationLevel, 1)} · ${escapeHtml(node.name)}</option>`).join('');
+  }
+
+  function dashboardRoutePanelHtml(context, focus) {
+    const map = state.world?.map;
+    const crossing = normalizeRouteCrossing();
+    const route = state.route;
+    if (!map?.nodes?.length) {
+      return `<section id="active-dashboard-route" class="tool-panel ${focus === 'route' ? 'dashboard-focused-panel' : ''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Route operations</p><h3>No operational world loaded</h3><p class="small-note">The dashboard no longer generates and renders a 960-location world merely because Route Operations was opened. Generate the world explicitly below, then file a crossing for this vessel ID.</p></div><button id="dashboard-generate-world-from-route" class="primary-action no-print" type="button">Generate Operational World</button></div></section>`;
+    }
+    const stations = crossingStationNodes(map);
+    const currentNode = crossingNode(context.group.currentNodeId, map);
+    if (!stations.some(node => node.id === route.startNodeId)) route.startNodeId = currentNode?.type === 'station' ? currentNode.id : stations[0]?.id || '';
+    if (!stations.some(node => node.id === route.endNodeId) || route.endNodeId === route.startNodeId) route.endNodeId = stations.find(node => node.id !== route.startNodeId)?.id || '';
+    const progress = typeof crossingProgress === 'function' ? crossingProgress(crossing) : { completedLegs: 0, totalLegs: crossing.legs.length, resolvedEvents: 0, totalEvents: route.plan.length };
+    const remaining = crossingRemainingCosts(crossing);
+    const nextSlot = nextPendingCrossingSlot();
+    const nextEvent = crossingSelectedEvent(nextSlot);
+    const activeLeg = activeCrossingLeg(crossing);
+    const legCheck = activeLeg ? crossingLegCanComplete(activeLeg, crossing) : { ready: false, issue: '' };
+    const readiness = crossing.status === 'prepared' ? crossingReadiness(crossing) : { ready: false, issues: [] };
+    const routeLocked = crossing.status === 'underway';
+    const visibleLegs = crossing.legs.slice(Math.max(0, crossing.activeLegIndex - 1), crossing.activeLegIndex + 8);
+    const eventDetails = nextEvent ? (typeof generalEncounterDetailHtml === 'function' && nextEvent.encounterTemplateId ? generalEncounterDetailHtml(nextEvent, nextSlot, true) : crossingEventDetails(nextEvent)) : '';
+    return `<section id="active-dashboard-route" class="tool-panel ${focus === 'route' ? 'dashboard-focused-panel' : ''}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Route operations · same active vessel</p><h3>${escapeHtml(currentNode?.name || 'Unpositioned')} → ${escapeHtml(crossingNode(route.endNodeId, map)?.name || 'Select destination')}</h3><p class="small-note">Crossing, vessel resources, crew operator, and world position are bound to <code>${escapeHtml(context.submarineId)}</code>.</p></div><span class="status-pill ${dashboardStatusClass(crossing.status)}">${escapeHtml(crossingStatusLabel(crossing.status))}</span></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Leg progress</span><strong>${progress.completedLegs}/${progress.totalLegs}</strong></div><div class="metric"><span>Encounter progress</span><strong>${progress.resolvedEvents}/${progress.totalEvents}</strong></div><div class="metric"><span>Hull</span><strong class="${number(state.submarine.hullCurrent) <= 0 ? 'bad' : ''}">${number(state.submarine.hullCurrent)}/${calculateSubmarine().totals.hull}</strong></div><div class="metric"><span>Remaining fuel</span><strong>${number(state.submarine.resources.fuel)}</strong></div><div class="metric"><span>Route cost remaining</span><strong>${escapeHtml(crossingCostText(remaining))}</strong></div></div>
+      <div class="field-grid three" style="margin-top:12px"><label class="field">Departure<select id="dashboard-route-start" ${routeLocked ? 'disabled' : ''}>${dashboardStationOptions(stations, route.startNodeId)}</select></label><label class="field">Destination<select id="dashboard-route-end" ${routeLocked ? 'disabled' : ''}>${dashboardStationOptions(stations.filter(node => node.id !== route.startNodeId), route.endNodeId)}</select></label><label class="field">Routing priority<select id="dashboard-route-mode" ${routeLocked ? 'disabled' : ''}><option value="balanced" ${route.routeMode === 'balanced' ? 'selected' : ''}>Balanced</option><option value="fastest" ${route.routeMode === 'fastest' ? 'selected' : ''}>Lowest distance</option><option value="safest" ${route.routeMode === 'safest' ? 'selected' : ''}>Safest</option><option value="fewest-legs" ${route.routeMode === 'fewest-legs' ? 'selected' : ''}>Fewest legs</option></select></label></div>
+      <div class="button-row no-print" style="margin-top:12px"><button id="dashboard-generate-crossing" class="primary-action" type="button" ${routeLocked || !route.startNodeId || !route.endNodeId ? 'disabled' : ''}>Generate Valid Crossing</button><button id="dashboard-start-crossing" class="secondary-action" type="button" ${crossing.status === 'prepared' && readiness.ready ? '' : 'disabled'}>Start Crossing</button><button id="dashboard-abort-crossing" class="danger-button" type="button" ${['prepared','underway'].includes(crossing.status) ? '' : 'disabled'}>Abort</button><button id="dashboard-clear-crossing" class="secondary-action" type="button" ${crossing.crossingId && crossing.status !== 'underway' ? '' : 'disabled'}>Clear Crossing</button><button id="dashboard-complete-leg" class="secondary-action" type="button" ${legCheck.ready ? '' : 'disabled'}>Complete Active Leg</button></div>
+      <div class="notice ${route.crossingMessage && /insufficient|incomplete|not |no |exceed|inoperative|failed/i.test(route.crossingMessage) ? 'bad' : ''}" style="margin-top:10px">${escapeHtml(route.crossingMessage || (readiness.issues || []).join(' ') || 'Configure and file a crossing for the active vessel.')}</div>
+      ${nextSlot && nextEvent ? `<div class="tool-card" style="margin-top:12px;border-color:var(--accent)"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Next unresolved encounter</p><h4>${escapeHtml(nextEvent.name || nextSlot.label)}</h4></div><span class="tag">${escapeHtml(nextEvent.stat || 'Intelligence')} vs ${number(nextEvent.dc, 8)}</span></div>${eventDetails}${nextSlot.roll ? `<p><strong>Last roll:</strong> ${escapeHtml(nextSlot.roll)}</p>` : ''}<div class="button-row no-print"><button id="dashboard-roll-next" class="primary-action" type="button">Roll with Selected Crew</button><button id="dashboard-success-next" class="secondary-action" type="button">Mark Success</button><button id="dashboard-failure-next" class="danger-button" type="button">Mark Failure</button><button id="dashboard-redraw-next" class="compact-button" type="button">Redraw</button></div></div>` : '<div class="notice" style="margin-top:12px">No unresolved route encounter.</div>'}
+      ${visibleLegs.length ? `<div class="table-wrap" style="margin-top:12px"><table class="tool-table"><thead><tr><th>Leg</th><th>Route</th><th>Danger</th><th>Cost</th><th>Status</th></tr></thead><tbody>${visibleLegs.map(leg => `<tr><td>${leg.index + 1}</td><td>${escapeHtml(crossingNode(leg.fromNodeId)?.name || leg.fromNodeId)} → ${escapeHtml(crossingNode(leg.toNodeId)?.name || leg.toNodeId)}</td><td class="${leg.danger ? 'bad' : 'good'}">${leg.danger ? 'Dangerous' : 'Standard'}</td><td>${escapeHtml(crossingCostText(leg.costs))}</td><td>${escapeHtml(leg.status)}</td></tr>`).join('')}</tbody></table></div>` : ''}
+    </section>`;
+  }
+
+  function dashboardMapSelection(context, full = false) {
+    const map = state.world?.map;
+    if (!map?.nodes?.length) return { nodes: [], edges: [], idSet: new Set() };
+    if (full) return { nodes: map.nodes, edges: map.edges, idSet: new Set(map.nodes.map(node => node.id)) };
+    const wanted = new Set();
+    const queue = [];
+    const add = id => { if (id && !wanted.has(id)) { wanted.add(id); queue.push(id); } };
+    add(context.group.currentNodeId || map.startId);
+    add(state.operationsDashboard.focusedNodeId);
+    for (const id of state.world.selected || []) add(id);
+    for (const id of normalizeRouteCrossing().pathNodeIds || []) add(id);
+    let depth = 0;
+    while (queue.length && wanted.size < 72 && depth < 3) {
+      const batch = queue.splice(0, queue.length);
+      for (const id of batch) {
+        for (const edge of map.edges) {
+          if (edge.a === id) add(edge.b);
+          else if (edge.b === id) add(edge.a);
+          if (wanted.size >= 72) break;
+        }
+        if (wanted.size >= 72) break;
+      }
+      depth += 1;
+    }
+    const nodes = map.nodes.filter(node => wanted.has(node.id));
+    const idSet = new Set(nodes.map(node => node.id));
+    const edges = map.edges.filter(edge => idSet.has(edge.a) && idSet.has(edge.b));
+    return { nodes, edges, idSet };
+  }
+
+  function dashboardOperationalMapSvg(context) {
+    const map = state.world?.map;
+    if (!map?.nodes?.length) return '';
+    const full = state.operationsDashboard.mapMode === 'full';
+    const selection = dashboardMapSelection(context, full);
+    const nodes = selection.nodes;
+    const edges = selection.edges;
+    const nodeById = Object.fromEntries(nodes.map(node => [node.id, node]));
+    const xs = nodes.map(node => number(node.x));
+    const ys = nodes.map(node => number(node.y));
+    const margin = full ? 160 : 90;
+    const minX = Math.min(...xs) - margin;
+    const maxX = Math.max(...xs) + margin;
+    const minY = Math.min(...ys) - margin;
+    const maxY = Math.max(...ys) + margin;
+    const width = Math.max(240, maxX - minX);
+    const height = Math.max(180, maxY - minY);
+    const routeIds = new Set(normalizeRouteCrossing().pathNodeIds || []);
+    const selectedIds = new Set(state.world.selected || []);
+    const focused = state.operationsDashboard.focusedNodeId;
+    const current = context.group.currentNodeId;
+    let stationLabels = 0;
+    return `<svg id="dashboard-operational-map" viewBox="${minX} ${minY} ${width} ${height}" role="img" aria-label="Active submarine operational world map" style="width:100%;height:${full ? 760 : 520}px;display:block;background:radial-gradient(circle at center,rgba(200,138,53,.07),rgba(0,0,0,.35));border-radius:14px">
+      ${edges.map(edge => { const a = nodeById[edge.a]; const b = nodeById[edge.b]; if (!a || !b) return ''; const active = routeIds.has(edge.a) && routeIds.has(edge.b); return `<line x1="${number(a.x)}" y1="${number(a.y)}" x2="${number(b.x)}" y2="${number(b.y)}" stroke="${active ? '#57b9ff' : edge.danger ? '#9d4d55' : '#59616d'}" stroke-width="${active ? 9 : edge.danger ? 4 : 2}" opacity="${active ? 1 : .68}"/>`; }).join('')}
+      ${nodes.map(node => { const isCurrent = node.id === current; const isFocused = node.id === focused; const selected = selectedIds.has(node.id); const route = routeIds.has(node.id); const radius = isCurrent ? 22 : isFocused ? 17 : node.type === 'station' ? 11 : node.type === 'anomaly' ? 15 : 7; const fill = isCurrent ? '#e65353' : isFocused ? '#f1cf77' : node.type === 'station' ? '#2d6686' : node.type === 'anomaly' ? '#b17a2e' : node.type === 'wreck' ? '#7b3434' : '#444b56'; const showLabel = isCurrent || isFocused || selected || route || node.type === 'anomaly' || (node.type === 'station' && stationLabels++ < (full ? 12 : 24)); return `<g class="dashboard-map-node" data-node-id="${escapeHtml(node.id)}" transform="translate(${number(node.x)} ${number(node.y)})" style="cursor:pointer"><circle r="${radius}" fill="${fill}" stroke="${selected || route ? '#ffffff' : '#b8c2cc'}" stroke-width="${isCurrent ? 7 : selected || route ? 4 : 2}"/>${showLabel ? `<text x="${radius + 7}" y="4" fill="#e8edf2" font-size="${isCurrent ? 18 : 13}" font-weight="${isCurrent ? 900 : 700}" pointer-events="none">${escapeHtml(node.name)}</text>` : ''}</g>`; }).join('')}
+    </svg>`;
+  }
+
+  function dashboardWorldPanelHtml(context, focus) {
+    const world = state.world;
+    const hub = context.hub;
+    const map = world?.map;
+    const groups = Object.values(hub.publicState.groups || {});
+    if (!map?.nodes?.length) {
+      return `<section id="active-dashboard-world" class="tool-panel ${focus === 'world' ? 'dashboard-focused-panel' : ''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">World operations</p><h3>Operational world not generated</h3><p class="small-note">World creation is now explicit. Opening the active-submarine dashboard no longer attempts to create and render the entire campaign graph automatically.</p></div></div><div class="field-grid three" style="margin-top:12px"><label class="field">World seed<input id="dashboard-world-seed" value="${escapeHtml(world.seed || '')}"></label><label class="field">Depth rings<input id="dashboard-world-rings" type="number" min="40" max="80" value="${number(world.rings, 48)}"></label><label class="field">Locations<input id="dashboard-world-nodes" type="number" min="400" max="1800" value="${number(world.nodes, 960)}"></label></div><div class="button-row no-print" style="margin-top:12px"><button id="dashboard-generate-world" class="primary-action" type="button">Generate Campaign World</button><button id="dashboard-random-world" class="secondary-action" type="button">Randomize Seed and Generate</button></div><div class="notice warn" style="margin-top:10px">A 48-ring world is intentionally large. Generation occurs only when requested, while normal dashboard rendering remains lightweight.</div></section>`;
+    }
+    const node = crossingNode(context.group.currentNodeId, map);
+    const focused = crossingNode(state.operationsDashboard.focusedNodeId, map);
+    return `<section id="active-dashboard-world" class="tool-panel ${focus === 'world' ? 'dashboard-focused-panel' : ''}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">World operations · same active vessel</p><h3>${escapeHtml(hub.worldName || 'Europa Public World')}</h3><p class="small-note">The red marker is <code>${escapeHtml(context.submarineId)}</code>. Route movement updates this group and vessel record together.</p></div><div class="button-row no-print"><button id="dashboard-toggle-map" class="secondary-action" type="button">${state.operationsDashboard.mapMode === 'full' ? 'Use Local Operational Map' : 'Load Simplified Full World'}</button><button id="dashboard-export-world" class="secondary-action" type="button">Export World State</button></div></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>World ID</span><strong>${escapeHtml(hub.worldId)}</strong></div><div class="metric"><span>Locations</span><strong>${map.nodes.length}</strong></div><div class="metric"><span>Stations</span><strong>${map.nodes.filter(item => item.type === 'station').length}</strong></div><div class="metric"><span>Active group</span><strong>${escapeHtml(context.group.name)}</strong></div><div class="metric"><span>Current position</span><strong>${escapeHtml(node?.name || 'Unpositioned')}</strong></div></div>
+      <div class="field-grid three" style="margin-top:12px"><label class="field">Active group<select id="dashboard-active-group">${groups.map(group => `<option value="${escapeHtml(group.groupId)}" ${group.groupId === context.group.groupId ? 'selected' : ''}>${escapeHtml(group.name)} · ${escapeHtml(group.groupId)}</option>`).join('')}</select></label><label class="field">Group name<input id="dashboard-group-name" value="${escapeHtml(context.group.name)}"></label><label class="field">Focused map node<input readonly value="${escapeHtml(focused?.name || 'None')}"></label></div>
+      <div class="button-row no-print" style="margin-top:10px"><button id="dashboard-create-group" class="secondary-action" type="button">Create New Expedition Group</button>${focused?.type === 'station' ? '<button id="dashboard-node-departure" class="secondary-action" type="button">Use Focused Station as Departure</button><button id="dashboard-node-destination" class="secondary-action" type="button">Use Focused Station as Destination</button>' : ''}<button id="dashboard-regenerate-world" class="danger-button" type="button">Regenerate World</button></div>
+      <div class="map-frame" style="min-height:0;margin-top:12px;overflow:hidden">${dashboardOperationalMapSvg(context)}</div>
+      ${focused ? `<div class="notice" style="margin-top:10px"><strong>${escapeHtml(focused.name)}</strong> · Node ${escapeHtml(focused.id)} · Ring ${number(focused.ring)} · Level ${number(focused.locationLevel, 1)}<br>${escapeHtml(focused.locationLore || focused.details || '')}</div>` : '<div class="small-note" style="margin-top:10px">Select a map node to inspect it or assign it to the active route.</div>'}
+    </section>`;
+  }
+
+  function activeDashboardHeaderHtml(context, focus, baseError = '') {
+    const currentNode = crossingNode(context.group.currentNodeId);
+    const crossing = normalizeRouteCrossing();
+    const diagnostics = activeDashboardDiagnostics();
+    return `<section id="active-dashboard-command" class="tool-panel active-dashboard-command" style="border-color:${diagnostics.valid ? 'rgba(117,197,142,.62)' : 'rgba(223,119,119,.75)'}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Unified active submarine management</p><h2>${escapeHtml(state.submarine.name || state.submarine.model)}</h2><p class="rules-note">Submarine Manager, Route Operations, World State, and crew consequences now resolve against one shared vessel identity, one active expedition group, and one ID-linked crew roster.</p></div><span class="status-pill ${diagnostics.valid ? 'good' : 'bad'}">${diagnostics.valid ? 'IDENTITIES SYNCHRONIZED' : 'SYNCHRONIZATION ERROR'}</span></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Active submarine ID</span><strong>${escapeHtml(context.submarineId)}</strong></div><div class="metric"><span>Active group ID</span><strong>${escapeHtml(context.group.groupId)}</strong></div><div class="metric"><span>Linked crew IDs</span><strong>${context.crewIds.length}</strong></div><div class="metric"><span>Current location</span><strong>${escapeHtml(currentNode?.name || 'World not positioned')}</strong></div><div class="metric"><span>Filed route</span><strong>${escapeHtml(crossing.crossingId || 'None')}</strong></div></div>
+      <div class="button-row no-print" style="margin-top:12px"><button class="${focus === 'overview' ? 'primary-action' : 'secondary-action'} dashboard-focus" data-focus="submarine" type="button">Vessel and Crew</button><button class="${focus === 'route' ? 'primary-action' : 'secondary-action'} dashboard-focus" data-focus="route" type="button">Route Operations</button><button class="${focus === 'world' ? 'primary-action' : 'secondary-action'} dashboard-focus" data-focus="world" type="button">World Operations</button><button id="dashboard-force-sync" class="secondary-action" type="button">Synchronize IDs Now</button></div>
+      ${baseError ? `<div class="notice bad" style="margin-top:10px"><strong>Legacy submarine panel error isolated:</strong> ${escapeHtml(baseError)}<br>The integrated route and world controls remain available below.</div>` : ''}${diagnostics.issues.length ? `<div class="notice bad" style="margin-top:10px">${diagnostics.issues.map(escapeHtml).join('<br>')}</div>` : ''}
+      <div style="margin-top:12px"><h3>Active Crew by ID</h3>${dashboardCrewTableHtml(context)}</div>
+    </section>`;
+  }
+
+  function dashboardSetMessage(message, isError = false) {
+    state.operationsDashboard.lastError = isError ? String(message || '') : '';
+    state.route.crossingMessage = String(message || '');
+    save();
+  }
+
+  function dashboardGenerateWorld(randomize = false) {
+    try {
+      if (randomize) state.world.seed = uniqueWorldSeed();
+      generateWorldMap();
+      if (state.world?.map) {
+        if (typeof reconcileWorldStationLevels === 'function') reconcileWorldStationLevels(state.world.map);
+        if (typeof seedWorldFactions === 'function') seedWorldFactions(state.world.map, true);
+        if (typeof assignWorldLocationLevels === 'function') assignWorldLocationLevels(state.world.map, false);
+        assignMissingGroupStarts();
+      }
+      normalizeActiveSubmarineDashboard(true);
+      dashboardSetMessage('Operational world generated and linked to the active submarine.');
+    } catch (error) {
+      dashboardSetMessage(`World generation failed: ${error.message}`, true);
+    }
+    renderSubmarine();
+  }
+
+  function bindActiveDashboardControls(context, focus) {
+    root.querySelectorAll('.dashboard-focus').forEach(button => button.addEventListener('click', event => setTool(event.currentTarget.dataset.focus)));
+    root.querySelector('#dashboard-force-sync')?.addEventListener('click', () => { normalizeActiveSubmarineDashboard(true); renderSubmarine(); });
+    root.querySelector('#dashboard-generate-world-from-route')?.addEventListener('click', () => dashboardGenerateWorld(false));
+    root.querySelector('#dashboard-generate-world')?.addEventListener('click', () => {
+      state.world.seed = root.querySelector('#dashboard-world-seed')?.value || state.world.seed;
+      state.world.rings = clamp(root.querySelector('#dashboard-world-rings')?.value, 40, 80);
+      state.world.nodes = clamp(root.querySelector('#dashboard-world-nodes')?.value, Math.max(400, state.world.rings * 8 + 1), 1800);
+      dashboardGenerateWorld(false);
+    });
+    root.querySelector('#dashboard-random-world')?.addEventListener('click', () => dashboardGenerateWorld(true));
+    root.querySelector('#dashboard-regenerate-world')?.addEventListener('click', () => dashboardGenerateWorld(false));
+    root.querySelector('#dashboard-toggle-map')?.addEventListener('click', () => { state.operationsDashboard.mapMode = state.operationsDashboard.mapMode === 'full' ? 'local' : 'full'; save(); renderSubmarine(); });
+    root.querySelector('#dashboard-export-world')?.addEventListener('click', () => download(`barotrauma-world-${normalizeWorldHub().worldId}.json`, JSON.stringify({ world: state.world, worldHub: state.worldHub, activeSubmarineId: context.submarineId, exportedAt: new Date().toISOString() }, null, 2)));
+    root.querySelector('#dashboard-active-group')?.addEventListener('change', event => { context.hub.activeGroupId = event.target.value; normalizeActiveSubmarineDashboard(true); renderSubmarine(); });
+    root.querySelector('#dashboard-group-name')?.addEventListener('change', event => { context.group.name = event.target.value.trim() || context.group.name; save(); renderSubmarine(); });
+    root.querySelector('#dashboard-create-group')?.addEventListener('click', () => { createWorldGroup(`Expedition Group ${Object.keys(context.hub.publicState.groups).length + 1}`); normalizeActiveSubmarineDashboard(true); renderSubmarine(); });
+    root.querySelectorAll('.dashboard-map-node').forEach(element => element.addEventListener('click', event => {
+      const nodeId = event.currentTarget.dataset.nodeId;
+      state.operationsDashboard.focusedNodeId = nodeId;
+      const selected = Array.isArray(state.world.selected) ? state.world.selected : [];
+      state.world.selected = selected.includes(nodeId) ? selected.filter(id => id !== nodeId) : selected.length < 2 ? [...selected, nodeId] : [nodeId];
+      save();
+      renderSubmarine();
+    }));
+    root.querySelector('#dashboard-node-departure')?.addEventListener('click', () => { const node = crossingNode(state.operationsDashboard.focusedNodeId); if (!node || node.type !== 'station') return; state.route.startNodeId = node.id; state.route.start = node.name; save(); setTool('route'); });
+    root.querySelector('#dashboard-node-destination')?.addEventListener('click', () => { const node = crossingNode(state.operationsDashboard.focusedNodeId); if (!node || node.type !== 'station') return; state.route.endNodeId = node.id; state.route.end = node.name; save(); setTool('route'); });
+
+    root.querySelector('#dashboard-route-start')?.addEventListener('change', event => { state.route.startNodeId = event.target.value; state.route.start = crossingNode(event.target.value)?.name || ''; save(); renderSubmarine(); });
+    root.querySelector('#dashboard-route-end')?.addEventListener('change', event => { state.route.endNodeId = event.target.value; state.route.end = crossingNode(event.target.value)?.name || ''; save(); renderSubmarine(); });
+    root.querySelector('#dashboard-route-mode')?.addEventListener('change', event => { state.route.routeMode = event.target.value; save(); });
+    root.querySelector('#dashboard-generate-crossing')?.addEventListener('click', () => { try { generateValidCrossing(); dashboardSetMessage('Valid crossing generated for the active submarine.'); } catch (error) { dashboardSetMessage(error.message, true); } renderSubmarine(); });
+    root.querySelector('#dashboard-start-crossing')?.addEventListener('click', () => { startCrossing(); renderSubmarine(); });
+    root.querySelector('#dashboard-abort-crossing')?.addEventListener('click', () => { abortCrossing(); normalizeActiveSubmarineDashboard(true); renderSubmarine(); });
+    root.querySelector('#dashboard-clear-crossing')?.addEventListener('click', () => { clearRouteCrossing(); normalizeActiveSubmarineDashboard(true); renderSubmarine(); });
+    root.querySelector('#dashboard-complete-leg')?.addEventListener('click', () => { completeCrossingLeg(); renderSubmarine(); });
+    root.querySelector('#dashboard-roll-next')?.addEventListener('click', () => { const slot = nextPendingCrossingSlot(); if (slot) rollCrossingEvent(slot.id); renderSubmarine(); });
+    root.querySelector('#dashboard-success-next')?.addEventListener('click', () => { const slot = nextPendingCrossingSlot(); if (slot) resolveCrossingEvent(slot.id, 'success'); renderSubmarine(); });
+    root.querySelector('#dashboard-failure-next')?.addEventListener('click', () => { const slot = nextPendingCrossingSlot(); if (slot) resolveCrossingEvent(slot.id, 'failure'); renderSubmarine(); });
+    root.querySelector('#dashboard-redraw-next')?.addEventListener('click', () => { const slot = nextPendingCrossingSlot(); if (slot) redrawCrossingEvent(slot.id); renderSubmarine(); });
+
+    if (focus === 'route' || focus === 'world') requestAnimationFrame(() => root.querySelector(`#active-dashboard-${focus}`)?.scrollIntoView({ block: 'start' }));
+  }
+
+  const renderSubmarineBeforeActiveDashboard = renderSubmarine;
+
+  function renderActiveSubmarineDashboard(requestedFocus = activeDashboardRawFocus()) {
+    let context;
+    let baseError = '';
+    try {
+      context = normalizeActiveSubmarineDashboard(false);
+    } catch (error) {
+      root.innerHTML = `<div class="tool-shell"><section class="tool-hero"><div><p class="eyebrow">Active submarine dashboard</p><h2>Identity normalization failed</h2><p class="rules-note bad">${escapeHtml(error.message)}</p></div></section></div>`;
+      return;
+    }
+    try {
+      renderSubmarineBeforeActiveDashboard();
+    } catch (error) {
+      baseError = error.message || String(error);
+      root.innerHTML = `<div class="tool-shell"><section class="tool-hero"><div><p class="eyebrow">Unified operations fallback</p><h2>${escapeHtml(state.submarine.name || state.submarine.model)}</h2><p class="rules-note">The older submarine panel encountered an error, but the active route and world dashboard has remained available.</p></div></section></div>`;
+    }
+    const shell = root.querySelector('.tool-shell');
+    if (!shell) return;
+    const hero = shell.querySelector(':scope > .tool-hero');
+    if (hero) {
+      const eyebrow = hero.querySelector('.eyebrow');
+      const title = hero.querySelector('h2');
+      const note = hero.querySelector('.rules-note');
+      if (eyebrow) eyebrow.textContent = 'Single-vessel campaign command';
+      if (title) title.textContent = 'Active Submarine Management Dashboard';
+      if (note) note.textContent = 'Manage the vessel, its ID-linked crew, filed route, current world position, systems, stores, cargo, casualties, and expedition state from one operational page.';
+      hero.insertAdjacentHTML('afterend', activeDashboardHeaderHtml(context, requestedFocus, baseError));
+    } else shell.insertAdjacentHTML('afterbegin', activeDashboardHeaderHtml(context, requestedFocus, baseError));
+    shell.insertAdjacentHTML('beforeend', dashboardRoutePanelHtml(context, requestedFocus));
+    shell.insertAdjacentHTML('beforeend', dashboardWorldPanelHtml(context, requestedFocus));
+    bindActiveDashboardControls(context, requestedFocus);
+  }
+
+  renderSubmarine = function renderUnifiedActiveSubmarineDashboard() {
+    renderActiveSubmarineDashboard(activeDashboardRawFocus());
+  };
+  renderRoute = function renderRouteInsideActiveSubmarineDashboard() {
+    renderActiveSubmarineDashboard('route');
+  };
+  renderWorld = function renderWorldInsideActiveSubmarineDashboard() {
+    renderActiveSubmarineDashboard('world');
+  };
+
+  normalizeActiveSubmarineDashboard(true);
