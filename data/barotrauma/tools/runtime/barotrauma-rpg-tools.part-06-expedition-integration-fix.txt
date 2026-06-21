@@ -1,0 +1,31 @@
+
+  const assignWorldLocationLevelsBeforeExpeditionFix = assignWorldLocationLevels;
+  assignWorldLocationLevels = function assignWorldLocationLevelsWithSafeWreckIsolation(map = state.world?.map, force = false) {
+    if (!map?.nodes?.length) return assignWorldLocationLevelsBeforeExpeditionFix(map, force);
+    const wreckNodes = map.nodes.filter(node => node.wreckSiteId && node.locationTypeId === 'managed-submarine-wreck');
+    if (!wreckNodes.length) return assignWorldLocationLevelsBeforeExpeditionFix(map, force);
+    const wreckIds = new Set(wreckNodes.map(node => node.id));
+    map.nodes = map.nodes.filter(node => !wreckIds.has(node.id));
+    let result;
+    try {
+      result = assignWorldLocationLevelsBeforeExpeditionFix(map, force);
+    } finally {
+      map.nodes.push(...wreckNodes);
+    }
+    return result;
+  };
+
+  const declareManagedSubmarineLostWithAllHandsBeforeAssetCleanup = declareManagedSubmarineLostWithAllHands;
+  declareManagedSubmarineLostWithAllHands = function declareManagedSubmarineLostWithAssetCleanup() {
+    const wreck = declareManagedSubmarineLostWithAllHandsBeforeAssetCleanup();
+    if (!wreck) return wreck;
+    normalizeCargoManagement().entries = [];
+    for (const resource of Object.keys(state.submarine.resources || {})) state.submarine.resources[resource] = 0;
+    for (const weapon of state.submarine.weapons || []) weapon.ammo = 0;
+    for (const weapon of state.submarine.wikiWeapons || []) weapon.ammo = 0;
+    state.submarine.notes = [state.submarine.notes, `LOST WITH ALL HANDS at ${wreck.nodeId}. Recoverable assets exist only in wreck record ${wreck.wreckSiteId}.`].filter(Boolean).join('\n');
+    syncCargoResourceIfEnabled();
+    normalizeManagedExpedition();
+    save();
+    return wreck;
+  };
