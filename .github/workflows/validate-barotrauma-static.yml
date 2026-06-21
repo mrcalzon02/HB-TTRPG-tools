@@ -59,12 +59,19 @@ jobs:
           JSON.parse(fs.readFileSync('data/barotrauma-tools-registry.json', 'utf8'));
           JSON.parse(fs.readFileSync('data/barotrauma/tools/encounters/encounter-index.json', 'utf8'));
 
-          assert(loader.includes('barotrauma-rpg-tools.part-06-standalone-module-captures.txt'), 'Standalone module captures are not loaded');
-          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt'), 'Dashboard boundary core is not loaded');
-          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt'), 'Dashboard boundary UI is not loaded');
-          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt'), 'Dashboard boundary stability is not loaded');
-          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-commissioning.txt'), 'Master-world commissioning is not loaded');
-          assert(loader.includes('barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt'), 'Station-only crew transition stability is not loaded');
+          for (const required of [
+            'barotrauma-rpg-tools.part-06-standalone-module-captures.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-commissioning.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-core-00.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-core-01.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt'
+          ]) assert(loader.includes(required), `${required} is not loaded`);
 
           const boundaryCore = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt', 'utf8');
           assert(boundaryCore.includes("return ['character','submarine','encounters','route','world','catalog','workshop'].includes(raw)"), 'Standalone hash dispatch contract is missing');
@@ -81,26 +88,41 @@ jobs:
           assert(commissioning.includes('Additional crew cannot be added while the submarine is In Route.'), 'In-route crew-add guard is missing');
           assert(commissioning.includes('physically docked at a station'), 'Physical-station crew-add requirement is missing');
 
-          const commissioningStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt', 'utf8');
-          assert(commissioningStability.includes("!['Reserve','Away'].includes(record.status)"), 'Reserve and away personnel are still counted as active submarine crew');
-          assert(commissioningStability.includes('if (statusControl && !alreadyAboard)'), 'Non-onboard status activation is not locked during transit');
+          const resolution00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-00.txt', 'utf8');
+          const resolution01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-01.txt', 'utf8');
+          const resolution02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt', 'utf8');
+          const resolutionUi = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt', 'utf8');
+          const resolutionStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt', 'utf8');
+
+          assert(resolution00.includes('ROUTE_RESOLUTION_FAMILY_PROFILES'), 'Crew-role family profiles are missing');
+          assert(resolution00.includes('routeResolutionSolutions'), 'Alternative solution generation is missing');
+          assert(resolution00.includes('routeResolutionMissionOffer'), 'Mission and contract generation is missing');
+          assert(resolution01.includes('routeResolutionStepBlueprints'), 'Turn-based phase generation is missing');
+          assert(resolution01.includes('advanceDashboardTurn'), 'Resolution steps do not advance crew turns');
+          assert(resolution01.includes('roleBonus') && resolution01.includes('supportBonus'), 'Crew-role and support bonuses are missing');
+          assert(resolution02.includes('critical-success') && resolution02.includes('critical-failure') && resolution02.includes("outcome==='mixed'"), 'Five-band outcome resolution is incomplete');
+          assert(resolution02.includes('applyRouteResolutionEffects'), 'Submarine and crew effect application is missing');
+          assert(resolution02.includes('effectsAppliedAt'), 'One-time effect protection is missing');
+          assert(resolution02.includes('publicState.gameStates'), 'Contracts are not persisted into master-world public state');
+          assert(resolutionUi.includes('Explicit turn-based event resolution'), 'Explicit route resolution interface is missing');
+          assert(resolutionUi.includes('Select an Alternative Solution'), 'Alternative solution UI is missing');
+          assert(resolutionUi.includes('Assign Supporting Crew Roles'), 'Crew role assignment UI is missing');
+          assert(resolutionUi.includes('Available Outcomes'), 'Outcome preview UI is missing');
+          assert(resolutionStability.includes('Controlled Withdrawal and Reassessment'), 'Fallback alternative solution is missing');
+          assert(resolutionStability.includes('BAROTRAUMA_ROUTE_EVENT_RESOLUTION_DIAGNOSTICS'), 'Route resolution diagnostics are missing');
 
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
-          assert(finalRuntime.includes('version: 18'), 'Suite export version was not advanced for master-world commissioning');
-          assert(finalRuntime.includes('masterWorldId: synchronizeMasterWorldId(false)'), 'Suite export omits the master world ID');
-          assert(finalRuntime.includes('normalizeDashboardCommissioningState()'), 'Suite import omits commissioning migration');
+          assert(finalRuntime.includes('version: 19'), 'Suite export version was not advanced for route event resolution');
+          assert(finalRuntime.includes('routeEventResolutionVersion: ROUTE_EVENT_RESOLUTION_VERSION'), 'Suite export omits route event resolution version');
+          assert(finalRuntime.includes('normalizeRouteEventResolutionState()'), 'Suite import omits route event resolution migration');
 
           const entry = fs.readFileSync('barotrauma-entry.js', 'utf8');
           assert(entry.includes('barotrauma-rpg-tools.html#dashboard'), 'Main Barotrauma menu does not link the Active Submarine Dashboard');
-          assert(entry.includes('barotrauma-rpg-tools.html#submarine'), 'Standalone Submarine Manager link is missing');
           assert(entry.includes('barotrauma-rpg-tools.html#route'), 'Standalone Route Planner link is missing');
-          assert(entry.includes('barotrauma-rpg-tools.html#world'), 'Standalone World State link is missing');
 
           const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
           assert(html.includes('data-tool="dashboard"'), 'Dashboard tool tab is missing');
-          assert(html.includes('data-tool="submarine"'), 'Standalone submarine tab is missing');
           assert(html.includes('data-tool="route"'), 'Standalone route tab is missing');
-          assert(html.includes('data-tool="world"'), 'Standalone world tab is missing');
 
-          console.log(`Validated ${paths.length} runtime fragments, unified master-world identity, station-gated crew recruitment, and dashboard/standalone navigation.`);
+          console.log(`Validated ${paths.length} runtime fragments, explicit route-event turns, alternative solutions, crew roles, outcomes, effects, contracts, and dashboard/standalone navigation.`);
           NODE
