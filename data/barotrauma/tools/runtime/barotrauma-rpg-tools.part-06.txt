@@ -1,4 +1,6 @@
 
+  const LEGACY_SUITE_IMPORT_COMPATIBILITY = { version: 20 };
+
   function render() {
     const tool = activeTool();
     document.querySelectorAll('.ops-tab').forEach(button => button.classList.toggle('active', button.dataset.tool === tool));
