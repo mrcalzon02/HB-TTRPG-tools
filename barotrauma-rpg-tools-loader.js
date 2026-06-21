@@ -59,6 +59,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
