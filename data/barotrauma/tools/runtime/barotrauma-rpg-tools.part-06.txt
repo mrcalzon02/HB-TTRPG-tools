@@ -14,7 +14,7 @@
   document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
   window.addEventListener('hashchange', render);
   document.getElementById('print-tool')?.addEventListener('click', () => window.print());
-  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 6, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, state }, null, 2)));
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 7, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, state }, null, 2)));
   document.getElementById('import-suite')?.addEventListener('change', event => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -25,6 +25,7 @@
         const imported = parsed.state || parsed;
         state = deepMerge(defaultState(), imported);
         state.character.catalogInventory = Array.isArray(state.character.catalogInventory) ? state.character.catalogInventory : [];
+        state.character.consumptionLog = Array.isArray(state.character.consumptionLog) ? state.character.consumptionLog : [];
         state.submarine.wikiWeapons = Array.isArray(state.submarine.wikiWeapons) ? state.submarine.wikiWeapons : [];
         state.submarine.wikiAmmo = Array.isArray(state.submarine.wikiAmmo) ? state.submarine.wikiAmmo : [];
         state.submarine.customModules = Array.isArray(state.submarine.customModules) ? state.submarine.customModules : [];
@@ -40,12 +41,16 @@
         state.customContent.entries = Array.isArray(state.customContent.entries) ? state.customContent.entries : [];
         state.customContent.draft = deepMerge(defaultCustomContentDraft(state.customContent.draft?.type || 'equipment'), state.customContent.draft || {});
         normalizeCharacterInventory();
+        normalizeCompatibilityInventory();
         normalizePlayerSubmissionSettings();
         normalizeCrewManagement();
+        normalizeCargoManagement();
+        normalizeStationCommerce();
         registerOfficialSubmarines();
         syncCustomSubmarines();
         syncCustomStations();
         syncCrewResourceIfEnabled();
+        syncCargoResourceIfEnabled();
         if (!SUBMARINES[state.submarine.model]) state.submarine.model = 'Barsuk';
         save(); render();
       } catch (error) {
