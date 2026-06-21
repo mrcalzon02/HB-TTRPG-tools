@@ -10,10 +10,13 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-05.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-catalog.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-submarines.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-custom-core.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-custom-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
   const submarineRosterUrl = 'data/barotrauma/tools/submarines/submarine-roster.json';
+  const customContentSchemaUrl = 'data/barotrauma/tools/custom/custom-content-schema.json';
 
   async function fetchText(path) {
     const response = await fetch(path, { cache: 'no-store' });
@@ -37,13 +40,15 @@
   }
 
   async function load() {
-    const [catalog, submarineRoster, sourceParts] = await Promise.all([
+    const [catalog, submarineRoster, customContentSchema, sourceParts] = await Promise.all([
       loadCatalog(),
       fetchJson(submarineRosterUrl),
+      fetchJson(customContentSchemaUrl),
       Promise.all(runtimeParts.map(fetchText))
     ]);
     window.BAROTRAUMA_WIKI_CATALOG = catalog;
     window.BAROTRAUMA_SUBMARINE_ROSTER = submarineRoster;
+    window.BAROTRAUMA_CUSTOM_CONTENT_SCHEMA = customContentSchema;
     const source = sourceParts.join('');
     new Function(`${source}\n//# sourceURL=barotrauma-rpg-tools.runtime.js`)();
   }
