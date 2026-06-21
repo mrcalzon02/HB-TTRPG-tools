@@ -33,6 +33,8 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-creature-encounters-core.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-creature-encounters-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-map-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-stability.txt',
@@ -47,6 +49,7 @@
   const worldStateSchemaUrl = 'data/barotrauma/tools/world/world-state-schema.json';
   const factionRegistryUrl = 'data/barotrauma/tools/factions/faction-registry.json';
   const locationLevelRegistryUrl = 'data/barotrauma/tools/locations/location-level-registry.json';
+  const creatureRegistryUrl = 'data/barotrauma/tools/creatures/creature-registry.json';
 
   async function fetchText(path) {
     const response = await fetch(path, { cache: 'no-store' });
@@ -70,7 +73,7 @@
   }
 
   async function load() {
-    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, locationLevelRegistry, sourceParts] = await Promise.all([
+    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, locationLevelRegistry, creatureRegistry, sourceParts] = await Promise.all([
       loadCatalog(),
       fetchJson(submarineRosterUrl),
       fetchJson(customContentSchemaUrl),
@@ -78,6 +81,7 @@
       fetchJson(worldStateSchemaUrl),
       fetchJson(factionRegistryUrl),
       fetchJson(locationLevelRegistryUrl),
+      fetchJson(creatureRegistryUrl),
       Promise.all(runtimeParts.map(fetchText))
     ]);
     window.BAROTRAUMA_WIKI_CATALOG = catalog;
@@ -87,6 +91,7 @@
     window.BAROTRAUMA_WORLD_STATE_SCHEMA = worldStateSchema;
     window.BAROTRAUMA_FACTION_REGISTRY = factionRegistry;
     window.BAROTRAUMA_LOCATION_LEVEL_REGISTRY = locationLevelRegistry;
+    window.BAROTRAUMA_CREATURE_REGISTRY = creatureRegistry;
     const source = sourceParts.join('');
     new Function(`${source}\n//# sourceURL=barotrauma-rpg-tools.runtime.js`)();
   }
