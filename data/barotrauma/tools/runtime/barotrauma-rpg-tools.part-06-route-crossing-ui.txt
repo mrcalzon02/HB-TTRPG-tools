@@ -1,0 +1,238 @@
+
+  function crossingStatusLabel(status) {
+    return ({ none:'No crossing', prepared:'Prepared', underway:'Underway', arrived:'Arrived', aborted:'Aborted' })[status] || status;
+  }
+
+  function crossingStatusTone(status) {
+    if (status === 'arrived') return 'good';
+    if (status === 'underway') return 'good';
+    if (status === 'prepared') return 'warn';
+    if (status === 'aborted') return 'bad';
+    return '';
+  }
+
+  function crossingNodeName(nodeId) {
+    return crossingNode(nodeId)?.name || nodeId || 'Unknown location';
+  }
+
+  function crossingCostText(costs = {}) {
+    return `Fuel ${number(costs.fuel)} · Food ${number(costs.food)} · Water ${number(costs.water)} · Supplies ${number(costs.supplies)}`;
+  }
+
+  function crossingProgress(crossing = normalizeRouteCrossing()) {
+    const totalLegs = crossing.legs.length;
+    const completedLegs = crossing.legs.filter(leg => leg.status === 'complete').length;
+    const totalEvents = state.route.plan.length;
+    const resolvedEvents = state.route.plan.filter(slot => slot.status !== 'pending').length;
+    return {
+      totalLegs,
+      completedLegs,
+      totalEvents,
+      resolvedEvents,
+      legPercent: totalLegs ? Math.round(completedLegs / totalLegs * 100) : 0,
+      eventPercent: totalEvents ? Math.round(resolvedEvents / totalEvents * 100) : 0
+    };
+  }
+
+  function crossingEventDetails(event) {
+    if (!event) return '';
+    const location = event.locationTypeId ? `<div class="notice location-encounter-detail"><strong>Level ${number(event.locationLevel)}: ${escapeHtml(event.locationLevelName || '')} — ${escapeHtml(event.locationTypeName || '')}</strong><br>${escapeHtml(event.locationLore || '')}<br><strong>Availability:</strong> ${escapeHtml(event.locationAvailability || 'None')}<br><strong>Shops:</strong> ${escapeHtml((event.locationShops || []).join(', ') || 'None')}<br><strong>Services:</strong> ${escapeHtml((event.locationServices || []).join(', ') || 'None')}<br><strong>Hazards:</strong> ${escapeHtml((event.locationHazards || []).join(', ') || 'Unknown')}</div>` : '';
+    return `${location}<p>${escapeHtml(event.description || '')}</p><p><strong>Reward:</strong> ${escapeHtml(event.reward || 'GM determination')}<br><strong>Failure:</strong> ${escapeHtml(event.failure || 'GM determination')}</p><span class="tag">${escapeHtml(event.category || 'Event')}</span><span class="tag">${escapeHtml(event.stat || 'Intelligence')} vs ${number(event.dc, 8)}</span>`;
+  }
+
+  function crossingEventCardHtml(slot, index, nextPendingId) {
+    const choices = Array.isArray(slot.choices) ? slot.choices : slot.event ? [slot.event] : [];
+    const selectedIndex = clamp(slot.selectedChoiceIndex, 0, Math.max(0, choices.length - 1));
+    const isNext = slot.id === nextPendingId;
+    return `<article class="route-card ${isNext ? 'current-crossing-event' : ''}" data-id="${escapeHtml(slot.id)}" style="${isNext ? 'border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)' : ''}">
+      <header><div><span class="tag">${escapeHtml(slot.phase)}</span>${slot.legIndex >= 0 ? `<span class="tag">Leg ${slot.legIndex + 1}</span>` : ''}${isNext ? '<span class="tag warn">NEXT</span>' : ''}<h4>${index + 1}. ${escapeHtml(slot.label)}</h4></div><span class="status-pill status-${escapeHtml(slot.status || 'pending')}">${escapeHtml(slot.status || 'pending')}</span></header>
+      ${choices.map((event, choiceIndex) => `<div class="tool-card" style="margin-top:8px;${choiceIndex === selectedIndex ? 'border-color:var(--accent)' : ''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><strong>${choices.length > 1 ? `Choice ${choiceIndex + 1}: ` : ''}${escapeHtml(event.name || 'Encounter')}</strong></div>${choices.length > 1 ? `<button class="compact-button crossing-select-choice no-print" data-id="${escapeHtml(slot.id)}" data-choice="${choiceIndex}" type="button" ${slot.status !== 'pending' ? 'disabled' : ''}>${choiceIndex === selectedIndex ? 'Selected' : 'Select'}</button>` : ''}</div>${crossingEventDetails(event)}</div>`).join('')}
+      ${slot.roll ? `<p><strong>Last roll:</strong> ${escapeHtml(slot.roll)}</p>` : ''}
+      <div class="button-row no-print" style="margin-top:8px">
+        <button class="compact-button crossing-roll" data-id="${escapeHtml(slot.id)}" type="button" ${slot.status !== 'pending' ? 'disabled' : ''}>Roll with Character</button>
+        <button class="compact-button crossing-success" data-id="${escapeHtml(slot.id)}" type="button" ${slot.status !== 'pending' ? 'disabled' : ''}>Mark Success</button>
+        <button class="compact-button crossing-failure" data-id="${escapeHtml(slot.id)}" type="button" ${slot.status !== 'pending' ? 'disabled' : ''}>Mark Failure</button>
+        <button class="compact-button crossing-redraw" data-id="${escapeHtml(slot.id)}" type="button" ${slot.status !== 'pending' ? 'disabled' : ''}>Redraw</button>
+        <button class="compact-button crossing-effect" data-effect="hull" type="button">Hull −1</button>
+        <button class="compact-button crossing-effect" data-effect="supplies" type="button">Supply −1</button>
+      </div>
+    </article>`;
+  }
+
+  function routeCrossingLegRows(crossing) {
+    return crossing.legs.map(leg => {
+      const eventSlots = state.route.plan.filter(slot => leg.eventIds.includes(slot.id));
+      const resolved = eventSlots.filter(slot => slot.status !== 'pending').length;
+      const check = crossingLegCanComplete(leg, crossing);
+      const active = crossing.status === 'underway' && leg.index === crossing.activeLegIndex;
+      return `<tr style="${active ? 'background:rgba(200,138,53,.09)' : ''}"><td>${leg.index + 1}</td><td><strong>${escapeHtml(crossingNodeName(leg.fromNodeId))}</strong><br>→ ${escapeHtml(crossingNodeName(leg.toNodeId))}</td><td>Level ${leg.fromLevel} → ${leg.toLevel}</td><td>${leg.distance}${leg.danger ? ' · <span class="bad">Dangerous</span>' : ' · Standard'}</td><td>${escapeHtml(crossingCostText(leg.costs))}</td><td>${resolved}/${eventSlots.length}</td><td><span class="status-pill status-${leg.status === 'complete' ? 'success' : leg.status === 'underway' ? 'pending' : 'pending'}">${escapeHtml(leg.status)}</span></td><td>${active ? `<button class="compact-button complete-crossing-leg no-print" type="button" ${check.ready ? '' : 'disabled'}>Complete Leg</button><div class="small-note">${escapeHtml(check.issue)}</div>` : ''}</td></tr>`;
+    }).join('');
+  }
+
+  function renderRoute() {
+    normalizeRouteCrossing();
+    if (!state.world?.map) generateWorldMap();
+    assignWorldLocationLevels(state.world.map, false);
+    const route = state.route;
+    const crossing = route.crossing;
+    const map = state.world.map;
+    const stations = crossingStationNodes(map);
+    const group = activeWorldGroup();
+    const groupNode = crossingNode(group?.currentNodeId, map);
+    if (!stations.some(node => node.id === route.startNodeId)) route.startNodeId = groupNode?.type === 'station' ? groupNode.id : stations[0]?.id || '';
+    if (!stations.some(node => node.id === route.endNodeId) || route.endNodeId === route.startNodeId) route.endNodeId = stations.find(node => node.id !== route.startNodeId)?.id || '';
+    const start = crossingNode(route.startNodeId, map);
+    const end = crossingNode(route.endNodeId, map);
+    const progress = crossingProgress(crossing);
+    const plannedCosts = crossingCostTotal(crossing.legs);
+    const remainingCosts = crossingRemainingCosts(crossing);
+    const nextSlot = nextPendingCrossingSlot();
+    const activeLeg = activeCrossingLeg(crossing);
+    const readiness = crossing.status === 'prepared' ? crossingReadiness(crossing) : { ready: false, issues: [] };
+    const generated = Boolean(crossing.crossingId);
+    const lockedBuilder = crossing.status === 'underway';
+    const stationOption = node => `<option value="${escapeHtml(node.id)}" ${node.id === route.startNodeId ? 'selected' : ''}>L${number(node.locationLevel)} · ${escapeHtml(node.name)} · ${escapeHtml(node.locationTypeName || 'Station')}</option>`;
+    const destinationOption = node => `<option value="${escapeHtml(node.id)}" ${node.id === route.endNodeId ? 'selected' : ''}>L${number(node.locationLevel)} · ${escapeHtml(node.name)} · ${escapeHtml(node.locationTypeName || 'Station')}</option>`;
+
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div><p class="eyebrow">Graph-validated station crossing and encounter tracking</p><h2>Route Encounter Generator and Crossing Tracker</h2><p class="rules-note">Choose two mapped stations, calculate a valid path through the current Europa world, generate encounters for every leg and intervening location, then advance the active expedition group only after encounters are resolved and vessel costs are paid.</p></div>
+          <div class="inline-actions no-print"><button id="open-world-from-route" class="secondary-action" type="button">Open World Map</button><a class="rules-link" href="barotrauma-rpg.html#game-flow">GAME FLOW →</a></div>
+        </section>
+        <div class="tool-grid">
+          <section class="tool-panel span-8">
+            <div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Crossing Builder</h3><p class="small-note">Active group: <strong>${escapeHtml(group?.name || 'No active group')}</strong> · Current position: <strong>${escapeHtml(groupNode?.name || 'Unknown')}</strong></p></div><button id="use-group-departure" class="secondary-action no-print" type="button" ${groupNode?.type === 'station' && !lockedBuilder ? '' : 'disabled'}>Use Group Station</button></div>
+            <div class="field-grid three">
+              <label class="field">Departure station<select id="crossing-start" ${lockedBuilder ? 'disabled' : ''}>${stations.map(stationOption).join('')}</select></label>
+              <label class="field">Destination station<select id="crossing-end" ${lockedBuilder ? 'disabled' : ''}>${stations.filter(node => node.id !== route.startNodeId).map(destinationOption).join('')}</select></label>
+              <label class="field">Routing priority<select id="crossing-mode" ${lockedBuilder ? 'disabled' : ''}><option value="balanced" ${route.routeMode === 'balanced' ? 'selected' : ''}>Balanced</option><option value="fastest" ${route.routeMode === 'fastest' ? 'selected' : ''}>Lowest distance</option><option value="safest" ${route.routeMode === 'safest' ? 'selected' : ''}>Avoid danger and deep levels</option><option value="fewest-legs" ${route.routeMode === 'fewest-legs' ? 'selected' : ''}>Fewest legs</option></select></label>
+              <label class="field">Additional pressure events<input id="crossing-pressure" type="number" min="0" max="50" value="${number(route.routePressure)}" ${lockedBuilder ? 'disabled' : ''}></label>
+              <label class="field">Navigation reduction<input id="crossing-reduction" type="number" min="0" max="20" value="${number(route.navigationReduction)}" ${lockedBuilder ? 'disabled' : ''}></label>
+              <label class="field">Sanity events<select id="crossing-sanity" ${lockedBuilder ? 'disabled' : ''}><option value="true" ${route.sanityEnabled ? 'selected' : ''}>Enabled</option><option value="false" ${!route.sanityEnabled ? 'selected' : ''}>Disabled</option></select></label>
+            </div>
+            <div class="check-list" style="margin-top:10px"><label class="check-row"><input id="crossing-navigation-expert" type="checkbox" ${route.navigationExpert ? 'checked' : ''} ${lockedBuilder ? 'disabled' : ''}><span><strong>Navigator: Navigation Expert</strong><br><span class="small-note">Applies the editable event reduction across the generated crossing.</span></span><span>${route.navigationExpert ? `−${route.navigationReduction}` : 'Off'}</span></label><label class="check-row"><input id="crossing-mapmaker" type="checkbox" ${route.mapmaker ? 'checked' : ''} ${lockedBuilder ? 'disabled' : ''}><span><strong>Navigator: Mapmaker</strong><br><span class="small-note">Each generated encounter presents two choices.</span></span><span>${route.mapmaker ? 'On' : 'Off'}</span></label></div>
+            <div class="button-row no-print" style="margin-top:12px"><button id="generate-crossing" class="primary-action" type="button" ${lockedBuilder || !start || !end ? 'disabled' : ''}>Generate Valid Crossing</button><button id="start-crossing" class="secondary-action" type="button" ${crossing.status === 'prepared' && readiness.ready ? '' : 'disabled'}>Start Crossing</button><button id="abort-crossing" class="danger-button" type="button" ${['prepared','underway'].includes(crossing.status) ? '' : 'disabled'}>Abort</button><button id="clear-crossing" class="secondary-action" type="button" ${generated && crossing.status !== 'underway' ? '' : 'disabled'}>Clear</button></div>
+            <div class="notice ${route.crossingMessage && /insufficient|incomplete|not |no |exceed|inoperative/i.test(route.crossingMessage) ? 'bad' : ''}" style="margin-top:10px">${escapeHtml(route.crossingMessage || 'Select a departure and destination, then generate a crossing.')}</div>
+          </section>
+
+          <section class="tool-panel span-4">
+            <h3>Vessel Consumption Rules</h3>
+            <div class="field-grid">
+              <label class="field">Fuel per route distance<input class="crossing-config" data-key="fuelPerDistance" type="number" min="0" step="1" value="${number(route.crossingConfig.fuelPerDistance)}" ${lockedBuilder ? 'disabled' : ''}></label>
+              <label class="field">Food per leg<input class="crossing-config" data-key="foodPerLeg" type="number" min="0" step="1" value="${number(route.crossingConfig.foodPerLeg)}" ${lockedBuilder ? 'disabled' : ''}></label>
+              <label class="field">Water per leg<input class="crossing-config" data-key="waterPerLeg" type="number" min="0" step="1" value="${number(route.crossingConfig.waterPerLeg)}" ${lockedBuilder ? 'disabled' : ''}></label>
+              <label class="field">Supplies per dangerous leg<input class="crossing-config" data-key="suppliesPerDangerousLeg" type="number" min="0" step="1" value="${number(route.crossingConfig.suppliesPerDangerousLeg)}" ${lockedBuilder ? 'disabled' : ''}></label>
+              <label class="field">Danger event bonus<input class="crossing-config" data-key="dangerEventBonus" type="number" min="0" max="10" step="1" value="${number(route.crossingConfig.dangerEventBonus)}" ${lockedBuilder ? 'disabled' : ''}></label>
+            </div>
+            <p class="small-note">Costs are stored on each generated leg. Changing these values does not rewrite a crossing already underway.</p>
+            <div class="metric-row"><div class="metric"><span>Fuel aboard</span><strong>${number(state.submarine.resources.fuel)}</strong></div><div class="metric"><span>Food</span><strong>${number(state.submarine.resources.food)}</strong></div><div class="metric"><span>Water</span><strong>${number(state.submarine.resources.water)}</strong></div><div class="metric"><span>Supplies</span><strong>${number(state.submarine.resources.supplies)}</strong></div></div>
+          </section>
+
+          <section class="tool-panel span-12">
+            <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Persistent voyage record</p><h3>${generated ? `${escapeHtml(crossingNodeName(crossing.departureNodeId))} → ${escapeHtml(crossingNodeName(crossing.destinationNodeId))}` : 'No crossing prepared'}</h3><p class="small-note">${generated ? crossing.pathNodeIds.map(crossingNodeName).map(escapeHtml).join(' → ') : 'Generate a graph-backed route to create legs and encounter slots.'}</p></div><span class="status-pill ${crossingStatusTone(crossing.status)}">${escapeHtml(crossingStatusLabel(crossing.status))}</span></div>
+            <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Legs</span><strong>${progress.completedLegs}/${progress.totalLegs}</strong></div><div class="metric"><span>Events</span><strong>${progress.resolvedEvents}/${progress.totalEvents}</strong></div><div class="metric"><span>Graph distance</span><strong>${number(route.distance)}</strong></div><div class="metric"><span>Current location</span><strong>${escapeHtml(crossingNodeName(crossing.currentNodeId))}</strong></div><div class="metric"><span>Planned costs</span><strong>${escapeHtml(crossingCostText(plannedCosts))}</strong></div><div class="metric"><span>Remaining costs</span><strong>${escapeHtml(crossingCostText(remainingCosts))}</strong></div></div>
+            <div style="height:10px;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:12px"><div style="height:100%;width:${progress.legPercent}%;background:var(--accent)"></div></div>
+            ${crossing.status === 'prepared' && readiness.issues.length ? `<div class="notice bad" style="margin-top:10px"><strong>Departure blocked:</strong><br>${readiness.issues.map(escapeHtml).join('<br>')}</div>` : ''}
+          </section>
+
+          <section class="tool-panel span-6">
+            <h3>Job Cards</h3>
+            <div class="check-list">${JOBS.map(job => `<label class="check-row"><input class="crossing-job" data-job="${job.id}" type="checkbox" ${route.jobs.includes(job.id) ? 'checked' : ''} ${lockedBuilder ? 'disabled' : ''}><span><strong>${escapeHtml(job.name)}</strong><br><span class="small-note">${escapeHtml(job.difficulty)} · ${job.events} event card${job.events === 1 ? '' : 's'}</span></span><strong>${job.payment}c</strong></label>`).join('')}</div>
+          </section>
+
+          <section class="tool-panel span-6">
+            <h3>Weighted Route Encounter Table</h3>
+            <p class="small-note">Nonstation path nodes always contribute their own location encounter. These weights generate the remaining travel and job encounters.</p>
+            <div class="table-wrap"><table class="tool-table" style="min-width:480px"><thead><tr><th>Category</th><th>Weight</th><th>Available cards</th></tr></thead><tbody>${EVENT_CATEGORIES.map(category => `<tr><td>${escapeHtml(category)}</td><td><input class="crossing-weight" data-category="${escapeHtml(category)}" type="number" min="0" max="100" value="${number(route.table[category], 0)}" ${lockedBuilder ? 'disabled' : ''}></td><td>${category === 'Location' ? (LOCATION_LEVEL_REGISTRY.locations || []).length : EVENTS.filter(event => event.category === category).length}</td></tr>`).join('')}</tbody></table></div>
+            <button id="reset-crossing-table" class="secondary-action no-print" type="button" style="margin-top:10px" ${lockedBuilder ? 'disabled' : ''}>Reset Default Weights</button>
+          </section>
+
+          <section class="tool-panel span-12">
+            <h3>Crossing Legs</h3>
+            <div class="table-wrap"><table class="tool-table" style="min-width:1200px"><thead><tr><th>Leg</th><th>Route</th><th>Levels</th><th>Distance</th><th>Costs</th><th>Encounters</th><th>Status</th><th>Advance</th></tr></thead><tbody>${generated ? routeCrossingLegRows(crossing) : '<tr><td colspan="8">No generated crossing.</td></tr>'}</tbody></table></div>
+          </section>
+
+          <section class="tool-panel span-12">
+            <div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Sequential Crossing Encounters</h3><p class="small-note">Job encounters resolve first. Travel and location encounters then resolve in exact leg order. A leg cannot complete while any of its encounters remain pending.</p></div>${nextSlot ? `<div class="metric"><span>Next encounter</span><strong>${escapeHtml(crossingSelectedEvent(nextSlot)?.name || nextSlot.label)}</strong></div>` : ''}</div>
+            <div class="card-list" style="margin-top:12px">${route.plan.map((slot, index) => crossingEventCardHtml(slot, index, nextSlot?.id)).join('') || '<div class="notice">No crossing encounters generated.</div>'}</div>
+          </section>
+
+          <section class="tool-panel span-12">
+            <h3>Crossing Log</h3>
+            <div class="card-list">${crossing.log.slice(0, 30).map(entry => `<div class="small-note"><strong>${escapeHtml(entry.canonicalAt || entry.at)}</strong> — ${escapeHtml(entry.text)}</div>`).join('') || '<div class="small-note">No crossing activity recorded.</div>'}</div>
+          </section>
+        </div>
+      </div>`;
+
+    bindTextInput('#crossing-start', element => {
+      route.startNodeId = element.value;
+      route.start = crossingNode(element.value)?.name || '';
+      if (route.endNodeId === route.startNodeId) route.endNodeId = stations.find(node => node.id !== route.startNodeId)?.id || '';
+      save(); renderRoute();
+    }, 'change');
+    bindTextInput('#crossing-end', element => { route.endNodeId = element.value; route.end = crossingNode(element.value)?.name || ''; }, 'change');
+    bindTextInput('#crossing-mode', element => { route.routeMode = element.value; }, 'change');
+    bindTextInput('#crossing-pressure', element => { route.routePressure = clamp(element.value, 0, 50); }, 'change');
+    bindTextInput('#crossing-reduction', element => { route.navigationReduction = clamp(element.value, 0, 20); }, 'change');
+    bindTextInput('#crossing-sanity', element => { route.sanityEnabled = element.value === 'true'; }, 'change');
+    bindTextInput('#crossing-navigation-expert', element => { route.navigationExpert = element.checked; save(); renderRoute(); }, 'change');
+    bindTextInput('#crossing-mapmaker', element => { route.mapmaker = element.checked; save(); renderRoute(); }, 'change');
+    root.querySelectorAll('.crossing-config').forEach(input => input.addEventListener('change', event => { route.crossingConfig[event.target.dataset.key] = Math.max(0, number(event.target.value)); save(); renderRoute(); }));
+    root.querySelectorAll('.crossing-job').forEach(input => input.addEventListener('change', event => { const id = event.target.dataset.job; route.jobs = event.target.checked ? [...new Set([...route.jobs, id])] : route.jobs.filter(item => item !== id); save(); renderRoute(); }));
+    root.querySelectorAll('.crossing-weight').forEach(input => input.addEventListener('change', event => { route.table[event.target.dataset.category] = clamp(event.target.value, 0, 100); save(); }));
+    root.querySelector('#reset-crossing-table')?.addEventListener('click', () => { route.table = Object.fromEntries(EVENT_CATEGORIES.map(category => [category, category === 'Sanity' ? 1 : 3])); save(); renderRoute(); });
+    root.querySelector('#use-group-departure')?.addEventListener('click', () => { if (groupNode?.type === 'station') { route.startNodeId = groupNode.id; route.start = groupNode.name; if (route.endNodeId === groupNode.id) route.endNodeId = stations.find(node => node.id !== groupNode.id)?.id || ''; save(); renderRoute(); } });
+    root.querySelector('#generate-crossing')?.addEventListener('click', () => { try { generateValidCrossing(); } catch (error) { route.crossingMessage = error.message; save(); } renderRoute(); });
+    root.querySelector('#start-crossing')?.addEventListener('click', () => { startCrossing(); renderRoute(); });
+    root.querySelector('#abort-crossing')?.addEventListener('click', () => { abortCrossing(); renderRoute(); });
+    root.querySelector('#clear-crossing')?.addEventListener('click', () => { clearRouteCrossing(); renderRoute(); });
+    root.querySelector('#open-world-from-route')?.addEventListener('click', () => setTool('world'));
+    root.querySelector('.complete-crossing-leg')?.addEventListener('click', () => { completeCrossingLeg(); renderRoute(); });
+    root.querySelectorAll('.crossing-select-choice').forEach(button => button.addEventListener('click', event => { selectCrossingChoice(event.target.dataset.id, number(event.target.dataset.choice)); renderRoute(); }));
+    root.querySelectorAll('.crossing-roll').forEach(button => button.addEventListener('click', event => { rollCrossingEvent(event.target.dataset.id); renderRoute(); }));
+    root.querySelectorAll('.crossing-success').forEach(button => button.addEventListener('click', event => { resolveCrossingEvent(event.target.dataset.id, 'success'); renderRoute(); }));
+    root.querySelectorAll('.crossing-failure').forEach(button => button.addEventListener('click', event => { resolveCrossingEvent(event.target.dataset.id, 'failure'); renderRoute(); }));
+    root.querySelectorAll('.crossing-redraw').forEach(button => button.addEventListener('click', event => { redrawCrossingEvent(event.target.dataset.id); renderRoute(); }));
+    root.querySelectorAll('.crossing-effect').forEach(button => button.addEventListener('click', event => { applyCrossingQuickEffect(event.target.dataset.effect); renderRoute(); }));
+  }
+
+  function renderSubmarineCrossingPanel() {
+    const crossing = normalizeRouteCrossing();
+    const shell = root.querySelector('.tool-shell');
+    const hero = shell?.querySelector(':scope > .tool-hero');
+    if (!shell || !hero) return;
+    const progress = crossingProgress(crossing);
+    const nextSlot = nextPendingCrossingSlot();
+    const nextEvent = crossingSelectedEvent(nextSlot);
+    const leg = activeCrossingLeg(crossing);
+    const legCheck = crossingLegCanComplete(leg, crossing);
+    const remaining = crossingRemainingCosts(crossing);
+    const readiness = crossing.status === 'prepared' ? crossingReadiness(crossing) : { ready: false, issues: [] };
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel submarine-crossing-panel';
+    panel.innerHTML = crossing.crossingId ? `
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Active expedition crossing</p><h3>${escapeHtml(crossingNodeName(crossing.departureNodeId))} → ${escapeHtml(crossingNodeName(crossing.destinationNodeId))}</h3><p class="small-note">Current position: ${escapeHtml(crossingNodeName(crossing.currentNodeId))}${leg ? ` · Active leg ${leg.index + 1}: ${escapeHtml(crossingNodeName(leg.fromNodeId))} → ${escapeHtml(crossingNodeName(leg.toNodeId))}` : ''}</p></div><span class="status-pill ${crossingStatusTone(crossing.status)}">${escapeHtml(crossingStatusLabel(crossing.status))}</span></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Leg progress</span><strong>${progress.completedLegs}/${progress.totalLegs}</strong></div><div class="metric"><span>Encounter progress</span><strong>${progress.resolvedEvents}/${progress.totalEvents}</strong></div><div class="metric"><span>Next encounter</span><strong>${escapeHtml(nextEvent?.name || 'None pending')}</strong></div><div class="metric"><span>Remaining route cost</span><strong>${escapeHtml(crossingCostText(remaining))}</strong></div><div class="metric"><span>Fuel aboard</span><strong>${number(state.submarine.resources.fuel)}</strong></div><div class="metric"><span>Hull</span><strong>${number(state.submarine.hullCurrent)}/${calculateSubmarine().totals.hull}</strong></div></div>
+      ${leg ? `<div class="notice" style="margin-top:10px"><strong>Active leg costs:</strong> ${escapeHtml(crossingCostText(leg.costs))}<br><strong>Advance condition:</strong> ${escapeHtml(legCheck.ready ? 'All encounters resolved and stores available.' : legCheck.issue)}</div>` : ''}
+      ${crossing.status === 'prepared' && readiness.issues.length ? `<div class="notice bad" style="margin-top:10px">${readiness.issues.map(escapeHtml).join('<br>')}</div>` : ''}
+      <div class="button-row no-print" style="margin-top:10px"><button id="sub-open-route" class="primary-action" type="button">Open Full Route Tracker</button><button id="sub-start-crossing" class="secondary-action" type="button" ${crossing.status === 'prepared' && readiness.ready ? '' : 'disabled'}>Start Crossing</button><button id="sub-roll-next" class="secondary-action" type="button" ${crossing.status === 'underway' && nextSlot ? '' : 'disabled'}>Roll Next Encounter</button><button id="sub-success-next" class="secondary-action" type="button" ${crossing.status === 'underway' && nextSlot ? '' : 'disabled'}>Next Success</button><button id="sub-failure-next" class="danger-button" type="button" ${crossing.status === 'underway' && nextSlot ? '' : 'disabled'}>Next Failure</button><button id="sub-complete-leg" class="secondary-action" type="button" ${legCheck.ready ? '' : 'disabled'}>Complete Active Leg</button></div>
+      <div class="button-row no-print" style="margin-top:8px"><button class="compact-button sub-crossing-effect" data-effect="hull" type="button">Hull −1</button><button class="compact-button sub-crossing-effect" data-effect="repair" type="button">Hull +1</button><button class="compact-button sub-crossing-effect" data-effect="fuel" type="button">Fuel −1</button><button class="compact-button sub-crossing-effect" data-effect="supplies" type="button">Supply −1</button><button class="compact-button sub-crossing-effect" data-effect="food" type="button">Food −1</button><button class="compact-button sub-crossing-effect" data-effect="water" type="button">Water −1</button></div>
+      <p class="small-note" style="margin-bottom:0">${escapeHtml(state.route.crossingMessage || '')}</p>
+    ` : `<div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Expedition route tracking</p><h3>No station crossing prepared</h3><p class="small-note">Use the Route Planner to calculate a valid path between mapped stations and generate its encounters.</p></div><button id="sub-open-route" class="primary-action no-print" type="button">Build a Crossing</button></div>`;
+    hero.insertAdjacentElement('afterend', panel);
+    panel.querySelector('#sub-open-route')?.addEventListener('click', () => setTool('route'));
+    panel.querySelector('#sub-start-crossing')?.addEventListener('click', () => { startCrossing(); renderSubmarine(); });
+    panel.querySelector('#sub-roll-next')?.addEventListener('click', () => { const slot = nextPendingCrossingSlot(); if (slot) rollCrossingEvent(slot.id); renderSubmarine(); });
+    panel.querySelector('#sub-success-next')?.addEventListener('click', () => { const slot = nextPendingCrossingSlot(); if (slot) resolveCrossingEvent(slot.id, 'success'); renderSubmarine(); });
+    panel.querySelector('#sub-failure-next')?.addEventListener('click', () => { const slot = nextPendingCrossingSlot(); if (slot) resolveCrossingEvent(slot.id, 'failure'); renderSubmarine(); });
+    panel.querySelector('#sub-complete-leg')?.addEventListener('click', () => { completeCrossingLeg(); renderSubmarine(); });
+    panel.querySelectorAll('.sub-crossing-effect').forEach(button => button.addEventListener('click', event => { applyCrossingQuickEffect(event.target.dataset.effect); renderSubmarine(); }));
+  }
+
+  const renderSubmarineBeforeRouteCrossing = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCrossingTracker() {
+    normalizeRouteCrossing();
+    renderSubmarineBeforeRouteCrossing();
+    renderSubmarineCrossingPanel();
+  };
