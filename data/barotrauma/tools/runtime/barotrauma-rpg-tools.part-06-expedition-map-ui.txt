@@ -1,0 +1,314 @@
+
+  function normalizeWorldMapView() {
+    state.world.mapView = state.world.mapView && typeof state.world.mapView === 'object' ? state.world.mapView : {};
+    const view = state.world.mapView;
+    view.scale = clamp(view.scale ?? 1, 0.2, 4);
+    view.scrollLeft = Math.max(0, number(view.scrollLeft));
+    view.scrollTop = Math.max(0, number(view.scrollTop));
+    view.focusedNodeId = String(view.focusedNodeId || '');
+    view.focusedEdgeId = String(view.focusedEdgeId || '');
+    view.initialized = Boolean(view.initialized);
+    return view;
+  }
+
+  function activeCrossingLegByEdge(edgeId) {
+    return normalizeRouteCrossing().legs.find(leg => leg.edgeId === edgeId) || null;
+  }
+
+  function mapNodeTooltipHtml(node) {
+    const groups = Object.values(normalizeWorldHub().publicState.groups).filter(group => group.currentNodeId === node.id);
+    const isShip = managedSubmarineNodeId() === node.id;
+    const wreck = wreckByNodeId(node.id);
+    return `<strong>${escapeHtml(node.name)}</strong><br><span>Level ${number(node.locationLevel, 1)} · ${escapeHtml(node.locationTypeName || node.type)}</span>${node.faction ? `<br><span>${escapeHtml(node.faction)}</span>` : ''}${node.specialty ? `<br><span>${escapeHtml(node.specialty)}</span>` : ''}${groups.length ? `<br><span>Groups: ${escapeHtml(groups.map(group => group.name).join(', '))}</span>` : ''}${isShip ? '<br><strong style="color:#ff6464">Managed submarine location</strong>' : ''}${wreck ? `<br><span>Recoverable: ${wreck.recoverableItemUnits} item units · ${wreck.recoverableMarks} Marks</span>` : ''}`;
+  }
+
+  function mapEdgeTooltipHtml(edge, map = state.world?.map) {
+    const from = crossingNode(edge.a, map);
+    const to = crossingNode(edge.b, map);
+    const leg = activeCrossingLegByEdge(edge.id);
+    return `<strong>${escapeHtml(from?.name || edge.a)} → ${escapeHtml(to?.name || edge.b)}</strong><br><span>Distance ${number(edge.distance, 1)} · ${edge.danger ? 'Dangerous route' : 'Standard route'}</span>${leg ? `<br><span>Filed crossing leg ${leg.index + 1} · ${escapeHtml(leg.status)}</span>` : ''}${edge.wreckSiteId ? '<br><span>Wreck transit route</span>' : ''}`;
+  }
+
+  function managedCrossingEdgeState(edgeId) {
+    const crossing = normalizeRouteCrossing();
+    const leg = crossing.legs.find(item => item.edgeId === edgeId);
+    if (!leg) return '';
+    if (leg.status === 'complete') return 'crossing-complete';
+    if (leg.status === 'underway' || leg.status === 'lost') return 'crossing-current';
+    return 'crossing-filed';
+  }
+
+  mapSvg = function mapSvgWithInteractiveExpeditionState(map, selected = []) {
+    if (!map) return '';
+    normalizeManagedExpedition();
+    const nodeById = Object.fromEntries(map.nodes.map(node => [node.id, node]));
+    const path = selected.length === 2 ? shortestPath(map, selected[0], selected[1]) : null;
+    const pathEdges = new Set();
+    if (path) for (let index = 0; index < path.ids.length - 1; index += 1) pathEdges.add([path.ids[index], path.ids[index + 1]].sort().join('|'));
+    const groupsByNode = {};
+    for (const group of Object.values(normalizeWorldHub().publicState.groups)) groupsByNode[group.currentNodeId] = [...(groupsByNode[group.currentNodeId] || []), group];
+    const shipNodeId = managedSubmarineNodeId();
+    const view = normalizeWorldMapView();
+    return `<svg id="world-map-svg" viewBox="0 0 ${map.width} ${map.height}" role="img" aria-label="Interactive Europa public-world campaign map" data-map-scale="${view.scale}">
+      <defs>
+        <radialGradient id="anomalyGlow"><stop offset="0" stop-color="#efcb7e" stop-opacity=".55"/><stop offset="1" stop-color="#efcb7e" stop-opacity="0"/></radialGradient>
+        <filter id="shipGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <circle cx="${map.width / 2}" cy="${map.height / 2}" r="180" fill="url(#anomalyGlow)"/>
+      ${map.edges.map(edge => {
+        const a = nodeById[edge.a]; const b = nodeById[edge.b];
+        if (!a || !b) return '';
+        const key = [edge.a, edge.b].sort().join('|');
+        const crossingState = managedCrossingEdgeState(edge.id);
+        const routeStyle = crossingState === 'crossing-current' ? 'stroke:#ff5555;stroke-width:12' : crossingState === 'crossing-complete' ? 'stroke:#65d78c;stroke-width:9' : crossingState === 'crossing-filed' ? 'stroke:#57b9ff;stroke-width:8' : pathEdges.has(key) ? 'stroke:#e9c36d;stroke-width:7' : '';
+        return `<g class="map-edge-group ${crossingState}" data-edge-id="${escapeHtml(edge.id)}"><line class="map-edge-hit" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="transparent" stroke-width="28" pointer-events="stroke"/><line class="map-edge ${edge.danger ? 'danger' : ''}" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" ${routeStyle ? `style="${routeStyle}"` : ''} pointer-events="none"/><text x="${((a.x+b.x)/2).toFixed(1)}" y="${((a.y+b.y)/2).toFixed(1)}" fill="#b8c0ca" font-size="13" pointer-events="none">${edge.distance}</text></g>`;
+      }).join('')}
+      ${shipNodeId && nodeById[shipNodeId] ? `<g class="managed-sub-location-marker" pointer-events="none"><circle cx="${nodeById[shipNodeId].x.toFixed(1)}" cy="${nodeById[shipNodeId].y.toFixed(1)}" r="54" fill="none" stroke="#ff3434" stroke-width="11" filter="url(#shipGlow)"/><circle cx="${nodeById[shipNodeId].x.toFixed(1)}" cy="${nodeById[shipNodeId].y.toFixed(1)}" r="68" fill="none" stroke="#ff3434" stroke-width="4" stroke-dasharray="12 8"/></g>` : ''}
+      ${map.nodes.map(node => {
+        const groups = groupsByNode[node.id] || [];
+        const wreck = wreckByNodeId(node.id);
+        const showLabel = node.type === 'station' || node.type === 'anomaly' || node.type === 'wreck' || selected.includes(node.id) || groups.length || view.focusedNodeId === node.id;
+        const color = LOCATION_LEVEL_COLORS[node.locationLevel] || '#888888';
+        const radius = node.type === 'anomaly' ? 24 : node.type === 'station' ? 13 : node.type === 'wreck' ? 11 : 8;
+        const stroke = node.type === 'station' && node.factionColor ? node.factionColor : node.type === 'wreck' ? '#e25d5d' : color;
+        return `<g class="map-node ${escapeHtml(node.type)} ${selected.includes(node.id) ? 'selected' : ''} ${view.focusedNodeId === node.id ? 'map-focused' : ''}" data-node-id="${escapeHtml(node.id)}" transform="translate(${node.x.toFixed(1)} ${node.y.toFixed(1)})"><circle r="${radius}" style="fill:${color}55;stroke:${stroke};stroke-width:${view.focusedNodeId === node.id ? 6 : node.type === 'anomaly' ? 4 : 2.5}"/><text class="map-node-level" x="0" y="3" text-anchor="middle" fill="#fff" font-size="${node.locationLevel === 10 ? 7 : 6}" font-weight="900" pointer-events="none">${number(node.locationLevel, '?')}</text>${showLabel ? `<text x="${node.type === 'anomaly' ? 32 : 18}" y="5" font-size="${node.type === 'station' ? 14 : 12}" pointer-events="none">${escapeHtml(node.name)}</text>` : ''}${groups.map((group, index) => `<g transform="translate(${index * 13 - 6} -20)" pointer-events="none"><circle r="6" fill="#ffffff" stroke="#111"/><title>${escapeHtml(group.name)}</title></g>`).join('')}${wreck && !wreck.claimed ? '<path d="M-8 -8 L8 8 M8 -8 L-8 8" stroke="#ff8b8b" stroke-width="3" pointer-events="none"/>' : ''}</g>`;
+      }).join('')}
+    </svg>`;
+  };
+
+  function focusedMapNode() {
+    const view = normalizeWorldMapView();
+    return crossingNode(view.focusedNodeId);
+  }
+
+  function focusedMapEdge() {
+    const view = normalizeWorldMapView();
+    return state.world?.map?.edges?.find(edge => edge.id === view.focusedEdgeId) || null;
+  }
+
+  function stationDetailsHtml(node) {
+    const station = STATIONS.find(item => item.worldNodeId === node.id || item.name === node.name);
+    const stationRecord = station ? normalizeStationCommerce().stations[stationIdentity(station)] : null;
+    const groups = Object.values(normalizeWorldHub().publicState.groups).filter(group => group.currentNodeId === node.id);
+    return `<div class="metric-row"><div class="metric"><span>Level / type</span><strong>L${number(node.locationLevel)} · ${escapeHtml(node.locationTypeName || node.type)}</strong></div><div class="metric"><span>Faction</span><strong>${escapeHtml(node.faction || 'Unclaimed')}</strong></div><div class="metric"><span>Specialty</span><strong>${escapeHtml(node.specialty || 'None')}</strong></div><div class="metric"><span>Groups present</span><strong>${groups.length}</strong></div><div class="metric"><span>Station reputation</span><strong>${number(stationRecord?.stationReputation)}</strong></div><div class="metric"><span>Owner reputation</span><strong>${number(stationRecord?.ownerReputation)}</strong></div></div><p>${escapeHtml(node.locationLore || node.details || '')}</p><p><strong>Availability:</strong> ${escapeHtml(node.locationAvailability || 'Unknown')}<br><strong>Shops:</strong> ${escapeHtml((node.locationShops || []).join(', ') || 'None')}<br><strong>Services:</strong> ${escapeHtml((node.locationServices || []).join(', ') || 'None')}<br><strong>Hazards:</strong> ${escapeHtml((node.locationHazards || []).join(', ') || 'None recorded')}<br><strong>Important locals:</strong> ${escapeHtml(node.locals || 'No named local contacts')}</p>`;
+  }
+
+  function wreckDetailsHtml(node, wreck) {
+    const remainingLots = (wreck.salvageLots || []).filter(lot => !lot.claimed);
+    return `<div class="notice bad"><strong>Lost with all hands</strong><br>${escapeHtml(node.details || '')}</div><div class="metric-row" style="margin-top:10px"><div class="metric"><span>Recoverable item units</span><strong>${wreck.recoverableItemUnits}</strong></div><div class="metric"><span>Recoverable Marks</span><strong>${wreck.recoverableMarks}</strong></div><div class="metric"><span>Estimated item value</span><strong>${wreck.estimatedItemValue}</strong></div><div class="metric"><span>Claim state</span><strong>${wreck.claimed ? 'Scavenged' : 'Unclaimed'}</strong></div></div><div class="card-list" style="margin-top:10px">${remainingLots.map(lot => `<div class="small-note"><strong>${escapeHtml(lot.name)}</strong> ×${number(lot.quantity)} · ${escapeHtml(lot.source)}</div>`).join('') || '<div class="small-note">No recoverable items remain.</div>'}</div>`;
+  }
+
+  function mapInspectionPanelHtml() {
+    const node = focusedMapNode();
+    const edge = focusedMapEdge();
+    if (node) {
+      const wreck = wreckByNodeId(node.id);
+      const station = node.type === 'station';
+      return `<section class="tool-panel span-12 map-inspection-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Selected map location</p><h3>${escapeHtml(node.name)}</h3><p class="small-note">Node ${escapeHtml(node.id)} · Ring ${number(node.ring)} · Level ${number(node.locationLevel)}</p></div><div class="button-row no-print">${station ? '<button id="map-set-departure" class="secondary-action" type="button">Set Departure</button><button id="map-set-destination" class="secondary-action" type="button">Set Destination</button><button id="map-open-station" class="secondary-action" type="button">Open Station in Sub Manager</button>' : ''}<button id="map-clear-focus" class="compact-button" type="button">Clear Highlight</button></div></div>${wreck ? wreckDetailsHtml(node, wreck) : station ? stationDetailsHtml(node) : `<p>${escapeHtml(node.locationLore || node.details || '')}</p><p><strong>Availability:</strong> ${escapeHtml(node.locationAvailability || 'None')}<br><strong>Services:</strong> ${escapeHtml((node.locationServices || []).join(', ') || 'None')}<br><strong>Hazards:</strong> ${escapeHtml((node.locationHazards || []).join(', ') || 'Unknown')}</p>`}${wreck && !wreck.claimed ? `<div class="button-row no-print"><button id="map-scavenge-wreck" class="primary-action" type="button" ${canActiveGroupScavengeWreck(wreck) ? '' : 'disabled'}>Recover Quarter-Salvage</button></div><p class="small-note">Another expedition may salvage this wreck while positioned at the wreck or either endpoint of its transit route.</p>` : ''}</section>`;
+    }
+    if (edge) {
+      const from = crossingNode(edge.a); const to = crossingNode(edge.b); const leg = activeCrossingLegByEdge(edge.id);
+      return `<section class="tool-panel span-12 map-inspection-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Selected transit route</p><h3>${escapeHtml(from?.name || edge.a)} → ${escapeHtml(to?.name || edge.b)}</h3></div><button id="map-clear-focus" class="compact-button no-print" type="button">Clear Highlight</button></div><div class="metric-row"><div class="metric"><span>Distance</span><strong>${number(edge.distance, 1)}</strong></div><div class="metric"><span>Danger</span><strong class="${edge.danger ? 'bad' : 'good'}">${edge.danger ? 'Dangerous' : 'Standard'}</strong></div><div class="metric"><span>Filed crossing</span><strong>${leg ? `Leg ${leg.index + 1}` : 'No'}</strong></div><div class="metric"><span>Leg status</span><strong>${escapeHtml(leg?.status || 'Unfiled')}</strong></div></div></section>`;
+    }
+    return `<section class="tool-panel span-12 map-inspection-panel"><div class="notice">Click a station, location, wreck, or route line to highlight it and inspect its full details. Route departure and destination are assigned from the selected station’s detail panel.</div></section>`;
+  }
+
+  function installWorldMapZoomAndInspection() {
+    const frame = root.querySelector('.expanded-map-frame, .map-frame');
+    const svg = frame?.querySelector('#world-map-svg');
+    if (!frame || !svg) return;
+    const view = normalizeWorldMapView();
+    const basePixels = 6000;
+    const applyScale = () => {
+      svg.style.width = `${basePixels * view.scale}px`;
+      svg.style.height = `${basePixels * view.scale}px`;
+      svg.style.maxWidth = 'none';
+    };
+    applyScale();
+    requestAnimationFrame(() => {
+      if (!view.initialized) {
+        const node = crossingNode(managedSubmarineNodeId());
+        if (node) {
+          const x = node.x / state.world.map.width * svg.clientWidth;
+          const y = node.y / state.world.map.height * svg.clientHeight;
+          frame.scrollLeft = Math.max(0, x - frame.clientWidth / 2);
+          frame.scrollTop = Math.max(0, y - frame.clientHeight / 2);
+        }
+        view.initialized = true;
+      } else {
+        frame.scrollLeft = view.scrollLeft;
+        frame.scrollTop = view.scrollTop;
+      }
+    });
+    frame.addEventListener('wheel', event => {
+      event.preventDefault();
+      const rect = frame.getBoundingClientRect();
+      const localX = event.clientX - rect.left;
+      const localY = event.clientY - rect.top;
+      const contentX = frame.scrollLeft + localX;
+      const contentY = frame.scrollTop + localY;
+      const oldScale = view.scale;
+      const factor = event.deltaY < 0 ? 1.16 : 1 / 1.16;
+      view.scale = clamp(oldScale * factor, 0.2, 4);
+      const ratio = view.scale / oldScale;
+      applyScale();
+      frame.scrollLeft = contentX * ratio - localX;
+      frame.scrollTop = contentY * ratio - localY;
+      view.scrollLeft = frame.scrollLeft;
+      view.scrollTop = frame.scrollTop;
+    }, { passive: false });
+    frame.addEventListener('scroll', () => { view.scrollLeft = frame.scrollLeft; view.scrollTop = frame.scrollTop; });
+
+    let tooltip = document.getElementById('world-map-hover-tooltip');
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.id = 'world-map-hover-tooltip';
+      tooltip.className = 'world-map-hover-tooltip';
+      tooltip.style.cssText = 'position:fixed;display:none;z-index:10000;pointer-events:none;max-width:360px;padding:10px 12px;border:1px solid var(--accent);border-radius:10px;background:#0d1016;color:var(--ink);box-shadow:var(--shadow);font-size:.82rem;line-height:1.45';
+      document.body.appendChild(tooltip);
+    }
+    frame.addEventListener('pointermove', event => {
+      const nodeElement = event.target.closest?.('[data-node-id]');
+      const edgeElement = event.target.closest?.('[data-edge-id]');
+      if (!nodeElement && !edgeElement) { tooltip.style.display = 'none'; return; }
+      if (nodeElement) {
+        const node = crossingNode(nodeElement.dataset.nodeId);
+        tooltip.innerHTML = node ? mapNodeTooltipHtml(node) : '';
+      } else {
+        const edge = state.world.map.edges.find(item => item.id === edgeElement.dataset.edgeId);
+        tooltip.innerHTML = edge ? mapEdgeTooltipHtml(edge) : '';
+      }
+      tooltip.style.display = 'block';
+      tooltip.style.left = `${Math.min(window.innerWidth - 380, event.clientX + 16)}px`;
+      tooltip.style.top = `${Math.min(window.innerHeight - 180, event.clientY + 16)}px`;
+    });
+    frame.addEventListener('pointerleave', () => { tooltip.style.display = 'none'; });
+
+    root.querySelectorAll('.map-node').forEach(oldElement => {
+      const element = oldElement.cloneNode(true);
+      oldElement.replaceWith(element);
+      element.addEventListener('click', event => {
+        event.stopPropagation();
+        const nodeId = event.currentTarget.dataset.nodeId;
+        view.focusedNodeId = nodeId;
+        view.focusedEdgeId = '';
+        save();
+        renderWorld();
+      });
+    });
+    root.querySelectorAll('.map-edge-group').forEach(element => element.addEventListener('click', event => {
+      event.stopPropagation();
+      view.focusedEdgeId = event.currentTarget.dataset.edgeId;
+      view.focusedNodeId = '';
+      save();
+      renderWorld();
+    }));
+  }
+
+  function bindMapInspectionControls() {
+    const view = normalizeWorldMapView();
+    const node = focusedMapNode();
+    root.querySelector('#map-clear-focus')?.addEventListener('click', () => { view.focusedNodeId = ''; view.focusedEdgeId = ''; save(); renderWorld(); });
+    root.querySelector('#map-set-departure')?.addEventListener('click', () => {
+      if (!node || node.type !== 'station') return;
+      state.route.startNodeId = node.id;
+      state.route.start = node.name;
+      state.world.selected = [node.id, ...state.world.selected.filter(id => id !== node.id).slice(0, 1)];
+      save(); renderWorld();
+    });
+    root.querySelector('#map-set-destination')?.addEventListener('click', () => {
+      if (!node || node.type !== 'station') return;
+      state.route.endNodeId = node.id;
+      state.route.end = node.name;
+      const departure = state.route.startNodeId && state.route.startNodeId !== node.id ? state.route.startNodeId : state.world.selected.find(id => id !== node.id);
+      state.world.selected = [departure, node.id].filter(Boolean);
+      save(); renderWorld();
+    });
+    root.querySelector('#map-open-station')?.addEventListener('click', () => {
+      if (!node || node.type !== 'station') return;
+      syncWorldMapStations();
+      const station = STATIONS.find(item => item.worldNodeId === node.id || item.name === node.name);
+      if (station) normalizeStationCommerce().activeStationId = stationIdentity(station);
+      save(); setTool('submarine');
+    });
+    root.querySelector('#map-scavenge-wreck')?.addEventListener('click', () => {
+      const wreck = node ? wreckByNodeId(node.id) : null;
+      if (!wreck) return;
+      try { scavengeManagedSubmarineWreck(wreck.wreckSiteId); renderWorld(); }
+      catch (error) { alert(error.message); }
+    });
+  }
+
+  function insertManagedWorldControls() {
+    const mapPanel = root.querySelector('.expanded-map-frame, .map-frame')?.closest('.tool-panel');
+    if (!mapPanel) return;
+    mapPanel.insertAdjacentHTML('beforebegin', mapInspectionPanelHtml());
+    mapPanel.insertAdjacentHTML('afterbegin', `<div class="tool-hero map-navigation-controls no-print" style="padding:0 0 12px;border:0;background:none"><div><h3>Interactive Map Navigation</h3><p class="small-note">Mouse wheel zooms toward the pointer. Hover stations and routes for summaries. Click to inspect. The red double circle marks the managed submarine.</p></div><div class="button-row"><button id="map-zoom-out" class="compact-button" type="button">−</button><button id="map-zoom-reset" class="compact-button" type="button">Reset Zoom</button><button id="map-zoom-in" class="compact-button" type="button">+</button><button id="map-center-ship" class="secondary-action" type="button">Center Managed Sub</button></div></div>`);
+    const view = normalizeWorldMapView();
+    const changeZoom = factor => { view.scale = clamp(view.scale * factor, 0.2, 4); view.initialized = false; save(); renderWorld(); };
+    root.querySelector('#map-zoom-in')?.addEventListener('click', () => changeZoom(1.25));
+    root.querySelector('#map-zoom-out')?.addEventListener('click', () => changeZoom(0.8));
+    root.querySelector('#map-zoom-reset')?.addEventListener('click', () => { view.scale = 1; view.scrollLeft = 0; view.scrollTop = 0; view.initialized = false; save(); renderWorld(); });
+    root.querySelector('#map-center-ship')?.addEventListener('click', () => { view.initialized = false; save(); renderWorld(); });
+  }
+
+  const renderWorldBeforeExpeditionMapUi = renderWorld;
+  renderWorld = function renderWorldWithManagedExpeditionMap() {
+    normalizeManagedExpedition();
+    renderWorldBeforeExpeditionMapUi();
+    const groupLocationSelects = root.querySelectorAll('.world-group-location');
+    groupLocationSelects.forEach(select => { select.disabled = true; select.title = 'Locations advance through filed crossings rather than manual reassignment.'; });
+    const manualMove = root.querySelector('#move-active-group');
+    if (manualMove) { manualMove.disabled = true; manualMove.textContent = 'Movement Requires Filed Crossing'; }
+    const oldSend = root.querySelector('#send-map-route');
+    if (oldSend) {
+      const replacement = oldSend.cloneNode(true);
+      replacement.textContent = 'Open Valid Crossing Planner';
+      oldSend.replaceWith(replacement);
+      replacement.addEventListener('click', () => {
+        const selected = state.world.selected.map(id => crossingNode(id)).filter(node => node?.type === 'station');
+        if (selected.length !== 2) return;
+        state.route.startNodeId = selected[0].id;
+        state.route.endNodeId = selected[1].id;
+        state.route.start = selected[0].name;
+        state.route.end = selected[1].name;
+        state.route.plan = [];
+        save(); setTool('route');
+      });
+    }
+    insertManagedWorldControls();
+    bindMapInspectionControls();
+    installWorldMapZoomAndInspection();
+  };
+
+  function managedExpeditionPanelHtml() {
+    const expedition = normalizeManagedExpedition();
+    const group = currentManagedGroup();
+    const node = crossingNode(expedition?.currentNodeId);
+    const crossing = normalizeRouteCrossing();
+    const records = managedCrewRecords();
+    const wreck = expedition?.wreckSiteId ? ensureWreckRegistry()[expedition.wreckSiteId] : null;
+    return `<section class="tool-panel managed-expedition-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Unified managed expedition</p><h3>${escapeHtml(group?.name || 'No active group')}</h3><p class="small-note">${escapeHtml(state.submarine.name || state.submarine.model)} · ${escapeHtml(node?.name || 'Unknown location')} · ${records.length} linked crew</p></div><span class="status-pill ${expedition?.status === 'lost' ? 'bad' : 'good'}">${escapeHtml(expedition?.status || 'unlinked')}</span></div><div class="metric-row" style="margin-top:12px"><div class="metric"><span>Managed submarine ID</span><strong>${escapeHtml(expedition?.submarineId || '')}</strong></div><div class="metric"><span>Starting station</span><strong>${escapeHtml(crossingNode(expedition?.startingNodeId)?.name || '')}</strong></div><div class="metric"><span>Current station / site</span><strong>${escapeHtml(node?.name || '')}</strong></div><div class="metric"><span>Filed crossing</span><strong>${escapeHtml(expedition?.filedCrossingId || 'None')}</strong></div><div class="metric"><span>Crossing status</span><strong>${escapeHtml(crossing.status)}</strong></div><div class="metric"><span>Linked crew</span><strong>${records.length}</strong></div></div><div class="card-list" style="margin-top:10px">${records.map(record => `<div class="small-note"><strong>${escapeHtml(record.characterName)}</strong> · ${escapeHtml(record.duty)} · ${escapeHtml(record.status)}</div>`).join('') || '<div class="small-note">No accepted crew are linked. Accept crew submissions in the Crew Management section.</div>'}</div>${wreck ? `<div class="notice bad" style="margin-top:10px"><strong>Wreck site:</strong> ${escapeHtml(wreck.nodeId)}<br>Recoverable quarter-salvage: ${wreck.recoverableItemUnits} item units and ${wreck.recoverableMarks} Marks.</div>` : ''}<div class="button-row no-print" style="margin-top:10px"><button id="expedition-sync" class="secondary-action" type="button">Synchronize Crew, Group, Sub and Station</button><button id="expedition-open-world" class="secondary-action" type="button">Show on World Map</button><button id="expedition-open-route" class="secondary-action" type="button">Open Filed Crossing</button><button id="expedition-declare-lost" class="danger-button" type="button" ${expedition?.status === 'active' && crossing.status === 'underway' ? '' : 'disabled'}>Declare Lost With All Hands</button></div><p class="small-note">Loss is available only during an underway filed crossing. It kills all accepted crew, destroys the submarine, and creates a persistent salvageable wreck along the active route leg.</p></section>`;
+  }
+
+  function bindManagedExpeditionPanel() {
+    root.querySelector('#expedition-sync')?.addEventListener('click', () => { normalizeManagedExpedition(); save(); renderSubmarine(); });
+    root.querySelector('#expedition-open-world')?.addEventListener('click', () => { const view = normalizeWorldMapView(); view.focusedNodeId = managedSubmarineNodeId(); view.focusedEdgeId = ''; view.initialized = false; save(); setTool('world'); });
+    root.querySelector('#expedition-open-route')?.addEventListener('click', () => setTool('route'));
+    root.querySelector('#expedition-declare-lost')?.addEventListener('click', () => { try { declareManagedSubmarineLostWithAllHands(); renderSubmarine(); } catch (error) { alert(error.message); } });
+  }
+
+  const renderSubmarineBeforeExpeditionMapUi = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithManagedExpedition() {
+    normalizeManagedExpedition();
+    renderSubmarineBeforeExpeditionMapUi();
+    const shell = root.querySelector('.tool-shell');
+    const hero = shell?.querySelector(':scope > .tool-hero');
+    if (hero) hero.insertAdjacentHTML('afterend', managedExpeditionPanelHtml());
+    bindManagedExpeditionPanel();
+  };
+
+  const crossingStatusLabelBeforeExpeditionMapUi = crossingStatusLabel;
+  crossingStatusLabel = function crossingStatusLabelWithLoss(status) {
+    return status === 'lost' ? 'Lost With All Hands' : crossingStatusLabelBeforeExpeditionMapUi(status);
+  };
