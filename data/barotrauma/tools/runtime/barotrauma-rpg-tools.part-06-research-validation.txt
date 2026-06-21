@@ -1,0 +1,508 @@
+
+  const RESEARCH_RULES = WORLD_STATE_SCHEMA.researchRules || {
+    minimumMarks: 25000,
+    minimumSupplies: 50,
+    minimumResearchDays: 30,
+    priceMultiplier: 25,
+    excessMarksMultiplier: 100000,
+    excessSuppliesMultiplier: 100,
+    excessDaysMultiplier: 365,
+    tierDays: 60
+  };
+
+  function defaultCustomResearch() {
+    return {
+      projects: [],
+      stationId: '',
+      wallet: 'submarine',
+      markContribution: 25000,
+      supplyContribution: 50,
+      notes: ''
+    };
+  }
+
+  function normalizeResearchProject(raw = {}) {
+    return {
+      projectId: raw.projectId || uid('research-project'),
+      designKind: raw.designKind || 'custom-content',
+      designId: raw.designId || '',
+      designName: raw.designName || 'Unnamed Research Project',
+      status: ['unfunded','funded','in-development','completed','cancelled'].includes(raw.status) ? raw.status : 'unfunded',
+      requiredMarks: Math.max(0, number(raw.requiredMarks)),
+      requiredSupplies: Math.max(0, number(raw.requiredSupplies)),
+      requiredDays: Math.max(1, number(raw.requiredDays, RESEARCH_RULES.minimumResearchDays)),
+      requiredResearchRating: clamp(raw.requiredResearchRating ?? 6, 1, 10),
+      fundedMarks: Math.max(0, number(raw.fundedMarks)),
+      fundedSupplies: Math.max(0, number(raw.fundedSupplies)),
+      stationId: raw.stationId || '',
+      stationName: raw.stationName || '',
+      stationOwner: raw.stationOwner || '',
+      startedAt: raw.startedAt || '',
+      completionAt: raw.completionAt || '',
+      completedAt: raw.completedAt || '',
+      excesses: Array.isArray(raw.excesses) ? raw.excesses : [],
+      createdAt: raw.createdAt || new Date().toISOString(),
+      updatedAt: raw.updatedAt || new Date().toISOString(),
+      notes: raw.notes || ''
+    };
+  }
+
+  function normalizeCustomResearch() {
+    if (!state.customResearch || typeof state.customResearch !== 'object') state.customResearch = defaultCustomResearch();
+    const defaults = defaultCustomResearch();
+    for (const [key, value] of Object.entries(defaults)) if (!(key in state.customResearch)) state.customResearch[key] = Array.isArray(value) ? [] : value;
+    state.customResearch.projects = Array.isArray(state.customResearch.projects) ? state.customResearch.projects.map(normalizeResearchProject) : [];
+    const stations = normalizeStationCommerce().stations;
+    if (!state.customResearch.stationId || !stations[state.customResearch.stationId]) state.customResearch.stationId = state.stationCommerce.activeStationId || Object.keys(stations)[0] || '';
+    updateResearchProjects();
+    return state.customResearch;
+  }
+
+  function officialItemCeilings(type) {
+    const items = WIKI_CATALOG.items || [];
+    const max = (values, fallback = 0) => values.length ? Math.max(...values.map(value => number(value, fallback))) : fallback;
+    if (type === 'handheld-weapon') {
+      const pool = items.filter(item => item.category === 'Weapons');
+      return { fireRate: max(pool.map(item => item.fireRate), 1), maxAmmo: max(pool.map(item => item.maxAmmo), 1) };
+    }
+    if (type === 'submarine-weapon') {
+      const pool = WIKI_CATALOG.submarineWeapons || [];
+      return { fireRate: max(pool.map(item => item.fireRate), 1), magazineSize: max(pool.flatMap(item => item.ammo || []).map(item => item.magazineSize), 1) };
+    }
+    if (type === 'personal-ammunition') return { capacity: max(items.filter(item => item.category === 'Ammunition').map(item => item.capacity), 1) };
+    if (type === 'submarine-ammunition') return { capacity: max(items.filter(item => item.category === 'Submarine Ammunition').map(item => item.capacity), 1) };
+    if (type === 'consumable') return { charges: max(items.filter(item => ['Consumables','Medical'].includes(item.category)).map(item => item.capacity), 1) };
+    if (['equipment','general-item'].includes(type)) return { capacity: max(items.filter(item => item.category !== 'Submarine Ammunition').map(item => item.capacity), 0) };
+    if (type === 'submarine-system') {
+      const anchors = CUSTOM_CONTENT_SCHEMA.installationAnchors || [];
+      return {
+        systemRating: max(anchors.map(item => item.effect), 3),
+        reliabilityRating: max(anchors.map(item => item.reliability), 3),
+        modifier: max(UPGRADES.flatMap(item => Object.values(item.effects || {})).filter(value => value > 0), 2)
+      };
+    }
+    if (type === 'power-source') {
+      const anchors = CUSTOM_CONTENT_SCHEMA.powerAnchors || [];
+      return {
+        output: max(anchors.map(item => item.output), 3),
+        storage: max(anchors.map(item => item.storage), 3),
+        recharge: max(anchors.map(item => item.recharge), 3),
+        modifier: max(UPGRADES.flatMap(item => Object.values(item.effects || {})).filter(value => value > 0), 2)
+      };
+    }
+    if (type === 'submarine-module') {
+      return {
+        upgradeRating: max((CUSTOM_CONTENT_SCHEMA.upgradeAnchors || []).map(item => Math.max(number(item.effect, 0), number(item.primary, 0))), 4),
+        modifier: max(UPGRADES.flatMap(item => Object.values(item.effects || {})).filter(value => value > 0), 2)
+      };
+    }
+    return {};
+  }
+
+  function excessMetric(excesses, metric, value, ceiling) {
+    const actual = number(value);
+    const limit = number(ceiling);
+    if (actual > limit) excesses.push({ metric, value: actual, ceiling: limit, excess: actual - limit, ratio: (actual - limit) / Math.max(1, Math.abs(limit)) });
+  }
+
+  function validateCustomContentRecord(entry) {
+    if (!entry || entry.type === 'station') return { status: 'within-current-limits', deployable: true, checkedAt: new Date().toISOString(), excesses: [], ceilings: {} };
+    const derived = derivedCustomEntry(entry);
+    const ceilings = officialItemCeilings(entry.type);
+    const excesses = [];
+    if (entry.type === 'handheld-weapon') {
+      excessMetric(excesses, 'Fire rate', derived.fireRate, ceilings.fireRate);
+      excessMetric(excesses, 'Magazine capacity', derived.maxAmmo, ceilings.maxAmmo);
+    } else if (entry.type === 'submarine-weapon') {
+      excessMetric(excesses, 'Fire rate', derived.fireRate, ceilings.fireRate);
+      excessMetric(excesses, 'Magazine capacity', derived.magazineSize, ceilings.magazineSize);
+    } else if (['personal-ammunition','submarine-ammunition'].includes(entry.type)) excessMetric(excesses, 'Ammunition capacity', derived.capacity, ceilings.capacity);
+    else if (entry.type === 'consumable') excessMetric(excesses, 'Charges', derived.charges, ceilings.charges);
+    else if (['equipment','general-item'].includes(entry.type) && number(derived.capacity) > 0) excessMetric(excesses, 'Capacity', derived.capacity, ceilings.capacity);
+    else if (entry.type === 'submarine-system') {
+      excessMetric(excesses, 'System rating', derived.systemRating, ceilings.systemRating);
+      excessMetric(excesses, 'Reliability', derived.reliabilityRating, ceilings.reliabilityRating);
+      for (const [stat, modifier] of Object.entries(derived.modifiers || {})) if (modifier > 0) excessMetric(excesses, `${stat} modifier`, modifier, ceilings.modifier);
+    } else if (entry.type === 'power-source') {
+      excessMetric(excesses, 'Power output', derived.output, ceilings.output);
+      excessMetric(excesses, 'Storage', derived.storage, ceilings.storage);
+      excessMetric(excesses, 'Recharge', derived.recharge, ceilings.recharge);
+      for (const [stat, modifier] of Object.entries(derived.modifiers || {})) if (modifier > 0) excessMetric(excesses, `${stat} modifier`, modifier, ceilings.modifier);
+    } else if (entry.type === 'submarine-module') {
+      excessMetric(excesses, 'Upgrade rating', derived.upgradeRating, ceilings.upgradeRating);
+      for (const [stat, modifier] of Object.entries(derived.modifiers || {})) if (modifier > 0) excessMetric(excesses, `${stat} modifier`, modifier, ceilings.modifier);
+    }
+    const existingProject = state.customResearch?.projects?.find(project => project.designKind === 'custom-content' && project.designId === entry.id);
+    const developed = existingProject?.status === 'completed';
+    return {
+      status: developed ? 'developed' : excesses.length ? 'research-required' : 'within-current-limits',
+      deployable: developed || !excesses.length,
+      checkedAt: new Date().toISOString(),
+      ceilings,
+      excesses
+    };
+  }
+
+  function officialSubmarineCeilings() {
+    const max = key => Math.max(...OFFICIAL_SUBMARINE_PROFILES.map(profile => number(profile[key], 0)));
+    const stats = OFFICIAL_SUBMARINE_PROFILES.map(profile => deriveSubmarineStats({ ...profile, official: true }));
+    const statMax = key => Math.max(...stats.map(profile => number(profile[key], 0)));
+    return {
+      tier: max('tier'), crewMax: max('crewMax'), cargo: max('cargo'), horizontal: max('horizontal'), descent: max('descent'),
+      smallFixed: max('smallFixed'), smallHardpoints: max('smallHardpoints'), largeFixed: max('largeFixed'), largeHardpoints: max('largeHardpoints'), utilitySystems: max('utilitySystems'),
+      speed: statMax('speed'), maneuverability: statMax('maneuverability'), defense: statMax('defense'), capacity: statMax('capacity'), hull: statMax('hull')
+    };
+  }
+
+  function validateCustomSubmarineProfile(profile) {
+    const ceilings = officialSubmarineCeilings();
+    const stats = deriveSubmarineStats({ ...profile, official: false });
+    const excesses = [];
+    for (const key of ['tier','crewMax','cargo','horizontal','descent','smallFixed','smallHardpoints','largeFixed','largeHardpoints','utilitySystems']) excessMetric(excesses, key, profile[key], ceilings[key]);
+    for (const key of ['speed','maneuverability','defense','capacity','hull']) excessMetric(excesses, `RPG ${key}`, stats[key], ceilings[key]);
+    const existingProject = state.customResearch?.projects?.find(project => project.designKind === 'custom-submarine' && project.designId === profile.id);
+    const developed = existingProject?.status === 'completed';
+    return {
+      status: developed ? 'developed' : excesses.length ? 'research-required' : 'within-current-limits',
+      deployable: developed || !excesses.length,
+      checkedAt: new Date().toISOString(),
+      ceilings,
+      excesses,
+      stats
+    };
+  }
+
+  function researchRequirements(designKind, design, validation) {
+    const excessScore = validation.excesses.reduce((sum, item) => sum + Math.max(0, number(item.ratio)), 0);
+    const tier = Math.max(1, number(design.tier, 1));
+    const derivedPrice = designKind === 'custom-content' ? number(derivedCustomEntry(design).price, 1000) : Math.max(10000, Math.round((number(design.cargo) * 250) + (number(design.crewMax) * 1000) + (submarineWeaponWeight(design) * 5000)));
+    return {
+      requiredMarks: Math.max(number(RESEARCH_RULES.minimumMarks, 25000), Math.ceil(derivedPrice * number(RESEARCH_RULES.priceMultiplier, 25) + excessScore * number(RESEARCH_RULES.excessMarksMultiplier, 100000))),
+      requiredSupplies: Math.max(number(RESEARCH_RULES.minimumSupplies, 50), Math.ceil(excessScore * number(RESEARCH_RULES.excessSuppliesMultiplier, 100) + tier * 25)),
+      requiredDays: Math.max(number(RESEARCH_RULES.minimumResearchDays, 30), Math.ceil(excessScore * number(RESEARCH_RULES.excessDaysMultiplier, 365) + tier * number(RESEARCH_RULES.tierDays, 60))),
+      requiredResearchRating: clamp(5 + Math.ceil(excessScore * 2), 5, 10)
+    };
+  }
+
+  function ensureResearchProject(designKind, design, validation) {
+    if (!validation.excesses.length) return null;
+    const research = normalizeCustomResearch();
+    let project = research.projects.find(item => item.designKind === designKind && item.designId === design.id);
+    const requirements = researchRequirements(designKind, design, validation);
+    if (!project) {
+      project = normalizeResearchProject({ designKind, designId: design.id, designName: design.name, excesses: validation.excesses, ...requirements });
+      research.projects.push(project);
+    } else if (project.status !== 'completed') {
+      project.designName = design.name;
+      project.excesses = cloneWorldData(validation.excesses);
+      project.requiredMarks = requirements.requiredMarks;
+      project.requiredSupplies = requirements.requiredSupplies;
+      project.requiredDays = requirements.requiredDays;
+      project.requiredResearchRating = requirements.requiredResearchRating;
+      project.fundedMarks = Math.min(project.fundedMarks, project.requiredMarks);
+      project.fundedSupplies = Math.min(project.fundedSupplies, project.requiredSupplies);
+      project.updatedAt = new Date().toISOString();
+    }
+    return project;
+  }
+
+  function validateAllCustomDesigns() {
+    normalizeCustomResearch();
+    for (const entry of state.customContent.entries) {
+      entry.validation = validateCustomContentRecord(entry);
+      if (!entry.validation.deployable) ensureResearchProject('custom-content', entry, entry.validation);
+    }
+    for (const profile of state.submarineLibrary.custom) {
+      profile.validation = validateCustomSubmarineProfile(profile);
+      if (!profile.validation.deployable) ensureResearchProject('custom-submarine', profile, profile.validation);
+    }
+    updateResearchProjects();
+  }
+
+  function projectDesign(project) {
+    return project.designKind === 'custom-content' ? customEntry(project.designId) : state.submarineLibrary.custom.find(item => item.id === project.designId);
+  }
+
+  function designDeployable(designKind, designId) {
+    const design = designKind === 'custom-content' ? customEntry(designId) : state.submarineLibrary.custom.find(item => item.id === designId);
+    if (!design) return false;
+    if (design.type === 'station') return true;
+    const validation = designKind === 'custom-content' ? validateCustomContentRecord(design) : validateCustomSubmarineProfile(design);
+    return validation.deployable;
+  }
+
+  function stationResearchRating(stationId) {
+    const stationRecord = normalizeStationCommerce().stations[stationId];
+    if (!stationRecord) return 0;
+    const customStation = state.customContent.entries.find(entry => entry.type === 'station' && entry.name === stationRecord.name);
+    if (customStation) return clamp(derivedCustomEntry(customStation).research, 1, 10);
+    let rating = stationRecord.playerStation ? 5 : stationRecord.faction && stationRecord.faction !== 'Independent' ? 6 : 2;
+    if (/research|technology|biotech|medical|fabrication|engineering|alien/i.test(stationRecord.specialty || '')) rating += 2;
+    return clamp(rating, 1, 10);
+  }
+
+  function stationResearchEligible(stationId) {
+    const station = normalizeStationCommerce().stations[stationId];
+    return Boolean(station && (station.playerStation || (station.faction && station.faction !== 'Independent')));
+  }
+
+  function researchWalletBalance() {
+    const research = normalizeCustomResearch();
+    if (research.wallet === 'character') return Math.max(0, number(state.character.credits));
+    if (research.wallet === 'station') return Math.max(0, number(normalizeStationCommerce().stations[research.stationId]?.treasury));
+    return Math.max(0, number(state.submarine.resources.credits));
+  }
+
+  function setResearchWalletBalance(value) {
+    const research = normalizeCustomResearch();
+    if (research.wallet === 'character') state.character.credits = Math.max(0, number(value));
+    else if (research.wallet === 'station') {
+      const station = normalizeStationCommerce().stations[research.stationId];
+      if (station) station.treasury = Math.max(0, number(value));
+    } else state.submarine.resources.credits = Math.max(0, number(value));
+  }
+
+  function fundResearchProject(projectId, requestedMarks, requestedSupplies) {
+    const project = normalizeCustomResearch().projects.find(item => item.projectId === projectId);
+    if (!project || ['completed','cancelled','in-development'].includes(project.status)) return false;
+    const remainingMarks = Math.max(0, project.requiredMarks - project.fundedMarks);
+    const remainingSupplies = Math.max(0, project.requiredSupplies - project.fundedSupplies);
+    const marks = Math.min(remainingMarks, researchWalletBalance(), Math.max(0, number(requestedMarks)));
+    const supplies = Math.min(remainingSupplies, Math.max(0, number(state.submarine.resources.supplies)), Math.max(0, number(requestedSupplies)));
+    setResearchWalletBalance(researchWalletBalance() - marks);
+    state.submarine.resources.supplies = Math.max(0, number(state.submarine.resources.supplies) - supplies);
+    project.fundedMarks += marks;
+    project.fundedSupplies += supplies;
+    project.status = project.fundedMarks >= project.requiredMarks && project.fundedSupplies >= project.requiredSupplies ? 'funded' : 'unfunded';
+    project.updatedAt = new Date().toISOString();
+    save();
+    return marks > 0 || supplies > 0;
+  }
+
+  function startResearchProject(projectId) {
+    const research = normalizeCustomResearch();
+    const project = research.projects.find(item => item.projectId === projectId);
+    const station = normalizeStationCommerce().stations[research.stationId];
+    if (!project || project.status !== 'funded') return { ok: false, message: 'Project is not fully funded.' };
+    if (!stationResearchEligible(research.stationId)) return { ok: false, message: 'Research must occur at a player-controlled or faction-owned station.' };
+    const rating = stationResearchRating(research.stationId);
+    if (rating < project.requiredResearchRating) return { ok: false, message: `Station research rating ${rating} is below the required ${project.requiredResearchRating}.` };
+    const start = worldGameDate();
+    const completion = new Date(start.getTime() + project.requiredDays * 86400000);
+    project.status = 'in-development';
+    project.stationId = research.stationId;
+    project.stationName = station.name;
+    project.stationOwner = station.playerStation ? station.stationOwner || 'Player controlled' : station.faction;
+    project.startedAt = start.toISOString();
+    project.completionAt = completion.toISOString();
+    project.updatedAt = new Date().toISOString();
+    save();
+    return { ok: true, message: `Development started at ${station.name}.` };
+  }
+
+  function completeResearchProject(project) {
+    project.status = 'completed';
+    project.completedAt = worldGameDate().toISOString();
+    project.updatedAt = new Date().toISOString();
+    const design = projectDesign(project);
+    if (design) design.validation = { ...(design.validation || {}), status: 'developed', deployable: true, completedProjectId: project.projectId, checkedAt: new Date().toISOString() };
+  }
+
+  function updateResearchProjects() {
+    if (!state.customResearch?.projects) return;
+    const now = worldGameDate().getTime();
+    for (const project of state.customResearch.projects) if (project.status === 'in-development' && project.completionAt && now >= Date.parse(project.completionAt)) completeResearchProject(project);
+  }
+
+  function researchProgress(project) {
+    if (project.status === 'completed') return 100;
+    if (project.status !== 'in-development' || !project.startedAt || !project.completionAt) {
+      const funding = (project.fundedMarks / Math.max(1, project.requiredMarks) + project.fundedSupplies / Math.max(1, project.requiredSupplies)) / 2;
+      return clamp(Math.round(funding * 100), 0, 99);
+    }
+    const start = Date.parse(project.startedAt);
+    const end = Date.parse(project.completionAt);
+    return clamp(Math.round((worldGameDate().getTime() - start) / Math.max(1, end - start) * 100), 0, 99);
+  }
+
+  const addCharacterCatalogueItemBeforeResearch = addCharacterCatalogueItem;
+  addCharacterCatalogueItem = function addValidatedCharacterCatalogueItem(id, quantity = 1) {
+    const entry = customEntry(id);
+    if (entry && !designDeployable('custom-content', id)) return false;
+    return addCharacterCatalogueItemBeforeResearch(id, quantity);
+  };
+
+  const addSubmarineWeaponBeforeResearch = addSubmarineWeapon;
+  addSubmarineWeapon = function addValidatedSubmarineWeapon(id) {
+    const entry = customEntry(id);
+    if (entry && !designDeployable('custom-content', id)) return false;
+    return addSubmarineWeaponBeforeResearch(id);
+  };
+
+  const addSubmarineAmmoBeforeResearch = addSubmarineAmmo;
+  addSubmarineAmmo = function addValidatedSubmarineAmmo(id, quantity = 1) {
+    const entry = customEntry(id);
+    if (entry && !designDeployable('custom-content', id)) return false;
+    return addSubmarineAmmoBeforeResearch(id, quantity);
+  };
+
+  const installCustomModuleBeforeResearch = installCustomModule;
+  installCustomModule = function installValidatedCustomModule(id) {
+    if (!designDeployable('custom-content', id)) return false;
+    return installCustomModuleBeforeResearch(id);
+  };
+
+  const useSubmarineModelBeforeResearch = useSubmarineModel;
+  useSubmarineModel = function useValidatedSubmarineModel(name) {
+    const profile = state.submarineLibrary.custom.find(item => item.name === name);
+    if (profile && !designDeployable('custom-submarine', profile.id)) {
+      alert('This submarine exceeds current official design ceilings and must complete its station R&D project before deployment.');
+      return false;
+    }
+    return useSubmarineModelBeforeResearch(name);
+  };
+
+  const allTradeRecordsBeforeResearch = allTradeRecords;
+  allTradeRecords = function allDeployableTradeRecords() {
+    return allTradeRecordsBeforeResearch().filter(record => !record.customEntry || designDeployable('custom-content', record.customEntry.id));
+  };
+
+  const syncCustomStationsBeforeResearch = syncCustomStations;
+  syncCustomStations = function syncValidatedCustomStations() {
+    syncCustomStationsBeforeResearch();
+    for (let index = STATIONS.length - 1; index >= 0; index -= 1) {
+      const station = STATIONS[index];
+      if (!station.customWorkshop) continue;
+      const entry = state.customContent.entries.find(item => item.type === 'station' && item.name === station.name);
+      if (entry && !designDeployable('custom-content', entry.id)) STATIONS.splice(index, 1);
+    }
+  };
+
+  const calculateSubmarineBeforeResearch = calculateSubmarine;
+  calculateSubmarine = function calculateSubmarineWithValidatedModules() {
+    const original = state.submarine.customModules;
+    state.submarine.customModules = original.filter(installed => designDeployable('custom-content', installed.id));
+    try { return calculateSubmarineBeforeResearch(); }
+    finally { state.submarine.customModules = original; }
+  };
+
+  function saveValidatedCustomContent() {
+    const library = state.customContent;
+    const pending = { ...library.draft, name: String(library.draft.name || '').trim() };
+    if (!pending.name) return alert('Enter a unique name before saving the custom record.');
+    const conflict = library.entries.find(item => item.name.toLowerCase() === pending.name.toLowerCase() && item.id !== pending.id);
+    if (conflict) return alert('A custom record with that name already exists.');
+    pending.id = pending.id || uid('custom-content');
+    pending.anchorId = customAnchor(pending.type, pending.anchorId).id;
+    pending.derivedVersion = CUSTOM_CONTENT_SCHEMA.schemaVersion || '1.0.0';
+    pending.validation = validateCustomContentRecord(pending);
+    const index = library.entries.findIndex(item => item.id === pending.id);
+    if (index >= 0) library.entries[index] = pending;
+    else library.entries.push(pending);
+    if (!pending.validation.deployable) ensureResearchProject('custom-content', pending, pending.validation);
+    library.draft = defaultCustomContentDraft(pending.type);
+    syncCustomStations();
+    save();
+    renderCustomWorkshop();
+  }
+
+  function saveValidatedCustomSubmarine() {
+    const pending = { ...state.submarineLibrary.draft };
+    pending.name = String(pending.name || '').trim();
+    if (!pending.name) return alert('Enter a unique submarine name before saving.');
+    if (OFFICIAL_SUBMARINE_NAMES.has(pending.name)) return alert('That name belongs to an official submarine. Choose a distinct custom name.');
+    const conflict = state.submarineLibrary.custom.find(item => item.name === pending.name && item.id !== pending.id);
+    if (conflict) return alert('A custom submarine with that name already exists.');
+    pending.crewMin = clamp(pending.crewMin, 1, 30);
+    pending.crewMax = clamp(pending.crewMax, pending.crewMin, 30);
+    pending.tier = clamp(pending.tier, 1, 3);
+    pending.id = pending.id || uid('custom-sub');
+    pending.validation = validateCustomSubmarineProfile(pending);
+    const existingIndex = state.submarineLibrary.custom.findIndex(item => item.id === pending.id);
+    if (existingIndex >= 0) state.submarineLibrary.custom[existingIndex] = pending;
+    else state.submarineLibrary.custom.push(pending);
+    if (!pending.validation.deployable) ensureResearchProject('custom-submarine', pending, pending.validation);
+    state.submarineLibrary.draft = defaultCustomSubmarineDraft();
+    syncCustomSubmarines();
+    save();
+    renderSubmarine();
+  }
+
+  function validationSummary(validation) {
+    if (!validation) return 'Not checked';
+    if (validation.deployable) return validation.status === 'developed' ? 'R&D completed — deployable' : 'Within current official limits — deployable';
+    return `Research required: ${validation.excesses.map(item => `${item.metric} ${item.value} > ${item.ceiling}`).join('; ')}`;
+  }
+
+  function renderResearchPanel() {
+    const research = normalizeCustomResearch();
+    validateAllCustomDesigns();
+    const station = normalizeStationCommerce().stations[research.stationId];
+    const stationOptions = Object.keys(normalizeStationCommerce().stations);
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12 research-development-panel';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Controlled technology development</p><h3>Custom Design Validation and Station R&D</h3><p class="small-note">Designs at or below current official item and submarine ceilings are field-ready. Any measurable improvement beyond existing equipment becomes an undeployable R&D project requiring exorbitant Marks, supplies, a capable station, and real canonical development time.</p></div><div class="metric-row"><div class="metric"><span>Projects</span><strong>${research.projects.length}</strong></div><div class="metric"><span>In development</span><strong>${research.projects.filter(item => item.status === 'in-development').length}</strong></div><div class="metric"><span>Completed</span><strong>${research.projects.filter(item => item.status === 'completed').length}</strong></div></div></div>
+      <div class="field-grid four" style="margin-top:12px"><label class="field">Development station<select id="research-station">${optionList(stationOptions, research.stationId, id => { const item = state.stationCommerce.stations[id]; return `${item?.name || id} — ${item?.playerStation ? 'Player station' : item?.faction || 'Independent'} — Research ${stationResearchRating(id)}`; })}</select></label><label class="field">Marks wallet<select id="research-wallet">${optionList(['submarine','character','station'], research.wallet, value => value === 'submarine' ? `Submarine (${number(state.submarine.resources.credits)} mk)` : value === 'character' ? `Character (${number(state.character.credits)} mk)` : `Station treasury (${number(station?.treasury)} mk)`)}</select></label><label class="field">Marks contribution<input id="research-marks" type="number" min="0" value="${research.markContribution}"></label><label class="field">Supply contribution<input id="research-supplies" type="number" min="0" value="${research.supplyContribution}"></label></div>
+      <div class="notice" style="margin-top:10px"><strong>Selected station:</strong> ${escapeHtml(station?.name || 'None')} · ${stationResearchEligible(research.stationId) ? 'ownership eligible' : 'not player-controlled or faction-owned'} · research rating ${stationResearchRating(research.stationId)} · available submarine supplies ${number(state.submarine.resources.supplies)}.</div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table research-project-table"><thead><tr><th>Project</th><th>Exceeds current equipment</th><th>Required investment</th><th>Funding</th><th>Development</th><th></th></tr></thead><tbody>${research.projects.map(project => `<tr><td><strong>${escapeHtml(project.designName)}</strong><br><span class="small-note">${escapeHtml(project.designKind)} · ${escapeHtml(project.projectId)}</span></td><td>${project.excesses.map(item => `<span class="tag">${escapeHtml(item.metric)} ${item.value} / ${item.ceiling}</span>`).join('')}</td><td>${project.requiredMarks.toLocaleString()} mk<br>${project.requiredSupplies} supplies<br>${project.requiredDays} real-time canonical days<br>Research rating ${project.requiredResearchRating}</td><td>${project.fundedMarks.toLocaleString()} / ${project.requiredMarks.toLocaleString()} mk<br>${project.fundedSupplies} / ${project.requiredSupplies} supplies</td><td><strong>${escapeHtml(project.status)}</strong><br><span class="small-note">${researchProgress(project)}%${project.stationName ? ` · ${escapeHtml(project.stationName)}` : ''}${project.completionAt ? `<br>Completes ${escapeHtml(project.completionAt)}` : ''}</span></td><td><div class="button-row"><button class="compact-button research-fund" data-id="${escapeHtml(project.projectId)}" type="button" ${['completed','in-development','cancelled'].includes(project.status) ? 'disabled' : ''}>Contribute</button><button class="compact-button research-fund-max" data-id="${escapeHtml(project.projectId)}" type="button" ${['completed','in-development','cancelled'].includes(project.status) ? 'disabled' : ''}>Fund Maximum</button><button class="compact-button research-start" data-id="${escapeHtml(project.projectId)}" type="button" ${project.status !== 'funded' ? 'disabled' : ''}>Start Development</button></div></td></tr>`).join('') || '<tr><td colspan="6">No over-limit custom designs require research.</td></tr>'}</tbody></table></div>
+      <label class="field" style="margin-top:12px">R&D programme notes<textarea id="research-notes">${escapeHtml(research.notes)}</textarea></label>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#research-station')?.addEventListener('change', event => { research.stationId = event.target.value; save(); render(); });
+    panel.querySelector('#research-wallet')?.addEventListener('change', event => { research.wallet = event.target.value; save(); render(); });
+    panel.querySelector('#research-marks')?.addEventListener('change', event => { research.markContribution = Math.max(0, number(event.target.value)); save(); });
+    panel.querySelector('#research-supplies')?.addEventListener('change', event => { research.supplyContribution = Math.max(0, number(event.target.value)); save(); });
+    panel.querySelector('#research-notes')?.addEventListener('input', event => { research.notes = event.target.value; save(); });
+    panel.querySelectorAll('.research-fund').forEach(button => button.addEventListener('click', event => { fundResearchProject(event.target.dataset.id, research.markContribution, research.supplyContribution); render(); }));
+    panel.querySelectorAll('.research-fund-max').forEach(button => button.addEventListener('click', event => { const project = research.projects.find(item => item.projectId === event.target.dataset.id); if (project) fundResearchProject(project.projectId, project.requiredMarks - project.fundedMarks, project.requiredSupplies - project.fundedSupplies); render(); }));
+    panel.querySelectorAll('.research-start').forEach(button => button.addEventListener('click', event => { const result = startResearchProject(event.target.dataset.id); if (!result.ok) alert(result.message); render(); }));
+  }
+
+  const renderCustomWorkshopBeforeResearch = renderCustomWorkshop;
+  renderCustomWorkshop = function renderCustomWorkshopWithValidation() {
+    validateAllCustomDesigns();
+    renderCustomWorkshopBeforeResearch();
+    const draft = state.customContent.draft;
+    const draftValidation = validateCustomContentRecord({ ...draft, id: draft.id || 'draft-validation' });
+    const previewNotice = root.querySelector('#custom-content-save')?.closest('.tool-panel')?.querySelector('.notice');
+    if (previewNotice) previewNotice.insertAdjacentHTML('afterend', `<div class="notice ${draftValidation.deployable ? 'good' : 'warn'}" style="margin-top:10px"><strong>Validator:</strong> ${escapeHtml(validationSummary(draftValidation))}</div>`);
+    const saveButton = root.querySelector('#custom-content-save');
+    if (saveButton) { const replacement = saveButton.cloneNode(true); saveButton.replaceWith(replacement); replacement.addEventListener('click', saveValidatedCustomContent); }
+    for (const entry of state.customContent.entries) {
+      const validation = validateCustomContentRecord(entry);
+      entry.validation = validation;
+      const row = root.querySelector(`.custom-content-edit[data-id="${entry.id}"]`)?.closest('tr');
+      if (row) row.querySelector('td:first-child')?.insertAdjacentHTML('beforeend', `<br><span class="small-note ${validation.deployable ? 'good' : 'warn'}">${escapeHtml(validationSummary(validation))}</span>`);
+      if (!validation.deployable && row) row.querySelectorAll('.custom-add-character,.custom-install-weapon,.custom-add-sub-ammo,.custom-install-module,.custom-route-station').forEach(button => { button.disabled = true; button.textContent = 'R&D Required'; });
+    }
+    renderResearchPanel();
+    save();
+  };
+
+  const renderSubmarineBeforeResearchValidation = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithResearchValidation() {
+    validateAllCustomDesigns();
+    renderSubmarineBeforeResearchValidation();
+    const draft = state.submarineLibrary.draft;
+    const draftValidation = validateCustomSubmarineProfile({ ...draft, id: draft.id || 'draft-submarine-validation' });
+    const saveButton = root.querySelector('#custom-sub-save');
+    if (saveButton) {
+      saveButton.insertAdjacentHTML('beforebegin', `<span class="small-note ${draftValidation.deployable ? 'good' : 'warn'}">${escapeHtml(validationSummary(draftValidation))}</span>`);
+      const replacement = saveButton.cloneNode(true);
+      saveButton.replaceWith(replacement);
+      replacement.addEventListener('click', saveValidatedCustomSubmarine);
+    }
+    for (const profile of state.submarineLibrary.custom) {
+      const validation = validateCustomSubmarineProfile(profile);
+      profile.validation = validation;
+      const useButton = root.querySelector(`.custom-sub-use[data-id="${profile.id}"]`);
+      const row = useButton?.closest('tr');
+      if (row) row.querySelector('td:first-child')?.insertAdjacentHTML('beforeend', `<br><span class="small-note ${validation.deployable ? 'good' : 'warn'}">${escapeHtml(validationSummary(validation))}</span>`);
+      if (useButton && !validation.deployable) { useButton.disabled = true; useButton.textContent = 'R&D Required'; }
+    }
+    renderResearchPanel();
+    save();
+  };
+
+  normalizeCustomResearch();
+  validateAllCustomDesigns();
