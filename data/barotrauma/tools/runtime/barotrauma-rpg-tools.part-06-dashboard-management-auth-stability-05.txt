@@ -17,3 +17,32 @@
     }
     return normalizeActiveSubmarineDashboardBeforeAuthenticatedGroupBinding(persist);
   };
+
+  const DASHBOARD_MANAGEMENT_RECOVERY_PARTS=[
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-core.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-00.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-01.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt'
+  ];
+
+  async function loadDashboardManagementRecoveryModules(){
+    try{
+      const responses=await Promise.all(DASHBOARD_MANAGEMENT_RECOVERY_PARTS.map(path=>fetch(path,{cache:'no-store'})));
+      const failed=responses.find(response=>!response.ok);
+      if(failed)throw new Error(`${failed.url} returned ${failed.status}`);
+      const source=(await Promise.all(responses.map(response=>response.text()))).join('');
+      eval(source);
+      globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_RECOVERY_READY=true;
+      if(activeSubmarineDashboardContext())render();
+      return true;
+    }catch(error){
+      globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_RECOVERY_READY=false;
+      globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_RECOVERY_ERROR=error.message||String(error);
+      console.error('Dashboard management recovery modules failed to load.',error);
+      return false;
+    }
+  }
+
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_RECOVERY_READY=false;
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_RECOVERY_PROMISE=loadDashboardManagementRecoveryModules();
