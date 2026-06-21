@@ -1,8 +1,9 @@
 
   advanceDashboardTurn = function advanceDashboardTurnWithoutSkippingCasualties(reason = '') {
+    const rawTurnOrder = state.operationsDashboard?.turnOrder || defaultDashboardTurnOrder();
+    const previousOrder = Array.isArray(rawTurnOrder.order) ? [...rawTurnOrder.order] : [];
+    const previousIndex = clamp(rawTurnOrder.activeIndex, 0, Math.max(0, previousOrder.length - 1));
     const turnOrder = normalizeDashboardTurnOrder();
-    const previousOrder = [...turnOrder.order];
-    const previousIndex = clamp(turnOrder.activeIndex, 0, Math.max(0, previousOrder.length - 1));
     const livingSet = new Set(dashboardTurnActors().map(actor => actor.ref));
     let nextRef = '';
     let wrapped = false;
