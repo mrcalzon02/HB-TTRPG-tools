@@ -1,0 +1,14 @@
+
+  const renderStandaloneSubmarineModule = renderSubmarine;
+  const renderStandaloneRouteModule = renderRoute;
+  const renderStandaloneWorldModule = renderWorld;
+
+  const generateValidCrossingStandaloneModule = generateValidCrossing;
+  const startCrossingStandaloneModule = startCrossing;
+  const resolveCrossingEventStandaloneModule = resolveCrossingEvent;
+  const rollCrossingEventStandaloneModule = rollCrossingEvent;
+  const redrawCrossingEventStandaloneModule = redrawCrossingEvent;
+  const completeCrossingLegStandaloneModule = completeCrossingLeg;
+  const abortCrossingStandaloneModule = abortCrossing;
+  const clearRouteCrossingStandaloneModule = clearRouteCrossing;
+  const generalEncounterRollOperatorStandaloneModule = generalEncounterRollOperator;
