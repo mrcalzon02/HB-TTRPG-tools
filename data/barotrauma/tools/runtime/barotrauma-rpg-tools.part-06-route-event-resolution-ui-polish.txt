@@ -1,0 +1,32 @@
+
+  function routeResolutionEventChoicesHtml(context) {
+    const choices = Array.isArray(context.slot.choices) ? context.slot.choices : [];
+    if (choices.length<2) return '';
+    const locked = context.session.steps.some(step=>step.status!=='pending');
+    return `<div class="tool-card" style="margin-top:12px"><h4>0. Select the Event Variant</h4><p class="small-note">Mapmaker and multi-choice crossings may expose different incidents, opportunities, rewards, and consequences. Choose the event card before selecting a solution plan.</p><div class="card-list">${choices.map((choice,index)=>`<label class="tool-card" style="display:block;border-color:${index===number(context.slot.selectedChoiceIndex)?'var(--accent)':'var(--line)'}"><div class="check-row" style="grid-template-columns:auto 1fr"><input class="route-resolution-event-choice" type="radio" name="route-resolution-event-choice" value="${index}" ${index===number(context.slot.selectedChoiceIndex)?'checked':''} ${locked?'disabled':''}><span><strong>${escapeHtml(choice.name||`Event ${index+1}`)}</strong><br><span class="small-note">${escapeHtml(choice.category||'Event')} · ${escapeHtml(choice.stat||'Intelligence')} vs ${number(choice.dc,8)}</span></span></div><p>${escapeHtml(choice.description||'')}</p><div class="field-grid"><div class="notice good"><strong>Reward / opportunity</strong><br>${escapeHtml(choice.reward||'GM determination')}</div><div class="notice bad"><strong>Failure / side effect</strong><br>${escapeHtml(choice.failure||'GM determination')}</div></div></label>`).join('')}</div></div>`;
+  }
+
+  const routeEventResolutionHtmlBeforeEventChoices = routeEventResolutionHtml;
+  routeEventResolutionHtml = function routeEventResolutionHtmlWithEventChoices(context,mode='dashboard') {
+    const html = routeEventResolutionHtmlBeforeEventChoices(context,mode);
+    const choices = routeResolutionEventChoicesHtml(context);
+    if (!choices) return html;
+    const marker = '<div class="tool-card" style="margin-top:12px"><h4>Situation and Consequences</h4>';
+    return html.replace(marker,`${choices}${marker}`);
+  };
+
+  const bindCurrentRouteEventResolutionBeforeEventChoices = bindCurrentRouteEventResolution;
+  bindCurrentRouteEventResolution = function bindCurrentRouteEventResolutionWithEventChoices() {
+    bindCurrentRouteEventResolutionBeforeEventChoices();
+    const panel = root.querySelector('#explicit-route-event-resolution');
+    panel?.querySelectorAll('.route-resolution-event-choice').forEach(input=>input.addEventListener('change',event=>{
+      const context = activeRouteResolutionContext();
+      if (!context||context.session.steps.some(step=>step.status!=='pending')) return;
+      const choiceIndex = clamp(number(event.target.value),0,Math.max(0,(context.slot.choices||[]).length-1));
+      selectCrossingChoice(context.slot.id,choiceIndex);
+      delete normalizeRouteEventResolutionState().sessions[context.slot.id];
+      normalizeRouteEventResolutionState().lastMessage = `Selected event variant ${choiceIndex+1}. Choose a solution plan for the new event.`;
+      save();
+      rerenderRouteResolutionView();
+    }));
+  };
