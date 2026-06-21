@@ -21,6 +21,7 @@
     if (!holder || !event?.encounterTemplateId || !['success','failure'].includes(status)) return '';
     if (holder.encounterEffectsApplied) return holder.encounterEffectsSummary || '';
     const effects = status === 'success' ? event.successEffects || {} : event.failureEffects || {};
+    const operator = typeof generalEncounterRollOperator === 'function' ? generalEncounterRollOperator() : { name: state.character.name || 'Current Character', current: state.character.current, record: state.character, status: state.character.status || 'Onboard' };
     const applied = [];
     if (number(effects.hull)) {
       const maximum = typeof calculateSubmarine === 'function' ? calculateSubmarine().totals.hull : Math.max(number(state.submarine.hullCurrent), 1);
@@ -50,20 +51,20 @@
         applied.push(`${key} ${number(effects.systemRandom) > 0 ? '+' : ''}${number(effects.systemRandom)}%`);
       }
     }
-    if (effects.stats && typeof effects.stats === 'object') {
+    if (effects.stats && typeof effects.stats === 'object' && operator?.current) {
       for (const [key, value] of Object.entries(effects.stats)) {
-        if (!(key in state.character.current) || !number(value)) continue;
-        state.character.current[key] = Math.max(0, number(state.character.current[key]) + number(value));
-        applied.push(`${key} ${number(value) > 0 ? '+' : ''}${number(value)}`);
+        if (!(key in operator.current) || !number(value)) continue;
+        operator.current[key] = Math.max(0, number(operator.current[key]) + number(value));
+        applied.push(`${operator.name} ${key} ${number(value) > 0 ? '+' : ''}${number(value)}`);
       }
     }
     if (number(effects.routePressure)) {
       state.route.routePressure = Math.max(0, number(state.route.routePressure) + number(effects.routePressure));
       applied.push(`route pressure ${number(effects.routePressure) > 0 ? '+' : ''}${number(effects.routePressure)}`);
     }
-    if (number(effects.lostSanity) && state.route.sanityEnabled !== false) {
-      state.character.lostSanity = Math.max(0, number(state.character.lostSanity) + Math.max(0, number(effects.lostSanity)));
-      applied.push(`Lost Sanity +${Math.max(0, number(effects.lostSanity))}`);
+    if (number(effects.lostSanity) && state.route.sanityEnabled !== false && operator?.record) {
+      operator.record.lostSanity = Math.max(0, number(operator.record.lostSanity) + Math.max(0, number(effects.lostSanity)));
+      applied.push(`${operator.name} Lost Sanity +${Math.max(0, number(effects.lostSanity))}`);
     }
     holder.encounterEffectsApplied = status;
     holder.encounterEffectsSummary = applied.join(' · ') || 'No automatic state changes';
@@ -101,12 +102,19 @@
       let status = '';
       let roll = item.roll || '';
       if (button.classList.contains('encounter-roll')) {
-        const stat = item.event.stat in state.character.current ? item.event.stat : 'Intelligence';
+        const operator = typeof generalEncounterRollOperator === 'function' ? generalEncounterRollOperator() : { name: state.character.name || 'Current Character', current: state.character.current, status: state.character.status || 'Onboard' };
+        if (!operator || operator.status === 'Dead') {
+          item.roll = 'No living selected character is available to attempt this encounter.';
+          save();
+          renderEncounters();
+          return;
+        }
+        const stat = item.event.stat in operator.current ? item.event.stat : 'Intelligence';
         const dice = [d6(), d6()];
-        const modifier = number(state.character.current[stat]);
+        const modifier = number(operator.current[stat]);
         const total = dice[0] + dice[1] + modifier;
         status = total >= number(item.event.dc, 8) ? 'success' : 'failure';
-        roll = `${dice[0]} + ${dice[1]} + ${modifier} ${stat} = ${total} vs ${item.event.dc}`;
+        roll = `${operator.name}: ${dice[0]} + ${dice[1]} + ${modifier} ${stat} = ${total} vs ${item.event.dc}`;
       } else status = button.classList.contains('encounter-success') ? 'success' : 'failure';
       item.status = status;
       item.roll = roll;
