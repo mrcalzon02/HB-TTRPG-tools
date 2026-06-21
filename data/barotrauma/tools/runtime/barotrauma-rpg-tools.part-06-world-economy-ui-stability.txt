@@ -1,0 +1,141 @@
+
+  const mapSvgBeforeProgressiveWorldEconomy=mapSvg;
+  mapSvg=function mapSvgProgressiveSkeleton(map,selected=[]) {
+    if (!globalThis.__BAROTRAUMA_PROGRESSIVE_WORLD_MAP_RENDER||!map||map.nodes.length<=300) return mapSvgBeforeProgressiveWorldEconomy(map,selected);
+    return `<svg id="world-map-svg" viewBox="0 0 ${map.width} ${map.height}" role="img" aria-label="Progressively rendered Europa campaign route map"><defs><radialGradient id="anomalyGlow"><stop offset="0" stop-color="#efcb7e" stop-opacity=".55"/><stop offset="1" stop-color="#efcb7e" stop-opacity="0"/></radialGradient></defs><circle cx="${map.width/2}" cy="${map.height/2}" r="92" fill="url(#anomalyGlow)"/><g id="world-progressive-edge-layer"></g><g id="world-progressive-node-layer"></g></svg>`;
+  };
+
+  const dashboardWorldViewerSvgBeforeProgressiveEconomy=dashboardWorldViewerSvg;
+  dashboardWorldViewerSvg=function dashboardWorldViewerProgressiveSkeleton(context) {
+    const map=state.world?.map;
+    if (!map?.nodes?.length||map.nodes.length<=300) return dashboardWorldViewerSvgBeforeProgressiveEconomy(context);
+    return `<svg id="dashboard-world-viewer-svg" viewBox="0 0 ${map.width} ${map.height}" role="img" aria-label="Progressively rendered Europa station network" style="width:100%;height:820px;min-width:1100px;display:block;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.5));border-radius:14px"><g id="dashboard-progressive-corridor-layer"></g><g id="dashboard-progressive-station-layer"></g></svg>`;
+  };
+
+  function insertSvgLayerBeforeVessels(svg,layer) {
+    const vesselLayer=svg.querySelector('#world-economy-vessel-layer');
+    if (vesselLayer) svg.insertBefore(layer,vesselLayer); else svg.appendChild(layer);
+  }
+
+  function populateStandaloneWorldMapProgressively(svg,map,selected=[]) {
+    if (!svg||!map?.nodes?.length||map.nodes.length<=300||svg.dataset.progressiveLoaded==='true') return;
+    svg.dataset.progressiveLoaded='true';
+    const namespace='http://www.w3.org/2000/svg';
+    const nodeById=Object.fromEntries(map.nodes.map(node=>[node.id,node]));
+    let edgeLayer=svg.querySelector('#world-progressive-edge-layer');
+    let nodeLayer=svg.querySelector('#world-progressive-node-layer');
+    if (!edgeLayer) { edgeLayer=document.createElementNS(namespace,'g');edgeLayer.id='world-progressive-edge-layer';insertSvgLayerBeforeVessels(svg,edgeLayer); }
+    if (!nodeLayer) { nodeLayer=document.createElementNS(namespace,'g');nodeLayer.id='world-progressive-node-layer';insertSvgLayerBeforeVessels(svg,nodeLayer); }
+    let edgeIndex=0,nodeIndex=0,labelCount=0;
+    const addEdges=()=>{
+      for (const edge of map.edges.slice(edgeIndex,edgeIndex+120)) {
+        const a=nodeById[edge.a],b=nodeById[edge.b];
+        if (!a||!b) continue;
+        const line=document.createElementNS(namespace,'line');
+        line.setAttribute('class',`map-edge ${edge.danger?'danger':''}`);
+        line.setAttribute('x1',number(a.x));line.setAttribute('y1',number(a.y));line.setAttribute('x2',number(b.x));line.setAttribute('y2',number(b.y));
+        edgeLayer.appendChild(line);
+      }
+      edgeIndex+=120;
+      if (edgeIndex<map.edges.length) setTimeout(addEdges,0); else setTimeout(addNodes,0);
+    };
+    const addNodes=()=>{
+      for (const node of map.nodes.slice(nodeIndex,nodeIndex+50)) {
+        const group=document.createElementNS(namespace,'g');
+        group.setAttribute('class',`map-node ${node.type} ${selected.includes(node.id)?'selected':''}`);
+        group.dataset.nodeId=node.id;
+        group.setAttribute('transform',`translate(${number(node.x)} ${number(node.y)})`);
+        const circle=document.createElementNS(namespace,'circle');
+        circle.setAttribute('r',node.type==='anomaly'?15:node.start?12:9);
+        group.appendChild(circle);
+        const showLabel=node.start||node.type==='anomaly'||selected.includes(node.id)||(node.type==='station'&&labelCount++<80);
+        if (showLabel) {
+          const text=document.createElementNS(namespace,'text');
+          text.setAttribute('x',node.type==='anomaly'?20:14);text.setAttribute('y','4');text.textContent=node.start?`START: ${node.name}`:node.name;group.appendChild(text);
+        }
+        group.addEventListener('click',()=>{
+          if (state.world.selected.includes(node.id)) state.world.selected=state.world.selected.filter(id=>id!==node.id);
+          else if (state.world.selected.length<2) state.world.selected.push(node.id);
+          else state.world.selected=[node.id];
+          save();renderWorld();
+        });
+        nodeLayer.appendChild(group);
+      }
+      nodeIndex+=50;
+      if (nodeIndex<map.nodes.length) setTimeout(addNodes,0);
+    };
+    setTimeout(addEdges,0);
+  }
+
+  function populateDashboardStationNetworkProgressively(svg,context) {
+    const map=state.world?.map;
+    if (!svg||!map?.nodes?.length||map.nodes.length<=300||svg.dataset.progressiveLoaded==='true') return;
+    svg.dataset.progressiveLoaded='true';
+    const namespace='http://www.w3.org/2000/svg';
+    const stations=map.nodes.filter(node=>node.type==='station');
+    const stationById=Object.fromEntries(stations.map(node=>[node.id,node]));
+    const currentId=context.group.currentNodeId;
+    const focusedId=state.operationsDashboard.focusedNodeId;
+    let corridorLayer=svg.querySelector('#dashboard-progressive-corridor-layer');
+    let stationLayer=svg.querySelector('#dashboard-progressive-station-layer');
+    if (!corridorLayer) { corridorLayer=document.createElementNS(namespace,'g');corridorLayer.id='dashboard-progressive-corridor-layer';insertSvgLayerBeforeVessels(svg,corridorLayer); }
+    if (!stationLayer) { stationLayer=document.createElementNS(namespace,'g');stationLayer.id='dashboard-progressive-station-layer';insertSvgLayerBeforeVessels(svg,stationLayer); }
+    let stationIndex=0,corridorIndex=0,labelCount=0;
+    const corridorKeys=new Set();
+    const addStations=()=>{
+      for (const station of stations.slice(stationIndex,stationIndex+35)) {
+        const current=station.id===currentId,focused=station.id===focusedId;
+        const group=document.createElementNS(namespace,'g');
+        group.setAttribute('class','dashboard-world-station');group.dataset.stationId=station.id;group.setAttribute('transform',`translate(${number(station.x)} ${number(station.y)})`);group.setAttribute('style','cursor:pointer');
+        const circle=document.createElementNS(namespace,'circle');
+        circle.setAttribute('r',current?28:focused?21:12);circle.setAttribute('fill',current?'#e65353':focused?'#d6aa54':'#2d6686');circle.setAttribute('stroke','#fff');circle.setAttribute('stroke-width',current?8:focused?6:2);group.appendChild(circle);
+        if (current||focused||labelCount++<45) { const text=document.createElementNS(namespace,'text');text.setAttribute('x',current?38:20);text.setAttribute('y','5');text.setAttribute('fill','#e8edf2');text.setAttribute('font-size',current?19:13);text.setAttribute('font-weight',current?900:700);text.textContent=station.name;group.appendChild(text); }
+        group.addEventListener('click',()=>{state.operationsDashboard.focusedNodeId=station.id;save();renderSubmarine();});
+        stationLayer.appendChild(group);
+      }
+      stationIndex+=35;
+      if (stationIndex<stations.length) setTimeout(addStations,0); else setTimeout(addCorridors,0);
+    };
+    const addCorridors=()=>{
+      const station=stations[corridorIndex];
+      if (!station) return;
+      for (const route of dashboardAdjacentStationRoutes(station.id,map)) {
+        const key=[station.id,route.stationId].sort().join('|');
+        if (corridorKeys.has(key)) continue;
+        corridorKeys.add(key);
+        const target=stationById[route.stationId];
+        if (!target) continue;
+        const line=document.createElementNS(namespace,'line');
+        line.setAttribute('x1',number(station.x));line.setAttribute('y1',number(station.y));line.setAttribute('x2',number(target.x));line.setAttribute('y2',number(target.y));line.setAttribute('stroke',route.danger?'#81444b':'#485b6c');line.setAttribute('stroke-width',route.pathNodeIds.includes(currentId)?7:3);line.setAttribute('opacity','.78');corridorLayer.appendChild(line);
+      }
+      corridorIndex+=1;
+      if (corridorIndex<stations.length) setTimeout(addCorridors,0);
+    };
+    setTimeout(addStations,0);
+  }
+
+  focusWorldEconomyVessel=function focusWorldEconomyVesselWithoutCssEscape(vesselId) {
+    const marker=[...root.querySelectorAll('.world-economy-vessel-marker')].find(item=>item.dataset.vesselId===vesselId);
+    if (!marker) return false;
+    root.querySelectorAll('.world-economy-vessel-marker').forEach(item=>item.classList.remove('map-focused'));
+    marker.classList.add('map-focused');
+    marker.scrollIntoView({behavior:'smooth',block:'center',inline:'center'});
+    return true;
+  };
+
+  const renderWorldBeforeProgressiveNetwork=renderWorld;
+  renderWorld=function renderWorldWithProgressiveNetwork() {
+    globalThis.__BAROTRAUMA_PROGRESSIVE_WORLD_MAP_RENDER=true;
+    let result;
+    try { result=renderWorldBeforeProgressiveNetwork(); }
+    finally { globalThis.__BAROTRAUMA_PROGRESSIVE_WORLD_MAP_RENDER=false; }
+    populateStandaloneWorldMapProgressively(root.querySelector('#world-map-svg'),state.world?.map,state.world?.selected||[]);
+    return result;
+  };
+
+  const renderActiveSubmarineDashboardBeforeProgressiveNetwork=renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard=function renderActiveSubmarineDashboardWithProgressiveNetwork(requestedFocus=activeDashboardRawFocus()) {
+    const result=renderActiveSubmarineDashboardBeforeProgressiveNetwork(requestedFocus);
+    if (state.operationsDashboard?.worldViewerOpen) populateDashboardStationNetworkProgressively(root.querySelector('#dashboard-world-viewer-svg'),normalizeActiveSubmarineDashboard(false));
+    return result;
+  };
