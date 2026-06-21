@@ -28,9 +28,19 @@ jobs:
         with:
           node-version: '22'
       - name: Validate assembled runtime
-        env:
-          VALIDATION_RECEIPT: data/barotrauma/validation/runtime-validation.json
-        run: node scripts/validate-barotrauma-runtime.mjs
+        id: validation
+        shell: bash
+        run: |
+          set +e
+          VALIDATION_RECEIPT=data/barotrauma/validation/runtime-validation.json node scripts/validate-barotrauma-runtime.mjs > validation-output.txt 2>&1
+          code=$?
+          cat validation-output.txt
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -ne 0 ]; then
+            mkdir -p data/barotrauma/validation
+            node -e "const fs=require('fs'); const output=fs.readFileSync('validation-output.txt','utf8'); fs.writeFileSync('data/barotrauma/validation/runtime-validation.json', JSON.stringify({status:'failed',validatedAt:new Date().toISOString(),sourceCommit:process.env.GITHUB_SHA||'',error:output},null,2)+'\\n');"
+          fi
+          exit 0
       - name: Commit validation receipt
         run: |
           if git diff --quiet -- data/barotrauma/validation/runtime-validation.json; then
@@ -41,3 +51,6 @@ jobs:
           git add data/barotrauma/validation/runtime-validation.json
           git commit -m "Record Barotrauma runtime validation"
           git push origin HEAD:main
+      - name: Fail when validation failed
+        if: steps.validation.outputs.exit_code != '0'
+        run: exit 1
