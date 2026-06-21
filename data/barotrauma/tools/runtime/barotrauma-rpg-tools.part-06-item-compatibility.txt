@@ -1,0 +1,421 @@
+
+  const ITEM_FUNCTIONALITY = globalThis.BAROTRAUMA_ITEM_FUNCTIONALITY || { inventoryRules: {}, toolBehaviors: {}, consumableEffects: {}, vendorArchetypes: [] };
+  const ITEM_INVENTORY_RULES = ITEM_FUNCTIONALITY.inventoryRules || {};
+  const ITEM_TOOL_BEHAVIORS = ITEM_FUNCTIONALITY.toolBehaviors || {};
+  const ITEM_CONSUMABLE_EFFECTS = ITEM_FUNCTIONALITY.consumableEffects || {};
+
+  state.character.consumptionLog = Array.isArray(state.character.consumptionLog) ? state.character.consumptionLog : [];
+
+  function itemToolBehavior(itemOrId) {
+    const id = typeof itemOrId === 'string' ? itemOrId : itemOrId?.id;
+    return ITEM_TOOL_BEHAVIORS[id] || null;
+  }
+
+  function itemUseEffect(item) {
+    if (!item) return '';
+    if (ITEM_CONSUMABLE_EFFECTS[item.id]) return ITEM_CONSUMABLE_EFFECTS[item.id];
+    const custom = item.custom ? customEntry(item.id) : null;
+    if (custom?.type === 'consumable') return custom.functionName || custom.description || `Consumes one charge of ${item.name}.`;
+    if (item.medicalUse) return `${item.description || item.name} Operational result: ${item.medicalUse}; consume one use when applied.`;
+    if (item.category === 'Consumables') return `${item.description || item.name} Consume one unit or use it to refill a compatible device.`;
+    if (item.category === 'Ammunition') return `Provides ${Math.max(1, number(item.capacity, 1))} compatible round${number(item.capacity, 1) === 1 ? '' : 's'} to ${item.compatibleWith?.join(', ') || 'an appropriate weapon'}.`;
+    return itemToolBehavior(item)?.action || '';
+  }
+
+  function itemFunctionalDescription(item) {
+    const effect = itemUseEffect(item);
+    if (!effect || String(item.description || '').includes(effect)) return item?.description || '';
+    return `${item.description || ''}${item.description ? ' ' : ''}${effect}`;
+  }
+
+  const inferInventoryTrackerBeforeCompatibility = inferInventoryTracker;
+  inferInventoryTracker = function inferCompatibleInventoryTracker(item) {
+    return itemToolBehavior(item)?.tracker || inferInventoryTrackerBeforeCompatibility(item);
+  };
+
+  const defaultUsesForItemBeforeCompatibility = defaultUsesForItem;
+  defaultUsesForItem = function defaultCompatibleUsesForItem(item) {
+    const configured = number(itemToolBehavior(item)?.maxUses, 0);
+    return configured > 0 ? configured : defaultUsesForItemBeforeCompatibility(item);
+  };
+
+  function normalizeCompatibilityInventory() {
+    normalizeCharacterInventory();
+    for (const entry of state.character.catalogInventory) {
+      const item = inventoryDefinition(entry);
+      const behavior = itemToolBehavior(item);
+      if (!behavior) continue;
+      if (behavior.tracker && ['toolbelt','backpack','bandolier','storage-container','artifact-transport-case'].includes(item.id)) entry.tracker = behavior.tracker;
+      if (behavior.maxUses > 0 && (entry.maxUses <= 1 || !Number.isFinite(Number(entry.maxUses)))) {
+        entry.maxUses = behavior.maxUses;
+        entry.usesRemaining = clamp(entry.usesRemaining || behavior.maxUses, 0, behavior.maxUses);
+      }
+      if (entry.tracker === 'condition' && !Number.isFinite(Number(entry.condition))) entry.condition = 100;
+    }
+  }
+
+  function equippedFunctionalItem(id) {
+    return state.character.catalogInventory.find(entry => entry.id === id && entry.equipped && (entry.tracker !== 'condition' || number(entry.condition, 100) > 0));
+  }
+
+  function characterInventoryCapacity() {
+    normalizeCompatibilityInventory();
+    const baseSlots = Math.max(1, number(state.character.current.Strength, 1));
+    const toolbelt = Boolean(equippedFunctionalItem('toolbelt'));
+    const backpack = Boolean(equippedFunctionalItem('backpack'));
+    const expansion = (toolbelt ? number(ITEM_INVENTORY_RULES.toolbeltSlots, 4) : 0) + (backpack ? number(ITEM_INVENTORY_RULES.backpackSlots, 4) : 0);
+    const used = state.character.catalogInventory.reduce((sum, entry) => sum + Math.max(1, number(entry.quantity, 1)), 0);
+    const capacity = baseSlots + expansion;
+    const backpackPenalty = backpack ? Math.max(0, number(ITEM_INVENTORY_RULES.backpackMobilityPenalty, 1)) : 0;
+    const overloadPenalty = Math.max(0, used - capacity);
+    return {
+      baseSlots,
+      expansion,
+      capacity,
+      used,
+      remaining: capacity - used,
+      toolbelt,
+      backpack,
+      mobilityPenalty: backpackPenalty + overloadPenalty,
+      backpackPenalty,
+      overloadPenalty
+    };
+  }
+
+  function effectiveCharacterCurrent() {
+    const capacity = characterInventoryCapacity();
+    return {
+      ...state.character.current,
+      Agility: Math.max(0, number(state.character.current.Agility) - capacity.mobilityPenalty)
+    };
+  }
+
+  function inventoryEntriesByName(name) {
+    const normalized = String(name || '').trim().toLowerCase();
+    return state.character.catalogInventory.filter(entry => String(inventoryDefinition(entry).name || '').trim().toLowerCase() === normalized);
+  }
+
+  function inventoryEntryReserve(entry) {
+    const item = inventoryDefinition(entry);
+    const quantity = Math.max(1, number(entry.quantity, 1));
+    if (entry.tracker === 'uses') return Math.max(0, number(entry.usesRemaining)) + Math.max(0, quantity - 1) * Math.max(1, number(entry.maxUses, item.capacity || 1));
+    return quantity * Math.max(1, number(item.capacity, 1));
+  }
+
+  function availableInventoryReserve(name) {
+    return inventoryEntriesByName(name).reduce((sum, entry) => sum + inventoryEntryReserve(entry), 0);
+  }
+
+  function consumeInventoryReserve(name, amount = 1) {
+    let remaining = Math.max(0, number(amount));
+    let consumed = 0;
+    for (const entry of [...inventoryEntriesByName(name)]) {
+      if (remaining <= 0) break;
+      const item = inventoryDefinition(entry);
+      if (entry.tracker === 'uses') {
+        const unitCapacity = Math.max(1, number(entry.maxUses, item.capacity || 1));
+        while (remaining > 0 && entry.quantity > 0) {
+          const available = Math.max(0, number(entry.usesRemaining));
+          if (available <= 0) {
+            if (entry.quantity > 1) {
+              entry.quantity -= 1;
+              entry.usesRemaining = unitCapacity;
+              continue;
+            }
+            break;
+          }
+          const take = Math.min(available, remaining);
+          entry.usesRemaining -= take;
+          remaining -= take;
+          consumed += take;
+          if (entry.usesRemaining <= 0 && entry.quantity > 1) {
+            entry.quantity -= 1;
+            entry.usesRemaining = unitCapacity;
+          }
+        }
+      } else {
+        const perItem = Math.max(1, number(item.capacity, 1));
+        while (remaining > 0 && entry.quantity > 0) {
+          const take = Math.min(perItem, remaining);
+          remaining -= take;
+          consumed += take;
+          entry.quantity -= 1;
+        }
+      }
+    }
+    state.character.catalogInventory = state.character.catalogInventory.filter(entry => Math.max(0, number(entry.quantity, 1)) > 0);
+    return consumed;
+  }
+
+  function addConsumptionLog(item, effect) {
+    state.character.consumptionLog.unshift({ id: uid('use'), item: item.name, effect, at: new Date().toISOString() });
+    state.character.consumptionLog = state.character.consumptionLog.slice(0, 20);
+  }
+
+  function spendTrackedUse(entry, item) {
+    if (number(entry.usesRemaining) <= 0) return false;
+    entry.usesRemaining = Math.max(0, number(entry.usesRemaining) - 1);
+    const consumable = ['Consumables','Medical','Ammunition'].includes(item.category) || customEntry(item.id)?.type === 'consumable';
+    if (consumable && entry.usesRemaining <= 0 && entry.quantity > 1) {
+      entry.quantity -= 1;
+      entry.usesRemaining = Math.max(1, number(entry.maxUses, item.capacity || 1));
+    }
+    const effect = itemUseEffect(item) || itemToolBehavior(item)?.action || `Used ${item.name}.`;
+    addConsumptionLog(item, effect);
+    return true;
+  }
+
+  function reloadTrackedWeapon(entry, item) {
+    const capacity = Math.max(1, number(entry.magazineCapacity, inferredMagazineCapacity(item, entry.ammoName, 1)));
+    const needed = Math.max(0, capacity - number(entry.currentAmmo));
+    if (!needed || !entry.ammoName) return 0;
+    const loaded = consumeInventoryReserve(entry.ammoName, needed);
+    entry.currentAmmo = Math.min(capacity, number(entry.currentAmmo) + loaded);
+    return loaded;
+  }
+
+  function refillTrackedTool(entry, item) {
+    const behavior = itemToolBehavior(item);
+    const supplies = behavior?.refillItems || [];
+    if (supplies.length) {
+      const supply = supplies.find(name => availableInventoryReserve(name) > 0);
+      if (!supply || consumeInventoryReserve(supply, 1) < 1) return '';
+      entry.usesRemaining = Math.max(1, number(entry.maxUses, behavior.maxUses || 1));
+      addConsumptionLog(item, `${item.name} refilled using ${supply}.`);
+      return supply;
+    }
+    entry.usesRemaining = Math.max(1, number(entry.maxUses, behavior?.maxUses || 1));
+    addConsumptionLog(item, `${item.name} serviced and restored to full uses.`);
+    return 'service';
+  }
+
+  function patchCharacterTaskResolverForInventory() {
+    const original = root.querySelector('#roll-task');
+    if (!original) return;
+    const replacement = original.cloneNode(true);
+    original.replaceWith(replacement);
+    replacement.addEventListener('click', () => {
+      const stat = root.querySelector('#roll-stat').value;
+      const dc = number(root.querySelector('#roll-dc').value, 8);
+      const dice = [d6(), d6()];
+      const modifier = number(effectiveCharacterCurrent()[stat]);
+      const total = dice[0] + dice[1] + modifier;
+      const success = total >= dc;
+      const capacity = characterInventoryCapacity();
+      const penaltyNote = stat === 'Agility' && capacity.mobilityPenalty ? ` (${capacity.mobilityPenalty} mobility penalty)` : '';
+      const logEntry = { result: success ? 'SUCCESS' : 'FAILURE', detail: `${dice[0]} + ${dice[1]} + ${modifier} ${stat}${penaltyNote} = ${total} vs ${dc}` };
+      state.character.rollLog.unshift(logEntry);
+      state.character.rollLog = state.character.rollLog.slice(0, 20);
+      save();
+      const result = root.querySelector('#roll-result');
+      if (result) result.innerHTML = `<strong class="${success ? 'good' : 'bad'}">${logEntry.result}</strong><br>${escapeHtml(logEntry.detail)}`;
+    });
+  }
+
+  const enhanceCharacterCatalogueBeforeCompatibility = enhanceCharacterCatalogue;
+  enhanceCharacterCatalogue = function enhanceCharacterCatalogueWithCompatibility() {
+    normalizeCompatibilityInventory();
+    enhanceCharacterCatalogueBeforeCompatibility();
+    const panel = [...root.querySelectorAll('.tool-panel')].find(item => item.querySelector('h3')?.textContent.includes('Tracked Inventory and Loadout'));
+    if (!panel) return;
+    const capacity = characterInventoryCapacity();
+    const effective = effectiveCharacterCurrent();
+    const capacityRow = document.createElement('div');
+    capacityRow.className = 'metric-row inventory-functionality-metrics';
+    capacityRow.style.marginBottom = '12px';
+    capacityRow.innerHTML = `<div class="metric"><span>Tracked slots</span><strong class="${capacity.used > capacity.capacity ? 'bad' : 'good'}">${capacity.used}/${capacity.capacity}</strong></div><div class="metric"><span>Expansion slots</span><strong>+${capacity.expansion}</strong></div><div class="metric"><span>Toolbelt</span><strong class="${capacity.toolbelt ? 'good' : ''}">${capacity.toolbelt ? '+4' : 'Not equipped'}</strong></div><div class="metric"><span>Backpack</span><strong class="${capacity.backpack ? 'warn' : ''}">${capacity.backpack ? '+4 / −1 Agility' : 'Not equipped'}</strong></div><div class="metric"><span>Effective Agility</span><strong class="${capacity.mobilityPenalty ? 'warn' : 'good'}">${effective.Agility}</strong></div><div class="metric"><span>Mobility penalty</span><strong class="${capacity.mobilityPenalty ? 'bad' : 'good'}">−${capacity.mobilityPenalty}</strong></div>`;
+    const firstTable = panel.querySelector('.table-wrap');
+    if (firstTable) panel.insertBefore(capacityRow, firstTable);
+    if (capacity.overloadPenalty > 0) {
+      const overload = document.createElement('div');
+      overload.className = 'notice bad';
+      overload.style.marginBottom = '12px';
+      overload.textContent = `Inventory exceeds tracked slot capacity by ${capacity.overloadPenalty}. Each excess slot adds one additional effective Agility penalty until items are removed, stored, or placed in cargo.`;
+      if (firstTable) panel.insertBefore(overload, firstTable);
+    }
+
+    panel.querySelectorAll('[data-inventory-instance]').forEach(row => {
+      const instanceId = row.dataset.inventoryInstance;
+      const entry = inventoryEntry(instanceId);
+      if (!entry) return;
+      const item = inventoryDefinition(entry);
+      const firstCell = row.querySelector('td');
+      const effect = itemUseEffect(item);
+      const behavior = itemToolBehavior(item);
+      if (firstCell && (effect || behavior?.action)) {
+        const note = document.createElement('div');
+        note.className = 'small-note item-function-note';
+        note.innerHTML = `<strong>Functional effect:</strong> ${escapeHtml(effect || behavior.action)}`;
+        firstCell.appendChild(note);
+      }
+      const counter = row.querySelector('.inventory-counter-block');
+      if (counter && entry.tracker === 'ammo') {
+        const reserve = document.createElement('span');
+        reserve.className = 'small-note';
+        reserve.textContent = `Compatible reserve available: ${availableInventoryReserve(entry.ammoName)} rounds/charges.`;
+        counter.appendChild(reserve);
+      }
+      if (counter && entry.tracker === 'uses' && behavior?.refillItems?.length) {
+        const refill = document.createElement('span');
+        refill.className = 'small-note';
+        refill.textContent = `Refill with: ${behavior.refillItems.join(', ')}.`;
+        counter.appendChild(refill);
+      }
+    });
+
+    panel.querySelectorAll('.inventory-reload').forEach(original => {
+      const replacement = original.cloneNode(true);
+      original.replaceWith(replacement);
+      replacement.addEventListener('click', event => {
+        const entry = inventoryEntry(event.target.dataset.instance);
+        if (!entry) return;
+        const loaded = reloadTrackedWeapon(entry, inventoryDefinition(entry));
+        replacement.textContent = loaded ? `Loaded ${loaded}` : 'No compatible reserve';
+        save();
+        if (loaded) renderCharacter();
+      });
+    });
+    panel.querySelectorAll('.inventory-refill').forEach(original => {
+      const replacement = original.cloneNode(true);
+      original.replaceWith(replacement);
+      replacement.addEventListener('click', event => {
+        const entry = inventoryEntry(event.target.dataset.instance);
+        if (!entry) return;
+        const source = refillTrackedTool(entry, inventoryDefinition(entry));
+        replacement.textContent = source ? 'Refilled' : 'Missing compatible supply';
+        save();
+        if (source) renderCharacter();
+      });
+    });
+    panel.querySelectorAll('.inventory-spend-use').forEach(original => {
+      const replacement = original.cloneNode(true);
+      original.replaceWith(replacement);
+      replacement.addEventListener('click', event => {
+        const entry = inventoryEntry(event.target.dataset.instance);
+        if (!entry) return;
+        if (spendTrackedUse(entry, inventoryDefinition(entry))) {
+          save();
+          renderCharacter();
+        }
+      });
+    });
+
+    if (state.character.consumptionLog.length) {
+      const details = document.createElement('details');
+      details.style.marginTop = '12px';
+      details.innerHTML = `<summary><strong>Recent item use and consumption</strong></summary><div class="card-list" style="margin-top:10px">${state.character.consumptionLog.slice(0, 10).map(entry => `<div class="small-note"><strong>${escapeHtml(entry.item)}</strong> — ${escapeHtml(entry.effect)}<br>${escapeHtml(new Date(entry.at).toLocaleString())}</div>`).join('')}</div>`;
+      panel.appendChild(details);
+    }
+  };
+
+  const renderCharacterBeforeItemCompatibility = renderCharacter;
+  renderCharacter = function renderCharacterWithItemCompatibility() {
+    renderCharacterBeforeItemCompatibility();
+    patchCharacterTaskResolverForInventory();
+  };
+
+  const renderEncountersBeforeItemCompatibility = renderEncounters;
+  renderEncounters = function renderEncountersWithInventoryMobility() {
+    renderEncountersBeforeItemCompatibility();
+    root.querySelectorAll('.encounter-roll').forEach(original => {
+      const replacement = original.cloneNode(true);
+      original.replaceWith(replacement);
+      replacement.addEventListener('click', event => {
+        const planner = state.encounters;
+        const item = planner.plan.find(candidate => candidate.id === event.target.dataset.id);
+        if (!item) return;
+        const stat = item.event.stat in state.character.current ? item.event.stat : 'Intelligence';
+        const dice = [d6(), d6()];
+        const modifier = number(effectiveCharacterCurrent()[stat]);
+        const total = dice[0] + dice[1] + modifier;
+        item.status = total >= number(item.event.dc) ? 'success' : 'failure';
+        item.roll = `${dice[0]} + ${dice[1]} + ${modifier} ${stat} = ${total} vs ${item.event.dc}`;
+        save(); renderEncounters();
+      });
+    });
+  };
+
+  const buildCrewSubmissionBeforeItemCompatibility = buildCrewSubmission;
+  buildCrewSubmission = function buildCrewSubmissionWithInventoryEffects() {
+    const submission = buildCrewSubmissionBeforeItemCompatibility();
+    const capacity = characterInventoryCapacity();
+    submission.character.effectiveCurrent = effectiveCharacterCurrent();
+    submission.character.inventoryEffects = {
+      trackedSlots: capacity.used,
+      slotCapacity: capacity.capacity,
+      toolbeltEquipped: capacity.toolbelt,
+      backpackEquipped: capacity.backpack,
+      mobilityPenalty: capacity.mobilityPenalty
+    };
+    return submission;
+  };
+
+  const crewRecordFromSubmissionBeforeItemCompatibility = crewRecordFromSubmission;
+  crewRecordFromSubmission = function crewRecordFromSubmissionWithInventoryEffects(submission) {
+    const record = crewRecordFromSubmissionBeforeItemCompatibility(submission);
+    if (submission?.character?.effectiveCurrent) record.current = { ...record.current, ...submission.character.effectiveCurrent };
+    record.inventoryEffects = submission?.character?.inventoryEffects || {};
+    return record;
+  };
+
+  const crewRollOperatorBeforeItemCompatibility = crewRollOperator;
+  crewRollOperator = function crewRollOperatorWithInventoryEffects() {
+    const operator = crewRollOperatorBeforeItemCompatibility();
+    if (operator.rosterId === 'local') operator.current = effectiveCharacterCurrent();
+    return operator;
+  };
+
+  function reloadSubmarineWikiWeapon(instanceId) {
+    const weaponEntry = state.submarine.wikiWeapons.find(entry => entry.instanceId === instanceId);
+    const weapon = weaponEntry && catalogueWeapon(weaponEntry.id);
+    const ammoDefinition = weapon?.ammo?.find(ammo => ammo.name === weaponEntry.ammoName);
+    if (!weaponEntry || !ammoDefinition) return false;
+    const stored = state.submarine.wikiAmmo.find(entry => catalogueItem(entry.id)?.name === weaponEntry.ammoName && number(entry.quantity) > 0);
+    if (!stored) return false;
+    stored.quantity -= 1;
+    weaponEntry.loaded = Math.max(0, number(ammoDefinition.magazineSize));
+    if (stored.quantity <= 0) state.submarine.wikiAmmo = state.submarine.wikiAmmo.filter(entry => entry !== stored);
+    save();
+    return true;
+  }
+
+  const enhanceSubmarineCatalogueBeforeCompatibility = enhanceSubmarineCatalogue;
+  enhanceSubmarineCatalogue = function enhanceSubmarineCatalogueWithCompatibility() {
+    enhanceSubmarineCatalogueBeforeCompatibility();
+    const panel = [...root.querySelectorAll('.tool-panel')].find(item => item.querySelector('h3')?.textContent.includes('Barotrauma Wiki Weapon Installations'));
+    if (!panel) return;
+    panel.querySelectorAll('.wiki-weapon-ammo').forEach(select => {
+      const row = select.closest('tr');
+      const actionCell = row?.querySelector('td:last-child');
+      if (!actionCell || actionCell.querySelector('.wiki-weapon-reload')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'compact-button wiki-weapon-reload';
+      button.dataset.instance = select.dataset.instance;
+      button.textContent = 'Reload from 1 Stored Box';
+      actionCell.prepend(button);
+      button.addEventListener('click', () => {
+        if (reloadSubmarineWikiWeapon(button.dataset.instance)) renderSubmarine();
+        else button.textContent = 'No matching ammo box';
+      });
+    });
+  };
+
+  const renderCatalogueBeforeItemCompatibility = renderCatalogue;
+  renderCatalogue = function renderCatalogueWithFunctionalEffects() {
+    renderCatalogueBeforeItemCompatibility();
+    root.querySelectorAll('.catalogue-add-character, .catalogue-add-ammo').forEach(button => {
+      const item = catalogueItem(button.dataset.id);
+      const row = button.closest('tr');
+      const operationalCell = row?.children?.[2];
+      const effect = itemUseEffect(item) || itemToolBehavior(item)?.action;
+      if (operationalCell && effect && !operationalCell.querySelector('.item-function-note')) {
+        const note = document.createElement('div');
+        note.className = 'small-note item-function-note';
+        note.innerHTML = `<strong>Functional effect:</strong> ${escapeHtml(effect)}`;
+        operationalCell.appendChild(note);
+      }
+    });
+  };
+
+  normalizeCompatibilityInventory();
