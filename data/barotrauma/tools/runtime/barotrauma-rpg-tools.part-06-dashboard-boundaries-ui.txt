@@ -71,7 +71,7 @@
       state.operationsDashboard.startingLocation = defaultDashboardStartingLocationState();
       normalizeDashboardStartingLocationState();
       randomizedDashboardStartingStations(true);
-      synchronizeActiveDashboardMechanics('World generated', { rebuildTurnOrder: true });
+      synchronizeActiveDashboardMechanics('World generated');
       renderSubmarine();
     }
   };
