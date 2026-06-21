@@ -1,0 +1,184 @@
+
+  function worldEconomyStationRecordForNode(nodeId) {
+    const station=STATIONS.find(item=>item.worldNodeId===nodeId)||STATIONS.find(item=>item.name===state.world?.map?.nodes?.find(node=>node.id===nodeId)?.name);
+    return station?normalizeStationCommerce().stations[stationIdentity(station)]||null:null;
+  }
+
+  function worldEconomyEnsureVendorShells(stationRecord) {
+    if (!stationRecord) return [];
+    if (Array.isArray(stationRecord.vendors)&&stationRecord.vendors.length) return stationRecord.vendors;
+    stationRecord.marketRevision=Math.max(0,number(stationRecord.marketRevision))+1;
+    const rng=seededRandom(`${stationRecord.id}:persistent-vendors:${stationRecord.marketRevision}`);
+    const preferred=stationSpecialtyVendorIds(stationRecord);
+    const normal=(ITEM_FUNCTIONALITY.vendorArchetypes||[]).filter(item=>!item.machine);
+    const machines=(ITEM_FUNCTIONALITY.vendorArchetypes||[]).filter(item=>item.machine);
+    const ids=[...preferred];
+    while (ids.length<3&&normal.length) {
+      const candidate=normal[Math.floor(rng()*normal.length)]?.id;
+      if (candidate&&!ids.includes(candidate)) ids.push(candidate);
+    }
+    const machine=machines[Math.floor(rng()*Math.max(1,machines.length))];
+    stationRecord.vendors=[...ids.slice(0,3).map(id=>vendorArchetype(id)),...(machine?[machine]:[])].map(archetype=>({vendorId:uid('vendor'),archetypeId:archetype.id,name:archetype.machine?archetype.name:randomOwnerName(rng,archetype.name),machine:Boolean(archetype.machine),markup:number(archetype.markup,1.1),stock:[]}));
+    return stationRecord.vendors;
+  }
+
+  function worldEconomyMigrateLegacyVendorStock(stationRecord,nodeId) {
+    const station=worldStationEconomy(nodeId);
+    if (!station||station.legacyVendorStockMigrated) return;
+    for (const vendor of stationRecord.vendors||[]) for (const stock of vendor.stock||[]) {
+      const record=tradeRecordByKey(stock.tradeKey);
+      if (!record||number(stock.quantity)<=0) continue;
+      const existing=station.inventory.catalogue[record.key]||{tradeKey:record.key,name:record.name,quantity:0,basePrice:tradeBasePrice(record),commodity:worldEconomyTradeCommodity(record)};
+      existing.quantity=Math.max(number(existing.quantity),number(stock.quantity));
+      existing.lastSource='legacy-market-migration';
+      existing.updatedAt=new Date().toISOString();
+      station.inventory.catalogue[record.key]=existing;
+    }
+    station.legacyVendorStockMigrated=true;
+  }
+
+  function worldEconomyVendorForRecord(stationRecord,record) {
+    const vendors=worldEconomyEnsureVendorShells(stationRecord);
+    return vendors.find(vendor=>!vendor.machine&&vendorArchetype(vendor.archetypeId).categories?.includes(record.category))
+      ||vendors.find(vendor=>!vendor.machine)
+      ||vendors[0]
+      ||null;
+  }
+
+  function worldEconomySyncVendorsFromStationInventory(stationRecord) {
+    if (!stationRecord) return false;
+    const nodeId=worldEconomyStationNodeId(stationRecord);
+    const station=worldStationEconomy(nodeId);
+    if (!station) return false;
+    worldEconomyEnsureVendorShells(stationRecord);
+    worldEconomyMigrateLegacyVendorStock(stationRecord,nodeId);
+    for (const vendor of stationRecord.vendors) vendor.stock=[];
+    for (const stock of Object.values(station.inventory.catalogue||{})) {
+      if (number(stock.quantity)<=0) continue;
+      const record=tradeRecordByKey(stock.tradeKey);
+      if (!record) continue;
+      const vendor=worldEconomyVendorForRecord(stationRecord,record);
+      if (!vendor) continue;
+      vendor.stock.push({stockId:`persistent-stock-${stationSlug(nodeId)}-${stationSlug(stock.tradeKey)}`,tradeKey:stock.tradeKey,quantity:Math.max(0,Math.floor(number(stock.quantity))),basePrice:number(stock.basePrice,tradeBasePrice(record))});
+    }
+    stationRecord.worldEconomyNodeId=nodeId;
+    stationRecord.deliveryGoodsAvailable=Math.max(0,number(station.inventory.deliveryGoods));
+    return true;
+  }
+
+  function worldEconomyUnpackDeliveryGoods(nodeId,quantity,vesselId='') {
+    const station=worldStationEconomy(nodeId);
+    const stationRecord=worldEconomyStationRecordForNode(nodeId);
+    const amount=Math.max(0,Math.floor(number(quantity)));
+    if (!station||!stationRecord||amount<=0) return {accepted:0,stockUnits:0};
+    worldEconomyEnsureVendorShells(stationRecord);
+    const records=allTradeRecords().filter(record=>record.kind!=='upgrade'||station.profileId==='shipyard'||station.profileId==='factory');
+    let stockUnits=0;
+    for (let crate=0;crate<amount;crate+=1) {
+      const rng=seededRandom(`${normalizeWorldHub().worldId}|${nodeId}|${vesselId}|delivery-crate|${station.production.cyclesCompleted}|${crate}|${station.playerSales.length}`);
+      const selections=3+Math.floor(rng()*4);
+      for (let index=0;index<selections;index+=1) {
+        const record=records[Math.floor(rng()*Math.max(1,records.length))];
+        if (!record) continue;
+        const units=1+Math.floor(rng()*4);
+        const existing=station.inventory.catalogue[record.key]||{tradeKey:record.key,name:record.name,quantity:0,basePrice:tradeBasePrice(record),commodity:worldEconomyTradeCommodity(record)};
+        existing.quantity=Math.max(0,number(existing.quantity))+units;
+        existing.lastSource=`delivery-goods:${vesselId||'internal'}`;
+        existing.updatedAt=new Date().toISOString();
+        station.inventory.catalogue[record.key]=existing;
+        station.inventory[existing.commodity]=Math.max(0,number(station.inventory[existing.commodity]))+units;
+        stockUnits+=units;
+      }
+    }
+    station.deliveryReceipts=Array.isArray(station.deliveryReceipts)?station.deliveryReceipts:[];
+    station.deliveryReceipts.unshift({id:uid('delivery-receipt'),vesselId,crates:amount,stockUnits,acceptedAt:new Date().toISOString()});
+    station.deliveryReceipts=station.deliveryReceipts.slice(0,100);
+    station.updatedAt=new Date().toISOString();
+    worldEconomySyncVendorsFromStationInventory(stationRecord);
+    worldEconomyTradeJournal(`${stationRecord.name} accepted ${amount} Delivery Goods crate${amount===1?'':'s'} and unpacked ${stockUnits} vendor stock units.`,{stationNodeId:nodeId,vesselId,deliveryGoods:amount,stockUnits});
+    return {accepted:amount,stockUnits};
+  }
+
+  worldEconomyAcceptDeliveryGoods=function worldEconomyAcceptAndUnpackDeliveryGoods(nodeId,quantity,vesselId='') {
+    return worldEconomyUnpackDeliveryGoods(nodeId,quantity,vesselId);
+  };
+
+  generateVendorStock=function generateVendorStockFromPersistentEconomy() { return []; };
+
+  generateStationMarket=function generatePersistentStationMarket(stationRecord) {
+    if (!stationRecord) return false;
+    worldEconomyEnsureVendorShells(stationRecord);
+    worldEconomySyncVendorsFromStationInventory(stationRecord);
+    stationRecord.marketRevision=Math.max(1,number(stationRecord.marketRevision));
+    stationRecord.notes=stationRecord.notes||'Vendor shelves are supplied only by player sales, station production, and completed submarine deliveries.';
+    save();
+    return true;
+  };
+
+  const sellToStationBeforePersistentWorldEconomy=sellToStation;
+  sellToStation=function sellToStationWithPersistentWorldInventory(sourceKey,stationRecord) {
+    const sellable=sellableRecords().find(item=>item.sourceKey===sourceKey);
+    const nodeId=worldEconomyStationNodeId(stationRecord);
+    const result=sellToStationBeforePersistentWorldEconomy(sourceKey,stationRecord);
+    if (result.ok&&sellable&&nodeId) {
+      worldEconomyAddStationStock(nodeId,sellable.record,1,'player-sale');
+      const station=worldStationEconomy(nodeId);
+      station.playerSales.unshift({id:uid('player-sale'),tradeKey:sellable.record.key,name:sellable.name,quantity:1,soldAt:new Date().toISOString(),sellerGroupId:normalizeWorldHub().activeGroupId||''});
+      station.playerSales=station.playerSales.slice(0,250);
+      worldEconomySyncVendorsFromStationInventory(stationRecord);
+      worldEconomyTradeJournal(`Player sale added ${sellable.name} permanently to ${stationRecord.name} inventory.`,{stationNodeId:nodeId,tradeKey:sellable.record.key,quantity:1,source:'player-sale'});
+      save();
+    }
+    return result;
+  };
+
+  const buyStationStockBeforePersistentWorldEconomy=buyStationStock;
+  buyStationStock=function buyStationStockFromPersistentWorldInventory(stationRecord,vendorId,stockId) {
+    const vendor=stationRecord?.vendors?.find(item=>item.vendorId===vendorId);
+    const stock=vendor?.stock?.find(item=>item.stockId===stockId);
+    const tradeKey=stock?.tradeKey||'';
+    const nodeId=worldEconomyStationNodeId(stationRecord);
+    const result=buyStationStockBeforePersistentWorldEconomy(stationRecord,vendorId,stockId);
+    if (result.ok&&nodeId&&tradeKey) {
+      worldEconomyRemoveStationStock(nodeId,tradeKey,1);
+      worldEconomySyncVendorsFromStationInventory(stationRecord);
+      worldEconomyTradeJournal(`Vendor sale removed one ${tradeKey} from ${stationRecord.name} persistent inventory.`,{stationNodeId:nodeId,tradeKey,quantity:1,source:'vendor-sale'});
+      save();
+    }
+    return result;
+  };
+
+  const normalizeStationCommerceBeforePersistentWorldEconomy=normalizeStationCommerce;
+  normalizeStationCommerce=function normalizeStationCommerceWithPersistentWorldInventory() {
+    const commerce=normalizeStationCommerceBeforePersistentWorldEconomy();
+    for (const stationRecord of Object.values(commerce.stations||{})) {
+      worldEconomyEnsureVendorShells(stationRecord);
+      worldEconomySyncVendorsFromStationInventory(stationRecord);
+    }
+    return commerce;
+  };
+
+  function patchPersistentStationCommercePanel() {
+    const panel=[...root.querySelectorAll('.tool-panel')].find(item=>item.querySelector('h3')?.textContent.includes('Station Stores, Vendors'));
+    if (!panel) return;
+    const station=activeStationRecord();
+    const nodeId=worldEconomyStationNodeId(station);
+    const economy=worldStationEconomy(nodeId);
+    const button=panel.querySelector('#station-regenerate-market');
+    if (button) {
+      button.textContent='Reconcile Delivered Stock';
+      button.title='This cannot generate goods. It only rebuilds vendor shelves from persistent station inventory and accepted freight deliveries.';
+    }
+    const heroText=panel.querySelector('.tool-hero .small-note');
+    if (heroText) heroText.textContent='Vendors never generate stock. Shelves contain only persistent player sales, station production converted through trade, and Delivery Goods accepted from completed freight arrivals.';
+    panel.querySelector('.metric-row')?.insertAdjacentHTML('beforeend',`<div class="metric"><span>Delivery Goods</span><strong>${number(economy?.inventory?.deliveryGoods)}</strong></div><div class="metric"><span>Persistent stock lines</span><strong>${Object.values(economy?.inventory?.catalogue||{}).filter(stock=>number(stock.quantity)>0).length}</strong></div>`);
+  }
+
+  const renderSubmarineBeforePersistentWorldCommerce=renderSubmarine;
+  renderSubmarine=function renderSubmarineWithPersistentWorldCommerce() {
+    const result=renderSubmarineBeforePersistentWorldCommerce();
+    patchPersistentStationCommercePanel();
+    return result;
+  };
+
+  normalizeStationCommerce();
