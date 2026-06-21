@@ -78,6 +78,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-stability-02.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-ui-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commissioning.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-stability-03.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
