@@ -1,0 +1,38 @@
+
+  const normalizeRouteResolutionSessionBeforeMigrationStability = normalizeRouteResolutionSession;
+  normalizeRouteResolutionSession = function normalizeRouteResolutionSessionWithFallbackMigration(slot,event) {
+    const session = normalizeRouteResolutionSessionBeforeMigrationStability(slot,event);
+    if (session.solutions.length<2) {
+      const expanded = routeResolutionSolutions(event);
+      const existingIds = new Set(session.solutions.map(solution=>solution.id));
+      session.solutions.push(...expanded.filter(solution=>!existingIds.has(solution.id)));
+      if (!session.solutions.some(solution=>solution.id===session.selectedSolutionId)) session.selectedSolutionId = session.solutions[0]?.id||'';
+      if (session.steps.every(step=>step.status==='pending')) session.steps = routeResolutionStepBlueprints(event,routeResolutionSelectedSolution(session),session.pursueOpportunity);
+    }
+    return session;
+  };
+
+  dashboardTurnActors = function dashboardTurnActorsForCommissionedResolutionOnly() {
+    const settings = normalizePlayerSubmissionSettings();
+    const actors = [];
+    if ((state.character.status||'Onboard')!=='Dead') actors.push({ref:'local',crewId:settings.characterId,name:state.character.name||'Current Character',status:state.character.status||'Onboard',current:state.character.current,agility:number(state.character.current?.Agility),type:'local'});
+    for (const record of activeDashboardAcceptedCrew()) {
+      if (!['Onboard','Injured'].includes(record.status)) continue;
+      if (record.sourceCharacterId&&record.sourceCharacterId===settings.characterId) continue;
+      actors.push({ref:record.rosterId,crewId:activeDashboardCrewId(record),name:record.characterName||'Crew Member',status:record.status,current:record.current,agility:number(record.current?.Agility),type:'crew'});
+    }
+    return actors;
+  };
+
+  const commitRouteEventResolutionBeforePreflight = commitRouteEventResolution;
+  commitRouteEventResolution = function commitRouteEventResolutionWithPreflight() {
+    const context = activeRouteResolutionContext();
+    if (!context) return {ok:false,message:'No unresolved route event is available.'};
+    if (context.slot.status!=='pending') return {ok:false,message:'This route event has already been resolved.'};
+    if (normalizeRouteCrossing().status!=='underway') return {ok:false,message:'The crossing is no longer underway.'};
+    if (!activeDashboardTurnActor()) return {ok:false,message:'No living commissioned crewman remains to commit the resolution.'};
+    if (context.session.effectsAppliedAt&&context.session.state!=='resolved') return {ok:false,message:'Effects were already applied to an incomplete session. Reset or recover the saved state before continuing.'};
+    return commitRouteEventResolutionBeforePreflight();
+  };
+
+  normalizeRouteEventResolutionState();
