@@ -1,0 +1,19 @@
+
+  const normalizeActiveSubmarineDashboardBeforeAuthenticatedGroupBinding=normalizeActiveSubmarineDashboard;
+  normalizeActiveSubmarineDashboard=function normalizeActiveSubmarineDashboardWithAuthenticatedGroupBinding(persist=false){
+    if(dashboardManagementRuntime.status==='authenticated'&&dashboardManagementRuntime.vesselId){
+      const hub=normalizeWorldHub();
+      const group=dashboardManagementGroupForVessel(dashboardManagementRuntime.vesselId);
+      if(!group)throw new Error('The authenticated submarine is no longer assigned to an expedition group.');
+      hub.activeGroupId=group.groupId;
+      hub.activeSubmarineId=dashboardManagementRuntime.vesselId;
+      state.submarine.worldSubmarineId=dashboardManagementRuntime.vesselId;
+      state.world.activeSubmarineId=dashboardManagementRuntime.vesselId;
+      state.route.activeSubmarineId=dashboardManagementRuntime.vesselId;
+      state.route.activeGroupId=group.groupId;
+      state.operationsDashboard=state.operationsDashboard&&typeof state.operationsDashboard==='object'?state.operationsDashboard:defaultActiveSubmarineDashboard();
+      state.operationsDashboard.activeSubmarineId=dashboardManagementRuntime.vesselId;
+      state.operationsDashboard.activeGroupId=group.groupId;
+    }
+    return normalizeActiveSubmarineDashboardBeforeAuthenticatedGroupBinding(persist);
+  };
