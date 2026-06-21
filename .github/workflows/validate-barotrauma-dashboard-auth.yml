@@ -50,7 +50,8 @@ jobs:
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-02.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt',
-            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt'
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt'
           ];
           required.forEach(name => assert(loader.includes(name), `${name} is not loaded`));
 
@@ -59,6 +60,7 @@ jobs:
           assert(indexOf(required[1]) < indexOf(required[2]), 'Pre-auth campaign identity is not restored before authentication initializes');
           assert(indexOf(required[7]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'Legacy snapshot migration is not loaded before final runtime');
           assert(indexOf(required[8]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'First-claim group registration safeguard is not loaded before final runtime');
+          assert(indexOf(required[9]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'Authenticated vessel-to-group binding is not loaded before final runtime');
 
           const core00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-00.txt', 'utf8');
           const core01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-01.txt', 'utf8');
@@ -67,6 +69,7 @@ jobs:
           const bootstrap = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-bootstrap.txt', 'utf8');
           const migration = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt', 'utf8');
           const firstClaim = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt', 'utf8');
+          const groupBinding = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt', 'utf8');
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
 
           assert(core00.includes("algorithm='PBKDF2-SHA-256'") || core00.includes("credential.algorithm='PBKDF2-SHA-256'"), 'Credential algorithm is not PBKDF2-SHA-256');
@@ -88,6 +91,8 @@ jobs:
           assert(bootstrap.includes('restorePreAuthDashboardCampaignIdentity'), 'Startup identity mutation rollback is missing');
           assert(migration.includes('migratedFromPublicWorld:true'), 'Older submarine state migration is missing');
           assert(firstClaim.includes('registerCurrentSubmarineForDashboardManagement'), 'First claim does not register an unassigned local submarine');
+          assert(groupBinding.includes('dashboardManagementGroupForVessel'), 'Authenticated sessions are not rebound to their recorded expedition group');
+          assert(groupBinding.includes('hub.activeGroupId=group.groupId'), 'Authenticated group ID is not enforced during normalization');
           assert(finalRuntime.includes('version: 21'), 'Suite export version is not 21');
           assert(finalRuntime.includes('dashboardManagementAuthVersion: DASHBOARD_MANAGEMENT_AUTH_VERSION'), 'Suite export omits authentication version');
           assert(finalRuntime.includes("logoutDashboardManagementSession('suite import')"), 'Suite import does not revoke the old management session');
