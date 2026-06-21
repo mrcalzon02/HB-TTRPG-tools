@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "1.0.0",
+  "title": "Barotrauma General Encounter Engine",
+  "source": {
+    "title": "HB Barotrauma RPG encounter expansion",
+    "retrievedAt": "2026-06-20",
+    "sourceWarning": "Original campaign adaptation. It preserves the imported RPG's event-card structure while replacing literal playing-card limits with data-driven encounter libraries, level gates, approaches, escalation stages, and state effects."
+  },
+  "progression": [
+    {
+      "minLevel": 1,
+      "maxLevel": 2,
+      "severity": "Routine",
+      "dcBonus": 0,
+      "effectScale": 1.0,
+      "description": "Outer-colony incidents with clear warning signs and limited consequences."
+    },
+    {
+      "minLevel": 3,
+      "maxLevel": 4,
+      "severity": "Complicated",
+      "dcBonus": 1,
+      "effectScale": 1.0,
+      "description": "Multiple systems or motives interact and simple solutions carry costs."
+    },
+    {
+      "minLevel": 5,
+      "maxLevel": 6,
+      "severity": "Severe",
+      "dcBonus": 2,
+      "effectScale": 1.25,
+      "description": "Failure threatens the vessel, expedition timetable, or crew readiness."
+    },
+    {
+      "minLevel": 7,
+      "maxLevel": 8,
+      "severity": "Critical",
+      "dcBonus": 3,
+      "effectScale": 1.5,
+      "description": "Deep-route crises cascade rapidly and create persistent consequences."
+    },
+    {
+      "minLevel": 9,
+      "maxLevel": 9,
+      "severity": "Catastrophic",
+      "dcBonus": 4,
+      "effectScale": 1.75,
+      "description": "Abyssal conditions make survival, containment, and escape equally difficult."
+    },
+    {
+      "minLevel": 10,
+      "maxLevel": 10,
+      "severity": "Endgame",
+      "dcBonus": 5,
+      "effectScale": 2.0,
+      "description": "Eye-of-Europa events can alter the campaign world rather than merely damage a submarine."
+    }
+  ],
+  "families": [
+    {
+      "id": "environment",
+      "name": "Environmental Hazard",
+      "category": "Hazard",
+      "description": "Currents, ice, pressure, geology, heat, and other dangers of Europa itself.",
+      "defaultWeight": 4
+    },
+    {
+      "id": "navigation",
+      "name": "Navigation Complication",
+      "category": "Navigation",
+      "description": "Bad charts, blocked passages, false contacts, and route-control problems.",
+      "defaultWeight": 3
+    },
+    {
+      "id": "systems",
+      "name": "Submarine Systems Crisis",
+      "category": "Maintenance",
+      "description": "Mechanical, electrical, reactor, ballast, life-support, and weapons failures.",
+      "defaultWeight": 4
+    },
+    {
+      "id": "salvage",
+      "name": "Wreck and Salvage Site",
+      "category": "Salvage",
+      "description": "Recoverable wreckage, hazardous cargo, black boxes, and contested remains.",
+      "defaultWeight": 3
+    },
+    {
+      "id": "ruins",
+      "name": "Ruins and Exploration",
+      "category": "Exploration",
+      "description": "Ancient structures, abandoned installations, sealed caverns, and archaeological hazards.",
+      "defaultWeight": 3
+    },
+    {
+      "id": "faction",
+      "name": "Faction and Human Contact",
+      "category": "Faction",
+      "description": "Patrols, pirates, traders, cultists, deserters, and political complications.",
+      "defaultWeight": 3
+    },
+    {
+      "id": "distress",
+      "name": "Distress and Rescue",
+      "category": "Distress",
+      "description": "Beacons, stranded crews, medical emergencies, quarantine, and moral choices.",
+      "defaultWeight": 2
+    },
+    {
+      "id": "opportunity",
+      "name": "Resource Opportunity",
+      "category": "Opportunity",
+      "description": "Minerals, biological samples, supply caches, trade windows, and strategic discoveries.",
+      "defaultWeight": 2
+    },
+    {
+      "id": "station",
+      "name": "Station Incident",
+      "category": "Station",
+      "description": "Dockside failures, shortages, inspections, unrest, sabotage, and public emergencies.",
+      "defaultWeight": 2
+    },
+    {
+      "id": "anomaly",
+      "name": "Anomaly and Psychological Pressure",
+      "category": "Anomaly",
+      "description": "Impossible signals, perceptual hazards, alien effects, and optional sanity pressure.",
+      "defaultWeight": 1
+    }
+  ],
+  "parts": [
+    "data/barotrauma/tools/encounters/encounter-templates-part-01.json",
+    "data/barotrauma/tools/encounters/encounter-templates-part-02.json",
+    "data/barotrauma/tools/encounters/encounter-templates-part-03.json",
+    "data/barotrauma/tools/encounters/encounter-templates-part-04.json",
+    "data/barotrauma/tools/encounters/encounter-templates-part-05.json"
+  ]
+}
