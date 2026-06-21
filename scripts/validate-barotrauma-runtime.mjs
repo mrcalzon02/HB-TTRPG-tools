@@ -24,12 +24,20 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-stability.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-levels.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-level-stability.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-level-polish.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-core.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-ui.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-crossing-stability.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-core.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-map-ui.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-stability.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-expedition-integration-fix.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
 ];
 const orderIndexes = requiredOrder.map(relativePath => runtimePaths.indexOf(relativePath));
-if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-scale, faction, location-level, research, or integration runtime fragments are not registered.');
+if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world, faction, location, research, crossing, expedition, or integration runtime fragments are not registered.');
 for (let index = 1; index < orderIndexes.length; index += 1) {
   if (orderIndexes[index] <= orderIndexes[index - 1]) throw new Error(`Runtime fragment order is invalid near ${requiredOrder[index]}.`);
 }
@@ -41,6 +49,19 @@ const source = runtimePaths.map(relativePath => {
 }).join('');
 
 new Function(source);
+
+const requiredRuntimeMarkers = [
+  ['normalizeManagedExpedition', 'Managed submarine, crew, and group integration is missing.'],
+  ['generateValidCrossing', 'Graph-backed route crossing generation is missing.'],
+  ['managed-sub-location-marker', 'Managed submarine world-map location marker is missing.'],
+  ["frame.addEventListener('wheel'", 'Pointer-centered world-map wheel zoom is missing.'],
+  ['mapEdgeTooltipHtml', 'World-map route hover information is missing.'],
+  ['stationDetailsHtml', 'Station click-detail information is missing.'],
+  ['declareManagedSubmarineLostWithAllHands', 'Lost-with-all-hands handling is missing.'],
+  ['selectQuarterSalvage', 'Deterministic quarter-salvage selection is missing.'],
+  ['recoverableMarks', 'Wreck value recovery is missing.']
+];
+for (const [marker, error] of requiredRuntimeMarkers) if (!source.includes(marker)) throw new Error(error);
 
 const jsonPaths = [
   'data/barotrauma/tools/catalog/catalog-index.json',
@@ -101,7 +122,7 @@ if (levelForRing(48, 48) !== 1) throw new Error('The outermost ring must be Leve
 if (levelForRing(1, 48) !== 9) throw new Error('The innermost non-core ring must be Level 9.');
 if (levelForRing(0, 48) !== 10) throw new Error('Ring zero must be Level 10.');
 
-const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} stations, ${factions.districts.length} districts, ${factions.umbrellas.length} umbrella factions, ${factions.organizations.length} operational organizations, ${locations.levels.length} location levels, ${locations.locations.length} station/encounter types, unified submissions, and controlled R&D.`;
+const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} stations, ${factions.districts.length} districts, ${factions.umbrellas.length} umbrella factions, ${factions.organizations.length} operational organizations, ${locations.levels.length} location levels, ${locations.locations.length} station/encounter types, linked managed expeditions, pointer-centered map zoom, route inspection, lost-with-all-hands wrecks, quarter-salvage, unified submissions, and controlled R&D.`;
 console.log(message);
 
 if (process.env.VALIDATION_RECEIPT) {
@@ -139,6 +160,7 @@ if (process.env.VALIDATION_RECEIPT) {
     backpackSlots: functionality.inventoryRules.backpackSlots,
     backpackMobilityPenalty: functionality.inventoryRules.backpackMobilityPenalty,
     vendingMachineArchetypes: functionality.vendorArchetypes.filter(vendor => vendor.machine).length,
+    expeditionIntegrationVersion: '1.0.0',
     message
   }, null, 2)}\n`);
 }
