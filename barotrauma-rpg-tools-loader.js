@@ -80,6 +80,11 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-ui-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commissioning.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-stability-03.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-00.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-01.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-ui.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-02.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
