@@ -1,0 +1,178 @@
+
+  function routeResolutionEffectsForOutcome(session,event,outcome) {
+    const success = cloneRouteResolutionData(event.successEffects||{});
+    const failure = cloneRouteResolutionData(event.failureEffects||{});
+    let effects;
+    if (outcome==='critical-success') effects = mergeRouteResolutionEffects(scaleRouteResolutionEffects(success,1.5),{crewMorale:1,routePressure:-1});
+    else if (outcome==='success') effects = success;
+    else if (outcome==='mixed') effects = mergeRouteResolutionEffects(scaleRouteResolutionEffects(success,0.5),scaleRouteResolutionEffects(failure,0.5));
+    else if (outcome==='critical-failure') effects = mergeRouteResolutionEffects(scaleRouteResolutionEffects(failure,1.5),{crewMorale:-1,lostSanity:event.optionalSanity?2:0,injuryCount:1,routePressure:1});
+    else effects = mergeRouteResolutionEffects(failure,{crewMorale:-1});
+    const opportunityStep = session.steps.find(step => step.id==='opportunity-contract');
+    if (session.pursueOpportunity&&opportunityStep) effects = mergeRouteResolutionEffects(effects,opportunityStep.status==='success'?session.missionOffer.rewardEffects:session.missionOffer.failureEffects);
+    return effects;
+  }
+
+  function routeResolutionTargetActor(ref) {
+    const actor = dashboardTurnActors().find(candidate => candidate.ref===ref)||null;
+    if (!actor) return null;
+    return {actor,record:actor.ref==='local'?state.character:normalizeCrewManagement().roster.find(item => item.rosterId===actor.ref)||null};
+  }
+
+  function applyRouteResolutionEffects(session,event,outcome) {
+    if (session.effectsAppliedAt) return session.effectSummary;
+    const effects = routeResolutionEffectsForOutcome(session,event,outcome);
+    const applied = [];
+    if (number(effects.hull)) {
+      state.submarine.hullCurrent = clamp(number(state.submarine.hullCurrent)+number(effects.hull),0,calculateSubmarine().totals.hull);
+      applied.push(`Hull ${number(effects.hull)>0?'+':''}${number(effects.hull)}`);
+    }
+    if (effects.resources&&typeof effects.resources==='object') for (const [key,value] of Object.entries(effects.resources)) {
+      if (!number(value)) continue;
+      state.submarine.resources[key] = Math.max(0,number(state.submarine.resources[key])+number(value));
+      applied.push(`${key} ${number(value)>0?'+':''}${number(value)}`);
+    }
+    if (effects.systems&&typeof effects.systems==='object') for (const [key,value] of Object.entries(effects.systems)) {
+      if (!state.submarine.systems?.[key]||!number(value)) continue;
+      state.submarine.systems[key].condition = clamp(number(state.submarine.systems[key].condition,100)+number(value),0,100);
+      applied.push(`${key} ${number(value)>0?'+':''}${number(value)}%`);
+    }
+    if (number(effects.systemRandom)) {
+      const systems = Object.keys(state.submarine.systems||{});
+      if (systems.length) {
+        const key = systems[Math.abs(seedHash(`${session.id}|system-effect`))%systems.length];
+        state.submarine.systems[key].condition = clamp(number(state.submarine.systems[key].condition,100)+number(effects.systemRandom),0,100);
+        applied.push(`${key} ${number(effects.systemRandom)>0?'+':''}${number(effects.systemRandom)}%`);
+      }
+    }
+    if (number(effects.routePressure)) {
+      state.route.routePressure = Math.max(0,number(state.route.routePressure)+number(effects.routePressure));
+      applied.push(`route pressure ${number(effects.routePressure)>0?'+':''}${number(effects.routePressure)}`);
+    }
+    const actors = dashboardTurnActors();
+    if (number(effects.crewMorale)) {
+      state.character.morale = number(state.character.morale)+number(effects.crewMorale);
+      for (const actor of actors) if (actor.ref!=='local') {
+        const record = normalizeCrewManagement().roster.find(item => item.rosterId===actor.ref);
+        if (record) record.morale = number(record.morale)+number(effects.crewMorale);
+      }
+      applied.push(`all active crew Morale ${number(effects.crewMorale)>0?'+':''}${number(effects.crewMorale)}`);
+    }
+    if (number(effects.lostSanity)&&state.route.sanityEnabled!==false) {
+      state.character.lostSanity = Math.max(0,number(state.character.lostSanity)+Math.max(0,number(effects.lostSanity)));
+      for (const actor of actors) if (actor.ref!=='local') {
+        const record = normalizeCrewManagement().roster.find(item => item.rosterId===actor.ref);
+        if (record) record.lostSanity = Math.max(0,number(record.lostSanity)+Math.max(0,number(effects.lostSanity)));
+      }
+      applied.push(`all active crew Lost Sanity +${Math.max(0,number(effects.lostSanity))}`);
+    }
+    if (effects.stats&&typeof effects.stats==='object') {
+      const target = routeResolutionTargetActor(session.leadCrewRef);
+      if (target?.actor?.current) for (const [key,value] of Object.entries(effects.stats)) {
+        if (!(key in target.actor.current)||!number(value)) continue;
+        target.actor.current[key] = Math.max(0,number(target.actor.current[key])+number(value));
+        applied.push(`${target.actor.name} ${key} ${number(value)>0?'+':''}${number(value)}`);
+      }
+    }
+    const injuryCount = Math.max(0,number(effects.injuryCount));
+    if (injuryCount) {
+      const candidates = actors.filter(actor => actor.status==='Onboard');
+      const injuredRefs = new Set();
+      for (let index=0; index<Math.min(injuryCount,candidates.length); index+=1) {
+        const available = candidates.filter(actor => !injuredRefs.has(actor.ref));
+        const actor = available[Math.abs(seedHash(`${session.id}|injury|${index}`))%Math.max(1,available.length)];
+        if (!actor) continue;
+        injuredRefs.add(actor.ref);
+        if (actor.ref==='local') state.character.status='Injured';
+        else {
+          const record = normalizeCrewManagement().roster.find(item => item.rosterId===actor.ref);
+          if (record&&record.status==='Onboard') record.status='Injured';
+        }
+        applied.push(`${actor.name} Injured`);
+      }
+    }
+    session.appliedEffects = effects;
+    session.effectSummary = applied.join(' · ')||'No automatic state changes';
+    session.effectsAppliedAt = new Date().toISOString();
+    return session.effectSummary;
+  }
+
+  function persistRouteResolutionContract(session,event,outcome) {
+    if (!session.acceptContract||session.contractId) return null;
+    const resolution = normalizeRouteEventResolutionState();
+    const contract = {...cloneRouteResolutionData(session.missionOffer),id:uid('route-contract'),worldId:session.masterWorldId,submarineId:session.submarineId,groupId:session.groupId,crossingId:session.crossingId,eventId:event.id,encounterTemplateId:event.encounterTemplateId||'',acceptedAt:session.createdAt,resolvedAt:new Date().toISOString(),outcome,status:['critical-success','success'].includes(outcome)?'completed':outcome==='critical-failure'?'failed':'complicated',effectSummary:session.effectSummary};
+    resolution.contracts.unshift(contract);
+    resolution.contracts = resolution.contracts.slice(0,200);
+    session.contractId = contract.id;
+    normalizeWorldHub().publicState.gameStates[`route-contract:${contract.id}`] = cloneRouteResolutionData(contract);
+    return contract;
+  }
+
+  let routeResolutionCommitInProgress = false;
+  const resolveCrossingEventBeforeExplicitResolution = resolveCrossingEvent;
+  resolveCrossingEvent = function resolveCrossingEventThroughExplicitModule(slotId,status,roll='') {
+    const slot = state.route.plan.find(item => item.id===slotId);
+    const event = crossingSelectedEvent(slot);
+    if (!routeResolutionCommitInProgress&&normalizeRouteCrossing().status==='underway'&&slot?.status==='pending'&&event) {
+      normalizeRouteEventResolutionState().lastMessage = 'Use the explicit turn-based Event Resolution module to resolve this route event.';
+      state.route.crossingMessage = normalizeRouteEventResolutionState().lastMessage;
+      save();
+      return false;
+    }
+    return resolveCrossingEventBeforeExplicitResolution(slotId,status,roll);
+  };
+
+  function commitRouteEventResolution() {
+    const context = activeRouteResolutionContext();
+    if (!context) return {ok:false,message:'No unresolved route event is available.'};
+    const session = context.session;
+    if (session.state!=='awaiting-commit') return {ok:false,message:'Complete every turn-based resolution step before committing an outcome.'};
+    const outcome = ROUTE_RESOLUTION_OUTCOMES.includes(session.outcomeOverride)?session.outcomeOverride:session.provisionalOutcome;
+    if (!outcome) return {ok:false,message:'No calculated outcome is available.'};
+    const effectSummary = applyRouteResolutionEffects(session,context.event,outcome);
+    session.outcome = outcome;
+    session.state = 'resolved';
+    session.resolvedAt = new Date().toISOString();
+    persistRouteResolutionContract(session,context.event,outcome);
+    context.slot.encounterEffectsApplied = `explicit-route-resolution:${outcome}`;
+    context.slot.encounterEffectsSummary = effectSummary;
+    const status = ['critical-success','success'].includes(outcome)?'success':['failure','critical-failure'].includes(outcome)?'failure':session.steps.filter(step => step.status==='success').length>=Math.ceil(session.steps.length/2)?'success':'failure';
+    const roll = `${session.steps.map(step => `${step.phase} ${step.total}/${step.dc}`).join(' · ')} · Outcome ${outcome} · ${effectSummary}`;
+    routeResolutionCommitInProgress = true;
+    let resolved = false;
+    try { resolved = resolveCrossingEventBeforeExplicitResolution(context.slot.id,status,roll); }
+    finally { routeResolutionCommitInProgress = false; }
+    if (!resolved) { session.state='awaiting-commit'; return {ok:false,message:state.route.crossingMessage||'The crossing event could not be committed.'}; }
+    const resolution = normalizeRouteEventResolutionState();
+    resolution.history.unshift({id:session.id,slotId:session.slotId,eventName:context.event.name,solution:routeResolutionSelectedSolution(session)?.label||'',leadCrewName:session.leadCrewName,outcome,effectSummary,resolvedAt:session.resolvedAt,contractId:session.contractId||''});
+    resolution.history = resolution.history.slice(0,200);
+    resolution.lastMessage = `${context.event.name} resolved as ${outcome.replace(/-/g,' ')}. ${effectSummary}`;
+    if (typeof synchronizeActiveDashboardMechanics==='function') synchronizeActiveDashboardMechanics('Explicit route event resolved');
+    if (typeof syncCrossingPublicRoute==='function') syncCrossingPublicRoute();
+    save();
+    return {ok:true,message:resolution.lastMessage,outcome,effectSummary};
+  }
+
+  function resetActiveRouteResolution(redrawEvent=false) {
+    const context = activeRouteResolutionContext();
+    if (!context) return false;
+    delete normalizeRouteEventResolutionState().sessions[context.slot.id];
+    if (redrawEvent) redrawCrossingEvent(context.slot.id);
+    save();
+    return true;
+  }
+
+  const dashboardTurnActorsBeforeExplicitResolution = dashboardTurnActors;
+  dashboardTurnActors = function dashboardTurnActorsForCommissionedResolution() {
+    const settings = normalizePlayerSubmissionSettings();
+    const actors = [];
+    if ((state.character.status||'Onboard')!=='Dead') actors.push({ref:'local',crewId:settings.characterId,name:state.character.name||'Current Character',status:state.character.status||'Onboard',current:state.character.current,agility:number(state.character.current?.Agility),type:'local'});
+    for (const record of activeDashboardAcceptedCrew()) {
+      if (!['Onboard','Injured'].includes(record.status)) continue;
+      if (record.sourceCharacterId&&record.sourceCharacterId===settings.characterId) continue;
+      actors.push({ref:record.rosterId,crewId:activeDashboardCrewId(record),name:record.characterName||'Crew Member',status:record.status,current:record.current,agility:number(record.current?.Agility),type:'crew'});
+    }
+    return actors.length?actors:dashboardTurnActorsBeforeExplicitResolution();
+  };
+
+  normalizeRouteEventResolutionState();
