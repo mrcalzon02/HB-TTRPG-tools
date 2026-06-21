@@ -1,0 +1,47 @@
+
+  function escalateCreatureChoicesForDangerousLeg(slot, crossing = normalizeRouteCrossing()) {
+    if (!slot || slot.legIndex < 0) return false;
+    const leg = crossing.legs[slot.legIndex];
+    if (!leg?.danger || !Array.isArray(slot.choices)) return false;
+    const targetNode = crossingNode(slot.worldNodeId || leg.toNodeId);
+    let changed = false;
+    slot.choices = slot.choices.map((event, choiceIndex) => {
+      if (!event?.creatureId || event.dangerousRoute) return event;
+      const creature = CREATURE_ENCOUNTERS.find(item => item.id === event.creatureId);
+      if (!creature) return event;
+      const rng = seededRandom(`${state.world?.seed}|${crossing.crossingId}|${slot.id}|${choiceIndex}|dangerous-creature`);
+      changed = true;
+      return buildCreatureEncounter(creature, targetNode?.locationLevel || event.creatureLevel || leg.toLevel || 1, rng, {
+        allowEndingCreatures: normalizeCreatureEncounterState().allowEndingCreatures,
+        targetNode,
+        dangerous: true
+      });
+    });
+    return changed;
+  }
+
+  const generateValidCrossingBeforeCreatureStability = generateValidCrossing;
+  generateValidCrossing = function generateValidCrossingWithDangerousCreatureSeverity() {
+    const crossing = generateValidCrossingBeforeCreatureStability();
+    let changed = false;
+    for (const slot of state.route.plan) if (escalateCreatureChoicesForDangerousLeg(slot, crossing)) changed = true;
+    if (changed) {
+      crossingLog(crossing, 'Dangerous route legs increased creature-attack severity by one step without unlocking deeper creature classes.');
+      syncCrossingPublicRoute();
+      save();
+    }
+    return crossing;
+  };
+
+  const redrawCrossingEventBeforeCreatureStability = redrawCrossingEvent;
+  redrawCrossingEvent = function redrawCrossingEventWithDangerousCreatureSeverity(slotId) {
+    const result = redrawCrossingEventBeforeCreatureStability(slotId);
+    if (!result) return result;
+    const slot = state.route.plan.find(item => item.id === slotId);
+    if (escalateCreatureChoicesForDangerousLeg(slot)) {
+      state.route.crossingMessage = 'Encounter redrawn with dangerous-leg creature severity applied.';
+      syncCrossingPublicRoute();
+      save();
+    }
+    return result;
+  };
