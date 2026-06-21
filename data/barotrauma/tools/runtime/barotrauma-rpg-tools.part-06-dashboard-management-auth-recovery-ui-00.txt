@@ -1,11 +1,12 @@
 
   function dashboardManagementGroupOptions(selectedId=''){
     const groups=Object.values(normalizeWorldHub().publicState.groups||{});
-    return `<option value="">Create a new expedition group</option>${groups.map(group=>`<option value="${escapeHtml(group.groupId)}" ${group.groupId===selectedId?'selected':''}>${escapeHtml(group.name)} · ${escapeHtml(group.groupId)}</option>`).join('')}`;
+    const fallbackId=selectedId||normalizeWorldHub().activeGroupId||groups[0]?.groupId||'';
+    return `<option value="" ${fallbackId?'':'selected'}>Create a new expedition group</option>${groups.map(group=>`<option value="${escapeHtml(group.groupId)}" ${group.groupId===fallbackId?'selected':''}>${escapeHtml(group.name)} · ${escapeHtml(group.groupId)}</option>`).join('')}`;
   }
 
   function dashboardManagementGroupFields(prefix,selectedId=''){
-    return `<label class="field">Expedition group<select id="${prefix}-group">${dashboardManagementGroupOptions(selectedId)}</select></label><label class="field">New group name<input id="${prefix}-new-group" placeholder="Used when no existing group is selected"></label>`;
+    return `<label class="field">Expedition group<select id="${prefix}-group">${dashboardManagementGroupOptions(selectedId)}</select></label><label class="field">New group name<input id="${prefix}-new-group" placeholder="Used only when creating a new group"></label>`;
   }
 
   function dashboardManagementCreationPanelHtml(){
