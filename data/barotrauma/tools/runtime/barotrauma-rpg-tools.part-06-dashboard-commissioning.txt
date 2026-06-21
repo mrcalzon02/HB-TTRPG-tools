@@ -1,0 +1,420 @@
+
+  const MASTER_WORLD_ID_VERSION = '1.0.0';
+  const normalizeWorldHubBeforeMasterWorldIdentity = normalizeWorldHub;
+  const generateWorldMapBeforeMasterWorldIdentity = generateWorldMap;
+  const currentWorldSubmissionBeforeMasterWorldIdentity = currentWorldSubmission;
+  const mergeCrewRecordBeforeDashboardStationGate = mergeCrewRecord;
+  const useSubmarineModelBeforeDashboardCommissioning = useSubmarineModel;
+
+  function synchronizeMasterWorldIdWithHub(hub, persist = false) {
+    state.world = state.world && typeof state.world === 'object' ? state.world : {};
+    const existing = String(
+      state.world.masterWorldId
+      || hub?.worldId
+      || state.world.map?.worldId
+      || state.operationsDashboard?.masterWorldId
+      || ''
+    ).trim();
+    const createdAt = hub?.createdAt || new Date().toISOString();
+    const masterWorldId = existing || worldIdFor(state.world.seed || 'EUROPA', createdAt);
+
+    state.world.masterWorldId = masterWorldId;
+    state.world.worldId = masterWorldId;
+    state.world.masterWorldIdVersion = MASTER_WORLD_ID_VERSION;
+    if (hub) {
+      hub.worldId = masterWorldId;
+      hub.masterWorldId = masterWorldId;
+      hub.masterWorldIdVersion = MASTER_WORLD_ID_VERSION;
+    }
+    if (state.world.map && typeof state.world.map === 'object') {
+      state.world.map.worldId = masterWorldId;
+      state.world.map.masterWorldId = masterWorldId;
+    }
+    if (state.operationsDashboard && typeof state.operationsDashboard === 'object') {
+      state.operationsDashboard.masterWorldId = masterWorldId;
+    }
+    if (state.route && typeof state.route === 'object') {
+      state.route.worldId = masterWorldId;
+      state.route.masterWorldId = masterWorldId;
+      if (state.route.crossing && typeof state.route.crossing === 'object') state.route.crossing.worldId = masterWorldId;
+    }
+
+    const publicState = hub?.publicState;
+    if (publicState && typeof publicState === 'object') {
+      for (const group of Object.values(publicState.groups || {})) group.worldId = masterWorldId;
+      for (const crew of Object.values(publicState.crews || {})) crew.worldId = masterWorldId;
+      for (const submarine of Object.values(publicState.submarines || {})) submarine.worldId = masterWorldId;
+      for (const location of Object.values(publicState.locations || {})) location.worldId = masterWorldId;
+      for (const route of Object.values(publicState.routes || {})) route.worldId = masterWorldId;
+      for (const project of Object.values(publicState.researchProjects || {})) project.worldId = masterWorldId;
+      for (const gameState of Object.values(publicState.gameStates || {})) gameState.worldId = masterWorldId;
+      for (const trade of publicState.trades || []) trade.worldId = masterWorldId;
+    }
+    if (persist) save();
+    return masterWorldId;
+  }
+
+  function synchronizeMasterWorldId(persist = false) {
+    const hub = state.worldHub && typeof state.worldHub === 'object'
+      ? state.worldHub
+      : normalizeWorldHubBeforeMasterWorldIdentity();
+    return synchronizeMasterWorldIdWithHub(hub, persist);
+  }
+
+  normalizeWorldHub = function normalizeWorldHubWithMasterIdentity() {
+    const hub = normalizeWorldHubBeforeMasterWorldIdentity();
+    synchronizeMasterWorldIdWithHub(hub, false);
+    return hub;
+  };
+
+  generateWorldMap = function generateWorldMapWithMasterIdentity() {
+    synchronizeMasterWorldId(false);
+    const result = generateWorldMapBeforeMasterWorldIdentity();
+    synchronizeMasterWorldId(true);
+    return result;
+  };
+
+  currentWorldSubmission = function currentWorldSubmissionWithMasterIdentity(kind) {
+    const masterWorldId = synchronizeMasterWorldId(false);
+    const submission = currentWorldSubmissionBeforeMasterWorldIdentity(kind);
+    submission.worldId = masterWorldId;
+    if (submission.payload && typeof submission.payload === 'object') submission.payload.worldId = masterWorldId;
+    return submission;
+  };
+
+  function defaultDashboardCommissioningState() {
+    return {
+      version: '1.0.0',
+      assignmentInitialized: false,
+      assignedCrewIds: [],
+      startingSubmarineModel: '',
+      commissionedAt: '',
+      lastCrewAddedAt: '',
+      lastCrewAddedStationId: '',
+      draftCrewName: '',
+      draftCrewClass: 'Engineer',
+      draftCrewDuty: 'Unassigned'
+    };
+  }
+
+  function normalizeDashboardCommissioningState() {
+    state.operationsDashboard = state.operationsDashboard && typeof state.operationsDashboard === 'object'
+      ? state.operationsDashboard
+      : defaultActiveSubmarineDashboard();
+    const dashboard = state.operationsDashboard;
+    dashboard.commissioning = dashboard.commissioning && typeof dashboard.commissioning === 'object'
+      ? dashboard.commissioning
+      : defaultDashboardCommissioningState();
+    const commissioning = dashboard.commissioning;
+    const defaults = defaultDashboardCommissioningState();
+    for (const [key, value] of Object.entries(defaults)) {
+      if (!(key in commissioning)) commissioning[key] = Array.isArray(value) ? [] : value;
+    }
+    commissioning.assignedCrewIds = Array.isArray(commissioning.assignedCrewIds) ? commissioning.assignedCrewIds : [];
+    const roster = normalizeCrewManagement().roster;
+    const validCrewIds = new Set(roster.map(activeDashboardCrewId).filter(Boolean));
+    if (!commissioning.assignmentInitialized) {
+      const previousIds = Array.isArray(dashboard.activeCrewIds) ? dashboard.activeCrewIds : [];
+      const acceptedIds = roster
+        .filter(record => record.active && record.approval === 'Accepted')
+        .map(activeDashboardCrewId)
+        .filter(Boolean);
+      commissioning.assignedCrewIds = [...new Set([...previousIds, ...acceptedIds])].filter(id => validCrewIds.has(id));
+      commissioning.assignmentInitialized = true;
+    } else commissioning.assignedCrewIds = [...new Set(commissioning.assignedCrewIds)].filter(id => validCrewIds.has(id));
+    commissioning.startingSubmarineModel = commissioning.startingSubmarineModel || state.submarine.model || 'Barsuk';
+    return commissioning;
+  }
+
+  activeDashboardAcceptedCrew = function activeDashboardCommissionedCrew() {
+    const commissioning = normalizeDashboardCommissioningState();
+    const assigned = new Set(commissioning.assignedCrewIds);
+    return normalizeCrewManagement().roster.filter(record => {
+      const crewId = activeDashboardCrewId(record);
+      return crewId && assigned.has(crewId) && record.active && record.approval === 'Accepted';
+    });
+  };
+
+  function dashboardCurrentPhysicalStation() {
+    const map = state.world?.map;
+    if (!map?.nodes?.length) return null;
+    const hub = normalizeWorldHub();
+    const group = hub.publicState.groups[hub.activeGroupId] || null;
+    const node = map.nodes.find(candidate => candidate.id === group?.currentNodeId) || null;
+    return node?.type === 'station' ? node : null;
+  }
+
+  function dashboardCrewAdditionPermission() {
+    if (!activeSubmarineDashboardContext()) return { allowed: true, station: null, message: '' };
+    const crossing = normalizeRouteCrossing();
+    if (crossing.status === 'underway' || state.operationsDashboard?.operationalState === 'in-route') {
+      return { allowed: false, station: null, message: 'Additional crew cannot be added while the submarine is In Route.' };
+    }
+    const station = dashboardCurrentPhysicalStation();
+    if (!station) return { allowed: false, station: null, message: 'Additional crew can only be added while the active submarine is physically docked at a station.' };
+    return { allowed: true, station, message: `Crew recruitment is available at ${station.name}.` };
+  }
+
+  function dashboardStartingSubmarineUnlocked() {
+    const start = normalizeDashboardStartingLocationState();
+    const crossing = normalizeRouteCrossing();
+    return !start.everDeparted && !start.locked && crossing.status !== 'underway';
+  }
+
+  function dashboardStartingSubmarineNames() {
+    syncCustomSubmarines();
+    const ordered = [
+      ...OFFICIAL_SUBMARINE_PROFILES.map(profile => profile.name),
+      ...state.submarineLibrary.custom.map(profile => profile.name),
+      ...Object.keys(SUBMARINES)
+    ];
+    return [...new Set(ordered)].filter(name => SUBMARINES[name]);
+  }
+
+  function applyDashboardStartingSubmarine(modelName, vesselName = '') {
+    if (!activeSubmarineDashboardContext()) return { ok: false, message: 'Starting-submarine selection is available only in the Active Submarine Dashboard.' };
+    if (!dashboardStartingSubmarineUnlocked()) return { ok: false, message: 'The starting submarine is locked after the first departure.' };
+    syncCustomSubmarines();
+    const model = SUBMARINES[modelName];
+    if (!model) return { ok: false, message: 'Choose a valid submarine model.' };
+
+    state.submarine.model = modelName;
+    state.submarine.name = String(vesselName || state.submarine.name || modelName).trim() || modelName;
+    state.submarine.weapons = (model.weapons || []).map(item => ({ ...item }));
+    state.submarine.hullCurrent = number(model.hull);
+    if (model.profile) {
+      state.submarine.resources.crew = Math.max(number(state.submarine.resources.crew), number(model.profile.crewMin));
+      installDefaultWikiWeapons(model.profile);
+    }
+    state.submarine.wikiDefaultsInitialized = true;
+    const commissioning = normalizeDashboardCommissioningState();
+    commissioning.startingSubmarineModel = modelName;
+    commissioning.commissionedAt = new Date().toISOString();
+    synchronizeMasterWorldId(false);
+    normalizeActiveSubmarineDashboard(true);
+    return { ok: true, message: `${state.submarine.name} commissioned as the active ${modelName}.` };
+  }
+
+  useSubmarineModel = function useSubmarineModelWithDashboardCommissioning(name) {
+    if (!activeSubmarineDashboardContext()) return useSubmarineModelBeforeDashboardCommissioning(name);
+    const result = applyDashboardStartingSubmarine(name, state.submarine.name);
+    if (!result.ok) {
+      dashboardSetMessage(result.message, true);
+      renderSubmarine();
+      return false;
+    }
+    renderSubmarine();
+    return true;
+  };
+
+  function dashboardCrewRecordById(crewId) {
+    return normalizeCrewManagement().roster.find(record => activeDashboardCrewId(record) === crewId) || null;
+  }
+
+  function assignCrewToActiveDashboard(crewId) {
+    const permission = dashboardCrewAdditionPermission();
+    if (!permission.allowed) return { ok: false, message: permission.message };
+    const record = dashboardCrewRecordById(crewId);
+    if (!record) return { ok: false, message: 'Choose a valid crew record.' };
+    if (record.status === 'Dead') return { ok: false, message: 'A deceased crew record cannot be added to the active submarine.' };
+    const commissioning = normalizeDashboardCommissioningState();
+    record.approval = 'Accepted';
+    record.active = true;
+    record.status = 'Onboard';
+    record.updatedAt = new Date().toISOString();
+    commissioning.assignedCrewIds = [...new Set([...commissioning.assignedCrewIds, activeDashboardCrewId(record)])];
+    commissioning.lastCrewAddedAt = record.updatedAt;
+    commissioning.lastCrewAddedStationId = permission.station.id;
+    state.submarine.resources.crew = 1 + activeDashboardAcceptedCrew().filter(item => item.status === 'Onboard').length;
+    normalizeActiveSubmarineDashboard(false);
+    if (typeof buildDashboardTurnOrder === 'function') buildDashboardTurnOrder(normalizeDashboardTurnOrder().mode === 'initiative');
+    synchronizeActiveDashboardMechanics('Crew added at station');
+    save();
+    return { ok: true, message: `${record.characterName} joined the active submarine at ${permission.station.name}.` };
+  }
+
+  function createAndAssignDashboardCrew(name, className, duty) {
+    const permission = dashboardCrewAdditionPermission();
+    if (!permission.allowed) return { ok: false, message: permission.message };
+    const cleanName = String(name || '').trim();
+    if (!cleanName) return { ok: false, message: 'Enter a crew member name.' };
+    const record = mergeCrewRecordBeforeDashboardStationGate(normalizeCrewRecord({
+      source: 'manual',
+      participantRole: 'NPC',
+      characterName: cleanName,
+      className: CLASSES[className] ? className : 'Engineer',
+      duty: CREW_DUTIES.includes(duty) ? duty : 'Unassigned',
+      shift: 'Unassigned',
+      approval: 'Accepted',
+      status: 'Onboard',
+      active: true
+    }));
+    return assignCrewToActiveDashboard(activeDashboardCrewId(record));
+  }
+
+  mergeCrewRecord = function mergeCrewRecordWithDashboardStationGate(incomingRaw) {
+    const management = normalizeCrewManagement();
+    const incoming = normalizeCrewRecord(incomingRaw);
+    const existing = management.roster.find(record => crewIdentityMatch(record, incoming) || (incoming.rosterId && record.rosterId === incoming.rosterId));
+    if (activeSubmarineDashboardContext() && !existing) {
+      const permission = dashboardCrewAdditionPermission();
+      if (!permission.allowed) throw new Error(permission.message);
+    }
+    return mergeCrewRecordBeforeDashboardStationGate(incomingRaw);
+  };
+
+  function dashboardCommissioningPanelHtml(context) {
+    const commissioning = normalizeDashboardCommissioningState();
+    const masterWorldId = synchronizeMasterWorldId(false);
+    const permission = dashboardCrewAdditionPermission();
+    const submarineUnlocked = dashboardStartingSubmarineUnlocked();
+    const models = dashboardStartingSubmarineNames();
+    const assigned = new Set(commissioning.assignedCrewIds);
+    const availableCrew = normalizeCrewManagement().roster.filter(record => {
+      const crewId = activeDashboardCrewId(record);
+      return crewId && !assigned.has(crewId) && record.status !== 'Dead';
+    });
+    const station = permission.station;
+    return `<section id="dashboard-commissioning" class="tool-panel" style="border-color:rgba(111,143,214,.62)">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Master-world commissioning</p><h3>Starting Submarine and Crew</h3><p class="small-note">The master map, active vessel, expedition group, crew, route, public records, and submissions all use one canonical world ID. Choose the starting submarine before first departure. New crew may join only while physically docked at a station.</p></div><span class="status-pill ${permission.allowed ? 'good' : 'warn'}">${permission.allowed ? 'AT STATION' : 'CREW ADDITION LOCKED'}</span></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Master world ID</span><strong>${escapeHtml(masterWorldId)}</strong></div><div class="metric"><span>Active submarine ID</span><strong>${escapeHtml(context.submarineId)}</strong></div><div class="metric"><span>Current station</span><strong>${escapeHtml(station?.name || 'Not docked')}</strong></div><div class="metric"><span>Assigned roster crew</span><strong>${commissioning.assignedCrewIds.length}</strong></div></div>
+      <div class="tool-card" style="margin-top:12px"><h4>Choose Starting Submarine</h4><div class="field-grid three"><label class="field">Submarine model<select id="dashboard-starting-submarine" ${submarineUnlocked ? '' : 'disabled'}>${models.map(name => `<option value="${escapeHtml(name)}" ${name === state.submarine.model ? 'selected' : ''}>${SUBMARINES[name]?.custom ? 'Custom — ' : ''}${escapeHtml(name)}</option>`).join('')}</select></label><label class="field">Vessel name<input id="dashboard-starting-submarine-name" value="${escapeHtml(state.submarine.name || state.submarine.model)}" ${submarineUnlocked ? '' : 'disabled'}></label><div class="button-row" style="align-self:end"><button id="dashboard-apply-starting-submarine" class="primary-action no-print" type="button" ${submarineUnlocked ? '' : 'disabled'}>Select Starting Submarine</button></div></div><p class="small-note">${submarineUnlocked ? 'The model remains editable until the first crossing begins.' : 'The starting submarine is permanently locked because this expedition has already departed.'}</p></div>
+      <div class="tool-card" style="margin-top:12px"><h4>Add Existing Crew Record</h4><div class="field-grid three"><label class="field">Available roster crew<select id="dashboard-available-crew" ${permission.allowed && availableCrew.length ? '' : 'disabled'}>${availableCrew.map(record => `<option value="${escapeHtml(activeDashboardCrewId(record))}">${escapeHtml(record.characterName)} · ${escapeHtml(record.className)} · ${escapeHtml(record.duty)}</option>`).join('') || '<option value="">No unassigned crew records</option>'}</select></label><div class="button-row" style="align-self:end"><button id="dashboard-add-existing-crew" class="primary-action no-print" type="button" ${permission.allowed && availableCrew.length ? '' : 'disabled'}>Add Crew at Station</button></div></div></div>
+      <div class="tool-card" style="margin-top:12px"><h4>Create and Add Crew Member</h4><div class="field-grid four"><label class="field">Crew name<input id="dashboard-new-crew-name" value="${escapeHtml(commissioning.draftCrewName)}" ${permission.allowed ? '' : 'disabled'}></label><label class="field">Class<select id="dashboard-new-crew-class" ${permission.allowed ? '' : 'disabled'}>${optionList(Object.keys(CLASSES), commissioning.draftCrewClass)}</select></label><label class="field">Duty<select id="dashboard-new-crew-duty" ${permission.allowed ? '' : 'disabled'}>${optionList(CREW_DUTIES, commissioning.draftCrewDuty)}</select></label><div class="button-row" style="align-self:end"><button id="dashboard-create-crew" class="secondary-action no-print" type="button" ${permission.allowed ? '' : 'disabled'}>Create and Add at Station</button></div></div></div>
+      <div id="dashboard-commissioning-message" class="notice ${permission.allowed ? '' : 'warn'}" style="margin-top:10px">${escapeHtml(permission.message || 'Commissioning controls ready.')}</div>
+    </section>`;
+  }
+
+  function dashboardCommissioningMessage(message, isError = false) {
+    const output = root.querySelector('#dashboard-commissioning-message');
+    if (!output) return;
+    output.textContent = message;
+    output.classList.toggle('bad', isError);
+    output.classList.toggle('good', !isError);
+  }
+
+  function bindDashboardCommissioningControls() {
+    const panel = root.querySelector('#dashboard-commissioning');
+    if (!panel) return;
+    panel.querySelector('#dashboard-apply-starting-submarine')?.addEventListener('click', () => {
+      const result = applyDashboardStartingSubmarine(
+        panel.querySelector('#dashboard-starting-submarine')?.value,
+        panel.querySelector('#dashboard-starting-submarine-name')?.value
+      );
+      if (result.ok) renderSubmarine();
+      else dashboardCommissioningMessage(result.message, true);
+    });
+    panel.querySelector('#dashboard-add-existing-crew')?.addEventListener('click', () => {
+      const result = assignCrewToActiveDashboard(panel.querySelector('#dashboard-available-crew')?.value || '');
+      if (result.ok) renderSubmarine();
+      else dashboardCommissioningMessage(result.message, true);
+    });
+    const commissioning = normalizeDashboardCommissioningState();
+    panel.querySelector('#dashboard-new-crew-name')?.addEventListener('input', event => { commissioning.draftCrewName = event.target.value; save(); });
+    panel.querySelector('#dashboard-new-crew-class')?.addEventListener('change', event => { commissioning.draftCrewClass = event.target.value; save(); });
+    panel.querySelector('#dashboard-new-crew-duty')?.addEventListener('change', event => { commissioning.draftCrewDuty = event.target.value; save(); });
+    panel.querySelector('#dashboard-create-crew')?.addEventListener('click', () => {
+      const result = createAndAssignDashboardCrew(
+        panel.querySelector('#dashboard-new-crew-name')?.value,
+        panel.querySelector('#dashboard-new-crew-class')?.value,
+        panel.querySelector('#dashboard-new-crew-duty')?.value
+      );
+      if (result.ok) {
+        commissioning.draftCrewName = '';
+        save();
+        renderSubmarine();
+      } else dashboardCommissioningMessage(result.message, true);
+    });
+  }
+
+  function enforceDashboardCommissioningBoundaries() {
+    if (!activeSubmarineDashboardContext()) return;
+    const legacyModel = root.querySelector('#sub-model');
+    if (legacyModel) {
+      legacyModel.disabled = true;
+      legacyModel.title = 'Use the Starting Submarine commissioning panel.';
+    }
+    const additionControls = ['#crew-add-current','#crew-add-manual','#crew-import-paste','#crew-submit-local'];
+    for (const selector of additionControls) root.querySelector(selector)?.remove();
+    const importInput = root.querySelector('#crew-import-files');
+    if (importInput) {
+      const label = root.querySelector(`label[for="${importInput.id}"]`);
+      label?.remove();
+      importInput.remove();
+    }
+    const addDetails = [...root.querySelectorAll('details')].filter(details => /Add a manual crew member|Paste a submission or roster JSON/i.test(details.querySelector('summary')?.textContent || ''));
+    addDetails.forEach(details => details.remove());
+
+    const permission = dashboardCrewAdditionPermission();
+    const assigned = new Set(normalizeDashboardCommissioningState().assignedCrewIds);
+    for (const record of normalizeCrewManagement().roster) {
+      const crewId = activeDashboardCrewId(record);
+      if (assigned.has(crewId)) continue;
+      for (const selector of ['.crew-approval','.crew-status','.crew-active']) {
+        const control = root.querySelector(`${selector}[data-id="${record.rosterId}"]`);
+        if (control) {
+          control.disabled = true;
+          control.title = permission.allowed ? 'Use the commissioning panel to add this crew member.' : permission.message;
+        }
+      }
+    }
+    const crewPanel = [...root.querySelectorAll('.tool-panel')].find(item => item.querySelector('h3')?.textContent.includes('Crew and Player Management'));
+    if (crewPanel && !crewPanel.querySelector('.dashboard-crew-boundary-note')) {
+      crewPanel.querySelector('.tool-hero')?.insertAdjacentHTML('afterend', `<div class="notice dashboard-crew-boundary-note ${permission.allowed ? '' : 'warn'}" style="margin-top:10px">Crew records may be edited here, but joining the active submarine is controlled by the commissioning panel and is allowed only at stations.</div>`);
+    }
+  }
+
+  const normalizeActiveSubmarineDashboardBeforeCommissioning = normalizeActiveSubmarineDashboard;
+  normalizeActiveSubmarineDashboard = function normalizeActiveSubmarineDashboardWithCommissioning(persist = false) {
+    const masterWorldId = synchronizeMasterWorldId(false);
+    normalizeDashboardCommissioningState();
+    const context = normalizeActiveSubmarineDashboardBeforeCommissioning(false);
+    context.dashboard.masterWorldId = masterWorldId;
+    context.hub.masterWorldId = masterWorldId;
+    context.crossing.worldId = masterWorldId;
+    context.group.worldId = masterWorldId;
+    synchronizeMasterWorldIdWithHub(context.hub, false);
+    if (persist) save();
+    return context;
+  };
+
+  const renderActiveSubmarineDashboardBeforeCommissioning = renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard = function renderActiveSubmarineDashboardWithCommissioning(requestedFocus = activeDashboardRawFocus()) {
+    synchronizeMasterWorldId(false);
+    const context = normalizeActiveSubmarineDashboard(false);
+    renderActiveSubmarineDashboardBeforeCommissioning(requestedFocus);
+    if (!activeSubmarineDashboardContext()) return;
+    const anchor = root.querySelector('#dashboard-starting-location') || root.querySelector('#active-dashboard-command');
+    anchor?.insertAdjacentHTML('afterend', dashboardCommissioningPanelHtml(context));
+    bindDashboardCommissioningControls();
+    enforceDashboardCommissioningBoundaries();
+  };
+
+  const dashboardBoundaryDiagnosticsBeforeCommissioning = dashboardBoundaryDiagnostics;
+  dashboardBoundaryDiagnostics = function dashboardBoundaryDiagnosticsWithCommissioning() {
+    const result = dashboardBoundaryDiagnosticsBeforeCommissioning();
+    const masterWorldId = synchronizeMasterWorldId(false);
+    const identifiers = [
+      state.world?.masterWorldId,
+      state.world?.map?.worldId,
+      state.worldHub?.worldId,
+      state.operationsDashboard?.masterWorldId,
+      state.route?.worldId,
+      state.route?.crossing?.worldId
+    ].filter(Boolean);
+    if (identifiers.some(id => id !== masterWorldId)) result.issues.push('Master world ID is not unified across the map, hub, dashboard, route, and crossing.');
+    if (activeSubmarineDashboardContext() && !dashboardCrewAdditionPermission().allowed) {
+      const activeAdditionControls = root.querySelectorAll('#dashboard-add-existing-crew:not([disabled]), #dashboard-create-crew:not([disabled]), #crew-add-current, #crew-add-manual, #crew-import-paste, #crew-submit-local');
+      if (activeAdditionControls.length) result.issues.push('Crew-addition controls remain active away from a station.');
+    }
+    result.masterWorldId = masterWorldId;
+    result.masterWorldIdCount = new Set(identifiers).size;
+    result.assignedRosterCrewCount = normalizeDashboardCommissioningState().assignedCrewIds.length;
+    result.crewAdditionAllowed = dashboardCrewAdditionPermission().allowed;
+    result.valid = !result.issues.length;
+    return result;
+  };
+
+  synchronizeMasterWorldId(false);
+  normalizeDashboardCommissioningState();
+  normalizeActiveSubmarineDashboard(true);
