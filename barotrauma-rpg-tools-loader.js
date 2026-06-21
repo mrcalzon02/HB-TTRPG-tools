@@ -27,6 +27,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-levels.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-level-stability.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-level-polish.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
