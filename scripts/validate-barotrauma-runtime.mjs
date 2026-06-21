@@ -22,12 +22,14 @@ const requiredOrder = [
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-commerce-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-seeding.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-faction-stability.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-levels.txt',
+  'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-location-level-stability.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-research-validation.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-research-patch.txt',
   'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
 ];
 const orderIndexes = requiredOrder.map(relativePath => runtimePaths.indexOf(relativePath));
-if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-scale, faction, stability, research, or integration runtime fragments are not registered.');
+if (orderIndexes.some(index => index < 0)) throw new Error('One or more required inventory, crew, cargo, commerce, world-scale, faction, location-level, research, or integration runtime fragments are not registered.');
 for (let index = 1; index < orderIndexes.length; index += 1) {
   if (orderIndexes[index] <= orderIndexes[index - 1]) throw new Error(`Runtime fragment order is invalid near ${requiredOrder[index]}.`);
 }
@@ -47,6 +49,7 @@ const jsonPaths = [
   'data/barotrauma/tools/items/item-functionality.json',
   'data/barotrauma/tools/world/world-state-schema.json',
   'data/barotrauma/tools/factions/faction-registry.json',
+  'data/barotrauma/tools/locations/location-level-registry.json',
   'data/barotrauma-tools-registry.json'
 ];
 for (const relativePath of jsonPaths) JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
@@ -80,7 +83,25 @@ if (!factions.organizations.some(item => item.parent === 'standard-union-208' &&
 if (!factions.organizations.some(item => item.parent === 'corporate-enclaves' && item.type.includes('distributor'))) throw new Error('Material distributors must remain represented in the faction registry.');
 if (!factions.organizations.some(item => item.parent === 'children-of-the-honkmother' && item.hidden) || !factions.organizations.some(item => item.parent === 'church-of-the-husk' && item.hidden)) throw new Error('Both cults require hidden operational subsets.');
 
-const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} stations, ${factions.districts.length} districts, ${factions.umbrellas.length} umbrella factions, ${factions.organizations.length} operational organizations, unified submissions, and controlled R&D.`;
+const locations = JSON.parse(fs.readFileSync(path.join(root, 'data/barotrauma/tools/locations/location-level-registry.json'), 'utf8'));
+if (!Array.isArray(locations.levels) || locations.levels.length !== 10) throw new Error('The location registry must contain exactly ten levels.');
+if (!Array.isArray(locations.locations) || locations.locations.length !== 48) throw new Error('The location registry must contain exactly the forty-eight requested location types.');
+for (let level = 1; level <= 10; level += 1) if (!locations.levels.some(item => item.level === level)) throw new Error(`Missing location level ${level}.`);
+if (locations.locations.filter(item => item.unique).length !== 1 || locations.locations.find(item => item.unique)?.id !== 'eye-of-europa') throw new Error('Eye of Europa must be the only unique location.');
+if (locations.locations.find(item => item.id === 'eye-of-europa')?.level !== 10) throw new Error('Eye of Europa must remain Level 10.');
+if (locations.locations.some(item => item.level === 6 && item.stationEligible)) throw new Error('Level 6 must remain completely derelict and non-commercial.');
+if (locations.locations.some(item => item.level === 9 && item.stationEligible)) throw new Error('Level 9 must remain precursor ruins or dead zones rather than ordinary stations.');
+if (locations.locations.some(item => !item.encounterEligible)) throw new Error('Every listed location type must be available to the encounter generator.');
+for (const item of locations.locations) {
+  if (!item.id || !item.name || !item.lore || !item.encounter || !item.reward || !item.failure) throw new Error(`Incomplete location lore or encounter profile: ${item.id || item.name || 'unknown'}`);
+  if (!Array.isArray(item.shops) || !Array.isArray(item.services) || !Array.isArray(item.hazards)) throw new Error(`Location shops, services, and hazards must be arrays: ${item.id}`);
+}
+const levelForRing = (ring, rings) => ring === 0 ? 10 : Math.min(9, Math.max(1, 1 + Math.floor((rings - ring) * 9 / rings)));
+if (levelForRing(48, 48) !== 1) throw new Error('The outermost ring must be Level 1.');
+if (levelForRing(1, 48) !== 9) throw new Error('The innermost non-core ring must be Level 9.');
+if (levelForRing(0, 48) !== 10) throw new Error('Ring zero must be Level 10.');
+
+const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, ${worldSchema.mapDefaults.rings}-voyage world depth, ${worldSchema.mapDefaults.totalLocations} locations, ${worldSchema.mapDefaults.stationTarget} stations, ${factions.districts.length} districts, ${factions.umbrellas.length} umbrella factions, ${factions.organizations.length} operational organizations, ${locations.levels.length} location levels, ${locations.locations.length} station/encounter types, unified submissions, and controlled R&D.`;
 console.log(message);
 
 if (process.env.VALIDATION_RECEIPT) {
@@ -96,6 +117,7 @@ if (process.env.VALIDATION_RECEIPT) {
     itemFunctionalitySchema: functionality.schemaVersion || '',
     worldStateSchema: worldSchema.schemaVersion || '',
     factionRegistrySchema: factions.schemaVersion || '',
+    locationLevelRegistrySchema: locations.schemaVersion || '',
     canonicalStart: worldSchema.canonicalStart,
     realEpoch: worldSchema.realEpoch,
     defaultRings: worldSchema.mapDefaults.rings,
@@ -107,6 +129,10 @@ if (process.env.VALIDATION_RECEIPT) {
     operationalDistricts: factions.districts.length,
     umbrellaFactions: factions.umbrellas.length,
     operationalOrganizations: factions.organizations.length,
+    locationLevels: locations.levels.length,
+    locationTypes: locations.locations.length,
+    stationLocationTypes: locations.locations.filter(item => item.stationEligible).length,
+    encounterLocationTypes: locations.locations.filter(item => item.encounterEligible).length,
     researchMinimumMarks: worldSchema.researchRules.minimumMarks,
     researchMinimumSupplies: worldSchema.researchRules.minimumSupplies,
     toolbeltSlots: functionality.inventoryRules.toolbeltSlots,
