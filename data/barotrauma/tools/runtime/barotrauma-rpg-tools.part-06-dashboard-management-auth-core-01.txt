@@ -1,0 +1,151 @@
+
+  async function establishDashboardManagementSession(vesselId,remember=false){
+    const authority=normalizeDashboardManagementAuthority();
+    const credential=authority.submarineCredentials[vesselId];
+    if(!credential?.verifier)throw new Error('This submarine does not yet have a management password.');
+    const token=dashboardManagementRandomToken(32);
+    const receiptId=uid('management-receipt');
+    const now=Date.now();
+    const expiresAt=new Date(now+(remember?DASHBOARD_MANAGEMENT_REMEMBER_DAYS*24:DASHBOARD_MANAGEMENT_SESSION_HOURS)*60*60*1000).toISOString();
+    credential.receipts={};
+    credential.receipts[receiptId]={receiptId,tokenHash:await dashboardManagementSha256(token),createdAt:new Date(now).toISOString(),lastUsedAt:new Date(now).toISOString(),expiresAt,remembered:Boolean(remember)};
+    dashboardManagementRuntime.status='authenticated';
+    dashboardManagementRuntime.vesselId=vesselId;
+    dashboardManagementRuntime.credentialId=credential.credentialId;
+    dashboardManagementRuntime.receiptId=receiptId;
+    dashboardManagementRuntime.expiresAt=expiresAt;
+    dashboardManagementRuntime.remembered=Boolean(remember);
+    dashboardManagementRuntime.message='Management session authenticated.';
+    activateDashboardManagedVessel(vesselId);
+    dashboardManagementWriteStoredSession({version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:normalizeWorldHub().worldId,vesselId,credentialId:credential.credentialId,receiptId,token,expiresAt},remember);
+    dashboardManagementAudit('login',vesselId,{managerPlayerId:credential.managerPlayerId,remembered:Boolean(remember),receiptId});
+    save();
+    return true;
+  }
+
+  async function createDashboardManagementCredential(vesselId,password,managerName='',remember=false){
+    const cleanPassword=String(password||'');
+    if(cleanPassword.length<10)throw new Error('Use a management password of at least 10 characters.');
+    const authority=normalizeDashboardManagementAuthority();
+    const existing=authority.submarineCredentials[vesselId];
+    if(existing?.verifier)throw new Error('This submarine is already claimed. Log in before changing its password.');
+    const salt=dashboardManagementRandomToken(16);
+    const settings=normalizePlayerSubmissionSettings();
+    const credential={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,vesselId,credentialId:uid('submarine-credential'),algorithm:'PBKDF2-SHA-256',iterations:DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS,salt,verifier:await dashboardManagementDeriveVerifier(cleanPassword,salt,DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS),managerPlayerId:settings.playerId||'',managerName:String(managerName||state.character.player||'').trim(),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),revision:1,receipts:{}};
+    authority.submarineCredentials[vesselId]=credential;
+    const record=dashboardManagementSubmarineRecord(vesselId);
+    if(record){record.managementCredentialId=credential.credentialId;record.managerPlayerId=credential.managerPlayerId;record.managerName=credential.managerName;record.updatedAt=new Date().toISOString();}
+    dashboardManagementAudit('credential-created',vesselId,{managerPlayerId:credential.managerPlayerId,managerName:credential.managerName});
+    save();
+    return establishDashboardManagementSession(vesselId,remember);
+  }
+
+  async function authenticateDashboardManagementPassword(vesselId,password,remember=false){
+    const credential=dashboardManagementCredential(vesselId);
+    if(!credential?.verifier)throw new Error('This submarine has not been claimed. Set its management password first.');
+    const derived=await dashboardManagementDeriveVerifier(String(password||''),credential.salt,credential.iterations);
+    if(!dashboardManagementConstantTimeEqual(derived,credential.verifier)){
+      dashboardManagementAudit('login-failed',vesselId,{managerPlayerId:normalizePlayerSubmissionSettings().playerId||''});
+      save();
+      throw new Error('The management password is incorrect.');
+    }
+    return establishDashboardManagementSession(vesselId,remember);
+  }
+
+  async function changeDashboardManagementPassword(currentPassword,newPassword,remember=dashboardManagementRuntime.remembered){
+    if(dashboardManagementRuntime.status!=='authenticated'||!dashboardManagementRuntime.vesselId)throw new Error('Log in before changing the management password.');
+    const vesselId=dashboardManagementRuntime.vesselId;
+    const credential=dashboardManagementCredential(vesselId);
+    const currentVerifier=await dashboardManagementDeriveVerifier(String(currentPassword||''),credential.salt,credential.iterations);
+    if(!dashboardManagementConstantTimeEqual(currentVerifier,credential.verifier))throw new Error('The current management password is incorrect.');
+    const cleanNew=String(newPassword||'');
+    if(cleanNew.length<10)throw new Error('Use a new management password of at least 10 characters.');
+    const salt=dashboardManagementRandomToken(16);
+    credential.salt=salt;
+    credential.verifier=await dashboardManagementDeriveVerifier(cleanNew,salt,DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS);
+    credential.iterations=DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS;
+    credential.updatedAt=new Date().toISOString();
+    credential.revision=Math.max(1,number(credential.revision))+1;
+    credential.receipts={};
+    dashboardManagementAudit('password-changed',vesselId,{revision:credential.revision});
+    dashboardManagementClearStoredSession();
+    dashboardManagementRuntime.status='locked';
+    save();
+    return establishDashboardManagementSession(vesselId,remember);
+  }
+
+  async function restoreDashboardManagementSession(){
+    const stored=dashboardManagementReadStoredSession();
+    if(!stored){dashboardManagementRuntime.status='locked';dashboardManagementRuntime.message='Choose a submarine and log in to manage it.';return false;}
+    try{
+      const hub=normalizeWorldHub();
+      if(stored.worldId!==hub.worldId)throw new Error('The stored management session belongs to another world save.');
+      const credential=dashboardManagementCredential(stored.vesselId);
+      if(!credential||credential.credentialId!==stored.credentialId)throw new Error('The stored management credential is no longer valid.');
+      const receipt=credential.receipts?.[stored.receiptId];
+      if(!receipt||Date.parse(receipt.expiresAt)<=Date.now())throw new Error('The stored management session has expired.');
+      const tokenHash=await dashboardManagementSha256(stored.token);
+      if(!dashboardManagementConstantTimeEqual(tokenHash,receipt.tokenHash))throw new Error('The stored management receipt is invalid.');
+      dashboardManagementRuntime.status='authenticated';
+      dashboardManagementRuntime.vesselId=stored.vesselId;
+      dashboardManagementRuntime.credentialId=stored.credentialId;
+      dashboardManagementRuntime.receiptId=stored.receiptId;
+      dashboardManagementRuntime.expiresAt=receipt.expiresAt;
+      dashboardManagementRuntime.remembered=Boolean(receipt.remembered);
+      dashboardManagementRuntime.message='Local management session restored.';
+      receipt.lastUsedAt=new Date().toISOString();
+      activateDashboardManagedVessel(stored.vesselId);
+      dashboardManagementAudit('session-restored',stored.vesselId,{receiptId:stored.receiptId,remembered:Boolean(receipt.remembered)});
+      save();
+      return true;
+    }catch(error){
+      dashboardManagementClearStoredSession();
+      dashboardManagementRuntime.status='locked';
+      dashboardManagementRuntime.vesselId='';
+      dashboardManagementRuntime.credentialId='';
+      dashboardManagementRuntime.receiptId='';
+      dashboardManagementRuntime.expiresAt='';
+      dashboardManagementRuntime.remembered=false;
+      dashboardManagementRuntime.message=error.message||'The previous management session could not be restored.';
+      return false;
+    }
+  }
+
+  function logoutDashboardManagementSession(reason='manual logout'){
+    const vesselId=dashboardManagementRuntime.vesselId;
+    if(vesselId)captureDashboardManagedVesselState(vesselId);
+    const credential=dashboardManagementCredential(vesselId);
+    if(credential?.receipts&&dashboardManagementRuntime.receiptId)delete credential.receipts[dashboardManagementRuntime.receiptId];
+    if(vesselId)dashboardManagementAudit('logout',vesselId,{reason,receiptId:dashboardManagementRuntime.receiptId});
+    dashboardManagementClearStoredSession();
+    dashboardManagementRuntime.status='locked';
+    dashboardManagementRuntime.vesselId='';
+    dashboardManagementRuntime.credentialId='';
+    dashboardManagementRuntime.receiptId='';
+    dashboardManagementRuntime.expiresAt='';
+    dashboardManagementRuntime.remembered=false;
+    dashboardManagementRuntime.message='Management session closed. Choose a submarine to log in again.';
+    save();
+    return true;
+  }
+
+  function dashboardManagementAuthorized(vesselId=state.submarine?.worldSubmarineId){
+    return dashboardManagementRuntime.status==='authenticated'&&Boolean(vesselId)&&dashboardManagementRuntime.vesselId===vesselId&&Date.parse(dashboardManagementRuntime.expiresAt)>Date.now();
+  }
+
+  function dashboardManagementAuthorizationCheck(action='manage this submarine'){
+    if(!activeSubmarineDashboardContext())return {allowed:true,message:''};
+    if(dashboardManagementAuthorized())return {allowed:true,message:''};
+    return {allowed:false,message:`Log in to ${action}.`};
+  }
+
+  const saveBeforeDashboardManagementAuth=save;
+  save=function saveWithDashboardManagementSnapshot(){
+    if(dashboardManagementRuntime.status==='authenticated'&&dashboardManagementRuntime.vesselId&&!dashboardManagementCaptureGuard)captureDashboardManagedVesselState(dashboardManagementRuntime.vesselId);
+    return saveBeforeDashboardManagementAuth();
+  };
+
+  setTimeout(async()=>{
+    await restoreDashboardManagementSession();
+    if(activeSubmarineDashboardContext())render();
+  },0);
