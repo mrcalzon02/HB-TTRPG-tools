@@ -71,7 +71,8 @@ jobs:
             'barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt',
             'barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt',
             'barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt',
-            'barotrauma-rpg-tools.part-06-route-event-resolution-stability-02.txt'
+            'barotrauma-rpg-tools.part-06-route-event-resolution-stability-02.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-stability-03.txt'
           ]) assert(loader.includes(required), `${required} is not loaded`);
 
           const boundaryCore = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt', 'utf8');
@@ -95,6 +96,7 @@ jobs:
           const resolutionUi = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt', 'utf8');
           const resolutionStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt', 'utf8');
           const resolutionStability02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability-02.txt', 'utf8');
+          const resolutionStability03 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability-03.txt', 'utf8');
 
           assert(resolution00.includes('ROUTE_RESOLUTION_FAMILY_PROFILES'), 'Crew-role family profiles are missing');
           assert(resolution00.includes('routeResolutionSolutions'), 'Alternative solution generation is missing');
@@ -115,6 +117,8 @@ jobs:
           assert(resolutionStability02.includes('normalizeRouteResolutionSessionWithFallbackMigration'), 'Saved one-option session migration is missing');
           assert(resolutionStability02.includes('dashboardTurnActorsForCommissionedResolutionOnly'), 'Turn order is not restricted to commissioned crew');
           assert(resolutionStability02.includes('commitRouteEventResolutionWithPreflight'), 'Outcome commitment preflight is missing');
+          assert(resolutionStability03.includes('commitRouteEventResolutionAtomically'), 'Atomic outcome rollback is missing');
+          assert(resolutionStability03.includes('state = snapshot'), 'Failed outcome commits do not restore campaign state');
 
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
           assert(finalRuntime.includes('version: 19'), 'Suite export version was not advanced for route event resolution');
@@ -129,5 +133,5 @@ jobs:
           assert(html.includes('data-tool="dashboard"'), 'Dashboard tool tab is missing');
           assert(html.includes('data-tool="route"'), 'Standalone route tab is missing');
 
-          console.log(`Validated ${paths.length} runtime fragments, explicit route-event turns, alternative solutions, crew roles, outcomes, effects, contracts, migrations, and dashboard/standalone navigation.`);
+          console.log(`Validated ${paths.length} runtime fragments, explicit route-event turns, alternative solutions, crew roles, outcomes, atomic effects, contracts, migrations, and dashboard/standalone navigation.`);
           NODE
