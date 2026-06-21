@@ -3,6 +3,7 @@
     const issues = [];
     const ids = new Set();
     const familyIds = new Set(GENERAL_ENCOUNTER_FAMILIES.map(item => item.id));
+    const lethalityIds = new Set();
     for (const template of GENERAL_ENCOUNTER_TEMPLATES) {
       if (!template.id) issues.push('Encounter template without an id.');
       else if (ids.has(template.id)) issues.push(`Duplicate encounter template id: ${template.id}.`);
@@ -11,14 +12,30 @@
       if (number(template.minLevel, 1) < 1 || number(template.maxLevel, 10) > 10 || number(template.minLevel, 1) > number(template.maxLevel, 10)) issues.push(`${template.id || 'Unknown template'} has an invalid level range.`);
       if (!Array.isArray(template.approaches) || !template.approaches.length) issues.push(`${template.id || 'Unknown template'} has no resolution approaches.`);
       if (GENERAL_ENCOUNTER_FAMILY_MAP[template.family]?.category !== template.category) issues.push(`${template.id || 'Unknown template'} category does not match its family.`);
+      const lethality = GENERAL_ENCOUNTER_LETHALITY_MAP[template.id];
+      if (!lethality) issues.push(`${template.id || 'Unknown template'} has no lethality profile.`);
+      else {
+        lethalityIds.add(template.id);
+        if (!Array.isArray(lethality.casualties) || !lethality.casualties.length) issues.push(`${template.id} has no casualty entries.`);
+        for (const casualty of lethality.casualties || []) {
+          if (!['approach','operator','randomCrew','multipleCrew','allCrew'].includes(casualty.target)) issues.push(`${template.id} has invalid casualty target ${casualty.target}.`);
+          if (number(casualty.damage) <= 0) issues.push(`${template.id} has non-positive casualty damage.`);
+          if (number(casualty.deathChance) < 0 || number(casualty.deathChance) > 100) issues.push(`${template.id} has invalid death chance.`);
+          if (number(casualty.catastrophicChance) < 0 || number(casualty.catastrophicChance) > 100) issues.push(`${template.id} has invalid catastrophic chance.`);
+        }
+      }
     }
+    for (const profile of GENERAL_ENCOUNTER_LETHALITY.profiles || []) if (!ids.has(profile.id)) issues.push(`Orphan lethality profile ${profile.id}.`);
     for (const family of GENERAL_ENCOUNTER_FAMILIES) if (!GENERAL_ENCOUNTER_TEMPLATES.some(template => template.family === family.id)) issues.push(`Encounter family ${family.id} has no templates.`);
     return {
       valid: !issues.length,
       issues,
       familyCount: GENERAL_ENCOUNTER_FAMILIES.length,
       templateCount: GENERAL_ENCOUNTER_TEMPLATES.length,
-      version: GENERAL_ENCOUNTER_VERSION
+      lethalityProfileCount: lethalityIds.size,
+      potentiallyFatalCount: GENERAL_ENCOUNTER_TEMPLATES.filter(template => (GENERAL_ENCOUNTER_LETHALITY_MAP[template.id]?.casualties || []).some(casualty => number(casualty.deathChance) > 0 || number(casualty.catastrophicChance) > 0)).length,
+      version: GENERAL_ENCOUNTER_VERSION,
+      lethalityVersion: GENERAL_ENCOUNTER_LETHALITY_VERSION
     };
   }
 
@@ -50,7 +67,7 @@
     let changed = false;
     for (const slot of state.route.plan) if (escalateGeneralEncounterChoicesForDangerousLeg(slot, crossing)) changed = true;
     if (changed) {
-      crossingLog(crossing, 'Dangerous route legs increased non-creature encounter severity by one step without changing encounter-family access.');
+      crossingLog(crossing, 'Dangerous route legs increased non-creature encounter severity, casualty damage, and fatality pressure by one step without changing encounter-family access.');
       syncCrossingPublicRoute();
       save();
     }
@@ -63,7 +80,7 @@
     if (!result) return result;
     const slot = state.route.plan.find(item => item.id === slotId);
     if (escalateGeneralEncounterChoicesForDangerousLeg(slot)) {
-      state.route.crossingMessage = 'Encounter redrawn with dangerous-leg challenge severity applied.';
+      state.route.crossingMessage = 'Encounter redrawn with dangerous-leg challenge severity and casualty escalation applied.';
       syncCrossingPublicRoute();
       save();
     }
