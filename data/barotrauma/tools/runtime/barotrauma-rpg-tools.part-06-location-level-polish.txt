@@ -1,0 +1,129 @@
+
+  function locationProfileMatchesNode(node, map = state.world?.map) {
+    if (!node || !map) return false;
+    const expectedLevel = locationLevelForRing(node.ring, map.rings);
+    const profile = LOCATION_TYPE_MAP[node.locationTypeId];
+    if (!profile || number(node.locationLevel) !== expectedLevel || number(profile.level) !== expectedLevel) return false;
+    if (node.type === 'station' && !profile.stationEligible) return false;
+    if (node.type !== 'station' && profile.unique !== (expectedLevel === 10)) return expectedLevel !== 10;
+    return true;
+  }
+
+  function locationAssignmentsNeedRefresh(map = state.world?.map) {
+    return !map?.nodes?.length || map.nodes.some(node => !locationProfileMatchesNode(node, map));
+  }
+
+  const applyLocationProfileToNodeBeforePolish = applyLocationProfileToNode;
+  applyLocationProfileToNode = function applyLocationProfileToNodeWithUniqueSiteName(node, profile, levelProfile, map) {
+    if (!node || !profile) return;
+    const wasStation = node.type === 'station';
+    if (!wasStation && !profile.unique) {
+      const current = String(node.name || '').trim();
+      const previousTypeName = String(node.locationTypeName || '').trim();
+      const appearsProfileGenerated = Boolean(current && ((previousTypeName && current.endsWith(previousTypeName)) || current.endsWith(profile.name)));
+      if (!node.locationBaseName) node.locationBaseName = current && !appearsProfileGenerated ? current : `Site ${number(node.ring)}-${String(node.id || '').replace(/^node-/, '')}`;
+    }
+    applyLocationProfileToNodeBeforePolish(node, profile, levelProfile, map);
+    if (!wasStation && !profile.unique) node.name = `${node.locationBaseName} — ${profile.name}`;
+  };
+
+  const assignWorldLocationLevelsBeforePolish = assignWorldLocationLevels;
+  assignWorldLocationLevels = function assignWorldLocationLevelsWithKindRefresh(map = state.world?.map, force = false) {
+    return assignWorldLocationLevelsBeforePolish(map, force || locationAssignmentsNeedRefresh(map));
+  };
+
+  const reconcileWorldStationLevelsBeforePolish = reconcileWorldStationLevels;
+  reconcileWorldStationLevels = function reconcileWorldStationLevelsWithoutStaleFactionData(map = state.world?.map) {
+    const changed = reconcileWorldStationLevelsBeforePolish(map);
+    if (!map?.nodes) return changed;
+    for (const node of map.nodes) {
+      if (node.type === 'station') continue;
+      for (const key of ['factionId','faction','parentFactionId','parentFaction','factionColor','organizationType','locals','visibleInfluences','hiddenInfluences']) delete node[key];
+    }
+    return changed;
+  };
+
+  function locationLevelLegendHtml() {
+    return `<div class="map-legend location-level-legend">${(LOCATION_LEVEL_REGISTRY.levels || []).map(level => `<span><i class="legend-dot" style="background:${LOCATION_LEVEL_COLORS[level.level]};color:${LOCATION_LEVEL_COLORS[level.level]}"></i>L${level.level} ${escapeHtml(level.name)}</span>`).join('')}</div>`;
+  }
+
+  function decorateRenderedMapWithLocationLevels() {
+    const map = state.world?.map;
+    if (!map?.nodes) return;
+    for (const element of root.querySelectorAll('.map-node')) {
+      const node = map.nodes.find(item => item.id === element.dataset.nodeId);
+      if (!node) continue;
+      const color = LOCATION_LEVEL_COLORS[node.locationLevel] || '#888888';
+      const circle = element.querySelector('circle');
+      if (circle) {
+        circle.style.fill = `${color}55`;
+        circle.style.stroke = node.type === 'station' && node.factionColor ? node.factionColor : color;
+        circle.style.strokeWidth = node.type === 'anomaly' ? '4' : '2.5';
+      }
+      let label = element.querySelector('.map-node-level');
+      if (!label) {
+        label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.classList.add('map-node-level');
+        label.setAttribute('x', '0');
+        label.setAttribute('y', '3');
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', node.locationLevel === 10 ? '7' : '6');
+        label.setAttribute('font-weight', '900');
+        label.setAttribute('fill', '#ffffff');
+        label.setAttribute('pointer-events', 'none');
+        element.insertBefore(label, element.querySelector('text'));
+      }
+      label.textContent = String(node.locationLevel || '?');
+    }
+    const mapFrame = root.querySelector('.expanded-map-frame, .map-frame');
+    const existingLegend = mapFrame?.parentElement?.querySelector('.location-level-legend');
+    if (mapFrame?.parentElement && !existingLegend) mapFrame.insertAdjacentHTML('afterend', locationLevelLegendHtml());
+  }
+
+  const renderLocationLevelWorldPanelBeforePolish = renderLocationLevelWorldPanel;
+  renderLocationLevelWorldPanel = function renderLocationLevelWorldPanelWithMapGradient() {
+    renderLocationLevelWorldPanelBeforePolish();
+    decorateRenderedMapWithLocationLevels();
+    const panel = root.querySelector('.location-level-world-panel');
+    const table = panel?.querySelector('.table-wrap');
+    if (table && !panel.querySelector('.location-level-legend')) table.insertAdjacentHTML('beforebegin', locationLevelLegendHtml());
+  };
+
+  const generateWorldMapBeforeLocationPolish = generateWorldMap;
+  generateWorldMap = function generateWorldMapWithLocationPolish() {
+    generateWorldMapBeforeLocationPolish();
+    if (locationAssignmentsNeedRefresh(state.world?.map)) assignWorldLocationLevels(state.world.map, true);
+    revalidateLocationGroupStarts();
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const importWorldSaveBeforeLocationPolish = importWorldSave;
+  importWorldSave = function importWorldSaveWithLocationPolish(raw) {
+    importWorldSaveBeforeLocationPolish(raw);
+    if (locationAssignmentsNeedRefresh(state.world?.map)) assignWorldLocationLevels(state.world.map, true);
+    revalidateLocationGroupStarts();
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const applyWorldSubmissionBeforeLocationPolish = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithLocationPolish(raw, allowForeign = false) {
+    const result = applyWorldSubmissionBeforeLocationPolish(raw, allowForeign);
+    if (locationAssignmentsNeedRefresh(state.world?.map)) assignWorldLocationLevels(state.world.map, true);
+    revalidateLocationGroupStarts();
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+    return result;
+  };
+
+  if (state.world?.map) {
+    if (locationAssignmentsNeedRefresh(state.world.map)) assignWorldLocationLevels(state.world.map, true);
+    revalidateLocationGroupStarts();
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  }
