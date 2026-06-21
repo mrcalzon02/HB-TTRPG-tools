@@ -3,7 +3,8 @@
     const tool = activeTool();
     document.querySelectorAll('.ops-tab').forEach(button => button.classList.toggle('active', button.dataset.tool === tool));
     try {
-      if (tool === 'submarine') renderSubmarine();
+      if (tool === 'dashboard') renderSubmarine();
+      else if (tool === 'submarine') renderSubmarine();
       else if (tool === 'encounters') renderEncounters();
       else if (tool === 'route') renderRoute();
       else if (tool === 'world') renderWorld();
@@ -15,14 +16,14 @@
       if (state.operationsDashboard && typeof state.operationsDashboard === 'object') state.operationsDashboard.lastError = error.message || String(error);
       save();
       root.innerHTML = `<div class="tool-shell"><section class="tool-hero"><div><p class="eyebrow">Recoverable interface failure</p><h2>The requested operations view encountered an error</h2><p class="rules-note bad">${escapeHtml(error.message || String(error))}</p><p class="small-note">The saved campaign state remains intact. Use the Active Submarine Dashboard to re-synchronize vessel, crew, route, and world identities.</p></div><button id="render-recovery-dashboard" class="primary-action no-print" type="button">Open Recovery Dashboard</button></section></div>`;
-      root.querySelector('#render-recovery-dashboard')?.addEventListener('click', () => { history.replaceState(null, '', '#submarine'); try { normalizeActiveSubmarineDashboard(true); normalizeDashboardTurnOrder(); } catch (syncError) { console.error(syncError); } render(); });
+      root.querySelector('#render-recovery-dashboard')?.addEventListener('click', () => { history.replaceState(null, '', '#dashboard'); try { normalizeActiveSubmarineDashboard(true); normalizeDashboardTurnOrder(); normalizeDashboardStartingLocationState(); } catch (syncError) { console.error(syncError); } render(); });
     }
   }
 
   document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
   window.addEventListener('hashchange', render);
   document.getElementById('print-tool')?.addEventListener('click', () => window.print());
-  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 16, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, worldStateSchemaVersion: WORLD_STATE_SCHEMA.schemaVersion, factionRegistryVersion: FACTION_REGISTRY.schemaVersion, locationLevelRegistryVersion: LOCATION_LEVEL_REGISTRY.schemaVersion, creatureRegistryVersion: CREATURE_ENCOUNTER_VERSION, routeCrossingVersion: ROUTE_CROSSING_VERSION, expeditionIntegrationVersion: EXPEDITION_INTEGRATION_VERSION, activeSubmarineDashboardVersion: ACTIVE_SUBMARINE_DASHBOARD_VERSION, activeTransitTurnVersion: ACTIVE_TRANSIT_TURN_VERSION, worldScaleVersion: state.world?.worldScaleVersion || '', state }, null, 2)));
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 17, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, worldStateSchemaVersion: WORLD_STATE_SCHEMA.schemaVersion, factionRegistryVersion: FACTION_REGISTRY.schemaVersion, locationLevelRegistryVersion: LOCATION_LEVEL_REGISTRY.schemaVersion, creatureRegistryVersion: CREATURE_ENCOUNTER_VERSION, routeCrossingVersion: ROUTE_CROSSING_VERSION, expeditionIntegrationVersion: EXPEDITION_INTEGRATION_VERSION, activeSubmarineDashboardVersion: ACTIVE_SUBMARINE_DASHBOARD_VERSION, activeTransitTurnVersion: ACTIVE_TRANSIT_TURN_VERSION, worldScaleVersion: state.world?.worldScaleVersion || '', state }, null, 2)));
   document.getElementById('import-suite')?.addEventListener('change', event => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -75,6 +76,7 @@
         normalizeManagedExpedition();
         normalizeActiveSubmarineDashboard(false);
         normalizeDashboardTurnOrder();
+        normalizeDashboardStartingLocationState();
         syncCrewResourceIfEnabled();
         syncCargoResourceIfEnabled();
         if (!SUBMARINES[state.submarine.model]) state.submarine.model = 'Barsuk';
