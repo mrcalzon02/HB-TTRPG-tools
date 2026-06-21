@@ -13,6 +13,7 @@
     "Crew participation uses portable player-submission and vessel-roster JSON files; no player account, automatic upload, or central campaign server is implied.",
     "Item functionality, cargo, and station-commerce behavior are maintained as an operational layer around the source-backed catalogue rather than rewriting official catalogue identities.",
     "The unified public world state is a portable shared-authority save file: submissions update the host's canonical save when pushed, but the static site does not claim a live network service or central server.",
+    "The campaign-scale Europa map now uses forty-eight mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, and a 7,008-unit shell radius while preserving older small-world maps in a migration archive.",
     "Custom items and submarines are validated against current official measurable ceilings. Designs exceeding those ceilings remain undeployable until their station-based research project has consumed the required Marks, supplies, capability, and canonical real time."
   ],
   "modules": [
@@ -115,11 +116,11 @@
       "title": "Expanded Europa Public World State",
       "priority": 8,
       "status": "available",
-      "description": "Creates a uniquely identified seeded Europa world with a five-times shell radius, 140 default locations, at least 25 stations, randomized outer-ring starts for multiple groups, real-time canonical dating beginning in 2175, route mapping, checkpoint saves, and one unified public registry updated by pushed crew, submarine, location, trade, route, research, and full game-state submissions.",
+      "description": "Creates a uniquely identified seeded Europa world with 48 mandatory inward voyage rings, 960 default locations, 180 guaranteed stations, a 7,008-unit shell radius, randomized outer-ring starts for multiple groups, real-time canonical dating beginning in 2175, route mapping, checkpoint saves, and one unified public registry updated by pushed crew, submarine, location, trade, route, research, and full game-state submissions.",
       "launchUrl": "barotrauma-rpg-tools.html#world",
       "actionLabel": "Open World State",
-      "tags": ["Europa", "public world state", "world ID", "saved states", "multiplayer submissions", "2175", "real-time clock", "stations", "groups", "routes", "trades", "research", "seeded generation"],
-      "dataFamilies": ["worldIdentity", "worldSave", "savedCheckpoint", "worldSubmission", "submissionJournal", "publicWorldRegistry", "multiplayerGroup", "randomizedStart", "canonicalClock", "worldMap", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
+      "tags": ["Europa", "public world state", "48 voyages", "960 locations", "180 stations", "world ID", "saved states", "multiplayer submissions", "2175", "real-time clock", "groups", "routes", "trades", "research", "seeded generation"],
+      "dataFamilies": ["worldIdentity", "worldSave", "savedCheckpoint", "worldSubmission", "submissionJournal", "publicWorldRegistry", "multiplayerGroup", "randomizedStart", "canonicalClock", "worldMap", "depthRingProfile", "voyageDepth", "locationNode", "routeEdge", "stationProfile", "pathSelection"]
     },
     {
       "id": "barotrauma-cult-faction-dossiers",
