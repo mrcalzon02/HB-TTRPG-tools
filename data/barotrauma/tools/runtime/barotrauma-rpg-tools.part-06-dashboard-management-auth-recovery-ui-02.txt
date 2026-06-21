@@ -1,0 +1,36 @@
+
+  function dashboardManagementRecoveryNoticeHtml(){
+    const code=dashboardManagementRuntime.pendingRecoveryCode;
+    if(!code||dashboardManagementRuntime.pendingRecoveryVesselId!==dashboardManagementRuntime.vesselId)return '';
+    return `<div id="dashboard-recovery-code-notice" class="notice warn" style="margin-top:12px;border-style:solid"><strong>Save this recovery code now.</strong><p class="small-note">It is shown only in this browser memory and is not stored as plaintext in the world save. It is required to reset a forgotten password.</p><div style="font-size:1.35rem;font-weight:900;letter-spacing:.12em;overflow-wrap:anywhere"><code id="dashboard-recovery-code-value">${escapeHtml(code)}</code></div><div class="button-row no-print" style="margin-top:10px"><button id="dashboard-copy-recovery-code" class="secondary-action" type="button">Copy Recovery Code</button><button id="dashboard-save-recovery-code" class="secondary-action" type="button">Save Recovery Record</button><button id="dashboard-confirm-recovery-code" class="primary-action" type="button">I Saved This Code</button></div></div>`;
+  }
+
+  const dashboardManagementSessionPanelHtmlBeforeRecovery=dashboardManagementSessionPanelHtml;
+  dashboardManagementSessionPanelHtml=function dashboardManagementSessionPanelHtmlWithRecovery(){
+    const html=dashboardManagementSessionPanelHtmlBeforeRecovery();
+    return html.replace('</section>',`${dashboardManagementRecoveryNoticeHtml()}</section>`);
+  };
+
+  const bindDashboardManagementSessionPanelBeforeRecovery=bindDashboardManagementSessionPanel;
+  bindDashboardManagementSessionPanel=function bindDashboardManagementSessionPanelWithRecovery(){
+    bindDashboardManagementSessionPanelBeforeRecovery();
+    const code=dashboardManagementRuntime.pendingRecoveryCode;
+    root.querySelector('#dashboard-copy-recovery-code')?.addEventListener('click',()=>copyText(code));
+    root.querySelector('#dashboard-save-recovery-code')?.addEventListener('click',()=>{
+      const record=[
+        'Barotrauma Submarine Management Recovery Record',
+        '',
+        `World ID: ${normalizeWorldHub().worldId}`,
+        `Submarine ID: ${dashboardManagementRuntime.vesselId}`,
+        `Recovery code: ${code}`,
+        '',
+        'Store this separately from the campaign world save.'
+      ].join('\n');
+      download(`barotrauma-${dashboardManagementRuntime.vesselId}-recovery.txt`,record);
+    });
+    root.querySelector('#dashboard-confirm-recovery-code')?.addEventListener('click',()=>{
+      dashboardManagementRuntime.pendingRecoveryCode='';
+      dashboardManagementRuntime.pendingRecoveryVesselId='';
+      renderActiveSubmarineDashboard();
+    });
+  };
