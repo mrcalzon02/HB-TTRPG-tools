@@ -1,0 +1,26 @@
+name: Validate Barotrauma Runtime
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/runtime/**'
+      - 'data/barotrauma/tools/catalog/**'
+      - 'data/barotrauma/tools/submarines/**'
+      - 'data/barotrauma/tools/custom/**'
+      - 'data/barotrauma-tools-registry.json'
+      - 'scripts/validate-barotrauma-runtime.mjs'
+      - '.github/workflows/validate-barotrauma-runtime.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate assembled runtime
+        run: node scripts/validate-barotrauma-runtime.mjs
