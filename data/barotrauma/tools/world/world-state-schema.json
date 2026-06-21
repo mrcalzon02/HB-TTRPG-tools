@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "worldSaveSchema": "barotrauma-public-world-save",
+  "submissionSchema": "barotrauma-world-submission",
+  "canonicalStart": "2175-01-01T00:00:00.000Z",
+  "realEpoch": "2026-06-20T08:00:00.000Z",
+  "timeScale": 1,
+  "mapDefaults": {
+    "rings": 10,
+    "totalLocations": 140,
+    "stationTarget": 25,
+    "branching": 42,
+    "shellRadius": 1460,
+    "baselineShellRadius": 292,
+    "shellRadiusMultiplier": 5
+  },
+  "submissionKinds": [
+    "crew",
+    "submarine",
+    "location",
+    "route",
+    "trade",
+    "research",
+    "game-state"
+  ],
+  "researchRules": {
+    "minimumMarks": 25000,
+    "minimumSupplies": 50,
+    "minimumResearchDays": 30,
+    "priceMultiplier": 25,
+    "excessMarksMultiplier": 100000,
+    "excessSuppliesMultiplier": 100,
+    "excessDaysMultiplier": 365,
+    "tierDays": 60
+  }
+}
