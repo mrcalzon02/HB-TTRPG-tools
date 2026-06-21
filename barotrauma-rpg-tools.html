@@ -55,7 +55,7 @@
     .check-list{display:grid;gap:8px}.check-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:9px}.check-row input[type=checkbox]{width:18px;height:18px}
     .system-row{display:grid;grid-template-columns:minmax(140px,1fr) minmax(160px,2fr) 80px;gap:10px;align-items:center;margin:8px 0}.system-row input[type=range]{width:100%}
     .map-frame{border:1px solid var(--line);border-radius:16px;min-height:680px;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.28) 55%,rgba(0,0,0,.5));overflow:auto;position:relative}
-    .map-frame svg{display:block;width:100%;height:680px;min-width:760px}.expanded-map-frame{height:1050px}.expanded-map-frame svg{width:3800px;height:3800px;max-width:none}.map-edge{stroke:rgba(200,210,220,.28);stroke-width:2}.map-edge.danger{stroke:rgba(223,119,119,.48);stroke-dasharray:6 5}.map-node{cursor:pointer}.map-node circle{stroke-width:2}.map-node text{fill:#e8edf2;font-size:11px;font-weight:700;pointer-events:none}.map-node.station circle{fill:#21364a;stroke:#70a7c7}.map-node.outpost circle{fill:#35351f;stroke:#c7b570}.map-node.wreck circle{fill:#3d2525;stroke:#bd7474}.map-node.ruins circle{fill:#392d47;stroke:#a985c7}.map-node.hazard circle{fill:#421f28;stroke:#d36378}.map-node.anomaly circle{fill:#5a431d;stroke:#e0b45f;stroke-width:4}.map-node.selected circle{stroke:#fff;stroke-width:4}
+    .map-frame svg{display:block;width:100%;height:680px;min-width:760px}.expanded-map-frame{height:1050px}.expanded-map-frame svg{width:6000px;height:6000px;max-width:none}.map-edge{stroke:rgba(200,210,220,.28);stroke-width:2}.map-edge.danger{stroke:rgba(223,119,119,.48);stroke-dasharray:6 5}.map-node{cursor:pointer}.map-node circle{stroke-width:2}.map-node text{fill:#e8edf2;font-size:11px;font-weight:700;pointer-events:none}.map-node.station circle{fill:#21364a;stroke:#70a7c7}.map-node.outpost circle{fill:#35351f;stroke:#c7b570}.map-node.wreck circle{fill:#3d2525;stroke:#bd7474}.map-node.ruins circle{fill:#392d47;stroke:#a985c7}.map-node.hazard circle{fill:#421f28;stroke:#d36378}.map-node.anomaly circle{fill:#5a431d;stroke:#e0b45f;stroke-width:4}.map-node.selected circle{stroke:#fff;stroke-width:4}
     .map-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid currentColor}
     .notice{border:1px dashed var(--line);border-radius:12px;padding:12px;color:var(--muted)}
     .danger-button{border:1px solid #8b4141;background:rgba(139,65,65,.15);color:#ffb9b9;border-radius:10px;padding:9px 12px;font-weight:800}
@@ -63,8 +63,8 @@
     .compact-button:hover{border-color:var(--accent)}
     .file-action{cursor:pointer}
     .hidden{display:none!important}
-    @media(max-width:1100px){.span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column:span 12}.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.station-vendor-grid{grid-template-columns:1fr}.expanded-map-frame svg{width:3000px;height:3000px}}
-    @media(max-width:700px){.ops-header,.tool-hero{display:grid}.field-grid,.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:1fr}.ops-page{padding:12px}.map-frame{min-height:560px}.map-frame svg{height:560px}.expanded-map-frame{height:760px}.expanded-map-frame svg{width:2500px;height:2500px}}
+    @media(max-width:1100px){.span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column:span 12}.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.station-vendor-grid{grid-template-columns:1fr}.expanded-map-frame svg{width:5000px;height:5000px}}
+    @media(max-width:700px){.ops-header,.tool-hero{display:grid}.field-grid,.field-grid.three,.field-grid.four,.stat-grid{grid-template-columns:1fr}.ops-page{padding:12px}.map-frame{min-height:560px}.map-frame svg{height:560px}.expanded-map-frame{height:760px}.expanded-map-frame svg{width:3800px;height:3800px}}
     @media print{.no-print,.ops-tabs,.ops-header-actions{display:none!important}.ops-page{max-width:none;padding:0}.tool-panel,.tool-card,.tool-hero{break-inside:avoid;background:white;color:black;border-color:#777}.field input,.field select,.field textarea{color:black;background:white}.map-frame{background:white}.expanded-map-frame{height:auto}.expanded-map-frame svg{width:100%;height:auto}}
   </style>
 </head>
@@ -74,7 +74,7 @@
       <div>
         <p class="eyebrow">Rules-derived campaign utilities</p>
         <h1>Barotrauma RPG Operations Suite</h1>
-        <p class="subtitle">Character, crew, cargo, station commerce, controlled R&D, submarines, multiplayer submissions, unified public-world saves, encounters, routes, and a greatly expanded seeded Europa campaign map.</p>
+        <p class="subtitle">Character, crew, cargo, station commerce, controlled R&D, submarines, multiplayer submissions, unified public-world saves, encounters, routes, and a 48-voyage campaign-scale Europa world.</p>
       </div>
       <div class="ops-header-actions">
         <button id="export-suite" class="secondary-action" type="button">Export Suite JSON</button>
@@ -96,6 +96,6 @@
 
     <section id="ops-root"><div class="notice">Loading Barotrauma RPG tools…</div></section>
   </main>
-  <script src="barotrauma-rpg-tools-loader.js?v=007"></script>
+  <script src="barotrauma-rpg-tools-loader.js?v=008"></script>
 </body>
 </html>
