@@ -1,0 +1,199 @@
+
+  const CREATURE_ENCOUNTER_REGISTRY = globalThis.BAROTRAUMA_CREATURE_REGISTRY || { schemaVersion: '0', source: {}, progression: [], creatures: [] };
+  const CREATURE_ENCOUNTER_VERSION = CREATURE_ENCOUNTER_REGISTRY.schemaVersion || '1.0.0';
+  const CREATURE_ENCOUNTERS = Array.isArray(CREATURE_ENCOUNTER_REGISTRY.creatures) ? CREATURE_ENCOUNTER_REGISTRY.creatures : [];
+  const CREATURE_CLASS_LABELS = { small: 'Small', large: 'Large', abyssal: 'Abyssal', ending: 'Ending Spoiler' };
+  const CREATURE_CLASS_ORDER = { small: 1, large: 2, abyssal: 3, ending: 4 };
+
+  if (!EVENT_CATEGORIES.includes('Creature')) EVENT_CATEGORIES.push('Creature');
+  if (!('Creature' in state.route.table)) state.route.table.Creature = 3;
+
+  function normalizeCreatureEncounterState() {
+    state.encounters = state.encounters && typeof state.encounters === 'object' ? state.encounters : {};
+    state.encounters.creatureLevel = clamp(state.encounters.creatureLevel || 1, 1, 10);
+    state.encounters.allowEndingCreatures = state.encounters.allowEndingCreatures !== false;
+    state.route = state.route && typeof state.route === 'object' ? state.route : {};
+    state.route.creatureSettings = state.route.creatureSettings && typeof state.route.creatureSettings === 'object' ? state.route.creatureSettings : {};
+    state.route.creatureSettings.allowEndingCreatures = state.route.creatureSettings.allowEndingCreatures !== false;
+    return state.route.creatureSettings;
+  }
+
+  function creatureSeverityProfile(level) {
+    const safeLevel = clamp(level, 1, 10);
+    return (CREATURE_ENCOUNTER_REGISTRY.progression || []).find(item => safeLevel >= number(item.minLevel) && safeLevel <= number(item.maxLevel)) || {
+      severity: `Level ${safeLevel}`,
+      dcBonus: Math.max(0, safeLevel - 2),
+      countMultiplier: 1,
+      hullDamage: Math.max(1, Math.ceil(safeLevel / 2)),
+      crewDamage: Math.max(1, Math.ceil(safeLevel / 2)),
+      description: 'Depth-scaled creature attack.'
+    };
+  }
+
+  function creaturePoolForLevel(level, allowEndingCreatures = true) {
+    const safeLevel = clamp(level, 1, 10);
+    return CREATURE_ENCOUNTERS
+      .filter(creature => safeLevel >= number(creature.minLevel, 1) && safeLevel <= number(creature.maxLevel, 10))
+      .filter(creature => !creature.endingOnly || (allowEndingCreatures && safeLevel === 10))
+      .sort((left, right) => (CREATURE_CLASS_ORDER[left.officialClass] || 0) - (CREATURE_CLASS_ORDER[right.officialClass] || 0) || number(left.baseThreat) - number(right.baseThreat) || left.name.localeCompare(right.name));
+  }
+
+  function weightedCreatureChoice(pool, rng = Math.random, level = 1) {
+    if (!pool.length) return null;
+    const weighted = pool.map(creature => ({ creature, weight: Math.max(0.1, number(creature.weight, 1)) * Math.max(0.4, 1.35 - Math.abs(number(level) - number(creature.minLevel, 1)) * 0.12) }));
+    let roll = rng() * weighted.reduce((sum, item) => sum + item.weight, 0);
+    for (const item of weighted) {
+      roll -= item.weight;
+      if (roll <= 0) return item.creature;
+    }
+    return weighted[weighted.length - 1].creature;
+  }
+
+  function creatureAttackCount(creature, severity, rng = Math.random) {
+    if ((creature.tags || []).some(tag => ['boss','apex','catastrophic'].includes(tag))) return 1;
+    const minimum = Math.max(1, number(creature.minCount, 1));
+    const maximum = Math.max(minimum, number(creature.maxCount, minimum));
+    const rolled = minimum + Math.floor(rng() * (maximum - minimum + 1));
+    return clamp(Math.round(rolled * Math.max(0.5, number(severity.countMultiplier, 1))), minimum, maximum + Math.max(0, Math.floor(number(severity.dcBonus) / 2)));
+  }
+
+  function creatureBehaviorText(creature) {
+    const profile = String(creature.attackProfile || 'assault');
+    if (/infection/.test(profile)) return 'The attackers force close contact and contamination, turning every breach into both a combat emergency and an infection-control failure.';
+    if (/boarder|boarding/.test(profile)) return 'The attackers breach access points and overwhelm isolated compartments while the crew divides between defense and damage control.';
+    if (/guardian|emp/.test(profile)) return 'The guardian attacks intruders with specialized ancient systems, targeting power, sonar, weapons, and movement.';
+    if (/psychic/.test(profile)) return 'The creature attacks perception and command discipline as much as the hull, producing panic, false contacts, and dangerous decisions.';
+    if (/ranged|spines/.test(profile)) return 'The creatures remain outside effective defensive arcs and bombard exposed systems, weapons, and divers.';
+    if (/grapple/.test(profile)) return 'The creature attempts to seize, pin, or drag the submarine while failures cascade through the vessel.';
+    if (/abyssal|catastrophe|endgame|apex/.test(profile)) return 'The entity treats the entire expedition as prey and sustains an overwhelming attack against hull, systems, crew, and escape routes.';
+    if (/swarm/.test(profile)) return 'A dense swarm attacks multiple weak points at once, obscuring sonar and multiplying local failures.';
+    return 'The creature attacks the hull and exposed systems through repeated impacts and coordinated pressure.';
+  }
+
+  function creatureWikiUrl(creature) {
+    return `https://barotraumagame.com/wiki/${encodeURIComponent(creature.wikiTitle || creature.name).replace(/%20/g, '_')}`;
+  }
+
+  function buildCreatureEncounter(creature, level, rng = Math.random, options = {}) {
+    if (!creature) return null;
+    const actualLevel = clamp(level, 1, 10);
+    const severityLevel = clamp(actualLevel + (options.dangerous ? 1 : 0), 1, 10);
+    const severity = creatureSeverityProfile(severityLevel);
+    const count = creatureAttackCount(creature, severity, rng);
+    const hullDamage = Math.max(1, number(severity.hullDamage, 1) + (creature.officialClass === 'abyssal' ? 1 : creature.officialClass === 'ending' ? 2 : 0));
+    const crewDamage = Math.max(1, number(severity.crewDamage, 1));
+    const dc = clamp(6 + number(creature.baseThreat, 1) + number(severity.dcBonus) + (options.dangerous ? 1 : 0), 7, 18);
+    const classLabel = CREATURE_CLASS_LABELS[creature.officialClass] || creature.officialClass;
+    const marks = creature.officialClass === 'ending' ? 0 : creature.officialClass === 'abyssal' ? 500 + number(severity.dcBonus) * 250 : creature.officialClass === 'large' ? 150 + number(severity.dcBonus) * 75 : 50 + count * 20 + number(severity.dcBonus) * 25;
+    return {
+      id: `creature-${creature.id}-${actualLevel}-${Math.floor(rng() * 1000000)}`,
+      category: 'Creature',
+      stat: creature.stat || 'Agility',
+      dc,
+      name: `${severity.severity}: ${count > 1 ? `${count}× ` : ''}${creature.name}`,
+      description: `${creatureBehaviorText(creature)} This ${classLabel.toLowerCase()} encounter was drawn from the Level ${actualLevel} pool.`,
+      reward: creature.officialClass === 'ending' ? 'Endgame relics, decisive campaign intelligence, and a major world-state consequence determined by the GM.' : `${marks} Marks of specimen value and creature-specific biological or salvage materials.`,
+      failure: `${hullDamage} Hull damage and one affected submarine system loses ${Math.min(50, 10 + number(severity.dcBonus) * 5)}% condition.${creature.canEnterSubmarine ? ` The active character also loses ${crewDamage} ${creature.stat || 'Strength'}.` : ''}`,
+      creatureId: creature.id,
+      creatureName: creature.name,
+      creatureClass: creature.officialClass,
+      creatureClassLabel: classLabel,
+      creatureCount: count,
+      creatureLevel: actualLevel,
+      creatureSeverityLevel: severityLevel,
+      creatureSeverity: severity.severity,
+      creatureThreat: number(creature.baseThreat, 1) * count + severityLevel,
+      creatureAttackProfile: creature.attackProfile,
+      creatureTags: cloneWorldData(creature.tags || []),
+      canEnterSubmarine: Boolean(creature.canEnterSubmarine),
+      endingOnly: Boolean(creature.endingOnly),
+      hullDamage,
+      crewDamage,
+      systemConditionDamage: Math.min(50, 10 + number(severity.dcBonus) * 5),
+      wikiUrl: creatureWikiUrl(creature),
+      sourceUrl: CREATURE_ENCOUNTER_REGISTRY.source?.url || 'https://barotraumagame.com/wiki/Creatures',
+      routeNodeId: options.targetNode?.id || '',
+      routeNodeName: options.targetNode?.name || '',
+      routeLocationLevel: actualLevel,
+      dangerousRoute: Boolean(options.dangerous)
+    };
+  }
+
+  function drawCreatureEncounter(level, rng = Math.random, options = {}) {
+    normalizeCreatureEncounterState();
+    const endingEnabled = options.allowEndingCreatures ?? state.route.creatureSettings.allowEndingCreatures;
+    let pool = creaturePoolForLevel(level, endingEnabled);
+    if (!pool.length && number(level) === 10) pool = creaturePoolForLevel(9, false).filter(creature => creature.officialClass === 'abyssal');
+    return buildCreatureEncounter(weightedCreatureChoice(pool, rng, level), level, rng, options) || {
+      id: `creature-unavailable-${Date.now()}`,
+      category: 'Creature', stat: 'Agility', dc: 8,
+      name: 'Unidentified Creature Contact',
+      description: `No configured creature matched the Level ${level} pool.`,
+      reward: 'GM determination.', failure: '1 Hull damage.',
+      creatureLevel: clamp(level, 1, 10), creatureSeverity: creatureSeverityProfile(level).severity, hullDamage: 1, crewDamage: 0
+    };
+  }
+
+  function encounterPlannerCreatureLevel() {
+    normalizeCreatureEncounterState();
+    const selectedNode = state.encounters.useSelectedWorldLocation && typeof selectedWorldLocationNode === 'function' ? selectedWorldLocationNode() : null;
+    if (selectedNode?.locationLevel) return clamp(selectedNode.locationLevel, 1, 10);
+    if (state.encounters.locationLevel !== 'All' && state.encounters.locationLevel !== undefined) return clamp(state.encounters.locationLevel, 1, 10);
+    return clamp(state.encounters.creatureLevel, 1, 10);
+  }
+
+  function routeCreatureLevel(route = state.route) {
+    const crossing = normalizeRouteCrossing();
+    const leg = activeCrossingLeg(crossing);
+    if (leg) return clamp(Math.max(number(leg.fromLevel, 1), number(leg.toLevel, 1)), 1, 10);
+    const start = crossingNode(route.startNodeId);
+    const end = crossingNode(route.endNodeId);
+    return clamp(Math.max(number(start?.locationLevel, 1), number(end?.locationLevel, 1)), 1, 10);
+  }
+
+  const drawRandomEventBeforeCreatureEncounters = drawRandomEvent;
+  drawRandomEvent = function drawRandomEventWithCreatures(category = 'All', sanityEnabled = true) {
+    const level = encounterPlannerCreatureLevel();
+    if (category === 'Creature') return drawCreatureEncounter(level, Math.random, { allowEndingCreatures: state.encounters.allowEndingCreatures });
+    const event = drawRandomEventBeforeCreatureEncounters(category, sanityEnabled);
+    return event?.category === 'Creature' ? drawCreatureEncounter(level, Math.random, { allowEndingCreatures: state.encounters.allowEndingCreatures }) : event;
+  };
+
+  const drawWeightedEventBeforeCreatureEncounters = drawWeightedEvent;
+  drawWeightedEvent = function drawWeightedEventWithCreatures(route) {
+    const event = drawWeightedEventBeforeCreatureEncounters(route);
+    return event?.category === 'Creature' ? drawCreatureEncounter(routeCreatureLevel(route), Math.random, { allowEndingCreatures: normalizeCreatureEncounterState().allowEndingCreatures }) : event;
+  };
+
+  drawCrossingEvent = function drawCrossingEventWithCreatures(route, targetNode, rng) {
+    const category = weightedCategory(route.table, route.sanityEnabled, rng);
+    if (category === 'Creature') return drawCreatureEncounter(targetNode?.locationLevel || 1, rng, { allowEndingCreatures: normalizeCreatureEncounterState().allowEndingCreatures, targetNode });
+    if (category === 'Location' && targetNode?.locationTypeId && LOCATION_TYPE_MAP[targetNode.locationTypeId]) return locationEncounterEvent(LOCATION_TYPE_MAP[targetNode.locationTypeId], targetNode);
+    const pool = EVENTS.filter(event => event.category === category && (route.sanityEnabled || event.category !== 'Sanity'));
+    const fallback = EVENTS.filter(event => route.sanityEnabled || event.category !== 'Sanity');
+    const source = pool[Math.floor(rng() * Math.max(1, pool.length))] || fallback[Math.floor(rng() * Math.max(1, fallback.length))] || EVENTS[0];
+    if (source?.category === 'Creature') return drawCreatureEncounter(targetNode?.locationLevel || 1, rng, { allowEndingCreatures: normalizeCreatureEncounterState().allowEndingCreatures, targetNode });
+    return { ...source, routeNodeId: targetNode?.id || '', routeNodeName: targetNode?.name || '', routeLocationLevel: targetNode?.locationLevel || 1 };
+  };
+
+  const resolveCrossingEventBeforeCreatureEncounters = resolveCrossingEvent;
+  resolveCrossingEvent = function resolveCrossingCreatureEvent(slotId, status, roll = '') {
+    const slot = state.route.plan.find(item => item.id === slotId);
+    const event = crossingSelectedEvent(slot);
+    const applyFailure = Boolean(slot && event?.creatureId && status === 'failure' && !slot.creatureFailureApplied);
+    const result = resolveCrossingEventBeforeCreatureEncounters(slotId, status, roll);
+    if (!result || !applyFailure) return result;
+    state.submarine.hullCurrent = Math.max(0, number(state.submarine.hullCurrent) - Math.max(0, number(event.hullDamage)));
+    const systems = Object.keys(state.submarine.systems || {});
+    if (systems.length) {
+      const key = systems[Math.abs(seededHash(`${state.route.crossing.crossingId}|${slotId}|${event.creatureId}`)) % systems.length];
+      state.submarine.systems[key].condition = Math.max(0, number(state.submarine.systems[key].condition, 100) - Math.max(0, number(event.systemConditionDamage)));
+    }
+    if (event.canEnterSubmarine && event.stat in state.character.current) state.character.current[event.stat] = Math.max(0, number(state.character.current[event.stat]) - Math.max(0, number(event.crewDamage)));
+    slot.creatureFailureApplied = true;
+    crossingLog(normalizeRouteCrossing(), `${event.creatureSeverity} ${event.creatureName} attack applied ${event.hullDamage} Hull damage${event.canEnterSubmarine ? ` and ${event.crewDamage} ${event.stat} damage` : ''}.`);
+    save();
+    return result;
+  };
+
+  normalizeCreatureEncounterState();
