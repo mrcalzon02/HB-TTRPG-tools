@@ -49,7 +49,8 @@ jobs:
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-ui.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-02.txt',
-            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt'
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt'
           ];
           required.forEach(name => assert(loader.includes(name), `${name} is not loaded`));
 
@@ -57,6 +58,7 @@ jobs:
           assert(indexOf(required[0]) < indexOf('barotrauma-rpg-tools.part-06-active-submarine-dashboard-core.txt'), 'Pre-auth snapshot is not loaded before dashboard initialization');
           assert(indexOf(required[1]) < indexOf(required[2]), 'Pre-auth campaign identity is not restored before authentication initializes');
           assert(indexOf(required[7]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'Legacy snapshot migration is not loaded before final runtime');
+          assert(indexOf(required[8]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'First-claim group registration safeguard is not loaded before final runtime');
 
           const core00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-00.txt', 'utf8');
           const core01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-01.txt', 'utf8');
@@ -64,11 +66,12 @@ jobs:
           const stability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt', 'utf8');
           const bootstrap = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-bootstrap.txt', 'utf8');
           const migration = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt', 'utf8');
+          const firstClaim = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt', 'utf8');
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
 
           assert(core00.includes("algorithm='PBKDF2-SHA-256'") || core00.includes("credential.algorithm='PBKDF2-SHA-256'"), 'Credential algorithm is not PBKDF2-SHA-256');
           assert(core00.includes('DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS=210000'), 'PBKDF2 iteration count is not 210000');
-          assert(core00.includes("crypto.subtle.deriveBits"), 'Password verifier is not derived through Web Crypto');
+          assert(core00.includes('crypto.subtle.deriveBits'), 'Password verifier is not derived through Web Crypto');
           assert(core00.includes('verifier') && core00.includes('salt'), 'Credential salt or verifier is missing');
           assert(core01.includes('tokenHash:await dashboardManagementSha256(token)'), 'World save does not store a hash of the session receipt');
           assert(core01.includes('dashboardManagementWriteStoredSession'), 'Local session receipt is not stored');
@@ -84,6 +87,7 @@ jobs:
           assert(stability.includes("if('token' in receipt)"), 'Raw session-token diagnostic is missing');
           assert(bootstrap.includes('restorePreAuthDashboardCampaignIdentity'), 'Startup identity mutation rollback is missing');
           assert(migration.includes('migratedFromPublicWorld:true'), 'Older submarine state migration is missing');
+          assert(firstClaim.includes('registerCurrentSubmarineForDashboardManagement'), 'First claim does not register an unassigned local submarine');
           assert(finalRuntime.includes('version: 21'), 'Suite export version is not 21');
           assert(finalRuntime.includes('dashboardManagementAuthVersion: DASHBOARD_MANAGEMENT_AUTH_VERSION'), 'Suite export omits authentication version');
           assert(finalRuntime.includes("logoutDashboardManagementSession('suite import')"), 'Suite import does not revoke the old management session');
