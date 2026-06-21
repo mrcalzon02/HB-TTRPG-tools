@@ -1,5 +1,5 @@
 
-  const LEGACY_SUITE_IMPORT_COMPATIBILITY = { version: 20 };
+  const LEGACY_SUITE_IMPORT_COMPATIBILITY = { version: 20, dashboardAuthVersion: 21 };
 
   function render() {
     const tool = activeTool();
@@ -25,7 +25,7 @@
   document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
   window.addEventListener('hashchange', render);
   document.getElementById('print-tool')?.addEventListener('click', () => window.print());
-  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 21, exportedAt: new Date().toISOString(), masterWorldId: synchronizeMasterWorldId(false), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, worldStateSchemaVersion: WORLD_STATE_SCHEMA.schemaVersion, factionRegistryVersion: FACTION_REGISTRY.schemaVersion, locationLevelRegistryVersion: LOCATION_LEVEL_REGISTRY.schemaVersion, creatureRegistryVersion: CREATURE_ENCOUNTER_VERSION, routeCrossingVersion: ROUTE_CROSSING_VERSION, routeEventResolutionVersion: ROUTE_EVENT_RESOLUTION_VERSION, worldEconomyVersion: WORLD_ECONOMY_VERSION, dashboardManagementAuthVersion: DASHBOARD_MANAGEMENT_AUTH_VERSION, expeditionIntegrationVersion: EXPEDITION_INTEGRATION_VERSION, activeSubmarineDashboardVersion: ACTIVE_SUBMARINE_DASHBOARD_VERSION, activeTransitTurnVersion: ACTIVE_TRANSIT_TURN_VERSION, worldScaleVersion: state.world?.worldScaleVersion || '', state }, null, 2)));
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 22, exportedAt: new Date().toISOString(), masterWorldId: synchronizeMasterWorldId(false), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, worldStateSchemaVersion: WORLD_STATE_SCHEMA.schemaVersion, factionRegistryVersion: FACTION_REGISTRY.schemaVersion, locationLevelRegistryVersion: LOCATION_LEVEL_REGISTRY.schemaVersion, creatureRegistryVersion: CREATURE_ENCOUNTER_VERSION, routeCrossingVersion: ROUTE_CROSSING_VERSION, routeEventResolutionVersion: ROUTE_EVENT_RESOLUTION_VERSION, worldEconomyVersion: WORLD_ECONOMY_VERSION, dashboardManagementAuthVersion: DASHBOARD_MANAGEMENT_AUTH_VERSION, dashboardManagementRecoveryVersion: '1.0.0', expeditionIntegrationVersion: EXPEDITION_INTEGRATION_VERSION, activeSubmarineDashboardVersion: ACTIVE_SUBMARINE_DASHBOARD_VERSION, activeTransitTurnVersion: ACTIVE_TRANSIT_TURN_VERSION, worldScaleVersion: state.world?.worldScaleVersion || '', state }, null, 2)));
   document.getElementById('import-suite')?.addEventListener('change', event => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -43,6 +43,8 @@
         dashboardManagementRuntime.receiptId = '';
         dashboardManagementRuntime.expiresAt = '';
         dashboardManagementRuntime.remembered = false;
+        dashboardManagementRuntime.pendingRecoveryCode = '';
+        dashboardManagementRuntime.pendingRecoveryVesselId = '';
         dashboardManagementRuntime.message = 'Suite imported. Choose a submarine and log in to manage it.';
         if (parsed.masterWorldId && !state.world?.masterWorldId) {
           state.world = state.world && typeof state.world === 'object' ? state.world : {};
