@@ -1,0 +1,77 @@
+
+  function generalEncounterLethalityRosterSummary() {
+    normalizeGeneralEncounterLifeState();
+    const roster = typeof normalizeCrewManagement === 'function' ? normalizeCrewManagement().roster.filter(record => record.active && record.approval === 'Accepted') : [];
+    const records = [{ name: state.character.name || 'Current Character', status: state.character.status, current: state.character.current }, ...roster.map(record => ({ name: record.characterName, status: record.status, current: record.current }))];
+    return {
+      records,
+      living: records.filter(record => record.status !== 'Dead').length,
+      injured: records.filter(record => record.status === 'Injured').length,
+      dead: records.filter(record => record.status === 'Dead').length
+    };
+  }
+
+  const generalEncounterDetailHtmlBeforeLethality = generalEncounterDetailHtml;
+  generalEncounterDetailHtml = function generalEncounterDetailHtmlWithLethality(event, item = null, compact = false) {
+    const html = generalEncounterDetailHtmlBeforeLethality(event, item, compact);
+    if (!event?.failureCasualties?.length) return html;
+    const casualtyOutcome = item?.encounterCasualtySummary ? `<br><strong>Casualties applied:</strong> ${escapeHtml(item.encounterCasualtySummary)}` : '';
+    return html.replace('</div>', `<div class="notice bad" style="margin-top:8px"><strong>Failure casualty exposure</strong><br>${escapeHtml(generalEncounterCasualtyText(event))}${casualtyOutcome}</div></div>`);
+  };
+
+  const renderCharacterBeforeGeneralLethality = renderCharacter;
+  renderCharacter = function renderCharacterWithLifeState() {
+    normalizeGeneralEncounterLifeState();
+    renderCharacterBeforeGeneralLethality();
+    const shell = root.querySelector('.tool-shell');
+    const hero = shell?.querySelector(':scope > .tool-hero');
+    if (!shell || !hero) return;
+    const summary = generalEncounterLethalityRosterSummary();
+    const operator = generalEncounterRollOperator();
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel character-lethality-panel';
+    panel.style.borderColor = state.character.status === 'Dead' ? 'rgba(223,119,119,.85)' : state.character.status === 'Injured' ? 'rgba(214,170,84,.7)' : 'rgba(117,197,142,.55)';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div><p class="eyebrow">Encounter injury and fatality state</p><h3>${escapeHtml(state.character.status)}</h3><p class="small-note">General encounter failures now damage current S.A.I.C. scores, can incapacitate or kill the resolving character, and can independently injure or kill accepted onboard crew.</p></div>
+        <div class="metric-row"><div class="metric"><span>Living characters</span><strong>${summary.living}</strong></div><div class="metric"><span>Injured</span><strong class="warn">${summary.injured}</strong></div><div class="metric"><span>Dead</span><strong class="bad">${summary.dead}</strong></div><div class="metric"><span>Selected operator</span><strong>${escapeHtml(operator?.name || 'None')}</strong></div></div>
+      </div>
+      <div class="field-grid three" style="margin-top:10px">
+        <label class="field">Current character status<select id="char-life-status">${optionList(GENERAL_ENCOUNTER_LIFE_STATUSES, state.character.status)}</select></label>
+        <div class="notice"><strong>Incapacitation:</strong> A damaged current S.A.I.C. score reaching 0 triggers a fatality check. A character already marked Injured dies automatically when another casualty drives a score to 0.</div>
+        <div class="notice bad"><strong>Hull collapse:</strong> Reaching 0 Hull applies a catastrophic decompression casualty check to every living onboard character.</div>
+      </div>
+      <div class="button-row no-print" style="margin-top:10px"><button id="stabilize-current-character" class="secondary-action" type="button" ${state.character.status === 'Injured' && number(state.submarine.resources.medical) > 0 ? '' : 'disabled'}>Stabilize with 1 Medical</button></div>
+    `;
+    hero.insertAdjacentElement('afterend', panel);
+    panel.querySelector('#char-life-status')?.addEventListener('change', event => {
+      state.character.status = GENERAL_ENCOUNTER_LIFE_STATUSES.includes(event.target.value) ? event.target.value : 'Onboard';
+      if (state.character.status === 'Dead') for (const key of Object.keys(state.character.current)) state.character.current[key] = 0;
+      save();
+      renderCharacter();
+    });
+    panel.querySelector('#stabilize-current-character')?.addEventListener('click', () => {
+      if (state.character.status !== 'Injured' || number(state.submarine.resources.medical) <= 0) return;
+      state.submarine.resources.medical = Math.max(0, number(state.submarine.resources.medical) - 1);
+      const zeroStats = Object.keys(state.character.current).filter(stat => number(state.character.current[stat]) <= 0);
+      for (const stat of zeroStats) state.character.current[stat] = 1;
+      state.character.status = 'Onboard';
+      const note = 'Stabilized with medical supplies';
+      state.character.conditions = String(state.character.conditions || '').includes(note) ? state.character.conditions : [state.character.conditions, note].filter(Boolean).join('; ');
+      save();
+      renderCharacter();
+    });
+  };
+
+  const renderSubmarineBeforeGeneralLethality = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCasualtySummary() {
+    renderSubmarineBeforeGeneralLethality();
+    const shell = root.querySelector('.tool-shell');
+    const hero = shell?.querySelector(':scope > .tool-hero');
+    if (!shell || !hero) return;
+    const summary = generalEncounterLethalityRosterSummary();
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel submarine-casualty-panel';
+    panel.innerHTML = `<div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Onboard casualty state</p><h3>Crew Survival</h3><p class="small-note">Injured crew remain valid casualty targets. Dead crew are removed from operator selection and from automatic onboard-crew counts.</p></div><div class="metric-row"><div class="metric"><span>Living</span><strong>${summary.living}</strong></div><div class="metric"><span>Injured</span><strong class="warn">${summary.injured}</strong></div><div class="metric"><span>Dead</span><strong class="bad">${summary.dead}</strong></div><div class="metric"><span>Hull</span><strong class="${number(state.submarine.hullCurrent) <= 0 ? 'bad' : ''}">${number(state.submarine.hullCurrent)}/${calculateSubmarine().totals.hull}</strong></div></div></div>`;
+    hero.insertAdjacentElement('afterend', panel);
+  };
