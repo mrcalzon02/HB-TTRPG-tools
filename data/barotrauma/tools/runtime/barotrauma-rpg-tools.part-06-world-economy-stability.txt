@@ -1,0 +1,72 @@
+
+  worldEconomyStationRecordForNode=function worldEconomyStationRecordForNodeLazy(nodeId) {
+    const station=STATIONS.find(item=>item.worldNodeId===nodeId)||STATIONS.find(item=>item.name===state.world?.map?.nodes?.find(node=>node.id===nodeId)?.name);
+    if (!station) return null;
+    const commerce=state.stationCommerce&&typeof state.stationCommerce==='object'?state.stationCommerce:null;
+    return commerce?.stations?.[stationIdentity(station)]||null;
+  };
+
+  normalizeStationCommerce=function normalizeStationCommerceLazilyForWorldEconomy() {
+    const commerce=normalizeStationCommerceBeforePersistentWorldEconomy();
+    const active=commerce.stations?.[commerce.activeStationId]||null;
+    if (active) {
+      worldEconomyEnsureVendorShells(active);
+      worldEconomySyncVendorsFromStationInventory(active);
+    }
+    return commerce;
+  };
+
+  function worldEconomyProcessSimulationBatches(now=new Date()) {
+    const economy=normalizeWorldEconomyState();
+    const vessels=Object.values(economy.vessels).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+    const batchSize=12;
+    let index=0;
+    const processBatch=()=>{
+      const batch=vessels.slice(index,index+batchSize);
+      for (const vessel of batch) {
+        const due=Date.parse(vessel.nextActionAt||0);
+        if (!Number.isFinite(due)||due>now.getTime()) continue;
+        if (vessel.status==='in-transit') arriveWorldEconomyFreighter(vessel,new Date(due));
+        else if (vessel.status==='docked') departWorldEconomyFreighter(vessel,new Date(Math.max(due,Date.parse(vessel.lastActionAt||0)||now.getTime())));
+      }
+      index+=batchSize;
+      if (index<vessels.length) setTimeout(processBatch,0);
+      else {
+        economy.simulation.lastSimulatedAt=now.toISOString();
+        economy.simulation.tickSequence=Math.max(0,number(economy.simulation.tickSequence))+1;
+        syncAllWorldPlayerVessels();
+        save();
+      }
+    };
+    setTimeout(processBatch,0);
+  }
+
+  function worldEconomyDiagnostics() {
+    const economy=normalizeWorldEconomyState();
+    const issues=[];
+    const vessels=Object.values(economy.vessels);
+    const activePlayers=vessels.filter(vessel=>vessel.kind==='player'&&vessel.active!==false);
+    for (const vessel of vessels) {
+      if (vessel.worldId!==normalizeWorldHub().worldId) issues.push(`Vessel ${vessel.vesselId} is linked to another world ID.`);
+      if (vessel.status==='in-transit') {
+        const start=Date.parse(vessel.location.departedAt||0),end=Date.parse(vessel.location.etaAt||0);
+        const minutes=(end-start)/60000;
+        if (vessel.kind==='npc'&&(!Number.isFinite(minutes)||minutes<15||minutes>105)) issues.push(`NPC vessel ${vessel.vesselId} has an invalid passive transit duration.`);
+      }
+    }
+    for (const station of Object.values(economy.stationEconomies)) {
+      if (station.profileId==='factory') {
+        const profile=worldEconomyProcessProfile(station);
+        if (!number(profile.outputs?.deliveryGoods)||number(profile.inputs?.rawMaterials)<10||number(profile.inputs?.components)<4) issues.push(`Factory ${station.name} does not use the substantial Delivery Goods recipe.`);
+      }
+    }
+    return {valid:!issues.length,issues,version:WORLD_ECONOMY_VERSION,vesselCount:vessels.filter(v=>v.active!==false).length,activePlayerVessels:activePlayers.length,npcVessels:vessels.filter(v=>v.kind==='npc'&&v.active!==false).length,availableVessels:vessels.filter(v=>v.status==='available').length,stationEconomies:Object.keys(economy.stationEconomies).length,tradeJournalEntries:economy.tradeJournal.length};
+  }
+
+  function publishWorldEconomyDiagnostics() {
+    globalThis.BAROTRAUMA_WORLD_ECONOMY_DIAGNOSTICS=worldEconomyDiagnostics();
+    if (!globalThis.BAROTRAUMA_WORLD_ECONOMY_DIAGNOSTICS.valid) console.warn('World economy diagnostics found issues.',globalThis.BAROTRAUMA_WORLD_ECONOMY_DIAGNOSTICS.issues);
+    return globalThis.BAROTRAUMA_WORLD_ECONOMY_DIAGNOSTICS;
+  }
+
+  publishWorldEconomyDiagnostics();
