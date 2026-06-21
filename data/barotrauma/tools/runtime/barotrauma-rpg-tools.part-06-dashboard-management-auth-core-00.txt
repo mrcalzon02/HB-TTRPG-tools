@@ -1,0 +1,249 @@
+
+  const DASHBOARD_MANAGEMENT_AUTH_VERSION='1.0.0';
+  const DASHBOARD_MANAGEMENT_COOKIE='hb_barotrauma_dashboard_session_v1';
+  const DASHBOARD_MANAGEMENT_SESSION_KEY='hb-barotrauma-dashboard-session-v1';
+  const DASHBOARD_MANAGEMENT_LAST_VESSEL_KEY='hb-barotrauma-dashboard-last-vessel-v1';
+  const DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS=210000;
+  const DASHBOARD_MANAGEMENT_SESSION_HOURS=12;
+  const DASHBOARD_MANAGEMENT_REMEMBER_DAYS=30;
+  const dashboardManagementRuntime={status:'checking',vesselId:'',credentialId:'',receiptId:'',expiresAt:'',remembered:false,message:'Checking local management session…'};
+  let dashboardManagementCaptureGuard=false;
+
+  function defaultDashboardManagementAuthority(){
+    return {version:DASHBOARD_MANAGEMENT_AUTH_VERSION,submarineCredentials:{},vesselSnapshots:{},audit:[]};
+  }
+
+  function normalizeDashboardManagementAuthority(){
+    const hub=normalizeWorldHub();
+    const defaults=defaultDashboardManagementAuthority();
+    hub.management=hub.management&&typeof hub.management==='object'?hub.management:defaults;
+    hub.management.version=DASHBOARD_MANAGEMENT_AUTH_VERSION;
+    hub.management.submarineCredentials=hub.management.submarineCredentials&&typeof hub.management.submarineCredentials==='object'&&!Array.isArray(hub.management.submarineCredentials)?hub.management.submarineCredentials:{};
+    hub.management.vesselSnapshots=hub.management.vesselSnapshots&&typeof hub.management.vesselSnapshots==='object'&&!Array.isArray(hub.management.vesselSnapshots)?hub.management.vesselSnapshots:{};
+    hub.management.audit=Array.isArray(hub.management.audit)?hub.management.audit.slice(0,500):[];
+    for(const [vesselId,raw] of Object.entries(hub.management.submarineCredentials)){
+      const credential=raw&&typeof raw==='object'?raw:{};
+      credential.version=DASHBOARD_MANAGEMENT_AUTH_VERSION;
+      credential.vesselId=vesselId;
+      credential.credentialId=String(credential.credentialId||uid('submarine-credential'));
+      credential.algorithm='PBKDF2-SHA-256';
+      credential.iterations=Math.max(100000,number(credential.iterations,DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS));
+      credential.salt=String(credential.salt||'');
+      credential.verifier=String(credential.verifier||'');
+      credential.managerPlayerId=String(credential.managerPlayerId||'');
+      credential.managerName=String(credential.managerName||'');
+      credential.createdAt=String(credential.createdAt||new Date().toISOString());
+      credential.updatedAt=String(credential.updatedAt||credential.createdAt);
+      credential.revision=Math.max(1,number(credential.revision,1));
+      credential.receipts=credential.receipts&&typeof credential.receipts==='object'&&!Array.isArray(credential.receipts)?credential.receipts:{};
+      for(const [receiptId,receiptRaw] of Object.entries(credential.receipts)){
+        const receipt=receiptRaw&&typeof receiptRaw==='object'?receiptRaw:{};
+        receipt.receiptId=receiptId;
+        receipt.tokenHash=String(receipt.tokenHash||'');
+        receipt.createdAt=String(receipt.createdAt||new Date().toISOString());
+        receipt.lastUsedAt=String(receipt.lastUsedAt||receipt.createdAt);
+        receipt.expiresAt=String(receipt.expiresAt||receipt.createdAt);
+        receipt.remembered=Boolean(receipt.remembered);
+        if(!receipt.tokenHash||Date.parse(receipt.expiresAt)<=Date.now()) delete credential.receipts[receiptId];
+      }
+      hub.management.submarineCredentials[vesselId]=credential;
+    }
+    return hub.management;
+  }
+
+  function dashboardManagementAudit(action,vesselId,details={}){
+    const authority=normalizeDashboardManagementAuthority();
+    authority.audit.unshift({id:uid('management-audit'),action,vesselId:String(vesselId||''),details:cloneWorldData(details||{}),at:new Date().toISOString(),canonicalAt:worldGameDate().toISOString()});
+    authority.audit=authority.audit.slice(0,500);
+  }
+
+  function dashboardManagementBytesToBase64Url(bytes){
+    let binary='';
+    for(const byte of bytes) binary+=String.fromCharCode(byte);
+    return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+
+  function dashboardManagementBase64UrlToBytes(value){
+    const padded=String(value||'').replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((String(value||'').length+3)%4);
+    const binary=atob(padded);
+    return Uint8Array.from(binary,character=>character.charCodeAt(0));
+  }
+
+  function dashboardManagementRandomToken(length=32){
+    const bytes=new Uint8Array(length);
+    crypto.getRandomValues(bytes);
+    return dashboardManagementBytesToBase64Url(bytes);
+  }
+
+  async function dashboardManagementSha256(value){
+    if(!crypto?.subtle) throw new Error('Web Crypto is unavailable. Management passwords require a secure browser context.');
+    const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(value||'')));
+    return dashboardManagementBytesToBase64Url(new Uint8Array(digest));
+  }
+
+  async function dashboardManagementDeriveVerifier(password,salt,iterations=DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS){
+    if(!crypto?.subtle) throw new Error('Web Crypto is unavailable. Management passwords require a secure browser context.');
+    const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(String(password||'')),{name:'PBKDF2'},false,['deriveBits']);
+    const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:dashboardManagementBase64UrlToBytes(salt),iterations:Math.max(100000,number(iterations,DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS))},key,256);
+    return dashboardManagementBytesToBase64Url(new Uint8Array(bits));
+  }
+
+  function dashboardManagementConstantTimeEqual(left,right){
+    const a=String(left||'');
+    const b=String(right||'');
+    let difference=a.length^b.length;
+    const length=Math.max(a.length,b.length);
+    for(let index=0;index<length;index+=1) difference|=(a.charCodeAt(index)||0)^(b.charCodeAt(index)||0);
+    return difference===0;
+  }
+
+  function dashboardManagementCredential(vesselId){
+    return normalizeDashboardManagementAuthority().submarineCredentials[String(vesselId||'')]||null;
+  }
+
+  function dashboardManagementSubmarineRecord(vesselId){
+    return normalizeWorldHub().publicState.submarines?.[vesselId]||null;
+  }
+
+  function dashboardManagementVessels(){
+    const hub=normalizeWorldHub();
+    const authority=normalizeDashboardManagementAuthority();
+    const registry=typeof worldVesselRegistry==='function'?worldVesselRegistry():{};
+    const ids=new Set([...Object.keys(hub.publicState.submarines||{}),...Object.values(registry||{}).filter(vessel=>vessel.active!==false&&vessel.kind==='player').map(vessel=>vessel.vesselId)]);
+    if(state.submarine?.worldSubmarineId) ids.add(state.submarine.worldSubmarineId);
+    return [...ids].map(vesselId=>{
+      const record=hub.publicState.submarines?.[vesselId]||{};
+      const vessel=registry?.[vesselId]||{};
+      const groupId=record.groupId||vessel.ownerGroupId||Object.values(hub.publicState.groups||{}).find(group=>(group.submarineIds||[]).includes(vesselId))?.groupId||'';
+      const group=hub.publicState.groups?.[groupId]||null;
+      return {vesselId,name:record.name||record.submarine?.name||vessel.name||(vesselId===state.submarine?.worldSubmarineId?(state.submarine.name||state.submarine.model):vesselId),model:record.model||record.submarine?.model||vessel.modelName||vessel.modelId||'',status:record.status||vessel.status||'docked',groupId,groupName:group?.name||'Unassigned expedition',currentNodeId:record.currentNodeId||vessel.location?.currentNodeId||vessel.location?.stationNodeId||group?.currentNodeId||'',claimed:Boolean(authority.submarineCredentials[vesselId]?.verifier)};
+    }).filter(record=>record.vesselId).sort((left,right)=>left.name.localeCompare(right.name)||left.vesselId.localeCompare(right.vesselId));
+  }
+
+  function dashboardManagementSelectedVesselId(){
+    try{return localStorage.getItem(DASHBOARD_MANAGEMENT_LAST_VESSEL_KEY)||dashboardManagementRuntime.vesselId||dashboardManagementVessels()[0]?.vesselId||'';}catch(error){return dashboardManagementRuntime.vesselId||dashboardManagementVessels()[0]?.vesselId||'';}
+  }
+
+  function dashboardManagementSetSelectedVesselId(vesselId){
+    try{localStorage.setItem(DASHBOARD_MANAGEMENT_LAST_VESSEL_KEY,String(vesselId||''));}catch(error){console.warn('Could not remember the selected submarine.',error);}
+  }
+
+  function dashboardManagementCookieSecureSuffix(){return location.protocol==='https:'?'; Secure':'';}
+
+  function dashboardManagementWriteCookie(payload,maxAgeSeconds){
+    const encoded=encodeURIComponent(btoa(JSON.stringify(payload)));
+    document.cookie=`${DASHBOARD_MANAGEMENT_COOKIE}=${encoded}; Path=/; Max-Age=${Math.max(0,Math.floor(maxAgeSeconds))}; SameSite=Strict${dashboardManagementCookieSecureSuffix()}`;
+  }
+
+  function dashboardManagementReadCookie(){
+    const prefix=`${DASHBOARD_MANAGEMENT_COOKIE}=`;
+    const raw=document.cookie.split(';').map(part=>part.trim()).find(part=>part.startsWith(prefix));
+    if(!raw)return null;
+    try{return JSON.parse(atob(decodeURIComponent(raw.slice(prefix.length))));}catch(error){return null;}
+  }
+
+  function dashboardManagementClearStoredSession(){
+    try{sessionStorage.removeItem(DASHBOARD_MANAGEMENT_SESSION_KEY);}catch(error){}
+    document.cookie=`${DASHBOARD_MANAGEMENT_COOKIE}=; Path=/; Max-Age=0; SameSite=Strict${dashboardManagementCookieSecureSuffix()}`;
+  }
+
+  function dashboardManagementReadStoredSession(){
+    try{
+      const session=sessionStorage.getItem(DASHBOARD_MANAGEMENT_SESSION_KEY);
+      if(session)return JSON.parse(session);
+    }catch(error){}
+    return dashboardManagementReadCookie();
+  }
+
+  function dashboardManagementWriteStoredSession(payload,remember){
+    dashboardManagementClearStoredSession();
+    if(remember){
+      dashboardManagementWriteCookie(payload,DASHBOARD_MANAGEMENT_REMEMBER_DAYS*24*60*60);
+    }else{
+      try{sessionStorage.setItem(DASHBOARD_MANAGEMENT_SESSION_KEY,JSON.stringify(payload));}catch(error){throw new Error('The browser could not store the management session.');}
+    }
+  }
+
+  function dashboardManagementGroupForVessel(vesselId){
+    const hub=normalizeWorldHub();
+    const record=hub.publicState.submarines?.[vesselId]||{};
+    const vessel=typeof worldVesselRegistry==='function'?worldVesselRegistry()?.[vesselId]:null;
+    const groupId=record.groupId||vessel?.ownerGroupId||Object.values(hub.publicState.groups||{}).find(group=>(group.submarineIds||[]).includes(vesselId))?.groupId||'';
+    return hub.publicState.groups?.[groupId]||null;
+  }
+
+  function captureDashboardManagedVesselState(vesselId=dashboardManagementRuntime.vesselId){
+    if(!vesselId||dashboardManagementCaptureGuard)return null;
+    dashboardManagementCaptureGuard=true;
+    try{
+      const hub=normalizeWorldHub();
+      const authority=normalizeDashboardManagementAuthority();
+      const group=dashboardManagementGroupForVessel(vesselId);
+      const snapshot={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:hub.worldId,vesselId,groupId:group?.groupId||'',submarine:cloneWorldData(state.submarine||{}),route:cloneWorldData(state.route||{}),operationsDashboard:cloneWorldData(state.operationsDashboard||{}),character:cloneWorldData(state.character||{}),capturedAt:new Date().toISOString()};
+      snapshot.submarine.worldSubmarineId=vesselId;
+      snapshot.operationsDashboard.activeSubmarineId=vesselId;
+      if(group)snapshot.operationsDashboard.activeGroupId=group.groupId;
+      authority.vesselSnapshots[vesselId]=snapshot;
+      const existing=hub.publicState.submarines[vesselId]||{};
+      hub.publicState.submarines[vesselId]={...existing,submarineId:vesselId,groupId:group?.groupId||existing.groupId||'',name:state.submarine?.name||existing.name||state.submarine?.model||vesselId,model:state.submarine?.model||existing.model||'',status:state.submarine?.managedExpedition?.status||existing.status||'active',currentNodeId:group?.currentNodeId||existing.currentNodeId||'',routeId:state.route?.crossing?.crossingId||existing.routeId||'',submarine:cloneWorldData(state.submarine||{}),dashboardSnapshotAt:snapshot.capturedAt,updatedAt:snapshot.capturedAt};
+      return snapshot;
+    }finally{dashboardManagementCaptureGuard=false;}
+  }
+
+  function activateDashboardManagedVessel(vesselId){
+    const hub=normalizeWorldHub();
+    const authority=normalizeDashboardManagementAuthority();
+    const snapshot=authority.vesselSnapshots[vesselId]||null;
+    const record=hub.publicState.submarines?.[vesselId]||{};
+    const vessel=typeof worldVesselRegistry==='function'?worldVesselRegistry()?.[vesselId]:null;
+    const group=dashboardManagementGroupForVessel(vesselId);
+    if(!group)throw new Error('This submarine is not assigned to an expedition group in the world save.');
+    if(snapshot){
+      state.submarine=deepMerge(defaultState().submarine,cloneWorldData(snapshot.submarine||{}));
+      state.route=deepMerge(defaultState().route,cloneWorldData(snapshot.route||{}));
+      state.operationsDashboard=deepMerge(defaultActiveSubmarineDashboard(),cloneWorldData(snapshot.operationsDashboard||{}));
+      state.character=deepMerge(defaultState().character,cloneWorldData(snapshot.character||{}));
+    }else{
+      const source=record.submarine&&typeof record.submarine==='object'?record.submarine:{};
+      const modelName=source.model||record.model||vessel?.modelId||vessel?.modelName||state.submarine?.model||'Barsuk';
+      const model=SUBMARINES[modelName]||SUBMARINES.Barsuk||{};
+      state.submarine=deepMerge(defaultState().submarine,cloneWorldData(source));
+      state.submarine.model=SUBMARINES[modelName]?modelName:state.submarine.model;
+      state.submarine.name=source.name||record.name||vessel?.name||state.submarine.name||modelName;
+      state.submarine.weapons=Array.isArray(source.weapons)?cloneWorldData(source.weapons):(model.weapons||[]).map(item=>({...item}));
+      state.submarine.hullCurrent=Math.max(0,number(source.hullCurrent,number(record.hullCurrent,number(model.hull,8))));
+      state.route=deepMerge(defaultState().route,{});
+      state.operationsDashboard=defaultActiveSubmarineDashboard();
+    }
+    state.submarine.worldSubmarineId=vesselId;
+    state.operationsDashboard.activeSubmarineId=vesselId;
+    state.operationsDashboard.activeGroupId=group.groupId;
+    state.operationsDashboard.dashboardFocus=state.operationsDashboard.dashboardFocus||'overview';
+    hub.activeGroupId=group.groupId;
+    hub.activeSubmarineId=vesselId;
+    state.world.activeSubmarineId=vesselId;
+    state.route.activeSubmarineId=vesselId;
+    state.route.activeGroupId=group.groupId;
+    group.primarySubmarineId=vesselId;
+    if(!(group.submarineIds||[]).includes(vesselId))group.submarineIds=[...(group.submarineIds||[]),vesselId];
+    normalizeDashboardCommissioningState();
+    normalizeActiveSubmarineDashboard(false);
+    synchronizeMasterWorldId(false);
+    dashboardManagementSetSelectedVesselId(vesselId);
+    return {hub,group,vesselId,record,vessel};
+  }
+
+  function registerCurrentSubmarineForDashboardManagement(){
+    const hub=normalizeWorldHub();
+    let group=activeWorldGroup();
+    if(!group)group=createWorldGroup(`Expedition Group ${Object.keys(hub.publicState.groups||{}).length+1}`);
+    state.submarine.worldSubmarineId=state.submarine.worldSubmarineId||uid('world-submarine');
+    const vesselId=state.submarine.worldSubmarineId;
+    group.primarySubmarineId=vesselId;
+    group.submarineIds=[...new Set([...(group.submarineIds||[]),vesselId])];
+    hub.publicState.submarines[vesselId]={...(hub.publicState.submarines[vesselId]||{}),submarineId:vesselId,groupId:group.groupId,name:state.submarine.name||state.submarine.model,model:state.submarine.model,status:'active',currentNodeId:group.currentNodeId||group.startingNodeId||'',submarine:cloneWorldData(state.submarine),updatedAt:new Date().toISOString()};
+    captureDashboardManagedVesselState(vesselId);
+    dashboardManagementSetSelectedVesselId(vesselId);
+    save();
+    return vesselId;
+  }
