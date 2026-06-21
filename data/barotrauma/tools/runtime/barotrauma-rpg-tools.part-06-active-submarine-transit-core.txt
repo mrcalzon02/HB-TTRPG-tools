@@ -171,7 +171,7 @@
     turnOrder.round = 1;
     turnOrder.turn = 1;
     turnOrder.encounterId = '';
-    stampDashboardEncounterTurn(true);
+    if (actors.length) stampDashboardEncounterTurn(true);
     save();
     return turnOrder;
   }
@@ -180,8 +180,9 @@
     const turnOrder = normalizeDashboardTurnOrder();
     const actors = dashboardTurnActors();
     const actorByRef = Object.fromEntries(actors.map(actor => [actor.ref, actor]));
-    if (!turnOrder.order.length) buildDashboardTurnOrder(false);
-    for (let offset = 0; offset < Math.max(1, turnOrder.order.length); offset += 1) {
+    if (!turnOrder.order.length && actors.length) buildDashboardTurnOrder(false);
+    if (!turnOrder.order.length) return null;
+    for (let offset = 0; offset < turnOrder.order.length; offset += 1) {
       const index = (turnOrder.activeIndex + offset) % Math.max(1, turnOrder.order.length);
       const actor = actorByRef[turnOrder.order[index]];
       if (actor) {
@@ -296,8 +297,15 @@
     const result = startCrossingBeforeTransitTurns();
     if (!result) return result;
     state.operationsDashboard.operationalState = 'in-route';
-    buildDashboardTurnOrder(state.operationsDashboard.turnOrder?.mode === 'initiative');
-    stampDashboardEncounterTurn(true);
+    const turnOrder = normalizeDashboardTurnOrder();
+    const actorCount = dashboardTurnActors().length;
+    if (turnOrder.mode === 'initiative' && turnOrder.rolledAt && turnOrder.order.length === actorCount) {
+      turnOrder.activeIndex = 0;
+      turnOrder.round = 1;
+      turnOrder.turn = 1;
+      turnOrder.encounterId = '';
+      stampDashboardEncounterTurn(true);
+    } else buildDashboardTurnOrder(turnOrder.mode === 'initiative');
     normalizeActiveSubmarineDashboard(true);
     return result;
   };
