@@ -47,4 +47,24 @@ if (functionality.inventoryRules?.backpackSlots !== 4) throw new Error('Backpack
 if (functionality.inventoryRules?.backpackMobilityPenalty !== 1) throw new Error('Backpack must impose a one-point mobility penalty.');
 if (!Array.isArray(functionality.vendorArchetypes) || !functionality.vendorArchetypes.some(vendor => vendor.machine)) throw new Error('At least one vending-machine archetype is required.');
 
-console.log(`Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, inventory expansion rules, and station-vendor configuration.`);
+const message = `Validated ${runtimePaths.length} runtime fragments (${source.length.toLocaleString()} characters), ${jsonPaths.length} JSON registries, inventory expansion rules, and station-vendor configuration.`;
+console.log(message);
+
+if (process.env.VALIDATION_RECEIPT) {
+  const receiptPath = path.join(root, process.env.VALIDATION_RECEIPT);
+  fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
+  fs.writeFileSync(receiptPath, `${JSON.stringify({
+    status: 'passed',
+    validatedAt: new Date().toISOString(),
+    sourceCommit: process.env.GITHUB_SHA || '',
+    runtimeFragments: runtimePaths.length,
+    runtimeCharacters: source.length,
+    jsonRegistries: jsonPaths.length,
+    itemFunctionalitySchema: functionality.schemaVersion || '',
+    toolbeltSlots: functionality.inventoryRules.toolbeltSlots,
+    backpackSlots: functionality.inventoryRules.backpackSlots,
+    backpackMobilityPenalty: functionality.inventoryRules.backpackMobilityPenalty,
+    vendingMachineArchetypes: functionality.vendorArchetypes.filter(vendor => vendor.machine).length,
+    message
+  }, null, 2)}\n`);
+}
