@@ -1,0 +1,31 @@
+
+  const normalizeActiveSubmarineDashboardBeforeLockedReadOnlyContext=normalizeActiveSubmarineDashboard;
+  normalizeActiveSubmarineDashboard=function normalizeActiveSubmarineDashboardWithLockedReadOnlyContext(persist=false){
+    if(activeSubmarineDashboardContext()&&!dashboardManagementAuthorized()){
+      state.operationsDashboard=state.operationsDashboard&&typeof state.operationsDashboard==='object'?state.operationsDashboard:defaultActiveSubmarineDashboard();
+      const hub=normalizeWorldHub();
+      const group=hub.publicState.groups?.[hub.activeGroupId]||null;
+      return {dashboard:state.operationsDashboard,hub,group,crossing:normalizeRouteCrossing(),submarineId:'',crewIds:[],localCrewId:'',acceptedCrew:[],locked:true};
+    }
+    return normalizeActiveSubmarineDashboardBeforeLockedReadOnlyContext(persist);
+  };
+
+  const activeDashboardDiagnosticsBeforeManagementLock=activeDashboardDiagnostics;
+  activeDashboardDiagnostics=function activeDashboardDiagnosticsWithManagementLock(){
+    if(activeSubmarineDashboardContext()&&!dashboardManagementAuthorized()){
+      const auth=dashboardManagementAuthDiagnostics();
+      return {valid:auth.valid,issues:[...auth.issues],version:ACTIVE_SUBMARINE_DASHBOARD_VERSION,locked:true,managementAuth:auth,activeSubmarineId:'',activeGroupId:'',activeCrewCount:0,activeRouteId:''};
+    }
+    return activeDashboardDiagnosticsBeforeManagementLock();
+  };
+
+  const dashboardBoundaryDiagnosticsBeforeLockedManagementSafety=dashboardBoundaryDiagnostics;
+  dashboardBoundaryDiagnostics=function dashboardBoundaryDiagnosticsWithLockedManagementSafety(){
+    if(activeSubmarineDashboardContext()&&!dashboardManagementAuthorized()){
+      const auth=dashboardManagementAuthDiagnostics();
+      return {valid:auth.valid,issues:[...auth.issues],locked:true,managementAuth:auth,activeTool:'dashboard',activeManagedVesselId:'',worldId:normalizeWorldHub().worldId};
+    }
+    return dashboardBoundaryDiagnosticsBeforeLockedManagementSafety();
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_AUTH_DIAGNOSTICS=dashboardManagementAuthDiagnostics();
