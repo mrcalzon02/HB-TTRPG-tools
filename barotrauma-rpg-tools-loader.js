@@ -57,6 +57,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-active-submarine-transit-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
