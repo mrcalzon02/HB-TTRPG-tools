@@ -1,0 +1,174 @@
+
+  const CUSTOM_MODULE_DEFINITIONS = globalThis.BAROTRAUMA_CUSTOM_MODULE_TYPES || { types: [], common: {} };
+  const CUSTOM_MODULE_TYPES = CUSTOM_MODULE_DEFINITIONS.types || [];
+  const CUSTOM_NUMERIC_FIELDS = new Set(['carryUnits','fireRate','capacity','cost','powerDraw','output','storage','conditionMax','danger','wealth']);
+  const CUSTOM_TEXTAREA_FIELDS = new Set(['description','effects','notes','services','compatibility']);
+
+  function defaultCustomModuleDraft(type = 'personal-weapon') {
+    return {
+      id: '', type, name: '', subtype: '', description: '', carryUnits: 1, suggestedStat: 'None', fireRate: 0,
+      capacity: 0, compatibility: '', cost: 0, rarity: 'Common', notes: '', mount: 'Other', loader: '', powerDraw: 0,
+      storage: 1, conditionMax: 100, effects: '', output: 0, fuel: '', medicalUse: '', faction: '', specialty: '',
+      locals: '', services: '', danger: 0, wealth: 0
+    };
+  }
+
+  state.customModules = state.customModules && typeof state.customModules === 'object'
+    ? state.customModules
+    : { entries: [], draft: defaultCustomModuleDraft(), filter: 'All', query: '', installedSystems: [], installedPower: [] };
+  state.customModules.entries = Array.isArray(state.customModules.entries) ? state.customModules.entries : [];
+  state.customModules.draft = deepMerge(defaultCustomModuleDraft(), state.customModules.draft || {});
+  state.customModules.installedSystems = Array.isArray(state.customModules.installedSystems) ? state.customModules.installedSystems : [];
+  state.customModules.installedPower = Array.isArray(state.customModules.installedPower) ? state.customModules.installedPower : [];
+
+  const modulesTab = document.createElement('button');
+  modulesTab.className = 'ops-tab';
+  modulesTab.dataset.tool = 'modules';
+  modulesTab.type = 'button';
+  modulesTab.textContent = 'Custom Modules';
+  document.querySelector('.ops-tabs')?.appendChild(modulesTab);
+
+  const activeToolBeforeModules = activeTool;
+  activeTool = function activeToolWithModules() {
+    return window.location.hash.replace(/^#/, '') === 'modules' ? 'modules' : activeToolBeforeModules();
+  };
+
+  function customType(id) {
+    return CUSTOM_MODULE_TYPES.find(item => item.id === id) || CUSTOM_MODULE_TYPES[0] || { id: 'general', label: 'General', family: 'general', fields: ['name','description','notes'] };
+  }
+
+  function customId(entry) {
+    return `custom-${entry.id}`;
+  }
+
+  function csvValues(value) {
+    return String(value || '').split(/[,;\n]/).map(item => item.trim()).filter(Boolean);
+  }
+
+  function moduleToItem(entry) {
+    const type = customType(entry.type);
+    return {
+      id: customId(entry), name: entry.name, category: type.catalogCategory || type.label, subcategory: entry.subtype || type.defaultSubtype || 'Custom',
+      description: entry.description || entry.effects || 'Custom campaign item.', carryUnits: Math.max(0, number(entry.carryUnits, 1)),
+      suggestedStat: entry.suggestedStat === 'None' ? '' : entry.suggestedStat, fireRate: number(entry.fireRate), capacity: number(entry.capacity),
+      compatibleAmmo: entry.type === 'personal-weapon' ? csvValues(entry.compatibility) : undefined,
+      compatibleWith: entry.type === 'ammunition' || entry.type === 'consumable' ? csvValues(entry.compatibility) : undefined,
+      medicalUse: entry.medicalUse || '', cost: number(entry.cost), rarity: entry.rarity, effects: entry.effects || '', notes: entry.notes || '',
+      source: 'custom', custom: true, customModuleId: entry.id
+    };
+  }
+
+  function moduleToSubmarineWeapon(entry) {
+    return {
+      id: customId(entry), name: entry.name, mount: entry.mount || 'Other', loader: entry.loader || null, fireRate: number(entry.fireRate) || null,
+      ammo: csvValues(entry.compatibility).map(name => ({ name, magazineSize: Math.max(1, number(entry.capacity, 1)), summary: entry.effects || entry.description || 'Custom ammunition.' })),
+      notes: [entry.description, entry.effects, entry.notes].filter(Boolean).join(' '), powerDraw: number(entry.powerDraw), storage: Math.max(0, number(entry.storage, 1)),
+      cost: number(entry.cost), rarity: entry.rarity, source: 'custom', custom: true, customModuleId: entry.id
+    };
+  }
+
+  function syncCustomModules() {
+    WIKI_CATALOG.items = WIKI_CATALOG.items.filter(item => !item.customModuleId);
+    WIKI_CATALOG.submarineWeapons = WIKI_CATALOG.submarineWeapons.filter(item => !item.customModuleId);
+    for (const entry of state.customModules.entries) {
+      const type = customType(entry.type);
+      if (type.family === 'item') WIKI_CATALOG.items.push(moduleToItem(entry));
+      if (type.family === 'submarineWeapon') WIKI_CATALOG.submarineWeapons.push(moduleToSubmarineWeapon(entry));
+    }
+    for (let index = STATIONS.length - 1; index >= 0; index -= 1) if (STATIONS[index].customModuleId) STATIONS.splice(index, 1);
+    for (const entry of state.customModules.entries.filter(item => customType(item.type).family === 'station')) {
+      STATIONS.push({ name: entry.name, faction: entry.faction || 'Independent', specialty: entry.specialty || entry.services || 'General services', locals: entry.locals || 'Custom personnel', description: entry.description || '', customModuleId: entry.id });
+    }
+  }
+
+  syncCustomModules();
+
+  const catalogueItemBeforeCustomModules = catalogueItem;
+  catalogueItem = function catalogueItemWithCustomModules(id) {
+    return WIKI_CATALOG.items.find(item => item.id === id) || catalogueItemBeforeCustomModules(id);
+  };
+  const catalogueWeaponBeforeCustomModules = catalogueWeapon;
+  catalogueWeapon = function catalogueWeaponWithCustomModules(id) {
+    return WIKI_CATALOG.submarineWeapons.find(item => item.id === id) || catalogueWeaponBeforeCustomModules(id);
+  };
+
+  function moduleFieldHtml(field, draft) {
+    const labels = {
+      name:'Name', subtype:'Subtype', description:'Description', carryUnits:'Carry units', suggestedStat:'Suggested statistic', fireRate:'Fire rate', capacity:'Capacity / magazine',
+      compatibility:'Compatible ammunition, systems, or items', cost:'Cost', rarity:'Rarity', notes:'Notes', mount:'Mount type', loader:'Loader', powerDraw:'Power draw', storage:'Storage cost',
+      conditionMax:'Maximum condition', effects:'Mechanical effects', output:'Power output', fuel:'Fuel or input', medicalUse:'Medical use', faction:'Faction', specialty:'Specialty', locals:'Notable locals',
+      services:'Services', danger:'Danger rating', wealth:'Wealth rating'
+    };
+    const label = labels[field] || field;
+    if (field === 'suggestedStat') return `<label class="field">${label}<select class="module-field" data-key="${field}">${optionList(CUSTOM_MODULE_DEFINITIONS.common?.stats || ['Strength','Agility','Intelligence','Charisma','None'], draft[field] || 'None')}</select></label>`;
+    if (field === 'rarity') return `<label class="field">${label}<select class="module-field" data-key="${field}">${optionList(CUSTOM_MODULE_DEFINITIONS.common?.rarities || ['Common','Uncommon','Rare','Prototype','Alien','Unique'], draft[field] || 'Common')}</select></label>`;
+    if (field === 'mount') return `<label class="field">${label}<select class="module-field" data-key="${field}">${optionList(CUSTOM_MODULE_DEFINITIONS.common?.mounts || ['Other'], draft[field] || 'Other')}</select></label>`;
+    if (CUSTOM_TEXTAREA_FIELDS.has(field)) return `<label class="field">${label}<textarea class="module-field" data-key="${field}">${escapeHtml(draft[field] || '')}</textarea></label>`;
+    if (CUSTOM_NUMERIC_FIELDS.has(field)) return `<label class="field">${label}<input class="module-field" data-key="${field}" type="number" step="any" value="${number(draft[field])}"></label>`;
+    return `<label class="field">${label}<input class="module-field" data-key="${field}" value="${escapeHtml(draft[field] || '')}"></label>`;
+  }
+
+  function installCustomSystem(entry) {
+    const family = customType(entry.type).family;
+    const collection = family === 'power' ? state.customModules.installedPower : state.customModules.installedSystems;
+    if (!collection.some(item => item.moduleId === entry.id)) collection.push({ id: uid('installed-module'), moduleId: entry.id, condition: Math.max(1, number(entry.conditionMax, 100)), note: '' });
+    save();
+  }
+
+  function renderCustomModules() {
+    syncCustomModules();
+    const library = state.customModules;
+    const draft = library.draft;
+    const type = customType(draft.type);
+    const query = String(library.query || '').trim().toLowerCase();
+    const filtered = library.entries.filter(entry => (library.filter === 'All' || entry.type === library.filter) && (!query || JSON.stringify(entry).toLowerCase().includes(query)));
+    root.innerHTML = `<div class="tool-shell">
+      <section class="tool-hero"><div><p class="eyebrow">Homebrew content infrastructure</p><h2>Custom Modules Library</h2><p class="rules-note">Create persistent custom weapons, ammunition, systems, power sources, tools, equipment, medical supplies, consumables, stations, locations, and general campaign modules. Compatible records become immediately available in the Character Sheet, Submarine Manager, Item Catalogue, and Route Planner.</p></div><div class="metric-row"><div class="metric"><span>Entries</span><strong>${library.entries.length}</strong></div><div class="metric"><span>Installed systems</span><strong>${library.installedSystems.length}</strong></div><div class="metric"><span>Power sources</span><strong>${library.installedPower.length}</strong></div></div></section>
+      <section class="tool-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>${draft.id ? 'Edit Custom Module' : 'Create Custom Module'}</h3><p class="small-note">The editor changes fields according to module type and validates unique names within each type.</p></div><div class="button-row no-print"><button id="export-modules" class="secondary-action" type="button">Export Modules</button><label class="secondary-action file-action" for="import-modules">Import Modules</label><input id="import-modules" type="file" accept="application/json" hidden></div></div>
+        <div class="field-grid three"><label class="field">Module type<select id="module-type">${optionList(CUSTOM_MODULE_TYPES.map(item => item.id), draft.type, id => customType(id).label)}</select></label>${type.fields.map(field => moduleFieldHtml(field, draft)).join('')}</div>
+        <div class="button-row no-print" style="margin-top:12px"><button id="save-module" class="primary-action" type="button">${draft.id ? 'Update Module' : 'Save Module'}</button><button id="reset-module" class="secondary-action" type="button">Clear Editor</button></div>
+      </section>
+      <section class="tool-panel"><div class="field-grid three"><label class="field">Search<input id="module-search" value="${escapeHtml(library.query || '')}"></label><label class="field">Filter type<select id="module-filter">${optionList(['All', ...CUSTOM_MODULE_TYPES.map(item => item.id)], library.filter, id => id === 'All' ? 'All module types' : customType(id).label)}</select></label><div class="metric" style="align-self:end"><span>Shown</span><strong>${filtered.length}</strong></div></div></section>
+      <section class="tool-panel"><h3>Custom Module Listing</h3><div class="table-wrap"><table class="tool-table"><thead><tr><th>Module</th><th>Type</th><th>Core values</th><th>Description / effects</th><th>Integration</th><th></th></tr></thead><tbody>${filtered.map(entry => {
+        const entryType = customType(entry.type); const values = [];
+        if (entry.cost) values.push(`${entry.cost}c`); if (entry.rarity) values.push(entry.rarity); if (entry.capacity) values.push(`Capacity ${entry.capacity}`); if (entry.powerDraw) values.push(`Draw ${entry.powerDraw}`); if (entry.output) values.push(`Output ${entry.output}`);
+        const integration = entryType.family === 'item' ? 'Item Catalogue / Character' : entryType.family === 'submarineWeapon' ? 'Weapon Catalogue / Submarine' : entryType.family === 'station' ? 'Route Planner / Stations' : entryType.family === 'system' || entryType.family === 'power' ? 'Submarine installations' : 'Reference library';
+        return `<tr><td><strong>${escapeHtml(entry.name)}</strong><br><span class="small-note">${escapeHtml(entry.subtype || '')}</span></td><td>${escapeHtml(entryType.label)}</td><td>${escapeHtml(values.join(' · ') || '—')}</td><td>${escapeHtml(entry.effects || entry.description || entry.notes || '—')}</td><td>${escapeHtml(integration)}</td><td><div class="button-row">${entryType.family === 'system' || entryType.family === 'power' ? `<button class="compact-button module-install" data-id="${entry.id}" type="button">Install</button>` : ''}<button class="compact-button module-edit" data-id="${entry.id}" type="button">Edit</button><button class="compact-button module-clone" data-id="${entry.id}" type="button">Duplicate</button><button class="compact-button module-delete" data-id="${entry.id}" type="button">Delete</button></div></td></tr>`;
+      }).join('') || '<tr><td colspan="6">No custom modules match the current filter.</td></tr>'}</tbody></table></div></section>
+    </div>`;
+
+    root.querySelector('#module-type')?.addEventListener('change', event => { library.draft = deepMerge(defaultCustomModuleDraft(event.target.value), { type: event.target.value }); save(); renderCustomModules(); });
+    root.querySelectorAll('.module-field').forEach(input => input.addEventListener(input.tagName === 'SELECT' ? 'change' : 'input', event => { library.draft[event.target.dataset.key] = event.target.type === 'number' ? number(event.target.value) : event.target.value; save(); }));
+    root.querySelector('#module-search')?.addEventListener('input', event => { library.query = event.target.value; save(); renderCustomModules(); });
+    root.querySelector('#module-filter')?.addEventListener('change', event => { library.filter = event.target.value; save(); renderCustomModules(); });
+    root.querySelector('#reset-module')?.addEventListener('click', () => { library.draft = defaultCustomModuleDraft(); save(); renderCustomModules(); });
+    root.querySelector('#save-module')?.addEventListener('click', () => {
+      const pending = { ...library.draft, name: String(library.draft.name || '').trim() };
+      if (!pending.name) return alert('Enter a module name before saving.');
+      if (library.entries.some(item => item.type === pending.type && item.name.toLowerCase() === pending.name.toLowerCase() && item.id !== pending.id)) return alert('A module of this type already uses that name.');
+      pending.id = pending.id || uid('module');
+      const index = library.entries.findIndex(item => item.id === pending.id);
+      if (index >= 0) library.entries[index] = pending; else library.entries.push(pending);
+      library.draft = defaultCustomModuleDraft(pending.type); syncCustomModules(); save(); renderCustomModules();
+    });
+    const findModule = id => library.entries.find(item => item.id === id);
+    root.querySelectorAll('.module-edit').forEach(button => button.addEventListener('click', event => { const entry = findModule(event.target.dataset.id); if (entry) { library.draft = { ...defaultCustomModuleDraft(entry.type), ...entry }; save(); renderCustomModules(); } }));
+    root.querySelectorAll('.module-clone').forEach(button => button.addEventListener('click', event => { const entry = findModule(event.target.dataset.id); if (entry) { library.draft = { ...entry, id: '', name: `${entry.name} Copy` }; save(); renderCustomModules(); } }));
+    root.querySelectorAll('.module-install').forEach(button => button.addEventListener('click', event => { const entry = findModule(event.target.dataset.id); if (entry) { installCustomSystem(entry); event.target.textContent = 'Installed'; } }));
+    root.querySelectorAll('.module-delete').forEach(button => button.addEventListener('click', event => { const id = event.target.dataset.id; library.entries = library.entries.filter(item => item.id !== id); library.installedSystems = library.installedSystems.filter(item => item.moduleId !== id); library.installedPower = library.installedPower.filter(item => item.moduleId !== id); state.character.catalogInventory = state.character.catalogInventory.filter(item => item.id !== `custom-${id}`); state.submarine.wikiWeapons = state.submarine.wikiWeapons.filter(item => item.id !== `custom-${id}`); state.submarine.wikiAmmo = state.submarine.wikiAmmo.filter(item => item.id !== `custom-${id}`); syncCustomModules(); save(); renderCustomModules(); }));
+    root.querySelector('#export-modules')?.addEventListener('click', () => download('barotrauma-custom-modules.json', JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), definitionsVersion: CUSTOM_MODULE_DEFINITIONS.schemaVersion, entries: library.entries }, null, 2)));
+    root.querySelector('#import-modules')?.addEventListener('change', event => { const file = event.target.files?.[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const parsed = JSON.parse(reader.result); const incoming = Array.isArray(parsed) ? parsed : parsed.entries; if (!Array.isArray(incoming)) throw new Error('No entries array found.'); for (const raw of incoming) { const entry = { ...defaultCustomModuleDraft(raw.type), ...raw, id: uid('module') }; if (entry.name) library.entries.push(entry); } syncCustomModules(); save(); renderCustomModules(); } catch (error) { alert(`Custom modules could not be imported: ${error.message}`); } }; reader.readAsText(file); });
+  }
+
+  function enhanceSubmarineCustomSystems() {
+    const panel = document.createElement('section'); panel.className = 'tool-panel span-12';
+    const rows = (collection, family) => collection.map(installed => { const entry = state.customModules.entries.find(item => item.id === installed.moduleId); if (!entry) return ''; return `<tr><td><strong>${escapeHtml(entry.name)}</strong><br><span class="small-note">${escapeHtml(entry.subtype || customType(entry.type).label)}</span></td><td>${family === 'power' ? `Output ${number(entry.output)} · Fuel ${escapeHtml(entry.fuel || '—')}` : escapeHtml(entry.effects || entry.description || '—')}</td><td>${number(entry.powerDraw)} / ${number(entry.storage)}</td><td><input class="installed-module-condition" data-family="${family}" data-id="${installed.id}" type="number" min="0" max="${Math.max(1, number(entry.conditionMax, 100))}" value="${number(installed.condition)}"></td><td><button class="compact-button installed-module-remove" data-family="${family}" data-id="${installed.id}" type="button">Remove</button></td></tr>`; }).join('');
+    panel.innerHTML = `<div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Custom Systems and Power Sources</h3><p class="small-note">Installed records from the Custom Modules Library. Power draw and storage values remain visible for GM balancing and vessel-capacity decisions.</p></div><button id="open-custom-modules" class="primary-action no-print" type="button">Open Custom Modules</button></div><h4>Systems</h4><div class="table-wrap"><table class="tool-table"><thead><tr><th>Module</th><th>Effects</th><th>Power / storage</th><th>Condition</th><th></th></tr></thead><tbody>${rows(state.customModules.installedSystems, 'system') || '<tr><td colspan="5">No custom systems installed.</td></tr>'}</tbody></table></div><h4 style="margin-top:16px">Power Sources</h4><div class="table-wrap"><table class="tool-table"><thead><tr><th>Source</th><th>Output / fuel</th><th>Power / storage</th><th>Condition</th><th></th></tr></thead><tbody>${rows(state.customModules.installedPower, 'power') || '<tr><td colspan="5">No custom power sources installed.</td></tr>'}</tbody></table></div>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#open-custom-modules')?.addEventListener('click', () => setTool('modules'));
+    panel.querySelectorAll('.installed-module-condition').forEach(input => input.addEventListener('change', event => { const list = event.target.dataset.family === 'power' ? state.customModules.installedPower : state.customModules.installedSystems; const item = list.find(entry => entry.id === event.target.dataset.id); if (item) item.condition = Math.max(0, number(event.target.value)); save(); }));
+    panel.querySelectorAll('.installed-module-remove').forEach(button => button.addEventListener('click', event => { const key = event.target.dataset.family === 'power' ? 'installedPower' : 'installedSystems'; state.customModules[key] = state.customModules[key].filter(item => item.id !== event.target.dataset.id); save(); renderSubmarine(); }));
+  }
+
+  const renderSubmarineBeforeCustomModules = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithCustomSystems() { syncCustomModules(); renderSubmarineBeforeCustomModules(); enhanceSubmarineCustomSystems(); };
