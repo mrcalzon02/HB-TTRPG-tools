@@ -1,5 +1,5 @@
 
-  const ACTIVE_SUBMARINE_DASHBOARD_VERSION = '1.0.0';
+  const ACTIVE_SUBMARINE_DASHBOARD_VERSION = '1.0.1';
 
   function defaultActiveSubmarineDashboard() {
     return {
@@ -108,6 +108,31 @@
     group.routeId = crossing.crossingId || group.routeId || '';
     if (dashboard.activeNodeId) group.currentNodeId = dashboard.activeNodeId;
 
+    const expeditionDefaults = typeof defaultManagedExpedition === 'function' ? defaultManagedExpedition() : {
+      version: ACTIVE_SUBMARINE_DASHBOARD_VERSION,
+      status: 'active',
+      groupId: '',
+      submarineId: '',
+      currentNodeId: '',
+      startingNodeId: '',
+      crewIds: [],
+      filedCrossingId: ''
+    };
+    state.submarine.managedExpedition = state.submarine.managedExpedition && typeof state.submarine.managedExpedition === 'object'
+      ? state.submarine.managedExpedition
+      : expeditionDefaults;
+    for (const [key, value] of Object.entries(expeditionDefaults)) {
+      if (!(key in state.submarine.managedExpedition)) state.submarine.managedExpedition[key] = Array.isArray(value) ? [] : value;
+    }
+    state.submarine.managedExpedition.groupId = group.groupId;
+    state.submarine.managedExpedition.submarineId = submarineId;
+    state.submarine.managedExpedition.currentNodeId = group.currentNodeId || dashboard.activeNodeId || '';
+    state.submarine.managedExpedition.startingNodeId = group.startingNodeId || '';
+    state.submarine.managedExpedition.crewIds = [...crewIds];
+    state.submarine.managedExpedition.filedCrossingId = crossing.crossingId || group.routeId || '';
+    if (state.submarine.managedExpedition.status !== 'lost') state.submarine.managedExpedition.status = 'active';
+    group.status = state.submarine.managedExpedition.status;
+
     hub.publicState.crews[localCrewId] = {
       crewId: localCrewId,
       sourceCharacterId: localCrewId,
@@ -143,7 +168,7 @@
       submarineId,
       groupId: group.groupId,
       managed: true,
-      status: state.submarine.managedExpedition?.status || 'active',
+      status: state.submarine.managedExpedition.status,
       currentNodeId: dashboard.activeNodeId,
       startingNodeId: group.startingNodeId || '',
       crewIds,
@@ -164,6 +189,7 @@
     if (crossing.crossingId && hub.publicState.routes[crossing.crossingId]) {
       hub.publicState.routes[crossing.crossingId].submarineId = submarineId;
       hub.publicState.routes[crossing.crossingId].groupId = group.groupId;
+      hub.publicState.routes[crossing.crossingId].crewIds = [...crewIds];
     }
     hub.updatedAt = dashboard.updatedAt;
     if (persist) save();
@@ -179,6 +205,8 @@
     if (state.route.activeSubmarineId !== context.submarineId) issues.push('Route is not linked to the active submarine.');
     if (state.world.activeSubmarineId !== context.submarineId) issues.push('World state is not linked to the active submarine.');
     if (context.crossing.submarineId !== context.submarineId) issues.push('Crossing is not linked to the active submarine.');
+    if (state.submarine.managedExpedition?.groupId !== context.group.groupId) issues.push('Managed expedition is not linked to the active group.');
+    if (state.submarine.managedExpedition?.submarineId !== context.submarineId) issues.push('Managed expedition is not linked to the active submarine.');
     return {
       valid: !issues.length,
       issues,
@@ -211,6 +239,7 @@
     }
     context.group.routeId = crossing.crossingId || context.group.routeId || '';
     state.operationsDashboard.activeRouteId = crossing.crossingId || '';
+    state.submarine.managedExpedition.filedCrossingId = crossing.crossingId || '';
     save();
   };
 
