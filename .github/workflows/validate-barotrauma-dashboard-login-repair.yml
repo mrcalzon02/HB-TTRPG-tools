@@ -1,0 +1,79 @@
+name: Validate Barotrauma Dashboard Login Repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability-02.txt'
+      - '.github/workflows/validate-barotrauma-dashboard-login-repair.yml'
+  pull_request:
+    paths:
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability-02.txt'
+      - '.github/workflows/validate-barotrauma-dashboard-login-repair.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-login-repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile and verify login-state repair contract
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const synchronous = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt', 'utf8');
+          const hydration = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt', 'utf8');
+          const transactional = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability-02.txt', 'utf8');
+          new Function(synchronous);
+          new Function(hydration);
+          new Function(transactional);
+
+          assert(synchronous.includes('dashboardManagementHydrateSnapshotBeforeAnyLogin'), 'Login does not synchronously hydrate an old vessel snapshot.');
+          assert(synchronous.includes('activateDashboardManagedVesselWithSynchronousHydration'), 'Automatic and fast manual login do not pass through synchronous hydration.');
+
+          const requiredCollections = [
+            'character.rollLog=Array.isArray',
+            'character.catalogInventory=Array.isArray',
+            'submarine.upgrades=Array.isArray',
+            'submarine.weapons=Array.isArray',
+            'submarine.wikiWeapons=Array.isArray',
+            'submarine.wikiAmmo=Array.isArray',
+            'submarine.customModules=Array.isArray',
+            'crewManagement.roster=Array.isArray',
+            'cargoManagement.entries=Array.isArray',
+            'route.jobs=Array.isArray',
+            'route.plan=Array.isArray',
+            'crossing.pathNodeIds=Array.isArray',
+            'crossing.legs=Array.isArray',
+            'crossing.log=Array.isArray',
+            'activeCrewIds=Array.isArray',
+            'commissioning.assignedCrewIds=Array.isArray',
+            'turnOrder.order=Array.isArray',
+            'turnOrder.history=Array.isArray'
+          ];
+          for (const marker of requiredCollections) {
+            assert(synchronous.includes(marker) || hydration.includes(marker), `Missing legacy collection repair: ${marker}`);
+          }
+
+          assert(hydration.includes('dashboardManagementHydrateManagedSnapshot'), 'Full snapshot hydration is missing.');
+          assert(hydration.includes('activateDashboardManagedVesselWithSnapshotHydration'), 'Authenticated activation does not use full snapshot hydration.');
+          assert(transactional.includes('establishDashboardManagementSessionTransactionally'), 'Login activation is not transactional.');
+          assert(transactional.includes('credential.receipts=previousReceipts'), 'A failed activation does not restore the prior receipt set.');
+          assert(transactional.includes('dashboardManagementClearStoredSession()'), 'A failed activation does not clear the invalid local receipt.');
+          assert(transactional.includes('login-activation-failed'), 'A failed activation is not recorded in the management audit.');
+          assert(transactional.includes('Dashboard state repair failed during'), 'Normalizer failures do not identify the failing stage.');
+          assert(transactional.includes('Retry Repaired Dashboard'), 'Render failure does not provide a recovery retry.');
+
+          console.log('Validated synchronous and transactional repair of legacy submarine snapshots during dashboard login.');
+          NODE
