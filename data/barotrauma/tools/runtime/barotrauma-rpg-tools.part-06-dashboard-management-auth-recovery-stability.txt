@@ -1,4 +1,29 @@
 
+  function dashboardManageableCreationSubmarineNames(){
+    syncCustomSubmarines();
+    return Object.keys(SUBMARINES).filter(name=>{
+      const model=SUBMARINES[name];
+      if(model?.custom)return true;
+      return model?.profile?.official===true&&number(model.profile.tier,0)===1;
+    }).sort((left,right)=>{
+      const leftCustom=Boolean(SUBMARINES[left]?.custom);
+      const rightCustom=Boolean(SUBMARINES[right]?.custom);
+      if(leftCustom!==rightCustom)return leftCustom?1:-1;
+      return left.localeCompare(right);
+    });
+  }
+
+  function dashboardManageableCreationSubmarineAllowed(modelName){
+    return dashboardManageableCreationSubmarineNames().includes(String(modelName||''));
+  }
+
+  const createNewManageableSubmarineBeforeTierRestriction=createNewManageableSubmarine;
+  createNewManageableSubmarine=async function createNewManageableSubmarineWithTierRestriction(options={}){
+    const modelName=String(options.modelName||'');
+    if(!dashboardManageableCreationSubmarineAllowed(modelName))throw new Error('New manageable submarines must be an official Tier 1 model or a custom submarine.');
+    return createNewManageableSubmarineBeforeTierRestriction({...options,modelName});
+  };
+
   async function claimExistingDashboardSubmarine(vesselId,password,managerName,options={}){
     const record=dashboardManagementSubmarineRecord(vesselId);
     if(!record)throw new Error('The selected public-world submarine record no longer exists.');
@@ -38,9 +63,13 @@
         if('code' in recovery||'recoveryCode' in recovery)result.issues.push(`Submarine ${vesselId} stores a plaintext recovery code in the world save.`);
       }else legacyCredentialCount+=1;
     }
+    const creationModels=dashboardManageableCreationSubmarineNames();
+    const invalidCreationModels=creationModels.filter(name=>!SUBMARINES[name]?.custom&&number(SUBMARINES[name]?.profile?.tier,0)!==1);
+    if(invalidCreationModels.length)result.issues.push(`New manageable submarine list contains non-Tier-1 official models: ${invalidCreationModels.join(', ')}.`);
     result.recoveryVersion=DASHBOARD_MANAGEMENT_RECOVERY_VERSION;
     result.recoveryReadyCount=recoveryReadyCount;
     result.legacyCredentialCount=legacyCredentialCount;
+    result.manageableCreationModels=creationModels;
     result.valid=!result.issues.length;
     return result;
   };
