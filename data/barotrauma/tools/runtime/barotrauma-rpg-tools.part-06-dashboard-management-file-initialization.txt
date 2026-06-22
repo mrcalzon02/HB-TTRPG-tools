@@ -1,0 +1,723 @@
+
+  const DASHBOARD_MANAGEMENT_FILE_INITIALIZATION_VERSION='1.0.0';
+
+  dashboardManagementRuntime.newFileSetup=dashboardManagementRuntime.newFileSetup&&typeof dashboardManagementRuntime.newFileSetup==='object'?dashboardManagementRuntime.newFileSetup:{
+    characterMode:'random',
+    randomCharacter:null,
+    startRevision:0,
+    startOptionNodeIds:[],
+    selectedStartNodeId:'',
+    importText:''
+  };
+
+  const DASHBOARD_RANDOM_GIVEN_NAMES=['Ada','Alex','Amara','Anika','Bastian','Cass','Dorian','Elias','Elena','Farah','Felix','Greta','Hana','Ilya','Jae','Jonas','Kira','Leona','Marek','Mira','Nadia','Niko','Orla','Pavel','Quinn','Rhea','Soren','Talia','Vera','Yuri'];
+  const DASHBOARD_RANDOM_SURNAMES=['Aalto','Baird','Calder','Dahl','Eklund','Farrow','Gale','Harker','Ivers','Juno','Kade','Larsen','Morrow','Nadir','Ortega','Pike','Reyes','Sato','Tanner','Vale','Ward','Yarrow'];
+  const DASHBOARD_CLASS_STAT_BIASES={
+    Engineer:['Intelligence','Agility'],
+    Medic:['Intelligence','Agility'],
+    Scientist:['Intelligence','Charisma'],
+    'Security officer':['Strength','Agility'],
+    Captain:['Charisma','Intelligence'],
+    Mechanic:['Strength','Agility'],
+    Navigator:['Intelligence','Agility']
+  };
+  const DASHBOARD_CLASS_DUTIES={
+    Engineer:'Engineering',Medic:'Medical',Scientist:'Research','Security officer':'Security',Captain:'Command',Mechanic:'Mechanical',Navigator:'Navigation'
+  };
+
+  function dashboardSetupRandom(seed=''){
+    return seededRandom(`${state.world?.seed||'EUROPA'}|management-file|${seed}|${Date.now()}|${Math.random()}`);
+  }
+
+  function dashboardSetupChoice(values,rng){
+    return values[Math.floor(rng()*Math.max(1,values.length))]||values[0];
+  }
+
+  function dashboardRandomPersonName(rng){
+    return `${dashboardSetupChoice(DASHBOARD_RANDOM_GIVEN_NAMES,rng)} ${dashboardSetupChoice(DASHBOARD_RANDOM_SURNAMES,rng)}`;
+  }
+
+  function dashboardVariedStatBlock(className='Engineer',seed=''){
+    const rng=dashboardSetupRandom(`${seed}|${className}`);
+    const stats={
+      Strength:2+Math.floor(rng()*4),
+      Agility:2+Math.floor(rng()*4),
+      Intelligence:2+Math.floor(rng()*4),
+      Charisma:2+Math.floor(rng()*4)
+    };
+    for(const stat of DASHBOARD_CLASS_STAT_BIASES[className]||['Intelligence'])stats[stat]=clamp(stats[stat]+1,1,6);
+    const values=Object.values(stats);
+    if(new Set(values).size===1){
+      const primary=(DASHBOARD_CLASS_STAT_BIASES[className]||['Intelligence'])[0];
+      stats[primary]=clamp(stats[primary]+1,1,6);
+      const lowest=Object.keys(stats).find(stat=>stat!==primary);
+      stats[lowest]=clamp(stats[lowest]-1,1,6);
+    }
+    const highest=Math.max(...Object.values(stats));
+    const lowest=Math.min(...Object.values(stats));
+    if(highest-lowest<2){
+      const primary=(DASHBOARD_CLASS_STAT_BIASES[className]||['Intelligence'])[0];
+      stats[primary]=clamp(stats[primary]+1,1,6);
+      const secondary=Object.keys(stats).sort((left,right)=>stats[left]-stats[right])[0];
+      if(secondary!==primary)stats[secondary]=clamp(stats[secondary]-1,1,6);
+    }
+    return stats;
+  }
+
+  function dashboardRandomCharacter(force=false){
+    const setup=dashboardManagementRuntime.newFileSetup;
+    if(setup.randomCharacter&&!force)return cloneWorldData(setup.randomCharacter);
+    const rng=dashboardSetupRandom(`player-character|${force?'reroll':'initial'}`);
+    const className=dashboardSetupChoice(Object.keys(CLASSES),rng);
+    const background=dashboardSetupChoice(BACKGROUNDS,rng);
+    const talent=dashboardSetupChoice(CLASSES[className]?.talents||[['Quick Fix','']],rng)?.[0]||'';
+    const stats=dashboardVariedStatBlock(className,`player|${rng()}`);
+    const character=deepMerge(defaultState().character,{
+      name:dashboardRandomPersonName(rng),
+      player:state.character?.player||'',
+      className,
+      level:1+Math.floor(rng()*3),
+      background:background?.name||'',
+      talent,
+      stats,
+      current:{...stats},
+      fateUsed:false,
+      lostSanity:0,
+      morale:0,
+      credits:0,
+      inventory:'',
+      conditions:'',
+      notes:'Randomized during management-file initialization.',
+      rollLog:[],
+      catalogInventory:[],
+      consumptionLog:[],
+      playerSubmission:defaultPlayerSubmissionSettings()
+    });
+    setup.randomCharacter=cloneWorldData(character);
+    return character;
+  }
+
+  function dashboardCharacterFromImportText(text){
+    const clean=String(text||'').trim();
+    if(!clean)throw new Error('Paste or select a character JSON file before creating the management file.');
+    let parsed;
+    try{parsed=JSON.parse(clean);}catch(error){throw new Error(`Character JSON could not be parsed: ${error.message}`);}
+    let source=null;
+    let playerName='';
+    if(parsed?.schema==='barotrauma-crew-submission'&&parsed.character){source=parsed.character;playerName=parsed.player?.name||'';}
+    else if(parsed?.character&&typeof parsed.character==='object'){source=parsed.character;playerName=parsed.player?.name||parsed.character.player||'';}
+    else if(parsed?.state?.character&&typeof parsed.state.character==='object'){source=parsed.state.character;playerName=source.player||'';}
+    else if(parsed?.payload?.character&&typeof parsed.payload.character==='object'){source=parsed.payload.character;playerName=source.player||'';}
+    else if(parsed?.stats&&typeof parsed.stats==='object'){source=parsed;playerName=parsed.player||'';}
+    if(!source)throw new Error('The imported JSON does not contain a recognizable Barotrauma character record.');
+    const stats={
+      Strength:clamp(source.stats?.Strength,1,12),
+      Agility:clamp(source.stats?.Agility,1,12),
+      Intelligence:clamp(source.stats?.Intelligence,1,12),
+      Charisma:clamp(source.stats?.Charisma,1,12)
+    };
+    const current={
+      Strength:clamp(source.current?.Strength??stats.Strength,0,12),
+      Agility:clamp(source.current?.Agility??stats.Agility,0,12),
+      Intelligence:clamp(source.current?.Intelligence??stats.Intelligence,0,12),
+      Charisma:clamp(source.current?.Charisma??stats.Charisma,0,12)
+    };
+    const className=CLASSES[source.className]?source.className:'Engineer';
+    const character=deepMerge(defaultState().character,cloneWorldData(source));
+    Object.assign(character,{
+      name:String(source.name||source.characterName||'Imported Character'),
+      player:String(playerName||source.player||''),
+      className,
+      level:clamp(source.level,1,99),
+      stats,
+      current,
+      rollLog:Array.isArray(source.rollLog)?source.rollLog:[],
+      catalogInventory:Array.isArray(source.catalogInventory)?source.catalogInventory:Array.isArray(source.inventory)?source.inventory:[],
+      consumptionLog:Array.isArray(source.consumptionLog)?source.consumptionLog:[],
+      inventory:Array.isArray(source.inventory)?String(source.inventoryText||''):String(source.inventory||source.inventoryText||''),
+      playerSubmission:source.playerSubmission&&typeof source.playerSubmission==='object'?cloneWorldData(source.playerSubmission):defaultPlayerSubmissionSettings()
+    });
+    return character;
+  }
+
+  function dashboardCharacterFromManual(options={}){
+    const className=CLASSES[options.className]?options.className:'Engineer';
+    const cleanName=String(options.name||'').trim();
+    if(!cleanName)throw new Error('Enter a character name or choose the randomized-character option.');
+    const stats={
+      Strength:clamp(options.Strength,1,12),
+      Agility:clamp(options.Agility,1,12),
+      Intelligence:clamp(options.Intelligence,1,12),
+      Charisma:clamp(options.Charisma,1,12)
+    };
+    const background=BACKGROUNDS.find(item=>item.name===options.background)||BACKGROUNDS[0];
+    const validTalents=(CLASSES[className]?.talents||[]).map(item=>item[0]);
+    return deepMerge(defaultState().character,{
+      name:cleanName,
+      player:String(options.player||'').trim(),
+      className,
+      level:clamp(options.level,1,99),
+      background:background?.name||'',
+      talent:validTalents.includes(options.talent)?options.talent:validTalents[0]||'',
+      stats,
+      current:{...stats},
+      fateUsed:false,
+      lostSanity:0,
+      morale:0,
+      credits:0,
+      inventory:'',
+      conditions:'',
+      notes:String(options.notes||'').trim(),
+      rollLog:[],
+      catalogInventory:[],
+      consumptionLog:[],
+      playerSubmission:defaultPlayerSubmissionSettings()
+    });
+  }
+
+  function dashboardCharacterForNewManagementFile(setup={}){
+    const mode=['import','create','random'].includes(setup.mode)?setup.mode:'random';
+    if(mode==='import')return dashboardCharacterFromImportText(setup.importText);
+    if(mode==='create')return dashboardCharacterFromManual(setup.manual||{});
+    const random=setup.randomCharacter&&typeof setup.randomCharacter==='object'?cloneWorldData(setup.randomCharacter):dashboardRandomCharacter(false);
+    if(setup.randomPlayerName)random.player=String(setup.randomPlayerName).trim();
+    return random;
+  }
+
+  function dashboardNewGroupStartingStations(refresh=false,count=12){
+    const setup=dashboardManagementRuntime.newFileSetup;
+    const map=state.world?.map;
+    if(!map?.nodes?.length)return [];
+    const outerRing=number(map.rings,Math.max(...map.nodes.map(node=>number(node.ring))));
+    const outerStations=map.nodes.filter(node=>node.type==='station'&&number(node.ring)===outerRing);
+    const stations=outerStations.length?outerStations:map.nodes.filter(node=>node.type==='station');
+    const validIds=new Set(stations.map(node=>node.id));
+    setup.startOptionNodeIds=(setup.startOptionNodeIds||[]).filter(id=>validIds.has(id));
+    if(refresh||!setup.startOptionNodeIds.length){
+      setup.startRevision=Math.max(0,number(setup.startRevision))+1;
+      const rng=dashboardSetupRandom(`new-group-start|${setup.startRevision}`);
+      setup.startOptionNodeIds=[...stations].map(node=>({node,value:rng()})).sort((left,right)=>left.value-right.value).slice(0,Math.min(count,stations.length)).map(entry=>entry.node.id);
+      setup.selectedStartNodeId=setup.startOptionNodeIds.includes(setup.selectedStartNodeId)?setup.selectedStartNodeId:setup.startOptionNodeIds[0]||'';
+    }
+    return setup.startOptionNodeIds.map(id=>map.nodes.find(node=>node.id===id)).filter(Boolean);
+  }
+
+  function dashboardApplyNewGroupStart(group,nodeId){
+    const map=state.world?.map;
+    const node=map?.nodes?.find(candidate=>candidate.id===nodeId&&candidate.type==='station');
+    if(!node)throw new Error('Choose a valid randomized starting station for the new expedition group.');
+    group.startingNodeId=node.id;
+    group.currentNodeId=node.id;
+    group.routeId='';
+    normalizeWorldHub().publicState.locations[group.groupId]={groupId:group.groupId,nodeId:node.id,updatedAt:new Date().toISOString()};
+    return node;
+  }
+
+  function dashboardGroupFleetIds(group){
+    group.submarineIds=Array.isArray(group.submarineIds)?[...new Set(group.submarineIds.filter(Boolean))]:[];
+    return group.submarineIds;
+  }
+
+  function dashboardGroupActiveVesselId(group){
+    const ids=dashboardGroupFleetIds(group);
+    const candidate=String(group.activeSubmarineId||group.primarySubmarineId||'');
+    return ids.includes(candidate)?candidate:ids.find(id=>normalizeWorldHub().publicState.submarines?.[id]?.status==='active')||ids[0]||'';
+  }
+
+  function dashboardVesselStationNodeId(vesselId,group){
+    const record=normalizeWorldHub().publicState.submarines?.[vesselId]||{};
+    return String(record.storedAtNodeId||record.currentNodeId||group?.currentNodeId||group?.startingNodeId||'');
+  }
+
+  function dashboardVesselCrossingStatus(vesselId){
+    const snapshot=normalizeDashboardManagementAuthority().vesselSnapshots?.[vesselId];
+    return String(snapshot?.route?.crossing?.status||'');
+  }
+
+  function dashboardMarkVesselInactive(vesselId,group,nodeId,reason='Another submarine became active'){
+    if(!vesselId)return;
+    const hub=normalizeWorldHub();
+    const now=new Date().toISOString();
+    const locationNodeId=String(nodeId||group?.currentNodeId||group?.startingNodeId||'');
+    const record=hub.publicState.submarines[vesselId]||{submarineId:vesselId,groupId:group?.groupId||''};
+    record.groupId=group?.groupId||record.groupId||'';
+    record.status='inactive';
+    record.activeForGroup=false;
+    record.currentNodeId=locationNodeId;
+    record.storedAtNodeId=locationNodeId;
+    record.storedAtAt=now;
+    record.storageReason=reason;
+    record.updatedAt=now;
+    if(record.submarine?.managedExpedition){record.submarine.managedExpedition.status='inactive';record.submarine.managedExpedition.currentNodeId=locationNodeId;}
+    hub.publicState.submarines[vesselId]=record;
+    const snapshot=normalizeDashboardManagementAuthority().vesselSnapshots?.[vesselId];
+    if(snapshot){
+      snapshot.submarine=snapshot.submarine&&typeof snapshot.submarine==='object'?snapshot.submarine:{};
+      snapshot.submarine.managedExpedition=snapshot.submarine.managedExpedition&&typeof snapshot.submarine.managedExpedition==='object'?snapshot.submarine.managedExpedition:{};
+      snapshot.submarine.managedExpedition.status='inactive';
+      snapshot.submarine.managedExpedition.currentNodeId=locationNodeId;
+      snapshot.operationsDashboard=snapshot.operationsDashboard&&typeof snapshot.operationsDashboard==='object'?snapshot.operationsDashboard:{};
+      snapshot.operationsDashboard.activeNodeId=locationNodeId;
+      snapshot.storedAtNodeId=locationNodeId;
+      snapshot.storedAtAt=now;
+    }
+    if(typeof worldVesselRegistry==='function'){
+      const vessel=worldVesselRegistry()?.[vesselId];
+      if(vessel){
+        vessel.active=true;
+        vessel.status='inactive';
+        vessel.ownerGroupId=group?.groupId||vessel.ownerGroupId||'';
+        vessel.location={...(vessel.location||{}),mode:'station',stationNodeId:locationNodeId,currentNodeId:locationNodeId,routeId:'',fromNodeId:'',toNodeId:'',progress:0,decisionState:'stored-inactive'};
+        vessel.updatedAt=now;
+        vessel.notes=`Inactive group submarine stored at ${locationNodeId}.`;
+      }
+    }
+  }
+
+  function dashboardMarkVesselActive(vesselId,group,nodeId,reason='Group active submarine selected'){
+    const hub=normalizeWorldHub();
+    const now=new Date().toISOString();
+    const locationNodeId=String(nodeId||group.currentNodeId||group.startingNodeId||'');
+    const record=hub.publicState.submarines[vesselId]||{submarineId:vesselId};
+    record.groupId=group.groupId;
+    record.status='active';
+    record.activeForGroup=true;
+    record.currentNodeId=locationNodeId;
+    record.storedAtNodeId='';
+    record.activatedAt=now;
+    record.updatedAt=now;
+    if(record.submarine?.managedExpedition){record.submarine.managedExpedition.status='active';record.submarine.managedExpedition.currentNodeId=locationNodeId;}
+    hub.publicState.submarines[vesselId]=record;
+    const snapshot=normalizeDashboardManagementAuthority().vesselSnapshots?.[vesselId];
+    if(snapshot?.submarine){
+      snapshot.submarine.managedExpedition=snapshot.submarine.managedExpedition&&typeof snapshot.submarine.managedExpedition==='object'?snapshot.submarine.managedExpedition:{};
+      snapshot.submarine.managedExpedition.status='active';
+      snapshot.submarine.managedExpedition.currentNodeId=locationNodeId;
+    }
+    group.primarySubmarineId=vesselId;
+    group.activeSubmarineId=vesselId;
+    group.submarineIds=[...new Set([...dashboardGroupFleetIds(group),vesselId])];
+    hub.activeGroupId=group.groupId;
+    hub.activeSubmarineId=vesselId;
+    if(typeof worldVesselRegistry==='function'){
+      const vessel=worldVesselRegistry()?.[vesselId];
+      if(vessel){
+        vessel.active=true;
+        vessel.status='docked';
+        vessel.ownerGroupId=group.groupId;
+        vessel.location={...(vessel.location||{}),mode:'station',stationNodeId:locationNodeId,currentNodeId:locationNodeId,routeId:'',fromNodeId:'',toNodeId:'',progress:0,decisionState:'active-at-station'};
+        vessel.updatedAt=now;
+        vessel.notes=reason;
+      }
+    }
+  }
+
+  function dashboardPrepareGroupVesselActivation(vesselId){
+    const group=dashboardManagementGroupForVessel(vesselId);
+    if(!group)throw new Error('This submarine is not assigned to an expedition group.');
+    const activeId=dashboardGroupActiveVesselId(group);
+    if(activeId&&activeId!==vesselId){
+      if(dashboardVesselCrossingStatus(activeId)==='underway')throw new Error('The group cannot change active submarines while its current submarine is In Route. Complete or abort the crossing at a station first.');
+      const currentNodeId=String(group.currentNodeId||group.startingNodeId||'');
+      const currentNode=state.world?.map?.nodes?.find(node=>node.id===currentNodeId);
+      if(currentNode?.type!=='station')throw new Error('The group can change active submarines only while physically docked at a station.');
+      const selectedLocation=dashboardVesselStationNodeId(vesselId,group);
+      const selectedRecord=normalizeWorldHub().publicState.submarines?.[vesselId]||{};
+      if(selectedRecord.status==='inactive'&&selectedLocation&&selectedLocation!==currentNodeId)throw new Error(`This inactive submarine is stored at ${state.world?.map?.nodes?.find(node=>node.id===selectedLocation)?.name||selectedLocation}, not at the group’s current station.`);
+    }
+    return {group,activeId};
+  }
+
+  function dashboardFinalizeGroupVesselActivation(vesselId,group,previousActiveId){
+    const nodeId=String(group.currentNodeId||group.startingNodeId||'');
+    if(previousActiveId&&previousActiveId!==vesselId)dashboardMarkVesselInactive(previousActiveId,group,nodeId,`Stored when ${vesselId} became active`);
+    for(const otherId of dashboardGroupFleetIds(group)){
+      if(otherId===vesselId||otherId===previousActiveId)continue;
+      const record=normalizeWorldHub().publicState.submarines?.[otherId];
+      if(record?.status==='active')dashboardMarkVesselInactive(otherId,group,record.currentNodeId||nodeId,'Normalized to enforce one active submarine per group');
+    }
+    dashboardMarkVesselActive(vesselId,group,nodeId,'Selected as the group’s sole active submarine');
+  }
+
+  function dashboardNormalizeAllGroupFleets(){
+    const hub=normalizeWorldHub();
+    for(const group of Object.values(hub.publicState.groups||{})){
+      const ids=dashboardGroupFleetIds(group);
+      if(!ids.length){group.primarySubmarineId='';group.activeSubmarineId='';continue;}
+      const activeId=dashboardGroupActiveVesselId(group);
+      group.primarySubmarineId=activeId;
+      group.activeSubmarineId=activeId;
+      for(const vesselId of ids){
+        if(vesselId===activeId)dashboardMarkVesselActive(vesselId,group,dashboardVesselStationNodeId(vesselId,group)||group.currentNodeId,'Normalized group active vessel');
+        else if(hub.publicState.submarines?.[vesselId]?.status==='active')dashboardMarkVesselInactive(vesselId,group,dashboardVesselStationNodeId(vesselId,group)||group.currentNodeId,'Normalized duplicate active vessel');
+      }
+    }
+  }
+
+  const activateDashboardManagedVesselBeforeFleetRules=activateDashboardManagedVessel;
+  activateDashboardManagedVessel=function activateDashboardManagedVesselWithFleetRules(vesselId){
+    const preparation=dashboardPrepareGroupVesselActivation(vesselId);
+    const result=activateDashboardManagedVesselBeforeFleetRules(vesselId);
+    dashboardFinalizeGroupVesselActivation(vesselId,preparation.group,preparation.activeId);
+    return result;
+  };
+
+  const syncAllWorldPlayerVesselsBeforeFleetRules=typeof syncAllWorldPlayerVessels==='function'?syncAllWorldPlayerVessels:null;
+  if(syncAllWorldPlayerVesselsBeforeFleetRules){
+    syncAllWorldPlayerVessels=function syncAllWorldPlayerVesselsWithFleetRules(){
+      const registry=syncAllWorldPlayerVesselsBeforeFleetRules();
+      const hub=normalizeWorldHub();
+      for(const group of Object.values(hub.publicState.groups||{})){
+        const activeId=dashboardGroupActiveVesselId(group);
+        for(const vesselId of dashboardGroupFleetIds(group)){
+          if(vesselId===activeId)continue;
+          const record=hub.publicState.submarines?.[vesselId]||{};
+          dashboardMarkVesselInactive(vesselId,group,record.storedAtNodeId||record.currentNodeId||group.currentNodeId,'Preserved inactive vessel during world-registry synchronization');
+        }
+      }
+      return registry;
+    };
+  }
+
+  const captureDashboardManagedVesselStateBeforeFleetRules=captureDashboardManagedVesselState;
+  captureDashboardManagedVesselState=function captureDashboardManagedVesselStateWithFleetRules(vesselId=dashboardManagementRuntime.vesselId){
+    const snapshot=captureDashboardManagedVesselStateBeforeFleetRules(vesselId);
+    const group=dashboardManagementGroupForVessel(vesselId);
+    if(group&&dashboardGroupActiveVesselId(group)===vesselId)dashboardMarkVesselActive(vesselId,group,group.currentNodeId,'Captured active managed vessel state');
+    return snapshot;
+  };
+
+  createNewManageableSubmarine=async function createNewManageableSubmarineWithFileInitialization(options={}){
+    const cleanName=String(options.name||'').trim();
+    if(!cleanName)throw new Error('Enter a name for the new submarine.');
+    const modelName=String(options.modelName||'Barsuk');
+    if(typeof dashboardManageableCreationSubmarineAllowed==='function'&&!dashboardManageableCreationSubmarineAllowed(modelName))throw new Error('New manageable submarines must be an official Tier 1 model or a custom submarine.');
+    if(!SUBMARINES[modelName])throw new Error('Choose a valid submarine model.');
+    const password=String(options.password||'');
+    if(password.length<10)throw new Error('Use a management password of at least 10 characters.');
+    if(!state.world?.map?.nodes?.length)throw new Error('Load the saved Masterworld before creating a managed submarine.');
+
+    const previousCharacter=cloneWorldData(state.character||defaultState().character);
+    const initializedCharacter=dashboardCharacterForNewManagementFile(options.characterSetup||{});
+    state.character=initializedCharacter;
+    normalizePlayerSubmissionSettings();
+    if(typeof normalizeCharacterInventory==='function')normalizeCharacterInventory();
+
+    const hub=normalizeWorldHub();
+    const authority=normalizeDashboardManagementAuthority();
+    let group=null;
+    let createdGroup=false;
+    let vesselId='';
+    try{
+      if(options.groupId&&hub.publicState.groups?.[options.groupId])group=hub.publicState.groups[options.groupId];
+      else{
+        const newGroupName=String(options.newGroupName||'').trim();
+        if(!newGroupName)throw new Error('Enter a name for the new expedition group.');
+        group=createWorldGroup(newGroupName);
+        createdGroup=true;
+        dashboardApplyNewGroupStart(group,String(options.startNodeId||dashboardManagementRuntime.newFileSetup.selectedStartNodeId||''));
+      }
+      const currentNodeId=String(group.currentNodeId||group.startingNodeId||'');
+      vesselId=uid('world-submarine');
+      const submarine=dashboardManagementBuildSubmarineState(vesselId,cleanName,modelName,group);
+      submarine.managedExpedition.status='inactive';
+      submarine.managedExpedition.currentNodeId=currentNodeId;
+      const route=deepMerge(defaultState().route,{});
+      route.activeSubmarineId=vesselId;
+      route.activeGroupId=group.groupId;
+      const operationsDashboard=defaultActiveSubmarineDashboard();
+      operationsDashboard.activeSubmarineId=vesselId;
+      operationsDashboard.activeGroupId=group.groupId;
+      operationsDashboard.activeNodeId=currentNodeId;
+      operationsDashboard.dashboardFocus='overview';
+      operationsDashboard.startingLocation={...defaultDashboardStartingLocationState(),worldKey:dashboardWorldIdentityKey(),optionNodeIds:currentNodeId?[currentNodeId]:[],selectedNodeId:currentNodeId,confirmedNodeId:currentNodeId,locked:true,everDeparted:false,updatedAt:new Date().toISOString(),creationOnly:true};
+      operationsDashboard.managementFile={version:DASHBOARD_MANAGEMENT_FILE_INITIALIZATION_VERSION,createdAt:new Date().toISOString(),characterMode:String(options.characterSetup?.mode||'random'),newGroup:createdGroup,startingNodeId:currentNodeId};
+      const capturedAt=new Date().toISOString();
+      authority.vesselSnapshots[vesselId]={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:hub.worldId,vesselId,groupId:group.groupId,submarine:cloneWorldData(submarine),route:cloneWorldData(route),operationsDashboard:cloneWorldData(operationsDashboard),character:cloneWorldData(initializedCharacter),capturedAt,createdAsManageableSubmarine:true,managementFileVersion:DASHBOARD_MANAGEMENT_FILE_INITIALIZATION_VERSION};
+      hub.publicState.submarines[vesselId]={submarineId:vesselId,groupId:group.groupId,name:submarine.name,model:modelName,status:'inactive',activeForGroup:false,managed:true,currentNodeId,storedAtNodeId:currentNodeId,startingNodeId:group.startingNodeId||currentNodeId,crewIds:[],routeId:'',submarine:cloneWorldData(submarine),createdAt:capturedAt,updatedAt:capturedAt};
+      dashboardManagementPairVesselToGroup(vesselId,group);
+      if(typeof syncAllWorldPlayerVessels==='function')syncAllWorldPlayerVessels();
+      dashboardManagementAudit('manageable-submarine-created',vesselId,{groupId:group.groupId,name:submarine.name,model:modelName,newGroup:createdGroup,startingNodeId:currentNodeId,characterMode:options.characterSetup?.mode||'random'});
+      save();
+      await createDashboardManagementCredential(vesselId,password,String(options.managerName||'').trim(),Boolean(options.remember));
+      dashboardManagementRuntime.newFileSetup.randomCharacter=null;
+      dashboardManagementRuntime.newFileSetup.importText='';
+      return vesselId;
+    }catch(error){
+      state.character=previousCharacter;
+      if(vesselId){
+        delete authority.vesselSnapshots[vesselId];
+        delete authority.submarineCredentials[vesselId];
+        delete hub.publicState.submarines[vesselId];
+        if(group)group.submarineIds=(group.submarineIds||[]).filter(id=>id!==vesselId);
+      }
+      if(createdGroup&&group){delete hub.publicState.groups[group.groupId];delete hub.publicState.locations[group.groupId];}
+      save();
+      throw error;
+    }
+  };
+
+  const randomizedDashboardStartingStationsBeforeCreationOnly=randomizedDashboardStartingStations;
+  randomizedDashboardStartingStations=function randomizedDashboardStartingStationsCreationOnly(refresh=false,count=12){
+    if(activeSubmarineDashboardContext()&&dashboardManagementRuntime.status==='authenticated'){
+      const group=dashboardManagementGroupForVessel(dashboardManagementRuntime.vesselId);
+      const node=state.world?.map?.nodes?.find(candidate=>candidate.id===(group?.startingNodeId||group?.currentNodeId));
+      const start=normalizeDashboardStartingLocationState();
+      start.optionNodeIds=node?[node.id]:[];
+      start.selectedNodeId=node?.id||'';
+      start.confirmedNodeId=node?.id||'';
+      start.locked=true;
+      start.creationOnly=true;
+      return node?[node]:[];
+    }
+    return randomizedDashboardStartingStationsBeforeCreationOnly(refresh,count);
+  };
+
+  const applyDashboardStartingLocationBeforeCreationOnly=applyDashboardStartingLocation;
+  applyDashboardStartingLocation=function applyDashboardStartingLocationCreationOnly(nodeId){
+    if(activeSubmarineDashboardContext()&&dashboardManagementRuntime.status==='authenticated')return {ok:false,message:'Starting location is fixed when the management file or expedition group is created.'};
+    return applyDashboardStartingLocationBeforeCreationOnly(nodeId);
+  };
+
+  const dashboardStartingLocationPanelHtmlBeforeCreationOnly=dashboardStartingLocationPanelHtml;
+  dashboardStartingLocationPanelHtml=function dashboardStartingLocationPanelHtmlCreationOnly(){
+    if(dashboardManagementRuntime.status!=='authenticated')return dashboardStartingLocationPanelHtmlBeforeCreationOnly();
+    const group=dashboardManagementGroupForVessel(dashboardManagementRuntime.vesselId);
+    const startNode=state.world?.map?.nodes?.find(node=>node.id===group?.startingNodeId);
+    const currentNode=state.world?.map?.nodes?.find(node=>node.id===group?.currentNodeId);
+    return `<section id="dashboard-starting-location" class="tool-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Management-file deployment record</p><h3>Starting Station Fixed</h3><p class="small-note">Starting-location randomization is available only while creating a new managed submarine in a new expedition group. Existing groups and existing managed submarines retain their recorded world location.</p></div><span class="status-pill good">RECORDED</span></div><div class="metric-row" style="margin-top:12px"><div class="metric"><span>Expedition group</span><strong>${escapeHtml(group?.name||'Unassigned')}</strong></div><div class="metric"><span>Original start</span><strong>${escapeHtml(startNode?.name||group?.startingNodeId||'Unknown')}</strong></div><div class="metric"><span>Current location</span><strong>${escapeHtml(currentNode?.name||group?.currentNodeId||'Unknown')}</strong></div></div></section>`;
+  };
+
+  dashboardStartingSubmarineUnlocked=function dashboardStartingSubmarineLockedForManagedFile(){
+    if(dashboardManagementRuntime.status==='authenticated')return false;
+    const start=normalizeDashboardStartingLocationState();
+    const crossing=normalizeRouteCrossing();
+    return !start.everDeparted&&!start.locked&&crossing.status!=='underway';
+  };
+
+  function dashboardCharacterStatSummary(character){
+    return `STR ${number(character.stats?.Strength)} · AGI ${number(character.stats?.Agility)} · INT ${number(character.stats?.Intelligence)} · CHA ${number(character.stats?.Charisma)}`;
+  }
+
+  function dashboardNewGroupStartOptionsHtml(){
+    const stations=dashboardNewGroupStartingStations(false);
+    const selected=dashboardManagementRuntime.newFileSetup.selectedStartNodeId;
+    return stations.map(node=>`<option value="${escapeHtml(node.id)}" ${node.id===selected?'selected':''}>L${number(node.locationLevel,1)} · ${escapeHtml(node.name)} · Ring ${number(node.ring)}</option>`).join('')||'<option value="">No station starts available</option>';
+  }
+
+  function dashboardRandomCharacterPreviewHtml(){
+    const character=dashboardRandomCharacter(false);
+    return `<div class="notice"><strong>${escapeHtml(character.name)}</strong> · Level ${number(character.level)} ${escapeHtml(character.className)}<br>${escapeHtml(character.background)} · ${escapeHtml(character.talent)}<br>${escapeHtml(dashboardCharacterStatSummary(character))}</div>`;
+  }
+
+  dashboardManagementCreationPanelHtml=function dashboardManagementCreationPanelHtmlWithFileInitialization(){
+    const models=dashboardManageableCreationSubmarineNames();
+    const setup=dashboardManagementRuntime.newFileSetup;
+    const groups=Object.values(normalizeWorldHub().publicState.groups||{});
+    const selectedGroupId=normalizeWorldHub().activeGroupId&&normalizeWorldHub().publicState.groups[normalizeWorldHub().activeGroupId]?normalizeWorldHub().activeGroupId:groups[0]?.groupId||'';
+    const newGroupSelected=!selectedGroupId;
+    const randomCharacter=dashboardRandomCharacter(false);
+    const manualClass='Engineer';
+    const manualTalents=(CLASSES[manualClass]?.talents||[]).map(item=>item[0]);
+    return `<details class="tool-card" style="margin-top:12px" open><summary><strong>Create New Manageable Submarine and Management File</strong></summary><p class="small-note">New official vessels are limited to Tier 1 submarines. A new management file must initialize its player character by import, manual creation, or randomized generation. Starting-station randomization appears only for a new expedition group.</p>
+      <div class="field-grid four" style="margin-top:10px"><label class="field">Vessel name<input id="dashboard-create-vessel-name" placeholder="New submarine name"></label><label class="field">Submarine model<select id="dashboard-create-vessel-model">${models.map(name=>`<option value="${escapeHtml(name)}">${SUBMARINES[name]?.custom?'Custom':'Tier 1'} — ${escapeHtml(name)}</option>`).join('')}</select></label><label class="field">Expedition group<select id="dashboard-create-vessel-group"><option value="">Create a new expedition group</option>${groups.map(group=>`<option value="${escapeHtml(group.groupId)}" ${group.groupId===selectedGroupId?'selected':''}>${escapeHtml(group.name)} · ${escapeHtml(group.groupId)}</option>`).join('')}</select></label><label class="field">New group name<input id="dashboard-create-vessel-new-group" placeholder="Required only for a new group"></label><label class="field">Manager name<input id="dashboard-create-vessel-manager" value="${escapeHtml(state.character.player||'')}"></label><label class="field">Management password<input id="dashboard-create-vessel-password" type="password" autocomplete="new-password"></label><label class="field">Confirm password<input id="dashboard-create-vessel-confirm" type="password" autocomplete="new-password"></label><label class="check-row"><input id="dashboard-create-vessel-remember" type="checkbox" checked><span>Remember this device</span></label></div>
+      <div id="dashboard-new-group-start-controls" class="tool-card ${newGroupSelected?'':'hidden'}" style="margin-top:12px;border-color:rgba(117,197,142,.6)"><h4>New Group Starting Station</h4><p class="small-note">This is the only place where a starting station may be randomized. Existing groups keep their current station.</p><div class="field-grid three"><label class="field">Randomized outer-ring stations<select id="dashboard-create-vessel-start-node">${dashboardNewGroupStartOptionsHtml()}</select></label><div class="button-row" style="align-self:end"><button id="dashboard-create-randomize-start" class="secondary-action" type="button">Randomize New-Group Starts</button></div></div></div>
+      <div class="tool-card" style="margin-top:12px"><h4>Player Character Initialization</h4><label class="field">Initialization method<select id="dashboard-create-character-mode"><option value="import" ${setup.characterMode==='import'?'selected':''}>Import an existing character</option><option value="create" ${setup.characterMode==='create'?'selected':''}>Create a character manually</option><option value="random" ${setup.characterMode==='random'?'selected':''}>Generate a randomized character</option></select></label>
+        <div id="dashboard-character-import-panel" class="${setup.characterMode==='import'?'':'hidden'}" style="margin-top:10px"><label class="field">Character JSON<textarea id="dashboard-create-character-import" placeholder="Paste a Barotrauma crew submission, exported character, or suite character JSON">${escapeHtml(setup.importText||'')}</textarea></label><label class="secondary-action file-action" for="dashboard-create-character-file">Select Character JSON</label><input id="dashboard-create-character-file" type="file" accept="application/json" hidden></div>
+        <div id="dashboard-character-create-panel" class="${setup.characterMode==='create'?'':'hidden'}" style="margin-top:10px"><div class="field-grid four"><label class="field">Character name<input id="dashboard-create-character-name"></label><label class="field">Player name<input id="dashboard-create-character-player" value="${escapeHtml(state.character.player||'')}"></label><label class="field">Class<select id="dashboard-create-character-class">${optionList(Object.keys(CLASSES),manualClass)}</select></label><label class="field">Level<input id="dashboard-create-character-level" type="number" min="1" max="99" value="1"></label><label class="field">Background<select id="dashboard-create-character-background">${optionList(BACKGROUNDS.map(item=>item.name),BACKGROUNDS[0]?.name)}</select></label><label class="field">Talent<select id="dashboard-create-character-talent">${optionList(manualTalents,manualTalents[0])}</select></label><label class="field">Strength<input id="dashboard-create-character-strength" type="number" min="1" max="12" value="3"></label><label class="field">Agility<input id="dashboard-create-character-agility" type="number" min="1" max="12" value="3"></label><label class="field">Intelligence<input id="dashboard-create-character-intelligence" type="number" min="1" max="12" value="3"></label><label class="field">Charisma<input id="dashboard-create-character-charisma" type="number" min="1" max="12" value="3"></label></div></div>
+        <div id="dashboard-character-random-panel" class="${setup.characterMode==='random'?'':'hidden'}" style="margin-top:10px"><label class="field">Player name<input id="dashboard-create-random-player" value="${escapeHtml(randomCharacter.player||state.character.player||'')}"></label><div id="dashboard-random-character-preview" style="margin-top:8px">${dashboardRandomCharacterPreviewHtml()}</div><div class="button-row" style="margin-top:8px"><button id="dashboard-reroll-character" class="secondary-action" type="button">Roll Another Character</button></div></div>
+      </div>
+      <div class="button-row" style="margin-top:10px"><button id="dashboard-create-manageable-vessel-v2" class="primary-action" type="button">Create Management File, Pair, and Log In</button></div></details>`;
+  };
+
+  function dashboardToggleCharacterInitializationPanels(mode){
+    for(const candidate of ['import','create','random'])root.querySelector(`#dashboard-character-${candidate}-panel`)?.classList.toggle('hidden',candidate!==mode);
+  }
+
+  function dashboardCollectCharacterSetup(){
+    const mode=root.querySelector('#dashboard-create-character-mode')?.value||'random';
+    const setup={mode};
+    if(mode==='import')setup.importText=root.querySelector('#dashboard-create-character-import')?.value||'';
+    else if(mode==='create')setup.manual={
+      name:root.querySelector('#dashboard-create-character-name')?.value,
+      player:root.querySelector('#dashboard-create-character-player')?.value,
+      className:root.querySelector('#dashboard-create-character-class')?.value,
+      level:root.querySelector('#dashboard-create-character-level')?.value,
+      background:root.querySelector('#dashboard-create-character-background')?.value,
+      talent:root.querySelector('#dashboard-create-character-talent')?.value,
+      Strength:root.querySelector('#dashboard-create-character-strength')?.value,
+      Agility:root.querySelector('#dashboard-create-character-agility')?.value,
+      Intelligence:root.querySelector('#dashboard-create-character-intelligence')?.value,
+      Charisma:root.querySelector('#dashboard-create-character-charisma')?.value
+    };
+    else{
+      setup.randomCharacter=cloneWorldData(dashboardManagementRuntime.newFileSetup.randomCharacter||dashboardRandomCharacter(false));
+      setup.randomPlayerName=root.querySelector('#dashboard-create-random-player')?.value||'';
+    }
+    return setup;
+  }
+
+  const bindDashboardManagementGateBeforeFileInitialization=bindDashboardManagementGate;
+  bindDashboardManagementGate=function bindDashboardManagementGateWithFileInitialization(){
+    bindDashboardManagementGateBeforeFileInitialization();
+    const groupSelect=root.querySelector('#dashboard-create-vessel-group');
+    const startPanel=root.querySelector('#dashboard-new-group-start-controls');
+    const updateGroupMode=()=>startPanel?.classList.toggle('hidden',Boolean(groupSelect?.value));
+    groupSelect?.addEventListener('change',updateGroupMode);
+    updateGroupMode();
+
+    root.querySelector('#dashboard-create-randomize-start')?.addEventListener('click',()=>{
+      const stations=dashboardNewGroupStartingStations(true);
+      const select=root.querySelector('#dashboard-create-vessel-start-node');
+      if(select)select.innerHTML=stations.map(node=>`<option value="${escapeHtml(node.id)}">L${number(node.locationLevel,1)} · ${escapeHtml(node.name)} · Ring ${number(node.ring)}</option>`).join('');
+    });
+    root.querySelector('#dashboard-create-vessel-start-node')?.addEventListener('change',event=>{dashboardManagementRuntime.newFileSetup.selectedStartNodeId=event.target.value;});
+
+    const modeSelect=root.querySelector('#dashboard-create-character-mode');
+    modeSelect?.addEventListener('change',event=>{
+      dashboardManagementRuntime.newFileSetup.characterMode=event.target.value;
+      dashboardToggleCharacterInitializationPanels(event.target.value);
+    });
+    dashboardToggleCharacterInitializationPanels(modeSelect?.value||'random');
+
+    root.querySelector('#dashboard-create-character-file')?.addEventListener('change',async event=>{
+      const file=event.target.files?.[0];
+      if(!file)return;
+      try{
+        const text=await file.text();
+        dashboardManagementRuntime.newFileSetup.importText=text;
+        const area=root.querySelector('#dashboard-create-character-import');
+        if(area)area.value=text;
+      }catch(error){dashboardManagementMessage(`Character file could not be read: ${error.message}`,true);}
+    });
+    root.querySelector('#dashboard-create-character-import')?.addEventListener('input',event=>{dashboardManagementRuntime.newFileSetup.importText=event.target.value;});
+
+    root.querySelector('#dashboard-create-character-class')?.addEventListener('change',event=>{
+      const talents=(CLASSES[event.target.value]?.talents||[]).map(item=>item[0]);
+      const select=root.querySelector('#dashboard-create-character-talent');
+      if(select)select.innerHTML=talents.map(talent=>`<option value="${escapeHtml(talent)}">${escapeHtml(talent)}</option>`).join('');
+    });
+    root.querySelector('#dashboard-reroll-character')?.addEventListener('click',()=>{
+      const character=dashboardRandomCharacter(true);
+      const player=root.querySelector('#dashboard-create-random-player');
+      if(player&&player.value)character.player=player.value;
+      const preview=root.querySelector('#dashboard-random-character-preview');
+      if(preview)preview.innerHTML=`<div class="notice"><strong>${escapeHtml(character.name)}</strong> · Level ${number(character.level)} ${escapeHtml(character.className)}<br>${escapeHtml(character.background)} · ${escapeHtml(character.talent)}<br>${escapeHtml(dashboardCharacterStatSummary(character))}</div>`;
+    });
+
+    root.querySelector('#dashboard-create-manageable-vessel-v2')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const password=root.querySelector('#dashboard-create-vessel-password');
+      const confirmation=root.querySelector('#dashboard-create-vessel-confirm');
+      if((password?.value||'')!==(confirmation?.value||'')){dashboardManagementMessage('The new submarine passwords do not match.',true);return;}
+      button.disabled=true;
+      dashboardManagementMessage('Creating the management file, character, submarine, and expedition pairing…');
+      try{
+        await createNewManageableSubmarine({
+          name:root.querySelector('#dashboard-create-vessel-name')?.value,
+          modelName:root.querySelector('#dashboard-create-vessel-model')?.value,
+          groupId:groupSelect?.value||'',
+          newGroupName:root.querySelector('#dashboard-create-vessel-new-group')?.value,
+          startNodeId:groupSelect?.value?'':root.querySelector('#dashboard-create-vessel-start-node')?.value,
+          managerName:root.querySelector('#dashboard-create-vessel-manager')?.value,
+          password:password?.value,
+          remember:Boolean(root.querySelector('#dashboard-create-vessel-remember')?.checked),
+          characterSetup:dashboardCollectCharacterSetup()
+        });
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        dashboardManagementMessage(error.message,true);
+        button.disabled=false;
+      }
+    });
+  };
+
+  createAndAssignDashboardCrew=function createAndAssignDashboardCrewWithVariedStats(name,className,duty,stats=null){
+    const permission=dashboardCrewAdditionPermission();
+    if(!permission.allowed)return {ok:false,message:permission.message};
+    const cleanName=String(name||'').trim();
+    if(!cleanName)return {ok:false,message:'Enter a crew member name.'};
+    const validClass=CLASSES[className]?className:'Engineer';
+    const statBlock=stats&&typeof stats==='object'?stats:dashboardVariedStatBlock(validClass,`crew|${cleanName}`);
+    const background=dashboardSetupChoice(BACKGROUNDS,dashboardSetupRandom(`crew-background|${cleanName}`));
+    const talent=dashboardSetupChoice(CLASSES[validClass]?.talents||[['Quick Fix','']],dashboardSetupRandom(`crew-talent|${cleanName}`))?.[0]||'';
+    const record=mergeCrewRecordBeforeDashboardStationGate(normalizeCrewRecord({
+      source:'generated',
+      participantRole:'NPC',
+      characterName:cleanName,
+      className:validClass,
+      level:1+Math.floor(dashboardSetupRandom(`crew-level|${cleanName}`)()*3),
+      background:background?.name||'',
+      talent,
+      duty:CREW_DUTIES.includes(duty)?duty:(DASHBOARD_CLASS_DUTIES[validClass]||'Unassigned'),
+      shift:'Unassigned',
+      approval:'Accepted',
+      status:'Onboard',
+      active:true,
+      stats:statBlock,
+      current:{...statBlock}
+    }));
+    return assignCrewToActiveDashboard(activeDashboardCrewId(record));
+  };
+
+  function createRandomAndAssignDashboardCrew(){
+    const permission=dashboardCrewAdditionPermission();
+    if(!permission.allowed)return {ok:false,message:permission.message};
+    const rng=dashboardSetupRandom('random-station-crew');
+    const className=dashboardSetupChoice(Object.keys(CLASSES),rng);
+    const name=dashboardRandomPersonName(rng);
+    const duty=DASHBOARD_CLASS_DUTIES[className]||dashboardSetupChoice(CREW_DUTIES.filter(item=>item!=='Unassigned'),rng);
+    return createAndAssignDashboardCrew(name,className,duty,dashboardVariedStatBlock(className,`random-crew|${name}`));
+  }
+
+  function dashboardGroupFleetRosterHtml(group){
+    const hub=normalizeWorldHub();
+    const activeId=dashboardGroupActiveVesselId(group);
+    const rows=dashboardGroupFleetIds(group).map(vesselId=>{
+      const record=hub.publicState.submarines?.[vesselId]||{};
+      const nodeId=record.storedAtNodeId||record.currentNodeId||group.currentNodeId;
+      const node=state.world?.map?.nodes?.find(candidate=>candidate.id===nodeId);
+      const active=vesselId===activeId;
+      return `<tr><td><strong class="${active?'good':''}">${escapeHtml(record.name||vesselId)}</strong><br><span class="small-note">${escapeHtml(record.model||record.submarine?.model||'Unknown model')}</span></td><td>${active?'<span class="status-pill good">ACTIVE</span>':'<span class="status-pill">INACTIVE / STORED</span>'}</td><td>${escapeHtml(node?.name||nodeId||'Unknown')}</td></tr>`;
+    }).join('');
+    return `<div class="tool-card" style="margin-top:12px"><h4>Expedition Group Submarine Roster</h4><p class="small-note">Each group has exactly one active submarine. Replaced submarines remain owned by the group but are stored inactive at the station where the replacement occurred.</p><div class="table-wrap"><table class="tool-table"><thead><tr><th>Submarine</th><th>Group state</th><th>Location</th></tr></thead><tbody>${rows||'<tr><td colspan="3">No submarines are assigned.</td></tr>'}</tbody></table></div></div>`;
+  }
+
+  const dashboardCommissioningPanelHtmlBeforeFileInitialization=dashboardCommissioningPanelHtml;
+  dashboardCommissioningPanelHtml=function dashboardCommissioningPanelHtmlWithFileInitialization(context){
+    const group=dashboardManagementGroupForVessel(context.submarineId)||context.group;
+    let html=dashboardCommissioningPanelHtmlBeforeFileInitialization(context);
+    html=html.replace('<h4>Choose Starting Submarine</h4>','<h4>Active Managed Submarine</h4>');
+    html=html.replace('The model remains editable until the first crossing begins.','The vessel model was fixed when this management file was created.');
+    html=html.replace('The starting submarine is permanently locked because this expedition has already departed.','The managed vessel model is fixed. Use a newly acquired submarine at the current station to change the group’s sole active vessel.');
+    html=html.replace('</button></div></div></div>\n       <div id="dashboard-commissioning-message"',`</button><button id="dashboard-random-crew" class="secondary-action no-print" type="button">Generate Random Crew at Station</button></div></div></div>${dashboardGroupFleetRosterHtml(group)}\n       <div id="dashboard-commissioning-message"`);
+    return html;
+  };
+
+  const bindDashboardCommissioningControlsBeforeFileInitialization=bindDashboardCommissioningControls;
+  bindDashboardCommissioningControls=function bindDashboardCommissioningControlsWithFileInitialization(){
+    bindDashboardCommissioningControlsBeforeFileInitialization();
+    root.querySelector('#dashboard-random-crew')?.addEventListener('click',()=>{
+      const result=createRandomAndAssignDashboardCrew();
+      if(result.ok)renderSubmarine();
+      else dashboardCommissioningMessage(result.message,true);
+    });
+  };
+
+  dashboardNormalizeAllGroupFleets();
+
+  const fleetDiagnostics=()=>{
+    const hub=normalizeWorldHub();
+    const issues=[];
+    for(const group of Object.values(hub.publicState.groups||{})){
+      const active=dashboardGroupFleetIds(group).filter(id=>hub.publicState.submarines?.[id]?.status==='active');
+      if(active.length>1)issues.push(`Group ${group.groupId} has ${active.length} active submarines.`);
+      if(group.primarySubmarineId&&group.activeSubmarineId&&group.primarySubmarineId!==group.activeSubmarineId)issues.push(`Group ${group.groupId} has conflicting active-submarine identifiers.`);
+    }
+    return {version:DASHBOARD_MANAGEMENT_FILE_INITIALIZATION_VERSION,valid:!issues.length,issues,groupCount:Object.keys(hub.publicState.groups||{}).length,randomizedStartingLocationPostLogin:false,characterInitializationModes:['import','create','random'],variedGeneratedCrewStats:true,oneActiveSubmarinePerGroup:true};
+  };
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_FILE_DIAGNOSTICS=fleetDiagnostics();
