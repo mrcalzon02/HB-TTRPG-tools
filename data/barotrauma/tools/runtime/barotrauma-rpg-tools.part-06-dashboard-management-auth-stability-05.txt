@@ -18,6 +18,55 @@
     return normalizeActiveSubmarineDashboardBeforeAuthenticatedGroupBinding(persist);
   };
 
+  function dashboardManagementHydrateSnapshotBeforeAnyLogin(vesselId){
+    const authority=normalizeDashboardManagementAuthority();
+    const snapshot=authority.vesselSnapshots?.[vesselId];
+    if(!snapshot||typeof snapshot!=='object')return null;
+    const defaults=defaultState();
+    snapshot.character=deepMerge(defaults.character,cloneWorldData(snapshot.character||{}));
+    snapshot.submarine=deepMerge(defaults.submarine,cloneWorldData(snapshot.submarine||{}));
+    snapshot.route=deepMerge(defaults.route,cloneWorldData(snapshot.route||{}));
+    snapshot.operationsDashboard=deepMerge(defaultActiveSubmarineDashboard(),cloneWorldData(snapshot.operationsDashboard||{}));
+
+    snapshot.character.rollLog=Array.isArray(snapshot.character.rollLog)?snapshot.character.rollLog:[];
+    snapshot.character.catalogInventory=Array.isArray(snapshot.character.catalogInventory)?snapshot.character.catalogInventory:[];
+    snapshot.character.consumptionLog=Array.isArray(snapshot.character.consumptionLog)?snapshot.character.consumptionLog:[];
+    snapshot.character.inventory=String(snapshot.character.inventory||'');
+
+    snapshot.submarine.upgrades=Array.isArray(snapshot.submarine.upgrades)?snapshot.submarine.upgrades:[];
+    snapshot.submarine.weapons=Array.isArray(snapshot.submarine.weapons)?snapshot.submarine.weapons:[];
+    snapshot.submarine.wikiWeapons=Array.isArray(snapshot.submarine.wikiWeapons)?snapshot.submarine.wikiWeapons:[];
+    snapshot.submarine.wikiAmmo=Array.isArray(snapshot.submarine.wikiAmmo)?snapshot.submarine.wikiAmmo:[];
+    snapshot.submarine.customModules=Array.isArray(snapshot.submarine.customModules)?snapshot.submarine.customModules:[];
+    snapshot.submarine.crewManagement=snapshot.submarine.crewManagement&&typeof snapshot.submarine.crewManagement==='object'?snapshot.submarine.crewManagement:{roster:[],activeCrewId:'local'};
+    snapshot.submarine.crewManagement.roster=Array.isArray(snapshot.submarine.crewManagement.roster)?snapshot.submarine.crewManagement.roster:[];
+    snapshot.submarine.cargoManagement=snapshot.submarine.cargoManagement&&typeof snapshot.submarine.cargoManagement==='object'?snapshot.submarine.cargoManagement:{entries:[]};
+    snapshot.submarine.cargoManagement.entries=Array.isArray(snapshot.submarine.cargoManagement.entries)?snapshot.submarine.cargoManagement.entries:[];
+
+    snapshot.route.jobs=Array.isArray(snapshot.route.jobs)?snapshot.route.jobs:[];
+    snapshot.route.plan=Array.isArray(snapshot.route.plan)?snapshot.route.plan:[];
+    snapshot.route.crossing=snapshot.route.crossing&&typeof snapshot.route.crossing==='object'?snapshot.route.crossing:{};
+    snapshot.route.crossing.pathNodeIds=Array.isArray(snapshot.route.crossing.pathNodeIds)?snapshot.route.crossing.pathNodeIds:[];
+    snapshot.route.crossing.legs=Array.isArray(snapshot.route.crossing.legs)?snapshot.route.crossing.legs:[];
+    snapshot.route.crossing.log=Array.isArray(snapshot.route.crossing.log)?snapshot.route.crossing.log:[];
+
+    snapshot.operationsDashboard.activeCrewIds=Array.isArray(snapshot.operationsDashboard.activeCrewIds)?snapshot.operationsDashboard.activeCrewIds:[];
+    snapshot.operationsDashboard.commissioning=snapshot.operationsDashboard.commissioning&&typeof snapshot.operationsDashboard.commissioning==='object'?snapshot.operationsDashboard.commissioning:{assignedCrewIds:[]};
+    snapshot.operationsDashboard.commissioning.assignedCrewIds=Array.isArray(snapshot.operationsDashboard.commissioning.assignedCrewIds)?snapshot.operationsDashboard.commissioning.assignedCrewIds:[];
+    snapshot.operationsDashboard.turnOrder=snapshot.operationsDashboard.turnOrder&&typeof snapshot.operationsDashboard.turnOrder==='object'?snapshot.operationsDashboard.turnOrder:{order:[],rolls:{},history:[]};
+    snapshot.operationsDashboard.turnOrder.order=Array.isArray(snapshot.operationsDashboard.turnOrder.order)?snapshot.operationsDashboard.turnOrder.order:[];
+    snapshot.operationsDashboard.turnOrder.history=Array.isArray(snapshot.operationsDashboard.turnOrder.history)?snapshot.operationsDashboard.turnOrder.history:[];
+    snapshot.operationsDashboard.turnOrder.rolls=snapshot.operationsDashboard.turnOrder.rolls&&typeof snapshot.operationsDashboard.turnOrder.rolls==='object'?snapshot.operationsDashboard.turnOrder.rolls:{};
+    snapshot.preLoginHydratedAt=new Date().toISOString();
+    return snapshot;
+  }
+
+  const activateDashboardManagedVesselBeforeSynchronousHydration=activateDashboardManagedVessel;
+  activateDashboardManagedVessel=function activateDashboardManagedVesselWithSynchronousHydration(vesselId){
+    dashboardManagementHydrateSnapshotBeforeAnyLogin(vesselId);
+    return activateDashboardManagedVesselBeforeSynchronousHydration(vesselId);
+  };
+
   const DASHBOARD_MANAGEMENT_RECOVERY_PARTS=[
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-core.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt',
