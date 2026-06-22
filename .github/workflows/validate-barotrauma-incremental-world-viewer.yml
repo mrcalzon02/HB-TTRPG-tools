@@ -1,0 +1,80 @@
+name: Validate Barotrauma Incremental World Viewer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-performance.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt'
+      - '.github/workflows/validate-barotrauma-incremental-world-viewer.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-performance.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt'
+      - '.github/workflows/validate-barotrauma-incremental-world-viewer.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-incremental-viewer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile and verify incremental world viewer
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const loader = fs.readFileSync('barotrauma-rpg-tools-loader.js', 'utf8');
+          new Function(loader);
+          const runtimeMatch = loader.match(/const runtimeParts = \[([\s\S]*?)\n  \];/);
+          assert(runtimeMatch, 'runtimeParts array missing');
+          const runtimePaths = [...runtimeMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
+          assert.deepStrictEqual(runtimePaths.filter(path => !fs.existsSync(path)), [], 'Loader references missing runtime fragments');
+          assert(runtimePaths.includes('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-performance.txt'), 'Masterworld performance safeguard is not loaded');
+          new Function(runtimePaths.map(path => fs.readFileSync(path, 'utf8')).join(''));
+
+          const performancePath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-performance.txt';
+          const incrementalPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt';
+          const performance = fs.readFileSync(performancePath, 'utf8');
+          const incremental = fs.readFileSync(incrementalPath, 'utf8');
+          new Function(incremental);
+
+          assert(performance.includes(incrementalPath), 'Performance safeguard does not dynamically load the incremental viewer');
+          assert(performance.includes("fetch(path,{cache:'no-store'})"), 'Incremental viewer package is not fetched without cache');
+          assert(performance.includes('automaticGenerationDisabled:true'), 'Automatic Masterworld generation is not disabled');
+          assert(performance.includes('dashboardGenerateWorldExplicitOnly'), 'World generation is not isolated behind an explicit creation path');
+          assert(performance.includes('Load Saved Masterworld'), 'Saved Masterworld restore action is missing');
+
+          assert(incremental.includes("sort((left,right)=>right[0]-left[0])"), 'Ring packages are not ordered from the outermost ring inward');
+          assert(incremental.includes("DASHBOARD_INCREMENTAL_RING_DELAY_MS=900"), 'Ring-to-ring loading delay is not deliberately slow');
+          assert(incremental.includes("DASHBOARD_INCREMENTAL_NODE_BATCH_SIZE=16"), 'Node packages are not bounded to small batches');
+          assert(incremental.includes('requestIdleCallback'), 'Renderer does not yield to browser idle time');
+          assert(incremental.includes('dashboard-world-overall-progress'), 'Overall progress bar is missing');
+          assert(incremental.includes('dashboard-world-current-ring-progress'), 'Current-ring progress bar is missing');
+          assert(incremental.includes('data-world-ring-progress'), 'Independent per-ring progress bars are missing');
+          assert(incremental.includes('Stage 1 loads the outermost ring'), 'Outer-ring-first loading is not explained in the interface');
+          assert(incremental.includes('dashboardIncrementalLoadRing'), 'One-ring-at-a-time loader is missing');
+          assert(incremental.includes('dashboardIncrementalWaitWhilePaused'), 'Pause-safe ring loading is missing');
+          assert(incremental.includes('dashboard-world-pause-loader'), 'Pause control is missing');
+          assert(incremental.includes('dashboard-world-resume-loader'), 'Resume control is missing');
+          assert(incremental.includes("dashboardIncrementalCancel('viewer closed')"), 'Closing the viewer does not cancel pending ring work');
+          assert(incremental.includes('document.createDocumentFragment()'), 'Ring nodes are not appended in lightweight document fragments');
+          assert(incremental.includes('dashboardIncrementalBindNodeInspection'), 'Incrementally loaded nodes cannot be inspected');
+          assert(!incremental.includes('generateWorldMap('), 'The incremental viewer must never generate a world');
+          assert(!incremental.includes('dashboardStationCorridors('), 'The viewer must not compute the complete station corridor graph');
+
+          const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
+          assert(/barotrauma-rpg-tools-loader\.js\?v=\d+/.test(html), 'Operations page loader lacks a cache revision');
+
+          console.log('Validated outer-to-inner incremental Masterworld rendering with per-ring progress, browser yielding, and cancellation.');
+          NODE
