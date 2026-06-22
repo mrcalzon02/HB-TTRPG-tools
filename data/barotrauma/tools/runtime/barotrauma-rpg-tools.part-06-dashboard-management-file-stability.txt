@@ -36,8 +36,14 @@
     for(const group of Object.values(hub.publicState.groups||{})){
       const activeId=dashboardGroupActiveVesselId(group);
       if(!activeId)continue;
+      for(const vesselId of dashboardGroupFleetIds(group)){
+        if(vesselId===activeId)continue;
+        const record=hub.publicState.submarines?.[vesselId]||{};
+        dashboardMarkVesselInactive(vesselId,group,record.storedAtNodeId||record.currentNodeId||group.currentNodeId||group.startingNodeId,'Migrated legacy reserve submarine to explicit inactive storage');
+      }
       const snapshot=normalizeDashboardManagementAuthority().vesselSnapshots?.[activeId];
       if(snapshot?.route?.crossing?.status==='underway')dashboardMarkVesselActive(activeId,group,snapshot.route.crossing.currentNodeId||group.currentNodeId,'Preserved active submarine transit during fleet normalization');
+      else dashboardMarkVesselActive(activeId,group,group.currentNodeId||group.startingNodeId,'Normalized sole active group submarine');
     }
     return result;
   };
@@ -46,5 +52,6 @@
   globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_FILE_DIAGNOSTICS={
     ...(globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_FILE_DIAGNOSTICS||{}),
     transitPreservedDuringLogin:true,
-    inactiveVesselsRemainVisible:true
+    inactiveVesselsRemainVisible:true,
+    legacyReserveStatusMigrated:true
   };
