@@ -1,0 +1,107 @@
+name: Validate Barotrauma Management File Initialization
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-initialization.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-stability.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-claim.txt'
+      - '.github/workflows/validate-barotrauma-management-file-initialization.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-initialization.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-stability.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-claim.txt'
+      - '.github/workflows/validate-barotrauma-management-file-initialization.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-management-file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile and verify management-file rules
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const recoveryLoaderPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt';
+          const initializationPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-initialization.txt';
+          const stabilityPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-stability.txt';
+          const claimPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-file-claim.txt';
+
+          const loader = fs.readFileSync(recoveryLoaderPath, 'utf8');
+          const match = loader.match(/const DASHBOARD_MANAGEMENT_RECOVERY_PARTS=\[([\s\S]*?)\n  \];/);
+          assert(match, 'Dashboard management recovery package list is missing');
+          const paths = [...match[1].matchAll(/'([^']+)'/g)].map(result => result[1]);
+          assert.deepStrictEqual(paths.filter(path => !fs.existsSync(path)), [], 'Recovery package references missing files');
+          assert.deepStrictEqual(paths.slice(-3), [initializationPath, stabilityPath, claimPath], 'Management-file rules must load last, in initialization/stability/claim order');
+          new Function(paths.map(path => fs.readFileSync(path, 'utf8')).join(''));
+
+          const initialization = fs.readFileSync(initializationPath, 'utf8');
+          const stability = fs.readFileSync(stabilityPath, 'utf8');
+          const claim = fs.readFileSync(claimPath, 'utf8');
+          new Function(initialization);
+          new Function(stability);
+          new Function(claim);
+
+          assert(initialization.includes("characterInitializationModes:['import','create','random']"), 'Management-file character modes are incomplete');
+          assert(initialization.includes('dashboardCharacterFromImportText'), 'Character import parser is missing');
+          assert(initialization.includes('dashboardCharacterFromManual'), 'Manual character creation is missing');
+          assert(initialization.includes('dashboardRandomCharacter'), 'Randomized player-character generation is missing');
+          assert(initialization.includes("option value=\"import\""), 'New-submarine UI lacks character import');
+          assert(initialization.includes("option value=\"create\""), 'New-submarine UI lacks manual character creation');
+          assert(initialization.includes("option value=\"random\""), 'New-submarine UI lacks randomized character creation');
+          assert(initialization.includes('dashboard-create-character-file'), 'Character JSON file input is missing');
+          assert(initialization.includes('dashboard-create-manageable-vessel-v2'), 'New management-file creation is not bound to the replacement workflow');
+
+          assert(initialization.includes('dashboardNewGroupStartingStations'), 'Creation-time randomized station list is missing');
+          assert(initialization.includes("if(activeSubmarineDashboardContext()&&dashboardManagementRuntime.status==='authenticated')"), 'Post-login starting-location interception is missing');
+          assert(initialization.includes("return {ok:false,message:'Starting location is fixed when the management file or expedition group is created.'}"), 'Existing managed submarines can still change their starting location');
+          assert(initialization.includes('Starting-location randomization is available only while creating a new managed submarine in a new expedition group.'), 'Fixed-start explanation is missing');
+          assert(initialization.includes("startNodeId:groupSelect?.value?'':"), 'Existing groups can receive a randomized replacement start');
+
+          assert(initialization.includes('group.activeSubmarineId=vesselId'), 'Group active-submarine identifier is not maintained');
+          assert(initialization.includes('group.primarySubmarineId=vesselId'), 'Legacy primary-submarine identifier is not synchronized');
+          assert(initialization.includes("record.status='inactive'"), 'Replaced submarines are not marked inactive');
+          assert(initialization.includes('record.storedAtNodeId=locationNodeId'), 'Inactive submarines are not stored at a station location');
+          assert(initialization.includes("record.status='active'"), 'Selected submarines are not marked active');
+          assert(initialization.includes('dashboardPrepareGroupVesselActivation'), 'Vessel switching preflight is missing');
+          assert(initialization.includes('The group cannot change active submarines while its current submarine is In Route.'), 'In-route vessel switching is not blocked');
+          assert(initialization.includes('This inactive submarine is stored at'), 'Remote activation of a stored submarine is not blocked');
+          assert(initialization.includes('Preserved inactive vessel during world-registry synchronization'), 'World registry can overwrite inactive vessel storage state');
+          assert(stability.includes('active-transit-preserved'), 'Restoring the already-active submarine can erase an underway route');
+          assert(stability.includes('Migrated legacy reserve submarine to explicit inactive storage'), 'Legacy reserve vessels are not migrated to inactive storage');
+
+          assert(initialization.includes('dashboardVariedStatBlock'), 'Generated stat variety function is missing');
+          assert(initialization.includes('new Set(values).size===1'), 'Uniform generated stat blocks are not corrected');
+          assert(initialization.includes('highest-lowest<2'), 'Generated crew stat spread is not enforced');
+          assert(initialization.includes("source:'generated'"), 'On-the-spot crew are not identified as generated records');
+          assert(initialization.includes('dashboard-random-crew'), 'Random station crew control is missing');
+          assert(initialization.includes('Generate Random Crew at Station'), 'Random crew UI is missing');
+          assert(initialization.includes('dashboardCrewAdditionPermission()'), 'Generated crew bypass the station-only recruitment gate');
+
+          assert(claim.includes('claimExistingDashboardSubmarineWithFileInitialization'), 'Existing-vessel claims do not create initialized management files');
+          assert(claim.includes('dashboardClaimCharacterSetupFromControls'), 'Claim flow does not collect character initialization');
+          assert(claim.includes("option value=\"import\""), 'Claim flow lacks character import');
+          assert(claim.includes("option value=\"create\""), 'Claim flow lacks manual character creation');
+          assert(claim.includes("option value=\"random\""), 'Claim flow lacks randomized character creation');
+          assert(claim.includes('dashboard-claim-existing-vessel-v2'), 'Claim flow still uses the legacy no-character workflow');
+          assert(claim.includes("startNodeId:groupSelect?.value?'':"), 'Existing-group claims can change group starting location');
+
+          const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
+          assert(/barotrauma-rpg-tools-loader\.js\?v=\d+/.test(html), 'Operations page loader lacks a cache revision');
+
+          console.log('Validated creation-only starts, single active group vessels, stored reserves, varied generated crew, and explicit character initialization.');
+          NODE
