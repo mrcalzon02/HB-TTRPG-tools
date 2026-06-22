@@ -1,0 +1,130 @@
+
+  function dashboardManagementNormalizeLegacyRuntimeCollections(){
+    const defaults=defaultState();
+    state.character=state.character&&typeof state.character==='object'?state.character:defaults.character;
+    state.submarine=state.submarine&&typeof state.submarine==='object'?state.submarine:defaults.submarine;
+    state.route=state.route&&typeof state.route==='object'?state.route:defaults.route;
+    state.world=state.world&&typeof state.world==='object'?state.world:defaults.world;
+    state.operationsDashboard=state.operationsDashboard&&typeof state.operationsDashboard==='object'?state.operationsDashboard:defaultActiveSubmarineDashboard();
+
+    state.character.stats=state.character.stats&&typeof state.character.stats==='object'?state.character.stats:{Strength:3,Agility:3,Intelligence:3,Charisma:3};
+    state.character.current=state.character.current&&typeof state.character.current==='object'?state.character.current:{...state.character.stats};
+    state.character.rollLog=Array.isArray(state.character.rollLog)?state.character.rollLog:[];
+    state.character.catalogInventory=Array.isArray(state.character.catalogInventory)?state.character.catalogInventory:[];
+    state.character.consumptionLog=Array.isArray(state.character.consumptionLog)?state.character.consumptionLog:[];
+    state.character.inventory=String(state.character.inventory||'');
+    state.character.conditions=String(state.character.conditions||'');
+    state.character.notes=String(state.character.notes||'');
+
+    state.submarine.manual=state.submarine.manual&&typeof state.submarine.manual==='object'?state.submarine.manual:{speed:0,maneuverability:0,defense:0,capacity:0,hull:0};
+    state.submarine.resources=state.submarine.resources&&typeof state.submarine.resources==='object'?state.submarine.resources:{};
+    state.submarine.systems=state.submarine.systems&&typeof state.submarine.systems==='object'?state.submarine.systems:{};
+    state.submarine.upgrades=Array.isArray(state.submarine.upgrades)?state.submarine.upgrades:[];
+    state.submarine.weapons=Array.isArray(state.submarine.weapons)?state.submarine.weapons:[];
+    state.submarine.wikiWeapons=Array.isArray(state.submarine.wikiWeapons)?state.submarine.wikiWeapons:[];
+    state.submarine.wikiAmmo=Array.isArray(state.submarine.wikiAmmo)?state.submarine.wikiAmmo:[];
+    state.submarine.customModules=Array.isArray(state.submarine.customModules)?state.submarine.customModules:[];
+    state.submarine.upkeep=state.submarine.upkeep&&typeof state.submarine.upkeep==='object'?state.submarine.upkeep:{};
+
+    state.route.jobs=Array.isArray(state.route.jobs)?state.route.jobs:[];
+    state.route.plan=Array.isArray(state.route.plan)?state.route.plan:[];
+    state.route.table=state.route.table&&typeof state.route.table==='object'?state.route.table:{};
+    state.world.selected=Array.isArray(state.world.selected)?state.world.selected:[];
+    if(state.world.map&&typeof state.world.map==='object'){
+      state.world.map.nodes=Array.isArray(state.world.map.nodes)?state.world.map.nodes:[];
+      state.world.map.edges=Array.isArray(state.world.map.edges)?state.world.map.edges:[];
+    }
+
+    state.submarineLibrary=state.submarineLibrary&&typeof state.submarineLibrary==='object'?state.submarineLibrary:{custom:[],draft:typeof defaultCustomSubmarineDraft==='function'?defaultCustomSubmarineDraft():{}};
+    state.submarineLibrary.custom=Array.isArray(state.submarineLibrary.custom)?state.submarineLibrary.custom:[];
+    state.customContent=state.customContent&&typeof state.customContent==='object'?state.customContent:{entries:[],draft:typeof defaultCustomContentDraft==='function'?defaultCustomContentDraft():{},query:'',filterType:'All'};
+    state.customContent.entries=Array.isArray(state.customContent.entries)?state.customContent.entries:[];
+    return true;
+  }
+
+  function dashboardManagementRunActivationNormalizers(){
+    const stages=[
+      ['normalize base collections',()=>dashboardManagementNormalizeLegacyRuntimeCollections()],
+      ['normalize character inventory',()=>typeof normalizeCharacterInventory==='function'&&normalizeCharacterInventory()],
+      ['normalize inventory compatibility',()=>typeof normalizeCompatibilityInventory==='function'&&normalizeCompatibilityInventory()],
+      ['normalize player identity',()=>typeof normalizePlayerSubmissionSettings==='function'&&normalizePlayerSubmissionSettings()],
+      ['normalize crew roster',()=>typeof normalizeCrewManagement==='function'&&normalizeCrewManagement()],
+      ['normalize cargo manifest',()=>typeof normalizeCargoManagement==='function'&&normalizeCargoManagement()],
+      ['normalize route crossing',()=>typeof normalizeRouteCrossing==='function'&&normalizeRouteCrossing()],
+      ['normalize route event resolution',()=>typeof normalizeRouteEventResolutionState==='function'&&normalizeRouteEventResolutionState()],
+      ['normalize dashboard commissioning',()=>typeof normalizeDashboardCommissioningState==='function'&&normalizeDashboardCommissioningState()],
+      ['normalize dashboard turn order',()=>typeof normalizeDashboardTurnOrder==='function'&&normalizeDashboardTurnOrder()],
+      ['normalize starting location',()=>typeof normalizeDashboardStartingLocationState==='function'&&normalizeDashboardStartingLocationState()]
+    ];
+    for(const [stage,operation] of stages){
+      try{operation();}
+      catch(error){
+        const wrapped=new Error(`Dashboard state repair failed during ${stage}: ${error?.message||String(error)}`);
+        wrapped.cause=error;
+        wrapped.stack=`${wrapped.stack||wrapped.message}\nCaused by:\n${error?.stack||error}`;
+        throw wrapped;
+      }
+    }
+    return true;
+  }
+
+  function dashboardManagementResetFailedSession(vesselId,previousReceipts,error){
+    const credential=dashboardManagementCredential(vesselId);
+    if(credential)credential.receipts=previousReceipts&&typeof previousReceipts==='object'?previousReceipts:{};
+    dashboardManagementClearStoredSession();
+    dashboardManagementRuntime.status='locked';
+    dashboardManagementRuntime.vesselId='';
+    dashboardManagementRuntime.credentialId='';
+    dashboardManagementRuntime.receiptId='';
+    dashboardManagementRuntime.expiresAt='';
+    dashboardManagementRuntime.remembered=false;
+    dashboardManagementRuntime.message=error?.message||'The password was valid, but the submarine state could not be activated.';
+    dashboardManagementAudit('login-activation-failed',vesselId,{message:dashboardManagementRuntime.message,stack:String(error?.stack||'').slice(0,4000)});
+    save();
+  }
+
+  const establishDashboardManagementSessionBeforeTransactionalActivation=establishDashboardManagementSession;
+  establishDashboardManagementSession=async function establishDashboardManagementSessionTransactionally(vesselId,remember=false){
+    const credential=dashboardManagementCredential(vesselId);
+    const previousReceipts=cloneWorldData(credential?.receipts||{});
+    try{
+      dashboardManagementHydrateManagedSnapshot(vesselId);
+      dashboardManagementNormalizeLegacyRuntimeCollections();
+      const result=await establishDashboardManagementSessionBeforeTransactionalActivation(vesselId,remember);
+      dashboardManagementRunActivationNormalizers();
+      return result;
+    }catch(error){
+      dashboardManagementResetFailedSession(vesselId,previousReceipts,error);
+      throw error;
+    }
+  };
+
+  function dashboardManagementRenderFailureHtml(error){
+    const message=error?.message||String(error);
+    const stack=String(error?.stack||'').split('\n').slice(0,8).join('\n');
+    return `<div class="tool-shell"><section class="tool-hero" style="border-color:rgba(223,119,119,.75)"><div><p class="eyebrow">Authenticated vessel · state recovery required</p><h2>The password was accepted, but the saved submarine dashboard could not finish rendering</h2><p class="rules-note bad">${escapeHtml(message)}</p><p class="small-note">The login receipt remains valid. No password or recovery code was exposed. Retry after the automatic legacy-state repair, or log out without changing the vessel save.</p></div><span class="status-pill bad">RENDER ERROR</span></section><section class="tool-panel"><div class="button-row no-print"><button id="dashboard-management-retry-render" class="primary-action" type="button">Retry Repaired Dashboard</button><button id="dashboard-management-error-logout" class="danger-button" type="button">Log Out</button></div><details style="margin-top:12px"><summary><strong>Technical details</strong></summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${escapeHtml(stack||message)}</pre></details></section></div>`;
+  }
+
+  const renderActiveSubmarineDashboardBeforeTransactionalRecovery=renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard=function renderActiveSubmarineDashboardWithTransactionalRecovery(requestedFocus=activeDashboardRawFocus()){
+    if(dashboardManagementRuntime.status!=='authenticated')return renderActiveSubmarineDashboardBeforeTransactionalRecovery(requestedFocus);
+    try{
+      dashboardManagementHydrateManagedSnapshot(dashboardManagementRuntime.vesselId);
+      dashboardManagementRunActivationNormalizers();
+      return renderActiveSubmarineDashboardBeforeTransactionalRecovery(requestedFocus);
+    }catch(error){
+      dashboardManagementRuntime.lastRenderError={message:error?.message||String(error),stack:String(error?.stack||''),at:new Date().toISOString(),vesselId:dashboardManagementRuntime.vesselId};
+      dashboardManagementRuntime.message=dashboardManagementRuntime.lastRenderError.message;
+      console.error('Authenticated dashboard render failed after state repair.',error);
+      root.innerHTML=dashboardManagementRenderFailureHtml(error);
+      root.querySelector('#dashboard-management-retry-render')?.addEventListener('click',()=>{
+        dashboardManagementRunActivationNormalizers();
+        renderActiveSubmarineDashboard(requestedFocus);
+      });
+      root.querySelector('#dashboard-management-error-logout')?.addEventListener('click',()=>{
+        logoutDashboardManagementSession('dashboard render recovery logout');
+        renderActiveSubmarineDashboard();
+      });
+      return false;
+    }
+  };
