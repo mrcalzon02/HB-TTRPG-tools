@@ -10,6 +10,7 @@ on:
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-local-corridor-viewer.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-integrity-recovery.txt'
       - '.github/workflows/validate-barotrauma-local-station-topology.yml'
   pull_request:
     paths:
@@ -19,6 +20,7 @@ on:
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-local-corridor-viewer.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-integrity-recovery.txt'
       - '.github/workflows/validate-barotrauma-local-station-topology.yml'
 
 permissions:
@@ -32,7 +34,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Compile and verify sparse concentric routing
+      - name: Compile and verify local node lattice routing
         run: |
           node <<'NODE'
           const fs = require('fs');
@@ -42,70 +44,76 @@ jobs:
           const topologyPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt';
           const incrementalPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt';
           const corridorViewerPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-local-corridor-viewer.txt';
+          const integrityPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-integrity-recovery.txt';
           const oldTransitPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-active-submarine-transit-core.txt';
 
           const performance = fs.readFileSync(performancePath, 'utf8');
           const topology = fs.readFileSync(topologyPath, 'utf8');
           const incremental = fs.readFileSync(incrementalPath, 'utf8');
           const corridorViewer = fs.readFileSync(corridorViewerPath, 'utf8');
+          const integrity = fs.readFileSync(integrityPath, 'utf8');
           const oldTransit = fs.readFileSync(oldTransitPath, 'utf8');
           new Function(performance);
           new Function(topology);
           new Function(incremental);
           new Function(corridorViewer);
+          new Function(integrity);
 
           const optionalMatch = performance.match(/const DASHBOARD_INCREMENTAL_WORLD_VIEWER_PARTS=\[([\s\S]*?)\n  \];/);
           assert(optionalMatch, 'Optional Masterworld package list is missing');
           const optionalPaths = [...optionalMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
-          assert.deepStrictEqual(optionalPaths, [topologyPath, incrementalPath, corridorViewerPath], 'Sparse topology must load before the incremental viewer and corridor renderer');
+          assert.deepStrictEqual(optionalPaths, [topologyPath, incrementalPath, corridorViewerPath], 'Topology, incremental viewer, and renderer must load in order');
           assert.deepStrictEqual(optionalPaths.filter(path => !fs.existsSync(path)), [], 'Optional Masterworld package references missing files');
           new Function(optionalPaths.map(path => fs.readFileSync(path, 'utf8')).join(''));
 
           assert(oldTransit.includes('for (const station of map.nodes.filter'), 'Legacy all-pairs implementation is no longer detectable for regression protection');
           assert(oldTransit.includes('dashboardAdjacentStationRoutes(station.id, map)'), 'Legacy all-pairs nested station traversal changed; review replacement coverage');
-
-          assert(performance.includes('dashboardAdjacentStationRoutesWhileLocalTopologyLoads(){return [];}'), 'Routes are not disabled while sparse topology loads');
-          assert(performance.includes('dashboardStationCorridorsWhileLocalTopologyLoads(){return [];}'), 'Corridor rendering is not disabled while sparse topology loads');
+          assert(performance.includes('dashboardAdjacentStationRoutesWhileLocalTopologyLoads(){return [];}'), 'Routes are not disabled while local topology loads');
+          assert(performance.includes('dashboardStationCorridorsWhileLocalTopologyLoads(){return [];}'), 'Corridor rendering is not disabled while local topology loads');
           assert(!performance.includes('dashboardAdjacentStationRoutes=dashboardAdjacentStationRoutesBeforeLocalTopologyLoad'), 'Failure path restores the legacy route search');
           assert(!performance.includes('dashboardStationCorridors=dashboardStationCorridorsBeforeLocalTopologyLoad'), 'Failure path restores the legacy all-pairs corridor graph');
-          assert(performance.includes('Global station routing remains disabled'), 'Failure mode does not explicitly preserve the safe disabled state');
 
-          assert(topology.includes('stationsByRing.get(ring-1)||[]'), 'Inward connections are not limited to exactly one ring down');
-          assert(topology.includes('list[(index+1)%list.length]'), 'Same-ring connections are not limited to circularly adjacent stations');
-          assert(topology.includes("relation==='same-ring'&&ringDifference!==0"), 'Same-ring corridor invariant is missing');
-          assert(topology.includes("relation==='one-ring-inward'&&ringDifference!==1"), 'One-ring corridor invariant is missing');
-          assert(topology.includes('Math.abs(number(route.station.ring)-number(origin.ring))<=1'), 'Route listing can expose stations more than one ring away');
-          assert(topology.includes("if(ringDifference>1)throw new Error('Cross-planetary and multi-ring station routes are prohibited.'"), 'Route filing does not reject multi-ring destinations');
-          assert(topology.includes("if(typeof dashboardManagementAuthorized==='function'&&!dashboardManagementAuthorized())"), 'Asynchronous local route replacement bypasses management authentication');
-          assert(topology.includes('save=()=>{};'), 'Temporary two-station crossing map can be persisted during route construction');
-          assert(topology.includes('save=saveBeforeLocalCrossing;'), 'Normal save function is not restored after local route construction');
-          assert(topology.includes('allPairsSearchDisabled:true'), 'Topology diagnostics do not declare all-pairs search disabled');
-          assert(topology.includes('maximumRingDifference'), 'Topology diagnostics do not measure the maximum ring span');
-          assert(!topology.includes('while(queue.length)'), 'Sparse station topology contains a graph-wide queue search');
-          assert(!topology.includes('dashboardGraphIndex('), 'Sparse station topology calls the legacy full node graph index');
-          assert(!topology.includes('for(const station of map.nodes.filter'), 'Sparse topology loops over every station and launches route searches');
+          assert(topology.includes('function dashboardLocalWorldTopology'), 'Complete local node lattice builder is missing');
+          assert(topology.includes("addEdge(list[index],list[(index+1)%list.length],'same-ring-adjacent')"), 'Nodes are not connected only to immediate same-ring neighbors');
+          assert(topology.includes('const inward=nodesByRing.get(ring-1)||[]'), 'Inward node links are not limited to exactly one ring');
+          assert(topology.includes("addEdge(node,nearest,'one-ring-inward')"), 'Nearest one-ring inward edge is missing');
+          assert(topology.includes("edge.a==='anomaly'||edge.b==='anomaly'"), 'Diagnostics do not require the lattice to reach the central anomaly');
+          assert(topology.includes('dashboardRingForwardPath'), 'Same-ring station routes do not follow adjacent node segments');
+          assert(topology.includes('dashboardRingShortestPath'), 'Local ring paths are not bounded to adjacent segments');
+          assert(topology.includes('dashboardPathEdgeIds'), 'Station routes do not resolve through local edge identifiers');
+          assert(topology.includes('localNodePath:true'), 'Station routes are not marked as local node paths');
+          assert(topology.includes('nodes:pathNodes,edges:pathEdges'), 'Crossing generation does not use the actual short local path');
+          assert(topology.includes('route.edgeIds.length'), 'Route message does not report short segment count');
+          assert(topology.includes('directStationChordsDisabled:true'), 'Topology diagnostics do not prohibit direct station chords');
+          assert(topology.includes('maximumWorldEdgeRingDifference'), 'Topology diagnostics do not measure ring span');
+          assert(!topology.includes('while(queue.length)'), 'Local topology contains a graph-wide queue search');
+          assert(!topology.includes('dashboardGraphIndex('), 'Local topology calls the legacy full graph index');
+          assert(!topology.includes('pathNodeIds:[left.id,right.id]'), 'Direct station-to-station chord records remain');
 
-          assert(corridorViewer.includes('dashboardIncrementalLocalCorridorsForRing'), 'Incremental viewer does not package sparse corridors by ring');
-          assert(corridorViewer.includes('const displayRing=difference===0?leftRing:Math.min(leftRing,rightRing)'), 'One-ring-down corridors are not deferred until the inner ring loads');
-          assert(corridorViewer.includes('if(difference>1)return false;'), 'Viewer can render station corridors spanning multiple rings');
-          assert(corridorViewer.includes('dashboardLocalStationTopology(map)'), 'Viewer does not use the sparse station topology');
-          assert(!corridorViewer.includes('crossingPath('), 'Viewer performs route planning while drawing corridors');
-          assert(!corridorViewer.includes('dashboardGraphIndex('), 'Viewer invokes the full world graph');
+          assert(corridorViewer.includes('dashboardLocalWorldTopology(map)'), 'Viewer does not use the complete local node lattice');
+          assert(corridorViewer.includes('return topology.edges.filter'), 'Viewer is still rendering station corridor summaries');
+          assert(corridorViewer.includes('if(difference>1)return false;'), 'Viewer can render edges spanning multiple rings');
+          assert(corridorViewer.includes("edge.relation==='one-ring-inward'"), 'Viewer does not distinguish one-step inward edges');
+          assert(corridorViewer.includes('one local segment'), 'Visible line descriptions do not identify local segments');
+          assert(corridorViewer.includes('complete local location lattice'), 'Viewer does not explain full ring-to-center lattice rendering');
+          assert(corridorViewer.includes('directStationChordsRendered:false'), 'Renderer diagnostics do not prohibit station chords');
+          assert(corridorViewer.includes('reachesCentralAnomaly'), 'Renderer diagnostics do not verify center connectivity');
+          assert(!corridorViewer.includes('topology.corridors.filter'), 'Viewer still reads direct station corridors');
+          assert(!corridorViewer.includes('topology.stationById'), 'Viewer still draws station endpoint chords');
+          assert(!corridorViewer.includes('crossingPath('), 'Viewer performs route planning while drawing');
+          assert(corridorViewer.includes(integrityPath), 'Integrity recovery package is not loaded after the renderer');
+          assert(corridorViewer.includes("fetch(path,{cache:'no-store'})"), 'Integrity recovery package can be stale-cached');
 
-          assert(corridorViewer.includes('dashboardSavedMasterWorldCandidatesLargestFirst'), 'Saved Masterworld recovery candidates are not re-ranked by completeness');
-          assert(corridorViewer.includes('right.nodeCount-left.nodeCount'), 'Candidate recovery does not prioritize node count');
-          assert(corridorViewer.includes('right.ringCount-left.ringCount'), 'Candidate recovery does not prioritize ring coverage');
-          assert(corridorViewer.includes('dashboardPreserveCurrentMasterWorldSafetyCheckpoint'), 'Current map is not preserved before recovery');
-          assert(corridorViewer.includes('Safety copy before Masterworld recovery'), 'Safety checkpoint is not clearly labeled');
-          assert(corridorViewer.includes('allowReplace=false'), 'Valid active maps can be replaced without an explicit recovery path');
-          assert(corridorViewer.includes('No world generation was performed.'), 'Recovery messaging does not explicitly prohibit regeneration');
-          assert(corridorViewer.includes('No larger checkpoint is present in this browser save.'), 'Missing larger-map recovery state is not explained');
-          assert(corridorViewer.includes('dashboard-masterworld-integrity-warning'), 'Undersized-map warning is absent from the viewer');
-          assert(corridorViewer.includes('current.ringCount<40||current.nodeCount<400'), 'Legacy-scale maps are not detected');
-          assert(corridorViewer.includes('recoveryGeneratesWorld:false'), 'Integrity diagnostics do not guarantee non-generative recovery');
+          assert(integrity.includes('dashboardSavedMasterWorldCandidatesLargestFirst'), 'Saved Masterworld recovery candidates are not ranked by completeness');
+          assert(integrity.includes('right.nodeCount-left.nodeCount'), 'Candidate recovery does not prioritize node count');
+          assert(integrity.includes('right.ringCount-left.ringCount'), 'Candidate recovery does not prioritize ring coverage');
+          assert(integrity.includes('dashboardPreserveCurrentMasterWorldSafetyCheckpoint'), 'Current map is not preserved before recovery');
+          assert(integrity.includes('No world generation was performed.'), 'Recovery messaging does not explicitly prohibit regeneration');
+          assert(integrity.includes('dashboard-masterworld-integrity-warning'), 'Undersized-map warning is absent');
+          assert(integrity.includes('recoveryGeneratesWorld:false'), 'Integrity diagnostics do not guarantee non-generative recovery');
 
           const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
           assert(/barotrauma-rpg-tools-loader\.js\?v=\d+/.test(html), 'Operations page loader lacks a cache revision');
 
-          console.log('Validated sparse local topology and safe largest-checkpoint Masterworld recovery without regeneration.');
+          console.log('Validated complete short-range local lattice routing, center connectivity, and safe Masterworld recovery.');
           NODE
