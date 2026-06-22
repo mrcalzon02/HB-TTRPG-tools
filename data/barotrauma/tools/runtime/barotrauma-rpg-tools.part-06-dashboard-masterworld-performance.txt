@@ -1,0 +1,151 @@
+
+  const DASHBOARD_MASTERWORLD_PERFORMANCE_VERSION='1.0.0';
+
+  function dashboardMasterWorldMapValid(world=state.world){
+    return Boolean(world?.map&&Array.isArray(world.map.nodes)&&world.map.nodes.length&&Array.isArray(world.map.edges));
+  }
+
+  function dashboardSavedMasterWorldCandidates(){
+    const hub=normalizeWorldHub();
+    const authoritativeId=String(state.world?.masterWorldId||hub.masterWorldId||hub.worldId||'');
+    const candidates=[];
+    const add=(id,label,world,savedAt,source)=>{
+      if(!dashboardMasterWorldMapValid(world))return;
+      const mapWorldId=String(world.map.masterWorldId||world.map.worldId||world.masterWorldId||world.worldId||'');
+      candidates.push({id,label,world,savedAt:String(savedAt||world.map.generatedAt||''),source,mapWorldId,matchesAuthoritative:Boolean(authoritativeId&&mapWorldId===authoritativeId)});
+    };
+    if(state.world?.scaleMigrationArchive?.map){
+      const archive=state.world.scaleMigrationArchive;
+      add('scale-migration-archive','Preserved Masterworld map from scale migration',{
+        ...state.world,
+        seed:archive.seed||state.world.seed,
+        rings:archive.rings||archive.map.rings||state.world.rings,
+        nodes:archive.nodes||archive.map.nodes.length,
+        stationTarget:archive.stationTarget||archive.map.stationTarget||state.world.stationTarget,
+        branching:archive.branching??state.world.branching,
+        shellRadius:archive.shellRadius||archive.map.shellRadius||state.world.shellRadius,
+        map:archive.map,
+        selected:Array.isArray(archive.selected)?archive.selected:[]
+      },archive.archivedAt,'scale-migration-archive');
+    }
+    for(const checkpoint of hub.savedStates||[]){
+      const world=checkpoint?.payload?.world;
+      if(!world)continue;
+      add(checkpoint.saveId||uid('saved-masterworld'),checkpoint.label||`World checkpoint ${checkpoint.revision||''}`,world,checkpoint.savedAt,'checkpoint');
+    }
+    return candidates.sort((left,right)=>Number(right.matchesAuthoritative)-Number(left.matchesAuthoritative)||Date.parse(right.savedAt||0)-Date.parse(left.savedAt||0));
+  }
+
+  function dashboardRestoreSavedMasterWorld(candidateId=''){
+    if(dashboardMasterWorldMapValid())return {ok:true,message:'The saved Masterworld is already loaded. No generation was performed.'};
+    const candidates=dashboardSavedMasterWorldCandidates();
+    const candidate=candidates.find(item=>item.id===candidateId)||candidates[0];
+    if(!candidate)return {ok:false,message:'No saved Masterworld map was found in the active campaign state or its checkpoints. Import the Masterworld save instead of repeatedly generating replacements.'};
+    const hub=normalizeWorldHub();
+    const authoritativeId=String(state.world?.masterWorldId||hub.masterWorldId||hub.worldId||candidate.mapWorldId||'');
+    state.world=cloneWorldData(candidate.world);
+    state.world.selected=Array.isArray(state.world.selected)?state.world.selected:[];
+    state.world.masterWorldId=authoritativeId;
+    state.world.worldId=authoritativeId;
+    if(state.world.map){
+      state.world.map.masterWorldId=authoritativeId;
+      state.world.map.worldId=authoritativeId;
+    }
+    hub.worldId=authoritativeId;
+    hub.masterWorldId=authoritativeId;
+    if(typeof synchronizeMasterWorldId==='function')synchronizeMasterWorldId(false);
+    assignMissingGroupStarts();
+    globalThis.__BAROTRAUMA_DASHBOARD_GRAPH_CACHE=null;
+    globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE=null;
+    save();
+    return {ok:true,message:`Loaded the saved Masterworld from ${candidate.label}. No world generation was performed.`};
+  }
+
+  function dashboardLightweightMasterWorldSvg(context){
+    const map=state.world?.map;
+    if(!dashboardMasterWorldMapValid())return '';
+    const stations=map.nodes.filter(node=>node.type==='station');
+    const currentId=context.group.currentNodeId;
+    const focusedId=state.operationsDashboard.focusedNodeId;
+    const centerX=number(map.width)/2;
+    const centerY=number(map.height)/2;
+    const shellRadius=Math.max(1,number(map.shellRadius,Math.min(map.width,map.height)/2));
+    const guideCount=Math.min(12,Math.max(4,Math.round(number(map.rings,48)/4)));
+    let labels=0;
+    return `<svg viewBox="0 0 ${number(map.width)} ${number(map.height)}" role="img" aria-label="Lightweight saved Masterworld station overview" style="width:100%;height:760px;min-width:1000px;display:block;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.5));border-radius:14px">
+      ${Array.from({length:guideCount},(_,index)=>{const radius=shellRadius*(index+1)/guideCount;return `<circle cx="${centerX}" cy="${centerY}" r="${radius}" fill="none" stroke="#59616d" stroke-width="2" opacity=".28"/>`;}).join('')}
+      ${stations.map(station=>{const current=station.id===currentId;const focused=station.id===focusedId;const showLabel=current||focused||labels++<20;return `<g class="dashboard-world-station" data-station-id="${escapeHtml(station.id)}" transform="translate(${number(station.x)} ${number(station.y)})" style="cursor:pointer"><circle r="${current?30:focused?22:11}" fill="${current?'#e65353':focused?'#d6aa54':'#2d6686'}" stroke="#fff" stroke-width="${current?8:focused?6:2}"/>${showLabel?`<text x="${current?40:19}" y="5" fill="#e8edf2" font-size="${current?20:13}" font-weight="${current?900:700}" pointer-events="none">${escapeHtml(station.name)}</text>`:''}</g>`;}).join('')}
+    </svg>`;
+  }
+
+  dashboardWorldViewerSvg=function dashboardWorldViewerLightweight(context){
+    return dashboardLightweightMasterWorldSvg(context);
+  };
+
+  dashboardWorldPanelHtml=function dashboardWorldPanelSavedMasterWorld(context,focus){
+    const world=state.world;
+    const map=world?.map;
+    if(!dashboardMasterWorldMapValid(world)){
+      const candidates=dashboardSavedMasterWorldCandidates();
+      return `<section id="active-dashboard-world" class="tool-panel ${focus==='world'?'dashboard-focused-panel':''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Saved Masterworld authority</p><h3>Masterworld map is not loaded</h3><p class="small-note">The dashboard will not generate a replacement automatically. Restore the existing Masterworld from a campaign checkpoint or import its save. Creating a new world is a separate destructive operation.</p></div><span class="status-pill warn">MAP UNLOADED</span></div>
+        ${candidates.length?`<div class="field-grid" style="margin-top:12px"><label class="field">Saved Masterworld source<select id="dashboard-saved-masterworld-source">${candidates.map(candidate=>`<option value="${escapeHtml(candidate.id)}">${escapeHtml(candidate.label)}${candidate.matchesAuthoritative?' · authoritative ID match':''} · ${candidate.world.map.nodes.length} locations</option>`).join('')}</select><span class="small-note">Loading restores saved map data; it does not regenerate locations.</span></label><div class="button-row" style="align-self:end"><button id="dashboard-restore-masterworld" class="primary-action" type="button">Load Saved Masterworld</button></div></div>`:'<div class="notice warn" style="margin-top:12px">No recoverable Masterworld map is embedded in the current browser state. Use Import Suite JSON or import the unified world save.</div>'}
+        <details style="margin-top:12px"><summary><strong>Create an entirely new Masterworld</strong></summary><p class="small-note bad">This is not a load operation. It discards the current map and builds a new campaign graph from the configured seed.</p><div class="button-row"><button id="dashboard-create-new-masterworld" class="danger-button" type="button">Create New Masterworld</button></div></details></section>`;
+    }
+    const current=crossingNode(context.group.currentNodeId,map);
+    const routes=current?.type==='station'?dashboardAdjacentStationRoutes(current.id,map):[];
+    const focused=crossingNode(state.operationsDashboard.focusedNodeId,map);
+    const viewerOpen=Boolean(state.operationsDashboard.worldViewerOpen);
+    return `<section id="active-dashboard-world" class="tool-panel ${focus==='world'?'dashboard-focused-panel':''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Saved Masterworld · immediate station routes</p><h3>${escapeHtml(current?.name||'Current station unavailable')}</h3><p class="small-note">This dashboard is reading the persistent Masterworld already held in campaign state. It does not generate the world when opened. The operational board shows only immediately reachable stations.</p></div><button id="dashboard-open-world-viewer" class="secondary-action no-print" type="button" ${viewerOpen?'disabled':''}>Open Lightweight Masterworld Overview</button></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Masterworld ID</span><strong>${escapeHtml(state.world.masterWorldId||normalizeWorldHub().masterWorldId||normalizeWorldHub().worldId)}</strong></div><div class="metric"><span>Saved locations</span><strong>${map.nodes.length}</strong></div><div class="metric"><span>Saved stations</span><strong>${map.nodes.filter(node=>node.type==='station').length}</strong></div><div class="metric"><span>Adjacent routes</span><strong>${routes.length}</strong></div><div class="metric"><span>Map generated</span><strong>${escapeHtml(map.generatedAt||'Saved map')}</strong></div></div>
+      <div class="map-frame" style="min-height:0;margin-top:12px;overflow:hidden">${dashboardAdjacentStationMapSvg(context,routes)}</div>
+      <div class="card-list" style="margin-top:12px">${routes.map(route=>`<div class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h4>${escapeHtml(route.station.name)}</h4><p class="small-note">${route.pathNodeIds.length-1} mapped segment${route.pathNodeIds.length-1===1?'':'s'} · distance ${route.distance} · ${route.danger?'dangerous corridor':'standard corridor'}</p></div><button class="compact-button dashboard-select-adjacent-route" data-station-id="${escapeHtml(route.stationId)}" type="button" ${state.operationsDashboard.operationalState==='in-route'?'disabled':''}>Select Route</button></div></div>`).join('')||'<div class="notice">No immediately adjacent station routes were found from the current station.</div>'}</div>
+      ${focused?`<div class="notice" style="margin-top:10px"><strong>${escapeHtml(focused.name)}</strong> · Ring ${number(focused.ring)} · Level ${number(focused.locationLevel,1)}<br>${escapeHtml(focused.locationLore||focused.details||'')}</div>`:''}</section>
+      ${viewerOpen?`<section id="dashboard-world-viewer" class="tool-panel dashboard-focused-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Lightweight saved Masterworld overview</p><h3>Europa Station Positions</h3><p class="small-note">Only station markers and depth guides are rendered. The browser no longer computes and draws the complete all-stations corridor network merely to view the world.</p></div><button id="dashboard-close-world-viewer" class="secondary-action no-print" type="button">Close Masterworld Overview</button></div><div class="map-frame" style="min-height:0;margin-top:12px;overflow:auto">${dashboardLightweightMasterWorldSvg(context)}</div></section>`:''}`;
+  };
+
+  const dashboardGenerateWorldBeforeMasterWorldPerformance=dashboardGenerateWorld;
+  dashboardGenerateWorld=function dashboardGenerateWorldExplicitOnly(randomize=false,explicitCreation=false){
+    if(!explicitCreation){
+      dashboardSetMessage(dashboardMasterWorldMapValid()?'The saved Masterworld is already loaded. No generation was performed.':'Automatic world generation is disabled. Load or import the saved Masterworld instead.',!dashboardMasterWorldMapValid());
+      renderSubmarine();
+      return false;
+    }
+    return dashboardGenerateWorldBeforeMasterWorldPerformance(randomize);
+  };
+
+  const bindActiveDashboardControlsBeforeMasterWorldPerformance=bindActiveDashboardControls;
+  bindActiveDashboardControls=function bindActiveDashboardControlsWithMasterWorldPerformance(context,focus){
+    bindActiveDashboardControlsBeforeMasterWorldPerformance(context,focus);
+    root.querySelector('#dashboard-restore-masterworld')?.addEventListener('click',()=>{
+      const result=dashboardRestoreSavedMasterWorld(root.querySelector('#dashboard-saved-masterworld-source')?.value||'');
+      dashboardSetMessage(result.message,!result.ok);
+      renderSubmarine();
+    });
+    root.querySelector('#dashboard-create-new-masterworld')?.addEventListener('click',()=>{
+      const confirmed=window.confirm('Create an entirely new Masterworld? This is not a load operation and will replace the current campaign map.');
+      if(!confirmed)return;
+      dashboardGenerateWorld(true,true);
+    });
+  };
+
+  const renderActiveSubmarineDashboardBeforeMasterWorldPerformance=renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard=function renderActiveSubmarineDashboardWithoutAutomaticFullWorld(requestedFocus=activeDashboardRawFocus()){
+    const deferFullViewer=requestedFocus==='world'&&!state.operationsDashboard?.worldViewerOpen;
+    const result=renderActiveSubmarineDashboardBeforeMasterWorldPerformance(deferFullViewer?'overview':requestedFocus);
+    if(deferFullViewer){
+      const worldButton=root.querySelector('.dashboard-focus[data-focus="world"]');
+      const vesselButton=root.querySelector('.dashboard-focus[data-focus="submarine"]');
+      if(worldButton){worldButton.classList.remove('secondary-action');worldButton.classList.add('primary-action');}
+      if(vesselButton){vesselButton.classList.remove('primary-action');vesselButton.classList.add('secondary-action');}
+      requestAnimationFrame(()=>root.querySelector('#active-dashboard-world')?.scrollIntoView({block:'start'}));
+    }
+    return result;
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_PERFORMANCE={
+    version:DASHBOARD_MASTERWORLD_PERFORMANCE_VERSION,
+    hasLoadedMap:dashboardMasterWorldMapValid(),
+    recoverableSavedMaps:dashboardSavedMasterWorldCandidates().length,
+    automaticGenerationDisabled:true,
+    fullCorridorRenderingDisabled:true
+  };
