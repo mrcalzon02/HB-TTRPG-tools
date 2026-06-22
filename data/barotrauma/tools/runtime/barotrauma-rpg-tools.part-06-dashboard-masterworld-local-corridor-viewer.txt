@@ -1,0 +1,71 @@
+
+  const DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION='1.0.0';
+
+  function dashboardIncrementalLocalCorridorsForRing(packageInfo,map=state.world?.map){
+    if(typeof dashboardLocalStationTopology!=='function')return [];
+    const topology=dashboardLocalStationTopology(map);
+    return topology.corridors.filter(corridor=>{
+      const left=topology.stationById[corridor.a];
+      const right=topology.stationById[corridor.b];
+      if(!left||!right)return false;
+      const leftRing=Math.round(number(left.ring));
+      const rightRing=Math.round(number(right.ring));
+      const difference=Math.abs(leftRing-rightRing);
+      if(difference>1)return false;
+      const displayRing=difference===0?leftRing:Math.min(leftRing,rightRing);
+      return displayRing===packageInfo.ring;
+    });
+  }
+
+  function dashboardIncrementalAddLocalCorridors(packageInfo,map=state.world?.map){
+    const layer=root.querySelector('#dashboard-incremental-world-corridors');
+    if(!layer)return 0;
+    const topology=dashboardLocalStationTopology(map);
+    const fragment=document.createDocumentFragment();
+    let added=0;
+    for(const corridor of dashboardIncrementalLocalCorridorsForRing(packageInfo,map)){
+      if(layer.querySelector(`[data-local-corridor-id="${CSS.escape(corridor.id)}"]`))continue;
+      const left=topology.stationById[corridor.a];
+      const right=topology.stationById[corridor.b];
+      if(!left||!right)continue;
+      const line=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'line');
+      line.dataset.localCorridorId=corridor.id;
+      line.setAttribute('x1',String(number(left.x)));
+      line.setAttribute('y1',String(number(left.y)));
+      line.setAttribute('x2',String(number(right.x)));
+      line.setAttribute('y2',String(number(right.y)));
+      line.setAttribute('stroke',corridor.danger?'#b95d68':corridor.relation==='one-ring-inward'?'#57b9ff':'#6f8f72');
+      line.setAttribute('stroke-width',corridor.relation==='one-ring-inward'?'3':'2');
+      line.setAttribute('opacity','.58');
+      line.setAttribute('vector-effect','non-scaling-stroke');
+      const title=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'title');
+      title.textContent=`${left.name} ↔ ${right.name} · ${corridor.relation.replaceAll('-',' ')} · distance ${corridor.distance}`;
+      line.appendChild(title);
+      fragment.appendChild(line);
+      added+=1;
+    }
+    layer.appendChild(fragment);
+    return added;
+  }
+
+  const dashboardIncrementalWorldViewerHtmlBeforeLocalCorridors=dashboardIncrementalWorldViewerHtml;
+  dashboardIncrementalWorldViewerHtml=function dashboardIncrementalWorldViewerHtmlWithLocalCorridors(context){
+    return dashboardIncrementalWorldViewerHtmlBeforeLocalCorridors(context)
+      .replace('<g id="dashboard-incremental-world-guides"></g>','<g id="dashboard-incremental-world-corridors"></g><g id="dashboard-incremental-world-guides"></g>')
+      .replace('No world generation occurs.','No world generation occurs. Only same-ring neighboring stations and one-ring-down station corridors are drawn.');
+  };
+
+  const dashboardIncrementalLoadRingBeforeLocalCorridors=dashboardIncrementalLoadRing;
+  dashboardIncrementalLoadRing=async function dashboardIncrementalLoadRingWithLocalCorridors(packageInfo,context,map,token,skipDelayRef){
+    if(token!==dashboardIncrementalWorldViewerRuntime.token)return false;
+    dashboardIncrementalAddLocalCorridors(packageInfo,map);
+    return dashboardIncrementalLoadRingBeforeLocalCorridors(packageInfo,context,map,token,skipDelayRef);
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_LOCAL_CORRIDOR_VIEWER_DIAGNOSTICS={
+    version:DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION,
+    corridorCount:typeof dashboardLocalStationTopology==='function'?dashboardLocalStationTopology().corridors.length:0,
+    maximumRingDifference:typeof dashboardLocalStationTopology==='function'?Math.max(0,...dashboardLocalStationTopology().corridors.map(corridor=>Math.abs(number(dashboardLocalStationTopology().stationById[corridor.a]?.ring)-number(dashboardLocalStationTopology().stationById[corridor.b]?.ring)))):0,
+    allPairsRenderingDisabled:true,
+    localCorridorsOnly:true
+  };
