@@ -1,5 +1,5 @@
 
-  const DASHBOARD_MASTERWORLD_PERFORMANCE_VERSION='1.0.0';
+  const DASHBOARD_MASTERWORLD_PERFORMANCE_VERSION='1.1.0';
 
   function dashboardMasterWorldMapValid(world=state.world){
     return Boolean(world?.map&&Array.isArray(world.map.nodes)&&world.map.nodes.length&&Array.isArray(world.map.edges));
@@ -57,6 +57,7 @@
     assignMissingGroupStarts();
     globalThis.__BAROTRAUMA_DASHBOARD_GRAPH_CACHE=null;
     globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE=null;
+    globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE=null;
     save();
     return {ok:true,message:`Loaded the saved Masterworld from ${candidate.label}. No world generation was performed.`};
   }
@@ -95,12 +96,12 @@
     const routes=current?.type==='station'?dashboardAdjacentStationRoutes(current.id,map):[];
     const focused=crossingNode(state.operationsDashboard.focusedNodeId,map);
     const viewerOpen=Boolean(state.operationsDashboard.worldViewerOpen);
-    return `<section id="active-dashboard-world" class="tool-panel ${focus==='world'?'dashboard-focused-panel':''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Saved Masterworld · immediate station routes</p><h3>${escapeHtml(current?.name||'Current station unavailable')}</h3><p class="small-note">This dashboard is reading the persistent Masterworld already held in campaign state. It does not generate the world when opened. The operational board shows only immediately reachable stations.</p></div><button id="dashboard-open-world-viewer" class="secondary-action no-print" type="button" ${viewerOpen?'disabled':''}>Open Lightweight Masterworld Overview</button></div>
-      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Masterworld ID</span><strong>${escapeHtml(state.world.masterWorldId||normalizeWorldHub().masterWorldId||normalizeWorldHub().worldId)}</strong></div><div class="metric"><span>Saved locations</span><strong>${map.nodes.length}</strong></div><div class="metric"><span>Saved stations</span><strong>${map.nodes.filter(node=>node.type==='station').length}</strong></div><div class="metric"><span>Adjacent routes</span><strong>${routes.length}</strong></div><div class="metric"><span>Map generated</span><strong>${escapeHtml(map.generatedAt||'Saved map')}</strong></div></div>
+    return `<section id="active-dashboard-world" class="tool-panel ${focus==='world'?'dashboard-focused-panel':''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Saved Masterworld · local concentric routes</p><h3>${escapeHtml(current?.name||'Current station unavailable')}</h3><p class="small-note">This dashboard reads the persistent Masterworld. Station routes are limited to immediate clockwise/counterclockwise neighbors and the next concentric ring. No cross-planetary route search is performed.</p></div><button id="dashboard-open-world-viewer" class="secondary-action no-print" type="button" ${viewerOpen?'disabled':''}>Open Lightweight Masterworld Overview</button></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Masterworld ID</span><strong>${escapeHtml(state.world.masterWorldId||normalizeWorldHub().masterWorldId||normalizeWorldHub().worldId)}</strong></div><div class="metric"><span>Saved locations</span><strong>${map.nodes.length}</strong></div><div class="metric"><span>Saved stations</span><strong>${map.nodes.filter(node=>node.type==='station').length}</strong></div><div class="metric"><span>Local routes</span><strong>${routes.length}</strong></div><div class="metric"><span>Topology</span><strong>Same ring / ±1 ring</strong></div></div>
       <div class="map-frame" style="min-height:0;margin-top:12px;overflow:hidden">${dashboardAdjacentStationMapSvg(context,routes)}</div>
-      <div class="card-list" style="margin-top:12px">${routes.map(route=>`<div class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h4>${escapeHtml(route.station.name)}</h4><p class="small-note">${route.pathNodeIds.length-1} mapped segment${route.pathNodeIds.length-1===1?'':'s'} · distance ${route.distance} · ${route.danger?'dangerous corridor':'standard corridor'}</p></div><button class="compact-button dashboard-select-adjacent-route" data-station-id="${escapeHtml(route.stationId)}" type="button" ${state.operationsDashboard.operationalState==='in-route'?'disabled':''}>Select Route</button></div></div>`).join('')||'<div class="notice">No immediately adjacent station routes were found from the current station.</div>'}</div>
+      <div class="card-list" style="margin-top:12px">${routes.map(route=>`<div class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h4>${escapeHtml(route.station.name)}</h4><p class="small-note">${escapeHtml(route.relation?.replaceAll('-',' ')||'local corridor')} · distance ${route.distance} · ${route.danger?'dangerous corridor':'standard corridor'}</p></div><button class="compact-button dashboard-select-adjacent-route" data-station-id="${escapeHtml(route.stationId)}" type="button" ${state.operationsDashboard.operationalState==='in-route'?'disabled':''}>Select Route</button></div></div>`).join('')||'<div class="notice">No same-ring or next-ring station corridor is available from this station.</div>'}</div>
       ${focused?`<div class="notice" style="margin-top:10px"><strong>${escapeHtml(focused.name)}</strong> · Ring ${number(focused.ring)} · Level ${number(focused.locationLevel,1)}<br>${escapeHtml(focused.locationLore||focused.details||'')}</div>`:''}</section>
-      ${viewerOpen?`<section id="dashboard-world-viewer" class="tool-panel dashboard-focused-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Lightweight saved Masterworld overview</p><h3>Europa Station Positions</h3><p class="small-note">Only station markers and depth guides are rendered. The browser no longer computes and draws the complete all-stations corridor network merely to view the world.</p></div><button id="dashboard-close-world-viewer" class="secondary-action no-print" type="button">Close Masterworld Overview</button></div><div class="map-frame" style="min-height:0;margin-top:12px;overflow:auto">${dashboardLightweightMasterWorldSvg(context)}</div></section>`:''}`;
+      ${viewerOpen?`<section id="dashboard-world-viewer" class="tool-panel dashboard-focused-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Lightweight saved Masterworld overview</p><h3>Europa Station Positions</h3><p class="small-note">Only local concentric station corridors are eligible. The browser never computes a complete all-stations route graph.</p></div><button id="dashboard-close-world-viewer" class="secondary-action no-print" type="button">Close Masterworld Overview</button></div><div class="map-frame" style="min-height:0;margin-top:12px;overflow:auto">${dashboardLightweightMasterWorldSvg(context)}</div></section>`:''}`;
   };
 
   const dashboardGenerateWorldBeforeMasterWorldPerformance=dashboardGenerateWorld;
@@ -147,10 +148,22 @@
     hasLoadedMap:dashboardMasterWorldMapValid(),
     recoverableSavedMaps:dashboardSavedMasterWorldCandidates().length,
     automaticGenerationDisabled:true,
-    fullCorridorRenderingDisabled:true
+    fullCorridorRenderingDisabled:true,
+    allPairsStationPlanningDisabled:true
+  };
+
+  const dashboardAdjacentStationRoutesBeforeLocalTopologyLoad=dashboardAdjacentStationRoutes;
+  const dashboardStationCorridorsBeforeLocalTopologyLoad=dashboardStationCorridors;
+  const generateValidCrossingBeforeLocalTopologyLoad=generateValidCrossing;
+  dashboardAdjacentStationRoutes=function dashboardAdjacentStationRoutesWhileLocalTopologyLoads(){return [];};
+  dashboardStationCorridors=function dashboardStationCorridorsWhileLocalTopologyLoads(){return [];};
+  generateValidCrossing=function generateValidCrossingWhileLocalTopologyLoads(){
+    if(activeSubmarineDashboardContext())throw new Error('Local station topology is still loading. Wait for the route panel to refresh.');
+    return generateValidCrossingBeforeLocalTopologyLoad();
   };
 
   const DASHBOARD_INCREMENTAL_WORLD_VIEWER_PARTS=[
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt'
   ];
 
@@ -161,16 +174,22 @@
       if(failed)throw new Error(`${failed.url} returned ${failed.status}`);
       const source=(await Promise.all(responses.map(response=>response.text()))).join('');
       eval(source);
+      globalThis.BAROTRAUMA_DASHBOARD_LOCAL_STATION_TOPOLOGY_READY=true;
       globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_READY=true;
       if(activeSubmarineDashboardContext())render();
       return true;
     }catch(error){
+      dashboardAdjacentStationRoutes=dashboardAdjacentStationRoutesBeforeLocalTopologyLoad;
+      dashboardStationCorridors=dashboardStationCorridorsBeforeLocalTopologyLoad;
+      generateValidCrossing=generateValidCrossingBeforeLocalTopologyLoad;
+      globalThis.BAROTRAUMA_DASHBOARD_LOCAL_STATION_TOPOLOGY_READY=false;
       globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_READY=false;
       globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_ERROR=error.message||String(error);
-      console.error('Incremental Masterworld viewer failed to load.',error);
+      console.error('Local station topology or incremental Masterworld viewer failed to load.',error);
       return false;
     }
   }
 
+  globalThis.BAROTRAUMA_DASHBOARD_LOCAL_STATION_TOPOLOGY_READY=false;
   globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_READY=false;
   globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_PROMISE=loadDashboardIncrementalWorldViewer();
