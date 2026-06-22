@@ -1,12 +1,12 @@
 
-  const DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION='1.1.0';
+  const DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION='2.0.0';
 
   function dashboardIncrementalLocalCorridorsForRing(packageInfo,map=state.world?.map){
-    if(typeof dashboardLocalStationTopology!=='function')return [];
-    const topology=dashboardLocalStationTopology(map);
-    return topology.corridors.filter(corridor=>{
-      const left=topology.stationById[corridor.a];
-      const right=topology.stationById[corridor.b];
+    if(typeof dashboardLocalWorldTopology!=='function')return [];
+    const topology=dashboardLocalWorldTopology(map);
+    return topology.edges.filter(edge=>{
+      const left=topology.nodeById[edge.a];
+      const right=topology.nodeById[edge.b];
       if(!left||!right)return false;
       const leftRing=Math.round(number(left.ring));
       const rightRing=Math.round(number(right.ring));
@@ -19,27 +19,31 @@
 
   function dashboardIncrementalAddLocalCorridors(packageInfo,map=state.world?.map){
     const layer=root.querySelector('#dashboard-incremental-world-corridors');
-    if(!layer)return 0;
-    const topology=dashboardLocalStationTopology(map);
+    if(!layer||typeof dashboardLocalWorldTopology!=='function')return 0;
+    const topology=dashboardLocalWorldTopology(map);
     const fragment=document.createDocumentFragment();
     let added=0;
-    for(const corridor of dashboardIncrementalLocalCorridorsForRing(packageInfo,map)){
-      if(layer.querySelector(`[data-local-corridor-id="${CSS.escape(corridor.id)}"]`))continue;
-      const left=topology.stationById[corridor.a];
-      const right=topology.stationById[corridor.b];
+    for(const edge of dashboardIncrementalLocalCorridorsForRing(packageInfo,map)){
+      if(layer.querySelector(`[data-local-corridor-id="${CSS.escape(edge.id)}"]`))continue;
+      const left=topology.nodeById[edge.a];
+      const right=topology.nodeById[edge.b];
       if(!left||!right)continue;
+      const ringDifference=Math.abs(number(left.ring)-number(right.ring));
+      if(ringDifference>1)continue;
       const line=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'line');
-      line.dataset.localCorridorId=corridor.id;
+      line.dataset.localCorridorId=edge.id;
+      line.dataset.localRelation=edge.relation;
       line.setAttribute('x1',String(number(left.x)));
       line.setAttribute('y1',String(number(left.y)));
       line.setAttribute('x2',String(number(right.x)));
       line.setAttribute('y2',String(number(right.y)));
-      line.setAttribute('stroke',corridor.danger?'#b95d68':corridor.relation==='one-ring-inward'?'#57b9ff':'#6f8f72');
-      line.setAttribute('stroke-width',corridor.relation==='one-ring-inward'?'3':'2');
-      line.setAttribute('opacity','.58');
+      const stationEndpoint=left.type==='station'||right.type==='station';
+      line.setAttribute('stroke',edge.danger?'#9d515a':edge.relation==='one-ring-inward'?'#397ea8':'#536f5c');
+      line.setAttribute('stroke-width',stationEndpoint?'2.2':'1.15');
+      line.setAttribute('opacity',stationEndpoint?'.72':'.42');
       line.setAttribute('vector-effect','non-scaling-stroke');
       const title=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'title');
-      title.textContent=`${left.name} ↔ ${right.name} · ${corridor.relation.replaceAll('-',' ')} · distance ${corridor.distance}`;
+      title.textContent=`${left.name||left.id} ↔ ${right.name||right.id} · ${edge.relation.replaceAll('-',' ')} · one local segment`;
       line.appendChild(title);
       fragment.appendChild(line);
       added+=1;
@@ -49,181 +53,54 @@
   }
 
   const dashboardIncrementalWorldViewerHtmlBeforeLocalCorridors=dashboardIncrementalWorldViewerHtml;
-  dashboardIncrementalWorldViewerHtml=function dashboardIncrementalWorldViewerHtmlWithLocalCorridors(context){
+  dashboardIncrementalWorldViewerHtml=function dashboardIncrementalWorldViewerHtmlWithLocalLattice(context){
     return dashboardIncrementalWorldViewerHtmlBeforeLocalCorridors(context)
       .replace('<g id="dashboard-incremental-world-guides"></g>','<g id="dashboard-incremental-world-corridors"></g><g id="dashboard-incremental-world-guides"></g>')
-      .replace('No world generation occurs.','No world generation occurs. Only same-ring neighboring stations and one-ring-down station corridors are drawn.');
+      .replace('No world generation occurs.','No world generation occurs. The complete local location lattice is drawn: immediate neighbors around each ring and one short step inward, continuing to the central anomaly.')
+      .replace('Incremental saved Masterworld viewer','Incremental saved Masterworld local-lattice viewer');
   };
 
   const dashboardIncrementalLoadRingBeforeLocalCorridors=dashboardIncrementalLoadRing;
-  dashboardIncrementalLoadRing=async function dashboardIncrementalLoadRingWithLocalCorridors(packageInfo,context,map,token,skipDelayRef){
+  dashboardIncrementalLoadRing=async function dashboardIncrementalLoadRingWithLocalLattice(packageInfo,context,map,token,skipDelayRef){
     if(token!==dashboardIncrementalWorldViewerRuntime.token)return false;
     dashboardIncrementalAddLocalCorridors(packageInfo,map);
     return dashboardIncrementalLoadRingBeforeLocalCorridors(packageInfo,context,map,token,skipDelayRef);
   };
 
-  const DASHBOARD_MASTERWORLD_INTEGRITY_VERSION='1.0.0';
-  const dashboardSavedMasterWorldCandidatesBeforeIntegrity=dashboardSavedMasterWorldCandidates;
-
-  function dashboardMasterWorldCandidateMetrics(candidate){
-    const map=candidate?.world?.map;
-    return {
-      nodeCount:Array.isArray(map?.nodes)?map.nodes.length:0,
-      ringCount:Math.max(0,number(map?.rings,Math.max(0,...(map?.nodes||[]).map(node=>number(node.ring,0))))),
-      stationCount:Array.isArray(map?.nodes)?map.nodes.filter(node=>node.type==='station').length:0,
-      generatedAt:String(map?.generatedAt||candidate?.savedAt||''),
-      scaleVersion:String(map?.worldScaleVersion||candidate?.world?.worldScaleVersion||candidate?.world?.expandedWorldVersion||'legacy')
-    };
-  }
-
-  dashboardSavedMasterWorldCandidates=function dashboardSavedMasterWorldCandidatesLargestFirst(){
-    const candidates=dashboardSavedMasterWorldCandidatesBeforeIntegrity().map(candidate=>({...candidate,...dashboardMasterWorldCandidateMetrics(candidate)}));
-    const sourceRank=source=>source==='checkpoint'?2:source==='scale-migration-archive'?1:0;
-    return candidates.sort((left,right)=>
-      Number(right.matchesAuthoritative)-Number(left.matchesAuthoritative)
-      ||right.nodeCount-left.nodeCount
-      ||right.ringCount-left.ringCount
-      ||right.stationCount-left.stationCount
-      ||sourceRank(right.source)-sourceRank(left.source)
-      ||Date.parse(right.savedAt||0)-Date.parse(left.savedAt||0)
-    );
-  };
-
-  function dashboardCurrentMasterWorldMetrics(){
-    const map=state.world?.map;
-    return {
-      nodeCount:Array.isArray(map?.nodes)?map.nodes.length:0,
-      ringCount:Math.max(0,number(map?.rings,Math.max(0,...(map?.nodes||[]).map(node=>number(node.ring,0))))),
-      stationCount:Array.isArray(map?.nodes)?map.nodes.filter(node=>node.type==='station').length:0,
-      scaleVersion:String(map?.worldScaleVersion||state.world?.worldScaleVersion||state.world?.expandedWorldVersion||'legacy')
-    };
-  }
-
-  function dashboardMasterWorldIntegrityReport(){
-    const current=dashboardCurrentMasterWorldMetrics();
-    const candidates=dashboardSavedMasterWorldCandidates();
-    const authoritative=candidates.filter(candidate=>candidate.matchesAuthoritative);
-    const pool=authoritative.length?authoritative:candidates;
-    const larger=pool.filter(candidate=>candidate.nodeCount>current.nodeCount||candidate.ringCount>current.ringCount);
-    const best=larger[0]||null;
-    const configuredNodes=Math.max(0,number(typeof WORLD_MAP_DEFAULTS!=='undefined'?WORLD_MAP_DEFAULTS.totalLocations:0,0));
-    const configuredRings=Math.max(0,number(typeof WORLD_MAP_DEFAULTS!=='undefined'?WORLD_MAP_DEFAULTS.rings:0,0));
-    const legacyScale=Boolean(current.nodeCount&&(current.ringCount<40||current.nodeCount<400||current.scaleVersion!==String(typeof WORLD_SCALE_VERSION!=='undefined'?WORLD_SCALE_VERSION:current.scaleVersion)));
-    return {current,candidates,larger,best,configuredNodes,configuredRings,legacyScale,hasLargerCandidate:Boolean(best),issue:Boolean(best||legacyScale)};
-  }
-
-  function dashboardPreserveCurrentMasterWorldSafetyCheckpoint(){
-    if(!dashboardMasterWorldMapValid())return null;
-    const hub=normalizeWorldHub();
-    const map=state.world.map;
-    const safetyKey=`integrity:${map.worldId||map.masterWorldId||hub.worldId}:${map.generatedAt||''}:${map.nodes.length}`;
-    const existing=(hub.savedStates||[]).find(checkpoint=>checkpoint.integritySafetyKey===safetyKey);
-    if(existing)return existing;
-    const payload=typeof worldSavePayload==='function'?worldSavePayload(false):{world:cloneWorldData(state.world),hub:cloneWorldData(hub)};
-    const checkpoint={
-      saveId:`SAVE-INTEGRITY-${Date.now().toString(36).toUpperCase()}`,
-      label:`Safety copy before Masterworld recovery · ${map.nodes.length} nodes`,
-      seed:state.world.seed,
-      worldId:hub.worldId,
-      revision:hub.revision,
-      savedAt:new Date().toISOString(),
-      canonicalAt:typeof worldGameDate==='function'?worldGameDate().toISOString():new Date().toISOString(),
-      payload,
-      integritySafetyKey:safetyKey
-    };
-    hub.savedStates=[checkpoint,...(hub.savedStates||[])].slice(0,30);
-    return checkpoint;
-  }
-
-  dashboardRestoreSavedMasterWorld=function dashboardRestoreSavedMasterWorldWithIntegrity(candidateId='',allowReplace=false){
-    const candidates=dashboardSavedMasterWorldCandidates();
-    const candidate=candidates.find(item=>item.id===candidateId)||candidates[0];
-    if(!candidate)return {ok:false,message:'No saved Masterworld map was found in the current browser state. Import the older unified world save that contained the larger map.'};
-    const current=dashboardCurrentMasterWorldMetrics();
-    if(dashboardMasterWorldMapValid()&&!allowReplace){
-      if(candidate.nodeCount<=current.nodeCount&&candidate.ringCount<=current.ringCount)return {ok:true,message:`The active Masterworld already contains ${current.nodeCount} nodes across ${current.ringCount} rings.`};
-      return {ok:false,requiresConfirmation:true,message:`A larger saved Masterworld exists: ${candidate.nodeCount} nodes across ${candidate.ringCount} rings. Confirm recovery before replacing the active ${current.nodeCount}-node map.`};
-    }
-    if(dashboardMasterWorldMapValid())dashboardPreserveCurrentMasterWorldSafetyCheckpoint();
-    const hub=normalizeWorldHub();
-    const authoritativeId=String(state.world?.masterWorldId||hub.masterWorldId||hub.worldId||candidate.mapWorldId||'');
-    state.world=cloneWorldData(candidate.world);
-    state.world.selected=Array.isArray(state.world.selected)?state.world.selected:[];
-    state.world.masterWorldId=authoritativeId;
-    state.world.worldId=authoritativeId;
-    if(state.world.map){
-      state.world.map.masterWorldId=authoritativeId;
-      state.world.map.worldId=authoritativeId;
-    }
-    hub.worldId=authoritativeId;
-    hub.masterWorldId=authoritativeId;
-    if(typeof synchronizeMasterWorldId==='function')synchronizeMasterWorldId(false);
-    assignMissingGroupStarts();
-    globalThis.__BAROTRAUMA_DASHBOARD_GRAPH_CACHE=null;
-    globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE=null;
-    globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE=null;
-    if(typeof dashboardIncrementalCancel==='function')dashboardIncrementalCancel('Masterworld recovered from a larger saved candidate');
-    save();
-    return {ok:true,message:`Recovered ${candidate.label}: ${candidate.nodeCount} saved nodes across ${candidate.ringCount} rings. No world generation was performed.`};
-  };
-
-  function dashboardMasterWorldIntegrityWarningHtml(scope='panel'){
-    const report=dashboardMasterWorldIntegrityReport();
-    if(!report.issue)return '';
-    const current=report.current;
-    const best=report.best;
-    const selectorId=scope==='viewer'?'dashboard-viewer-masterworld-recovery-source':'dashboard-masterworld-recovery-source';
-    const buttonId=scope==='viewer'?'dashboard-viewer-recover-larger-masterworld':'dashboard-recover-larger-masterworld';
-    const largerOptions=report.larger.map(candidate=>`<option value="${escapeHtml(candidate.id)}">${escapeHtml(candidate.label)} · ${candidate.nodeCount} nodes · ${candidate.ringCount} rings${candidate.matchesAuthoritative?' · same world ID':''}</option>`).join('');
-    return `<div class="notice warn dashboard-masterworld-integrity-warning" style="margin:12px 0"><strong>Masterworld integrity warning:</strong> the active save contains only ${current.nodeCount} nodes across ${current.ringCount} rings. ${report.legacyScale?`This is a legacy-scale map; the current campaign configuration targets ${report.configuredNodes||'many more'} nodes across ${report.configuredRings||'more'} rings. `:''}${best?`A larger saved candidate was found with ${best.nodeCount} nodes across ${best.ringCount} rings.`:'No larger checkpoint is present in this browser save. The older unified world save must be imported to recover missing nodes.'}${best?`<div class="field-grid" style="margin-top:10px"><label class="field">Recover saved Masterworld<select id="${selectorId}">${largerOptions}</select></label><div class="button-row" style="align-self:end"><button id="${buttonId}" class="primary-action" type="button">Recover Larger Saved Map</button></div></div><span class="small-note">The current ${current.nodeCount}-node map is preserved as a safety checkpoint before replacement. This does not generate a new world.</span>`:''}</div>`;
-  }
-
-  const dashboardWorldPanelHtmlBeforeIntegrity=dashboardWorldPanelHtml;
-  dashboardWorldPanelHtml=function dashboardWorldPanelHtmlWithIntegrity(context,focus){
-    const html=dashboardWorldPanelHtmlBeforeIntegrity(context,focus);
-    if(!dashboardMasterWorldMapValid())return html;
-    return `${dashboardMasterWorldIntegrityWarningHtml('panel')}${html}`;
-  };
-
-  const dashboardIncrementalWorldViewerHtmlBeforeIntegrity=dashboardIncrementalWorldViewerHtml;
-  dashboardIncrementalWorldViewerHtml=function dashboardIncrementalWorldViewerHtmlWithIntegrity(context){
-    const html=dashboardIncrementalWorldViewerHtmlBeforeIntegrity(context);
-    const warning=dashboardMasterWorldIntegrityWarningHtml('viewer');
-    return warning?html.replace('<div class="metric-row"',`${warning}<div class="metric-row"`):html;
-  };
-
-  if(root.dataset.masterworldIntegrityRecoveryBound!=='true'){
-    root.dataset.masterworldIntegrityRecoveryBound='true';
-    root.addEventListener('click',event=>{
-      const button=event.target.closest?.('#dashboard-recover-larger-masterworld, #dashboard-viewer-recover-larger-masterworld');
-      if(!button)return;
-      const viewer=button.id==='dashboard-viewer-recover-larger-masterworld';
-      const select=root.querySelector(viewer?'#dashboard-viewer-masterworld-recovery-source':'#dashboard-masterworld-recovery-source');
-      const candidate=dashboardSavedMasterWorldCandidates().find(item=>item.id===select?.value)||dashboardMasterWorldIntegrityReport().best;
-      if(!candidate){dashboardSetMessage('No larger saved Masterworld candidate is available in this browser state.',true);return;}
-      const confirmed=window.confirm(`Recover ${candidate.nodeCount} saved nodes across ${candidate.ringCount} rings from “${candidate.label}”? The current map will be preserved as a safety checkpoint. No world generation will occur.`);
-      if(!confirmed)return;
-      const result=dashboardRestoreSavedMasterWorld(candidate.id,true);
-      dashboardSetMessage(result.message,!result.ok);
-      if(result.ok){
-        state.operationsDashboard.worldViewerOpen=false;
-        renderSubmarine();
-      }
-    });
-  }
-
-  const integrityReport=dashboardMasterWorldIntegrityReport();
+  const latticeTopology=typeof dashboardLocalWorldTopology==='function'&&dashboardMasterWorldMapValid()?dashboardLocalWorldTopology():{edges:[],nodeById:{}};
+  const maximumRingDifference=Math.max(0,...latticeTopology.edges.map(edge=>Math.abs(number(latticeTopology.nodeById[edge.a]?.ring)-number(latticeTopology.nodeById[edge.b]?.ring))));
+  const maximumGeometricSegment=Math.max(0,...latticeTopology.edges.map(edge=>number(edge.geometric,0)));
   globalThis.BAROTRAUMA_DASHBOARD_LOCAL_CORRIDOR_VIEWER_DIAGNOSTICS={
     version:DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION,
-    corridorCount:typeof dashboardLocalStationTopology==='function'?dashboardLocalStationTopology().corridors.length:0,
-    maximumRingDifference:typeof dashboardLocalStationTopology==='function'?Math.max(0,...dashboardLocalStationTopology().corridors.map(corridor=>Math.abs(number(dashboardLocalStationTopology().stationById[corridor.a]?.ring)-number(dashboardLocalStationTopology().stationById[corridor.b]?.ring)))):0,
+    nodeCount:Object.keys(latticeTopology.nodeById).length,
+    edgeCount:latticeTopology.edges.length,
+    maximumRingDifference,
+    maximumGeometricSegment,
+    sameRingNeighborsOnly:latticeTopology.edges.filter(edge=>edge.relation==='same-ring-adjacent').every(edge=>number(latticeTopology.nodeById[edge.a]?.ring)===number(latticeTopology.nodeById[edge.b]?.ring)),
+    oneRingInwardOnly:latticeTopology.edges.filter(edge=>edge.relation==='one-ring-inward').every(edge=>Math.abs(number(latticeTopology.nodeById[edge.a]?.ring)-number(latticeTopology.nodeById[edge.b]?.ring))===1),
+    reachesCentralAnomaly:latticeTopology.edges.some(edge=>edge.a==='anomaly'||edge.b==='anomaly'),
+    directStationChordsRendered:false,
+    completeLocalLatticeRendered:true,
     allPairsRenderingDisabled:true,
-    localCorridorsOnly:true,
-    masterworldIntegrityVersion:DASHBOARD_MASTERWORLD_INTEGRITY_VERSION,
-    currentNodeCount:integrityReport.current.nodeCount,
-    currentRingCount:integrityReport.current.ringCount,
-    largerCandidateCount:integrityReport.larger.length,
-    largestCandidateNodeCount:integrityReport.best?.nodeCount||0,
-    legacyScaleDetected:integrityReport.legacyScale,
-    recoveryGeneratesWorld:false
+    localCorridorsOnly:true
   };
+
+  async function loadDashboardMasterworldIntegrityRecovery(){
+    try{
+      const path='data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-integrity-recovery.txt';
+      const response=await fetch(path,{cache:'no-store'});
+      if(!response.ok)throw new Error(`${path} returned ${response.status}`);
+      eval(await response.text());
+      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=true;
+      if(activeSubmarineDashboardContext())render();
+      return true;
+    }catch(error){
+      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=false;
+      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_ERROR=error.message||String(error);
+      console.error('Masterworld integrity recovery panel failed to load.',error);
+      return false;
+    }
+  }
+
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=false;
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_PROMISE=loadDashboardMasterworldIntegrityRecovery();
