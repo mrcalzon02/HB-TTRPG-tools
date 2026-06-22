@@ -1,5 +1,5 @@
 
-  const DASHBOARD_LOCAL_STATION_TOPOLOGY_VERSION='1.0.0';
+  const DASHBOARD_LOCAL_STATION_TOPOLOGY_VERSION='1.1.0';
 
   function dashboardStationPolarAngle(node,map=state.world?.map){
     const centerX=number(map?.width)/2;
@@ -15,7 +15,7 @@
 
   function dashboardLocalStationTopology(map=state.world?.map){
     if(!map?.nodes?.length)return {corridors:[],corridorById:{},corridorsByStation:{},stationById:{},rings:[]};
-    const cacheKey=`${map.worldId||map.masterWorldId||map.seed||''}|${map.generatedAt||''}|${map.nodes.length}|${map.edges?.length||0}|local-station-topology-v1`;
+    const cacheKey=`${map.worldId||map.masterWorldId||map.seed||''}|${map.generatedAt||''}|${map.nodes.length}|${map.edges?.length||0}|local-station-topology-v1.1`;
     if(globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE?.key===cacheKey)return globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE.value;
 
     const stations=map.nodes.filter(node=>node.type==='station');
@@ -42,20 +42,19 @@
       const distance=Math.max(1,Math.round(geometric/nominalLeg));
       const dangerRng=seededRandom(`${map.seed||map.worldId||''}|local-station-corridor|${key}`);
       const edgeId=`station-local-${ids[0]}-${ids[1]}`;
+      const danger=dangerRng()<0.18;
       corridorMap.set(key,{
         id:edgeId,
         a:left.id,
         b:right.id,
         relation,
         distance,
-        danger:dangerRng()<0.18,
+        danger,
         voyages:1,
         pathNodeIds:[left.id,right.id],
         edgeIds:[edgeId],
-        edge:{id:edgeId,a:left.id,b:right.id,distance,voyages:1,danger:false,localStationCorridor:true,relation}
+        edge:{id:edgeId,a:left.id,b:right.id,distance,voyages:1,danger,localStationCorridor:true,relation}
       });
-      const corridor=corridorMap.get(key);
-      corridor.edge.danger=corridor.danger;
     };
 
     for(const [ring,list] of stationsByRing.entries()){
@@ -123,6 +122,7 @@
   const generateValidCrossingBeforeLocalStationTopology=generateValidCrossing;
   generateValidCrossing=function generateStrictlyLocalStationCrossing(){
     if(!activeSubmarineDashboardContext())return generateValidCrossingBeforeLocalStationTopology();
+    if(typeof dashboardManagementAuthorized==='function'&&!dashboardManagementAuthorized())throw new Error('Log in to the managed submarine before filing a route.');
     const context=normalizeActiveSubmarineDashboard(false);
     normalizeDashboardTurnOrder();
     if(state.operationsDashboard.operationalState!=='at-station')throw new Error('A new route may only be filed while At Station.');
@@ -136,11 +136,14 @@
     const ringDifference=Math.abs(number(origin.ring)-number(corridor.station.ring));
     if(ringDifference>1)throw new Error('Cross-planetary and multi-ring station routes are prohibited.');
     const temporaryEdge={...corridor.edge,id:corridor.edgeIds[0],a:origin.id,b:corridor.stationId,distance:corridor.distance,danger:corridor.danger,voyages:1,localStationCorridor:true};
+    const saveBeforeLocalCrossing=save;
     state.world.map={...fullMap,nodes:[origin,corridor.station],edges:[temporaryEdge],startId:origin.id};
     let crossing;
     try{
+      save=()=>{};
       crossing=generateValidCrossingBeforeStationAdjacency();
     }finally{
+      save=saveBeforeLocalCrossing;
       state.world.map=fullMap;
     }
     crossing.stationCorridor={
@@ -162,12 +165,16 @@
     return crossing;
   };
 
+  const topologyForDiagnostics=dashboardMasterWorldMapValid()?dashboardLocalStationTopology():{corridors:[],stationById:{}};
+  const maximumRingDifference=Math.max(0,...topologyForDiagnostics.corridors.map(corridor=>Math.abs(number(topologyForDiagnostics.stationById[corridor.a]?.ring)-number(topologyForDiagnostics.stationById[corridor.b]?.ring))));
   globalThis.BAROTRAUMA_DASHBOARD_LOCAL_STATION_TOPOLOGY_DIAGNOSTICS={
     version:DASHBOARD_LOCAL_STATION_TOPOLOGY_VERSION,
-    stationCount:state.world?.map?.nodes?.filter(node=>node.type==='station').length||0,
-    corridorCount:dashboardMasterWorldMapValid?.()?dashboardLocalStationTopology().corridors.length:0,
-    maximumRingDifference:dashboardMasterWorldMapValid?.()?Math.max(0,...dashboardLocalStationTopology().corridors.map(corridor=>Math.abs(number(dashboardLocalStationTopology().stationById[corridor.a]?.ring)-number(dashboardLocalStationTopology().stationById[corridor.b]?.ring)))):0,
+    stationCount:Object.keys(topologyForDiagnostics.stationById).length,
+    corridorCount:topologyForDiagnostics.corridors.length,
+    maximumRingDifference,
     allPairsSearchDisabled:true,
     crossPlanetaryPlanningDisabled:true,
+    persistedTemporaryMap:false,
+    authorizationGuarded:true,
     allowedRelations:['same-ring-adjacent','one-ring-inward','one-ring-outward']
   };
