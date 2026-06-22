@@ -72,7 +72,8 @@ jobs:
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-00.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-01.txt',
             'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt',
-            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt'
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability-02.txt'
           ];
           requiredRecovery.forEach(name => assert(recoveryLoader.includes(name), `${name} is not dynamically loaded`));
 
@@ -97,6 +98,7 @@ jobs:
           const recoveryUi01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-01.txt', 'utf8');
           const recoveryUi02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt', 'utf8');
           const recoveryPostload = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt', 'utf8');
+          const activationRecovery = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability-02.txt', 'utf8');
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
           const roster = JSON.parse(fs.readFileSync('data/barotrauma/tools/submarines/submarine-roster.json', 'utf8'));
 
@@ -127,6 +129,11 @@ jobs:
           assert(recoveryStability.includes('if(model?.custom)return true;'), 'Custom submarines are not explicitly allowed for new creation');
           assert(recoveryStability.includes('number(model.profile.tier,0)===1'), 'Official new-submarine creation is not restricted to Tier 1');
           assert(recoveryStability.includes('createNewManageableSubmarineWithTierRestriction'), 'The creation API does not enforce the Tier 1/custom rule');
+          assert(recoveryStability.includes('dashboardManagementHydrateManagedSnapshot'), 'Legacy managed snapshots are not hydrated before activation');
+          assert(recoveryStability.includes('submarine.wikiWeapons=Array.isArray'), 'Legacy tracked submarine weapons are not normalized');
+          assert(recoveryStability.includes('submarine.customModules=Array.isArray'), 'Legacy custom modules are not normalized');
+          assert(recoveryStability.includes('route.plan=Array.isArray'), 'Legacy route plans are not normalized');
+          assert(recoveryStability.includes('dashboard.turnOrder.order=Array.isArray'), 'Legacy dashboard turn orders are not normalized');
           assert(recoveryUi00.includes('const models=dashboardManageableCreationSubmarineNames();'), 'The creation selector does not use the restricted model list');
           assert(!recoveryUi00.includes('dashboardStartingSubmarineNames'), 'The creation selector still uses the unrestricted commissioning list');
           assert(recoveryUi00.includes("SUBMARINES[name]?.custom?'Custom':'Tier 1'"), 'Creation options are not labeled as Tier 1 or Custom');
@@ -139,6 +146,14 @@ jobs:
           assert(recoveryUi02.includes("pendingRecoveryCode=''"), 'One-time recovery code cannot be cleared from runtime memory');
           assert(recoveryPostload.includes('legacy-recovery-issued-after-session-restore'), 'Restored legacy sessions do not receive a recovery code');
 
+          assert(activationRecovery.includes('establishDashboardManagementSessionTransactionally'), 'Login activation is not transactional');
+          assert(activationRecovery.includes('login-activation-failed'), 'Failed activation is not audited');
+          assert(activationRecovery.includes('credential.receipts=previousReceipts'), 'Failed activation does not restore previous receipts');
+          assert(activationRecovery.includes('dashboardManagementClearStoredSession()'), 'Failed activation does not clear the invalid local session');
+          assert(activationRecovery.includes('dashboardManagementRunActivationNormalizers'), 'Authenticated activation does not run staged normalizers');
+          assert(activationRecovery.includes('Retry Repaired Dashboard'), 'A recoverable render failure has no retry interface');
+          assert(activationRecovery.includes('lastRenderError'), 'Render-stage failure details are not retained for diagnostics');
+
           const officialTierOne = roster.submarines.filter(model => Number(model.tier) === 1).map(model => model.name).sort();
           assert.deepStrictEqual(officialTierOne, ['Barsuk', 'Camel', 'Dugong', 'Orca'], 'Official Tier 1 roster changed; review the manageable-submarine creation restriction');
           assert(roster.submarines.filter(model => Number(model.tier) > 1).length > 0, 'Roster no longer exercises exclusion of higher-tier official submarines');
@@ -150,5 +165,5 @@ jobs:
           assert(finalRuntime.includes('dashboardAuthVersion: 21'), 'Version-21 dashboard-auth import compatibility marker is missing');
           assert(finalRuntime.includes('pendingRecoveryCode ='), 'Suite import does not clear one-time recovery memory');
 
-          console.log(`Validated ${paths.length} base fragments and ${recoveryPaths.length} recovery fragments. New manageable submarines are limited to official Tier 1 models plus custom submarines.`);
+          console.log(`Validated ${paths.length} base fragments and ${recoveryPaths.length} recovery fragments. Login activation now hydrates legacy snapshots transactionally before rendering.`);
           NODE
