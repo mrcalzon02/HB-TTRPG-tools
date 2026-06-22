@@ -92,8 +92,20 @@ jobs:
           assert(!corridorViewer.includes('crossingPath('), 'Viewer performs route planning while drawing corridors');
           assert(!corridorViewer.includes('dashboardGraphIndex('), 'Viewer invokes the full world graph');
 
+          assert(corridorViewer.includes('dashboardSavedMasterWorldCandidatesLargestFirst'), 'Saved Masterworld recovery candidates are not re-ranked by completeness');
+          assert(corridorViewer.includes('right.nodeCount-left.nodeCount'), 'Candidate recovery does not prioritize node count');
+          assert(corridorViewer.includes('right.ringCount-left.ringCount'), 'Candidate recovery does not prioritize ring coverage');
+          assert(corridorViewer.includes('dashboardPreserveCurrentMasterWorldSafetyCheckpoint'), 'Current map is not preserved before recovery');
+          assert(corridorViewer.includes('Safety copy before Masterworld recovery'), 'Safety checkpoint is not clearly labeled');
+          assert(corridorViewer.includes('allowReplace=false'), 'Valid active maps can be replaced without an explicit recovery path');
+          assert(corridorViewer.includes('No world generation was performed.'), 'Recovery messaging does not explicitly prohibit regeneration');
+          assert(corridorViewer.includes('No larger checkpoint is present in this browser save.'), 'Missing larger-map recovery state is not explained');
+          assert(corridorViewer.includes('dashboard-masterworld-integrity-warning'), 'Undersized-map warning is absent from the viewer');
+          assert(corridorViewer.includes('current.ringCount<40||current.nodeCount<400'), 'Legacy-scale maps are not detected');
+          assert(corridorViewer.includes('recoveryGeneratesWorld:false'), 'Integrity diagnostics do not guarantee non-generative recovery');
+
           const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
           assert(/barotrauma-rpg-tools-loader\.js\?v=\d+/.test(html), 'Operations page loader lacks a cache revision');
 
-          console.log('Validated sparse same-ring and one-ring station topology with no cross-planetary planning or all-pairs fallback.');
+          console.log('Validated sparse local topology and safe largest-checkpoint Masterworld recovery without regeneration.');
           NODE
