@@ -1,5 +1,5 @@
 
-  const DASHBOARD_MASTERWORLD_PERFORMANCE_VERSION='1.1.0';
+  const DASHBOARD_MASTERWORLD_PERFORMANCE_VERSION='1.2.0';
 
   function dashboardMasterWorldMapValid(world=state.world){
     return Boolean(world?.map&&Array.isArray(world.map.nodes)&&world.map.nodes.length&&Array.isArray(world.map.edges));
@@ -152,8 +152,6 @@
     allPairsStationPlanningDisabled:true
   };
 
-  const dashboardAdjacentStationRoutesBeforeLocalTopologyLoad=dashboardAdjacentStationRoutes;
-  const dashboardStationCorridorsBeforeLocalTopologyLoad=dashboardStationCorridors;
   const generateValidCrossingBeforeLocalTopologyLoad=generateValidCrossing;
   dashboardAdjacentStationRoutes=function dashboardAdjacentStationRoutesWhileLocalTopologyLoads(){return [];};
   dashboardStationCorridors=function dashboardStationCorridorsWhileLocalTopologyLoads(){return [];};
@@ -164,7 +162,8 @@
 
   const DASHBOARD_INCREMENTAL_WORLD_VIEWER_PARTS=[
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt',
-    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt'
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-local-corridor-viewer.txt'
   ];
 
   async function loadDashboardIncrementalWorldViewer(){
@@ -179,13 +178,10 @@
       if(activeSubmarineDashboardContext())render();
       return true;
     }catch(error){
-      dashboardAdjacentStationRoutes=dashboardAdjacentStationRoutesBeforeLocalTopologyLoad;
-      dashboardStationCorridors=dashboardStationCorridorsBeforeLocalTopologyLoad;
-      generateValidCrossing=generateValidCrossingBeforeLocalTopologyLoad;
-      globalThis.BAROTRAUMA_DASHBOARD_LOCAL_STATION_TOPOLOGY_READY=false;
+      globalThis.BAROTRAUMA_DASHBOARD_LOCAL_STATION_TOPOLOGY_READY=typeof dashboardLocalStationTopology==='function';
       globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_READY=false;
       globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_ERROR=error.message||String(error);
-      console.error('Local station topology or incremental Masterworld viewer failed to load.',error);
+      console.error('Local station topology or incremental Masterworld viewer failed to load. Global station routing remains disabled.',error);
       return false;
     }
   }
