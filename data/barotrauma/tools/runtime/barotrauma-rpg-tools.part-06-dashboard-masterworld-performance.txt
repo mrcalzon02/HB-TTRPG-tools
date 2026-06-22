@@ -149,3 +149,28 @@
     automaticGenerationDisabled:true,
     fullCorridorRenderingDisabled:true
   };
+
+  const DASHBOARD_INCREMENTAL_WORLD_VIEWER_PARTS=[
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-incremental-viewer.txt'
+  ];
+
+  async function loadDashboardIncrementalWorldViewer(){
+    try{
+      const responses=await Promise.all(DASHBOARD_INCREMENTAL_WORLD_VIEWER_PARTS.map(path=>fetch(path,{cache:'no-store'})));
+      const failed=responses.find(response=>!response.ok);
+      if(failed)throw new Error(`${failed.url} returned ${failed.status}`);
+      const source=(await Promise.all(responses.map(response=>response.text()))).join('');
+      eval(source);
+      globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_READY=true;
+      if(activeSubmarineDashboardContext())render();
+      return true;
+    }catch(error){
+      globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_READY=false;
+      globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_ERROR=error.message||String(error);
+      console.error('Incremental Masterworld viewer failed to load.',error);
+      return false;
+    }
+  }
+
+  globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_READY=false;
+  globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_PROMISE=loadDashboardIncrementalWorldViewer();
