@@ -135,7 +135,7 @@
     const duplicateTemplateIds = templates.filter((template, position) => templates.findIndex(other => other.id === template.id) !== position).map(template => template.id);
     const duplicateProfileIds = profiles.filter((profile, position) => profiles.findIndex(other => other.id === profile.id) !== position).map(profile => profile.id);
     if (duplicateTemplateIds.length) throw new Error(`Duplicate encounter template identifiers: ${[...new Set(duplicateTemplateIds)].join(', ')}`);
-    if (duplicateProfileIds.length) throw new Error(`Duplicate encounter lethality registry mismatch. Missing: ${missingProfiles.join(', ') || 'none'}. Orphaned: ${orphanProfiles.join(', ') || 'none'}.`);
+    if (duplicateProfileIds.length) throw new Error(`Duplicate encounter lethality identifiers: ${[...new Set(duplicateProfileIds)].join(', ')}`);
     const profileIds = new Set(profiles.map(profile => profile.id));
     const missingProfiles = templates.filter(template => !profileIds.has(template.id)).map(template => template.id);
     const orphanProfiles = profiles.filter(profile => !templates.some(template => template.id === profile.id)).map(profile => profile.id);
