@@ -1,0 +1,56 @@
+
+  const DASHBOARD_MASTERWORLD_DEPTH_UI_VERSION='1.0.0';
+
+  function dashboardMasterworldDepthPanelHtml(){
+    const report=typeof worldDepthValidateMap==='function'?worldDepthValidateMap(state.world?.map):{valid:false,issues:['Depth verifier is unavailable.'],rings:number(state.world?.map?.rings,0),nodeCount:state.world?.map?.nodes?.length||0,stationCount:0,verifiedMissionDepth:0,shortestOuterToCenterJourneys:Infinity};
+    const underway=typeof worldDepthUnderwayVessels==='function'?worldDepthUnderwayVessels():[];
+    const minimum=Number.isFinite(report.shortestOuterToCenterJourneys)?report.shortestOuterToCenterJourneys:0;
+    return `<section id="dashboard-masterworld-depth-regeneration" class="tool-panel" style="border-color:${report.valid?'rgba(117,197,142,.62)':'rgba(223,119,119,.72)'}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Verified campaign depth</p><h3>${report.valid?'Deep Masterworld Verified':'Regenerate the Shallow Masterworld'}</h3><p class="small-note">A valid campaign world must contain at least ${WORLD_DEPTH_REQUIRED_RINGS} concentric rings, ${WORLD_DEPTH_REQUIRED_LOCATIONS} saved locations, a station on every ring, and no route edge that skips a ring. The verified shortest outer-shell journey to the central anomaly must be at least ${WORLD_DEPTH_REQUIRED_MISSIONS} missions.</p></div><span class="status-pill ${report.valid?'good':'bad'}">${report.valid?'DEPTH VERIFIED':'SHALLOW WORLD'}</span></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Active rings</span><strong class="${report.rings>=WORLD_DEPTH_REQUIRED_RINGS?'good':'bad'}">${report.rings}/${WORLD_DEPTH_REQUIRED_RINGS}</strong></div><div class="metric"><span>Saved locations</span><strong class="${report.nodeCount>=WORLD_DEPTH_REQUIRED_LOCATIONS?'good':'bad'}">${report.nodeCount}/${WORLD_DEPTH_REQUIRED_LOCATIONS}</strong></div><div class="metric"><span>Stations</span><strong>${report.stationCount}</strong></div><div class="metric"><span>Verified journey depth</span><strong class="${minimum>=WORLD_DEPTH_REQUIRED_MISSIONS?'good':'bad'}">${minimum}/${WORLD_DEPTH_REQUIRED_MISSIONS}</strong></div></div>
+      ${report.issues?.length?`<div class="notice bad" style="margin-top:12px"><strong>Depth verification failed:</strong> ${escapeHtml(report.issues.slice(0,8).join(' '))}</div>`:'<div class="notice good" style="margin-top:12px">The mandatory inward route is verified from the outer starting station through every ring to the central anomaly.</div>'}
+      ${underway.length?`<div class="notice warn" style="margin-top:10px">Regeneration is blocked while these submarines are In Route: ${escapeHtml(underway.join(', '))}.</div>`:''}
+      <details style="margin-top:12px" ${report.valid?'':'open'}><summary><strong>${report.valid?'Regenerate another verified deep world':'Replace this shallow world with the promised deep campaign'}</strong></summary><p class="small-note bad">This replaces the active map and station economy. The complete current campaign is first preserved as a safety checkpoint. Existing groups and owned submarines remain in the same Masterworld identity but are relocated to outer-ring stations; active and inactive vessel ownership is preserved.</p><div class="button-row"><button id="dashboard-regenerate-deep-masterworld" class="danger-button" type="button" ${underway.length?'disabled':''}>Regenerate Verified 48-Ring Masterworld</button></div></details>
+      <div id="dashboard-depth-regeneration-message" class="notice" style="margin-top:10px">No regeneration occurs until the destructive action is explicitly confirmed.</div>
+    </section>`;
+  }
+
+  const dashboardWorldPanelHtmlBeforeDepthRegeneration=dashboardWorldPanelHtml;
+  dashboardWorldPanelHtml=function dashboardWorldPanelHtmlWithDepthRegeneration(context,focus){
+    return `${dashboardMasterworldDepthPanelHtml()}${dashboardWorldPanelHtmlBeforeDepthRegeneration(context,focus)}`;
+  };
+
+  const bindActiveDashboardControlsBeforeDepthRegeneration=bindActiveDashboardControls;
+  bindActiveDashboardControls=function bindActiveDashboardControlsWithDepthRegeneration(context,focus){
+    bindActiveDashboardControlsBeforeDepthRegeneration(context,focus);
+    root.querySelector('#dashboard-regenerate-deep-masterworld')?.addEventListener('click',()=>{
+      const message=root.querySelector('#dashboard-depth-regeneration-message');
+      try{
+        if(typeof dashboardManagementAuthorized==='function'&&!dashboardManagementAuthorized())throw new Error('Log in to the managed submarine before replacing the Masterworld.');
+        const underway=worldDepthUnderwayVessels();
+        if(underway.length)throw new Error(`Complete or abort all underway crossings before regeneration: ${underway.join(', ')}.`);
+        const confirmation=window.prompt(`This will replace the active ${number(state.world?.map?.rings,0)}-ring map with a verified ${WORLD_DEPTH_REQUIRED_RINGS}-ring Masterworld and relocate all groups to new outer-ring stations. A safety checkpoint will be created first. Type REGENERATE ${WORLD_DEPTH_REQUIRED_RINGS} to continue.`,'');
+        if(confirmation!==`REGENERATE ${WORLD_DEPTH_REQUIRED_RINGS}`){
+          if(message)message.textContent='Deep Masterworld regeneration was cancelled.';
+          return;
+        }
+        if(message){message.textContent='Generating and verifying the deep Masterworld…';message.classList.remove('bad');}
+        const validation=regenerateVerifiedDeepMasterworld();
+        state.operationsDashboard.worldViewerOpen=false;
+        dashboardSetMessage(`Generated a verified ${validation.rings}-ring Masterworld with ${validation.shortestOuterToCenterJourneys} minimum missions from the outer shell to the central anomaly.`);
+        renderSubmarine();
+      }catch(error){
+        if(message){message.textContent=error.message||String(error);message.classList.add('bad');}
+        dashboardSetMessage(error.message||String(error),true);
+      }
+    });
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_DEPTH_UI={
+    version:DASHBOARD_MASTERWORLD_DEPTH_UI_VERSION,
+    requiredRings:WORLD_DEPTH_REQUIRED_RINGS,
+    requiredMissions:WORLD_DEPTH_REQUIRED_MISSIONS,
+    explicitDestructiveConfirmation:true,
+    safetyCheckpointBeforeRegeneration:true,
+    automaticRegeneration:false
+  };
