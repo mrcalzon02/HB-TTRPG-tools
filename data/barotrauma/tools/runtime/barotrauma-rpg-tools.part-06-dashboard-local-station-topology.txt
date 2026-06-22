@@ -1,0 +1,173 @@
+
+  const DASHBOARD_LOCAL_STATION_TOPOLOGY_VERSION='1.0.0';
+
+  function dashboardStationPolarAngle(node,map=state.world?.map){
+    const centerX=number(map?.width)/2;
+    const centerY=number(map?.height)/2;
+    const angle=Math.atan2(number(node?.y)-centerY,number(node?.x)-centerX);
+    return angle<0?angle+Math.PI*2:angle;
+  }
+
+  function dashboardStationAngularDistance(left,right){
+    const difference=Math.abs(left-right)%(Math.PI*2);
+    return Math.min(difference,Math.PI*2-difference);
+  }
+
+  function dashboardLocalStationTopology(map=state.world?.map){
+    if(!map?.nodes?.length)return {corridors:[],corridorById:{},corridorsByStation:{},stationById:{},rings:[]};
+    const cacheKey=`${map.worldId||map.masterWorldId||map.seed||''}|${map.generatedAt||''}|${map.nodes.length}|${map.edges?.length||0}|local-station-topology-v1`;
+    if(globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE?.key===cacheKey)return globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE.value;
+
+    const stations=map.nodes.filter(node=>node.type==='station');
+    const stationById=Object.fromEntries(stations.map(station=>[station.id,station]));
+    const stationsByRing=new Map();
+    for(const station of stations){
+      const ring=Math.max(0,Math.round(number(station.ring,0)));
+      if(!stationsByRing.has(ring))stationsByRing.set(ring,[]);
+      stationsByRing.get(ring).push({...station,__angle:dashboardStationPolarAngle(station,map)});
+    }
+    for(const list of stationsByRing.values())list.sort((left,right)=>left.__angle-right.__angle||String(left.id).localeCompare(String(right.id)));
+
+    const corridorMap=new Map();
+    const nominalLeg=Math.max(1,number(map.shellRadius,Math.min(number(map.width),number(map.height))/2)/Math.max(1,number(map.rings,48)));
+    const addCorridor=(left,right,relation)=>{
+      if(!left||!right||left.id===right.id)return;
+      const ringDifference=Math.abs(number(left.ring)-number(right.ring));
+      if(relation==='same-ring'&&ringDifference!==0)return;
+      if(relation==='one-ring-inward'&&ringDifference!==1)return;
+      const ids=[left.id,right.id].sort();
+      const key=ids.join('|');
+      if(corridorMap.has(key))return;
+      const geometric=Math.hypot(number(left.x)-number(right.x),number(left.y)-number(right.y));
+      const distance=Math.max(1,Math.round(geometric/nominalLeg));
+      const dangerRng=seededRandom(`${map.seed||map.worldId||''}|local-station-corridor|${key}`);
+      const edgeId=`station-local-${ids[0]}-${ids[1]}`;
+      corridorMap.set(key,{
+        id:edgeId,
+        a:left.id,
+        b:right.id,
+        relation,
+        distance,
+        danger:dangerRng()<0.18,
+        voyages:1,
+        pathNodeIds:[left.id,right.id],
+        edgeIds:[edgeId],
+        edge:{id:edgeId,a:left.id,b:right.id,distance,voyages:1,danger:false,localStationCorridor:true,relation}
+      });
+      const corridor=corridorMap.get(key);
+      corridor.edge.danger=corridor.danger;
+    };
+
+    for(const [ring,list] of stationsByRing.entries()){
+      if(list.length===2)addCorridor(list[0],list[1],'same-ring');
+      else if(list.length>2){
+        for(let index=0;index<list.length;index+=1)addCorridor(list[index],list[(index+1)%list.length],'same-ring');
+      }
+      if(ring<=0)continue;
+      const inward=stationsByRing.get(ring-1)||[];
+      if(!inward.length)continue;
+      for(const station of list){
+        const nearest=[...inward].sort((left,right)=>dashboardStationAngularDistance(station.__angle,left.__angle)-dashboardStationAngularDistance(station.__angle,right.__angle)||String(left.id).localeCompare(String(right.id)))[0];
+        addCorridor(station,nearest,'one-ring-inward');
+      }
+    }
+
+    const corridors=[...corridorMap.values()];
+    const corridorsByStation=Object.fromEntries(stations.map(station=>[station.id,[]]));
+    for(const corridor of corridors){
+      corridorsByStation[corridor.a]?.push(corridor);
+      corridorsByStation[corridor.b]?.push(corridor);
+    }
+    for(const [stationId,list] of Object.entries(corridorsByStation)){
+      const origin=stationById[stationId];
+      list.sort((left,right)=>{
+        const leftTarget=stationById[left.a===stationId?left.b:left.a];
+        const rightTarget=stationById[right.a===stationId?right.b:right.a];
+        const leftDelta=number(leftTarget?.ring)-number(origin?.ring);
+        const rightDelta=number(rightTarget?.ring)-number(origin?.ring);
+        const rank=delta=>delta<0?0:delta===0?1:2;
+        return rank(leftDelta)-rank(rightDelta)||left.distance-right.distance||String(leftTarget?.name||'').localeCompare(String(rightTarget?.name||''));
+      });
+    }
+    const value={corridors,corridorById:Object.fromEntries(corridors.map(corridor=>[corridor.id,corridor])),corridorsByStation,stationById,rings:[...stationsByRing.keys()].sort((left,right)=>right-left)};
+    globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE={key:cacheKey,value};
+    globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE={key:cacheKey,value:corridors};
+    return value;
+  }
+
+  dashboardAdjacentStationRoutes=function dashboardAdjacentStationRoutesLocalOnly(originId,map=state.world?.map){
+    const topology=dashboardLocalStationTopology(map);
+    const origin=topology.stationById[originId];
+    if(!origin)return [];
+    return (topology.corridorsByStation[originId]||[]).map(corridor=>{
+      const stationId=corridor.a===originId?corridor.b:corridor.a;
+      const station=topology.stationById[stationId];
+      const ringDelta=number(station?.ring)-number(origin.ring);
+      return {
+        stationId,
+        station,
+        distance:corridor.distance,
+        danger:corridor.danger,
+        relation:ringDelta<0?'one-ring-inward':ringDelta>0?'one-ring-outward':'same-ring-adjacent',
+        pathNodeIds:[originId,stationId],
+        edgeIds:[corridor.id],
+        edge:{...corridor.edge,a:originId,b:stationId}
+      };
+    }).filter(route=>route.station&&Math.abs(number(route.station.ring)-number(origin.ring))<=1);
+  };
+
+  dashboardStationCorridors=function dashboardStationCorridorsLocalOnly(map=state.world?.map){
+    return dashboardLocalStationTopology(map).corridors;
+  };
+
+  const generateValidCrossingBeforeLocalStationTopology=generateValidCrossing;
+  generateValidCrossing=function generateStrictlyLocalStationCrossing(){
+    if(!activeSubmarineDashboardContext())return generateValidCrossingBeforeLocalStationTopology();
+    const context=normalizeActiveSubmarineDashboard(false);
+    normalizeDashboardTurnOrder();
+    if(state.operationsDashboard.operationalState!=='at-station')throw new Error('A new route may only be filed while At Station.');
+    const fullMap=state.world?.map;
+    const origin=crossingNode(context.group.currentNodeId,fullMap);
+    if(!origin||origin.type!=='station')throw new Error('The active submarine must be positioned at a station before filing a route.');
+    state.route.startNodeId=origin.id;
+    state.route.start=origin.name;
+    const corridor=dashboardAdjacentStationRoutes(origin.id,fullMap).find(route=>route.stationId===state.route.endNodeId);
+    if(!corridor)throw new Error('Destination must be a directly adjacent same-ring station or a station on the next concentric ring.');
+    const ringDifference=Math.abs(number(origin.ring)-number(corridor.station.ring));
+    if(ringDifference>1)throw new Error('Cross-planetary and multi-ring station routes are prohibited.');
+    const temporaryEdge={...corridor.edge,id:corridor.edgeIds[0],a:origin.id,b:corridor.stationId,distance:corridor.distance,danger:corridor.danger,voyages:1,localStationCorridor:true};
+    state.world.map={...fullMap,nodes:[origin,corridor.station],edges:[temporaryEdge],startId:origin.id};
+    let crossing;
+    try{
+      crossing=generateValidCrossingBeforeStationAdjacency();
+    }finally{
+      state.world.map=fullMap;
+    }
+    crossing.stationCorridor={
+      topologyVersion:DASHBOARD_LOCAL_STATION_TOPOLOGY_VERSION,
+      originId:origin.id,
+      destinationId:corridor.stationId,
+      relation:corridor.relation,
+      pathNodeIds:[origin.id,corridor.stationId],
+      edgeIds:[temporaryEdge.id],
+      distance:corridor.distance,
+      danger:corridor.danger
+    };
+    crossing.pathNodeIds=[origin.id,corridor.stationId];
+    state.route.distance=corridor.distance;
+    state.route.crossingMessage=`Local ${corridor.relation.replaceAll('-',' ')} route filed: ${origin.name} → ${corridor.station.name}.`;
+    state.world.selected=[origin.id,corridor.stationId];
+    synchronizeActiveDashboardMechanics('Strict local station route generated',{rebuildTurnOrder:true});
+    save();
+    return crossing;
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_LOCAL_STATION_TOPOLOGY_DIAGNOSTICS={
+    version:DASHBOARD_LOCAL_STATION_TOPOLOGY_VERSION,
+    stationCount:state.world?.map?.nodes?.filter(node=>node.type==='station').length||0,
+    corridorCount:dashboardMasterWorldMapValid?.()?dashboardLocalStationTopology().corridors.length:0,
+    maximumRingDifference:dashboardMasterWorldMapValid?.()?Math.max(0,...dashboardLocalStationTopology().corridors.map(corridor=>Math.abs(number(dashboardLocalStationTopology().stationById[corridor.a]?.ring)-number(dashboardLocalStationTopology().stationById[corridor.b]?.ring)))):0,
+    allPairsSearchDisabled:true,
+    crossPlanetaryPlanningDisabled:true,
+    allowedRelations:['same-ring-adjacent','one-ring-inward','one-ring-outward']
+  };
