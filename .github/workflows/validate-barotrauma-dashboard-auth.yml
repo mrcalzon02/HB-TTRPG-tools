@@ -6,6 +6,7 @@ on:
     paths:
       - 'barotrauma-rpg-tools.html'
       - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/submarines/submarine-roster.json'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-*.txt'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
       - '.github/workflows/validate-barotrauma-dashboard-auth.yml'
@@ -13,6 +14,7 @@ on:
     paths:
       - 'barotrauma-rpg-tools.html'
       - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/submarines/submarine-roster.json'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-*.txt'
       - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
       - '.github/workflows/validate-barotrauma-dashboard-auth.yml'
@@ -96,6 +98,7 @@ jobs:
           const recoveryUi02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt', 'utf8');
           const recoveryPostload = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt', 'utf8');
           const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
+          const roster = JSON.parse(fs.readFileSync('data/barotrauma/tools/submarines/submarine-roster.json', 'utf8'));
 
           assert(core00.includes("algorithm='PBKDF2-SHA-256'") || core00.includes("credential.algorithm='PBKDF2-SHA-256'"), 'Credential algorithm is not PBKDF2-SHA-256');
           assert(core00.includes('DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS=210000'), 'PBKDF2 iteration count is not 210000');
@@ -120,6 +123,13 @@ jobs:
           assert(recoveryCore.includes('credential.receipts={}'), 'Password reset does not revoke older sessions');
           assert(recoveryCore.includes('await dashboardManagementIssueRecoveryCode(credential)'), 'Password reset does not rotate the recovery code');
           assert(recoveryStability.includes("if('code' in recovery||'recoveryCode' in recovery)"), 'Plaintext recovery-code diagnostic is missing');
+          assert(recoveryStability.includes('dashboardManageableCreationSubmarineNames'), 'Tier-restricted manageable submarine list is missing');
+          assert(recoveryStability.includes('if(model?.custom)return true;'), 'Custom submarines are not explicitly allowed for new creation');
+          assert(recoveryStability.includes('number(model.profile.tier,0)===1'), 'Official new-submarine creation is not restricted to Tier 1');
+          assert(recoveryStability.includes('createNewManageableSubmarineWithTierRestriction'), 'The creation API does not enforce the Tier 1/custom rule');
+          assert(recoveryUi00.includes('const models=dashboardManageableCreationSubmarineNames();'), 'The creation selector does not use the restricted model list');
+          assert(!recoveryUi00.includes('dashboardStartingSubmarineNames'), 'The creation selector still uses the unrestricted commissioning list');
+          assert(recoveryUi00.includes("SUBMARINES[name]?.custom?'Custom':'Tier 1'"), 'Creation options are not labeled as Tier 1 or Custom');
           assert(recoveryUi00.includes('Create New Manageable Submarine'), 'New manageable submarine interface is missing');
           assert(recoveryUi00.includes('Repair Login Pairing'), 'Pairing-repair interface is missing');
           assert(recoveryUi00.includes('Reset Forgotten Password'), 'Password-reset interface is missing');
@@ -129,6 +139,10 @@ jobs:
           assert(recoveryUi02.includes("pendingRecoveryCode=''"), 'One-time recovery code cannot be cleared from runtime memory');
           assert(recoveryPostload.includes('legacy-recovery-issued-after-session-restore'), 'Restored legacy sessions do not receive a recovery code');
 
+          const officialTierOne = roster.submarines.filter(model => Number(model.tier) === 1).map(model => model.name).sort();
+          assert.deepStrictEqual(officialTierOne, ['Barsuk', 'Camel', 'Dugong', 'Orca'], 'Official Tier 1 roster changed; review the manageable-submarine creation restriction');
+          assert(roster.submarines.filter(model => Number(model.tier) > 1).length > 0, 'Roster no longer exercises exclusion of higher-tier official submarines');
+
           assert(!/credential\.recovery\.(code|recoveryCode)\s*=/.test(recoveryCore), 'A plaintext recovery code is written into the credential');
           assert(!/receipt\.token\s*=/.test(core01), 'A raw receipt token appears to be written into world state');
           assert(finalRuntime.includes('version: 22'), 'Suite export version is not 22');
@@ -136,5 +150,5 @@ jobs:
           assert(finalRuntime.includes('dashboardAuthVersion: 21'), 'Version-21 dashboard-auth import compatibility marker is missing');
           assert(finalRuntime.includes('pendingRecoveryCode ='), 'Suite import does not clear one-time recovery memory');
 
-          console.log(`Validated ${paths.length} base fragments and ${recoveryPaths.length} recovery fragments for manageable-submarine creation, pairing repair, login, logout, and password reset.`);
+          console.log(`Validated ${paths.length} base fragments and ${recoveryPaths.length} recovery fragments. New manageable submarines are limited to official Tier 1 models plus custom submarines.`);
           NODE
