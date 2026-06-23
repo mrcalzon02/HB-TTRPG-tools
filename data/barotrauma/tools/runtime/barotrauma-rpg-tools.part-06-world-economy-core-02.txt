@@ -1,0 +1,229 @@
+
+  if (!WORLD_ECONOMY_COMMODITIES.includes('deliveryGoods')) WORLD_ECONOMY_COMMODITIES.push('deliveryGoods');
+  WORLD_STATION_PROCESS_PROFILES.factory = {
+    label:'Delivery-Goods Fabrication',
+    inputs:{rawMaterials:12,industrialGoods:4,components:4,fuel:2},
+    outputs:{deliveryGoods:8},
+    notes:'Factories consume substantial bulk material, machinery, components, and fuel to package generic Delivery Goods. These sealed freight lots are the only mechanism that can regenerate ordinary vendor stock.'
+  };
+  WORLD_STATION_PROCESS_PROFILES.shipyard = {
+    label:'Shipyard Construction',
+    inputs:{rawMaterials:10,industrialGoods:6,components:5,deliveryGoods:2,fuel:2},
+    outputs:{credits:40},
+    vesselProgress:25,
+    notes:'Shipyards consume bulk industrial stock and Delivery Goods to construct commissionable submarines.'
+  };
+
+  function worldEconomyProcessProfile(station) {
+    return WORLD_STATION_PROCESS_PROFILES[station?.profileId]||WORLD_STATION_PROCESS_PROFILES.general;
+  }
+
+  function worldEconomyCanRunProcess(station,profile) {
+    return Object.entries(profile.inputs||{}).every(([key,value])=>number(station.inventory[key])>=number(value));
+  }
+
+  function worldEconomyManufacturedModel(station) {
+    const names=[...new Set([...(OFFICIAL_SUBMARINE_PROFILES||[]).map(profile=>profile.name),...Object.keys(SUBMARINES||{})])].filter(name=>SUBMARINES[name]);
+    if (!names.length) return 'Barsuk';
+    return names[Math.abs(seededHash(`${station.stationNodeId}|${station.construction.completedVesselIds.length}|manufactured-model`))%names.length];
+  }
+
+  function worldEconomyCompleteShipyardVessel(station,completedAt) {
+    const modelName=worldEconomyManufacturedModel(station);
+    const model=SUBMARINES[modelName]||{};
+    const vessel=upsertWorldVessel({
+      vesselId:uid('manufactured-submarine'),worldId:normalizeWorldHub().worldId,kind:'manufactured',role:'available-vessel',
+      name:`${station.name} ${modelName} ${station.construction.completedVesselIds.length+1}`,modelId:modelName,modelName,
+      ownerGroupId:'',status:'available',active:true,availableForCommission:true,
+      location:{mode:'station',stationNodeId:station.stationNodeId,currentNodeId:station.stationNodeId,arrivedAt:completedAt,decisionState:'available-for-commission'},
+      capacity:number(model.capacity?.total||model.capacity||40,40),createdAt:completedAt,updatedAt:completedAt,lastActionAt:completedAt,
+      notes:`Constructed by ${station.name} through the persistent world economy.`
+    });
+    station.construction.completedVesselIds.push(vessel.vesselId);
+    station.construction.lastCompletedAt=completedAt;
+    station.construction.progress=Math.max(0,number(station.construction.progress)-100);
+    worldEconomyJournal(`${station.name} completed ${vessel.name}; it is now available for commission.`,'shipyard',{stationNodeId:station.stationNodeId,vesselId:vessel.vesselId});
+    return vessel;
+  }
+
+  function processWorldStationEconomyCycle(station,cycleAt=new Date().toISOString()) {
+    const profile=worldEconomyProcessProfile(station);
+    if (!worldEconomyCanRunProcess(station,profile)) {
+      station.production.cyclesBlocked=Math.max(0,number(station.production.cyclesBlocked))+1;
+      station.production.lastProcessedAt=cycleAt;
+      station.production.lastCycleSummary=`Blocked: insufficient ${Object.entries(profile.inputs||{}).filter(([key,value])=>number(station.inventory[key])<number(value)).map(([key])=>key).join(', ')||'inputs'}.`;
+      station.shortages=Object.fromEntries(Object.entries(profile.inputs||{}).filter(([key,value])=>number(station.inventory[key])<number(value)).map(([key,value])=>[key,number(value)-number(station.inventory[key])]));
+      return false;
+    }
+    for (const [key,value] of Object.entries(profile.inputs||{})) station.inventory[key]=Math.max(0,number(station.inventory[key])-number(value));
+    for (const [key,value] of Object.entries(profile.outputs||{})) station.inventory[key]=Math.max(0,number(station.inventory[key]))+number(value);
+    station.production.cyclesCompleted=Math.max(0,number(station.production.cyclesCompleted))+1;
+    station.production.lastProcessedAt=cycleAt;
+    station.production.lastCycleSummary=`Consumed ${Object.entries(profile.inputs||{}).map(([key,value])=>`${value} ${key}`).join(', ')||'nothing'}; produced ${Object.entries(profile.outputs||{}).map(([key,value])=>`${value} ${key}`).join(', ')||'services'}.`;
+    station.shortages={};
+    if (number(profile.vesselProgress)) {
+      station.construction.progress=Math.max(0,number(station.construction.progress))+number(profile.vesselProgress);
+      while (station.construction.progress>=100) worldEconomyCompleteShipyardVessel(station,cycleAt);
+    }
+    station.updatedAt=cycleAt;
+    return true;
+  }
+
+  function worldEconomyTransitDurationMinutes(vessel,fromNodeId,toNodeId) {
+    const sequence=Math.max(0,number(vessel?.transitSequence));
+    return 15+(seededHash(`${vessel?.vesselId}|${fromNodeId}|${toNodeId}|${sequence}|passive-trade-duration`)%91);
+  }
+
+  function worldEconomyNpcFleetTargetCount() {
+    const stations=(state.world?.map?.nodes||[]).filter(node=>node.type==='station').length;
+    return clamp(Math.round(stations/32),WORLD_ECONOMY_DEFAULTS.npcFleetMinimum,WORLD_ECONOMY_DEFAULTS.npcFleetMaximum);
+  }
+
+  function worldEconomyNpcNames() {
+    return ['Mercantile','Provisioner','Foundry Runner','Vent Courier','Ore Hauler','Colony Tender','Station Packet','Factory Exchange','Deep Freight','Abyssal Caravan'];
+  }
+
+  function seedWorldEconomyNpcFleet() {
+    const map=state.world?.map;
+    if (!map?.nodes?.length) return [];
+    const registry=worldVesselRegistry();
+    const active=Object.values(registry).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+    const target=worldEconomyNpcFleetTargetCount();
+    const stations=map.nodes.filter(node=>node.type==='station');
+    for (let index=active.length;index<target;index+=1) {
+      const station=stations[Math.abs(seededHash(`${map.worldId||map.seed}|npc-fleet-station|${index}`))%Math.max(1,stations.length)];
+      if (!station) break;
+      const names=worldEconomyNpcNames();
+      const role=names[Math.abs(seededHash(`${map.worldId||map.seed}|npc-fleet-role|${index}`))%names.length];
+      upsertWorldVessel({vesselId:`npc-trader-${stationSlug(map.worldId||map.seed||'world')}-${index+1}`,worldId:normalizeWorldHub().worldId,kind:'npc',role:'trade-freighter',name:`${station.name} ${role} ${index+1}`,modelId:'npc-freighter',modelName:'NPC Trade Submarine',status:'docked',active:true,availableForCommission:false,location:{mode:'station',stationNodeId:station.id,currentNodeId:station.id,arrivedAt:new Date().toISOString(),decisionState:'loading'},cargo:{commodities:{}},capacity:18+(seededHash(`${index}|capacity`)%35),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastActionAt:new Date().toISOString(),nextActionAt:new Date(Date.now()+(5+seededHash(`${index}|dwell`)%11)*60000).toISOString(),transitSequence:0,notes:'Persistent NPC freight vessel generated for the master world economy.'});
+    }
+    return Object.values(registry).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+  }
+
+  function worldEconomyStationDemand(station,key) {
+    const profile=worldEconomyProcessProfile(station);
+    const required=number(profile.inputs?.[key]);
+    const inventory=number(station.inventory[key]);
+    const target=Math.max(8,required*5);
+    return Math.max(0,target-inventory)+number(station.shortages?.[key])*3;
+  }
+
+  function worldEconomyStationSurplus(station,key) {
+    const profile=worldEconomyProcessProfile(station);
+    const reserve=Math.max(5,number(profile.inputs?.[key])*3);
+    return Math.max(0,number(station.inventory[key])-reserve);
+  }
+
+  function worldEconomyChooseFreightRun(vessel) {
+    const origin=worldStationEconomy(vessel.location.stationNodeId||vessel.location.currentNodeId);
+    if (!origin) return null;
+    const routes=dashboardAdjacentStationRoutes(origin.stationNodeId).filter(route=>worldStationEconomy(route.stationId));
+    if (!routes.length) return null;
+    const candidates=[];
+    for (const route of routes) {
+      const target=worldStationEconomy(route.stationId);
+      for (const key of WORLD_ECONOMY_COMMODITIES.filter(key=>!['credits'].includes(key))) {
+        const surplus=worldEconomyStationSurplus(origin,key);
+        const demand=worldEconomyStationDemand(target,key);
+        if (surplus<=0||demand<=0) continue;
+        const priority=(key==='deliveryGoods'?4:1)+demand+Math.min(surplus,number(vessel.capacity));
+        candidates.push({route,target,key,surplus,demand,priority});
+      }
+    }
+    if (!candidates.length) {
+      const route=routes[seededHash(`${vessel.vesselId}|${vessel.transitSequence}|empty-route`)%routes.length];
+      return {route,target:worldStationEconomy(route.stationId),key:'',quantity:0};
+    }
+    candidates.sort((left,right)=>right.priority-left.priority||left.route.distance-right.route.distance);
+    const chosen=candidates[0];
+    chosen.quantity=Math.max(1,Math.min(Math.floor(number(vessel.capacity)),Math.floor(chosen.surplus),Math.ceil(chosen.demand)));
+    return chosen;
+  }
+
+  function departWorldEconomyFreighter(vessel,departAt=new Date()) {
+    if (!vessel||vessel.kind!=='npc'||vessel.status!=='docked') return false;
+    const run=worldEconomyChooseFreightRun(vessel);
+    if (!run?.route||!run.target) return false;
+    const origin=worldStationEconomy(vessel.location.stationNodeId||vessel.location.currentNodeId);
+    vessel.cargo.commodities={};
+    if (run.key&&run.quantity>0) {
+      origin.inventory[run.key]=Math.max(0,number(origin.inventory[run.key])-run.quantity);
+      vessel.cargo.commodities[run.key]=run.quantity;
+    }
+    const minutes=worldEconomyTransitDurationMinutes(vessel,origin.stationNodeId,run.target.stationNodeId);
+    const eta=new Date(departAt.getTime()+minutes*60000);
+    vessel.status='in-transit';
+    vessel.location={mode:'route',stationNodeId:'',routeId:`npc-route-${vessel.vesselId}-${vessel.transitSequence+1}`,departureNodeId:origin.stationNodeId,destinationNodeId:run.target.stationNodeId,fromNodeId:origin.stationNodeId,toNodeId:run.target.stationNodeId,currentNodeId:origin.stationNodeId,pathNodeIds:run.route.pathNodeIds||[origin.stationNodeId,run.target.stationNodeId],progress:0,departedAt:departAt.toISOString(),etaAt:eta.toISOString(),arrivedAt:'',decisionState:'scheduled-passive-trade'};
+    vessel.transitSequence=Math.max(0,number(vessel.transitSequence))+1;
+    vessel.lastActionAt=departAt.toISOString();
+    vessel.nextActionAt=eta.toISOString();
+    vessel.updatedAt=departAt.toISOString();
+    origin.updatedAt=departAt.toISOString();
+    worldEconomyTradeJournal(`${vessel.name} departed ${origin.name} for ${run.target.name}; arrival and trade scheduled in ${minutes} minutes.`,{vesselId:vessel.vesselId,fromNodeId:origin.stationNodeId,toNodeId:run.target.stationNodeId,minutes,cargo:worldEconomyClone(vessel.cargo.commodities)});
+    return true;
+  }
+
+  function worldEconomyAcceptDeliveryGoods(nodeId,quantity,vesselId='') {
+    const station=worldStationEconomy(nodeId);
+    const amount=Math.max(0,Math.floor(number(quantity)));
+    if (!station||amount<=0) return {accepted:0,stockUnits:0};
+    station.inventory.deliveryGoods=Math.max(0,number(station.inventory.deliveryGoods))+amount;
+    station.updatedAt=new Date().toISOString();
+    return {accepted:amount,stockUnits:0,vesselId};
+  }
+
+  function arriveWorldEconomyFreighter(vessel,arriveAt=new Date()) {
+    if (!vessel||vessel.kind!=='npc'||vessel.status!=='in-transit') return false;
+    const destination=worldStationEconomy(vessel.location.destinationNodeId||vessel.location.toNodeId);
+    if (!destination) return false;
+    const manifest=worldEconomyClone(vessel.cargo.commodities||{});
+    for (const [key,value] of Object.entries(manifest)) {
+      const amount=Math.max(0,number(value));
+      if (!amount) continue;
+      if (key==='deliveryGoods') worldEconomyAcceptDeliveryGoods(destination.stationNodeId,amount,vessel.vesselId);
+      else destination.inventory[key]=Math.max(0,number(destination.inventory[key]))+amount;
+    }
+    vessel.cargo.commodities={};
+    vessel.status='docked';
+    vessel.location={mode:'station',stationNodeId:destination.stationNodeId,currentNodeId:destination.stationNodeId,routeId:vessel.location.routeId,departureNodeId:vessel.location.departureNodeId,destinationNodeId:destination.stationNodeId,progress:1,departedAt:vessel.location.departedAt,etaAt:vessel.location.etaAt,arrivedAt:arriveAt.toISOString(),decisionState:'trade-completed'};
+    vessel.lastActionAt=arriveAt.toISOString();
+    vessel.nextActionAt=new Date(arriveAt.getTime()+(5+seededHash(`${vessel.vesselId}|${vessel.transitSequence}|dwell`)%11)*60000).toISOString();
+    vessel.updatedAt=arriveAt.toISOString();
+    destination.updatedAt=arriveAt.toISOString();
+    worldEconomyTradeJournal(`${vessel.name} arrived at ${destination.name} and completed its scheduled trade.`,{vesselId:vessel.vesselId,toNodeId:destination.stationNodeId,cargo:manifest});
+    return true;
+  }
+
+  function processWorldEconomySimulation(now=new Date(),options={}) {
+    const economy=normalizeWorldEconomyState();
+    syncAllWorldPlayerVessels();
+    seedWorldEconomyNpcFleet();
+    const last=Date.parse(economy.simulation.lastSimulatedAt||now.toISOString());
+    const elapsed=Math.max(0,now.getTime()-(Number.isFinite(last)?last:now.getTime()));
+    const cycles=Math.min(WORLD_ECONOMY_DEFAULTS.catchupCycleLimit,Math.floor(elapsed/(WORLD_ECONOMY_DEFAULTS.stationCycleMinutes*60000)));
+    let processedStations=0,completedTrades=0,departedTrades=0;
+    if (cycles>0) {
+      const stations=Object.values(economy.stationEconomies).filter(station=>!station.archived);
+      for (let cycle=0;cycle<cycles;cycle+=1) {
+        const cycleAt=new Date((Number.isFinite(last)?last:now.getTime())+(cycle+1)*WORLD_ECONOMY_DEFAULTS.stationCycleMinutes*60000).toISOString();
+        for (const station of stations) { processWorldStationEconomyCycle(station,cycleAt); processedStations+=1; }
+      }
+    }
+    const npc=Object.values(economy.vessels).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+    const vesselLimit=Math.max(1,number(options.vesselLimit,npc.length||1));
+    for (const vessel of npc.slice(0,vesselLimit)) {
+      const due=Date.parse(vessel.nextActionAt||0);
+      if (!Number.isFinite(due)||due>now.getTime()) continue;
+      if (vessel.status==='in-transit') { if (arriveWorldEconomyFreighter(vessel,new Date(due))) completedTrades+=1; }
+      else if (vessel.status==='docked') { if (departWorldEconomyFreighter(vessel,new Date(Math.max(due,Date.parse(vessel.lastActionAt||0)||now.getTime())))) departedTrades+=1; }
+    }
+    economy.simulation.lastSimulatedAt=now.toISOString();
+    economy.simulation.tickSequence=Math.max(0,number(economy.simulation.tickSequence))+1;
+    economy.simulation.lastSummary=`Processed ${cycles} station cycle${cycles===1?'':'s'}, ${departedTrades} freight departures, and ${completedTrades} completed trades.`;
+    normalizeWorldHub().updatedAt=now.toISOString();
+    save();
+    return {cycles,processedStations,departedTrades,completedTrades,summary:economy.simulation.lastSummary};
+  }
+
+  normalizeWorldEconomyState();
+  seedWorldEconomyNpcFleet();

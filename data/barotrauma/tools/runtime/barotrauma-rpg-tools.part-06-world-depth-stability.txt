@@ -1,0 +1,53 @@
+
+  const WORLD_DEPTH_STABILITY_VERSION='1.0.0';
+
+  const worldDepthRelocateCampaignBeforeStability=worldDepthRelocateCampaignAfterRegeneration;
+  worldDepthRelocateCampaignAfterRegeneration=function worldDepthRelocateCampaignAfterRegenerationStable(){
+    const hub=normalizeWorldHub();
+    for(const group of Object.values(hub.publicState.groups||{})){
+      const recordIds=Object.values(hub.publicState.submarines||{}).filter(record=>record?.groupId===group.groupId).map(record=>record.submarineId).filter(Boolean);
+      group.submarineIds=[...new Set([...(group.submarineIds||[]),group.primarySubmarineId,group.activeSubmarineId,...recordIds].filter(Boolean))];
+    }
+    const result=worldDepthRelocateCampaignBeforeStability();
+    const activeGroup=hub.publicState.groups?.[hub.activeGroupId];
+    const activeNodeId=activeGroup?.currentNodeId||'';
+    if(state.submarine?.managedExpedition){
+      state.submarine.managedExpedition.groupId=activeGroup?.groupId||state.submarine.managedExpedition.groupId||'';
+      state.submarine.managedExpedition.currentNodeId=activeNodeId;
+      state.submarine.managedExpedition.routeId='';
+      state.submarine.managedExpedition.status='active';
+    }
+    state.world.activeSubmarineId=hub.activeSubmarineId||activeGroup?.activeSubmarineId||activeGroup?.primarySubmarineId||'';
+    if(state.commerce&&typeof state.commerce==='object'){
+      state.commerce.stationId=activeNodeId;
+      state.commerce.selectedStationId=activeNodeId;
+      state.commerce.market=null;
+    }
+    if(typeof synchronizeActiveDashboardMechanics==='function'&&activeGroup)synchronizeActiveDashboardMechanics('Campaign relocated after verified deep-world regeneration',{rebuildTurnOrder:true});
+    return result;
+  };
+
+  const regenerateVerifiedDeepMasterworldBeforeTransactionGuard=regenerateVerifiedDeepMasterworld;
+  regenerateVerifiedDeepMasterworld=function regenerateVerifiedDeepMasterworldTransactional(){
+    const stateBackup=cloneWorldData(state);
+    try{
+      return regenerateVerifiedDeepMasterworldBeforeTransactionGuard();
+    }catch(error){
+      for(const key of Object.keys(state))delete state[key];
+      Object.assign(state,cloneWorldData(stateBackup));
+      globalThis.__BAROTRAUMA_DASHBOARD_GRAPH_CACHE=null;
+      globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE=null;
+      globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE=null;
+      globalThis.__BAROTRAUMA_LOCAL_WORLD_TOPOLOGY_CACHE=null;
+      save();
+      throw new Error(`Deep Masterworld regeneration was rolled back safely: ${error.message||String(error)}`);
+    }
+  };
+
+  globalThis.BAROTRAUMA_WORLD_DEPTH_STABILITY={
+    version:WORLD_DEPTH_STABILITY_VERSION,
+    transactionalRollback:true,
+    groupFleetIdsNormalized:true,
+    activeSubmarineRelocated:true,
+    commerceReboundToNewStation:true
+  };

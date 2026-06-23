@@ -1,0 +1,11 @@
+
+  const createDashboardManagementCredentialBeforeGroupRegistration=createDashboardManagementCredential;
+  createDashboardManagementCredential=async function createDashboardManagementCredentialWithGroupRegistration(vesselId,password,managerName='',remember=false){
+    if(!dashboardManagementGroupForVessel(vesselId)){
+      if(vesselId===state.submarine?.worldSubmarineId||!dashboardManagementSubmarineRecord(vesselId)){
+        const registeredId=registerCurrentSubmarineForDashboardManagement();
+        if(registeredId!==vesselId)throw new Error('The local submarine identity changed during registration. Select the registered vessel and try again.');
+      }else throw new Error('This submarine must be assigned to an expedition group before it can be claimed.');
+    }
+    return createDashboardManagementCredentialBeforeGroupRegistration(vesselId,password,managerName,remember);
+  };

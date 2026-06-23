@@ -1,0 +1,91 @@
+
+  function dashboardManagementDenied(action,returnValue=false){
+    const message=`Log in to ${action}.`;
+    dashboardManagementRuntime.message=message;
+    if(typeof dashboardSetMessage==='function')dashboardSetMessage(message,true);
+    return returnValue;
+  }
+
+  function dashboardManagementGuardFunction(original,action,deniedValue=false){
+    return function dashboardManagementGuardedFunction(...args){
+      if(activeSubmarineDashboardContext()&&!dashboardManagementAuthorized())return dashboardManagementDenied(action,typeof deniedValue==='function'?deniedValue():deniedValue);
+      return original.apply(this,args);
+    };
+  }
+
+  const normalizeActiveSubmarineDashboardBeforeManagementBoundary=normalizeActiveSubmarineDashboard;
+  normalizeActiveSubmarineDashboard=function normalizeActiveSubmarineDashboardWithManagementBoundary(persist=false){
+    if(activeSubmarineDashboardContext()&&!dashboardManagementAuthorized()){
+      state.operationsDashboard=state.operationsDashboard&&typeof state.operationsDashboard==='object'?state.operationsDashboard:defaultActiveSubmarineDashboard();
+      return {dashboard:state.operationsDashboard,hub:normalizeWorldHub(),group:null,crossing:normalizeRouteCrossing(),submarineId:'',crewIds:[],localCrewId:'',acceptedCrew:[],locked:true};
+    }
+    return normalizeActiveSubmarineDashboardBeforeManagementBoundary(persist);
+  };
+
+  generateValidCrossing=dashboardManagementGuardFunction(generateValidCrossing,'file a route for this submarine',false);
+  startCrossing=dashboardManagementGuardFunction(startCrossing,'depart with this submarine',false);
+  resolveCrossingEvent=dashboardManagementGuardFunction(resolveCrossingEvent,'resolve route events for this submarine',false);
+  rollCrossingEvent=dashboardManagementGuardFunction(rollCrossingEvent,'roll route events for this submarine',false);
+  redrawCrossingEvent=dashboardManagementGuardFunction(redrawCrossingEvent,'redraw route events for this submarine',false);
+  completeCrossingLeg=dashboardManagementGuardFunction(completeCrossingLeg,'complete route legs for this submarine',false);
+  abortCrossing=dashboardManagementGuardFunction(abortCrossing,'abort transit for this submarine',false);
+  clearRouteCrossing=dashboardManagementGuardFunction(clearRouteCrossing,'clear this submarine’s route',false);
+  generateStationMarket=dashboardManagementGuardFunction(generateStationMarket,'reconcile vendor stock for this submarine',false);
+  buyStationStock=dashboardManagementGuardFunction(buyStationStock,'purchase station stock for this submarine',()=>({ok:false,message:'Log in to purchase station stock for this submarine.'}));
+  sellToStation=dashboardManagementGuardFunction(sellToStation,'sell cargo from this submarine',()=>({ok:false,message:'Log in to sell cargo from this submarine.'}));
+  applyDashboardStartingLocation=dashboardManagementGuardFunction(applyDashboardStartingLocation,'set this submarine’s starting station',()=>({ok:false,message:'Log in to set this submarine’s starting station.'}));
+  applyDashboardStartingSubmarine=dashboardManagementGuardFunction(applyDashboardStartingSubmarine,'change this submarine’s commissioned model',()=>({ok:false,message:'Log in to change this submarine’s commissioned model.'}));
+  assignCrewToActiveDashboard=dashboardManagementGuardFunction(assignCrewToActiveDashboard,'assign crew to this submarine',()=>({ok:false,message:'Log in to assign crew to this submarine.'}));
+  createAndAssignDashboardCrew=dashboardManagementGuardFunction(createAndAssignDashboardCrew,'create crew for this submarine',()=>({ok:false,message:'Log in to create crew for this submarine.'}));
+  synchronizeActiveDashboardMechanics=dashboardManagementGuardFunction(synchronizeActiveDashboardMechanics,'synchronize this submarine',null);
+  dashboardGenerateWorld=dashboardManagementGuardFunction(dashboardGenerateWorld,'regenerate the managed campaign world',false);
+
+  const importWorldSaveBeforeDashboardManagementAuth=importWorldSave;
+  importWorldSave=function importWorldSaveWithManagementLogout(raw){
+    if(dashboardManagementRuntime.status==='authenticated')logoutDashboardManagementSession('world save import');
+    const result=importWorldSaveBeforeDashboardManagementAuth(raw);
+    normalizeDashboardManagementAuthority();
+    dashboardManagementRuntime.status='locked';
+    dashboardManagementRuntime.message='World save imported. Log in to a submarine in the imported world.';
+    dashboardManagementClearStoredSession();
+    return result;
+  };
+
+  function dashboardManagementContainsPlaintextPassword(value){
+    if(!value||typeof value!=='object')return false;
+    for(const [key,entry] of Object.entries(value)){
+      if(/password/i.test(key))return true;
+      if(entry&&typeof entry==='object'&&dashboardManagementContainsPlaintextPassword(entry))return true;
+    }
+    return false;
+  }
+
+  function dashboardManagementAuthDiagnostics(){
+    const authority=normalizeDashboardManagementAuthority();
+    const issues=[];
+    for(const [vesselId,credential] of Object.entries(authority.submarineCredentials)){
+      if(!credential.credentialId)issues.push(`Submarine ${vesselId} has no credential ID.`);
+      if(!credential.salt)issues.push(`Submarine ${vesselId} has no password salt.`);
+      if(!credential.verifier)issues.push(`Submarine ${vesselId} has no password verifier.`);
+      if(number(credential.iterations)<100000)issues.push(`Submarine ${vesselId} uses too few PBKDF2 iterations.`);
+      for(const receipt of Object.values(credential.receipts||{})){
+        if(!receipt.tokenHash)issues.push(`Submarine ${vesselId} has a receipt without a token hash.`);
+        if('token' in receipt)issues.push(`Submarine ${vesselId} stores a raw receipt token in the world save.`);
+      }
+    }
+    if(dashboardManagementContainsPlaintextPassword(authority))issues.push('The management authority contains a plaintext password field.');
+    if(dashboardManagementRuntime.status==='authenticated'&&!dashboardManagementAuthorized(dashboardManagementRuntime.vesselId))issues.push('The runtime reports an authenticated but invalid management session.');
+    return {valid:!issues.length,issues,version:DASHBOARD_MANAGEMENT_AUTH_VERSION,credentialCount:Object.keys(authority.submarineCredentials).length,snapshotCount:Object.keys(authority.vesselSnapshots).length,sessionStatus:dashboardManagementRuntime.status,activeManagedVesselId:dashboardManagementRuntime.vesselId||''};
+  }
+
+  const dashboardBoundaryDiagnosticsBeforeManagementAuth=dashboardBoundaryDiagnostics;
+  dashboardBoundaryDiagnostics=function dashboardBoundaryDiagnosticsWithManagementAuth(){
+    const result=dashboardBoundaryDiagnosticsBeforeManagementAuth();
+    const auth=dashboardManagementAuthDiagnostics();
+    result.managementAuth=auth;
+    if(!auth.valid)result.issues.push(...auth.issues);
+    result.valid=!result.issues.length;
+    return result;
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_AUTH_DIAGNOSTICS=dashboardManagementAuthDiagnostics();

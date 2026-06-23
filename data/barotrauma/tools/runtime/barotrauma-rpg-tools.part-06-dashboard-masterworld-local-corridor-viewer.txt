@@ -1,0 +1,184 @@
+
+  const DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION='2.1.0';
+
+  const dashboardLocalStationTopologyBeforeCentralAnomaly=dashboardLocalStationTopology;
+  dashboardLocalStationTopology=function dashboardLocalStationTopologyWithCentralAnomaly(map=state.world?.map){
+    const topology=dashboardLocalStationTopologyBeforeCentralAnomaly(map);
+    if(topology.centralAnomalyRouteReady)return topology;
+    const anomaly=topology.worldTopology?.nodeById?.anomaly||map?.nodes?.find(node=>node.id==='anomaly'||node.type==='anomaly');
+    topology.destinationById={...(topology.stationById||{})};
+    if(!anomaly){topology.centralAnomalyRouteReady=true;return topology;}
+    topology.destinationById[anomaly.id]=anomaly;
+    topology.corridorsByStation=topology.corridorsByStation||{};
+    topology.corridorsByStation[anomaly.id]=topology.corridorsByStation[anomaly.id]||[];
+    topology.corridorById=topology.corridorById||{};
+    for(const station of Object.values(topology.stationById||{}).filter(node=>number(node.ring)===1)){
+      const edge=dashboardLocalEdgeForPair(topology.worldTopology,station.id,anomaly.id);
+      if(!edge)continue;
+      const id=`station-path-${station.id}-${anomaly.id}`;
+      if(topology.corridorById[id])continue;
+      const corridor={
+        id,
+        a:station.id,
+        b:anomaly.id,
+        relation:'central-anomaly',
+        distance:Math.max(1,number(edge.distance,1)),
+        danger:Boolean(edge.danger),
+        voyages:1,
+        pathNodeIds:[station.id,anomaly.id],
+        edgeIds:[edge.id],
+        edges:[edge],
+        localNodePath:true,
+        finalCenterMission:true
+      };
+      topology.corridors.push(corridor);
+      topology.corridorById[id]=corridor;
+      topology.corridorsByStation[station.id]=topology.corridorsByStation[station.id]||[];
+      topology.corridorsByStation[station.id].push(corridor);
+      topology.corridorsByStation[anomaly.id].push(corridor);
+    }
+    topology.centralAnomalyRouteReady=true;
+    return topology;
+  };
+
+  dashboardAdjacentStationRoutes=function dashboardAdjacentStationRoutesIncludingCentralAnomaly(originId,map=state.world?.map){
+    const topology=dashboardLocalStationTopology(map);
+    const origin=topology.destinationById?.[originId]||topology.stationById?.[originId];
+    if(!origin)return [];
+    return (topology.corridorsByStation?.[originId]||[]).map(corridor=>{
+      const destinationId=corridor.a===originId?corridor.b:corridor.a;
+      const destination=topology.destinationById?.[destinationId]||topology.stationById?.[destinationId];
+      const ringDelta=number(destination?.ring)-number(origin.ring);
+      const forward=corridor.a===originId;
+      return {
+        stationId:destinationId,
+        station:destination,
+        destinationId,
+        destination,
+        distance:corridor.distance,
+        danger:corridor.danger,
+        relation:destination?.type==='anomaly'?'central-anomaly':ringDelta<0?'one-ring-inward':ringDelta>0?'one-ring-outward':'same-ring-adjacent',
+        pathNodeIds:forward?[...corridor.pathNodeIds]:[...corridor.pathNodeIds].reverse(),
+        edgeIds:forward?[...corridor.edgeIds]:[...corridor.edgeIds].reverse(),
+        edges:(forward?[...corridor.edgeIds]:[...corridor.edgeIds].reverse()).map(id=>topology.worldTopology.edgeById[id]).filter(Boolean),
+        localNodePath:true,
+        finalCenterMission:Boolean(corridor.finalCenterMission)
+      };
+    }).filter(route=>route.destination&&Math.abs(number(route.destination.ring)-number(origin.ring))<=1&&route.pathNodeIds.length>=2);
+  };
+
+  if(typeof crossingStationNodes==='function'){
+    const crossingStationNodesBeforeCentralAnomaly=crossingStationNodes;
+    crossingStationNodes=function crossingStationNodesIncludingCentralAnomaly(map=state.world?.map){
+      const nodes=crossingStationNodesBeforeCentralAnomaly(map);
+      if(!activeSubmarineDashboardContext())return nodes;
+      const anomaly=map?.nodes?.find(node=>node.id==='anomaly'||node.type==='anomaly');
+      return anomaly&&!nodes.some(node=>node.id===anomaly.id)?[...nodes,anomaly]:nodes;
+    };
+  }
+
+  function dashboardIncrementalLocalCorridorsForRing(packageInfo,map=state.world?.map){
+    if(typeof dashboardLocalWorldTopology!=='function')return [];
+    const topology=dashboardLocalWorldTopology(map);
+    return topology.edges.filter(edge=>{
+      const left=topology.nodeById[edge.a];
+      const right=topology.nodeById[edge.b];
+      if(!left||!right)return false;
+      const leftRing=Math.round(number(left.ring));
+      const rightRing=Math.round(number(right.ring));
+      const difference=Math.abs(leftRing-rightRing);
+      if(difference>1)return false;
+      const displayRing=difference===0?leftRing:Math.min(leftRing,rightRing);
+      return displayRing===packageInfo.ring;
+    });
+  }
+
+  function dashboardIncrementalAddLocalCorridors(packageInfo,map=state.world?.map){
+    const layer=root.querySelector('#dashboard-incremental-world-corridors');
+    if(!layer||typeof dashboardLocalWorldTopology!=='function')return 0;
+    const topology=dashboardLocalWorldTopology(map);
+    const fragment=document.createDocumentFragment();
+    let added=0;
+    for(const edge of dashboardIncrementalLocalCorridorsForRing(packageInfo,map)){
+      if(layer.querySelector(`[data-local-corridor-id="${CSS.escape(edge.id)}"]`))continue;
+      const left=topology.nodeById[edge.a];
+      const right=topology.nodeById[edge.b];
+      if(!left||!right)continue;
+      const ringDifference=Math.abs(number(left.ring)-number(right.ring));
+      if(ringDifference>1)continue;
+      const line=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'line');
+      line.dataset.localCorridorId=edge.id;
+      line.dataset.localRelation=edge.relation;
+      line.setAttribute('x1',String(number(left.x)));
+      line.setAttribute('y1',String(number(left.y)));
+      line.setAttribute('x2',String(number(right.x)));
+      line.setAttribute('y2',String(number(right.y)));
+      const stationEndpoint=left.type==='station'||right.type==='station'||left.type==='anomaly'||right.type==='anomaly';
+      line.setAttribute('stroke',edge.danger?'#9d515a':edge.relation==='one-ring-inward'||left.type==='anomaly'||right.type==='anomaly'?'#397ea8':'#536f5c');
+      line.setAttribute('stroke-width',stationEndpoint?'2.2':'1.15');
+      line.setAttribute('opacity',stationEndpoint?'.72':'.42');
+      line.setAttribute('vector-effect','non-scaling-stroke');
+      const title=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'title');
+      title.textContent=`${left.name||left.id} ↔ ${right.name||right.id} · ${edge.relation.replaceAll('-',' ')} · one local segment`;
+      line.appendChild(title);
+      fragment.appendChild(line);
+      added+=1;
+    }
+    layer.appendChild(fragment);
+    return added;
+  }
+
+  const dashboardIncrementalWorldViewerHtmlBeforeLocalCorridors=dashboardIncrementalWorldViewerHtml;
+  dashboardIncrementalWorldViewerHtml=function dashboardIncrementalWorldViewerHtmlWithLocalLattice(context){
+    return dashboardIncrementalWorldViewerHtmlBeforeLocalCorridors(context)
+      .replace('<g id="dashboard-incremental-world-guides"></g>','<g id="dashboard-incremental-world-corridors"></g><g id="dashboard-incremental-world-guides"></g>')
+      .replace('No world generation occurs.','No world generation occurs. The complete local location lattice is drawn: immediate neighbors around each ring and one short step inward, continuing through the final mission to the central anomaly.')
+      .replace('Incremental saved Masterworld viewer','Incremental saved Masterworld local-lattice viewer');
+  };
+
+  const dashboardIncrementalLoadRingBeforeLocalCorridors=dashboardIncrementalLoadRing;
+  dashboardIncrementalLoadRing=async function dashboardIncrementalLoadRingWithLocalLattice(packageInfo,context,map,token,skipDelayRef){
+    if(token!==dashboardIncrementalWorldViewerRuntime.token)return false;
+    dashboardIncrementalAddLocalCorridors(packageInfo,map);
+    return dashboardIncrementalLoadRingBeforeLocalCorridors(packageInfo,context,map,token,skipDelayRef);
+  };
+
+  const latticeTopology=typeof dashboardLocalWorldTopology==='function'&&dashboardMasterWorldMapValid()?dashboardLocalWorldTopology():{edges:[],nodeById:{}};
+  const stationTopology=typeof dashboardLocalStationTopology==='function'&&dashboardMasterWorldMapValid()?dashboardLocalStationTopology():{corridors:[]};
+  const maximumRingDifference=Math.max(0,...latticeTopology.edges.map(edge=>Math.abs(number(latticeTopology.nodeById[edge.a]?.ring)-number(latticeTopology.nodeById[edge.b]?.ring))));
+  const maximumGeometricSegment=Math.max(0,...latticeTopology.edges.map(edge=>number(edge.geometric,0)));
+  globalThis.BAROTRAUMA_DASHBOARD_LOCAL_CORRIDOR_VIEWER_DIAGNOSTICS={
+    version:DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION,
+    nodeCount:Object.keys(latticeTopology.nodeById).length,
+    edgeCount:latticeTopology.edges.length,
+    maximumRingDifference,
+    maximumGeometricSegment,
+    sameRingNeighborsOnly:latticeTopology.edges.filter(edge=>edge.relation==='same-ring-adjacent').every(edge=>number(latticeTopology.nodeById[edge.a]?.ring)===number(latticeTopology.nodeById[edge.b]?.ring)),
+    oneRingInwardOnly:latticeTopology.edges.filter(edge=>edge.relation==='one-ring-inward').every(edge=>Math.abs(number(latticeTopology.nodeById[edge.a]?.ring)-number(latticeTopology.nodeById[edge.b]?.ring))===1),
+    reachesCentralAnomaly:latticeTopology.edges.some(edge=>edge.a==='anomaly'||edge.b==='anomaly'),
+    finalCenterMissionAvailable:stationTopology.corridors.some(corridor=>corridor.finalCenterMission),
+    directStationChordsRendered:false,
+    completeLocalLatticeRendered:true,
+    allPairsRenderingDisabled:true,
+    localCorridorsOnly:true
+  };
+
+  async function loadDashboardMasterworldIntegrityRecovery(){
+    try{
+      const path='data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-integrity-recovery.txt';
+      const response=await fetch(path,{cache:'no-store'});
+      if(!response.ok)throw new Error(`${path} returned ${response.status}`);
+      eval(await response.text());
+      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=true;
+      if(activeSubmarineDashboardContext())render();
+      return true;
+    }catch(error){
+      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=false;
+      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_ERROR=error.message||String(error);
+      console.error('Masterworld integrity recovery panel failed to load.',error);
+      return false;
+    }
+  }
+
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=false;
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_PROMISE=loadDashboardMasterworldIntegrityRecovery();

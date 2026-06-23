@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "title": "Europan Faction and Operational District Registry",
+  "description": "Campaign faction seed derived from institutions and conflicts alluded to in THE EUROPAN CREWMAN’S PRIMER. Primer-backed institutions retain their original names; newly named departments, corporations, distributors, criminal organizations, union chapters, and cult cells are identified as derived campaign material.",
+  "sourceReferences": [
+    "appendix-standard-union-208",
+    "xxi-the-right-to-representation",
+    "xxxii-the-red-registry",
+    "xxxiii-logistical-sanctions",
+    "xxxvii-union-halls",
+    "xxxix-union-relations-with-governments",
+    "xl-union-relations-with-criminal-organizations",
+    "the-children-of-the-honkmother",
+    "the-church-of-the-husk",
+    "the-jovian-separatists",
+    "the-submariner-between-factions"
+  ],
+  "districts": [
+    {"id":"outer-surface-gateways","name":"Outer Surface Gateways","min":0.875,"max":1.01,"economy":["transport","food","crew","general trade"],"description":"Surface-adjacent ports, arrival colonies, convoy assembly points, and first-contact trade stations."},
+    {"id":"coalition-core-lanes","name":"Coalition Core Lanes","min":0.75,"max":0.875,"economy":["administration","security","medical","logistics"],"description":"Heavily patrolled shipping corridors linking major colonies and administrative centers."},
+    {"id":"industrial-distribution-belt","name":"Industrial Distribution Belt","min":0.625,"max":0.75,"economy":["fabrication","materials","reactors","repair"],"description":"Fabrication stations, reactor depots, material exchanges, repair yards, and high-volume cargo junctions."},
+    {"id":"contested-colony-arc","name":"Contested Colony Arc","min":0.5,"max":0.625,"economy":["mixed industry","habitation","security","trade"],"description":"Dense settlements where Coalition, Separatist, corporate, and local claims overlap."},
+    {"id":"separatist-marches","name":"Separatist Marches","min":0.375,"max":0.5,"economy":["mining","militia supply","repair","local agriculture"],"description":"Autonomous stations, worker councils, militia ports, and irregular supply corridors."},
+    {"id":"deep-resource-frontier","name":"Deep Resource Frontier","min":0.25,"max":0.375,"economy":["mining","salvage","fuel","heavy equipment"],"description":"Mining, salvage, fuel recovery, and dangerous extraction settlements."},
+    {"id":"hadal-research-zone","name":"Hadal Research Zone","min":0.125,"max":0.25,"economy":["research","medical","alien technology","containment"],"description":"Remote laboratories, quarantine stations, alien-ruin expeditions, and hazardous biological programmes."},
+    {"id":"central-exclusion-zone","name":"Central Exclusion Zone","min":0,"max":0.125,"economy":["black research","salvage","military","survival"],"description":"Innermost stations, black sites, cult refuges, derelict installations, and anomaly-adjacent outposts."}
+  ],
+  "umbrellas": [
+    {"id":"europan-coalition","name":"Europan Coalition","type":"government","color":"#4f83b6","source":"Primer-backed major government."},
+    {"id":"jovian-separatists","name":"Jovian Separatists","type":"government-opposition","color":"#b6534f","source":"Primer-backed revolutionary movement."},
+    {"id":"standard-union-208","name":"Standard Union 208","type":"labor","color":"#d4a72c","source":"Primer-backed labor compact."},
+    {"id":"corporate-enclaves","name":"Corporate Enclaves","type":"corporate","color":"#7e68a6","source":"Primer-backed category; company names are derived."},
+    {"id":"independent-stations","name":"Independent Stations","type":"local-government","color":"#6f8f72","source":"Primer-backed category; local blocs are derived."},
+    {"id":"criminal-cartels","name":"Criminal Cartels","type":"criminal","color":"#8f5b45","source":"Primer-backed category; the Combine is directly alluded to."},
+    {"id":"children-of-the-honkmother","name":"Children of the Honkmother","type":"cult","color":"#d07cc2","source":"Primer-backed cult; cell names are derived."},
+    {"id":"church-of-the-husk","name":"Church of the Husk","type":"cult","color":"#6b9f75","source":"Primer-backed cult; cell names are derived."}
+  ],
+  "organizations": [
+    {"id":"coalition-civil-administration","name":"Coalition Civil Administration","parent":"europan-coalition","type":"government bureau","weight":10,"districts":["outer-surface-gateways","coalition-core-lanes","contested-colony-arc"],"trade":["administration","habitation","general trade"],"station":true,"hidden":false,"source":"Derived Coalition subfaction."},
+    {"id":"coalition-fleet-command","name":"Coalition Fleet Command","parent":"europan-coalition","type":"military command","weight":8,"districts":["coalition-core-lanes","contested-colony-arc","central-exclusion-zone"],"trade":["weapons","security","submarine systems"],"station":true,"hidden":false,"source":"Derived Coalition subfaction."},
+    {"id":"coalition-logistics-directorate","name":"Coalition Logistics Directorate","parent":"europan-coalition","type":"logistics bureau","weight":11,"districts":["outer-surface-gateways","coalition-core-lanes","industrial-distribution-belt"],"trade":["transport","food","materials","fuel"],"station":true,"hidden":false,"source":"Derived from Primer emphasis on logistics and shortages."},
+    {"id":"coalition-colonial-security","name":"Coalition Colonial Security Bureau","parent":"europan-coalition","type":"security service","weight":6,"districts":["coalition-core-lanes","contested-colony-arc","separatist-marches"],"trade":["security","weapons","detention"],"station":true,"hidden":false,"source":"Derived Coalition subfaction."},
+    {"id":"coalition-science-hazard-office","name":"Coalition Science and Hazard Office","parent":"europan-coalition","type":"scientific bureau","weight":7,"districts":["industrial-distribution-belt","hadal-research-zone","central-exclusion-zone"],"trade":["research","medical","containment","alien technology"],"station":true,"hidden":false,"source":"Derived Coalition subfaction."},
+
+    {"id":"jovian-workers-congress","name":"Jovian Workers’ Congress","parent":"jovian-separatists","type":"political congress","weight":9,"districts":["contested-colony-arc","separatist-marches","deep-resource-frontier"],"trade":["labor","food","habitation","general trade"],"station":true,"hidden":false,"source":"Derived from Primer-backed workers and labor organizers."},
+    {"id":"free-station-councils","name":"Free Station Councils","parent":"jovian-separatists","type":"local autonomist bloc","weight":10,"districts":["contested-colony-arc","separatist-marches"],"trade":["general trade","repair","food","local services"],"station":true,"hidden":false,"source":"Derived from Primer-backed local autonomists."},
+    {"id":"deep-miners-front","name":"Deep Miners’ Front","parent":"jovian-separatists","type":"industrial movement","weight":9,"districts":["separatist-marches","deep-resource-frontier"],"trade":["mining","explosives","heavy equipment","fuel"],"station":true,"hidden":false,"source":"Derived from Primer-backed miners and unsafe workplaces."},
+    {"id":"separatist-transport-compact","name":"Separatist Transport Compact","parent":"jovian-separatists","type":"transport syndicate","weight":8,"districts":["outer-surface-gateways","contested-colony-arc","separatist-marches"],"trade":["transport","fuel","smuggling","crew"],"station":true,"hidden":false,"source":"Derived from Primer-backed transport crews and smugglers."},
+    {"id":"red-current-militia","name":"Red Current Militia","parent":"jovian-separatists","type":"militia federation","weight":6,"districts":["contested-colony-arc","separatist-marches","central-exclusion-zone"],"trade":["weapons","security","submarine systems"],"station":true,"hidden":false,"source":"Derived militant Separatist subfaction."},
+
+    {"id":"union208-central-council","name":"Union 208 Central Council","parent":"standard-union-208","type":"labor federation","weight":5,"districts":["coalition-core-lanes","industrial-distribution-belt","contested-colony-arc"],"trade":["arbitration","contracts","crew","mutual aid"],"station":true,"hidden":false,"source":"Primer-backed institution; central council is derived."},
+    {"id":"union208-submariners-guild","name":"Union 208 Submariners’ Guild","parent":"standard-union-208","type":"maritime union","weight":8,"districts":["outer-surface-gateways","coalition-core-lanes","contested-colony-arc","separatist-marches"],"trade":["crew","contracts","training","rescue"],"station":true,"hidden":false,"source":"Derived from Primer-backed station chapters and representatives."},
+    {"id":"union208-dockworkers","name":"Union 208 Dockworkers’ Chapters","parent":"standard-union-208","type":"dock union","weight":8,"districts":["outer-surface-gateways","coalition-core-lanes","industrial-distribution-belt"],"trade":["cargo","docking","repair","convoys"],"station":true,"hidden":false,"source":"Derived from Primer-backed dockworkers and logistical sanctions."},
+    {"id":"union208-mutual-aid","name":"Union 208 Mutual Aid Network","parent":"standard-union-208","type":"mutual aid network","weight":6,"districts":["contested-colony-arc","separatist-marches","deep-resource-frontier"],"trade":["medical","food","rescue","death benefits"],"station":true,"hidden":false,"source":"Primer-backed mutual aid network."},
+
+    {"id":"abyssal-materials-consortium","name":"Abyssal Materials Consortium","parent":"corporate-enclaves","type":"mining corporation","weight":9,"districts":["industrial-distribution-belt","deep-resource-frontier"],"trade":["mining","metals","pressure materials","explosives"],"station":true,"hidden":false,"source":"Derived corporate faction."},
+    {"id":"pelagic-pressure-systems","name":"Pelagic Pressure Systems","parent":"corporate-enclaves","type":"engineering corporation","weight":8,"districts":["industrial-distribution-belt","deep-resource-frontier","hadal-research-zone"],"trade":["pressure systems","repair","pumps","fabrication"],"station":true,"hidden":false,"source":"Derived corporate faction."},
+    {"id":"thalassa-reactor-fuel","name":"Thalassa Reactor and Fuel","parent":"corporate-enclaves","type":"energy corporation","weight":8,"districts":["coalition-core-lanes","industrial-distribution-belt","deep-resource-frontier"],"trade":["reactor fuel","power","batteries","hazard transport"],"station":true,"hidden":false,"source":"Derived corporate faction."},
+    {"id":"hadal-medical-supply","name":"Hadal Medical Supply Group","parent":"corporate-enclaves","type":"medical corporation","weight":7,"districts":["coalition-core-lanes","industrial-distribution-belt","hadal-research-zone"],"trade":["medical","blood","antidotes","biotechnology"],"station":true,"hidden":false,"source":"Derived corporate faction."},
+    {"id":"borealis-transit-freight","name":"Borealis Transit and Freight","parent":"corporate-enclaves","type":"transport corporation","weight":10,"districts":["outer-surface-gateways","coalition-core-lanes","industrial-distribution-belt"],"trade":["transport","cargo","crew contracts","convoys"],"station":true,"hidden":false,"source":"Derived corporate faction."},
+    {"id":"deepwater-materials-exchange","name":"Deepwater Materials Exchange","parent":"corporate-enclaves","type":"material distributor","weight":10,"districts":["outer-surface-gateways","industrial-distribution-belt","deep-resource-frontier"],"trade":["materials","salvage","components","bulk cargo"],"station":true,"hidden":false,"source":"Derived material distributor."},
+    {"id":"outer-ring-provisioners","name":"Outer Ring Provisioners League","parent":"corporate-enclaves","type":"material distributor","weight":9,"districts":["outer-surface-gateways","coalition-core-lanes"],"trade":["food","medical","oxygen","general trade"],"station":true,"hidden":false,"source":"Derived material distributor."},
+
+    {"id":"free-captains-league","name":"Free Captains’ League","parent":"independent-stations","type":"captains association","weight":8,"districts":["outer-surface-gateways","contested-colony-arc","deep-resource-frontier"],"trade":["contracts","escort","salvage","transport"],"station":true,"hidden":false,"source":"Derived independent bloc."},
+    {"id":"neutral-port-authorities","name":"Neutral Port Authorities","parent":"independent-stations","type":"neutral administration","weight":8,"districts":["outer-surface-gateways","contested-colony-arc"],"trade":["general trade","docking","arbitration","medical"],"station":true,"hidden":false,"source":"Derived independent bloc."},
+    {"id":"frontier-habitation-councils","name":"Frontier Habitation Councils","parent":"independent-stations","type":"local councils","weight":7,"districts":["separatist-marches","deep-resource-frontier"],"trade":["habitation","food","repair","local defense"],"station":true,"hidden":false,"source":"Derived independent bloc."},
+
+    {"id":"the-combine","name":"The Combine","parent":"criminal-cartels","type":"territorial cartel","weight":6,"districts":["deep-resource-frontier","central-exclusion-zone"],"trade":["contraband","forced labor","salvage","weapons"],"station":true,"hidden":false,"source":"Primer-backed criminal territorial organization."},
+    {"id":"black-current-cartel","name":"Black Current Cartel","parent":"criminal-cartels","type":"smuggling cartel","weight":7,"districts":["contested-colony-arc","separatist-marches","deep-resource-frontier"],"trade":["smuggling","weapons","fuel","safe passage"],"station":true,"hidden":false,"source":"Derived criminal faction."},
+    {"id":"cold-ledger-syndicate","name":"Cold Ledger Syndicate","parent":"criminal-cartels","type":"financial syndicate","weight":5,"districts":["coalition-core-lanes","industrial-distribution-belt","contested-colony-arc"],"trade":["debt","laundering","contracts","bribery"],"station":true,"hidden":false,"source":"Derived criminal faction."},
+    {"id":"lantern-smugglers","name":"Lantern Smugglers’ Network","parent":"criminal-cartels","type":"smuggling network","weight":7,"districts":["outer-surface-gateways","contested-colony-arc","separatist-marches"],"trade":["contraband","medical","crew passage","cargo"],"station":true,"hidden":false,"source":"Derived criminal faction."},
+
+    {"id":"brass-horn-choir","name":"Brass Horn Choir","parent":"children-of-the-honkmother","type":"cult congregation","weight":2,"districts":["outer-surface-gateways","contested-colony-arc","separatist-marches"],"trade":["performance","mutual aid","entertainment"],"station":false,"hidden":true,"source":"Derived Honkmother subset."},
+    {"id":"greasepaint-fraternities","name":"Greasepaint Fraternities","parent":"children-of-the-honkmother","type":"cult fraternity","weight":2,"districts":["industrial-distribution-belt","contested-colony-arc","deep-resource-frontier"],"trade":["crew recruitment","pranks","contraband"],"station":false,"hidden":true,"source":"Derived Honkmother subset."},
+    {"id":"laughing-ballast-cells","name":"Laughing Ballast Cells","parent":"children-of-the-honkmother","type":"radical cult cell","weight":1,"districts":["deep-resource-frontier","central-exclusion-zone"],"trade":["sabotage","ritual","recruitment"],"station":false,"hidden":true,"source":"Derived extremist Honkmother subset."},
+
+    {"id":"communion-open-throat","name":"Communion of the Open Throat","parent":"church-of-the-husk","type":"husk congregation","weight":1.2,"districts":["hadal-research-zone","central-exclusion-zone"],"trade":["infection","biological samples","conversion"],"station":false,"hidden":true,"source":"Derived Husk subset."},
+    {"id":"ascendant-tide","name":"Ascendant Tide","parent":"church-of-the-husk","type":"militant husk cell","weight":1,"districts":["deep-resource-frontier","hadal-research-zone","central-exclusion-zone"],"trade":["forced infection","sabotage","assassination"],"station":false,"hidden":true,"source":"Derived militant Husk subset."},
+    {"id":"quiet-choir","name":"Quiet Choir","parent":"church-of-the-husk","type":"infiltration network","weight":1.4,"districts":["coalition-core-lanes","industrial-distribution-belt","hadal-research-zone"],"trade":["infiltration","medical theft","concealment"],"station":false,"hidden":true,"source":"Derived Husk subset."}
+  ],
+  "relations": {
+    "sameUmbrella": 35,
+    "coalitionVsSeparatist": -70,
+    "unionVsGovernments": 10,
+    "unionVsCorporations": -15,
+    "unionVsCriminal": -5,
+    "governmentVsCriminal": -55,
+    "allVsHusk": -80,
+    "honkmotherVsAuthority": -20,
+    "independentNeutrality": 5
+  },
+  "seeding": {
+    "guaranteeEveryStationEligibleOrganization": true,
+    "secondaryInfluenceMin": 1,
+    "secondaryInfluenceMax": 3,
+    "unionPresenceChance": 0.58,
+    "criminalPresenceChance": 0.24,
+    "honkmotherPresenceChance": 0.13,
+    "huskPresenceChance": 0.08,
+    "districtDominanceSlots": 4,
+    "maximumPrimaryCultShare": 0
+  }
+}

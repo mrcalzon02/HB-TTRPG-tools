@@ -1,0 +1,320 @@
+
+  const DASHBOARD_INCREMENTAL_WORLD_VIEWER_VERSION='1.0.0';
+  const DASHBOARD_INCREMENTAL_RING_DELAY_MS=900;
+  const DASHBOARD_INCREMENTAL_BATCH_DELAY_MS=45;
+  const DASHBOARD_INCREMENTAL_NODE_BATCH_SIZE=16;
+  const DASHBOARD_INCREMENTAL_SVG_NS='http://www.w3.org/2000/svg';
+
+  const dashboardIncrementalWorldViewerRuntime=globalThis.__BAROTRAUMA_INCREMENTAL_WORLD_VIEWER_RUNTIME||{
+    token:0,
+    status:'idle',
+    paused:false,
+    currentRing:null,
+    loadedRings:0,
+    totalRings:0,
+    loadedNodes:0,
+    totalNodes:0,
+    startedAt:'',
+    completedAt:'',
+    cancelReason:''
+  };
+  globalThis.__BAROTRAUMA_INCREMENTAL_WORLD_VIEWER_RUNTIME=dashboardIncrementalWorldViewerRuntime;
+
+  function dashboardIncrementalWorldRingPackages(map=state.world?.map){
+    if(!dashboardMasterWorldMapValid({map}))return [];
+    const grouped=new Map();
+    for(const node of map.nodes){
+      const ring=Math.max(0,Math.round(number(node.ring,0)));
+      if(!grouped.has(ring))grouped.set(ring,[]);
+      grouped.get(ring).push(node);
+    }
+    return [...grouped.entries()]
+      .sort((left,right)=>right[0]-left[0])
+      .map(([ring,nodes],index)=>({
+        ring,
+        nodes,
+        stage:index+1,
+        stationCount:nodes.filter(node=>node.type==='station').length,
+        levelMin:Math.min(...nodes.map(node=>Math.max(1,number(node.locationLevel,1)))),
+        levelMax:Math.max(...nodes.map(node=>Math.max(1,number(node.locationLevel,1))))
+      }));
+  }
+
+  function dashboardIncrementalRingDisplay(packageInfo,maxRing){
+    if(packageInfo.ring===maxRing)return `Stage ${packageInfo.stage} · Ring ${packageInfo.ring} · outer shell first`;
+    if(packageInfo.ring===0)return `Stage ${packageInfo.stage} · central anomaly`;
+    const levelText=packageInfo.levelMin===packageInfo.levelMax?`Level ${packageInfo.levelMin}`:`Levels ${packageInfo.levelMin}–${packageInfo.levelMax}`;
+    return `Stage ${packageInfo.stage} · Ring ${packageInfo.ring} · ${levelText}`;
+  }
+
+  function dashboardIncrementalWorldViewerHtml(context){
+    const map=state.world?.map;
+    const packages=dashboardIncrementalWorldRingPackages(map);
+    const maxRing=packages[0]?.ring||number(map?.rings,0);
+    const totalNodes=packages.reduce((sum,item)=>sum+item.nodes.length,0);
+    return `<section id="dashboard-world-viewer" class="tool-panel dashboard-focused-panel">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Incremental saved Masterworld viewer</p><h3>Outer Shell to Central Anomaly</h3><p class="small-note">The saved map is displayed in controlled packages. Stage 1 loads the outermost ring; each following stage moves one ring inward. No world generation occurs.</p></div><button id="dashboard-close-world-viewer" class="secondary-action no-print" type="button">Close and Cancel Loading</button></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Saved rings</span><strong>${packages.length}</strong></div><div class="metric"><span>Saved nodes</span><strong>${totalNodes}</strong></div><div class="metric"><span>Loading order</span><strong>Outside → inward</strong></div><div class="metric"><span>Ring delay</span><strong>${(DASHBOARD_INCREMENTAL_RING_DELAY_MS/1000).toFixed(1)} seconds</strong></div></div>
+      <section class="tool-card" style="margin-top:12px">
+        <div class="field-grid three"><label class="field">Overall ring progress<progress id="dashboard-world-overall-progress" max="${Math.max(1,packages.length)}" value="0" style="width:100%;height:22px"></progress><span id="dashboard-world-overall-label" class="small-note">Waiting to load outer ring…</span></label><label class="field">Current ring progress<progress id="dashboard-world-current-ring-progress" max="1" value="0" style="width:100%;height:22px"></progress><span id="dashboard-world-current-ring-label" class="small-note">No ring active</span></label><div class="button-row no-print" style="align-self:end"><button id="dashboard-world-pause-loader" class="secondary-action" type="button">Pause</button><button id="dashboard-world-resume-loader" class="secondary-action" type="button" disabled>Resume</button><button id="dashboard-world-next-ring" class="secondary-action" type="button">Finish Current Ring Now</button></div></div>
+        <div id="dashboard-world-ring-progress-list" style="display:grid;gap:6px;max-height:280px;overflow:auto;margin-top:12px">${packages.map(item=>`<div class="check-row" data-world-ring-row="${item.ring}" style="grid-template-columns:minmax(230px,1fr) minmax(180px,2fr) auto"><span><strong>${escapeHtml(dashboardIncrementalRingDisplay(item,maxRing))}</strong><br><span class="small-note">${item.nodes.length} nodes · ${item.stationCount} stations</span></span><progress data-world-ring-progress="${item.ring}" max="${Math.max(1,item.nodes.length)}" value="0" style="width:100%;height:18px"></progress><span data-world-ring-status="${item.ring}" class="status-pill">QUEUED</span></div>`).join('')}</div>
+      </section>
+      <div class="map-frame" style="min-height:0;margin-top:12px;overflow:auto"><svg id="dashboard-incremental-world-svg" viewBox="0 0 ${number(map.width)} ${number(map.height)}" role="img" aria-label="Saved Masterworld loading incrementally from the outer ring inward" style="width:100%;height:760px;min-width:1000px;display:block;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.5));border-radius:14px"><g id="dashboard-incremental-world-guides"></g><g id="dashboard-incremental-world-nodes"></g></svg></div>
+      <div id="dashboard-incremental-world-detail" class="notice" style="margin-top:10px"><strong>Loading stage 1:</strong> the outermost ring will appear first. Select any loaded node to inspect it without restarting the loader.</div>
+    </section>`;
+  }
+
+  function dashboardIncrementalCancel(reason='cancelled'){
+    dashboardIncrementalWorldViewerRuntime.token+=1;
+    dashboardIncrementalWorldViewerRuntime.status='cancelled';
+    dashboardIncrementalWorldViewerRuntime.paused=false;
+    dashboardIncrementalWorldViewerRuntime.cancelReason=reason;
+  }
+
+  function dashboardIncrementalDelay(milliseconds,token){
+    return new Promise(resolve=>setTimeout(()=>resolve(token===dashboardIncrementalWorldViewerRuntime.token),Math.max(0,milliseconds)));
+  }
+
+  function dashboardIncrementalYield(token){
+    return new Promise(resolve=>{
+      const finish=()=>resolve(token===dashboardIncrementalWorldViewerRuntime.token);
+      if(typeof requestIdleCallback==='function')requestIdleCallback(finish,{timeout:180});
+      else setTimeout(finish,DASHBOARD_INCREMENTAL_BATCH_DELAY_MS);
+    });
+  }
+
+  async function dashboardIncrementalWaitWhilePaused(token){
+    while(token===dashboardIncrementalWorldViewerRuntime.token&&dashboardIncrementalWorldViewerRuntime.paused){
+      if(!await dashboardIncrementalDelay(140,token))return false;
+    }
+    return token===dashboardIncrementalWorldViewerRuntime.token;
+  }
+
+  function dashboardIncrementalSetStatus(ring,status,text=''){
+    const badge=root.querySelector(`[data-world-ring-status="${ring}"]`);
+    if(badge){
+      badge.textContent=status;
+      badge.classList.toggle('good',status==='LOADED');
+      badge.classList.toggle('warn',status==='LOADING'||status==='PAUSED');
+    }
+    const row=root.querySelector(`[data-world-ring-row="${ring}"]`);
+    if(row&&text)row.title=text;
+  }
+
+  function dashboardIncrementalNodeColor(node){
+    if(node.type==='station')return '#2d6686';
+    if(node.type==='anomaly')return '#d6aa54';
+    if(node.type==='outpost')return '#82763d';
+    if(node.type==='wreck')return '#81444b';
+    if(node.type==='ruins')return '#76538e';
+    return '#59616d';
+  }
+
+  function dashboardIncrementalCreateNodeElement(node,context,labelBudget){
+    const group=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'g');
+    group.setAttribute('transform',`translate(${number(node.x)} ${number(node.y)})`);
+    group.dataset.nodeId=node.id;
+    if(node.type==='station')group.dataset.stationId=node.id;
+    group.style.cursor='pointer';
+    const current=node.id===context.group.currentNodeId;
+    const focused=node.id===state.operationsDashboard.focusedNodeId;
+    const circle=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'circle');
+    const radius=node.type==='anomaly'?18:current?20:focused?15:node.type==='station'?9:4;
+    circle.setAttribute('r',String(radius));
+    circle.setAttribute('fill',current?'#e65353':focused?'#d6aa54':dashboardIncrementalNodeColor(node));
+    circle.setAttribute('stroke',current||focused?'#ffffff':'#b9c0c8');
+    circle.setAttribute('stroke-width',current?'6':focused?'4':'1.5');
+    group.appendChild(circle);
+    const title=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'title');
+    title.textContent=`${node.name||node.id} · Ring ${number(node.ring)} · Level ${number(node.locationLevel,1)} · ${node.type||'location'}`;
+    group.appendChild(title);
+    const showLabel=current||focused||node.type==='anomaly'||(node.type==='station'&&labelBudget.remaining>0);
+    if(showLabel){
+      if(node.type==='station'&&!current&&!focused)labelBudget.remaining-=1;
+      const label=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'text');
+      label.setAttribute('x',String(radius+8));
+      label.setAttribute('y','5');
+      label.setAttribute('fill','#e8edf2');
+      label.setAttribute('font-size',current?'18':'12');
+      label.setAttribute('font-weight',current?'900':'700');
+      label.setAttribute('pointer-events','none');
+      label.textContent=node.name||node.id;
+      group.appendChild(label);
+    }
+    return group;
+  }
+
+  function dashboardIncrementalAddRingGuide(packageInfo,map){
+    if(packageInfo.ring<=0)return;
+    const guideLayer=root.querySelector('#dashboard-incremental-world-guides');
+    if(!guideLayer)return;
+    const centerX=number(map.width)/2;
+    const centerY=number(map.height)/2;
+    const shellRadius=Math.max(1,number(map.shellRadius,Math.min(map.width,map.height)/2));
+    const maximumRing=Math.max(1,number(map.rings,Math.max(...dashboardIncrementalWorldRingPackages(map).map(item=>item.ring))));
+    const guide=document.createElementNS(DASHBOARD_INCREMENTAL_SVG_NS,'circle');
+    guide.setAttribute('cx',String(centerX));
+    guide.setAttribute('cy',String(centerY));
+    guide.setAttribute('r',String(shellRadius*packageInfo.ring/maximumRing));
+    guide.setAttribute('fill','none');
+    guide.setAttribute('stroke',packageInfo.stage===1?'#d6aa54':'#59616d');
+    guide.setAttribute('stroke-width',packageInfo.stage===1?'4':'2');
+    guide.setAttribute('opacity',packageInfo.stage===1?'.52':'.26');
+    guide.dataset.guideRing=String(packageInfo.ring);
+    guideLayer.appendChild(guide);
+  }
+
+  function dashboardIncrementalUpdateDetail(node){
+    const detail=root.querySelector('#dashboard-incremental-world-detail');
+    if(!detail)return;
+    detail.innerHTML=`<strong>${escapeHtml(node.name||node.id)}</strong> · ${escapeHtml(node.type||'location')} · Ring ${number(node.ring)} · Level ${number(node.locationLevel,1)}<br>${escapeHtml(node.locationLore||node.details||'No additional location description.')}`;
+  }
+
+  function dashboardIncrementalBindNodeInspection(map){
+    const svg=root.querySelector('#dashboard-incremental-world-svg');
+    if(!svg||svg.dataset.inspectionBound==='true')return;
+    svg.dataset.inspectionBound='true';
+    svg.addEventListener('click',event=>{
+      const target=event.target.closest?.('[data-node-id]');
+      if(!target)return;
+      const node=map.nodes.find(item=>item.id===target.dataset.nodeId);
+      if(!node)return;
+      state.operationsDashboard.focusedNodeId=node.id;
+      save();
+      dashboardIncrementalUpdateDetail(node);
+    });
+  }
+
+  async function dashboardIncrementalLoadRing(packageInfo,context,map,token,skipDelayRef){
+    if(token!==dashboardIncrementalWorldViewerRuntime.token)return false;
+    const nodeLayer=root.querySelector('#dashboard-incremental-world-nodes');
+    if(!nodeLayer?.isConnected)return false;
+    dashboardIncrementalWorldViewerRuntime.currentRing=packageInfo.ring;
+    dashboardIncrementalWorldViewerRuntime.status='loading';
+    dashboardIncrementalSetStatus(packageInfo.ring,'LOADING');
+    const currentLabel=root.querySelector('#dashboard-world-current-ring-label');
+    const currentProgress=root.querySelector('#dashboard-world-current-ring-progress');
+    if(currentLabel)currentLabel.textContent=dashboardIncrementalRingDisplay(packageInfo,Math.max(...dashboardIncrementalWorldRingPackages(map).map(item=>item.ring)));
+    if(currentProgress){currentProgress.max=Math.max(1,packageInfo.nodes.length);currentProgress.value=0;}
+    dashboardIncrementalAddRingGuide(packageInfo,map);
+    const labelBudget={remaining:packageInfo.stage===1?7:3};
+    for(let offset=0;offset<packageInfo.nodes.length;offset+=DASHBOARD_INCREMENTAL_NODE_BATCH_SIZE){
+      if(!await dashboardIncrementalWaitWhilePaused(token))return false;
+      const fragment=document.createDocumentFragment();
+      const batch=packageInfo.nodes.slice(offset,offset+DASHBOARD_INCREMENTAL_NODE_BATCH_SIZE);
+      for(const node of batch)fragment.appendChild(dashboardIncrementalCreateNodeElement(node,context,labelBudget));
+      nodeLayer.appendChild(fragment);
+      const loaded=Math.min(packageInfo.nodes.length,offset+batch.length);
+      dashboardIncrementalWorldViewerRuntime.loadedNodes+=batch.length;
+      if(currentProgress)currentProgress.value=loaded;
+      const ringProgress=root.querySelector(`[data-world-ring-progress="${packageInfo.ring}"]`);
+      if(ringProgress)ringProgress.value=loaded;
+      const overallLabel=root.querySelector('#dashboard-world-overall-label');
+      if(overallLabel)overallLabel.textContent=`Ring ${packageInfo.ring}: ${loaded}/${packageInfo.nodes.length} nodes · ${dashboardIncrementalWorldViewerRuntime.loadedRings}/${dashboardIncrementalWorldViewerRuntime.totalRings} rings complete`;
+      if(!await dashboardIncrementalYield(token))return false;
+    }
+    dashboardIncrementalWorldViewerRuntime.loadedRings+=1;
+    dashboardIncrementalSetStatus(packageInfo.ring,'LOADED');
+    const overallProgress=root.querySelector('#dashboard-world-overall-progress');
+    if(overallProgress)overallProgress.value=dashboardIncrementalWorldViewerRuntime.loadedRings;
+    if(skipDelayRef.requested){skipDelayRef.requested=false;return true;}
+    return dashboardIncrementalDelay(DASHBOARD_INCREMENTAL_RING_DELAY_MS,token);
+  }
+
+  async function dashboardStartIncrementalWorldViewer(context){
+    const map=state.world?.map;
+    const svg=root.querySelector('#dashboard-incremental-world-svg');
+    if(!dashboardMasterWorldMapValid()||!svg)return false;
+    dashboardIncrementalCancel('restart');
+    const token=dashboardIncrementalWorldViewerRuntime.token;
+    const packages=dashboardIncrementalWorldRingPackages(map);
+    const skipDelayRef={requested:false};
+    dashboardIncrementalWorldViewerRuntime.status='loading';
+    dashboardIncrementalWorldViewerRuntime.paused=false;
+    dashboardIncrementalWorldViewerRuntime.currentRing=null;
+    dashboardIncrementalWorldViewerRuntime.loadedRings=0;
+    dashboardIncrementalWorldViewerRuntime.totalRings=packages.length;
+    dashboardIncrementalWorldViewerRuntime.loadedNodes=0;
+    dashboardIncrementalWorldViewerRuntime.totalNodes=map.nodes.length;
+    dashboardIncrementalWorldViewerRuntime.startedAt=new Date().toISOString();
+    dashboardIncrementalWorldViewerRuntime.completedAt='';
+    dashboardIncrementalWorldViewerRuntime.cancelReason='';
+    dashboardIncrementalBindNodeInspection(map);
+
+    const pauseButton=root.querySelector('#dashboard-world-pause-loader');
+    const resumeButton=root.querySelector('#dashboard-world-resume-loader');
+    const nextButton=root.querySelector('#dashboard-world-next-ring');
+    pauseButton?.addEventListener('click',()=>{
+      dashboardIncrementalWorldViewerRuntime.paused=true;
+      dashboardIncrementalWorldViewerRuntime.status='paused';
+      pauseButton.disabled=true;
+      if(resumeButton)resumeButton.disabled=false;
+      if(dashboardIncrementalWorldViewerRuntime.currentRing!==null)dashboardIncrementalSetStatus(dashboardIncrementalWorldViewerRuntime.currentRing,'PAUSED');
+    });
+    resumeButton?.addEventListener('click',()=>{
+      dashboardIncrementalWorldViewerRuntime.paused=false;
+      dashboardIncrementalWorldViewerRuntime.status='loading';
+      resumeButton.disabled=true;
+      if(pauseButton)pauseButton.disabled=false;
+      if(dashboardIncrementalWorldViewerRuntime.currentRing!==null)dashboardIncrementalSetStatus(dashboardIncrementalWorldViewerRuntime.currentRing,'LOADING');
+    });
+    nextButton?.addEventListener('click',()=>{skipDelayRef.requested=true;});
+    root.querySelector('#dashboard-close-world-viewer')?.addEventListener('click',()=>dashboardIncrementalCancel('viewer closed'),{capture:true});
+
+    if(!await dashboardIncrementalDelay(120,token))return false;
+    for(const packageInfo of packages){
+      if(token!==dashboardIncrementalWorldViewerRuntime.token||!root.querySelector('#dashboard-incremental-world-svg')?.isConnected)return false;
+      if(!await dashboardIncrementalLoadRing(packageInfo,context,map,token,skipDelayRef))return false;
+    }
+    dashboardIncrementalWorldViewerRuntime.status='complete';
+    dashboardIncrementalWorldViewerRuntime.currentRing=null;
+    dashboardIncrementalWorldViewerRuntime.completedAt=new Date().toISOString();
+    const overallLabel=root.querySelector('#dashboard-world-overall-label');
+    const currentLabel=root.querySelector('#dashboard-world-current-ring-label');
+    if(overallLabel)overallLabel.textContent=`Complete: ${dashboardIncrementalWorldViewerRuntime.loadedRings} rings and ${dashboardIncrementalWorldViewerRuntime.loadedNodes} saved nodes loaded incrementally.`;
+    if(currentLabel)currentLabel.textContent='Central anomaly loaded · viewer complete';
+    if(pauseButton)pauseButton.disabled=true;
+    if(resumeButton)resumeButton.disabled=true;
+    if(nextButton)nextButton.disabled=true;
+    globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_DIAGNOSTICS={
+      version:DASHBOARD_INCREMENTAL_WORLD_VIEWER_VERSION,
+      order:'outer-to-inner',
+      ringDelayMs:DASHBOARD_INCREMENTAL_RING_DELAY_MS,
+      batchSize:DASHBOARD_INCREMENTAL_NODE_BATCH_SIZE,
+      status:'complete',
+      loadedRings:dashboardIncrementalWorldViewerRuntime.loadedRings,
+      totalRings:dashboardIncrementalWorldViewerRuntime.totalRings,
+      loadedNodes:dashboardIncrementalWorldViewerRuntime.loadedNodes,
+      totalNodes:dashboardIncrementalWorldViewerRuntime.totalNodes
+    };
+    return true;
+  }
+
+  const dashboardWorldPanelHtmlBeforeIncrementalViewer=dashboardWorldPanelHtml;
+  dashboardWorldPanelHtml=function dashboardWorldPanelHtmlIncrementalViewer(context,focus){
+    let html=dashboardWorldPanelHtmlBeforeIncrementalViewer(context,focus);
+    html=html.replace('Open Lightweight Masterworld Overview','Open Incremental Masterworld Viewer');
+    if(!state.operationsDashboard?.worldViewerOpen||!dashboardMasterWorldMapValid())return html;
+    const viewerIndex=html.indexOf('<section id="dashboard-world-viewer"');
+    if(viewerIndex<0)return `${html}${dashboardIncrementalWorldViewerHtml(context)}`;
+    return `${html.slice(0,viewerIndex)}${dashboardIncrementalWorldViewerHtml(context)}`;
+  };
+
+  const bindActiveDashboardControlsBeforeIncrementalViewer=bindActiveDashboardControls;
+  bindActiveDashboardControls=function bindActiveDashboardControlsIncrementalViewer(context,focus){
+    dashboardIncrementalCancel('dashboard rerendered');
+    bindActiveDashboardControlsBeforeIncrementalViewer(context,focus);
+    if(root.querySelector('#dashboard-incremental-world-svg'))requestAnimationFrame(()=>dashboardStartIncrementalWorldViewer(context));
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_INCREMENTAL_WORLD_VIEWER_DIAGNOSTICS={
+    version:DASHBOARD_INCREMENTAL_WORLD_VIEWER_VERSION,
+    order:'outer-to-inner',
+    ringDelayMs:DASHBOARD_INCREMENTAL_RING_DELAY_MS,
+    batchSize:DASHBOARD_INCREMENTAL_NODE_BATCH_SIZE,
+    status:'ready',
+    loadedRings:0,
+    totalRings:dashboardIncrementalWorldRingPackages().length,
+    loadedNodes:0,
+    totalNodes:state.world?.map?.nodes?.length||0
+  };

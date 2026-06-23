@@ -1,0 +1,16 @@
+
+  globalThis.__BAROTRAUMA_DASHBOARD_PREAUTH_SNAPSHOT={
+    submarine:cloneWorldData(state.submarine||{}),
+    route:cloneWorldData(state.route||{}),
+    operationsDashboard:state.operationsDashboard&&typeof state.operationsDashboard==='object'?cloneWorldData(state.operationsDashboard):null,
+    worldActiveSubmarineId:state.world?.activeSubmarineId||'',
+    hub:state.worldHub&&typeof state.worldHub==='object'?{
+      activeGroupId:state.worldHub.activeGroupId||'',
+      activeSubmarineId:state.worldHub.activeSubmarineId||'',
+      groups:cloneWorldData(state.worldHub.publicState?.groups||{}),
+      crews:cloneWorldData(state.worldHub.publicState?.crews||{}),
+      submarines:cloneWorldData(state.worldHub.publicState?.submarines||{}),
+      locations:cloneWorldData(state.worldHub.publicState?.locations||{}),
+      routes:cloneWorldData(state.worldHub.publicState?.routes||{})
+    }:null
+  };

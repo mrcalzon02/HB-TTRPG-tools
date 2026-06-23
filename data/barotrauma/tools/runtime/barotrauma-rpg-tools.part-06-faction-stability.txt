@@ -1,0 +1,84 @@
+
+  function factionStateIsComplete(map = state.world?.map) {
+    if (!map?.nodes) return false;
+    const publicState = state.worldHub?.publicState;
+    const stationCount = map.nodes.filter(node => node.type === 'station').length;
+    return Boolean(
+      publicState &&
+      Object.keys(publicState.factions || {}).length >= (FACTION_REGISTRY.umbrellas || []).length &&
+      Object.keys(publicState.districts || {}).length >= (FACTION_REGISTRY.districts || []).length &&
+      Object.keys(publicState.stationInfluence || {}).length >= stationCount
+    );
+  }
+
+  const seedWorldFactionsBeforeStability = seedWorldFactions;
+  seedWorldFactions = function seedWorldFactionsWithCompletenessCheck(map = state.world?.map, force = false) {
+    const mustRegenerate = !force && map?.factionSeedVersion === FACTION_SEED_VERSION && !factionStateIsComplete(map);
+    const result = seedWorldFactionsBeforeStability(map, force || mustRegenerate);
+    if (map?.nodes) {
+      for (const node of map.nodes.filter(item => item.type === 'station')) {
+        const publicNames = (node.visibleInfluences || []).filter(item => item.visibility === 'public').map(item => item.name);
+        const covertCount = (node.visibleInfluences || []).filter(item => item.visibility === 'covert').length;
+        const influenceText = publicNames.length ? ` Public influences: ${publicNames.join(', ')}.` : '';
+        const covertText = covertCount ? ` Known covert pressures: ${covertCount}.` : '';
+        node.details = `${node.parentFaction || 'Independent'} — ${node.faction || 'Unassigned'}. ${node.districtName || 'Unassigned waters'}. ${node.specialty || 'General trade'}. Important locals: ${node.locals || 'Station personnel'}.${influenceText}${covertText}`;
+      }
+    }
+    return result;
+  };
+
+  const normalizeStationRecordBeforeFactionStability = normalizeStationRecord;
+  normalizeStationRecord = function normalizeStationRecordWithWorldIdentity(raw, station) {
+    const record = normalizeStationRecordBeforeFactionStability(raw, station);
+    if (station) {
+      record.worldGenerated = Boolean(station.worldGenerated);
+      record.worldNodeId = station.worldNodeId || record.worldNodeId || '';
+    }
+    return record;
+  };
+
+  const normalizeStationCommerceBeforeFactionStability = normalizeStationCommerce;
+  normalizeStationCommerce = function normalizeStationCommerceWithoutSupersededWorldRecords() {
+    const commerce = normalizeStationCommerceBeforeFactionStability();
+    const validIds = new Set(STATIONS.map(stationIdentity));
+    for (const [id, record] of Object.entries(commerce.stations || {})) {
+      if (record?.worldGenerated && !validIds.has(id)) delete commerce.stations[id];
+    }
+    if (!validIds.has(commerce.activeStationId)) {
+      const routeStation = STATIONS.find(station => station.name === state.route.end) || STATIONS[0];
+      commerce.activeStationId = routeStation ? stationIdentity(routeStation) : '';
+    }
+    return commerce;
+  };
+
+  const applyWorldSubmissionBeforeFactionStability = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithCompleteFactionAssignments(raw, allowForeign = false) {
+    const submission = normalizeWorldSubmission(raw);
+    const result = applyWorldSubmissionBeforeFactionStability(submission, allowForeign);
+    if (submission.kind !== 'faction') return result;
+    for (const node of state.world.map?.nodes?.filter(item => item.type === 'station') || []) {
+      const organization = FACTION_ORG_MAP[node.factionId];
+      const umbrella = FACTION_UMBRELLA_MAP[node.parentFactionId || organization?.parent];
+      if (!organization) continue;
+      const titles = factionTitlePair(organization);
+      node.parentFactionId = umbrella?.id || organization.parent;
+      node.parentFaction = umbrella?.name || organization.parent;
+      node.factionColor = umbrella?.color || '#888';
+      node.organizationType = organization.type;
+      node.specialty = (organization.trade || []).join(', ') || node.specialty || 'General trade';
+      node.locals = node.locals || `${node.name} ${titles[0]}; ${node.name} ${titles[1]}`;
+      const publicNames = (node.visibleInfluences || []).filter(item => item.visibility === 'public').map(item => item.name);
+      node.details = `${node.parentFaction} — ${node.faction}. ${node.districtName || 'Unassigned waters'}. ${node.specialty}. Important locals: ${node.locals}.${publicNames.length ? ` Public influences: ${publicNames.join(', ')}.` : ''}`;
+    }
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+    return result;
+  };
+
+  if (state.world?.map) {
+    seedWorldFactions(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  }

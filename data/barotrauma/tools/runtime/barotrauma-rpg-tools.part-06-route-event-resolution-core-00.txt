@@ -1,0 +1,114 @@
+
+  const ROUTE_EVENT_RESOLUTION_VERSION = '1.0.0';
+  const ROUTE_RESOLUTION_OUTCOMES = ['critical-success','success','mixed','failure','critical-failure'];
+  const ROUTE_RESOLUTION_FAMILY_PROFILES = {
+    Hazard: { leadRoles:['Navigation','Engineering','Diving / Salvage'], supportRoles:['Sonar','Mechanical','Medical'], missionType:'Hazard Survey', issuer:'Regional Navigation Authority', opportunityReward:{resources:{supplies:1},routePressure:-1}, opportunityRisk:{hull:-1,routePressure:1}, descriptions:['Read the environment before it closes around the vessel.','Commit the submarine to a controlled passage through the hazard.','Stabilize damaged systems and restore the route corridor.'] },
+    Navigation: { leadRoles:['Navigation','Sonar','Command'], supportRoles:['Engineering','Logistics','Research'], missionType:'Route Verification', issuer:'Europa Charting Office', opportunityReward:{resources:{fuel:1},routePressure:-1}, opportunityRisk:{resources:{fuel:-1},routePressure:1}, descriptions:['Establish which readings, charts, and signals can be trusted.','Execute the selected course while the navigation picture changes.','Reconcile the final position and publish a reliable route record.'] },
+    Maintenance: { leadRoles:['Engineering','Reactor','Mechanical'], supportRoles:['Logistics','Command','Security'], missionType:'Emergency Systems Service', issuer:'Submarine Systems Cooperative', opportunityReward:{hull:1,resources:{supplies:1}}, opportunityRisk:{systemRandom:-10,resources:{supplies:-1}}, descriptions:['Diagnose the failure before secondary alarms conceal its source.','Isolate, repair, or bypass the failing machinery under operational load.','Test the repair and prevent the fault from migrating into another system.'] },
+    Salvage: { leadRoles:['Diving / Salvage','Engineering','Logistics'], supportRoles:['Security','Medical','Sonar'], missionType:'Salvage Claim', issuer:'Licensed Recovery Exchange', opportunityReward:{resources:{supplies:2,fuel:1}}, opportunityRisk:{hull:-1,resources:{supplies:-1}}, descriptions:['Survey ownership, structural stability, and recoverable value.','Enter or manipulate the site without compromising the submarine.','Secure recovered material and document the claim before departure.'] },
+    Exploration: { leadRoles:['Research','Diving / Salvage','Sonar'], supportRoles:['Medical','Engineering','Security'], missionType:'Exploration Objective', issuer:'Europa Research Compact', opportunityReward:{resources:{supplies:1},crewMorale:1}, opportunityRisk:{lostSanity:1,routePressure:1}, descriptions:['Interpret the site without disturbing its most dangerous unknowns.','Advance the investigation while preserving an escape route.','Extract data, samples, and personnel before conditions change.'] },
+    Faction: { leadRoles:['Command','Security','Logistics'], supportRoles:['Medical','Navigation','Weapons'], missionType:'Faction Contract', issuer:'Local Political Authority', opportunityReward:{resources:{supplies:2},crewMorale:1}, opportunityRisk:{routePressure:2,crewMorale:-1}, descriptions:['Identify the other party, its leverage, and what it is not saying.','Negotiate, intimidate, evade, or comply without surrendering operational control.','Record obligations, enemies, and promises created by the encounter.'] },
+    Distress: { leadRoles:['Medical','Command','Diving / Salvage'], supportRoles:['Security','Engineering','Logistics'], missionType:'Rescue Mission', issuer:'Europa Emergency Network', opportunityReward:{resources:{supplies:1},crewMorale:2}, opportunityRisk:{resources:{supplies:-2},injuryCount:1}, descriptions:['Verify the distress call and determine who can still be saved.','Conduct rescue, quarantine, towing, or triage under time pressure.','Stabilize survivors and account for the cost imposed on the expedition.'] },
+    Opportunity: { leadRoles:['Logistics','Research','Diving / Salvage'], supportRoles:['Engineering','Security','Command'], missionType:'Resource Contract', issuer:'Independent Trade Consortium', opportunityReward:{resources:{supplies:3,fuel:1},crewMorale:1}, opportunityRisk:{resources:{supplies:-1,fuel:-1},routePressure:1}, descriptions:['Confirm that the opportunity is real, legal, and worth the delay.','Exploit the resource window before competitors or hazards intervene.','Secure, inventory, and assign the recovered value.'] },
+    Station: { leadRoles:['Logistics','Security','Engineering'], supportRoles:['Command','Medical','Mechanical'], missionType:'Station Service Contract', issuer:'Station Administration', opportunityReward:{resources:{supplies:2},crewMorale:1}, opportunityRisk:{resources:{supplies:-1},routePressure:1}, descriptions:['Determine which station failure or political demand is actually urgent.','Coordinate a response without losing control of the docked vessel.','Close the incident, document liabilities, and secure payment or goodwill.'] },
+    Anomaly: { leadRoles:['Research','Medical','Command'], supportRoles:['Sonar','Security','Navigation'], missionType:'Anomalous Research Directive', issuer:'Restricted Research Directorate', opportunityReward:{resources:{supplies:1},crewMorale:1,routePressure:-1}, opportunityRisk:{lostSanity:2,crewMorale:-1,routePressure:1}, descriptions:['Establish a shared reality and isolate unreliable observations.','Interact with or escape the phenomenon without spreading its influence.','Debrief the crew, preserve evidence, and contain psychological effects.'] },
+    Creature: { leadRoles:['Weapons','Security','Navigation'], supportRoles:['Medical','Engineering','Sonar'], missionType:'Fauna Control Bounty', issuer:'Regional Security Office', opportunityReward:{resources:{supplies:2},crewMorale:1}, opportunityRisk:{hull:-2,injuryCount:1}, descriptions:['Identify the creature, its behavior, and the safest engagement range.','Fight, evade, distract, or outmaneuver the contact.','Treat casualties, inspect the hull, and decide whether specimens can be recovered.'] },
+    Custom: { leadRoles:['Command','Engineering','Navigation'], supportRoles:['Medical','Security','Logistics'], missionType:'Expedition Task', issuer:'Expedition Command', opportunityReward:{resources:{supplies:1},crewMorale:1}, opportunityRisk:{routePressure:1}, descriptions:['Assess the situation and establish immediate priorities.','Carry out the selected plan under changing conditions.','Stabilize the expedition and record the consequences.'] }
+  };
+
+  const ROUTE_RESOLUTION_STAT_ROLES = {
+    Strength:['Mechanical','Security','Diving / Salvage','Engineering'],
+    Agility:['Navigation','Weapons','Diving / Salvage','Sonar'],
+    Intelligence:['Engineering','Navigation','Research','Medical','Reactor','Sonar'],
+    Charisma:['Command','Logistics','Security','Medical']
+  };
+
+  function cloneRouteResolutionData(value) { return value === undefined ? undefined : JSON.parse(JSON.stringify(value)); }
+
+  function mergeRouteResolutionEffects(target = {}, source = {}) {
+    const result = cloneRouteResolutionData(target) || {};
+    for (const [key, value] of Object.entries(source || {})) {
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        result[key] = result[key] && typeof result[key] === 'object' && !Array.isArray(result[key]) ? result[key] : {};
+        for (const [nestedKey, nestedValue] of Object.entries(value)) result[key][nestedKey] = number(result[key][nestedKey]) + number(nestedValue);
+      } else result[key] = number(result[key]) + number(value);
+    }
+    return result;
+  }
+
+  function scaleRouteResolutionEffects(effects = {}, scale = 1) {
+    const result = {};
+    for (const [key, value] of Object.entries(effects || {})) {
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        result[key] = {};
+        for (const [nestedKey, nestedValue] of Object.entries(value)) {
+          const amount = number(nestedValue);
+          result[key][nestedKey] = amount === 0 ? 0 : Math.sign(amount) * Math.max(1, Math.round(Math.abs(amount) * scale));
+        }
+      } else {
+        const amount = number(value);
+        result[key] = amount === 0 ? 0 : Math.sign(amount) * Math.max(1, Math.round(Math.abs(amount) * scale));
+      }
+    }
+    return result;
+  }
+
+  function defaultRouteEventResolutionState() { return { version:ROUTE_EVENT_RESOLUTION_VERSION, sessions:{}, contracts:[], history:[], lastMessage:'' }; }
+
+  function normalizeRouteEventResolutionState() {
+    state.route = state.route && typeof state.route === 'object' ? state.route : {};
+    state.route.eventResolution = state.route.eventResolution && typeof state.route.eventResolution === 'object' ? state.route.eventResolution : defaultRouteEventResolutionState();
+    const resolution = state.route.eventResolution;
+    resolution.version = ROUTE_EVENT_RESOLUTION_VERSION;
+    resolution.sessions = resolution.sessions && typeof resolution.sessions === 'object' && !Array.isArray(resolution.sessions) ? resolution.sessions : {};
+    resolution.contracts = Array.isArray(resolution.contracts) ? resolution.contracts : [];
+    resolution.history = Array.isArray(resolution.history) ? resolution.history.slice(0,200) : [];
+    resolution.lastMessage = String(resolution.lastMessage || '');
+    return resolution;
+  }
+
+  function routeResolutionProfile(event) { return ROUTE_RESOLUTION_FAMILY_PROFILES[event?.category] || ROUTE_RESOLUTION_FAMILY_PROFILES.Custom; }
+  function routeResolutionTemplate(event) { return GENERAL_ENCOUNTER_TEMPLATES.find(template => template.id === event?.encounterTemplateId) || null; }
+
+  function routeResolutionDutyForStat(stat, profile, index = 0) {
+    const roles = [...(ROUTE_RESOLUTION_STAT_ROLES[stat] || []), ...(profile?.leadRoles || [])];
+    return roles[index % Math.max(1, roles.length)] || 'Command';
+  }
+
+  function routeResolutionSolutions(event) {
+    const template = routeResolutionTemplate(event);
+    const profile = routeResolutionProfile(event);
+    const approaches = Array.isArray(event?.encounterApproaches) && event.encounterApproaches.length ? event.encounterApproaches
+      : Array.isArray(template?.approaches) && template.approaches.length ? template.approaches.map((approach,index) => ({...approach,id:`${template.id}-approach-${index}`,dc:number(event?.dc,template.baseDC||8)+number(approach.dcMod)}))
+      : [{id:`${event?.id||'event'}-approach-0`,stat:event?.stat||'Intelligence',label:'Resolve the immediate threat',dc:number(event?.dc,8)}];
+    return approaches.map((approach,index) => {
+      const stat = approach.stat || event?.stat || 'Intelligence';
+      const leadRole = routeResolutionDutyForStat(stat, profile, index);
+      const supportRoles = [...new Set([...(profile.supportRoles||[]),...(ROUTE_RESOLUTION_STAT_ROLES[stat]||[])])].filter(role => role !== leadRole).slice(0,4);
+      const setup = template?.setup || event?.description || 'The situation develops faster than expected.';
+      const crisis = template?.stages?.crisis || event?.encounterComplication || 'The crew must commit before conditions deteriorate.';
+      return {
+        id:approach.id || `${event?.id||'event'}-solution-${index}`, label:approach.label || `Use ${stat}`, stat,
+        dc:clamp(number(approach.dc,event?.dc||8),5,20), leadRole, supportRoles,
+        description:`${setup} ${crisis} This plan places ${leadRole} personnel in the lead and uses ${stat} to ${String(approach.label||'resolve the incident').toLowerCase()}.`,
+        successText:`The ${leadRole} plan controls the event. ${event?.reward||template?.reward||'The expedition secures an advantage.'}`,
+        mixedText:`The plan works at a cost. ${event?.encounterPersistent||template?.persistent||'A consequence follows the expedition.'}`,
+        failureText:`The plan loses control. ${event?.failure||template?.failure||'The submarine and crew absorb the consequences.'}`
+      };
+    });
+  }
+
+  function routeResolutionMissionOffer(event, slot) {
+    const profile = routeResolutionProfile(event);
+    const template = routeResolutionTemplate(event);
+    const destination = crossingNode(normalizeRouteCrossing().destinationNodeId)?.name || 'the destination station';
+    const objective = event?.encounterOpportunity || template?.opportunities?.[0] || event?.reward || `Resolve the event and report to ${destination}.`;
+    return { id:`contract-${slot.id}`, type:profile.missionType, issuer:profile.issuer,
+      title:`${profile.missionType}: ${String(event?.name||slot.label||'Route Event').replace(/^.*?:\s*/,'')}`,
+      objective, completion:`Reach ${destination} with the event resolved and the active submarine operational.`,
+      rewardText:`${event?.reward||template?.reward||'Payment determined by the issuer.'} Additional effect: ${encounterEffectsText(profile.opportunityReward)}.`,
+      riskText:`${event?.failure||template?.failure||'Failure creates an expedition liability.'} Additional effect: ${encounterEffectsText(profile.opportunityRisk)}.`,
+      rewardEffects:cloneRouteResolutionData(profile.opportunityReward), failureEffects:cloneRouteResolutionData(profile.opportunityRisk) };
+  }
+
+  normalizeRouteEventResolutionState();

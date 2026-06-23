@@ -1,0 +1,86 @@
+
+  const MANAGED_WRECK_PROFILE_KEYS = ['name','type','details','locationLevel','locationLevelName','locationTypeId','locationTypeName','locationLore','locationAvailability','locationShops','locationServices','locationHazards','locationDanger','encounterLocation','stationLocation','wreckSiteId','sourceSubmarineId','sourceGroupId','createdAt'];
+
+  const locationProfileMatchesNodeBeforeManagedWrecks = locationProfileMatchesNode;
+  locationProfileMatchesNode = function locationProfileMatchesNodeWithManagedWrecks(node, map = state.world?.map) {
+    if (node?.wreckSiteId && node.locationTypeId === 'managed-submarine-wreck') return true;
+    return locationProfileMatchesNodeBeforeManagedWrecks(node, map);
+  };
+
+  const assignWorldLocationLevelsBeforeManagedWrecks = assignWorldLocationLevels;
+  assignWorldLocationLevels = function assignWorldLocationLevelsPreservingManagedWrecks(map = state.world?.map, force = false) {
+    const snapshots = (map?.nodes || []).filter(node => node.wreckSiteId && node.locationTypeId === 'managed-submarine-wreck').map(node => ({ id: node.id, values: Object.fromEntries(MANAGED_WRECK_PROFILE_KEYS.map(key => [key, cloneWorldData(node[key])])) }));
+    const result = assignWorldLocationLevelsBeforeManagedWrecks(map, force);
+    for (const snapshot of snapshots) {
+      const node = map?.nodes?.find(item => item.id === snapshot.id);
+      if (node) Object.assign(node, snapshot.values);
+    }
+    return result;
+  };
+
+  const worldSavePayloadBeforeManagedExpedition = worldSavePayload;
+  worldSavePayload = function worldSavePayloadWithManagedExpedition(includeSavedStates = true) {
+    normalizeManagedExpedition();
+    const payload = worldSavePayloadBeforeManagedExpedition(includeSavedStates);
+    payload.version = Math.max(2, number(payload.version, 1));
+    payload.expeditionIntegrationVersion = EXPEDITION_INTEGRATION_VERSION;
+    payload.sharedModules = payload.sharedModules || {};
+    payload.sharedModules.managedSubmarine = cloneWorldData(state.submarine);
+    payload.sharedModules.activeRoute = cloneWorldData(state.route);
+    payload.sharedModules.activeCharacter = cloneWorldData(state.character);
+    payload.sharedModules.encounters = cloneWorldData(state.encounters);
+    return payload;
+  };
+
+  const importWorldSaveBeforeManagedExpeditionStability = importWorldSave;
+  importWorldSave = function importWorldSaveRestoringManagedExpedition(raw) {
+    importWorldSaveBeforeManagedExpeditionStability(raw);
+    if (raw?.sharedModules?.managedSubmarine) state.submarine = cloneWorldData(raw.sharedModules.managedSubmarine);
+    if (raw?.sharedModules?.activeRoute) state.route = cloneWorldData(raw.sharedModules.activeRoute);
+    if (raw?.sharedModules?.activeCharacter) state.character = cloneWorldData(raw.sharedModules.activeCharacter);
+    if (raw?.sharedModules?.encounters) state.encounters = cloneWorldData(raw.sharedModules.encounters);
+    normalizePlayerSubmissionSettings();
+    normalizeCrewManagement();
+    normalizeCargoManagement();
+    normalizeRouteCrossing();
+    normalizeManagedExpedition();
+    save();
+  };
+
+  const renderWorldBeforeManagedExpeditionStability = renderWorld;
+  renderWorld = function renderWorldWithLockedCrossingMovement() {
+    renderWorldBeforeManagedExpeditionStability();
+    const hub = normalizeWorldHub();
+    for (const select of root.querySelectorAll('.world-group-location')) {
+      const group = hub.publicState.groups[select.dataset.id];
+      const node = crossingNode(group?.currentNodeId);
+      const replacement = document.createElement('div');
+      replacement.innerHTML = `<strong>${escapeHtml(node?.name || group?.currentNodeId || 'Unknown')}</strong><br><span class="small-note">Position changes through completed crossing legs.</span>`;
+      select.replaceWith(replacement);
+    }
+    for (const button of root.querySelectorAll('.world-group-reroll')) {
+      const group = hub.publicState.groups[button.dataset.id];
+      if (group?.submarineIds?.length || group?.routeId) {
+        button.disabled = true;
+        button.title = 'A linked expedition cannot reroll its starting station.';
+      }
+    }
+    const registryMetrics = [...root.querySelectorAll('.tool-panel h3')].find(element => element.textContent.includes('Unified Public World Registries'))?.parentElement?.querySelector('.metric-row');
+    if (registryMetrics && !registryMetrics.querySelector('[data-wreck-metric]')) registryMetrics.insertAdjacentHTML('beforeend', `<div class="metric" data-wreck-metric><span>Wreck sites</span><strong>${Object.keys(ensureWreckRegistry()).length}</strong></div>`);
+  };
+
+  const clearRouteCrossingBeforeManagedExpeditionStability = clearRouteCrossing;
+  clearRouteCrossing = function clearRouteCrossingPreservingLostRecord() {
+    const expedition = state.submarine.managedExpedition;
+    if (expedition?.status === 'lost') {
+      state.route.crossingMessage = 'The lost crossing remains filed as the submarine wreck record and cannot be cleared from the active world history.';
+      save();
+      return false;
+    }
+    const result = clearRouteCrossingBeforeManagedExpeditionStability();
+    normalizeManagedExpedition();
+    return result;
+  };
+
+  normalizeRouteCrossing();
+  if (state.world?.map) normalizeManagedExpedition();

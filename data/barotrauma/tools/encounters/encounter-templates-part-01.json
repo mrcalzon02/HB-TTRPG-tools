@@ -1,0 +1,257 @@
+{
+  "schemaVersion": "1.0.0",
+  "part": 1,
+  "templates": [
+    {
+      "id": "crosscurrent-shear",
+      "name": "Crosscurrent Shear",
+      "family": "environment",
+      "category": "Hazard",
+      "minLevel": 1,
+      "maxLevel": 8,
+      "baseDC": 7,
+      "weight": 10,
+      "contexts": ["travel", "location"],
+      "approaches": [
+        {"stat": "Intelligence", "label": "Plot a counter-current course", "dcMod": 0},
+        {"stat": "Agility", "label": "Ride the shear manually", "dcMod": 1}
+      ],
+      "setup": "Two opposed currents begin twisting the submarine out of its safe approach corridor.",
+      "stages": {
+        "contact": "Sonar shows the route bending faster than the charts predict.",
+        "crisis": "The vessel is dragged toward rock, ice, or unsafe depth.",
+        "aftermath": "The crew must regain the route before the next hazard arrives."
+      },
+      "complications": ["A cargo restraint tears loose.", "The sonar picture becomes unreliable.", "The safest route costs additional fuel."],
+      "opportunities": ["The current exposes a hidden passage.", "Debris in the flow contains useful salvage."],
+      "reward": "The crew preserves the route and may exploit the newly revealed passage.",
+      "failure": "The submarine is displaced, battered, and forced into a less favorable route.",
+      "successEffects": {"resources": {"fuel": 1}},
+      "failureEffects": {"hull": -1, "resources": {"fuel": -1}, "routePressure": 1},
+      "clock": 3,
+      "persistent": "A failed correction leaves the next Navigation encounter at +1 DC.",
+      "tags": ["current", "geology"],
+      "optionalSanity": false
+    },
+    {
+      "id": "icefall-collapse",
+      "name": "Icefall Collapse",
+      "family": "environment",
+      "category": "Hazard",
+      "minLevel": 1,
+      "maxLevel": 7,
+      "baseDC": 8,
+      "weight": 9,
+      "contexts": ["travel", "location"],
+      "approaches": [
+        {"stat": "Agility", "label": "Thread the falling ice", "dcMod": 0},
+        {"stat": "Strength", "label": "Brace and force through", "dcMod": 1},
+        {"stat": "Intelligence", "label": "Predict the collapse pattern", "dcMod": 0}
+      ],
+      "setup": "A ceiling of stressed Europan ice fractures above the route.",
+      "stages": {
+        "contact": "Hairline cracks race across the overhead shelf.",
+        "crisis": "Tons of ice descend through the travel lane.",
+        "aftermath": "The submarine must clear trapped debris before propulsion overheats."
+      },
+      "complications": ["A weapon mount is pinned.", "A ballast intake clogs.", "The collapse seals the return path."],
+      "opportunities": ["Freshly exposed ice contains recoverable minerals.", "The collapse opens a shortcut."],
+      "reward": "The crew escapes with an intact hull and a clearer map of the region.",
+      "failure": "Impact damage and blocked systems turn the route into a repair operation.",
+      "successEffects": {},
+      "failureEffects": {"hull": -2, "systemRandom": -15, "routePressure": 1},
+      "clock": 3,
+      "persistent": "The collapsed passage remains blocked on the campaign map until cleared.",
+      "tags": ["ice", "collapse"],
+      "optionalSanity": false
+    },
+    {
+      "id": "thermal-plume",
+      "name": "Thermal Plume",
+      "family": "environment",
+      "category": "Hazard",
+      "minLevel": 3,
+      "maxLevel": 10,
+      "baseDC": 9,
+      "weight": 8,
+      "contexts": ["travel", "location"],
+      "approaches": [
+        {"stat": "Intelligence", "label": "Balance reactor and cooling loads", "dcMod": 0},
+        {"stat": "Agility", "label": "Cross before the plume peaks", "dcMod": 1}
+      ],
+      "setup": "A volcanic vent cycle floods the route with heat, turbulence, and mineral-rich particulate.",
+      "stages": {
+        "contact": "Temperature alarms rise while visibility falls.",
+        "crisis": "Cooling, batteries, and navigation begin failing together.",
+        "aftermath": "The crew must vent heat and inspect damaged seals."
+      },
+      "complications": ["The reactor load spikes.", "Medical stores are threatened by heat.", "A hot-current eddy pushes the vessel deeper."],
+      "opportunities": ["The plume carries rare minerals.", "Thermal data improves future route prediction."],
+      "reward": "The submarine crosses cleanly and records valuable vent data.",
+      "failure": "Heat damage degrades a system and consumes emergency supplies.",
+      "successEffects": {"resources": {"supplies": 1}},
+      "failureEffects": {"systemRandom": -20, "resources": {"supplies": -1}, "routePressure": 1},
+      "clock": 4,
+      "persistent": "Until repaired, the affected system loses another 5% condition after each dangerous leg.",
+      "tags": ["thermal", "volcanic"],
+      "optionalSanity": false
+    },
+    {
+      "id": "pressure-front",
+      "name": "Moving Pressure Front",
+      "family": "environment",
+      "category": "Hazard",
+      "minLevel": 5,
+      "maxLevel": 10,
+      "baseDC": 10,
+      "weight": 7,
+      "contexts": ["travel", "location"],
+      "approaches": [
+        {"stat": "Strength", "label": "Hold the hull and ballast together", "dcMod": 0},
+        {"stat": "Intelligence", "label": "Equalize before the front strikes", "dcMod": 0},
+        {"stat": "Agility", "label": "Climb ahead of the pressure wave", "dcMod": 1}
+      ],
+      "setup": "A fast pressure transition moves through the trench like weather.",
+      "stages": {
+        "contact": "The hull begins speaking in unfamiliar knocks.",
+        "crisis": "Seals, ballast, and weak compartments fail in sequence.",
+        "aftermath": "The crew must stabilize the frame before hidden damage spreads."
+      },
+      "complications": ["An old hull repair begins leaking.", "A crew member is trapped behind a pressure door.", "The front drives predators toward the submarine."],
+      "opportunities": ["The pressure scan reveals a safe deep corridor.", "A successful brace proves a new hull procedure."],
+      "reward": "The vessel survives the front and gains a reliable deep-pressure profile.",
+      "failure": "The hull and one system suffer serious structural damage.",
+      "successEffects": {"hull": 1},
+      "failureEffects": {"hull": -3, "systemRandom": -20},
+      "clock": 4,
+      "persistent": "Future pressure events at this location remember whether the crew reinforced or abandoned it.",
+      "tags": ["pressure", "deep"],
+      "optionalSanity": false
+    },
+    {
+      "id": "false-beacon",
+      "name": "False Navigation Beacon",
+      "family": "navigation",
+      "category": "Navigation",
+      "minLevel": 1,
+      "maxLevel": 8,
+      "baseDC": 8,
+      "weight": 10,
+      "contexts": ["travel", "job"],
+      "approaches": [
+        {"stat": "Intelligence", "label": "Authenticate the signal", "dcMod": 0},
+        {"stat": "Charisma", "label": "Challenge the operator over radio", "dcMod": 1}
+      ],
+      "setup": "A trusted navigation beacon transmits correct codes from an impossible position.",
+      "stages": {
+        "contact": "The beacon offers a shorter route.",
+        "crisis": "Following it leads toward terrain absent from every chart.",
+        "aftermath": "The crew must decide whether to expose, disable, or exploit the transmitter."
+      },
+      "complications": ["The signal mimics a friendly station.", "A second vessel is already following it.", "The beacon contains a delayed distress call."],
+      "opportunities": ["Tracing the signal reveals a cache.", "The false route bypasses a dangerous leg."],
+      "reward": "The crew identifies the deception and recovers useful routing intelligence.",
+      "failure": "The submarine loses time, fuel, and route position.",
+      "successEffects": {"resources": {"fuel": 1}},
+      "failureEffects": {"resources": {"fuel": -2}, "routePressure": 1},
+      "clock": 3,
+      "persistent": "The beacon's owner becomes a future faction or mystery lead.",
+      "tags": ["signal", "deception"],
+      "optionalSanity": false
+    },
+    {
+      "id": "sonar-shadow",
+      "name": "Sonar Shadow Corridor",
+      "family": "navigation",
+      "category": "Navigation",
+      "minLevel": 2,
+      "maxLevel": 10,
+      "baseDC": 8,
+      "weight": 9,
+      "contexts": ["travel", "location"],
+      "approaches": [
+        {"stat": "Intelligence", "label": "Navigate by dead reckoning", "dcMod": 0},
+        {"stat": "Agility", "label": "Proceed slowly by visual contact", "dcMod": 1}
+      ],
+      "setup": "Mineral layers swallow active sonar and distort passive returns.",
+      "stages": {
+        "contact": "Known landmarks disappear from the display.",
+        "crisis": "The submarine enters a blind corridor with narrowing clearance.",
+        "aftermath": "The crew must rebuild its position from partial readings."
+      },
+      "complications": ["A moving contact hides inside the shadow.", "The map is correct but vertically inverted.", "Communications vanish with sonar."],
+      "opportunities": ["The shadow conceals an untouched route.", "The mineral field can be commercially mapped."],
+      "reward": "The crew charts a reusable blind passage.",
+      "failure": "The vessel strikes terrain or exits far from the intended route.",
+      "successEffects": {},
+      "failureEffects": {"hull": -1, "resources": {"fuel": -1}, "routePressure": 1},
+      "clock": 3,
+      "persistent": "Mapped successfully, this corridor grants one future redraw here.",
+      "tags": ["sonar", "blind"],
+      "optionalSanity": false
+    },
+    {
+      "id": "chart-dispute",
+      "name": "Conflicting Charts",
+      "family": "navigation",
+      "category": "Navigation",
+      "minLevel": 1,
+      "maxLevel": 6,
+      "baseDC": 7,
+      "weight": 8,
+      "contexts": ["travel", "job"],
+      "approaches": [
+        {"stat": "Intelligence", "label": "Reconcile survey data", "dcMod": 0},
+        {"stat": "Charisma", "label": "Force a command decision", "dcMod": 1}
+      ],
+      "setup": "Two authoritative charts disagree about the same passage.",
+      "stages": {
+        "contact": "The differences appear minor.",
+        "crisis": "Each chart places a lethal obstacle where the other shows open water.",
+        "aftermath": "The crew must document which source failed and why."
+      },
+      "complications": ["One chart was altered deliberately.", "Both charts are outdated.", "The crew splits into rival interpretations."],
+      "opportunities": ["The bad chart identifies who benefits from the error.", "Correcting it earns station reputation."],
+      "reward": "The expedition establishes a dependable route record.",
+      "failure": "Indecision or a wrong choice adds delay and damage.",
+      "successEffects": {},
+      "failureEffects": {"routePressure": 2, "hull": -1},
+      "clock": 3,
+      "persistent": "The rejected chart remains evidence in a later sabotage or corruption investigation.",
+      "tags": ["charts", "command"],
+      "optionalSanity": false
+    },
+    {
+      "id": "blocked-passage",
+      "name": "Blocked Passage",
+      "family": "navigation",
+      "category": "Navigation",
+      "minLevel": 3,
+      "maxLevel": 10,
+      "baseDC": 9,
+      "weight": 8,
+      "contexts": ["travel", "location"],
+      "approaches": [
+        {"stat": "Strength", "label": "Clear or breach the obstruction", "dcMod": 0},
+        {"stat": "Agility", "label": "Attempt the narrow bypass", "dcMod": 1},
+        {"stat": "Intelligence", "label": "Find a secondary route", "dcMod": 0}
+      ],
+      "setup": "Debris, ice, wreckage, or biological growth closes the expected route.",
+      "stages": {
+        "contact": "The obstruction looks temporary.",
+        "crisis": "The bypass proves narrower and more unstable than expected.",
+        "aftermath": "The crew must reopen, mark, or abandon the passage."
+      },
+      "complications": ["The obstruction is under tension.", "Something is nesting inside it.", "Clearing it exposes a pressure pocket."],
+      "opportunities": ["The blockage contains salvage.", "The alternate route reaches an uncharted location."],
+      "reward": "The passage becomes usable and the crew retains control of the route.",
+      "failure": "The expedition spends resources and attracts additional danger.",
+      "successEffects": {},
+      "failureEffects": {"resources": {"supplies": -2, "fuel": -1}, "routePressure": 1},
+      "clock": 4,
+      "persistent": "Uncleared, this edge remains dangerous on future crossings.",
+      "tags": ["obstruction", "route"],
+      "optionalSanity": false
+    }
+  ]
+}

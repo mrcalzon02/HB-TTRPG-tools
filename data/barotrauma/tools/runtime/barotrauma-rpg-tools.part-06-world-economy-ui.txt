@@ -1,0 +1,150 @@
+
+  function worldEconomyVesselLocationLabel(vessel) {
+    const map=state.world?.map;
+    const nodeName=id=>map?.nodes?.find(node=>node.id===id)?.name||id||'Unknown';
+    if (vessel.location.mode==='station') return `${nodeName(vessel.location.stationNodeId||vessel.location.currentNodeId)} · docked`;
+    return `${nodeName(vessel.location.fromNodeId||vessel.location.departureNodeId)} → ${nodeName(vessel.location.toNodeId||vessel.location.destinationNodeId)} · ${Math.round(clamp(number(vessel.location.progress),0,1)*100)}%${vessel.location.decisionState?` · ${vessel.location.decisionState}`:''}`;
+  }
+
+  function worldEconomyCargoLabel(vessel) {
+    const cargo=Object.entries(vessel.cargo?.commodities||{}).filter(([,value])=>number(value)>0);
+    return cargo.length?cargo.map(([key,value])=>`${value} ${key}`).join(', '):'Empty';
+  }
+
+  function worldEconomyInventoryLabel(station) {
+    const keys=['food','water','rawMaterials','radioactives','fuel','industrialGoods','components','deliveryGoods','medicalSupplies','ammunition'];
+    return keys.filter(key=>number(station.inventory?.[key])>0).map(key=>`${key} ${number(station.inventory[key])}`).join(' · ')||'No bulk inventory';
+  }
+
+  function worldEconomyVesselRowsHtml(limit) {
+    const vessels=Object.values(worldVesselRegistry()).filter(vessel=>vessel.active!==false).sort((left,right)=>{
+      const priority=value=>value.kind==='player'?0:value.status==='available'?1:value.status==='in-transit'?2:3;
+      return priority(left)-priority(right)||left.name.localeCompare(right.name);
+    });
+    return {total:vessels.length,html:vessels.slice(0,limit).map(vessel=>`<tr><td><strong>${escapeHtml(vessel.name)}</strong><br><code>${escapeHtml(vessel.vesselId)}</code></td><td>${escapeHtml(vessel.kind)}<br><span class="small-note">${escapeHtml(vessel.role)}</span></td><td><strong class="${vessel.status==='in-transit'?'warn':vessel.status==='available'?'good':''}">${escapeHtml(vessel.status)}</strong></td><td>${escapeHtml(worldEconomyVesselLocationLabel(vessel))}</td><td>${escapeHtml(worldEconomyCargoLabel(vessel))}</td><td>${vessel.nextActionAt?escapeHtml(new Date(vessel.nextActionAt).toLocaleString()):'Player/event driven'}</td><td><button class="compact-button world-economy-focus-vessel" data-vessel-id="${escapeHtml(vessel.vesselId)}" type="button">Locate</button></td></tr>`).join('')||'<tr><td colspan="7">No active vessels registered.</td></tr>'};
+  }
+
+  function worldEconomyStationRowsHtml(limit) {
+    const stations=Object.values(normalizeWorldEconomyState().stationEconomies).filter(station=>!station.archived).sort((left,right)=>left.name.localeCompare(right.name));
+    const vessels=Object.values(worldVesselRegistry()).filter(vessel=>vessel.active!==false);
+    return {total:stations.length,html:stations.slice(0,limit).map(station=>{
+      const docked=vessels.filter(vessel=>vessel.location.mode==='station'&&(vessel.location.stationNodeId||vessel.location.currentNodeId)===station.stationNodeId).length;
+      const inbound=vessels.filter(vessel=>vessel.location.mode==='route'&&(vessel.location.destinationNodeId||vessel.location.toNodeId)===station.stationNodeId).length;
+      const profile=worldEconomyProcessProfile(station);
+      return `<tr><td><strong>${escapeHtml(station.name)}</strong><br><span class="small-note">${escapeHtml(station.profileId)} · ${escapeHtml(station.faction)}</span></td><td><strong>${escapeHtml(profile.label)}</strong><br><span class="small-note">${escapeHtml(profile.notes)}</span></td><td>${escapeHtml(worldEconomyInventoryLabel(station))}</td><td>${number(station.construction?.progress)}%<br><span class="small-note">${station.construction?.completedVesselIds?.length||0} completed</span></td><td>${docked} docked · ${inbound} inbound</td><td>${Object.keys(station.shortages||{}).length?escapeHtml(Object.entries(station.shortages).map(([key,value])=>`${key} ${value}`).join(', ')):'None'}</td></tr>`;
+    }).join('')||'<tr><td colspan="6">No station economies registered.</td></tr>'};
+  }
+
+  function worldEconomyMasterRegistryHtml() {
+    const economy=normalizeWorldEconomyState();
+    const metrics=worldVesselMetrics();
+    const vesselRows=worldEconomyVesselRowsHtml(economy.simulation.viewerVesselLimit);
+    const stationRows=worldEconomyStationRowsHtml(economy.simulation.viewerStationLimit);
+    return `<section id="world-economy-master-registry" class="tool-panel span-12" style="border-color:rgba(87,185,255,.65)">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Master world save · persistent active economy</p><h3>World Vessel and Trade Registry</h3><p class="small-note">Player positions are event-driven and may advance immediately. Passive NPC freight takes 15–105 real minutes from departure through arrival and trade completion. Vendor shelves contain only player sales, local production routed through trade, or factory-produced Delivery Goods accepted from completed freight runs.</p></div><div class="button-row no-print"><button id="world-economy-process-now" class="secondary-action" type="button">Process Due Economy Actions</button></div></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>All active vessels</span><strong>${metrics.total}</strong></div><div class="metric"><span>Player vessels</span><strong>${metrics.player}</strong></div><div class="metric"><span>NPC trade vessels</span><strong>${metrics.npc}</strong></div><div class="metric"><span>Docked</span><strong>${metrics.docked}</strong></div><div class="metric"><span>In transit / waiting</span><strong>${metrics.transit}</strong></div><div class="metric"><span>Available to commission</span><strong>${metrics.available}</strong></div><div class="metric"><span>Shipyards producing</span><strong>${metrics.construction}</strong></div></div>
+      <div id="world-economy-simulation-message" class="notice" style="margin-top:10px">${escapeHtml(economy.simulation.lastSummary||'The passive economy will process due production and freight actions in progressive batches.')}</div>
+      <details open style="margin-top:12px"><summary><strong>Active vessel registry (${vesselRows.total})</strong></summary><div class="table-wrap" style="margin-top:8px"><table class="tool-table"><thead><tr><th>Vessel</th><th>Kind / role</th><th>Status</th><th>World position</th><th>Cargo</th><th>Next action</th><th></th></tr></thead><tbody>${vesselRows.html}</tbody></table></div>${vesselRows.total>economy.simulation.viewerVesselLimit?'<button id="world-economy-load-more-vessels" class="secondary-action no-print" type="button" style="margin-top:8px">Load More Vessels</button>':''}</details>
+      <details style="margin-top:12px"><summary><strong>Station production and inventory registry (${stationRows.total})</strong></summary><div class="table-wrap" style="margin-top:8px"><table class="tool-table"><thead><tr><th>Station</th><th>Bulk process</th><th>Persistent inventory</th><th>Vessel production</th><th>Traffic</th><th>Shortages</th></tr></thead><tbody>${stationRows.html}</tbody></table></div>${stationRows.total>economy.simulation.viewerStationLimit?'<button id="world-economy-load-more-stations" class="secondary-action no-print" type="button" style="margin-top:8px">Load More Stations</button>':''}</details>
+      <details style="margin-top:12px"><summary><strong>Recent world trade activity</strong></summary><div class="card-list" style="margin-top:8px">${economy.tradeJournal.slice(0,30).map(entry=>`<div class="notice"><strong>${escapeHtml(new Date(entry.at).toLocaleString())}</strong><br>${escapeHtml(entry.text)}</div>`).join('')||'<div class="notice">No completed freight or player trades have been recorded.</div>'}</div></details>
+    </section>`;
+  }
+
+  function progressiveWorldVesselMarkers(svg) {
+    if (!svg||svg.querySelector('#world-economy-vessel-layer')) return;
+    const vessels=Object.values(worldVesselRegistry()).filter(vessel=>vessel.active!==false);
+    const namespace='http://www.w3.org/2000/svg';
+    const layer=document.createElementNS(namespace,'g');
+    layer.id='world-economy-vessel-layer';
+    svg.appendChild(layer);
+    let index=0;
+    const addBatch=()=>{
+      const batch=vessels.slice(index,index+20);
+      batch.forEach((vessel,batchIndex)=>{
+        const position=worldVesselMapPosition(vessel,state.world?.map,index+batchIndex);
+        if (!position) return;
+        const group=document.createElementNS(namespace,'g');
+        group.classList.add('world-economy-vessel-marker');
+        group.dataset.vesselId=vessel.vesselId;
+        group.setAttribute('transform',`translate(${position.x} ${position.y})`);
+        group.setAttribute('style','cursor:pointer');
+        const circle=document.createElementNS(namespace,'circle');
+        circle.setAttribute('r',vessel.kind==='player'?'13':vessel.status==='available'?'11':'8');
+        circle.setAttribute('fill',vessel.kind==='player'?'#f2c14e':vessel.status==='available'?'#75c58e':'#9cc8e2');
+        circle.setAttribute('stroke','#111820');
+        circle.setAttribute('stroke-width','3');
+        const title=document.createElementNS(namespace,'title');
+        title.textContent=`${vessel.name} · ${vessel.status} · ${worldEconomyVesselLocationLabel(vessel)} · Cargo: ${worldEconomyCargoLabel(vessel)}`;
+        group.append(circle,title);
+        if (vessel.kind==='player'||vessel.status==='available') {
+          const text=document.createElementNS(namespace,'text');
+          text.setAttribute('x','16');text.setAttribute('y','4');text.setAttribute('fill','#ffffff');text.setAttribute('font-size','12');text.setAttribute('font-weight','800');text.textContent=vessel.name;group.appendChild(text);
+        }
+        layer.appendChild(group);
+      });
+      index+=20;
+      if (index<vessels.length) setTimeout(addBatch,0);
+    };
+    setTimeout(addBatch,0);
+  }
+
+  function focusWorldEconomyVessel(vesselId) {
+    const marker=root.querySelector(`.world-economy-vessel-marker[data-vessel-id="${CSS.escape(vesselId)}"]`);
+    if (!marker) return false;
+    root.querySelectorAll('.world-economy-vessel-marker').forEach(item=>item.classList.remove('map-focused'));
+    marker.classList.add('map-focused');
+    marker.scrollIntoView({behavior:'smooth',block:'center',inline:'center'});
+    return true;
+  }
+
+  function bindWorldEconomyMasterRegistry() {
+    const panel=root.querySelector('#world-economy-master-registry');
+    if (!panel) return;
+    panel.querySelector('#world-economy-process-now')?.addEventListener('click',event=>{
+      const started=scheduleWorldEconomyProgressiveSimulation(new Date(),'manual due-action processing');
+      const output=panel.querySelector('#world-economy-simulation-message');
+      if (output) output.textContent=started?'Processing production and freight actions in progressive batches…':'A world-economy batch is already running.';
+      event.currentTarget.disabled=true;
+      setTimeout(()=>{ if (activeTool()==='world') renderWorld(); else if (activeSubmarineDashboardContext()) renderSubmarine(); },250);
+    });
+    panel.querySelector('#world-economy-load-more-vessels')?.addEventListener('click',()=>{
+      const economy=worldEconomyPublicState();economy.simulation.viewerVesselLimit+=WORLD_ECONOMY_DEFAULTS.viewerBatchSize;save();if(activeTool()==='world')renderWorld();else renderSubmarine();
+    });
+    panel.querySelector('#world-economy-load-more-stations')?.addEventListener('click',()=>{
+      const economy=worldEconomyPublicState();economy.simulation.viewerStationLimit+=WORLD_ECONOMY_DEFAULTS.viewerBatchSize;save();if(activeTool()==='world')renderWorld();else renderSubmarine();
+    });
+    panel.querySelectorAll('.world-economy-focus-vessel').forEach(button=>button.addEventListener('click',event=>focusWorldEconomyVessel(event.currentTarget.dataset.vesselId)));
+  }
+
+  function injectWorldEconomyIntoCurrentViewer() {
+    normalizeWorldEconomyState();
+    syncAllWorldPlayerVessels();
+    const existing=root.querySelector('#world-economy-master-registry');
+    existing?.remove();
+    const dashboardViewer=root.querySelector('#dashboard-world-viewer');
+    const standaloneGrid=activeTool()==='world'?root.querySelector('.tool-grid'):null;
+    if (dashboardViewer) dashboardViewer.insertAdjacentHTML('beforeend',worldEconomyMasterRegistryHtml());
+    else if (standaloneGrid) standaloneGrid.insertAdjacentHTML('afterbegin',worldEconomyMasterRegistryHtml());
+    else return;
+    bindWorldEconomyMasterRegistry();
+    const svg=dashboardViewer?.querySelector('svg')||root.querySelector('#world-map-svg');
+    progressiveWorldVesselMarkers(svg);
+  }
+
+  const renderWorldBeforeMasterEconomyViewer=renderWorld;
+  renderWorld=function renderWorldWithMasterEconomyViewer() {
+    scheduleWorldEconomyProgressiveSimulation(new Date(),'world viewer opened');
+    const result=renderWorldBeforeMasterEconomyViewer();
+    injectWorldEconomyIntoCurrentViewer();
+    return result;
+  };
+
+  const renderActiveSubmarineDashboardBeforeMasterEconomyViewer=renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard=function renderActiveSubmarineDashboardWithMasterEconomyViewer(requestedFocus=activeDashboardRawFocus()) {
+    const result=renderActiveSubmarineDashboardBeforeMasterEconomyViewer(requestedFocus);
+    if (state.operationsDashboard?.worldViewerOpen) {
+      scheduleWorldEconomyProgressiveSimulation(new Date(),'dashboard world viewer opened');
+      injectWorldEconomyIntoCurrentViewer();
+    }
+    return result;
+  };

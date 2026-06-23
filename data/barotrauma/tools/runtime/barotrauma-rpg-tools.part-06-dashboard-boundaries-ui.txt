@@ -1,0 +1,77 @@
+
+  function dashboardStartingLocationPanelHtml() {
+    const start = normalizeDashboardStartingLocationState();
+    const stations = randomizedDashboardStartingStations(false);
+    const selected = crossingNode(start.selectedNodeId) || stations[0] || null;
+    const confirmed = crossingNode(start.confirmedNodeId) || null;
+    const atStation = dashboardOperationalState() === 'at-station';
+    const locked = start.locked || start.everDeparted;
+    return `<section id="dashboard-starting-location" class="tool-panel" style="border-color:${locked ? 'var(--line)' : 'rgba(117,197,142,.68)'}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Active submarine deployment</p><h3>Randomized Starting Station</h3><p class="small-note">The dropdown is drawn from the station nodes in the active main-world map. Confirming a station updates the submarine, expedition group, route departure, immediate-route board, commerce market, public location record, and crew turn generators together.</p></div><span class="status-pill ${locked ? 'warn' : 'good'}">${locked ? 'START LOCKED' : 'INITIAL PLACEMENT'}</span></div>
+      ${stations.length ? `<div class="field-grid three" style="margin-top:12px"><label class="field">Randomized available stations<select id="dashboard-starting-station" ${!atStation || locked ? 'disabled' : ''}>${stations.map(node => `<option value="${escapeHtml(node.id)}" ${node.id === selected?.id ? 'selected' : ''}>L${number(node.locationLevel, 1)} · ${escapeHtml(node.name)} · Ring ${number(node.ring)}</option>`).join('')}</select></label><label class="field">Confirmed starting station<input value="${escapeHtml(confirmed?.name || 'Not yet confirmed')}" readonly></label><label class="field">Current submarine position<input value="${escapeHtml(crossingNode(normalizeActiveSubmarineDashboard(false).group.currentNodeId)?.name || 'Unpositioned')}" readonly></label></div>
+      <div class="button-row no-print" style="margin-top:12px"><button id="dashboard-randomize-starting-stations" class="secondary-action" type="button" ${!atStation || locked ? 'disabled' : ''}>Randomize Available Starts</button><button id="dashboard-confirm-starting-station" class="primary-action" type="button" ${!atStation || locked || !selected ? 'disabled' : ''}>Begin Submarine Here</button></div>` : '<div class="notice warn" style="margin-top:12px">Generate or import the main Europa world before choosing a randomized starting station.</div>'}
+      <div id="dashboard-starting-location-message" class="notice ${locked ? 'warn' : ''}" style="margin-top:10px">${locked ? 'The starting station was permanently locked when the submarine first departed.' : atStation ? 'Choose one of the randomized world stations before the first departure.' : 'Starting-station selection is unavailable while In Route.'}</div>
+    </section>`;
+  }
+
+  function bindDashboardStartingLocationControls() {
+    const panel = root.querySelector('#dashboard-starting-location');
+    if (!panel) return;
+    panel.querySelector('#dashboard-starting-station')?.addEventListener('change', event => {
+      const start = normalizeDashboardStartingLocationState();
+      start.selectedNodeId = event.target.value;
+      start.updatedAt = new Date().toISOString();
+      save();
+    });
+    panel.querySelector('#dashboard-randomize-starting-stations')?.addEventListener('click', () => {
+      randomizedDashboardStartingStations(true);
+      renderSubmarine();
+    });
+    panel.querySelector('#dashboard-confirm-starting-station')?.addEventListener('click', () => {
+      const select = panel.querySelector('#dashboard-starting-station');
+      const result = applyDashboardStartingLocation(select?.value || '');
+      if (result.ok) renderSubmarine();
+      else {
+        const message = panel.querySelector('#dashboard-starting-location-message');
+        if (message) {
+          message.textContent = result.message;
+          message.classList.add('bad');
+        }
+      }
+    });
+  }
+
+  const renderActiveSubmarineDashboardBeforeBoundariesUi = renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard = function renderActiveSubmarineDashboardWithStartingLocations(requestedFocus = activeDashboardRawFocus()) {
+    if (activeSubmarineDashboardContext()) {
+      normalizeDashboardStartingLocationState();
+      if (state.world?.map?.nodes?.length) randomizedDashboardStartingStations(false);
+      synchronizeActiveDashboardMechanics('Dashboard rendered');
+    }
+    renderActiveSubmarineDashboardBeforeBoundariesUi(requestedFocus);
+    if (!activeSubmarineDashboardContext()) return;
+    const statePanel = root.querySelector('.dashboard-operational-state');
+    if (statePanel) statePanel.insertAdjacentHTML('afterend', dashboardStartingLocationPanelHtml());
+    else root.querySelector('#active-dashboard-command')?.insertAdjacentHTML('afterend', dashboardStartingLocationPanelHtml());
+    bindDashboardStartingLocationControls();
+    const focusButtons = root.querySelectorAll('.dashboard-focus');
+    focusButtons.forEach(button => {
+      if (button.dataset.focus === 'submarine') button.textContent = 'Vessel and Crew';
+      if (button.dataset.focus === 'route') button.textContent = 'Integrated Route Transit';
+      if (button.dataset.focus === 'world') button.textContent = 'World Map Viewer';
+    });
+  };
+
+  const dashboardGenerateWorldBeforeBoundariesUi = dashboardGenerateWorld;
+  dashboardGenerateWorld = function dashboardGenerateWorldWithSharedMechanics(randomize = false) {
+    const previousKey = dashboardWorldIdentityKey();
+    dashboardGenerateWorldBeforeBoundariesUi(randomize);
+    const nextKey = dashboardWorldIdentityKey();
+    if (nextKey && nextKey !== previousKey) {
+      state.operationsDashboard.startingLocation = defaultDashboardStartingLocationState();
+      normalizeDashboardStartingLocationState();
+      randomizedDashboardStartingStations(true);
+      synchronizeActiveDashboardMechanics('World generated');
+      renderSubmarine();
+    }
+  };

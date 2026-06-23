@@ -1,0 +1,140 @@
+      encounterFamily: template.family,
+      encounterFamilyLabel: generalEncounterFamilyLabel(template.family),
+      encounterLevel: actualLevel,
+      encounterSeverityLevel: severityLevel,
+      encounterSeverity: severity.severity,
+      encounterSeverityDescription: severity.description || '',
+      encounterStage: stage,
+      encounterStageLabel: GENERAL_ENCOUNTER_STAGE_LABELS[stage],
+      encounterClock: Math.max(1, number(template.clock, 3)),
+      encounterComplication: complication,
+      encounterOpportunity: opportunity,
+      encounterPersistent: template.persistent || '',
+      encounterTags: cloneEncounterData(template.tags || []),
+      encounterApproaches: approaches,
+      selectedApproachIndex: 0,
+      successEffects,
+      failureEffects,
+      optionalSanity: Boolean(template.optionalSanity),
+      dangerousRoute: Boolean(options.dangerous),
+      scenarioId: options.scenarioId || '',
+      routeNodeId: options.targetNode?.id || '',
+      routeNodeName: options.targetNode?.name || '',
+      routeLocationLevel: actualLevel
+    };
+  }
+
+  function drawGeneralEncounter(level, rng = Math.random, options = {}) {
+    normalizeGeneralEncounterState();
+    const pool = generalEncounterPool(level, options.family || 'All', options.context || 'any', options);
+    const template = weightedGeneralEncounterChoice(pool, rng, level);
+    return buildGeneralEncounter(template, level, rng, options) || {
+      id: `challenge-unavailable-${Date.now()}`,
+      category: options.category || 'Custom',
+      stat: 'Intelligence',
+      dc: 8,
+      name: 'Unconfigured Challenge',
+      description: `No general encounter matched Level ${level}, family ${options.family || 'All'}, and context ${options.context || 'any'}.`,
+      reward: 'GM determination.',
+      failure: 'GM determination.'
+    };
+  }
+
+  function drawGeneralEncounterSequence(level, rng = Math.random, options = {}) {
+    const pool = generalEncounterPool(level, options.family || 'All', options.context || 'any', options);
+    const template = weightedGeneralEncounterChoice(pool, rng, level);
+    if (!template) return [];
+    const scenarioId = `scenario-${template.id}-${Date.now().toString(36)}-${Math.floor(rng() * 100000)}`;
+    return ['contact','crisis','aftermath'].map(stage => buildGeneralEncounter(template, level, rng, { ...options, stage, scenarioId }));
+  }
+
+  function generalEncounterPlannerLevel() {
+    normalizeGeneralEncounterState();
+    const selectedNode = state.encounters.useSelectedWorldLocation && typeof selectedWorldLocationNode === 'function' ? selectedWorldLocationNode() : null;
+    if (selectedNode?.locationLevel) return clamp(selectedNode.locationLevel, 1, 10);
+    if (state.encounters.locationLevel !== 'All' && state.encounters.locationLevel !== undefined) return clamp(state.encounters.locationLevel, 1, 10);
+    return clamp(state.encounters.generalLevel, 1, 10);
+  }
+
+  function generalEncounterPlannerContext() {
+    const selectedNode = state.encounters.useSelectedWorldLocation && typeof selectedWorldLocationNode === 'function' ? selectedWorldLocationNode() : null;
+    if (selectedNode) return generalEncounterContextForNode(selectedNode, state.encounters.generalContext);
+    return state.encounters.generalContext || 'any';
+  }
+
+  function weightedGeneralCategory(entries, rng = Math.random) {
+    const usable = entries.filter(([, weight]) => number(weight) > 0);
+    if (!usable.length) return '';
+    let roll = rng() * usable.reduce((sum, [, weight]) => sum + number(weight), 0);
+    for (const [category, weight] of usable) {
+      roll -= number(weight);
+      if (roll <= 0) return category;
+    }
+    return usable[usable.length - 1][0];
+  }
+
+  function availablePlannerCategories(level, context, sanityEnabled) {
+    const represented = new Set();
+    const entries = [];
+    for (const family of GENERAL_ENCOUNTER_FAMILIES) {
+      if (generalEncounterPool(level, family.id, context, { sanityEnabled }).length) {
+        entries.push([family.category, Math.max(0, number(state.route.table?.[family.category], family.defaultWeight || 2))]);
+        represented.add(family.category);
+      }
+    }
+    if (typeof creaturePoolForLevel === 'function' && creaturePoolForLevel(level, state.encounters.allowEndingCreatures !== false).length) {
+      entries.push(['Creature', Math.max(0, number(state.route.table?.Creature, 3))]);
+      represented.add('Creature');
+    }
+    for (const category of EVENT_CATEGORIES) {
+      if (represented.has(category) || category === 'Location') continue;
+      if (!sanityEnabled && category === 'Sanity') continue;
+      if (EVENTS.some(event => event.category === category)) entries.push([category, Math.max(0, number(state.route.table?.[category], category === 'Sanity' ? 1 : 2))]);
+    }
+    return entries;
+  }
+
+  const drawRandomEventBeforeGeneralEncounters = drawRandomEvent;
+  drawRandomEvent = function drawRandomEventWithGeneralEncounters(category = 'All', sanityEnabled = true) {
+    normalizeGeneralEncounterState();
+    const level = generalEncounterPlannerLevel();
+    const context = generalEncounterPlannerContext();
+    if (category === 'All') {
+      const chosen = weightedGeneralCategory(availablePlannerCategories(level, context, sanityEnabled), Math.random);
+      return chosen ? drawRandomEvent(chosen, sanityEnabled) : drawRandomEventBeforeGeneralEncounters(category, sanityEnabled);
+    }
+    const family = GENERAL_ENCOUNTER_CATEGORY_MAP[category];
+    if (family) {
+      const encounter = drawGeneralEncounter(level, Math.random, { family: family.id, category, context, sanityEnabled, targetNode: state.encounters.useSelectedWorldLocation && typeof selectedWorldLocationNode === 'function' ? selectedWorldLocationNode() : null });
+      if (encounter?.encounterTemplateId) return encounter;
+    }
+    return drawRandomEventBeforeGeneralEncounters(category, sanityEnabled);
+  };
+
+  const drawWeightedEventBeforeGeneralEncounters = drawWeightedEvent;
+  drawWeightedEvent = function drawWeightedEventWithGeneralEncounters(route) {
+    normalizeGeneralEncounterState();
+    const level = typeof routeCreatureLevel === 'function' ? routeCreatureLevel(route) : clamp(state.encounters.generalLevel, 1, 10);
+    const category = weightedCategory(route.table, route.sanityEnabled, Math.random);
+    const family = GENERAL_ENCOUNTER_CATEGORY_MAP[category];
+    if (family) {
+      const event = drawGeneralEncounter(level, Math.random, { family: family.id, category, context: 'travel', sanityEnabled: route.sanityEnabled });
+      if (event?.encounterTemplateId) return event;
+    }
+    if (category === 'Creature' && typeof drawCreatureEncounter === 'function') return drawCreatureEncounter(level, Math.random, { allowEndingCreatures: normalizeCreatureEncounterState().allowEndingCreatures });
+    const pool = EVENTS.filter(event => event.category === category && (route.sanityEnabled || event.category !== 'Sanity'));
+    const fallback = EVENTS.filter(event => route.sanityEnabled || event.category !== 'Sanity');
+    return pool[Math.floor(Math.random() * Math.max(1, pool.length))] || fallback[Math.floor(Math.random() * Math.max(1, fallback.length))] || drawWeightedEventBeforeGeneralEncounters(route);
+  };
+
+  const drawCrossingEventBeforeGeneralEncounters = drawCrossingEvent;
+  drawCrossingEvent = function drawCrossingEventWithGeneralEncounters(route, targetNode, rng = Math.random) {
+    normalizeGeneralEncounterState();
+    const category = weightedCategory(route.table, route.sanityEnabled, rng);
+    const level = clamp(targetNode?.locationLevel || 1, 1, 10);
+    const family = GENERAL_ENCOUNTER_CATEGORY_MAP[category];
+    if (family) {
+      const event = drawGeneralEncounter(level, rng, { family: family.id, category, context: 'travel', sanityEnabled: route.sanityEnabled, targetNode });
+      if (event?.encounterTemplateId) return event;
+    }
+    if (category === 'Creature' && typeof drawCreatureEncounter === 'function') return drawCreatureEncounter(level, rng, { allowEndingCreatures: normalizeCreatureEncounterState().allowEndingCreatures, targetNode });

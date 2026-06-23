@@ -1,0 +1,130 @@
+name: Validate Barotrauma World Depth
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'barotrauma-rpg-tools.html'
+      - 'data/barotrauma/tools/world/world-state-schema.json'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-scale-patch.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-depth-guarantee.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-depth-stability.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-depth-regeneration-ui.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-local-corridor-viewer.txt'
+      - '.github/workflows/validate-barotrauma-world-depth.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'barotrauma-rpg-tools.html'
+      - 'data/barotrauma/tools/world/world-state-schema.json'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-scale-patch.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-depth-guarantee.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-depth-stability.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-depth-regeneration-ui.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-local-corridor-viewer.txt'
+      - '.github/workflows/validate-barotrauma-world-depth.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-world-depth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile runtime and verify deep-world contract
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const loaderPath = 'barotrauma-rpg-tools-loader.js';
+          const scalePath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-scale-patch.txt';
+          const depthPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-depth-guarantee.txt';
+          const stabilityPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-depth-stability.txt';
+          const depthUiPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-depth-regeneration-ui.txt';
+          const topologyPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-local-station-topology.txt';
+          const viewerPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-local-corridor-viewer.txt';
+
+          const loader = fs.readFileSync(loaderPath, 'utf8');
+          new Function(loader);
+          const match = loader.match(/const runtimeParts = \[([\s\S]*?)\n  \];/);
+          assert(match, 'runtimeParts array is missing');
+          const paths = [...match[1].matchAll(/'([^']+)'/g)].map(result => result[1]);
+          assert.deepStrictEqual(paths.filter(path => !fs.existsSync(path)), [], 'Loader references missing runtime fragments');
+          assert(paths.indexOf(depthPath) === paths.indexOf(scalePath) + 1, 'Depth guarantee must load immediately after the 48-ring scale generator');
+          assert(paths.indexOf(depthUiPath) === paths.indexOf('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-performance.txt') + 1, 'Depth regeneration controls must load immediately after Masterworld performance safeguards');
+          new Function(paths.map(path => fs.readFileSync(path, 'utf8')).join(''));
+
+          const schema = JSON.parse(fs.readFileSync('data/barotrauma/tools/world/world-state-schema.json', 'utf8'));
+          assert.strictEqual(schema.mapDefaults.rings, 48, 'Schema default must remain 48 rings');
+          assert.strictEqual(schema.mapDefaults.minimumCenterVoyages, 48, 'Schema minimum center voyages must remain 48');
+          assert(schema.mapDefaults.totalLocations >= 960, 'Schema must provide at least 960 locations');
+          assert(schema.mapDefaults.stationTarget >= 180, 'Schema must provide at least 180 stations');
+
+          const scale = fs.readFileSync(scalePath, 'utf8');
+          const depth = fs.readFileSync(depthPath, 'utf8');
+          const stability = fs.readFileSync(stabilityPath, 'utf8');
+          const depthUi = fs.readFileSync(depthUiPath, 'utf8');
+          const topology = fs.readFileSync(topologyPath, 'utf8');
+          const viewer = fs.readFileSync(viewerPath, 'utf8');
+          new Function(depth);
+          new Function(stability);
+          new Function(depthUi);
+
+          assert(scale.includes('rings: 48'), 'Scale generator no longer targets 48 rings');
+          assert(scale.includes('totalLocations: 960'), 'Scale generator no longer targets 960 locations');
+          assert(scale.includes('minimumCenterVoyages: 48'), 'Scale generator no longer declares 48 inward voyages');
+
+          assert(depth.includes("WORLD_DEPTH_REQUIRED_RINGS=48"), 'Hard 48-ring requirement is missing');
+          assert(depth.includes("WORLD_DEPTH_REQUIRED_MISSIONS=48"), 'Hard 48-mission requirement is missing');
+          assert(depth.includes("WORLD_DEPTH_REQUIRED_LOCATIONS=960"), 'Hard 960-location requirement is missing');
+          assert(depth.includes("WORLD_DEPTH_REQUIRED_STATIONS=180"), 'Hard station target is missing');
+          assert(depth.includes('worldDepthEnsureMissionSpine'), 'Mandatory inward station spine is missing');
+          assert(depth.includes('for(let ring=rings;ring>=1;ring-=1)'), 'Generator does not walk every ring from the outer shell inward');
+          assert(depth.includes('worldDepthPromoteStation(next,ring-1'), 'A station is not guaranteed on every inward ring');
+          assert(depth.includes("ring===1?'central-anomaly':'one-ring-inward'"), 'Final anomaly mission is not part of the mandatory spine');
+          assert(depth.includes('worldDepthShortestJourneyCount'), 'Shortest actual route is not measured');
+          assert(depth.includes('shortest<WORLD_DEPTH_REQUIRED_MISSIONS'), 'World acceptance does not reject shortcuts under 48 missions');
+          assert(depth.includes('for(let ring=1;ring<=rings;ring+=1)if(!stationRings.has(ring))'), 'World acceptance does not require a station on every ring');
+          assert(depth.includes('Generated Masterworld failed depth verification'), 'Invalid generated worlds are not rejected');
+          assert(depth.includes('worldDepthSafetyCheckpoint'), 'Destructive regeneration does not create a safety checkpoint');
+          assert(depth.includes('worldDepthUnderwayVessels'), 'Regeneration does not inspect underway vessels');
+          assert(depth.includes('Deep Masterworld regeneration is blocked while submarines are In Route'), 'Regeneration is not blocked during crossings');
+          assert(depth.includes('worldDepthRelocateCampaignAfterRegeneration'), 'Persistent groups and vessels are not relocated after regeneration');
+          assert(depth.includes('hub.publicState.worldEconomy'), 'Old station economy is not reset for the replacement map');
+
+          assert(stability.includes('regenerateVerifiedDeepMasterworldTransactional'), 'Transactional regeneration wrapper is missing');
+          assert(stability.includes('const stateBackup=cloneWorldData(state)'), 'Pre-regeneration state backup is missing');
+          assert(stability.includes('Object.assign(state,cloneWorldData(stateBackup))'), 'Failed regeneration does not restore the previous state');
+          assert(stability.includes('rolled back safely'), 'Rollback failure messaging is missing');
+          assert(stability.includes('group.submarineIds=[...new Set'), 'Group fleet IDs are not normalized before relocation');
+          assert(stability.includes('commerceReboundToNewStation:true'), 'Commerce is not rebound after relocation');
+
+          assert(depthUi.includes('Regenerate Verified 48-Ring Masterworld'), 'Explicit regeneration control is missing');
+          assert(depthUi.includes('REGENERATE ${WORLD_DEPTH_REQUIRED_RINGS}'), 'Typed destructive confirmation is missing');
+          assert(depthUi.includes('No regeneration occurs until'), 'UI does not state that regeneration is explicit only');
+          assert(depthUi.includes('safety checkpoint'), 'UI does not explain safety preservation');
+          assert(depthUi.includes('shortestOuterToCenterJourneys'), 'UI does not report verified route depth');
+          assert(depthUi.includes(stabilityPath), 'Transactional safeguard module is not dynamically loaded');
+          assert(depthUi.includes("fetch(path,{cache:'no-store'})"), 'Transactional safeguard can be stale-cached');
+          assert(depthUi.includes('BAROTRAUMA_WORLD_DEPTH_STABILITY_READY'), 'Regeneration is not gated on rollback readiness');
+          assert(depthUi.includes('automaticRegeneration:false'), 'Dashboard must not regenerate a world automatically');
+
+          assert(topology.includes('worldDepthSpine') || depth.includes('worldDepthSpine'), 'Mandatory depth-spine markers are missing');
+          assert(topology.includes('Math.abs(number(left.ring)-number(right.ring))>1') || topology.includes("relation==='one-ring-inward'&&ringDifference!==1"), 'Topology does not reject multi-ring edges');
+          assert(viewer.includes("relation:'central-anomaly'"), 'Ring 1 does not expose the anomaly as the final mission');
+          assert(viewer.includes('finalCenterMissionAvailable'), 'Viewer diagnostics do not verify the final center mission');
+          assert(viewer.includes('crossingStationNodesIncludingCentralAnomaly'), 'Route destination selector cannot include the central anomaly');
+
+          const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
+          assert(/barotrauma-rpg-tools-loader\.js\?v=\d+/.test(html), 'Operations page loader lacks a cache revision');
+
+          console.log('Validated explicit 48-ring, 960-location Masterworld generation with a verified 48-mission route to the central anomaly and transactional rollback.');
+          NODE

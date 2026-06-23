@@ -1,29 +1,55 @@
 
+  const LEGACY_SUITE_IMPORT_COMPATIBILITY = { version: 20, dashboardAuthVersion: 21 };
+
   function render() {
     const tool = activeTool();
     document.querySelectorAll('.ops-tab').forEach(button => button.classList.toggle('active', button.dataset.tool === tool));
-    if (tool === 'submarine') renderSubmarine();
-    else if (tool === 'encounters') renderEncounters();
-    else if (tool === 'route') renderRoute();
-    else if (tool === 'world') renderWorld();
-    else if (tool === 'catalog') renderCatalogue();
-    else if (tool === 'workshop') renderCustomWorkshop();
-    else renderCharacter();
+    try {
+      if (tool === 'dashboard') renderSubmarine();
+      else if (tool === 'submarine') renderSubmarine();
+      else if (tool === 'encounters') renderEncounters();
+      else if (tool === 'route') renderRoute();
+      else if (tool === 'world') renderWorld();
+      else if (tool === 'catalog') renderCatalogue();
+      else if (tool === 'workshop') renderCustomWorkshop();
+      else renderCharacter();
+    } catch (error) {
+      console.error('Barotrauma operations render failure.', error);
+      if (state.operationsDashboard && typeof state.operationsDashboard === 'object') state.operationsDashboard.lastError = error.message || String(error);
+      save();
+      root.innerHTML = `<div class="tool-shell"><section class="tool-hero"><div><p class="eyebrow">Recoverable interface failure</p><h2>The requested operations view encountered an error</h2><p class="rules-note bad">${escapeHtml(error.message || String(error))}</p><p class="small-note">The saved campaign state remains intact. Use the Active Submarine Dashboard to re-synchronize the master world ID, vessel registry, crew, route, event resolution, station economy, management credential, and world identities.</p></div><button id="render-recovery-dashboard" class="primary-action no-print" type="button">Open Recovery Dashboard</button></section></div>`;
+      root.querySelector('#render-recovery-dashboard')?.addEventListener('click', () => { history.replaceState(null, '', '#dashboard'); try { synchronizeMasterWorldId(false); normalizeWorldEconomyState(); syncAllWorldPlayerVessels(); seedWorldEconomyNpcFleet(); normalizeWorldEconomySimulationClocks(); normalizeDashboardManagementAuthority(); if (dashboardManagementAuthorized()) { normalizeActiveSubmarineDashboard(true); normalizeDashboardTurnOrder(); normalizeDashboardStartingLocationState(); normalizeDashboardCommissioningState(); normalizeRouteEventResolutionState(); } } catch (syncError) { console.error(syncError); } render(); });
+    }
   }
 
   document.querySelectorAll('.ops-tab').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
   window.addEventListener('hashchange', render);
   document.getElementById('print-tool')?.addEventListener('click', () => window.print());
-  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 7, exportedAt: new Date().toISOString(), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, state }, null, 2)));
+  document.getElementById('export-suite')?.addEventListener('click', () => download('barotrauma-rpg-operations-suite.json', JSON.stringify({ version: 22, exportedAt: new Date().toISOString(), masterWorldId: synchronizeMasterWorldId(false), catalogueVersion: WIKI_CATALOG.currentGameVersionShown, submarineRosterVersion: SUBMARINE_ROSTER_DATA.schemaVersion, customContentSchemaVersion: CUSTOM_CONTENT_SCHEMA.schemaVersion, itemFunctionalityVersion: ITEM_FUNCTIONALITY.schemaVersion, worldStateSchemaVersion: WORLD_STATE_SCHEMA.schemaVersion, factionRegistryVersion: FACTION_REGISTRY.schemaVersion, locationLevelRegistryVersion: LOCATION_LEVEL_REGISTRY.schemaVersion, creatureRegistryVersion: CREATURE_ENCOUNTER_VERSION, routeCrossingVersion: ROUTE_CROSSING_VERSION, routeEventResolutionVersion: ROUTE_EVENT_RESOLUTION_VERSION, worldEconomyVersion: WORLD_ECONOMY_VERSION, dashboardManagementAuthVersion: DASHBOARD_MANAGEMENT_AUTH_VERSION, dashboardManagementRecoveryVersion: '1.0.0', expeditionIntegrationVersion: EXPEDITION_INTEGRATION_VERSION, activeSubmarineDashboardVersion: ACTIVE_SUBMARINE_DASHBOARD_VERSION, activeTransitTurnVersion: ACTIVE_TRANSIT_TURN_VERSION, worldScaleVersion: state.world?.worldScaleVersion || '', state }, null, 2)));
   document.getElementById('import-suite')?.addEventListener('change', event => {
     const file = event.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       try {
+        if (dashboardManagementRuntime.status === 'authenticated') logoutDashboardManagementSession('suite import');
+        else dashboardManagementClearStoredSession();
         const parsed = JSON.parse(reader.result);
         const imported = parsed.state || parsed;
         state = deepMerge(defaultState(), imported);
+        dashboardManagementRuntime.status = 'locked';
+        dashboardManagementRuntime.vesselId = '';
+        dashboardManagementRuntime.credentialId = '';
+        dashboardManagementRuntime.receiptId = '';
+        dashboardManagementRuntime.expiresAt = '';
+        dashboardManagementRuntime.remembered = false;
+        dashboardManagementRuntime.pendingRecoveryCode = '';
+        dashboardManagementRuntime.pendingRecoveryVesselId = '';
+        dashboardManagementRuntime.message = 'Suite imported. Choose a submarine and log in to manage it.';
+        if (parsed.masterWorldId && !state.world?.masterWorldId) {
+          state.world = state.world && typeof state.world === 'object' ? state.world : {};
+          state.world.masterWorldId = parsed.masterWorldId;
+        }
         state.character.catalogInventory = Array.isArray(state.character.catalogInventory) ? state.character.catalogInventory : [];
         state.character.consumptionLog = Array.isArray(state.character.consumptionLog) ? state.character.consumptionLog : [];
         state.submarine.wikiWeapons = Array.isArray(state.submarine.wikiWeapons) ? state.submarine.wikiWeapons : [];
@@ -45,13 +71,42 @@
         normalizePlayerSubmissionSettings();
         normalizeCrewManagement();
         normalizeCargoManagement();
-        normalizeStationCommerce();
         registerOfficialSubmarines();
         syncCustomSubmarines();
         syncCustomStations();
+        normalizeStationCommerce();
+        normalizeExpandedWorld();
+        normalizeWorldHub();
+        synchronizeMasterWorldId(false);
+        if (state.world?.map) {
+          const stationLevelsChanged = reconcileWorldStationLevels(state.world.map);
+          seedWorldFactions(state.world.map, stationLevelsChanged);
+          assignWorldLocationLevels(state.world.map, false);
+          revalidateLocationGroupStarts();
+        }
+        syncWorldMapStations();
+        normalizeStationCommerce();
+        normalizeCustomResearch();
+        validateAllCustomDesigns();
+        assignMissingGroupStarts();
+        normalizeRouteCrossing();
+        normalizeCreatureEncounterState();
+        normalizeManagedExpedition();
+        normalizeDashboardCommissioningState();
+        normalizeRouteEventResolutionState();
+        normalizeWorldEconomyState();
+        syncAllWorldPlayerVessels();
+        seedWorldEconomyNpcFleet();
+        normalizeWorldEconomySimulationClocks();
+        normalizeDashboardManagementAuthority();
+        normalizeActiveSubmarineDashboard(false);
+        normalizeDashboardTurnOrder();
+        normalizeDashboardStartingLocationState();
         syncCrewResourceIfEnabled();
         syncCargoResourceIfEnabled();
         if (!SUBMARINES[state.submarine.model]) state.submarine.model = 'Barsuk';
+        synchronizeMasterWorldId(false);
+        scheduleWorldEconomyProgressiveSimulation(new Date(), 'suite import catch-up');
         save(); render();
       } catch (error) {
         alert(`The selected JSON could not be imported: ${error.message}`);

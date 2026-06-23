@@ -1,0 +1,369 @@
+
+  const WORLD_DEPTH_GUARANTEE_VERSION='1.0.0';
+  const WORLD_DEPTH_REQUIRED_RINGS=48;
+  const WORLD_DEPTH_REQUIRED_MISSIONS=48;
+  const WORLD_DEPTH_REQUIRED_LOCATIONS=960;
+  const WORLD_DEPTH_REQUIRED_STATIONS=180;
+
+  Object.assign(WORLD_MAP_DEFAULTS,WORLD_STATE_SCHEMA.mapDefaults||{},WORLD_SCALE_DEFAULTS||{}, {
+    rings:WORLD_DEPTH_REQUIRED_RINGS,
+    minimumCenterVoyages:WORLD_DEPTH_REQUIRED_MISSIONS,
+    totalLocations:WORLD_DEPTH_REQUIRED_LOCATIONS,
+    stationTarget:WORLD_DEPTH_REQUIRED_STATIONS,
+    minimumNodesPerRing:Math.max(8,number(WORLD_MAP_DEFAULTS.minimumNodesPerRing,8))
+  });
+
+  function worldDepthAngle(node,map=state.world?.map){
+    const centerX=number(map?.width)/2;
+    const centerY=number(map?.height)/2;
+    const angle=Math.atan2(number(node?.y)-centerY,number(node?.x)-centerX);
+    return angle<0?angle+Math.PI*2:angle;
+  }
+
+  function worldDepthAngularDistance(left,right){
+    const difference=Math.abs(left-right)%(Math.PI*2);
+    return Math.min(difference,Math.PI*2-difference);
+  }
+
+  function worldDepthPromoteStation(node,ring,rng,usedNames){
+    if(!node)return null;
+    if(node.type!=='station'){
+      const generatedName=typeof mapName==='function'?mapName(rng,usedNames):`Depthway Station ${String(ring).padStart(2,'0')}`;
+      const profile=typeof generatedStationProfile==='function'?generatedStationProfile(rng,generatedName):{name:generatedName,faction:'Independent',specialty:'Deep-route logistics',locals:`${generatedName} Administrator; ${generatedName} Quartermaster`};
+      node.type='station';
+      node.name=profile.name||generatedName;
+      node.faction=profile.faction||'Independent';
+      node.specialty=profile.specialty||'Deep-route logistics';
+      node.locals=profile.locals||'Station personnel';
+      node.details=`${node.faction}. ${node.specialty}. Important locals: ${node.locals}. This station anchors the mandatory inward campaign route.`;
+      node.surface=ring===number(state.world?.map?.rings,state.world?.rings);
+      usedNames.add(node.name);
+    }
+    node.worldDepthSpine=true;
+    node.mandatoryInwardStation=true;
+    node.depthRing=ring;
+    return node;
+  }
+
+  function worldDepthAddEdge(map,left,right,relation='one-ring-inward'){
+    if(!left||!right||left.id===right.id)return null;
+    const ringDifference=Math.abs(number(left.ring)-number(right.ring));
+    if(ringDifference>1)return null;
+    const existing=(map.edges||[]).find(edge=>(edge.a===left.id&&edge.b===right.id)||(edge.a===right.id&&edge.b===left.id));
+    if(existing){
+      existing.voyages=1;
+      existing.worldDepthSpine=true;
+      existing.mandatoryInward=true;
+      existing.relation=relation;
+      return existing;
+    }
+    const geometric=Math.hypot(number(left.x)-number(right.x),number(left.y)-number(right.y));
+    const nominalLeg=Math.max(1,number(map.shellRadius,7008)/Math.max(1,number(map.rings,WORLD_DEPTH_REQUIRED_RINGS)));
+    const edge={
+      id:`depth-edge-${left.id}-${right.id}`,
+      a:left.id,
+      b:right.id,
+      distance:Math.max(1,Math.round(geometric/nominalLeg)),
+      voyages:1,
+      danger:left.type==='hazard'||right.type==='hazard',
+      relation,
+      worldDepthSpine:true,
+      mandatoryInward:true
+    };
+    map.edges=Array.isArray(map.edges)?map.edges:[];
+    map.edges.push(edge);
+    return edge;
+  }
+
+  function worldDepthEnsureMissionSpine(map=state.world?.map){
+    if(!map?.nodes?.length)throw new Error('Cannot verify campaign depth without a generated Masterworld map.');
+    const rings=Math.max(WORLD_DEPTH_REQUIRED_RINGS,number(map.rings,state.world?.rings));
+    const nodesByRing=new Map();
+    for(const node of map.nodes){
+      const ring=Math.max(0,Math.round(number(node.ring,0)));
+      if(!nodesByRing.has(ring))nodesByRing.set(ring,[]);
+      nodesByRing.get(ring).push(node);
+    }
+    for(let ring=1;ring<=rings;ring+=1)if(!(nodesByRing.get(ring)||[]).length)throw new Error(`Generated Masterworld is missing ring ${ring}.`);
+    const anomaly=map.nodes.find(node=>node.id==='anomaly'||node.type==='anomaly');
+    if(!anomaly)throw new Error('Generated Masterworld is missing the central anomaly.');
+    anomaly.id='anomaly';
+    anomaly.ring=0;
+    anomaly.worldDepthSpine=true;
+    anomaly.depthMissionIndex=rings;
+
+    const rng=seededRandom(`${map.seed||state.world?.seed||'EUROPA'}|verified-depth-spine|${WORLD_DEPTH_GUARANTEE_VERSION}`);
+    const usedNames=new Set(map.nodes.map(node=>node.name).filter(Boolean));
+    const targetAngle=rng()*Math.PI*2;
+    const outerNodes=nodesByRing.get(rings)||[];
+    let current=[...outerNodes].sort((left,right)=>{
+      const leftStation=left.type==='station'?0:1;
+      const rightStation=right.type==='station'?0:1;
+      return leftStation-rightStation||worldDepthAngularDistance(worldDepthAngle(left,map),targetAngle)-worldDepthAngularDistance(worldDepthAngle(right,map),targetAngle);
+    })[0];
+    if(!current)throw new Error('Generated Masterworld has no outer-ring starting node.');
+
+    const pathNodeIds=[];
+    const edgeIds=[];
+    for(let ring=rings;ring>=1;ring-=1){
+      current=worldDepthPromoteStation(current,ring,rng,usedNames);
+      current.depthMissionIndex=rings-ring;
+      pathNodeIds.push(current.id);
+      const next=ring===1?anomaly:[...(nodesByRing.get(ring-1)||[])].sort((left,right)=>worldDepthAngularDistance(worldDepthAngle(current,map),worldDepthAngle(left,map))-worldDepthAngularDistance(worldDepthAngle(current,map),worldDepthAngle(right,map))||String(left.id).localeCompare(String(right.id)))[0];
+      if(!next)throw new Error(`Generated Masterworld cannot continue inward from ring ${ring}.`);
+      if(ring>1)worldDepthPromoteStation(next,ring-1,rng,usedNames);
+      const edge=worldDepthAddEdge(map,current,next,ring===1?'central-anomaly':'one-ring-inward');
+      if(!edge)throw new Error(`Generated Masterworld could not create the mandatory inward edge from ring ${ring}.`);
+      edge.depthMissionIndex=rings-ring;
+      edgeIds.push(edge.id);
+      current=next;
+    }
+    pathNodeIds.push(anomaly.id);
+
+    for(const node of map.nodes)node.start=false;
+    const start=map.nodes.find(node=>node.id===pathNodeIds[0]);
+    start.start=true;
+    map.startId=start.id;
+    map.rings=rings;
+    map.minimumCenterVoyages=rings;
+    map.stationCount=map.nodes.filter(node=>node.type==='station').length;
+    map.depthGuarantee={
+      version:WORLD_DEPTH_GUARANTEE_VERSION,
+      requiredRings:WORLD_DEPTH_REQUIRED_RINGS,
+      requiredMissions:WORLD_DEPTH_REQUIRED_MISSIONS,
+      verifiedMissionDepth:edgeIds.length,
+      stationMissionDepth:pathNodeIds.filter(id=>id!=='anomaly').length-1,
+      finalAnomalyMission:true,
+      pathNodeIds,
+      edgeIds,
+      outerStartId:start.id,
+      anomalyId:anomaly.id,
+      verifiedAt:new Date().toISOString()
+    };
+    return map.depthGuarantee;
+  }
+
+  function worldDepthShortestJourneyCount(map,startId,endId='anomaly'){
+    const adjacency={};
+    for(const node of map?.nodes||[])adjacency[node.id]=[];
+    for(const edge of map?.edges||[]){
+      const left=map.nodes.find(node=>node.id===edge.a);
+      const right=map.nodes.find(node=>node.id===edge.b);
+      if(!left||!right||Math.abs(number(left.ring)-number(right.ring))>1)continue;
+      adjacency[edge.a]?.push(edge.b);
+      adjacency[edge.b]?.push(edge.a);
+    }
+    const queue=[[startId,0]];
+    const visited=new Set([startId]);
+    while(queue.length){
+      const [id,distance]=queue.shift();
+      if(id===endId)return distance;
+      for(const next of adjacency[id]||[])if(!visited.has(next)){visited.add(next);queue.push([next,distance+1]);}
+    }
+    return Infinity;
+  }
+
+  function worldDepthValidateMap(map=state.world?.map){
+    const issues=[];
+    const rings=number(map?.rings,0);
+    if(rings<WORLD_DEPTH_REQUIRED_RINGS)issues.push(`World has ${rings} rings; ${WORLD_DEPTH_REQUIRED_RINGS} are required.`);
+    const nodeCount=map?.nodes?.length||0;
+    if(nodeCount<WORLD_DEPTH_REQUIRED_LOCATIONS)issues.push(`World has ${nodeCount} locations; ${WORLD_DEPTH_REQUIRED_LOCATIONS} are required.`);
+    const stationRings=new Set((map?.nodes||[]).filter(node=>node.type==='station').map(node=>number(node.ring)));
+    for(let ring=1;ring<=rings;ring+=1)if(!stationRings.has(ring))issues.push(`Ring ${ring} has no station.`);
+    const guarantee=map?.depthGuarantee||{};
+    if(number(guarantee.verifiedMissionDepth,0)<WORLD_DEPTH_REQUIRED_MISSIONS)issues.push(`Verified mission depth is ${number(guarantee.verifiedMissionDepth,0)}; ${WORLD_DEPTH_REQUIRED_MISSIONS} are required.`);
+    const path=Array.isArray(guarantee.pathNodeIds)?guarantee.pathNodeIds:[];
+    if(path.length!==rings+1)issues.push(`Mandatory route contains ${path.length} nodes; expected ${rings+1}.`);
+    for(let index=0;index<path.length-1;index+=1){
+      const left=map?.nodes?.find(node=>node.id===path[index]);
+      const right=map?.nodes?.find(node=>node.id===path[index+1]);
+      if(!left||!right||Math.abs(number(left.ring)-number(right.ring))!==1)issues.push(`Mandatory route step ${index+1} does not move exactly one ring inward.`);
+    }
+    const shortest=worldDepthShortestJourneyCount(map,map?.startId,'anomaly');
+    if(shortest<WORLD_DEPTH_REQUIRED_MISSIONS)issues.push(`Shortest outer-to-center route is only ${shortest} journeys.`);
+    if(!Number.isFinite(shortest))issues.push('Central anomaly is unreachable from the outer starting station.');
+    return {
+      valid:!issues.length,
+      issues,
+      rings,
+      nodeCount,
+      stationCount:(map?.nodes||[]).filter(node=>node.type==='station').length,
+      verifiedMissionDepth:number(guarantee.verifiedMissionDepth,0),
+      shortestOuterToCenterJourneys:shortest,
+      pathNodeIds:path,
+      edgeIds:Array.isArray(guarantee.edgeIds)?guarantee.edgeIds:[]
+    };
+  }
+
+  const generateWorldMapBeforeDepthGuarantee=generateWorldMap;
+  generateWorldMap=function generateVerifiedDeepMasterworld(){
+    const previousWorld=cloneWorldData(state.world);
+    const previousHub=cloneWorldData(state.worldHub);
+    const saveBeforeDepthGeneration=save;
+    try{
+      const world=normalizeExpandedWorld();
+      world.rings=Math.max(WORLD_DEPTH_REQUIRED_RINGS,number(world.rings,WORLD_DEPTH_REQUIRED_RINGS));
+      world.nodes=Math.max(WORLD_DEPTH_REQUIRED_LOCATIONS,number(world.nodes,WORLD_DEPTH_REQUIRED_LOCATIONS),world.rings*number(WORLD_MAP_DEFAULTS.minimumNodesPerRing,8)+1);
+      world.stationTarget=Math.max(WORLD_DEPTH_REQUIRED_STATIONS,number(world.stationTarget,WORLD_DEPTH_REQUIRED_STATIONS),world.rings);
+      world.shellRadius=Math.max(7008,number(world.shellRadius,7008));
+      world.minimumCenterVoyages=world.rings;
+      save=()=>{};
+      generateWorldMapBeforeDepthGuarantee();
+      const map=state.world?.map;
+      if(!map)throw new Error('Masterworld generation returned no map.');
+      map.seed=state.world.seed;
+      worldDepthEnsureMissionSpine(map);
+      const validation=worldDepthValidateMap(map);
+      if(!validation.valid)throw new Error(`Generated Masterworld failed depth verification: ${validation.issues.join(' ')}`);
+      state.world.rings=map.rings;
+      state.world.nodes=map.nodes.length;
+      state.world.stationTarget=Math.max(WORLD_DEPTH_REQUIRED_STATIONS,map.stationCount);
+      state.world.minimumCenterVoyages=validation.shortestOuterToCenterJourneys;
+      state.world.worldScaleVersion=WORLD_SCALE_VERSION;
+      state.world.depthGuarantee=cloneWorldData(map.depthGuarantee);
+      const hub=normalizeWorldHub();
+      map.worldId=hub.worldId;
+      map.masterWorldId=hub.masterWorldId||hub.worldId;
+      globalThis.__BAROTRAUMA_DASHBOARD_GRAPH_CACHE=null;
+      globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE=null;
+      globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE=null;
+      globalThis.__BAROTRAUMA_LOCAL_WORLD_TOPOLOGY_CACHE=null;
+      save=saveBeforeDepthGeneration;
+      save();
+      globalThis.BAROTRAUMA_WORLD_DEPTH_GUARANTEE={version:WORLD_DEPTH_GUARANTEE_VERSION,...validation};
+      return map;
+    }catch(error){
+      state.world=previousWorld;
+      state.worldHub=previousHub;
+      save=saveBeforeDepthGeneration;
+      save();
+      throw error;
+    }finally{
+      save=saveBeforeDepthGeneration;
+    }
+  };
+
+  function worldDepthSafetyCheckpoint(label='Safety copy before deep Masterworld regeneration'){
+    const hub=normalizeWorldHub();
+    if(!state.world?.map?.nodes?.length)return null;
+    const payload=typeof worldSavePayload==='function'?worldSavePayload(false):{world:cloneWorldData(state.world),hub:cloneWorldData(hub)};
+    const checkpoint={
+      saveId:`SAVE-DEPTH-${Date.now().toString(36).toUpperCase()}`,
+      label:`${label} · ${state.world.map.nodes.length} nodes · ${number(state.world.map.rings)} rings`,
+      seed:state.world.seed,
+      worldId:hub.worldId,
+      revision:hub.revision,
+      savedAt:new Date().toISOString(),
+      canonicalAt:typeof worldGameDate==='function'?worldGameDate().toISOString():new Date().toISOString(),
+      payload,
+      depthRegenerationSafety:true
+    };
+    hub.savedStates=[checkpoint,...(hub.savedStates||[])].slice(0,30);
+    return checkpoint;
+  }
+
+  function worldDepthUnderwayVessels(){
+    const underway=[];
+    if(state.route?.crossing?.status==='underway')underway.push(state.submarine?.worldSubmarineId||'active local submarine');
+    if(typeof normalizeDashboardManagementAuthority==='function'){
+      const authority=normalizeDashboardManagementAuthority();
+      for(const [vesselId,snapshot] of Object.entries(authority.vesselSnapshots||{}))if(snapshot?.route?.crossing?.status==='underway'&&!underway.includes(vesselId))underway.push(vesselId);
+    }
+    return underway;
+  }
+
+  function worldDepthRelocateCampaignAfterRegeneration(){
+    const hub=normalizeWorldHub();
+    const map=state.world.map;
+    const outerStations=map.nodes.filter(node=>node.type==='station'&&number(node.ring)===number(map.rings)).sort((left,right)=>String(left.id).localeCompare(String(right.id)));
+    if(!outerStations.length)throw new Error('Deep Masterworld regeneration produced no outer-ring stations for expedition placement.');
+    const groups=Object.values(hub.publicState.groups||{}).sort((left,right)=>String(left.groupId).localeCompare(String(right.groupId)));
+    hub.publicState.locations={};
+    hub.publicState.routes={};
+    for(let index=0;index<groups.length;index+=1){
+      const group=groups[index];
+      const station=outerStations[index%outerStations.length];
+      group.startingNodeId=station.id;
+      group.currentNodeId=station.id;
+      group.routeId='';
+      group.updatedAt=new Date().toISOString();
+      hub.publicState.locations[group.groupId]={groupId:group.groupId,nodeId:station.id,updatedAt:new Date().toISOString(),relocatedByDepthRegeneration:true};
+      for(const vesselId of group.submarineIds||[]){
+        const record=hub.publicState.submarines?.[vesselId];
+        if(record){
+          record.currentNodeId=station.id;
+          record.startingNodeId=station.id;
+          record.routeId='';
+          if(record.status==='inactive')record.storedAtNodeId=station.id;
+          record.updatedAt=new Date().toISOString();
+          if(record.submarine?.managedExpedition){record.submarine.managedExpedition.currentNodeId=station.id;record.submarine.managedExpedition.routeId='';}
+        }
+        if(typeof normalizeDashboardManagementAuthority==='function'){
+          const snapshot=normalizeDashboardManagementAuthority().vesselSnapshots?.[vesselId];
+          if(snapshot){
+            const replacementRoute=deepMerge(defaultState().route,{});
+            replacementRoute.activeSubmarineId=vesselId;
+            replacementRoute.activeGroupId=group.groupId;
+            replacementRoute.startNodeId=station.id;
+            replacementRoute.start=station.name;
+            snapshot.route=replacementRoute;
+            snapshot.operationsDashboard=snapshot.operationsDashboard&&typeof snapshot.operationsDashboard==='object'?snapshot.operationsDashboard:defaultActiveSubmarineDashboard();
+            snapshot.operationsDashboard.activeNodeId=station.id;
+            snapshot.operationsDashboard.activeGroupId=group.groupId;
+            snapshot.operationsDashboard.activeSubmarineId=vesselId;
+            snapshot.operationsDashboard.operationalState='at-station';
+            snapshot.operationsDashboard.startingLocation={...defaultDashboardStartingLocationState(),worldKey:dashboardWorldIdentityKey(),optionNodeIds:[station.id],selectedNodeId:station.id,confirmedNodeId:station.id,locked:true,everDeparted:false,updatedAt:new Date().toISOString(),creationOnly:true};
+            if(snapshot.submarine?.managedExpedition){snapshot.submarine.managedExpedition.currentNodeId=station.id;snapshot.submarine.managedExpedition.routeId='';}
+            snapshot.capturedAt=new Date().toISOString();
+          }
+        }
+      }
+    }
+    if(hub.activeGroupId&&hub.publicState.groups[hub.activeGroupId]){
+      const activeGroup=hub.publicState.groups[hub.activeGroupId];
+      const activeStation=map.nodes.find(node=>node.id===activeGroup.currentNodeId);
+      state.route=deepMerge(defaultState().route,{activeGroupId:activeGroup.groupId,activeSubmarineId:hub.activeSubmarineId||activeGroup.activeSubmarineId||activeGroup.primarySubmarineId||'',startNodeId:activeStation?.id||'',start:activeStation?.name||''});
+      state.operationsDashboard=state.operationsDashboard&&typeof state.operationsDashboard==='object'?state.operationsDashboard:defaultActiveSubmarineDashboard();
+      state.operationsDashboard.activeNodeId=activeStation?.id||'';
+      state.operationsDashboard.activeGroupId=activeGroup.groupId;
+      state.operationsDashboard.operationalState='at-station';
+      state.operationsDashboard.worldViewerOpen=false;
+    }
+    if(hub.publicState.worldEconomy)hub.publicState.worldEconomy=typeof defaultWorldEconomyState==='function'?defaultWorldEconomyState():{stationEconomies:{},vessels:{},economyJournal:[],tradeJournal:[],simulation:{lastSimulatedAt:new Date().toISOString(),tickSequence:0}};
+    if(typeof normalizeWorldEconomyState==='function')normalizeWorldEconomyState();
+    if(typeof syncAllWorldPlayerVessels==='function')syncAllWorldPlayerVessels();
+  }
+
+  function regenerateVerifiedDeepMasterworld(){
+    const underway=worldDepthUnderwayVessels();
+    if(underway.length)throw new Error(`Deep Masterworld regeneration is blocked while submarines are In Route: ${underway.join(', ')}.`);
+    worldDepthSafetyCheckpoint();
+    state.world.seed=uniqueWorldSeed();
+    state.world.rings=WORLD_DEPTH_REQUIRED_RINGS;
+    state.world.nodes=WORLD_DEPTH_REQUIRED_LOCATIONS;
+    state.world.stationTarget=WORLD_DEPTH_REQUIRED_STATIONS;
+    state.world.branching=number(WORLD_MAP_DEFAULTS.branching,48);
+    state.world.shellRadius=number(WORLD_MAP_DEFAULTS.shellRadius,7008);
+    state.world.minimumCenterVoyages=WORLD_DEPTH_REQUIRED_MISSIONS;
+    state.world.map=null;
+    state.world.selected=[];
+    const map=generateWorldMap();
+    worldDepthRelocateCampaignAfterRegeneration();
+    const validation=worldDepthValidateMap(map);
+    if(!validation.valid)throw new Error(`Deep Masterworld regeneration failed after campaign relocation: ${validation.issues.join(' ')}`);
+    const hub=normalizeWorldHub();
+    hub.revision+=1;
+    hub.updatedAt=new Date().toISOString();
+    hub.publicState.submissionJournal.unshift({submissionId:uid('world-depth-regeneration'),kind:'game-state',status:'accepted',createdAt:new Date().toISOString(),summary:`Regenerated verified ${validation.rings}-ring Masterworld with ${validation.shortestOuterToCenterJourneys} minimum journeys to the center.`});
+    save();
+    globalThis.BAROTRAUMA_WORLD_DEPTH_GUARANTEE={version:WORLD_DEPTH_GUARANTEE_VERSION,...validation,regeneratedAt:new Date().toISOString()};
+    return validation;
+  }
+
+  if(state.world?.map?.nodes?.length){
+    const existingDepth=worldDepthValidateMap(state.world.map);
+    globalThis.BAROTRAUMA_WORLD_DEPTH_GUARANTEE={version:WORLD_DEPTH_GUARANTEE_VERSION,...existingDepth};
+  }else{
+    globalThis.BAROTRAUMA_WORLD_DEPTH_GUARANTEE={version:WORLD_DEPTH_GUARANTEE_VERSION,valid:false,issues:['No active Masterworld map loaded.'],rings:0,nodeCount:0,verifiedMissionDepth:0,shortestOuterToCenterJourneys:Infinity};
+  }

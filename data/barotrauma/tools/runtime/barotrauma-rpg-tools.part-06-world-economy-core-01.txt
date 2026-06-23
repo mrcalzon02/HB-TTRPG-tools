@@ -1,0 +1,196 @@
+
+  function worldVesselRegistry() { return normalizeWorldEconomyState().vessels; }
+
+  function normalizeWorldVesselRecord(raw={}) {
+    const now = new Date().toISOString();
+    const location = raw.location&&typeof raw.location==='object'?raw.location:{};
+    const cargo = raw.cargo&&typeof raw.cargo==='object'?raw.cargo:{};
+    cargo.commodities = cargo.commodities&&typeof cargo.commodities==='object'?cargo.commodities:{};
+    for (const key of WORLD_ECONOMY_COMMODITIES.filter(key=>key!=='credits')) cargo.commodities[key] = Math.max(0,number(cargo.commodities[key]));
+    return {
+      vesselId:String(raw.vesselId||uid('world-vessel')),
+      worldId:String(raw.worldId||normalizeWorldHub().worldId),
+      kind:['player','npc','manufactured'].includes(raw.kind)?raw.kind:'player',
+      role:String(raw.role||'expedition'),
+      name:String(raw.name||raw.modelName||'Unnamed Submarine'),
+      modelId:String(raw.modelId||raw.model||''),
+      modelName:String(raw.modelName||raw.modelId||raw.model||'Unknown Model'),
+      ownerGroupId:String(raw.ownerGroupId||raw.groupId||''),
+      ownerPlayerId:String(raw.ownerPlayerId||''),
+      status:['docked','in-transit','awaiting-decision','available','under-construction','inactive'].includes(raw.status)?raw.status:'docked',
+      active:raw.active!==false,
+      availableForCommission:Boolean(raw.availableForCommission),
+      commissionedAt:String(raw.commissionedAt||''),
+      location:{
+        mode:location.mode==='route'?'route':'station',
+        stationNodeId:String(location.stationNodeId||''),
+        routeId:String(location.routeId||''),
+        departureNodeId:String(location.departureNodeId||''),
+        destinationNodeId:String(location.destinationNodeId||''),
+        fromNodeId:String(location.fromNodeId||''),
+        toNodeId:String(location.toNodeId||''),
+        currentNodeId:String(location.currentNodeId||''),
+        pathNodeIds:Array.isArray(location.pathNodeIds)?location.pathNodeIds:[],
+        progress:clamp(number(location.progress),0,1),
+        departedAt:String(location.departedAt||''),
+        etaAt:String(location.etaAt||''),
+        arrivedAt:String(location.arrivedAt||''),
+        decisionState:String(location.decisionState||'')
+      },
+      cargo,
+      capacity:Math.max(1,number(raw.capacity,20)),
+      sourceSubmissionId:String(raw.sourceSubmissionId||''),
+      createdAt:String(raw.createdAt||now),
+      updatedAt:String(raw.updatedAt||now),
+      lastActionAt:String(raw.lastActionAt||now),
+      nextActionAt:String(raw.nextActionAt||''),
+      transitSequence:Math.max(0,number(raw.transitSequence)),
+      notes:String(raw.notes||'')
+    };
+  }
+
+  function upsertWorldVessel(raw={}) {
+    const registry = worldVesselRegistry();
+    const vesselId = String(raw.vesselId||uid('world-vessel'));
+    const existing = registry[vesselId]||{};
+    const merged = normalizeWorldVesselRecord({...existing,...raw,vesselId,location:{...(existing.location||{}),...(raw.location||{})},cargo:{...(existing.cargo||{}),...(raw.cargo||{}),commodities:{...(existing.cargo?.commodities||{}),...(raw.cargo?.commodities||{})}},createdAt:existing.createdAt||raw.createdAt});
+    registry[vesselId] = merged;
+    return merged;
+  }
+
+  function worldPublicRouteForGroup(groupId) {
+    const hub = normalizeWorldHub();
+    const group = hub.publicState.groups[groupId];
+    if (group?.routeId&&hub.publicState.routes[group.routeId]) return hub.publicState.routes[group.routeId];
+    return Object.values(hub.publicState.routes).filter(route=>route.groupId===groupId).sort((a,b)=>Date.parse(b.updatedAt||0)-Date.parse(a.updatedAt||0))[0]||null;
+  }
+
+  function worldPlayerRouteLocation(groupId,routeRecord=null) {
+    const hub = normalizeWorldHub();
+    const group = hub.publicState.groups[groupId];
+    const record = routeRecord||worldPublicRouteForGroup(groupId);
+    const route = record?.route||{};
+    const crossing = route.crossing||record||{};
+    const currentNodeId = crossing.currentNodeId||group?.currentNodeId||crossing.departureNodeId||'';
+    if (crossing.status==='underway') {
+      const legs = Array.isArray(crossing.legs)?crossing.legs:[];
+      const activeIndex = Math.max(0,number(crossing.activeLegIndex));
+      const leg = legs[activeIndex]||legs.find(item=>item.status==='underway')||legs.find(item=>item.status!=='complete');
+      const plan = Array.isArray(route.plan)?route.plan:[];
+      const eventIds = leg?.eventIds||[];
+      const legEvents = plan.filter(slot=>eventIds.includes(slot.id));
+      const completed = legEvents.filter(slot=>slot.status!=='pending').length;
+      const progress = legEvents.length?clamp((completed+.15)/legEvents.length,.08,.92):.5;
+      const pending = plan.find(slot=>slot.status==='pending');
+      return {status:'in-transit',location:{mode:'route',routeId:crossing.crossingId||record?.routeId||'',departureNodeId:crossing.departureNodeId||'',destinationNodeId:crossing.destinationNodeId||'',fromNodeId:leg?.fromNodeId||currentNodeId,toNodeId:leg?.toNodeId||crossing.destinationNodeId||'',currentNodeId,pathNodeIds:Array.isArray(crossing.pathNodeIds)?crossing.pathNodeIds:[],progress,departedAt:crossing.startedAt||'',etaAt:'',decisionState:pending?'awaiting-event-resolution':'awaiting-leg-completion'}};
+    }
+    if (crossing.status==='aborted'&&state.world?.map?.nodes?.find(node=>node.id===currentNodeId)?.type!=='station') return {status:'awaiting-decision',location:{mode:'route',routeId:crossing.crossingId||record?.routeId||'',departureNodeId:crossing.departureNodeId||'',destinationNodeId:crossing.destinationNodeId||'',fromNodeId:currentNodeId,toNodeId:crossing.destinationNodeId||'',currentNodeId,pathNodeIds:Array.isArray(crossing.pathNodeIds)?crossing.pathNodeIds:[],progress:.5,departedAt:crossing.startedAt||'',etaAt:'',decisionState:'crossing-aborted-awaiting-decision'}};
+    const stationNodeId = crossing.status==='arrived'?crossing.destinationNodeId||currentNodeId:currentNodeId||crossing.departureNodeId||group?.startingNodeId||'';
+    return {status:'docked',location:{mode:'station',stationNodeId,currentNodeId:stationNodeId,routeId:crossing.crossingId||record?.routeId||'',departureNodeId:crossing.departureNodeId||'',destinationNodeId:crossing.destinationNodeId||'',progress:crossing.status==='arrived'?1:0,arrivedAt:crossing.completedAt||'',decisionState:crossing.status==='prepared'?'route-prepared':'docked'}};
+  }
+
+  function syncAllWorldPlayerVessels() {
+    const hub = normalizeWorldHub();
+    const registry = worldVesselRegistry();
+    const seen = new Set();
+    for (const [vesselId,payload] of Object.entries(hub.publicState.submarines||{})) {
+      const groupId = payload.groupId||Object.values(hub.publicState.groups).find(group=>group.submarineIds?.includes(vesselId))?.groupId||'';
+      const group = hub.publicState.groups[groupId];
+      const submarine = payload.submarine||payload;
+      const model = payload.model||{};
+      const routeLocation = worldPlayerRouteLocation(groupId);
+      upsertWorldVessel({vesselId,worldId:hub.worldId,kind:'player',role:'player-expedition',name:submarine.name||submarine.vesselName||model.name||submarine.model||vesselId,modelId:submarine.model||model.id||'',modelName:model.name||submarine.model||'Player Submarine',ownerGroupId:groupId,ownerPlayerId:submarine.ownerPlayerId||'',status:routeLocation.status,location:routeLocation.location,capacity:number(model.capacity?.total||model.capacity||submarine.capacity?.total||submarine.resources?.cargo||40,40),active:true,availableForCommission:false,updatedAt:payload.updatedAt||new Date().toISOString(),notes:group?`Player vessel assigned to ${group.name}`:'Submitted player vessel'});
+      seen.add(vesselId);
+    }
+    for (const vessel of Object.values(registry)) if (vessel.kind==='player'&&!seen.has(vessel.vesselId)) vessel.active = false;
+    return registry;
+  }
+
+  function syncActivePlayerVesselRegistry(reason='Active player state synchronized') {
+    const hub = normalizeWorldHub();
+    const group = activeWorldGroup();
+    state.submarine.worldSubmarineId = state.submarine.worldSubmarineId||uid('world-submarine');
+    const vesselId = state.submarine.worldSubmarineId;
+    if (group&&!group.submarineIds.includes(vesselId)) group.submarineIds.push(vesselId);
+    if (!hub.publicState.submarines[vesselId]) hub.publicState.submarines[vesselId] = {submarineId:vesselId,groupId:group?.groupId||'',submarine:worldEconomyClone(state.submarine),model:worldEconomyClone(SUBMARINES[state.submarine.model]||{}),updatedAt:new Date().toISOString()};
+    else Object.assign(hub.publicState.submarines[vesselId],{groupId:group?.groupId||hub.publicState.submarines[vesselId].groupId||'',submarine:worldEconomyClone(state.submarine),model:worldEconomyClone(SUBMARINES[state.submarine.model]||{}),updatedAt:new Date().toISOString()});
+    const routeLocation = worldPlayerRouteLocation(group?.groupId||'',{routeId:state.route?.crossing?.crossingId||'',route:state.route});
+    const model = SUBMARINES[state.submarine.model]||{};
+    const vessel = upsertWorldVessel({vesselId,worldId:hub.worldId,kind:'player',role:'player-expedition',name:state.submarine.name||model.name||state.submarine.model||'Player Submarine',modelId:state.submarine.model||'',modelName:model.name||state.submarine.model||'Player Submarine',ownerGroupId:group?.groupId||'',ownerPlayerId:normalizePlayerSubmissionSettings().playerId||'',status:routeLocation.status,location:routeLocation.location,capacity:number(model.capacity?.total||model.capacity||state.submarine.resources?.cargo||40,40),active:true,availableForCommission:false,updatedAt:new Date().toISOString(),notes:reason});
+    hub.updatedAt = new Date().toISOString();
+    return vessel;
+  }
+
+  function worldVesselMapPosition(vessel,map=state.world?.map,index=0) {
+    if (!map?.nodes?.length||!vessel) return null;
+    const nodeById = Object.fromEntries(map.nodes.map(node=>[node.id,node]));
+    let x=0,y=0;
+    if (vessel.location.mode==='station') {
+      const node = nodeById[vessel.location.stationNodeId||vessel.location.currentNodeId];
+      if (!node) return null;
+      const angle=(seededHash(vessel.vesselId)%360)*Math.PI/180;
+      const radius=22+(index%4)*8;
+      x=number(node.x)+Math.cos(angle)*radius;
+      y=number(node.y)+Math.sin(angle)*radius;
+    } else {
+      const from=nodeById[vessel.location.fromNodeId||vessel.location.departureNodeId];
+      const to=nodeById[vessel.location.toNodeId||vessel.location.destinationNodeId];
+      if (!from||!to) return null;
+      let progress=clamp(number(vessel.location.progress,.5),0,1);
+      if (vessel.kind==='npc'&&vessel.location.departedAt&&vessel.location.etaAt) {
+        const start=Date.parse(vessel.location.departedAt),end=Date.parse(vessel.location.etaAt);
+        if (Number.isFinite(start)&&Number.isFinite(end)&&end>start) progress=clamp((Date.now()-start)/(end-start),0,1);
+      }
+      x=number(from.x)+(number(to.x)-number(from.x))*progress;
+      y=number(from.y)+(number(to.y)-number(from.y))*progress;
+    }
+    return {x,y};
+  }
+
+  function worldVesselMetrics() {
+    const vessels=Object.values(worldVesselRegistry()).filter(vessel=>vessel.active!==false);
+    return {total:vessels.length,player:vessels.filter(v=>v.kind==='player').length,npc:vessels.filter(v=>v.kind==='npc').length,docked:vessels.filter(v=>v.status==='docked').length,transit:vessels.filter(v=>v.status==='in-transit'||v.status==='awaiting-decision').length,available:vessels.filter(v=>v.status==='available').length,construction:Object.values(normalizeWorldEconomyState().stationEconomies).filter(station=>number(station.construction?.progress)>0).length};
+  }
+
+  const applyWorldSubmissionBeforeWorldVessels = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithVesselRegistry(raw,allowForeign=false) {
+    const submission=normalizeWorldSubmission(raw);
+    const result=applyWorldSubmissionBeforeWorldVessels(submission,allowForeign);
+    if (['submarine','route','location','game-state'].includes(submission.kind)) syncAllWorldPlayerVessels();
+    return result;
+  };
+
+  const syncCrossingPublicRouteBeforeWorldVessels = syncCrossingPublicRoute;
+  syncCrossingPublicRoute = function syncCrossingPublicRouteWithVesselRegistry() {
+    const result=syncCrossingPublicRouteBeforeWorldVessels();
+    syncActivePlayerVesselRegistry('Crossing and player-vessel location synchronized');
+    return result;
+  };
+
+  const clearRouteCrossingBeforeWorldVessels = clearRouteCrossing;
+  clearRouteCrossing = function clearRouteCrossingWithVesselRegistry() {
+    const result=clearRouteCrossingBeforeWorldVessels();
+    syncActivePlayerVesselRegistry('Route cleared while vessel remained docked');
+    return result;
+  };
+
+  const worldSavePayloadBeforeWorldEconomy = worldSavePayload;
+  worldSavePayload = function worldSavePayloadWithEconomy(includeSavedStates=true) {
+    normalizeWorldEconomyState();
+    syncAllWorldPlayerVessels();
+    const payload=worldSavePayloadBeforeWorldEconomy(includeSavedStates);
+    payload.version=2;
+    payload.worldEconomyVersion=WORLD_ECONOMY_VERSION;
+    return payload;
+  };
+
+  const importWorldSaveBeforeWorldEconomy = importWorldSave;
+  importWorldSave = function importWorldSaveWithEconomy(raw) {
+    const result=importWorldSaveBeforeWorldEconomy(raw);
+    normalizeWorldEconomyState();
+    syncAllWorldPlayerVessels();
+    return result;
+  };
+
+  syncAllWorldPlayerVessels();
+  syncActivePlayerVesselRegistry('World vessel registry initialized');

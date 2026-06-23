@@ -1,0 +1,12 @@
+
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_RECOVERY_VERSION=DASHBOARD_MANAGEMENT_RECOVERY_VERSION;
+
+  Promise.resolve().then(async()=>{
+    if(dashboardManagementRuntime.status!=='authenticated'||!dashboardManagementRuntime.vesselId)return;
+    const credential=dashboardManagementCredential(dashboardManagementRuntime.vesselId);
+    if(!credential?.verifier||credential.recovery?.verifier)return;
+    await dashboardManagementIssueRecoveryCode(credential);
+    dashboardManagementAudit('legacy-recovery-issued-after-session-restore',dashboardManagementRuntime.vesselId,{recoveryRevision:credential.recovery.revision});
+    save();
+    if(activeSubmarineDashboardContext())renderActiveSubmarineDashboard();
+  }).catch(error=>console.error('Could not issue a recovery code for the restored legacy session.',error));

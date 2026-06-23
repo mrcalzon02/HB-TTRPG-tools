@@ -1,0 +1,107 @@
+
+  const bindDashboardManagementGateBeforeRecovery=bindDashboardManagementGate;
+  bindDashboardManagementGate=function bindDashboardManagementGateWithRecovery(){
+    bindDashboardManagementGateBeforeRecovery();
+    const selectedId=dashboardManagementSelectedVesselId();
+    const selected=dashboardManagementVessels().find(vessel=>vessel.vesselId===selectedId)||null;
+    if(selected&&!selected.claimed&&!selected.groupId)root.querySelector('#dashboard-management-claim')?.closest('.tool-card')?.remove();
+
+    root.querySelector('#dashboard-create-manageable-vessel')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const password=root.querySelector('#dashboard-create-vessel-password');
+      const confirmation=root.querySelector('#dashboard-create-vessel-confirm');
+      if((password?.value||'')!==(confirmation?.value||'')){dashboardManagementMessage('The new submarine passwords do not match.',true);return;}
+      button.disabled=true;
+      dashboardManagementMessage('Creating the new manageable submarine and expedition pairing…');
+      try{
+        await createNewManageableSubmarine({
+          name:root.querySelector('#dashboard-create-vessel-name')?.value,
+          modelName:root.querySelector('#dashboard-create-vessel-model')?.value,
+          groupId:root.querySelector('#dashboard-create-vessel-group')?.value,
+          newGroupName:root.querySelector('#dashboard-create-vessel-new-group')?.value,
+          managerName:root.querySelector('#dashboard-create-vessel-manager')?.value,
+          password:password?.value,
+          remember:Boolean(root.querySelector('#dashboard-create-vessel-remember')?.checked)
+        });
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        dashboardManagementMessage(error.message,true);
+        button.disabled=false;
+      }
+    });
+
+    root.querySelector('#dashboard-claim-existing-vessel')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const password=root.querySelector('#dashboard-claim-existing-password');
+      const confirmation=root.querySelector('#dashboard-claim-existing-confirm');
+      if((password?.value||'')!==(confirmation?.value||'')){dashboardManagementMessage('The claim passwords do not match.',true);return;}
+      button.disabled=true;
+      dashboardManagementMessage('Pairing and claiming the existing submarine…');
+      try{
+        await claimExistingDashboardSubmarine(selectedId,password?.value||'',root.querySelector('#dashboard-claim-existing-manager')?.value||'',{
+          groupId:root.querySelector('#dashboard-claim-existing-group')?.value||'',
+          newGroupName:root.querySelector('#dashboard-claim-existing-new-group')?.value||'',
+          remember:Boolean(root.querySelector('#dashboard-claim-existing-remember')?.checked)
+        });
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        dashboardManagementMessage(error.message,true);
+        button.disabled=false;
+      }
+    });
+
+    root.querySelector('#dashboard-repair-pairing')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const password=root.querySelector('#dashboard-repair-pairing-password');
+      button.disabled=true;
+      dashboardManagementMessage('Verifying the current password and repairing the expedition pairing…');
+      try{
+        await repairDashboardManagementPairing(selectedId,password?.value||'',{
+          groupId:root.querySelector('#dashboard-repair-pairing-group')?.value||'',
+          newGroupName:root.querySelector('#dashboard-repair-pairing-new-group')?.value||'',
+          remember:Boolean(root.querySelector('#dashboard-repair-pairing-remember')?.checked)
+        });
+        if(password)password.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){
+        if(password)password.value='';
+        dashboardManagementMessage(error.message,true);
+        button.disabled=false;
+      }
+    });
+
+    root.querySelector('#dashboard-reset-password')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      const recovery=root.querySelector('#dashboard-reset-recovery-code');
+      const password=root.querySelector('#dashboard-reset-new-password');
+      const confirmation=root.querySelector('#dashboard-reset-confirm-password');
+      if((password?.value||'')!==(confirmation?.value||'')){dashboardManagementMessage('The reset passwords do not match.',true);return;}
+      button.disabled=true;
+      dashboardManagementMessage('Verifying the recovery code and rotating the credential…');
+      try{
+        await resetDashboardManagementPassword(selectedId,recovery?.value||'',password?.value||'',{
+          groupId:root.querySelector('#dashboard-reset-group')?.value||'',
+          newGroupName:root.querySelector('#dashboard-reset-new-group')?.value||'',
+          remember:Boolean(root.querySelector('#dashboard-reset-remember')?.checked)
+        });
+        if(recovery)recovery.value='';
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        renderActiveSubmarineDashboard();
+      }catch(error){
+        if(recovery)recovery.value='';
+        if(password)password.value='';
+        if(confirmation)confirmation.value='';
+        dashboardManagementMessage(error.message,true);
+        button.disabled=false;
+      }
+    });
+  };

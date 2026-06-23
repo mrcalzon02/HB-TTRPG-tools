@@ -1,0 +1,169 @@
+name: Validate Barotrauma Dashboard Authentication
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/submarines/submarine-roster.json'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-*.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
+      - '.github/workflows/validate-barotrauma-dashboard-auth.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma/tools/submarines/submarine-roster.json'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-*.txt'
+      - 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
+      - '.github/workflows/validate-barotrauma-dashboard-auth.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-dashboard-auth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate assembled authentication and recovery runtime
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const loader = fs.readFileSync('barotrauma-rpg-tools-loader.js', 'utf8');
+          const runtimeMatch = loader.match(/const runtimeParts = \[([\s\S]*?)\n  \];/);
+          assert(runtimeMatch, 'runtimeParts array missing');
+          const paths = [...runtimeMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
+          assert.deepStrictEqual(paths.filter(path => !fs.existsSync(path)), [], 'Loader references missing runtime fragments');
+          new Function(paths.map(path => fs.readFileSync(path, 'utf8')).join(''));
+
+          const recoveryLoaderPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt';
+          const recoveryLoader = fs.readFileSync(recoveryLoaderPath, 'utf8');
+          const recoveryMatch = recoveryLoader.match(/const DASHBOARD_MANAGEMENT_RECOVERY_PARTS=\[([\s\S]*?)\n  \];/);
+          assert(recoveryMatch, 'Recovery module list missing');
+          const recoveryPaths = [...recoveryMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
+          assert.deepStrictEqual(recoveryPaths.filter(path => !fs.existsSync(path)), [], 'Recovery loader references missing fragments');
+          const recoverySource = recoveryPaths.map(path => fs.readFileSync(path, 'utf8')).join('');
+          new Function(recoverySource);
+
+          const required = [
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-prelude.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-bootstrap.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-core-00.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-core-01.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-ui.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-02.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt'
+          ];
+          required.forEach(name => assert(loader.includes(name), `${name} is not loaded`));
+
+          const requiredRecovery = [
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-core.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-00.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-01.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability-02.txt'
+          ];
+          requiredRecovery.forEach(name => assert(recoveryLoader.includes(name), `${name} is not dynamically loaded`));
+
+          const indexOf = name => paths.findIndex(path => path.endsWith(name));
+          assert(indexOf(required[0]) < indexOf('barotrauma-rpg-tools.part-06-active-submarine-dashboard-core.txt'), 'Pre-auth snapshot is not loaded before dashboard initialization');
+          assert(indexOf(required[1]) < indexOf(required[2]), 'Pre-auth campaign identity is not restored before authentication initializes');
+          assert(indexOf(required[7]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'Legacy snapshot migration is not loaded before final runtime');
+          assert(indexOf(required[8]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'First-claim group registration safeguard is not loaded before final runtime');
+          assert(indexOf(required[9]) < indexOf('barotrauma-rpg-tools.part-06.txt'), 'Authenticated vessel-to-group binding is not loaded before final runtime');
+
+          const core00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-00.txt', 'utf8');
+          const core01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-core-01.txt', 'utf8');
+          const ui = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-ui.txt', 'utf8');
+          const stability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability.txt', 'utf8');
+          const bootstrap = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-bootstrap.txt', 'utf8');
+          const migration = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt', 'utf8');
+          const firstClaim = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt', 'utf8');
+          const groupBinding = recoveryLoader;
+          const recoveryCore = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-core.txt', 'utf8');
+          const recoveryStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability.txt', 'utf8');
+          const recoveryUi00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-00.txt', 'utf8');
+          const recoveryUi01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-01.txt', 'utf8');
+          const recoveryUi02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-ui-02.txt', 'utf8');
+          const recoveryPostload = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-postload.txt', 'utf8');
+          const activationRecovery = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-recovery-stability-02.txt', 'utf8');
+          const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
+          const roster = JSON.parse(fs.readFileSync('data/barotrauma/tools/submarines/submarine-roster.json', 'utf8'));
+
+          assert(core00.includes("algorithm='PBKDF2-SHA-256'") || core00.includes("credential.algorithm='PBKDF2-SHA-256'"), 'Credential algorithm is not PBKDF2-SHA-256');
+          assert(core00.includes('DASHBOARD_MANAGEMENT_PASSWORD_ITERATIONS=210000'), 'PBKDF2 iteration count is not 210000');
+          assert(core00.includes('crypto.subtle.deriveBits'), 'Password verifier is not derived through Web Crypto');
+          assert(core01.includes('tokenHash:await dashboardManagementSha256(token)'), 'World save does not store a hash of the session receipt');
+          assert(core01.includes('logoutDashboardManagementSession'), 'Logout and receipt revocation are missing');
+          assert(ui.includes('Log In to a Managed Submarine'), 'Dashboard login gate is missing');
+          assert(ui.includes('Log Out of This Submarine'), 'Dashboard logout control is missing');
+          assert(stability.includes('generateValidCrossing=dashboardManagementGuardFunction'), 'Route filing is not authorization guarded');
+          assert(bootstrap.includes('restorePreAuthDashboardCampaignIdentity'), 'Startup identity mutation rollback is missing');
+          assert(migration.includes('migratedFromPublicWorld:true'), 'Older submarine state migration is missing');
+          assert(firstClaim.includes('registerCurrentSubmarineForDashboardManagement'), 'First claim does not register an unassigned local submarine');
+          assert(groupBinding.includes('hub.activeGroupId=group.groupId'), 'Authenticated group ID is not enforced during normalization');
+          assert(groupBinding.includes('eval(source)'), 'Recovery modules are not evaluated in the campaign runtime scope');
+
+          assert(recoveryCore.includes('createNewManageableSubmarine'), 'New manageable submarine creation is missing');
+          assert(recoveryCore.includes('dashboardManagementBuildSubmarineState'), 'New submarine state construction is missing');
+          assert(recoveryCore.includes('dashboardManagementPairVesselToGroup'), 'Vessel-to-expedition pairing is missing');
+          assert(recoveryCore.includes('resetDashboardManagementPassword'), 'Recovery-code password reset is missing');
+          assert(recoveryCore.includes('repairDashboardManagementPairing'), 'Current-password pairing repair is missing');
+          assert(recoveryCore.includes('DASHBOARD_MANAGEMENT_RECOVERY_ITERATIONS=240000'), 'Recovery-code derivation strength is incorrect');
+          assert(recoveryCore.includes('credential.receipts={}'), 'Password reset does not revoke older sessions');
+          assert(recoveryCore.includes('await dashboardManagementIssueRecoveryCode(credential)'), 'Password reset does not rotate the recovery code');
+          assert(recoveryStability.includes("if('code' in recovery||'recoveryCode' in recovery)"), 'Plaintext recovery-code diagnostic is missing');
+          assert(recoveryStability.includes('dashboardManageableCreationSubmarineNames'), 'Tier-restricted manageable submarine list is missing');
+          assert(recoveryStability.includes('if(model?.custom)return true;'), 'Custom submarines are not explicitly allowed for new creation');
+          assert(recoveryStability.includes('number(model.profile.tier,0)===1'), 'Official new-submarine creation is not restricted to Tier 1');
+          assert(recoveryStability.includes('createNewManageableSubmarineWithTierRestriction'), 'The creation API does not enforce the Tier 1/custom rule');
+          assert(recoveryStability.includes('dashboardManagementHydrateManagedSnapshot'), 'Legacy managed snapshots are not hydrated before activation');
+          assert(recoveryStability.includes('submarine.wikiWeapons=Array.isArray'), 'Legacy tracked submarine weapons are not normalized');
+          assert(recoveryStability.includes('submarine.customModules=Array.isArray'), 'Legacy custom modules are not normalized');
+          assert(recoveryStability.includes('route.plan=Array.isArray'), 'Legacy route plans are not normalized');
+          assert(recoveryStability.includes('dashboard.turnOrder.order=Array.isArray'), 'Legacy dashboard turn orders are not normalized');
+          assert(recoveryUi00.includes('const models=dashboardManageableCreationSubmarineNames();'), 'The creation selector does not use the restricted model list');
+          assert(!recoveryUi00.includes('dashboardStartingSubmarineNames'), 'The creation selector still uses the unrestricted commissioning list');
+          assert(recoveryUi00.includes("SUBMARINES[name]?.custom?'Custom':'Tier 1'"), 'Creation options are not labeled as Tier 1 or Custom');
+          assert(recoveryUi00.includes('Create New Manageable Submarine'), 'New manageable submarine interface is missing');
+          assert(recoveryUi00.includes('Repair Login Pairing'), 'Pairing-repair interface is missing');
+          assert(recoveryUi00.includes('Reset Forgotten Password'), 'Password-reset interface is missing');
+          assert(recoveryUi01.includes('createNewManageableSubmarine'), 'Creation controls are not bound');
+          assert(recoveryUi01.includes('resetDashboardManagementPassword'), 'Reset controls are not bound');
+          assert(recoveryUi02.includes('Save this recovery code now.'), 'One-time recovery-code presentation is missing');
+          assert(recoveryUi02.includes("pendingRecoveryCode=''"), 'One-time recovery code cannot be cleared from runtime memory');
+          assert(recoveryPostload.includes('legacy-recovery-issued-after-session-restore'), 'Restored legacy sessions do not receive a recovery code');
+
+          assert(activationRecovery.includes('establishDashboardManagementSessionTransactionally'), 'Login activation is not transactional');
+          assert(activationRecovery.includes('login-activation-failed'), 'Failed activation is not audited');
+          assert(activationRecovery.includes('credential.receipts=previousReceipts'), 'Failed activation does not restore previous receipts');
+          assert(activationRecovery.includes('dashboardManagementClearStoredSession()'), 'Failed activation does not clear the invalid local session');
+          assert(activationRecovery.includes('dashboardManagementRunActivationNormalizers'), 'Authenticated activation does not run staged normalizers');
+          assert(activationRecovery.includes('Retry Repaired Dashboard'), 'A recoverable render failure has no retry interface');
+          assert(activationRecovery.includes('lastRenderError'), 'Render-stage failure details are not retained for diagnostics');
+
+          const officialTierOne = roster.submarines.filter(model => Number(model.tier) === 1).map(model => model.name).sort();
+          assert.deepStrictEqual(officialTierOne, ['Barsuk', 'Camel', 'Dugong', 'Orca'], 'Official Tier 1 roster changed; review the manageable-submarine creation restriction');
+          assert(roster.submarines.filter(model => Number(model.tier) > 1).length > 0, 'Roster no longer exercises exclusion of higher-tier official submarines');
+
+          assert(!/credential\.recovery\.(code|recoveryCode)\s*=/.test(recoveryCore), 'A plaintext recovery code is written into the credential');
+          assert(!/receipt\.token\s*=/.test(core01), 'A raw receipt token appears to be written into world state');
+          assert(finalRuntime.includes('version: 22'), 'Suite export version is not 22');
+          assert(finalRuntime.includes("dashboardManagementRecoveryVersion: '1.0.0'"), 'Suite export omits recovery version');
+          assert(finalRuntime.includes('dashboardAuthVersion: 21'), 'Version-21 dashboard-auth import compatibility marker is missing');
+          assert(finalRuntime.includes('pendingRecoveryCode ='), 'Suite import does not clear one-time recovery memory');
+
+          console.log(`Validated ${paths.length} base fragments and ${recoveryPaths.length} recovery fragments. Login activation now hydrates legacy snapshots transactionally before rendering.`);
+          NODE

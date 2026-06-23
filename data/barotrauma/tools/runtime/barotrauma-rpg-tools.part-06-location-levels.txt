@@ -1,0 +1,451 @@
+
+  const LOCATION_LEVEL_REGISTRY = globalThis.BAROTRAUMA_LOCATION_LEVEL_REGISTRY || { schemaVersion: '0', levels: [], locations: [] };
+  const LOCATION_LEVEL_VERSION = LOCATION_LEVEL_REGISTRY.schemaVersion || '1.0.0';
+  const LOCATION_LEVEL_MAP = Object.fromEntries((LOCATION_LEVEL_REGISTRY.levels || []).map(item => [number(item.level), item]));
+  const LOCATION_TYPE_MAP = Object.fromEntries((LOCATION_LEVEL_REGISTRY.locations || []).map(item => [item.id, item]));
+  const LOCATION_LEVEL_COLORS = { 1:'#9fbf8f', 2:'#8eb5a0', 3:'#7caeb5', 4:'#7594bd', 5:'#a98a70', 6:'#8b7f89', 7:'#806b99', 8:'#bd7658', 9:'#7960a8', 10:'#d6aa54' };
+
+  if (!EVENT_CATEGORIES.includes('Location')) EVENT_CATEGORIES.push('Location');
+  if (!state.route.table.Location) state.route.table.Location = 3;
+  state.encounters.locationLevel = state.encounters.locationLevel || 'All';
+  state.encounters.locationTypeId = state.encounters.locationTypeId || 'All';
+  state.encounters.useSelectedWorldLocation = Boolean(state.encounters.useSelectedWorldLocation);
+
+  function locationLevelForRing(ring, rings) {
+    const safeRing = Math.max(0, number(ring));
+    const safeRings = Math.max(1, number(rings, 48));
+    if (safeRing === 0) return 10;
+    return clamp(1 + Math.floor((safeRings - safeRing) * 9 / safeRings), 1, 9);
+  }
+
+  function locationLevelProfile(level) {
+    return LOCATION_LEVEL_MAP[clamp(level, 1, 10)] || { level: clamp(level, 1, 10), name: `Level ${level}`, subtitle: '', summary: '', availability: '', shopBias: [], danger: level };
+  }
+
+  function locationProfilesForLevel(level, mode = 'all') {
+    return (LOCATION_LEVEL_REGISTRY.locations || []).filter(item => number(item.level) === number(level) && (mode === 'station' ? item.stationEligible : mode === 'encounter' ? item.encounterEligible : true));
+  }
+
+  function seededLocationChoice(values, rng) {
+    if (!values.length) return null;
+    const total = values.reduce((sum, item) => sum + Math.max(0.1, number(item.rarity, 1)), 0);
+    let roll = rng() * total;
+    for (const item of values) {
+      roll -= Math.max(0.1, number(item.rarity, 1));
+      if (roll <= 0) return item;
+    }
+    return values[values.length - 1];
+  }
+
+  function locationMapNodeType(profile, originalType) {
+    if (originalType === 'station' || originalType === 'anomaly') return originalType;
+    const id = String(profile?.id || '');
+    if (/outpost|vault|reactor|biodome/.test(id)) return 'wreck';
+    if (/monolith|resonance|maze/.test(id)) return 'ruins';
+    if (/void|depths|expanse|ice-field|trench|cavern|fissure|vent|formation|graveyard/.test(id)) return 'hazard';
+    if (/husk|feeding|breeding|lair/.test(id)) return 'hazard';
+    return originalType === 'outpost' ? 'outpost' : 'hazard';
+  }
+
+  function locationDetailText(node, profile, levelProfile) {
+    const stationText = node.type === 'station' ? `${node.parentFaction || node.faction || 'Independent'} — ${node.faction || 'Unassigned'}. ` : '';
+    const publicNames = (node.visibleInfluences || []).filter(item => item.visibility === 'public').map(item => item.name);
+    const influenceText = publicNames.length ? ` Public influences: ${publicNames.join(', ')}.` : '';
+    return `${stationText}Level ${profile.level}: ${levelProfile.name} — ${profile.name}. ${profile.lore} Availability: ${profile.availability}${node.locals ? ` Important locals: ${node.locals}.` : ''}${influenceText}`;
+  }
+
+  function applyLocationProfileToNode(node, profile, levelProfile, map) {
+    if (!node || !profile) return;
+    const originalType = node.type;
+    node.locationLevel = number(profile.level);
+    node.locationLevelName = levelProfile.name;
+    node.locationLevelSubtitle = levelProfile.subtitle || '';
+    node.locationTypeId = profile.id;
+    node.locationTypeName = profile.name;
+    node.locationLore = profile.lore;
+    node.locationAvailability = profile.availability;
+    node.locationShops = cloneWorldData(profile.shops || []);
+    node.locationServices = cloneWorldData(profile.services || []);
+    node.locationHazards = cloneWorldData(profile.hazards || []);
+    node.locationFactions = cloneWorldData(profile.factions || []);
+    node.locationDanger = number(levelProfile.danger, profile.level);
+    node.locationLevelColor = LOCATION_LEVEL_COLORS[node.locationLevel] || '#888';
+    node.encounterLocation = Boolean(profile.encounterEligible);
+    node.stationLocation = Boolean(profile.stationEligible);
+    node.availabilityTier = node.locationLevel;
+    if (originalType !== 'station' && originalType !== 'anomaly') node.type = locationMapNodeType(profile, originalType);
+    if (profile.unique) {
+      node.name = profile.name;
+      node.type = 'anomaly';
+    } else if (originalType !== 'station') {
+      const prefix = MAP_PREFIX[Math.abs(seededHash(`${map.seed}|${node.id}|location-name`)) % MAP_PREFIX.length];
+      node.name = `${prefix} ${profile.name}`;
+    }
+    node.details = locationDetailText(node, profile, levelProfile);
+  }
+
+  function worldLocationLevelsComplete(map = state.world?.map) {
+    return Boolean(map?.nodes?.length && map.locationLevelVersion === LOCATION_LEVEL_VERSION && map.nodes.every(node => node.locationLevel && node.locationTypeId));
+  }
+
+  function assignWorldLocationLevels(map = state.world?.map, force = false) {
+    if (!map?.nodes) return null;
+    if (!force && worldLocationLevelsComplete(map)) return map;
+    const salt = number(state.world.locationLevelSeedSalt, 0);
+    const rng = seededRandom(`${map.seed}|locations|${LOCATION_LEVEL_VERSION}|${salt}`);
+    for (const node of map.nodes) {
+      const level = locationLevelForRing(node.ring, map.rings);
+      const levelProfile = locationLevelProfile(level);
+      let pool;
+      if (level === 10) pool = locationProfilesForLevel(10, 'encounter').filter(item => item.unique);
+      else if (node.type === 'station') pool = locationProfilesForLevel(level, 'station');
+      else {
+        const nonStation = locationProfilesForLevel(level, 'encounter').filter(item => !item.stationEligible);
+        pool = nonStation.length ? nonStation : locationProfilesForLevel(level, 'encounter');
+      }
+      const profile = seededLocationChoice(pool, rng) || locationProfilesForLevel(level)[0];
+      applyLocationProfileToNode(node, profile, levelProfile, map);
+    }
+    map.locationLevelVersion = LOCATION_LEVEL_VERSION;
+    map.locationLevelSeedSalt = salt;
+    state.world.locationLevelVersion = LOCATION_LEVEL_VERSION;
+    return map;
+  }
+
+  function stationLocationProfile(station) {
+    if (!station) return null;
+    return LOCATION_TYPE_MAP[station.locationTypeId] || LOCATION_TYPE_MAP[station.derived?.locationTypeId] || locationProfilesForLevel(station.locationLevel || station.derived?.locationLevel || 1, 'station')[0] || null;
+  }
+
+  function decorateStandaloneStation(station, entry = null) {
+    if (!station) return station;
+    const desiredLevel = clamp(entry?.locationLevel ?? station.locationLevel ?? 1, 1, 9);
+    const eligible = locationProfilesForLevel(desiredLevel, 'station');
+    const profile = eligible.find(item => item.id === (entry?.locationTypeId || station.locationTypeId)) || eligible[0] || locationProfilesForLevel(1, 'station')[0];
+    const levelProfile = locationLevelProfile(profile?.level || desiredLevel);
+    if (!profile) return station;
+    station.locationLevel = profile.level;
+    station.locationLevelName = levelProfile.name;
+    station.locationLevelSubtitle = levelProfile.subtitle;
+    station.locationTypeId = profile.id;
+    station.locationTypeName = profile.name;
+    station.locationLore = profile.lore;
+    station.locationAvailability = profile.availability;
+    station.locationShops = cloneWorldData(profile.shops || []);
+    station.locationServices = cloneWorldData(profile.services || []);
+    station.locationHazards = cloneWorldData(profile.hazards || []);
+    station.availabilityTier = profile.level;
+    station.specialty = [station.specialty, ...(profile.shops || []), ...(profile.services || [])].filter(Boolean).join(', ');
+    return station;
+  }
+
+  const defaultCustomContentDraftBeforeLocationLevels = defaultCustomContentDraft;
+  defaultCustomContentDraft = function defaultCustomContentDraftWithLocationLevel(type = 'equipment') {
+    const draft = defaultCustomContentDraftBeforeLocationLevels(type);
+    if (type === 'station') {
+      draft.locationLevel = clamp(draft.locationLevel || 1, 1, 9);
+      draft.locationTypeId = draft.locationTypeId || locationProfilesForLevel(draft.locationLevel, 'station')[0]?.id || 'frontier-outpost';
+    }
+    return draft;
+  };
+  if (state.customContent?.draft?.type === 'station') {
+    state.customContent.draft.locationLevel = clamp(state.customContent.draft.locationLevel || 1, 1, 9);
+    state.customContent.draft.locationTypeId = state.customContent.draft.locationTypeId || locationProfilesForLevel(state.customContent.draft.locationLevel, 'station')[0]?.id || 'frontier-outpost';
+  }
+
+  const syncCustomStationsBeforeLocationLevels = syncCustomStations;
+  syncCustomStations = function syncCustomStationsWithLocationLevels() {
+    syncCustomStationsBeforeLocationLevels();
+    for (const station of STATIONS.filter(item => item.customWorkshop)) {
+      const entry = state.customContent.entries.find(item => item.type === 'station' && item.name === station.name);
+      decorateStandaloneStation(station, entry);
+    }
+  };
+
+  const seedWorldFactionsBeforeLocationLevels = seedWorldFactions;
+  seedWorldFactions = function seedWorldFactionsWithLocationLevels(map = state.world?.map, force = false) {
+    const result = seedWorldFactionsBeforeLocationLevels(map, force);
+    assignWorldLocationLevels(map, false);
+    return result;
+  };
+
+  const syncWorldMapStationsBeforeLocationLevels = syncWorldMapStations;
+  syncWorldMapStations = function syncWorldMapStationsWithLocationLevels() {
+    syncWorldMapStationsBeforeLocationLevels();
+    const map = state.world?.map;
+    if (!map?.nodes) return;
+    for (const station of STATIONS.filter(item => item.worldGenerated)) {
+      const node = map.nodes.find(item => item.id === station.worldNodeId || item.name === station.name);
+      if (!node) continue;
+      Object.assign(station, {
+        locationLevel: node.locationLevel,
+        locationLevelName: node.locationLevelName,
+        locationLevelSubtitle: node.locationLevelSubtitle,
+        locationTypeId: node.locationTypeId,
+        locationTypeName: node.locationTypeName,
+        locationLore: node.locationLore,
+        locationAvailability: node.locationAvailability,
+        locationShops: cloneWorldData(node.locationShops || []),
+        locationServices: cloneWorldData(node.locationServices || []),
+        locationHazards: cloneWorldData(node.locationHazards || []),
+        availabilityTier: node.availabilityTier
+      });
+      station.specialty = [node.specialty, ...(node.locationShops || []), ...(node.locationServices || [])].filter(Boolean).join(', ');
+    }
+    for (const station of STATIONS.filter(item => item.customWorkshop)) decorateStandaloneStation(station, state.customContent.entries.find(item => item.type === 'station' && item.name === station.name));
+  };
+
+  const normalizeStationRecordBeforeLocationLevels = normalizeStationRecord;
+  normalizeStationRecord = function normalizeStationRecordWithLocationLevels(raw, station) {
+    const record = normalizeStationRecordBeforeLocationLevels(raw, station);
+    const profile = stationLocationProfile(station) || LOCATION_TYPE_MAP[record.locationTypeId];
+    if (station) {
+      record.locationLevel = number(station.locationLevel || profile?.level || record.locationLevel || 1);
+      record.locationLevelName = station.locationLevelName || locationLevelProfile(record.locationLevel).name;
+      record.locationLevelSubtitle = station.locationLevelSubtitle || locationLevelProfile(record.locationLevel).subtitle;
+      record.locationTypeId = station.locationTypeId || profile?.id || record.locationTypeId || '';
+      record.locationTypeName = station.locationTypeName || profile?.name || record.locationTypeName || '';
+      record.locationLore = station.locationLore || profile?.lore || record.locationLore || '';
+      record.locationAvailability = station.locationAvailability || profile?.availability || record.locationAvailability || '';
+      record.locationShops = cloneWorldData(station.locationShops || profile?.shops || record.locationShops || []);
+      record.locationServices = cloneWorldData(station.locationServices || profile?.services || record.locationServices || []);
+      record.locationHazards = cloneWorldData(station.locationHazards || profile?.hazards || record.locationHazards || []);
+      record.availabilityTier = number(station.availabilityTier || profile?.level || record.availabilityTier || record.locationLevel);
+    }
+    return record;
+  };
+
+  const stationSpecialtyVendorIdsBeforeLocationLevels = stationSpecialtyVendorIds;
+  stationSpecialtyVendorIds = function stationSpecialtyVendorIdsWithLocationShops(station) {
+    const ids = stationSpecialtyVendorIdsBeforeLocationLevels(station);
+    const profile = stationLocationProfile(station);
+    const text = [...(profile?.shops || []), ...(profile?.services || []), station?.locationAvailability || ''].join(' ').toLowerCase();
+    if (/armory|weapon|military|explosive|contraband|pirate/.test(text)) ids.push('arms-dealer');
+    if (/medical|clinic|hospital|pharmacy|botanist|biological/.test(text)) ids.push('medical-supplier');
+    if (/engineering|tool|factory|material|mining|repair|contractor|salvage/.test(text)) ids.push('engineering-broker');
+    if (/shipyard|system|geothermal|reactor|heavy fabrication/.test(text)) ids.push('systems-dealer');
+    if (/provision|general|market|food|outfitter|quartermaster/.test(text)) ids.push('quartermaster', 'general-trader');
+    return [...new Set(ids)];
+  };
+
+  const generateWorldMapBeforeLocationLevels = generateWorldMap;
+  generateWorldMap = function generateWorldMapWithLocationLevels() {
+    generateWorldMapBeforeLocationLevels();
+    assignWorldLocationLevels(state.world.map, true);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const importWorldSaveBeforeLocationLevels = importWorldSave;
+  importWorldSave = function importWorldSaveWithLocationLevels(raw) {
+    importWorldSaveBeforeLocationLevels(raw);
+    assignWorldLocationLevels(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  function locationEncounterEvent(profile, contextNode = null) {
+    const levelProfile = locationLevelProfile(profile.level);
+    return {
+      id: `location-${profile.id}`,
+      category: 'Location',
+      stat: profile.stat || 'Intelligence',
+      dc: number(profile.dc, 6 + profile.level),
+      name: contextNode ? `${profile.name}: ${contextNode.name}` : profile.name,
+      description: profile.encounter,
+      reward: profile.reward,
+      failure: profile.failure,
+      locationLevel: profile.level,
+      locationLevelName: levelProfile.name,
+      locationTypeId: profile.id,
+      locationTypeName: profile.name,
+      locationLore: profile.lore,
+      locationAvailability: profile.availability,
+      locationShops: cloneWorldData(profile.shops || []),
+      locationServices: cloneWorldData(profile.services || []),
+      locationHazards: cloneWorldData(profile.hazards || []),
+      worldNodeId: contextNode?.id || '',
+      worldNodeName: contextNode?.name || ''
+    };
+  }
+
+  function selectedWorldLocationNode() {
+    const map = state.world?.map;
+    if (!map?.nodes) return null;
+    const routeNode = map.nodes.find(node => node.name === state.route.end);
+    if (routeNode?.locationTypeId) return routeNode;
+    const selectedIds = Array.isArray(state.world.selected) ? [...state.world.selected].reverse() : [];
+    return selectedIds.map(id => map.nodes.find(node => node.id === id)).find(node => node?.locationTypeId) || null;
+  }
+
+  function filteredLocationEncounterProfiles() {
+    const planner = state.encounters;
+    const selected = planner.useSelectedWorldLocation ? selectedWorldLocationNode() : null;
+    if (selected?.locationTypeId && LOCATION_TYPE_MAP[selected.locationTypeId]) return [{ profile: LOCATION_TYPE_MAP[selected.locationTypeId], node: selected }];
+    let profiles = (LOCATION_LEVEL_REGISTRY.locations || []).filter(item => item.encounterEligible);
+    if (planner.locationLevel !== 'All') profiles = profiles.filter(item => number(item.level) === number(planner.locationLevel));
+    if (planner.locationTypeId !== 'All') profiles = profiles.filter(item => item.id === planner.locationTypeId);
+    return profiles.map(profile => ({ profile, node: null }));
+  }
+
+  const eligibleEventsBeforeLocationLevels = eligibleEvents;
+  eligibleEvents = function eligibleEventsWithLocations(category = 'All', sanityEnabled = true) {
+    const planner = state.encounters;
+    const locationFiltered = planner.locationLevel !== 'All' || planner.locationTypeId !== 'All' || planner.useSelectedWorldLocation;
+    const base = category === 'Location' || locationFiltered ? [] : eligibleEventsBeforeLocationLevels(category, sanityEnabled);
+    const includeLocations = category === 'All' || category === 'Location' || locationFiltered;
+    const locations = includeLocations ? filteredLocationEncounterProfiles().map(item => locationEncounterEvent(item.profile, item.node)) : [];
+    return [...base, ...locations];
+  };
+
+  const encounterCardHtmlBeforeLocationLevels = encounterCardHtml;
+  encounterCardHtml = function encounterCardHtmlWithLocationDetails(item, index, prefix = 'encounter') {
+    let html = encounterCardHtmlBeforeLocationLevels(item, index, prefix);
+    const event = item.event || item;
+    if (!event.locationTypeId) return html;
+    const tags = `<span class="tag">Level ${number(event.locationLevel)}: ${escapeHtml(event.locationLevelName)}</span><span class="tag">${escapeHtml(event.locationTypeName)}</span>`;
+    html = html.replace('<h4>', `${tags}<h4>`);
+    const details = `<div class="notice location-encounter-detail"><strong>Lore:</strong> ${escapeHtml(event.locationLore || '')}<br><strong>Availability:</strong> ${escapeHtml(event.locationAvailability || 'None')}<br><strong>Shops:</strong> ${escapeHtml((event.locationShops || []).join(', ') || 'None')}<br><strong>Services:</strong> ${escapeHtml((event.locationServices || []).join(', ') || 'None')}<br><strong>Hazards:</strong> ${escapeHtml((event.locationHazards || []).join(', ') || 'Unknown')}</div>`;
+    return html.replace('<div class="button-row no-print">', `${details}<div class="button-row no-print">`);
+  };
+
+  const renderEncountersBeforeLocationLevels = renderEncounters;
+  renderEncounters = function renderEncountersWithLocationLevels() {
+    const planner = state.encounters;
+    planner.locationLevel = planner.locationLevel || 'All';
+    planner.locationTypeId = planner.locationTypeId || 'All';
+    renderEncountersBeforeLocationLevels();
+    const drawPanel = root.querySelector('#enc-count')?.closest('.tool-panel');
+    if (!drawPanel) return;
+    const levelValues = ['All', ...Array.from({ length: 10 }, (_, index) => String(index + 1))];
+    const selectedLevel = planner.locationLevel;
+    const typeProfiles = (LOCATION_LEVEL_REGISTRY.locations || []).filter(item => item.encounterEligible && (selectedLevel === 'All' || number(item.level) === number(selectedLevel)));
+    const selectedNode = selectedWorldLocationNode();
+    drawPanel.querySelector('.field-grid')?.insertAdjacentHTML('afterend', `
+      <div class="field-grid" style="margin-top:10px">
+        <label class="field">Location level<select id="enc-location-level">${optionList(levelValues, String(planner.locationLevel), value => value === 'All' ? 'All levels' : `Level ${value}: ${locationLevelProfile(value).name}`)}</select></label>
+        <label class="field">Location type<select id="enc-location-type">${optionList(['All', ...typeProfiles.map(item => item.id)], planner.locationTypeId, id => id === 'All' ? 'All location types' : `${LOCATION_TYPE_MAP[id]?.name || id}`)}</select></label>
+      </div>
+      <label class="check-row" style="margin-top:10px"><input id="enc-use-world-location" type="checkbox" ${planner.useSelectedWorldLocation ? 'checked' : ''}><span><strong>Use current world destination</strong><br><span class="small-note">${selectedNode ? `Level ${selectedNode.locationLevel}: ${escapeHtml(selectedNode.locationTypeName)} — ${escapeHtml(selectedNode.name)}` : 'No mapped destination is currently available.'}</span></span></label>
+      <button id="draw-world-location" class="secondary-action no-print" type="button" style="margin-top:10px" ${selectedNode ? '' : 'disabled'}>Add Current World Location</button>
+    `);
+    root.querySelector('#enc-location-level')?.addEventListener('change', event => {
+      planner.locationLevel = event.target.value;
+      const permitted = (LOCATION_LEVEL_REGISTRY.locations || []).some(item => item.id === planner.locationTypeId && (planner.locationLevel === 'All' || number(item.level) === number(planner.locationLevel)));
+      if (!permitted) planner.locationTypeId = 'All';
+      save(); renderEncounters();
+    });
+    root.querySelector('#enc-location-type')?.addEventListener('change', event => { planner.locationTypeId = event.target.value; save(); });
+    root.querySelector('#enc-use-world-location')?.addEventListener('change', event => { planner.useSelectedWorldLocation = event.target.checked; save(); renderEncounters(); });
+    root.querySelector('#draw-world-location')?.addEventListener('click', () => {
+      const node = selectedWorldLocationNode();
+      const profile = LOCATION_TYPE_MAP[node?.locationTypeId];
+      if (!profile) return;
+      planner.plan.push({ id: uid('location'), event: locationEncounterEvent(profile, node), status: 'pending', roll: '' });
+      save(); renderEncounters();
+    });
+  };
+
+  const renderCustomWorkshopBeforeLocationLevels = renderCustomWorkshop;
+  renderCustomWorkshop = function renderCustomWorkshopWithStationLocationLevel() {
+    renderCustomWorkshopBeforeLocationLevels();
+    const draft = state.customContent.draft;
+    if (draft.type !== 'station') return;
+    draft.locationLevel = clamp(draft.locationLevel || 1, 1, 9);
+    const profiles = locationProfilesForLevel(draft.locationLevel, 'station');
+    if (!profiles.some(item => item.id === draft.locationTypeId)) draft.locationTypeId = profiles[0]?.id || 'frontier-outpost';
+    const profile = LOCATION_TYPE_MAP[draft.locationTypeId];
+    const grid = root.querySelector('#custom-content-name')?.closest('.field-grid');
+    grid?.insertAdjacentHTML('beforeend', `
+      <label class="field">Station location level<select id="custom-station-location-level">${optionList(Array.from({ length: 9 }, (_, index) => String(index + 1)), String(draft.locationLevel), value => `Level ${value}: ${locationLevelProfile(value).name}`)}</select></label>
+      <label class="field">Station location type<select id="custom-station-location-type">${optionList(profiles.map(item => item.id), draft.locationTypeId, id => LOCATION_TYPE_MAP[id]?.name || id)}</select></label>
+    `);
+    const preview = root.querySelector('#custom-content-preview')?.closest('.button-row');
+    preview?.insertAdjacentHTML('beforebegin', `<div class="notice" style="margin-top:10px"><strong>Level ${draft.locationLevel}: ${escapeHtml(locationLevelProfile(draft.locationLevel).name)} — ${escapeHtml(profile?.name || '')}</strong><br>${escapeHtml(profile?.lore || '')}<br><strong>Availability:</strong> ${escapeHtml(profile?.availability || '')}<br><strong>Shops:</strong> ${escapeHtml((profile?.shops || []).join(', ') || 'None')} · <strong>Services:</strong> ${escapeHtml((profile?.services || []).join(', ') || 'None')}</div>`);
+    root.querySelector('#custom-station-location-level')?.addEventListener('change', event => {
+      draft.locationLevel = clamp(event.target.value, 1, 9);
+      draft.locationTypeId = locationProfilesForLevel(draft.locationLevel, 'station')[0]?.id || 'frontier-outpost';
+      save(); renderCustomWorkshop();
+    });
+    root.querySelector('#custom-station-location-type')?.addEventListener('change', event => { draft.locationTypeId = event.target.value; save(); renderCustomWorkshop(); });
+  };
+
+  function levelRingRange(level, rings) {
+    if (number(level) === 10) return 'Core only';
+    const matching = Array.from({ length: rings }, (_, index) => index + 1).filter(ring => locationLevelForRing(ring, rings) === number(level));
+    if (!matching.length) return 'None';
+    return matching.length === 1 ? `Ring ${matching[0]}` : `Rings ${Math.min(...matching)}–${Math.max(...matching)}`;
+  }
+
+  function renderLocationLevelWorldPanel() {
+    const map = state.world?.map;
+    if (!map?.nodes) return;
+    assignWorldLocationLevels(map, false);
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12 location-level-world-panel';
+    const levelRows = (LOCATION_LEVEL_REGISTRY.levels || []).map(level => {
+      const nodes = map.nodes.filter(node => number(node.locationLevel) === number(level.level));
+      const stations = nodes.filter(node => node.type === 'station');
+      const present = [...new Set(nodes.map(node => node.locationTypeName).filter(Boolean))];
+      return `<tr><td><strong style="color:${LOCATION_LEVEL_COLORS[level.level]}">Level ${level.level}: ${escapeHtml(level.name)}</strong><br><span class="small-note">${escapeHtml(level.subtitle)}</span></td><td>${escapeHtml(levelRingRange(level.level, map.rings))}</td><td>${nodes.length}</td><td>${stations.length}</td><td>${present.slice(0, 12).map(name => `<span class="tag">${escapeHtml(name)}</span>`).join('') || 'None'}</td><td class="small-note">${escapeHtml(level.availability)}</td></tr>`;
+    }).join('');
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Shared station and encounter geography</p><h3>Ten-Level Europan Location Gradient</h3><p class="small-note">Outermost ring locations begin at Level 1. Every inward ring advances through a continuous gradient, ending with Level 9 immediately around the center and the unique Level 10 Eye of Europa at ring zero.</p></div><div class="button-row no-print"><button id="reseed-location-types" class="secondary-action" type="button">Reseed Location Types</button></div></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Levels</span><strong>10</strong></div><div class="metric"><span>Location types</span><strong>${(LOCATION_LEVEL_REGISTRY.locations || []).length}</strong></div><div class="metric"><span>Station profiles</span><strong>${(LOCATION_LEVEL_REGISTRY.locations || []).filter(item => item.stationEligible).length}</strong></div><div class="metric"><span>Encounter profiles</span><strong>${(LOCATION_LEVEL_REGISTRY.locations || []).filter(item => item.encounterEligible).length}</strong></div><div class="metric"><span>Core locations</span><strong>${map.nodes.filter(node => node.locationLevel === 10).length}</strong></div></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table"><thead><tr><th>Level</th><th>Ring band</th><th>Locations</th><th>Stations</th><th>Types present</th><th>Availability</th></tr></thead><tbody>${levelRows}</tbody></table></div>
+    `;
+    const factionPanel = root.querySelector('.faction-world-panel');
+    if (factionPanel?.parentElement) factionPanel.parentElement.insertBefore(panel, factionPanel);
+    else root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#reseed-location-types')?.addEventListener('click', () => {
+      state.world.locationLevelSeedSalt = number(state.world.locationLevelSeedSalt) + 1;
+      assignWorldLocationLevels(state.world.map, true);
+      seedWorldFactions(state.world.map, false);
+      syncWorldMapStations();
+      normalizeStationCommerce();
+      save(); renderWorld();
+    });
+    for (const element of root.querySelectorAll('.map-node')) {
+      const node = map.nodes.find(item => item.id === element.dataset.nodeId);
+      if (!node) continue;
+      element.dataset.locationLevel = node.locationLevel;
+      element.dataset.locationType = node.locationTypeId;
+      const title = element.querySelector('title') || document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = `Level ${node.locationLevel}: ${node.locationLevelName} — ${node.locationTypeName}. ${node.name}. Availability: ${node.locationAvailability || 'None'}`;
+      if (!title.parentElement) element.prepend(title);
+    }
+  }
+
+  const renderWorldBeforeLocationLevels = renderWorld;
+  renderWorld = function renderWorldWithLocationLevels() {
+    if (!state.world?.map) generateWorldMap();
+    assignWorldLocationLevels(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    renderWorldBeforeLocationLevels();
+    renderLocationLevelWorldPanel();
+  };
+
+  const renderSubmarineBeforeLocationLevels = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithStationLocationProfile() {
+    renderSubmarineBeforeLocationLevels();
+    const commerce = normalizeStationCommerce();
+    const record = commerce.stations[commerce.activeStationId];
+    if (!record?.locationTypeId) return;
+    const profile = LOCATION_TYPE_MAP[record.locationTypeId];
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12 active-station-location-panel';
+    panel.innerHTML = `<div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">${record.playerStation ? 'Player station' : 'NPC station'} location profile</p><h3>Level ${record.locationLevel}: ${escapeHtml(record.locationLevelName)} — ${escapeHtml(record.locationTypeName)}</h3><p class="small-note">${escapeHtml(record.locationLore || '')}</p></div><div class="metric-row"><div class="metric"><span>Availability tier</span><strong>${number(record.availabilityTier, record.locationLevel)}</strong></div><div class="metric"><span>Shops</span><strong>${(record.locationShops || []).length}</strong></div><div class="metric"><span>Services</span><strong>${(record.locationServices || []).length}</strong></div><div class="metric"><span>Hazards</span><strong>${(record.locationHazards || []).length}</strong></div></div></div><div class="field-grid three" style="margin-top:12px"><div class="notice"><strong>Availability</strong><br>${escapeHtml(record.locationAvailability || 'No dependable market information.')}</div><div class="notice"><strong>Shops</strong><br>${escapeHtml((record.locationShops || []).join(', ') || 'None')}</div><div class="notice"><strong>Services and hazards</strong><br>${escapeHtml((record.locationServices || []).join(', ') || 'None')}<br><span class="bad">${escapeHtml((record.locationHazards || []).join(', ') || 'No unusual hazards recorded')}</span></div></div>`;
+    const grid = root.querySelector('.tool-grid');
+    if (grid) grid.insertBefore(panel, grid.firstElementChild);
+  };
+
+  syncCustomStations();
+  if (state.world?.map) {
+    assignWorldLocationLevels(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  }

@@ -1,0 +1,701 @@
+
+  const WORLD_STATE_SCHEMA = globalThis.BAROTRAUMA_WORLD_STATE_SCHEMA || {
+    schemaVersion: '1.0.0',
+    worldSaveSchema: 'barotrauma-public-world-save',
+    submissionSchema: 'barotrauma-world-submission',
+    canonicalStart: '2175-01-01T00:00:00.000Z',
+    realEpoch: '2026-06-20T08:00:00.000Z',
+    timeScale: 1,
+    mapDefaults: { rings: 10, totalLocations: 140, stationTarget: 25, branching: 42, shellRadius: 1460 },
+    submissionKinds: ['crew','submarine','location','route','trade','research','game-state']
+  };
+
+  const WORLD_SAVE_SCHEMA = WORLD_STATE_SCHEMA.worldSaveSchema || 'barotrauma-public-world-save';
+  const WORLD_SUBMISSION_SCHEMA = WORLD_STATE_SCHEMA.submissionSchema || 'barotrauma-world-submission';
+  const WORLD_SUBMISSION_KINDS = WORLD_STATE_SCHEMA.submissionKinds || ['crew','submarine','location','route','trade','research','game-state'];
+  const WORLD_MAP_DEFAULTS = WORLD_STATE_SCHEMA.mapDefaults || { rings: 10, totalLocations: 140, stationTarget: 25, branching: 42, shellRadius: 1460 };
+
+  function worldIdFor(seed, createdAt = new Date().toISOString()) {
+    return `WLD-${seedHash(`${seed}|${createdAt}`).toString(36).toUpperCase().padStart(7, '0')}-${seedHash(createdAt).toString(36).toUpperCase().slice(0, 5)}`;
+  }
+
+  function uniqueWorldSeed() {
+    const used = new Set((state.worldHub?.savedStates || []).map(item => item.seed));
+    let seed;
+    do seed = `EUROPA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+    while (used.has(seed));
+    return seed;
+  }
+
+  function defaultPublicWorldState() {
+    return {
+      groups: {},
+      crews: {},
+      submarines: {},
+      locations: {},
+      routes: {},
+      trades: [],
+      researchProjects: {},
+      gameStates: {},
+      submissionJournal: []
+    };
+  }
+
+  function defaultWorldHub() {
+    const createdAt = new Date().toISOString();
+    return {
+      schemaVersion: WORLD_STATE_SCHEMA.schemaVersion || '1.0.0',
+      worldId: worldIdFor(state.world?.seed || WORLD_MAP_DEFAULTS.seed || 'EUROPA', createdAt),
+      worldName: 'Europa Public World',
+      revision: 1,
+      createdAt,
+      updatedAt: createdAt,
+      canonicalStart: WORLD_STATE_SCHEMA.canonicalStart || '2175-01-01T00:00:00.000Z',
+      realEpoch: WORLD_STATE_SCHEMA.realEpoch || '2026-06-20T08:00:00.000Z',
+      timeScale: number(WORLD_STATE_SCHEMA.timeScale, 1),
+      activeGroupId: '',
+      pendingSubmissions: [],
+      publicState: defaultPublicWorldState(),
+      savedStates: [],
+      checkpointLabel: '',
+      groupDraftName: 'Expedition Group',
+      notes: ''
+    };
+  }
+
+  function normalizePublicWorldState(raw) {
+    const base = defaultPublicWorldState();
+    const publicState = raw && typeof raw === 'object' ? raw : {};
+    for (const [key, value] of Object.entries(base)) {
+      if (!(key in publicState)) publicState[key] = Array.isArray(value) ? [] : {};
+    }
+    for (const key of ['groups','crews','submarines','locations','routes','researchProjects','gameStates']) {
+      if (!publicState[key] || typeof publicState[key] !== 'object' || Array.isArray(publicState[key])) publicState[key] = {};
+    }
+    publicState.trades = Array.isArray(publicState.trades) ? publicState.trades : [];
+    publicState.submissionJournal = Array.isArray(publicState.submissionJournal) ? publicState.submissionJournal : [];
+    return publicState;
+  }
+
+  function normalizeExpandedWorld() {
+    state.world = state.world && typeof state.world === 'object' ? state.world : {};
+    if (!state.world.expandedWorldVersion) {
+      state.world.seed = uniqueWorldSeed();
+      state.world.rings = WORLD_MAP_DEFAULTS.rings;
+      state.world.nodes = WORLD_MAP_DEFAULTS.totalLocations;
+      state.world.stationTarget = WORLD_MAP_DEFAULTS.stationTarget;
+      state.world.branching = WORLD_MAP_DEFAULTS.branching;
+      state.world.shellRadius = WORLD_MAP_DEFAULTS.shellRadius;
+      state.world.map = null;
+      state.world.selected = [];
+      state.world.expandedWorldVersion = WORLD_STATE_SCHEMA.schemaVersion || '1.0.0';
+    }
+    state.world.rings = clamp(state.world.rings, 5, 20);
+    state.world.nodes = clamp(state.world.nodes, 50, 300);
+    state.world.stationTarget = clamp(state.world.stationTarget ?? WORLD_MAP_DEFAULTS.stationTarget, 10, Math.max(10, state.world.nodes - 1));
+    state.world.branching = clamp(state.world.branching, 0, 100);
+    state.world.shellRadius = clamp(state.world.shellRadius ?? WORLD_MAP_DEFAULTS.shellRadius, 500, 3000);
+    state.world.selected = Array.isArray(state.world.selected) ? state.world.selected : [];
+    return state.world;
+  }
+
+  function normalizeWorldHub() {
+    normalizeExpandedWorld();
+    if (!state.worldHub || typeof state.worldHub !== 'object') state.worldHub = defaultWorldHub();
+    const defaults = defaultWorldHub();
+    for (const [key, value] of Object.entries(defaults)) {
+      if (!(key in state.worldHub)) state.worldHub[key] = Array.isArray(value) ? [] : value && typeof value === 'object' ? { ...value } : value;
+    }
+    state.worldHub.pendingSubmissions = Array.isArray(state.worldHub.pendingSubmissions) ? state.worldHub.pendingSubmissions : [];
+    state.worldHub.savedStates = Array.isArray(state.worldHub.savedStates) ? state.worldHub.savedStates : [];
+    state.worldHub.publicState = normalizePublicWorldState(state.worldHub.publicState);
+    if (!state.worldHub.worldId) state.worldHub.worldId = worldIdFor(state.world.seed, state.worldHub.createdAt);
+    if (!state.worldHub.canonicalStart) state.worldHub.canonicalStart = WORLD_STATE_SCHEMA.canonicalStart;
+    if (!state.worldHub.realEpoch) state.worldHub.realEpoch = WORLD_STATE_SCHEMA.realEpoch;
+    if (!Number.isFinite(Number(state.worldHub.timeScale))) state.worldHub.timeScale = 1;
+    return state.worldHub;
+  }
+
+  function worldGameDate(at = Date.now()) {
+    const hub = normalizeWorldHub();
+    const realEpoch = Date.parse(hub.realEpoch);
+    const canonicalEpoch = Date.parse(hub.canonicalStart);
+    const elapsed = Math.max(0, at - realEpoch) * Math.max(0, number(hub.timeScale, 1));
+    return new Date(canonicalEpoch + elapsed);
+  }
+
+  function formatWorldDate(date = worldGameDate()) {
+    return `${date.toISOString().replace('T', ' ').replace('.000Z', ' UTC')} (real-time progression)`;
+  }
+
+  function generatedStationProfile(rng, name) {
+    const factions = ['The Alliance','The Syndicate','The Confederacy','Independent','Europa Coalition','Separatist Administration','Research Compact','Free Captains'];
+    const specialties = ['Weapons and security','Medical and biotechnology','Salvage and engineering','Trade and fabrication','Diving and survival equipment','Research and alien technology','Mining and heavy industry','Submarine systems and power','Agriculture and life support','Neutral markets and transport'];
+    const faction = factions[Math.floor(rng() * factions.length)];
+    const specialty = specialties[Math.floor(rng() * specialties.length)];
+    return { name, faction, specialty, locals: `${name} Administrator; ${name} Quartermaster` };
+  }
+
+  function expandedRingCounts(rings, requestedNodes) {
+    const result = [];
+    let remaining = requestedNodes - 1;
+    let weight = 0;
+    for (let ring = 1; ring <= rings; ring += 1) weight += ring;
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const minimumRemaining = (rings - ring) * 4;
+      let count = ring === rings ? remaining : Math.max(4, Math.round((requestedNodes - 1) * ring / weight));
+      count = Math.max(4, Math.min(count, remaining - minimumRemaining));
+      result.push(count);
+      remaining -= count;
+    }
+    if (remaining > 0) result[result.length - 1] += remaining;
+    return result;
+  }
+
+  function assignExpandedStations(nodes, stationTarget, rings, rng) {
+    const candidates = nodes.filter(node => node.id !== 'anomaly');
+    const outer = candidates.filter(node => node.ring === rings).sort(() => rng() - 0.5);
+    const selected = new Set(outer.slice(0, Math.min(outer.length, Math.ceil(stationTarget * 0.6))).map(node => node.id));
+    const remaining = candidates.filter(node => !selected.has(node.id)).map(node => ({ node, score: (node.ring / rings) * 2 + rng() })).sort((a, b) => b.score - a.score);
+    for (const candidate of remaining) {
+      if (selected.size >= stationTarget) break;
+      selected.add(candidate.node.id);
+    }
+    const usedNames = new Set(['The Central Anomaly']);
+    const stationQueue = STATIONS.map(item => ({ ...item }));
+    for (const node of candidates) {
+      if (selected.has(node.id)) {
+        node.type = 'station';
+        const source = stationQueue.shift() || generatedStationProfile(rng, mapName(rng, usedNames));
+        node.name = source.name;
+        node.faction = source.faction || 'Independent';
+        node.specialty = source.specialty || 'General trade';
+        node.locals = source.locals || 'Station personnel';
+        node.details = `${node.faction}. ${node.specialty}. Important locals: ${node.locals}.`;
+        node.surface = node.ring === rings;
+        usedNames.add(node.name);
+      } else {
+        const roll = rng();
+        node.type = roll < 0.25 ? 'outpost' : roll < 0.5 ? 'wreck' : roll < 0.7 ? 'ruins' : 'hazard';
+        node.name = mapName(rng, usedNames);
+        node.details = node.type === 'outpost' ? 'A pressure outpost with limited stores, a small population, and uncertain loyalties.'
+          : node.type === 'wreck' ? 'A wreck or salvage site whose potential value may exceed its safety.'
+          : node.type === 'ruins' ? 'Ancient structures, alien ruins, or abandoned research installations.'
+          : 'A route hazard involving currents, storms, cave pressure, hostile fauna, or unstable ice.';
+      }
+    }
+  }
+
+  function generateWorldMap() {
+    const world = normalizeExpandedWorld();
+    const hub = normalizeWorldHub();
+    const rng = seededRandom(`${world.seed}|${world.rings}|${world.nodes}|${world.stationTarget}|${world.branching}|${world.shellRadius}`);
+    const rings = clamp(world.rings, 5, 20);
+    const requestedNodes = clamp(world.nodes, Math.max(50, rings * 4 + 1), 300);
+    const stationTarget = clamp(world.stationTarget, 10, requestedNodes - 1);
+    const shellRadius = clamp(world.shellRadius, 500, 3000);
+    const margin = 360;
+    const width = Math.ceil(shellRadius * 2 + margin * 2);
+    const height = width;
+    const center = { x: width / 2, y: height / 2 };
+    const nodes = [{ id: 'anomaly', name: 'The Central Anomaly', type: 'anomaly', ring: 0, x: center.x, y: center.y, details: 'The campaign’s ultimate destination at Europa’s center.', pressure: rings + 1, outerBias: 0 }];
+    const ringCounts = expandedRingCounts(rings, requestedNodes);
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const count = ringCounts[ring - 1];
+      const radius = shellRadius * ring / rings;
+      const phase = rng() * Math.PI * 2;
+      for (let index = 0; index < count; index += 1) {
+        const angle = phase + Math.PI * 2 * index / count + (rng() - 0.5) * Math.min(0.12, 2 / count);
+        const jitter = (rng() - 0.5) * Math.min(70, radius * 0.035);
+        nodes.push({
+          id: `node-${ring}-${index}`,
+          name: '',
+          type: 'hazard',
+          ring,
+          x: center.x + Math.cos(angle) * (radius + jitter),
+          y: center.y + Math.sin(angle) * (radius + jitter),
+          details: '',
+          pressure: Math.max(1, rings - ring + 1),
+          outerBias: ring / rings
+        });
+      }
+    }
+    assignExpandedStations(nodes, stationTarget, rings, rng);
+
+    const edges = [];
+    const edgeKeys = new Set();
+    const addEdge = (a, b, forceDanger = false) => {
+      if (!a || !b || a.id === b.id) return;
+      const key = [a.id, b.id].sort().join('|');
+      if (edgeKeys.has(key)) return;
+      edgeKeys.add(key);
+      const geometric = Math.hypot(a.x - b.x, a.y - b.y);
+      const distance = Math.max(1, Math.round(geometric / Math.max(85, shellRadius / 18)));
+      const danger = forceDanger || a.type === 'hazard' || b.type === 'hazard' || rng() < 0.18;
+      edges.push({ id: `edge-${edges.length + 1}`, a: a.id, b: b.id, distance, danger });
+    };
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const current = nodes.filter(node => node.ring === ring);
+      const inward = nodes.filter(node => node.ring === ring - 1);
+      for (const node of current) {
+        const nearest = [...inward].sort((left, right) => Math.hypot(node.x - left.x, node.y - left.y) - Math.hypot(node.x - right.x, node.y - right.y));
+        addEdge(node, nearest[0]);
+        if (nearest[1] && rng() < number(world.branching) / 100) addEdge(node, nearest[1]);
+      }
+      for (let index = 0; index < current.length; index += 1) {
+        addEdge(current[index], current[(index + 1) % current.length], rng() < 0.12);
+        if (current[index + 2] && rng() < number(world.branching) / 180) addEdge(current[index], current[index + 2]);
+      }
+    }
+    const outerStations = nodes.filter(node => node.ring === rings && node.type === 'station');
+    const start = outerStations[Math.floor(rng() * Math.max(1, outerStations.length))] || nodes.find(node => node.ring === rings) || nodes[nodes.length - 1];
+    start.start = true;
+    world.map = {
+      schemaVersion: WORLD_STATE_SCHEMA.schemaVersion || '1.0.0',
+      worldId: hub.worldId,
+      seed: world.seed,
+      width,
+      height,
+      rings,
+      stationTarget,
+      stationCount: nodes.filter(node => node.type === 'station').length,
+      shellRadius,
+      nodes,
+      edges,
+      startId: start.id,
+      generatedAt: new Date().toISOString()
+    };
+    world.selected = [start.id, 'anomaly'];
+    assignMissingGroupStarts();
+    hub.revision += 1;
+    hub.updatedAt = new Date().toISOString();
+    save();
+  }
+
+  function worldOuterStations() {
+    const map = state.world?.map;
+    if (!map) return [];
+    return map.nodes.filter(node => node.type === 'station' && node.ring === map.rings);
+  }
+
+  function randomizedGroupStart(groupId, excluded = new Set()) {
+    const stations = worldOuterStations();
+    if (!stations.length) return state.world?.map?.startId || 'anomaly';
+    const available = stations.filter(station => !excluded.has(station.id));
+    const pool = available.length ? available : stations;
+    const rng = seededRandom(`${state.world.seed}|${normalizeWorldHub().worldId}|${groupId}|outer-start`);
+    return pool[Math.floor(rng() * pool.length)]?.id || pool[0].id;
+  }
+
+  function createWorldGroup(name = '') {
+    const hub = normalizeWorldHub();
+    if (!state.world.map) generateWorldMap();
+    const groupId = uid('group');
+    const used = new Set(Object.values(hub.publicState.groups).map(group => group.startingNodeId));
+    const startingNodeId = randomizedGroupStart(groupId, used);
+    const group = {
+      groupId,
+      name: String(name || hub.groupDraftName || `Expedition Group ${Object.keys(hub.publicState.groups).length + 1}`).trim(),
+      createdAt: new Date().toISOString(),
+      startingNodeId,
+      currentNodeId: startingNodeId,
+      crewIds: [],
+      submarineIds: [],
+      routeId: '',
+      notes: ''
+    };
+    hub.publicState.groups[groupId] = group;
+    hub.publicState.locations[groupId] = { groupId, nodeId: startingNodeId, updatedAt: new Date().toISOString() };
+    hub.activeGroupId = groupId;
+    hub.revision += 1;
+    hub.updatedAt = new Date().toISOString();
+    save();
+    return group;
+  }
+
+  function assignMissingGroupStarts() {
+    const hub = normalizeWorldHub();
+    const mapIds = new Set(state.world?.map?.nodes?.map(node => node.id) || []);
+    const used = new Set();
+    for (const group of Object.values(hub.publicState.groups)) {
+      if (!mapIds.has(group.startingNodeId)) group.startingNodeId = randomizedGroupStart(group.groupId, used);
+      used.add(group.startingNodeId);
+      if (!mapIds.has(group.currentNodeId)) group.currentNodeId = group.startingNodeId;
+      hub.publicState.locations[group.groupId] = { groupId: group.groupId, nodeId: group.currentNodeId, updatedAt: new Date().toISOString() };
+    }
+    if (!Object.keys(hub.publicState.groups).length && state.world?.map) createWorldGroup('Expedition Group 1');
+    if (!hub.publicState.groups[hub.activeGroupId]) hub.activeGroupId = Object.keys(hub.publicState.groups)[0] || '';
+  }
+
+  function activeWorldGroup() {
+    const hub = normalizeWorldHub();
+    return hub.publicState.groups[hub.activeGroupId] || null;
+  }
+
+  function cloneWorldData(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function currentWorldSubmission(kind) {
+    const hub = normalizeWorldHub();
+    const group = activeWorldGroup();
+    const settings = normalizePlayerSubmissionSettings();
+    if (!WORLD_SUBMISSION_KINDS.includes(kind)) throw new Error(`Unsupported world submission kind: ${kind}`);
+    let payload;
+    if (kind === 'crew') payload = { localCharacter: buildCrewSubmission(), roster: cloneWorldData(normalizeCrewManagement().roster), groupId: group?.groupId || '' };
+    else if (kind === 'submarine') {
+      state.submarine.worldSubmarineId = state.submarine.worldSubmarineId || uid('world-submarine');
+      payload = { submarineId: state.submarine.worldSubmarineId, groupId: group?.groupId || '', submarine: cloneWorldData(state.submarine), model: cloneWorldData(SUBMARINES[state.submarine.model] || {}) };
+    } else if (kind === 'location') payload = { groupId: group?.groupId || '', nodeId: group?.currentNodeId || state.world.map?.startId || '', node: state.world.map?.nodes?.find(node => node.id === group?.currentNodeId) || null };
+    else if (kind === 'route') payload = { groupId: group?.groupId || '', routeId: uid('world-route'), route: cloneWorldData(state.route), selectedNodes: cloneWorldData(state.world.selected || []) };
+    else if (kind === 'trade') payload = { groupId: group?.groupId || '', transactions: cloneWorldData((state.stationCommerce?.transactionLog || []).slice(0, 40)), stationId: state.stationCommerce?.activeStationId || '' };
+    else if (kind === 'research') payload = { groupId: group?.groupId || '', projects: cloneWorldData(state.customResearch?.projects || []), customContent: cloneWorldData(state.customContent?.entries || []), customSubmarines: cloneWorldData(state.submarineLibrary?.custom || []) };
+    else payload = {
+      groupId: group?.groupId || '',
+      character: cloneWorldData(state.character),
+      submarine: cloneWorldData(state.submarine),
+      route: cloneWorldData(state.route),
+      encounters: cloneWorldData(state.encounters),
+      stationCommerce: cloneWorldData(state.stationCommerce || {}),
+      customContent: cloneWorldData(state.customContent || {}),
+      submarineLibrary: cloneWorldData(state.submarineLibrary || {}),
+      research: cloneWorldData(state.customResearch || {})
+    };
+    return {
+      schema: WORLD_SUBMISSION_SCHEMA,
+      version: 1,
+      worldId: hub.worldId,
+      submissionId: uid('world-submission'),
+      kind,
+      sourceId: settings.playerId || state.submarine.worldSubmarineId || group?.groupId || 'local',
+      groupId: group?.groupId || '',
+      submittedAt: new Date().toISOString(),
+      canonicalAt: worldGameDate().toISOString(),
+      payload
+    };
+  }
+
+  function normalizeWorldSubmission(raw) {
+    if (raw?.schema === 'barotrauma-crew-submission') {
+      return {
+        schema: WORLD_SUBMISSION_SCHEMA,
+        version: 1,
+        worldId: normalizeWorldHub().worldId,
+        submissionId: uid('world-submission'),
+        kind: 'crew',
+        sourceId: raw.player?.id || uid('source'),
+        groupId: normalizeWorldHub().activeGroupId,
+        submittedAt: raw.submittedAt || new Date().toISOString(),
+        canonicalAt: worldGameDate().toISOString(),
+        payload: { localCharacter: raw, roster: [], groupId: normalizeWorldHub().activeGroupId }
+      };
+    }
+    if (raw?.schema !== WORLD_SUBMISSION_SCHEMA || !WORLD_SUBMISSION_KINDS.includes(raw.kind)) throw new Error('This file is not a supported world submission.');
+    return {
+      ...raw,
+      submissionId: raw.submissionId || uid('world-submission'),
+      worldId: raw.worldId || normalizeWorldHub().worldId,
+      submittedAt: raw.submittedAt || new Date().toISOString(),
+      canonicalAt: raw.canonicalAt || worldGameDate().toISOString(),
+      payload: raw.payload || {}
+    };
+  }
+
+  function queueWorldSubmission(raw) {
+    const hub = normalizeWorldHub();
+    const submission = normalizeWorldSubmission(raw);
+    const existing = hub.pendingSubmissions.find(item => item.submissionId === submission.submissionId);
+    if (!existing) hub.pendingSubmissions.push({ ...submission, status: submission.worldId !== hub.worldId ? 'foreign-world' : 'pending', queuedAt: new Date().toISOString() });
+    save();
+    return submission;
+  }
+
+  function applyWorldSubmission(raw, allowForeign = false) {
+    const hub = normalizeWorldHub();
+    const submission = normalizeWorldSubmission(raw);
+    if (submission.worldId !== hub.worldId && !allowForeign) throw new Error(`Submission belongs to ${submission.worldId}, not ${hub.worldId}.`);
+    const payload = submission.payload || {};
+    const groupId = payload.groupId || submission.groupId || hub.activeGroupId;
+    if (submission.kind === 'crew') {
+      if (payload.localCharacter) {
+        const record = crewRecordFromSubmission(payload.localCharacter);
+        const key = record.sourceCharacterId || record.rosterId;
+        hub.publicState.crews[key] = cloneWorldData(record);
+        mergeCrewSubmission(payload.localCharacter);
+        if (groupId && hub.publicState.groups[groupId] && !hub.publicState.groups[groupId].crewIds.includes(key)) hub.publicState.groups[groupId].crewIds.push(key);
+      }
+      for (const rawRecord of payload.roster || []) {
+        const record = normalizeCrewRecord(rawRecord);
+        const key = record.sourceCharacterId || record.rosterId;
+        hub.publicState.crews[key] = cloneWorldData(record);
+        if (groupId && hub.publicState.groups[groupId] && !hub.publicState.groups[groupId].crewIds.includes(key)) hub.publicState.groups[groupId].crewIds.push(key);
+      }
+    } else if (submission.kind === 'submarine') {
+      const key = payload.submarineId || submission.sourceId || uid('world-submarine');
+      hub.publicState.submarines[key] = cloneWorldData({ ...payload, updatedAt: submission.submittedAt });
+      if (groupId && hub.publicState.groups[groupId] && !hub.publicState.groups[groupId].submarineIds.includes(key)) hub.publicState.groups[groupId].submarineIds.push(key);
+    } else if (submission.kind === 'location') {
+      const targetGroup = hub.publicState.groups[groupId];
+      if (targetGroup && state.world.map?.nodes?.some(node => node.id === payload.nodeId)) targetGroup.currentNodeId = payload.nodeId;
+      hub.publicState.locations[groupId || submission.sourceId] = cloneWorldData({ ...payload, updatedAt: submission.submittedAt });
+    } else if (submission.kind === 'route') {
+      const key = payload.routeId || `${groupId || submission.sourceId}-${submission.submissionId}`;
+      hub.publicState.routes[key] = cloneWorldData({ ...payload, updatedAt: submission.submittedAt });
+      if (groupId && hub.publicState.groups[groupId]) hub.publicState.groups[groupId].routeId = key;
+    } else if (submission.kind === 'trade') {
+      for (const transaction of payload.transactions || []) {
+        const key = transaction.id || `${transaction.at}|${transaction.text}`;
+        if (!hub.publicState.trades.some(item => (item.id || `${item.at}|${item.text}`) === key)) hub.publicState.trades.push(cloneWorldData({ ...transaction, groupId, stationId: payload.stationId || '' }));
+      }
+      hub.publicState.trades = hub.publicState.trades.slice(-500);
+    } else if (submission.kind === 'research') {
+      for (const project of payload.projects || []) hub.publicState.researchProjects[project.projectId || project.designId || uid('research')] = cloneWorldData(project);
+    } else {
+      hub.publicState.gameStates[submission.sourceId || submission.submissionId] = cloneWorldData({ ...payload, updatedAt: submission.submittedAt });
+    }
+    hub.publicState.submissionJournal.unshift({ submissionId: submission.submissionId, kind: submission.kind, sourceId: submission.sourceId, groupId, submittedAt: submission.submittedAt, appliedAt: new Date().toISOString(), canonicalAt: worldGameDate().toISOString() });
+    hub.publicState.submissionJournal = hub.publicState.submissionJournal.slice(0, 500);
+    hub.revision += 1;
+    hub.updatedAt = new Date().toISOString();
+    const queued = hub.pendingSubmissions.find(item => item.submissionId === submission.submissionId);
+    if (queued) queued.status = 'applied';
+    save();
+    return submission;
+  }
+
+  function worldSavePayload(includeSavedStates = true) {
+    const hub = normalizeWorldHub();
+    const hubCopy = cloneWorldData(hub);
+    if (!includeSavedStates) hubCopy.savedStates = [];
+    return {
+      schema: WORLD_SAVE_SCHEMA,
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      canonicalAt: worldGameDate().toISOString(),
+      worldId: hub.worldId,
+      world: cloneWorldData(state.world),
+      hub: hubCopy,
+      sharedModules: {
+        stationCommerce: cloneWorldData(state.stationCommerce || {}),
+        customContent: cloneWorldData(state.customContent || {}),
+        submarineLibrary: cloneWorldData(state.submarineLibrary || {}),
+        customResearch: cloneWorldData(state.customResearch || {})
+      }
+    };
+  }
+
+  function importWorldSave(raw) {
+    if (raw?.schema !== WORLD_SAVE_SCHEMA || !raw.world || !raw.hub) throw new Error('This is not a unified Barotrauma public world save.');
+    state.world = cloneWorldData(raw.world);
+    state.worldHub = cloneWorldData(raw.hub);
+    if (raw.sharedModules?.stationCommerce) state.stationCommerce = cloneWorldData(raw.sharedModules.stationCommerce);
+    if (raw.sharedModules?.customContent) state.customContent = cloneWorldData(raw.sharedModules.customContent);
+    if (raw.sharedModules?.submarineLibrary) state.submarineLibrary = cloneWorldData(raw.sharedModules.submarineLibrary);
+    if (raw.sharedModules?.customResearch) state.customResearch = cloneWorldData(raw.sharedModules.customResearch);
+    normalizeExpandedWorld();
+    normalizeWorldHub();
+    normalizeStationCommerce();
+    syncCustomStations();
+    syncCustomSubmarines();
+    assignMissingGroupStarts();
+    save();
+  }
+
+  function createWorldCheckpoint(label = '') {
+    const hub = normalizeWorldHub();
+    const payload = worldSavePayload(false);
+    const checkpoint = {
+      saveId: `SAVE-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
+      label: String(label || `Revision ${hub.revision}`).trim(),
+      seed: state.world.seed,
+      worldId: hub.worldId,
+      revision: hub.revision,
+      savedAt: new Date().toISOString(),
+      canonicalAt: worldGameDate().toISOString(),
+      payload
+    };
+    hub.savedStates.unshift(checkpoint);
+    hub.savedStates = hub.savedStates.slice(0, 30);
+    hub.checkpointLabel = '';
+    save();
+    return checkpoint;
+  }
+
+  function loadWorldCheckpoint(saveId) {
+    const hub = normalizeWorldHub();
+    const checkpoint = hub.savedStates.find(item => item.saveId === saveId);
+    if (!checkpoint) return false;
+    const archives = cloneWorldData(hub.savedStates);
+    importWorldSave(checkpoint.payload);
+    state.worldHub.savedStates = archives;
+    save();
+    return true;
+  }
+
+  function createNewUnifiedWorld() {
+    const previousSaves = cloneWorldData(normalizeWorldHub().savedStates);
+    state.world = {
+      seed: uniqueWorldSeed(),
+      rings: WORLD_MAP_DEFAULTS.rings,
+      nodes: WORLD_MAP_DEFAULTS.totalLocations,
+      stationTarget: WORLD_MAP_DEFAULTS.stationTarget,
+      branching: WORLD_MAP_DEFAULTS.branching,
+      shellRadius: WORLD_MAP_DEFAULTS.shellRadius,
+      map: null,
+      selected: [],
+      expandedWorldVersion: WORLD_STATE_SCHEMA.schemaVersion || '1.0.0'
+    };
+    state.worldHub = defaultWorldHub();
+    state.worldHub.savedStates = previousSaves;
+    generateWorldMap();
+    assignMissingGroupStarts();
+    save();
+  }
+
+  function mapSvg(map, selected = []) {
+    if (!map) return '';
+    const nodeById = Object.fromEntries(map.nodes.map(node => [node.id, node]));
+    const path = selected.length === 2 ? shortestPath(map, selected[0], selected[1]) : null;
+    const pathEdges = new Set();
+    if (path) for (let index = 0; index < path.ids.length - 1; index += 1) pathEdges.add([path.ids[index], path.ids[index + 1]].sort().join('|'));
+    const groupsByNode = {};
+    for (const group of Object.values(normalizeWorldHub().publicState.groups)) {
+      groupsByNode[group.currentNodeId] = [...(groupsByNode[group.currentNodeId] || []), group];
+    }
+    return `<svg id="world-map-svg" viewBox="0 0 ${map.width} ${map.height}" role="img" aria-label="Expanded Europa public-world campaign map">
+      <defs><radialGradient id="anomalyGlow"><stop offset="0" stop-color="#efcb7e" stop-opacity=".55"/><stop offset="1" stop-color="#efcb7e" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="${map.width / 2}" cy="${map.height / 2}" r="180" fill="url(#anomalyGlow)"/>
+      ${map.edges.map(edge => { const a = nodeById[edge.a]; const b = nodeById[edge.b]; const key = [edge.a, edge.b].sort().join('|'); return `<g><line class="map-edge ${edge.danger ? 'danger' : ''}" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" ${pathEdges.has(key) ? 'style="stroke:#e9c36d;stroke-width:7"' : ''}/><text x="${((a.x+b.x)/2).toFixed(1)}" y="${((a.y+b.y)/2).toFixed(1)}" fill="#929aa4" font-size="13">${edge.distance}</text></g>`; }).join('')}
+      ${map.nodes.map(node => { const groups = groupsByNode[node.id] || []; const showLabel = node.type === 'station' || node.type === 'anomaly' || selected.includes(node.id) || groups.length; return `<g class="map-node ${escapeHtml(node.type)} ${selected.includes(node.id) ? 'selected' : ''}" data-node-id="${escapeHtml(node.id)}" transform="translate(${node.x.toFixed(1)} ${node.y.toFixed(1)})"><circle r="${node.type === 'anomaly' ? 24 : node.type === 'station' ? 13 : 8}"/>${showLabel ? `<text x="${node.type === 'anomaly' ? 32 : 18}" y="5" font-size="${node.type === 'station' ? 14 : 12}">${escapeHtml(node.name)}</text>` : ''}${groups.map((group, index) => `<g transform="translate(${index * 13 - 6} -20)"><circle r="6" fill="#ffffff" stroke="#111"/><title>${escapeHtml(group.name)}</title></g>`).join('')}</g>`; }).join('')}
+    </svg>`;
+  }
+
+  let worldClockTimer = null;
+  function startWorldClockTicker() {
+    if (worldClockTimer) clearInterval(worldClockTimer);
+    worldClockTimer = setInterval(() => {
+      const element = document.getElementById('world-canon-clock');
+      if (element) element.textContent = formatWorldDate();
+    }, 1000);
+  }
+
+  function publicWorldMetrics() {
+    const publicState = normalizeWorldHub().publicState;
+    return {
+      groups: Object.keys(publicState.groups).length,
+      crews: Object.keys(publicState.crews).length,
+      submarines: Object.keys(publicState.submarines).length,
+      routes: Object.keys(publicState.routes).length,
+      trades: publicState.trades.length,
+      research: Object.keys(publicState.researchProjects).length,
+      gameStates: Object.keys(publicState.gameStates).length
+    };
+  }
+
+  function renderWorld() {
+    const world = normalizeExpandedWorld();
+    const hub = normalizeWorldHub();
+    if (!world.map) generateWorldMap();
+    assignMissingGroupStarts();
+    const map = world.map;
+    const selectedNodes = world.selected.map(id => map.nodes.find(node => node.id === id)).filter(Boolean);
+    const path = selectedNodes.length === 2 ? shortestPath(map, selectedNodes[0].id, selectedNodes[1].id) : null;
+    const groups = Object.values(hub.publicState.groups);
+    const activeGroup = activeWorldGroup();
+    const metrics = publicWorldMetrics();
+    root.innerHTML = `
+      <div class="tool-shell">
+        <section class="tool-hero">
+          <div><p class="eyebrow">Unified public-world authority</p><h2>Expanded Europa World State</h2><p class="rules-note">A five-times-radius seeded map, persistent campaign identity, real-time 2175 clock, randomized outer-ring group starts, submission inbox, public registries, and importable or exportable world checkpoints.</p></div>
+          <div class="metric-row"><div class="metric"><span>World ID</span><strong>${escapeHtml(hub.worldId)}</strong></div><div class="metric"><span>Revision</span><strong>${hub.revision}</strong></div><div class="metric"><span>Stations</span><strong>${map.stationCount}</strong></div><div class="metric"><span>Locations</span><strong>${map.nodes.length}</strong></div></div>
+        </section>
+        <div class="tool-grid">
+          <section class="tool-panel span-12">
+            <div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>World Identity and Canonical Clock</h3><p class="small-note">The canonical epoch is 2175-01-01. It began when June 20, 2026 began in Sitka, Alaska, and advances one second for every real second.</p></div><div><strong id="world-canon-clock">${escapeHtml(formatWorldDate())}</strong><br><span class="small-note">Real epoch ${escapeHtml(hub.realEpoch)}</span></div></div>
+            <div class="field-grid three" style="margin-top:12px"><label class="field">World name<input id="world-name" value="${escapeHtml(hub.worldName)}"></label><label class="field">Unique seed<input id="world-seed" value="${escapeHtml(world.seed)}"></label><label class="field">World notes<input id="world-notes" value="${escapeHtml(hub.notes)}"></label></div>
+            <div class="button-row no-print" style="margin-top:10px"><button id="new-unified-world" class="danger-button" type="button">Create New World ID</button><button id="export-world-save" class="primary-action" type="button">Export Unified World Save</button><label class="secondary-action file-action" for="import-world-save">Import Unified World Save</label><input id="import-world-save" type="file" accept="application/json" hidden></div>
+          </section>
+
+          <section class="tool-panel span-4">
+            <h3>Expanded Generation</h3>
+            <div class="field-grid"><label class="field">Depth rings<input id="world-rings" type="number" min="5" max="20" value="${world.rings}"></label><label class="field">Total locations<input id="world-nodes" type="number" min="50" max="300" value="${world.nodes}"></label><label class="field">Guaranteed stations<input id="world-stations" type="number" min="10" max="150" value="${world.stationTarget}"></label><label class="field">Shell radius<input id="world-radius" type="number" min="500" max="3000" value="${world.shellRadius}"></label><label class="field">Branching %<input id="world-branching" type="number" min="0" max="100" value="${world.branching}"></label></div>
+            <div class="button-row no-print" style="margin-top:10px"><button id="generate-world" class="primary-action" type="button">Regenerate This Seed</button><button id="randomize-seed" class="secondary-action" type="button">Unique New Seed</button><button id="export-map-json" class="secondary-action" type="button">Export Map JSON</button><button id="export-map-svg" class="secondary-action" type="button">Export SVG</button></div>
+            <p class="small-note">Default shell radius ${WORLD_MAP_DEFAULTS.shellRadius}, approximately five times the previous 292-unit shell. Default station count ${WORLD_MAP_DEFAULTS.stationTarget}, five times the original five named stations.</p>
+          </section>
+
+          <section class="tool-panel span-8">
+            <h3>Selected Route and Location</h3>
+            ${selectedNodes.length ? `<p><strong>${escapeHtml(selectedNodes.map(node => node.name).join(' → '))}</strong></p>` : '<p class="small-note">No locations selected.</p>'}
+            ${path ? `<div class="metric-row"><div class="metric"><span>Route distance</span><strong>${path.distance}</strong></div><div class="metric"><span>Locations</span><strong>${path.ids.length}</strong></div><div class="metric"><span>Event cards</span><strong>${path.distance}</strong></div></div><p class="small-note">${path.ids.map(id => escapeHtml(map.nodes.find(node => node.id === id)?.name || id)).join(' → ')}</p><div class="button-row no-print"><button id="send-map-route" class="primary-action" type="button">Use Route in Planner</button><button id="move-active-group" class="secondary-action" type="button" ${activeGroup && selectedNodes[0] ? '' : 'disabled'}>Move Active Group to First Selection</button></div>` : '<div class="notice">Select two connected locations to calculate a route.</div>'}
+            ${selectedNodes.map(node => `<div class="tool-card" style="margin-top:10px"><strong>${escapeHtml(node.name)}</strong><br><span class="tag">${escapeHtml(node.type)}</span><span class="tag">Depth ring ${node.ring}</span>${node.surface ? '<span class="tag">Outer surface ring</span>' : ''}<p>${escapeHtml(node.details)}</p></div>`).join('')}
+          </section>
+
+          <section class="tool-panel span-12">
+            <div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Multiplayer Groups and Randomized Starts</h3><p class="small-note">Each new group receives a deterministic randomized starting station on the outer ring. Different groups avoid duplicate starts while unused stations remain.</p></div><div class="button-row no-print"><input id="world-group-name" class="tool-input" value="${escapeHtml(hub.groupDraftName)}" placeholder="Group name"><button id="world-create-group" class="primary-action" type="button">Create Group</button></div></div>
+            <div class="table-wrap"><table class="tool-table"><thead><tr><th>Group</th><th>Randomized start</th><th>Current location</th><th>Crew</th><th>Submarines</th><th>Notes</th><th></th></tr></thead><tbody>${groups.map(group => { const start = map.nodes.find(node => node.id === group.startingNodeId); const current = map.nodes.find(node => node.id === group.currentNodeId); return `<tr><td><strong>${escapeHtml(group.name)}</strong><br><span class="small-note">${escapeHtml(group.groupId)}</span></td><td>${escapeHtml(start?.name || group.startingNodeId)}</td><td><select class="world-group-location" data-id="${escapeHtml(group.groupId)}">${optionList(map.nodes.filter(node => node.type === 'station').map(node => node.id), group.currentNodeId, id => map.nodes.find(node => node.id === id)?.name || id)}</select></td><td>${group.crewIds.length}</td><td>${group.submarineIds.length}</td><td><input class="world-group-notes" data-id="${escapeHtml(group.groupId)}" value="${escapeHtml(group.notes || '')}"></td><td><div class="button-row"><button class="compact-button world-group-active" data-id="${escapeHtml(group.groupId)}" type="button">${hub.activeGroupId === group.groupId ? 'Active' : 'Make Active'}</button><button class="compact-button world-group-reroll" data-id="${escapeHtml(group.groupId)}" type="button">Reroll Start</button><button class="compact-button world-group-remove" data-id="${escapeHtml(group.groupId)}" type="button">Remove</button></div></td></tr>`; }).join('')}</tbody></table></div>
+          </section>
+
+          <section class="tool-panel span-12">
+            <div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Submission Composer and Inbox</h3><p class="small-note">Create module-specific submissions or import files from other players. The unified public state changes only when a queued submission is pushed into this world save.</p></div><div class="metric-row"><div class="metric"><span>Pending</span><strong>${hub.pendingSubmissions.filter(item => item.status === 'pending').length}</strong></div><div class="metric"><span>Applied journal</span><strong>${hub.publicState.submissionJournal.length}</strong></div></div></div>
+            <div class="button-row no-print">${WORLD_SUBMISSION_KINDS.map(kind => `<button class="secondary-action build-world-submission" data-kind="${escapeHtml(kind)}" type="button">Queue ${escapeHtml(kind)}</button>`).join('')}<label class="secondary-action file-action" for="world-submission-files">Import Submissions</label><input id="world-submission-files" type="file" accept="application/json" multiple hidden><button id="push-all-world-submissions" class="primary-action" type="button">Push All Pending to World Save</button></div>
+            <details style="margin-top:10px"><summary><strong>Paste submission JSON</strong></summary><label class="field" style="margin-top:8px">JSON<textarea id="world-submission-paste"></textarea></label><button id="queue-pasted-world-submission" class="secondary-action no-print" type="button" style="margin-top:8px">Queue Pasted Submission</button></details>
+            <div class="table-wrap" style="margin-top:12px"><table class="tool-table"><thead><tr><th>Submission</th><th>Kind</th><th>Source / group</th><th>Submitted</th><th>Status</th><th></th></tr></thead><tbody>${hub.pendingSubmissions.map(item => `<tr><td><strong>${escapeHtml(item.submissionId)}</strong><br><span class="small-note">World ${escapeHtml(item.worldId)}</span></td><td>${escapeHtml(item.kind)}</td><td>${escapeHtml(item.sourceId || '')}<br><span class="small-note">${escapeHtml(item.groupId || '')}</span></td><td>${escapeHtml(new Date(item.submittedAt).toLocaleString())}</td><td>${escapeHtml(item.status || 'pending')}</td><td><div class="button-row"><button class="compact-button world-submission-push" data-id="${escapeHtml(item.submissionId)}" type="button" ${item.status === 'applied' ? 'disabled' : ''}>Push</button><button class="compact-button world-submission-export" data-id="${escapeHtml(item.submissionId)}" type="button">Export</button><button class="compact-button world-submission-remove" data-id="${escapeHtml(item.submissionId)}" type="button">Remove</button></div></td></tr>`).join('') || '<tr><td colspan="6">No submissions queued.</td></tr>'}</tbody></table></div>
+          </section>
+
+          <section class="tool-panel span-12">
+            <h3>Unified Public World Registries</h3>
+            <div class="metric-row"><div class="metric"><span>Groups</span><strong>${metrics.groups}</strong></div><div class="metric"><span>Crew</span><strong>${metrics.crews}</strong></div><div class="metric"><span>Submarines</span><strong>${metrics.submarines}</strong></div><div class="metric"><span>Routes</span><strong>${metrics.routes}</strong></div><div class="metric"><span>Trades</span><strong>${metrics.trades}</strong></div><div class="metric"><span>R&D projects</span><strong>${metrics.research}</strong></div><div class="metric"><span>Game states</span><strong>${metrics.gameStates}</strong></div></div>
+            <details style="margin-top:12px"><summary><strong>Latest applied submissions</strong></summary><div class="card-list" style="margin-top:10px">${hub.publicState.submissionJournal.slice(0, 20).map(item => `<div class="small-note"><strong>${escapeHtml(item.kind)}</strong> from ${escapeHtml(item.sourceId || 'unknown')} · ${escapeHtml(item.submissionId)}<br>Applied ${escapeHtml(new Date(item.appliedAt).toLocaleString())} · Canonical ${escapeHtml(item.canonicalAt)}</div>`).join('') || '<div class="small-note">No submissions applied.</div>'}</div></details>
+          </section>
+
+          <section class="tool-panel span-12">
+            <div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Saved World States</h3><p class="small-note">Checkpoints preserve this world ID, seed, map, public registries, markets, custom content, and R&D state.</p></div><div class="button-row no-print"><input id="world-checkpoint-label" class="tool-input" value="${escapeHtml(hub.checkpointLabel)}" placeholder="Checkpoint label"><button id="create-world-checkpoint" class="primary-action" type="button">Create Saved State</button></div></div>
+            <div class="table-wrap"><table class="tool-table"><thead><tr><th>Save ID</th><th>Label</th><th>World / seed</th><th>Revision</th><th>Canonical time</th><th></th></tr></thead><tbody>${hub.savedStates.map(item => `<tr><td><strong>${escapeHtml(item.saveId)}</strong></td><td>${escapeHtml(item.label)}</td><td>${escapeHtml(item.worldId)}<br><span class="small-note">${escapeHtml(item.seed)}</span></td><td>${item.revision}</td><td>${escapeHtml(item.canonicalAt)}</td><td><div class="button-row"><button class="compact-button world-save-load" data-id="${escapeHtml(item.saveId)}" type="button">Load</button><button class="compact-button world-save-export" data-id="${escapeHtml(item.saveId)}" type="button">Export</button><button class="compact-button world-save-delete" data-id="${escapeHtml(item.saveId)}" type="button">Delete</button></div></td></tr>`).join('') || '<tr><td colspan="6">No saved states.</td></tr>'}</tbody></table></div>
+          </section>
+
+          <section class="tool-panel span-12"><div class="map-frame expanded-map-frame">${mapSvg(map, world.selected)}</div><div class="map-legend"><span><i class="legend-dot" style="background:#21364a;color:#70a7c7"></i>Station</span><span><i class="legend-dot" style="background:#35351f;color:#c7b570"></i>Outpost</span><span><i class="legend-dot" style="background:#3d2525;color:#bd7474"></i>Wreck</span><span><i class="legend-dot" style="background:#392d47;color:#a985c7"></i>Ruins</span><span><i class="legend-dot" style="background:#421f28;color:#d36378"></i>Hazard</span><span><i class="legend-dot" style="background:#5a431d;color:#e0b45f"></i>Anomaly</span><span>White marker: active group location</span></div></section>
+        </div>
+      </div>`;
+
+    startWorldClockTicker();
+    bindTextInput('#world-name', element => { hub.worldName = element.value; });
+    bindTextInput('#world-seed', element => { world.seed = element.value; });
+    bindTextInput('#world-notes', element => { hub.notes = element.value; });
+    bindTextInput('#world-rings', element => { world.rings = clamp(element.value, 5, 20); }, 'change');
+    bindTextInput('#world-nodes', element => { world.nodes = clamp(element.value, 50, 300); }, 'change');
+    bindTextInput('#world-stations', element => { world.stationTarget = clamp(element.value, 10, 150); }, 'change');
+    bindTextInput('#world-radius', element => { world.shellRadius = clamp(element.value, 500, 3000); }, 'change');
+    bindTextInput('#world-branching', element => { world.branching = clamp(element.value, 0, 100); }, 'change');
+    root.querySelector('#generate-world')?.addEventListener('click', () => { generateWorldMap(); renderWorld(); });
+    root.querySelector('#randomize-seed')?.addEventListener('click', () => { world.seed = uniqueWorldSeed(); generateWorldMap(); renderWorld(); });
+    root.querySelector('#new-unified-world')?.addEventListener('click', () => { createNewUnifiedWorld(); renderWorld(); });
+    root.querySelector('#export-map-json')?.addEventListener('click', () => download(`barotrauma-map-${world.seed}.json`, JSON.stringify(map, null, 2)));
+    root.querySelector('#export-map-svg')?.addEventListener('click', () => download(`barotrauma-map-${world.seed}.svg`, mapSvg(map, world.selected), 'image/svg+xml'));
+    root.querySelector('#export-world-save')?.addEventListener('click', () => download(`${hub.worldId.toLowerCase()}-public-world-save.json`, JSON.stringify(worldSavePayload(true), null, 2)));
+    root.querySelector('#import-world-save')?.addEventListener('change', async event => { const file = event.target.files?.[0]; if (!file) return; try { importWorldSave(JSON.parse(await file.text())); renderWorld(); } catch (error) { alert(`World save could not be imported: ${error.message}`); } finally { event.target.value = ''; } });
+    root.querySelectorAll('.map-node').forEach(node => node.addEventListener('click', event => { const id = event.currentTarget.dataset.nodeId; if (world.selected.includes(id)) world.selected = world.selected.filter(item => item !== id); else if (world.selected.length < 2) world.selected.push(id); else world.selected = [id]; save(); renderWorld(); }));
+    root.querySelector('#send-map-route')?.addEventListener('click', () => { if (!path || selectedNodes.length !== 2) return; state.route.start = selectedNodes[0].name; state.route.end = selectedNodes[1].name; state.route.distance = path.distance; state.route.plan = []; save(); setTool('route'); });
+    root.querySelector('#move-active-group')?.addEventListener('click', () => { if (!activeGroup || !selectedNodes[0]) return; activeGroup.currentNodeId = selectedNodes[0].id; hub.publicState.locations[activeGroup.groupId] = { groupId: activeGroup.groupId, nodeId: activeGroup.currentNodeId, updatedAt: new Date().toISOString() }; hub.revision += 1; save(); renderWorld(); });
+    root.querySelector('#world-group-name')?.addEventListener('input', event => { hub.groupDraftName = event.target.value; save(); });
+    root.querySelector('#world-create-group')?.addEventListener('click', () => { createWorldGroup(root.querySelector('#world-group-name').value); renderWorld(); });
+    root.querySelectorAll('.world-group-active').forEach(button => button.addEventListener('click', event => { hub.activeGroupId = event.target.dataset.id; save(); renderWorld(); }));
+    root.querySelectorAll('.world-group-location').forEach(select => select.addEventListener('change', event => { const group = hub.publicState.groups[event.target.dataset.id]; if (group) { group.currentNodeId = event.target.value; hub.publicState.locations[group.groupId] = { groupId: group.groupId, nodeId: group.currentNodeId, updatedAt: new Date().toISOString() }; hub.revision += 1; save(); renderWorld(); } }));
+    root.querySelectorAll('.world-group-notes').forEach(input => input.addEventListener('input', event => { const group = hub.publicState.groups[event.target.dataset.id]; if (group) group.notes = event.target.value; save(); }));
+    root.querySelectorAll('.world-group-reroll').forEach(button => button.addEventListener('click', event => { const group = hub.publicState.groups[event.target.dataset.id]; if (!group) return; const used = new Set(Object.values(hub.publicState.groups).filter(item => item.groupId !== group.groupId).map(item => item.startingNodeId)); group.startingNodeId = randomizedGroupStart(`${group.groupId}-${Date.now()}`, used); group.currentNodeId = group.startingNodeId; hub.publicState.locations[group.groupId] = { groupId: group.groupId, nodeId: group.currentNodeId, updatedAt: new Date().toISOString() }; hub.revision += 1; save(); renderWorld(); }));
+    root.querySelectorAll('.world-group-remove').forEach(button => button.addEventListener('click', event => { delete hub.publicState.groups[event.target.dataset.id]; delete hub.publicState.locations[event.target.dataset.id]; if (hub.activeGroupId === event.target.dataset.id) hub.activeGroupId = Object.keys(hub.publicState.groups)[0] || ''; hub.revision += 1; save(); renderWorld(); }));
+    root.querySelectorAll('.build-world-submission').forEach(button => button.addEventListener('click', event => { queueWorldSubmission(currentWorldSubmission(event.target.dataset.kind)); save(); renderWorld(); }));
+    root.querySelector('#world-submission-files')?.addEventListener('change', async event => { const errors = []; for (const file of [...(event.target.files || [])]) { try { const parsed = JSON.parse(await file.text()); if (parsed.schema === WORLD_SAVE_SCHEMA) importWorldSave(parsed); else if (Array.isArray(parsed)) parsed.forEach(queueWorldSubmission); else queueWorldSubmission(parsed); } catch (error) { errors.push(`${file.name}: ${error.message}`); } } event.target.value = ''; save(); renderWorld(); if (errors.length) alert(errors.join('\n')); });
+    root.querySelector('#queue-pasted-world-submission')?.addEventListener('click', () => { try { const parsed = JSON.parse(root.querySelector('#world-submission-paste').value); if (Array.isArray(parsed)) parsed.forEach(queueWorldSubmission); else queueWorldSubmission(parsed); save(); renderWorld(); } catch (error) { alert(`Submission could not be queued: ${error.message}`); } });
+    root.querySelector('#push-all-world-submissions')?.addEventListener('click', () => { for (const submission of hub.pendingSubmissions.filter(item => item.status === 'pending')) applyWorldSubmission(submission); save(); renderWorld(); });
+    root.querySelectorAll('.world-submission-push').forEach(button => button.addEventListener('click', event => { const submission = hub.pendingSubmissions.find(item => item.submissionId === event.target.dataset.id); if (!submission) return; try { applyWorldSubmission(submission); renderWorld(); } catch (error) { alert(error.message); } }));
+    root.querySelectorAll('.world-submission-export').forEach(button => button.addEventListener('click', event => { const submission = hub.pendingSubmissions.find(item => item.submissionId === event.target.dataset.id); if (submission) download(`${submission.submissionId}.json`, JSON.stringify(submission, null, 2)); }));
+    root.querySelectorAll('.world-submission-remove').forEach(button => button.addEventListener('click', event => { hub.pendingSubmissions = hub.pendingSubmissions.filter(item => item.submissionId !== event.target.dataset.id); save(); renderWorld(); }));
+    root.querySelector('#world-checkpoint-label')?.addEventListener('input', event => { hub.checkpointLabel = event.target.value; save(); });
+    root.querySelector('#create-world-checkpoint')?.addEventListener('click', () => { createWorldCheckpoint(root.querySelector('#world-checkpoint-label').value); renderWorld(); });
+    root.querySelectorAll('.world-save-load').forEach(button => button.addEventListener('click', event => { if (loadWorldCheckpoint(event.target.dataset.id)) renderWorld(); }));
+    root.querySelectorAll('.world-save-export').forEach(button => button.addEventListener('click', event => { const checkpoint = hub.savedStates.find(item => item.saveId === event.target.dataset.id); if (checkpoint) download(`${checkpoint.saveId.toLowerCase()}-${stationSlug(checkpoint.label)}.json`, JSON.stringify(checkpoint.payload, null, 2)); }));
+    root.querySelectorAll('.world-save-delete').forEach(button => button.addEventListener('click', event => { hub.savedStates = hub.savedStates.filter(item => item.saveId !== event.target.dataset.id); save(); renderWorld(); }));
+  }
+
+  normalizeExpandedWorld();
+  normalizeWorldHub();

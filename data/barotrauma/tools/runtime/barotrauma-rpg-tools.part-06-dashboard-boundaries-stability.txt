@@ -1,0 +1,85 @@
+
+  generateValidCrossing = function generateValidCrossingWithoutDuplicateInitiative() {
+    if (!activeSubmarineDashboardContext()) return generateValidCrossingStandaloneModule();
+    const result = generateValidCrossingActiveDashboardModule();
+    if (result) synchronizeActiveDashboardMechanics('Adjacent route generated');
+    return result;
+  };
+
+  function dashboardBoundaryDiagnostics() {
+    const raw = window.location.hash.replace(/^#/, '');
+    const dashboardContext = activeSubmarineDashboardContext();
+    const map = state.world?.map;
+    const stationIds = new Set((map?.nodes || []).filter(node => node.type === 'station').map(node => node.id));
+    const start = normalizeDashboardStartingLocationState();
+    const issues = [];
+
+    if (dashboardContext && activeTool() !== 'dashboard') issues.push('Dashboard hash did not resolve to the dashboard tool.');
+    if (!dashboardContext && raw === 'submarine' && activeTool() !== 'submarine') issues.push('Standalone submarine hash was redirected.');
+    if (!dashboardContext && raw === 'route' && activeTool() !== 'route') issues.push('Standalone route hash was redirected.');
+    if (!dashboardContext && raw === 'world' && activeTool() !== 'world') issues.push('Standalone world hash was redirected.');
+    if (!dashboardContext && raw === 'encounters' && activeTool() !== 'encounters') issues.push('Standalone encounter hash was redirected.');
+
+    for (const nodeId of start.optionNodeIds) {
+      if (!stationIds.has(nodeId)) issues.push(`Randomized starting location ${nodeId} is not a station in the active world.`);
+    }
+    if (start.confirmedNodeId && !stationIds.has(start.confirmedNodeId)) issues.push('Confirmed starting location is not a station in the active world.');
+
+    if (dashboardContext && dashboardOperationalState() === 'in-route') {
+      const transactionControls = root.querySelectorAll('.commerce-buy, #commerce-sell, #station-regenerate-market, #commerce-station');
+      if (transactionControls.length) issues.push('Commerce controls remain exposed while In Route.');
+    }
+    if (dashboardContext && dashboardOperationalState() === 'at-station') {
+      const currentStation = dashboardCurrentWorldStation();
+      const commerce = normalizeStationCommerce();
+      if (currentStation && commerce.activeStationId !== stationIdentity(currentStation)) issues.push('Dashboard commerce is not locked to the current world station.');
+    }
+    if (!dashboardContext && ['submarine','route','world'].includes(raw) && root.querySelector('#active-dashboard-command')) {
+      issues.push('A standalone module rendered the integrated dashboard command panel.');
+    }
+
+    return {
+      valid: !issues.length,
+      issues,
+      hash: raw,
+      dashboardContext,
+      resolvedTool: activeTool(),
+      operationalState: state.operationsDashboard?.operationalState || '',
+      randomizedStartingStationCount: start.optionNodeIds.length,
+      transactionControlCount: dashboardContext && dashboardOperationalState() === 'in-route'
+        ? root.querySelectorAll('.commerce-buy, #commerce-sell, #station-regenerate-market, #commerce-station').length
+        : null,
+      standaloneRenderersCaptured: Boolean(renderStandaloneSubmarineModule && renderStandaloneRouteModule && renderStandaloneWorldModule)
+    };
+  }
+
+  function publishDashboardBoundaryDiagnostics() {
+    globalThis.BAROTRAUMA_DASHBOARD_BOUNDARY_DIAGNOSTICS = dashboardBoundaryDiagnostics();
+    if (!globalThis.BAROTRAUMA_DASHBOARD_BOUNDARY_DIAGNOSTICS.valid) {
+      console.warn('Barotrauma dashboard boundary diagnostics found issues.', globalThis.BAROTRAUMA_DASHBOARD_BOUNDARY_DIAGNOSTICS.issues);
+    }
+    return globalThis.BAROTRAUMA_DASHBOARD_BOUNDARY_DIAGNOSTICS;
+  }
+
+  const renderSubmarineBeforeDashboardBoundaryDiagnostics = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithBoundaryDiagnostics() {
+    const result = renderSubmarineBeforeDashboardBoundaryDiagnostics();
+    publishDashboardBoundaryDiagnostics();
+    return result;
+  };
+
+  const renderRouteBeforeDashboardBoundaryDiagnostics = renderRoute;
+  renderRoute = function renderRouteWithBoundaryDiagnostics() {
+    const result = renderRouteBeforeDashboardBoundaryDiagnostics();
+    publishDashboardBoundaryDiagnostics();
+    return result;
+  };
+
+  const renderWorldBeforeDashboardBoundaryDiagnostics = renderWorld;
+  renderWorld = function renderWorldWithBoundaryDiagnostics() {
+    const result = renderWorldBeforeDashboardBoundaryDiagnostics();
+    publishDashboardBoundaryDiagnostics();
+    return result;
+  };
+
+  publishDashboardBoundaryDiagnostics();

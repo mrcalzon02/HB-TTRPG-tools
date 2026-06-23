@@ -1,0 +1,130 @@
+
+  function generalEncounterApproachOptions(event) {
+    const selected = clamp(event.selectedApproachIndex, 0, Math.max(0, (event.encounterApproaches || []).length - 1));
+    return (event.encounterApproaches || []).map((approach, index) => `<option value="${index}" ${index === selected ? 'selected' : ''}>${escapeHtml(approach.label || approach.stat)} — ${escapeHtml(approach.stat)} vs ${number(approach.dc)}</option>`).join('');
+  }
+
+  function generalEncounterDetailHtml(event, item = null, compact = false) {
+    if (!event?.encounterTemplateId) return '';
+    const approachRows = (event.encounterApproaches || []).map((approach, index) => `<div class="small-note"><strong>${index + 1}. ${escapeHtml(approach.label || approach.stat)}</strong> — ${escapeHtml(approach.stat)} vs ${number(approach.dc)}</div>`).join('');
+    const outcome = item?.encounterEffectsApplied ? `<div class="notice ${item.encounterEffectsApplied === 'success' ? 'good' : 'bad'}" style="margin-top:8px"><strong>${escapeHtml(item.encounterEffectsApplied)} effects applied:</strong> ${escapeHtml(item.encounterEffectsSummary || 'No automatic state changes')}</div>` : '';
+    const selector = !compact && item ? `<label class="field" style="margin-top:8px">Resolution approach<select class="general-encounter-approach" data-item-id="${escapeHtml(item.id)}">${generalEncounterApproachOptions(event)}</select></label>` : '';
+    return `<div class="notice general-encounter-detail" style="margin-top:10px">
+      <strong>${escapeHtml(event.encounterFamilyLabel)} · ${escapeHtml(event.encounterSeverity)} · Level ${number(event.encounterLevel)} · ${escapeHtml(event.encounterStageLabel)}</strong><br>
+      <strong>Escalation clock:</strong> ${number(event.encounterClock)} segments${event.scenarioId ? ` · <strong>Linked scenario:</strong> ${escapeHtml(event.scenarioId)}` : ''}${event.dangerousRoute ? ' · <span class="bad">Dangerous-route escalation</span>' : ''}<br>
+      ${event.encounterComplication ? `<strong>Complication:</strong> ${escapeHtml(event.encounterComplication)}<br>` : ''}
+      ${event.encounterOpportunity ? `<strong>Opportunity:</strong> ${escapeHtml(event.encounterOpportunity)}<br>` : ''}
+      ${event.encounterPersistent ? `<strong>Persistent consequence:</strong> ${escapeHtml(event.encounterPersistent)}<br>` : ''}
+      <strong>Success state effects:</strong> ${escapeHtml(encounterEffectsText(event.successEffects))}<br>
+      <strong>Failure state effects:</strong> ${escapeHtml(encounterEffectsText(event.failureEffects))}
+      ${compact ? `<details style="margin-top:8px"><summary><strong>Available approaches</strong></summary>${approachRows}</details>` : selector}
+      ${outcome}
+    </div>`;
+  }
+
+  const encounterCardHtmlBeforeGeneralEncounters = encounterCardHtml;
+  encounterCardHtml = function encounterCardHtmlWithGeneralEncounterDetails(item, index, prefix = 'encounter') {
+    let html = encounterCardHtmlBeforeGeneralEncounters(item, index, prefix);
+    const event = item.event || item;
+    if (!event?.encounterTemplateId) return html;
+    const tags = `<span class="tag">${escapeHtml(event.encounterFamilyLabel)}</span><span class="tag">${escapeHtml(event.encounterSeverity)}</span><span class="tag">Level ${number(event.encounterLevel)}</span><span class="tag">${escapeHtml(event.encounterStageLabel)}</span>`;
+    html = html.replace('<h4>', `${tags}<h4>`);
+    return html.replace('<div class="button-row no-print">', `${generalEncounterDetailHtml(event, item, false)}<div class="button-row no-print">`);
+  };
+
+  const crossingEventDetailsBeforeGeneralEncounters = crossingEventDetails;
+  crossingEventDetails = function crossingEventDetailsWithGeneralEncounters(event) {
+    return `${generalEncounterDetailHtml(event, null, true)}${crossingEventDetailsBeforeGeneralEncounters(event)}`;
+  };
+
+  function generalEncounterFamilyCounts(level, context, sanityEnabled, targetNode = null) {
+    return Object.fromEntries(GENERAL_ENCOUNTER_FAMILIES.map(family => [
+      family.id,
+      generalEncounterPool(level, family.id, context, { sanityEnabled, targetNode }).length
+    ]));
+  }
+
+  function generalEncounterLibraryTable(level, context, sanityEnabled, targetNode = null) {
+    const counts = generalEncounterFamilyCounts(level, context, sanityEnabled, targetNode);
+    return `<div class="table-wrap"><table class="tool-table" style="min-width:880px"><thead><tr><th>Encounter library</th><th>Route category</th><th>Available now</th><th>Total templates</th><th>Purpose</th></tr></thead><tbody>${GENERAL_ENCOUNTER_FAMILIES.map(family => `<tr><td><strong>${escapeHtml(family.name)}</strong></td><td>${escapeHtml(family.category)}</td><td>${number(counts[family.id])}</td><td>${GENERAL_ENCOUNTER_TEMPLATES.filter(template => template.family === family.id).length}</td><td class="small-note">${escapeHtml(family.description || '')}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+
+  const renderEncountersBeforeGeneralEncounters = renderEncounters;
+  renderEncounters = function renderEncountersWithGeneralEncounterEngine() {
+    normalizeGeneralEncounterState();
+    renderEncountersBeforeGeneralEncounters();
+    const planner = state.encounters;
+    const selectedNode = planner.useSelectedWorldLocation && typeof selectedWorldLocationNode === 'function' ? selectedWorldLocationNode() : null;
+    const level = generalEncounterPlannerLevel();
+    const context = generalEncounterPlannerContext();
+    const familyId = GENERAL_ENCOUNTER_FAMILY_MAP[planner.generalFamily] ? planner.generalFamily : 'All';
+    const pool = generalEncounterPool(level, familyId, context, { sanityEnabled: state.route.sanityEnabled !== false, targetNode: selectedNode });
+    const severity = generalEncounterSeverityProfile(level);
+    const sequenceHeading = [...root.querySelectorAll('.tool-panel h3')].find(element => element.textContent.trim() === 'Encounter Sequence');
+    const sequencePanel = sequenceHeading?.closest('.tool-panel');
+    if (!sequencePanel?.parentElement) return;
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12 general-encounter-panel';
+    panel.style.borderColor = 'rgba(105,142,174,.62)';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none">
+        <div><p class="eyebrow">Registry-driven challenge architecture</p><h3>General Encounter Engine</h3><p class="small-note">The old literal card limit is retired. Non-creature encounters now come from independent libraries with level gates, weighted route categories, multiple approaches, escalation clocks, linked three-stage scenarios, persistent consequences, and automatic state effects.</p></div>
+        <div class="metric-row"><div class="metric"><span>Libraries</span><strong>${GENERAL_ENCOUNTER_FAMILIES.length}</strong></div><div class="metric"><span>Templates</span><strong>${GENERAL_ENCOUNTER_TEMPLATES.length}</strong></div><div class="metric"><span>Available</span><strong>${pool.length}</strong></div><div class="metric"><span>Severity</span><strong>${escapeHtml(severity.severity)}</strong></div></div>
+      </div>
+      <div class="field-grid four" style="margin-top:12px">
+        <label class="field">Encounter library<select id="general-encounter-family">${optionList(['All', ...GENERAL_ENCOUNTER_FAMILIES.map(item => item.id)], familyId, id => id === 'All' ? 'All general libraries' : GENERAL_ENCOUNTER_FAMILY_MAP[id]?.name || id)}</select></label>
+        <label class="field">Challenge level<select id="general-encounter-level" ${selectedNode ? 'disabled' : ''}>${optionList(Array.from({ length: 10 }, (_, index) => String(index + 1)), String(level), value => `Level ${value}: ${generalEncounterSeverityProfile(value).severity}`)}</select></label>
+        <label class="field">Context<select id="general-encounter-context">${optionList(['any','travel','location','station','job'], context, value => ({ any:'Any context', travel:'Travel', location:'Location expedition', station:'Station', job:'Job complication' })[value])}</select></label>
+        <div class="notice"><strong>${selectedNode ? escapeHtml(selectedNode.name) : 'Independent draw'}</strong><br>${selectedNode ? `Level ${number(selectedNode.locationLevel)} · ${escapeHtml(selectedNode.locationTypeName || selectedNode.type || 'Mapped location')}` : 'Enable “Use current world destination” in the draw controls to bind level and location context.'}</div>
+      </div>
+      <div class="button-row no-print" style="margin-top:12px">
+        <button id="draw-general-encounter" class="primary-action" type="button" ${pool.length ? '' : 'disabled'}>Add Challenge Encounter</button>
+        <button id="draw-general-scenario" class="secondary-action" type="button" ${pool.length ? '' : 'disabled'}>Add Linked 3-Stage Scenario</button>
+      </div>
+      <p class="small-note">${escapeHtml(severity.description || '')} A single challenge applies full outcome effects once. A linked scenario uses Contact, Crisis, and Aftermath cards; Contact creates pressure rather than immediate damage.</p>
+      <details style="margin-top:10px"><summary><strong>Encounter libraries available at this level and context</strong></summary><div style="margin-top:8px">${generalEncounterLibraryTable(level, context, state.route.sanityEnabled !== false, selectedNode)}</div></details>
+    `;
+    sequencePanel.parentElement.insertBefore(panel, sequencePanel);
+
+    panel.querySelector('#general-encounter-family')?.addEventListener('change', event => { planner.generalFamily = event.target.value; save(); renderEncounters(); });
+    panel.querySelector('#general-encounter-level')?.addEventListener('change', event => { planner.generalLevel = clamp(event.target.value, 1, 10); save(); renderEncounters(); });
+    panel.querySelector('#general-encounter-context')?.addEventListener('change', event => { planner.generalContext = event.target.value; save(); renderEncounters(); });
+    panel.querySelector('#draw-general-encounter')?.addEventListener('click', () => {
+      const event = drawGeneralEncounter(level, Math.random, { family: familyId, context, sanityEnabled: state.route.sanityEnabled !== false, targetNode: selectedNode });
+      if (event?.encounterTemplateId) planner.plan.push({ id: uid('challenge'), event, status: 'pending', roll: '' });
+      save(); renderEncounters();
+    });
+    panel.querySelector('#draw-general-scenario')?.addEventListener('click', () => {
+      const events = drawGeneralEncounterSequence(level, Math.random, { family: familyId, context, sanityEnabled: state.route.sanityEnabled !== false, targetNode: selectedNode });
+      for (const event of events) planner.plan.push({ id: uid('scenario'), event, status: 'pending', roll: '' });
+      save(); renderEncounters();
+    });
+  };
+
+  const renderRouteBeforeGeneralEncounters = renderRoute;
+  renderRoute = function renderRouteWithGeneralEncounterEngine() {
+    normalizeGeneralEncounterState();
+    renderRouteBeforeGeneralEncounters();
+    const crossing = normalizeRouteCrossing();
+    const level = typeof crossingCreatureLevel === 'function' ? crossingCreatureLevel() : (crossing.legs.length ? clamp(Math.max(...crossing.legs.map(leg => Math.max(number(leg.fromLevel, 1), number(leg.toLevel, 1)))), 1, 10) : 1);
+    const weightedHeading = [...root.querySelectorAll('.tool-panel h3')].find(element => element.textContent.includes('Weighted Route Encounter Table'));
+    const weightedPanel = weightedHeading?.closest('.tool-panel');
+    if (weightedPanel) {
+      for (const row of weightedPanel.querySelectorAll('tbody tr')) {
+        const category = row.firstElementChild?.textContent.trim();
+        const family = GENERAL_ENCOUNTER_CATEGORY_MAP[category];
+        if (family && row.lastElementChild) row.lastElementChild.textContent = String(generalEncounterPool(level, family.id, 'travel', { sanityEnabled: state.route.sanityEnabled !== false }).length);
+      }
+    }
+    const creaturePanel = root.querySelector('.creature-route-pool');
+    const anchor = creaturePanel || weightedPanel;
+    if (!anchor?.parentElement) return;
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12 general-encounter-route-panel';
+    panel.style.borderColor = 'rgba(105,142,174,.62)';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Route-scaled non-creature libraries</p><h3>General Challenge Pools</h3><p class="small-note">Each route category now draws a level-valid challenge template instead of being limited to a single legacy card. Dangerous legs raise severity after generation. Imported legacy Pirate and Sanity cards remain compatible.</p></div><div class="metric-row"><div class="metric"><span>Route level</span><strong>${number(level)}</strong></div><div class="metric"><span>Severity</span><strong>${escapeHtml(generalEncounterSeverityProfile(level).severity)}</strong></div><div class="metric"><span>General templates</span><strong>${GENERAL_ENCOUNTER_TEMPLATES.length}</strong></div><div class="metric"><span>Registry</span><strong>v${escapeHtml(GENERAL_ENCOUNTER_VERSION)}</strong></div></div></div>
+      <div style="margin-top:12px">${generalEncounterLibraryTable(level, 'travel', state.route.sanityEnabled !== false)}</div>
+    `;
+    anchor.insertAdjacentElement('afterend', panel);
+  };

@@ -1,0 +1,184 @@
+
+  function dashboardManagementHydrateManagedSnapshot(vesselId){
+    const authority=normalizeDashboardManagementAuthority();
+    const snapshot=authority.vesselSnapshots?.[vesselId];
+    if(!snapshot||typeof snapshot!=='object')return null;
+
+    const defaults=defaultState();
+    const character=deepMerge(defaults.character,cloneWorldData(snapshot.character||{}));
+    character.stats=character.stats&&typeof character.stats==='object'?character.stats:{Strength:3,Agility:3,Intelligence:3,Charisma:3};
+    character.current=character.current&&typeof character.current==='object'?character.current:{...character.stats};
+    character.rollLog=Array.isArray(character.rollLog)?character.rollLog:[];
+    character.catalogInventory=Array.isArray(character.catalogInventory)?character.catalogInventory:[];
+    character.consumptionLog=Array.isArray(character.consumptionLog)?character.consumptionLog:[];
+    character.inventory=String(character.inventory||'');
+    character.conditions=String(character.conditions||'');
+    character.notes=String(character.notes||'');
+
+    const submarine=deepMerge(defaults.submarine,cloneWorldData(snapshot.submarine||{}));
+    submarine.manual=submarine.manual&&typeof submarine.manual==='object'?submarine.manual:{speed:0,maneuverability:0,defense:0,capacity:0,hull:0};
+    submarine.resources=submarine.resources&&typeof submarine.resources==='object'?submarine.resources:{};
+    submarine.systems=submarine.systems&&typeof submarine.systems==='object'?submarine.systems:{};
+    submarine.upgrades=Array.isArray(submarine.upgrades)?submarine.upgrades:[];
+    submarine.weapons=Array.isArray(submarine.weapons)?submarine.weapons:[];
+    submarine.wikiWeapons=Array.isArray(submarine.wikiWeapons)?submarine.wikiWeapons:[];
+    submarine.wikiAmmo=Array.isArray(submarine.wikiAmmo)?submarine.wikiAmmo:[];
+    submarine.customModules=Array.isArray(submarine.customModules)?submarine.customModules:[];
+    submarine.crewManagement=deepMerge(typeof defaultCrewManagement==='function'?defaultCrewManagement():{roster:[],activeCrewId:'local'},submarine.crewManagement&&typeof submarine.crewManagement==='object'?submarine.crewManagement:{});
+    submarine.crewManagement.roster=Array.isArray(submarine.crewManagement.roster)?submarine.crewManagement.roster:[];
+    submarine.cargoManagement=deepMerge(typeof defaultCargoManagement==='function'?defaultCargoManagement():{entries:[]},submarine.cargoManagement&&typeof submarine.cargoManagement==='object'?submarine.cargoManagement:{});
+    submarine.cargoManagement.entries=Array.isArray(submarine.cargoManagement.entries)?submarine.cargoManagement.entries:[];
+    submarine.managedExpedition=submarine.managedExpedition&&typeof submarine.managedExpedition==='object'?submarine.managedExpedition:{};
+
+    const route=deepMerge(defaults.route,cloneWorldData(snapshot.route||{}));
+    route.jobs=Array.isArray(route.jobs)?route.jobs:[];
+    route.plan=Array.isArray(route.plan)?route.plan:[];
+    route.table=route.table&&typeof route.table==='object'?route.table:{};
+    route.crossing=deepMerge(typeof defaultRouteCrossing==='function'?defaultRouteCrossing():{pathNodeIds:[],legs:[],log:[],spentResources:{}},route.crossing&&typeof route.crossing==='object'?route.crossing:{});
+    route.crossing.pathNodeIds=Array.isArray(route.crossing.pathNodeIds)?route.crossing.pathNodeIds:[];
+    route.crossing.legs=Array.isArray(route.crossing.legs)?route.crossing.legs:[];
+    route.crossing.log=Array.isArray(route.crossing.log)?route.crossing.log:[];
+    route.eventResolution=deepMerge(typeof defaultRouteEventResolutionState==='function'?defaultRouteEventResolutionState():{sessions:{},contracts:[],history:[],lastMessage:''},route.eventResolution&&typeof route.eventResolution==='object'?route.eventResolution:{});
+    route.eventResolution.sessions=route.eventResolution.sessions&&typeof route.eventResolution.sessions==='object'&&!Array.isArray(route.eventResolution.sessions)?route.eventResolution.sessions:{};
+    route.eventResolution.contracts=Array.isArray(route.eventResolution.contracts)?route.eventResolution.contracts:[];
+    route.eventResolution.history=Array.isArray(route.eventResolution.history)?route.eventResolution.history:[];
+
+    const dashboard=deepMerge(defaultActiveSubmarineDashboard(),cloneWorldData(snapshot.operationsDashboard||{}));
+    dashboard.activeCrewIds=Array.isArray(dashboard.activeCrewIds)?dashboard.activeCrewIds:[];
+    dashboard.commissioning=deepMerge(typeof defaultDashboardCommissioningState==='function'?defaultDashboardCommissioningState():{assignedCrewIds:[]},dashboard.commissioning&&typeof dashboard.commissioning==='object'?dashboard.commissioning:{});
+    dashboard.commissioning.assignedCrewIds=Array.isArray(dashboard.commissioning.assignedCrewIds)?dashboard.commissioning.assignedCrewIds:[];
+    dashboard.turnOrder=deepMerge(typeof defaultDashboardTurnOrder==='function'?defaultDashboardTurnOrder():{order:[],rolls:{},history:[]},dashboard.turnOrder&&typeof dashboard.turnOrder==='object'?dashboard.turnOrder:{});
+    dashboard.turnOrder.order=Array.isArray(dashboard.turnOrder.order)?dashboard.turnOrder.order:[];
+    dashboard.turnOrder.history=Array.isArray(dashboard.turnOrder.history)?dashboard.turnOrder.history:[];
+    dashboard.turnOrder.rolls=dashboard.turnOrder.rolls&&typeof dashboard.turnOrder.rolls==='object'&&!Array.isArray(dashboard.turnOrder.rolls)?dashboard.turnOrder.rolls:{};
+    dashboard.startingLocation=deepMerge(typeof defaultDashboardStartingLocationState==='function'?defaultDashboardStartingLocationState():{optionNodeIds:[]},dashboard.startingLocation&&typeof dashboard.startingLocation==='object'?dashboard.startingLocation:{});
+    dashboard.startingLocation.optionNodeIds=Array.isArray(dashboard.startingLocation.optionNodeIds)?dashboard.startingLocation.optionNodeIds:[];
+
+    snapshot.character=character;
+    snapshot.submarine=submarine;
+    snapshot.route=route;
+    snapshot.operationsDashboard=dashboard;
+    snapshot.schemaHydratedAt=new Date().toISOString();
+    return snapshot;
+  }
+
+  function dashboardManagementHydrateActiveRuntimeCollections(){
+    state.character=state.character&&typeof state.character==='object'?state.character:defaultState().character;
+    state.submarine=state.submarine&&typeof state.submarine==='object'?state.submarine:defaultState().submarine;
+    state.route=state.route&&typeof state.route==='object'?state.route:defaultState().route;
+    state.operationsDashboard=state.operationsDashboard&&typeof state.operationsDashboard==='object'?state.operationsDashboard:defaultActiveSubmarineDashboard();
+    state.character.rollLog=Array.isArray(state.character.rollLog)?state.character.rollLog:[];
+    state.character.catalogInventory=Array.isArray(state.character.catalogInventory)?state.character.catalogInventory:[];
+    state.character.consumptionLog=Array.isArray(state.character.consumptionLog)?state.character.consumptionLog:[];
+    state.submarine.upgrades=Array.isArray(state.submarine.upgrades)?state.submarine.upgrades:[];
+    state.submarine.weapons=Array.isArray(state.submarine.weapons)?state.submarine.weapons:[];
+    state.submarine.wikiWeapons=Array.isArray(state.submarine.wikiWeapons)?state.submarine.wikiWeapons:[];
+    state.submarine.wikiAmmo=Array.isArray(state.submarine.wikiAmmo)?state.submarine.wikiAmmo:[];
+    state.submarine.customModules=Array.isArray(state.submarine.customModules)?state.submarine.customModules:[];
+    state.route.jobs=Array.isArray(state.route.jobs)?state.route.jobs:[];
+    state.route.plan=Array.isArray(state.route.plan)?state.route.plan:[];
+    state.operationsDashboard.activeCrewIds=Array.isArray(state.operationsDashboard.activeCrewIds)?state.operationsDashboard.activeCrewIds:[];
+  }
+
+  const activateDashboardManagedVesselBeforeSnapshotHydration=activateDashboardManagedVessel;
+  activateDashboardManagedVessel=function activateDashboardManagedVesselWithSnapshotHydration(vesselId){
+    let stage='hydrate saved vessel snapshot';
+    try{
+      dashboardManagementHydrateManagedSnapshot(vesselId);
+      stage='activate hydrated vessel snapshot';
+      const result=activateDashboardManagedVesselBeforeSnapshotHydration(vesselId);
+      stage='normalize activated runtime collections';
+      dashboardManagementHydrateActiveRuntimeCollections();
+      if(typeof normalizeCharacterInventory==='function')normalizeCharacterInventory();
+      if(typeof normalizeCompatibilityInventory==='function')normalizeCompatibilityInventory();
+      if(typeof normalizePlayerSubmissionSettings==='function')normalizePlayerSubmissionSettings();
+      if(typeof normalizeCrewManagement==='function')normalizeCrewManagement();
+      if(typeof normalizeCargoManagement==='function')normalizeCargoManagement();
+      if(typeof normalizeRouteCrossing==='function')normalizeRouteCrossing();
+      if(typeof normalizeRouteEventResolutionState==='function')normalizeRouteEventResolutionState();
+      return result;
+    }catch(error){
+      const wrapped=new Error(`Managed submarine activation failed while attempting to ${stage}: ${error?.message||String(error)}`);
+      wrapped.cause=error;
+      wrapped.stack=`${wrapped.stack||wrapped.message}\nCaused by:\n${error?.stack||error}`;
+      console.error(wrapped);
+      throw wrapped;
+    }
+  };
+
+  function dashboardManageableCreationSubmarineNames(){
+    syncCustomSubmarines();
+    return Object.keys(SUBMARINES).filter(name=>{
+      const model=SUBMARINES[name];
+      if(model?.custom)return true;
+      return model?.profile?.official===true&&number(model.profile.tier,0)===1;
+    }).sort((left,right)=>{
+      const leftCustom=Boolean(SUBMARINES[left]?.custom);
+      const rightCustom=Boolean(SUBMARINES[right]?.custom);
+      if(leftCustom!==rightCustom)return leftCustom?1:-1;
+      return left.localeCompare(right);
+    });
+  }
+
+  function dashboardManageableCreationSubmarineAllowed(modelName){
+    return dashboardManageableCreationSubmarineNames().includes(String(modelName||''));
+  }
+
+  const createNewManageableSubmarineBeforeTierRestriction=createNewManageableSubmarine;
+  createNewManageableSubmarine=async function createNewManageableSubmarineWithTierRestriction(options={}){
+    const modelName=String(options.modelName||'');
+    if(!dashboardManageableCreationSubmarineAllowed(modelName))throw new Error('New manageable submarines must be an official Tier 1 model or a custom submarine.');
+    return createNewManageableSubmarineBeforeTierRestriction({...options,modelName});
+  };
+
+  async function claimExistingDashboardSubmarine(vesselId,password,managerName,options={}){
+    const record=dashboardManagementSubmarineRecord(vesselId);
+    if(!record)throw new Error('The selected public-world submarine record no longer exists.');
+    if(dashboardManagementCredential(vesselId)?.verifier)throw new Error('This submarine is already claimed.');
+    const group=dashboardManagementResolveGroup(options.groupId,options.newGroupName);
+    dashboardManagementPairVesselToGroup(vesselId,group);
+    const authority=normalizeDashboardManagementAuthority();
+    if(!authority.vesselSnapshots[vesselId]){
+      const rawModel=record.submarine?.model||(typeof record.model==='string'?record.model:record.model?.name||record.model?.id)||'Barsuk';
+      const modelName=SUBMARINES[rawModel]?rawModel:'Barsuk';
+      const submarine=dashboardManagementBuildSubmarineState(vesselId,record.name||record.submarine?.name||modelName,modelName,group);
+      const route=deepMerge(defaultState().route,{});
+      route.activeSubmarineId=vesselId;
+      route.activeGroupId=group.groupId;
+      const operationsDashboard=defaultActiveSubmarineDashboard();
+      operationsDashboard.activeSubmarineId=vesselId;
+      operationsDashboard.activeGroupId=group.groupId;
+      operationsDashboard.activeNodeId=group.currentNodeId||group.startingNodeId||'';
+      authority.vesselSnapshots[vesselId]={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:normalizeWorldHub().worldId,vesselId,groupId:group.groupId,submarine,route,operationsDashboard,character:cloneWorldData(state.character||{}),capturedAt:new Date().toISOString(),claimedFromExistingPublicRecord:true};
+    }
+    save();
+    return createDashboardManagementCredential(vesselId,password,managerName,Boolean(options.remember));
+  }
+
+  const dashboardManagementAuthDiagnosticsBeforeRecovery=dashboardManagementAuthDiagnostics;
+  dashboardManagementAuthDiagnostics=function dashboardManagementAuthDiagnosticsWithRecovery(){
+    const result=dashboardManagementAuthDiagnosticsBeforeRecovery();
+    const authority=normalizeDashboardManagementAuthority();
+    let recoveryReadyCount=0;
+    let legacyCredentialCount=0;
+    for(const [vesselId,credential] of Object.entries(authority.submarineCredentials||{})){
+      const recovery=credential.recovery;
+      if(recovery?.verifier){
+        recoveryReadyCount+=1;
+        if(!recovery.salt)result.issues.push(`Submarine ${vesselId} has a recovery verifier without a salt.`);
+        if(number(recovery.iterations)<100000)result.issues.push(`Submarine ${vesselId} uses too few recovery-code derivation iterations.`);
+        if('code' in recovery||'recoveryCode' in recovery)result.issues.push(`Submarine ${vesselId} stores a plaintext recovery code in the world save.`);
+      }else legacyCredentialCount+=1;
+    }
+    const creationModels=dashboardManageableCreationSubmarineNames();
+    const invalidCreationModels=creationModels.filter(name=>!SUBMARINES[name]?.custom&&number(SUBMARINES[name]?.profile?.tier,0)!==1);
+    if(invalidCreationModels.length)result.issues.push(`New manageable submarine list contains non-Tier-1 official models: ${invalidCreationModels.join(', ')}.`);
+    result.recoveryVersion=DASHBOARD_MANAGEMENT_RECOVERY_VERSION;
+    result.recoveryReadyCount=recoveryReadyCount;
+    result.legacyCredentialCount=legacyCredentialCount;
+    result.manageableCreationModels=creationModels;
+    result.valid=!result.issues.length;
+    return result;
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_AUTH_DIAGNOSTICS=dashboardManagementAuthDiagnostics();

@@ -1,0 +1,277 @@
+
+  const GENERAL_ENCOUNTER_LETHALITY = globalThis.BAROTRAUMA_ENCOUNTER_LETHALITY || { schemaVersion: '0', profiles: [] };
+  const GENERAL_ENCOUNTER_LETHALITY_VERSION = GENERAL_ENCOUNTER_LETHALITY.schemaVersion || '1.0.0';
+  const GENERAL_ENCOUNTER_LETHALITY_MAP = Object.fromEntries((GENERAL_ENCOUNTER_LETHALITY.profiles || []).map(profile => [profile.id, profile]));
+  const GENERAL_ENCOUNTER_LIFE_STATUSES = ['Onboard','Injured','Dead'];
+
+  function normalizeGeneralEncounterLifeState() {
+    state.character.status = GENERAL_ENCOUNTER_LIFE_STATUSES.includes(state.character.status) ? state.character.status : 'Onboard';
+    state.character.conditions = String(state.character.conditions || '');
+    return state.character.status;
+  }
+
+  function addGeneralEncounterEffects(base = {}, extra = {}) {
+    const result = cloneEncounterData(base || {}) || {};
+    for (const [key, value] of Object.entries(extra || {})) {
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        result[key] = result[key] && typeof result[key] === 'object' && !Array.isArray(result[key]) ? result[key] : {};
+        for (const [nestedKey, nestedValue] of Object.entries(value)) result[key][nestedKey] = number(result[key][nestedKey]) + number(nestedValue);
+      } else result[key] = number(result[key]) + number(value);
+    }
+    return result;
+  }
+
+  function generalEncounterLethalityStageFactor(stage) {
+    return ({ contact: 0.55, crisis: 1, aftermath: 0.75, challenge: 1 })[stage] || 1;
+  }
+
+  function scaledGeneralEncounterCasualty(raw, event) {
+    const severity = generalEncounterSeverityProfile(event.encounterSeverityLevel || event.encounterLevel || 1);
+    const stageFactor = generalEncounterLethalityStageFactor(event.encounterStage);
+    const severityFactor = Math.max(0.75, number(severity.effectScale, 1));
+    const level = clamp(event.encounterSeverityLevel || event.encounterLevel || 1, 1, 10);
+    const fatalityFactor = Math.max(0.5, stageFactor);
+    const countBonus = raw.target === 'multipleCrew' && level >= 7 ? 1 : 0;
+    return {
+      ...cloneEncounterData(raw),
+      count: raw.target === 'allCrew' ? 0 : Math.max(1, number(raw.count, 1) + countBonus),
+      damage: Math.max(1, Math.round(Math.max(1, number(raw.damage, 1)) * severityFactor * stageFactor)),
+      deathChance: clamp(Math.round((number(raw.deathChance) + Math.max(0, level - 1) * 2 + (event.dangerousRoute ? 10 : 0)) * fatalityFactor), 0, 95),
+      catastrophicChance: clamp(Math.round((number(raw.catastrophicChance) + Math.max(0, level - 4) * 2 + (event.dangerousRoute ? 5 : 0)) * fatalityFactor), 0, 85)
+    };
+  }
+
+  function generalEncounterCasualtyTargetLabel(profile, event) {
+    if (profile.target === 'operator') return 'resolving character';
+    if (profile.target === 'randomCrew') return 'one independent onboard character';
+    if (profile.target === 'multipleCrew') return `${Math.max(1, number(profile.count, 1))} onboard characters`;
+    if (profile.target === 'allCrew') return 'every onboard character';
+    if (profile.target === 'approach') return ['Strength','Agility'].includes(event?.stat) ? 'resolving character' : 'one independent onboard character';
+    return 'onboard character';
+  }
+
+  function generalEncounterCasualtyText(event) {
+    const profiles = Array.isArray(event?.failureCasualties) ? event.failureCasualties : [];
+    if (!profiles.length) return 'No direct casualty check';
+    return profiles.map(profile => `${generalEncounterCasualtyTargetLabel(profile, event)}: ${number(profile.damage)} S.A.I.C. damage; ${number(profile.deathChance)}% fatality check at incapacitation${number(profile.catastrophicChance) ? `; ${number(profile.catastrophicChance)}% immediate catastrophic fatality` : ''}`).join(' · ');
+  }
+
+  const buildGeneralEncounterBeforeLethality = buildGeneralEncounter;
+  buildGeneralEncounter = function buildGeneralEncounterWithLethality(template, level, rng = Math.random, options = {}) {
+    const event = buildGeneralEncounterBeforeLethality(template, level, rng, options);
+    const profile = GENERAL_ENCOUNTER_LETHALITY_MAP[template?.id];
+    if (!event?.encounterTemplateId || !profile) return event;
+    const severity = generalEncounterSeverityProfile(event.encounterSeverityLevel || level);
+    const factor = Math.max(0.75, number(severity.effectScale, 1)) * generalEncounterLethalityStageFactor(event.encounterStage);
+    const additionalEffects = scaledEncounterEffects(profile.additionalFailureEffects || {}, factor);
+    event.failureEffects = addGeneralEncounterEffects(event.failureEffects, additionalEffects);
+    event.failureCasualties = (profile.casualties || []).map(item => scaledGeneralEncounterCasualty(item, event));
+    event.lethalityProfileId = profile.id;
+    event.lethalityVersion = GENERAL_ENCOUNTER_LETHALITY_VERSION;
+    event.failure = `${event.failure} Casualty risk: ${generalEncounterCasualtyText(event)}.`;
+    return event;
+  };
+
+  function generalEncounterHash(text) {
+    if (typeof seededHash === 'function') return Math.abs(seededHash(text));
+    let hash = 2166136261;
+    for (const character of String(text)) {
+      hash ^= character.charCodeAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+    return Math.abs(hash >>> 0);
+  }
+
+  function generalEncounterChance(seed, chance) {
+    return generalEncounterHash(seed) % 100 + 1 <= clamp(chance, 0, 100);
+  }
+
+  function localGeneralEncounterTarget() {
+    normalizeGeneralEncounterLifeState();
+    return {
+      id: 'local',
+      type: 'local',
+      name: state.character.name || 'Current Character',
+      current: state.character.current,
+      status: state.character.status,
+      record: state.character
+    };
+  }
+
+  function generalEncounterRosterTargets(includeInjured = true) {
+    if (typeof normalizeCrewManagement !== 'function') return [];
+    const management = normalizeCrewManagement();
+    const localCharacterId = typeof normalizePlayerSubmissionSettings === 'function' ? normalizePlayerSubmissionSettings().characterId : '';
+    return management.roster
+      .filter(record => record.active && record.approval === 'Accepted' && (record.status === 'Onboard' || (includeInjured && record.status === 'Injured')))
+      .filter(record => !localCharacterId || record.sourceCharacterId !== localCharacterId)
+      .map(record => ({
+        id: record.rosterId,
+        type: 'crew',
+        name: record.characterName || 'Unnamed Crew Member',
+        current: record.current,
+        status: record.status,
+        record
+      }));
+  }
+
+  function allLivingGeneralEncounterTargets() {
+    const targets = [];
+    const local = localGeneralEncounterTarget();
+    if (local.status !== 'Dead') targets.push(local);
+    targets.push(...generalEncounterRosterTargets(true).filter(target => target.status !== 'Dead'));
+    return targets;
+  }
+
+  function generalEncounterRollOperator() {
+    const management = typeof normalizeCrewManagement === 'function' ? normalizeCrewManagement() : null;
+    if (management?.activeCrewId && management.activeCrewId !== 'local') {
+      const record = management.roster.find(item => item.rosterId === management.activeCrewId);
+      if (record && record.active && record.approval === 'Accepted' && record.status !== 'Dead') {
+        return { id: record.rosterId, type: 'crew', name: record.characterName || 'Crew Member', current: record.current, status: record.status, record };
+      }
+    }
+    const local = localGeneralEncounterTarget();
+    if (local.status !== 'Dead') return local;
+    return generalEncounterRosterTargets(true).find(target => target.status !== 'Dead') || local;
+  }
+
+  function deterministicGeneralEncounterTargets(pool, count, seed) {
+    const remaining = [...pool];
+    const selected = [];
+    while (remaining.length && selected.length < count) {
+      const index = generalEncounterHash(`${seed}|${selected.length}`) % remaining.length;
+      selected.push(remaining.splice(index, 1)[0]);
+    }
+    return selected;
+  }
+
+  function targetsForGeneralEncounterCasualty(profile, event, holder, casualtyIndex) {
+    const all = allLivingGeneralEncounterTargets();
+    if (!all.length) return [];
+    const operator = generalEncounterRollOperator();
+    const independent = all.filter(target => target.id !== operator.id);
+    const seed = `${event.id}|${holder.id || 'holder'}|${casualtyIndex}|targets`;
+    let targetMode = profile.target;
+    if (targetMode === 'approach') targetMode = ['Strength','Agility'].includes(event.stat) ? 'operator' : 'randomCrew';
+    if (targetMode === 'operator') return operator.status === 'Dead' ? deterministicGeneralEncounterTargets(all, 1, seed) : [operator];
+    if (targetMode === 'randomCrew') return deterministicGeneralEncounterTargets(independent.length ? independent : all, 1, seed);
+    if (targetMode === 'multipleCrew') return deterministicGeneralEncounterTargets(all, Math.min(all.length, Math.max(1, number(profile.count, 1))), seed);
+    if (targetMode === 'allCrew') return all;
+    return deterministicGeneralEncounterTargets(all, 1, seed);
+  }
+
+  function appendGeneralEncounterCondition(target, text) {
+    const condition = String(text || '').trim();
+    if (!condition) return;
+    const existing = String(target.record.conditions || '').trim();
+    if (!existing.includes(condition)) target.record.conditions = existing ? `${existing}; ${condition}` : condition;
+  }
+
+  function setGeneralEncounterTargetStatus(target, status) {
+    if (target.type === 'local') {
+      state.character.status = status;
+      target.status = status;
+      return;
+    }
+    target.record.status = status;
+    target.status = status;
+    if (status === 'Dead' && typeof normalizeCrewManagement === 'function') {
+      const management = normalizeCrewManagement();
+      if (management.activeCrewId === target.id) management.activeCrewId = 'local';
+    }
+  }
+
+  function chooseGeneralEncounterDamageStat(target, profile, seed) {
+    const requested = Array.isArray(profile.stats) && profile.stats.length ? profile.stats : ['Strength','Agility','Intelligence','Charisma'];
+    const usable = requested.filter(stat => stat in target.current && number(target.current[stat]) > 0);
+    const pool = usable.length ? usable : Object.keys(target.current).filter(stat => number(target.current[stat]) > 0);
+    if (!pool.length) return requested[0] || 'Strength';
+    return pool[generalEncounterHash(seed) % pool.length];
+  }
+
+  function applyGeneralEncounterCasualty(target, profile, event, holder, casualtyIndex, targetIndex) {
+    if (!target || target.status === 'Dead') return `${target?.name || 'Character'} was already dead`;
+    const seed = `${event.id}|${holder.id || 'holder'}|${casualtyIndex}|${target.id}|${targetIndex}`;
+    const stat = chooseGeneralEncounterDamageStat(target, profile, `${seed}|stat`);
+    const before = Math.max(0, number(target.current[stat]));
+    const damage = Math.max(1, number(profile.damage, 1));
+    target.current[stat] = Math.max(0, before - damage);
+    const critical = target.current[stat] <= 0;
+    const previouslyInjured = target.status === 'Injured';
+    const catastrophic = generalEncounterChance(`${seed}|catastrophic`, profile.catastrophicChance);
+    const fatalAtZero = critical && (previouslyInjured || generalEncounterChance(`${seed}|fatal`, profile.deathChance));
+    const dead = catastrophic || fatalAtZero;
+    appendGeneralEncounterCondition(target, `${event.name}: ${profile.condition || 'Encounter trauma'}`);
+    if (dead) {
+      setGeneralEncounterTargetStatus(target, 'Dead');
+      for (const key of Object.keys(target.current)) target.current[key] = 0;
+      appendGeneralEncounterCondition(target, 'DECEASED');
+      return `${target.name} killed (${stat} ${before}→0)`;
+    }
+    setGeneralEncounterTargetStatus(target, 'Injured');
+    return `${target.name} injured (${stat} ${before}→${target.current[stat]})`;
+  }
+
+  function applyGeneralEncounterCasualties(holder, event, profiles) {
+    const results = [];
+    profiles.forEach((profile, casualtyIndex) => {
+      const targets = targetsForGeneralEncounterCasualty(profile, event, holder, casualtyIndex);
+      targets.forEach((target, targetIndex) => results.push(applyGeneralEncounterCasualty(target, profile, event, holder, casualtyIndex, targetIndex)));
+    });
+    if (typeof syncCrewResourceIfEnabled === 'function') syncCrewResourceIfEnabled();
+    return results.filter(Boolean);
+  }
+
+  const applyGeneralEncounterEffectsBeforeLethality = applyGeneralEncounterEffects;
+  applyGeneralEncounterEffects = function applyGeneralEncounterEffectsWithCasualties(holder, event, status, scope = 'encounter') {
+    const baseSummary = applyGeneralEncounterEffectsBeforeLethality(holder, event, status, scope);
+    if (!holder || status !== 'failure' || !event?.encounterTemplateId) return baseSummary;
+    const casualtyResults = [];
+    if (!holder.encounterCasualtiesApplied && Array.isArray(event.failureCasualties) && event.failureCasualties.length) {
+      casualtyResults.push(...applyGeneralEncounterCasualties(holder, event, event.failureCasualties));
+      holder.encounterCasualtiesApplied = true;
+    }
+    if (number(state.submarine.hullCurrent) <= 0 && !holder.hullCollapseCasualtiesApplied) {
+      casualtyResults.push(...applyGeneralEncounterCasualties(holder, event, [{
+        target: 'allCrew',
+        count: 0,
+        stats: ['Strength','Agility'],
+        damage: 4,
+        deathChance: 95,
+        catastrophicChance: 75,
+        condition: 'Catastrophic hull collapse and uncontrolled decompression.'
+      }]));
+      holder.hullCollapseCasualtiesApplied = true;
+      state.route.crossingMessage = 'Hull integrity has failed. Catastrophic mass-casualty checks were applied.';
+    }
+    if (casualtyResults.length) {
+      const casualtySummary = casualtyResults.join(' · ');
+      holder.encounterCasualtySummary = casualtySummary;
+      holder.encounterEffectsSummary = [holder.encounterEffectsSummary, casualtySummary].filter(Boolean).join(' · ');
+      if (scope === 'crossing' && typeof crossingLog === 'function') crossingLog(normalizeRouteCrossing(), `Casualties from ${event.name}: ${casualtySummary}.`);
+      save();
+    }
+    return holder.encounterEffectsSummary || baseSummary;
+  };
+
+  const rollCrossingEventBeforeGeneralLethality = rollCrossingEvent;
+  rollCrossingEvent = function rollCrossingEventWithCrewOperator(slotId) {
+    const slot = state.route.plan.find(item => item.id === slotId);
+    const event = crossingSelectedEvent(slot);
+    if (!slot || !event) return false;
+    const operator = generalEncounterRollOperator();
+    if (!operator || operator.status === 'Dead') {
+      state.route.crossingMessage = 'No living selected character is available to resolve the encounter.';
+      save();
+      return false;
+    }
+    const stat = event.stat in operator.current ? event.stat : 'Intelligence';
+    const dice = [d6(), d6()];
+    const modifier = number(operator.current[stat]);
+    const total = dice[0] + dice[1] + modifier;
+    const dc = number(event.dc, 8);
+    return resolveCrossingEvent(slotId, total >= dc ? 'success' : 'failure', `${operator.name}: ${dice[0]} + ${dice[1]} + ${modifier} ${stat} = ${total} vs ${dc}`);
+  };
+
+  normalizeGeneralEncounterLifeState();

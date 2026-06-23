@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "2.2.0",
+  "worldSaveSchema": "barotrauma-public-world-save",
+  "submissionSchema": "barotrauma-world-submission",
+  "canonicalStart": "2175-01-01T00:00:00.000Z",
+  "realEpoch": "2026-06-20T08:00:00.000Z",
+  "timeScale": 1,
+  "mapDefaults": {
+    "rings": 48,
+    "minimumCenterVoyages": 48,
+    "totalLocations": 960,
+    "stationTarget": 180,
+    "branching": 48,
+    "shellRadius": 7008,
+    "baselineShellRadius": 292,
+    "previousShellRadius": 1460,
+    "shellRadiusMultiplier": 24,
+    "minimumNodesPerRing": 8,
+    "maximumRings": 80,
+    "maximumLocations": 1800,
+    "maximumStations": 400,
+    "maximumShellRadius": 14000
+  },
+  "locationLevelRules": {
+    "levels": 10,
+    "outermostLevel": 1,
+    "innermostNonCoreLevel": 9,
+    "coreLevel": 10,
+    "coreLocationId": "eye-of-europa",
+    "levelFormula": "ring 0 => 10; otherwise 1 + floor((rings - ring) * 9 / rings), clamped to 1..9",
+    "commercialStationLevels": [1, 2, 3, 4, 5, 7, 8],
+    "derelictOnlyLevels": [6],
+    "precursorOnlyLevels": [9],
+    "uniqueCore": true
+  },
+  "submissionKinds": [
+    "crew",
+    "submarine",
+    "location",
+    "route",
+    "trade",
+    "research",
+    "faction",
+    "game-state"
+  ],
+  "researchRules": {
+    "minimumMarks": 25000,
+    "minimumSupplies": 50,
+    "minimumResearchDays": 30,
+    "priceMultiplier": 25,
+    "excessMarksMultiplier": 100000,
+    "excessSuppliesMultiplier": 100,
+    "excessDaysMultiplier": 365,
+    "tierDays": 60
+  }
+}

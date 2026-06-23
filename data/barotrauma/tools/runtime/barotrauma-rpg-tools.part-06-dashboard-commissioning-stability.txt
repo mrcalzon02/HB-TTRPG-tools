@@ -1,0 +1,56 @@
+
+  activeDashboardAcceptedCrew = function activeDashboardCommissionedOnboardCrew() {
+    const commissioning = normalizeDashboardCommissioningState();
+    const assigned = new Set(commissioning.assignedCrewIds);
+    return normalizeCrewManagement().roster.filter(record => {
+      const crewId = activeDashboardCrewId(record);
+      return crewId
+        && assigned.has(crewId)
+        && record.active
+        && record.approval === 'Accepted'
+        && !['Reserve','Away'].includes(record.status);
+    });
+  };
+
+  const enforceDashboardCommissioningBoundariesBeforeStability = enforceDashboardCommissioningBoundaries;
+  enforceDashboardCommissioningBoundaries = function enforceDashboardCommissioningBoundariesStable() {
+    enforceDashboardCommissioningBoundariesBeforeStability();
+    if (!activeSubmarineDashboardContext()) return;
+    const permission = dashboardCrewAdditionPermission();
+    if (permission.allowed) return;
+    const assigned = new Set(normalizeDashboardCommissioningState().assignedCrewIds);
+    for (const record of normalizeCrewManagement().roster) {
+      const crewId = activeDashboardCrewId(record);
+      const statusControl = root.querySelector(`.crew-status[data-id="${record.rosterId}"]`);
+      const approvalControl = root.querySelector(`.crew-approval[data-id="${record.rosterId}"]`);
+      const activeControl = root.querySelector(`.crew-active[data-id="${record.rosterId}"]`);
+      const alreadyAboard = assigned.has(crewId) && ['Onboard','Injured','Missing','Dead'].includes(record.status);
+      if (statusControl && !alreadyAboard) {
+        statusControl.disabled = true;
+        statusControl.title = permission.message;
+      }
+      if (approvalControl && record.approval !== 'Accepted') {
+        approvalControl.disabled = true;
+        approvalControl.title = permission.message;
+      }
+      if (activeControl && !record.active) {
+        activeControl.disabled = true;
+        activeControl.title = permission.message;
+      }
+    }
+  };
+
+  const dashboardBoundaryDiagnosticsBeforeCommissioningStability = dashboardBoundaryDiagnostics;
+  dashboardBoundaryDiagnostics = function dashboardBoundaryDiagnosticsWithCrewTransitionStability() {
+    const result = dashboardBoundaryDiagnosticsBeforeCommissioningStability();
+    const activeIds = new Set(activeDashboardAcceptedCrew().map(activeDashboardCrewId));
+    for (const record of normalizeCrewManagement().roster) {
+      if (['Reserve','Away'].includes(record.status) && activeIds.has(activeDashboardCrewId(record))) {
+        result.issues.push(`Reserve or away crew ${record.characterName} is incorrectly counted as active aboard the submarine.`);
+      }
+    }
+    result.valid = !result.issues.length;
+    return result;
+  };
+
+  normalizeActiveSubmarineDashboard(true);

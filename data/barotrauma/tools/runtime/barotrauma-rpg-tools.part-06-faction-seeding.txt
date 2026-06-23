@@ -1,0 +1,460 @@
+
+  const FACTION_REGISTRY = globalThis.BAROTRAUMA_FACTION_REGISTRY || { schemaVersion: '0', districts: [], umbrellas: [], organizations: [], relations: {}, seeding: {} };
+  const FACTION_SEED_VERSION = FACTION_REGISTRY.schemaVersion || '1.0.0';
+  const FACTION_ORG_MAP = Object.fromEntries((FACTION_REGISTRY.organizations || []).map(item => [item.id, item]));
+  const FACTION_UMBRELLA_MAP = Object.fromEntries((FACTION_REGISTRY.umbrellas || []).map(item => [item.id, item]));
+  const FACTION_DISTRICT_MAP = Object.fromEntries((FACTION_REGISTRY.districts || []).map(item => [item.id, item]));
+
+  if (!WORLD_SUBMISSION_KINDS.includes('faction')) WORLD_SUBMISSION_KINDS.push('faction');
+
+  const defaultPublicWorldStateBeforeFactions = defaultPublicWorldState;
+  defaultPublicWorldState = function defaultPublicWorldStateWithFactions() {
+    return {
+      ...defaultPublicWorldStateBeforeFactions(),
+      factions: {},
+      districts: {},
+      stationInfluence: {},
+      factionRelations: {},
+      factionJournal: []
+    };
+  };
+
+  const normalizePublicWorldStateBeforeFactions = normalizePublicWorldState;
+  normalizePublicWorldState = function normalizePublicWorldStateWithFactions(raw) {
+    const publicState = normalizePublicWorldStateBeforeFactions(raw);
+    for (const key of ['factions', 'districts', 'stationInfluence', 'factionRelations']) {
+      if (!publicState[key] || typeof publicState[key] !== 'object' || Array.isArray(publicState[key])) publicState[key] = {};
+    }
+    publicState.factionJournal = Array.isArray(publicState.factionJournal) ? publicState.factionJournal : [];
+    return publicState;
+  };
+
+  function factionDistrictForNode(node, map = state.world?.map) {
+    const outerBias = Number.isFinite(Number(node?.outerBias)) ? Number(node.outerBias) : number(node?.ring) / Math.max(1, number(map?.rings, 48));
+    return (FACTION_REGISTRY.districts || []).find(item => outerBias >= number(item.min) && outerBias < number(item.max)) || FACTION_REGISTRY.districts?.[FACTION_REGISTRY.districts.length - 1] || { id: 'unassigned', name: 'Unassigned Waters', economy: [] };
+  }
+
+  function seededShuffle(values, rng) {
+    const result = [...values];
+    for (let index = result.length - 1; index > 0; index -= 1) {
+      const target = Math.floor(rng() * (index + 1));
+      [result[index], result[target]] = [result[target], result[index]];
+    }
+    return result;
+  }
+
+  function weightedFactionChoice(values, rng, districtId, excluded = new Set()) {
+    const eligible = values.filter(item => !excluded.has(item.id));
+    if (!eligible.length) return null;
+    const weighted = eligible.map(item => {
+      let weight = Math.max(0.01, number(item.weight, 1));
+      if ((item.districts || []).includes(districtId)) weight *= 5;
+      else weight *= 0.22;
+      if (item.parent === 'europan-coalition' && districtId === 'coalition-core-lanes') weight *= 1.8;
+      if (item.parent === 'jovian-separatists' && districtId === 'separatist-marches') weight *= 1.9;
+      if (item.parent === 'corporate-enclaves' && districtId === 'industrial-distribution-belt') weight *= 1.7;
+      if (item.parent === 'criminal-cartels' && ['deep-resource-frontier', 'central-exclusion-zone'].includes(districtId)) weight *= 1.8;
+      if (item.parent === 'standard-union-208' && ['outer-surface-gateways', 'industrial-distribution-belt', 'contested-colony-arc'].includes(districtId)) weight *= 1.5;
+      return { item, weight };
+    });
+    const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+    let roll = rng() * total;
+    for (const entry of weighted) {
+      roll -= entry.weight;
+      if (roll <= 0) return entry.item;
+    }
+    return weighted[weighted.length - 1].item;
+  }
+
+  function factionTitlePair(organization) {
+    const type = organization?.type || '';
+    if (/military|militia|security|privateer/i.test(type)) return ['Commandant', 'Quartermaster'];
+    if (/union|labor|mutual aid/i.test(type)) return ['Chapter Representative', 'Hall Steward'];
+    if (/corporation|distributor|mining|energy|medical/i.test(type)) return ['Station Director', 'Contract Comptroller'];
+    if (/cartel|syndicate|smuggl/i.test(type)) return ['Local Boss', 'Route Keeper'];
+    if (/council|administration|government|bureau/i.test(type)) return ['Administrator', 'Civil Comptroller'];
+    return ['Station Administrator', 'Quartermaster'];
+  }
+
+  function factionRelationValue(leftId, rightId) {
+    if (leftId === rightId) return 100;
+    const left = FACTION_UMBRELLA_MAP[leftId];
+    const right = FACTION_UMBRELLA_MAP[rightId];
+    if (!left || !right) return 0;
+    if ([leftId, rightId].includes('church-of-the-husk')) return number(FACTION_REGISTRY.relations?.allVsHusk, -80);
+    if ([leftId, rightId].sort().join('|') === ['europan-coalition', 'jovian-separatists'].sort().join('|')) return number(FACTION_REGISTRY.relations?.coalitionVsSeparatist, -70);
+    if ([leftId, rightId].includes('criminal-cartels') && ([left.type, right.type].includes('government') || [left.type, right.type].includes('government-opposition'))) return number(FACTION_REGISTRY.relations?.governmentVsCriminal, -55);
+    if ([leftId, rightId].includes('standard-union-208')) {
+      const other = leftId === 'standard-union-208' ? rightId : leftId;
+      if (other === 'corporate-enclaves') return number(FACTION_REGISTRY.relations?.unionVsCorporations, -15);
+      if (other === 'criminal-cartels') return number(FACTION_REGISTRY.relations?.unionVsCriminal, -5);
+      if (['europan-coalition', 'jovian-separatists', 'independent-stations'].includes(other)) return number(FACTION_REGISTRY.relations?.unionVsGovernments, 10);
+    }
+    if ([leftId, rightId].includes('children-of-the-honkmother') && ['europan-coalition', 'corporate-enclaves'].some(id => [leftId, rightId].includes(id))) return number(FACTION_REGISTRY.relations?.honkmotherVsAuthority, -20);
+    if ([leftId, rightId].includes('independent-stations')) return number(FACTION_REGISTRY.relations?.independentNeutrality, 5);
+    return 0;
+  }
+
+  function buildFactionRelations() {
+    const result = {};
+    for (const left of FACTION_REGISTRY.umbrellas || []) {
+      for (const right of FACTION_REGISTRY.umbrellas || []) result[[left.id, right.id].sort().join('|')] = factionRelationValue(left.id, right.id);
+    }
+    return result;
+  }
+
+  function influenceRecord(organization, visibility, strength) {
+    const umbrella = FACTION_UMBRELLA_MAP[organization.parent] || { id: organization.parent, name: organization.parent, color: '#888' };
+    return {
+      id: organization.id,
+      name: organization.name,
+      parentId: umbrella.id,
+      parentName: umbrella.name,
+      type: organization.type,
+      visibility,
+      strength: clamp(strength, 1, 100),
+      source: organization.source || ''
+    };
+  }
+
+  function stationInfluencesFor(node, primary, rng) {
+    const district = node.districtId;
+    const visible = [];
+    const hidden = [];
+    const excluded = new Set([primary.id]);
+    const stationOrganizations = (FACTION_REGISTRY.organizations || []).filter(item => item.station && !item.hidden);
+    const unionOrganizations = stationOrganizations.filter(item => item.parent === 'standard-union-208');
+    const criminalOrganizations = stationOrganizations.filter(item => item.parent === 'criminal-cartels');
+    const ordinaryOrganizations = stationOrganizations.filter(item => !['standard-union-208', 'criminal-cartels'].includes(item.parent));
+    const cultOrganizations = (FACTION_REGISTRY.organizations || []).filter(item => item.hidden);
+
+    const ordinary = weightedFactionChoice(ordinaryOrganizations, rng, district, excluded);
+    if (ordinary && ordinary.parent !== primary.parent) {
+      visible.push(influenceRecord(ordinary, 'public', 20 + Math.round(rng() * 40)));
+      excluded.add(ordinary.id);
+    }
+    if (primary.parent !== 'standard-union-208' && rng() < number(FACTION_REGISTRY.seeding?.unionPresenceChance, 0.58)) {
+      const union = weightedFactionChoice(unionOrganizations, rng, district, excluded);
+      if (union) {
+        visible.push(influenceRecord(union, 'public', 20 + Math.round(rng() * 50)));
+        excluded.add(union.id);
+      }
+    }
+    if (primary.parent !== 'criminal-cartels' && rng() < number(FACTION_REGISTRY.seeding?.criminalPresenceChance, 0.24)) {
+      const criminal = weightedFactionChoice(criminalOrganizations, rng, district, excluded);
+      if (criminal) {
+        visible.push(influenceRecord(criminal, rng() < 0.45 ? 'covert' : 'public', 10 + Math.round(rng() * 45)));
+        excluded.add(criminal.id);
+      }
+    }
+    const honkChance = number(FACTION_REGISTRY.seeding?.honkmotherPresenceChance, 0.13) * (district === 'contested-colony-arc' ? 1.5 : 1);
+    const huskChance = number(FACTION_REGISTRY.seeding?.huskPresenceChance, 0.08) * (['hadal-research-zone', 'central-exclusion-zone'].includes(district) ? 2.2 : 0.7);
+    if (rng() < honkChance) {
+      const cult = weightedFactionChoice(cultOrganizations.filter(item => item.parent === 'children-of-the-honkmother'), rng, district, excluded);
+      if (cult) hidden.push(influenceRecord(cult, 'hidden', 5 + Math.round(rng() * 45)));
+    }
+    if (rng() < huskChance) {
+      const cult = weightedFactionChoice(cultOrganizations.filter(item => item.parent === 'church-of-the-husk'), rng, district, excluded);
+      if (cult) hidden.push(influenceRecord(cult, 'hidden', 5 + Math.round(rng() * 55)));
+    }
+    return { visible: visible.slice(0, number(FACTION_REGISTRY.seeding?.secondaryInfluenceMax, 3)), hidden };
+  }
+
+  function seedWorldFactions(map = state.world?.map, force = false) {
+    if (!map?.nodes) return null;
+    const world = normalizeExpandedWorld();
+    const hub = normalizeWorldHub();
+    const salt = number(world.factionSeedSalt, 0);
+    if (!force && map.factionSeedVersion === FACTION_SEED_VERSION && map.factionSeedSalt === salt) return hub.publicState;
+    const rng = seededRandom(`${map.seed}|${hub.worldId}|factions|${FACTION_SEED_VERSION}|${salt}`);
+    const publicState = normalizePublicWorldState(hub.publicState);
+    publicState.factions = {};
+    publicState.districts = {};
+    publicState.stationInfluence = {};
+    publicState.factionRelations = buildFactionRelations();
+
+    for (const umbrella of FACTION_REGISTRY.umbrellas || []) publicState.factions[umbrella.id] = { ...umbrella, stationIds: [], visibleInfluence: 0, hiddenCells: 0, organizationCounts: {} };
+    for (const district of FACTION_REGISTRY.districts || []) publicState.districts[district.id] = { ...district, nodeIds: [], stationIds: [], organizationCounts: {}, dominantOrganizations: [] };
+    for (const node of map.nodes) {
+      const district = factionDistrictForNode(node, map);
+      node.districtId = district.id;
+      node.districtName = district.name;
+      publicState.districts[district.id]?.nodeIds.push(node.id);
+    }
+
+    const stations = seededShuffle(map.nodes.filter(node => node.type === 'station'), rng);
+    const primaryOrganizations = (FACTION_REGISTRY.organizations || []).filter(item => item.station && !item.hidden);
+    const unassigned = new Set(stations.map(node => node.id));
+    const guaranteed = new Map();
+    if (FACTION_REGISTRY.seeding?.guaranteeEveryStationEligibleOrganization) {
+      for (const organization of seededShuffle(primaryOrganizations, rng)) {
+        const preferred = stations.filter(node => unassigned.has(node.id) && (organization.districts || []).includes(node.districtId));
+        const fallback = stations.filter(node => unassigned.has(node.id));
+        const selected = (preferred.length ? preferred : fallback)[Math.floor(rng() * Math.max(1, (preferred.length ? preferred : fallback).length))];
+        if (!selected) break;
+        guaranteed.set(selected.id, organization);
+        unassigned.delete(selected.id);
+      }
+    }
+
+    for (const node of stations) {
+      const primary = guaranteed.get(node.id) || weightedFactionChoice(primaryOrganizations, rng, node.districtId) || primaryOrganizations[0];
+      const umbrella = FACTION_UMBRELLA_MAP[primary.parent] || { id: primary.parent, name: primary.parent, color: '#888' };
+      const titles = factionTitlePair(primary);
+      const influences = stationInfluencesFor(node, primary, rng);
+      node.factionId = primary.id;
+      node.faction = primary.name;
+      node.parentFactionId = umbrella.id;
+      node.parentFaction = umbrella.name;
+      node.factionColor = umbrella.color;
+      node.organizationType = primary.type;
+      node.specialty = (primary.trade || []).join(', ') || node.specialty || 'General trade';
+      node.locals = `${node.name} ${titles[0]}; ${node.name} ${titles[1]}`;
+      node.visibleInfluences = influences.visible;
+      node.hiddenInfluences = influences.hidden;
+      node.details = `${umbrella.name} — ${primary.name}. ${node.districtName}. ${node.specialty}. Important locals: ${node.locals}.`;
+      publicState.stationInfluence[node.id] = {
+        nodeId: node.id,
+        stationName: node.name,
+        districtId: node.districtId,
+        primary: influenceRecord(primary, 'primary', 100),
+        visible: cloneWorldData(influences.visible),
+        hidden: cloneWorldData(influences.hidden),
+        updatedAt: new Date().toISOString()
+      };
+      const factionState = publicState.factions[umbrella.id];
+      if (factionState) {
+        factionState.stationIds.push(node.id);
+        factionState.organizationCounts[primary.id] = number(factionState.organizationCounts[primary.id]) + 1;
+        factionState.visibleInfluence += influences.visible.filter(item => item.parentId === umbrella.id).length;
+        factionState.hiddenCells += influences.hidden.filter(item => item.parentId === umbrella.id).length;
+      }
+      for (const influence of [...influences.visible, ...influences.hidden]) {
+        const stateEntry = publicState.factions[influence.parentId];
+        if (!stateEntry) continue;
+        if (influence.visibility === 'hidden') stateEntry.hiddenCells += 1;
+        else stateEntry.visibleInfluence += 1;
+        stateEntry.organizationCounts[influence.id] = number(stateEntry.organizationCounts[influence.id]) + 1;
+      }
+      const districtState = publicState.districts[node.districtId];
+      if (districtState) {
+        districtState.stationIds.push(node.id);
+        districtState.organizationCounts[primary.id] = number(districtState.organizationCounts[primary.id]) + 1;
+      }
+    }
+    for (const district of Object.values(publicState.districts)) district.dominantOrganizations = Object.entries(district.organizationCounts).sort((left, right) => right[1] - left[1]).slice(0, number(FACTION_REGISTRY.seeding?.districtDominanceSlots, 4)).map(([id, count]) => ({ id, name: FACTION_ORG_MAP[id]?.name || id, count }));
+    map.factionSeedVersion = FACTION_SEED_VERSION;
+    map.factionSeedSalt = salt;
+    map.factionRegistryVersion = FACTION_REGISTRY.schemaVersion;
+    world.factionSeedVersion = FACTION_SEED_VERSION;
+    publicState.factionJournal.unshift({ eventId: uid('faction-seed'), at: new Date().toISOString(), canonicalAt: worldGameDate().toISOString(), seed: map.seed, salt, stationCount: stations.length, registryVersion: FACTION_SEED_VERSION });
+    publicState.factionJournal = publicState.factionJournal.slice(0, 100);
+    hub.publicState = publicState;
+    hub.updatedAt = new Date().toISOString();
+    hub.revision += 1;
+    return publicState;
+  }
+
+  const syncWorldMapStationsBeforeFactions = syncWorldMapStations;
+  syncWorldMapStations = function syncFactionWorldMapStations() {
+    syncWorldMapStationsBeforeFactions();
+    const map = state.world?.map;
+    if (!map?.nodes) return;
+    for (const station of STATIONS.filter(item => item.worldGenerated)) {
+      const node = map.nodes.find(item => item.id === station.worldNodeId || item.name === station.name);
+      if (!node) continue;
+      Object.assign(station, {
+        faction: node.faction || station.faction,
+        factionId: node.factionId || '',
+        parentFaction: node.parentFaction || '',
+        parentFactionId: node.parentFactionId || '',
+        factionColor: node.factionColor || '',
+        organizationType: node.organizationType || '',
+        districtId: node.districtId || '',
+        districtName: node.districtName || '',
+        specialty: node.specialty || station.specialty,
+        locals: node.locals || station.locals,
+        visibleInfluences: cloneWorldData(node.visibleInfluences || []),
+        hiddenInfluences: cloneWorldData(node.hiddenInfluences || [])
+      });
+    }
+  };
+
+  const normalizeStationRecordBeforeFactions = normalizeStationRecord;
+  normalizeStationRecord = function normalizeFactionStationRecord(raw, station) {
+    const record = normalizeStationRecordBeforeFactions(raw, station);
+    if (station) {
+      record.factionId = station.factionId || record.factionId || '';
+      record.parentFaction = station.parentFaction || record.parentFaction || '';
+      record.parentFactionId = station.parentFactionId || record.parentFactionId || '';
+      record.districtId = station.districtId || record.districtId || '';
+      record.districtName = station.districtName || record.districtName || '';
+      record.organizationType = station.organizationType || record.organizationType || '';
+      record.visibleInfluences = cloneWorldData(station.visibleInfluences || record.visibleInfluences || []);
+      record.hiddenInfluences = cloneWorldData(station.hiddenInfluences || record.hiddenInfluences || []);
+    }
+    return record;
+  };
+
+  const normalizeStationCommerceBeforeFactions = normalizeStationCommerce;
+  normalizeStationCommerce = function normalizeFactionCommerce() {
+    const commerce = normalizeStationCommerceBeforeFactions();
+    for (const umbrella of FACTION_REGISTRY.umbrellas || []) if (!(umbrella.name in commerce.factionReputation)) commerce.factionReputation[umbrella.name] = 0;
+    for (const organization of FACTION_REGISTRY.organizations || []) if (!(organization.name in commerce.factionReputation)) commerce.factionReputation[organization.name] = 0;
+    return commerce;
+  };
+
+  const stationBuyPriceBeforeFactionReputation = stationBuyPrice;
+  stationBuyPrice = function stationBuyPriceWithParentFaction(stationRecord, vendor, stock) {
+    const commerce = state.stationCommerce || normalizeStationCommerce();
+    const organizationRep = number(commerce.factionReputation[stationRecord.faction]);
+    const parentRep = number(commerce.factionReputation[stationRecord.parentFaction]);
+    const blended = organizationRep * 0.7 + parentRep * 0.3;
+    const vendorReputation = vendor?.machine ? 0 : number(vendor?.reputation, stationRecord.ownerReputation);
+    const reputation = blended * 0.5 + number(stationRecord.stationReputation) * 0.3 + vendorReputation * 0.2;
+    const reputationFactor = clamp(1 - reputation / 250, 0.6, 1.6);
+    return Math.max(1, Math.round(number(stock.basePrice, 1) * number(vendor.markup, 1.1) * reputationFactor));
+  };
+
+  const generateWorldMapBeforeFactions = generateWorldMap;
+  generateWorldMap = function generateWorldMapWithFactions() {
+    generateWorldMapBeforeFactions();
+    seedWorldFactions(state.world.map, true);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const importWorldSaveBeforeFactions = importWorldSave;
+  importWorldSave = function importWorldSaveWithFactions(raw) {
+    importWorldSaveBeforeFactions(raw);
+    seedWorldFactions(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  };
+
+  const currentWorldSubmissionBeforeFactions = currentWorldSubmission;
+  currentWorldSubmission = function currentWorldSubmissionWithFactions(kind) {
+    if (kind !== 'faction') return currentWorldSubmissionBeforeFactions(kind);
+    const hub = normalizeWorldHub();
+    const group = activeWorldGroup();
+    return {
+      schema: WORLD_SUBMISSION_SCHEMA,
+      version: 1,
+      worldId: hub.worldId,
+      submissionId: uid('world-submission'),
+      kind: 'faction',
+      sourceId: normalizePlayerSubmissionSettings().playerId || group?.groupId || 'local',
+      groupId: group?.groupId || '',
+      submittedAt: new Date().toISOString(),
+      canonicalAt: worldGameDate().toISOString(),
+      payload: {
+        registryVersion: FACTION_SEED_VERSION,
+        factionSeedSalt: number(state.world.factionSeedSalt),
+        factions: cloneWorldData(hub.publicState.factions),
+        districts: cloneWorldData(hub.publicState.districts),
+        stationInfluence: cloneWorldData(hub.publicState.stationInfluence),
+        factionRelations: cloneWorldData(hub.publicState.factionRelations),
+        stationAssignments: cloneWorldData((state.world.map?.nodes || []).filter(node => node.type === 'station').map(node => ({ nodeId: node.id, factionId: node.factionId, faction: node.faction, parentFactionId: node.parentFactionId, parentFaction: node.parentFaction, districtId: node.districtId, districtName: node.districtName, visibleInfluences: node.visibleInfluences || [], hiddenInfluences: node.hiddenInfluences || [] })))
+      }
+    };
+  };
+
+  const applyWorldSubmissionBeforeFactions = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithFactions(raw, allowForeign = false) {
+    const submission = normalizeWorldSubmission(raw);
+    if (submission.kind !== 'faction') return applyWorldSubmissionBeforeFactions(submission, allowForeign);
+    const hub = normalizeWorldHub();
+    if (submission.worldId !== hub.worldId && !allowForeign) throw new Error(`Submission belongs to ${submission.worldId}, not ${hub.worldId}.`);
+    const payload = submission.payload || {};
+    const publicState = normalizePublicWorldState(hub.publicState);
+    if (payload.factions) publicState.factions = cloneWorldData(payload.factions);
+    if (payload.districts) publicState.districts = cloneWorldData(payload.districts);
+    if (payload.stationInfluence) publicState.stationInfluence = cloneWorldData(payload.stationInfluence);
+    if (payload.factionRelations) publicState.factionRelations = cloneWorldData(payload.factionRelations);
+    for (const assignment of payload.stationAssignments || []) {
+      const node = state.world.map?.nodes?.find(item => item.id === assignment.nodeId);
+      if (!node) continue;
+      Object.assign(node, cloneWorldData(assignment));
+      const org = FACTION_ORG_MAP[node.factionId];
+      if (org) {
+        node.organizationType = org.type;
+        node.specialty = (org.trade || []).join(', ');
+      }
+    }
+    state.world.factionSeedSalt = number(payload.factionSeedSalt, state.world.factionSeedSalt);
+    state.world.map.factionSeedVersion = payload.registryVersion || FACTION_SEED_VERSION;
+    publicState.submissionJournal.unshift({ submissionId: submission.submissionId, kind: 'faction', sourceId: submission.sourceId, groupId: submission.groupId || '', submittedAt: submission.submittedAt, appliedAt: new Date().toISOString(), canonicalAt: worldGameDate().toISOString() });
+    publicState.factionJournal.unshift({ eventId: uid('faction-import'), at: new Date().toISOString(), canonicalAt: worldGameDate().toISOString(), submissionId: submission.submissionId, sourceId: submission.sourceId });
+    hub.publicState = publicState;
+    hub.revision += 1;
+    hub.updatedAt = new Date().toISOString();
+    const queued = hub.pendingSubmissions.find(item => item.submissionId === submission.submissionId);
+    if (queued) queued.status = 'applied';
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+    return submission;
+  };
+
+  function renderFactionWorldPanel() {
+    const map = state.world?.map;
+    const hub = normalizeWorldHub();
+    if (!map) return;
+    const publicState = normalizePublicWorldState(hub.publicState);
+    const umbrellas = (FACTION_REGISTRY.umbrellas || []).map(item => ({ ...item, state: publicState.factions[item.id] || {} }));
+    const districts = (FACTION_REGISTRY.districts || []).map(item => ({ ...item, state: publicState.districts[item.id] || {} }));
+    const organizations = FACTION_REGISTRY.organizations || [];
+    const primaryCounts = {};
+    for (const node of map.nodes.filter(item => item.type === 'station')) primaryCounts[node.factionId] = number(primaryCounts[node.factionId]) + 1;
+    const hiddenCount = Object.values(publicState.stationInfluence).reduce((sum, item) => sum + (item.hidden || []).length, 0);
+    const panel = document.createElement('section');
+    panel.className = 'tool-panel span-12 faction-world-panel';
+    panel.innerHTML = `
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Primer-derived political geography</p><h3>Factions, Organizations, and Operational Districts</h3><p class="small-note">Every station has a primary authority or owner, public secondary influences, Union 208 representation where seeded, and possible covert criminal or cult activity. Primer-backed institutions are separated from newly named campaign subfactions in the registry.</p></div><div class="button-row no-print"><button id="reseed-world-factions" class="secondary-action" type="button">Reseed Political Geography</button><button id="toggle-hidden-factions" class="secondary-action" type="button">${state.world.showHiddenFactions ? 'Conceal Hidden Cells' : 'Reveal Hidden Cells'}</button><button id="queue-faction-submission" class="primary-action" type="button">Queue Faction Submission</button></div></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Umbrella factions</span><strong>${umbrellas.length}</strong></div><div class="metric"><span>Operational organizations</span><strong>${organizations.length}</strong></div><div class="metric"><span>Districts</span><strong>${districts.length}</strong></div><div class="metric"><span>Seeded stations</span><strong>${map.stationCount}</strong></div><div class="metric"><span>Hidden cells</span><strong>${hiddenCount}</strong></div></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table"><thead><tr><th>Operational district</th><th>Depth band</th><th>Stations</th><th>Economy</th><th>Dominant organizations</th></tr></thead><tbody>${districts.map(district => { const stateEntry = district.state || {}; const minRing = Math.max(1, Math.ceil(number(district.min) * map.rings)); const maxRing = Math.max(minRing, Math.min(map.rings, Math.ceil(number(district.max) * map.rings) - 1)); return `<tr><td><strong>${escapeHtml(district.name)}</strong><br><span class="small-note">${escapeHtml(district.description || '')}</span></td><td>Rings ${minRing}–${maxRing}</td><td>${(stateEntry.stationIds || []).length}</td><td>${(district.economy || []).map(item => `<span class="tag">${escapeHtml(item)}</span>`).join('')}</td><td>${(stateEntry.dominantOrganizations || []).map(item => `<span class="tag">${escapeHtml(item.name)} ${item.count}</span>`).join('') || 'Unseeded'}</td></tr>`; }).join('')}</tbody></table></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table"><thead><tr><th>Major faction</th><th>Primary stations</th><th>Public influence</th><th>${state.world.showHiddenFactions ? 'Hidden cells' : 'Covert activity'}</th><th>Organizations represented</th><th>Source status</th></tr></thead><tbody>${umbrellas.map(faction => { const counts = faction.state.organizationCounts || {}; const represented = Object.keys(counts).sort((left, right) => number(counts[right]) - number(counts[left])).map(id => `${FACTION_ORG_MAP[id]?.name || id} (${counts[id]})`); return `<tr><td><strong style="color:${escapeHtml(faction.color || '#ddd')}">${escapeHtml(faction.name)}</strong><br><span class="small-note">${escapeHtml(faction.type)}</span></td><td>${(faction.state.stationIds || []).length}</td><td>${number(faction.state.visibleInfluence)}</td><td>${state.world.showHiddenFactions ? number(faction.state.hiddenCells) : 'Classified'}</td><td>${represented.slice(0, 8).map(item => `<span class="tag">${escapeHtml(item)}</span>`).join('') || 'None'}</td><td class="small-note">${escapeHtml(faction.source || '')}</td></tr>`; }).join('')}</tbody></table></div>
+      <details style="margin-top:12px"><summary><strong>Operational organization roster</strong></summary><div class="table-wrap" style="margin-top:10px"><table class="tool-table"><thead><tr><th>Organization</th><th>Umbrella</th><th>Type</th><th>Primary stations</th><th>Preferred districts</th><th>Trade and function</th><th>Derivation</th></tr></thead><tbody>${organizations.filter(item => state.world.showHiddenFactions || !item.hidden).map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong>${item.hidden ? '<br><span class="status-pill status-failure">hidden cell</span>' : ''}</td><td>${escapeHtml(FACTION_UMBRELLA_MAP[item.parent]?.name || item.parent)}</td><td>${escapeHtml(item.type)}</td><td>${number(primaryCounts[item.id])}</td><td>${(item.districts || []).map(id => `<span class="tag">${escapeHtml(FACTION_DISTRICT_MAP[id]?.name || id)}</span>`).join('')}</td><td>${(item.trade || []).map(value => `<span class="tag">${escapeHtml(value)}</span>`).join('')}</td><td class="small-note">${escapeHtml(item.source || '')}</td></tr>`).join('')}</tbody></table></div></details>`;
+    const mapPanel = root.querySelector('.expanded-map-frame')?.closest('.tool-panel');
+    if (mapPanel?.parentElement) mapPanel.parentElement.insertBefore(panel, mapPanel);
+    else root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelector('#reseed-world-factions')?.addEventListener('click', () => {
+      state.world.factionSeedSalt = number(state.world.factionSeedSalt) + 1;
+      seedWorldFactions(state.world.map, true);
+      syncWorldMapStations();
+      normalizeStationCommerce();
+      save();
+      renderWorld();
+    });
+    panel.querySelector('#toggle-hidden-factions')?.addEventListener('click', () => { state.world.showHiddenFactions = !state.world.showHiddenFactions; save(); renderWorld(); });
+    panel.querySelector('#queue-faction-submission')?.addEventListener('click', () => { queueWorldSubmission(currentWorldSubmission('faction')); save(); renderWorld(); });
+    for (const element of root.querySelectorAll('.map-node.station')) {
+      const node = map.nodes.find(item => item.id === element.dataset.nodeId);
+      if (!node) continue;
+      const circle = element.querySelector('circle');
+      if (circle && node.factionColor) circle.style.stroke = node.factionColor;
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      const hidden = state.world.showHiddenFactions && node.hiddenInfluences?.length ? ` Hidden: ${node.hiddenInfluences.map(item => item.name).join(', ')}.` : '';
+      title.textContent = `${node.name}: ${node.faction}; ${node.districtName}.${hidden}`;
+      element.prepend(title);
+    }
+  }
+
+  const renderWorldBeforeFactionPanel = renderWorld;
+  renderWorld = function renderWorldWithFactionPanel() {
+    if (!state.world?.map) generateWorldMap();
+    seedWorldFactions(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    renderWorldBeforeFactionPanel();
+    renderFactionWorldPanel();
+  };
+
+  if (state.world?.map) {
+    seedWorldFactions(state.world.map, false);
+    syncWorldMapStations();
+    normalizeStationCommerce();
+    save();
+  }

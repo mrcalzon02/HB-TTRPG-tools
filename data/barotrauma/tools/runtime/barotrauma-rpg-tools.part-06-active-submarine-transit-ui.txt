@@ -1,0 +1,166 @@
+
+  function dashboardTurnOrderRowsHtml() {
+    const turnOrder = normalizeDashboardTurnOrder();
+    const actors = dashboardTurnActors();
+    const actorByRef = Object.fromEntries(actors.map(actor => [actor.ref, actor]));
+    const order = turnOrder.order.length ? turnOrder.order : actors.map(actor => actor.ref);
+    return order.map((ref, index) => {
+      const actor = actorByRef[ref];
+      if (!actor) return '';
+      const roll = turnOrder.rolls[ref];
+      const active = index === turnOrder.activeIndex;
+      return `<tr class="${active ? 'dashboard-active-turn-row' : ''}"><td>${index + 1}</td><td><strong class="${active ? 'good' : ''}">${escapeHtml(actor.name)}</strong>${active ? '<br><span class="small-note">ACTIVE TURN</span>' : ''}</td><td>${escapeHtml(actor.status)}</td><td>${roll ? `${roll.dice[0]} + ${roll.dice[1]} + ${roll.agility} Agility = <strong>${roll.total}</strong>` : turnOrder.mode === 'rotation' ? 'Roster rotation' : 'Not rolled'}</td><td><button class="compact-button dashboard-set-turn" data-actor-ref="${escapeHtml(actor.ref)}" type="button">Set Active</button></td></tr>`;
+    }).join('');
+  }
+
+  function dashboardTurnOrderHtml(inRoute) {
+    const turnOrder = normalizeDashboardTurnOrder();
+    const actor = activeDashboardTurnActor();
+    return `<section class="tool-card dashboard-turn-order" style="margin-top:12px;border-color:${inRoute ? 'rgba(87,185,255,.75)' : 'var(--line)'}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Crew action order</p><h4>${inRoute ? `Round ${turnOrder.round} · Turn ${turnOrder.turn}` : 'Departure turn-order method'}</h4><p class="small-note">Every consequential route card belongs to the active crew member. Resolving the card advances automatically to the next living crew member.</p></div><span class="status-pill ${actor ? 'good' : 'bad'}">${escapeHtml(actor?.name || 'No living operator')}</span></div>
+      <div class="field-grid three" style="margin-top:10px"><label class="field">Turn-order method<select id="dashboard-turn-mode"><option value="rotation" ${turnOrder.mode === 'rotation' ? 'selected' : ''}>Consecutive rotating roster</option><option value="initiative" ${turnOrder.mode === 'initiative' ? 'selected' : ''}>2d6 + Agility initiative</option></select></label><div class="notice"><strong>Rotation:</strong> crew act in roster order and cycle consecutively after each resolved card.</div><div class="notice"><strong>Initiative:</strong> every living crew member rolls 2d6 + current Agility; highest total acts first.</div></div>
+      <div class="button-row no-print" style="margin-top:10px"><button id="dashboard-build-turn-order" class="secondary-action" type="button">${turnOrder.mode === 'initiative' ? 'Roll / Reroll Initiative' : 'Rebuild Rotation Order'}</button>${inRoute ? '<button id="dashboard-next-turn" class="compact-button" type="button">Advance Turn Without Resolving</button>' : ''}</div>
+      <div class="table-wrap" style="margin-top:10px"><table class="tool-table"><thead><tr><th>Order</th><th>Crew member</th><th>Status</th><th>Initiative / method</th><th></th></tr></thead><tbody>${dashboardTurnOrderRowsHtml() || '<tr><td colspan="5">No living onboard crew are available.</td></tr>'}</tbody></table></div>
+    </section>`;
+  }
+
+  dashboardRoutePanelHtml = function dashboardRoutePanelHtmlByOperationalState(context, focus) {
+    const map = state.world?.map;
+    const crossing = normalizeRouteCrossing();
+    const route = state.route;
+    const inRoute = crossing.status === 'underway';
+    normalizeDashboardTurnOrder();
+    if (!map?.nodes?.length) {
+      return `<section id="active-dashboard-route" class="tool-panel ${focus === 'route' ? 'dashboard-focused-panel' : ''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">${inRoute ? 'In Route' : 'At Station'}</p><h3>No operational world loaded</h3><p class="small-note">Generate the world before filing an adjacent station route.</p></div><button id="dashboard-generate-world-from-route" class="primary-action no-print" type="button">Generate Operational World</button></div></section>`;
+    }
+    const currentStation = crossingNode(context.group.currentNodeId, map);
+    const adjacentRoutes = currentStation?.type === 'station' ? dashboardAdjacentStationRoutes(currentStation.id, map) : [];
+    if (!inRoute && currentStation?.type === 'station') {
+      route.startNodeId = currentStation.id;
+      route.start = currentStation.name;
+      if (!adjacentRoutes.some(item => item.stationId === route.endNodeId)) route.endNodeId = adjacentRoutes[0]?.stationId || '';
+      route.end = crossingNode(route.endNodeId, map)?.name || '';
+    }
+    const progress = typeof crossingProgress === 'function' ? crossingProgress(crossing) : { completedLegs: 0, totalLegs: crossing.legs.length, resolvedEvents: 0, totalEvents: route.plan.length };
+    const remaining = crossingRemainingCosts(crossing);
+    const nextSlot = nextPendingCrossingSlot();
+    const nextEvent = crossingSelectedEvent(nextSlot);
+    const activeLeg = activeCrossingLeg(crossing);
+    const legCheck = activeLeg ? crossingLegCanComplete(activeLeg, crossing) : { ready: false, issue: '' };
+    const readiness = crossing.status === 'prepared' ? crossingReadiness(crossing) : { ready: false, issues: [] };
+    const selectedCorridor = adjacentRoutes.find(item => item.stationId === route.endNodeId);
+    const actor = activeDashboardTurnActor();
+    const eventDetails = nextEvent ? (typeof generalEncounterDetailHtml === 'function' && nextEvent.encounterTemplateId ? generalEncounterDetailHtml(nextEvent, nextSlot, true) : crossingEventDetails(nextEvent)) : '';
+    const queue = state.route.plan.filter(slot => slot.status === 'pending').slice(0, 8);
+    return `<section id="active-dashboard-route" class="tool-panel ${focus === 'route' ? 'dashboard-focused-panel' : ''}" style="border-color:${inRoute ? 'rgba(87,185,255,.75)' : 'rgba(117,197,142,.62)'}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">${inRoute ? 'IN ROUTE' : 'AT STATION'}</p><h3>${inRoute ? `${escapeHtml(crossingNode(crossing.departureNodeId)?.name || '')} → ${escapeHtml(crossingNode(crossing.destinationNodeId)?.name || '')}` : escapeHtml(currentStation?.name || 'Station position required')}</h3><p class="small-note">${inRoute ? 'Transit management, encounter-card resolution, turn order, vessel consequences, and leg completion are active.' : 'Repairs, commerce, crew preparation, upkeep, and filing one immediately adjacent station route are available.'}</p></div><span class="status-pill ${inRoute ? 'warn' : 'good'}">${inRoute ? 'IN ROUTE' : 'AT STATION'}</span></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Active vessel</span><strong>${escapeHtml(context.submarineId)}</strong></div><div class="metric"><span>Hull</span><strong class="${number(state.submarine.hullCurrent) <= 0 ? 'bad' : ''}">${number(state.submarine.hullCurrent)}/${calculateSubmarine().totals.hull}</strong></div><div class="metric"><span>Leg progress</span><strong>${progress.completedLegs}/${progress.totalLegs}</strong></div><div class="metric"><span>Event progress</span><strong>${progress.resolvedEvents}/${progress.totalEvents}</strong></div><div class="metric"><span>Fuel</span><strong>${number(state.submarine.resources.fuel)}</strong></div></div>
+      ${!inRoute ? `<div class="field-grid three" style="margin-top:12px"><label class="field">Current station<input value="${escapeHtml(currentStation?.name || 'Not at a station')}" readonly></label><label class="field">Immediately adjacent destination<select id="dashboard-route-end">${adjacentRoutes.map(item => `<option value="${escapeHtml(item.stationId)}" ${item.stationId === route.endNodeId ? 'selected' : ''}>${escapeHtml(item.station.name)} · distance ${item.distance}${item.danger ? ' · dangerous' : ''}</option>`).join('')}</select></label><label class="field">Selected corridor<input value="${selectedCorridor ? `${selectedCorridor.pathNodeIds.length - 1} mapped segment${selectedCorridor.pathNodeIds.length - 1 === 1 ? '' : 's'} · ${selectedCorridor.distance} distance` : 'No adjacent route available'}" readonly></label></div>
+      <div class="button-row no-print" style="margin-top:12px"><button id="dashboard-generate-crossing" class="primary-action" type="button" ${!route.endNodeId ? 'disabled' : ''}>File Adjacent Route</button><button id="dashboard-start-crossing" class="secondary-action" type="button" ${crossing.status === 'prepared' && readiness.ready ? '' : 'disabled'}>Depart and Enter In Route</button><button id="dashboard-clear-crossing" class="secondary-action" type="button" ${crossing.crossingId ? '' : 'disabled'}>Clear Filed Route</button></div>
+      <div class="notice ${readiness.issues?.length ? 'bad' : ''}" style="margin-top:10px">${escapeHtml(state.route.crossingMessage || readiness.issues?.join(' ') || (adjacentRoutes.length ? 'Choose one adjacent station route and file the crossing.' : 'No adjacent station corridor is currently available.'))}</div>` : `<div class="button-row no-print" style="margin-top:12px"><button id="dashboard-abort-crossing" class="danger-button" type="button">Abort Transit</button><button id="dashboard-complete-leg" class="secondary-action" type="button" ${legCheck.ready ? '' : 'disabled'}>Complete Active Leg</button></div><div class="notice ${legCheck.issue ? 'warn' : ''}" style="margin-top:10px">${escapeHtml(state.route.crossingMessage || legCheck.issue || `Remaining route cost: ${crossingCostText(remaining)}`)}</div>`}
+      ${dashboardTurnOrderHtml(inRoute)}
+      ${inRoute ? (nextSlot && nextEvent ? `<div class="tool-card" style="margin-top:12px;border-color:var(--accent)"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Consequential event card · Round ${number(nextSlot.assignedRound, state.operationsDashboard.turnOrder.round)} Turn ${number(nextSlot.assignedTurn, state.operationsDashboard.turnOrder.turn)}</p><h4>${escapeHtml(nextEvent.name || nextSlot.label)}</h4><p class="small-note">Assigned to <strong>${escapeHtml(nextSlot.assignedCrewName || actor?.name || 'No operator')}</strong>. Later cards remain locked until this card is resolved.</p></div><span class="tag">${escapeHtml(nextEvent.stat || 'Intelligence')} vs ${number(nextEvent.dc, 8)}</span></div>${eventDetails}${nextSlot.roll ? `<p><strong>Last roll:</strong> ${escapeHtml(nextSlot.roll)}</p>` : ''}<div class="button-row no-print"><button id="dashboard-roll-next" class="primary-action" type="button">Roll as ${escapeHtml(actor?.name || 'Active Crew')}</button><button id="dashboard-success-next" class="secondary-action" type="button">Mark Success</button><button id="dashboard-failure-next" class="danger-button" type="button">Mark Failure</button><button id="dashboard-redraw-next" class="compact-button" type="button">Redraw Card</button></div></div>` : '<div class="notice good" style="margin-top:12px">No unresolved cards remain for the active leg. Complete the leg to continue transit or arrive at the destination.</div>') : ''}
+      ${inRoute && queue.length ? `<div class="table-wrap" style="margin-top:12px"><table class="tool-table"><thead><tr><th>Sequence</th><th>Card</th><th>Leg</th><th>Assigned crew</th><th>State</th></tr></thead><tbody>${queue.map((slot, index) => `<tr><td>${slot.sequence || index + 1}</td><td>${escapeHtml(crossingSelectedEvent(slot)?.name || slot.label)}</td><td>${slot.legIndex >= 0 ? slot.legIndex + 1 : 'Job'}</td><td>${escapeHtml(slot.assignedCrewName || (index === 0 ? actor?.name || 'Pending' : 'Assigned when active'))}</td><td>${index === 0 ? '<strong class="warn">ACTIVE</strong>' : 'Locked'}</td></tr>`).join('')}</tbody></table></div>` : ''}
+    </section>`;
+  };
+
+  function dashboardAdjacentStationMapSvg(context, routes) {
+    const current = crossingNode(context.group.currentNodeId);
+    if (!current) return '';
+    const nodes = [current, ...routes.map(route => route.station)];
+    const xs = nodes.map(node => number(node.x));
+    const ys = nodes.map(node => number(node.y));
+    const minX = Math.min(...xs) - 100;
+    const maxX = Math.max(...xs) + 100;
+    const minY = Math.min(...ys) - 100;
+    const maxY = Math.max(...ys) + 100;
+    const width = Math.max(280, maxX - minX);
+    const height = Math.max(220, maxY - minY);
+    return `<svg viewBox="${minX} ${minY} ${width} ${height}" role="img" aria-label="Immediately adjacent station routes" style="width:100%;height:500px;display:block;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.35));border-radius:14px">${routes.map(route => `<g><line x1="${number(current.x)}" y1="${number(current.y)}" x2="${number(route.station.x)}" y2="${number(route.station.y)}" stroke="${route.danger ? '#c45e68' : '#57b9ff'}" stroke-width="${route.stationId === state.route.endNodeId ? 10 : 5}"/><text x="${(number(current.x) + number(route.station.x)) / 2}" y="${(number(current.y) + number(route.station.y)) / 2 - 8}" fill="#d5dce4" font-size="13" text-anchor="middle">${route.distance}${route.danger ? ' · danger' : ''}</text></g>`).join('')}<g transform="translate(${number(current.x)} ${number(current.y)})"><circle r="24" fill="#e65353" stroke="#fff" stroke-width="6"/><text x="32" y="5" fill="#fff" font-size="18" font-weight="900">${escapeHtml(current.name)}</text></g>${routes.map(route => `<g class="dashboard-adjacent-station" data-station-id="${escapeHtml(route.stationId)}" transform="translate(${number(route.station.x)} ${number(route.station.y)})" style="cursor:pointer"><circle r="${route.stationId === state.route.endNodeId ? 18 : 13}" fill="#2d6686" stroke="${route.stationId === state.route.endNodeId ? '#fff' : '#9cc8e2'}" stroke-width="${route.stationId === state.route.endNodeId ? 5 : 3}"/><text x="22" y="5" fill="#e8edf2" font-size="14" font-weight="700" pointer-events="none">${escapeHtml(route.station.name)}</text></g>`).join('')}</svg>`;
+  }
+
+  function dashboardWorldViewerSvg(context) {
+    const map = state.world?.map;
+    if (!map?.nodes?.length) return '';
+    const stations = map.nodes.filter(node => node.type === 'station');
+    const stationById = Object.fromEntries(stations.map(node => [node.id, node]));
+    const corridors = dashboardStationCorridors(map);
+    const currentId = context.group.currentNodeId;
+    const focusedId = state.operationsDashboard.focusedNodeId;
+    let labels = 0;
+    return `<svg viewBox="0 0 ${map.width} ${map.height}" role="img" aria-label="Europa station network viewer" style="width:100%;height:820px;min-width:1100px;display:block;background:radial-gradient(circle at center,rgba(200,138,53,.08),rgba(0,0,0,.5));border-radius:14px">${corridors.map(corridor => { const a = stationById[corridor.a]; const b = stationById[corridor.b]; if (!a || !b) return ''; return `<line x1="${number(a.x)}" y1="${number(a.y)}" x2="${number(b.x)}" y2="${number(b.y)}" stroke="${corridor.danger ? '#81444b' : '#485b6c'}" stroke-width="${corridor.pathNodeIds.includes(currentId) ? 7 : 3}" opacity=".78"/>`; }).join('')}${stations.map(station => { const current = station.id === currentId; const focused = station.id === focusedId; const showLabel = current || focused || labels++ < 35; return `<g class="dashboard-world-station" data-station-id="${escapeHtml(station.id)}" transform="translate(${number(station.x)} ${number(station.y)})" style="cursor:pointer"><circle r="${current ? 28 : focused ? 21 : 12}" fill="${current ? '#e65353' : focused ? '#d6aa54' : '#2d6686'}" stroke="#fff" stroke-width="${current ? 8 : focused ? 6 : 2}"/>${showLabel ? `<text x="${current ? 38 : 20}" y="5" fill="#e8edf2" font-size="${current ? 19 : 13}" font-weight="${current ? 900 : 700}" pointer-events="none">${escapeHtml(station.name)}</text>` : ''}</g>`; }).join('')}</svg>`;
+  }
+
+  dashboardWorldPanelHtml = function dashboardWorldPanelImmediateRoutes(context, focus) {
+    const world = state.world;
+    const map = world?.map;
+    if (!map?.nodes?.length) {
+      return `<section id="active-dashboard-world" class="tool-panel ${focus === 'world' ? 'dashboard-focused-panel' : ''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Immediate station routes</p><h3>Operational world not generated</h3><p class="small-note">Generate the campaign world to expose adjacent station corridors.</p></div></div><div class="field-grid three" style="margin-top:12px"><label class="field">World seed<input id="dashboard-world-seed" value="${escapeHtml(world.seed || '')}"></label><label class="field">Depth rings<input id="dashboard-world-rings" type="number" min="40" max="80" value="${number(world.rings, 48)}"></label><label class="field">Locations<input id="dashboard-world-nodes" type="number" min="400" max="1800" value="${number(world.nodes, 960)}"></label></div><div class="button-row no-print" style="margin-top:12px"><button id="dashboard-generate-world" class="primary-action" type="button">Generate Campaign World</button><button id="dashboard-random-world" class="secondary-action" type="button">Randomize Seed and Generate</button></div></section>`;
+    }
+    const current = crossingNode(context.group.currentNodeId, map);
+    const routes = current?.type === 'station' ? dashboardAdjacentStationRoutes(current.id, map) : [];
+    const focused = crossingNode(state.operationsDashboard.focusedNodeId, map);
+    return `<section id="active-dashboard-world" class="tool-panel ${focus === 'world' ? 'dashboard-focused-panel' : ''}">
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Immediate station routes</p><h3>${escapeHtml(current?.name || 'Current station unavailable')}</h3><p class="small-note">This operational map exposes only the next stations reachable without passing through another station. Intermediate hazards remain inside the route corridor and are resolved through transit cards.</p></div><button id="dashboard-open-world-viewer" class="secondary-action no-print" type="button">Open World Map Viewer</button></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Current station</span><strong>${escapeHtml(current?.name || 'None')}</strong></div><div class="metric"><span>Adjacent station routes</span><strong>${routes.length}</strong></div><div class="metric"><span>Selected destination</span><strong>${escapeHtml(crossingNode(state.route.endNodeId)?.name || 'None')}</strong></div><div class="metric"><span>Dashboard state</span><strong class="${state.operationsDashboard.operationalState === 'in-route' ? 'warn' : 'good'}">${state.operationsDashboard.operationalState === 'in-route' ? 'In Route' : 'At Station'}</strong></div></div>
+      <div class="map-frame" style="min-height:0;margin-top:12px;overflow:hidden">${dashboardAdjacentStationMapSvg(context, routes)}</div>
+      <div class="card-list" style="margin-top:12px">${routes.map(route => `<div class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h4>${escapeHtml(route.station.name)}</h4><p class="small-note">${route.pathNodeIds.length - 1} mapped segment${route.pathNodeIds.length - 1 === 1 ? '' : 's'} · distance ${route.distance} · ${route.danger ? 'dangerous corridor' : 'standard corridor'}</p></div><button class="compact-button dashboard-select-adjacent-route" data-station-id="${escapeHtml(route.stationId)}" type="button" ${state.operationsDashboard.operationalState === 'in-route' ? 'disabled' : ''}>Select Route</button></div></div>`).join('') || '<div class="notice">No immediately adjacent station routes were found from the current station.</div>'}</div>
+      ${focused ? `<div class="notice" style="margin-top:10px"><strong>${escapeHtml(focused.name)}</strong> · Ring ${number(focused.ring)} · Level ${number(focused.locationLevel, 1)}<br>${escapeHtml(focused.locationLore || focused.details || '')}</div>` : ''}
+    </section>${state.operationsDashboard.worldViewerOpen ? `<section id="dashboard-world-viewer" class="tool-panel dashboard-focused-panel"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Separate world map viewer</p><h3>Europa Station Network</h3><p class="small-note">This viewer displays the complete station-to-station network on demand. It does not replace the immediate route board or expose distant stations as selectable departures.</p></div><button id="dashboard-close-world-viewer" class="secondary-action no-print" type="button">Close World Map Viewer</button></div><div class="map-frame" style="min-height:0;margin-top:12px;overflow:auto">${dashboardWorldViewerSvg(context)}</div></section>` : ''}`;
+  };
+
+  const bindActiveDashboardControlsBeforeTransitUi = bindActiveDashboardControls;
+  bindActiveDashboardControls = function bindActiveDashboardTransitControls(context, focus) {
+    bindActiveDashboardControlsBeforeTransitUi(context, focus);
+    root.querySelector('#dashboard-turn-mode')?.addEventListener('change', event => {
+      const turnOrder = normalizeDashboardTurnOrder();
+      turnOrder.mode = event.target.value === 'initiative' ? 'initiative' : 'rotation';
+      turnOrder.order = [];
+      turnOrder.rolls = {};
+      buildDashboardTurnOrder(turnOrder.mode === 'initiative');
+      renderSubmarine();
+    });
+    root.querySelector('#dashboard-build-turn-order')?.addEventListener('click', () => { buildDashboardTurnOrder(normalizeDashboardTurnOrder().mode === 'initiative'); renderSubmarine(); });
+    root.querySelector('#dashboard-next-turn')?.addEventListener('click', () => { advanceDashboardTurn('Turn advanced manually without resolving a card.'); renderSubmarine(); });
+    root.querySelectorAll('.dashboard-set-turn').forEach(button => button.addEventListener('click', event => { setDashboardActiveActor(event.currentTarget.dataset.actorRef); renderSubmarine(); }));
+    root.querySelectorAll('.dashboard-adjacent-station, .dashboard-select-adjacent-route').forEach(element => element.addEventListener('click', event => {
+      if (state.operationsDashboard.operationalState === 'in-route') return;
+      const stationId = event.currentTarget.dataset.stationId;
+      const station = crossingNode(stationId);
+      if (!station) return;
+      state.route.endNodeId = station.id;
+      state.route.end = station.name;
+      state.operationsDashboard.focusedNodeId = station.id;
+      save();
+      renderSubmarine();
+    }));
+    root.querySelector('#dashboard-open-world-viewer')?.addEventListener('click', () => { state.operationsDashboard.worldViewerOpen = true; save(); renderSubmarine(); });
+    root.querySelector('#dashboard-close-world-viewer')?.addEventListener('click', () => { state.operationsDashboard.worldViewerOpen = false; save(); renderSubmarine(); });
+    root.querySelectorAll('.dashboard-world-station').forEach(element => element.addEventListener('click', event => { state.operationsDashboard.focusedNodeId = event.currentTarget.dataset.stationId; save(); renderSubmarine(); }));
+  };
+
+  const renderActiveSubmarineDashboardBeforeTransitUi = renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard = function renderActiveSubmarineDashboardTwoState(requestedFocus = activeDashboardRawFocus()) {
+    normalizeDashboardTurnOrder();
+    if (requestedFocus === 'world') state.operationsDashboard.worldViewerOpen = true;
+    renderActiveSubmarineDashboardBeforeTransitUi(requestedFocus);
+    const shell = root.querySelector('.tool-shell');
+    const command = root.querySelector('#active-dashboard-command');
+    const routePanel = root.querySelector('#active-dashboard-route');
+    const worldPanel = root.querySelector('#active-dashboard-world');
+    if (!shell || !command) return;
+    const inRoute = state.operationsDashboard.operationalState === 'in-route';
+    command.insertAdjacentHTML('afterend', `<section class="tool-panel dashboard-operational-state" style="border-color:${inRoute ? 'rgba(87,185,255,.85)' : 'rgba(117,197,142,.75)'}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Dashboard operational state</p><h3>${inRoute ? 'IN ROUTE' : 'AT STATION'}</h3><p class="small-note">${inRoute ? 'The Route Manager controls play. Consequential cards are resolved in sequence by the active crew member, then the turn advances.' : 'Station services, repairs, commerce, crew preparation, and adjacent-route filing are active.'}</p></div><span class="status-pill ${inRoute ? 'warn' : 'good'}">${inRoute ? 'TRANSIT ACTIVE' : 'DOCKED'}</span></div></section>`);
+    const statePanel = root.querySelector('.dashboard-operational-state');
+    if (inRoute && routePanel) statePanel.insertAdjacentElement('afterend', routePanel);
+    else if (!inRoute && worldPanel) statePanel.insertAdjacentElement('afterend', worldPanel);
+    const worldButton = root.querySelector('.dashboard-focus[data-focus="world"]');
+    if (worldButton) worldButton.textContent = 'World Map Viewer';
+    if (inRoute) {
+      for (const panel of root.querySelectorAll('.tool-panel')) {
+        const heading = panel.querySelector('h3')?.textContent || '';
+        if (/Station Upkeep|Station Commerce|Vendor|Controlled Research|Dockside|Market/i.test(heading)) panel.classList.add('dashboard-station-panel-locked');
+      }
+      root.querySelectorAll('.dashboard-station-panel-locked input, .dashboard-station-panel-locked select, .dashboard-station-panel-locked textarea, .dashboard-station-panel-locked button').forEach(control => { control.disabled = true; });
+    }
+  };

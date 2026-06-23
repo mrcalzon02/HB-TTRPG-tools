@@ -1,0 +1,194 @@
+name: Validate Barotrauma Static Tools
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'barotrauma-entry.js'
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma-tools-registry.json'
+      - 'data/barotrauma/**'
+      - '.github/workflows/validate-barotrauma-static.yml'
+  pull_request:
+    paths:
+      - 'barotrauma-entry.js'
+      - 'barotrauma-rpg-tools.html'
+      - 'barotrauma-rpg-tools-loader.js'
+      - 'data/barotrauma-tools-registry.json'
+      - 'data/barotrauma/**'
+      - '.github/workflows/validate-barotrauma-static.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check standalone JavaScript syntax
+        run: |
+          node --check barotrauma-entry.js
+          node --check barotrauma-rpg-tools-loader.js
+
+      - name: Validate runtime assembly and registries
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert');
+
+          const loader = fs.readFileSync('barotrauma-rpg-tools-loader.js', 'utf8');
+          const runtimeMatch = loader.match(/const runtimeParts = \[([\s\S]*?)\n  \];/);
+          assert(runtimeMatch, 'runtimeParts array was not found in the loader');
+          const paths = [...runtimeMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
+          assert(paths.length > 60, `Expected the complete runtime list; found ${paths.length} fragments`);
+          const missing = paths.filter(path => !fs.existsSync(path));
+          assert.deepStrictEqual(missing, [], `Missing runtime fragments: ${missing.join(', ')}`);
+
+          const source = paths.map(path => fs.readFileSync(path, 'utf8')).join('');
+          new Function(source);
+
+          JSON.parse(fs.readFileSync('data/barotrauma-tools-registry.json', 'utf8'));
+          JSON.parse(fs.readFileSync('data/barotrauma/tools/encounters/encounter-index.json', 'utf8'));
+
+          for (const required of [
+            'barotrauma-rpg-tools.part-06-standalone-module-captures.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-commissioning.txt',
+            'barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-core-00.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-core-01.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-ui-polish.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-stability-02.txt',
+            'barotrauma-rpg-tools.part-06-route-event-resolution-stability-03.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-core-00.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-core-01.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-core-02.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-commerce-00.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-commerce-01.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-stability.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-scheduler.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-stability-02.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-ui.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-ui-stability.txt',
+            'barotrauma-rpg-tools.part-06-world-economy-stability-03.txt'
+          ]) assert(loader.includes(required), `${required} is not loaded`);
+          assert(!loader.includes('barotrauma-rpg-tools.part-06-world-economy-core-03.txt'), 'The superseded monolithic commerce fragment is still loaded');
+
+          const boundaryCore = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-core.txt', 'utf8');
+          assert(boundaryCore.includes("return ['character','submarine','encounters','route','world','catalog','workshop'].includes(raw)"), 'Standalone hash dispatch contract is missing');
+          assert(boundaryCore.includes('Purchasing is unavailable while In Route.'), 'In-route purchase guard is missing');
+          assert(boundaryCore.includes('Selling is unavailable while In Route.'), 'In-route selling guard is missing');
+          assert(boundaryCore.includes("map.nodes.filter(node => node.type === 'station')"), 'Starting locations are not sourced from world stations');
+
+          const commissioning = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning.txt', 'utf8');
+          assert(commissioning.includes('state.world.masterWorldId = masterWorldId'), 'Canonical master world ID assignment is missing');
+          assert(commissioning.includes('state.world.map.worldId = masterWorldId'), 'Master map world ID synchronization is missing');
+          assert(commissioning.includes('submission.worldId = masterWorldId'), 'World submissions do not use the master world ID');
+          assert(commissioning.includes('Select Starting Submarine'), 'Dashboard starting-submarine control is missing');
+          assert(commissioning.includes('Add Crew at Station'), 'Dashboard station crew-add control is missing');
+          assert(commissioning.includes('Additional crew cannot be added while the submarine is In Route.'), 'In-route crew-add guard is missing');
+          assert(commissioning.includes('physically docked at a station'), 'Physical-station crew-add requirement is missing');
+
+          const resolution00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-00.txt', 'utf8');
+          const resolution01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-01.txt', 'utf8');
+          const resolution02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-02.txt', 'utf8');
+          const resolutionUi = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-ui.txt', 'utf8');
+          const resolutionUiPolish = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-ui-polish.txt', 'utf8');
+          const resolutionStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability.txt', 'utf8');
+          const resolutionStability02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability-02.txt', 'utf8');
+          const resolutionStability03 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-stability-03.txt', 'utf8');
+
+          assert(resolution00.includes('ROUTE_RESOLUTION_FAMILY_PROFILES'), 'Crew-role family profiles are missing');
+          assert(resolution00.includes('routeResolutionSolutions'), 'Alternative solution generation is missing');
+          assert(resolution00.includes('routeResolutionMissionOffer'), 'Mission and contract generation is missing');
+          assert(resolution01.includes('routeResolutionStepBlueprints'), 'Turn-based phase generation is missing');
+          assert(resolution01.includes('advanceDashboardTurn'), 'Resolution steps do not advance crew turns');
+          assert(resolution01.includes('roleBonus') && resolution01.includes('supportBonus'), 'Crew-role and support bonuses are missing');
+          assert(resolution02.includes('critical-success') && resolution02.includes('critical-failure') && resolution02.includes("outcome==='mixed'"), 'Five-band outcome resolution is incomplete');
+          assert(resolution02.includes('applyRouteResolutionEffects'), 'Submarine and crew effect application is missing');
+          assert(resolution02.includes('effectsAppliedAt'), 'One-time effect protection is missing');
+          assert(resolution02.includes('publicState.gameStates'), 'Contracts are not persisted into master-world public state');
+          assert(resolutionUi.includes('Explicit turn-based event resolution'), 'Explicit route resolution interface is missing');
+          assert(resolutionUi.includes('Select an Alternative Solution'), 'Alternative solution UI is missing');
+          assert(resolutionUi.includes('Assign Supporting Crew Roles'), 'Crew role assignment UI is missing');
+          assert(resolutionUi.includes('Available Outcomes'), 'Outcome preview UI is missing');
+          assert(resolutionUiPolish.includes('Select the Event Variant'), 'Mapmaker event variant selection is missing');
+          assert(resolutionUiPolish.includes('selectCrossingChoice'), 'Event variant selection is not connected to the route card choice');
+          assert(resolutionStability.includes('Controlled Withdrawal and Reassessment'), 'Fallback alternative solution is missing');
+          assert(resolutionStability.includes('BAROTRAUMA_ROUTE_EVENT_RESOLUTION_DIAGNOSTICS'), 'Route resolution diagnostics are missing');
+          assert(resolutionStability02.includes('normalizeRouteResolutionSessionWithFallbackMigration'), 'Saved one-option session migration is missing');
+          assert(resolutionStability02.includes('dashboardTurnActorsForCommissionedResolutionOnly'), 'Turn order is not restricted to commissioned crew');
+          assert(resolutionStability02.includes('commitRouteEventResolutionWithPreflight'), 'Outcome commitment preflight is missing');
+          assert(resolutionStability03.includes('commitRouteEventResolutionAtomically'), 'Atomic outcome rollback is missing');
+          assert(resolutionStability03.includes('state = snapshot'), 'Failed outcome commits do not restore campaign state');
+
+          const economy00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-00.txt', 'utf8');
+          const economy01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-01.txt', 'utf8');
+          const economy02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-core-02.txt', 'utf8');
+          const economyCommerce00 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commerce-00.txt', 'utf8');
+          const economyCommerce01 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-commerce-01.txt', 'utf8');
+          const economyScheduler = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-scheduler.txt', 'utf8');
+          const economyStability02 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-stability-02.txt', 'utf8');
+          const economyUi = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-ui.txt', 'utf8');
+          const economyUiStability = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-ui-stability.txt', 'utf8');
+          const economyStability03 = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-world-economy-stability-03.txt', 'utf8');
+
+          assert(economy00.includes('WORLD_STATION_PROCESS_PROFILES'), 'Station production profiles are missing');
+          assert(economy00.includes('playerSales'), 'Persistent player-sale inventory is missing');
+          assert(economy01.includes('syncAllWorldPlayerVessels'), 'Submitted player vessels are not synchronized into the master registry');
+          assert(economy01.includes("status:'awaiting-decision'"), 'Mid-route player decision state is missing');
+          assert(economy01.includes('worldSavePayloadWithEconomy'), 'Master world saves do not include the economy registry');
+          assert(economy02.includes("15+(seededHash") && economy02.includes('%91'), 'NPC freight duration is not constrained to 15–105 minutes');
+          assert(economy02.includes("outputs:{deliveryGoods:8}"), 'Factories do not produce Delivery Goods');
+          assert(economy02.includes("inputs:{rawMaterials:12,industrialGoods:4,components:4,fuel:2}"), 'Delivery Goods do not have substantial material costs');
+          assert(economy02.includes('processWorldStationEconomyCycle'), 'Station production cycles are missing');
+          assert(economy02.includes('worldEconomyCompleteShipyardVessel'), 'Shipyard vessel production is missing');
+          assert(economy02.includes('departWorldEconomyFreighter') && economy02.includes('arriveWorldEconomyFreighter'), 'NPC freight departure or arrival is missing');
+          assert(economyCommerce00.includes('generateVendorStock=function generateVendorStockFromPersistentEconomy() { return []; }'), 'Legacy spontaneous vendor stock generation is not disabled');
+          assert(economyCommerce00.includes('worldEconomyUnpackDeliveryGoods'), 'Delivery Goods cannot restock vendor inventory');
+          assert(economyCommerce01.includes('sellToStationWithPersistentWorldInventory'), 'Player sales are not persisted to station inventory');
+          assert(economyCommerce01.includes('buyStationStockFromPersistentWorldInventory'), 'Vendor sales do not consume persistent station inventory');
+          assert(economyCommerce01.includes('const active=commerce.stations?.[commerce.activeStationId]'), 'Vendor projection is not lazy to the active station');
+          assert(economyScheduler.includes('setTimeout(processStations,0)'), 'Station catch-up is not processed progressively');
+          assert(economyScheduler.includes('setTimeout(processVessels,0)'), 'NPC freight catch-up is not processed progressively');
+          assert(economyStability02.includes('lastStationCycleAt'), 'Hourly production does not use an independent cycle clock');
+          assert(economyStability02.includes('stationRecord.treasury'), 'Colony cash production is not connected to station treasury');
+          assert(economyUi.includes('World Vessel and Trade Registry'), 'Master vessel registry UI is missing');
+          assert(economyUi.includes('Available to commission'), 'Available vessel counter is missing');
+          assert(economyUi.includes('progressiveWorldVesselMarkers'), 'Vessel markers are not progressively rendered');
+          assert(economyUiStability.includes('populateStandaloneWorldMapProgressively'), 'Standalone world network is not progressively rendered');
+          assert(economyUiStability.includes('populateDashboardStationNetworkProgressively'), 'Dashboard station network is not progressively rendered');
+          assert(economyStability03.includes('worldEconomyStationRecordForNodeWithUnopenedStationSupport'), 'Unopened stations cannot accept scheduled freight');
+          assert(economyStability03.includes('dashboardBoundaryDiagnosticsWithWorldEconomy'), 'World economy diagnostics are not integrated');
+
+          const finalRuntime = fs.readFileSync('data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt', 'utf8');
+          assert(finalRuntime.includes('version: 20'), 'Suite export version was not advanced for persistent world economy');
+          assert(finalRuntime.includes('worldEconomyVersion: WORLD_ECONOMY_VERSION'), 'Suite export omits world economy version');
+          assert(finalRuntime.includes('normalizeWorldEconomyState()'), 'Suite import omits world economy migration');
+          assert(finalRuntime.includes('scheduleWorldEconomyProgressiveSimulation'), 'Suite import does not schedule economy catch-up');
+
+          const entry = fs.readFileSync('barotrauma-entry.js', 'utf8');
+          assert(entry.includes('barotrauma-rpg-tools.html#dashboard'), 'Main Barotrauma menu does not link the Active Submarine Dashboard');
+          assert(entry.includes('barotrauma-rpg-tools.html#route'), 'Standalone Route Planner link is missing');
+
+          const html = fs.readFileSync('barotrauma-rpg-tools.html', 'utf8');
+          assert(html.includes('data-tool="dashboard"'), 'Dashboard tool tab is missing');
+          assert(html.includes('data-tool="route"'), 'Standalone route tab is missing');
+          assert(html.includes('data-tool="world"'), 'Standalone world tab is missing');
+
+          console.log(`Validated ${paths.length} runtime fragments, route-event resolution, persistent station production, submitted player vessels, 15–105 minute NPC freight, Delivery Goods-only vendor replenishment, and progressive world rendering.`);
+          NODE

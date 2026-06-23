@@ -1,0 +1,374 @@
+
+  const EXPEDITION_INTEGRATION_VERSION = '1.0.0';
+
+  function defaultManagedExpedition() {
+    return {
+      version: EXPEDITION_INTEGRATION_VERSION,
+      status: 'active',
+      groupId: '',
+      submarineId: '',
+      currentNodeId: '',
+      startingNodeId: '',
+      crewIds: [],
+      filedCrossingId: '',
+      lostAt: '',
+      wreckSiteId: '',
+      notes: ''
+    };
+  }
+
+  function ensureWreckRegistry() {
+    const publicState = normalizeWorldHub().publicState;
+    if (!publicState.wrecks || typeof publicState.wrecks !== 'object' || Array.isArray(publicState.wrecks)) publicState.wrecks = {};
+    return publicState.wrecks;
+  }
+
+  function managedSubmarineIdentity() {
+    state.submarine.worldSubmarineId = state.submarine.worldSubmarineId || uid('world-submarine');
+    return state.submarine.worldSubmarineId;
+  }
+
+  function managedCrewRecords() {
+    return normalizeCrewManagement().roster.filter(record => record.approval === 'Accepted');
+  }
+
+  function managedCrewIdentity(record) {
+    return record.sourceCharacterId || record.rosterId;
+  }
+
+  function currentManagedGroup() {
+    const hub = normalizeWorldHub();
+    assignMissingGroupStarts();
+    return hub.publicState.groups[hub.activeGroupId] || null;
+  }
+
+  function managedSubmarineNodeId() {
+    const expedition = state.submarine.managedExpedition;
+    const group = currentManagedGroup();
+    return group?.currentNodeId || expedition?.currentNodeId || '';
+  }
+
+  function syncCommerceToManagedLocation(nodeId = managedSubmarineNodeId()) {
+    const node = crossingNode(nodeId);
+    if (!node || node.type !== 'station') return;
+    syncWorldMapStations();
+    const station = STATIONS.find(item => item.worldNodeId === node.id || item.name === node.name);
+    if (!station) return;
+    const commerce = normalizeStationCommerce();
+    commerce.activeStationId = stationIdentity(station);
+  }
+
+  function normalizeManagedExpedition() {
+    const hub = normalizeWorldHub();
+    ensureWreckRegistry();
+    const map = state.world?.map;
+    if (!map?.nodes?.length) return null;
+    assignMissingGroupStarts();
+    let group = currentManagedGroup();
+    if (!group) group = createWorldGroup('Expedition Group 1');
+    const defaults = defaultManagedExpedition();
+    state.submarine.managedExpedition = state.submarine.managedExpedition && typeof state.submarine.managedExpedition === 'object' ? state.submarine.managedExpedition : defaults;
+    const expedition = state.submarine.managedExpedition;
+    for (const [key, value] of Object.entries(defaults)) if (!(key in expedition)) expedition[key] = Array.isArray(value) ? [] : value;
+    const submarineId = managedSubmarineIdentity();
+    const validNodeIds = new Set(map.nodes.map(node => node.id));
+    if (!validNodeIds.has(group.startingNodeId)) group.startingNodeId = randomizedGroupStart(group.groupId);
+    if (!validNodeIds.has(group.currentNodeId)) group.currentNodeId = group.startingNodeId;
+    if (expedition.status !== 'lost' && !['active','lost'].includes(expedition.status)) expedition.status = 'active';
+    expedition.groupId = group.groupId;
+    expedition.submarineId = submarineId;
+    expedition.startingNodeId = group.startingNodeId;
+    expedition.currentNodeId = group.currentNodeId;
+    expedition.filedCrossingId = state.route?.crossing?.crossingId || group.routeId || '';
+
+    const records = managedCrewRecords();
+    const crewIds = [];
+    for (const record of records) {
+      const crewId = managedCrewIdentity(record);
+      crewIds.push(crewId);
+      hub.publicState.crews[crewId] = cloneWorldData({ ...record, crewId, groupId: group.groupId, submarineId, updatedAt: new Date().toISOString() });
+    }
+    expedition.crewIds = crewIds;
+    group.crewIds = [...new Set(crewIds)];
+    group.submarineIds = [...new Set([submarineId])];
+    group.primarySubmarineId = submarineId;
+    group.status = expedition.status;
+    hub.publicState.locations[group.groupId] = { groupId: group.groupId, nodeId: group.currentNodeId, submarineId, updatedAt: new Date().toISOString() };
+    hub.publicState.submarines[submarineId] = cloneWorldData({
+      submarineId,
+      groupId: group.groupId,
+      managed: true,
+      status: expedition.status,
+      currentNodeId: group.currentNodeId,
+      startingNodeId: group.startingNodeId,
+      crewIds,
+      routeId: expedition.filedCrossingId,
+      model: state.submarine.model,
+      name: state.submarine.name || state.submarine.model,
+      hullCurrent: state.submarine.hullCurrent,
+      submarine: state.submarine,
+      updatedAt: new Date().toISOString()
+    });
+    if (expedition.status !== 'lost') syncCommerceToManagedLocation(group.currentNodeId);
+    hub.updatedAt = new Date().toISOString();
+    return expedition;
+  }
+
+  function syncManagedExpeditionAfterMovement() {
+    const expedition = normalizeManagedExpedition();
+    if (!expedition) return;
+    const group = currentManagedGroup();
+    expedition.currentNodeId = group?.currentNodeId || expedition.currentNodeId;
+    expedition.filedCrossingId = state.route?.crossing?.crossingId || group?.routeId || '';
+    syncCommerceToManagedLocation(expedition.currentNodeId);
+    normalizeManagedExpedition();
+    save();
+  }
+
+  function assetLotValue(lot) {
+    if (lot.id) {
+      const record = allTradeRecords().find(item => item.id === lot.id);
+      if (record) return tradeBasePrice(record);
+    }
+    return Math.max(5, number(lot.unitValue, 80));
+  }
+
+  function managedSubmarineAssetLots() {
+    const lots = [];
+    for (const entry of normalizeCargoManagement().entries) {
+      lots.push({ source: 'cargo', id: entry.id || '', name: cargoItem(entry).name, quantity: Math.max(1, number(entry.quantity, 1)), unitSize: number(entry.unitSize, 1), condition: entry.condition, unitValue: entry.id ? assetLotValue({ id: entry.id }) : 80, notes: entry.notes || '' });
+    }
+    for (const mount of state.submarine.weapons || []) {
+      const source = WEAPONS.find(item => item.name === mount.name);
+      lots.push({ source: 'mounted-weapon', id: '', name: mount.name || 'Mounted Weapon', quantity: 1, unitSize: number(source?.storage, 1), condition: 50, unitValue: 1200 + number(mount.tier, 1) * 500, notes: `Recovered tier ${number(mount.tier, 1)} weapon mount.` });
+    }
+    for (const mount of state.submarine.wikiWeapons || []) {
+      const weapon = WIKI_CATALOG.submarineWeapons.find(item => item.id === mount.id);
+      lots.push({ source: 'mounted-weapon', id: mount.id || '', name: weapon?.name || mount.name || 'Mounted Weapon', quantity: 1, unitSize: 2, condition: 50, unitValue: 1500, notes: 'Recovered official-system weapon mount.' });
+    }
+    for (const upgradeId of state.submarine.upgrades || []) {
+      const upgrade = UPGRADES.find(item => item.id === upgradeId);
+      if (upgrade) lots.push({ source: 'upgrade', id: '', name: upgrade.name, quantity: 1, unitSize: 1, condition: 40, unitValue: number(upgrade.price, 100), notes: 'Recovered installed upgrade components.' });
+    }
+    for (const record of managedCrewRecords()) {
+      for (const entry of record.inventory || []) {
+        const definition = entry.id ? catalogueItem(entry.id) : null;
+        lots.push({ source: 'crew-inventory', id: entry.id || '', name: definition?.name || entry.customName || 'Crew Equipment', quantity: Math.max(1, number(entry.quantity, 1)), unitSize: number(definition?.carryUnits || entry.carryUnits, 1), condition: clamp(entry.condition ?? 50, 0, 100), unitValue: entry.id ? assetLotValue({ id: entry.id }) : 60, notes: `Recovered from ${record.characterName}.` });
+      }
+    }
+    return lots;
+  }
+
+  function selectQuarterSalvage(lots, seedText) {
+    const totalUnits = lots.reduce((sum, lot) => sum + Math.max(1, number(lot.quantity, 1)), 0);
+    const targetUnits = totalUnits ? Math.max(1, Math.ceil(totalUnits * 0.25)) : 0;
+    const remaining = lots.map((lot, index) => ({ index, quantity: Math.max(1, number(lot.quantity, 1)) }));
+    const selected = new Map();
+    const rng = seededRandom(seedText);
+    let chosen = 0;
+    while (chosen < targetUnits && remaining.some(item => item.quantity > 0)) {
+      const availableUnits = remaining.reduce((sum, item) => sum + item.quantity, 0);
+      let roll = Math.floor(rng() * availableUnits);
+      let chosenEntry = null;
+      for (const entry of remaining) {
+        roll -= entry.quantity;
+        if (roll < 0) { chosenEntry = entry; break; }
+      }
+      if (!chosenEntry) break;
+      selected.set(chosenEntry.index, (selected.get(chosenEntry.index) || 0) + 1);
+      chosenEntry.quantity -= 1;
+      chosen += 1;
+    }
+    return [...selected.entries()].map(([index, quantity]) => ({ ...lots[index], salvageId: uid('salvage'), quantity, claimed: false }));
+  }
+
+  function activeTransitLegForLoss() {
+    const crossing = normalizeRouteCrossing();
+    if (crossing.status !== 'underway') return null;
+    return activeCrossingLeg(crossing);
+  }
+
+  function createManagedSubmarineWreck() {
+    const expedition = normalizeManagedExpedition();
+    const group = currentManagedGroup();
+    const map = state.world?.map;
+    const leg = activeTransitLegForLoss();
+    if (!expedition || !group || !map || !leg) throw new Error('A submarine can only be lost with all hands while a filed crossing is underway.');
+    const from = crossingNode(leg.fromNodeId, map);
+    const to = crossingNode(leg.toNodeId, map);
+    if (!from || !to) throw new Error('The active transit leg is missing its mapped endpoints.');
+    const wreckSiteId = uid('wreck-site');
+    const submarineId = managedSubmarineIdentity();
+    const rng = seededRandom(`${map.seed}|${submarineId}|${leg.edgeId}|${wreckSiteId}`);
+    const offsetX = (rng() - 0.5) * 36;
+    const offsetY = (rng() - 0.5) * 36;
+    const wreckNode = {
+      id: wreckSiteId,
+      name: `Wreck of ${state.submarine.name || state.submarine.model}`,
+      type: 'wreck',
+      ring: Math.max(1, Math.round((number(from.ring) + number(to.ring)) / 2)),
+      x: (number(from.x) + number(to.x)) / 2 + offsetX,
+      y: (number(from.y) + number(to.y)) / 2 + offsetY,
+      details: `The lost ${state.submarine.model} ${state.submarine.name || ''} lies broken along the route between ${from.name} and ${to.name}. All hands were lost. A deterministic quarter of its carried items and Marks remains recoverable by another expedition.`,
+      pressure: Math.max(number(from.pressure, 1), number(to.pressure, 1)),
+      outerBias: (number(from.outerBias) + number(to.outerBias)) / 2,
+      locationLevel: Math.max(number(from.locationLevel, 1), number(to.locationLevel, 1)),
+      locationLevelName: 'Wreck Transit Site',
+      locationTypeId: 'managed-submarine-wreck',
+      locationTypeName: 'Lost Submarine Wreck',
+      locationLore: 'A complete expedition ended here. The hull is a grave, a navigational hazard, and a salvage claim.',
+      locationAvailability: 'Salvage only; no conventional market.',
+      locationShops: [],
+      locationServices: ['Wreck survey', 'Hazard marking', 'Salvage recovery'],
+      locationHazards: ['Unstable hull', 'Live ammunition', 'Pressure fractures', 'Predatory scavengers'],
+      locationDanger: 'Extreme',
+      encounterLocation: true,
+      stationLocation: false,
+      wreckSiteId,
+      sourceSubmarineId: submarineId,
+      sourceGroupId: group.groupId,
+      createdAt: new Date().toISOString()
+    };
+    map.nodes.push(wreckNode);
+    const nextEdgeNumber = map.edges.length + 1;
+    const halfDistance = Math.max(1, Math.ceil(number(leg.distance, 1) / 2));
+    map.edges.push({ id: `edge-${nextEdgeNumber}-wreck-a`, a: from.id, b: wreckNode.id, distance: halfDistance, voyages: 1, danger: true, wreckSiteId });
+    map.edges.push({ id: `edge-${nextEdgeNumber}-wreck-b`, a: wreckNode.id, b: to.id, distance: halfDistance, voyages: 1, danger: true, wreckSiteId });
+
+    const assets = managedSubmarineAssetLots();
+    const salvageLots = selectQuarterSalvage(assets, `${map.seed}|${wreckSiteId}|quarter-salvage`);
+    const carriedMarks = Math.max(0, number(state.submarine.resources.credits));
+    const recoverableMarks = Math.floor(carriedMarks * 0.25);
+    const itemValue = salvageLots.reduce((sum, lot) => sum + assetLotValue(lot) * number(lot.quantity, 1), 0);
+    const wreck = {
+      wreckSiteId,
+      nodeId: wreckNode.id,
+      sourceSubmarineId: submarineId,
+      sourceGroupId: group.groupId,
+      sourceSubmarineName: state.submarine.name || state.submarine.model,
+      sourceModel: state.submarine.model,
+      routeId: state.route.crossing.crossingId,
+      edgeId: leg.edgeId,
+      fromNodeId: from.id,
+      toNodeId: to.id,
+      lostAt: new Date().toISOString(),
+      canonicalAt: worldGameDate().toISOString(),
+      allHandsLost: true,
+      crewIds: [...expedition.crewIds],
+      originalItemUnits: assets.reduce((sum, lot) => sum + number(lot.quantity, 1), 0),
+      recoverableItemUnits: salvageLots.reduce((sum, lot) => sum + number(lot.quantity, 1), 0),
+      salvageLots,
+      recoverableMarks,
+      estimatedItemValue: itemValue,
+      claimed: false,
+      claimedByGroupId: '',
+      claimedAt: ''
+    };
+    ensureWreckRegistry()[wreckSiteId] = wreck;
+    return wreck;
+  }
+
+  function declareManagedSubmarineLostWithAllHands() {
+    const expedition = normalizeManagedExpedition();
+    if (!expedition || expedition.status === 'lost') return null;
+    const wreck = createManagedSubmarineWreck();
+    const group = currentManagedGroup();
+    for (const record of normalizeCrewManagement().roster) {
+      if (record.approval !== 'Accepted') continue;
+      record.status = 'Dead';
+      record.active = false;
+      record.current = { Strength: 0, Agility: 0, Intelligence: 0, Charisma: 0 };
+      record.conditions = [record.conditions, `Dead — lost with all hands aboard ${state.submarine.name || state.submarine.model}.`].filter(Boolean).join('\n');
+      record.updatedAt = new Date().toISOString();
+    }
+    state.character.current = { Strength: 0, Agility: 0, Intelligence: 0, Charisma: 0 };
+    state.character.conditions = [state.character.conditions, `Dead — lost with all hands aboard ${state.submarine.name || state.submarine.model}.`].filter(Boolean).join('\n');
+    state.submarine.hullCurrent = 0;
+    for (const system of Object.values(state.submarine.systems || {})) system.condition = 0;
+    expedition.status = 'lost';
+    expedition.lostAt = wreck.lostAt;
+    expedition.wreckSiteId = wreck.wreckSiteId;
+    expedition.currentNodeId = wreck.nodeId;
+    if (group) {
+      group.status = 'lost';
+      group.currentNodeId = wreck.nodeId;
+      group.routeId = state.route.crossing.crossingId;
+    }
+    state.route.crossing.status = 'lost';
+    state.route.crossing.currentNodeId = wreck.nodeId;
+    const leg = activeCrossingLeg(state.route.crossing);
+    if (leg) leg.status = 'lost';
+    state.route.crossingMessage = `Submarine lost with all hands. Wreck site ${wreck.wreckSiteId} has been added to the active transit route.`;
+    normalizeManagedExpedition();
+    save();
+    return wreck;
+  }
+
+  function wreckByNodeId(nodeId) {
+    return Object.values(ensureWreckRegistry()).find(wreck => wreck.nodeId === nodeId) || null;
+  }
+
+  function canActiveGroupScavengeWreck(wreck) {
+    const group = currentManagedGroup();
+    if (!wreck || !group || wreck.claimed || group.groupId === wreck.sourceGroupId) return false;
+    const currentId = group.currentNodeId;
+    return currentId === wreck.nodeId || currentId === wreck.fromNodeId || currentId === wreck.toNodeId;
+  }
+
+  function scavengeManagedSubmarineWreck(wreckSiteId) {
+    const wreck = ensureWreckRegistry()[wreckSiteId];
+    const group = currentManagedGroup();
+    if (!canActiveGroupScavengeWreck(wreck)) throw new Error('The active expedition must be a different group positioned at the wreck or one of its route endpoints.');
+    for (const lot of wreck.salvageLots || []) {
+      if (lot.claimed || number(lot.quantity) <= 0) continue;
+      addCargoItem(lot.id || '', lot.quantity, {
+        customName: lot.name,
+        unitSize: lot.unitSize,
+        owner: 'Submarine',
+        location: 'Cargo Bay',
+        notes: [lot.notes, `Recovered from ${wreck.sourceSubmarineName}.`].filter(Boolean).join(' '),
+        acquiredFrom: wreck.nodeId
+      });
+      lot.claimed = true;
+    }
+    state.submarine.resources.credits = Math.max(0, number(state.submarine.resources.credits)) + Math.max(0, number(wreck.recoverableMarks));
+    wreck.claimed = true;
+    wreck.claimedByGroupId = group.groupId;
+    wreck.claimedAt = new Date().toISOString();
+    const node = crossingNode(wreck.nodeId);
+    if (node) node.details += ` Salvage was recovered by ${group.name} on ${wreck.claimedAt}.`;
+    normalizeManagedExpedition();
+    save();
+    return wreck;
+  }
+
+  const generateValidCrossingBeforeExpeditionIntegration = generateValidCrossing;
+  generateValidCrossing = function generateValidManagedCrossing() {
+    const expedition = normalizeManagedExpedition();
+    if (expedition?.status === 'lost') throw new Error('The managed submarine is lost and cannot file another crossing.');
+    const crossing = generateValidCrossingBeforeExpeditionIntegration();
+    normalizeManagedExpedition();
+    return crossing;
+  };
+
+  const completeCrossingLegBeforeExpeditionIntegration = completeCrossingLeg;
+  completeCrossingLeg = function completeManagedCrossingLeg() {
+    const result = completeCrossingLegBeforeExpeditionIntegration();
+    if (result) syncManagedExpeditionAfterMovement();
+    return result;
+  };
+
+  const applyWorldSubmissionBeforeExpeditionIntegration = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithManagedExpedition(raw, allowForeign = false) {
+    const result = applyWorldSubmissionBeforeExpeditionIntegration(raw, allowForeign);
+    normalizeManagedExpedition();
+    save();
+    return result;
+  };
+
+  const importWorldSaveBeforeExpeditionIntegration = importWorldSave;
+  importWorldSave = function importWorldSaveWithManagedExpedition(raw) {
+    importWorldSaveBeforeExpeditionIntegration(raw);
+    normalizeManagedExpedition();
+    save();
+  };

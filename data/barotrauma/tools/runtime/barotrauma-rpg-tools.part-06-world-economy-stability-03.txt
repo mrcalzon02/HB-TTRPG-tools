@@ -1,0 +1,60 @@
+
+  worldEconomyStationRecordForNode=function worldEconomyStationRecordForNodeWithUnopenedStationSupport(nodeId) {
+    const station=STATIONS.find(item=>item.worldNodeId===nodeId)||STATIONS.find(item=>item.name===state.world?.map?.nodes?.find(node=>node.id===nodeId)?.name);
+    if (!station) return null;
+    const id=stationIdentity(station);
+    let record=state.stationCommerce?.stations?.[id]||null;
+    if (!record) record=normalizeStationCommerceBeforePersistentWorldEconomy().stations?.[id]||null;
+    return record;
+  };
+
+  const normalizeWorldEconomyStateBeforeVesselValidity=normalizeWorldEconomyState;
+  normalizeWorldEconomyState=function normalizeWorldEconomyStateWithVesselValidity() {
+    const economy=normalizeWorldEconomyStateBeforeVesselValidity();
+    const validNodes=new Set((state.world?.map?.nodes||[]).map(node=>node.id));
+    for (const vessel of Object.values(economy.vessels||{})) {
+      const refs=[vessel.location?.stationNodeId,vessel.location?.currentNodeId,vessel.location?.fromNodeId,vessel.location?.toNodeId,vessel.location?.departureNodeId,vessel.location?.destinationNodeId].filter(Boolean);
+      if (!refs.length||refs.some(id=>validNodes.has(id))) continue;
+      if (vessel.kind==='player') {
+        vessel.status='awaiting-decision';
+        vessel.location.decisionState='world-map-regenerated-location-unresolved';
+      } else vessel.active=false;
+      vessel.updatedAt=new Date().toISOString();
+    }
+    return economy;
+  };
+
+  processWorldEconomySimulation=function processWorldEconomySimulationProgressively(now=new Date(),options={}) {
+    const scheduled=scheduleWorldEconomyProgressiveSimulation(now,options.reason||'progressive simulation request');
+    return {scheduled,summary:scheduled?'World economy processing was queued in progressive batches.':'World economy processing is already running.'};
+  };
+
+  const worldEconomyDiagnosticsBeforeIntegrity=worldEconomyDiagnostics;
+  worldEconomyDiagnostics=function worldEconomyDiagnosticsWithSupplyIntegrity() {
+    const result=worldEconomyDiagnosticsBeforeIntegrity();
+    const economy=normalizeWorldEconomyState();
+    for (const station of Object.values(economy.stationEconomies)) {
+      for (const stock of Object.values(station.inventory?.catalogue||{})) {
+        if (number(stock.quantity)>0&&!stock.lastSource) result.issues.push(`Station ${station.name} contains vendor stock without a production, delivery, migration, or player-sale source.`);
+      }
+    }
+    const submittedPlayerVessels=Object.keys(normalizeWorldHub().publicState.submarines||{}).length;
+    const registeredPlayerVessels=Object.values(economy.vessels).filter(vessel=>vessel.kind==='player'&&vessel.active!==false).length;
+    if (registeredPlayerVessels<submittedPlayerVessels) result.issues.push('The master vessel registry does not include every active submitted player submarine.');
+    result.submittedPlayerVessels=submittedPlayerVessels;
+    result.registeredPlayerVessels=registeredPlayerVessels;
+    result.valid=!result.issues.length;
+    return result;
+  };
+
+  const dashboardBoundaryDiagnosticsBeforeWorldEconomy=dashboardBoundaryDiagnostics;
+  dashboardBoundaryDiagnostics=function dashboardBoundaryDiagnosticsWithWorldEconomy() {
+    const result=dashboardBoundaryDiagnosticsBeforeWorldEconomy();
+    const economy=worldEconomyDiagnostics();
+    result.worldEconomy=economy;
+    if (!economy.valid) result.issues.push(...economy.issues);
+    result.valid=!result.issues.length;
+    return result;
+  };
+
+  publishWorldEconomyDiagnostics();

@@ -1,0 +1,81 @@
+
+  const renderCustomWorkshopBeforeResearchHostPatch = renderCustomWorkshop;
+  renderCustomWorkshop = function renderCustomWorkshopWithResearchHostPatch() {
+    renderCustomWorkshopBeforeResearchHostPatch();
+    if (!root.querySelector('.research-development-panel')) {
+      const shell = root.querySelector('.tool-shell');
+      if (shell) {
+        const host = document.createElement('div');
+        host.className = 'tool-grid research-workshop-grid';
+        shell.appendChild(host);
+        renderResearchPanel();
+      }
+    }
+  };
+
+  const renderSubmarineBeforeValidatedModelSelect = renderSubmarine;
+  renderSubmarine = function renderSubmarineWithValidatedModelSelect() {
+    renderSubmarineBeforeValidatedModelSelect();
+    const original = root.querySelector('#sub-model');
+    if (!original) return;
+    const replacement = original.cloneNode(true);
+    original.replaceWith(replacement);
+    replacement.addEventListener('change', event => {
+      const selectedName = event.target.value;
+      const profile = state.submarineLibrary.custom.find(item => item.name === selectedName);
+      if (profile && !designDeployable('custom-submarine', profile.id)) {
+        event.target.value = state.submarine.model;
+        alert('This custom submarine is still an R&D design and cannot become the active vessel until development is complete.');
+        return;
+      }
+      useSubmarineModel(selectedName);
+    });
+  };
+
+  const applyWorldSubmissionBeforeResearchLibraryMerge = applyWorldSubmission;
+  applyWorldSubmission = function applyWorldSubmissionWithResearchLibraryMerge(raw, allowForeign = false) {
+    const submission = normalizeWorldSubmission(raw);
+    const result = applyWorldSubmissionBeforeResearchLibraryMerge(submission, allowForeign);
+    if (submission.kind !== 'research') return result;
+    const payload = submission.payload || {};
+    for (const rawEntry of payload.customContent || []) {
+      if (!rawEntry?.name || !CUSTOM_TYPE_MAP[rawEntry.type]) continue;
+      const existing = state.customContent.entries.find(item => item.id === rawEntry.id || item.name.toLowerCase() === String(rawEntry.name).toLowerCase());
+      const normalized = { ...defaultCustomContentDraft(rawEntry.type), ...rawEntry, id: rawEntry.id || uid('custom-content') };
+      if (existing) Object.assign(existing, normalized, { id: existing.id });
+      else state.customContent.entries.push(normalized);
+    }
+    for (const rawProfile of payload.customSubmarines || []) {
+      if (!rawProfile?.name || OFFICIAL_SUBMARINE_NAMES.has(rawProfile.name)) continue;
+      const existing = state.submarineLibrary.custom.find(item => item.id === rawProfile.id || item.name.toLowerCase() === String(rawProfile.name).toLowerCase());
+      const normalized = { ...defaultCustomSubmarineDraft(), ...rawProfile, id: rawProfile.id || uid('custom-sub') };
+      if (existing) Object.assign(existing, normalized, { id: existing.id });
+      else state.submarineLibrary.custom.push(normalized);
+    }
+    const research = normalizeCustomResearch();
+    for (const rawProject of payload.projects || []) {
+      const incoming = normalizeResearchProject(rawProject);
+      const existing = research.projects.find(item => item.projectId === incoming.projectId || (item.designKind === incoming.designKind && item.designId === incoming.designId));
+      if (existing) {
+        const completed = existing.status === 'completed' || incoming.status === 'completed';
+        Object.assign(existing, incoming, {
+          projectId: existing.projectId,
+          fundedMarks: Math.max(existing.fundedMarks, incoming.fundedMarks),
+          fundedSupplies: Math.max(existing.fundedSupplies, incoming.fundedSupplies),
+          status: completed ? 'completed' : incoming.status
+        });
+      } else research.projects.push(incoming);
+    }
+    syncCustomSubmarines();
+    syncCustomStations();
+    validateAllCustomDesigns();
+    save();
+    return result;
+  };
+
+  const validateAllCustomDesignsBeforeOrphanCleanup = validateAllCustomDesigns;
+  validateAllCustomDesigns = function validateAllCustomDesignsWithOrphanCleanup() {
+    validateAllCustomDesignsBeforeOrphanCleanup();
+    if (!state.customResearch?.projects) return;
+    state.customResearch.projects = state.customResearch.projects.filter(project => Boolean(projectDesign(project)) || project.status === 'completed');
+  };

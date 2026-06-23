@@ -1,0 +1,166 @@
+
+  dashboardManagementRuntime.claimFileSetup=dashboardManagementRuntime.claimFileSetup&&typeof dashboardManagementRuntime.claimFileSetup==='object'?dashboardManagementRuntime.claimFileSetup:{characterMode:'random',randomCharacter:null,startRevision:0,startOptionNodeIds:[],selectedStartNodeId:'',importText:''};
+
+  function dashboardClaimRandomCharacter(force=false){
+    const claimSetup=dashboardManagementRuntime.claimFileSetup;
+    if(claimSetup.randomCharacter&&!force)return cloneWorldData(claimSetup.randomCharacter);
+    const previous=dashboardManagementRuntime.newFileSetup.randomCharacter;
+    const generated=dashboardRandomCharacter(true);
+    dashboardManagementRuntime.newFileSetup.randomCharacter=previous;
+    claimSetup.randomCharacter=cloneWorldData(generated);
+    return generated;
+  }
+
+  function dashboardClaimStartingStations(refresh=false,count=12){
+    const claimSetup=dashboardManagementRuntime.claimFileSetup;
+    const map=state.world?.map;
+    if(!map?.nodes?.length)return [];
+    const outerRing=number(map.rings,Math.max(...map.nodes.map(node=>number(node.ring))));
+    const outer=map.nodes.filter(node=>node.type==='station'&&number(node.ring)===outerRing);
+    const stations=outer.length?outer:map.nodes.filter(node=>node.type==='station');
+    const valid=new Set(stations.map(node=>node.id));
+    claimSetup.startOptionNodeIds=(claimSetup.startOptionNodeIds||[]).filter(id=>valid.has(id));
+    if(refresh||!claimSetup.startOptionNodeIds.length){
+      claimSetup.startRevision=Math.max(0,number(claimSetup.startRevision))+1;
+      const rng=dashboardSetupRandom(`claim-new-group-start|${claimSetup.startRevision}`);
+      claimSetup.startOptionNodeIds=[...stations].map(node=>({node,value:rng()})).sort((left,right)=>left.value-right.value).slice(0,Math.min(count,stations.length)).map(entry=>entry.node.id);
+      claimSetup.selectedStartNodeId=claimSetup.startOptionNodeIds.includes(claimSetup.selectedStartNodeId)?claimSetup.selectedStartNodeId:claimSetup.startOptionNodeIds[0]||'';
+    }
+    return claimSetup.startOptionNodeIds.map(id=>map.nodes.find(node=>node.id===id)).filter(Boolean);
+  }
+
+  function dashboardClaimCharacterSetupFromControls(){
+    const mode=root.querySelector('#dashboard-claim-character-mode')?.value||'random';
+    if(mode==='import')return {mode,importText:root.querySelector('#dashboard-claim-character-import')?.value||''};
+    if(mode==='create')return {mode,manual:{
+      name:root.querySelector('#dashboard-claim-character-name')?.value,
+      player:root.querySelector('#dashboard-claim-character-player')?.value,
+      className:root.querySelector('#dashboard-claim-character-class')?.value,
+      level:root.querySelector('#dashboard-claim-character-level')?.value,
+      background:root.querySelector('#dashboard-claim-character-background')?.value,
+      talent:root.querySelector('#dashboard-claim-character-talent')?.value,
+      Strength:root.querySelector('#dashboard-claim-character-strength')?.value,
+      Agility:root.querySelector('#dashboard-claim-character-agility')?.value,
+      Intelligence:root.querySelector('#dashboard-claim-character-intelligence')?.value,
+      Charisma:root.querySelector('#dashboard-claim-character-charisma')?.value
+    }};
+    return {mode,randomCharacter:cloneWorldData(dashboardManagementRuntime.claimFileSetup.randomCharacter||dashboardClaimRandomCharacter(false)),randomPlayerName:root.querySelector('#dashboard-claim-random-player')?.value||''};
+  }
+
+  claimExistingDashboardSubmarine=async function claimExistingDashboardSubmarineWithFileInitialization(vesselId,password,managerName,options={}){
+    const record=dashboardManagementSubmarineRecord(vesselId);
+    if(!record)throw new Error('The selected public-world submarine record no longer exists.');
+    if(dashboardManagementCredential(vesselId)?.verifier)throw new Error('This submarine is already claimed.');
+    if(!state.world?.map?.nodes?.length)throw new Error('Load the saved Masterworld before claiming a submarine.');
+    const previousCharacter=cloneWorldData(state.character||defaultState().character);
+    state.character=dashboardCharacterForNewManagementFile(options.characterSetup||{});
+    normalizePlayerSubmissionSettings();
+    if(typeof normalizeCharacterInventory==='function')normalizeCharacterInventory();
+    const hub=normalizeWorldHub();
+    const authority=normalizeDashboardManagementAuthority();
+    let group=null;
+    let createdGroup=false;
+    try{
+      if(options.groupId&&hub.publicState.groups?.[options.groupId])group=hub.publicState.groups[options.groupId];
+      else{
+        const cleanGroupName=String(options.newGroupName||'').trim();
+        if(!cleanGroupName)throw new Error('Enter a name for the new expedition group.');
+        group=createWorldGroup(cleanGroupName);
+        createdGroup=true;
+        dashboardApplyNewGroupStart(group,String(options.startNodeId||dashboardManagementRuntime.claimFileSetup.selectedStartNodeId||''));
+      }
+      dashboardManagementPairVesselToGroup(vesselId,group);
+      const currentNodeId=String(group.currentNodeId||group.startingNodeId||'');
+      if(!authority.vesselSnapshots[vesselId]){
+        const rawModel=record.submarine?.model||(typeof record.model==='string'?record.model:record.model?.name||record.model?.id)||'Barsuk';
+        const modelName=SUBMARINES[rawModel]?rawModel:'Barsuk';
+        const submarine=dashboardManagementBuildSubmarineState(vesselId,record.name||record.submarine?.name||modelName,modelName,group);
+        submarine.managedExpedition.status='inactive';
+        submarine.managedExpedition.currentNodeId=currentNodeId;
+        const route=deepMerge(defaultState().route,{});
+        route.activeSubmarineId=vesselId;
+        route.activeGroupId=group.groupId;
+        const operationsDashboard=defaultActiveSubmarineDashboard();
+        operationsDashboard.activeSubmarineId=vesselId;
+        operationsDashboard.activeGroupId=group.groupId;
+        operationsDashboard.activeNodeId=currentNodeId;
+        operationsDashboard.startingLocation={...defaultDashboardStartingLocationState(),worldKey:dashboardWorldIdentityKey(),optionNodeIds:currentNodeId?[currentNodeId]:[],selectedNodeId:currentNodeId,confirmedNodeId:currentNodeId,locked:true,everDeparted:false,updatedAt:new Date().toISOString(),creationOnly:true};
+        operationsDashboard.managementFile={version:DASHBOARD_MANAGEMENT_FILE_INITIALIZATION_VERSION,createdAt:new Date().toISOString(),characterMode:String(options.characterSetup?.mode||'random'),newGroup:createdGroup,startingNodeId:currentNodeId,claimedExistingVessel:true};
+        authority.vesselSnapshots[vesselId]={version:DASHBOARD_MANAGEMENT_AUTH_VERSION,worldId:hub.worldId,vesselId,groupId:group.groupId,submarine,route,operationsDashboard,character:cloneWorldData(state.character),capturedAt:new Date().toISOString(),claimedFromExistingPublicRecord:true,managementFileVersion:DASHBOARD_MANAGEMENT_FILE_INITIALIZATION_VERSION};
+      }
+      Object.assign(record,{groupId:group.groupId,status:'inactive',activeForGroup:false,currentNodeId,storedAtNodeId:currentNodeId,managed:true,updatedAt:new Date().toISOString()});
+      dashboardManagementAudit('existing-submarine-management-file-created',vesselId,{groupId:group.groupId,newGroup:createdGroup,startingNodeId:currentNodeId,characterMode:options.characterSetup?.mode||'random'});
+      save();
+      const result=await createDashboardManagementCredential(vesselId,password,managerName,Boolean(options.remember));
+      dashboardManagementRuntime.claimFileSetup.randomCharacter=null;
+      dashboardManagementRuntime.claimFileSetup.importText='';
+      return result;
+    }catch(error){
+      state.character=previousCharacter;
+      if(createdGroup&&group){delete hub.publicState.groups[group.groupId];delete hub.publicState.locations[group.groupId];}
+      save();
+      throw error;
+    }
+  };
+
+  dashboardManagementClaimExistingPanelHtml=function dashboardManagementClaimExistingPanelHtmlWithFileInitialization(selected){
+    if(!selected||selected.claimed||selected.groupId)return '';
+    const setup=dashboardManagementRuntime.claimFileSetup;
+    const groups=Object.values(normalizeWorldHub().publicState.groups||{});
+    const selectedGroupId=normalizeWorldHub().activeGroupId&&normalizeWorldHub().publicState.groups[normalizeWorldHub().activeGroupId]?normalizeWorldHub().activeGroupId:groups[0]?.groupId||'';
+    const randomCharacter=dashboardClaimRandomCharacter(false);
+    const className='Engineer';
+    const talents=(CLASSES[className]?.talents||[]).map(item=>item[0]);
+    const starts=dashboardClaimStartingStations(false);
+    return `<details class="tool-card" style="margin-top:12px" open><summary><strong>Pair, Claim, and Create Management File</strong></summary><p class="small-note">Claiming an existing unclaimed submarine creates a new management file. Initialize its player character by importing, manual creation, or randomized generation.</p>
+      <div class="field-grid four" style="margin-top:10px"><label class="field">Expedition group<select id="dashboard-claim-existing-group"><option value="">Create a new expedition group</option>${groups.map(group=>`<option value="${escapeHtml(group.groupId)}" ${group.groupId===selectedGroupId?'selected':''}>${escapeHtml(group.name)} · ${escapeHtml(group.groupId)}</option>`).join('')}</select></label><label class="field">New group name<input id="dashboard-claim-existing-new-group" placeholder="Required only for a new group"></label><label class="field">Manager name<input id="dashboard-claim-existing-manager" value="${escapeHtml(state.character.player||'')}"></label><label class="field">New password<input id="dashboard-claim-existing-password" type="password" autocomplete="new-password"></label><label class="field">Confirm password<input id="dashboard-claim-existing-confirm" type="password" autocomplete="new-password"></label><label class="check-row"><input id="dashboard-claim-existing-remember" type="checkbox" checked><span>Remember this device</span></label></div>
+      <div id="dashboard-claim-new-group-start" class="tool-card ${selectedGroupId?'hidden':''}" style="margin-top:12px"><h4>New Group Starting Station</h4><div class="field-grid three"><label class="field">Randomized outer-ring stations<select id="dashboard-claim-start-node">${starts.map(node=>`<option value="${escapeHtml(node.id)}">L${number(node.locationLevel,1)} · ${escapeHtml(node.name)} · Ring ${number(node.ring)}</option>`).join('')}</select></label><div class="button-row" style="align-self:end"><button id="dashboard-claim-randomize-start" class="secondary-action" type="button">Randomize New-Group Starts</button></div></div></div>
+      <div class="tool-card" style="margin-top:12px"><h4>Player Character Initialization</h4><label class="field">Initialization method<select id="dashboard-claim-character-mode"><option value="import" ${setup.characterMode==='import'?'selected':''}>Import an existing character</option><option value="create" ${setup.characterMode==='create'?'selected':''}>Create a character manually</option><option value="random" ${setup.characterMode==='random'?'selected':''}>Generate a randomized character</option></select></label>
+        <div id="dashboard-claim-character-import-panel" class="${setup.characterMode==='import'?'':'hidden'}"><label class="field">Character JSON<textarea id="dashboard-claim-character-import">${escapeHtml(setup.importText||'')}</textarea></label><label class="secondary-action file-action" for="dashboard-claim-character-file">Select Character JSON</label><input id="dashboard-claim-character-file" type="file" accept="application/json" hidden></div>
+        <div id="dashboard-claim-character-create-panel" class="${setup.characterMode==='create'?'':'hidden'}"><div class="field-grid four"><label class="field">Character name<input id="dashboard-claim-character-name"></label><label class="field">Player name<input id="dashboard-claim-character-player" value="${escapeHtml(state.character.player||'')}"></label><label class="field">Class<select id="dashboard-claim-character-class">${optionList(Object.keys(CLASSES),className)}</select></label><label class="field">Level<input id="dashboard-claim-character-level" type="number" min="1" max="99" value="1"></label><label class="field">Background<select id="dashboard-claim-character-background">${optionList(BACKGROUNDS.map(item=>item.name),BACKGROUNDS[0]?.name)}</select></label><label class="field">Talent<select id="dashboard-claim-character-talent">${optionList(talents,talents[0])}</select></label><label class="field">Strength<input id="dashboard-claim-character-strength" type="number" min="1" max="12" value="3"></label><label class="field">Agility<input id="dashboard-claim-character-agility" type="number" min="1" max="12" value="3"></label><label class="field">Intelligence<input id="dashboard-claim-character-intelligence" type="number" min="1" max="12" value="3"></label><label class="field">Charisma<input id="dashboard-claim-character-charisma" type="number" min="1" max="12" value="3"></label></div></div>
+        <div id="dashboard-claim-character-random-panel" class="${setup.characterMode==='random'?'':'hidden'}"><label class="field">Player name<input id="dashboard-claim-random-player" value="${escapeHtml(randomCharacter.player||state.character.player||'')}"></label><div id="dashboard-claim-random-preview" class="notice"><strong>${escapeHtml(randomCharacter.name)}</strong> · Level ${number(randomCharacter.level)} ${escapeHtml(randomCharacter.className)}<br>${escapeHtml(dashboardCharacterStatSummary(randomCharacter))}</div><button id="dashboard-claim-reroll-character" class="secondary-action" type="button">Roll Another Character</button></div>
+      </div><div class="button-row" style="margin-top:10px"><button id="dashboard-claim-existing-vessel-v2" class="primary-action" type="button">Pair, Create File, and Log In</button></div></details>`;
+  };
+
+  function dashboardToggleClaimCharacterPanels(mode){
+    for(const candidate of ['import','create','random'])root.querySelector(`#dashboard-claim-character-${candidate}-panel`)?.classList.toggle('hidden',candidate!==mode);
+  }
+
+  const bindDashboardManagementGateBeforeClaimFileInitialization=bindDashboardManagementGate;
+  bindDashboardManagementGate=function bindDashboardManagementGateWithClaimFileInitialization(){
+    bindDashboardManagementGateBeforeClaimFileInitialization();
+    const selectedId=dashboardManagementSelectedVesselId();
+    const groupSelect=root.querySelector('#dashboard-claim-existing-group');
+    const startPanel=root.querySelector('#dashboard-claim-new-group-start');
+    const updateGroupMode=()=>startPanel?.classList.toggle('hidden',Boolean(groupSelect?.value));
+    groupSelect?.addEventListener('change',updateGroupMode);
+    updateGroupMode();
+    root.querySelector('#dashboard-claim-randomize-start')?.addEventListener('click',()=>{
+      const stations=dashboardClaimStartingStations(true);
+      const select=root.querySelector('#dashboard-claim-start-node');
+      if(select)select.innerHTML=stations.map(node=>`<option value="${escapeHtml(node.id)}">L${number(node.locationLevel,1)} · ${escapeHtml(node.name)} · Ring ${number(node.ring)}</option>`).join('');
+    });
+    const mode=root.querySelector('#dashboard-claim-character-mode');
+    mode?.addEventListener('change',event=>{dashboardManagementRuntime.claimFileSetup.characterMode=event.target.value;dashboardToggleClaimCharacterPanels(event.target.value);});
+    dashboardToggleClaimCharacterPanels(mode?.value||'random');
+    root.querySelector('#dashboard-claim-character-import')?.addEventListener('input',event=>{dashboardManagementRuntime.claimFileSetup.importText=event.target.value;});
+    root.querySelector('#dashboard-claim-character-file')?.addEventListener('change',async event=>{
+      const file=event.target.files?.[0];if(!file)return;
+      const text=await file.text();dashboardManagementRuntime.claimFileSetup.importText=text;const area=root.querySelector('#dashboard-claim-character-import');if(area)area.value=text;
+    });
+    root.querySelector('#dashboard-claim-character-class')?.addEventListener('change',event=>{
+      const talents=(CLASSES[event.target.value]?.talents||[]).map(item=>item[0]);const select=root.querySelector('#dashboard-claim-character-talent');if(select)select.innerHTML=talents.map(talent=>`<option value="${escapeHtml(talent)}">${escapeHtml(talent)}</option>`).join('');
+    });
+    root.querySelector('#dashboard-claim-reroll-character')?.addEventListener('click',()=>{
+      const character=dashboardClaimRandomCharacter(true);const player=root.querySelector('#dashboard-claim-random-player');if(player?.value)character.player=player.value;const preview=root.querySelector('#dashboard-claim-random-preview');if(preview)preview.innerHTML=`<strong>${escapeHtml(character.name)}</strong> · Level ${number(character.level)} ${escapeHtml(character.className)}<br>${escapeHtml(dashboardCharacterStatSummary(character))}`;
+    });
+    root.querySelector('#dashboard-claim-existing-vessel-v2')?.addEventListener('click',async event=>{
+      const button=event.currentTarget;const password=root.querySelector('#dashboard-claim-existing-password');const confirm=root.querySelector('#dashboard-claim-existing-confirm');
+      if((password?.value||'')!==(confirm?.value||'')){dashboardManagementMessage('The claim passwords do not match.',true);return;}
+      button.disabled=true;dashboardManagementMessage('Creating the claimed submarine management file…');
+      try{
+        await claimExistingDashboardSubmarine(selectedId,password?.value||'',root.querySelector('#dashboard-claim-existing-manager')?.value||'',{groupId:groupSelect?.value||'',newGroupName:root.querySelector('#dashboard-claim-existing-new-group')?.value||'',startNodeId:groupSelect?.value?'':root.querySelector('#dashboard-claim-start-node')?.value||'',remember:Boolean(root.querySelector('#dashboard-claim-existing-remember')?.checked),characterSetup:dashboardClaimCharacterSetupFromControls()});
+        if(password)password.value='';if(confirm)confirm.value='';renderActiveSubmarineDashboard();
+      }catch(error){if(password)password.value='';if(confirm)confirm.value='';dashboardManagementMessage(error.message,true);button.disabled=false;}
+    });
+  };

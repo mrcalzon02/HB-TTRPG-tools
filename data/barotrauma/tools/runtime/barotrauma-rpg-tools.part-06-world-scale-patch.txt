@@ -1,0 +1,250 @@
+
+  const WORLD_SCALE_VERSION = '2.0.0';
+  const WORLD_SCALE_DEFAULTS = {
+    rings: 48,
+    minimumCenterVoyages: 48,
+    totalLocations: 960,
+    stationTarget: 180,
+    branching: 48,
+    shellRadius: 7008,
+    baselineShellRadius: 292,
+    previousShellRadius: 1460,
+    shellRadiusMultiplier: 24,
+    minimumNodesPerRing: 8,
+    maximumRings: 80,
+    maximumLocations: 1800,
+    maximumStations: 400,
+    maximumShellRadius: 14000
+  };
+
+  Object.assign(WORLD_MAP_DEFAULTS, WORLD_SCALE_DEFAULTS, WORLD_STATE_SCHEMA.mapDefaults || {});
+
+  normalizeExpandedWorld = function normalizeFortyEightVoyageWorld() {
+    state.world = state.world && typeof state.world === 'object' ? state.world : {};
+    const world = state.world;
+    const migrating = world.worldScaleVersion !== WORLD_SCALE_VERSION;
+    if (migrating) {
+      if (world.map) {
+        world.scaleMigrationArchive = {
+          archivedAt: new Date().toISOString(),
+          scaleVersion: world.worldScaleVersion || world.expandedWorldVersion || 'legacy',
+          seed: world.seed,
+          rings: world.rings,
+          nodes: world.nodes,
+          stationTarget: world.stationTarget,
+          branching: world.branching,
+          shellRadius: world.shellRadius,
+          map: cloneWorldData(world.map),
+          selected: cloneWorldData(world.selected || [])
+        };
+      }
+      world.seed = world.seed || uniqueWorldSeed();
+      world.rings = WORLD_MAP_DEFAULTS.rings;
+      world.nodes = WORLD_MAP_DEFAULTS.totalLocations;
+      world.stationTarget = WORLD_MAP_DEFAULTS.stationTarget;
+      world.branching = WORLD_MAP_DEFAULTS.branching;
+      world.shellRadius = WORLD_MAP_DEFAULTS.shellRadius;
+      world.map = null;
+      world.selected = [];
+      world.worldScaleVersion = WORLD_SCALE_VERSION;
+      world.expandedWorldVersion = WORLD_STATE_SCHEMA.schemaVersion || WORLD_SCALE_VERSION;
+    }
+    world.seed = world.seed || uniqueWorldSeed();
+    world.rings = clamp(world.rings ?? WORLD_MAP_DEFAULTS.rings, 40, WORLD_MAP_DEFAULTS.maximumRings || 80);
+    const minimumLocations = Math.max(400, world.rings * (WORLD_MAP_DEFAULTS.minimumNodesPerRing || 8) + 1);
+    world.nodes = clamp(world.nodes ?? WORLD_MAP_DEFAULTS.totalLocations, minimumLocations, WORLD_MAP_DEFAULTS.maximumLocations || 1800);
+    world.stationTarget = clamp(world.stationTarget ?? WORLD_MAP_DEFAULTS.stationTarget, 50, Math.min(world.nodes - 1, WORLD_MAP_DEFAULTS.maximumStations || 400));
+    world.branching = clamp(world.branching ?? WORLD_MAP_DEFAULTS.branching, 0, 100);
+    world.shellRadius = clamp(world.shellRadius ?? WORLD_MAP_DEFAULTS.shellRadius, 5000, WORLD_MAP_DEFAULTS.maximumShellRadius || 14000);
+    world.selected = Array.isArray(world.selected) ? world.selected : [];
+    world.minimumCenterVoyages = world.rings;
+    return world;
+  };
+
+  expandedRingCounts = function expandedFortyEightVoyageRingCounts(rings, requestedNodes) {
+    const minimumPerRing = WORLD_MAP_DEFAULTS.minimumNodesPerRing || 8;
+    const baselineTotal = rings * minimumPerRing;
+    const available = Math.max(0, requestedNodes - 1 - baselineTotal);
+    const totalWeight = rings * (rings + 1) / 2;
+    const rawExtras = Array.from({ length: rings }, (_, index) => available * (index + 1) / totalWeight);
+    const extras = rawExtras.map(value => Math.floor(value));
+    let remainder = available - extras.reduce((sum, value) => sum + value, 0);
+    const fractionalOrder = rawExtras
+      .map((value, index) => ({ index, fraction: value - extras[index] }))
+      .sort((left, right) => right.fraction - left.fraction || right.index - left.index);
+    for (let index = 0; index < fractionalOrder.length && remainder > 0; index += 1, remainder -= 1) extras[fractionalOrder[index].index] += 1;
+    return extras.map(value => minimumPerRing + value);
+  };
+
+  generateWorldMap = function generateFortyEightVoyageWorldMap() {
+    const world = normalizeExpandedWorld();
+    const hub = normalizeWorldHub();
+    for (let index = STATIONS.length - 1; index >= 0; index -= 1) if (STATIONS[index]?.worldGenerated) STATIONS.splice(index, 1);
+    const rng = seededRandom(`${world.seed}|${world.rings}|${world.nodes}|${world.stationTarget}|${world.branching}|${world.shellRadius}|${WORLD_SCALE_VERSION}`);
+    const rings = clamp(world.rings, 40, WORLD_MAP_DEFAULTS.maximumRings || 80);
+    const minimumLocations = Math.max(400, rings * (WORLD_MAP_DEFAULTS.minimumNodesPerRing || 8) + 1);
+    const requestedNodes = clamp(world.nodes, minimumLocations, WORLD_MAP_DEFAULTS.maximumLocations || 1800);
+    const stationTarget = clamp(world.stationTarget, 50, Math.min(requestedNodes - 1, WORLD_MAP_DEFAULTS.maximumStations || 400));
+    const shellRadius = clamp(world.shellRadius, 5000, WORLD_MAP_DEFAULTS.maximumShellRadius || 14000);
+    const margin = 520;
+    const width = Math.ceil(shellRadius * 2 + margin * 2);
+    const height = width;
+    const center = { x: width / 2, y: height / 2 };
+    const nodes = [{
+      id: 'anomaly',
+      name: 'The Central Anomaly',
+      type: 'anomaly',
+      ring: 0,
+      x: center.x,
+      y: center.y,
+      details: `The campaign's ultimate destination, ${rings} mandatory inward voyages from the outer shell.`,
+      pressure: rings + 1,
+      outerBias: 0
+    }];
+    const ringCounts = expandedRingCounts(rings, requestedNodes);
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const count = ringCounts[ring - 1];
+      const radius = shellRadius * ring / rings;
+      const phase = rng() * Math.PI * 2;
+      for (let index = 0; index < count; index += 1) {
+        const angle = phase + Math.PI * 2 * index / count + (rng() - 0.5) * Math.min(0.1, 1.5 / count);
+        const jitter = (rng() - 0.5) * Math.min(90, radius * 0.025);
+        nodes.push({
+          id: `node-${ring}-${index}`,
+          name: '',
+          type: 'hazard',
+          ring,
+          x: center.x + Math.cos(angle) * (radius + jitter),
+          y: center.y + Math.sin(angle) * (radius + jitter),
+          details: '',
+          pressure: Math.max(1, rings - ring + 1),
+          outerBias: ring / rings
+        });
+      }
+    }
+    assignExpandedStations(nodes, stationTarget, rings, rng);
+
+    const edges = [];
+    const edgeKeys = new Set();
+    const addEdge = (a, b, forceDanger = false) => {
+      if (!a || !b || a.id === b.id) return;
+      const key = [a.id, b.id].sort().join('|');
+      if (edgeKeys.has(key)) return;
+      edgeKeys.add(key);
+      const geometric = Math.hypot(a.x - b.x, a.y - b.y);
+      const nominalLeg = shellRadius / rings;
+      const distance = Math.max(1, Math.round(geometric / Math.max(85, nominalLeg)));
+      const danger = forceDanger || a.type === 'hazard' || b.type === 'hazard' || rng() < 0.18;
+      edges.push({ id: `edge-${edges.length + 1}`, a: a.id, b: b.id, distance, voyages: 1, danger });
+    };
+    for (let ring = 1; ring <= rings; ring += 1) {
+      const current = nodes.filter(node => node.ring === ring);
+      const inward = nodes.filter(node => node.ring === ring - 1);
+      for (const node of current) {
+        const nearest = [...inward].sort((left, right) => Math.hypot(node.x - left.x, node.y - left.y) - Math.hypot(node.x - right.x, node.y - right.y));
+        addEdge(node, nearest[0]);
+        if (nearest[1] && rng() < number(world.branching) / 100) addEdge(node, nearest[1]);
+      }
+      for (let index = 0; index < current.length; index += 1) {
+        addEdge(current[index], current[(index + 1) % current.length], rng() < 0.12);
+        if (current[index + 2] && rng() < number(world.branching) / 180) addEdge(current[index], current[index + 2]);
+      }
+    }
+    const outerStations = nodes.filter(node => node.ring === rings && node.type === 'station');
+    const start = outerStations[Math.floor(rng() * Math.max(1, outerStations.length))] || nodes.find(node => node.ring === rings) || nodes[nodes.length - 1];
+    start.start = true;
+    world.map = {
+      schemaVersion: WORLD_STATE_SCHEMA.schemaVersion || WORLD_SCALE_VERSION,
+      worldScaleVersion: WORLD_SCALE_VERSION,
+      worldId: hub.worldId,
+      seed: world.seed,
+      width,
+      height,
+      rings,
+      minimumCenterVoyages: rings,
+      stationTarget,
+      stationCount: nodes.filter(node => node.type === 'station').length,
+      shellRadius,
+      nodes,
+      edges,
+      startId: start.id,
+      generatedAt: new Date().toISOString()
+    };
+    world.minimumCenterVoyages = rings;
+    world.selected = [start.id, 'anomaly'];
+    assignMissingGroupStarts();
+    hub.revision += 1;
+    hub.updatedAt = new Date().toISOString();
+    save();
+  };
+
+  createNewUnifiedWorld = function createNewFortyEightVoyageWorld() {
+    const previousSaves = cloneWorldData(normalizeWorldHub().savedStates);
+    state.world = {
+      seed: uniqueWorldSeed(),
+      rings: WORLD_MAP_DEFAULTS.rings,
+      nodes: WORLD_MAP_DEFAULTS.totalLocations,
+      stationTarget: WORLD_MAP_DEFAULTS.stationTarget,
+      branching: WORLD_MAP_DEFAULTS.branching,
+      shellRadius: WORLD_MAP_DEFAULTS.shellRadius,
+      minimumCenterVoyages: WORLD_MAP_DEFAULTS.minimumCenterVoyages,
+      map: null,
+      selected: [],
+      expandedWorldVersion: WORLD_STATE_SCHEMA.schemaVersion || WORLD_SCALE_VERSION,
+      worldScaleVersion: WORLD_SCALE_VERSION
+    };
+    state.worldHub = defaultWorldHub();
+    state.worldHub.savedStates = previousSaves;
+    generateWorldMap();
+    assignMissingGroupStarts();
+    save();
+  };
+
+  function replaceWorldScaleField(selector, minimum, maximum, handler) {
+    const original = root.querySelector(selector);
+    if (!original) return;
+    const replacement = original.cloneNode(true);
+    replacement.min = String(minimum);
+    replacement.max = String(maximum);
+    original.replaceWith(replacement);
+    replacement.addEventListener('change', event => handler(number(event.target.value)));
+  }
+
+  const renderWorldBeforeScaleExpansion = renderWorld;
+  renderWorld = function renderFortyEightVoyageWorld() {
+    renderWorldBeforeScaleExpansion();
+    const world = normalizeExpandedWorld();
+    const heroNote = root.querySelector('.tool-shell > .tool-hero .rules-note');
+    if (heroNote) heroNote.textContent = `A campaign-scale Europa with ${world.rings} mandatory inward voyages, ${world.nodes} locations, ${world.stationTarget} stations, persistent identity, randomized outer-ring group starts, submissions, and recoverable world checkpoints.`;
+    const heroMetrics = root.querySelector('.tool-shell > .tool-hero .metric-row');
+    if (heroMetrics) heroMetrics.insertAdjacentHTML('beforeend', `<div class="metric"><span>Minimum center voyages</span><strong>${world.rings}</strong></div>`);
+    const generationPanel = root.querySelector('#world-radius')?.closest('.tool-panel');
+    if (generationPanel) {
+      const note = [...generationPanel.querySelectorAll('.small-note')].find(item => item.textContent.includes('Default shell radius'));
+      if (note) note.textContent = `Default campaign depth: ${WORLD_MAP_DEFAULTS.rings} mandatory inward voyages, ${WORLD_MAP_DEFAULTS.totalLocations} locations, ${WORLD_MAP_DEFAULTS.stationTarget} stations, and a ${WORLD_MAP_DEFAULTS.shellRadius}-unit shell—twenty-four times the original 292-unit baseline.`;
+      generationPanel.insertAdjacentHTML('beforeend', `<div class="notice" style="margin-top:10px"><strong>Voyage-depth rule:</strong> Routes may branch and circle within a depth band, but no edge skips an inward ring. An outer-shell group therefore requires at least ${world.rings} distinct voyages to reach the central anomaly.</div>`);
+    }
+    replaceWorldScaleField('#world-rings', 40, WORLD_MAP_DEFAULTS.maximumRings || 80, value => {
+      world.rings = clamp(value, 40, WORLD_MAP_DEFAULTS.maximumRings || 80);
+      world.minimumCenterVoyages = world.rings;
+      world.nodes = Math.max(world.nodes, world.rings * (WORLD_MAP_DEFAULTS.minimumNodesPerRing || 8) + 1);
+      save();
+      renderWorld();
+    });
+    replaceWorldScaleField('#world-nodes', Math.max(400, world.rings * (WORLD_MAP_DEFAULTS.minimumNodesPerRing || 8) + 1), WORLD_MAP_DEFAULTS.maximumLocations || 1800, value => {
+      world.nodes = clamp(value, Math.max(400, world.rings * (WORLD_MAP_DEFAULTS.minimumNodesPerRing || 8) + 1), WORLD_MAP_DEFAULTS.maximumLocations || 1800);
+      world.stationTarget = Math.min(world.stationTarget, world.nodes - 1);
+      save();
+    });
+    replaceWorldScaleField('#world-stations', 50, Math.min(world.nodes - 1, WORLD_MAP_DEFAULTS.maximumStations || 400), value => {
+      world.stationTarget = clamp(value, 50, Math.min(world.nodes - 1, WORLD_MAP_DEFAULTS.maximumStations || 400));
+      save();
+    });
+    replaceWorldScaleField('#world-radius', 5000, WORLD_MAP_DEFAULTS.maximumShellRadius || 14000, value => {
+      world.shellRadius = clamp(value, 5000, WORLD_MAP_DEFAULTS.maximumShellRadius || 14000);
+      save();
+    });
+  };
+
+  normalizeExpandedWorld();
+  save();

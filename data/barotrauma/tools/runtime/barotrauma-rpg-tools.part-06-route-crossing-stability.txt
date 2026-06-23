@@ -1,0 +1,60 @@
+
+  function isNextCrossingSlot(slotId) {
+    return Boolean(slotId && nextPendingCrossingSlot()?.id === slotId);
+  }
+
+  const selectCrossingChoiceBeforeStability = selectCrossingChoice;
+  selectCrossingChoice = function selectCrossingChoiceSequential(slotId, choiceIndex) {
+    if (!isNextCrossingSlot(slotId)) {
+      state.route.crossingMessage = 'Resolve the highlighted next encounter before changing a later encounter.';
+      save();
+      return false;
+    }
+    selectCrossingChoiceBeforeStability(slotId, choiceIndex);
+    return true;
+  };
+
+  const resolveCrossingEventBeforeStability = resolveCrossingEvent;
+  resolveCrossingEvent = function resolveCrossingEventSequential(slotId, status, roll = '') {
+    if (!isNextCrossingSlot(slotId)) {
+      state.route.crossingMessage = 'Crossing encounters must be resolved in sequence.';
+      save();
+      return false;
+    }
+    return resolveCrossingEventBeforeStability(slotId, status, roll);
+  };
+
+  const redrawCrossingEventBeforeStability = redrawCrossingEvent;
+  redrawCrossingEvent = function redrawCrossingEventSequential(slotId) {
+    if (!isNextCrossingSlot(slotId)) {
+      state.route.crossingMessage = 'Only the highlighted next encounter may be redrawn.';
+      save();
+      return false;
+    }
+    return redrawCrossingEventBeforeStability(slotId);
+  };
+
+  const clearRouteCrossingBeforeStability = clearRouteCrossing;
+  clearRouteCrossing = function clearRouteCrossingAndReleaseGroup() {
+    const crossingId = state.route?.crossing?.crossingId || '';
+    const hub = normalizeWorldHub();
+    const group = activeWorldGroup();
+    if (group && (!crossingId || group.routeId === crossingId)) group.routeId = '';
+    clearRouteCrossingBeforeStability();
+    hub.updatedAt = new Date().toISOString();
+    save();
+  };
+
+  const crossingEventCardHtmlBeforeStability = crossingEventCardHtml;
+  crossingEventCardHtml = function crossingEventCardHtmlSequential(slot, index, nextPendingId) {
+    let html = crossingEventCardHtmlBeforeStability(slot, index, nextPendingId);
+    const locked = slot.status === 'pending' && slot.id !== nextPendingId;
+    if (!locked) return html;
+    html = html.replace('<article class="route-card ', '<article aria-disabled="true" class="route-card ');
+    html = html.replace(/<button class="compact-button crossing-select-choice/g, '<button disabled class="compact-button crossing-select-choice');
+    html = html.replace(/<button class="compact-button crossing-roll/g, '<button disabled class="compact-button crossing-roll');
+    html = html.replace(/<button class="compact-button crossing-success/g, '<button disabled class="compact-button crossing-success');
+    html = html.replace(/<button class="compact-button crossing-failure/g, '<button disabled class="compact-button crossing-failure');
+    html = html.replace(/<button class="compact-button crossing-redraw/g, '<button disabled class="compact-button crossing-redraw');
+    return html.replace('</header>', '<span class="small-note">Locked until earlier encounters are resolved.</span></header>');
+  };

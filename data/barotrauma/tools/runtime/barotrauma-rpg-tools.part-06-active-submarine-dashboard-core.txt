@@ -1,0 +1,269 @@
+
+  const ACTIVE_SUBMARINE_DASHBOARD_VERSION = '1.0.1';
+
+  function defaultActiveSubmarineDashboard() {
+    return {
+      version: ACTIVE_SUBMARINE_DASHBOARD_VERSION,
+      activeSubmarineId: '',
+      activeGroupId: '',
+      activeCrewIds: [],
+      activeRouteId: '',
+      activeNodeId: '',
+      mapMode: 'local',
+      focusedNodeId: '',
+      lastError: '',
+      updatedAt: ''
+    };
+  }
+
+  function activeDashboardRawFocus() {
+    const raw = window.location.hash.replace(/^#/, '');
+    return raw === 'route' ? 'route' : raw === 'world' ? 'world' : 'overview';
+  }
+
+  function activeDashboardCrewId(record) {
+    return record?.sourceCharacterId || record?.rosterId || '';
+  }
+
+  function activeDashboardAcceptedCrew() {
+    if (typeof normalizeCrewManagement !== 'function') return [];
+    return normalizeCrewManagement().roster.filter(record => record.active && record.approval === 'Accepted');
+  }
+
+  function ensureDashboardGroup(hub) {
+    let group = hub.publicState.groups[hub.activeGroupId] || null;
+    if (!group && state.world?.map?.nodes?.length) {
+      assignMissingGroupStarts();
+      group = hub.publicState.groups[hub.activeGroupId] || null;
+    }
+    if (!group) {
+      const groupId = hub.activeGroupId || uid('group');
+      group = {
+        groupId,
+        name: hub.groupDraftName || 'Expedition Group 1',
+        createdAt: new Date().toISOString(),
+        startingNodeId: '',
+        currentNodeId: '',
+        crewIds: [],
+        submarineIds: [],
+        primarySubmarineId: '',
+        routeId: '',
+        notes: ''
+      };
+      hub.publicState.groups[groupId] = group;
+      hub.activeGroupId = groupId;
+    }
+    if (state.world?.map?.nodes?.length) {
+      const validIds = new Set(state.world.map.nodes.map(node => node.id));
+      if (!validIds.has(group.startingNodeId)) group.startingNodeId = randomizedGroupStart(group.groupId);
+      if (!validIds.has(group.currentNodeId)) group.currentNodeId = group.startingNodeId;
+    }
+    return group;
+  }
+
+  function normalizeActiveSubmarineDashboard(persist = false) {
+    state.operationsDashboard = state.operationsDashboard && typeof state.operationsDashboard === 'object'
+      ? state.operationsDashboard
+      : defaultActiveSubmarineDashboard();
+    const dashboard = state.operationsDashboard;
+    const defaults = defaultActiveSubmarineDashboard();
+    for (const [key, value] of Object.entries(defaults)) {
+      if (!(key in dashboard)) dashboard[key] = Array.isArray(value) ? [] : value;
+    }
+    dashboard.version = ACTIVE_SUBMARINE_DASHBOARD_VERSION;
+    dashboard.mapMode = dashboard.mapMode === 'full' ? 'full' : 'local';
+    dashboard.activeCrewIds = Array.isArray(dashboard.activeCrewIds) ? dashboard.activeCrewIds : [];
+
+    state.submarine.worldSubmarineId = state.submarine.worldSubmarineId || dashboard.activeSubmarineId || uid('world-submarine');
+    const submarineId = state.submarine.worldSubmarineId;
+    const hub = normalizeWorldHub();
+    const group = ensureDashboardGroup(hub);
+    const settings = normalizePlayerSubmissionSettings();
+    const localCrewId = settings.characterId || uid('character');
+    settings.characterId = localCrewId;
+    const acceptedCrew = activeDashboardAcceptedCrew();
+    const rosterCrewIds = acceptedCrew.map(activeDashboardCrewId).filter(Boolean);
+    const crewIds = [...new Set([localCrewId, ...rosterCrewIds])];
+    const crossing = normalizeRouteCrossing();
+
+    dashboard.activeSubmarineId = submarineId;
+    dashboard.activeGroupId = group.groupId;
+    dashboard.activeCrewIds = crewIds;
+    dashboard.activeRouteId = crossing.crossingId || group.routeId || '';
+    dashboard.activeNodeId = group.currentNodeId || crossing.currentNodeId || '';
+    dashboard.updatedAt = new Date().toISOString();
+
+    hub.activeGroupId = group.groupId;
+    hub.activeSubmarineId = submarineId;
+    state.world.activeSubmarineId = submarineId;
+    state.route.activeSubmarineId = submarineId;
+    state.route.activeGroupId = group.groupId;
+    crossing.worldId = hub.worldId;
+    crossing.groupId = group.groupId;
+    crossing.submarineId = submarineId;
+
+    group.primarySubmarineId = submarineId;
+    group.submarineIds = [...new Set([submarineId, ...(group.submarineIds || [])])];
+    group.crewIds = crewIds;
+    group.routeId = crossing.crossingId || group.routeId || '';
+    if (dashboard.activeNodeId) group.currentNodeId = dashboard.activeNodeId;
+
+    const expeditionDefaults = typeof defaultManagedExpedition === 'function' ? defaultManagedExpedition() : {
+      version: ACTIVE_SUBMARINE_DASHBOARD_VERSION,
+      status: 'active',
+      groupId: '',
+      submarineId: '',
+      currentNodeId: '',
+      startingNodeId: '',
+      crewIds: [],
+      filedCrossingId: ''
+    };
+    state.submarine.managedExpedition = state.submarine.managedExpedition && typeof state.submarine.managedExpedition === 'object'
+      ? state.submarine.managedExpedition
+      : expeditionDefaults;
+    for (const [key, value] of Object.entries(expeditionDefaults)) {
+      if (!(key in state.submarine.managedExpedition)) state.submarine.managedExpedition[key] = Array.isArray(value) ? [] : value;
+    }
+    state.submarine.managedExpedition.groupId = group.groupId;
+    state.submarine.managedExpedition.submarineId = submarineId;
+    state.submarine.managedExpedition.currentNodeId = group.currentNodeId || dashboard.activeNodeId || '';
+    state.submarine.managedExpedition.startingNodeId = group.startingNodeId || '';
+    state.submarine.managedExpedition.crewIds = [...crewIds];
+    state.submarine.managedExpedition.filedCrossingId = crossing.crossingId || group.routeId || '';
+    if (state.submarine.managedExpedition.status !== 'lost') state.submarine.managedExpedition.status = 'active';
+    group.status = state.submarine.managedExpedition.status;
+
+    hub.publicState.crews[localCrewId] = {
+      crewId: localCrewId,
+      sourceCharacterId: localCrewId,
+      characterName: state.character.name || 'Current Character',
+      playerName: state.character.player || '',
+      className: state.character.className,
+      level: state.character.level,
+      status: state.character.status || 'Onboard',
+      approval: 'Accepted',
+      active: true,
+      current: cloneWorldData(state.character.current),
+      stats: cloneWorldData(state.character.stats),
+      conditions: state.character.conditions || '',
+      lostSanity: number(state.character.lostSanity),
+      groupId: group.groupId,
+      submarineId,
+      localRecord: true,
+      updatedAt: dashboard.updatedAt
+    };
+    for (const record of acceptedCrew) {
+      const crewId = activeDashboardCrewId(record);
+      if (!crewId) continue;
+      hub.publicState.crews[crewId] = cloneWorldData({
+        ...record,
+        crewId,
+        groupId: group.groupId,
+        submarineId,
+        updatedAt: dashboard.updatedAt
+      });
+    }
+
+    hub.publicState.submarines[submarineId] = {
+      submarineId,
+      groupId: group.groupId,
+      managed: true,
+      status: state.submarine.managedExpedition.status,
+      currentNodeId: dashboard.activeNodeId,
+      startingNodeId: group.startingNodeId || '',
+      crewIds,
+      routeId: dashboard.activeRouteId,
+      model: state.submarine.model,
+      name: state.submarine.name || state.submarine.model,
+      hullCurrent: number(state.submarine.hullCurrent),
+      hullMaximum: typeof calculateSubmarine === 'function' ? calculateSubmarine().totals.hull : number(state.submarine.hullCurrent),
+      resources: cloneWorldData(state.submarine.resources || {}),
+      updatedAt: dashboard.updatedAt
+    };
+    hub.publicState.locations[group.groupId] = {
+      groupId: group.groupId,
+      nodeId: dashboard.activeNodeId,
+      submarineId,
+      updatedAt: dashboard.updatedAt
+    };
+    if (crossing.crossingId && hub.publicState.routes[crossing.crossingId]) {
+      hub.publicState.routes[crossing.crossingId].submarineId = submarineId;
+      hub.publicState.routes[crossing.crossingId].groupId = group.groupId;
+      hub.publicState.routes[crossing.crossingId].crewIds = [...crewIds];
+    }
+    hub.updatedAt = dashboard.updatedAt;
+    if (persist) save();
+    return { dashboard, hub, group, crossing, submarineId, crewIds, localCrewId, acceptedCrew };
+  }
+
+  function activeDashboardDiagnostics() {
+    const context = normalizeActiveSubmarineDashboard(false);
+    const issues = [];
+    if (!context.submarineId) issues.push('No active submarine ID.');
+    if (!context.group?.groupId) issues.push('No active expedition group ID.');
+    if (!context.crewIds.length) issues.push('No active crew IDs.');
+    if (state.route.activeSubmarineId !== context.submarineId) issues.push('Route is not linked to the active submarine.');
+    if (state.world.activeSubmarineId !== context.submarineId) issues.push('World state is not linked to the active submarine.');
+    if (context.crossing.submarineId !== context.submarineId) issues.push('Crossing is not linked to the active submarine.');
+    if (state.submarine.managedExpedition?.groupId !== context.group.groupId) issues.push('Managed expedition is not linked to the active group.');
+    if (state.submarine.managedExpedition?.submarineId !== context.submarineId) issues.push('Managed expedition is not linked to the active submarine.');
+    return {
+      valid: !issues.length,
+      issues,
+      version: ACTIVE_SUBMARINE_DASHBOARD_VERSION,
+      activeSubmarineId: context.submarineId,
+      activeGroupId: context.group.groupId,
+      activeCrewCount: context.crewIds.length,
+      activeRouteId: context.crossing.crossingId || ''
+    };
+  }
+
+  const activeToolBeforeDashboard = activeTool;
+  activeTool = function activeToolWithUnifiedDashboard() {
+    const raw = window.location.hash.replace(/^#/, '');
+    if (raw === 'route' || raw === 'world' || raw === 'submarine-dashboard') return 'submarine';
+    return activeToolBeforeDashboard();
+  };
+
+  const syncCrossingPublicRouteBeforeDashboard = syncCrossingPublicRoute;
+  syncCrossingPublicRoute = function syncCrossingPublicRouteWithActiveSubmarine() {
+    const context = normalizeActiveSubmarineDashboard(false);
+    syncCrossingPublicRouteBeforeDashboard();
+    const crossing = normalizeRouteCrossing();
+    crossing.submarineId = context.submarineId;
+    crossing.groupId = context.group.groupId;
+    if (crossing.crossingId && context.hub.publicState.routes[crossing.crossingId]) {
+      context.hub.publicState.routes[crossing.crossingId].submarineId = context.submarineId;
+      context.hub.publicState.routes[crossing.crossingId].groupId = context.group.groupId;
+      context.hub.publicState.routes[crossing.crossingId].crewIds = [...context.crewIds];
+    }
+    context.group.routeId = crossing.crossingId || context.group.routeId || '';
+    state.operationsDashboard.activeRouteId = crossing.crossingId || '';
+    state.submarine.managedExpedition.filedCrossingId = crossing.crossingId || '';
+    save();
+  };
+
+  const completeCrossingLegBeforeDashboard = completeCrossingLeg;
+  completeCrossingLeg = function completeCrossingLegWithDashboardSync() {
+    const result = completeCrossingLegBeforeDashboard();
+    normalizeActiveSubmarineDashboard(true);
+    return result;
+  };
+
+  const startCrossingBeforeDashboard = startCrossing;
+  startCrossing = function startCrossingWithDashboardSync() {
+    normalizeActiveSubmarineDashboard(false);
+    const result = startCrossingBeforeDashboard();
+    normalizeActiveSubmarineDashboard(true);
+    return result;
+  };
+
+  const generateValidCrossingBeforeDashboard = generateValidCrossing;
+  generateValidCrossing = function generateValidCrossingWithDashboardIdentity() {
+    normalizeActiveSubmarineDashboard(false);
+    const result = generateValidCrossingBeforeDashboard();
+    normalizeActiveSubmarineDashboard(true);
+    return result;
+  };
+
+  globalThis.BAROTRAUMA_ACTIVE_SUBMARINE_DASHBOARD_DIAGNOSTICS = activeDashboardDiagnostics();

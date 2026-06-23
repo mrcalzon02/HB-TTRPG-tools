@@ -1,0 +1,27 @@
+
+  const renderActiveSubmarineDashboardBeforeTransitPolish = renderActiveSubmarineDashboard;
+  renderActiveSubmarineDashboard = function renderActiveSubmarineDashboardTransitPolish(requestedFocus = activeDashboardRawFocus()) {
+    renderActiveSubmarineDashboardBeforeTransitPolish(requestedFocus);
+    const statePanel = root.querySelector('.dashboard-operational-state');
+    const routePanel = root.querySelector('#active-dashboard-route');
+    const worldPanel = root.querySelector('#active-dashboard-world');
+    const inRoute = state.operationsDashboard?.operationalState === 'in-route';
+    if (!inRoute && statePanel && worldPanel) {
+      statePanel.insertAdjacentElement('afterend', worldPanel);
+      if (routePanel) worldPanel.insertAdjacentElement('afterend', routePanel);
+    }
+    const queueTable = [...root.querySelectorAll('#active-dashboard-route table')].find(table => table.querySelector('th')?.textContent?.trim() === 'Sequence');
+    if (queueTable) {
+      [...queueTable.querySelectorAll('tbody tr')].slice(1).forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells[1]) cells[1].textContent = 'Face-down consequential card';
+        if (cells[3]) cells[3].textContent = 'Assigned when revealed';
+        if (cells[4]) cells[4].textContent = 'Locked / concealed';
+      });
+    }
+    root.querySelector('.dashboard-active-turn-row')?.style.setProperty('background', 'rgba(117,197,142,.12)');
+    root.querySelectorAll('.dashboard-station-panel-locked').forEach(panel => {
+      panel.style.opacity = '.58';
+      panel.title = 'Station-only operations are unavailable while In Route.';
+    });
+  };

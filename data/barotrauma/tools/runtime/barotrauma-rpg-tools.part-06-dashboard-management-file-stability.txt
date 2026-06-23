@@ -1,0 +1,85 @@
+
+  const dashboardMarkVesselActiveBeforeTransitPreservation=dashboardMarkVesselActive;
+  dashboardMarkVesselActive=function dashboardMarkVesselActivePreservingTransit(vesselId,group,nodeId,reason='Group active submarine selected'){
+    const hub=normalizeWorldHub();
+    const authority=normalizeDashboardManagementAuthority();
+    const snapshot=authority.vesselSnapshots?.[vesselId];
+    const crossing=snapshot?.route?.crossing||{};
+    const underway=crossing.status==='underway';
+    const locationNodeId=String(underway?(crossing.currentNodeId||group.currentNodeId||group.startingNodeId||''):(nodeId||group.currentNodeId||group.startingNodeId||''));
+    const result=dashboardMarkVesselActiveBeforeTransitPreservation(vesselId,group,locationNodeId,reason);
+    const record=hub.publicState.submarines?.[vesselId];
+    if(record){
+      record.status='active';
+      record.activeForGroup=true;
+      record.currentNodeId=locationNodeId;
+      record.storedAtNodeId='';
+      if(record.submarine?.managedExpedition){record.submarine.managedExpedition.status='active';record.submarine.managedExpedition.currentNodeId=locationNodeId;}
+    }
+    if(typeof worldVesselRegistry==='function'){
+      const vessel=worldVesselRegistry()?.[vesselId];
+      if(vessel&&underway){
+        const routeLocation=typeof worldPlayerRouteLocation==='function'?worldPlayerRouteLocation(group.groupId,{routeId:crossing.crossingId||'',route:snapshot.route}):null;
+        vessel.status=routeLocation?.status||'in-transit';
+        vessel.location=routeLocation?.location||{...(vessel.location||{}),mode:'route',routeId:crossing.crossingId||'',departureNodeId:crossing.departureNodeId||'',destinationNodeId:crossing.destinationNodeId||'',currentNodeId:locationNodeId,pathNodeIds:Array.isArray(crossing.pathNodeIds)?crossing.pathNodeIds:[],progress:.5,decisionState:'active-transit-preserved'};
+        vessel.updatedAt=new Date().toISOString();
+        vessel.notes=reason;
+      }
+    }
+    return result;
+  };
+
+  const dashboardNormalizeAllGroupFleetsBeforeTransitPreservation=dashboardNormalizeAllGroupFleets;
+  dashboardNormalizeAllGroupFleets=function dashboardNormalizeAllGroupFleetsPreservingTransit(){
+    const result=dashboardNormalizeAllGroupFleetsBeforeTransitPreservation();
+    const hub=normalizeWorldHub();
+    for(const group of Object.values(hub.publicState.groups||{})){
+      const activeId=dashboardGroupActiveVesselId(group);
+      if(!activeId)continue;
+      for(const vesselId of dashboardGroupFleetIds(group)){
+        if(vesselId===activeId)continue;
+        const record=hub.publicState.submarines?.[vesselId]||{};
+        dashboardMarkVesselInactive(vesselId,group,record.storedAtNodeId||record.currentNodeId||group.currentNodeId||group.startingNodeId,'Migrated legacy reserve submarine to explicit inactive storage');
+      }
+      const snapshot=normalizeDashboardManagementAuthority().vesselSnapshots?.[activeId];
+      if(snapshot?.route?.crossing?.status==='underway')dashboardMarkVesselActive(activeId,group,snapshot.route.crossing.currentNodeId||group.currentNodeId,'Preserved active submarine transit during fleet normalization');
+      else dashboardMarkVesselActive(activeId,group,group.currentNodeId||group.startingNodeId,'Normalized sole active group submarine');
+    }
+    return result;
+  };
+
+  const bindDashboardCommissioningControlsBeforeManagementFileUiStability=bindDashboardCommissioningControls;
+  bindDashboardCommissioningControls=function bindDashboardCommissioningControlsWithManagementFileUiStability(){
+    const panel=root.querySelector('#dashboard-commissioning');
+    if(panel){
+      const createButton=panel.querySelector('#dashboard-create-crew');
+      if(createButton&&!panel.querySelector('#dashboard-random-crew')){
+        const randomButton=document.createElement('button');
+        randomButton.id='dashboard-random-crew';
+        randomButton.className='secondary-action no-print';
+        randomButton.type='button';
+        randomButton.textContent='Generate Random Crew at Station';
+        createButton.insertAdjacentElement('afterend',randomButton);
+      }
+      if(!panel.querySelector('.dashboard-group-fleet-roster')){
+        const context=normalizeActiveSubmarineDashboard(false);
+        const group=dashboardManagementGroupForVessel(context.submarineId)||context.group;
+        const wrapper=document.createElement('div');
+        wrapper.className='dashboard-group-fleet-roster';
+        wrapper.innerHTML=dashboardGroupFleetRosterHtml(group);
+        const message=panel.querySelector('#dashboard-commissioning-message');
+        if(message)message.insertAdjacentElement('beforebegin',wrapper);
+        else panel.appendChild(wrapper);
+      }
+    }
+    return bindDashboardCommissioningControlsBeforeManagementFileUiStability();
+  };
+
+  dashboardNormalizeAllGroupFleets();
+  globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_FILE_DIAGNOSTICS={
+    ...(globalThis.BAROTRAUMA_DASHBOARD_MANAGEMENT_FILE_DIAGNOSTICS||{}),
+    transitPreservedDuringLogin:true,
+    inactiveVesselsRemainVisible:true,
+    legacyReserveStatusMigrated:true,
+    commissioningUiInjectionStable:true
+  };
