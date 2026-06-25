@@ -1,0 +1,681 @@
+
+  const SUBMARINE_CAPABILITY_UNIFICATION_VERSION='1.0.0';
+  const SUBMARINE_STANDARD_CRATE_ITEM_LIMIT=20;
+  const SUBMARINE_LOOSE_ITEM_LIMIT=40;
+  const SUBMARINE_ECONOMY_STATION_CYCLE_MINUTES=360;
+  const SUBMARINE_ECONOMY_EXPANSION_INTERVAL_HOURS=24;
+
+  const SUBMARINE_WIKI_FACILITIES={
+    Barsuk:{fabricator:false,deconstructor:false,medicalFabricator:false,researchStation:false},
+    Dugong:{fabricator:false,deconstructor:false,medicalFabricator:false,researchStation:false},
+    Orca:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Camel:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Wallaby:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Humpback:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    'Orca 2':{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Azimuth:{fabricator:true,deconstructor:true,medicalFabricator:false,researchStation:false},
+    Typhon:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Herja:{fabricator:true,deconstructor:true,medicalFabricator:false,researchStation:false},
+    'R-29':{fabricator:true,deconstructor:true,medicalFabricator:false,researchStation:false},
+    Berilia:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Remora:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    'Typhon 2':{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Kastrull:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:false},
+    Winterhalter:{fabricator:true,deconstructor:true,medicalFabricator:true,researchStation:true}
+  };
+
+  function submarineCapabilityModel(){
+    return SUBMARINES[state.submarine.model]||SUBMARINES.Barsuk||{};
+  }
+
+  function submarineCapabilityProfile(){
+    return submarineCapabilityModel().profile||OFFICIAL_SUBMARINE_PROFILES.find(item=>item.name===state.submarine.model)||{};
+  }
+
+  function submarineWikiSourceUrl(profile=submarineCapabilityProfile()){
+    return profile?.wikiSlug?`https://barotraumagame.com/wiki/${encodeURIComponent(profile.wikiSlug).replace(/%2F/g,'/')}`:(SUBMARINE_ROSTER_DATA.source?.url||'https://barotraumagame.com/wiki/Submarines');
+  }
+
+  function submarineFacilityProfile(profile=submarineCapabilityProfile()){
+    if(profile?.facilities&&typeof profile.facilities==='object')return {
+      fabricator:Boolean(profile.facilities.fabricator),
+      deconstructor:Boolean(profile.facilities.deconstructor),
+      medicalFabricator:Boolean(profile.facilities.medicalFabricator),
+      researchStation:Boolean(profile.facilities.researchStation)
+    };
+    return {...(SUBMARINE_WIKI_FACILITIES[profile?.name||state.submarine.model]||{fabricator:false,deconstructor:false,medicalFabricator:false,researchStation:false})};
+  }
+
+  function submarineWeaponSlotType(systemId){
+    const weapon=catalogueWeapon(systemId);
+    if(!weapon)return 'unknown';
+    if(weapon.mount==='Turret')return 'small';
+    if(weapon.mount==='Large Turret')return 'large';
+    if(systemId==='depth-charge-tube')return 'depth-charge';
+    if(systemId==='electrical-discharge-coil')return 'discharge-coil';
+    return 'utility';
+  }
+
+  function submarineWeaponSlotLabel(type){
+    return type==='small'?'Small turret':type==='large'?'Large turret':type==='depth-charge'?'Depth-charge tube':type==='discharge-coil'?'Electrical discharge coil':type==='drone'?'Auxiliary drone weapon':'Utility installation';
+  }
+
+  function submarineWeaponSlotCompatible(slot,systemId){
+    if(!slot||!systemId)return false;
+    const type=submarineWeaponSlotType(systemId);
+    if(slot.slotType==='small')return type==='small';
+    if(slot.slotType==='large')return type==='large';
+    if(slot.slotType==='depth-charge')return systemId==='depth-charge-tube';
+    if(slot.slotType==='discharge-coil')return systemId==='electrical-discharge-coil';
+    if(slot.slotType==='drone')return systemId==='coilgun';
+    return type==='utility';
+  }
+
+  function submarineWeaponSlotBlueprint(profile=submarineCapabilityProfile()){
+    const slots=[];
+    const counters={small:0,large:0,'depth-charge':0,'discharge-coil':0,utility:0,drone:0};
+    for(const systemId of genericSystemsForProfile(profile)){
+      const slotType=submarineWeaponSlotType(systemId);
+      counters[slotType]=(counters[slotType]||0)+1;
+      slots.push({
+        slotId:`${slotType}-fixed-${counters[slotType]}`,
+        slotType,
+        hardpoint:false,
+        locked:['depth-charge','discharge-coil','utility'].includes(slotType),
+        installedId:systemId,
+        source:'official-installed'
+      });
+    }
+    for(let index=0;index<Math.max(0,number(profile.smallHardpoints));index+=1){
+      counters.small+=1;
+      slots.push({slotId:`small-hardpoint-${index+1}`,slotType:'small',hardpoint:true,locked:false,installedId:'',source:'official-hardpoint'});
+    }
+    for(let index=0;index<Math.max(0,number(profile.largeHardpoints));index+=1){
+      counters.large+=1;
+      slots.push({slotId:`large-hardpoint-${index+1}`,slotType:'large',hardpoint:true,locked:false,installedId:'',source:'official-hardpoint'});
+    }
+    if(profile.drone){
+      slots.push({slotId:'drone-fixed-1',slotType:'drone',hardpoint:false,locked:true,installedId:'coilgun',source:'official-drone'});
+    }
+    return slots;
+  }
+
+  function submarineWeaponSlotSignature(profile=submarineCapabilityProfile()){
+    return JSON.stringify({model:state.submarine.model,defaults:genericSystemsForProfile(profile),smallHardpoints:number(profile.smallHardpoints),largeHardpoints:number(profile.largeHardpoints),drone:Boolean(profile.drone)});
+  }
+
+  function syncWikiWeaponsFromWeaponSlots(){
+    const previous=new Map((state.submarine.wikiWeapons||[]).map(entry=>[entry.instanceId,entry]));
+    state.submarine.wikiWeapons=(state.submarine.weaponSlots||[]).filter(slot=>slot.installedId).map(slot=>{
+      const weapon=catalogueWeapon(slot.installedId);
+      const prior=previous.get(slot.slotId)||{};
+      const ammoNames=(weapon?.ammo||[]).map(item=>item.name);
+      const ammoName=ammoNames.includes(prior.ammoName)?prior.ammoName:(weapon?.ammo?.[0]?.name||'');
+      const ammo=weapon?.ammo?.find(item=>item.name===ammoName);
+      return {instanceId:slot.slotId,id:slot.installedId,ammoName,loaded:Math.max(0,number(prior.loaded,ammo?.magazineSize||0)),slotType:slot.slotType,slotSource:slot.source};
+    });
+    state.submarine.weapons=[];
+    return state.submarine.wikiWeapons;
+  }
+
+  function normalizeSubmarineWeaponSlots(force=false){
+    const profile=submarineCapabilityProfile();
+    const signature=submarineWeaponSlotSignature(profile);
+    if(force||!Array.isArray(state.submarine.weaponSlots)||state.submarine.weaponSlotSignature!==signature){
+      state.submarine.weaponSlots=submarineWeaponSlotBlueprint(profile);
+      state.submarine.weaponSlotSignature=signature;
+      state.submarine.weaponInstallMessage='Weapon installations reset to the selected submarine’s official wiki layout.';
+    }
+    const blueprint=submarineWeaponSlotBlueprint(profile);
+    const blueprintById=new Map(blueprint.map(slot=>[slot.slotId,slot]));
+    state.submarine.weaponSlots=blueprint.map(expected=>{
+      const existing=(state.submarine.weaponSlots||[]).find(slot=>slot.slotId===expected.slotId)||{};
+      const installedId=existing.installedId&&submarineWeaponSlotCompatible(expected,existing.installedId)?existing.installedId:expected.installedId;
+      return {...expected,installedId};
+    });
+    state.submarine.weaponSlots=state.submarine.weaponSlots.filter(slot=>blueprintById.has(slot.slotId));
+    syncWikiWeaponsFromWeaponSlots();
+    return state.submarine.weaponSlots;
+  }
+
+  function installSubmarineWeaponInSlot(slotId,systemId){
+    const slots=normalizeSubmarineWeaponSlots();
+    const slot=slots.find(item=>item.slotId===slotId);
+    if(!slot||slot.locked)return {ok:false,message:'That installation is fixed to the official submarine layout.'};
+    if(systemId&&!submarineWeaponSlotCompatible(slot,systemId))return {ok:false,message:`${catalogueWeapon(systemId)?.name||systemId} is not compatible with a ${submarineWeaponSlotLabel(slot.slotType).toLowerCase()} mount.`};
+    slot.installedId=systemId||'';
+    syncWikiWeaponsFromWeaponSlots();
+    state.submarine.weaponInstallMessage=slot.installedId?`${catalogueWeapon(slot.installedId)?.name||slot.installedId} installed in ${submarineWeaponSlotLabel(slot.slotType).toLowerCase()} ${slot.slotId}.`:`${submarineWeaponSlotLabel(slot.slotType)} ${slot.slotId} left empty.`;
+    save();
+    return {ok:true,message:state.submarine.weaponInstallMessage};
+  }
+
+  const addSubmarineWeaponBeforeCapabilityUnification=addSubmarineWeapon;
+  addSubmarineWeapon=function addSubmarineWeaponWithinWikiSlots(id){
+    if(typeof designDeployable==='function'){
+      const custom=typeof customEntry==='function'?customEntry(id):null;
+      if(custom&&!designDeployable('custom-content',id))return false;
+    }
+    const weapon=catalogueWeapon(id);
+    if(!weapon)return false;
+    const slots=normalizeSubmarineWeaponSlots();
+    const slot=slots.find(item=>!item.locked&&!item.installedId&&submarineWeaponSlotCompatible(item,id));
+    if(!slot){
+      state.submarine.weaponInstallMessage=`No empty compatible ${weapon.mount||'weapon'} hardpoint is available on ${state.submarine.model}.`;
+      return false;
+    }
+    return installSubmarineWeaponInSlot(slot.slotId,id).ok;
+  };
+
+  const useSubmarineModelBeforeCapabilityUnification=useSubmarineModel;
+  useSubmarineModel=function useSubmarineModelWithCanonicalCapabilities(name){
+    const result=useSubmarineModelBeforeCapabilityUnification(name);
+    normalizeSubmarineWeaponSlots(true);
+    normalizeUnifiedCargoManagement();
+    save();
+    return result;
+  };
+
+  const calculateSubmarineBeforeCapabilityUnification=calculateSubmarine;
+  calculateSubmarine=function calculateSubmarineWithoutLegacyWeaponOrCargoCapacity(){
+    const result=calculateSubmarineBeforeCapabilityUnification();
+    normalizeSubmarineWeaponSlots();
+    const crew=Math.max(0,number(state.submarine.resources.crew));
+    const supplies=Math.ceil(Math.max(0,number(state.submarine.resources.supplies))/10);
+    result.weaponCapacity=0;
+    result.wikiWeaponCapacity=0;
+    result.usedCapacity=crew+supplies;
+    result.remainingCapacity=result.totals.capacity-result.usedCapacity;
+    result.officialCargoCrates=submarineCargoCrateCapacity();
+    result.usedCargoCrates=unifiedCargoCapacityReport().economicCratesUsed;
+    result.looseItemsUsed=unifiedCargoCapacityReport().looseItemsUsed;
+    return result;
+  };
+
+  function submarineCargoCrateCapacity(profile=submarineCapabilityProfile()){
+    return Math.max(0,Math.floor(number(profile?.cargo,0)));
+  }
+
+  const normalizeCargoEntryBeforeCapabilityUnification=normalizeCargoEntry;
+  normalizeCargoEntry=function normalizeUnifiedCargoEntry(raw={}){
+    const entry=normalizeCargoEntryBeforeCapabilityUnification(raw);
+    entry.storageMode=raw.storageMode==='economic-crate'?'economic-crate':'loose';
+    entry.crateId=entry.storageMode==='economic-crate'?String(raw.crateId||''):'';
+    entry.economic=entry.storageMode==='economic-crate';
+    return entry;
+  };
+
+  const normalizeCargoManagementBeforeCapabilityUnification=normalizeCargoManagement;
+  normalizeCargoManagement=function normalizeUnifiedCargoManagement(){
+    const cargo=normalizeCargoManagementBeforeCapabilityUnification();
+    cargo.entries=(cargo.entries||[]).map(normalizeCargoEntry);
+    cargo.autoSync=true;
+    cargo.lastMessage=String(cargo.lastMessage||'');
+    let migrationCrate=1;
+    for(const entry of cargo.entries){
+      if(entry.storageMode==='economic-crate'&&!entry.crateId){entry.crateId=`crate-${migrationCrate}`;migrationCrate+=1;}
+    }
+    const report=unifiedCargoCapacityReport(cargo);
+    state.submarine.resources.cargo=report.economicCratesUsed;
+    return cargo;
+  };
+
+  function unifiedCargoCrates(cargo=state.submarine.cargoManagement){
+    const groups={};
+    for(const entry of cargo?.entries||[]){
+      if(entry.storageMode!=='economic-crate'||!entry.crateId)continue;
+      groups[entry.crateId]=groups[entry.crateId]||[];
+      groups[entry.crateId].push(entry);
+    }
+    return groups;
+  }
+
+  function unifiedCargoCapacityReport(cargo=state.submarine.cargoManagement){
+    cargo=cargo&&Array.isArray(cargo.entries)?cargo:{entries:[]};
+    const crates=unifiedCargoCrates(cargo);
+    const crateLoads=Object.fromEntries(Object.entries(crates).map(([crateId,entries])=>[crateId,entries.reduce((sum,entry)=>sum+Math.max(0,number(entry.quantity)),0)]));
+    const economicItems=Object.values(crateLoads).reduce((sum,value)=>sum+value,0);
+    const looseItemsUsed=cargo.entries.filter(entry=>entry.storageMode!=='economic-crate').reduce((sum,entry)=>sum+Math.max(0,number(entry.quantity)),0);
+    const ratedCrates=submarineCargoCrateCapacity();
+    return {
+      ratedCrates,
+      economicCratesUsed:Object.keys(crateLoads).length,
+      economicItems,
+      economicItemCapacity:ratedCrates*SUBMARINE_STANDARD_CRATE_ITEM_LIMIT,
+      looseItemsUsed,
+      looseItemCapacity:SUBMARINE_LOOSE_ITEM_LIMIT,
+      crateLoads,
+      overloadedCrates:Object.entries(crateLoads).filter(([,load])=>load>SUBMARINE_STANDARD_CRATE_ITEM_LIMIT).map(([id])=>id),
+      crateLimitExceeded:Object.keys(crateLoads).length>ratedCrates,
+      looseLimitExceeded:looseItemsUsed>SUBMARINE_LOOSE_ITEM_LIMIT
+    };
+  }
+
+  function unifiedCargoNextCrateId(cargo=normalizeCargoManagement()){
+    let index=1;
+    const used=new Set(Object.keys(unifiedCargoCrates(cargo)));
+    while(used.has(`crate-${index}`))index+=1;
+    return `crate-${index}`;
+  }
+
+  function unifiedCargoAppendEntry(cargo,raw){
+    const match=cargo.entries.find(entry=>entry.id===(raw.id||'')&&entry.customName===(raw.customName||catalogueItem(raw.id)?.name||'Unnamed Cargo')&&entry.owner===(raw.owner||'Submarine')&&entry.location===(raw.location||'Cargo Bay')&&entry.storageMode===raw.storageMode&&entry.crateId===(raw.crateId||''));
+    if(match)match.quantity+=Math.max(1,number(raw.quantity,1));
+    else cargo.entries.push(normalizeCargoEntry(raw));
+  }
+
+  function addUnifiedCargoItem(id,quantity=1,options={}){
+    const cargo=normalizeCargoManagement();
+    const item=id?catalogueItem(id):null;
+    const amount=Math.max(1,Math.floor(number(quantity,1)));
+    const storageMode=options.storageMode==='economic-crate'||options.economic===true?'economic-crate':'loose';
+    const name=options.customName||item?.name||'Unnamed Cargo';
+    const common={id:id||'',customName:name,unitSize:options.unitSize??(item?.category==='Submarine Ammunition'?1:item?.carryUnits||1),owner:options.owner||'Submarine',location:options.location||'Cargo Bay',notes:options.notes||'',acquiredFrom:options.acquiredFrom||'',storageMode};
+    const report=unifiedCargoCapacityReport(cargo);
+    if(storageMode==='loose'){
+      if(report.looseItemsUsed+amount>SUBMARINE_LOOSE_ITEM_LIMIT){cargo.lastMessage=`Loose storage is full: ${report.looseItemsUsed}/${SUBMARINE_LOOSE_ITEM_LIMIT} items already aboard.`;return false;}
+      unifiedCargoAppendEntry(cargo,{...common,quantity:amount,crateId:''});
+    }else{
+      if(report.economicItems+amount>report.economicItemCapacity){cargo.lastMessage=`Economic cargo exceeds ${report.ratedCrates} rated crates (${report.economicItemCapacity} standard items).`;return false;}
+      let remaining=amount;
+      const crateLoads={...report.crateLoads};
+      const availableCrates=Object.keys(crateLoads).sort((left,right)=>left.localeCompare(right,undefined,{numeric:true}));
+      for(const crateId of availableCrates){
+        if(remaining<=0)break;
+        const free=Math.max(0,SUBMARINE_STANDARD_CRATE_ITEM_LIMIT-number(crateLoads[crateId]));
+        if(!free)continue;
+        const packed=Math.min(free,remaining);
+        unifiedCargoAppendEntry(cargo,{...common,quantity:packed,crateId});
+        crateLoads[crateId]=number(crateLoads[crateId])+packed;
+        remaining-=packed;
+      }
+      while(remaining>0){
+        if(Object.keys(crateLoads).length>=report.ratedCrates){cargo.lastMessage=`No rated economic cargo crate remains available on ${state.submarine.model}.`;return false;}
+        const crateId=unifiedCargoNextCrateId({entries:cargo.entries});
+        const packed=Math.min(SUBMARINE_STANDARD_CRATE_ITEM_LIMIT,remaining);
+        unifiedCargoAppendEntry(cargo,{...common,quantity:packed,crateId});
+        crateLoads[crateId]=packed;
+        remaining-=packed;
+      }
+    }
+    cargo.lastMessage=`Added ${amount} ${name} to ${storageMode==='economic-crate'?'economic crate storage':'loose onboard storage'}.`;
+    state.submarine.resources.cargo=unifiedCargoCapacityReport(cargo).economicCratesUsed;
+    save();
+    return true;
+  }
+
+  addCargoItem=function addCargoItemWithCratesAndLooseStorage(id,quantity=1,options={}){
+    return addUnifiedCargoItem(id,quantity,options);
+  };
+
+  cargoUnits=function cargoUnitsAsEconomicCrates(){
+    return unifiedCargoCapacityReport(normalizeCargoManagement()).economicCratesUsed;
+  };
+
+  syncCargoResourceIfEnabled=function syncCargoResourceToRatedCrates(){
+    state.submarine.resources.cargo=unifiedCargoCapacityReport(normalizeCargoManagement()).economicCratesUsed;
+  };
+
+  function repackUnifiedEconomicCargo(){
+    const cargo=normalizeCargoManagement();
+    const economic=cargo.entries.filter(entry=>entry.storageMode==='economic-crate').map(entry=>({...entry}));
+    cargo.entries=cargo.entries.filter(entry=>entry.storageMode!=='economic-crate');
+    let crateIndex=1;
+    let remainingInCrate=SUBMARINE_STANDARD_CRATE_ITEM_LIMIT;
+    for(const entry of economic){
+      let remaining=Math.max(0,number(entry.quantity));
+      while(remaining>0){
+        if(remainingInCrate<=0){crateIndex+=1;remainingInCrate=SUBMARINE_STANDARD_CRATE_ITEM_LIMIT;}
+        const packed=Math.min(remainingInCrate,remaining);
+        cargo.entries.push(normalizeCargoEntry({...entry,cargoId:uid('cargo'),quantity:packed,storageMode:'economic-crate',crateId:`crate-${crateIndex}`}));
+        remaining-=packed;
+        remainingInCrate-=packed;
+      }
+    }
+    cargo.lastMessage=`Economic cargo repacked into ${unifiedCargoCapacityReport(cargo).economicCratesUsed} crates.`;
+    syncCargoResourceIfEnabled();
+    save();
+  }
+
+  moveCharacterInventoryToCargo=function moveCharacterInventoryToLooseSubmarineStorage(instanceId){
+    const entry=inventoryEntry(instanceId);
+    if(!entry)return false;
+    const item=inventoryDefinition(entry);
+    if(!addCargoItem(entry.id,1,{customName:item.name,unitSize:item.carryUnits||entry.carryUnits||1,owner:state.character.name||state.character.player||'Crew',location:'Cabinet / cupboard storage',notes:entry.notes||'',acquiredFrom:'Character inventory',storageMode:'loose'}))return false;
+    if(entry.quantity>1)entry.quantity-=1;
+    else state.character.catalogInventory=state.character.catalogInventory.filter(itemEntry=>itemEntry.instanceId!==instanceId);
+    save();
+    return true;
+  };
+
+  const deliverTradePurchaseBeforeCapabilityUnification=deliverTradePurchase;
+  deliverTradePurchase=function deliverTradePurchaseToCorrectStorage(record,destination,stationRecord){
+    if(record.kind==='item'){
+      if(record.category==='Submarine Ammunition')return addSubmarineAmmo(record.id,1)!==false;
+      if(destination==='character')return addCharacterCatalogueItem(record.id,1)!==false;
+      return addCargoItem(record.id,1,{acquiredFrom:stationRecord.name,owner:'Submarine',location:'Economic Cargo Bay',storageMode:'economic-crate',economic:true});
+    }
+    if(record.kind==='submarineWeapon')return addSubmarineWeapon(record.id);
+    return deliverTradePurchaseBeforeCapabilityUnification(record,destination,stationRecord);
+  };
+
+  function renderUnifiedCargoManagementPanel(){
+    const cargo=normalizeCargoManagement();
+    const report=unifiedCargoCapacityReport(cargo);
+    const catalogueOptions=allTradeRecords().filter(record=>record.kind==='item').map(record=>record.id);
+    const panel=document.createElement('section');
+    panel.className='tool-panel span-12';
+    panel.innerHTML=`
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Wiki-rated freight and onboard stowage</p><h3>General Cargo Manifest</h3><p class="small-note">Economic cargo uses the submarine’s official crate rating. Each physical crate holds up to ${SUBMARINE_STANDARD_CRATE_ITEM_LIMIT} standard items. Personal, mission, and non-economic equipment uses a separate ${SUBMARINE_LOOSE_ITEM_LIMIT}-item cabinet, cupboard, rack, and loose-storage allowance.</p></div><a class="rules-link" href="${escapeHtml(submarineWikiSourceUrl())}" target="_blank" rel="noopener">Official submarine capacity source ↗</a></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Economic crates</span><strong class="${report.crateLimitExceeded?'bad':'good'}">${report.economicCratesUsed}/${report.ratedCrates}</strong></div><div class="metric"><span>Crated items</span><strong>${report.economicItems}/${report.economicItemCapacity}</strong></div><div class="metric"><span>Loose items</span><strong class="${report.looseLimitExceeded?'bad':'good'}">${report.looseItemsUsed}/${report.looseItemCapacity}</strong></div><div class="metric"><span>Crate item limit</span><strong>${SUBMARINE_STANDARD_CRATE_ITEM_LIMIT}</strong></div></div>
+      <div class="field-grid four" style="margin-top:12px"><label class="field">Catalogue item<select id="cargo-add-item">${optionList(catalogueOptions,catalogueOptions[0]||'',id=>catalogueItem(id)?.name||customEntry(id)?.name||id)}</select></label><label class="field">Quantity<input id="cargo-add-quantity" type="number" min="1" max="9999" value="1"></label><label class="field">Storage class<select id="cargo-add-storage"><option value="loose">Loose / non-economic</option><option value="economic-crate">Economic cargo crate</option></select></label><div class="button-row" style="align-self:end"><button id="cargo-add-catalogue" class="primary-action no-print" type="button">Add to Manifest</button><button id="cargo-repack-economic" class="secondary-action no-print" type="button">Repack Crates</button></div></div>
+      <div class="notice ${report.crateLimitExceeded||report.looseLimitExceeded||report.overloadedCrates.length?'bad':''}" style="margin-top:10px">${escapeHtml(cargo.lastMessage||`Economic freight is ${report.economicCratesUsed}/${report.ratedCrates} crates; non-economic loose storage is ${report.looseItemsUsed}/${report.looseItemCapacity} items.`)}</div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table cargo-manifest-table"><thead><tr><th>Cargo</th><th>Storage class</th><th>Container</th><th>Quantity</th><th>Owner</th><th>Location</th><th>Condition</th><th>Notes</th><th></th></tr></thead><tbody>${cargo.entries.map(entry=>{const item=cargoItem(entry);const crateLoad=entry.crateId?number(report.crateLoads[entry.crateId]):0;return `<tr><td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${escapeHtml(item.category||'Cargo')} · ${escapeHtml(item.subcategory||'')}</span></td><td>${entry.storageMode==='economic-crate'?'<span class="status-pill warn">ECONOMIC</span>':'<span class="status-pill">LOOSE</span>'}</td><td>${entry.storageMode==='economic-crate'?`${escapeHtml(entry.crateId)} · ${crateLoad}/${SUBMARINE_STANDARD_CRATE_ITEM_LIMIT}`:'Cabinet / rack pool'}</td><td><div class="cargo-quantity-controls"><button class="compact-button cargo-subtract" data-id="${escapeHtml(entry.cargoId)}" type="button">−</button><input class="cargo-quantity" data-id="${escapeHtml(entry.cargoId)}" type="number" min="1" max="9999" value="${entry.quantity}"><button class="compact-button cargo-add-one" data-id="${escapeHtml(entry.cargoId)}" type="button">+</button></div></td><td><input class="cargo-owner" data-id="${escapeHtml(entry.cargoId)}" value="${escapeHtml(entry.owner)}"></td><td><input class="cargo-location" data-id="${escapeHtml(entry.cargoId)}" value="${escapeHtml(entry.location)}"></td><td><input class="cargo-condition" data-id="${escapeHtml(entry.cargoId)}" type="number" min="0" max="100" value="${entry.condition}"></td><td><textarea class="cargo-notes" data-id="${escapeHtml(entry.cargoId)}">${escapeHtml(entry.notes)}</textarea></td><td><div class="button-row"><button class="compact-button cargo-to-character" data-id="${escapeHtml(entry.cargoId)}" type="button">Give to Character</button><button class="compact-button cargo-remove" data-id="${escapeHtml(entry.cargoId)}" type="button">Remove Lot</button></div></td></tr>`;}).join('')||'<tr><td colspan="9">No cargo lots are recorded.</td></tr>'}</tbody></table></div>
+      <details style="margin-top:12px"><summary><strong>Add manual or unlisted cargo</strong></summary><div class="field-grid four" style="margin-top:10px"><label class="field">Cargo name<input id="cargo-manual-name" value="${escapeHtml(cargo.draftName)}"></label><label class="field">Quantity<input id="cargo-manual-quantity" type="number" min="1" value="${cargo.draftQuantity}"></label><label class="field">Storage class<select id="cargo-manual-storage"><option value="loose">Loose / non-economic</option><option value="economic-crate">Economic cargo crate</option></select></label><label class="field">Owner<input id="cargo-manual-owner" value="${escapeHtml(cargo.draftOwner)}"></label><label class="field">Location<input id="cargo-manual-location" value="${escapeHtml(cargo.draftLocation)}"></label></div><button id="cargo-add-manual" class="secondary-action no-print" type="button" style="margin-top:10px">Add Manual Cargo</button></details>
+      <label class="field" style="margin-top:12px">Manifest notes<textarea id="cargo-manifest-notes">${escapeHtml(cargo.notes)}</textarea></label>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    const cargoEntry=id=>cargo.entries.find(entry=>entry.cargoId===id);
+    const updateText=(id,key,value)=>{const entry=cargoEntry(id);if(!entry)return;entry[key]=value;save();};
+    panel.querySelector('#cargo-add-catalogue')?.addEventListener('click',()=>{const ok=addCargoItem(panel.querySelector('#cargo-add-item').value,panel.querySelector('#cargo-add-quantity').value,{storageMode:panel.querySelector('#cargo-add-storage').value,economic:panel.querySelector('#cargo-add-storage').value==='economic-crate'});if(!ok)alert(cargo.lastMessage);renderSubmarine();});
+    panel.querySelector('#cargo-repack-economic')?.addEventListener('click',()=>{repackUnifiedEconomicCargo();renderSubmarine();});
+    panel.querySelectorAll('.cargo-subtract').forEach(button=>button.addEventListener('click',event=>{removeCargoQuantity(event.currentTarget.dataset.id,1);syncCargoResourceIfEnabled();renderSubmarine();}));
+    panel.querySelectorAll('.cargo-add-one').forEach(button=>button.addEventListener('click',event=>{const entry=cargoEntry(event.currentTarget.dataset.id);if(!entry)return;const ok=addCargoItem(entry.id,1,{customName:entry.customName,unitSize:entry.unitSize,owner:entry.owner,location:entry.location,notes:entry.notes,acquiredFrom:entry.acquiredFrom,storageMode:entry.storageMode,economic:entry.storageMode==='economic-crate'});if(!ok)alert(cargo.lastMessage);renderSubmarine();}));
+    panel.querySelectorAll('.cargo-quantity').forEach(input=>input.addEventListener('change',event=>{const entry=cargoEntry(event.currentTarget.dataset.id);if(!entry)return;const requested=Math.max(1,Math.floor(number(event.currentTarget.value,entry.quantity)));if(requested<entry.quantity){entry.quantity=requested;syncCargoResourceIfEnabled();save();renderSubmarine();return;}const addition=requested-entry.quantity;if(!addition)return;const original=entry.quantity;entry.quantity=original;const ok=addCargoItem(entry.id,addition,{customName:entry.customName,unitSize:entry.unitSize,owner:entry.owner,location:entry.location,notes:entry.notes,acquiredFrom:entry.acquiredFrom,storageMode:entry.storageMode,economic:entry.storageMode==='economic-crate'});if(!ok)alert(cargo.lastMessage);renderSubmarine();}));
+    for(const [selector,key] of [['.cargo-owner','owner'],['.cargo-location','location'],['.cargo-notes','notes']])panel.querySelectorAll(selector).forEach(input=>input.addEventListener('input',event=>updateText(event.currentTarget.dataset.id,key,event.currentTarget.value)));
+    panel.querySelectorAll('.cargo-condition').forEach(input=>input.addEventListener('change',event=>{const entry=cargoEntry(event.currentTarget.dataset.id);if(entry){entry.condition=clamp(event.currentTarget.value,0,100);save();}}));
+    panel.querySelectorAll('.cargo-to-character').forEach(button=>button.addEventListener('click',event=>{if(moveCargoToCharacter(event.currentTarget.dataset.id)){syncCargoResourceIfEnabled();renderSubmarine();}}));
+    panel.querySelectorAll('.cargo-remove').forEach(button=>button.addEventListener('click',event=>{cargo.entries=cargo.entries.filter(entry=>entry.cargoId!==event.currentTarget.dataset.id);syncCargoResourceIfEnabled();save();renderSubmarine();}));
+    for(const [selector,key,numeric] of [['#cargo-manual-name','draftName'],['#cargo-manual-quantity','draftQuantity',true],['#cargo-manual-owner','draftOwner'],['#cargo-manual-location','draftLocation']])panel.querySelector(selector)?.addEventListener(numeric?'change':'input',event=>{cargo[key]=numeric?number(event.currentTarget.value):event.currentTarget.value;save();});
+    panel.querySelector('#cargo-add-manual')?.addEventListener('click',()=>{if(!cargo.draftName.trim())return alert('Enter a cargo name.');const storageMode=panel.querySelector('#cargo-manual-storage').value;const ok=addCargoItem('',cargo.draftQuantity,{customName:cargo.draftName,unitSize:cargo.draftUnitSize,owner:cargo.draftOwner,location:cargo.draftLocation,storageMode,economic:storageMode==='economic-crate'});if(!ok)return alert(cargo.lastMessage);cargo.draftName='';save();renderSubmarine();});
+    panel.querySelector('#cargo-manifest-notes')?.addEventListener('input',event=>{cargo.notes=event.currentTarget.value;save();});
+  }
+
+  renderCargoManagementPanel=renderUnifiedCargoManagementPanel;
+
+  function renderUnifiedWikiWeaponPanel(){
+    normalizeSubmarineWeaponSlots();
+    const profile=submarineCapabilityProfile();
+    const slots=state.submarine.weaponSlots||[];
+    const panel=document.createElement('section');
+    panel.className='tool-panel span-12';
+    const installed=slots.filter(slot=>slot.installedId).length;
+    const available=slots.filter(slot=>!slot.locked&&!slot.installedId).length;
+    panel.innerHTML=`
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Canonical official installation layout</p><h3>Barotrauma Wiki Weapon Installations</h3><p class="small-note">The original RPG-template weapon table is retired. Every weapon now occupies one compatible official small-turret, large-turret, fixed utility, or auxiliary-drone slot. Empty hardpoints can be equipped, but the submarine can never exceed its wiki-rated installation count.</p></div><a class="rules-link" href="${escapeHtml(submarineWikiSourceUrl(profile))}" target="_blank" rel="noopener">Open ${escapeHtml(profile.name||state.submarine.model)} on the official wiki ↗</a></div>
+      <div class="metric-row" style="margin-top:12px"><div class="metric"><span>Installed systems</span><strong>${installed}</strong></div><div class="metric"><span>Total rated slots</span><strong>${slots.length}</strong></div><div class="metric"><span>Empty hardpoints</span><strong>${available}</strong></div><div class="metric"><span>Official cargo rating</span><strong>${submarineCargoCrateCapacity(profile)} crates</strong></div></div>
+      <div class="notice" style="margin-top:10px">${escapeHtml(state.submarine.weaponInstallMessage||'Installed systems and empty hardpoints were loaded from the official submarine profile.')}</div>
+      <div class="table-wrap" style="margin-top:12px"><table class="tool-table"><thead><tr><th>Rated slot</th><th>Installation</th><th>Mount / loader</th><th>Loaded ammunition</th><th>Rounds</th><th>Status</th></tr></thead><tbody>${slots.map(slot=>{const weapon=slot.installedId?catalogueWeapon(slot.installedId):null;const compatible=WIKI_CATALOG.submarineWeapons.filter(item=>submarineWeaponSlotCompatible(slot,item.id));const entry=state.submarine.wikiWeapons.find(item=>item.instanceId===slot.slotId);return `<tr><td><strong>${escapeHtml(submarineWeaponSlotLabel(slot.slotType))}</strong><br><code>${escapeHtml(slot.slotId)}</code></td><td>${slot.locked?`<strong>${escapeHtml(weapon?.name||'Fixed installation')}</strong>`:`<select class="unified-weapon-slot" data-slot-id="${escapeHtml(slot.slotId)}"><option value="">Empty hardpoint</option>${compatible.map(item=>`<option value="${escapeHtml(item.id)}" ${item.id===slot.installedId?'selected':''}>${escapeHtml(item.name)}</option>`).join('')}</select>`}</td><td>${weapon?`${escapeHtml(weapon.mount||'')}<br><span class="small-note">${escapeHtml(weapon.loader||'No loader')}</span>`:'—'}</td><td>${weapon?.ammo?.length?`<select class="unified-weapon-ammo" data-slot-id="${escapeHtml(slot.slotId)}">${optionList(weapon.ammo.map(item=>item.name),entry?.ammoName||weapon.ammo[0].name)}</select>`:'No ammunition'}</td><td>${weapon?.ammo?.length?`<input class="unified-weapon-loaded" data-slot-id="${escapeHtml(slot.slotId)}" type="number" min="0" value="${Math.max(0,number(entry?.loaded))}">`:'—'}</td><td><span class="status-pill ${slot.installedId?'good':''}">${slot.source==='official-hardpoint'?(slot.installedId?'HARDPOINT FITTED':'HARDPOINT EMPTY'):slot.source==='official-drone'?'DRONE FIXED':'WIKI FIXED'}</span></td></tr>`;}).join('')}</tbody></table></div>
+      <h3 style="margin-top:18px">Submarine Ammunition Stores</h3>
+      <div class="table-wrap"><table class="tool-table"><thead><tr><th>Ammunition</th><th>Compatible system</th><th>Rounds per box</th><th>Boxes</th><th>Total rounds</th><th></th></tr></thead><tbody>${state.submarine.wikiAmmo.map(entry=>{const item=catalogueItem(entry.id);if(!item)return '';const quantity=Math.max(1,number(entry.quantity,1));return `<tr><td><strong>${escapeHtml(item.name)}</strong><br><span class="small-note">${escapeHtml(item.description)}</span></td><td>${escapeHtml((item.compatibleWith||[]).join(', '))}</td><td>${number(item.capacity,1)}</td><td><input class="wiki-ammo-quantity" data-id="${escapeHtml(item.id)}" type="number" min="1" max="999" value="${quantity}"></td><td>${number(item.capacity,1)*quantity}</td><td><button class="compact-button wiki-ammo-remove" data-id="${escapeHtml(item.id)}" type="button">Remove</button></td></tr>`;}).join('')||'<tr><td colspan="6">No official-wiki ammunition boxes stored.</td></tr>'}</tbody></table></div>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    panel.querySelectorAll('.unified-weapon-slot').forEach(select=>select.addEventListener('change',event=>{const result=installSubmarineWeaponInSlot(event.currentTarget.dataset.slotId,event.currentTarget.value);if(!result.ok)alert(result.message);renderSubmarine();}));
+    panel.querySelectorAll('.unified-weapon-ammo').forEach(select=>select.addEventListener('change',event=>{const entry=state.submarine.wikiWeapons.find(item=>item.instanceId===event.currentTarget.dataset.slotId);const weapon=entry&&catalogueWeapon(entry.id);const ammo=weapon?.ammo?.find(item=>item.name===event.currentTarget.value);if(entry){entry.ammoName=event.currentTarget.value;entry.loaded=ammo?.magazineSize||0;save();renderSubmarine();}}));
+    panel.querySelectorAll('.unified-weapon-loaded').forEach(input=>input.addEventListener('change',event=>{const entry=state.submarine.wikiWeapons.find(item=>item.instanceId===event.currentTarget.dataset.slotId);if(entry){entry.loaded=Math.max(0,number(event.currentTarget.value));save();}}));
+    panel.querySelectorAll('.wiki-ammo-quantity').forEach(input=>input.addEventListener('change',event=>{const entry=state.submarine.wikiAmmo.find(item=>item.id===event.currentTarget.dataset.id);if(entry){entry.quantity=clamp(event.currentTarget.value,1,999);save();renderSubmarine();}}));
+    panel.querySelectorAll('.wiki-ammo-remove').forEach(button=>button.addEventListener('click',event=>{state.submarine.wikiAmmo=state.submarine.wikiAmmo.filter(item=>item.id!==event.currentTarget.dataset.id);save();renderSubmarine();}));
+  }
+
+  enhanceSubmarineCatalogue=renderUnifiedWikiWeaponPanel;
+
+  function onboardFacilityLog(text,type='facility',details={}){
+    state.submarine.onboardFacilityLog=Array.isArray(state.submarine.onboardFacilityLog)?state.submarine.onboardFacilityLog:[];
+    state.submarine.onboardFacilityLog.unshift({id:uid('onboard-facility'),type,text,details,at:new Date().toISOString()});
+    state.submarine.onboardFacilityLog=state.submarine.onboardFacilityLog.slice(0,100);
+  }
+
+  function onboardFabricationCandidates(medical=false){
+    return (WIKI_CATALOG.items||[]).filter(item=>medical?item.category==='Medical':!['Medical','Submarine Ammunition'].includes(item.category));
+  }
+
+  function fabricateOnboardItem(itemId,medical=false){
+    const facilities=submarineFacilityProfile();
+    if(medical&&!facilities.medicalFabricator)return {ok:false,message:'This submarine has no mounted Medical Fabricator.'};
+    if(!medical&&!facilities.fabricator)return {ok:false,message:'This submarine has no mounted Fabricator.'};
+    const item=catalogueItem(itemId);
+    if(!item||medical!==(item.category==='Medical'))return {ok:false,message:'The selected item is not available to this machine.'};
+    const supplyCost=Math.max(1,Math.ceil(number(item.carryUnits,1)));
+    if(number(state.submarine.resources.supplies)<supplyCost)return {ok:false,message:`Fabrication requires ${supplyCost} submarine supplies.`};
+    if(!addCargoItem(item.id,1,{owner:'Submarine',location:medical?'Medical Fabricator output':'Fabricator output',storageMode:'loose',notes:'Fabricated aboard the active submarine.'}))return {ok:false,message:normalizeCargoManagement().lastMessage};
+    state.submarine.resources.supplies=Math.max(0,number(state.submarine.resources.supplies)-supplyCost);
+    onboardFacilityLog(`${item.name} fabricated aboard ${state.submarine.name||state.submarine.model}.`,medical?'medical-fabrication':'fabrication',{itemId,supplyCost});
+    save();
+    return {ok:true,message:`Fabricated ${item.name} for ${supplyCost} supplies.`};
+  }
+
+  function deconstructOnboardCargo(cargoId){
+    const facilities=submarineFacilityProfile();
+    if(!facilities.deconstructor)return {ok:false,message:'This submarine has no mounted Deconstructor.'};
+    const cargo=normalizeCargoManagement();
+    const entry=cargo.entries.find(item=>item.cargoId===cargoId);
+    if(!entry)return {ok:false,message:'Cargo entry not found.'};
+    const item=cargoItem(entry);
+    const recovered=Math.max(1,Math.ceil(number(entry.unitSize,1)));
+    removeCargoQuantity(cargoId,1);
+    state.submarine.resources.supplies=Math.max(0,number(state.submarine.resources.supplies))+recovered;
+    syncCargoResourceIfEnabled();
+    onboardFacilityLog(`${item.name} deconstructed aboard ${state.submarine.name||state.submarine.model}.`,'deconstruction',{cargoId,recoveredSupplies:recovered});
+    save();
+    return {ok:true,message:`Deconstructed one ${item.name}; recovered ${recovered} supplies.`};
+  }
+
+  function startOnboardResearchProject(projectId){
+    const facilities=submarineFacilityProfile();
+    if(!facilities.researchStation)return {ok:false,message:'This submarine has no mounted Research Station.'};
+    const project=normalizeCustomResearch().projects.find(item=>item.projectId===projectId);
+    if(!project||project.status!=='funded')return {ok:false,message:'Select a fully funded research project.'};
+    if(number(project.requiredResearchRating)>8)return {ok:false,message:`The onboard Research Station is rated 8; this project requires ${project.requiredResearchRating}.`};
+    const start=worldGameDate();
+    project.status='in-development';
+    project.stationId=`onboard:${state.submarine.worldSubmarineId||state.submarine.model}`;
+    project.stationName=`${state.submarine.name||state.submarine.model} Research Station`;
+    project.stationOwner=activeWorldGroup()?.name||'Active expedition';
+    project.startedAt=start.toISOString();
+    project.completionAt=new Date(start.getTime()+Math.max(1,number(project.requiredDays))*86400000).toISOString();
+    project.updatedAt=new Date().toISOString();
+    onboardFacilityLog(`${project.designName} began onboard research development.`,'research',{projectId});
+    save();
+    return {ok:true,message:`Onboard development started for ${project.designName}.`};
+  }
+
+  function renderOnboardFacilitiesPanel(){
+    const facilities=submarineFacilityProfile();
+    const regular=onboardFabricationCandidates(false);
+    const medical=onboardFabricationCandidates(true);
+    const cargo=normalizeCargoManagement();
+    const funded=typeof normalizeCustomResearch==='function'?normalizeCustomResearch().projects.filter(project=>project.status==='funded'):[];
+    const panel=document.createElement('section');
+    panel.className='tool-panel span-12';
+    panel.innerHTML=`
+      <div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Mounted wiki installations</p><h3>Onboard Fabrication, Recovery, and Research</h3><p class="small-note">Mounted machines are available only when the selected official submarine carries them. The campaign operations below abstract wiki recipes into submarine supplies while preserving the machine restriction, cargo limits, and persistent activity log.</p></div><a class="rules-link" href="https://barotraumagame.com/wiki/Installations" target="_blank" rel="noopener">Official installations reference ↗</a></div>
+      <div class="tool-grid" style="margin-top:12px"><div class="tool-card span-3"><h3>Fabricator</h3><span class="status-pill ${facilities.fabricator?'good':''}">${facilities.fabricator?'MOUNTED':'NOT INSTALLED'}</span><label class="field" style="margin-top:10px">Output<select id="onboard-fabricator-item" ${facilities.fabricator?'':'disabled'}>${optionList(regular.map(item=>item.id),regular[0]?.id||'',id=>catalogueItem(id)?.name||id)}</select></label><button id="onboard-fabricate" class="compact-button no-print" type="button" ${facilities.fabricator?'':'disabled'}>Fabricate to Loose Storage</button></div>
+      <div class="tool-card span-3"><h3>Medical Fabricator</h3><span class="status-pill ${facilities.medicalFabricator?'good':''}">${facilities.medicalFabricator?'MOUNTED':'NOT INSTALLED'}</span><label class="field" style="margin-top:10px">Medical output<select id="onboard-medical-item" ${facilities.medicalFabricator?'':'disabled'}>${optionList(medical.map(item=>item.id),medical[0]?.id||'',id=>catalogueItem(id)?.name||id)}</select></label><button id="onboard-medical-fabricate" class="compact-button no-print" type="button" ${facilities.medicalFabricator?'':'disabled'}>Fabricate Medical Item</button></div>
+      <div class="tool-card span-3"><h3>Deconstructor</h3><span class="status-pill ${facilities.deconstructor?'good':''}">${facilities.deconstructor?'MOUNTED':'NOT INSTALLED'}</span><label class="field" style="margin-top:10px">Cargo input<select id="onboard-deconstruct-item" ${facilities.deconstructor?'':'disabled'}>${cargo.entries.map(entry=>`<option value="${escapeHtml(entry.cargoId)}">${escapeHtml(cargoItem(entry).name)} · ${escapeHtml(entry.storageMode)}</option>`).join('')}</select></label><button id="onboard-deconstruct" class="compact-button no-print" type="button" ${facilities.deconstructor&&cargo.entries.length?'':'disabled'}>Deconstruct One Item</button></div>
+      <div class="tool-card span-3"><h3>Research Station</h3><span class="status-pill ${facilities.researchStation?'good':''}">${facilities.researchStation?'MOUNTED · RATING 8':'NOT INSTALLED'}</span><label class="field" style="margin-top:10px">Funded project<select id="onboard-research-project" ${facilities.researchStation?'':'disabled'}>${funded.map(project=>`<option value="${escapeHtml(project.projectId)}">${escapeHtml(project.designName)} · requires ${project.requiredResearchRating}</option>`).join('')}</select></label><button id="onboard-start-research" class="compact-button no-print" type="button" ${facilities.researchStation&&funded.length?'':'disabled'}>Begin Onboard Development</button></div></div>
+      <div id="onboard-facility-message" class="notice" style="margin-top:10px">Submarine supplies available: ${number(state.submarine.resources.supplies)}. Loose storage: ${unifiedCargoCapacityReport(cargo).looseItemsUsed}/${SUBMARINE_LOOSE_ITEM_LIMIT}.</div>
+      <details style="margin-top:10px"><summary><strong>Recent onboard machine activity</strong></summary><div class="card-list" style="margin-top:8px">${(state.submarine.onboardFacilityLog||[]).slice(0,20).map(entry=>`<div class="notice"><strong>${escapeHtml(new Date(entry.at).toLocaleString())}</strong><br>${escapeHtml(entry.text)}</div>`).join('')||'<div class="notice">No onboard machine operations recorded.</div>'}</div></details>`;
+    root.querySelector('.tool-grid')?.appendChild(panel);
+    const show=result=>{const output=panel.querySelector('#onboard-facility-message');if(output){output.textContent=result.message;output.classList.toggle('bad',!result.ok);output.classList.toggle('good',result.ok);}};
+    panel.querySelector('#onboard-fabricate')?.addEventListener('click',()=>{const result=fabricateOnboardItem(panel.querySelector('#onboard-fabricator-item').value,false);show(result);if(result.ok)renderSubmarine();});
+    panel.querySelector('#onboard-medical-fabricate')?.addEventListener('click',()=>{const result=fabricateOnboardItem(panel.querySelector('#onboard-medical-item').value,true);show(result);if(result.ok)renderSubmarine();});
+    panel.querySelector('#onboard-deconstruct')?.addEventListener('click',()=>{const result=deconstructOnboardCargo(panel.querySelector('#onboard-deconstruct-item').value);show(result);if(result.ok)renderSubmarine();});
+    panel.querySelector('#onboard-start-research')?.addEventListener('click',()=>{const result=startOnboardResearchProject(panel.querySelector('#onboard-research-project').value);show(result);if(result.ok)renderSubmarine();});
+  }
+
+  const renderSubmarineBeforeCapabilityUnification=renderSubmarine;
+  renderSubmarine=function renderSubmarineWithUnifiedOfficialCapabilities(){
+    normalizeSubmarineWeaponSlots();
+    normalizeCargoManagement();
+    const result=renderSubmarineBeforeCapabilityUnification();
+    const legacyPanel=[...root.querySelectorAll('.tool-panel')].find(panel=>panel.querySelector('h3')?.textContent.trim()==='Installed Weapons');
+    legacyPanel?.remove();
+    const storesPanel=[...root.querySelectorAll('.tool-panel')].find(panel=>panel.querySelector('h3')?.textContent.trim()==='Stores and Capacity');
+    if(storesPanel){
+      const cargoInput=storesPanel.querySelector('.sub-resource[data-resource="cargo"]');
+      if(cargoInput){cargoInput.disabled=true;cargoInput.title='Economic cargo is synchronized to the official crate manifest.';}
+      const note=storesPanel.querySelector('.small-note:last-child');
+      if(note)note.textContent='RPG operational capacity now covers crew and supply burden only. Official economic freight uses wiki-rated crates; non-economic equipment uses the separate 40-item loose-storage pool.';
+    }
+    renderOnboardFacilitiesPanel();
+    return result;
+  };
+
+  function worldEconomyWildlifeRoll(key){
+    return (seededHash(key)%1000000)/1000000;
+  }
+
+  function worldEconomyDamageStationForWildlife(station,severity,at){
+    const keys=WORLD_ECONOMY_COMMODITIES.filter(key=>key!=='credits'&&number(station.inventory?.[key])>0);
+    const losses={};
+    for(const key of keys){
+      const fraction=.03+severity*.12;
+      const loss=Math.min(number(station.inventory[key]),Math.max(0,Math.floor(number(station.inventory[key])*fraction)));
+      if(loss>0){station.inventory[key]-=loss;losses[key]=loss;}
+    }
+    station.construction.progress=Math.max(0,number(station.construction?.progress)-Math.round(5+severity*20));
+    station.production.cyclesBlocked=Math.max(0,number(station.production?.cyclesBlocked))+1;
+    station.production.lastProcessedAt=at;
+    station.production.lastCycleSummary='Wildlife attack disrupted production and damaged stored resources.';
+    station.updatedAt=at;
+    worldEconomyJournal(`${station.name} suffered a wildlife attack; production was interrupted and stores were damaged.`,'wildlife-setback',{stationNodeId:station.stationNodeId,severity,losses});
+  }
+
+  WORLD_ECONOMY_DEFAULTS.stationCycleMinutes=SUBMARINE_ECONOMY_STATION_CYCLE_MINUTES;
+  WORLD_ECONOMY_DEFAULTS.catchupCycleLimit=Math.max(28,number(WORLD_ECONOMY_DEFAULTS.catchupCycleLimit));
+  WORLD_ECONOMY_DEFAULTS.npcFleetMinimum=2;
+  WORLD_ECONOMY_DEFAULTS.npcFleetMaximum=Math.min(24,Math.max(2,number(WORLD_ECONOMY_DEFAULTS.npcFleetMaximum,24)));
+
+  const processWorldStationEconomyCycleBeforeWildlifeSetbacks=processWorldStationEconomyCycle;
+  processWorldStationEconomyCycle=function processWorldStationEconomyCycleWithWildlifeSetbacks(station,cycleAt=new Date().toISOString()){
+    const node=state.world?.map?.nodes?.find(item=>item.id===station?.stationNodeId);
+    const depthRatio=1-(Math.max(0,number(node?.ring))/Math.max(1,number(state.world?.map?.rings,48)));
+    const chance=.003+depthRatio*.007;
+    const roll=worldEconomyWildlifeRoll(`${station?.stationNodeId}|${cycleAt}|station-wildlife`);
+    if(roll<chance){worldEconomyDamageStationForWildlife(station,clamp(roll/Math.max(.0001,chance),0,1),cycleAt);return false;}
+    return processWorldStationEconomyCycleBeforeWildlifeSetbacks(station,cycleAt);
+  };
+
+  worldEconomyTransitDurationMinutes=function worldEconomySlowPersistentTransitMinutes(vessel,fromNodeId,toNodeId){
+    const sequence=Math.max(0,number(vessel?.transitSequence));
+    return 360+(seededHash(`${vessel?.vesselId}|${fromNodeId}|${toNodeId}|${sequence}|slow-passive-trade-duration`)%1081);
+  };
+
+  const normalizeWorldVesselRecordBeforeWildlifeDamage=normalizeWorldVesselRecord;
+  normalizeWorldVesselRecord=function normalizeWorldVesselRecordWithHull(raw={}){
+    const vessel=normalizeWorldVesselRecordBeforeWildlifeDamage(raw);
+    const model=SUBMARINES[vessel.modelId]||SUBMARINES[vessel.modelName]||{};
+    vessel.hullMaximum=Math.max(4,number(raw.hullMaximum,number(model.hull,12)));
+    vessel.hullCurrent=clamp(raw.hullCurrent??vessel.hullCurrent??vessel.hullMaximum,0,vessel.hullMaximum);
+    vessel.lastWildlifeEncounterSequence=Math.max(-1,number(raw.lastWildlifeEncounterSequence,-1));
+    vessel.wildlifeDamageTotal=Math.max(0,number(raw.wildlifeDamageTotal));
+    return vessel;
+  };
+
+  worldEconomyNpcFleetTargetCount=function worldEconomySlowNpcFleetTargetCount(){
+    const stations=(state.world?.map?.nodes||[]).filter(node=>node.type==='station').length;
+    return clamp(Math.round(stations/64),WORLD_ECONOMY_DEFAULTS.npcFleetMinimum,WORLD_ECONOMY_DEFAULTS.npcFleetMaximum);
+  };
+
+  function worldEconomyCreateSlowNpcVessel(station,index,now){
+    const names=worldEconomyNpcNames();
+    const role=names[Math.abs(seededHash(`${station.id}|slow-role|${index}`))%names.length];
+    return upsertWorldVessel({vesselId:`npc-trader-${stationSlug(state.world?.map?.worldId||state.world?.map?.seed||'world')}-${Date.parse(now.toISOString()).toString(36)}-${index}`,worldId:normalizeWorldHub().worldId,kind:'npc',role:'trade-freighter',name:`${station.name} ${role}`,modelId:'Barsuk',modelName:'Barsuk',status:'docked',active:true,availableForCommission:false,location:{mode:'station',stationNodeId:station.id,currentNodeId:station.id,arrivedAt:now.toISOString(),decisionState:'slow-expansion-commissioning'},cargo:{commodities:{}},capacity:12+(seededHash(`${station.id}|slow-capacity|${index}`)%24),hullMaximum:12,hullCurrent:12,createdAt:now.toISOString(),updatedAt:now.toISOString(),lastActionAt:now.toISOString(),nextActionAt:new Date(now.getTime()+(120+seededHash(`${station.id}|slow-dwell|${index}`)%361)*60000).toISOString(),transitSequence:0,notes:'Slow persistent NPC economic vessel; vulnerable to wildlife during expansion and transit.'});
+  }
+
+  seedWorldEconomyNpcFleet=function seedWorldEconomyNpcFleetSlowly(){
+    const map=state.world?.map;
+    if(!map?.nodes?.length)return [];
+    const economy=normalizeWorldEconomyState();
+    const registry=worldVesselRegistry();
+    let active=Object.values(registry).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+    const target=worldEconomyNpcFleetTargetCount();
+    economy.simulation.npcExpansion=economy.simulation.npcExpansion&&typeof economy.simulation.npcExpansion==='object'?economy.simulation.npcExpansion:{lastAttemptAt:'',attempts:0,successful:0,repelled:0};
+    const expansion=economy.simulation.npcExpansion;
+    const now=new Date();
+    const last=Date.parse(expansion.lastAttemptAt||0);
+    const bootstrap=active.length===0;
+    if(!bootstrap&&Number.isFinite(last)&&now.getTime()-last<SUBMARINE_ECONOMY_EXPANSION_INTERVAL_HOURS*3600000)return active;
+    if(active.length>=target)return active;
+    const attempts=bootstrap?Math.min(2,target-active.length):1;
+    const stations=map.nodes.filter(node=>node.type==='station');
+    for(let index=0;index<attempts;index+=1){
+      expansion.attempts+=1;
+      const station=stations[Math.abs(seededHash(`${map.worldId||map.seed}|slow-expansion-station|${expansion.attempts}`))%Math.max(1,stations.length)];
+      if(!station)break;
+      const stationEconomy=worldStationEconomy(station.id);
+      const depthRatio=1-number(station.ring)/Math.max(1,number(map.rings,48));
+      const attackChance=.22+depthRatio*.18;
+      const roll=worldEconomyWildlifeRoll(`${map.worldId||map.seed}|npc-expansion|${expansion.attempts}`);
+      if(roll<attackChance){
+        expansion.repelled+=1;
+        if(stationEconomy)worldEconomyDamageStationForWildlife(stationEconomy,clamp(roll/attackChance,0,1),now.toISOString());
+        worldEconomyJournal(`Wildlife repelled an NPC economic expansion attempt from ${station.name}.`,'npc-expansion-repelled',{stationNodeId:station.id,attempt:expansion.attempts});
+        continue;
+      }
+      const available=Object.values(registry).find(vessel=>vessel.status==='available'&&vessel.availableForCommission);
+      if(available){
+        available.kind='npc';available.role='trade-freighter';available.status='docked';available.availableForCommission=false;available.ownerGroupId=station.parentFactionId||station.factionId||'npc-freight-guild';available.commissionedAt=now.toISOString();available.updatedAt=now.toISOString();available.nextActionAt=new Date(now.getTime()+(120+seededHash(`${available.vesselId}|slow-commission-dwell`)%361)*60000).toISOString();available.location={mode:'station',stationNodeId:station.id,currentNodeId:station.id,arrivedAt:now.toISOString(),decisionState:'slow-npc-commissioning'};
+      }else worldEconomyCreateSlowNpcVessel(station,expansion.attempts,now);
+      expansion.successful+=1;
+    }
+    expansion.lastAttemptAt=now.toISOString();
+    active=Object.values(registry).filter(vessel=>vessel.kind==='npc'&&vessel.active!==false);
+    return active;
+  };
+
+  const arriveWorldEconomyFreighterBeforeWildlifeDamage=arriveWorldEconomyFreighter;
+  arriveWorldEconomyFreighter=function arriveWorldEconomyFreighterThroughWildlife(vessel,arriveAt=new Date()){
+    if(!vessel||vessel.kind!=='npc'||vessel.status!=='in-transit')return false;
+    Object.assign(vessel,normalizeWorldVesselRecord(vessel));
+    const sequence=Math.max(0,number(vessel.transitSequence));
+    if(vessel.lastWildlifeEncounterSequence!==sequence){
+      const roll=worldEconomyWildlifeRoll(`${vessel.vesselId}|${sequence}|transit-wildlife`);
+      vessel.lastWildlifeEncounterSequence=sequence;
+      if(roll<.06){
+        const manifest=worldEconomyClone(vessel.cargo?.commodities||{});
+        vessel.hullCurrent=0;vessel.wildlifeDamageTotal+=vessel.hullMaximum;vessel.cargo.commodities={};vessel.status='inactive';vessel.active=false;vessel.nextActionAt='';vessel.updatedAt=arriveAt.toISOString();
+        worldEconomyTradeJournal(`${vessel.name} was lost to native wildlife before completing its freight run.`,{vesselId:vessel.vesselId,sequence,cargoLost:manifest});
+        worldEconomyJournal(`${vessel.name} was destroyed during NPC transit; Europa’s wildlife checked economic expansion along this route.`,'wildlife-vessel-loss',{vesselId:vessel.vesselId,sequence});
+        return true;
+      }
+      if(roll<.30){
+        const severity=clamp((.30-roll)/.24,0,1);
+        const damage=Math.max(1,Math.round(1+severity*4));
+        vessel.hullCurrent=Math.max(1,vessel.hullCurrent-damage);vessel.wildlifeDamageTotal+=damage;
+        const lost={};
+        for(const [key,value] of Object.entries(vessel.cargo?.commodities||{})){
+          const amount=Math.min(number(value),Math.max(1,Math.floor(number(value)*(.15+severity*.35))));
+          vessel.cargo.commodities[key]=Math.max(0,number(value)-amount);lost[key]=amount;
+        }
+        worldEconomyTradeJournal(`${vessel.name} survived a wildlife attack with hull damage and cargo losses.`,{vesselId:vessel.vesselId,sequence,damage,lost});
+      }
+    }
+    const result=arriveWorldEconomyFreighterBeforeWildlifeDamage(vessel,arriveAt);
+    if(result&&vessel.active!==false){
+      const repairDelay=120+(seededHash(`${vessel.vesselId}|${sequence}|post-transit-dwell`)%361);
+      vessel.nextActionAt=new Date(arriveAt.getTime()+repairDelay*60000).toISOString();
+      vessel.updatedAt=arriveAt.toISOString();
+    }
+    return result;
+  };
+
+  const worldEconomyMasterRegistryHtmlBeforeSlowEcology=worldEconomyMasterRegistryHtml;
+  worldEconomyMasterRegistryHtml=function worldEconomyMasterRegistryHtmlWithSlowEcology(){
+    return worldEconomyMasterRegistryHtmlBeforeSlowEcology().replace('Player positions are event-driven and may advance immediately. Passive NPC freight takes 15–105 real minutes from departure through arrival and trade completion. Vendor shelves contain only player sales, local production routed through trade, or factory-produced Delivery Goods accepted from completed freight runs.','Player positions remain event-driven. The NPC economy is a slow persistent underpinning rather than the main game: station production advances in six-hour cycles, freight voyages take roughly six to twenty-four real hours, fleet expansion is attempted no more than once per day, and Europa’s native wildlife can damage stations, destroy cargo, cripple freighters, or repel expansion attempts.');
+  };
+
+  normalizeSubmarineWeaponSlots();
+  normalizeCargoManagement();
+  globalThis.BAROTRAUMA_SUBMARINE_CAPABILITY_UNIFICATION_DIAGNOSTICS={
+    version:SUBMARINE_CAPABILITY_UNIFICATION_VERSION,
+    canonicalWeaponSlots:true,
+    legacyRpgWeaponsRetired:true,
+    standardItemsPerCrate:SUBMARINE_STANDARD_CRATE_ITEM_LIMIT,
+    looseItemCapacity:SUBMARINE_LOOSE_ITEM_LIMIT,
+    onboardFacilities:true,
+    stationCycleMinutes:WORLD_ECONOMY_DEFAULTS.stationCycleMinutes,
+    npcTransitMinutes:[360,1440],
+    npcExpansionIntervalHours:SUBMARINE_ECONOMY_EXPANSION_INTERVAL_HOURS,
+    wildlifeStationSetbacks:true,
+    wildlifeTransitDamage:true,
+    wildlifeExpansionResistance:true
+  };
