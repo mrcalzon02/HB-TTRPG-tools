@@ -57,3 +57,19 @@
     source: 'data/barotrauma/tools/world/master-world-save.json',
     removesWebRegenerationRequirement: true
   };
+
+  if (!globalThis.__BAROTRAUMA_JOB_SYSTEM_PACKED_LOADING) {
+    globalThis.__BAROTRAUMA_JOB_SYSTEM_PACKED_LOADING = true;
+    (async () => {
+      const partPaths = Array.from({ length: 9 }, (_, index) => `data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-job-system-packed-${String(index).padStart(2, '0')}.txt`);
+      const packedSource = (await Promise.all(partPaths.map(async path => {
+        const response = await fetch(path, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`${path} returned ${response.status}`);
+        return response.text();
+      }))).join('');
+      eval(packedSource);
+    })().catch(error => {
+      globalThis.__BAROTRAUMA_JOB_SYSTEM_PACKED_LOADING = false;
+      console.error('The Job, Event, and Station card payload could not be loaded.', error);
+    });
+  }
