@@ -1,0 +1,114 @@
+  function submarineConstructionBasePrice(modelName){
+    const model=SUBMARINES[modelName]||{};
+    const profile=model.profile||OFFICIAL_SUBMARINE_PROFILES.find(item=>item.name===modelName)||{};
+    if(number(profile.price)>0)return number(profile.price);
+    return Math.max(5000,Math.round(number(profile.cargo)*250+number(profile.crewMax,4)*1000+submarineWeaponWeight(profile)*2500+number(profile.tier,1)*5000));
+  }
+
+  function submarineConstructionPrice(modelName){
+    return Math.ceil(submarineConstructionBasePrice(modelName)*SUBMARINE_CONSTRUCTION_COST_MULTIPLIER/100)*100;
+  }
+
+  for(const profile of OFFICIAL_SUBMARINE_PROFILES)profile.campaignConstructionCost=submarineConstructionPrice(profile.name);
+
+  const shipyardProfile=WORLD_STATION_PROCESS_PROFILES.shipyard;
+  if(shipyardProfile&&!shipyardProfile.recipeCostMultiplierApplied){
+    shipyardProfile.inputs=Object.fromEntries(Object.entries(shipyardProfile.inputs||{}).map(([key,value])=>[key,Math.max(1,number(value))*SUBMARINE_CONSTRUCTION_COST_MULTIPLIER]));
+    shipyardProfile.recipeCostMultiplierApplied=SUBMARINE_CONSTRUCTION_COST_MULTIPLIER;
+    shipyardProfile.notes=`${shipyardProfile.notes||'Shipyard construction.'} Campaign construction consumes ${SUBMARINE_CONSTRUCTION_COST_MULTIPLIER}× the former industrial input requirement.`;
+  }
+
+  const worldEconomyCompleteShipyardVesselBeforeRecipeAudit=worldEconomyCompleteShipyardVessel;
+  worldEconomyCompleteShipyardVessel=function worldEconomyCompleteShipyardVesselWithConstructionPrice(station,completedAt){
+    const vessel=worldEconomyCompleteShipyardVesselBeforeRecipeAudit(station,completedAt);
+    const modelName=vessel?.modelId||vessel?.modelName||'Barsuk';
+    if(vessel){
+      vessel.constructionCost=submarineConstructionPrice(modelName);
+      vessel.commissioningPrice=vessel.constructionCost;
+      vessel.constructionCostMultiplier=SUBMARINE_CONSTRUCTION_COST_MULTIPLIER;
+      vessel.constructionInputs=cloneWorldData(shipyardProfile?.inputs||{});
+      vessel.updatedAt=completedAt;
+    }
+    return vessel;
+  };
+
+  const normalizeWorldVesselRecordBeforeRecipeAudit=normalizeWorldVesselRecord;
+  normalizeWorldVesselRecord=function normalizeWorldVesselRecordWithConstructionPrice(raw={}){
+    const vessel=normalizeWorldVesselRecordBeforeRecipeAudit(raw);
+    if(vessel.status==='available'||vessel.kind==='manufactured'){
+      vessel.constructionCost=Math.max(submarineConstructionPrice(vessel.modelId||vessel.modelName||'Barsuk'),number(raw.constructionCost));
+      vessel.commissioningPrice=Math.max(vessel.constructionCost,number(raw.commissioningPrice));
+      vessel.constructionCostMultiplier=Math.max(SUBMARINE_CONSTRUCTION_COST_MULTIPLIER,number(raw.constructionCostMultiplier));
+    }
+    return vessel;
+  };
+
+  const worldEconomyCommissionPermissionBeforeRecipeAudit=worldEconomyCommissionPermission;
+  worldEconomyCommissionPermission=function worldEconomyCommissionPermissionWithPrice(vessel){
+    const permission=worldEconomyCommissionPermissionBeforeRecipeAudit(vessel);
+    if(!permission.allowed)return permission;
+    const price=Math.max(0,number(vessel?.commissioningPrice,submarineConstructionPrice(vessel?.modelId||vessel?.modelName||'Barsuk')));
+    const credits=Math.max(0,number(state.submarine.resources.credits));
+    if(credits<price)return {allowed:false,message:`Commissioning requires ${price.toLocaleString()} mk; the active submarine treasury contains ${credits.toLocaleString()} mk.`,price};
+    return {allowed:true,message:`Available for commission at ${price.toLocaleString()} mk.`,price};
+  };
+
+  const commissionWorldEconomyVesselBeforeRecipeAudit=commissionWorldEconomyVessel;
+  commissionWorldEconomyVessel=function commissionWorldEconomyVesselWithPayment(vesselId){
+    const vessel=worldVesselRegistry()[vesselId];
+    const permission=worldEconomyCommissionPermission(vessel);
+    if(!permission.allowed)return {ok:false,message:permission.message};
+    const price=Math.max(0,number(permission.price,vessel?.commissioningPrice));
+    const stationNodeId=vessel.location?.stationNodeId||vessel.location?.currentNodeId||'';
+    const result=commissionWorldEconomyVesselBeforeRecipeAudit(vesselId);
+    if(!result.ok)return result;
+    state.submarine.resources.credits=Math.max(0,number(state.submarine.resources.credits)-price);
+    const station=worldStationEconomy(stationNodeId);
+    if(station)station.inventory.credits=Math.max(0,number(station.inventory.credits))+price;
+    worldEconomyJournal(`${vessel.name} commissioned for ${price.toLocaleString()} mk after the ${SUBMARINE_CONSTRUCTION_COST_MULTIPLIER}× construction-cost revision.`,'commissioning-payment',{vesselId,stationNodeId,price,multiplier:SUBMARINE_CONSTRUCTION_COST_MULTIPLIER});
+    save();
+    return {ok:true,message:`${vessel.name} commissioned for ${price.toLocaleString()} mk.`};
+  };
+
+  worldEconomyVesselRowsHtml=function worldEconomyVesselRowsHtmlWithConstructionPrices(limit){
+    const vessels=Object.values(worldVesselRegistry()).filter(vessel=>vessel.active!==false).sort((left,right)=>{
+      const priority=value=>value.kind==='player'?0:value.status==='available'?1:value.status==='in-transit'?2:3;
+      return priority(left)-priority(right)||left.name.localeCompare(right.name);
+    });
+    return {total:vessels.length,html:vessels.slice(0,limit).map(vessel=>{
+      const permission=worldEconomyCommissionPermission(vessel);
+      const price=vessel.status==='available'?Math.max(0,number(vessel.commissioningPrice,submarineConstructionPrice(vessel.modelId||vessel.modelName||'Barsuk'))):0;
+      return `<tr><td><strong>${escapeHtml(vessel.name)}</strong><br><code>${escapeHtml(vessel.vesselId)}</code></td><td>${escapeHtml(vessel.kind)}<br><span class="small-note">${escapeHtml(vessel.role)}${price?` · ${price.toLocaleString()} mk`:''}</span></td><td><strong class="${vessel.status==='in-transit'?'warn':vessel.status==='available'?'good':''}">${escapeHtml(vessel.status)}</strong></td><td>${escapeHtml(worldEconomyVesselLocationLabel(vessel))}</td><td>${escapeHtml(worldEconomyCargoLabel(vessel))}</td><td>${vessel.nextActionAt?escapeHtml(new Date(vessel.nextActionAt).toLocaleString()):'Player/event driven'}</td><td><div class="button-row"><button class="compact-button world-economy-focus-vessel" data-vessel-id="${escapeHtml(vessel.vesselId)}" type="button">Locate</button>${vessel.status==='available'?`<button class="compact-button world-economy-commission-vessel" data-vessel-id="${escapeHtml(vessel.vesselId)}" type="button" ${permission.allowed?'':`disabled title="${escapeHtml(permission.message)}"`}>Commission · ${price.toLocaleString()} mk</button>`:''}</div></td></tr>`;
+    }).join('')||'<tr><td colspan="7">No active vessels registered.</td></tr>'};
+  };
+
+  const renderSubmarineBeforeRecipeAudit=renderSubmarine;
+  renderSubmarine=function renderSubmarineWithItemAuditAndConstructionCost(){
+    const result=renderSubmarineBeforeRecipeAudit();
+    const model=submarineCapabilityProfile();
+    const vesselPanel=[...root.querySelectorAll('.tool-panel')].find(panel=>panel.querySelector('h3')?.textContent.trim()==='Vessel Record');
+    if(vesselPanel&&!vesselPanel.querySelector('.submarine-construction-cost-notice')){
+      const notice=document.createElement('div');notice.className='notice submarine-construction-cost-notice';notice.style.marginTop='10px';
+      const official=number(model.price);
+      const construction=submarineConstructionPrice(state.submarine.model);
+      notice.innerHTML=`<strong>Campaign construction economics:</strong> ${construction.toLocaleString()} mk minimum construction/commissioning cost (${SUBMARINE_CONSTRUCTION_COST_MULTIPLIER}× baseline${official?` official price ${official.toLocaleString()} mk`:''}). Shipyard industrial inputs are also multiplied by ${SUBMARINE_CONSTRUCTION_COST_MULTIPLIER}.`;
+      vesselPanel.appendChild(notice);
+    }
+    return result;
+  };
+
+  normalizeSubmarineCraftingState();
+  normalizeAuditedInventoryUsage();
+  globalThis.BAROTRAUMA_ITEM_RECIPE_AUDIT_DIAGNOSTICS={
+    version:ITEM_RECIPE_AUDIT_VERSION,
+    officialRecipeCount:(ITEM_RECIPE_DATA.recipes||[]).length,
+    registeredMaterialCount:(ITEM_RECIPE_DATA.materials||[]).length,
+    deterministicFallbackRecipes:true,
+    derivedRecoveryFraction:DERIVED_RECIPE_RECOVERY_FRACTION,
+    transactionalInventoryUse:true,
+    ghostConsumablesRemoved:true,
+    materialRequiredRepairs:true,
+    machineOutputBuffers:true,
+    submarineConstructionCostMultiplier:SUBMARINE_CONSTRUCTION_COST_MULTIPLIER,
+    shipyardInputs:cloneWorldData(WORLD_STATION_PROCESS_PROFILES.shipyard?.inputs||{})
+  };
