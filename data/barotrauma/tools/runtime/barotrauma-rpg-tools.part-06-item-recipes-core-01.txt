@@ -1,0 +1,125 @@
+  }
+
+  function recipeMachineForItem(item){
+    const official=officialRecipeForItem(item);
+    return official?.machine||((item?.category==='Medical')?'medical-fabricator':'fabricator');
+  }
+
+  function defaultSubmarineCraftingState(){
+    return {version:ITEM_RECIPE_AUDIT_VERSION,selectedFabricatorItemId:'',selectedMedicalItemId:'',selectedDeconstructorSource:'',fabricatorOutput:[],medicalOutput:[],deconstructorOutput:[],activityLog:[],lastMessage:''};
+  }
+
+  function normalizeSubmarineCraftingState(){
+    const defaults=defaultSubmarineCraftingState();
+    state.submarine.crafting=state.submarine.crafting&&typeof state.submarine.crafting==='object'?state.submarine.crafting:defaults;
+    for(const [key,value] of Object.entries(defaults))if(!(key in state.submarine.crafting))state.submarine.crafting[key]=Array.isArray(value)?[]:value;
+    for(const key of ['fabricatorOutput','medicalOutput','deconstructorOutput','activityLog'])state.submarine.crafting[key]=Array.isArray(state.submarine.crafting[key])?state.submarine.crafting[key]:[];
+    state.submarine.crafting.version=ITEM_RECIPE_AUDIT_VERSION;
+    return state.submarine.crafting;
+  }
+
+  function craftingActivity(text,type='crafting',details={}){
+    const crafting=normalizeSubmarineCraftingState();
+    crafting.activityLog.unshift({id:uid('crafting-log'),type,text,details,at:new Date().toISOString()});
+    crafting.activityLog=crafting.activityLog.slice(0,100);
+    crafting.lastMessage=text;
+    if(typeof onboardFacilityLog==='function')onboardFacilityLog(text,type,details);
+  }
+
+  function recipeSourceRecords(name,requirement={}){
+    const target=normalizedRecipeName(name);
+    const conditionAllowed=value=>{
+      const condition=number(value,100);
+      if(requirement.conditionMin!=null&&condition<number(requirement.conditionMin))return false;
+      if(requirement.conditionMax!=null&&condition>number(requirement.conditionMax))return false;
+      return true;
+    };
+    const sources=[];
+    const cargo=normalizeCargoManagement();
+    for(const entry of cargo.entries){
+      if(normalizedRecipeName(cargoItem(entry).name)!==target||!conditionAllowed(entry.condition))continue;
+      sources.push({kind:'cargo',entry,quantity:Math.max(0,number(entry.quantity))});
+    }
+    normalizeCharacterInventory();
+    for(const entry of state.character.catalogInventory){
+      if(normalizedRecipeName(inventoryDefinition(entry).name)!==target||!conditionAllowed(entry.condition))continue;
+      sources.push({kind:'character',entry,quantity:Math.max(0,number(entry.quantity))});
+    }
+    return sources;
+  }
+
+  function availableRecipeMaterial(name,requirement={}){
+    return recipeSourceRecords(name,requirement).reduce((sum,source)=>sum+source.quantity,0);
+  }
+
+  function chooseRecipeRequirements(recipe){
+    const reserved={};
+    const chosen=[];
+    const missing=[];
+    for(const ingredient of recipe?.ingredients||[]){
+      const options=ingredient.options?.length?ingredient.options:[ingredient.name];
+      const quantity=Math.max(1,number(ingredient.quantity,1));
+      let selection='';
+      for(const name of options){
+        const key=normalizedRecipeName(name);
+        const free=availableRecipeMaterial(name,ingredient)-number(reserved[key]);
+        if(free>=quantity){selection=name;reserved[key]=number(reserved[key])+quantity;break;}
+      }
+      if(selection)chosen.push({...ingredient,name:selection,options:undefined,quantity});
+      else missing.push({ingredient,available:Math.max(...options.map(name=>availableRecipeMaterial(name,ingredient)-number(reserved[normalizedRecipeName(name)])),0)});
+    }
+    return {ok:missing.length===0,chosen,missing};
+  }
+
+  function consumeRecipeMaterial(name,quantity,requirement={}){
+    let remaining=Math.max(0,number(quantity));
+    const sources=recipeSourceRecords(name,requirement);
+    for(const source of sources){
+      if(remaining<=0)break;
+      const take=Math.min(remaining,Math.max(0,number(source.entry.quantity)));
+      source.entry.quantity-=take;
+      remaining-=take;
+      if(source.kind==='cargo'&&source.entry.quantity<=0){
+        state.submarine.cargoManagement.entries=state.submarine.cargoManagement.entries.filter(entry=>entry!==source.entry);
+      }else if(source.kind==='character'&&source.entry.quantity<=0){
+        state.character.catalogInventory=state.character.catalogInventory.filter(entry=>entry!==source.entry);
+      }
+    }
+    syncCargoResourceIfEnabled();
+    return Math.max(0,number(quantity)-remaining);
+  }
+
+  function consumeRecipeRequirements(requirements){
+    for(const requirement of requirements){
+      if(consumeRecipeMaterial(requirement.name,requirement.quantity,requirement)<requirement.quantity)return false;
+    }
+    return true;
+  }
+
+  function machineOutputKey(machine){
+    return machine==='medical-fabricator'?'medicalOutput':machine==='deconstructor'?'deconstructorOutput':'fabricatorOutput';
+  }
+
+  function machineOutputBuffer(machine){
+    const crafting=normalizeSubmarineCraftingState();
+    return crafting[machineOutputKey(machine)];
+  }
+
+  function canAcceptMachineOutputs(machine,outputs){
+    const buffer=machineOutputBuffer(machine);
+    const names=new Set(buffer.filter(entry=>number(entry.quantity)>0).map(entry=>normalizedRecipeName(entry.name)));
+    for(const output of outputs||[])if(number(output.quantity)>0)names.add(normalizedRecipeName(output.name));
+    return names.size<=number(MACHINE_OUTPUT_LIMITS[machine],1);
+  }
+
+  function addMachineOutput(machine,name,quantity,itemId=''){
+    const amount=Math.max(0,number(quantity));
+    if(!amount)return;
+    const buffer=machineOutputBuffer(machine);
+    const existing=buffer.find(entry=>normalizedRecipeName(entry.name)===normalizedRecipeName(name));
+    const item=itemId?catalogueItem(itemId):recipeMaterialItemByName(name);
+    if(existing)existing.quantity+=amount;
+    else buffer.push({outputId:uid('machine-output'),id:itemId||item?.id||'',name,quantity:amount,machine});
+  }
+
+  function collectMachineOutput(machine,outputId){
