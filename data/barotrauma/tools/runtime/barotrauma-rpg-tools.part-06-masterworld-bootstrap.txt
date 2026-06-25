@@ -67,9 +67,16 @@
         if (!response.ok) throw new Error(`${path} returned ${response.status}`);
         return response.text();
       }))).join('');
-      eval(packedSource);
+      const jobLoad = eval(packedSource);
+      if (jobLoad && typeof jobLoad.then === 'function') await jobLoad;
+
+      const observerPath = 'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-masterworld-observer-packed.txt';
+      const observerResponse = await fetch(observerPath, { cache: 'no-store' });
+      if (!observerResponse.ok) throw new Error(`${observerPath} returned ${observerResponse.status}`);
+      const observerLoad = eval(await observerResponse.text());
+      if (observerLoad && typeof observerLoad.then === 'function') await observerLoad;
     })().catch(error => {
       globalThis.__BAROTRAUMA_JOB_SYSTEM_PACKED_LOADING = false;
-      console.error('The Job, Event, and Station card payload could not be loaded.', error);
+      console.error('The Job System or Masterworld Observer payload could not be loaded.', error);
     });
   }
