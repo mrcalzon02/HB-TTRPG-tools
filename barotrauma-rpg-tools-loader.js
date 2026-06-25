@@ -94,6 +94,15 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-submarine-capability-unification.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-data.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-core-00.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-core-01.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-core-02.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-ui-00.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-ui-01.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-ui-02.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-ui-03.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-item-recipes-economy.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-masterworld-bootstrap.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
