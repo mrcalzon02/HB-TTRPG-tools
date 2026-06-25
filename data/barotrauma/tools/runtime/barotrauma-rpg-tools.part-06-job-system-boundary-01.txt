@@ -1,0 +1,119 @@
+    if(!activeSubmarineDashboardContext())return false;
+    const boundary=persistentJobSystemBoundary();
+    if(!boundary.allowed){
+      const target=root.querySelector('.tool-grid')||root.querySelector('.tool-shell');
+      if(target)target.insertAdjacentHTML('beforeend',lockedPersistentJobSystemHtml(boundary));
+      return false;
+    }
+    return renderJobSystemPanelBeforeDashboardBoundary();
+  };
+
+  jobSystemRerender=function jobSystemRerenderDashboardBound(){
+    if(activeSubmarineDashboardContext())renderSubmarine();
+    else if(activeTool()==='jobs')renderStandaloneJobSystem();
+    else render();
+  };
+
+  function defaultStandaloneJobSystemState(){
+    return {
+      version:JOB_SYSTEM_STANDALONE_VERSION,
+      drawSequence:0,
+      mode:'friendly-station',
+      family:'All',
+      difficulty:'All',
+      actionId:'steady-procedure',
+      flatModifier:0,
+      cards:[],
+      lastRoll:null,
+      lastMessage:'Standalone output is unattached and cannot alter the Masterworld.'
+    };
+  }
+
+  function normalizeStandaloneJobSystemState(){
+    state.jobSystemStandalone=state.jobSystemStandalone&&typeof state.jobSystemStandalone==='object'?state.jobSystemStandalone:defaultStandaloneJobSystemState();
+    const standalone=state.jobSystemStandalone;
+    const defaults=defaultStandaloneJobSystemState();
+    for(const [key,value] of Object.entries(defaults))if(!(key in standalone))standalone[key]=Array.isArray(value)?[]:value;
+    standalone.version=JOB_SYSTEM_STANDALONE_VERSION;
+    standalone.cards=Array.isArray(standalone.cards)?standalone.cards:[];
+    standalone.drawSequence=Math.max(0,number(standalone.drawSequence));
+    standalone.flatModifier=clamp(number(standalone.flatModifier),-10,20);
+    return standalone;
+  }
+
+  function standaloneFilteredJobs(standalone){
+    return JOB_CARD_LIBRARY.filter(card=>(standalone.family==='All'||card.family===standalone.family)&&(standalone.difficulty==='All'||card.difficulty===standalone.difficulty));
+  }
+  function standaloneFilteredEvents(standalone){
+    return JOB_EVENT_LIBRARY.filter(card=>(standalone.family==='All'||card.family===standalone.family)&&(standalone.difficulty==='All'||card.difficulty===standalone.difficulty));
+  }
+  function standalonePick(pool,rng,count=1){
+    const working=[...pool];
+    const selected=[];
+    while(working.length&&selected.length<count){
+      const index=Math.floor(rng()*working.length);
+      selected.push(working.splice(index,1)[0]);
+    }
+    return selected;
+  }
+  function standaloneCardRecord(kind,card){
+    return {standaloneId:uid('standalone-card'),kind,cardId:card.id,drawnAt:new Date().toISOString(),card:cloneJobData(card)};
+  }
+
+  function drawStandaloneJobSystemOutput(){
+    const standalone=normalizeStandaloneJobSystemState();
+    standalone.drawSequence+=1;
+    const rng=seededRandom(`${state.world?.seed||'STANDALONE'}|job-system-sandbox|${standalone.drawSequence}|${standalone.mode}|${standalone.family}|${standalone.difficulty}`);
+    const jobs=standaloneFilteredJobs(standalone);
+    const events=standaloneFilteredEvents(standalone);
+    const friendlyStations=JOB_STATION_CARD_LIBRARY.filter(card=>!card.hostile);
+    const hostileStations=JOB_STATION_CARD_LIBRARY.filter(card=>card.hostile);
+    const records=[];
+    if(standalone.mode==='friendly-station'){
+      records.push(...standalonePick(jobs.length?jobs:JOB_CARD_LIBRARY,rng,2).map(card=>standaloneCardRecord('job',card)));
+      records.push(...standalonePick(friendlyStations,rng,1).map(card=>standaloneCardRecord('station',card)));
+    }else if(standalone.mode==='hostile-station'){
+      records.push(...standalonePick(hostileStations,rng,2).map(card=>standaloneCardRecord('station',card)));
+    }else if(standalone.mode==='single-job'){
+      records.push(...standalonePick(jobs.length?jobs:JOB_CARD_LIBRARY,rng,1).map(card=>standaloneCardRecord('job',card)));
+    }else if(standalone.mode==='single-event'){
+      records.push(...standalonePick(events.length?events:JOB_EVENT_LIBRARY,rng,1).map(card=>standaloneCardRecord('event',card)));
+    }else{
+      const job=standalonePick(jobs.length?jobs:JOB_CARD_LIBRARY,rng,1)[0];
+      if(job){
+        records.push(standaloneCardRecord('job',job));
+        const families=JOB_FAMILY_EVENT_FAMILIES[job.family]||Object.keys(JOB_EVENT_ROLE_PROFILES);
+        const packetEvents=(events.length?events:JOB_EVENT_LIBRARY).filter(card=>families.includes(card.family));
+        records.push(...standalonePick(packetEvents.length?packetEvents:JOB_EVENT_LIBRARY,rng,Math.min(10,Math.max(1,number(job.eventCount)))).map(card=>standaloneCardRecord('event',card)));
+      }
+    }
+    standalone.cards=records;
+    standalone.lastRoll=null;
+    standalone.lastMessage=`Generated ${records.length} unattached card${records.length===1?'':'s'}. No Masterworld, station, route, crew, economy, or inventory state was changed.`;
+    save();
+    return records;
+  }
+
+  function standaloneJobSystemPreviewRoll(){
+    const standalone=normalizeStandaloneJobSystemState();
+    const eventRecord=standalone.cards.find(record=>record.kind==='event');
+    if(!eventRecord){
+      standalone.lastMessage='Draw an Event card or complete Job packet before rolling a standalone preview.';
+      save();
+      return {ok:false,message:standalone.lastMessage};
+    }
+    const event=eventRecord.card;
+    const action=JOB_ACTION_MAP[standalone.actionId]||JOB_TURN_ACTIONS[0]||{label:'No Action',bonus:0};
+    const dice=[d6(),d6()];
+    const total=dice[0]+dice[1]+number(action.bonus)+number(standalone.flatModifier);
+    const dc=number(jobDifficulty(event).dc,9);
+    const outcome=total>=dc+4?'critical success':total>=dc?'success':total===dc-1?'mixed':total<=dc-5?'critical failure':'failure';
+    standalone.lastRoll={at:new Date().toISOString(),eventId:event.id,eventTitle:event.title,dice,total,dc,actionId:action.id||'',actionLabel:action.label,flatModifier:number(standalone.flatModifier),outcome};
+    standalone.lastMessage=`Preview only: ${event.title} resolved as ${outcome} (${dice.join(' + ')} + ${number(action.bonus)} action + ${number(standalone.flatModifier)} modifier = ${total} vs ${dc}).`;
+    save();
+    return {ok:true,message:standalone.lastMessage};
+  }
+
+  function standaloneCardHtml(record){
+    const card=record.card||{};
+    if(record.kind==='job')return `<div class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><span class="tag">${escapeHtml(card.family)}</span><span class="tag ${jobDifficultyTone(card.difficulty)}">${escapeHtml(card.difficulty)}</span><h4>${escapeHtml(card.title)}</h4></div><span class="status-pill">UNATTACHED JOB</span></div><p>${escapeHtml(card.summary)}</p><div class="metric-row"><div class="metric"><span>Payment</span><strong>${number(card.payment).toLocaleString()} mk</strong></div><div class="metric"><span>Required events</span><strong>${number(card.eventCount)}</strong></div><div class="metric"><span>Scope</span><strong>${escapeHtml(card.scope)}</strong></div></div><p class="small-note">${escapeHtml(jobSourceLabel(card.source))}. This card has not been offered by any station and cannot be accepted here.</p></div>`;
