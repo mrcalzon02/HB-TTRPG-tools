@@ -1,0 +1,50 @@
+  };
+
+  function normalizeAuditedInventoryUsage(){
+    normalizeCharacterInventory();
+    for(const entry of state.character.catalogInventory){
+      const item=inventoryDefinition(entry);
+      if(REUSABLE_CONDITION_TOOL_IDS.has(item.id)&&entry.tracker!=='condition'){
+        const ratio=number(entry.maxUses)>0?clamp(number(entry.usesRemaining)/number(entry.maxUses),0,1):1;
+        entry.tracker='condition';
+        entry.condition=clamp(entry.condition??Math.round(ratio*100),0,100);
+      }
+    }
+    state.character.catalogInventory=state.character.catalogInventory.filter(entry=>number(entry.quantity)>0);
+  }
+
+  const normalizeCompatibilityInventoryBeforeRecipeAudit=normalizeCompatibilityInventory;
+  normalizeCompatibilityInventory=function normalizeCompatibilityInventoryAfterRecipeAudit(){
+    normalizeCompatibilityInventoryBeforeRecipeAudit();
+    normalizeAuditedInventoryUsage();
+  };
+
+  characterInventoryCapacity=function characterInventoryCapacityByCarryUnits(){
+    normalizeAuditedInventoryUsage();
+    const baseSlots=Math.max(1,number(state.character.current.Strength,1));
+    const toolbelt=Boolean(equippedFunctionalItem('toolbelt'));
+    const backpack=Boolean(equippedFunctionalItem('backpack'));
+    const expansion=(toolbelt?number(ITEM_INVENTORY_RULES.toolbeltSlots,4):0)+(backpack?number(ITEM_INVENTORY_RULES.backpackSlots,4):0);
+    const used=state.character.catalogInventory.reduce((sum,entry)=>{
+      const item=inventoryDefinition(entry);
+      return sum+Math.max(1,number(item.carryUnits,entry.carryUnits||1))*Math.max(1,number(entry.quantity,1));
+    },0);
+    const capacity=baseSlots+expansion;
+    const backpackPenalty=backpack?Math.max(0,number(ITEM_INVENTORY_RULES.backpackMobilityPenalty,1)):0;
+    const overloadPenalty=Math.max(0,used-capacity);
+    return {baseSlots,expansion,capacity,used,remaining:capacity-used,toolbelt,backpack,mobilityPenalty:backpackPenalty+overloadPenalty,backpackPenalty,overloadPenalty};
+  };
+
+  spendTrackedUse=function spendTrackedUseWithoutGhostItems(entry,item){
+    if(!entry||number(entry.usesRemaining)<=0)return false;
+    entry.usesRemaining=Math.max(0,number(entry.usesRemaining)-1);
+    const disposable=['Consumables','Medical','Ammunition'].includes(item.category)||CONSUMED_ON_FINAL_USE_IDS.has(item.id)||customEntry(item.id)?.type==='consumable';
+    const effect=itemUseEffect(item)||itemToolBehavior(item)?.action||`Used ${item.name}.`;
+    addConsumptionLog(item,effect);
+    if(disposable&&entry.usesRemaining<=0){
+      if(number(entry.quantity)>1){entry.quantity-=1;entry.usesRemaining=Math.max(1,number(entry.maxUses,item.capacity||1));}
+      else state.character.catalogInventory=state.character.catalogInventory.filter(candidate=>candidate!==entry);
+    }
+    return true;
+  };
+
