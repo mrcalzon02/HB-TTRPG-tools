@@ -1,0 +1,50 @@
+  refillTrackedTool=function refillTrackedToolWithRequiredSupply(entry,item){
+    const behavior=itemToolBehavior(item);
+    const supplies=behavior?.refillItems||[];
+    if(!supplies.length)return '';
+    const supply=supplies.find(name=>availableInventoryReserve(name)>0);
+    if(!supply||consumeInventoryReserve(supply,1)<1)return '';
+    entry.usesRemaining=Math.max(1,number(entry.maxUses,behavior.maxUses||1));
+    addConsumptionLog(item,`${item.name} refilled using ${supply}.`);
+    return supply;
+  };
+
+  function itemRepairRequirements(item,condition){
+    const recipe=recipeForItem(item,recipeMachineForItem(item));
+    let candidates=(recipe?.deconstruction||[]).map(entry=>entry.name||entry.options?.[0]).filter(name=>RECIPE_MATERIAL_NAMES.has(normalizedRecipeName(name)));
+    if(!candidates.length)candidates=(recipe?.ingredients||[]).map(entry=>entry.name||entry.options?.[0]).filter(name=>RECIPE_MATERIAL_NAMES.has(normalizedRecipeName(name)));
+    if(!candidates.length)candidates=['Steel Bar','Plastic'];
+    candidates=[...new Set(candidates)];
+    const units=Math.max(1,Math.ceil((100-clamp(condition,0,100))/40));
+    const requirements=[];
+    for(let index=0;index<Math.min(units,2);index+=1)requirements.push({name:candidates[index%candidates.length],quantity:1});
+    if(units>2)requirements[0].quantity+=units-2;
+    return requirements;
+  }
+
+  function repairInventoryItemWithMaterials(entry){
+    if(!entry)return {ok:false,message:'Inventory item not found.'};
+    const item=inventoryDefinition(entry);
+    if(number(entry.condition)>=100)return {ok:false,message:`${item.name} is already at full condition.`};
+    const requirements=itemRepairRequirements(item,entry.condition);
+    const plan=chooseRecipeRequirements({ingredients:requirements});
+    if(!plan.ok)return {ok:false,message:`Repair requires ${requirements.map(recipeMaterialDisplay).join(', ')}.`};
+    if(!consumeRecipeRequirements(plan.chosen))return {ok:false,message:'Repair materials changed before the repair completed.'};
+    entry.condition=100;
+    addConsumptionLog(item,`${item.name} repaired using ${plan.chosen.map(recipeMaterialDisplay).join(', ')}.`);
+    save();
+    return {ok:true,message:`${item.name} repaired.`};
+  }
+
+  function operateConditionItem(entry){
+    if(!entry)return {ok:false,message:'Inventory item not found.'};
+    const item=inventoryDefinition(entry);
+    if(number(entry.condition)<=0)return {ok:false,message:`${item.name} is broken.`};
+    const wear=Math.max(1,number(itemToolBehavior(item)?.wearPerUse,item.category==='Tools'?5:2));
+    entry.condition=Math.max(0,number(entry.condition)-wear);
+    addConsumptionLog(item,itemUseEffect(item)||itemToolBehavior(item)?.action||`Operated ${item.name}.`);
+    save();
+    return {ok:true,message:`${item.name} used; condition reduced by ${wear}.`};
+  }
+
+  const enhanceCharacterCatalogueBeforeRecipeAudit=enhanceCharacterCatalogue;
