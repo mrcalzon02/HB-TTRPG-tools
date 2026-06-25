@@ -1,0 +1,120 @@
+    const crafting=normalizeSubmarineCraftingState();
+    const buffer=crafting[machineOutputKey(machine)];
+    const entry=buffer.find(item=>item.outputId===outputId);
+    if(!entry)return {ok:false,message:'Machine output no longer exists.'};
+    const report=unifiedCargoCapacityReport(normalizeCargoManagement());
+    const free=Math.max(0,SUBMARINE_LOOSE_ITEM_LIMIT-report.looseItemsUsed);
+    if(free<=0)return {ok:false,message:'Loose onboard storage is full. Clear cabinet or rack space before collecting machine output.'};
+    const quantity=Math.min(free,Math.max(1,number(entry.quantity)));
+    const item=entry.id?catalogueItem(entry.id):recipeMaterialItemByName(entry.name);
+    const ok=addCargoItem(item?.id||'',quantity,{customName:entry.name,owner:'Submarine',location:`${machine} output`,storageMode:'loose',notes:'Collected from mounted machine output.'});
+    if(!ok)return {ok:false,message:normalizeCargoManagement().lastMessage};
+    entry.quantity-=quantity;
+    if(entry.quantity<=0)crafting[machineOutputKey(machine)]=buffer.filter(item=>item!==entry);
+    craftingActivity(`Collected ${quantity} ${entry.name} from ${machine.replace('-', ' ')} output.`,'machine-output',{machine,name:entry.name,quantity});
+    save();
+    return {ok:true,message:`Collected ${quantity} ${entry.name}.`};
+  }
+
+  function craftRecipeItem(itemId,machine){
+    const facilities=submarineFacilityProfile();
+    if(machine==='fabricator'&&!facilities.fabricator)return {ok:false,message:'This submarine has no mounted Fabricator.'};
+    if(machine==='medical-fabricator'&&!facilities.medicalFabricator)return {ok:false,message:'This submarine has no mounted Medical Fabricator.'};
+    const item=catalogueItem(itemId);
+    if(!item)return {ok:false,message:'Choose a valid catalogue item.'};
+    const recipe=recipeForItem(item,machine);
+    if(!recipe||recipe.machine!==machine)return {ok:false,message:`${item.name} is not assigned to this machine.`};
+    const plan=chooseRecipeRequirements(recipe);
+    if(!plan.ok){
+      const detail=plan.missing.map(entry=>`${recipeMaterialDisplay(entry.ingredient)} (${entry.available} available)`).join('; ');
+      return {ok:false,message:`Missing fabrication materials: ${detail}.`};
+    }
+    const outputs=[{name:item.name,quantity:Math.max(1,number(recipe.outputQuantity,1))}];
+    if(!canAcceptMachineOutputs(machine,outputs))return {ok:false,message:'The machine output slot contains another item. Collect it before fabricating a different product.'};
+    if(!consumeRecipeRequirements(plan.chosen))return {ok:false,message:'Materials changed before fabrication could complete.'};
+    addMachineOutput(machine,item.name,outputs[0].quantity,item.id);
+    craftingActivity(`${item.name} fabricated using ${recipe.source==='official-wiki'?'the official wiki recipe':'a deterministic campaign-derived recipe'}.`,'fabrication',{itemId:item.id,machine,source:recipe.source,ingredients:plan.chosen});
+    save();
+    return {ok:true,message:`Fabricated ${outputs[0].quantity} ${item.name}; collect it from the machine output.`};
+  }
+
+  function deconstructionSources(){
+    const records=[];
+    const cargo=normalizeCargoManagement();
+    for(const entry of cargo.entries){
+      const item=cargoItem(entry);
+      if(item.category==='Crafting Materials')continue;
+      records.push({sourceKey:`cargo:${entry.cargoId}`,kind:'cargo',entry,item,name:item.name,condition:number(entry.condition,100)});
+    }
+    normalizeCharacterInventory();
+    for(const entry of state.character.catalogInventory){
+      const item=inventoryDefinition(entry);
+      if(item.category==='Crafting Materials')continue;
+      records.push({sourceKey:`character:${entry.instanceId}`,kind:'character',entry,item,name:item.name,condition:number(entry.condition,100)});
+    }
+    return records;
+  }
+
+  function deconstructionOutputsFor(source){
+    const recipe=recipeForItem(source.item,recipeMachineForItem(source.item));
+    if(!recipe)return {recipe:null,outputs:[]};
+    const outputs=[];
+    for(const raw of recipe.deconstruction||[]){
+      if(raw.conditionMin!=null&&source.condition<number(raw.conditionMin))continue;
+      if(raw.conditionMax!=null&&source.condition>number(raw.conditionMax))continue;
+      let quantity=Math.max(0,number(raw.quantity,1));
+      if(recipe.source!=='official-wiki')quantity=Math.floor(quantity*clamp(source.condition/100,0,1));
+      if(quantity>0)outputs.push({name:raw.name||raw.options?.[0]||'Recovered Material',quantity});
+    }
+    return {recipe,outputs};
+  }
+
+  function removeDeconstructionSource(source){
+    if(source.kind==='cargo')return removeCargoQuantity(source.entry.cargoId,1);
+    if(source.kind==='character'){
+      source.entry.quantity-=1;
+      if(source.entry.quantity<=0)state.character.catalogInventory=state.character.catalogInventory.filter(entry=>entry!==source.entry);
+      save();
+      return true;
+    }
+    return false;
+  }
+
+  function deconstructRecipeSource(sourceKey){
+    const facilities=submarineFacilityProfile();
+    if(!facilities.deconstructor)return {ok:false,message:'This submarine has no mounted Deconstructor.'};
+    const source=deconstructionSources().find(entry=>entry.sourceKey===sourceKey);
+    if(!source)return {ok:false,message:'Choose an available item to deconstruct.'};
+    const {recipe,outputs}=deconstructionOutputsFor(source);
+    if(!recipe)return {ok:false,message:'No deconstruction model is available for this item.'};
+    if(!canAcceptMachineOutputs('deconstructor',outputs))return {ok:false,message:`The Deconstructor has only ${MACHINE_OUTPUT_LIMITS.deconstructor} output slots. Collect existing outputs first.`};
+    if(!removeDeconstructionSource(source))return {ok:false,message:'The selected item could not be removed from inventory.'};
+    for(const output of outputs)addMachineOutput('deconstructor',output.name,output.quantity,recipeMaterialItemByName(output.name)?.id||'');
+    const summary=outputs.length?outputs.map(output=>`${output.quantity} ${output.name}`).join(', '):'no recoverable material';
+    craftingActivity(`${source.name} deconstructed into ${summary} using ${recipe.source==='official-wiki'?'the official wiki yield':'a loss-bearing campaign-derived yield'}.`,'deconstruction',{sourceKey,itemName:source.name,source:recipe.source,condition:source.condition,outputs});
+    save();
+    return {ok:true,message:`Deconstructed ${source.name}: ${summary}.`};
+  }
+
+  function craftableItemsForMachine(machine){
+    return (WIKI_CATALOG.items||[]).filter(item=>item.category!=='Crafting Materials'&&recipeMachineForItem(item)===machine).sort((left,right)=>left.name.localeCompare(right.name));
+  }
+
+  function recipeAvailabilityHtml(recipe){
+    if(!recipe)return '<div class="notice">No recipe selected.</div>';
+    const rows=(recipe.ingredients||[]).map(ingredient=>{
+      const names=ingredient.options?.length?ingredient.options:[ingredient.name];
+      const availability=Math.max(...names.map(name=>availableRecipeMaterial(name,ingredient)),0);
+      const required=Math.max(1,number(ingredient.quantity,1));
+      return `<tr><td>${escapeHtml(recipeMaterialDisplay(ingredient))}</td><td><strong class="${availability>=required?'good':'bad'}">${availability}</strong></td></tr>`;
+    }).join('');
+    const deconstruction=(recipe.deconstruction||[]).map(recipeMaterialDisplay).join(', ')||'No recoverable material';
+    const skill=recipe.skill?`${recipe.skill.name} ${recipe.skill.level}`:'No recorded skill threshold';
+    return `<div class="notice"><strong>${recipe.source==='official-wiki'?'Official wiki recipe':'Algorithmically derived campaign recipe'}</strong><br>${escapeHtml(skill)} · ${number(recipe.fabricationTimeSeconds)} seconds · produces ${number(recipe.outputQuantity,1)}<br><span class="small-note">${escapeHtml(recipe.notes||'')}</span></div><div class="table-wrap" style="margin-top:8px"><table class="tool-table"><thead><tr><th>Required material</th><th>Available</th></tr></thead><tbody>${rows}</tbody></table></div><p class="small-note"><strong>Deconstruction:</strong> ${escapeHtml(deconstruction)}.</p>`;
+  }
+
+  function machineOutputHtml(machine){
+    const buffer=machineOutputBuffer(machine);
+    return `<div class="card-list">${buffer.map(entry=>`<div class="notice"><strong>${escapeHtml(entry.name)}</strong> × ${number(entry.quantity)}<div class="button-row no-print" style="margin-top:7px"><button class="compact-button recipe-collect-output" data-machine="${escapeHtml(machine)}" data-output-id="${escapeHtml(entry.outputId)}" type="button">Collect to Loose Storage</button></div></div>`).join('')||'<div class="notice">Output slot empty.</div>'}</div>`;
+  }
+
