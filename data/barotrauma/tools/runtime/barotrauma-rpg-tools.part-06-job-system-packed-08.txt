@@ -1,0 +1,2 @@
+    if(typeof render==='function')render();
+  })().catch(error=>console.error('Job, Event, and Station card runtime failed to load.',error));
