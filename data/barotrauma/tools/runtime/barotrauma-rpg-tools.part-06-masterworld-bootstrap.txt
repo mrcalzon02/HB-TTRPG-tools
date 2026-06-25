@@ -70,12 +70,16 @@
       const jobLoad = eval(packedSource);
       if (jobLoad && typeof jobLoad.then === 'function') await jobLoad;
 
-      const observerPartPaths = Array.from({ length: 4 }, (_, index) => `data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-masterworld-observer-packed-${String(index).padStart(2, '0')}.txt`);
-      const observerSource = (await Promise.all(observerPartPaths.map(async path => {
+      const observerPayloadPaths = Array.from({ length: 10 }, (_, index) => `data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-masterworld-observer-payload-${String(index).padStart(2, '0')}.txt`);
+      const observerPayload = (await Promise.all(observerPayloadPaths.map(async path => {
         const response = await fetch(path, { cache: 'no-store' });
         if (!response.ok) throw new Error(`${path} returned ${response.status}`);
         return response.text();
       }))).join('');
+      if (typeof DecompressionStream !== 'function') throw new Error('This browser does not support the compressed Masterworld Observer runtime.');
+      const observerBytes = Uint8Array.from(atob(observerPayload), character => character.charCodeAt(0));
+      const observerStream = new Blob([observerBytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+      const observerSource = await new Response(observerStream).text();
       const observerLoad = eval(observerSource);
       if (observerLoad && typeof observerLoad.then === 'function') await observerLoad;
     })().catch(error => {
