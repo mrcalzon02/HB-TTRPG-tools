@@ -1,0 +1,65 @@
+    if(record.kind==='event')return `<div class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><span class="tag">${escapeHtml(card.family)}</span><span class="tag ${jobDifficultyTone(card.difficulty)}">${escapeHtml(card.difficulty)}</span><h4>${escapeHtml(card.title)}</h4></div><span class="status-pill warn">UNATTACHED EVENT</span></div><p>${escapeHtml(card.description)}</p><div class="metric-row"><div class="metric"><span>Primary statistic</span><strong>${escapeHtml(card.primaryStat)}</strong></div><div class="metric"><span>DC</span><strong>${number(jobDifficulty(card).dc)}</strong></div><div class="metric"><span>Clock</span><strong>${number(card.clock)} phases</strong></div></div><div class="field-grid" style="margin-top:8px"><div class="notice good"><strong>Success</strong><br>${escapeHtml(card.success)}</div><div class="notice bad"><strong>Failure</strong><br>${escapeHtml(card.failure)}</div></div><p class="small-note">This Event is not attached to a Job, route crossing, station, crew turn, or persistent condition.</p></div>`;
+    return `<div class="tool-card"><div class="tool-hero" style="padding:0;border:0;background:none"><div><span class="tag">${card.hostile?'Hostile':'Friendly'}</span><h4>${escapeHtml(card.title)}</h4></div><span class="status-pill ${card.hostile?'bad':'good'}">UNATTACHED STATION CARD</span></div><p>${escapeHtml(card.description)}</p><p class="small-note">This output is not tied to a world station and applies no economy, reputation, or encounter effects.</p></div>`;
+  }
+
+  function renderStandaloneJobSystem(){
+    const standalone=normalizeStandaloneJobSystemState();
+    const families=['All',...new Set([...JOB_CARD_LIBRARY.map(card=>card.family),...JOB_EVENT_LIBRARY.map(card=>card.family)])];
+    const difficulties=['All','Easy','Moderate','Hard','Very Hard','Extreme'];
+    const lastRoll=standalone.lastRoll;
+    root.innerHTML=`<div class="tool-shell"><section class="tool-hero"><div><p class="eyebrow">Standalone card laboratory</p><h2>Standalone Jobs, Events, and Stations</h2><p class="rules-note">Generate unattached cards for preparation, testing, printing, or manual use. This sandbox never reads or mutates the active station deck, accepted Jobs, dashboard crew turns, route crossing, persistent conditions, economy, reputation, cargo, or inventory.</p></div><span class="status-pill">SANDBOX ONLY</span></section><div class="tool-grid">
+      <section class="tool-panel span-4"><h3>Output Controls</h3><label class="field">Output type<select id="standalone-job-mode"><option value="friendly-station" ${standalone.mode==='friendly-station'?'selected':''}>Friendly Station Draw · 2 Jobs + 1 Station card</option><option value="hostile-station" ${standalone.mode==='hostile-station'?'selected':''}>Hostile Station Draw · exactly 2 cards</option><option value="single-job" ${standalone.mode==='single-job'?'selected':''}>Single Job card</option><option value="single-event" ${standalone.mode==='single-event'?'selected':''}>Single Event card</option><option value="job-packet" ${standalone.mode==='job-packet'?'selected':''}>Complete Job packet with Event cards</option></select></label><label class="field">Family filter<select id="standalone-job-family">${families.map(value=>`<option value="${escapeHtml(value)}" ${value===standalone.family?'selected':''}>${escapeHtml(value)}</option>`).join('')}</select></label><label class="field">Difficulty filter<select id="standalone-job-difficulty">${difficulties.map(value=>`<option value="${escapeHtml(value)}" ${value===standalone.difficulty?'selected':''}>${escapeHtml(value)}</option>`).join('')}</select></label><div class="button-row no-print" style="margin-top:10px"><button id="standalone-job-draw" class="primary-action" type="button">Generate Unattached Output</button><button id="standalone-job-clear" class="secondary-action" type="button">Clear</button><button id="standalone-job-export" class="secondary-action" type="button" ${standalone.cards.length?'':'disabled'}>Export JSON</button></div><div class="notice" style="margin-top:10px">${escapeHtml(standalone.lastMessage)}</div></section>
+      <section class="tool-panel span-8"><h3>Unattached Output</h3><div class="card-list">${standalone.cards.map(standaloneCardHtml).join('')||'<div class="notice">No standalone cards generated.</div>'}</div></section>
+      <section class="tool-panel span-12"><div class="tool-hero" style="padding:0;border:0;background:none"><div><h3>Event Roll Preview</h3><p class="small-note">This is a disposable probability preview. It uses no crew record and consumes no item.</p></div><span class="status-pill">NO EFFECTS</span></div><div class="field-grid three"><label class="field">Action<select id="standalone-job-action">${JOB_TURN_ACTIONS.map(action=>`<option value="${escapeHtml(action.id)}" ${action.id===standalone.actionId?'selected':''}>${escapeHtml(action.label)} · +${number(action.bonus)}</option>`).join('')}</select></label><label class="field">Manual modifier<input id="standalone-job-modifier" type="number" min="-10" max="20" value="${number(standalone.flatModifier)}"></label><div class="button-row" style="align-self:end"><button id="standalone-job-roll" class="secondary-action no-print" type="button" ${standalone.cards.some(record=>record.kind==='event')?'':'disabled'}>Roll 2d6 Preview</button></div></div>${lastRoll?`<div class="notice ${/success/.test(lastRoll.outcome)?'good':/failure/.test(lastRoll.outcome)?'bad':'warn'}" style="margin-top:10px"><strong>${escapeHtml(lastRoll.eventTitle)}</strong>: ${escapeHtml(lastRoll.outcome)} · ${lastRoll.dice.join(' + ')} + action ${number(JOB_ACTION_MAP[lastRoll.actionId]?.bonus)} + modifier ${number(lastRoll.flatModifier)} = ${number(lastRoll.total)} vs DC ${number(lastRoll.dc)}</div>`:''}</section>
+    </div></div>`;
+    const sync=()=>{standalone.mode=root.querySelector('#standalone-job-mode')?.value||standalone.mode;standalone.family=root.querySelector('#standalone-job-family')?.value||standalone.family;standalone.difficulty=root.querySelector('#standalone-job-difficulty')?.value||standalone.difficulty;standalone.actionId=root.querySelector('#standalone-job-action')?.value||standalone.actionId;standalone.flatModifier=clamp(root.querySelector('#standalone-job-modifier')?.value,-10,20);save();};
+    ['#standalone-job-mode','#standalone-job-family','#standalone-job-difficulty','#standalone-job-action','#standalone-job-modifier'].forEach(selector=>root.querySelector(selector)?.addEventListener('change',sync));
+    root.querySelector('#standalone-job-draw')?.addEventListener('click',()=>{sync();drawStandaloneJobSystemOutput();renderStandaloneJobSystem();});
+    root.querySelector('#standalone-job-clear')?.addEventListener('click',()=>{standalone.cards=[];standalone.lastRoll=null;standalone.lastMessage='Standalone output cleared. No persistent state was affected.';save();renderStandaloneJobSystem();});
+    root.querySelector('#standalone-job-export')?.addEventListener('click',()=>download(`barotrauma-standalone-job-output-${standalone.drawSequence}.json`,JSON.stringify({schema:'barotrauma-standalone-job-output',version:JOB_SYSTEM_STANDALONE_VERSION,exportedAt:new Date().toISOString(),mode:standalone.mode,family:standalone.family,difficulty:standalone.difficulty,cards:standalone.cards,lastRoll:standalone.lastRoll},null,2)));
+    root.querySelector('#standalone-job-roll')?.addEventListener('click',()=>{sync();standaloneJobSystemPreviewRoll();renderStandaloneJobSystem();});
+  }
+
+  function ensureStandaloneJobSystemTab(){
+    const nav=document.querySelector('.ops-tabs');
+    if(!nav||nav.querySelector('[data-tool="jobs"]'))return;
+    const button=document.createElement('button');
+    button.className='ops-tab';
+    button.dataset.tool='jobs';
+    button.type='button';
+    button.textContent='Standalone Jobs & Events';
+    const worldButton=nav.querySelector('[data-tool="world"]');
+    nav.insertBefore(button,worldButton||null);
+    button.addEventListener('click',()=>setTool('jobs'));
+  }
+
+  const activeToolBeforeStandaloneJobSystem=activeTool;
+  activeTool=function activeToolWithStandaloneJobSystem(){
+    const raw=window.location.hash.replace(/^#/,'');
+    if(raw==='jobs'||raw==='job-system'||raw==='standalone-jobs')return 'jobs';
+    return activeToolBeforeStandaloneJobSystem();
+  };
+
+  const renderBeforeStandaloneJobSystem=render;
+  render=function renderWithStandaloneJobSystem(){
+    ensureStandaloneJobSystemTab();
+    if(activeTool()==='jobs'){
+      document.querySelectorAll('.ops-tab').forEach(button=>button.classList.toggle('active',button.dataset.tool==='jobs'));
+      renderStandaloneJobSystem();
+      return;
+    }
+    return renderBeforeStandaloneJobSystem();
+  };
+
+  ensureStandaloneJobSystemTab();
+  normalizeStandaloneJobSystemState();
+  globalThis.BAROTRAUMA_JOB_SYSTEM_DIAGNOSTICS={
+    ...globalThis.BAROTRAUMA_JOB_SYSTEM_DIAGNOSTICS,
+    persistentDashboardOnly:true,
+    persistentRequiresAuthorizedDashboard:true,
+    persistentRequiresActiveCrew:true,
+    standaloneSandbox:true,
+    standaloneMutatesMasterworld:false,
+    standaloneTab:'jobs'
+  };
+  if(activeTool()==='jobs')render();
