@@ -3,4 +3,5 @@ ZIx1nvhX4NOCSdJL/atW4U05+rv1im2tgv1ueHme2sFhKFCFxMYxQqA98ZnZkVXU8kZ9NZ2Vwb7FPXGR
     const bytes=Uint8Array.from(atob(payload),character=>character.charCodeAt(0));
     const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
     const source=await new Response(stream).text();
-    eval(source);
+    const boundaryParts=await Promise.all([0,1,2].map(async index=>{const path=`data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-job-system-boundary-${String(index).padStart(2,'0')}.txt`;const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw new Error(`${path} returned ${response.status}`);return response.text();}));
+    eval(`${source}\n${boundaryParts.join('')}`);
