@@ -1,0 +1,135 @@
+
+  const JOB_SYSTEM_STANDALONE_VERSION='1.0.0';
+
+  function persistentJobSystemBoundary(){
+    const dashboard=typeof activeSubmarineDashboardContext==='function'&&activeSubmarineDashboardContext();
+    const authorized=!dashboard?false:(typeof dashboardManagementAuthorized!=='function'||dashboardManagementAuthorized());
+    let context=null;
+    let actors=[];
+    if(dashboard&&authorized){
+      try{
+        context=normalizeActiveSubmarineDashboard(false);
+        actors=typeof dashboardTurnActors==='function'?dashboardTurnActors().filter(actor=>actor&&actor.status!=='Dead'):[];
+      }catch(error){
+        console.error('Job System dashboard boundary evaluation failed.',error);
+      }
+    }
+    const expeditionActive=state.submarine?.managedExpedition?.status!=='lost';
+    const allowed=Boolean(dashboard&&authorized&&context?.submarineId&&actors.length&&expeditionActive);
+    const message=!dashboard
+      ?'Persistent Jobs, Events, and Stations are available only inside the Active Submarine Dashboard.'
+      :!authorized
+        ?'Log in to the Active Submarine Dashboard before accessing persistent Jobs, Events, and Stations.'
+        :!context?.submarineId
+          ?'The dashboard has no active submarine attached to the Masterworld.'
+          :!actors.length
+            ?'At least one living active crew member is required before persistent Jobs or Events can be used.'
+            :!expeditionActive
+              ?'The active expedition is lost or inactive and cannot accept or resolve persistent Jobs.'
+              :'Persistent Job System ready.';
+    return {allowed,dashboard,authorized,context,actors,message};
+  }
+
+  function requirePersistentJobSystem(){
+    const boundary=persistentJobSystemBoundary();
+    return boundary.allowed?{ok:true,boundary}:{ok:false,boundary,message:boundary.message};
+  }
+
+  const drawJobStationCardsBeforeDashboardBoundary=drawJobStationCards;
+  drawJobStationCards=function drawJobStationCardsDashboardOnly(force=false){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?drawJobStationCardsBeforeDashboardBoundary(force):permission;
+  };
+  const acceptJobOfferBeforeDashboardBoundary=acceptJobOffer;
+  acceptJobOffer=function acceptJobOfferDashboardOnly(instanceId){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?acceptJobOfferBeforeDashboardBoundary(instanceId):permission;
+  };
+  const resolveStationUtilityCardBeforeDashboardBoundary=resolveStationUtilityCard;
+  resolveStationUtilityCard=function resolveStationUtilityCardDashboardOnly(instanceId){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?resolveStationUtilityCardBeforeDashboardBoundary(instanceId):permission;
+  };
+  const drawJobEventBeforeDashboardBoundary=drawJobEvent;
+  drawJobEvent=function drawJobEventDashboardOnly(jobInstanceId,forcedEventId=''){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?drawJobEventBeforeDashboardBoundary(jobInstanceId,forcedEventId):permission;
+  };
+  const selectJobEventApproachBeforeDashboardBoundary=selectJobEventApproach;
+  selectJobEventApproach=function selectJobEventApproachDashboardOnly(approachId){
+    return requirePersistentJobSystem().ok?selectJobEventApproachBeforeDashboardBoundary(approachId):false;
+  };
+  const setJobEventSupportCrewBeforeDashboardBoundary=setJobEventSupportCrew;
+  setJobEventSupportCrew=function setJobEventSupportCrewDashboardOnly(refs){
+    return requirePersistentJobSystem().ok?setJobEventSupportCrewBeforeDashboardBoundary(refs):false;
+  };
+  const rollJobEventStepBeforeDashboardBoundary=rollJobEventStep;
+  rollJobEventStep=function rollJobEventStepDashboardOnly(){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?rollJobEventStepBeforeDashboardBoundary():permission;
+  };
+  const commitJobEventResolutionBeforeDashboardBoundary=commitJobEventResolution;
+  commitJobEventResolution=function commitJobEventResolutionDashboardOnly(){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?commitJobEventResolutionBeforeDashboardBoundary():permission;
+  };
+  const abandonJobBeforeDashboardBoundary=abandonJob;
+  abandonJob=function abandonJobDashboardOnly(jobInstanceId){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?abandonJobBeforeDashboardBoundary(jobInstanceId):permission;
+  };
+  const focusJobBeforeDashboardBoundary=focusJob;
+  focusJob=function focusJobDashboardOnly(jobInstanceId){
+    return requirePersistentJobSystem().ok?focusJobBeforeDashboardBoundary(jobInstanceId):false;
+  };
+  const startJobConditionCureBeforeDashboardBoundary=startJobConditionCure;
+  startJobConditionCure=function startJobConditionCureDashboardOnly(conditionId){
+    const permission=requirePersistentJobSystem();
+    return permission.ok?startJobConditionCureBeforeDashboardBoundary(conditionId):permission;
+  };
+
+  const drawCrossingEventWithJobCardsBeforeDashboardBoundary=drawCrossingEvent;
+  drawCrossingEvent=function drawCrossingEventWithDashboardBoundJobCards(route,targetNode,rng){
+    return persistentJobSystemBoundary().allowed
+      ?drawCrossingEventWithJobCardsBeforeDashboardBoundary(route,targetNode,rng)
+      :drawCrossingEventBeforeJobCards(route,targetNode,rng);
+  };
+  const routeResolutionSupportBonusWithJobCardsBeforeDashboardBoundary=routeResolutionSupportBonus;
+  routeResolutionSupportBonus=function routeResolutionSupportBonusDashboardBound(session,step,activeActor){
+    return persistentJobSystemBoundary().allowed
+      ?routeResolutionSupportBonusWithJobCardsBeforeDashboardBoundary(session,step,activeActor)
+      :routeResolutionSupportBonusBeforeJobCards(session,step,activeActor);
+  };
+  const routeResolutionEffectsWithJobCardsBeforeDashboardBoundary=routeResolutionEffectsForOutcome;
+  routeResolutionEffectsForOutcome=function routeResolutionEffectsDashboardBound(session,event,outcome){
+    return persistentJobSystemBoundary().allowed
+      ?routeResolutionEffectsWithJobCardsBeforeDashboardBoundary(session,event,outcome)
+      :routeResolutionEffectsForOutcomeBeforeJobCards(session,event,outcome);
+  };
+  const rollRouteResolutionStepWithJobCardsBeforeDashboardBoundary=rollRouteResolutionStep;
+  rollRouteResolutionStep=function rollRouteResolutionStepDashboardBound(){
+    return persistentJobSystemBoundary().allowed
+      ?rollRouteResolutionStepWithJobCardsBeforeDashboardBoundary()
+      :rollRouteResolutionStepBeforeJobCards();
+  };
+  const routeEventResolutionHtmlWithJobCardsBeforeDashboardBoundary=routeEventResolutionHtml;
+  routeEventResolutionHtml=function routeEventResolutionHtmlDashboardBound(context,mode='dashboard'){
+    return persistentJobSystemBoundary().allowed
+      ?routeEventResolutionHtmlWithJobCardsBeforeDashboardBoundary(context,mode)
+      :routeEventResolutionHtmlBeforeJobCardTurnPlan(context,mode);
+  };
+  const bindRouteResolutionWithJobCardsBeforeDashboardBoundary=bindCurrentRouteEventResolution;
+  bindCurrentRouteEventResolution=function bindRouteResolutionDashboardBound(){
+    return persistentJobSystemBoundary().allowed
+      ?bindRouteResolutionWithJobCardsBeforeDashboardBoundary()
+      :bindCurrentRouteEventResolutionBeforeJobCardTurnPlan();
+  };
+
+  function lockedPersistentJobSystemHtml(boundary=persistentJobSystemBoundary()){
+    return `<section id="job-card-system-locked" class="tool-panel span-12" style="border-color:rgba(214,170,84,.45)"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">JOBS, EVENTS AND STATIONS · dashboard-bound campaign engine</p><h3>Persistent Card Engine Locked</h3><p class="small-note">${escapeHtml(boundary.message)} Standalone card generation is available from the separate Standalone Jobs & Events tab and never modifies Masterworld state.</p></div><span class="status-pill warn">READ BOUNDARY</span></div></section>`;
+  }
+
+  const renderJobSystemPanelBeforeDashboardBoundary=renderJobSystemPanel;
+  renderJobSystemPanel=function renderJobSystemPanelDashboardOnly(){
+    root.querySelector('#job-card-system')?.remove();
+    root.querySelector('#job-card-system-locked')?.remove();
