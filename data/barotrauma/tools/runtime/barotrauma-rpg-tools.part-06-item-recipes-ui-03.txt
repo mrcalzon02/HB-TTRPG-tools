@@ -1,0 +1,50 @@
+  enhanceCharacterCatalogue=function enhanceCharacterCatalogueWithUsageAndRecipeAudit(){
+    normalizeAuditedInventoryUsage();
+    enhanceCharacterCatalogueBeforeRecipeAudit();
+    const panel=[...root.querySelectorAll('.tool-panel')].find(item=>item.querySelector('h3')?.textContent.includes('Tracked Inventory and Loadout'));
+    if(!panel)return;
+    const intro=panel.querySelector('.tool-hero .small-note');
+    if(intro)intro.textContent='Inventory use is transactional: ammunition reloads consume matching reserve, rechargeable tools require a compatible cell or tank, disposable items disappear when their final use is spent, reusable tools wear down by condition, and repairs consume recipe-derived materials.';
+    panel.querySelectorAll('[data-inventory-instance]').forEach(row=>{
+      const entry=inventoryEntry(row.dataset.inventoryInstance);
+      if(!entry)return;
+      const item=inventoryDefinition(entry);
+      const firstCell=row.querySelector('td');
+      const recipe=recipeForItem(item,recipeMachineForItem(item));
+      if(firstCell&&recipe&&!firstCell.querySelector('.inventory-recipe-note')){
+        const note=document.createElement('div');
+        note.className='small-note inventory-recipe-note';
+        note.innerHTML=`<strong>Recipe:</strong> ${recipe.source==='official-wiki'?'Official wiki':'Algorithmically derived'} · ${escapeHtml((recipe.ingredients||[]).map(recipeMaterialDisplay).join(', '))}`;
+        firstCell.appendChild(note);
+      }
+      const counter=row.querySelector('.inventory-counter-block');
+      if(counter&&entry.tracker==='condition'&&(item.category==='Tools'||item.category==='Weapons')){
+        const actions=counter.querySelector('.button-row')||counter.appendChild(document.createElement('div'));
+        actions.classList.add('button-row','no-print');
+        if(!actions.querySelector('.inventory-operate-condition')){
+          const button=document.createElement('button');button.type='button';button.className='compact-button inventory-operate-condition';button.dataset.instance=entry.instanceId;button.textContent='Use / Operate';actions.prepend(button);
+        }
+      }
+    });
+    panel.querySelectorAll('.inventory-repair').forEach(original=>{
+      const replacement=original.cloneNode(true);original.replaceWith(replacement);replacement.textContent='Repair with Materials';
+      replacement.addEventListener('click',event=>{const result=repairInventoryItemWithMaterials(inventoryEntry(event.currentTarget.dataset.instance));replacement.textContent=result.ok?'Repaired':result.message;if(result.ok)renderCharacter();});
+    });
+    panel.querySelectorAll('.inventory-operate-condition').forEach(button=>button.addEventListener('click',event=>{const result=operateConditionItem(inventoryEntry(event.currentTarget.dataset.instance));button.textContent=result.ok?'Used':result.message;if(result.ok)renderCharacter();}));
+  };
+
+  const renderCatalogueBeforeRecipeAudit=renderCatalogue;
+  renderCatalogue=function renderCatalogueWithRecipeProvenance(){
+    renderCatalogueBeforeRecipeAudit();
+    root.querySelectorAll('.catalogue-add-character, .catalogue-add-ammo').forEach(button=>{
+      const item=catalogueItem(button.dataset.id);
+      const row=button.closest('tr');
+      const cell=row?.children?.[2];
+      const recipe=recipeForItem(item,recipeMachineForItem(item));
+      if(!cell||!recipe||cell.querySelector('.catalogue-recipe-note'))return;
+      const note=document.createElement('div');note.className='small-note item-function-note catalogue-recipe-note';
+      note.innerHTML=`<strong>Construction:</strong> ${recipe.source==='official-wiki'?'Official wiki recipe':'Algorithmically derived recipe'} · ${escapeHtml((recipe.ingredients||[]).map(recipeMaterialDisplay).join(', '))}`;
+      cell.appendChild(note);
+    });
+  };
+
