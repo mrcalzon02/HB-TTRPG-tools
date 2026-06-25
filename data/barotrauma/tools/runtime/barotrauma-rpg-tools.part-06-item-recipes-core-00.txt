@@ -1,0 +1,125 @@
+
+  const ITEM_RECIPE_DATA=globalThis.BAROTRAUMA_ITEM_RECIPES||{rules:{},materials:[],recipes:[],source:{}};
+  const ITEM_RECIPE_AUDIT_VERSION='1.0.0';
+  const ITEM_RECIPE_SOURCE_KEY='fabricator';
+  const SUBMARINE_CONSTRUCTION_COST_MULTIPLIER=Math.max(2,number(ITEM_RECIPE_DATA.rules?.submarineConstructionCostMultiplier,2));
+  const MACHINE_OUTPUT_LIMITS={fabricator:Math.max(1,number(ITEM_RECIPE_DATA.rules?.fabricatorOutputSlots,1)),'medical-fabricator':Math.max(1,number(ITEM_RECIPE_DATA.rules?.fabricatorOutputSlots,1)),deconstructor:Math.max(1,number(ITEM_RECIPE_DATA.rules?.deconstructorOutputSlots,5))};
+  const DERIVED_RECIPE_RECOVERY_FRACTION=clamp(number(ITEM_RECIPE_DATA.rules?.derivedRecoveryFraction,.6),.25,.8);
+
+  function normalizedRecipeName(value){
+    return String(value||'').trim().toLowerCase().replace(/[’']/g,"'").replace(/\s+/g,' ');
+  }
+
+  function registerCraftingMaterialCatalogue(){
+    WIKI_CATALOG.sources=WIKI_CATALOG.sources&&typeof WIKI_CATALOG.sources==='object'?WIKI_CATALOG.sources:{};
+    WIKI_CATALOG.sources[ITEM_RECIPE_SOURCE_KEY]={title:ITEM_RECIPE_DATA.source?.title||'Fabricator & Deconstructor',url:ITEM_RECIPE_DATA.source?.url||'https://barotraumagame.com/wiki/Fabricator_%26_Deconstructor'};
+    const names=new Set((WIKI_CATALOG.items||[]).map(item=>normalizedRecipeName(item.name)));
+    const ids=new Set((WIKI_CATALOG.items||[]).map(item=>item.id));
+    for(const raw of ITEM_RECIPE_DATA.materials||[]){
+      if(!raw?.name||names.has(normalizedRecipeName(raw.name))||ids.has(raw.id))continue;
+      WIKI_CATALOG.items.push({...raw,source:raw.source||ITEM_RECIPE_SOURCE_KEY});
+      names.add(normalizedRecipeName(raw.name));
+      ids.add(raw.id);
+    }
+  }
+
+  registerCraftingMaterialCatalogue();
+
+  const RECIPE_MATERIAL_NAMES=new Set((ITEM_RECIPE_DATA.materials||[]).map(item=>normalizedRecipeName(item.name)));
+  const REUSABLE_CONDITION_TOOL_IDS=new Set(['screwdriver','hardened-screwdriver','dementonite-screwdriver','wrench','hardened-wrench','dementonite-wrench','heavy-wrench','multi-tool','crowbar','hardened-crowbar','dementonite-crowbar']);
+  const CONSUMED_ON_FINAL_USE_IDS=new Set(['sonar-beacon','fixfoam-grenade','flare','glowstick']);
+
+  function recipeMaterialItemByName(name){
+    const target=normalizedRecipeName(name);
+    return (WIKI_CATALOG.items||[]).find(item=>normalizedRecipeName(item.name)===target)||null;
+  }
+
+  function recipeMaterialDisplay(ingredient){
+    const names=ingredient?.options?.length?ingredient.options:[ingredient?.name||'Unknown'];
+    const condition=ingredient?.conditionMin!=null?` at ≥${ingredient.conditionMin}% condition`:ingredient?.conditionMax!=null?` at ≤${ingredient.conditionMax}% condition`:'';
+    return `${Math.max(1,number(ingredient?.quantity,1))} × ${names.join(' or ')}${condition}`;
+  }
+
+  function officialRecipeForItem(item,machine=''){
+    const target=normalizedRecipeName(item?.name);
+    if(!target)return null;
+    const raw=(ITEM_RECIPE_DATA.recipes||[]).find(recipe=>normalizedRecipeName(recipe.itemName)===target&&(!machine||recipe.machine===machine));
+    return raw?cloneWorldData(raw):null;
+  }
+
+  function recipeSeed(item){
+    return seededHash(`${item?.id||''}|${item?.name||''}|${item?.category||''}|campaign-derived-recipe`);
+  }
+
+  function derivedRecipePalette(item){
+    const category=String(item?.category||'Miscellaneous');
+    const subcategory=String(item?.subcategory||'').toLowerCase();
+    if(category==='Medical')return ['Stabilozine','Ethanol','Plastic','Opium','Alien Blood'];
+    if(category==='Submarine Ammunition')return ['Steel Bar','Aluminum','Lead','UEX','Titanium'];
+    if(category==='Ammunition')return ['Lead','Steel Bar','Magnesium','Zinc','Aluminum'];
+    if(category==='Weapons')return ['Steel Bar','Aluminum','Plastic','Copper','Titanium'];
+    if(category==='Gear')return ['Plastic','Rubber','Ballistic Fiber','Steel Bar','Titanium'];
+    if(category==='Tools')return ['Steel Bar','Plastic','Copper','Rubber','Aluminum'];
+    if(category==='Consumables'){
+      if(/reactor|fuel/.test(subcategory))return ['Steel Bar','Lead','Uranium','Thorium'];
+      if(/electrical|battery|power/.test(subcategory))return ['Zinc','Lithium','Copper','Plastic'];
+      if(/tank|gas|oxygen/.test(subcategory))return ['Steel Bar','Aluminum','Plastic','Rubber'];
+      return ['Carbon','Plastic','Ethanol','Aluminum'];
+    }
+    return ['Plastic','Steel Bar','Copper','Carbon','Rubber'];
+  }
+
+  function derivedRecipeComplexity(item){
+    const carry=Math.max(1,number(item?.carryUnits,1));
+    const ammo=Math.ceil(Math.max(0,number(item?.maxAmmo,item?.capacity||0))/50);
+    const categoryWeight={Weapons:3,'Submarine Ammunition':4,Ammunition:2,Tools:2,Gear:2,Medical:2,Consumables:1,'Crafting Materials':0}[item?.category]??1;
+    return clamp(Math.ceil(carry+ammo+categoryWeight),2,12);
+  }
+
+  function derivedRecipeRecovery(ingredients,seed){
+    const units=[];
+    for(const ingredient of ingredients){
+      const name=ingredient.name||ingredient.options?.[0];
+      for(let index=0;index<Math.max(1,number(ingredient.quantity,1));index+=1)units.push(name);
+    }
+    if(!units.length)return [];
+    const recoverCount=Math.max(1,Math.floor(units.length*DERIVED_RECIPE_RECOVERY_FRACTION));
+    const start=seed%units.length;
+    const recovered={};
+    for(let index=0;index<recoverCount;index+=1){
+      const name=units[(start+index)%units.length];
+      recovered[name]=(recovered[name]||0)+1;
+    }
+    return Object.entries(recovered).map(([name,quantity])=>({name,quantity})).slice(0,MACHINE_OUTPUT_LIMITS.deconstructor);
+  }
+
+  function deriveCampaignRecipe(item,machine=''){
+    if(!item||item.category==='Crafting Materials')return null;
+    const resolvedMachine=machine||((item.category==='Medical')?'medical-fabricator':'fabricator');
+    const seed=recipeSeed(item);
+    const palette=derivedRecipePalette(item);
+    const complexity=derivedRecipeComplexity(item);
+    const distinct=clamp(2+Math.floor(complexity/4),2,Math.min(5,palette.length));
+    const ingredients=[];
+    let remaining=complexity;
+    for(let index=0;index<distinct;index+=1){
+      const paletteIndex=(seed+index*3)%palette.length;
+      const name=palette[paletteIndex];
+      const slotsLeft=distinct-index;
+      const quantity=index===distinct-1?remaining:Math.max(1,Math.floor(remaining/slotsLeft));
+      remaining-=quantity;
+      ingredients.push({name,quantity});
+    }
+    return {
+      itemName:item.name,machine:resolvedMachine,source:'algorithmic-derived',outputQuantity:1,
+      ingredients,
+      deconstruction:derivedRecipeRecovery(ingredients,seed),
+      skill:{name:item.suggestedStat||((item.category==='Medical')?'Medical':'Mechanical'),level:clamp(10+complexity*5,10,80)},
+      fabricationTimeSeconds:clamp(5+complexity*5,10,90),
+      deconstructionTimeSeconds:clamp(5+complexity*3,5,60),
+      notes:`Deterministic campaign recipe derived from ${item.category||'item'} classification, ${number(item.carryUnits,1)} carry units, and operational complexity. Deconstruction recovers approximately ${Math.round(DERIVED_RECIPE_RECOVERY_FRACTION*100)}% of input material units.`
+    };
+  }
+
+  function recipeForItem(item,machine=''){
+    return officialRecipeForItem(item,machine)||deriveCampaignRecipe(item,machine);
