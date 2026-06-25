@@ -93,6 +93,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-submarine-capability-unification.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-masterworld-bootstrap.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
