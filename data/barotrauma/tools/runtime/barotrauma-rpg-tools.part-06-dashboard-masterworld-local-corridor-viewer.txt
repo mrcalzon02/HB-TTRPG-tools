@@ -163,22 +163,10 @@
     localCorridorsOnly:true
   };
 
-  async function loadDashboardMasterworldIntegrityRecovery(){
-    try{
-      const path='data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-integrity-recovery.txt';
-      const response=await fetch(path,{cache:'no-store'});
-      if(!response.ok)throw new Error(`${path} returned ${response.status}`);
-      eval(await response.text());
-      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=true;
-      if(activeSubmarineDashboardContext())render();
-      return true;
-    }catch(error){
-      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=false;
-      globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_ERROR=error.message||String(error);
-      console.error('Masterworld integrity recovery panel failed to load.',error);
-      return false;
-    }
-  }
-
-  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=false;
-  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_PROMISE=loadDashboardMasterworldIntegrityRecovery();
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_READY=true;
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_PROMISE=Promise.resolve(true);
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_INTEGRITY_DIAGNOSTICS={
+    version:'removed-from-web-ui',
+    recoveryPanelLoaded:false,
+    reason:'The verified checked-in Masterworld save replaces browser-side integrity recovery.'
+  };

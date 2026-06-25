@@ -5,6 +5,7 @@ const root = process.cwd();
 const loaderPath = path.join(root, 'barotrauma-rpg-tools-loader.js');
 const loader = fs.readFileSync(loaderPath, 'utf8');
 const runtimePaths = [...loader.matchAll(/'([^']*barotrauma-rpg-tools\.part-[^']+\.txt)'/g)].map(match => match[1]);
+const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
 if (!runtimePaths.length) throw new Error('No Barotrauma runtime fragments were found in the loader.');
 if (new Set(runtimePaths).size !== runtimePaths.length) throw new Error('The runtime loader contains duplicate fragment paths.');
@@ -77,6 +78,7 @@ const jsonPaths = [
   'data/barotrauma/tools/custom/custom-content-schema.json',
   'data/barotrauma/tools/items/item-functionality.json',
   'data/barotrauma/tools/world/world-state-schema.json',
+  'data/barotrauma/tools/world/master-world-save.json',
   'data/barotrauma/tools/factions/faction-registry.json',
   'data/barotrauma/tools/locations/location-level-registry.json',
   'data/barotrauma/tools/creatures/creature-registry.json',
@@ -101,6 +103,49 @@ if (worldSchema.mapDefaults?.totalLocations < 960) throw new Error('The campaign
 if (worldSchema.mapDefaults?.minimumNodesPerRing < 8) throw new Error('Each depth ring must retain at least eight generated locations.');
 if (!worldSchema.submissionKinds?.includes('research') || !worldSchema.submissionKinds?.includes('faction') || !worldSchema.submissionKinds?.includes('game-state')) throw new Error('World submissions must include research, faction, and full game-state records.');
 if (worldSchema.researchRules?.minimumMarks < 25000 || worldSchema.researchRules?.minimumSupplies < 50) throw new Error('Over-limit R&D must retain exorbitant minimum funding requirements.');
+
+const masterWorldSave = JSON.parse(fs.readFileSync(path.join(root, 'data/barotrauma/tools/world/master-world-save.json'), 'utf8'));
+if (masterWorldSave.schema !== worldSchema.worldSaveSchema) throw new Error('The checked-in Masterworld save uses the wrong schema.');
+if (masterWorldSave.generator?.script !== 'scripts/regenerate-barotrauma-master-world.py') throw new Error('The checked-in Masterworld save must identify its local Python regeneration script.');
+const masterMap = masterWorldSave.world?.map;
+if (!masterMap || !Array.isArray(masterMap.nodes) || !Array.isArray(masterMap.edges)) throw new Error('The checked-in Masterworld save does not contain a usable map.');
+if (masterMap.rings !== worldSchema.mapDefaults.rings) throw new Error('The checked-in Masterworld ring count does not match the schema default.');
+if (masterMap.nodes.length < worldSchema.mapDefaults.totalLocations) throw new Error('The checked-in Masterworld has too few saved locations.');
+if (masterMap.nodes.filter(node => node.type === 'station').length < worldSchema.mapDefaults.stationTarget) throw new Error('The checked-in Masterworld has too few stations.');
+const masterStationRings = new Set(masterMap.nodes.filter(node => node.type === 'station').map(node => number(node.ring)));
+for (let ring = 1; ring <= worldSchema.mapDefaults.rings; ring += 1) if (!masterStationRings.has(ring)) throw new Error(`The checked-in Masterworld has no station on ring ${ring}.`);
+const masterPath = masterMap.depthGuarantee?.pathNodeIds || [];
+if (masterPath.length !== worldSchema.mapDefaults.rings + 1) throw new Error('The checked-in Masterworld mandatory route has the wrong length.');
+const masterNodeById = new Map(masterMap.nodes.map(node => [node.id, node]));
+for (let index = 0; index < masterPath.length - 1; index += 1) {
+  const left = masterNodeById.get(masterPath[index]);
+  const right = masterNodeById.get(masterPath[index + 1]);
+  if (!left || !right || Math.abs(number(left.ring) - number(right.ring)) !== 1) throw new Error(`The checked-in Masterworld mandatory route step ${index + 1} does not move exactly one ring inward.`);
+}
+const masterAdjacency = new Map(masterMap.nodes.map(node => [node.id, []]));
+for (const edge of masterMap.edges) {
+  const left = masterNodeById.get(edge.a);
+  const right = masterNodeById.get(edge.b);
+  if (!left || !right || Math.abs(number(left.ring) - number(right.ring)) > 1) continue;
+  masterAdjacency.get(edge.a)?.push(edge.b);
+  masterAdjacency.get(edge.b)?.push(edge.a);
+}
+let masterShortest = Infinity;
+const masterQueue = [[masterMap.startId, 0]];
+const masterVisited = new Set([masterMap.startId]);
+while (masterQueue.length) {
+  const [id, distance] = masterQueue.shift();
+  if (id === 'anomaly') {
+    masterShortest = distance;
+    break;
+  }
+  for (const next of masterAdjacency.get(id) || []) {
+    if (masterVisited.has(next)) continue;
+    masterVisited.add(next);
+    masterQueue.push([next, distance + 1]);
+  }
+}
+if (masterShortest < worldSchema.mapDefaults.minimumCenterVoyages) throw new Error('The checked-in Masterworld shortest outer-to-center route is too shallow.');
 
 const factions = JSON.parse(fs.readFileSync(path.join(root, 'data/barotrauma/tools/factions/faction-registry.json'), 'utf8'));
 if (!Array.isArray(factions.districts) || factions.districts.length < 8) throw new Error('Faction seeding requires at least eight operational districts.');

@@ -61,7 +61,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-ui.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-boundaries-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-performance.txt',
-    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-masterworld-depth-regeneration-ui.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-masterworld-ui-lockdown.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-commissioning-stability.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-route-event-resolution-core-00.txt',
@@ -93,6 +93,7 @@
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-03.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-04.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-dashboard-management-auth-stability-05.txt',
+    'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06-masterworld-bootstrap.txt',
     'data/barotrauma/tools/runtime/barotrauma-rpg-tools.part-06.txt'
   ];
   const catalogIndexUrl = 'data/barotrauma/tools/catalog/catalog-index.json';
@@ -100,6 +101,7 @@
   const customContentSchemaUrl = 'data/barotrauma/tools/custom/custom-content-schema.json';
   const itemFunctionalityUrl = 'data/barotrauma/tools/items/item-functionality.json';
   const worldStateSchemaUrl = 'data/barotrauma/tools/world/world-state-schema.json';
+  const masterWorldSaveUrl = 'data/barotrauma/tools/world/master-world-save.json';
   const factionRegistryUrl = 'data/barotrauma/tools/factions/faction-registry.json';
   const locationLevelRegistryUrl = 'data/barotrauma/tools/locations/location-level-registry.json';
   const creatureRegistryUrl = 'data/barotrauma/tools/creatures/creature-registry.json';
@@ -146,12 +148,13 @@
   }
 
   async function load() {
-    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, factionRegistry, locationLevelRegistry, creatureRegistry, encounterRegistry, sourceParts] = await Promise.all([
+    const [catalog, submarineRoster, customContentSchema, itemFunctionality, worldStateSchema, masterWorldSave, factionRegistry, locationLevelRegistry, creatureRegistry, encounterRegistry, sourceParts] = await Promise.all([
       loadCatalog(),
       fetchJson(submarineRosterUrl),
       fetchJson(customContentSchemaUrl),
       fetchJson(itemFunctionalityUrl),
       fetchJson(worldStateSchemaUrl),
+      fetchJson(masterWorldSaveUrl),
       fetchJson(factionRegistryUrl),
       fetchJson(locationLevelRegistryUrl),
       fetchJson(creatureRegistryUrl),
@@ -163,6 +166,7 @@
     window.BAROTRAUMA_CUSTOM_CONTENT_SCHEMA = customContentSchema;
     window.BAROTRAUMA_ITEM_FUNCTIONALITY = itemFunctionality;
     window.BAROTRAUMA_WORLD_STATE_SCHEMA = worldStateSchema;
+    window.BAROTRAUMA_MASTER_WORLD_SAVE = masterWorldSave;
     window.BAROTRAUMA_FACTION_REGISTRY = factionRegistry;
     window.BAROTRAUMA_LOCATION_LEVEL_REGISTRY = locationLevelRegistry;
     window.BAROTRAUMA_CREATURE_REGISTRY = creatureRegistry;

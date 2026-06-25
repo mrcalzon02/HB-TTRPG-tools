@@ -1,0 +1,38 @@
+
+  const MASTER_WORLD_UI_LOCKDOWN_VERSION = '1.0.0';
+
+  const dashboardWorldPanelHtmlBeforeMasterWorldLockdown = dashboardWorldPanelHtml;
+  dashboardWorldPanelHtml = function dashboardWorldPanelHtmlWithoutWebRegeneration(context, focus) {
+    if (!dashboardMasterWorldMapValid(state.world)) {
+      const candidates = dashboardSavedMasterWorldCandidates();
+      return `<section id="active-dashboard-world" class="tool-panel ${focus === 'world' ? 'dashboard-focused-panel' : ''}"><div class="tool-hero" style="padding:0;border:0;background:none"><div><p class="eyebrow">Saved Masterworld authority</p><h3>Masterworld map is loading</h3><p class="small-note">The dashboard uses the checked-in verified 48-ring Masterworld save. Browser-side regeneration is disabled; local demonstrations and debugging should use scripts/regenerate-barotrauma-master-world.py.</p></div><span class="status-pill warn">MAP LOADING</span></div>
+        ${candidates.length ? `<div class="field-grid" style="margin-top:12px"><label class="field">Saved Masterworld source<select id="dashboard-saved-masterworld-source">${candidates.map(candidate => `<option value="${escapeHtml(candidate.id)}">${escapeHtml(candidate.label)}${candidate.matchesAuthoritative ? ' - authoritative ID match' : ''} - ${candidate.world.map.nodes.length} locations</option>`).join('')}</select><span class="small-note">Loading restores saved map data; it does not regenerate locations.</span></label><div class="button-row" style="align-self:end"><button id="dashboard-restore-masterworld" class="primary-action" type="button">Load Saved Masterworld</button></div></div>` : '<div class="notice warn" style="margin-top:12px">The checked-in Masterworld save was not available to this browser session. Reopen the page after deployment or import data/barotrauma/tools/world/master-world-save.json.</div>'}
+        <div class="notice" style="margin-top:12px">The local regeneration command remains available outside the web UI for demonstrations and debugging.</div></section>`;
+    }
+    return dashboardWorldPanelHtmlBeforeMasterWorldLockdown(context, focus);
+  };
+
+  const bindActiveDashboardControlsBeforeMasterWorldLockdown = bindActiveDashboardControls;
+  bindActiveDashboardControls = function bindActiveDashboardControlsWithoutWebRegeneration(context, focus) {
+    bindActiveDashboardControlsBeforeMasterWorldLockdown(context, focus);
+    root.querySelector('#dashboard-create-new-masterworld')?.remove();
+  };
+
+  const renderWorldBeforeMasterWorldLockdown = renderWorld;
+  renderWorld = function renderWorldWithoutWebRegeneration() {
+    renderWorldBeforeMasterWorldLockdown();
+    for (const selector of ['#generate-world', '#randomize-seed', '#new-unified-world']) {
+      root.querySelector(selector)?.remove();
+    }
+    const worldSeed = root.querySelector('#world-seed');
+    const generationPanel = worldSeed?.closest('.tool-panel');
+    if (generationPanel && !generationPanel.querySelector('[data-masterworld-lockdown-note]')) {
+      generationPanel.insertAdjacentHTML('beforeend', '<div class="notice" data-masterworld-lockdown-note="true" style="margin-top:10px">The verified Masterworld is checked in. Regenerate it locally with scripts/regenerate-barotrauma-master-world.py when demonstration or debugging requires a fresh canonical save.</div>');
+    }
+  };
+
+  globalThis.BAROTRAUMA_MASTER_WORLD_UI_LOCKDOWN = {
+    version: MASTER_WORLD_UI_LOCKDOWN_VERSION,
+    webRegenerationControlsRemoved: true,
+    localRegenerationScript: 'scripts/regenerate-barotrauma-master-world.py'
+  };

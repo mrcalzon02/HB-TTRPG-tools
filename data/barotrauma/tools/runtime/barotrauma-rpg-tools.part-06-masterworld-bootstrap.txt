@@ -1,0 +1,59 @@
+
+  const MASTER_WORLD_BOOTSTRAP_VERSION = '1.0.0';
+  const MASTER_WORLD_BOOTSTRAP_MINIMUM_RINGS = 48;
+  const MASTER_WORLD_BOOTSTRAP_MINIMUM_LOCATIONS = 960;
+
+  function masterWorldBootstrapCurrentReport() {
+    const map = state.world?.map;
+    const nodeCount = Array.isArray(map?.nodes) ? map.nodes.length : 0;
+    const ringCount = Math.max(0, number(map?.rings, Math.max(0, ...(map?.nodes || []).map(node => number(node.ring, 0)))));
+    const validDepth = typeof worldDepthValidateMap === 'function' ? worldDepthValidateMap(map) : { valid: false };
+    return { map, nodeCount, ringCount, valid: Boolean(validDepth.valid) };
+  }
+
+  function masterWorldBootstrapShouldImport() {
+    const report = masterWorldBootstrapCurrentReport();
+    return !report.valid || report.ringCount < MASTER_WORLD_BOOTSTRAP_MINIMUM_RINGS || report.nodeCount < MASTER_WORLD_BOOTSTRAP_MINIMUM_LOCATIONS;
+  }
+
+  function masterWorldBootstrapImport() {
+    const payload = globalThis.BAROTRAUMA_MASTER_WORLD_SAVE;
+    if (!payload || payload.schema !== WORLD_SAVE_SCHEMA) return false;
+    if (!masterWorldBootstrapShouldImport()) return false;
+    const previousSavedStates = cloneWorldData(normalizeWorldHub().savedStates || []);
+    const previousMasterWorldId = state.world?.masterWorldId || state.worldHub?.masterWorldId || '';
+    importWorldSave(payload);
+    if (previousSavedStates.length) {
+      state.worldHub.savedStates = [...previousSavedStates, ...(state.worldHub.savedStates || [])].slice(0, 30);
+    }
+    if (previousMasterWorldId && !state.world.masterWorldId) state.world.masterWorldId = previousMasterWorldId;
+    if (typeof synchronizeMasterWorldId === 'function') synchronizeMasterWorldId(false);
+    if (state.world?.map) {
+      if (typeof reconcileWorldStationLevels === 'function') reconcileWorldStationLevels(state.world.map);
+      if (typeof seedWorldFactions === 'function') seedWorldFactions(state.world.map, false);
+      if (typeof assignWorldLocationLevels === 'function') assignWorldLocationLevels(state.world.map, false);
+      if (typeof revalidateLocationGroupStarts === 'function') revalidateLocationGroupStarts();
+      if (typeof syncWorldMapStations === 'function') syncWorldMapStations();
+    }
+    if (typeof normalizeWorldEconomyState === 'function') normalizeWorldEconomyState();
+    if (typeof syncAllWorldPlayerVessels === 'function') syncAllWorldPlayerVessels();
+    if (typeof seedWorldEconomyNpcFleet === 'function') seedWorldEconomyNpcFleet();
+    if (typeof normalizeWorldEconomySimulationClocks === 'function') normalizeWorldEconomySimulationClocks();
+    if (typeof normalizeActiveSubmarineDashboard === 'function') normalizeActiveSubmarineDashboard(false);
+    if (typeof normalizeDashboardTurnOrder === 'function') normalizeDashboardTurnOrder();
+    if (typeof normalizeDashboardStartingLocationState === 'function') normalizeDashboardStartingLocationState();
+    globalThis.__BAROTRAUMA_DASHBOARD_GRAPH_CACHE = null;
+    globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE = null;
+    globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE = null;
+    globalThis.__BAROTRAUMA_LOCAL_WORLD_TOPOLOGY_CACHE = null;
+    save();
+    return true;
+  }
+
+  const masterWorldBootstrapImported = masterWorldBootstrapImport();
+  globalThis.BAROTRAUMA_MASTER_WORLD_BOOTSTRAP = {
+    version: MASTER_WORLD_BOOTSTRAP_VERSION,
+    imported: masterWorldBootstrapImported,
+    source: 'data/barotrauma/tools/world/master-world-save.json',
+    removesWebRegenerationRequirement: true
+  };
