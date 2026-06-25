@@ -1,5 +1,5 @@
 
-  const DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION='2.1.0';
+  const DASHBOARD_LOCAL_CORRIDOR_VIEWER_VERSION='2.2.0';
 
   const dashboardLocalStationTopologyBeforeCentralAnomaly=dashboardLocalStationTopology;
   dashboardLocalStationTopology=function dashboardLocalStationTopologyWithCentralAnomaly(map=state.world?.map){
@@ -169,4 +169,347 @@
     version:'removed-from-web-ui',
     recoveryPanelLoaded:false,
     reason:'The verified checked-in Masterworld save replaces browser-side integrity recovery.'
+  };
+
+  const DASHBOARD_MASTERWORLD_VIEWPORT_VERSION='1.0.0';
+  const DASHBOARD_MASTERWORLD_ZOOM_MIN=.5;
+  const DASHBOARD_MASTERWORLD_ZOOM_MAX=6;
+  const DASHBOARD_MASTERWORLD_ZOOM_STEP=.25;
+  const dashboardMasterWorldViewportRuntime=globalThis.__BAROTRAUMA_MASTERWORLD_VIEWPORT_RUNTIME||{
+    zoom:1,
+    baseWidth:0,
+    baseHeight:0,
+    selectedType:'',
+    selectedId:'',
+    selectedEndpointIds:[],
+    initialized:false
+  };
+  globalThis.__BAROTRAUMA_MASTERWORLD_VIEWPORT_RUNTIME=dashboardMasterWorldViewportRuntime;
+
+  function dashboardMasterWorldClampZoom(value){
+    return Math.max(DASHBOARD_MASTERWORLD_ZOOM_MIN,Math.min(DASHBOARD_MASTERWORLD_ZOOM_MAX,number(value,1)));
+  }
+
+  function dashboardMasterWorldViewportElements(){
+    return {
+      viewport:root.querySelector('#dashboard-incremental-world-viewport'),
+      svg:root.querySelector('#dashboard-incremental-world-svg'),
+      zoomLabel:root.querySelector('#dashboard-world-zoom-label')
+    };
+  }
+
+  function dashboardMasterWorldFitDimensions(map,viewport){
+    const mapWidth=Math.max(1,number(map?.width,1000));
+    const mapHeight=Math.max(1,number(map?.height,1000));
+    const availableWidth=Math.max(320,(viewport?.clientWidth||1000)-18);
+    const availableHeight=Math.max(320,(viewport?.clientHeight||760)-18);
+    const fitScale=Math.min(availableWidth/mapWidth,availableHeight/mapHeight);
+    return {
+      width:Math.max(320,Math.round(mapWidth*fitScale)),
+      height:Math.max(320,Math.round(mapHeight*fitScale))
+    };
+  }
+
+  function dashboardMasterWorldApplyZoom(nextZoom,anchorClientX=null,anchorClientY=null){
+    const {viewport,svg,zoomLabel}=dashboardMasterWorldViewportElements();
+    if(!viewport||!svg)return false;
+    const previousWidth=Math.max(1,svg.getBoundingClientRect().width||dashboardMasterWorldViewportRuntime.baseWidth||1);
+    const previousHeight=Math.max(1,svg.getBoundingClientRect().height||dashboardMasterWorldViewportRuntime.baseHeight||1);
+    const viewportRect=viewport.getBoundingClientRect();
+    const localAnchorX=anchorClientX===null?viewport.clientWidth/2:anchorClientX-viewportRect.left;
+    const localAnchorY=anchorClientY===null?viewport.clientHeight/2:anchorClientY-viewportRect.top;
+    const mapRatioX=(viewport.scrollLeft+localAnchorX)/previousWidth;
+    const mapRatioY=(viewport.scrollTop+localAnchorY)/previousHeight;
+    const zoom=dashboardMasterWorldClampZoom(nextZoom);
+    const renderedWidth=Math.max(1,Math.round(dashboardMasterWorldViewportRuntime.baseWidth*zoom));
+    const renderedHeight=Math.max(1,Math.round(dashboardMasterWorldViewportRuntime.baseHeight*zoom));
+    dashboardMasterWorldViewportRuntime.zoom=zoom;
+    svg.style.width=`${renderedWidth}px`;
+    svg.style.height=`${renderedHeight}px`;
+    svg.style.minWidth='0';
+    svg.style.maxWidth='none';
+    viewport.scrollLeft=Math.max(0,mapRatioX*renderedWidth-localAnchorX);
+    viewport.scrollTop=Math.max(0,mapRatioY*renderedHeight-localAnchorY);
+    if(zoomLabel)zoomLabel.textContent=`${Math.round(zoom*100)}%`;
+    const zoomOut=root.querySelector('#dashboard-world-zoom-out');
+    const zoomIn=root.querySelector('#dashboard-world-zoom-in');
+    if(zoomOut)zoomOut.disabled=zoom<=DASHBOARD_MASTERWORLD_ZOOM_MIN;
+    if(zoomIn)zoomIn.disabled=zoom>=DASHBOARD_MASTERWORLD_ZOOM_MAX;
+    return true;
+  }
+
+  function dashboardMasterWorldResetZoom(map=state.world?.map){
+    const {viewport,svg}=dashboardMasterWorldViewportElements();
+    if(!viewport||!svg)return false;
+    const dimensions=dashboardMasterWorldFitDimensions(map,viewport);
+    dashboardMasterWorldViewportRuntime.baseWidth=dimensions.width;
+    dashboardMasterWorldViewportRuntime.baseHeight=dimensions.height;
+    dashboardMasterWorldViewportRuntime.zoom=1;
+    svg.style.width=`${dimensions.width}px`;
+    svg.style.height=`${dimensions.height}px`;
+    svg.style.minWidth='0';
+    svg.style.maxWidth='none';
+    viewport.scrollLeft=0;
+    viewport.scrollTop=0;
+    const zoomLabel=root.querySelector('#dashboard-world-zoom-label');
+    if(zoomLabel)zoomLabel.textContent='100%';
+    const zoomOut=root.querySelector('#dashboard-world-zoom-out');
+    const zoomIn=root.querySelector('#dashboard-world-zoom-in');
+    if(zoomOut)zoomOut.disabled=false;
+    if(zoomIn)zoomIn.disabled=false;
+    return true;
+  }
+
+  function dashboardMasterWorldSelectionElement(){
+    const {selectedType,selectedId}=dashboardMasterWorldViewportRuntime;
+    if(!selectedId)return null;
+    if(selectedType==='route')return root.querySelector(`.dashboard-incremental-corridor[data-local-corridor-id="${CSS.escape(selectedId)}"]`);
+    return root.querySelector(`[data-node-id="${CSS.escape(selectedId)}"]`);
+  }
+
+  function dashboardMasterWorldCenterSelection(){
+    const {viewport}=dashboardMasterWorldViewportElements();
+    const selected=dashboardMasterWorldSelectionElement();
+    const status=root.querySelector('#dashboard-world-viewport-status');
+    if(!viewport||!selected){
+      if(status)status.textContent='Select a loaded station, node, or route before centering.';
+      return false;
+    }
+    const viewportRect=viewport.getBoundingClientRect();
+    const selectedRect=selected.getBoundingClientRect();
+    viewport.scrollLeft+=selectedRect.left+selectedRect.width/2-(viewportRect.left+viewport.clientWidth/2);
+    viewport.scrollTop+=selectedRect.top+selectedRect.height/2-(viewportRect.top+viewport.clientHeight/2);
+    if(status)status.textContent='Centered the selected map element.';
+    return true;
+  }
+
+  function dashboardMasterWorldApplySelectionClasses(){
+    root.querySelectorAll('.dashboard-incremental-node.viewer-selected,.dashboard-incremental-node.viewer-route-endpoint').forEach(element=>element.classList.remove('viewer-selected','viewer-route-endpoint'));
+    root.querySelectorAll('.dashboard-incremental-corridor.viewer-selected').forEach(element=>element.classList.remove('viewer-selected'));
+    const runtime=dashboardMasterWorldViewportRuntime;
+    if(runtime.selectedType==='route'){
+      root.querySelectorAll(`[data-local-corridor-id="${CSS.escape(runtime.selectedId)}"]`).forEach(element=>element.classList.add('viewer-selected'));
+      for(const endpointId of runtime.selectedEndpointIds||[]){
+        root.querySelector(`[data-node-id="${CSS.escape(endpointId)}"]`)?.classList.add('viewer-route-endpoint');
+      }
+    }else if(runtime.selectedId){
+      root.querySelector(`[data-node-id="${CSS.escape(runtime.selectedId)}"]`)?.classList.add('viewer-selected');
+    }
+    const clearButton=root.querySelector('#dashboard-world-clear-selection');
+    const centerButton=root.querySelector('#dashboard-world-center-selection');
+    if(clearButton)clearButton.disabled=!runtime.selectedId;
+    if(centerButton)centerButton.disabled=!runtime.selectedId;
+  }
+
+  function dashboardMasterWorldSelectNode(node,map=state.world?.map){
+    if(!node)return false;
+    dashboardMasterWorldViewportRuntime.selectedType=node.type==='station'?'station':'node';
+    dashboardMasterWorldViewportRuntime.selectedId=node.id;
+    dashboardMasterWorldViewportRuntime.selectedEndpointIds=[];
+    dashboardMasterWorldApplySelectionClasses();
+    const topology=typeof dashboardLocalWorldTopology==='function'?dashboardLocalWorldTopology(map):null;
+    const localEdges=(topology?.edges||[]).filter(edge=>edge.a===node.id||edge.b===node.id);
+    const detail=root.querySelector('#dashboard-incremental-world-detail');
+    if(detail){
+      const classification=node.type==='station'?'Station selected':'Node selected';
+      detail.innerHTML=`<strong>${escapeHtml(node.name||node.id)}</strong> · ${escapeHtml(node.type||'location')} · Ring ${number(node.ring)} · Level ${number(node.locationLevel,1)}<br>${escapeHtml(node.locationLore||node.details||'No additional location description.')}<br><span class="small-note">${classification}. ${localEdges.length} loaded/local route segment${localEdges.length===1?'':'s'} connect here. Use Center Selection to bring it to the middle of the viewport.</span>`;
+    }
+    const status=root.querySelector('#dashboard-world-viewport-status');
+    if(status)status.textContent=`Selected ${node.type==='station'?'station':'node'}: ${node.name||node.id}.`;
+    return true;
+  }
+
+  function dashboardMasterWorldSelectRoute(routeId,map=state.world?.map){
+    if(!routeId||typeof dashboardLocalWorldTopology!=='function')return false;
+    const topology=dashboardLocalWorldTopology(map);
+    const edge=(topology.edges||[]).find(item=>item.id===routeId);
+    if(!edge)return false;
+    const left=topology.nodeById?.[edge.a];
+    const right=topology.nodeById?.[edge.b];
+    dashboardMasterWorldViewportRuntime.selectedType='route';
+    dashboardMasterWorldViewportRuntime.selectedId=edge.id;
+    dashboardMasterWorldViewportRuntime.selectedEndpointIds=[edge.a,edge.b];
+    dashboardMasterWorldApplySelectionClasses();
+    const detail=root.querySelector('#dashboard-incremental-world-detail');
+    if(detail){
+      const relation=String(edge.relation||'local route').replaceAll('-',' ');
+      const distance=Math.max(1,number(edge.distance,number(edge.geometric,1)));
+      detail.innerHTML=`<strong>${escapeHtml(left?.name||edge.a)} ↔ ${escapeHtml(right?.name||edge.b)}</strong> · selected route<br>${escapeHtml(relation)} · distance ${distance} · ${edge.danger?'dangerous corridor':'standard corridor'}<br><span class="small-note">Endpoints: ${escapeHtml(left?.type||'node')} on ring ${number(left?.ring)} and ${escapeHtml(right?.type||'node')} on ring ${number(right?.ring)}. The bright line and endpoint halos mark the active selection.</span>`;
+    }
+    const status=root.querySelector('#dashboard-world-viewport-status');
+    if(status)status.textContent=`Selected route: ${left?.name||edge.a} to ${right?.name||edge.b}.`;
+    return true;
+  }
+
+  function dashboardMasterWorldClearSelection(){
+    dashboardMasterWorldViewportRuntime.selectedType='';
+    dashboardMasterWorldViewportRuntime.selectedId='';
+    dashboardMasterWorldViewportRuntime.selectedEndpointIds=[];
+    dashboardMasterWorldApplySelectionClasses();
+    const detail=root.querySelector('#dashboard-incremental-world-detail');
+    if(detail)detail.innerHTML='<strong>Selection cleared.</strong> Select any loaded station or node, or click a route segment, to inspect it without restarting the loader.';
+    const status=root.querySelector('#dashboard-world-viewport-status');
+    if(status)status.textContent='Selection cleared.';
+  }
+
+  const dashboardIncrementalWorldViewerHtmlBeforeViewportControls=dashboardIncrementalWorldViewerHtml;
+  dashboardIncrementalWorldViewerHtml=function dashboardIncrementalWorldViewerHtmlWithViewportControls(context){
+    const html=dashboardIncrementalWorldViewerHtmlBeforeViewportControls(context);
+    const controls=`<style>
+      #dashboard-incremental-world-viewport{height:min(76vh,900px);min-height:480px!important;overflow:scroll!important;scrollbar-gutter:stable both-edges;overscroll-behavior:contain;cursor:grab;touch-action:none;background:rgba(0,0,0,.34)}
+      #dashboard-incremental-world-viewport.viewer-dragging{cursor:grabbing;user-select:none}
+      #dashboard-incremental-world-svg{display:block;max-width:none!important;flex:none;transform-origin:top left}
+      .dashboard-incremental-node:focus{outline:none}.dashboard-incremental-node:focus circle{stroke:#fff;stroke-width:5;filter:drop-shadow(0 0 8px rgba(255,255,255,.9))}
+      .dashboard-incremental-node.viewer-selected circle{stroke:#fff!important;stroke-width:6!important;filter:drop-shadow(0 0 14px rgba(255,209,102,.95))}
+      .dashboard-incremental-node.viewer-route-endpoint circle{stroke:#ffd166!important;stroke-width:5!important;filter:drop-shadow(0 0 10px rgba(255,209,102,.9))}
+      .dashboard-incremental-corridor{cursor:pointer;pointer-events:stroke}
+      .dashboard-incremental-corridor.viewer-selected{stroke:#ffd166!important;stroke-width:5!important;opacity:1!important;filter:drop-shadow(0 0 5px rgba(255,209,102,.9))}
+      .dashboard-incremental-corridor-hit{stroke:transparent!important;stroke-width:18!important;opacity:0!important;pointer-events:stroke;cursor:pointer}
+      .dashboard-world-viewport-controls{position:sticky;top:0;z-index:3;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;padding:9px;border:1px solid var(--line);border-radius:12px;background:#0f1218}
+      .dashboard-world-viewport-controls output{min-width:58px;text-align:center;font-weight:900;color:var(--accent)}
+    </style><div class="dashboard-world-viewport-controls no-print" aria-label="Masterworld map controls"><button id="dashboard-world-zoom-out" class="compact-button" type="button" aria-label="Zoom out">−</button><output id="dashboard-world-zoom-label" aria-live="polite">100%</output><button id="dashboard-world-zoom-in" class="compact-button" type="button" aria-label="Zoom in">+</button><button id="dashboard-world-reset-zoom" class="compact-button" type="button">Fit Whole Map</button><button id="dashboard-world-center-selection" class="compact-button" type="button" disabled>Center Selection</button><button id="dashboard-world-clear-selection" class="compact-button" type="button" disabled>Clear Selection</button><span id="dashboard-world-viewport-status" class="small-note">Scroll normally, drag empty map space to pan, or hold Ctrl while using the mouse wheel to zoom.</span></div>`;
+    return html.replace('<div class="map-frame" style="min-height:0;margin-top:12px;overflow:auto"><svg id="dashboard-incremental-world-svg"',`${controls}<div id="dashboard-incremental-world-viewport" class="map-frame" tabindex="0" aria-label="Scrollable and zoomable Masterworld map"><svg id="dashboard-incremental-world-svg"`);
+  };
+
+  const dashboardIncrementalCreateNodeElementBeforeViewportSelection=dashboardIncrementalCreateNodeElement;
+  dashboardIncrementalCreateNodeElement=function dashboardIncrementalCreateSelectableNodeElement(node,context,labelBudget){
+    const group=dashboardIncrementalCreateNodeElementBeforeViewportSelection(node,context,labelBudget);
+    group.classList.add('dashboard-incremental-node');
+    if(node.type==='station')group.classList.add('dashboard-incremental-station');
+    group.setAttribute('tabindex','0');
+    group.setAttribute('role','button');
+    group.setAttribute('aria-label',`${node.type==='station'?'Station':'Node'} ${node.name||node.id}, ring ${number(node.ring)}, level ${number(node.locationLevel,1)}`);
+    if(dashboardMasterWorldViewportRuntime.selectedId===node.id)group.classList.add('viewer-selected');
+    if((dashboardMasterWorldViewportRuntime.selectedEndpointIds||[]).includes(node.id))group.classList.add('viewer-route-endpoint');
+    return group;
+  };
+
+  const dashboardIncrementalAddLocalCorridorsBeforeViewportSelection=dashboardIncrementalAddLocalCorridors;
+  dashboardIncrementalAddLocalCorridors=function dashboardIncrementalAddSelectableLocalCorridors(packageInfo,map=state.world?.map){
+    const added=dashboardIncrementalAddLocalCorridorsBeforeViewportSelection(packageInfo,map);
+    const layer=root.querySelector('#dashboard-incremental-world-corridors');
+    const topology=typeof dashboardLocalWorldTopology==='function'?dashboardLocalWorldTopology(map):null;
+    if(!layer||!topology)return added;
+    for(const line of layer.querySelectorAll('line[data-local-corridor-id]:not([data-viewer-interactive])')){
+      line.dataset.viewerInteractive='true';
+      line.classList.add('dashboard-incremental-corridor');
+      line.setAttribute('tabindex','0');
+      line.setAttribute('role','button');
+      const edge=(topology.edges||[]).find(item=>item.id===line.dataset.localCorridorId);
+      const left=topology.nodeById?.[edge?.a];
+      const right=topology.nodeById?.[edge?.b];
+      line.setAttribute('aria-label',`Route ${left?.name||edge?.a||''} to ${right?.name||edge?.b||''}`);
+      if(dashboardMasterWorldViewportRuntime.selectedType==='route'&&dashboardMasterWorldViewportRuntime.selectedId===line.dataset.localCorridorId)line.classList.add('viewer-selected');
+      const hitArea=line.cloneNode(false);
+      hitArea.removeAttribute('tabindex');
+      hitArea.removeAttribute('role');
+      hitArea.removeAttribute('aria-label');
+      hitArea.dataset.viewerHitArea='true';
+      hitArea.classList.remove('dashboard-incremental-corridor','viewer-selected');
+      hitArea.classList.add('dashboard-incremental-corridor-hit');
+      line.after(hitArea);
+    }
+    dashboardMasterWorldApplySelectionClasses();
+    return added;
+  };
+
+  const dashboardIncrementalUpdateDetailBeforeViewportSelection=dashboardIncrementalUpdateDetail;
+  dashboardIncrementalUpdateDetail=function dashboardIncrementalUpdateSelectableNodeDetail(node){
+    dashboardIncrementalUpdateDetailBeforeViewportSelection(node);
+    dashboardMasterWorldSelectNode(node,state.world?.map);
+  };
+
+  function dashboardMasterWorldBindViewportInteractions(map=state.world?.map){
+    const {viewport,svg}=dashboardMasterWorldViewportElements();
+    if(!viewport||!svg||viewport.dataset.viewerBound==='true')return false;
+    viewport.dataset.viewerBound='true';
+    dashboardMasterWorldViewportRuntime.initialized=true;
+    dashboardMasterWorldResetZoom(map);
+
+    root.querySelector('#dashboard-world-zoom-out')?.addEventListener('click',()=>dashboardMasterWorldApplyZoom(dashboardMasterWorldViewportRuntime.zoom-DASHBOARD_MASTERWORLD_ZOOM_STEP));
+    root.querySelector('#dashboard-world-zoom-in')?.addEventListener('click',()=>dashboardMasterWorldApplyZoom(dashboardMasterWorldViewportRuntime.zoom+DASHBOARD_MASTERWORLD_ZOOM_STEP));
+    root.querySelector('#dashboard-world-reset-zoom')?.addEventListener('click',()=>dashboardMasterWorldResetZoom(map));
+    root.querySelector('#dashboard-world-center-selection')?.addEventListener('click',dashboardMasterWorldCenterSelection);
+    root.querySelector('#dashboard-world-clear-selection')?.addEventListener('click',dashboardMasterWorldClearSelection);
+
+    svg.addEventListener('click',event=>{
+      const routeTarget=event.target.closest?.('[data-local-corridor-id]');
+      if(routeTarget){dashboardMasterWorldSelectRoute(routeTarget.dataset.localCorridorId,map);return;}
+      const nodeTarget=event.target.closest?.('[data-node-id]');
+      if(!nodeTarget)return;
+      const node=map?.nodes?.find(item=>item.id===nodeTarget.dataset.nodeId);
+      if(node)dashboardMasterWorldSelectNode(node,map);
+    });
+
+    svg.addEventListener('keydown',event=>{
+      const interactive=event.target.closest?.('[data-node-id],[data-local-corridor-id]');
+      if(!interactive||!['Enter',' '].includes(event.key))return;
+      event.preventDefault();
+      interactive.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:0,clientY:0}));
+    });
+
+    viewport.addEventListener('wheel',event=>{
+      if(!(event.ctrlKey||event.metaKey))return;
+      event.preventDefault();
+      const direction=event.deltaY<0?1:-1;
+      dashboardMasterWorldApplyZoom(dashboardMasterWorldViewportRuntime.zoom+direction*DASHBOARD_MASTERWORLD_ZOOM_STEP,event.clientX,event.clientY);
+    },{passive:false});
+
+    let drag=null;
+    viewport.addEventListener('pointerdown',event=>{
+      if(event.button!==0||event.target.closest?.('[data-node-id],[data-local-corridor-id]'))return;
+      drag={pointerId:event.pointerId,x:event.clientX,y:event.clientY,left:viewport.scrollLeft,top:viewport.scrollTop};
+      viewport.classList.add('viewer-dragging');
+      viewport.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    });
+    viewport.addEventListener('pointermove',event=>{
+      if(!drag||drag.pointerId!==event.pointerId)return;
+      viewport.scrollLeft=drag.left-(event.clientX-drag.x);
+      viewport.scrollTop=drag.top-(event.clientY-drag.y);
+    });
+    const endDrag=event=>{
+      if(!drag||drag.pointerId!==event.pointerId)return;
+      viewport.releasePointerCapture?.(event.pointerId);
+      drag=null;
+      viewport.classList.remove('viewer-dragging');
+    };
+    viewport.addEventListener('pointerup',endDrag);
+    viewport.addEventListener('pointercancel',endDrag);
+
+    viewport.addEventListener('keydown',event=>{
+      const scrollStep=Math.max(80,Math.round(Math.min(viewport.clientWidth,viewport.clientHeight)*.16));
+      if(event.key==='+'||event.key==='='){event.preventDefault();dashboardMasterWorldApplyZoom(dashboardMasterWorldViewportRuntime.zoom+DASHBOARD_MASTERWORLD_ZOOM_STEP);}
+      else if(event.key==='-'){event.preventDefault();dashboardMasterWorldApplyZoom(dashboardMasterWorldViewportRuntime.zoom-DASHBOARD_MASTERWORLD_ZOOM_STEP);}
+      else if(event.key==='0'){event.preventDefault();dashboardMasterWorldResetZoom(map);}
+      else if(event.key==='Home'){event.preventDefault();dashboardMasterWorldCenterSelection();}
+      else if(event.key==='ArrowLeft'){event.preventDefault();viewport.scrollLeft-=scrollStep;}
+      else if(event.key==='ArrowRight'){event.preventDefault();viewport.scrollLeft+=scrollStep;}
+      else if(event.key==='ArrowUp'){event.preventDefault();viewport.scrollTop-=scrollStep;}
+      else if(event.key==='ArrowDown'){event.preventDefault();viewport.scrollTop+=scrollStep;}
+    });
+
+    dashboardMasterWorldApplySelectionClasses();
+    return true;
+  }
+
+  const dashboardIncrementalBindNodeInspectionBeforeViewportControls=dashboardIncrementalBindNodeInspection;
+  dashboardIncrementalBindNodeInspection=function dashboardIncrementalBindNodeInspectionWithViewportControls(map){
+    dashboardIncrementalBindNodeInspectionBeforeViewportControls(map);
+    dashboardMasterWorldBindViewportInteractions(map);
+  };
+
+  globalThis.BAROTRAUMA_DASHBOARD_MASTERWORLD_VIEWPORT_DIAGNOSTICS={
+    version:DASHBOARD_MASTERWORLD_VIEWPORT_VERSION,
+    zoomControls:true,
+    nativeScrolling:true,
+    dragPanning:true,
+    ctrlWheelZoom:true,
+    keyboardNavigation:true,
+    stationSelection:true,
+    nodeSelection:true,
+    routeSelection:true,
+    routeHitTargetWidth:18,
+    minimumZoom:DASHBOARD_MASTERWORLD_ZOOM_MIN,
+    maximumZoom:DASHBOARD_MASTERWORLD_ZOOM_MAX
   };
