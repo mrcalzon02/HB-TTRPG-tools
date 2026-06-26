@@ -127,7 +127,7 @@
     const mechanical=profile.generator?.mechanicalMode||'none';
     const exact=profile.generator?.mechanicalOptions?.levelMode==='exact';
     values['npc-level-mode']=mechanical==='none'?'none':mechanical==='open-d20-full'?(exact?'full-custom':'full'):(exact?'custom':'generated');
-    for(const[id,value]of Object.entries(values))if(this.controls[id]&&value!==undefined&&[...this.controls[id].options||[]].some?.(option=>option.value===String(value))!==false)this.controls[id].value=String(value);
+    for(const[id,value]of Object.entries(values)){const control=this.controls[id];if(!control||value===undefined||value===null)continue;if(control.tagName==='SELECT'&&![...control.options].some(option=>option.value===String(value)))continue;control.value=String(value);}
     this.profileLoadedFromPersistence=true;
     this.updateConditionalControls();this.renderProfile();this.savePreferences();
     this.setStatus(`${profile.identity.fullName} ${source==='import'?'imported':source==='clone'?'cloned':'loaded'}.`,'success');
