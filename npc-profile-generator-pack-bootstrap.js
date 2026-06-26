@@ -6,6 +6,7 @@
     ['npc-profile-generator-pack-storage.js','NpcProfileGeneratorPackStorage'],
     ['npc-profile-generator-pack-ui.js','NpcProfileGeneratorPackUI']
   ];
+  const REQUIRED_DATA_FLAGS=['depthDataLoaded','householdDataLoaded','operationDataLoaded','mechanicsDataLoaded'];
 
   function loadScript(src,globalName){
     if(globalThis[globalName])return Promise.resolve();
@@ -28,6 +29,7 @@
   }
 
   async function loadModules(){for(const[source,globalName]of MODULES)await loadScript(source,globalName);}
+  function baseDataReady(workspace){return REQUIRED_DATA_FLAGS.every(flag=>workspace?.[flag]===true);}
 
   function status(message,tone='error'){
     const element=document.getElementById('npc-generator-status');
@@ -39,9 +41,19 @@
   async function applyWhenReady(){
     try{await loadModules();}
     catch(error){status(`Custom campaign packs failed to initialize: ${error.message}`);return;}
+    let checks=0;
     const timer=window.setInterval(async()=>{
+      checks+=1;
       const workspace=globalThis.NpcProfileGeneratorWorkspace;
-      if(!workspace||workspace.customPackBootstrapApplied)return;
+      if(!workspace){
+        if(checks>=600){window.clearInterval(timer);status('Custom campaign packs could not find the NPC workspace.');}
+        return;
+      }
+      if(workspace.customPackBootstrapApplied){window.clearInterval(timer);return;}
+      if(!baseDataReady(workspace)){
+        if(checks>=600){window.clearInterval(timer);status('Custom campaign packs could not apply because core NPC data did not finish loading.');}
+        return;
+      }
       workspace.customPackBootstrapApplied=true;
       window.clearInterval(timer);
       try{
@@ -56,5 +68,5 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyWhenReady,{once:true});
   else applyWhenReady();
 
-  globalThis.NpcProfileGeneratorPackBootstrap=Object.freeze({MODULES,loadModules,applyWhenReady});
+  globalThis.NpcProfileGeneratorPackBootstrap=Object.freeze({MODULES,REQUIRED_DATA_FLAGS,loadModules,baseDataReady,applyWhenReady});
 })();
