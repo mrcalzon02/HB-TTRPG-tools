@@ -1,0 +1,106 @@
+{
+  "projectId": "universal-npc-profile-generator",
+  "projectTitle": "Universal NPC Profile Generator",
+  "schemaVersion": "1.0.0",
+  "activeBranch": "main",
+  "activePhaseId": "phase-1-canonical-schemas-fixtures",
+  "lastCompletedPhaseId": "phase-0-specification-architecture",
+  "runtimeStatus": "not-started",
+  "existingRuntimePreserved": "kaysender-npc-generator.js",
+  "phases": [
+    {
+      "id": "phase-0-specification-architecture",
+      "sequence": 0,
+      "status": "gate-passed",
+      "deliverables": [
+        "docs/npc-profile-generator-plan.md",
+        "docs/npc-profile-generator-archetypes.md",
+        "docs/npc-profile-generator-applicability-matrix.md",
+        "docs/npc-profile-generator-risk-register.md"
+      ],
+      "exitGate": "Profile families, absence states, archetype hierarchy, applicability policies, first-release scope, risks, and architectural boundaries are documented."
+    },
+    {
+      "id": "phase-1-canonical-schemas-fixtures",
+      "sequence": 1,
+      "status": "active",
+      "deliverables": [
+        "data/schemas/npc-profile.schema.json",
+        "data/schemas/npc-generator-pack.schema.json",
+        "data/schemas/npc-archetype.schema.json",
+        "data/npc-generator/fixtures/"
+      ],
+      "exitGate": "Valid fixtures pass schema validation and malformed or contradictory fixtures fail with actionable diagnostics."
+    },
+    {
+      "id": "phase-2-archetype-applicability-engine",
+      "sequence": 2,
+      "status": "queued"
+    },
+    {
+      "id": "phase-3-deterministic-generation-core",
+      "sequence": 3,
+      "status": "queued"
+    },
+    {
+      "id": "phase-4-minimum-generic-fantasy-pack",
+      "sequence": 4,
+      "status": "queued"
+    },
+    {
+      "id": "phase-5-standalone-interface",
+      "sequence": 5,
+      "status": "queued"
+    },
+    {
+      "id": "phase-6-deep-identity-background-motivation",
+      "sequence": 6,
+      "status": "queued"
+    },
+    {
+      "id": "phase-7-family-household-relationships",
+      "sequence": 7,
+      "status": "queued"
+    },
+    {
+      "id": "phase-8-archetype-specific-modules",
+      "sequence": 8,
+      "status": "queued"
+    },
+    {
+      "id": "phase-9-mechanical-profile-generation",
+      "sequence": 9,
+      "status": "queued"
+    },
+    {
+      "id": "phase-10-storage-import-export-printing",
+      "sequence": 10,
+      "status": "queued"
+    },
+    {
+      "id": "phase-11-custom-data-packs",
+      "sequence": 11,
+      "status": "queued"
+    },
+    {
+      "id": "phase-12-kaysender-adapter",
+      "sequence": 12,
+      "status": "queued"
+    },
+    {
+      "id": "phase-13-roster-group-generation",
+      "sequence": 13,
+      "status": "queued"
+    },
+    {
+      "id": "phase-14-automated-validation-browser-testing",
+      "sequence": 14,
+      "status": "queued"
+    },
+    {
+      "id": "phase-15-documentation-initial-release",
+      "sequence": 15,
+      "status": "queued"
+    }
+  ]
+}
