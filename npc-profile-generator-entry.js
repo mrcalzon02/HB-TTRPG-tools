@@ -16,21 +16,24 @@
     ['npc-generator-operations.js', 'NpcProfileGeneratorOperations'],
     ['npc-generator-mechanics.js', 'NpcProfileGeneratorMechanics'],
     ['npc-profile-generator-core.js', 'NpcProfileGeneratorCore'],
+    ['npc-profile-generator-storage.js', 'NpcProfileGeneratorStorage'],
+    ['npc-profile-generator-export.js', 'NpcProfileGeneratorExport'],
     ['npc-profile-generator-renderer.js', 'NpcProfileGeneratorRenderer'],
     ['npc-profile-generator-ui.js', 'NpcProfileGeneratorUI'],
     ['npc-profile-generator-mechanics-ui.js', 'NpcProfileGeneratorMechanicsUI'],
+    ['npc-profile-generator-persistence-ui.js', 'NpcProfileGeneratorPersistenceUI'],
     ['npc-profile-generator-depth-data.js', 'NpcProfileGeneratorDepthData'],
     ['npc-profile-generator-household-data.js', 'NpcProfileGeneratorHouseholdData'],
     ['npc-profile-generator-operation-data.js', 'NpcProfileGeneratorOperationData'],
     ['npc-profile-generator-mechanics-data.js', 'NpcProfileGeneratorMechanicsData']
   ];
 
-  function loadStylesheet() {
-    if (document.querySelector('link[data-npc-profile-generator-style]')) return;
+  function loadStylesheet(href,attribute) {
+    if (document.querySelector(`link[${attribute}]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'npc-profile-generator.css';
-    link.dataset.npcProfileGeneratorStyle = 'true';
+    link.href = href;
+    link.setAttribute(attribute,'true');
     document.head.appendChild(link);
   }
 
@@ -96,9 +99,9 @@
     card.innerHTML = `
       <div class="module-meta"><span class="badge section-generators">generator</span><span class="badge status-active">active</span><span class="badge">dedicated workspace</span></div>
       <h3>Universal NPC Profile Generator</h3>
-      <p>Create civilians, laborers, craftspeople, merchants, bankers, beggars, guards, soldiers, thieves, bandits, and nobles with role-appropriate homes, workplaces, operations, families, motives, secrets, hooks, and optional open-d20 mechanics.</p>
+      <p>Create civilians, laborers, craftspeople, merchants, bankers, beggars, guards, soldiers, thieves, bandits, and nobles with role-appropriate homes, workplaces, operations, families, motives, secrets, hooks, optional mechanics, and local profile storage.</p>
       <h4>Module capabilities</h4>
-      <div class="chip-list"><span class="chip">11 archetypes</span><span class="chip">deterministic seeds</span><span class="chip">section rerolls</span><span class="chip">field and section locks</span><span class="chip">conditional operations</span><span class="chip">optional mechanics</span><span class="chip">JSON export</span></div>
+      <div class="chip-list"><span class="chip">11 archetypes</span><span class="chip">deterministic seeds</span><span class="chip">section rerolls</span><span class="chip">field and section locks</span><span class="chip">conditional operations</span><span class="chip">optional mechanics</span><span class="chip">save and import</span><span class="chip">JSON, text, Markdown</span></div>
       <button type="button" class="primary-action" id="open-universal-npc-generator">Open NPC Generator</button>`;
     card.querySelector('#open-universal-npc-generator')?.addEventListener('click', () => {
       switchView(WORKSPACE_ID);
@@ -109,7 +112,8 @@
   }
 
   async function init() {
-    loadStylesheet();
+    loadStylesheet('npc-profile-generator.css','data-npc-profile-generator-style');
+    loadStylesheet('npc-profile-generator-persistence.css','data-npc-profile-persistence-style');
     buildCard();
     const section = buildWorkspace();
     const status = section.querySelector('#npc-generator-status');
