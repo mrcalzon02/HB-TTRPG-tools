@@ -79,6 +79,7 @@ jobs:
           node --check npc-profile-generator-entry.js
           node --check npc-profile-generator-persistence-ui.js
           node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-profile.schema.json','utf8'))"
+          git diff --check
 
       - name: Validate current universal NPC milestone
         id: npc_gate
