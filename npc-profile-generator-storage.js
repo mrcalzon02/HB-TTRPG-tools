@@ -38,9 +38,7 @@
     return{valid:errors.length===0,errors};
   }
 
-  function emptyCollection(timestamp=now()){
-    return{storageType:'npcProfileCollection',schemaVersion:STORAGE_SCHEMA_VERSION,updatedAt:timestamp,records:[]};
-  }
+  function emptyCollection(timestamp=now()){return{storageType:'npcProfileCollection',schemaVersion:STORAGE_SCHEMA_VERSION,updatedAt:timestamp,records:[]};}
   function validateCollection(collection){
     if(!object(collection)||collection.storageType!=='npcProfileCollection')return{valid:false,errors:[issue('STORAGE_COLLECTION_INVALID','Saved-profile collection is invalid.')]};
     if(major(collection.schemaVersion)!==1)return{valid:false,errors:[issue('STORAGE_SCHEMA_UNSUPPORTED',`Storage schema ${collection.schemaVersion} is unsupported.`)]};
@@ -48,36 +46,23 @@
     return{valid:true,errors:[]};
   }
   function readCollection(storage,key=STORAGE_KEY){
-    try{
-      const raw=storage?.getItem?.(key);
-      if(!raw)return{collection:emptyCollection(),errors:[]};
-      const collection=JSON.parse(raw);
-      const validation=validateCollection(collection);
-      return validation.valid?{collection,errors:[]}:{collection:emptyCollection(),errors:validation.errors};
-    }catch(error){return{collection:emptyCollection(),errors:[issue('STORAGE_READ_FAILED',error.message)]};}
+    try{const raw=storage?.getItem?.(key);if(!raw)return{collection:emptyCollection(),errors:[]};const collection=JSON.parse(raw);const validation=validateCollection(collection);return validation.valid?{collection,errors:[]}:{collection:emptyCollection(),errors:validation.errors};}
+    catch(error){return{collection:emptyCollection(),errors:[issue('STORAGE_READ_FAILED',error.message)]};}
   }
   function writeCollection(storage,collection,key=STORAGE_KEY){
-    const validation=validateCollection(collection);
-    if(!validation.valid)return{ok:false,errors:validation.errors};
-    try{storage?.setItem?.(key,JSON.stringify(collection));return{ok:true,errors:[]};}
-    catch(error){return{ok:false,errors:[issue('STORAGE_WRITE_FAILED',error.message)]};}
+    const validation=validateCollection(collection);if(!validation.valid)return{ok:false,errors:validation.errors};
+    try{storage?.setItem?.(key,JSON.stringify(collection));return{ok:true,errors:[]};}catch(error){return{ok:false,errors:[issue('STORAGE_WRITE_FAILED',error.message)]};}
   }
   function createRecord(profile,options={}){
-    const validation=validateProfile(profile);
-    if(!validation.valid)return{record:null,errors:validation.errors};
-    const timestamp=options.savedAt||now();
-    return{record:{recordType:'npcSavedProfile',storageSchemaVersion:STORAGE_SCHEMA_VERSION,recordId:profile.profileId,label:options.label||profile.identity.fullName,savedAt:timestamp,updatedAt:timestamp,profile:clone(profile)},errors:[]};
+    const validation=validateProfile(profile);if(!validation.valid)return{record:null,errors:validation.errors};
+    const timestamp=options.savedAt||now();return{record:{recordType:'npcSavedProfile',storageSchemaVersion:STORAGE_SCHEMA_VERSION,recordId:profile.profileId,label:options.label||profile.identity.fullName,savedAt:timestamp,updatedAt:timestamp,profile:clone(profile)},errors:[]};
   }
   function saveProfile(storage,profile,options={}){
     const created=createRecord(profile,options);if(!created.record)return{ok:false,errors:created.errors};
-    const read=readCollection(storage,options.key);const collection=read.collection;
-    const existing=collection.records.findIndex(record=>record.recordId===created.record.recordId);
+    const read=readCollection(storage,options.key);const collection=read.collection;const existing=collection.records.findIndex(record=>record.recordId===created.record.recordId);
     if(existing>=0){created.record.savedAt=collection.records[existing].savedAt;collection.records.splice(existing,1,created.record);}else collection.records.unshift(created.record);
-    collection.records.sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
-    collection.records=collection.records.slice(0,Number(options.maxRecords||MAX_RECORDS));
-    collection.updatedAt=created.record.updatedAt;
-    const written=writeCollection(storage,collection,options.key);
-    return{...written,record:created.record,collection,errors:[...read.errors,...written.errors]};
+    collection.records.sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));collection.records=collection.records.slice(0,Number(options.maxRecords||MAX_RECORDS));collection.updatedAt=created.record.updatedAt;
+    const written=writeCollection(storage,collection,options.key);return{...written,record:created.record,collection,errors:[...read.errors,...written.errors]};
   }
   function listProfiles(storage,options={}){const result=readCollection(storage,options.key);return{records:result.collection.records.map(clone),errors:result.errors};}
   function loadProfile(storage,recordId,options={}){
@@ -86,25 +71,20 @@
     const validation=validateProfile(record.profile);return validation.valid?{profile:clone(record.profile),record:clone(record),errors:result.errors}:{profile:null,record:clone(record),errors:[...result.errors,...validation.errors]};
   }
   function deleteProfile(storage,recordId,options={}){
-    const result=readCollection(storage,options.key);const before=result.collection.records.length;
-    result.collection.records=result.collection.records.filter(item=>item.recordId!==recordId);result.collection.updatedAt=options.timestamp||now();
-    const written=writeCollection(storage,result.collection,options.key);
-    return{ok:written.ok&&result.collection.records.length<before,collection:result.collection,errors:[...result.errors,...written.errors]};
+    const result=readCollection(storage,options.key);const before=result.collection.records.length;result.collection.records=result.collection.records.filter(item=>item.recordId!==recordId);result.collection.updatedAt=options.timestamp||now();
+    const written=writeCollection(storage,result.collection,options.key);return{ok:written.ok&&result.collection.records.length<before,collection:result.collection,errors:[...result.errors,...written.errors]};
   }
   function cloneProfile(profile,options={}){
     const validation=validateProfile(profile);if(!validation.valid)return{profile:null,errors:validation.errors};
-    const timestamp=options.timestamp||now();const output=clone(profile);
-    output.profileId=options.profileId||`npc-clone-${hash(`${profile.profileId}:${timestamp}:${options.salt||''}`)}`;
-    output.revision=1;output.createdAt=timestamp;output.updatedAt=timestamp;
-    output.provenance=output.provenance||{};output.provenance.createdBy='user';output.provenance.notes=[...(output.provenance.notes||[]),`Cloned from ${profile.profileId}.`];
-    return{profile:output,errors:[]};
+    const timestamp=options.timestamp||now();const output=clone(profile);output.profileId=options.profileId||`npc-clone-${hash(`${profile.profileId}:${timestamp}:${options.salt||''}`)}`;output.revision=1;output.createdAt=timestamp;output.updatedAt=timestamp;
+    output.provenance=output.provenance||{};output.provenance.createdBy='user';output.provenance.notes=[...(output.provenance.notes||[]),`Cloned from ${profile.profileId}.`];return{profile:output,errors:[]};
   }
   function parseImport(text){
     if(typeof text!=='string')return{profile:null,errors:[issue('IMPORT_TEXT_REQUIRED','Import content must be text.')]};
     if(new TextEncoder().encode(text).length>MAX_IMPORT_BYTES)return{profile:null,errors:[issue('IMPORT_TOO_LARGE',`Import exceeds ${MAX_IMPORT_BYTES} bytes.`)]};
     let parsed;try{parsed=JSON.parse(text);}catch(error){return{profile:null,errors:[issue('IMPORT_JSON_INVALID',error.message)]};}
-    const profile=parsed?.recordType==='npcSavedProfile'?parsed.profile:parsed;
-    const validation=validateProfile(profile);return validation.valid?{profile:clone(profile),errors:[]}:{profile:null,errors:validation.errors};
+    if(parsed?.recordType==='npcSavedProfile'&&major(parsed.storageSchemaVersion)!==1)return{profile:null,errors:[issue('IMPORT_STORAGE_SCHEMA_UNSUPPORTED',`Saved-profile schema ${parsed.storageSchemaVersion||'missing'} is unsupported.`,'/storageSchemaVersion')]};
+    const profile=parsed?.recordType==='npcSavedProfile'?parsed.profile:parsed;const validation=validateProfile(profile);return validation.valid?{profile:clone(profile),errors:[]}:{profile:null,errors:validation.errors};
   }
   function regenerationConfig(profile,archetype,pack,timestamp=now()){
     const validation=validateProfile(profile);if(!validation.valid)return{config:null,errors:validation.errors};
