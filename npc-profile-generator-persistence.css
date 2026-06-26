@@ -1,0 +1,14 @@
+.npc-persistence-actions{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.npc-persistence-actions h3{font-size:1rem;margin-bottom:10px}
+.npc-profile-manager{width:min(760px,calc(100vw - 32px));max-height:80vh;padding:0;border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--text);box-shadow:var(--shadow)}
+.npc-profile-manager::backdrop{background:rgba(0,0,0,.72)}
+.npc-manager-header{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;border-bottom:1px solid var(--line);background:var(--panel);z-index:1}
+.npc-manager-header .secondary-action{width:auto}
+.npc-saved-profile-list{display:grid;gap:10px;padding:16px 20px 22px;overflow:auto}
+.npc-saved-profile-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.npc-saved-profile-row h3{font-size:1rem;margin-bottom:4px}
+.npc-saved-profile-row p{color:var(--muted);font-size:.82rem}
+.npc-saved-profile-actions{display:flex;gap:8px}
+.npc-saved-profile-actions .primary-action,.npc-saved-profile-actions .danger-action{width:auto;padding:8px 11px}
+@media(max-width:620px){.npc-saved-profile-row{grid-template-columns:1fr}.npc-saved-profile-actions{justify-content:stretch}.npc-saved-profile-actions button{flex:1}.npc-manager-header{align-items:stretch;flex-direction:column}.npc-manager-header .secondary-action{width:100%}}
+@media print{.npc-persistence-actions,.npc-profile-manager{display:none!important}}
