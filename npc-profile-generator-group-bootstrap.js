@@ -30,7 +30,12 @@
 
   async function loadModules(){for(const[source,globalName]of MODULES)await loadScript(source,globalName);}
   function workspaceReady(workspace){
-    return Boolean(workspace)&&REQUIRED_DATA_FLAGS.every(flag=>workspace[flag]===true)&&workspace.customPackBootstrapApplied===true;
+    return Boolean(workspace)
+      &&REQUIRED_DATA_FLAGS.every(flag=>workspace[flag]===true)
+      &&workspace.customPackBootstrapApplied===true
+      &&workspace.packUiInstalled===true
+      &&Boolean(workspace.customPackBasePack)
+      &&Array.isArray(workspace.installedCustomPacks);
   }
   function status(message,tone='error'){
     const element=document.getElementById('npc-generator-status');
