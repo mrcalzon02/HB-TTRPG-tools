@@ -1,1 +1,284 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"Universal NPC Group","type":"object"}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/npc-group.schema.json",
+  "title": "Universal NPC Group",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "groupType",
+    "schemaVersion",
+    "groupId",
+    "revision",
+    "createdAt",
+    "updatedAt",
+    "generator",
+    "template",
+    "shared",
+    "leadership",
+    "members",
+    "relationships",
+    "diagnostics",
+    "provenance"
+  ],
+  "properties": {
+    "groupType": { "const": "npcGroup" },
+    "schemaVersion": { "$ref": "#/$defs/version" },
+    "groupId": {
+      "type": "string",
+      "pattern": "^npc-group-[a-z0-9][a-z0-9-]{7,63}$"
+    },
+    "revision": { "type": "integer", "minimum": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "generator": { "$ref": "#/$defs/generatorReceipt" },
+    "template": { "$ref": "#/$defs/templateReference" },
+    "shared": { "$ref": "#/$defs/sharedContext" },
+    "leadership": { "$ref": "#/$defs/leadership" },
+    "members": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 50,
+      "items": { "$ref": "#/$defs/member" }
+    },
+    "relationships": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/relationship" }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/diagnostic" }
+    },
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+  "$defs": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+    },
+    "memberId": {
+      "type": "string",
+      "pattern": "^member-[a-z0-9][a-z0-9-]{5,63}$"
+    },
+    "relationshipId": {
+      "type": "string",
+      "pattern": "^relationship-[a-z0-9][a-z0-9-]{5,63}$"
+    },
+    "stringList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "groupKind": {
+      "enum": [
+        "household",
+        "business",
+        "patrol",
+        "squad",
+        "gang",
+        "bandit-group",
+        "noble-household",
+        "guild-team",
+        "crew",
+        "traveling-party"
+      ]
+    },
+    "generatorReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generatorId",
+        "generatorVersion",
+        "packId",
+        "packVersion",
+        "seed",
+        "mode",
+        "templateId",
+        "rerollCounters"
+      ],
+      "properties": {
+        "generatorId": { "const": "universal-npc-group-generator" },
+        "generatorVersion": { "$ref": "#/$defs/version" },
+        "packId": { "$ref": "#/$defs/id" },
+        "packVersion": { "$ref": "#/$defs/version" },
+        "seed": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "mode": { "enum": ["quick", "standard", "deep"] },
+        "templateId": { "$ref": "#/$defs/id" },
+        "rerollCounters": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "templateReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "groupKind"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "groupKind": { "$ref": "#/$defs/groupKind" }
+      }
+    },
+    "organization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind", "factionTie"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 },
+        "factionTie": { "type": ["string", "null"] }
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind", "region"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 },
+        "region": { "type": ["string", "null"] }
+      }
+    },
+    "sharedContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "groupName",
+        "groupKind",
+        "organization",
+        "location",
+        "objective",
+        "problem",
+        "sharedSurname",
+        "factionTie",
+        "resources",
+        "notes"
+      ],
+      "properties": {
+        "groupName": { "type": "string", "minLength": 1 },
+        "groupKind": { "$ref": "#/$defs/groupKind" },
+        "organization": { "$ref": "#/$defs/organization" },
+        "location": { "$ref": "#/$defs/location" },
+        "objective": { "type": "string", "minLength": 1 },
+        "problem": { "type": "string", "minLength": 1 },
+        "sharedSurname": { "type": ["string", "null"] },
+        "factionTie": { "type": ["string", "null"] },
+        "resources": { "$ref": "#/$defs/stringList" },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "leadership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["leaderMemberId", "leaderRoleId", "commandStyle", "secondMemberId"],
+      "properties": {
+        "leaderMemberId": { "$ref": "#/$defs/memberId" },
+        "leaderRoleId": { "$ref": "#/$defs/id" },
+        "commandStyle": { "type": "string", "minLength": 1 },
+        "secondMemberId": {
+          "anyOf": [
+            { "$ref": "#/$defs/memberId" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "member": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memberId",
+        "profileId",
+        "roleId",
+        "roleLabel",
+        "leadershipRank",
+        "reportsToMemberId",
+        "organizationId",
+        "locationId",
+        "relationshipIds",
+        "profile"
+      ],
+      "properties": {
+        "memberId": { "$ref": "#/$defs/memberId" },
+        "profileId": {
+          "type": "string",
+          "pattern": "^npc-[a-z0-9][a-z0-9-]{7,63}$"
+        },
+        "roleId": { "$ref": "#/$defs/id" },
+        "roleLabel": { "type": "string", "minLength": 1 },
+        "leadershipRank": { "type": "integer", "minimum": 0 },
+        "reportsToMemberId": {
+          "anyOf": [
+            { "$ref": "#/$defs/memberId" },
+            { "type": "null" }
+          ]
+        },
+        "organizationId": { "$ref": "#/$defs/id" },
+        "locationId": { "$ref": "#/$defs/id" },
+        "relationshipIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/relationshipId" }
+        },
+        "profile": { "$ref": "npc-profile.schema.json" }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationshipId",
+        "fromMemberId",
+        "toMemberId",
+        "type",
+        "reciprocalType",
+        "quality",
+        "notes"
+      ],
+      "properties": {
+        "relationshipId": { "$ref": "#/$defs/relationshipId" },
+        "fromMemberId": { "$ref": "#/$defs/memberId" },
+        "toMemberId": { "$ref": "#/$defs/memberId" },
+        "type": { "type": "string", "minLength": 1 },
+        "reciprocalType": { "type": "string", "minLength": 1 },
+        "quality": { "type": "string", "minLength": 1 },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "message", "path"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$" },
+        "severity": { "enum": ["info", "warning", "error"] },
+        "message": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "pattern": "^/" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourcePackIds", "sourceTemplateIds", "memberProfileIds", "notes"],
+      "properties": {
+        "sourcePackIds": { "$ref": "#/$defs/stringList" },
+        "sourceTemplateIds": { "$ref": "#/$defs/stringList" },
+        "memberProfileIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^npc-[a-z0-9][a-z0-9-]{7,63}$"
+          }
+        },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
