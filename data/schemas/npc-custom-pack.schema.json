@@ -1,1 +1,73 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"Universal NPC Custom Campaign Pack","type":"object"}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/npc-custom-pack.schema.json",
+  "title": "Universal NPC Custom Campaign Pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["packType","schemaVersion","packId","version","title","description","compatibility"],
+  "properties": {
+    "packType": {"const":"npcCustomPack"},
+    "schemaVersion": {"$ref":"#/$defs/version"},
+    "packId": {"$ref":"#/$defs/id"},
+    "version": {"$ref":"#/$defs/version"},
+    "title": {"type":"string","minLength":1,"maxLength":120},
+    "description": {"type":"string","minLength":1,"maxLength":2000},
+    "author": {"type":["string","null"]},
+    "license": {"type":["string","null"]},
+    "compatibility": {
+      "type":"object","additionalProperties":false,
+      "required":["generatorMinVersion","generatorMaxMajor","profileSchemaVersion","basePackId"],
+      "properties":{
+        "generatorMinVersion":{"$ref":"#/$defs/version"},
+        "generatorMaxMajor":{"type":"integer","minimum":0},
+        "profileSchemaVersion":{"$ref":"#/$defs/version"},
+        "basePackId":{"$ref":"#/$defs/id"}
+      }
+    },
+    "dependencies": {
+      "type":"array","uniqueItems":true,
+      "items":{"type":"object","additionalProperties":false,"required":["packId","minimumVersion"],"properties":{"packId":{"$ref":"#/$defs/id"},"minimumVersion":{"$ref":"#/$defs/version"},"optional":{"type":"boolean"}}}
+    },
+    "names": {
+      "type":"object","additionalProperties":false,
+      "properties":{
+        "givenNames":{"$ref":"#/$defs/stringList"},
+        "familyNames":{"$ref":"#/$defs/stringList"},
+        "pronouns":{"$ref":"#/$defs/stringList"},
+        "languages":{"$ref":"#/$defs/stringList"}
+      }
+    },
+    "ancestries": {
+      "type":"array","uniqueItems":true,
+      "items":{
+        "type":"object","additionalProperties":false,"required":["id","label","ageRanges","householdRule"],
+        "properties":{
+          "id":{"$ref":"#/$defs/id"},"label":{"type":"string","minLength":1},
+          "ageRanges":{"type":"object","additionalProperties":false,"required":["child","adolescent","adult","middle-aged","elderly"],"properties":{"child":{"$ref":"#/$defs/range"},"adolescent":{"$ref":"#/$defs/range"},"adult":{"$ref":"#/$defs/range"},"middle-aged":{"$ref":"#/$defs/range"},"elderly":{"$ref":"#/$defs/range"}}},
+          "householdRule":{"type":"object","additionalProperties":false,"required":["adultThreshold","elderThreshold","maxAge","parentGapMin","parentGapMax","siblingSpread","partnerSpread"],"properties":{"adultThreshold":{"type":"integer","minimum":1},"elderThreshold":{"type":"integer","minimum":2},"maxAge":{"type":"integer","minimum":2},"parentGapMin":{"type":"integer","minimum":1},"parentGapMax":{"type":"integer","minimum":1},"siblingSpread":{"type":"integer","minimum":0},"partnerSpread":{"type":"integer","minimum":0}}}
+        }
+      }
+    },
+    "tables": {"$ref":"#/$defs/tableMap"},
+    "tableExtensions": {"$ref":"#/$defs/tableMap"},
+    "archetypes": {"type":"array","items":{"$ref":"npc-archetype.schema.json"}},
+    "operationModules": {
+      "type":"object","propertyNames":{"$ref":"#/$defs/id"},
+      "additionalProperties":{"type":"object","additionalProperties":false,"required":["targetKind","label","fields"],"properties":{"targetKind":{"enum":["canonical-work","existing-extension","new-extension"]},"extensionId":{"type":"string","pattern":"^[a-z][A-Za-z0-9]{2,63}$"},"label":{"type":"string","minLength":1},"fields":{"type":"array","minItems":1,"items":{"$ref":"#/$defs/field"}}}}
+    },
+    "mechanicalPackages": {
+      "type":"object","propertyNames":{"$ref":"#/$defs/id"},
+      "additionalProperties":{"type":"object","additionalProperties":false,"required":["classLabel","role","hitDie","attackProgression","goodSaves","primaryAbilities","skills","combatOptions","protectionOptions","equipment"],"properties":{"classLabel":{"type":"string","minLength":1},"role":{"type":"string","minLength":1},"hitDie":{"type":"integer","minimum":1,"maximum":100},"attackProgression":{"enum":["half","three-quarter","full"]},"goodSaves":{"type":"array","uniqueItems":true,"items":{"enum":["fortitude","reflex","will"]}},"primaryAbilities":{"type":"array","minItems":1,"uniqueItems":true,"items":{"enum":["strength","dexterity","constitution","intelligence","wisdom","charisma"]}},"skills":{"$ref":"#/$defs/stringList"},"combatOptions":{"$ref":"#/$defs/stringList"},"protectionOptions":{"$ref":"#/$defs/stringList"},"equipment":{"$ref":"#/$defs/stringList"}}}
+    },
+    "levelGuidance": {"type":"object","propertyNames":{"$ref":"#/$defs/id"},"additionalProperties":{"$ref":"#/$defs/range"}},
+    "notes": {"$ref":"#/$defs/stringList"}
+  },
+  "$defs": {
+    "id":{"type":"string","pattern":"^[a-z0-9][a-z0-9-]{2,63}$"},
+    "version":{"type":"string","pattern":"^\\d+\\.\\d+\\.\\d+$"},
+    "stringList":{"type":"array","uniqueItems":true,"items":{"type":"string","minLength":1}},
+    "range":{"type":"array","prefixItems":[{"type":"integer","minimum":0},{"type":"integer","minimum":0}],"items":false,"minItems":2,"maxItems":2},
+    "tableMap":{"type":"object","propertyNames":{"$ref":"#/$defs/id"},"additionalProperties":{"type":"array","minItems":1,"items":{}}},
+    "field":{"type":"object","additionalProperties":false,"required":["id","label","valueType","policy","tableId"],"properties":{"id":{"type":"string","pattern":"^[a-z][A-Za-z0-9]{1,63}$"},"label":{"type":"string","minLength":1},"valueType":{"enum":["string","number","integer","boolean","string-list","reference","stateful-reference","object"]},"policy":{"enum":["required","optional","weighted-none","unknown-allowed","derived","prohibited"]},"tableId":{"$ref":"#/$defs/id"},"noneWeight":{"type":"integer","minimum":0,"maximum":100},"unknownWeight":{"type":"integer","minimum":0,"maximum":100},"count":{"type":"integer","minimum":1,"maximum":20},"minDepth":{"enum":["quick","standard","deep"]},"maxDepth":{"enum":["quick","standard","deep"]}}}
+  }
+}
