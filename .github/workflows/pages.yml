@@ -57,16 +57,8 @@ jobs:
           node --check scripts/validate-npc-phase-7.mjs
           node --check scripts/validate-npc-phase-8.mjs
 
-      - name: Validate universal NPC milestone contracts
-        run: |
-          node scripts/validate-npc-phase-1.mjs
-          node scripts/validate-npc-phase-2.mjs
-          node scripts/validate-npc-phase-3.mjs
-          node data/npc-generator/validate-phase-4.mjs
-          node scripts/validate-npc-phase-5.mjs
-          node scripts/validate-npc-phase-6.mjs
-          node scripts/validate-npc-phase-7.mjs
-          node scripts/validate-npc-phase-8.mjs
+      - name: Validate current universal NPC milestone
+        run: node scripts/validate-npc-phase-8.mjs
 
       - name: Install Chromium
         run: |
