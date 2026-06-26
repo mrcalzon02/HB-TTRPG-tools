@@ -1,0 +1,33 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-12-kaysender-adapter",
+  "status": "gate-passed",
+  "validatedThroughCommit": "545852629f94ec816bc51185e8169a1bb5f0ab8a",
+  "ciReceiptCommit": "811ee56be4bdb21dcb0f36e29255ae5bc9e0e2d4",
+  "validator": "scripts/validate-npc-phase-12.mjs",
+  "workflow": ".github/workflows/pages.yml",
+  "executionDate": "2026-06-26",
+  "results": {
+    "legacyRecordsGenerated": 111,
+    "universalProfilesConverted": 111,
+    "deterministicPairsVerified": 224,
+    "controlCasesVerified": 31,
+    "legacyImportsVerified": 12,
+    "validationErrors": 0
+  },
+  "verifiedBehavior": [
+    "All thirty-seven Kaysender population bands normalize and generate through deterministic seeded selection.",
+    "All legacy class pools, power tiers, age controls, ancestry controls, batch boundaries, setting pools, occupations, and crew roles remain available.",
+    "Every normalized record preserves the original seventeen output rows and fallback wording.",
+    "Kaysender custom classes preserve conversion-pending numerical status rather than inventing unsupported mechanics.",
+    "Legacy rendered-card objects import without changing their row values.",
+    "Canonical universal profiles preserve identity, region, occupation, class, level, crew role, faction, characterization, source IDs, and compatibility-pack provenance.",
+    "The legacy runtime Git blob SHA remains unchanged."
+  ],
+  "notes": [
+    "The Kaysender compatibility layer is additive and does not retire or modify kaysender-npc-generator.js.",
+    "Only main was used.",
+    "Phase 13 may begin."
+  ]
+}
