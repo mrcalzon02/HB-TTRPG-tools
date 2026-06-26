@@ -40,13 +40,16 @@ jobs:
           node --check npc-generator-relationship-records.js
           node --check npc-generator-household.js
           node --check npc-generator-operations.js
+          node --check npc-generator-mechanics.js
           node --check npc-profile-generator-core.js
           node --check npc-profile-generator-entry.js
           node --check npc-profile-generator-ui.js
           node --check npc-profile-generator-renderer.js
+          node --check npc-profile-generator-mechanics-ui.js
           node --check npc-profile-generator-depth-data.js
           node --check npc-profile-generator-household-data.js
           node --check npc-profile-generator-operation-data.js
+          node --check npc-profile-generator-mechanics-data.js
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
           node --check scripts/validate-npc-phase-1.mjs
           node --check scripts/validate-npc-phase-2.mjs
@@ -56,11 +59,12 @@ jobs:
           node --check scripts/validate-npc-phase-6.mjs
           node --check scripts/validate-npc-phase-7.mjs
           node --check scripts/validate-npc-phase-8.mjs
+          node --check scripts/validate-npc-phase-9.mjs
 
       - name: Validate current universal NPC milestone
-        run: node scripts/validate-npc-phase-8.mjs
+        run: node scripts/validate-npc-phase-9.mjs
 
-      - name: Record Phase 8 CI pass
+      - name: Record Phase 9 CI pass
         if: github.actor != 'github-actions[bot]'
         env:
           VALIDATED_SHA: ${{ github.sha }}
@@ -70,19 +74,19 @@ jobs:
           const receipt = {
             receiptType: 'npcPhaseCiReceipt',
             projectId: 'universal-npc-profile-generator',
-            phaseId: 'phase-8-archetype-specific-modules',
+            phaseId: 'phase-9-mechanical-profile-generation',
             status: 'passed',
             validatedCommit: process.env.VALIDATED_SHA,
-            validator: 'scripts/validate-npc-phase-8.mjs',
+            validator: 'scripts/validate-npc-phase-9.mjs',
             workflow: '.github/workflows/pages.yml'
           };
-          fs.writeFileSync('data/npc-generator/fixtures/phase-8-ci-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
+          fs.writeFileSync('data/npc-generator/fixtures/phase-9-ci-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
           NODE
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/npc-generator/fixtures/phase-8-ci-receipt.json
+          git add data/npc-generator/fixtures/phase-9-ci-receipt.json
           if ! git diff --cached --quiet; then
-            git commit -m "Record NPC phase 8 CI pass [skip ci]"
+            git commit -m "Record NPC phase 9 CI pass [skip ci]"
             git push
           fi
 
