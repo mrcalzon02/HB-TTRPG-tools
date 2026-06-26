@@ -33,11 +33,40 @@ jobs:
           node --check character-sheet-title.js
           node --check barotrauma-primer-click-fix.js
           node --check barotrauma-primer-page.js
+          node --check npc-generator-foundation.js
+          node --check npc-generator-compose.js
+          node --check npc-generator-household-core.js
+          node --check npc-generator-household-records.js
+          node --check npc-generator-relationship-records.js
+          node --check npc-generator-household.js
+          node --check npc-generator-operations.js
+          node --check npc-profile-generator-core.js
+          node --check npc-profile-generator-entry.js
+          node --check npc-profile-generator-ui.js
+          node --check npc-profile-generator-renderer.js
+          node --check npc-profile-generator-depth-data.js
+          node --check npc-profile-generator-household-data.js
+          node --check npc-profile-generator-operation-data.js
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
           node --check scripts/validate-npc-phase-1.mjs
+          node --check scripts/validate-npc-phase-2.mjs
+          node --check scripts/validate-npc-phase-3.mjs
+          node --check data/npc-generator/validate-phase-4.mjs
+          node --check scripts/validate-npc-phase-5.mjs
+          node --check scripts/validate-npc-phase-6.mjs
+          node --check scripts/validate-npc-phase-7.mjs
+          node --check scripts/validate-npc-phase-8.mjs
 
-      - name: Validate universal NPC phase 1 contracts
-        run: node scripts/validate-npc-phase-1.mjs
+      - name: Validate universal NPC milestone contracts
+        run: |
+          node scripts/validate-npc-phase-1.mjs
+          node scripts/validate-npc-phase-2.mjs
+          node scripts/validate-npc-phase-3.mjs
+          node data/npc-generator/validate-phase-4.mjs
+          node scripts/validate-npc-phase-5.mjs
+          node scripts/validate-npc-phase-6.mjs
+          node scripts/validate-npc-phase-7.mjs
+          node scripts/validate-npc-phase-8.mjs
 
       - name: Install Chromium
         run: |
