@@ -3,7 +3,7 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-8-archetype-specific-modules",
   "status": "passed",
-  "validatedCommit": "c3fdaffcb667a8583d9d7517a33c307f59f0bb6f",
+  "validatedCommit": "915ccec45b6557eb4be0c522300e8ca061697b31",
   "validator": "scripts/validate-npc-phase-8.mjs",
   "workflow": ".github/workflows/pages.yml"
 }
