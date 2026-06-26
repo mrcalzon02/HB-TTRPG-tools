@@ -15,7 +15,66 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  p0-editor-gate:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate mainline editor contracts
+        run: |
+          node scripts/validate-crafting-data.mjs
+          node scripts/validate-editor-roadmap.mjs
+          node scripts/validate-editor-kernel.mjs
+          node scripts/validate-editor-migrations.mjs
+          node scripts/validate-editor-adapter-integration.mjs
+          node scripts/validate-editor-inheritance.mjs
+          node scripts/validate-editor-drafts.mjs
+          node scripts/validate-editor-lifecycle.mjs
+          node scripts/validate-editor-repository.mjs
+          node scripts/validate-editor-runtime-structure.mjs
+          node scripts/validate-p0-browser-verification.mjs
+
+      - name: Check P0 browser JavaScript
+        run: |
+          node --check kaysender-editor-live-smoke.js
+          node --check kaysender-editor-smoke-runtime.js
+          node --check scripts/run-p0-browser-verification.mjs
+          node --check scripts/validate-p0-browser-verification.mjs
+
+      - name: Install Chromium verification runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.60.0
+          npx playwright install --with-deps chromium
+
+      - name: Run P0 browser verification
+        run: node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png artifacts/p0-browser-verification-failure.json
+
+      - name: Validate P0 browser verification receipt
+        run: node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json
+
+      - name: Upload P0 browser verification evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: p0-browser-verification
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Remove P0 browser dependencies
+        if: ${{ always() }}
+        run: rm -rf node_modules
+
   deploy:
+    needs: p0-editor-gate
     environment:
       name: github-pages
     runs-on: ubuntu-latest
