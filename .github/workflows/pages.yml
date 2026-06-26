@@ -62,23 +62,35 @@ jobs:
           node --check scripts/validate-npc-phase-9.mjs
 
       - name: Validate current universal NPC milestone
-        run: node scripts/validate-npc-phase-9.mjs
+        id: npc_gate
+        shell: bash
+        run: |
+          set +e
+          node scripts/validate-npc-phase-9.mjs > phase-9-validator-output.txt 2>&1
+          status=$?
+          cat phase-9-validator-output.txt
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
 
-      - name: Record Phase 9 CI pass
+      - name: Record Phase 9 CI result
         if: github.actor != 'github-actions[bot]'
         env:
           VALIDATED_SHA: ${{ github.sha }}
+          VALIDATION_STATUS: ${{ steps.npc_gate.outputs.status }}
         run: |
           node - <<'NODE'
           const fs = require('node:fs');
+          const statusCode = Number(process.env.VALIDATION_STATUS || 1);
           const receipt = {
             receiptType: 'npcPhaseCiReceipt',
             projectId: 'universal-npc-profile-generator',
             phaseId: 'phase-9-mechanical-profile-generation',
-            status: 'passed',
+            status: statusCode === 0 ? 'passed' : 'failed',
             validatedCommit: process.env.VALIDATED_SHA,
             validator: 'scripts/validate-npc-phase-9.mjs',
-            workflow: '.github/workflows/pages.yml'
+            workflow: '.github/workflows/pages.yml',
+            exitCode: statusCode,
+            output: fs.readFileSync('phase-9-validator-output.txt', 'utf8').trim().split('\n').slice(-120)
           };
           fs.writeFileSync('data/npc-generator/fixtures/phase-9-ci-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
           NODE
@@ -86,9 +98,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/npc-generator/fixtures/phase-9-ci-receipt.json
           if ! git diff --cached --quiet; then
-            git commit -m "Record NPC phase 9 CI pass [skip ci]"
+            git commit -m "Record NPC phase 9 CI result [skip ci]"
             git push
           fi
+
+      - name: Enforce NPC milestone gate
+        if: steps.npc_gate.outputs.status != '0'
+        run: exit 1
 
       - name: Install Chromium
         run: |
