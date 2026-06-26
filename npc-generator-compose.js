@@ -55,13 +55,14 @@
     return generated;
   }
 
-  function provenanceFor(previous,packId,archetypeId,override) {
+  function provenanceFor(previous,packId,archetypeId,override,additionalPackIds=[]) {
     if (override) return F.clone(override);
-    if (!previous?.provenance) return {createdBy:'generator',sourcePackIds:[packId],sourceEntryIds:[archetypeId],migratedFromSchema:null,notes:[]};
+    const sourcePackIds=[packId,...(additionalPackIds||[])].filter(Boolean);
+    if (!previous?.provenance) return {createdBy:'generator',sourcePackIds:[...new Set(sourcePackIds)],sourceEntryIds:[archetypeId],migratedFromSchema:null,notes:[]};
     const prior=F.clone(previous.provenance);
     return {
       createdBy:'user',
-      sourcePackIds:[...new Set([...(prior.sourcePackIds||[]),packId])],
+      sourcePackIds:[...new Set([...(prior.sourcePackIds||[]),...sourcePackIds])],
       sourceEntryIds:[...new Set([...(prior.sourceEntryIds||[]),archetypeId])],
       migratedFromSchema:prior.migratedFromSchema??null,
       notes:F.clone(prior.notes||[])
@@ -103,11 +104,11 @@
       profileId:config.profileId || config.previousProfile?.profileId || F.generatedProfileId(seed,packId,archetype.id),
       revision:Number(config.revision || config.previousProfile?.revision || 1),
       createdAt:config.previousProfile?.createdAt || timestamp,updatedAt:timestamp,
-      generator:{generatorId:GENERATOR_ID,generatorVersion:VERSION,packId,packVersion:pack.version || '0.0.0',seed,mode,rerollCounters:counters},
+      generator:{generatorId:GENERATOR_ID,generatorVersion:VERSION,packId,packVersion:pack.version || '0.0.0',seed,mode,rerollCounters:counters,customPackIds:F.clone(pack.activeCustomPackIds||[])},
       archetype:{id:archetype.id,label:archetype.label,parentId:archetype.parentId || null,subtypeId:null,tags:F.clone(archetype.tags || [])},
       identity:F.generateIdentity(pack,rootRng,diagnostics,config.options || {},counters,mode),
       sections,locks:F.clone(config.locks || []),diagnostics:[],
-      provenance:provenanceFor(config.previousProfile,packId,archetype.id,config.provenance)
+      provenance:provenanceFor(config.previousProfile,packId,archetype.id,config.provenance,pack.activeCustomPackIds||[])
     };
 
     applyLocks(profile,config.previousProfile,config.locks || [],diagnostics);
