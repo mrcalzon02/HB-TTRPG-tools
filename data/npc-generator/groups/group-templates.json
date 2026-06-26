@@ -1,0 +1,201 @@
+{
+  "dataType": "npcGroupTemplates",
+  "schemaVersion": "1.0.0",
+  "packId": "generic-fantasy-core",
+  "version": "0.1.0",
+  "templates": [
+    {
+      "id": "household",
+      "label": "Household",
+      "groupKind": "household",
+      "sizeRange": [2, 7],
+      "sharedSurnamePolicy": "required",
+      "organizationKind": "household",
+      "locationKind": "residence",
+      "leaderRoleId": "household-head",
+      "secondRoleId": "partner",
+      "tables": {"name":"householdNames","location":"householdLocations","objective":"householdObjectives","problem":"householdProblems","resources":"householdResources"},
+      "roles": [
+        {"id":"household-head","label":"Household head","minimum":1,"maximum":1,"archetypeIds":["civilian-general","commercial-merchant","commercial-craft-worker","elite-noble"],"leadershipRank":3,"reportsToRoleId":null,"surnamePolicy":"shared","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"partner","label":"Partner","minimum":0,"maximum":1,"archetypeIds":["civilian-general","commercial-merchant","commercial-craft-worker"],"leadershipRank":2,"reportsToRoleId":"household-head","surnamePolicy":"shared","relationshipToLeader":"partner","reciprocalFromLeader":"partner"},
+        {"id":"dependent","label":"Dependent","minimum":1,"maximum":3,"archetypeIds":["civilian-general"],"leadershipRank":0,"reportsToRoleId":"household-head","surnamePolicy":"shared","ageBands":["child","adolescent"],"relationshipToLeader":"child","reciprocalFromLeader":"parent"},
+        {"id":"relative","label":"Resident relative","minimum":0,"maximum":2,"archetypeIds":["civilian-general","civilian-laborer"],"leadershipRank":1,"reportsToRoleId":"household-head","surnamePolicy":"shared","relationshipToLeader":"relative","reciprocalFromLeader":"relative"}
+      ],
+      "peerRelationship": {"type":"household-member","reciprocalType":"household-member"}
+    },
+    {
+      "id": "business",
+      "label": "Business Staff",
+      "groupKind": "business",
+      "sizeRange": [3, 8],
+      "sharedSurnamePolicy": "optional",
+      "organizationKind": "business",
+      "locationKind": "workplace",
+      "leaderRoleId": "proprietor",
+      "secondRoleId": "senior-specialist",
+      "tables": {"name":"businessNames","location":"businessLocations","objective":"businessObjectives","problem":"businessProblems","resources":"businessResources"},
+      "roles": [
+        {"id":"proprietor","label":"Proprietor","minimum":1,"maximum":1,"archetypeIds":["commercial-merchant","commercial-craft-worker","commercial-banker"],"leadershipRank":4,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"senior-specialist","label":"Senior specialist","minimum":1,"maximum":2,"archetypeIds":["commercial-craft-worker","commercial-merchant","civilian-general"],"leadershipRank":3,"reportsToRoleId":"proprietor","surnamePolicy":"independent","relationshipToLeader":"employee","reciprocalFromLeader":"employer"},
+        {"id":"worker","label":"Worker","minimum":1,"maximum":4,"archetypeIds":["civilian-laborer","civilian-general"],"leadershipRank":1,"reportsToRoleId":"senior-specialist","surnamePolicy":"independent","relationshipToLeader":"employee","reciprocalFromLeader":"employer"},
+        {"id":"apprentice","label":"Apprentice","minimum":0,"maximum":2,"archetypeIds":["civilian-general","commercial-craft-worker"],"leadershipRank":0,"reportsToRoleId":"senior-specialist","surnamePolicy":"independent","ageBands":["adolescent","adult"],"relationshipToLeader":"apprentice","reciprocalFromLeader":"master"}
+      ],
+      "peerRelationship": {"type":"colleague","reciprocalType":"colleague"}
+    },
+    {
+      "id": "patrol",
+      "label": "Guard Patrol",
+      "groupKind": "patrol",
+      "sizeRange": [3, 7],
+      "sharedSurnamePolicy": "none",
+      "organizationKind": "watch",
+      "locationKind": "patrol-district",
+      "leaderRoleId": "patrol-sergeant",
+      "secondRoleId": "senior-guard",
+      "tables": {"name":"patrolNames","location":"patrolLocations","objective":"patrolObjectives","problem":"patrolProblems","resources":"patrolResources"},
+      "roles": [
+        {"id":"patrol-sergeant","label":"Patrol sergeant","minimum":1,"maximum":1,"archetypeIds":["authority-city-guard"],"leadershipRank":4,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"senior-guard","label":"Senior guard","minimum":0,"maximum":1,"archetypeIds":["authority-city-guard"],"leadershipRank":3,"reportsToRoleId":"patrol-sergeant","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"commander"},
+        {"id":"guard","label":"Guard","minimum":2,"maximum":5,"archetypeIds":["authority-city-guard"],"leadershipRank":1,"reportsToRoleId":"patrol-sergeant","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"commander"}
+      ],
+      "peerRelationship": {"type":"patrol-partner","reciprocalType":"patrol-partner"}
+    },
+    {
+      "id": "squad",
+      "label": "Military Squad",
+      "groupKind": "squad",
+      "sizeRange": [5, 10],
+      "sharedSurnamePolicy": "none",
+      "organizationKind": "military-unit",
+      "locationKind": "duty-station",
+      "leaderRoleId": "squad-leader",
+      "secondRoleId": "second-in-command",
+      "tables": {"name":"squadNames","location":"squadLocations","objective":"squadObjectives","problem":"squadProblems","resources":"squadResources"},
+      "roles": [
+        {"id":"squad-leader","label":"Squad leader","minimum":1,"maximum":1,"archetypeIds":["military-soldier"],"leadershipRank":5,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"second-in-command","label":"Second in command","minimum":1,"maximum":1,"archetypeIds":["military-soldier"],"leadershipRank":4,"reportsToRoleId":"squad-leader","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"commander"},
+        {"id":"soldier","label":"Soldier","minimum":3,"maximum":7,"archetypeIds":["military-soldier"],"leadershipRank":1,"reportsToRoleId":"second-in-command","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"commander"},
+        {"id":"specialist","label":"Squad specialist","minimum":0,"maximum":2,"archetypeIds":["military-soldier","commercial-craft-worker"],"leadershipRank":2,"reportsToRoleId":"second-in-command","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"commander"}
+      ],
+      "peerRelationship": {"type":"squadmate","reciprocalType":"squadmate"}
+    },
+    {
+      "id": "gang",
+      "label": "Criminal Gang",
+      "groupKind": "gang",
+      "sizeRange": [4, 9],
+      "sharedSurnamePolicy": "none",
+      "organizationKind": "criminal-gang",
+      "locationKind": "safehouse",
+      "leaderRoleId": "gang-boss",
+      "secondRoleId": "lieutenant",
+      "tables": {"name":"gangNames","location":"gangLocations","objective":"gangObjectives","problem":"gangProblems","resources":"gangResources"},
+      "roles": [
+        {"id":"gang-boss","label":"Gang boss","minimum":1,"maximum":1,"archetypeIds":["criminal-thief","criminal-bandit"],"leadershipRank":5,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"lieutenant","label":"Lieutenant","minimum":0,"maximum":1,"archetypeIds":["criminal-thief","criminal-bandit"],"leadershipRank":4,"reportsToRoleId":"gang-boss","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"boss"},
+        {"id":"thief","label":"Thief","minimum":1,"maximum":4,"archetypeIds":["criminal-thief"],"leadershipRank":1,"reportsToRoleId":"lieutenant","surnamePolicy":"independent","relationshipToLeader":"gang-affiliate","reciprocalFromLeader":"boss"},
+        {"id":"enforcer","label":"Enforcer","minimum":1,"maximum":3,"archetypeIds":["criminal-bandit","military-soldier"],"leadershipRank":2,"reportsToRoleId":"lieutenant","surnamePolicy":"independent","relationshipToLeader":"gang-affiliate","reciprocalFromLeader":"boss"}
+      ],
+      "peerRelationship": {"type":"gang-affiliate","reciprocalType":"gang-affiliate"}
+    },
+    {
+      "id": "bandit-group",
+      "label": "Bandit Group",
+      "groupKind": "bandit-group",
+      "sizeRange": [4, 10],
+      "sharedSurnamePolicy": "none",
+      "organizationKind": "outlaw-band",
+      "locationKind": "bandit-camp",
+      "leaderRoleId": "bandit-chief",
+      "secondRoleId": "chief-scout",
+      "tables": {"name":"banditGroupNames","location":"banditGroupLocations","objective":"banditGroupObjectives","problem":"banditGroupProblems","resources":"banditGroupResources"},
+      "roles": [
+        {"id":"bandit-chief","label":"Bandit chief","minimum":1,"maximum":1,"archetypeIds":["criminal-bandit"],"leadershipRank":5,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"chief-scout","label":"Chief scout","minimum":1,"maximum":2,"archetypeIds":["criminal-bandit","criminal-thief"],"leadershipRank":3,"reportsToRoleId":"bandit-chief","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"chief"},
+        {"id":"raider","label":"Raider","minimum":2,"maximum":7,"archetypeIds":["criminal-bandit"],"leadershipRank":1,"reportsToRoleId":"bandit-chief","surnamePolicy":"independent","relationshipToLeader":"band-member","reciprocalFromLeader":"chief"}
+      ],
+      "peerRelationship": {"type":"band-member","reciprocalType":"band-member"}
+    },
+    {
+      "id": "noble-household",
+      "label": "Noble Household",
+      "groupKind": "noble-household",
+      "sizeRange": [5, 12],
+      "sharedSurnamePolicy": "role-based",
+      "organizationKind": "noble-house",
+      "locationKind": "estate",
+      "leaderRoleId": "house-noble",
+      "secondRoleId": "steward",
+      "tables": {"name":"nobleHouseNames","location":"nobleHouseLocations","objective":"nobleHouseObjectives","problem":"nobleHouseProblems","resources":"nobleHouseResources"},
+      "roles": [
+        {"id":"house-noble","label":"House noble","minimum":1,"maximum":1,"archetypeIds":["elite-noble"],"leadershipRank":6,"reportsToRoleId":null,"surnamePolicy":"shared","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"house-relative","label":"House relative","minimum":0,"maximum":2,"archetypeIds":["elite-noble"],"leadershipRank":4,"reportsToRoleId":"house-noble","surnamePolicy":"shared","relationshipToLeader":"relative","reciprocalFromLeader":"relative"},
+        {"id":"steward","label":"Steward","minimum":1,"maximum":1,"archetypeIds":["commercial-merchant","civilian-general"],"leadershipRank":5,"reportsToRoleId":"house-noble","surnamePolicy":"independent","relationshipToLeader":"retainer","reciprocalFromLeader":"patron"},
+        {"id":"house-guard","label":"House guard","minimum":1,"maximum":3,"archetypeIds":["authority-city-guard","military-soldier"],"leadershipRank":2,"reportsToRoleId":"steward","surnamePolicy":"independent","relationshipToLeader":"retainer","reciprocalFromLeader":"patron"},
+        {"id":"house-servant","label":"Household servant","minimum":2,"maximum":5,"archetypeIds":["civilian-general","civilian-laborer"],"leadershipRank":0,"reportsToRoleId":"steward","surnamePolicy":"independent","relationshipToLeader":"employee","reciprocalFromLeader":"patron"}
+      ],
+      "peerRelationship": {"type":"household-retainer","reciprocalType":"household-retainer"}
+    },
+    {
+      "id": "guild-team",
+      "label": "Guild Team",
+      "groupKind": "guild-team",
+      "sizeRange": [3, 8],
+      "sharedSurnamePolicy": "none",
+      "organizationKind": "guild-team",
+      "locationKind": "guild-worksite",
+      "leaderRoleId": "guild-master",
+      "secondRoleId": "senior-journeyworker",
+      "tables": {"name":"guildTeamNames","location":"guildTeamLocations","objective":"guildTeamObjectives","problem":"guildTeamProblems","resources":"guildTeamResources"},
+      "roles": [
+        {"id":"guild-master","label":"Guild master","minimum":1,"maximum":1,"archetypeIds":["commercial-craft-worker","commercial-merchant"],"leadershipRank":5,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"senior-journeyworker","label":"Senior journeyworker","minimum":1,"maximum":2,"archetypeIds":["commercial-craft-worker"],"leadershipRank":3,"reportsToRoleId":"guild-master","surnamePolicy":"independent","relationshipToLeader":"journeyworker","reciprocalFromLeader":"master"},
+        {"id":"journeyworker","label":"Journeyworker","minimum":0,"maximum":2,"archetypeIds":["commercial-craft-worker","civilian-laborer"],"leadershipRank":2,"reportsToRoleId":"senior-journeyworker","surnamePolicy":"independent","relationshipToLeader":"journeyworker","reciprocalFromLeader":"master"},
+        {"id":"guild-apprentice","label":"Guild apprentice","minimum":1,"maximum":3,"archetypeIds":["civilian-general","commercial-craft-worker"],"leadershipRank":0,"reportsToRoleId":"senior-journeyworker","surnamePolicy":"independent","ageBands":["adolescent","adult"],"relationshipToLeader":"apprentice","reciprocalFromLeader":"master"},
+        {"id":"guild-clerk","label":"Guild clerk","minimum":0,"maximum":1,"archetypeIds":["civilian-general"],"leadershipRank":1,"reportsToRoleId":"guild-master","surnamePolicy":"independent","relationshipToLeader":"employee","reciprocalFromLeader":"employer"}
+      ],
+      "peerRelationship": {"type":"guild-colleague","reciprocalType":"guild-colleague"}
+    },
+    {
+      "id": "crew",
+      "label": "Airship Crew",
+      "groupKind": "crew",
+      "sizeRange": [6, 14],
+      "sharedSurnamePolicy": "none",
+      "organizationKind": "ship-crew",
+      "locationKind": "airship",
+      "leaderRoleId": "captain",
+      "secondRoleId": "first-officer",
+      "tables": {"name":"crewNames","location":"crewLocations","objective":"crewObjectives","problem":"crewProblems","resources":"crewResources"},
+      "roles": [
+        {"id":"captain","label":"Captain","minimum":1,"maximum":1,"archetypeIds":["military-soldier","commercial-merchant","elite-noble"],"leadershipRank":6,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"first-officer","label":"First officer","minimum":1,"maximum":1,"archetypeIds":["military-soldier"],"leadershipRank":5,"reportsToRoleId":"captain","surnamePolicy":"independent","relationshipToLeader":"subordinate","reciprocalFromLeader":"captain"},
+        {"id":"technical-crew","label":"Technical crew","minimum":1,"maximum":3,"archetypeIds":["commercial-craft-worker"],"leadershipRank":2,"reportsToRoleId":"first-officer","surnamePolicy":"independent","relationshipToLeader":"crew-member","reciprocalFromLeader":"captain"},
+        {"id":"deck-crew","label":"Deck crew","minimum":2,"maximum":5,"archetypeIds":["civilian-laborer","civilian-general"],"leadershipRank":1,"reportsToRoleId":"first-officer","surnamePolicy":"independent","relationshipToLeader":"crew-member","reciprocalFromLeader":"captain"},
+        {"id":"security-crew","label":"Security crew","minimum":0,"maximum":3,"archetypeIds":["military-soldier","authority-city-guard"],"leadershipRank":2,"reportsToRoleId":"first-officer","surnamePolicy":"independent","relationshipToLeader":"crew-member","reciprocalFromLeader":"captain"},
+        {"id":"mystical-support","label":"Mystical support","minimum":0,"maximum":2,"archetypeIds":["civilian-general"],"leadershipRank":2,"reportsToRoleId":"first-officer","surnamePolicy":"independent","relationshipToLeader":"crew-member","reciprocalFromLeader":"captain"}
+      ],
+      "peerRelationship": {"type":"crewmate","reciprocalType":"crewmate"}
+    },
+    {
+      "id": "traveling-party",
+      "label": "Traveling Party",
+      "groupKind": "traveling-party",
+      "sizeRange": [3, 8],
+      "sharedSurnamePolicy": "none",
+      "organizationKind": "traveling-party",
+      "locationKind": "route-or-camp",
+      "leaderRoleId": "party-leader",
+      "secondRoleId": "guide",
+      "tables": {"name":"travelingPartyNames","location":"travelingPartyLocations","objective":"travelingPartyObjectives","problem":"travelingPartyProblems","resources":"travelingPartyResources"},
+      "roles": [
+        {"id":"party-leader","label":"Party leader","minimum":1,"maximum":1,"archetypeIds":["commercial-merchant","military-soldier","civilian-general"],"leadershipRank":5,"reportsToRoleId":null,"surnamePolicy":"independent","relationshipToLeader":null,"reciprocalFromLeader":null},
+        {"id":"guide","label":"Guide","minimum":0,"maximum":1,"archetypeIds":["civilian-laborer","military-soldier"],"leadershipRank":3,"reportsToRoleId":"party-leader","surnamePolicy":"independent","relationshipToLeader":"traveling-companion","reciprocalFromLeader":"traveling-companion"},
+        {"id":"guard","label":"Guard","minimum":1,"maximum":3,"archetypeIds":["military-soldier","authority-city-guard"],"leadershipRank":2,"reportsToRoleId":"party-leader","surnamePolicy":"independent","relationshipToLeader":"guard","reciprocalFromLeader":"protected-person"},
+        {"id":"specialist","label":"Specialist","minimum":1,"maximum":3,"archetypeIds":["commercial-craft-worker","civilian-general","commercial-merchant"],"leadershipRank":2,"reportsToRoleId":"party-leader","surnamePolicy":"independent","relationshipToLeader":"traveling-companion","reciprocalFromLeader":"traveling-companion"},
+        {"id":"traveler","label":"Traveler","minimum":0,"maximum":3,"archetypeIds":["civilian-general","civilian-laborer"],"leadershipRank":0,"reportsToRoleId":"party-leader","surnamePolicy":"independent","relationshipToLeader":"traveling-companion","reciprocalFromLeader":"traveling-companion"}
+      ],
+      "peerRelationship": {"type":"traveling-companion","reciprocalType":"traveling-companion"}
+    }
+  ]
+}
