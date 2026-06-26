@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "6f44c5aea1af6d3fcba78237af403483efa450ba",
+  "validatedCommit": "390012e970ae4344fe40e678a4d944d3d3831fe7",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -12,12 +12,12 @@
     "receipt": "scripts/validate-p0-browser-verification.mjs"
   },
   "exitCodes": {
-    "static": 1,
+    "static": 0,
     "browser": 1
   },
   "artifact": "p0-browser-verification",
   "browserReceiptPresent": false,
-  "browserFailurePresent": false,
+  "browserFailurePresent": true,
   "staticOutput": [
     "Crafting data validation passed.",
     "Templates: 43",
@@ -48,17 +48,29 @@
     "Verified edit generations, stale autosave rejection, stale manual checkpoint rejection, current autosave completion, failed autosave retention, and current manual save completion.",
     "Editor repository validation passed.",
     "Verified idempotent saves, stale revision rejection, same-revision conflict rejection, transactional rollback, live listings, malformed-record repair, and explicit deletion.",
-    "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-runtime-structure.mjs:8",
-    "const fail=message=>{throw new Error(message);};",
-    "                           ^",
-    "Error: Built-in editor adapters is missing 'fieldMap: {'.",
-    "    at fail (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-runtime-structure.mjs:8:28)",
-    "    at requireMarkers (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-runtime-structure.mjs:11:59)",
-    "    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-runtime-structure.mjs:65:1",
-    "Node.js v20.20.2"
+    "Editor adapter integration validation passed.",
+    "Verified adapter schemas, migrations, current/outdated/future imports, local-envelope schema validation, default 1.0.0 wrapping, and wrong-profile diagnostics.",
+    "Editor inheritance validation passed.",
+    "Verified pinned references, embedded-context identity restoration, source revisions, invalid policy rejection, invalid revision rejection, and legacy reference normalization.",
+    "Recovery draft load failed for floating-island-editor: Error: synthetic draft read failure",
+    "    at FaultStorage.getItem (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-drafts.mjs:17:29)",
+    "    at loadDraft (kaysender-editor-kernel.js:348:36)",
+    "    at Object.loadDraft (kaysender-editor-kernel-adapters.js:128:14)",
+    "    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-drafts.mjs:94:21",
+    "Editor recovery draft validation passed.",
+    "Verified valid save/load, explicit-only clearing, invalid-envelope rejection, quota failure handling, read failure handling, clear failure handling, and successful recovery after storage errors.",
+    "Editor lifecycle validation passed.",
+    "Verified edit generations, stale autosave rejection, stale manual checkpoint rejection, current autosave completion, failed autosave retention, and current manual save completion.",
+    "Editor repository validation passed.",
+    "Verified idempotent saves, stale revision rejection, same-revision conflict rejection, transactional rollback, live listings, malformed-record repair, and explicit deletion.",
+    "Shared editor runtime structure validation passed.",
+    "Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, split internal P0 smoke loading, and the expanded persistent browser chain.",
+    "P0 browser verification contract validation passed.",
+    "Verified split internal smoke runtime, receipt schema, persistent editor chain, exact pinned parent revisions, Chromium runner, artifact retention, and Pages deployment ordering."
   ],
   "browserOutput": [
-    "P0 browser verification was skipped because static validation failed."
+    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, migrated, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-526654f6c0d6 schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d64d8b2a8a52 changed revision 1 to 2.",
+    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, migrated, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-526654f6c0d6 schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d64d8b2a8a52 changed revision 1 to 2."
   ],
-  "recordedAt": "2026-06-26T21:36:29.677Z"
+  "recordedAt": "2026-06-26T21:39:42.570Z"
 }
