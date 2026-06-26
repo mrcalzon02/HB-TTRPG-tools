@@ -28,12 +28,16 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Check Primer JavaScript
+      - name: Check project JavaScript
         run: |
           node --check character-sheet-title.js
           node --check barotrauma-primer-click-fix.js
           node --check barotrauma-primer-page.js
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
+          node --check scripts/validate-npc-phase-1.mjs
+
+      - name: Validate universal NPC phase 1 contracts
+        run: node scripts/validate-npc-phase-1.mjs
 
       - name: Install Chromium
         run: |
