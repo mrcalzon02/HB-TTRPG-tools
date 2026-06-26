@@ -2,11 +2,13 @@ import {
   fixture,GroupData,templateDocument,tableDocument,ledger,clone,setPath
 } from './npc-phase-13-validation-fixture.mjs';
 import { assertStaticContracts } from './npc-phase-13-validation-assertions.mjs';
+import { assertGroupUiContracts } from './npc-phase-13-ui-assertions.mjs';
 
 export function runTemplateCases(){
   const failures=[];
   const fail=message=>failures.push(message);
   assertStaticContracts(fail);
+  assertGroupUiContracts(fail);
   let invalidCases=0;
 
   for(const testCase of fixture.invalidTemplateCases){
