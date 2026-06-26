@@ -1,0 +1,133 @@
+{
+  "packType": "npcCustomPack",
+  "schemaVersion": "1.0.0",
+  "packId": "frostmarch-campaign",
+  "version": "1.0.0",
+  "title": "Frostmarch Campaign",
+  "description": "Adds Frostborn names, ancestry rules, a Frost Warden archetype, winter patrol operations, and open-d20 mechanics.",
+  "author": "Christopher Vardeman",
+  "license": null,
+  "compatibility": {
+    "generatorMinVersion": "0.1.0",
+    "generatorMaxMajor": 0,
+    "profileSchemaVersion": "1.0.0",
+    "basePackId": "generic-fantasy-core"
+  },
+  "dependencies": [],
+  "names": {
+    "givenNames": ["Eira", "Haldor", "Kiva", "Rimek", "Svala", "Torren"],
+    "familyNames": ["Coldwater", "Frostmere", "Icevein", "Snowward"],
+    "languages": ["Frost Cant"]
+  },
+  "ancestries": [
+    {
+      "id": "frostborn",
+      "label": "Frostborn",
+      "ageRanges": {
+        "child": [0, 11],
+        "adolescent": [12, 17],
+        "adult": [18, 59],
+        "middle-aged": [60, 109],
+        "elderly": [110, 160]
+      },
+      "householdRule": {
+        "adultThreshold": 18,
+        "elderThreshold": 110,
+        "maxAge": 160,
+        "parentGapMin": 17,
+        "parentGapMax": 60,
+        "siblingSpread": 18,
+        "partnerSpread": 20
+      }
+    }
+  ],
+  "tables": {
+    "frost-warden-stations": ["North Ice Gate", "White River Watch", "Stormglass Beacon", "Glacier Road Post"],
+    "frost-warden-duties": ["escort winter caravans", "survey unstable ice", "maintain storm markers", "search for missing travelers"],
+    "frost-warden-patrol-areas": ["the White River crossing", "the northern glacier road", "the wind-carved uplands", "the abandoned mining trail"],
+    "frost-warden-hazards": ["whiteout conditions", "thin river ice", "predatory winter beasts", "sudden avalanche risk"],
+    "frost-warden-support": ["sled handlers", "village guides", "signal keepers", "temple healers"],
+    "frost-warden-weather": ["clear but dangerously cold", "rising wind and snow", "unstable thaw", "heavy ice fog"],
+    "frost-warden-supply": ["fully supplied", "short on lamp oil", "winter rations running low", "replacement rope delayed"],
+    "frost-warden-local-pressure": ["villagers demand a wider patrol", "merchants want the road reopened", "command understates the danger", "a missing patrol has not reported"],
+    "frost-warden-secrets": ["an old route remains passable", "the beacon records were altered", "a local guide knows the cause of recent losses", "the patrol found evidence of deliberate sabotage"]
+  },
+  "tableExtensions": {
+    "factions": ["Frostmarch Wardens"],
+    "homelands": ["the Frostmarch"],
+    "currentLocations": ["Frostmarch frontier post"]
+  },
+  "archetypes": [
+    {
+      "archetypeType": "npcArchetype",
+      "schemaVersion": "1.0.0",
+      "id": "frost-warden",
+      "label": "Frost Warden",
+      "family": "mobile-expedition",
+      "parentId": "base-person",
+      "implementationWave": "custom",
+      "description": "A frontier patrol specialist responsible for winter roads, rescue work, storm markers, and isolated settlements.",
+      "tags": ["custom", "frontier", "winter", "patrol"],
+      "generationDefaults": {
+        "mode": "standard",
+        "mechanicalMode": "open-d20-light",
+        "levelMin": 1,
+        "levelMax": 8,
+        "wealthBands": ["poor", "modest", "comfortable"],
+        "ageBands": ["adult", "middle-aged", "elderly"]
+      },
+      "sectionPolicies": {
+        "mechanics": {"policy": "required"},
+        "workContext": {
+          "policy": "substitute",
+          "substituteSection": "winterPatrol",
+          "reason": "Frost Wardens operate through mobile patrol assignments rather than ordinary workplaces."
+        }
+      },
+      "specializedSections": [
+        {
+          "id": "winterPatrol",
+          "label": "Winter Patrol",
+          "fields": [
+            {"id": "station", "label": "Station", "valueType": "reference", "policy": "required", "tableId": "frost-warden-stations"},
+            {"id": "duty", "label": "Duty", "valueType": "string", "policy": "required", "tableId": "frost-warden-duties"},
+            {"id": "patrolArea", "label": "Patrol area", "valueType": "string", "policy": "required", "tableId": "frost-warden-patrol-areas"},
+            {"id": "hazard", "label": "Primary hazard", "valueType": "string", "policy": "optional", "tableId": "frost-warden-hazards"},
+            {"id": "support", "label": "Support", "valueType": "string-list", "policy": "optional", "tableId": "frost-warden-support"}
+          ]
+        }
+      ],
+      "validationRules": []
+    }
+  ],
+  "operationModules": {
+    "frost-warden": {
+      "targetKind": "existing-extension",
+      "label": "Winter Patrol Depth",
+      "fields": [
+        {"id": "weatherCondition", "label": "Weather condition", "valueType": "string", "policy": "required", "tableId": "frost-warden-weather", "minDepth": "standard"},
+        {"id": "supplyCondition", "label": "Supply condition", "valueType": "string", "policy": "required", "tableId": "frost-warden-supply", "minDepth": "standard"},
+        {"id": "localPressure", "label": "Local pressure", "valueType": "string", "policy": "required", "tableId": "frost-warden-local-pressure", "minDepth": "deep"},
+        {"id": "patrolSecret", "label": "Patrol secret", "valueType": "string", "policy": "required", "tableId": "frost-warden-secrets", "minDepth": "deep"}
+      ]
+    }
+  },
+  "mechanicalPackages": {
+    "frost-warden": {
+      "classLabel": "Ranger",
+      "role": "frontier patrol specialist",
+      "hitDie": 10,
+      "attackProgression": "full",
+      "goodSaves": ["fortitude", "reflex"],
+      "primaryAbilities": ["wisdom", "constitution"],
+      "skills": ["survival", "perception", "medicine", "athletics"],
+      "combatOptions": ["spear", "bow", "axe"],
+      "protectionOptions": ["leather", "studded", "mail-shirt"],
+      "equipment": ["winter field kit", "signal lantern", "climbing rope", "storm markers"]
+    }
+  },
+  "levelGuidance": {
+    "frost-warden": [1, 8]
+  },
+  "notes": ["Reference fixture for transactional custom-pack validation and generation."]
+}
