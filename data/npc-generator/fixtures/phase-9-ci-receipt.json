@@ -2,13 +2,16 @@
   "receiptType": "npcPhaseCiReceipt",
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-9-mechanical-profile-generation",
-  "status": "failed",
-  "validatedCommit": "c5175b554ca90d5c2e14815b49cb2032eb916a4a",
+  "status": "passed",
+  "validatedCommit": "aad9034b2d3769954f6cd38c8cdd7d40231972e9",
   "validator": "scripts/validate-npc-phase-9.mjs",
   "workflow": ".github/workflows/pages.yml",
-  "exitCode": 1,
+  "exitCode": 0,
   "output": [
-    "NPC Phase 9 validation failed:",
-    "- Matrix not implemented."
+    "NPC Phase 9 validation passed.",
+    "Mechanical packages verified: 11",
+    "Profiles generated: 1320",
+    "Deterministic Full repeats: 440",
+    "Mechanics reroll changes observed: 11"
   ]
 }
