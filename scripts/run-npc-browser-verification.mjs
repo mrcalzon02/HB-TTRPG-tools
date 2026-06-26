@@ -20,7 +20,7 @@ try{
   browser=await chromium.launch({headless:true});
   const context=await browser.newContext({viewport:matrix.viewports.desktop,acceptDownloads:true});
   await context.grantPermissions(['clipboard-read','clipboard-write'],{origin});
-  await context.addInitScript(keys=>{for(const key of keys)localStorage.removeItem(key);},Object.values(matrix.storageKeys));
+  await context.addInitScript(keys=>{try{for(const key of keys)localStorage.removeItem(key);}catch(_){/* Opaque startup documents do not expose storage. */}},Object.values(matrix.storageKeys));
   const page=await context.newPage();
   page.setDefaultTimeout(matrix.timeouts.action);
   const monitoring=installPageMonitoring(page,origin,'NPC workspace');
