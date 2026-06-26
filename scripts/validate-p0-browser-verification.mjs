@@ -8,7 +8,9 @@ const readJson = async relativePath => JSON.parse(await readText(relativePath));
 const fail = message => { throw new Error(message); };
 
 const schema = await readJson('data/kaysender/editors/p0-browser-verification.schema.json');
-const smoke = await readText('kaysender-editor-live-smoke.js');
+const smokeLoader = await readText('kaysender-editor-live-smoke.js');
+const smokeRuntime = await readText('kaysender-editor-smoke-runtime.js');
+const smoke = `${smokeLoader}\n${smokeRuntime}`;
 const runner = await readText('scripts/run-p0-browser-verification.mjs');
 const workflow = await readText('.github/workflows/pages.yml');
 
@@ -57,6 +59,15 @@ if (inheritanceSchema?.additionalProperties !== false) fail('Browser verificatio
 if (inheritanceSchema?.properties?.policy?.const !== 'pinned-revision') fail('Browser verification inheritance policy must be pinned-revision.');
 
 for (const marker of [
+  'kaysender-editor-smoke-runtime.js',
+  'navigator.webdriver === true',
+  'data-p0-smoke-runtime',
+  'loadP0SmokeRuntime'
+]) {
+  if (!smokeLoader.includes(marker)) fail(`P0 smoke loader is missing contract marker '${marker}'.`);
+}
+
+for (const marker of [
   "const RECEIPT_SCHEMA_VERSION = '1.0.0'",
   "const RECEIPT_STAGE = 'P0'",
   "const RECEIPT_STAGE_ID = 'shared-editor-kernel'",
@@ -73,7 +84,7 @@ for (const marker of [
   'Download Verification Receipt',
   'getKaysenderEditorSmokeReceipt'
 ]) {
-  if (!smoke.includes(marker)) fail(`Browser verification harness is missing contract marker '${marker}'.`);
+  if (!smokeRuntime.includes(marker)) fail(`Browser verification runtime is missing contract marker '${marker}'.`);
 }
 
 for (const marker of [
@@ -176,5 +187,5 @@ if (receiptPath) {
   console.log(`P0 browser verification receipt passed: ${receiptPath}`);
 } else {
   console.log('P0 browser verification contract validation passed.');
-  console.log('Verified receipt schema, expanded persistent browser smoke, exact pinned parent revisions, Chromium runner, direct workflow failure, artifact retention, and Pages deployment ordering.');
+  console.log('Verified split internal smoke runtime, receipt schema, persistent editor chain, exact pinned parent revisions, Chromium runner, artifact retention, and Pages deployment ordering.');
 }
