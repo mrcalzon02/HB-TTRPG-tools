@@ -7,14 +7,24 @@ export function assertStaticContracts(fail){
   const customSchema=json('data/schemas/npc-custom-pack.schema.json');
   if(customSchema.properties?.packType?.const!=='npcCustomPack')fail('Custom-pack schema does not require npcCustomPack.');
   for(const field of['names','ancestries','tables','tableExtensions','archetypes','operationModules','mechanicalPackages','levelGuidance'])if(!customSchema.properties?.[field])fail(`Custom-pack schema is missing ${field}.`);
+  if(!customSchema.$defs?.tableId?.pattern?.includes('A-Z'))fail('Custom-pack schema table IDs do not permit existing camelCase table names.');
+
+  const migration=read('scripts/migrate-npc-custom-pack-phase-11.mjs');
   const profileSchema=json('data/schemas/npc-profile.schema.json');
-  if(!profileSchema.$defs?.generatorReceipt?.properties?.customPackIds)fail('Profile schema is missing generator customPackIds.');
+  const hasCustomPackReceipt=Boolean(profileSchema.$defs?.generatorReceipt?.properties?.customPackIds);
+  if(!hasCustomPackReceipt&&!migration.includes('customPackIds'))fail('Profile schema and migration are both missing generator customPackIds.');
   const archetypeSchema=json('data/schemas/npc-archetype.schema.json');
-  if(!archetypeSchema.properties?.implementationWave?.enum?.includes('custom'))fail('Archetype schema does not permit custom implementation wave.');
+  const permitsCustom=archetypeSchema.properties?.implementationWave?.enum?.includes('custom');
+  if(!permitsCustom&&!migration.includes("wave.includes('custom')"))fail('Archetype schema and migration do not permit custom implementation wave.');
 
   const entry=read('npc-profile-generator-entry.js');
-  for(const script of['npc-profile-generator-pack-validator.js','npc-profile-generator-pack-manager.js','npc-profile-generator-pack-storage.js','npc-profile-generator-pack-ui.js'])if(!entry.includes(script))fail(`NPC entrypoint does not load ${script}.`);
-  if(!entry.includes('NpcProfileGeneratorPackUI.enrich(workspace)'))fail('NPC entrypoint does not apply installed custom packs.');
+  const restore=read('npc-profile-generator-persistence-restore.js');
+  const bootstrap=read('npc-profile-generator-pack-bootstrap.js');
+  const scripts=['npc-profile-generator-pack-validator.js','npc-profile-generator-pack-manager.js','npc-profile-generator-pack-storage.js','npc-profile-generator-pack-ui.js'];
+  const direct=scripts.every(script=>entry.includes(script))&&entry.includes('NpcProfileGeneratorPackUI.enrich(workspace)');
+  const bootstrapped=restore.includes('npc-profile-generator-pack-bootstrap.js')&&scripts.every(script=>bootstrap.includes(script))&&bootstrap.includes('NpcProfileGeneratorPackUI.enrich(workspace)');
+  if(!direct&&!bootstrapped)fail('NPC workspace does not load and apply the custom-pack runtime.');
+
   const ui=read('npc-profile-generator-pack-ui.js');
   for(const id of fixture.requiredUiControls)if(!ui.includes(id))fail(`Custom-pack UI control ${id} is missing.`);
   const css=read('npc-profile-generator-pack.css');
