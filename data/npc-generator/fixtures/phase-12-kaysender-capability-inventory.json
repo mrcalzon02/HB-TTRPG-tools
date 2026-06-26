@@ -1,0 +1,200 @@
+{
+  "fixtureType": "npcPhase12KaysenderCapabilityInventory",
+  "schemaVersion": "1.0.0",
+  "legacyRuntime": {
+    "path": "kaysender-npc-generator.js",
+    "sha": "008314c9c4619564a3b18efafd43fe13257757fa",
+    "moduleId": "npc-crew-generator",
+    "manifestUrl": "data/kaysender/generators/npc-crew-generator.json",
+    "preservationRequired": true,
+    "randomness": "Math.random",
+    "deterministic": false
+  },
+  "sources": [
+    {
+      "path": "data/kaysender/generators/npc-crew-generator.json",
+      "sha": "b9b0fe527db38b30255cb1a142068daa22b8394e",
+      "role": "manifest-classes-setting-pools"
+    },
+    {
+      "path": "data/kaysender/generators/npc-crew/bands-civilian.json",
+      "sha": "1158abf6a333c7b8370e8bb62056ec62275b2f52",
+      "role": "civilian-population-bands",
+      "bandCount": 16
+    },
+    {
+      "path": "data/kaysender/generators/npc-crew/bands-authority.json",
+      "sha": "c1921ed81cd0ead31e49436b9547f0fa2df1dc44",
+      "role": "authority-population-bands",
+      "bandCount": 8
+    },
+    {
+      "path": "data/kaysender/generators/npc-crew/bands-outlaw.json",
+      "sha": "371747c7fdd1f4e796cdf488b87f5d829ad72462",
+      "role": "outlaw-population-bands",
+      "bandCount": 5
+    },
+    {
+      "path": "data/kaysender/generators/npc-crew/bands-airship.json",
+      "sha": "40d74acc705cbf976abd131f3877075ff4a2e9e1",
+      "role": "airship-and-random-population-bands",
+      "bandCount": 8
+    }
+  ],
+  "counts": {
+    "classes": 19,
+    "playerClasses": 11,
+    "npcClasses": 5,
+    "customClasses": 3,
+    "ancestries": 7,
+    "powerTiers": 8,
+    "ageBandChoices": 6,
+    "homeRegions": 14,
+    "factions": 16,
+    "needs": 12,
+    "fears": 12,
+    "loyalties": 12,
+    "secrets": 12,
+    "problems": 12,
+    "dispositions": 12,
+    "populationBands": 37,
+    "bandsWithCrewRoles": 10
+  },
+  "controls": {
+    "populationBand": {
+      "legacySelector": "[data-npc=\"band\"]",
+      "values": "all population-band IDs with random-population first"
+    },
+    "classPool": {
+      "legacySelector": "[data-npc=\"class-pool\"]",
+      "values": ["appropriate", "npc", "pc", "custom", "all"]
+    },
+    "powerTier": {
+      "legacySelector": "[data-npc=\"tier\"]",
+      "values": ["appropriate", "ordinary", "skilled", "veteran", "elite", "heroic", "legendary", "any"]
+    },
+    "ageBand": {
+      "legacySelector": "[data-npc=\"age\"]",
+      "values": ["appropriate", "child", "adolescent", "adult", "middle-aged", "elderly"]
+    },
+    "ancestry": {
+      "legacySelector": "[data-npc=\"ancestry\"]",
+      "values": ["random", "Dwager", "Dragon Kin", "Lizzzefaire", "Hume", "Fae", "Halfling", "Gezistack"]
+    },
+    "count": {
+      "legacySelector": "[data-npc=\"count\"]",
+      "minimum": 1,
+      "maximum": 12,
+      "default": 1
+    }
+  },
+  "classPools": {
+    "pc": ["Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Wizard"],
+    "npc": ["Adept", "Aristocrat", "Commoner", "Expert", "Warrior"],
+    "custom": ["Airship Engineer", "Air Captain", "Sky Warden"]
+  },
+  "ancestries": ["Dwager", "Dragon Kin", "Lizzzefaire", "Hume", "Fae", "Halfling", "Gezistack"],
+  "populationBandGroups": {
+    "civilian": [
+      "children-dependents",
+      "adolescents-apprentices",
+      "elderly-retired",
+      "civilian-laborers",
+      "farmers-herders",
+      "miners-salvagers",
+      "artisans-craftspeople",
+      "service-hospitality",
+      "merchants-traders",
+      "scribes-scholars",
+      "clergy-temple",
+      "healers-medics",
+      "refugees-displaced",
+      "entertainers-performers",
+      "arcane-practitioners",
+      "guild-personnel"
+    ],
+    "authority": [
+      "government-personnel",
+      "nobility-court",
+      "watch-law",
+      "militia-reserve",
+      "professional-soldiers",
+      "military-officers",
+      "mercenaries",
+      "diplomats-envoys"
+    ],
+    "outlaw": [
+      "bandits-raiders",
+      "criminal-underworld",
+      "smugglers-contraband",
+      "pirates-privateers",
+      "prisoners-indentured"
+    ],
+    "airship": [
+      "airship-deck-crew",
+      "airship-command",
+      "airship-technical",
+      "airship-gunnery-security",
+      "airship-mystical-support",
+      "explorers-surveyors",
+      "hunters-guides",
+      "random-population"
+    ]
+  },
+  "crewRoleBands": [
+    "adolescents-apprentices",
+    "military-officers",
+    "smugglers-contraband",
+    "pirates-privateers",
+    "airship-deck-crew",
+    "airship-command",
+    "airship-technical",
+    "airship-gunnery-security",
+    "airship-mystical-support",
+    "explorers-surveyors"
+  ],
+  "legacyOutputRows": [
+    "Population band",
+    "Ancestry and age",
+    "Home region",
+    "Occupation",
+    "Class and level",
+    "Class role",
+    "Ship role",
+    "Faction tie",
+    "Disposition",
+    "Need",
+    "Fear",
+    "Loyalty",
+    "Secret",
+    "Current problem",
+    "Combat readiness",
+    "Open d20 stat stub",
+    "Rules status"
+  ],
+  "legacyAssumptions": [
+    "Empty choice lists return the literal string none.",
+    "The random-population sentinel resolves to one of the other 36 bands.",
+    "Unknown population-band IDs fall back to a random selectable band.",
+    "Unknown ancestry names fall back to a random Kaysender ancestry.",
+    "Population-appropriate age selects one age band from the selected population band.",
+    "Population-appropriate class mode uses weighted preferredClasses and falls back to the NPC class pool.",
+    "Empty or invalid explicit class pools fall back to the NPC class pool.",
+    "Population-appropriate power uses the population band level range; other tiers use their own range.",
+    "Classes with no paths omit the path suffix from the class label.",
+    "Custom classes use conversion-pending stat-stub language instead of numerical Hit Die, attack, and save progression.",
+    "Bands without crew roles emit shore-based or no assigned ship role.",
+    "Cards whose combat-readiness text includes noncombatant receive the scan-clean class.",
+    "Generation count is clamped to the inclusive range 1 through 12.",
+    "Legacy generation is nondeterministic because it uses Math.random directly."
+  ],
+  "adapterRequirements": [
+    "Preserve all six legacy controls and their option semantics.",
+    "Preserve every population band, class pool, power tier, ancestry, occupation, crew role, and global setting pool.",
+    "Emit every legacy output row in the same order and with compatible fallback text.",
+    "Add deterministic seed behavior without changing the legacy runtime.",
+    "Produce both a normalized Kaysender alpha record and a canonical universal NPC profile.",
+    "Preserve conversion-pending status for Kaysender custom classes.",
+    "Never consider the legacy runtime for retirement until the Phase 12 matrix passes."
+  ]
+}
