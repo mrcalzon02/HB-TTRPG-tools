@@ -33,7 +33,8 @@ jobs:
         shell: bash
         run: |
           set +e
-          {
+          (
+            set -e
             node scripts/validate-crafting-data.mjs
             node scripts/validate-editor-roadmap.mjs
             node scripts/validate-editor-kernel.mjs
@@ -49,7 +50,7 @@ jobs:
             node --check kaysender-editor-smoke-runtime.js
             node --check scripts/run-p0-browser-verification.mjs
             node --check scripts/validate-p0-browser-verification.mjs
-          } > p0-static-output.txt 2>&1
+          ) > p0-static-output.txt 2>&1
           status=$?
           echo "$status" > p0-static-status.txt
           cat p0-static-output.txt
@@ -84,18 +85,18 @@ jobs:
         run: |
           test -f p0-browser-output.txt || echo "P0 browser verification was skipped because static validation failed." > p0-browser-output.txt
           test -f p0-browser-status.txt || echo "1" > p0-browser-status.txt
+          mkdir -p artifacts
+          cp p0-static-output.txt artifacts/p0-static-output.txt
+          cp p0-browser-output.txt artifacts/p0-browser-output.txt
+          cp p0-static-status.txt artifacts/p0-static-status.txt
+          cp p0-browser-status.txt artifacts/p0-browser-status.txt
 
       - name: Upload P0 browser verification evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@v5
         with:
           name: p0-browser-verification
-          path: |
-            artifacts/
-            p0-static-output.txt
-            p0-browser-output.txt
-            p0-static-status.txt
-            p0-browser-status.txt
+          path: artifacts/
           if-no-files-found: warn
           retention-days: 30
 
