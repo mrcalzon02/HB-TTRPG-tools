@@ -1,0 +1,300 @@
+{
+  "fixtureType": "npcPhase1ArchetypePackFixtures",
+  "schemaVersion": "1.0.0",
+  "archetypes": {
+    "valid": [
+      {
+        "id": "valid-beggar-archetype",
+        "record": {
+          "archetypeType": "npcArchetype",
+          "schemaVersion": "1.0.0",
+          "id": "marginalized-beggar",
+          "label": "Beggar",
+          "family": "civilian",
+          "parentId": "civilian-general",
+          "implementationWave": "A",
+          "description": "A destitute person whose normal workplace is replaced by a street territory and shelter context.",
+          "tags": [
+            "marginalized",
+            "street",
+            "civilian"
+          ],
+          "generationDefaults": {
+            "mode": "deep",
+            "mechanicalMode": "none",
+            "levelMin": 0,
+            "levelMax": 3,
+            "wealthBands": [
+              "destitute",
+              "poor"
+            ],
+            "ageBands": [
+              "adolescent",
+              "adult",
+              "middle-aged",
+              "elderly"
+            ]
+          },
+          "sectionPolicies": {
+            "identity": {
+              "policy": "required"
+            },
+            "socialEconomic": {
+              "policy": "required"
+            },
+            "residence": {
+              "policy": "weighted-none",
+              "noneWeight": 70
+            },
+            "workContext": {
+              "policy": "not-applicable",
+              "reason": "A beggar has no normal commercial workplace.",
+              "substituteSection": "streetTerritory"
+            },
+            "familyHousehold": {
+              "policy": "optional"
+            },
+            "mechanics": {
+              "policy": "optional"
+            }
+          },
+          "specializedSections": [
+            {
+              "id": "streetTerritory",
+              "label": "Street Territory",
+              "description": "Usual area, sleeping place, cause of destitution, informal support, and local pressure.",
+              "fields": [
+                {
+                  "id": "usualArea",
+                  "label": "Usual area",
+                  "valueType": "string",
+                  "policy": "required",
+                  "tableId": "beggar-usual-areas"
+                },
+                {
+                  "id": "sleepingPlace",
+                  "label": "Sleeping place",
+                  "valueType": "stateful-reference",
+                  "policy": "weighted-none",
+                  "tableId": "beggar-shelters",
+                  "noneWeight": 35
+                },
+                {
+                  "id": "causeOfDestitution",
+                  "label": "Cause of destitution",
+                  "valueType": "string",
+                  "policy": "required",
+                  "tableId": "beggar-causes"
+                },
+                {
+                  "id": "benefactor",
+                  "label": "Benefactor",
+                  "valueType": "stateful-reference",
+                  "policy": "weighted-none",
+                  "tableId": "beggar-benefactors",
+                  "noneWeight": 65
+                }
+              ]
+            }
+          ],
+          "validationRules": [
+            {
+              "id": "beggar-no-normal-business",
+              "severity": "error",
+              "when": [
+                {
+                  "path": "/archetype/id",
+                  "operator": "equals",
+                  "value": "marginalized-beggar"
+                }
+              ],
+              "assert": [
+                {
+                  "path": "/sections/workContext/state",
+                  "operator": "state-is",
+                  "value": "not-applicable"
+                }
+              ],
+              "message": "Beggar profiles must replace a normal workplace with streetTerritory.",
+              "path": "/sections/workContext"
+            }
+          ]
+        }
+      }
+    ],
+    "invalid": [
+      {
+        "id": "invalid-archetype-none-weight",
+        "expectedCodes": [
+          "ARCHETYPE_NONE_WEIGHT_RANGE"
+        ],
+        "record": {
+          "archetypeType": "npcArchetype",
+          "schemaVersion": "1.0.0",
+          "id": "marginalized-beggar-invalid",
+          "label": "Beggar",
+          "family": "civilian",
+          "parentId": "civilian-general",
+          "implementationWave": "A",
+          "description": "Invalid fixture with an impossible absence weight.",
+          "tags": [
+            "marginalized",
+            "street",
+            "civilian"
+          ],
+          "generationDefaults": {
+            "mode": "deep",
+            "mechanicalMode": "none",
+            "levelMin": 0,
+            "levelMax": 3,
+            "wealthBands": [
+              "destitute",
+              "poor"
+            ],
+            "ageBands": [
+              "adolescent",
+              "adult",
+              "middle-aged",
+              "elderly"
+            ]
+          },
+          "sectionPolicies": {
+            "identity": {
+              "policy": "required"
+            },
+            "socialEconomic": {
+              "policy": "required"
+            },
+            "residence": {
+              "policy": "weighted-none",
+              "noneWeight": 140
+            },
+            "workContext": {
+              "policy": "not-applicable",
+              "reason": "A beggar has no normal commercial workplace.",
+              "substituteSection": "streetTerritory"
+            },
+            "familyHousehold": {
+              "policy": "optional"
+            },
+            "mechanics": {
+              "policy": "optional"
+            }
+          },
+          "specializedSections": [
+            {
+              "id": "streetTerritory",
+              "label": "Street Territory",
+              "fields": [
+                {
+                  "id": "usualArea",
+                  "label": "Usual area",
+                  "valueType": "string",
+                  "policy": "required",
+                  "tableId": "beggar-usual-areas"
+                }
+              ]
+            }
+          ],
+          "validationRules": []
+        }
+      }
+    ]
+  },
+  "packs": {
+    "valid": [
+      {
+        "id": "valid-generic-pack",
+        "record": {
+          "packType": "npcGeneratorPack",
+          "schemaVersion": "1.0.0",
+          "packId": "generic-fantasy-core",
+          "version": "0.1.0",
+          "title": "Generic Fantasy Core",
+          "description": "Initial setting-neutral fantasy data pack for the Universal NPC Profile Generator.",
+          "author": "Christopher Vardeman",
+          "license": null,
+          "compatibility": {
+            "generatorMinVersion": "0.1.0",
+            "generatorMaxMajor": 0,
+            "profileSchemaVersion": "1.0.0",
+            "archetypeSchemaVersion": "1.0.0"
+          },
+          "dependencies": [],
+          "archetypeFiles": [
+            "data/npc-generator/archetypes/wave-a.json"
+          ],
+          "dataFiles": {
+            "ancestries": [
+              "data/npc-generator/ancestries/core-fantasy.json"
+            ],
+            "names": [
+              "data/npc-generator/names/core-fantasy-names.json"
+            ],
+            "motivations": [
+              "data/npc-generator/tables/motivations.json"
+            ]
+          },
+          "protectedIdPolicy": {
+            "allowCoreOverrides": false,
+            "namespace": "generic-fantasy-core",
+            "reservedPrefixes": [
+              "core-",
+              "system-"
+            ]
+          },
+          "defaultContext": {
+            "genre": "fantasy",
+            "magicPrevalence": "variable"
+          },
+          "notes": [
+            "Phase 1 structural fixture; referenced data files are created in later phases."
+          ]
+        }
+      }
+    ],
+    "invalid": [
+      {
+        "id": "invalid-pack-id-and-core-override",
+        "expectedCodes": [
+          "PACK_ID_INVALID",
+          "PACK_CORE_OVERRIDE_FORBIDDEN"
+        ],
+        "record": {
+          "packType": "npcGeneratorPack",
+          "schemaVersion": "1.0.0",
+          "packId": "Bad Pack ID",
+          "version": "0.1.0",
+          "title": "Invalid Generic Fantasy Core",
+          "description": "Invalid fixture with a malformed ID and forbidden core override.",
+          "author": "Christopher Vardeman",
+          "license": null,
+          "compatibility": {
+            "generatorMinVersion": "0.1.0",
+            "generatorMaxMajor": 0,
+            "profileSchemaVersion": "1.0.0",
+            "archetypeSchemaVersion": "1.0.0"
+          },
+          "dependencies": [],
+          "archetypeFiles": [
+            "data/npc-generator/archetypes/wave-a.json"
+          ],
+          "dataFiles": {
+            "ancestries": [
+              "data/npc-generator/ancestries/core-fantasy.json"
+            ]
+          },
+          "protectedIdPolicy": {
+            "allowCoreOverrides": true,
+            "namespace": "generic-fantasy-core",
+            "reservedPrefixes": [
+              "core-"
+            ]
+          },
+          "defaultContext": {},
+          "notes": []
+        }
+      }
+    ]
+  }
+}
