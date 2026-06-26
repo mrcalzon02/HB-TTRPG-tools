@@ -3,7 +3,7 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-13-roster-group-generation",
   "status": "passed",
-  "validatedCommit": "aa87fac5208654bbe2431d0e3ec63b3a76b008ca",
+  "validatedCommit": "eb211a55c0cb15118e2eaa98683bc693a16bc415",
   "validator": "scripts/validate-npc-phase-13.mjs",
   "workflow": ".github/workflows/pages.yml",
   "exitCode": 0,
