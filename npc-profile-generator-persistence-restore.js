@@ -34,16 +34,19 @@
     return true;
   };
 
-  function loadCustomPackBootstrap(){
-    if(globalThis.NpcProfileGeneratorPackBootstrap||document.querySelector('script[data-npc-pack-bootstrap]'))return;
+  function loadBootstrap(src,attribute,globalName){
+    if(globalThis[globalName]||document.querySelector(`script[${attribute}]`))return;
     const script=document.createElement('script');
-    script.src='npc-profile-generator-pack-bootstrap.js';
+    script.src=src;
     script.defer=true;
-    script.dataset.npcPackBootstrap='true';
+    script.setAttribute(attribute,'true');
     document.body.appendChild(script);
   }
+  function loadCustomPackBootstrap(){loadBootstrap('npc-profile-generator-pack-bootstrap.js','data-npc-pack-bootstrap','NpcProfileGeneratorPackBootstrap');}
+  function loadGroupBootstrap(){loadBootstrap('npc-profile-generator-group-bootstrap.js','data-npc-group-bootstrap','NpcProfileGeneratorGroupBootstrap');}
 
   Object.defineProperty(prototype,'__persistenceRestoreInstalled',{value:true});
-  globalThis.NpcProfileGeneratorPersistenceRestore=Object.freeze({installed:true,loadCustomPackBootstrap});
+  globalThis.NpcProfileGeneratorPersistenceRestore=Object.freeze({installed:true,loadBootstrap,loadCustomPackBootstrap,loadGroupBootstrap});
   loadCustomPackBootstrap();
+  loadGroupBootstrap();
 })();
