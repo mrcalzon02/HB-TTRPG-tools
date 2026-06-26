@@ -1,0 +1,48 @@
+{
+  "fixtureType": "npcPhase6DepthFixtures",
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-06-25T12:00:00.000Z",
+  "seedsPerArchetype": 25,
+  "modes": ["quick", "standard", "deep"],
+  "archetypeIds": [
+    "civilian-general",
+    "civilian-laborer",
+    "commercial-craft-worker",
+    "commercial-merchant",
+    "commercial-banker",
+    "marginalized-beggar",
+    "authority-city-guard",
+    "military-soldier",
+    "criminal-thief",
+    "criminal-bandit",
+    "elite-noble"
+  ],
+  "quickIdentityNullFields": ["cultureId", "homeland", "currentLocation", "gender"],
+  "standardIdentityRequiredFields": ["cultureId", "homeland", "currentLocation"],
+  "deepIdentityRequiredCollections": ["aliases", "titles"],
+  "standardSectionFields": {
+    "appearance": ["face", "eyes", "hair", "voice", "clothing"],
+    "personality": ["privateDemeanor", "habit", "belief"],
+    "motivations": ["loyalty", "currentPressure"],
+    "background": ["origin", "upbringing", "educationOrTraining", "reasonForBeingHere"]
+  },
+  "deepSectionFields": {
+    "appearance": ["distinctiveMark", "mannerism", "posture"],
+    "personality": ["boundary", "stressResponse", "socialBlindSpot"],
+    "motivations": ["hiddenDesire", "moralLine", "willingSacrifice"],
+    "background": ["recentChange", "unresolvedPast", "reputationOrigin"]
+  },
+  "minimumCharacterizationFields": {
+    "quick": 8,
+    "standard": 20,
+    "deep": 32
+  },
+  "requiredComponentFiles": [
+    "data/npc-generator/tables/deep-profile-tables.json",
+    "data/npc-generator/tables/deep-identity-tables.json",
+    "data/npc-generator/tables/deep-appearance-tables.json",
+    "data/npc-generator/tables/deep-personality-tables.json",
+    "data/npc-generator/tables/deep-motivation-tables.json",
+    "data/npc-generator/tables/deep-background-tables.json"
+  ]
+}
