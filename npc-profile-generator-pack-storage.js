@@ -56,18 +56,22 @@
     try{return{pack:JSON.parse(text),diagnostics:[]};}
     catch(error){return{pack:null,diagnostics:[issue('CUSTOM_PACK_JSON_INVALID','error',error.message)]};
   }
+  function candidatePackList(installed,input,maxPacks=MAX_PACKS){
+    const candidates=(installed||[]).map(clone);
+    const existing=candidates.findIndex(pack=>pack.packId===input.packId);
+    if(existing>=0)candidates.splice(existing,1,clone(input));
+    else candidates.push(clone(input));
+    return candidates.slice(-Number(maxPacks||MAX_PACKS));
+  }
   function installPack(storage,basePack,baseArchetypes,input,options={}){
+    if(!input||typeof input!=='object'||Array.isArray(input))return{ok:false,valid:false,pack:clone(basePack),archetypes:clone(baseArchetypes||[]),appliedPacks:[],diagnostics:[issue('CUSTOM_PACK_NOT_OBJECT','error','Custom pack must be a JSON object.')]};
     const installed=listPacks(storage,options);
-    const retained=installed.packs.filter(pack=>pack.packId!==input?.packId);
-    const existing=Manager.rebuild(basePack,baseArchetypes,retained,options);
-    if(!existing.valid)return{ok:false,...existing,diagnostics:[...installed.diagnostics,...existing.diagnostics]};
-    const validation=Manager.applyCustomPack(existing.pack,existing.archetypes,input,{...options,installedPacks:existing.appliedPacks});
-    if(!validation.valid)return{ok:false,...validation,diagnostics:[...installed.diagnostics,...validation.diagnostics]};
-    const saved=savePack(storage,validation.appliedPack,options);
-    const all=listPacks(storage,options).packs;
-    const rebuilt=Manager.rebuild(basePack,baseArchetypes,all,options);
-    return{ok:saved.ok&&rebuilt.valid,...rebuilt,savedRecord:saved.record,diagnostics:[...installed.diagnostics,...validation.diagnostics,...saved.diagnostics,...rebuilt.diagnostics]};
+    const candidates=candidatePackList(installed.packs,input,options.maxPacks);
+    const rebuilt=Manager.rebuild(basePack,baseArchetypes,candidates,options);
+    if(!rebuilt.valid)return{ok:false,...rebuilt,diagnostics:[...installed.diagnostics,...rebuilt.diagnostics]};
+    const saved=savePack(storage,input,options);
+    return{ok:saved.ok&&rebuilt.valid,...rebuilt,savedRecord:saved.record,diagnostics:[...installed.diagnostics,...rebuilt.diagnostics,...saved.diagnostics]};
   }
 
-  globalThis.NpcProfileGeneratorPackStorage=Object.freeze({STORAGE_KEY,STORAGE_VERSION,MAX_PACK_BYTES,MAX_PACKS,clone,emptyCollection,readCollection,writeCollection,listPacks,savePack,dependentPacks,removePack,parsePack,installPack});
+  globalThis.NpcProfileGeneratorPackStorage=Object.freeze({STORAGE_KEY,STORAGE_VERSION,MAX_PACK_BYTES,MAX_PACKS,clone,emptyCollection,readCollection,writeCollection,listPacks,savePack,dependentPacks,removePack,parsePack,candidatePackList,installPack});
 })();
