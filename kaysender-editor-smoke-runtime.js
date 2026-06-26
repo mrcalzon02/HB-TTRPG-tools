@@ -9,11 +9,47 @@
   const RECEIPT_STAGE_ID = 'shared-editor-kernel';
   const RECEIPT_STORAGE_KEY = 'hb-ttrpg-tools:p0-live-smoke:last-pass';
   const EDITOR_CHAIN = ['floating-island-editor', 'settlement-editor', 'airship-editor'];
+  const VOLATILE_KEYS = new Set(['generatedAt', 'updatedAt', 'exportedAt', 'lastRenderedAt']);
   const results = [];
   let lastReport = null;
 
   const wait = ms => new Promise(resolve => window.setTimeout(resolve, ms));
   const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+
+  function firstDifference(left, right, path = '') {
+    if (Object.is(left, right)) return null;
+    if (Array.isArray(left) || Array.isArray(right)) {
+      if (!Array.isArray(left) || !Array.isArray(right)) return { path, left, right };
+      if (left.length !== right.length) return { path: `${path}.length`, left: left.length, right: right.length };
+      for (let index = 0; index < left.length; index += 1) {
+        const difference = firstDifference(left[index], right[index], `${path}[${index}]`);
+        if (difference) return difference;
+      }
+      return null;
+    }
+    const leftObject = left && typeof left === 'object';
+    const rightObject = right && typeof right === 'object';
+    if (leftObject || rightObject) {
+      if (!leftObject || !rightObject) return { path, left, right };
+      const keys = [...new Set([...Object.keys(left), ...Object.keys(right)])].filter(key => !VOLATILE_KEYS.has(key)).sort();
+      for (const key of keys) {
+        const difference = firstDifference(left[key], right[key], path ? `${path}.${key}` : key);
+        if (difference) return difference;
+      }
+      return null;
+    }
+    return { path, left, right };
+  }
+
+  function describeReopenDifference(expected, active) {
+    const dataDifference = firstDifference(expected.data, active.data, 'data');
+    if (dataDifference) return `${dataDifference.path}: ${JSON.stringify(dataDifference.left)} → ${JSON.stringify(dataDifference.right)}`;
+    const lockDifference = firstDifference(expected.locks || [], active.locks || [], 'locks');
+    if (lockDifference) return `${lockDifference.path}: ${JSON.stringify(lockDifference.left)} → ${JSON.stringify(lockDifference.right)}`;
+    const inheritanceDifference = firstDifference(expected.inheritance || [], active.inheritance || [], 'inheritance');
+    if (inheritanceDifference) return `${inheritanceDifference.path}: ${JSON.stringify(inheritanceDifference.left)} → ${JSON.stringify(inheritanceDifference.right)}`;
+    return 'fingerprint changed, but no nonvolatile first difference was found';
+  }
 
   async function waitFor(selector, timeoutMs = 8000) {
     const started = Date.now();
@@ -187,7 +223,9 @@
     const active = Production().getActiveEnvelope();
     if (!active) throw new Error(`No active envelope was available after reopening ${envelope.profileId}.`);
     if (active.profileId !== envelope.profileId) throw new Error(`Reopening ${envelope.profileId} changed its stable profile ID to ${active.profileId}.`);
-    if (active.revision !== envelope.revision) throw new Error(`Reopening ${envelope.profileId} changed revision ${envelope.revision} to ${active.revision}.`);
+    if (active.revision !== envelope.revision) {
+      throw new Error(`Reopening ${envelope.profileId} changed revision ${envelope.revision} to ${active.revision}; first difference ${describeReopenDifference(envelope, active)}.`);
+    }
     return active;
   }
 
