@@ -3,8 +3,8 @@
   "setting": "Kaysender",
   "stage": "P0",
   "stageId": "shared-editor-kernel",
-  "status": "failed",
-  "validatedCommit": "39adb274f01b3ef7ab1cd77d5f35f3674926de48",
+  "status": "passed",
+  "validatedCommit": "202fe2947d16422fe86f372203ad20b018dcffd5",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -13,11 +13,11 @@
   },
   "exitCodes": {
     "static": 0,
-    "browser": 1
+    "browser": 0
   },
   "artifact": "p0-browser-verification",
-  "browserReceiptPresent": false,
-  "browserFailurePresent": true,
+  "browserReceiptPresent": true,
+  "browserFailurePresent": false,
   "staticOutput": [
     "Crafting data validation passed.",
     "Templates: 43",
@@ -65,14 +65,18 @@
     "Verified idempotent saves, stale revision rejection, same-revision conflict rejection, transactional rollback, live listings, malformed-record repair, and explicit deletion.",
     "Island v3 migration normalization validation passed.",
     "Normalized 4 active cells to 20 km² without weakening canonical validation.",
+    "Settlement inheritance guard validation passed.",
+    "Verified 8 Island-to-Settlement type mappings and legal select fallback behavior.",
     "Shared editor runtime structure validation passed.",
-    "Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, normalized Island migration geometry, split internal P0 smoke loading, and the expanded persistent browser chain.",
+    "Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, normalized Island migration geometry, legal Settlement inheritance controls, exact reopen diagnostics, and the expanded persistent browser chain.",
     "P0 browser verification contract validation passed.",
     "Verified split internal smoke runtime, receipt schema, persistent editor chain, exact pinned parent revisions, Chromium runner, artifact retention, and Pages deployment ordering."
   ],
   "browserOutput": [
-    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-5e0e809b283d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-8f1a431eecba changed revision 1 to 2; first difference data.outputs.summary: \"Unnamed Skyport is a unknown with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\" → \"Unnamed Skyport is a small fortified village with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\".",
-    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-5e0e809b283d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-8f1a431eecba changed revision 1 to 2; first difference data.outputs.summary: \"Unnamed Skyport is a unknown with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\" → \"Unnamed Skyport is a small fortified village with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\"."
+    "P0 browser verification passed in Chromium.",
+    "Receipt written to artifacts/p0-browser-verification.json.",
+    "Temporary persistent records were cleaned up successfully.",
+    "P0 browser verification receipt passed: artifacts/p0-browser-verification.json"
   ],
-  "recordedAt": "2026-06-26T22:55:54.796Z"
+  "recordedAt": "2026-06-26T23:01:14.965Z"
 }
