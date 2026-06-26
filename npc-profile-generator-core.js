@@ -4,12 +4,14 @@
   const assembly = globalThis.NpcProfileGeneratorAssembly;
   const household = globalThis.NpcProfileGeneratorHousehold;
   const operations = globalThis.NpcProfileGeneratorOperations;
+  const mechanics = globalThis.NpcProfileGeneratorMechanics;
   if (!foundation || !assembly) throw new Error('NPC generator foundation and composition modules must load first.');
 
   function generateProfile(config = {}) {
     let result = assembly.generateProfile(config);
     if (household) result = household.enrich(result, config);
     if (operations) result = operations.enrich(result, config);
+    if (mechanics) result = mechanics.enrich(result, config);
     return result;
   }
 
