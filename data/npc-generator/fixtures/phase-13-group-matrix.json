@@ -31,6 +31,22 @@
     "crew",
     "traveling-party"
   ],
+  "requiredUiControls": [
+    "npc-group-template",
+    "npc-group-size",
+    "npc-group-depth",
+    "npc-group-seed",
+    "npc-group-random-seed",
+    "npc-group-generate",
+    "npc-group-diagnostics",
+    "npc-group-output"
+  ],
+  "requiredBootstrapModules": [
+    "npc-profile-generator-group-data.js",
+    "npc-group-generator-foundation.js",
+    "npc-group-generator-core.js",
+    "npc-profile-generator-group-ui.js"
+  ],
   "invalidTemplateCases": [
     {"id":"missing-leader-role","mutation":"leaderRoleId","value":"missing-role","expectedCode":"GROUP_LEADER_ROLE_MISSING"},
     {"id":"missing-reporting-role","mutation":"roles.1.reportsToRoleId","value":"missing-role","expectedCode":"GROUP_REPORTING_ROLE_MISSING"},
@@ -49,6 +65,8 @@
     "Members whose role requires the shared surname use the group surname.",
     "Every profile contains a groupMembership extension and preserves group and template provenance.",
     "All ten group kinds have distinct role structures and shared context.",
-    "Malformed template references and impossible capacities produce actionable diagnostics before generation."
+    "Malformed template references and impossible capacities produce actionable diagnostics before generation.",
+    "The browser exposes template, size, depth, seed, generation, diagnostics, and output controls.",
+    "The group bootstrap waits for completed core data and campaign-pack application before mounting the group UI."
   ]
 }
