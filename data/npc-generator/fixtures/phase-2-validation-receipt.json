@@ -1,0 +1,55 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-2-archetype-applicability-engine",
+  "status": "gate-passed",
+  "validatedThroughCommit": "8f6ca8d8338a85e6af9632310bcff23589afe6da",
+  "validator": "scripts/validate-npc-phase-2.mjs",
+  "executionDate": "2026-06-25",
+  "executionEnvironment": "Local Node.js execution using the exact committed rules runtimes, Wave A policy catalogue, rules fixtures, and active Phase 2 ledger state.",
+  "results": {
+    "archetypesResolved": 12,
+    "inheritanceCasesPassed": 3,
+    "applicabilityCasesPassed": 4,
+    "profileValidationCasesPassed": 5,
+    "invalidGraphCasesRejected": 4,
+    "policyTypesCovered": 8
+  },
+  "verifiedCapabilities": [
+    "parent-policy inheritance",
+    "child-policy overrides",
+    "specialized-section inheritance",
+    "required policies",
+    "optional policies",
+    "weighted-none policies",
+    "unknown-allowed policies",
+    "substitute policies",
+    "derived policies",
+    "prohibited policies",
+    "not-applicable policies",
+    "missing-parent diagnostics",
+    "inheritance-cycle diagnostics",
+    "duplicate-ID diagnostics",
+    "unknown-substitute diagnostics",
+    "required-field diagnostics",
+    "prohibited-section diagnostics",
+    "not-applicable-section diagnostics",
+    "declarative validation rules"
+  ],
+  "files": [
+    "npc-profile-generator-rules-core.js",
+    "npc-profile-generator-rules-validation.js",
+    "data/npc-generator/archetypes/wave-a-policies.json",
+    "data/npc-generator/fixtures/phase-2-rules-fixtures.json",
+    "scripts/validate-npc-phase-2.mjs"
+  ],
+  "workflowIntegration": {
+    "status": "not-written",
+    "reason": "The available GitHub connector write path rejected attempted workflow-file changes. The validator remains directly executable and can be added to CI through a later supported repository write path."
+  },
+  "notes": [
+    "Phase 2 exit requirements are satisfied and Phase 3 may begin.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
