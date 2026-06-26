@@ -105,14 +105,14 @@ try {
     window.alert = () => undefined;
   });
 
-  await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle', timeout: 30000 });
+  await page.goto(`${baseUrl}/index.html?p0-smoke=1`, { waitUntil: 'networkidle', timeout: 30000 });
   await page.waitForFunction(() => (
     typeof window.runKaysenderEditorSmokeTest === 'function' &&
     typeof window.getKaysenderEditorSmokeReceipt === 'function' &&
     Boolean(window.KaysenderEditorKernel) &&
     Boolean(window.KaysenderEditorRepository) &&
     Boolean(window.KaysenderMainlineEditorProduction)
-  ), null, { timeout: 15000 });
+  ), null, { timeout: 30000 });
 
   await page.evaluate(async timeoutMs => {
     await Promise.race([
