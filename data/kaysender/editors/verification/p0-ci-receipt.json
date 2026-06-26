@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "a7e1c366f18fce83ec261c294bcf56b1f43d2e01",
+  "validatedCommit": "23ad1e01f4d567cf1b8df2a124d52bf4e67f5bbe",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -72,5 +72,5 @@
     "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Island did not produce an active canonical envelope.",
     "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Island did not produce an active canonical envelope."
   ],
-  "recordedAt": "2026-06-26T21:42:31.362Z"
+  "recordedAt": "2026-06-26T21:44:06.832Z"
 }
