@@ -108,6 +108,7 @@
       legacyButtonSelectors: ['.editor-launch'],
       hiddenLegacyActionIds: ['island-copy-json', 'island-download-json'],
       cardLinkFlag: 'editorLinked',
+      fieldMap: {},
       flatFieldExclusions: ['outputs', 'derivedScores'],
       parentImports: [],
       open: () => undefined
