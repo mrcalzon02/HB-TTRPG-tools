@@ -55,6 +55,19 @@
     return generated;
   }
 
+  function provenanceFor(previous,packId,archetypeId,override) {
+    if (override) return F.clone(override);
+    if (!previous?.provenance) return {createdBy:'generator',sourcePackIds:[packId],sourceEntryIds:[archetypeId],migratedFromSchema:null,notes:[]};
+    const prior=F.clone(previous.provenance);
+    return {
+      createdBy:'user',
+      sourcePackIds:[...new Set([...(prior.sourcePackIds||[]),packId])],
+      sourceEntryIds:[...new Set([...(prior.sourceEntryIds||[]),archetypeId])],
+      migratedFromSchema:prior.migratedFromSchema??null,
+      notes:F.clone(prior.notes||[])
+    };
+  }
+
   function generateProfile(config = {}) {
     const diagnostics = [];
     const seed = Random.normalizeSeed(config.seed);
@@ -68,7 +81,8 @@
     if (!archetype) return {profile:null,diagnostics:[...diagnostics,F.diagnostic('GENERATOR_ARCHETYPE_UNAVAILABLE','error','A resolved archetype is required.','/archetype')],valid:false};
 
     const counters = F.clone(config.rerollCounters || {});
-    const rootRng = Random.create(Random.deriveSeed(seed,VERSION,pack.packId || 'unknown-pack',pack.version || '0.0.0',archetype.id));
+    const packId=pack.packId || 'unknown-pack';
+    const rootRng = Random.create(Random.deriveSeed(seed,VERSION,packId,pack.version || '0.0.0',archetype.id));
     const applicability = Rules.resolveApplicability(archetype,{
       rollForSection:id => F.sectionRng(rootRng,`applicability:${id}`,counters).int(0,99),
       explicitStates:config.explicitStates || {},
@@ -86,14 +100,14 @@
     const timestamp = config.timestamp || '1970-01-01T00:00:00.000Z';
     const profile = {
       profileType:'npcProfile',schemaVersion:'1.0.0',
-      profileId:config.profileId || config.previousProfile?.profileId || F.generatedProfileId(seed,pack.packId || 'unknown-pack',archetype.id),
+      profileId:config.profileId || config.previousProfile?.profileId || F.generatedProfileId(seed,packId,archetype.id),
       revision:Number(config.revision || config.previousProfile?.revision || 1),
       createdAt:config.previousProfile?.createdAt || timestamp,updatedAt:timestamp,
-      generator:{generatorId:GENERATOR_ID,generatorVersion:VERSION,packId:pack.packId || 'unknown-pack',packVersion:pack.version || '0.0.0',seed,mode,rerollCounters:counters},
+      generator:{generatorId:GENERATOR_ID,generatorVersion:VERSION,packId,packVersion:pack.version || '0.0.0',seed,mode,rerollCounters:counters},
       archetype:{id:archetype.id,label:archetype.label,parentId:archetype.parentId || null,subtypeId:null,tags:F.clone(archetype.tags || [])},
       identity:F.generateIdentity(pack,rootRng,diagnostics,config.options || {},counters,mode),
       sections,locks:F.clone(config.locks || []),diagnostics:[],
-      provenance:{createdBy:config.previousProfile ? 'user' : 'generator',sourcePackIds:[pack.packId || 'unknown-pack'],sourceEntryIds:[archetype.id],migratedFromSchema:null,notes:[]}
+      provenance:provenanceFor(config.previousProfile,packId,archetype.id,config.provenance)
     };
 
     applyLocks(profile,config.previousProfile,config.locks || [],diagnostics);
@@ -102,5 +116,5 @@
     return {profile,diagnostics,valid:!diagnostics.some(item => item.severity === 'error'),receipt:F.clone(profile.generator)};
   }
 
-  globalThis.NpcProfileGeneratorAssembly = Object.freeze({GENERATOR_ID,VERSION,generateExtension,generateSection,applyLocks,generateProfile});
+  globalThis.NpcProfileGeneratorAssembly = Object.freeze({GENERATOR_ID,VERSION,generateExtension,generateSection,applyLocks,provenanceFor,generateProfile});
 })();
