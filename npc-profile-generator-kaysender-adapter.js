@@ -1,0 +1,1 @@
+// Deterministic Kaysender compatibility adapter.
