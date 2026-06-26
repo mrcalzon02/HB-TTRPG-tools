@@ -65,6 +65,7 @@
     loadScriptOnce('npc-profile-generator-entry.js','data-npc-profile-generator-entry','npcProfileGeneratorEntry');
     loadScriptOnce('kaysender-npc-generator.js','data-npc-generator','npcGenerator');
     loadScriptOnce('kaysender-crafting-generator.js','data-crafting-generator','craftingGenerator');
+    loadScriptOnce('kaysender-settlement-inheritance-guard.js','data-settlement-inheritance-guard','settlementInheritanceGuard');
   }
 
   function primerDestinationFor(element) {
