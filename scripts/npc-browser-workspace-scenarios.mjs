@@ -1,5 +1,7 @@
+import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { readDownload,requireValue,same,stableProfile } from './npc-browser-test-helpers.mjs';
+import { requireValue,same,stableProfile } from './npc-browser-test-helpers.mjs';
 
 async function clickAndWaitForProfile(page,selector){
   const event=page.evaluate(()=>new Promise(resolve=>{
@@ -9,7 +11,31 @@ async function clickAndWaitForProfile(page,selector){
   return event;
 }
 
-export async function runWorkspaceScenarios({page,context,matrix,root,origin,recorder}){
+async function installDownloadCapture(page){
+  await page.evaluate(()=>{
+    if(globalThis.__npcDownloadCaptureInstalled)return;
+    const blobs=new Map(),captures=[];
+    const create=URL.createObjectURL.bind(URL);
+    const click=HTMLAnchorElement.prototype.click;
+    URL.createObjectURL=blob=>{const url=create(blob);blobs.set(url,blob);return url;};
+    HTMLAnchorElement.prototype.click=function(){
+      const blob=blobs.get(this.href);
+      if(this.download&&blob)blob.text().then(content=>captures.push({name:this.download,type:blob.type,content}));
+      return click.call(this);
+    };
+    globalThis.__npcCapturedDownloads=captures;
+    globalThis.__npcDownloadCaptureInstalled=true;
+  });
+}
+
+async function captureDownload(page,selector,timeout){
+  const before=await page.evaluate(()=>globalThis.__npcCapturedDownloads?.length||0);
+  await page.click(selector);
+  await page.waitForFunction(count=>(globalThis.__npcCapturedDownloads?.length||0)>count,before,{timeout});
+  return page.evaluate(index=>globalThis.__npcCapturedDownloads[index],before);
+}
+
+export async function runWorkspaceScenarios({page,matrix,root,origin,recorder}){
   const s=matrix.selectors,t=matrix.timeouts;
 
   await recorder.check('workspace-load',async()=>{
@@ -34,6 +60,7 @@ export async function runWorkspaceScenarios({page,context,matrix,root,origin,rec
     requireValue(accessibility.buttons>=matrix.accessibility.minimumNamedButtons,`Only ${accessibility.buttons} named buttons were found.`);
     requireValue(accessibility.selects>=matrix.accessibility.minimumNamedSelects,`Only ${accessibility.selects} named selects were found.`);
     requireValue(accessibility.sections>=10,`Only ${accessibility.sections} profile sections rendered.`);
+    await installDownloadCapture(page);
     return accessibility;
   });
 
@@ -92,18 +119,22 @@ export async function runWorkspaceScenarios({page,context,matrix,root,origin,rec
   });
 
   await recorder.check('export-import-copy',async()=>{
-    const jsonDownload=page.waitForEvent('download');await page.click(s.exportJson);const json=await readDownload(await jsonDownload);
-    const textDownload=page.waitForEvent('download');await page.click(s.exportText);const text=await readDownload(await textDownload);
-    const markdownDownload=page.waitForEvent('download');await page.click(s.exportMarkdown);const markdown=await readDownload(await markdownDownload);
+    const json=await captureDownload(page,s.exportJson,t.action);
+    const text=await captureDownload(page,s.exportText,t.action);
+    const markdown=await captureDownload(page,s.exportMarkdown,t.action);
     const parsed=JSON.parse(json.content);
     requireValue(text.content.includes(parsed.identity.fullName),'Readable text export is missing the profile name.');
     requireValue(markdown.content.includes(parsed.identity.fullName),'Markdown export is missing the profile name.');
-    await page.setInputFiles(s.importProfileFile,json.path);
-    await page.waitForFunction(id=>globalThis.NpcProfileGeneratorWorkspace?.currentProfile?.profileId===id,parsed.profileId,{timeout:t.action});
+    const importPath=path.join(os.tmpdir(),`npc-phase14-${process.pid}.json`);
+    fs.writeFileSync(importPath,json.content);
+    try{
+      await page.setInputFiles(s.importProfileFile,importPath);
+      await page.waitForFunction(id=>globalThis.NpcProfileGeneratorWorkspace?.currentProfile?.profileId===id,parsed.profileId,{timeout:t.action});
+    }finally{fs.rmSync(importPath,{force:true});}
     await page.click(s.copyText);const copiedText=await page.evaluate(()=>navigator.clipboard.readText());
     await page.click(s.copyMarkdown);const copiedMarkdown=await page.evaluate(()=>navigator.clipboard.readText());
     requireValue(copiedText.includes(parsed.identity.fullName),'Copied text is missing the profile name.');
     requireValue(copiedMarkdown.includes(parsed.identity.fullName),'Copied Markdown is missing the profile name.');
-    return{jsonBytes:json.bytes,textBytes:text.bytes,markdownBytes:markdown.bytes,importedProfileId:parsed.profileId,fixture:path.relative(root,json.path)};
+    return{jsonBytes:json.content.length,textBytes:text.content.length,markdownBytes:markdown.content.length,importedProfileId:parsed.profileId,downloads:[json.name,text.name,markdown.name]};
   });
 }
