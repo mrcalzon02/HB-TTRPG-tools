@@ -1,0 +1,32 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-11-custom-data-packs",
+  "status": "gate-passed",
+  "validatedThroughCommit": "9c18d34f8fd31e84152e4a970c718d8187145108",
+  "ciReceiptCommit": "376918eef35d4e072baf447ec28289ad118bccc1",
+  "validator": "scripts/validate-npc-phase-11.mjs",
+  "workflow": ".github/workflows/pages.yml",
+  "executionDate": "2026-06-26",
+  "results": {
+    "customProfilesGenerated": 120,
+    "deterministicDeepRepeats": 40,
+    "invalidPackClassesRejected": 17,
+    "storageAndUpgradeChecks": 14,
+    "validationErrors": 0
+  },
+  "verifiedBehavior": [
+    "Versioned custom packs extend names, ancestries, tables, table extensions, archetypes, operation modules, mechanical packages, and level guidance without editing the generation core.",
+    "Protected IDs, missing dependencies, incompatible versions, unresolved references, malformed chronology, unsafe overrides, and invalid mechanics produce actionable diagnostics.",
+    "Rejected packs and incompatible upgrades leave the base runtime and installed-pack storage unchanged.",
+    "Depended-on packs can upgrade transactionally while downgrades below dependent minimum versions are rejected.",
+    "Quick, Standard, and Deep custom-archetype profiles remain deterministic and record base/custom pack provenance.",
+    "The browser bootstrap waits for all core data enrichers before snapshotting and applying installed campaign packs."
+  ],
+  "notes": [
+    "The canonical NPC profile schema directly permits generator.customPackIds.",
+    "The original Kaysender runtime remains unchanged.",
+    "Only main was used.",
+    "Phase 12 may begin."
+  ]
+}
