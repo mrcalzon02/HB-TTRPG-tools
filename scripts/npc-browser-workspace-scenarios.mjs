@@ -3,6 +3,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { requireValue,same,stableProfile } from './npc-browser-test-helpers.mjs';
 
+const GENERATORS_NAV='.top-nav .nav-button[data-view="generators"]';
+
 async function clickAndWaitForProfile(page,selector){
   const event=page.evaluate(()=>new Promise(resolve=>{
     document.getElementById('npc-profile-generator-root')?.addEventListener('npc-profile-generated',entry=>resolve({reason:entry.detail?.reason,profileId:entry.detail?.profile?.profileId}),{once:true});
@@ -40,7 +42,9 @@ export async function runWorkspaceScenarios({page,matrix,root,origin,recorder}){
 
   await recorder.check('workspace-load',async()=>{
     await page.goto(`${origin}${matrix.entryPath}`,{waitUntil:'domcontentloaded'});
-    await page.waitForSelector(s.openNpc,{timeout:t.workspace});
+    await page.waitForSelector(GENERATORS_NAV,{state:'visible',timeout:t.workspace});
+    await page.click(GENERATORS_NAV);
+    await page.waitForSelector(s.openNpc,{state:'visible',timeout:t.workspace});
     await page.click(s.openNpc);
     await page.waitForSelector(s.workspace,{state:'visible',timeout:t.workspace});
     await page.waitForFunction(()=>{
