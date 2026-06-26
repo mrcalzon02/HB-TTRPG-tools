@@ -3,7 +3,7 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-14-automated-validation-browser-testing",
   "status": "failed",
-  "validatedCommit": "98877a1a682e588ce5c61eedc9457fb292abbbc3",
+  "validatedCommit": "7ed5367b2d62b530b46bf8f5975cc5871e195f32",
   "staticValidator": "scripts/validate-npc-all-phases.mjs",
   "browserValidator": "scripts/run-npc-browser-verification.mjs",
   "browserArtifact": "artifacts/npc-browser-verification.json",
@@ -14,7 +14,7 @@
   },
   "staticOutput": [
     "Consolidated NPC regression validation failed:",
-    "- phase-7-family-household-relationships failed with exit code 1: - elf: relationship reroll changed family household. | - halfling: relationship reroll changed family household. | - gnome: relationship reroll changed family household. | - orc: relationship reroll changed family household. | - goblin: relationship reroll changed family household. | - dragon-kin: relationship reroll changed family household."
+    "- phase-7-family-household-relationships failed with exit code 1: NPC Phase 7 validation failed: | - elf: family reroll changed relationship network."
   ],
   "browserOutput": []
 }
