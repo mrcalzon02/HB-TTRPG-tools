@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "ae55fd66c750e9cf9946a9383571786ca6a79004",
+  "validatedCommit": "69a42523f4661c07c29c5eb4ad51cfa9b832ca8c",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -29,13 +29,8 @@
     "Required next stage: P0 — Shared Editor Kernel and Profile Contract",
     "P0 implementation state: framework-implementation-complete-pending-runtime-gate",
     "Covered main-line modules: 18",
-    "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-kernel.mjs:9",
-    "const fail = message => { throw new Error(message); };",
-    "                                ^",
-    "Error: Live browser smoke harness is missing 'Run P0 Live Smoke Test'.",
-    "    at fail (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-kernel.mjs:9:33)",
-    "    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-kernel.mjs:164:38",
-    "Node.js v20.20.2",
+    "Shared editor kernel validation passed.",
+    "Verified base envelope behavior, stable revisions, explicit-only draft deletion, nested and flat context adapters, generic production actions, adapter-driven script ordering, wrong-profile diagnostics, malformed JSON diagnostics, and the live browser smoke harness.",
     "Editor migration validation passed.",
     "Verified flat Island conversion into schema 2.0.0, canonical nested preservation, migration logging, field cleanup, and idempotence.",
     "kaysender-editor-builtins.js:172",
@@ -100,5 +95,5 @@
     "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Profile schema 2.0.0 is older than the Production Island Editor contract 3.0.0, and no registered migration completed the upgrade.",
     "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Profile schema 2.0.0 is older than the Production Island Editor contract 3.0.0, and no registered migration completed the upgrade."
   ],
-  "recordedAt": "2026-06-26T21:30:14.193Z"
+  "recordedAt": "2026-06-26T21:32:48.610Z"
 }
