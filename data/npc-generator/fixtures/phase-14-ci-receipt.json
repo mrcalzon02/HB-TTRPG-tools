@@ -3,7 +3,7 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-14-automated-validation-browser-testing",
   "status": "failed",
-  "validatedCommit": "ae606e1cbda43eb0c43a23a9ec0ed595bee87d07",
+  "validatedCommit": "f63aaf46bd9bc47fed9ac79c5a212233f654e2e0",
   "staticValidator": "scripts/validate-npc-all-phases.mjs",
   "browserValidator": "scripts/run-npc-browser-verification.mjs",
   "browserArtifact": "artifacts/npc-browser-verification.json",
