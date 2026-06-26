@@ -1,0 +1,51 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-4-minimum-generic-fantasy-pack",
+  "status": "gate-passed",
+  "validatedThroughCommit": "d13e0ecd1b61a531caca4bcd9494e2cc2403522c",
+  "validator": "data/npc-generator/validate-phase-4.mjs",
+  "executionDate": "2026-06-25",
+  "executionEnvironment": "Local Node.js execution using the committed split generator runtime, Wave A archetype policies, generic fantasy manifest, ancestry and name files, core profile tables, operational tables, generation matrix, and active Phase 4 ledger state.",
+  "results": {
+    "tablesLoaded": 106,
+    "requiredTableReferencesResolved": 100,
+    "archetypesTested": 11,
+    "seedsPerArchetype": 100,
+    "profilesGenerated": 1100,
+    "uniqueProfileIds": 1100,
+    "warnings": 0,
+    "errors": 0,
+    "unresolvedFallbacks": 0,
+    "duplicateProfileIds": 0,
+    "inappropriateNormalWorkplaceFields": 0
+  },
+  "files": [
+    "data/npc-generator/packs/generic-fantasy-core.json",
+    "data/npc-generator/ancestries/core-fantasy.json",
+    "data/npc-generator/names/core-fantasy-names.json",
+    "data/npc-generator/tables/core-profile-tables.json",
+    "data/npc-generator/tables/wave-a-operational-tables.json",
+    "data/npc-generator/fixtures/phase-4-generation-matrix.json",
+    "data/npc-generator/validate-phase-4.mjs"
+  ],
+  "verifiedArchetypes": [
+    "civilian-general",
+    "civilian-laborer",
+    "commercial-craft-worker",
+    "commercial-merchant",
+    "commercial-banker",
+    "marginalized-beggar",
+    "authority-city-guard",
+    "military-soldier",
+    "criminal-thief",
+    "criminal-bandit",
+    "elite-noble"
+  ],
+  "notes": [
+    "Phase 4 exit requirements are satisfied and Phase 5 may begin.",
+    "Ancestry-specific maturation and family plausibility remain scheduled for Phase 7.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
