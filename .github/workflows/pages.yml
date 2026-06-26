@@ -63,6 +63,7 @@ jobs:
           node --check scripts/npc-phase-11-validation-fixture.mjs
           node --check scripts/npc-phase-11-validation-assertions.mjs
           node --check scripts/npc-phase-11-validation-runner.mjs
+          node --check scripts/npc-phase-11-storage-upgrade-checks.mjs
           node --check scripts/validate-npc-phase-11.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
           node --check scripts/validate-npc-phase-1.mjs
