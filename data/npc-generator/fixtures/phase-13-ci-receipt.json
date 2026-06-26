@@ -1,0 +1,19 @@
+{
+  "receiptType": "npcPhaseCiReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-13-roster-group-generation",
+  "status": "passed",
+  "validatedCommit": "aa87fac5208654bbe2431d0e3ec63b3a76b008ca",
+  "validator": "scripts/validate-npc-phase-13.mjs",
+  "workflow": ".github/workflows/pages.yml",
+  "exitCode": 0,
+  "output": [
+    "NPC Phase 13 validation passed.",
+    "Groups generated: 220",
+    "Members generated: 1425",
+    "Relationships generated: 3620",
+    "Deterministic pairs verified: 220",
+    "Boundary groups verified: 20",
+    "Invalid templates rejected: 5"
+  ]
+}
