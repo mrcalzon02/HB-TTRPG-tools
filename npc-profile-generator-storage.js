@@ -14,7 +14,7 @@
   const issue=(code,message,path='/')=>({code,message,path});
   const major=value=>Number(String(value||'').split('.')[0]);
   const now=()=>new Date().toISOString();
-  function hash(value){let result=7;for(const character of String(value))result=(result*31+character.charCodeAt(0))%2147483647;return(result||1).toString(16);}
+  function hash(value){let result=7;for(const character of String(value))result=(result*31+character.charCodeAt(0))%2147483647;return(result||1).toString(16).padStart(8,'0');}
 
   function validateProfile(profile){
     const errors=[];
