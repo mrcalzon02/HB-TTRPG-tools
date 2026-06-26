@@ -1,0 +1,118 @@
+{
+  "artifactType": "npcBrowserVerification",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-26T20:18:37.505Z",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-14-automated-validation-browser-testing",
+  "entryUrl": "http://127.0.0.1:4177/index.html",
+  "browser": "chromium",
+  "headless": true,
+  "viewportMatrix": {
+    "desktop": {
+      "width": 1440,
+      "height": 1100
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "valid": false,
+  "requiredScenarioIds": [
+    "workspace-load",
+    "progressive-mechanics",
+    "seed-determinism",
+    "lock-reroll",
+    "save-clone",
+    "export-import-copy",
+    "custom-pack-install",
+    "group-after-pack-rebuild",
+    "legacy-kaysender",
+    "mobile-layout",
+    "console-network-clean"
+  ],
+  "scenarios": [
+    {
+      "id": "workspace-load",
+      "status": "failed",
+      "message": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#open-universal-npc-generator') to be visible\n    63 × locator resolved to hidden <button type=\"button\" class=\"primary-action\" id=\"open-universal-npc-generator\">Open NPC Generator</button>\n",
+      "details": {}
+    },
+    {
+      "id": "progressive-mechanics",
+      "status": "failed",
+      "message": "page.selectOption: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-level-mode')\n    - locator resolved to <select class=\"tool-input\" id=\"npc-level-mode\">…</select>\n  - attempting select option action\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n    - waiting 20ms\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n      - waiting 100ms\n    30 × waiting for element to be visible and enabled\n       - element is not visible\n     - retrying select option action\n       - waiting 500ms\n",
+      "details": {}
+    },
+    {
+      "id": "seed-determinism",
+      "status": "failed",
+      "message": "page.fill: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-seed')\n    - locator resolved to <input type=\"text\" id=\"npc-seed\" class=\"tool-input\"/>\n    - fill(\"phase14-browser-profile\")\n  - attempting fill action\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n      - waiting 100ms\n    30 × waiting for element to be visible, enabled and editable\n       - element is not visible\n     - retrying fill action\n       - waiting 500ms\n",
+      "details": {}
+    },
+    {
+      "id": "lock-reroll",
+      "status": "failed",
+      "message": "page.evaluate: TypeError: Cannot read properties of null (reading 'sections')\n    at eval (eval at evaluate (:302:30), <anonymous>:1:86)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "details": {}
+    },
+    {
+      "id": "save-clone",
+      "status": "failed",
+      "message": "page.evaluate: TypeError: Cannot read properties of null (reading 'profileId')\n    at eval (eval at evaluate (:302:30), <anonymous>:1:60)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "details": {}
+    },
+    {
+      "id": "export-import-copy",
+      "status": "failed",
+      "message": "page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-export')\n    - locator resolved to <button disabled type=\"button\" id=\"npc-export\" class=\"secondary-action\">Export JSON</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    29 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+      "details": {}
+    },
+    {
+      "id": "custom-pack-install",
+      "status": "failed",
+      "message": "page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-manage-packs')\n    - locator resolved to <button type=\"button\" id=\"npc-manage-packs\" class=\"secondary-action\">Manage Packs</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    29 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+      "details": {}
+    },
+    {
+      "id": "group-after-pack-rebuild",
+      "status": "failed",
+      "message": "page.selectOption: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-group-template')\n    - locator resolved to <select class=\"tool-input\" id=\"npc-group-template\">…</select>\n  - attempting select option action\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n    - waiting 20ms\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n      - waiting 100ms\n    30 × waiting for element to be visible and enabled\n       - element is not visible\n     - retrying select option action\n       - waiting 500ms\n",
+      "details": {}
+    },
+    {
+      "id": "legacy-kaysender",
+      "status": "failed",
+      "message": "page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-return-generators')\n    - locator resolved to <button type=\"button\" class=\"secondary-action\" id=\"npc-return-generators\">Return to Generator Bench</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    29 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+      "details": {}
+    },
+    {
+      "id": "mobile-layout",
+      "status": "failed",
+      "message": "Profile or group controls are not visible at the mobile viewport.",
+      "details": {}
+    },
+    {
+      "id": "console-network-clean",
+      "status": "passed",
+      "details": {
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "requestFailures": 0,
+        "httpErrors": 0
+      }
+    }
+  ],
+  "failures": [
+    "workspace-load: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#open-universal-npc-generator') to be visible\n    63 × locator resolved to hidden <button type=\"button\" class=\"primary-action\" id=\"open-universal-npc-generator\">Open NPC Generator</button>\n",
+    "progressive-mechanics: page.selectOption: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-level-mode')\n    - locator resolved to <select class=\"tool-input\" id=\"npc-level-mode\">…</select>\n  - attempting select option action\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n    - waiting 20ms\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n      - waiting 100ms\n    30 × waiting for element to be visible and enabled\n       - element is not visible\n     - retrying select option action\n       - waiting 500ms\n",
+    "seed-determinism: page.fill: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-seed')\n    - locator resolved to <input type=\"text\" id=\"npc-seed\" class=\"tool-input\"/>\n    - fill(\"phase14-browser-profile\")\n  - attempting fill action\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n      - waiting 100ms\n    30 × waiting for element to be visible, enabled and editable\n       - element is not visible\n     - retrying fill action\n       - waiting 500ms\n",
+    "lock-reroll: page.evaluate: TypeError: Cannot read properties of null (reading 'sections')\n    at eval (eval at evaluate (:302:30), <anonymous>:1:86)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+    "save-clone: page.evaluate: TypeError: Cannot read properties of null (reading 'profileId')\n    at eval (eval at evaluate (:302:30), <anonymous>:1:60)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+    "export-import-copy: page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-export')\n    - locator resolved to <button disabled type=\"button\" id=\"npc-export\" class=\"secondary-action\">Export JSON</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    29 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+    "custom-pack-install: page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-manage-packs')\n    - locator resolved to <button type=\"button\" id=\"npc-manage-packs\" class=\"secondary-action\">Manage Packs</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    29 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+    "group-after-pack-rebuild: page.selectOption: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-group-template')\n    - locator resolved to <select class=\"tool-input\" id=\"npc-group-template\">…</select>\n  - attempting select option action\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n    - waiting 20ms\n    2 × waiting for element to be visible and enabled\n      - element is not visible\n    - retrying select option action\n      - waiting 100ms\n    30 × waiting for element to be visible and enabled\n       - element is not visible\n     - retrying select option action\n       - waiting 500ms\n",
+    "legacy-kaysender: page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('#npc-return-generators')\n    - locator resolved to <button type=\"button\" class=\"secondary-action\" id=\"npc-return-generators\">Return to Generator Bench</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    29 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+    "mobile-layout: Profile or group controls are not visible at the mobile viewport."
+  ]
+}
