@@ -11,7 +11,8 @@
     ['npc-generator-compose.js', 'NpcProfileGeneratorAssembly'],
     ['npc-profile-generator-core.js', 'NpcProfileGeneratorCore'],
     ['npc-profile-generator-renderer.js', 'NpcProfileGeneratorRenderer'],
-    ['npc-profile-generator-ui.js', 'NpcProfileGeneratorUI']
+    ['npc-profile-generator-ui.js', 'NpcProfileGeneratorUI'],
+    ['npc-profile-generator-depth-data.js', 'NpcProfileGeneratorDepthData']
   ];
 
   function loadStylesheet() {
@@ -104,7 +105,9 @@
     const status = section.querySelector('#npc-generator-status');
     try {
       await loadRuntime();
-      await globalThis.NpcProfileGeneratorUI.mount(section.querySelector('#npc-profile-generator-root'), status);
+      const workspace = await globalThis.NpcProfileGeneratorUI.mount(section.querySelector('#npc-profile-generator-root'), status);
+      globalThis.NpcProfileGeneratorWorkspace = workspace;
+      await globalThis.NpcProfileGeneratorDepthData.enrich(workspace);
     } catch (error) {
       if (status) {
         status.textContent = `Universal NPC Profile Generator failed to initialize: ${error.message}`;
