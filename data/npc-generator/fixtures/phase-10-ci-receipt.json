@@ -3,7 +3,7 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-10-storage-import-export-printing",
   "status": "failed",
-  "validatedCommit": "9b51d53d13c56c770582d3a46b7e1b964c9328ba",
+  "validatedCommit": "4c80618dcc9de8af41e59d2eee1a41f8edeff8ba",
   "validator": "scripts/validate-npc-phase-10.mjs",
   "migration": "scripts/migrate-npc-profile-schema-phase-10.mjs",
   "workflow": ".github/workflows/pages.yml",
