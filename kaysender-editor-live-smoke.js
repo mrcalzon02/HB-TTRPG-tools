@@ -16,14 +16,27 @@
     document.body.appendChild(script);
   };
 
+  const loadP0SmokeRuntime = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('p0-smoke') !== '1') return;
+    if (window.runKaysenderEditorSmokeTest || document.querySelector('script[data-p0-smoke-runtime]')) return;
+    const script = document.createElement('script');
+    script.src = 'kaysender-editor-smoke-runtime.js';
+    script.defer = true;
+    script.dataset.p0SmokeRuntime = 'true';
+    document.body.appendChild(script);
+  };
+
   const grid = document.getElementById('barotrauma-overview-grid');
-  if (!grid) return;
+  if (grid) {
+    new MutationObserver(removeLegacyPrimerSourceButton).observe(grid, {
+      childList: true,
+      subtree: true
+    });
+    removeLegacyPrimerSourceButton();
+    loadRpgWikiAction();
+  }
 
-  new MutationObserver(removeLegacyPrimerSourceButton).observe(grid, {
-    childList: true,
-    subtree: true
-  });
-
-  removeLegacyPrimerSourceButton();
-  loadRpgWikiAction();
+  loadP0SmokeRuntime();
+  window.KaysenderP0SmokeLoader = Object.freeze({ loadP0SmokeRuntime });
 })();
