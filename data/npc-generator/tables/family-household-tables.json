@@ -1,1 +1,1 @@
-{"dataType":"npcFamilyHouseholdTables","schemaVersion":"1.0.0","tables":{}}
+{"dataType":"npcFamilyHouseholdManifest","schemaVersion":"1.0.0","components":["ancestry-household-rules.json","household-status-tables.json","household-obligation-tables.json","relationship-network-tables.json"]}
