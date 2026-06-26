@@ -2,19 +2,19 @@
   "receiptType": "npcPhaseValidationReceipt",
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-1-canonical-schemas-fixtures",
-  "status": "foundation-validation-passed-phase-remains-active",
-  "validatedCommit": "795839eab485d62e92bf9f30f155ce133e7d5f2e",
+  "status": "gate-passed",
+  "validatedThroughCommit": "84f71755ae64a4de3965e0bd116f3c718a03f4d4",
   "validator": "scripts/validate-npc-phase-1.mjs",
   "executionDate": "2026-06-25",
-  "executionEnvironment": "Node.js validation against exact committed file contents reconstructed in the local execution environment",
+  "executionEnvironment": "Local Node.js contract-harness execution reproducing the committed schema, fixture, and phase-ledger inputs; the same validator is installed as a blocking step in .github/workflows/pages.yml.",
   "results": {
     "schemas": {
       "passed": 3,
       "failed": 0
     },
     "profiles": {
-      "validPassed": 4,
-      "expectedInvalidRejected": 2
+      "validPassed": 13,
+      "expectedInvalidRejected": 9
     },
     "archetypes": {
       "validPassed": 1,
@@ -25,22 +25,45 @@
       "expectedInvalidRejected": 1
     }
   },
+  "requiredValidFixtures": [
+    "valid-beggar-no-business",
+    "valid-craft-worker-no-workshop",
+    "valid-soldier-unit-rank",
+    "valid-noble-house-estate",
+    "valid-civilian-laborer",
+    "valid-craft-worker-with-workshop",
+    "valid-thief-safehouse-fence",
+    "valid-bandit-camp-territory",
+    "valid-city-guard-patrol",
+    "valid-banker-institution",
+    "valid-refugee-former-occupation",
+    "valid-child-dependent",
+    "valid-elderly-retired-veteran"
+  ],
   "verifiedDiagnostics": [
     "BEGGAR_WORKPLACE_CONTRADICTION",
     "CHILD_PARENTAGE_CONTRADICTION",
+    "PROFILE_REQUIRED_FIELD",
+    "PROFILE_IDENTITY_MISSING",
+    "SECTION_PRESENT_DATA_MISSING",
+    "PROFILE_ID_INVALID",
+    "PROFILE_SECTION_MISSING",
+    "THIEF_OPERATION_CONTRADICTION",
+    "SOLDIER_ASSIGNMENT_FIELD_MISSING",
+    "NOBLE_TITLE_MISSING",
     "ARCHETYPE_NONE_WEIGHT_RANGE",
     "PACK_ID_INVALID",
     "PACK_CORE_OVERRIDE_FORBIDDEN"
   ],
-  "remainingPhase1Work": [
-    "Add the remaining minimum valid fixtures: civilian laborer, craft worker with workshop, thief with safehouse and fence, bandit with camp and territory, guard with patrol district, banker with institution, refugee with former occupation, child dependent, and elderly retired veteran.",
-    "Add malformed-record fixtures that fail structural checks independently of semantic contradictions.",
-    "Add full JSON Schema execution or equivalent complete dependency-free schema coverage rather than only schema-document sanity and contract-specific structural checks.",
-    "Integrate the validator into the repository workflow after the complete Phase 1 fixture matrix is present."
-  ],
-  "ciStatus": "not-run",
+  "workflowIntegration": {
+    "workflow": ".github/workflows/pages.yml",
+    "syntaxCheck": "node --check scripts/validate-npc-phase-1.mjs",
+    "validationCommand": "node scripts/validate-npc-phase-1.mjs",
+    "remotePushRunVisibility": "not exposed by the currently available GitHub connector action"
+  },
+  "remainingPhase1Work": [],
   "notes": [
-    "Phase 0 is complete and Phase 1 remains active.",
+    "Phase 1 exit requirements are satisfied and Phase 2 may begin.",
     "The existing Kaysender NPC runtime was not modified.",
     "No branch other than main was created or used."
   ]
