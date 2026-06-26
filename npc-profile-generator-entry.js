@@ -14,12 +14,15 @@
     ['npc-generator-relationship-records.js', 'NpcProfileRelationshipRecords'],
     ['npc-generator-household.js', 'NpcProfileGeneratorHousehold'],
     ['npc-generator-operations.js', 'NpcProfileGeneratorOperations'],
+    ['npc-generator-mechanics.js', 'NpcProfileGeneratorMechanics'],
     ['npc-profile-generator-core.js', 'NpcProfileGeneratorCore'],
     ['npc-profile-generator-renderer.js', 'NpcProfileGeneratorRenderer'],
     ['npc-profile-generator-ui.js', 'NpcProfileGeneratorUI'],
+    ['npc-profile-generator-mechanics-ui.js', 'NpcProfileGeneratorMechanicsUI'],
     ['npc-profile-generator-depth-data.js', 'NpcProfileGeneratorDepthData'],
     ['npc-profile-generator-household-data.js', 'NpcProfileGeneratorHouseholdData'],
-    ['npc-profile-generator-operation-data.js', 'NpcProfileGeneratorOperationData']
+    ['npc-profile-generator-operation-data.js', 'NpcProfileGeneratorOperationData'],
+    ['npc-profile-generator-mechanics-data.js', 'NpcProfileGeneratorMechanicsData']
   ];
 
   function loadStylesheet() {
@@ -93,9 +96,9 @@
     card.innerHTML = `
       <div class="module-meta"><span class="badge section-generators">generator</span><span class="badge status-active">active</span><span class="badge">dedicated workspace</span></div>
       <h3>Universal NPC Profile Generator</h3>
-      <p>Create civilians, laborers, craftspeople, merchants, bankers, beggars, guards, soldiers, thieves, bandits, and nobles with role-appropriate homes, workplaces, operations, families, motives, secrets, and hooks.</p>
+      <p>Create civilians, laborers, craftspeople, merchants, bankers, beggars, guards, soldiers, thieves, bandits, and nobles with role-appropriate homes, workplaces, operations, families, motives, secrets, hooks, and optional open-d20 mechanics.</p>
       <h4>Module capabilities</h4>
-      <div class="chip-list"><span class="chip">11 archetypes</span><span class="chip">deterministic seeds</span><span class="chip">section rerolls</span><span class="chip">field and section locks</span><span class="chip">conditional operations</span><span class="chip">JSON export</span></div>
+      <div class="chip-list"><span class="chip">11 archetypes</span><span class="chip">deterministic seeds</span><span class="chip">section rerolls</span><span class="chip">field and section locks</span><span class="chip">conditional operations</span><span class="chip">optional mechanics</span><span class="chip">JSON export</span></div>
       <button type="button" class="primary-action" id="open-universal-npc-generator">Open NPC Generator</button>`;
     card.querySelector('#open-universal-npc-generator')?.addEventListener('click', () => {
       switchView(WORKSPACE_ID);
@@ -117,6 +120,7 @@
       await globalThis.NpcProfileGeneratorDepthData.enrich(workspace);
       await globalThis.NpcProfileGeneratorHouseholdData.enrich(workspace);
       await globalThis.NpcProfileGeneratorOperationData.enrich(workspace);
+      await globalThis.NpcProfileGeneratorMechanicsData.enrich(workspace);
     } catch (error) {
       if (status) {
         status.textContent = `Universal NPC Profile Generator failed to initialize: ${error.message}`;
