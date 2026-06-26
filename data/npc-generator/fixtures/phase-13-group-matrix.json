@@ -1,1 +1,54 @@
-{"fixtureType":"npcPhase13GroupGenerationMatrix","schemaVersion":"1.0.0"}
+{
+  "fixtureType": "npcPhase13GroupGenerationMatrix",
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-06-26T12:00:00.000Z",
+  "schema": "data/schemas/npc-group.schema.json",
+  "templates": "data/npc-generator/groups/group-templates.json",
+  "tables": "data/npc-generator/groups/group-tables.json",
+  "seedsPerTemplate": 20,
+  "depths": ["quick", "standard", "deep"],
+  "templateIds": [
+    "household",
+    "business",
+    "patrol",
+    "squad",
+    "gang",
+    "bandit-group",
+    "noble-household",
+    "guild-team",
+    "crew",
+    "traveling-party"
+  ],
+  "expectedGroupKinds": [
+    "household",
+    "business",
+    "patrol",
+    "squad",
+    "gang",
+    "bandit-group",
+    "noble-household",
+    "guild-team",
+    "crew",
+    "traveling-party"
+  ],
+  "invalidTemplateCases": [
+    {"id":"missing-leader-role","mutation":"leaderRoleId","value":"missing-role","expectedCode":"GROUP_LEADER_ROLE_MISSING"},
+    {"id":"missing-reporting-role","mutation":"roles.1.reportsToRoleId","value":"missing-role","expectedCode":"GROUP_REPORTING_ROLE_MISSING"},
+    {"id":"missing-shared-table","mutation":"tables.location","value":"missing-table","expectedCode":"GROUP_TABLE_REFERENCE"},
+    {"id":"minimum-overflow","mutation":"sizeRange","value":[2,2],"expectedCode":"GROUP_TEMPLATE_MINIMUM_OVERFLOW"},
+    {"id":"invalid-surname-policy","mutation":"sharedSurnamePolicy","value":"sometimes","expectedCode":"GROUP_SURNAME_POLICY"}
+  ],
+  "requirements": [
+    "All ten templates validate and generate deterministic group records.",
+    "Every generated group contains between its template minimum and maximum member count.",
+    "Minimum and maximum requested sizes are both generated for every template.",
+    "Every member embeds a canonical NPC profile with a unique profile ID and full name.",
+    "Every member references the shared organization and location.",
+    "The leader exists, the optional second exists when its role is allocated, and every nonleader reports to an existing member.",
+    "Every relationship endpoint resolves and every directed edge has a reciprocal edge with inverse types.",
+    "Members whose role requires the shared surname use the group surname.",
+    "Every profile contains a groupMembership extension and preserves group and template provenance.",
+    "All ten group kinds have distinct role structures and shared context.",
+    "Malformed template references and impossible capacities produce actionable diagnostics before generation."
+  ]
+}
