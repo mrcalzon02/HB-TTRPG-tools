@@ -54,7 +54,7 @@
     if(typeof text!=='string')return{pack:null,diagnostics:[issue('CUSTOM_PACK_TEXT_REQUIRED','error','Custom pack import must be text.')]};
     if(new TextEncoder().encode(text).length>MAX_PACK_BYTES)return{pack:null,diagnostics:[issue('CUSTOM_PACK_TOO_LARGE','error',`Custom pack exceeds ${MAX_PACK_BYTES} bytes.`)]};
     try{return{pack:JSON.parse(text),diagnostics:[]};}
-    catch(error){return{pack:null,diagnostics:[issue('CUSTOM_PACK_JSON_INVALID','error',error.message)]};
+    catch(error){return{pack:null,diagnostics:[issue('CUSTOM_PACK_JSON_INVALID','error',error.message)]};}
   }
   function candidatePackList(installed,input,maxPacks=MAX_PACKS){
     const candidates=(installed||[]).map(clone);
