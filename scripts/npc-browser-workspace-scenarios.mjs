@@ -62,10 +62,11 @@ export async function runWorkspaceScenarios({page,context,matrix,root,origin,rec
 
   await recorder.check('lock-reroll',async()=>{
     const section='appearance',container=`.npc-profile-section[data-section-id="${section}"]`;
+    const sectionLock=`${container} .npc-section-actions button[aria-pressed]`;
     const before=await page.evaluate(id=>JSON.parse(JSON.stringify(globalThis.NpcProfileGeneratorWorkspace.currentProfile.sections[id])),section);
     const priorCounter=await page.evaluate(id=>Number(globalThis.NpcProfileGeneratorWorkspace.rerollCounters[id]||0),section);
-    await page.locator(container).getByRole('button',{name:'Lock'}).click();
-    requireValue(await page.locator(container).getByRole('button',{name:'Unlock'}).getAttribute('aria-pressed')==='true','Section lock did not activate.');
+    await page.locator(sectionLock).click();
+    requireValue(await page.locator(`${container} .npc-section-actions button[aria-pressed="true"]`).count()===1,'Section lock did not activate.');
     const event=page.evaluate(()=>new Promise(resolve=>document.getElementById('npc-profile-generator-root')?.addEventListener('npc-profile-generated',()=>resolve(true),{once:true})));
     await page.locator(container).getByRole('button',{name:'Reroll section'}).click();await event;
     const after=await page.evaluate(id=>JSON.parse(JSON.stringify(globalThis.NpcProfileGeneratorWorkspace.currentProfile.sections[id])),section);
