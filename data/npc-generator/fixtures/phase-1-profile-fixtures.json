@@ -1,0 +1,962 @@
+{
+  "fixtureType": "npcPhase1ProfileFixtures",
+  "schemaVersion": "1.0.0",
+  "valid": [
+    {
+      "id": "valid-beggar-no-business",
+      "profile": {
+        "profileType": "npcProfile",
+        "schemaVersion": "1.0.0",
+        "profileId": "npc-beggar01",
+        "revision": 1,
+        "createdAt": "2026-06-25T12:00:00Z",
+        "updatedAt": "2026-06-25T12:00:00Z",
+        "generator": {
+          "generatorId": "universal-npc-profile-generator",
+          "generatorVersion": "0.1.0",
+          "packId": "generic-fantasy-core",
+          "packVersion": "0.1.0",
+          "seed": "npc-beggar01-seed",
+          "mode": "deep",
+          "rerollCounters": {}
+        },
+        "archetype": {
+          "id": "marginalized-beggar",
+          "label": "Beggar",
+          "parentId": null,
+          "subtypeId": null,
+          "tags": []
+        },
+        "identity": {
+          "fullName": "Mara Venn",
+          "givenName": "Mara",
+          "familyName": "Venn",
+          "aliases": [],
+          "titles": [],
+          "pronouns": "they/them",
+          "gender": null,
+          "age": 47,
+          "ageBand": "adult",
+          "ancestryId": "human",
+          "cultureId": "generic-frontier",
+          "homeland": "Riversend",
+          "currentLocation": "Stonebridge",
+          "languages": [
+            "Common"
+          ]
+        },
+        "sections": {
+          "appearance": {
+            "state": "present",
+            "data": {
+              "build": "average",
+              "firstImpression": "watchful"
+            }
+          },
+          "mechanics": {
+            "state": "none",
+            "reason": "Narrative-only fixture."
+          },
+          "socialEconomic": {
+            "state": "present",
+            "data": {
+              "occupation": "street beggar",
+              "wealthBand": "destitute",
+              "employmentStatus": "none",
+              "dependents": 0
+            }
+          },
+          "residence": {
+            "state": "none",
+            "reason": "No stable residence; sleeps beneath the old east gate."
+          },
+          "workContext": {
+            "state": "not-applicable",
+            "reason": "A beggar has no normal commercial workplace.",
+            "substituteSection": "streetTerritory"
+          },
+          "familyHousehold": {
+            "state": "present",
+            "data": {
+              "householdType": "none",
+              "parentsState": "deceased",
+              "childCount": 0
+            }
+          },
+          "personality": {
+            "state": "present",
+            "data": {
+              "publicDemeanor": "guarded but polite",
+              "virtue": "patient",
+              "flaw": "suspicious"
+            }
+          },
+          "motivations": {
+            "state": "present",
+            "data": {
+              "immediateNeed": "secure tomorrow's meals",
+              "longTermAmbition": "find stability",
+              "fear": "being abandoned",
+              "loyalty": "one trusted friend"
+            }
+          },
+          "background": {
+            "state": "present",
+            "data": {
+              "origin": "Riversend",
+              "definingEvent": "survived a warehouse fire",
+              "reasonForBeingHere": "seeking work"
+            }
+          },
+          "affiliationsRelationships": {
+            "state": "present",
+            "data": {
+              "factions": [],
+              "friends": [],
+              "rivals": []
+            }
+          },
+          "possessionsResources": {
+            "state": "present",
+            "data": {
+              "carriedMoney": "a few copper coins",
+              "significantPossession": "a worn keepsake"
+            }
+          },
+          "secretsProblemsHooks": {
+            "state": "present",
+            "data": {
+              "publicProblem": "owes a small debt",
+              "secret": "witnessed a crime",
+              "campaignHook": "needs discreet help"
+            }
+          },
+          "extensions": {
+            "streetTerritory": {
+              "state": "present",
+              "data": {
+                "usualArea": "Old East Gate",
+                "sleepingPlace": "covered drainage arch",
+                "causeOfDestitution": "injury ended dock work",
+                "benefactorState": "none",
+                "rival": "a territorial alms collector"
+              }
+            }
+          }
+        },
+        "locks": [],
+        "diagnostics": [],
+        "provenance": {
+          "createdBy": "generator",
+          "sourcePackIds": [
+            "generic-fantasy-core"
+          ],
+          "sourceEntryIds": [
+            "marginalized-beggar"
+          ],
+          "migratedFromSchema": null,
+          "notes": []
+        }
+      }
+    },
+    {
+      "id": "valid-craft-worker-no-workshop",
+      "profile": {
+        "profileType": "npcProfile",
+        "schemaVersion": "1.0.0",
+        "profileId": "npc-crafter01",
+        "revision": 1,
+        "createdAt": "2026-06-25T12:00:00Z",
+        "updatedAt": "2026-06-25T12:00:00Z",
+        "generator": {
+          "generatorId": "universal-npc-profile-generator",
+          "generatorVersion": "0.1.0",
+          "packId": "generic-fantasy-core",
+          "packVersion": "0.1.0",
+          "seed": "npc-crafter01-seed",
+          "mode": "deep",
+          "rerollCounters": {}
+        },
+        "archetype": {
+          "id": "commercial-craft-worker",
+          "label": "Craft Worker",
+          "parentId": null,
+          "subtypeId": null,
+          "tags": []
+        },
+        "identity": {
+          "fullName": "Tomas Hale",
+          "givenName": "Tomas",
+          "familyName": "Hale",
+          "aliases": [],
+          "titles": [],
+          "pronouns": "they/them",
+          "gender": null,
+          "age": 36,
+          "ageBand": "adult",
+          "ancestryId": "human",
+          "cultureId": "generic-frontier",
+          "homeland": "Riversend",
+          "currentLocation": "Stonebridge",
+          "languages": [
+            "Common"
+          ]
+        },
+        "sections": {
+          "appearance": {
+            "state": "present",
+            "data": {
+              "build": "average",
+              "firstImpression": "watchful"
+            }
+          },
+          "mechanics": {
+            "state": "none",
+            "reason": "Narrative-only fixture."
+          },
+          "socialEconomic": {
+            "state": "present",
+            "data": {
+              "occupation": "itinerant tinsmith",
+              "wealthBand": "poor",
+              "employmentStatus": "self-employed",
+              "guildState": "none"
+            }
+          },
+          "residence": {
+            "state": "present",
+            "data": {
+              "type": "traveling-cart",
+              "householdStatus": "alone"
+            }
+          },
+          "workContext": {
+            "state": "present",
+            "data": {
+              "kind": "craft-practice",
+              "trade": "tinsmith",
+              "standing": "journeyworker",
+              "workshop": {
+                "state": "none",
+                "reason": "Works from a handcart."
+              },
+              "tools": [
+                "small hammer",
+                "snips",
+                "portable brazier"
+              ],
+              "currentCommission": "repair cooking pots for the militia camp"
+            }
+          },
+          "familyHousehold": {
+            "state": "present",
+            "data": {
+              "householdType": "single",
+              "parentsState": "unknown",
+              "childCount": 0
+            }
+          },
+          "personality": {
+            "state": "present",
+            "data": {
+              "publicDemeanor": "guarded but polite",
+              "virtue": "patient",
+              "flaw": "suspicious"
+            }
+          },
+          "motivations": {
+            "state": "present",
+            "data": {
+              "immediateNeed": "secure tomorrow's meals",
+              "longTermAmbition": "find stability",
+              "fear": "being abandoned",
+              "loyalty": "one trusted friend"
+            }
+          },
+          "background": {
+            "state": "present",
+            "data": {
+              "origin": "Riversend",
+              "definingEvent": "survived a warehouse fire",
+              "reasonForBeingHere": "seeking work"
+            }
+          },
+          "affiliationsRelationships": {
+            "state": "present",
+            "data": {
+              "factions": [],
+              "friends": [],
+              "rivals": []
+            }
+          },
+          "possessionsResources": {
+            "state": "present",
+            "data": {
+              "carriedMoney": "a few copper coins",
+              "significantPossession": "a worn keepsake",
+              "workTools": [
+                "small hammer",
+                "snips",
+                "portable brazier"
+              ]
+            }
+          },
+          "secretsProblemsHooks": {
+            "state": "present",
+            "data": {
+              "publicProblem": "owes a small debt",
+              "secret": "witnessed a crime",
+              "campaignHook": "needs discreet help"
+            }
+          }
+        },
+        "locks": [],
+        "diagnostics": [],
+        "provenance": {
+          "createdBy": "generator",
+          "sourcePackIds": [
+            "generic-fantasy-core"
+          ],
+          "sourceEntryIds": [
+            "commercial-craft-worker"
+          ],
+          "migratedFromSchema": null,
+          "notes": []
+        }
+      }
+    },
+    {
+      "id": "valid-soldier-unit-rank",
+      "profile": {
+        "profileType": "npcProfile",
+        "schemaVersion": "1.0.0",
+        "profileId": "npc-soldier01",
+        "revision": 1,
+        "createdAt": "2026-06-25T12:00:00Z",
+        "updatedAt": "2026-06-25T12:00:00Z",
+        "generator": {
+          "generatorId": "universal-npc-profile-generator",
+          "generatorVersion": "0.1.0",
+          "packId": "generic-fantasy-core",
+          "packVersion": "0.1.0",
+          "seed": "npc-soldier01-seed",
+          "mode": "deep",
+          "rerollCounters": {}
+        },
+        "archetype": {
+          "id": "military-soldier",
+          "label": "Professional Soldier",
+          "parentId": null,
+          "subtypeId": null,
+          "tags": []
+        },
+        "identity": {
+          "fullName": "Elise Crowe",
+          "givenName": "Elise",
+          "familyName": "Crowe",
+          "aliases": [],
+          "titles": [],
+          "pronouns": "they/them",
+          "gender": null,
+          "age": 29,
+          "ageBand": "adult",
+          "ancestryId": "human",
+          "cultureId": "generic-frontier",
+          "homeland": "Riversend",
+          "currentLocation": "Stonebridge",
+          "languages": [
+            "Common"
+          ]
+        },
+        "sections": {
+          "appearance": {
+            "state": "present",
+            "data": {
+              "build": "average",
+              "firstImpression": "watchful"
+            }
+          },
+          "mechanics": {
+            "state": "present",
+            "data": {
+              "mode": "open-d20-light",
+              "level": 3,
+              "class": "Warrior",
+              "combatReadiness": "professional"
+            }
+          },
+          "socialEconomic": {
+            "state": "present",
+            "data": {
+              "occupation": "infantry soldier",
+              "wealthBand": "modest",
+              "employmentStatus": "employed",
+              "payStatus": "one month overdue"
+            }
+          },
+          "residence": {
+            "state": "present",
+            "data": {
+              "type": "barracks",
+              "householdStatus": "unit-quartering"
+            }
+          },
+          "workContext": {
+            "state": "present",
+            "data": {
+              "kind": "military-assignment",
+              "organization": "Stonebridge Garrison",
+              "unit": "Third Gate Company",
+              "rank": "corporal",
+              "specialty": "shield infantry",
+              "commander": "Captain Orra Pell",
+              "dutyStation": "East Gate Barracks",
+              "orders": "reinforce night patrols",
+              "morale": "strained"
+            }
+          },
+          "familyHousehold": {
+            "state": "present",
+            "data": {
+              "householdType": "single",
+              "parentsState": "unknown",
+              "childCount": 0
+            }
+          },
+          "personality": {
+            "state": "present",
+            "data": {
+              "publicDemeanor": "guarded but polite",
+              "virtue": "patient",
+              "flaw": "suspicious"
+            }
+          },
+          "motivations": {
+            "state": "present",
+            "data": {
+              "immediateNeed": "secure tomorrow's meals",
+              "longTermAmbition": "find stability",
+              "fear": "being abandoned",
+              "loyalty": "one trusted friend"
+            }
+          },
+          "background": {
+            "state": "present",
+            "data": {
+              "origin": "Riversend",
+              "definingEvent": "survived a warehouse fire",
+              "reasonForBeingHere": "seeking work"
+            }
+          },
+          "affiliationsRelationships": {
+            "state": "present",
+            "data": {
+              "factions": [
+                "Stonebridge Garrison"
+              ],
+              "friends": [
+                "two squadmates"
+              ],
+              "rivals": []
+            }
+          },
+          "possessionsResources": {
+            "state": "present",
+            "data": {
+              "carriedMoney": "a few copper coins",
+              "significantPossession": "a worn keepsake"
+            }
+          },
+          "secretsProblemsHooks": {
+            "state": "present",
+            "data": {
+              "publicProblem": "owes a small debt",
+              "secret": "witnessed a crime",
+              "campaignHook": "needs discreet help"
+            }
+          }
+        },
+        "locks": [],
+        "diagnostics": [],
+        "provenance": {
+          "createdBy": "generator",
+          "sourcePackIds": [
+            "generic-fantasy-core"
+          ],
+          "sourceEntryIds": [
+            "military-soldier"
+          ],
+          "migratedFromSchema": null,
+          "notes": []
+        }
+      }
+    },
+    {
+      "id": "valid-noble-house-estate",
+      "profile": {
+        "profileType": "npcProfile",
+        "schemaVersion": "1.0.0",
+        "profileId": "npc-noble001",
+        "revision": 1,
+        "createdAt": "2026-06-25T12:00:00Z",
+        "updatedAt": "2026-06-25T12:00:00Z",
+        "generator": {
+          "generatorId": "universal-npc-profile-generator",
+          "generatorVersion": "0.1.0",
+          "packId": "generic-fantasy-core",
+          "packVersion": "0.1.0",
+          "seed": "npc-noble001-seed",
+          "mode": "deep",
+          "rerollCounters": {}
+        },
+        "archetype": {
+          "id": "elite-noble",
+          "label": "Noble",
+          "parentId": null,
+          "subtypeId": null,
+          "tags": []
+        },
+        "identity": {
+          "fullName": "Lady Anwen Marr",
+          "givenName": "Lady",
+          "familyName": "Anwen Marr",
+          "aliases": [],
+          "titles": [
+            "Lady of Grey Orchard"
+          ],
+          "pronouns": "they/them",
+          "gender": null,
+          "age": 41,
+          "ageBand": "adult",
+          "ancestryId": "human",
+          "cultureId": "generic-frontier",
+          "homeland": "Riversend",
+          "currentLocation": "Stonebridge",
+          "languages": [
+            "Common"
+          ]
+        },
+        "sections": {
+          "appearance": {
+            "state": "present",
+            "data": {
+              "build": "average",
+              "firstImpression": "watchful"
+            }
+          },
+          "mechanics": {
+            "state": "none",
+            "reason": "Narrative-only fixture."
+          },
+          "socialEconomic": {
+            "state": "present",
+            "data": {
+              "occupation": "estate holder",
+              "wealthBand": "wealthy",
+              "employmentStatus": "estate-income",
+              "socialClass": "nobility"
+            }
+          },
+          "residence": {
+            "state": "present",
+            "data": {
+              "type": "manor-house",
+              "name": "Grey Orchard Hall",
+              "householdStatus": "extended-household"
+            }
+          },
+          "workContext": {
+            "state": "present",
+            "data": {
+              "kind": "estate-court-role",
+              "title": "Lady of Grey Orchard",
+              "house": "House Marr",
+              "rank": "minor landed noble",
+              "successionPosition": "current holder",
+              "estate": "Grey Orchard",
+              "incomeSource": "orchards and river toll rights",
+              "currentProblem": "a disputed boundary threatens both income and legitimacy"
+            }
+          },
+          "familyHousehold": {
+            "state": "present",
+            "data": {
+              "householdType": "noble-household",
+              "parentsState": "deceased",
+              "spouseState": "none",
+              "childCount": 1,
+              "heir": "Celia Marr"
+            }
+          },
+          "personality": {
+            "state": "present",
+            "data": {
+              "publicDemeanor": "guarded but polite",
+              "virtue": "patient",
+              "flaw": "suspicious"
+            }
+          },
+          "motivations": {
+            "state": "present",
+            "data": {
+              "immediateNeed": "secure tomorrow's meals",
+              "longTermAmbition": "find stability",
+              "fear": "being abandoned",
+              "loyalty": "one trusted friend"
+            }
+          },
+          "background": {
+            "state": "present",
+            "data": {
+              "origin": "Riversend",
+              "definingEvent": "survived a warehouse fire",
+              "reasonForBeingHere": "seeking work"
+            }
+          },
+          "affiliationsRelationships": {
+            "state": "present",
+            "data": {
+              "factions": [],
+              "friends": [],
+              "rivals": []
+            }
+          },
+          "possessionsResources": {
+            "state": "present",
+            "data": {
+              "carriedMoney": "a few copper coins",
+              "significantPossession": "a worn keepsake"
+            }
+          },
+          "secretsProblemsHooks": {
+            "state": "present",
+            "data": {
+              "publicProblem": "owes a small debt",
+              "secret": "witnessed a crime",
+              "campaignHook": "needs discreet help"
+            }
+          }
+        },
+        "locks": [],
+        "diagnostics": [],
+        "provenance": {
+          "createdBy": "generator",
+          "sourcePackIds": [
+            "generic-fantasy-core"
+          ],
+          "sourceEntryIds": [
+            "elite-noble"
+          ],
+          "migratedFromSchema": null,
+          "notes": []
+        }
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "id": "invalid-beggar-normal-business",
+      "expectedCodes": [
+        "BEGGAR_WORKPLACE_CONTRADICTION"
+      ],
+      "profile": {
+        "profileType": "npcProfile",
+        "schemaVersion": "1.0.0",
+        "profileId": "npc-badbeggar",
+        "revision": 1,
+        "createdAt": "2026-06-25T12:00:00Z",
+        "updatedAt": "2026-06-25T12:00:00Z",
+        "generator": {
+          "generatorId": "universal-npc-profile-generator",
+          "generatorVersion": "0.1.0",
+          "packId": "generic-fantasy-core",
+          "packVersion": "0.1.0",
+          "seed": "npc-beggar01-seed",
+          "mode": "deep",
+          "rerollCounters": {}
+        },
+        "archetype": {
+          "id": "marginalized-beggar",
+          "label": "Beggar",
+          "parentId": null,
+          "subtypeId": null,
+          "tags": []
+        },
+        "identity": {
+          "fullName": "Mara Venn",
+          "givenName": "Mara",
+          "familyName": "Venn",
+          "aliases": [],
+          "titles": [],
+          "pronouns": "they/them",
+          "gender": null,
+          "age": 47,
+          "ageBand": "adult",
+          "ancestryId": "human",
+          "cultureId": "generic-frontier",
+          "homeland": "Riversend",
+          "currentLocation": "Stonebridge",
+          "languages": [
+            "Common"
+          ]
+        },
+        "sections": {
+          "appearance": {
+            "state": "present",
+            "data": {
+              "build": "average",
+              "firstImpression": "watchful"
+            }
+          },
+          "mechanics": {
+            "state": "none",
+            "reason": "Narrative-only fixture."
+          },
+          "socialEconomic": {
+            "state": "present",
+            "data": {
+              "occupation": "street beggar",
+              "wealthBand": "destitute",
+              "employmentStatus": "none",
+              "dependents": 0
+            }
+          },
+          "residence": {
+            "state": "none",
+            "reason": "No stable residence; sleeps beneath the old east gate."
+          },
+          "workContext": {
+            "state": "present",
+            "data": {
+              "kind": "normal-business",
+              "name": "Golden Crown Banking Hall",
+              "ownership": "owner"
+            }
+          },
+          "familyHousehold": {
+            "state": "present",
+            "data": {
+              "householdType": "none",
+              "parentsState": "deceased",
+              "childCount": 0
+            }
+          },
+          "personality": {
+            "state": "present",
+            "data": {
+              "publicDemeanor": "guarded but polite",
+              "virtue": "patient",
+              "flaw": "suspicious"
+            }
+          },
+          "motivations": {
+            "state": "present",
+            "data": {
+              "immediateNeed": "secure tomorrow's meals",
+              "longTermAmbition": "find stability",
+              "fear": "being abandoned",
+              "loyalty": "one trusted friend"
+            }
+          },
+          "background": {
+            "state": "present",
+            "data": {
+              "origin": "Riversend",
+              "definingEvent": "survived a warehouse fire",
+              "reasonForBeingHere": "seeking work"
+            }
+          },
+          "affiliationsRelationships": {
+            "state": "present",
+            "data": {
+              "factions": [],
+              "friends": [],
+              "rivals": []
+            }
+          },
+          "possessionsResources": {
+            "state": "present",
+            "data": {
+              "carriedMoney": "a few copper coins",
+              "significantPossession": "a worn keepsake"
+            }
+          },
+          "secretsProblemsHooks": {
+            "state": "present",
+            "data": {
+              "publicProblem": "owes a small debt",
+              "secret": "witnessed a crime",
+              "campaignHook": "needs discreet help"
+            }
+          }
+        },
+        "locks": [],
+        "diagnostics": [],
+        "provenance": {
+          "createdBy": "generator",
+          "sourcePackIds": [
+            "generic-fantasy-core"
+          ],
+          "sourceEntryIds": [
+            "marginalized-beggar"
+          ],
+          "migratedFromSchema": null,
+          "notes": []
+        }
+      }
+    },
+    {
+      "id": "invalid-child-has-children",
+      "expectedCodes": [
+        "CHILD_PARENTAGE_CONTRADICTION"
+      ],
+      "profile": {
+        "profileType": "npcProfile",
+        "schemaVersion": "1.0.0",
+        "profileId": "npc-badchild",
+        "revision": 1,
+        "createdAt": "2026-06-25T12:00:00Z",
+        "updatedAt": "2026-06-25T12:00:00Z",
+        "generator": {
+          "generatorId": "universal-npc-profile-generator",
+          "generatorVersion": "0.1.0",
+          "packId": "generic-fantasy-core",
+          "packVersion": "0.1.0",
+          "seed": "npc-badchild-seed",
+          "mode": "deep",
+          "rerollCounters": {}
+        },
+        "archetype": {
+          "id": "civilian-general",
+          "label": "General Civilian",
+          "parentId": null,
+          "subtypeId": null,
+          "tags": []
+        },
+        "identity": {
+          "fullName": "Perrin Bell",
+          "givenName": "Perrin",
+          "familyName": "Bell",
+          "aliases": [],
+          "titles": [],
+          "pronouns": "they/them",
+          "gender": null,
+          "age": 9,
+          "ageBand": "child",
+          "ancestryId": "human",
+          "cultureId": "generic-frontier",
+          "homeland": "Riversend",
+          "currentLocation": "Stonebridge",
+          "languages": [
+            "Common"
+          ]
+        },
+        "sections": {
+          "appearance": {
+            "state": "present",
+            "data": {
+              "build": "average",
+              "firstImpression": "watchful"
+            }
+          },
+          "mechanics": {
+            "state": "none",
+            "reason": "Narrative-only fixture."
+          },
+          "socialEconomic": {
+            "state": "present",
+            "data": {
+              "occupation": "General Civilian",
+              "wealthBand": "modest",
+              "employmentStatus": "variable"
+            }
+          },
+          "residence": {
+            "state": "present",
+            "data": {
+              "type": "rented-room",
+              "householdStatus": "single"
+            }
+          },
+          "workContext": {
+            "state": "unknown",
+            "reason": "Not yet specialized."
+          },
+          "familyHousehold": {
+            "state": "present",
+            "data": {
+              "householdType": "family",
+              "parentsState": "living",
+              "childCount": 2,
+              "children": [
+                "Milo Bell",
+                "Wenna Bell"
+              ]
+            }
+          },
+          "personality": {
+            "state": "present",
+            "data": {
+              "publicDemeanor": "guarded but polite",
+              "virtue": "patient",
+              "flaw": "suspicious"
+            }
+          },
+          "motivations": {
+            "state": "present",
+            "data": {
+              "immediateNeed": "secure tomorrow's meals",
+              "longTermAmbition": "find stability",
+              "fear": "being abandoned",
+              "loyalty": "one trusted friend"
+            }
+          },
+          "background": {
+            "state": "present",
+            "data": {
+              "origin": "Riversend",
+              "definingEvent": "survived a warehouse fire",
+              "reasonForBeingHere": "seeking work"
+            }
+          },
+          "affiliationsRelationships": {
+            "state": "present",
+            "data": {
+              "factions": [],
+              "friends": [],
+              "rivals": []
+            }
+          },
+          "possessionsResources": {
+            "state": "present",
+            "data": {
+              "carriedMoney": "a few copper coins",
+              "significantPossession": "a worn keepsake"
+            }
+          },
+          "secretsProblemsHooks": {
+            "state": "present",
+            "data": {
+              "publicProblem": "owes a small debt",
+              "secret": "witnessed a crime",
+              "campaignHook": "needs discreet help"
+            }
+          }
+        },
+        "locks": [],
+        "diagnostics": [],
+        "provenance": {
+          "createdBy": "generator",
+          "sourcePackIds": [
+            "generic-fantasy-core"
+          ],
+          "sourceEntryIds": [
+            "civilian-general"
+          ],
+          "migratedFromSchema": null,
+          "notes": []
+        }
+      }
+    }
+  ]
+}
