@@ -94,7 +94,8 @@
       description.appendChild(renderValue(value));
       const controls = document.createElement('div');
       controls.className = 'npc-field-controls no-print';
-      controls.appendChild(lockButton(`${pointer}/data/${key}`, locks, onToggleLock, true));
+      const fieldBase = pointer === '/identity' ? pointer : `${pointer}/data`;
+      controls.appendChild(lockButton(`${fieldBase}/${key}`, locks, onToggleLock, true));
       row.append(term, description, controls);
       list.appendChild(row);
     });
