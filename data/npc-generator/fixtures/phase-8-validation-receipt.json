@@ -1,0 +1,53 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-8-archetype-specific-modules",
+  "status": "gate-passed",
+  "validatedThroughCommit": "c3fdaffcb667a8583d9d7517a33c307f59f0bb6f",
+  "ciReceiptCommit": "97ab162e5a20d25bc73b3adfc6dc9d3d95c1adb1",
+  "validator": "scripts/validate-npc-phase-8.mjs",
+  "workflow": ".github/workflows/pages.yml",
+  "executionDate": "2026-06-26",
+  "results": {
+    "operationModulesVerified": 11,
+    "operationTablesVerified": 72,
+    "seedsPerArchetype": 50,
+    "modesPerSeed": 3,
+    "profilesGenerated": 1650,
+    "deterministicDeepRepeats": 550,
+    "archetypeRerollChangesObserved": 11,
+    "generationErrors": 0,
+    "generationWarnings": 0,
+    "forbiddenNormalWorkplaceKeys": 0,
+    "baseFieldOverwriteFailures": 0,
+    "lockFailures": 0,
+    "rerollIsolationFailures": 0
+  },
+  "verifiedArchetypes": [
+    "civilian-general",
+    "civilian-laborer",
+    "commercial-craft-worker",
+    "commercial-merchant",
+    "commercial-banker",
+    "marginalized-beggar",
+    "authority-city-guard",
+    "military-soldier",
+    "criminal-thief",
+    "criminal-bandit",
+    "elite-noble"
+  ],
+  "verifiedBehavior": [
+    "Quick mode contains no Phase 8 operational fields.",
+    "Standard mode adds practical role-specific operational information.",
+    "Deep mode adds pressures, dependencies, logistics, rivals, and current crises.",
+    "Base required operational values are preserved during enrichment.",
+    "Operation rerolls change only the selected work or extension target.",
+    "Locked operational fields survive rerolls.",
+    "Beggar, thief, and bandit profiles do not receive prohibited normal-workplace keys."
+  ],
+  "notes": [
+    "Phase 8 exit requirements are satisfied and Phase 9 may begin.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
