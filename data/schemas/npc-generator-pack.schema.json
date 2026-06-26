@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/npc-generator-pack.schema.json",
+  "title": "Universal NPC Generator Data Pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packType",
+    "schemaVersion",
+    "packId",
+    "version",
+    "title",
+    "description",
+    "compatibility",
+    "archetypeFiles",
+    "dataFiles",
+    "protectedIdPolicy"
+  ],
+  "properties": {
+    "packType": {
+      "const": "npcGeneratorPack"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "packId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "author": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "license": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generatorMinVersion",
+        "generatorMaxMajor",
+        "profileSchemaVersion",
+        "archetypeSchemaVersion"
+      ],
+      "properties": {
+        "generatorMinVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "generatorMaxMajor": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "profileSchemaVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "archetypeSchemaVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "packId",
+          "minimumVersion"
+        ],
+        "properties": {
+          "packId": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+          },
+          "minimumVersion": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          },
+          "optional": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "archetypeFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/path"
+      },
+      "uniqueItems": true
+    },
+    "dataFiles": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z][A-Za-z0-9]*$"
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/path"
+        },
+        "uniqueItems": true
+      }
+    },
+    "protectedIdPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowCoreOverrides",
+        "namespace"
+      ],
+      "properties": {
+        "allowCoreOverrides": {
+          "const": false
+        },
+        "namespace": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{2,63}$"
+        },
+        "reservedPrefixes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "defaultContext": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "path": {
+      "type": "string",
+      "pattern": "^(data|packs)/[A-Za-z0-9._/-]+\\.json$"
+    }
+  }
+}
