@@ -66,7 +66,12 @@
   function filename(profile,extension){const base=(profile.identity?.fullName||profile.profileId||'npc-profile').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');return`${base||'npc-profile'}.${extension}`;}
   function download(content,name,mime='text/plain'){
     if(typeof document==='undefined'||typeof URL==='undefined')return{ok:false,error:'Browser download APIs are unavailable.'};
-    const blob=new Blob([content],{type:mime});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);return{ok:true};
+    const blob=new Blob([content],{type:mime});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();
+    globalThis.setTimeout(()=>URL.revokeObjectURL(url),0);
+    return{ok:true};
   }
   function copy(content){return globalThis.navigator?.clipboard?.writeText?globalThis.navigator.clipboard.writeText(content):Promise.reject(new Error('Clipboard API is unavailable.'));}
 
