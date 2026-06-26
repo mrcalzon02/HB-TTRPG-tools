@@ -1,0 +1,71 @@
+{
+  "dataType": "npcGroupTables",
+  "schemaVersion": "1.0.0",
+  "packId": "generic-fantasy-core",
+  "version": "0.1.0",
+  "tables": {
+    "householdNames": ["Household", "Family", "Kinship", "Home"],
+    "householdLocations": ["a modest row house", "rooms above a workshop", "a crowded tenement apartment", "a small farmstead", "a rented courtyard house", "a weathered cottage"],
+    "householdObjectives": ["keep every dependent fed through the coming season", "save enough to secure a safer home", "protect the household from a hostile creditor", "find stable work for its adult members", "arrange care for an aging relative", "recover property lost during a recent crisis"],
+    "householdProblems": ["the household income no longer covers food and rent", "two relatives disagree over who should lead the household", "a dependent has gone missing", "a creditor is threatening eviction or seizure", "one member is hiding a dangerous obligation", "the residence needs repairs the family cannot afford"],
+    "householdResources": ["shared savings", "a family heirloom", "neighborhood goodwill", "a small garden", "trade tools", "an extended family contact"],
+
+    "businessNames": ["The Brass Lantern Workshop", "Three Bridges Trading House", "The Quiet Hammer", "North Gate Provisions", "The Copper Ledger", "Riverstone Repairs"],
+    "businessLocations": ["a market-square storefront", "a workshop beside the east gate", "a warehouse near the river landing", "a rented stall and back room", "a converted ground-floor residence", "a busy courtyard workshop"],
+    "businessObjectives": ["complete a valuable contract before its deadline", "expand into a neighboring district", "secure a reliable supply route", "pay off the debt used to open the business", "earn recognition from the local guild", "retain skilled workers through a difficult season"],
+    "businessProblems": ["a major client refuses to pay", "critical materials have not arrived", "a rival is undercutting prices through sabotage", "the proprietor has promised more work than the staff can finish", "the guild is investigating a rules violation", "one employee is stealing from inventory"],
+    "businessResources": ["specialized tools", "trade inventory", "a delivery cart", "guild contacts", "a modest cash reserve", "a valuable long-term contract"],
+
+    "patrolNames": ["North Gate Patrol", "River Ward Watch", "Lantern Street Patrol", "Market District Watch", "Old Wall Patrol", "Harbor Night Watch"],
+    "patrolLocations": ["the north gate and adjoining streets", "the crowded market district", "the river warehouses", "a poor residential ward", "the old city wall", "the harbor approaches"],
+    "patrolObjectives": ["reduce robberies along its assigned route", "locate a wanted suspect", "keep a public gathering peaceful", "protect merchants during a tense market week", "identify the source of repeated false alarms", "restore public confidence after a recent failure"],
+    "patrolProblems": ["the patrol is dangerously understaffed", "its commander is concealing misconduct", "local residents refuse to cooperate", "one guard is taking bribes", "equipment and wages are overdue", "another patrol is interfering with the investigation"],
+    "patrolResources": ["a station house", "watch warrants", "signal whistles", "holding cells", "a local informant network", "municipal authority"],
+
+    "squadNames": ["Third Banner Squad", "Iron Pike Section", "Ash Company First Squad", "West Wall Detail", "Red Shield Squad", "Seventh Sapper Team"],
+    "squadLocations": ["a fortified border post", "a temporary field camp", "the outer wall barracks", "a disputed river crossing", "a mountain watchtower", "a siege-work staging area"],
+    "squadObjectives": ["hold its position until relieved", "escort a critical supply convoy", "reconnoiter enemy movement", "repair and defend damaged fortifications", "capture a strategically important crossing", "recover soldiers missing after a patrol"],
+    "squadProblems": ["orders from headquarters contradict local reality", "the squad has lost vital equipment", "the second in command questions the leader's judgment", "several soldiers are exhausted or wounded", "the promised relief force has not arrived", "an enemy agent may be inside the unit"],
+    "squadResources": ["military weapons", "field rations", "unit maps", "a signal kit", "engineering tools", "formal command authority"],
+
+    "gangNames": ["The Black Knives", "Lantern Alley Crew", "The Crooked Keys", "Red Coin Gang", "The Hollow Hands", "South Ward Circle"],
+    "gangLocations": ["a concealed cellar safehouse", "rooms behind a disreputable tavern", "an abandoned bathhouse", "a warehouse loft", "a maze of connected tenement rooms", "an old storm drain junction"],
+    "gangObjectives": ["take control of a lucrative protection territory", "steal a guarded shipment", "silence a witness before trial", "force a rival gang out of the district", "recover money stolen by a former member", "place an informant inside the city watch"],
+    "gangProblems": ["the boss suspects a lieutenant of betrayal", "a recent crime attracted too much official attention", "the gang owes money to a larger syndicate", "two members claim the same territory", "its safehouse has been discovered", "a valuable fence has stopped cooperating"],
+    "gangResources": ["a hidden safehouse", "stolen goods", "street informants", "forged papers", "concealed weapons", "a cooperative fence"],
+
+    "banditGroupNames": ["The Grey Road Band", "Black Pine Raiders", "The Broken Spur Company", "Red Ravine Bandits", "The Hollow Hill Crew", "Ashwood Marauders"],
+    "banditGroupLocations": ["a concealed forest camp", "caves above a trade road", "an abandoned watchtower", "a ravine ambush site", "a ruined farmstead", "a temporary camp beside an old bridge"],
+    "banditGroupObjectives": ["ambush a wealthy caravan", "force nearby villages to pay tribute", "move camp before soldiers arrive", "recruit desperate locals", "recover captured members", "secure a safer route through the region"],
+    "banditGroupProblems": ["food supplies are nearly exhausted", "the chief's authority is weakening", "a scout has disappeared", "local militia know the camp's general location", "stolen treasure has divided the group", "a patron who funded the band now demands repayment"],
+    "banditGroupResources": ["a concealed camp", "captured mounts", "roadside scouts", "stolen weapons", "hidden caches", "knowledge of local trails"],
+
+    "nobleHouseNames": ["House", "Estate", "Court", "Lineage"],
+    "nobleHouseLocations": ["a fortified manor estate", "a city palace and courtyard", "a declining country house", "a tower overlooking the river", "an ancestral hilltop keep", "a walled urban compound"],
+    "nobleHouseObjectives": ["secure a politically valuable marriage", "restore the house's damaged finances", "gain appointment to an important office", "defend its estate from a rival claim", "conceal a succession dispute", "expand influence over a nearby town"],
+    "nobleHouseProblems": ["the estate is burdened by hidden debt", "two relatives claim the same inheritance", "the steward has discovered financial fraud", "a household guard serves a rival patron", "the noble's heir has disappeared", "servants are spreading a dangerous secret"],
+    "nobleHouseResources": ["hereditary title", "estate income", "armed retainers", "court connections", "legal privileges", "an ancestral archive"],
+
+    "guildTeamNames": ["Copper Compass Guild Team", "Stonewright Third Crew", "The Blue Apron Company", "Master Vell's Workshop Team", "East Hall Journeyworkers", "The Argent Measure"],
+    "guildTeamLocations": ["a guild-owned workshop", "a major construction site", "a rented project yard", "the guild's eastern hall", "a client's fortified residence", "a temporary roadside work camp"],
+    "guildTeamObjectives": ["finish a prestigious masterwork", "train apprentices before the examination season", "complete a dangerous repair contract", "prove a disputed technique is reliable", "win the next guild commission", "restore the team's damaged professional reputation"],
+    "guildTeamProblems": ["the client keeps changing the contract", "an apprentice caused expensive damage", "a senior worker plans to leave for a rival", "materials supplied by the guild are defective", "the project site is unsafe", "the master is hiding a serious mistake"],
+    "guildTeamResources": ["guild-certified tools", "specialized plans", "apprentice labor", "a material allowance", "professional credentials", "access to guild archives"],
+
+    "crewNames": ["The Wayward Star", "The Copper Zephyr", "The Resolute Gull", "The Windward Lantern", "The Argent Cloud", "The Far Horizon"],
+    "crewLocations": ["a long-range trading airship", "a weathered survey vessel", "a heavily armed escort ship", "a fast courier airship", "a converted exploration vessel", "a patched independent freighter"],
+    "crewObjectives": ["deliver urgent cargo before a rival vessel", "chart a dangerous unrecorded route", "reach port before the ship core fails", "escort a vulnerable convoy", "locate a missing expedition", "complete one profitable voyage without losing another crew member"],
+    "crewProblems": ["the ship core is behaving unpredictably", "the crew has not been paid", "the captain is concealing the true destination", "supplies are insufficient for the planned route", "a faction agent is aboard under a false name", "the first officer and captain no longer trust one another"],
+    "crewResources": ["an airworthy vessel", "navigation charts", "cargo space", "shipboard weapons", "repair stores", "a trained mixed crew"],
+
+    "travelingPartyNames": ["The East Road Company", "Grey Bridge Travelers", "The Long Mile Party", "The Southbound Fellowship", "The Wayfarer's Compact", "The Lantern Road Company"],
+    "travelingPartyLocations": ["a roadside camp", "a mountain pass", "a river ferry crossing", "an isolated coaching inn", "a muddy trade road", "the edge of an unfamiliar settlement"],
+    "travelingPartyObjectives": ["reach a distant settlement before winter", "escort a specialist to a dangerous site", "deliver documents to a regional authority", "find a safe route around active fighting", "locate a missing traveler", "transport a valuable but fragile object"],
+    "travelingPartyProblems": ["one traveler is lying about the destination", "supplies were lost during the last crossing", "the guide believes the main road is unsafe", "a member is being followed", "the party cannot agree on who should lead", "bad weather has closed the planned route"],
+    "travelingPartyResources": ["pack animals", "travel permits", "camp equipment", "a route map", "shared provisions", "a letter of introduction"],
+
+    "commandStyles": ["calm and consultative", "strictly hierarchical", "protective but controlling", "improvised and practical", "charismatic and personal", "distant but competent", "consensus-driven", "fear-based and punitive"],
+    "relationshipQualities": ["deeply trusted", "professionally reliable", "friendly but competitive", "strained by old resentment", "bound by debt", "mutually protective", "uneasy but functional", "secretly disloyal"],
+    "groupFactions": ["independent", "local household", "local guild", "municipal authority", "military command", "merchant consortium", "noble patron", "temple authority", "criminal syndicate", "regional alliance"]
+  }
+}
