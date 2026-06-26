@@ -58,6 +58,10 @@
     if(!workspace.groupTimestamps.has(key))workspace.groupTimestamps.set(key,new Date().toISOString());
     return workspace.groupTimestamps.get(key);
   }
+  function refreshPack(workspace){
+    workspace.pack=GroupData.extendPack(workspace.pack,workspace.groupData);
+    return workspace.pack;
+  }
   function renderDiagnostics(workspace,result){
     const target=workspace.controls['npc-group-diagnostics'];target.innerHTML='';
     const diagnostics=result?.diagnostics||[];
@@ -99,6 +103,7 @@
     const templateId=workspace.controls['npc-group-template'].value,seed=workspace.controls['npc-group-seed'].value.trim()||randomSeed(),depth=workspace.controls['npc-group-depth'].value,sizeValue=workspace.controls['npc-group-size'].value;
     workspace.controls['npc-group-seed'].value=seed;
     const key=[templateId,seed,depth,sizeValue].join('|');
+    refreshPack(workspace);
     const result=GroupCore.generateGroup({templateId,seed,groupData:workspace.groupData,pack:workspace.pack,archetypes:workspace.data?.policies?.archetypes||[],mode:depth,size:sizeValue===''?undefined:Number(sizeValue),mechanicalMode:'none',timestamp:timestampFor(workspace,key)});
     workspace.currentGroupResult=result;workspace.currentGroup=result.group;renderDiagnostics(workspace,result);renderGroup(workspace,result.group);
     workspace.setStatus?.(result.valid?`${result.group.shared.groupName} generated with ${result.group.members.length} members.`:`Group generation failed during ${reason}.`,result.valid?'success':'error');
@@ -109,8 +114,8 @@
     ensureStyles();workspace.setStatus?.('Loading group and roster data…');
     const data=await GroupData.load();
     if(!data.valid)throw new Error(`Group data is invalid: ${data.diagnostics.map(item=>item.code).join(', ')}.`);
-    workspace.groupData=data;workspace.pack=GroupData.extendPack(workspace.pack,data);installShell(workspace);populate(workspace);generate(workspace,'initial');return workspace;
+    workspace.groupData=data;refreshPack(workspace);installShell(workspace);populate(workspace);generate(workspace,'initial');return workspace;
   }
 
-  globalThis.NpcProfileGeneratorGroupUI=Object.freeze({ensureStyles,randomSeed,option,node,fact,installShell,populate,syncTemplate,timestampFor,renderDiagnostics,memberCard,renderGroup,generate,enrich});
+  globalThis.NpcProfileGeneratorGroupUI=Object.freeze({ensureStyles,randomSeed,option,node,fact,installShell,populate,syncTemplate,timestampFor,refreshPack,renderDiagnostics,memberCard,renderGroup,generate,enrich});
 })();
