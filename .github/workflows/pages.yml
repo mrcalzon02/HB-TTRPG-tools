@@ -29,43 +29,73 @@ jobs:
           node-version: "20"
 
       - name: Validate mainline editor contracts
+        id: p0_static
+        shell: bash
         run: |
-          node scripts/validate-crafting-data.mjs
-          node scripts/validate-editor-roadmap.mjs
-          node scripts/validate-editor-kernel.mjs
-          node scripts/validate-editor-migrations.mjs
-          node scripts/validate-editor-adapter-integration.mjs
-          node scripts/validate-editor-inheritance.mjs
-          node scripts/validate-editor-drafts.mjs
-          node scripts/validate-editor-lifecycle.mjs
-          node scripts/validate-editor-repository.mjs
-          node scripts/validate-editor-runtime-structure.mjs
-          node scripts/validate-p0-browser-verification.mjs
-
-      - name: Check P0 browser JavaScript
-        run: |
-          node --check kaysender-editor-live-smoke.js
-          node --check kaysender-editor-smoke-runtime.js
-          node --check scripts/run-p0-browser-verification.mjs
-          node --check scripts/validate-p0-browser-verification.mjs
+          set +e
+          {
+            node scripts/validate-crafting-data.mjs
+            node scripts/validate-editor-roadmap.mjs
+            node scripts/validate-editor-kernel.mjs
+            node scripts/validate-editor-migrations.mjs
+            node scripts/validate-editor-adapter-integration.mjs
+            node scripts/validate-editor-inheritance.mjs
+            node scripts/validate-editor-drafts.mjs
+            node scripts/validate-editor-lifecycle.mjs
+            node scripts/validate-editor-repository.mjs
+            node scripts/validate-editor-runtime-structure.mjs
+            node scripts/validate-p0-browser-verification.mjs
+            node --check kaysender-editor-live-smoke.js
+            node --check kaysender-editor-smoke-runtime.js
+            node --check scripts/run-p0-browser-verification.mjs
+            node --check scripts/validate-p0-browser-verification.mjs
+          } > p0-static-output.txt 2>&1
+          status=$?
+          echo "$status" > p0-static-status.txt
+          cat p0-static-output.txt
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Install Chromium verification runtime
+        if: steps.p0_static.outputs.status == '0'
         run: |
           npm install --no-save --package-lock=false playwright@1.60.0
           npx playwright install --with-deps chromium
 
-      - name: Run P0 browser verification
-        run: node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png artifacts/p0-browser-verification-failure.json
+      - name: Run and validate P0 browser verification
+        id: p0_browser
+        if: steps.p0_static.outputs.status == '0'
+        shell: bash
+        run: |
+          set +e
+          node scripts/run-p0-browser-verification.mjs artifacts/p0-browser-verification.json artifacts/p0-browser-verification-failure.png artifacts/p0-browser-verification-failure.json > p0-browser-output.txt 2>&1
+          status=$?
+          if [ "$status" -eq 0 ]; then
+            node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json >> p0-browser-output.txt 2>&1
+            status=$?
+          fi
+          echo "$status" > p0-browser-status.txt
+          cat p0-browser-output.txt
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
 
-      - name: Validate P0 browser verification receipt
-        run: node scripts/validate-p0-browser-verification.mjs artifacts/p0-browser-verification.json
+      - name: Complete P0 diagnostic files
+        if: ${{ always() }}
+        run: |
+          test -f p0-browser-output.txt || echo "P0 browser verification was skipped because static validation failed." > p0-browser-output.txt
+          test -f p0-browser-status.txt || echo "1" > p0-browser-status.txt
 
       - name: Upload P0 browser verification evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@v5
         with:
           name: p0-browser-verification
-          path: artifacts/
+          path: |
+            artifacts/
+            p0-static-output.txt
+            p0-browser-output.txt
+            p0-static-status.txt
+            p0-browser-status.txt
           if-no-files-found: warn
           retention-days: 30
 
@@ -73,8 +103,75 @@ jobs:
         if: ${{ always() }}
         run: rm -rf node_modules
 
-  deploy:
+      - name: Enforce P0 editor gate
+        if: always() && (steps.p0_static.outputs.status != '0' || steps.p0_browser.outputs.status != '0')
+        run: exit 1
+
+  p0-editor-receipt:
     needs: p0-editor-gate
+    if: always() && github.actor != 'github-actions[bot]'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download P0 evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: p0-browser-verification
+          path: p0-evidence
+
+      - name: Record P0 CI result
+        env:
+          VALIDATED_SHA: ${{ github.sha }}
+          P0_JOB_RESULT: ${{ needs.p0-editor-gate.result }}
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const path=require('node:path');
+          const root='p0-evidence';
+          const locate=name=>{
+            const direct=path.join(root,name);
+            if(fs.existsSync(direct))return direct;
+            const nested=path.join(root,'artifacts',name);
+            return fs.existsSync(nested)?nested:null;
+          };
+          const read=name=>{const file=locate(name);return file?fs.readFileSync(file,'utf8').trim():'';};
+          const lines=name=>read(name).split('\n').filter(Boolean).slice(-240);
+          const staticCode=Number(read('p0-static-status.txt')||1);
+          const browserCode=Number(read('p0-browser-status.txt')||1);
+          const receipt={
+            receiptType:'kaysenderP0CiReceipt',
+            setting:'Kaysender',
+            stage:'P0',
+            stageId:'shared-editor-kernel',
+            status:staticCode===0&&browserCode===0&&process.env.P0_JOB_RESULT==='success'?'passed':'failed',
+            validatedCommit:process.env.VALIDATED_SHA,
+            workflow:'.github/workflows/pages.yml',
+            validators:{static:'scripts/validate-editor-runtime-structure.mjs',browser:'scripts/run-p0-browser-verification.mjs',receipt:'scripts/validate-p0-browser-verification.mjs'},
+            exitCodes:{static:staticCode,browser:browserCode},
+            artifact:'p0-browser-verification',
+            browserReceiptPresent:Boolean(locate('p0-browser-verification.json')),
+            browserFailurePresent:Boolean(locate('p0-browser-verification-failure.json')),
+            staticOutput:lines('p0-static-output.txt'),
+            browserOutput:lines('p0-browser-output.txt'),
+            recordedAt:new Date().toISOString()
+          };
+          fs.mkdirSync('data/kaysender/editors/verification',{recursive:true});
+          fs.writeFileSync('data/kaysender/editors/verification/p0-ci-receipt.json',`${JSON.stringify(receipt,null,2)}\n`);
+          NODE
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/kaysender/editors/verification/p0-ci-receipt.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Kaysender P0 CI result [skip ci]"
+            git push
+          fi
+
+  deploy:
+    needs: [p0-editor-gate, p0-editor-receipt]
     environment:
       name: github-pages
     runs-on: ubuntu-latest
