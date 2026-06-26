@@ -17,8 +17,8 @@
   };
 
   const loadP0SmokeRuntime = () => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('p0-smoke') !== '1') return;
+    const internalMode = new URLSearchParams(window.location.search).get('p0-smoke') === '1' || navigator.webdriver === true;
+    if (!internalMode) return;
     if (window.runKaysenderEditorSmokeTest || document.querySelector('script[data-p0-smoke-runtime]')) return;
     const script = document.createElement('script');
     script.src = 'kaysender-editor-smoke-runtime.js';
