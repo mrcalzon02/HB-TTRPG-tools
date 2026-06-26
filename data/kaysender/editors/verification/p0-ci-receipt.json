@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "390012e970ae4344fe40e678a4d944d3d3831fe7",
+  "validatedCommit": "a7e1c366f18fce83ec261c294bcf56b1f43d2e01",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -69,8 +69,8 @@
     "Verified split internal smoke runtime, receipt schema, persistent editor chain, exact pinned parent revisions, Chromium runner, artifact retention, and Pages deployment ordering."
   ],
   "browserOutput": [
-    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, migrated, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-526654f6c0d6 schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d64d8b2a8a52 changed revision 1 to 2.",
-    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, migrated, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-526654f6c0d6 schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d64d8b2a8a52 changed revision 1 to 2."
+    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Island did not produce an active canonical envelope.",
+    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Island did not produce an active canonical envelope."
   ],
-  "recordedAt": "2026-06-26T21:39:42.570Z"
+  "recordedAt": "2026-06-26T21:42:31.362Z"
 }
