@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "90b67a110532aaab79adab1147dce0a07de9978a",
+  "validatedCommit": "6f44c5aea1af6d3fcba78237af403483efa450ba",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -12,12 +12,12 @@
     "receipt": "scripts/validate-p0-browser-verification.mjs"
   },
   "exitCodes": {
-    "static": 0,
+    "static": 1,
     "browser": 1
   },
   "artifact": "p0-browser-verification",
   "browserReceiptPresent": false,
-  "browserFailurePresent": true,
+  "browserFailurePresent": false,
   "staticOutput": [
     "Crafting data validation passed.",
     "Templates: 43",
@@ -55,18 +55,10 @@
     "    at fail (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-runtime-structure.mjs:8:28)",
     "    at requireMarkers (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-runtime-structure.mjs:11:59)",
     "    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-runtime-structure.mjs:65:1",
-    "Node.js v20.20.2",
-    "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-p0-browser-verification.mjs:8",
-    "const fail = message => { throw new Error(message); };",
-    "                                ^",
-    "Error: Pages workflow is missing P0 browser gate marker 'path: artifacts/'.",
-    "    at fail (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-p0-browser-verification.mjs:8:33)",
-    "    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-p0-browser-verification.mjs:114:35",
     "Node.js v20.20.2"
   ],
   "browserOutput": [
-    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, migrated, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-aef1dc9d699f schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-faf00d59adb6 changed revision 1 to 2.",
-    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, migrated, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-aef1dc9d699f schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-faf00d59adb6 changed revision 1 to 2."
+    "P0 browser verification was skipped because static validation failed."
   ],
-  "recordedAt": "2026-06-26T21:35:56.891Z"
+  "recordedAt": "2026-06-26T21:36:29.677Z"
 }
