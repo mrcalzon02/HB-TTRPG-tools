@@ -1,0 +1,23 @@
+.npc-group-workspace{margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.npc-group-heading{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:16px}
+.npc-group-heading p{color:var(--muted);max-width:72ch;line-height:1.5}
+.npc-group-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}
+.npc-group-controls label{display:grid;gap:6px;font-size:.84rem;color:var(--muted)}
+.npc-group-controls .npc-group-action-row{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap}
+.npc-group-controls button{width:auto}
+.npc-group-output{margin-top:16px;display:grid;gap:16px}
+.npc-group-hero,.npc-group-section{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.npc-group-hero h3{font-size:1.4rem;margin:2px 0 8px}.npc-group-hero p{line-height:1.55}
+.npc-group-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.npc-group-fact{padding:11px;border-radius:12px;background:rgba(255,255,255,.035)}
+.npc-group-fact strong{display:block;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.npc-group-roster{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.npc-group-member{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.npc-group-member h4{font-size:1rem;margin-bottom:5px}.npc-group-member p{font-size:.84rem;color:var(--muted);line-height:1.45}
+.npc-group-member details{margin-top:10px}.npc-group-member summary{cursor:pointer;font-size:.82rem;font-weight:700}
+.npc-group-member dl{display:grid;grid-template-columns:max-content 1fr;gap:5px 10px;margin-top:9px;font-size:.8rem}.npc-group-member dt{color:var(--muted)}
+.npc-group-relationships{display:grid;gap:8px}.npc-group-relationship{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.025);font-size:.84rem;line-height:1.45}
+.npc-group-empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+@media(max-width:900px){.npc-group-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.npc-group-facts{grid-template-columns:1fr}}
+@media(max-width:560px){.npc-group-heading{display:block}.npc-group-controls{grid-template-columns:1fr}.npc-group-controls .npc-group-action-row{grid-column:1}.npc-group-action-row button{flex:1}.npc-group-roster{grid-template-columns:1fr}}
+@media print{.npc-group-controls,.npc-group-heading .no-print{display:none!important}.npc-group-workspace{border-top:0}.npc-group-member{break-inside:avoid}}
