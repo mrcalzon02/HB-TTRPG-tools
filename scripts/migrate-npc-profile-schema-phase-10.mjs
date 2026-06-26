@@ -57,4 +57,13 @@ if(!entry.includes(restorationLine)){
   fs.writeFileSync(entryPath,entry);
 }
 
-console.log('NPC Phase 10 schema and entrypoint migration complete.');
+const uiPath=path.join(root,'npc-profile-generator-persistence-ui.js');
+let ui=fs.readFileSync(uiPath,'utf8');
+const unsafe="    for(const[id,value]of Object.entries(values))if(this.controls[id]&&value!==undefined&&[...this.controls[id].options||[]].some?.(option=>option.value===String(value))!==false)this.controls[id].value=String(value);";
+const safe="    for(const[id,value]of Object.entries(values)){const control=this.controls[id];if(!control||value===undefined||value===null)continue;if(control.tagName==='SELECT'&&![...control.options].some(option=>option.value===String(value)))continue;control.value=String(value);}";
+if(ui.includes(unsafe)){
+  ui=ui.replace(unsafe,safe);
+  fs.writeFileSync(uiPath,ui);
+}
+
+console.log('NPC Phase 10 schema and interface migration complete.');
