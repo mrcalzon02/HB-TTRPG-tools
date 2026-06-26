@@ -3,28 +3,12 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-9-mechanical-profile-generation",
   "status": "failed",
-  "validatedCommit": "da67d64ce6f6e3c7f9faee5672425dc1a63f4e08",
+  "validatedCommit": "c5175b554ca90d5c2e14815b49cb2032eb916a4a",
   "validator": "scripts/validate-npc-phase-9.mjs",
   "workflow": ".github/workflows/pages.yml",
   "exitCode": 1,
   "output": [
-    "node:internal/modules/esm/resolve:283",
-    "    throw new ERR_MODULE_NOT_FOUND(",
-    "          ^",
-    "",
-    "Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/npc-phase-9-validation-matrix.mjs' imported from /home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/npc-phase-9-validation-runner.mjs",
-    "    at finalizeResolution (node:internal/modules/esm/resolve:283:11)",
-    "    at moduleResolve (node:internal/modules/esm/resolve:952:10)",
-    "    at defaultResolve (node:internal/modules/esm/resolve:1188:11)",
-    "    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:708:12)",
-    "    at #cachedDefaultResolve (node:internal/modules/esm/loader:657:25)",
-    "    at ModuleLoader.resolve (node:internal/modules/esm/loader:640:38)",
-    "    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:264:38)",
-    "    at ModuleJob._link (node:internal/modules/esm/module_job:168:49) {",
-    "  code: 'ERR_MODULE_NOT_FOUND',",
-    "  url: 'file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/npc-phase-9-validation-matrix.mjs'",
-    "}",
-    "",
-    "Node.js v20.20.2"
+    "NPC Phase 9 validation failed:",
+    "- Matrix not implemented."
   ]
 }
