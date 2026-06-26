@@ -3,11 +3,14 @@
   const foundation = globalThis.NpcProfileGeneratorFoundation;
   const assembly = globalThis.NpcProfileGeneratorAssembly;
   const household = globalThis.NpcProfileGeneratorHousehold;
+  const operations = globalThis.NpcProfileGeneratorOperations;
   if (!foundation || !assembly) throw new Error('NPC generator foundation and composition modules must load first.');
 
   function generateProfile(config = {}) {
-    const result = assembly.generateProfile(config);
-    return household ? household.enrich(result, config) : result;
+    let result = assembly.generateProfile(config);
+    if (household) result = household.enrich(result, config);
+    if (operations) result = operations.enrich(result, config);
+    return result;
   }
 
   globalThis.NpcProfileGeneratorCore = Object.freeze({
