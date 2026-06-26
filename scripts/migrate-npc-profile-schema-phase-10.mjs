@@ -46,4 +46,15 @@ Object.assign(defs.diagnostic.properties,{
 
 schema.description='Canonical Universal NPC profile schema, including deterministic postprocessor metadata, persistence-safe diagnostics, and extension envelopes.';
 fs.writeFileSync(target,`${JSON.stringify(schema,null,2)}\n`);
-console.log('NPC profile schema migrated for Phase 10.');
+
+const entryPath=path.join(root,'npc-profile-generator-entry.js');
+let entry=fs.readFileSync(entryPath,'utf8');
+const persistenceLine="    ['npc-profile-generator-persistence-ui.js', 'NpcProfileGeneratorPersistenceUI'],";
+const restorationLine="    ['npc-profile-generator-persistence-restore.js', 'NpcProfileGeneratorPersistenceRestore'],";
+if(!entry.includes(restorationLine)){
+  if(!entry.includes(persistenceLine))throw new Error('NPC entrypoint persistence line was not found.');
+  entry=entry.replace(persistenceLine,`${persistenceLine}\n${restorationLine}`);
+  fs.writeFileSync(entryPath,entry);
+}
+
+console.log('NPC Phase 10 schema and entrypoint migration complete.');
