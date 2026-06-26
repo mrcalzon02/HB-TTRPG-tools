@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "23ad1e01f4d567cf1b8df2a124d52bf4e67f5bbe",
+  "validatedCommit": "750d30175c1af65b64e2255f1a21a8230f9d5ec5",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -63,14 +63,16 @@
     "Verified edit generations, stale autosave rejection, stale manual checkpoint rejection, current autosave completion, failed autosave retention, and current manual save completion.",
     "Editor repository validation passed.",
     "Verified idempotent saves, stale revision rejection, same-revision conflict rejection, transactional rollback, live listings, malformed-record repair, and explicit deletion.",
+    "Island v3 migration normalization validation passed.",
+    "Normalized 4 active cells to 20 km² without weakening canonical validation.",
     "Shared editor runtime structure validation passed.",
-    "Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, split internal P0 smoke loading, and the expanded persistent browser chain.",
+    "Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, normalized Island migration geometry, split internal P0 smoke loading, and the expanded persistent browser chain.",
     "P0 browser verification contract validation passed.",
     "Verified split internal smoke runtime, receipt schema, persistent editor chain, exact pinned parent revisions, Chromium runner, artifact retention, and Pages deployment ordering."
   ],
   "browserOutput": [
-    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Island did not produce an active canonical envelope.",
-    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Island did not produce an active canonical envelope."
+    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-6e3ad8bbec3d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d927c7fdb1d8 changed revision 1 to 2.",
+    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-6e3ad8bbec3d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d927c7fdb1d8 changed revision 1 to 2."
   ],
-  "recordedAt": "2026-06-26T21:44:06.832Z"
+  "recordedAt": "2026-06-26T22:49:36.047Z"
 }
