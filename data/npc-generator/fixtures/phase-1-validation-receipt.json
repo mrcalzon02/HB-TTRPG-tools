@@ -1,0 +1,47 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-1-canonical-schemas-fixtures",
+  "status": "foundation-validation-passed-phase-remains-active",
+  "validatedCommit": "795839eab485d62e92bf9f30f155ce133e7d5f2e",
+  "validator": "scripts/validate-npc-phase-1.mjs",
+  "executionDate": "2026-06-25",
+  "executionEnvironment": "Node.js validation against exact committed file contents reconstructed in the local execution environment",
+  "results": {
+    "schemas": {
+      "passed": 3,
+      "failed": 0
+    },
+    "profiles": {
+      "validPassed": 4,
+      "expectedInvalidRejected": 2
+    },
+    "archetypes": {
+      "validPassed": 1,
+      "expectedInvalidRejected": 1
+    },
+    "packs": {
+      "validPassed": 1,
+      "expectedInvalidRejected": 1
+    }
+  },
+  "verifiedDiagnostics": [
+    "BEGGAR_WORKPLACE_CONTRADICTION",
+    "CHILD_PARENTAGE_CONTRADICTION",
+    "ARCHETYPE_NONE_WEIGHT_RANGE",
+    "PACK_ID_INVALID",
+    "PACK_CORE_OVERRIDE_FORBIDDEN"
+  ],
+  "remainingPhase1Work": [
+    "Add the remaining minimum valid fixtures: civilian laborer, craft worker with workshop, thief with safehouse and fence, bandit with camp and territory, guard with patrol district, banker with institution, refugee with former occupation, child dependent, and elderly retired veteran.",
+    "Add malformed-record fixtures that fail structural checks independently of semantic contradictions.",
+    "Add full JSON Schema execution or equivalent complete dependency-free schema coverage rather than only schema-document sanity and contract-specific structural checks.",
+    "Integrate the validator into the repository workflow after the complete Phase 1 fixture matrix is present."
+  ],
+  "ciStatus": "not-run",
+  "notes": [
+    "Phase 0 is complete and Phase 1 remains active.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
