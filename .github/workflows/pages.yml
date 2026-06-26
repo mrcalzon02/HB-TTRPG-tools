@@ -55,6 +55,8 @@ jobs:
           node --check npc-profile-generator-pack-manager.js
           node --check npc-profile-generator-pack-storage.js
           node --check npc-profile-generator-pack-ui.js
+          node --check npc-profile-generator-kaysender-data.js
+          node --check npc-profile-generator-kaysender-adapter.js
           node --check npc-profile-generator-depth-data.js
           node --check npc-profile-generator-household-data.js
           node --check npc-profile-generator-operation-data.js
@@ -65,6 +67,10 @@ jobs:
           node --check scripts/npc-phase-11-validation-runner.mjs
           node --check scripts/npc-phase-11-storage-upgrade-checks.mjs
           node --check scripts/validate-npc-phase-11.mjs
+          node --check scripts/npc-phase-12-validation-fixture.mjs
+          node --check scripts/npc-phase-12-validation-assertions.mjs
+          node --check scripts/npc-phase-12-validation-runner.mjs
+          node --check scripts/validate-npc-phase-12.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
           node --check scripts/validate-npc-phase-1.mjs
           node --check scripts/validate-npc-phase-2.mjs
@@ -77,11 +83,9 @@ jobs:
           node --check scripts/validate-npc-phase-9.mjs
           node --check scripts/validate-npc-phase-10.mjs
 
-      - name: Verify Phase 11 custom-pack contracts
+      - name: Verify Phase 12 Kaysender contracts
         run: |
-          node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-profile.schema.json','utf8'))"
-          node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-archetype.schema.json','utf8'))"
-          node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-custom-pack.schema.json','utf8'))"
+          node -e "for(const path of ['data/schemas/npc-profile.schema.json','data/schemas/npc-archetype.schema.json','data/schemas/npc-custom-pack.schema.json','data/schemas/kaysender-npc-alpha.schema.json','data/npc-generator/packs/kaysender-compatibility.json','data/npc-generator/fixtures/phase-12-kaysender-capability-inventory.json','data/npc-generator/fixtures/phase-12-kaysender-matrix.json'])JSON.parse(require('node:fs').readFileSync(path,'utf8'))"
           git diff --check
 
       - name: Validate current universal NPC milestone
@@ -89,13 +93,13 @@ jobs:
         shell: bash
         run: |
           set +e
-          node scripts/validate-npc-phase-11.mjs > phase-11-validator-output.txt 2>&1
+          node scripts/validate-npc-phase-12.mjs > phase-12-validator-output.txt 2>&1
           status=$?
-          cat phase-11-validator-output.txt
+          cat phase-12-validator-output.txt
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Record Phase 11 CI result
+      - name: Record Phase 12 CI result
         if: github.actor != 'github-actions[bot]'
         env:
           VALIDATED_SHA: ${{ github.sha }}
@@ -107,22 +111,22 @@ jobs:
           const receipt = {
             receiptType: 'npcPhaseCiReceipt',
             projectId: 'universal-npc-profile-generator',
-            phaseId: 'phase-11-custom-data-packs',
+            phaseId: 'phase-12-kaysender-adapter',
             status: statusCode === 0 ? 'passed' : 'failed',
             validatedCommit: process.env.VALIDATED_SHA,
-            validator: 'scripts/validate-npc-phase-11.mjs',
-            integration: 'npc-profile-generator-pack-bootstrap.js',
+            validator: 'scripts/validate-npc-phase-12.mjs',
+            legacyRuntime: 'kaysender-npc-generator.js',
             workflow: '.github/workflows/pages.yml',
             exitCode: statusCode,
-            output: fs.readFileSync('phase-11-validator-output.txt', 'utf8').trim().split('\n').slice(-160)
+            output: fs.readFileSync('phase-12-validator-output.txt', 'utf8').trim().split('\n').slice(-200)
           };
-          fs.writeFileSync('data/npc-generator/fixtures/phase-11-ci-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
+          fs.writeFileSync('data/npc-generator/fixtures/phase-12-ci-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
           NODE
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/npc-generator/fixtures/phase-11-ci-receipt.json
+          git add data/npc-generator/fixtures/phase-12-ci-receipt.json
           if ! git diff --cached --quiet; then
-            git commit -m "Record NPC phase 11 CI result [skip ci]"
+            git commit -m "Record NPC phase 12 CI result [skip ci]"
             git push
           fi
 
