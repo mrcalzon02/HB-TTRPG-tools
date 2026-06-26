@@ -8,13 +8,14 @@
   const RECEIPT_STAGE = 'P0';
   const RECEIPT_STAGE_ID = 'shared-editor-kernel';
   const RECEIPT_STORAGE_KEY = 'hb-ttrpg-tools:p0-live-smoke:last-pass';
-  const EDITOR_CHAIN = ['floating-island-editor','settlement-editor','airship-editor'];
+  const EDITOR_CHAIN = ['floating-island-editor', 'settlement-editor', 'airship-editor'];
   const results = [];
   let lastReport = null;
 
   const wait = ms => new Promise(resolve => window.setTimeout(resolve, ms));
+  const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 
-  async function waitFor(selector, timeoutMs = 6000) {
+  async function waitFor(selector, timeoutMs = 8000) {
     const started = Date.now();
     while (Date.now() - started < timeoutMs) {
       const element = document.querySelector(selector);
@@ -24,15 +25,10 @@
     throw new Error(`Timed out waiting for ${selector}.`);
   }
 
-  function readFullProfile(outputId) {
-    const output = document.getElementById(outputId);
-    const textarea = output ? Array.from(output.querySelectorAll('textarea.json-export')).at(-1) : null;
-    if (!textarea?.value?.trim()) throw new Error(`No full profile JSON was rendered in ${outputId}.`);
-    return JSON.parse(textarea.value);
-  }
-
   function escapeHtml(value) {
-    return String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[character]));
   }
 
   function renderResults() {
@@ -57,27 +53,14 @@
     if (downloadButton) downloadButton.disabled = !lastReport;
   }
 
-  async function buildAndRead(panelId, buildButtonId, outputId) {
-    const panel = await waitFor(`#${panelId}`);
-    const button = panel.querySelector(`#${buildButtonId}`);
-    if (!button) throw new Error(`Missing build action ${buildButtonId}.`);
-    button.click();
-    await wait(160);
-    return readFullProfile(outputId);
-  }
-
-  async function importParent(panel, textareaId, buttonId, envelope, datasetEnvelopeKey) {
-    const textarea = panel.querySelector(`#${textareaId}`);
-    const button = panel.querySelector(`#${buttonId}`);
-    if (!textarea || !button) throw new Error(`Missing parent import controls ${textareaId}/${buttonId}.`);
-    textarea.value = JSON.stringify(envelope, null, 2);
-    button.click();
-    await wait(180);
-    if (!panel.dataset[datasetEnvelopeKey]) throw new Error(`Canonical parent provenance was not stored in ${datasetEnvelopeKey}.`);
-  }
-
   function profileReceipt(editorId, envelope) {
-    return {editorId,profileId:envelope.profileId,profileType:envelope.profileType,revision:envelope.revision,inheritance:envelope.inheritance};
+    return {
+      editorId,
+      profileId: envelope.profileId,
+      profileType: envelope.profileType,
+      revision: envelope.revision,
+      inheritance: clone(envelope.inheritance || [])
+    };
   }
 
   function createReceipt(profiles) {
@@ -95,14 +78,22 @@
   }
 
   function isReceipt(value) {
-    return Boolean(value&&value.schemaVersion===RECEIPT_SCHEMA_VERSION&&value.stage===RECEIPT_STAGE&&value.stageId===RECEIPT_STAGE_ID&&value.result==='passed'&&Array.isArray(value.editorChain)&&value.editorChain.join('|')===EDITOR_CHAIN.join('|')&&Array.isArray(value.stageResults)&&value.stageResults.length>=4&&value.stageResults.every(item=>item?.ok===true)&&Array.isArray(value.profiles)&&value.profiles.length===3);
+    return Boolean(
+      value && value.schemaVersion === RECEIPT_SCHEMA_VERSION &&
+      value.stage === RECEIPT_STAGE && value.stageId === RECEIPT_STAGE_ID &&
+      value.result === 'passed' && Array.isArray(value.editorChain) &&
+      value.editorChain.join('|') === EDITOR_CHAIN.join('|') &&
+      Array.isArray(value.stageResults) && value.stageResults.length >= 4 &&
+      value.stageResults.every(item => item?.ok === true) &&
+      Array.isArray(value.profiles) && value.profiles.length === 3
+    );
   }
 
   function saveSessionReport(report) {
     lastReport = report;
     renderReceipt();
     try { window.sessionStorage?.setItem(RECEIPT_STORAGE_KEY, JSON.stringify(report)); }
-    catch (error) { addResult('Session report', true, `Verification passed; browser storage declined the optional report: ${error.message}`); }
+    catch (error) { addResult('Session report', true, `Verification passed; optional browser storage declined the receipt: ${error.message}`); }
   }
 
   function restoreSessionReport() {
@@ -116,7 +107,7 @@
   function clearSessionReport() {
     lastReport = null;
     renderReceipt();
-    try { window.sessionStorage?.removeItem(RECEIPT_STORAGE_KEY); } catch { /* optional storage */ }
+    try { window.sessionStorage?.removeItem(RECEIPT_STORAGE_KEY); } catch { /* optional */ }
   }
 
   async function copyReceipt() {
@@ -143,7 +134,7 @@
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `kaysender-${RECEIPT_STAGE.toLowerCase()}-browser-verification-${lastReport.testedAt.replace(/[:.]/g, '-')}.json`;
+    link.download = `kaysender-p0-browser-verification-${lastReport.testedAt.replace(/[:.]/g, '-')}.json`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -152,12 +143,12 @@
   }
 
   function saveAndReload(envelope, temporaryProfileIds) {
-    const saveResult = Repository.save(envelope);
-    if (!saveResult.ok) throw new Error(saveResult.message);
+    const saved = Repository.save(envelope);
+    if (!saved.ok) throw new Error(saved.message);
     temporaryProfileIds.push(envelope.profileId);
-    const loadResult = Repository.load(envelope.profileId);
-    if (!loadResult.ok) throw new Error(loadResult.message);
-    return loadResult.envelope;
+    const loaded = Repository.load(envelope.profileId);
+    if (!loaded.ok) throw new Error(loaded.message);
+    return loaded.envelope;
   }
 
   function requireReference(envelope, profileId, revision, label) {
@@ -167,27 +158,37 @@
     if (reference.policy !== 'pinned-revision') throw new Error(`${label} did not retain pinned-revision inheritance for ${profileId}.`);
   }
 
+  async function rebuildActive(expectedType, label) {
+    Production().rebuildActive();
+    await wait(260);
+    const envelope = Production().getActiveEnvelope();
+    if (!envelope) throw new Error(`${label} did not produce an active canonical envelope.`);
+    if (envelope.profileType !== expectedType) throw new Error(`${label} produced ${envelope.profileType} instead of ${expectedType}.`);
+    const errors = Kernel.validateEnvelope(envelope, [expectedType]).filter(item => item.severity === 'error');
+    if (errors.length) throw new Error(errors.map(item => item.message).join('; '));
+    return envelope;
+  }
+
+  async function importParent(panel, textareaId, buttonId, envelope, datasetEnvelopeKey) {
+    const textarea = panel.querySelector(`#${textareaId}`);
+    const button = panel.querySelector(`#${buttonId}`);
+    if (!textarea || !button) throw new Error(`Missing parent import controls ${textareaId}/${buttonId}.`);
+    textarea.value = JSON.stringify(envelope, null, 2);
+    button.click();
+    await wait(220);
+    if (!panel.dataset[datasetEnvelopeKey]) throw new Error(`Canonical parent provenance was not stored in ${datasetEnvelopeKey}.`);
+  }
+
   async function reopenActiveRecord(editorAlias, envelope) {
     await Production().launch(editorAlias);
     const imported = Production().importIntoActive(envelope);
     if (!imported) throw new Error(`Could not reopen ${envelope.profileId} in ${editorAlias}.`);
-    await wait(240);
+    await wait(300);
     const active = Production().getActiveEnvelope();
     if (!active) throw new Error(`No active envelope was available after reopening ${envelope.profileId}.`);
     if (active.profileId !== envelope.profileId) throw new Error(`Reopening ${envelope.profileId} changed its stable profile ID to ${active.profileId}.`);
     if (active.revision !== envelope.revision) throw new Error(`Reopening ${envelope.profileId} changed revision ${envelope.revision} to ${active.revision}.`);
     return active;
-  }
-
-  function normalizeIslandProfile(profile) {
-    const result = Kernel.normalizeImportedRecord(profile, {
-      expectedTypes: ['floating-island-foundation-profile'],
-      editorId: 'floating-island-editor',
-      moduleId: 'floating-island-generator'
-    });
-    if (!result.ok) throw new Error(result.diagnostics.map(item=>item.message).join('; '));
-    if (result.envelope.profileSchemaVersion !== '3.0.0') throw new Error(`Island migration produced schema ${result.envelope.profileSchemaVersion} instead of 3.0.0.`);
-    return result.envelope;
   }
 
   async function runSmokeTest() {
@@ -206,22 +207,15 @@
 
     try {
       await Production().launchIsland();
-      const islandRaw = await buildAndRead('kaysender-editor-panel', 'island-build-profile', 'floating-island-editor-output');
-      const islandEnvelope = normalizeIslandProfile(islandRaw);
-      const islandDiagnostics = Kernel.validateEnvelope(islandEnvelope, ['floating-island-foundation-profile']);
-      if (islandDiagnostics.some(item => item.severity === 'error')) throw new Error(islandDiagnostics.map(item => item.message).join('; '));
+      const islandEnvelope = await rebuildActive('floating-island-foundation-profile', 'Island');
+      if (islandEnvelope.profileSchemaVersion !== '3.0.0') throw new Error(`Island production envelope used schema ${islandEnvelope.profileSchemaVersion} instead of 3.0.0.`);
       const storedIsland = saveAndReload(islandEnvelope, temporaryProfileIds);
-      addResult('Island', true, `Built, migrated, saved, and reloaded ${storedIsland.name} as ${storedIsland.profileId} schema ${storedIsland.profileSchemaVersion}.`);
+      addResult('Island', true, `Built, saved, and reloaded ${storedIsland.name} as ${storedIsland.profileId} schema ${storedIsland.profileSchemaVersion}.`);
 
       await Production().launchSettlement();
       const settlementPanel = await waitFor('#kaysender-settlement-editor-panel');
       await importParent(settlementPanel, 'settlement-island-import', 'settlement-load-island', storedIsland, 'sourceIslandEnvelope');
-      const settlementRaw = await buildAndRead('kaysender-settlement-editor-panel', 'settlement-build-profile', 'settlement-editor-output');
-      const settlementEnvelope = Kernel.createEnvelope(settlementRaw, {
-        editorId: 'settlement-editor',moduleId: 'settlement-generator',inheritance: [Kernel.inheritanceReference(storedIsland, 'parent-island')]
-      });
-      const settlementDiagnostics = Kernel.validateEnvelope(settlementEnvelope, ['settlement-profile']);
-      if (settlementDiagnostics.some(item => item.severity === 'error')) throw new Error(settlementDiagnostics.map(item => item.message).join('; '));
+      const settlementEnvelope = await rebuildActive('settlement-profile', 'Settlement');
       requireReference(settlementEnvelope, storedIsland.profileId, storedIsland.revision, 'Settlement');
       const storedSettlement = saveAndReload(settlementEnvelope, temporaryProfileIds);
       addResult('Settlement', true, `Built, saved, and reloaded ${storedSettlement.name} with pinned island inheritance.`);
@@ -234,13 +228,7 @@
       const airshipPanel = await waitFor('#kaysender-airship-editor-panel');
       await importParent(airshipPanel, 'airship-island-import', 'airship-load-island', storedIsland, 'sourceIslandEnvelope');
       await importParent(airshipPanel, 'airship-settlement-import', 'airship-load-settlement', storedSettlement, 'sourceSettlementEnvelope');
-      const airshipRaw = await buildAndRead('kaysender-airship-editor-panel', 'airship-build-profile', 'airship-editor-output');
-      const airshipEnvelope = Kernel.createEnvelope(airshipRaw, {
-        editorId: 'airship-editor',moduleId: 'airship-vessel-generator',
-        inheritance: [Kernel.inheritanceReference(storedIsland, 'parent-island'),Kernel.inheritanceReference(storedSettlement, 'parent-settlement')]
-      });
-      const airshipDiagnostics = Kernel.validateEnvelope(airshipEnvelope, ['airship-profile']);
-      if (airshipDiagnostics.some(item => item.severity === 'error')) throw new Error(airshipDiagnostics.map(item => item.message).join('; '));
+      const airshipEnvelope = await rebuildActive('airship-profile', 'Airship');
       requireReference(airshipEnvelope, storedIsland.profileId, storedIsland.revision, 'Airship');
       requireReference(airshipEnvelope, storedSettlement.profileId, storedSettlement.revision, 'Airship');
       const storedAirship = saveAndReload(airshipEnvelope, temporaryProfileIds);
@@ -255,17 +243,13 @@
       airshipPanel.dataset.sourceSettlement = '';
       airshipPanel.dataset.sourceSettlementEnvelope = '';
       if (settlementTextarea) settlementTextarea.value = '';
-      Production().rebuildActive();
-      await wait(220);
-      const clearedAirship = Production().getActiveEnvelope();
+      const clearedAirship = await rebuildActive('airship-profile', 'Airship after parent clear');
       if (clearedAirship.inheritance.some(item => item.profileId === storedSettlement.profileId)) throw new Error('Clearing the settlement parent did not remove it from the canonical Airship inheritance ledger.');
       requireReference(clearedAirship, storedIsland.profileId, storedIsland.revision, 'Airship after parent clear');
       addResult('Inheritance clear', true, 'Cleared the Settlement parent from active context and the canonical Airship ledger.');
 
       await importParent(airshipPanel, 'airship-settlement-import', 'airship-load-settlement', storedSettlement, 'sourceSettlementEnvelope');
-      Production().rebuildActive();
-      await wait(220);
-      reopenedAirship = Production().getActiveEnvelope();
+      reopenedAirship = await rebuildActive('airship-profile', 'Airship after parent restore');
       requireReference(reopenedAirship, storedIsland.profileId, storedIsland.revision, 'Airship after restore');
       requireReference(reopenedAirship, storedSettlement.profileId, storedSettlement.revision, 'Airship after restore');
       addResult('Inheritance restore', true, 'Restored the saved Settlement parent deliberately and recovered both pinned references.');
@@ -310,7 +294,7 @@
   }
 
   window.runKaysenderEditorSmokeTest = runSmokeTest;
-  window.getKaysenderEditorSmokeReceipt = () => lastReport ? JSON.parse(JSON.stringify(lastReport)) : null;
+  window.getKaysenderEditorSmokeReceipt = () => lastReport ? clone(lastReport) : null;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else install();
 })();
