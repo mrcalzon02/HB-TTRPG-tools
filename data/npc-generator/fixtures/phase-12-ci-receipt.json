@@ -1,0 +1,19 @@
+{
+  "receiptType": "npcPhaseCiReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-12-kaysender-adapter",
+  "status": "passed",
+  "validatedCommit": "545852629f94ec816bc51185e8169a1bb5f0ab8a",
+  "validator": "scripts/validate-npc-phase-12.mjs",
+  "legacyRuntime": "kaysender-npc-generator.js",
+  "workflow": ".github/workflows/pages.yml",
+  "exitCode": 0,
+  "output": [
+    "NPC Phase 12 validation passed.",
+    "Legacy records generated: 111",
+    "Universal profiles converted: 111",
+    "Deterministic pairs verified: 224",
+    "Control cases verified: 31",
+    "Legacy imports verified: 12"
+  ]
+}
