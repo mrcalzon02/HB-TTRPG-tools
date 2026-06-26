@@ -13,6 +13,7 @@ function requireMarkers(source,label,markers){
 
 const files=Object.fromEntries(await Promise.all([
   'index.html',
+  'character-sheet-title.js',
   'data/kaysender/schemas/editor-profile-envelope.schema.json',
   'kaysender-editor-adapter-registry.js',
   'kaysender-editor-builtins.js',
@@ -27,13 +28,17 @@ const files=Object.fromEntries(await Promise.all([
   'kaysender-editor-error-boundary.js',
   'kaysender-editor-live-smoke.js',
   'kaysender-editor-smoke-runtime.js',
-  'kaysender-island-v3-migration-normalizer.js'
+  'kaysender-island-v3-migration-normalizer.js',
+  'kaysender-settlement-inheritance-guard.js'
 ].map(async name=>[name,await read(name)])));
 
 const html=files['index.html'];
 requireMarkers(html,'Main page',[
   'id="character-sheet"','id="module-viewer-root"','id="kaysender-status"','id="kaysender-overview-grid"',
   'data-view="kaysender"','data-view="solanum-umbra"','<script src="solanum-umbra-entry.js"></script>'
+]);
+requireMarkers(files['character-sheet-title.js'],'Supplemental runtime loader',[
+  'kaysender-settlement-inheritance-guard.js','data-settlement-inheritance-guard','settlementInheritanceGuard'
 ]);
 
 const orderedScripts=[
@@ -76,6 +81,13 @@ requireMarkers(migrationNormalizer,'Island v3 migration normalizer',[
   'domain.applyDerived(profile)','source.buildDownstreamExports','island-v3-migrated-cell-area-normalization'
 ]);
 new vm.Script(migrationNormalizer,{filename:'kaysender-island-v3-migration-normalizer.js'});
+
+const settlementGuard=files['kaysender-settlement-inheritance-guard.js'];
+requireMarkers(settlementGuard,'Settlement inheritance guard',[
+  'mapSettlementType','setLegalValue','repairSettlementInheritance','settlement-load-island',
+  'small fortified village','agricultural island town','pirate-tolerated harbor'
+]);
+new vm.Script(settlementGuard,{filename:'kaysender-settlement-inheritance-guard.js'});
 
 requireMarkers(files['kaysender-editor-field-mapping.js'],'Shared editor field mapping service',[
   'function readPath','function writeField','function apply(','function applyFlat','window.KaysenderEditorFieldMapping'
@@ -145,7 +157,7 @@ requireMarkers(smokeLoader,'P0 internal smoke loader',[
 ]);
 requireMarkers(smokeRuntime,'P0 browser verification runtime',[
   'Run P0 Live Smoke Test','launchIsland','launchSettlement','launchAirship','saveAndReload','reopenActiveRecord',
-  'changed revision ${envelope.revision}','Inheritance clear','Inheritance restore','sourceIslandEnvelope','sourceSettlementEnvelope',
+  'changed revision ${envelope.revision}','first difference','Inheritance clear','Inheritance restore','sourceIslandEnvelope','sourceSettlementEnvelope',
   'hb-ttrpg-tools:p0-live-smoke:last-pass','Copy Verification Receipt','Download Verification Receipt',
   'p0-live-smoke-receipt','getKaysenderEditorSmokeReceipt'
 ]);
@@ -158,6 +170,7 @@ await import('./validate-editor-drafts.mjs');
 await import('./validate-editor-lifecycle.mjs');
 await import('./validate-editor-repository.mjs');
 await import('./validate-island-v3-migration-normalization.mjs');
+await import('./validate-settlement-inheritance-guard.mjs');
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, normalized Island migration geometry, split internal P0 smoke loading, and the expanded persistent browser chain.');
+console.log('Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, normalized Island migration geometry, legal Settlement inheritance controls, exact reopen diagnostics, and the expanded persistent browser chain.');
