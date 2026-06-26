@@ -8,9 +8,21 @@
     'familyHousehold','personality','motivations','background',
     'affiliationsRelationships','possessionsResources','secretsProblemsHooks'
   ];
+  const DEPTH_RANK = Object.freeze({ quick: 0, standard: 1, deep: 2 });
   const isObject = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
   const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
   const diagnostic = (code, severity, message, path = '/', extra = {}) => ({ code, severity, message, path, ...extra });
+
+  function normalizeDepth(mode) {
+    return Object.prototype.hasOwnProperty.call(DEPTH_RANK, mode) ? mode : 'standard';
+  }
+
+  function fieldIncluded(field, mode = 'standard') {
+    const selected = DEPTH_RANK[normalizeDepth(mode)];
+    const minimum = DEPTH_RANK[normalizeDepth(field?.minDepth || 'quick')];
+    const maximum = DEPTH_RANK[normalizeDepth(field?.maxDepth || 'deep')];
+    return selected >= minimum && selected <= maximum;
+  }
 
   function decodePointer(pointer) {
     if (pointer === '' || pointer === '/') return [];
@@ -91,9 +103,12 @@
     return chooseTable(pack,field.tableId,rng,diagnostics,path,`Unresolved ${field.label || field.id}`);
   }
 
-  function generateFields(fields, pack, rng, diagnostics, basePath) {
+  function generateFields(fields, pack, rng, diagnostics, basePath, mode = 'standard') {
     const data = {};
-    for (const field of fields || []) data[field.id] = generateField(field,pack,rng.fork(`field:${field.id}`),diagnostics,`${basePath}/${field.id}`);
+    for (const field of fields || []) {
+      if (!fieldIncluded(field, mode)) continue;
+      data[field.id] = generateField(field,pack,rng.fork(`field:${field.id}`),diagnostics,`${basePath}/${field.id}`);
+    }
     return data;
   }
 
@@ -109,7 +124,13 @@
     return rootRng.fork(`section:${sectionId}`,`reroll:${Number(counters?.[sectionId] || 0)}`);
   }
 
-  function generateIdentity(pack, rootRng, diagnostics, options, counters) {
+  function chooseOptionalTable(pack, tableId, rng, diagnostics, path) {
+    if (!tableEntries(pack, tableId).length) return null;
+    return chooseTable(pack, tableId, rng, diagnostics, path, null);
+  }
+
+  function generateIdentity(pack, rootRng, diagnostics, options, counters, mode = 'standard') {
+    const depth = normalizeDepth(mode);
     const rng = sectionRng(rootRng,'identity',counters);
     const selected = options?.identity || {};
     const givenName = selected.givenName ?? chooseTable(pack,'givenNames',rng.fork('givenName'),diagnostics,'/identity/givenName','Unnamed');
@@ -120,18 +141,36 @@
     const language = selected.language ?? chooseTable(pack,'languages',rng.fork('language'),diagnostics,'/identity/languages','Common');
     const range = pack?.ageRanges?.[ageBand] || [18,65];
     const age = selected.age ?? rng.fork('age').int(Number(range[0]),Number(range[1]));
+    const standard = DEPTH_RANK[depth] >= DEPTH_RANK.standard;
+    const deep = depth === 'deep';
+    const languages = clone(selected.languages || [language]);
+    if (deep && !selected.languages && tableEntries(pack,'languages').length > 1) {
+      const second = chooseTable(pack,'languages',rng.fork('secondLanguage'),diagnostics,'/identity/languages/1',language);
+      if (!languages.includes(second)) languages.push(second);
+    }
+    const alias = deep ? chooseOptionalTable(pack,'aliases',rng.fork('alias'),diagnostics,'/identity/aliases/0') : null;
+    const title = deep ? chooseOptionalTable(pack,'titles',rng.fork('title'),diagnostics,'/identity/titles/0') : null;
     return {
       fullName:selected.fullName ?? [givenName,familyName].filter(Boolean).join(' '),
-      givenName,familyName,aliases:clone(selected.aliases || []),titles:clone(selected.titles || []),
-      pronouns,gender:selected.gender ?? null,age,ageBand,ancestryId,
-      cultureId:selected.cultureId ?? null,homeland:selected.homeland ?? null,
-      currentLocation:selected.currentLocation ?? null,languages:clone(selected.languages || [language])
+      givenName,
+      familyName,
+      aliases:clone(selected.aliases || (alias ? [alias] : [])),
+      titles:clone(selected.titles || (title ? [title] : [])),
+      pronouns,
+      gender:selected.gender ?? (deep ? chooseOptionalTable(pack,'genders',rng.fork('gender'),diagnostics,'/identity/gender') : null),
+      age,
+      ageBand,
+      ancestryId,
+      cultureId:selected.cultureId ?? (standard ? chooseOptionalTable(pack,'cultures',rng.fork('culture'),diagnostics,'/identity/cultureId') : null),
+      homeland:selected.homeland ?? (standard ? chooseOptionalTable(pack,'homelands',rng.fork('homeland'),diagnostics,'/identity/homeland') : null),
+      currentLocation:selected.currentLocation ?? (standard ? chooseOptionalTable(pack,'currentLocations',rng.fork('currentLocation'),diagnostics,'/identity/currentLocation') : null),
+      languages
     };
   }
 
   globalThis.NpcProfileGeneratorFoundation = Object.freeze({
-    CANONICAL_SECTIONS:Object.freeze(CANONICAL_SECTIONS),isObject,clone,diagnostic,
-    decodePointer,pointerGet,pointerSet,tableEntries,chooseTable,generatedProfileId,
+    CANONICAL_SECTIONS:Object.freeze(CANONICAL_SECTIONS),DEPTH_RANK,isObject,clone,diagnostic,
+    normalizeDepth,fieldIncluded,decodePointer,pointerGet,pointerSet,tableEntries,chooseTable,generatedProfileId,
     generateField,generateFields,camelToKebab,specializedSectionFor,sectionRng,generateIdentity
   });
 })();
