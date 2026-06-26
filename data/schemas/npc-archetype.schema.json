@@ -1,0 +1,406 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/npc-archetype.schema.json",
+  "title": "Universal NPC Archetype",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "archetypeType",
+    "schemaVersion",
+    "id",
+    "label",
+    "family",
+    "implementationWave",
+    "description",
+    "sectionPolicies",
+    "specializedSections",
+    "validationRules"
+  ],
+  "properties": {
+    "archetypeType": {
+      "const": "npcArchetype"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "enum": [
+        "civilian",
+        "agricultural-resource",
+        "commercial",
+        "authority-law",
+        "military-security",
+        "criminal-outlaw",
+        "elite-political",
+        "religious-supernatural",
+        "mobile-expedition",
+        "custom"
+      ]
+    },
+    "parentId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+    },
+    "implementationWave": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "custom"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tags": {
+      "$ref": "#/$defs/stringList"
+    },
+    "generationDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "quick",
+            "standard",
+            "deep"
+          ]
+        },
+        "mechanicalMode": {
+          "enum": [
+            "none",
+            "open-d20-light",
+            "open-d20-stub"
+          ]
+        },
+        "levelMin": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "levelMax": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "wealthBands": {
+          "$ref": "#/$defs/stringList"
+        },
+        "ageBands": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "child",
+              "adolescent",
+              "adult",
+              "middle-aged",
+              "elderly",
+              "ageless",
+              "unknown"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "sectionPolicies": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][A-Za-z0-9]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/sectionPolicy"
+      }
+    },
+    "specializedSections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/specializedSection"
+      }
+    },
+    "validationRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/validationRule"
+      }
+    }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "sectionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy"
+      ],
+      "properties": {
+        "policy": {
+          "enum": [
+            "required",
+            "optional",
+            "weighted-none",
+            "unknown-allowed",
+            "substitute",
+            "derived",
+            "prohibited",
+            "not-applicable"
+          ]
+        },
+        "noneWeight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "unknownWeight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "substituteSection": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exceptionTags": {
+          "$ref": "#/$defs/stringList"
+        },
+        "requiredFields": {
+          "$ref": "#/$defs/stringList"
+        },
+        "prohibitedFields": {
+          "$ref": "#/$defs/stringList"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "policy": {
+                "const": "weighted-none"
+              }
+            },
+            "required": [
+              "policy"
+            ]
+          },
+          "then": {
+            "required": [
+              "noneWeight"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "policy": {
+                "const": "substitute"
+              }
+            },
+            "required": [
+              "policy"
+            ]
+          },
+          "then": {
+            "required": [
+              "substituteSection"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "policy": {
+                "enum": [
+                  "not-applicable",
+                  "prohibited"
+                ]
+              }
+            },
+            "required": [
+              "policy"
+            ]
+          },
+          "then": {
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      ]
+    },
+    "specializedSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "fields"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "valueType",
+              "policy"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][A-Za-z0-9]*$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "valueType": {
+                "enum": [
+                  "string",
+                  "number",
+                  "integer",
+                  "boolean",
+                  "string-list",
+                  "reference",
+                  "stateful-reference",
+                  "object"
+                ]
+              },
+              "policy": {
+                "enum": [
+                  "required",
+                  "optional",
+                  "weighted-none",
+                  "unknown-allowed",
+                  "derived",
+                  "prohibited"
+                ]
+              },
+              "tableId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "noneWeight": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "operator"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "operator": {
+          "enum": [
+            "equals",
+            "not-equals",
+            "in",
+            "not-in",
+            "present",
+            "absent",
+            "state-is",
+            "greater-than",
+            "less-than"
+          ]
+        },
+        "value": {}
+      }
+    },
+    "validationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "severity",
+        "assert",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "when": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "assert": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    }
+  }
+}
