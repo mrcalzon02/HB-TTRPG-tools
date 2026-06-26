@@ -1,6 +1,8 @@
 import path from 'node:path';
 import { requireValue,same,stableGroup } from './npc-browser-test-helpers.mjs';
 
+const GENERATORS_NAV='.top-nav .nav-button[data-view="generators"]';
+
 export async function runExtensionScenarios({page,matrix,root,recorder}){
   const s=matrix.selectors,t=matrix.timeouts;
 
@@ -67,7 +69,9 @@ export async function runExtensionScenarios({page,matrix,root,recorder}){
   });
 
   await recorder.check('mobile-layout',async()=>{
-    await page.evaluate(()=>document.getElementById('open-universal-npc-generator')?.click());
+    await page.click(GENERATORS_NAV);
+    await page.waitForSelector(s.openNpc,{state:'visible',timeout:t.action});
+    await page.click(s.openNpc);
     await page.setViewportSize(matrix.viewports.mobile);
     await page.waitForSelector(s.workspace,{state:'visible',timeout:t.action});
     const layout=await page.evaluate(()=>({
