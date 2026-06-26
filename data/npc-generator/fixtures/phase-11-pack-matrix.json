@@ -1,0 +1,28 @@
+{
+  "fixtureType": "npcPhase11CustomPackMatrix",
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-06-26T12:00:00.000Z",
+  "validFixture": "data/npc-generator/fixtures/custom-pack-valid.json",
+  "invalidFixture": "data/npc-generator/fixtures/custom-pack-invalid.json",
+  "customArchetypeId": "frost-warden",
+  "customAncestryId": "frostborn",
+  "seedsPerDepth": 40,
+  "depths": ["quick", "standard", "deep"],
+  "mechanicalMode": "open-d20-full",
+  "expectedNewTables": 9,
+  "expectedTableExtensions": ["factions", "homelands", "currentLocations"],
+  "expectedNameExtensions": ["givenNames", "familyNames", "languages"],
+  "expectedStandardOperationFields": ["weatherCondition", "supplyCondition"],
+  "expectedDeepOperationFields": ["localPressure", "patrolSecret"],
+  "requiredUiControls": ["npc-import-pack", "npc-manage-packs", "npc-pack-file", "npc-pack-manager", "npc-pack-list"],
+  "requirements": [
+    "The valid fixture passes semantic validation and applies without mutating the base pack or base archetypes.",
+    "Names, ancestry rules, new tables, table extensions, custom archetype, operation module, mechanical package, and level guidance merge transactionally.",
+    "Every invalid mutation produces its expected diagnostic and leaves the base runtime unchanged.",
+    "The custom archetype generates valid deterministic Quick, Standard, and Deep profiles using the custom ancestry.",
+    "Standard and Deep operation fields obey depth eligibility.",
+    "Custom mechanical output respects level guidance and package references.",
+    "Generated profiles record both the base and custom pack in generator receipts and provenance.",
+    "Installed packs survive storage round trips, dependency removal is blocked, and corrupted storage recovers with diagnostics."
+  ]
+}
