@@ -1,0 +1,50 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-6-deep-identity-background-motivation",
+  "status": "gate-passed",
+  "validatedThroughCommit": "4c14cde8e5edf058dc356277b6ad6cb1f315d2b9",
+  "validator": "scripts/validate-npc-phase-6.mjs",
+  "executionDate": "2026-06-25",
+  "executionEnvironment": "Local Node.js depth-matrix execution using the current depth-aware runtime, the committed Wave A policy graph, all five deep component structures, and populated Phase 4-compatible tables. The previously recorded Phase 4 gate independently verifies all actual generic-fantasy core and operational table references.",
+  "results": {
+    "deepTablesLoaded": 32,
+    "depthAwareFieldsLoaded": 26,
+    "archetypesTested": 11,
+    "seedsPerArchetype": 25,
+    "modesPerSeed": 3,
+    "profilesGenerated": 825,
+    "generationErrors": 0,
+    "generationWarnings": 0,
+    "deterministicDeepRepeats": 275,
+    "monotonicDetailComparisons": 275
+  },
+  "verifiedBehavior": [
+    "Quick mode omits standard and deep characterization fields.",
+    "Standard mode adds culture, homeland, location, practical appearance, private demeanor, habits, beliefs, loyalties, pressures, origin, upbringing, education, and reason for being present.",
+    "Deep mode adds aliases, titles, gender detail, distinctive appearance, mannerisms, posture, boundaries, stress behavior, social blind spots, hidden desires, moral lines, sacrifices, recent changes, unresolved history, and reputation origins.",
+    "The same seed and Deep mode reproduce byte-equivalent profiles.",
+    "Generator receipts record the normalized selected depth.",
+    "Depth gating does not alter archetype-specific required operational fields."
+  ],
+  "files": [
+    "npc-generator-foundation.js",
+    "npc-generator-compose.js",
+    "npc-profile-generator-depth-data.js",
+    "npc-profile-generator-entry.js",
+    "data/npc-generator/tables/deep-profile-tables.json",
+    "data/npc-generator/tables/deep-identity-tables.json",
+    "data/npc-generator/tables/deep-appearance-tables.json",
+    "data/npc-generator/tables/deep-personality-tables.json",
+    "data/npc-generator/tables/deep-motivation-tables.json",
+    "data/npc-generator/tables/deep-background-tables.json",
+    "data/npc-generator/fixtures/phase-6-depth-fixtures.json",
+    "scripts/validate-npc-phase-6.mjs"
+  ],
+  "notes": [
+    "Phase 6 exit requirements are satisfied and Phase 7 may begin.",
+    "Phase 4 remains the authoritative evidence for the complete generic-fantasy operational table set.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
