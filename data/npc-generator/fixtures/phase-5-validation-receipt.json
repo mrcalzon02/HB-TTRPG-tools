@@ -1,0 +1,50 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-5-standalone-interface",
+  "status": "gate-passed",
+  "validatedThroughCommit": "a2b14139c90620a55ccb47453ce0382c1627fe7c",
+  "validator": "scripts/validate-npc-phase-5.mjs",
+  "executionDate": "2026-06-25",
+  "executionEnvironment": "Node.js syntax and contract validation plus a headless Chromium interaction smoke through Python Playwright. Browser execution used the committed interface modules with deterministic generator/data contract mocks; the real deterministic engine and 106-table pack are independently covered by the Phase 3 and Phase 4 executable receipts.",
+  "results": {
+    "controlsVerified": 13,
+    "runtimeScriptsVerified": 8,
+    "dataUrlsVerified": 6,
+    "firstReleaseArchetypeContracts": 11,
+    "browserSmokeChecks": 8,
+    "javascriptSyntax": "passed",
+    "responsiveAndPrintContracts": "passed",
+    "canonicalIdentityLockPaths": "passed",
+    "savedSelectionRestoreOrder": "passed"
+  },
+  "browserChecks": [
+    "Generator Bench card inserted exactly once",
+    "Dedicated NPC workspace opens as the active application view",
+    "Archetype, depth, ancestry, age, mechanics mode, and seed controls render",
+    "A readable profile banner and section grid render",
+    "Section reroll controls execute",
+    "Field lock controls toggle aria-pressed",
+    "Diagnostics region remains accessible",
+    "Return control restores Generator Bench"
+  ],
+  "files": [
+    "npc-profile-generator-entry.js",
+    "npc-profile-generator-ui.js",
+    "npc-profile-generator-renderer.js",
+    "npc-profile-generator.css",
+    "character-sheet-title.js",
+    "data/npc-generator/fixtures/phase-5-browser-fixtures.json",
+    "scripts/validate-npc-phase-5.mjs"
+  ],
+  "interfaceAdaptation": {
+    "plannedStandaloneHtml": "not used",
+    "implementedSurface": "Dedicated in-application view launched from Generator Bench",
+    "reason": "The GitHub connector repeatedly rejected creation of a new HTML document. The repository already uses one-page view routing, so the implementation preserves the established application architecture without weakening the milestone's dedicated-workspace behavior."
+  },
+  "notes": [
+    "Phase 5 exit requirements are satisfied and Phase 6 may begin.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
