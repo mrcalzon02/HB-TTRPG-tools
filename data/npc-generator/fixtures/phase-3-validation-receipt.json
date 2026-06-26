@@ -1,0 +1,48 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-3-deterministic-generation-core",
+  "status": "gate-passed",
+  "validatedThroughCommit": "7e5d596a6fc0c9519835f58412c08e263dd31a5e",
+  "validator": "scripts/validate-npc-phase-3.mjs",
+  "executionDate": "2026-06-25",
+  "executionEnvironment": "Local Node.js execution using the exact split runtime modules, Wave A policies, generation fixture pack, active Phase 3 ledger state, and committed validator logic.",
+  "results": {
+    "runtimeFilesChecked": 6,
+    "generationFixturesPassed": 8,
+    "deterministicProfileEquality": "passed",
+    "differentSeedDivergence": "passed",
+    "isolatedSectionReroll": "passed",
+    "lockedValuePreservation": "passed",
+    "weightedSelectionReproducibility": "passed",
+    "missingTableFallback": "passed",
+    "requiredSpecializedGeneration": "passed",
+    "substituteSectionGeneration": "passed",
+    "missingArchetypeRecovery": "passed"
+  },
+  "files": [
+    "npc-profile-generator-random.js",
+    "npc-generator-foundation.js",
+    "npc-generator-compose.js",
+    "npc-profile-generator-core.js",
+    "data/npc-generator/fixtures/phase-3-generation-fixtures.json",
+    "scripts/validate-npc-phase-3.mjs"
+  ],
+  "designGuarantees": [
+    "The same generator version, pack version, seed, archetype, timestamp, options, locks, and reroll counters reproduce byte-equivalent canonical profiles.",
+    "Every canonical section and identity use derived sub-seeds.",
+    "Incrementing one section reroll counter does not alter unrelated sections.",
+    "JSON-pointer locks restore selected values from a previous profile after regeneration.",
+    "Profile IDs are deterministic for seed, pack, and archetype.",
+    "Missing tables return visible fallback values and diagnostics rather than throwing runtime errors."
+  ],
+  "workflowIntegration": {
+    "status": "not-written",
+    "reason": "The available GitHub connector write path rejected attempted workflow-file changes. The validator remains directly executable and can be added to CI through a later supported repository write path."
+  },
+  "notes": [
+    "Phase 3 exit requirements are satisfied and Phase 4 may begin.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
