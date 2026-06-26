@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "dfc62e9d93d7247f073827840b3c152ea5e36415",
+  "validatedCommit": "ae55fd66c750e9cf9946a9383571786ca6a79004",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -100,5 +100,5 @@
     "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Profile schema 2.0.0 is older than the Production Island Editor contract 3.0.0, and no registered migration completed the upgrade.",
     "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | P0 live smoke: Profile schema 2.0.0 is older than the Production Island Editor contract 3.0.0, and no registered migration completed the upgrade."
   ],
-  "recordedAt": "2026-06-26T21:28:50.796Z"
+  "recordedAt": "2026-06-26T21:30:14.193Z"
 }
