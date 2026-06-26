@@ -91,6 +91,31 @@
     }
   }
 
+  function registerHeadlessIslandContract() {
+    if (typeof document !== 'undefined' || Registry.resolve('floating-island-editor')) return;
+    Registry.register({
+      id: 'floating-island-editor',
+      aliases: ['island'],
+      moduleId: 'floating-island-generator',
+      label: 'Headless P0 Island Contract Adapter',
+      profileType: 'floating-island-foundation-profile',
+      currentSchemaVersion: '2.0.0',
+      panelId: 'kaysender-editor-panel',
+      formId: 'floating-island-editor-form',
+      outputId: 'floating-island-editor-output',
+      buildButtonId: 'island-build-profile',
+      randomizeButtonId: 'island-randomize',
+      legacyButtonSelectors: ['.editor-launch'],
+      hiddenLegacyActionIds: ['island-copy-json', 'island-download-json'],
+      cardLinkFlag: 'editorLinked',
+      flatFieldExclusions: ['outputs', 'derivedScores'],
+      parentImports: [],
+      open: () => undefined
+    });
+  }
+
+  registerHeadlessIslandContract();
+
   Registry.register({
     id: 'settlement-editor',
     aliases: ['settlement'],
@@ -169,6 +194,8 @@
     open: () => window.openAirshipEditor?.()
   });
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', activateIslandV3, { once: true });
-  else activateIslandV3();
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', activateIslandV3, { once: true });
+    else activateIslandV3();
+  }
 })();
