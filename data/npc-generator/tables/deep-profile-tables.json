@@ -1,1 +1,1 @@
-{"dataType":"npcDeepProfileTableManifest","schemaVersion":"1.0.0","packId":"generic-fantasy-core","componentCount":4}
+{"dataType":"npcDeepProfileTableManifest","schemaVersion":"1.0.0","packId":"generic-fantasy-core","componentCount":5,"dataFiles":["deep-identity-tables.json","deep-appearance-tables.json","deep-personality-tables.json","deep-motivation-tables.json","deep-background-tables.json"]}
