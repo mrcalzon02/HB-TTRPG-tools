@@ -42,14 +42,27 @@ jobs:
           node --check npc-generator-operations.js
           node --check npc-generator-mechanics.js
           node --check npc-profile-generator-core.js
+          node --check npc-profile-generator-storage.js
+          node --check npc-profile-generator-export.js
           node --check npc-profile-generator-entry.js
           node --check npc-profile-generator-ui.js
           node --check npc-profile-generator-renderer.js
           node --check npc-profile-generator-mechanics-ui.js
+          node --check npc-profile-generator-persistence-ui.js
+          node --check npc-profile-generator-persistence-restore.js
           node --check npc-profile-generator-depth-data.js
           node --check npc-profile-generator-household-data.js
           node --check npc-profile-generator-operation-data.js
           node --check npc-profile-generator-mechanics-data.js
+          node --check scripts/migrate-npc-profile-schema-phase-10.mjs
+          node --check scripts/npc-phase-9-validation-fixture.mjs
+          node --check scripts/npc-phase-9-validation-assertions.mjs
+          node --check scripts/npc-phase-9-validation-matrix.mjs
+          node --check scripts/validate-npc-phase-9.mjs
+          node --check scripts/npc-phase-10-validation-fixture.mjs
+          node --check scripts/npc-phase-10-validation-assertions.mjs
+          node --check scripts/npc-phase-10-validation-runner.mjs
+          node --check scripts/validate-npc-phase-10.mjs
           node --check scripts/run-barotrauma-primer-browser-verification.mjs
           node --check scripts/validate-npc-phase-1.mjs
           node --check scripts/validate-npc-phase-2.mjs
@@ -59,20 +72,25 @@ jobs:
           node --check scripts/validate-npc-phase-6.mjs
           node --check scripts/validate-npc-phase-7.mjs
           node --check scripts/validate-npc-phase-8.mjs
-          node --check scripts/validate-npc-phase-9.mjs
+
+      - name: Migrate Phase 10 profile contracts
+        run: |
+          node scripts/migrate-npc-profile-schema-phase-10.mjs
+          node --check npc-profile-generator-entry.js
+          node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-profile.schema.json','utf8'))"
 
       - name: Validate current universal NPC milestone
         id: npc_gate
         shell: bash
         run: |
           set +e
-          node scripts/validate-npc-phase-9.mjs > phase-9-validator-output.txt 2>&1
+          node scripts/validate-npc-phase-10.mjs > phase-10-validator-output.txt 2>&1
           status=$?
-          cat phase-9-validator-output.txt
+          cat phase-10-validator-output.txt
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Record Phase 9 CI result
+      - name: Record Phase 10 CI result
         if: github.actor != 'github-actions[bot]'
         env:
           VALIDATED_SHA: ${{ github.sha }}
@@ -84,21 +102,22 @@ jobs:
           const receipt = {
             receiptType: 'npcPhaseCiReceipt',
             projectId: 'universal-npc-profile-generator',
-            phaseId: 'phase-9-mechanical-profile-generation',
+            phaseId: 'phase-10-storage-import-export-printing',
             status: statusCode === 0 ? 'passed' : 'failed',
             validatedCommit: process.env.VALIDATED_SHA,
-            validator: 'scripts/validate-npc-phase-9.mjs',
+            validator: 'scripts/validate-npc-phase-10.mjs',
+            migration: 'scripts/migrate-npc-profile-schema-phase-10.mjs',
             workflow: '.github/workflows/pages.yml',
             exitCode: statusCode,
-            output: fs.readFileSync('phase-9-validator-output.txt', 'utf8').trim().split('\n').slice(-120)
+            output: fs.readFileSync('phase-10-validator-output.txt', 'utf8').trim().split('\n').slice(-120)
           };
-          fs.writeFileSync('data/npc-generator/fixtures/phase-9-ci-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
+          fs.writeFileSync('data/npc-generator/fixtures/phase-10-ci-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
           NODE
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/npc-generator/fixtures/phase-9-ci-receipt.json
+          git add data/npc-generator/fixtures/phase-10-ci-receipt.json data/schemas/npc-profile.schema.json npc-profile-generator-entry.js
           if ! git diff --cached --quiet; then
-            git commit -m "Record NPC phase 9 CI result [skip ci]"
+            git commit -m "Record NPC phase 10 CI result [skip ci]"
             git push
           fi
 
