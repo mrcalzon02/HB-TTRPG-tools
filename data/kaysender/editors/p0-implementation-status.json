@@ -41,6 +41,7 @@
     "profileAdaptersAndMigrations": true,
     "versionedMigrationRegistry": true,
     "legacyFlatIslandMigrationTo2_0_0": true,
+    "islandProductionMigrationTo3_0_0": true,
     "migrationFixtureValidation": true,
     "adapterIntegrationValidation": true,
     "provenanceAndInheritanceLedger": true,
@@ -77,6 +78,8 @@
     "builtInAdapterFieldMapsDefined": true,
     "adapterFieldMapsAppliedByRuntime": true,
     "browserVerificationHarness": true,
+    "internalSmokeRuntimeSplit": true,
+    "productionOwnedSmokeEnvelopes": true,
     "expandedPersistentBrowserSmoke": true,
     "exactReceiptParentRevisionValidation": true,
     "browserSmokeCleanupValidation": true,
@@ -85,6 +88,7 @@
     "browserVerificationReceiptContract": true,
     "browserReceiptPinnedInheritanceSchema": true,
     "directBlockingPagesGate": true,
+    "durableP0CiReceipt": true,
     "verificationArtifactRetention": true,
     "documentationHandoffComplete": true
   },
@@ -140,7 +144,8 @@
     "kaysender-editor-record-library.js",
     "kaysender-editor-parent-library.js",
     "kaysender-editor-error-boundary.js",
-    "kaysender-editor-live-smoke.js"
+    "kaysender-editor-live-smoke.js",
+    "kaysender-editor-smoke-runtime.js"
   ],
   "schemaFiles": [
     "data/kaysender/schemas/editor-profile-envelope.schema.json",
@@ -155,6 +160,7 @@
     "scripts/validate-editor-lifecycle.mjs",
     "scripts/validate-editor-repository.mjs",
     "scripts/validate-editor-runtime-structure.mjs",
+    "scripts/run-p0-browser-verification.mjs",
     "scripts/validate-p0-browser-verification.mjs"
   ],
   "documentationFiles": [
