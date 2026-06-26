@@ -67,26 +67,34 @@ function withoutMechanics(profile){
   delete sections.mechanics;
   return sections;
 }
-function assertFields(data,fields,label){for(const field of fields)if(!hasValue(data?.[field]))fail(`${label}: missing ${field}.`);}
+function assertFields(data,fields,label){for(const field of fields)if(!hasValue(data?.[field]))fail(`${label}: missing ${field}. Available keys: ${Object.keys(data||{}).join(', ')}.`);}
 function validateFull(data,mechanicalPackage,label){
   assertFields(data,fixture.fullOnlyFields,label);
-  const abilityKeys=Object.keys(data.abilityScores||{}).sort();
+  const scores=data?.abilityScores;
+  const modifiers=data?.abilityModifiers;
+  const saves=data?.savingThrows;
+  const skills=data?.skillBonuses;
+  if(!scores||!modifiers||!saves||!skills){
+    fail(`${label}: Full mechanics block is incomplete. mechanicalMode=${data?.mechanicalMode||'missing'}; keys=${Object.keys(data||{}).join(', ')}.`);
+    return;
+  }
+  const abilityKeys=Object.keys(scores).sort();
   if(JSON.stringify(abilityKeys)!==JSON.stringify([...fixture.abilityIds].sort()))fail(`${label}: ability score keys are incomplete.`);
   for(const ability of fixture.abilityIds){
-    const score=data.abilityScores[ability];
-    if(data.abilityModifiers?.[ability]!==Mechanics.modifier(score))fail(`${label}: ${ability} modifier does not match score.`);
+    const score=scores[ability];
+    if(modifiers[ability]!==Mechanics.modifier(score))fail(`${label}: ${ability} modifier does not match score.`);
   }
-  const saveKeys=Object.keys(data.savingThrows||{}).sort();
+  const saveKeys=Object.keys(saves).sort();
   if(JSON.stringify(saveKeys)!==JSON.stringify([...fixture.saveIds].sort()))fail(`${label}: saving throws are incomplete.`);
-  const skillKeys=Object.keys(data.skillBonuses||{}).sort();
+  const skillKeys=Object.keys(skills).sort();
   if(JSON.stringify(skillKeys)!==JSON.stringify([...(mechanicalPackage.skills||[])].sort()))fail(`${label}: trained skill package is incomplete.`);
   if(!Array.isArray(data.attacks)||data.attacks.length!==1||JSON.stringify(data.attacks[0])!==JSON.stringify(data.mainAttack))fail(`${label}: full attack list disagrees with main attack.`);
-  if(data.initiative!==data.abilityModifiers.dexterity)fail(`${label}: initiative does not use Dexterity.`);
+  if(data.initiative!==modifiers.dexterity)fail(`${label}: initiative does not use Dexterity.`);
   if(!Number.isInteger(data.speed)||data.speed<5)fail(`${label}: speed is invalid.`);
 }
 function compareShared(light,full,label){
   const shared=fixture.lightFields.filter(field=>field!=='mechanicalMode');
-  for(const field of shared)if(JSON.stringify(light[field])!==JSON.stringify(full[field]))fail(`${label}: Light and Full disagree on ${field}.`);
+  for(const field of shared)if(JSON.stringify(light?.[field])!==JSON.stringify(full?.[field]))fail(`${label}: Light and Full disagree on ${field}.`);
 }
 function validateMath(data,mechanicalPackage,label){
   if(!Number.isInteger(data.level)||data.level<0)fail(`${label}: level is invalid.`);
@@ -136,6 +144,7 @@ for(const archetypeId of fixture.archetypeIds){
       }else{
         const data=mechanicsData(result.profile);
         if(result.profile.sections.mechanics?.state!=='present'||!data){fail(`${label}: mechanics section is absent.`);continue;}
+        if(data.mechanicalMode!==mode)fail(`${label}: section mechanicalMode=${data.mechanicalMode||'missing'}; expected ${mode}.`);
         assertFields(data,fixture.lightFields,label);
         validateMath(data,mechanicalPackage,label);
         if(mode==='open-d20-light')for(const field of fixture.fullOnlyFields)if(field in data)fail(`${label}: Full-only field ${field} appears in Light mode.`);
