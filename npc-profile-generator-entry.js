@@ -13,11 +13,13 @@
     ['npc-generator-household-records.js', 'NpcProfileHouseholdRecords'],
     ['npc-generator-relationship-records.js', 'NpcProfileRelationshipRecords'],
     ['npc-generator-household.js', 'NpcProfileGeneratorHousehold'],
+    ['npc-generator-operations.js', 'NpcProfileGeneratorOperations'],
     ['npc-profile-generator-core.js', 'NpcProfileGeneratorCore'],
     ['npc-profile-generator-renderer.js', 'NpcProfileGeneratorRenderer'],
     ['npc-profile-generator-ui.js', 'NpcProfileGeneratorUI'],
     ['npc-profile-generator-depth-data.js', 'NpcProfileGeneratorDepthData'],
-    ['npc-profile-generator-household-data.js', 'NpcProfileGeneratorHouseholdData']
+    ['npc-profile-generator-household-data.js', 'NpcProfileGeneratorHouseholdData'],
+    ['npc-profile-generator-operation-data.js', 'NpcProfileGeneratorOperationData']
   ];
 
   function loadStylesheet() {
@@ -114,6 +116,7 @@
       globalThis.NpcProfileGeneratorWorkspace = workspace;
       await globalThis.NpcProfileGeneratorDepthData.enrich(workspace);
       await globalThis.NpcProfileGeneratorHouseholdData.enrich(workspace);
+      await globalThis.NpcProfileGeneratorOperationData.enrich(workspace);
     } catch (error) {
       if (status) {
         status.textContent = `Universal NPC Profile Generator failed to initialize: ${error.message}`;
