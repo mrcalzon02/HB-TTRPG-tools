@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "750d30175c1af65b64e2255f1a21a8230f9d5ec5",
+  "validatedCommit": "39adb274f01b3ef7ab1cd77d5f35f3674926de48",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -71,8 +71,8 @@
     "Verified split internal smoke runtime, receipt schema, persistent editor chain, exact pinned parent revisions, Chromium runner, artifact retention, and Pages deployment ordering."
   ],
   "browserOutput": [
-    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-6e3ad8bbec3d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d927c7fdb1d8 changed revision 1 to 2.",
-    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-6e3ad8bbec3d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-d927c7fdb1d8 changed revision 1 to 2."
+    "Browser diagnostics: Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-5e0e809b283d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-8f1a431eecba changed revision 1 to 2; first difference data.outputs.summary: \"Unnamed Skyport is a unknown with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\" → \"Unnamed Skyport is a small fortified village with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\".",
+    "P0 browser verification failed: Browser smoke completed without a passing receipt. Start: Beginning Island → Settlement → Airship browser-path smoke test with persistent reopen checks. | Island: Built, saved, and reloaded Unnamed Skyland as island-unnamed-skyland-5e0e809b283d schema 3.0.0. | Settlement: Built, saved, and reloaded Unnamed Skyport with pinned island inheritance. | P0 live smoke: Reopening settlement-unnamed-skyport-8f1a431eecba changed revision 1 to 2; first difference data.outputs.summary: \"Unnamed Skyport is a unknown with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\" → \"Unnamed Skyport is a small fortified village with a small 150-300 population. It is governed by elected mayor and elder council, defended by poor militia and watch bells, and sustained by skygrain and airfruit agriculture. Water status is rationed cisterns; food status is tight but stable; trade access is minor route access.\"."
   ],
-  "recordedAt": "2026-06-26T22:49:36.047Z"
+  "recordedAt": "2026-06-26T22:55:54.796Z"
 }
