@@ -83,8 +83,8 @@
       this.data = { manifest, policies, names, ancestries, coreTables, operationalTables };
       this.pack = mergePackData(this.data);
       this.renderShell();
-      this.restorePreferences();
       this.populateControls();
+      this.restorePreferences();
       this.updateConditionalControls();
       this.generate('initial');
       this.root.setAttribute('aria-busy', 'false');
