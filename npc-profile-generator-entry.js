@@ -22,6 +22,7 @@
     ['npc-profile-generator-ui.js', 'NpcProfileGeneratorUI'],
     ['npc-profile-generator-mechanics-ui.js', 'NpcProfileGeneratorMechanicsUI'],
     ['npc-profile-generator-persistence-ui.js', 'NpcProfileGeneratorPersistenceUI'],
+    ['npc-profile-generator-persistence-restore.js', 'NpcProfileGeneratorPersistenceRestore'],
     ['npc-profile-generator-depth-data.js', 'NpcProfileGeneratorDepthData'],
     ['npc-profile-generator-household-data.js', 'NpcProfileGeneratorHouseholdData'],
     ['npc-profile-generator-operation-data.js', 'NpcProfileGeneratorOperationData'],

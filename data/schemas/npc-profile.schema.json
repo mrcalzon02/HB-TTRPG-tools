@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/npc-profile.schema.json",
   "title": "Universal NPC Profile",
-  "description": "Canonical setting-neutral profile produced or edited by the Universal NPC Profile Generator.",
+  "description": "Canonical Universal NPC profile schema, including deterministic postprocessor metadata, persistence-safe diagnostics, and extension envelopes.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -129,6 +129,60 @@
           "additionalProperties": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        "householdGeneratorVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "operationGeneratorVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "mechanicsGeneratorVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "mechanicalMode": {
+          "enum": [
+            "none",
+            "open-d20-light",
+            "open-d20-full"
+          ]
+        },
+        "mechanicalOptions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "enum": [
+                "none",
+                "open-d20-light",
+                "open-d20-full"
+              ]
+            },
+            "levelMode": {
+              "enum": [
+                "appropriate",
+                "exact",
+                "range"
+              ]
+            },
+            "level": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "minimum": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "maximum": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
           }
         }
       }
@@ -284,6 +338,29 @@
         },
         "sourceIds": {
           "$ref": "#/$defs/stringList"
+        },
+        "operationModule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "label",
+            "version"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$"
+            }
+          }
         }
       },
       "allOf": [
@@ -380,7 +457,7 @@
         "extensions": {
           "type": "object",
           "propertyNames": {
-            "pattern": "^[a-z0-9][a-z0-9.-]{2,63}$"
+            "pattern": "^[a-z][A-Za-z0-9.-]{2,63}$"
           },
           "additionalProperties": {
             "$ref": "#/$defs/sectionEnvelope"
@@ -425,6 +502,35 @@
         },
         "recoverable": {
           "type": "boolean"
+        },
+        "tableId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "archetypeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetKind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "cycle": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
