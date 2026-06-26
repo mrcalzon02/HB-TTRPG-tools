@@ -1,0 +1,18 @@
+{
+  "receiptType": "npcPhaseCiReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-11-custom-data-packs",
+  "status": "passed",
+  "validatedCommit": "9c18d34f8fd31e84152e4a970c718d8187145108",
+  "validator": "scripts/validate-npc-phase-11.mjs",
+  "integration": "npc-profile-generator-pack-bootstrap.js",
+  "workflow": ".github/workflows/pages.yml",
+  "exitCode": 0,
+  "output": [
+    "NPC Phase 11 validation passed.",
+    "Custom profiles generated: 120",
+    "Deterministic Deep repeats: 40",
+    "Invalid packs rejected: 17",
+    "Storage checks passed: 14"
+  ]
+}
