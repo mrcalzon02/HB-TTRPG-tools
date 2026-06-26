@@ -1,0 +1,12 @@
+.npc-pack-actions{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.npc-pack-actions h3{font-size:1rem;margin-bottom:8px}
+.npc-pack-actions p{color:var(--muted);font-size:.84rem;line-height:1.45;margin-bottom:10px}
+.npc-pack-manager{width:min(760px,calc(100vw - 32px));max-height:80vh;padding:0;border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--text);box-shadow:var(--shadow)}
+.npc-pack-manager::backdrop{background:rgba(0,0,0,.72)}
+.npc-pack-list{display:grid;gap:10px;padding:16px 20px 22px;overflow:auto}
+.npc-pack-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.npc-pack-row h3{font-size:1rem;margin-bottom:4px}.npc-pack-row p{color:var(--muted);font-size:.82rem}.npc-pack-row code{overflow-wrap:anywhere}
+.npc-pack-row-actions{display:flex;gap:8px}.npc-pack-row-actions button{width:auto;padding:8px 11px}
+.npc-pack-summary{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+@media(max-width:620px){.npc-pack-row{grid-template-columns:1fr}.npc-pack-row-actions button{flex:1}}
+@media print{.npc-pack-actions,.npc-pack-manager{display:none!important}}
