@@ -1,0 +1,68 @@
+{
+  "fixtureType": "npcPhase5InterfaceFixtures",
+  "schemaVersion": "1.0.0",
+  "workspaceId": "npc-generator",
+  "cardId": "universal-npc-generator-card",
+  "requiredControlIds": [
+    "npc-archetype",
+    "npc-depth",
+    "npc-ancestry",
+    "npc-age-band",
+    "npc-age",
+    "npc-level-mode",
+    "npc-custom-level",
+    "npc-seed",
+    "npc-random-seed",
+    "npc-generate",
+    "npc-export",
+    "npc-print",
+    "npc-clear-locks"
+  ],
+  "requiredRuntimeScripts": [
+    "npc-profile-generator-random.js",
+    "npc-profile-generator-rules-core.js",
+    "npc-profile-generator-rules-validation.js",
+    "npc-generator-foundation.js",
+    "npc-generator-compose.js",
+    "npc-profile-generator-core.js",
+    "npc-profile-generator-renderer.js",
+    "npc-profile-generator-ui.js"
+  ],
+  "requiredDataUrls": [
+    "data/npc-generator/packs/generic-fantasy-core.json",
+    "data/npc-generator/archetypes/wave-a-policies.json",
+    "data/npc-generator/names/core-fantasy-names.json",
+    "data/npc-generator/ancestries/core-fantasy.json",
+    "data/npc-generator/tables/core-profile-tables.json",
+    "data/npc-generator/tables/wave-a-operational-tables.json"
+  ],
+  "requiredCapabilities": [
+    "archetype-selection",
+    "depth-selection",
+    "ancestry-selection",
+    "age-selection",
+    "mechanics-mode",
+    "deterministic-seed",
+    "section-reroll",
+    "field-lock",
+    "section-lock",
+    "json-export",
+    "print-profile",
+    "visible-diagnostics",
+    "responsive-layout"
+  ],
+  "browserSmoke": {
+    "engine": "Chromium through Python Playwright",
+    "status": "passed",
+    "checks": [
+      "Generator Bench card inserted exactly once",
+      "Dedicated workspace opens and becomes the active view",
+      "Control panel renders",
+      "Generated profile banner renders",
+      "Section reroll controls render and execute",
+      "Field lock controls toggle aria-pressed",
+      "Diagnostics region renders",
+      "Return control restores Generator Bench"
+    ]
+  }
+}
