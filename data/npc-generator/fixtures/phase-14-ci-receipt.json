@@ -3,18 +3,48 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-14-automated-validation-browser-testing",
   "status": "failed",
-  "validatedCommit": "7ed5367b2d62b530b46bf8f5975cc5871e195f32",
+  "validatedCommit": "ec514d7f14be0035d6f052150aa577524b011f10",
   "staticValidator": "scripts/validate-npc-all-phases.mjs",
   "browserValidator": "scripts/run-npc-browser-verification.mjs",
   "browserArtifact": "artifacts/npc-browser-verification.json",
   "workflow": ".github/workflows/pages.yml",
   "exitCodes": {
-    "static": 1,
+    "static": 0,
     "browser": 1
   },
   "staticOutput": [
-    "Consolidated NPC regression validation failed:",
-    "- phase-7-family-household-relationships failed with exit code 1: NPC Phase 7 validation failed: | - elf: family reroll changed relationship network."
+    "Consolidated NPC regression validation passed.",
+    "Historical phase validators passed: 13",
+    "- phase-1-canonical-schemas-fixtures: scripts/validate-npc-phase-1.mjs",
+    "- phase-2-archetype-applicability-engine: scripts/validate-npc-phase-2.mjs",
+    "- phase-3-deterministic-generation-core: scripts/validate-npc-phase-3.mjs",
+    "- phase-4-minimum-generic-fantasy-pack: data/npc-generator/validate-phase-4.mjs",
+    "- phase-5-standalone-interface: scripts/validate-npc-phase-5.mjs",
+    "- phase-6-deep-identity-background-motivation: scripts/validate-npc-phase-6.mjs",
+    "- phase-7-family-household-relationships: scripts/validate-npc-phase-7.mjs",
+    "- phase-8-archetype-specific-modules: scripts/validate-npc-phase-8.mjs",
+    "- phase-9-mechanical-profile-generation: scripts/validate-npc-phase-9.mjs",
+    "- phase-10-storage-import-export-printing: scripts/validate-npc-phase-10.mjs",
+    "- phase-11-custom-data-packs: scripts/validate-npc-phase-11.mjs",
+    "- phase-12-kaysender-adapter: scripts/validate-npc-phase-12.mjs",
+    "- phase-13-roster-group-generation: scripts/validate-npc-phase-13.mjs"
   ],
-  "browserOutput": []
+  "browserOutput": [
+    "node:internal/process/promises:391",
+    "    triggerUncaughtException(err, true /* fromPromise */);",
+    "    ^",
+    "",
+    "page.waitForEvent: Timeout 15000ms exceeded while waiting for event \"download\"",
+    "=========================== logs ===========================",
+    "waiting for event \"download\"",
+    "============================================================",
+    "    at /home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/npc-browser-workspace-scenarios.mjs:95:29",
+    "    at Object.check (/home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/npc-browser-test-helpers.mjs:9:29)",
+    "    at runWorkspaceScenarios (/home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/npc-browser-workspace-scenarios.mjs:94:18)",
+    "    at async file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/run-npc-browser-verification.mjs:28:3 {",
+    "  name: 'TimeoutError'",
+    "}",
+    "",
+    "Node.js v20.20.2"
+  ]
 }
