@@ -1,0 +1,92 @@
+{
+  "fixtureType": "npcCustomPackInvalidCases",
+  "schemaVersion": "1.0.0",
+  "baseFixture": "data/npc-generator/fixtures/custom-pack-valid.json",
+  "cases": [
+    {
+      "id": "protected-pack-id",
+      "mutations": [{"path": "/packId", "value": "generic-fantasy-core"}],
+      "expectedCodes": ["CUSTOM_PACK_PROTECTED_ID"]
+    },
+    {
+      "id": "reserved-pack-prefix",
+      "mutations": [{"path": "/packId", "value": "core-frostmarch"}],
+      "expectedCodes": ["CUSTOM_PACK_PROTECTED_ID"]
+    },
+    {
+      "id": "generator-too-old",
+      "mutations": [{"path": "/compatibility/generatorMinVersion", "value": "9.0.0"}],
+      "expectedCodes": ["CUSTOM_PACK_GENERATOR_TOO_OLD"]
+    },
+    {
+      "id": "wrong-base-pack",
+      "mutations": [{"path": "/compatibility/basePackId", "value": "another-setting"}],
+      "expectedCodes": ["CUSTOM_PACK_BASE_MISMATCH"]
+    },
+    {
+      "id": "missing-dependency",
+      "mutations": [{"path": "/dependencies", "value": [{"packId": "winter-foundation", "minimumVersion": "1.0.0", "optional": false}]}],
+      "expectedCodes": ["CUSTOM_PACK_DEPENDENCY_MISSING"]
+    },
+    {
+      "id": "core-table-override",
+      "mutations": [{"path": "/tables/givenNames", "value": ["Override"]}],
+      "expectedCodes": ["CUSTOM_PACK_TABLE_OVERRIDE"]
+    },
+    {
+      "id": "missing-extension-target",
+      "mutations": [{"path": "/tableExtensions/nonexistent-table", "value": ["Entry"]}],
+      "expectedCodes": ["CUSTOM_PACK_EXTENSION_TARGET"]
+    },
+    {
+      "id": "duplicate-ancestry",
+      "mutations": [{"path": "/ancestries/0/id", "value": "human"}],
+      "expectedCodes": ["CUSTOM_PACK_ANCESTRY_DUPLICATE"]
+    },
+    {
+      "id": "ancestry-threshold-mismatch",
+      "mutations": [{"path": "/ancestries/0/householdRule/adultThreshold", "value": 30}],
+      "expectedCodes": ["CUSTOM_PACK_ANCESTRY_RULE_MISMATCH"]
+    },
+    {
+      "id": "missing-parent",
+      "mutations": [{"path": "/archetypes/0/parentId", "value": "missing-parent"}],
+      "expectedCodes": ["CUSTOM_PACK_PARENT_MISSING"]
+    },
+    {
+      "id": "missing-specialized-table",
+      "mutations": [{"path": "/archetypes/0/specializedSections/0/fields/0/tableId", "value": "missing-table"}],
+      "expectedCodes": ["CUSTOM_PACK_TABLE_REFERENCE"]
+    },
+    {
+      "id": "operation-target-not-custom",
+      "mutations": [{"path": "/operationModules/civilian-general", "copyFrom": "/operationModules/frost-warden"}],
+      "expectedCodes": ["CUSTOM_PACK_OPERATION_TARGET"]
+    },
+    {
+      "id": "operation-missing-table",
+      "mutations": [{"path": "/operationModules/frost-warden/fields/0/tableId", "value": "missing-operation-table"}],
+      "expectedCodes": ["CUSTOM_PACK_TABLE_REFERENCE"]
+    },
+    {
+      "id": "unknown-mechanical-skill",
+      "mutations": [{"path": "/mechanicalPackages/frost-warden/skills/0", "value": "unknownSkill"}],
+      "expectedCodes": ["CUSTOM_PACK_SKILL_REFERENCE"]
+    },
+    {
+      "id": "unknown-combat-option",
+      "mutations": [{"path": "/mechanicalPackages/frost-warden/combatOptions/0", "value": "ice-cannon"}],
+      "expectedCodes": ["CUSTOM_PACK_COMBAT_REFERENCE"]
+    },
+    {
+      "id": "invalid-level-guidance",
+      "mutations": [{"path": "/levelGuidance/frost-warden", "value": [8, 1]}],
+      "expectedCodes": ["CUSTOM_PACK_LEVEL_GUIDANCE"]
+    },
+    {
+      "id": "required-mechanics-missing",
+      "mutations": [{"path": "/mechanicalPackages", "value": {}}, {"path": "/levelGuidance", "value": {}}],
+      "expectedCodes": ["CUSTOM_PACK_REQUIRED_MECHANICS_MISSING"]
+    }
+  ]
+}
