@@ -12,6 +12,7 @@ const host = '127.0.0.1';
 const port = Number(process.env.P0_BROWSER_PORT || 4173);
 const smokeTimeoutMs = Number(process.env.P0_BROWSER_SMOKE_TIMEOUT || 60000);
 const baseUrl = `http://${host}:${port}`;
+const requiredEditorIds = ['floating-island-editor', 'settlement-editor', 'airship-editor'];
 
 const mimeTypes = new Map([
   ['.css', 'text/css; charset=utf-8'],
@@ -106,13 +107,18 @@ try {
   });
 
   await page.goto(`${baseUrl}/index.html?p0-smoke=1`, { waitUntil: 'networkidle', timeout: 30000 });
-  await page.waitForFunction(() => (
-    typeof window.runKaysenderEditorSmokeTest === 'function' &&
-    typeof window.getKaysenderEditorSmokeReceipt === 'function' &&
-    Boolean(window.KaysenderEditorKernel) &&
-    Boolean(window.KaysenderEditorRepository) &&
-    Boolean(window.KaysenderMainlineEditorProduction)
-  ), null, { timeout: 30000 });
+  await page.waitForFunction(requiredIds => {
+    const production=window.KaysenderMainlineEditorProduction;
+    const registered=production?.listEditors?.().map(item=>item.id)||[];
+    return (
+      typeof window.runKaysenderEditorSmokeTest === 'function' &&
+      typeof window.getKaysenderEditorSmokeReceipt === 'function' &&
+      Boolean(window.KaysenderEditorKernel) &&
+      Boolean(window.KaysenderEditorRepository) &&
+      Boolean(production) &&
+      requiredIds.every(id=>registered.includes(id))
+    );
+  }, requiredEditorIds, { timeout: 30000 });
 
   await page.evaluate(async timeoutMs => {
     await Promise.race([
