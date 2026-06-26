@@ -3,9 +3,9 @@
   "projectTitle": "Universal NPC Profile Generator",
   "schemaVersion": "1.0.0",
   "activeBranch": "main",
-  "activePhaseId": "phase-2-archetype-applicability-engine",
-  "lastCompletedPhaseId": "phase-1-canonical-schemas-fixtures",
-  "runtimeStatus": "rules-engine-foundation",
+  "activePhaseId": "phase-3-deterministic-generation-core",
+  "lastCompletedPhaseId": "phase-2-archetype-applicability-engine",
+  "runtimeStatus": "deterministic-core-foundation",
   "existingRuntimePreserved": "kaysender-npc-generator.js",
   "phases": [
     {
@@ -43,19 +43,31 @@
     {
       "id": "phase-2-archetype-applicability-engine",
       "sequence": 2,
-      "status": "active",
+      "status": "gate-passed",
       "deliverables": [
-        "npc-profile-generator-rules.js",
+        "npc-profile-generator-rules-core.js",
+        "npc-profile-generator-rules-validation.js",
         "data/npc-generator/archetypes/wave-a-policies.json",
         "data/npc-generator/fixtures/phase-2-rules-fixtures.json",
+        "data/npc-generator/fixtures/phase-2-validation-receipt.json",
         "scripts/validate-npc-phase-2.mjs"
+      ],
+      "evidence": [
+        "data/npc-generator/fixtures/phase-2-validation-receipt.json"
       ],
       "exitGate": "Every initial archetype resolves inherited required, optional, weighted-none, unknown-allowed, substituted, derived, prohibited, and not-applicable policies; cycles, missing parents, unknown substitutions, and contradictory profile states produce actionable diagnostics."
     },
     {
       "id": "phase-3-deterministic-generation-core",
       "sequence": 3,
-      "status": "queued"
+      "status": "active",
+      "deliverables": [
+        "npc-profile-generator-random.js",
+        "npc-profile-generator-core.js",
+        "data/npc-generator/fixtures/phase-3-generation-fixtures.json",
+        "scripts/validate-npc-phase-3.mjs"
+      ],
+      "exitGate": "The same generator version, pack version, seed, archetype, options, and locks reproduce the same normalized profile; field and section sub-seeds isolate rerolls; weighted selection, fallbacks, generation receipts, and locked-value preservation pass executable fixtures."
     },
     {
       "id": "phase-4-minimum-generic-fantasy-pack",
