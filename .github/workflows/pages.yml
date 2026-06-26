@@ -50,6 +50,7 @@ jobs:
           node --check npc-profile-generator-mechanics-ui.js
           node --check npc-profile-generator-persistence-ui.js
           node --check npc-profile-generator-persistence-restore.js
+          node --check npc-profile-generator-pack-bootstrap.js
           node --check npc-profile-generator-pack-validator.js
           node --check npc-profile-generator-pack-manager.js
           node --check npc-profile-generator-pack-storage.js
@@ -75,10 +76,8 @@ jobs:
           node --check scripts/validate-npc-phase-9.mjs
           node --check scripts/validate-npc-phase-10.mjs
 
-      - name: Migrate Phase 11 custom-pack contracts
+      - name: Verify Phase 11 custom-pack contracts
         run: |
-          node scripts/migrate-npc-custom-pack-phase-11.mjs
-          node --check npc-profile-generator-entry.js
           node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-profile.schema.json','utf8'))"
           node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-archetype.schema.json','utf8'))"
           node -e "JSON.parse(require('node:fs').readFileSync('data/schemas/npc-custom-pack.schema.json','utf8'))"
@@ -111,7 +110,7 @@ jobs:
             status: statusCode === 0 ? 'passed' : 'failed',
             validatedCommit: process.env.VALIDATED_SHA,
             validator: 'scripts/validate-npc-phase-11.mjs',
-            migration: 'scripts/migrate-npc-custom-pack-phase-11.mjs',
+            integration: 'npc-profile-generator-pack-bootstrap.js',
             workflow: '.github/workflows/pages.yml',
             exitCode: statusCode,
             output: fs.readFileSync('phase-11-validator-output.txt', 'utf8').trim().split('\n').slice(-160)
@@ -120,7 +119,7 @@ jobs:
           NODE
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/npc-generator/fixtures/phase-11-ci-receipt.json data/schemas/npc-profile.schema.json data/schemas/npc-archetype.schema.json npc-profile-generator-entry.js
+          git add data/npc-generator/fixtures/phase-11-ci-receipt.json
           if ! git diff --cached --quiet; then
             git commit -m "Record NPC phase 11 CI result [skip ci]"
             git push
