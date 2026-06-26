@@ -1,1 +1,1 @@
-{"dataType":"npcAncestryLifeStageRules","schemaVersion":"1.0.0","entries":[]}
+{"dataType":"npcAncestryLifeStageManifest","schemaVersion":"1.0.0","source":"data/npc-generator/tables/ancestry-household-rules.json","ancestryCount":8}
