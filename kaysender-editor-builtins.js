@@ -23,6 +23,7 @@
     'kaysender-island-v3-schema-validator.js',
     'kaysender-island-v3-domain.js',
     'kaysender-island-v3-transformers.js',
+    'kaysender-island-v3-migration-normalizer.js',
     'kaysender-island-v3-consumer-builders.js',
     'kaysender-island-surface-grid-controller.js',
     'kaysender-island-v3-adapter-factory.js',
