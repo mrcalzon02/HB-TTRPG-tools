@@ -26,7 +26,8 @@ const files=Object.fromEntries(await Promise.all([
   'kaysender-editor-parent-library.js',
   'kaysender-editor-error-boundary.js',
   'kaysender-editor-live-smoke.js',
-  'kaysender-editor-smoke-runtime.js'
+  'kaysender-editor-smoke-runtime.js',
+  'kaysender-island-v3-migration-normalizer.js'
 ].map(async name=>[name,await read(name)])));
 
 const html=files['index.html'];
@@ -66,8 +67,15 @@ requireMarkers(files['kaysender-editor-builtins.js'],'Built-in editor adapters',
   "id: 'floating-island-editor'","id: 'settlement-editor'","id: 'airship-editor'",
   "relationship: 'parent-island'","relationship: 'parent-settlement'",
   "profileType: 'floating-island-foundation-profile'","profileType: 'settlement-profile'","profileType: 'airship-profile'",
-  'fieldMap: {','flatFieldExclusions:'
+  'fieldMap: {','flatFieldExclusions:','kaysender-island-v3-migration-normalizer.js'
 ]);
+
+const migrationNormalizer=files['kaysender-island-v3-migration-normalizer.js'];
+requireMarkers(migrationNormalizer,'Island v3 migration normalizer',[
+  'normalizeMigratedCellAreas','planArea / currentArea','finalCell.areaKm2',
+  'domain.applyDerived(profile)','source.buildDownstreamExports','island-v3-migrated-cell-area-normalization'
+]);
+new vm.Script(migrationNormalizer,{filename:'kaysender-island-v3-migration-normalizer.js'});
 
 requireMarkers(files['kaysender-editor-field-mapping.js'],'Shared editor field mapping service',[
   'function readPath','function writeField','function apply(','function applyFlat','window.KaysenderEditorFieldMapping'
@@ -149,6 +157,7 @@ await import('./validate-editor-inheritance.mjs');
 await import('./validate-editor-drafts.mjs');
 await import('./validate-editor-lifecycle.mjs');
 await import('./validate-editor-repository.mjs');
+await import('./validate-island-v3-migration-normalization.mjs');
 
 console.log('Shared editor runtime structure validation passed.');
-console.log('Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, split internal P0 smoke loading, and the expanded persistent browser chain.');
+console.log('Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, normalized Island migration geometry, split internal P0 smoke loading, and the expanded persistent browser chain.');
