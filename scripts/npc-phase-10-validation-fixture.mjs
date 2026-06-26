@@ -90,7 +90,7 @@ export class MemoryStorage{
   clear(){this.values.clear();}
 }
 export const clone=value=>JSON.parse(JSON.stringify(value));
-export const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+export const same=(left,right)=>Exporter.stable(left)===Exporter.stable(right);
 export function generate(archetypeId,index=0,extra={}){
   const resolved=Rules.resolveArchetype(archetypeId,policies.archetypes);
   if(!resolved.valid)throw new Error(`${archetypeId} could not be resolved.`);
