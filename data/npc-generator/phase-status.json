@@ -3,9 +3,9 @@
   "projectTitle": "Universal NPC Profile Generator",
   "schemaVersion": "1.0.0",
   "activeBranch": "main",
-  "activePhaseId": "phase-1-canonical-schemas-fixtures",
-  "lastCompletedPhaseId": "phase-0-specification-architecture",
-  "runtimeStatus": "not-started",
+  "activePhaseId": "phase-2-archetype-applicability-engine",
+  "lastCompletedPhaseId": "phase-1-canonical-schemas-fixtures",
+  "runtimeStatus": "rules-engine-foundation",
   "existingRuntimePreserved": "kaysender-npc-generator.js",
   "phases": [
     {
@@ -23,19 +23,34 @@
     {
       "id": "phase-1-canonical-schemas-fixtures",
       "sequence": 1,
-      "status": "active",
+      "status": "gate-passed",
       "deliverables": [
         "data/schemas/npc-profile.schema.json",
         "data/schemas/npc-generator-pack.schema.json",
         "data/schemas/npc-archetype.schema.json",
-        "data/npc-generator/fixtures/"
+        "data/npc-generator/fixtures/phase-1-profile-fixtures.json",
+        "data/npc-generator/fixtures/phase-1-supplemental-profile-fixtures.json",
+        "data/npc-generator/fixtures/phase-1-archetype-pack-fixtures.json",
+        "data/npc-generator/fixtures/phase-1-validation-receipt.json",
+        "scripts/validate-npc-phase-1.mjs"
+      ],
+      "evidence": [
+        "data/npc-generator/fixtures/phase-1-validation-receipt.json",
+        ".github/workflows/pages.yml"
       ],
       "exitGate": "Valid fixtures pass schema validation and malformed or contradictory fixtures fail with actionable diagnostics."
     },
     {
       "id": "phase-2-archetype-applicability-engine",
       "sequence": 2,
-      "status": "queued"
+      "status": "active",
+      "deliverables": [
+        "npc-profile-generator-rules.js",
+        "data/npc-generator/archetypes/wave-a-policies.json",
+        "data/npc-generator/fixtures/phase-2-rules-fixtures.json",
+        "scripts/validate-npc-phase-2.mjs"
+      ],
+      "exitGate": "Every initial archetype resolves inherited required, optional, weighted-none, unknown-allowed, substituted, derived, prohibited, and not-applicable policies; cycles, missing parents, unknown substitutions, and contradictory profile states produce actionable diagnostics."
     },
     {
       "id": "phase-3-deterministic-generation-core",
