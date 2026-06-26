@@ -1,1 +1,34 @@
-{"receiptType":"npcPhaseValidationReceipt","phaseId":"phase-13-roster-group-generation","status":"pending-record"}
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-13-roster-group-generation",
+  "status": "gate-passed",
+  "validatedThroughCommit": "7909dc9c157898d204fdabe4d045934e6a6b72b9",
+  "ciReceiptCommit": "f1c9d0d6ca97033920e068b5dd168b65e42afe4b",
+  "validator": "scripts/validate-npc-phase-13.mjs",
+  "executionDate": "2026-06-26",
+  "results": {
+    "groups": 220,
+    "members": 1425,
+    "relationships": 3620,
+    "deterministicPairs": 220,
+    "boundaryGroups": 20,
+    "invalidTemplates": 5,
+    "errors": 0
+  },
+  "browser": {
+    "integrationVersion": "0.1.0",
+    "controls": 8,
+    "modulesParsed": 3,
+    "bootstrapSequencing": "passed",
+    "campaignPackRecomposition": "passed"
+  },
+  "verified": [
+    "Ten coherent deterministic group kinds with embedded canonical NPC profiles.",
+    "Resolvable leadership, reporting, shared organization and location references.",
+    "Reciprocal relationship edges and required shared surnames.",
+    "Browser group controls, diagnostics, roster rendering, bootstrap readiness, and print styles.",
+    "Original Kaysender runtime unchanged; only main used."
+  ],
+  "nextPhase": "phase-14-automated-validation-browser-testing"
+}
