@@ -3,7 +3,7 @@
   "projectId": "universal-npc-profile-generator",
   "phaseId": "phase-9-mechanical-profile-generation",
   "status": "failed",
-  "validatedCommit": "b55f1df547caa6d38c2880fe64b51e9d27890f7c",
+  "validatedCommit": "143ae59cc36e6ead546ab95aac8d12769b8b0258",
   "validator": "scripts/validate-npc-phase-9.mjs",
   "workflow": ".github/workflows/pages.yml",
   "exitCode": 1,
