@@ -1,0 +1,59 @@
+{
+  "receiptType": "npcPhaseValidationReceipt",
+  "projectId": "universal-npc-profile-generator",
+  "phaseId": "phase-7-family-household-relationships",
+  "status": "gate-passed",
+  "validatedThroughCommit": "065e1238d7a276cdc826b464113f467318474ee9",
+  "validator": "scripts/validate-npc-phase-7.mjs",
+  "executionDate": "2026-06-25",
+  "executionEnvironment": "Local Node.js execution using the exact household plausibility, household records, relationship records, reroll, and lock contracts committed on main, plus the committed ancestry and relationship table values. The repository validator loads the complete canonical runtime in dependency order.",
+  "results": {
+    "ancestriesTested": 8,
+    "lifeStageScenarios": 3,
+    "profileDepths": 3,
+    "seedsPerScenario": 20,
+    "profilesGenerated": 1440,
+    "deterministicDeepRepeats": 480,
+    "generationErrors": 0,
+    "plausibilityFailures": 0,
+    "countMismatches": 0,
+    "lockFailures": 0,
+    "rerollIsolationFailures": 0
+  },
+  "explicitStatesObserved": [
+    "none",
+    "not-applicable",
+    "unknown"
+  ],
+  "verifiedBehavior": [
+    "Profiles below an ancestry adult threshold receive no current partnership record, descendants, or dependents.",
+    "Standard and Deep early-life profiles receive a plausible guardian.",
+    "Living parent ages respect configured ancestry generation gaps.",
+    "Deceased parent records distinguish hypothetical current age from age at death.",
+    "Descendant ages respect minimum generation gaps.",
+    "Sibling, descendant, and dependent counts match generated records.",
+    "Current partnership records never fall below ancestry adult thresholds.",
+    "Family rerolls do not change the unrelated relationship network.",
+    "Relationship rerolls do not change the family household.",
+    "Locks are reapplied after household postprocessing."
+  ],
+  "files": [
+    "npc-generator-household-core.js",
+    "npc-generator-household-records.js",
+    "npc-generator-relationship-records.js",
+    "npc-generator-household.js",
+    "npc-profile-generator-household-data.js",
+    "npc-profile-generator-core.js",
+    "data/npc-generator/tables/ancestry-household-rules.json",
+    "data/npc-generator/tables/household-status-tables.json",
+    "data/npc-generator/tables/household-obligation-tables.json",
+    "data/npc-generator/tables/relationship-network-tables.json",
+    "data/npc-generator/fixtures/phase-7-kinship-matrix.json",
+    "scripts/validate-npc-phase-7.mjs"
+  ],
+  "notes": [
+    "Phase 7 exit requirements are satisfied and Phase 8 may begin.",
+    "The existing Kaysender NPC runtime was not modified.",
+    "No branch other than main was created or used."
+  ]
+}
