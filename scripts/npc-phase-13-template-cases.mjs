@@ -3,12 +3,14 @@ import {
 } from './npc-phase-13-validation-fixture.mjs';
 import { assertStaticContracts } from './npc-phase-13-validation-assertions.mjs';
 import { assertGroupUiContracts } from './npc-phase-13-ui-assertions.mjs';
+import { assertGroupPackRecomposition } from './npc-phase-13-pack-recomposition-assertions.mjs';
 
 export function runTemplateCases(){
   const failures=[];
   const fail=message=>failures.push(message);
   assertStaticContracts(fail);
   assertGroupUiContracts(fail);
+  assertGroupPackRecomposition(fail);
   let invalidCases=0;
 
   for(const testCase of fixture.invalidTemplateCases){
