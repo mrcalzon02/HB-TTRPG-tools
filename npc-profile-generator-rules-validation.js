@@ -53,7 +53,8 @@
       const actual = section(profile, id);
       const state = id === 'identity' ? (object(actual) ? 'present' : 'none') : actual?.state;
       const at = id === 'identity' ? '/identity' : `/sections/${id}`;
-      if (policy.policy === 'required' && state !== 'present') diagnostics.push(diag('PROFILE_REQUIRED_SECTION_MISSING', 'error', `${id} is required for ${archetype.id}.`, at));
+      const narrativeMechanics = id === 'mechanics' && profile?.generator?.mechanicalMode === 'none';
+      if (policy.policy === 'required' && state !== 'present' && !narrativeMechanics) diagnostics.push(diag('PROFILE_REQUIRED_SECTION_MISSING', 'error', `${id} is required for ${archetype.id}.`, at));
       if (policy.policy === 'derived' && state !== 'present') diagnostics.push(diag('PROFILE_DERIVED_SECTION_MISSING', 'error', `${id} must be present as derived data.`, at));
       if (policy.policy === 'prohibited' && state === 'present') diagnostics.push(diag('PROFILE_PROHIBITED_SECTION_PRESENT', 'error', `${id} is prohibited for ${archetype.id}.`, at));
       if (policy.policy === 'not-applicable' && state === 'present') diagnostics.push(diag('PROFILE_NOT_APPLICABLE_SECTION_PRESENT', 'error', `${id} is not applicable to ${archetype.id}.`, at));
