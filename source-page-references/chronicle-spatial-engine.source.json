@@ -129,8 +129,8 @@
     },
     "validation": {
       "status": "passed",
-      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
-      "checkedAt": "2026-06-27T15:51:07.497Z",
+      "validatedCommit": "a58a1f3a7bef03228b0c63ba739669db81f2dd57",
+      "checkedAt": "2026-06-27T15:53:19.082Z",
       "unifiedStatusProfile": [
         5,
         8,
@@ -162,8 +162,8 @@
     "deterministicReplay": true,
     "validation": {
       "status": "passed",
-      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
-      "checkedAt": "2026-06-27T15:51:07.497Z",
+      "validatedCommit": "a58a1f3a7bef03228b0c63ba739669db81f2dd57",
+      "checkedAt": "2026-06-27T15:53:19.082Z",
       "version": "3.2.0",
       "minimumVariantsPerCatalog": 27648,
       "manifestationChannels": 12,
@@ -207,8 +207,8 @@
     "globalGeneratorVersion": "world-seeded-system-site-server-rescan-3.2.0",
     "validation": {
       "status": "passed",
-      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
-      "checkedAt": "2026-06-27T15:51:07.497Z",
+      "validatedCommit": "a58a1f3a7bef03228b0c63ba739669db81f2dd57",
+      "checkedAt": "2026-06-27T15:53:19.082Z",
       "regionalThemeVersion": "3.2.0",
       "catalogVersion": "1.0.0",
       "expansionVersion": "1.0.0",
@@ -239,8 +239,8 @@
     "fitnessAndSportsTagAwareness": true,
     "validation": {
       "status": "passed",
-      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
-      "checkedAt": "2026-06-27T15:51:07.497Z",
+      "validatedCommit": "a58a1f3a7bef03228b0c63ba739669db81f2dd57",
+      "checkedAt": "2026-06-27T15:53:19.082Z",
       "totalChecks": 23,
       "passedChecks": 23,
       "failedChecks": 0,
