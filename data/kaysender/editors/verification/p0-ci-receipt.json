@@ -3,8 +3,8 @@
   "setting": "Kaysender",
   "stage": "P0",
   "stageId": "shared-editor-kernel",
-  "status": "passed",
-  "validatedCommit": "202fe2947d16422fe86f372203ad20b018dcffd5",
+  "status": "failed",
+  "validatedCommit": "00344fc18efe31ee8781c07b57b43aee52307e27",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -12,11 +12,11 @@
     "receipt": "scripts/validate-p0-browser-verification.mjs"
   },
   "exitCodes": {
-    "static": 0,
-    "browser": 0
+    "static": 1,
+    "browser": 1
   },
   "artifact": "p0-browser-verification",
-  "browserReceiptPresent": true,
+  "browserReceiptPresent": false,
   "browserFailurePresent": false,
   "staticOutput": [
     "Crafting data validation passed.",
@@ -24,59 +24,10 @@
     "Modes: {\"personal-equipment\":14,\"weapon-armor\":5,\"ship-module\":13,\"ship-weapon\":5,\"ship-core\":6}",
     "Material profiles: 20",
     "Power profiles: 9",
-    "Editor roadmap validation passed.",
-    "Production stages: 17",
-    "Required next stage: P0 — Shared Editor Kernel and Profile Contract",
-    "P0 implementation state: framework-implementation-complete-pending-runtime-gate",
-    "Covered main-line modules: 18",
-    "Shared editor kernel validation passed.",
-    "Verified base envelope behavior, stable revisions, explicit-only draft deletion, nested and flat context adapters, generic production actions, adapter-driven script ordering, wrong-profile diagnostics, malformed JSON diagnostics, and the live browser smoke harness.",
-    "Editor migration validation passed.",
-    "Verified flat Island conversion into schema 2.0.0, canonical nested preservation, migration logging, field cleanup, and idempotence.",
-    "Editor adapter integration validation passed.",
-    "Verified adapter schemas, migrations, current/outdated/future imports, local-envelope schema validation, default 1.0.0 wrapping, and wrong-profile diagnostics.",
-    "Editor inheritance validation passed.",
-    "Verified pinned references, embedded-context identity restoration, source revisions, invalid policy rejection, invalid revision rejection, and legacy reference normalization.",
-    "Recovery draft load failed for floating-island-editor: Error: synthetic draft read failure",
-    "    at FaultStorage.getItem (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-drafts.mjs:17:29)",
-    "    at loadDraft (kaysender-editor-kernel.js:348:36)",
-    "    at Object.loadDraft (kaysender-editor-kernel-adapters.js:128:14)",
-    "    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-drafts.mjs:94:21",
-    "Editor recovery draft validation passed.",
-    "Verified valid save/load, explicit-only clearing, invalid-envelope rejection, quota failure handling, read failure handling, clear failure handling, and successful recovery after storage errors.",
-    "Editor lifecycle validation passed.",
-    "Verified edit generations, stale autosave rejection, stale manual checkpoint rejection, current autosave completion, failed autosave retention, and current manual save completion.",
-    "Editor repository validation passed.",
-    "Verified idempotent saves, stale revision rejection, same-revision conflict rejection, transactional rollback, live listings, malformed-record repair, and explicit deletion.",
-    "Editor adapter integration validation passed.",
-    "Verified adapter schemas, migrations, current/outdated/future imports, local-envelope schema validation, default 1.0.0 wrapping, and wrong-profile diagnostics.",
-    "Editor inheritance validation passed.",
-    "Verified pinned references, embedded-context identity restoration, source revisions, invalid policy rejection, invalid revision rejection, and legacy reference normalization.",
-    "Recovery draft load failed for floating-island-editor: Error: synthetic draft read failure",
-    "    at FaultStorage.getItem (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-drafts.mjs:17:29)",
-    "    at loadDraft (kaysender-editor-kernel.js:348:36)",
-    "    at Object.loadDraft (kaysender-editor-kernel-adapters.js:128:14)",
-    "    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-editor-drafts.mjs:94:21",
-    "Editor recovery draft validation passed.",
-    "Verified valid save/load, explicit-only clearing, invalid-envelope rejection, quota failure handling, read failure handling, clear failure handling, and successful recovery after storage errors.",
-    "Editor lifecycle validation passed.",
-    "Verified edit generations, stale autosave rejection, stale manual checkpoint rejection, current autosave completion, failed autosave retention, and current manual save completion.",
-    "Editor repository validation passed.",
-    "Verified idempotent saves, stale revision rejection, same-revision conflict rejection, transactional rollback, live listings, malformed-record repair, and explicit deletion.",
-    "Island v3 migration normalization validation passed.",
-    "Normalized 4 active cells to 20 km² without weakening canonical validation.",
-    "Settlement inheritance guard validation passed.",
-    "Verified 8 Island-to-Settlement type mappings and legal select fallback behavior.",
-    "Shared editor runtime structure validation passed.",
-    "Verified schema-aware adapters, lifecycle, persistence, pinned-parent repair, normalized Island migration geometry, legal Settlement inheritance controls, exact reopen diagnostics, and the expanded persistent browser chain.",
-    "P0 browser verification contract validation passed.",
-    "Verified split internal smoke runtime, receipt schema, persistent editor chain, exact pinned parent revisions, Chromium runner, artifact retention, and Pages deployment ordering."
+    "The required-next stage must currently be P0; found P1."
   ],
   "browserOutput": [
-    "P0 browser verification passed in Chromium.",
-    "Receipt written to artifacts/p0-browser-verification.json.",
-    "Temporary persistent records were cleaned up successfully.",
-    "P0 browser verification receipt passed: artifacts/p0-browser-verification.json"
+    "P0 browser verification was skipped because static validation failed."
   ],
-  "recordedAt": "2026-06-26T23:01:14.965Z"
+  "recordedAt": "2026-06-27T00:09:12.451Z"
 }
