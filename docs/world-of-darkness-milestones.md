@@ -76,9 +76,25 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 - Record local and global scan coverage, including bounds, center, zoom, game line, result counts, response-cap state, and package keys.
 - Preserve one global world namespace per seed while stacking independent worlds side by side.
 
+### Milestone 3.4 — Context-Aware Location Variant Expansion
+
+**Status: Complete**
+
+- Preserve the 21 original context states and add 21 new context-aware states.
+- Produce 42 effective contexts across 10 archetypes for 420 effective location variants.
+- Preserve the sparse distribution at 57.14% mundane, 28.57% tangential, 9.52% active but unregistered, and 4.76% inventoried.
+- Double population, struggle, adventure-hook, location-seed, and item pools from 8 to 16 entries each.
+- Provide four linked-content entries per inventory status in every output pool.
+- Score context and content candidates by active game line, mapped category, named-feature class, and retained OSM tags.
+- Add explicit setting frames for Unified, Vampire, Werewolf, Changing Breeds, Hunter, Changeling, and Mage.
+- Keep the real mapped place as the source of truth rather than replacing it with a generic archetype name.
+- Add a context-aware browser preview and immediate enrichment for newly saved local packages and local viewport scans.
+- Enrich only packages created by the current global-ingestion issue, preserving older published snapshots unchanged.
+- Validate deterministic VTM bar, WTA park, Changing Breeds natural-site, Hunter transit, Changeling park, Mage library, and Unified civic-site cases.
+
 ## Milestone 4 — Persistent Chronicle Overlay and Territory Filters
 
-**Status: In progress — seed and scan persistence complete**
+**Status: In progress — seed, scan, and context persistence complete**
 
 Completed foundations:
 
@@ -86,6 +102,7 @@ Completed foundations:
 - Store global packages and global scan coverage by embedded world seed.
 - Distinguish local-only, local-with-global-counterpart, and embedded-global editing modes.
 - Refresh the global register without overwriting local work.
+- Preserve real-world and game-line context metadata in newly generated location packages.
 
 Remaining requirements:
 
@@ -107,6 +124,7 @@ Completed foundations:
 - Use dashed circles for local packages and solid circles for globally embedded packages.
 - Scale provisional radius by tangential, active-unregistered, and inventoried status.
 - Filter the provisional overlay by local/global scope and supernatural sphere.
+- Make context-aware setting, feature, category, tag, and selected-output metadata available for later influence generation.
 
 Remaining requirements:
 
@@ -127,7 +145,7 @@ Remaining requirements:
 
 **Status: In progress**
 
-- Validate named-location matching, runtime order, world-scan schemas, influence registry, and JavaScript syntax through GitHub Actions.
-- Add browser-level smoke tests for map initialization, named extraction, local scan, global rescan submission, overlay rendering, result selection, filtering, and registry merge behavior.
+- Validate named-location matching, runtime order, world-scan schemas, influence registry, JavaScript syntax, 420 effective variants, doubled output pools, and deterministic setting-aware samples through GitHub Actions.
+- Add browser-level smoke tests for map initialization, named extraction, local scan, context-aware preview and enrichment, global rescan submission, overlay rendering, result selection, filtering, and registry merge behavior.
 - Add graceful service-failure diagnostics and offline fallback behavior.
 - Confirm attribution, caching, request throttling, and service-policy compliance.
