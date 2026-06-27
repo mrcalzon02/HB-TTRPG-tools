@@ -10,7 +10,8 @@ const globalRescanPath = 'world-of-darkness-global-rescan-bridge.js';
 const contextCorePath = 'world-of-darkness-context-aware-core.js';
 const contextNormalizerPath = 'world-of-darkness-context-output-normalizer.js';
 const contextBridgePath = 'world-of-darkness-context-aware-variants.js';
-const loaderPath = 'character-sheet-title.js';
+const shellLoaderPath = 'character-sheet-title.js';
+const spatialLoaderPath = 'world-of-darkness-spatial-loader.js';
 
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const generatedRegistry = JSON.parse(fs.readFileSync(generatedRegistryPath, 'utf8'));
@@ -21,7 +22,8 @@ const worldScan = fs.readFileSync(worldScanPath, 'utf8');
 const globalRescan = fs.readFileSync(globalRescanPath, 'utf8');
 const contextCore = fs.readFileSync(contextCorePath, 'utf8');
 const contextBridge = fs.readFileSync(contextBridgePath, 'utf8');
-const loader = fs.readFileSync(loaderPath, 'utf8');
+const shellLoader = fs.readFileSync(shellLoaderPath, 'utf8');
+const spatialLoader = fs.readFileSync(spatialLoaderPath, 'utf8');
 
 if (config.schemaVersion !== '2.5.0') throw new Error('Spatial engine config must use schemaVersion 2.5.0.');
 if (config.namedLocationMatching?.scanScope !== 'all-openstreetmap-nodes-ways-and-relations-with-name-tag') {
@@ -49,24 +51,43 @@ if (!globalRescan.includes('server-rescan-all-named')) throw new Error('Compact 
 if (!contextCore.includes('context-aware-location-4.0.0')) throw new Error('Context-aware core version marker is missing.');
 if (!contextBridge.includes('wod:local-world-scan-complete')) throw new Error('Context-aware browser bridge does not enrich local world scans.');
 if (!contextBridge.includes('Context-Aware Synthesis')) throw new Error('Context-aware browser preview is missing.');
-if (!loader.includes('script.async = false')) throw new Error('Supplemental runtime loading is not ordered.');
+if (!shellLoader.includes('script.async = false')) throw new Error('Workspace script loading is not ordered.');
 
-const runtimePaths = [
+const wodBundleMatch = shellLoader.match(/'world-of-darkness':\s*\[([\s\S]*?)\]/);
+if (!wodBundleMatch) throw new Error('The World of Darkness shell bundle is missing.');
+const initialWodScripts = [...wodBundleMatch[1].matchAll(/'([^']+\.js)'/g)].map(match => match[1]);
+const expectedInitialWodScripts = ['world-of-darkness-entry.js', 'world-of-darkness-spatial-loader.js'];
+if (JSON.stringify(initialWodScripts) !== JSON.stringify(expectedInitialWodScripts)) {
+  throw new Error(`World of Darkness must open with only ${expectedInitialWodScripts.join(', ')}.`);
+}
+
+const coreRuntimePaths = [
   'world-of-darkness-named-location-bridge.js',
-  'world-of-darkness-spatial-engine-inventory.js',
+  'world-of-darkness-spatial-engine-inventory.js'
+];
+const enhancementRuntimePaths = [
   'world-of-darkness-location-package-bridge.js',
   'world-of-darkness-world-scan-overlay.js',
   'world-of-darkness-global-rescan-bridge.js',
   'world-of-darkness-context-aware-core.js',
   'world-of-darkness-context-output-normalizer.js',
-  'world-of-darkness-context-aware-variants.js'
+  'world-of-darkness-context-aware-variants.js',
+  'world-of-darkness-registry-workflow-note.js'
 ];
+const runtimePaths = [...coreRuntimePaths, ...enhancementRuntimePaths];
 let previousIndex = -1;
 for (const runtimePath of runtimePaths) {
-  const index = loader.indexOf(runtimePath);
-  if (index < 0) throw new Error(`Loader is missing ${runtimePath}.`);
-  if (index <= previousIndex) throw new Error(`Runtime order is invalid at ${runtimePath}.`);
+  const index = spatialLoader.indexOf(runtimePath);
+  if (index < 0) throw new Error(`Staged spatial loader is missing ${runtimePath}.`);
+  if (index <= previousIndex) throw new Error(`Staged spatial runtime order is invalid at ${runtimePath}.`);
   previousIndex = index;
+}
+if (!spatialLoader.includes('Open Chronicle Spatial Engine')) throw new Error('Explicit spatial-engine activation control is missing.');
+if (!spatialLoader.includes('requestIdleCallback')) throw new Error('Advanced Chronicle layers must be deferred until after map mount.');
+if (!spatialLoader.includes('waitForSpatialShell')) throw new Error('The staged loader does not wait for the map shell.');
+if (!spatialLoader.includes('wod:spatial-stack-ready')) throw new Error('The spatial stack completion event is missing.');
+for (const runtimePath of runtimePaths) {
+  if (wodBundleMatch[1].includes(runtimePath)) throw new Error(`${runtimePath} must not load merely by opening the World of Darkness tab.`);
 }
 
 if (generatedRegistry.schemaVersion !== '2.0.0' || generatedRegistry.registryType !== 'chronicle-world-seeded-location-packages') {
@@ -89,8 +110,9 @@ if (!influenceRegistry.worlds || typeof influenceRegistry.worlds !== 'object' ||
   throw new Error('Influence overlay worlds must be an object.');
 }
 
-if (sourceReceipt.schemaVersion !== '2.5.0') throw new Error('Chronicle source receipt must use schemaVersion 2.5.0.');
+if (sourceReceipt.schemaVersion !== '2.6.0') throw new Error('Chronicle source receipt must use schemaVersion 2.6.0.');
 const governedPaths = [
+  sourceReceipt.spatialStageLoader,
   sourceReceipt.namedLocationBridge,
   sourceReceipt.governedRuntime,
   sourceReceipt.worldSeedBridge,
@@ -111,6 +133,15 @@ for (const governedPath of governedPaths) {
 }
 if (sourceReceipt.effectiveLocationVariantCount !== 420) throw new Error('Source receipt does not record 420 effective variants.');
 if (sourceReceipt.effectiveEntriesPerOutputPool !== 16) throw new Error('Source receipt does not record 16 entries per output pool.');
+if (JSON.stringify(sourceReceipt.loadingModel?.worldOfDarknessTab) !== JSON.stringify(expectedInitialWodScripts)) {
+  throw new Error('Source receipt does not record the lightweight World of Darkness tab bundle.');
+}
+if (JSON.stringify(sourceReceipt.loadingModel?.spatialCoreOnExplicitOpen) !== JSON.stringify(coreRuntimePaths)) {
+  throw new Error('Source receipt does not record the explicit spatial core.');
+}
+if (JSON.stringify(sourceReceipt.loadingModel?.deferredAfterMapMount) !== JSON.stringify(enhancementRuntimePaths)) {
+  throw new Error('Source receipt does not record the deferred Chronicle enhancements.');
+}
 
 console.log(JSON.stringify({
   namedLocationScope: config.namedLocationMatching.scanScope,
@@ -119,7 +150,9 @@ console.log(JSON.stringify({
   globalSubmissionModel: config.worldScan.globalSubmissionModel,
   effectiveLocationVariants: config.contextAwareGeneration.effectiveLocationVariants,
   effectiveEntriesPerOutputPool: config.contextAwareGeneration.effectiveEntriesPerOutputPool,
-  runtimeOrder: runtimePaths,
+  initialWodScripts,
+  spatialCore: coreRuntimePaths,
+  deferredEnhancements: enhancementRuntimePaths,
   governedPathCount: governedPaths.length,
   embeddedWorlds: Object.keys(generatedRegistry.worlds || {}).length,
   influenceSpheres: influenceRegistry.sphereVocabulary,
