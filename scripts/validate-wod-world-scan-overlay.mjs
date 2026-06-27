@@ -24,9 +24,11 @@ if (receipt.generatedPackageSchemaVersion !== '2.1.0') throw new Error('Chronicl
 if (receipt.detailDiversity?.legacyCharacterPrototypeSelection !== false) throw new Error('Receipt does not retire bundled character selection.');
 if (receipt.detailDiversity?.legacyRumorBundleSelection !== false) throw new Error('Receipt does not retire bundled rumor selection.');
 if (receipt.detailDiversity?.minimumCharacterPresentationCombinationsPerGameLine !== 82944) throw new Error('Receipt has the wrong character-combination floor.');
+if (receipt.loadingModel?.staleConfigCompatibilityVersion !== '2.6.1') throw new Error('Receipt does not record stale configuration compatibility version 2.6.1.');
 
 const expectedCore = [
   'world-of-darkness-lightweight-map-core.js',
+  'world-of-darkness-spatial-config-compat.js',
   'world-of-darkness-detail-diversity-core.js',
   'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-radial-scan-compat.js'
@@ -38,6 +40,7 @@ if (JSON.stringify(receipt.loadingModel?.spatialCoreOnExplicitOpen) !== JSON.str
 for (const path of [
   receipt.spatialStageLoader,
   receipt.lightweightMapCore,
+  receipt.spatialConfigCompatibility,
   receipt.detailDiversityCore,
   receipt.radialLocationLoader,
   receipt.radialScanCompatibility,
@@ -59,6 +62,7 @@ console.log(JSON.stringify({
   influenceSpheres: influence.sphereVocabulary,
   effectiveLocationVariants: config.contextAwareGeneration.effectiveLocationVariants,
   generatedPackageSchemaVersion: receipt.generatedPackageSchemaVersion,
+  staleConfigCompatibilityVersion: receipt.loadingModel.staleConfigCompatibilityVersion,
   mapOnlyStartup: receipt.loadingModel.mapOnlyStartup,
   detailDiversity: receipt.detailDiversity
 }, null, 2));
