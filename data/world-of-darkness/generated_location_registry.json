@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryType": "chronicle-generated-location-packages",
+  "description": "Immutable published snapshots of generated World of Darkness location packages. Each package preserves the exact population, struggle, adventure hook, location seed, item, source context, and generator cross-links selected at generation time.",
+  "entries": {}
+}
