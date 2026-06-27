@@ -1,0 +1,77 @@
+name: Deploy World of Darkness Spatial Hotfix to Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'character-sheet-title.js'
+      - 'world-of-darkness-*.js'
+      - 'data/world-of-darkness/**'
+      - 'docs/world-of-darkness-milestones.md'
+      - 'source-page-references/chronicle-spatial-engine.source.json'
+      - 'scripts/ingest-wod-*.mjs'
+      - 'scripts/enrich-wod-location-context.mjs'
+      - 'scripts/validate-wod-*.mjs'
+      - 'scripts/run-wod-detail-diversity-validation.mjs'
+      - '.github/workflows/deploy-wod-spatial-pages.yml'
+      - '.github/workflows/validate-wod-world-scan-overlay.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  validate-and-deploy:
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check World of Darkness JavaScript syntax
+        run: |
+          node --check character-sheet-title.js
+          node --check world-of-darkness-spatial-loader.js
+          node --check world-of-darkness-spatial-config-compat.js
+          node --check world-of-darkness-lightweight-map-core.js
+          node --check world-of-darkness-detail-diversity-core.js
+          node --check world-of-darkness-radial-location-loader.js
+          node --check world-of-darkness-radial-scan-compat.js
+          node --check world-of-darkness-location-package-bridge.js
+          node --check world-of-darkness-context-aware-variants.js
+          node --check scripts/ingest-wod-location-package.mjs
+          node --check scripts/enrich-wod-location-context.mjs
+
+      - name: Validate World of Darkness spatial contracts
+        run: |
+          node scripts/validate-wod-location-inventory.mjs
+          node scripts/validate-wod-world-seed-packages.mjs
+          node scripts/validate-wod-context-aware-variants.mjs
+          node scripts/validate-wod-detail-diversity.mjs
+          node scripts/validate-wod-map-only-core.mjs
+          node scripts/validate-wod-world-scan-overlay.mjs
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
