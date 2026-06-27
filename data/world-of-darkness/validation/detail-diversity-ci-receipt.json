@@ -1,12 +1,12 @@
 {
   "receiptType": "wodDetailDiversityValidation",
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "status": "failed",
-  "validatedCommit": "4ac9ebbc417a35a824e6213b04c9b6d53e34af95",
+  "validatedCommit": "0665c6432669bd0ecf3c968a327ba3a331f45ae5",
   "workflow": ".github/workflows/validate-wod-world-scan-overlay.yml",
-  "checkedAt": "2026-06-27T15:21:56.449Z",
-  "totalChecks": 21,
-  "passedChecks": 19,
+  "checkedAt": "2026-06-27T15:22:52.781Z",
+  "totalChecks": 23,
+  "passedChecks": 21,
   "failedChecks": 2,
   "results": [
     {
@@ -35,6 +35,14 @@
     },
     {
       "name": "syntax:detail-diversity-core",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:regional-theme-expansion",
       "passed": true,
       "exitCode": 0,
       "signal": null,
@@ -99,6 +107,14 @@
     },
     {
       "name": "syntax:world-scan-rescan-v3",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:world-scan-rescan-v4",
       "passed": true,
       "exitCode": 0,
       "signal": null,
