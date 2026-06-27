@@ -8,15 +8,19 @@
   "spatialStageLoader": "world-of-darkness-spatial-loader.js",
   "lightweightMapCore": "world-of-darkness-lightweight-map-core.js",
   "spatialConfigCompatibility": "world-of-darkness-spatial-config-compat.js",
+  "systemSiteCatalog": "world-of-darkness-system-site-catalog.js",
   "detailDiversityCore": "world-of-darkness-detail-diversity-core.js",
+  "regionalThemeExpansion": "world-of-darkness-regional-theme-expansion.js",
+  "systemSiteExpansion": "world-of-darkness-system-site-expansion.js",
   "radialLocationLoader": "world-of-darkness-radial-location-loader.js",
   "radialScanCompatibility": "world-of-darkness-radial-scan-compat.js",
   "worldSeedBridge": "world-of-darkness-location-package-bridge.js",
   "worldScanOverlay": "world-of-darkness-world-scan-overlay.js",
   "globalRescanBridge": "world-of-darkness-global-rescan-bridge.js",
   "globalRescanPackageFactory": "scripts/wod-world-scan-package-factory.mjs",
-  "globalRescanIngestion": "scripts/ingest-wod-world-scan-rescan-v3.mjs",
+  "globalRescanIngestion": "scripts/ingest-wod-world-scan-rescan-v4.mjs",
   "globalRescanValidator": "scripts/validate-wod-unified-global-rescan.mjs",
+  "systemSiteValidator": "scripts/validate-wod-system-site-expansion.mjs",
   "contextAwareCore": "world-of-darkness-context-aware-core.js",
   "contextOutputNormalizer": "world-of-darkness-context-output-normalizer.js",
   "contextAwareBrowserBridge": "world-of-darkness-context-aware-variants.js",
@@ -51,17 +55,21 @@
     "spatialCoreOnExplicitOpen": [
       "world-of-darkness-lightweight-map-core.js",
       "world-of-darkness-spatial-config-compat.js",
+      "world-of-darkness-system-site-catalog.js",
       "world-of-darkness-detail-diversity-core.js",
+      "world-of-darkness-regional-theme-expansion.js",
+      "world-of-darkness-system-site-expansion.js",
       "world-of-darkness-radial-location-loader.js",
       "world-of-darkness-radial-scan-compat.js"
     ],
     "staleConfigCompatibilityVersion": "2.7.0",
-    "staleConfigPolicy": "bypass cached configuration, merge governed dataset defaults, synthesize a safe config response when necessary, and route omitted status calls through the active game-line selector",
     "activeGameLineStatusBridge": true,
     "mapOnlyStartup": {
       "chronicleDatasetFetches": 0,
       "mutationObservers": 0,
       "pureDiversityCoreNetworkRequests": 0,
+      "pureRegionalThemeNetworkRequests": 0,
+      "pureSystemSiteNetworkRequests": 0,
       "leafletPrimarySource": "cdn.jsdelivr.net",
       "leafletFallbackSource": "unpkg.com",
       "leafletSourceTimeoutMs": 4500,
@@ -72,7 +80,6 @@
       "concurrency": 1,
       "visibleLocationCap": 90,
       "cancelOnMapMove": true,
-      "restartPolicy": "user-initiated-rescan-from-new-center",
       "perLocationProgress": true,
       "overallProgress": true
     },
@@ -84,19 +91,10 @@
       "world-of-darkness-context-output-normalizer.js",
       "world-of-darkness-context-aware-variants.js",
       "world-of-darkness-registry-workflow-note.js"
-    ],
-    "manualAdvancedOverride": "Load Chronicle Tools Now"
+    ]
   },
   "unifiedCatalogGeneration": {
-    "policy": "Unified World of Darkness is a high-density cross-catalog mode rather than a seventh isolated catalog",
-    "catalogs": [
-      "vampire",
-      "werewolf",
-      "breeds",
-      "hunter",
-      "changeling",
-      "mage"
-    ],
+    "catalogs": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
     "singleCatalogStatusProfile": {
       "mundane": 12,
       "tangential": 6,
@@ -111,61 +109,70 @@
       "inventoried": 3,
       "supernaturalOrAdjacentPercent": 76.19
     },
-    "regionalThemePolicy": "one shared overlap theme per neighborhood",
-    "localCatalogPolicy": "individual locations consume all six catalog lenses before local reuse",
-    "adjacencyPolicy": "Vampire, Werewolf, Changing Breeds, Hunter, Changeling, and Mage locations may appear directly beside one another",
-    "catalogIdentityFields": [
-      "catalogLine",
-      "catalogLabel"
-    ],
     "globalIngestion": {
       "packageFactory": "scripts/wod-world-scan-package-factory.mjs",
-      "ingestionScript": "scripts/ingest-wod-world-scan-rescan-v3.mjs",
+      "baseRescanScript": "scripts/ingest-wod-world-scan-rescan-v3.mjs",
+      "wrapper": "scripts/ingest-wod-world-scan-rescan-v4.mjs",
       "validator": "scripts/validate-wod-unified-global-rescan.mjs",
       "workflow": ".github/workflows/ingest-wod-world-scan-batch.yml",
-      "generatorVersion": "world-seeded-cross-catalog-server-rescan-3.1.0",
+      "generatorVersion": "world-seeded-system-site-server-rescan-3.2.0",
       "packageSchemaVersion": "2.1.0",
       "onePassImmutablePackageTransaction": true,
-      "postIngestionContextRewrite": false,
-      "catalogAndStatusCountsStoredInCoverage": true,
-      "offlineFixtureSupport": true
+      "postIngestionContextRewrite": false
     },
-    "validationRequirements": [
-      "exact 5/8/5/3 Unified status counts across 21 deterministic slots",
-      "unchanged 12/6/2/1 single-catalog status counts",
-      "all six catalogs present in the clustered Unified sample",
-      "first six nearby Unified records use six different catalog lenses",
-      "catalog assignment replays deterministically",
-      "global package factory emits schema 2.1.0 immutable snapshots",
-      "production workflow invokes rescan-v3 without a post-ingestion rewrite"
-    ],
     "validation": {
-      "status": "passed",
-      "validatedCommit": "366563a72d9a25380d06c619cc2caf3a3368044c",
-      "checkedAt": "2026-06-27T14:48:57.487Z",
-      "unifiedStatusProfile": [
-        5,
-        8,
-        5,
-        3
-      ],
-      "singleCatalogStatusProfile": [
-        12,
-        6,
-        2,
-        1
-      ],
+      "status": "pending",
+      "unifiedStatusProfile": [5, 8, 5, 3],
+      "singleCatalogStatusProfile": [12, 6, 2, 1],
       "catalogsCovered": 6,
-      "browserRegression": "contract:detail-diversity",
-      "serverRegression": "contract:unified-global-rescan",
+      "deterministicReplay": true
+    }
+  },
+  "regionalThemeGeneration": {
+    "version": "3.1.0",
+    "actorFamiliesPerCatalog": 12,
+    "structuresPerCatalog": 12,
+    "currentPressures": 16,
+    "minimumVariantsPerCatalog": 2304,
+    "legacyThemeFrequencyDenominator": 32,
+    "districtCellMultiplier": 4,
+    "worldSeedSpecific": true,
+    "deterministicReplay": true
+  },
+  "systemSiteGeneration": {
+    "catalogVersion": "1.0.0",
+    "expansionVersion": "1.0.0",
+    "supportedModes": ["unified", "vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
+    "dimensions": 8,
+    "dimensionNames": [
+      "site type",
+      "hidden function",
+      "supernatural infrastructure",
+      "operational secret",
+      "custodian",
+      "evidence pattern",
+      "local conflict",
+      "failure consequence"
+    ],
+    "authoredEntries": 588,
+    "siteTypesPerMode": 12,
+    "minimumEntriesPerOtherDimensionPerMode": 10,
+    "minimumDedicatedLineStructuralCombinations": 144000000,
+    "categoryAware": true,
+    "neighborhoodAntiRepeat": true,
+    "nearbyUniqueSiteTypesBeforeRepeat": 12,
+    "nearbyUniqueValuesBeforeRepeatPerOtherDimension": 10,
+    "mundaneSitesReceiveProfiles": false,
+    "persistence": "full site profile in contextSnapshot and regionalTheme.siteProfile",
+    "globalGeneratorVersion": "world-seeded-system-site-server-rescan-3.2.0",
+    "validation": {
+      "status": "pending",
       "deterministicReplay": true
     }
   },
   "detailDiversity": {
     "schemaVersion": "1.0.0",
     "neighborhoodCellDegrees": 0.015,
-    "regionalThemePolicy": "stable by neighborhood cell and active game line",
-    "localDetailPolicy": "independent field salts plus current-pass neighborhood used-value avoidance",
     "legacyCharacterPrototypeSelection": false,
     "legacyRumorBundleSelection": false,
     "independentlySelectedComponents": 21,
@@ -175,31 +182,14 @@
     "minimumRumorCombinations": 6144,
     "minimumCharacterPresentationCombinationsPerGameLine": 82944,
     "fitnessAndSportsTagAwareness": true,
-    "regressionSample": "24 tightly clustered Seattle fitness locations",
-    "regressionRequirements": [
-      "one shared regional theme",
-      "unique public facade",
-      "unique associated character",
-      "unique temporal anchor",
-      "unique traumatic catalyst",
-      "unique operational secret",
-      "unique vulnerability",
-      "unique sensory anchor",
-      "unique media feed",
-      "unique street rumor",
-      "unique mechanical seed",
-      "unique diversity signature",
-      "deterministic replay"
-    ],
     "validation": {
-      "status": "passed",
-      "validatedCommit": "366563a72d9a25380d06c619cc2caf3a3368044c",
-      "checkedAt": "2026-06-27T14:48:57.487Z",
-      "totalChecks": 17,
-      "passedChecks": 17,
-      "failedChecks": 0,
+      "status": "pending",
+      "totalChecks": 23,
       "sampleSize": 24,
-      "hiddenFunctionUniqueCount": 24
+      "hiddenFunctionUniqueCount": 24,
+      "regionalThemeModelVersion": "3.1.0",
+      "minimumRegionalThemeVariantsPerCatalog": 2304,
+      "legacyThemeFrequencyDenominator": 32
     }
   },
   "namedLocationScope": "all OpenStreetMap nodes, ways, and relations with a name tag",
@@ -207,26 +197,14 @@
   "effectiveLocationVariantCount": 420,
   "effectiveContextsPerArchetype": 42,
   "effectiveEntriesPerOutputPool": 16,
-  "contextSelectionInputs": [
-    "world seed",
-    "stable real-location key",
-    "inventory status",
-    "active game line",
-    "Unified local catalog lens",
-    "mapped category",
-    "named-feature class",
-    "retained OpenStreetMap tags",
-    "quantized neighborhood cell",
-    "nearby values already used during the active radial pass"
-  ],
   "localWorldScanCap": 90,
   "globalViewportProcessingCap": 90,
   "singleCatalogMundaneOrTangentialPercent": 85.71,
   "singleCatalogInventoriedPercent": 4.76,
   "unifiedSupernaturalOrAdjacentPercent": 76.19,
   "generatedPackageSchemaVersion": "2.1.0",
-  "worldSeedModel": "selectable embedded and local immutable worlds with world-seed-rotated detail pools",
-  "immutabilityModel": "the exact diversified snapshot is preserved through local save, global ingestion, reload, and later context passes",
+  "worldSeedModel": "selectable embedded and local immutable worlds",
+  "immutabilityModel": "regional theme, site profile, narrative snapshot, and linked outputs persist through local save, global ingestion, and reload",
   "influenceOverlayModel": "provisional generated circles plus future curated world-seeded geometry",
   "claimedBusinessIntegration": "deferred",
   "branchPolicy": "main only",
