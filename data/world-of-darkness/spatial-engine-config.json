@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.3.0",
+  "schemaVersion": "2.4.0",
   "mapMode": "leaflet-openstreetmap-lazy-manual-scan",
   "performance": {
     "lazyStartOnWorldOfDarknessView": true,
@@ -38,9 +38,10 @@
   },
   "worldScan": {
     "localVisibleLocationCap": 90,
-    "globalBatchLocationCap": 75,
+    "globalViewportProcessingCap": 90,
+    "globalSubmissionModel": "compact-viewport-manifest-with-server-side-all-named-rescan",
     "globalRegistryBehavior": "add-only-missing-packages-under-active-world-seed",
-    "globalCoverageTracking": "bounds-zoom-center-game-line-package-keys",
+    "globalCoverageTracking": "bounds-zoom-center-game-line-package-keys-and-server-result-count",
     "claimedLocationBehavior": "defer-to-future-claimed-business-integration"
   },
   "influenceOverlay": {
