@@ -47,15 +47,7 @@
     ],
     'world-of-darkness': [
       'world-of-darkness-entry.js',
-      'world-of-darkness-named-location-bridge.js',
-      'world-of-darkness-spatial-engine-inventory.js',
-      'world-of-darkness-location-package-bridge.js',
-      'world-of-darkness-world-scan-overlay.js',
-      'world-of-darkness-global-rescan-bridge.js',
-      'world-of-darkness-context-aware-core.js',
-      'world-of-darkness-context-output-normalizer.js',
-      'world-of-darkness-context-aware-variants.js',
-      'world-of-darkness-registry-workflow-note.js'
+      'world-of-darkness-spatial-loader.js'
     ]
   });
 
@@ -97,7 +89,7 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       }
     } catch (_) {
-      // Unreadable optional browser storage must not block startup.
+      // Optional browser storage must not block startup.
     }
   }
 
@@ -132,8 +124,8 @@
 
   function existingScript(src) {
     return [...document.scripts].find(script => {
-      const value = script.getAttribute('src') || '';
-      return value === src || value.endsWith(`/${src}`) || value.split('?')[0].endsWith(`/${src}`);
+      const value = (script.getAttribute('src') || '').split('?')[0];
+      return value === src || value.endsWith(`/${src}`);
     });
   }
 
@@ -141,6 +133,7 @@
     if (loadedScripts.has(src)) return loadedScripts.get(src);
     const existing = existingScript(src);
     if (existing?.dataset.hbLoaded === 'true') return Promise.resolve();
+
     const promise = new Promise((resolve, reject) => {
       const script = existing || document.createElement('script');
       let settled = false;
@@ -162,7 +155,7 @@
         script.async = false;
         script.dataset.hbLazyWorkspace = 'true';
         document.body.appendChild(script);
-      } else if (script.readyState === 'complete' || script.dataset.hbLoaded === 'true') {
+      } else if (script.dataset.hbLoaded === 'true') {
         finish();
       }
     });
@@ -173,6 +166,7 @@
   async function loadBundle(viewId) {
     if (!BUNDLES[viewId]) return;
     if (loadedBundles.has(viewId)) return loadedBundles.get(viewId);
+
     const promise = (async () => {
       const scripts = BUNDLES[viewId];
       for (let index = 0; index < scripts.length; index += 1) {
@@ -185,6 +179,7 @@
       }
       if (viewId === 'barotrauma') installPrimerUpgrade();
     })();
+
     loadedBundles.set(viewId, promise);
     try {
       await promise;
@@ -207,8 +202,12 @@
   }
 
   async function openView(viewId) {
-    const controls = [...document.querySelectorAll(`[data-view="${CSS.escape(viewId)}"]`)];
-    controls.forEach(control => { control.disabled = true; control.setAttribute('aria-busy', 'true'); });
+    const safeViewId = window.CSS?.escape ? CSS.escape(viewId) : viewId.replace(/[^a-z0-9_-]/gi, '');
+    const controls = [...document.querySelectorAll(`[data-view="${safeViewId}"]`)];
+    controls.forEach(control => {
+      control.disabled = true;
+      control.setAttribute('aria-busy', 'true');
+    });
     try {
       await loadBundle(viewId);
       await window.HBTTRPGApp?.prepareView?.(viewId);
@@ -217,7 +216,10 @@
     } catch (error) {
       setStatus(`${viewLabel(viewId)} failed to load: ${error.message}`, true);
     } finally {
-      controls.forEach(control => { control.disabled = false; control.removeAttribute('aria-busy'); });
+      controls.forEach(control => {
+        control.disabled = false;
+        control.removeAttribute('aria-busy');
+      });
     }
   }
 
