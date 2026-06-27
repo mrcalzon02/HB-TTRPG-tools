@@ -74,7 +74,14 @@ for (const pkg of packages) {
   if (pkg.gameLine !== 'unified') throw new Error(`${pkg.packageKey} lost the Unified game-line identity.`);
   const snapshot = pkg.location.contextSnapshot;
   if (!expectedCatalogs.includes(snapshot.catalogLine)) throw new Error(`${pkg.packageKey} has invalid catalog line ${snapshot.catalogLine}.`);
-  if (!snapshot.catalogLabel || !snapshot.hiddenFunction.includes(snapshot.catalogLabel)) throw new Error(`${pkg.packageKey} does not expose its catalog label.`);
+  if (!snapshot.catalogLabel) throw new Error(`${pkg.packageKey} lacks its catalog label.`);
+  if (pkg.location.inventoryStatus === 'MUNDANE') {
+    if (!snapshot.hiddenFunction.includes('No confirmed supernatural function')) {
+      throw new Error(`${pkg.packageKey} does not preserve its mundane-site disclaimer.`);
+    }
+  } else if (!snapshot.hiddenFunction.includes(snapshot.catalogLabel)) {
+    throw new Error(`${pkg.packageKey} does not expose its supernatural catalog label.`);
+  }
   if (!/^[0-9a-f]{8}$/.test(snapshot.diversitySignature || '')) throw new Error(`${pkg.packageKey} lacks a diversity signature.`);
   if (!snapshot.regionalTheme?.id) throw new Error(`${pkg.packageKey} lacks a regional theme.`);
   for (const output of ['population', 'struggle', 'adventureHook', 'locationSeed', 'item']) {
@@ -123,6 +130,8 @@ console.log(JSON.stringify({
   packageCount: packages.length,
   unifiedCatalogsObserved: [...observedCatalogs].sort(),
   firstCatalogCycle: catalogLines.slice(0, 6),
+  mundanePackages: packages.filter(pkg => pkg.location.inventoryStatus === 'MUNDANE').length,
+  supernaturalOrAdjacentPackages: packages.filter(pkg => pkg.location.inventoryStatus !== 'MUNDANE').length,
   uniqueDiversitySignatures: new Set(packages.map(pkg => pkg.location.contextSnapshot.diversitySignature)).size,
   deterministicReplay: true,
   dedicatedVampireIsolation: true,
