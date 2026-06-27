@@ -1,4 +1,8 @@
 import diversityCore from '../world-of-darkness-detail-diversity-core.js';
+import systemSiteCatalog from '../world-of-darkness-system-site-catalog.js';
+import systemSiteExpansion from '../world-of-darkness-system-site-expansion.js';
+
+const expandedDiversityCore = systemSiteExpansion.enhanceCore(diversityCore, systemSiteCatalog);
 
 const STATUS_LABELS = Object.freeze({
   MUNDANE: 'Mundane / No Known Connection',
@@ -83,13 +87,13 @@ export function createWorldScanPackageFactory({
   if (!['unified', 'vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage'].includes(gameLine)) throw new Error(`Unsupported game line ${gameLine}.`);
 
   const scopedDetail = rotateArrays(detailDiversity, worldSeed.seedValue);
-  const session = diversityCore.createSession(scopedDetail);
+  const session = expandedDiversityCore.createSession(scopedDetail);
 
   function generate(location) {
     if (!/^gmaps-[0-9a-f]{8}$/.test(location.locationKey || '')) throw new Error(`Invalid location key ${location.locationKey}.`);
     const packageKey = keyFrom('wodpkg', `${worldSeed.worldSeedKey}|${location.locationKey}|${gameLine}`);
     const seed = hash32(`${worldSeed.seedValue}|${location.locationKey}|${gameLine}|status`);
-    const status = diversityCore.inventoryStatusFromSeed(seed, gameLine);
+    const status = expandedDiversityCore.inventoryStatusFromSeed(seed, gameLine);
     const detail = session.generate({
       location: {
         entryKey: `${worldSeed.worldSeedKey}|${location.locationKey}`,
@@ -150,6 +154,15 @@ export function createWorldScanPackageFactory({
           regionalTheme: clone(detail.regionalTheme),
           catalogLine: detail.catalogLine,
           catalogLabel: detail.catalogLabel,
+          siteProfile: clone(detail.siteProfile),
+          siteType: clone(detail.siteType),
+          systemHiddenFunction: clone(detail.systemHiddenFunction),
+          supernaturalInfrastructure: clone(detail.supernaturalInfrastructure),
+          systemSecret: clone(detail.systemSecret),
+          custodianType: clone(detail.custodianType),
+          evidencePattern: clone(detail.evidencePattern),
+          localConflict: clone(detail.localConflict),
+          failureConsequence: clone(detail.failureConsequence),
           associatedCharacter: detail.embeddedCharacter,
           temporalAnchor: detail.temporalAnchor,
           traumaticCatalyst: detail.traumaticCatalyst,
@@ -184,10 +197,13 @@ export function createWorldScanPackageFactory({
       crossLinks: clone(baseCrosslinks?.crossLinks || []),
       source: {
         crosslinkSchemaVersion: baseCrosslinks?.schemaVersion,
-        generatorVersion: 'world-seeded-cross-catalog-server-rescan-3.1.0',
+        generatorVersion: 'world-seeded-system-site-server-rescan-3.2.0',
         contextResolverVersion: '1.0.0',
         detailDiversityVersion: detailDiversity?.schemaVersion,
-        detailDiversityPolicy: 'world-seed-rotated-pools-with-unified-high-density-catalog-rotation'
+        regionalThemeVersion: detail.regionalTheme?.themeVersion || 'legacy',
+        systemSiteCatalogVersion: systemSiteCatalog.schemaVersion,
+        systemSiteExpansionVersion: systemSiteExpansion.version,
+        detailDiversityPolicy: 'world-seed-rotated-pools-with-compositional-regional-themes-and-system-specific-site-structures'
       }
     };
   }
@@ -196,7 +212,8 @@ export function createWorldScanPackageFactory({
     generate,
     gameLine,
     worldSeedKey: worldSeed.worldSeedKey,
-    statusProfile: diversityCore.statusProfile(gameLine),
-    catalogLines: [...diversityCore.catalogLines]
+    statusProfile: expandedDiversityCore.statusProfile(gameLine),
+    catalogLines: [...expandedDiversityCore.catalogLines],
+    systemSiteCatalogVersion: systemSiteCatalog.schemaVersion
   });
 }
