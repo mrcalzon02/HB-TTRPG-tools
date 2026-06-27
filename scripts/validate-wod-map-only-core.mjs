@@ -2,12 +2,14 @@ import fs from 'node:fs';
 
 const loader = fs.readFileSync('world-of-darkness-spatial-loader.js', 'utf8');
 const mapCore = fs.readFileSync('world-of-darkness-lightweight-map-core.js', 'utf8');
+const configCompat = fs.readFileSync('world-of-darkness-spatial-config-compat.js', 'utf8');
 const diversityCore = fs.readFileSync('world-of-darkness-detail-diversity-core.js', 'utf8');
 const radial = fs.readFileSync('world-of-darkness-radial-location-loader.js', 'utf8');
 const compatibility = fs.readFileSync('world-of-darkness-radial-scan-compat.js', 'utf8');
 
 const core = [
   'world-of-darkness-lightweight-map-core.js',
+  'world-of-darkness-spatial-config-compat.js',
   'world-of-darkness-detail-diversity-core.js',
   'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-radial-scan-compat.js'
@@ -45,6 +47,22 @@ for (const marker of [
   'Discover Named Locations'
 ]) {
   if (!mapCore.includes(marker)) throw new Error(`Map-only core is missing ${marker}.`);
+}
+
+for (const marker of [
+  "COMPAT_VERSION = '2.6.1'",
+  'CORE_DATA_DEFAULTS',
+  'contextExpansion',
+  'detailDiversity',
+  "freshUrl.searchParams.set('wod-config', COMPAT_VERSION)",
+  "cache: 'no-store'",
+  'syntheticConfigResponse',
+  'staleSchemaDefaultsApplied: true'
+]) {
+  if (!configCompat.includes(marker)) throw new Error(`Spatial config compatibility is missing ${marker}.`);
+}
+if (!loader.indexOf("'world-of-darkness-spatial-config-compat.js'") < loader.indexOf("'world-of-darkness-radial-location-loader.js'")) {
+  throw new Error('Spatial config compatibility must load before the radial location loader.');
 }
 
 for (const marker of [
@@ -101,6 +119,8 @@ console.log(JSON.stringify({
   chronicleDataFetchesBeforeScan: 0,
   mapMutationObservers: 0,
   pureDiversityCoreNetworkRequests: 0,
+  staleConfigCompatibilityVersion: '2.6.1',
+  governedDatasetDefaults: 10,
   leafletFallbackTimeoutMs: 4500,
   radialConcurrency: 1,
   radialVisibleCap: 90,
