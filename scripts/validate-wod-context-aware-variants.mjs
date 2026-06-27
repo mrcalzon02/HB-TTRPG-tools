@@ -88,9 +88,17 @@ const changelingPark = enriched.find(pkg => pkg.gameLine === 'changeling');
 if (werewolfPark.location.contextAwareness.selectedContextId === changelingPark.location.contextAwareness.selectedContextId) {
   throw new Error('Werewolf and Changeling park contexts should diverge under the same real-world feature family.');
 }
-if (werewolfPark.outputs.adventureHook.id === changelingPark.outputs.adventureHook.id
-    && werewolfPark.outputs.population.id === changelingPark.outputs.population.id) {
-  throw new Error('Werewolf and Changeling park outputs did not diverge meaningfully.');
+const outputIds = pkg => [
+  pkg.outputs.population?.id,
+  pkg.outputs.struggle?.id,
+  pkg.outputs.adventureHook?.id,
+  pkg.outputs.locationSeed?.id,
+  pkg.outputs.item?.id || pkg.outputs.items?.id
+];
+const werewolfOutputs = outputIds(werewolfPark);
+const changelingOutputs = outputIds(changelingPark);
+if (werewolfOutputs.every((id, index) => id === changelingOutputs[index])) {
+  throw new Error('Werewolf and Changeling park packages did not diverge across any linked output pool.');
 }
 
 console.log(JSON.stringify({
@@ -104,6 +112,7 @@ console.log(JSON.stringify({
     variant: pkg.location.contextSnapshot.locationVariant,
     population: pkg.outputs.population.id,
     hook: pkg.outputs.adventureHook.id,
+    seed: pkg.outputs.locationSeed.id,
     matchedHooks: pkg.location.contextAwareness.matchedHooks
   }))
 }, null, 2));
