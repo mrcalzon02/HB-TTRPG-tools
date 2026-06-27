@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "2.0.0",
+  "module": "chronicle-spatial-locations",
+  "entryCount": 210,
+  "expansionRule": "10 canonical location archetypes × 21 inventory/context variants",
+  "distribution": {
+    "MUNDANE": { "countPerArchetype": 12, "percentage": 57.14 },
+    "TANGENTIAL": { "countPerArchetype": 6, "percentage": 28.57 },
+    "ACTIVE_UNREGISTERED": { "countPerArchetype": 2, "percentage": 9.52 },
+    "INVENTORIED": { "countPerArchetype": 1, "percentage": 4.76 },
+    "mundaneOrTangentialPercent": 85.71,
+    "notInventoriedPercent": 95.24
+  },
+  "source": "World of Darkness Campaign Assistant: Generator Prototype Specifications",
+  "governance": "CHRONICLE SPATIAL ENGINE: MASTER SPECIFICATION & ARCHITECTURE GOVERNANCE",
+  "prototypes": [
+    {
+      "sourcePrototype": 1,
+      "mundaneBase": { "name": "Back Alley", "category": "Transit", "description": "Narrow corridor between 4th and 5th Ave, choked with old grease traps and electronic waste bins." },
+      "kindredLayer": "Nosferatu Dead-Drop: External AC units from the computer shop hum to mask whispered conversations. An analog hardware box hides encrypted data files behind the mainframe racks.",
+      "umbralLayer": "Weaver Choke Point: Pattern Spiders swarm the electronic waste and suppress organic emotional resonance.",
+      "awakenedVector": "Technocracy Vector: An Iteration X passive tracking hub spoofs nearby device identities and watches clandestine movement."
+    },
+    {
+      "sourcePrototype": 2,
+      "mundaneBase": { "name": "24-Hour Laundromat", "category": "Commercial", "description": "Fluorescent lights flicker over rusted metal washers; the air smells of industrial detergent and stagnant water." },
+      "kindredLayer": "Anarch Feeding Ground: A low-risk hunting zone for transient neonates, with a blind spot behind the commercial dryers.",
+      "umbralLayer": "Stagnant Pool: Minor spirits of apathy cling to broken machines and spiritual residue collects around the drains.",
+      "awakenedVector": "Coincidental Sanctum: The repeating machinery rhythm can dampen sensory noise and reduce the visibility of subtle workings."
+    },
+    {
+      "sourcePrototype": 3,
+      "mundaneBase": { "name": "Subway Transit Station", "category": "Transit", "description": "Subterranean concrete platforms are covered in brake dust and echo with high-pitched rail noise." },
+      "kindredLayer": "Ventrue Domain Border: Mortal security patrols the approaches while ultraviolet glyphs record unauthorized passage.",
+      "umbralLayer": "Underground Warren: Old service tunnels intersect paths used by feral Rat-Spirits and territorial urban shapeshifters.",
+      "awakenedVector": "Void Engineers Outpost: Transit telemetry is used to monitor anomalous movement through subterranean infrastructure."
+    },
+    {
+      "sourcePrototype": 4,
+      "mundaneBase": { "name": "Condemned Tenement", "category": "Abandoned", "description": "Boarded windows, rotting floorboards, and structural cracks expose the building's skeletal rebar." },
+      "kindredLayer": "Hollow Haven: A temporary shelter for unaligned or desperate Kindred avoiding daylight and official scrutiny.",
+      "umbralLayer": "Bane Infestation: Spirits of neglect and accumulated suffering feed within the damaged structure.",
+      "awakenedVector": "Nephandic Residue: Broken logic and inverted geometry appear in isolated corners of the upper floor."
+    },
+    {
+      "sourcePrototype": 5,
+      "mundaneBase": { "name": "Rooftop Parking Deck", "category": "Industrial", "description": "Exposed concrete overlooks the skyline and smells of exhaust, rain, and hot asphalt." },
+      "kindredLayer": "Harpy Vantage Point: A discreet neutral overlook used for exchanging secrets beyond formal court supervision.",
+      "umbralLayer": "Glade Anchor: Wind and sky spirits pass across the exposed roof when pollution and traffic briefly subside.",
+      "awakenedVector": "Etherite Observatory: The roof offers a temporary platform for measuring celestial and consensus distortions."
+    },
+    {
+      "sourcePrototype": 6,
+      "mundaneBase": { "name": "24-Hour Corner Deli", "category": "Commercial", "description": "A crowded neighborhood shop is packed with cheap groceries, neon signs, and a guarded counter." },
+      "kindredLayer": "Circulatory System Node: Local operators quietly exchange protection, blood access, and neighborhood information.",
+      "umbralLayer": "Urban Feeding Ground: Minor spirits of hunger, anxiety, and routine gather around the grill and stockroom.",
+      "awakenedVector": "Hedge Magic Focus: Folk protections are hidden in ordinary product arrangements and lottery displays."
+    },
+    {
+      "sourcePrototype": 7,
+      "mundaneBase": { "name": "Botanical Greenhouse", "category": "Green Space", "description": "A glass municipal structure holds tropical plants in heavy humidity and rich soil." },
+      "kindredLayer": "Gangrel Sanctuary: Animals, insects, and root systems provide a quiet intelligence network within the city.",
+      "umbralLayer": "Wyld Pocket: Plant spirits retain unusual coherence and memory within the managed urban greenhouse.",
+      "awakenedVector": "Verbena Grove: Living patterns can be studied or cultivated beneath the cover of municipal botany."
+    },
+    {
+      "sourcePrototype": 8,
+      "mundaneBase": { "name": "Automotive Salvage Yard", "category": "Industrial", "description": "Crushed vehicles, broken glass, and mud pits leak dark oil into the surrounding soil." },
+      "kindredLayer": "Brujah Staging Ground: Heavy machinery noise can conceal meetings, training, and political organizing.",
+      "umbralLayer": "Weaver-Wyrm Conflict Zone: Toxic elementals and machinery spirits compete over the contaminated ground.",
+      "awakenedVector": "Hermetic Forge: Scrap metal is tested for symbolic history and reused in defensive occult construction."
+    },
+    {
+      "sourcePrototype": 9,
+      "mundaneBase": { "name": "Steam Ventilation Vault", "category": "Subterranean", "description": "A bricked utility access point vents scalding vapor into the night air." },
+      "kindredLayer": "Nosferatu Escape Hatch: A concealed mechanism opens into utility and sewer passages below street level.",
+      "umbralLayer": "Steam Elemental Nest: Spirits of pressure and heat gather around the active infrastructure.",
+      "awakenedVector": "Athanor Matrix: Thermal differences can support alchemical refinement while remaining hidden inside ordinary utilities."
+    },
+    {
+      "sourcePrototype": 10,
+      "mundaneBase": { "name": "Historic Churchyard", "category": "Green Space", "description": "Weathered slate markers stand beneath iron gates and mature trees." },
+      "kindredLayer": "Hecata Vault: An ancestral crypt may serve as an anchor for necromantic records and obligations.",
+      "umbralLayer": "Silent Verge: The boundary between the living city and its dead is unusually close around the oldest graves.",
+      "awakenedVector": "Celestial Chorus Node: Sustained faith and ritual history create a stabilizing resonance around the grounds."
+    }
+  ],
+  "contextVariants": [
+    { "id": "routine-commerce", "title": "Routine Commerce", "inventoryStatus": "MUNDANE", "effect": "The location is exactly what it appears to be: an ordinary business or civic site serving regular customers.", "mechanicalSeed": "Use mundane staffing, pricing, scheduling, and customer conflict only." },
+    { "id": "ordinary-maintenance", "title": "Ordinary Maintenance", "inventoryStatus": "MUNDANE", "effect": "Recent oddities are explained by repairs, inspections, utility work, or deferred maintenance.", "mechanicalSeed": "A repair deadline or contractor dispute complicates access." },
+    { "id": "staff-turnover", "title": "Staff Turnover", "inventoryStatus": "MUNDANE", "effect": "Unfamiliar faces and inconsistent stories come from hiring problems, resignations, or management changes.", "mechanicalSeed": "A new employee misunderstands a harmless situation." },
+    { "id": "delivery-window", "title": "Delivery Window", "inventoryStatus": "MUNDANE", "effect": "Late-night traffic and locked doors are connected to deliveries, inventory control, and ordinary loss prevention.", "mechanicalSeed": "A delayed shipment creates a practical obstacle." },
+    { "id": "neighborhood-convenience", "title": "Neighborhood Convenience", "inventoryStatus": "MUNDANE", "effect": "The site matters because residents use it, not because supernatural factions control it.", "mechanicalSeed": "Local residents defend the location from disruption." },
+    { "id": "quiet-after-hours", "title": "Quiet After Hours", "inventoryStatus": "MUNDANE", "effect": "The building becomes empty and eerie after closing, but there is no confirmed supernatural use.", "mechanicalSeed": "Security alarms and ordinary patrols are the main danger." },
+    { "id": "minor-code-complaint", "title": "Minor Code Complaint", "inventoryStatus": "MUNDANE", "effect": "Rumors of secrecy originate in permit disputes, sanitation complaints, fire-code concerns, or zoning enforcement.", "mechanicalSeed": "Municipal paperwork creates a time-sensitive complication." },
+    { "id": "seasonal-slowdown", "title": "Seasonal Slowdown", "inventoryStatus": "MUNDANE", "effect": "Reduced activity, dark windows, and irregular hours reflect seasonal economics rather than hidden occupation.", "mechanicalSeed": "The site may close temporarily without sinister cause." },
+    { "id": "renovation-noise", "title": "Renovation Noise", "inventoryStatus": "MUNDANE", "effect": "Unusual sounds, covered windows, and restricted rooms come from remodeling or structural work.", "mechanicalSeed": "Construction exposes an entirely ordinary but inconvenient hazard." },
+    { "id": "public-event", "title": "Public Event", "inventoryStatus": "MUNDANE", "effect": "Crowds and unusual schedules are tied to a fundraiser, sale, meeting, performance, or community program.", "mechanicalSeed": "Public attention makes covert action difficult." },
+    { "id": "local-gossip", "title": "Local Gossip", "inventoryStatus": "MUNDANE", "effect": "The location has accumulated stories because it is old, unpopular, or socially important, not because those stories are true.", "mechanicalSeed": "A rumor spreads faster than the facts." },
+    { "id": "financial-strain", "title": "Financial Strain", "inventoryStatus": "MUNDANE", "effect": "Short staffing, odd transactions, and unusual hours are symptoms of debt, rent pressure, or declining business.", "mechanicalSeed": "A mundane creditor or landlord forces a decision." },
+    { "id": "historical-echo", "title": "Historical Echo", "inventoryStatus": "TANGENTIAL", "effect": "The building has a documented history connected to an older incident, but no current supernatural occupation is confirmed.", "mechanicalSeed": "Research reveals a past connection without proving a present one." },
+    { "id": "passing-witness", "title": "Passing Witness", "inventoryStatus": "TANGENTIAL", "effect": "Someone associated with the supernatural once visited, worked nearby, or was seen here briefly.", "mechanicalSeed": "A witness remembers one useful but incomplete detail." },
+    { "id": "route-adjacency", "title": "Route Adjacency", "inventoryStatus": "TANGENTIAL", "effect": "The site sits near a known feeding route, spirit path, occult boundary, or surveillance corridor without being part of it.", "mechanicalSeed": "Activity passes nearby but does not originate here." },
+    { "id": "residual-resonance", "title": "Residual Resonance", "inventoryStatus": "TANGENTIAL", "effect": "A faint emotional, spiritual, or magical residue remains from an event that happened elsewhere or long ago.", "mechanicalSeed": "Sensitive characters notice a trace that cannot identify a current actor." },
+    { "id": "accidental-shelter", "title": "Accidental Shelter", "inventoryStatus": "TANGENTIAL", "effect": "A supernatural figure used the location once out of convenience, with no enduring claim or infrastructure.", "mechanicalSeed": "Evidence points to temporary use rather than ownership." },
+    { "id": "unverified-rumor", "title": "Unverified Rumor", "inventoryStatus": "TANGENTIAL", "effect": "The location appears in informal stories and secondhand warnings but not in any reliable inventory.", "mechanicalSeed": "Following the rumor produces ambiguity rather than confirmation." },
+    { "id": "concealed-use", "title": "Concealed Use", "inventoryStatus": "ACTIVE_UNREGISTERED", "effect": "The location is being used by supernatural actors, but the arrangement is unofficial, temporary, or deliberately omitted from faction records.", "mechanicalSeed": "Discovery creates leverage because no one can safely admit ownership." },
+    { "id": "recurring-anomaly", "title": "Recurring Anomaly", "inventoryStatus": "ACTIVE_UNREGISTERED", "effect": "A repeatable supernatural effect is present, yet no faction has accepted responsibility or completed a formal survey.", "mechanicalSeed": "The anomaly escalates whenever investigators attempt to classify it." },
+    { "id": "formal-domain-entry", "title": "Formal Domain Entry", "inventoryStatus": "INVENTORIED", "effect": "The location is formally catalogued, monitored, claimed, or administratively recognized by at least one supernatural organization.", "mechanicalSeed": "Any intrusion risks an organized response from the recorded custodian." }
+  ]
+}
