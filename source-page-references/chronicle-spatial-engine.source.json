@@ -48,10 +48,7 @@
     "data/world-of-darkness/spatial-engine-config.json"
   ],
   "loadingModel": {
-    "worldOfDarknessTab": [
-      "world-of-darkness-entry.js",
-      "world-of-darkness-spatial-loader.js"
-    ],
+    "worldOfDarknessTab": ["world-of-darkness-entry.js", "world-of-darkness-spatial-loader.js"],
     "spatialCoreOnExplicitOpen": [
       "world-of-darkness-lightweight-map-core.js",
       "world-of-darkness-spatial-config-compat.js",
@@ -129,11 +126,12 @@
     }
   },
   "regionalThemeGeneration": {
-    "version": "3.1.0",
+    "version": "3.2.0",
     "actorFamiliesPerCatalog": 12,
     "structuresPerCatalog": 12,
     "currentPressures": 16,
-    "minimumVariantsPerCatalog": 2304,
+    "manifestationChannels": 12,
+    "minimumVariantsPerCatalog": 27648,
     "legacyThemeFrequencyDenominator": 32,
     "districtCellMultiplier": 4,
     "worldSeedSpecific": true,
@@ -187,8 +185,9 @@
       "totalChecks": 23,
       "sampleSize": 24,
       "hiddenFunctionUniqueCount": 24,
-      "regionalThemeModelVersion": "3.1.0",
-      "minimumRegionalThemeVariantsPerCatalog": 2304,
+      "regionalThemeModelVersion": "3.2.0",
+      "minimumRegionalThemeVariantsPerCatalog": 27648,
+      "regionalManifestationChannels": 12,
       "legacyThemeFrequencyDenominator": 32
     }
   },
