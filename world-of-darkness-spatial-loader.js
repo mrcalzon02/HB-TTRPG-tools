@@ -4,7 +4,9 @@
   const CORE_SCRIPTS = [
     'world-of-darkness-lightweight-map-core.js',
     'world-of-darkness-spatial-config-compat.js',
+    'world-of-darkness-system-site-catalog.js',
     'world-of-darkness-detail-diversity-core.js',
+    'world-of-darkness-system-site-expansion.js',
     'world-of-darkness-radial-location-loader.js',
     'world-of-darkness-radial-scan-compat.js'
   ];
@@ -186,7 +188,7 @@
       mapReady = true;
       setButtonState('Spatial Engine Loaded', true);
       setAdvancedButtonState('Load Chronicle Tools Now', false);
-      setStatus('Map ready. Move to the desired area, then discover named locations. Records will load center-first with regional theme consistency and local detail anti-repetition.');
+      setStatus('Map ready. Move to the desired area, then discover named locations. Records will load center-first with regional consistency, system-specific site structures, and local detail anti-repetition.');
       if (shouldAutoOpen()) scheduleEnhancements();
       return true;
     })().catch(error => {
