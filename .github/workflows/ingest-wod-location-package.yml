@@ -43,6 +43,11 @@ jobs:
           ISSUE_NUMBER: ${{ inputs.issue_number }}
         run: node scripts/ingest-wod-location-package.mjs
 
+      - name: Apply context-aware location variants
+        env:
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+        run: node scripts/enrich-wod-location-context.mjs
+
       - name: Commit generated package registry
         run: |
           git config user.name "github-actions[bot]"
@@ -51,7 +56,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated package changes to commit."
           else
-            git commit -m "Publish World of Darkness location package #${{ inputs.issue_number }} [skip ci]"
+            git commit -m "Publish context-aware World of Darkness location package #${{ inputs.issue_number }} [skip ci]"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
