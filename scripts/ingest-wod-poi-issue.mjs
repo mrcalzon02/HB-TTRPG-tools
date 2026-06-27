@@ -35,6 +35,8 @@ if (typeof entry.primary_type !== 'string' || !/^[a-z0-9_]{2,50}$/.test(entry.pr
 if (!entry.coordinates || !Number.isFinite(entry.coordinates.lat) || !Number.isFinite(entry.coordinates.lng)) throw new Error('Finite coordinates are required.');
 if (entry.coordinates.lat < -90 || entry.coordinates.lat > 90 || entry.coordinates.lng < -180 || entry.coordinates.lng > 180) throw new Error('Coordinates are outside valid latitude/longitude ranges.');
 if (!['STANDARD_UNCLAIMED', 'SUPPORTIVE', 'OPT_OUT'].includes(entry.veil_interaction)) throw new Error('veil_interaction is invalid.');
+if (!['MUNDANE', 'TANGENTIAL', 'ACTIVE_UNREGISTERED', 'INVENTORIED'].includes(entry.inventory_status)) throw new Error('inventory_status is invalid.');
+if (entry.veil_interaction === 'OPT_OUT' && entry.inventory_status !== 'MUNDANE') throw new Error('Opt-out entries must use MUNDANE inventory_status.');
 if (typeof entry.claimed !== 'boolean' || typeof entry.opt_out !== 'boolean') throw new Error('claimed and opt_out must be booleans.');
 if (entry.opt_out !== (entry.veil_interaction === 'OPT_OUT')) throw new Error('opt_out must agree with veil_interaction.');
 if (!entry.submitted_lore || typeof entry.submitted_lore !== 'object' || Array.isArray(entry.submitted_lore)) throw new Error('submitted_lore must be an object.');
@@ -55,4 +57,4 @@ registry.entries[patch.entryKey] = {
 };
 registry.entries = Object.fromEntries(Object.entries(registry.entries).sort(([a], [b]) => a.localeCompare(b)));
 fs.writeFileSync(targetPath, `${JSON.stringify(registry, null, 2)}\n`);
-console.log(`Validated and stored ${patch.entryKey}: ${entry.place_name}`);
+console.log(`Validated and stored ${patch.entryKey}: ${entry.place_name} (${entry.inventory_status})`);
