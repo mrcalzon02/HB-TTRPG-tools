@@ -1,0 +1,40 @@
+name: Validate Main Page Performance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'app-lite.js'
+      - 'app-lite-view-mounts.js'
+      - 'character-sheet-title.js'
+      - 'character-sheet-view.js'
+      - 'scripts/validate-main-page-lazy-boot.mjs'
+      - '.github/workflows/validate-main-page-performance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check startup script syntax
+        run: |
+          node --check app-lite.js
+          node --check app-lite-view-mounts.js
+          node --check character-sheet-title.js
+          node --check character-sheet-view.js
+          node --check scripts/validate-main-page-lazy-boot.mjs
+
+      - name: Validate lazy startup contract
+        run: node scripts/validate-main-page-lazy-boot.mjs
