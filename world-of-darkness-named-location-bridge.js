@@ -7,12 +7,74 @@
   const featureLabelsByName = new Map();
   const originalFetch = window.fetch.bind(window);
   let lastScanMeta = null;
+  let latestScan = null;
+  let capturedMap = null;
   let engineObserver = null;
 
   const normalize = value => String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
   const humanize = value => String(value || '')
     .replace(/[_:]+/g, ' ')
     .replace(/\b\w/g, character => character.toUpperCase());
+
+  function mapViewport() {
+    if (!capturedMap) return null;
+    const bounds = capturedMap.getBounds();
+    const center = capturedMap.getCenter();
+    return {
+      zoom: capturedMap.getZoom(),
+      center: { lat: center.lat, lng: center.lng },
+      bounds: {
+        south: bounds.getSouth(),
+        west: bounds.getWest(),
+        north: bounds.getNorth(),
+        east: bounds.getEast()
+      }
+    };
+  }
+
+  function publishMap(map) {
+    capturedMap = map;
+    window.WODChronicleSpatialMap = map;
+    document.dispatchEvent(new CustomEvent('wod:spatial-map-ready', {
+      detail: { map, viewport: mapViewport() }
+    }));
+  }
+
+  function wrapLeaflet(leaflet) {
+    if (!leaflet?.map || leaflet.__wodNamedLocationWrapped) return;
+    const originalMap = leaflet.map;
+    leaflet.map = function wrappedChronicleMap(...args) {
+      const map = originalMap.apply(this, args);
+      publishMap(map);
+      return map;
+    };
+    Object.defineProperty(leaflet, '__wodNamedLocationWrapped', {
+      configurable: false,
+      enumerable: false,
+      value: true
+    });
+  }
+
+  function captureLeafletAssignment() {
+    if (window.L?.map) {
+      wrapLeaflet(window.L);
+      return;
+    }
+    const descriptor = Object.getOwnPropertyDescriptor(window, 'L');
+    if (descriptor && descriptor.configurable === false) return;
+    let leaflet = window.L;
+    Object.defineProperty(window, 'L', {
+      configurable: true,
+      enumerable: true,
+      get() {
+        return leaflet;
+      },
+      set(value) {
+        leaflet = value;
+        wrapLeaflet(value);
+      }
+    });
+  }
 
   function isOverpassUrl(input) {
     try {
@@ -114,6 +176,51 @@
     return 'Named Map Feature';
   }
 
+  function sourceTags(tags = {}) {
+    const allowed = [
+      'amenity', 'shop', 'tourism', 'historic', 'leisure', 'natural', 'waterway',
+      'highway', 'railway', 'public_transport', 'place', 'boundary', 'aeroway',
+      'office', 'craft', 'landuse', 'power', 'man_made', 'military', 'building',
+      'religion', 'denomination', 'operator', 'brand'
+    ];
+    return Object.fromEntries(allowed.filter(key => tags[key] != null).map(key => [key, String(tags[key])]));
+  }
+
+  function serializeElement(element) {
+    const tags = element.tags || {};
+    const lat = Number(element.lat ?? element.center?.lat);
+    const lng = Number(element.lon ?? element.center?.lon);
+    return {
+      osmType: element.type,
+      osmId: String(element.id),
+      name: String(tags.name || '').trim(),
+      lat,
+      lng,
+      featureLabel: tags.wod_named_feature_label || featureLabel(tags),
+      sourceTags: sourceTags(tags),
+      address: [
+        tags['addr:full'],
+        [tags['addr:housenumber'], tags['addr:street']].filter(Boolean).join(' '),
+        tags['addr:city'] || tags['addr:town'] || tags['addr:village'],
+        tags['addr:state'],
+        tags['addr:postcode']
+      ].filter(Boolean).join(', ')
+    };
+  }
+
+  function publishScan(elements) {
+    latestScan = {
+      scannedAt: new Date().toISOString(),
+      viewport: mapViewport(),
+      meta: { ...lastScanMeta },
+      locations: elements.map(serializeElement).filter(location => location.name && Number.isFinite(location.lat) && Number.isFinite(location.lng))
+    };
+    window.WODNamedLocationLatestScan = latestScan;
+    document.dispatchEvent(new CustomEvent('wod:named-location-scan-complete', {
+      detail: latestScan
+    }));
+  }
+
   function transformPayload(payload, limit) {
     if (!payload || !Array.isArray(payload.elements)) return payload;
     const seen = new Set();
@@ -139,6 +246,7 @@
       limit,
       capped: elements.length >= limit
     };
+    window.setTimeout(() => publishScan(elements), 0);
     return { ...payload, elements };
   }
 
@@ -187,7 +295,7 @@
     const rightNote = engine.querySelector('.wod-inventory-right .wod-note');
     if (rightNote) rightNote.textContent = 'Every OpenStreetMap node, way, or relation with a name is eligible, including businesses, buildings, roads, parks, schools, landmarks, natural features, trails, transit sites, and public facilities. Formally inventoried supernatural sites remain intentionally rare.';
     const scanButton = document.getElementById('wod-scan-visible-businesses');
-    if (scanButton) scanButton.textContent = 'Scan Named Locations';
+    if (scanButton) scanButton.textContent = 'Discover Named Locations';
     const search = document.getElementById('wod-visible-business-search');
     if (search) search.placeholder = 'Filter visible named locations…';
   }
@@ -247,6 +355,14 @@
     };
     seek();
   }
+
+  window.WODNamedLocationBridge = {
+    getMap: () => capturedMap,
+    getLatestScan: () => latestScan,
+    getViewport: () => mapViewport()
+  };
+
+  captureLeafletAssignment();
 
   try {
     if (!localStorage.getItem(CACHE_MIGRATION_KEY)) {
