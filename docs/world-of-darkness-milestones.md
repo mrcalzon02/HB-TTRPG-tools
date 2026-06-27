@@ -92,9 +92,28 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 - Enrich only packages created by the current global-ingestion issue, preserving older published snapshots unchanged.
 - Validate deterministic VTM bar, WTA park, Changing Breeds natural-site, Hunter transit, Changeling park, Mage library, and Unified civic-site cases.
 
+### Milestone 3.5 — Radial Progressive Location Hydration
+
+**Status: Complete — live browser timing still required**
+
+- Open the Leaflet map before loading visible Chronicle records.
+- Suppress the legacy all-at-once renderer after an Overpass response.
+- Sort visible named locations by distance from the current map center.
+- Limit the active browser queue to 90 visible locations.
+- Hydrate exactly one location record at a time.
+- Yield to browser painting between identity, stored-information, and deterministic-context stages.
+- Display one progress bar per location and one overall radial progress bar.
+- Add markers only as individual records become ready.
+- Cancel the current queue when the map begins moving or zooming.
+- Require a new scan to restart from the new center rather than continuing to process the abandoned viewport.
+- Keep world-seed, global-registry, influence-overlay, and context-enhancement systems dormant until the radial pass finishes.
+- Provide **Load Chronicle Tools Now** as an explicit override for users who need advanced tools before the queue completes.
+- Preserve deep-link behavior by loading required advanced systems when `wodWorld`, `wodPackage`, `wodScope`, or `wodSpatial=1` is present.
+- Validate nearest-first ordering, one-record concurrency, cancellation markers, individual progress controls, and deferred advanced loading through GitHub Actions.
+
 ## Milestone 4 — Persistent Chronicle Overlay and Territory Filters
 
-**Status: In progress — seed, scan, and context persistence complete**
+**Status: In progress — seed, scan, context, and radial loading foundations complete**
 
 Completed foundations:
 
@@ -103,6 +122,7 @@ Completed foundations:
 - Distinguish local-only, local-with-global-counterpart, and embedded-global editing modes.
 - Refresh the global register without overwriting local work.
 - Preserve real-world and game-line context metadata in newly generated location packages.
+- Keep advanced overlay and registry systems deferred until the map and visible-location queue are usable.
 
 Remaining requirements:
 
@@ -145,7 +165,7 @@ Remaining requirements:
 
 **Status: In progress**
 
-- Validate named-location matching, runtime order, world-scan schemas, influence registry, JavaScript syntax, 420 effective variants, doubled output pools, and deterministic setting-aware samples through GitHub Actions.
-- Add browser-level smoke tests for map initialization, named extraction, local scan, context-aware preview and enrichment, global rescan submission, overlay rendering, result selection, filtering, and registry merge behavior.
+- Validate named-location matching, radial ordering and cancellation, runtime order, world-scan schemas, influence registry, JavaScript syntax, 420 effective variants, doubled output pools, and deterministic setting-aware samples through GitHub Actions.
+- Add browser-level smoke tests for map initialization, map relocation before scanning, radial hydration, queue cancellation, result selection, local scan, context-aware preview and enrichment, global rescan submission, overlay rendering, filtering, and registry merge behavior.
 - Add graceful service-failure diagnostics and offline fallback behavior.
 - Confirm attribution, caching, request throttling, and service-policy compliance.
