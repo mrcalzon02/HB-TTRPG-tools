@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "mapMode": "leaflet-openstreetmap-lazy-manual-scan",
   "performance": {
     "lazyStartOnWorldOfDarknessView": true,
@@ -25,12 +25,24 @@
     "locations": "data/world-of-darkness/locations_core_v2.json",
     "characters": "data/world-of-darkness/characters_core.json",
     "rumors": "data/world-of-darkness/rumors_core.json",
-    "centralRegistry": "data/world-of-darkness/poi_registry.json"
+    "centralRegistry": "data/world-of-darkness/poi_registry.json",
+    "crosslinks": "data/world-of-darkness/location_crosslink_core.json",
+    "generatedLocationRegistry": "data/world-of-darkness/generated_location_registry.json"
+  },
+  "worldSeeds": {
+    "model": "local-and-embedded-selectable-world-seeds",
+    "packageIdentity": "world-seed-key-plus-location-key-plus-game-line",
+    "globalBehavior": "stack-packages-across-seeds-without-overwrite",
+    "immutability": "published-packages-must-be-deleted-before-regeneration",
+    "claimedBusinessIntegration": "deferred"
   },
   "persistence": {
     "baseline": "deterministic-business-key-and-coordinate-seed",
     "localOverrides": "localStorage",
-    "centralOverrides": "static-repository-registry"
+    "localWorldSeeds": "localStorage",
+    "localGeneratedPackages": "localStorage",
+    "centralOverrides": "static-repository-registry",
+    "embeddedWorlds": "generated-location-registry"
   },
   "businessTypeMappings": {
     "restaurant": "Vampiric Circulatory Node / Anarch Haven",
