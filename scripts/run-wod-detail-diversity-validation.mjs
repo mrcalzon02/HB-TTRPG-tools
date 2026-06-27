@@ -10,10 +10,13 @@ const checks = [
   ['syntax:browser-context-guard', ['--check', 'world-of-darkness-context-aware-variants.js']],
   ['syntax:package-ingestion', ['--check', 'scripts/ingest-wod-location-package.mjs']],
   ['syntax:server-context-guard', ['--check', 'scripts/enrich-wod-location-context.mjs']],
+  ['syntax:world-scan-package-factory', ['--check', 'scripts/wod-world-scan-package-factory.mjs']],
+  ['syntax:world-scan-rescan-v3', ['--check', 'scripts/ingest-wod-world-scan-rescan-v3.mjs']],
   ['contract:location-inventory', ['scripts/validate-wod-location-inventory.mjs']],
   ['contract:world-seed-packages', ['scripts/validate-wod-world-seed-packages.mjs']],
   ['contract:legacy-context-matrix', ['scripts/validate-wod-context-aware-variants.mjs']],
   ['contract:detail-diversity', ['scripts/validate-wod-detail-diversity.mjs']],
+  ['contract:unified-global-rescan', ['scripts/validate-wod-unified-global-rescan.mjs']],
   ['contract:map-only-core', ['scripts/validate-wod-map-only-core.mjs']],
   ['contract:world-scan-governance', ['scripts/validate-wod-world-scan-overlay.mjs']]
 ];
@@ -40,7 +43,7 @@ const validatedCommit = process.env.GITHUB_SHA || process.env.VALIDATED_COMMIT |
 const checkedAt = new Date().toISOString();
 const receipt = {
   receiptType: 'wodDetailDiversityValidation',
-  schemaVersion: '1.0.0',
+  schemaVersion: '1.1.0',
   status: failed.length ? 'failed' : 'passed',
   validatedCommit,
   workflow: '.github/workflows/validate-wod-world-scan-overlay.yml',
@@ -77,6 +80,18 @@ if (!failed.length) {
     failedChecks: receipt.failedChecks,
     sampleSize: 24,
     hiddenFunctionUniqueCount: 24
+  };
+  governance.unifiedCatalogGeneration ||= {};
+  governance.unifiedCatalogGeneration.validation = {
+    status: 'passed',
+    validatedCommit,
+    checkedAt,
+    unifiedStatusProfile: [5, 8, 5, 3],
+    singleCatalogStatusProfile: [12, 6, 2, 1],
+    catalogsCovered: 6,
+    browserRegression: 'contract:detail-diversity',
+    serverRegression: 'contract:unified-global-rescan',
+    deterministicReplay: true
   };
   fs.writeFileSync(governancePath, `${JSON.stringify(governance, null, 2)}\n`);
 }
