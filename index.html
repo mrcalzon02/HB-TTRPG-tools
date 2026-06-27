@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HB TTRPG Tools</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="character-sheet-layout.css" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="character-sheet-layout.css">
 </head>
 <body>
   <header class="site-header no-print">
@@ -29,48 +29,50 @@
       <div class="hero-card no-print">
         <p class="eyebrow">General menu page</p>
         <h2 id="tools-title">Tool Library</h2>
-        <p>This page is the central front door for the project. Each card can later point to a standalone module while still sharing the same visual language and panel layout system.</p>
+        <p>This page is the central front door for the project. Workspaces now load only when opened, keeping the homepage lightweight.</p>
       </div>
-
       <div class="menu-grid no-print">
-        <article class="menu-card"><h3>Utilities</h3><p>Reusable helpers, printable pages, editable sheets, trackers, and table-side aids.</p><button class="link-button" data-view="utilities">Open Utilities</button></article>
+        <article class="menu-card"><h3>Utilities</h3><p>Printable pages, editable sheets, trackers, and table-side aids.</p><button class="link-button" data-view="utilities">Open Utilities</button></article>
         <article class="menu-card"><h3>Generators</h3><p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, and homebrew assets.</p><button class="link-button" data-view="generators">Open Generators</button></article>
-        <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, door highlights, traps, monsters, treasures, and source-backed room notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button></article>
-        <article class="menu-card"><h3>Barotrauma Campaign Workspace</h3><p>Registry-backed planning area for crew lore, submarine operations, missions, threats, investigations, wrecks, and campaign records.</p><button class="link-button" data-view="barotrauma">Open Barotrauma</button></article>
-        <article class="menu-card"><h3>Kaysender Campaign Workspace</h3><p>Registry-driven planning area for the Kaysender wiki, tools, utilities, and generators.</p><button class="link-button" data-view="kaysender">Open Kaysender</button></article>
-        <article class="menu-card"><h3>Solanum Umbra Workspace</h3><p>Dedicated native-system wiki for characters, professions, cybernetics, crafting, equipment, combat, enemies, and entities.</p><button class="link-button" data-view="solanum-umbra">Open Solanum Umbra</button></article>
+        <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, doors, traps, monsters, treasures, and source-backed notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button></article>
+        <article class="menu-card"><h3>Barotrauma Campaign Workspace</h3><p>Crew lore, submarine operations, missions, threats, investigations, wrecks, and campaign records.</p><button class="link-button" data-view="barotrauma">Open Barotrauma</button></article>
+        <article class="menu-card"><h3>Kaysender Campaign Workspace</h3><p>Registry-driven planning area for the Kaysender wiki, tools, utilities, generators, and editors.</p><button class="link-button" data-view="kaysender">Open Kaysender</button></article>
+        <article class="menu-card" data-solanum-card="true"><h3>Solanum Umbra Workspace</h3><p>Native-system wiki for characters, professions, cybernetics, crafting, equipment, combat, enemies, and entities.</p><button class="link-button" data-view="solanum-umbra">Open Solanum Umbra</button></article>
       </div>
-
-      <section class="registry-section no-print" aria-labelledby="kaysender-tool-framework-title"><div class="section-heading"><p class="eyebrow">Kaysender tools</p><h2 id="kaysender-tool-framework-title">Crafting and Operations Frameworks</h2><p>These tool modules are loaded from the Kaysender registry JSON and kept separate from generic utilities.</p></div><div id="kaysender-tools-grid" class="module-grid" data-registry-section="tools"></div></section>
+      <section class="registry-section no-print" aria-labelledby="kaysender-tool-framework-title">
+        <div class="section-heading"><p class="eyebrow">Kaysender tools</p><h2 id="kaysender-tool-framework-title">Crafting and Operations Frameworks</h2><p>The registry remains dormant until Kaysender or Generators is opened.</p></div>
+        <div id="kaysender-tools-grid" class="module-grid" data-registry-section="tools"></div>
+      </section>
     </section>
 
-    <section id="modules" class="view" aria-labelledby="modules-title"><div class="hero-card no-print"><p class="eyebrow">Module extraction and table viewer</p><h2 id="modules-title">Module Viewer</h2><p>Browse standardized module extractions with clickable map overlays. Room numbers open room records; door markers open entry details, locks, secret doors, traps, monsters, treasures, and source-backed room notes.</p></div><div id="module-viewer-root" class="no-print"></div></section>
+    <section id="modules" class="view" aria-labelledby="modules-title">
+      <div class="hero-card no-print"><p class="eyebrow">Module extraction and table viewer</p><h2 id="modules-title">Module Viewer</h2><p>The module viewer loads on demand.</p></div>
+      <div id="module-viewer-root" class="no-print"></div>
+    </section>
 
     <section id="utilities" class="view" aria-labelledby="utilities-title">
-      <div class="hero-card no-print"><p class="eyebrow">Utilities</p><h2 id="utilities-title">AD and D 3.5 - Hypertext D20 Character Sheet</h2><p>Fill the browser sheet, auto-calculate common totals, then use the print button to save a clean PDF from your browser.</p></div>
-      <div class="utility-shell">
-        <aside class="toolbox no-print" aria-label="Character sheet controls"><h3>Sheet Controls</h3><label class="control-label" for="sheet-title">Sheet title</label><input id="sheet-title" class="tool-input" value="AD and D 3.5 - Hypertext D20 compatible character sheet" /><p class="control-label">Panel layout</p><div class="segmented-control" role="group" aria-label="Panel layout"><button class="layout-button" data-layout="2">2</button><button class="layout-button" data-layout="3">3</button><button class="layout-button active" data-layout="4">4</button></div><button id="print-sheet" class="primary-action">Print / Save as PDF</button><button id="export-json" class="secondary-action">Export Character JSON</button><label class="secondary-action file-action" for="import-json">Import Character JSON</label><input id="import-json" type="file" accept="application/json" hidden /><button id="reset-sheet" class="danger-action">Clear Sheet</button><p class="helper-note">This creates a print-ready PDF using the browser print dialog. In most browsers, choose “Save as PDF.”</p></aside>
-        <form id="character-sheet" class="character-sheet" autocomplete="off"><header class="sheet-banner"><h2 id="print-title">AD and D 3.5 - Hypertext D20 compatible character sheet</h2><p>Homebrew-ready d20 fantasy character record</p></header><div id="panel-grid" class="panel-grid panels-4">
-          <section class="sheet-panel identity-panel"><h3>Character Information</h3><div class="field-grid two-col"><label>Character Name<input name="characterName" type="text" /></label><label>Player<input name="playerName" type="text" /></label><label>Class / Levels<input name="classLevels" type="text" /></label><label>Race<input name="race" type="text" /></label><label>Alignment<input name="alignment" type="text" /></label><label>Deity / Patron<input name="deity" type="text" /></label><label>Size<input name="size" type="text" /></label><label>Experience<input name="experience" type="text" /></label></div><h4>Description</h4><div class="field-grid three-col compact"><label>Age<input name="age" type="text" /></label><label>Gender<input name="gender" type="text" /></label><label>Height<input name="height" type="text" /></label><label>Weight<input name="weight" type="text" /></label><label>Eyes<input name="eyes" type="text" /></label><label>Hair<input name="hair" type="text" /></label><label>Skin<input name="skin" type="text" /></label><label>Homeland<input name="homeland" type="text" /></label><label>Campaign<input name="campaign" type="text" /></label></div><label class="wide-label">Character Notes<textarea name="characterNotes" rows="5"></textarea></label></section>
-          <section class="sheet-panel stats-panel"><h3>Stats, Saves, and Combat Basics</h3><div class="ability-table"><div class="table-row table-head"><span>Ability</span><span>Score</span><span>Mod</span><span>Temp</span></div><div class="table-row"><strong>STR</strong><input name="strScore" class="ability-score" data-mod-target="strMod" type="number" /><input name="strMod" readonly /><input name="strTemp" type="number" /></div><div class="table-row"><strong>DEX</strong><input name="dexScore" class="ability-score" data-mod-target="dexMod" type="number" /><input name="dexMod" readonly /><input name="dexTemp" type="number" /></div><div class="table-row"><strong>CON</strong><input name="conScore" class="ability-score" data-mod-target="conMod" type="number" /><input name="conMod" readonly /><input name="conTemp" type="number" /></div><div class="table-row"><strong>INT</strong><input name="intScore" class="ability-score" data-mod-target="intMod" type="number" /><input name="intMod" readonly /><input name="intTemp" type="number" /></div><div class="table-row"><strong>WIS</strong><input name="wisScore" class="ability-score" data-mod-target="wisMod" type="number" /><input name="wisMod" readonly /><input name="wisTemp" type="number" /></div><div class="table-row"><strong>CHA</strong><input name="chaScore" class="ability-score" data-mod-target="chaMod" type="number" /><input name="chaMod" readonly /><input name="chaTemp" type="number" /></div></div><div class="field-grid three-col compact combat-grid"><label>HP Max<input name="hpMax" type="number" /></label><label>HP Current<input name="hpCurrent" type="number" /></label><label>Nonlethal<input name="nonlethal" type="number" /></label><label>AC<input name="armorClass" type="number" /></label><label>Touch<input name="touchAc" type="number" /></label><label>Flat-Footed<input name="flatFootedAc" type="number" /></label><label>Initiative<input name="initiative" type="number" /></label><label>Speed<input name="speed" type="text" /></label><label>Base Attack<input name="baseAttack" type="text" /></label><label>Grapple<input name="grapple" type="text" /></label><label>Spell Resist<input name="spellResist" type="text" /></label><label>Damage Red.<input name="damageReduction" type="text" /></label></div><h4>Saving Throws</h4><div class="save-table"><div class="table-row table-head"><span>Save</span><span>Base</span><span>Ability</span><span>Magic</span><span>Misc</span><span>Total</span></div><div class="table-row save-row" data-save="fort"><strong>Fort</strong><input name="fortBase" type="number" /><input name="fortAbility" type="number" /><input name="fortMagic" type="number" /><input name="fortMisc" type="number" /><input name="fortTotal" readonly /></div><div class="table-row save-row" data-save="ref"><strong>Ref</strong><input name="refBase" type="number" /><input name="refAbility" type="number" /><input name="refMagic" type="number" /><input name="refMisc" type="number" /><input name="refTotal" readonly /></div><div class="table-row save-row" data-save="will"><strong>Will</strong><input name="willBase" type="number" /><input name="willAbility" type="number" /><input name="willMagic" type="number" /><input name="willMisc" type="number" /><input name="willTotal" readonly /></div></div></section>
-          <section class="sheet-panel skills-panel"><h3>Skills</h3><div class="skill-table" id="skill-table" aria-label="Skill list"></div></section>
-          <section class="sheet-panel gear-panel"><h3>Weapons, Armor, and Equipment</h3><h4>Weapons</h4><div class="weapon-table"><div class="table-row table-head"><span>Weapon</span><span>Attack</span><span>Damage</span><span>Critical</span><span>Range</span><span>Notes</span></div><div class="table-row"><input name="weapon1" /><input name="weapon1Atk" /><input name="weapon1Dmg" /><input name="weapon1Crit" /><input name="weapon1Range" /><input name="weapon1Notes" /></div><div class="table-row"><input name="weapon2" /><input name="weapon2Atk" /><input name="weapon2Dmg" /><input name="weapon2Crit" /><input name="weapon2Range" /><input name="weapon2Notes" /></div><div class="table-row"><input name="weapon3" /><input name="weapon3Atk" /><input name="weapon3Dmg" /><input name="weapon3Crit" /><input name="weapon3Range" /><input name="weapon3Notes" /></div><div class="table-row"><input name="weapon4" /><input name="weapon4Atk" /><input name="weapon4Dmg" /><input name="weapon4Crit" /><input name="weapon4Range" /><input name="weapon4Notes" /></div></div><h4>Armor / Shield / Protection</h4><div class="field-grid two-col compact"><label>Armor<input name="armorName" type="text" /></label><label>Shield<input name="shieldName" type="text" /></label><label>Armor Bonus<input name="armorBonus" type="number" /></label><label>Shield Bonus<input name="shieldBonus" type="number" /></label><label>Max Dex<input name="maxDex" type="text" /></label><label>Armor Check<input name="armorCheck" type="text" /></label></div><label class="wide-label">Equipment<textarea name="equipment" rows="6"></textarea></label><label class="wide-label">Feats, Traits, Features, and Special Abilities<textarea name="features" rows="6"></textarea></label><label class="wide-label">Spells / Powers / Prepared Notes<textarea name="spells" rows="6"></textarea></label><label class="wide-label">Treasure and Currency<textarea name="treasure" rows="4"></textarea></label></section>
-        </div></form>
-      </div>
-      <section class="registry-section no-print" aria-labelledby="kaysender-utilities-title"><div class="section-heading"><p class="eyebrow">Kaysender utilities</p><h2 id="kaysender-utilities-title">Wiki, Compatibility, and Survival Utilities</h2><p>The Kaysender utility layer keeps open d20 conversion notes, wiki systems, and scarcity trackers organized beside the generic sheet tool.</p></div><div id="kaysender-utilities-grid" class="module-grid" data-registry-section="utilities"></div></section>
+      <div class="hero-card no-print"><p class="eyebrow">Utilities</p><h2 id="utilities-title">AD and D 3.5 - Hypertext D20 Character Sheet</h2><p>The complete sheet mounts only when this workspace is opened.</p></div>
+      <div id="character-sheet-mount"><div class="module-empty">Open Utilities to load the character sheet.</div></div>
+      <section class="registry-section no-print" aria-labelledby="kaysender-utilities-title">
+        <div class="section-heading"><p class="eyebrow">Kaysender utilities</p><h2 id="kaysender-utilities-title">Wiki, Compatibility, and Survival Utilities</h2><p>The Kaysender utility registry loads only when its workspace is requested.</p></div>
+        <div id="kaysender-utilities-grid" class="module-grid" data-registry-section="utilities"></div>
+      </section>
     </section>
 
-    <section id="generators" class="view" aria-labelledby="generators-title"><div class="hero-card no-print"><p class="eyebrow">Generators</p><h2 id="generators-title">Generator Bench</h2><p>Registry-driven generators for Kaysender locations, ships, populations, shops, encounters, factions, crews, and campaign jobs.</p></div><div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div></section>
+    <section id="generators" class="view" aria-labelledby="generators-title">
+      <div class="hero-card no-print"><p class="eyebrow">Generators</p><h2 id="generators-title">Generator Bench</h2><p>Generator scripts and registry data load only after this workspace is opened.</p></div>
+      <div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div>
+    </section>
 
     <section id="barotrauma" class="view" aria-labelledby="barotrauma-title">
       <div class="hero-card no-print">
         <p class="eyebrow">Barotrauma campaign workspace</p>
         <h2 id="barotrauma-title">Europa Operations and Lore Dashboard</h2>
-        <p>A registry-backed foundation for original campaign tools, in-world documents, submarine operations, crew generation, missions, investigations, threats, wrecks, and voyage records. This is an unofficial fan workspace and is not affiliated with or endorsed by the creators or publishers of Barotrauma.</p>
+        <p>A registry-backed foundation for crew lore, submarine operations, missions, investigations, threats, wrecks, and voyage records.</p>
       </div>
       <div class="registry-controls no-print" aria-label="Barotrauma module controls">
         <label class="control-label" for="barotrauma-search">Search Barotrauma modules</label>
-        <input id="barotrauma-search" class="tool-input" type="search" placeholder="Search crew, submarines, missions, cults, threats, wrecks, investigations..." />
+        <input id="barotrauma-search" class="tool-input" type="search" placeholder="Search crew, submarines, missions, cults, threats, wrecks, investigations...">
         <div class="segmented-control registry-filter-group" role="group" aria-label="Barotrauma registry filters">
           <button class="layout-button registry-filter active" data-barotrauma-filter="all">All</button>
           <button class="layout-button registry-filter" data-barotrauma-filter="reference">Reference</button>
@@ -79,35 +81,31 @@
           <button class="layout-button registry-filter" data-barotrauma-filter="campaign">Campaign</button>
         </div>
       </div>
-      <div id="barotrauma-status" class="registry-status no-print">Loading Barotrauma module registry…</div>
+      <div id="barotrauma-status" class="registry-status no-print">Barotrauma loads when this workspace is opened.</div>
       <div id="barotrauma-overview-grid" class="module-grid no-print"></div>
     </section>
 
-    <section id="kaysender" class="view" aria-labelledby="kaysender-title"><div class="hero-card no-print"><p class="eyebrow">Kaysender setting workspace</p><h2 id="kaysender-title">Open d20 Conversion Dashboard</h2><p>This dashboard is the staging area for turning the Kaysender manuscript into wiki entries, generators, trackers, and open d20-compatible campaign tools. The cards below are loaded from <code>data/kaysender-tools-registry.json</code>.</p></div><div class="registry-controls no-print" aria-label="Kaysender module controls"><label class="control-label" for="kaysender-search">Search modules</label><input id="kaysender-search" class="tool-input" type="search" placeholder="Search wiki, airships, markets, settlements..." /><div class="segmented-control registry-filter-group" role="group" aria-label="Registry filters"><button class="layout-button registry-filter active" data-kaysender-filter="all">All</button><button class="layout-button registry-filter" data-kaysender-filter="tools">Tools</button><button class="layout-button registry-filter" data-kaysender-filter="utilities">Utilities</button><button class="layout-button registry-filter" data-kaysender-filter="generators">Generators</button></div></div><div id="kaysender-status" class="registry-status no-print">Loading Kaysender module registry…</div><div id="kaysender-overview-grid" class="module-grid no-print" data-registry-section="overview"></div></section>
+    <section id="kaysender" class="view" aria-labelledby="kaysender-title">
+      <div class="hero-card no-print"><p class="eyebrow">Kaysender setting workspace</p><h2 id="kaysender-title">Open d20 Conversion Dashboard</h2><p>This dashboard is the staging area for the Kaysender wiki, generators, trackers, and campaign editors.</p></div>
+      <div class="registry-controls no-print" aria-label="Kaysender module controls">
+        <label class="control-label" for="kaysender-search">Search modules</label>
+        <input id="kaysender-search" class="tool-input" type="search" placeholder="Search wiki, airships, markets, settlements...">
+        <div class="segmented-control registry-filter-group" role="group" aria-label="Registry filters">
+          <button class="layout-button registry-filter active" data-kaysender-filter="all">All</button>
+          <button class="layout-button registry-filter" data-kaysender-filter="tools">Tools</button>
+          <button class="layout-button registry-filter" data-kaysender-filter="utilities">Utilities</button>
+          <button class="layout-button registry-filter" data-kaysender-filter="generators">Generators</button>
+        </div>
+      </div>
+      <div id="kaysender-status" class="registry-status no-print">Kaysender loads when this workspace is opened.</div>
+      <div id="kaysender-overview-grid" class="module-grid no-print" data-registry-section="overview"></div>
+    </section>
   </main>
 
   <footer class="site-footer no-print"><p>HB TTRPG Tools · Browser-based homebrew utility suite.</p></footer>
 
-  <script src="app.js"></script>
+  <script src="app-lite.js"></script>
+  <script src="app-lite-view-mounts.js"></script>
   <script src="character-sheet-title.js"></script>
-  <script src="module-viewer.js"></script>
-  <script src="barotrauma-entry.js"></script>
-  <script src="solanum-umbra-entry.js"></script>
-  <script src="kaysender-wiki.js"></script>
-  <script src="kaysender-editor-kernel.js"></script>
-  <script src="kaysender-editor-field-mapping.js"></script>
-  <script src="kaysender-editor-adapter-registry.js"></script>
-  <script src="kaysender-editor-builtins.js"></script>
-  <script src="kaysender-editor-migrations.js"></script>
-  <script src="kaysender-editor-kernel-adapters.js"></script>
-  <script src="kaysender-editor-lifecycle.js"></script>
-  <script src="kaysender-editor-repository.js"></script>
-  <script src="kaysender-editors.js"></script>
-  <script src="kaysender-settlement-editor.js"></script>
-  <script src="kaysender-airship-editor.js"></script>
-  <script src="kaysender-editor-production.js"></script>
-  <script src="kaysender-editor-record-library.js"></script>
-  <script src="kaysender-editor-error-boundary.js"></script>
-  <script src="kaysender-editor-live-smoke.js"></script>
 </body>
 </html>
