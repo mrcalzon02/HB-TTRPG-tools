@@ -1,8 +1,8 @@
 # Chronicle Spatial Engine Implementation
 
-The binding source document is stored in the repository at:
+The binding source specification is stored in the repository at:
 
-`SRC/world-of-darkness/chronicle-spatial-engine-governance.docx`
+`SRC/world-of-darkness/chronicle-spatial-engine-governance.md`
 
 ## No-paid-API deployment amendment
 
@@ -54,4 +54,4 @@ This exposes no GitHub token in browser code and requires no paid Google API int
 
 ## Source preservation
 
-The exact supplied DOCX is committed under `SRC/world-of-darkness/`, and its byte length and SHA-256 digest are recorded in `source-page-references/chronicle-spatial-engine.source.json`.
+The complete supplied master specification is preserved as repository Markdown under `SRC/world-of-darkness/`. The original uploaded DOCX byte length and SHA-256 digest remain recorded in `source-page-references/chronicle-spatial-engine.source.json` so the original binary source is still independently verifiable.
