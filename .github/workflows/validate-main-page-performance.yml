@@ -10,8 +10,11 @@ on:
       - 'character-sheet-title.js'
       - 'character-sheet-view.js'
       - 'world-of-darkness-spatial-loader.js'
+      - 'world-of-darkness-lightweight-map-core.js'
       - 'world-of-darkness-radial-location-loader.js'
+      - 'world-of-darkness-radial-scan-compat.js'
       - 'scripts/validate-main-page-lazy-boot.mjs'
+      - 'scripts/validate-wod-map-only-core.mjs'
       - '.github/workflows/validate-main-page-performance.yml'
   workflow_dispatch:
 
@@ -37,8 +40,13 @@ jobs:
           node --check character-sheet-title.js
           node --check character-sheet-view.js
           node --check world-of-darkness-spatial-loader.js
+          node --check world-of-darkness-lightweight-map-core.js
           node --check world-of-darkness-radial-location-loader.js
+          node --check world-of-darkness-radial-scan-compat.js
           node --check scripts/validate-main-page-lazy-boot.mjs
+          node --check scripts/validate-wod-map-only-core.mjs
 
-      - name: Validate lazy startup contract
-        run: node scripts/validate-main-page-lazy-boot.mjs
+      - name: Validate lazy startup contracts
+        run: |
+          node scripts/validate-main-page-lazy-boot.mjs
+          node scripts/validate-wod-map-only-core.mjs
