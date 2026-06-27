@@ -70,6 +70,7 @@
     loadScriptOnce('world-of-darkness-world-scan-overlay.js','data-world-of-darkness-world-scan-overlay','worldOfDarknessWorldScanOverlay');
     loadScriptOnce('world-of-darkness-global-rescan-bridge.js','data-world-of-darkness-global-rescan-bridge','worldOfDarknessGlobalRescanBridge');
     loadScriptOnce('world-of-darkness-context-aware-core.js','data-world-of-darkness-context-aware-core','worldOfDarknessContextAwareCore');
+    loadScriptOnce('world-of-darkness-context-output-normalizer.js','data-world-of-darkness-context-output-normalizer','worldOfDarknessContextOutputNormalizer');
     loadScriptOnce('world-of-darkness-context-aware-variants.js','data-world-of-darkness-context-aware-variants','worldOfDarknessContextAwareVariants');
     loadScriptOnce('world-of-darkness-registry-workflow-note.js','data-world-of-darkness-registry-workflow-note','worldOfDarknessRegistryWorkflowNote');
     loadScriptOnce('shadowrun-entry.js','data-shadowrun-entry','shadowrunEntry');
