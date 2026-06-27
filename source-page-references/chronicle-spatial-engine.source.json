@@ -52,8 +52,9 @@
       "world-of-darkness-radial-location-loader.js",
       "world-of-darkness-radial-scan-compat.js"
     ],
-    "staleConfigCompatibilityVersion": "2.6.1",
-    "staleConfigPolicy": "bypass cached configuration, merge governed dataset defaults, and synthesize a safe config response when necessary",
+    "staleConfigCompatibilityVersion": "2.7.0",
+    "staleConfigPolicy": "bypass cached configuration, merge governed dataset defaults, synthesize a safe config response when necessary, and route omitted status calls through the active game-line selector",
+    "activeGameLineStatusBridge": true,
     "mapOnlyStartup": {
       "chronicleDatasetFetches": 0,
       "mutationObservers": 0,
@@ -82,6 +83,35 @@
       "world-of-darkness-registry-workflow-note.js"
     ],
     "manualAdvancedOverride": "Load Chronicle Tools Now"
+  },
+  "unifiedCatalogGeneration": {
+    "policy": "Unified World of Darkness is a high-density cross-catalog mode rather than a seventh isolated catalog",
+    "catalogs": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
+    "singleCatalogStatusProfile": {
+      "mundane": 12,
+      "tangential": 6,
+      "activeUnregistered": 2,
+      "inventoried": 1,
+      "supernaturalOrAdjacentPercent": 42.86
+    },
+    "unifiedStatusProfile": {
+      "mundane": 5,
+      "tangential": 8,
+      "activeUnregistered": 5,
+      "inventoried": 3,
+      "supernaturalOrAdjacentPercent": 76.19
+    },
+    "regionalThemePolicy": "one shared overlap theme per neighborhood",
+    "localCatalogPolicy": "individual locations consume all six catalog lenses before local reuse",
+    "adjacencyPolicy": "Vampire, Werewolf, Changing Breeds, Hunter, Changeling, and Mage locations may appear directly beside one another",
+    "catalogIdentityFields": ["catalogLine", "catalogLabel"],
+    "validationRequirements": [
+      "exact 5/8/5/3 Unified status counts across 21 deterministic slots",
+      "unchanged 12/6/2/1 single-catalog status counts",
+      "all six catalogs present in the clustered Unified sample",
+      "first six nearby Unified records use six different catalog lenses",
+      "catalog assignment replays deterministically"
+    ]
   },
   "detailDiversity": {
     "schemaVersion": "1.0.0",
@@ -134,6 +164,7 @@
     "stable real-location key",
     "inventory status",
     "active game line",
+    "Unified local catalog lens",
     "mapped category",
     "named-feature class",
     "retained OpenStreetMap tags",
@@ -142,8 +173,9 @@
   ],
   "localWorldScanCap": 90,
   "globalViewportProcessingCap": 90,
-  "mundaneOrTangentialPercent": 85.71,
-  "inventoriedPercent": 4.76,
+  "singleCatalogMundaneOrTangentialPercent": 85.71,
+  "singleCatalogInventoriedPercent": 4.76,
+  "unifiedSupernaturalOrAdjacentPercent": 76.19,
   "generatedPackageSchemaVersion": "2.1.0",
   "worldSeedModel": "selectable embedded and local immutable worlds with world-seed-rotated detail pools",
   "immutabilityModel": "the exact diversified snapshot is preserved through local save, global ingestion, reload, and later context passes",
