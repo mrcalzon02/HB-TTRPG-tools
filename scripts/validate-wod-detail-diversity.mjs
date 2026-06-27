@@ -130,6 +130,9 @@ for (const record of records) {
   if (!record.catalogLabel || !record.hiddenFunction.includes(record.catalogLabel)) {
     throw new Error(`Unified record ${record.diversitySignature} does not identify its selected catalog lens.`);
   }
+  if (record.regionalTheme?.catalogLine !== record.catalogLine || record.regionalTheme?.catalogLabel !== record.catalogLabel) {
+    throw new Error(`Unified record ${record.diversitySignature} does not persist catalog identity inside its regional-theme snapshot.`);
+  }
 }
 
 const exactUnique = ['publicFacade', 'embeddedCharacter', 'temporalAnchor', 'traumaticCatalyst', 'operationalSecret', 'vulnerability', 'sensoryAnchor', 'mediaFeed', 'rumor', 'mechanicalSeed', 'diversitySignature'];
@@ -168,6 +171,7 @@ const replay = records.map((_, index) => {
 for (let index = 0; index < records.length; index += 1) {
   if (records[index].diversitySignature !== replay[index].diversitySignature) throw new Error(`Deterministic replay failed at record ${index}.`);
   if (records[index].catalogLine !== replay[index].catalogLine) throw new Error(`Unified catalog replay failed at record ${index}.`);
+  if (records[index].regionalTheme.catalogLine !== replay[index].regionalTheme.catalogLine) throw new Error(`Persisted catalog replay failed at record ${index}.`);
 }
 
 console.log(JSON.stringify({
@@ -179,6 +183,7 @@ console.log(JSON.stringify({
   singleCatalogSupernaturalOrAdjacentPercent: 42.86,
   unifiedCatalogsObserved: [...observedCatalogs].sort(),
   firstCatalogCycle: records.slice(0, 6).map(record => record.catalogLine),
+  persistedCatalogIdentity: true,
   exactUniqueFields: exactUnique,
   hiddenFunctionUniqueCount: hiddenUnique,
   publicFacadeCombinations: config.contextAwareGeneration.detailDiversity.minimumPublicFacadeCombinations,
