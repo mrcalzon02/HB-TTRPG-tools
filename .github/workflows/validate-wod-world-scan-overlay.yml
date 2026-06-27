@@ -9,10 +9,19 @@ on:
       - 'world-of-darkness-world-scan-overlay.js'
       - 'world-of-darkness-global-rescan-bridge.js'
       - 'world-of-darkness-location-package-bridge.js'
+      - 'world-of-darkness-context-aware-core.js'
+      - 'world-of-darkness-context-output-normalizer.js'
+      - 'world-of-darkness-context-aware-variants.js'
       - 'scripts/ingest-wod-world-scan-rescan.mjs'
+      - 'scripts/enrich-wod-location-context.mjs'
+      - 'scripts/validate-wod-location-inventory.mjs'
+      - 'scripts/validate-wod-world-seed-packages.mjs'
+      - 'scripts/validate-wod-context-aware-variants.mjs'
       - 'scripts/validate-wod-world-scan-overlay.mjs'
+      - 'source-page-references/chronicle-spatial-engine.source.json'
       - 'data/world-of-darkness/**'
       - '.github/workflows/ingest-wod-world-scan-batch.yml'
+      - '.github/workflows/ingest-wod-location-package.yml'
       - '.github/workflows/validate-wod-world-scan-overlay.yml'
   workflow_dispatch:
 
@@ -38,12 +47,21 @@ jobs:
           node --check world-of-darkness-world-scan-overlay.js
           node --check world-of-darkness-global-rescan-bridge.js
           node --check world-of-darkness-location-package-bridge.js
+          node --check world-of-darkness-context-aware-core.js
+          node --check world-of-darkness-context-output-normalizer.js
+          node --check world-of-darkness-context-aware-variants.js
           node --check scripts/ingest-wod-world-scan-rescan.mjs
           node --check scripts/ingest-wod-location-package.mjs
+          node --check scripts/enrich-wod-location-context.mjs
           node --check scripts/delete-wod-location-package.mjs
+          node --check scripts/validate-wod-location-inventory.mjs
+          node --check scripts/validate-wod-world-seed-packages.mjs
+          node --check scripts/validate-wod-context-aware-variants.mjs
+          node --check scripts/validate-wod-world-scan-overlay.mjs
 
       - name: Validate generated data contracts
         run: |
           node scripts/validate-wod-location-inventory.mjs
           node scripts/validate-wod-world-seed-packages.mjs
+          node scripts/validate-wod-context-aware-variants.mjs
           node scripts/validate-wod-world-scan-overlay.mjs
