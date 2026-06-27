@@ -121,7 +121,28 @@
       "all six catalogs present in the clustered Unified sample",
       "first six nearby Unified records use six different catalog lenses",
       "catalog assignment replays deterministically"
-    ]
+    ],
+    "validation": {
+      "status": "passed",
+      "validatedCommit": "33664d0707f36435956754f920999a0bf55cd31d",
+      "checkedAt": "2026-06-27T14:14:43.765Z",
+      "unifiedStatusProfile": [
+        5,
+        8,
+        5,
+        3
+      ],
+      "singleCatalogStatusProfile": [
+        12,
+        6,
+        2,
+        1
+      ],
+      "catalogsCovered": 6,
+      "browserRegression": "contract:detail-diversity",
+      "serverRegression": "contract:unified-global-rescan",
+      "deterministicReplay": true
+    }
   },
   "detailDiversity": {
     "schemaVersion": "1.0.0",
@@ -155,10 +176,10 @@
     ],
     "validation": {
       "status": "passed",
-      "validatedCommit": "f6eff37137f54a5cdd6241dae14392034141c6c8",
-      "checkedAt": "2026-06-27T14:11:35.735Z",
-      "totalChecks": 14,
-      "passedChecks": 14,
+      "validatedCommit": "33664d0707f36435956754f920999a0bf55cd31d",
+      "checkedAt": "2026-06-27T14:14:43.765Z",
+      "totalChecks": 17,
+      "passedChecks": 17,
       "failedChecks": 0,
       "sampleSize": 24,
       "hiddenFunctionUniqueCount": 24
