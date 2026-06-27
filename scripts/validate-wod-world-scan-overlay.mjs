@@ -7,20 +7,38 @@ const influence = JSON.parse(fs.readFileSync('data/world-of-darkness/influence_o
 const receipt = JSON.parse(fs.readFileSync('source-page-references/chronicle-spatial-engine.source.json', 'utf8'));
 const worldScan = fs.readFileSync('world-of-darkness-world-scan-overlay.js', 'utf8');
 
+if (config.schemaVersion !== '2.6.0') throw new Error('Spatial configuration must use schemaVersion 2.6.0.');
 if (config.namedLocationMatching?.scanScope !== 'all-openstreetmap-nodes-ways-and-relations-with-name-tag') throw new Error('Named-location scope is invalid.');
 if (config.worldScan?.localVisibleLocationCap !== 90) throw new Error('Local scan cap must remain 90.');
 if (config.worldScan?.globalViewportProcessingCap !== 90) throw new Error('Global scan cap must remain 90.');
 if (config.contextAwareGeneration?.effectiveLocationVariants !== 420) throw new Error('Effective location variants must remain 420.');
 if (config.contextAwareGeneration?.effectiveEntriesPerOutputPool !== 16) throw new Error('Output pools must remain 16 entries.');
+if (config.contextAwareGeneration?.detailDiversity?.legacyCharacterPrototypeUse !== false) throw new Error('Legacy character prototype selection returned.');
+if (config.contextAwareGeneration?.detailDiversity?.legacyRumorBundleUse !== false) throw new Error('Legacy rumor bundle selection returned.');
 if (generated.schemaVersion !== '2.0.0') throw new Error('Generated registry schema is invalid.');
 if (influence.schemaVersion !== '1.0.0') throw new Error('Influence registry schema is invalid.');
 if (!worldScan.includes('Scan Visible Area Locally') || !worldScan.includes('Scan Visible Area Globally')) throw new Error('World scan controls are missing.');
 if (!worldScan.includes('renderInfluenceOverlay')) throw new Error('Influence overlay renderer is missing.');
-if (receipt.schemaVersion !== '2.8.0') throw new Error('Chronicle source receipt must use schemaVersion 2.8.0.');
+if (receipt.schemaVersion !== '2.9.0') throw new Error('Chronicle source receipt must use schemaVersion 2.9.0.');
+if (receipt.generatedPackageSchemaVersion !== '2.1.0') throw new Error('Chronicle receipt must record package schemaVersion 2.1.0.');
+if (receipt.detailDiversity?.legacyCharacterPrototypeSelection !== false) throw new Error('Receipt does not retire bundled character selection.');
+if (receipt.detailDiversity?.legacyRumorBundleSelection !== false) throw new Error('Receipt does not retire bundled rumor selection.');
+if (receipt.detailDiversity?.minimumCharacterPresentationCombinationsPerGameLine !== 82944) throw new Error('Receipt has the wrong character-combination floor.');
+
+const expectedCore = [
+  'world-of-darkness-lightweight-map-core.js',
+  'world-of-darkness-detail-diversity-core.js',
+  'world-of-darkness-radial-location-loader.js',
+  'world-of-darkness-radial-scan-compat.js'
+];
+if (JSON.stringify(receipt.loadingModel?.spatialCoreOnExplicitOpen) !== JSON.stringify(expectedCore)) {
+  throw new Error('Receipt does not record the active diversified map core.');
+}
 
 for (const path of [
   receipt.spatialStageLoader,
   receipt.lightweightMapCore,
+  receipt.detailDiversityCore,
   receipt.radialLocationLoader,
   receipt.radialScanCompatibility,
   receipt.worldSeedBridge,
@@ -29,6 +47,8 @@ for (const path of [
   receipt.contextAwareCore,
   receipt.contextOutputNormalizer,
   receipt.contextAwareBrowserBridge,
+  receipt.contextAwareServerEnricher,
+  receipt.detailDiversityValidator,
   ...receipt.coreDataFiles
 ]) {
   if (!path || !fs.existsSync(path)) throw new Error(`Governed path is missing: ${path}`);
@@ -38,5 +58,7 @@ console.log(JSON.stringify({
   embeddedWorlds: Object.keys(generated.worlds || {}).length,
   influenceSpheres: influence.sphereVocabulary,
   effectiveLocationVariants: config.contextAwareGeneration.effectiveLocationVariants,
-  mapOnlyStartup: receipt.loadingModel.mapOnlyStartup
+  generatedPackageSchemaVersion: receipt.generatedPackageSchemaVersion,
+  mapOnlyStartup: receipt.loadingModel.mapOnlyStartup,
+  detailDiversity: receipt.detailDiversity
 }, null, 2));
