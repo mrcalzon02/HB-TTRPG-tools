@@ -55,17 +55,29 @@
           score: score(candidate, location) + core.hash32(`${location.entryKey || location.osmId}|${field}|${candidate.id}`) / 0xffffffff
         })).sort((left, right) => right.score - left.score);
         const best = ranked[0].score;
-        const shortlist = ranked.filter(item => item.score >= best - 4).map(item => item.candidate);
+        const preferred = ranked.filter(item => item.score >= best - 4).map(item => item.candidate);
+        const remaining = ranked.map(item => item.candidate).filter(candidate => !preferred.some(item => item.id === candidate.id));
         const set = usageSet(location, line, field);
-        const start = core.hash32(`${location.entryKey || location.osmId}|${line}|${catalogLine}|${status}|${field}|${baseThemeId}`) % shortlist.length;
-        for (let offset = 0; offset < shortlist.length; offset += 1) {
-          const candidate = shortlist[(start + offset) % shortlist.length];
+        const seed = core.hash32(`${location.entryKey || location.osmId}|${line}|${catalogLine}|${status}|${field}|${baseThemeId}`);
+        const preferredStart = seed % preferred.length;
+        for (let offset = 0; offset < preferred.length; offset += 1) {
+          const candidate = preferred[(preferredStart + offset) % preferred.length];
           if (!set.has(candidate.id)) {
             set.add(candidate.id);
             return candidate;
           }
         }
-        return shortlist[start];
+        if (remaining.length) {
+          const remainingStart = seed % remaining.length;
+          for (let offset = 0; offset < remaining.length; offset += 1) {
+            const candidate = remaining[(remainingStart + offset) % remaining.length];
+            if (!set.has(candidate.id)) {
+              set.add(candidate.id);
+              return candidate;
+            }
+          }
+        }
+        return preferred[preferredStart];
       }
 
       function generate(input) {
