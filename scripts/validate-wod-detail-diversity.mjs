@@ -1,8 +1,10 @@
 import fs from 'node:fs';
 import diversityCore from '../world-of-darkness-detail-diversity-core.js';
 import regionalThemeExpansion from '../world-of-darkness-regional-theme-expansion.js';
+import regionalLegacyQualifier from '../world-of-darkness-regional-legacy-qualifier.js';
 
-const expandedCore = regionalThemeExpansion.enhanceCore(diversityCore);
+const regionalCore = regionalThemeExpansion.enhanceCore(diversityCore);
+const expandedCore = regionalLegacyQualifier.enhanceCore(regionalCore);
 const config = JSON.parse(fs.readFileSync('data/world-of-darkness/spatial-engine-config.json', 'utf8'));
 const detail = JSON.parse(fs.readFileSync(config.coreData.detailDiversity, 'utf8'));
 const baseLocations = JSON.parse(fs.readFileSync(config.coreData.locations, 'utf8'));
@@ -10,29 +12,28 @@ const contextExpansion = JSON.parse(fs.readFileSync(config.coreData.contextExpan
 const expectedCatalogs = ['vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage'];
 const lines = ['unified', ...expectedCatalogs];
 
-if (config.schemaVersion !== '2.6.0') throw new Error('Spatial config must use schemaVersion 2.6.0.');
-if (detail.schemaVersion !== '1.0.0') throw new Error('Detail diversity schema must use version 1.0.0.');
-if (regionalThemeExpansion.version !== '3.2.0' || expandedCore.__regionalThemeExpansionVersion !== '3.2.0') throw new Error('Regional theme expansion 3.2.0 is not active.');
+if (config.schemaVersion !== '2.6.0' || detail.schemaVersion !== '1.0.0') throw new Error('Spatial or detail schema version changed unexpectedly.');
+if (regionalThemeExpansion.version !== '3.2.0' || regionalCore.__regionalThemeExpansionVersion !== '3.2.0') throw new Error('Regional theme expansion 3.2.0 is not active.');
+if (regionalLegacyQualifier.version !== '1.0.0' || expandedCore.__regionalLegacyQualifierVersion !== '1.0.0') throw new Error('Regional legacy qualifier 1.0.0 is not active.');
 if (expandedCore.regionalThemeManifestationChannels?.length !== 12) throw new Error('Regional theme expansion must expose twelve manifestation channels.');
-if (expandedCore.legacyThemeFrequencyDenominator !== 32) throw new Error('Legacy themes must remain limited to one result in 32 neighborhood selections.');
-if (expandedCore.themeDistrictMultiplier !== 4) throw new Error('District family multiplier must remain four neighborhood cells per axis.');
+if (expandedCore.legacyThemeFrequencyDenominator !== 32 || expandedCore.themeDistrictMultiplier !== 4) throw new Error('Regional legacy frequency or district size changed.');
 
 const expectedStandardProfile = [12, 6, 2, 1];
 const expectedUnifiedProfile = [5, 8, 5, 3];
-if (JSON.stringify(expandedCore.statusProfile('vampire')) !== JSON.stringify(expectedStandardProfile)) throw new Error('Single-catalog density profile changed unexpectedly.');
-if (JSON.stringify(expandedCore.statusProfile('unified')) !== JSON.stringify(expectedUnifiedProfile)) throw new Error('Unified density profile changed unexpectedly.');
+if (JSON.stringify(expandedCore.statusProfile('vampire')) !== JSON.stringify(expectedStandardProfile)) throw new Error('Single-catalog density profile changed.');
+if (JSON.stringify(expandedCore.statusProfile('unified')) !== JSON.stringify(expectedUnifiedProfile)) throw new Error('Unified density profile changed.');
 
-function countStatuses(line) {
+function statusCounts(line) {
   const counts = { MUNDANE: 0, TANGENTIAL: 0, ACTIVE_UNREGISTERED: 0, INVENTORIED: 0 };
   for (let seed = 0; seed < 21; seed += 1) counts[expandedCore.inventoryStatusFromSeed(seed, line)] += 1;
   return counts;
 }
-const standardCounts = countStatuses('vampire');
-const unifiedCounts = countStatuses('unified');
+const standardCounts = statusCounts('vampire');
+const unifiedCounts = statusCounts('unified');
 if (JSON.stringify(Object.values(standardCounts)) !== JSON.stringify(expectedStandardProfile)) throw new Error(`Single-catalog status distribution is invalid: ${JSON.stringify(standardCounts)}.`);
 if (JSON.stringify(Object.values(unifiedCounts)) !== JSON.stringify(expectedUnifiedProfile)) throw new Error(`Unified status distribution is invalid: ${JSON.stringify(unifiedCounts)}.`);
-if (config.contextAwareGeneration?.lineDensityProfiles?.unified?.supernaturalOrAdjacentPercent !== 76.19) throw new Error('Unified supernatural-or-adjacent percentage must remain 76.19%.');
-if (config.contextAwareGeneration?.lineDensityProfiles?.singleCatalog?.supernaturalOrAdjacentPercent !== 42.86) throw new Error('Single-catalog supernatural-or-adjacent percentage must remain 42.86%.');
+if (config.contextAwareGeneration?.lineDensityProfiles?.unified?.supernaturalOrAdjacentPercent !== 76.19) throw new Error('Unified supernatural density changed.');
+if (config.contextAwareGeneration?.lineDensityProfiles?.singleCatalog?.supernaturalOrAdjacentPercent !== 42.86) throw new Error('Single-catalog supernatural density changed.');
 if (JSON.stringify([...expandedCore.catalogLines]) !== JSON.stringify(expectedCatalogs)) throw new Error('Unified catalog list is incomplete.');
 
 const pools = detail.pools || {};
@@ -88,23 +89,28 @@ for (const line of lines) {
   for (const theme of sampled) counts.set(theme.id, (counts.get(theme.id) || 0) + 1);
   const unique = counts.size;
   const maximumRecurrence = Math.max(...counts.values());
-  const legacyCount = sampled.filter(theme => theme.themeSource === 'legacy-rare').length;
+  const legacyCount = sampled.filter(theme => String(theme.themeSource).startsWith('legacy-rare')).length;
+  const qualifiedLegacyCount = sampled.filter(theme => theme.themeSource === 'legacy-rare-qualified').length;
   if (unique < 330) throw new Error(`${line} regional themes are repeating too often across separated areas (${unique}/384 unique).`);
   if (maximumRecurrence > 3) throw new Error(`${line} has an exact regional theme recurring ${maximumRecurrence} times in 384 separated areas.`);
   if (legacyCount > 24) throw new Error(`${line} legacy regional themes are appearing too frequently (${legacyCount}/384).`);
+  if (legacyCount !== qualifiedLegacyCount) throw new Error(`${line} emitted an unqualified legacy regional theme.`);
   if (sampled.some(theme => theme.themeVersion !== '3.2.0')) throw new Error(`${line} emitted a regional theme outside model 3.2.0.`);
   themeMetrics[line] = {
     variantCount: expandedCore.regionalThemeVariantCount(line, pools.regionalThemes[line].length),
     sampled: sampled.length,
     unique,
     maximumRecurrence,
-    legacyCount
+    legacyCount,
+    qualifiedLegacyCount
   };
 }
 
 const vampireThemes = sampleThemes('vampire', 768, { columns: 32, latBase: 34.1, lngBase: -116.8 });
-const anarchNightRouteCount = vampireThemes.filter(theme => theme.id === 'anarch-night-route').length;
-if (anarchNightRouteCount > 8) throw new Error(`Anarch Night Route is still too frequent (${anarchNightRouteCount}/768 separated Vampire areas).`);
+const anarchNightRouteCount = vampireThemes.filter(theme => theme.legacyBaseId === 'anarch-night-route').length;
+const anarchVisibleExpressions = new Set(vampireThemes.filter(theme => theme.legacyBaseId === 'anarch-night-route').map(theme => theme.id)).size;
+if (anarchNightRouteCount > 8) throw new Error(`Anarch Night Route family is still too frequent (${anarchNightRouteCount}/768 separated Vampire areas).`);
+if (anarchNightRouteCount > 1 && anarchVisibleExpressions < 2) throw new Error('Repeated Anarch Night Route family results are not visibly qualified by different channels.');
 
 let coherentDistrict = null;
 for (let districtIndex = 0; districtIndex < 128 && !coherentDistrict; districtIndex += 1) {
@@ -117,12 +123,15 @@ for (let districtIndex = 0; districtIndex < 128 && !coherentDistrict; districtIn
     { lat: latBase + 0.002, lng: lngBase + 0.018 },
     { lat: latBase + 0.018, lng: lngBase + 0.018 }
   ].map((coordinates, index) => session.themeFor({
-    ...themeLocation(index), entryKey: `gmaps-district-${districtIndex}-${index}`, lat: coordinates.lat, lng: coordinates.lng
+    ...themeLocation(index),
+    entryKey: `gmaps-district-${districtIndex}-${index}`,
+    lat: coordinates.lat,
+    lng: coordinates.lng
   }, 'vampire'));
   if (cells.every(theme => theme.themeSource === 'compositional-product-space')) coherentDistrict = cells;
 }
 if (!coherentDistrict) throw new Error('Could not find a product-space district sample for coherence testing.');
-if (new Set(coherentDistrict.map(theme => theme.familyId)).size !== 1) throw new Error('Nearby neighborhood cells inside one district lost their shared supernatural family.');
+if (new Set(coherentDistrict.map(theme => theme.familyId)).size !== 1) throw new Error('Nearby neighborhood cells lost their shared supernatural family.');
 if (new Set(coherentDistrict.map(theme => theme.id)).size < 3) throw new Error('Nearby neighborhood cells are not varying their exact regional expression enough.');
 
 const baselineWorldThemes = sampleThemes('unified', 96, { worldSeedKey: 'wodworld-11111111', columns: 16, latBase: 25.1, lngBase: -80.2 });
@@ -150,8 +159,12 @@ function generateSeattle() {
   return Array.from({ length: 24 }, (_, index) => {
     const location = seattleLocation(index);
     return session.generate({
-      location, line: 'unified', inventoryStatus: 'ACTIVE_UNREGISTERED',
-      seed: expandedCore.hash32(location.entryKey), baseLocations, contextExpansion
+      location,
+      line: 'unified',
+      inventoryStatus: 'ACTIVE_UNREGISTERED',
+      seed: expandedCore.hash32(location.entryKey),
+      baseLocations,
+      contextExpansion
     });
   });
 }
@@ -185,22 +198,19 @@ console.log(JSON.stringify({
   sharedRegionalTheme: records[0].regionalTheme,
   regionalThemeModel: {
     version: '3.2.0',
+    legacyQualifierVersion: regionalLegacyQualifier.version,
     compositionalVariantsPerCatalog: 27648,
     manifestationChannels: expandedCore.regionalThemeManifestationChannels.length,
     legacyFrequencyDenominator: expandedCore.legacyThemeFrequencyDenominator,
-    districtMultiplier: expandedCore.themeDistrictMultiplier,
     metrics: themeMetrics,
-    anarchNightRouteCount,
-    anarchNightRouteSampleSize: vampireThemes.length,
+    anarchNightRouteFamilyCount: anarchNightRouteCount,
+    anarchNightRouteVisibleExpressions: anarchVisibleExpressions,
     coherentDistrictFamily: coherentDistrict[0].familyId,
     coherentDistrictUniqueExpressions: new Set(coherentDistrict.map(theme => theme.id)).size,
-    worldSpecificDifferences,
-    worldSpecificSampleSize: baselineWorldThemes.length
+    worldSpecificDifferences
   },
   unifiedStatusCounts: unifiedCounts,
   standardStatusCounts: standardCounts,
-  unifiedSupernaturalOrAdjacentPercent: 76.19,
-  singleCatalogSupernaturalOrAdjacentPercent: 42.86,
   unifiedCatalogsObserved: [...new Set(records.map(record => record.catalogLine))].sort(),
   exactUniqueFields: exactUnique,
   hiddenFunctionUniqueCount: hiddenUnique,
