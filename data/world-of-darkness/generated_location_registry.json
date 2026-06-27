@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "registryType": "chronicle-generated-location-packages",
-  "description": "Immutable published snapshots of generated World of Darkness location packages. Each package preserves the exact population, struggle, adventure hook, location seed, item, source context, and generator cross-links selected at generation time.",
-  "entries": {}
+  "schemaVersion": "2.0.0",
+  "registryType": "chronicle-world-seeded-location-packages",
+  "description": "Immutable published World of Darkness location-package snapshots organized by world seed. The same real location may exist differently in any number of embedded worlds without collision or overwrite.",
+  "worlds": {}
 }
