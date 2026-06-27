@@ -19,10 +19,17 @@ if (!Number.isInteger(issueNumber) || issueNumber < 1) {
 }
 
 let enrichedCount = 0;
+let preservedDiversifiedCount = 0;
 const enrichedKeys = [];
+const preservedDiversifiedKeys = [];
 for (const world of Object.values(registry.worlds || {})) {
   for (const [packageKey, pkg] of Object.entries(world.packages || {})) {
     if (Number(pkg.submittedFromIssue || 0) !== issueNumber) continue;
+    if (pkg.source?.detailDiversityVersion === '1.0.0') {
+      preservedDiversifiedCount += 1;
+      preservedDiversifiedKeys.push(packageKey);
+      continue;
+    }
     if (pkg.source?.contextResolverVersion === '1.0.0') continue;
     const enriched = resolver.enrichPackage(pkg, datasets, {
       generatorVersion: 'context-aware-global-ingestion-4.0.0',
@@ -43,6 +50,8 @@ console.log(JSON.stringify({
   issueNumber,
   enrichedCount,
   enrichedKeys,
+  preservedDiversifiedCount,
+  preservedDiversifiedKeys,
   effectiveLocationVariants: datasets.baseLocations.prototypes.length * (datasets.baseLocations.contextVariants.length + datasets.contextExpansion.contextVariants.length),
   effectiveEntriesPerOutputPool: datasets.baseCrosslinks.population.length + datasets.crosslinkExpansion.population.length
 }, null, 2));
