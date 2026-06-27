@@ -2,9 +2,9 @@
   "receiptType": "wodDetailDiversityValidation",
   "schemaVersion": "1.3.0",
   "status": "failed",
-  "validatedCommit": "0665c6432669bd0ecf3c968a327ba3a331f45ae5",
+  "validatedCommit": "711fe6ba5dcf8bee4cce44dc6cd511d49a3278e9",
   "workflow": ".github/workflows/validate-wod-world-scan-overlay.yml",
-  "checkedAt": "2026-06-27T15:22:52.781Z",
+  "checkedAt": "2026-06-27T15:24:20.740Z",
   "totalChecks": 23,
   "passedChecks": 21,
   "failedChecks": 2,
@@ -191,7 +191,7 @@
       "exitCode": 1,
       "signal": null,
       "stdout": "{\n  \"mapOnlyCore\": [\n    \"world-of-darkness-lightweight-map-core.js\",\n    \"world-of-darkness-spatial-config-compat.js\",\n    \"world-of-darkness-system-site-catalog.js\",\n    \"world-of-darkness-detail-diversity-core.js\",\n    \"world-of-darkness-regional-theme-expansion.js\",\n    \"world-of-darkness-system-site-expansion.js\",\n    \"world-of-darkness-radial-location-loader.js\",\n    \"world-of-darkness-radial-scan-compat.js\"\n  ],\n  \"retiredCore\": [\n    \"world-of-darkness-named-location-bridge.js\",\n    \"world-of-darkness-spatial-engine-inventory.js\"\n  ],\n  \"deferredTools\": [\n    \"world-of-darkness-location-package-bridge.js\",\n    \"world-of-darkness-world-scan-overlay.js\",\n    \"world-of-darkness-global-rescan-bridge.js\",\n    \"world-of-darkness-context-aware-core.js\",\n    \"world-of-darkness-context-output-normalizer.js\",\n    \"world-of-darkness-context-aware-variants.js\",\n    \"world-of-darkness-registry-workflow-note.js\"\n  ],\n  \"chronicleDataFetchesBeforeScan\": 0,\n  \"mapMutationObservers\": 0,\n  \"pureDiversityCoreNetworkRequests\": 0,\n  \"pureRegionalAndSystemModuleNetworkRequests\": 0,\n  \"staleConfigCompatibilityVersion\": \"2.7.0\",\n  \"activeGameLineStatusBridge\": true,\n  \"unifiedStatusProfile\": [\n    5,\n    8,\n    5,\n    3\n  ],\n  \"singleCatalogStatusProfile\": [\n    12,\n    6,\n    2,\n    1\n  ],\n  \"unifiedCatalogs\": 6,\n  \"regionalThemeModelVersion\": \"3.1.0\",\n  \"systemSiteCatalogVersion\": \"1.0.0\",\n  \"systemSiteExpansionVersion\": \"1.0.0\",\n  \"systemSiteDimensions\": 8,\n  \"governedDatasetDefaults\": 10,\n  \"leafletFallbackTimeoutMs\": 4500,\n  \"radialConcurrency\": 1,\n  \"radialVisibleCap\": 90,\n  \"bundledCharacterRumorSelection\": false\n}",
-      "stderr": "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-world-scan-overlay.mjs:29\n  throw new Error('Production global scan workflow does not invoke rescan-v3.');\n        ^\n\nError: Production global scan workflow does not invoke rescan-v3.\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-world-scan-overlay.mjs:29:9\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v20.20.2"
+      "stderr": "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-world-scan-overlay.mjs:44\nif (receipt.unifiedCatalogGeneration?.globalIngestion?.generatorVersion !== 'world-seeded-system-site-server-rescan-3.2.0') throw new Error('Receipt does not record the system-site global generator version.');\n                                                                                                                                  ^\n\nError: Receipt does not record the system-site global generator version.\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-world-scan-overlay.mjs:44:131\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v20.20.2"
     }
   ]
 }
