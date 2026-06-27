@@ -1,10 +1,12 @@
 import diversityCore from '../world-of-darkness-detail-diversity-core.js';
 import regionalThemeExpansion from '../world-of-darkness-regional-theme-expansion.js';
+import regionalLegacyQualifier from '../world-of-darkness-regional-legacy-qualifier.js';
 import systemSiteCatalog from '../world-of-darkness-system-site-catalog.js';
 import systemSiteExpansion from '../world-of-darkness-system-site-expansion.js';
 
 const regionalDiversityCore = regionalThemeExpansion.enhanceCore(diversityCore);
-const expandedDiversityCore = systemSiteExpansion.enhanceCore(regionalDiversityCore, systemSiteCatalog);
+const qualifiedRegionalCore = regionalLegacyQualifier.enhanceCore(regionalDiversityCore);
+const expandedDiversityCore = systemSiteExpansion.enhanceCore(qualifiedRegionalCore, systemSiteCatalog);
 
 const STATUS_LABELS = Object.freeze({
   MUNDANE: 'Mundane / No Known Connection',
@@ -203,9 +205,10 @@ export function createWorldScanPackageFactory({
         contextResolverVersion: '1.0.0',
         detailDiversityVersion: detailDiversity?.schemaVersion,
         regionalThemeVersion: detail.regionalTheme?.themeVersion || regionalThemeExpansion.version,
+        regionalLegacyQualifierVersion: regionalLegacyQualifier.version,
         systemSiteCatalogVersion: systemSiteCatalog.schemaVersion,
         systemSiteExpansionVersion: systemSiteExpansion.version,
-        detailDiversityPolicy: 'world-seed-rotated-pools-with-product-space-regional-themes-and-system-specific-site-structures'
+        detailDiversityPolicy: 'world-seed-rotated-pools-with-qualified-legacy-regional-themes-and-system-specific-site-structures'
       }
     };
   }
@@ -217,6 +220,7 @@ export function createWorldScanPackageFactory({
     statusProfile: expandedDiversityCore.statusProfile(gameLine),
     catalogLines: [...expandedDiversityCore.catalogLines],
     regionalThemeVersion: regionalThemeExpansion.version,
+    regionalLegacyQualifierVersion: regionalLegacyQualifier.version,
     systemSiteCatalogVersion: systemSiteCatalog.schemaVersion
   });
 }
