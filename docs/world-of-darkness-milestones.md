@@ -8,66 +8,112 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 
 - Preserve the Chronicle Spatial Engine master specification under `SRC/world-of-darkness/`.
 - Record the original source filename, size, and SHA-256 receipt.
-- Establish three deterministic 70-entry core tables: locations, characters, and rumors.
+- Establish deterministic location, character, and rumor data contracts.
 - Establish the central POI registry and configuration contract.
 
-## Milestone 2 — No-Key Spatial Client and Business Capture
+## Milestone 2 — No-Key Spatial Client and Location Capture
 
 **Status: Complete**
 
 - Remove the paid Google Maps JavaScript and Places API requirement.
 - Provide a no-key map client and full-map launch path.
-- Capture business name, address, coordinates, type, and reference URL.
-- Resolve the captured business into a deterministic Chronicle key and 32-bit spatial seed.
+- Capture location name, address, coordinates, type, reference URL, and source identity.
+- Resolve the captured location into a deterministic Chronicle key and spatial seed.
 - Display the complete World of Darkness record and local Storyteller governance controls.
 
-## Milestone 3 — Visible Viewport Business Extraction
+## Milestone 3 — Named Viewport Extraction
 
-**Status: Complete — Performance stabilization applied**
+**Status: Complete — performance stabilization and scope expansion applied**
 
-- Replace the unreadable cross-origin map iframe as the extraction surface with a Leaflet/OpenStreetMap viewport.
-- Read the current visible map bounds after pan or zoom.
-- Query named amenities, shops, tourism sites, offices, and healthcare locations through Overpass.
-- Normalize point, way, and relation results into business records with usable coordinates.
-- Apply the same deterministic Chronicle key, 70-entry spatial filter, game-line layer, political pressure, and central-registry status to every visible result.
-- Render matching numbered markers on the map.
-- Render a searchable and type-filterable business list directly to the right of the map on desktop layouts.
-- Selecting a marker or list record opens the full World of Darkness record in the left panel.
-- Cache viewport scans for ten minutes, cap visible results, abort stale requests, reject oversized viewports, and provide a second Overpass endpoint as a fallback.
+- Use a Leaflet/OpenStreetMap viewport as the inspectable extraction surface.
+- Read the current visible bounds after pan or zoom.
+- Query every OpenStreetMap node, way, or relation carrying a `name` tag.
+- Include businesses, named buildings, roads, parks, schools, religious sites, monuments, natural features, water features, trails, transit sites, civic facilities, neighborhoods, and boundaries.
+- Normalize named results into stable location records with usable coordinates, OSM identity, feature class, selected source tags, and reference URL.
+- Render numbered markers and a searchable location list.
+- Selecting a marker or list record opens the complete World of Darkness record.
+- Cache viewport scans for ten minutes, cap client-visible results at 90, reject oversized viewports, abort stale requests, and use a fallback Overpass endpoint.
 
 ### Milestone 3 performance gate
 
 - Do not load a hidden Google Maps iframe.
 - Do not geocode the default search text during startup.
-- Do not initiate a business scan during startup.
+- Do not initiate a location scan during startup.
 - Start auto-scan disabled on every page load.
 - Initialize the map independently while Chronicle datasets load in the background.
-- Delay opt-in auto-scans until the map has remained idle for 3.5 seconds.
+- Delay opt-in auto-scans until the map remains idle for 3.5 seconds.
 - Enforce a twelve-second minimum interval between opt-in auto-scans.
-- Skip repeated scans of an unchanged viewport unless the user forces a refresh.
-- Update map tiles only after movement becomes idle and keep the tile buffer small.
+- Skip unchanged viewports unless the user forces a refresh.
 - Load the map runtime only after the World of Darkness view becomes active.
+
+### Milestone 3.1 — Sparse Supernatural Inventory
+
+**Status: Complete**
+
+- Expand the location system from 70 to 210 deterministic variants.
+- Keep 57.14% mundane, 28.57% tangential, 9.52% active but unregistered, and 4.76% formally inventoried.
+- Prevent mundane sites from receiving false havens, caerns, chantries, custodians, or active supernatural plots.
+
+### Milestone 3.2 — World-Seeded Location Packages
+
+**Status: Complete**
+
+- Provide selectable local and embedded global world seeds.
+- Save complete immutable location packages beneath one world seed.
+- Allow the same real location to exist differently across many worlds without overwrite.
+- Require deletion before regeneration under the same world, location, and game line.
+- Exclude claimed businesses until their later governance panel is implemented.
+
+### Milestone 3.3 — Local and Global World Scans
+
+**Status: Complete**
+
+- Expose the current world label, seed key, raw seed value, local/global scope, package counts, and viewport-coverage counts directly above the map.
+- Add **Scan Visible Area Locally** to generate and save up to 90 named-location packages in browser storage.
+- Add **Scan Visible Area Globally** to prepare a compact viewport manifest.
+- Rescan submitted bounds server-side through the owner-approved GitHub Actions workflow.
+- Add every missing eligible named-location package to the selected embedded world without overwriting existing packages.
+- Record local and global scan coverage, including bounds, center, zoom, game line, result counts, response-cap state, and package keys.
+- Preserve one global world namespace per seed while stacking independent worlds side by side.
 
 ## Milestone 4 — Persistent Chronicle Overlay and Territory Filters
 
-**Status: Next**
+**Status: In progress — seed and scan persistence complete**
 
-Completion requirements:
+Completed foundations:
 
-- Persist the active game line, list filters, and selected business in addition to the existing map view.
-- Visually distinguish unclaimed, supportive, opt-out, and centrally registered locations without requiring selection.
-- Add faction, supernatural sphere, political pressure, and registry-state filters.
-- Reconcile central-registry updates with cached viewport results.
-- Add explicit refresh and cache-expiration indicators.
-- Export the currently filtered overlay as GeoJSON and KML.
+- Persist local world seeds, active world selection, local packages, and local scan coverage.
+- Store global packages and global scan coverage by embedded world seed.
+- Distinguish local-only, local-with-global-counterpart, and embedded-global editing modes.
+- Refresh the global register without overwriting local work.
+
+Remaining requirements:
+
+- Persist the active game line, list filters, and selected location.
+- Add faction, political-pressure, registry-state, and evidence-confidence filters.
+- Add explicit cache-age and coverage-age indicators.
+- Export filtered packages and overlays as GeoJSON and KML.
 
 ## Milestone 5 — Domain Politics and Influence Network
 
-**Status: Planned**
+**Status: Groundwork started**
 
-- Connect visible businesses into faction domains and influence relationships.
-- Generate contested borders, neutral ground, feeding routes, spirit corridors, Mysteries, and hunter surveillance zones.
-- Track ownership, claims, favors, hostility, leverage, and changes caused by chronicle events.
+Completed foundations:
+
+- Add `influence_overlay_registry.json` as the repository authority for future curated influence geometry.
+- Define supported point, circle, line, polygon, and multipolygon geometry.
+- Define Kindred, Garou, Changing Breeds, Hunter, Dreaming, Awakened, mixed, and unknown spheres.
+- Render provisional package-derived influence circles on the active map.
+- Use dashed circles for local packages and solid circles for globally embedded packages.
+- Scale provisional radius by tangential, active-unregistered, and inventoried status.
+- Filter the provisional overlay by local/global scope and supernatural sphere.
+
+Remaining requirements:
+
+- Connect locations into faction domains and influence relationships.
+- Generate contested borders, neutral ground, feeding routes, spirit corridors, Mysteries, wards, and hunter surveillance zones.
+- Add curated geometry submission and governance workflows.
+- Track ownership, claims, favors, hostility, leverage, and chronicle-driven changes.
 
 ## Milestone 6 — Chronicle Persistence and Campaign Consequences
 
@@ -79,9 +125,9 @@ Completion requirements:
 
 ## Milestone 7 — Verification and Deployment Hardening
 
-**Status: Planned**
+**Status: In progress**
 
-- Add browser-level smoke tests for map initialization, viewport extraction, result selection, filtering, and registry merge behavior.
-- Add static validation for all World of Darkness runtime and data files.
+- Validate named-location matching, runtime order, world-scan schemas, influence registry, and JavaScript syntax through GitHub Actions.
+- Add browser-level smoke tests for map initialization, named extraction, local scan, global rescan submission, overlay rendering, result selection, filtering, and registry merge behavior.
 - Add graceful service-failure diagnostics and offline fallback behavior.
 - Confirm attribution, caching, request throttling, and service-policy compliance.
