@@ -2,11 +2,13 @@ import fs from 'node:fs';
 
 const loader = fs.readFileSync('world-of-darkness-spatial-loader.js', 'utf8');
 const mapCore = fs.readFileSync('world-of-darkness-lightweight-map-core.js', 'utf8');
+const diversityCore = fs.readFileSync('world-of-darkness-detail-diversity-core.js', 'utf8');
 const radial = fs.readFileSync('world-of-darkness-radial-location-loader.js', 'utf8');
 const compatibility = fs.readFileSync('world-of-darkness-radial-scan-compat.js', 'utf8');
 
 const core = [
   'world-of-darkness-lightweight-map-core.js',
+  'world-of-darkness-detail-diversity-core.js',
   'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-radial-scan-compat.js'
 ];
@@ -46,6 +48,19 @@ for (const marker of [
 }
 
 for (const marker of [
+  'createSession',
+  'neighborhoodKey',
+  'inventoryStatusFromSeed',
+  'regional-theme',
+  'diversitySignature'
+]) {
+  if (!diversityCore.includes(marker)) throw new Error(`Detail diversity core is missing ${marker}.`);
+}
+if (diversityCore.includes('fetch(') || diversityCore.includes('XMLHttpRequest')) {
+  throw new Error('The pure detail-diversity module must not perform network work during startup.');
+}
+
+for (const marker of [
   'MAX_VISIBLE = 90',
   '.sort((left, right) => left.distance - right.distance',
   "map.on('movestart zoomstart'",
@@ -53,12 +68,17 @@ for (const marker of [
   'wod:radial-location-ready',
   'wod:radial-load-complete',
   'wod:radial-load-cancelled',
-  'return { ...payload, elements: [] }'
+  'return { ...payload, elements: [] }',
+  'Selecting unused neighborhood details',
+  'detailDiversity'
 ]) {
   if (!radial.includes(marker)) throw new Error(`Radial loader is missing ${marker}.`);
 }
 if (!radial.includes('for (let index = 0; index < state.rawLocations.length; index += 1)')) {
   throw new Error('Radial hydration is not sequential.');
+}
+if (radial.includes('characters_core.json') || radial.includes('rumors_core.json')) {
+  throw new Error('Radial generation returned to bundled character or rumor prototypes.');
 }
 
 for (const marker of [
@@ -80,7 +100,9 @@ console.log(JSON.stringify({
   deferredTools: deferred,
   chronicleDataFetchesBeforeScan: 0,
   mapMutationObservers: 0,
+  pureDiversityCoreNetworkRequests: 0,
   leafletFallbackTimeoutMs: 4500,
   radialConcurrency: 1,
-  radialVisibleCap: 90
+  radialVisibleCap: 90,
+  bundledCharacterRumorSelection: false
 }, null, 2));
