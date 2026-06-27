@@ -7,6 +7,9 @@ const sourceReceiptPath = 'source-page-references/chronicle-spatial-engine.sourc
 const namedBridgePath = 'world-of-darkness-named-location-bridge.js';
 const worldScanPath = 'world-of-darkness-world-scan-overlay.js';
 const globalRescanPath = 'world-of-darkness-global-rescan-bridge.js';
+const contextCorePath = 'world-of-darkness-context-aware-core.js';
+const contextNormalizerPath = 'world-of-darkness-context-output-normalizer.js';
+const contextBridgePath = 'world-of-darkness-context-aware-variants.js';
 const loaderPath = 'character-sheet-title.js';
 
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -16,9 +19,11 @@ const sourceReceipt = JSON.parse(fs.readFileSync(sourceReceiptPath, 'utf8'));
 const namedBridge = fs.readFileSync(namedBridgePath, 'utf8');
 const worldScan = fs.readFileSync(worldScanPath, 'utf8');
 const globalRescan = fs.readFileSync(globalRescanPath, 'utf8');
+const contextCore = fs.readFileSync(contextCorePath, 'utf8');
+const contextBridge = fs.readFileSync(contextBridgePath, 'utf8');
 const loader = fs.readFileSync(loaderPath, 'utf8');
 
-if (config.schemaVersion !== '2.4.0') throw new Error('Spatial engine config must use schemaVersion 2.4.0.');
+if (config.schemaVersion !== '2.5.0') throw new Error('Spatial engine config must use schemaVersion 2.5.0.');
 if (config.namedLocationMatching?.scanScope !== 'all-openstreetmap-nodes-ways-and-relations-with-name-tag') {
   throw new Error('Named-location scan scope is not configured for all named OSM elements.');
 }
@@ -27,7 +32,11 @@ if (config.worldScan?.globalViewportProcessingCap !== 90) throw new Error('Globa
 if (config.worldScan?.globalSubmissionModel !== 'compact-viewport-manifest-with-server-side-all-named-rescan') {
   throw new Error('Global scans must use the compact server-rescan submission model.');
 }
+if (config.contextAwareGeneration?.effectiveLocationVariants !== 420) throw new Error('Context-aware generation must expose 420 effective location variants.');
+if (config.contextAwareGeneration?.effectiveEntriesPerOutputPool !== 16) throw new Error('Context-aware generation must expose 16 entries per output pool.');
 if (config.coreData?.influenceOverlayRegistry !== influenceRegistryPath) throw new Error('Influence overlay registry is not registered in coreData.');
+if (!fs.existsSync(config.coreData.contextExpansion)) throw new Error('Context expansion data is missing.');
+if (!fs.existsSync(config.coreData.crosslinkExpansion)) throw new Error('Crosslink expansion data is missing.');
 if (!namedBridge.includes('nwr["name"](${bbox})')) throw new Error('Named-location bridge does not issue the all-name Overpass query.');
 if (!namedBridge.includes('wod:named-location-scan-complete')) throw new Error('Named-location bridge does not publish completed scans.');
 if (!namedBridge.includes('wod:spatial-map-ready')) throw new Error('Named-location bridge does not expose the map instance.');
@@ -37,14 +46,27 @@ if (!worldScan.includes('Scan Visible Area Locally') || !worldScan.includes('Sca
 if (!worldScan.includes('renderInfluenceOverlay')) throw new Error('Influence overlay renderer is missing.');
 if (!globalRescan.includes('WOD_WORLD_SCAN_RESCAN_PATCH')) throw new Error('Compact global rescan marker is missing.');
 if (!globalRescan.includes('server-rescan-all-named')) throw new Error('Compact global rescan query mode is missing.');
+if (!contextCore.includes('context-aware-location-4.0.0')) throw new Error('Context-aware core version marker is missing.');
+if (!contextBridge.includes('wod:local-world-scan-complete')) throw new Error('Context-aware browser bridge does not enrich local world scans.');
+if (!contextBridge.includes('Context-Aware Synthesis')) throw new Error('Context-aware browser preview is missing.');
 if (!loader.includes('script.async = false')) throw new Error('Supplemental runtime loading is not ordered.');
-const namedIndex = loader.indexOf('world-of-darkness-named-location-bridge.js');
-const spatialIndex = loader.indexOf('world-of-darkness-spatial-engine-inventory.js');
-const packageIndex = loader.indexOf('world-of-darkness-location-package-bridge.js');
-const overlayIndex = loader.indexOf('world-of-darkness-world-scan-overlay.js');
-const rescanIndex = loader.indexOf('world-of-darkness-global-rescan-bridge.js');
-if (!(namedIndex >= 0 && namedIndex < spatialIndex && spatialIndex < packageIndex && packageIndex < overlayIndex && overlayIndex < rescanIndex)) {
-  throw new Error('World of Darkness runtime load order must be named bridge, spatial engine, package bridge, world-scan overlay, then compact global rescan bridge.');
+
+const runtimePaths = [
+  'world-of-darkness-named-location-bridge.js',
+  'world-of-darkness-spatial-engine-inventory.js',
+  'world-of-darkness-location-package-bridge.js',
+  'world-of-darkness-world-scan-overlay.js',
+  'world-of-darkness-global-rescan-bridge.js',
+  'world-of-darkness-context-aware-core.js',
+  'world-of-darkness-context-output-normalizer.js',
+  'world-of-darkness-context-aware-variants.js'
+];
+let previousIndex = -1;
+for (const runtimePath of runtimePaths) {
+  const index = loader.indexOf(runtimePath);
+  if (index < 0) throw new Error(`Loader is missing ${runtimePath}.`);
+  if (index <= previousIndex) throw new Error(`Runtime order is invalid at ${runtimePath}.`);
+  previousIndex = index;
 }
 
 if (generatedRegistry.schemaVersion !== '2.0.0' || generatedRegistry.registryType !== 'chronicle-world-seeded-location-packages') {
@@ -67,29 +89,38 @@ if (!influenceRegistry.worlds || typeof influenceRegistry.worlds !== 'object' ||
   throw new Error('Influence overlay worlds must be an object.');
 }
 
-if (sourceReceipt.schemaVersion !== '2.4.0') throw new Error('Chronicle source receipt must use schemaVersion 2.4.0.');
+if (sourceReceipt.schemaVersion !== '2.5.0') throw new Error('Chronicle source receipt must use schemaVersion 2.5.0.');
 const governedPaths = [
   sourceReceipt.namedLocationBridge,
   sourceReceipt.governedRuntime,
   sourceReceipt.worldSeedBridge,
   sourceReceipt.worldScanOverlay,
   sourceReceipt.globalRescanBridge,
-  sourceReceipt.globalRescanWorkflow
+  sourceReceipt.contextAwareCore,
+  sourceReceipt.contextOutputNormalizer,
+  sourceReceipt.contextAwareBrowserBridge,
+  sourceReceipt.contextAwareServerEnricher,
+  sourceReceipt.globalRescanWorkflow,
+  sourceReceipt.individualPackageWorkflow,
+  ...sourceReceipt.coreDataFiles
 ];
 for (const governedPath of governedPaths) {
   if (typeof governedPath !== 'string' || !fs.existsSync(governedPath)) {
     throw new Error(`Governed Chronicle path is missing: ${governedPath}`);
   }
 }
-if (!sourceReceipt.coreDataFiles.includes(influenceRegistryPath)) throw new Error('Source receipt does not include the influence overlay registry.');
+if (sourceReceipt.effectiveLocationVariantCount !== 420) throw new Error('Source receipt does not record 420 effective variants.');
+if (sourceReceipt.effectiveEntriesPerOutputPool !== 16) throw new Error('Source receipt does not record 16 entries per output pool.');
 
 console.log(JSON.stringify({
   namedLocationScope: config.namedLocationMatching.scanScope,
   localWorldScanCap: config.worldScan.localVisibleLocationCap,
   globalViewportProcessingCap: config.worldScan.globalViewportProcessingCap,
   globalSubmissionModel: config.worldScan.globalSubmissionModel,
-  runtimeOrder: ['named-location-bridge', 'spatial-engine', 'location-package-bridge', 'world-scan-overlay', 'global-rescan-bridge'],
-  governedPaths,
+  effectiveLocationVariants: config.contextAwareGeneration.effectiveLocationVariants,
+  effectiveEntriesPerOutputPool: config.contextAwareGeneration.effectiveEntriesPerOutputPool,
+  runtimeOrder: runtimePaths,
+  governedPathCount: governedPaths.length,
   embeddedWorlds: Object.keys(generatedRegistry.worlds || {}).length,
   influenceSpheres: influenceRegistry.sphereVocabulary,
   provisionalRadii: config.influenceOverlay.statusRadiusMeters
