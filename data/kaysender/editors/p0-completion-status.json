@@ -1,0 +1,57 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "1.0.0",
+  "stage": "P0",
+  "stageId": "shared-editor-kernel",
+  "title": "Shared Editor Kernel and Profile Contract",
+  "status": "complete",
+  "activeBranch": "main",
+  "completedAt": "2026-06-26T23:01:14.965Z",
+  "validatedCommit": "202fe2947d16422fe86f372203ad20b018dcffd5",
+  "receiptCommit": "1968b12b83fbb043472668331aa4f04c42a3f0d5",
+  "receiptFile": "data/kaysender/editors/verification/p0-ci-receipt.json",
+  "browserArtifact": "p0-browser-verification",
+  "verification": {
+    "staticExitCode": 0,
+    "browserExitCode": 0,
+    "browserReceiptPresent": true,
+    "browserFailurePresent": false,
+    "chromiumChain": [
+      "floating-island-editor",
+      "settlement-editor",
+      "airship-editor"
+    ],
+    "temporaryPersistentRecordsCleaned": true,
+    "pinnedRevisionInheritanceVerified": true,
+    "reopenRevisionStabilityVerified": true,
+    "inheritanceClearAndRestoreVerified": true
+  },
+  "exitCriteria": [
+    {
+      "criterion": "All three existing alpha editors can open through the shared shell",
+      "status": "passed"
+    },
+    {
+      "criterion": "Current island profiles import into settlement and airship editors without flat-field assumptions",
+      "status": "passed"
+    },
+    {
+      "criterion": "Malformed or wrong-profile imports produce actionable errors instead of silent failure",
+      "status": "passed"
+    },
+    {
+      "criterion": "Every editor exposes a dedicated New blank record action",
+      "status": "passed"
+    },
+    {
+      "criterion": "Shared behavior is covered by automated validation and smoke tests",
+      "status": "passed"
+    }
+  ],
+  "promotion": {
+    "nextStage": "P1",
+    "nextStageId": "floating-island-production-editor",
+    "authorized": true
+  },
+  "historicalImplementationSnapshot": "data/kaysender/editors/p0-implementation-status.json"
+}
