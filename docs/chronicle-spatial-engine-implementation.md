@@ -8,15 +8,41 @@ The binding source specification is stored in the repository at:
 
 The master document originally illustrates direct `google.maps.places.Place` integration. The deployed GitHub Pages implementation deliberately avoids the paid Google Maps JavaScript and Places APIs.
 
-The active client instead uses:
+The active client now uses:
 
-1. An ordinary no-key Google Maps embedded client window for searching, panning, zooming, and visual reference.
-2. A full Google Maps launch button for selecting a real business and copying its share/browser URL.
-3. A capture form for business name, address, Google Maps URL, type, latitude, and longitude.
-4. URL parsing for full Google Maps links containing `@latitude,longitude`, `q=latitude,longitude`, or encoded `!3d...!4d...` coordinates.
-5. Manual coordinate entry when Google supplies a shortened link that cannot be resolved by a cross-origin GitHub Pages client.
+1. A Leaflet/OpenStreetMap viewport that the browser can inspect directly.
+2. Explicit location search through Nominatim only when the user presses **Move Map**.
+3. Visible-bound business extraction through Overpass only when the user presses **Scan Visible Area**, unless throttled auto-scan is deliberately enabled.
+4. A full Google Maps launch button for cross-checking a selected real-world location without embedding or loading Google Maps in the application.
+5. A manual capture form for business name, address, reference URL, type, latitude, and longitude.
 
-Google prevents a parent website from reading interactions inside an embedded Maps iframe. The client therefore cannot silently extract a clicked business from the no-key map window. The capture form is the explicit boundary that preserves a no-cost, no-key deployment.
+The discarded Google Maps iframe is no longer loaded. This removes a redundant map request and avoids paying the startup cost for a cross-origin window the application cannot inspect.
+
+## Performance-first loading contract
+
+The active runtime is `world-of-darkness-spatial-engine-fast.js`.
+
+Its load order is intentionally separated:
+
+- The Chronicle interface is constructed without external map or data requests.
+- Leaflet starts only after the World of Darkness view becomes active.
+- The map is displayed as soon as Leaflet loads.
+- The three Chronicle data tables and central registry load in the background and do not block the map.
+- The default search text is not geocoded during startup.
+- No viewport business extraction occurs during startup.
+- Auto-scan starts disabled on every page load.
+
+When auto-scan is enabled manually, it waits until the map has remained idle for 3.5 seconds, requires zoom level 15 or closer, enforces a twelve-second minimum interval, and skips an unchanged viewport. Manual scans remain available at zoom level 14 or closer.
+
+Map tile updates occur after movement becomes idle, animation overhead is disabled, and the retained tile buffer is intentionally small.
+
+## Visible business extraction
+
+A manual or permitted throttled scan reads the current map bounds and queries named OpenStreetMap amenities, shops, tourism locations, offices, and healthcare locations. Point, way, and relation results are normalized to a common business record.
+
+Viewport results are cached for ten minutes. The runtime limits each displayed result set to 90 locations, aborts superseded requests, rejects oversized viewports, and can fall back to a second Overpass endpoint.
+
+Every extracted location is processed through the same deterministic World of Darkness pipeline and appears as both a numbered marker and an entry in the right-hand business list.
 
 ## Deterministic universal baseline
 
