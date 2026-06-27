@@ -6,6 +6,7 @@ const checks = [
   ['syntax:spatial-config-compat', ['--check', 'world-of-darkness-spatial-config-compat.js']],
   ['syntax:system-site-catalog', ['--check', 'world-of-darkness-system-site-catalog.js']],
   ['syntax:detail-diversity-core', ['--check', 'world-of-darkness-detail-diversity-core.js']],
+  ['syntax:regional-theme-expansion', ['--check', 'world-of-darkness-regional-theme-expansion.js']],
   ['syntax:system-site-expansion', ['--check', 'world-of-darkness-system-site-expansion.js']],
   ['syntax:radial-loader', ['--check', 'world-of-darkness-radial-location-loader.js']],
   ['syntax:package-bridge', ['--check', 'world-of-darkness-location-package-bridge.js']],
@@ -14,6 +15,7 @@ const checks = [
   ['syntax:server-context-guard', ['--check', 'scripts/enrich-wod-location-context.mjs']],
   ['syntax:world-scan-package-factory', ['--check', 'scripts/wod-world-scan-package-factory.mjs']],
   ['syntax:world-scan-rescan-v3', ['--check', 'scripts/ingest-wod-world-scan-rescan-v3.mjs']],
+  ['syntax:world-scan-rescan-v4', ['--check', 'scripts/ingest-wod-world-scan-rescan-v4.mjs']],
   ['syntax:system-site-validator', ['--check', 'scripts/validate-wod-system-site-expansion.mjs']],
   ['contract:location-inventory', ['scripts/validate-wod-location-inventory.mjs']],
   ['contract:world-seed-packages', ['scripts/validate-wod-world-seed-packages.mjs']],
@@ -47,7 +49,7 @@ const validatedCommit = process.env.GITHUB_SHA || process.env.VALIDATED_COMMIT |
 const checkedAt = new Date().toISOString();
 const receipt = {
   receiptType: 'wodDetailDiversityValidation',
-  schemaVersion: '1.2.0',
+  schemaVersion: '1.3.0',
   status: failed.length ? 'failed' : 'passed',
   validatedCommit,
   workflow: '.github/workflows/validate-wod-world-scan-overlay.yml',
@@ -84,7 +86,7 @@ if (!failed.length) {
     failedChecks: receipt.failedChecks,
     sampleSize: 24,
     hiddenFunctionUniqueCount: 24,
-    regionalThemeModelVersion: '3.0.0',
+    regionalThemeModelVersion: '3.1.0',
     minimumRegionalThemeVariantsPerCatalog: 2304,
     legacyThemeFrequencyDenominator: 32
   };
@@ -105,16 +107,19 @@ if (!failed.length) {
     status: 'passed',
     validatedCommit,
     checkedAt,
+    regionalThemeVersion: '3.1.0',
     catalogVersion: '1.0.0',
     expansionVersion: '1.0.0',
     dimensions: 8,
-    authoredEntries: 574,
-    minimumDedicatedLineStructuralCombinations: 120000000,
+    authoredEntries: 588,
+    minimumDedicatedLineStructuralCombinations: 144000000,
     nearbyUniqueSiteTypesBeforeRepeat: 12,
     nearbyUniqueValuesBeforeRepeatPerOtherDimension: 10,
     mundaneSitesRemainMundane: true,
     browserRegression: 'contract:system-site-expansion',
     serverRegression: 'contract:unified-global-rescan',
+    globalGeneratorVersion: 'world-seeded-system-site-server-rescan-3.2.0',
+    globalIngestionWrapper: 'scripts/ingest-wod-world-scan-rescan-v4.mjs',
     deterministicReplay: true
   };
   fs.writeFileSync(governancePath, `${JSON.stringify(governance, null, 2)}\n`);
