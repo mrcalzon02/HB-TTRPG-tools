@@ -2,9 +2,8 @@
   'use strict';
 
   const CORE_SCRIPTS = [
-    'world-of-darkness-named-location-bridge.js',
-    'world-of-darkness-radial-location-loader.js',
-    'world-of-darkness-spatial-engine-inventory.js'
+    'world-of-darkness-lightweight-map-core.js',
+    'world-of-darkness-radial-location-loader.js'
   ];
   const ENHANCEMENT_SCRIPTS = [
     'world-of-darkness-location-package-bridge.js',
@@ -119,7 +118,7 @@
     section.innerHTML = `
       <p class="eyebrow">Optional map workspace</p>
       <h3>Chronicle Spatial Engine</h3>
-      <p>The map opens first. Visible location records then load one at a time from the map center outward. World seeds, global registries, overlays, and context tools remain dormant until the radial pass finishes or you request them.</p>
+      <p>The map-only renderer opens first without Chronicle datasets, registry parsing, or whole-map observers. Visible records then load one at a time from the map center outward.</p>
       <div class="wod-spatial-loader-actions">
         <button id="wod-open-spatial-engine" type="button" class="primary-action">Open Chronicle Spatial Engine</button>
         <button id="wod-load-chronicle-tools" type="button" class="secondary-action" disabled>Load Chronicle Tools Now</button>
@@ -176,7 +175,7 @@
     corePromise = (async () => {
       setButtonState('Loading Map…', true);
       for (let index = 0; index < CORE_SCRIPTS.length; index += 1) {
-        setStatus(`Loading map core ${index + 1} of ${CORE_SCRIPTS.length}…`);
+        setStatus(`Loading map-only core ${index + 1} of ${CORE_SCRIPTS.length}…`);
         await loadScript(CORE_SCRIPTS[index]);
         await nextPaint();
       }
