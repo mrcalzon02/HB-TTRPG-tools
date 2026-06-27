@@ -47,6 +47,12 @@ if (JSON.stringify([...diversityCore.catalogLines]) !== JSON.stringify(expectedC
 if (JSON.stringify(config.contextAwareGeneration?.unifiedCatalogMode?.catalogs) !== JSON.stringify(expectedCatalogs)) {
   throw new Error('Spatial configuration does not declare all six Unified catalogs.');
 }
+if (diversityCore.legacyThemeFrequencyDenominator !== 32) {
+  throw new Error('Legacy regional themes must remain limited to one result in 32 neighborhood selections.');
+}
+if (diversityCore.themeDistrictMultiplier !== 4) {
+  throw new Error('Regional theme families must remain stable across four neighborhood cells per district axis.');
+}
 
 const pools = detail.pools || {};
 const expectedMinimums = {
@@ -85,6 +91,91 @@ for (const line of ['unified', ...expectedCatalogs]) {
   if (!Array.isArray(pools.regionalThemes?.[line]) || pools.regionalThemes[line].length < 6) throw new Error(`${line} lacks regional themes.`);
   if (!Array.isArray(pools.characterAlignments?.[line]) || pools.characterAlignments[line].length < 12) throw new Error(`${line} lacks character alignments.`);
   if (!Array.isArray(pools.lineManifestations?.[line]) || pools.lineManifestations[line].length < 8) throw new Error(`${line} lacks manifestations.`);
+  const variantCount = diversityCore.regionalThemeVariantCount(line, pools.regionalThemes[line].length);
+  if (variantCount < 2300) throw new Error(`${line} must provide at least 2,300 regional theme variants; found ${variantCount}.`);
+}
+
+function themeLocation(index, options = {}) {
+  const columns = Number(options.columns || 24);
+  const spacing = Number(options.spacing || 0.021);
+  const latBase = Number(options.latBase || 31.2);
+  const lngBase = Number(options.lngBase || -121.4);
+  return {
+    entryKey: options.worldSeedKey ? `${options.worldSeedKey}|gmaps-theme-${String(index).padStart(4, '0')}` : `gmaps-theme-${String(index).padStart(4, '0')}`,
+    osmId: String(7000000 + index),
+    name: `Regional Theme Sample ${index + 1}`,
+    address: `${index + 1} Theme Test Way`,
+    lat: latBase + (index % columns) * spacing,
+    lng: lngBase + Math.floor(index / columns) * spacing,
+    category: 'other',
+    categoryLabel: 'Other Named Location',
+    featureLabel: 'Named Map Feature',
+    sourceTags: { building: 'yes' }
+  };
+}
+
+function sampleThemes(line, count, options = {}) {
+  const session = diversityCore.createSession(detail);
+  return Array.from({ length: count }, (_, index) => session.themeFor(themeLocation(index, options), line));
+}
+
+const themeMetrics = {};
+for (const line of ['unified', ...expectedCatalogs]) {
+  const sampled = sampleThemes(line, 384);
+  const counts = new Map();
+  for (const theme of sampled) counts.set(theme.id, (counts.get(theme.id) || 0) + 1);
+  const unique = counts.size;
+  const maximumRecurrence = Math.max(...counts.values());
+  const legacyCount = sampled.filter(theme => theme.themeSource === 'legacy-rare').length;
+  if (unique < 330) throw new Error(`${line} regional themes are repeating too often across separated areas (${unique}/384 unique).`);
+  if (maximumRecurrence > 3) throw new Error(`${line} has an exact regional theme recurring ${maximumRecurrence} times in 384 separated areas.`);
+  if (legacyCount > 24) throw new Error(`${line} legacy regional themes are appearing too frequently (${legacyCount}/384).`);
+  themeMetrics[line] = {
+    variantCount: diversityCore.regionalThemeVariantCount(line, pools.regionalThemes[line].length),
+    sampled: sampled.length,
+    unique,
+    maximumRecurrence,
+    legacyCount
+  };
+}
+
+const vampireThemes = sampleThemes('vampire', 768, { columns: 32, latBase: 34.1, lngBase: -116.8 });
+const anarchNightRouteCount = vampireThemes.filter(theme => theme.id === 'anarch-night-route').length;
+if (anarchNightRouteCount > 8) {
+  throw new Error(`Anarch Night Route is still too frequent (${anarchNightRouteCount}/768 separated Vampire areas).`);
+}
+
+let coherentDistrict = null;
+for (let districtIndex = 0; districtIndex < 128 && !coherentDistrict; districtIndex += 1) {
+  const latBase = 40 + districtIndex * 0.25;
+  const lngBase = -100 - districtIndex * 0.25;
+  const session = diversityCore.createSession(detail);
+  const cells = [
+    { lat: latBase + 0.002, lng: lngBase + 0.002 },
+    { lat: latBase + 0.018, lng: lngBase + 0.002 },
+    { lat: latBase + 0.002, lng: lngBase + 0.018 },
+    { lat: latBase + 0.018, lng: lngBase + 0.018 }
+  ].map((coordinates, index) => session.themeFor({
+    ...themeLocation(index),
+    entryKey: `gmaps-district-${districtIndex}-${index}`,
+    lat: coordinates.lat,
+    lng: coordinates.lng
+  }, 'vampire'));
+  if (cells.every(theme => theme.themeSource === 'compositional')) coherentDistrict = cells;
+}
+if (!coherentDistrict) throw new Error('Could not find a compositional district sample for regional coherence testing.');
+if (new Set(coherentDistrict.map(theme => theme.familyId)).size !== 1) {
+  throw new Error('Nearby neighborhood cells inside one district lost their shared supernatural family.');
+}
+if (new Set(coherentDistrict.map(theme => theme.id)).size < 3) {
+  throw new Error('Nearby neighborhood cells are not varying their exact regional-theme expression enough.');
+}
+
+const baselineWorldThemes = sampleThemes('unified', 96, { worldSeedKey: 'wodworld-11111111', columns: 16, latBase: 25.1, lngBase: -80.2 });
+const alternateWorldThemes = sampleThemes('unified', 96, { worldSeedKey: 'wodworld-22222222', columns: 16, latBase: 25.1, lngBase: -80.2 });
+const worldSpecificDifferences = baselineWorldThemes.filter((theme, index) => theme.id !== alternateWorldThemes[index].id).length;
+if (worldSpecificDifferences < 80) {
+  throw new Error(`Regional themes are insufficiently world-seed-specific (${worldSpecificDifferences}/96 differ).`);
 }
 
 const session = diversityCore.createSession(detail);
@@ -133,6 +224,9 @@ for (const record of records) {
   if (record.regionalTheme?.catalogLine !== record.catalogLine || record.regionalTheme?.catalogLabel !== record.catalogLabel) {
     throw new Error(`Unified record ${record.diversitySignature} does not persist catalog identity inside its regional-theme snapshot.`);
   }
+  if (!record.regionalTheme?.themeVersion || !record.regionalTheme?.variationCount) {
+    throw new Error(`Unified record ${record.diversitySignature} lacks regional theme diversity metadata.`);
+  }
 }
 
 const exactUnique = ['publicFacade', 'embeddedCharacter', 'temporalAnchor', 'traumaticCatalyst', 'operationalSecret', 'vulnerability', 'sensoryAnchor', 'mediaFeed', 'rumor', 'mechanicalSeed', 'diversitySignature'];
@@ -172,11 +266,25 @@ for (let index = 0; index < records.length; index += 1) {
   if (records[index].diversitySignature !== replay[index].diversitySignature) throw new Error(`Deterministic replay failed at record ${index}.`);
   if (records[index].catalogLine !== replay[index].catalogLine) throw new Error(`Unified catalog replay failed at record ${index}.`);
   if (records[index].regionalTheme.catalogLine !== replay[index].regionalTheme.catalogLine) throw new Error(`Persisted catalog replay failed at record ${index}.`);
+  if (records[index].regionalTheme.id !== replay[index].regionalTheme.id) throw new Error(`Regional theme replay failed at record ${index}.`);
 }
 
 console.log(JSON.stringify({
   sampleSize: records.length,
   sharedRegionalTheme: records[0].regionalTheme,
+  regionalThemeModel: {
+    version: '3.0.0',
+    compositionalVariantsPerCatalog: 2304,
+    legacyFrequencyDenominator: diversityCore.legacyThemeFrequencyDenominator,
+    districtMultiplier: diversityCore.themeDistrictMultiplier,
+    metrics: themeMetrics,
+    anarchNightRouteCount,
+    anarchNightRouteSampleSize: vampireThemes.length,
+    coherentDistrictFamily: coherentDistrict[0].familyId,
+    coherentDistrictUniqueExpressions: new Set(coherentDistrict.map(theme => theme.id)).size,
+    worldSpecificDifferences,
+    worldSpecificSampleSize: baselineWorldThemes.length
+  },
   unifiedStatusCounts: unifiedCounts,
   standardStatusCounts: standardCounts,
   unifiedSupernaturalOrAdjacentPercent: 76.19,
