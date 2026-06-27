@@ -1,7 +1,14 @@
 (() => {
   'use strict';
 
-  const MAP_ENGINES = new Set(['location', 'urban']);
+  const STORAGE = {
+    apiKey: 'hb-wod-google-maps-api-key-v1',
+    mapCenter: 'hb-wod-chronicle-map-center-v1',
+    localPrefix: 'hb-wod-poi-v1:',
+    generatedPrefix: 'hb-wod-generated-poi-v1:'
+  };
+  const DEFAULT_CENTER = { lat: 61.2181, lng: -149.9003 };
+  const DEFAULT_ZOOM = 14;
   const LINE_TITLES = {
     unified: 'Unified World of Darkness',
     vampire: 'Vampire: The Masquerade',
@@ -11,398 +18,680 @@
     changeling: 'Changeling',
     mage: 'Mage: The Awakening'
   };
+  const CLAIM_FLAGS = {
+    STANDARD_UNCLAIMED: 'Standard Unclaimed',
+    SUPPORTIVE: 'Supportive (Part of the Veil)',
+    OPT_OUT: 'Opt-Out (Mundane Disconnect)'
+  };
 
-  const PRESSURES = [
-    ['Quiet Observation', 'A hidden watcher records the group without acting.', 'Identify the observer before the next scene.'],
-    ['Municipal Intervention', 'Permits, inspections, closures, or code enforcement threaten the arrangement.', 'A mundane deadline advances whenever attention rises.'],
-    ['Faction Challenge', 'A rival faction makes a deniable territorial claim.', 'The first overt power use changes local influence.'],
-    ['Human Witness', 'A civilian has noticed the pattern and is collecting evidence.', 'The witness can become an asset, liability, or dependent.'],
-    ['Corporate Acquisition', 'A shell company is buying, demolishing, or securitizing the site.', 'Trace ownership to reveal the supernatural beneficiary.'],
-    ['Spiritual Disturbance', 'The Gauntlet, Dreaming, Shadow, resonance, or occult geometry destabilizes.', 'Add one environmental manifestation per unresolved scene.'],
-    ['Internal Betrayal', 'Someone inside the controlling group trades access for protection.', 'A trusted relationship begins compromised.']
-  ];
-
-  const URBAN_PROTOTYPES = [
-    ['Back Alley', 'Transit', 'Grease traps and electronic waste choke a narrow service corridor.', 'Nosferatu dead-drop behind humming AC units.', 'Weaver choke point swarming with Pattern Spiders.', 'Technocratic tracking vector spoofing local network identifiers.', 'A disputed intelligence corridor.'],
-    ['24-Hour Laundromat', 'Commercial', 'Flickering fluorescent lights wash rusted machines in detergent haze.', 'Anarch feeding ground and unmapped meeting blind spot.', 'Apathy spirits cling to broken machines.', 'Coincidental sanctum hidden in one machine rhythm.', 'A neutral exchange point taxed by local predators.'],
-    ['Subway Station', 'Transit', 'Brake dust, emergency lights, and rail screams fill concrete platforms.', 'Patrolled domain border marked with ultraviolet wards.', 'Rat-Spirit warren beneath the platforms.', 'Subsurface anomaly-monitoring outpost.', 'Control determines movement between three territories.'],
-    ['Condemned Tenement', 'Abandoned', 'Boarded windows and exposed rebar conceal unsafe rooms.', 'Hollow haven for desperate neonates.', 'Bane infestation fed by historic suffering.', 'Inverted geometry and corrupt occult residue.', 'Demolition threatens every hidden claimant.'],
-    ['Rooftop Parking Deck', 'Industrial', 'Rain and gasoline haze hang over an exposed skyline.', 'Harpy vantage point and temporary neutral ground.', 'Wind-spirit glade anchor above the smog.', 'Etherite observation node.', 'Prestige site claimed through guaranteed privacy.'],
-    ['Corner Deli', 'Commercial', 'Cheap groceries, hot grease, neon signs, and bulletproof glass.', 'Owner pays a blood tithe for protection.', 'Gluttony and anxiety spirits fight near the grill.', 'Folk charms hide in lottery-ticket arrangements.', 'A neighborhood information exchange.'],
-    ['Botanical Greenhouse', 'Green Space', 'Humid glass preserves tropical plants, insects, and failing irrigation.', 'Gangrel sanctuary using roots as an intelligence network.', 'Rare Wyld pocket with a thin Gauntlet.', 'Living-pattern node disguised as botany.', 'Donors, officials, and supernatural custodians feud.'],
-    ['Salvage Yard', 'Industrial', 'Crushed vehicles and leaking oil form canyons of scrap.', 'Brujah staging ground hidden by machinery noise.', 'Weaver-Wyrm warzone among toxic machine spirits.', 'Symbolic forge for modern artifacts.', 'Workers, criminals, buyers, and occultists compete.'],
-    ['Steam Vault', 'Subterranean', 'Old copper valves blast white vapor into the night.', 'Sewer escape hatch bypassing street pursuit.', 'Volatile steam-elemental nest.', 'Thermal alchemical matrix.', 'Valve control grants routes, heat, and evidence disposal.'],
-    ['Historic Churchyard', 'Green Space', 'Slate tombstones stand behind iron gates and ancient oaks.', 'Hecata vault anchoring necromantic transactions.', 'Silent verge pressed close to the Shadowlands.', 'High-faith node resisting dark sorcery.', 'Clergy, developers, preservationists, and the dead struggle.']
-  ];
-
-  let generation = null;
-  let selectedIndex = -1;
-  let revision = 0;
-  let installed = false;
+  const state = {
+    config: null,
+    locations: [],
+    characters: [],
+    rumors: [],
+    centralRegistry: { entries: {} },
+    map: null,
+    selectedMarker: null,
+    selectedPlace: null,
+    selectedRecord: null,
+    mapsPromise: null,
+    initialCenter: null,
+    installed: false
+  };
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[character]));
 
-  function hash(value) {
-    let result = 2166136261;
-    for (const character of String(value)) {
-      result ^= character.charCodeAt(0);
-      result = Math.imul(result, 16777619);
+  function murmurHash3(input, seed = 0) {
+    let remainder = input.length & 3;
+    let bytes = input.length - remainder;
+    let h1 = seed;
+    const c1 = 0xcc9e2d51;
+    const c2 = 0x1b873593;
+    let index = 0;
+
+    while (index < bytes) {
+      let k1 = (input.charCodeAt(index) & 0xff)
+        | ((input.charCodeAt(++index) & 0xff) << 8)
+        | ((input.charCodeAt(++index) & 0xff) << 16)
+        | ((input.charCodeAt(++index) & 0xff) << 24);
+      ++index;
+      k1 = Math.imul(k1, c1);
+      k1 = (k1 << 15) | (k1 >>> 17);
+      k1 = Math.imul(k1, c2);
+      h1 ^= k1;
+      h1 = (h1 << 13) | (h1 >>> 19);
+      h1 = Math.imul(h1, 5) + 0xe6546b64;
     }
-    return result >>> 0;
+
+    let k1 = 0;
+    if (remainder === 3) k1 ^= (input.charCodeAt(index + 2) & 0xff) << 16;
+    if (remainder >= 2) k1 ^= (input.charCodeAt(index + 1) & 0xff) << 8;
+    if (remainder >= 1) {
+      k1 ^= input.charCodeAt(index) & 0xff;
+      k1 = Math.imul(k1, c1);
+      k1 = (k1 << 15) | (k1 >>> 17);
+      k1 = Math.imul(k1, c2);
+      h1 ^= k1;
+    }
+
+    h1 ^= input.length;
+    h1 ^= h1 >>> 16;
+    h1 = Math.imul(h1, 0x85ebca6b);
+    h1 ^= h1 >>> 13;
+    h1 = Math.imul(h1, 0xc2b2ae35);
+    h1 ^= h1 >>> 16;
+    return h1 >>> 0;
   }
 
-  function variantFor(seed) {
-    const number = hash(seed) % 70;
-    return [number, Math.floor(number / 7), number % 7];
+  function rotateRight(value, amount) {
+    return ((value >>> amount) | (value << (32 - amount))) >>> 0;
   }
 
-  function currentInput() {
-    return {
-      engine: document.getElementById('wod-engine')?.value || 'location',
-      line: document.getElementById('wod-line')?.value || 'unified',
-      seed: document.getElementById('wod-seed')?.value.trim() || 'Unnamed urban domain',
-      lat: Number(document.getElementById('wod-lat')?.value),
-      lon: Number(document.getElementById('wod-lon')?.value)
+  function loadJson(url) {
+    return fetch(url, { cache: 'no-store' }).then(response => {
+      if (!response.ok) throw new Error(`${url} returned ${response.status}`);
+      return response.json();
+    });
+  }
+
+  async function loadCoreData() {
+    const config = await loadJson('data/world-of-darkness/spatial-engine-config.json');
+    const [locations, characters, rumors, centralRegistry] = await Promise.all([
+      loadJson(config.coreData.locations),
+      loadJson(config.coreData.characters),
+      loadJson(config.coreData.rumors),
+      loadJson(config.coreData.centralRegistry)
+    ]);
+    const expandCore = (document, prefix) => {
+      if (Array.isArray(document.entries)) return document.entries;
+      const prototypes = document.prototypes || [];
+      const pressures = document.pressureVariants || [];
+      return prototypes.flatMap((prototype, prototypeIndex) => pressures.map((pressure, pressureIndex) => ({
+        ...prototype,
+        id: `${prefix}-${String(prototypeIndex + 1).padStart(2, '0')}-${String(pressureIndex + 1).padStart(2, '0')}`,
+        variant: prototypeIndex * pressures.length + pressureIndex + 1,
+        sourcePrototype: prototypeIndex + 1,
+        pressureVariant: pressureIndex + 1,
+        pressure
+      })));
     };
+    state.config = config;
+    state.locations = expandCore(locations, 'location');
+    state.characters = expandCore(characters, 'character');
+    state.rumors = expandCore(rumors, 'rumor');
+    state.centralRegistry = centralRegistry || { entries: {} };
+    updateDataStatus();
   }
 
-  function lineTitle(line) {
-    return LINE_TITLES[line] || line;
+  function readInitialCenter(oldBox) {
+    const lat = Number(oldBox?.querySelector('#wod-lat')?.value);
+    const lng = Number(oldBox?.querySelector('#wod-lon')?.value);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng };
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE.mapCenter));
+      if (Number.isFinite(stored?.lat) && Number.isFinite(stored?.lng)) return stored;
+    } catch (_) {
+      // Ignore unreadable map state.
+    }
+    return DEFAULT_CENTER;
   }
 
-  function adaptLine(line, prototype) {
-    if (line === 'vampire') return prototype[3];
-    if (line === 'werewolf' || line === 'breeds') return prototype[4];
-    if (line === 'mage') return prototype[5];
-    if (line === 'changeling') return 'A Dreaming reflection, oath pressure, and hidden trod attach themselves to this mundane site.';
-    if (line === 'hunter') return 'The observable evidence is incomplete; every supernatural explanation may be a clue, a cover story, or deliberate misinformation.';
-    return [prototype[3], prototype[4], prototype[5]].join(' | ');
+  function buildWorkspace() {
+    const view = document.getElementById('world-of-darkness');
+    const oldBox = view?.querySelector('.wod-box');
+    if (!view || !oldBox) return false;
+    if (document.getElementById('wod-spatial-engine')) return true;
+
+    state.initialCenter = readInitialCenter(oldBox);
+    injectStyles();
+
+    const workspace = document.createElement('section');
+    workspace.id = 'wod-spatial-engine';
+    workspace.className = 'wod-spatial-engine no-print';
+    workspace.setAttribute('aria-labelledby', 'wod-spatial-title');
+    workspace.innerHTML = `
+      <header class="wod-spatial-header">
+        <p class="eyebrow">Interactive urban overlay</p>
+        <h2 id="wod-spatial-title">Chronicle Spatial Engine</h2>
+        <p>Move through a live Google map, click a native business or landmark, and resolve its stable World of Darkness registry entry from the business Place ID and geocoded coordinates.</p>
+      </header>
+
+      <div class="wod-spatial-setup">
+        <label>
+          <span>Google Maps JavaScript API key</span>
+          <input id="wod-google-api-key" type="password" autocomplete="off" placeholder="Stored only in this browser" />
+        </label>
+        <button id="wod-load-map" class="primary-action">Load Interactive Google Map</button>
+        <button id="wod-forget-map-key" class="secondary-action">Forget Local API Key</button>
+        <label>
+          <span>Game line interpretation</span>
+          <select id="wod-spatial-line">
+            ${Object.entries(LINE_TITLES).map(([id, title]) => `<option value="${id}">${escapeHtml(title)}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+
+      <div class="wod-spatial-layout">
+        <aside class="wod-spatial-sidebar">
+          <section class="wod-pane-card wod-search-card">
+            <h3>Move to an Area</h3>
+            <p>Search for a city, neighborhood, address, or business. You can then pan and zoom normally and click any labeled point of interest.</p>
+            <div class="wod-search-row">
+              <input id="wod-place-search" type="search" placeholder="Business, address, neighborhood, city..." />
+              <button id="wod-place-search-button" class="secondary-action">Search</button>
+            </div>
+            <div id="wod-search-results" class="wod-search-results"></div>
+          </section>
+
+          <div id="wod-spatial-status" class="wod-status" aria-live="polite">Loading the Chronicle Spatial Engine core datasets…</div>
+          <div id="wod-display-matrix">
+            <section class="wod-pane-card">
+              <h3>No Domain Selected</h3>
+              <p>Load the map and click a business icon to extract its deterministic spatial token and hidden matrix variables.</p>
+            </section>
+          </div>
+        </aside>
+
+        <section class="wod-map-shell" aria-label="Interactive Google Maps business overlay">
+          <div id="wod-google-map" class="wod-google-map">
+            <div class="wod-map-placeholder">
+              <h3>Google Maps Not Loaded</h3>
+              <p>Enter a browser-restricted Google Maps JavaScript API key and load the map. The key is not committed to the repository.</p>
+            </div>
+          </div>
+          <div class="wod-map-footer">
+            <span id="wod-map-center-readout">Awaiting map initialization.</span>
+            <button id="wod-use-browser-location" class="secondary-action">Use Browser Location</button>
+          </div>
+        </section>
+      </div>`;
+
+    oldBox.replaceWith(workspace);
+    bindControls();
+    const savedKey = localStorage.getItem(STORAGE.apiKey) || '';
+    document.getElementById('wod-google-api-key').value = savedKey;
+    if (savedKey) void loadGoogleMaps(savedKey);
+    void loadCoreData().catch(error => setStatus(`Core data failed to load: ${error.message}`, true));
+    return true;
   }
 
   function injectStyles() {
-    if (document.getElementById('wod-map-workspace-style')) return;
+    if (document.getElementById('wod-chronicle-spatial-style')) return;
     const style = document.createElement('style');
-    style.id = 'wod-map-workspace-style';
+    style.id = 'wod-chronicle-spatial-style';
     style.textContent = `
-      .wod-map-workspace{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}
-      .wod-map-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
-      .wod-map-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.8fr);gap:14px;align-items:start}
-      .wod-map-panel,.wod-map-details{border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.18);overflow:hidden}
-      .wod-map-frame{position:relative;min-height:520px;background:#111;overflow:hidden}
-      .wod-map-frame iframe{width:100%;height:520px;border:0;display:block;pointer-events:none;filter:saturate(.72) contrast(1.05) brightness(.82)}
-      .wod-map-markers{position:absolute;inset:0;pointer-events:none}
-      .wod-map-marker{position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;border:2px solid #fff;background:#7b1d28;color:#fff;font-weight:900;box-shadow:0 2px 12px #000;pointer-events:auto;cursor:pointer}
-      .wod-map-marker:hover,.wod-map-marker.active{background:var(--accent);color:#111;z-index:3;scale:1.12}
-      .wod-map-label{position:absolute;left:12px;bottom:12px;max-width:72%;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.84);color:#fff;font-size:.78rem;pointer-events:none}
-      .wod-map-site-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;padding:10px}
-      .wod-map-site-button{border:1px solid var(--line);border-radius:11px;padding:9px;text-align:left;background:rgba(255,255,255,.025);color:var(--ink)}
-      .wod-map-site-button.active,.wod-map-site-button:hover{border-color:var(--accent);background:rgba(200,138,53,.1)}
-      .wod-map-site-button small{display:block;color:var(--muted);margin-top:3px}
-      .wod-map-details{padding:16px;position:sticky;top:12px}
-      .wod-map-details h3{margin-top:0}
-      .wod-map-detail-grid{display:grid;gap:9px}
-      .wod-map-detail{border-left:3px solid var(--accent);padding:8px;background:rgba(255,255,255,.025)}
-      .wod-map-detail strong{display:block;color:var(--ink);margin-bottom:3px}
-      .wod-map-coordinate{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent)}
-      .wod-map-empty{color:var(--muted);padding:18px}
-      .wod-map-external{display:inline-flex;margin-top:12px;text-decoration:none}
-      .wod-map-note{color:var(--muted);font-size:.82rem;margin:8px 12px 0}
-      @media(max-width:900px){.wod-map-layout{grid-template-columns:1fr}.wod-map-details{position:static}.wod-map-frame,.wod-map-frame iframe{height:440px;min-height:440px}}
+      .wod-spatial-engine{border:1px solid var(--line);border-radius:20px;background:#0b0d12;overflow:hidden;margin:18px 0 28px}
+      .wod-spatial-header{padding:22px 24px 8px}
+      .wod-spatial-header h2{margin:.15rem 0 .55rem}
+      .wod-spatial-setup{display:grid;grid-template-columns:minmax(240px,1fr) auto auto minmax(230px,.75fr);gap:10px;align-items:end;padding:12px 24px 20px;border-bottom:1px solid var(--line)}
+      .wod-spatial-setup label{display:grid;gap:5px;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
+      .wod-spatial-setup input,.wod-spatial-setup select,.wod-search-row input,.wod-admin-card textarea,.wod-admin-card select{width:100%;box-sizing:border-box;background:#11151d;border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:10px}
+      .wod-spatial-layout{display:grid;grid-template-columns:minmax(340px,420px) minmax(0,1fr);min-height:720px}
+      .wod-spatial-sidebar{padding:16px;overflow:auto;max-height:780px;border-right:1px solid var(--line);background:#101218}
+      .wod-map-shell{display:grid;grid-template-rows:minmax(650px,1fr) auto;min-width:0;background:#16191f}
+      .wod-google-map{width:100%;height:100%;min-height:650px;background:#16191f}
+      .wod-map-placeholder{display:grid;place-content:center;text-align:center;height:100%;padding:30px;color:var(--muted)}
+      .wod-map-footer{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line);color:var(--muted);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.78rem}
+      .wod-pane-card{background:#181b22;padding:15px;margin:0 0 14px;border:1px solid #333;border-left:5px solid #8b0000;border-radius:12px}
+      .wod-pane-card h3{margin-top:0}
+      .wod-pane-card.supportive{border-left-color:#00ffcc;box-shadow:0 0 14px rgba(0,255,204,.16)}
+      .wod-pane-card.opt-out{border-left-color:#666;filter:saturate(.45)}
+      .wod-search-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+      .wod-search-results{display:grid;gap:6px;margin-top:8px}
+      .wod-search-result{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:9px;padding:9px;background:#11151d;color:var(--ink)}
+      .wod-search-result:hover{border-color:var(--accent)}
+      .wod-search-result small{display:block;color:var(--muted);margin-top:3px}
+      .wod-status{padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:14px;color:var(--muted);background:#0d1016}
+      .wod-status.error{border-color:#8b0000;color:#ffb3b3}
+      .wod-matrix-grid{display:grid;gap:9px}
+      .wod-matrix-field{border-left:3px solid var(--accent);padding:8px 10px;background:#10131a}
+      .wod-matrix-field strong{display:block;margin-bottom:3px;color:var(--ink)}
+      .wod-spatial-token{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;word-break:break-all;color:var(--accent)}
+      .wod-claim-badge{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:.75rem;font-weight:800}
+      .wod-claim-badge.supportive{border-color:#00ffcc;color:#00ffcc}
+      .wod-claim-badge.opt-out{border-color:#777;color:#aaa}
+      .wod-admin-card{border-left-color:#6441a5}
+      .wod-admin-card label{display:grid;gap:5px;margin-top:10px;color:var(--muted);font-size:.8rem}
+      .wod-admin-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+      .wod-selected-marker{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#8b0000;color:#fff;border:2px solid #fff;box-shadow:0 0 16px #000;font-weight:900}
+      .wod-selected-marker.supportive{background:#00bfa5;box-shadow:0 0 18px rgba(0,255,204,.7)}
+      .wod-selected-marker.opt-out{background:#666}
+      .wod-note{font-size:.8rem;color:var(--muted)}
+      @media(max-width:1120px){.wod-spatial-setup{grid-template-columns:1fr 1fr}.wod-spatial-layout{grid-template-columns:1fr}.wod-spatial-sidebar{max-height:none;border-right:0;border-bottom:1px solid var(--line)}.wod-map-shell{grid-template-rows:560px auto}.wod-google-map{min-height:560px}}
+      @media(max-width:680px){.wod-spatial-setup{grid-template-columns:1fr}.wod-search-row{grid-template-columns:1fr}.wod-map-footer{align-items:stretch;flex-direction:column}.wod-map-shell{grid-template-rows:460px auto}.wod-google-map{min-height:460px}}
     `;
     document.head.appendChild(style);
   }
 
-  function buildWorkspace() {
-    const box = document.querySelector('#world-of-darkness .wod-box');
-    const actions = box?.querySelector('.prototype-actions');
-    if (!box || !actions) return false;
-    if (document.getElementById('wod-map-workspace')) return true;
-
-    injectStyles();
-    const section = document.createElement('section');
-    section.id = 'wod-map-workspace';
-    section.className = 'wod-map-workspace';
-    section.setAttribute('aria-labelledby', 'wod-map-title');
-    section.innerHTML = `
-      <div class="section-heading">
-        <p class="eyebrow">Interactive urban overlay</p>
-        <h3 id="wod-map-title">Google Maps Mystification Window</h3>
-        <p>Generate supernatural sites over a real-world map. Clicking a numbered marker or its location card automatically opens the complete mundane, supernatural, political, and mechanical record.</p>
-      </div>
-      <div class="wod-map-toolbar">
-        <button id="wod-map-generate" class="primary-action">Generate Five Locations</button>
-        <button id="wod-map-add" class="secondary-action" disabled>Add Generated Location</button>
-        <button id="wod-map-reroll" class="secondary-action" disabled>Regenerate Selected</button>
-        <button id="wod-map-center" class="secondary-action">Center on Base Location</button>
-        <button id="wod-map-position" class="secondary-action">Use Browser Location</button>
-      </div>
-      <div class="wod-map-layout">
-        <div class="wod-map-panel">
-          <div class="wod-map-frame">
-            <iframe id="wod-map-frame" title="Google Maps view of the generated World of Darkness urban overlay" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-            <div id="wod-map-markers" class="wod-map-markers" aria-label="Generated clickable supernatural locations"></div>
-            <div id="wod-map-label" class="wod-map-label">Generate an overlay to place clickable locations on the map.</div>
-          </div>
-          <p class="wod-map-note">The embedded map remains fixed at the base location so the generated marker overlay stays aligned. The selected-location panel opens a fully interactive Google Maps page for panning, Street View, and nearby-place research.</p>
-          <div id="wod-map-site-list" class="wod-map-site-list"></div>
-        </div>
-        <aside id="wod-map-details" class="wod-map-details" aria-live="polite">
-          <div class="wod-map-empty">Generate an Urban Mystification or Unified Location overlay, then click a numbered marker.</div>
-        </aside>
-      </div>`;
-
-    actions.insertAdjacentElement('afterend', section);
-    document.getElementById('wod-map-generate').addEventListener('click', generateOverlay);
-    document.getElementById('wod-map-add').addEventListener('click', addSite);
-    document.getElementById('wod-map-reroll').addEventListener('click', regenerateSelected);
-    document.getElementById('wod-map-center').addEventListener('click', centerMap);
-    document.getElementById('wod-map-position').addEventListener('click', useBrowserLocation);
-    document.getElementById('wod-engine').addEventListener('change', updateVisibility);
-    centerMap();
-    updateVisibility();
-    return true;
+  function bindControls() {
+    document.getElementById('wod-load-map').addEventListener('click', () => {
+      const key = document.getElementById('wod-google-api-key').value.trim();
+      if (!key) return setStatus('Enter a Google Maps JavaScript API key before loading the map.', true);
+      localStorage.setItem(STORAGE.apiKey, key);
+      void loadGoogleMaps(key);
+    });
+    document.getElementById('wod-forget-map-key').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE.apiKey);
+      document.getElementById('wod-google-api-key').value = '';
+      setStatus('The locally stored Google Maps API key was removed. Reload the page to unload the current map session.');
+    });
+    document.getElementById('wod-place-search-button').addEventListener('click', searchPlaces);
+    document.getElementById('wod-place-search').addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        void searchPlaces();
+      }
+    });
+    document.getElementById('wod-spatial-line').addEventListener('change', () => {
+      if (state.selectedPlace) void resolvePlace(state.selectedPlace);
+    });
+    document.getElementById('wod-use-browser-location').addEventListener('click', useBrowserLocation);
   }
 
-  function updateVisibility() {
-    const workspace = document.getElementById('wod-map-workspace');
-    const mapMode = MAP_ENGINES.has(currentInput().engine);
-    if (workspace) workspace.hidden = !mapMode;
-    const originalGenerate = document.getElementById('wod-go');
-    if (originalGenerate && mapMode) {
-      originalGenerate.textContent = currentInput().engine === 'urban'
-        ? 'Generate Urban Mystification Overlay'
-        : 'Generate Location Overlay';
+  function updateDataStatus() {
+    if (!state.config) return;
+    setStatus(`Core registry loaded: ${state.locations.length} spatial domains, ${state.characters.length} character profiles, ${state.rumors.length} rumor records, and ${Object.keys(state.centralRegistry.entries || {}).length} central POI overrides.`);
+  }
+
+  function setStatus(message, error = false) {
+    const target = document.getElementById('wod-spatial-status');
+    if (!target) return;
+    target.textContent = message;
+    target.classList.toggle('error', error);
+  }
+
+  async function loadGoogleMaps(apiKey) {
+    if (window.google?.maps?.importLibrary) return initializeMap();
+    if (state.mapsPromise) return state.mapsPromise;
+
+    state.mapsPromise = new Promise((resolve, reject) => {
+      const callbackName = `__hbWodMapsReady_${Date.now()}`;
+      window[callbackName] = () => {
+        delete window[callbackName];
+        resolve();
+      };
+      const script = document.createElement('script');
+      const params = new URLSearchParams({
+        key: apiKey,
+        v: 'weekly',
+        libraries: 'places,marker',
+        loading: 'async',
+        callback: callbackName
+      });
+      script.src = `https://maps.googleapis.com/maps/api/js?${params}`;
+      script.async = true;
+      script.defer = true;
+      script.dataset.wodGoogleMaps = 'true';
+      script.onerror = () => reject(new Error('Google Maps JavaScript API failed to load. Check the API key, enabled APIs, billing, and HTTP-referrer restrictions.'));
+      document.head.appendChild(script);
+    });
+
+    try {
+      await state.mapsPromise;
+      await initializeMap();
+    } catch (error) {
+      state.mapsPromise = null;
+      setStatus(error.message, true);
     }
   }
 
-  function interceptOriginalControls(event) {
-    const control = event.target.closest?.('button,a');
-    if (!control || !MAP_ENGINES.has(currentInput().engine)) return;
-    if (!['wod-go', 'wod-copy', 'wod-geo', 'wod-kml'].includes(control.id)) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    if (control.id === 'wod-go') generateOverlay();
-    if (control.id === 'wod-copy') copyJson();
-    if (control.id === 'wod-geo') exportGeoJson();
-    if (control.id === 'wod-kml') exportKml();
+  async function initializeMap() {
+    if (state.map) return;
+    const [{ Map }, { AdvancedMarkerElement }] = await Promise.all([
+      google.maps.importLibrary('maps'),
+      google.maps.importLibrary('marker')
+    ]);
+    state.AdvancedMarkerElement = AdvancedMarkerElement;
+    const center = state.initialCenter || DEFAULT_CENTER;
+    state.map = new Map(document.getElementById('wod-google-map'), {
+      zoom: DEFAULT_ZOOM,
+      center,
+      mapId: state.config?.mapId || '4504f8b37365c3d0',
+      clickableIcons: true,
+      disableDefaultUI: false,
+      streetViewControl: true,
+      fullscreenControl: true,
+      mapTypeControl: true
+    });
+    state.map.addListener('click', event => {
+      if (event.placeId) {
+        event.stop();
+        void selectPlaceById(event.placeId);
+      }
+    });
+    state.map.addListener('idle', updateCenterReadout);
+    setStatus('Interactive map loaded. Pan or zoom to any area, then click a labeled business or landmark.');
+    updateCenterReadout();
   }
 
-  function createSite(input, index, siteRevision = 0) {
-    const variant = variantFor(`${input.seed}|${input.line}|${input.engine}|${index}|${siteRevision}`);
-    const prototype = URBAN_PROTOTYPES[variant[1]];
-    const pressure = PRESSURES[variant[2]];
-    const radius = 0.0025 + (hash(`${input.seed}|${index}|${siteRevision}|radius`) % 1000) / 1000 * 0.0075;
-    const angle = (hash(`${input.seed}|${index}|${siteRevision}|angle`) % 360) * Math.PI / 180;
-    const latitude = input.lat + Math.sin(angle) * radius;
-    const longitudeScale = Math.max(Math.cos(input.lat * Math.PI / 180), 0.25);
-    const longitude = input.lon + Math.cos(angle) * radius / longitudeScale;
+  function updateCenterReadout() {
+    if (!state.map) return;
+    const center = state.map.getCenter();
+    if (!center) return;
+    const value = { lat: center.lat(), lng: center.lng() };
+    localStorage.setItem(STORAGE.mapCenter, JSON.stringify(value));
+    const target = document.getElementById('wod-map-center-readout');
+    if (target) target.textContent = `Map center: ${value.lat.toFixed(5)}, ${value.lng.toFixed(5)} · zoom ${state.map.getZoom()}`;
+  }
+
+  async function searchPlaces() {
+    if (!state.map) return setStatus('Load the interactive Google map before searching.', true);
+    const query = document.getElementById('wod-place-search').value.trim();
+    if (!query) return;
+    setStatus(`Searching Google Places for “${query}”…`);
+    try {
+      const { Place } = await google.maps.importLibrary('places');
+      const { places } = await Place.searchByText({
+        textQuery: query,
+        fields: ['id', 'displayName', 'formattedAddress', 'location', 'primaryType', 'googleMapsURI'],
+        maxResultCount: 5
+      });
+      renderSearchResults(places || []);
+      if (!places?.length) setStatus(`No Google Places results were returned for “${query}”.`, true);
+      else setStatus(`${places.length} Google Places result${places.length === 1 ? '' : 's'} found. Select one or continue moving around the map.`);
+    } catch (error) {
+      setStatus(`Google Places search failed: ${error.message}`, true);
+    }
+  }
+
+  function renderSearchResults(places) {
+    const target = document.getElementById('wod-search-results');
+    target.innerHTML = '';
+    places.forEach(place => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'wod-search-result';
+      button.innerHTML = `<strong>${escapeHtml(place.displayName || 'Unnamed place')}</strong><small>${escapeHtml(place.formattedAddress || place.primaryType || '')}</small>`;
+      button.addEventListener('click', () => {
+        if (place.location) {
+          state.map.panTo(place.location);
+          state.map.setZoom(17);
+        }
+        void resolvePlace(place);
+      });
+      target.appendChild(button);
+    });
+  }
+
+  async function selectPlaceById(placeId) {
+    try {
+      setStatus(`Resolving Google Place ID ${placeId}…`);
+      const { Place } = await google.maps.importLibrary('places');
+      const place = new Place({ id: placeId });
+      await place.fetchFields({
+        fields: ['id', 'displayName', 'formattedAddress', 'primaryType', 'location', 'googleMapsURI']
+      });
+      await resolvePlace(place);
+    } catch (error) {
+      setStatus(`The selected business could not be resolved: ${error.message}`, true);
+    }
+  }
+
+  function businessMapping(primaryType) {
+    return state.config?.businessTypeMappings?.[primaryType]
+      || `Subverted Complex (${primaryType || 'unclassified point of interest'})`;
+  }
+
+  function selectedLine() {
+    return document.getElementById('wod-spatial-line')?.value || 'unified';
+  }
+
+  function lineLayer(line, location) {
+    if (line === 'vampire') return location.kindredLayer;
+    if (line === 'werewolf' || line === 'breeds') return location.umbralLayer;
+    if (line === 'mage') return location.awakenedVector;
+    if (line === 'hunter') return `Hunter interpretation: ${location.mundaneBase.description} The supernatural explanation remains contested evidence.`;
+    if (line === 'changeling') return `Changeling interpretation: the mundane footprint conceals a Dreaming reflection shaped by ${location.pressure.title.toLowerCase()}.`;
+    return `${location.kindredLayer} | ${location.umbralLayer} | ${location.awakenedVector}`;
+  }
+
+  function parseStored(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key));
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function buildBaseline(place) {
+    if (!state.locations.length || !state.characters.length || !state.rumors.length) {
+      throw new Error('The 70-entry core data tables are not loaded yet.');
+    }
+    const lat = place.location?.lat?.() ?? place.location?.lat;
+    const lng = place.location?.lng?.() ?? place.location?.lng;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error('The selected Google Place has no usable geocoded coordinates.');
+
+    const spatialToken = `${place.id}|${Number(lat).toFixed(6)}|${Number(lng).toFixed(6)}`;
+    const seed = murmurHash3(spatialToken, 0x9747b28c);
+    const location = state.locations[seed % state.locations.length];
+    const character = state.characters[rotateRight(seed, 9) % state.characters.length];
+    const rumor = state.rumors[rotateRight(seed, 17) % state.rumors.length];
+    const line = selectedLine();
+    const gothicRegistry = businessMapping(place.primaryType);
 
     return {
-      id: `wod-site-${hash(`${input.seed}|${index}|${siteRevision}`)}`,
-      name: `${prototype[0]} ${index + 1}`,
-      category: prototype[1],
-      coordinates: [Number(longitude.toFixed(6)), Number(latitude.toFixed(6))],
-      mundane: prototype[2],
-      kindredLayer: prototype[3],
-      umbralLayer: prototype[4],
-      awakenedLayer: prototype[5],
-      selectedLayer: adaptLine(input.line, prototype),
-      politics: prototype[6],
-      pressure: pressure[0],
-      effect: pressure[1],
-      mechanic: pressure[2],
-      variant: variant[0] + 1,
-      sourcePrototype: variant[1] + 1,
-      pressureVariant: variant[2] + 1,
-      revision: siteRevision
+      schemaVersion: '1.0.0',
+      placeId: place.id,
+      placeName: place.displayName || 'Unnamed Google Place',
+      formattedAddress: place.formattedAddress || '',
+      primaryType: place.primaryType || 'unknown',
+      googleMapsURI: place.googleMapsURI || '',
+      coordinates: { lat: Number(lat), lng: Number(lng) },
+      spatialToken,
+      seed32: seed,
+      gameLine: line,
+      gameLineTitle: LINE_TITLES[line],
+      gothicRegistry,
+      claimStatus: 'STANDARD_UNCLAIMED',
+      source: 'DETERMINISTIC_UNIVERSAL_BASELINE',
+      lore: {
+        publicFacade: `${place.displayName || 'This business'} operates as a ${location.mundaneBase.name.toLowerCase()}-pattern ${location.mundaneBase.category.toLowerCase()} site. ${location.mundaneBase.description}`,
+        hiddenFunction: lineLayer(line, location),
+        kindredLayer: location.kindredLayer,
+        umbralLayer: location.umbralLayer,
+        awakenedVector: location.awakenedVector,
+        currentPressure: `${location.pressure.title}: ${location.pressure.effect}`,
+        mechanicalSeed: location.pressure.mechanicalSeed,
+        embeddedCharacter: `${character.sphereAlignmentAndTenure} — ${character.aestheticAndTell}`,
+        temporalAnchor: character.temporalAnchor,
+        traumaticCatalyst: character.traumaticCatalyst,
+        operationalSecret: character.secretActivePlot,
+        vulnerability: character.fatalWeakness,
+        sensoryAnchor: rumor.sensoryAnchor,
+        mediaFeed: rumor.mediaFeed,
+        streetRumor: rumor.urbanLegend
+      },
+      coreReferences: {
+        locationId: location.id,
+        locationVariant: location.variant,
+        characterId: character.id,
+        characterVariant: character.variant,
+        rumorId: rumor.id,
+        rumorVariant: rumor.variant
+      }
     };
   }
 
-  function generateOverlay() {
-    const input = currentInput();
-    if (!Number.isFinite(input.lat) || !Number.isFinite(input.lon)) {
-      setResult('A valid latitude and longitude are required before an overlay can be generated.');
+  function mergeRecord(baseline, central, local) {
+    const resolved = structuredClone(baseline);
+    if (central) {
+      resolved.source = 'CENTRAL_REGISTRY_OVERRIDE';
+      Object.assign(resolved, central);
+      resolved.lore = { ...baseline.lore, ...(central.submitted_lore || central.lore || {}) };
+    }
+    if (local) {
+      resolved.source = 'LOCAL_STORYTELLER_OVERRIDE';
+      resolved.claimStatus = local.veil_interaction || local.claimStatus || resolved.claimStatus;
+      resolved.optOut = Boolean(local.opt_out || resolved.claimStatus === 'OPT_OUT');
+      resolved.lore = { ...resolved.lore, ...(local.submitted_lore || local.lore || {}) };
+    }
+    resolved.optOut = Boolean(resolved.optOut || resolved.opt_out || resolved.claimStatus === 'OPT_OUT');
+    return resolved;
+  }
+
+  async function resolvePlace(place) {
+    try {
+      const baseline = buildBaseline(place);
+      const central = state.centralRegistry.entries?.[place.id] || null;
+      const local = parseStored(`${STORAGE.localPrefix}${place.id}`);
+      const resolved = mergeRecord(baseline, central, local);
+      state.selectedPlace = place;
+      state.selectedRecord = resolved;
+      localStorage.setItem(`${STORAGE.generatedPrefix}${place.id}`, JSON.stringify(baseline));
+      renderPlace(resolved);
+      renderMarker(place, resolved.claimStatus);
+      setStatus(`${resolved.placeName} resolved from ${resolved.source.replaceAll('_', ' ').toLowerCase()}. The same Place ID and coordinates resolve the same baseline record in every browser.`);
+    } catch (error) {
+      setStatus(`World of Darkness record generation failed: ${error.message}`, true);
+    }
+  }
+
+  function claimClass(status) {
+    if (status === 'SUPPORTIVE') return 'supportive';
+    if (status === 'OPT_OUT') return 'opt-out';
+    return '';
+  }
+
+  function matrixField(label, value) {
+    return `<div class="wod-matrix-field"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(value)}</span></div>`;
+  }
+
+  function renderPlace(record) {
+    const target = document.getElementById('wod-display-matrix');
+    const status = record.claimStatus || 'STANDARD_UNCLAIMED';
+    const statusClass = claimClass(status);
+
+    if (record.optOut) {
+      target.innerHTML = `
+        <section class="wod-pane-card opt-out">
+          <p class="eyebrow">Mundane disconnect active</p>
+          <h3>${escapeHtml(record.placeName)}</h3>
+          <p><strong>Real address:</strong> ${escapeHtml(record.formattedAddress)}</p>
+          <p>This footprint is a narrative blackout zone. Supernatural lore connections are suppressed under the business governance rules.</p>
+          <span class="wod-claim-badge opt-out">${escapeHtml(CLAIM_FLAGS.OPT_OUT)}</span>
+        </section>
+        ${renderAdministration(record)}`;
+      bindAdministration(record);
       return;
     }
 
-    revision = 0;
-    generation = {
-      engine: input.engine === 'urban' ? 'Urban Mystification Engine' : 'Unified Location and Political Overlay',
-      engineId: input.engine,
-      seed: input.seed,
-      line: input.line,
-      lineTitle: lineTitle(input.line),
-      center: { lat: input.lat, lon: input.lon },
-      sites: Array.from({ length: 5 }, (_, index) => createSite(input, index, revision))
-    };
-    selectedIndex = 0;
-    syncGeoJson();
-    renderOverlay();
-    enableControls();
-  }
-
-  function syncGeoJson() {
-    if (!generation?.sites) return;
-    generation.geojson = {
-      type: 'FeatureCollection',
-      features: generation.sites.map(site => ({
-        type: 'Feature',
-        properties: { ...site, coordinates: undefined },
-        geometry: { type: 'Point', coordinates: site.coordinates }
-      }))
-    };
-  }
-
-  function enableControls() {
-    ['wod-copy', 'wod-geo', 'wod-kml', 'wod-map-add'].forEach(id => {
-      const control = document.getElementById(id);
-      if (control) control.disabled = false;
-    });
-    document.getElementById('wod-map-reroll').disabled = selectedIndex < 0;
-  }
-
-  function googleEmbedUrl(lat, lon, zoom = 15) {
-    return `https://www.google.com/maps?q=${Number(lat)},${Number(lon)}&z=${zoom}&output=embed`;
-  }
-
-  function googleOpenUrl(site) {
-    return `https://www.google.com/maps/search/?api=1&query=${site.coordinates[1]},${site.coordinates[0]}`;
-  }
-
-  function centerMap() {
-    const input = currentInput();
-    if (!Number.isFinite(input.lat) || !Number.isFinite(input.lon)) return;
-    const frame = document.getElementById('wod-map-frame');
-    if (frame) frame.src = googleEmbedUrl(input.lat, input.lon);
-    const label = document.getElementById('wod-map-label');
-    if (label) label.textContent = `${input.seed} · ${input.lat.toFixed(5)}, ${input.lon.toFixed(5)}`;
-  }
-
-  function markerPosition(site) {
-    const center = generation.center;
-    const maxLat = Math.max(0.006, ...generation.sites.map(item => Math.abs(item.coordinates[1] - center.lat)));
-    const maxLon = Math.max(0.006, ...generation.sites.map(item => Math.abs(item.coordinates[0] - center.lon)));
-    return {
-      left: Math.max(8, Math.min(92, 50 + ((site.coordinates[0] - center.lon) / maxLon) * 38)),
-      top: Math.max(8, Math.min(92, 50 - ((site.coordinates[1] - center.lat) / maxLat) * 38))
-    };
-  }
-
-  function renderOverlay() {
-    if (!generation?.sites) return;
-    centerMap();
-    const markers = document.getElementById('wod-map-markers');
-    const list = document.getElementById('wod-map-site-list');
-    markers.innerHTML = '';
-    list.innerHTML = '';
-
-    generation.sites.forEach((site, index) => {
-      const position = markerPosition(site);
-      const marker = document.createElement('button');
-      marker.type = 'button';
-      marker.className = `wod-map-marker ${index === selectedIndex ? 'active' : ''}`;
-      marker.style.left = `${position.left}%`;
-      marker.style.top = `${position.top}%`;
-      marker.textContent = String(index + 1);
-      marker.title = `${site.name}: ${site.category}`;
-      marker.setAttribute('aria-label', `Select ${site.name}`);
-      marker.addEventListener('click', () => selectSite(index));
-      markers.appendChild(marker);
-
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className = `wod-map-site-button ${index === selectedIndex ? 'active' : ''}`;
-      card.innerHTML = `<strong>${index + 1}. ${escapeHtml(site.name)}</strong><small>${escapeHtml(site.category)} · ${escapeHtml(site.pressure)}</small>`;
-      card.addEventListener('click', () => selectSite(index));
-      list.appendChild(card);
-    });
-
-    renderSelected();
-    setResult(`<strong>${escapeHtml(generation.engine)}</strong> generated ${generation.sites.length} clickable locations for ${escapeHtml(generation.lineTitle)}. Select any marker to display its full record automatically.`);
-  }
-
-  function selectSite(index) {
-    if (!generation?.sites?.[index]) return;
-    selectedIndex = index;
-    document.querySelectorAll('.wod-map-marker').forEach((marker, markerIndex) => marker.classList.toggle('active', markerIndex === index));
-    document.querySelectorAll('.wod-map-site-button').forEach((button, buttonIndex) => button.classList.toggle('active', buttonIndex === index));
-    document.getElementById('wod-map-reroll').disabled = false;
-    renderSelected();
-  }
-
-  function detail(label, value) {
-    return `<div class="wod-map-detail"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(value)}</span></div>`;
-  }
-
-  function renderSelected() {
-    const target = document.getElementById('wod-map-details');
-    const site = generation?.sites?.[selectedIndex];
-    if (!target || !site) return;
-
     target.innerHTML = `
-      <p class="eyebrow">Selected generated location ${selectedIndex + 1}</p>
-      <h3>${escapeHtml(site.name)}</h3>
-      <p class="wod-map-coordinate">${site.coordinates[1].toFixed(6)}, ${site.coordinates[0].toFixed(6)}</p>
-      <div class="wod-map-detail-grid">
-        ${detail('Mundane footprint', `${site.category}: ${site.mundane}`)}
-        ${detail(`${generation.lineTitle} layer`, site.selectedLayer)}
-        ${detail('Kindred layer', site.kindredLayer)}
-        ${detail('Umbral layer', site.umbralLayer)}
-        ${detail('Awakened vector', site.awakenedLayer)}
-        ${detail('Domain politics', site.politics)}
-        ${detail(site.pressure, site.effect)}
-        ${detail('Mechanical seed', site.mechanic)}
-        ${detail('Deterministic variant', `${site.variant} of 70 · prototype ${site.sourcePrototype} · pressure ${site.pressureVariant}`)}
-      </div>
-      <a class="primary-action wod-map-external" target="_blank" rel="noopener" href="${googleOpenUrl(site)}">Open Selected Location in Google Maps</a>`;
+      <section class="wod-pane-card ${statusClass}">
+        <p class="eyebrow">Selected business domain</p>
+        <h3>${escapeHtml(record.placeName)}</h3>
+        <p><strong>Real address:</strong> ${escapeHtml(record.formattedAddress)}</p>
+        <p><strong>Google primary type:</strong> ${escapeHtml(record.primaryType)}</p>
+        <p><strong>Gothic registry:</strong> ${escapeHtml(record.gothicRegistry)}</p>
+        <p><span class="wod-claim-badge ${statusClass}">${escapeHtml(CLAIM_FLAGS[status] || status)}</span></p>
+        <div class="wod-matrix-grid">
+          ${matrixField('Public facade', record.lore.publicFacade)}
+          ${matrixField(`${record.gameLineTitle} hidden function`, record.lore.hiddenFunction)}
+          ${matrixField('Kindred layer', record.lore.kindredLayer)}
+          ${matrixField('Umbral layer', record.lore.umbralLayer)}
+          ${matrixField('Awakened vector', record.lore.awakenedVector)}
+          ${matrixField('Current pressure', record.lore.currentPressure)}
+          ${matrixField('Mechanical seed', record.lore.mechanicalSeed)}
+          ${matrixField('Embedded character', record.lore.embeddedCharacter)}
+          ${matrixField('Temporal anchor', record.lore.temporalAnchor)}
+          ${matrixField('Traumatic catalyst', record.lore.traumaticCatalyst)}
+          ${matrixField('Operational secret', record.lore.operationalSecret)}
+          ${matrixField('Fatal vulnerability', record.lore.vulnerability)}
+          ${matrixField('Sensory anchor', record.lore.sensoryAnchor)}
+          ${matrixField('Police scanner / media feed', record.lore.mediaFeed)}
+          ${matrixField('Street rumor', record.lore.streetRumor)}
+        </div>
+        <p><strong>Spatial token:</strong> <span class="wod-spatial-token">${escapeHtml(record.spatialToken)}</span></p>
+        <p><strong>Deterministic seed:</strong> <span class="wod-spatial-token">${record.seed32}</span></p>
+        <p class="wod-note">Core references: ${escapeHtml(record.coreReferences.locationId)}, ${escapeHtml(record.coreReferences.characterId)}, ${escapeHtml(record.coreReferences.rumorId)}.</p>
+        ${record.googleMapsURI ? `<a class="primary-action" target="_blank" rel="noopener" href="${escapeHtml(record.googleMapsURI)}">Open Business in Google Maps</a>` : ''}
+      </section>
+      ${renderAdministration(record)}`;
+
+    bindAdministration(record);
   }
 
-  function addSite() {
-    if (!generation?.sites) return generateOverlay();
-    revision += 1;
-    const input = currentInput();
-    generation.sites.push(createSite(input, generation.sites.length, revision));
-    selectedIndex = generation.sites.length - 1;
-    syncGeoJson();
-    renderOverlay();
-    enableControls();
+  function renderAdministration(record) {
+    return `
+      <section class="wod-pane-card wod-admin-card">
+        <h3>Business Registry Governance</h3>
+        <label>
+          Chronicle interaction status
+          <select id="wod-config-veil">
+            <option value="STANDARD_UNCLAIMED" ${record.claimStatus === 'STANDARD_UNCLAIMED' ? 'selected' : ''}>Standard Unclaimed</option>
+            <option value="SUPPORTIVE" ${record.claimStatus === 'SUPPORTIVE' ? 'selected' : ''}>Supportive (Part of the Veil)</option>
+            <option value="OPT_OUT" ${record.claimStatus === 'OPT_OUT' ? 'selected' : ''}>Opt-Out (Mundane Disconnect)</option>
+          </select>
+        </label>
+        <label>
+          Custom public facade / lore directive
+          <textarea id="wod-config-lore" rows="6" placeholder="Enter a custom public-facing domain narrative…">${escapeHtml(record.source === 'DETERMINISTIC_UNIVERSAL_BASELINE' ? '' : record.lore.publicFacade || '')}</textarea>
+        </label>
+        <div class="wod-admin-actions">
+          <button id="wod-save-local-claim" class="primary-action">Save Storyteller Override</button>
+          <button id="wod-clear-local-claim" class="secondary-action">Clear Local Override</button>
+          <button id="wod-copy-business-record" class="secondary-action">Copy Universal Record</button>
+          <button id="wod-export-registry-patch" class="secondary-action">Export Central Registry Patch</button>
+        </div>
+        <p class="wod-note">The deterministic baseline is universal across browsers. Storyteller changes follow the master specification and remain in localStorage until their exported patch is merged into the repository’s central <code>poi_registry.json</code>.</p>
+      </section>`;
   }
 
-  function regenerateSelected() {
-    if (!generation?.sites?.[selectedIndex]) return;
-    revision += 1;
-    generation.sites[selectedIndex] = createSite(currentInput(), selectedIndex, revision);
-    syncGeoJson();
-    renderOverlay();
-    enableControls();
+  function bindAdministration(record) {
+    document.getElementById('wod-save-local-claim')?.addEventListener('click', () => saveLocalOverride(record));
+    document.getElementById('wod-clear-local-claim')?.addEventListener('click', () => clearLocalOverride(record));
+    document.getElementById('wod-copy-business-record')?.addEventListener('click', () => navigator.clipboard?.writeText(JSON.stringify(record, null, 2)));
+    document.getElementById('wod-export-registry-patch')?.addEventListener('click', () => exportRegistryPatch(record));
   }
 
-  function useBrowserLocation() {
-    if (!navigator.geolocation) return setResult('This browser does not expose geolocation.');
-    setResult('Requesting the browser location…');
-    navigator.geolocation.getCurrentPosition(position => {
-      document.getElementById('wod-lat').value = position.coords.latitude.toFixed(6);
-      document.getElementById('wod-lon').value = position.coords.longitude.toFixed(6);
-      if (!document.getElementById('wod-seed').value.trim()) document.getElementById('wod-seed').value = 'Browser location';
-      centerMap();
-      setResult('Browser coordinates loaded. Generate an overlay to populate the map.');
-    }, error => setResult(`Browser location was not available: ${escapeHtml(error.message || 'permission denied')}.`), {
-      enableHighAccuracy: false,
-      timeout: 10000,
-      maximumAge: 300000
-    });
+  function saveLocalOverride(record) {
+    const veil = document.getElementById('wod-config-veil').value;
+    const loreText = document.getElementById('wod-config-lore').value.trim();
+    const payload = {
+      place_id: record.placeId,
+      claimed: true,
+      opt_out: veil === 'OPT_OUT',
+      veil_interaction: veil,
+      submitted_lore: loreText ? { publicFacade: loreText } : {},
+      updated_at: new Date().toISOString()
+    };
+    localStorage.setItem(`${STORAGE.localPrefix}${record.placeId}`, JSON.stringify(payload));
+    void resolvePlace(state.selectedPlace);
   }
 
-  function setResult(message) {
-    const target = document.getElementById('wod-result');
-    if (target) target.innerHTML = `<div class="wod-result">${message}</div>`;
+  function clearLocalOverride(record) {
+    localStorage.removeItem(`${STORAGE.localPrefix}${record.placeId}`);
+    void resolvePlace(state.selectedPlace);
   }
 
-  function copyJson() {
-    if (generation) navigator.clipboard?.writeText(JSON.stringify(generation, null, 2));
+  function exportRegistryPatch(record) {
+    const local = parseStored(`${STORAGE.localPrefix}${record.placeId}`) || {
+      place_id: record.placeId,
+      claimed: false,
+      opt_out: false,
+      veil_interaction: 'STANDARD_UNCLAIMED',
+      submitted_lore: {}
+    };
+    const patch = {
+      schemaVersion: '1.0.0',
+      target: 'data/world-of-darkness/poi_registry.json',
+      entryKey: record.placeId,
+      entry: {
+        ...local,
+        place_name: record.placeName,
+        formatted_address: record.formattedAddress,
+        primary_type: record.primaryType,
+        spatial_token: record.spatialToken,
+        deterministic_seed: record.seed32,
+        core_references: record.coreReferences
+      }
+    };
+    download(`${safeFileName(record.placeName)}-${record.placeId}-registry-patch.json`, 'application/json', JSON.stringify(patch, null, 2));
+  }
+
+  function safeFileName(value) {
+    return String(value || 'wod-business').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80);
   }
 
   function download(name, type, content) {
@@ -416,26 +705,48 @@
     URL.revokeObjectURL(url);
   }
 
-  function exportGeoJson() {
-    if (generation?.geojson) download('world-of-darkness-overlay.geojson', 'application/geo+json', JSON.stringify(generation.geojson, null, 2));
+  function renderMarker(place, status) {
+    if (!state.map || !place.location || !state.AdvancedMarkerElement) return;
+    if (state.selectedMarker) state.selectedMarker.map = null;
+    const markerContent = document.createElement('div');
+    markerContent.className = `wod-selected-marker ${claimClass(status)}`;
+    markerContent.textContent = '✦';
+    state.selectedMarker = new state.AdvancedMarkerElement({
+      map: state.map,
+      position: place.location,
+      title: place.displayName || 'Selected World of Darkness business',
+      content: markerContent
+    });
+    state.map.panTo(place.location);
+    if ((state.map.getZoom() || 0) < 16) state.map.setZoom(16);
   }
 
-  function exportKml() {
-    if (!generation?.sites) return;
-    const placemarks = generation.sites.map(site => `<Placemark><name>${escapeHtml(site.name)}</name><description>${escapeHtml(`${site.selectedLayer} | ${site.politics} | ${site.pressure}: ${site.effect}`)}</description><Point><coordinates>${site.coordinates[0]},${site.coordinates[1]},0</coordinates></Point></Placemark>`).join('');
-    download('world-of-darkness-overlay.kml', 'application/vnd.google-earth.kml+xml', `<?xml version="1.0"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>${placemarks}</Document></kml>`);
+  function useBrowserLocation() {
+    if (!navigator.geolocation) return setStatus('This browser does not expose geolocation.', true);
+    setStatus('Requesting browser location…');
+    navigator.geolocation.getCurrentPosition(position => {
+      const center = { lat: position.coords.latitude, lng: position.coords.longitude };
+      if (state.map) {
+        state.map.panTo(center);
+        state.map.setZoom(16);
+      }
+      localStorage.setItem(STORAGE.mapCenter, JSON.stringify(center));
+      setStatus('Browser location loaded. Click a nearby business icon to resolve its domain.');
+    }, error => setStatus(`Browser location was not available: ${error.message || 'permission denied'}.`, true), {
+      enableHighAccuracy: false,
+      timeout: 10000,
+      maximumAge: 300000
+    });
   }
 
   function install() {
-    if (!installed) {
-      installed = true;
-      document.addEventListener('click', interceptOriginalControls, true);
-    }
+    if (state.installed) return;
+    state.installed = true;
     if (buildWorkspace()) return;
     let attempts = 0;
     const retry = window.setInterval(() => {
       attempts += 1;
-      if (buildWorkspace() || attempts > 80) window.clearInterval(retry);
+      if (buildWorkspace() || attempts > 100) window.clearInterval(retry);
     }, 100);
   }
 
