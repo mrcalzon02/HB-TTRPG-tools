@@ -75,6 +75,9 @@ for (const pkg of packages) {
   const snapshot = pkg.location.contextSnapshot;
   if (!expectedCatalogs.includes(snapshot.catalogLine)) throw new Error(`${pkg.packageKey} has invalid catalog line ${snapshot.catalogLine}.`);
   if (!snapshot.catalogLabel) throw new Error(`${pkg.packageKey} lacks its catalog label.`);
+  if (snapshot.regionalTheme?.catalogLine !== snapshot.catalogLine || snapshot.regionalTheme?.catalogLabel !== snapshot.catalogLabel) {
+    throw new Error(`${pkg.packageKey} does not persist matching catalog identity inside its regional-theme snapshot.`);
+  }
   if (pkg.location.inventoryStatus === 'MUNDANE') {
     if (!snapshot.hiddenFunction.includes('No confirmed supernatural function')) {
       throw new Error(`${pkg.packageKey} does not preserve its mundane-site disclaimer.`);
@@ -100,6 +103,7 @@ for (let index = 0; index < packages.length; index += 1) {
   if (left.packageKey !== right.packageKey) throw new Error(`Package identity replay failed at ${index}.`);
   if (left.location.inventoryStatus !== right.location.inventoryStatus) throw new Error(`Status replay failed at ${index}.`);
   if (left.location.contextSnapshot.catalogLine !== right.location.contextSnapshot.catalogLine) throw new Error(`Catalog replay failed at ${index}.`);
+  if (left.location.contextSnapshot.regionalTheme.catalogLine !== right.location.contextSnapshot.regionalTheme.catalogLine) throw new Error(`Persisted catalog replay failed at ${index}.`);
   if (left.location.contextSnapshot.diversitySignature !== right.location.contextSnapshot.diversitySignature) throw new Error(`Diversity replay failed at ${index}.`);
 }
 
@@ -132,6 +136,7 @@ console.log(JSON.stringify({
   firstCatalogCycle: catalogLines.slice(0, 6),
   mundanePackages: packages.filter(pkg => pkg.location.inventoryStatus === 'MUNDANE').length,
   supernaturalOrAdjacentPackages: packages.filter(pkg => pkg.location.inventoryStatus !== 'MUNDANE').length,
+  persistedCatalogIdentity: true,
   uniqueDiversitySignatures: new Set(packages.map(pkg => pkg.location.contextSnapshot.diversitySignature)).size,
   deterministicReplay: true,
   dedicatedVampireIsolation: true,
