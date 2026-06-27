@@ -3,7 +3,8 @@
 
   const CORE_SCRIPTS = [
     'world-of-darkness-lightweight-map-core.js',
-    'world-of-darkness-radial-location-loader.js'
+    'world-of-darkness-radial-location-loader.js',
+    'world-of-darkness-radial-scan-compat.js'
   ];
   const ENHANCEMENT_SCRIPTS = [
     'world-of-darkness-location-package-bridge.js',
