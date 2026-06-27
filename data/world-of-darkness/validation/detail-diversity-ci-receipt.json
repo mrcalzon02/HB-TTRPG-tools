@@ -2,12 +2,12 @@
   "receiptType": "wodDetailDiversityValidation",
   "schemaVersion": "1.3.0",
   "status": "failed",
-  "validatedCommit": "79e6c6388f699c1e1a004e7276125902ee77af31",
+  "validatedCommit": "b9d41a858f6209b71fe6f71db5bd1b57a3568013",
   "workflow": ".github/workflows/validate-wod-world-scan-overlay.yml",
-  "checkedAt": "2026-06-27T15:33:26.310Z",
+  "checkedAt": "2026-06-27T15:35:22.200Z",
   "totalChecks": 23,
-  "passedChecks": 19,
-  "failedChecks": 4,
+  "passedChecks": 21,
+  "failedChecks": 2,
   "results": [
     {
       "name": "syntax:spatial-loader",
@@ -179,19 +179,19 @@
     },
     {
       "name": "contract:map-only-core",
-      "passed": false,
-      "exitCode": 1,
+      "passed": true,
+      "exitCode": 0,
       "signal": null,
-      "stdout": "",
-      "stderr": "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-map-only-core.mjs:76\n  if (!regionalExpansion.includes(marker)) throw new Error(`Regional theme expansion is missing ${marker}.`);\n                                                 ^\n\nError: Regional theme expansion is missing VERSION = '3.1.0'.\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-map-only-core.mjs:76:50\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v20.20.2"
+      "stdout": "{\n  \"mapOnlyCore\": [\n    \"world-of-darkness-lightweight-map-core.js\",\n    \"world-of-darkness-spatial-config-compat.js\",\n    \"world-of-darkness-system-site-catalog.js\",\n    \"world-of-darkness-detail-diversity-core.js\",\n    \"world-of-darkness-regional-theme-expansion.js\",\n    \"world-of-darkness-system-site-expansion.js\",\n    \"world-of-darkness-radial-location-loader.js\",\n    \"world-of-darkness-radial-scan-compat.js\"\n  ],\n  \"deferredTools\": [\n    \"world-of-darkness-location-package-bridge.js\",\n    \"world-of-darkness-world-scan-overlay.js\",\n    \"world-of-darkness-global-rescan-bridge.js\",\n    \"world-of-darkness-context-aware-core.js\",\n    \"world-of-darkness-context-output-normalizer.js\",\n    \"world-of-darkness-context-aware-variants.js\",\n    \"world-of-darkness-registry-workflow-note.js\"\n  ],\n  \"chronicleDataFetchesBeforeScan\": 0,\n  \"mapMutationObservers\": 0,\n  \"pureGeneratorNetworkRequests\": 0,\n  \"compatibilityVersion\": \"2.7.0\",\n  \"regionalThemeModelVersion\": \"3.2.0\",\n  \"regionalManifestationChannels\": 12,\n  \"systemSiteCatalogVersion\": \"1.0.0\",\n  \"systemSiteExpansionVersion\": \"1.0.0\",\n  \"systemSiteDimensions\": 8,\n  \"radialConcurrency\": 1,\n  \"radialVisibleCap\": 90\n}",
+      "stderr": ""
     },
     {
       "name": "contract:world-scan-governance",
-      "passed": false,
-      "exitCode": 1,
+      "passed": true,
+      "exitCode": 0,
       "signal": null,
-      "stdout": "",
-      "stderr": "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-map-only-core.mjs:76\n  if (!regionalExpansion.includes(marker)) throw new Error(`Regional theme expansion is missing ${marker}.`);\n                                                 ^\n\nError: Regional theme expansion is missing VERSION = '3.1.0'.\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-map-only-core.mjs:76:50\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v20.20.2"
+      "stdout": "{\n  \"mapOnlyCore\": [\n    \"world-of-darkness-lightweight-map-core.js\",\n    \"world-of-darkness-spatial-config-compat.js\",\n    \"world-of-darkness-system-site-catalog.js\",\n    \"world-of-darkness-detail-diversity-core.js\",\n    \"world-of-darkness-regional-theme-expansion.js\",\n    \"world-of-darkness-system-site-expansion.js\",\n    \"world-of-darkness-radial-location-loader.js\",\n    \"world-of-darkness-radial-scan-compat.js\"\n  ],\n  \"deferredTools\": [\n    \"world-of-darkness-location-package-bridge.js\",\n    \"world-of-darkness-world-scan-overlay.js\",\n    \"world-of-darkness-global-rescan-bridge.js\",\n    \"world-of-darkness-context-aware-core.js\",\n    \"world-of-darkness-context-output-normalizer.js\",\n    \"world-of-darkness-context-aware-variants.js\",\n    \"world-of-darkness-registry-workflow-note.js\"\n  ],\n  \"chronicleDataFetchesBeforeScan\": 0,\n  \"mapMutationObservers\": 0,\n  \"pureGeneratorNetworkRequests\": 0,\n  \"compatibilityVersion\": \"2.7.0\",\n  \"regionalThemeModelVersion\": \"3.2.0\",\n  \"regionalManifestationChannels\": 12,\n  \"systemSiteCatalogVersion\": \"1.0.0\",\n  \"systemSiteExpansionVersion\": \"1.0.0\",\n  \"systemSiteDimensions\": 8,\n  \"radialConcurrency\": 1,\n  \"radialVisibleCap\": 90\n}\n{\n  \"embeddedWorlds\": 0,\n  \"influenceSpheres\": [\n    \"kindred\",\n    \"garou\",\n    \"changing_breeds\",\n    \"hunter\",\n    \"dreaming\",\n    \"awakened\",\n    \"mixed\",\n    \"unknown\"\n  ],\n  \"effectiveLocationVariants\": 420,\n  \"generatedPackageSchemaVersion\": \"2.1.0\",\n  \"staleConfigCompatibilityVersion\": \"2.7.0\",\n  \"activeGameLineStatusBridge\": true,\n  \"unifiedSupernaturalOrAdjacentPercent\": 76.19,\n  \"singleCatalogSupernaturalOrAdjacentPercent\": 42.86,\n  \"unifiedCatalogs\": [\n    \"vampire\",\n    \"werewolf\",\n    \"breeds\",\n    \"hunter\",\n    \"changeling\",\n    \"mage\"\n  ],\n  \"regionalThemeVersion\": \"3.1.0\",\n  \"regionalThemeVariantsPerCatalog\": 2304,\n  \"systemSiteAuthoredEntries\": 588,\n  \"systemSiteCombinationFloor\": 144000000,\n  \"globalGeneratorVersion\": \"world-seeded-system-site-server-rescan-3.2.0\",\n  \"productionWorkflowUsesV4\": true,\n  \"mapOnlyStartup\": {\n    \"chronicleDatasetFetches\": 0,\n    \"mutationObservers\": 0,\n    \"pureDiversityCoreNetworkRequests\": 0,\n    \"pureRegionalThemeNetworkRequests\": 0,\n    \"pureSystemSiteNetworkRequests\": 0,\n    \"leafletPrimarySource\": \"cdn.jsdelivr.net\",\n    \"leafletFallbackSource\": \"unpkg.com\",\n    \"leafletSourceTimeoutMs\": 4500,\n    \"autoScan\": false\n  },\n  \"detailDiversity\": {\n    \"schemaVersion\": \"1.0.0\",\n    \"neighborhoodCellDegrees\": 0.015,\n    \"legacyCharacterPrototypeSelection\": false,\n    \"legacyRumorBundleSelection\": false,\n    \"independentlySelectedComponents\": 21,\n    \"minimumPublicFacadeCombinations\": 9216,\n    \"minimumSensoryCombinations\": 576,\n    \"minimumMediaCombinations\": 6144,\n    \"minimumRumorCombinations\": 6144,\n    \"minimumCharacterPresentationCombinationsPerGameLine\": 82944,\n    \"fitnessAndSportsTagAwareness\": true,\n    \"validation\": {\n      \"status\": \"pending\",\n      \"totalChecks\": 23,\n      \"sampleSize\": 24,\n      \"hiddenFunctionUniqueCount\": 24,\n      \"regionalThemeModelVersion\": \"3.1.0\",\n      \"minimumRegionalThemeVariantsPerCatalog\": 2304,\n      \"legacyThemeFrequencyDenominator\": 32\n    }\n  }\n}",
+      "stderr": ""
     }
   ]
 }
