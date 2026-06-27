@@ -1,14 +1,14 @@
 {
   "receiptType": "chronicleSpatialEngineSourceReceipt",
-  "schemaVersion": "2.7.0",
+  "schemaVersion": "2.8.0",
   "sourcePath": "SRC/world-of-darkness/chronicle-spatial-engine-governance.md",
   "uploadedName": "# CHRONICLE SPATIAL ENGINE- MASTER SPECIFICATION & ARCHITECTURE GOVERNANCE.docx",
   "sizeBytes": 12009,
   "sha256": "fc22260bf7b5fbcd655bb067d2f8e6d2c7bd4694301c1885fbbd99962a6a30fe",
   "spatialStageLoader": "world-of-darkness-spatial-loader.js",
+  "lightweightMapCore": "world-of-darkness-lightweight-map-core.js",
   "radialLocationLoader": "world-of-darkness-radial-location-loader.js",
-  "governedRuntime": "world-of-darkness-spatial-engine-inventory.js",
-  "namedLocationBridge": "world-of-darkness-named-location-bridge.js",
+  "radialScanCompatibility": "world-of-darkness-radial-scan-compat.js",
   "worldSeedBridge": "world-of-darkness-location-package-bridge.js",
   "worldScanOverlay": "world-of-darkness-world-scan-overlay.js",
   "globalRescanBridge": "world-of-darkness-global-rescan-bridge.js",
@@ -18,6 +18,10 @@
   "contextAwareServerEnricher": "scripts/enrich-wod-location-context.mjs",
   "globalRescanWorkflow": ".github/workflows/ingest-wod-world-scan-batch.yml",
   "individualPackageWorkflow": ".github/workflows/ingest-wod-location-package.yml",
+  "retiredStartupSources": [
+    "world-of-darkness-named-location-bridge.js",
+    "world-of-darkness-spatial-engine-inventory.js"
+  ],
   "coreDataFiles": [
     "data/world-of-darkness/locations_core_v2.json",
     "data/world-of-darkness/location_context_expansion_v3.json",
@@ -36,10 +40,18 @@
       "world-of-darkness-spatial-loader.js"
     ],
     "spatialCoreOnExplicitOpen": [
-      "world-of-darkness-named-location-bridge.js",
+      "world-of-darkness-lightweight-map-core.js",
       "world-of-darkness-radial-location-loader.js",
-      "world-of-darkness-spatial-engine-inventory.js"
+      "world-of-darkness-radial-scan-compat.js"
     ],
+    "mapOnlyStartup": {
+      "chronicleDatasetFetches": 0,
+      "mutationObservers": 0,
+      "leafletPrimarySource": "cdn.jsdelivr.net",
+      "leafletFallbackSource": "unpkg.com",
+      "leafletSourceTimeoutMs": 4500,
+      "autoScan": false
+    },
     "locationHydration": {
       "order": "nearest-to-current-map-center-first",
       "concurrency": 1,
