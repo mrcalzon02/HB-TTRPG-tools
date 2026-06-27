@@ -1,0 +1,66 @@
+{
+  "setting": "Kaysender",
+  "schemaVersion": "1.0.0",
+  "stage": "P1",
+  "stageId": "floating-island-production-editor",
+  "title": "Promote Floating Island / Skyland Editor",
+  "status": "audit-and-contract-active",
+  "activeBranch": "main",
+  "parallelMainLineEditors": 1,
+  "openedAfter": {
+    "stage": "P0",
+    "stageId": "shared-editor-kernel",
+    "completionFile": "data/kaysender/editors/p0-completion-status.json",
+    "validatedCommit": "202fe2947d16422fe86f372203ad20b018dcffd5"
+  },
+  "moduleIds": [
+    "floating-island-generator"
+  ],
+  "requiredInputs": [
+    "floating-island foundation profile",
+    "wiki terrain and ecology entries"
+  ],
+  "constructionMilestones": [
+    {"order":1,"id":"audit-upstream-contracts","status":"active","deliverable":"Audit current Island schemas, runtime modules, registry records, fixtures, wiki terrain/ecology sources, and actual exported examples."},
+    {"order":2,"id":"define-canonical-contract","status":"queued","deliverable":"Define the authoritative Island production input/output contract and downstream consumer boundaries."},
+    {"order":3,"id":"revise-json-schema","status":"queued","deliverable":"Add or revise the canonical Island JSON schema and schema-level reference requirements."},
+    {"order":4,"id":"complete-migrations","status":"queued","deliverable":"Complete migration adapters for older flat, 2.0.0, and early 3.0.0 Island records."},
+    {"order":5,"id":"create-fixture-matrix","status":"queued","deliverable":"Create representative valid, edge-case, invalid, and downstream-consumer fixtures."},
+    {"order":6,"id":"integrate-shared-kernel","status":"queued","deliverable":"Complete Island production-editor integration through the P0 shared kernel."},
+    {"order":7,"id":"complete-manual-controls","status":"queued","deliverable":"Provide deliberate manual editing for every canonical production record and reference."},
+    {"order":8,"id":"complete-derived-validation","status":"queued","deliverable":"Reconcile geometry, acreage, water, food, settlement capacity, drift, fracture, resources, ecology, and references."},
+    {"order":9,"id":"complete-randomization-presets","status":"queued","deliverable":"Add selective randomization and presets without overwriting locks or deliberate edits."},
+    {"order":10,"id":"complete-exports","status":"queued","deliverable":"Complete canonical JSON, wiki, Population, Settlement, Ecology, Route, Market, Faction, Crisis, and Encounter exports."},
+    {"order":11,"id":"accessibility-mobile-keyboard-review","status":"queued","deliverable":"Complete accessibility, mobile layout, and keyboard-operation review."},
+    {"order":12,"id":"automated-validation-smoke","status":"queued","deliverable":"Add structural, functional, migration, round-trip, reference, and Chromium smoke coverage."},
+    {"order":13,"id":"downstream-fixture-consumption","status":"queued","deliverable":"Verify Settlement, Ecology, and Route fixtures consume the exported Island profile."},
+    {"order":14,"id":"registry-documentation-history","status":"queued","deliverable":"Update registry status, wiki links, README, deployment notes, and development history."},
+    {"order":15,"id":"p1-exit-gate","status":"queued","deliverable":"Pass the complete P1 exit gate before activating P2."}
+  ],
+  "requiredOutputs": {
+    "canonicalGeometryAndMapCells": "present-needs-audit",
+    "hydrologyAndFoodCapacity": "present-needs-audit",
+    "resourceNodes": "present-needs-audit",
+    "altitudeAndDriftTimeline": "present-needs-audit",
+    "fractureAndStabilityModel": "present-needs-audit",
+    "approachAndLandingZones": "present-needs-audit",
+    "siteSlotLedger": "present-needs-audit",
+    "settlementCapacity": "present-needs-audit",
+    "ecologyEnvelope": "present-needs-audit",
+    "routeNodeExport": "present-needs-audit",
+    "playerSafeSummaryAndGmSecrets": "present-needs-audit"
+  },
+  "exitCriteria": [
+    {"criterion":"Map cells can be deliberately edited rather than only generated","status":"pending-audit"},
+    {"criterion":"Every site, resource, and hazard has a stable ID and map reference","status":"pending-audit"},
+    {"criterion":"Derived acreage, population capacity, water, drift, and fracture outputs validate","status":"pending-audit"},
+    {"criterion":"Profile imports and exports round-trip without data loss","status":"pending-audit"},
+    {"criterion":"Settlement, ecology, and route fixtures can consume the exported profile","status":"pending-audit"}
+  ],
+  "automationPolicy": {
+    "automaticReceiptCommits": false,
+    "verificationMode": "source-and-runtime-gates-with-explicit-promotion",
+    "reason": "Do not restore the previously paused workflow that created recurring P1 receipt commits on every push."
+  },
+  "nextAction": "Complete milestone 1 by producing an evidence-backed audit matrix of the existing Island 3.0.0 production stack and identifying the first unmet production requirement."
+}
