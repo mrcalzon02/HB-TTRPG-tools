@@ -1,8 +1,10 @@
 import diversityCore from '../world-of-darkness-detail-diversity-core.js';
+import regionalThemeExpansion from '../world-of-darkness-regional-theme-expansion.js';
 import systemSiteCatalog from '../world-of-darkness-system-site-catalog.js';
 import systemSiteExpansion from '../world-of-darkness-system-site-expansion.js';
 
-const expandedDiversityCore = systemSiteExpansion.enhanceCore(diversityCore, systemSiteCatalog);
+const regionalDiversityCore = regionalThemeExpansion.enhanceCore(diversityCore);
+const expandedDiversityCore = systemSiteExpansion.enhanceCore(regionalDiversityCore, systemSiteCatalog);
 
 const STATUS_LABELS = Object.freeze({
   MUNDANE: 'Mundane / No Known Connection',
@@ -11,7 +13,7 @@ const STATUS_LABELS = Object.freeze({
   INVENTORIED: 'Formally Inventoried'
 });
 
-const clone = value => JSON.parse(JSON.stringify(value));
+const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 
 export function hash32(input) {
   let hash = 2166136261;
@@ -200,10 +202,10 @@ export function createWorldScanPackageFactory({
         generatorVersion: 'world-seeded-system-site-server-rescan-3.2.0',
         contextResolverVersion: '1.0.0',
         detailDiversityVersion: detailDiversity?.schemaVersion,
-        regionalThemeVersion: detail.regionalTheme?.themeVersion || 'legacy',
+        regionalThemeVersion: detail.regionalTheme?.themeVersion || regionalThemeExpansion.version,
         systemSiteCatalogVersion: systemSiteCatalog.schemaVersion,
         systemSiteExpansionVersion: systemSiteExpansion.version,
-        detailDiversityPolicy: 'world-seed-rotated-pools-with-compositional-regional-themes-and-system-specific-site-structures'
+        detailDiversityPolicy: 'world-seed-rotated-pools-with-product-space-regional-themes-and-system-specific-site-structures'
       }
     };
   }
@@ -214,6 +216,7 @@ export function createWorldScanPackageFactory({
     worldSeedKey: worldSeed.worldSeedKey,
     statusProfile: expandedDiversityCore.statusProfile(gameLine),
     catalogLines: [...expandedDiversityCore.catalogLines],
+    regionalThemeVersion: regionalThemeExpansion.version,
     systemSiteCatalogVersion: systemSiteCatalog.schemaVersion
   });
 }
