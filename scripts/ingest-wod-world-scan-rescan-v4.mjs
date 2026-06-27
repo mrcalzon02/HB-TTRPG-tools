@@ -30,7 +30,7 @@ if (siteProfiles.length !== supernaturalPackages.length) {
 }
 
 coverage.generatorVersion = 'world-seeded-system-site-server-rescan-3.2.0';
-coverage.regionalThemeVersion = '3.1.0';
+coverage.regionalThemeVersion = '3.2.0';
 coverage.systemSiteCatalogVersion = '1.0.0';
 coverage.systemSiteExpansionVersion = '1.0.0';
 coverage.systemSiteProfileCount = siteProfiles.length;
