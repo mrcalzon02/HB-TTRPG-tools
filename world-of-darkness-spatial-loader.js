@@ -119,9 +119,12 @@
     return true;
   }
 
-  async function waitForSpatialShell() {
-    for (let attempt = 0; attempt < 160; attempt += 1) {
-      if (document.getElementById('wod-spatial-engine')) return true;
+  async function waitForSpatialMap() {
+    for (let attempt = 0; attempt < 240; attempt += 1) {
+      const shell = document.getElementById('wod-spatial-engine');
+      const mapElement = document.getElementById('wod-inventory-map');
+      const capturedMap = window.WODNamedLocationBridge?.getMap?.();
+      if (shell && (capturedMap || mapElement?.classList.contains('leaflet-container'))) return true;
       await wait(50);
     }
     return false;
@@ -155,9 +158,9 @@
         await loadScript(CORE_SCRIPTS[index]);
         await nextPaint();
       }
-      if (!await waitForSpatialShell()) throw new Error('The spatial interface did not mount.');
+      if (!await waitForSpatialMap()) throw new Error('The map interface did not become usable.');
       setButtonState('Spatial Engine Loaded', true);
-      setStatus('Map shell loaded. Advanced Chronicle layers are attaching without blocking the map.');
+      setStatus('Map is usable. Advanced Chronicle layers will attach without blocking map interaction.');
       const schedule = window.requestIdleCallback || (callback => window.setTimeout(callback, 150));
       schedule(() => { void loadEnhancements(); }, { timeout: 1200 });
       return true;
