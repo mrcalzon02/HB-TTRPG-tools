@@ -1,12 +1,13 @@
 {
   "receiptType": "chronicleSpatialEngineSourceReceipt",
-  "schemaVersion": "2.8.0",
+  "schemaVersion": "2.9.0",
   "sourcePath": "SRC/world-of-darkness/chronicle-spatial-engine-governance.md",
   "uploadedName": "# CHRONICLE SPATIAL ENGINE- MASTER SPECIFICATION & ARCHITECTURE GOVERNANCE.docx",
   "sizeBytes": 12009,
   "sha256": "fc22260bf7b5fbcd655bb067d2f8e6d2c7bd4694301c1885fbbd99962a6a30fe",
   "spatialStageLoader": "world-of-darkness-spatial-loader.js",
   "lightweightMapCore": "world-of-darkness-lightweight-map-core.js",
+  "detailDiversityCore": "world-of-darkness-detail-diversity-core.js",
   "radialLocationLoader": "world-of-darkness-radial-location-loader.js",
   "radialScanCompatibility": "world-of-darkness-radial-scan-compat.js",
   "worldSeedBridge": "world-of-darkness-location-package-bridge.js",
@@ -16,17 +17,21 @@
   "contextOutputNormalizer": "world-of-darkness-context-output-normalizer.js",
   "contextAwareBrowserBridge": "world-of-darkness-context-aware-variants.js",
   "contextAwareServerEnricher": "scripts/enrich-wod-location-context.mjs",
+  "detailDiversityValidator": "scripts/validate-wod-detail-diversity.mjs",
   "globalRescanWorkflow": ".github/workflows/ingest-wod-world-scan-batch.yml",
   "individualPackageWorkflow": ".github/workflows/ingest-wod-location-package.yml",
   "retiredStartupSources": [
     "world-of-darkness-named-location-bridge.js",
     "world-of-darkness-spatial-engine-inventory.js"
   ],
+  "legacyBundledProfileSources": [
+    "data/world-of-darkness/characters_core.json",
+    "data/world-of-darkness/rumors_core.json"
+  ],
   "coreDataFiles": [
     "data/world-of-darkness/locations_core_v2.json",
     "data/world-of-darkness/location_context_expansion_v3.json",
-    "data/world-of-darkness/characters_core.json",
-    "data/world-of-darkness/rumors_core.json",
+    "data/world-of-darkness/location_detail_diversity_v1.json",
     "data/world-of-darkness/location_crosslink_core.json",
     "data/world-of-darkness/location_crosslink_expansion_v2.json",
     "data/world-of-darkness/generated_location_registry.json",
@@ -41,12 +46,14 @@
     ],
     "spatialCoreOnExplicitOpen": [
       "world-of-darkness-lightweight-map-core.js",
+      "world-of-darkness-detail-diversity-core.js",
       "world-of-darkness-radial-location-loader.js",
       "world-of-darkness-radial-scan-compat.js"
     ],
     "mapOnlyStartup": {
       "chronicleDatasetFetches": 0,
       "mutationObservers": 0,
+      "pureDiversityCoreNetworkRequests": 0,
       "leafletPrimarySource": "cdn.jsdelivr.net",
       "leafletFallbackSource": "unpkg.com",
       "leafletSourceTimeoutMs": 4500,
@@ -72,6 +79,37 @@
     ],
     "manualAdvancedOverride": "Load Chronicle Tools Now"
   },
+  "detailDiversity": {
+    "schemaVersion": "1.0.0",
+    "neighborhoodCellDegrees": 0.015,
+    "regionalThemePolicy": "stable by neighborhood cell and active game line",
+    "localDetailPolicy": "independent field salts plus current-pass neighborhood used-value avoidance",
+    "legacyCharacterPrototypeSelection": false,
+    "legacyRumorBundleSelection": false,
+    "independentlySelectedComponents": 21,
+    "minimumPublicFacadeCombinations": 9216,
+    "minimumSensoryCombinations": 576,
+    "minimumMediaCombinations": 6144,
+    "minimumRumorCombinations": 6144,
+    "minimumCharacterPresentationCombinationsPerGameLine": 82944,
+    "fitnessAndSportsTagAwareness": true,
+    "regressionSample": "24 tightly clustered Seattle fitness locations",
+    "regressionRequirements": [
+      "one shared regional theme",
+      "unique public facade",
+      "unique associated character",
+      "unique temporal anchor",
+      "unique traumatic catalyst",
+      "unique operational secret",
+      "unique vulnerability",
+      "unique sensory anchor",
+      "unique media feed",
+      "unique street rumor",
+      "unique mechanical seed",
+      "unique diversity signature",
+      "deterministic replay"
+    ]
+  },
   "namedLocationScope": "all OpenStreetMap nodes, ways, and relations with a name tag",
   "baseLocationVariantCount": 210,
   "effectiveLocationVariantCount": 420,
@@ -84,15 +122,17 @@
     "active game line",
     "mapped category",
     "named-feature class",
-    "retained OpenStreetMap tags"
+    "retained OpenStreetMap tags",
+    "quantized neighborhood cell",
+    "nearby values already used during the active radial pass"
   ],
   "localWorldScanCap": 90,
   "globalViewportProcessingCap": 90,
   "mundaneOrTangentialPercent": 85.71,
   "inventoriedPercent": 4.76,
-  "generatedPackageSchemaVersion": "2.0.0",
-  "worldSeedModel": "selectable embedded and local immutable worlds",
-  "immutabilityModel": "additive resolver applies only during creation of a new package; existing published snapshots remain unchanged",
+  "generatedPackageSchemaVersion": "2.1.0",
+  "worldSeedModel": "selectable embedded and local immutable worlds with world-seed-rotated detail pools",
+  "immutabilityModel": "the exact diversified snapshot is preserved through local save, global ingestion, reload, and later context passes",
   "influenceOverlayModel": "provisional generated circles plus future curated world-seeded geometry",
   "claimedBusinessIntegration": "deferred",
   "branchPolicy": "main only"
