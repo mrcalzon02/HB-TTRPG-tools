@@ -108,7 +108,17 @@
       "unique mechanical seed",
       "unique diversity signature",
       "deterministic replay"
-    ]
+    ],
+    "validation": {
+      "status": "passed",
+      "validatedCommit": "ad80b9d9b962846ca44e9ca971adbc1d8e0f09d6",
+      "checkedAt": "2026-06-27T06:41:15.598Z",
+      "totalChecks": 13,
+      "passedChecks": 13,
+      "failedChecks": 0,
+      "sampleSize": 24,
+      "hiddenFunctionUniqueCount": 24
+    }
   },
   "namedLocationScope": "all OpenStreetMap nodes, ways, and relations with a name tag",
   "baseLocationVariantCount": 210,
@@ -135,5 +145,6 @@
   "immutabilityModel": "the exact diversified snapshot is preserved through local save, global ingestion, reload, and later context passes",
   "influenceOverlayModel": "provisional generated circles plus future curated world-seeded geometry",
   "claimedBusinessIntegration": "deferred",
-  "branchPolicy": "main only"
+  "branchPolicy": "main only",
+  "detailDiversityValidationReceipt": "data/world-of-darkness/validation/detail-diversity-ci-receipt.json"
 }

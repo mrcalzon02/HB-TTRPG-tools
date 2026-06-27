@@ -113,7 +113,7 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 
 ### Milestone 3.6 — Neighborhood Theme and Local Detail Diversification
 
-**Status: Complete — automated regression result pending**
+**Status: Complete — automated regression passed**
 
 - Retire the visible-map generator's use of the nominal 70-entry character and rumor tables, which contained only ten genuinely distinct profile bundles repeated across pressure variants.
 - Replace complete bundled biographies and rumor trios with independently selected component pools.
