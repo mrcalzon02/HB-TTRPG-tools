@@ -6,6 +6,7 @@ const generated = JSON.parse(fs.readFileSync('data/world-of-darkness/generated_l
 const influence = JSON.parse(fs.readFileSync('data/world-of-darkness/influence_overlay_registry.json', 'utf8'));
 const receipt = JSON.parse(fs.readFileSync('source-page-references/chronicle-spatial-engine.source.json', 'utf8'));
 const worldScan = fs.readFileSync('world-of-darkness-world-scan-overlay.js', 'utf8');
+const globalWorkflow = fs.readFileSync('.github/workflows/ingest-wod-world-scan-batch.yml', 'utf8');
 
 if (config.schemaVersion !== '2.6.0') throw new Error('Spatial configuration must use schemaVersion 2.6.0.');
 if (config.namedLocationMatching?.scanScope !== 'all-openstreetmap-nodes-ways-and-relations-with-name-tag') throw new Error('Named-location scope is invalid.');
@@ -23,6 +24,20 @@ if (generated.schemaVersion !== '2.0.0') throw new Error('Generated registry sch
 if (influence.schemaVersion !== '1.0.0') throw new Error('Influence registry schema is invalid.');
 if (!worldScan.includes('Scan Visible Area Locally') || !worldScan.includes('Scan Visible Area Globally')) throw new Error('World scan controls are missing.');
 if (!worldScan.includes('renderInfluenceOverlay')) throw new Error('Influence overlay renderer is missing.');
+
+if (!globalWorkflow.includes('node scripts/ingest-wod-world-scan-rescan-v3.mjs')) {
+  throw new Error('Production global scan workflow does not invoke rescan-v3.');
+}
+if (globalWorkflow.includes('node scripts/ingest-wod-world-scan-rescan.mjs')) {
+  throw new Error('Production global scan workflow returned to the legacy rescan generator.');
+}
+if (globalWorkflow.includes('node scripts/enrich-wod-location-context.mjs')) {
+  throw new Error('Production global scan workflow must not rewrite completed v3 packages.');
+}
+if (!globalWorkflow.includes('immutable cross-catalog packages')) {
+  throw new Error('Production global scan workflow does not identify its one-pass immutable package transaction.');
+}
+
 if (receipt.schemaVersion !== '2.9.0') throw new Error('Chronicle source receipt must use schemaVersion 2.9.0.');
 if (receipt.generatedPackageSchemaVersion !== '2.1.0') throw new Error('Chronicle receipt must record package schemaVersion 2.1.0.');
 if (receipt.detailDiversity?.legacyCharacterPrototypeSelection !== false) throw new Error('Receipt does not retire bundled character selection.');
@@ -33,6 +48,12 @@ if (receipt.loadingModel?.activeGameLineStatusBridge !== true) throw new Error('
 if (receipt.unifiedCatalogGeneration?.unifiedStatusProfile?.supernaturalOrAdjacentPercent !== 76.19) throw new Error('Receipt does not record Unified density.');
 if (receipt.unifiedCatalogGeneration?.singleCatalogStatusProfile?.supernaturalOrAdjacentPercent !== 42.86) throw new Error('Receipt does not preserve single-catalog density.');
 if (JSON.stringify(receipt.unifiedCatalogGeneration?.catalogs) !== JSON.stringify(expectedCatalogs)) throw new Error('Receipt does not record all Unified catalogs.');
+if (receipt.unifiedCatalogGeneration?.globalIngestion?.generatorVersion !== 'world-seeded-cross-catalog-server-rescan-3.1.0') {
+  throw new Error('Receipt does not record the cross-catalog global generator version.');
+}
+if (receipt.unifiedCatalogGeneration?.globalIngestion?.onePassImmutablePackageTransaction !== true) {
+  throw new Error('Receipt does not prohibit post-ingestion package rewriting.');
+}
 
 const expectedCore = [
   'world-of-darkness-lightweight-map-core.js',
@@ -45,7 +66,7 @@ if (JSON.stringify(receipt.loadingModel?.spatialCoreOnExplicitOpen) !== JSON.str
   throw new Error('Receipt does not record the active diversified map core.');
 }
 
-for (const path of [
+for (const governedPath of [
   receipt.spatialStageLoader,
   receipt.lightweightMapCore,
   receipt.spatialConfigCompatibility,
@@ -55,6 +76,9 @@ for (const path of [
   receipt.worldSeedBridge,
   receipt.worldScanOverlay,
   receipt.globalRescanBridge,
+  receipt.globalRescanPackageFactory,
+  receipt.globalRescanIngestion,
+  receipt.globalRescanValidator,
   receipt.contextAwareCore,
   receipt.contextOutputNormalizer,
   receipt.contextAwareBrowserBridge,
@@ -62,7 +86,7 @@ for (const path of [
   receipt.detailDiversityValidator,
   ...receipt.coreDataFiles
 ]) {
-  if (!path || !fs.existsSync(path)) throw new Error(`Governed path is missing: ${path}`);
+  if (!governedPath || !fs.existsSync(governedPath)) throw new Error(`Governed path is missing: ${governedPath}`);
 }
 
 console.log(JSON.stringify({
@@ -75,6 +99,9 @@ console.log(JSON.stringify({
   unifiedSupernaturalOrAdjacentPercent: receipt.unifiedCatalogGeneration.unifiedStatusProfile.supernaturalOrAdjacentPercent,
   singleCatalogSupernaturalOrAdjacentPercent: receipt.unifiedCatalogGeneration.singleCatalogStatusProfile.supernaturalOrAdjacentPercent,
   unifiedCatalogs: receipt.unifiedCatalogGeneration.catalogs,
+  globalGeneratorVersion: receipt.unifiedCatalogGeneration.globalIngestion.generatorVersion,
+  onePassImmutablePackageTransaction: receipt.unifiedCatalogGeneration.globalIngestion.onePassImmutablePackageTransaction,
+  productionWorkflowUsesV3: true,
   mapOnlyStartup: receipt.loadingModel.mapOnlyStartup,
   detailDiversity: receipt.detailDiversity
 }, null, 2));
