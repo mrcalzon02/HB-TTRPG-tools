@@ -6,9 +6,10 @@ on:
     paths:
       - 'character-sheet-title.js'
       - 'world-of-darkness-spatial-loader.js'
+      - 'world-of-darkness-lightweight-map-core.js'
+      - 'world-of-darkness-detail-diversity-core.js'
       - 'world-of-darkness-radial-location-loader.js'
-      - 'world-of-darkness-named-location-bridge.js'
-      - 'world-of-darkness-spatial-engine-inventory.js'
+      - 'world-of-darkness-radial-scan-compat.js'
       - 'world-of-darkness-world-scan-overlay.js'
       - 'world-of-darkness-global-rescan-bridge.js'
       - 'world-of-darkness-location-package-bridge.js'
@@ -16,10 +17,13 @@ on:
       - 'world-of-darkness-context-output-normalizer.js'
       - 'world-of-darkness-context-aware-variants.js'
       - 'scripts/ingest-wod-world-scan-rescan.mjs'
+      - 'scripts/ingest-wod-location-package.mjs'
       - 'scripts/enrich-wod-location-context.mjs'
       - 'scripts/validate-wod-location-inventory.mjs'
       - 'scripts/validate-wod-world-seed-packages.mjs'
       - 'scripts/validate-wod-context-aware-variants.mjs'
+      - 'scripts/validate-wod-detail-diversity.mjs'
+      - 'scripts/validate-wod-map-only-core.mjs'
       - 'scripts/validate-wod-world-scan-overlay.mjs'
       - 'source-page-references/chronicle-spatial-engine.source.json'
       - 'data/world-of-darkness/**'
@@ -47,9 +51,10 @@ jobs:
         run: |
           node --check character-sheet-title.js
           node --check world-of-darkness-spatial-loader.js
+          node --check world-of-darkness-lightweight-map-core.js
+          node --check world-of-darkness-detail-diversity-core.js
           node --check world-of-darkness-radial-location-loader.js
-          node --check world-of-darkness-named-location-bridge.js
-          node --check world-of-darkness-spatial-engine-inventory.js
+          node --check world-of-darkness-radial-scan-compat.js
           node --check world-of-darkness-world-scan-overlay.js
           node --check world-of-darkness-global-rescan-bridge.js
           node --check world-of-darkness-location-package-bridge.js
@@ -63,6 +68,8 @@ jobs:
           node --check scripts/validate-wod-location-inventory.mjs
           node --check scripts/validate-wod-world-seed-packages.mjs
           node --check scripts/validate-wod-context-aware-variants.mjs
+          node --check scripts/validate-wod-detail-diversity.mjs
+          node --check scripts/validate-wod-map-only-core.mjs
           node --check scripts/validate-wod-world-scan-overlay.mjs
 
       - name: Validate generated data contracts
@@ -70,4 +77,6 @@ jobs:
           node scripts/validate-wod-location-inventory.mjs
           node scripts/validate-wod-world-seed-packages.mjs
           node scripts/validate-wod-context-aware-variants.mjs
+          node scripts/validate-wod-detail-diversity.mjs
+          node scripts/validate-wod-map-only-core.mjs
           node scripts/validate-wod-world-scan-overlay.mjs
