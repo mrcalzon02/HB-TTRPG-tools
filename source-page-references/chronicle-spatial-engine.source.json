@@ -14,6 +14,9 @@
   "worldSeedBridge": "world-of-darkness-location-package-bridge.js",
   "worldScanOverlay": "world-of-darkness-world-scan-overlay.js",
   "globalRescanBridge": "world-of-darkness-global-rescan-bridge.js",
+  "globalRescanPackageFactory": "scripts/wod-world-scan-package-factory.mjs",
+  "globalRescanIngestion": "scripts/ingest-wod-world-scan-rescan-v3.mjs",
+  "globalRescanValidator": "scripts/validate-wod-unified-global-rescan.mjs",
   "contextAwareCore": "world-of-darkness-context-aware-core.js",
   "contextOutputNormalizer": "world-of-darkness-context-output-normalizer.js",
   "contextAwareBrowserBridge": "world-of-darkness-context-aware-variants.js",
@@ -115,12 +118,26 @@
       "catalogLine",
       "catalogLabel"
     ],
+    "globalIngestion": {
+      "packageFactory": "scripts/wod-world-scan-package-factory.mjs",
+      "ingestionScript": "scripts/ingest-wod-world-scan-rescan-v3.mjs",
+      "validator": "scripts/validate-wod-unified-global-rescan.mjs",
+      "workflow": ".github/workflows/ingest-wod-world-scan-batch.yml",
+      "generatorVersion": "world-seeded-cross-catalog-server-rescan-3.1.0",
+      "packageSchemaVersion": "2.1.0",
+      "onePassImmutablePackageTransaction": true,
+      "postIngestionContextRewrite": false,
+      "catalogAndStatusCountsStoredInCoverage": true,
+      "offlineFixtureSupport": true
+    },
     "validationRequirements": [
       "exact 5/8/5/3 Unified status counts across 21 deterministic slots",
       "unchanged 12/6/2/1 single-catalog status counts",
       "all six catalogs present in the clustered Unified sample",
       "first six nearby Unified records use six different catalog lenses",
-      "catalog assignment replays deterministically"
+      "catalog assignment replays deterministically",
+      "global package factory emits schema 2.1.0 immutable snapshots",
+      "production workflow invokes rescan-v3 without a post-ingestion rewrite"
     ],
     "validation": {
       "status": "passed",
