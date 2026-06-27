@@ -1,8 +1,9 @@
 (() => {
   'use strict';
 
-  const COMPAT_VERSION = '2.6.1';
+  const COMPAT_VERSION = '2.7.0';
   const CONFIG_PATH_PATTERN = /(?:^|\/)data\/world-of-darkness\/spatial-engine-config\.json(?:[?#].*)?$/;
+  const GAME_LINES = new Set(['unified', 'vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage']);
   const CORE_DATA_DEFAULTS = Object.freeze({
     locations: 'data/world-of-darkness/locations_core_v2.json',
     contextExpansion: 'data/world-of-darkness/location_context_expansion_v3.json',
@@ -25,6 +26,36 @@
     return String(input ?? '');
   }
 
+  function activeGameLine(explicitLine = '') {
+    if (GAME_LINES.has(explicitLine)) return explicitLine;
+    const selected = document.getElementById('wod-spatial-line')?.value || '';
+    return GAME_LINES.has(selected) ? selected : 'vampire';
+  }
+
+  function wrapDetailCore(core) {
+    if (!core || core.__activeLineStatusBridge === COMPAT_VERSION) return core;
+    const bridged = {
+      ...core,
+      inventoryStatusFromSeed(seed, line = '') {
+        return core.inventoryStatusFromSeed(seed, activeGameLine(line));
+      },
+      __activeLineStatusBridge: COMPAT_VERSION
+    };
+    return Object.freeze(bridged);
+  }
+
+  let detailCoreValue = window.WODDetailDiversityCore ? wrapDetailCore(window.WODDetailDiversityCore) : null;
+  try {
+    Object.defineProperty(window, 'WODDetailDiversityCore', {
+      configurable: true,
+      enumerable: true,
+      get() { return detailCoreValue; },
+      set(value) { detailCoreValue = wrapDetailCore(value); }
+    });
+  } catch (_) {
+    if (window.WODDetailDiversityCore) window.WODDetailDiversityCore = wrapDetailCore(window.WODDetailDiversityCore);
+  }
+
   function mergedConfig(payload) {
     const source = payload && typeof payload === 'object' && !Array.isArray(payload) ? payload : {};
     return {
@@ -36,7 +67,8 @@
       compatibility: {
         ...(source.compatibility && typeof source.compatibility === 'object' ? source.compatibility : {}),
         spatialConfigCompatVersion: COMPAT_VERSION,
-        staleSchemaDefaultsApplied: true
+        staleSchemaDefaultsApplied: true,
+        activeGameLineStatusBridge: true
       }
     };
   }
@@ -85,6 +117,7 @@
   window.WODSpatialConfigCompat = Object.freeze({
     version: COMPAT_VERSION,
     coreDataDefaults: CORE_DATA_DEFAULTS,
+    resolveGameLine: activeGameLine,
     upgrade: mergedConfig
   });
 })();
