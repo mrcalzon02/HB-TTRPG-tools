@@ -68,6 +68,7 @@
     loadScriptOnce('world-of-darkness-spatial-engine-inventory.js','data-world-of-darkness-spatial-engine-inventory','worldOfDarknessSpatialEngineInventory');
     loadScriptOnce('world-of-darkness-location-package-bridge.js','data-world-of-darkness-location-package-bridge','worldOfDarknessLocationPackageBridge');
     loadScriptOnce('world-of-darkness-world-scan-overlay.js','data-world-of-darkness-world-scan-overlay','worldOfDarknessWorldScanOverlay');
+    loadScriptOnce('world-of-darkness-global-rescan-bridge.js','data-world-of-darkness-global-rescan-bridge','worldOfDarknessGlobalRescanBridge');
     loadScriptOnce('world-of-darkness-registry-workflow-note.js','data-world-of-darkness-registry-workflow-note','worldOfDarknessRegistryWorkflowNote');
     loadScriptOnce('shadowrun-entry.js','data-shadowrun-entry','shadowrunEntry');
     loadScriptOnce('npc-profile-generator-entry.js','data-npc-profile-generator-entry','npcProfileGeneratorEntry');
