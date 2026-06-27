@@ -2,10 +2,10 @@
   "receiptType": "wodSpatialPagesDeployment",
   "schemaVersion": "1.0.0",
   "status": "passed",
-  "deployedCommit": "5a87d40270e6983239df0e4f846bea186d6be1d7",
+  "deployedCommit": "f327272e7f09c5d1053125431853dbd645e6c590",
   "pageUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
   "workflow": ".github/workflows/deploy-wod-spatial-pages.yml",
-  "deployedAt": "2026-06-27T14:12:59.905Z",
+  "deployedAt": "2026-06-27T14:22:49.036Z",
   "compatibilityVersion": "2.6.1",
   "regressionChecks": 14
 }
