@@ -1,11 +1,12 @@
 {
   "receiptType": "chronicleSpatialEngineSourceReceipt",
-  "schemaVersion": "2.6.0",
+  "schemaVersion": "2.7.0",
   "sourcePath": "SRC/world-of-darkness/chronicle-spatial-engine-governance.md",
   "uploadedName": "# CHRONICLE SPATIAL ENGINE- MASTER SPECIFICATION & ARCHITECTURE GOVERNANCE.docx",
   "sizeBytes": 12009,
   "sha256": "fc22260bf7b5fbcd655bb067d2f8e6d2c7bd4694301c1885fbbd99962a6a30fe",
   "spatialStageLoader": "world-of-darkness-spatial-loader.js",
+  "radialLocationLoader": "world-of-darkness-radial-location-loader.js",
   "governedRuntime": "world-of-darkness-spatial-engine-inventory.js",
   "namedLocationBridge": "world-of-darkness-named-location-bridge.js",
   "worldSeedBridge": "world-of-darkness-location-package-bridge.js",
@@ -36,9 +37,19 @@
     ],
     "spatialCoreOnExplicitOpen": [
       "world-of-darkness-named-location-bridge.js",
+      "world-of-darkness-radial-location-loader.js",
       "world-of-darkness-spatial-engine-inventory.js"
     ],
-    "deferredAfterMapMount": [
+    "locationHydration": {
+      "order": "nearest-to-current-map-center-first",
+      "concurrency": 1,
+      "visibleLocationCap": 90,
+      "cancelOnMapMove": true,
+      "restartPolicy": "user-initiated-rescan-from-new-center",
+      "perLocationProgress": true,
+      "overallProgress": true
+    },
+    "deferredAfterRadialPass": [
       "world-of-darkness-location-package-bridge.js",
       "world-of-darkness-world-scan-overlay.js",
       "world-of-darkness-global-rescan-bridge.js",
@@ -46,7 +57,8 @@
       "world-of-darkness-context-output-normalizer.js",
       "world-of-darkness-context-aware-variants.js",
       "world-of-darkness-registry-workflow-note.js"
-    ]
+    ],
+    "manualAdvancedOverride": "Load Chronicle Tools Now"
   },
   "namedLocationScope": "all OpenStreetMap nodes, ways, and relations with a name tag",
   "baseLocationVariantCount": 210,
