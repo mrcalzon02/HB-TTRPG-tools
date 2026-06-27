@@ -29,10 +29,11 @@ const categories = [
   ['natural_feature', 'Natural Feature', 'Natural or Water Feature', { natural: 'wood' }]
 ];
 
-if (regionalThemeExpansion.version !== '3.1.0' || regionalCore.__regionalThemeExpansionVersion !== '3.1.0') throw new Error('Regional theme expansion 3.1.0 is not active.');
+if (regionalThemeExpansion.version !== '3.2.0' || regionalCore.__regionalThemeExpansionVersion !== '3.2.0') throw new Error('Regional theme expansion 3.2.0 is not active.');
+if (regionalCore.regionalThemeManifestationChannels?.length !== 12) throw new Error('Regional theme manifestation channels are incomplete.');
 if (systemSiteCatalog.schemaVersion !== '1.0.0') throw new Error('System site catalog must use schemaVersion 1.0.0.');
 if (systemSiteExpansion.version !== '1.0.0') throw new Error('System site expansion must use version 1.0.0.');
-if (expandedCore.__systemSiteExpansionVersion !== '1.0.0') throw new Error('Detail diversity core was not enhanced with system site expansion.');
+if (expandedCore.__systemSiteExpansionVersion !== '1.0.0') throw new Error('System site expansion is not active.');
 if (JSON.stringify([...systemSiteCatalog.fields]) !== JSON.stringify(fields)) throw new Error('System site catalog dimensions changed unexpectedly.');
 
 let authoredEntryCount = 0;
@@ -43,24 +44,14 @@ for (const line of lines) {
   for (const field of fields) {
     const minimum = field === 'siteTypes' ? 12 : 10;
     if (!Array.isArray(catalog[field]) || catalog[field].length < minimum) throw new Error(`${line}.${field} must contain at least ${minimum} entries.`);
-    const ids = new Set(catalog[field].map(entry => entry.id));
-    if (ids.size !== catalog[field].length) throw new Error(`${line}.${field} contains duplicate IDs.`);
+    if (new Set(catalog[field].map(entry => entry.id)).size !== catalog[field].length) throw new Error(`${line}.${field} contains duplicate IDs.`);
     for (const entry of catalog[field]) {
       if (!entry.id || !entry.label || !entry.text) throw new Error(`${line}.${field} contains an incomplete entry.`);
-      if (!Array.isArray(entry.statuses) || !entry.statuses.includes('TANGENTIAL') || !entry.statuses.includes('ACTIVE_UNREGISTERED') || !entry.statuses.includes('INVENTORIED')) {
-        throw new Error(`${line}.${field}.${entry.id} does not support all supernatural inventory states.`);
-      }
+      if (!['TANGENTIAL', 'ACTIVE_UNREGISTERED', 'INVENTORIED'].every(status => entry.statuses?.includes(status))) throw new Error(`${line}.${field}.${entry.id} lacks a supernatural inventory state.`);
     }
     authoredEntryCount += catalog[field].length;
   }
-  combinationFloors[line] = catalog.siteTypes.length
-    * catalog.hiddenFunctions.length
-    * catalog.infrastructures.length
-    * catalog.systemSecrets.length
-    * catalog.custodians.length
-    * catalog.evidencePatterns.length
-    * catalog.conflicts.length
-    * catalog.consequences.length;
+  combinationFloors[line] = fields.reduce((product, field) => product * catalog[field].length, 1);
   if (combinationFloors[line] < 144000000) throw new Error(`${line} has fewer than 144,000,000 structural combinations.`);
 }
 if (authoredEntryCount < 588) throw new Error(`System site catalog has only ${authoredEntryCount} authored entries.`);
@@ -98,24 +89,22 @@ for (const line of lines) {
   const records = generateLine(line);
   const firstTwelve = records.slice(0, 12);
   const firstTen = records.slice(0, 10);
-  if (new Set(firstTwelve.map(record => record.siteProfile?.siteType?.id)).size !== 12) throw new Error(`${line} repeated a site archetype before twelve nearby supernatural sites were generated.`);
+  if (new Set(firstTwelve.map(record => record.siteProfile?.siteType?.id)).size !== 12) throw new Error(`${line} repeated a site archetype before twelve nearby sites were generated.`);
   for (const field of profileFields.slice(1)) {
-    if (new Set(firstTen.map(record => record.siteProfile?.[field]?.id)).size !== 10) throw new Error(`${line} repeated ${field} before ten nearby supernatural sites were generated.`);
+    if (new Set(firstTen.map(record => record.siteProfile?.[field]?.id)).size !== 10) throw new Error(`${line} repeated ${field} before ten nearby sites were generated.`);
   }
   for (const record of records) {
-    if (record.regionalTheme?.themeVersion !== '3.1.0') throw new Error(`${line} record lacks regional theme 3.1.0.`);
+    if (record.regionalTheme?.themeVersion !== '3.2.0' || !record.regionalTheme?.manifestationChannelId) throw new Error(`${line} record lacks regional theme 3.2.0.`);
     if (!record.siteProfile || record.siteProfile.schemaVersion !== '1.0.0') throw new Error(`${line} record lacks a system site profile.`);
     for (const field of profileFields) {
       if (!record.siteProfile[field]?.id || !record.siteProfile[field]?.label || !record.siteProfile[field]?.text) throw new Error(`${line} record lacks complete ${field} data.`);
     }
-    if (record.regionalTheme?.siteProfile?.combinationSignature !== record.siteProfile.combinationSignature) throw new Error(`${line} record does not persist the site profile inside its regional theme snapshot.`);
+    if (record.regionalTheme?.siteProfile?.combinationSignature !== record.siteProfile.combinationSignature) throw new Error(`${line} record does not persist its site profile.`);
     if (!record.hiddenFunction.includes(record.siteProfile.siteType.label)
       || !record.hiddenFunction.includes(record.siteProfile.hiddenFunction.label)
-      || !record.hiddenFunction.includes(record.siteProfile.infrastructure.label)) {
-      throw new Error(`${line} record does not expose site type, hidden function, and infrastructure in its hidden-function text.`);
-    }
+      || !record.hiddenFunction.includes(record.siteProfile.infrastructure.label)) throw new Error(`${line} record does not expose its site structure.`);
     if (!record.operationalSecret.includes(record.siteProfile.operationalSecret.label)) throw new Error(`${line} record does not expose its system secret.`);
-    if (!record.embeddedCharacter.includes(record.siteProfile.custodian.label)) throw new Error(`${line} record does not expose its custodian type.`);
+    if (!record.embeddedCharacter.includes(record.siteProfile.custodian.label)) throw new Error(`${line} record does not expose its custodian.`);
     if (!record.contextEffect.includes(record.siteProfile.evidencePattern.label)) throw new Error(`${line} record does not expose its evidence pattern.`);
     if (!record.vulnerability.includes(record.siteProfile.localConflict.label)) throw new Error(`${line} record does not expose its local conflict.`);
     if (!record.mechanicalSeed.includes(record.siteProfile.failureConsequence.label)) throw new Error(`${line} record does not expose its failure consequence.`);
@@ -157,6 +146,7 @@ if (!mundane.hiddenFunction.startsWith('No confirmed supernatural function')) th
 
 console.log(JSON.stringify({
   regionalThemeVersion: regionalThemeExpansion.version,
+  regionalManifestationChannels: regionalCore.regionalThemeManifestationChannels.length,
   catalogVersion: systemSiteCatalog.schemaVersion,
   expansionVersion: systemSiteExpansion.version,
   authoredEntryCount,
