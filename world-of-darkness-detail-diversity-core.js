@@ -190,12 +190,13 @@
       const statusManifestation = pick(`status-${status}`, pools.statusManifestations?.[status], location, line, context.id);
       const lineManifestation = pick(`line-${line}`, pools.lineManifestations?.[line] || pools.lineManifestations?.unified, location, line, context.id);
       const complication = pick('mechanical-complication', pools.mechanicalComplications, location, line, context.id);
+      const pressureLink = ` The location-specific expression is currently entangled with this mundane operational pressure: ${pressure}`;
 
       let hiddenFunction;
-      if (status === 'MUNDANE') hiddenFunction = `No confirmed supernatural function. ${statusManifestation} The wider ${theme.label} may shape local speculation, but no evidence assigns this location an occult role.`;
-      else if (status === 'TANGENTIAL') hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation} The trace does not establish ownership or permanent occupation.`;
-      else if (status === 'ACTIVE_UNREGISTERED') hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}`;
-      else hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}`;
+      if (status === 'MUNDANE') hiddenFunction = `No confirmed supernatural function. ${statusManifestation} The wider ${theme.label} may shape local speculation, but no evidence assigns this location an occult role.${pressureLink}`;
+      else if (status === 'TANGENTIAL') hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation} The trace does not establish ownership or permanent occupation.${pressureLink}`;
+      else if (status === 'ACTIVE_UNREGISTERED') hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}${pressureLink}`;
+      else hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}${pressureLink}`;
 
       const supernatural = status !== 'MUNDANE';
       const alignments = pools.characterAlignments?.[line] || pools.characterAlignments?.unified || [];
