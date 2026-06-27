@@ -36,7 +36,7 @@
   }
 
   async function loadJson(url) {
-    const response = await fetch(url, { cache: 'no-store' });
+    const response = await fetch(url, { cache: 'force-cache' });
     if (!response.ok) throw new Error(`${url} returned ${response.status}`);
     return response.json();
   }
@@ -63,7 +63,13 @@
     return localWorlds.worlds?.[ref.worldSeedKey] || null;
   }
 
+  function isDiversifiedPackage(pkg) {
+    return pkg?.source?.detailDiversityVersion === '1.0.0'
+      || /^[0-9a-f]{8}$/.test(pkg?.location?.contextSnapshot?.diversitySignature || '');
+  }
+
   function enrichPackage(pkg, generatorVersion) {
+    if (isDiversifiedPackage(pkg)) return pkg;
     if (!state.datasets || !window.WODContextAwareCore) return pkg;
     return window.WODContextAwareCore.enrichPackage(pkg, state.datasets, {
       generatorVersion,
@@ -72,28 +78,33 @@
   }
 
   function enrichStoredKeys(worldSeedKey, packageKeys, generatorVersion) {
-    if (!worldSeedKey || !packageKeys?.length || state.enriching) return { changed: 0 };
+    if (!worldSeedKey || !packageKeys?.length || state.enriching) return { changed: 0, preserved: 0 };
     state.enriching = true;
     try {
       const registry = readStorage(STORAGE.localRegistry, { worlds: {} });
       const packages = registry.worlds?.[worldSeedKey]?.packages;
-      if (!packages) return { changed: 0 };
+      if (!packages) return { changed: 0, preserved: 0 };
       let changed = 0;
+      let preserved = 0;
       for (const packageKey of packageKeys) {
         const pkg = packages[packageKey];
         if (!pkg) continue;
+        if (isDiversifiedPackage(pkg)) {
+          preserved += 1;
+          continue;
+        }
         if (pkg.source?.contextResolverVersion === '1.0.0') continue;
         packages[packageKey] = enrichPackage(pkg, generatorVersion);
         changed += 1;
       }
       if (changed && writeStorage(STORAGE.localRegistry, registry)) {
         document.dispatchEvent(new CustomEvent('wod:context-aware-packages-enriched', {
-          detail: { worldSeedKey, packageKeys: clone(packageKeys), changed }
+          detail: { worldSeedKey, packageKeys: clone(packageKeys), changed, preserved }
         }));
         const world = activeWorld();
         if (world) document.dispatchEvent(new CustomEvent('wod:world-seed-changed', { detail: clone(world) }));
       }
-      return { changed };
+      return { changed, preserved };
     } finally {
       state.enriching = false;
     }
@@ -107,8 +118,10 @@
     const packageKeys = coverage?.packageKeys || [];
     const result = enrichStoredKeys(worldSeedKey, packageKeys, 'context-aware-local-world-scan-4.0.0');
     updateStatus(result.changed
-      ? `Applied context-aware 420-variant enrichment to ${result.changed} newly generated local package${result.changed === 1 ? '' : 's'}.`
-      : 'Local scan packages already use the context-aware 420-variant resolver.');
+      ? `Applied legacy context-aware enrichment to ${result.changed} new local package${result.changed === 1 ? '' : 's'}; ${result.preserved} diversified package${result.preserved === 1 ? '' : 's'} remained unchanged.`
+      : result.preserved
+        ? `Preserved ${result.preserved} diversified package${result.preserved === 1 ? '' : 's'} without legacy rewriting.`
+        : 'Local scan packages already use a completed resolver.');
   }
 
   function currentPackageKey() {
@@ -121,7 +134,8 @@
     const packageKey = currentPackageKey();
     if (!ref?.worldSeedKey || !packageKey) return;
     const result = enrichStoredKeys(ref.worldSeedKey, [packageKey], 'context-aware-local-package-4.0.0');
-    if (result.changed) updateStatus(`Saved ${packageKey} with context-aware real-world and game-line enrichment.`);
+    if (result.changed) updateStatus(`Saved ${packageKey} with legacy context-aware real-world and game-line enrichment.`);
+    else if (result.preserved) updateStatus(`Saved ${packageKey} with its expanded diversity snapshot unchanged.`);
   }
 
   function updateStatus(message) {
@@ -149,6 +163,7 @@
   function previewPackage() {
     const output = document.getElementById('wod-location-package-output');
     if (!output?.textContent.includes('wodpkg-')) return null;
+    if (/diversity\s+[0-9a-f]{8}/i.test(output.textContent)) return null;
     const name = document.getElementById('wod-business-name')?.value.trim();
     const address = document.getElementById('wod-business-address')?.value.trim() || '';
     const lat = Number(document.getElementById('wod-business-lat')?.value);
@@ -195,6 +210,7 @@
     if (!state.datasets || !window.WODContextAwareCore) return;
     const output = document.getElementById('wod-location-package-output');
     if (!output || output.querySelector('[data-wod-context-aware-preview]')) return;
+    if (/diversity\s+[0-9a-f]{8}/i.test(output.textContent)) return;
     const skeleton = previewPackage();
     if (!skeleton) return;
     const enriched = enrichPackage(skeleton, 'context-aware-preview-4.0.0');
@@ -204,7 +220,7 @@
     card.className = 'wod-package-output-card';
     card.dataset.wodContextAwarePreview = 'true';
     card.innerHTML = `
-      <h5>Context-Aware Synthesis · ${escapeHtml(summary.setting)}</h5>
+      <h5>Legacy Context-Aware Synthesis · ${escapeHtml(summary.setting)}</h5>
       <p><strong>Effective matrix:</strong> ${escapeHtml(summary.variant)} across 420 location variants.</p>
       <p><strong>Real-world match:</strong> ${escapeHtml(summary.featureClass)} · ${escapeHtml(enriched.location.contextAwareness.realWorldCategory)}</p>
       <p><strong>Selected context:</strong> ${escapeHtml(summary.context)}</p>
@@ -243,6 +259,6 @@
     }
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else void install();
 })();
