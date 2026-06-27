@@ -6,6 +6,7 @@ const mounts = fs.readFileSync('app-lite-view-mounts.js', 'utf8');
 const loader = fs.readFileSync('character-sheet-title.js', 'utf8');
 const sheetView = fs.readFileSync('character-sheet-view.js', 'utf8');
 const wodSpatialLoader = fs.readFileSync('world-of-darkness-spatial-loader.js', 'utf8');
+const wodRadialLoader = fs.readFileSync('world-of-darkness-radial-location-loader.js', 'utf8');
 
 const scriptSources = [...index.matchAll(/<script\s+[^>]*src=["']([^"']+)["'][^>]*><\/script>/gi)].map(match => match[1]);
 const allowedStartupScripts = ['app-lite.js', 'app-lite-view-mounts.js', 'character-sheet-title.js'];
@@ -23,6 +24,7 @@ const forbiddenStartupScripts = [
   'kaysender-editor-live-smoke.js',
   'world-of-darkness-entry.js',
   'world-of-darkness-spatial-loader.js',
+  'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-spatial-engine-inventory.js',
   'shadowrun-entry.js'
 ];
@@ -60,7 +62,11 @@ if (JSON.stringify(wodInitialScripts) !== JSON.stringify(expectedWodInitial)) {
   throw new Error(`World of Darkness initial bundle must contain only ${expectedWodInitial.join(', ')}; found ${wodInitialScripts.join(', ')}.`);
 }
 
-const spatialCore = ['world-of-darkness-named-location-bridge.js', 'world-of-darkness-spatial-engine-inventory.js'];
+const spatialCore = [
+  'world-of-darkness-named-location-bridge.js',
+  'world-of-darkness-radial-location-loader.js',
+  'world-of-darkness-spatial-engine-inventory.js'
+];
 const spatialEnhancements = [
   'world-of-darkness-location-package-bridge.js',
   'world-of-darkness-world-scan-overlay.js',
@@ -77,8 +83,31 @@ for (const script of spatialCore) {
   if (wodBundleMatch[1].includes(script)) throw new Error(`${script} must not load merely by opening the World of Darkness tab.`);
 }
 if (!wodSpatialLoader.includes('Open Chronicle Spatial Engine')) throw new Error('The explicit Chronicle Spatial Engine launcher is missing.');
-if (!wodSpatialLoader.includes('requestIdleCallback')) throw new Error('Advanced Chronicle layers must be scheduled after the map shell.');
+if (!wodSpatialLoader.includes('Load Chronicle Tools Now')) throw new Error('The advanced Chronicle override control is missing.');
+if (!wodSpatialLoader.includes("document.addEventListener('wod:radial-load-complete'")) throw new Error('Advanced tools must wait for the radial pass by default.');
+if (!wodSpatialLoader.includes('requestIdleCallback')) throw new Error('Advanced Chronicle layers must be scheduled after the radial pass.');
 if (!wodSpatialLoader.includes('wod:spatial-stack-ready')) throw new Error('The staged spatial stack completion event is missing.');
+
+const radialRequirements = [
+  'MAX_VISIBLE = 90',
+  'STEP_DELAY_MS',
+  '.sort((left, right) => left.distance - right.distance',
+  "map.on('movestart zoomstart'",
+  'wod-radial-overall',
+  'Waiting in radial queue',
+  'wod:radial-location-ready',
+  'wod:radial-load-complete',
+  'wod:radial-load-cancelled'
+];
+for (const requirement of radialRequirements) {
+  if (!wodRadialLoader.includes(requirement)) throw new Error(`Radial location loader is missing required contract marker: ${requirement}`);
+}
+if (!wodRadialLoader.includes('for (let index = 0; index < state.rawLocations.length; index += 1)')) {
+  throw new Error('Radial location hydration must process the ordered queue sequentially.');
+}
+if (!wodRadialLoader.includes('return { ...payload, elements: [] }')) {
+  throw new Error('The legacy all-at-once location renderer is not being suppressed.');
+}
 
 if (loader.includes('loadSupplementalGenerators()')) throw new Error('The retired eager supplemental loader returned.');
 if (!loader.includes('internalSmoke')) throw new Error('Kaysender live smoke loading must remain explicitly gated.');
@@ -93,5 +122,8 @@ console.log(JSON.stringify({
   worldOfDarknessInitialScripts: wodInitialScripts,
   worldOfDarknessSpatialCoreScripts: spatialCore,
   worldOfDarknessDeferredEnhancements: spatialEnhancements,
+  radialHydrationConcurrency: 1,
+  radialVisibleLocationCap: 90,
+  radialCancelOnMapMove: true,
   kaysenderSmokeNormalStartup: false
 }, null, 2));
