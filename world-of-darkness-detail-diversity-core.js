@@ -6,7 +6,19 @@
   'use strict';
 
   const STATUS_ORDER = ['MUNDANE', 'TANGENTIAL', 'ACTIVE_UNREGISTERED', 'INVENTORIED'];
-  const STATUS_COUNTS = [12, 6, 2, 1];
+  const STATUS_PROFILES = Object.freeze({
+    standard: Object.freeze([12, 6, 2, 1]),
+    unified: Object.freeze([5, 8, 5, 3])
+  });
+  const CATALOG_LINES = Object.freeze(['vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage']);
+  const CATALOG_LABELS = Object.freeze({
+    vampire: 'Vampire: The Masquerade',
+    werewolf: 'Werewolf: The Apocalypse',
+    breeds: 'Changing Breeds',
+    hunter: 'Hunter',
+    changeling: 'Changeling: The Dreaming',
+    mage: 'Mage'
+  });
   const FALLBACK_PROTOTYPES = {
     restaurant: [6, 2, 5], bar: [6, 2, 5], night_club: [6, 5, 2],
     book_store: [6, 4, 2], library: [4, 6, 10], hospital: [4, 5, 9], pharmacy: [6, 4, 2],
@@ -53,11 +65,17 @@
     return `${Math.floor(lat / cellDegrees)}:${Math.floor(lng / cellDegrees)}`;
   }
 
-  function inventoryStatusFromSeed(seed) {
-    const slot = Number(seed >>> 0) % 21;
+  function statusProfile(line = 'unified') {
+    return line === 'unified' ? STATUS_PROFILES.unified : STATUS_PROFILES.standard;
+  }
+
+  function inventoryStatusFromSeed(seed, line = 'unified') {
+    const counts = statusProfile(line);
+    const total = counts.reduce((sum, count) => sum + count, 0);
+    const slot = Number(seed >>> 0) % total;
     let cursor = 0;
     for (let index = 0; index < STATUS_ORDER.length; index += 1) {
-      cursor += STATUS_COUNTS[index];
+      cursor += counts[index];
       if (slot < cursor) return STATUS_ORDER[index];
     }
     return 'MUNDANE';
@@ -141,9 +159,9 @@
       };
     }
 
-    function chooseContext(location, line, status, baseLocations, contextExpansion) {
+    function chooseContext(location, line, status, baseLocations, contextExpansion, usageLine = line) {
       const candidates = allContexts(baseLocations, contextExpansion).filter(context => context.inventoryStatus === status);
-      return pickScored('context', candidates, location, line, status, context => applicabilityScore({
+      return pickScored('context', candidates, location, usageLine, `${line}|${status}`, context => applicabilityScore({
         gameLines: context.gameLines,
         categories: context.categoryHooks,
         featureHooks: context.featureHooks,
@@ -151,11 +169,11 @@
       }, location, line));
     }
 
-    function choosePrototype(location, line, baseLocations, contextExpansion) {
+    function choosePrototype(location, line, baseLocations, contextExpansion, usageLine = line) {
       const prototypes = baseLocations?.prototypes || [];
       const affinities = contextExpansion?.prototypeAffinity || [];
       const fallback = FALLBACK_PROTOTYPES[location.category] || FALLBACK_PROTOTYPES.other;
-      return pickScored('prototype', prototypes, location, line, location.category, prototype => {
+      return pickScored('prototype', prototypes, location, usageLine, `${line}|${location.category}`, prototype => {
         const affinity = affinities.find(item => item.sourcePrototype === prototype.sourcePrototype);
         let score = applicabilityScore(affinity, location, line);
         const fallbackIndex = fallback.indexOf(prototype.sourcePrototype);
@@ -170,15 +188,22 @@
         .replaceAll('{feature}', normalize(location.featureLabel || 'named map feature'));
     }
 
+    function catalogFor(location, line, status) {
+      if (line !== 'unified') return line;
+      return pick('unified-catalog-line', CATALOG_LINES, location, line, status) || CATALOG_LINES[0];
+    }
+
     function generate(input) {
       const location = input.location;
       const line = input.line || 'unified';
-      const status = input.inventoryStatus || inventoryStatusFromSeed(input.seed || 0);
+      const status = input.inventoryStatus || inventoryStatusFromSeed(input.seed || 0, line);
+      const catalogLine = catalogFor(location, line, status);
+      const catalogLabel = CATALOG_LABELS[catalogLine] || humanize(catalogLine);
       const theme = themeFor(location, line);
-      const context = chooseContext(location, line, status, input.baseLocations, input.contextExpansion) || {
+      const context = chooseContext(location, catalogLine, status, input.baseLocations, input.contextExpansion, line) || {
         id: 'unclassified-context', title: 'Unclassified Context', effect: 'No stable context was selected.', mechanicalSeed: 'Treat the first interpretation as provisional.', inventoryStatus: status
       };
-      const prototype = choosePrototype(location, line, input.baseLocations, input.contextExpansion) || input.baseLocations?.prototypes?.[0] || { sourcePrototype: 1 };
+      const prototype = choosePrototype(location, catalogLine, input.baseLocations, input.contextExpansion, line) || input.baseLocations?.prototypes?.[0] || { sourcePrototype: 1 };
       const contexts = allContexts(input.baseLocations, input.contextExpansion);
       const prototypeIndex = Math.max(0, (input.baseLocations?.prototypes || []).findIndex(item => item.sourcePrototype === prototype.sourcePrototype));
       const contextIndex = Math.max(0, contexts.findIndex(item => item.id === context.id));
@@ -188,19 +213,23 @@
       const facadeDetail = pick('facade-detail', pools.facadeDetails, location, line, status);
       const pressure = pick('operational-pressure', pools.operationalPressures, location, line, status);
       const statusManifestation = pick(`status-${status}`, pools.statusManifestations?.[status], location, line, context.id);
-      const lineManifestation = pick(`line-${line}`, pools.lineManifestations?.[line] || pools.lineManifestations?.unified, location, line, context.id);
+      const catalogManifestations = pools.lineManifestations?.[catalogLine] || [];
+      const unifiedManifestations = line === 'unified' ? pools.lineManifestations?.unified || [] : [];
+      const manifestationPool = line === 'unified' ? [...catalogManifestations, ...unifiedManifestations] : catalogManifestations;
+      const lineManifestation = pick(`catalog-manifestation-${catalogLine}`, manifestationPool, location, line, context.id);
       const complication = pick('mechanical-complication', pools.mechanicalComplications, location, line, context.id);
       const pressureLink = ` The location-specific expression is currently entangled with this mundane operational pressure: ${pressure}`;
+      const catalogPrefix = line === 'unified' ? `${catalogLabel} catalog expression: ` : '';
 
       let hiddenFunction;
       if (status === 'MUNDANE') hiddenFunction = `No confirmed supernatural function. ${statusManifestation} The wider ${theme.label} may shape local speculation, but no evidence assigns this location an occult role.${pressureLink}`;
-      else if (status === 'TANGENTIAL') hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation} The trace does not establish ownership or permanent occupation.${pressureLink}`;
-      else if (status === 'ACTIVE_UNREGISTERED') hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}${pressureLink}`;
-      else hiddenFunction = `${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}${pressureLink}`;
+      else if (status === 'TANGENTIAL') hiddenFunction = `${catalogPrefix}${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation} The trace does not establish ownership or permanent occupation.${pressureLink}`;
+      else if (status === 'ACTIVE_UNREGISTERED') hiddenFunction = `${catalogPrefix}${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}${pressureLink}`;
+      else hiddenFunction = `${catalogPrefix}${statusManifestation} Regional theme: ${theme.label} — ${theme.description} ${lineManifestation}${pressureLink}`;
 
       const supernatural = status !== 'MUNDANE';
-      const alignments = pools.characterAlignments?.[line] || pools.characterAlignments?.unified || [];
-      const alignment = pick('character-alignment', alignments, location, line, theme.id);
+      const alignments = pools.characterAlignments?.[catalogLine] || pools.characterAlignments?.unified || [];
+      const alignment = pick(`character-alignment-${catalogLine}`, alignments, location, line, theme.id);
       const tenure = pick('character-tenure', pools.tenures, location, line, theme.id);
       const aesthetic = pick('character-aesthetic', pools.aestheticProfiles, location, line, alignment);
       const tell = pick('character-tell', pools.behavioralTells, location, line, alignment);
@@ -219,9 +248,9 @@
       const rumorConsequence = pick('rumor-consequence', pools.rumorConsequences, location, line, rumorClaim);
 
       const publicFacade = `${location.name} ${facade}. ${facadeDetail} ${pressure}`;
-      const contextEffect = `${context.effect} ${statusManifestation}`;
+      const contextEffect = `${line === 'unified' ? `${catalogLabel} lens: ` : ''}${context.effect} ${statusManifestation}`;
       const mechanicalSeed = `${context.mechanicalSeed} ${complication}`;
-      const embeddedCharacter = supernatural ? `${alignment}; ${tenure} — ${aesthetic}. ${tell}` : 'No supernatural custodian is assigned.';
+      const embeddedCharacter = supernatural ? `${line === 'unified' ? `${catalogLabel} — ` : ''}${alignment}; ${tenure} — ${aesthetic}. ${tell}` : 'No supernatural custodian is assigned.';
       const temporalAnchor = supernatural ? `${capitalize(temporalObject)}. ${anchorBehavior}` : 'No occult temporal anchor is recorded.';
       const traumaticCatalyst = supernatural ? `They ${trauma}.` : 'No supernatural catalyst is documented.';
       const operationalSecret = supernatural ? `They are ${secret}.` : 'No active supernatural plot is confirmed.';
@@ -232,6 +261,8 @@
 
       return {
         status,
+        catalogLine,
+        catalogLabel,
         context,
         prototype,
         variant,
@@ -250,12 +281,21 @@
         sensoryAnchor,
         mediaFeed,
         rumor,
-        diversitySignature: hash32([facade, facadeDetail, pressure, statusManifestation, lineManifestation, alignment, tenure, aesthetic, tell, temporalObject, trauma, secret, vulnerability, sensoryCondition, sensoryConsequence, mediaSource, mediaEvent, mediaInstruction, rumorSource, rumorClaim, rumorConsequence].join('|')).toString(16).padStart(8, '0')
+        diversitySignature: hash32([catalogLine, facade, facadeDetail, pressure, statusManifestation, lineManifestation, alignment, tenure, aesthetic, tell, temporalObject, trauma, secret, vulnerability, sensoryCondition, sensoryConsequence, mediaSource, mediaEvent, mediaInstruction, rumorSource, rumorClaim, rumorConsequence].join('|')).toString(16).padStart(8, '0')
       };
     }
 
     return Object.freeze({ generate, pick, themeFor, neighborhoodKey: location => neighborhoodKey(location, cellDegrees), used });
   }
 
-  return Object.freeze({ hash32, inventoryStatusFromSeed, neighborhoodKey, createSession });
+  return Object.freeze({
+    hash32,
+    inventoryStatusFromSeed,
+    statusProfile,
+    neighborhoodKey,
+    createSession,
+    catalogLines: CATALOG_LINES,
+    catalogLabels: CATALOG_LABELS,
+    statusProfiles: STATUS_PROFILES
+  });
 });
