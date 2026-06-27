@@ -3,14 +3,18 @@ import fs from 'node:fs';
 const loader = fs.readFileSync('world-of-darkness-spatial-loader.js', 'utf8');
 const mapCore = fs.readFileSync('world-of-darkness-lightweight-map-core.js', 'utf8');
 const configCompat = fs.readFileSync('world-of-darkness-spatial-config-compat.js', 'utf8');
+const siteCatalog = fs.readFileSync('world-of-darkness-system-site-catalog.js', 'utf8');
 const diversityCore = fs.readFileSync('world-of-darkness-detail-diversity-core.js', 'utf8');
+const siteExpansion = fs.readFileSync('world-of-darkness-system-site-expansion.js', 'utf8');
 const radial = fs.readFileSync('world-of-darkness-radial-location-loader.js', 'utf8');
 const compatibility = fs.readFileSync('world-of-darkness-radial-scan-compat.js', 'utf8');
 
 const core = [
   'world-of-darkness-lightweight-map-core.js',
   'world-of-darkness-spatial-config-compat.js',
+  'world-of-darkness-system-site-catalog.js',
   'world-of-darkness-detail-diversity-core.js',
+  'world-of-darkness-system-site-expansion.js',
   'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-radial-scan-compat.js'
 ];
@@ -64,10 +68,52 @@ for (const marker of [
 ]) {
   if (!configCompat.includes(marker)) throw new Error(`Spatial config compatibility is missing ${marker}.`);
 }
+
+for (const marker of [
+  "schemaVersion: '1.0.0'",
+  'siteTypes',
+  'hiddenFunctions',
+  'infrastructures',
+  'systemSecrets',
+  'custodians',
+  'evidencePatterns',
+  'conflicts',
+  'consequences',
+  'cross-sphere-civic-junction',
+  'feeding-permission-node',
+  'caern-catchment-site',
+  'fera-migration-waystation',
+  'hunter-safehouse',
+  'freehold-annex',
+  'sanctum-annex'
+]) {
+  if (!siteCatalog.includes(marker)) throw new Error(`System site catalog is missing ${marker}.`);
+}
+for (const marker of [
+  "VERSION = '1.0.0'",
+  'enhanceCore',
+  'systemSiteCatalogVersion',
+  'siteProfile',
+  'Specific hidden function',
+  'Supernatural infrastructure',
+  'System secret',
+  'Evidence pattern',
+  'Local struggle',
+  'Failure consequence'
+]) {
+  if (!siteExpansion.includes(marker)) throw new Error(`System site expansion is missing ${marker}.`);
+}
+
 const configCompatIndex = loader.indexOf("'world-of-darkness-spatial-config-compat.js'");
+const siteCatalogIndex = loader.indexOf("'world-of-darkness-system-site-catalog.js'");
+const diversityCoreIndex = loader.indexOf("'world-of-darkness-detail-diversity-core.js'");
+const siteExpansionIndex = loader.indexOf("'world-of-darkness-system-site-expansion.js'");
 const radialLoaderIndex = loader.indexOf("'world-of-darkness-radial-location-loader.js'");
-if (configCompatIndex < 0 || radialLoaderIndex < 0 || configCompatIndex > radialLoaderIndex) {
-  throw new Error('Spatial config compatibility must load before the radial location loader.');
+if ([configCompatIndex, siteCatalogIndex, diversityCoreIndex, siteExpansionIndex, radialLoaderIndex].some(index => index < 0)) {
+  throw new Error('One or more spatial core modules are absent from the loader.');
+}
+if (!(configCompatIndex < siteCatalogIndex && siteCatalogIndex < diversityCoreIndex && diversityCoreIndex < siteExpansionIndex && siteExpansionIndex < radialLoaderIndex)) {
+  throw new Error('System catalog and expansion must load after compatibility/core setup and before radial hydration.');
 }
 
 for (const marker of [
@@ -80,13 +126,19 @@ for (const marker of [
   'createSession',
   'neighborhoodKey',
   'inventoryStatusFromSeed',
-  'regional-theme',
+  'THEME_COMPONENTS',
+  'THEME_DYNAMICS',
+  'regionalThemeVariantCount',
+  'themeVersion',
   'diversitySignature'
 ]) {
   if (!diversityCore.includes(marker)) throw new Error(`Detail diversity core is missing ${marker}.`);
 }
 if (diversityCore.includes('fetch(') || diversityCore.includes('XMLHttpRequest')) {
   throw new Error('The pure detail-diversity module must not perform network work during startup.');
+}
+if (siteCatalog.includes('fetch(') || siteCatalog.includes('XMLHttpRequest') || siteExpansion.includes('fetch(') || siteExpansion.includes('XMLHttpRequest')) {
+  throw new Error('System site modules must remain pure and must not perform network work during startup.');
 }
 
 for (const marker of [
@@ -130,11 +182,16 @@ console.log(JSON.stringify({
   chronicleDataFetchesBeforeScan: 0,
   mapMutationObservers: 0,
   pureDiversityCoreNetworkRequests: 0,
+  pureSystemSiteModuleNetworkRequests: 0,
   staleConfigCompatibilityVersion: '2.7.0',
   activeGameLineStatusBridge: true,
   unifiedStatusProfile: [5, 8, 5, 3],
   singleCatalogStatusProfile: [12, 6, 2, 1],
   unifiedCatalogs: 6,
+  regionalThemeModelVersion: '3.0.0',
+  systemSiteCatalogVersion: '1.0.0',
+  systemSiteExpansionVersion: '1.0.0',
+  systemSiteDimensions: 8,
   governedDatasetDefaults: 10,
   leafletFallbackTimeoutMs: 4500,
   radialConcurrency: 1,
