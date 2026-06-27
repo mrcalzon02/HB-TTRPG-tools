@@ -3,6 +3,7 @@
 
   const CORE_SCRIPTS = [
     'world-of-darkness-named-location-bridge.js',
+    'world-of-darkness-radial-location-loader.js',
     'world-of-darkness-spatial-engine-inventory.js'
   ];
   const ENHANCEMENT_SCRIPTS = [
@@ -18,6 +19,7 @@
   const scriptPromises = new Map();
   let corePromise = null;
   let enhancementPromise = null;
+  let mapReady = false;
 
   const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
   const nextPaint = () => new Promise(resolve => requestAnimationFrame(() => resolve()));
@@ -82,6 +84,14 @@
     button.setAttribute('aria-busy', disabled ? 'true' : 'false');
   }
 
+  function setAdvancedButtonState(label, disabled) {
+    const button = document.getElementById('wod-load-chronicle-tools');
+    if (!button) return;
+    button.textContent = label;
+    button.disabled = disabled;
+    button.setAttribute('aria-busy', disabled ? 'true' : 'false');
+  }
+
   function injectStyle() {
     if (document.getElementById('wod-spatial-loader-style')) return;
     const style = document.createElement('style');
@@ -109,13 +119,15 @@
     section.innerHTML = `
       <p class="eyebrow">Optional map workspace</p>
       <h3>Chronicle Spatial Engine</h3>
-      <p>The World of Darkness generators above are ready now. The map, named-location extraction, world seeds, global registry, influence overlays, and 420-variant context system load only when requested.</p>
+      <p>The map opens first. Visible location records then load one at a time from the map center outward. World seeds, global registries, overlays, and context tools remain dormant until the radial pass finishes or you request them.</p>
       <div class="wod-spatial-loader-actions">
         <button id="wod-open-spatial-engine" type="button" class="primary-action">Open Chronicle Spatial Engine</button>
+        <button id="wod-load-chronicle-tools" type="button" class="secondary-action" disabled>Load Chronicle Tools Now</button>
         <span id="wod-spatial-loader-status" class="wod-spatial-loader-status">Spatial systems are dormant, so they are not delaying this tab.</span>
       </div>`;
     prototype.before(section);
     section.querySelector('#wod-open-spatial-engine').addEventListener('click', () => void openSpatialEngine());
+    section.querySelector('#wod-load-chronicle-tools').addEventListener('click', () => void loadEnhancements());
     return true;
   }
 
@@ -131,22 +143,32 @@
   }
 
   async function loadEnhancements() {
+    if (!mapReady) return;
     if (enhancementPromise) return enhancementPromise;
+    setAdvancedButtonState('Loading Chronicle Tools…', true);
     enhancementPromise = (async () => {
       for (let index = 0; index < ENHANCEMENT_SCRIPTS.length; index += 1) {
-        setStatus(`Map is usable. Attaching Chronicle tools ${index + 1} of ${ENHANCEMENT_SCRIPTS.length}…`);
+        setStatus(`Map remains usable. Attaching Chronicle tool ${index + 1} of ${ENHANCEMENT_SCRIPTS.length}…`);
         await loadScript(ENHANCEMENT_SCRIPTS[index]);
         await nextPaint();
         await wait(0);
       }
-      setStatus('Chronicle Spatial Engine and all world-seed, scan, influence, and context systems are ready.', 'success');
+      setAdvancedButtonState('Chronicle Tools Loaded', true);
+      setStatus('World seeds, saved packages, scans, influence overlays, and context systems are ready.', 'success');
       document.dispatchEvent(new CustomEvent('wod:spatial-stack-ready'));
     })().catch(error => {
       enhancementPromise = null;
-      setStatus(`The map loaded, but an advanced Chronicle layer failed: ${error.message}`, 'error');
+      setAdvancedButtonState('Retry Chronicle Tools', false);
+      setStatus(`The map remains usable, but an advanced Chronicle layer failed: ${error.message}`, 'error');
       throw error;
     });
     return enhancementPromise;
+  }
+
+  function scheduleEnhancements() {
+    if (!mapReady || enhancementPromise) return;
+    const schedule = window.requestIdleCallback || (callback => window.setTimeout(callback, 150));
+    schedule(() => { void loadEnhancements(); }, { timeout: 1800 });
   }
 
   async function openSpatialEngine() {
@@ -154,19 +176,22 @@
     corePromise = (async () => {
       setButtonState('Loading Map…', true);
       for (let index = 0; index < CORE_SCRIPTS.length; index += 1) {
-        setStatus(`Loading spatial core ${index + 1} of ${CORE_SCRIPTS.length}…`);
+        setStatus(`Loading map core ${index + 1} of ${CORE_SCRIPTS.length}…`);
         await loadScript(CORE_SCRIPTS[index]);
         await nextPaint();
       }
       if (!await waitForSpatialMap()) throw new Error('The map interface did not become usable.');
+      mapReady = true;
       setButtonState('Spatial Engine Loaded', true);
-      setStatus('Map is usable. Advanced Chronicle layers will attach without blocking map interaction.');
-      const schedule = window.requestIdleCallback || (callback => window.setTimeout(callback, 150));
-      schedule(() => { void loadEnhancements(); }, { timeout: 1200 });
+      setAdvancedButtonState('Load Chronicle Tools Now', false);
+      setStatus('Map ready. Move to the desired area, then discover named locations. Records will load center-first, one at a time.');
+      if (shouldAutoOpen()) scheduleEnhancements();
       return true;
     })().catch(error => {
       corePromise = null;
+      mapReady = false;
       setButtonState('Retry Chronicle Spatial Engine', false);
+      setAdvancedButtonState('Load Chronicle Tools Now', true);
       setStatus(`Spatial engine failed to load: ${error.message}`, 'error');
       throw error;
     });
@@ -189,9 +214,15 @@
   document.addEventListener('hb:view-activated', event => {
     if (event.detail?.viewId === 'world-of-darkness' && shouldAutoOpen()) void openSpatialEngine();
   });
+  document.addEventListener('wod:radial-load-complete', scheduleEnhancements);
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else void install();
 
-  window.WODSpatialLoader = Object.freeze({ openSpatialEngine, loadEnhancements, scriptPromises });
+  window.WODSpatialLoader = Object.freeze({
+    openSpatialEngine,
+    loadEnhancements,
+    scheduleEnhancements,
+    scriptPromises
+  });
 })();
