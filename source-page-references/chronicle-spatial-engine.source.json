@@ -7,6 +7,7 @@
   "sha256": "fc22260bf7b5fbcd655bb067d2f8e6d2c7bd4694301c1885fbbd99962a6a30fe",
   "spatialStageLoader": "world-of-darkness-spatial-loader.js",
   "lightweightMapCore": "world-of-darkness-lightweight-map-core.js",
+  "spatialConfigCompatibility": "world-of-darkness-spatial-config-compat.js",
   "detailDiversityCore": "world-of-darkness-detail-diversity-core.js",
   "radialLocationLoader": "world-of-darkness-radial-location-loader.js",
   "radialScanCompatibility": "world-of-darkness-radial-scan-compat.js",
@@ -46,10 +47,13 @@
     ],
     "spatialCoreOnExplicitOpen": [
       "world-of-darkness-lightweight-map-core.js",
+      "world-of-darkness-spatial-config-compat.js",
       "world-of-darkness-detail-diversity-core.js",
       "world-of-darkness-radial-location-loader.js",
       "world-of-darkness-radial-scan-compat.js"
     ],
+    "staleConfigCompatibilityVersion": "2.6.1",
+    "staleConfigPolicy": "bypass cached configuration, merge governed dataset defaults, and synthesize a safe config response when necessary",
     "mapOnlyStartup": {
       "chronicleDatasetFetches": 0,
       "mutationObservers": 0,
