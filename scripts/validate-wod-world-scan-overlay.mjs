@@ -84,7 +84,8 @@ for (const runtimePath of runtimePaths) {
 }
 if (!spatialLoader.includes('Open Chronicle Spatial Engine')) throw new Error('Explicit spatial-engine activation control is missing.');
 if (!spatialLoader.includes('requestIdleCallback')) throw new Error('Advanced Chronicle layers must be deferred until after map mount.');
-if (!spatialLoader.includes('waitForSpatialShell')) throw new Error('The staged loader does not wait for the map shell.');
+if (!spatialLoader.includes('waitForSpatialMap')) throw new Error('The staged loader does not wait for a usable map instance.');
+if (!spatialLoader.includes("classList.contains('leaflet-container')")) throw new Error('The map-ready gate does not confirm Leaflet initialization.');
 if (!spatialLoader.includes('wod:spatial-stack-ready')) throw new Error('The spatial stack completion event is missing.');
 for (const runtimePath of runtimePaths) {
   if (wodBundleMatch[1].includes(runtimePath)) throw new Error(`${runtimePath} must not load merely by opening the World of Darkness tab.`);
