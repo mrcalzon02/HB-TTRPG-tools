@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 const checks = [
   ['syntax:spatial-loader', ['--check', 'world-of-darkness-spatial-loader.js']],
+  ['syntax:spatial-config-compat', ['--check', 'world-of-darkness-spatial-config-compat.js']],
   ['syntax:detail-diversity-core', ['--check', 'world-of-darkness-detail-diversity-core.js']],
   ['syntax:radial-loader', ['--check', 'world-of-darkness-radial-location-loader.js']],
   ['syntax:package-bridge', ['--check', 'world-of-darkness-location-package-bridge.js']],
