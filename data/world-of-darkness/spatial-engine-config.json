@@ -55,6 +55,34 @@
       "nearby values already used in the current radial pass"
     ],
     "supportedGameLines": ["unified", "vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
+    "lineDensityProfiles": {
+      "singleCatalog": {
+        "slots": 21,
+        "mundane": 12,
+        "tangential": 6,
+        "activeUnregistered": 2,
+        "inventoried": 1,
+        "supernaturalOrAdjacentPercent": 42.86,
+        "activeOrInventoriedPercent": 14.29
+      },
+      "unified": {
+        "slots": 21,
+        "mundane": 5,
+        "tangential": 8,
+        "activeUnregistered": 5,
+        "inventoried": 3,
+        "supernaturalOrAdjacentPercent": 76.19,
+        "activeOrInventoriedPercent": 38.1
+      }
+    },
+    "unifiedCatalogMode": {
+      "catalogs": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
+      "regionalThemePolicy": "shared unified overlap theme by neighborhood",
+      "localCatalogLensPolicy": "rotate individual locations through all six catalogs before local catalog reuse",
+      "contextPolicy": "score context and prototype against the selected local catalog lens",
+      "manifestationPolicy": "combine the selected catalog manifestations with unified overlap manifestations",
+      "adjacencyPolicy": "different catalog locations may generate immediately beside one another"
+    },
     "baseContextCount": 21,
     "addedContextCount": 21,
     "effectiveContextCount": 42,
@@ -99,7 +127,8 @@
     "activeUnregisteredPercent": 9.52,
     "inventoriedPercent": 4.76,
     "mundaneOrTangentialPercent": 85.71,
-    "notInventoriedPercent": 95.24
+    "notInventoriedPercent": 95.24,
+    "scope": "single-catalog context matrix; Unified runtime density is governed separately by contextAwareGeneration.lineDensityProfiles.unified"
   },
   "coreData": {
     "locations": "data/world-of-darkness/locations_core_v2.json",
