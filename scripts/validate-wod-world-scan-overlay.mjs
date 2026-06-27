@@ -3,6 +3,7 @@ import fs from 'node:fs';
 const configPath = 'data/world-of-darkness/spatial-engine-config.json';
 const generatedRegistryPath = 'data/world-of-darkness/generated_location_registry.json';
 const influenceRegistryPath = 'data/world-of-darkness/influence_overlay_registry.json';
+const sourceReceiptPath = 'source-page-references/chronicle-spatial-engine.source.json';
 const namedBridgePath = 'world-of-darkness-named-location-bridge.js';
 const worldScanPath = 'world-of-darkness-world-scan-overlay.js';
 const globalRescanPath = 'world-of-darkness-global-rescan-bridge.js';
@@ -11,6 +12,7 @@ const loaderPath = 'character-sheet-title.js';
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const generatedRegistry = JSON.parse(fs.readFileSync(generatedRegistryPath, 'utf8'));
 const influenceRegistry = JSON.parse(fs.readFileSync(influenceRegistryPath, 'utf8'));
+const sourceReceipt = JSON.parse(fs.readFileSync(sourceReceiptPath, 'utf8'));
 const namedBridge = fs.readFileSync(namedBridgePath, 'utf8');
 const worldScan = fs.readFileSync(worldScanPath, 'utf8');
 const globalRescan = fs.readFileSync(globalRescanPath, 'utf8');
@@ -65,12 +67,29 @@ if (!influenceRegistry.worlds || typeof influenceRegistry.worlds !== 'object' ||
   throw new Error('Influence overlay worlds must be an object.');
 }
 
+if (sourceReceipt.schemaVersion !== '2.4.0') throw new Error('Chronicle source receipt must use schemaVersion 2.4.0.');
+const governedPaths = [
+  sourceReceipt.namedLocationBridge,
+  sourceReceipt.governedRuntime,
+  sourceReceipt.worldSeedBridge,
+  sourceReceipt.worldScanOverlay,
+  sourceReceipt.globalRescanBridge,
+  sourceReceipt.globalRescanWorkflow
+];
+for (const governedPath of governedPaths) {
+  if (typeof governedPath !== 'string' || !fs.existsSync(governedPath)) {
+    throw new Error(`Governed Chronicle path is missing: ${governedPath}`);
+  }
+}
+if (!sourceReceipt.coreDataFiles.includes(influenceRegistryPath)) throw new Error('Source receipt does not include the influence overlay registry.');
+
 console.log(JSON.stringify({
   namedLocationScope: config.namedLocationMatching.scanScope,
   localWorldScanCap: config.worldScan.localVisibleLocationCap,
   globalViewportProcessingCap: config.worldScan.globalViewportProcessingCap,
   globalSubmissionModel: config.worldScan.globalSubmissionModel,
   runtimeOrder: ['named-location-bridge', 'spatial-engine', 'location-package-bridge', 'world-scan-overlay', 'global-rescan-bridge'],
+  governedPaths,
   embeddedWorlds: Object.keys(generatedRegistry.worlds || {}).length,
   influenceSpheres: influenceRegistry.sphereVocabulary,
   provisionalRadii: config.influenceOverlay.statusRadiusMeters
