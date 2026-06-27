@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.2.0",
+  "schemaVersion": "2.3.0",
   "mapMode": "leaflet-openstreetmap-lazy-manual-scan",
   "performance": {
     "lazyStartOnWorldOfDarknessView": true,
@@ -36,6 +36,24 @@
     "denseAreaGuidance": "zoom-closer-and-rescan-when-server-cap-is-reached",
     "legacyBusinessOnlyCacheMigration": "clear-once"
   },
+  "worldScan": {
+    "localVisibleLocationCap": 90,
+    "globalBatchLocationCap": 75,
+    "globalRegistryBehavior": "add-only-missing-packages-under-active-world-seed",
+    "globalCoverageTracking": "bounds-zoom-center-game-line-package-keys",
+    "claimedLocationBehavior": "defer-to-future-claimed-business-integration"
+  },
+  "influenceOverlay": {
+    "generatedLayerModel": "provisional-circles-from-world-seeded-packages",
+    "curatedLayerModel": "repository-backed-geojson-compatible-features",
+    "localStyle": "dashed",
+    "globalStyle": "solid",
+    "statusRadiusMeters": {
+      "TANGENTIAL": 120,
+      "ACTIVE_UNREGISTERED": 240,
+      "INVENTORIED": 420
+    }
+  },
   "locationDistribution": {
     "totalVariants": 210,
     "variantsPerArchetype": 21,
@@ -52,7 +70,8 @@
     "rumors": "data/world-of-darkness/rumors_core.json",
     "centralRegistry": "data/world-of-darkness/poi_registry.json",
     "crosslinks": "data/world-of-darkness/location_crosslink_core.json",
-    "generatedLocationRegistry": "data/world-of-darkness/generated_location_registry.json"
+    "generatedLocationRegistry": "data/world-of-darkness/generated_location_registry.json",
+    "influenceOverlayRegistry": "data/world-of-darkness/influence_overlay_registry.json"
   },
   "worldSeeds": {
     "model": "local-and-embedded-selectable-world-seeds",
@@ -66,8 +85,11 @@
     "localOverrides": "localStorage",
     "localWorldSeeds": "localStorage",
     "localGeneratedPackages": "localStorage",
+    "localScanCoverage": "localStorage",
     "centralOverrides": "static-repository-registry",
-    "embeddedWorlds": "generated-location-registry"
+    "embeddedWorlds": "generated-location-registry",
+    "globalScanCoverage": "generated-location-registry-world-scanCoverage",
+    "curatedInfluence": "influence-overlay-registry"
   },
   "businessTypeMappings": {
     "restaurant": "Vampiric Circulatory Node / Anarch Haven",
