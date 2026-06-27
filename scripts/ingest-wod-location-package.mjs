@@ -17,7 +17,8 @@ try {
   throw new Error(`Package patch is not valid JSON: ${error.message}`);
 }
 
-if (patch?.schemaVersion !== '2.0.0') throw new Error('Unsupported patch schemaVersion.');
+const supportedPackageSchemas = new Set(['2.0.0', '2.1.0']);
+if (!supportedPackageSchemas.has(patch?.schemaVersion)) throw new Error('Unsupported patch schemaVersion.');
 if (patch?.target !== 'data/world-of-darkness/generated_location_registry.json') {
   throw new Error('Package patch target is not allowed.');
 }
@@ -48,7 +49,8 @@ if (typeof worldSeed.createdAt !== 'string' || Number.isNaN(Date.parse(worldSeed
 
 const pkg = patch.package;
 if (!pkg || typeof pkg !== 'object' || Array.isArray(pkg)) throw new Error('Missing package object.');
-if (pkg.schemaVersion !== '2.0.0') throw new Error('Unsupported package schemaVersion.');
+if (!supportedPackageSchemas.has(pkg.schemaVersion)) throw new Error('Unsupported package schemaVersion.');
+if (pkg.schemaVersion !== patch.schemaVersion) throw new Error('Patch and package schema versions must match.');
 if (pkg.packageKey !== patch.packageKey) throw new Error('package.packageKey must match patch.packageKey.');
 if (pkg.worldSeedKey !== worldSeed.worldSeedKey) throw new Error('package.worldSeedKey must match worldSeed.worldSeedKey.');
 if (!/^gmaps-[0-9a-f]{8}$/.test(pkg.locationKey || '')) throw new Error('locationKey must use the gmaps-xxxxxxxx format.');
@@ -93,9 +95,21 @@ const contextEntries = Object.entries(location.contextSnapshot);
 if (contextEntries.length > 50) throw new Error('location.contextSnapshot has too many fields.');
 for (const [key, value] of contextEntries) {
   if (typeof key !== 'string' || key.length > 120) throw new Error('A contextSnapshot key is invalid.');
-  if (typeof value !== 'string' || value.length > 6000) {
-    throw new Error(`contextSnapshot value for ${key} is invalid.`);
+  if (typeof value === 'string') {
+    if (value.length > 6000) throw new Error(`contextSnapshot value for ${key} is too long.`);
+    continue;
   }
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error(`contextSnapshot value for ${key} must be a bounded string or object.`);
+  }
+  if (JSON.stringify(value).length > 6000) throw new Error(`contextSnapshot object for ${key} is too large.`);
+}
+
+if (location.spatialContext != null) {
+  if (!location.spatialContext || typeof location.spatialContext !== 'object' || Array.isArray(location.spatialContext)) {
+    throw new Error('location.spatialContext must be an object when present.');
+  }
+  if (JSON.stringify(location.spatialContext).length > 12000) throw new Error('location.spatialContext is too large.');
 }
 
 const requiredOutputs = ['population', 'struggle', 'adventureHook', 'locationSeed', 'item'];
@@ -116,6 +130,12 @@ for (const outputName of requiredOutputs) {
   for (const [key, value] of Object.entries(output)) {
     if (key === 'statuses') {
       if (!Array.isArray(value)) throw new Error(`${outputName}.statuses must be an array.`);
+      continue;
+    }
+    if (key === 'applicability') {
+      if (!value || typeof value !== 'object' || Array.isArray(value) || JSON.stringify(value).length > 6000) {
+        throw new Error(`${outputName}.applicability must be a bounded object.`);
+      }
       continue;
     }
     if (typeof value !== 'string' || value.length > 6000) {
@@ -142,8 +162,19 @@ if (!pkg.source || typeof pkg.source !== 'object' || Array.isArray(pkg.source)) 
 if (typeof pkg.source.crosslinkSchemaVersion !== 'string' || pkg.source.crosslinkSchemaVersion.length > 40) {
   throw new Error('source.crosslinkSchemaVersion is invalid.');
 }
-if (typeof pkg.source.generatorVersion !== 'string' || pkg.source.generatorVersion.length > 40) {
+if (typeof pkg.source.generatorVersion !== 'string' || pkg.source.generatorVersion.length > 100) {
   throw new Error('source.generatorVersion is invalid.');
+}
+if (pkg.schemaVersion === '2.1.0') {
+  if (pkg.source.detailDiversityVersion !== '1.0.0') throw new Error('Diversified packages must declare detailDiversityVersion 1.0.0.');
+  if (!/^[0-9a-f]{8}$/.test(location.contextSnapshot.diversitySignature || '')) {
+    throw new Error('Diversified packages require an eight-character diversitySignature.');
+  }
+  const theme = location.contextSnapshot.regionalTheme;
+  if (!theme || typeof theme !== 'object' || Array.isArray(theme)
+    || typeof theme.id !== 'string' || typeof theme.label !== 'string' || typeof theme.description !== 'string') {
+    throw new Error('Diversified packages require structured regionalTheme metadata.');
+  }
 }
 
 const targetPath = path.resolve(process.cwd(), patch.target);
