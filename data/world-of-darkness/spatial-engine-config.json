@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.4.0",
+  "schemaVersion": "2.5.0",
   "mapMode": "leaflet-openstreetmap-lazy-manual-scan",
   "performance": {
     "lazyStartOnWorldOfDarknessView": true,
@@ -44,6 +44,36 @@
     "globalCoverageTracking": "bounds-zoom-center-game-line-package-keys-and-server-result-count",
     "claimedLocationBehavior": "defer-to-future-claimed-business-integration"
   },
+  "contextAwareGeneration": {
+    "model": "additive-base-plus-context-expansion",
+    "selectionInputs": [
+      "world seed",
+      "stable real-location key",
+      "inventory status",
+      "active game line",
+      "mapped category",
+      "named-feature class",
+      "retained OpenStreetMap tags"
+    ],
+    "supportedGameLines": [
+      "unified",
+      "vampire",
+      "werewolf",
+      "breeds",
+      "hunter",
+      "changeling",
+      "mage"
+    ],
+    "baseContextCount": 21,
+    "addedContextCount": 21,
+    "effectiveContextCount": 42,
+    "prototypeCount": 10,
+    "effectiveLocationVariants": 420,
+    "baseEntriesPerOutputPool": 8,
+    "addedEntriesPerOutputPool": 8,
+    "effectiveEntriesPerOutputPool": 16,
+    "immutability": "existing published packages remain unchanged; enrichment applies only during the new package transaction"
+  },
   "influenceOverlay": {
     "generatedLayerModel": "provisional-circles-from-world-seeded-packages",
     "curatedLayerModel": "repository-backed-geojson-compatible-features",
@@ -56,8 +86,13 @@
     }
   },
   "locationDistribution": {
-    "totalVariants": 210,
-    "variantsPerArchetype": 21,
+    "baseTotalVariants": 210,
+    "effectiveTotalVariants": 420,
+    "variantsPerArchetype": 42,
+    "mundaneCountPerArchetype": 24,
+    "tangentialCountPerArchetype": 12,
+    "activeUnregisteredCountPerArchetype": 4,
+    "inventoriedCountPerArchetype": 2,
     "mundanePercent": 57.14,
     "tangentialPercent": 28.57,
     "activeUnregisteredPercent": 9.52,
@@ -67,10 +102,12 @@
   },
   "coreData": {
     "locations": "data/world-of-darkness/locations_core_v2.json",
+    "contextExpansion": "data/world-of-darkness/location_context_expansion_v3.json",
     "characters": "data/world-of-darkness/characters_core.json",
     "rumors": "data/world-of-darkness/rumors_core.json",
     "centralRegistry": "data/world-of-darkness/poi_registry.json",
     "crosslinks": "data/world-of-darkness/location_crosslink_core.json",
+    "crosslinkExpansion": "data/world-of-darkness/location_crosslink_expansion_v2.json",
     "generatedLocationRegistry": "data/world-of-darkness/generated_location_registry.json",
     "influenceOverlayRegistry": "data/world-of-darkness/influence_overlay_registry.json"
   },
