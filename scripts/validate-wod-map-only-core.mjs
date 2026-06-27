@@ -61,7 +61,9 @@ for (const marker of [
 ]) {
   if (!configCompat.includes(marker)) throw new Error(`Spatial config compatibility is missing ${marker}.`);
 }
-if (!loader.indexOf("'world-of-darkness-spatial-config-compat.js'") < loader.indexOf("'world-of-darkness-radial-location-loader.js'")) {
+const configCompatIndex = loader.indexOf("'world-of-darkness-spatial-config-compat.js'");
+const radialLoaderIndex = loader.indexOf("'world-of-darkness-radial-location-loader.js'");
+if (configCompatIndex < 0 || radialLoaderIndex < 0 || configCompatIndex > radialLoaderIndex) {
   throw new Error('Spatial config compatibility must load before the radial location loader.');
 }
 
