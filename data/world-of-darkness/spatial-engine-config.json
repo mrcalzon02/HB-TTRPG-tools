@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "mapId": "4504f8b37365c3d0",
+  "schemaVersion": "1.1.0",
+  "mapMode": "google-maps-no-key-embed",
   "coreData": {
     "locations": "data/world-of-darkness/locations_core.json",
     "characters": "data/world-of-darkness/characters_core.json",
@@ -8,7 +8,7 @@
     "centralRegistry": "data/world-of-darkness/poi_registry.json"
   },
   "persistence": {
-    "baseline": "deterministic-place-id-and-coordinate-seed",
+    "baseline": "deterministic-business-key-and-coordinate-seed",
     "localOverrides": "localStorage",
     "centralOverrides": "static-repository-registry"
   },
