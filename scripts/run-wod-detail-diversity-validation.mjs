@@ -7,6 +7,7 @@ const checks = [
   ['syntax:system-site-catalog', ['--check', 'world-of-darkness-system-site-catalog.js']],
   ['syntax:detail-diversity-core', ['--check', 'world-of-darkness-detail-diversity-core.js']],
   ['syntax:regional-theme-expansion', ['--check', 'world-of-darkness-regional-theme-expansion.js']],
+  ['syntax:regional-legacy-qualifier', ['--check', 'world-of-darkness-regional-legacy-qualifier.js']],
   ['syntax:system-site-expansion', ['--check', 'world-of-darkness-system-site-expansion.js']],
   ['syntax:radial-loader', ['--check', 'world-of-darkness-radial-location-loader.js']],
   ['syntax:package-bridge', ['--check', 'world-of-darkness-location-package-bridge.js']],
@@ -49,7 +50,7 @@ const validatedCommit = process.env.GITHUB_SHA || process.env.VALIDATED_COMMIT |
 const checkedAt = new Date().toISOString();
 const receipt = {
   receiptType: 'wodDetailDiversityValidation',
-  schemaVersion: '1.3.0',
+  schemaVersion: '1.4.0',
   status: failed.length ? 'failed' : 'passed',
   validatedCommit,
   workflow: '.github/workflows/validate-wod-world-scan-overlay.yml',
@@ -84,6 +85,7 @@ if (!failed.length) {
     sampleSize: 24,
     hiddenFunctionUniqueCount: 24,
     regionalThemeModelVersion: '3.2.0',
+    regionalLegacyQualifierVersion: '1.0.0',
     minimumRegionalThemeVariantsPerCatalog: 27648,
     regionalManifestationChannels: 12,
     legacyThemeFrequencyDenominator: 32
@@ -94,9 +96,11 @@ if (!failed.length) {
     validatedCommit,
     checkedAt,
     version: '3.2.0',
+    legacyQualifierVersion: '1.0.0',
     minimumVariantsPerCatalog: 27648,
     manifestationChannels: 12,
     legacyThemeFrequencyDenominator: 32,
+    exactThemeRecurrenceCeiling: 3,
     deterministicReplay: true
   };
   governance.unifiedCatalogGeneration ||= {};
@@ -117,6 +121,7 @@ if (!failed.length) {
     validatedCommit,
     checkedAt,
     regionalThemeVersion: '3.2.0',
+    regionalLegacyQualifierVersion: '1.0.0',
     catalogVersion: '1.0.0',
     expansionVersion: '1.0.0',
     dimensions: 8,
