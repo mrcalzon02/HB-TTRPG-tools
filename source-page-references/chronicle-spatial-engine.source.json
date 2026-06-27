@@ -1,7 +1,7 @@
 {
   "receiptType": "chronicleSpatialEngineSourceReceipt",
-  "schemaVersion": "1.0.0",
-  "sourcePath": "SRC/world-of-darkness/CHRONICLE-SPATIAL-ENGINE-MASTER-SPECIFICATION-AND-ARCHITECTURE-GOVERNANCE.docx",
+  "schemaVersion": "1.1.0",
+  "sourcePath": "SRC/world-of-darkness/chronicle-spatial-engine-governance.docx",
   "uploadedName": "# CHRONICLE SPATIAL ENGINE- MASTER SPECIFICATION & ARCHITECTURE GOVERNANCE.docx",
   "sizeBytes": 12009,
   "sha256": "fc22260bf7b5fbcd655bb067d2f8e6d2c7bd4694301c1885fbbd99962a6a30fe",
