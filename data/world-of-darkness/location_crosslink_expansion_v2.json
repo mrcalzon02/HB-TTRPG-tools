@@ -1,0 +1,402 @@
+{
+  "schemaVersion": "2.0.0",
+  "module": "chronicle-location-crosslink-expansion",
+  "description": "Adds eight entries to each status-aware output pool, doubling every pool from 8 to 16 and providing game-line and real-world applicability hooks.",
+  "baseEntriesPerPool": 8,
+  "addedEntriesPerPool": 8,
+  "effectiveEntriesPerPool": 16,
+  "population": [
+    {
+      "id": "population-mundane-operational-specialists",
+      "statuses": ["MUNDANE"],
+      "title": "Operational Specialists",
+      "composition": "People whose jobs match the real-world feature—drivers, nurses, librarians, groundskeepers, clerks, engineers, guides, or maintenance workers—control practical access.",
+      "roles": "They understand schedules, hazards, restricted areas, and the difference between normal and genuinely unusual activity.",
+      "supernaturalConnection": "None is required; their expertise makes bad supernatural assumptions easier to expose.",
+      "complication": "The most knowledgeable worker is unavailable because of an ordinary staffing or safety problem.",
+      "applicability": { "gameLines": ["all"], "categories": ["government", "hospital", "library", "transit_station", "industrial", "park", "infrastructure"], "featureHooks": ["public", "hospital", "library", "station", "industrial", "park", "utility"], "tagHooks": { "amenity": ["*"], "railway": ["*"], "power": ["*"] } }
+    },
+    {
+      "id": "population-mundane-community-dependents",
+      "statuses": ["MUNDANE"],
+      "title": "Community Dependents",
+      "composition": "Residents, commuters, patients, students, worshippers, customers, or visitors rely on the location's ordinary service.",
+      "roles": "Their routines reveal which entrances, hours, services, and staff relationships actually matter.",
+      "supernaturalConnection": "They are uninvolved, but harm to the site creates real human consequences.",
+      "complication": "A covert investigation threatens a service the surrounding community cannot easily replace.",
+      "applicability": { "gameLines": ["unified", "hunter", "vampire", "changeling"], "categories": ["store", "restaurant", "hospital", "school", "church", "park", "transit_station"], "featureHooks": ["shop", "restaurant", "hospital", "school", "religious", "park", "station"], "tagHooks": { "amenity": ["school", "hospital", "place_of_worship", "restaurant", "bus_station"], "shop": ["*"] } }
+    },
+    {
+      "id": "population-tangential-line-observers",
+      "statuses": ["TANGENTIAL"],
+      "title": "Line-Specific Observers",
+      "composition": "Ordinary witnesses noticed details that matter differently to Kindred, hunters, mages, changelings, Garou, or another Changing Breed.",
+      "roles": "Each witness reports the same event through the expectations created by the location's real-world purpose.",
+      "supernaturalConnection": "Their testimony contains a genuine trace but no proof that the site itself is controlled.",
+      "complication": "The active game line makes one witness seem credible while obscuring another equally important account.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage", "unified"], "categories": ["all"], "featureHooks": ["station", "bar", "park", "library", "school", "historic", "public"], "tagHooks": {} }
+    },
+    {
+      "id": "population-tangential-data-custodians",
+      "statuses": ["TANGENTIAL"],
+      "title": "Data-Trail Custodians",
+      "composition": "A scheduler, records clerk, camera operator, dispatcher, archivist, or platform administrator controls the relevant ordinary records.",
+      "roles": "They preserve timestamps and movement data without knowing why investigators value them.",
+      "supernaturalConnection": "A supernatural actor appears only as an unexplained entry in a mundane system.",
+      "complication": "Policy, privacy law, institutional loyalty, or technical failure prevents immediate access.",
+      "applicability": { "gameLines": ["unified", "hunter", "vampire", "mage"], "categories": ["government", "transit_station", "hospital", "library", "office", "store", "lodging"], "featureHooks": ["government", "station", "hospital", "library", "office", "hotel", "retail"], "tagHooks": { "amenity": ["police", "townhall", "hospital", "library"], "office": ["*"], "tourism": ["hotel", "motel"] } }
+    },
+    {
+      "id": "population-active-embedded-cover-team",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Embedded Cover Team",
+      "composition": "A supernatural operator and informed mortal specialists perform legitimate work matching the location's actual purpose.",
+      "roles": "Their real jobs give them access, plausible authority, records, equipment, and reasons to be present.",
+      "supernaturalConnection": "The operation remains unofficial because formal recognition would expose the cover or provoke a jurisdictional dispute.",
+      "complication": "A routine audit tests whether the team truly understands the institution it is exploiting.",
+      "applicability": { "gameLines": ["vampire", "hunter", "mage", "unified"], "categories": ["hospital", "government", "office", "store", "lodging", "transit_station", "industrial"], "featureHooks": ["hospital", "government", "office", "shop", "hotel", "station", "industrial"], "tagHooks": { "amenity": ["hospital", "police", "townhall"], "office": ["*"], "tourism": ["hotel", "motel"], "shop": ["*"] } }
+    },
+    {
+      "id": "population-active-unstable-coalition",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Unstable Cross-Sphere Coalition",
+      "composition": "Representatives of two supernatural perspectives and several mortal intermediaries cooperate because the real-world location serves all of them.",
+      "roles": "Each group handles a different part of the site's mundane and supernatural operation.",
+      "supernaturalConnection": "No single faction can safely claim the location without losing the others' expertise or provoking exposure.",
+      "complication": "A change in the site's ordinary operation removes the compromise that held the coalition together.",
+      "applicability": { "gameLines": ["unified", "werewolf", "breeds", "changeling", "mage"], "categories": ["park", "natural_feature", "water_feature", "historic_site", "library", "infrastructure", "church"], "featureHooks": ["park", "nature", "water", "historic", "library", "utility", "religious"], "tagHooks": { "natural": ["*"], "historic": ["*"], "waterway": ["*"], "amenity": ["library", "place_of_worship"] } }
+    },
+    {
+      "id": "population-inventoried-sphere-delegation",
+      "statuses": ["INVENTORIED"],
+      "title": "Recognized Sphere Delegation",
+      "composition": "A formally appointed custodian works with specialists whose titles and methods reflect the selected game line.",
+      "roles": "They enforce access rules, document incidents, and translate the site's ordinary operation into supernatural policy.",
+      "supernaturalConnection": "Their authority is valid within one sphere but may not be recognized by another.",
+      "complication": "A visiting representative challenges whether the custodian's mandate applies to the current real-world use.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["public", "historic", "park", "library", "hospital", "station"], "tagHooks": {} }
+    },
+    {
+      "id": "population-inventoried-joint-jurisdiction",
+      "statuses": ["INVENTORIED"],
+      "title": "Joint-Jurisdiction Staff",
+      "composition": "Multiple custodians, mortal administrators, and neutral service workers maintain one location under a negotiated cross-system agreement.",
+      "roles": "Separate ledgers govern physical access, feeding, spiritual passage, evidence handling, resonance, and public safety.",
+      "supernaturalConnection": "The location is formally recognized by more than one supernatural authority.",
+      "complication": "The agreement does not specify which ledger controls a new feature created by recent real-world changes.",
+      "applicability": { "gameLines": ["unified"], "categories": ["government", "hospital", "library", "transit_station", "park", "historic_site", "church", "infrastructure"], "featureHooks": ["public", "hospital", "library", "station", "park", "historic", "religious", "utility"], "tagHooks": { "amenity": ["*"], "historic": ["*"], "natural": ["*"], "public_transport": ["*"] } }
+    }
+  ],
+  "struggles": [
+    {
+      "id": "struggle-mundane-real-use",
+      "statuses": ["MUNDANE"],
+      "title": "Conflict Over Real-World Use",
+      "stakes": "The location's ordinary users may lose access, safety, employment, housing, transport, care, worship, or public space.",
+      "sides": "Operators, workers, users, neighbors, regulators, and property owners disagree about what the place is for.",
+      "escalation": "Supernatural attention worsens an existing human dispute without creating it.",
+      "resolutionClue": "Understanding the actual service and who depends on it reveals a solution that occult investigation alone would miss.",
+      "applicability": { "gameLines": ["all"], "categories": ["all"], "featureHooks": ["public", "shop", "hospital", "school", "park", "station", "building"], "tagHooks": {} }
+    },
+    {
+      "id": "struggle-mundane-infrastructure-access",
+      "statuses": ["MUNDANE"],
+      "title": "Infrastructure and Access Failure",
+      "stakes": "A real utility, route, service, building system, or environmental condition is failing.",
+      "sides": "Maintenance staff, management, users, emergency services, and contractors prioritize different risks.",
+      "escalation": "Delay closes the location or turns inconvenience into a public emergency.",
+      "resolutionClue": "The site's tags, layout, and operating purpose identify the overlooked dependency.",
+      "applicability": { "gameLines": ["unified", "hunter", "mage", "werewolf"], "categories": ["infrastructure", "transit_feature", "transit_station", "hospital", "water_feature", "industrial", "named_building"], "featureHooks": ["utility", "station", "hospital", "water", "industrial", "building"], "tagHooks": { "power": ["*"], "waterway": ["*"], "railway": ["*"], "man_made": ["*"] } }
+    },
+    {
+      "id": "struggle-tangential-false-pattern",
+      "statuses": ["TANGENTIAL"],
+      "title": "False Pattern Amplification",
+      "stakes": "A weak supernatural trace is being exaggerated into a claim about the entire location or community.",
+      "sides": "Investigators, frightened residents, opportunists, witnesses, and actual supernatural actors benefit from different interpretations.",
+      "escalation": "Public attention or faction mobilization harms innocent users and obscures the moving target.",
+      "resolutionClue": "Real-world schedules, records, or geography show that the pattern only passes through the site.",
+      "applicability": { "gameLines": ["unified", "hunter", "vampire", "mage"], "categories": ["government", "hospital", "school", "church", "store", "transit_station"], "featureHooks": ["public", "hospital", "school", "religious", "shop", "station"], "tagHooks": { "amenity": ["*"] } }
+    },
+    {
+      "id": "struggle-tangential-cross-line-misreading",
+      "statuses": ["TANGENTIAL"],
+      "title": "Cross-Line Misreading",
+      "stakes": "One supernatural system mistakes another sphere's trace for evidence of local ownership or hostility.",
+      "sides": "The active game's faction, an outside sphere, ordinary site users, and a third party exploiting the confusion all react differently.",
+      "escalation": "A reconnaissance mistake becomes a territorial or ideological confrontation.",
+      "resolutionClue": "The real-world feature explains why multiple supernatural routes or resonances overlap here.",
+      "applicability": { "gameLines": ["unified", "werewolf", "breeds", "changeling", "mage", "vampire"], "categories": ["park", "natural_feature", "historic_site", "library", "transit_station", "church", "named_boundary"], "featureHooks": ["park", "nature", "historic", "library", "station", "religious", "boundary"], "tagHooks": { "natural": ["*"], "historic": ["*"], "public_transport": ["*"] } }
+    },
+    {
+      "id": "struggle-active-unregistered-collision",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Unregistered Sphere Collision",
+      "stakes": "Two groups actively use the same place for different supernatural purposes without a recognized agreement.",
+      "sides": "Current users, an emerging claimant, mortal operators, and the authority that would regulate the dispute all have leverage.",
+      "escalation": "Each side modifies the real-world operation to disadvantage the other, increasing exposure.",
+      "resolutionClue": "The location's mundane function offers a division of access neither faction initially considered.",
+      "applicability": { "gameLines": ["unified", "vampire", "werewolf", "breeds", "changeling", "mage"], "categories": ["all"], "featureHooks": ["park", "station", "bar", "library", "historic", "utility"], "tagHooks": {} }
+    },
+    {
+      "id": "struggle-active-operational-footprint",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Operational Footprint Exposure",
+      "stakes": "The supernatural operation cannot continue without manipulating deliveries, staffing, access logs, ecology, public events, or maintenance.",
+      "sides": "Operators want secrecy while workers, users, inspectors, and rivals notice the accumulating pattern.",
+      "escalation": "A normal disruption removes the cover and forces increasingly obvious intervention.",
+      "resolutionClue": "One real-world dependency is responsible for most of the visible anomalies.",
+      "applicability": { "gameLines": ["vampire", "hunter", "mage", "unified"], "categories": ["store", "restaurant", "hospital", "office", "industrial", "transit_station", "lodging"], "featureHooks": ["shop", "restaurant", "hospital", "office", "industrial", "station", "hotel"], "tagHooks": { "shop": ["*"], "office": ["*"], "tourism": ["hotel", "motel"], "railway": ["*"] } }
+    },
+    {
+      "id": "struggle-inventoried-jurisdictional-overlap",
+      "statuses": ["INVENTORIED"],
+      "title": "Jurisdictional Overlap",
+      "stakes": "Several recognized authorities claim different rights over the same physical location and its supernatural layers.",
+      "sides": "Custodians, neighboring domains, mortal operators, and outside inspectors cite incompatible mandates.",
+      "escalation": "Routine access becomes a test case capable of changing policy across the city.",
+      "resolutionClue": "The site's current real-world classification differs from the classification used when the mandates were written.",
+      "applicability": { "gameLines": ["unified"], "categories": ["government", "hospital", "library", "transit_station", "park", "historic_site", "church", "infrastructure"], "featureHooks": ["public", "hospital", "library", "station", "park", "historic", "religious", "utility"], "tagHooks": { "amenity": ["*"], "historic": ["*"], "natural": ["*"] } }
+    },
+    {
+      "id": "struggle-inventoried-doctrine-reality",
+      "statuses": ["INVENTORIED"],
+      "title": "Doctrine Versus Local Reality",
+      "stakes": "Official supernatural policy treats the site as an abstract asset while its actual operation has changed.",
+      "sides": "Central authority, local custodian, mortal staff, site users, and reformers disagree about what compliance requires.",
+      "escalation": "Enforcement damages the very feature the inventory was meant to preserve.",
+      "resolutionClue": "Current maps, schedules, ecology, or institutional practice prove that the official model is obsolete.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["public", "nature", "building", "station", "historic", "institution"], "tagHooks": {} }
+    }
+  ],
+  "adventureHooks": [
+    {
+      "id": "hook-mundane-cannot-close",
+      "statuses": ["MUNDANE"],
+      "title": "The Place Cannot Simply Close",
+      "opening": "Investigation or supernatural violence makes shutting the location seem like the safest option.",
+      "reversal": "Its actual service is essential to workers, patients, commuters, residents, students, worshippers, or the surrounding neighborhood.",
+      "decision": "Preserve ordinary operations under dangerous conditions, relocate the service, or accept the human cost of closure.",
+      "reward": "Protecting the mundane institution creates durable allies and a reliable local information network.",
+      "applicability": { "gameLines": ["all"], "categories": ["hospital", "transit_station", "government", "school", "church", "store", "park"], "featureHooks": ["hospital", "station", "public", "school", "religious", "shop", "park"], "tagHooks": { "amenity": ["*"] } }
+    },
+    {
+      "id": "hook-mundane-real-emergency",
+      "statuses": ["MUNDANE"],
+      "title": "A Real Emergency in the Wrong Story",
+      "opening": "Characters arrive expecting occult activity while a fire, outage, medical crisis, structural failure, environmental hazard, or missing person demands immediate help.",
+      "reversal": "The emergency is mundane, but supernatural methods could solve it at the cost of exposure.",
+      "decision": "Use extraordinary power, work through ordinary responders, or continue the original investigation.",
+      "reward": "The emergency reveals the location's true access routes, dependencies, and trustworthy personnel.",
+      "applicability": { "gameLines": ["unified", "hunter", "vampire", "mage", "werewolf"], "categories": ["hospital", "industrial", "infrastructure", "named_building", "park", "natural_feature", "transit_station"], "featureHooks": ["hospital", "industrial", "utility", "building", "park", "nature", "station"], "tagHooks": { "power": ["*"], "natural": ["*"], "railway": ["*"], "building": ["*"] } }
+    },
+    {
+      "id": "hook-tangential-wrong-theory",
+      "statuses": ["TANGENTIAL"],
+      "title": "The Correct Evidence and the Wrong Supernatural Theory",
+      "opening": "The location provides authentic evidence that strongly resembles the active game line's expected threat.",
+      "reversal": "The trace belongs to another sphere or merely crossed the site through its ordinary network.",
+      "decision": "Follow the unfamiliar explanation, report the expected one, or conceal uncertainty from allies demanding action.",
+      "reward": "Correct interpretation prevents a cross-faction incident and identifies a larger hidden route.",
+      "applicability": { "gameLines": ["unified", "vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["station", "park", "library", "bar", "historic", "public"], "tagHooks": {} }
+    },
+    {
+      "id": "hook-tangential-data-knows-more",
+      "statuses": ["TANGENTIAL"],
+      "title": "The Data Knows More Than the Witnesses",
+      "opening": "Everyone at the site remembers an ordinary day, but schedules, transactions, sensors, ecology, or infrastructure record an impossible pattern.",
+      "reversal": "The pattern documents movement through the location rather than activity originating there.",
+      "decision": "Take the records, protect their custodians, or leave the evidence in place to capture the next passage.",
+      "reward": "The real-world system predicts when and where the trace will appear again.",
+      "applicability": { "gameLines": ["hunter", "mage", "vampire", "unified"], "categories": ["transit_station", "hospital", "office", "store", "industrial", "infrastructure", "library"], "featureHooks": ["station", "hospital", "office", "shop", "industrial", "utility", "library"], "tagHooks": { "railway": ["*"], "office": ["*"], "shop": ["*"], "power": ["*"] } }
+    },
+    {
+      "id": "hook-active-between-systems",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "A Site Between Systems",
+      "opening": "The active game line discovers a working supernatural site designed around another sphere's assumptions.",
+      "reversal": "The site's ordinary function makes both interpretations useful, and neither faction can operate it alone.",
+      "decision": "Create a joint arrangement, seize the site, expose it to a regulator, or preserve its unofficial neutrality.",
+      "reward": "Cooperation unlocks a capability unavailable to either system independently.",
+      "applicability": { "gameLines": ["unified", "vampire", "werewolf", "breeds", "changeling", "mage"], "categories": ["park", "historic_site", "library", "transit_station", "church", "infrastructure", "hospital"], "featureHooks": ["park", "historic", "library", "station", "religious", "utility", "hospital"], "tagHooks": { "natural": ["*"], "historic": ["*"], "amenity": ["library", "place_of_worship", "hospital"] } }
+    },
+    {
+      "id": "hook-active-cover-depends-on-place",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "The Cover Depends on the Place",
+      "opening": "A pending renovation, closure, route change, staffing shift, or ownership transfer will destroy the supernatural operation's mundane cover.",
+      "reversal": "Preventing the change would harm ordinary users or require obvious manipulation.",
+      "decision": "Move the operation, corrupt the decision, preserve the site, or let the cover collapse.",
+      "reward": "A successful transition creates a cleaner and more context-aware operation elsewhere.",
+      "applicability": { "gameLines": ["vampire", "hunter", "mage", "unified"], "categories": ["store", "restaurant", "bar", "lodging", "office", "transit_station", "named_building"], "featureHooks": ["shop", "restaurant", "bar", "hotel", "office", "station", "building"], "tagHooks": { "shop": ["*"], "tourism": ["hotel", "motel"], "office": ["*"], "building": ["*"] } }
+    },
+    {
+      "id": "hook-inventoried-ledgers-disagree",
+      "statuses": ["INVENTORIED"],
+      "title": "The Ledgers Describe Different Places",
+      "opening": "Multiple supernatural authorities produce valid records for the same coordinates.",
+      "reversal": "Each ledger describes a different layer of the site's actual use, history, ecology, or infrastructure.",
+      "decision": "Choose one authority, reconcile the records, divide access, or reveal that the overlap was intentionally hidden.",
+      "reward": "The reconciled record becomes a map of the city's larger cross-system influence network.",
+      "applicability": { "gameLines": ["unified"], "categories": ["government", "hospital", "library", "transit_station", "park", "historic_site", "church", "infrastructure"], "featureHooks": ["public", "hospital", "library", "station", "park", "historic", "religious", "utility"], "tagHooks": { "amenity": ["*"], "historic": ["*"], "natural": ["*"] } }
+    },
+    {
+      "id": "hook-inventoried-line-inspection",
+      "statuses": ["INVENTORIED"],
+      "title": "A Sphere-Specific Inspection",
+      "opening": "An inspector from the selected game line arrives to evaluate the site under that system's doctrine.",
+      "reversal": "Compliance with the inspection would violate the site's real-world obligations or another recognized supernatural mandate.",
+      "decision": "Stage compliance, challenge jurisdiction, expose the conflict, or change the site's operation permanently.",
+      "reward": "The inspector can grant a formal exception that becomes politically valuable elsewhere.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["public", "institution", "park", "historic", "building", "station"], "tagHooks": {} }
+    }
+  ],
+  "locationSeeds": [
+    {
+      "id": "seed-mundane-civic-anchor",
+      "statuses": ["MUNDANE"],
+      "title": "A Civic or Neighborhood Anchor",
+      "premise": "The location's real-world purpose makes it socially important even without supernatural ownership.",
+      "firstScene": "Establish who relies on the service, route, public space, institution, or business before introducing danger.",
+      "longTermUse": "Track how supernatural politics alter access, staffing, trust, and neighborhood stability.",
+      "applicability": { "gameLines": ["all"], "categories": ["government", "hospital", "library", "transit_station", "store", "park", "church"], "featureHooks": ["public", "hospital", "library", "station", "shop", "park", "religious"], "tagHooks": { "amenity": ["*"] } }
+    },
+    {
+      "id": "seed-mundane-system-pressure",
+      "statuses": ["MUNDANE"],
+      "title": "Pressure on the Mundane System",
+      "premise": "A real-world process—maintenance, regulation, ecology, logistics, ownership, or public access—is already close to failure.",
+      "firstScene": "Characters encounter the practical problem before they understand why supernatural actors care about it.",
+      "longTermUse": "The site's ordinary condition becomes a recurring campaign clock independent of supernatural plots.",
+      "applicability": { "gameLines": ["unified", "hunter", "mage", "werewolf"], "categories": ["infrastructure", "industrial", "hospital", "transit_feature", "named_building", "natural_feature"], "featureHooks": ["utility", "industrial", "hospital", "transit", "building", "nature"], "tagHooks": { "power": ["*"], "man_made": ["*"], "natural": ["*"], "railway": ["*"] } }
+    },
+    {
+      "id": "seed-tangential-context-without-ownership",
+      "statuses": ["TANGENTIAL"],
+      "title": "Context Without Ownership",
+      "premise": "The location repeatedly provides clues because of its geography or operation, yet no supernatural group controls it.",
+      "firstScene": "A clue makes sense only after the characters understand the site's actual timetable, users, environment, or records.",
+      "longTermUse": "The place becomes a neutral reference point that different factions interpret through their own game-line assumptions.",
+      "applicability": { "gameLines": ["all"], "categories": ["all"], "featureHooks": ["station", "road", "park", "library", "bar", "historic"], "tagHooks": {} }
+    },
+    {
+      "id": "seed-tangential-real-pattern-clue",
+      "statuses": ["TANGENTIAL"],
+      "title": "The Real-World Pattern Is the Clue",
+      "premise": "Supernatural movement can be inferred from ordinary deliveries, tides, transit, staffing, school terms, events, or maintenance cycles.",
+      "firstScene": "The characters initially dismiss a mundane pattern that later predicts the next incident.",
+      "longTermUse": "Each return adds another data point and makes the site a valuable but vulnerable observatory.",
+      "applicability": { "gameLines": ["hunter", "mage", "vampire", "werewolf", "unified"], "categories": ["transit_station", "water_feature", "hospital", "store", "industrial", "park", "school"], "featureHooks": ["station", "water", "hospital", "shop", "industrial", "park", "school"], "tagHooks": { "railway": ["*"], "waterway": ["*"], "shop": ["*"], "natural": ["*"] } }
+    },
+    {
+      "id": "seed-active-system-specific-emergence",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "System-Specific Emergence",
+      "premise": "The location's real-world operation accidentally creates a useful effect best understood through the selected game line.",
+      "firstScene": "A routine change makes the effect repeatable enough for a faction to notice.",
+      "longTermUse": "Track whether the site becomes a haven, locus, Mystery, freehold, hunter asset, or contested hybrid.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["park", "bar", "library", "industrial", "historic", "hospital"], "tagHooks": {} }
+    },
+    {
+      "id": "seed-active-unified-collision",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Unified Collision Point",
+      "premise": "Several supernatural systems independently exploit different aspects of one real-world location.",
+      "firstScene": "The characters discover that an apparent single-faction operation is actually a fragile layered arrangement.",
+      "longTermUse": "The site becomes a laboratory for alliances, misinterpretations, shared infrastructure, and escalating jurisdiction.",
+      "applicability": { "gameLines": ["unified"], "categories": ["park", "historic_site", "library", "transit_station", "hospital", "church", "infrastructure"], "featureHooks": ["park", "historic", "library", "station", "hospital", "religious", "utility"], "tagHooks": { "amenity": ["*"], "historic": ["*"], "natural": ["*"] } }
+    },
+    {
+      "id": "seed-inventoried-local-nexus",
+      "statuses": ["INVENTORIED"],
+      "title": "Recognized Local Nexus",
+      "premise": "The site's real-world function makes it too useful, visible, or dangerous to remain outside formal supernatural administration.",
+      "firstScene": "Characters encounter an access protocol built around both mundane policy and the selected game line's authority.",
+      "longTermUse": "Changes in the real institution repeatedly force revisions to supernatural law and custodianship.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["public", "institution", "park", "historic", "station", "building"], "tagHooks": {} }
+    },
+    {
+      "id": "seed-inventoried-layered-jurisdiction",
+      "statuses": ["INVENTORIED"],
+      "title": "Layered Jurisdiction",
+      "premise": "Several supernatural authorities formally recognize different functions of the same place.",
+      "firstScene": "A simple request requires permissions from incompatible custodians.",
+      "longTermUse": "The location becomes a recurring political map of cross-system treaties, loopholes, and unresolved borders.",
+      "applicability": { "gameLines": ["unified"], "categories": ["government", "hospital", "library", "transit_station", "park", "historic_site", "church", "infrastructure"], "featureHooks": ["public", "hospital", "library", "station", "park", "historic", "religious", "utility"], "tagHooks": { "amenity": ["*"], "historic": ["*"], "natural": ["*"] } }
+    }
+  ],
+  "items": [
+    {
+      "id": "item-mundane-site-access-record",
+      "statuses": ["MUNDANE"],
+      "title": "Site-Specific Access Record",
+      "appearance": "A sign-in sheet, appointment list, transit manifest, room booking, permit, key log, trail register, or maintenance access record appropriate to the location.",
+      "function": "It establishes who could legitimately enter and when.",
+      "hiddenValue": "A small procedural exception identifies the route used by someone avoiding normal access.",
+      "applicability": { "gameLines": ["all"], "categories": ["government", "hospital", "library", "transit_station", "named_building", "park", "industrial"], "featureHooks": ["public", "hospital", "library", "station", "building", "park", "industrial"], "tagHooks": { "amenity": ["*"], "building": ["*"], "railway": ["*"] } }
+    },
+    {
+      "id": "item-mundane-dependency-map",
+      "statuses": ["MUNDANE"],
+      "title": "Operational Dependency Map",
+      "appearance": "A floor plan, utility diagram, service map, route chart, ecological survey, evacuation plan, or staff-created sketch.",
+      "function": "It shows how the real-world location continues to operate.",
+      "hiddenValue": "One dependency also explains the apparent supernatural pattern without making the site supernatural.",
+      "applicability": { "gameLines": ["unified", "hunter", "mage", "werewolf"], "categories": ["infrastructure", "industrial", "hospital", "transit_feature", "named_building", "natural_feature", "water_feature"], "featureHooks": ["utility", "industrial", "hospital", "transit", "building", "nature", "water"], "tagHooks": { "power": ["*"], "man_made": ["*"], "natural": ["*"], "waterway": ["*"] } }
+    },
+    {
+      "id": "item-tangential-cross-system-fragment",
+      "statuses": ["TANGENTIAL"],
+      "title": "Cross-System Evidence Fragment",
+      "appearance": "An ordinary photograph, ticket, map annotation, damaged object, environmental sample, or witness recording contains details meaningful to more than one supernatural system.",
+      "function": "It proves that something unusual crossed the site.",
+      "hiddenValue": "Different game lines extract different truths, and combining them reveals the direction of travel.",
+      "applicability": { "gameLines": ["unified", "vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["station", "park", "historic", "bar", "library", "road"], "tagHooks": {} }
+    },
+    {
+      "id": "item-tangential-environmental-trace",
+      "statuses": ["TANGENTIAL"],
+      "title": "Environmental Trace Container",
+      "appearance": "A maintenance sample, water bottle, soil bag, air filter, medical specimen, discarded food package, or evidence envelope was collected for an ordinary reason.",
+      "function": "It preserves a short-lived physical or resonant trace.",
+      "hiddenValue": "The trace matches another location connected through real infrastructure or ecology.",
+      "applicability": { "gameLines": ["werewolf", "breeds", "hunter", "mage", "unified"], "categories": ["park", "natural_feature", "water_feature", "hospital", "industrial", "infrastructure", "restaurant"], "featureHooks": ["park", "nature", "water", "hospital", "industrial", "utility", "restaurant"], "tagHooks": { "natural": ["*"], "waterway": ["*"], "amenity": ["hospital", "restaurant"], "landuse": ["industrial"] } }
+    },
+    {
+      "id": "item-active-line-bound-tool",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Line-Bound Working Tool",
+      "appearance": "Ordinary equipment has been adapted according to the selected game line: feeding logistics, spirit practice, hunter surveillance, oneiromancy, occult instrumentation, or species-specific access.",
+      "function": "It converts the location's real-world operation into a repeatable supernatural advantage.",
+      "hiddenValue": "Its design reveals the operator's assumptions and the sphere they expected to confront.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["shop", "park", "library", "hospital", "station", "industrial"], "tagHooks": {} }
+    },
+    {
+      "id": "item-active-shared-protocol",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Improvised Shared Protocol",
+      "appearance": "A hybrid checklist, code phrase, access marker, ritual sequence, route plan, or equipment modification combines methods from several supernatural systems.",
+      "function": "It allows incompatible users to share the site without formal recognition.",
+      "hiddenValue": "One step was added after a previous alliance failed and identifies the absent participant.",
+      "applicability": { "gameLines": ["unified"], "categories": ["park", "historic_site", "library", "transit_station", "hospital", "church", "infrastructure"], "featureHooks": ["park", "historic", "library", "station", "hospital", "religious", "utility"], "tagHooks": { "amenity": ["*"], "historic": ["*"], "natural": ["*"] } }
+    },
+    {
+      "id": "item-inventoried-sphere-credentials",
+      "statuses": ["INVENTORIED"],
+      "title": "Sphere Credential Set",
+      "appearance": "A badge, seal, writ, token, encoded invitation, spirit mark, compact, or ritual proof is paired with ordinary institutional identification.",
+      "function": "It authorizes access under the selected game line's rules and the site's mundane procedures.",
+      "hiddenValue": "The supernatural credential and mundane identification expire under different conditions.",
+      "applicability": { "gameLines": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"], "categories": ["all"], "featureHooks": ["public", "institution", "station", "historic", "park", "building"], "tagHooks": {} }
+    },
+    {
+      "id": "item-inventoried-jurisdiction-dossier",
+      "statuses": ["INVENTORIED"],
+      "title": "Multi-System Jurisdiction Dossier",
+      "appearance": "A secured file combines property records, maps, ecological surveys, supernatural claims, access agreements, incident reports, and contradictory annotations.",
+      "function": "It documents how several authorities divide the location's physical and supernatural layers.",
+      "hiddenValue": "One apparently mundane map revision quietly transfers control of an entire influence corridor.",
+      "applicability": { "gameLines": ["unified"], "categories": ["government", "hospital", "library", "transit_station", "park", "historic_site", "church", "infrastructure"], "featureHooks": ["public", "hospital", "library", "station", "park", "historic", "religious", "utility"], "tagHooks": { "amenity": ["*"], "historic": ["*"], "natural": ["*"] } }
+    }
+  ]
+}
