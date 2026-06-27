@@ -9,6 +9,7 @@ on:
       - 'app-lite-view-mounts.js'
       - 'character-sheet-title.js'
       - 'character-sheet-view.js'
+      - 'world-of-darkness-spatial-loader.js'
       - 'scripts/validate-main-page-lazy-boot.mjs'
       - '.github/workflows/validate-main-page-performance.yml'
   workflow_dispatch:
@@ -34,6 +35,7 @@ jobs:
           node --check app-lite-view-mounts.js
           node --check character-sheet-title.js
           node --check character-sheet-view.js
+          node --check world-of-darkness-spatial-loader.js
           node --check scripts/validate-main-page-lazy-boot.mjs
 
       - name: Validate lazy startup contract
