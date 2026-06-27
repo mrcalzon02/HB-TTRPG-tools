@@ -6,6 +6,7 @@
   const LOCAL_WORLDS_KEY = 'hb-wod-local-world-seeds-v2';
   let globalRegistry = { worlds: {} };
   let pending = false;
+  let pendingWindow = null;
 
   const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
 
@@ -71,23 +72,51 @@
     target.textContent = message;
   }
 
+  function reserveSubmissionWindow() {
+    if (pendingWindow && !pendingWindow.closed) return pendingWindow;
+    pendingWindow = window.open('about:blank', '_blank');
+    if (pendingWindow) {
+      pendingWindow.document.title = 'Preparing World of Darkness global scan';
+      pendingWindow.document.body.textContent = 'Discovering named locations and preparing the global viewport submission…';
+    }
+    return pendingWindow;
+  }
+
   function requestDiscovery() {
     const button = document.getElementById('wod-scan-visible-businesses');
     if (!button) {
+      pendingWindow?.close();
+      pendingWindow = null;
       setStatus('The named-location discovery control is unavailable.', 'error');
       return;
     }
+    reserveSubmissionWindow();
     pending = true;
     setStatus('The visible map has not been discovered yet. Discovering named locations before preparing the global rescan…');
     button.click();
   }
 
+  function openSubmission(url) {
+    if (pendingWindow && !pendingWindow.closed) {
+      pendingWindow.location.href = url;
+      pendingWindow = null;
+      return;
+    }
+    window.open(url, '_blank', 'noopener');
+  }
+
   function submitCompactRescan() {
     const world = activeWorld();
     const scan = window.WODNamedLocationBridge?.getLatestScan?.();
-    if (!world) return setStatus('Select a local or embedded world seed before scanning globally.', 'error');
+    if (!world) {
+      pendingWindow?.close();
+      pendingWindow = null;
+      return setStatus('Select a local or embedded world seed before scanning globally.', 'error');
+    }
     if (!scanIsCurrent(scan)) return requestDiscovery();
     if (!scan?.viewport?.bounds || scan.viewport.zoom < 14) {
+      pendingWindow?.close();
+      pendingWindow = null;
       return setStatus('Zoom to level 14 or closer before scanning globally.', 'error');
     }
 
@@ -122,7 +151,8 @@
     };
     const body = `<!-- WOD_WORLD_SCAN_RESCAN_PATCH -->\nThis compact request asks the owner-approved workflow to rescan every named OpenStreetMap feature inside the recorded viewport and add missing immutable packages under the selected world seed.\n\n\`\`\`json\n${JSON.stringify(patch, null, 2)}\n\`\`\`\n`;
     const title = `[WOD-GLOBAL-SCAN] ${world.label} · ${line} · ${scanKey}`;
-    window.open(`https://github.com/${REPOSITORY}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`, '_blank', 'noopener');
+    const url = `https://github.com/${REPOSITORY}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+    openSubmission(url);
     setStatus('Opened a compact global viewport-rescan issue. Submit it, then run “Ingest World of Darkness World Scan Batch” with the issue number. The workflow will rescan the bounds and hard-code every missing named-location package.', 'success');
   }
 
@@ -138,6 +168,7 @@
     button.addEventListener('click', event => {
       event.preventDefault();
       event.stopImmediatePropagation();
+      if (!scanIsCurrent(window.WODNamedLocationBridge?.getLatestScan?.())) reserveSubmissionWindow();
       submitCompactRescan();
     }, true);
     document.addEventListener('wod:named-location-scan-complete', () => {
