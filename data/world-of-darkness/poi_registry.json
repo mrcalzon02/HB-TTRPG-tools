@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryType": "chronicle-spatial-poi-registry",
+  "description": "Curated cross-browser business claim, opt-out, supportive, and custom lore overrides. Deterministic baseline records are resolved from Google Place IDs and the 70-entry core datasets; an entry is required only when overriding that universal baseline.",
+  "entries": {}
+}
