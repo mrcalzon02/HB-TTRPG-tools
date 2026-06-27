@@ -3,6 +3,7 @@
 
   const CORE_SCRIPTS = [
     'world-of-darkness-lightweight-map-core.js',
+    'world-of-darkness-detail-diversity-core.js',
     'world-of-darkness-radial-location-loader.js',
     'world-of-darkness-radial-scan-compat.js'
   ];
@@ -119,7 +120,7 @@
     section.innerHTML = `
       <p class="eyebrow">Optional map workspace</p>
       <h3>Chronicle Spatial Engine</h3>
-      <p>The map-only renderer opens first without Chronicle datasets, registry parsing, or whole-map observers. Visible records then load one at a time from the map center outward.</p>
+      <p>The map-only renderer opens first without Chronicle datasets, registry parsing, or whole-map observers. Visible records then load one at a time from the map center outward with neighborhood-aware anti-repetition.</p>
       <div class="wod-spatial-loader-actions">
         <button id="wod-open-spatial-engine" type="button" class="primary-action">Open Chronicle Spatial Engine</button>
         <button id="wod-load-chronicle-tools" type="button" class="secondary-action" disabled>Load Chronicle Tools Now</button>
@@ -184,7 +185,7 @@
       mapReady = true;
       setButtonState('Spatial Engine Loaded', true);
       setAdvancedButtonState('Load Chronicle Tools Now', false);
-      setStatus('Map ready. Move to the desired area, then discover named locations. Records will load center-first, one at a time.');
+      setStatus('Map ready. Move to the desired area, then discover named locations. Records will load center-first with regional theme consistency and local detail anti-repetition.');
       if (shouldAutoOpen()) scheduleEnhancements();
       return true;
     })().catch(error => {
