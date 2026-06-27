@@ -2,9 +2,9 @@
   "receiptType": "wodDetailDiversityValidation",
   "schemaVersion": "1.0.0",
   "status": "failed",
-  "validatedCommit": "232191286243eee1d5ef4b460b79b59c8591cfbf",
+  "validatedCommit": "aaba62e4376b330168e22bdc1c2852803a39ad52",
   "workflow": ".github/workflows/validate-wod-world-scan-overlay.yml",
-  "checkedAt": "2026-06-27T14:00:47.628Z",
+  "checkedAt": "2026-06-27T14:02:01.387Z",
   "totalChecks": 14,
   "passedChecks": 12,
   "failedChecks": 2,
@@ -102,7 +102,7 @@
       "passed": true,
       "exitCode": 0,
       "signal": null,
-      "stdout": "{\n  \"sampleSize\": 24,\n  \"sharedRegionalTheme\": {\n    \"id\": \"hunter-evidence-corridor\",\n    \"label\": \"Evidence Corridor\",\n    \"faction\": \"independent hunters\",\n    \"description\": \"Camera coverage, emergency calls, public records, and witness movement create a pattern no single cell fully understands.\"\n  },\n  \"exactUniqueFields\": [\n    \"publicFacade\",\n    \"embeddedCharacter\",\n    \"temporalAnchor\",\n    \"traumaticCatalyst\",\n    \"operationalSecret\",\n    \"vulnerability\",\n    \"sensoryAnchor\",\n    \"mediaFeed\",\n    \"rumor\",\n    \"mechanicalSeed\",\n    \"diversitySignature\"\n  ],\n  \"hiddenFunctionUniqueCount\": 24,\n  \"publicFacadeCombinations\": 9216,\n  \"sensoryCombinations\": 576,\n  \"mediaCombinations\": 6144,\n  \"rumorCombinations\": 6144,\n  \"characterPresentationsPerLine\": 82944,\n  \"deterministicReplay\": true\n}",
+      "stdout": "{\n  \"sampleSize\": 24,\n  \"sharedRegionalTheme\": {\n    \"id\": \"hunter-evidence-corridor\",\n    \"label\": \"Evidence Corridor\",\n    \"faction\": \"independent hunters\",\n    \"description\": \"Camera coverage, emergency calls, public records, and witness movement create a pattern no single cell fully understands.\"\n  },\n  \"unifiedStatusCounts\": {\n    \"MUNDANE\": 5,\n    \"TANGENTIAL\": 8,\n    \"ACTIVE_UNREGISTERED\": 5,\n    \"INVENTORIED\": 3\n  },\n  \"standardStatusCounts\": {\n    \"MUNDANE\": 12,\n    \"TANGENTIAL\": 6,\n    \"ACTIVE_UNREGISTERED\": 2,\n    \"INVENTORIED\": 1\n  },\n  \"unifiedSupernaturalOrAdjacentPercent\": 76.19,\n  \"singleCatalogSupernaturalOrAdjacentPercent\": 42.86,\n  \"unifiedCatalogsObserved\": [\n    \"breeds\",\n    \"changeling\",\n    \"hunter\",\n    \"mage\",\n    \"vampire\",\n    \"werewolf\"\n  ],\n  \"firstCatalogCycle\": [\n    \"werewolf\",\n    \"vampire\",\n    \"mage\",\n    \"changeling\",\n    \"hunter\",\n    \"breeds\"\n  ],\n  \"exactUniqueFields\": [\n    \"publicFacade\",\n    \"embeddedCharacter\",\n    \"temporalAnchor\",\n    \"traumaticCatalyst\",\n    \"operationalSecret\",\n    \"vulnerability\",\n    \"sensoryAnchor\",\n    \"mediaFeed\",\n    \"rumor\",\n    \"mechanicalSeed\",\n    \"diversitySignature\"\n  ],\n  \"hiddenFunctionUniqueCount\": 24,\n  \"publicFacadeCombinations\": 9216,\n  \"sensoryCombinations\": 576,\n  \"mediaCombinations\": 6144,\n  \"rumorCombinations\": 6144,\n  \"characterPresentationsPerLine\": 82944,\n  \"deterministicReplay\": true\n}",
       "stderr": ""
     },
     {
