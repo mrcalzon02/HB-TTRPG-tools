@@ -5,7 +5,9 @@ on:
     branches: [main]
     paths:
       - 'character-sheet-title.js'
+      - 'world-of-darkness-spatial-loader.js'
       - 'world-of-darkness-named-location-bridge.js'
+      - 'world-of-darkness-spatial-engine-inventory.js'
       - 'world-of-darkness-world-scan-overlay.js'
       - 'world-of-darkness-global-rescan-bridge.js'
       - 'world-of-darkness-location-package-bridge.js'
@@ -43,7 +45,9 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check character-sheet-title.js
+          node --check world-of-darkness-spatial-loader.js
           node --check world-of-darkness-named-location-bridge.js
+          node --check world-of-darkness-spatial-engine-inventory.js
           node --check world-of-darkness-world-scan-overlay.js
           node --check world-of-darkness-global-rescan-bridge.js
           node --check world-of-darkness-location-package-bridge.js
