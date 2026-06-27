@@ -37,16 +37,11 @@ jobs:
           ISSUE_NUMBER: ${{ inputs.issue_number }}
         run: gh issue view "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --json body --jq .body > /tmp/wod-world-scan-rescan.txt
 
-      - name: Rescan viewport and ingest missing named locations
+      - name: Generate and ingest immutable cross-catalog packages
         env:
           ISSUE_BODY_FILE: /tmp/wod-world-scan-rescan.txt
           ISSUE_NUMBER: ${{ inputs.issue_number }}
-        run: node scripts/ingest-wod-world-scan-rescan.mjs
-
-      - name: Apply context-aware location variants
-        env:
-          ISSUE_NUMBER: ${{ inputs.issue_number }}
-        run: node scripts/enrich-wod-location-context.mjs
+        run: node scripts/ingest-wod-world-scan-rescan-v3.mjs
 
       - name: Commit global world scan
         run: |
@@ -56,7 +51,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No new global named locations were added."
           else
-            git commit -m "Ingest context-aware World of Darkness viewport rescan #${{ inputs.issue_number }} [skip ci]"
+            git commit -m "Ingest diversified cross-catalog World of Darkness viewport rescan #${{ inputs.issue_number }} [skip ci]"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
