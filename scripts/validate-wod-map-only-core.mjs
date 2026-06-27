@@ -6,6 +6,7 @@ const configCompat = fs.readFileSync('world-of-darkness-spatial-config-compat.js
 const siteCatalog = fs.readFileSync('world-of-darkness-system-site-catalog.js', 'utf8');
 const diversityCore = fs.readFileSync('world-of-darkness-detail-diversity-core.js', 'utf8');
 const regionalExpansion = fs.readFileSync('world-of-darkness-regional-theme-expansion.js', 'utf8');
+const legacyQualifier = fs.readFileSync('world-of-darkness-regional-legacy-qualifier.js', 'utf8');
 const siteExpansion = fs.readFileSync('world-of-darkness-system-site-expansion.js', 'utf8');
 const radial = fs.readFileSync('world-of-darkness-radial-location-loader.js', 'utf8');
 const compatibility = fs.readFileSync('world-of-darkness-radial-scan-compat.js', 'utf8');
@@ -16,6 +17,7 @@ const core = [
   'world-of-darkness-system-site-catalog.js',
   'world-of-darkness-detail-diversity-core.js',
   'world-of-darkness-regional-theme-expansion.js',
+  'world-of-darkness-regional-legacy-qualifier.js',
   'world-of-darkness-system-site-expansion.js',
   'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-radial-scan-compat.js'
@@ -35,38 +37,20 @@ for (const file of ['world-of-darkness-named-location-bridge.js', 'world-of-dark
 }
 
 const ordered = core.map(file => loader.indexOf(`'${file}'`));
-if (ordered.some(index => index < 0) || ordered.some((index, position) => position && index <= ordered[position - 1])) {
-  throw new Error('Spatial core scripts are missing or out of order.');
-}
-
-if (mapCore.includes('data/world-of-darkness/') || mapCore.includes('loadCoreData') || mapCore.includes('MutationObserver')) {
-  throw new Error('Map-only core performs Chronicle data or whole-map observation work.');
-}
-for (const marker of ['SCRIPT_TIMEOUT_MS = 4500', 'cdn.jsdelivr.net', 'unpkg.com', 'Discover Named Locations']) {
-  if (!mapCore.includes(marker)) throw new Error(`Map-only core is missing ${marker}.`);
-}
-for (const marker of ["COMPAT_VERSION = '2.7.0'", 'activeGameLineStatusBridge: true', "cache: 'no-store'", 'syntheticConfigResponse']) {
-  if (!configCompat.includes(marker)) throw new Error(`Spatial configuration compatibility is missing ${marker}.`);
-}
-for (const marker of ["schemaVersion: '1.0.0'", 'siteTypes', 'systemSecrets', 'custodians', 'consequences', 'feeding-permission-node', 'caern-catchment-site', 'hunter-safehouse', 'freehold-annex', 'sanctum-annex']) {
-  if (!siteCatalog.includes(marker)) throw new Error(`System site catalog is missing ${marker}.`);
-}
-for (const marker of ["VERSION = '3.2.0'", 'MANIFESTATION_CHANNELS', 'mix32', 'regional-theme-local-product-v32', 'manifestationChannelId']) {
-  if (!regionalExpansion.includes(marker)) throw new Error(`Regional theme expansion is missing ${marker}.`);
-}
-for (const marker of ["VERSION = '1.0.0'", 'siteProfile', 'Specific hidden function', 'Supernatural infrastructure', 'System secret', 'Failure consequence']) {
-  if (!siteExpansion.includes(marker)) throw new Error(`System site expansion is missing ${marker}.`);
-}
-for (const source of [diversityCore, siteCatalog, regionalExpansion, siteExpansion]) {
+if (ordered.some(index => index < 0) || ordered.some((index, position) => position && index <= ordered[position - 1])) throw new Error('Spatial core scripts are missing or out of order.');
+if (mapCore.includes('data/world-of-darkness/') || mapCore.includes('loadCoreData') || mapCore.includes('MutationObserver')) throw new Error('Map-only core performs Chronicle data or whole-map observation work.');
+for (const marker of ['SCRIPT_TIMEOUT_MS = 4500', 'cdn.jsdelivr.net', 'unpkg.com', 'Discover Named Locations']) if (!mapCore.includes(marker)) throw new Error(`Map-only core is missing ${marker}.`);
+for (const marker of ["COMPAT_VERSION = '2.7.0'", 'activeGameLineStatusBridge: true', "cache: 'no-store'", 'syntheticConfigResponse']) if (!configCompat.includes(marker)) throw new Error(`Spatial configuration compatibility is missing ${marker}.`);
+for (const marker of ["schemaVersion: '1.0.0'", 'siteTypes', 'systemSecrets', 'custodians', 'consequences', 'feeding-permission-node', 'caern-catchment-site', 'hunter-safehouse', 'freehold-annex', 'sanctum-annex']) if (!siteCatalog.includes(marker)) throw new Error(`System site catalog is missing ${marker}.`);
+for (const marker of ["VERSION = '3.2.0'", 'MANIFESTATION_CHANNELS', 'mix32', 'regional-theme-local-product-v32', 'manifestationChannelId']) if (!regionalExpansion.includes(marker)) throw new Error(`Regional theme expansion is missing ${marker}.`);
+for (const marker of ["VERSION = '1.0.0'", 'legacyBaseId', 'legacy-rare-qualified', 'legacy-theme-channel-v32']) if (!legacyQualifier.includes(marker)) throw new Error(`Regional legacy qualifier is missing ${marker}.`);
+for (const marker of ["VERSION = '1.0.0'", 'siteProfile', 'Specific hidden function', 'Supernatural infrastructure', 'System secret', 'Failure consequence']) if (!siteExpansion.includes(marker)) throw new Error(`System site expansion is missing ${marker}.`);
+for (const source of [diversityCore, siteCatalog, regionalExpansion, legacyQualifier, siteExpansion]) {
   if (source.includes('fetch(') || source.includes('XMLHttpRequest')) throw new Error('A pure generation module performs network work.');
 }
-for (const marker of ['MAX_VISIBLE = 90', "map.on('movestart zoomstart'", 'wod:radial-load-complete', 'Selecting unused neighborhood details']) {
-  if (!radial.includes(marker)) throw new Error(`Radial loader is missing ${marker}.`);
-}
+for (const marker of ['MAX_VISIBLE = 90', "map.on('movestart zoomstart'", 'wod:radial-load-complete', 'Selecting unused neighborhood details']) if (!radial.includes(marker)) throw new Error(`Radial loader is missing ${marker}.`);
 if (!radial.includes('for (let index = 0; index < state.rawLocations.length; index += 1)')) throw new Error('Radial hydration is not sequential.');
-for (const marker of ['wod:named-location-scan-complete', "hydrationMode: 'radial-sequential'", 'wod-resolve-business']) {
-  if (!compatibility.includes(marker)) throw new Error(`Compatibility bridge is missing ${marker}.`);
-}
+for (const marker of ['wod:named-location-scan-complete', "hydrationMode: 'radial-sequential'", 'wod-resolve-business']) if (!compatibility.includes(marker)) throw new Error(`Compatibility bridge is missing ${marker}.`);
 
 console.log(JSON.stringify({
   mapOnlyCore: core,
@@ -76,6 +60,7 @@ console.log(JSON.stringify({
   pureGeneratorNetworkRequests: 0,
   compatibilityVersion: '2.7.0',
   regionalThemeModelVersion: '3.2.0',
+  regionalLegacyQualifierVersion: '1.0.0',
   regionalManifestationChannels: 12,
   systemSiteCatalogVersion: '1.0.0',
   systemSiteExpansionVersion: '1.0.0',
