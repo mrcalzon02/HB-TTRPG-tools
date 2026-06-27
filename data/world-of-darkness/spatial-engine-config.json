@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "mapId": "4504f8b37365c3d0",
+  "coreData": {
+    "locations": "data/world-of-darkness/locations_core.json",
+    "characters": "data/world-of-darkness/characters_core.json",
+    "rumors": "data/world-of-darkness/rumors_core.json",
+    "centralRegistry": "data/world-of-darkness/poi_registry.json"
+  },
+  "persistence": {
+    "baseline": "deterministic-place-id-and-coordinate-seed",
+    "localOverrides": "localStorage",
+    "centralOverrides": "static-repository-registry"
+  },
+  "businessTypeMappings": {
+    "restaurant": "Vampiric Circulatory Node / Anarch Haven",
+    "bar": "Vampiric Circulatory Node / Anarch Haven",
+    "night_club": "Vampiric Circulatory Node / Anarch Haven",
+    "book_store": "Hermetic Chantry Archive / Occult Library",
+    "library": "Hermetic Chantry Archive / Occult Library",
+    "hospital": "Blood Bank Depot / Mage Alchemical Laboratory",
+    "pharmacy": "Blood Bank Depot / Mage Alchemical Laboratory",
+    "cemetery": "Shadowlands Verge / Werewolf Caern Border",
+    "park": "Shadowlands Verge / Werewolf Caern Border"
+  }
+}
