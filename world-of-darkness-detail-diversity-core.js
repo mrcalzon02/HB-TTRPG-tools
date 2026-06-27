@@ -258,6 +258,7 @@
       const sensoryAnchor = `${capitalize(sensoryCondition)}. ${sensoryConsequence}`;
       const mediaFeed = `“${capitalize(mediaSource)}: ${capitalize(mediaEvent)}. ${mediaInstruction}”`;
       const rumor = `${capitalize(rumorSource)} say ${rumorClaim}. ${rumorConsequence}`;
+      const regionalTheme = { ...clone(theme), catalogLine, catalogLabel };
 
       return {
         status,
@@ -267,7 +268,7 @@
         prototype,
         variant,
         effectiveVariantCount: Math.max(1, (input.baseLocations?.prototypes || []).length) * Math.max(1, contexts.length),
-        regionalTheme: clone(theme),
+        regionalTheme,
         publicFacade,
         hiddenFunction,
         contextTitle: context.title,
