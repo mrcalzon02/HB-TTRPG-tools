@@ -50,10 +50,13 @@ for (const marker of [
 }
 
 for (const marker of [
-  "COMPAT_VERSION = '2.6.1'",
+  "COMPAT_VERSION = '2.7.0'",
   'CORE_DATA_DEFAULTS',
   'contextExpansion',
   'detailDiversity',
+  'wrapDetailCore',
+  'activeGameLine',
+  'activeGameLineStatusBridge: true',
   "freshUrl.searchParams.set('wod-config', COMPAT_VERSION)",
   "cache: 'no-store'",
   'syntheticConfigResponse',
@@ -68,6 +71,12 @@ if (configCompatIndex < 0 || radialLoaderIndex < 0 || configCompatIndex > radial
 }
 
 for (const marker of [
+  'STATUS_PROFILES',
+  'standard: Object.freeze([12, 6, 2, 1])',
+  'unified: Object.freeze([5, 8, 5, 3])',
+  'CATALOG_LINES',
+  'unified-catalog-line',
+  'catalogLine',
   'createSession',
   'neighborhoodKey',
   'inventoryStatusFromSeed',
@@ -121,7 +130,11 @@ console.log(JSON.stringify({
   chronicleDataFetchesBeforeScan: 0,
   mapMutationObservers: 0,
   pureDiversityCoreNetworkRequests: 0,
-  staleConfigCompatibilityVersion: '2.6.1',
+  staleConfigCompatibilityVersion: '2.7.0',
+  activeGameLineStatusBridge: true,
+  unifiedStatusProfile: [5, 8, 5, 3],
+  singleCatalogStatusProfile: [12, 6, 2, 1],
+  unifiedCatalogs: 6,
   governedDatasetDefaults: 10,
   leafletFallbackTimeoutMs: 4500,
   radialConcurrency: 1,
