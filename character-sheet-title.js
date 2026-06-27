@@ -64,6 +64,7 @@
     loadScriptOnce('solanum-umbra-entry.js','data-solanum-umbra-entry','solanumUmbraEntry');
     loadScriptOnce('world-of-darkness-entry.js','data-world-of-darkness-entry','worldOfDarknessEntry');
     loadScriptOnce('world-of-darkness-map-workspace.js','data-world-of-darkness-map-workspace','worldOfDarknessMapWorkspace');
+    loadScriptOnce('world-of-darkness-registry-workflow-note.js','data-world-of-darkness-registry-workflow-note','worldOfDarknessRegistryWorkflowNote');
     loadScriptOnce('shadowrun-entry.js','data-shadowrun-entry','shadowrunEntry');
     loadScriptOnce('npc-profile-generator-entry.js','data-npc-profile-generator-entry','npcProfileGeneratorEntry');
     loadScriptOnce('kaysender-npc-generator.js','data-npc-generator','npcGenerator');
