@@ -35,13 +35,11 @@ function location(index) {
     name: `Unified Server Location ${index + 1}`,
     address: `${500 + index} 9th Avenue, Seattle, WA 98104`,
     referenceUrl: `https://www.openstreetmap.org/node/${910000 + index}`,
-    category,
-    categoryLabel,
+    category, categoryLabel,
     coordinates: { lat, lng },
     osmType: 'node',
     osmId: String(910000 + index),
-    featureLabel,
-    sourceTags,
+    featureLabel, sourceTags,
     scanKey: 'wodscan-1234abcd',
     scanZoom: 17,
     scanBounds: { south: 47.60, west: -122.34, north: 47.62, east: -122.31 },
@@ -51,33 +49,22 @@ function location(index) {
 
 function factory(gameLine) {
   return createWorldScanPackageFactory({
-    worldSeed,
-    gameLine,
-    generatedAt,
-    baseLocations,
-    contextExpansion,
-    detailDiversity,
-    baseCrosslinks,
-    crosslinkExpansion
+    worldSeed, gameLine, generatedAt, baseLocations, contextExpansion,
+    detailDiversity, baseCrosslinks, crosslinkExpansion
   });
 }
 
 const unifiedFactory = factory('unified');
-if (JSON.stringify(unifiedFactory.statusProfile) !== JSON.stringify([5, 8, 5, 3])) {
-  throw new Error(`Unified server factory has the wrong status profile: ${JSON.stringify(unifiedFactory.statusProfile)}.`);
-}
+if (JSON.stringify(unifiedFactory.statusProfile) !== JSON.stringify([5, 8, 5, 3])) throw new Error(`Unified server factory has the wrong status profile: ${JSON.stringify(unifiedFactory.statusProfile)}.`);
+if (unifiedFactory.regionalThemeVersion !== '3.1.0') throw new Error('Unified server factory lacks regional theme version 3.1.0.');
 if (unifiedFactory.systemSiteCatalogVersion !== '1.0.0') throw new Error('Unified server factory lacks system site catalog version 1.0.0.');
 
 const packages = Array.from({ length: 24 }, (_, index) => unifiedFactory.generate(location(index)));
 const catalogLines = packages.map(pkg => pkg.location.contextSnapshot.catalogLine);
 const observedCatalogs = new Set(catalogLines);
 const expectedCatalogs = ['vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage'];
-if (observedCatalogs.size !== 6 || expectedCatalogs.some(line => !observedCatalogs.has(line))) {
-  throw new Error(`Unified server packages did not cover all catalogs: ${JSON.stringify([...observedCatalogs])}.`);
-}
-if (new Set(catalogLines.slice(0, 6)).size !== 6) {
-  throw new Error(`Unified server catalog rotation repeated before all catalogs were used: ${JSON.stringify(catalogLines.slice(0, 6))}.`);
-}
+if (observedCatalogs.size !== 6 || expectedCatalogs.some(line => !observedCatalogs.has(line))) throw new Error(`Unified server packages did not cover all catalogs: ${JSON.stringify([...observedCatalogs])}.`);
+if (new Set(catalogLines.slice(0, 6)).size !== 6) throw new Error(`Unified server catalog rotation repeated before all catalogs were used: ${JSON.stringify(catalogLines.slice(0, 6))}.`);
 
 const supernaturalPackages = [];
 const mundanePackages = [];
@@ -89,10 +76,8 @@ for (const pkg of packages) {
   const snapshot = pkg.location.contextSnapshot;
   if (!expectedCatalogs.includes(snapshot.catalogLine)) throw new Error(`${pkg.packageKey} has invalid catalog line ${snapshot.catalogLine}.`);
   if (!snapshot.catalogLabel) throw new Error(`${pkg.packageKey} lacks its catalog label.`);
-  if (snapshot.regionalTheme?.catalogLine !== snapshot.catalogLine || snapshot.regionalTheme?.catalogLabel !== snapshot.catalogLabel) {
-    throw new Error(`${pkg.packageKey} does not persist matching catalog identity inside its regional-theme snapshot.`);
-  }
-  if (snapshot.regionalTheme?.themeVersion !== '3.0.0') throw new Error(`${pkg.packageKey} lacks regional theme model 3.0.0.`);
+  if (snapshot.regionalTheme?.catalogLine !== snapshot.catalogLine || snapshot.regionalTheme?.catalogLabel !== snapshot.catalogLabel) throw new Error(`${pkg.packageKey} does not persist matching catalog identity inside its regional-theme snapshot.`);
+  if (snapshot.regionalTheme?.themeVersion !== '3.1.0') throw new Error(`${pkg.packageKey} lacks regional theme model 3.1.0.`);
 
   if (pkg.location.inventoryStatus === 'MUNDANE') {
     mundanePackages.push(pkg);
@@ -103,24 +88,16 @@ for (const pkg of packages) {
     if (!snapshot.hiddenFunction.includes(snapshot.catalogLabel)) throw new Error(`${pkg.packageKey} does not expose its supernatural catalog label.`);
     if (!snapshot.siteProfile || snapshot.siteProfile.schemaVersion !== '1.0.0') throw new Error(`${pkg.packageKey} lacks a complete system site profile.`);
     const pairs = [
-      ['siteType', snapshot.siteType],
-      ['hiddenFunction', snapshot.systemHiddenFunction],
-      ['infrastructure', snapshot.supernaturalInfrastructure],
-      ['operationalSecret', snapshot.systemSecret],
-      ['custodian', snapshot.custodianType],
-      ['evidencePattern', snapshot.evidencePattern],
-      ['localConflict', snapshot.localConflict],
-      ['failureConsequence', snapshot.failureConsequence]
+      ['siteType', snapshot.siteType], ['hiddenFunction', snapshot.systemHiddenFunction],
+      ['infrastructure', snapshot.supernaturalInfrastructure], ['operationalSecret', snapshot.systemSecret],
+      ['custodian', snapshot.custodianType], ['evidencePattern', snapshot.evidencePattern],
+      ['localConflict', snapshot.localConflict], ['failureConsequence', snapshot.failureConsequence]
     ];
     for (const [profileField, directField] of pairs) {
       const profileValue = snapshot.siteProfile[profileField];
-      if (!profileValue?.id || !directField?.id || profileValue.id !== directField.id) {
-        throw new Error(`${pkg.packageKey} does not preserve matching ${profileField} data.`);
-      }
+      if (!profileValue?.id || !directField?.id || profileValue.id !== directField.id) throw new Error(`${pkg.packageKey} does not preserve matching ${profileField} data.`);
     }
-    if (snapshot.regionalTheme?.siteProfile?.combinationSignature !== snapshot.siteProfile.combinationSignature) {
-      throw new Error(`${pkg.packageKey} does not preserve its site profile inside the regional theme snapshot.`);
-    }
+    if (snapshot.regionalTheme?.siteProfile?.combinationSignature !== snapshot.siteProfile.combinationSignature) throw new Error(`${pkg.packageKey} does not preserve its site profile inside the regional theme snapshot.`);
   }
 
   if (!/^[0-9a-f]{8}$/.test(snapshot.diversitySignature || '')) throw new Error(`${pkg.packageKey} lacks a diversity signature.`);
@@ -129,17 +106,11 @@ for (const pkg of packages) {
     if (!pkg.outputs?.[output]?.id) throw new Error(`${pkg.packageKey} lacks ${output}.`);
   }
   if (pkg.source?.generatorVersion !== 'world-seeded-system-site-server-rescan-3.2.0') throw new Error(`${pkg.packageKey} has the wrong server generator version.`);
-  if (pkg.source?.regionalThemeVersion !== '3.0.0') throw new Error(`${pkg.packageKey} has the wrong regional theme version.`);
-  if (pkg.source?.systemSiteCatalogVersion !== '1.0.0' || pkg.source?.systemSiteExpansionVersion !== '1.0.0') {
-    throw new Error(`${pkg.packageKey} has the wrong system site versions.`);
-  }
+  if (pkg.source?.regionalThemeVersion !== '3.1.0') throw new Error(`${pkg.packageKey} has the wrong regional theme version.`);
+  if (pkg.source?.systemSiteCatalogVersion !== '1.0.0' || pkg.source?.systemSiteExpansionVersion !== '1.0.0') throw new Error(`${pkg.packageKey} has the wrong system site versions.`);
 }
-if (supernaturalPackages.length !== 18 || mundanePackages.length !== 6) {
-  throw new Error(`Unified sample expected 18 supernatural-or-adjacent and 6 mundane packages; found ${supernaturalPackages.length} and ${mundanePackages.length}.`);
-}
-if (new Set(supernaturalPackages.map(pkg => pkg.location.contextSnapshot.siteProfile.combinationSignature)).size !== supernaturalPackages.length) {
-  throw new Error('Unified global packages repeated a complete system-site combination inside the clustered sample.');
-}
+if (supernaturalPackages.length !== 18 || mundanePackages.length !== 6) throw new Error(`Unified sample expected 18 supernatural-or-adjacent and 6 mundane packages; found ${supernaturalPackages.length} and ${mundanePackages.length}.`);
+if (new Set(supernaturalPackages.map(pkg => pkg.location.contextSnapshot.siteProfile.combinationSignature)).size !== supernaturalPackages.length) throw new Error('Unified global packages repeated a complete system-site combination inside the clustered sample.');
 
 const replayFactory = factory('unified');
 const replay = Array.from({ length: 24 }, (_, index) => replayFactory.generate(location(index)));
@@ -155,20 +126,17 @@ for (let index = 0; index < packages.length; index += 1) {
 }
 
 const vampireFactory = factory('vampire');
-if (JSON.stringify(vampireFactory.statusProfile) !== JSON.stringify([12, 6, 2, 1])) {
-  throw new Error(`Dedicated Vampire factory inherited Unified density: ${JSON.stringify(vampireFactory.statusProfile)}.`);
-}
+if (JSON.stringify(vampireFactory.statusProfile) !== JSON.stringify([12, 6, 2, 1])) throw new Error(`Dedicated Vampire factory inherited Unified density: ${JSON.stringify(vampireFactory.statusProfile)}.`);
 const vampirePackages = Array.from({ length: 8 }, (_, index) => vampireFactory.generate(location(index + 40)));
 if (vampirePackages.some(pkg => pkg.location.contextSnapshot.catalogLine !== 'vampire')) throw new Error('Dedicated Vampire packages escaped into another catalog.');
 
 for (const marker of [
   "await import('./ingest-wod-world-scan-rescan-v3.mjs')",
   "generatorVersion = 'world-seeded-system-site-server-rescan-3.2.0'",
-  "regionalThemeVersion = '3.0.0'",
+  "regionalThemeVersion = '3.1.0'",
   "systemSiteCatalogVersion = '1.0.0'",
   "systemSiteExpansionVersion = '1.0.0'",
-  'systemSiteProfileCount',
-  'systemSiteCombinationSignatures'
+  'systemSiteProfileCount', 'systemSiteCombinationSignatures'
 ]) {
   if (!ingestionSource.includes(marker)) throw new Error(`Global v4 rescan ingestion is missing ${marker}.`);
 }
@@ -191,7 +159,7 @@ console.log(JSON.stringify({
   dedicatedVampireIsolation: true,
   packageSchemaVersion: '2.1.0',
   generatorVersion: 'world-seeded-system-site-server-rescan-3.2.0',
-  regionalThemeVersion: '3.0.0',
+  regionalThemeVersion: '3.1.0',
   systemSiteCatalogVersion: '1.0.0',
   systemSiteExpansionVersion: '1.0.0'
 }, null, 2));
