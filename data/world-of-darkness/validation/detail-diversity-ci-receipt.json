@@ -1,12 +1,12 @@
 {
   "receiptType": "wodDetailDiversityValidation",
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "status": "failed",
-  "validatedCommit": "4f20d02eb7fc9754a2961fa2428ce4568356957e",
+  "validatedCommit": "8d0c2545adb5f3db354875cc1a03e8928de6c29d",
   "workflow": ".github/workflows/validate-wod-world-scan-overlay.yml",
-  "checkedAt": "2026-06-27T15:05:54.665Z",
-  "totalChecks": 17,
-  "passedChecks": 15,
+  "checkedAt": "2026-06-27T15:06:51.722Z",
+  "totalChecks": 21,
+  "passedChecks": 19,
   "failedChecks": 2,
   "results": [
     {
@@ -26,7 +26,23 @@
       "stderr": ""
     },
     {
+      "name": "syntax:system-site-catalog",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
       "name": "syntax:detail-diversity-core",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:system-site-expansion",
       "passed": true,
       "exitCode": 0,
       "signal": null,
@@ -90,6 +106,14 @@
       "stderr": ""
     },
     {
+      "name": "syntax:system-site-validator",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
       "name": "contract:location-inventory",
       "passed": true,
       "exitCode": 0,
@@ -120,6 +144,14 @@
       "signal": null,
       "stdout": "",
       "stderr": "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-detail-diversity.mjs:130\n  if (unique < 330) throw new Error(`${line} regional themes are repeating too often across separated areas (${unique}/384 unique).`);\n                          ^\n\nError: unified regional themes are repeating too often across separated areas (255/384 unique).\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-detail-diversity.mjs:130:27\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v20.20.2"
+    },
+    {
+      "name": "contract:system-site-expansion",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "{\n  \"catalogVersion\": \"1.0.0\",\n  \"expansionVersion\": \"1.0.0\",\n  \"authoredEntryCount\": 588,\n  \"dimensions\": [\n    \"siteTypes\",\n    \"hiddenFunctions\",\n    \"infrastructures\",\n    \"systemSecrets\",\n    \"custodians\",\n    \"evidencePatterns\",\n    \"conflicts\",\n    \"consequences\"\n  ],\n  \"minimumDedicatedLineStructuralCombinations\": 144000000,\n  \"metrics\": {\n    \"unified\": {\n      \"structuralCombinationFloor\": 144000000,\n      \"firstTwelveUniqueSiteTypes\": 12,\n      \"firstTenUniqueHiddenFunctions\": 10,\n      \"firstTenUniqueInfrastructure\": 10,\n      \"firstTenUniqueSecrets\": 10,\n      \"firstTenUniqueCustodians\": 10,\n      \"firstTenUniqueEvidencePatterns\": 10,\n      \"firstTenUniqueConflicts\": 10,\n      \"firstTenUniqueConsequences\": 10,\n      \"deterministicReplay\": true\n    },\n    \"vampire\": {\n      \"structuralCombinationFloor\": 144000000,\n      \"firstTwelveUniqueSiteTypes\": 12,\n      \"firstTenUniqueHiddenFunctions\": 10,\n      \"firstTenUniqueInfrastructure\": 10,\n      \"firstTenUniqueSecrets\": 10,\n      \"firstTenUniqueCustodians\": 10,\n      \"firstTenUniqueEvidencePatterns\": 10,\n      \"firstTenUniqueConflicts\": 10,\n      \"firstTenUniqueConsequences\": 10,\n      \"deterministicReplay\": true\n    },\n    \"werewolf\": {\n      \"structuralCombinationFloor\": 144000000,\n      \"firstTwelveUniqueSiteTypes\": 12,\n      \"firstTenUniqueHiddenFunctions\": 10,\n      \"firstTenUniqueInfrastructure\": 10,\n      \"firstTenUniqueSecrets\": 10,\n      \"firstTenUniqueCustodians\": 10,\n      \"firstTenUniqueEvidencePatterns\": 10,\n      \"firstTenUniqueConflicts\": 10,\n      \"firstTenUniqueConsequences\": 10,\n      \"deterministicReplay\": true\n    },\n    \"breeds\": {\n      \"structuralCombinationFloor\": 144000000,\n      \"firstTwelveUniqueSiteTypes\": 12,\n      \"firstTenUniqueHiddenFunctions\": 10,\n      \"firstTenUniqueInfrastructure\": 10,\n      \"firstTenUniqueSecrets\": 10,\n      \"firstTenUniqueCustodians\": 10,\n      \"firstTenUniqueEvidencePatterns\": 10,\n      \"firstTenUniqueConflicts\": 10,\n      \"firstTenUniqueConsequences\": 10,\n      \"deterministicReplay\": true\n    },\n    \"hunter\": {\n      \"structuralCombinationFloor\": 144000000,\n      \"firstTwelveUniqueSiteTypes\": 12,\n      \"firstTenUniqueHiddenFunctions\": 10,\n      \"firstTenUniqueInfrastructure\": 10,\n      \"firstTenUniqueSecrets\": 10,\n      \"firstTenUniqueCustodians\": 10,\n      \"firstTenUniqueEvidencePatterns\": 10,\n      \"firstTenUniqueConflicts\": 10,\n      \"firstTenUniqueConsequences\": 10,\n      \"deterministicReplay\": true\n    },\n    \"changeling\": {\n      \"structuralCombinationFloor\": 144000000,\n      \"firstTwelveUniqueSiteTypes\": 12,\n      \"firstTenUniqueHiddenFunctions\": 10,\n      \"firstTenUniqueInfrastructure\": 10,\n      \"firstTenUniqueSecrets\": 10,\n      \"firstTenUniqueCustodians\": 10,\n      \"firstTenUniqueEvidencePatterns\": 10,\n      \"firstTenUniqueConflicts\": 10,\n      \"firstTenUniqueConsequences\": 10,\n      \"deterministicReplay\": true\n    },\n    \"mage\": {\n      \"structuralCombinationFloor\": 144000000,\n      \"firstTwelveUniqueSiteTypes\": 12,\n      \"firstTenUniqueHiddenFunctions\": 10,\n      \"firstTenUniqueInfrastructure\": 10,\n      \"firstTenUniqueSecrets\": 10,\n      \"firstTenUniqueCustodians\": 10,\n      \"firstTenUniqueEvidencePatterns\": 10,\n      \"firstTenUniqueConflicts\": 10,\n      \"firstTenUniqueConsequences\": 10,\n      \"deterministicReplay\": true\n    }\n  },\n  \"mundaneSitesRemainMundane\": true\n}",
+      "stderr": ""
     },
     {
       "name": "contract:unified-global-rescan",
