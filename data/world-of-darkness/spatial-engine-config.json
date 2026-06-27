@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.5.0",
+  "schemaVersion": "2.6.0",
   "mapMode": "leaflet-openstreetmap-lazy-manual-scan",
   "performance": {
     "lazyStartOnWorldOfDarknessView": true,
@@ -25,13 +25,10 @@
       "trails and paths",
       "transit locations",
       "public and civic facilities",
+      "fitness and sports facilities",
       "named neighborhoods and boundaries"
     ],
-    "viewportServerResultCaps": {
-      "small": 1200,
-      "medium": 900,
-      "large": 600
-    },
+    "viewportServerResultCaps": { "small": 1200, "medium": 900, "large": 600 },
     "clientVisibleResultCap": 90,
     "denseAreaGuidance": "zoom-closer-and-rescan-when-server-cap-is-reached",
     "legacyBusinessOnlyCacheMigration": "clear-once"
@@ -45,7 +42,7 @@
     "claimedLocationBehavior": "defer-to-future-claimed-business-integration"
   },
   "contextAwareGeneration": {
-    "model": "additive-base-plus-context-expansion",
+    "model": "additive-context-matrix-plus-compositional-detail-diversity",
     "selectionInputs": [
       "world seed",
       "stable real-location key",
@@ -53,17 +50,11 @@
       "active game line",
       "mapped category",
       "named-feature class",
-      "retained OpenStreetMap tags"
+      "retained OpenStreetMap tags",
+      "quantized neighborhood cell",
+      "nearby values already used in the current radial pass"
     ],
-    "supportedGameLines": [
-      "unified",
-      "vampire",
-      "werewolf",
-      "breeds",
-      "hunter",
-      "changeling",
-      "mage"
-    ],
+    "supportedGameLines": ["unified", "vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
     "baseContextCount": 21,
     "addedContextCount": 21,
     "effectiveContextCount": 42,
@@ -72,6 +63,20 @@
     "baseEntriesPerOutputPool": 8,
     "addedEntriesPerOutputPool": 8,
     "effectiveEntriesPerOutputPool": 16,
+    "detailDiversity": {
+      "schemaVersion": "1.0.0",
+      "neighborhoodCellDegrees": 0.015,
+      "regionalThemePolicy": "stable-by-neighborhood-cell-and-game-line",
+      "localDetailPolicy": "field-salted-deterministic-selection-with-neighborhood-used-value-avoidance",
+      "legacyCharacterPrototypeUse": false,
+      "legacyRumorBundleUse": false,
+      "independentlySelectedComponents": 21,
+      "minimumPublicFacadeCombinations": 9216,
+      "minimumSensoryCombinations": 576,
+      "minimumMediaCombinations": 6144,
+      "minimumRumorCombinations": 6144,
+      "minimumCharacterPresentationCombinationsPerGameLine": 82944
+    },
     "immutability": "existing published packages remain unchanged; enrichment applies only during the new package transaction"
   },
   "influenceOverlay": {
@@ -79,11 +84,7 @@
     "curatedLayerModel": "repository-backed-geojson-compatible-features",
     "localStyle": "dashed",
     "globalStyle": "solid",
-    "statusRadiusMeters": {
-      "TANGENTIAL": 120,
-      "ACTIVE_UNREGISTERED": 240,
-      "INVENTORIED": 420
-    }
+    "statusRadiusMeters": { "TANGENTIAL": 120, "ACTIVE_UNREGISTERED": 240, "INVENTORIED": 420 }
   },
   "locationDistribution": {
     "baseTotalVariants": 210,
@@ -103,6 +104,7 @@
   "coreData": {
     "locations": "data/world-of-darkness/locations_core_v2.json",
     "contextExpansion": "data/world-of-darkness/location_context_expansion_v3.json",
+    "detailDiversity": "data/world-of-darkness/location_detail_diversity_v1.json",
     "characters": "data/world-of-darkness/characters_core.json",
     "rumors": "data/world-of-darkness/rumors_core.json",
     "centralRegistry": "data/world-of-darkness/poi_registry.json",
@@ -138,6 +140,8 @@
     "hospital": "Blood Bank Depot / Mage Alchemical Laboratory",
     "pharmacy": "Blood Bank Depot / Mage Alchemical Laboratory",
     "cemetery": "Shadowlands Verge / Werewolf Caern Border",
-    "park": "Shadowlands Verge / Werewolf Caern Border"
+    "park": "Shadowlands Verge / Werewolf Caern Border",
+    "fitness": "Body-Culture Social Node / Controlled Training Ground",
+    "sports": "Crowd Resonance Venue / Territorial Gathering Site"
   }
 }
