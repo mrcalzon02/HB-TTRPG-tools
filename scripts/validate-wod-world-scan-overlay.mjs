@@ -22,7 +22,7 @@ if (!worldScan.includes('Scan Visible Area Locally') || !worldScan.includes('Sca
 
 if (!globalWorkflow.includes('node scripts/ingest-wod-world-scan-rescan-v4.mjs')) throw new Error('Production global scan workflow does not invoke rescan-v4.');
 if (globalWorkflow.includes('run: node scripts/ingest-wod-world-scan-rescan-v3.mjs') || globalWorkflow.includes('node scripts/enrich-wod-location-context.mjs')) throw new Error('Production workflow bypasses v4 or rewrites completed packages.');
-if (!globalWorkflow.includes('immutable regional and system-site packages')) throw new Error('Production workflow does not identify its immutable regional and system-site transaction.');
+if (!globalWorkflow.includes('immutable regional and system-site packages')) throw new Error('Production workflow does not identify its immutable transaction.');
 
 if (receipt.schemaVersion !== '2.9.0' || receipt.generatedPackageSchemaVersion !== '2.1.0') throw new Error('Chronicle receipt schema is invalid.');
 if (receipt.detailDiversity?.legacyCharacterPrototypeSelection !== false || receipt.detailDiversity?.legacyRumorBundleSelection !== false) throw new Error('Receipt does not retire bundled profiles.');
@@ -32,9 +32,9 @@ if (receipt.unifiedCatalogGeneration?.unifiedStatusProfile?.supernaturalOrAdjace
 if (JSON.stringify(receipt.unifiedCatalogGeneration?.catalogs) !== JSON.stringify(expectedCatalogs)) throw new Error('Receipt does not record all Unified catalogs.');
 if (receipt.unifiedCatalogGeneration?.globalIngestion?.generatorVersion !== 'world-seeded-system-site-server-rescan-3.2.0' || receipt.unifiedCatalogGeneration?.globalIngestion?.wrapper !== 'scripts/ingest-wod-world-scan-rescan-v4.mjs') throw new Error('Receipt does not record system-site v4 global ingestion.');
 if (receipt.unifiedCatalogGeneration?.globalIngestion?.onePassImmutablePackageTransaction !== true) throw new Error('Receipt does not prohibit post-ingestion rewriting.');
-if (receipt.regionalThemeGeneration?.version !== '3.2.0') throw new Error('Receipt does not record regional theme version 3.2.0.');
+if (receipt.regionalThemeGeneration?.version !== '3.2.0' || receipt.regionalThemeGeneration?.legacyQualifierVersion !== '1.0.0') throw new Error('Receipt does not record the regional model and qualifier versions.');
 if (receipt.regionalThemeGeneration?.minimumVariantsPerCatalog !== 27648 || receipt.regionalThemeGeneration?.manifestationChannels !== 12) throw new Error('Receipt does not record the complete regional product space.');
-if (receipt.regionalThemeGeneration?.legacyThemeFrequencyDenominator !== 32) throw new Error('Receipt does not record the 1-in-32 legacy theme policy.');
+if (receipt.regionalThemeGeneration?.legacyThemeFrequencyDenominator !== 32 || receipt.regionalThemeGeneration?.exactThemeRecurrenceCeiling !== 3) throw new Error('Receipt does not record regional rarity limits.');
 if (receipt.systemSiteGeneration?.catalogVersion !== '1.0.0' || receipt.systemSiteGeneration?.expansionVersion !== '1.0.0') throw new Error('Receipt does not record system-site versions.');
 if (receipt.systemSiteGeneration?.authoredEntries !== 588 || receipt.systemSiteGeneration?.dimensions !== 8 || receipt.systemSiteGeneration?.minimumDedicatedLineStructuralCombinations !== 144000000) throw new Error('Receipt has incomplete system-site counts.');
 
@@ -44,6 +44,7 @@ const expectedCore = [
   'world-of-darkness-system-site-catalog.js',
   'world-of-darkness-detail-diversity-core.js',
   'world-of-darkness-regional-theme-expansion.js',
+  'world-of-darkness-regional-legacy-qualifier.js',
   'world-of-darkness-system-site-expansion.js',
   'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-radial-scan-compat.js'
@@ -51,14 +52,29 @@ const expectedCore = [
 if (JSON.stringify(receipt.loadingModel?.spatialCoreOnExplicitOpen) !== JSON.stringify(expectedCore)) throw new Error('Receipt does not record the active map core.');
 
 for (const governedPath of [
-  receipt.spatialStageLoader, receipt.lightweightMapCore, receipt.spatialConfigCompatibility,
-  receipt.systemSiteCatalog, receipt.detailDiversityCore, receipt.regionalThemeExpansion,
-  receipt.systemSiteExpansion, receipt.radialLocationLoader, receipt.radialScanCompatibility,
-  receipt.worldSeedBridge, receipt.worldScanOverlay, receipt.globalRescanBridge,
-  receipt.globalRescanPackageFactory, receipt.globalRescanIngestion, receipt.globalRescanValidator,
-  receipt.systemSiteValidator, receipt.contextAwareCore, receipt.contextOutputNormalizer,
-  receipt.contextAwareBrowserBridge, receipt.contextAwareServerEnricher,
-  receipt.detailDiversityValidator, ...receipt.coreDataFiles
+  receipt.spatialStageLoader,
+  receipt.lightweightMapCore,
+  receipt.spatialConfigCompatibility,
+  receipt.systemSiteCatalog,
+  receipt.detailDiversityCore,
+  receipt.regionalThemeExpansion,
+  receipt.regionalLegacyQualifier,
+  receipt.systemSiteExpansion,
+  receipt.radialLocationLoader,
+  receipt.radialScanCompatibility,
+  receipt.worldSeedBridge,
+  receipt.worldScanOverlay,
+  receipt.globalRescanBridge,
+  receipt.globalRescanPackageFactory,
+  receipt.globalRescanIngestion,
+  receipt.globalRescanValidator,
+  receipt.systemSiteValidator,
+  receipt.contextAwareCore,
+  receipt.contextOutputNormalizer,
+  receipt.contextAwareBrowserBridge,
+  receipt.contextAwareServerEnricher,
+  receipt.detailDiversityValidator,
+  ...receipt.coreDataFiles
 ]) if (!governedPath || !fs.existsSync(governedPath)) throw new Error(`Governed path is missing: ${governedPath}`);
 
 console.log(JSON.stringify({
@@ -66,6 +82,7 @@ console.log(JSON.stringify({
   influenceSpheres: influence.sphereVocabulary,
   effectiveLocationVariants: config.contextAwareGeneration.effectiveLocationVariants,
   regionalThemeVersion: receipt.regionalThemeGeneration.version,
+  regionalLegacyQualifierVersion: receipt.regionalThemeGeneration.legacyQualifierVersion,
   regionalThemeVariantsPerCatalog: receipt.regionalThemeGeneration.minimumVariantsPerCatalog,
   regionalManifestationChannels: receipt.regionalThemeGeneration.manifestationChannels,
   systemSiteAuthoredEntries: receipt.systemSiteGeneration.authoredEntries,
