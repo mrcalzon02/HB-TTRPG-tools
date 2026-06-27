@@ -6,6 +6,7 @@
     'world-of-darkness-spatial-config-compat.js',
     'world-of-darkness-system-site-catalog.js',
     'world-of-darkness-detail-diversity-core.js',
+    'world-of-darkness-regional-theme-expansion.js',
     'world-of-darkness-system-site-expansion.js',
     'world-of-darkness-radial-location-loader.js',
     'world-of-darkness-radial-scan-compat.js'
