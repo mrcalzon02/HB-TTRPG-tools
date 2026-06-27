@@ -86,7 +86,14 @@
   },
   "unifiedCatalogGeneration": {
     "policy": "Unified World of Darkness is a high-density cross-catalog mode rather than a seventh isolated catalog",
-    "catalogs": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
+    "catalogs": [
+      "vampire",
+      "werewolf",
+      "breeds",
+      "hunter",
+      "changeling",
+      "mage"
+    ],
     "singleCatalogStatusProfile": {
       "mundane": 12,
       "tangential": 6,
@@ -104,7 +111,10 @@
     "regionalThemePolicy": "one shared overlap theme per neighborhood",
     "localCatalogPolicy": "individual locations consume all six catalog lenses before local reuse",
     "adjacencyPolicy": "Vampire, Werewolf, Changing Breeds, Hunter, Changeling, and Mage locations may appear directly beside one another",
-    "catalogIdentityFields": ["catalogLine", "catalogLabel"],
+    "catalogIdentityFields": [
+      "catalogLine",
+      "catalogLabel"
+    ],
     "validationRequirements": [
       "exact 5/8/5/3 Unified status counts across 21 deterministic slots",
       "unchanged 12/6/2/1 single-catalog status counts",
@@ -145,8 +155,8 @@
     ],
     "validation": {
       "status": "passed",
-      "validatedCommit": "f2aad518b7046e6953c4e8c70afdcd0e4f011f21",
-      "checkedAt": "2026-06-27T14:03:22.137Z",
+      "validatedCommit": "eddafa231cd633ff00acb292409c8047e9cb5e0c",
+      "checkedAt": "2026-06-27T14:06:50.412Z",
       "totalChecks": 14,
       "passedChecks": 14,
       "failedChecks": 0,
