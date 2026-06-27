@@ -111,9 +111,28 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 - Preserve deep-link behavior by loading required advanced systems when `wodWorld`, `wodPackage`, `wodScope`, or `wodSpatial=1` is present.
 - Validate nearest-first ordering, one-record concurrency, cancellation markers, individual progress controls, and deferred advanced loading through GitHub Actions.
 
+### Milestone 3.6 — Neighborhood Theme and Local Detail Diversification
+
+**Status: Complete — automated regression result pending**
+
+- Retire the visible-map generator's use of the nominal 70-entry character and rumor tables, which contained only ten genuinely distinct profile bundles repeated across pressure variants.
+- Replace complete bundled biographies and rumor trios with independently selected component pools.
+- Keep a single regional supernatural theme stable within a quantized neighborhood cell and active game line.
+- Diversify every location-level field independently, including facade, operational pressure, manifestation, mechanical complication, alignment, tenure, appearance, behavioral tell, temporal object, anchor behavior, trauma, secret, vulnerability, sensory condition, sensory consequence, media source, incident, instruction, rumor source, claim, and consequence.
+- Track values already used inside the active neighborhood and radial pass so equally suitable alternatives are consumed before a field repeats.
+- Preserve deterministic replay for the same ordered scan while avoiding nearby duplicate bundles.
+- Derive fitness, sports, religious, cemetery, education, transit, natural, retail, office, industrial, road, and historic classifications from retained OpenStreetMap tags.
+- Prevent a fitness business from receiving a churchyard public facade unless its actual mapped tags support a cemetery or religious interpretation.
+- Provide at least 9,216 facade combinations, 576 sensory combinations, 6,144 media combinations, 6,144 rumor combinations, and 82,944 character presentations per game line before context, regional theme, secret, trauma, vulnerability, and mechanical combinations are counted.
+- Store a regional theme and eight-character diversity signature in every diversified record.
+- Generate world-specific packages by rotating the compositional pools with the selected world seed.
+- Preserve the exact diversified snapshot through local save, global submission, global ingestion, browser reload, and later context-aware processing.
+- Upgrade new immutable packages to schema `2.1.0` while continuing to accept legacy schema `2.0.0` packages.
+- Validate a sample of 24 tightly clustered Seattle fitness locations: one regional theme, unique complete facade, character, anchor, trauma, secret, vulnerability, sensory, media, rumor, mechanical, and signature outputs, plus deterministic replay.
+
 ## Milestone 4 — Persistent Chronicle Overlay and Territory Filters
 
-**Status: In progress — seed, scan, context, and radial loading foundations complete**
+**Status: In progress — seed, scan, context, radial loading, and detail-diversity foundations complete**
 
 Completed foundations:
 
@@ -122,6 +141,7 @@ Completed foundations:
 - Distinguish local-only, local-with-global-counterpart, and embedded-global editing modes.
 - Refresh the global register without overwriting local work.
 - Preserve real-world and game-line context metadata in newly generated location packages.
+- Preserve the complete diversified detail snapshot and regional theme in local and global world packages.
 - Keep advanced overlay and registry systems deferred until the map and visible-location queue are usable.
 
 Remaining requirements:
@@ -144,7 +164,7 @@ Completed foundations:
 - Use dashed circles for local packages and solid circles for globally embedded packages.
 - Scale provisional radius by tangential, active-unregistered, and inventoried status.
 - Filter the provisional overlay by local/global scope and supernatural sphere.
-- Make context-aware setting, feature, category, tag, and selected-output metadata available for later influence generation.
+- Make context-aware setting, feature, category, tag, selected-output, regional-theme, and diversity metadata available for later influence generation.
 
 Remaining requirements:
 
@@ -165,7 +185,7 @@ Remaining requirements:
 
 **Status: In progress**
 
-- Validate named-location matching, radial ordering and cancellation, runtime order, world-scan schemas, influence registry, JavaScript syntax, 420 effective variants, doubled output pools, and deterministic setting-aware samples through GitHub Actions.
-- Add browser-level smoke tests for map initialization, map relocation before scanning, radial hydration, queue cancellation, result selection, local scan, context-aware preview and enrichment, global rescan submission, overlay rendering, filtering, and registry merge behavior.
+- Validate named-location matching, radial ordering and cancellation, runtime order, world-scan schemas, influence registry, JavaScript syntax, 420 effective variants, doubled output pools, neighborhood anti-repetition, diversified package ingestion, and deterministic setting-aware samples through GitHub Actions.
+- Add browser-level smoke tests for map initialization, map relocation before scanning, radial hydration, queue cancellation, result selection, diversified record display, local save, global submission, package reload, local scan, global rescan submission, overlay rendering, filtering, and registry merge behavior.
 - Add graceful service-failure diagnostics and offline fallback behavior.
 - Confirm attribution, caching, request throttling, and service-policy compliance.
