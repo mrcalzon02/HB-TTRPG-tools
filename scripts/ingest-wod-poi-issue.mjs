@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const body = process.env.ISSUE_BODY || '';
+const body = process.env.ISSUE_BODY_FILE
+  ? fs.readFileSync(process.env.ISSUE_BODY_FILE, 'utf8')
+  : (process.env.ISSUE_BODY || '');
 const marker = '<!-- WOD_POI_REGISTRY_PATCH -->';
 if (!body.includes(marker)) throw new Error('Missing Chronicle Spatial Engine registry marker.');
 
