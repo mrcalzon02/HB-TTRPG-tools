@@ -17,7 +17,7 @@
   const NOMINATIM_ENDPOINT = 'https://nominatim.openstreetmap.org/search';
   const DEFAULT_VIEW = { lat: 47.6016, lng: -122.3334, zoom: 15 };
   const MIN_SCAN_ZOOM = 14;
-  const SCRIPT_TIMEOUT_MS = 8000;
+  const SCRIPT_TIMEOUT_MS = 4500;
   const STORAGE = {
     view: 'hb-wod-inventory-map-view-v2',
     query: 'hb-wod-inventory-map-query-v2',
@@ -179,13 +179,19 @@
   function attachCss(url) {
     return new Promise(resolve => {
       const link = document.createElement('link');
+      let settled = false;
+      const finish = value => {
+        if (settled) return;
+        settled = true;
+        resolve(value);
+      };
       link.rel = 'stylesheet';
       link.href = url;
       link.dataset.wodLightweightLeaflet = 'true';
-      link.onload = () => resolve(true);
-      link.onerror = () => resolve(false);
+      link.onload = () => finish(true);
+      link.onerror = () => finish(false);
       document.head.appendChild(link);
-      window.setTimeout(() => resolve(false), SCRIPT_TIMEOUT_MS);
+      window.setTimeout(() => finish(false), SCRIPT_TIMEOUT_MS);
     });
   }
 
@@ -193,26 +199,34 @@
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       let settled = false;
-      const finish = callback => value => {
+      const succeed = () => {
         if (settled) return;
         settled = true;
-        callback(value);
+        window.clearTimeout(timeout);
+        resolve(window.L);
       };
-      const timeout = window.setTimeout(finish(reject)(new Error(`${new URL(url).hostname} timed out`)), SCRIPT_TIMEOUT_MS);
+      const fail = message => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        script.remove();
+        reject(new Error(message));
+      };
+      const timeout = window.setTimeout(() => fail(`${new URL(url).hostname} timed out`), SCRIPT_TIMEOUT_MS);
       script.src = url;
       script.async = true;
       script.dataset.wodLightweightLeaflet = 'true';
-      script.onload = finish(value => { window.clearTimeout(timeout); resolve(value); })(window.L);
-      script.onerror = finish(() => { window.clearTimeout(timeout); reject(new Error(`${new URL(url).hostname} failed`)); });
+      script.onload = succeed;
+      script.onerror = () => fail(`${new URL(url).hostname} failed`);
       document.head.appendChild(script);
     });
   }
 
   async function loadLeaflet() {
     if (window.L?.map) return window.L;
-    for (const css of LEAFLET_CSS_SOURCES) {
-      if (await attachCss(css)) break;
-    }
+    void attachCss(LEAFLET_CSS_SOURCES[0]).then(loaded => {
+      if (!loaded) void attachCss(LEAFLET_CSS_SOURCES[1]);
+    });
     let lastError = null;
     for (const source of LEAFLET_JS_SOURCES) {
       try {
