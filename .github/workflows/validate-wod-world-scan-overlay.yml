@@ -1,0 +1,45 @@
+name: Validate World of Darkness World Scans
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'world-of-darkness-named-location-bridge.js'
+      - 'world-of-darkness-world-scan-overlay.js'
+      - 'world-of-darkness-location-package-bridge.js'
+      - 'scripts/ingest-wod-world-scan-batch.mjs'
+      - 'scripts/validate-wod-world-scan-overlay.mjs'
+      - 'data/world-of-darkness/**'
+      - '.github/workflows/ingest-wod-world-scan-batch.yml'
+      - '.github/workflows/validate-wod-world-scan-overlay.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check world-of-darkness-named-location-bridge.js
+          node --check world-of-darkness-world-scan-overlay.js
+          node --check world-of-darkness-location-package-bridge.js
+          node --check scripts/ingest-wod-world-scan-batch.mjs
+          node --check scripts/ingest-wod-location-package.mjs
+          node --check scripts/delete-wod-location-package.mjs
+
+      - name: Validate generated data contracts
+        run: |
+          node scripts/validate-wod-location-inventory.mjs
+          node scripts/validate-wod-world-seed-packages.mjs
+          node scripts/validate-wod-world-scan-overlay.mjs
