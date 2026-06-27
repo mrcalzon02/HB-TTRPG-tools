@@ -1,4 +1,4 @@
-name: Deploy World of Darkness Spatial Hotfix to Pages
+name: Deploy World of Darkness Spatial Engine to Pages
 
 on:
   push:
@@ -10,9 +10,11 @@ on:
       - 'docs/world-of-darkness-milestones.md'
       - 'source-page-references/chronicle-spatial-engine.source.json'
       - 'scripts/ingest-wod-*.mjs'
+      - 'scripts/wod-world-scan-package-factory.mjs'
       - 'scripts/enrich-wod-location-context.mjs'
       - 'scripts/validate-wod-*.mjs'
       - 'scripts/run-wod-detail-diversity-validation.mjs'
+      - '.github/workflows/ingest-wod-world-scan-batch.yml'
       - '.github/workflows/deploy-wod-spatial-pages.yml'
       - '.github/workflows/validate-wod-world-scan-overlay.yml'
   workflow_dispatch:
@@ -55,6 +57,9 @@ jobs:
           node --check world-of-darkness-context-aware-variants.js
           node --check scripts/ingest-wod-location-package.mjs
           node --check scripts/enrich-wod-location-context.mjs
+          node --check scripts/wod-world-scan-package-factory.mjs
+          node --check scripts/ingest-wod-world-scan-rescan-v3.mjs
+          node --check scripts/validate-wod-unified-global-rescan.mjs
 
       - name: Validate World of Darkness spatial contracts
         run: |
@@ -62,6 +67,7 @@ jobs:
           node scripts/validate-wod-world-seed-packages.mjs
           node scripts/validate-wod-context-aware-variants.mjs
           node scripts/validate-wod-detail-diversity.mjs
+          node scripts/validate-wod-unified-global-rescan.mjs
           node scripts/validate-wod-map-only-core.mjs
           node scripts/validate-wod-world-scan-overlay.mjs
 
@@ -86,14 +92,19 @@ jobs:
           const fs = require('node:fs');
           const receipt = {
             receiptType: 'wodSpatialPagesDeployment',
-            schemaVersion: '1.0.0',
+            schemaVersion: '1.1.0',
             status: 'passed',
             deployedCommit: process.env.DEPLOYED_SHA,
             pageUrl: process.env.PAGE_URL,
             workflow: '.github/workflows/deploy-wod-spatial-pages.yml',
             deployedAt: new Date().toISOString(),
-            compatibilityVersion: '2.6.1',
-            regressionChecks: 14
+            compatibilityVersion: '2.7.0',
+            regressionChecks: 17,
+            unifiedSupernaturalOrAdjacentPercent: 76.19,
+            singleCatalogSupernaturalOrAdjacentPercent: 42.86,
+            unifiedCatalogs: ['vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage'],
+            globalGeneratorVersion: 'world-seeded-cross-catalog-server-rescan-3.1.0',
+            persistedCatalogIdentity: true
           };
           fs.mkdirSync('data/world-of-darkness/validation', { recursive: true });
           fs.writeFileSync('data/world-of-darkness/validation/pages-deployment-receipt.json', `${JSON.stringify(receipt, null, 2)}\n`);
