@@ -4,9 +4,7 @@
   const OVERPASS_HOSTS = new Set(['overpass-api.de', 'overpass.kumi.systems']);
   const MAX_VISIBLE = 90;
   const STEP_DELAY_MS = 24;
-  const STORAGE = {
-    localPrefix: 'hb-wod-poi-v2:'
-  };
+  const STORAGE = { localPrefix: 'hb-wod-poi-v2:' };
   const INVENTORY_LABELS = {
     MUNDANE: 'Mundane / No Known Connection',
     TANGENTIAL: 'Tangential / Peripheral Association',
@@ -14,27 +12,13 @@
     INVENTORIED: 'Formally Inventoried'
   };
   const BUSINESS_TYPES = {
-    restaurant: 'Food / Restaurant',
-    bar: 'Bar / Pub',
-    night_club: 'Night Club',
-    book_store: 'Book Store',
-    library: 'Library',
-    hospital: 'Healthcare',
-    pharmacy: 'Pharmacy',
-    cemetery: 'Cemetery',
-    park: 'Park / Green Space',
-    store: 'Retail',
-    lodging: 'Lodging',
-    church: 'Religious Site',
-    transit_station: 'Transit',
-    government: 'Civic / Government',
-    office: 'Office',
-    industrial: 'Craft / Industrial',
-    natural_feature: 'Natural Feature',
-    road: 'Road / Route',
-    education: 'Education',
-    historic: 'Historic Site',
-    other: 'Other Named Location'
+    restaurant: 'Food / Restaurant', bar: 'Bar / Pub', night_club: 'Night Club',
+    book_store: 'Book Store', library: 'Library', hospital: 'Healthcare', pharmacy: 'Pharmacy',
+    cemetery: 'Cemetery', park: 'Park / Green Space', store: 'Retail', lodging: 'Lodging',
+    church: 'Religious Site', transit_station: 'Transit', government: 'Civic / Government',
+    office: 'Office', industrial: 'Craft / Industrial', natural_feature: 'Natural Feature',
+    road: 'Road / Route', education: 'Education', historic: 'Historic Site',
+    fitness: 'Fitness / Gym', sports: 'Sports / Recreation', other: 'Other Named Location'
   };
 
   const originalFetch = window.fetch.bind(window);
@@ -48,6 +32,7 @@
     recordByKey: new Map(),
     corePromise: null,
     core: null,
+    diversitySession: null,
     centralRegistry: { entries: {} },
     installed: false,
     lastCenter: null
@@ -61,11 +46,8 @@
   const normalize = value => String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
 
   function readStorage(key, fallback) {
-    try {
-      return JSON.parse(localStorage.getItem(key)) ?? fallback;
-    } catch (_) {
-      return fallback;
-    }
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+    catch (_) { return fallback; }
   }
 
   function murmurHash3(input, seed = 0) {
@@ -107,17 +89,11 @@
     return h1 >>> 0;
   }
 
-  function rotateRight(value, amount) {
-    return ((value >>> amount) | (value << (32 - amount))) >>> 0;
-  }
-
   function isOverpassUrl(input) {
     try {
       const raw = input instanceof Request ? input.url : String(input);
       return OVERPASS_HOSTS.has(new URL(raw, location.href).hostname);
-    } catch (_) {
-      return false;
-    }
+    } catch (_) { return false; }
   }
 
   function interceptOverpass() {
@@ -126,15 +102,13 @@
       if (!isOverpassUrl(input)) return response;
       return new Proxy(response, {
         get(target, property) {
-          if (property === 'json') {
-            return async () => {
-              const payload = await target.json();
-              if (!payload || !Array.isArray(payload.elements)) return payload;
-              const elements = payload.elements.slice();
-              window.setTimeout(() => beginFromElements(elements), 0);
-              return { ...payload, elements: [] };
-            };
-          }
+          if (property === 'json') return async () => {
+            const payload = await target.json();
+            if (!payload || !Array.isArray(payload.elements)) return payload;
+            const elements = payload.elements.slice();
+            window.setTimeout(() => beginFromElements(elements), 0);
+            return { ...payload, elements: [] };
+          };
           const value = Reflect.get(target, property, target);
           return typeof value === 'function' ? value.bind(target) : value;
         }
@@ -148,55 +122,21 @@
     return response.json();
   }
 
-  function expandLegacyCore(document, prefix) {
-    if (Array.isArray(document.entries)) return document.entries;
-    const prototypes = document.prototypes || [];
-    const pressures = document.pressureVariants || [];
-    return prototypes.flatMap((prototype, prototypeIndex) => pressures.map((pressure, pressureIndex) => ({
-      ...prototype,
-      id: `${prefix}-${String(prototypeIndex + 1).padStart(2, '0')}-${String(pressureIndex + 1).padStart(2, '0')}`,
-      variant: prototypeIndex * pressures.length + pressureIndex + 1,
-      pressure
-    })));
-  }
-
-  function expandLocationCore(document) {
-    if (Array.isArray(document.entries)) return document.entries;
-    const prototypes = document.prototypes || [];
-    const contexts = document.contextVariants || [];
-    return prototypes.flatMap((prototype, prototypeIndex) => contexts.map((context, contextIndex) => ({
-      ...prototype,
-      id: `location-${String(prototypeIndex + 1).padStart(2, '0')}-${String(contextIndex + 1).padStart(2, '0')}`,
-      variant: prototypeIndex * contexts.length + contextIndex + 1,
-      context,
-      inventoryStatus: context.inventoryStatus
-    })));
-  }
-
   async function loadCoreData() {
     if (state.corePromise) return state.corePromise;
     state.corePromise = (async () => {
-      updateOverall('Loading Chronicle generation tables…', 5);
+      updateOverall('Loading Chronicle context and diversity tables…', 5);
       const config = await loadJson('data/world-of-darkness/spatial-engine-config.json');
-      updateOverall('Loading location archetypes…', 20);
-      const locationsPromise = loadJson(config.coreData.locations);
-      const charactersPromise = loadJson(config.coreData.characters);
-      const rumorsPromise = loadJson(config.coreData.rumors);
-      const registryPromise = loadJson(config.coreData.centralRegistry);
-      const [locations, characters, rumors, registry] = await Promise.all([
-        locationsPromise,
-        charactersPromise,
-        rumorsPromise,
-        registryPromise
+      const detailPath = config.coreData.detailDiversity || 'data/world-of-darkness/location_detail_diversity_v1.json';
+      const [baseLocations, contextExpansion, registry, detailDiversity] = await Promise.all([
+        loadJson(config.coreData.locations),
+        loadJson(config.coreData.contextExpansion),
+        loadJson(config.coreData.centralRegistry),
+        loadJson(detailPath)
       ]);
-      state.core = {
-        config,
-        locations: expandLocationCore(locations),
-        characters: expandLegacyCore(characters, 'character'),
-        rumors: expandLegacyCore(rumors, 'rumor')
-      };
+      state.core = { config, baseLocations, contextExpansion, detailDiversity };
       state.centralRegistry = registry || { entries: {} };
-      updateOverall('Chronicle generation tables ready.', 100);
+      updateOverall('Expanded Chronicle detail tables ready.', 100);
       return state.core;
     })().catch(error => {
       state.corePromise = null;
@@ -205,44 +145,41 @@
     return state.corePromise;
   }
 
-  function serializeElement(element) {
-    const tags = element.tags || {};
-    const lat = Number(element.lat ?? element.center?.lat);
-    const lng = Number(element.lon ?? element.center?.lon);
-    const name = String(tags.name || tags.brand || tags.operator || '').trim();
-    return {
-      osmType: element.type,
-      osmId: String(element.id),
-      name,
-      lat,
-      lng,
-      featureLabel: tags.wod_named_feature_label || 'Named Map Feature',
-      sourceTags: Object.fromEntries(Object.entries(tags).filter(([key]) => [
-        'amenity', 'shop', 'tourism', 'historic', 'leisure', 'natural', 'waterway', 'highway',
-        'railway', 'public_transport', 'place', 'boundary', 'aeroway', 'office', 'craft',
-        'landuse', 'power', 'man_made', 'military', 'building', 'operator', 'brand'
-      ].includes(key))),
-      address: [
-        tags['addr:full'],
-        [tags['addr:housenumber'], tags['addr:street']].filter(Boolean).join(' '),
-        tags['addr:city'] || tags['addr:town'] || tags['addr:village'],
-        tags['addr:state'],
-        tags['addr:postcode']
-      ].filter(Boolean).join(', ')
-    };
+  function featureLabelFrom(tags = {}) {
+    if (tags.wod_named_feature_label) return tags.wod_named_feature_label;
+    if (tags.leisure === 'fitness_centre' || tags.amenity === 'gym') return 'Fitness Centre';
+    if (tags.leisure === 'sports_centre' || tags.leisure === 'stadium' || tags.sport) return 'Sports Facility';
+    if (tags.amenity === 'restaurant' || tags.amenity === 'cafe' || tags.amenity === 'fast_food') return 'Food Venue';
+    if (tags.amenity === 'bar' || tags.amenity === 'pub' || tags.amenity === 'nightclub') return 'Nightlife Venue';
+    if (tags.shop) return 'Retail Location';
+    if (tags.office) return 'Office';
+    if (tags.tourism) return 'Tourism Location';
+    if (tags.amenity === 'place_of_worship') return 'Religious Site';
+    if (tags.amenity === 'grave_yard' || tags.landuse === 'cemetery') return 'Cemetery';
+    if (tags.amenity === 'school' || tags.amenity === 'college' || tags.amenity === 'university') return 'Education Site';
+    if (tags.railway || tags.public_transport) return 'Transit Feature';
+    if (tags.highway) return 'Named Road or Path';
+    if (tags.leisure === 'park' || tags.leisure === 'garden' || tags.leisure === 'nature_reserve') return 'Park or Green Space';
+    if (tags.natural || tags.waterway) return 'Natural or Water Feature';
+    if (tags.historic) return 'Historic Site';
+    if (tags.building) return 'Named Building';
+    if (tags.place) return 'Named Place';
+    return 'Named Map Feature';
   }
 
   function detectCategory(tags = {}, featureLabel = '') {
     const amenity = tags.amenity;
     const shop = tags.shop;
     const tourism = tags.tourism;
+    if (tags.leisure === 'fitness_centre' || amenity === 'gym') return 'fitness';
+    if (tags.leisure === 'sports_centre' || tags.leisure === 'stadium' || tags.sport) return 'sports';
     if (['restaurant', 'cafe', 'fast_food', 'food_court', 'ice_cream'].includes(amenity)) return 'restaurant';
     if (['bar', 'pub', 'biergarten'].includes(amenity)) return 'bar';
     if (amenity === 'nightclub') return 'night_club';
     if (amenity === 'library') return 'library';
     if (['hospital', 'clinic', 'doctors', 'dentist'].includes(amenity) || tags.healthcare) return 'hospital';
     if (amenity === 'pharmacy') return 'pharmacy';
-    if (amenity === 'grave_yard') return 'cemetery';
+    if (amenity === 'grave_yard' || tags.landuse === 'cemetery') return 'cemetery';
     if (amenity === 'place_of_worship') return 'church';
     if (['school', 'college', 'university', 'kindergarten'].includes(amenity)) return 'education';
     if (['bus_station', 'ferry_terminal'].includes(amenity) || tags.railway || tags.public_transport) return 'transit_station';
@@ -251,13 +188,39 @@
     if (shop) return 'store';
     if (['hotel', 'motel', 'hostel', 'guest_house'].includes(tourism)) return 'lodging';
     if (tags.office) return 'office';
-    if (tags.craft || tags.industrial || tags.man_made) return 'industrial';
-    if (tags.leisure === 'park' || tags.leisure === 'garden' || tags.leisure === 'nature_reserve') return 'park';
+    if (tags.craft || tags.industrial || tags.man_made || tags.landuse === 'industrial') return 'industrial';
+    if (['park', 'garden', 'nature_reserve'].includes(tags.leisure)) return 'park';
     if (tags.natural || tags.waterway) return 'natural_feature';
     if (tags.highway) return 'road';
     if (tags.historic) return 'historic';
+    if (/fitness|gym/i.test(featureLabel)) return 'fitness';
+    if (/sport|stadium|recreation/i.test(featureLabel)) return 'sports';
     if (/park|garden|green space/i.test(featureLabel)) return 'park';
     return 'other';
+  }
+
+  function serializeElement(element) {
+    const tags = element.tags || {};
+    const lat = Number(element.lat ?? element.center?.lat);
+    const lng = Number(element.lon ?? element.center?.lon);
+    const name = String(tags.name || tags.brand || tags.operator || '').trim();
+    const featureLabel = featureLabelFrom(tags);
+    const sourceTags = Object.fromEntries(Object.entries(tags).filter(([key]) => [
+      'amenity', 'shop', 'tourism', 'historic', 'leisure', 'sport', 'healthcare', 'natural', 'waterway',
+      'highway', 'railway', 'public_transport', 'place', 'boundary', 'aeroway', 'office', 'craft',
+      'landuse', 'power', 'man_made', 'military', 'building', 'operator', 'brand'
+    ].includes(key)));
+    return {
+      osmType: element.type,
+      osmId: String(element.id),
+      name, lat, lng, featureLabel, sourceTags,
+      address: [
+        tags['addr:full'],
+        [tags['addr:housenumber'], tags['addr:street']].filter(Boolean).join(' '),
+        tags['addr:city'] || tags['addr:town'] || tags['addr:village'],
+        tags['addr:state'], tags['addr:postcode']
+      ].filter(Boolean).join(', ')
+    };
   }
 
   function distanceMeters(center, location) {
@@ -289,66 +252,49 @@
       .slice(0, MAX_VISIBLE);
   }
 
-  function lineLayer(line, location) {
-    if (line === 'vampire') return location.kindredLayer;
-    if (line === 'werewolf' || line === 'breeds') return location.umbralLayer;
-    if (line === 'mage') return location.awakenedVector;
-    if (line === 'hunter') return `Hunter interpretation: ${location.mundaneBase.description}`;
-    if (line === 'changeling') return 'Changeling interpretation: the mundane footprint may cast a Dreaming reflection.';
-    return `${location.kindredLayer} | ${location.umbralLayer} | ${location.awakenedVector}`;
-  }
-
-  function inventoryInterpretation(line, location) {
-    const context = location.context;
-    const strongLayer = lineLayer(line, location);
-    if (context.inventoryStatus === 'MUNDANE') return {
-      registry: 'No supernatural inventory entry',
-      hiddenFunction: `No confirmed supernatural function. ${context.effect}`,
-      confidence: 'No credible evidence',
+  function interpretationFor(status) {
+    if (status === 'MUNDANE') return {
+      registry: 'No supernatural inventory entry', confidence: 'No credible evidence',
       catalogueNote: 'This location is not present in any known supernatural inventory.'
     };
-    if (context.inventoryStatus === 'TANGENTIAL') return {
-      registry: 'Peripheral association — not inventoried',
-      hiddenFunction: `${context.effect} The nearest known pattern resembles: ${strongLayer} The location itself is not confirmed as involved.`,
-      confidence: 'Weak, indirect, or historical evidence',
+    if (status === 'TANGENTIAL') return {
+      registry: 'Peripheral association — not inventoried', confidence: 'Weak, indirect, or historical evidence',
       catalogueNote: 'Referenced only through rumor, route adjacency, witness testimony, or residual resonance.'
     };
-    if (context.inventoryStatus === 'ACTIVE_UNREGISTERED') return {
-      registry: 'Active supernatural site — unregistered',
-      hiddenFunction: `${context.effect} ${strongLayer}`,
-      confidence: 'Active evidence without formal ownership record',
+    if (status === 'ACTIVE_UNREGISTERED') return {
+      registry: 'Active supernatural site — unregistered', confidence: 'Active evidence without formal ownership record',
       catalogueNote: 'Known to some operators but absent from formal faction inventories.'
     };
     return {
-      registry: 'Formal supernatural inventory entry',
-      hiddenFunction: `${context.effect} ${strongLayer}`,
-      confidence: 'Formally catalogued',
+      registry: 'Formal supernatural inventory entry', confidence: 'Formally catalogued',
       catalogueNote: 'Recorded, monitored, claimed, or administratively recognized by supernatural actors.'
     };
   }
 
   function enrichLocation(location) {
+    if (!window.WODDetailDiversityCore || !state.diversitySession) throw new Error('The detail diversity engine is unavailable.');
     const canonical = [normalize(location.name), normalize(location.address), location.lat.toFixed(6), location.lng.toFixed(6)].join('|');
     const entryKey = `gmaps-${murmurHash3(canonical, 0x1f123bb5).toString(16).padStart(8, '0')}`;
     const spatialToken = `${entryKey}|${location.lat.toFixed(6)}|${location.lng.toFixed(6)}`;
     const seed = murmurHash3(spatialToken, 0x9747b28c);
-    const baseLocation = state.core.locations[seed % state.core.locations.length];
-    const character = state.core.characters[rotateRight(seed, 9) % state.core.characters.length];
-    const rumor = state.core.rumors[rotateRight(seed, 17) % state.core.rumors.length];
     const central = state.centralRegistry.entries?.[entryKey] || null;
     const local = readStorage(`${STORAGE.localPrefix}${entryKey}`, null);
     const override = local || central;
     const claimStatus = override?.veil_interaction || 'STANDARD_UNCLAIMED';
     const line = document.getElementById('wod-spatial-line')?.value || 'unified';
-    let inventoryStatus = central?.inventory_status || baseLocation.inventoryStatus;
+    let inventoryStatus = central?.inventory_status || window.WODDetailDiversityCore.inventoryStatusFromSeed(seed);
     if (claimStatus === 'OPT_OUT') inventoryStatus = 'MUNDANE';
     if (central && claimStatus !== 'OPT_OUT') inventoryStatus = 'INVENTORIED';
-    const interpretedLocation = {
-      ...baseLocation,
+    const enrichedLocation = { ...location, entryKey };
+    const detail = state.diversitySession.generate({
+      location: enrichedLocation,
+      line,
       inventoryStatus,
-      context: { ...baseLocation.context, inventoryStatus }
-    };
-    const interpretation = inventoryInterpretation(line, interpretedLocation);
+      seed,
+      baseLocations: state.core.baseLocations,
+      contextExpansion: state.core.contextExpansion
+    });
+    const interpretation = interpretationFor(inventoryStatus);
     const lore = override?.submitted_lore || {};
     return {
       ...location,
@@ -358,22 +304,25 @@
       inventoryStatus,
       inventoryLabel: INVENTORY_LABELS[inventoryStatus],
       gothicRegistry: interpretation.registry,
-      hiddenFunction: lore.hiddenFunction || interpretation.hiddenFunction,
-      publicFacade: lore.publicFacade || `${location.name} follows a ${baseLocation.mundaneBase.name.toLowerCase()}-pattern ${baseLocation.mundaneBase.category.toLowerCase()} footprint. ${baseLocation.mundaneBase.description}`,
+      hiddenFunction: lore.hiddenFunction || detail.hiddenFunction,
+      publicFacade: lore.publicFacade || detail.publicFacade,
       confidence: interpretation.confidence,
       catalogueNote: interpretation.catalogueNote,
-      contextTitle: baseLocation.context.title,
-      contextEffect: baseLocation.context.effect,
-      mechanicalSeed: baseLocation.context.mechanicalSeed,
-      embeddedCharacter: inventoryStatus === 'MUNDANE' ? 'No supernatural custodian is assigned.' : `${character.sphereAlignmentAndTenure} — ${character.aestheticAndTell}`,
-      temporalAnchor: inventoryStatus === 'MUNDANE' ? 'No occult temporal anchor is recorded.' : character.temporalAnchor,
-      traumaticCatalyst: inventoryStatus === 'MUNDANE' ? 'No supernatural catalyst is documented.' : character.traumaticCatalyst,
-      operationalSecret: inventoryStatus === 'MUNDANE' ? 'No active supernatural plot is confirmed.' : character.secretActivePlot,
-      vulnerability: inventoryStatus === 'MUNDANE' ? 'Ordinary commercial, civic, or structural vulnerabilities only.' : character.fatalWeakness,
-      sensoryAnchor: rumor.sensoryAnchor,
-      mediaFeed: rumor.mediaFeed,
-      rumor: inventoryStatus === 'MUNDANE' ? `Neighborhood rumor only: ${rumor.urbanLegend}` : rumor.urbanLegend,
-      locationVariant: baseLocation.variant,
+      contextTitle: detail.contextTitle,
+      contextEffect: detail.contextEffect,
+      mechanicalSeed: detail.mechanicalSeed,
+      embeddedCharacter: detail.embeddedCharacter,
+      temporalAnchor: detail.temporalAnchor,
+      traumaticCatalyst: detail.traumaticCatalyst,
+      operationalSecret: detail.operationalSecret,
+      vulnerability: detail.vulnerability,
+      sensoryAnchor: detail.sensoryAnchor,
+      mediaFeed: detail.mediaFeed,
+      rumor: inventoryStatus === 'MUNDANE' ? `Neighborhood rumor only: ${detail.rumor}` : detail.rumor,
+      locationVariant: detail.variant,
+      effectiveVariantCount: detail.effectiveVariantCount,
+      regionalTheme: detail.regionalTheme,
+      diversitySignature: detail.diversitySignature,
       claimStatus,
       central: Boolean(central),
       optOut: claimStatus === 'OPT_OUT'
@@ -424,8 +373,7 @@
   function inventoryClass(status) {
     return status === 'TANGENTIAL' ? 'tangential'
       : status === 'ACTIVE_UNREGISTERED' ? 'active-unregistered'
-        : status === 'INVENTORIED' ? 'inventoried'
-          : 'mundane';
+        : status === 'INVENTORIED' ? 'inventoried' : 'mundane';
   }
 
   function placeholderKey(location) {
@@ -472,7 +420,8 @@
         <span class="wod-inventory-pill">${escapeHtml(record.featureLabel)}</span>
         <span class="wod-inventory-pill">${escapeHtml(record.categoryLabel)}</span>
         <span class="wod-inventory-pill">${escapeHtml(record.inventoryLabel)}</span>
-        <span class="wod-inventory-pill">Variant ${record.locationVariant}/210</span>
+        <span class="wod-inventory-pill">${escapeHtml(record.regionalTheme.label)}</span>
+        <span class="wod-inventory-pill">Variant ${record.locationVariant}/${record.effectiveVariantCount}</span>
       </div>
       <p><strong>${escapeHtml(record.gothicRegistry)}</strong></p>
       <p class="wod-inventory-preview">${escapeHtml(record.hiddenFunction.length > 200 ? `${record.hiddenFunction.slice(0, 199)}…` : record.hiddenFunction)}</p>
@@ -486,11 +435,10 @@
     const icon = window.L.divIcon({
       className: '',
       html: `<div class="wod-inventory-marker ${inventoryClass(record.inventoryStatus)}">${index + 1}</div>`,
-      iconSize: [27, 27],
-      iconAnchor: [13, 13]
+      iconSize: [27, 27], iconAnchor: [13, 13]
     });
     const marker = window.L.marker([record.lat, record.lng], { icon, title: record.name })
-      .bindPopup(`<strong>${escapeHtml(record.name)}</strong><br>${escapeHtml(record.inventoryLabel)}<br><small>${escapeHtml(record.gothicRegistry)}</small>`);
+      .bindPopup(`<strong>${escapeHtml(record.name)}</strong><br>${escapeHtml(record.inventoryLabel)}<br><small>${escapeHtml(record.regionalTheme.label)}</small>`);
     marker.on('click', () => selectRecord(record, false));
     marker.addTo(state.markerLayer);
     record.marker = marker;
@@ -529,6 +477,7 @@
     if (!matrix) return;
     const fields = [
       ['Supernatural inventory status', record.inventoryLabel],
+      ['Regional theme', `${record.regionalTheme.label}: ${record.regionalTheme.description}`],
       ['Evidence confidence', record.confidence],
       ['Catalogue note', record.catalogueNote],
       ['Public facade', record.publicFacade],
@@ -551,9 +500,12 @@
         <p><strong>${escapeHtml(record.gothicRegistry)}</strong></p>
         <div class="wod-inventory-grid">${fields.map(([label, value]) => field(label, value)).join('')}</div>
         <p><strong>Chronicle key:</strong> <span class="wod-inventory-token">${record.entryKey}</span></p>
+        <p><strong>Diversity signature:</strong> <span class="wod-inventory-token">${record.diversitySignature}</span></p>
         <a class="primary-action" target="_blank" rel="noopener" href="${escapeHtml(record.googleMapsUrl)}">Open in Google Maps</a>
       </section>`;
-    document.dispatchEvent(new CustomEvent('wod:radial-location-selected', { detail: { record: JSON.parse(JSON.stringify({ ...record, marker: undefined })) } }));
+    document.dispatchEvent(new CustomEvent('wod:radial-location-selected', {
+      detail: { record: JSON.parse(JSON.stringify({ ...record, marker: undefined })) }
+    }));
   }
 
   function currentFilters(record) {
@@ -563,7 +515,8 @@
     if (type !== 'all' && record.category !== type) return false;
     if (status !== 'all' && record.inventoryStatus !== status) return false;
     if (!query) return true;
-    return [record.name, record.address, record.featureLabel, record.categoryLabel, record.inventoryLabel, record.gothicRegistry, record.hiddenFunction]
+    return [record.name, record.address, record.featureLabel, record.categoryLabel, record.inventoryLabel,
+      record.gothicRegistry, record.regionalTheme.label, record.hiddenFunction, record.sensoryAnchor, record.rumor]
       .some(value => normalize(value).includes(query));
   }
 
@@ -571,11 +524,10 @@
     for (const record of state.records) {
       const card = document.getElementById(placeholderKey(record));
       if (card) card.hidden = !currentFilters(record);
-      if (record.marker) {
-        if (currentFilters(record)) {
-          if (!state.markerLayer.hasLayer(record.marker)) state.markerLayer.addLayer(record.marker);
-        } else if (state.markerLayer.hasLayer(record.marker)) state.markerLayer.removeLayer(record.marker);
-      }
+      if (!record.marker || !state.markerLayer) continue;
+      if (currentFilters(record)) {
+        if (!state.markerLayer.hasLayer(record.marker)) state.markerLayer.addLayer(record.marker);
+      } else if (state.markerLayer.hasLayer(record.marker)) state.markerLayer.removeLayer(record.marker);
     }
   }
 
@@ -624,23 +576,27 @@
 
     try {
       await loadCoreData();
+      state.diversitySession = window.WODDetailDiversityCore.createSession(state.core.detailDiversity);
       for (let index = 0; index < state.rawLocations.length; index += 1) {
         if (token !== state.queueToken) return;
         const location = state.rawLocations[index];
         updatePlaceholder(location, 15, 'Reading mapped identity…');
         await nextPaint();
         if (token !== state.queueToken) return;
-        updatePlaceholder(location, 45, 'Checking stored Chronicle information…');
+        updatePlaceholder(location, 40, 'Checking saved Chronicle information…');
         await wait(STEP_DELAY_MS);
         if (token !== state.queueToken) return;
-        updatePlaceholder(location, 70, 'Applying deterministic supernatural context…');
+        updatePlaceholder(location, 65, 'Selecting unused neighborhood details…');
+        await nextPaint();
+        if (token !== state.queueToken) return;
+        updatePlaceholder(location, 85, 'Composing setting-aware Chronicle record…');
         const record = enrichLocation(location);
         state.records.push(record);
         state.recordByKey.set(record.entryKey, record);
         renderReadyCard(record);
         addMarker(record, index);
         const completed = index + 1;
-        updateOverall(`Loaded ${record.name}. Continuing radially outward…`, completed / state.rawLocations.length * 100, completed, state.rawLocations.length);
+        updateOverall(`Loaded ${record.name}. Continuing outward without repeating nearby detail bundles…`, completed / state.rawLocations.length * 100, completed, state.rawLocations.length);
         document.dispatchEvent(new CustomEvent('wod:radial-location-ready', {
           detail: { index, completed, total: state.rawLocations.length, record: JSON.parse(JSON.stringify({ ...record, marker: undefined })) }
         }));
@@ -650,7 +606,7 @@
       }
       if (token !== state.queueToken) return;
       state.running = false;
-      updateOverall(`Loaded ${state.records.length} locations from the center outward.`, 100, state.records.length, state.rawLocations.length);
+      updateOverall(`Loaded ${state.records.length} locations with shared regional themes and diversified local details.`, 100, state.records.length, state.rawLocations.length);
       document.dispatchEvent(new CustomEvent('wod:radial-load-complete', {
         detail: { total: state.records.length, records: state.records.map(record => JSON.parse(JSON.stringify({ ...record, marker: undefined }))) }
       }));
@@ -677,16 +633,8 @@
     line?.addEventListener('change', event => {
       event.stopImmediatePropagation();
       if (state.rawLocations.length) void beginFromElements(state.rawLocations.map(location => ({
-        type: location.osmType,
-        id: location.osmId,
-        lat: location.lat,
-        lon: location.lng,
-        tags: {
-          ...location.sourceTags,
-          name: location.name,
-          wod_named_feature_label: location.featureLabel,
-          'addr:full': location.address
-        }
+        type: location.osmType, id: location.osmId, lat: location.lat, lon: location.lng,
+        tags: { ...location.sourceTags, name: location.name, wod_named_feature_label: location.featureLabel, 'addr:full': location.address }
       })));
     }, true);
   }
@@ -699,7 +647,7 @@
       state.map = window.WODNamedLocationBridge?.getMap?.() || window.WODChronicleSpatialMap || null;
       if (state.map && installProgressPanel()) {
         bindControls();
-        updateOverall('Map ready. Move anywhere, then discover named locations. Records will load nearest-first.', 0, 0, 0);
+        updateOverall('Map ready. Move anywhere, then discover named locations. Nearby details will be diversified automatically.', 0, 0, 0);
         return;
       }
       await wait(50);
