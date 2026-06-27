@@ -5,6 +5,7 @@ const generatedRegistryPath = 'data/world-of-darkness/generated_location_registr
 const influenceRegistryPath = 'data/world-of-darkness/influence_overlay_registry.json';
 const namedBridgePath = 'world-of-darkness-named-location-bridge.js';
 const worldScanPath = 'world-of-darkness-world-scan-overlay.js';
+const globalRescanPath = 'world-of-darkness-global-rescan-bridge.js';
 const loaderPath = 'character-sheet-title.js';
 
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -12,14 +13,18 @@ const generatedRegistry = JSON.parse(fs.readFileSync(generatedRegistryPath, 'utf
 const influenceRegistry = JSON.parse(fs.readFileSync(influenceRegistryPath, 'utf8'));
 const namedBridge = fs.readFileSync(namedBridgePath, 'utf8');
 const worldScan = fs.readFileSync(worldScanPath, 'utf8');
+const globalRescan = fs.readFileSync(globalRescanPath, 'utf8');
 const loader = fs.readFileSync(loaderPath, 'utf8');
 
-if (config.schemaVersion !== '2.3.0') throw new Error('Spatial engine config must use schemaVersion 2.3.0.');
+if (config.schemaVersion !== '2.4.0') throw new Error('Spatial engine config must use schemaVersion 2.4.0.');
 if (config.namedLocationMatching?.scanScope !== 'all-openstreetmap-nodes-ways-and-relations-with-name-tag') {
   throw new Error('Named-location scan scope is not configured for all named OSM elements.');
 }
 if (config.worldScan?.localVisibleLocationCap !== 90) throw new Error('Local world-scan cap must remain 90.');
-if (config.worldScan?.globalBatchLocationCap !== 75) throw new Error('Global batch cap must remain 75.');
+if (config.worldScan?.globalViewportProcessingCap !== 90) throw new Error('Global viewport processing cap must remain 90.');
+if (config.worldScan?.globalSubmissionModel !== 'compact-viewport-manifest-with-server-side-all-named-rescan') {
+  throw new Error('Global scans must use the compact server-rescan submission model.');
+}
 if (config.coreData?.influenceOverlayRegistry !== influenceRegistryPath) throw new Error('Influence overlay registry is not registered in coreData.');
 if (!namedBridge.includes('nwr["name"](${bbox})')) throw new Error('Named-location bridge does not issue the all-name Overpass query.');
 if (!namedBridge.includes('wod:named-location-scan-complete')) throw new Error('Named-location bridge does not publish completed scans.');
@@ -27,15 +32,17 @@ if (!namedBridge.includes('wod:spatial-map-ready')) throw new Error('Named-locat
 if (!worldScan.includes('Scan Visible Area Locally') || !worldScan.includes('Scan Visible Area Globally')) {
   throw new Error('Local and global world-scan controls are missing.');
 }
-if (!worldScan.includes('WOD_WORLD_SCAN_BATCH_PATCH')) throw new Error('Global batch submission marker is missing.');
 if (!worldScan.includes('renderInfluenceOverlay')) throw new Error('Influence overlay renderer is missing.');
-if (!loader.includes("script.async = false")) throw new Error('Supplemental runtime loading is not ordered.');
-const namedIndex = loader.indexOf("world-of-darkness-named-location-bridge.js");
-const spatialIndex = loader.indexOf("world-of-darkness-spatial-engine-inventory.js");
-const packageIndex = loader.indexOf("world-of-darkness-location-package-bridge.js");
-const overlayIndex = loader.indexOf("world-of-darkness-world-scan-overlay.js");
-if (!(namedIndex >= 0 && namedIndex < spatialIndex && spatialIndex < packageIndex && packageIndex < overlayIndex)) {
-  throw new Error('World of Darkness runtime load order must be named bridge, spatial engine, package bridge, then world-scan overlay.');
+if (!globalRescan.includes('WOD_WORLD_SCAN_RESCAN_PATCH')) throw new Error('Compact global rescan marker is missing.');
+if (!globalRescan.includes('server-rescan-all-named')) throw new Error('Compact global rescan query mode is missing.');
+if (!loader.includes('script.async = false')) throw new Error('Supplemental runtime loading is not ordered.');
+const namedIndex = loader.indexOf('world-of-darkness-named-location-bridge.js');
+const spatialIndex = loader.indexOf('world-of-darkness-spatial-engine-inventory.js');
+const packageIndex = loader.indexOf('world-of-darkness-location-package-bridge.js');
+const overlayIndex = loader.indexOf('world-of-darkness-world-scan-overlay.js');
+const rescanIndex = loader.indexOf('world-of-darkness-global-rescan-bridge.js');
+if (!(namedIndex >= 0 && namedIndex < spatialIndex && spatialIndex < packageIndex && packageIndex < overlayIndex && overlayIndex < rescanIndex)) {
+  throw new Error('World of Darkness runtime load order must be named bridge, spatial engine, package bridge, world-scan overlay, then compact global rescan bridge.');
 }
 
 if (generatedRegistry.schemaVersion !== '2.0.0' || generatedRegistry.registryType !== 'chronicle-world-seeded-location-packages') {
@@ -61,8 +68,9 @@ if (!influenceRegistry.worlds || typeof influenceRegistry.worlds !== 'object' ||
 console.log(JSON.stringify({
   namedLocationScope: config.namedLocationMatching.scanScope,
   localWorldScanCap: config.worldScan.localVisibleLocationCap,
-  globalBatchCap: config.worldScan.globalBatchLocationCap,
-  runtimeOrder: ['named-location-bridge', 'spatial-engine', 'location-package-bridge', 'world-scan-overlay'],
+  globalViewportProcessingCap: config.worldScan.globalViewportProcessingCap,
+  globalSubmissionModel: config.worldScan.globalSubmissionModel,
+  runtimeOrder: ['named-location-bridge', 'spatial-engine', 'location-package-bridge', 'world-scan-overlay', 'global-rescan-bridge'],
   embeddedWorlds: Object.keys(generatedRegistry.worlds || {}).length,
   influenceSpheres: influenceRegistry.sphereVocabulary,
   provisionalRadii: config.influenceOverlay.statusRadiusMeters
