@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import diversityCore from '../world-of-darkness-detail-diversity-core.js';
 import regionalThemeExpansion from '../world-of-darkness-regional-theme-expansion.js';
+import regionalLegacyQualifier from '../world-of-darkness-regional-legacy-qualifier.js';
 import systemSiteCatalog from '../world-of-darkness-system-site-catalog.js';
 import systemSiteExpansion from '../world-of-darkness-system-site-expansion.js';
 
@@ -9,7 +10,8 @@ const detail = JSON.parse(fs.readFileSync(config.coreData.detailDiversity, 'utf8
 const baseLocations = JSON.parse(fs.readFileSync(config.coreData.locations, 'utf8'));
 const contextExpansion = JSON.parse(fs.readFileSync(config.coreData.contextExpansion, 'utf8'));
 const regionalCore = regionalThemeExpansion.enhanceCore(diversityCore);
-const expandedCore = systemSiteExpansion.enhanceCore(regionalCore, systemSiteCatalog);
+const qualifiedRegionalCore = regionalLegacyQualifier.enhanceCore(regionalCore);
+const expandedCore = systemSiteExpansion.enhanceCore(qualifiedRegionalCore, systemSiteCatalog);
 
 const lines = ['unified', 'vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage'];
 const fields = ['siteTypes', 'hiddenFunctions', 'infrastructures', 'systemSecrets', 'custodians', 'evidencePatterns', 'conflicts', 'consequences'];
@@ -30,7 +32,8 @@ const categories = [
 ];
 
 if (regionalThemeExpansion.version !== '3.2.0' || regionalCore.__regionalThemeExpansionVersion !== '3.2.0') throw new Error('Regional theme expansion 3.2.0 is not active.');
-if (regionalCore.regionalThemeManifestationChannels?.length !== 12) throw new Error('Regional theme manifestation channels are incomplete.');
+if (regionalLegacyQualifier.version !== '1.0.0' || qualifiedRegionalCore.__regionalLegacyQualifierVersion !== '1.0.0') throw new Error('Regional legacy qualifier 1.0.0 is not active.');
+if (qualifiedRegionalCore.regionalThemeManifestationChannels?.length !== 12) throw new Error('Regional theme manifestation channels are incomplete.');
 if (systemSiteCatalog.schemaVersion !== '1.0.0') throw new Error('System site catalog must use schemaVersion 1.0.0.');
 if (systemSiteExpansion.version !== '1.0.0') throw new Error('System site expansion must use version 1.0.0.');
 if (expandedCore.__systemSiteExpansionVersion !== '1.0.0') throw new Error('System site expansion is not active.');
@@ -44,10 +47,10 @@ for (const line of lines) {
   for (const field of fields) {
     const minimum = field === 'siteTypes' ? 12 : 10;
     if (!Array.isArray(catalog[field]) || catalog[field].length < minimum) throw new Error(`${line}.${field} must contain at least ${minimum} entries.`);
-    if (new Set(catalog[field].map(entry => entry.id)).size !== catalog[field].length) throw new Error(`${line}.${field} contains duplicate IDs.`);
-    for (const entry of catalog[field]) {
-      if (!entry.id || !entry.label || !entry.text) throw new Error(`${line}.${field} contains an incomplete entry.`);
-      if (!['TANGENTIAL', 'ACTIVE_UNREGISTERED', 'INVENTORIED'].every(status => entry.statuses?.includes(status))) throw new Error(`${line}.${field}.${entry.id} lacks a supernatural inventory state.`);
+    if (new Set(catalog[field].map(item => item.id)).size !== catalog[field].length) throw new Error(`${line}.${field} contains duplicate IDs.`);
+    for (const item of catalog[field]) {
+      if (!item.id || !item.label || !item.text) throw new Error(`${line}.${field} contains an incomplete entry.`);
+      if (!['TANGENTIAL', 'ACTIVE_UNREGISTERED', 'INVENTORIED'].every(status => item.statuses?.includes(status))) throw new Error(`${line}.${field}.${item.id} lacks a supernatural inventory state.`);
     }
     authoredEntryCount += catalog[field].length;
   }
@@ -65,7 +68,10 @@ function location(index, line, world = 'wodworld-77777777') {
     address: `${800 + index} Chronicle Avenue`,
     lat: 47.6101 + (index % 6) * 0.0003,
     lng: -122.3311 + Math.floor(index / 6) * 0.0003,
-    category, categoryLabel, featureLabel, sourceTags
+    category,
+    categoryLabel,
+    featureLabel,
+    sourceTags
   };
 }
 
@@ -146,7 +152,8 @@ if (!mundane.hiddenFunction.startsWith('No confirmed supernatural function')) th
 
 console.log(JSON.stringify({
   regionalThemeVersion: regionalThemeExpansion.version,
-  regionalManifestationChannels: regionalCore.regionalThemeManifestationChannels.length,
+  regionalLegacyQualifierVersion: regionalLegacyQualifier.version,
+  regionalManifestationChannels: qualifiedRegionalCore.regionalThemeManifestationChannels.length,
   catalogVersion: systemSiteCatalog.schemaVersion,
   expansionVersion: systemSiteExpansion.version,
   authoredEntryCount,
