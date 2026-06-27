@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import diversityCore from '../world-of-darkness-detail-diversity-core.js';
+import regionalThemeExpansion from '../world-of-darkness-regional-theme-expansion.js';
 import systemSiteCatalog from '../world-of-darkness-system-site-catalog.js';
 import systemSiteExpansion from '../world-of-darkness-system-site-expansion.js';
 
@@ -7,7 +8,8 @@ const config = JSON.parse(fs.readFileSync('data/world-of-darkness/spatial-engine
 const detail = JSON.parse(fs.readFileSync(config.coreData.detailDiversity, 'utf8'));
 const baseLocations = JSON.parse(fs.readFileSync(config.coreData.locations, 'utf8'));
 const contextExpansion = JSON.parse(fs.readFileSync(config.coreData.contextExpansion, 'utf8'));
-const expandedCore = systemSiteExpansion.enhanceCore(diversityCore, systemSiteCatalog);
+const regionalCore = regionalThemeExpansion.enhanceCore(diversityCore);
+const expandedCore = systemSiteExpansion.enhanceCore(regionalCore, systemSiteCatalog);
 
 const lines = ['unified', 'vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage'];
 const fields = ['siteTypes', 'hiddenFunctions', 'infrastructures', 'systemSecrets', 'custodians', 'evidencePatterns', 'conflicts', 'consequences'];
@@ -27,6 +29,7 @@ const categories = [
   ['natural_feature', 'Natural Feature', 'Natural or Water Feature', { natural: 'wood' }]
 ];
 
+if (regionalThemeExpansion.version !== '3.1.0' || regionalCore.__regionalThemeExpansionVersion !== '3.1.0') throw new Error('Regional theme expansion 3.1.0 is not active.');
 if (systemSiteCatalog.schemaVersion !== '1.0.0') throw new Error('System site catalog must use schemaVersion 1.0.0.');
 if (systemSiteExpansion.version !== '1.0.0') throw new Error('System site expansion must use version 1.0.0.');
 if (expandedCore.__systemSiteExpansionVersion !== '1.0.0') throw new Error('Detail diversity core was not enhanced with system site expansion.');
@@ -39,9 +42,7 @@ for (const line of lines) {
   if (!catalog) throw new Error(`System site catalog is missing ${line}.`);
   for (const field of fields) {
     const minimum = field === 'siteTypes' ? 12 : 10;
-    if (!Array.isArray(catalog[field]) || catalog[field].length < minimum) {
-      throw new Error(`${line}.${field} must contain at least ${minimum} entries.`);
-    }
+    if (!Array.isArray(catalog[field]) || catalog[field].length < minimum) throw new Error(`${line}.${field} must contain at least ${minimum} entries.`);
     const ids = new Set(catalog[field].map(entry => entry.id));
     if (ids.size !== catalog[field].length) throw new Error(`${line}.${field} contains duplicate IDs.`);
     for (const entry of catalog[field]) {
@@ -60,9 +61,9 @@ for (const line of lines) {
     * catalog.evidencePatterns.length
     * catalog.conflicts.length
     * catalog.consequences.length;
-  if (combinationFloors[line] < 120000000) throw new Error(`${line} has fewer than 120,000,000 structural combinations.`);
+  if (combinationFloors[line] < 144000000) throw new Error(`${line} has fewer than 144,000,000 structural combinations.`);
 }
-if (authoredEntryCount < 574) throw new Error(`System site catalog has only ${authoredEntryCount} authored entries.`);
+if (authoredEntryCount < 588) throw new Error(`System site catalog has only ${authoredEntryCount} authored entries.`);
 
 function location(index, line, world = 'wodworld-77777777') {
   const [category, categoryLabel, featureLabel, sourceTags] = categories[index % categories.length];
@@ -73,10 +74,7 @@ function location(index, line, world = 'wodworld-77777777') {
     address: `${800 + index} Chronicle Avenue`,
     lat: 47.6101 + (index % 6) * 0.0003,
     lng: -122.3311 + Math.floor(index / 6) * 0.0003,
-    category,
-    categoryLabel,
-    featureLabel,
-    sourceTags
+    category, categoryLabel, featureLabel, sourceTags
   };
 }
 
@@ -100,24 +98,17 @@ for (const line of lines) {
   const records = generateLine(line);
   const firstTwelve = records.slice(0, 12);
   const firstTen = records.slice(0, 10);
-  if (new Set(firstTwelve.map(record => record.siteProfile?.siteType?.id)).size !== 12) {
-    throw new Error(`${line} repeated a site archetype before twelve nearby supernatural sites were generated.`);
-  }
+  if (new Set(firstTwelve.map(record => record.siteProfile?.siteType?.id)).size !== 12) throw new Error(`${line} repeated a site archetype before twelve nearby supernatural sites were generated.`);
   for (const field of profileFields.slice(1)) {
-    if (new Set(firstTen.map(record => record.siteProfile?.[field]?.id)).size !== 10) {
-      throw new Error(`${line} repeated ${field} before ten nearby supernatural sites were generated.`);
-    }
+    if (new Set(firstTen.map(record => record.siteProfile?.[field]?.id)).size !== 10) throw new Error(`${line} repeated ${field} before ten nearby supernatural sites were generated.`);
   }
   for (const record of records) {
+    if (record.regionalTheme?.themeVersion !== '3.1.0') throw new Error(`${line} record lacks regional theme 3.1.0.`);
     if (!record.siteProfile || record.siteProfile.schemaVersion !== '1.0.0') throw new Error(`${line} record lacks a system site profile.`);
     for (const field of profileFields) {
-      if (!record.siteProfile[field]?.id || !record.siteProfile[field]?.label || !record.siteProfile[field]?.text) {
-        throw new Error(`${line} record lacks complete ${field} data.`);
-      }
+      if (!record.siteProfile[field]?.id || !record.siteProfile[field]?.label || !record.siteProfile[field]?.text) throw new Error(`${line} record lacks complete ${field} data.`);
     }
-    if (record.regionalTheme?.siteProfile?.combinationSignature !== record.siteProfile.combinationSignature) {
-      throw new Error(`${line} record does not persist the site profile inside its regional theme snapshot.`);
-    }
+    if (record.regionalTheme?.siteProfile?.combinationSignature !== record.siteProfile.combinationSignature) throw new Error(`${line} record does not persist the site profile inside its regional theme snapshot.`);
     if (!record.hiddenFunction.includes(record.siteProfile.siteType.label)
       || !record.hiddenFunction.includes(record.siteProfile.hiddenFunction.label)
       || !record.hiddenFunction.includes(record.siteProfile.infrastructure.label)) {
@@ -132,12 +123,9 @@ for (const line of lines) {
 
   const replay = generateLine(line);
   for (let index = 0; index < records.length; index += 1) {
-    if (records[index].siteProfile.combinationSignature !== replay[index].siteProfile.combinationSignature) {
-      throw new Error(`${line} system site replay failed at ${index}.`);
-    }
-    if (records[index].diversitySignature !== replay[index].diversitySignature) {
-      throw new Error(`${line} diversity replay failed at ${index}.`);
-    }
+    if (records[index].regionalTheme.id !== replay[index].regionalTheme.id) throw new Error(`${line} regional theme replay failed at ${index}.`);
+    if (records[index].siteProfile.combinationSignature !== replay[index].siteProfile.combinationSignature) throw new Error(`${line} system site replay failed at ${index}.`);
+    if (records[index].diversitySignature !== replay[index].diversitySignature) throw new Error(`${line} diversity replay failed at ${index}.`);
   }
 
   metrics[line] = {
@@ -168,6 +156,7 @@ if (mundane.siteProfile !== null) throw new Error('Mundane locations must not re
 if (!mundane.hiddenFunction.startsWith('No confirmed supernatural function')) throw new Error('Mundane hidden-function disclaimer was lost.');
 
 console.log(JSON.stringify({
+  regionalThemeVersion: regionalThemeExpansion.version,
   catalogVersion: systemSiteCatalog.schemaVersion,
   expansionVersion: systemSiteExpansion.version,
   authoredEntryCount,
