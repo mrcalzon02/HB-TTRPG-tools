@@ -1,0 +1,367 @@
+{
+  "schemaVersion": "1.0.0",
+  "module": "chronicle-location-crosslinks",
+  "description": "Status-aware deterministic content pools used to turn one selected spatial location into a complete cross-linked Chronicle package.",
+  "population": [
+    {
+      "id": "population-mundane-shift",
+      "statuses": ["MUNDANE"],
+      "title": "Ordinary Shift Change",
+      "composition": "A manager, two exhausted workers, a new hire, and a delivery driver overlap for twenty hurried minutes.",
+      "roles": "They keep the location functioning while covering scheduling gaps, unfinished tasks, and customer complaints.",
+      "supernaturalConnection": "None is confirmed; suspicious behavior is better explained by fatigue and workplace pressure.",
+      "complication": "The new hire has contradictory instructions and may accidentally obstruct investigators."
+    },
+    {
+      "id": "population-mundane-regulars",
+      "statuses": ["MUNDANE"],
+      "title": "Neighborhood Regulars",
+      "composition": "Three familiar customers, a nearby resident, and an off-duty worker occupy the public area.",
+      "roles": "They exchange local news, watch unfamiliar visitors, and notice changes in normal routine.",
+      "supernaturalConnection": "Nobody knowingly participates in supernatural society.",
+      "complication": "One regular misremembers a harmless detail with complete confidence."
+    },
+    {
+      "id": "population-tangential-witnesses",
+      "statuses": ["TANGENTIAL"],
+      "title": "Uncoordinated Witness Cluster",
+      "composition": "Two workers and one regular customer separately noticed the same unusual visitor during the previous week.",
+      "roles": "They continue ordinary routines and have not compared accounts.",
+      "supernaturalConnection": "The visitor may have been supernatural, but nobody at the location knowingly assisted them.",
+      "complication": "Each witness remembers a different identifying detail, and only one account is reliable."
+    },
+    {
+      "id": "population-tangential-network",
+      "statuses": ["TANGENTIAL"],
+      "title": "Unwitting Information Network",
+      "composition": "Staff, delivery workers, nearby residents, and regular customers collectively observe most activity around the site.",
+      "roles": "They exchange practical gossip without recognizing its value to supernatural investigators.",
+      "supernaturalConnection": "A faction occasionally mines their conversations through an intermediary.",
+      "complication": "Questioning too many people alerts the intermediary that someone is mapping the network."
+    },
+    {
+      "id": "population-active-cell",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Unofficial Supernatural Cell",
+      "composition": "One experienced operator, two junior associates, and several unaware mortal helpers use the location intermittently.",
+      "roles": "The mortals perform legitimate work and unknowingly preserve the cell's cover.",
+      "supernaturalConnection": "The operators avoid formal recognition and maintain no declared claim.",
+      "complication": "One junior associate wants protection badly enough to betray the cell's existence."
+    },
+    {
+      "id": "population-active-caretakers",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Improvised Anomaly Caretakers",
+      "composition": "A small group of informed mortals and one supernatural specialist quietly manage a recurring effect.",
+      "roles": "They maintain ordinary operations while hiding closures, damage, and unexplained incidents.",
+      "supernaturalConnection": "The effect is real, but no faction has accepted jurisdiction.",
+      "complication": "The specialist has stopped responding and the caretakers are improvising dangerous procedures."
+    },
+    {
+      "id": "population-inventoried-custodians",
+      "statuses": ["INVENTORIED"],
+      "title": "Recognized Custodial Staff",
+      "composition": "A formal custodian, two empowered deputies, mortal retainers, and vetted service workers maintain the site.",
+      "roles": "The visible staff preserve the public facade and control access.",
+      "supernaturalConnection": "The site is assigned, documented, and periodically inspected by a supernatural authority.",
+      "complication": "The custodian's mandate is expiring and rival candidates are already testing the defenses."
+    },
+    {
+      "id": "population-inventoried-office",
+      "statuses": ["INVENTORIED"],
+      "title": "Faction Administrative Node",
+      "composition": "A record keeper, field liaison, security specialist, and mortal clerical staff process local supernatural business.",
+      "roles": "The public operation appears bureaucratic, professional, and unremarkable.",
+      "supernaturalConnection": "The hidden office records claims, permissions, debts, reports, and violations.",
+      "complication": "A missing entry may conceal corruption or prevent an innocent party from proving authorization."
+    }
+  ],
+  "struggles": [
+    {
+      "id": "struggle-mundane-costs",
+      "statuses": ["MUNDANE"],
+      "title": "Rent and Operating-Cost Pressure",
+      "stakes": "The location may close, relocate, reduce hours, or cut services.",
+      "sides": "Owner, workers, landlord, creditors, and customers want incompatible outcomes.",
+      "escalation": "Deferred maintenance and staffing cuts create additional failures.",
+      "resolutionClue": "A contract, subsidy, cooperative arrangement, or negotiated delay can change the outcome."
+    },
+    {
+      "id": "struggle-mundane-reputation",
+      "statuses": ["MUNDANE"],
+      "title": "Reputation Crisis",
+      "stakes": "A complaint, rumor, or recorded incident threatens the location's survival.",
+      "sides": "Staff, customers, online observers, and local institutions interpret incomplete evidence differently.",
+      "escalation": "Attempts to suppress the story make it spread faster.",
+      "resolutionClue": "A complete timeline separates ordinary wrongdoing from invented supernatural explanations."
+    },
+    {
+      "id": "struggle-tangential-evidence",
+      "statuses": ["TANGENTIAL"],
+      "title": "Disputed Evidence",
+      "stakes": "Investigators disagree about whether the location is relevant at all.",
+      "sides": "One party sees a supernatural pattern while another sees coincidence and confirmation bias.",
+      "escalation": "Resources are diverted from a more immediate threat.",
+      "resolutionClue": "Independent mundane records can confirm timing without proving supernatural involvement."
+    },
+    {
+      "id": "struggle-tangential-witness",
+      "statuses": ["TANGENTIAL"],
+      "title": "Unaware Witness at Risk",
+      "stakes": "A person connected only by observation may be harmed, silenced, or manipulated.",
+      "sides": "Investigators, the witness, a supernatural actor, and ordinary authorities pursue different priorities.",
+      "escalation": "The witness begins making public accusations without understanding the danger.",
+      "resolutionClue": "Removing the witness from the pattern may be more useful than extracting further testimony."
+    },
+    {
+      "id": "struggle-active-claim",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Race to Formalize a Claim",
+      "stakes": "Whoever documents or controls the site first may obtain lasting authority.",
+      "sides": "Current users, a major faction, local independents, and the mortal owner compete.",
+      "escalation": "Covert observation gives way to sabotage and manufactured incidents.",
+      "resolutionClue": "The site's utility depends on a feature nobody fully understands."
+    },
+    {
+      "id": "struggle-active-secrecy",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Secrecy Collapse",
+      "stakes": "Repeated supernatural use is becoming visible to workers, customers, or authorities.",
+      "sides": "Users disagree over evacuation, intimidation, memory alteration, and disclosure.",
+      "escalation": "A civilian begins assembling a public evidence archive.",
+      "resolutionClue": "The strongest evidence came from one preventable operational habit."
+    },
+    {
+      "id": "struggle-inventoried-mandate",
+      "statuses": ["INVENTORIED"],
+      "title": "Contested Custodial Mandate",
+      "stakes": "Control of the site will determine access, status, and future policy.",
+      "sides": "The current custodian, appointed successor, local faction, and mortal owner all claim authority.",
+      "escalation": "Procedural disputes become operational interference and proxy violence.",
+      "resolutionClue": "The original mandate contains a neglected condition that changes succession."
+    },
+    {
+      "id": "struggle-inventoried-audit",
+      "statuses": ["INVENTORIED"],
+      "title": "Inventory Audit and Missing Records",
+      "stakes": "An official review may expose unauthorized use, concealed assets, or falsified incidents.",
+      "sides": "Auditors, custodians, beneficiaries, and rivals want different parts of the record preserved.",
+      "escalation": "Witnesses and evidence begin disappearing before the audit concludes.",
+      "resolutionClue": "A mundane maintenance ledger reveals when the official inventory was altered."
+    }
+  ],
+  "adventureHooks": [
+    {
+      "id": "hook-mundane-mistaken-target",
+      "statuses": ["MUNDANE"],
+      "title": "The Wrong Address",
+      "opening": "The characters are sent here by a source who insists the location hides supernatural activity.",
+      "reversal": "The business is mundane; the source confused it with a similar name or shifted address.",
+      "decision": "Protect innocent people from the investigation's consequences or keep pressing them for information.",
+      "reward": "Correcting the mistake reveals who intentionally corrupted the original intelligence."
+    },
+    {
+      "id": "hook-mundane-human-problem",
+      "statuses": ["MUNDANE"],
+      "title": "Nothing Supernatural About It",
+      "opening": "A frightened employee asks for help with incidents they believe are occult.",
+      "reversal": "The danger is fraud, stalking, unsafe management, or ordinary organized crime.",
+      "decision": "Intervene without exposing supernatural methods or abandon a human problem outside the chronicle's main agenda.",
+      "reward": "The grateful witnesses later recognize a genuinely supernatural pattern elsewhere."
+    },
+    {
+      "id": "hook-tangential-trace",
+      "statuses": ["TANGENTIAL"],
+      "title": "Follow the Trace, Not the Building",
+      "opening": "A weak resonance or witness report points toward the selected location.",
+      "reversal": "The site is only where the trail crossed ordinary life.",
+      "decision": "Continue following the moving target or remain to protect people now noticed by it.",
+      "reward": "A timestamp, receipt, or camera angle identifies the next point in the route."
+    },
+    {
+      "id": "hook-tangential-returning-visitor",
+      "statuses": ["TANGENTIAL"],
+      "title": "The Visitor Returns",
+      "opening": "A previously unexplained visitor is expected to return during normal business hours.",
+      "reversal": "The visitor is being followed and may not know the location has become significant.",
+      "decision": "Make contact publicly, follow them afterward, or protect the uninvolved business.",
+      "reward": "The visitor carries a partial account of a larger domain conflict."
+    },
+    {
+      "id": "hook-active-discovery",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "An Unclaimed Secret",
+      "opening": "The characters confirm active supernatural use at a site absent from every formal ledger.",
+      "reversal": "Multiple factions already know and have mutually avoided documenting it.",
+      "decision": "Register the site, preserve its unofficial status, exploit it, or destroy its usefulness.",
+      "reward": "Control of the information grants leverage over every group that kept silent."
+    },
+    {
+      "id": "hook-active-failing-cover",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Cover Story Failure",
+      "opening": "A mundane inspection is about to expose repeated supernatural alterations.",
+      "reversal": "The local users cannot agree which evidence is most dangerous.",
+      "decision": "Repair the cover, redirect the inspector, evacuate the users, or let the truth force a political reckoning.",
+      "reward": "The inspection files reveal who first modified the location."
+    },
+    {
+      "id": "hook-inventoried-lockdown",
+      "statuses": ["INVENTORIED"],
+      "title": "Inventory Lockdown",
+      "opening": "The site seals itself or is formally closed after an internal alarm.",
+      "reversal": "The emergency protocol protects the registry more than the people trapped inside.",
+      "decision": "Obey the custodian, breach the lockdown, or trade access for political concessions.",
+      "reward": "The sealed records expose a hidden relationship between recognized domains."
+    },
+    {
+      "id": "hook-inventoried-inspection",
+      "statuses": ["INVENTORIED"],
+      "title": "The Unscheduled Inspector",
+      "opening": "A powerful representative arrives without notice and demands access to the entire site.",
+      "reversal": "The inspector's credentials are real, but their private objective is not part of the audit.",
+      "decision": "Cooperate, obstruct, expose the objective, or use the visit to challenge local authority.",
+      "reward": "The inspector can confirm one disputed claim if persuaded or compromised."
+    }
+  ],
+  "locationSeeds": [
+    {
+      "id": "seed-mundane-routine",
+      "statuses": ["MUNDANE"],
+      "title": "A Routine Worth Protecting",
+      "premise": "The location matters because ordinary people depend on it.",
+      "firstScene": "Show the normal rhythm before any extraordinary interruption occurs.",
+      "longTermUse": "Return here to measure how chronicle events affect human lives and neighborhood stability."
+    },
+    {
+      "id": "seed-mundane-records",
+      "statuses": ["MUNDANE"],
+      "title": "Mundane Records, Extraordinary Pattern",
+      "premise": "The business is innocent, but its schedules, receipts, cameras, or deliveries document nearby supernatural activity.",
+      "firstScene": "Characters must obtain records without inventing a supernatural threat inside the location.",
+      "longTermUse": "The location becomes a reliable but vulnerable source of ordinary evidence."
+    },
+    {
+      "id": "seed-tangential-crossroads",
+      "statuses": ["TANGENTIAL"],
+      "title": "A Crossroads Without a Gate",
+      "premise": "Several supernatural routes pass near the site without belonging to it.",
+      "firstScene": "Two unrelated travelers arrive close together and misinterpret each other's presence.",
+      "longTermUse": "Repeated crossings slowly make the location relevant despite its original innocence."
+    },
+    {
+      "id": "seed-tangential-memory",
+      "statuses": ["TANGENTIAL"],
+      "title": "The Place Remembers Indirectly",
+      "premise": "Objects and witnesses preserve fragments of an event that happened elsewhere.",
+      "firstScene": "A mundane item produces one impossible but incomplete connection.",
+      "longTermUse": "Each return reveals another fragment while increasing attention from the original participants."
+    },
+    {
+      "id": "seed-active-emergent-domain",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "An Emerging Domain",
+      "premise": "Repeated use is transforming an ordinary site into supernatural infrastructure.",
+      "firstScene": "A minor effect becomes reliable enough that someone proposes formal ownership.",
+      "longTermUse": "Track how users, factions, and mortals reshape the site before it enters any official inventory."
+    },
+    {
+      "id": "seed-active-accidental-node",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "The Accidental Node",
+      "premise": "Unrelated renovations, technology, ritual habits, or human emotion created a useful supernatural effect.",
+      "firstScene": "The characters witness the effect before anyone agrees what caused it.",
+      "longTermUse": "Competing explanations produce different methods of control and escalating damage."
+    },
+    {
+      "id": "seed-inventoried-institution",
+      "statuses": ["INVENTORIED"],
+      "title": "Institution Inside an Institution",
+      "premise": "A formal supernatural office operates through ordinary business procedures and physical infrastructure.",
+      "firstScene": "Characters must navigate both mundane policy and supernatural protocol to obtain access.",
+      "longTermUse": "The site becomes a recurring political stage whose records preserve campaign continuity."
+    },
+    {
+      "id": "seed-inventoried-old-entry",
+      "statuses": ["INVENTORIED"],
+      "title": "The Inventory Is Older Than the Building",
+      "premise": "The current structure inherited a supernatural designation from an earlier place on the same ground.",
+      "firstScene": "Modern plans conflict with obligations written for a vanished predecessor.",
+      "longTermUse": "Excavation of the site's administrative history changes claims, permissions, and enemies."
+    }
+  ],
+  "items": [
+    {
+      "id": "item-mundane-logbook",
+      "statuses": ["MUNDANE"],
+      "title": "Ordinary Operations Log",
+      "appearance": "A stained binder or shared spreadsheet recording shifts, incidents, maintenance, and deliveries.",
+      "function": "It establishes a reliable mundane timeline.",
+      "hiddenValue": "Repeated names and times may reveal activity outside the location without making the location supernatural."
+    },
+    {
+      "id": "item-mundane-key",
+      "statuses": ["MUNDANE"],
+      "title": "Mislabelled Spare Key",
+      "appearance": "A common key with an old handwritten tag that no longer matches the current floor plan.",
+      "function": "It opens an overlooked storage, utility, or service area.",
+      "hiddenValue": "The space contains ordinary evidence someone assumed had been discarded."
+    },
+    {
+      "id": "item-tangential-receipt",
+      "statuses": ["TANGENTIAL"],
+      "title": "Receipt With an Impossible Timestamp",
+      "appearance": "A normal transaction receipt whose time conflicts with cameras, witness accounts, or closing hours.",
+      "function": "It proves that someone interacted with the location during the relevant period.",
+      "hiddenValue": "The discrepancy identifies the visitor's method or route, not control of the business."
+    },
+    {
+      "id": "item-tangential-lost-property",
+      "statuses": ["TANGENTIAL"],
+      "title": "Unclaimed Personal Effect",
+      "appearance": "A cheap object in lost-and-found that staff consider worthless.",
+      "function": "It connects a former visitor to another location or identity.",
+      "hiddenValue": "Its significance appears only when compared with a rumor, character profile, or domain record."
+    },
+    {
+      "id": "item-active-improvised-focus",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Improvised Supernatural Focus",
+      "appearance": "Ordinary business equipment has been modified with symbols, materials, or repeated procedures.",
+      "function": "It stabilizes the site's undocumented supernatural use.",
+      "hiddenValue": "Removing it ends one effect but exposes another that it was suppressing."
+    },
+    {
+      "id": "item-active-dead-drop",
+      "statuses": ["ACTIVE_UNREGISTERED"],
+      "title": "Unofficial Dead-Drop Cache",
+      "appearance": "A sealed maintenance container, false inventory package, or marked utility panel.",
+      "function": "It stores messages, tools, payments, or emergency supplies outside formal faction systems.",
+      "hiddenValue": "The contents identify users who publicly deny knowing the location."
+    },
+    {
+      "id": "item-inventoried-ledger",
+      "statuses": ["INVENTORIED"],
+      "title": "Custodial Inventory Ledger",
+      "appearance": "A secured paper volume, encrypted terminal, or symbolically bound record system.",
+      "function": "It documents authorized users, incidents, assets, obligations, and inspections.",
+      "hiddenValue": "One entry was removed without correcting the cross-references."
+    },
+    {
+      "id": "item-inventoried-token",
+      "statuses": ["INVENTORIED"],
+      "title": "Recognized Access Token",
+      "appearance": "A badge, seal, coin, card, key, or ritual marker that looks ordinary outside supernatural context.",
+      "function": "It proves limited authority to enter, request records, or activate a protected feature.",
+      "hiddenValue": "The token remains valid even though its original holder has lost official standing."
+    }
+  ],
+  "crossLinks": [
+    { "id": "urban-mystification", "label": "Urban Mystification Engine", "uses": "location facade, hidden function, inventory status, physical context" },
+    { "id": "street-level-nobody", "label": "Street-Level Nobody Oracle", "uses": "population roles, witnesses, unaware staff, local contacts" },
+    { "id": "rumor-resonance", "label": "Rumor and Resonance Mill", "uses": "sensory anchor, media feed, street rumor, evidence confidence" },
+    { "id": "character-profiling", "label": "Character Profiling and Tenure Engine", "uses": "associated custodian, operator, witness, or specialist" },
+    { "id": "domain-politics", "label": "Domain Politics and Influence Network", "uses": "claims, stakeholders, opposition, leverage, inventory authority" },
+    { "id": "chronicle-consequences", "label": "Chronicle Clocks and Consequence Dashboard", "uses": "escalation, decisions, unresolved pressure, long-term changes" }
+  ]
+}
