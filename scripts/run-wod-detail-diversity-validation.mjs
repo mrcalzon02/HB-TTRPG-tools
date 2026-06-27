@@ -67,10 +67,7 @@ fs.writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`);
 if (!failed.length) {
   const milestonePath = 'docs/world-of-darkness-milestones.md';
   let milestones = fs.readFileSync(milestonePath, 'utf8');
-  milestones = milestones.replace(
-    '**Status: Complete — automated regression result pending**',
-    '**Status: Complete — automated regression passed**'
-  );
+  milestones = milestones.replace('**Status: Complete — automated regression result pending**', '**Status: Complete — automated regression passed**');
   fs.writeFileSync(milestonePath, milestones);
 
   const governancePath = 'source-page-references/chronicle-spatial-engine.source.json';
@@ -86,9 +83,21 @@ if (!failed.length) {
     failedChecks: receipt.failedChecks,
     sampleSize: 24,
     hiddenFunctionUniqueCount: 24,
-    regionalThemeModelVersion: '3.1.0',
-    minimumRegionalThemeVariantsPerCatalog: 2304,
+    regionalThemeModelVersion: '3.2.0',
+    minimumRegionalThemeVariantsPerCatalog: 27648,
+    regionalManifestationChannels: 12,
     legacyThemeFrequencyDenominator: 32
+  };
+  governance.regionalThemeGeneration ||= {};
+  governance.regionalThemeGeneration.validation = {
+    status: 'passed',
+    validatedCommit,
+    checkedAt,
+    version: '3.2.0',
+    minimumVariantsPerCatalog: 27648,
+    manifestationChannels: 12,
+    legacyThemeFrequencyDenominator: 32,
+    deterministicReplay: true
   };
   governance.unifiedCatalogGeneration ||= {};
   governance.unifiedCatalogGeneration.validation = {
@@ -107,7 +116,7 @@ if (!failed.length) {
     status: 'passed',
     validatedCommit,
     checkedAt,
-    regionalThemeVersion: '3.1.0',
+    regionalThemeVersion: '3.2.0',
     catalogVersion: '1.0.0',
     expansionVersion: '1.0.0',
     dimensions: 8,
