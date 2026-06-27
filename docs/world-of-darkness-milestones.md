@@ -1,6 +1,6 @@
 # World of Darkness Chronicle Spatial Engine Milestones
 
-Development proceeds sequentially on the single `main` branch. A milestone is not considered complete until its runtime, data contract, interface controls, failure handling, and repository documentation are committed.
+Development proceeds sequentially on the single `main` branch. A milestone is not considered complete until its runtime, data contract, interface controls, failure handling, performance gate, and repository documentation are committed.
 
 ## Milestone 1 — Source Governance and Canonical Data
 
@@ -23,17 +23,30 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 
 ## Milestone 3 — Visible Viewport Business Extraction
 
-**Status: Complete**
+**Status: Complete — Performance stabilization applied**
 
 - Replace the unreadable cross-origin map iframe as the extraction surface with a Leaflet/OpenStreetMap viewport.
 - Read the current visible map bounds after pan or zoom.
-- Query named amenities, shops, tourism sites, offices, crafts, leisure sites, and healthcare locations through Overpass.
+- Query named amenities, shops, tourism sites, offices, and healthcare locations through Overpass.
 - Normalize point, way, and relation results into business records with usable coordinates.
 - Apply the same deterministic Chronicle key, 70-entry spatial filter, game-line layer, political pressure, and central-registry status to every visible result.
 - Render matching numbered markers on the map.
 - Render a searchable and type-filterable business list directly to the right of the map on desktop layouts.
-- Selecting a marker or list record populates the canonical business capture fields and opens the full World of Darkness record in the left panel.
-- Cache viewport scans for five minutes, cap visible results, abort stale requests, reject oversized viewports, and provide a second Overpass endpoint as a fallback.
+- Selecting a marker or list record opens the full World of Darkness record in the left panel.
+- Cache viewport scans for ten minutes, cap visible results, abort stale requests, reject oversized viewports, and provide a second Overpass endpoint as a fallback.
+
+### Milestone 3 performance gate
+
+- Do not load a hidden Google Maps iframe.
+- Do not geocode the default search text during startup.
+- Do not initiate a business scan during startup.
+- Start auto-scan disabled on every page load.
+- Initialize the map independently while Chronicle datasets load in the background.
+- Delay opt-in auto-scans until the map has remained idle for 3.5 seconds.
+- Enforce a twelve-second minimum interval between opt-in auto-scans.
+- Skip repeated scans of an unchanged viewport unless the user forces a refresh.
+- Update map tiles only after movement becomes idle and keep the tile buffer small.
+- Load the map runtime only after the World of Darkness view becomes active.
 
 ## Milestone 4 — Persistent Chronicle Overlay and Territory Filters
 
@@ -41,7 +54,7 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 
 Completion requirements:
 
-- Persist the last map view, active game line, list filters, and selected business.
+- Persist the active game line, list filters, and selected business in addition to the existing map view.
 - Visually distinguish unclaimed, supportive, opt-out, and centrally registered locations without requiring selection.
 - Add faction, supernatural sphere, political pressure, and registry-state filters.
 - Reconcile central-registry updates with cached viewport results.
