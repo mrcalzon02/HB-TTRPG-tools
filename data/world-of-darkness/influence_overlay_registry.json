@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryType": "chronicle-supernatural-influence-overlays",
+  "description": "Curated supernatural spheres of influence stored by world seed. Generated package halos are provisional client overlays; future claimed-domain, faction-border, route, corridor, ward, caern, chantry, haven, and surveillance geometry will be committed here.",
+  "geometryModel": {
+    "supportedTypes": [
+      "Point",
+      "Circle",
+      "LineString",
+      "Polygon",
+      "MultiPolygon"
+    ],
+    "coordinateOrder": "longitude-latitude-for-geojson",
+    "worldIsolation": "all influence features belong to exactly one worldSeedKey",
+    "immutability": "published generated packages remain immutable; curated influence geometry uses later governance workflows"
+  },
+  "sphereVocabulary": [
+    "kindred",
+    "garou",
+    "changing_breeds",
+    "hunter",
+    "dreaming",
+    "awakened",
+    "mixed",
+    "unknown"
+  ],
+  "worlds": {}
+}
