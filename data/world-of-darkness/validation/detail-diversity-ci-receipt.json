@@ -1,13 +1,13 @@
 {
   "receiptType": "wodDetailDiversityValidation",
   "schemaVersion": "1.3.0",
-  "status": "failed",
-  "validatedCommit": "e4126074d8cdc078de33ab44faec3198b2d30de0",
+  "status": "passed",
+  "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
   "workflow": ".github/workflows/validate-wod-world-scan-overlay.yml",
-  "checkedAt": "2026-06-27T15:47:15.076Z",
+  "checkedAt": "2026-06-27T15:51:07.497Z",
   "totalChecks": 23,
-  "passedChecks": 22,
-  "failedChecks": 1,
+  "passedChecks": 23,
+  "failedChecks": 0,
   "results": [
     {
       "name": "syntax:spatial-loader",
@@ -155,11 +155,11 @@
     },
     {
       "name": "contract:detail-diversity",
-      "passed": false,
-      "exitCode": 1,
+      "passed": true,
+      "exitCode": 0,
       "signal": null,
-      "stdout": "",
-      "stderr": "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-detail-diversity.mjs:93\n  if (maximumRecurrence > 3) throw new Error(`${line} has an exact regional theme recurring ${maximumRecurrence} times in 384 separated areas.`);\n                                   ^\n\nError: vampire has an exact regional theme recurring 4 times in 384 separated areas.\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-detail-diversity.mjs:93:36\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v20.20.2"
+      "stdout": "{\n  \"sampleSize\": 24,\n  \"sharedRegionalTheme\": {\n    \"id\": \"dead-living-administration--emergency-response-mesh--unwanted-attention--infrastructure-and-maintenance\",\n    \"label\": \"Dead–Living Administration Emergency Response Mesh: Unwanted Attention — Through Infrastructure and Maintenance\",\n    \"faction\": \"the Restless Dead and living institutions\",\n    \"description\": \"Administrative routines continue to reproduce obligations and exclusions created by people who are no longer among the living. Dispatch, medical response, shelters, and crisis procedures repeatedly bring supernatural incidents into the same mortal systems. A rival faction, mortal institution, investigator, or opportunistic outsider has begun asking questions the existing arrangement cannot comfortably answer. Utilities, repairs, service routes, equipment, and overlooked technical systems express the supernatural pressure.\",\n    \"familyId\": \"dead-living-administration\",\n    \"familyLabel\": \"Dead–Living Administration\",\n    \"structureId\": \"emergency-response-mesh\",\n    \"structureLabel\": \"Emergency Response Mesh\",\n    \"dynamicId\": \"unwanted-attention\",\n    \"dynamicLabel\": \"Unwanted Attention\",\n    \"manifestationChannelId\": \"infrastructure-and-maintenance\",\n    \"manifestationChannelLabel\": \"Through Infrastructure and Maintenance\",\n    \"districtKey\": \"793:-2039\",\n    \"neighborhoodKey\": \"3173:-8156\",\n    \"themeVersion\": \"3.2.0\",\n    \"themeSource\": \"compositional-product-space\",\n    \"variationCount\": 27656,\n    \"legacyFrequencyDenominator\": 32,\n    \"catalogLine\": \"werewolf\",\n    \"catalogLabel\": \"Werewolf: The Apocalypse\"\n  },\n  \"regionalThemeModel\": {\n    \"version\": \"3.2.0\",\n    \"legacyQualifierVersion\": \"1.0.0\",\n    \"compositionalVariantsPerCatalog\": 27648,\n    \"manifestationChannels\": 12,\n    \"legacyFrequencyDenominator\": 32,\n    \"metrics\": {\n      \"unified\": {\n        \"variantCount\": 27744,\n        \"sampled\": 384,\n        \"unique\": 381,\n        \"maximumRecurrence\": 2,\n        \"legacyCount\": 13,\n        \"qualifiedLegacyCount\": 13\n      },\n      \"vampire\": {\n        \"variantCount\": 27720,\n        \"sampled\": 384,\n        \"unique\": 379,\n        \"maximumRecurrence\": 2,\n        \"legacyCount\": 11,\n        \"qualifiedLegacyCount\": 11\n      },\n      \"werewolf\": {\n        \"variantCount\": 27720,\n        \"sampled\": 384,\n        \"unique\": 381,\n        \"maximumRecurrence\": 2,\n        \"legacyCount\": 14,\n        \"qualifiedLegacyCount\": 14\n      },\n      \"breeds\": {\n        \"variantCount\": 27720,\n        \"sampled\": 384,\n        \"unique\": 383,\n        \"maximumRecurrence\": 2,\n        \"legacyCount\": 10,\n        \"qualifiedLegacyCount\": 10\n      },\n      \"hunter\": {\n        \"variantCount\": 27720,\n        \"sampled\": 384,\n        \"unique\": 379,\n        \"maximumRecurrence\": 2,\n        \"legacyCount\": 10,\n        \"qualifiedLegacyCount\": 10\n      },\n      \"changeling\": {\n        \"variantCount\": 27720,\n        \"sampled\": 384,\n        \"unique\": 380,\n        \"maximumRecurrence\": 3,\n        \"legacyCount\": 17,\n        \"qualifiedLegacyCount\": 17\n      },\n      \"mage\": {\n        \"variantCount\": 27720,\n        \"sampled\": 384,\n        \"unique\": 378,\n        \"maximumRecurrence\": 2,\n        \"legacyCount\": 15,\n        \"qualifiedLegacyCount\": 15\n      }\n    },\n    \"anarchNightRouteFamilyCount\": 4,\n    \"anarchNightRouteVisibleExpressions\": 4,\n    \"coherentDistrictFamily\": \"anarch-couriers\",\n    \"coherentDistrictUniqueExpressions\": 4,\n    \"worldSpecificDifferences\": 96\n  },\n  \"unifiedStatusCounts\": {\n    \"MUNDANE\": 5,\n    \"TANGENTIAL\": 8,\n    \"ACTIVE_UNREGISTERED\": 5,\n    \"INVENTORIED\": 3\n  },\n  \"standardStatusCounts\": {\n    \"MUNDANE\": 12,\n    \"TANGENTIAL\": 6,\n    \"ACTIVE_UNREGISTERED\": 2,\n    \"INVENTORIED\": 1\n  },\n  \"unifiedCatalogsObserved\": [\n    \"breeds\",\n    \"changeling\",\n    \"hunter\",\n    \"mage\",\n    \"vampire\",\n    \"werewolf\"\n  ],\n  \"exactUniqueFields\": [\n    \"publicFacade\",\n    \"embeddedCharacter\",\n    \"temporalAnchor\",\n    \"traumaticCatalyst\",\n    \"operationalSecret\",\n    \"vulnerability\",\n    \"sensoryAnchor\",\n    \"mediaFeed\",\n    \"rumor\",\n    \"mechanicalSeed\",\n    \"diversitySignature\"\n  ],\n  \"hiddenFunctionUniqueCount\": 24,\n  \"deterministicReplay\": true\n}",
+      "stderr": ""
     },
     {
       "name": "contract:system-site-expansion",

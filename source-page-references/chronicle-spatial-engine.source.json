@@ -48,7 +48,10 @@
     "data/world-of-darkness/spatial-engine-config.json"
   ],
   "loadingModel": {
-    "worldOfDarknessTab": ["world-of-darkness-entry.js", "world-of-darkness-spatial-loader.js"],
+    "worldOfDarknessTab": [
+      "world-of-darkness-entry.js",
+      "world-of-darkness-spatial-loader.js"
+    ],
     "spatialCoreOnExplicitOpen": [
       "world-of-darkness-lightweight-map-core.js",
       "world-of-darkness-spatial-config-compat.js",
@@ -91,7 +94,14 @@
     ]
   },
   "unifiedCatalogGeneration": {
-    "catalogs": ["vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
+    "catalogs": [
+      "vampire",
+      "werewolf",
+      "breeds",
+      "hunter",
+      "changeling",
+      "mage"
+    ],
     "singleCatalogStatusProfile": {
       "mundane": 12,
       "tangential": 6,
@@ -118,10 +128,24 @@
       "postIngestionContextRewrite": false
     },
     "validation": {
-      "status": "pending",
-      "unifiedStatusProfile": [5, 8, 5, 3],
-      "singleCatalogStatusProfile": [12, 6, 2, 1],
+      "status": "passed",
+      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
+      "checkedAt": "2026-06-27T15:51:07.497Z",
+      "unifiedStatusProfile": [
+        5,
+        8,
+        5,
+        3
+      ],
+      "singleCatalogStatusProfile": [
+        12,
+        6,
+        2,
+        1
+      ],
       "catalogsCovered": 6,
+      "browserRegression": "contract:detail-diversity",
+      "serverRegression": "contract:unified-global-rescan",
       "deterministicReplay": true
     }
   },
@@ -135,12 +159,30 @@
     "legacyThemeFrequencyDenominator": 32,
     "districtCellMultiplier": 4,
     "worldSeedSpecific": true,
-    "deterministicReplay": true
+    "deterministicReplay": true,
+    "validation": {
+      "status": "passed",
+      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
+      "checkedAt": "2026-06-27T15:51:07.497Z",
+      "version": "3.2.0",
+      "minimumVariantsPerCatalog": 27648,
+      "manifestationChannels": 12,
+      "legacyThemeFrequencyDenominator": 32,
+      "deterministicReplay": true
+    }
   },
   "systemSiteGeneration": {
     "catalogVersion": "1.0.0",
     "expansionVersion": "1.0.0",
-    "supportedModes": ["unified", "vampire", "werewolf", "breeds", "hunter", "changeling", "mage"],
+    "supportedModes": [
+      "unified",
+      "vampire",
+      "werewolf",
+      "breeds",
+      "hunter",
+      "changeling",
+      "mage"
+    ],
     "dimensions": 8,
     "dimensionNames": [
       "site type",
@@ -164,7 +206,22 @@
     "persistence": "full site profile in contextSnapshot and regionalTheme.siteProfile",
     "globalGeneratorVersion": "world-seeded-system-site-server-rescan-3.2.0",
     "validation": {
-      "status": "pending",
+      "status": "passed",
+      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
+      "checkedAt": "2026-06-27T15:51:07.497Z",
+      "regionalThemeVersion": "3.2.0",
+      "catalogVersion": "1.0.0",
+      "expansionVersion": "1.0.0",
+      "dimensions": 8,
+      "authoredEntries": 588,
+      "minimumDedicatedLineStructuralCombinations": 144000000,
+      "nearbyUniqueSiteTypesBeforeRepeat": 12,
+      "nearbyUniqueValuesBeforeRepeatPerOtherDimension": 10,
+      "mundaneSitesRemainMundane": true,
+      "browserRegression": "contract:system-site-expansion",
+      "serverRegression": "contract:unified-global-rescan",
+      "globalGeneratorVersion": "world-seeded-system-site-server-rescan-3.2.0",
+      "globalIngestionWrapper": "scripts/ingest-wod-world-scan-rescan-v4.mjs",
       "deterministicReplay": true
     }
   },
@@ -181,8 +238,12 @@
     "minimumCharacterPresentationCombinationsPerGameLine": 82944,
     "fitnessAndSportsTagAwareness": true,
     "validation": {
-      "status": "pending",
+      "status": "passed",
+      "validatedCommit": "6c99e6341c9b0cc7a15be6d8fa2fff2ca93cf48c",
+      "checkedAt": "2026-06-27T15:51:07.497Z",
       "totalChecks": 23,
+      "passedChecks": 23,
+      "failedChecks": 0,
       "sampleSize": 24,
       "hiddenFunctionUniqueCount": 24,
       "regionalThemeModelVersion": "3.2.0",
