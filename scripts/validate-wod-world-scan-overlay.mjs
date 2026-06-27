@@ -5,6 +5,7 @@ const generatedRegistryPath = 'data/world-of-darkness/generated_location_registr
 const influenceRegistryPath = 'data/world-of-darkness/influence_overlay_registry.json';
 const sourceReceiptPath = 'source-page-references/chronicle-spatial-engine.source.json';
 const namedBridgePath = 'world-of-darkness-named-location-bridge.js';
+const radialLoaderPath = 'world-of-darkness-radial-location-loader.js';
 const worldScanPath = 'world-of-darkness-world-scan-overlay.js';
 const globalRescanPath = 'world-of-darkness-global-rescan-bridge.js';
 const contextCorePath = 'world-of-darkness-context-aware-core.js';
@@ -18,6 +19,7 @@ const generatedRegistry = JSON.parse(fs.readFileSync(generatedRegistryPath, 'utf
 const influenceRegistry = JSON.parse(fs.readFileSync(influenceRegistryPath, 'utf8'));
 const sourceReceipt = JSON.parse(fs.readFileSync(sourceReceiptPath, 'utf8'));
 const namedBridge = fs.readFileSync(namedBridgePath, 'utf8');
+const radialLoader = fs.readFileSync(radialLoaderPath, 'utf8');
 const worldScan = fs.readFileSync(worldScanPath, 'utf8');
 const globalRescan = fs.readFileSync(globalRescanPath, 'utf8');
 const contextCore = fs.readFileSync(contextCorePath, 'utf8');
@@ -63,6 +65,7 @@ if (JSON.stringify(initialWodScripts) !== JSON.stringify(expectedInitialWodScrip
 
 const coreRuntimePaths = [
   'world-of-darkness-named-location-bridge.js',
+  'world-of-darkness-radial-location-loader.js',
   'world-of-darkness-spatial-engine-inventory.js'
 ];
 const enhancementRuntimePaths = [
@@ -83,12 +86,36 @@ for (const runtimePath of runtimePaths) {
   previousIndex = index;
 }
 if (!spatialLoader.includes('Open Chronicle Spatial Engine')) throw new Error('Explicit spatial-engine activation control is missing.');
-if (!spatialLoader.includes('requestIdleCallback')) throw new Error('Advanced Chronicle layers must be deferred until after map mount.');
+if (!spatialLoader.includes('Load Chronicle Tools Now')) throw new Error('Manual advanced-tool loading control is missing.');
+if (!spatialLoader.includes("document.addEventListener('wod:radial-load-complete'")) throw new Error('Advanced Chronicle tools do not wait for the radial pass.');
+if (!spatialLoader.includes('requestIdleCallback')) throw new Error('Advanced Chronicle layers must be scheduled during browser idle time.');
 if (!spatialLoader.includes('waitForSpatialMap')) throw new Error('The staged loader does not wait for a usable map instance.');
 if (!spatialLoader.includes("classList.contains('leaflet-container')")) throw new Error('The map-ready gate does not confirm Leaflet initialization.');
 if (!spatialLoader.includes('wod:spatial-stack-ready')) throw new Error('The spatial stack completion event is missing.');
 for (const runtimePath of runtimePaths) {
   if (wodBundleMatch[1].includes(runtimePath)) throw new Error(`${runtimePath} must not load merely by opening the World of Darkness tab.`);
+}
+
+const radialRequirements = [
+  'MAX_VISIBLE = 90',
+  'STEP_DELAY_MS',
+  '.sort((left, right) => left.distance - right.distance',
+  "map.on('movestart zoomstart'",
+  'wod-radial-overall',
+  'Waiting in radial queue',
+  'wod:radial-location-ready',
+  'wod:radial-load-complete',
+  'wod:radial-load-cancelled',
+  'return { ...payload, elements: [] }'
+];
+for (const requirement of radialRequirements) {
+  if (!radialLoader.includes(requirement)) throw new Error(`Radial location loader is missing required contract marker: ${requirement}`);
+}
+if (!radialLoader.includes('for (let index = 0; index < state.rawLocations.length; index += 1)')) {
+  throw new Error('Radial location hydration must use one sequential queue.');
+}
+if (!radialLoader.includes('await nextPaint()') || !radialLoader.includes('await wait(STEP_DELAY_MS)')) {
+  throw new Error('Radial location hydration does not yield between individual records.');
 }
 
 if (generatedRegistry.schemaVersion !== '2.0.0' || generatedRegistry.registryType !== 'chronicle-world-seeded-location-packages') {
@@ -111,9 +138,10 @@ if (!influenceRegistry.worlds || typeof influenceRegistry.worlds !== 'object' ||
   throw new Error('Influence overlay worlds must be an object.');
 }
 
-if (sourceReceipt.schemaVersion !== '2.6.0') throw new Error('Chronicle source receipt must use schemaVersion 2.6.0.');
+if (sourceReceipt.schemaVersion !== '2.7.0') throw new Error('Chronicle source receipt must use schemaVersion 2.7.0.');
 const governedPaths = [
   sourceReceipt.spatialStageLoader,
+  sourceReceipt.radialLocationLoader,
   sourceReceipt.namedLocationBridge,
   sourceReceipt.governedRuntime,
   sourceReceipt.worldSeedBridge,
@@ -140,9 +168,12 @@ if (JSON.stringify(sourceReceipt.loadingModel?.worldOfDarknessTab) !== JSON.stri
 if (JSON.stringify(sourceReceipt.loadingModel?.spatialCoreOnExplicitOpen) !== JSON.stringify(coreRuntimePaths)) {
   throw new Error('Source receipt does not record the explicit spatial core.');
 }
-if (JSON.stringify(sourceReceipt.loadingModel?.deferredAfterMapMount) !== JSON.stringify(enhancementRuntimePaths)) {
+if (JSON.stringify(sourceReceipt.loadingModel?.deferredAfterRadialPass) !== JSON.stringify(enhancementRuntimePaths)) {
   throw new Error('Source receipt does not record the deferred Chronicle enhancements.');
 }
+if (sourceReceipt.loadingModel?.locationHydration?.concurrency !== 1) throw new Error('Source receipt must record one-at-a-time location hydration.');
+if (sourceReceipt.loadingModel?.locationHydration?.visibleLocationCap !== 90) throw new Error('Source receipt must record the 90-location radial cap.');
+if (sourceReceipt.loadingModel?.locationHydration?.cancelOnMapMove !== true) throw new Error('Source receipt must record cancellation on map movement.');
 
 console.log(JSON.stringify({
   namedLocationScope: config.namedLocationMatching.scanScope,
@@ -153,6 +184,9 @@ console.log(JSON.stringify({
   effectiveEntriesPerOutputPool: config.contextAwareGeneration.effectiveEntriesPerOutputPool,
   initialWodScripts,
   spatialCore: coreRuntimePaths,
+  radialHydrationConcurrency: 1,
+  radialVisibleLocationCap: 90,
+  radialCancelOnMapMove: true,
   deferredEnhancements: enhancementRuntimePaths,
   governedPathCount: governedPaths.length,
   embeddedWorlds: Object.keys(generatedRegistry.worlds || {}).length,
