@@ -1,0 +1,26 @@
+{
+  "receiptType": "worldOfDarknessBlueprintSourceReceipt",
+  "schemaVersion": "1.0.0",
+  "sources": [
+    {
+      "uploadedName": "World of Darkness Character Profiling & Tenure Engine_ Master Data Blueprints.docx",
+      "sizeBytes": 15756,
+      "sha256": "362ef118fd0ec59e90f77187576e3ce5069f8054b5952193906e7291408a7d47",
+      "role": "Character tenure, trauma, psychological profile, active plot, and vulnerability blueprint"
+    },
+    {
+      "uploadedName": "World of Darkness Campaign Assistant_ Generator Prototype Specifications.docx",
+      "sizeBytes": 19034,
+      "sha256": "c68f73490ab0cd4ed76972b12138833a85c33320b86e8553440f105119b91cf7",
+      "role": "Urban mystification, street-level NPC, rumor, deterministic address-hash, and map-overlay blueprint"
+    }
+  ],
+  "implementedFiles": [
+    "world-of-darkness-entry.js",
+    "shadowrun-entry.js",
+    "character-sheet-title.js",
+    "docs/world-of-darkness-blueprint-integration.md"
+  ],
+  "branchPolicy": "main only",
+  "sourceStorage": "Original DOCX uploads supplied in the implementation conversation; normalized blueprint logic committed in the runtime and integration documentation."
+}

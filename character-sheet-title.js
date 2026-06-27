@@ -62,6 +62,8 @@
     loadScriptOnce('magical-library-entry.js','data-magical-library-entry','magicalLibraryEntry');
     loadScriptOnce('elemental-realms-entry.js','data-elemental-realms-entry','elementalRealmsEntry');
     loadScriptOnce('solanum-umbra-entry.js','data-solanum-umbra-entry','solanumUmbraEntry');
+    loadScriptOnce('world-of-darkness-entry.js','data-world-of-darkness-entry','worldOfDarknessEntry');
+    loadScriptOnce('shadowrun-entry.js','data-shadowrun-entry','shadowrunEntry');
     loadScriptOnce('npc-profile-generator-entry.js','data-npc-profile-generator-entry','npcProfileGeneratorEntry');
     loadScriptOnce('kaysender-npc-generator.js','data-npc-generator','npcGenerator');
     loadScriptOnce('kaysender-crafting-generator.js','data-crafting-generator','craftingGenerator');
