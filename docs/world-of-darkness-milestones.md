@@ -51,7 +51,7 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 **Status: Complete**
 
 - Expand the location system from 70 to 210 deterministic variants.
-- Keep 57.14% mundane, 28.57% tangential, 9.52% active but unregistered, and 4.76% formally inventoried.
+- Keep 57.14% mundane, 28.57% tangential, 9.52% active but unregistered, and 4.76% formally inventoried for dedicated single-catalog generation.
 - Prevent mundane sites from receiving false havens, caerns, chantries, custodians, or active supernatural plots.
 
 ### Milestone 3.2 — World-Seeded Location Packages
@@ -82,7 +82,7 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 
 - Preserve the 21 original context states and add 21 new context-aware states.
 - Produce 42 effective contexts across 10 archetypes for 420 effective location variants.
-- Preserve the sparse distribution at 57.14% mundane, 28.57% tangential, 9.52% active but unregistered, and 4.76% inventoried.
+- Preserve the sparse single-catalog distribution at 57.14% mundane, 28.57% tangential, 9.52% active but unregistered, and 4.76% inventoried.
 - Double population, struggle, adventure-hook, location-seed, and item pools from 8 to 16 entries each.
 - Provide four linked-content entries per inventory status in every output pool.
 - Score context and content candidates by active game line, mapped category, named-feature class, and retained OSM tags.
@@ -130,9 +130,30 @@ Development proceeds sequentially on the single `main` branch. A milestone is no
 - Upgrade new immutable packages to schema `2.1.0` while continuing to accept legacy schema `2.0.0` packages.
 - Validate a sample of 24 tightly clustered Seattle fitness locations: one regional theme, unique complete facade, character, anchor, trauma, secret, vulnerability, sensory, media, rumor, mechanical, and signature outputs, plus deterministic replay.
 
+### Milestone 3.7 — Unified High-Density Cross-Catalog Generation
+
+**Status: Complete — browser, package, workflow, and server regressions passed**
+
+- Treat **Unified World of Darkness** as a cross-catalog aggregation mode rather than a seventh isolated game line.
+- Draw local catalog lenses from Vampire: The Masquerade, Werewolf: The Apocalypse, Changing Breeds, Hunter, Changeling: The Dreaming, and Mage.
+- Increase Unified's deterministic 21-slot distribution to 5 mundane, 8 tangential, 5 active-but-unregistered, and 3 inventoried locations.
+- Produce a Unified supernatural-or-adjacent rate of 76.19% and an active-or-inventoried rate of 38.10%.
+- Preserve the dedicated single-catalog profile at 12 mundane, 6 tangential, 2 active-but-unregistered, and 1 inventoried location, or 42.86% supernatural-or-adjacent.
+- Keep one Unified overlap theme stable across a neighborhood while rotating individual locations through all six catalogs before reusing a local catalog lens.
+- Accept that Vampire, Werewolf, Changing Breeds, Hunter, Changeling, and Mage locations may appear directly beside one another.
+- Score each location's context, prototype, manifestation, and associated character against its selected local catalog lens.
+- Combine catalog-specific manifestations with Unified overlap manifestations.
+- Preserve `catalogLine` and `catalogLabel` in generated records and inside the immutable regional-theme snapshot used by browser packages.
+- Keep mundane Unified records explicitly mundane even though they retain a deterministic catalog assignment for rotation and later regeneration.
+- Generate global schema `2.1.0` packages through the pure `world-seeded-cross-catalog-server-rescan-3.1.0` package factory.
+- Store catalog and inventory-status counts in global scan coverage records.
+- Use one-pass v3 global ingestion without the legacy post-ingestion context rewrite.
+- Validate browser and server samples of 24 clustered locations, all six catalogs, six-catalog first-cycle rotation, deterministic replay, persisted catalog identity, and dedicated Vampire isolation.
+- Require the production owner workflow to invoke `ingest-wod-world-scan-rescan-v3.mjs` and prohibit fallback to the legacy rescan path.
+
 ## Milestone 4 — Persistent Chronicle Overlay and Territory Filters
 
-**Status: In progress — seed, scan, context, radial loading, and detail-diversity foundations complete**
+**Status: In progress — seed, scan, context, radial loading, detail diversity, and Unified cross-catalog foundations complete**
 
 Completed foundations:
 
@@ -140,14 +161,14 @@ Completed foundations:
 - Store global packages and global scan coverage by embedded world seed.
 - Distinguish local-only, local-with-global-counterpart, and embedded-global editing modes.
 - Refresh the global register without overwriting local work.
-- Preserve real-world and game-line context metadata in newly generated location packages.
+- Preserve real-world, game-line, catalog-lens, and context metadata in newly generated location packages.
 - Preserve the complete diversified detail snapshot and regional theme in local and global world packages.
 - Keep advanced overlay and registry systems deferred until the map and visible-location queue are usable.
 
 Remaining requirements:
 
 - Persist the active game line, list filters, and selected location.
-- Add faction, political-pressure, registry-state, and evidence-confidence filters.
+- Add faction, political-pressure, registry-state, evidence-confidence, and Unified catalog-lens filters.
 - Add explicit cache-age and coverage-age indicators.
 - Export filtered packages and overlays as GeoJSON and KML.
 
@@ -164,7 +185,7 @@ Completed foundations:
 - Use dashed circles for local packages and solid circles for globally embedded packages.
 - Scale provisional radius by tangential, active-unregistered, and inventoried status.
 - Filter the provisional overlay by local/global scope and supernatural sphere.
-- Make context-aware setting, feature, category, tag, selected-output, regional-theme, and diversity metadata available for later influence generation.
+- Make context-aware setting, feature, category, tag, selected-output, regional-theme, catalog-lens, and diversity metadata available for later influence generation.
 
 Remaining requirements:
 
@@ -185,7 +206,7 @@ Remaining requirements:
 
 **Status: In progress**
 
-- Validate named-location matching, radial ordering and cancellation, runtime order, world-scan schemas, influence registry, JavaScript syntax, 420 effective variants, doubled output pools, neighborhood anti-repetition, diversified package ingestion, and deterministic setting-aware samples through GitHub Actions.
+- Validate named-location matching, radial ordering and cancellation, runtime order, world-scan schemas, influence registry, JavaScript syntax, 420 effective variants, doubled output pools, neighborhood anti-repetition, Unified density, six-catalog rotation, persisted catalog identity, v3 global ingestion, diversified package ingestion, and deterministic setting-aware samples through GitHub Actions.
 - Add browser-level smoke tests for map initialization, map relocation before scanning, radial hydration, queue cancellation, result selection, diversified record display, local save, global submission, package reload, local scan, global rescan submission, overlay rendering, filtering, and registry merge behavior.
 - Add graceful service-failure diagnostics and offline fallback behavior.
 - Confirm attribution, caching, request throttling, and service-policy compliance.
