@@ -28,6 +28,10 @@
     return base.prepareView(viewId);
   }
 
+  document.addEventListener('hb:view-activated', event => {
+    if (event.detail?.viewId === 'modules') window.initModuleViewer?.();
+  });
+
   window.HBTTRPGApp = Object.freeze({
     ...base,
     prepareView
