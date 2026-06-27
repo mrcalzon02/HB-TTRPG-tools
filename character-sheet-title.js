@@ -63,7 +63,7 @@
     loadScriptOnce('elemental-realms-entry.js','data-elemental-realms-entry','elementalRealmsEntry');
     loadScriptOnce('solanum-umbra-entry.js','data-solanum-umbra-entry','solanumUmbraEntry');
     loadScriptOnce('world-of-darkness-entry.js','data-world-of-darkness-entry','worldOfDarknessEntry');
-    loadScriptOnce('world-of-darkness-spatial-engine-fast.js','data-world-of-darkness-spatial-engine-fast','worldOfDarknessSpatialEngineFast');
+    loadScriptOnce('world-of-darkness-spatial-engine-inventory.js','data-world-of-darkness-spatial-engine-inventory','worldOfDarknessSpatialEngineInventory');
     loadScriptOnce('world-of-darkness-registry-workflow-note.js','data-world-of-darkness-registry-workflow-note','worldOfDarknessRegistryWorkflowNote');
     loadScriptOnce('shadowrun-entry.js','data-shadowrun-entry','shadowrunEntry');
     loadScriptOnce('npc-profile-generator-entry.js','data-npc-profile-generator-entry','npcProfileGeneratorEntry');
