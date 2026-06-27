@@ -4,10 +4,12 @@ on:
   push:
     branches: [main]
     paths:
+      - 'character-sheet-title.js'
       - 'world-of-darkness-named-location-bridge.js'
       - 'world-of-darkness-world-scan-overlay.js'
+      - 'world-of-darkness-global-rescan-bridge.js'
       - 'world-of-darkness-location-package-bridge.js'
-      - 'scripts/ingest-wod-world-scan-batch.mjs'
+      - 'scripts/ingest-wod-world-scan-rescan.mjs'
       - 'scripts/validate-wod-world-scan-overlay.mjs'
       - 'data/world-of-darkness/**'
       - '.github/workflows/ingest-wod-world-scan-batch.yml'
@@ -31,10 +33,12 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
+          node --check character-sheet-title.js
           node --check world-of-darkness-named-location-bridge.js
           node --check world-of-darkness-world-scan-overlay.js
+          node --check world-of-darkness-global-rescan-bridge.js
           node --check world-of-darkness-location-package-bridge.js
-          node --check scripts/ingest-wod-world-scan-batch.mjs
+          node --check scripts/ingest-wod-world-scan-rescan.mjs
           node --check scripts/ingest-wod-location-package.mjs
           node --check scripts/delete-wod-location-package.mjs
 
