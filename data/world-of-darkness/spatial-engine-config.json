@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "2.0.0",
   "mapMode": "leaflet-openstreetmap-lazy-manual-scan",
   "performance": {
     "lazyStartOnWorldOfDarknessView": true,
@@ -11,8 +11,18 @@
     "viewportCacheTtlMs": 600000,
     "maximumVisibleResults": 90
   },
+  "locationDistribution": {
+    "totalVariants": 210,
+    "variantsPerArchetype": 21,
+    "mundanePercent": 57.14,
+    "tangentialPercent": 28.57,
+    "activeUnregisteredPercent": 9.52,
+    "inventoriedPercent": 4.76,
+    "mundaneOrTangentialPercent": 85.71,
+    "notInventoriedPercent": 95.24
+  },
   "coreData": {
-    "locations": "data/world-of-darkness/locations_core.json",
+    "locations": "data/world-of-darkness/locations_core_v2.json",
     "characters": "data/world-of-darkness/characters_core.json",
     "rumors": "data/world-of-darkness/rumors_core.json",
     "centralRegistry": "data/world-of-darkness/poi_registry.json"
