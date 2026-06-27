@@ -5,12 +5,14 @@ const generatedRegistryPath = 'data/world-of-darkness/generated_location_registr
 const influenceRegistryPath = 'data/world-of-darkness/influence_overlay_registry.json';
 const namedBridgePath = 'world-of-darkness-named-location-bridge.js';
 const worldScanPath = 'world-of-darkness-world-scan-overlay.js';
+const loaderPath = 'character-sheet-title.js';
 
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const generatedRegistry = JSON.parse(fs.readFileSync(generatedRegistryPath, 'utf8'));
 const influenceRegistry = JSON.parse(fs.readFileSync(influenceRegistryPath, 'utf8'));
 const namedBridge = fs.readFileSync(namedBridgePath, 'utf8');
 const worldScan = fs.readFileSync(worldScanPath, 'utf8');
+const loader = fs.readFileSync(loaderPath, 'utf8');
 
 if (config.schemaVersion !== '2.3.0') throw new Error('Spatial engine config must use schemaVersion 2.3.0.');
 if (config.namedLocationMatching?.scanScope !== 'all-openstreetmap-nodes-ways-and-relations-with-name-tag') {
@@ -27,6 +29,14 @@ if (!worldScan.includes('Scan Visible Area Locally') || !worldScan.includes('Sca
 }
 if (!worldScan.includes('WOD_WORLD_SCAN_BATCH_PATCH')) throw new Error('Global batch submission marker is missing.');
 if (!worldScan.includes('renderInfluenceOverlay')) throw new Error('Influence overlay renderer is missing.');
+if (!loader.includes("script.async = false")) throw new Error('Supplemental runtime loading is not ordered.');
+const namedIndex = loader.indexOf("world-of-darkness-named-location-bridge.js");
+const spatialIndex = loader.indexOf("world-of-darkness-spatial-engine-inventory.js");
+const packageIndex = loader.indexOf("world-of-darkness-location-package-bridge.js");
+const overlayIndex = loader.indexOf("world-of-darkness-world-scan-overlay.js");
+if (!(namedIndex >= 0 && namedIndex < spatialIndex && spatialIndex < packageIndex && packageIndex < overlayIndex)) {
+  throw new Error('World of Darkness runtime load order must be named bridge, spatial engine, package bridge, then world-scan overlay.');
+}
 
 if (generatedRegistry.schemaVersion !== '2.0.0' || generatedRegistry.registryType !== 'chronicle-world-seeded-location-packages') {
   throw new Error('Generated world registry schema is invalid.');
@@ -52,6 +62,7 @@ console.log(JSON.stringify({
   namedLocationScope: config.namedLocationMatching.scanScope,
   localWorldScanCap: config.worldScan.localVisibleLocationCap,
   globalBatchCap: config.worldScan.globalBatchLocationCap,
+  runtimeOrder: ['named-location-bridge', 'spatial-engine', 'location-package-bridge', 'world-scan-overlay'],
   embeddedWorlds: Object.keys(generatedRegistry.worlds || {}).length,
   influenceSpheres: influenceRegistry.sphereVocabulary,
   provisionalRadii: config.influenceOverlay.statusRadiusMeters
