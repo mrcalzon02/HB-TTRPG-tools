@@ -1,20 +1,26 @@
 {
   "receiptType": "chronicleSpatialEngineSourceReceipt",
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "sourcePath": "SRC/world-of-darkness/chronicle-spatial-engine-governance.md",
   "uploadedName": "# CHRONICLE SPATIAL ENGINE- MASTER SPECIFICATION & ARCHITECTURE GOVERNANCE.docx",
   "sizeBytes": 12009,
   "sha256": "fc22260bf7b5fbcd655bb067d2f8e6d2c7bd4694301c1885fbbd99962a6a30fe",
   "governedRuntime": "world-of-darkness-spatial-engine-inventory.js",
+  "worldSeedBridge": "world-of-darkness-location-package-bridge.js",
   "coreDataFiles": [
     "data/world-of-darkness/locations_core_v2.json",
     "data/world-of-darkness/characters_core.json",
     "data/world-of-darkness/rumors_core.json",
+    "data/world-of-darkness/location_crosslink_core.json",
+    "data/world-of-darkness/generated_location_registry.json",
     "data/world-of-darkness/poi_registry.json",
     "data/world-of-darkness/spatial-engine-config.json"
   ],
   "locationVariantCount": 210,
   "mundaneOrTangentialPercent": 85.71,
   "inventoriedPercent": 4.76,
+  "generatedPackageSchemaVersion": "2.0.0",
+  "worldSeedModel": "selectable embedded and local immutable worlds",
+  "claimedBusinessIntegration": "deferred",
   "branchPolicy": "main only"
 }
