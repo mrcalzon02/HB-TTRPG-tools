@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.1.0",
+  "schemaVersion": "2.2.0",
   "mapMode": "leaflet-openstreetmap-lazy-manual-scan",
   "performance": {
     "lazyStartOnWorldOfDarknessView": true,
@@ -10,6 +10,31 @@
     "autoScanCooldownMs": 12000,
     "viewportCacheTtlMs": 600000,
     "maximumVisibleResults": 90
+  },
+  "namedLocationMatching": {
+    "scanScope": "all-openstreetmap-nodes-ways-and-relations-with-name-tag",
+    "eligibleExamples": [
+      "businesses",
+      "named buildings",
+      "roads and streets",
+      "parks and green spaces",
+      "schools and campuses",
+      "religious sites",
+      "historic sites and monuments",
+      "natural and water features",
+      "trails and paths",
+      "transit locations",
+      "public and civic facilities",
+      "named neighborhoods and boundaries"
+    ],
+    "viewportServerResultCaps": {
+      "small": 1200,
+      "medium": 900,
+      "large": 600
+    },
+    "clientVisibleResultCap": 90,
+    "denseAreaGuidance": "zoom-closer-and-rescan-when-server-cap-is-reached",
+    "legacyBusinessOnlyCacheMigration": "clear-once"
   },
   "locationDistribution": {
     "totalVariants": 210,
@@ -37,7 +62,7 @@
     "claimedBusinessIntegration": "deferred"
   },
   "persistence": {
-    "baseline": "deterministic-business-key-and-coordinate-seed",
+    "baseline": "deterministic-named-location-key-and-coordinate-seed",
     "localOverrides": "localStorage",
     "localWorldSeeds": "localStorage",
     "localGeneratedPackages": "localStorage",
