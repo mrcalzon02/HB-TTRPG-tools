@@ -1,0 +1,59 @@
+{
+  "receiptType": "shadowrunBinaryCubeValidationContract",
+  "schemaVersion": "0.2.0",
+  "branchPolicy": "main only",
+  "securityClassification": "experimental-ttrpg-obfuscation-not-production-cryptography",
+  "requiredStaticValidation": {
+    "validator": "scripts/validate-shadowrun-binary-cube.mjs",
+    "minimumAssertions": 14258,
+    "minimumRoundTrips": 3840,
+    "recommendedGridSizes": [4, 12, 20, 28, 36, 44, 52, 60],
+    "directedLegalFacePairs": 24,
+    "gridFourMatrix": {
+      "inputFaces": 6,
+      "legalOutputFacesPerInput": 4,
+      "inputOrientations": 4,
+      "outputOrientations": 4,
+      "maskDensities": [1, 0.75, 0.5],
+      "payloadLengthsPerConfiguration": 3
+    },
+    "mandatoryFailureCases": [
+      "non-binary input",
+      "same or opposite face misuse",
+      "wrong key",
+      "ciphertext corruption",
+      "framing metadata corruption",
+      "key fingerprint mismatch",
+      "invalid permutation",
+      "unsupported schema",
+      "truncated block"
+    ]
+  },
+  "requiredBrowserValidation": {
+    "validator": "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
+    "minimumChecks": 12,
+    "requiredCapabilities": [
+      "lazy workspace loading",
+      "lazy engine and interface loading",
+      "single script instance",
+      "deterministic key generation",
+      "data-entry mask generation",
+      "multiblock encryption",
+      "six-face diagnostics",
+      "browser round trip",
+      "package and key validation",
+      "tamper detection",
+      "opposite-face rejection",
+      "copy import and download controls",
+      "local storage restoration",
+      "zero page and console errors"
+    ]
+  },
+  "continuousIntegration": {
+    "workflow": ".github/workflows/shadowrun-binary-cube.yml",
+    "triggerBranch": "main",
+    "artifactName": "shadowrun-binary-cube-verification",
+    "artifactRetentionDays": 30
+  },
+  "releaseRule": "No Binary Cube engine, interface, source receipt, phase ledger, or implementation document change is complete until both static and browser validation pass on main."
+}
