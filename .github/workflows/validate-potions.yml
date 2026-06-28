@@ -1,0 +1,37 @@
+name: Validate Potion Formulary
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "medicinal-potions*.js"
+      - "medicinal-potions*.css"
+      - "scripts/validate-medicinal-potions.mjs"
+      - "scripts/validate-srd-potions.mjs"
+      - "docs/potion-formulary.md"
+      - ".github/workflows/validate-potions.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-potion-formulary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check potion JavaScript syntax
+        run: find . -maxdepth 1 -name 'medicinal-potions*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Validate core Potion Formulary
+        run: node scripts/validate-medicinal-potions.mjs
+
+      - name: Validate SRD potion and oil ranges
+        run: node scripts/validate-srd-potions.mjs
