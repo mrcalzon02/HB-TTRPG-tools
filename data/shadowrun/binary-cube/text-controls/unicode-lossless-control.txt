@@ -1,0 +1,4 @@
+UTF-8 control: café, naïve, façade, résumé, jalapeño, Alaska.
+Symbols: © ™ → ← × ÷ — …
+Non-Latin: Ελληνικά, русский, 日本語.
+Emoji: 🧊 🔐 🛰️
