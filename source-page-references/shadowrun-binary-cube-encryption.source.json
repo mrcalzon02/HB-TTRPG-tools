@@ -1,0 +1,67 @@
+{
+  "receiptType": "shadowrunBinaryCubeEncryptionSourceReceipt",
+  "schemaVersion": "1.0.0",
+  "project": "HB-TTRPG-tools",
+  "workspace": "Shadowrun",
+  "branchPolicy": "main only",
+  "sources": [
+    {
+      "uploadedName": "3d Data Encryption Templating.txt",
+      "sizeBytes": 6728,
+      "sha256": "dcf866c17c4da1b821e4f09eb9253cdb78127d2ef1b035502c2cd36ad8638624",
+      "role": "Primary conceptual description of cube sizing, starting point, keyed three-coordinate point generation, data entry, rotation, export, decryption, padding, multiple cubes, Nested Cubes, and Crossword split-key masking."
+    },
+    {
+      "uploadedName": "Templet one encryption.xlsx",
+      "sizeBytes": 12758,
+      "sha256": "b38a124293b49137f657529fe7a1367499612b398fc81efa7fecffa479cb9c1d",
+      "role": "Four-by-four visual face-projection example and legacy reference fixture."
+    }
+  ],
+  "sourceDerivedStages": [
+    "Grid size",
+    "Select start point",
+    "Key generation",
+    "Enter data",
+    "Rotate data field",
+    "Remove or export data",
+    "Decryption"
+  ],
+  "recommendedGridSizes": [4, 12, 20, 28, 36, 44, 52, 60],
+  "advancedConcepts": [
+    "Random or sampled junk data for incomplete blocks",
+    "Multiple cube blocks for large inputs",
+    "Data-entry masks",
+    "Nested Cubes",
+    "Crossword split-key or withheld-data masks"
+  ],
+  "legacySpreadsheetFixture": {
+    "gridSize": 4,
+    "input": "0100100001101001",
+    "labeledFaces": {
+      "bottom": "1001011010000100",
+      "back": "0000001111000011",
+      "left": "0000011000111001",
+      "right": "0000011011001001",
+      "front": "0000110000111100"
+    },
+    "status": "Preserved as a visual reference. Not a normative automated test vector until the original coordinate-key mapping is reconstructed or supplied."
+  },
+  "normalizedImplementationModel": {
+    "algorithm": "latin-cube-face-permutation",
+    "activePointsPerBlock": "gridSize squared",
+    "coordinateRule": "z = depthPermutation[(rowPermutation[x] + columnPermutation[y]) mod gridSize]",
+    "projectionRequirement": "Unique x-y, x-z, and y-z coordinate pairs",
+    "validEncryptedExit": "One of the four faces perpendicular to the input face",
+    "maskMeaning": "Key-held boolean selection over input-face cells",
+    "paddingMeaning": "Deterministic seeded junk bits for inactive or unused cells"
+  },
+  "implementedFiles": [
+    "shadowrun-entry.js",
+    "shadowrun-binary-cube-encryption.js",
+    "docs/shadowrun/binary-cube-encryption-milestone-plan.md",
+    "source-page-references/shadowrun-binary-cube-encryption.source.json"
+  ],
+  "securityClassification": "Experimental TTRPG obfuscation and research prototype; not production cryptography.",
+  "sourceStorage": "Original uploads were supplied in the implementation conversation. Their exact names, sizes, hashes, extracted requirements, and normalized implementation role are preserved in this receipt."
+}
