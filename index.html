@@ -6,6 +6,7 @@
   <title>HB TTRPG Tools</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="character-sheet-layout.css">
+  <link rel="stylesheet" href="medicinal-potions.css" data-potion-formulary-style="medicinal-potions.css">
 </head>
 <body>
   <header class="site-header no-print">
@@ -33,7 +34,7 @@
       </div>
       <div class="menu-grid no-print">
         <article class="menu-card"><h3>Utilities</h3><p>Printable pages, editable sheets, trackers, and table-side aids.</p><button class="link-button" data-view="utilities">Open Utilities</button></article>
-        <article class="menu-card"><h3>Generators</h3><p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, and homebrew assets.</p><button class="link-button" data-view="generators">Open Generators</button></article>
+        <article class="menu-card"><h3>Generators</h3><p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, potions, and homebrew assets.</p><button class="link-button" data-view="generators">Open Generators</button></article>
         <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, doors, traps, monsters, treasures, and source-backed notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button></article>
         <article class="menu-card"><h3>Barotrauma Campaign Workspace</h3><p>Crew lore, submarine operations, missions, threats, investigations, wrecks, and campaign records.</p><button class="link-button" data-view="barotrauma">Open Barotrauma</button></article>
         <article class="menu-card"><h3>Kaysender Campaign Workspace</h3><p>Registry-driven planning area for the Kaysender wiki, tools, utilities, generators, and editors.</p><button class="link-button" data-view="kaysender">Open Kaysender</button></article>
@@ -61,7 +62,16 @@
 
     <section id="generators" class="view" aria-labelledby="generators-title">
       <div class="hero-card no-print"><p class="eyebrow">Generators</p><h2 id="generators-title">Generator Bench</h2><p>Generator scripts and registry data load only after this workspace is opened.</p></div>
-      <div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div>
+      <div class="generator-subnav no-print" role="tablist" aria-label="Generator Bench sections">
+        <button id="generator-library-tab" class="generator-tab active" type="button" role="tab" aria-selected="true" aria-controls="generator-library-panel" data-generator-tab="library">Generator Library</button>
+        <button id="potion-formulary-tab" class="generator-tab" type="button" role="tab" aria-selected="false" aria-controls="potion-formulary-panel" data-generator-tab="potion-formulary">Potion Formulary</button>
+      </div>
+      <div id="generator-library-panel" class="generator-panel" role="tabpanel" aria-labelledby="generator-library-tab" data-generator-panel="library">
+        <div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div>
+      </div>
+      <div id="potion-formulary-panel" class="generator-panel" role="tabpanel" aria-labelledby="potion-formulary-tab" data-generator-panel="potion-formulary" hidden>
+        <div id="medicinal-potions-root"><div class="module-empty">Open the Potion Formulary tab to generate Medicinal, Minor, Medium, Major, and Elixir formulas.</div></div>
+      </div>
     </section>
 
     <section id="barotrauma" class="view" aria-labelledby="barotrauma-title">
@@ -107,5 +117,6 @@
   <script src="app-lite.js"></script>
   <script src="app-lite-view-mounts.js"></script>
   <script src="character-sheet-title.js"></script>
+  <script src="medicinal-potions-entry.js"></script>
 </body>
 </html>
