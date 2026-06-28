@@ -95,7 +95,7 @@
   }
 
   function loadCubeTool() {
-    if (window.ShadowrunBinaryCubeEngine && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeAuthUI) {
+    if (window.ShadowrunBinaryCubeEngine && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) {
       return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
     }
     if (cubeToolPromise) return cubeToolPromise;
@@ -106,6 +106,8 @@
       if (!window.ShadowrunBinaryCubeAuth) throw new Error('The Binary Cube authenticated-envelope engine loaded without exposing its API.');
       await loadCubeScript('shadowrun-binary-cube-encryption.js');
       if (!window.ShadowrunBinaryCubeEncryption) throw new Error('The Binary Cube laboratory loaded without exposing its interface.');
+      await loadCubeScript('shadowrun-binary-cube-editor.js');
+      if (!window.ShadowrunBinaryCubeEditor) throw new Error('The Binary Cube custom key editor loaded without exposing its API.');
       await loadCubeScript('shadowrun-binary-cube-auth-ui.js');
       if (!window.ShadowrunBinaryCubeAuthUI) throw new Error('The Binary Cube authenticated-envelope controls loaded without exposing their interface.');
       return window.ShadowrunBinaryCubeEncryption;
