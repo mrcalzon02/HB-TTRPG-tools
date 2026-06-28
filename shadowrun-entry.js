@@ -25,6 +25,7 @@
   ];
   let active = 'all';
   let cubeToolPromise = null;
+  const loadedCubeScripts = new Map();
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const title = value => String(value).replace(/^./, character => character.toUpperCase());
 
@@ -69,18 +70,39 @@
     bind();
   }
 
-  function loadCubeTool() {
-    if (window.ShadowrunBinaryCubeEncryption) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
-    if (cubeToolPromise) return cubeToolPromise;
-    cubeToolPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'shadowrun-binary-cube-encryption.js';
-      script.async = false;
-      script.dataset.shadowrunCubeTool = 'true';
-      script.onload = () => resolve(window.ShadowrunBinaryCubeEncryption);
-      script.onerror = () => reject(new Error('The Binary Cube Encryption Laboratory could not be loaded.'));
-      document.body.appendChild(script);
+  function loadCubeScript(src) {
+    if (loadedCubeScripts.has(src)) return loadedCubeScripts.get(src);
+    const promise = new Promise((resolve, reject) => {
+      const existing = [...document.scripts].find(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src));
+      if (existing?.dataset.shadowrunCubeLoaded === 'true') return resolve();
+      const script = existing || document.createElement('script');
+      script.addEventListener('load', () => {
+        script.dataset.shadowrunCubeLoaded = 'true';
+        resolve();
+      }, { once: true });
+      script.addEventListener('error', () => reject(new Error(`${src} could not be loaded.`)), { once: true });
+      if (!existing) {
+        script.src = src;
+        script.async = false;
+        script.dataset.shadowrunCubeTool = 'true';
+        document.body.appendChild(script);
+      }
     });
+    loadedCubeScripts.set(src, promise);
+    promise.catch(() => loadedCubeScripts.delete(src));
+    return promise;
+  }
+
+  function loadCubeTool() {
+    if (window.ShadowrunBinaryCubeEngine && window.ShadowrunBinaryCubeEncryption) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
+    if (cubeToolPromise) return cubeToolPromise;
+    cubeToolPromise = (async () => {
+      await loadCubeScript('shadowrun-binary-cube-engine.js');
+      if (!window.ShadowrunBinaryCubeEngine) throw new Error('The Binary Cube engine loaded without exposing its API.');
+      await loadCubeScript('shadowrun-binary-cube-encryption.js');
+      if (!window.ShadowrunBinaryCubeEncryption) throw new Error('The Binary Cube laboratory loaded without exposing its interface.');
+      return window.ShadowrunBinaryCubeEncryption;
+    })();
     cubeToolPromise.catch(() => { cubeToolPromise = null; });
     return cubeToolPromise;
   }
