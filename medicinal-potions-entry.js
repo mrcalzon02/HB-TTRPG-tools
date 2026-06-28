@@ -38,7 +38,27 @@
     if (bundlePromise) return bundlePromise;
     bundlePromise = (async () => {
       loadStyle('medicinal-potions.css');
-      for (const src of ['medicinal-potions-core-data.js', 'medicinal-potions-effects-data.js', 'medicinal-potions-sensory-data.js', 'medicinal-potions-compounds-data.js', 'medicinal-potions-process-data.js', 'medicinal-potions-formula-data.js', 'medicinal-potions-aging-data.js', 'medicinal-potions-data.js', 'medicinal-potions-engine.js', 'medicinal-potions-module.js']) await loadScript(src);
+      loadStyle('medicinal-potions-srd.css');
+      for (const src of [
+        'medicinal-potions-core-data.js',
+        'medicinal-potions-effects-data.js',
+        'medicinal-potions-sensory-data.js',
+        'medicinal-potions-compounds-data.js',
+        'medicinal-potions-process-data.js',
+        'medicinal-potions-formula-data.js',
+        'medicinal-potions-aging-data.js',
+        'medicinal-potions-data.js',
+        'medicinal-potions-engine.js',
+        'medicinal-potions-module.js',
+        'medicinal-potions-srd-core-data.js',
+        'medicinal-potions-srd-entries-a.js',
+        'medicinal-potions-srd-entries-b.js',
+        'medicinal-potions-srd-entries-c.js',
+        'medicinal-potions-srd-entries-d.js',
+        'medicinal-potions-srd-data.js',
+        'medicinal-potions-srd-engine.js',
+        'medicinal-potions-srd-module.js'
+      ]) await loadScript(src);
     })();
     return bundlePromise;
   }
