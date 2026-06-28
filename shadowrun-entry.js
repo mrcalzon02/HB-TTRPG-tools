@@ -20,9 +20,11 @@
     ['campaign','Lifestyle, Downtime, and Recovery Manager','Track living costs, healing, repair, training, contact maintenance, side jobs, legal trouble, and personal consequences.'],
     ['campaign','Campaign Clocks and Consequence Dashboard','Track corporate retaliation, police heat, gang hostility, contact strain, media exposure, magical fallout, and team debt.'],
     ['reference','Edition and House-Rule Profile','Record selected edition, terminology, dice assumptions, Matrix model, magic options, availability rules, and house conversions.'],
-    ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.']
+    ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.'],
+    ['tools','Binary Cube Encryption Laboratory','Develop and test a binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype']
   ];
   let active = 'all';
+  let cubeToolPromise = null;
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const title = value => String(value).replace(/^./, character => character.toUpperCase());
 
@@ -30,7 +32,7 @@
     if (document.getElementById('setting-workspace-shared-style')) return;
     const node = document.createElement('style');
     node.id = 'setting-workspace-shared-style';
-    node.textContent = '.setting-workspace-controls{display:grid;gap:12px;margin:18px 0}.setting-tab-row{display:flex;flex-wrap:wrap;gap:8px}.setting-tab{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:#ffffff08;color:var(--muted);font-weight:700}.setting-tab.active,.setting-tab:hover{border-color:var(--accent);color:var(--ink)}.setting-module-count{color:var(--muted);margin:8px 0 14px}';
+    node.textContent = '.setting-workspace-controls{display:grid;gap:12px;margin:18px 0}.setting-tab-row{display:flex;flex-wrap:wrap;gap:8px}.setting-tab{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:#ffffff08;color:var(--muted);font-weight:700}.setting-tab.active,.setting-tab:hover{border-color:var(--accent);color:var(--ink)}.setting-module-count{color:var(--muted);margin:8px 0 14px}.shadowrun-module-action{margin-top:12px}';
     document.head.appendChild(node);
   }
 
@@ -67,6 +69,40 @@
     bind();
   }
 
+  function loadCubeTool() {
+    if (window.ShadowrunBinaryCubeEncryption) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
+    if (cubeToolPromise) return cubeToolPromise;
+    cubeToolPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'shadowrun-binary-cube-encryption.js';
+      script.async = false;
+      script.dataset.shadowrunCubeTool = 'true';
+      script.onload = () => resolve(window.ShadowrunBinaryCubeEncryption);
+      script.onerror = () => reject(new Error('The Binary Cube Encryption Laboratory could not be loaded.'));
+      document.body.appendChild(script);
+    });
+    cubeToolPromise.catch(() => { cubeToolPromise = null; });
+    return cubeToolPromise;
+  }
+
+  async function openTool(button) {
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const original = button.textContent;
+    button.textContent = 'Loading Laboratory…';
+    try {
+      const api = await loadCubeTool();
+      if (!api?.openPanel) throw new Error('The Binary Cube Encryption Laboratory loaded without an open-panel interface.');
+      api.openPanel();
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      button.textContent = original;
+    }
+  }
+
   function build() {
     const main = document.querySelector('main');
     if (!main || document.getElementById(VIEW_ID)) return;
@@ -76,6 +112,10 @@
     section.innerHTML = '<div class="hero-card no-print"><p class="eyebrow">Shadowrun campaign workspace</p><h2>Sprawl Operations and Run Planning Dashboard</h2><p>An edition-flexible predictive-support registry for locations, missions, contacts, corporations, security, the Matrix, magic, gear, pursuits, downtime, and long-term consequences.</p><p class="helper-note">Unofficial fan planning workspace; not affiliated with or endorsed by the rights holders.</p></div><div class="setting-workspace-controls no-print"><label class="control-label">Search Shadowrun modules</label><input id="shadowrun-search" class="tool-input" type="search"><div id="shadowrun-tabs" class="setting-tab-row"></div></div><p id="shadowrun-count" class="setting-module-count no-print"></p><div id="shadowrun-grid" class="module-grid no-print"></div>';
     main.appendChild(section);
     section.querySelector('#shadowrun-search').addEventListener('input', render);
+    section.querySelector('#shadowrun-grid').addEventListener('click', event => {
+      const button = event.target.closest('[data-shadowrun-open="shadowrun-binary-cube-encryption"]');
+      if (button) void openTool(button);
+    });
     tabs(); render(); bind();
   }
 
@@ -98,7 +138,11 @@
     if (!grid) return;
     const query = (document.getElementById('shadowrun-search')?.value || '').toLowerCase();
     const visible = modules.filter(module => (active === 'all' || module[0] === active) && module.join(' ').toLowerCase().includes(query));
-    grid.innerHTML = visible.map((module,index) => `<article class="module-card"><div class="module-meta"><span class="badge section-${esc(module[0])}">${esc(title(module[0]))}</span><span class="badge status-planned">Planned</span><span class="badge">priority ${index + 1}</span></div><h3>${esc(module[1])}</h3><p>${esc(module[2])}</p></article>`).join('') || '<div class="module-empty">No Shadowrun modules match the current filter.</div>';
+    grid.innerHTML = visible.map((module,index) => {
+      const status = module[4] || 'planned';
+      const action = module[3] ? `<button type="button" class="link-button shadowrun-module-action" data-shadowrun-open="${esc(module[3])}">Open Laboratory</button>` : '';
+      return `<article class="module-card"${module[3] ? ` data-shadowrun-module="${esc(module[3])}"` : ''}><div class="module-meta"><span class="badge section-${esc(module[0])}">${esc(title(module[0]))}</span><span class="badge status-${esc(status)}">${esc(title(status))}</span><span class="badge">priority ${index + 1}</span></div><h3>${esc(module[1])}</h3><p>${esc(module[2])}</p>${action}</article>`;
+    }).join('') || '<div class="module-empty">No Shadowrun modules match the current filter.</div>';
     document.getElementById('shadowrun-count').textContent = `${visible.length} of ${modules.length} modules shown.`;
   }
 
