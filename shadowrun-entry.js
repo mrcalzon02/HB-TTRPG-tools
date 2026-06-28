@@ -95,13 +95,19 @@
   }
 
   function loadCubeTool() {
-    if (window.ShadowrunBinaryCubeEngine && window.ShadowrunBinaryCubeEncryption) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
+    if (window.ShadowrunBinaryCubeEngine && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeAuthUI) {
+      return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
+    }
     if (cubeToolPromise) return cubeToolPromise;
     cubeToolPromise = (async () => {
       await loadCubeScript('shadowrun-binary-cube-engine.js');
       if (!window.ShadowrunBinaryCubeEngine) throw new Error('The Binary Cube engine loaded without exposing its API.');
+      await loadCubeScript('shadowrun-binary-cube-auth.js');
+      if (!window.ShadowrunBinaryCubeAuth) throw new Error('The Binary Cube authenticated-envelope engine loaded without exposing its API.');
       await loadCubeScript('shadowrun-binary-cube-encryption.js');
       if (!window.ShadowrunBinaryCubeEncryption) throw new Error('The Binary Cube laboratory loaded without exposing its interface.');
+      await loadCubeScript('shadowrun-binary-cube-auth-ui.js');
+      if (!window.ShadowrunBinaryCubeAuthUI) throw new Error('The Binary Cube authenticated-envelope controls loaded without exposing their interface.');
       return window.ShadowrunBinaryCubeEncryption;
     })();
     cubeToolPromise.catch(() => { cubeToolPromise = null; });
