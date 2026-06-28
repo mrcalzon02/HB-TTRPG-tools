@@ -1,8 +1,11 @@
 {
   "receiptType": "shadowrunBinaryCubeValidationContract",
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "branchPolicy": "main only",
-  "securityClassification": "experimental-ttrpg-obfuscation-not-production-cryptography",
+  "securityClassification": {
+    "cubeCore": "experimental-ttrpg-obfuscation-not-production-cryptography",
+    "optionalEnvelope": "PBKDF2-SHA-256 derived AES-GCM authenticated transport around the experimental package"
+  },
   "requiredStaticValidation": {
     "validator": "scripts/validate-shadowrun-binary-cube.mjs",
     "minimumAssertions": 14258,
@@ -29,23 +32,64 @@
       "truncated block"
     ]
   },
+  "requiredAuthenticatedEnvelopeValidation": {
+    "validator": "scripts/validate-shadowrun-binary-cube-auth.mjs",
+    "minimumAssertions": 39,
+    "profile": {
+      "kdf": "PBKDF2-SHA-256",
+      "defaultIterations": 310000,
+      "minimumAcceptedIterations": 100000,
+      "maximumAcceptedIterations": 1000000,
+      "saltBytes": 16,
+      "cipher": "AES-GCM-256",
+      "ivBytes": 12,
+      "authenticationTagBits": 128,
+      "minimumPassphraseCharacters": 12
+    },
+    "mandatorySuccessCases": [
+      "exact package recovery",
+      "random salt per independent seal",
+      "random initialization vector per independent seal",
+      "stable deterministic test fixture when test salt and IV are supplied",
+      "package key identifier bound as authenticated associated data"
+    ],
+    "mandatoryFailureCases": [
+      "wrong passphrase",
+      "ciphertext modification",
+      "associated key identifier modification",
+      "associated KDF metadata modification",
+      "unsupported envelope schema",
+      "malformed Base64",
+      "incorrect salt length",
+      "unsupported cipher profile",
+      "short passphrase",
+      "non-Binary-Cube package",
+      "out-of-range KDF iteration count",
+      "incorrect explicit IV length"
+    ],
+    "secretHandlingRule": "The browser interface must never persist or serialize the envelope passphrase."
+  },
   "requiredBrowserValidation": {
     "validator": "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
-    "minimumChecks": 12,
+    "minimumChecks": 18,
     "requiredCapabilities": [
       "lazy workspace loading",
-      "lazy engine and interface loading",
-      "single script instance",
+      "lazy engine interface authentication-engine and authentication-interface loading",
+      "single script instance per component",
       "deterministic key generation",
       "data-entry mask generation",
       "multiblock encryption",
       "six-face diagnostics",
       "browser round trip",
       "package and key validation",
-      "tamper detection",
+      "package corruption detection",
       "opposite-face rejection",
-      "copy import and download controls",
-      "local storage restoration",
+      "key package and envelope transfer controls",
+      "AES-GCM envelope sealing",
+      "authenticated envelope opening",
+      "wrong envelope passphrase rejection",
+      "authenticated metadata tamper rejection",
+      "local storage restoration without passphrase persistence",
       "zero page and console errors"
     ]
   },
@@ -53,7 +97,12 @@
     "workflow": ".github/workflows/shadowrun-binary-cube.yml",
     "triggerBranch": "main",
     "artifactName": "shadowrun-binary-cube-verification",
-    "artifactRetentionDays": 30
+    "artifactRetentionDays": 30,
+    "requiredEvidence": [
+      "shadowrun-binary-cube-static-verification.json",
+      "shadowrun-binary-cube-auth-verification.json",
+      "shadowrun-binary-cube-browser-verification.json"
+    ]
   },
-  "releaseRule": "No Binary Cube engine, interface, source receipt, phase ledger, or implementation document change is complete until both static and browser validation pass on main."
+  "releaseRule": "No Binary Cube core, authenticated envelope, interface, source receipt, phase ledger, or implementation document change is complete until core static, authenticated-envelope static, and browser validation pass on main."
 }
