@@ -1,15 +1,18 @@
 {
   "receiptType": "shadowrunBinaryCubePhaseLedger",
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "projectId": "shadowrun-binary-cube-encryption",
   "workspace": "Shadowrun",
   "activeBranch": "main",
   "branchPolicy": "exactly one active branch named main",
-  "securityClassification": "experimental-ttrpg-obfuscation-not-production-cryptography",
+  "securityClassification": {
+    "cubeCore": "experimental-ttrpg-obfuscation-not-production-cryptography",
+    "optionalEnvelope": "standard authenticated transport around the experimental Binary Cube package"
+  },
   "activePhaseId": "phase-10-integrity-authenticity-framing",
   "lastCompletedPhaseId": "phase-08-error-handling-diagnostics",
   "validationPhaseStatus": "implemented-awaiting-main-ci-evidence",
-  "runtimeStatus": "engine-ui-separated-static-and-browser-gates-installed",
+  "runtimeStatus": "core-authentication-and-browser-gates-installed",
   "phases": [
     {
       "sequence": 0,
@@ -105,6 +108,7 @@
       "status": "implemented-awaiting-main-ci-evidence",
       "evidence": [
         "scripts/validate-shadowrun-binary-cube.mjs",
+        "scripts/validate-shadowrun-binary-cube-auth.mjs",
         "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
         "data/shadowrun/binary-cube/validation-contract.json",
         ".github/workflows/shadowrun-binary-cube.yml"
@@ -113,18 +117,33 @@
     {
       "sequence": 10,
       "id": "phase-10-integrity-authenticity-framing",
-      "status": "active",
+      "status": "implemented-awaiting-main-ci-evidence",
       "completedScope": [
         "key content fingerprint",
         "package framing checksum",
         "ciphertext corruption detection",
         "metadata corruption detection",
-        "explicit checksum classification as non-cryptographic"
+        "explicit checksum classification as non-cryptographic",
+        "optional PBKDF2-SHA-256 passphrase key derivation",
+        "optional AES-GCM-256 authenticated package envelope",
+        "random 16-byte salt and 12-byte initialization vector per seal",
+        "key identifier KDF profile and cipher profile bound as authenticated associated data",
+        "wrong-passphrase and tamper rejection",
+        "passphrase retained only in browser memory and never persisted",
+        "authenticated envelope copy import inspection download and clear controls",
+        "standalone authentication validator and browser verification coverage"
       ],
       "remainingScope": [
-        "design an optional cryptographic authenticity envelope without misrepresenting the permutation as secure encryption",
-        "define key-derivation and secret-handling boundaries",
-        "add schema migration rules for authenticated packages"
+        "obtain passing main-branch CI evidence for core authentication and browser validators",
+        "freeze the envelope schema migration policy before introducing any 0.2.x envelope format",
+        "decide whether a non-passphrase key-file transport mode belongs in a later phase"
+      ],
+      "evidence": [
+        "shadowrun-binary-cube-auth.js",
+        "shadowrun-binary-cube-auth-ui.js",
+        "scripts/validate-shadowrun-binary-cube-auth.mjs",
+        "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
+        "data/shadowrun/binary-cube/validation-contract.json"
       ]
     },
     {
@@ -153,6 +172,6 @@
       "status": "queued"
     }
   ],
-  "currentWork": "The algorithm has been separated from the browser interface and placed behind repeatable static and browser validation gates so implementation changes can be tested without relying on manual inspection alone.",
-  "nextWork": "Obtain passing main-branch CI evidence, then complete the integrity and authenticity design while preserving the explicit rule that this research prototype is not production cryptography."
+  "currentWork": "The project now separates the experimental cube permutation from an optional PBKDF2-derived AES-GCM transport envelope, and all three layers—core engine, authenticated envelope, and browser workflow—have mandatory automated validators on main.",
+  "nextWork": "Confirm passing main-branch CI evidence, freeze the authenticated-envelope migration policy, and then advance to the custom coordinate and data-entry mask editor without weakening the established validation gates."
 }
