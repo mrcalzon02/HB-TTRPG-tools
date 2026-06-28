@@ -1,6 +1,7 @@
 {
   "receiptType": "shadowrunBinaryCubeEncryptionSourceReceipt",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
+  "implementationSchemaVersion": "0.2.0",
   "project": "HB-TTRPG-tools",
   "workspace": "Shadowrun",
   "branchPolicy": "main only",
@@ -54,14 +55,51 @@
     "projectionRequirement": "Unique x-y, x-z, and y-z coordinate pairs",
     "validEncryptedExit": "One of the four faces perpendicular to the input face",
     "maskMeaning": "Key-held boolean selection over input-face cells",
-    "paddingMeaning": "Deterministic seeded junk bits for inactive or unused cells"
+    "paddingMeaning": "Deterministic seeded junk bits for inactive or unused cells",
+    "keyFingerprint": "FNV-1a 32-bit deterministic content fingerprint",
+    "packageChecksum": "FNV-1a 32-bit corruption detection over framing metadata and ciphertext",
+    "checksumLimitation": "Not cryptographic authentication and not evidence of secrecy or authorship"
   },
   "implementedFiles": [
     "shadowrun-entry.js",
+    "shadowrun-binary-cube-engine.js",
     "shadowrun-binary-cube-encryption.js",
+    "scripts/validate-shadowrun-binary-cube.mjs",
+    "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
+    ".github/workflows/shadowrun-binary-cube.yml",
+    "data/shadowrun/binary-cube/validation-contract.json",
+    "data/shadowrun/binary-cube/phase-status.json",
     "docs/shadowrun/binary-cube-encryption-milestone-plan.md",
+    "docs/shadowrun/binary-cube-development-system.md",
     "source-page-references/shadowrun-binary-cube-encryption.source.json"
   ],
+  "implementedCapabilities": [
+    "Pure engine separated from browser interface",
+    "Deterministic keyed point-field generation",
+    "Six face projections and quarter-turn orientation",
+    "Perpendicular-face enforcement",
+    "Full and sparse data-entry masks",
+    "Deterministic filler",
+    "Arbitrary-length multiblock binary framing",
+    "Key and package validation",
+    "Key and package copy, JSON import, and JSON download",
+    "Local browser persistence",
+    "All-six-face diagnostics",
+    "Corruption detection checksum",
+    "Exhaustive engine validation",
+    "Chromium browser verification",
+    "Main-branch continuous-integration gate"
+  ],
+  "validationBaseline": {
+    "staticValidator": "scripts/validate-shadowrun-binary-cube.mjs",
+    "assertions": 14258,
+    "roundTrips": 3840,
+    "recommendedSizesCovered": 8,
+    "directedLegalFacePairsCovered": 24,
+    "browserValidator": "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
+    "workflow": ".github/workflows/shadowrun-binary-cube.yml",
+    "statusAtReceiptUpdate": "implemented-awaiting-main-ci-evidence"
+  },
   "securityClassification": "Experimental TTRPG obfuscation and research prototype; not production cryptography.",
   "sourceStorage": "Original uploads were supplied in the implementation conversation. Their exact names, sizes, hashes, extracted requirements, and normalized implementation role are preserved in this receipt."
 }
