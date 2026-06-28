@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -18,6 +19,7 @@ const {
 
 let assertions = 0;
 let roundTrips = 0;
+let knownTextControl = null;
 const sizesCovered = new Set();
 const facePairsCovered = new Set();
 
@@ -39,6 +41,19 @@ function deepEqual(actual, expected, message) {
 function expectThrow(callback, pattern, message) {
   assertions += 1;
   assert.throws(callback, pattern, message);
+}
+
+function sha256(value) {
+  return crypto.createHash('sha256').update(value).digest('hex');
+}
+
+function bytesToBits(bytes) {
+  return [...bytes].map(byte => byte.toString(2).padStart(8, '0')).join('');
+}
+
+function bitsToBytes(bits) {
+  if (bits.length % 8 !== 0) throw new Error('Known text control did not recover complete bytes.');
+  return Buffer.from(Array.from({ length: bits.length / 8 }, (_, index) => Number.parseInt(bits.slice(index * 8, index * 8 + 8), 2)));
 }
 
 function legalOutputs(inputFace) {
@@ -160,6 +175,50 @@ function validateFailureModes() {
   expectThrow(() => engine.decryptBinary(truncated, key), /aligned to the cube block size/i, 'Truncated ciphertext must fail block alignment.');
 }
 
+function validateKnownLoremIpsumControl() {
+  const documentPath = path.join(root, 'data/shadowrun/binary-cube/lorem-ipsum-control.txt');
+  const keyPath = path.join(root, 'data/shadowrun/binary-cube/lorem-ipsum-control-key.json');
+  const sourceBytes = fs.readFileSync(documentPath);
+  const sourceText = sourceBytes.toString('utf8');
+  const sourceBits = bytesToBits(sourceBytes);
+  const key = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
+  const validatedKey = engine.validateKey(key);
+
+  equal(sourceBytes.length, 124, 'Lorem ipsum control document byte length changed.');
+  equal(sha256(sourceBytes), 'bdc77e51f558cca288e3fc31a1c63549ba8662ccc7d858695b50b29a567243dd', 'Lorem ipsum control document hash changed.');
+  equal(sourceBits.length, 992, 'Lorem ipsum control binary length changed.');
+  equal(validatedKey.keyId, 'c4f43c25', 'Known Lorem ipsum control key changed.');
+  equal(validatedKey.mask.filter(Boolean).length, 16, 'Known Lorem ipsum control key capacity changed.');
+
+  const payload = engine.encryptBinary(sourceBits, validatedKey);
+  engine.validatePackage(payload, validatedKey);
+  equal(payload.originalBitLength, 992, 'Known Lorem ipsum package original length changed.');
+  equal(payload.blockCount, 62, 'Known Lorem ipsum package block count changed.');
+  equal(payload.ciphertext.length, 992, 'Known Lorem ipsum ciphertext length changed.');
+  equal(payload.checksum, 'd9175bae', 'Known Lorem ipsum package checksum changed.');
+  equal(sha256(payload.ciphertext), 'ae80ec5f7cd8ef818e880d246a9dae4effec46148a9418931126d911911efc2f', 'Known Lorem ipsum ciphertext changed.');
+
+  const recoveredBits = engine.decryptBinary(payload, validatedKey);
+  const recoveredBytes = bitsToBytes(recoveredBits);
+  equal(recoveredBits, sourceBits, 'Known Lorem ipsum binary did not recover exactly.');
+  deepEqual(recoveredBytes, sourceBytes, 'Known Lorem ipsum bytes did not recover exactly.');
+  equal(recoveredBytes.toString('utf8'), sourceText, 'Known Lorem ipsum text did not recover exactly.');
+  roundTrips += 1;
+
+  knownTextControl = {
+    document: 'data/shadowrun/binary-cube/lorem-ipsum-control.txt',
+    key: 'data/shadowrun/binary-cube/lorem-ipsum-control-key.json',
+    keyId: validatedKey.keyId,
+    sourceBytes: sourceBytes.length,
+    sourceBits: sourceBits.length,
+    blockCount: payload.blockCount,
+    ciphertextBits: payload.ciphertext.length,
+    ciphertextSha256: sha256(payload.ciphertext),
+    packageChecksum: payload.checksum,
+    exactRecovery: true
+  };
+}
+
 function validateLegacyFixtureAndIntegration() {
   const receiptPath = path.join(root, 'source-page-references/shadowrun-binary-cube-encryption.source.json');
   const receipt = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
@@ -186,6 +245,7 @@ validateDeterminism();
 validateGridFourMatrix();
 validateRecommendedSizes();
 validateFailureModes();
+validateKnownLoremIpsumControl();
 validateLegacyFixtureAndIntegration();
 
 for (const size of RECOMMENDED_GRID_SIZES) check(sizesCovered.has(size), `Recommended grid size ${size} was not covered.`);
@@ -212,6 +272,7 @@ function writeSummary() {
       maskDensities: 3,
       payloadLengthsPerConfiguration: 3
     },
+    knownTextControl,
     checksumType: CHECKSUM_TYPE
   };
   const outputPath = process.argv[2] ? path.resolve(process.argv[2]) : null;
@@ -224,4 +285,5 @@ function writeSummary() {
   console.log(`Round trips: ${roundTrips}`);
   console.log(`Recommended sizes: ${summary.recommendedGridSizesCovered.join(', ')}`);
   console.log(`Directed legal face pairs: ${summary.directedFacePairsCovered}`);
+  console.log(`Known Lorem ipsum control: ${knownTextControl.exactRecovery ? 'exact recovery' : 'failed'}`);
 }
