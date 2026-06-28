@@ -1,0 +1,2 @@
+Speech to text regularly mangling the name of Lorem ipsum—hey, it got it that time.
+This sentence is intentionally fixed so transcription cleanup, punctuation, and UTF-8 recovery can be checked byte for byte.
