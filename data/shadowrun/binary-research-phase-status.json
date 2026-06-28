@@ -1,0 +1,60 @@
+{
+  "receiptType": "shadowrunBinaryResearchPhaseStatus",
+  "schemaVersion": "1.0.0",
+  "updatedDate": "2026-06-28",
+  "activeBranch": "main",
+  "workspace": "Shadowrun",
+  "projects": [
+    {
+      "id": "binary-cube-encryption-laboratory",
+      "classification": "experimental permutation and TTRPG obfuscation research",
+      "engineSchemaVersion": "0.2.0",
+      "completedPhases": [
+        "source-preservation",
+        "algorithm-contract",
+        "collision-free-latin-cube-key-generation",
+        "reversible-face-projection",
+        "binary-framing-and-padding",
+        "generated-data-entry-masks",
+        "browser-laboratory-foundation",
+        "engine-interface-separation",
+        "repository-validation-matrix",
+        "checksum-corruption-detection",
+        "key-and-package-import-export"
+      ],
+      "activePhase": "custom-mask-and-coordinate-diagnostics",
+      "nextGate": "Add an editable mask and coordinate-field viewer, then preserve a browser verification receipt."
+    },
+    {
+      "id": "polyaminal-fold-ladder",
+      "classification": "experimental lossless binary transform and compressor; not encryption",
+      "engineSchemaVersion": "0.1.0",
+      "completedPhases": [
+        "concept-normalization",
+        "anchor-swing-fold-definition",
+        "raw-bit-conservation-proof",
+        "gated-stage-codec-prototype",
+        "compact-binary-packing",
+        "checksum-corruption-detection",
+        "multi-block-round-trip-validation",
+        "deterministic-benchmark-baseline",
+        "shadowrun-module-registration",
+        "deployment-regression-gate-integration"
+      ],
+      "activePhase": "bounded-no-expansion-mode",
+      "nextGate": "Add a raw block escape path so incompressible data expands only by fixed framing overhead, then build a stage visualizer."
+    }
+  ],
+  "deploymentGate": {
+    "runner": "scripts/validate-npc-all-phases.mjs",
+    "validators": [
+      "scripts/validate-shadowrun-binary-cube.mjs",
+      "scripts/validate-shadowrun-polyaminal-fold.mjs"
+    ],
+    "failureBehavior": "Any nonzero Shadowrun validator exit code causes the consolidated repository regression validation to fail and stops the deploy job."
+  },
+  "contextCheckpoint": {
+    "current": "Both binary research concepts now have executable engines, preserved source or concept receipts, technical documentation, repeatable validators, and mainline deployment gating.",
+    "next": "Prioritize no-expansion PFL framing and visual diagnostics before adding adaptive preconditioners or any further security claims."
+  }
+}
