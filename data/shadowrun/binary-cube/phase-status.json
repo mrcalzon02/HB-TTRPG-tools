@@ -1,6 +1,6 @@
 {
   "receiptType": "shadowrunBinaryCubePhaseLedger",
-  "schemaVersion": "0.5.0",
+  "schemaVersion": "0.4.0",
   "projectId": "shadowrun-binary-cube-encryption",
   "workspace": "Shadowrun",
   "activeBranch": "main",
@@ -12,7 +12,7 @@
   "activePhaseId": "phase-11-custom-coordinate-mask-editor",
   "lastCompletedPhaseId": "phase-08-error-handling-diagnostics",
   "validationPhaseStatus": "implemented-awaiting-main-ci-evidence",
-  "runtimeStatus": "core-editor-known-text-authentication-browser-and-schema-gates-installed",
+  "runtimeStatus": "core-editor-authentication-browser-and-schema-gates-installed",
   "phases": [
     {
       "sequence": 0,
@@ -106,27 +106,12 @@
       "sequence": 9,
       "id": "phase-09-automated-verification",
       "status": "implemented-awaiting-main-ci-evidence",
-      "completedScope": [
-        "exhaustive binary engine matrix",
-        "custom editor matrix",
-        "known-text UTF-8 corpus with five pinned documents",
-        "eight deterministic control keys covering every recommended grid size",
-        "forty document-by-key exact recovery round trips",
-        "independent reference execution with pinned aggregate ciphertext and matrix digest",
-        "authenticated-envelope validator",
-        "Chromium browser workflow",
-        "main-only continuous-integration artifact gate"
-      ],
       "evidence": [
         "scripts/validate-shadowrun-binary-cube.mjs",
         "scripts/validate-shadowrun-binary-cube-editor.mjs",
-        "scripts/validate-shadowrun-binary-cube-text-controls.mjs",
         "scripts/validate-shadowrun-binary-cube-auth.mjs",
         "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
-        "data/shadowrun/binary-cube/text-control-manifest.json",
-        "data/shadowrun/binary-cube/text-control-reference-summary.json",
         "data/shadowrun/binary-cube/validation-contract.json",
-        "docs/shadowrun/binary-cube-text-control-validation.md",
         ".github/workflows/shadowrun-binary-cube.yml"
       ]
     },
@@ -152,7 +137,7 @@
         "authenticated-envelope threat model operation guide and secret-handling documentation"
       ],
       "remainingScope": [
-        "obtain passing main-branch CI evidence for core editor known-text authentication and browser validators",
+        "obtain passing main-branch CI evidence for core editor authentication and browser validators",
         "record whether a non-passphrase key-file transport mode belongs in a later phase rather than expanding Phase 10"
       ],
       "evidence": [
@@ -188,17 +173,15 @@
         "documentation source receipt validation contract and main workflow integration"
       ],
       "remainingScope": [
-        "obtain passing main-branch CI evidence for the editor static known-text and browser gates",
+        "obtain passing main-branch CI evidence for the editor static and browser gates",
         "evaluate whether a future arbitrary point-field editor should extend beyond the existing Latin-cube permutation model and therefore require a new key schema"
       ],
       "evidence": [
         "shadowrun-binary-cube-editor.js",
         "scripts/validate-shadowrun-binary-cube-editor.mjs",
-        "scripts/validate-shadowrun-binary-cube-text-controls.mjs",
         "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
         "data/shadowrun/binary-cube/validation-contract.json",
         "docs/shadowrun/binary-cube-custom-editor.md",
-        "docs/shadowrun/binary-cube-text-control-validation.md",
         ".github/workflows/shadowrun-binary-cube.yml"
       ]
     },
@@ -223,6 +206,6 @@
       "status": "queued"
     }
   ],
-  "currentWork": "The validation system now includes five pinned UTF-8 control documents and eight deterministic keys covering every recommended grid size. An independent reference execution recovered all 40 document-key combinations exactly and pinned the 164976-bit aggregate ciphertext total and full matrix digest, while the repository JavaScript validator and main workflow remain the required gate.",
-  "nextWork": "Obtain and record passing main-branch JavaScript evidence for the core, editor, known-text, authenticated-envelope, and browser validators. Only after that evidence is visible should Phases 9 through 11 close and Phase 12 Nested Cubes begin."
+  "currentWork": "Phase 11 now provides a protected custom permutation and data-entry mask editor without changing key schema 0.2.0. The editor recalculates fingerprints, validates all six projections, clears incompatible packages, supports recovery, and is included in static, browser, and main-branch workflow gates.",
+  "nextWork": "Confirm passing main-branch evidence for the core, editor, authenticated-envelope, and browser validators. After those gates are recorded, close Phases 9 through 11 and begin the Phase 12 Nested Cubes data model without weakening the existing compatibility and security boundaries."
 }
