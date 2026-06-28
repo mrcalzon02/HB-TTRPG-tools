@@ -79,6 +79,7 @@ try {
   await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle' });
   assert(await page.locator('script[src="shadowrun-binary-cube-engine.js"]').count() === 0, 'Binary Cube engine loaded before the Shadowrun tool was opened.');
   assert(await page.locator('script[src="shadowrun-binary-cube-auth.js"]').count() === 0, 'Authenticated-envelope engine loaded before the Shadowrun tool was opened.');
+  assert(await page.locator('script[src="shadowrun-binary-cube-editor.js"]').count() === 0, 'Custom editor loaded before the Shadowrun tool was opened.');
   checks.push('binary-cube-components-are-lazy-before-workspace-use');
 
   await page.locator('[data-view="shadowrun"]').first().click();
@@ -92,19 +93,22 @@ try {
   assert(await page.locator('script[src="shadowrun-binary-cube-engine.js"]').count() === 0, 'Binary Cube engine loaded before the laboratory launcher was used.');
   await page.locator('[data-shadowrun-open="shadowrun-binary-cube-encryption"]').click();
   await page.waitForSelector('#shadowrun-binary-cube-lab:not([hidden])');
+  await page.waitForSelector('#cube-custom-editor-section');
   await page.waitForSelector('#cube-auth-envelope-section');
   await page.waitForFunction(() => Boolean(
     window.ShadowrunBinaryCubeEngine
     && window.ShadowrunBinaryCubeAuth
     && window.ShadowrunBinaryCubeEncryption
+    && window.ShadowrunBinaryCubeEditor
     && window.ShadowrunBinaryCubeAuthUI
   ));
-  checks.push('engine-interface-and-authentication-load-on-demand');
+  checks.push('engine-interface-editor-and-authentication-load-on-demand');
 
   const scriptCounts = {
     engine: await page.locator('script[src="shadowrun-binary-cube-engine.js"]').count(),
     auth: await page.locator('script[src="shadowrun-binary-cube-auth.js"]').count(),
     interface: await page.locator('script[src="shadowrun-binary-cube-encryption.js"]').count(),
+    editor: await page.locator('script[src="shadowrun-binary-cube-editor.js"]').count(),
     authInterface: await page.locator('script[src="shadowrun-binary-cube-auth-ui.js"]').count()
   };
   assert(Object.values(scriptCounts).every(count => count === 1), `Expected exactly one of each Binary Cube script: ${JSON.stringify(scriptCounts)}.`);
@@ -204,13 +208,56 @@ try {
   assert(transferControlCount === 6, `Expected six Binary Cube import, export, and copy controls but found ${transferControlCount}.`);
   const authControlCount = await page.locator('[data-cube-auth-seal], [data-cube-auth-open], [data-cube-auth-inspect], [data-cube-auth-copy], [data-cube-auth-download], #cube-auth-import, [data-cube-auth-clear]').count();
   assert(authControlCount === 7, `Expected seven authenticated-envelope controls but found ${authControlCount}.`);
-  checks.push('package-key-and-envelope-transfer-controls');
+  const editorControlCount = await page.locator('[data-cube-custom-load], [data-cube-custom-validate], [data-cube-custom-apply], [data-cube-custom-restore], [data-cube-custom-undo], [data-cube-custom-redo]').count();
+  assert(editorControlCount === 6, `Expected six protected editor workflow controls but found ${editorControlCount}.`);
+  checks.push('package-key-envelope-and-editor-controls');
+
+  await page.locator('[data-cube-custom-load]').click();
+  assert(await page.locator('[data-cube-custom-cell]').count() === 16, 'The 4x4 custom mask editor did not render 16 keyboard-accessible cells.');
+  const loadedEditorStatus = await page.locator('#cube-custom-status').textContent();
+  assert(loadedEditorStatus?.includes(`key ${generatedKey.keyId}`), 'The editor did not identify the loaded active key.');
+  checks.push('custom-editor-loads-protected-draft');
+
+  await page.locator('#cube-custom-row').fill('0, 1, 1, 3');
+  await page.locator('[data-cube-custom-validate]').click();
+  const invalidDraftStatus = await page.locator('#cube-custom-status').textContent();
+  assert(invalidDraftStatus?.includes('exactly once'), `Duplicate permutation draft was not rejected: ${invalidDraftStatus || 'missing'}.`);
+  assert(JSON.parse(await page.locator('#cube-key').inputValue()).keyId === generatedKey.keyId, 'Invalid draft changed the active key.');
+  checks.push('custom-editor-rejects-invalid-draft-without-mutation');
+
+  await page.locator('[data-cube-custom-load]').click();
+  await page.locator('[data-cube-custom-pattern="half"]').click();
+  assert(!(await page.locator('[data-cube-custom-undo]').isDisabled()), 'Undo did not become available after a mask edit.');
+  await page.locator('[data-cube-custom-undo]').click();
+  const undoMask = (await page.locator('#cube-custom-mask').inputValue()).replace(/\s+/g, '');
+  assert([...undoMask].filter(bit => bit === '1').length === 12, 'Undo did not restore the original 75% mask.');
+  await page.locator('[data-cube-custom-redo]').click();
+  const redoMask = (await page.locator('#cube-custom-mask').inputValue()).replace(/\s+/g, '');
+  assert([...redoMask].filter(bit => bit === '1').length === 8, 'Redo did not restore the custom 50% mask.');
+  checks.push('custom-editor-undo-and-redo');
+
+  await page.locator('[data-cube-custom-shift="row:1"]').click();
+  await page.locator('[data-cube-custom-validate]').click();
+  const validDraftStatus = await page.locator('#cube-custom-status').textContent();
+  assert(validDraftStatus?.includes('collision-free points'), `Valid custom draft did not pass six-face validation: ${validDraftStatus || 'missing'}.`);
+  await page.locator('[data-cube-custom-apply]').click();
+  const customKey = JSON.parse(await page.locator('#cube-key').inputValue());
+  assert(customKey.keyId !== generatedKey.keyId, 'Applying custom material did not recalculate the key fingerprint.');
+  assert(customKey.mask.filter(Boolean).length === 8, 'Applied custom key did not preserve the edited 50% mask.');
+  assert((await page.locator('#cube-package').inputValue()) === '', 'Applying a changed key did not clear the incompatible package.');
+  checks.push('custom-editor-applies-validated-key-and-clears-package');
+
+  await page.locator('[data-cube-custom-restore]').click();
+  const restoredPreviousKey = JSON.parse(await page.locator('#cube-key').inputValue());
+  assert(restoredPreviousKey.keyId === generatedKey.keyId, 'Previous valid key recovery did not restore the original key.');
+  checks.push('custom-editor-restores-previous-valid-key');
 
   await page.reload({ waitUntil: 'networkidle' });
   await page.locator('[data-view="shadowrun"]').first().click();
   await page.waitForSelector('#shadowrun.active');
   await page.locator('[data-shadowrun-open="shadowrun-binary-cube-encryption"]').click();
   await page.waitForSelector('#shadowrun-binary-cube-lab:not([hidden])');
+  await page.waitForSelector('#cube-custom-editor-section');
   await page.waitForSelector('#cube-auth-envelope-section');
   const restoredSeed = await page.locator('#cube-seed').inputValue();
   const restoredKey = await page.locator('#cube-key').inputValue();
@@ -231,12 +278,18 @@ try {
   result.blockCount = encryptedPackage.blockCount;
   result.ciphertextBitLength = encryptedPackage.ciphertext.length;
   result.checksum = encryptedPackage.checksum;
+  result.editor = {
+    draftProtection: true,
+    invalidDraftRejected: true,
+    undoRedo: true,
+    fingerprintRecalculated: true,
+    previousKeyRecovery: true
+  };
   result.authenticatedEnvelope = {
     schemaVersion: authenticatedEnvelope.schemaVersion,
     kdf: `${authenticatedEnvelope.kdf.name}-${authenticatedEnvelope.kdf.hash}`,
     iterations: authenticatedEnvelope.kdf.iterations,
     cipher: authenticatedEnvelope.cipher.name,
-    keyLength: authenticatedEnvelope.cipher.keyLength,
     tagLength: authenticatedEnvelope.cipher.tagLength
   };
   await fs.writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`);
