@@ -1,0 +1,68 @@
+{
+  "receiptType": "shadowrunBinaryCubeSchemaPolicy",
+  "policyVersion": "1.0.0",
+  "branchPolicy": "main only",
+  "documents": {
+    "key": {
+      "format": "hb-ttrpg-shadowrun-binary-cube-key",
+      "currentSchemaVersion": "0.2.0",
+      "compatibility": "strict exact-version validation",
+      "unknownVersionBehavior": "reject with a visible unsupported-schema error"
+    },
+    "package": {
+      "format": "hb-ttrpg-shadowrun-binary-cube-package",
+      "currentSchemaVersion": "0.2.0",
+      "compatibility": "strict exact-version validation",
+      "unknownVersionBehavior": "reject with a visible unsupported-schema error"
+    },
+    "authenticatedEnvelope": {
+      "format": "hb-ttrpg-shadowrun-binary-cube-authenticated-envelope",
+      "currentSchemaVersion": "0.1.0",
+      "compatibility": "strict exact-version validation",
+      "unknownVersionBehavior": "reject before key derivation or decryption"
+    }
+  },
+  "versioningRules": [
+    "A format identifier is permanent and must not be reused for an incompatible document family.",
+    "A schema version changes whenever existing serialized fields change meaning, type, required status, or authenticated-data role.",
+    "Patch-level implementation releases may not silently reinterpret an existing serialized schema.",
+    "Unknown fields may be preserved by storage and transport layers but must not silently change algorithm behavior.",
+    "An authenticated-envelope field included in associated data may not be renamed, removed, or retyped without a new envelope schema version.",
+    "A migration must be explicit, one-directional, testable, and must retain the original document until the migrated output passes validation.",
+    "No migration may recover or infer missing secret material, masks, permutations, passphrases, salts, initialization vectors, or authentication tags.",
+    "A failed migration must leave the source document unchanged and produce a visible diagnostic."
+  ],
+  "migrationProcedure": [
+    "Detect the exact format and schema version without modifying the source object.",
+    "Validate the source document with the validator written for that schema.",
+    "Copy the source into a new object; never mutate the only stored copy.",
+    "Apply one documented migration step at a time.",
+    "Assign the destination schema version only after all required destination fields exist.",
+    "Recompute fingerprints, checksums, or authenticated envelopes using the destination rules.",
+    "Validate the destination document with current validators.",
+    "Run positive, negative, corruption, and browser compatibility tests.",
+    "Record the migration in the phase ledger, source receipt, and validation contract before release."
+  ],
+  "authenticatedEnvelopeRules": {
+    "passphrasePersistence": "prohibited",
+    "passphraseSerialization": "prohibited",
+    "defaultKdf": "PBKDF2-SHA-256",
+    "defaultIterations": 310000,
+    "cipher": "AES-GCM-256",
+    "saltBytes": 16,
+    "ivBytes": 12,
+    "tagBits": 128,
+    "associatedDataFields": [
+      "format",
+      "schemaVersion",
+      "securityClassification",
+      "cubePackageFormat",
+      "cubePackageSchemaVersion",
+      "cubeKeyId",
+      "kdf",
+      "cipher"
+    ],
+    "migrationBoundary": "An envelope cannot be migrated without opening it with the correct passphrase, validating the enclosed package, and sealing a new envelope with fresh random salt and IV."
+  },
+  "releaseGate": "Any new key, package, or envelope schema requires dedicated migration tests, updated browser verification, updated validation-contract minima, and passing main-branch CI evidence before the schema becomes current."
+}
