@@ -10,7 +10,9 @@ const root = path.resolve(path.dirname(scriptPath), '..');
 const require = createRequire(import.meta.url);
 const engine = require(path.join(root, 'shadowrun-binary-cube-engine.js'));
 const manifestPath = path.join(root, 'data/shadowrun/binary-cube/text-control-manifest.json');
+const referencePath = path.join(root, 'data/shadowrun/binary-cube/text-control-reference-summary.json');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+const reference = JSON.parse(fs.readFileSync(referencePath, 'utf8'));
 const decoder = new TextDecoder('utf-8', { fatal: true });
 
 let assertions = 0;
@@ -40,6 +42,14 @@ function digest(bytes) {
   return crypto.createHash('sha256').update(bytes).digest('hex');
 }
 
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
 function bytesToBits(bytes) {
   return [...bytes].map(byte => byte.toString(2).padStart(8, '0')).join('');
 }
@@ -62,6 +72,13 @@ check(manifest.terminalLineFeedRequired === true, 'Every control document must r
 check(Array.isArray(manifest.documents) && manifest.documents.length === 5, 'Exactly five initial text control documents are required.');
 check(Array.isArray(manifest.knownControlKeys) && manifest.knownControlKeys.length === 8, 'Exactly eight known control keys are required.');
 equal(manifest.batchPolicy.expectedRoundTrips, manifest.documents.length * manifest.knownControlKeys.length, 'Manifest round-trip count must equal the full document-by-key matrix.');
+
+check(reference.receiptType === 'shadowrunBinaryCubeTextControlReferenceSummary', 'Reference execution receipt type must be recognized.');
+equal(reference.schemaVersion, manifest.schemaVersion, 'Reference execution schema must match the control manifest.');
+equal(reference.classification, 'independent-reference-execution-not-main-ci-evidence', 'Reference execution must not be misclassified as main CI evidence.');
+equal(reference.documentCount, manifest.documents.length, 'Reference document count must match the manifest.');
+equal(reference.controlKeyCount, manifest.knownControlKeys.length, 'Reference key count must match the manifest.');
+equal(reference.roundTrips, manifest.batchPolicy.expectedRoundTrips, 'Reference round-trip count must match the full matrix.');
 
 const documents = new Map();
 const documentIds = new Set();
@@ -170,6 +187,12 @@ for (const document of documents.values()) {
 equal(roundTrips, manifest.batchPolicy.expectedRoundTrips, 'Executed text-control round trips did not match the manifest matrix.');
 equal(matrixResults.length, roundTrips, 'Every round trip must produce one evidence row.');
 check(matrixResults.every(result => result.exactRecovery), 'Every text-control matrix row must recover exactly.');
+equal(sourceBytes, reference.sourceBytesPerCorpusPass, 'Corpus source byte total changed from the independent reference execution.');
+equal(sourceBytes * 8, reference.sourceBitsPerCorpusPass, 'Corpus source bit total changed from the independent reference execution.');
+equal(encryptedBits, reference.encryptedBits, 'Aggregate ciphertext bit total changed from the independent reference execution.');
+equal(roundTrips, reference.exactByteRecoveries, 'Exact byte recovery count changed from the independent reference execution.');
+equal(roundTrips, reference.exactTextRecoveries, 'Exact text recovery count changed from the independent reference execution.');
+equal(digest(Buffer.from(canonicalJson(matrixResults), 'utf8')), reference.matrixCanonicalSha256, 'The full deterministic control matrix changed from the independent reference execution.');
 
 const summary = {
   receiptType: 'shadowrunBinaryCubeTextControlValidationSummary',
@@ -187,6 +210,7 @@ const summary = {
   encryptedBits,
   exactByteRecoveries: roundTrips,
   exactTextRecoveries: roundTrips,
+  matrixCanonicalSha256: digest(Buffer.from(canonicalJson(matrixResults), 'utf8')),
   matrix: matrixResults
 };
 
@@ -203,3 +227,4 @@ console.log(`Assertions: ${assertions}`);
 console.log(`Exact UTF-8 round trips: ${roundTrips}`);
 console.log(`Source bytes per corpus pass: ${sourceBytes}`);
 console.log(`Ciphertext bits produced: ${encryptedBits}`);
+console.log(`Matrix SHA-256: ${summary.matrixCanonicalSha256}`);
