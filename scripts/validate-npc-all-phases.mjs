@@ -21,6 +21,10 @@ const VALIDATORS=[
   {sequence:12,path:'scripts/validate-npc-phase-12.mjs'},
   {sequence:13,path:'scripts/validate-npc-phase-13.mjs'}
 ];
+const PROJECT_VALIDATORS=[
+  {id:'shadowrun-binary-cube',path:'scripts/validate-shadowrun-binary-cube.mjs'},
+  {id:'shadowrun-polyaminal-fold',path:'scripts/validate-shadowrun-polyaminal-fold.mjs'}
+];
 
 function clone(value){return JSON.parse(JSON.stringify(value));}
 function syntheticLedger(current,sequence){
@@ -41,10 +45,14 @@ function copyRepository(destination){
   }});
 }
 function tail(value,count=12){return String(value||'').trim().split('\n').filter(Boolean).slice(-count);}
+function runValidator(temporary,validator,args=[]){
+  const result=spawnSync(process.execPath,[validator.path,...args],{cwd:temporary,encoding:'utf8',env:{...process.env,NPC_REGRESSION_MODE:'1'},maxBuffer:32*1024*1024});
+  return{exitCode:result.status??1,stdout:tail(result.stdout),stderr:tail(result.stderr)};
+}
 
 export function runAllPhases(){
   const current=JSON.parse(fs.readFileSync(path.join(root,'data/npc-generator/phase-status.json'),'utf8'));
-  const failures=[],results=[];
+  const failures=[],results=[],projectResults=[];
   if(current.activeBranch!=='main')failures.push('Current ledger does not retain main as the only active branch.');
   if(current.activePhaseId!=='phase-14-automated-validation-browser-testing')failures.push('Phase 14 must be active before running the consolidated regression suite.');
   const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'npc-phase-regression-'));
@@ -54,10 +62,17 @@ export function runAllPhases(){
       const phase=current.phases.find(item=>item.sequence===validator.sequence);
       const ledger=syntheticLedger(current,validator.sequence);
       fs.writeFileSync(path.join(temporary,'data/npc-generator/phase-status.json'),`${JSON.stringify(ledger)}\n`);
-      const result=spawnSync(process.execPath,[validator.path],{cwd:temporary,encoding:'utf8',env:{...process.env,NPC_REGRESSION_MODE:'1'},maxBuffer:32*1024*1024});
-      const record={phaseId:phase.id,sequence:validator.sequence,validator:validator.path,exitCode:result.status??1,stdout:tail(result.stdout),stderr:tail(result.stderr)};
+      const execution=runValidator(temporary,validator);
+      const record={phaseId:phase.id,sequence:validator.sequence,validator:validator.path,...execution};
       results.push(record);
       if(record.exitCode!==0)failures.push(`${phase.id} failed with exit code ${record.exitCode}: ${[...record.stderr,...record.stdout].slice(-6).join(' | ')}`);
+    }
+    fs.writeFileSync(path.join(temporary,'data/npc-generator/phase-status.json'),`${JSON.stringify(current)}\n`);
+    for(const validator of PROJECT_VALIDATORS){
+      const execution=runValidator(temporary,validator);
+      const record={projectId:validator.id,validator:validator.path,...execution};
+      projectResults.push(record);
+      if(record.exitCode!==0)failures.push(`${validator.id} failed with exit code ${record.exitCode}: ${[...record.stderr,...record.stdout].slice(-6).join(' | ')}`);
     }
   }finally{
     fs.rmSync(temporary,{recursive:true,force:true});
@@ -65,17 +80,19 @@ export function runAllPhases(){
   const live=fs.readFileSync(path.join(root,'data/npc-generator/phase-status.json'),'utf8');
   const liveLedger=JSON.parse(live);
   if(liveLedger.activePhaseId!==current.activePhaseId||liveLedger.lastCompletedPhaseId!==current.lastCompletedPhaseId)failures.push('Live phase ledger changed during regression validation.');
-  return{valid:failures.length===0,failures,results,validatorsRun:results.length};
+  return{valid:failures.length===0,failures,results,projectResults,validatorsRun:results.length,projectValidatorsRun:projectResults.length};
 }
 
 if(path.resolve(process.argv[1]||'')===scriptPath){
   const result=runAllPhases();
   if(!result.valid){
-    console.error('Consolidated NPC regression validation failed:');
+    console.error('Consolidated repository regression validation failed:');
     result.failures.forEach(message=>console.error(`- ${message}`));
     process.exit(1);
   }
-  console.log('Consolidated NPC regression validation passed.');
-  console.log(`Historical phase validators passed: ${result.validatorsRun}`);
+  console.log('Consolidated repository regression validation passed.');
+  console.log(`Historical NPC phase validators passed: ${result.validatorsRun}`);
   result.results.forEach(item=>console.log(`- ${item.phaseId}: ${item.validator}`));
+  console.log(`Additional project validators passed: ${result.projectValidatorsRun}`);
+  result.projectResults.forEach(item=>console.log(`- ${item.projectId}: ${item.validator}`));
 }
