@@ -1,6 +1,6 @@
 {
   "receiptType": "shadowrunBinaryCubePhaseLedger",
-  "schemaVersion": "0.3.1",
+  "schemaVersion": "0.4.0",
   "projectId": "shadowrun-binary-cube-encryption",
   "workspace": "Shadowrun",
   "activeBranch": "main",
@@ -9,10 +9,10 @@
     "cubeCore": "experimental-ttrpg-obfuscation-not-production-cryptography",
     "optionalEnvelope": "standard authenticated transport around the experimental Binary Cube package"
   },
-  "activePhaseId": "phase-10-integrity-authenticity-framing",
+  "activePhaseId": "phase-11-custom-coordinate-mask-editor",
   "lastCompletedPhaseId": "phase-08-error-handling-diagnostics",
   "validationPhaseStatus": "implemented-awaiting-main-ci-evidence",
-  "runtimeStatus": "core-authentication-browser-and-schema-gates-installed",
+  "runtimeStatus": "core-editor-authentication-browser-and-schema-gates-installed",
   "phases": [
     {
       "sequence": 0,
@@ -108,6 +108,7 @@
       "status": "implemented-awaiting-main-ci-evidence",
       "evidence": [
         "scripts/validate-shadowrun-binary-cube.mjs",
+        "scripts/validate-shadowrun-binary-cube-editor.mjs",
         "scripts/validate-shadowrun-binary-cube-auth.mjs",
         "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
         "data/shadowrun/binary-cube/validation-contract.json",
@@ -136,7 +137,7 @@
         "authenticated-envelope threat model operation guide and secret-handling documentation"
       ],
       "remainingScope": [
-        "obtain passing main-branch CI evidence for core authentication and browser validators",
+        "obtain passing main-branch CI evidence for core editor authentication and browser validators",
         "record whether a non-passphrase key-file transport mode belongs in a later phase rather than expanding Phase 10"
       ],
       "evidence": [
@@ -152,7 +153,37 @@
     {
       "sequence": 11,
       "id": "phase-11-custom-coordinate-mask-editor",
-      "status": "queued"
+      "status": "implemented-awaiting-main-ci-evidence",
+      "completedScope": [
+        "protected draft isolated from the active key",
+        "editable row column and depth permutations",
+        "editable exact-length boolean data-entry mask",
+        "full three-quarter checker border diagonal and invert mask patterns",
+        "keyboard-accessible visual mask cells through grid size 12",
+        "large-grid mask text editing and capacity summary",
+        "permutation length integer range and uniqueness validation",
+        "nonempty mask and grid-size validation",
+        "all-six-face projection validation before apply",
+        "key fingerprint recalculation after accepted custom material",
+        "incompatible package and decrypted output clearing after key replacement",
+        "bounded draft undo and redo",
+        "previous valid key restoration",
+        "standalone editor validator covering all recommended sizes and 40 custom-key round trips",
+        "browser verification for invalid draft rejection apply recovery and accessibility controls",
+        "documentation source receipt validation contract and main workflow integration"
+      ],
+      "remainingScope": [
+        "obtain passing main-branch CI evidence for the editor static and browser gates",
+        "evaluate whether a future arbitrary point-field editor should extend beyond the existing Latin-cube permutation model and therefore require a new key schema"
+      ],
+      "evidence": [
+        "shadowrun-binary-cube-editor.js",
+        "scripts/validate-shadowrun-binary-cube-editor.mjs",
+        "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
+        "data/shadowrun/binary-cube/validation-contract.json",
+        "docs/shadowrun/binary-cube-custom-editor.md",
+        ".github/workflows/shadowrun-binary-cube.yml"
+      ]
     },
     {
       "sequence": 12,
@@ -175,6 +206,6 @@
       "status": "queued"
     }
   ],
-  "currentWork": "The project now separates the experimental cube permutation from an optional PBKDF2-derived AES-GCM transport envelope, enforces strict schema migration rules, and places the core engine, authentication layer, and browser workflow behind mandatory validators on main.",
-  "nextWork": "Confirm passing main-branch CI evidence, record the Phase 10 gate result, and then advance to the custom coordinate and data-entry mask editor without weakening the established validation and security boundaries."
+  "currentWork": "Phase 11 now provides a protected custom permutation and data-entry mask editor without changing key schema 0.2.0. The editor recalculates fingerprints, validates all six projections, clears incompatible packages, supports recovery, and is included in static, browser, and main-branch workflow gates.",
+  "nextWork": "Confirm passing main-branch evidence for the core, editor, authenticated-envelope, and browser validators. After those gates are recorded, close Phases 9 through 11 and begin the Phase 12 Nested Cubes data model without weakening the existing compatibility and security boundaries."
 }
