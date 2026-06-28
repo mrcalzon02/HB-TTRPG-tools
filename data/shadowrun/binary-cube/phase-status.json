@@ -1,0 +1,158 @@
+{
+  "receiptType": "shadowrunBinaryCubePhaseLedger",
+  "schemaVersion": "0.2.0",
+  "projectId": "shadowrun-binary-cube-encryption",
+  "workspace": "Shadowrun",
+  "activeBranch": "main",
+  "branchPolicy": "exactly one active branch named main",
+  "securityClassification": "experimental-ttrpg-obfuscation-not-production-cryptography",
+  "activePhaseId": "phase-10-integrity-authenticity-framing",
+  "lastCompletedPhaseId": "phase-08-error-handling-diagnostics",
+  "validationPhaseStatus": "implemented-awaiting-main-ci-evidence",
+  "runtimeStatus": "engine-ui-separated-static-and-browser-gates-installed",
+  "phases": [
+    {
+      "sequence": 0,
+      "id": "phase-00-source-intake-preservation",
+      "status": "gate-passed",
+      "evidence": [
+        "source-page-references/shadowrun-binary-cube-encryption.source.json",
+        "docs/shadowrun/binary-cube-encryption-milestone-plan.md"
+      ]
+    },
+    {
+      "sequence": 1,
+      "id": "phase-01-terminology-algorithm-contract",
+      "status": "gate-passed",
+      "evidence": [
+        "shadowrun-binary-cube-engine.js",
+        "docs/shadowrun/binary-cube-encryption-milestone-plan.md"
+      ]
+    },
+    {
+      "sequence": 2,
+      "id": "phase-02-deterministic-point-field-key-generation",
+      "status": "gate-passed",
+      "evidence": [
+        "shadowrun-binary-cube-engine.js:createKey",
+        "shadowrun-binary-cube-engine.js:buildPoints",
+        "shadowrun-binary-cube-engine.js:projectionDiagnostics"
+      ]
+    },
+    {
+      "sequence": 3,
+      "id": "phase-03-face-orientation-reversible-block-permutation",
+      "status": "gate-passed",
+      "evidence": [
+        "shadowrun-binary-cube-engine.js:faceCell",
+        "shadowrun-binary-cube-engine.js:faceOrder",
+        "shadowrun-binary-cube-engine.js:transformBlock"
+      ]
+    },
+    {
+      "sequence": 4,
+      "id": "phase-04-binary-framing-padding-multiblock",
+      "status": "gate-passed",
+      "evidence": [
+        "shadowrun-binary-cube-engine.js:encryptBinary",
+        "shadowrun-binary-cube-engine.js:decryptBinary"
+      ]
+    },
+    {
+      "sequence": 5,
+      "id": "phase-05-data-entry-masks",
+      "status": "gate-passed",
+      "evidence": [
+        "shadowrun-binary-cube-engine.js:maskFromDensity",
+        "shadowrun-binary-cube-encryption.js"
+      ]
+    },
+    {
+      "sequence": 6,
+      "id": "phase-06-shadowrun-workspace-ui",
+      "status": "gate-passed",
+      "evidence": [
+        "shadowrun-entry.js",
+        "shadowrun-binary-cube-encryption.js"
+      ]
+    },
+    {
+      "sequence": 7,
+      "id": "phase-07-persistence-interchange-recovery",
+      "status": "gate-passed",
+      "evidence": [
+        "shadowrun-binary-cube-encryption.js localStorage persistence",
+        "key and package copy controls",
+        "key and package JSON import controls",
+        "key and package JSON download controls"
+      ]
+    },
+    {
+      "sequence": 8,
+      "id": "phase-08-error-handling-diagnostics",
+      "status": "gate-passed",
+      "evidence": [
+        "all-six-face projection diagnostics",
+        "wrong-key rejection",
+        "schema and fingerprint validation",
+        "block and framing validation",
+        "visible browser status messages"
+      ]
+    },
+    {
+      "sequence": 9,
+      "id": "phase-09-automated-verification",
+      "status": "implemented-awaiting-main-ci-evidence",
+      "evidence": [
+        "scripts/validate-shadowrun-binary-cube.mjs",
+        "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
+        "data/shadowrun/binary-cube/validation-contract.json",
+        ".github/workflows/shadowrun-binary-cube.yml"
+      ]
+    },
+    {
+      "sequence": 10,
+      "id": "phase-10-integrity-authenticity-framing",
+      "status": "active",
+      "completedScope": [
+        "key content fingerprint",
+        "package framing checksum",
+        "ciphertext corruption detection",
+        "metadata corruption detection",
+        "explicit checksum classification as non-cryptographic"
+      ],
+      "remainingScope": [
+        "design an optional cryptographic authenticity envelope without misrepresenting the permutation as secure encryption",
+        "define key-derivation and secret-handling boundaries",
+        "add schema migration rules for authenticated packages"
+      ]
+    },
+    {
+      "sequence": 11,
+      "id": "phase-11-custom-coordinate-mask-editor",
+      "status": "queued"
+    },
+    {
+      "sequence": 12,
+      "id": "phase-12-nested-cubes",
+      "status": "queued"
+    },
+    {
+      "sequence": 13,
+      "id": "phase-13-crossword-split-key-mode",
+      "status": "queued"
+    },
+    {
+      "sequence": 14,
+      "id": "phase-14-security-analysis-release-classification",
+      "status": "queued"
+    },
+    {
+      "sequence": 15,
+      "id": "phase-15-shadowrun-gameplay-integration",
+      "status": "queued"
+    }
+  ],
+  "currentWork": "The algorithm has been separated from the browser interface and placed behind repeatable static and browser validation gates so implementation changes can be tested without relying on manual inspection alone.",
+  "nextWork": "Obtain passing main-branch CI evidence, then complete the integrity and authenticity design while preserving the explicit rule that this research prototype is not production cryptography."
+}
