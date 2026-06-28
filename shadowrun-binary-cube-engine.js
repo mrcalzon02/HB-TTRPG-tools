@@ -1,0 +1,454 @@
+(function installBinaryCubeEngine(root, factory) {
+  'use strict';
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  if (root) root.ShadowrunBinaryCubeEngine = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeEngine() {
+  'use strict';
+
+  const KEY_FORMAT = 'hb-ttrpg-shadowrun-binary-cube-key';
+  const PACKAGE_FORMAT = 'hb-ttrpg-shadowrun-binary-cube-package';
+  const SCHEMA_VERSION = '0.2.0';
+  const ALGORITHM = 'latin-cube-face-permutation';
+  const SECURITY_CLASSIFICATION = 'experimental-ttrpg-obfuscation-not-production-cryptography';
+  const CHECKSUM_TYPE = 'fnv1a32-corruption-detection-only';
+  const FACES = Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
+  const OPPOSITE = Object.freeze({ top: 'bottom', bottom: 'top', front: 'back', back: 'front', left: 'right', right: 'left' });
+  const RECOMMENDED_GRID_SIZES = Object.freeze([4, 12, 20, 28, 36, 44, 52, 60]);
+
+  function fail(message) {
+    throw new Error(message);
+  }
+
+  function normalizeBits(value, label = 'Binary input') {
+    const compact = String(value ?? '').replace(/\s+/g, '');
+    if (!compact) fail(`${label} must contain at least one binary digit.`);
+    if (/[^01]/.test(compact)) fail(`${label} may contain only 0, 1, and whitespace.`);
+    return compact;
+  }
+
+  function fnv1a32(value) {
+    let hash = 0x811c9dc5;
+    const text = String(value ?? '');
+    for (let index = 0; index < text.length; index += 1) {
+      hash ^= text.charCodeAt(index);
+      hash = Math.imul(hash, 0x01000193);
+    }
+    return hash >>> 0;
+  }
+
+  function hex32(value) {
+    return fnv1a32(value).toString(16).padStart(8, '0');
+  }
+
+  function mulberry32(seed) {
+    let state = seed >>> 0;
+    return () => {
+      state += 0x6d2b79f5;
+      let result = state;
+      result = Math.imul(result ^ (result >>> 15), result | 1);
+      result ^= result + Math.imul(result ^ (result >>> 7), result | 61);
+      return ((result ^ (result >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function range(size) {
+    return Array.from({ length: size }, (_, index) => index);
+  }
+
+  function shuffle(values, random) {
+    const output = [...values];
+    for (let index = output.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(random() * (index + 1));
+      [output[index], output[swapIndex]] = [output[swapIndex], output[index]];
+    }
+    return output;
+  }
+
+  function isPermutation(values, size) {
+    return Array.isArray(values)
+      && values.length === size
+      && new Set(values).size === size
+      && values.every(value => Number.isInteger(value) && value >= 0 && value < size);
+  }
+
+  function normalizeQuarterTurns(value) {
+    return ((Number(value) || 0) % 4 + 4) % 4;
+  }
+
+  function validateFacePair(inputFace, outputFace) {
+    if (!FACES.includes(inputFace) || !FACES.includes(outputFace)) fail('Input and output faces must be valid cube faces.');
+    if (inputFace === outputFace) fail('The output face cannot be the same as the input face.');
+    if (OPPOSITE[inputFace] === outputFace) fail('The opposite face preserves the original projection. Choose one of the four perpendicular faces.');
+    return true;
+  }
+
+  function legalOutputFaces(inputFace) {
+    if (!FACES.includes(inputFace)) fail('A valid input face is required.');
+    return FACES.filter(face => face !== inputFace && face !== OPPOSITE[inputFace]);
+  }
+
+  function maskFromDensity(size, density, random) {
+    const cellCount = size * size;
+    const normalizedDensity = Math.max(0.05, Math.min(1, Number(density) || 1));
+    const target = Math.max(1, Math.round(cellCount * normalizedDensity));
+    const indexes = shuffle(range(cellCount), random);
+    const selected = new Set(indexes.slice(0, target));
+    return range(cellCount).map(index => selected.has(index));
+  }
+
+  function keyFingerprint(key) {
+    const material = [
+      KEY_FORMAT,
+      SCHEMA_VERSION,
+      key.algorithm,
+      key.gridSize,
+      key.seed,
+      key.inputFace,
+      key.outputFace,
+      normalizeQuarterTurns(key.inputQuarterTurns),
+      normalizeQuarterTurns(key.outputQuarterTurns),
+      key.rowPermutation.join(','),
+      key.columnPermutation.join(','),
+      key.depthPermutation.join(','),
+      key.mask.map(Boolean).map(value => value ? '1' : '0').join(''),
+      key.paddingMode
+    ].join('|');
+    return hex32(material);
+  }
+
+  function createKey(options = {}) {
+    const gridSize = Number(options.gridSize ?? 4);
+    if (!Number.isInteger(gridSize) || gridSize < 2 || gridSize > 60) fail('Grid size must be an integer from 2 through 60.');
+    const seed = String(options.seed || 'shadowrun-cube-key');
+    const inputFace = String(options.inputFace || 'top');
+    const outputFace = String(options.outputFace || 'front');
+    validateFacePair(inputFace, outputFace);
+    const inputQuarterTurns = normalizeQuarterTurns(options.inputQuarterTurns);
+    const outputQuarterTurns = normalizeQuarterTurns(options.outputQuarterTurns);
+    const random = mulberry32(fnv1a32(`${seed}|${gridSize}|latin-cube-key|${SCHEMA_VERSION}`));
+    const key = {
+      format: KEY_FORMAT,
+      schemaVersion: SCHEMA_VERSION,
+      algorithm: ALGORITHM,
+      securityClassification: SECURITY_CLASSIFICATION,
+      gridSize,
+      seed,
+      inputFace,
+      outputFace,
+      inputQuarterTurns,
+      outputQuarterTurns,
+      rowPermutation: shuffle(range(gridSize), random),
+      columnPermutation: shuffle(range(gridSize), random),
+      depthPermutation: shuffle(range(gridSize), random),
+      mask: maskFromDensity(gridSize, options.maskDensity ?? 1, random),
+      paddingMode: 'deterministic-seeded-random'
+    };
+    key.keyId = keyFingerprint(key);
+    return key;
+  }
+
+  function validateKey(rawKey) {
+    const key = typeof rawKey === 'string' ? JSON.parse(rawKey) : rawKey;
+    if (!key || typeof key !== 'object' || Array.isArray(key)) fail('A key object is required.');
+    if (key.format !== KEY_FORMAT) fail('The imported key format is not recognized.');
+    if (key.schemaVersion !== SCHEMA_VERSION) fail(`Unsupported key schema version: ${key.schemaVersion || 'missing'}. Expected ${SCHEMA_VERSION}.`);
+    if (key.algorithm !== ALGORITHM) fail('The key algorithm is not supported by this engine.');
+    const size = Number(key.gridSize);
+    if (!Number.isInteger(size) || size < 2 || size > 60) fail('The key grid size is invalid.');
+    validateFacePair(key.inputFace, key.outputFace);
+    if (!isPermutation(key.rowPermutation, size)) fail('The key row permutation is invalid.');
+    if (!isPermutation(key.columnPermutation, size)) fail('The key column permutation is invalid.');
+    if (!isPermutation(key.depthPermutation, size)) fail('The key depth permutation is invalid.');
+    if (!Array.isArray(key.mask) || key.mask.length !== size * size || !key.mask.some(Boolean)) fail('The key mask is invalid or has no payload cells.');
+    if (key.paddingMode !== 'deterministic-seeded-random') fail('The key padding mode is not supported.');
+    const copy = {
+      ...key,
+      gridSize: size,
+      seed: String(key.seed ?? ''),
+      inputQuarterTurns: normalizeQuarterTurns(key.inputQuarterTurns),
+      outputQuarterTurns: normalizeQuarterTurns(key.outputQuarterTurns),
+      mask: key.mask.map(Boolean)
+    };
+    const expected = keyFingerprint(copy);
+    if (key.keyId && key.keyId !== expected) fail('The key fingerprint does not match its contents.');
+    copy.keyId = expected;
+    return copy;
+  }
+
+  function buildPoints(rawKey) {
+    const key = rawKey.format === KEY_FORMAT ? validateKey(rawKey) : rawKey;
+    const size = key.gridSize;
+    const points = [];
+    for (let x = 0; x < size; x += 1) {
+      for (let y = 0; y < size; y += 1) {
+        const latinValue = (key.rowPermutation[x] + key.columnPermutation[y]) % size;
+        points.push({ id: x * size + y, x, y, z: key.depthPermutation[latinValue] });
+      }
+    }
+    return points;
+  }
+
+  function rotateCell(row, column, size, quarterTurns) {
+    let nextRow = row;
+    let nextColumn = column;
+    for (let turn = 0; turn < normalizeQuarterTurns(quarterTurns); turn += 1) {
+      [nextRow, nextColumn] = [nextColumn, size - 1 - nextRow];
+    }
+    return [nextRow, nextColumn];
+  }
+
+  function faceCell(point, face, size, quarterTurns = 0) {
+    let row;
+    let column;
+    switch (face) {
+      case 'top':
+        row = point.y; column = point.x; break;
+      case 'bottom':
+        row = point.y; column = size - 1 - point.x; break;
+      case 'front':
+        row = size - 1 - point.z; column = point.x; break;
+      case 'back':
+        row = size - 1 - point.z; column = size - 1 - point.x; break;
+      case 'left':
+        row = size - 1 - point.z; column = point.y; break;
+      case 'right':
+        row = size - 1 - point.z; column = size - 1 - point.y; break;
+      default:
+        fail(`Unknown cube face: ${face}`);
+    }
+    return rotateCell(row, column, size, quarterTurns);
+  }
+
+  function faceOrder(points, face, size, quarterTurns = 0) {
+    if (!FACES.includes(face)) fail(`Unknown cube face: ${face}`);
+    const order = new Array(size * size);
+    for (const point of points) {
+      const [row, column] = faceCell(point, face, size, quarterTurns);
+      const index = row * size + column;
+      if (order[index]) fail(`Point-field collision detected on the ${face} face at row ${row}, column ${column}.`);
+      order[index] = point;
+    }
+    if (order.some(point => !point)) fail(`The ${face} projection contains one or more empty cells.`);
+    return order;
+  }
+
+  function projectionDiagnostics(rawKey) {
+    const key = validateKey(rawKey);
+    const points = buildPoints(key);
+    const faces = {};
+    for (const face of FACES) {
+      const order = faceOrder(points, face, key.gridSize, 0);
+      faces[face] = { uniqueCells: new Set(order.map(point => point.id)).size, expectedCells: key.gridSize * key.gridSize };
+    }
+    return {
+      gridSize: key.gridSize,
+      pointCount: points.length,
+      expectedPointCount: key.gridSize * key.gridSize,
+      collisionFree: Object.values(faces).every(result => result.uniqueCells === result.expectedCells),
+      faces
+    };
+  }
+
+  function assertProjectionUniqueness(rawPointsOrKey, maybeSize) {
+    if (Array.isArray(rawPointsOrKey)) {
+      const points = rawPointsOrKey;
+      const size = Number(maybeSize);
+      for (const face of FACES) faceOrder(points, face, size, 0);
+      return true;
+    }
+    const diagnostics = projectionDiagnostics(rawPointsOrKey);
+    if (!diagnostics.collisionFree) fail('The generated point field contains a face-projection collision.');
+    return true;
+  }
+
+  function transformBlock(block, rawKey, fromFace, fromTurns, toFace, toTurns) {
+    const key = validateKey(rawKey);
+    const points = buildPoints(key);
+    const inputOrder = faceOrder(points, fromFace, key.gridSize, fromTurns);
+    const outputOrder = faceOrder(points, toFace, key.gridSize, toTurns);
+    if (typeof block !== 'string' || block.length !== inputOrder.length || /[^01]/.test(block)) fail('A cube block must contain exactly gridSize squared binary digits.');
+    const bitsByPoint = new Array(inputOrder.length);
+    for (let index = 0; index < inputOrder.length; index += 1) bitsByPoint[inputOrder[index].id] = block[index];
+    return outputOrder.map(point => bitsByPoint[point.id]).join('');
+  }
+
+  function deterministicFiller(key, blockIndex, cellCount) {
+    const random = mulberry32(fnv1a32(`${key.seed}|${key.keyId}|padding|${blockIndex}`));
+    return range(cellCount).map(() => random() >= 0.5 ? '1' : '0');
+  }
+
+  function checksumMaterial(payload) {
+    return JSON.stringify({
+      format: payload.format,
+      schemaVersion: payload.schemaVersion,
+      algorithm: payload.algorithm,
+      securityClassification: payload.securityClassification,
+      keyId: payload.keyId,
+      gridSize: payload.gridSize,
+      inputFace: payload.inputFace,
+      outputFace: payload.outputFace,
+      inputQuarterTurns: payload.inputQuarterTurns,
+      outputQuarterTurns: payload.outputQuarterTurns,
+      originalBitLength: payload.originalBitLength,
+      payloadCapacity: payload.payloadCapacity,
+      blockCount: payload.blockCount,
+      ciphertext: payload.ciphertext
+    });
+  }
+
+  function packageChecksum(payload) {
+    return hex32(checksumMaterial(payload));
+  }
+
+  function encryptBinary(binary, rawKey) {
+    const bits = normalizeBits(binary);
+    const key = validateKey(rawKey);
+    const cellCount = key.gridSize * key.gridSize;
+    const payloadIndexes = key.mask.flatMap((enabled, index) => enabled ? [index] : []);
+    const payloadCapacity = payloadIndexes.length;
+    const blockCount = Math.ceil(bits.length / payloadCapacity);
+    let cursor = 0;
+    let ciphertext = '';
+
+    for (let blockIndex = 0; blockIndex < blockCount; blockIndex += 1) {
+      const cells = deterministicFiller(key, blockIndex, cellCount);
+      for (const cellIndex of payloadIndexes) {
+        if (cursor < bits.length) cells[cellIndex] = bits[cursor++];
+      }
+      ciphertext += transformBlock(cells.join(''), key, key.inputFace, key.inputQuarterTurns, key.outputFace, key.outputQuarterTurns);
+    }
+
+    const payload = {
+      format: PACKAGE_FORMAT,
+      schemaVersion: SCHEMA_VERSION,
+      algorithm: ALGORITHM,
+      securityClassification: SECURITY_CLASSIFICATION,
+      keyId: key.keyId,
+      gridSize: key.gridSize,
+      inputFace: key.inputFace,
+      outputFace: key.outputFace,
+      inputQuarterTurns: key.inputQuarterTurns,
+      outputQuarterTurns: key.outputQuarterTurns,
+      originalBitLength: bits.length,
+      payloadCapacity,
+      blockCount,
+      ciphertext,
+      checksumType: CHECKSUM_TYPE
+    };
+    payload.checksum = packageChecksum(payload);
+    return payload;
+  }
+
+  function validatePackage(rawPackage, rawKey) {
+    let payload;
+    try {
+      payload = typeof rawPackage === 'string' ? JSON.parse(rawPackage) : rawPackage;
+    } catch (error) {
+      fail(`Encrypted package JSON is invalid: ${error.message}`);
+    }
+    const key = validateKey(rawKey);
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) fail('An encrypted package object is required.');
+    if (payload.format !== PACKAGE_FORMAT) fail('The encrypted package format is not recognized.');
+    if (payload.schemaVersion !== SCHEMA_VERSION) fail(`Unsupported package schema version: ${payload.schemaVersion || 'missing'}. Expected ${SCHEMA_VERSION}.`);
+    if (payload.algorithm !== ALGORITHM) fail('The package algorithm is not supported by this engine.');
+    if (payload.keyId !== key.keyId) fail('The encrypted package requires a different key.');
+    if (Number(payload.gridSize) !== key.gridSize) fail('Package and key grid sizes do not match.');
+    if (payload.inputFace !== key.inputFace || payload.outputFace !== key.outputFace) fail('Package and key face selections do not match.');
+    if (normalizeQuarterTurns(payload.inputQuarterTurns) !== key.inputQuarterTurns || normalizeQuarterTurns(payload.outputQuarterTurns) !== key.outputQuarterTurns) fail('Package and key orientations do not match.');
+    const ciphertext = normalizeBits(payload.ciphertext, 'Ciphertext');
+    const cellCount = key.gridSize * key.gridSize;
+    if (ciphertext.length % cellCount !== 0) fail('Ciphertext length is not aligned to the cube block size.');
+    const payloadCapacity = key.mask.filter(Boolean).length;
+    if (Number(payload.payloadCapacity) !== payloadCapacity) fail('Package payload capacity does not match the key mask.');
+    const blockCount = Number(payload.blockCount);
+    if (!Number.isInteger(blockCount) || blockCount < 1 || blockCount * cellCount !== ciphertext.length) fail('Package block count does not match its ciphertext length.');
+    const originalBitLength = Number(payload.originalBitLength);
+    if (!Number.isInteger(originalBitLength) || originalBitLength < 1 || originalBitLength > blockCount * payloadCapacity) fail('The package original bit length is invalid.');
+    const expectedBlocks = Math.ceil(originalBitLength / payloadCapacity);
+    if (blockCount !== expectedBlocks) fail('Package block count does not match its original bit length and mask capacity.');
+    if (payload.checksumType !== CHECKSUM_TYPE) fail('The package checksum type is missing or unsupported.');
+    const normalized = {
+      ...payload,
+      gridSize: key.gridSize,
+      inputQuarterTurns: key.inputQuarterTurns,
+      outputQuarterTurns: key.outputQuarterTurns,
+      originalBitLength,
+      payloadCapacity,
+      blockCount,
+      ciphertext
+    };
+    const expectedChecksum = packageChecksum(normalized);
+    if (payload.checksum !== expectedChecksum) fail('Package checksum validation failed. The ciphertext or framing metadata may be corrupted.');
+    normalized.checksum = expectedChecksum;
+    return normalized;
+  }
+
+  function decryptBinary(rawPackage, rawKey) {
+    const key = validateKey(rawKey);
+    const payload = validatePackage(rawPackage, key);
+    const cellCount = key.gridSize * key.gridSize;
+    const payloadIndexes = key.mask.flatMap((enabled, index) => enabled ? [index] : []);
+    let plaintext = '';
+
+    for (let offset = 0; offset < payload.ciphertext.length; offset += cellCount) {
+      const outputBlock = payload.ciphertext.slice(offset, offset + cellCount);
+      const inputBlock = transformBlock(outputBlock, key, key.outputFace, key.outputQuarterTurns, key.inputFace, key.inputQuarterTurns);
+      for (const cellIndex of payloadIndexes) plaintext += inputBlock[cellIndex];
+    }
+    return plaintext.slice(0, payload.originalBitLength);
+  }
+
+  function diagnosePackage(rawPackage, rawKey) {
+    const key = validateKey(rawKey);
+    const payload = validatePackage(rawPackage, key);
+    const cellCount = key.gridSize * key.gridSize;
+    const encryptedBlock = payload.ciphertext.slice(0, cellCount);
+    const inputBlock = transformBlock(encryptedBlock, key, key.outputFace, key.outputQuarterTurns, key.inputFace, key.inputQuarterTurns);
+    const faces = {};
+    for (const face of FACES) {
+      faces[face] = transformBlock(inputBlock, key, key.inputFace, key.inputQuarterTurns, face, 0);
+    }
+    return {
+      keyId: key.keyId,
+      gridSize: key.gridSize,
+      pointField: projectionDiagnostics(key),
+      payloadCapacity: key.mask.filter(Boolean).length,
+      inactiveMaskCells: key.mask.filter(value => !value).length,
+      blockCount: payload.blockCount,
+      originalBitLength: payload.originalBitLength,
+      ciphertextBitLength: payload.ciphertext.length,
+      checksum: payload.checksum,
+      checksumType: payload.checksumType,
+      firstBlock: { input: inputBlock, encrypted: encryptedBlock, faces }
+    };
+  }
+
+  return Object.freeze({
+    createKey,
+    validateKey,
+    validatePackage,
+    buildPoints,
+    faceCell,
+    faceOrder,
+    transformBlock,
+    projectionDiagnostics,
+    assertProjectionUniqueness,
+    encryptBinary,
+    decryptBinary,
+    diagnosePackage,
+    packageChecksum,
+    legalOutputFaces,
+    constants: Object.freeze({
+      KEY_FORMAT,
+      PACKAGE_FORMAT,
+      SCHEMA_VERSION,
+      ALGORITHM,
+      SECURITY_CLASSIFICATION,
+      CHECKSUM_TYPE,
+      FACES,
+      OPPOSITE,
+      RECOMMENDED_GRID_SIZES
+    })
+  });
+});
