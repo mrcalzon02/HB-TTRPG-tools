@@ -1,5 +1,0 @@
-Line one: commas, periods, semicolons; colons: and quotation marks "remain exact."
-Line two contains a tab before the marker:	[TAB]
-Line three follows a blank line.
-
-Final line: parentheses (stay), brackets [stay], braces {stay}, slash /, backslash \, and question mark?
