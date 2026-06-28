@@ -1,6 +1,6 @@
 {
   "receiptType": "shadowrunBinaryCubeEncryptionSourceReceipt",
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "implementationSchemas": {
     "key": "0.2.0",
     "package": "0.2.0",
@@ -64,6 +64,25 @@
     "packageChecksum": "FNV-1a 32-bit corruption detection over framing metadata and ciphertext",
     "checksumLimitation": "Not cryptographic authentication and not evidence of secrecy or authorship"
   },
+  "customEditorModel": {
+    "phase": 11,
+    "schemaChangeRequired": false,
+    "editableCoordinateMaterial": ["rowPermutation", "columnPermutation", "depthPermutation"],
+    "editableMaskMaterial": "existing gridSize-squared boolean mask",
+    "draftIsolation": "The active key is not changed until the draft validates and is explicitly applied.",
+    "validation": [
+      "grid-size match",
+      "integer range",
+      "permutation uniqueness",
+      "nonempty exact-length mask",
+      "key fingerprint recalculation",
+      "all-six-face projection uniqueness"
+    ],
+    "recovery": ["bounded undo and redo", "previous valid key restoration"],
+    "compatibilityRule": "Applying a changed key clears the package and decrypted output because prior packages require the prior key.",
+    "visualMaskLimit": 12,
+    "largeGridBehavior": "Text editing and active/inactive summary without rendering an unbounded cell grid."
+  },
   "authenticatedTransportModel": {
     "purpose": "Optional confidentiality and authenticated transport for a validated serialized Binary Cube package",
     "separationRule": "The standard cryptographic envelope is separate from and does not validate the security of the experimental cube permutation",
@@ -85,9 +104,11 @@
     "shadowrun-entry.js",
     "shadowrun-binary-cube-engine.js",
     "shadowrun-binary-cube-encryption.js",
+    "shadowrun-binary-cube-editor.js",
     "shadowrun-binary-cube-auth.js",
     "shadowrun-binary-cube-auth-ui.js",
     "scripts/validate-shadowrun-binary-cube.mjs",
+    "scripts/validate-shadowrun-binary-cube-editor.mjs",
     "scripts/validate-shadowrun-binary-cube-auth.mjs",
     "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
     ".github/workflows/shadowrun-binary-cube.yml",
@@ -97,6 +118,7 @@
     "docs/shadowrun/binary-cube-encryption-milestone-plan.md",
     "docs/shadowrun/binary-cube-development-system.md",
     "docs/shadowrun/binary-cube-authenticated-envelope.md",
+    "docs/shadowrun/binary-cube-custom-editor.md",
     "source-page-references/shadowrun-binary-cube-encryption.source.json"
   ],
   "implementedCapabilities": [
@@ -112,6 +134,11 @@
     "Local browser persistence",
     "All-six-face diagnostics",
     "Corruption detection checksum",
+    "Protected custom permutation and mask draft editor",
+    "Keyboard-accessible visual mask editing through size 12",
+    "Large-grid mask text editing and capacity summary",
+    "Draft undo redo and previous valid key recovery",
+    "Custom key fingerprint recalculation and incompatible-package clearing",
     "Optional PBKDF2-derived AES-GCM authenticated package envelope",
     "Fresh random salt and initialization vector per normal envelope seal",
     "Wrong-passphrase and authenticated-metadata tamper rejection",
@@ -119,6 +146,7 @@
     "Passphrase held only in browser memory",
     "Strict key, package, and envelope schema rejection policy",
     "Exhaustive engine validation",
+    "Standalone custom-editor validation",
     "Standalone authenticated-envelope validation",
     "Chromium browser verification",
     "Main-branch continuous-integration gate"
@@ -129,10 +157,14 @@
     "coreRoundTrips": 3840,
     "recommendedSizesCovered": 8,
     "directedLegalFacePairsCovered": 24,
+    "customEditorValidator": "scripts/validate-shadowrun-binary-cube-editor.mjs",
+    "customEditorAssertions": 252,
+    "customEditorRoundTrips": 40,
+    "customEditorMaskPatterns": 5,
     "authenticatedEnvelopeValidator": "scripts/validate-shadowrun-binary-cube-auth.mjs",
     "authenticatedEnvelopeAssertions": 39,
     "browserValidator": "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
-    "browserChecks": 18,
+    "browserChecks": 23,
     "workflow": ".github/workflows/shadowrun-binary-cube.yml",
     "statusAtReceiptUpdate": "implemented-awaiting-main-ci-evidence"
   },
