@@ -1,6 +1,6 @@
 {
   "receiptType": "shadowrunBinaryCubeValidationContract",
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.4.0",
   "branchPolicy": "main only",
   "securityClassification": {
     "cubeCore": "experimental-ttrpg-obfuscation-not-production-cryptography",
@@ -30,6 +30,37 @@
       "invalid permutation",
       "unsupported schema",
       "truncated block"
+    ]
+  },
+  "requiredCustomEditorValidation": {
+    "validator": "scripts/validate-shadowrun-binary-cube-editor.mjs",
+    "minimumAssertions": 252,
+    "minimumRoundTrips": 40,
+    "recommendedGridSizes": [4, 12, 20, 28, 36, 44, 52, 60],
+    "requiredMaskPatterns": ["full", "three-quarter", "half", "border", "diagonal"],
+    "maximumVisualGridSize": 12,
+    "requiredCapabilities": [
+      "protected draft isolated from the active key",
+      "row column and depth permutation editing",
+      "text and keyboard-accessible visual mask editing",
+      "large-grid textual summary instead of unbounded cell rendering",
+      "range and uniqueness validation",
+      "nonempty mask validation",
+      "all-six-face projection validation",
+      "key fingerprint recalculation",
+      "undo and redo",
+      "previous valid key recovery",
+      "incompatible package clearing after key replacement"
+    ],
+    "mandatoryFailureCases": [
+      "duplicate permutation value",
+      "out-of-range permutation value",
+      "short permutation",
+      "wrong draft grid size",
+      "empty mask",
+      "non-binary mask",
+      "wrong mask length",
+      "prior package used with rebuilt key"
     ]
   },
   "requiredAuthenticatedEnvelopeValidation": {
@@ -71,10 +102,10 @@
   },
   "requiredBrowserValidation": {
     "validator": "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
-    "minimumChecks": 18,
+    "minimumChecks": 23,
     "requiredCapabilities": [
       "lazy workspace loading",
-      "lazy engine interface authentication-engine and authentication-interface loading",
+      "lazy engine interface custom-editor authentication-engine and authentication-interface loading",
       "single script instance per component",
       "deterministic key generation",
       "data-entry mask generation",
@@ -84,11 +115,16 @@
       "package and key validation",
       "package corruption detection",
       "opposite-face rejection",
-      "key package and envelope transfer controls",
+      "key package envelope and editor transfer or workflow controls",
       "AES-GCM envelope sealing",
       "authenticated envelope opening",
       "wrong envelope passphrase rejection",
       "authenticated metadata tamper rejection",
+      "custom editor protected draft loading",
+      "custom editor invalid draft rejection without active-key mutation",
+      "custom editor undo and redo",
+      "custom editor validated apply with fingerprint recalculation and package clearing",
+      "custom editor previous valid key recovery",
       "local storage restoration without passphrase persistence",
       "zero page and console errors"
     ]
@@ -100,9 +136,10 @@
     "artifactRetentionDays": 30,
     "requiredEvidence": [
       "shadowrun-binary-cube-static-verification.json",
+      "shadowrun-binary-cube-editor-verification.json",
       "shadowrun-binary-cube-auth-verification.json",
       "shadowrun-binary-cube-browser-verification.json"
     ]
   },
-  "releaseRule": "No Binary Cube core, authenticated envelope, interface, source receipt, phase ledger, or implementation document change is complete until core static, authenticated-envelope static, and browser validation pass on main."
+  "releaseRule": "No Binary Cube core, custom editor, authenticated envelope, interface, source receipt, phase ledger, or implementation document change is complete until core static, editor static, authenticated-envelope static, and browser validation pass on main."
 }
