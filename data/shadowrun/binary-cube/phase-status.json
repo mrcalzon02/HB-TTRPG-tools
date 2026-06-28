@@ -1,6 +1,6 @@
 {
   "receiptType": "shadowrunBinaryCubePhaseLedger",
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.3.1",
   "projectId": "shadowrun-binary-cube-encryption",
   "workspace": "Shadowrun",
   "activeBranch": "main",
@@ -12,7 +12,7 @@
   "activePhaseId": "phase-10-integrity-authenticity-framing",
   "lastCompletedPhaseId": "phase-08-error-handling-diagnostics",
   "validationPhaseStatus": "implemented-awaiting-main-ci-evidence",
-  "runtimeStatus": "core-authentication-and-browser-gates-installed",
+  "runtimeStatus": "core-authentication-browser-and-schema-gates-installed",
   "phases": [
     {
       "sequence": 0,
@@ -131,19 +131,22 @@
         "wrong-passphrase and tamper rejection",
         "passphrase retained only in browser memory and never persisted",
         "authenticated envelope copy import inspection download and clear controls",
-        "standalone authentication validator and browser verification coverage"
+        "standalone authentication validator and browser verification coverage",
+        "strict key package and authenticated-envelope schema migration policy",
+        "authenticated-envelope threat model operation guide and secret-handling documentation"
       ],
       "remainingScope": [
         "obtain passing main-branch CI evidence for core authentication and browser validators",
-        "freeze the envelope schema migration policy before introducing any 0.2.x envelope format",
-        "decide whether a non-passphrase key-file transport mode belongs in a later phase"
+        "record whether a non-passphrase key-file transport mode belongs in a later phase rather than expanding Phase 10"
       ],
       "evidence": [
         "shadowrun-binary-cube-auth.js",
         "shadowrun-binary-cube-auth-ui.js",
         "scripts/validate-shadowrun-binary-cube-auth.mjs",
         "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
-        "data/shadowrun/binary-cube/validation-contract.json"
+        "data/shadowrun/binary-cube/validation-contract.json",
+        "data/shadowrun/binary-cube/schema-policy.json",
+        "docs/shadowrun/binary-cube-authenticated-envelope.md"
       ]
     },
     {
@@ -172,6 +175,6 @@
       "status": "queued"
     }
   ],
-  "currentWork": "The project now separates the experimental cube permutation from an optional PBKDF2-derived AES-GCM transport envelope, and all three layers—core engine, authenticated envelope, and browser workflow—have mandatory automated validators on main.",
-  "nextWork": "Confirm passing main-branch CI evidence, freeze the authenticated-envelope migration policy, and then advance to the custom coordinate and data-entry mask editor without weakening the established validation gates."
+  "currentWork": "The project now separates the experimental cube permutation from an optional PBKDF2-derived AES-GCM transport envelope, enforces strict schema migration rules, and places the core engine, authentication layer, and browser workflow behind mandatory validators on main.",
+  "nextWork": "Confirm passing main-branch CI evidence, record the Phase 10 gate result, and then advance to the custom coordinate and data-entry mask editor without weakening the established validation and security boundaries."
 }
