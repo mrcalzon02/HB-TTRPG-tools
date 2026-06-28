@@ -12,6 +12,7 @@ on:
       - "shadowrun-binary-cube-auth-ui.js"
       - "scripts/validate-shadowrun-binary-cube.mjs"
       - "scripts/validate-shadowrun-binary-cube-editor.mjs"
+      - "scripts/validate-shadowrun-binary-cube-text-controls.mjs"
       - "scripts/validate-shadowrun-binary-cube-auth.mjs"
       - "scripts/run-shadowrun-binary-cube-browser-verification.mjs"
       - "source-page-references/shadowrun-binary-cube-encryption.source.json"
@@ -50,6 +51,7 @@ jobs:
           node --check shadowrun-binary-cube-auth-ui.js
           node --check scripts/validate-shadowrun-binary-cube.mjs
           node --check scripts/validate-shadowrun-binary-cube-editor.mjs
+          node --check scripts/validate-shadowrun-binary-cube-text-controls.mjs
           node --check scripts/validate-shadowrun-binary-cube-auth.mjs
           node --check scripts/run-shadowrun-binary-cube-browser-verification.mjs
 
@@ -58,6 +60,9 @@ jobs:
 
       - name: Run custom key editor validation
         run: node scripts/validate-shadowrun-binary-cube-editor.mjs artifacts/shadowrun-binary-cube-editor-verification.json
+
+      - name: Run known-text control matrix
+        run: node scripts/validate-shadowrun-binary-cube-text-controls.mjs artifacts/shadowrun-binary-cube-text-control-verification.json
 
       - name: Run authenticated-envelope validation
         run: node scripts/validate-shadowrun-binary-cube-auth.mjs artifacts/shadowrun-binary-cube-auth-verification.json
