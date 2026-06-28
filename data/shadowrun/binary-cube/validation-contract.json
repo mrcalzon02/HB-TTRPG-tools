@@ -1,6 +1,6 @@
 {
   "receiptType": "shadowrunBinaryCubeValidationContract",
-  "schemaVersion": "0.4.0",
+  "schemaVersion": "0.5.0",
   "branchPolicy": "main only",
   "securityClassification": {
     "cubeCore": "experimental-ttrpg-obfuscation-not-production-cryptography",
@@ -62,6 +62,44 @@
       "wrong mask length",
       "prior package used with rebuilt key"
     ]
+  },
+  "requiredTextControlValidation": {
+    "validator": "scripts/validate-shadowrun-binary-cube-text-controls.mjs",
+    "manifest": "data/shadowrun/binary-cube/text-control-manifest.json",
+    "referenceSummary": "data/shadowrun/binary-cube/text-control-reference-summary.json",
+    "minimumAssertions": 630,
+    "minimumRoundTrips": 40,
+    "documentCount": 5,
+    "controlKeyCount": 8,
+    "encoding": "UTF-8",
+    "lineEndingPolicy": "LF only with a terminal line feed",
+    "sourceBytesPerCorpusPass": 1550,
+    "sourceBitsPerCorpusPass": 12400,
+    "expectedEncryptedBits": 164976,
+    "matrixCanonicalSha256": "fbcb643e4ace66b00f167ab049a1d46b09aa5900995a9e6c9f60dd83c9a60bb1",
+    "requiredDocumentControls": [
+      "lorem-ipsum-basic",
+      "speech-to-text-lorem-control",
+      "formatting-whitespace-control",
+      "unicode-lossless-control",
+      "lorem-ipsum-multiblock"
+    ],
+    "requiredGridSizes": [4, 12, 20, 28, 36, 44, 52, 60],
+    "requiredComparisons": [
+      "source SHA-256 and byte length",
+      "UTF-8 decode and re-encode byte identity",
+      "known deterministic key identifier and payload capacity",
+      "deterministic independent encryption",
+      "package JSON serialization identity",
+      "package checksum validation",
+      "decrypted binary identity",
+      "recovered byte identity",
+      "recovered text identity",
+      "recovered SHA-256 identity",
+      "aggregate ciphertext length",
+      "full matrix canonical SHA-256"
+    ],
+    "evidenceClassificationRule": "The independent reference summary is a pinned comparison baseline and is not main-branch CI evidence."
   },
   "requiredAuthenticatedEnvelopeValidation": {
     "validator": "scripts/validate-shadowrun-binary-cube-auth.mjs",
@@ -137,9 +175,10 @@
     "requiredEvidence": [
       "shadowrun-binary-cube-static-verification.json",
       "shadowrun-binary-cube-editor-verification.json",
+      "shadowrun-binary-cube-text-control-verification.json",
       "shadowrun-binary-cube-auth-verification.json",
       "shadowrun-binary-cube-browser-verification.json"
     ]
   },
-  "releaseRule": "No Binary Cube core, custom editor, authenticated envelope, interface, source receipt, phase ledger, or implementation document change is complete until core static, editor static, authenticated-envelope static, and browser validation pass on main."
+  "releaseRule": "No Binary Cube core, custom editor, known-text control corpus, authenticated envelope, interface, source receipt, phase ledger, or implementation document change is complete until core static, editor static, text-control, authenticated-envelope static, and browser validation pass on main."
 }
