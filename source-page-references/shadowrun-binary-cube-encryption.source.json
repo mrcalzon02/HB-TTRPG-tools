@@ -1,7 +1,11 @@
 {
   "receiptType": "shadowrunBinaryCubeEncryptionSourceReceipt",
-  "schemaVersion": "1.1.0",
-  "implementationSchemaVersion": "0.2.0",
+  "schemaVersion": "1.2.0",
+  "implementationSchemas": {
+    "key": "0.2.0",
+    "package": "0.2.0",
+    "authenticatedEnvelope": "0.1.0"
+  },
   "project": "HB-TTRPG-tools",
   "workspace": "Shadowrun",
   "branchPolicy": "main only",
@@ -60,17 +64,39 @@
     "packageChecksum": "FNV-1a 32-bit corruption detection over framing metadata and ciphertext",
     "checksumLimitation": "Not cryptographic authentication and not evidence of secrecy or authorship"
   },
+  "authenticatedTransportModel": {
+    "purpose": "Optional confidentiality and authenticated transport for a validated serialized Binary Cube package",
+    "separationRule": "The standard cryptographic envelope is separate from and does not validate the security of the experimental cube permutation",
+    "format": "hb-ttrpg-shadowrun-binary-cube-authenticated-envelope",
+    "schemaVersion": "0.1.0",
+    "kdf": "PBKDF2-SHA-256",
+    "defaultIterations": 310000,
+    "acceptedIterationRange": [100000, 1000000],
+    "saltBytes": 16,
+    "cipher": "AES-GCM-256",
+    "ivBytes": 12,
+    "authenticationTagBits": 128,
+    "minimumPassphraseCharacters": 12,
+    "passphrasePersistence": "prohibited",
+    "passphraseSerialization": "prohibited",
+    "migrationPolicy": "data/shadowrun/binary-cube/schema-policy.json"
+  },
   "implementedFiles": [
     "shadowrun-entry.js",
     "shadowrun-binary-cube-engine.js",
     "shadowrun-binary-cube-encryption.js",
+    "shadowrun-binary-cube-auth.js",
+    "shadowrun-binary-cube-auth-ui.js",
     "scripts/validate-shadowrun-binary-cube.mjs",
+    "scripts/validate-shadowrun-binary-cube-auth.mjs",
     "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
     ".github/workflows/shadowrun-binary-cube.yml",
     "data/shadowrun/binary-cube/validation-contract.json",
     "data/shadowrun/binary-cube/phase-status.json",
+    "data/shadowrun/binary-cube/schema-policy.json",
     "docs/shadowrun/binary-cube-encryption-milestone-plan.md",
     "docs/shadowrun/binary-cube-development-system.md",
+    "docs/shadowrun/binary-cube-authenticated-envelope.md",
     "source-page-references/shadowrun-binary-cube-encryption.source.json"
   ],
   "implementedCapabilities": [
@@ -86,20 +112,33 @@
     "Local browser persistence",
     "All-six-face diagnostics",
     "Corruption detection checksum",
+    "Optional PBKDF2-derived AES-GCM authenticated package envelope",
+    "Fresh random salt and initialization vector per normal envelope seal",
+    "Wrong-passphrase and authenticated-metadata tamper rejection",
+    "Envelope copy, import, inspection, download, and clear controls",
+    "Passphrase held only in browser memory",
+    "Strict key, package, and envelope schema rejection policy",
     "Exhaustive engine validation",
+    "Standalone authenticated-envelope validation",
     "Chromium browser verification",
     "Main-branch continuous-integration gate"
   ],
   "validationBaseline": {
-    "staticValidator": "scripts/validate-shadowrun-binary-cube.mjs",
-    "assertions": 14258,
-    "roundTrips": 3840,
+    "coreStaticValidator": "scripts/validate-shadowrun-binary-cube.mjs",
+    "coreAssertions": 14258,
+    "coreRoundTrips": 3840,
     "recommendedSizesCovered": 8,
     "directedLegalFacePairsCovered": 24,
+    "authenticatedEnvelopeValidator": "scripts/validate-shadowrun-binary-cube-auth.mjs",
+    "authenticatedEnvelopeAssertions": 39,
     "browserValidator": "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
+    "browserChecks": 18,
     "workflow": ".github/workflows/shadowrun-binary-cube.yml",
     "statusAtReceiptUpdate": "implemented-awaiting-main-ci-evidence"
   },
-  "securityClassification": "Experimental TTRPG obfuscation and research prototype; not production cryptography.",
+  "securityClassification": {
+    "cubeCore": "Experimental TTRPG obfuscation and research prototype; not production cryptography.",
+    "authenticatedEnvelope": "Standard authenticated transport around the experimental package; security depends on the passphrase, Web Crypto environment, and correct operation."
+  },
   "sourceStorage": "Original uploads were supplied in the implementation conversation. Their exact names, sizes, hashes, extracted requirements, and normalized implementation role are preserved in this receipt."
 }
