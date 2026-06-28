@@ -1,0 +1,49 @@
+{
+  "receiptType": "shadowrunPolyaminalFoldLadderConceptReceipt",
+  "schemaVersion": "1.0.0",
+  "project": "HB-TTRPG-tools",
+  "workspace": "Shadowrun",
+  "branchPolicy": "main only",
+  "conceptOrigin": {
+    "author": "Christopher Vardeman",
+    "receivedDate": "2026-06-28",
+    "workingPhrase": "phased polyaminal encryption compression algorithm",
+    "sourceSummary": "Segment binary information, repeatedly fold and stack the resulting layers, use a stage-ladder signal model, and pack or unpack limited deterministic binary through gated swing information."
+  },
+  "normalizedName": "Polyaminal Fold Ladder",
+  "abbreviation": "PFL",
+  "normalizedInterpretation": {
+    "pairTransform": "anchor = first bit; swing = first bit XOR second bit",
+    "recursiveStep": "Fold the anchor stream again while preserving each swing stream as a ladder level.",
+    "rawInformationConservation": "One root bit plus all swing stages equals the original block bit count.",
+    "compressionMechanism": "Select the cheapest reversible codec independently for each swing stage.",
+    "initialStageGates": [
+      "raw",
+      "constant",
+      "Elias-gamma run length",
+      "sparse minority positions"
+    ],
+    "securityBoundary": "PFL is a lossless transform and compressor, not encryption. Compression must precede any real encryption layer."
+  },
+  "implementedFiles": [
+    "shadowrun-polyaminal-fold-engine.js",
+    "scripts/validate-shadowrun-polyaminal-fold.mjs",
+    "docs/shadowrun/polyaminal-fold-ladder-research.md",
+    "source-page-references/shadowrun-polyaminal-fold-ladder.source.json"
+  ],
+  "prototypeSchemaVersion": "0.1.0",
+  "supportedBlockSizes": [64, 128, 256, 512, 1024, 2048, 4096],
+  "prototypeValidation": {
+    "assertions": 423,
+    "roundTrips": 392,
+    "deterministicBenchmarks": {
+      "zeros": { "inputBits": 4096, "encodedBits": 204, "ratio": 0.0498046875 },
+      "alternating": { "inputBits": 4096, "encodedBits": 204, "ratio": 0.0498046875 },
+      "alignedRuns": { "inputBits": 4096, "encodedBits": 204, "ratio": 0.0498046875 },
+      "repeatedEnglishText": { "inputBits": 4320, "encodedBits": 4055, "ratio": 0.9386574074074074 },
+      "deterministicRandom": { "inputBits": 4096, "encodedBits": 4254, "ratio": 1.03857421875 }
+    }
+  },
+  "classification": "Experimental lossless binary transform and compression research; no cryptographic security claim.",
+  "nextGate": "Integrate validation into deployment and add a raw escape mode so incompressible blocks do not expand beyond bounded framing overhead."
+}
