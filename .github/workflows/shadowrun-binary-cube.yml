@@ -1,0 +1,64 @@
+name: Validate Shadowrun Binary Cube
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "shadowrun-entry.js"
+      - "shadowrun-binary-cube-engine.js"
+      - "shadowrun-binary-cube-encryption.js"
+      - "scripts/validate-shadowrun-binary-cube.mjs"
+      - "scripts/run-shadowrun-binary-cube-browser-verification.mjs"
+      - "source-page-references/shadowrun-binary-cube-encryption.source.json"
+      - "data/shadowrun/binary-cube/**"
+      - "docs/shadowrun/**"
+      - ".github/workflows/shadowrun-binary-cube.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shadowrun-binary-cube-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout mainline source
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check shadowrun-entry.js
+          node --check shadowrun-binary-cube-engine.js
+          node --check shadowrun-binary-cube-encryption.js
+          node --check scripts/validate-shadowrun-binary-cube.mjs
+          node --check scripts/run-shadowrun-binary-cube-browser-verification.mjs
+
+      - name: Run exhaustive engine validation
+        run: node scripts/validate-shadowrun-binary-cube.mjs artifacts/shadowrun-binary-cube-static-verification.json
+
+      - name: Install browser verification runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.60.0
+          npx playwright install --with-deps chromium
+
+      - name: Run browser verification
+        run: node scripts/run-shadowrun-binary-cube-browser-verification.mjs artifacts/shadowrun-binary-cube-browser-verification.json artifacts/shadowrun-binary-cube-browser-verification-failure.png
+
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: shadowrun-binary-cube-verification
+          path: artifacts/shadowrun-binary-cube-*
+          if-no-files-found: warn
+          retention-days: 30
