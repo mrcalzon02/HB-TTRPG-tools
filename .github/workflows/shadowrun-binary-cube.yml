@@ -7,7 +7,10 @@ on:
       - "shadowrun-entry.js"
       - "shadowrun-binary-cube-engine.js"
       - "shadowrun-binary-cube-encryption.js"
+      - "shadowrun-binary-cube-auth.js"
+      - "shadowrun-binary-cube-auth-ui.js"
       - "scripts/validate-shadowrun-binary-cube.mjs"
+      - "scripts/validate-shadowrun-binary-cube-auth.mjs"
       - "scripts/run-shadowrun-binary-cube-browser-verification.mjs"
       - "source-page-references/shadowrun-binary-cube-encryption.source.json"
       - "data/shadowrun/binary-cube/**"
@@ -40,11 +43,17 @@ jobs:
           node --check shadowrun-entry.js
           node --check shadowrun-binary-cube-engine.js
           node --check shadowrun-binary-cube-encryption.js
+          node --check shadowrun-binary-cube-auth.js
+          node --check shadowrun-binary-cube-auth-ui.js
           node --check scripts/validate-shadowrun-binary-cube.mjs
+          node --check scripts/validate-shadowrun-binary-cube-auth.mjs
           node --check scripts/run-shadowrun-binary-cube-browser-verification.mjs
 
       - name: Run exhaustive engine validation
         run: node scripts/validate-shadowrun-binary-cube.mjs artifacts/shadowrun-binary-cube-static-verification.json
+
+      - name: Run authenticated-envelope validation
+        run: node scripts/validate-shadowrun-binary-cube-auth.mjs artifacts/shadowrun-binary-cube-auth-verification.json
 
       - name: Install browser verification runtime
         run: |
