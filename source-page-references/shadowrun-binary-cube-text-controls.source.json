@@ -1,0 +1,61 @@
+{
+  "receiptType": "shadowrunBinaryCubeTextControlSourceReceipt",
+  "schemaVersion": "0.1.0",
+  "projectId": "shadowrun-binary-cube-encryption",
+  "branchPolicy": "main only",
+  "purpose": "Supplemental provenance receipt for the known-text UTF-8 input-output control corpus and deterministic control-key batch.",
+  "manifest": "data/shadowrun/binary-cube/text-control-manifest.json",
+  "referenceSummary": "data/shadowrun/binary-cube/text-control-reference-summary.json",
+  "validator": "scripts/validate-shadowrun-binary-cube-text-controls.mjs",
+  "documentation": "docs/shadowrun/binary-cube-text-control-validation.md",
+  "documents": [
+    {
+      "id": "lorem-ipsum-basic",
+      "path": "data/shadowrun/binary-cube/text-controls/lorem-ipsum-basic.txt",
+      "utf8Bytes": 124,
+      "sha256": "bdc77e51f558cca288e3fc31a1c63549ba8662ccc7d858695b50b29a567243dd"
+    },
+    {
+      "id": "speech-to-text-lorem-control",
+      "path": "data/shadowrun/binary-cube/text-controls/speech-to-text-lorem-control.txt",
+      "utf8Bytes": 211,
+      "sha256": "f50e045a96e23ce2c1ead10f354a6ec6c6be837c629b400265079d99a173655b"
+    },
+    {
+      "id": "formatting-whitespace-control",
+      "path": "data/shadowrun/binary-cube/text-controls/formatting-whitespace-control.txt",
+      "utf8Bytes": 271,
+      "sha256": "8b6083faf68ea98aca6adf411a9e6e7334580e30bbb7454cc12c780d82791bcd"
+    },
+    {
+      "id": "unicode-lossless-control",
+      "path": "data/shadowrun/binary-cube/text-controls/unicode-lossless-control.txt",
+      "utf8Bytes": 187,
+      "sha256": "de11e3437140a5cc50ba4e0a223e248f0ed7b9806b17d2c201bd527d56a50272"
+    },
+    {
+      "id": "lorem-ipsum-multiblock",
+      "path": "data/shadowrun/binary-cube/text-controls/lorem-ipsum-multiblock.txt",
+      "utf8Bytes": 757,
+      "sha256": "4484232bd625dfeec98e830022b23234d17009f486f6c968e18e5c24c4ba8456"
+    }
+  ],
+  "controlKeyGridSizes": [4, 12, 20, 28, 36, 44, 52, 60],
+  "referenceExecution": {
+    "classification": "independent-reference-execution-not-main-ci-evidence",
+    "roundTrips": 40,
+    "sourceBytesPerCorpusPass": 1550,
+    "sourceBitsPerCorpusPass": 12400,
+    "encryptedBits": 164976,
+    "exactByteRecoveries": 40,
+    "exactTextRecoveries": 40,
+    "matrixCanonicalSha256": "fbcb643e4ace66b00f167ab049a1d46b09aa5900995a9e6c9f60dd83c9a60bb1"
+  },
+  "requiredJavaScriptGate": {
+    "minimumAssertions": 630,
+    "minimumRoundTrips": 40,
+    "artifact": "shadowrun-binary-cube-text-control-verification.json",
+    "status": "implemented-awaiting-main-ci-evidence"
+  },
+  "securityClassification": "Lossless behavior validation for experimental TTRPG obfuscation; not evidence of cryptographic secrecy."
+}
