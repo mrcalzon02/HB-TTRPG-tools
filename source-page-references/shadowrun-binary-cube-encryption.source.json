@@ -1,6 +1,6 @@
 {
   "receiptType": "shadowrunBinaryCubeEncryptionSourceReceipt",
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "implementationSchemas": {
     "key": "0.2.0",
     "package": "0.2.0",
@@ -50,10 +50,14 @@
       "right": "0000011011001001",
       "front": "0000110000111100"
     },
-    "status": "Preserved as a visual reference. Not a normative automated test vector until the original coordinate-key mapping is reconstructed or supplied."
+    "status": "Preserved as the 4x4 visual demonstration fixture. It is not the standard known-text control because its original coordinate-key mapping has not been reconstructed or supplied."
   },
   "normalizedImplementationModel": {
     "algorithm": "latin-cube-face-permutation",
+    "minimumGridSize": 3,
+    "minimumGridRationale": "A 2x2 model is too small to demonstrate the three-axis Binary Cube structure and is rejected as equivalent in practical complexity to a simple Latin-cipher-sized model.",
+    "demonstrationGridSize": 4,
+    "standardTestGridSize": 16,
     "activePointsPerBlock": "gridSize squared",
     "coordinateRule": "z = depthPermutation[(rowPermutation[x] + columnPermutation[y]) mod gridSize]",
     "projectionRequirement": "Unique x-y, x-z, and y-z coordinate pairs",
@@ -63,6 +67,20 @@
     "keyFingerprint": "FNV-1a 32-bit deterministic content fingerprint",
     "packageChecksum": "FNV-1a 32-bit corruption detection over framing metadata and ciphertext",
     "checksumLimitation": "Not cryptographic authentication and not evidence of secrecy or authorship"
+  },
+  "standardKnownTextControl": {
+    "document": "data/shadowrun/binary-cube/lorem-ipsum-control.txt",
+    "key": "data/shadowrun/binary-cube/lorem-ipsum-control-key.json",
+    "gridSize": 16,
+    "keyId": "ee5ebaaf",
+    "sourceBytes": 124,
+    "sourceBits": 992,
+    "payloadCapacity": 256,
+    "blockCount": 4,
+    "ciphertextBits": 1024,
+    "ciphertextSha256": "27d410d413fd6cf08d4f0c0a0640902d15cd763cf5ade44babb1470a06e2c72a",
+    "packageChecksum": "871d6edf",
+    "requiredResult": "exact binary byte and UTF-8 text recovery"
   },
   "customEditorModel": {
     "phase": 11,
@@ -112,6 +130,8 @@
     "scripts/validate-shadowrun-binary-cube-auth.mjs",
     "scripts/run-shadowrun-binary-cube-browser-verification.mjs",
     ".github/workflows/shadowrun-binary-cube.yml",
+    "data/shadowrun/binary-cube/lorem-ipsum-control.txt",
+    "data/shadowrun/binary-cube/lorem-ipsum-control-key.json",
     "data/shadowrun/binary-cube/validation-contract.json",
     "data/shadowrun/binary-cube/phase-status.json",
     "data/shadowrun/binary-cube/schema-policy.json",
@@ -124,6 +144,9 @@
   "implementedCapabilities": [
     "Pure engine separated from browser interface",
     "Deterministic keyed point-field generation",
+    "Hard 3x3 minimum key-size enforcement",
+    "Preserved 4x4 demonstration and orientation model",
+    "Fixed 16x16 standard Lorem ipsum known-answer control",
     "Six face projections and quarter-turn orientation",
     "Perpendicular-face enforcement",
     "Full and sparse data-entry masks",
@@ -153,8 +176,12 @@
   ],
   "validationBaseline": {
     "coreStaticValidator": "scripts/validate-shadowrun-binary-cube.mjs",
-    "coreAssertions": 14258,
-    "coreRoundTrips": 3840,
+    "coreAssertions": 14277,
+    "coreRoundTrips": 3841,
+    "minimumGridSize": 3,
+    "demonstrationGridSize": 4,
+    "standardTestGridSize": 16,
+    "knownTextControlKeyId": "ee5ebaaf",
     "recommendedSizesCovered": 8,
     "directedLegalFacePairsCovered": 24,
     "customEditorValidator": "scripts/validate-shadowrun-binary-cube-editor.mjs",
