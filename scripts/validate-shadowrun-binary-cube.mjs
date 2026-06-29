@@ -13,6 +13,9 @@ const {
   FACES,
   OPPOSITE,
   RECOMMENDED_GRID_SIZES,
+  MIN_GRID_SIZE,
+  DEMONSTRATION_GRID_SIZE,
+  STANDARD_TEST_GRID_SIZE,
   SCHEMA_VERSION,
   CHECKSUM_TYPE
 } = engine.constants;
@@ -100,7 +103,7 @@ function validateGridFourMatrix() {
         for (let outputQuarterTurns = 0; outputQuarterTurns < 4; outputQuarterTurns += 1) {
           for (const maskDensity of [1, 0.75, 0.5]) {
             const options = {
-              gridSize: 4,
+              gridSize: DEMONSTRATION_GRID_SIZE,
               seed: `grid4-${inputFace}-${outputFace}-${inputQuarterTurns}-${outputQuarterTurns}-${maskDensity}`,
               inputFace,
               outputFace,
@@ -141,12 +144,19 @@ function validateRecommendedSizes() {
 }
 
 function validateFailureModes() {
-  const key = engine.createKey({ gridSize: 4, seed: 'failure-key', inputFace: 'top', outputFace: 'front', maskDensity: 0.75 });
+  equal(MIN_GRID_SIZE, 3, 'The minimum Binary Cube key size must remain 3x3.');
+  equal(DEMONSTRATION_GRID_SIZE, 4, 'The demonstration Binary Cube size must remain 4x4.');
+  equal(STANDARD_TEST_GRID_SIZE, 16, 'The standard Binary Cube test size must remain 16x16.');
+  const minimumKey = engine.createKey({ gridSize: MIN_GRID_SIZE, seed: 'minimum-valid-key', inputFace: 'top', outputFace: 'front' });
+  equal(minimumKey.gridSize, 3, 'A 3x3 Binary Cube key must remain valid.');
+  expectThrow(() => engine.createKey({ gridSize: 2, inputFace: 'top', outputFace: 'front' }), /from 3 through 60/i, 'A 2x2 key must be rejected because it collapses to a simple Latin-cipher-sized model.');
+
+  const key = engine.createKey({ gridSize: DEMONSTRATION_GRID_SIZE, seed: 'failure-key', inputFace: 'top', outputFace: 'front', maskDensity: 0.75 });
   const payload = engine.encryptBinary('001011010011101', key);
   expectThrow(() => engine.encryptBinary('00102', key), /only 0, 1/i, 'Invalid binary input must fail.');
-  expectThrow(() => engine.createKey({ gridSize: 4, inputFace: 'top', outputFace: 'bottom' }), /opposite face/i, 'Opposite faces must be rejected.');
+  expectThrow(() => engine.createKey({ gridSize: DEMONSTRATION_GRID_SIZE, inputFace: 'top', outputFace: 'bottom' }), /opposite face/i, 'Opposite faces must be rejected.');
 
-  const wrongKey = engine.createKey({ gridSize: 4, seed: 'wrong-key', inputFace: 'top', outputFace: 'front', maskDensity: 0.75 });
+  const wrongKey = engine.createKey({ gridSize: DEMONSTRATION_GRID_SIZE, seed: 'wrong-key', inputFace: 'top', outputFace: 'front', maskDensity: 0.75 });
   expectThrow(() => engine.decryptBinary(payload, wrongKey), /different key/i, 'A wrong key must fail before decryption.');
 
   const damagedCiphertext = structuredClone(payload);
@@ -187,16 +197,17 @@ function validateKnownLoremIpsumControl() {
   equal(sourceBytes.length, 124, 'Lorem ipsum control document byte length changed.');
   equal(sha256(sourceBytes), 'bdc77e51f558cca288e3fc31a1c63549ba8662ccc7d858695b50b29a567243dd', 'Lorem ipsum control document hash changed.');
   equal(sourceBits.length, 992, 'Lorem ipsum control binary length changed.');
-  equal(validatedKey.keyId, 'c4f43c25', 'Known Lorem ipsum control key changed.');
-  equal(validatedKey.mask.filter(Boolean).length, 16, 'Known Lorem ipsum control key capacity changed.');
+  equal(validatedKey.gridSize, STANDARD_TEST_GRID_SIZE, 'Known Lorem ipsum control must use the 16x16 standard test model.');
+  equal(validatedKey.keyId, 'ee5ebaaf', 'Known Lorem ipsum control key changed.');
+  equal(validatedKey.mask.filter(Boolean).length, 256, 'Known Lorem ipsum control key capacity changed.');
 
   const payload = engine.encryptBinary(sourceBits, validatedKey);
   engine.validatePackage(payload, validatedKey);
   equal(payload.originalBitLength, 992, 'Known Lorem ipsum package original length changed.');
-  equal(payload.blockCount, 62, 'Known Lorem ipsum package block count changed.');
-  equal(payload.ciphertext.length, 992, 'Known Lorem ipsum ciphertext length changed.');
-  equal(payload.checksum, 'd9175bae', 'Known Lorem ipsum package checksum changed.');
-  equal(sha256(payload.ciphertext), 'ae80ec5f7cd8ef818e880d246a9dae4effec46148a9418931126d911911efc2f', 'Known Lorem ipsum ciphertext changed.');
+  equal(payload.blockCount, 4, 'Known Lorem ipsum package block count changed.');
+  equal(payload.ciphertext.length, 1024, 'Known Lorem ipsum ciphertext length changed.');
+  equal(payload.checksum, '871d6edf', 'Known Lorem ipsum package checksum changed.');
+  equal(sha256(payload.ciphertext), '27d410d413fd6cf08d4f0c0a0640902d15cd763cf5ade44babb1470a06e2c72a', 'Known Lorem ipsum ciphertext changed.');
 
   const recoveredBits = engine.decryptBinary(payload, validatedKey);
   const recoveredBytes = bitsToBytes(recoveredBits);
@@ -208,9 +219,11 @@ function validateKnownLoremIpsumControl() {
   knownTextControl = {
     document: 'data/shadowrun/binary-cube/lorem-ipsum-control.txt',
     key: 'data/shadowrun/binary-cube/lorem-ipsum-control-key.json',
+    model: `${STANDARD_TEST_GRID_SIZE}x${STANDARD_TEST_GRID_SIZE}`,
     keyId: validatedKey.keyId,
     sourceBytes: sourceBytes.length,
     sourceBits: sourceBits.length,
+    payloadCapacity: payload.payloadCapacity,
     blockCount: payload.blockCount,
     ciphertextBits: payload.ciphertext.length,
     ciphertextSha256: sha256(payload.ciphertext),
@@ -223,7 +236,7 @@ function validateLegacyFixtureAndIntegration() {
   const receiptPath = path.join(root, 'source-page-references/shadowrun-binary-cube-encryption.source.json');
   const receipt = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
   const fixture = receipt.legacySpreadsheetFixture;
-  equal(fixture.gridSize, 4, 'Legacy spreadsheet fixture must preserve the 4x4 grid size.');
+  equal(fixture.gridSize, DEMONSTRATION_GRID_SIZE, 'Legacy spreadsheet fixture must preserve the 4x4 demonstration grid size.');
   equal(fixture.input, '0100100001101001', 'Legacy spreadsheet input must remain preserved.');
   deepEqual(fixture.labeledFaces, {
     bottom: '1001011010000100',
@@ -262,6 +275,9 @@ function writeSummary() {
     valid: true,
     assertions,
     roundTrips,
+    minimumGridSize: MIN_GRID_SIZE,
+    demonstrationGridSize: DEMONSTRATION_GRID_SIZE,
+    standardTestGridSize: STANDARD_TEST_GRID_SIZE,
     recommendedGridSizesCovered: [...sizesCovered].sort((a, b) => a - b),
     directedFacePairsCovered: facePairsCovered.size,
     exhaustiveGridFour: {
@@ -283,6 +299,9 @@ function writeSummary() {
   console.log('Shadowrun Binary Cube validation passed.');
   console.log(`Assertions: ${assertions}`);
   console.log(`Round trips: ${roundTrips}`);
+  console.log(`Minimum grid size: ${MIN_GRID_SIZE}x${MIN_GRID_SIZE}`);
+  console.log(`Demonstration grid size: ${DEMONSTRATION_GRID_SIZE}x${DEMONSTRATION_GRID_SIZE}`);
+  console.log(`Standard test grid size: ${STANDARD_TEST_GRID_SIZE}x${STANDARD_TEST_GRID_SIZE}`);
   console.log(`Recommended sizes: ${summary.recommendedGridSizesCovered.join(', ')}`);
   console.log(`Directed legal face pairs: ${summary.directedFacePairsCovered}`);
   console.log(`Known Lorem ipsum control: ${knownTextControl.exactRecovery ? 'exact recovery' : 'failed'}`);
