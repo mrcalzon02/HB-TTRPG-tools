@@ -12,6 +12,10 @@
   const ALGORITHM = 'latin-cube-face-permutation';
   const SECURITY_CLASSIFICATION = 'experimental-ttrpg-obfuscation-not-production-cryptography';
   const CHECKSUM_TYPE = 'fnv1a32-corruption-detection-only';
+  const MIN_GRID_SIZE = 3;
+  const DEMONSTRATION_GRID_SIZE = 4;
+  const STANDARD_TEST_GRID_SIZE = 16;
+  const MAX_GRID_SIZE = 60;
   const FACES = Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
   const OPPOSITE = Object.freeze({ top: 'bottom', bottom: 'top', front: 'back', back: 'front', left: 'right', right: 'left' });
   const RECOMMENDED_GRID_SIZES = Object.freeze([4, 12, 20, 28, 36, 44, 52, 60]);
@@ -76,6 +80,14 @@
     return ((Number(value) || 0) % 4 + 4) % 4;
   }
 
+  function validateGridSize(value, label = 'Grid size') {
+    const size = Number(value);
+    if (!Number.isInteger(size) || size < MIN_GRID_SIZE || size > MAX_GRID_SIZE) {
+      fail(`${label} must be an integer from ${MIN_GRID_SIZE} through ${MAX_GRID_SIZE}.`);
+    }
+    return size;
+  }
+
   function validateFacePair(inputFace, outputFace) {
     if (!FACES.includes(inputFace) || !FACES.includes(outputFace)) fail('Input and output faces must be valid cube faces.');
     if (inputFace === outputFace) fail('The output face cannot be the same as the input face.');
@@ -118,8 +130,7 @@
   }
 
   function createKey(options = {}) {
-    const gridSize = Number(options.gridSize ?? 4);
-    if (!Number.isInteger(gridSize) || gridSize < 2 || gridSize > 60) fail('Grid size must be an integer from 2 through 60.');
+    const gridSize = validateGridSize(options.gridSize ?? DEMONSTRATION_GRID_SIZE);
     const seed = String(options.seed || 'shadowrun-cube-key');
     const inputFace = String(options.inputFace || 'top');
     const outputFace = String(options.outputFace || 'front');
@@ -154,8 +165,7 @@
     if (key.format !== KEY_FORMAT) fail('The imported key format is not recognized.');
     if (key.schemaVersion !== SCHEMA_VERSION) fail(`Unsupported key schema version: ${key.schemaVersion || 'missing'}. Expected ${SCHEMA_VERSION}.`);
     if (key.algorithm !== ALGORITHM) fail('The key algorithm is not supported by this engine.');
-    const size = Number(key.gridSize);
-    if (!Number.isInteger(size) || size < 2 || size > 60) fail('The key grid size is invalid.');
+    const size = validateGridSize(key.gridSize, 'The key grid size');
     validateFacePair(key.inputFace, key.outputFace);
     if (!isPermutation(key.rowPermutation, size)) fail('The key row permutation is invalid.');
     if (!isPermutation(key.columnPermutation, size)) fail('The key column permutation is invalid.');
@@ -202,20 +212,13 @@
     let row;
     let column;
     switch (face) {
-      case 'top':
-        row = point.y; column = point.x; break;
-      case 'bottom':
-        row = point.y; column = size - 1 - point.x; break;
-      case 'front':
-        row = size - 1 - point.z; column = point.x; break;
-      case 'back':
-        row = size - 1 - point.z; column = size - 1 - point.x; break;
-      case 'left':
-        row = size - 1 - point.z; column = point.y; break;
-      case 'right':
-        row = size - 1 - point.z; column = size - 1 - point.y; break;
-      default:
-        fail(`Unknown cube face: ${face}`);
+      case 'top': row = point.y; column = point.x; break;
+      case 'bottom': row = point.y; column = size - 1 - point.x; break;
+      case 'front': row = size - 1 - point.z; column = point.x; break;
+      case 'back': row = size - 1 - point.z; column = size - 1 - point.x; break;
+      case 'left': row = size - 1 - point.z; column = point.y; break;
+      case 'right': row = size - 1 - point.z; column = size - 1 - point.y; break;
+      default: fail(`Unknown cube face: ${face}`);
     }
     return rotateCell(row, column, size, quarterTurns);
   }
@@ -406,9 +409,7 @@
     const encryptedBlock = payload.ciphertext.slice(0, cellCount);
     const inputBlock = transformBlock(encryptedBlock, key, key.outputFace, key.outputQuarterTurns, key.inputFace, key.inputQuarterTurns);
     const faces = {};
-    for (const face of FACES) {
-      faces[face] = transformBlock(inputBlock, key, key.inputFace, key.inputQuarterTurns, face, 0);
-    }
+    for (const face of FACES) faces[face] = transformBlock(inputBlock, key, key.inputFace, key.inputQuarterTurns, face, 0);
     return {
       keyId: key.keyId,
       gridSize: key.gridSize,
@@ -446,6 +447,10 @@
       ALGORITHM,
       SECURITY_CLASSIFICATION,
       CHECKSUM_TYPE,
+      MIN_GRID_SIZE,
+      DEMONSTRATION_GRID_SIZE,
+      STANDARD_TEST_GRID_SIZE,
+      MAX_GRID_SIZE,
       FACES,
       OPPOSITE,
       RECOMMENDED_GRID_SIZES
