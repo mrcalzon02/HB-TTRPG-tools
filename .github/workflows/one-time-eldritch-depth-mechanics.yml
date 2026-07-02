@@ -1,0 +1,94 @@
+name: One-time Eldritch Depth mechanics rewrite
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-eldritch-depth-mechanics.yml
+
+permissions:
+  contents: write
+
+jobs:
+  rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Rewrite all Depth abilities with fixed resolution
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('data/blacklight-continuum/rules/eldritch-binding-sources.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          data['schemaVersion'] = '1.1.0'
+          data['selectionRules']['depthResolutionStandard'] = (
+              'Every Depth ability states its action, cost, range, test or resistance, duration, fixed outcome, and failure consequence where a roll is required. Information abilities use closed question menus. The Moderator supplies only facts already true in established play; if no valid fact exists, the ability returns None and refunds its Pact cost.'
+          )
+
+          effects = {
+            'void-mind': {
+              'Depth 1': "Action: one exchange. Cost: 1 Pact. Target: one person, object, record, or location you can directly examine within 5 meters. Choose exactly one question: What was intentionally concealed here? Which visible detail was added or altered most recently? What expected trace is missing? What single fact most directly contradicts the apparent explanation? Test Resolve + Investigation at difficulty 2, or opposed by Guile + Security when a sentient actor actively concealed the answer. Success: receive one specific fact answering the chosen question and gain one die on the first test that directly exploits it before scene end. Failure: receive no fact and gain 1 Intrusion. If established play contains no valid answer, receive None and refund the Pact cost.",
+              'Depth 2': "Action: declare before rolling. Cost: 1 Pact and 1 Intrusion. Choose one Skill currently rated 0 or 1. For one test, treat that Skill as rating 3. You cannot Push this test, use the borrowed rating to satisfy a prerequisite, or gain credentials, equipment, contacts, cultural authority, or a specialization from it. After the test, the borrowed rating ends regardless of success or failure.",
+              'Depth 3': "Trigger: you possess two recorded statements, observations, memories, or records that cannot both be true. Cost: 1 Pact. Create one Contradiction token naming the two incompatible facts. Before scene end, spend the token on one test that directly determines which fact is false, who created the contradiction, or what event reconciles them. Add two dice and reroll one failed die after the roll. The token is consumed after the test. If the test still fails, gain 1 Intrusion.",
+              'Depth 4': "Action: ten uninterrupted minutes comparing at least three distinct pieces of evidence. Cost: 2 Pact. Test Resolve + Investigation at difficulty 3. Before rolling choose one output: the single event capable of producing all three pieces; the person or system with access to all three; the one missing record that would connect them; or which piece originated in another continuity. Success: receive one specific lead naming a person, place, record, system, or event and gain two dice on the first action that directly pursues it before operation end. Failure: identify one of the three pieces as unreliable, contaminated, or irrelevant and gain no lead. If no valid output exists in established play, receive None and refund the Pact cost.",
+              'Depth 5': "Action: one exchange. Cost: 2 Pact and 2 Intrusion. Duration: one scene. Set Reason to 5 for Investigation, Science, Noospherics, alien systems, anomalies, and pacts, and add two dice to those tests. During the scene you may use Secret Beneath the Surface up to three times without paying Pact. You cannot Push, restore Pact, or use this ability again while the Archive is open. Each failed affected test adds 1 Intrusion after resolution."
+            },
+            'abyssal-womb': {
+              'Depth 1': "Action: one standard action. Cost: 1 Pact. Range: 10 meters and line of sight. Choose one unattended or willing target object of Carry 1 or less. Perform exactly one operation: move it up to 5 meters; retrieve it to your hand; open or close one unsecured closure; press one visible control; pour or empty one container; or hold it stationary against ordinary gravity until your next turn. The hand cannot attack, pick locks, perform surgery, use a Skill, cross an active boundary, or affect a held or secured object.",
+              'Depth 2': "Action: one standard action. Cost: 1 Pact. Target: yourself or one willing target within 10 meters. Duration: three rounds. The target gains Armor 2 and two dice against forced movement, falling, separation, disarming, and restraint. Its movement is reduced by half. A target can benefit from only one Cradle at a time.",
+              'Depth 3': "Action: one standard action. Cost: 1 Pact. Duration: one scene. At the start of each of your turns choose two different simple interactions: draw or stow one item; reload one weapon; open or close one unsecured door; operate one adjacent control; carry one additional Carry 1 object without penalty; or provide one die of assistance to an adjacent Engineering, Medicine, Security, or Systems Intrusion test. These interactions require no separate action but cannot make attacks, activate powers, perform opposed tests, or repeat the same interaction twice in one turn.",
+              'Depth 4': "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Range: create within 5 meters. Duration: one scene. The servitor has Guard 4, durability 5, movement 8 meters, and acts immediately after you with a four-die pool. Choose one profile: Carrier moves Carry 4 and may transfer one carried object per turn; Attendant provides two assistance dice to one adjacent Medicine or Engineering test per turn; Warden makes one four-die restraint attack per turn with durability 4; Scout moves through 10-centimeter gaps, sees and hears normally, and reports through your pact. It cannot attack unless it is the Warden, use powers, spend resources, or act outside its selected profile. It collapses at zero durability.",
+              'Depth 5': "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Range: place a 10-meter-radius field within 20 meters. Duration: three rounds. At the start of each of your turns choose three different effects: move one unattended Carry 2 object up to 10 meters; grant one target Armor 2 until your next turn; make one restraint attack using Resolve + Archetype Rating against Guard with durability 5; operate one visible unsecured mechanism; move one willing target 3 meters without provoking reactions; or give two assistance dice to one visible ally's physical or technical test. No target may receive the same effect twice in one round, and each chosen effect resolves once."
+            },
+            'that-which-hungers': {
+              'Depth 1': "Action: one standard action. Cost: none, once per scene. Choose one category: biological vitality, stored electrical power, ammunition, food, active supernatural Resource, or portable valuables. Range: 50 meters. Learn the direction, distance band (within 10 meters, 11–25 meters, or 26–50 meters), and whether the largest concentration is stationary or moving. The sense does not identify ownership, exact quantity, defenses, identity, or a safe route. If no concentration exists, receive None.",
+              'Depth 2': "Trigger: once per scene after you personally inflict at least 1 Impact or Trauma on a hostile target, or destroy an obstacle with an attack. Choose one result immediately: restore 1 Pact; remove 1 Impact from yourself; or gain Armor 1 until the start of your next turn. Only one result can be gained from the triggering action, regardless of targets damaged.",
+              'Depth 3': "Action: one standard action. Cost: 1 Pact. Target: one unattended Serviceable handheld object within reach; the object is destroyed. Choose one function for the scene: Cutter grants two dice to one breach, repair, or sabotage test per round; Power Source supplies three charges to one held compatible device; Sensor grants thermal, vibration, or electromagnetic detection within 20 meters; Armor Component grants Armor 1; Mobility Component grants climbing at normal speed or one 10-meter assisted leap per round. Only one devoured function may be active; activating another ends the first.",
+              'Depth 4': "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Area: 5-meter cone. Make one Resolve + Close Combat test and compare it separately to each target's Guard. Success against a living target inflicts 2 Trauma. Success against an object or barrier inflicts 5 structural damage. Unsecured Carry 1 objects in the cone are destroyed automatically. Failure against a target causes no damage to that target. Allies are affected unless excluded before rolling; you may exclude up to Archetype Rating targets.",
+              'Depth 5': "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Duration: three rounds. The first time each round you inflict Trauma or destroy an object of Carry 2 or greater, choose either restore 1 Pact or remove 1 Impact. During the duration you cannot voluntarily transfer equipment, provide assistance dice, heal another target, or spend Pact on an effect whose only beneficiary is another character. If a round ends without a qualifying consumption, gain 1 Intrusion."
+            },
+            'lidless-eye': {
+              'Depth 1': "Passive while conscious. You perceive visible movement in every direction. Enemies gain no flanking bonus against you, and you gain two dice on Awareness tests to detect an ambush by a visible attacker. This does not see through cover, darkness, invisibility, active concealment, or a barrier.",
+              'Depth 2': "Action: one standard action. Cost: 1 Pact. Target: one visible creature, autonomous system, or manifested entity within 20 meters. Duration: one scene. You know its direction, distance band, and whether it has changed physical form, identity credentials, or noospheric address. If it enters active concealment, test Resolve + Investigation opposed by Guile + Stealth or Reason + Security; success maintains the mark, failure suspends it until the target becomes directly visible again. A stronger active boundary also suspends the mark.",
+              'Depth 3': "Action: one standard action. Cost: 1 Pact. Range: one nonliving barrier within 20 meters and no thicker than 1 meter. Duration: one exchange. Choose one mode: normal vision, thermal contrast, active energy, or noospheric activity. You perceive that mode through the barrier in a 5-meter-deep area. The ability cannot see through a second barrier, reveal thoughts or encrypted content, or permit an attack through the barrier without another capability.",
+              'Depth 4': "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Choose one point within 10 meters. Observe an exact visual and auditory replay of the final sixty seconds that occurred within 5 meters of that point. The replay lasts one minute, may be paused once, and includes only events physically visible or audible from the chosen point. It never reveals thoughts, encrypted data, invisible entities, or events behind opaque cover. If nothing occurred, the replay shows an empty interval.",
+              'Depth 5': "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Area: 20-meter radius centered on you. Duration: three rounds. Inside the field, invisibility, visual disguise, holographic substitution, hidden weapons, and noospheric identity masking provide no concealment. Every participant knows every other participant's exact location and current visible form. Cover, darkness created by a solid obstruction, and physical barriers still block attacks and line of effect."
+            },
+            'the-silence': {
+              'Depth 1': "Action: one standard action. Cost: 1 Pact. Choose yourself, one object, or one 3-meter-radius area within 10 meters. Duration: three rounds. The target produces no audible sound. Speech, alarms, impacts, machinery, and weapon noise created inside the area cannot be heard by anyone, including occupants. Vibration, radio, noospheric signals, thermal effects, and visible cues remain unaffected.",
+              'Depth 2': "Action: one standard action. Cost: 1 Pact. Duration: until broken or scene end. While you move no more than 1 meter per round and do not attack, speak, transmit, or activate another visible power, ordinary visual observers treat your occupied space as empty. A searching observer may detect you with Awareness + Investigation opposed by Resolve + Stealth. Success reveals you to that observer. Physical contact, thermal sensing, pressure sensing, vibration sensing, and noospheric sensing reveal you automatically.",
+              'Depth 3': "Action: one standard action. Cost: 1 Pact. Target: one willing target or one unwilling target within 10 meters. Unwilling resistance: Resolve + Stealth opposed by Awareness + Investigation. Duration: three rounds. On success, the target is omitted from ordinary visual attention and visible-light camera tracking. It remains audible, tangible, thermally visible, and physically present. The effect ends immediately after the target attacks, inflicts damage, activates a visible power, or moves more than 10 meters in one round. Failure: Pact is spent and the target is immune to this ability until scene end.",
+              'Depth 4': "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Place a 10-meter-radius field within 20 meters. Duration: three rounds. Audible sound, radio, noospheric messages, remote sensor feeds, and targeting locks cannot cross the boundary in either direction. Ranged attacks crossing the boundary lose two dice. Direct line of sight, physical movement, thrown objects, and attacks made entirely inside or outside the field function normally.",
+              'Depth 5': "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Target: one active power, autonomous manifestation, signal field, portal, or noospheric process within 10 meters. Test Resolve + Noospherics opposed by the controller's Resolve + relevant Archetype Attribute, or difficulty 4 if uncontrolled. Success: suppress the target for three rounds; its duration does not decrease while suppressed. Failure: the target remains active, Pact and Intrusion are spent, and you cannot target it again with The Final Quiet this scene. While any suppression from this ability lasts, you cannot use Invocation powers."
+            },
+            'the-noise': {
+              'Depth 1': "Action: one standard action. Cost: 1 Pact. Target: one communication channel, sensor feed, targeting link, or remote-control connection within 20 meters. If unattended, it is jammed automatically for three rounds. If controlled, test Resolve + Systems Intrusion opposed by Reason + Security. Success jams it for three rounds; commands fail and transmitted information is unreadable. The controller may spend an action each round to repeat the opposed test and end the jam on success. Failure: no jam occurs and you suffer 1 Disruption.",
+              'Depth 2': "Action: one standard action. Cost: 1 Pact. Target: one creature or autonomous intelligence within 10 meters. Test Resolve + Performance or Resolve + Noospherics opposed by Resolve + Composure. Success: until the end of the target's next turn it cannot take reactions and loses two dice from its next Reason-, Awareness-, or Composure-based test. Failure: the target is unaffected and gains two dice to resist this ability for the rest of the scene. The effect does not control actions or create beliefs.",
+              'Depth 3': "Action: one standard action. Cost: 1 Pact. Choose up to Archetype Rating visible subjects of one category: people, machines, weapons, identity credentials, sensor returns, or spoken voices. Duration: one scene. Ordinary sensors and remote observers cannot distinguish among them without Awareness + Investigation or Reason + Security at difficulty equal to Archetype Rating. Direct physical inspection succeeds automatically. A successful distinction test identifies one selected subject and remains valid for that observer for the scene.",
+              'Depth 4': "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Place a 10-meter-radius field within 20 meters. Duration: three rounds. Inside it, speech, radio, and noospheric communication fail; tests requiring sustained concentration lose two dice; and reactions requiring a warning, command, targeting cue, or remote sensor are unavailable. Direct physical senses, movement, melee attacks, and unguided ranged attacks remain possible.",
+              'Depth 5': "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Place a 20-meter-radius field within 30 meters. Duration: three rounds. Inside it, ranged attacks beyond 3 meters cannot select a specific target; identity credentials, facial recognition, remote control, telepathy, radio, and noospheric messaging fail; and sensor or informational bonuses cannot add dice to locating a target. Characters locate others using unmodified Awareness against difficulty 2. You perceive the location of every source producing sound, signal, motion, or active power, but cannot identify which source is which without direct contact."
+            }
+          }
+
+          catalog = next(item for item in data['catalogs'] if item['id'] == 'binding-sources')
+          for variant in catalog['variants']:
+              source_effects = effects[variant['id']]
+              for step in variant['progression']:
+                  step['effect'] = source_effects[step['stage']]
+
+          path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          Path('.github/workflows/one-time-eldritch-depth-mechanics.yml').unlink()
+          PY
+      - name: Commit mechanical Depth rewrite
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Make Eldritch Depth abilities mechanically explicit"
+          git push origin main
