@@ -2,8 +2,11 @@
   'use strict';
 
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
+  const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   let rulesData = null;
   let rulesPromise = null;
+  let lineageData = null;
+  let lineagePromise = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -16,16 +19,20 @@
     const style = document.createElement('style');
     style.id = 'blacklight-wiki-power-style';
     style.textContent = `
-      .blacklight-wiki-power-catalog{display:grid;gap:15px;margin-top:20px}
-      .blacklight-wiki-family{border:1px solid rgba(200,138,53,.35);border-radius:15px;padding:14px;background:rgba(255,255,255,.025)}
-      .blacklight-wiki-family h4{margin:0 0 7px!important}
-      .blacklight-wiki-family>p{color:var(--muted);line-height:1.55}
+      .blacklight-wiki-power-catalog,.blacklight-wiki-lineage-catalog{display:grid;gap:15px;margin-top:20px}
+      .blacklight-wiki-family,.blacklight-wiki-lineage{border:1px solid rgba(200,138,53,.35);border-radius:15px;padding:14px;background:rgba(255,255,255,.025)}
+      .blacklight-wiki-family h4,.blacklight-wiki-lineage h4{margin:0 0 7px!important}
+      .blacklight-wiki-family>p,.blacklight-wiki-lineage>p{color:var(--muted);line-height:1.55}
+      .blacklight-wiki-lineage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+      .blacklight-wiki-lineage-grid div{border-left:3px solid var(--accent);padding:8px 10px;background:rgba(200,138,53,.07);color:var(--muted);line-height:1.46}
+      .blacklight-wiki-lineage-effect{border-top:1px solid var(--line);padding-top:9px;margin-top:9px;color:var(--muted);line-height:1.5}
+      .blacklight-wiki-lineage-effect strong{color:var(--ink)}
       .blacklight-wiki-rank{display:grid;grid-template-columns:70px minmax(140px,.5fr) minmax(0,2fr);gap:9px;padding:9px 0;border-top:1px solid var(--line)}
       .blacklight-wiki-rank:first-child{border-top:0}
       .blacklight-wiki-rank-badge{color:var(--accent);font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
       .blacklight-wiki-rank strong{color:var(--ink)}
       .blacklight-wiki-rank span:last-child{color:var(--muted);line-height:1.5}
-      @media(max-width:900px){.blacklight-wiki-rank{grid-template-columns:1fr}}
+      @media(max-width:900px){.blacklight-wiki-rank,.blacklight-wiki-lineage-grid{grid-template-columns:1fr}}
     `;
     document.head.appendChild(style);
   }
@@ -42,6 +49,7 @@
       <div class="module-meta">
         <span class="badge status-active">basic character sheet</span>
         <span class="badge">6 integrated archetypes</span>
+        <span class="badge">13 Vampire bloodlines</span>
         <span class="badge">36 power families</span>
         <span class="badge">180 ranked powers</span>
       </div>
@@ -88,6 +96,22 @@
     return rulesPromise;
   }
 
+  function loadLineages() {
+    if (lineageData) return Promise.resolve(lineageData);
+    if (!lineagePromise) {
+      lineagePromise = fetch(VAMPIRE_LINEAGE_URL, { cache: 'no-store' })
+        .then(response => {
+          if (!response.ok) throw new Error(`Vampire lineage request failed with status ${response.status}.`);
+          return response.json();
+        })
+        .then(data => {
+          lineageData = data;
+          return data;
+        });
+    }
+    return lineagePromise;
+  }
+
   function removeLegacyPowerTable(entryTarget) {
     [...entryTarget.querySelectorAll('h4')].forEach(heading => {
       const title = heading.textContent.trim();
@@ -112,6 +136,20 @@
       </article>`;
   }
 
+  function renderLineage(lineage) {
+    return `
+      <article class="blacklight-wiki-lineage">
+        <h4>${escapeHtml(lineage.name)}</h4>
+        <div class="blacklight-wiki-lineage-grid">
+          <div><strong>Society of Shadows legacy:</strong> ${escapeHtml(lineage.legacy)}</div>
+          <div><strong>Continuum translation:</strong> ${escapeHtml(lineage.continuum)}</div>
+        </div>
+        <p><strong>Favored power families:</strong> ${(lineage.favoredFamilies || []).map(escapeHtml).join(' · ')}</p>
+        <div class="blacklight-wiki-lineage-effect"><strong>${escapeHtml(lineage.gift.name)}:</strong> ${escapeHtml(lineage.gift.effect)}</div>
+        <div class="blacklight-wiki-lineage-effect"><strong>${escapeHtml(lineage.bane.name)}:</strong> ${escapeHtml(lineage.bane.effect)}</div>
+      </article>`;
+  }
+
   async function enrichActiveWikiEntry() {
     const entryTarget = document.querySelector('#blacklight-browser #blacklight-entry');
     if (!entryTarget || entryTarget.querySelector('[data-blacklight-wiki-power-catalog]')) return;
@@ -119,11 +157,24 @@
     if (!entryId.endsWith('-archetype')) return;
 
     try {
-      const data = await loadRules();
+      const [data, lineages] = await Promise.all([
+        loadRules(),
+        entryId === 'vampire-archetype' ? loadLineages() : Promise.resolve(null)
+      ]);
       const archetypeId = entryId.replace(/-archetype$/, '');
       const archetype = (data.archetypes || []).find(item => item.id === archetypeId);
       if (!archetype) return;
       removeLegacyPowerTable(entryTarget);
+
+      if (entryId === 'vampire-archetype' && lineages?.lineages?.length) {
+        const lineageCatalog = document.createElement('section');
+        lineageCatalog.dataset.blacklightWikiLineageCatalog = 'true';
+        lineageCatalog.innerHTML = `
+          <h4>Thirteen Remainder Bloodlines</h4>
+          <p class="blacklight-callout"><strong>These remain part of the Vampire Archetype.</strong> ${escapeHtml(lineages.framework)}</p>
+          <div class="blacklight-wiki-lineage-catalog">${lineages.lineages.map(renderLineage).join('')}</div>`;
+        entryTarget.appendChild(lineageCatalog);
+      }
 
       const catalog = document.createElement('section');
       catalog.dataset.blacklightWikiPowerCatalog = 'true';
@@ -133,7 +184,7 @@
         <div class="blacklight-wiki-power-catalog">${archetype.powerFamilies.map(renderFamily).join('')}</div>`;
       entryTarget.appendChild(catalog);
     } catch (error) {
-      console.error('Blacklight power catalog enrichment failed.', error);
+      console.error('Blacklight Archetype enrichment failed.', error);
     }
   }
 
