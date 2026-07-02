@@ -1,0 +1,129 @@
+{
+  "setting": "Blacklight Continuum",
+  "schemaVersion": "1.0.0",
+  "name": "Combat Foundation",
+  "coreProcedure": {
+    "start": "Combat begins when opposed characters attempt actions whose order can change the result. Establish positions, cover, visible threats, current tracks, and immediate objectives before determining Initiative.",
+    "initiative": "Act from highest Initiative to lowest. Initiative equals Finesse + Composure. Break a tie with higher Awareness, then higher Finesse, then one unmodified d10 roll for the tied participants.",
+    "round": "A round is approximately six seconds. Each participant receives one turn per round.",
+    "turn": "On a turn, a character may take one Standard Action, move up to 8 meters, and perform one Minor Interaction in any order. A Standard Action may be exchanged for another Move or Minor Interaction. Unused actions are lost.",
+    "reaction": "A character has one Reaction per round. It refreshes at the start of that character's turn. A Reaction can be used only when a rule, capability, item, or Cohesion option permits it.",
+    "minorInteraction": "A Minor Interaction draws or stows one accessible item, opens or closes one unsecured adjacent closure, changes posture, speaks briefly, presses an adjacent control, or performs another equally small physical interaction."
+  },
+  "standardActions": [
+    {"name": "Attack", "effect": "Make one weapon, unarmed, or damaging capability attack."},
+    {"name": "Use Capability", "effect": "Activate one capability whose activation is a Standard Action."},
+    {"name": "Guard", "effect": "Increase Defense Difficulty by 1 until the start of your next turn."},
+    {"name": "Sprint", "effect": "Move an additional 8 meters. Difficult terrain halves both movement allowances."},
+    {"name": "Assist", "effect": "Choose one adjacent ally or one ally you can validly guide through communication. If you possess the relevant Skill at 1 or 2, grant one die to the ally's next matching test before your next turn. At Skill 3 or higher, grant two dice. A test receives no more than two assistance dice."},
+    {"name": "Break Free", "effect": "Test Force + Athletics or Finesse + Mobility against the restraint's printed difficulty. On success, end Restrained. On failure, remain Restrained."},
+    {"name": "Stabilize", "effect": "Attempt to stop a Downed character from gaining additional Death Marks."},
+    {"name": "Emergency Treatment", "effect": "Attempt to restore a Stable Downed character to 1 Vitality."},
+    {"name": "Complex Interaction", "effect": "Operate, repair, breach, retrieve, carry, or manipulate something requiring more than a Minor Interaction."}
+  ],
+  "movement": {
+    "normal": "Move up to 8 meters during the turn.",
+    "difficultTerrain": "Each meter costs 2 meters of movement.",
+    "occupiedSpace": "A character cannot end movement inside another character's occupied space unless a capability explicitly permits it.",
+    "leavingReach": "Leaving an adjacent hostile character's reach does not automatically cause an attack. A reaction attack exists only when a capability or weapon explicitly provides one."
+  },
+  "attackProcedure": {
+    "pools": [
+      "Unarmed or forceful melee: Force + Close Combat.",
+      "Precise melee: Finesse + Close Combat.",
+      "Ordinary ranged weapon: Finesse + Firearms.",
+      "Heavy weapon: Force + Heavy Weapons unless the item states another pool.",
+      "Damaging capability: the pool printed by that capability."
+    ],
+    "physicalDefenseDifficulty": "Physical Defense Difficulty equals maximum 1, ceiling(Guard / 2).",
+    "identityDefenseDifficulty": "A mental, noospheric, identity, or direct Disruption attack uses maximum 1, ceiling(Identity Defense / 2), unless the capability prints another resistance.",
+    "hit": "The attack hits when successes equal or exceed the applicable Defense Difficulty.",
+    "margin": "Margin equals attack successes minus Defense Difficulty, minimum 0.",
+    "rawDamage": "Raw Damage equals the attack's Damage rating + Margin.",
+    "protection": "Impact and Trauma damage subtract Protection from Raw Damage. A successful hit inflicts a minimum of 1 damage unless a capability explicitly allows complete negation. Disruption ignores ordinary Protection unless a capability or item explicitly protects against Disruption.",
+    "vitalityLoss": "Every final damage point removes 1 current Vitality and is recorded under its damage type.",
+    "cover": [
+      "Partial Cover: +1 Physical Defense Difficulty against attacks crossing the cover.",
+      "Substantial Cover: +2 Physical Defense Difficulty against attacks crossing the cover.",
+      "Total Cover: the target cannot be directly attacked through the cover without a capability that crosses or destroys it."
+    ],
+    "range": [
+      "Adjacent: 0–2 meters. Melee attacks function normally.",
+      "Short: 3–20 meters. Ordinary ranged attacks have no range modifier.",
+      "Medium: 21–50 meters. Increase Physical Defense Difficulty by 1.",
+      "Long: 51–100 meters. Increase Physical Defense Difficulty by 2.",
+      "Beyond Long: the attack is unavailable unless the weapon or capability explicitly provides greater range."
+    ]
+  },
+  "sampleDamageRatings": [
+    {"attack": "Unarmed strike", "damage": 2, "type": "Impact"},
+    {"attack": "Baton, club, or forceful tool", "damage": 3, "type": "Impact"},
+    {"attack": "Compact pistol", "damage": 4, "type": "Trauma"},
+    {"attack": "Rifle or heavy cutting weapon", "damage": 5, "type": "Trauma"},
+    {"attack": "Heavy firearm or anti-materiel weapon", "damage": 6, "type": "Trauma"},
+    {"attack": "Arc, identity, or noospheric weapon", "damage": 3, "type": "Disruption"}
+  ],
+  "damageAndVitality": {
+    "impact": "Impact represents bruising, blunt force, shock, fatigue, and nonpenetrating injury.",
+    "trauma": "Trauma represents penetration, severe laceration, burning, crushing, organ injury, and other immediately dangerous bodily harm.",
+    "disruption": "Disruption represents memory damage, identity fracture, noospheric injury, hostile cognition, and destabilization of the character's functional continuity.",
+    "sharedTrack": "All three damage types reduce the same current Vitality track. Record each type separately because healing, armor, powers, and consequences may treat them differently.",
+    "wounded": "At current Vitality equal to or below half Maximum, rounded down, the character is Wounded and loses 1 die from Force, Finesse, and Resilience tests. This penalty ends when current Vitality rises above that threshold.",
+    "healing": "Removing one recorded damage point restores one current Vitality. Current Vitality cannot exceed Maximum, and a healing effect must state which damage types it can remove."
+  },
+  "exposure": {
+    "meaning": "Exposure is immediate operational risk accumulated by forcing uncertain actions, attracting attention, overcommitting, and remaining inside unstable conditions. Exposure is not Archetype Pressure and does not replace it.",
+    "gain": [
+      "After a character Pushes a test, gain 1 Exposure after the final roll resolves.",
+      "A hazard, capability, Complication, or scenario rule may add Exposure when explicitly stated."
+    ],
+    "push": "After the initial roll and before final resolution, reroll failed dice up to Resolve. A test may be Pushed once. The rerolled results replace the original results. Gain 1 Exposure after resolving the final roll, whether the Push succeeds or fails.",
+    "warningThreshold": "Exposure Warning equals ceiling(Exposure Limit / 2).",
+    "warningEffect": "At or above Exposure Warning, the character is Exposed. Reduce the maximum number of failed dice that character may reroll with a Push by 1, to a minimum of 1.",
+    "limit": "When Exposure reaches its Limit, finish resolving the current action, then resolve Overexposure.",
+    "overexposure": "Suffer 1 Impact that ignores Protection, lose the current Reaction, and become unable to Push until the end of the character's next turn. Set Exposure to its Warning value, then reapply each point that exceeded the Limit. Reapplied overflow can cause another Overexposure.",
+    "recovery": [
+      "Ten uninterrupted minutes in a position free from combat, pursuit, and an active hazard sets Exposure to 0.",
+      "If a scene ends without a safe ten-minute interval, reduce Exposure by 1 and carry the remainder forward.",
+      "A completed Full Rest sets Exposure to 0."
+    ]
+  },
+  "cohesion": {
+    "meaning": "Cohesion is the character's remaining ability to hold identity, judgment, discipline, and connection together under immediate pressure. It is spent deliberately and is not lost merely because damage or Pressure increases.",
+    "spendingLimit": "A character may use only one Cohesion option on the same trigger or test unless a capability explicitly says otherwise.",
+    "options": [
+      {"name": "Commit", "cost": 1, "timing": "Before rolling a test", "effect": "Add two dice to that test."},
+      {"name": "Brace", "cost": 1, "timing": "After final damage is calculated", "effect": "Reduce Impact or Disruption from that hit by 1. Brace cannot reduce Trauma and cannot reduce damage below 0."},
+      {"name": "Anchor", "cost": 1, "timing": "Reaction when an ally within 10 meters or a functioning communication channel makes a Death Test or a test against fear, domination, identity alteration, or involuntary control", "effect": "The ally rerolls up to two failed dice and must keep the new results."},
+      {"name": "Refuse Collapse", "cost": 2, "timing": "Once per scene when damage would reduce the character from positive Vitality to 0", "effect": "Remain at 1 Vitality instead, become Staggered until the end of the next turn, and record the remaining damage normally. This cannot prevent an explicitly instant-death effect or be used while already Downed."}
+    ],
+    "recovery": [
+      "Once per scene after combat or immediate danger ends, ten uninterrupted minutes regrouping with at least one willing ally restores 1 Cohesion.",
+      "A completed Full Rest restores Cohesion to Maximum.",
+      "No character can possess more current Cohesion than Cohesion Maximum."
+    ]
+  },
+  "pressureInCombat": {
+    "rule": "Archetype Pressure follows the universal Resource and Pressure procedure during combat. Pay Resource, mark printed Pressure, resolve the action, then resolve a Crisis if the Limit was reached.",
+    "thresholdTiming": "A Warning or Critical effect begins after the action that crossed that threshold resolves. If the character was already Critical before spending Resource, any Critical rule triggered by that expenditure applies to the action as printed.",
+    "persistence": "Pressure does not clear because combat ends. Only the Archetype's printed recovery methods reduce it.",
+    "distinction": "Exposure measures immediate operational overcommitment. Pressure measures the Archetype's specific escalating danger. One action may add both when its rules say so."
+  },
+  "conditions": {
+    "prone": "The character is on the ground. Standing costs the turn's Move. Adjacent melee attacks reduce Physical Defense Difficulty by 1; ranged attacks from more than 3 meters increase it by 1.",
+    "restrained": "Movement is 0. Physical Defense Difficulty is reduced by 1, minimum 1. Force-, Finesse-, Athletics-, Mobility-, Close Combat-, and Firearms-based tests lose two dice except a Break Free test.",
+    "staggered": "The character has no Reaction and loses one die from all tests until the condition ends.",
+    "downed": "Current Vitality is 0. The character is Prone, cannot take actions, movement, Minor Interactions, or Reactions, and is Unstable unless successfully stabilized.",
+    "stable": "A Stable character at 0 Vitality remains Downed but does not make Death Tests or gain Death Marks from time. New damage makes the character Unstable again after applying the damage's Death Marks."
+  },
+  "downedDyingAndDeath": {
+    "reachingZero": "When damage reduces current Vitality to 0, become Downed and Unstable. Every damage point remaining after Vitality reaches 0 adds 1 Death Mark. If Death Marks reach 3, the character dies immediately.",
+    "gracePeriod": "A character reduced to 0 does not make a Death Test during the round in which they were Downed. If still Unstable, the first Death Test occurs at the end of the following round.",
+    "deathTest": "Roll Resilience + Composure at difficulty 2. Success adds no Death Mark. Failure adds 1 Death Mark. A failed Death Test containing one or more results of 1 adds 2 Death Marks instead. A Death Test may be Pushed and may receive Anchor before final resolution.",
+    "furtherDamage": "Any new damaging hit against a Downed character adds 1 Death Mark after damage is calculated. If the hit inflicts 3 or more final damage, add 2 Death Marks instead. The character also becomes Unstable if previously Stable.",
+    "stabilize": "Standard Action, adjacent target. With a field medical kit, test Reason + Medicine at difficulty 2. Without a kit, difficulty is 3. Success makes the target Stable and removes 1 Death Mark. Failure changes nothing. The test may be Pushed.",
+    "emergencyTreatment": "Standard Action, adjacent Stable target at 0 Vitality, one field medical kit charge. Test Reason + Medicine at difficulty 3. Success removes one recorded Impact or Trauma, restores the target to 1 Vitality, removes 1 Death Mark, ends Downed, and applies Staggered until the end of the target's next turn. Failure consumes the action but not the kit charge. The test may be Pushed.",
+    "death": "At 3 Death Marks the character is dead. Death is immediate and cannot be reversed by Stabilize, Emergency Treatment, ordinary healing, Cohesion, or retroactive declarations. Only a capability explicitly able to restore a dead character can change that state.",
+    "equalApplication": "Player characters, allied characters, neutral characters, and hostile characters use the same Downed, stabilization, and death procedures unless a recorded capability explicitly states otherwise."
+  }
+}
