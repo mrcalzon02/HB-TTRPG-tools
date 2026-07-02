@@ -1,0 +1,53 @@
+name: Fix on-demand Resource and Pressure wiki rendering
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-resource-pressure-wiki-observer.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Keep observer active before workspace mount
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('blacklight-resource-pressure.js')
+          text = path.read_text(encoding='utf-8')
+          old = """  function installWikiMode() {
+    if (!document.getElementById('blacklight-browser')) return false;
+    renderWikiEntry();
+    new MutationObserver(renderWikiEntry).observe(document.documentElement, { childList: true, subtree: true });
+    return true;
+  }
+"""
+          new = """  function installWikiMode() {
+    renderWikiEntry();
+    new MutationObserver(renderWikiEntry).observe(document.documentElement, { childList: true, subtree: true });
+    return true;
+  }
+"""
+          if old not in text:
+              raise SystemExit('Wiki observer anchor not found')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          Path('.github/workflows/one-time-resource-pressure-wiki-observer.yml').unlink()
+          PY
+      - name: Validate and commit
+        run: |
+          node --check blacklight-resource-pressure.js
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Keep Resource and Pressure wiki observer active"
+          git push origin main
