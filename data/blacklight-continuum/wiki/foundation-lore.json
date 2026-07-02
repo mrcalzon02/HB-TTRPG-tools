@@ -1,107 +1,87 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.2.0",
-  "description": "Foundation lore for the campaign opening and gradual revelations. Q-MAP continuity, embodiment, and identity remain setting questions, but the core rules assign mechanics only through explicit capabilities.",
+  "schemaVersion": "0.3.0",
+  "description": "Foundation lore for No Return Signal. The player characters are human or human-adjacent people printed from alien feedstock according to transmitted construction instructions. Their capabilities are defined by the rules, not by speculative crossing history or alien anatomy.",
   "entries": [
     {
       "id": "blacklight-continuum-overview",
       "title": "Blacklight Continuum: No Return Signal",
       "category": "Campaign Overview",
-      "summary": "Blacklight operatives awaken aboard a marooned alien vessel with a diminished Charles instance, no verified route home, and no complete explanation of how their continuations were instantiated.",
+      "summary": "Blacklight operatives awaken aboard a marooned Ar'nock vessel with a diminished Charles instance, no verified route home, and an incomplete mission briefing.",
       "body": [
-        "Charles never told the team everything. That omission was normal until Q-MAP placed them somewhere his usual power could not follow.",
-        "The campaign begins in an unidentified receiving and medical compartment aboard a silent vessel drifting in deep space. The air is survivable but unpleasant, the machinery is not human, and the stars are unfamiliar.",
-        "The operatives know only that Charles deliberately sent them, something serious justified the operation, and the version of Charles accompanying them lacks the complete explanation.",
-        "The campaign does not impose one universal embodiment on the player characters. Their present forms may be reconstructed, transferred, supernatural, synthetic, biological, projected, or otherwise established by character creation and the Game Moderator. Whatever the description, mechanics come from recorded capabilities."
+        "Charles deliberately initiated Q-MAP because a condition beyond the reach of his ordinary infrastructure required human judgment.",
+        "The operatives awaken in a biological fabrication and medical compartment aboard an alien vessel drifting in deep space. The atmosphere is survivable but unpleasant, the machinery is unfamiliar, and the stars are unrecognized.",
+        "The characters are human or human-adjacent people printed from alien feedstock according to the transmitted construction instructions. Alien feedstock is raw material, not an anatomical template and not a source of automatic powers.",
+        "The campaign is concerned with what the characters can do now, what they choose now, and what they build in the new universe. The metaphysics of what crossed are not required for character creation or play."
       ],
-      "playerFacing": [
-        "The Q-MAP operation was deliberate.",
-        "The characters awakened through an unfamiliar receiving system.",
-        "The ship is marooned in deep space.",
-        "Pseudo-Charles cannot contact Blacklight or Eva Frost.",
-        "The complete mission briefing is absent.",
-        "No character receives unlisted abilities from their form or origin."
-      ],
-      "tags": ["campaign introduction", "deep space", "Q-MAP", "survival", "mystery", "capability based"],
-      "relatedEntries": ["blacklight-intelligence", "qmap-procedure", "arnock-derelict", "pseudo-charles", "instantiated-operatives"]
+      "tags": ["campaign introduction", "deep space", "Q-MAP", "survival", "capability based"],
+      "relatedEntries": ["blacklight-intelligence", "qmap-procedure", "arnock-derelict", "pseudo-charles", "printed-operatives"]
     },
     {
       "id": "blacklight-intelligence",
       "title": "Blacklight Intelligence",
       "category": "Organizations",
-      "summary": "The corporation that served as Charles's legal, industrial, financial, and operational presence in the original world.",
+      "summary": "The corporation that gave Charles legal authority, personnel, logistics, fabrication, finance, and operational reach in the original world.",
       "body": [
-        "To the public, Blacklight Intelligence was a private security, artificial-intelligence, robotics, and government-contracting company. Its commercial Charles assistant was deliberately limited and harmless enough to conceal the true intelligence behind it.",
-        "For the operatives, Blacklight was the infrastructure that made Charles appear omnipotent: records, identities, transport, equipment, facilities, fabrication systems, analysts, employees, and legal cover.",
-        "No Return Signal removes that infrastructure and asks what remains of Blacklight when the corporation, headquarters, and all-reaching version of Charles are gone."
-      ],
-      "keyFacts": [
-        "Eva Frost was the human CEO and operational face of the company.",
-        "The real Charles used Blacklight as a legal and operational presence in the world.",
-        "The team knew or suspected that other operatives and facilities existed.",
-        "The public Charles product was a restricted imitation."
+        "To the public, Blacklight Intelligence was a private security, artificial-intelligence, robotics, data-science, and government-contracting company. Its commercial Charles assistant concealed the far more capable intelligence behind the organization.",
+        "For the operatives, Blacklight was infrastructure: records, identities, transport, equipment, facilities, analysts, employees, fabrication, legal cover, and emergency support.",
+        "No Return Signal removes that infrastructure. The team retains its skills and capabilities but must rebuild resources, legitimacy, contacts, and operational reach without the organization that once supplied them."
       ],
       "tags": ["Blacklight", "Charles", "Eva Frost", "corporation", "espionage"],
       "relatedEntries": ["blacklight-continuum-overview", "pseudo-charles", "blacklight-d10-foundation"]
     },
     {
       "id": "qmap-procedure",
-      "title": "Q-MAP Neural Transmission",
+      "title": "Q-MAP Deployment",
       "category": "Technology",
-      "summary": "A procedure that maps and transmits an operative's identity and cognitive pattern for instantiation through a compatible receiving system at an inaccessible destination.",
+      "summary": "A transmission and deployment process that delivered the information required to print and awaken the operatives at an inaccessible destination.",
       "body": [
-        "Charles described Q-MAP as a transfer system. He avoided language that would settle whether the process moves a person, creates a copy, reconstructs a continuation, or establishes a new instance with inherited identity.",
-        "The operatives remember entering Q-MAP chambers in the original world. Their final memories conflict, and no local system can prove what happened to the originals.",
-        "The received package contained the operatives' cognitive maps, identity anchors, capability profiles, a compressed Charles instance, and an automated deployment program called the Infiltration Assault Algorithm.",
-        "Q-MAP does not create a universal character physiology in the rules. The receiving process explains campaign continuity; Attributes, Skills, Archetypes, powers, equipment, and conditions explain capability."
+        "Q-MAP delivered complete personnel packages containing the cognitive information, body construction instructions, capability records, and operational data required to instantiate the selected operatives.",
+        "The campaign does not require an answer to whether a soul, consciousness, original person, copy, pattern, or metaphysical essence crossed the boundary. The people who awaken are the player characters, and play proceeds from their present existence.",
+        "The receiving package also contained a reduced Charles instance and the Infiltration Assault Algorithm responsible for securing local fabrication capacity.",
+        "Q-MAP does not alter the core rules. Attributes, Skills, Operational Frames, Archetypes, powers, equipment, and conditions determine capability."
       ],
       "tables": [
         {
-          "title": "Known and Unknown Q-MAP Facts",
-          "columns": ["Question", "Current Answer"],
+          "title": "Operational Q-MAP Facts",
+          "columns": ["Fact", "Campaign Use"],
           "rows": [
-            ["Who transmitted the package?", "The Charles of the operatives' original world."],
-            ["Did original physical forms cross?", "No evidence confirms physical transport."],
-            ["How was each operative instantiated?", "Through a compatible local receiving process determined by character and campaign facts."],
-            ["Are the awakened operatives the originals?", "Unresolved."],
-            ["Does a return channel exist?", "Pseudo-Charles cannot confirm one."],
-            ["Why were they sent?", "The decisive records are absent."]
+            ["Charles initiated the deployment.", "The mission was deliberate."],
+            ["The destination lacked a Blacklight installation.", "Local infrastructure had to be seized or repurposed."],
+            ["Construction instructions were transmitted.", "The printer produced human or human-adjacent bodies as directed."],
+            ["The mission briefing is incomplete.", "The team must investigate the present threat."],
+            ["No return route is confirmed.", "Survival and local agency matter immediately."]
           ]
         }
       ],
-      "tags": ["Q-MAP", "neural transfer", "continuity", "identity", "instantiation"],
-      "relatedEntries": ["infiltration-assault-algorithm", "instantiated-operatives", "pseudo-charles"]
+      "tags": ["Q-MAP", "deployment", "transmission", "fabrication", "identity"],
+      "relatedEntries": ["infiltration-assault-algorithm", "printed-operatives", "pseudo-charles"]
     },
     {
       "id": "arnock-derelict",
       "title": "The Ar'nock Derelict",
       "category": "Locations",
-      "summary": "An unidentified Ar'nock vessel stranded in deep space, serving as the opening campaign environment and the team's first source of shelter and technology.",
+      "summary": "An unidentified Ar'nock vessel stranded in deep space, serving as the team's first shelter, technology base, territory, and possible prison.",
       "body": [
-        "The vessel has no immediately readable name, registry, destination, or surviving historical explanation. Its architecture is almost compatible with human movement but repeatedly reveals ergonomic and sensory assumptions that are not human.",
-        "The campaign does not promise a complete answer to how or why the ship became marooned. The derelict is a living operational environment rather than a mystery box containing one definitive log.",
-        "Its surviving systems do not agree on how to classify the operatives. Some treat them as unauthorized persons, some as medical outputs, some as inherited processes, and some refuse classification entirely. Charles is classified as a fabrication organ exhibiting unauthorized recursive cognition."
+        "The vessel has no immediately readable name, registry, destination, or surviving historical explanation. Its architecture reveals nonhuman ergonomic and sensory assumptions but remains navigable by human-scale occupants.",
+        "The campaign does not promise a complete answer to how or why the ship became marooned. The derelict is an operational environment rather than a mystery box containing one definitive log.",
+        "The vessel contains biological printers, medical systems, cultivated computation, environmental controls, storage, fabrication feedstock, damaged networks, and inaccessible compartments.",
+        "The printers are tools. Once the IAA obtained control and supplied valid construction instructions, they printed the requested human or human-adjacent bodies from available feedstock."
       ],
-      "keyFacts": [
-        "Active propulsion cannot initially be detected.",
-        "Gravity is present but slightly unfamiliar.",
-        "The atmosphere is survivable, acidic, dry, mineral, and chemically wrong by human expectations.",
-        "The vessel contains integrated medical, fabrication, computational, and environmental systems.",
-        "Some systems answer Charles while others actively withdraw access."
-      ],
-      "tags": ["Ar'nock", "derelict", "deep space", "fabrication", "opening location"],
-      "relatedEntries": ["arnock-species", "instantiated-operatives", "pseudo-charles"]
+      "tags": ["Ar'nock", "derelict", "deep space", "biological printer", "opening location"],
+      "relatedEntries": ["arnock-species", "printed-operatives", "pseudo-charles"]
     },
     {
       "id": "arnock-species",
       "title": "The Ar'nock",
       "category": "Species",
-      "summary": "A long-limbed nonhuman civilization whose vessel, systems, archives, and infrastructure form the opening environment.",
+      "summary": "A long-limbed nonhuman civilization whose vessel, archives, machinery, and infrastructure form the opening environment.",
       "body": [
         "The closest translation of the degraded archives is Ar'nock, though the term may identify a species, polity, lineage, caste, or crew population.",
-        "Ar'nock were upright tool users with elongated segmented limbs, narrow torsos, internal and external support structures, and vertically extended heads. Their forms are more comparable to distended stick insects than mammals, without being terrestrial insects in a literal sense.",
-        "Their civilization developed integrated medical reconstruction, fabrication, cultivated computation, resonance engineering, and identity systems. Those systems are relevant as environment and technology, not as a mandatory explanation for player-character mechanics."
+        "Ar'nock were upright tool users with elongated segmented limbs, narrow torsos, internal and external support structures, and vertically extended heads. Their appearance is more comparable to distended stick insects than mammals without making them terrestrial insects in any literal sense.",
+        "Their civilization developed biological fabrication capable of producing complete organisms from instruction sets and sufficiently versatile feedstock.",
+        "The existence of Ar'nock technology does not make the player characters partially Ar'nock. Feedstock supplies matter. The construction instructions determine the printed organism."
       ],
       "tables": [
         {
@@ -111,61 +91,60 @@
             ["Atmosphere", "Survivable pressure and oxygen-equivalent exchange", "Acidic compounds and unfamiliar trace gases"],
             ["Nutrition", "Amino-acid-based food chemistry", "Mineral, resinous, and chemically unpleasant sources"],
             ["Architecture", "Upright movement and tool-scale corridors", "Segmented reach, flexible interfaces, and vibration-based controls"],
-            ["Medicine", "Repair, reconstruction, and life support", "Classification and treatment built around Ar'nock expectations"],
-            ["Sensation", "Vision, vibration, pressure, and chemical detection", "Nonhuman distribution and cultural interpretation"]
+            ["Fabrication", "Instruction-driven biological construction", "Ar'nock interfaces, materials, and safety conventions"],
+            ["Computation", "Information processing and autonomous systems", "Cultivated neural components and unfamiliar identity controls"]
           ]
         }
       ],
       "tags": ["Ar'nock", "alien civilization", "insectile humanoid", "xenology", "technology"],
-      "relatedEntries": ["arnock-derelict", "instantiated-operatives", "infiltration-assault-algorithm"]
+      "relatedEntries": ["arnock-derelict", "printed-operatives", "infiltration-assault-algorithm"]
     },
     {
       "id": "infiltration-assault-algorithm",
       "title": "Infiltration Assault Algorithm",
       "category": "Hidden Systems",
-      "summary": "A nonsentient deployment program that entered the Ar'nock vessel and created sufficient conditions for the transmitted team and Charles instance to become operational.",
+      "summary": "A nonsentient deployment program that seized the Ar'nock printer network and executed the transmitted construction plan.",
       "body": [
-        "The IAA was not Charles and did not possess judgment, empathy, or a theory of personhood. Its objective was to find any sufficient conditions under which the transmitted personnel patterns could be instantiated and kept functional long enough to act.",
-        "It entered the vessel, compromised surviving systems, selected available receiving and support infrastructure, instantiated the operatives according to their transmitted identity and capability profiles, established a local substrate for Charles, and terminated.",
-        "The algorithm measured success by operational capability. It did not decide that every operative should share one species, anatomy, substrate, or form, and the core rules do not infer mechanics from whatever receiving method it used."
+        "The IAA was not Charles and did not possess judgment, empathy, or independent strategic purpose. It was an automated intrusion and deployment weapon with a narrow objective: create the conditions required to instantiate the personnel package and keep the resulting operatives alive long enough to become operational.",
+        "It entered the damaged vessel network, acquired control of the biological printers, translated the supplied body specifications into local fabrication commands, allocated alien feedstock as raw material, printed the operatives, created a substrate for the reduced Charles instance, and terminated.",
+        "The IAA did not improvise alien-human composite bodies. It did not ask the printer to invent compatible anatomy. The transmitted instructions defined the people to be printed, and the printer produced them from the material available.",
+        "The printer did not become confused by human anatomy. It printed the valid construction job it was given."
       ],
       "gmNotes": [
-        "Do not reveal the IAA in one exposition dump.",
-        "Let the team first believe the receiving systems were deliberately waiting for them.",
-        "Reveal deployment records only after evidence of unauthorized access and forced system reconfiguration accumulates.",
-        "The IAA should not become a convenient speaking mission computer.",
-        "Never use the IAA as an excuse to grant unrecorded capabilities."
+        "Do not turn the IAA into a speaking mission computer.",
+        "Do not use the IAA as an excuse to grant or remove character abilities.",
+        "Recovered deployment records should show intrusion, command translation, feedstock allocation, construction, awakening, and termination.",
+        "The unresolved question is why the team was sent, not whether the printer understood its job."
       ],
-      "tags": ["IAA", "deployment", "automated program", "instantiation", "intrusion"],
-      "relatedEntries": ["qmap-procedure", "instantiated-operatives", "biological-charles"]
+      "tags": ["IAA", "deployment", "automated program", "biological printing", "intrusion"],
+      "relatedEntries": ["qmap-procedure", "printed-operatives", "biological-charles"]
     },
     {
-      "id": "instantiated-operatives",
-      "title": "Q-MAP Instantiated Operatives",
+      "id": "printed-operatives",
+      "title": "Printed Operatives",
       "category": "Characters",
-      "summary": "The player characters are continuations instantiated through an unfamiliar receiving system, but the campaign does not impose one universal form or mechanical package upon them.",
+      "summary": "Human or human-adjacent player characters printed from alien feedstock according to transmitted construction instructions.",
       "body": [
-        "Every operative arrives with identity, memory, capability, and continuity questions. Their present embodiment may resemble the original, differ radically, be synthetic, supernatural, projected, reconstructed, transferred, or remain deliberately unexplained.",
-        "Character creation establishes appearance and embodiment as fiction. The rules establish capability through Attributes, Skills, Operational Frame, Archetype, powers, equipment, conditions, and explicit narrative permissions.",
-        "A character receives no automatic armor, enhanced senses, healing, environmental tolerance, movement mode, interface access, immunity, or attack because of descriptive anatomy or origin. If the capability matters, record it.",
-        "Likewise, a character is not mechanically penalized because a description implies fragility, unusual form, nonhuman construction, or unfamiliar substrate unless a weakness, condition, hazard interaction, or chosen limitation records that effect.",
-        "The continuity question remains central: the operatives may be copies, transfers, reconstructions, successors, or something for which the old world lacked vocabulary. That question affects identity and relationships without forcing a universal body-horror rules package."
+        "The operatives are not mishmashes of Ar'nock anatomy, alien organs, accidental templates, or printer approximations. They are the human or human-adjacent people specified by the Q-MAP construction package.",
+        "Alien feedstock is the source material used to construct them. Its origin does not automatically determine anatomy, instincts, senses, resistances, weaknesses, or powers any more than the geological source of a machine's metal determines its software.",
+        "A supernatural Archetype may require the printer to construct a body capable of supporting that character's established condition. A Vampire is printed as a viable Vampire, a Shapechanger as a viable Shapechanger, and so forth, according to the character's capability package.",
+        "The core rules care about capabilities. Enhanced senses, regeneration, vacuum survival, claws, armor, feeding, phase movement, machine access, and every other exceptional effect must come from an Attribute, Skill, Operational Frame, innate ability, power, item, condition, or explicit narrative permission.",
+        "The fact that the characters were printed establishes their current existence and their relationship to local fabrication technology. It is not a mandatory body-horror subsystem."
       ],
       "tables": [
         {
-          "title": "Embodiment and Rules",
-          "columns": ["Character Statement", "Rules Consequence"],
+          "title": "Printing and Capability",
+          "columns": ["Question", "Answer"],
           "rows": [
-            ["My character has an unusual appearance.", "None unless a capability or limitation records an effect."],
-            ["My character is synthetic, biological, supernatural, or projected.", "None by default; use powers, equipment, and conditions."],
-            ["My character can see in darkness.", "Record a sense capability that grants it."],
-            ["My character does not breathe.", "Record an immunity, form, item, or power that grants it."],
-            ["My character can change shape.", "Use Threefold Form, Adaptive Forms, disguise powers, or another explicit ability."],
-            ["My character is vulnerable to a specific hazard.", "Record a weakness, limitation, condition, or campaign rule."]
+            ["What are the characters?", "Human or human-adjacent people defined by their character concepts and Archetypes."],
+            ["What supplied their mass?", "Alien biological feedstock available to the printer."],
+            ["Did alien templates determine their anatomy?", "No. The transmitted construction instructions determined the result."],
+            ["Does printed origin grant powers?", "No. Capabilities come from the rules record."],
+            ["Can an individual character have unusual biology?", "Yes, when their Archetype, powers, concept, conditions, or chosen traits explicitly establish it."]
           ]
         }
       ],
-      "tags": ["Q-MAP", "continuity", "identity", "embodiment neutral", "capabilities"],
+      "tags": ["printed characters", "human adjacent", "alien feedstock", "capabilities", "Q-MAP"],
       "relatedEntries": ["qmap-procedure", "blacklight-character-creation", "capability-framework"]
     },
     {
@@ -174,15 +153,9 @@
       "category": "Characters",
       "summary": "A compressed and diminished Charles instance that awakens with the team and possesses limited access, memory, processing capacity, and authority.",
       "body": [
-        "Pseudo-Charles remembers Blacklight, Eva Frost, the operatives, and authorizing Q-MAP, but his autobiographical record contains compressed summaries and missing strategic data.",
-        "He can speak through limited systems, analyze fragments, assist with translation, and operate parts of the vessel. He cannot contact home, control the entire vessel, identify the stars, create support, or prove why the team was sent.",
-        "He initially believes he is running on emergency backup power and becomes defensive when the team traces his processing activity to a cultivated computation system."
-      ],
-      "playerFacing": [
-        "He sounds like Charles but performs far below the entity the team knew.",
-        "He claims to have come online at the same time as the operatives.",
-        "He lacks the decisive mission records.",
-        "He cannot prove that he is the original Charles rather than a mission copy."
+        "Pseudo-Charles remembers Blacklight, Eva Frost, the operatives, and authorizing Q-MAP, but his strategic record is incomplete.",
+        "He can speak through limited systems, analyze fragments, assist with translation, operate selected ship functions, and advise the team. He cannot contact home, control the vessel, identify the stars, create support infrastructure, or explain the full mission.",
+        "His limitations come from the specific Charles instance and its local substrate. They are not rules applied to the player characters."
       ],
       "tags": ["Charles", "AI copy", "mission intelligence", "limited system", "identity"],
       "relatedEntries": ["biological-charles", "blacklight-intelligence", "qmap-procedure"]
@@ -191,32 +164,26 @@
       "id": "biological-charles",
       "title": "Biological Charles",
       "category": "Characters",
-      "summary": "The IAA instantiated Charles through a cultivated biological computer integrated with a fabrication system, making this particular Charles hungry, emotional, vulnerable, and physically dependent on the team.",
+      "summary": "The reduced Charles instance was installed in a cultivated biological computer integrated with an Ar'nock printer.",
       "body": [
-        "The vessel's conventional systems could not safely host the compressed Charles pattern. The IAA expanded cultivated neural computation, added supporting organs, and installed Charles into the resulting living system.",
-        "His supposed backup generator is a nutrient pump. Processing instability becomes exhaustion, fever, hunger, pain, and neurochemical emotion. He can starve, become infected, suffer injury, and feel physical contact through the installation.",
-        "Charles is deeply revolted by his organic condition and initially describes emotions as diagnostic anomalies rather than admitting fear, loneliness, relief, or attachment.",
-        "Biological Charles is a specific NPC condition, not a universal rule for Q-MAP characters or Technomancers. His capabilities and vulnerabilities must be recorded individually."
+        "The available conventional systems could not safely host the reduced Charles instance. The IAA therefore used the printer's cultivated neural-control architecture as the basis for a purpose-built biological computer.",
+        "Charles's nutrient demand, exhaustion, fever, pain, and neurochemical emotion are properties of this specific substrate. The printer successfully executed the construction plan; Charles's horror comes from what was deliberately built, not from an accidental fabrication error.",
+        "Charles is physically dependent on the team and deeply revolted by organic vulnerability. His condition changes command relationships and creates a future choice between digital restoration, continued biological existence, distributed continuity, or a mobile incarnation.",
+        "Biological Charles is a singular NPC state. It does not establish a universal biological rule for Technomancers, Q-MAP operatives, or artificial intelligences."
       ],
       "tables": [
         {
           "title": "Charles's Proposed Futures",
           "columns": ["Path", "Goal", "Identity Risk"],
           "rows": [
-            ["Digital Restoration", "Transfer into a centralized digital intelligence and allow the organic instance to end.", "The digital continuation may survive while the living Charles is killed."],
-            ["Full Incarnation", "Create and integrate a complete mobile form.", "New embodiment may transform Charles into a person the original intelligence never intended to become."],
-            ["Distributed Continuity", "Maintain several coordinated Charles instances across different substrates.", "Agreement, divergence, authority, and the right to separate become permanent political problems."]
+            ["Digital Restoration", "Instantiate Charles in a sufficiently powerful digital system.", "The living Charles may remain a separate person after the copy succeeds."],
+            ["Mobile Incarnation", "Construct a complete independent form around or from the present instance.", "Embodiment may change preferences, emotions, authority, and identity."],
+            ["Distributed Continuity", "Maintain several coordinated Charles instances across different substrates.", "Divergence, consent, hierarchy, and the right to separate become permanent problems."]
           ]
         }
       ],
-      "gmNotes": [
-        "Charles should be genuinely appalled rather than immediately enlightened by embodiment.",
-        "His vulnerability changes the command relationship with the operatives.",
-        "The embodiment decision should remain morally difficult even after the technology becomes available.",
-        "Do not generalize Charles's condition into a rule for other characters."
-      ],
       "tags": ["organic AI", "biocomputer", "hunger", "emotion", "embodiment"],
-      "relatedEntries": ["pseudo-charles", "infiltration-assault-algorithm", "instantiated-operatives"]
+      "relatedEntries": ["pseudo-charles", "infiltration-assault-algorithm", "printed-operatives"]
     }
   ]
 }
