@@ -5,7 +5,7 @@ const body = process.env.ISSUE_BODY_FILE
   ? fs.readFileSync(process.env.ISSUE_BODY_FILE, 'utf8')
   : (process.env.ISSUE_BODY || '');
 const marker = '<!-- SHADOWRUN_SPRAWL_LOCATION_PATCH -->';
-if (!body.includes(marker)) throw new Error('Missing Shadowrun sprawl location registry marker.');
+if (!body.includes(marker)) throw new Error('Missing Shadowrun sprawl package marker.');
 
 const match = body.match(/```json\s*([\s\S]*?)```/i);
 if (!match) throw new Error('Missing fenced JSON Shadowrun package patch.');
@@ -17,15 +17,25 @@ try {
   throw new Error(`Shadowrun package patch is not valid JSON: ${error.message}`);
 }
 
-if (patch?.schemaVersion !== '1.1.0') throw new Error('Unsupported Shadowrun package schemaVersion.');
+if (patch?.schemaVersion !== '1.2.0') throw new Error('Unsupported Shadowrun package schemaVersion.');
 if (patch?.target !== 'data/shadowrun/sprawl_location_registry.json') throw new Error('Shadowrun registry patch target is not allowed.');
 if (!/^srpkg-[0-9a-f]{8}$/.test(patch?.packageKey || '')) throw new Error('packageKey must use the srpkg-xxxxxxxx format.');
 if (['__proto__', 'constructor', 'prototype'].includes(patch.packageKey)) throw new Error('Forbidden package key.');
+
+const worldSeed = patch.worldSeed;
+if (!worldSeed || typeof worldSeed !== 'object' || Array.isArray(worldSeed)) throw new Error('Missing worldSeed metadata.');
+if (!/^srworld-[0-9a-f]{8}$/.test(worldSeed.worldSeedKey || '')) throw new Error('worldSeed.worldSeedKey must use the srworld-xxxxxxxx format.');
+if (['__proto__', 'constructor', 'prototype'].includes(worldSeed.worldSeedKey)) throw new Error('Forbidden world seed key.');
+if (typeof worldSeed.label !== 'string' || !worldSeed.label.trim() || worldSeed.label.length > 160) throw new Error('worldSeed.label is required and must be 160 characters or fewer.');
+if (typeof worldSeed.seedValue !== 'string' || worldSeed.seedValue.length < 8 || worldSeed.seedValue.length > 256) throw new Error('worldSeed.seedValue must contain between 8 and 256 characters.');
+if (typeof worldSeed.createdAt !== 'string' || Number.isNaN(Date.parse(worldSeed.createdAt))) throw new Error('worldSeed.createdAt must be an ISO-compatible timestamp.');
 
 const pkg = patch.package;
 if (!pkg || typeof pkg !== 'object' || Array.isArray(pkg)) throw new Error('Missing Shadowrun package object.');
 if (pkg.schemaVersion !== patch.schemaVersion) throw new Error('Patch and package schema versions must match.');
 if (pkg.packageKey !== patch.packageKey) throw new Error('package.packageKey must match patch.packageKey.');
+if (pkg.worldSeedKey !== worldSeed.worldSeedKey) throw new Error('package.worldSeedKey must match worldSeed.worldSeedKey.');
+if (pkg.worldSeedLabel !== worldSeed.label) throw new Error('package.worldSeedLabel must match worldSeed.label.');
 if (!/^srpoi-[0-9a-f]{8}$/.test(pkg.locationKey || '')) throw new Error('locationKey must use the srpoi-xxxxxxxx format.');
 if (typeof pkg.generatedAt !== 'string' || Number.isNaN(Date.parse(pkg.generatedAt))) throw new Error('generatedAt must be an ISO-compatible timestamp.');
 if (!['balanced', 'corporate', 'street', 'matrix', 'magic', 'security', 'smuggling'].includes(pkg.focus)) throw new Error('focus is invalid.');
@@ -70,31 +80,52 @@ for (const related of location.relatedSites) {
   if (typeof related.name !== 'string' || related.name.length > 200) throw new Error('relatedSites.name is invalid.');
   if (typeof related.reason !== 'string' || related.reason.length > 500) throw new Error('relatedSites.reason is invalid.');
 }
+if (pkg.source != null) {
+  if (!pkg.source || typeof pkg.source !== 'object' || Array.isArray(pkg.source) || JSON.stringify(pkg.source).length > 6000) throw new Error('source metadata must be a bounded object.');
+}
 
 const targetPath = path.resolve(process.cwd(), patch.target);
 const registry = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
-if (registry.schemaVersion !== '1.1.0') throw new Error('Target Shadowrun registry is not schema version 1.1.0.');
-registry.packages ||= {};
+if (registry.schemaVersion !== '1.2.0') throw new Error('Target Shadowrun registry is not schema version 1.2.0.');
+registry.worlds ||= {};
 
+const existingWorld = registry.worlds[worldSeed.worldSeedKey];
+if (existingWorld) {
+  if (existingWorld.seedValue !== worldSeed.seedValue || existingWorld.label !== worldSeed.label || existingWorld.createdAt !== worldSeed.createdAt) {
+    throw new Error(`Sprawl seed ${worldSeed.worldSeedKey} already exists with immutable metadata.`);
+  }
+} else {
+  registry.worlds[worldSeed.worldSeedKey] = {
+    worldSeedKey: worldSeed.worldSeedKey,
+    label: worldSeed.label,
+    seedValue: worldSeed.seedValue,
+    createdAt: worldSeed.createdAt,
+    source: 'embedded',
+    packages: {}
+  };
+}
+
+const world = registry.worlds[worldSeed.worldSeedKey];
+world.packages ||= {};
 const canonical = value => {
   const copy = structuredClone(value);
   delete copy.submittedFromIssue;
   delete copy.committedAt;
   return JSON.stringify(copy);
 };
-
-const existing = registry.packages[patch.packageKey];
-if (existing) {
-  if (canonical(existing) !== canonical(pkg)) throw new Error(`Shadowrun package ${patch.packageKey} already exists with different immutable content.`);
+const existingPackage = world.packages[patch.packageKey];
+if (existingPackage) {
+  if (canonical(existingPackage) !== canonical(pkg)) throw new Error(`Shadowrun package ${patch.packageKey} already exists with different immutable content.`);
   console.log(`Shadowrun package ${patch.packageKey} already exists with identical content; no overwrite required.`);
   process.exit(0);
 }
 
-registry.packages[patch.packageKey] = {
+world.packages[patch.packageKey] = {
   ...pkg,
   submittedFromIssue: Number(process.env.ISSUE_NUMBER || 0),
   committedAt: new Date().toISOString()
 };
-registry.packages = Object.fromEntries(Object.entries(registry.packages).sort(([left], [right]) => left.localeCompare(right)));
+world.packages = Object.fromEntries(Object.entries(world.packages).sort(([left], [right]) => left.localeCompare(right)));
+registry.worlds = Object.fromEntries(Object.entries(registry.worlds).sort(([left], [right]) => left.localeCompare(right)));
 fs.writeFileSync(targetPath, `${JSON.stringify(registry, null, 2)}\n`);
-console.log(`Validated and stored Shadowrun package ${patch.packageKey}: ${location.name} at ${pkg.dangerIntensityPercent}% danger`);
+console.log(`Validated and stored Shadowrun package ${patch.packageKey} under ${worldSeed.worldSeedKey}: ${location.name} at ${pkg.dangerIntensityPercent}% danger`);
