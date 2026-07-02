@@ -1,0 +1,256 @@
+{
+  "setting": "Blacklight Continuum",
+  "archetype": "Human Investigator",
+  "schemaVersion": "1.0.0",
+  "framework": "Human Vigil options are road maps for people who confront impossible threats without supernatural blood, transformation, patrons, fae compacts, or awakened control of reality. Select one Vigil Conviction and optionally one Hunter Practice. A Conviction defines why the character continues to stand up and provides favored power families, recommended Skills, and one Conviction Method. A Hunter Practice defines an advanced mundane profession with prerequisites and staged attainments. These options do not use Gifts or Banes. Every effect comes from observation, training, preparation, equipment, relationships, courage, and deliberate human action.",
+  "selectionRules": {
+    "vigilConviction": "Choose one at character creation or remain Uncommitted. It defines two favored power families, recommended Skills, and one Conviction Method.",
+    "hunterPractice": "Choose one as an intended advanced path or leave it Undeclared. Its attainments require later advancement and are not automatic starting abilities."
+  },
+  "catalogs": [
+    {
+      "id": "vigil-convictions",
+      "title": "Seven Vigil Convictions",
+      "eyebrow": "Why the human keeps standing",
+      "code": "7 CONVICTIONS",
+      "legacyLabel": "Former hunter calling",
+      "selectionField": "lineageVariant",
+      "variants": [
+        {
+          "id": "red-line",
+          "name": "The Red Line",
+          "legacy": "Hunters driven to stop active predators through direct confrontation, decisive force, and the refusal to let another victim become the cost of hesitation.",
+          "continuum": "The enemy is no longer limited to familiar monsters. The Red Line marks any person, organism, intelligence, or institution that is presently choosing predation and must be interrupted now.",
+          "favoredFamilies": ["Field Discipline", "Contingency Engineering"],
+          "recommendedSkills": ["Firearms", "Close Combat", "Awareness"],
+          "method": {
+            "name": "Name the Immediate Threat",
+            "effect": "Once per scene after personally witnessing a target inflict Trauma, attempt coercive control, or deliberately endanger a helpless person, mark that target until scene end. Gain two dice on the first attack, restraint, pursuit, or sabotage test made directly against the marked target. The mark ends after the bonus is used."
+          }
+        },
+        {
+          "id": "standing-wall",
+          "name": "The Standing Wall",
+          "legacy": "Protectors who defined the hunt through people, homes, neighborhoods, shelters, and lines that predators would not be permitted to cross.",
+          "continuum": "Home may now be a damaged ship compartment or improvised habitat. The conviction remains the same: survival becomes possible when one person decides where the retreat ends.",
+          "favoredFamilies": ["Field Discipline", "Human Network"],
+          "recommendedSkills": ["Command", "Athletics", "Medicine"],
+          "method": {
+            "name": "Stand Between",
+            "effect": "Once per round, when an adjacent ally is targeted by a physical attack, forced movement, capture attempt, or environmental hazard, spend 1 Conviction to become the target or share the effect. If you become the sole target, reduce the resulting Impact or Trauma by 1 after defenses. If the effect cannot legally target you, grant the ally two defense dice instead."
+          }
+        },
+        {
+          "id": "clear-verdict",
+          "name": "The Clear Verdict",
+          "legacy": "Hunters who refused to act blindly, separating victim from perpetrator, weakness from bait, and evidence from the stories fear wanted them to believe.",
+          "continuum": "Copies, altered memories, autonomous systems, and unfamiliar species make judgment harder rather than less necessary. Responsibility must be reconstructed before force becomes justice.",
+          "favoredFamilies": ["Casecraft", "Continuity Anchoring"],
+          "recommendedSkills": ["Investigation", "Empathy", "Reason"],
+          "method": {
+            "name": "Three-Part Assessment",
+            "effect": "Once per scene after one action observing a person, intelligence, or organized group, choose one question and test Awareness + Investigation against difficulty 2: Is it knowingly causing the immediate harm? Is it acting under an identifiable coercion? What visible action would most clearly distinguish cooperation from deception? On success receive the exact answer. On failure receive no answer and the target becomes aware of your scrutiny if it can perceive you."
+          }
+        },
+        {
+          "id": "willing-burden",
+          "name": "The Willing Burden",
+          "legacy": "Hunters who accepted pain, exhaustion, blame, and danger so someone else could survive long enough to escape, recover, or finish the work.",
+          "continuum": "Martyrdom is no longer treated as sacred or inevitable. The Willing Burden makes a measured choice to carry a cost without pretending that self-destruction is the only proof of courage.",
+          "favoredFamilies": ["Field Discipline", "Continuity Anchoring"],
+          "recommendedSkills": ["Resilience", "Medicine", "Resolve"],
+          "method": {
+            "name": "Carry It With Me",
+            "effect": "Once per scene as a reaction when an ally within 5 meters suffers Impact, Exposure, Strain, or a fear penalty, take up to 2 points of that consequence yourself. Reduce the transferred total by 1, to a minimum of 0. You cannot transfer Trauma, Discord, Hunger, Fury, Intrusion, Feedback, or another Archetype's Pressure with this Method."
+          }
+        },
+        {
+          "id": "open-door",
+          "name": "The Open Door",
+          "legacy": "Hunters who believed some enemies could stop, some victims could be recovered, and understanding a monster did not require surrendering to it.",
+          "continuum": "The new universe contains hostile beings whose motives are cultural, programmed, coerced, or desperate rather than innately evil. The Open Door preserves an exit without confusing mercy with passivity.",
+          "favoredFamilies": ["Human Network", "Casecraft"],
+          "recommendedSkills": ["Negotiation", "Empathy", "Medicine"],
+          "method": {
+            "name": "Offer a Way Out",
+            "effect": "Once per scene, state one immediate, achievable condition under which you will stop attacking, expose, or pursue a target. If the target can understand the offer, test Presence + Negotiation opposed by its Resolve + Composure. On success, the target cannot initiate a hostile action against you until the end of its next turn unless you or an ally attacks it first. Acceptance remains voluntary and creates no supernatural compulsion."
+          }
+        },
+        {
+          "id": "unbroken-witness",
+          "name": "The Unbroken Witness",
+          "legacy": "Hunters who retained empathy, curiosity, and moral clarity when fear demanded that every unfamiliar person be treated as a target.",
+          "continuum": "In a civilization of copies, synthetic minds, engineered organisms, and alien cultures, innocence is the refusal to let unfamiliarity become evidence of guilt.",
+          "favoredFamilies": ["Continuity Anchoring", "Human Network"],
+          "recommendedSkills": ["Empathy", "Xenoculture", "Investigation"],
+          "method": {
+            "name": "See the Person First",
+            "effect": "Once per scene after one minute of direct interaction, choose one target and ask one question: What are they most afraid will happen next? What immediate need are they trying to protect? Are they speaking from personal choice, rehearsed instruction, or visible coercion? Receive the answer indicated by observable behavior and gain one die on the next Empathy, Negotiation, or Continuity Anchoring test involving that target."
+          }
+        },
+        {
+          "id": "far-horizon",
+          "name": "The Far Horizon",
+          "legacy": "Hunters who saw scattered survivors as the beginning of an organization, individual victories as steps in a campaign, and impossible threats as problems humanity could eventually learn to solve.",
+          "continuum": "There is no existing human institution capable of protecting the team. The Far Horizon turns a handful of people into a plan and a plan into something that may outlive its founders.",
+          "favoredFamilies": ["Human Network", "Institutional Ghostcraft"],
+          "recommendedSkills": ["Command", "Negotiation", "Investigation"],
+          "method": {
+            "name": "Keep the Objective Visible",
+            "effect": "Once per scene, state one immediate objective and choose up to Archetype Rating willing allies who can hear or receive you. Each gains one die on their first action directly advancing the objective. If a chosen ally produces a Complication, you may spend 1 Conviction to restate the plan and allow that ally to reroll one failed die; the Complication still occurs."
+          }
+        }
+      ]
+    },
+    {
+      "id": "hunter-practices",
+      "title": "Ten Hunter Practices",
+      "eyebrow": "Advanced mortal professions",
+      "code": "10 PRACTICES",
+      "legacyLabel": "Former hunting discipline",
+      "selectionField": "humanInvestigatorPractice",
+      "variants": [
+        {
+          "id": "counterpredator",
+          "name": "Counterpredator",
+          "legacy": "A combat hunter trained to study an enemy's routine, survive the first exchange, and strike during the narrow interval when superior power becomes exposed.",
+          "continuum": "The target may be supernatural, synthetic, institutional, biological, or mechanical. The method remains observation, preparation, disciplined violence, and immediate withdrawal before advantage disappears.",
+          "favoredFamilies": ["Field Discipline", "Contingency Engineering"],
+          "recommendedSkills": ["Firearms", "Close Combat", "Stealth"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Field Discipline or Contingency Engineering.",
+          "progression": [
+            {"stage": "Initiate", "name": "Target Profile", "effect": "After observing or researching one target for ten minutes, choose one profile benefit for the operation: two dice to track it; two dice to identify its equipment or attack routine; or one die on attacks made during the first round you personally engage it. Only one Target Profile may be active."},
+            {"stage": "Adept", "name": "Ambush Denial", "effect": "Once per scene when the profiled target acts before you, spend 1 Conviction to immediately move up to half your movement, draw or ready one item, and gain 1 Guard until your next turn."},
+            {"stage": "Master", "name": "Exploit the Window", "effect": "Once per scene after the profiled target fails a test, suffers a Complication, reloads, changes form, loses a connection, or activates a costly ability, spend 2 Conviction to take one immediate attack, restraint, sabotage, or escape action against it with two bonus dice."}
+          ]
+        },
+        {
+          "id": "sanctuary-marshal",
+          "name": "Sanctuary Marshal",
+          "legacy": "A defender who turns ordinary rooms, shelters, clinics, vehicles, and community spaces into places where frightened people can survive organized predation.",
+          "continuum": "A sanctuary is defined by procedures, maintained exits, trusted people, supplies, and the willingness to defend its rules—not by sacred ground or supernatural protection.",
+          "favoredFamilies": ["Field Discipline", "Human Network"],
+          "recommendedSkills": ["Security", "Command", "Medicine"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Field Discipline or Human Network.",
+          "progression": [
+            {"stage": "Initiate", "name": "Safe-Room Protocol", "effect": "After ten minutes preparing a bounded room, vehicle, or compartment, designate one controlled entrance, one emergency exit, and one rally point. Allies who reviewed the plan gain one die on defense, evacuation, and first-aid tests inside the site for the scene."},
+            {"stage": "Adept", "name": "Evacuation Discipline", "effect": "Once per scene, spend 1 Conviction and issue a clear evacuation route. Up to Archetype Rating willing allies may immediately move half their movement toward the designated exit without surrendering active defense."},
+            {"stage": "Master", "name": "Hold Until Relieved", "effect": "Spend 2 Conviction and 1 Strain while defending a prepared site. For three rounds, allies inside gain 1 Guard and cannot be forced to flee by fear. The effect ends early if you leave the site or become incapacitated."}
+          ]
+        },
+        {
+          "id": "forensic-adversary",
+          "name": "Forensic Adversary",
+          "legacy": "An investigator who treats supernatural concealment, corrupted testimony, staged scenes, and impossible alibis as adversarial systems that can still be made to contradict themselves.",
+          "continuum": "The practice expands to edited memories, copied identities, autonomous witnesses, fabricated records, and institutions designed to distribute responsibility until no one appears accountable.",
+          "favoredFamilies": ["Casecraft", "Continuity Anchoring"],
+          "recommendedSkills": ["Investigation", "Science", "Noospherics"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Casecraft or Continuity Anchoring.",
+          "progression": [
+            {"stage": "Initiate", "name": "Adversarial Timeline", "effect": "After ten minutes comparing at least three records, statements, or traces, identify the earliest point at which they cease to support one shared sequence of events."},
+            {"stage": "Adept", "name": "Protected Duplicate", "effect": "Spend 1 Conviction while preserving evidence. Create two independently verifiable copies with separate custody records. Destroying, altering, or discrediting one copy does not affect the other, and attempts to deny that both originated from the same source lose two dice."},
+            {"stage": "Master", "name": "Close Every Alibi", "effect": "Once per operation, spend 2 Conviction after establishing three contradictions connected to one target. Choose one privilege the target has used to evade responsibility: anonymity, delegated action, copied identity, jurisdiction, memory loss, or system ownership. For the rest of the operation, that privilege cannot by itself negate evidence linking the target to the investigated act."}
+          ]
+        },
+        {
+          "id": "burden-carrier",
+          "name": "Burden Carrier",
+          "legacy": "A rescue specialist trained to enter the dangerous space, keep another person conscious, and pay the physical or psychological price required to bring them back.",
+          "continuum": "The practice rejects romantic martyrdom. Every sacrifice has a defined purpose, a survivable limit, and a recovery plan whenever circumstances permit one.",
+          "favoredFamilies": ["Field Discipline", "Continuity Anchoring"],
+          "recommendedSkills": ["Medicine", "Athletics", "Resolve"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Field Discipline or Continuity Anchoring.",
+          "progression": [
+            {"stage": "Initiate", "name": "Rescue Harness", "effect": "You can move at full speed while carrying or dragging one willing, unconscious, or incapacitated person whose Carry requirement does not exceed your Carry + Archetype Rating. Gain two dice against separation, forced movement, and loss of grip while doing so."},
+            {"stage": "Adept", "name": "Stay With Me", "effect": "Spend 1 Conviction and one action beside an incapacitated ally. They remain conscious enough to speak, perceive, and take one minor action each round for three rounds. Further Trauma still affects them normally."},
+            {"stage": "Master", "name": "I Pay This Part", "effect": "Once per scene when an ally within reach would suffer Trauma, capture, identity removal, or forced displacement, spend 2 Conviction and 1 Strain. Replace that consequence with 2 Impact to yourself and one related persistent condition chosen from injured, exhausted, exposed, or separated. The ally avoids the original consequence."}
+          ]
+        },
+        {
+          "id": "recovery-negotiator",
+          "name": "Recovery Negotiator",
+          "legacy": "A hunter who creates surrender terms, extracts victims from coercive relationships, and distinguishes an enemy capable of stopping from one merely using conversation to gain time.",
+          "continuum": "Recovery can involve cults, machine collectives, predatory contracts, copied identities, parasitic systems, or frightened beings trapped inside roles they did not choose.",
+          "favoredFamilies": ["Human Network", "Casecraft"],
+          "recommendedSkills": ["Negotiation", "Empathy", "Investigation"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Human Network or Casecraft.",
+          "progression": [
+            {"stage": "Initiate", "name": "Terms of Exit", "effect": "After five minutes of conversation, identify one specific condition the target requires before it will consider stopping, surrendering, defecting, or releasing a dependent person. The condition may be unacceptable, but it is stated truthfully as the target currently understands it."},
+            {"stage": "Adept", "name": "Protected Defection", "effect": "Spend 1 Conviction when a willing target accepts negotiated exit terms. For the scene, that target gains two dice against coercion to resume its former role, and allies who accepted the negotiation cannot attack it without first succeeding on Resolve + Composure against difficulty 2."},
+            {"stage": "Master", "name": "Accountable Mercy", "effect": "Once per operation, write or state a five-part recovery agreement naming prohibited conduct, restitution, monitoring, protection, and the consequence of breach. A willing target who accepts gains one die on actions fulfilling the agreement. The first intentional breach is automatically evident to every named signatory through ordinary records, witnesses, or a prearranged verification method."}
+          ]
+        },
+        {
+          "id": "witness-advocate",
+          "name": "Witness Advocate",
+          "legacy": "A protector of survivors, testimony, identity, and consent who understands that defeating a predator means little if victims are erased, disbelieved, or forced back into silence.",
+          "continuum": "The witness may be biological, copied, synthetic, distributed, memory-damaged, or legally unrecognized. Advocacy begins by preserving what that person can still choose to say.",
+          "favoredFamilies": ["Continuity Anchoring", "Institutional Ghostcraft"],
+          "recommendedSkills": ["Empathy", "Negotiation", "Security"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Continuity Anchoring or Institutional Ghostcraft.",
+          "progression": [
+            {"stage": "Initiate", "name": "Consent Record", "effect": "After one minute with a willing witness, record their current name, chosen identity, immediate account, and one action they do not consent to. For the operation, attempts to falsely claim their consent lose two dice while the record or witness survives."},
+            {"stage": "Adept", "name": "Trauma-Informed Interview", "effect": "Spend 1 Conviction before questioning a willing witness. For the scene, they ignore one fear, pain, or authority penalty while answering, and you may ask one follow-up question after a failed Investigation or Empathy test without worsening their condition."},
+            {"stage": "Master", "name": "Public Standing", "effect": "Spend 2 Conviction after presenting a preserved Consent Record to an institution or organized group. Test Presence + Negotiation against difficulty 3. On success, the witness receives provisional recognition sufficient to speak, request protection, retain counsel or an advocate, and contest one immediate action affecting them for the scene."}
+          ]
+        },
+        {
+          "id": "cell-architect",
+          "name": "Cell Architect",
+          "legacy": "An organizer who turns isolated hunters, frightened witnesses, professionals, and ordinary neighbors into a resilient network that can share information without collapsing into panic or personality cult.",
+          "continuum": "The work now includes secure channels, noospheric identity, distributed cells, machine participants, and communities that may have no shared species or legal framework.",
+          "favoredFamilies": ["Human Network", "Institutional Ghostcraft"],
+          "recommendedSkills": ["Command", "Security", "Negotiation"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Human Network or Institutional Ghostcraft.",
+          "progression": [
+            {"stage": "Initiate", "name": "Three-Person Cell", "effect": "After one hour of planning with at least two willing participants, assign one role to each: observer, responder, custodian, liaison, medic, or analyst. Once per operation, each member gains two dice on one test directly fulfilling their assigned role."},
+            {"stage": "Adept", "name": "Compartmented Network", "effect": "Spend 1 Conviction during planning. Divide information among up to Archetype Rating cells. Capturing or compromising one cell reveals only its own objective, members, and one designated contact route unless the attacker defeats Reason + Security at difficulty 3."},
+            {"stage": "Master", "name": "The Work Continues", "effect": "Spend 2 Conviction, 1 Strain, and one week training at least five willing people. Establish a durable Vigil Network with one safe contact method, one evidence archive, one emergency protocol, and one accountable leader or council. Once per operation, the Network can provide one established contact, one Serviceable supply cache, or one verified local warning."}
+          ]
+        },
+        {
+          "id": "solitary-listener",
+          "name": "Solitary Listener",
+          "legacy": "An isolated watcher who learned to detect patterns others dismissed, operate without immediate support, and preserve observations when no institution or cell believed the threat existed.",
+          "continuum": "Isolation remains useful for avoiding compromised networks, but the Practice treats solitude as an operational condition rather than proof of special insight or moral superiority.",
+          "favoredFamilies": ["Casecraft", "Contingency Engineering"],
+          "recommendedSkills": ["Awareness", "Survival", "Security"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Casecraft or Contingency Engineering.",
+          "progression": [
+            {"stage": "Initiate", "name": "Quiet Baseline", "effect": "After spending ten uninterrupted minutes alone in a location, record its ordinary sounds, signals, movement, temperature, and routines. For the scene, gain two dice to notice a change from that baseline."},
+            {"stage": "Adept", "name": "Dead-Drop Discipline", "effect": "Once per operation, establish one concealed cache or message drop containing two common items or one evidence packet. Finding it without your directions requires Awareness + Investigation against difficulty equal to Resolve."},
+            {"stage": "Master", "name": "Independent Confirmation", "effect": "Once per scene when every available ally, sensor, or record contradicts your direct observation, spend 2 Conviction to preserve your observation as an Identity Anchor and continue acting without contradiction penalties for three rounds. This does not make the observation true; it prevents social or system consensus from erasing it before it can be tested."}
+          ]
+        },
+        {
+          "id": "final-directive",
+          "name": "Final Directive",
+          "legacy": "A relentless hunter who narrows life around one intolerable threat and develops the discipline to continue after ordinary caution, reputation, and comfort have ceased to matter.",
+          "continuum": "The Practice is powerful and dangerous because determination is not proof of correctness. Every attainment requires a named objective and leaves evidence that others can use to challenge the hunter's conclusions.",
+          "favoredFamilies": ["Field Discipline", "Casecraft"],
+          "recommendedSkills": ["Resolve", "Investigation", "Firearms"],
+          "entryRequirement": "Archetype Rating 3, one rank-3 Field Discipline or Casecraft power, and a written named objective supported by two pieces of evidence.",
+          "progression": [
+            {"stage": "Initiate", "name": "One Objective", "effect": "Name one specific target, organization, location, or operation supported by two preserved pieces of evidence. Gain one die on tests directly pursuing it and lose one die on unrelated social and recovery tests during scenes in which you refuse an available opportunity to rest or assist an ally."},
+            {"stage": "Adept", "name": "Nothing Wasted", "effect": "Once per scene after failing a test directly pursuing the named objective, gain 1 Strain to learn one specific reason for failure from the following list: insufficient force, wrong timing, false information, missing access, compromised equipment, or outside intervention. Gain one die on the next test that directly corrects that reason."},
+            {"stage": "Master", "name": "End the Directive", "effect": "Once per operation, spend 2 Conviction and 2 Strain when taking an action that could conclusively complete or permanently abandon the named objective. Add Resolve to the test and ignore fear and injury penalties. After resolution, the Directive ends and cannot be selected again without three new pieces of evidence and one full rest."}
+          ]
+        },
+        {
+          "id": "containment-engineer",
+          "name": "Containment Engineer",
+          "legacy": "A practical specialist who learns what a threat requires, denies those conditions with ordinary tools, and builds cages, quarantines, alarms, and failure procedures around observed behavior.",
+          "continuum": "Alien materials and posthuman systems expand the available toolkit, but the method remains empirical: identify the requirement, construct the control, test the boundary, and document the escape condition.",
+          "favoredFamilies": ["Contingency Engineering", "Institutional Ghostcraft"],
+          "recommendedSkills": ["Engineering", "Security", "Science"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Contingency Engineering or Institutional Ghostcraft.",
+          "progression": [
+            {"stage": "Initiate", "name": "Containment Requirement", "effect": "After observing a threat use one capability or testing one evidence-backed hypothesis, choose one requirement to document: material it cannot cross; signal it must maintain; environmental condition it needs; action that triggers it; or resource it must consume. The conclusion applies only when supported by the observed event."},
+            {"stage": "Adept", "name": "Field Containment", "effect": "Spend 1 Conviction and ten minutes using available equipment to create one 3-meter bounded containment zone tailored to a documented requirement. The zone has durability equal to Reason + Archetype Rating and imposes two dice of penalties on attempts to cross or activate the documented requirement. It lasts for the scene or until destroyed."},
+            {"stage": "Master", "name": "Layered Failure Plan", "effect": "Spend 2 Conviction and one hour preparing a site around one documented threat. Establish three layers selected from alarm, delay, isolation, evacuation, evidence preservation, power denial, or destructive failsafe. Each layer can activate once during the operation and performs its stated ordinary function without a test when its written trigger occurs. A destructive failsafe cannot exceed available weapons or installed hazards."}
+          ]
+        }
+      ]
+    }
+  ]
+}
