@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.8.0",
+  "schemaVersion": "0.9.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -87,7 +87,7 @@
     {
       "id": "human-investigator",
       "name": "Human Investigator",
-      "theme": "A mortal specialist who turns evidence, preparation, discipline, institutions, and relationships into capabilities able to compete with supernatural and posthuman threats.",
+      "theme": "A purely mortal hunter and investigator who competes with supernatural, posthuman, institutional, and alien threats through evidence, preparation, discipline, relationships, logistics, courage, and accountable judgment. The Human Investigator possesses no automatic mystical inheritance, transformative state, patron, bloodline, compact, or awakened command of reality. Their exceptional capabilities are the far edge of what trained human beings can accomplish when they refuse to surrender initiative, identity, one another, or the truth.",
       "resourceName": "Conviction",
       "pressureName": "Strain",
       "keyAttribute": "Resolve",
@@ -296,6 +296,16 @@
             }
           ]
         }
+      ],
+      "lore": [
+        "The Human Investigator is the road for a character who remains human without treating humanity as an absence of options. They may be a detective, survivor, medic, soldier, organizer, journalist, engineer, advocate, responder, hunter, analyst, witness, or ordinary person who learned to function under extraordinary pressure.",
+        "They do not receive automatic supernatural senses, immunity, regeneration, prophecy, or authority. Every advantage comes from a recorded Skill, specialization, Operational Frame, item, relationship, preparation, innate Human ability, ranked capability, or explicit situational permission.",
+        "What makes the Investigator exceptional is the ability to connect evidence before a predator can erase it, keep moving under fear, preserve another person's identity, exploit institutional procedure, prepare options before disaster, and turn isolated people into a functioning network.",
+        "Conviction is not supernatural energy. It is the character's limited capacity to commit fully to a principle, decision, person, or plan when hesitation would surrender the initiative. Spending Conviction represents focus, courage, preparation brought to bear, and the choice to accept responsibility.",
+        "Strain records the cost of exceeding ordinary limits. Exhaustion, fear, injury, isolation, unresolved responsibility, moral pressure, and repeated dependence on willpower accumulate because the Investigator remains mortal even when their performance becomes extraordinary.",
+        "Choose one Vigil Conviction or remain Uncommitted. The Conviction defines why the character continues to confront the threat and provides favored families, recommended Skills, and one explicit Conviction Method.",
+        "A Hunter Practice may be selected as an intended advanced profession or left Undeclared. Practice attainments require later advancement. They are learned procedures and capabilities rather than blessings, Gifts, Banes, magical Edges, or unexplained revelations.",
+        "Casecraft, Field Discipline, Continuity Anchoring, Institutional Ghostcraft, Contingency Engineering, and Human Network remain the shared capability families beneath every Vigil Conviction and Hunter Practice."
       ]
     },
     {
