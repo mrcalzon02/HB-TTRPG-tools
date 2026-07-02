@@ -1,0 +1,34 @@
+name: One-time Archetype label cleanup
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-archetype-label-cleanup.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Remove final history label
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('blacklight-archetype-transition.js')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('Select an Archetype to review its Resource, Pressure, weakness, innate abilities, and six complete power families. Crossing history and body reconstruction are not part of this rules record.', 'Select an Archetype to review its Resource, Pressure, weakness, innate abilities, and six complete power families.')
+          path.write_text(text, encoding='utf-8')
+          Path('.github/workflows/one-time-archetype-label-cleanup.yml').unlink()
+          PY
+      - name: Commit cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Remove final Archetype history label"
+          git push origin main
