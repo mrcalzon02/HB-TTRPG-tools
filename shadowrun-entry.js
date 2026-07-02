@@ -3,7 +3,7 @@
 
   const VIEW_ID = 'shadowrun';
   const modules = [
-    ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, run hooks, security posture, Matrix surfaces, magical texture, legwork, and export packages.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
+    ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, run hooks, security posture, Matrix surfaces, magical texture, legwork, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
     ['generators','Mr. Johnson and Employer Generator','Create an employer persona, public identity, real sponsor, negotiation posture, withheld information, leverage, and betrayal risk.'],
     ['tools','Fixer and Contact Network Editor','Track contacts, loyalty, connection, specialties, neighborhoods, favors, availability, and evolving risk.'],
@@ -24,10 +24,11 @@
     ['tools','Binary Cube Encryption Laboratory','Develop and test a binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype','Open Laboratory'],
     ['tools','Polyaminal Fold Ladder Compression Research','Investigate recursive anchor/swing folding, stage-gated codecs, deterministic binary packing, measurable compression behavior, and eventual handoff into the Binary Cube pipeline.',null,'research']
   ];
+
   let active = 'all';
   let cubeToolPromise = null;
   let sprawlToolPromise = null;
-  const loadedCubeScripts = new Map();
+  const scriptPromises = new Map();
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const title = value => String(value).replace(/^./, character => character.toUpperCase());
 
@@ -72,26 +73,45 @@
     bind();
   }
 
-  function loadCubeScript(src) {
-    if (loadedCubeScripts.has(src)) return loadedCubeScripts.get(src);
+  function existingScript(src) {
+    return [...document.scripts].find(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src));
+  }
+
+  function loadScript(src, ready = () => false) {
+    if (ready()) return Promise.resolve();
+    if (scriptPromises.has(src)) return scriptPromises.get(src);
     const promise = new Promise((resolve, reject) => {
-      const existing = [...document.scripts].find(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src));
-      if (existing?.dataset.shadowrunCubeLoaded === 'true') return resolve();
+      const existing = existingScript(src);
       const script = existing || document.createElement('script');
-      script.addEventListener('load', () => {
-        script.dataset.shadowrunCubeLoaded = 'true';
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        if (!ready()) return reject(new Error(`${src} loaded without exposing its expected API.`));
+        script.dataset.shadowrunToolLoaded = 'true';
         resolve();
-      }, { once: true });
-      script.addEventListener('error', () => reject(new Error(`${src} could not be loaded.`)), { once: true });
+      };
+      const fail = () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        reject(new Error(`${src} could not be loaded.`));
+      };
+      const timeout = window.setTimeout(() => ready() ? finish() : fail(), 10000);
+      script.addEventListener('load', finish, { once: true });
+      script.addEventListener('error', fail, { once: true });
       if (!existing) {
         script.src = src;
         script.async = false;
-        script.dataset.shadowrunCubeTool = 'true';
+        script.dataset.shadowrunTool = 'true';
         document.body.appendChild(script);
+      } else if (ready()) {
+        finish();
       }
     });
-    loadedCubeScripts.set(src, promise);
-    promise.catch(() => loadedCubeScripts.delete(src));
+    scriptPromises.set(src, promise);
+    promise.catch(() => scriptPromises.delete(src));
     return promise;
   }
 
@@ -101,16 +121,11 @@
     }
     if (cubeToolPromise) return cubeToolPromise;
     cubeToolPromise = (async () => {
-      await loadCubeScript('shadowrun-binary-cube-engine.js');
-      if (!window.ShadowrunBinaryCubeEngine) throw new Error('The Binary Cube engine loaded without exposing its API.');
-      await loadCubeScript('shadowrun-binary-cube-auth.js');
-      if (!window.ShadowrunBinaryCubeAuth) throw new Error('The Binary Cube authenticated-envelope engine loaded without exposing its API.');
-      await loadCubeScript('shadowrun-binary-cube-encryption.js');
-      if (!window.ShadowrunBinaryCubeEncryption) throw new Error('The Binary Cube laboratory loaded without exposing its interface.');
-      await loadCubeScript('shadowrun-binary-cube-editor.js');
-      if (!window.ShadowrunBinaryCubeEditor) throw new Error('The Binary Cube custom key editor loaded without exposing its API.');
-      await loadCubeScript('shadowrun-binary-cube-auth-ui.js');
-      if (!window.ShadowrunBinaryCubeAuthUI) throw new Error('The Binary Cube authenticated-envelope controls loaded without exposing their interface.');
+      await loadScript('shadowrun-binary-cube-engine.js', () => Boolean(window.ShadowrunBinaryCubeEngine));
+      await loadScript('shadowrun-binary-cube-auth.js', () => Boolean(window.ShadowrunBinaryCubeAuth));
+      await loadScript('shadowrun-binary-cube-encryption.js', () => Boolean(window.ShadowrunBinaryCubeEncryption));
+      await loadScript('shadowrun-binary-cube-editor.js', () => Boolean(window.ShadowrunBinaryCubeEditor));
+      await loadScript('shadowrun-binary-cube-auth-ui.js', () => Boolean(window.ShadowrunBinaryCubeAuthUI));
       return window.ShadowrunBinaryCubeEncryption;
     })();
     cubeToolPromise.catch(() => { cubeToolPromise = null; });
@@ -118,15 +133,12 @@
   }
 
   function loadSprawlTool() {
-    if (window.ShadowrunSprawlDiscoveryEngine && window.ShadowrunSprawlDiscovery) {
-      return Promise.resolve(window.ShadowrunSprawlDiscovery);
-    }
     if (sprawlToolPromise) return sprawlToolPromise;
     sprawlToolPromise = (async () => {
-      await loadCubeScript('shadowrun-sprawl-discovery-engine.js');
-      if (!window.ShadowrunSprawlDiscoveryEngine) throw new Error('The Sprawl Discovery engine loaded without exposing its API.');
-      await loadCubeScript('shadowrun-sprawl-discovery.js');
-      if (!window.ShadowrunSprawlDiscovery) throw new Error('The Sprawl Discovery panel loaded without exposing its interface.');
+      await loadScript('shadowrun-sprawl-discovery-engine.js', () => Boolean(window.ShadowrunSprawlDiscoveryEngine));
+      await loadScript('shadowrun-sprawl-discovery.js', () => Boolean(window.ShadowrunSprawlDiscovery));
+      await loadScript('spatial-submission-handoff.js', () => Boolean(window.HBSpatialSubmissionHandoff));
+      await loadScript('shadowrun-sprawl-registry-bridge.js', () => Boolean(window.ShadowrunSprawlRegistry));
       return window.ShadowrunSprawlDiscovery;
     })();
     sprawlToolPromise.catch(() => { sprawlToolPromise = null; });
@@ -148,9 +160,8 @@
     button.disabled = true;
     button.setAttribute('aria-busy', 'true');
     const original = button.textContent;
-    button.textContent = 'Loading Laboratory…';
     try {
-      button.textContent = `Loading ${toolLabel(toolId)}...`;
+      button.textContent = `Loading ${toolLabel(toolId)}…`;
       const api = await loadTool(toolId);
       if (!api?.openPanel) throw new Error(`${toolLabel(toolId)} loaded without an open-panel interface.`);
       api.openPanel();
@@ -176,7 +187,9 @@
       const button = event.target.closest('[data-shadowrun-open]');
       if (button) void openTool(button);
     });
-    tabs(); render(); bind();
+    tabs();
+    render();
+    bind();
   }
 
   function tabs() {
@@ -206,6 +219,12 @@
     document.getElementById('shadowrun-count').textContent = `${visible.length} of ${modules.length} modules shown.`;
   }
 
-  function init() { style(); navigation(); build(); navigation(); }
+  function init() {
+    style();
+    navigation();
+    build();
+    navigation();
+  }
+
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();
