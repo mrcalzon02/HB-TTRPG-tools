@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.4.0",
+  "schemaVersion": "0.5.0",
   "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops.",
   "entries": [
     {
@@ -18,37 +18,111 @@
       "tables": [
         {
           "title": "Derived Traits",
-          "columns": ["Trait", "Formula"],
+          "columns": [
+            "Trait",
+            "Formula"
+          ],
           "rows": [
-            ["Vitality", "Resilience + 5"],
-            ["Guard", "Finesse + Awareness"],
-            ["Initiative", "Finesse + Composure"],
-            ["Cohesion", "Resolve + Composure + 3"],
-            ["Exposure Limit", "Resolve + Resilience"],
-            ["Carry", "Force + Resilience"],
-            ["Identity Defense", "Resolve + Composure"],
-            ["Protection", "Resilience + Armor Rating"],
-            ["Power Dice", "Archetype Rating + Archetype Key Attribute"],
-            ["Resource Maximum", "Archetype Base + Archetype Rating + Key Attribute"]
+            [
+              "Vitality",
+              "Resilience + 5"
+            ],
+            [
+              "Guard",
+              "Finesse + Awareness"
+            ],
+            [
+              "Initiative",
+              "Finesse + Composure"
+            ],
+            [
+              "Cohesion",
+              "Resolve + Composure + 3"
+            ],
+            [
+              "Exposure Limit",
+              "Resolve + Resilience"
+            ],
+            [
+              "Carry",
+              "Force + Resilience"
+            ],
+            [
+              "Identity Defense",
+              "Resolve + Composure"
+            ],
+            [
+              "Protection",
+              "Resilience + Armor Rating"
+            ],
+            [
+              "Power Dice",
+              "Archetype Rating + Archetype Key Attribute"
+            ],
+            [
+              "Resource Maximum",
+              "Archetype Base + Archetype Rating + Key Attribute"
+            ]
           ]
         },
         {
           "title": "Capability Rule",
-          "columns": ["Record", "Purpose"],
+          "columns": [
+            "Record",
+            "Purpose"
+          ],
           "rows": [
-            ["Attributes and Skills", "General competence"],
-            ["Operational Frame", "Professional training and mission role"],
-            ["Archetype", "Exceptional capability framework"],
-            ["Innate Abilities", "Automatic Archetype permissions"],
-            ["Ranked Powers", "Purchased or earned exceptional effects"],
-            ["Equipment", "External tools and functions"],
-            ["Limitations and Conditions", "Recorded restrictions and consequences"]
+            [
+              "Attributes and Skills",
+              "General competence"
+            ],
+            [
+              "Operational Frame",
+              "Professional training and mission role"
+            ],
+            [
+              "Archetype",
+              "Exceptional capability framework"
+            ],
+            [
+              "Innate Abilities",
+              "Automatic Archetype permissions"
+            ],
+            [
+              "Ranked Powers",
+              "Purchased or earned exceptional effects"
+            ],
+            [
+              "Equipment",
+              "External tools and functions"
+            ],
+            [
+              "Limitations and Conditions",
+              "Recorded restrictions and consequences"
+            ]
           ]
         }
       ],
-      "links": [{"label": "Open Basic Character Sheet", "href": "blacklight-character-sheet.html"}],
-      "tags": ["character sheet", "d10", "capabilities", "autosave", "JSON", "print"],
-      "relatedEntries": ["blacklight-basic-archetypes", "blacklight-d10-foundation", "blacklight-character-creation", "capability-framework"]
+      "links": [
+        {
+          "label": "Open Basic Character Sheet",
+          "href": "blacklight-character-sheet.html"
+        }
+      ],
+      "tags": [
+        "character sheet",
+        "d10",
+        "capabilities",
+        "autosave",
+        "JSON",
+        "print"
+      ],
+      "relatedEntries": [
+        "blacklight-basic-archetypes",
+        "blacklight-d10-foundation",
+        "blacklight-character-creation",
+        "capability-framework"
+      ]
     },
     {
       "id": "blacklight-basic-archetypes",
@@ -63,19 +137,74 @@
       "tables": [
         {
           "title": "Archetype Summary",
-          "columns": ["Archetype", "Resource", "Pressure", "Key Attribute", "Capability Domain"],
+          "columns": [
+            "Archetype",
+            "Resource",
+            "Pressure",
+            "Key Attribute",
+            "Capability Domain"
+          ],
           "rows": [
-            ["Human Investigator", "Conviction", "Strain", "Resolve", "Evidence, discipline, identity defense, institutions, contingency, and human networks"],
-            ["Vampire", "Vitae", "Hunger", "Resilience", "Speed, command, concealment, resilience, feeding, and blood memory"],
-            ["Shapechanger", "Fury", "Instinct", "Force", "Forms, pursuit, pack bonds, adaptation, spirits, and territory"],
-            ["Eldritch Binder", "Pact", "Intrusion", "Resolve", "Seals, manifestations, obligations, cognition, thresholds, and invocation"],
-            ["Harmonic Mutant", "Resonance", "Discord", "Composure", "Projection, echoes, structures, emotion, phase, and memory"],
-            ["Technomancer", "Bandwidth", "Feedback", "Reason", "Networks, constructs, identity, machine relations, signals, and fabrication"]
+            [
+              "Human Investigator",
+              "Conviction",
+              "Strain",
+              "Resolve",
+              "Evidence, discipline, identity defense, institutions, contingency, and human networks"
+            ],
+            [
+              "Vampire",
+              "Vitae",
+              "Hunger",
+              "Resilience",
+              "Speed, command, concealment, resilience, feeding, and blood memory"
+            ],
+            [
+              "Shapechanger",
+              "Fury",
+              "Instinct",
+              "Force",
+              "Forms, pursuit, pack bonds, adaptation, spirits, and territory"
+            ],
+            [
+              "Eldritch Binder",
+              "Pact",
+              "Intrusion",
+              "Resolve",
+              "Seals, manifestations, obligations, cognition, thresholds, and invocation"
+            ],
+            [
+              "Harmonic Mutant",
+              "Resonance",
+              "Discord",
+              "Composure",
+              "Projection, echoes, structures, emotion, phase, and memory"
+            ],
+            [
+              "Technomancer",
+              "Bandwidth",
+              "Feedback",
+              "Reason",
+              "Networks, constructs, identity, machine relations, signals, and fabrication"
+            ]
           ]
         }
       ],
-      "tags": ["classes", "archetypes", "capabilities", "resources", "pressure tracks"],
-      "relatedEntries": ["human-investigator-archetype", "vampire-archetype", "shapechanger-archetype", "eldritch-binder-archetype", "harmonic-mutant-archetype", "technomancer-archetype"]
+      "tags": [
+        "classes",
+        "archetypes",
+        "capabilities",
+        "resources",
+        "pressure tracks"
+      ],
+      "relatedEntries": [
+        "human-investigator-archetype",
+        "vampire-archetype",
+        "shapechanger-archetype",
+        "eldritch-binder-archetype",
+        "harmonic-mutant-archetype",
+        "technomancer-archetype"
+      ]
     },
     {
       "id": "human-investigator-archetype",
@@ -90,122 +219,277 @@
       "tables": [
         {
           "title": "Six Power Families",
-          "columns": ["Family", "Primary Function"],
+          "columns": [
+            "Family",
+            "Primary Function"
+          ],
           "rows": [
-            ["Casecraft", "Evidence, reconstruction, contradiction, and responsibility"],
-            ["Field Discipline", "Tactical movement, protection, timing, and mortal defiance"],
-            ["Continuity Anchoring", "Identity defense, shared baselines, and resistance to editing"],
-            ["Institutional Ghostcraft", "Credentials, hierarchy, jurisdiction, and organization building"],
-            ["Contingency Engineering", "Tools, routes, caches, reversals, and failure analysis"],
-            ["Human Network", "Trust, witnesses, competent cells, obligations, and community"]
+            [
+              "Casecraft",
+              "Evidence, reconstruction, contradiction, and responsibility"
+            ],
+            [
+              "Field Discipline",
+              "Tactical movement, protection, timing, and mortal defiance"
+            ],
+            [
+              "Continuity Anchoring",
+              "Identity defense, shared baselines, and resistance to editing"
+            ],
+            [
+              "Institutional Ghostcraft",
+              "Credentials, hierarchy, jurisdiction, and organization building"
+            ],
+            [
+              "Contingency Engineering",
+              "Tools, routes, caches, reversals, and failure analysis"
+            ],
+            [
+              "Human Network",
+              "Trust, witnesses, competent cells, obligations, and community"
+            ]
           ]
         }
       ],
-      "tags": ["human", "investigator", "Conviction", "Strain", "evidence", "community"]
+      "tags": [
+        "human",
+        "investigator",
+        "Conviction",
+        "Strain",
+        "evidence",
+        "community"
+      ]
     },
     {
       "id": "vampire-archetype",
       "title": "Vampire",
       "category": "Archetypes",
-      "summary": "A Vitae-fueled predator whose powers govern supernatural speed, authority, concealment, resilience, feeding, and inherited memory.",
+      "summary": "A Vitae-fueled predator whose capabilities remain intact while Hunger, lineage, and the ancient curse feel like distant shadows of the forces that once defined existence.",
       "body": [
-        "Vitae is the Vampire's Resource. It fuels physical acceleration, supernatural command, concealment, recovery, predation, and lineage effects.",
-        "Hunger is the Vampire's Pressure. It increases when Vitae is depleted, feeding is delayed, predatory compulsion is denied, or powers demand more than the character can safely provide.",
-        "Crimson Velocity controls speed and action economy. Grave Dominion controls predatory authority. Veil of Night controls recognition and concealment. Deathless Resilience controls survival and recovery. Vital Predation controls feeding and function theft. Blood Memory controls inherited information, stored experience, and lineage creation."
+        "The Vampire is still a Vampire. Vitae still answers. Supernatural speed, command, concealment, resilience, feeding, and blood memory operate according to the recorded innate abilities and powers. The transition has not replaced the curse with an imitation and has not mechanically reduced the Archetype.",
+        "What changed is proximity. In the former universe, Hunger could feel like an all-consuming second consciousness threaded through appetite, anger, fear, desire, and every judgment involving blood. Here it is more distant: a persistent hum, a pressure behind the eyes, a migraine still beyond the horizon. It can intensify and impose its recorded consequences, but it no longer feels like the entire cosmos agrees that the Vampire must hunger.",
+        "The binding curse traditionally associated with Cain also feels remote. It remains part of the Vampire's supernatural condition, but its authority resembles a memory half completed rather than a command carved into the foundations of creation. The curse has not vanished; the new universe simply does not appear to recognize its history or reinforce it with the same metaphysical certainty.",
+        "Centuries of lineage, ancestral memory, inherited custom, predatory instinct, and the emotional gravity of blood remain accessible through the Vampire's capabilities. They are less formative to moment-by-moment thought. A lineage voice that once felt like an ancestor standing directly behind the Vampire may now feel like a recording heard through several closed rooms.",
+        "This distance can be frightening or liberating. A Vampire may discover that some compulsions were never identical to identity, that some traditions were upheld because the old universe made them feel inevitable, and that predation remains a choice even while Hunger remains real.",
+        "Vitae is the Vampire's Resource. Hunger is the Vampire's Pressure. Crimson Velocity controls speed and action economy. Grave Dominion controls predatory authority. Veil of Night controls recognition and concealment. Deathless Resilience controls survival and recovery. Vital Predation controls feeding and function theft. Blood Memory controls inherited information, stored experience, and lineage creation."
       ],
       "tables": [
         {
           "title": "Six Power Families",
-          "columns": ["Family", "Primary Function"],
+          "columns": [
+            "Family",
+            "Primary Function"
+          ],
           "rows": [
-            ["Crimson Velocity", "Speed, reactions, additional motion, and temporal advantage"],
-            ["Grave Dominion", "Command, fixation, group presence, and predatory authority"],
-            ["Veil of Night", "Stealth, altered recognition, disguise, and memory concealment"],
-            ["Deathless Resilience", "Healing, dormancy, armor, catastrophic survival, and persistence"],
-            ["Vital Predation", "Feeding analysis, unfamiliar sources, hunting, and function theft"],
-            ["Blood Memory", "Memory extraction, sharing, inherited skill, ancestors, and lineage creation"]
+            [
+              "Crimson Velocity",
+              "Speed, reactions, additional motion, and temporal advantage"
+            ],
+            [
+              "Grave Dominion",
+              "Command, fixation, group presence, and predatory authority"
+            ],
+            [
+              "Veil of Night",
+              "Stealth, altered recognition, disguise, and memory concealment"
+            ],
+            [
+              "Deathless Resilience",
+              "Healing, dormancy, armor, catastrophic survival, and persistence"
+            ],
+            [
+              "Vital Predation",
+              "Feeding analysis, unfamiliar sources, hunting, and function theft"
+            ],
+            [
+              "Blood Memory",
+              "Memory extraction, sharing, inherited skill, ancestors, and lineage creation"
+            ]
           ]
         }
       ],
-      "tags": ["vampire", "Vitae", "Hunger", "predation", "lineage", "undeath"]
+      "tags": [
+        "vampire",
+        "Vitae",
+        "Hunger",
+        "predation",
+        "lineage",
+        "undeath"
+      ]
     },
     {
       "id": "shapechanger-archetype",
       "title": "Shapechanger",
       "category": "Archetypes",
-      "summary": "A supernatural transformer whose powers govern forms, pursuit, pack continuity, adaptive capabilities, spirit relations, and territorial sovereignty.",
+      "summary": "A supernatural transformer whose forms, pack bonds, spirit relations, and territorial instincts remain intact while Gaia's once-constant call reaches them only as a distant, partially obscured voice.",
       "body": [
-        "Fury is the Shapechanger's Resource. It fuels rapid transformation, pursuit, protection, environmental adaptation, spirit action, and territorial control.",
-        "Instinct is the Shapechanger's Pressure. It rises through denied pursuit, threatened packmates, violated territory, humiliation, confinement, and extended use of predatory forms.",
-        "Threefold Form supplies the basic permission to shift among social, hunting, and war forms. Warform defines combat benefits. Hunt Across Worlds defines pursuit. Pack Continuity defines bonded coordination. Adaptive Forms defines utility transformations. Spirit Ecology defines spirit interaction. Territorial Sovereignty defines claimed domains."
+        "The Shapechanger's powers still work. The character can assume recorded forms, pursue across impossible boundaries, sense and protect the pack, adopt explicit adaptations, interact with spirits, and establish territory according to the Archetype's abilities. Nothing about the transition silently removes those permissions.",
+        "What has faded is the immediate presence of the living spiritual order that once surrounded those powers. The call of Gaia may once have existed in every heartbeat, every root, every territorial trespass, every packmate's distress, and every surge of Fury. Here that call feels like a conversation half heard through a wall: recognizable, emotionally undeniable, but stripped of detail and immediate direction.",
+        "The Shapechanger is not severed from Gaia so much as displaced beyond the cosmology in which that relationship was ordinary. The bond remains inside the character, but the stars, ecosystems, spirits, and local metaphysical structures do not automatically answer as parts of the same sacred body.",
+        "Old spirit relationships may continue through established pacts and named bonds, yet unfamiliar local spirits have no inherited reason to recognize the Shapechanger's status, rites, renown, or territorial claims. The Shapechanger must establish those relationships through actual capabilities and actions rather than relying upon universal recognition.",
+        "Fury therefore feels more personal. Instinct remains powerful, but it is no longer accompanied by the same certainty that rage serves a universally understood war. Pack loyalty may become more important precisely because the cosmic Pack feels distant and the people immediately beside the Shapechanger are the only voices that answer clearly.",
+        "Fury is the Shapechanger's Resource. Instinct is the Shapechanger's Pressure. Threefold Form supplies the explicit ability to shift among social, hunting, and war forms. Warform defines combat benefits. Hunt Across Worlds defines pursuit. Pack Continuity defines bonded coordination. Adaptive Forms defines utility transformations. Spirit Ecology defines spirit interaction. Territorial Sovereignty defines claimed domains."
       ],
       "tables": [
         {
           "title": "Six Power Families",
-          "columns": ["Family", "Primary Function"],
+          "columns": [
+            "Family",
+            "Primary Function"
+          ],
           "rows": [
-            ["Warform", "Combat transformation, weapons, scale, defenses, and apex shape"],
-            ["Hunt Across Worlds", "Tracking through disguise, transfer, systems, and altered identity"],
-            ["Pack Continuity", "Bond sensing, coordination, shared harm, and collective defense"],
-            ["Adaptive Forms", "Utility traits, borrowed functions, environments, and stable new forms"],
-            ["Spirit Ecology", "Detection, thresholds, pacts, reflection travel, and new totems"],
-            ["Territorial Sovereignty", "Claims, warnings, perimeter awareness, environmental defense, and domains"]
+            [
+              "Warform",
+              "Combat transformation, weapons, scale, defenses, and apex shape"
+            ],
+            [
+              "Hunt Across Worlds",
+              "Tracking through disguise, transfer, systems, and altered identity"
+            ],
+            [
+              "Pack Continuity",
+              "Bond sensing, coordination, shared harm, and collective defense"
+            ],
+            [
+              "Adaptive Forms",
+              "Utility traits, borrowed functions, environments, and stable new forms"
+            ],
+            [
+              "Spirit Ecology",
+              "Detection, thresholds, pacts, reflection travel, and new totems"
+            ],
+            [
+              "Territorial Sovereignty",
+              "Claims, warnings, perimeter awareness, environmental defense, and domains"
+            ]
           ]
         }
       ],
-      "tags": ["shapechanger", "Fury", "Instinct", "forms", "pack", "territory"]
+      "tags": [
+        "shapechanger",
+        "Fury",
+        "Instinct",
+        "forms",
+        "pack",
+        "territory"
+      ]
     },
     {
       "id": "eldritch-binder-archetype",
       "title": "Eldritch Binder",
       "category": "Archetypes",
-      "summary": "A negotiator, jailer, host, or partner whose capabilities arise from a structured relationship with an impossible presence.",
+      "summary": "A negotiator, jailer, host, or partner whose impossible patron still answers, though the old compact now feels carried within the Binder rather than recognized by the surrounding universe.",
       "body": [
-        "Pact is the Binder's Resource. It represents usable authority, negotiated permission, stored obligation, and controlled access to the answering presence.",
-        "Intrusion is the Binder's Pressure. It measures attention, influence, knowledge, access, and leverage gained by the presence through repeated use.",
-        "Sealcraft controls boundaries and local law. Borrowed Manifestation grants temporary capabilities. Pact Economy governs prices and obligations. Forbidden Cognition grants dangerous knowledge. Threshold Geometry creates nonordinary routes. Invocation controls signs, avatars, partial arrivals, and full audiences."
+        "Whatever answered the Binder before still answers now. Patron, prisoner, elder intelligence, impossible location, living name, inherited wound, extradimensional force, or negotiated fragment: the relationship survived. The Binder's powers work. Existing bindings, contracts, prohibitions, permissions, seals, debts, and invocation rights remain available according to the recorded abilities.",
+        "The connection nevertheless feels diminished. In the former universe it may have felt like a tether extending from the Binder into a vast metaphysical structure that knew both parties, recorded the agreement, and enforced its vocabulary. Here it feels more like a binding carried inside the Binder: a knot of obligation, access, memory, and authority that continues to function even though the surrounding reality does not recognize the institution that issued it.",
+        "The answering presence may also feel farther away. Its voice arrives with less contextual weight. Its signs may be smaller. Its attention may no longer fill the same unseen architecture. Even an ancient being that helped create, transform, or define the Binder can feel like a shadow of its former immediacy—not because it ceased to exist, but because the cosmological road between Binder and presence no longer runs through familiar territory.",
+        "The contract still binds the parties who carry it. Local forces, laws, thresholds, spirits, and causal structures are not automatically signatories. A prohibition that once relied upon the universe recognizing a sacred name may now operate only through the Binder's explicit Sealcraft. A right of passage once honored by every threshold may now need to be actively asserted through Threshold Geometry.",
+        "This makes the Binder simultaneously weaker in inherited authority and more personally responsible for every act of invocation. The old universe no longer stands visibly behind the contract. What remains is the Binder, the answering presence, the terms they still remember, and the capabilities that prove the agreement continues to have force.",
+        "Pact is the Binder's Resource. Intrusion is the Binder's Pressure. Sealcraft controls boundaries and local law. Borrowed Manifestation grants temporary capabilities. Pact Economy governs prices and obligations. Forbidden Cognition grants dangerous knowledge. Threshold Geometry creates nonordinary routes. Invocation controls signs, avatars, partial arrivals, and full audiences."
       ],
       "tables": [
         {
           "title": "Six Power Families",
-          "columns": ["Family", "Primary Function"],
+          "columns": [
+            "Family",
+            "Primary Function"
+          ],
           "rows": [
-            ["Sealcraft", "Boundaries, prohibitions, anchoring, prisons, and local law"],
-            ["Borrowed Manifestation", "Senses, reach, defenses, movement, and hybrid states"],
-            ["Pact Economy", "Prices, deferred costs, obligation transfer, renegotiation, and contracts"],
-            ["Forbidden Cognition", "Anomaly reading, translation, patron questions, unrealized memory, and dangerous knowledge"],
-            ["Threshold Geometry", "Folded reach, impossible angles, doors, transit, and persistent routes"],
-            ["Invocation", "Signs, channels, avatars, partial arrival, and negotiated audience"]
+            [
+              "Sealcraft",
+              "Boundaries, prohibitions, anchoring, prisons, and local law"
+            ],
+            [
+              "Borrowed Manifestation",
+              "Senses, reach, defenses, movement, and hybrid states"
+            ],
+            [
+              "Pact Economy",
+              "Prices, deferred costs, obligation transfer, renegotiation, and contracts"
+            ],
+            [
+              "Forbidden Cognition",
+              "Anomaly reading, translation, patron questions, unrealized memory, and dangerous knowledge"
+            ],
+            [
+              "Threshold Geometry",
+              "Folded reach, impossible angles, doors, transit, and persistent routes"
+            ],
+            [
+              "Invocation",
+              "Signs, channels, avatars, partial arrival, and negotiated audience"
+            ]
           ]
         }
       ],
-      "tags": ["Eldritch Binder", "Pact", "Intrusion", "patron", "seals", "contracts"]
+      "tags": [
+        "Eldritch Binder",
+        "Pact",
+        "Intrusion",
+        "patron",
+        "seals",
+        "contracts"
+      ]
     },
     {
       "id": "harmonic-mutant-archetype",
       "title": "Harmonic Mutant",
       "category": "Archetypes",
-      "summary": "A resonance wielder whose powers affect force, patterns, structures, emotion, phase, and memory through a chosen harmonic medium.",
+      "summary": "A mortal resonance inheritor whose powers still function even though the layered fae and eldritch compacts that once made those harmonics natural are no longer recognized by local reality.",
       "body": [
-        "Resonance is the Mutant's Resource. It fuels projection, healing, structural interaction, emotional modulation, phase effects, and memory work.",
-        "Discord is the Mutant's Pressure. It accumulates through incompatible frequencies, emotional shock, repeated projection, environmental coupling, unstable phase effects, and uncontrolled sympathetic response.",
-        "Harmonic Projection controls force. Echo Patterns controls healing and duplication. Structural Resonance controls architecture and machinery. Emotional Chord controls collective state. Phase Modulation controls interaction with matter and nearby outcomes. Memory Harmonics controls recovery, storage, separation, and preservation of memory patterns."
+        "The Harmonic Mutant still manipulates resonance. Projection, healing, structural interaction, emotional tuning, phase modulation, and memory harmonics continue to function according to the recorded powers. The problem is not that the character has lost the method. The problem is that the world now answers in a different language.",
+        "A Harmonic Mutant is not merely someone who produces unusual frequencies. The Archetype is the mortal distillate of layered agreements between beings and reality. Ancient fae, eldritch intermediaries, or comparable higher-order entities established compacts with fundamental forces such as threshold, flame, memory, weight, distance, identity, emotion, and repetition.",
+        "Those first agreements produced secondary institutions, inherited privileges, ecological arrangements, supernatural customs, bloodline effects, and metaphysical organizations. Those consequences produced further third-, fourth-, and fifth-order agreements. Mortal lives were eventually shaped by the accumulated resonant pathways created through that chain.",
+        "The Harmonic Mutant learned to attune to those distilled pathways. The character did not necessarily negotiate directly with the first beings or the fundamental forces. They inherited the remainder: a compact already translated through generations of supernatural organization until its effects could live inside mortal thought, emotion, blood, memory, or altered physiology.",
+        "Here, the fundamental forces still exist, but the old contractual chain does not recognize the Mutant as an authorized participant. The local versions of distance, memory, gravity, emotion, matter, and identity are not necessarily governed by the same agreements or obligated to answer the same inherited procedures. The old organizations and resonant paths may have analogues, but those analogues do not know the character.",
+        "The Mutant therefore feels the wrongness of the new universe more clearly than most. The self still carries the old compact. Teammates still carry identities and supernatural conditions shaped elsewhere. The surrounding world responds, but it responds at an unfamiliar angle, as though every note remains recognizable while the interval between notes has changed.",
+        "That is why the abilities can feel diminished without being mechanically weaker. Attunement requires reaching across a contractual absence. Resonance returns with unfamiliar overtones. Emotional chords meet societies whose metaphysical assumptions were not part of the original agreement. Structural frequencies answer, but the Mutant can feel that the answer is not recognition—it is forced compatibility.",
+        "A Harmonic Mutant is therefore a person whose compact with reality was fundamentally displaced by transition. The old agreement persists as a remainder carried within the character. Local reality has not accepted the contract, yet the Mutant continues to make it function through Resonance, accepting Discord as the measurable friction between inherited law and an unbound universe.",
+        "Resonance is the Mutant's Resource. Discord is the Mutant's Pressure. Harmonic Projection controls force. Echo Patterns controls healing and duplication. Structural Resonance controls architecture and machinery. Emotional Chord controls collective state. Phase Modulation controls interaction with matter and nearby outcomes. Memory Harmonics controls recovery, storage, separation, and preservation of memory patterns."
       ],
       "tables": [
         {
           "title": "Six Power Families",
-          "columns": ["Family", "Primary Function"],
+          "columns": [
+            "Family",
+            "Primary Function"
+          ],
           "rows": [
-            ["Harmonic Projection", "Force, disruption, shielding, catastrophic chords, and area effects"],
-            ["Echo Patterns", "Healing, doubles, links, lasting alterations, and chorus selves"],
-            ["Structural Resonance", "Sensing, stress control, bracing, activation, and system integration"],
-            ["Emotional Chord", "Mood sensing, panic control, crowd tuning, bonds, and shared intent"],
-            ["Phase Modulation", "Friction, passage, interleaving, causal evasion, and between-state existence"],
-            ["Memory Harmonics", "Recall, imprinting, recovery, perspective splitting, and preserved identity messages"]
+            [
+              "Harmonic Projection",
+              "Force, disruption, shielding, catastrophic chords, and area effects"
+            ],
+            [
+              "Echo Patterns",
+              "Healing, doubles, links, lasting alterations, and chorus selves"
+            ],
+            [
+              "Structural Resonance",
+              "Sensing, stress control, bracing, activation, and system integration"
+            ],
+            [
+              "Emotional Chord",
+              "Mood sensing, panic control, crowd tuning, bonds, and shared intent"
+            ],
+            [
+              "Phase Modulation",
+              "Friction, passage, interleaving, causal evasion, and between-state existence"
+            ],
+            [
+              "Memory Harmonics",
+              "Recall, imprinting, recovery, perspective splitting, and preserved identity messages"
+            ]
           ]
         }
       ],
-      "tags": ["Harmonic Mutant", "Resonance", "Discord", "frequency", "phase", "memory"]
+      "tags": [
+        "Harmonic Mutant",
+        "Resonance",
+        "Discord",
+        "frequency",
+        "phase",
+        "memory"
+      ]
     },
     {
       "id": "technomancer-archetype",
@@ -220,18 +504,46 @@
       "tables": [
         {
           "title": "Six Power Families",
-          "columns": ["Family", "Primary Function"],
+          "columns": [
+            "Family",
+            "Primary Function"
+          ],
           "rows": [
-            ["Network Dominion", "Commands, unauthorized access, possession, distribution, and local control"],
-            ["Construct Engineering", "Tools, helper processes, barriers, swarms, and emergency devices"],
-            ["Noospheric Identity", "Credentials, provisional personhood, borrowed roles, ownership, and rooted identities"],
-            ["Machine Communion", "System needs, negotiation, awakening, partnership, and machine assemblies"],
-            ["Signal Warfare", "Jamming, defense, quarantine, targeted hostile signals, and blackouts"],
-            ["Fabrication Interface", "Template reading, repairs, peripherals, rule alteration, and complex creation"]
+            [
+              "Network Dominion",
+              "Commands, unauthorized access, possession, distribution, and local control"
+            ],
+            [
+              "Construct Engineering",
+              "Tools, helper processes, barriers, swarms, and emergency devices"
+            ],
+            [
+              "Noospheric Identity",
+              "Credentials, provisional personhood, borrowed roles, ownership, and rooted identities"
+            ],
+            [
+              "Machine Communion",
+              "System needs, negotiation, awakening, partnership, and machine assemblies"
+            ],
+            [
+              "Signal Warfare",
+              "Jamming, defense, quarantine, targeted hostile signals, and blackouts"
+            ],
+            [
+              "Fabrication Interface",
+              "Template reading, repairs, peripherals, rule alteration, and complex creation"
+            ]
           ]
         }
       ],
-      "tags": ["Technomancer", "Bandwidth", "Feedback", "networks", "machine personhood", "fabrication"]
+      "tags": [
+        "Technomancer",
+        "Bandwidth",
+        "Feedback",
+        "networks",
+        "machine personhood",
+        "fabrication"
+      ]
     }
   ]
 }

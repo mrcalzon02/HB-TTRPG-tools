@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.4.0",
+  "schemaVersion": "0.5.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -301,7 +301,7 @@
     {
       "id": "vampire",
       "name": "Vampire",
-      "theme": "A blood-fueled predator whose capabilities concern speed, authority, concealment, resilience, feeding, and inherited memory under altered cosmic laws.",
+      "theme": "A Vitae-fueled predator whose supernatural speed, authority, concealment, resilience, feeding, and inherited memory remain fully functional even though the ancient curse behind them feels remote. Hunger is no longer an all-consuming presence woven through every thought; it is a distant pressure, like a migraine approaching from beyond the horizon. The legacy commonly attributed to Cain, the weight of lineage, and the compulsions carried through centuries of blood still exist, but they feel more like inherited memories than an immediate hand upon the soul. This emotional and metaphysical distance does not reduce the Vampire's recorded capabilities unless a specific rule says otherwise.",
       "resourceName": "Vitae",
       "pressureName": "Hunger",
       "keyAttribute": "Resilience",
@@ -515,7 +515,7 @@
     {
       "id": "shapechanger",
       "name": "Shapechanger",
-      "theme": "A supernatural transformer whose capabilities govern forms, pursuit, pack bonds, adaptation, spirit relationships, and territory.",
+      "theme": "A supernatural transformer whose forms, pursuit, pack bonds, adaptive capabilities, spirit relations, and territorial authority continue to function even though the living spiritual world that once answered them now feels impossibly far away. The call of Gaia, once present in blood, breath, instinct, rage, and every living boundary, reaches the Shapechanger like a conversation half heard through a wall. The bond remains real, but the surrounding universe no longer reinforces it with the same immediate recognition. This distance changes how the power feels, not what the character can do according to the recorded abilities.",
       "resourceName": "Fury",
       "pressureName": "Instinct",
       "keyAttribute": "Force",
@@ -729,7 +729,7 @@
     {
       "id": "eldritch-binder",
       "name": "Eldritch Binder",
-      "theme": "A negotiator, jailer, host, or partner bound to an impossible presence through names, obligations, boundaries, knowledge, thresholds, and invocation.",
+      "theme": "A negotiator, jailer, host, or partner whose structured relationship with an impossible presence survives the transition intact. Whatever entity, force, patron, fragment, name, wound, or elder intelligence answered the Binder in the former universe still answers here. Existing contracts, bindings, prohibitions, permissions, and invocations remain valid between Binder and presence, but the connection feels diminished: less like a living tether stretching through a familiar cosmos and more like a binding carried inside the Binder. Local reality does not automatically recognize the old compact or enforce its assumptions, yet the answering presence and the Binder's recorded capabilities remain available.",
       "resourceName": "Pact",
       "pressureName": "Intrusion",
       "keyAttribute": "Resolve",
@@ -943,7 +943,7 @@
     {
       "id": "harmonic-mutant",
       "name": "Harmonic Mutant",
-      "theme": "A resonance wielder able to affect force, living patterns, structures, emotions, phase relationships, and memory through explicit harmonic capabilities.",
+      "theme": "A resonance wielder whose ability to affect force, living patterns, structures, emotion, phase, and memory still operates, while every use reveals that the surrounding universe answers to a different harmonic order. The Mutant is the mortal remainder of layered compacts: ancient fae or comparable higher beings bargained with fundamental forces, later powers and institutions inherited portions of those agreements, and mortal bloodlines learned to use the third-, fourth-, and fifth-order consequences. Those forces and paths still exist here, but they do not recognize the Mutant as an authorized party. The Mutant therefore feels the wrongness of self, team, and universe with unusual clarity: the old compact with reality persists inside the character, while the reality outside no longer acknowledges the chain that once made it natural. Recorded capabilities remain mechanically unchanged unless a specific effect states otherwise.",
       "resourceName": "Resonance",
       "pressureName": "Discord",
       "keyAttribute": "Composure",
