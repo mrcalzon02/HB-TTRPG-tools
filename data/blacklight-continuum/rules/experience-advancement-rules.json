@@ -1,0 +1,102 @@
+{
+  "setting": "Blacklight Continuum",
+  "schemaVersion": "1.0.0",
+  "name": "Experience and Advancement Exchange",
+  "earning": {
+    "sessionMinimum": {
+      "award": 1,
+      "rule": "Every player character that meaningfully participates in a completed session should receive at least 1 Experience. Ending a session early because someone invoked a safety boundary does not by itself remove this baseline award."
+    },
+    "sceneAward": {
+      "award": 1,
+      "maximumPerCharacterPerScene": 1,
+      "sessionMaximum": null,
+      "rule": "A character may receive 1 additional Experience for a qualifying scene. Several different scenes may each award Experience during the same session, and several characters may independently earn the award in the same scene.",
+      "qualifyingCriteria": [
+        {
+          "name": "Character Development",
+          "definition": "The character makes, reveals, or accepts a meaningful change involving a Conviction, relationship, identity, fear, obligation, weakness, belief, or long-term objective."
+        },
+        {
+          "name": "Story Participation",
+          "definition": "The character materially advances, complicates, clarifies, or resolves the scene rather than merely being present for it."
+        },
+        {
+          "name": "Bravery or Courage",
+          "definition": "The character knowingly accepts a meaningful personal risk, cost, or consequence to confront a danger or truth. Reckless disruption without a character-grounded purpose does not qualify."
+        },
+        {
+          "name": "Selflessness or Protection",
+          "definition": "The character gives up a real advantage, resource, position, safety, or opportunity to protect or support another person without coercing that person into the scene."
+        },
+        {
+          "name": "Conviction and Consequence",
+          "definition": "The character follows a recorded principle, promise, pact, bond, duty, or limitation when doing so creates a genuine complication or cost."
+        },
+        {
+          "name": "Teamwork or Problem Solving",
+          "definition": "The character enables another participant, integrates several characters' capabilities, or produces a useful solution that changes the scene."
+        },
+        {
+          "name": "Vulnerability or Portrayal",
+          "definition": "The player portrays the established character's perspective, uncertainty, fear, desire, contradiction, or limitations in a way that gives the table meaningful material to respond to. This does not require acting skill, a character voice, emotional disclosure by the player, or agreement with the Moderator's personal values."
+        }
+      ]
+    },
+    "sceneDefinition": "For Experience awards, a scene is one continuous situation organized around a location, objective, confrontation, investigation, negotiation, journey segment, or meaningful transition. Pausing, changing Initiative rounds, or briefly cutting between participants does not create a new scene. A continuing situation cannot be divided into artificial scenes to multiply Experience.",
+    "awardProcedure": [
+      "The Moderator states the awarded character, the qualifying scene, and one criterion that the moment satisfied.",
+      "The award may be announced when the scene ends or recorded during the session review.",
+      "The same character cannot receive more than 1 bonus Experience for the same scene, even when the moment satisfies several criteria.",
+      "No character competes with another character for an award. Recognizing one participant never prevents recognition of another.",
+      "A player may briefly ask what criterion supported an award or why a submitted moment did not qualify. The answer must concern the printed criteria rather than personal approval of the player.",
+      "Experience already earned cannot be confiscated as punishment, leverage, or retaliation. A clerical error may be corrected openly."
+    ],
+    "prohibitedAwardBases": [
+      "Obeying the Moderator outside the fiction",
+      "Providing money, gifts, labor, transportation, housing, employment access, romance, sexual attention, personal information, or another out-of-game favor",
+      "Crossing a stated boundary or participating in content after consent was withdrawn",
+      "Amount of table time consumed, speaking volume, acting talent, friendship with the Moderator, or conformity to the Moderator's preferred morality",
+      "Manufacturing, repeating, colluding over, or artificially extending a low-risk situation solely to create awardable moments",
+      "Using player-only information, hidden files, private scenes, or system knowledge the character does not possess"
+    ]
+  },
+  "exchangeRates": [
+    {
+      "purchase": "Skill Point",
+      "experienceCost": 2,
+      "effect": "Increase one Skill by 1, to a maximum rating of 5."
+    },
+    {
+      "purchase": "Attribute Point",
+      "experienceCost": 3,
+      "effect": "Increase one Attribute by 1, to a maximum rating of 5, then recalculate every affected derived trait, Resource Maximum, Pressure Limit, threshold, and dice pool."
+    },
+    {
+      "purchase": "Power or Ability Point",
+      "experienceCost": 4,
+      "effect": "Purchase one eligible ranked power, Depth, attainment, practice ability, lineage ability, or other option explicitly priced as one Power or Ability Point. One point purchases one ability or one rank, not an entire family or progression."
+    }
+  ],
+  "spendingProcedure": [
+    "Experience may be banked indefinitely and cannot fall below 0.",
+    "Purchases normally occur between sessions or during a declared advancement break, not while an unresolved action, test, or hostile scene is underway.",
+    "Pay the complete Experience cost, record the purchase in the advancement ledger, and then change the purchased rating or ability.",
+    "A purchase cannot raise a Skill or Attribute above 5.",
+    "A Power or Ability purchase must satisfy every printed Archetype Rating gate, sequence requirement, entry requirement, Source, bloodline, practice, lineage, or other prerequisite.",
+    "These exchange rates do not raise Archetype Rating, directly buy Resource or Pressure capacity, waive prerequisites, create a new capability family, or grant an unrecorded narrative permission.",
+    "Fractional points, Experience debt, negative Experience, and partial payments are not permitted.",
+    "A completed purchase is permanent unless the table openly approves a respec between sessions. A respec cannot be used to retroactively gain an advantage in a completed scene."
+  ],
+  "ownershipAndRecords": [
+    "Experience belongs to the character that earned it. It does not automatically transfer to another character controlled by the same player.",
+    "Record Lifetime Experience Earned, Current Unspent Experience, session awards, award reasons, and completed purchases.",
+    "The Moderator cannot condition access to earned Experience on secrecy, personal loyalty, continued participation, or acceptance of unwanted content.",
+    "When the Moderator also controls a player character, another participant should confirm awards made to that character."
+  ],
+  "examples": [
+    "6 Experience may purchase 3 Skill Points, 2 Attribute Points, or 1 Power or Ability Point plus 1 Skill Point.",
+    "A four-scene session may award a participating character 1 baseline Experience and three separate scene awards for a total of 4 Experience when three scenes independently satisfy the criteria.",
+    "Two characters who both accept meaningful risk to protect a third character may each receive the scene award."
+  ]
+}
