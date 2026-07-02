@@ -59,19 +59,19 @@
     panel.className = 'blacklight-sheet-panel';
     panel.innerHTML = `
       <div class="blacklight-section-heading">
-        <div><p class="eyebrow">The same archetype entry, continued</p><h2>Old-World Identity, Continuum Translation, and Power Families</h2></div>
-        <span class="blacklight-panel-code">CONTINUITY</span>
+        <div><p class="eyebrow">The same archetype entry, continued</p><h2>Old-World Capability, Continuum Change, and Power Families</h2></div>
+        <span class="blacklight-panel-code">CAPABILITY</span>
       </div>
       <div id="blacklight-transition-profile" class="blacklight-transition-profile">
-        <p class="helper-note">Select an archetype to load its complete existing record and all six detailed power families.</p>
+        <p class="helper-note">Select an archetype to load its complete record and all six detailed power families.</p>
       </div>
       <div class="blacklight-field-grid blacklight-grid-2">
-        <label>Old-World Identity<textarea name="oldWorldIdentity" rows="4" placeholder="Who were you, and what did this Archetype mean before Q-MAP?"></textarea></label>
-        <label>Old Rule That No Longer Holds<textarea name="brokenOldRule" rows="4" placeholder="Which certainty about your condition has already failed here?"></textarea></label>
-        <label>First Translation Scar<textarea name="firstTranslationScar" rows="4" placeholder="What did the body do wrong the first time an old power returned?"></textarea></label>
-        <label>Current Continuum Derivative<textarea name="currentDerivative" rows="4" placeholder="How has one power changed into something native to this body and universe?"></textarea></label>
-        <label>Fragmented Legacy Memory<textarea name="legacyMemoryFragment" rows="4" placeholder="What old-world memory guides a power even though its context is missing?"></textarea></label>
-        <label>Adaptation Marks and Discoveries<textarea name="adaptationMarks" rows="4" placeholder="Record new couplings, altered tells, replaced limitations, and derivative traits."></textarea></label>
+        <label>Old-World Capability Identity<textarea name="oldWorldIdentity" rows="4" placeholder="What could you do, and what did this Archetype mean before Q-MAP?"></textarea></label>
+        <label>Old Assumption That No Longer Holds<textarea name="brokenOldRule" rows="4" placeholder="Which certainty about your powers, source, limits, or enemies failed here?"></textarea></label>
+        <label>First Power Misfire<textarea name="firstTranslationScar" rows="4" placeholder="What happened the first time a familiar capability behaved differently?"></textarea></label>
+        <label>Current Continuum Expression<textarea name="currentDerivative" rows="4" placeholder="How does the capability function now, and what explicit rule defines it?"></textarea></label>
+        <label>Fragmented Legacy Memory<textarea name="legacyMemoryFragment" rows="4" placeholder="What old-world memory still guides the capability even though its context is missing?"></textarea></label>
+        <label>Capability Discoveries<textarea name="adaptationMarks" rows="4" placeholder="Record new uses, altered tells, replaced limits, prerequisites, and learned interactions."></textarea></label>
       </div>`;
 
     archetypePanel.insertAdjacentElement('afterend', panel);
@@ -115,7 +115,7 @@
             <p>${escapeHtml(family.description)}</p>
             <div class="blacklight-family-roots">
               <div><strong>Old-world root:</strong> ${escapeHtml(family.oldWorldRoot)}</div>
-              <div><strong>Continuum translation:</strong> ${escapeHtml(family.continuumTranslation)}</div>
+              <div><strong>Continuum expression:</strong> ${escapeHtml(family.continuumTranslation)}</div>
             </div>
             <div class="blacklight-ranked-powers">${(family.abilities || []).map(ability => `
               <div class="blacklight-ranked-power">
@@ -141,13 +141,13 @@
     if (!entry || !archetype) {
       target.innerHTML = `
         <div class="blacklight-transition-hero">
-          <h3>Power Did Not Cross Intact</h3>
-          <p>Q-MAP carried memory, instinct, procedure, and supernatural self-pattern. Select an archetype to see its integrated history and six complete power families.</p>
+          <h3>Capability Is Explicit</h3>
+          <p>Q-MAP may have changed context, memory, ownership, and the laws surrounding familiar powers, but the rules only care about recorded capabilities. Select an archetype to see its integrated history and six complete power families.</p>
         </div>`;
       return;
     }
 
-    const nonPowerTables = (entry.tables || []).filter(table => table.title !== 'Power Families');
+    const nonPowerTables = (entry.tables || []).filter(table => table.title !== 'Power Families' && table.title !== 'Six Power Families');
     target.innerHTML = `
       <div class="blacklight-transition-hero">
         <p class="eyebrow">Integrated ${escapeHtml(entry.title)} entry</p>
@@ -156,7 +156,7 @@
       </div>
       ${(entry.keyFacts?.length || entry.playerFacing?.length) ? `
         <div class="blacklight-continuity-facts">
-          ${entry.keyFacts?.length ? `<article><h4>Continuity Facts</h4><ul>${entry.keyFacts.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>` : ''}
+          ${entry.keyFacts?.length ? `<article><h4>Capability Facts</h4><ul>${entry.keyFacts.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>` : ''}
           ${entry.playerFacing?.length ? `<article><h4>Character Questions</h4><ul>${entry.playerFacing.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>` : ''}
         </div>` : ''}
       ${nonPowerTables.map(renderTable).join('')}
