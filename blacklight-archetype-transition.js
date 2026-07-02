@@ -4,9 +4,11 @@
   const ENTRY_URL = 'data/blacklight-continuum/wiki/basic-archetypes.json';
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
+  const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
   let archetypeWiki = null;
   let rulesData = null;
   let vampireLineageData = null;
+  let shapechangerVariantData = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -80,29 +82,49 @@
     return input;
   }
 
+  function variantCatalogsFor(archetypeId) {
+    if (archetypeId === 'vampire' && vampireLineageData?.lineages?.length) {
+      return [{
+        id: 'remainder-bloodlines',
+        title: 'Thirteen Remainder Bloodlines',
+        eyebrow: 'Inherited undead society',
+        code: '13 LINEAGES',
+        legacyLabel: 'Society of Shadows legacy',
+        variants: vampireLineageData.lineages
+      }];
+    }
+    if (archetypeId === 'shapechanger' && shapechangerVariantData?.catalogs?.length) {
+      return shapechangerVariantData.catalogs;
+    }
+    return [];
+  }
+
+  function allVariantsFor(archetypeId) {
+    return variantCatalogsFor(archetypeId).flatMap(catalog => catalog.variants || []);
+  }
+
   function populateLineageInput(archetypeId) {
     const input = ensureLineageInput();
     const datalist = document.getElementById('blacklight-lineage-options');
     if (!input || !datalist) return;
     datalist.innerHTML = '';
-    if (archetypeId !== 'vampire') {
-      input.placeholder = 'Bloodline, shifting tradition, patron, resonance school…';
-      return;
-    }
-    (vampireLineageData?.lineages || []).forEach(lineage => {
+    const variants = allVariantsFor(archetypeId);
+    variants.forEach(variant => {
       const option = document.createElement('option');
-      option.value = lineage.name;
-      option.label = `${lineage.gift.name} / ${lineage.bane.name}`;
+      option.value = variant.name;
+      option.label = `${variant.gift?.name || 'Gift'} / ${variant.bane?.name || 'Bane'}`;
       datalist.appendChild(option);
     });
-    input.placeholder = 'Choose a Remainder Bloodline or enter Unaligned…';
+    if (archetypeId === 'vampire') input.placeholder = 'Choose a Remainder Bloodline or enter Unaligned…';
+    else if (archetypeId === 'shapechanger') input.placeholder = 'Choose a Lunar Nation, Changing Form, or enter Unaligned…';
+    else input.placeholder = 'Bloodline, shifting tradition, patron, resonance school…';
   }
 
-  function selectedLineageId() {
+  function selectedVariantId(archetypeId) {
     const value = document.querySelector('[name="lineageVariant"]')?.value?.trim().toLowerCase();
     if (!value) return '';
-    const match = (vampireLineageData?.lineages || []).find(lineage =>
-      lineage.id.toLowerCase() === value || lineage.name.toLowerCase() === value
+    const match = allVariantsFor(archetypeId).find(variant =>
+      variant.id.toLowerCase() === value || variant.name.toLowerCase() === value
     );
     return match?.id || '';
   }
@@ -126,24 +148,27 @@
       </section>`;
   }
 
-  function renderVampireLineages(archetypeId) {
-    if (archetypeId !== 'vampire' || !vampireLineageData?.lineages?.length) return '';
-    const chosen = selectedLineageId();
+  function renderVariantCatalogs(archetypeId) {
+    const catalogs = variantCatalogsFor(archetypeId);
+    if (!catalogs.length) return '';
+    const chosen = selectedVariantId(archetypeId);
+    const framework = archetypeId === 'vampire' ? vampireLineageData.framework : shapechangerVariantData.framework;
     return `
       <section>
-        <div class="blacklight-section-heading"><div><p class="eyebrow">Inherited undead society</p><h2>Thirteen Remainder Bloodlines</h2></div><span class="blacklight-panel-code">13 LINEAGES</span></div>
-        <p class="blacklight-callout">${escapeHtml(vampireLineageData.framework)}</p>
-        <div class="blacklight-lineage-catalog">${vampireLineageData.lineages.map(lineage => `
-          <details class="blacklight-lineage-record" ${lineage.id === chosen ? 'open' : ''}>
-            <summary>${escapeHtml(lineage.name)}</summary>
-            <div class="blacklight-lineage-grid">
-              <div><strong>Society of Shadows legacy:</strong> ${escapeHtml(lineage.legacy)}</div>
-              <div><strong>Continuum translation:</strong> ${escapeHtml(lineage.continuum)}</div>
-            </div>
-            <p><strong>Favored power families:</strong> ${(lineage.favoredFamilies || []).map(escapeHtml).join(' · ')}</p>
-            <div class="blacklight-lineage-gift"><strong>${escapeHtml(lineage.gift.name)}:</strong> ${escapeHtml(lineage.gift.effect)}</div>
-            <div class="blacklight-lineage-bane"><strong>${escapeHtml(lineage.bane.name)}:</strong> ${escapeHtml(lineage.bane.effect)}</div>
-          </details>`).join('')}</div>
+        <p class="blacklight-callout">${escapeHtml(framework)}</p>
+        ${catalogs.map(catalog => `
+          <div class="blacklight-section-heading"><div><p class="eyebrow">${escapeHtml(catalog.eyebrow || 'Integrated variants')}</p><h2>${escapeHtml(catalog.title)}</h2></div><span class="blacklight-panel-code">${escapeHtml(catalog.code || `${(catalog.variants || []).length} VARIANTS`)}</span></div>
+          <div class="blacklight-lineage-catalog">${(catalog.variants || []).map(variant => `
+            <details class="blacklight-lineage-record" ${variant.id === chosen ? 'open' : ''}>
+              <summary>${escapeHtml(variant.name)}</summary>
+              <div class="blacklight-lineage-grid">
+                <div><strong>${escapeHtml(catalog.legacyLabel || 'Inherited legacy')}:</strong> ${escapeHtml(variant.legacy)}</div>
+                <div><strong>Continuum translation:</strong> ${escapeHtml(variant.continuum)}</div>
+              </div>
+              <p><strong>Favored power families:</strong> ${(variant.favoredFamilies || []).map(escapeHtml).join(' · ')}</p>
+              <div class="blacklight-lineage-gift"><strong>${escapeHtml(variant.gift.name)}:</strong> ${escapeHtml(variant.gift.effect)}</div>
+              <div class="blacklight-lineage-bane"><strong>${escapeHtml(variant.bane.name)}:</strong> ${escapeHtml(variant.bane.effect)}</div>
+            </details>`).join('')}</div>`).join('')}
       </section>`;
   }
 
@@ -174,7 +199,7 @@
         <h3>${escapeHtml(entry.summary)}</h3>
         ${(entry.body || []).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}
       </div>
-      ${renderVampireLineages(archetypeId)}
+      ${renderVariantCatalogs(archetypeId)}
       ${renderPowerFamilies(archetype)}`;
   }
 
@@ -184,17 +209,20 @@
     if (!panel) return;
 
     try {
-      const [entryResponse, rulesResponse, lineageResponse] = await Promise.all([
+      const [entryResponse, rulesResponse, vampireResponse, shapechangerResponse] = await Promise.all([
         fetch(ENTRY_URL, { cache: 'no-store' }),
         fetch(RULES_URL, { cache: 'no-store' }),
-        fetch(VAMPIRE_LINEAGE_URL, { cache: 'no-store' })
+        fetch(VAMPIRE_LINEAGE_URL, { cache: 'no-store' }),
+        fetch(SHAPECHANGER_VARIANT_URL, { cache: 'no-store' })
       ]);
       if (!entryResponse.ok) throw new Error(`Archetype entry request failed with status ${entryResponse.status}.`);
       if (!rulesResponse.ok) throw new Error(`Power catalog request failed with status ${rulesResponse.status}.`);
-      if (!lineageResponse.ok) throw new Error(`Vampire lineage request failed with status ${lineageResponse.status}.`);
+      if (!vampireResponse.ok) throw new Error(`Vampire lineage request failed with status ${vampireResponse.status}.`);
+      if (!shapechangerResponse.ok) throw new Error(`Shapechanger variant request failed with status ${shapechangerResponse.status}.`);
       archetypeWiki = await entryResponse.json();
       rulesData = await rulesResponse.json();
-      vampireLineageData = await lineageResponse.json();
+      vampireLineageData = await vampireResponse.json();
+      shapechangerVariantData = await shapechangerResponse.json();
       renderEntry();
 
       const select = document.getElementById('blacklight-archetype');
