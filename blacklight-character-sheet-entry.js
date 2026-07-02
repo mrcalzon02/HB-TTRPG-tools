@@ -13,12 +13,14 @@
         <span class="badge status-active">basic character sheet</span>
         <span class="badge">6 archetypes</span>
         <span class="badge">65 ranked abilities</span>
+        <span class="badge">6 transition profiles</span>
       </div>
       <h3>Blacklight Basic Operative Record</h3>
-      <p>Create normal Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers. The sheet calculates derived traits, loads class resources and pressure tracks, enforces power-rank access, autosaves locally, imports and exports JSON, and prints cleanly.</p>
+      <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers whose old-world powers must be translated through imperfect Ar'nock-derived bodies, fragmented memories, and the altered laws of the far-future Continuum.</p>
       <div class="blacklight-actions">
         <a class="primary-action" href="blacklight-character-sheet.html">Open Basic Character Sheet</a>
-        <a class="secondary-action" href="data/blacklight-continuum/rules/basic-character-options.json" target="_blank" rel="noopener">Open Archetype Data</a>
+        <a class="secondary-action" href="docs/blacklight-continuum/archetype-transition-guide.md" target="_blank" rel="noopener">Open Transition Guide</a>
+        <a class="secondary-action" href="data/blacklight-continuum/rules/archetype-transition-profiles.json" target="_blank" rel="noopener">Open Transition Data</a>
       </div>`;
 
     grid.insertBefore(card, grid.children[1] || null);
