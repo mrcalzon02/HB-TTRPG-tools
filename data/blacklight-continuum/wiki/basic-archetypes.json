@@ -1,19 +1,19 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.3.0",
-  "description": "The core Blacklight Continuum character entries. Archetypes define capabilities, resources, pressures, weaknesses, and advancement paths. They do not assign mechanics according to body type, species, substrate, or origin.",
+  "schemaVersion": "0.4.0",
+  "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops. Crossing history, body speculation, and origin reconstruction are intentionally excluded.",
   "entries": [
     {
       "id": "blacklight-basic-character-sheet",
       "title": "Blacklight Basic Character Sheet",
       "category": "Character Creation",
-      "summary": "A browser-editable, autosaving, printable character sheet organized around identity, competence, powers, limits, equipment, relationships, and conditions.",
+      "summary": "A browser-editable, autosaving, printable character sheet organized around identity, competence, powers, limitations, equipment, relationships, conditions, and advancement.",
       "body": [
-        "The Basic sheet records operative identity, nine Attributes, twenty-four Skills, derived traits, Archetype Resource and Pressure, ranked powers, identity anchors, equipment, contacts, limitations, conditions, and advancement.",
-        "The sheet follows a strict capability rule: appearance, species, physiology, substrate, transformation, and origin do not grant free mechanics. A benefit exists only when recorded as an Attribute, Skill, specialization, innate ability, power, Operational Frame feature, equipment tag, condition, or explicit narrative permission.",
-        "A character records what their Archetype meant in the old world, which assumptions stopped working in the Continuum, the first power that behaved differently, and the current expression of their capabilities.",
-        "Selecting an Archetype loads its Resource, Pressure, weakness, innate abilities, six power families, and thirty ranked powers. The sheet supports browser autosave, JSON import and export, clearing, and print-to-PDF output."
+        "The Basic sheet records the character's present identity, nine Attributes, twenty-four Skills, Operational Frame, Archetype, derived traits, Resource, Pressure, innate abilities, ranked powers, equipment, relationships, limitations, conditions, and advancement.",
+        "The sheet follows a strict capability rule: appearance, species, physiology, substrate, origin, and descriptive transformation do not grant mechanics. A benefit exists only when recorded as an Attribute, Skill, specialization, innate ability, power, Operational Frame feature, equipment tag, condition, or explicit narrative permission.",
+        "Selecting an Archetype loads its Resource, Pressure, weakness, innate abilities, six power families, and thirty ranked powers. The sheet does not require a record of what crossed, what failed to cross, or how the character's powers were reconstructed.",
+        "The sheet supports browser autosave, JSON import and export, clearing, and print-to-PDF output."
       ],
       "tables": [
         {
@@ -33,14 +33,16 @@
           ]
         },
         {
-          "title": "Capability Principle",
-          "columns": ["Question", "Rule"],
+          "title": "Capability Rule",
+          "columns": ["Record", "Purpose"],
           "rows": [
-            ["Does appearance grant an ability?", "No. Record the ability explicitly."],
-            ["Does species grant automatic armor, senses, movement, or immunity?", "No. Purchase or record the relevant capability."],
-            ["Can two characters describe the same power differently?", "Yes. Shared mechanics may have different fictional sources."],
-            ["Can similar-looking characters have different capabilities?", "Yes. Description does not determine statistics."],
-            ["Can embodiment matter in a scene?", "Yes, when an individual power, item, condition, hazard, or established narrative fact makes it relevant."]
+            ["Attributes and Skills", "General competence"],
+            ["Operational Frame", "Professional training and mission role"],
+            ["Archetype", "Exceptional capability framework"],
+            ["Innate Abilities", "Automatic Archetype permissions"],
+            ["Ranked Powers", "Purchased or earned exceptional effects"],
+            ["Equipment", "External tools and functions"],
+            ["Limitations and Conditions", "Recorded restrictions and consequences"]
           ]
         }
       ],
@@ -52,19 +54,18 @@
       "id": "blacklight-basic-archetypes",
       "title": "Basic Archetypes",
       "category": "Character Options",
-      "summary": "Six distinct supernatural or exceptional capability frameworks sharing one d10 chassis without relying on a universal theory of anatomy or embodiment.",
+      "summary": "Six exceptional capability frameworks sharing one d10 chassis.",
       "body": [
-        "An Archetype defines what exceptional capabilities the character can develop, how those capabilities are fueled, what pressure threatens their control, and which limitation gives the Archetype dramatic shape.",
-        "Archetype is not species. A Vampire is a Vampire because they possess Vitae, Hunger, vampiric innate abilities, and vampiric power families—not because the core rules inspect their organs. A Shapechanger transforms because Threefold Form and its powers permit transformation—not because any description of unusual anatomy grants free effects.",
-        "Operational Frames remain separate. Archetype defines exceptional capability; Operational Frame defines professional training and mission role. Any Archetype can serve as an Investigator, Pilot, Medic, Infiltrator, Engineer, Envoy, or Continuity Warden when their Skills support it.",
-        "Each Archetype contains six families with five powers each. Power text defines activation, cost, effect, resistance, duration, and failure. Flavor explains how the character experiences the capability but never replaces the rule."
+        "An Archetype defines the exceptional capabilities a character can develop, the Resource used to activate or intensify those capabilities, the Pressure that threatens control, the weakness that creates meaningful limits, and the power families available for advancement.",
+        "Archetype is not species, anatomy, biography, or profession. Operational Frame defines professional training. Archetype defines exceptional capability. Any Archetype can serve in any Operational Frame when the character's Skills support it.",
+        "Each Archetype contains six families with five ranked powers each. Power text defines activation, cost, test, effect, resistance, duration, and failure. Descriptive presentation never replaces those rules."
       ],
       "tables": [
         {
           "title": "Archetype Summary",
           "columns": ["Archetype", "Resource", "Pressure", "Key Attribute", "Capability Domain"],
           "rows": [
-            ["Human Investigator", "Conviction", "Strain", "Resolve", "Evidence, discipline, continuity, institutions, contingency, and human networks"],
+            ["Human Investigator", "Conviction", "Strain", "Resolve", "Evidence, discipline, identity defense, institutions, contingency, and human networks"],
             ["Vampire", "Vitae", "Hunger", "Resilience", "Speed, command, concealment, resilience, feeding, and blood memory"],
             ["Shapechanger", "Fury", "Instinct", "Force", "Forms, pursuit, pack bonds, adaptation, spirits, and territory"],
             ["Eldritch Binder", "Pact", "Intrusion", "Resolve", "Seals, manifestations, obligations, cognition, thresholds, and invocation"],
@@ -80,19 +81,11 @@
       "id": "human-investigator-archetype",
       "title": "Human Investigator",
       "category": "Archetypes",
-      "summary": "A mortal specialist who competes with impossible threats through evidence, training, preparation, institutional literacy, relationships, and the refusal to surrender responsibility.",
+      "summary": "A mortal specialist who competes with impossible threats through evidence, training, preparation, institutional literacy, relationships, and accountable judgment.",
       "body": [
-        "In the old world the Human Investigator survived because they understood systems supernatural predators overlooked: witnesses, law, hospitals, archives, logistics, neighborhoods, labor, evidence, and the particular people who kept institutions functioning.",
-        "The Continuum strips away familiar jurisdiction and support. The Investigator retains methods but must apply them where records can be edited, minds copied, machine citizens hold rights, and legal identity may be stronger evidence than memory.",
-        "Conviction represents the capacity to continue making accountable judgments when certainty is impossible. Strain measures the cost of carrying that responsibility without supernatural immunity or unlimited institutional support.",
-        "The Investigator's powers remain recognizably human in source even when their results become extraordinary. Casecraft establishes facts. Field Discipline preserves action under danger. Continuity Anchoring protects personhood. Institutional Ghostcraft creates leverage from procedure. Contingency Engineering preserves options. Human Network builds durable support.",
-        "Nothing in the Archetype requires a particular body or origin. The Investigator can be transferred, synthetic, supernatural-adjacent, disabled, transformed, or conventionally human. Their mechanics come from their capabilities."
-      ],
-      "keyFacts": [
-        "No automatic supernatural immunity is granted.",
-        "Conviction fuels exceptional certainty, preparation, and resistance.",
-        "Investigation powers reveal routes to proof rather than automatically solving mysteries.",
-        "Community and institutional powers create persistent campaign assets whose loyalty depends on conduct."
+        "Conviction is the Investigator's Resource. It fuels decisive resistance, prepared solutions, protective action, institutional leverage, and the refusal to surrender a chosen principle.",
+        "Strain is the Investigator's Pressure. It accumulates through exhaustion, fear, isolation, overextension, unresolved responsibility, and repeated reliance on willpower beyond ordinary limits.",
+        "Casecraft establishes usable evidence and reconstructs responsibility. Field Discipline preserves action under danger. Continuity Anchoring protects identity and consent. Institutional Ghostcraft manipulates procedure and authority. Contingency Engineering preserves options. Human Network creates durable support through trust and organization."
       ],
       "tables": [
         {
@@ -108,12 +101,6 @@
           ]
         }
       ],
-      "playerFacing": [
-        "Which institution once gave your work practical power?",
-        "What principle remains binding even when nobody can enforce it?",
-        "Which case taught you that evidence and truth are not always the same thing?",
-        "Who taught you that survival is a collective skill?"
-      ],
       "tags": ["human", "investigator", "Conviction", "Strain", "evidence", "community"]
     },
     {
@@ -122,17 +109,9 @@
       "category": "Archetypes",
       "summary": "A Vitae-fueled predator whose powers govern supernatural speed, authority, concealment, resilience, feeding, and inherited memory.",
       "body": [
-        "In the old world the Vampire understood existence through blood, Hunger, lineage, predation, death, secrecy, and the rules of whatever curse or inheritance created them.",
-        "The Continuum does not erase those powers, but familiar assumptions may fail. Different stars complicate sunlight. Synthetic or alien life complicates feeding. Copied minds complicate domination. Noospheric identity complicates concealment. A lineage may survive as memory and practice even when no elder or institution remains to validate it.",
-        "The rules do not require a single biological explanation of vampirism. One Vampire may be undead, another cursed, another infected, another metaphysical, and another something not yet classified. All use the same mechanics when they possess the same powers.",
-        "Vitae is the Archetype Resource and Hunger is its Pressure. A feeding source restores Vitae only when the campaign and capability text say it does. Appearance, fangs, temperature, pulse, and anatomy remain descriptive unless an ability gives them an effect.",
-        "Crimson Velocity controls action economy and speed. Grave Dominion controls predatory authority. Veil of Night controls recognition. Deathless Resilience controls survival. Vital Predation controls feeding. Blood Memory controls lineage information and inherited technique."
-      ],
-      "keyFacts": [
-        "Vampirism is defined by Resource, Pressure, innate abilities, weakness, and purchased powers—not by mandatory anatomy.",
-        "Feeding compatibility is recorded explicitly.",
-        "Sunlight remains an Archetype weakness even when its exact manifestation differs by lineage.",
-        "Blood Memory is a specific power family and not a universal property of all blood."
+        "Vitae is the Vampire's Resource. It fuels physical acceleration, supernatural command, concealment, recovery, predation, and lineage effects.",
+        "Hunger is the Vampire's Pressure. It increases when Vitae is depleted, feeding is delayed, predatory compulsion is denied, or powers demand more than the character can safely provide.",
+        "Crimson Velocity controls speed and action economy. Grave Dominion controls predatory authority. Veil of Night controls recognition and concealment. Deathless Resilience controls survival and recovery. Vital Predation controls feeding and function theft. Blood Memory controls inherited information, stored experience, and lineage creation."
       ],
       "tables": [
         {
@@ -148,12 +127,6 @@
           ]
         }
       ],
-      "playerFacing": [
-        "What does Hunger ask you to treat as food?",
-        "Which feeding act will you refuse even when collapse is imminent?",
-        "What bloodline rule still matters without an elder to enforce it?",
-        "Which power most clearly separates you from the person you once were?"
-      ],
       "tags": ["vampire", "Vitae", "Hunger", "predation", "lineage", "undeath"]
     },
     {
@@ -162,17 +135,9 @@
       "category": "Archetypes",
       "summary": "A supernatural transformer whose powers govern forms, pursuit, pack continuity, adaptive capabilities, spirit relations, and territorial sovereignty.",
       "body": [
-        "The Shapechanger was never defined by one outward appearance. Their identity included social restraint, hunting perception, warlike force, pack relationship, territory, and a spiritual or supernatural understanding of transformation.",
-        "The Continuum presents environments and beings the old forms were never designed to address. The Shapechanger may learn forms for vacuum, hostile machinery, alien terrain, noospheric pursuit, or reflection spaces, but receives those benefits only through explicit powers.",
-        "Threefold Form grants the basic transformation capability. It does not silently grant armor, claws, enhanced senses, speed, or healing beyond what its text and purchased powers provide.",
-        "Fury fuels transformation and decisive action. Instinct measures predatory escalation and the danger that pursuit, territory, or one preferred form will overwhelm judgment.",
-        "Warform governs combat. Hunt Across Worlds governs pursuit. Pack Continuity governs bonded coordination. Adaptive Forms governs utility transformation. Spirit Ecology governs nonphysical relationships. Territorial Sovereignty governs domains."
-      ],
-      "keyFacts": [
-        "The player decides whether transformation is biological, spiritual, magical, technological, symbolic, or mixed.",
-        "Every mechanical benefit of a form must appear in a power or innate ability.",
-        "Pack membership is relational and may include different species, substrates, or Archetypes.",
-        "Local entities must be understood rather than automatically classified according to old-world spirit categories."
+        "Fury is the Shapechanger's Resource. It fuels rapid transformation, pursuit, protection, environmental adaptation, spirit action, and territorial control.",
+        "Instinct is the Shapechanger's Pressure. It rises through denied pursuit, threatened packmates, violated territory, humiliation, confinement, and extended use of predatory forms.",
+        "Threefold Form supplies the basic permission to shift among social, hunting, and war forms. Warform defines combat benefits. Hunt Across Worlds defines pursuit. Pack Continuity defines bonded coordination. Adaptive Forms defines utility transformations. Spirit Ecology defines spirit interaction. Territorial Sovereignty defines claimed domains."
       ],
       "tables": [
         {
@@ -188,31 +153,17 @@
           ]
         }
       ],
-      "playerFacing": [
-        "Which form feels most honest?",
-        "What does Instinct demand when you are denied pursuit?",
-        "Who belongs to your pack, and who believes they do not?",
-        "What new form are you afraid to make permanent?"
-      ],
       "tags": ["shapechanger", "Fury", "Instinct", "forms", "pack", "territory"]
     },
     {
       "id": "eldritch-binder-archetype",
       "title": "Eldritch Binder",
       "category": "Archetypes",
-      "summary": "A negotiator, jailer, host, or partner whose powers arise from a structured relationship with an impossible presence.",
+      "summary": "A negotiator, jailer, host, or partner whose capabilities arise from a structured relationship with an impossible presence.",
       "body": [
-        "The Eldritch Binder's defining fact is not anatomy. It is relationship: pact, imprisonment, inheritance, infection, research accident, family obligation, deliberate invitation, or desperate bargain.",
-        "The Continuum destabilizes old names and categories. A demon, machine intelligence, archive ghost, alien organism, living equation, and causal remnant may obey different boundaries even when they present similar signs.",
-        "Pact measures usable structure within the relationship. Intrusion measures how much attention, knowledge, influence, or access the answering presence has acquired.",
-        "Borrowed manifestations may look like organs, limbs, shadows, devices, voices, fields, symbols, or impossible geometry. Only the recorded effect matters mechanically.",
-        "Sealcraft controls boundaries. Borrowed Manifestation grants temporary capabilities. Pact Economy governs obligation. Forbidden Cognition grants dangerous knowledge. Threshold Geometry creates routes. Invocation governs presence."
-      ],
-      "keyFacts": [
-        "The identity of the answering presence can remain unresolved.",
-        "Flavor never grants an additional sense, limb, defense, or movement mode beyond the power text.",
-        "Intrusion is knowledge and leverage gained by the presence, not generic biological corruption.",
-        "Agreements require wording, parties, consideration, limits, and consequences."
+        "Pact is the Binder's Resource. It represents usable authority, negotiated permission, stored obligation, and controlled access to the answering presence.",
+        "Intrusion is the Binder's Pressure. It measures attention, influence, knowledge, access, and leverage gained by the presence through repeated use.",
+        "Sealcraft controls boundaries and local law. Borrowed Manifestation grants temporary capabilities. Pact Economy governs prices and obligations. Forbidden Cognition grants dangerous knowledge. Threshold Geometry creates nonordinary routes. Invocation controls signs, avatars, partial arrivals, and full audiences."
       ],
       "tables": [
         {
@@ -228,12 +179,6 @@
           ]
         }
       ],
-      "playerFacing": [
-        "What was promised, and what was merely implied?",
-        "Which old boundary no longer appears reliable?",
-        "What does the presence know about you that your allies do not?",
-        "What term would you demand before renewing the relationship?"
-      ],
       "tags": ["Eldritch Binder", "Pact", "Intrusion", "patron", "seals", "contracts"]
     },
     {
@@ -242,17 +187,9 @@
       "category": "Archetypes",
       "summary": "A resonance wielder whose powers affect force, patterns, structures, emotion, phase, and memory through a chosen harmonic medium.",
       "body": [
-        "The Harmonic Mutant understands reality through pattern, rhythm, frequency, phase, repetition, and interference. Their source might be mutation, magic, technology, dimensional exposure, training, inheritance, or an event nobody has classified.",
-        "The core rules do not require special organs or a hybrid physiology. A character may sing, calculate, project fields, manipulate psychic resonance, use instruments, vibrate through supernatural means, or combine several methods.",
-        "Resonance fuels powers. Discord measures accumulated instability between intended effect, emotional state, surrounding systems, and uncontrolled sympathetic response.",
-        "The family effects specify what can be sensed, healed, copied, phased, or preserved. Similar descriptive traits do not grant these functions without the relevant power.",
-        "Harmonic Projection controls force. Echo Patterns controls healing and copies. Structural Resonance controls architecture. Emotional Chord controls collective state. Phase Modulation controls material interaction. Memory Harmonics controls mnemonic pattern."
-      ],
-      "keyFacts": [
-        "The player chooses the medium through which resonance is expressed.",
-        "Discord can affect powers, perception, identity, or the environment depending on the triggering effect.",
-        "Memory Harmonics is a purchased capability and not a default property of places or bodies.",
-        "Structural powers do not make the character part of a ship or building unless a power is actively used."
+        "Resonance is the Mutant's Resource. It fuels projection, healing, structural interaction, emotional modulation, phase effects, and memory work.",
+        "Discord is the Mutant's Pressure. It accumulates through incompatible frequencies, emotional shock, repeated projection, environmental coupling, unstable phase effects, and uncontrolled sympathetic response.",
+        "Harmonic Projection controls force. Echo Patterns controls healing and duplication. Structural Resonance controls architecture and machinery. Emotional Chord controls collective state. Phase Modulation controls interaction with matter and nearby outcomes. Memory Harmonics controls recovery, storage, separation, and preservation of memory patterns."
       ],
       "tables": [
         {
@@ -268,12 +205,6 @@
           ]
         }
       ],
-      "playerFacing": [
-        "What medium carries your resonance?",
-        "Which frequency, symbol, rhythm, or pattern means safety?",
-        "What uncontrolled response first taught you to fear Discord?",
-        "Which memory can you reproduce more accurately than you can describe?"
-      ],
       "tags": ["Harmonic Mutant", "Resonance", "Discord", "frequency", "phase", "memory"]
     },
     {
@@ -282,17 +213,9 @@
       "category": "Archetypes",
       "summary": "A network and fabrication specialist whose powers govern system authority, constructs, noospheric identity, machine relationships, signal warfare, and advanced production.",
       "body": [
-        "The Technomancer makes technology respond as an environment of permissions, intentions, relationships, and processes rather than a collection of inert devices.",
-        "Their interface may be wireless, ritual, psychic, implanted, external, symbolic, voice-driven, tool-mediated, or otherwise established by the character concept. The core rules do not require a biological port, cybernetic implant, or particular substrate.",
-        "Bandwidth measures active processing and interface capacity. Feedback measures reciprocal access, surveillance, hostile synchronization, identity contamination, and the consequences of allowing systems to act back through a connection.",
-        "Machine Communion is not Network Dominion. One builds relationship with potentially autonomous minds; the other contests authority. Fabrication Interface is not an assumed bodily feature; it is a ranked capability to understand and direct compatible production systems.",
-        "Network Dominion controls access. Construct Engineering creates tools. Noospheric Identity controls recognized personhood. Machine Communion governs relationships. Signal Warfare controls connectivity. Fabrication Interface governs production."
-      ],
-      "keyFacts": [
-        "Every connection is reciprocal unless a power or secured system says otherwise.",
-        "Machine intelligence may possess personhood, rights, fear, obligation, and political standing.",
-        "No interface method grants extra mechanics beyond the selected powers and equipment.",
-        "Sentient creations become characters with moral status, not disposable items."
+        "Bandwidth is the Technomancer's Resource. It measures usable attention, active connections, processing, permissions, and interface capacity committed to current effects.",
+        "Feedback is the Technomancer's Pressure. It accumulates through hostile access, reciprocal surveillance, synchronization, identity contamination, overloaded channels, and autonomous systems acting back through the connection.",
+        "Network Dominion controls access and authority. Construct Engineering creates tools and systems. Noospheric Identity controls recognized personhood. Machine Communion governs relationships with autonomous intelligences. Signal Warfare controls connectivity and denial. Fabrication Interface governs template reading, repairs, production, and complex creation."
       ],
       "tables": [
         {
@@ -307,12 +230,6 @@
             ["Fabrication Interface", "Template reading, repairs, peripherals, rule alteration, and complex creation"]
           ]
         }
-      ],
-      "playerFacing": [
-        "How do you interface with systems?",
-        "Which machine first convinced you that software could be a person?",
-        "What connection followed you back when it should not have?",
-        "What will you refuse to create even when the mission demands it?"
       ],
       "tags": ["Technomancer", "Bandwidth", "Feedback", "networks", "machine personhood", "fabrication"]
     }
