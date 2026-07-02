@@ -3,7 +3,7 @@
 
   const STORAGE_KEY = 'hb-wod-supernatural-intensity-v1';
   const GAME_LINES = new Set(['unified', 'vampire', 'werewolf', 'breeds', 'hunter', 'changeling', 'mage']);
-  const state = { installed: false, values: {}, refreshTimer: 0 };
+  const state = { installed: false, values: {}, refreshTimer: 0, annotationFrame: 0 };
   const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
 
   function clamp(value) {
@@ -138,7 +138,6 @@
       syncControl(activeLine());
     }, true);
     syncControl(activeLine());
-    observeSelectedRecord();
     return true;
   }
 
@@ -147,7 +146,7 @@
     const note = document.getElementById('wod-supernatural-intensity-note');
     if (output) output.textContent = `${formatPercent(value)}%`;
     if (note) note.textContent = `Profile default: ${formatPercent(defaultFor(activeLine()))}%. This controls how often generated locations contain a supernatural or supernatural-adjacent occurrence.`;
-    annotateSelectedRecord();
+    scheduleSelectedRecordAnnotation();
   }
 
   function syncControl(line = activeLine()) {
@@ -169,6 +168,15 @@
     }, 180);
   }
 
+  function scheduleSelectedRecordAnnotation() {
+    if (state.annotationFrame) return;
+    const schedule = window.requestAnimationFrame || (callback => window.setTimeout(callback, 0));
+    state.annotationFrame = schedule(() => {
+      state.annotationFrame = 0;
+      annotateSelectedRecord();
+    });
+  }
+
   function annotateSelectedRecord() {
     const grid = document.querySelector('#wod-display-matrix .wod-inventory-grid');
     if (!grid) return;
@@ -177,22 +185,24 @@
       field = document.createElement('div');
       field.className = 'wod-inventory-field';
       field.dataset.wodIntensityField = 'true';
+      const label = document.createElement('strong');
+      label.textContent = 'Supernatural occurrence frequency';
+      const value = document.createElement('span');
+      value.dataset.wodIntensityValue = 'true';
+      field.append(label, value);
       grid.prepend(field);
     }
-    field.innerHTML = `<strong>Supernatural occurrence frequency</strong><span>${formatPercent(getValue())}% for the ${activeLine()} profile</span>`;
+    const value = field.querySelector('[data-wod-intensity-value]');
+    const nextText = `${formatPercent(getValue())}% for the ${activeLine()} profile`;
+    if (value && value.textContent !== nextText) value.textContent = nextText;
   }
 
-  function observeSelectedRecord() {
-    const matrix = document.getElementById('wod-display-matrix');
-    if (!matrix || matrix.dataset.wodIntensityObserved === 'true') return;
-    matrix.dataset.wodIntensityObserved = 'true';
-    new MutationObserver(annotateSelectedRecord).observe(matrix, { childList: true, subtree: true });
-  }
-
-  function decorateSelectionEvent(event) {
-    if (!event.detail?.record) return;
-    event.detail.record.supernaturalIntensityPercent = getValue();
-    event.detail.record.supernaturalIntensityProfile = activeLine();
+  function handleSelectionEvent(event) {
+    if (event.detail?.record) {
+      event.detail.record.supernaturalIntensityPercent = getValue();
+      event.detail.record.supernaturalIntensityProfile = activeLine();
+    }
+    scheduleSelectedRecordAnnotation();
   }
 
   async function install() {
@@ -205,7 +215,7 @@
     }
   }
 
-  document.addEventListener('wod:radial-location-selected', decorateSelectionEvent, true);
+  document.addEventListener('wod:radial-location-selected', handleSelectionEvent, true);
   document.addEventListener('wod:spatial-map-ready', () => { void install(); });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else void install();
