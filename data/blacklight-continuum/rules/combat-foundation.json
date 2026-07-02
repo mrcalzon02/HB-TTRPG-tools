@@ -1,6 +1,6 @@
 {
   "setting": "Blacklight Continuum",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "name": "Combat Foundation",
   "coreProcedure": {
     "start": "Combat begins when opposed characters attempt actions whose order can change the result. Establish positions, cover, visible threats, current tracks, and immediate objectives before determining Initiative.",
@@ -80,6 +80,14 @@
       "Medium: 21–50 meters. Increase Physical Defense Difficulty by 1.",
       "Long: 51–100 meters. Increase Physical Defense Difficulty by 2.",
       "Beyond Long: the attack is unavailable unless the weapon or capability explicitly provides greater range."
+    ],
+    "damageResolutionOrder": [
+      "Determine whether the attack hits and calculate Margin.",
+      "Calculate Raw Damage from Damage rating + Margin.",
+      "Apply Protection, Armor penetration, immunity, and other fixed modifiers. A normal successful Impact or Trauma hit has a minimum of 1 damage at this step unless a rule permits complete negation.",
+      "Resolve Living Soak or another printed post-Protection soak or resistance. A soak may reduce the remaining damage to 0.",
+      "Resolve reactive reductions such as Cohesion Brace against any damage still remaining.",
+      "Remove one Vitality per remaining damage point, record the damage type, and apply Downed or Death Mark rules when required."
     ]
   },
   "sampleDamageRatings": [
@@ -196,5 +204,21 @@
     "emergencyTreatment": "Standard Action, adjacent Stable target at 0 Vitality, one field medical kit charge. Test Reason + Medicine at difficulty 3. Success removes one recorded Impact or Trauma, restores the target to 1 Vitality, removes 1 Death Mark, ends Downed, and applies Staggered until the end of the target's next turn. Failure consumes the action but not the kit charge. The test may be Pushed.",
     "death": "At 3 Death Marks the character is dead. Death is immediate and cannot be reversed by Stabilize, Emergency Treatment, ordinary healing, Cohesion, or retroactive declarations. Only a capability explicitly able to restore a dead character can change that state.",
     "equalApplication": "Player characters, allied characters, neutral characters, and hostile characters use the same Downed, stabilization, and death procedures unless a recorded capability explicitly states otherwise."
+  },
+  "shapechangerSoak": {
+    "name": "Living Soak",
+    "separationFromProtection": "Protection is a fixed subtraction based on Resilience and Armor. Living Soak is a second Shapechanger-only roll made after Protection. Increasing Resilience can therefore improve both layers.",
+    "socialForm": "After final Impact damage is determined, roll Resilience. Each success removes 1 damage.",
+    "huntingAndWarForms": "After final Impact or Trauma damage is determined, roll Resilience + Archetype Rating. Each success removes 1 damage.",
+    "timing": "Roll once per damaging hit after Protection and before Cohesion Brace or Vitality loss. Living Soak requires no action, Reaction, or Fury.",
+    "completeNegation": "Living Soak may reduce the remaining damage to 0 even when the attack hit and the Protection step imposed a minimum of 1 damage.",
+    "woundedInteraction": "Because Living Soak uses Resilience, the Wounded penalty and any other penalty applying to Resilience tests reduce the Soak pool.",
+    "excludedEffects": "Living Soak does not reduce Disruption, Pressure, Exposure, Death Marks not created by damage, or an effect explicitly stating that it ignores Shapechanger Soak."
+  },
+  "temporaryDerivedChanges": {
+    "rule": "When an effect temporarily changes an Attribute, immediately recalculate every derived trait using that Attribute.",
+    "vitalityIncrease": "When temporary Resilience raises Vitality Maximum, increase current Vitality by the same amount. This represents functional mass and endurance created by the form, not healing of recorded damage.",
+    "vitalityDecrease": "When the increase ends, reduce Maximum normally and reduce current Vitality only when it exceeds the new Maximum. Existing recorded damage remains.",
+    "protectionAndPools": "Protection, Exposure Limit, Soak pools, and other derived values change immediately for the duration of the Attribute change."
   }
 }

@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.10.0",
+  "schemaVersion": "0.12.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -545,7 +545,11 @@
       "innateAbilities": [
         {
           "name": "Threefold Form",
-          "effect": "You possess a social form, a hunting form, and a war form. Their appearance and origin are chosen by the player. Shifting costs 1 Fury in danger unless a power says otherwise."
+          "effect": "You possess a social form, a hunting form, and a war form. Their appearance and origin are chosen by the player. Shifting is a Minor Interaction. Shifting during danger costs 1 Fury unless a power says otherwise; shifting after one uninterrupted minute outside immediate danger costs no Fury."
+        },
+        {
+          "name": "Living Soak",
+          "effect": "After Protection and other fixed modifiers determine final damage, but before Vitality is lost, make one Soak Test for each damaging hit. In social form, roll Resilience against Impact damage only. In hunting or war form, roll Resilience + Archetype Rating against Impact or Trauma damage. Each success removes 1 final damage, and Living Soak may reduce a successful hit to 0 damage. It requires no action, Reaction, or Fury and can be used once per hit. Wounded and other penalties to Resilience tests reduce the Soak pool. Living Soak cannot reduce Disruption, Pressure, Exposure, Death Marks not created by damage, or an effect explicitly stating that it ignores Shapechanger Soak."
         },
         {
           "name": "Regeneration",
