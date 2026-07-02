@@ -49,7 +49,6 @@
       <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers. Every Archetype contains six five-rank capability families with explicit costs, effects, limits, resistance, and failure consequences.</p>
       <div class="blacklight-actions">
         <a class="primary-action" href="blacklight-character-sheet.html">Open Basic Character Sheet</a>
-        <a class="secondary-action" href="data/blacklight-continuum/rules/basic-character-options.json" target="_blank" rel="noopener">Open Canonical Power Data</a>
       </div>`;
 
     grid.insertBefore(card, grid.children[1] || null);
