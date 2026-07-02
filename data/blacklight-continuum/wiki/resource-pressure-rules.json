@@ -1,0 +1,58 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "description": "Universal Resource and Pressure rules for all six Blacklight Continuum Archetypes.",
+  "entries": [
+    {
+      "id": "archetype-resource-pressure-procedure",
+      "title": "Archetype Resource and Pressure Procedure",
+      "category": "Rules",
+      "summary": "Every Archetype Resource has explicit spending, depletion, and recovery rules, while every Pressure track has fixed thresholds, penalties, recovery methods, and a Crisis at its Limit.",
+      "body": [
+        "Resource is usable capacity. A character must possess at least the printed cost before activating a capability, spends that cost before the test or effect resolves, and keeps the cost on failure unless the ability explicitly refunds it.",
+        "Pressure measures a specific form of accumulating danger. Pressure Limit equals Composure + 5. Warning begins at the ceiling of one third of the Limit. Critical begins at the ceiling of two thirds of the Limit. Critical includes both the Warning and Critical effects.",
+        "If a Pressure cost reaches the Limit, the current action still resolves. The Archetype Crisis occurs immediately afterward. Set Pressure to the Warning Threshold, then reapply any points that exceeded the Limit one at a time. Reapplied overflow can trigger another Crisis.",
+        "Resource recovery and Pressure reduction are not interchangeable. Each Archetype lists the exact actions that restore its Resource or reduce its Pressure. A Full Rest affects only the tracks whose procedures explicitly say it does.",
+        "A Full Rest is at least six hours without combat, pursuit, severe environmental exposure, or maintaining an active power. It includes food and water when required and sleep, dormancy, meditation, or another equivalent inactive state.",
+        "The six Crisis procedures are Human Breaking Point, Feeding Frenzy, Rampage, Incursion, Dissonant Cascade, and Hard Reboot. Their outcomes are printed rules rather than moderator-selected punishment."
+      ],
+      "tables": [
+        {
+          "title": "Track Formulas",
+          "columns": ["Track Value", "Formula"],
+          "rows": [
+            ["Resource Maximum", "resourceBase + Archetype Rating + key Attribute"],
+            ["Pressure Limit", "Composure + 5"],
+            ["Warning Threshold", "ceiling(Pressure Limit / 3)"],
+            ["Critical Threshold", "ceiling((Pressure Limit × 2) / 3)"]
+          ]
+        },
+        {
+          "title": "Pressure Bands",
+          "columns": ["Band", "Mechanical State"],
+          "rows": [
+            ["Stable", "0 through Warning − 1; no universal penalty"],
+            ["Warning", "Warning through Critical − 1; apply the Archetype Warning effect"],
+            ["Critical", "Critical through Limit − 1; apply Warning and Critical effects"],
+            ["Crisis", "At Limit; finish the current action, resolve Crisis, reset to Warning, then reapply overflow"]
+          ]
+        },
+        {
+          "title": "Archetype Tracks",
+          "columns": ["Archetype", "Resource", "Pressure", "Crisis"],
+          "rows": [
+            ["Human Investigator", "Conviction", "Strain", "Human Breaking Point"],
+            ["Vampire", "Vitae", "Hunger", "Feeding Frenzy"],
+            ["Shapechanger", "Fury", "Instinct", "Rampage"],
+            ["Eldritch Binder", "Pact", "Intrusion", "Incursion"],
+            ["Harmonic Mutant", "Resonance", "Discord", "Dissonant Cascade"],
+            ["Technomancer", "Bandwidth", "Feedback", "Hard Reboot"]
+          ]
+        }
+      ],
+      "tags": ["resource", "pressure", "recovery", "crisis", "conviction", "hunger", "intrusion", "discord", "feedback"],
+      "relatedEntries": ["blacklight-d10-foundation", "capability-framework", "blacklight-character-creation"]
+    }
+  ]
+}
