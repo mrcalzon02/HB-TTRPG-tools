@@ -1,0 +1,371 @@
+{
+  "setting": "Blacklight Continuum",
+  "archetype": "Shapechanger",
+  "schemaVersion": "1.0.0",
+  "framework": "Shapechanger variants are inherited spiritual, cultural, and transformational traditions carried into the Continuum. They remain part of the Shapechanger Archetype and use its six shared power families. Choose one Lunar Nation, one Changing Form, or remain Unaligned. Each variant grants one printed Gift, imposes one printed Bane, and identifies two favored power families for later advancement rules.",
+  "catalogs": [
+    {
+      "id": "lunar-nations",
+      "title": "Thirteen Lunar Nations",
+      "eyebrow": "Inherited wolf societies",
+      "code": "13 NATIONS",
+      "legacyLabel": "Old spiritual society",
+      "variants": [
+        {
+          "id": "burning-line",
+          "name": "Mothers of the Burning Line",
+          "legacy": "Matrilineal guardians, avengers, sacred-site defenders, and protectors of people repeatedly treated as acceptable casualties by stronger powers.",
+          "continuum": "The old sacred places and ancestral courts possess no local jurisdiction, but the duty to stand between violence and its chosen victim remains immediate.",
+          "favoredFamilies": ["Pack Continuity", "Warform"],
+          "gift": {
+            "name": "Guardian's Intercept",
+            "effect": "Once per round, when an ally within 5 meters is targeted by an attack or hostile effect, spend 1 Fury to move adjacent to that ally and become the target instead. Reduce the resulting Impact, Trauma, Disruption, or Pressure by 1 after defenses are applied."
+          },
+          "bane": {
+            "name": "Broken Protection",
+            "effect": "After explicitly accepting responsibility for a person's safety, knowingly abandoning that person while you remain capable of intervening adds 2 Instinct. Instinct cannot be reduced below 1 until you rescue them, secure their safety, or receive their informed release from the promise."
+          }
+        },
+        {
+          "id": "streetbone-clans",
+          "name": "The Streetbone Clans",
+          "legacy": "Urban scavengers, protectors of the discarded, survivors of poverty, and packs that learned every city has a hidden ecology beneath official ownership.",
+          "continuum": "Alleys and rail tunnels have become service decks, waste loops, abandoned habitats, and unregistered infrastructure. Their society still begins wherever powerful people stop looking.",
+          "favoredFamilies": ["Adaptive Forms", "Territorial Sovereignty"],
+          "gift": {
+            "name": "Scavenger's Providence",
+            "effect": "Once per scene after five minutes searching an urban, industrial, or wrecked area, choose one result: recover one Serviceable handheld tool; recover two common consumables; or gain two dice on one repair, shelter, or survival test performed with the recovered salvage. Recovered items last until used, broken, or the operation ends."
+          },
+          "bane": {
+            "name": "Never Waste Plenty",
+            "effect": "If a scene ends while you possess food, medical supplies, breathable reserves, or repair materials that an ally openly needed during that scene and you knowingly withheld them, gain 1 Instinct."
+          }
+        },
+        {
+          "id": "concordant-grove",
+          "name": "The Concordant Grove",
+          "legacy": "Peacemakers, healers, mediators, and spiritual diplomats who believed survival required ending wars that rage alone could never win.",
+          "continuum": "The universal war they once understood no longer surrounds them. Their work becomes more difficult because every peace must now be justified without inherited cosmic certainty.",
+          "favoredFamilies": ["Pack Continuity", "Spirit Ecology"],
+          "gift": {
+            "name": "Truce Howl",
+            "effect": "Spend 1 Fury and one action. Choose up to Archetype Rating + 2 targets within 10 meters that can hear or otherwise perceive you. Each unwilling target tests Resolve + Composure against difficulty equal to Archetype Rating. A failed target cannot initiate an attack until the end of your next turn. The restriction ends immediately for a target that is attacked."
+          },
+          "bane": {
+            "name": "Pain of Civil War",
+            "effect": "The first time each scene that two willing members of your pack deliberately harm one another, gain 1 Instinct and lose one die from all actions until one participant stops fighting, accepts mediation, or the scene ends."
+          }
+        },
+        {
+          "id": "hearthfire-singers",
+          "name": "The Hearthfire Singers",
+          "legacy": "Storykeepers, passionate warriors, celebrants, kinship-builders, and packs that preserved identity through song, feud, memory, and shared ritual.",
+          "continuum": "Their ancestral landscapes are unreachable, but stories remain portable territory. The tale told around a damaged heater can bind a new pack as surely as an old sacred hall once did.",
+          "favoredFamilies": ["Pack Continuity", "Territorial Sovereignty"],
+          "gift": {
+            "name": "Story Before Battle",
+            "effect": "Once per scene, spend one uninterrupted minute telling a story, singing, performing, or leading a shared ritual. Choose up to Archetype Rating + 2 willing listeners. Each removes 1 Pressure and gains one die against fear and identity disruption until scene end."
+          },
+          "bane": {
+            "name": "Open Heart",
+            "effect": "When a trusted ally publicly rejects your pack bond, ridicules a sincere shared ritual, or deliberately destroys a meaningful communal keepsake, gain 1 Instinct and lose two Guile dice against that ally until scene end."
+          }
+        },
+        {
+          "id": "ironhowl-hosts",
+          "name": "The Ironhowl Hosts",
+          "legacy": "Warrior societies, monster hunters, oath-bound champions, and packs that measured honor through endurance, direct challenge, and victory over worthy enemies.",
+          "continuum": "The old enemy categories are unreliable here. Their discipline survives, but they must decide who is actually worthy of violence instead of inheriting a permanent list.",
+          "favoredFamilies": ["Warform", "Hunt Across Worlds"],
+          "gift": {
+            "name": "Challenge of the Worthy",
+            "effect": "As a minor action, mark one visible target within 20 meters until it is defeated, escapes the scene, or you dismiss the challenge. Gain two dice on Close Combat tests against the marked target and two dice to resist its fear, domination, and forced movement effects. Attacks against other targets lose two dice while the challenge remains active."
+          },
+          "bane": {
+            "name": "Shame of Retreat",
+            "effect": "If you voluntarily leave a marked target while physically capable of continuing the confrontation and an ally remains endangered by that target, gain 2 Instinct."
+          }
+        },
+        {
+          "id": "glass-circuit-packs",
+          "name": "The Glass Circuit Packs",
+          "legacy": "Urban adapters, machine mystics, corporate infiltrators, infrastructure shamans, and packs that treated cities and technology as living territory rather than spiritual absence.",
+          "continuum": "Their instincts translate unusually well to habitats, ships, computational ecologies, and machine populations, even though local systems do not recognize their old rites.",
+          "favoredFamilies": ["Spirit Ecology", "Adaptive Forms"],
+          "gift": {
+            "name": "City-Spirit Interface",
+            "effect": "Autonomous machines, infrastructure processes, and active networks count as valid presences for your Spirit Ecology powers. Gain two dice on Engineering and Security tests inside active infrastructure. Once per scene while connected to a system, spend 1 Fury to learn one fact: its strongest active hazard; the identity of its most recent authorized user; the nearest controlled exit; or the location of its primary power source."
+          },
+          "bane": {
+            "name": "Static Withdrawal",
+            "effect": "After completing a scene without an active machine, powered structure, or communication network within 20 meters, gain 1 Instinct and lose one Reason die until you spend one uninterrupted minute interacting with a powered system."
+          }
+        },
+        {
+          "id": "first-fang-wilds",
+          "name": "The First Fang Wilds",
+          "legacy": "Wilderness purists, hunters of encroaching civilization, protectors of nonhuman life, and packs that regarded human expansion as the most persistent wound in the living world.",
+          "continuum": "Humanity is no longer the only civilization reshaping ecosystems. Their anger remains useful, but the category of invader must be judged environment by environment.",
+          "favoredFamilies": ["Hunt Across Worlds", "Territorial Sovereignty"],
+          "gift": {
+            "name": "Unbounded Hunt",
+            "effect": "In undeveloped wilderness, unmanaged ecological zones, or environments without maintained roads and corridors, gain two dice on Stealth and Survival tests and ignore ordinary movement penalties from brush, mud, loose stone, shallow water, and comparable natural terrain."
+          },
+          "bane": {
+            "name": "Cage Fury",
+            "effect": "The first time each scene that an artificial restraint or enclosure prevents you from moving more than 2 meters for one complete round, gain 1 Instinct."
+          }
+        },
+        {
+          "id": "veiled-talon-courts",
+          "name": "The Veiled Talon Courts",
+          "legacy": "Strategists, political predators, intelligence brokers, and ambitious leaders who believed power should be taken from those too weak or foolish to hold it.",
+          "continuum": "Their old conspiracies and offices have vanished. The instinct to identify leverage remains, but every claim to rule must be rebuilt from nothing.",
+          "favoredFamilies": ["Territorial Sovereignty", "Hunt Across Worlds"],
+          "gift": {
+            "name": "Leverage Before Blood",
+            "effect": "After winning an opposed Command, Deception, Negotiation, or Investigation test, choose one benefit: restore 1 Fury; or gain two dice on your next action against the opposing target before scene end. This Gift can activate once per scene."
+          },
+          "bane": {
+            "name": "Humiliation Ledger",
+            "effect": "The first time each scene that a target with lower formal authority publicly defeats your stated plan or strips you of control over a claimed objective, gain 1 Instinct. Instinct from this Bane can be removed normally after you acknowledge the defeat or establish a new objective."
+          }
+        },
+        {
+          "id": "long-road-deadwalkers",
+          "name": "The Long Road Deadwalkers",
+          "legacy": "Nomads, spirit messengers, ghost-guides, travelers between territories, and packs that carried warnings and ancestral obligations across hostile borders.",
+          "continuum": "The old roads through the spirit world no longer connect familiar lands, but thresholds, reflections, dead stations, and memory routes still create passages for those who refuse settlement.",
+          "favoredFamilies": ["Spirit Ecology", "Hunt Across Worlds"],
+          "gift": {
+            "name": "Road Through Echoes",
+            "effect": "Once per scene, spend 1 Fury to step through a reflection, doorway, shadow, memorial surface, or active threshold and reappear at another visible example within 15 meters. Spend 1 additional Fury to bring one willing adjacent ally and their worn equipment."
+          },
+          "bane": {
+            "name": "Restless Dead",
+            "effect": "After completing three consecutive full rests within the same claimed territory, your first Initiative or Spirit Ecology test after each later rest there loses two dice. The penalty ends after traveling at least 10 kilometers or completing a full rest at a different site."
+          }
+        },
+        {
+          "id": "moon-crowned-houses",
+          "name": "The Moon-Crowned Houses",
+          "legacy": "Inherited judges, royal packs, ceremonial leaders, and bloodlines trained to embody unity, law, dignity, and the dangerous assumption that leadership belonged to them.",
+          "continuum": "Their ancestry commands no one here. What remains is bearing, precedent, and the burden of proving that leadership serves the pack rather than merely preserving rank.",
+          "favoredFamilies": ["Pack Continuity", "Territorial Sovereignty"],
+          "gift": {
+            "name": "Bearing of the First Pack",
+            "effect": "Willing allies within 10 meters may use your Composure in place of their own when resisting fear. Once per scene after you succeed on a Command test, choose one ally who heard you; that ally gains two dice on their next action before the end of their next turn."
+          },
+          "bane": {
+            "name": "Fractured Majesty",
+            "effect": "When a Presence or Command test produces a Complication, suffer 1 Disruption and you cannot activate Pack Continuity powers until the end of your next turn."
+          }
+        },
+        {
+          "id": "still-horizon-order",
+          "name": "The Still Horizon Order",
+          "legacy": "Contemplatives, spiritual philosophers, disciplined warriors, and seekers who treated self-mastery as the foundation of every other victory.",
+          "continuum": "The local spirit order is unfamiliar, but disciplined attention remains portable. Their silence is no longer communion with a known cosmos; it is a method for hearing what this one actually says.",
+          "favoredFamilies": ["Spirit Ecology", "Adaptive Forms"],
+          "gift": {
+            "name": "Stillness Between Heartbeats",
+            "effect": "Once per scene as a minor action, ignore all dice penalties caused by Instinct until the start of your next turn and gain two dice on Resolve and Composure tests during that interval."
+          },
+          "bane": {
+            "name": "Interrupted Center",
+            "effect": "If you are attacked, forcibly moved, or subjected to a hostile power during deliberate meditation, ritual stillness, or a full rest, gain 1 Instinct and reduce Initiative by 2 during the next round."
+          }
+        },
+        {
+          "id": "coilroot-keepers",
+          "name": "The Coilroot Keepers",
+          "legacy": "Occult wardens, keepers of dangerous names, guardians of sealed places, and spiritual investigators who preserved truths considered too dangerous for ordinary society.",
+          "continuum": "Their old sealed histories are distant, but unfamiliar anomalies make the discipline of asking the right dangerous question more valuable than ever.",
+          "favoredFamilies": ["Spirit Ecology", "Hunt Across Worlds"],
+          "gift": {
+            "name": "Keeper's Question",
+            "effect": "Once per scene after examining a spirit, anomaly, ritual, ward, or supernatural effect for one action, choose one question and receive a truthful answer: What feeds or sustains it? What boundary contains or blocks it? What bargain or command does it recognize? What specific action will awaken or intensify it?"
+          },
+          "bane": {
+            "name": "Weight of the Hidden",
+            "effect": "Knowingly revealing a secret entrusted to you under an explicit oath adds 2 Instinct and prevents use of Keeper's Question until you repair the breach, receive release from the oath, or complete a full rest after the injured party accepts restitution."
+          }
+        },
+        {
+          "id": "white-gale-nations",
+          "name": "The White Gale Nations",
+          "legacy": "Northern guardians, winter hunters, defenders of threatened peoples, and packs whose spiritual identity was inseparable from cold territory, inherited grief, and resistance to invasion.",
+          "continuum": "Their ancestral lands cannot be reached, but the duty to remember seizure, desecration, and disappearance remains sharper in a universe where entire peoples can be copied, relocated, or erased from recognition.",
+          "favoredFamilies": ["Territorial Sovereignty", "Warform"],
+          "gift": {
+            "name": "Winter Territory",
+            "effect": "Ignore ordinary environmental penalties from cold, snow, and ice. While inside territory you have claimed through Territorial Sovereignty, gain two dice to track intruders and two dice to resist forced movement, restraint, and environmental displacement."
+          },
+          "bane": {
+            "name": "Ancestral Grievance",
+            "effect": "The first time each scene that you witness the seizure or deliberate desecration of claimed territory, a memorial, or pack remains, gain 1 Instinct. If you leave the scene without recovering the remains, marking the offender, or establishing a warning, gain 1 additional Instinct."
+          }
+        }
+      ]
+    },
+    {
+      "id": "changing-forms",
+      "title": "Ten Changing Forms",
+      "eyebrow": "Other inherited shapes",
+      "code": "10 FORMS",
+      "legacyLabel": "Former changing society",
+      "variants": [
+        {
+          "id": "pridebound-hunters",
+          "name": "The Pridebound Hunters",
+          "legacy": "Independent feline hunters, secretive prides, solitary guardians, and shapechangers who treated territory, elegance, and personal sovereignty as inseparable.",
+          "continuum": "The old breeds and pride territories are absent. Their independence remains, but local ecosystems offer new prey, new heights, and no inherited reason to respect their boundaries.",
+          "favoredFamilies": ["Hunt Across Worlds", "Adaptive Forms"],
+          "gift": {
+            "name": "Cat's Sovereignty",
+            "effect": "Choose one path at character creation. Stalker: gain two Stealth dice while no ally is within 5 meters. Climber: move across steep surfaces and climbable walls at normal speed without a test. Sprinter: increase ground movement by 5 meters and gain two pursuit dice during the first round of a chase. Watcher: gain thermal sight within 20 meters and two Awareness dice when detecting hidden movement."
+          },
+          "bane": {
+            "name": "Crowded Instinct",
+            "effect": "While three or more other creatures are within 2 meters of you, reduce Guard by 1 and lose one Awareness die. Packmates you are physically carrying do not count."
+          }
+        },
+        {
+          "id": "blackwing-couriers",
+          "name": "The Blackwing Couriers",
+          "legacy": "Corvid messengers, omen readers, collectors of secrets, battlefield witnesses, and travelers who carried news between otherwise isolated supernatural societies.",
+          "continuum": "There are no familiar courts to carry messages between, but distance, isolation, and failing communications make a trustworthy witness more important than ever.",
+          "favoredFamilies": ["Hunt Across Worlds", "Spirit Ecology"],
+          "gift": {
+            "name": "Sky Messenger",
+            "effect": "Your hunting form can fly 20 meters per exchange and carry worn equipment plus one handheld object. Once per scene, spend 1 Fury to send a message of no more than twenty-five words to one known person within 10 kilometers; the message arrives as your remembered voice and identifies your direction at the time of sending."
+          },
+          "bane": {
+            "name": "Unquiet Witness",
+            "effect": "If you discover an imminent threat to a known ally and knowingly fail to warn them before the scene ends, gain 2 Instinct."
+          }
+        },
+        {
+          "id": "deep-sleep-wardens",
+          "name": "The Deep-Sleep Wardens",
+          "legacy": "Bear-shaped healers, patient protectors, seasonal guardians, and ancient powers that answered violence slowly but with overwhelming finality.",
+          "continuum": "Their old seasonal rhythms no longer match the sky, yet the disciplines of healing, endurance, and restorative sleep remain intact.",
+          "favoredFamilies": ["Adaptive Forms", "Pack Continuity"],
+          "gift": {
+            "name": "Healing Slumber",
+            "effect": "Spend 1 Fury and maintain uninterrupted contact with yourself or a willing target for ten minutes. Remove 2 Impact or convert 1 Trauma into Impact. A target can benefit from Healing Slumber once per scene. During a full rest, you recover one additional Impact."
+          },
+          "bane": {
+            "name": "Heavy Awakening",
+            "effect": "When danger begins while you are asleep, dormant, or in a full rest, reduce Initiative by 2 during the first round after awakening."
+          }
+        },
+        {
+          "id": "elder-scale-keepers",
+          "name": "The Elder-Scale Keepers",
+          "legacy": "Primeval reptilian memory-keepers, dreamers of extinct worlds, custodians of ancestral forms, and survivors whose identity reached farther back than human history.",
+          "continuum": "Their inherited memories describe a world that is now cosmologically distant. The lessons remain useful even when none of the stars or species match the remembered age.",
+          "favoredFamilies": ["Adaptive Forms", "Territorial Sovereignty"],
+          "gift": {
+            "name": "Primeval Frame",
+            "effect": "In hunting or war form, gain 1 Armor and hold your breath for Archetype Rating × 10 minutes. Once per scene, choose one remembered adaptation for three rounds: aquatic movement at 20 meters per exchange; thermal sight within 20 meters; or a crushing tail or jaw attack that deals Trauma and gains one attack die."
+          },
+          "bane": {
+            "name": "Cold Slowing",
+            "effect": "After suffering cold damage or spending one complete round below freezing without protection, reduce Initiative by 2 and ground movement by 5 meters. Both penalties end after one complete round above freezing."
+          }
+        },
+        {
+          "id": "laughing-horizon",
+          "name": "The Laughing Horizon",
+          "legacy": "Coyote-shaped tricksters, teachers through embarrassment, sacred trespassers, and survivors who broke rigid systems by exposing the assumptions holding them together.",
+          "continuum": "The new universe contains institutions no old story anticipated. Their purpose remains to discover which rules are necessary and which survive only because nobody has laughed at them yet.",
+          "favoredFamilies": ["Hunt Across Worlds", "Spirit Ecology"],
+          "gift": {
+            "name": "Turn the Joke",
+            "effect": "Once per scene after failing a non-damage test, spend 1 Fury to convert the result into one success and choose one Complication: drop or break one carried common item; reveal your position; offend one involved target, imposing two social dice against them until scene end; or gain 1 Instinct."
+          },
+          "bane": {
+            "name": "Forbidden Door",
+            "effect": "When a visible authority explicitly forbids you from entering a place or asking about a subject, your first action that does not investigate, challenge, or deliberately set aside that prohibition loses two dice. Spend 1 Fury to ignore this Bane for the scene."
+          }
+        },
+        {
+          "id": "underwarren-chorus",
+          "name": "The Underwarren Chorus",
+          "legacy": "Rat-shaped swarm survivors, revolutionaries, plague witnesses, tunnel nations, and shapechangers who understood that collective persistence could outlast every empire.",
+          "continuum": "Their old warrens are gone, but crowded habitats, waste systems, neglected workers, and unregistered populations recreate the conditions in which their societies thrive.",
+          "favoredFamilies": ["Adaptive Forms", "Pack Continuity"],
+          "gift": {
+            "name": "Many Small Bodies",
+            "effect": "Spend 1 Fury to replace your hunting form with a coordinated swarm until scene end. The swarm can pass through openings at least 5 centimeters wide, gains two Stealth dice, and occupies a 2-meter area. It cannot use carried equipment, weapons, or Warform attacks. Area attacks against the swarm deal 2 additional damage. Returning to another form is a minor action."
+          },
+          "bane": {
+            "name": "Alone Is Death",
+            "effect": "If a scene ends with no willing ally within 20 meters, gain 1 Instinct and reduce Guard by 1 until you rejoin an ally or complete a full rest in a secure communal site."
+          }
+        },
+        {
+          "id": "abyssal-jaw",
+          "name": "The Abyssal Jaw",
+          "legacy": "Shark-shaped ocean hunters, territorial survivors, ancient predators, and guardians of waters that predated every human border.",
+          "continuum": "Alien seas and artificial oceans contain no familiar migrations, but movement, blood, pressure, and territorial intrusion remain legible in any water.",
+          "favoredFamilies": ["Warform", "Hunt Across Worlds"],
+          "gift": {
+            "name": "Red Current",
+            "effect": "Your hunting and war forms breathe water, ignore ordinary pressure within inhabited ocean depths, and swim 30 meters per exchange. In water, detect fresh blood within 100 meters and gain two dice to track or attack a bleeding target."
+          },
+          "bane": {
+            "name": "Blood in the Water",
+            "effect": "The first time each scene that living blood enters water within 30 meters, gain 1 Instinct. While at Instinct 3 or higher in water, beginning a turn within 10 meters of a bleeding creature requires a Resolve + Composure test at difficulty 2; failure forces your first action to move toward or attack the nearest bleeding creature."
+          }
+        },
+        {
+          "id": "silk-covenant",
+          "name": "The Silk Covenant",
+          "legacy": "Spider-shaped network builders, patient conspirators, keepers of reciprocal obligation, and shapechangers who treated every relationship as part of a living web.",
+          "continuum": "Local noospheres and political systems create webs on a scale their ancestors never imagined. The danger is no longer finding connections but becoming trapped inside too many of them.",
+          "favoredFamilies": ["Territorial Sovereignty", "Pack Continuity"],
+          "gift": {
+            "name": "Living Web",
+            "effect": "Spend 1 Fury and one action to create a webbed zone with a 5-meter radius on a surface or between nearby structures. The web has durability equal to Archetype Rating + 3 and lasts for the scene. Designated allies move through it normally. Other creatures entering the zone test Force + Athletics against difficulty equal to Archetype Rating; failure restrains them until they deal enough damage to destroy the web or succeed on the same test as an action."
+          },
+          "bane": {
+            "name": "Webbed Obligations",
+            "effect": "When either party knowingly breaks a reciprocal agreement you personally swore, gain 1 Instinct and lose two Composure dice until you formally release the agreement, secure restitution, or complete your own outstanding obligation."
+          }
+        },
+        {
+          "id": "lantern-foxes",
+          "name": "The Lantern Foxes",
+          "legacy": "Fox-shaped illusionists, spirit magicians, courtly tricksters, oath-keepers, and survivors who used wit to move between human and supernatural societies.",
+          "continuum": "The old courts cannot confirm their titles or magic, but deception, elegance, and carefully worded promises remain effective in any reality containing minds.",
+          "favoredFamilies": ["Spirit Ecology", "Adaptive Forms"],
+          "gift": {
+            "name": "Foxfire Misdirection",
+            "effect": "Spend 1 Fury to create one visual and auditory illusion inside a 3-meter cube within 20 meters. The illusion lasts for three rounds and follows one simple repeated motion or sound you define at activation. Physical contact reveals it as unreal. A suspicious observer may test Awareness + Investigation against difficulty equal to Archetype Rating to recognize it without contact."
+          },
+          "bane": {
+            "name": "Promise-Tail",
+            "effect": "Knowingly breaking a spoken bargain whose terms you personally repeated adds 2 Instinct. Instinct cannot be reduced below 1 until you complete the promised act, obtain release from the other party, or provide restitution they knowingly accept."
+          }
+        },
+        {
+          "id": "verdict-coil",
+          "name": "The Verdict Coil",
+          "legacy": "Serpent-shaped investigators, secret judges, executioners of supernatural law, and hidden societies that treated patience and proof as prerequisites for lethal action.",
+          "continuum": "Their old mandates possess no jurisdiction. The discipline of witnessing, marking, and proving a violation remains, while every sentence must now be justified without inherited authority.",
+          "favoredFamilies": ["Hunt Across Worlds", "Warform"],
+          "gift": {
+            "name": "Venomous Verdict",
+            "effect": "After personally witnessing a target inflict Trauma, break a sworn agreement, or attempt supernatural domination, mark that target until scene end. After a successful bite, claw, or direct-contact attack against the marked target, spend 1 Fury. The target tests Resilience against difficulty equal to Archetype Rating. Failure inflicts 2 Impact and two dice of action penalties for two rounds; success inflicts 1 Impact. A target can suffer this venom once per scene."
+          },
+          "bane": {
+            "name": "Unproven Sentence",
+            "effect": "If you knowingly use Venomous Verdict or deliver a deliberate killing attack against a target who is not currently marked by witnessed conduct, gain 2 Instinct and lose access to Venomous Verdict until completing a full rest."
+          }
+        }
+      ]
+    }
+  ]
+}
