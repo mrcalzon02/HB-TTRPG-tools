@@ -4,6 +4,7 @@
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
+  const HARMONIC_VARIANT_URL = 'data/blacklight-continuum/rules/harmonic-compact-remainders.json';
   let rulesData = null;
   let rulesPromise = null;
   const variantCache = new Map();
@@ -52,6 +53,7 @@
         <span class="badge">6 integrated archetypes</span>
         <span class="badge">13 Vampire bloodlines</span>
         <span class="badge">23 Shapechanger variants</span>
+        <span class="badge">13 Harmonic remainders</span>
         <span class="badge">36 power families</span>
         <span class="badge">180 ranked powers</span>
       </div>
@@ -98,12 +100,15 @@
     return rulesPromise;
   }
 
+  function variantUrlFor(archetypeId) {
+    if (archetypeId === 'vampire') return VAMPIRE_LINEAGE_URL;
+    if (archetypeId === 'shapechanger') return SHAPECHANGER_VARIANT_URL;
+    if (archetypeId === 'harmonic-mutant') return HARMONIC_VARIANT_URL;
+    return '';
+  }
+
   function loadVariantData(archetypeId) {
-    const url = archetypeId === 'vampire'
-      ? VAMPIRE_LINEAGE_URL
-      : archetypeId === 'shapechanger'
-        ? SHAPECHANGER_VARIANT_URL
-        : '';
+    const url = variantUrlFor(archetypeId);
     if (!url) return Promise.resolve(null);
     if (variantCache.has(archetypeId)) return Promise.resolve(variantCache.get(archetypeId));
     if (!variantPromises.has(archetypeId)) {
@@ -166,7 +171,9 @@
         variants: data.lineages
       }];
     }
-    if (archetypeId === 'shapechanger' && data?.catalogs?.length) return data.catalogs;
+    if ((archetypeId === 'shapechanger' || archetypeId === 'harmonic-mutant') && data?.catalogs?.length) {
+      return data.catalogs;
+    }
     return [];
   }
 
