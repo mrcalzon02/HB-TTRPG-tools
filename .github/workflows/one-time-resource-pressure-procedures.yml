@@ -1,0 +1,469 @@
+name: One-time Archetype resource and pressure procedures
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-resource-pressure-procedures.yml
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Add track procedures and interface rendering
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rules_path = Path('data/blacklight-continuum/rules/basic-character-options.json')
+          rules = json.loads(rules_path.read_text(encoding='utf-8'))
+          rules['schemaVersion'] = '0.11.0'
+          rules['resourcePressureProcedure'] = {
+              'resourceMaximum': 'Resource Maximum equals resourceBase + Archetype Rating + the Archetype key Attribute.',
+              'pressureLimit': 'Pressure Limit equals Composure + 5.',
+              'warningThreshold': 'Warning Threshold equals ceiling(Pressure Limit / 3).',
+              'criticalThreshold': 'Critical Threshold equals ceiling((Pressure Limit × 2) / 3).',
+              'bands': [
+                  'Stable: Pressure 0 through Warning Threshold − 1. No universal penalty applies.',
+                  'Warning: Pressure from the Warning Threshold through Critical Threshold − 1. Apply the Archetype Warning effect.',
+                  'Critical: Pressure from the Critical Threshold through Pressure Limit − 1. Apply both Warning and Critical effects.',
+                  'Crisis: When Pressure reaches the Limit, finish resolving the current action, then resolve the Archetype Crisis.'
+              ],
+              'spendingOrder': 'Declare the capability, verify that current Resource is at least the printed cost, spend the Resource, mark any printed Pressure gain, resolve the action, then resolve a Crisis if Pressure reached its Limit. A failed activation keeps its spent cost unless the ability explicitly refunds it.',
+              'insufficientResource': 'A character cannot voluntarily reduce Resource below 0. If current Resource is lower than the printed cost, the capability cannot be activated unless another recorded rule replaces or pays that cost.',
+              'overflow': 'After a Crisis, set current Pressure to the Warning Threshold. Reapply every Pressure point that exceeded the Limit one at a time. If the reapplied points reach the Limit again, resolve another Crisis.',
+              'recoveryCap': 'Resource cannot rise above its Maximum and Pressure cannot fall below 0. Excess recovery is lost.',
+              'fullRest': 'A Full Rest is at least six hours without combat, pursuit, severe environmental exposure, or maintaining an active power. It must include food and water when the character needs them and sleep, dormancy, meditation, or an equivalent inactive state.'
+          }
+
+          track_rules = {
+              'human-investigator': {
+                  'resource': {
+                      'name': 'Conviction',
+                      'meaning': 'Conviction is finite moral focus, prepared resolve, and the decision to accept responsibility rather than surrender initiative.',
+                      'spending': 'Spending Conviction means committing attention, courage, preparation, or personal certainty to the printed capability. Spending Conviction does not automatically add Strain unless the capability says it does.',
+                      'depletedState': 'Spent: At 0 Conviction, you cannot activate Conviction-cost abilities. The first time you Push during each scene, gain 1 additional Strain after the roll resolves. All ordinary actions remain available.',
+                      'recovery': [
+                          {'name': 'Act on the Conviction', 'frequency': 'Once per scene', 'effect': 'After an action directly upholds your recorded Defining Conviction, restore 1 Conviction if the action also caused at least one listed cost: you suffered damage, Pressure, or Exposure; spent a scarce item; surrendered cover or positional advantage; placed yourself in immediate danger to protect another person; or refused a direct benefit because accepting it would violate the Conviction.'},
+                          {'name': 'Fulfill a Commitment', 'frequency': 'Once per operation', 'effect': 'When you complete a recorded Debt, Promise, Professional Obligation, or stated mission objective, restore 2 Conviction.'},
+                          {'name': 'Regroup with Another Person', 'frequency': 'Once per operation', 'effect': 'Spend ten uninterrupted minutes with a willing ally or Touchstone. Each participant states one current fear and one immediate commitment. Restore 1 Conviction and remove 1 Strain.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Restore Conviction to its Maximum.'}
+                      ]
+                  },
+                  'pressure': {
+                      'name': 'Strain',
+                      'meaning': 'Strain is exhaustion, fear, unresolved responsibility, pain, isolation, and the cumulative cost of forcing a mortal mind and body past sustainable limits.',
+                      'warning': {'name': 'Worn', 'effect': 'Reduce the maximum number of failed dice you may reroll with a Push by 1, to a minimum of 1.'},
+                      'critical': {'name': 'Overextended', 'effect': 'In addition to Worn, lose 1 die from Force, Finesse, Reason, and Awareness tests, and receive no more than 1 assistance die on any test.'},
+                      'crisis': {'name': 'Human Breaking Point', 'effect': 'After the current action resolves, choose one response. Collapse: fall Prone and take no actions or reactions until the end of your next turn. Flight: immediately move your full movement toward the nearest known safe position; until the end of your next turn you may only move, defend, or assist an adjacent ally who is moving with you. Tunnel Vision: immediately take one basic action directly advancing your currently stated objective without spending Resource; afterward lose reactions and cannot assist or communicate until the end of your next turn. After the response, gain Exhausted: lose 1 die from all tests until a Full Rest. If already Exhausted, suffer 1 Trauma instead.'},
+                      'recovery': [
+                          {'name': 'Breather', 'frequency': 'Once per scene', 'effect': 'Spend ten uninterrupted minutes in a safe position with water, food when needed, and no active task. Remove 1 Strain.'},
+                          {'name': 'Regroup', 'frequency': 'Once per operation', 'effect': 'Regroup with a willing ally or Touchstone as described under Conviction recovery. Remove 1 Strain and restore 1 Conviction.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Remove all Strain and remove Exhausted.'}
+                      ]
+                  }
+              },
+              'vampire': {
+                  'resource': {
+                      'name': 'Vitae',
+                      'meaning': 'Vitae is the concentrated vital medium sustaining the cursed bloodline and powering supernatural speed, resilience, authority, concealment, healing, and blood memory.',
+                      'spending': 'Spending Vitae consumes stored vital power. If a Vitae cost reduces current Vitae to 0, gain 1 Hunger after the current action resolves.',
+                      'depletedState': 'Bloodless: At 0 Vitae, you cannot activate Vitae-cost abilities, Predator’s Blood, Cold Repair, or another vampiric healing effect. Deathless State remains active. At the start of each scene while Vitae remains 0, gain 1 Hunger.',
+                      'recovery': [
+                          {'name': 'Feeding', 'frequency': 'Limited by the Feeding innate ability', 'effect': 'Direct contact and one full action restore 1 Vitae, up to Archetype Rating Vitae from one target or source per scene. Use the recorded feeding medium and resistance rules.'},
+                          {'name': 'Fill the Reserve', 'frequency': 'Once per operation', 'effect': 'When Feeding raises current Vitae to its Maximum, reduce Hunger by 1 after the feeding scene.'},
+                          {'name': 'Dormancy', 'frequency': 'Once per completed Full Rest', 'effect': 'Dormancy does not restore Vitae. If current Vitae is at least half Maximum, rounded up, reduce Hunger by 2.'}
+                      ]
+                  },
+                  'pressure': {
+                      'name': 'Hunger',
+                      'meaning': 'Hunger is the cursed appetite narrowing attention toward the recorded vital medium. It remains quieter in the Continuum, but becomes physically and psychologically dominant as the track rises.',
+                      'warning': {'name': 'Red Attention', 'effect': 'While a valid feeding source is perceptible within 10 meters, lose 1 die from Empathy, Investigation, and Negotiation tests that do not directly concern locating, understanding, protecting, or feeding from that source.'},
+                      'critical': {'name': 'Predatory Narrowing', 'effect': 'In addition to Red Attention, at the start of each turn when an injured, helpless, or restrained valid feeding source is perceptible within 10 meters, test Resolve + Composure at difficulty 2. On failure choose immediately: move toward the source and use your standard action to attempt Feeding if possible; or move your full movement until you are more than 10 meters from every perceptible valid source and gain 1 Hunger. If neither choice is possible, lose the standard action.'},
+                      'crisis': {'name': 'Feeding Frenzy', 'effect': 'After the current action resolves, identify the nearest perceptible valid feeding source. For up to three rounds you must use movement to approach it and your standard action to attempt Feeding. If it becomes inaccessible, use the next nearest valid source. The frenzy ends immediately after you restore 2 Vitae or when no valid source remains perceptible. If no valid source exists when the frenzy begins, suffer 2 Trauma and enter involuntary dormancy, becoming Incapacitated until scene end.'},
+                      'recovery': [
+                          {'name': 'Substantial Feeding', 'frequency': 'Once per scene', 'effect': 'Restoring at least 2 Vitae during one scene reduces Hunger by 1. Feeding from a helpless unwilling person still adds 1 Hunger at scene end as stated by Feeding.'},
+                          {'name': 'Full Reserve', 'frequency': 'Once per operation', 'effect': 'Raising Vitae to Maximum through Feeding reduces Hunger by 1.'},
+                          {'name': 'Sated Dormancy', 'frequency': 'Once per completed Full Rest', 'effect': 'If Vitae is at least half Maximum, rounded up, reduce Hunger by 2.'}
+                      ]
+                  }
+              },
+              'shapechanger': {
+                  'resource': {
+                      'name': 'Fury',
+                      'meaning': 'Fury is mobilized supernatural drive: the force used to transform, regenerate, pursue, defend pack, and impose the Shapechanger’s living will upon body and territory.',
+                      'spending': 'Spending Fury converts controlled predatory drive into a printed transformation or action. Spending Fury does not add Instinct unless the capability says it does.',
+                      'depletedState': 'Spent Beast: At 0 Fury, you cannot shift in danger, activate Fury-cost abilities, or use Fury-based Regeneration. Existing forms remain until scene end. At scene end, if you remain in a war or apex form, return to social or hunting form and gain 1 Instinct.',
+                      'recovery': [
+                          {'name': 'Provoked Fury', 'frequency': 'Once per scene', 'effect': 'After you or a bonded packmate suffers Trauma from a hostile source, restore 1 Fury.'},
+                          {'name': 'Complete the Hunt', 'frequency': 'Once per scene', 'effect': 'After you personally catch, restrain, or drive off a marked quarry; break a restraint or confinement holding you; or repel an intruder from claimed territory, restore 1 Fury.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Restore Fury to its Maximum.'}
+                      ]
+                  },
+                  'pressure': {
+                      'name': 'Instinct',
+                      'meaning': 'Instinct is predatory escalation: the growing priority of pursuit, territory, dominance, pack defense, bodily action, and immediate threat over reflection and social restraint.',
+                      'warning': {'name': 'Predatory Focus', 'effect': 'While a marked quarry, active confinement, immediate pack threat, or territorial violation is present, lose 1 die from Reason, Negotiation, Engineering, Medicine, and Systems Intrusion tests.'},
+                      'critical': {'name': 'Challenge Reflex', 'effect': 'In addition to Predatory Focus, the first time each round you attempt an action outside the following priorities, test Resolve + Composure at difficulty 2: defend a threatened packmate; pursue or restrain marked quarry; break confinement; attack a creature that damaged you this round; or drive an intruder from claimed territory. On failure, replace the declared action with the highest applicable priority.'},
+                      'crisis': {'name': 'Rampage', 'effect': 'After the current action resolves, shift into war form without paying Fury when space permits; otherwise use hunting form. For three rounds you may only move, pursue, attack, break restraint, interpose for a packmate, or drive an intruder toward an exit. Use this priority order: a creature currently harming a packmate; marked quarry; a creature restraining you; a creature that harmed you this scene; nearest visible hostile. If no priority target exists, move toward the nearest open exit and break obstacles blocking it. Afterward gain Feral Tell: lose 2 dice from Deception and Negotiation tests made to appear calm or harmless until a Full Rest.'},
+                      'recovery': [
+                          {'name': 'Run the Instinct Out', 'frequency': 'Once per scene', 'effect': 'Spend ten uninterrupted minutes performing strenuous movement, controlled hunting drills, or physical labor in a safe area. Remove 1 Instinct.'},
+                          {'name': 'Voluntary De-escalation', 'frequency': 'Once per scene', 'effect': 'When you knowingly spare or release a helpless or surrendered quarry, abandon a pursuit because a packmate asks you to stop, or permit a nonhostile intruder to leave claimed territory, remove 1 Instinct.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Remove all Instinct when resting with at least one bonded packmate or inside secure claimed territory; otherwise remove 2 Instinct. Remove Feral Tell.'}
+                      ]
+                  }
+              },
+              'eldritch-binder': {
+                  'resource': {
+                      'name': 'Pact',
+                      'meaning': 'Pact is usable leverage inside the binding: fulfilled terms, preserved prohibitions, accepted prices, names, permissions, and portions of the relationship the Source remains obligated to honor.',
+                      'spending': 'Spending Pact invokes an enforceable part of the binding. It does not mean friendship or consent from the Source. At Critical Intrusion, every Pact expenditure widens the channel as stated by Partial Occupancy.',
+                      'depletedState': 'Unleveraged: At 0 Pact, you cannot activate Pact-cost abilities. Existing effects retain their printed duration. The Source remains connected and may still offer its Temptation. Full Rest alone does not restore Pact.',
+                      'recovery': [
+                          {'name': 'Answer the Temptation', 'frequency': 'Once per scene', 'effect': 'Resolve the selected Source’s printed Temptation. Receive its benefit, restore 1 Pact, and gain 1 Intrusion.'},
+                          {'name': 'Fulfill a Pact Term', 'frequency': 'Each specific term once per scene', 'effect': 'When you complete a recorded payment, service, prohibition, invitation condition, or maintenance duty, restore the Pact amount written in the agreement. If no amount is written, restore 1 Pact.'},
+                          {'name': 'Reaffirm Name and Boundary', 'frequency': 'Once per operation', 'effect': 'Spend ten uninterrupted minutes repairing or reciting the binding and either consume one common ritual supply or suffer 1 Impact. Restore 1 Pact.'},
+                          {'name': 'Full Rest', 'frequency': 'Never by itself', 'effect': 'A Full Rest does not restore Pact unless a separate recorded agreement says it does.'}
+                      ]
+                  },
+                  'pressure': {
+                      'name': 'Intrusion',
+                      'meaning': 'Intrusion is the portion of the Source currently inside the Binder’s senses, body, habits, memory, surroundings, or decision-making. It measures access, not anger.',
+                      'warning': {'name': 'Source Leakage', 'effect': 'A source-specific tell becomes visible or audible and cannot be hidden without a disguise or concealment test. Lose 1 Identity Defense and 1 die from Deception and Stealth tests made to conceal the binding.'},
+                      'critical': {'name': 'Partial Occupancy', 'effect': 'In addition to Source Leakage, whenever you spend one or more Pact, gain 1 additional Intrusion after the current action resolves. Ordinary disguise cannot hide the source-specific tell, and only a supernatural or technological concealment capability may contest detection.'},
+                      'crisis': {'name': 'Incursion', 'effect': 'After the current action resolves, resolve the selected Source’s printed Intrusion Breach, suffer 1 Disruption, and gain its Source Mark until Intrusion falls below the Warning Threshold. Void Mind: choose one Skill and lose 1 die from that Skill as memories overlap. Abyssal Womb: lose 1 die from Finesse and Guile tests as phantom limbs act out of sequence. That Which Hungers: lose 1 die from Empathy and Negotiation as appetite colors every exchange. Lidless Eye: lose 1 die from Stealth and Deception as additional eyes and reflected attention expose you. The Silence: lose 1 die from Presence and Performance as voice and outline disappear. The Noise: lose 1 die from Command and Noospherics as static contaminates every signal.'},
+                      'recovery': [
+                          {'name': 'Reinforce the Boundary', 'frequency': 'Once per scene', 'effect': 'Spend ten uninterrupted minutes inside a drawn, programmed, spoken, or otherwise recorded boundary and spend 1 Pact. Remove 2 Intrusion.'},
+                          {'name': 'Fulfill a Pact Term', 'frequency': 'Each specific term once per scene', 'effect': 'Completing a recorded pact obligation removes 1 Intrusion in addition to any Pact restored.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Remove 2 Intrusion when resting inside an intact prepared boundary; otherwise remove 1 Intrusion. A Source Mark ends immediately when Intrusion falls below the Warning Threshold.'}
+                      ]
+                  }
+              },
+              'harmonic-mutant': {
+                  'resource': {
+                      'name': 'Resonance',
+                      'meaning': 'Resonance is stored harmonic alignment between the Mutant and force, matter, life, emotion, phase, memory, and the compact encoded inside the character.',
+                      'spending': 'Spending Resonance releases or retunes that alignment. Spending Resonance does not add Discord unless the capability or Critical Discord rule says it does.',
+                      'depletedState': 'Flat: At 0 Resonance, you cannot activate Resonance-cost abilities or Tune the Self. Existing effects continue for their printed durations, but no effect may be renewed or extended.',
+                      'recovery': [
+                          {'name': 'Retune', 'frequency': 'Once per scene', 'effect': 'Spend ten uninterrupted minutes using a stable rhythm, instrument, oscillator, structural vibration, or repeated physical motion. Test Composure + Science or Composure + Performance at difficulty 2. On success choose either restore 2 Resonance or remove 1 Discord. On failure restore 1 Resonance and gain 1 Discord.'},
+                          {'name': 'Shared Rhythm', 'frequency': 'Once per operation', 'effect': 'Spend ten uninterrupted minutes performing synchronized work, music, movement, breathing, or conversation with at least one willing participant. Restore 1 Resonance and remove 1 Discord.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Restore Resonance to its Maximum.'}
+                      ]
+                  },
+                  'pressure': {
+                      'name': 'Discord',
+                      'meaning': 'Discord is accumulated mismatch between the Mutant’s inherited harmonic order and the local universe. It appears as vibration, emotional bleed, phase errors, involuntary light, sound, heat, motion, and bodily instability.',
+                      'warning': {'name': 'Off-Key', 'effect': 'Lose 1 die from Composure and Stealth tests and from every test made to activate a Resonance ability.'},
+                      'critical': {'name': 'Cross-Coupling', 'effect': 'In addition to Off-Key, whenever you spend Resonance choose one spill immediately after the action: suffer 1 Impact; gain 1 additional Discord; or push every unsecured Carry 1 object within 2 meters 2 meters directly away from you, revealing your exact location until the start of your next turn.'},
+                      'crisis': {'name': 'Dissonant Cascade', 'effect': 'After the current action resolves, end every active Harmonic Mutant effect you control. Suffer 1 Disruption and become Staggered, losing reactions and 2 Guard until the end of your next turn. Every other creature within 5 meters tests Resilience + Composure at difficulty 2; failure inflicts 1 Impact and pushes the creature 3 meters directly away. Every unsecured Carry 1 object within 5 meters is pushed 3 meters away.'},
+                      'recovery': [
+                          {'name': 'Retune', 'frequency': 'Once per scene', 'effect': 'A successful Retune may remove 1 Discord instead of restoring Resonance.'},
+                          {'name': 'Shared Rhythm', 'frequency': 'Once per operation', 'effect': 'Shared Rhythm removes 1 Discord and restores 1 Resonance.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Remove 2 Discord.'}
+                      ]
+                  }
+              },
+              'technomancer': {
+                  'resource': {
+                      'name': 'Bandwidth',
+                      'meaning': 'Bandwidth is available awakened processing, attention, authorization, connection capacity, and interface load that can be committed to machines, identities, signals, fabrication, and autonomous systems.',
+                      'spending': 'Spending Bandwidth commits processing and access capacity to the printed effect. It does not add Feedback unless the capability or Critical Feedback rule says it does.',
+                      'depletedState': 'Saturated: At 0 Bandwidth, you cannot activate Bandwidth-cost abilities. Ghost Interface functions only through direct touch. The first time you Push an Engineering, Fabrication, Noospherics, Security, Science, or Systems Intrusion test each scene, gain 1 Feedback after the roll.',
+                      'recovery': [
+                          {'name': 'Close a Channel', 'frequency': 'Once per scene', 'effect': 'Voluntarily end one sustained Technomancer effect that has remained active for at least one full round. Restore 1 Bandwidth.'},
+                          {'name': 'Offline Diagnostic', 'frequency': 'Once per scene', 'effect': 'Spend ten uninterrupted minutes with no active Technomancer power and no live remote connection. Restore 2 Bandwidth and remove 1 Feedback.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Restore Bandwidth to its Maximum.'}
+                      ]
+                  },
+                  'pressure': {
+                      'name': 'Feedback',
+                      'meaning': 'Feedback is reciprocal signal pressure: hostile traces, copied commands, cognitive heat, identity echo, machine attention, recursive thought, and foreign processes returning through open channels.',
+                      'warning': {'name': 'Signal Echo', 'effect': 'Lose 1 Identity Defense. Hostile systems and intelligences gain 1 die on tests to detect, trace, identify, or target your active connection or noospheric identity.'},
+                      'critical': {'name': 'Recursive Loop', 'effect': 'In addition to Signal Echo, whenever you spend one or more Bandwidth, gain 1 additional Feedback after the current action resolves. You may maintain only one sustained Technomancer effect; when entering Critical, immediately end older sustained effects until only the most recently activated remains. Activating another sustained effect ends the current one.'},
+                      'crisis': {'name': 'Hard Reboot', 'effect': 'After the current action resolves, end every active Technomancer effect you control and sever every remote connection. Suffer 2 Disruption, lose reactions, suppress Personal Firewall, and become unable to activate Technomancer powers until the end of your next turn. Every hostile system connected when the Crisis occurred learns your current physical location or network address, whichever it can normally represent.'},
+                      'recovery': [
+                          {'name': 'Offline Diagnostic', 'frequency': 'Once per scene', 'effect': 'Offline Diagnostic removes 1 Feedback and restores 2 Bandwidth.'},
+                          {'name': 'Hardware Purge', 'frequency': 'Once per operation', 'effect': 'Spend ten uninterrupted minutes and consume one Serviceable electronic, noospheric, or fabrication component. Remove 2 Feedback.'},
+                          {'name': 'Full Rest', 'frequency': 'Once per completed Full Rest', 'effect': 'Remove all Feedback when fully disconnected from external networks and active systems for the rest; otherwise remove 2 Feedback.'}
+                      ]
+                  }
+              }
+          }
+
+          for archetype in rules['archetypes']:
+              if archetype['id'] in track_rules:
+                  archetype['trackRules'] = track_rules[archetype['id']]
+
+          rules_path.write_text(json.dumps(rules, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          foundation_path = Path('data/blacklight-continuum/wiki/foundation-rules.json')
+          foundation = json.loads(foundation_path.read_text(encoding='utf-8'))
+          foundation['schemaVersion'] = '0.5.0'
+          foundation['entries'] = [entry for entry in foundation['entries'] if entry.get('id') != 'archetype-resource-pressure-procedure']
+          foundation['entries'].append({
+              'id': 'archetype-resource-pressure-procedure',
+              'title': 'Archetype Resource and Pressure Procedure',
+              'category': 'Rules',
+              'summary': 'Every Archetype Resource has explicit spending and recovery rules, while every Pressure track has fixed thresholds, penalties, recovery methods, and a Crisis at its Limit.',
+              'body': [
+                  'Resource is usable capacity. A character must possess at least the printed cost before activating a capability, spends that cost before the test or effect resolves, and keeps the cost on failure unless the ability explicitly refunds it.',
+                  'Pressure measures a specific form of accumulating danger. Pressure Limit equals Composure + 5. Warning begins at ceiling of one third of the Limit. Critical begins at ceiling of two thirds of the Limit. Critical includes both the Warning and Critical effects.',
+                  'If a Pressure cost reaches the Limit, the current action still resolves. The Archetype Crisis occurs immediately afterward. Set Pressure to the Warning Threshold, then reapply any points that exceeded the Limit one at a time.',
+                  'Resource recovery and Pressure reduction are not interchangeable. Each Archetype lists the exact actions that restore its Resource or reduce its Pressure. A Full Rest affects only the tracks whose procedures explicitly say it does.',
+                  'The six Crisis procedures are Human Breaking Point, Feeding Frenzy, Rampage, Incursion, Dissonant Cascade, and Hard Reboot. Their outcomes are printed rules rather than moderator-selected punishment.'
+              ],
+              'tables': [
+                  {
+                      'title': 'Track Formulas',
+                      'columns': ['Track Value', 'Formula'],
+                      'rows': [
+                          ['Resource Maximum', 'resourceBase + Archetype Rating + key Attribute'],
+                          ['Pressure Limit', 'Composure + 5'],
+                          ['Warning Threshold', 'ceiling(Pressure Limit / 3)'],
+                          ['Critical Threshold', 'ceiling((Pressure Limit × 2) / 3)']
+                      ]
+                  },
+                  {
+                      'title': 'Pressure Bands',
+                      'columns': ['Band', 'Mechanical State'],
+                      'rows': [
+                          ['Stable', '0 through Warning − 1; no universal penalty'],
+                          ['Warning', 'Warning through Critical − 1; apply Archetype Warning effect'],
+                          ['Critical', 'Critical through Limit − 1; apply Warning and Critical effects'],
+                          ['Crisis', 'At Limit; finish current action, resolve Crisis, reset to Warning, then reapply overflow']
+                      ]
+                  },
+                  {
+                      'title': 'Archetype Tracks',
+                      'columns': ['Archetype', 'Resource', 'Pressure', 'Crisis'],
+                      'rows': [
+                          ['Human Investigator', 'Conviction', 'Strain', 'Human Breaking Point'],
+                          ['Vampire', 'Vitae', 'Hunger', 'Feeding Frenzy'],
+                          ['Shapechanger', 'Fury', 'Instinct', 'Rampage'],
+                          ['Eldritch Binder', 'Pact', 'Intrusion', 'Incursion'],
+                          ['Harmonic Mutant', 'Resonance', 'Discord', 'Dissonant Cascade'],
+                          ['Technomancer', 'Bandwidth', 'Feedback', 'Hard Reboot']
+                      ]
+                  }
+              ],
+              'tags': ['resource', 'pressure', 'recovery', 'crisis', 'conviction', 'hunger', 'intrusion'],
+              'relatedEntries': ['blacklight-d10-foundation', 'capability-framework', 'blacklight-character-creation']
+          })
+          foundation_path.write_text(json.dumps(foundation, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          sheet_path = Path('blacklight-character-sheet.js')
+          sheet = sheet_path.read_text(encoding='utf-8')
+          helper_anchor = "  function renderArchetypeSummary() {\n"
+          helper_code = """  function renderRecovery(items) {
+    return (items || []).map(item => `<li><strong>${escapeHtml(item.name)} (${escapeHtml(item.frequency)}):</strong> ${escapeHtml(item.effect)}</li>`).join('');
+  }
+
+  function renderTrackRules(archetype) {
+    const tracks = archetype?.trackRules;
+    if (!tracks) return '';
+    return `
+      <div class="blacklight-track-status-grid">
+        <div id="blacklight-resource-status" class="blacklight-track-status"></div>
+        <div id="blacklight-pressure-status" class="blacklight-track-status"></div>
+      </div>
+      <div class="blacklight-track-rule-grid">
+        <section>
+          <h4>${escapeHtml(tracks.resource.name)} Procedure</h4>
+          <p><strong>Meaning:</strong> ${escapeHtml(tracks.resource.meaning)}</p>
+          <p><strong>Spending:</strong> ${escapeHtml(tracks.resource.spending)}</p>
+          <p><strong>At 0:</strong> ${escapeHtml(tracks.resource.depletedState)}</p>
+          <h4>Recovery</h4>
+          <ul>${renderRecovery(tracks.resource.recovery)}</ul>
+        </section>
+        <section>
+          <h4>${escapeHtml(tracks.pressure.name)} Procedure</h4>
+          <p><strong>Meaning:</strong> ${escapeHtml(tracks.pressure.meaning)}</p>
+          <p><strong>Warning — ${escapeHtml(tracks.pressure.warning.name)}:</strong> ${escapeHtml(tracks.pressure.warning.effect)}</p>
+          <p><strong>Critical — ${escapeHtml(tracks.pressure.critical.name)}:</strong> ${escapeHtml(tracks.pressure.critical.effect)}</p>
+          <p><strong>Crisis — ${escapeHtml(tracks.pressure.crisis.name)}:</strong> ${escapeHtml(tracks.pressure.crisis.effect)}</p>
+          <h4>Pressure Recovery</h4>
+          <ul>${renderRecovery(tracks.pressure.recovery)}</ul>
+        </section>
+      </div>`;
+  }
+
+  function updateTrackStatus() {
+    const archetype = state.archetype;
+    const resourceStatus = document.getElementById('blacklight-resource-status');
+    const pressureStatus = document.getElementById('blacklight-pressure-status');
+    if (!archetype || !resourceStatus || !pressureStatus) return;
+
+    const resourceMax = Number(document.getElementById('blacklight-resource-max')?.value || 0);
+    const resourceCurrent = Math.max(0, number('resourceCurrent', 0));
+    const pressureLimit = Math.max(1, Number(document.getElementById('blacklight-pressure-limit')?.value || 1));
+    const pressureCurrent = Math.max(0, number('pressureCurrent', 0));
+    const warning = Math.ceil(pressureLimit / 3);
+    const critical = Math.ceil((pressureLimit * 2) / 3);
+    const band = pressureCurrent >= pressureLimit ? 'Crisis'
+      : pressureCurrent >= critical ? 'Critical'
+        : pressureCurrent >= warning ? 'Warning'
+          : 'Stable';
+
+    resourceStatus.innerHTML = `<strong>${escapeHtml(archetype.resourceName)}:</strong> ${resourceCurrent}/${resourceMax} · ${resourceCurrent <= 0 ? 'Depleted state active' : 'Available'}`;
+    pressureStatus.innerHTML = `<strong>${escapeHtml(archetype.pressureName)}:</strong> ${pressureCurrent}/${pressureLimit} · ${band} · Warning ${warning} · Critical ${critical} · Crisis ${pressureLimit}`;
+  }
+
+"""
+          if helper_code.strip() not in sheet:
+              sheet = sheet.replace(helper_anchor, helper_code + helper_anchor, 1)
+          old_summary = """      <div class="blacklight-weakness-box"><strong>${escapeHtml(archetype.weakness)}:</strong> ${escapeHtml(archetype.weaknessText)}</div>
+      <h4>Innate Abilities</h4>"""
+          new_summary = """      <div class="blacklight-weakness-box"><strong>${escapeHtml(archetype.weakness)}:</strong> ${escapeHtml(archetype.weaknessText)}</div>
+      ${renderTrackRules(archetype)}
+      <h4>Innate Abilities</h4>"""
+          if old_summary not in sheet:
+              raise SystemExit('Character sheet summary anchor not found')
+          sheet = sheet.replace(old_summary, new_summary, 1)
+          calculate_anchor = """      setText('blacklight-resource-formula', `${state.archetype.resourceBase} base + Archetype ${rating} + ${state.archetype.keyAttribute} ${keyValue}`);
+    } else {"""
+          calculate_replacement = """      setText('blacklight-resource-formula', `${state.archetype.resourceBase} base + Archetype ${rating} + ${state.archetype.keyAttribute} ${keyValue}`);
+      const resourceCurrent = form.elements.resourceCurrent;
+      const pressureCurrent = form.elements.pressureCurrent;
+      if (resourceCurrent) resourceCurrent.max = String(resourceMax);
+      if (pressureCurrent) pressureCurrent.max = String(composure + 5);
+    } else {"""
+          if calculate_anchor not in sheet:
+              raise SystemExit('Character sheet calculation anchor not found')
+          sheet = sheet.replace(calculate_anchor, calculate_replacement, 1)
+          title_anchor = """    const characterName = form.elements.characterName?.value?.trim();
+    setText('blacklight-sheet-character-title', characterName || 'Basic Operative Record');"""
+          title_replacement = """    updateTrackStatus();
+    const characterName = form.elements.characterName?.value?.trim();
+    setText('blacklight-sheet-character-title', characterName || 'Basic Operative Record');"""
+          if title_anchor not in sheet:
+              raise SystemExit('Character sheet title anchor not found')
+          sheet = sheet.replace(title_anchor, title_replacement, 1)
+          sheet_path.write_text(sheet, encoding='utf-8')
+
+          css_path = Path('blacklight-character-sheet.css')
+          css = css_path.read_text(encoding='utf-8')
+          css_block = """
+.blacklight-track-status-grid,
+.blacklight-track-rule-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.blacklight-track-status,
+.blacklight-track-rule-grid > section {
+  border: 1px solid rgba(200, 138, 53, 0.28);
+  border-radius: 13px;
+  padding: 11px;
+  background: rgba(5, 8, 13, 0.32);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.blacklight-track-status strong,
+.blacklight-track-rule-grid strong {
+  color: var(--ink);
+}
+
+.blacklight-track-rule-grid h4:first-child {
+  margin-top: 0;
+}
+"""
+          if '.blacklight-track-status-grid' not in css:
+              css = css.replace('.blacklight-power-list {', css_block + '\n.blacklight-power-list {', 1)
+              css = css.replace('    .blacklight-skill-groups {\n    grid-template-columns: 1fr;\n  }', '    .blacklight-skill-groups,\n    .blacklight-track-status-grid,\n    .blacklight-track-rule-grid {\n    grid-template-columns: 1fr;\n  }', 1) if '    .blacklight-skill-groups {\n    grid-template-columns: 1fr;\n  }' in css else css
+          css_path.write_text(css, encoding='utf-8')
+
+          entry_path = Path('blacklight-character-sheet-entry.js')
+          entry = entry_path.read_text(encoding='utf-8')
+          style_anchor = "      .blacklight-wiki-progression strong{color:var(--ink)}\n"
+          style_add = """      .blacklight-wiki-progression strong{color:var(--ink)}
+      .blacklight-wiki-track-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+      .blacklight-wiki-track{border:1px solid rgba(200,138,53,.35);border-radius:15px;padding:14px;background:rgba(255,255,255,.025)}
+      .blacklight-wiki-track h4{margin:0 0 8px!important;color:var(--accent)}
+      .blacklight-wiki-track p,.blacklight-wiki-track li{color:var(--muted);line-height:1.5}
+"""
+          if style_anchor not in entry:
+              raise SystemExit('Wiki style anchor not found')
+          entry = entry.replace(style_anchor, style_add, 1)
+          entry = entry.replace('@media(max-width:900px){.blacklight-wiki-rank,.blacklight-wiki-lineage-grid{grid-template-columns:1fr}}', '@media(max-width:900px){.blacklight-wiki-rank,.blacklight-wiki-lineage-grid,.blacklight-wiki-track-grid{grid-template-columns:1fr}}', 1)
+          render_family_anchor = "  function renderFamily(family) {\n"
+          track_helper = """  function renderTrackRecovery(items) {
+    return (items || []).map(item => `<li><strong>${escapeHtml(item.name)} (${escapeHtml(item.frequency)}):</strong> ${escapeHtml(item.effect)}</li>`).join('');
+  }
+
+  function renderArchetypeTracks(archetype) {
+    const tracks = archetype?.trackRules;
+    if (!tracks) return '';
+    return `
+      <section data-blacklight-wiki-track-rules="true">
+        <h4>Resource and Pressure Procedure</h4>
+        <div class="blacklight-wiki-track-grid">
+          <article class="blacklight-wiki-track">
+            <h4>${escapeHtml(tracks.resource.name)}</h4>
+            <p><strong>Meaning:</strong> ${escapeHtml(tracks.resource.meaning)}</p>
+            <p><strong>Spending:</strong> ${escapeHtml(tracks.resource.spending)}</p>
+            <p><strong>At 0:</strong> ${escapeHtml(tracks.resource.depletedState)}</p>
+            <ul>${renderTrackRecovery(tracks.resource.recovery)}</ul>
+          </article>
+          <article class="blacklight-wiki-track">
+            <h4>${escapeHtml(tracks.pressure.name)}</h4>
+            <p><strong>Meaning:</strong> ${escapeHtml(tracks.pressure.meaning)}</p>
+            <p><strong>Warning — ${escapeHtml(tracks.pressure.warning.name)}:</strong> ${escapeHtml(tracks.pressure.warning.effect)}</p>
+            <p><strong>Critical — ${escapeHtml(tracks.pressure.critical.name)}:</strong> ${escapeHtml(tracks.pressure.critical.effect)}</p>
+            <p><strong>Crisis — ${escapeHtml(tracks.pressure.crisis.name)}:</strong> ${escapeHtml(tracks.pressure.crisis.effect)}</p>
+            <ul>${renderTrackRecovery(tracks.pressure.recovery)}</ul>
+          </article>
+        </div>
+      </section>`;
+  }
+
+"""
+          if track_helper.strip() not in entry:
+              entry = entry.replace(render_family_anchor, track_helper + render_family_anchor, 1)
+          append_anchor = """      removeLegacyPowerTable(entryTarget);
+
+      const catalogs = variantCatalogs(archetypeId, variants);"""
+          append_replacement = """      removeLegacyPowerTable(entryTarget);
+      entryTarget.insertAdjacentHTML('beforeend', renderArchetypeTracks(archetype));
+
+      const catalogs = variantCatalogs(archetypeId, variants);"""
+          if append_anchor not in entry:
+              raise SystemExit('Wiki track insertion anchor not found')
+          entry = entry.replace(append_anchor, append_replacement, 1)
+          entry_path.write_text(entry, encoding='utf-8')
+
+          index_path = Path('data/blacklight-continuum/wiki/wiki-index.json')
+          index = json.loads(index_path.read_text(encoding='utf-8'))
+          index['schemaVersion'] = '0.13.0'
+          index['description'] = 'Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records now include complete Resource spending, recovery, depletion, Pressure thresholds, Critical effects, recovery procedures, and fixed Crisis outcomes alongside their capability families and integrated advancement options.'
+          scope = index['completedScope']
+          scope['wikiEntries'] = 22
+          scope['archetypeResourceProcedures'] = 6
+          scope['archetypePressureProcedures'] = 6
+          scope['archetypeCrisisProcedures'] = 6
+          area = 'balance testing for Resource recovery, Pressure thresholds, and Crisis severity'
+          if area not in index['nextDevelopmentAreas']:
+              index['nextDevelopmentAreas'].insert(1, area)
+          index_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          Path('.github/workflows/one-time-resource-pressure-procedures.yml').unlink()
+          PY
+      - name: Commit track procedures
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Define Archetype resource and pressure procedures"
+          git push origin main
