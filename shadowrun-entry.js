@@ -2,6 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
+  const ASSET_VERSION = '20260702-3';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -102,7 +103,7 @@
       script.addEventListener('load', finish, { once: true });
       script.addEventListener('error', fail, { once: true });
       if (!existing) {
-        script.src = src;
+        script.src = `${src}?v=${ASSET_VERSION}`;
         script.async = false;
         script.dataset.shadowrunTool = 'true';
         document.body.appendChild(script);
