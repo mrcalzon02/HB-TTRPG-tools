@@ -6,6 +6,7 @@
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
   const HARMONIC_VARIANT_URL = 'data/blacklight-continuum/rules/harmonic-compact-remainders.json';
+  const ELDRITCH_VARIANT_URL = 'data/blacklight-continuum/rules/eldritch-binding-sources.json';
   const TECHNOMANCER_VARIANT_URL = 'data/blacklight-continuum/rules/technomancer-awakening-practices.json';
   let rulesData = null;
   let rulesPromise = null;
@@ -60,6 +61,7 @@
         <span class="badge">13 Vampire bloodlines</span>
         <span class="badge">23 Shapechanger variants</span>
         <span class="badge">13 Harmonic remainders</span>
+        <span class="badge">6 Eldritch sources</span>
         <span class="badge">20 Technomancer practices</span>
         <span class="badge">36 power families</span>
         <span class="badge">180 ranked powers</span>
@@ -112,6 +114,7 @@
     if (archetypeId === 'vampire') return VAMPIRE_LINEAGE_URL;
     if (archetypeId === 'shapechanger') return SHAPECHANGER_VARIANT_URL;
     if (archetypeId === 'harmonic-mutant') return HARMONIC_VARIANT_URL;
+    if (archetypeId === 'eldritch-binder') return ELDRITCH_VARIANT_URL;
     if (archetypeId === 'technomancer') return TECHNOMANCER_VARIANT_URL;
     return '';
   }
@@ -179,6 +182,8 @@
         ${renderMethod(variant.trainedSkills ? 'Order Method' : 'Conviction Method', variant.method)}
         ${renderMethod('Lineage Gift', variant.gift)}
         ${renderMethod('Lineage Bane', variant.bane)}
+        ${renderMethod('Temptation', variant.temptation)}
+        ${renderMethod('Intrusion Breach', variant.intrusionBreach)}
         ${variant.progression?.length ? `<div class="blacklight-wiki-progression">${variant.progression.map(step => `<div><strong>${escapeHtml(step.stage)} — ${escapeHtml(step.name)}:</strong> ${escapeHtml(step.effect)}</div>`).join('')}</div>` : ''}
       </article>`;
   }
@@ -191,7 +196,7 @@
         variants: data.lineages
       }];
     }
-    if ((archetypeId === 'human-investigator' || archetypeId === 'shapechanger' || archetypeId === 'harmonic-mutant' || archetypeId === 'technomancer') && data?.catalogs?.length) {
+    if ((archetypeId === 'human-investigator' || archetypeId === 'shapechanger' || archetypeId === 'harmonic-mutant' || archetypeId === 'eldritch-binder' || archetypeId === 'technomancer') && data?.catalogs?.length) {
       return data.catalogs;
     }
     return [];

@@ -7,6 +7,7 @@
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
   const HARMONIC_VARIANT_URL = 'data/blacklight-continuum/rules/harmonic-compact-remainders.json';
+  const ELDRITCH_VARIANT_URL = 'data/blacklight-continuum/rules/eldritch-binding-sources.json';
   const TECHNOMANCER_VARIANT_URL = 'data/blacklight-continuum/rules/technomancer-awakening-practices.json';
   const STORAGE_KEY = 'hb-ttrpg-tools-blacklight-basic-character-v1';
 
@@ -40,6 +41,7 @@
   let vampireLineageData = null;
   let shapechangerVariantData = null;
   let harmonicVariantData = null;
+  let eldritchVariantData = null;
   let technomancerVariantData = null;
 
   function escapeHtml(value) {
@@ -180,6 +182,7 @@
     }
     if (archetypeId === 'shapechanger' && shapechangerVariantData?.catalogs?.length) return shapechangerVariantData.catalogs;
     if (archetypeId === 'harmonic-mutant' && harmonicVariantData?.catalogs?.length) return harmonicVariantData.catalogs;
+    if (archetypeId === 'eldritch-binder' && eldritchVariantData?.catalogs?.length) return eldritchVariantData.catalogs;
     if (archetypeId === 'technomancer' && technomancerVariantData?.catalogs?.length) return technomancerVariantData.catalogs;
     return [];
   }
@@ -189,6 +192,7 @@
     if (archetypeId === 'vampire') return vampireLineageData?.framework || '';
     if (archetypeId === 'shapechanger') return shapechangerVariantData?.framework || '';
     if (archetypeId === 'harmonic-mutant') return harmonicVariantData?.framework || '';
+    if (archetypeId === 'eldritch-binder') return eldritchVariantData?.framework || '';
     if (archetypeId === 'technomancer') return technomancerVariantData?.framework || '';
     return '';
   }
@@ -248,6 +252,11 @@
       const practice = catalogs.find(catalog => fieldForCatalog(catalog) === 'humanInvestigatorPractice');
       populateDatalist(document.getElementById('blacklight-lineage-options'), conviction?.variants);
       populateDatalist(document.getElementById('blacklight-human-practice-options'), practice?.variants);
+    } else if (archetypeId === 'eldritch-binder') {
+      setPrimaryLabel('Binding Source');
+      primary.placeholder = 'Choose one Eldritch Binding Source…';
+      const source = catalogs.find(catalog => fieldForCatalog(catalog) === 'lineageVariant');
+      populateDatalist(document.getElementById('blacklight-lineage-options'), source?.variants);
     } else if (archetypeId === 'technomancer') {
       setPrimaryLabel('Awakening Paradigm');
       primary.placeholder = 'Choose an Awakening Paradigm…';
@@ -307,6 +316,8 @@
       ${renderMethod(variant.trainedSkills ? 'Order Method' : 'Conviction Method', variant.method)}
       ${renderMethod('Lineage Gift', variant.gift)}
       ${renderMethod('Lineage Bane', variant.bane)}
+      ${renderMethod('Temptation', variant.temptation)}
+      ${renderMethod('Intrusion Breach', variant.intrusionBreach)}
       ${variant.progression?.length ? `<div class="blacklight-progression">${variant.progression.map(step => `
         <div class="blacklight-progression-step"><strong>${escapeHtml(step.stage)} — ${escapeHtml(step.name)}:</strong> ${escapeHtml(step.effect)}</div>`).join('')}</div>` : ''}`;
   }
@@ -370,13 +381,14 @@
     if (!panel) return;
 
     try {
-      const [entryResponse, rulesResponse, humanResponse, vampireResponse, shapechangerResponse, harmonicResponse, technomancerResponse] = await Promise.all([
+      const [entryResponse, rulesResponse, humanResponse, vampireResponse, shapechangerResponse, harmonicResponse, eldritchResponse, technomancerResponse] = await Promise.all([
         fetch(ENTRY_URL, { cache: 'no-store' }),
         fetch(RULES_URL, { cache: 'no-store' }),
         fetch(HUMAN_VARIANT_URL, { cache: 'no-store' }),
         fetch(VAMPIRE_LINEAGE_URL, { cache: 'no-store' }),
         fetch(SHAPECHANGER_VARIANT_URL, { cache: 'no-store' }),
         fetch(HARMONIC_VARIANT_URL, { cache: 'no-store' }),
+        fetch(ELDRITCH_VARIANT_URL, { cache: 'no-store' }),
         fetch(TECHNOMANCER_VARIANT_URL, { cache: 'no-store' })
       ]);
       if (!entryResponse.ok) throw new Error(`Archetype entry request failed with status ${entryResponse.status}.`);
@@ -385,6 +397,7 @@
       if (!vampireResponse.ok) throw new Error(`Vampire lineage request failed with status ${vampireResponse.status}.`);
       if (!shapechangerResponse.ok) throw new Error(`Shapechanger variant request failed with status ${shapechangerResponse.status}.`);
       if (!harmonicResponse.ok) throw new Error(`Harmonic variant request failed with status ${harmonicResponse.status}.`);
+      if (!eldritchResponse.ok) throw new Error(`Eldritch source request failed with status ${eldritchResponse.status}.`);
       if (!technomancerResponse.ok) throw new Error(`Technomancer practice request failed with status ${technomancerResponse.status}.`);
       archetypeWiki = await entryResponse.json();
       rulesData = await rulesResponse.json();
@@ -392,6 +405,7 @@
       vampireLineageData = await vampireResponse.json();
       shapechangerVariantData = await shapechangerResponse.json();
       harmonicVariantData = await harmonicResponse.json();
+      eldritchVariantData = await eldritchResponse.json();
       technomancerVariantData = await technomancerResponse.json();
       renderEntry();
 

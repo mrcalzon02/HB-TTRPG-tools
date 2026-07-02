@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.9.0",
+  "schemaVersion": "0.10.0",
   "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops.",
   "entries": [
     {
@@ -435,14 +435,18 @@
       "id": "eldritch-binder-archetype",
       "title": "Eldritch Binder",
       "category": "Archetypes",
-      "summary": "A negotiator, jailer, host, or partner whose impossible patron still answers, though the old compact now feels carried within the Binder rather than recognized by the surrounding universe.",
+      "summary": "A finite mortal bound to one of six infinite predatory presences, trading controlled access to the self for impossible knowledge, reach, consumption, observation, absence, or informational ruin.",
       "body": [
-        "Whatever answered the Binder before still answers now. Patron, prisoner, elder intelligence, impossible location, living name, inherited wound, extradimensional force, or negotiated fragment: the relationship survived. The Binder's powers work. Existing bindings, contracts, prohibitions, permissions, seals, debts, and invocation rights remain available according to the recorded abilities.",
-        "The connection nevertheless feels diminished. In the former universe it may have felt like a tether extending from the Binder into a vast metaphysical structure that knew both parties, recorded the agreement, and enforced its vocabulary. Here it feels more like a binding carried inside the Binder: a knot of obligation, access, memory, and authority that continues to function even though the surrounding reality does not recognize the institution that issued it.",
-        "The answering presence may also feel farther away. Its voice arrives with less contextual weight. Its signs may be smaller. Its attention may no longer fill the same unseen architecture. Even an ancient being that helped create, transform, or define the Binder can feel like a shadow of its former immediacy—not because it ceased to exist, but because the cosmological road between Binder and presence no longer runs through familiar territory.",
-        "The contract still binds the parties who carry it. Local forces, laws, thresholds, spirits, and causal structures are not automatically signatories. A prohibition that once relied upon the universe recognizing a sacred name may now operate only through the Binder's explicit Sealcraft. A right of passage once honored by every threshold may now need to be actively asserted through Threshold Geometry.",
-        "This makes the Binder simultaneously weaker in inherited authority and more personally responsible for every act of invocation. The old universe no longer stands visibly behind the contract. What remains is the Binder, the answering presence, the terms they still remember, and the capabilities that prove the agreement continues to have force.",
-        "Pact is the Binder's Resource. Intrusion is the Binder's Pressure. Sealcraft controls boundaries and local law. Borrowed Manifestation grants temporary capabilities. Pact Economy governs prices and obligations. Forbidden Cognition grants dangerous knowledge. Threshold Geometry creates nonordinary routes. Invocation controls signs, avatars, partial arrivals, and full audiences."
+        "The Eldritch Binder was already bound before the transition. The Source is not an artifact of biological printing, alien feedstock, mistaken reconstruction, or an improvised explanation for supernatural abilities. Whatever answered before still answers here.",
+        "The connection feels diminished and remote. It no longer resembles a living tether running through a familiar occult universe. It feels like a sealed binding carried inside the Binder: quieter, thinner, and easier to mistake for weakness, while remaining attached to something infinitely larger than the person containing it.",
+        "The six known Binding Sources are the Void Mind, the Abyssal Womb, That Which Hungers, the Lidless Eye, the Silence, and the Noise. They are not benign cosmic archetypes. Each is vile, acquisitive, and willing to remove the Binder one finite piece at a time in exchange for allowing more of itself through.",
+        "The Void Mind is endless unknowable knowledge, secrets of unlived lives, impossible realities, and conclusions no mortal reasoning produced. The Abyssal Womb is a dreaming schemer whose thousand arms push, pull, cradle, assemble, steal, and position every participant inside a design too large to perceive.",
+        "That Which Hungers is red appetite without reciprocity, teaching the Binder to convert bodies, objects, energy, and relationships into fuel. The Lidless Eye is observation without privacy: the certainty that it has always seen the Binder and that noticing the gaze merely makes observation mutual.",
+        "The Silence is anti-presence, the movement at the edge of an empty room, and the quiet after something has been removed from existence. The Noise is the screaming white and gray abyss that flattens information, identity, warning, and voice into static, hiss, hum, and finally furious sameness.",
+        "Choose one Binding Source. Each Source defines two favored power families, recommended Skills, one Temptation, one Intrusion Breach, and five purchasable Depth of Binding abilities. These options do not use Gifts or Banes.",
+        "The Temptation is a bounded once-per-scene exchange that restores 1 Pact and adds 1 Intrusion. The Intrusion Breach is a fixed consequence resolved when Intrusion reaches its limit. The Moderator applies the printed consequence rather than inventing an arbitrary possession, mutilation, or loss.",
+        "Depth abilities are purchased in order. Depth 1 represents the first stable concession to the Source. Depth 5 allows a substantial local expression of its nature. Greater depth does not mean mutual trust; it means the channel has widened.",
+        "Pact is the Binder's Resource. Intrusion is the Binder's Pressure. Sealcraft defines temporary law. Borrowed Manifestation grants senses, reach, defense, and movement. Pact Economy governs prices and obligations. Forbidden Cognition grants dangerous understanding. Threshold Geometry changes adjacency and routes. Invocation permits increasingly direct local arrival."
       ],
       "tables": [
         {

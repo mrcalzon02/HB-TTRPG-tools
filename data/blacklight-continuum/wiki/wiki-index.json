@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.11.0",
+  "schemaVersion": "0.12.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated advancement options including seven Human Vigil Convictions, ten Hunter Practices, thirteen Vampire Remainder Bloodlines, twenty-three Shapechanger traditions, thirteen Harmonic Compact Remainders, and twenty Technomancer awakening practices.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated advancement options including seven Human Vigil Convictions, ten Hunter Practices, thirteen Vampire Remainder Bloodlines, twenty-three Shapechanger traditions, six Eldritch Binding Sources with thirty Depth abilities, thirteen Harmonic Compact Remainders, and twenty Technomancer awakening practices.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -53,7 +53,9 @@
     "coreAttributes": 9,
     "openingEquipmentExamples": 6,
     "browserCharacterSheets": 1,
-    "formattedCampaignReaders": 1
+    "formattedCampaignReaders": 1,
+    "eldritchBindingSources": 6,
+    "eldritchDepthAbilities": 30
   },
   "nextDevelopmentAreas": [
     "balance testing for all ranked powers",
@@ -61,6 +63,7 @@
     "Human Vigil Conviction and Hunter Practice advancement costs",
     "Remainder Bloodline advancement and favored-family costs",
     "Shapechanger variant advancement and favored-family costs",
+    "Eldritch Binding Source and Depth advancement costs",
     "Compact Remainder advancement and favored-family costs",
     "Technomancer Paradigm Order and Career advancement costs",
     "capability prerequisites and cross-Archetype purchases",
@@ -74,5 +77,6 @@
     "Ar'nock vessel room and hazard module",
     "mission and job generator",
     "Charles decision arc"
-  ]
+  ],
+  "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json"
 }

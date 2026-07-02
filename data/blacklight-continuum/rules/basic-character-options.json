@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.9.0",
+  "schemaVersion": "0.10.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -748,18 +748,18 @@
     {
       "id": "eldritch-binder",
       "name": "Eldritch Binder",
-      "theme": "A negotiator, jailer, host, or partner whose structured relationship with an impossible presence survives the transition intact. Whatever entity, force, patron, fragment, name, wound, or elder intelligence answered the Binder in the former universe still answers here. Existing contracts, bindings, prohibitions, permissions, and invocations remain valid between Binder and presence, but the connection feels diminished: less like a living tether stretching through a familiar cosmos and more like a binding carried inside the Binder. Local reality does not automatically recognize the old compact or enforce its assumptions, yet the answering presence and the Binder's recorded capabilities remain available.",
+      "theme": "A negotiator, jailer, vessel, accomplice, or surviving contractual partner bound to one of six infinite predatory presences: the Void Mind, the Abyssal Womb, That Which Hungers, the Lidless Eye, the Silence, or the Noise. Whatever answered in the former universe still answers here. Existing contracts, prohibitions, permissions, names, and invocations remain valid between Binder and Source, but the connection feels diminished: less like a tether running through a familiar occult cosmos and more like a sealed fragment of infinity carried inside a finite person. The entity is vastly larger than the Binder, fundamentally vile, and eager to exchange power for access to identity, memory, agency, relationship, and soul.",
       "resourceName": "Pact",
       "pressureName": "Intrusion",
       "keyAttribute": "Resolve",
       "resourceBase": 3,
       "startingAbility": "Chalk Boundary",
       "weakness": "The Passenger Notices",
-      "weaknessText": "Every use teaches the answering presence more about you, the team, and local reality. High Intrusion creates compulsions, altered terms, independent manifestations, or unwanted attention according to the pact.",
+      "weaknessText": "Every use teaches the Binding Source more about you, the team, and local reality. Each Source defines a printed Temptation and an explicit Intrusion Breach. When Intrusion reaches its limit, resolve that Breach rather than inventing an undefined possession or arbitrary loss.",
       "innateAbilities": [
         {
           "name": "Bound Presence",
-          "effect": "Choose the relationship and what answers: patron, fragment, address, wound, procedural copy, successor, or unresolved presence. This choice defines fiction, not free mechanics."
+          "effect": "Choose one Binding Source: the Void Mind, the Abyssal Womb, That Which Hungers, the Lidless Eye, the Silence, or the Noise. Record its Temptation, Intrusion Breach, favored families, and purchased Depth abilities. The Source's description grants no additional unrecorded mechanics."
         },
         {
           "name": "Name and Boundary",
@@ -957,6 +957,15 @@
             }
           ]
         }
+      ],
+      "lore": [
+        "The Eldritch Binder was already bound before the transition. The Source did not arise from alien feedstock, printer error, or reconstruction. The old relationship survived because the pact remained a valid relationship between Binder and entity even when the surrounding universe changed.",
+        "The Source now feels more distant and less cosmically immediate. Old cults, temples, geometries, bloodlines, stars, dream routes, and enforcement mechanisms may no longer exist here, but the entity still answers through the binding carried inside the character.",
+        "Every Source is infinite in comparison to the Binder. The relationship may be negotiated, constrained, exploited, inherited, stolen, or maintained under duress, but it is never equal. The Binder is a small finite self under an attention that can always offer more of itself than the Binder can safely contain.",
+        "Choose one Binding Source: the Void Mind, the Abyssal Womb, That Which Hungers, the Lidless Eye, the Silence, or the Noise. The Source grants no free capability beyond its recorded Temptation, favored families, purchased Depth abilities, and the shared Eldritch Binder rules.",
+        "A Temptation is an explicit once-per-scene exchange: the Binder accepts a source-specific advantage, restores 1 Pact, and gains 1 Intrusion. An Intrusion Breach is the fixed source-specific consequence resolved when Intrusion reaches its limit.",
+        "Depth of Binding abilities are purchased in order from Depth 1 through Depth 5. Each deeper ability gives the Binder a larger, clearer portion of the Source's power while creating a stronger channel through which the Source can answer.",
+        "Sealcraft, Borrowed Manifestation, Pact Economy, Forbidden Cognition, Threshold Geometry, and Invocation remain the six shared Eldritch Binder power families beneath every Binding Source."
       ]
     },
     {
