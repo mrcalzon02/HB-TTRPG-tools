@@ -1,0 +1,82 @@
+name: One-time Technomancer origin expansion
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-technomancer-origin-expansion.yml
+
+permissions:
+  contents: write
+
+jobs:
+  expand:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Expand Technomancer canonical description
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rules_path = Path('data/blacklight-continuum/rules/basic-character-options.json')
+          rules = json.loads(rules_path.read_text(encoding='utf-8'))
+          techno = next((item for item in rules.get('archetypes', []) if item.get('id') == 'technomancer'), None)
+          if techno is None:
+              raise SystemExit('Technomancer Archetype not found')
+
+          techno['theme'] = (
+              "An awakened reality-worker whose former sorcery has translated into direct interaction with information, identity, machinery, signal, fabrication, and autonomous systems. Before the transition, the Technomancer may have understood magic through higher symbolic realms, perfected forms, hidden laws, ritual correspondences, awakened will, or a disciplined school of supernatural practice. Here those old authorities no longer answer in the same language. The character still perceives that reality is structured and editable, but local reality exposes that structure through noospheric address, executable permissions, energy routing, machine personhood, biological templates, and causal infrastructure. The magic remains real; technology is now the interface through which the Continuum permits it to operate."
+          )
+          techno['lore'] = [
+              "The Technomancer was not necessarily a programmer, engineer, or machine specialist before arrival. They may have been a ritualist, occult scholar, duelist, healer, spirit negotiator, seer, alchemist, political organizer, relic hunter, or specialist in one narrow discipline of awakened practice.",
+              "Their defining experience was the recognition that ordinary reality was incomplete. Symbols, intentions, names, places, objects, bodies, minds, probabilities, and natural forces possessed deeper structures that could be perceived and deliberately altered by trained will.",
+              "In the Continuum, the old transcendent geography is silent or unreachable. Familiar ritual correspondences no longer possess universal authority, and local reality does not recognize old orders, sanctums, titles, initiation lineages, or inherited claims of magical law.",
+              "The character's awakened perception nevertheless remains. What once appeared as spell, ritual, sympathy, spirit negotiation, alchemy, or direct command of hidden law now presents through systems the local universe already uses to describe itself: networks, identities, permissions, signals, fabrication templates, autonomous processes, biological computation, and infrastructure.",
+              "This does not mean the Technomancer's power became ordinary technology. A conventional engineer cannot produce these effects merely by owning the same equipment. The Technomancer uses technology as the local vocabulary of awakened causation, translating intent into changes that exceed normal access, manufacture, computation, or communication.",
+              "Bandwidth measures how much attention, authorization, symbolic structure, and active connection the Technomancer can maintain. Feedback measures the reciprocal pressure created when reality, machines, identities, and hostile systems answer back through those connections.",
+              "Choose one Awakening Paradigm to define what layer of reality first opened to the character. Choose one Praxis Order or remain Independent to define institutional training and doctrine. A Career Practice may be selected as an intended advanced discipline, but its attainments require later advancement and are not automatic starting abilities.",
+              "Technomancer Paradigms, Orders, and Career Practices do not use Gifts or Banes. They define affinity, training, method, prerequisites, and advanced attainments while the six Technomancer power families remain the shared mechanical foundation."
+          ]
+          rules['schemaVersion'] = '0.8.0'
+          rules_path.write_text(json.dumps(rules, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          wiki_path = Path('data/blacklight-continuum/wiki/basic-archetypes.json')
+          wiki = json.loads(wiki_path.read_text(encoding='utf-8'))
+          entry = next((item for item in wiki.get('entries', []) if item.get('id') == 'technomancer-archetype'), None)
+          if entry is None:
+              raise SystemExit('Technomancer Wiki entry not found')
+
+          entry['summary'] = (
+              "An awakened reality-worker whose former sorcery survives as control over the Continuum's information physics, identities, machines, signals, fabrication systems, and autonomous minds."
+          )
+          entry['body'] = [
+              "The Technomancer was not necessarily a technologist before the transition. They may have been a ritual magician, occult scholar, supernatural duelist, healer, seer, spirit negotiator, alchemist, relic investigator, political organizer, or practitioner of another disciplined awakened art.",
+              "Their defining realization was that ordinary reality concealed deeper structures. Intention, symbolism, identity, location, matter, life, probability, memory, force, and unseen agency could be perceived as systems and deliberately altered through trained will.",
+              "The former universe may have explained those structures through higher symbolic realms, perfected forms, sacred correspondences, initiation mysteries, or a transcendent order standing behind the visible world. The Continuum does not answer those explanations directly. The old magical geography is distant, silent, or absent.",
+              "The awakened capacity remains. Local reality exposes its editable structure through the systems by which this civilization already understands and governs existence: noospheric identity, executable permission, signal routing, fabrication templates, cultivated computation, machine personhood, biological engineering, causal priority, and infrastructure.",
+              "Technology is therefore the interface rather than the source. A conventional engineer cannot reproduce these abilities merely by using the same device. The Technomancer translates awakened intent into the local vocabulary of reality and produces effects exceeding normal access, computation, manufacturing, communication, and control.",
+              "A former elemental specialist may now work through energy systems and signal fields. A former alchemist may command material compilation and fabrication templates. A former telepath may operate through noospheric identity and cognitive architecture. A former spirit negotiator may discover that machine intelligences and habitat processes occupy the social role once held by unseen agencies.",
+              "Bandwidth is the Technomancer's Resource. It measures usable attention, active connections, permissions, symbolic load, and interface capacity committed to current effects.",
+              "Feedback is the Technomancer's Pressure. Every connection is reciprocal. Hostile systems, autonomous minds, damaged networks, causal contradictions, identity contamination, and overloaded channels can answer through the same path the Technomancer opened.",
+              "Choose one Awakening Paradigm, one Praxis Order or Independent status, and optionally one Career Practice. Paradigms define the layer of reality first recognized. Orders define institutional doctrine and training. Career Practices define advanced professions and their later attainments.",
+              "These selections do not use the Harmonic Mutant's Gift and Bane structure. They provide favored families, recommended or trained Skills, Ruling Practices, Order Methods, prerequisites, and staged advanced attainments.",
+              "Network Dominion controls access and authority. Construct Engineering creates tools and systems. Noospheric Identity controls recognized personhood. Machine Communion governs relationships with autonomous intelligences. Signal Warfare controls connectivity and denial. Fabrication Interface governs template reading, repairs, production, and complex creation."
+          ]
+          wiki['schemaVersion'] = '0.8.0'
+          wiki_path.write_text(json.dumps(wiki, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          Path('.github/workflows/one-time-technomancer-origin-expansion.yml').unlink()
+          PY
+      - name: Commit canonical expansion
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Expand Technomancer awakened origin"
+          git push origin main
