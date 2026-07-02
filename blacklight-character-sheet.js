@@ -91,6 +91,7 @@
     target.innerHTML = `
       <h3>${escapeHtml(archetype.name)}</h3>
       <p>${escapeHtml(archetype.theme)}</p>
+      ${(archetype.lore || []).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}
       <div class="blacklight-weakness-box"><strong>${escapeHtml(archetype.weakness)}:</strong> ${escapeHtml(archetype.weaknessText)}</div>
       <h4>Innate Abilities</h4>
       <ul>${(archetype.innateAbilities || []).map(ability => `<li><strong>${escapeHtml(ability.name)}:</strong> ${escapeHtml(ability.effect)}</li>`).join('')}</ul>`;

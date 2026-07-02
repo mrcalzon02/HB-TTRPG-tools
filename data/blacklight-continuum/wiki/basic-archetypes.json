@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.5.0",
+  "schemaVersion": "0.6.0",
   "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops.",
   "entries": [
     {
@@ -264,16 +264,66 @@
       "id": "vampire-archetype",
       "title": "Vampire",
       "category": "Archetypes",
-      "summary": "A Vitae-fueled predator whose capabilities remain intact while Hunger, lineage, and the ancient curse feel like distant shadows of the forces that once defined existence.",
+      "summary": "A bearer of the cursed bloodline whose Vitae and predatory gifts remain intact while the old Sun, the Society of Shadows, the Veil, Hunger, and the inherited authority of Cain's legacy feel distant rather than cosmically immediate.",
       "body": [
-        "The Vampire is still a Vampire. Vitae still answers. Supernatural speed, command, concealment, resilience, feeding, and blood memory operate according to the recorded innate abilities and powers. The transition has not replaced the curse with an imitation and has not mechanically reduced the Archetype.",
-        "What changed is proximity. In the former universe, Hunger could feel like an all-consuming second consciousness threaded through appetite, anger, fear, desire, and every judgment involving blood. Here it is more distant: a persistent hum, a pressure behind the eyes, a migraine still beyond the horizon. It can intensify and impose its recorded consequences, but it no longer feels like the entire cosmos agrees that the Vampire must hunger.",
-        "The binding curse traditionally associated with Cain also feels remote. It remains part of the Vampire's supernatural condition, but its authority resembles a memory half completed rather than a command carved into the foundations of creation. The curse has not vanished; the new universe simply does not appear to recognize its history or reinforce it with the same metaphysical certainty.",
-        "Centuries of lineage, ancestral memory, inherited custom, predatory instinct, and the emotional gravity of blood remain accessible through the Vampire's capabilities. They are less formative to moment-by-moment thought. A lineage voice that once felt like an ancestor standing directly behind the Vampire may now feel like a recording heard through several closed rooms.",
-        "This distance can be frightening or liberating. A Vampire may discover that some compulsions were never identical to identity, that some traditions were upheld because the old universe made them feel inevitable, and that predation remains a choice even while Hunger remains real.",
+        "The Vampire is still one of the cursed dead. Vitae still answers. Supernatural speed, command, concealment, resilience, feeding, and blood memory function according to the recorded innate abilities and powers. The transition has not replaced the bloodline with an imitation, stripped away undeath, or reduced the Vampire to a biological reconstruction pretending to be supernatural.",
+        "The character may have been a newly made Childe of Cain, still learning the etiquette and terror of undeath. They may have been a court predator, a keeper of the Veil, an enforcer charged with silencing dangerous witnesses, a bloodline heir carrying inherited privileges and feuds, or an elder who ruled the Society of Shadows through mortal institutions and lesser undead servants. They may have been ancient enough to regard governments, corporations, religions, and mortal generations as temporary weather.",
+        "Every station within the old undead society taught the same foundational rule: humanity must never be allowed to see clearly. Feedings were concealed, supernatural displays suppressed, impossible deaths explained, and internal wars kept beneath mortal notice. The Veil was survival policy hardened into sacred custom. If mortals understood the scale of undead influence, fear would become organization, organization would become fire, and the cursed bloodlines would again be hunted into daylight as they had been in the oldest nights.",
+        "That rule feels less pressing here. The civilizations of the Continuum do not inherit the old world's fear, folklore, inquisitions, or buried evidence. They do not know the Vampire's bloodline or the offices of the Society of Shadows. Hiding remains useful whenever secrecy protects the team, but the Veil no longer feels like a law built into existence. It feels like deeply conditioned operational discipline: conceal the feeding, control the witness, prevent scrutiny from becoming coordinated hostility, and never let an avoidable revelation create an enemy civilization.",
+        "The heavens provide the first proof that the old curse no longer occupies familiar territory. Night starlight is still the light of suns, yet it does not burn. More astonishingly, direct light from foreign stars does not automatically provoke the lethal hatred associated with the Sun of the Vampire's original world. The curse was pronounced inside another creation, another covenant, and another divine jurisdiction. No Vampire can know whether a foreign star acknowledges the authority that condemned Cain or the mortals who inherited his blood.",
+        "The curse therefore recognizes the original Sun and effects that deliberately reproduce or invoke its signature; it does not treat every star in every reality as an obedient executioner. This is an explicit setting rule rather than an invitation for arbitrary stellar rulings. Ordinary night starlight and foreign sunlight do not inflict solar damage unless a specific hazard or supernatural effect states that it carries the old solar curse.",
+        "The cursed bloodline's essence still flows through the Vampire. Vitae remains necessary. Blood memory still contains ancestral instincts, techniques, identities, grief, and centuries of inherited expectation. The old hierarchy may no longer have jurisdiction, but its lessons remain carved into behavior. A former neonate may still look for permission. A former courtier may still measure every room as a hierarchy. A keeper of the Veil may instinctively erase evidence before anyone asks. An elder may still expect obedience from people who have never heard the elder's name.",
+        "Hunger remains, but it has receded from the center of thought. The Red Thirst resembles a distant migraine, electronic interference behind consciousness, or a signal sounding from beyond several closed doors. It can intensify and still produces the printed consequences of the Hunger track, yet it is no longer an all-consuming command that must be wrestled down every waking moment.",
+        "The nearest mortal throat no longer automatically becomes the center of the Vampire's attention. Blood can still smell rich, warm, and sustaining without instantly reducing every person to a vessel. The Vampire may still choose cruelty, indulgence, domination, or predation, but the new distance makes those choices more clearly their own.",
+        "This freedom can be more disturbing than the curse. A predator who once blamed every atrocity upon Hunger must now confront the possibility that some acts were chosen. A Veil keeper must decide what secrecy protects rather than obeying secrecy as inherited religion. A newly turned Childe may experience the first genuine mental quiet since death. An ancient elder may find the absence of constant bloodline pressure more frightening than the pressure itself.",
         "Vitae is the Vampire's Resource. Hunger is the Vampire's Pressure. Crimson Velocity controls speed and action economy. Grave Dominion controls predatory authority. Veil of Night controls recognition and concealment. Deathless Resilience controls survival and recovery. Vital Predation controls feeding and function theft. Blood Memory controls inherited information, stored experience, and lineage creation."
       ],
       "tables": [
+        {
+          "title": "Former Stations Within the Society of Shadows",
+          "columns": [
+            "Former Station",
+            "Old Expectation",
+            "Continuum Remainder"
+          ],
+          "rows": [
+            [
+              "Newly Turned Childe",
+              "Obey a sire, master Hunger, learn secrecy, and survive the first years of undeath.",
+              "The sire may be unreachable and Hunger is quieter, leaving the Childe with more freedom and less certainty."
+            ],
+            [
+              "Court-Bound Neonate",
+              "Earn recognition through service, alliances, feeding discipline, and obedience to hidden law.",
+              "Court instincts remain useful, but no local authority recognizes old rank or prestation."
+            ],
+            [
+              "Keeper of the Veil",
+              "Suppress witnesses, explain impossible events, and prevent mortal scrutiny from becoming organized resistance.",
+              "Secrecy remains a tactical capability rather than a universally binding undead commandment."
+            ],
+            [
+              "Bloodline Scion",
+              "Carry inherited gifts, feuds, customs, and the political weight of a cursed lineage.",
+              "The bloodline remains within the Vampire, but its old institutions and enemies possess no automatic local jurisdiction."
+            ],
+            [
+              "Hidden Enforcer",
+              "Punish breaches, hunt uncontrolled predators, and protect the Society of Shadows through sanctioned violence.",
+              "The skills remain; the sanction does not. Every act of enforcement now requires a chosen authority and purpose."
+            ],
+            [
+              "Elder of the Society of Shadows",
+              "Rule through patience, mortal institutions, blood-bound servants, and centuries of accumulated obligation.",
+              "Experience remains immense, but old titles command no one who does not choose to acknowledge them."
+            ],
+            [
+              "Ancient Sovereign",
+              "Treat dynasties and civilizations as temporary instruments while preserving the bloodline across ages.",
+              "The Continuum is old enough to resist inherited certainty, forcing the ancient to negotiate with powers outside every familiar hierarchy."
+            ]
+          ]
+        },
         {
           "title": "Six Power Families",
           "columns": [

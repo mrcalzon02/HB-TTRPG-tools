@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.5.0",
+  "schemaVersion": "0.6.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -301,14 +301,14 @@
     {
       "id": "vampire",
       "name": "Vampire",
-      "theme": "A Vitae-fueled predator whose supernatural speed, authority, concealment, resilience, feeding, and inherited memory remain fully functional even though the ancient curse behind them feels remote. Hunger is no longer an all-consuming presence woven through every thought; it is a distant pressure, like a migraine approaching from beyond the horizon. The legacy commonly attributed to Cain, the weight of lineage, and the compulsions carried through centuries of blood still exist, but they feel more like inherited memories than an immediate hand upon the soul. This emotional and metaphysical distance does not reduce the Vampire's recorded capabilities unless a specific rule says otherwise.",
+      "theme": "A bearer of the cursed bloodline whose Vitae, predatory gifts, deathless resilience, inherited memory, and blood-bound authority remain fully functional even though the ancient curse feels remote. The Vampire may have arrived as a newly made Childe of Cain, a practiced predator of the hidden courts, a keeper of the Veil, a bloodline heir, or an elder who once ruled the Society of Shadows from beyond mortal perception. Those identities and centuries of experience remain part of the character, but the new universe does not automatically recognize the hierarchy, theology, or cosmic authority that once made them feel inevitable.",
       "resourceName": "Vitae",
       "pressureName": "Hunger",
       "keyAttribute": "Resilience",
       "resourceBase": 5,
       "startingAbility": "Quickened Step",
-      "weakness": "Sun and Hunger",
-      "weaknessText": "Direct unfiltered stellar radiation causes severe harm, and Hunger rises when feeding, Vitae, and predatory satisfaction fall out of alignment. Exact manifestations belong to the Archetype, not to a universal body model.",
+      "weakness": "The Old Sun and Distant Hunger",
+      "weaknessText": "Ordinary night starlight and direct light from foreign stars do not automatically harm you. The curse reacts only to direct light from the original Sun, artificial radiation specifically calibrated to reproduce that Sun's cursed signature, or a supernatural effect explicitly invoking the original solar curse upon Cain's bloodline. Such exposure inflicts 2 Trauma per round, ignores ordinary Armor, and prevents Cold Repair and other vampiric healing until the end of your next round after exposure ends. Hunger remains a Pressure track: it is quieter than in the former universe, but its printed penalties and consequences still apply when it rises.",
       "innateAbilities": [
         {
           "name": "Predator's Blood",
@@ -510,6 +510,15 @@
             }
           ]
         }
+      ],
+      "lore": [
+        "You may have been freshly turned, still measuring immortality in nights rather than centuries. You may have served a hidden court, enforced the feeding laws of an undead domain, preserved the Veil, hunted those who endangered secrecy, inherited the privileges and liabilities of an ancient bloodline, or ruled mortal and undead society through agents who never knew your name. You may have been one of the ancient elders for whom kingdoms, religions, companies, and generations of lesser vampires were temporary instruments. Whatever station you held, you remember the old discipline of hiding in plain sight.",
+        "The Society of Shadows survived because mortals were never permitted to understand how thoroughly the undead lived among them. Feeding had to be concealed. Corpses had to be explained. supernatural displays had to be contained. Rivalries could not be allowed to become public wars. Every Vampire learned the old lesson in some form: if humanity saw the truth clearly enough, fear would become organization, organization would become fire, and the undead would again be dragged into daylight beneath torches, weapons, cameras, laboratories, and armies.",
+        "That obligation feels less pressing here. The people and systems of this universe do not know your bloodline, your court, your lineage taboos, or the old Veil. They do not automatically recognize you as one of the hidden dead because their histories never contained the society that taught mortals to fear you. Secrecy may still be tactically wise, but it is no longer an inherited command backed by centuries of collective terror. The old reflex remains: conceal the feeding, control the witness, leave no impossible corpse, never let mortal scrutiny become a crusade. What has changed is that the reflex now feels like training rather than gravity.",
+        "The first lesson of foreign night is stranger still. Starlight is the light of suns, yet the distant light crossing the night does not burn you. More unsettling is the discovery that the direct light of foreign stars does not automatically awaken the hatred carried by the Sun of the old world. The curse was pronounced within another history, another covenant, and perhaps another divine jurisdiction. Who is a Vampire to declare that every star in every universe owes allegiance to the power that condemned Cain's bloodline? The foreign heavens may illuminate you without recognizing you as cursed.",
+        "The cursed essence nevertheless remains. Vitae still sustains the deathless state. Blood memory still carries skills, instincts, names, grief, and the accumulated weight of lineage. The character still possesses the capabilities recorded on the sheet. What has weakened is not the power but the feeling that every part of existence was built to reinforce it.",
+        "Hunger remains, but it no longer occupies every waking thought. The Red Thirst feels like a distant migraine, a persistent electronic noise behind the mind, or a signal heard from several rooms away. It can intensify. It can become dangerous. It can still drive predation when neglected. Yet the Vampire is no longer required to spend every moment suppressing the image of the nearest mortal throat opening beneath their teeth. The rich scent of blood remains desirable without automatically becoming the center of the universe.",
+        "This quiet does not make the Vampire humane, ethical, or safe. It makes choice harder to excuse. Predation can no longer be blamed entirely upon a curse that once felt indistinguishable from thought. The Vampire retains the habits, hierarchies, memories, and appetites of the old undead society while gaining an unfamiliar distance from them. A former tyrant may discover that command feels optional. A keeper of the Veil may realize that secrecy can be chosen for the team's survival rather than obeyed as sacred law. A newly turned Childe may encounter the first genuine silence they have known since death. An ancient elder may find the absence of constant bloodline pressure more frightening than Hunger itself."
       ]
     },
     {
