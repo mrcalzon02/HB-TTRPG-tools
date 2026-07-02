@@ -3,7 +3,7 @@
 
   const VIEW_ID = 'shadowrun';
   const modules = [
-    ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, run hooks, security posture, Matrix surfaces, magical texture, legwork, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
+    ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
     ['generators','Mr. Johnson and Employer Generator','Create an employer persona, public identity, real sponsor, negotiation posture, withheld information, leverage, and betrayal risk.'],
     ['tools','Fixer and Contact Network Editor','Track contacts, loyalty, connection, specialties, neighborhoods, favors, availability, and evolving risk.'],
@@ -137,8 +137,9 @@
     sprawlToolPromise = (async () => {
       await loadScript('shadowrun-sprawl-discovery-engine.js', () => Boolean(window.ShadowrunSprawlDiscoveryEngine));
       await loadScript('shadowrun-sprawl-discovery.js', () => Boolean(window.ShadowrunSprawlDiscovery));
+      await loadScript('shadowrun-danger-intensity-control.js', () => Boolean(window.ShadowrunDangerIntensity));
       await loadScript('spatial-submission-handoff.js', () => Boolean(window.HBSpatialSubmissionHandoff));
-      await loadScript('shadowrun-sprawl-registry-bridge.js', () => Boolean(window.ShadowrunSprawlRegistry));
+      await loadScript('shadowrun-sprawl-seed-workspace.js', () => Boolean(window.ShadowrunSprawlSeedWorkspace));
       return window.ShadowrunSprawlDiscovery;
     })();
     sprawlToolPromise.catch(() => { sprawlToolPromise = null; });
