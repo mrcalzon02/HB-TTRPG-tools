@@ -20,14 +20,12 @@
       .blacklight-wiki-family{border:1px solid rgba(200,138,53,.35);border-radius:15px;padding:14px;background:rgba(255,255,255,.025)}
       .blacklight-wiki-family h4{margin:0 0 7px!important}
       .blacklight-wiki-family>p{color:var(--muted);line-height:1.55}
-      .blacklight-wiki-family-context{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 12px}
-      .blacklight-wiki-family-context div{border-left:3px solid var(--accent);padding:8px 10px;background:rgba(200,138,53,.07);color:var(--muted);line-height:1.46}
       .blacklight-wiki-rank{display:grid;grid-template-columns:70px minmax(140px,.5fr) minmax(0,2fr);gap:9px;padding:9px 0;border-top:1px solid var(--line)}
       .blacklight-wiki-rank:first-child{border-top:0}
       .blacklight-wiki-rank-badge{color:var(--accent);font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
       .blacklight-wiki-rank strong{color:var(--ink)}
       .blacklight-wiki-rank span:last-child{color:var(--muted);line-height:1.5}
-      @media(max-width:900px){.blacklight-wiki-family-context,.blacklight-wiki-rank{grid-template-columns:1fr}}
+      @media(max-width:900px){.blacklight-wiki-rank{grid-template-columns:1fr}}
     `;
     document.head.appendChild(style);
   }
@@ -48,7 +46,7 @@
         <span class="badge">180 ranked powers</span>
       </div>
       <h3>Blacklight Basic Operative Record</h3>
-      <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers. Every Archetype contains six five-rank capability families with explicit costs, effects, limits, resistance, and failure consequences. Appearance and embodiment do not grant unlisted mechanics.</p>
+      <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers. Every Archetype contains six five-rank capability families with explicit costs, effects, limits, resistance, and failure consequences.</p>
       <div class="blacklight-actions">
         <a class="primary-action" href="blacklight-character-sheet.html">Open Basic Character Sheet</a>
         <a class="secondary-action" href="data/blacklight-continuum/rules/basic-character-options.json" target="_blank" rel="noopener">Open Canonical Power Data</a>
@@ -106,10 +104,6 @@
       <article class="blacklight-wiki-family">
         <h4>${escapeHtml(family.name)}</h4>
         <p>${escapeHtml(family.description)}</p>
-        <div class="blacklight-wiki-family-context">
-          <div><strong>Old-world root:</strong> ${escapeHtml(family.oldWorldRoot)}</div>
-          <div><strong>Continuum expression:</strong> ${escapeHtml(family.continuumTranslation)}</div>
-        </div>
         <div>${(family.abilities || []).map(ability => `
           <div class="blacklight-wiki-rank">
             <span class="blacklight-wiki-rank-badge">Rank ${escapeHtml(ability.rank)}</span>
@@ -136,7 +130,7 @@
       catalog.dataset.blacklightWikiPowerCatalog = 'true';
       catalog.innerHTML = `
         <h4>Complete Power Families</h4>
-        <p class="blacklight-callout"><strong>${archetype.powerFamilies.length} distinct families · ${archetype.powerFamilies.reduce((total, family) => total + (family.abilities?.length || 0), 0)} ranked powers.</strong> These capabilities are part of this same ${escapeHtml(archetype.name)} entry, not separate Wiki records.</p>
+        <p class="blacklight-callout"><strong>${archetype.powerFamilies.length} distinct families · ${archetype.powerFamilies.reduce((total, family) => total + (family.abilities?.length || 0), 0)} ranked powers.</strong> These capabilities are part of this same ${escapeHtml(archetype.name)} entry.</p>
         <div class="blacklight-wiki-power-catalog">${archetype.powerFamilies.map(renderFamily).join('')}</div>`;
       entryTarget.appendChild(catalog);
     } catch (error) {
