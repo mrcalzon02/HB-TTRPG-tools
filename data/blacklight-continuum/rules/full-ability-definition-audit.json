@@ -1,0 +1,198 @@
+{
+  "count": 19,
+  "abilities": [
+    {
+      "archetype": "Human Investigator",
+      "family": "Innate Abilities",
+      "rank": "innate",
+      "ability": "Prepared Contingency",
+      "effect": "Once per operation, establish one plausible precaution, item, credential, contact method, or escape provision prepared before the scene. It creates leverage but cannot solve the entire operation by itself.",
+      "markers": [
+        "plausible"
+      ]
+    },
+    {
+      "archetype": "Human Investigator",
+      "family": "Continuity Anchoring",
+      "rank": 5,
+      "ability": "Human Standard",
+      "effect": "Cost: 2 Conviction and 1 Strain. Define a principle of personhood such as informed consent, continuity of responsibility, autonomy, or a copy's right to refuse reintegration. Allies accepting the standard may use your Resolve for Identity Defense; violations face difficulty equal to Archetype Rating.",
+      "markers": [
+        "may use"
+      ]
+    },
+    {
+      "archetype": "Human Investigator",
+      "family": "Institutional Ghostcraft",
+      "rank": 4,
+      "ability": "Manufacture Jurisdiction",
+      "effect": "Cost: 1 Conviction and a credible public objective. Test: Presence + Command. Establish temporary authority over a site, emergency, investigation, or evacuation until defeated by a superior claimant.",
+      "markers": [
+        "credible public objective"
+      ]
+    },
+    {
+      "archetype": "Human Investigator",
+      "family": "Institutional Ghostcraft",
+      "rank": 5,
+      "ability": "Found an Institution",
+      "effect": "Cost: 2 Conviction, 1 Strain, and willing participants. Create a durable protocol, office, mutual-aid cell, investigative body, or emergency authority with a defined purpose and limits. It survives while members continue performing its function.",
+      "markers": [
+        "defined purpose and limits"
+      ]
+    },
+    {
+      "archetype": "Human Investigator",
+      "family": "Contingency Engineering",
+      "rank": 3,
+      "ability": "Cached Countermeasure",
+      "effect": "Cost: 1 Conviction and one previously visited scene, contact, or storage point. Establish a narrow countermeasure against a known threat. Failure: it exists but has degraded, moved, or acquired an owner.",
+      "markers": [
+        "known threat"
+      ]
+    },
+    {
+      "archetype": "Human Investigator",
+      "family": "Contingency Engineering",
+      "rank": 5,
+      "ability": "Everything Has a Failure Mode",
+      "effect": "Cost: 2 Conviction and 1 Strain. Requirement: observe the target for three rounds or study it for ten minutes. Test: Reason + Investigation, difficulty 4. On success, place one Failure Mode on the target until the operation ends. After you or an ally succeeds against that target, consume the Failure Mode to choose one effect: ignore its defenses for one action; cancel one active effect it created; inflict 3 Trauma or 3 Disruption as appropriate to the target; grant all allies two dice against it until the end of the round; or force it to abandon one of two currently active objectives until its next turn. Failure: gain 1 additional Strain and the same target cannot be analyzed again this scene.",
+      "markers": [
+        "appropriate"
+      ]
+    },
+    {
+      "archetype": "Vampire",
+      "family": "Innate Abilities",
+      "rank": "innate",
+      "ability": "Feeding",
+      "effect": "Blood or a lineage-compatible vital medium restores Vitae according to the campaign's feeding rules. The player and Game Moderator define what satisfies Hunger and what ethical consequences follow.",
+      "markers": [
+        "game moderator",
+        "campaign's",
+        "according to the campaign"
+      ]
+    },
+    {
+      "archetype": "Vampire",
+      "family": "Crimson Velocity",
+      "rank": 4,
+      "ability": "Red Interval",
+      "effect": "Cost: 2 Vitae. For one round, a chosen target's active defenses lose two dice against you and you may interrupt one ordinary reaction. Failure: suffer two dice penalty on the next nonphysical action.",
+      "markers": [
+        "one ordinary"
+      ]
+    },
+    {
+      "archetype": "Vampire",
+      "family": "Grave Dominion",
+      "rank": 4,
+      "ability": "Court of One",
+      "effect": "Cost: 2 Vitae. Address a small group as if each member receives personal attention. One shared emotional posture takes hold on success. Failure: the group synchronizes against you.",
+      "markers": [
+        "small group",
+        "one shared emotional posture"
+      ]
+    },
+    {
+      "archetype": "Vampire",
+      "family": "Grave Dominion",
+      "rank": 5,
+      "ability": "Sovereign Silence",
+      "effect": "Cost: 2 Vitae and 1 Hunger. For one exchange, suppress panic, argument, unauthorized movement, and hostile initiation in a room or local network. Strong targets resist at difficulty 4 and remember the violation afterward.",
+      "markers": [
+        "strong targets"
+      ]
+    },
+    {
+      "archetype": "Vampire",
+      "family": "Veil of Night",
+      "rank": 5,
+      "ability": "Erase the Witness",
+      "effect": "Cost: 2 Vitae and 1 Hunger. Test: Guile + Empathy opposed by Resolve + Awareness. Remove, replace, or procedurally close a short recent memory involving you. Contradictory evidence can reopen the seam.",
+      "markers": [
+        "short recent memory"
+      ]
+    },
+    {
+      "archetype": "Shapechanger",
+      "family": "Innate Abilities",
+      "rank": "innate",
+      "ability": "Pack Sense",
+      "effect": "Recognize the direction and broad emotional condition of a bonded packmate through a supernatural bond. The effect works across disguises and ordinary identity changes within the campaign's range limits.",
+      "markers": [
+        "campaign's"
+      ]
+    },
+    {
+      "archetype": "Shapechanger",
+      "family": "Pack Continuity",
+      "rank": 2,
+      "ability": "Coordinated Instinct",
+      "effect": "Cost: 1 Fury. Up to Archetype Rating packmates may use your Initiative or add one die to an action supporting another member. Failure: all briefly share the highest current Pressure.",
+      "markers": [
+        "may use"
+      ]
+    },
+    {
+      "archetype": "Shapechanger",
+      "family": "Spirit Ecology",
+      "rank": 1,
+      "ability": "Scent the Unseen",
+      "effect": "Cost: none. Test: Awareness + Xenoculture. Detect nearby incorporeal, noospheric, ecological, machine, emotional, or reflection presences and learn their broad category. Failure: classify them according to a dangerous old assumption.",
+      "markers": [
+        "broad category"
+      ]
+    },
+    {
+      "archetype": "Eldritch Binder",
+      "family": "Innate Abilities",
+      "rank": "innate",
+      "ability": "Forbidden Comprehension",
+      "effect": "Spend 1 Pact to understand the immediate function or intent of an alien symbol, ritual, anomaly, or device without receiving complete cultural context.",
+      "markers": [
+        "the immediate function or intent"
+      ]
+    },
+    {
+      "archetype": "Eldritch Binder",
+      "family": "Borrowed Manifestation",
+      "rank": 4,
+      "ability": "Unnatural Locomotion",
+      "effect": "Cost: 2 Pact. For a scene, ignore one ordinary movement limitation: cling to surfaces, fold through narrow spaces, step across gaps, swim through machinery, or move inverted.",
+      "markers": [
+        "one ordinary"
+      ]
+    },
+    {
+      "archetype": "Eldritch Binder",
+      "family": "Forbidden Cognition",
+      "rank": 4,
+      "ability": "Remember What Never Happened",
+      "effect": "Cost: 2 Pact. Access one plausible unrealized memory connected to the situation and gain two dice on one action using its lesson. Failure: it feels indistinguishable from lived experience.",
+      "markers": [
+        "plausible"
+      ]
+    },
+    {
+      "archetype": "Eldritch Binder",
+      "family": "Invocation",
+      "rank": 4,
+      "ability": "Partial Arrival",
+      "effect": "Cost: 2 Pact and 1 Intrusion. Manifest a major portion of the presence to produce one large effect consistent with its nature. You retain veto over one action.",
+      "markers": [
+        "one large effect"
+      ]
+    },
+    {
+      "archetype": "Harmonic Mutant",
+      "family": "Emotional Chord",
+      "rank": 2,
+      "ability": "Dampen Panic",
+      "effect": "Cost: 1 Resonance. Remove one fear penalty and prevent panic spreading through a small group for a scene. The danger remains understood.",
+      "markers": [
+        "small group"
+      ]
+    }
+  ]
+}
