@@ -1,7 +1,9 @@
 {
   "powerFamily": {
     "name": "Sealcraft",
-    "description": "Boundary and containment capabilities.",
-    "abilities": []
+    "description": "Protective boundary capabilities.",
+    "abilities": [
+      {"rank": 1, "name": "First Seal", "effect": "Cost: 1 Pact. Gain one die when protecting a marked area for one scene."}
+    ]
   }
 }
