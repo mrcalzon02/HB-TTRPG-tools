@@ -153,7 +153,7 @@
             {
               "stage": "Depth 2",
               "name": "Red Claim",
-              "effect": "Trigger: once per scene after you personally inflict at least 1 Impact or Trauma on a hostile target, or destroy an obstacle with an attack. Choose one result immediately: restore 1 Pact; remove 1 Impact from yourself; or gain Armor 1 until the start of your next turn. Only one result can be gained from the triggering action, regardless of targets damaged."
+              "effect": "Trigger: once per scene after you personally inflict at least 1 Impact or Trauma on a hostile target, or destroy an obstacle with an attack. Cost: none. Choose one result immediately: restore 1 Pact; remove 1 Impact from yourself; or gain Armor 1 until the start of your next turn. Only one result can be gained from the triggering action, regardless of targets damaged."
             },
             {
               "stage": "Depth 3",
