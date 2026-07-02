@@ -88,14 +88,14 @@
       <div class="hero-card no-print">
         <p class="eyebrow">Blacklight Continuum campaign workspace</p>
         <h2 id="blacklight-continuum-title">No Return Signal</h2>
-        <p>Far-future mirror-universe science-fiction espionage, identity horror, alien biological fabrication, and an original d10 dice-pool system.</p>
+        <p>Far-future mirror-universe science-fiction espionage, identity horror, supernatural capability development, advanced technology, and an original d10 dice-pool system.</p>
       </div>
       <div class="module-grid no-print">
         <article class="module-card">
           <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">player and GM sections</span></div>
           <h3>The Ar'nock Derelict</h3>
-          <p>Read the complete campaign foundation: Q-MAP awakening, pseudo-Charles, printed operatives, the Ar'nock vessel, biological Charles, themes, jobs, skills, powers, equipment, and opening-session guidance.</p>
-          <div class="blacklight-actions"><a class="primary-action" href="docs/blacklight-continuum/campaign-introduction.md" target="_blank" rel="noopener">Open Campaign Document</a></div>
+          <p>Read the campaign foundation: Q-MAP awakening, pseudo-Charles, the Ar'nock vessel, biological Charles, identity questions, jobs, skills, powers, equipment, and opening-session guidance.</p>
+          <div class="blacklight-actions"><a class="primary-action" href="blacklight-campaign-reader.html" target="_blank" rel="noopener">Open Formatted Campaign Document</a></div>
         </article>
         <article class="module-card">
           <div class="module-meta"><span id="blacklight-pack-count" class="badge status-active">loading packs</span><span id="blacklight-entry-count" class="badge status-active">loading entries</span></div>
@@ -104,9 +104,9 @@
           <button id="blacklight-open-wiki" class="primary-action" type="button">Open Blacklight Continuum Wiki</button>
         </article>
         <article class="module-card">
-          <div class="module-meta"><span class="badge status-active">d10 alpha</span><span class="badge">original system</span></div>
+          <div class="module-meta"><span class="badge status-active">d10 alpha</span><span class="badge">capability first</span></div>
           <h3>System Foundation</h3>
-          <p>Nine Attributes, twenty-four Skills, twelve Operational Frames, Exposure and Cohesion, hybrid power families, salvage equipment, and dangerous opposed resolution.</p>
+          <p>Nine Attributes, twenty-four Skills, twelve Operational Frames, Exposure and Cohesion, explicit capability families, equipment, and dangerous opposed resolution. Form and origin grant no unlisted mechanics.</p>
           <button id="blacklight-open-rules" class="secondary-action" type="button">Open Rules Entries</button>
         </article>
         <article class="module-card">
@@ -135,7 +135,7 @@
       if (entryBadge) entryBadge.textContent = `${entryCount} entr${entryCount === 1 ? 'y' : 'ies'}`;
       if (scope) scope.textContent = data.index.description || 'Blacklight Continuum campaign wiki active.';
       if (next) next.textContent = (data.index.nextDevelopmentAreas || []).map(humanize).join(', ') || 'Additional campaign and system development remains planned.';
-    } catch (error) {
+    } catch (_) {
       const scope = document.getElementById('blacklight-scope-summary');
       if (scope) scope.textContent = 'The Blacklight Continuum wiki will load when the project is served through GitHub Pages or a local web server.';
     }
@@ -150,7 +150,7 @@
       const data = await loadWiki();
       renderBrowser(browser, data, preferredEntryId);
       browser.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } catch (error) {
+    } catch (_) {
       browser.innerHTML = '<p class="helper-note">The Blacklight Continuum wiki could not be loaded. Serve the project through GitHub Pages or a local web server.</p>';
     }
   }
@@ -165,7 +165,7 @@
         <p>${escapeHtml(data.index?.description || 'No Return Signal foundation entries.')}</p>
       </div>
       <div class="blacklight-controls">
-        <input type="search" id="blacklight-search" placeholder="Search Q-MAP, Ar'nock, Charles, printed bodies, jobs, powers, equipment, or rules…">
+        <input type="search" id="blacklight-search" placeholder="Search Q-MAP, Ar'nock, Charles, Archetypes, capabilities, jobs, equipment, or rules…">
         <button type="button" id="blacklight-reset" class="secondary-action">Reset</button>
         <div id="blacklight-categories" class="blacklight-categories"></div>
       </div>
