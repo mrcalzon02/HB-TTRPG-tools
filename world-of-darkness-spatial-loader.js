@@ -1,6 +1,7 @@
 (() => {
   'use strict';
 
+  const ASSET_VERSION = '20260702-5';
   const CORE_SCRIPTS = [
     'world-of-darkness-lightweight-map-core.js',
     'world-of-darkness-spatial-config-compat.js',
@@ -59,7 +60,7 @@
       script.addEventListener('load', finish, { once: true });
       script.addEventListener('error', fail, { once: true });
       if (!existing) {
-        script.src = src;
+        script.src = `${src}?v=${ASSET_VERSION}`;
         script.async = false;
         script.dataset.wodSpatialStage = 'true';
         document.body.appendChild(script);
