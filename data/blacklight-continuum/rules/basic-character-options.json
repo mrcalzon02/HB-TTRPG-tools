@@ -98,7 +98,7 @@
       "innateAbilities": [
         {
           "name": "Prepared Contingency",
-          "effect": "Once per operation, establish one plausible precaution, item, credential, contact method, or escape provision prepared before the scene. It creates leverage but cannot solve the entire operation by itself."
+          "effect": "Once per operation, reveal one preparation made before the current scene and choose one result: produce one Serviceable handheld tool or consumable; present a routine credential valid for one checkpoint; reveal a hidden cache containing two common supplies; open a secure channel to one established contact; reveal a mapped escape route granting two dice to one escape test; or trigger one prearranged signal that causes an established ally to perform one previously agreed task. The contingency cannot create Advanced or Exceptional equipment, invent a new contact, bypass an active opposed test, or solve the operation's primary objective by itself."
         },
         {
           "name": "Evidence Chain",
@@ -199,7 +199,7 @@
             {
               "rank": 5,
               "name": "Human Standard",
-              "effect": "Cost: 2 Conviction and 1 Strain. Define a principle of personhood such as informed consent, continuity of responsibility, autonomy, or a copy's right to refuse reintegration. Allies accepting the standard may use your Resolve for Identity Defense; violations face difficulty equal to Archetype Rating."
+              "effect": "Cost: 2 Conviction and 1 Strain. Choose one standard: informed consent; continuity of responsibility; bodily autonomy; or a copy's right to remain separate. Up to Archetype Rating willing allies who verbally accept the standard use your Resolve in place of their own for Identity Defense for the scene. Any attempt to compel a protected ally to violate the chosen standard must first achieve successes equal to Archetype Rating; failure cancels that attempt without consuming the ally's action."
             }
           ]
         },
@@ -225,12 +225,12 @@
             {
               "rank": 4,
               "name": "Manufacture Jurisdiction",
-              "effect": "Cost: 1 Conviction and a credible public objective. Test: Presence + Command. Establish temporary authority over a site, emergency, investigation, or evacuation until defeated by a superior claimant."
+              "effect": "Cost: 1 Conviction. Choose emergency response, evacuation, criminal investigation, hazardous containment, or infrastructure repair. Test: Presence + Command opposed by the highest Presence + Command among active claimants, or difficulty 3 when none are present. On success, for the scene routine personnel and systems treat you as the operation lead for site access, briefings, traffic control, and requisition of Serviceable equipment. This authority cannot transfer property, imprison a person, compel self-harm, or overrule an existing claimant who wins a later opposed test. Each rival claimant may contest once per scene."
             },
             {
               "rank": 5,
               "name": "Found an Institution",
-              "effect": "Cost: 2 Conviction, 1 Strain, and willing participants. Create a durable protocol, office, mutual-aid cell, investigative body, or emergency authority with a defined purpose and limits. It survives while members continue performing its function."
+              "effect": "Cost: 2 Conviction, 1 Strain, five willing members, a functioning site, and one week of work. Choose one institution. Mutual Aid: members recover one additional Impact after a full rest. Investigative Office: members gain one die on shared Investigation tests. Emergency Service: members gain one die to Initiative during disasters. Site Defense: members gain one Guard while protecting the site. Logistics Office: once per operation, the institution supplies one Serviceable item from its established inventory. Record one leader, one appeal procedure, and three rules binding every member. The institution persists while at least three members and its site remain active."
             }
           ]
         },
@@ -251,7 +251,7 @@
             {
               "rank": 3,
               "name": "Cached Countermeasure",
-              "effect": "Cost: 1 Conviction and one previously visited scene, contact, or storage point. Establish a narrow countermeasure against a known threat. Failure: it exists but has degraded, moved, or acquired an owner."
+              "effect": "Cost: 1 Conviction and access to a previously visited site, established contact, or prepared storage point. Choose one countermeasure against a threat already observed during the campaign: Filter, which ignores one exposure to a named gas, toxin, spore, or contaminant; Jammer, which grants two defense dice against one named signal or sensor type for a scene; Insulated Barrier, which provides Armor 3 against one named damage type for three rounds; Antidote, which removes one poison or disease condition; Decoy, which causes one named pursuer to spend its first action investigating the false target; or Override Key, which opens one previously studied lock or security system after a successful Reason + Security test at difficulty 2. Failure: the countermeasure functions once, then breaks and adds 1 Exposure."
             },
             {
               "rank": 4,
@@ -261,7 +261,7 @@
             {
               "rank": 5,
               "name": "Everything Has a Failure Mode",
-              "effect": "Cost: 2 Conviction and 1 Strain. Requirement: observe the target for three rounds or study it for ten minutes. Test: Reason + Investigation, difficulty 4. On success, place one Failure Mode on the target until the operation ends. After you or an ally succeeds against that target, consume the Failure Mode to choose one effect: ignore its defenses for one action; cancel one active effect it created; inflict 3 Trauma or 3 Disruption as appropriate to the target; grant all allies two dice against it until the end of the round; or force it to abandon one of two currently active objectives until its next turn. Failure: gain 1 additional Strain and the same target cannot be analyzed again this scene."
+              "effect": "Cost: 2 Conviction and 1 Strain. Requirement: observe the target for three rounds or study it for ten minutes. Test: Reason + Investigation, difficulty 4. On success, place one Failure Mode on the target until the operation ends. After you or an ally succeeds against that target, consume the Failure Mode to choose one effect: ignore its defenses for one action; cancel one active effect it created; inflict 3 Trauma on a physical organism or structure, or 3 Disruption on software, a noospheric entity, or an identity system; grant all allies two dice against it until the end of the round; or force it to abandon one of two currently active objectives until its next turn. Failure: gain 1 additional Strain and the same target cannot be analyzed again this scene."
             }
           ]
         },
@@ -320,7 +320,7 @@
         },
         {
           "name": "Feeding",
-          "effect": "Blood or a lineage-compatible vital medium restores Vitae according to the campaign's feeding rules. The player and Game Moderator define what satisfies Hunger and what ethical consequences follow."
+          "effect": "At character creation, record Blood or one alternate vital medium: living bioelectric charge, psychic emotion, stored memory, or thermal life-energy. Feeding requires direct contact and one full action per Vitae restored, up to Archetype Rating Vitae from one target or source per scene. Feeding from an unwilling target requires Finesse + Close Combat opposed by Finesse + Athletics. Blood feeding inflicts 1 Impact per Vitae restored. Alternate feeding suppresses the target's matching function for one round per Vitae restored. Restoring at least 2 Vitae during one scene reduces Hunger by 1. Feeding from a helpless unwilling person adds 1 Hunger at scene end."
         }
       ],
       "powerFamilies": [
@@ -346,7 +346,7 @@
             {
               "rank": 4,
               "name": "Red Interval",
-              "effect": "Cost: 2 Vitae. For one round, a chosen target's active defenses lose two dice against you and you may interrupt one ordinary reaction. Failure: suffer two dice penalty on the next nonphysical action."
+              "effect": "Cost: 2 Vitae. Choose one target you can perceive. Until the end of your next turn, that target loses two dice from Guard and cannot take reactions triggered by your movement, attacks, feeding, or withdrawal. Other reactions remain available. Failure: the target keeps its reactions, but still loses one Guard die until the end of your turn; you lose two dice from your next nonphysical action."
             },
             {
               "rank": 5,
@@ -377,12 +377,12 @@
             {
               "rank": 4,
               "name": "Court of One",
-              "effect": "Cost: 2 Vitae. Address a small group as if each member receives personal attention. One shared emotional posture takes hold on success. Failure: the group synchronizes against you."
+              "effect": "Cost: 2 Vitae. Target up to Archetype Rating + 2 beings within 10 meters that can perceive you. Test: Presence + Empathy opposed by the highest Resolve + Composure among them. Choose one posture for the scene. Deference: targets lose two dice when directly opposing your stated instructions. Fear: targets lose two attack dice against you and cannot willingly approach within 2 meters. Devotion: targets gain two dice when defending or assisting you but will not accept obvious lethal harm. Hesitation: each target loses its first minor action. Failure: no posture takes hold and every target gains two dice to resist your Grave Dominion powers for the scene."
             },
             {
               "rank": 5,
               "name": "Sovereign Silence",
-              "effect": "Cost: 2 Vitae and 1 Hunger. For one exchange, suppress panic, argument, unauthorized movement, and hostile initiation in a room or local network. Strong targets resist at difficulty 4 and remember the violation afterward."
+              "effect": "Cost: 2 Vitae and 1 Hunger. Affect every chosen target within 10 meters or one local network containing no more than Archetype Rating × 3 active users. Each unwilling target tests Resolve + Composure against difficulty equal to Archetype Rating. A failed target cannot initiate an attack, move more than 2 meters, transmit a message, or speak except to answer a direct question until the end of the exchange. A successful target is unaffected and recognizes the attempted domination."
             }
           ]
         },
@@ -413,7 +413,7 @@
             {
               "rank": 5,
               "name": "Erase the Witness",
-              "effect": "Cost: 2 Vitae and 1 Hunger. Test: Guile + Empathy opposed by Resolve + Awareness. Remove, replace, or procedurally close a short recent memory involving you. Contradictory evidence can reopen the seam."
+              "effect": "Cost: 2 Vitae and 1 Hunger. Test: Guile + Empathy opposed by Resolve + Awareness. Choose one memory involving you from the previous ten minutes and choose one alteration: remove your presence from it; replace your face and voice with those of an unidentified stranger; or make the event feel routine and already resolved. The alteration lasts until the target reviews contradictory physical evidence or succeeds on a Resolve + Investigation test at difficulty equal to Archetype Rating. Failure: the memory remains intact and the target remembers the attempted intrusion."
             }
           ]
         },
@@ -534,7 +534,7 @@
         },
         {
           "name": "Pack Sense",
-          "effect": "Recognize the direction and broad emotional condition of a bonded packmate through a supernatural bond. The effect works across disguises and ordinary identity changes within the campaign's range limits."
+          "effect": "Sense every bonded packmate within 10 kilometers per Archetype Rating, or anywhere inside your claimed territory when that area is larger. You know each packmate's direction, approximate distance, and one current state: calm, afraid, injured, enraged, unconscious, restrained, or controlled. Disguise, ordinary identity changes, walls, and routine signal loss do not block the bond; dimensional separation and a complete noospheric quarantine do."
         }
       ],
       "powerFamilies": [
@@ -612,7 +612,7 @@
             {
               "rank": 2,
               "name": "Coordinated Instinct",
-              "effect": "Cost: 1 Fury. Up to Archetype Rating packmates may use your Initiative or add one die to an action supporting another member. Failure: all briefly share the highest current Pressure."
+              "effect": "Cost: 1 Fury. Choose up to Archetype Rating willing packmates within Pack Sense range. At activation, each chosen packmate either raises Initiative to your Initiative when theirs is lower, or gains one die on the first action each round that directly assists another chosen packmate. The selected benefit lasts for the scene and cannot be changed after activation. Failure: no benefit is gained and every chosen participant gains 1 Pressure."
             },
             {
               "rank": 3,
@@ -669,7 +669,7 @@
             {
               "rank": 1,
               "name": "Scent the Unseen",
-              "effect": "Cost: none. Test: Awareness + Xenoculture. Detect nearby incorporeal, noospheric, ecological, machine, emotional, or reflection presences and learn their broad category. Failure: classify them according to a dangerous old assumption."
+              "effect": "Cost: none. Test: Awareness + Xenoculture. Detect every nonmaterial presence within 20 meters and classify each as one of six types: incorporeal spirit; noospheric intelligence; ecological collective; autonomous machine presence; emotional imprint; or reflection entity. For each detected presence, learn its direction, approximate distance, and whether it is dormant, observing, communicating, or acting. Failure: you detect the number and direction of presences but misclassify one type."
             },
             {
               "rank": 2,
@@ -748,7 +748,7 @@
         },
         {
           "name": "Forbidden Comprehension",
-          "effect": "Spend 1 Pact to understand the immediate function or intent of an alien symbol, ritual, anomaly, or device without receiving complete cultural context."
+          "effect": "Spend 1 Pact after observing an alien symbol, ritual, anomaly, or device for one exchange. Learn its immediate function, its normal activation method, and its most immediate hazard or prohibition. The ability does not provide history, cultural meaning, creator identity, hidden secondary functions, or instructions for safely reproducing it."
         }
       ],
       "powerFamilies": [
@@ -805,7 +805,7 @@
             {
               "rank": 4,
               "name": "Unnatural Locomotion",
-              "effect": "Cost: 2 Pact. For a scene, ignore one ordinary movement limitation: cling to surfaces, fold through narrow spaces, step across gaps, swim through machinery, or move inverted."
+              "effect": "Cost: 2 Pact. Choose one mode for the scene. Clinging: move across walls and ceilings at normal speed. Compression: pass through openings at least 10 centimeters wide at half speed. Gap Step: cross an open gap up to 10 meters as though a solid path existed. Machinery Swim: move through occupied machinery spaces at half speed without becoming entangled or taking contact damage. Inversion: choose the direction of gravity affecting only you and move normally on the selected surface. Only one mode may be active at a time."
             },
             {
               "rank": 5,
@@ -867,7 +867,7 @@
             {
               "rank": 4,
               "name": "Remember What Never Happened",
-              "effect": "Cost: 2 Pact. Access one plausible unrealized memory connected to the situation and gain two dice on one action using its lesson. Failure: it feels indistinguishable from lived experience."
+              "effect": "Cost: 2 Pact. Choose one failed or unattempted action from the current operation, then choose one answer to recover from an unrealized outcome: the target's strongest defense; one hidden cost of the action; one safer route to the same objective; or one tool, credential, or preparation that would have changed the result. Gain two dice on the next action that directly exploits the answer. Failure: receive the answer and gain the bonus, but also gain 1 Intrusion and treat the unrealized event as a real personal memory until the scene ends."
             },
             {
               "rank": 5,
@@ -929,7 +929,7 @@
             {
               "rank": 4,
               "name": "Partial Arrival",
-              "effect": "Cost: 2 Pact and 1 Intrusion. Manifest a major portion of the presence to produce one large effect consistent with its nature. You retain veto over one action."
+              "effect": "Cost: 2 Pact and 1 Intrusion. Manifest the presence for one action and choose one effect. Breach: destroy one unattended barrier or structure within 20 meters with Armor no greater than Archetype Rating + 2. Suppress: enemies in a 10-meter radius lose two dice and cannot take reactions until your next turn. Protect: create a barrier with durability equal to Resolve + Archetype Rating covering up to Archetype Rating targets for three rounds. Translate: move yourself and up to Archetype Rating willing targets between two visible points within 30 meters. Reveal: expose every invisible, disguised, incorporeal, or noospherically concealed entity within 20 meters for the scene. Seize: restrain one target within 20 meters using Resolve + Archetype Rating against its Guard; the restraint has durability 5. The manifestation disappears after the selected effect resolves."
             },
             {
               "rank": 5,
@@ -1071,7 +1071,7 @@
             {
               "rank": 2,
               "name": "Dampen Panic",
-              "effect": "Cost: 1 Resonance. Remove one fear penalty and prevent panic spreading through a small group for a scene. The danger remains understood."
+              "effect": "Cost: 1 Resonance. Affect up to Archetype Rating + 2 willing targets within 10 meters. Remove one active fear penalty from each target and prevent the same hazard or source from imposing another fear penalty on them for the scene. The targets still perceive the danger, retain relevant memories, and can choose to retreat."
             },
             {
               "rank": 3,
