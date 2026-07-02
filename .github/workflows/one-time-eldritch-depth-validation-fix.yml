@@ -1,0 +1,96 @@
+name: Fix and validate Eldritch Depth mechanics
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-eldritch-depth-validation-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fix free trigger wording and validate all Depths
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('data/blacklight-continuum/rules/eldritch-binding-sources.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          catalog = next(item for item in data['catalogs'] if item['id'] == 'binding-sources')
+
+          hunger = next(item for item in catalog['variants'] if item['id'] == 'that-which-hungers')
+          red_claim = next(item for item in hunger['progression'] if item['stage'] == 'Depth 2')
+          if 'Cost: none.' not in red_claim['effect']:
+              red_claim['effect'] = red_claim['effect'].replace(
+                  'Trigger: once per scene after',
+                  'Trigger: once per scene after'
+              ).replace(
+                  'Choose one result immediately:',
+                  'Cost: none. Choose one result immediately:'
+              )
+
+          abilities = [step for source in catalog['variants'] for step in source['progression']]
+          assert len(abilities) == 30
+          assert all(step.get('effect') for step in abilities)
+          assert all(
+              ('Action:' in step['effect'] or 'Trigger:' in step['effect'] or 'Passive while conscious.' in step['effect'])
+              for step in abilities
+          )
+          assert all(
+              ('Cost:' in step['effect'] or 'Passive while conscious.' in step['effect'])
+              for step in abilities
+          )
+
+          prohibited = [
+              'appropriate effect',
+              'major effect',
+              'significant effect',
+              'comparable effect',
+              'the moderator decides',
+              'at the moderator',
+              'one thematic',
+              'as appropriate',
+              'according to the campaign',
+          ]
+          combined = '\n'.join(step['effect'].lower() for step in abilities)
+          for phrase in prohibited:
+              assert phrase not in combined, phrase
+
+          expected = {
+              'void-mind',
+              'abyssal-womb',
+              'that-which-hungers',
+              'lidless-eye',
+              'the-silence',
+              'the-noise',
+          }
+          assert {source['id'] for source in catalog['variants']} == expected
+          assert all(len(source['progression']) == 5 for source in catalog['variants'])
+          assert all(
+              [step['stage'] for step in source['progression']] == [f'Depth {number}' for number in range(1, 6)]
+              for source in catalog['variants']
+          )
+          assert 'closed question menus' in data['selectionRules']['depthResolutionStandard']
+          assert 'refunds its Pact cost' in data['selectionRules']['depthResolutionStandard']
+
+          path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          Path('.github/workflows/one-time-eldritch-depth-validation.yml').unlink(missing_ok=True)
+          Path('.github/workflows/one-time-eldritch-depth-validation-fix.yml').unlink()
+          PY
+      - name: Commit validated cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Validate mechanical Eldritch Depth abilities"
+          git push origin main
