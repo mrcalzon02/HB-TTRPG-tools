@@ -1,28 +1,30 @@
 (() => {
   'use strict';
 
-  const NOTE = 'Submitting opens a prefilled issue in this repository. After submitting it, run the manual Ingest World of Darkness POI Registry Submission workflow with that issue number. The workflow validates the JSON and commits the entry into poi_registry.json on main. No Google API key or browser-exposed GitHub token is required.';
-  const STATUS = 'A prefilled GitHub registry issue was opened. Submit it while signed into the repository-owner account, then manually run the Ingest World of Darkness POI Registry Submission workflow with the new issue number. The JSON patch was also copied when browser permissions allowed.';
+  const SOURCE = 'spatial-submission-handoff.js';
 
-  function patchWorkflowText() {
-    document.querySelectorAll('#wod-spatial-engine .wod-note').forEach(note => {
-      if (note.textContent.includes('Submitting opens a prefilled issue')) note.textContent = NOTE;
+  function loadHandoff() {
+    if (window.HBSpatialSubmissionHandoff) return Promise.resolve(window.HBSpatialSubmissionHandoff);
+    const existing = [...document.scripts].find(script => (script.getAttribute('src') || '').split('?')[0].endsWith(SOURCE));
+    if (existing?.dataset.hbSpatialSubmissionLoaded === 'true') return Promise.resolve(window.HBSpatialSubmissionHandoff);
+    return new Promise((resolve, reject) => {
+      const script = existing || document.createElement('script');
+      script.addEventListener('load', () => {
+        script.dataset.hbSpatialSubmissionLoaded = 'true';
+        resolve(window.HBSpatialSubmissionHandoff);
+      }, { once: true });
+      script.addEventListener('error', () => reject(new Error(`${SOURCE} could not be loaded.`)), { once: true });
+      if (!existing) {
+        script.src = SOURCE;
+        script.async = false;
+        script.dataset.wodRegistryWorkflow = 'true';
+        document.body.appendChild(script);
+      }
     });
-
-    const button = document.getElementById('wod-submit-central-registry');
-    if (button && button.dataset.manualWorkflowNote !== 'true') {
-      button.dataset.manualWorkflowNote = 'true';
-      button.addEventListener('click', () => {
-        window.setTimeout(() => {
-          const status = document.getElementById('wod-spatial-status');
-          if (status) status.textContent = STATUS;
-        }, 0);
-      });
-    }
   }
 
-  const observer = new MutationObserver(patchWorkflowText);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
-  patchWorkflowText();
-  document.addEventListener('DOMContentLoaded', patchWorkflowText);
+  void loadHandoff().catch(error => {
+    const status = document.getElementById('wod-spatial-loader-status') || document.getElementById('wod-visible-business-status');
+    if (status) status.textContent = `Global registry handoff failed to load: ${error.message}`;
+  });
 })();
