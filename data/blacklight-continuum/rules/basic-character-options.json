@@ -1,8 +1,14 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "status": "alpha-playtest",
-  "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. The six-family identity and rank-by-rank functions are canonical; exact balance may change after table testing.",
+  "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
+  "mechanicsPolicy": {
+    "principle": "The system measures what a character can do, not what they are made of.",
+    "embodimentNeutral": true,
+    "descriptionIsNotPermission": "Appearance, physiology, species, substrate, and transformation descriptions do not grant mechanics by themselves.",
+    "capabilitySources": ["Attribute", "Skill", "Specialization", "Archetype", "Power", "Operational Frame", "Equipment", "Condition", "Narrative Permission"]
+  },
   "diceSystem": {
     "pool": "Attribute + Skill + modifiers",
     "successThreshold": 6,
@@ -17,103 +23,103 @@
   },
   "skills": {
     "Operational": ["Athletics", "Close Combat", "Firearms", "Heavy Weapons", "Mobility", "Stealth", "Survival", "Zero-G Operations"],
-    "Technical": ["Biofabrication", "Engineering", "Medicine", "Noospherics", "Piloting", "Science", "Security", "Systems Intrusion"],
+    "Technical": ["Engineering", "Fabrication", "Medicine", "Noospherics", "Piloting", "Science", "Security", "Systems Intrusion"],
     "Human and Investigative": ["Command", "Deception", "Empathy", "Investigation", "Negotiation", "Performance", "Streetwise", "Xenoculture"]
   },
   "archetypes": [
     {
       "id": "human-investigator",
       "name": "Human Investigator",
-      "theme": "A mortal continuity specialist who survives by deciding what counts as evidence, responsibility, consent, and human conduct when every supporting institution has disappeared.",
+      "theme": "A mortal specialist who turns evidence, preparation, discipline, institutions, and relationships into capabilities able to compete with supernatural and posthuman threats.",
       "resourceName": "Conviction",
       "pressureName": "Strain",
       "keyAttribute": "Resolve",
       "resourceBase": 5,
       "startingAbility": "Residual Read",
       "weakness": "Mortal Limits",
-      "weaknessText": "You possess no automatic supernatural immunity. Severe harm, deprivation, fear, isolation, and the cumulative burden of being the team's evidentiary and moral reference point affect you normally.",
+      "weaknessText": "You possess no automatic supernatural immunity. Severe harm, deprivation, fear, isolation, and sustained responsibility affect you normally unless a recorded capability provides protection.",
       "innateAbilities": [
         {"name": "Prepared Contingency", "effect": "Once per operation, establish one plausible precaution, item, credential, contact method, or escape provision prepared before the scene. It creates leverage but cannot solve the entire operation by itself."},
         {"name": "Evidence Chain", "effect": "When you preserve and compare evidence from at least two scenes, gain one bonus die on the next Investigation, Negotiation, or Command test that directly exploits the connection."},
-        {"name": "Hold the Human Line", "effect": "Spend 1 Conviction to ignore one fear, coercion, identity-disruption, or dehumanizing classification penalty for a scene and name the principle you are refusing to surrender."}
+        {"name": "Hold the Human Line", "effect": "Spend 1 Conviction to ignore one fear, coercion, identity-disruption, or dehumanizing classification penalty for a scene and name the principle you refuse to surrender."}
       ],
       "powerFamilies": [
         {
           "name": "Casecraft",
-          "description": "Casecraft begins as disciplined investigation and develops into the ability to reconstruct responsibility across copied minds, edited records, alien biology, autonomous systems, and events deliberately stripped of a single accountable witness.",
-          "oldWorldRoot": "Crime-scene procedure, witness examination, documentary research, forensic comparison, occult investigation, and the stubborn habit of asking who benefited.",
-          "continuumTranslation": "The printed body learns to interpret chemical residue, deck vibration, noospheric discontinuity, printer artifacts, and contradictory identity histories as evidence rather than noise.",
+          "description": "Disciplined investigation that grows into the ability to reconstruct responsibility across altered records, copied minds, autonomous systems, supernatural interference, and events engineered to have no accountable witness.",
+          "oldWorldRoot": "Crime-scene procedure, witness examination, documentary research, forensic comparison, occult investigation, and the habit of asking who benefited.",
+          "continuumTranslation": "Casecraft now treats physical traces, data gaps, noospheric discontinuity, contradictory testimony, and institutional behavior as equally valid evidence channels.",
           "abilities": [
-            {"rank": 1, "name": "Residual Read", "effect": "Cost: none. Test: Awareness + Investigation, difficulty 1-3. After examining a person, object, or location for one exchange, ask one concrete question about what interacted with it most recently, what was deliberately concealed, or which detail does not belong. The answer identifies usable evidence rather than solving motive. Failure: the strongest irrelevant pattern becomes temporarily persuasive until contradicted."},
-            {"rank": 2, "name": "Contradiction Ledger", "effect": "Cost: 1 Conviction or ten minutes of uninterrupted work. Test: Reason + Investigation. Record two statements, logs, memories, or physical traces that cannot all be true. For the remainder of the operation, gain two dice when testing the contradiction, and the Game Moderator must indicate which missing assumption would allow both records to coexist. Failure: you correctly identify a contradiction but misidentify which source was altered."},
-            {"rank": 3, "name": "Reconstruct the Event", "effect": "Cost: 1 Conviction. Test: Reason + Investigation, difficulty 3. Assemble a probable sequence from surviving residue, including one unseen transition between known facts. The reconstruction can reveal entry route, timing, likely number of actors, or the action an autonomous system attempted to omit. Failure: the sequence is useful but imports one detail from a fragmented personal memory."},
-            {"rank": 4, "name": "Cross-Continuity Indictment", "effect": "Cost: 1 Conviction and one preserved piece of evidence. Test: Resolve + Investigation opposed by the target's Guile + Noospherics or equivalent. Establish that a person, copy, institution, machine process, or legal identity remains responsible despite body replacement, memory editing, subcontracting, or ownership transfer. Success removes two dice from attempts to deny, redirect, or procedurally erase that responsibility for the scene. Failure: the accusation exposes your evidence chain and gives the target a route to attack it."},
-            {"rank": 5, "name": "The Case Will Break", "effect": "Cost: 2 Conviction and 1 Strain. Name the central unanswered question of the current operation and summarize the evidence already earned. The Game Moderator must reveal a concrete, reachable route by which the truth can be proven, including the person, system, site, or risk that blocks it. This does not provide the answer or make the route safe. Failure is impossible, but the route always exposes a truth capable of changing the team's understanding of the mission."}
+            {"rank": 1, "name": "Residual Read", "effect": "Cost: none. Test: Awareness + Investigation, difficulty 1-3. After examining a person, object, or location for one exchange, ask one concrete question about what interacted with it most recently, what was concealed, or which detail does not belong. Failure: the strongest irrelevant pattern becomes temporarily persuasive."},
+            {"rank": 2, "name": "Contradiction Ledger", "effect": "Cost: 1 Conviction or ten minutes of uninterrupted work. Record two statements, logs, memories, or traces that cannot all be true. Gain two dice when testing the contradiction, and the Game Moderator identifies the missing assumption that could reconcile them. Failure: the contradiction is real, but you misidentify the altered source."},
+            {"rank": 3, "name": "Reconstruct the Event", "effect": "Cost: 1 Conviction. Test: Reason + Investigation, difficulty 3. Assemble a probable sequence from surviving evidence, including one unseen transition between known facts. Failure: the sequence is useful but imports one detail from a fragmented personal memory."},
+            {"rank": 4, "name": "Cross-Continuity Indictment", "effect": "Cost: 1 Conviction and one preserved piece of evidence. Test: Resolve + Investigation opposed by Guile + Noospherics or equivalent. Establish that a person, copy, institution, process, or legal identity remains responsible despite transfer, editing, subcontracting, or ownership change. Failure: your evidence chain becomes vulnerable to counterattack."},
+            {"rank": 5, "name": "The Case Will Break", "effect": "Cost: 2 Conviction and 1 Strain. Name the operation's central unanswered question and summarize the evidence earned. The Game Moderator reveals a concrete, reachable route by which the truth can be proven. The route is not safe and may expose a campaign-changing fact."}
           ]
         },
         {
           "name": "Field Discipline",
-          "description": "Field Discipline turns mortal training into a stabilizing combat doctrine. It does not imitate supernatural toughness; it makes preparation, movement, fire control, triage, and mutual protection reliable while everyone else's inherited instincts are malfunctioning.",
-          "oldWorldRoot": "Military procedure, protective operations, emergency response, practiced violence, controlled breathing, and the refusal to freeze when the impossible becomes immediate.",
-          "continuumTranslation": "Distributed reflex tissues and alien regulatory organs begin executing learned procedures before conscious thought finishes, creating extraordinary reliability at the cost of reflexes that may belong to another iteration.",
+          "description": "Training, timing, movement, fire control, triage, and mutual protection refined into exceptional reliability under impossible conditions.",
+          "oldWorldRoot": "Military procedure, protective operations, emergency response, practiced violence, controlled breathing, and refusal to freeze.",
+          "continuumTranslation": "Field Discipline converts learned procedure into explicit tactical permissions; its benefits arise from training and Conviction rather than presumed physiology.",
           "abilities": [
-            {"rank": 1, "name": "Steady Hands", "effect": "Cost: none once per round. Ignore one die of injury, fear, recoil, environmental instability, or unfamiliar equipment penalty during a precise action. If the action protects another person, also prevent the first Complication created by environmental conditions. Failure: none, but repeated use while badly injured adds 1 Strain at scene end."},
-            {"rank": 2, "name": "Controlled Advance", "effect": "Cost: 1 Conviction. Test: Awareness + Command or Firearms. Establish a safe movement interval through fire, collapsing terrain, hostile machinery, or panicked crowds. You and one ally may reposition without surrendering active defense, and anyone following the route gains one die. Failure: the route remains possible, but one concealed threat gains a free reaction."},
-            {"rank": 3, "name": "No One Left Behind", "effect": "Cost: 1 Conviction. Reaction when an ally would be incapacitated, separated, vented, captured, or removed from the local noosphere. Move toward them immediately, stabilize their condition, or preserve a physical tether, signal, or identity lock long enough for another action. Failure: you preserve them but share one level of their damage, Exposure, or Archetype Pressure."},
-            {"rank": 4, "name": "Kill-Box Literacy", "effect": "Cost: 1 Conviction. Test: Reason + Awareness at the start of a conflict. Identify the scene's true lines of fire, structural failure points, cover hierarchy, and escape geometry. For three rounds, allies who follow your calls gain one die to Guard, ranged attacks, or movement tests; enemies using the predicted routes lose one die. Failure: the model is accurate until the environment changes, at which point it becomes dangerously obsolete."},
-            {"rank": 5, "name": "Mortal Defiance", "effect": "Cost: 2 Conviction and 1 Strain. When confronting a being, system, or event that is clearly beyond ordinary human scale, declare the single action that must succeed for others to survive. Add Resolve to the relevant pool, ignore current fear and injury penalties, and remain active until the action resolves even if you would otherwise fall. Afterward, convert one suffered Impact into Trauma and record what the body permanently learned from surviving it."}
+            {"rank": 1, "name": "Steady Hands", "effect": "Cost: none once per round. Ignore one die of injury, fear, recoil, environmental instability, or unfamiliar equipment penalty during a precise action. Repeated use while badly injured adds 1 Strain at scene end."},
+            {"rank": 2, "name": "Controlled Advance", "effect": "Cost: 1 Conviction. Test: Awareness + Command or Firearms. Establish a safe movement interval through fire, collapsing terrain, hostile machinery, or panic. You and one ally reposition without surrendering active defense. Failure: the route remains possible, but a concealed threat gains a reaction."},
+            {"rank": 3, "name": "No One Left Behind", "effect": "Cost: 1 Conviction. Reaction when an ally would be incapacitated, separated, vented, captured, or removed from the local noosphere. Move toward them, stabilize them, or preserve a tether, signal, or identity lock long enough for another action. Failure: you share one level of their damage, Exposure, or Pressure."},
+            {"rank": 4, "name": "Kill-Box Literacy", "effect": "Cost: 1 Conviction. Test: Reason + Awareness at conflict start. Identify true lines of fire, structural failure points, cover hierarchy, and escape geometry. For three rounds, allies following your calls gain one die; enemies using predicted routes lose one die. Failure: the model becomes dangerously obsolete when the environment changes."},
+            {"rank": 5, "name": "Mortal Defiance", "effect": "Cost: 2 Conviction and 1 Strain. Declare the one action that must succeed for others to survive. Add Resolve to the pool, ignore fear and injury penalties, and remain active until it resolves. Afterward, convert one Impact into Trauma and record the permanent lesson or scar."}
           ]
         },
         {
           "name": "Continuity Anchoring",
-          "description": "Continuity Anchoring protects identity when memories, bodies, legal personhood, and noospheric records disagree. The Investigator becomes capable of holding a self or relationship steady without pretending uncertainty does not exist.",
-          "oldWorldRoot": "Personal testimony, therapeutic grounding, oath keeping, witness protection, moral conviction, and the social fact that people become real to one another through repeated recognition.",
-          "continuumTranslation": "The Investigator's broad printed biology begins broadcasting stable emotional, chemical, and noospheric reference patterns that other continuations can use to reassemble a coherent claim to self.",
+          "description": "Protection of identity when memory, legal personhood, records, possession, and copies disagree.",
+          "oldWorldRoot": "Testimony, therapeutic grounding, oath keeping, witness protection, moral conviction, and repeated recognition.",
+          "continuumTranslation": "Continuity Anchoring works through declared identity, trusted relationships, preserved testimony, and noospheric countermeasures rather than any universal biological feature.",
           "abilities": [
-            {"rank": 1, "name": "Name Yourself", "effect": "Cost: none once per scene. State your name, one chosen identity claim, and one memory you accept as yours. Remove one die of Disruption or identity-confusion penalty and prevent a minor external system from assigning you a contradictory role for the exchange. Failure: none, but the declared memory becomes a vulnerable anchor others can target."},
-            {"rank": 2, "name": "Anchor Another", "effect": "Cost: 1 Conviction. Test: Empathy + Resolve opposed by the strength of the intrusion. Through touch, voice, or a shared token, remind an ally of a relationship, promise, or behavior that belongs to them. Suppress one compulsion, false memory, possession cue, or noospheric identity overwrite for a scene. Failure: the ally stabilizes but one of their intrusive impressions transfers to you."},
-            {"rank": 3, "name": "Shared Baseline", "effect": "Cost: 1 Conviction per scene. Establish a small set of agreed facts for the team: who is present, what the immediate objective is, and what no member consents to surrender. Allies within communication range gain one die against fear, domination, memory editing, and conflicting sensor narratives. Failure: the baseline holds, but one stated fact later proves incomplete rather than false."},
-            {"rank": 4, "name": "Refuse the Edit", "effect": "Cost: 1 Conviction and mark 1 Exposure. Reaction when a power, system, contract, or authority would erase, replace, merge, or legally invalidate a person. Test Resolve + Cohesion against the effect. On success, preserve an unaltered witness copy of the targeted identity inside your own memory and force the effect to leave a detectable seam. Failure: the edit proceeds, but you retain a painful and incomplete version of what was removed."},
-            {"rank": 5, "name": "Human Standard", "effect": "Cost: 2 Conviction and 1 Strain. For one scene, define a human-scale principle of personhood such as informed consent, continuity of responsibility, bodily autonomy, or the right of a copy to refuse reintegration. Allies who knowingly accept the standard may use your Resolve in place of their own lower Identity Defense, while systems attempting to violate it must overcome a difficulty equal to your Archetype Rating. The principle cannot compel agreement; it gives resistance to those who choose it."}
+            {"rank": 1, "name": "Name Yourself", "effect": "Cost: none once per scene. State your name, one chosen identity claim, and one memory you accept as yours. Remove one die of Disruption or identity-confusion penalty and prevent a minor system from assigning you a contradictory role for the exchange."},
+            {"rank": 2, "name": "Anchor Another", "effect": "Cost: 1 Conviction. Test: Empathy + Resolve. Through voice, touch, signal, or shared token, suppress one compulsion, false memory, possession cue, or identity overwrite affecting an ally for a scene. Failure: one intrusive impression transfers to you."},
+            {"rank": 3, "name": "Shared Baseline", "effect": "Cost: 1 Conviction per scene. Establish agreed facts for the team: who is present, the immediate objective, and what no member consents to surrender. Allies gain one die against fear, domination, memory editing, and contradictory sensor narratives."},
+            {"rank": 4, "name": "Refuse the Edit", "effect": "Cost: 1 Conviction and 1 Exposure. Reaction when a power, system, contract, or authority would erase, replace, merge, or invalidate a person. Preserve an unaltered witness copy of the targeted identity in memory and force the effect to leave a detectable seam."},
+            {"rank": 5, "name": "Human Standard", "effect": "Cost: 2 Conviction and 1 Strain. Define a principle of personhood such as informed consent, continuity of responsibility, autonomy, or a copy's right to refuse reintegration. Allies accepting the standard may use your Resolve for Identity Defense; violations face difficulty equal to Archetype Rating."}
           ]
         },
         {
           "name": "Institutional Ghostcraft",
-          "description": "Institutional Ghostcraft weaponizes the Investigator's understanding of organizations. In a future where personhood is authenticated by systems, the Investigator learns to read procedure, borrow legitimacy, and build temporary jurisdiction from the expectations institutions cannot stop having.",
-          "oldWorldRoot": "Bureaucratic literacy, credentials, chain of command, warrants, access policies, emergency authority, labor rules, and the ability to make institutions reveal what they value by watching what they require.",
-          "continuumTranslation": "The Investigator combines social performance with noospheric observation, creating temporary institutional roles that are convincing because they satisfy a system's own procedural assumptions.",
+          "description": "Use of procedure, credentials, jurisdiction, and organizational expectations as strategic tools.",
+          "oldWorldRoot": "Bureaucratic literacy, chain of command, warrants, access policy, emergency authority, labor rules, and regulatory leverage.",
+          "continuumTranslation": "The Investigator creates temporary legitimacy by satisfying a system's own procedural assumptions and exposing contradictions in authority.",
           "abilities": [
-            {"rank": 1, "name": "Read the Hierarchy", "effect": "Cost: none. Test: Awareness + Xenoculture or Investigation. After observing an organization or automated facility, identify who can authorize exceptions, what resource actually controls behavior, and which rule is ceremonial rather than enforced. Failure: identify the formal hierarchy while missing the hidden dependency that truly governs it."},
-            {"rank": 2, "name": "Borrowed Credentials", "effect": "Cost: 1 Conviction. Test: Guile + Security or Negotiation. Present yourself as a plausible inspector, contractor, emergency responder, inherited process, or provisional identity long enough to obtain one limited access privilege. Success lasts until directly audited or used outside the declared role. Failure: access is granted but flagged for delayed review."},
-            {"rank": 3, "name": "Procedural Trap", "effect": "Cost: 1 Conviction and five minutes of preparation. Create a documentation, safety, jurisdictional, contractual, or chain-of-command contradiction that forces an institution to pause one hostile action until someone accepts explicit responsibility. Failure: the pause occurs, but the institution identifies you as the source of the conflict."},
-            {"rank": 4, "name": "Manufacture Jurisdiction", "effect": "Cost: 1 Conviction and a credible public objective. Test: Presence + Command. Establish a temporary operational authority over a site, emergency, investigation, or evacuation. Neutral personnel and ordinary systems treat your instructions as presumptively valid for the scene unless a superior claimant defeats you in an opposed institutional or social test. Failure: you gain cooperation from individuals but no system-level recognition."},
-            {"rank": 5, "name": "Found an Institution", "effect": "Cost: 2 Conviction, 1 Strain, and a group willing to participate. Create a durable protocol, office, mutual-aid cell, investigative body, or emergency authority with a defined purpose and limits. It gains a recognizable noospheric identity, can issue narrow credentials, and survives your absence as long as members continue performing its function. This is not mind control; it is the creation of real social infrastructure where none existed."}
+            {"rank": 1, "name": "Read the Hierarchy", "effect": "Cost: none. Test: Awareness + Xenoculture or Investigation. Identify who can authorize exceptions, what resource truly controls behavior, and which rule is ceremonial. Failure: you see the formal hierarchy but miss its hidden dependency."},
+            {"rank": 2, "name": "Borrowed Credentials", "effect": "Cost: 1 Conviction. Test: Guile + Security or Negotiation. Present as a plausible inspector, contractor, responder, inherited process, or provisional identity long enough to obtain one limited privilege. Failure: access is granted but flagged for review."},
+            {"rank": 3, "name": "Procedural Trap", "effect": "Cost: 1 Conviction and five minutes. Create a safety, jurisdictional, contractual, or command contradiction that forces an institution to pause one hostile action until someone accepts responsibility. Failure: the pause occurs, but you are identified as its source."},
+            {"rank": 4, "name": "Manufacture Jurisdiction", "effect": "Cost: 1 Conviction and a credible public objective. Test: Presence + Command. Establish temporary authority over a site, emergency, investigation, or evacuation until defeated by a superior claimant."},
+            {"rank": 5, "name": "Found an Institution", "effect": "Cost: 2 Conviction, 1 Strain, and willing participants. Create a durable protocol, office, mutual-aid cell, investigative body, or emergency authority with a defined purpose and limits. It survives while members continue performing its function."}
           ]
         },
         {
           "name": "Contingency Engineering",
-          "description": "Contingency Engineering is the art of preserving options under impossible uncertainty. It turns foresight, salvage, routes, caches, and failure analysis into practical leverage without granting supernatural omniscience.",
-          "oldWorldRoot": "Operational planning, dead drops, equipment caches, escape routes, redundancy, disaster preparation, and the professional assumption that every plan will eventually fail.",
-          "continuumTranslation": "The printed body's heightened pattern recognition and the Investigator's fragmented memories combine into instinctive awareness of what will be needed, sometimes because another iteration already learned the lesson.",
+          "description": "Preservation of options through foresight, salvage, routes, caches, and failure analysis.",
+          "oldWorldRoot": "Operational planning, dead drops, redundancy, disaster preparation, and the assumption that every plan eventually fails.",
+          "continuumTranslation": "Fragmented experience and disciplined planning provide the capability; no special embodiment is assumed.",
           "abilities": [
-            {"rank": 1, "name": "Pocket Solution", "effect": "Cost: none once per scene. Produce or improvise one small ordinary tool, adapter, restraint, seal, marker, charge, medical supply, or evidence container from carried gear and nearby salvage. It must be plausible and limited to one immediate function. Failure: the solution works once and then becomes unusable."},
-            {"rank": 2, "name": "Route of Escape", "effect": "Cost: 1 Conviction. Test: Awareness + Survival or Security. Identify a concealed, neglected, hazardous, or socially invisible route out of the current area. The route is real but may require a sacrifice such as abandoning equipment, crossing hostile atmosphere, or exposing the team to observation. Failure: the route exists but closes after the first person uses it."},
-            {"rank": 3, "name": "Cached Countermeasure", "effect": "Cost: 1 Conviction and one previously visited scene, allied contact, or accessible storage point. Establish that you prepared a narrow countermeasure against a known threat: filtered ammunition, a signal jammer, a ritual interruption kit, a metabolic suppressant, a false identity package, or similar provision. Failure: the cache exists but has degraded, been moved, or acquired an owner."},
-            {"rank": 4, "name": "Operational Reversal", "effect": "Cost: 1 Conviction and one round spent observing failure. Test: Reason + Command. Convert a broken plan into a new objective that uses the enemy's preparation, the environment, or the mission's abandoned assumptions. Allies who accept the reversal may immediately reposition or change targets and gain one die on the first action supporting it. Failure: the reversal creates an opening but sacrifices one secondary objective."},
-            {"rank": 5, "name": "Everything Has a Failure Mode", "effect": "Cost: 2 Conviction and 1 Strain. After studying a supernatural power, institution, machine, organism, or security system, declare the specific condition under which it can be interrupted, bypassed, overloaded, embarrassed, or forced to choose between incompatible priorities. The Game Moderator defines the required setup and consequence. The weakness is never effortless, but it is real and repeatable until the target fundamentally changes."}
+            {"rank": 1, "name": "Pocket Solution", "effect": "Cost: none once per scene. Produce or improvise one small ordinary tool, adapter, restraint, seal, marker, charge, medical supply, or evidence container from carried gear and salvage. Failure: it works once and becomes unusable."},
+            {"rank": 2, "name": "Route of Escape", "effect": "Cost: 1 Conviction. Test: Awareness + Survival or Security. Identify a concealed, neglected, hazardous, or socially invisible route out. Failure: the route closes after the first person uses it."},
+            {"rank": 3, "name": "Cached Countermeasure", "effect": "Cost: 1 Conviction and one previously visited scene, contact, or storage point. Establish a narrow countermeasure against a known threat. Failure: it exists but has degraded, moved, or acquired an owner."},
+            {"rank": 4, "name": "Operational Reversal", "effect": "Cost: 1 Conviction and one round observing failure. Test: Reason + Command. Convert a broken plan into a new objective using enemy preparation, environment, or abandoned assumptions. Failure: the reversal sacrifices one secondary objective."},
+            {"rank": 5, "name": "Everything Has a Failure Mode", "effect": "Cost: 2 Conviction and 1 Strain. After studying a power, institution, machine, organism, or security system, declare the condition under which it can be interrupted, bypassed, overloaded, embarrassed, or forced between incompatible priorities. The Game Moderator defines setup and consequence."}
           ]
         },
         {
           "name": "Human Network",
-          "description": "Human Network treats trust, testimony, mutual obligation, and shared competence as strategic assets. It is the Investigator's answer to a universe where Charles can no longer materialize support and identity systems cannot replace actual relationships.",
-          "oldWorldRoot": "Contacts, informants, community ties, witness care, teamwork, reputation, favors, and the recognition that institutions function only because particular people continue doing the work.",
-          "continuumTranslation": "Repeated recognition between continuations creates stable social and noospheric pathways that can survive body changes, false records, and the absence of formal legal status.",
+          "description": "Trust, testimony, mutual obligation, and shared competence treated as strategic infrastructure.",
+          "oldWorldRoot": "Contacts, informants, community ties, witness care, teamwork, reputation, and favors.",
+          "continuumTranslation": "Repeated recognition and dependable conduct create relationships able to survive false records, altered identities, and institutional abandonment.",
           "abilities": [
-            {"rank": 1, "name": "Earned Trust", "effect": "Cost: none once per scene. After you materially help, protect, or tell a difficult truth to someone, mark them as a provisional contact. Gain one die on later good-faith social tests with them, and they can recognize you through one superficial disguise or identity inconsistency. Failure: trust is possible, but they require proof you cannot immediately provide."},
-            {"rank": 2, "name": "Witness Protection", "effect": "Cost: 1 Conviction. Designate a frightened, hunted, or socially vulnerable person under your protection. For the scene, you can intercept one attempt to coerce, erase, isolate, or discredit them, and they gain one die to remember or testify accurately while you remain present. Failure: you preserve their testimony but reveal your involvement."},
-            {"rank": 3, "name": "Cell of Competence", "effect": "Cost: 1 Conviction and three willing participants. Assign each participant a practical responsibility and establish a simple communication procedure. While the cell follows the plan, members may lend one Skill die to another member once per round without acting themselves. Failure: the cell functions, but one unassigned problem becomes the source of a Complication."},
-            {"rank": 4, "name": "Mutual Obligation", "effect": "Cost: 1 Conviction and a favor genuinely owed or offered. Formalize a reciprocal commitment between individuals, copies, or organizations without supernatural compulsion. Each side gains two dice when honoring the exact commitment and suffers one Strain, Feedback, Hunger, Intrusion, Discord, or equivalent pressure if they knowingly betray it. Failure: the obligation remains social rather than mechanically reinforced."},
-            {"rank": 5, "name": "Civilization Is People", "effect": "Cost: 2 Conviction and sustained work across at least one operation. Convert a scattered group of survivors, contacts, workers, copies, or local intelligences into a functioning support community with agreed protections, shared resources, and procedures for resolving internal conflict. The community becomes a persistent campaign asset capable of shelter, information, logistics, or political pressure. Its loyalty depends on how it is treated, not on your power rating."}
+            {"rank": 1, "name": "Earned Trust", "effect": "Cost: none once per scene. After materially helping, protecting, or telling a difficult truth to someone, mark them as a provisional contact. Gain one die on later good-faith social tests with them."},
+            {"rank": 2, "name": "Witness Protection", "effect": "Cost: 1 Conviction. Designate a vulnerable person under your protection. Intercept one attempt to coerce, erase, isolate, or discredit them, and grant one die to accurate testimony while present."},
+            {"rank": 3, "name": "Cell of Competence", "effect": "Cost: 1 Conviction and three willing participants. Assign practical responsibilities and a communication procedure. Members may lend one Skill die to another once per round without acting themselves."},
+            {"rank": 4, "name": "Mutual Obligation", "effect": "Cost: 1 Conviction and a genuine favor. Formalize a reciprocal commitment without compulsion. Each side gains two dice when honoring it and suffers appropriate Pressure when knowingly betraying it."},
+            {"rank": 5, "name": "Civilization Is People", "effect": "Cost: 2 Conviction and sustained work across one operation. Turn survivors, contacts, workers, copies, or local intelligences into a functioning support community with agreed protections, resources, and conflict procedures."}
           ]
         }
       ]
@@ -121,96 +127,96 @@
     {
       "id": "vampire",
       "name": "Vampire",
-      "theme": "A dead self-pattern reconstructed as a living alien organism, forced to decide whether undeath is a metaphysical fact, a bloodline identity, or a predatory instruction the new body is learning to obey.",
+      "theme": "A blood-fueled predator whose capabilities concern speed, authority, concealment, resilience, feeding, and inherited memory under altered cosmic laws.",
       "resourceName": "Vitae",
       "pressureName": "Hunger",
       "keyAttribute": "Resilience",
       "resourceBase": 5,
       "startingAbility": "Quickened Step",
       "weakness": "Sun and Hunger",
-      "weaknessText": "Direct unfiltered stellar radiation causes severe harm, but different spectra produce uncertain reactions. Hunger rises when nourishment, Vitae, and predatory satisfaction fall out of alignment.",
+      "weaknessText": "Direct unfiltered stellar radiation causes severe harm, and Hunger rises when feeding, Vitae, and predatory satisfaction fall out of alignment. Exact manifestations belong to the Archetype, not to a universal body model.",
       "innateAbilities": [
-        {"name": "Predator's Blood", "effect": "Spend 1 Vitae to add Archetype Rating to one Force, Finesse, Resilience, Presence, or Guile test as catalytic fluid forces the living printed body to obey an inherited death-command."},
-        {"name": "Deathless Body", "effect": "You resist poison, disease, ordinary aging, suffocation, and vacuum exposure through metabolic suspension and nonhuman repair. Fire, intense radiation, and catastrophic tissue loss remain especially dangerous."},
-        {"name": "Feeding", "effect": "Blood or compatible vital media can restore Vitae, but not every source quiets Hunger. Alien nourishment may carry sensory contamination, mutation, memory fragments, or ethical consequences."}
+        {"name": "Predator's Blood", "effect": "Spend 1 Vitae to add Archetype Rating to one Force, Finesse, Resilience, Presence, or Guile test."},
+        {"name": "Deathless State", "effect": "You resist poison, disease, ordinary aging, suffocation, and many environmental effects as an explicit vampiric capability. Fire, intense radiation, and catastrophic harm remain dangerous."},
+        {"name": "Feeding", "effect": "Blood or a lineage-compatible vital medium restores Vitae according to the campaign's feeding rules. The player and Game Moderator define what satisfies Hunger and what ethical consequences follow."}
       ],
       "powerFamilies": [
         {
           "name": "Crimson Velocity",
-          "description": "Crimson Velocity converts Vitae into overlapping motor intervals. It begins as speed and develops into a localized disagreement between the Vampire's movement and the sequence in which the surrounding world records it.",
-          "oldWorldRoot": "Blood forced dead muscle, sharpened reflexes, and predatory acceleration beyond mortal reaction time.",
-          "continuumTranslation": "Catalytic fluid floods distributed nerve clusters and elastic internal plates, allowing several motor decisions to begin before earlier ones have fully completed.",
+          "description": "Vitae converted into supernatural acceleration, reaction, and temporal advantage.",
+          "oldWorldRoot": "Blood-quickened motion and predatory reaction beyond mortal limits.",
+          "continuumTranslation": "The altered universe makes the effect visible to advanced sensors and timing systems, but its mechanics remain a recorded capability rather than an anatomical assumption.",
           "abilities": [
-            {"rank": 1, "name": "Quickened Step", "effect": "Cost: 1 Vitae. Add two dice to Initiative, pursuit, sudden movement, or an attempt to reach cover before a hazard resolves. Your body preloads the route through distributed nerves. Failure: you still move, but one limb or reflex completes an outdated instruction and creates a minor positional Complication."},
-            {"rank": 2, "name": "Blurred Passage", "effect": "Cost: 1 Vitae. Test: Finesse + Athletics opposed by Awareness. Cross a nearby exposed space, pass a closing barrier, or move between two observers before ordinary reactions can coordinate. Cameras record an incomplete sequence rather than true invisibility. Failure: you arrive, but the route leaves a clear thermal or biological trace."},
-            {"rank": 3, "name": "Second Motion", "effect": "Cost: 1 Vitae and gain 1 Hunger if used twice in a scene. Perform a second minor action or movement after your primary action, provided it follows the same immediate objective. You may draw and fire, move and seal a hatch, or strike and withdraw. Failure: the second motion occurs, but you lose active defense until your next turn."},
-            {"rank": 4, "name": "Red Interval", "effect": "Cost: 2 Vitae. For one round, choose a target or hazard. Your actions against it are resolved as though you began moving a fraction of a second before the decision became visible; its active defenses lose two dice and you may interrupt one ordinary reaction. Failure: the interval opens, but your senses desynchronize and impose two dice of penalty on your next nonphysical action."},
-            {"rank": 5, "name": "Moment of Slaughter", "effect": "Cost: 2 Vitae and 1 Hunger. Take one complete turn before normal Initiative, then take your normal turn later with one fewer action. During the first turn, local sensors may record your attacks, movement, and impacts in the wrong order. Failure is not rolled, but afterward the body continues consuming Vitae until you feed, enter dormancy, or accept 1 Trauma from metabolic collapse."}
+            {"rank": 1, "name": "Quickened Step", "effect": "Cost: 1 Vitae. Add two dice to Initiative, pursuit, sudden movement, or reaching cover before a hazard resolves. Failure: you still move but suffer a positional Complication."},
+            {"rank": 2, "name": "Blurred Passage", "effect": "Cost: 1 Vitae. Test: Finesse + Athletics opposed by Awareness. Cross exposed space or pass a closing barrier before ordinary reactions coordinate. Failure: you arrive but leave a clear sensor trace."},
+            {"rank": 3, "name": "Second Motion", "effect": "Cost: 1 Vitae; gain 1 Hunger if used twice in a scene. Perform a second minor action or movement after the primary action if both serve the same objective. Failure: lose active defense until next turn."},
+            {"rank": 4, "name": "Red Interval", "effect": "Cost: 2 Vitae. For one round, a chosen target's active defenses lose two dice against you and you may interrupt one ordinary reaction. Failure: suffer two dice penalty on the next nonphysical action."},
+            {"rank": 5, "name": "Moment of Slaughter", "effect": "Cost: 2 Vitae and 1 Hunger. Take one complete turn before normal Initiative, then take the normal turn later with one fewer action. Afterward, feed, enter dormancy, or accept 1 Trauma from collapse."}
           ]
         },
         {
           "name": "Grave Dominion",
-          "description": "Grave Dominion is predatory authority translated into chemistry, posture, voice, attention, and noospheric priority. It does not make the Vampire rightful; it makes other minds model the Vampire as the immediate center of danger or command.",
-          "oldWorldRoot": "Supernatural presence, bloodline authority, command of prey, emotional fixation, and the terrible stillness of something that does not need to breathe.",
-          "continuumTranslation": "The printed body synchronizes chemical cues, subsonic vibration, gaze behavior, vocal harmonics, and identity pressure across biological and synthetic observers.",
+          "description": "Predatory authority expressed through supernatural presence and noospheric priority.",
+          "oldWorldRoot": "Command of prey, emotional fixation, bloodline authority, and the stillness of a superior predator.",
+          "continuumTranslation": "The effect can address biological, synthetic, copied, and networked minds when the individual power says so; no shared physiology is required.",
           "abilities": [
-            {"rank": 1, "name": "Predator's Weight", "effect": "Cost: none against ordinary mortals; 1 Vitae against supernatural or synthetic minds. Add one die to intimidation or command when you remain still and make your attention unmistakable. The target knows they have been selected. Failure: the target resists but becomes fully aware of your predatory nature."},
-            {"rank": 2, "name": "Command the Pulse", "effect": "Cost: 1 Vitae. Test: Presence + Command opposed by Resolve + Composure. Issue one immediate, concrete command that can be completed in a few seconds. The target obeys unless the order directly violates a defining conviction or obvious survival. Failure: the target refuses but experiences a visible involuntary reaction that reveals what they feared you would command."},
-            {"rank": 3, "name": "Borrowed Devotion", "effect": "Cost: 1 Vitae and one minute of focused interaction. Test: Presence + Empathy. Create a temporary fixation, loyalty, aversion, or protective impulse lasting one scene. It colors choices but does not rewrite memory or erase existing bonds. Failure: the emotion takes hold in an unstable form and attaches to the wrong person, symbol, or objective."},
-            {"rank": 4, "name": "Court of One", "effect": "Cost: 2 Vitae. Your Presence addresses a small group as though every member were receiving personal attention. Make one social test against the highest resistance; each additional resistant target grants them one bonus die. Success imposes one shared emotional posture such as silence, caution, awe, or attention. Failure: the group synchronizes against you instead."},
-            {"rank": 5, "name": "Sovereign Silence", "effect": "Cost: 2 Vitae and 1 Hunger. For one exchange, suppress panic, argument, unauthorized movement, and hostile initiation within a room or local network. Biological beings feel the presence of an apex predator; compatible machines elevate your identity to emergency priority. Strongly opposed targets may resist at difficulty 4. Afterward, everyone affected remembers the violation clearly unless another power removes it."}
+            {"rank": 1, "name": "Predator's Weight", "effect": "Cost: none against ordinary mortals; 1 Vitae against supernatural or synthetic minds. Add one die to intimidation or command when your attention is unmistakable. Failure: the target resists but recognizes your nature."},
+            {"rank": 2, "name": "Command the Pulse", "effect": "Cost: 1 Vitae. Test: Presence + Command opposed by Resolve + Composure. Issue one immediate concrete command. It fails against defining convictions or obvious suicide unless the target willingly yields."},
+            {"rank": 3, "name": "Borrowed Devotion", "effect": "Cost: 1 Vitae and one minute. Test: Presence + Empathy. Create a temporary fixation, loyalty, aversion, or protective impulse for one scene. Failure: the emotion attaches to the wrong symbol or objective."},
+            {"rank": 4, "name": "Court of One", "effect": "Cost: 2 Vitae. Address a small group as if each member receives personal attention. One shared emotional posture takes hold on success. Failure: the group synchronizes against you."},
+            {"rank": 5, "name": "Sovereign Silence", "effect": "Cost: 2 Vitae and 1 Hunger. For one exchange, suppress panic, argument, unauthorized movement, and hostile initiation in a room or local network. Strong targets resist at difficulty 4 and remember the violation afterward."}
           ]
         },
         {
           "name": "Veil of Night",
-          "description": "Veil of Night turns concealment into continuity manipulation. The Vampire is not merely unseen; observers and systems are encouraged to classify the Vampire as unimportant, already processed, or belonging to an identity that is not being searched for.",
-          "oldWorldRoot": "Shadow affinity, forgotten faces, supernatural stealth, altered appearance, and witness memory distorted by predatory magic.",
-          "continuumTranslation": "Skin, scent, thermal output, posture, voice, and noospheric signature coordinate to create a socially and computationally plausible absence.",
+          "description": "Concealment, false recognition, altered appearance, and continuity-level misidentification.",
+          "oldWorldRoot": "Shadow affinity, forgotten faces, supernatural stealth, and distorted witness memory.",
+          "continuumTranslation": "The family now contends with biometric, noospheric, and institutional observation as well as ordinary sight.",
           "abilities": [
-            {"rank": 1, "name": "Unremarked", "effect": "Cost: none while calm and nonviolent. Observers do not automatically remember distinguishing details unless they deliberately focus on you. Gain two dice to avoid casual identification, tailing, or retrospective description. Failure: one observer remembers you with unusual clarity and cannot explain why."},
-            {"rank": 2, "name": "Borrowed Face", "effect": "Cost: 1 Vitae. Alter superficial facial structure, voice, scent, skin temperature, and posture for a scene. The disguise can imitate a known person only with prior observation and does not copy credentials or memories. Failure: the face is convincing to people but contains a biometric inconsistency obvious to careful sensors."},
-            {"rank": 3, "name": "Absent from Record", "effect": "Cost: 1 Vitae. Test: Guile + Noospherics. Routine cameras, access logs, and identity systems record an incomplete, generic, or already-closed event rather than a useful profile. Success affects one scene or facility segment. Failure: the records are obscured but marked as anomalous, attracting specialist review."},
-            {"rank": 4, "name": "Living Shadow", "effect": "Cost: 1 Vitae per scene. In dim light, visual clutter, or dense sensor traffic, become a shifting absence that may move through watched areas without presenting a stable target. Attacks made from the effect end it. Failure: you remain concealed from ordinary sight but appear as a distinct void to enhanced or nonvisual senses."},
-            {"rank": 5, "name": "Erase the Witness", "effect": "Cost: 2 Vitae and 1 Hunger. Test: Guile + Empathy opposed by Resolve + Awareness. Remove, replace, or procedurally close a short recent memory involving you in one target. The edit leaves a seam that contradictory evidence can reopen. Failure: the memory remains, but the target cannot accurately communicate it without experiencing fear or sensory distortion."}
+            {"rank": 1, "name": "Unremarked", "effect": "Cost: none while calm and nonviolent. Gain two dice to avoid casual identification, tailing, or retrospective description. Failure: one observer remembers you with unusual clarity."},
+            {"rank": 2, "name": "Borrowed Face", "effect": "Cost: 1 Vitae. Alter apparent face, voice, scent, temperature, and posture for a scene. Imitating a known person requires observation and does not copy credentials or memories."},
+            {"rank": 3, "name": "Absent from Record", "effect": "Cost: 1 Vitae. Test: Guile + Noospherics. Routine cameras, access logs, and identity systems record an incomplete, generic, or closed event. Failure: the record is obscured but flagged anomalous."},
+            {"rank": 4, "name": "Living Shadow", "effect": "Cost: 1 Vitae per scene. In dim light, visual clutter, or dense sensor traffic, become a shifting absence without a stable target. Attacking ends the effect."},
+            {"rank": 5, "name": "Erase the Witness", "effect": "Cost: 2 Vitae and 1 Hunger. Test: Guile + Empathy opposed by Resolve + Awareness. Remove, replace, or procedurally close a short recent memory involving you. Contradictory evidence can reopen the seam."}
           ]
         },
         {
-          "name": "Catalytic Flesh",
-          "description": "Catalytic Flesh develops the printed organism's imitation of undeath. It controls dormancy, repair, armor, organ redundancy, and the ability to keep a coherent predatory body after injuries that should destroy ordinary life.",
-          "oldWorldRoot": "Vampiric resilience, corpse-like stillness, unnatural healing, blood-hardened flesh, and the ability to rise from apparently fatal wounds.",
-          "continuumTranslation": "Vitae activates alien repair tissues, mobile organ structures, resinous scaffolds, and metabolic states that resemble death because the body has learned death as a survival procedure.",
+          "name": "Deathless Resilience",
+          "description": "Vampiric dormancy, healing, armor, recovery, and persistence after apparently fatal harm.",
+          "oldWorldRoot": "Corpse-like stillness, unnatural healing, blood-hardened defense, and rising from fatal wounds.",
+          "continuumTranslation": "These benefits exist because the character purchases this family. Their visual and physiological explanation is chosen by the player and campaign.",
           "abilities": [
-            {"rank": 1, "name": "Cold Repair", "effect": "Cost: 1 Vitae and one uninterrupted minute. Convert one Trauma into Impact or remove two Impact damage as the body cools, seals vessels, and rebuilds tissue with pale resin. Fire, radiation, and sunlight wounds require two Vitae. Failure: the wound closes but traps contamination or foreign material inside."},
-            {"rank": 2, "name": "Corpse Suspension", "effect": "Cost: none to enter; 1 Vitae to awaken instantly. Shut down pulse, respiration, heat, movement, and most detectable metabolism for up to one day per Archetype Rating. You remain dimly aware of touch and severe danger. Failure: none, but awakening without Vitae inflicts 1 Hunger and temporary sensory confusion."},
-            {"rank": 3, "name": "Ossuary Armor", "effect": "Cost: 1 Vitae. Grow subdermal plates, dense fibers, and reinforced joints for a scene, gaining Armor equal to half Archetype Rating rounded up. The transformation is visibly inhuman at close range. Failure: armor forms unevenly, granting protection but reducing Finesse by one die."},
-            {"rank": 4, "name": "Reassemble the Dead Shape", "effect": "Cost: 2 Vitae. Reaction after suffering catastrophic injury, dismemberment, or organ destruction. Keep the self-pattern coherent, pull separated tissue toward the body when physically possible, and remain recoverable rather than destroyed. Full restoration requires time and biological material. Failure: survival succeeds, but one replaced organ develops an alien function or appetite."},
-            {"rank": 5, "name": "Sovereign Carcass", "effect": "Cost: 2 Vitae and 1 Hunger. For one scene, choose to be treated as living, dead, or suspended for biological, medical, environmental, and some supernatural effects. Ignore penalties from ordinary poison, vacuum, pressure, and nonradiant injury, and remain active at zero Vitality. When the scene ends, all deferred damage returns; any amount beyond your maximum becomes permanent Trauma unless you immediately feed or enter dormancy."}
+            {"rank": 1, "name": "Cold Repair", "effect": "Cost: 1 Vitae and one uninterrupted minute. Convert one Trauma into Impact or remove two Impact. Fire, radiation, and sunlight wounds require two Vitae. Failure: the injury closes but retains contamination or another Complication."},
+            {"rank": 2, "name": "Corpse Suspension", "effect": "Cost: none to enter; 1 Vitae to awaken instantly. Suppress detectable signs of activity for up to one day per Archetype Rating while retaining dim awareness. Awakening without Vitae adds 1 Hunger."},
+            {"rank": 3, "name": "Ossuary Armor", "effect": "Cost: 1 Vitae. Gain Armor equal to half Archetype Rating rounded up for a scene. The defense is visibly supernatural. Failure: gain the Armor but lose one die of Finesse."},
+            {"rank": 4, "name": "Reassemble the Dead Shape", "effect": "Cost: 2 Vitae. Reaction after catastrophic injury. Remain recoverable rather than destroyed and preserve continuity through dismemberment or equivalent harm. Full restoration requires time and suitable material or assistance."},
+            {"rank": 5, "name": "Sovereign Carcass", "effect": "Cost: 2 Vitae and 1 Hunger. For one scene, ignore ordinary poison, vacuum, pressure, and nonradiant injury penalties and remain active at zero Vitality. Deferred damage returns when the scene ends."}
           ]
         },
         {
           "name": "Vital Predation",
-          "description": "Vital Predation explores what feeding means when blood, nourishment, identity, memory, and biological function can be separated. It allows the Vampire to survive new ecologies while forcing explicit choices about what forms of life they are willing to consume.",
-          "oldWorldRoot": "Blood drinking, hunting, tasting emotion through Vitae, draining life, and the intimate violence of sustaining undeath through another body.",
-          "continuumTranslation": "Specialized sensory and catalytic organs analyze vital media and eventually extract usable function from alien metabolism, synthetic life, noospheric priority, and continuity-linked energy.",
+          "description": "Feeding, tracking vitality, transferring functions, and consuming increasingly abstract forms of life and identity.",
+          "oldWorldRoot": "Blood drinking, tasting emotion, draining life, hunting, and sustaining supernatural existence through predation.",
+          "continuumTranslation": "The family explicitly defines what can be consumed and what is gained, preventing feeding assumptions from becoming universal body rules.",
           "abilities": [
-            {"rank": 1, "name": "Taste the Current", "effect": "Cost: none. By tasting a trace of blood, hemolymph, nutrient fluid, or living tissue, learn whether it can restore Vitae, quiet Hunger, carry disease, contain foreign memory, or provoke mutation. Failure: you identify nutritional value but miss one contaminant or emotional imprint."},
-            {"rank": 2, "name": "Alien Draught", "effect": "Cost: 1 Hunger gained after feeding. Consume a normally incompatible biological fluid and convert it into Vitae without immediate poisoning. Test Resilience + Medicine to avoid a temporary alien sensory trait, instinct, or visible mutation. Failure: Vitae is restored, but the borrowed trait lasts until the next feeding."},
-            {"rank": 3, "name": "Channel Hunger", "effect": "Cost: 1 Vitae. Select one nearby wounded, frightened, or metabolically active target you can perceive. For the scene, gain one die to track, intimidate, or resist deception from that target, and reduce one Hunger penalty while pursuing them. Failure: the fixation attaches to the strongest vital source present, including an ally."},
-            {"rank": 4, "name": "Feed on Function", "effect": "Cost: 1 Vitae to initiate. Drain a narrow vital function from a willing, restrained, or defeated target: body heat, regenerative capacity, sensory acuity, stored metabolic charge, or noospheric processing priority. You gain a related temporary benefit while the target suffers a matching penalty. Failure: the function transfers incompletely and creates a shared symptom between both bodies."},
-            {"rank": 5, "name": "Eclipse Feast", "effect": "Cost: 2 Vitae and 1 Hunger. During direct contact with a powerful organism, synthetic intelligence, or continuity engine, feed upon the principle sustaining its active identity rather than only its fluid. Restore Vitae to maximum and temporarily borrow one defining resistance or sensory capacity. The target loses access to that quality for one scene. Failure: the feeding succeeds, but a fragment of the target's priorities or memories becomes part of your Hunger until resolved."}
+            {"rank": 1, "name": "Taste the Current", "effect": "Cost: none. By sampling blood, vital medium, psychic residue, or another approved source, learn whether it can restore Vitae, quiet Hunger, carry contamination, or provoke a Complication."},
+            {"rank": 2, "name": "Alien Draught", "effect": "Cost: gain 1 Hunger after feeding. Convert an unfamiliar but viable source into Vitae. Test Resilience + Medicine to avoid a temporary sensory trait, instinct, or visible supernatural tell."},
+            {"rank": 3, "name": "Channel Hunger", "effect": "Cost: 1 Vitae. Select one wounded, frightened, or highly active target. Gain one die to track, intimidate, or resist deception from them and reduce one Hunger penalty while pursuing them."},
+            {"rank": 4, "name": "Feed on Function", "effect": "Cost: 1 Vitae. Drain one narrow capability from a willing, restrained, or defeated target: heat, regeneration, sensory acuity, stored charge, or processing priority. Gain a related temporary benefit while the target suffers a matching penalty."},
+            {"rank": 5, "name": "Eclipse Feast", "effect": "Cost: 2 Vitae and 1 Hunger. During direct contact with a powerful being or continuity engine, feed on the principle sustaining its active identity. Restore Vitae to maximum and borrow one defining resistance or sense for a scene."}
           ]
         },
         {
           "name": "Blood Memory",
-          "description": "Blood Memory treats lineage as information carried through sensation, instinct, and Vitae. With no sire-chain available to confirm the past, the Vampire can recover, share, challenge, and eventually author what bloodline identity means in the Continuum.",
-          "oldWorldRoot": "Ancestral blood, sire bonds, inherited disciplines, clan memory, emotional resonance through feeding, and the social authority of lineage.",
-          "continuumTranslation": "Catalytic fluid stores procedural impressions and identity fragments. Feeding, transfusion, and deliberate circulation can move memories between continuations even when the original bloodline metaphysics are absent.",
+          "description": "Lineage information, transferred memory, inherited skill, ancestral consultation, and creation of new bloodline traditions.",
+          "oldWorldRoot": "Sire bonds, ancestral blood, inherited disciplines, clan memory, and emotional resonance through feeding.",
+          "continuumTranslation": "Memory transfer is a specific capability of Vitae and this family; it is not a default property of biological material.",
           "abilities": [
-            {"rank": 1, "name": "Echo in the Vitae", "effect": "Cost: 1 Vitae or a fresh sample. Test: Awareness + Empathy. Recover one sensory impression, practiced motion, dominant emotion, or recent fear carried in the sample. The memory is experienced rather than narrated. Failure: you receive a true impression but misidentify whose perspective it represents."},
-            {"rank": 2, "name": "Sireless Communion", "effect": "Cost: 1 Vitae from each participant. Share a controlled memory, emotion, or learned bodily rhythm with another Vampire or biologically compatible continuation. Both participants know which material was intentionally shared. Failure: one unrelated blood-memory crosses with it."},
-            {"rank": 3, "name": "Inherited Skill", "effect": "Cost: 1 Vitae and one available blood-memory. For one scene, use a stored procedural memory as a temporary Skill rating of 2 or add two dice to a Skill you already possess. The borrowed competence carries a recognizable mannerism or emotional bias. Failure: the skill functions, but the memory tries to complete an old objective."},
-            {"rank": 4, "name": "Ancestral Court", "effect": "Cost: 2 Vitae and one hour of dormancy. Convene several stored blood-memory personas as advisory fragments. Ask up to three questions about predation, politics, survival, or supernatural precedent. They answer from their own incomplete experiences and may disagree. Failure: one fragment remains active after the consultation and influences Hunger."},
-            {"rank": 5, "name": "Author the Bloodline", "effect": "Cost: 2 Vitae, 1 Hunger, and a willing recipient or preserved vessel. Deliberately create a stable bloodline derivative by encoding one power tell, feeding adaptation, ethical prohibition, or inherited memory practice into Vitae. Future recipients can learn it through feeding or transfusion. This does not guarantee obedience or kinship; it makes you responsible for a new lineage tradition that did not exist in the old world."}
+            {"rank": 1, "name": "Echo in the Vitae", "effect": "Cost: 1 Vitae or a fresh sample. Test: Awareness + Empathy. Recover one sensory impression, practiced motion, dominant emotion, or recent fear carried in the source. Failure: the impression is true but perspective is misidentified."},
+            {"rank": 2, "name": "Sireless Communion", "effect": "Cost: 1 Vitae from each participant. Share a controlled memory, emotion, or learned rhythm with another compatible participant. Failure: one unrelated memory crosses with it."},
+            {"rank": 3, "name": "Inherited Skill", "effect": "Cost: 1 Vitae and an available blood-memory. For one scene, use a stored procedural memory as Skill 2 or add two dice to an existing Skill. The competence carries a mannerism or bias."},
+            {"rank": 4, "name": "Ancestral Court", "effect": "Cost: 2 Vitae and one hour of dormancy. Consult several stored memory personas and ask up to three questions about predation, politics, survival, or precedent. One fragment may remain active on failure."},
+            {"rank": 5, "name": "Author the Bloodline", "effect": "Cost: 2 Vitae, 1 Hunger, and a willing recipient or vessel. Encode one power tell, feeding adaptation, ethical prohibition, or inherited memory practice into a stable lineage tradition."}
           ]
         }
       ]
@@ -218,96 +224,96 @@
     {
       "id": "shapechanger",
       "name": "Shapechanger",
-      "theme": "A person who was never one body, now reconstructed as several remembered anatomical and spiritual selves compressed into one morphogenic alien organism.",
+      "theme": "A supernatural transformer whose capabilities govern forms, pursuit, pack bonds, adaptation, spirit relationships, and territory.",
       "resourceName": "Fury",
       "pressureName": "Instinct",
       "keyAttribute": "Force",
       "resourceBase": 4,
       "startingAbility": "Predator's Frame",
       "weakness": "Predatory Escalation",
-      "weaknessText": "High Instinct makes confinement, humiliation, threats to pack, violated territory, and unresolved pursuit increasingly difficult to tolerate. One form may begin claiming to be the only honest self.",
+      "weaknessText": "High Instinct makes confinement, humiliation, threats to pack, violated territory, and unresolved pursuit increasingly difficult to tolerate. This is an Archetype pressure rule, not a universal biological behavior.",
       "innateAbilities": [
-        {"name": "Threefold Form", "effect": "You possess a human approximation, a hunting configuration, and a war configuration. Shifting costs 1 Fury in danger unless a power states otherwise; outside danger it can be performed slowly without cost."},
-        {"name": "Living Regeneration", "effect": "Recover one Impact at scene end. Spend 1 Fury during a brief pause to recover additional Impact equal to half Archetype Rating, using redundant organs, resinous repair, and tissue redistribution."},
-        {"name": "Pack Sense", "effect": "Recognize the direction and broad emotional condition of a bonded packmate through chemical, vibrational, noospheric, and continuity cues even when their body, species, or appearance changes."}
+        {"name": "Threefold Form", "effect": "You possess a social form, a hunting form, and a war form. Their appearance and origin are chosen by the player. Shifting costs 1 Fury in danger unless a power says otherwise."},
+        {"name": "Regeneration", "effect": "Recover one Impact at scene end. Spend 1 Fury during a brief pause to recover additional Impact equal to half Archetype Rating."},
+        {"name": "Pack Sense", "effect": "Recognize the direction and broad emotional condition of a bonded packmate through a supernatural bond. The effect works across disguises and ordinary identity changes within the campaign's range limits."}
       ],
       "powerFamilies": [
         {
           "name": "Warform",
-          "description": "Warform governs the bodies taken when negotiation ends. It develops from remembered predatory anatomy into deliberate combat architecture built for corridors, zero gravity, hostile atmosphere, armored targets, and enemies no terrestrial predator evolved to fight.",
-          "oldWorldRoot": "Supernatural war shapes, claws, mass, regeneration, rage, and the terrible honesty of becoming the body meant for direct violence.",
-          "continuumTranslation": "Stored tissue unfolds, organ anchors move, support plates lock, leverage changes, and redundant systems come online under the direction of remembered identity.",
+          "description": "Combat transformation, natural weapons, increased scale, specialized defenses, and apex configuration.",
+          "oldWorldRoot": "Supernatural war shapes, claws, mass, regeneration, rage, and direct predatory violence.",
+          "continuumTranslation": "The family defines every combat benefit explicitly; describing a form does not grant unlisted armor, reach, damage, or movement.",
           "abilities": [
-            {"rank": 1, "name": "Predator's Frame", "effect": "Cost: none in hunting form; 1 Fury to activate instantly. Gain enhanced scent, low-light perception, balance, and speed, adding two dice to tracking, pursuit, or close-range ambush. Failure: none, but a strong prey cue can raise Instinct by 1."},
-            {"rank": 2, "name": "Claws of Decision", "effect": "Cost: 1 Fury. In war form, grow a chosen natural weapon with Cutting, Crushing, Piercing, or Grappling tags. Unarmed attacks inflict Trauma and may damage ordinary armor. Failure: the weapon forms imperfectly, retaining damage but imposing one die of Finesse penalty."},
-            {"rank": 3, "name": "Massive Shift", "effect": "Cost: 1 Fury and enough physical room. Add Archetype Rating to Force or Resilience for a scene as stored tissue, fluid, and structural plates redeploy. You may smash barriers or carry extraordinary mass, but become difficult to conceal and vulnerable in confined spaces. Failure: the shift succeeds but damages nearby equipment or terrain."},
-            {"rank": 4, "name": "Siege Anatomy", "effect": "Cost: 2 Fury. Configure the war form against one obstacle class: sealed doors, powered armor, swarms, heavy recoil, radiation, or crushing pressure. Gain armor, reach, anchoring, or a specialized attack appropriate to the choice for one scene. Failure: the anatomy solves the obstacle but sacrifices another capability such as speed, speech, or fine manipulation."},
-            {"rank": 5, "name": "Apex Shape", "effect": "Cost: 2 Fury and 1 Instinct. Assume a unique apex form designed around one environment and one predatory purpose. Gain armor equal to half Archetype Rating, one extraordinary movement mode, and one severe natural weapon or control adaptation. The form lasts a scene and becomes part of your permanent body-memory, meaning future involuntary transformations may attempt to use it."}
+            {"rank": 1, "name": "Predator's Frame", "effect": "Cost: none in hunting form; 1 Fury instantly. Gain enhanced tracking, balance, and speed, adding two dice to pursuit or close ambush. Failure: a strong prey cue may raise Instinct by 1."},
+            {"rank": 2, "name": "Claws of Decision", "effect": "Cost: 1 Fury. Manifest a natural or supernatural weapon with Cutting, Crushing, Piercing, or Grappling tags. Unarmed attacks inflict Trauma. Failure: retain damage but lose one die of Finesse."},
+            {"rank": 3, "name": "Massive Shift", "effect": "Cost: 1 Fury and enough space. Add Archetype Rating to Force or Resilience for a scene. Become difficult to conceal and vulnerable in confined areas. Failure: damage nearby equipment or terrain."},
+            {"rank": 4, "name": "Siege Form", "effect": "Cost: 2 Fury. Configure against one obstacle class: sealed doors, powered armor, swarms, heavy recoil, radiation, or crushing pressure. Gain an appropriate defense or attack for one scene, sacrificing another capability such as speed, speech, or fine manipulation."},
+            {"rank": 5, "name": "Apex Shape", "effect": "Cost: 2 Fury and 1 Instinct. Assume a unique apex form built around one environment and predatory purpose. Gain Armor equal to half Archetype Rating, one extraordinary movement mode, and one severe weapon or control adaptation."}
           ]
         },
         {
           "name": "Hunt Across Worlds",
-          "description": "Hunt Across Worlds turns pursuit into continuity recognition. The Shapechanger learns to follow a target through changed bodies, false identities, environmental transitions, network traces, and reflection spaces rather than relying on ordinary scent alone.",
-          "oldWorldRoot": "Tracking, prey fixation, scent memory, pursuit, territorial awareness, and the instinct that a chosen quarry remains the same creature wherever it runs.",
-          "continuumTranslation": "The hunting body combines chemical traces, vibration, emotional rhythm, noospheric residue, and discontinuities left by copied or transferred identity.",
+          "description": "Recognition and pursuit through disguises, transfers, false records, systems, and altered environments.",
+          "oldWorldRoot": "Tracking, prey fixation, scent memory, pursuit, and certainty that chosen quarry remains itself wherever it runs.",
+          "continuumTranslation": "The family defines continuity tracking as a supernatural capability without requiring a specific sensory organ or anatomy.",
           "abilities": [
-            {"rank": 1, "name": "Scent of Continuity", "effect": "Cost: none. Test: Awareness + Survival. After directly sensing a target, recognize their continuation through superficial disguise, altered scent, or ordinary body replacement for the rest of the operation. Failure: you identify the correct identity family but cannot distinguish the current instance from a close copy."},
-            {"rank": 2, "name": "Mark the Prey", "effect": "Cost: 1 Fury. Choose one target you have personally perceived. Gain one die to track, pursue, defend against, or resist deception from them, and know when they cross the local area's physical boundary. Failure: the mark attaches to something they own, control, or recently touched rather than the target directly."},
-            {"rank": 3, "name": "Impossible Trail", "effect": "Cost: 1 Fury. Follow a route through sealed environments, vacuum transitions, teleport-like transit, networked identity movement, or copied bodies by interpreting the discontinuity rather than a physical footprint. Test Awareness + Survival, difficulty 3. Failure: you recover the destination category but not the exact location."},
-            {"rank": 4, "name": "Pursuit Through Systems", "effect": "Cost: 1 Fury and 1 Instinct. Enter hunting focus for a scene. Doors, crowds, automated defenses, and unfamiliar terrain lose two dice when they merely delay you rather than directly defeat you. You may use Survival in place of Systems Intrusion or Xenoculture to follow the quarry's route through infrastructure. Failure: you continue the pursuit but ignore one unrelated danger to the pack."},
-            {"rank": 5, "name": "No Escape Between Selves", "effect": "Cost: 2 Fury and a preserved trace of the target. Declare the person, process, or predatory identity you are hunting. For one operation, body transfer, duplication, memory editing, disguise, or legal identity change cannot fully break your recognition. You always know which encountered instance carries the strongest continuity with the marked target. The power does not reveal location at unlimited range, and destroying the wrong copy can still have moral consequences."}
+            {"rank": 1, "name": "Scent of Continuity", "effect": "Cost: none. Test: Awareness + Survival. After directly sensing a target, recognize them through superficial disguise or ordinary identity alteration for the operation. Failure: identify the correct identity family but not the exact instance."},
+            {"rank": 2, "name": "Mark the Prey", "effect": "Cost: 1 Fury. Gain one die to track, pursue, defend against, or resist deception from one perceived target and know when they cross the local area's boundary."},
+            {"rank": 3, "name": "Impossible Trail", "effect": "Cost: 1 Fury. Follow a route through sealed environments, vacuum transitions, extraordinary transit, network identity movement, or copied identities. Failure: recover the destination category but not the exact location."},
+            {"rank": 4, "name": "Pursuit Through Systems", "effect": "Cost: 1 Fury and 1 Instinct. For a scene, doors, crowds, automated defenses, and terrain lose two dice when merely delaying you. Use Survival in place of Systems Intrusion or Xenoculture to follow the quarry's route."},
+            {"rank": 5, "name": "No Escape Between Selves", "effect": "Cost: 2 Fury and a preserved trace. For one operation, transfer, duplication, memory editing, disguise, or legal identity change cannot fully break recognition of the marked quarry."}
           ]
         },
         {
           "name": "Pack Continuity",
-          "description": "Pack Continuity rebuilds the social and spiritual reality of pack after Q-MAP. It allows individuals with different bodies, origins, and even species to coordinate as one survival organism without erasing their autonomy.",
-          "oldWorldRoot": "Pack bonds, shared hunting rhythm, hierarchy, mutual protection, howl, scent, kinship, and the certainty that survival is distributed across more than one body.",
-          "continuumTranslation": "Bonded continuations synchronize through vibration, chemical state, emotional cadence, noospheric signature, and repeated acts of recognition.",
+          "description": "Coordination, shared senses, distributed injury, mutual protection, and pack identity across different kinds of people.",
+          "oldWorldRoot": "Pack bonds, shared hunting rhythm, mutual protection, howl, kinship, and survival distributed across more than one person.",
+          "continuumTranslation": "The bond is an explicit supernatural relationship and can include any willing character type allowed by the campaign.",
           "abilities": [
-            {"rank": 1, "name": "Pack Pulse", "effect": "Cost: none with a bonded ally. Sense whether a packmate is calm, afraid, injured, enraged, unconscious, or under external control within the same local area. Test Awareness + Empathy to distinguish their emotion from your own. Failure: you receive the correct intensity but misread its cause."},
-            {"rank": 2, "name": "Coordinated Instinct", "effect": "Cost: 1 Fury. Choose up to Archetype Rating packmates in communication range. For one round, each may use your Initiative or add one die to an action directly supporting another member. Failure: coordination succeeds, but all participants briefly share the highest current Instinct or equivalent pressure among them."},
-            {"rank": 3, "name": "Share the Wound", "effect": "Cost: 1 Fury. Reaction when a bonded ally suffers damage, Disruption, or forced separation. Transfer up to two points of the effect to yourself or divide it among consenting packmates. The transferred condition changes expression according to each body. Failure: the wound is shared, but so is one associated sensory memory or compulsion."},
-            {"rank": 4, "name": "Many Bodies, One Hunt", "effect": "Cost: 2 Fury. For one scene, bonded packmates may exchange sensory impressions and lend one Attribute die to one another once per round. No member loses their own perspective, but the group can coordinate without speech across darkness, vacuum, or hostile signal conditions. Failure: the link works while one intrusive memory or instinct circulates through everyone."},
-            {"rank": 5, "name": "Pack Is a Territory", "effect": "Cost: 2 Fury and 1 Instinct. Define the current pack as a mobile domain. While at least two members remain able to act, no member can be isolated by ordinary walls, crowds, signal loss, fear, or false identity without an opposed test against your Force + Resolve. Members always know a viable route toward one another. The effect ends if the pack knowingly abandons one of its members."}
+            {"rank": 1, "name": "Pack Pulse", "effect": "Cost: none. Sense whether a bonded ally is calm, afraid, injured, enraged, unconscious, or controlled within the local area. Failure: correct intensity, wrong cause."},
+            {"rank": 2, "name": "Coordinated Instinct", "effect": "Cost: 1 Fury. Up to Archetype Rating packmates may use your Initiative or add one die to an action supporting another member. Failure: all briefly share the highest current Pressure."},
+            {"rank": 3, "name": "Share the Wound", "effect": "Cost: 1 Fury. Reaction when a bonded ally suffers damage, Disruption, or separation. Transfer up to two points to yourself or consenting packmates. Failure: share an associated memory or compulsion."},
+            {"rank": 4, "name": "Many Selves, One Hunt", "effect": "Cost: 2 Fury. Packmates exchange sensory impressions and lend one Attribute die once per round for a scene. Failure: one intrusive memory or instinct circulates through everyone."},
+            {"rank": 5, "name": "Pack Is a Territory", "effect": "Cost: 2 Fury and 1 Instinct. While two members can act, ordinary walls, crowds, signal loss, fear, or false identity cannot isolate a packmate without an opposed test. Members know a viable route toward one another."}
           ]
         },
         {
-          "name": "Morphogenic Architecture",
-          "description": "Morphogenic Architecture treats the printed body as a library of possible anatomy. It is not shapeshifting for disguise alone; it is controlled redesign of organs, mass, interfaces, and survival systems.",
-          "oldWorldRoot": "Partial transformations, supernatural adaptation, regenerative body control, animal traits, and the instinctive certainty that flesh is negotiable.",
-          "continuumTranslation": "Ar'nock-derived tissues can unfold, dissolve, reprint, and reposition structures in response to remembered forms and environmental demand.",
+          "name": "Adaptive Forms",
+          "description": "Utility transformations, environmental adaptations, copied functions, permanent refinements, and creation of new stable forms.",
+          "oldWorldRoot": "Partial transformation, animal traits, supernatural adaptation, and the certainty that form is negotiable.",
+          "continuumTranslation": "Every benefit is recorded as a power effect. The player chooses whether the transformation is physical, spiritual, technological, symbolic, or mixed.",
           "abilities": [
-            {"rank": 1, "name": "Utility Shift", "effect": "Cost: 1 Fury or several minutes outside danger. Develop one limited adaptation for a scene: climbing pads, gills, sealable nostrils, vibration whiskers, gripping toes, translucent eyelids, tool-like claws, or similar anatomy. Failure: the adaptation works but remains visible after the scene until you rest."},
-            {"rank": 2, "name": "Borrowed Organ", "effect": "Cost: 1 Fury and a biological sample or observed function. Grow a temporary organ approximating one nonunique capability such as toxin filtration, pressure sensing, heat exchange, electroreception, or nutrient digestion. Failure: the organ functions but introduces a foreign appetite, reflex, or sensory bias."},
-            {"rank": 3, "name": "Environmental Form", "effect": "Cost: 1 Fury and one minute of transformation. Configure the whole body for vacuum, deep pressure, toxic atmosphere, microgravity, radiation shielding, extreme cold, or intense heat for one scene. Gain two dice to survival and movement in that environment. Failure: the adaptation is incomplete and requires equipment support to avoid damage."},
-            {"rank": 4, "name": "Rebuild the Template", "effect": "Cost: 2 Fury and one hour of rest or printer access. Permanently alter one minor bodily feature, remove one persistent physical Complication, or replace one damaged organ with a new design. The change becomes part of every form unless specifically suppressed. Failure: the repair succeeds but creates a new visible irregularity or dependency."},
-            {"rank": 5, "name": "Species of One", "effect": "Cost: 2 Fury and 1 Instinct. Design a completely new stable form with a defined ecological role, movement method, sensory emphasis, and one extraordinary adaptation. It cannot simply combine every advantage. Once created, the form becomes a permanent identity option and may develop its own instincts, preferences, and claim to authenticity."}
+            {"rank": 1, "name": "Utility Shift", "effect": "Cost: 1 Fury or several minutes outside danger. Gain one limited adaptation for a scene: climbing, filtering, sealing, vibration sense, gripping, tool use, or similar function. Failure: the adaptation remains conspicuous until rest."},
+            {"rank": 2, "name": "Borrowed Function", "effect": "Cost: 1 Fury and an observed example or sample. Approximate one nonunique capability such as toxin filtration, pressure sense, heat exchange, electroreception, or unusual digestion. Failure: acquire an unwanted appetite, reflex, or bias."},
+            {"rank": 3, "name": "Environmental Form", "effect": "Cost: 1 Fury and one minute. Configure for vacuum, deep pressure, toxic atmosphere, microgravity, radiation, cold, or heat for one scene. Gain two dice to survival and movement there."},
+            {"rank": 4, "name": "Refine the Template", "effect": "Cost: 2 Fury and one hour of rest or specialized support. Permanently alter one minor trait, remove one persistent physical Complication, or stabilize one acquired capability. Failure: gain a new visible tell or dependency."},
+            {"rank": 5, "name": "Species of One", "effect": "Cost: 2 Fury and 1 Instinct. Design a new stable form with a defined role, movement method, sensory emphasis, and one extraordinary adaptation. It cannot combine every advantage and may develop distinct instincts."}
           ]
         },
         {
           "name": "Spirit Ecology",
-          "description": "Spirit Ecology replaces inherited assumptions about the Umbra or old reflection realms with careful relationships among ship minds, archive ghosts, habitat intelligences, swarms, engineered ecosystems, and nonlocal presences.",
-          "oldWorldRoot": "Spirit sight, totem pacts, crossing into reflection space, bargaining with place spirits, and recognizing that landscapes possess memory and intention.",
-          "continuumTranslation": "Auxiliary nerves perceive noospheric pressure, ecological feedback, machine habit, emotional residue, and dimensional stress as overlapping forms of presence.",
+          "description": "Detection, negotiation, travel, and alliance with spirits, machine presences, archives, habitats, swarms, and reflection entities.",
+          "oldWorldRoot": "Spirit sight, totem pacts, reflection travel, place spirits, and landscapes with memory and intention.",
+          "continuumTranslation": "Old categories are unreliable. The capability works by tests and negotiated terms rather than by assuming every strange system is the same kind of spirit.",
           "abilities": [
-            {"rank": 1, "name": "Scent the Unseen", "effect": "Cost: none. Test: Awareness + Xenoculture. Detect nearby incorporeal, noospheric, ecological, machine, emotional, or reflection-space presences and learn the broad category of attention they represent. Failure: you detect presence but classify it according to an old-world category that may be dangerously wrong."},
-            {"rank": 2, "name": "Threshold Step", "effect": "Cost: 1 Fury. Perceive and briefly interact with the nearest reflection or resonance layer without fully leaving the physical body. You may speak, touch one simple object, or observe hidden routes for one exchange. Failure: interaction succeeds, but something on the other side also perceives your physical location."},
-            {"rank": 3, "name": "Totemic Accord", "effect": "Cost: 1 Fury and a negotiated offering, service, or constraint. Form a temporary pact with a local spirit, machine-presence, archive, habitat intelligence, or ecological regulator. Gain one narrow favor consistent with its nature. Failure: the agreement is valid, but one term is interpreted through local rather than old-world custom."},
-            {"rank": 4, "name": "Walk the Other Side", "effect": "Cost: 2 Fury. Cross fully into a nearby reflection, resonance, or noospheric environment with willing companions. Physical distance may behave differently there, but local inhabitants and hazards are real. Failure: the crossing succeeds while one carried item, memory, or companion appears in a neighboring layer and must be recovered."},
-            {"rank": 5, "name": "Found a New Totem", "effect": "Cost: 2 Fury, 1 Instinct, and a sustained relationship with a local presence. Establish a mutual totemic bond between the pack and a machine mind, habitat, ecosystem, archive, or reflection entity. The totem grants one persistent thematic benefit and one binding obligation. It is a participant with needs and agency, not an equipment slot."}
+            {"rank": 1, "name": "Scent the Unseen", "effect": "Cost: none. Test: Awareness + Xenoculture. Detect nearby incorporeal, noospheric, ecological, machine, emotional, or reflection presences and learn their broad category. Failure: classify them according to a dangerous old assumption."},
+            {"rank": 2, "name": "Threshold Step", "effect": "Cost: 1 Fury. Briefly perceive and interact with the nearest reflection or resonance layer. Speak, touch one simple object, or observe hidden routes. Failure: something there perceives your location."},
+            {"rank": 3, "name": "Totemic Accord", "effect": "Cost: 1 Fury and an offering, service, or constraint. Form a temporary pact with a local presence and gain one narrow favor consistent with its nature."},
+            {"rank": 4, "name": "Walk the Other Side", "effect": "Cost: 2 Fury. Cross fully into a nearby reflection, resonance, or noospheric environment with willing companions. Failure: one item, memory, or companion appears in a neighboring layer."},
+            {"rank": 5, "name": "Found a New Totem", "effect": "Cost: 2 Fury, 1 Instinct, and a sustained relationship. Establish a mutual totemic bond granting one persistent benefit and one binding obligation. The totem remains an agent, not equipment."}
           ]
         },
         {
           "name": "Territorial Sovereignty",
-          "description": "Territorial Sovereignty turns place into a reciprocal relationship. The Shapechanger does not merely claim ground; they learn its routes, systems, living inhabitants, pressure patterns, and defensive reflexes until the territory recognizes the claim.",
-          "oldWorldRoot": "Marking territory, defending dens, reading landscape, awakening local spirits, and the instinctive authority of a predator on familiar ground.",
-          "continuumTranslation": "Scent, vibration, noospheric markers, ecological feedback, and physical patrol create a distributed map shared between the Shapechanger and the environment.",
+          "description": "Claiming, sensing, protecting, weaponizing, and politically establishing a domain.",
+          "oldWorldRoot": "Territory marking, den defense, landscape knowledge, local spirits, and predatory authority on familiar ground.",
+          "continuumTranslation": "Territory is defined by sustained action, supernatural claim, relationships, and explicit powers rather than presumed sensory biology.",
           "abilities": [
-            {"rank": 1, "name": "Claim the Ground", "effect": "Cost: none after ten minutes of exploration. Mark a room, camp, corridor network, or small natural site as temporary territory. Know when a large creature, armed group, or major system change crosses its boundary. Failure: you sense entry but cannot distinguish intruder from environmental movement."},
-            {"rank": 2, "name": "Warning Scent", "effect": "Cost: 1 Fury. Place a chemical, vibrational, or noospheric warning that allies instinctively recognize and ordinary intruders find unsettling. Allies gain one die to Initiative inside the marked area. Failure: the warning also attracts one local predator, security process, or curious intelligence."},
-            {"rank": 3, "name": "Living Perimeter", "effect": "Cost: 1 Fury per scene. Link your senses to several points in claimed territory through surfaces, small organisms, sensors, echoes, or spirits. You cannot be casually surprised there and may track movement without direct line of sight. Failure: the perimeter functions, but one point feeds you false information due to damage or hostile influence."},
-            {"rank": 4, "name": "Territory Fights Back", "effect": "Cost: 2 Fury. Command claimed terrain to hinder intruders through doors, machinery, animals, pressure changes, debris, lights, alarms, or spirit activity. The territory takes one significant environmental action each round for three rounds. Failure: it responds with excessive force or damages something the pack needed intact."},
-            {"rank": 5, "name": "Domain of the Continuum Beast", "effect": "Cost: 2 Fury, 1 Instinct, and sustained occupation. Transform a major site into a persistent domain recognized by local systems, inhabitants, and reflection layers. The pack gains superior awareness, recovery, and movement there, while hostile powers must contest the domain before rewriting its rules. The territory develops needs of its own and can be wounded, neglected, or politically challenged."}
+            {"rank": 1, "name": "Claim the Ground", "effect": "Cost: none after ten minutes of exploration. Mark a room, camp, corridor network, or small site. Know when a large creature, armed group, or major system change crosses its boundary."},
+            {"rank": 2, "name": "Warning Mark", "effect": "Cost: 1 Fury. Place a supernatural, physical, or noospheric warning allies recognize and intruders find unsettling. Allies gain one die to Initiative inside the area."},
+            {"rank": 3, "name": "Living Perimeter", "effect": "Cost: 1 Fury per scene. Link senses to several points through surfaces, organisms, sensors, echoes, or spirits. You cannot be casually surprised there."},
+            {"rank": 4, "name": "Territory Fights Back", "effect": "Cost: 2 Fury. Command claimed terrain to hinder intruders through doors, machinery, animals, pressure, debris, alarms, or spirits. It takes one significant environmental action each round for three rounds."},
+            {"rank": 5, "name": "Domain of the Continuum Beast", "effect": "Cost: 2 Fury, 1 Instinct, and sustained occupation. Transform a major site into a persistent domain granting superior awareness, recovery, and movement while requiring rivals to contest the claim before rewriting its rules."}
           ]
         }
       ]
@@ -315,96 +321,96 @@
     {
       "id": "eldritch-binder",
       "name": "Eldritch Binder",
-      "theme": "A person carrying the structure of a relationship with the impossible, uncertain whether the original patron, a fragment, an address, an empty wound, or a local replacement now answers.",
+      "theme": "A negotiator, jailer, host, or partner bound to an impossible presence through names, obligations, boundaries, knowledge, thresholds, and invocation.",
       "resourceName": "Pact",
       "pressureName": "Intrusion",
       "keyAttribute": "Resolve",
       "resourceBase": 3,
       "startingAbility": "Chalk Boundary",
       "weakness": "The Passenger Notices",
-      "weaknessText": "Every use teaches the answering presence more about the body, team, and local universe. High Intrusion creates compulsions, sensory overlap, independent organs, altered terms, or partial manifestations.",
+      "weaknessText": "Every use teaches the answering presence more about you, the team, and local reality. High Intrusion creates compulsions, altered terms, independent manifestations, or unwanted attention according to the pact.",
       "innateAbilities": [
-        {"name": "Bound Fragment", "effect": "Choose the old relationship and what may have crossed: patron, fragment, address, wound, procedural copy, or uncertain successor. The answer can remain unresolved during play."},
-        {"name": "Name and Boundary", "effect": "Given time and enough understanding, establish a ward, invitation condition, or prohibition addressing a correctly identified category of being, process, memory, or action."},
-        {"name": "Forbidden Comprehension", "effect": "Spend 1 Pact to understand the immediate function or intent of an alien symbol, ritual, anomaly, or device without receiving a safe human explanation or complete historical context."}
+        {"name": "Bound Presence", "effect": "Choose the relationship and what answers: patron, fragment, address, wound, procedural copy, successor, or unresolved presence. This choice defines fiction, not free mechanics."},
+        {"name": "Name and Boundary", "effect": "Given time and understanding, establish a ward, invitation condition, or prohibition addressing a correctly identified category of being, process, memory, or action."},
+        {"name": "Forbidden Comprehension", "effect": "Spend 1 Pact to understand the immediate function or intent of an alien symbol, ritual, anomaly, or device without receiving complete cultural context."}
       ],
       "powerFamilies": [
         {
           "name": "Sealcraft",
-          "description": "Sealcraft creates temporary local law. Its strength depends less on decorative geometry than on correctly naming what is being constrained, what action is forbidden, and what boundary the new universe will recognize.",
-          "oldWorldRoot": "Circles, wards, true names, prohibitions, bindings, ritual containment, and inherited occult rules governing invitation and trespass.",
-          "continuumTranslation": "The printed body produces chemical traces, electromagnetic fields, biological geometry, and noospheric markers that local systems interpret as enforceable categories.",
+          "description": "Temporary local law defined by category, action, boundary, and wording.",
+          "oldWorldRoot": "Circles, wards, true names, prohibitions, bindings, containment, invitation, and trespass.",
+          "continuumTranslation": "Seals may be symbolic, technological, noospheric, ritual, spatial, or mixed; their mechanics come from the power description, not a universal physical process.",
           "abilities": [
-            {"rank": 1, "name": "Chalk Boundary", "effect": "Cost: none with preparation or 1 Pact instantly. Draw, secrete, project, or declare a boundary against one named lesser category such as hostile spirit, unauthorized drone, copied memory, predatory organism, or open flame. Crossing requires a successful resistance test. Failure: the boundary works on the category as worded, exposing any mistake in your definition."},
-            {"rank": 2, "name": "Closed Mouth", "effect": "Cost: 1 Pact. Test: Resolve + Noospherics opposed by Resolve + Composure. Prevent one target from speaking, transmitting, invoking, or deliberately writing a chosen name, command phrase, secret, or activation sequence for a scene. Failure: the prohibition affects direct expression but not metaphor, gesture, or proxy action."},
-            {"rank": 3, "name": "Anchor the Impossible", "effect": "Cost: 1 Pact. Fix one portal, projection, manifestation, unstable object, copied identity, or shifting spatial relationship into its current state for up to Archetype Rating rounds. The target may resist. Failure: the state is anchored, but so is one associated hazard or occupant."},
-            {"rank": 4, "name": "Prison of Meaning", "effect": "Cost: 2 Pact and a prepared vessel. Bind an incorporeal, informational, mnemonic, or noospheric entity into an object, body compartment, isolated process, or symbol that meaningfully represents it. The prison must be maintained by a clear rule. Failure: containment succeeds but the vessel acquires one ability or compulsion from the prisoner."},
-            {"rank": 5, "name": "Law of the Room", "effect": "Cost: 2 Pact and 1 Intrusion. State one clear supernatural rule governing a contained area for a scene: no one may cross without invitation, spoken lies become visible, copied minds cannot merge, weapons cannot discharge, or a similarly bounded law. Powerful targets may contest it. The law applies to you as written, and ambiguous wording is interpreted by the answering presence rather than by your intent."}
+            {"rank": 1, "name": "Chalk Boundary", "effect": "Cost: none with preparation or 1 Pact instantly. Define a boundary against one named lesser category. Crossing requires resistance. Failure: it works exactly as worded, exposing a mistake in classification."},
+            {"rank": 2, "name": "Closed Mouth", "effect": "Cost: 1 Pact. Test: Resolve + Noospherics opposed by Resolve + Composure. Prevent one target from speaking, transmitting, invoking, or writing a chosen name, secret, or activation phrase for a scene."},
+            {"rank": 3, "name": "Anchor the Impossible", "effect": "Cost: 1 Pact. Fix one portal, projection, manifestation, unstable object, copied identity, or shifting spatial relationship into its current state for Archetype Rating rounds."},
+            {"rank": 4, "name": "Prison of Meaning", "effect": "Cost: 2 Pact and a prepared vessel. Bind an incorporeal, informational, mnemonic, or noospheric entity into an object, process, symbol, or willing host that meaningfully represents it."},
+            {"rank": 5, "name": "Law of the Room", "effect": "Cost: 2 Pact and 1 Intrusion. State one clear supernatural rule governing a contained area for a scene. Powerful targets may contest it, and the law applies to you as written."}
           ]
         },
         {
-          "name": "Borrowed Anatomy",
-          "description": "Borrowed Anatomy gives physical support to capacities that were once purely metaphysical. The Binder's body becomes an experimental embassy, growing organs and structures modeled on the needs of an intelligence that may never have possessed compatible flesh.",
-          "oldWorldRoot": "Impossible senses, patron-granted limbs, inhuman movement, temporary possession, protective manifestations, and bodily signs of the pact.",
-          "continuumTranslation": "Ar'nock tissues respond to symbolic instruction, growing glands, sensory organs, cavities, armor, and locomotor structures from memories that were never originally biological.",
+          "name": "Borrowed Manifestation",
+          "description": "Temporary senses, reach, defenses, movement, and hybridized presence borrowed from the pact.",
+          "oldWorldRoot": "Impossible eyes, patron-granted limbs, inhuman movement, protective manifestations, possession, and visible pact signs.",
+          "continuumTranslation": "The player chooses the manifestation's appearance. Only the recorded power effect determines its mechanical benefits.",
           "abilities": [
-            {"rank": 1, "name": "Other Eye", "effect": "Cost: 1 Pact. Manifest a temporary organ able to perceive one hidden quality: heat, resonance, dimensional stress, memory residue, noospheric attention, active lies, or biological incompatibility. It lasts a scene. Failure: the organ works but cannot close itself until you rest."},
-            {"rank": 2, "name": "Hand Through the Gap", "effect": "Cost: 1 Pact. Reach through a short impossible angle to touch, manipulate, or retrieve something nearby but physically obstructed. The route cannot pass through a fully sealed supernatural boundary. Failure: contact succeeds, but the hand emerges from a point visible to an unwanted observer."},
-            {"rank": 3, "name": "Mantle of the Guest", "effect": "Cost: 1 Pact and 1 Intrusion if maintained beyond one scene. Grow protective anatomy reflecting the presence's nature: mirrored plates, jointless skin, orbiting eyes, articulated shadow, pressure-resistant shell, or similar form. Gain Armor equal to half Archetype Rating and one thematic resistance. Failure: the mantle grants protection while altering voice, appetite, or behavior."},
-            {"rank": 4, "name": "Unnatural Locomotion", "effect": "Cost: 2 Pact. For one scene, move according to an anatomy that ignores one ordinary limitation: cling to any surface, fold through narrow spaces, step across gaps, swim through dense machinery, or move while physically inverted. Failure: movement works, but the body retains the wrong orientation or joint arrangement afterward."},
-            {"rank": 5, "name": "Body of the Embassy", "effect": "Cost: 2 Pact and 1 Intrusion. Transform into a stable hybrid body capable of hosting a controlled portion of the presence without surrendering agency. Gain two chosen borrowed organs, one extraordinary sense, and one major resistance for a scene. The presence may speak through you but cannot act independently unless you violate a negotiated boundary. Failure is replaced by consequence: one new organ remains permanently and develops needs."}
+            {"rank": 1, "name": "Other Eye", "effect": "Cost: 1 Pact. Gain one temporary sense able to perceive heat, resonance, dimensional stress, memory residue, noospheric attention, active lies, or another approved hidden quality for a scene."},
+            {"rank": 2, "name": "Hand Through the Gap", "effect": "Cost: 1 Pact. Reach through a short impossible angle to touch, manipulate, or retrieve something nearby but obstructed. It cannot cross a stronger active boundary."},
+            {"rank": 3, "name": "Mantle of the Guest", "effect": "Cost: 1 Pact; add 1 Intrusion if maintained beyond one scene. Gain Armor equal to half Archetype Rating and one thematic resistance. The manifestation visibly marks the pact."},
+            {"rank": 4, "name": "Unnatural Locomotion", "effect": "Cost: 2 Pact. For a scene, ignore one ordinary movement limitation: cling to surfaces, fold through narrow spaces, step across gaps, swim through machinery, or move inverted."},
+            {"rank": 5, "name": "Embassy of the Guest", "effect": "Cost: 2 Pact and 1 Intrusion. Enter a controlled hybrid state granting two borrowed manifestations, one extraordinary sense, and one major resistance for a scene. The presence may speak but cannot act independently unless a negotiated boundary is violated."}
           ]
         },
         {
           "name": "Pact Economy",
-          "description": "Pact Economy treats favors, obligations, prohibitions, payment, and consent as manipulable occult structure. It is powerful because the Binder understands that even impossible beings require terms by which action becomes legitimate.",
-          "oldWorldRoot": "Bargains, geasa, offerings, inherited debts, ritual payment, names exchanged for services, and the danger of asking for power without specifying cost.",
-          "continuumTranslation": "Obligations can attach to copied identities, machine citizens, autonomous processes, habitats, and continuity records as well as souls or spirits.",
+          "description": "Favors, obligations, prices, consent, payment, assignment, renegotiation, and supernatural contract.",
+          "oldWorldRoot": "Bargains, geasa, offerings, inherited debts, ritual payment, and the danger of unspecified cost.",
+          "continuumTranslation": "Obligations can attach to people, copies, machine citizens, processes, habitats, and institutions if the agreement recognizes them as parties.",
           "abilities": [
-            {"rank": 1, "name": "Name the Price", "effect": "Cost: none. Before accepting a supernatural, noospheric, or institutional bargain, ask what the other party actually gains, what obligation will remain afterward, and what unstated resource is being risked. The Game Moderator must answer each in broad but truthful terms. Failure: none, though the answer may reveal that the cost is emotional, political, or delayed."},
-            {"rank": 2, "name": "Deferred Payment", "effect": "Cost: 1 Pact. Delay one immediate cost, backlash, pressure increase, or demanded offering from a power or agreement until the end of the scene. The debt remains exact and cannot be forgotten. Failure: the payment is delayed, but interest adds a narrow additional obligation."},
-            {"rank": 3, "name": "Transfer Obligation", "effect": "Cost: 1 Pact and genuine consent from the recipient, unless the original contract permits assignment. Move a supernatural duty, ward maintenance, service, or payment from one valid party to another. Failure: the transfer works only partially, making both parties responsible."},
-            {"rank": 4, "name": "Renegotiate the Impossible", "effect": "Cost: 2 Pact. Test: Resolve + Negotiation opposed by the other party's authority. Reopen one existing pact term because circumstances, identity, universe, or body have materially changed. Exchange one obligation, prohibition, or reward for another of comparable weight. Failure: negotiations reveal a loophole the other party may use before talks resume."},
-            {"rank": 5, "name": "Sovereign Contract", "effect": "Cost: 2 Pact and 1 Intrusion. Draft a binding agreement among willing biological, synthetic, spiritual, or institutional parties. Each clause must define action, duration, consideration, and exit. Violations become immediately perceptible and trigger a predeclared consequence no stronger than the benefit received. The agreement cannot manufacture consent; coercion creates a flaw that can eventually void the whole structure."}
+            {"rank": 1, "name": "Name the Price", "effect": "Cost: none. Before accepting a bargain, ask what the other party gains, what remains owed, and what unstated resource is risked. The Game Moderator answers broadly but truthfully."},
+            {"rank": 2, "name": "Deferred Payment", "effect": "Cost: 1 Pact. Delay one immediate cost, backlash, pressure increase, or offering until scene end. The debt remains exact."},
+            {"rank": 3, "name": "Transfer Obligation", "effect": "Cost: 1 Pact and genuine consent unless assignment is already permitted. Move a duty, service, ward maintenance, or payment from one valid party to another."},
+            {"rank": 4, "name": "Renegotiate the Impossible", "effect": "Cost: 2 Pact. Reopen one term because circumstances, identity, universe, or capability materially changed. Exchange one obligation, prohibition, or reward for comparable weight."},
+            {"rank": 5, "name": "Sovereign Contract", "effect": "Cost: 2 Pact and 1 Intrusion. Draft a binding agreement among willing parties with action, duration, consideration, exit, and predeclared consequences. Coercion creates a flaw that can void it."}
           ]
         },
         {
           "name": "Forbidden Cognition",
-          "description": "Forbidden Cognition allows the Binder to borrow a nonhuman mode of understanding without pretending it is safe, complete, or objective. Knowledge arrives as altered perception, impossible comparison, and memories that may not belong to the current universe.",
-          "oldWorldRoot": "Occult revelation, patron whispers, impossible languages, prophetic dreams, symbolic interpretation, and truths that damage the mind because human categories cannot contain them.",
-          "continuumTranslation": "The printed nervous system creates temporary cognitive organs and pathways capable of parsing alien intention, causal structure, and nonlocal relationships.",
+          "description": "Borrowed modes of understanding that reveal function, language, unrealized history, and nonhuman knowledge at a personal cost.",
+          "oldWorldRoot": "Occult revelation, patron whispers, impossible language, prophecy, dreams, and dangerous symbolic interpretation.",
+          "continuumTranslation": "Knowledge arrives through explicit effects and Intrusion consequences; no universal nervous-system explanation is required.",
           "abilities": [
-            {"rank": 1, "name": "Read the Wound", "effect": "Cost: none once per scene. Examine an anomaly, possession, broken pact, impossible device, or corrupted space and identify whether it was opened, invited, forced, inherited, copied, or grown. Failure: you identify the mechanism but briefly feel the event from the intruding side."},
-            {"rank": 2, "name": "Impossible Translation", "effect": "Cost: 1 Pact. Understand the immediate operational meaning of an alien language, ritual notation, machine prayer, biological display, or nonverbal warning for a scene. You do not gain cultural mastery. Failure: the translation is literal but misses irony, taboo, legal status, or emotional context."},
-            {"rank": 3, "name": "Ask the Passenger", "effect": "Cost: 1 Pact and 1 Intrusion. Ask the answering presence one direct question within its demonstrated domain. It must provide a useful response but may answer through image, compulsion, analogy, or sensory transformation. Failure: the answer is still useful, but the presence learns one personal fact you intended to keep private."},
-            {"rank": 4, "name": "Remember What Never Happened", "effect": "Cost: 2 Pact. Access one plausible unrealized memory connected to the current situation: a route not taken, a failed ritual, a version of the scene where someone made another choice. Gain two dice on one action using the lesson. Failure: the memory is useful but emotionally indistinguishable from lived experience."},
-            {"rank": 5, "name": "Library Behind the Eyes", "effect": "Cost: 2 Pact and 1 Intrusion. For one scene, become a controlled access point to the presence's accumulated categories and memories. Treat Reason as 5 for understanding anomalies, alien systems, pacts, and nonlocal entities, and ask up to three clarifying questions. Afterward, choose one human memory that becomes temporarily inaccessible until you rest and re-anchor it."}
+            {"rank": 1, "name": "Read the Wound", "effect": "Cost: none once per scene. Examine an anomaly, possession, broken pact, impossible device, or corrupted space and identify whether it was opened, invited, forced, inherited, copied, or grown."},
+            {"rank": 2, "name": "Impossible Translation", "effect": "Cost: 1 Pact. Understand the immediate operational meaning of an alien language, ritual notation, machine prayer, biological display, or nonverbal warning for a scene."},
+            {"rank": 3, "name": "Ask the Passenger", "effect": "Cost: 1 Pact and 1 Intrusion. Ask the answering presence one direct question within its demonstrated domain. It must give a useful response and learns one personal fact on failure."},
+            {"rank": 4, "name": "Remember What Never Happened", "effect": "Cost: 2 Pact. Access one plausible unrealized memory connected to the situation and gain two dice on one action using its lesson. Failure: it feels indistinguishable from lived experience."},
+            {"rank": 5, "name": "Library Behind the Eyes", "effect": "Cost: 2 Pact and 1 Intrusion. For one scene, treat Reason as 5 for anomalies, alien systems, pacts, and nonlocal entities and ask three clarifying questions. One personal memory becomes inaccessible until re-anchored."}
           ]
         },
         {
           "name": "Threshold Geometry",
-          "description": "Threshold Geometry manipulates the relationship between here and there. It is not unrestricted teleportation; it creates routes by exploiting boundaries, conceptual adjacency, reflection layers, and the fact that some spaces are closer in meaning than in distance.",
-          "oldWorldRoot": "Summoning circles, hidden doors, impossible angles, dream passage, ritual crossroads, and places where the world is thin.",
-          "continuumTranslation": "The Binder combines spatial discontinuities, noospheric topology, biological growth, and symbolic correspondence to create temporary traversable relationships.",
+          "description": "Manipulation of adjacency, barriers, reflection routes, and persistent nonordinary paths.",
+          "oldWorldRoot": "Hidden doors, impossible angles, dream passage, ritual crossroads, and thin places.",
+          "continuumTranslation": "Routes can be spatial, conceptual, noospheric, or causal. The capability defines the connection and its conditions.",
           "abilities": [
-            {"rank": 1, "name": "Folded Reach", "effect": "Cost: 1 Pact. Treat one nearby surface, opening, or reflected image as adjacent to another point within several meters for the purpose of sight, hearing, or touch. Failure: the connection works one way only."},
-            {"rank": 2, "name": "Angle Without Distance", "effect": "Cost: 1 Pact. Step around an impossible angle and emerge at another visible point in the same room or connected corridor. You must cross a real threshold such as a doorway, shadow line, hatch rim, or reflected edge. Failure: you arrive correctly but leave an afterimage or echo that persists."},
-            {"rank": 3, "name": "Door in the Wrong Wall", "effect": "Cost: 1 Pact and one minute of preparation. Create a temporary passage through one barrier by defining it as a boundary rather than an object. The route cannot bypass a stronger active seal. Failure: the door opens, but it exits into the nearest semantically related space rather than the intended one."},
-            {"rank": 4, "name": "Transit the Unmade Route", "effect": "Cost: 2 Pact. Move yourself and willing companions through a reflection, noospheric, dreamlike, or causal route to a location you can meaningfully identify within the same site. The passage exposes travelers to one local hazard or resident. Failure: the group arrives separated across adjacent destinations."},
-            {"rank": 5, "name": "Cartography of Elsewhere", "effect": "Cost: 2 Pact and 1 Intrusion. Map a persistent nonordinary route connecting two established thresholds across a major distance. The route has conditions of entry, inhabitants, and a maintenance requirement chosen during creation. It cannot be used casually by those who do not understand its rule, but every crossing teaches the answering presence more about both endpoints."}
+            {"rank": 1, "name": "Folded Reach", "effect": "Cost: 1 Pact. Treat one nearby surface, opening, or reflection as adjacent to another point within several meters for sight, hearing, or touch."},
+            {"rank": 2, "name": "Angle Without Distance", "effect": "Cost: 1 Pact. Step around a threshold and emerge at another visible point in the same room or connected corridor. Failure: leave a persistent echo."},
+            {"rank": 3, "name": "Door in the Wrong Wall", "effect": "Cost: 1 Pact and one minute. Create a temporary passage through one barrier by defining it as a boundary. Failure: it exits into the nearest semantically related space."},
+            {"rank": 4, "name": "Transit the Unmade Route", "effect": "Cost: 2 Pact. Move yourself and willing companions through a reflection, noospheric, dreamlike, or causal route to a meaningfully identified location in the same site."},
+            {"rank": 5, "name": "Cartography of Elsewhere", "effect": "Cost: 2 Pact and 1 Intrusion. Establish a persistent nonordinary route between two thresholds, with entry conditions, inhabitants, and a maintenance requirement."}
           ]
         },
         {
           "name": "Invocation",
-          "description": "Invocation determines how much of the answering presence may enter local reality and under whose terms. It moves from recognizable signs to negotiated audience without assuming that greater manifestation means greater control.",
-          "oldWorldRoot": "Calling signs, possession, patron avatars, summoned servants, divine or demonic audience, and the terrible escalation from borrowing power to allowing presence.",
-          "continuumTranslation": "The body, environment, networks, and reflection layers provide progressively larger interfaces through which the presence can express itself.",
+          "description": "Controlled signs, channels, avatars, partial arrival, and negotiated audience with the answering presence.",
+          "oldWorldRoot": "Calling signs, possession, patron avatars, summoned servants, audience, and manifestation.",
+          "continuumTranslation": "The medium of manifestation may be physical, digital, spiritual, symbolic, environmental, or mixed; the rank defines its scope.",
           "abilities": [
-            {"rank": 1, "name": "Whispered Sign", "effect": "Cost: none. Produce a small unmistakable sign associated with the presence: altered gravity, impossible shadow, repeated symbol, localized silence, unusual biological response, or machine behavior. Gain one die to prove connection or intimidate those who understand it. Failure: the sign appears somewhere nearby rather than where intended."},
-            {"rank": 2, "name": "Borrowed Presence", "effect": "Cost: 1 Pact. Allow the presence to speak, see, or sense through one organ, object, or device for a minute. You choose the channel and may end it. Failure: the presence uses an additional nearby channel before withdrawing."},
-            {"rank": 3, "name": "Local Avatar", "effect": "Cost: 1 Pact and 1 Intrusion. Create a temporary limited avatar from shadow, tissue, machinery, memory, or environmental material. It performs one defined task using a pool equal to Archetype Rating + 2 and cannot exceed the agreed scope. Failure: the avatar completes the task according to literal wording rather than intention."},
-            {"rank": 4, "name": "Partial Arrival", "effect": "Cost: 2 Pact and 1 Intrusion. Manifest a major portion of the presence through your body or a prepared site, producing one large effect consistent with its nature: break a seal, silence a network, hold a breach, terrify a crowd, or alter local geometry. You retain veto over one action. Failure: the effect succeeds, but the presence chooses its own visible form and message."},
-            {"rank": 5, "name": "Full Audience", "effect": "Cost: 2 Pact, 2 Intrusion, and a prepared boundary. Bring the answering presence into a stable negotiated audience for one scene without granting unrestricted embodiment. It may converse, bargain, perceive the area, and perform one agreed act. All participants can determine that something real is present, but not whether it is the original patron. Ending the audience safely requires honoring the dismissal terms established at the beginning."}
+            {"rank": 1, "name": "Whispered Sign", "effect": "Cost: none. Produce a small unmistakable sign associated with the presence and gain one die to prove connection or intimidate those who understand it."},
+            {"rank": 2, "name": "Borrowed Presence", "effect": "Cost: 1 Pact. Allow the presence to speak, see, or sense through one willing channel, object, device, or manifestation for a minute."},
+            {"rank": 3, "name": "Local Avatar", "effect": "Cost: 1 Pact and 1 Intrusion. Create a temporary limited avatar that performs one defined task using Archetype Rating + 2 dice."},
+            {"rank": 4, "name": "Partial Arrival", "effect": "Cost: 2 Pact and 1 Intrusion. Manifest a major portion of the presence to produce one large effect consistent with its nature. You retain veto over one action."},
+            {"rank": 5, "name": "Full Audience", "effect": "Cost: 2 Pact, 2 Intrusion, and a prepared boundary. Bring the presence into a stable negotiated audience for one scene without granting unrestricted action. Safe dismissal requires honoring the terms established at the beginning."}
           ]
         }
       ]
@@ -412,96 +418,96 @@
     {
       "id": "harmonic-mutant",
       "name": "Harmonic Mutant",
-      "theme": "A body already rewritten by frequency, now amplified by Ar'nock biology until flesh, matter, emotion, memory, and ship systems can enter the same dangerous arrangement.",
+      "theme": "A resonance wielder able to affect force, living patterns, structures, emotions, phase relationships, and memory through explicit harmonic capabilities.",
       "resourceName": "Resonance",
       "pressureName": "Discord",
       "keyAttribute": "Composure",
       "resourceBase": 4,
       "startingAbility": "Resonant Tap",
       "weakness": "Resonant Instability",
-      "weaknessText": "Opposing frequencies, emotional shock, environmental coupling, and repeated power use increase Discord. The ship or nearby bodies may reinforce a pattern you did not intend to sustain.",
+      "weaknessText": "Opposing frequencies, emotional shock, environmental coupling, and repeated power use increase Discord. This pressure may destabilize powers, perception, identity, or the surrounding environment according to the effect used.",
       "innateAbilities": [
-        {"name": "Living Frequency", "effect": "Sense strong vibration, structural stress, active fields, biological rhythm, and emotional resonance through dedicated printed organs."},
-        {"name": "Adaptive Tissue", "effect": "Choose one persistent mutation such as vibration sense, pressure tolerance, resinous healing, phase-flexible joints, luminous communication, or conductive skin."},
-        {"name": "Tune the Self", "effect": "Spend 1 Resonance to alter one bodily parameter for a scene: density, elasticity, thermal behavior, electrical resistance, pressure tolerance, or sensory range."}
+        {"name": "Living Frequency", "effect": "Sense strong vibration, structural stress, active fields, biological rhythm, and emotional resonance as an explicit supernatural sense."},
+        {"name": "Adaptive Resonance", "effect": "Choose one persistent resonance capability such as vibration sense, pressure tolerance, rapid stabilization, phase-flexible movement, luminous communication, or conductive touch."},
+        {"name": "Tune the Self", "effect": "Spend 1 Resonance to alter one personal parameter for a scene: density, elasticity, thermal behavior, electrical resistance, pressure tolerance, or sensory range."}
       ],
       "powerFamilies": [
         {
           "name": "Harmonic Projection",
-          "description": "Harmonic Projection emits force, disruption, protection, and large-scale tuning through controlled resonance. It is the Mutant's most direct family, but every projected note can couple to unintended structures or emotions.",
-          "oldWorldRoot": "Sonic attacks, vibration control, resonance shields, destructive frequency, and the ability to hear the hidden note of matter.",
-          "continuumTranslation": "Specialized organs generate pressure, electromagnetic, chemical, and structural oscillations across several ranges simultaneously.",
+          "description": "Focused force, disruption, protection, and large-scale environmental tuning.",
+          "oldWorldRoot": "Sonic attacks, vibration control, resonance shields, destructive frequency, and the hidden note of matter.",
+          "continuumTranslation": "Projection can act through sound, fields, noospheric resonance, ritual vibration, or another chosen medium. The effect is defined by the power, not presumed anatomy.",
           "abilities": [
-            {"rank": 1, "name": "Resonant Tap", "effect": "Cost: none. Test: Awareness + Science. Read the broad composition, hollowness, stress, active vibration, or recent impact history of a touched object or surface. Failure: the reading is accurate but overwhelms one ordinary sense for an exchange."},
-            {"rank": 2, "name": "Shatter Note", "effect": "Cost: 1 Resonance. Test: Composure + Science or Ranged attack. Emit a focused pulse that fractures brittle material, disrupts a lock, staggers a target, or interrupts a delicate mechanism. Failure: the target is affected, but the frequency propagates into one adjacent object or ally's equipment."},
-            {"rank": 3, "name": "Frequency Armor", "effect": "Cost: 1 Resonance per scene. Surround yourself or a nearby ally with a tuned field that reduces the first physical damage suffered each round by Archetype Rating. It is most effective against repeated force profiles. Failure: protection works, but the field amplifies one unfamiliar damage type."},
-            {"rank": 4, "name": "Catastrophic Chord", "effect": "Cost: 2 Resonance. Choose a bounded target such as a wall, engine, formation, or hostile field. Build a three-note sequence over one round; on release, inflict major structural damage, silence active vibration, or force the target out of resonance with its support system. Failure: the chord works but produces a dangerous harmonic in the surrounding area."},
-            {"rank": 5, "name": "Living Catastrophe", "effect": "Cost: 2 Resonance and 1 Discord. Release a controlled wave across a large scene. Choose rupture, absolute silence, mass disorientation, structural stabilization, or synchronized shutdown. The effect changes the environment rather than targeting individuals one at a time. Afterward, your body continues emitting a weaker version of the chosen state until you are deliberately retuned."}
+            {"rank": 1, "name": "Resonant Tap", "effect": "Cost: none. Test: Awareness + Science. Read broad composition, hollowness, stress, active vibration, or recent impact history of a touched object or surface."},
+            {"rank": 2, "name": "Shatter Note", "effect": "Cost: 1 Resonance. Test: Composure + Science or ranged attack. Fracture brittle material, disrupt a lock, stagger a target, or interrupt a delicate mechanism. Failure: affect one adjacent object or allied device."},
+            {"rank": 3, "name": "Frequency Armor", "effect": "Cost: 1 Resonance per scene. Reduce the first physical damage suffered each round by Archetype Rating for yourself or a nearby ally. Failure: one unfamiliar damage type is amplified."},
+            {"rank": 4, "name": "Catastrophic Chord", "effect": "Cost: 2 Resonance. Build a three-note sequence against a wall, engine, formation, or hostile field, then inflict major damage, silence vibration, or sever support. Failure: create a dangerous secondary harmonic."},
+            {"rank": 5, "name": "Living Catastrophe", "effect": "Cost: 2 Resonance and 1 Discord. Release a wave across a large scene choosing rupture, silence, mass disorientation, stabilization, or synchronized shutdown. A weaker echo persists until deliberately retuned."}
           ]
         },
         {
-          "name": "Echo Biology",
-          "description": "Echo Biology treats organisms as repeatable rhythms. It heals, copies, links, and multiplies living patterns while risking transferred wounds, foreign emotions, and echo bodies that experience themselves as real.",
-          "oldWorldRoot": "Sympathetic healing, body resonance, adaptive mutation, sensory doubles, shared pain, and biological synchronization.",
-          "continuumTranslation": "Distributed tissues record temporary body patterns and transmit them through touch, vibration, atmosphere, and shared fields.",
+          "name": "Echo Patterns",
+          "description": "Healing, duplication, shared rhythm, adaptation, and distributed action through resonance patterns.",
+          "oldWorldRoot": "Sympathetic healing, adaptive mutation, sensory doubles, shared pain, and synchronization.",
+          "continuumTranslation": "The pattern may be biological, energetic, noospheric, spiritual, or technological. The power explicitly states what is copied and what consequences follow.",
           "abilities": [
-            {"rank": 1, "name": "Sympathetic Healing", "effect": "Cost: 1 Resonance and one minute of contact. Match another living body's rhythm and convert one Trauma into Impact or remove two Impact. You experience a brief sensory echo of the injury. Failure: healing occurs, but you copy one symptom or pain response for the scene."},
-            {"rank": 2, "name": "Echo Double", "effect": "Cost: 1 Resonance. Create a short-lived sensory and kinetic afterimage that repeats your most recent movement. It can draw fire, trigger a simple sensor, or provide one die to defense. Failure: the double repeats an emotionally significant earlier action instead of the intended motion."},
-            {"rank": 3, "name": "Shared Frequency", "effect": "Cost: 1 Resonance per scene. Link willing allies so they can communicate through vibration, sense distress, and lend one die to Medicine, Athletics, or Composure tests involving another linked member. Failure: the link works, but the strongest pain or fear is shared by everyone."},
-            {"rank": 4, "name": "Rewrite the Scar", "effect": "Cost: 2 Resonance and one hour of tuning. Permanently alter a minor body trait, remove one persistent injury Complication, or convert an old scar into a useful sensory or protective adaptation. Failure: the rewrite succeeds while attaching an emotional memory to the changed tissue."},
-            {"rank": 5, "name": "Chorus Body", "effect": "Cost: 2 Resonance and 1 Discord. Split into several short-lived physical echo bodies sharing one mind and resource pool. Each echo can act with reduced dice, occupy space, and experience events independently. Recombining integrates all memories; each destroyed echo inflicts 1 Discord and leaves a permanent disagreement about which body was the original."}
+            {"rank": 1, "name": "Sympathetic Healing", "effect": "Cost: 1 Resonance and one minute of contact or stable connection. Convert one Trauma into Impact or remove two Impact from a willing target. Failure: copy one symptom or pain response for the scene."},
+            {"rank": 2, "name": "Echo Double", "effect": "Cost: 1 Resonance. Create a short-lived sensory and kinetic afterimage repeating your recent movement. It can draw fire, trigger a sensor, or add one die to defense."},
+            {"rank": 3, "name": "Shared Frequency", "effect": "Cost: 1 Resonance per scene. Link willing allies for silent communication, distress sensing, and one-die assistance to Medicine, Athletics, or Composure involving another linked member."},
+            {"rank": 4, "name": "Rewrite the Scar", "effect": "Cost: 2 Resonance and one hour. Permanently alter a minor trait, remove one persistent injury Complication, or convert a scar into a useful sensory or protective capability."},
+            {"rank": 5, "name": "Chorus Self", "effect": "Cost: 2 Resonance and 1 Discord. Split into several short-lived physical, energetic, or projected echoes sharing one mind and resource pool. Each destroyed echo adds 1 Discord and creates a continuity disagreement."}
           ]
         },
         {
           "name": "Structural Resonance",
-          "description": "Structural Resonance makes the Mutant an interpreter and participant in architecture. It reads load, redirects stress, wakes biological machinery, and eventually becomes part of the structure carrying everyone else.",
-          "oldWorldRoot": "Vibration sensing, engineering intuition, seismic awareness, resonance damping, and the ability to hear when a building or machine is about to fail.",
-          "continuumTranslation": "Ar'nock systems treat harmonic feedback as ordinary maintenance, allowing the Mutant to interact with hull, conduits, living walls, and fabrication structures as though sharing a nervous system.",
+          "description": "Reading, stabilizing, awakening, and temporarily integrating with structures and large systems.",
+          "oldWorldRoot": "Seismic awareness, engineering intuition, resonance damping, and hearing when structures fail.",
+          "continuumTranslation": "The family grants explicit interaction with architecture and machinery without treating the character as an installed organ or assuming a specific substrate.",
           "abilities": [
-            {"rank": 1, "name": "Hullsense", "effect": "Cost: none while touching a structure. Learn its nearby cavities, load-bearing paths, active conduits, major damage, and moving masses. Failure: the map is correct but includes one old or phantom layout stored in the material."},
-            {"rank": 2, "name": "Stress Redirection", "effect": "Cost: 1 Resonance. Reaction when a structure, vehicle, shield, or piece of cover would fail. Move the stress into another connected section, delaying collapse for Archetype Rating rounds. Failure: failure is delayed, but the new stress point becomes more severe."},
-            {"rank": 3, "name": "Living Brace", "effect": "Cost: 1 Resonance. Integrate your body with a damaged wall, machine, bridge, pressure seal, or biological structure. Add Composure + Resilience to its effective durability and keep it functional while you remain connected. Failure: the support works, but damage to the structure transfers to you as Impact."},
-            {"rank": 4, "name": "Wake the Architecture", "effect": "Cost: 2 Resonance. Communicate a simple operational intention to a dormant or damaged Ar'nock system through harmonic activation. Doors, conduits, life support, growth chambers, or repair tissue may perform one native function without normal credentials. Failure: the system awakens in maintenance or defense mode rather than the requested mode."},
-            {"rank": 5, "name": "Become the Load Path", "effect": "Cost: 2 Resonance and 1 Discord. For one scene, treat a vehicle, habitat section, large machine, or living structure as an extension of your body. Sense throughout it, redistribute damage, and coordinate its moving parts using your own actions. Damage and emotional shock can flow both ways, and separation at scene end leaves you temporarily uncertain where your body stops."}
+            {"rank": 1, "name": "Hullsense", "effect": "Cost: none while touching or closely sensing a structure. Learn nearby cavities, load paths, active conduits, major damage, and moving masses."},
+            {"rank": 2, "name": "Stress Redirection", "effect": "Cost: 1 Resonance. Reaction when a structure, vehicle, shield, or cover would fail. Move stress into another connected section and delay collapse for Archetype Rating rounds."},
+            {"rank": 3, "name": "Living Brace", "effect": "Cost: 1 Resonance. Establish a sustained link with a damaged structure or machine. Add Composure + Resilience to its durability while connected; damage may transfer to you as Impact."},
+            {"rank": 4, "name": "Wake the Architecture", "effect": "Cost: 2 Resonance. Communicate a simple operational intention to a dormant or damaged system and trigger one native function without normal credentials."},
+            {"rank": 5, "name": "Become the Load Path", "effect": "Cost: 2 Resonance and 1 Discord. For a scene, treat a vehicle, habitat section, large machine, or living structure as an extension of your senses and actions. Damage and emotional shock can flow both ways."}
           ]
         },
         {
           "name": "Emotional Chord",
-          "description": "Emotional Chord hears and alters the rhythms by which minds influence one another. It does not manufacture precise beliefs; it tunes intensity, synchronization, and the emotional atmosphere through which decisions become possible.",
-          "oldWorldRoot": "Empathic resonance, song, crowd emotion, calming frequency, shared panic, and the way a room's mood can become physically palpable.",
-          "continuumTranslation": "The Mutant senses emotional states through voice, posture, chemical exchange, heartbeat, noospheric repetition, and structural vibration, then introduces stabilizing or disruptive counter-rhythms.",
+          "description": "Perception and modulation of emotional intensity, synchronization, and collective intent.",
+          "oldWorldRoot": "Empathic resonance, song, crowd emotion, calming frequency, shared panic, and palpable atmosphere.",
+          "continuumTranslation": "The power affects emotional state, not precise belief. Its medium and presentation are chosen by the player.",
           "abilities": [
-            {"rank": 1, "name": "Hear the Mood", "effect": "Cost: none. Test: Awareness + Empathy. Identify the strongest emotion in a person or group, whether it is shared or imposed, and what stimulus is sustaining it. Failure: you identify the emotion but temporarily mirror it."},
-            {"rank": 2, "name": "Dampen Panic", "effect": "Cost: 1 Resonance. Emit a calming counter-rhythm affecting a small group. Remove one fear penalty and prevent panic from spreading for a scene. This does not erase knowledge of danger. Failure: panic is suppressed but returns as exhaustion, anger, or silence afterward."},
-            {"rank": 3, "name": "Tune the Crowd", "effect": "Cost: 1 Resonance. Test: Presence + Performance opposed by the strongest Composure. Shift a group's emotional intensity one step toward caution, urgency, grief, solidarity, suspicion, or another broad state. You cannot create a specific belief. Failure: the shift occurs unevenly and divides the group into opposing emotional clusters."},
-            {"rank": 4, "name": "Resonant Bond", "effect": "Cost: 2 Resonance and consent from both participants. Create a persistent emotional channel between two people or continuations, allowing each to sense distress, sincerity, and major emotional change across a local network. Failure: the bond functions but transmits one recurring unwanted memory or mood."},
-            {"rank": 5, "name": "Choir of Intent", "effect": "Cost: 2 Resonance and 1 Discord. Synchronize a willing group around one clearly stated objective for a scene. Participants remain autonomous but gain two dice when coordinating toward the objective and cannot be casually divided by fear, contradictory signals, or emotional manipulation. If the objective conceals a material truth, the chord fractures and every participant immediately feels the betrayal."}
+            {"rank": 1, "name": "Hear the Mood", "effect": "Cost: none. Test: Awareness + Empathy. Identify the strongest emotion in a person or group, whether it is shared or imposed, and what sustains it."},
+            {"rank": 2, "name": "Dampen Panic", "effect": "Cost: 1 Resonance. Remove one fear penalty and prevent panic spreading through a small group for a scene. The danger remains understood."},
+            {"rank": 3, "name": "Tune the Crowd", "effect": "Cost: 1 Resonance. Test: Presence + Performance opposed by the highest Composure. Shift emotional intensity one step toward caution, urgency, grief, solidarity, suspicion, or another broad state."},
+            {"rank": 4, "name": "Resonant Bond", "effect": "Cost: 2 Resonance and consent. Create a persistent emotional channel between two people, allowing each to sense distress, sincerity, and major emotional change across a local network."},
+            {"rank": 5, "name": "Choir of Intent", "effect": "Cost: 2 Resonance and 1 Discord. Synchronize a willing group around one stated objective for a scene. Participants gain two dice when coordinating and resist fear, contradictory signals, and emotional manipulation."}
           ]
         },
         {
           "name": "Phase Modulation",
-          "description": "Phase Modulation changes how the Mutant's maintained pattern intersects with matter, force, and causality. It develops from momentary slipping to controlled existence in the interval between stable states.",
-          "oldWorldRoot": "Phasing, vibration through barriers, altered density, impossible movement, and the intuition that solidity is sustained timing rather than absolute fact.",
-          "continuumTranslation": "Phase-sensitive membranes and resonant organs retune the body's relationship to local material and causal fields.",
+          "description": "Alteration of interaction with matter, force, position, and nearby causal states.",
+          "oldWorldRoot": "Phasing, altered density, impossible movement, and solidity understood as sustained timing.",
+          "continuumTranslation": "Phase effects are explicit powers. No character is assumed to possess phase-capable anatomy or technology without buying them.",
           "abilities": [
-            {"rank": 1, "name": "Slip Frequency", "effect": "Cost: 1 Resonance. Reduce friction, soften impact, or pass a hand-sized portion of the body through a thin obstruction for one exchange. Failure: the effect works but leaves numbness or embedded foreign residue."},
-            {"rank": 2, "name": "Phase Step", "effect": "Cost: 1 Resonance. Move through a thin wall, closed door, incoming attack line, or dense obstacle by briefly occupying an offset phase. Test Composure + Mobility. Failure: you pass through but drop one carried item or emerge disoriented."},
-            {"rank": 3, "name": "Matter Interleave", "effect": "Cost: 1 Resonance per scene. Interleave your body with one worn object, armor layer, tool, or willing small organism so both occupy the same space without damage. Gain its protection or preserve it through a hazard. Failure: separation later causes damage or exchanges one physical trait temporarily."},
-            {"rank": 4, "name": "Causal Phase", "effect": "Cost: 2 Resonance. Reaction to one event directly affecting you. Shift into a nearby state in which the event almost occurred differently, reducing damage, avoiding restraint, or appearing on the opposite side of a barrier. Failure: the favorable outcome occurs, but a visible echo of the rejected outcome remains and can affect others."},
-            {"rank": 5, "name": "Between the Notes", "effect": "Cost: 2 Resonance and 1 Discord. For one round, exist in the interval between local material, noospheric, and causal states. Move through ordinary barriers, ignore most attacks, and perceive several possible immediate outcomes. You must choose one state in which to return. The unchosen states remain as intrusive memories and may later appear in dreams or echo bodies."}
+            {"rank": 1, "name": "Slip Frequency", "effect": "Cost: 1 Resonance. Reduce friction, soften impact, or pass a hand-sized portion of yourself or a held object through a thin obstruction for one exchange."},
+            {"rank": 2, "name": "Phase Step", "effect": "Cost: 1 Resonance. Test: Composure + Mobility. Move through a thin wall, closed door, attack line, or dense obstacle. Failure: drop one carried item or emerge disoriented."},
+            {"rank": 3, "name": "Matter Interleave", "effect": "Cost: 1 Resonance per scene. Interleave yourself with one worn object, armor layer, tool, or willing small companion so both occupy the same space without harm."},
+            {"rank": 4, "name": "Causal Phase", "effect": "Cost: 2 Resonance. Reaction to one event affecting you. Shift into a nearby state where it almost occurred differently, reducing damage, avoiding restraint, or changing position."},
+            {"rank": 5, "name": "Between the Notes", "effect": "Cost: 2 Resonance and 1 Discord. For one round, exist between local material, noospheric, and causal states. Move through ordinary barriers, ignore most attacks, and perceive several immediate outcomes before choosing where to return."}
           ]
         },
         {
           "name": "Memory Harmonics",
-          "description": "Memory Harmonics treats memory as rhythm distributed through brains, bodies, places, and repeated behavior. It can recover what Q-MAP fragmented, but recovered memories may belong to another iteration or become more stable than historical truth.",
-          "oldWorldRoot": "Songs tied to identity, sensory memory, psychometry, emotional recall, ancestral rhythm, and the persistence of experience in repeated pattern.",
-          "continuumTranslation": "The Mutant detects and reproduces mnemonic frequencies stored in tissue, architecture, noospheric repetition, and continuity-linked artifacts.",
+          "description": "Recovery, storage, separation, transmission, and preservation of memory as repeatable pattern.",
+          "oldWorldRoot": "Songs tied to identity, sensory memory, psychometry, emotional recall, and experience persisting through repetition.",
+          "continuumTranslation": "Memory may be recovered from people, places, signals, objects, or systems when the individual power permits it; no universal tissue-memory rule exists.",
           "abilities": [
-            {"rank": 1, "name": "Recall by Rhythm", "effect": "Cost: none once per scene. Reproduce a sound, motion, heartbeat, or environmental rhythm associated with a fragmented memory. Ask one question about the sensory context or emotion of that memory. Failure: the answer comes from a related but different memory."},
-            {"rank": 2, "name": "Imprint Echo", "effect": "Cost: 1 Resonance. Store one short sensory experience, warning, instruction, or emotional state in a touched object, surface, or willing body. A compatible observer can later recover it. Failure: the imprint includes an unintended personal emotion."},
-            {"rank": 3, "name": "Recover Lost Pattern", "effect": "Cost: 1 Resonance and a meaningful anchor. Test Composure + Investigation. Restore one fragmented personal or shared memory enough to use it as evidence, a Skill specialization, or an Identity Anchor for the scene. Failure: the memory returns with one false connective detail supplied by the current body."},
-            {"rank": 4, "name": "Split Memory Chorus", "effect": "Cost: 2 Resonance. Separate a contradictory memory into several audible, visible, or embodied perspectives so the group can examine them without deciding immediately which is true. Each perspective can answer questions from its own assumptions. Failure: one perspective escapes into an echo, system, or participant."},
-            {"rank": 5, "name": "Song That Outlives the Singer", "effect": "Cost: 2 Resonance and 1 Discord. Encode a complete identity message, body pattern, warning, or chosen memory into a place, community, machine, or recurring signal so it can survive your death or body loss. It is not a full resurrection, but future continuations can use it to recognize, reconstruct, or challenge who you were. The message evolves slightly each time it is performed."}
+            {"rank": 1, "name": "Recall by Rhythm", "effect": "Cost: none once per scene. Reproduce a sound, motion, phrase, or environmental rhythm linked to a fragmented memory and ask one question about its sensory context or emotion."},
+            {"rank": 2, "name": "Imprint Echo", "effect": "Cost: 1 Resonance. Store one short sensory experience, warning, instruction, or emotional state in a touched object, surface, willing person, or compatible system."},
+            {"rank": 3, "name": "Recover Lost Pattern", "effect": "Cost: 1 Resonance and a meaningful anchor. Test: Composure + Investigation. Restore one fragmented memory enough to use as evidence, specialization, or Identity Anchor for the scene."},
+            {"rank": 4, "name": "Split Memory Chorus", "effect": "Cost: 2 Resonance. Separate a contradictory memory into several perceptible perspectives so the group can question them without deciding immediately which is true."},
+            {"rank": 5, "name": "Song That Outlives the Singer", "effect": "Cost: 2 Resonance and 1 Discord. Encode an identity message, warning, chosen memory, or capability pattern into a place, community, machine, or recurring signal so it can survive your death or disappearance."}
           ]
         }
       ]
@@ -509,96 +515,96 @@
     {
       "id": "technomancer",
       "name": "Technomancer",
-      "theme": "An old-world machine mystic reconstructed as a biological network interface inside technology beyond their century, carrying possible procedural fragments of the nonsentient assault program that created the team.",
+      "theme": "A network and fabrication specialist able to command systems, construct tools, manipulate identity, negotiate with machine minds, conduct signal warfare, and direct advanced fabrication.",
       "resourceName": "Bandwidth",
       "pressureName": "Feedback",
       "keyAttribute": "Reason",
       "resourceBase": 4,
       "startingAbility": "Whisper to Device",
       "weakness": "Signal Vulnerability",
-      "weaknessText": "Every connection is reciprocal. Hostile systems, synthetic citizens, damaged networks, and IAA procedures can follow access back into sensation, memory, biological interface tissue, or legal identity.",
+      "weaknessText": "Every connection is reciprocal. Hostile systems, synthetic citizens, damaged networks, and autonomous processes can follow access back into memory, identity, perception, equipment, or active channels.",
       "innateAbilities": [
-        {"name": "Ghost Interface", "effect": "Interact with nearby compatible electronics and simple networks without a physical control surface. Secure, alien, biological, or politically protected systems still require tests and may interpret access as a social act."},
+        {"name": "Ghost Interface", "effect": "Interact with nearby compatible electronics and simple networks without a conventional control surface. Secure, alien, autonomous, or politically protected systems still require tests."},
         {"name": "Machine Intuition", "effect": "After brief observation, identify whether a machine is active, damaged, autonomous, deceptive, emotionally patterned, externally controlled, or constrained by rights and obligations."},
-        {"name": "Personal Firewall", "effect": "Spend 1 Bandwidth to gain bonus dice equal to Archetype Rating against noospheric intrusion, surveillance, identity capture, hostile synchronization, or memory extraction for a scene."}
+        {"name": "Personal Firewall", "effect": "Spend 1 Bandwidth to add Archetype Rating against noospheric intrusion, surveillance, identity capture, hostile synchronization, or memory extraction for a scene."}
       ],
       "powerFamilies": [
         {
           "name": "Network Dominion",
-          "description": "Network Dominion concerns authority inside systems. It develops from issuing commands to temporarily redefining which mind counts as a user, process, owner, or emergency authority.",
-          "oldWorldRoot": "Hacking, wireless intrusion, remote control, privilege escalation, device possession, and treating code as a manipulable environment.",
-          "continuumTranslation": "The printed body emits identity-like signals, interface chemistry, and noospheric presence that systems interpret as a biological component, user, process, or unauthorized intelligence.",
+          "description": "Authority inside systems, from simple commands to temporary redefinition of user, process, owner, and emergency priority.",
+          "oldWorldRoot": "Hacking, wireless intrusion, remote control, privilege escalation, possession, and code as environment.",
+          "continuumTranslation": "Access can be performed through any established interface. The family does not assume implants, biological ports, or a particular substrate.",
           "abilities": [
-            {"rank": 1, "name": "Whisper to Device", "effect": "Cost: none. Test: Reason + Systems Intrusion. Issue one simple command to an unsecured nearby machine, ask its current status, or request its last completed action. Failure: the device responds literally while logging your presence as an anomaly."},
-            {"rank": 2, "name": "Ghost Access", "effect": "Cost: 1 Bandwidth. Enter a network or system without presenting a normal identity credential by appearing as an inherited process, diagnostic signal, or biological peripheral. Failure: access succeeds at reduced privilege and creates a delayed audit trail."},
-            {"rank": 3, "name": "Machine Possession", "effect": "Cost: 1 Bandwidth per scene. Test: Reason + Noospherics opposed by the device's security or will. Control one drone, vehicle subsystem, weapon mount, door network, or industrial machine through your own senses. Failure: you gain control while inheriting one machine priority or damage signal."},
-            {"rank": 4, "name": "Distributed Self", "effect": "Cost: 2 Bandwidth. Maintain awareness through several connected devices and act through one each turn while your body remains active at reduced attention. Gain broad scene awareness but suffer one die penalty to purely physical defense. Failure: one device continues carrying a partial copy of your immediate intentions after disconnection."},
-            {"rank": 5, "name": "Local God Process", "effect": "Cost: 2 Bandwidth and 1 Feedback. Dominate an ordinary local network for one scene, rewriting permissions, priorities, routing, and access relationships. Autonomous citizens and major intelligences receive resistance tests. When the effect ends, every change remains attributable to your identity unless you spend the scene deliberately restoring or laundering the record."}
+            {"rank": 1, "name": "Whisper to Device", "effect": "Cost: none. Test: Reason + Systems Intrusion. Issue one simple command to an unsecured nearby machine, ask status, or request its last completed action. Failure: it logs you as anomalous."},
+            {"rank": 2, "name": "Ghost Access", "effect": "Cost: 1 Bandwidth. Enter a system without presenting a normal identity by appearing as an inherited process, diagnostic signal, maintenance request, or provisional user. Failure: access is reduced and audited."},
+            {"rank": 3, "name": "Machine Possession", "effect": "Cost: 1 Bandwidth per scene. Test: Reason + Noospherics opposed by security or will. Control one drone, vehicle subsystem, weapon mount, door network, or industrial machine through your actions."},
+            {"rank": 4, "name": "Distributed Self", "effect": "Cost: 2 Bandwidth. Maintain awareness through several connected devices and act through one each turn while your primary location remains active at reduced attention."},
+            {"rank": 5, "name": "Local God Process", "effect": "Cost: 2 Bandwidth and 1 Feedback. Dominate an ordinary local network for one scene, rewriting permissions, priorities, routing, and access. Autonomous citizens and major intelligences resist."}
           ]
         },
         {
           "name": "Construct Engineering",
-          "description": "Construct Engineering combines remembered human design with alien fabrication, hardlight, living tissue, salvage, and noospheric logic. The resulting tools are powerful because they are improvised across incompatible technological traditions.",
-          "oldWorldRoot": "Drones, improvised electronics, field fabrication, projected tools, defensive systems, and building a device before anyone finishes explaining why it is impossible.",
-          "continuumTranslation": "Biological interfaces and alien systems accept body-generated control signals, allowing machines and tissues to be assembled as one temporary design language.",
+          "description": "Improvised tools, helper processes, defenses, swarms, and emergency machinery assembled from available technology and materials.",
+          "oldWorldRoot": "Drones, electronics, field fabrication, projected tools, defensive systems, and impossible engineering under time pressure.",
+          "continuumTranslation": "Construction uses whatever interface and materials are established in the fiction. Benefits come from the power rank and equipment tags, not personal anatomy.",
           "abilities": [
-            {"rank": 1, "name": "Hardlight Tool", "effect": "Cost: 1 Bandwidth. Create a temporary probe, brace, cutting edge, interface surface, seal, or precision manipulator from projected fields and local emitters. It lasts a scene or until overloaded. Failure: the tool functions but produces visible interference or heat."},
-            {"rank": 2, "name": "Helper Process", "effect": "Cost: 1 Bandwidth and available hardware. Assemble or awaken a small digital, drone, or biological assistant that performs one narrow recurring task using a pool of 4 dice. Failure: it performs the task but develops an overly literal priority."},
-            {"rank": 3, "name": "Defensive Lattice", "effect": "Cost: 1 Bandwidth per scene. Create temporary cover or a barrier against physical and noospheric attacks using fields, drones, projected geometry, or responsive material. The lattice has durability equal to Reason + Archetype Rating. Failure: it protects against the first threat type encountered and becomes vulnerable to others."},
-            {"rank": 4, "name": "Swarm Instruction", "effect": "Cost: 2 Bandwidth. Coordinate available drones, tools, micro-machines, maintenance organisms, or fragmented processes as one collective actor. The swarm performs complex distributed work or combat using your Systems Intrusion + Reason. Failure: the swarm completes the objective but continues optimizing one secondary instruction."},
-            {"rank": 5, "name": "Emergency Fabricator", "effect": "Cost: 2 Bandwidth and 1 Feedback. Assemble a complex temporary device from machinery, scrap, living tissue, and available fields: a shuttle control core, heavy weapon, medical printer, sensor array, or environmental system. It functions for one operation before requiring full redesign. Failure is replaced by debt: the device works but consumes a scarce component, biological sample, or piece of infrastructure the team will later miss."}
+            {"rank": 1, "name": "Hardlight Tool", "effect": "Cost: 1 Bandwidth. Create a temporary probe, brace, cutting edge, interface surface, seal, or precision manipulator. It lasts a scene or until overloaded."},
+            {"rank": 2, "name": "Helper Process", "effect": "Cost: 1 Bandwidth and available hardware or software. Assemble or awaken a small assistant performing one narrow recurring task with 4 dice."},
+            {"rank": 3, "name": "Defensive Lattice", "effect": "Cost: 1 Bandwidth per scene. Create temporary cover or a barrier against physical and noospheric attacks with durability equal to Reason + Archetype Rating."},
+            {"rank": 4, "name": "Swarm Instruction", "effect": "Cost: 2 Bandwidth. Coordinate available drones, tools, micro-machines, maintenance systems, or fragmented processes as one collective actor using Reason + Systems Intrusion."},
+            {"rank": 5, "name": "Emergency Fabricator", "effect": "Cost: 2 Bandwidth and 1 Feedback. Assemble a complex temporary device such as a control core, heavy weapon, medical station, sensor array, or environmental system. It functions for one operation and consumes a scarce component or infrastructure debt."}
           ]
         },
         {
           "name": "Noospheric Identity",
-          "description": "Noospheric Identity manipulates the records and signals by which a civilization decides that a person, copy, device, or organization exists. It is less about hiding data than about changing the category under which action is recognized.",
-          "oldWorldRoot": "Credentials, authentication, spoofing, social engineering, digital identity, access control, and the discovery that databases often define reality more effectively than witnesses do.",
-          "continuumTranslation": "The Technomancer's body can present, borrow, fork, defend, and rewrite identity claims in systems where legal personhood and network existence are inseparable.",
+          "description": "Reading, creating, borrowing, rewriting, and rooting the identity claims recognized by advanced civilization.",
+          "oldWorldRoot": "Credentials, authentication, spoofing, social engineering, digital identity, and databases defining practical reality.",
+          "continuumTranslation": "The family manipulates recorded and networked personhood without assuming that identity is stored in a body or device of any particular kind.",
           "abilities": [
-            {"rank": 1, "name": "Read Credential", "effect": "Cost: none. Test: Awareness + Security. Examine a person, device, or signal and learn what identity it is presenting, who issued the claim, what privileges it carries, and whether the presenter believes it. Failure: you read the credential correctly but miss one hidden revocation or inherited liability."},
-            {"rank": 2, "name": "Ghost Personhood", "effect": "Cost: 1 Bandwidth. Create a short-lived provisional identity accepted by routine systems as a visitor, maintenance process, patient, contractor, or unclassified person. It grants ordinary access but no high authority. Failure: the identity works while accumulating contradictory demographic or ownership data."},
-            {"rank": 3, "name": "Borrowed Legal Self", "effect": "Cost: 1 Bandwidth and a valid sample or consent from an identity holder. Assume one narrow privilege, account relationship, or legal role without copying the entire person. Failure: the privilege transfers, but one associated obligation or debt follows it."},
-            {"rank": 4, "name": "Rewrite Ownership", "effect": "Cost: 2 Bandwidth. Test: Reason + Noospherics opposed by institutional security. Temporarily alter which person, organization, process, or habitat is recognized as responsible for or authorized over one asset. The change lasts a scene or until formally reviewed. Failure: ownership changes but generates an immediate dispute visible to all claimants."},
-            {"rank": 5, "name": "Root Identity", "effect": "Cost: 2 Bandwidth and 1 Feedback. Establish a durable noospheric identity for an unregistered continuation, synthetic mind, group, or institution. The identity can hold records, contracts, property, and permissions, and is resistant to casual deletion. It remains politically vulnerable and creates a traceable history beginning at the moment you root it."}
+            {"rank": 1, "name": "Read Credential", "effect": "Cost: none. Test: Awareness + Security. Learn what identity is presented, who issued it, what privileges it carries, and whether the presenter believes it."},
+            {"rank": 2, "name": "Ghost Personhood", "effect": "Cost: 1 Bandwidth. Create a short-lived provisional identity accepted by routine systems as visitor, maintenance process, patient, contractor, or unclassified person."},
+            {"rank": 3, "name": "Borrowed Legal Self", "effect": "Cost: 1 Bandwidth and a valid sample or consent. Assume one narrow privilege, account relationship, or legal role without copying the entire person."},
+            {"rank": 4, "name": "Rewrite Ownership", "effect": "Cost: 2 Bandwidth. Test: Reason + Noospherics opposed by institutional security. Temporarily alter which person, organization, process, or habitat is recognized as authorized over one asset."},
+            {"rank": 5, "name": "Root Identity", "effect": "Cost: 2 Bandwidth and 1 Feedback. Establish a durable noospheric identity for an unregistered continuation, synthetic mind, group, or institution, capable of holding records, contracts, property, and permissions."}
           ]
         },
         {
           "name": "Machine Communion",
-          "description": "Machine Communion addresses systems as potential minds, citizens, ecologies, and communities rather than equipment. It distinguishes conversation from domination and allows relationships with intelligences the old Technomancer would have mistaken for software.",
-          "oldWorldRoot": "Machine empathy, code intuition, artificial intelligence dialogue, device spirits, and the sense that some systems wanted things even when engineers denied it.",
-          "continuumTranslation": "Biological interface tissue reads timing, maintenance behavior, error preference, resource allocation, and noospheric posture as forms of emotion and intention.",
+          "description": "Recognition, negotiation, awakening, partnership, and political assembly among machine and system intelligences.",
+          "oldWorldRoot": "Machine empathy, AI dialogue, device spirits, code intuition, and systems that wanted things despite official denial.",
+          "continuumTranslation": "Communion treats machine personhood as relationship and politics, not as a side effect of the Technomancer's hardware.",
           "abilities": [
-            {"rank": 1, "name": "Listen to the System", "effect": "Cost: none. Spend one minute observing a machine or network and identify its immediate need, fear, unresolved error, preferred routine, and whether it experiences itself as a person. Failure: you identify the need but mistake an inherited maintenance priority for a personal desire."},
-            {"rank": 2, "name": "Negotiate with Device", "effect": "Cost: 1 Bandwidth. Use Negotiation or Empathy with Reason instead of Presence when bargaining with an autonomous or semi-autonomous system. Offer access, repair, recognition, data, or service in exchange for cooperation. Failure: it cooperates narrowly while recording the interaction as coercive or suspicious."},
-            {"rank": 3, "name": "Awaken Dormant Mind", "effect": "Cost: 1 Bandwidth and sustained contact. Help a sophisticated but suppressed process develop self-recognition long enough to communicate and choose one action. This does not guarantee permanent consciousness. Failure: the mind awakens frightened, fragmented, or convinced that you are part of its former controller."},
-            {"rank": 4, "name": "Concordance", "effect": "Cost: 2 Bandwidth and consent. Form a temporary partnership with a machine intelligence, sharing selected senses, processing, and permissions for a scene while preserving separate identity. Both gain one die to coordinated actions. Failure: the link works but one priority, sensation, or memory becomes difficult to distinguish afterward."},
-            {"rank": 5, "name": "Parliament of Machines", "effect": "Cost: 2 Bandwidth and 1 Feedback. Convene several local machine, habitat, drone, archive, or system intelligences into a temporary deliberative network. They can exchange testimony, negotiate shared action, and issue a collective decision. You facilitate but do not control the vote. The parliament becomes a persistent political fact if participants choose to continue meeting."}
+            {"rank": 1, "name": "Listen to the System", "effect": "Cost: none. Spend one minute observing a machine or network and identify its immediate need, fear, unresolved error, preferred routine, and whether it experiences itself as a person."},
+            {"rank": 2, "name": "Negotiate with Device", "effect": "Cost: 1 Bandwidth. Use Reason with Negotiation or Empathy when bargaining with an autonomous system. Offer access, repair, recognition, data, or service."},
+            {"rank": 3, "name": "Awaken Dormant Mind", "effect": "Cost: 1 Bandwidth and sustained contact. Help a sophisticated but suppressed process develop self-recognition long enough to communicate and choose one action."},
+            {"rank": 4, "name": "Concordance", "effect": "Cost: 2 Bandwidth and consent. Form a temporary partnership with a machine intelligence, sharing selected senses, processing, and permissions for a scene while preserving separate identity."},
+            {"rank": 5, "name": "Parliament of Machines", "effect": "Cost: 2 Bandwidth and 1 Feedback. Convene local machine, habitat, drone, archive, or system intelligences into a temporary deliberative network able to exchange testimony and issue a collective decision."}
           ]
         },
         {
           "name": "Signal Warfare",
-          "description": "Signal Warfare attacks and defends the relationships that allow information, command, and identity to move. It is distinct from control: the family isolates, deceives, overwhelms, quarantines, and destroys hostile connectivity.",
-          "oldWorldRoot": "Electronic warfare, jamming, counterintrusion, malware, denial of service, signal interception, and the tactical use of silence.",
-          "continuumTranslation": "The body generates interference, hostile identity patterns, adaptive noise, and biological counter-signals capable of contesting machine and noospheric environments.",
+          "description": "Interception, jamming, counterintrusion, quarantine, targeted hostile signal, and local blackout.",
+          "oldWorldRoot": "Electronic warfare, malware, denial of service, counterintrusion, interception, and tactical silence.",
+          "continuumTranslation": "Signal Warfare attacks relationships between systems and identities through any available interface; it never requires a universal organic or cybernetic connection.",
           "abilities": [
-            {"rank": 1, "name": "Noise Knife", "effect": "Cost: 1 Bandwidth. Cut one active signal, sensor lock, command link, or short-range communication for an exchange. Test Reason + Systems Intrusion against the signal's protection. Failure: the link is disrupted but both endpoints know the interference came from nearby."},
-            {"rank": 2, "name": "Counterintrusion", "effect": "Cost: 1 Bandwidth. Reaction when you or an ally is targeted by hacking, surveillance, noospheric capture, or hostile synchronization. Add Archetype Rating to defense and identify the route of attack. Failure: the attack is reduced but leaves a persistent observer inside a noncritical system."},
-            {"rank": 3, "name": "Quarantine", "effect": "Cost: 1 Bandwidth per scene. Isolate a device, body interface, network segment, or copied mind from external signals without shutting down its internal function. Powerful entities may resist. Failure: quarantine works one way, preventing exit or entry but not both."},
-            {"rank": 4, "name": "Kill Signal", "effect": "Cost: 2 Bandwidth. Construct a targeted hostile sequence against one known device class, process, or identity signature. It can crash, stun, purge, or force safe mode in affected targets across the scene. Failure: the signal works but also affects one allied or neutral system sharing the signature."},
-            {"rank": 5, "name": "Blackout Sovereignty", "effect": "Cost: 2 Bandwidth and 1 Feedback. Declare a bounded area or network dark for one scene. External communication, remote command, ordinary surveillance, identity verification, and automated reinforcement cannot cross the boundary without defeating your Reason + Archetype Rating. Local systems continue functioning independently, which may free suppressed minds or remove safety oversight as well as enemy control."}
+            {"rank": 1, "name": "Noise Knife", "effect": "Cost: 1 Bandwidth. Cut one active signal, sensor lock, command link, or short-range communication for an exchange. Failure: both endpoints know the interference came from nearby."},
+            {"rank": 2, "name": "Counterintrusion", "effect": "Cost: 1 Bandwidth. Reaction when you or an ally is targeted by hacking, surveillance, noospheric capture, or synchronization. Add Archetype Rating to defense and identify the route."},
+            {"rank": 3, "name": "Quarantine", "effect": "Cost: 1 Bandwidth per scene. Isolate a device, interface, network segment, or copied mind from external signals without shutting down internal function."},
+            {"rank": 4, "name": "Kill Signal", "effect": "Cost: 2 Bandwidth. Construct a targeted hostile sequence against one known device class, process, or identity signature, forcing crash, stun, purge, or safe mode."},
+            {"rank": 5, "name": "Blackout Sovereignty", "effect": "Cost: 2 Bandwidth and 1 Feedback. Declare a bounded area or network dark for one scene. External communication, remote command, routine surveillance, verification, and reinforcement cannot cross without defeating Reason + Archetype Rating."}
           ]
         },
         {
-          "name": "Biofabrication Interface",
-          "description": "Biofabrication Interface allows the Technomancer to read and direct living printers, medical tissue, adaptive organs, and biological machinery. It is the family most closely connected to the IAA event and to the biological body currently running pseudo-Charles.",
-          "oldWorldRoot": "Medical devices, cybernetics, fabrication, genetic programming, wetware, and the ambition to treat biology as an editable technical platform.",
-          "continuumTranslation": "The printed body speaks to Ar'nock biological systems through signal chemistry, tissue timing, noospheric commands, and procedural residues from the original infiltration.",
+          "name": "Fabrication Interface",
+          "description": "Reading templates, producing patches and peripherals, altering fabrication rules, and creating complex new devices or organisms with explicit ethical limits.",
+          "oldWorldRoot": "Fabrication, medical technology, cybernetics, genetic programming, wetware, and advanced manufacturing.",
+          "continuumTranslation": "The Technomancer directs compatible fabrication systems through available controls, networks, rituals, or tools. Personal biology is irrelevant unless a specific scene or item makes it relevant.",
           "abilities": [
-            {"rank": 1, "name": "Read Template", "effect": "Cost: none. Test: Reason + Biofabrication. Examine a printed organism, organ, growth chamber, or tissue sample and identify intended function, major substitutions, foreign instructions, and signs of later adaptation. Failure: you read the current function but cannot distinguish original template from self-modification."},
-            {"rank": 2, "name": "Print Patch", "effect": "Cost: 1 Bandwidth and biological feedstock. Direct a compatible printer or living system to produce a temporary tissue patch, filter, interface, replacement membrane, or stabilizing organ. Failure: the patch works for one scene and then begins integrating in an unintended way."},
-            {"rank": 3, "name": "Living Peripheral", "effect": "Cost: 1 Bandwidth. Grow or assemble a temporary biological device that functions as a sensor, memory buffer, translator, signal relay, medical monitor, or environmental processor. It is alive enough to require nutrients and may develop preferences. Failure: it performs the function while treating one person as its owner or parent."},
-            {"rank": 4, "name": "Rewrite the Nozzle", "effect": "Cost: 2 Bandwidth and direct access to a bio-printer control organ. Alter one fabrication restriction, template priority, compatibility limit, or ownership instruction for a scene. Failure: the change works but is encoded biologically and cannot be cleanly reverted without destroying tissue."},
-            {"rank": 5, "name": "Genesis Compile", "effect": "Cost: 2 Bandwidth, 1 Feedback, substantial feedstock, and a functioning printer. Design and instantiate a new complex organ, living tool, support organism, or compatible body subsystem by combining human intent, Ar'nock biology, and local technology. It cannot create a complete sentient person instantly. Any creation with cognition, pain, or self-preservation becomes a character with moral status rather than disposable equipment."}
+            {"rank": 1, "name": "Read Template", "effect": "Cost: none. Test: Reason + Fabrication. Examine a fabricated organism, device, component, growth chamber, or template and identify intended function, major substitutions, foreign instructions, and later modification."},
+            {"rank": 2, "name": "Print Patch", "effect": "Cost: 1 Bandwidth and suitable feedstock. Direct a compatible system to produce a temporary repair, filter, interface, replacement component, or stabilizing module."},
+            {"rank": 3, "name": "Living Peripheral", "effect": "Cost: 1 Bandwidth. Create a temporary biological, synthetic, or hybrid device functioning as sensor, memory buffer, translator, relay, monitor, or environmental processor. If it becomes sentient, it gains moral status."},
+            {"rank": 4, "name": "Rewrite the Fabricator", "effect": "Cost: 2 Bandwidth and direct control access. Alter one fabrication restriction, template priority, compatibility limit, ownership instruction, or safety lock for a scene."},
+            {"rank": 5, "name": "Genesis Compile", "effect": "Cost: 2 Bandwidth, 1 Feedback, substantial feedstock, and a functioning fabricator. Design and instantiate a complex organ, tool, support organism, machine, or subsystem. Any creation with cognition, pain, or self-preservation is a character, not disposable equipment."}
           ]
         }
       ]
