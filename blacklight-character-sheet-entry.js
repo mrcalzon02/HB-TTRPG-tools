@@ -3,7 +3,8 @@
 
   function installCharacterCard() {
     const grid = document.querySelector('#blacklight-continuum .module-grid');
-    if (!grid || grid.querySelector('[data-blacklight-basic-sheet-card]')) return false;
+    if (!grid) return false;
+    if (grid.querySelector('[data-blacklight-basic-sheet-card]')) return true;
 
     const card = document.createElement('article');
     card.className = 'module-card';
@@ -28,22 +29,27 @@
   function installCampaignReaderLink() {
     const workspace = document.getElementById('blacklight-continuum');
     if (!workspace) return false;
-    const link = [...workspace.querySelectorAll('a')].find(anchor =>
+
+    const currentLink = [...workspace.querySelectorAll('a')].find(anchor =>
+      anchor.getAttribute('href') === 'blacklight-campaign-reader.html'
+    );
+    if (currentLink) return true;
+
+    const sourceLink = [...workspace.querySelectorAll('a')].find(anchor =>
       anchor.getAttribute('href') === 'docs/blacklight-continuum/campaign-introduction.md'
       || anchor.textContent.trim() === 'Open Campaign Document'
     );
-    if (!link) return false;
-    link.href = 'blacklight-campaign-reader.html';
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.textContent = 'Open Formatted Campaign Document';
+    if (!sourceLink) return false;
+
+    sourceLink.href = 'blacklight-campaign-reader.html';
+    sourceLink.target = '_blank';
+    sourceLink.rel = 'noopener';
+    sourceLink.textContent = 'Open Formatted Campaign Document';
     return true;
   }
 
   function install() {
-    const cardReady = installCharacterCard();
-    const readerReady = installCampaignReaderLink();
-    return cardReady && readerReady;
+    return installCharacterCard() && installCampaignReaderLink();
   }
 
   if (!install()) {
