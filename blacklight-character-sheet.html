@@ -30,6 +30,7 @@
         <h3>Basic Test</h3>
         <p><strong>Attribute + Skill</strong> d10s. Results of 6–9 are successes. A 10 is a success and may activate a specialization or power rider.</p>
         <p>A failed roll containing a 1 creates a Complication. Push by rerolling failed dice up to Resolve, then gain 1 Exposure.</p>
+        <p><strong>Description is not permission.</strong> A special sense, defense, movement mode, immunity, attack, transformation, interface, or resistance exists only when recorded as a capability.</p>
       </div>
     </aside>
 
@@ -53,8 +54,8 @@
           <label>Concept<input name="concept" type="text" placeholder="Marooned analyst, blood-fed infiltrator…"></label>
           <label>Archetype<select id="blacklight-archetype" name="archetype"><option value="">Loading…</option></select></label>
           <label>Archetype Rating<input id="blacklight-archetype-rating" name="archetypeRating" type="number" min="1" max="5" value="1"></label>
-          <label>Operational Frame<input name="operationalFrame" type="text" placeholder="Infiltrator, Medic, Clone Warden…"></label>
-          <label>Lineage / Variant<input name="lineageVariant" type="text" placeholder="Bloodline, shifting form, patron, mutation…"></label>
+          <label>Operational Frame<input name="operationalFrame" type="text" placeholder="Infiltrator, Medic, Continuity Warden…"></label>
+          <label>Lineage / Variant<input name="lineageVariant" type="text" placeholder="Bloodline, shifting tradition, patron, resonance school…"></label>
           <label>Origin World<input name="originWorld" type="text"></label>
           <label>Current Identity Status<input name="identityStatus" type="text" value="Unregistered Q-MAP Continuation"></label>
           <label>Experience / Advancement<input name="advancement" type="number" min="0" value="0"></label>
@@ -130,7 +131,7 @@
         </div>
         <div class="blacklight-damage-grid">
           <label>Impact Damage<textarea name="impactDamage" rows="2" placeholder="Bruising, shock, exhaustion"></textarea></label>
-          <label>Trauma Damage<textarea name="traumaDamage" rows="2" placeholder="Penetration, burns, organ injury"></textarea></label>
+          <label>Trauma Damage<textarea name="traumaDamage" rows="2" placeholder="Penetration, burns, severe injury"></textarea></label>
           <label>Disruption Damage<textarea name="disruptionDamage" rows="2" placeholder="Memory, noospheric, identity injury"></textarea></label>
         </div>
       </section>
@@ -141,12 +142,12 @@
           <span class="blacklight-panel-code">0–5</span>
         </div>
         <div id="blacklight-skills" class="blacklight-skill-groups"></div>
-        <label class="blacklight-wide-label">Specializations<textarea name="specializations" rows="3" placeholder="Shipboard Firearms, Printed Anatomy, Identity Architecture…"></textarea></label>
+        <label class="blacklight-wide-label">Specializations<textarea name="specializations" rows="3" placeholder="Shipboard Firearms, Field Medicine, Identity Architecture…"></textarea></label>
       </section>
 
       <section class="blacklight-sheet-panel blacklight-archetype-panel">
         <div class="blacklight-section-heading">
-          <div><p class="eyebrow">Supernatural or exceptional nature</p><h2>Archetype, Weakness, and Innate Abilities</h2></div>
+          <div><p class="eyebrow">Exceptional capability framework</p><h2>Archetype, Weakness, and Innate Abilities</h2></div>
           <span class="blacklight-panel-code">CLASS</span>
         </div>
         <article id="blacklight-archetype-summary" class="blacklight-archetype-summary">
@@ -156,7 +157,7 @@
 
       <section class="blacklight-sheet-panel">
         <div class="blacklight-section-heading">
-          <div><p class="eyebrow">Ranked supernatural development</p><h2>Powers and Abilities</h2></div>
+          <div><p class="eyebrow">Ranked capability development</p><h2>Powers and Abilities</h2></div>
           <span class="blacklight-panel-code">1–5</span>
         </div>
         <div id="blacklight-power-list" class="blacklight-power-list">
@@ -186,15 +187,16 @@
 
       <section class="blacklight-sheet-panel">
         <div class="blacklight-section-heading">
-          <div><p class="eyebrow">Printed biology</p><h2>Body, Form, and Conditions</h2></div>
-          <span class="blacklight-panel-code">BIO</span>
+          <div><p class="eyebrow">Explicit rules record</p><h2>Capabilities, Limits, and Conditions</h2></div>
+          <span class="blacklight-panel-code">CAP</span>
         </div>
+        <p class="helper-note">Describe appearance and embodiment freely. Record every rules-relevant benefit or restriction here or in a power, item, condition, Attribute, Skill, or Archetype feature.</p>
         <div class="blacklight-field-grid blacklight-grid-3">
-          <label>Visible Irregularity<textarea name="visibleIrregularity" rows="3" placeholder="Resinous wounds, reflective eyes, segmented joints…"></textarea></label>
-          <label>Latent Advantage<textarea name="latentAdvantage" rows="3"></textarea></label>
-          <label>Biological Need or Bane<textarea name="biologicalNeed" rows="3"></textarea></label>
-          <label>Current Form<textarea name="currentForm" rows="3"></textarea></label>
-          <label>Mutations / Adaptations<textarea name="mutations" rows="3"></textarea></label>
+          <label>Signature Capability<textarea name="visibleIrregularity" rows="3" placeholder="What can you explicitly do that ordinary characters cannot?"></textarea></label>
+          <label>Capability Source / Expression<textarea name="latentAdvantage" rows="3" placeholder="Training, blood, pact, technology, resonance, spirit, equipment…"></textarea></label>
+          <label>Meaningful Limitation or Bane<textarea name="biologicalNeed" rows="3" placeholder="What restricts, costs, or endangers the capability?"></textarea></label>
+          <label>Current State / Form<textarea name="currentForm" rows="3" placeholder="Only record a state when it changes available capabilities."></textarea></label>
+          <label>Adaptations / Upgrades<textarea name="mutations" rows="3" placeholder="Purchased or earned changes with explicit effects."></textarea></label>
           <label>Persistent Conditions<textarea name="conditions" rows="3"></textarea></label>
         </div>
       </section>
