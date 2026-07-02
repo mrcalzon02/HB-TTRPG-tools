@@ -3,7 +3,6 @@
 
   const ENTRY_URL = 'data/blacklight-continuum/wiki/basic-archetypes.json';
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
-  const STORAGE_KEY = 'hb-ttrpg-tools-blacklight-basic-character-v1';
   let archetypeWiki = null;
   let rulesData = null;
 
@@ -21,29 +20,18 @@
       .blacklight-transition-profile{display:grid;gap:14px}
       .blacklight-transition-hero{border:1px solid rgba(200,138,53,.34);border-radius:16px;padding:15px;background:linear-gradient(120deg,rgba(89,42,122,.16),rgba(200,138,53,.08))}
       .blacklight-transition-hero h3{margin:0 0 6px}.blacklight-transition-hero p{color:var(--muted);line-height:1.58}
-      .blacklight-continuity-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-      .blacklight-continuity-facts article{border:1px solid var(--line);border-radius:13px;padding:12px;background:rgba(255,255,255,.025)}
-      .blacklight-continuity-facts h4{margin:0 0 7px;color:var(--accent)}
-      .blacklight-continuity-facts ul{margin:0;padding-left:18px}.blacklight-continuity-facts li{color:var(--muted);line-height:1.48}
-      .blacklight-transition-table-wrap{overflow-x:auto}
-      .blacklight-transition-table{width:100%;min-width:700px;border-collapse:collapse;color:var(--muted);font-size:.87rem}
-      .blacklight-transition-table th,.blacklight-transition-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top;line-height:1.45}
-      .blacklight-transition-table th{color:var(--ink);background:rgba(200,138,53,.12)}
-      .blacklight-transition-table tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
       .blacklight-family-catalog{display:grid;gap:16px}
       .blacklight-family-record{border:1px solid rgba(200,138,53,.34);border-radius:16px;padding:15px;background:rgba(255,255,255,.025)}
       .blacklight-family-record h3{margin:0 0 7px;color:var(--accent)}
-      .blacklight-family-record>p{color:var(--muted);line-height:1.56;margin:7px 0}
-      .blacklight-family-roots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
-      .blacklight-family-roots div{border-left:3px solid var(--accent);padding:9px 11px;background:rgba(200,138,53,.07);color:var(--muted);line-height:1.48}
+      .blacklight-family-record>p{color:var(--muted);line-height:1.56;margin:7px 0 12px}
       .blacklight-ranked-powers{display:grid;gap:8px}
       .blacklight-ranked-power{display:grid;grid-template-columns:72px minmax(150px,.55fr) minmax(0,2fr);gap:10px;padding:10px;border-top:1px solid var(--line)}
       .blacklight-ranked-power:first-child{border-top:0}
       .blacklight-ranked-power strong{color:var(--ink)}
       .blacklight-rank-badge{color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem}
       .blacklight-ranked-power span:last-child{color:var(--muted);line-height:1.52}
-      @media(max-width:900px){.blacklight-continuity-facts,.blacklight-family-roots{grid-template-columns:1fr}.blacklight-ranked-power{grid-template-columns:1fr}}
-      @media print{.blacklight-transition-hero,.blacklight-continuity-facts article,.blacklight-family-record,.blacklight-family-roots div{background:#fff!important;border-color:#555!important}.blacklight-transition-hero p,.blacklight-continuity-facts li,.blacklight-transition-table,.blacklight-family-record>p,.blacklight-family-roots div,.blacklight-ranked-power span:last-child{color:#222!important}.blacklight-continuity-facts h4,.blacklight-transition-table th,.blacklight-family-record h3,.blacklight-ranked-power strong,.blacklight-rank-badge{color:#000!important}.blacklight-transition-table th,.blacklight-transition-table td{border-color:#555!important}}
+      @media(max-width:900px){.blacklight-ranked-power{grid-template-columns:1fr}}
+      @media print{.blacklight-transition-hero,.blacklight-family-record{background:#fff!important;border-color:#555!important}.blacklight-transition-hero p,.blacklight-family-record>p,.blacklight-ranked-power span:last-child{color:#222!important}.blacklight-family-record h3,.blacklight-ranked-power strong,.blacklight-rank-badge{color:#000!important}}
     `;
     document.head.appendChild(style);
   }
@@ -59,49 +47,15 @@
     panel.className = 'blacklight-sheet-panel';
     panel.innerHTML = `
       <div class="blacklight-section-heading">
-        <div><p class="eyebrow">The same archetype entry, continued</p><h2>Old-World Capability, Continuum Change, and Power Families</h2></div>
+        <div><p class="eyebrow">Complete capability catalog</p><h2>Archetype Power Families</h2></div>
         <span class="blacklight-panel-code">CAPABILITY</span>
       </div>
       <div id="blacklight-transition-profile" class="blacklight-transition-profile">
-        <p class="helper-note">Select an archetype to load its complete record and all six detailed power families.</p>
-      </div>
-      <div class="blacklight-field-grid blacklight-grid-2">
-        <label>Old-World Capability Identity<textarea name="oldWorldIdentity" rows="4" placeholder="What could you do, and what did this Archetype mean before Q-MAP?"></textarea></label>
-        <label>Old Assumption That No Longer Holds<textarea name="brokenOldRule" rows="4" placeholder="Which certainty about your powers, source, limits, or enemies failed here?"></textarea></label>
-        <label>First Power Misfire<textarea name="firstTranslationScar" rows="4" placeholder="What happened the first time a familiar capability behaved differently?"></textarea></label>
-        <label>Current Continuum Expression<textarea name="currentDerivative" rows="4" placeholder="How does the capability function now, and what explicit rule defines it?"></textarea></label>
-        <label>Fragmented Legacy Memory<textarea name="legacyMemoryFragment" rows="4" placeholder="What old-world memory still guides the capability even though its context is missing?"></textarea></label>
-        <label>Capability Discoveries<textarea name="adaptationMarks" rows="4" placeholder="Record new uses, altered tells, replaced limits, prerequisites, and learned interactions."></textarea></label>
+        <p class="helper-note">Select an Archetype to load its capability summary and all six detailed power families.</p>
       </div>`;
 
     archetypePanel.insertAdjacentElement('afterend', panel);
-    restoreInjectedFields(panel);
     return panel;
-  }
-
-  function restoreInjectedFields(panel) {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const data = JSON.parse(raw);
-      const fields = data?.fields || {};
-      panel.querySelectorAll('[name]').forEach(field => {
-        if (Object.prototype.hasOwnProperty.call(fields, field.name)) field.value = fields[field.name] ?? '';
-      });
-    } catch (_) {
-      // The main sheet owns persistence; this only restores fields injected after its first load.
-    }
-  }
-
-  function renderTable(table) {
-    return `
-      <section>
-        <h3>${escapeHtml(table.title || 'Archetype Record')}</h3>
-        <div class="blacklight-transition-table-wrap"><table class="blacklight-transition-table">
-          <thead><tr>${(table.columns || []).map(column => `<th>${escapeHtml(column)}</th>`).join('')}</tr></thead>
-          <tbody>${(table.rows || []).map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')}</tbody>
-        </table></div>
-      </section>`;
   }
 
   function renderPowerFamilies(archetype) {
@@ -113,10 +67,6 @@
           <article class="blacklight-family-record">
             <h3>${escapeHtml(family.name)}</h3>
             <p>${escapeHtml(family.description)}</p>
-            <div class="blacklight-family-roots">
-              <div><strong>Old-world root:</strong> ${escapeHtml(family.oldWorldRoot)}</div>
-              <div><strong>Continuum expression:</strong> ${escapeHtml(family.continuumTranslation)}</div>
-            </div>
             <div class="blacklight-ranked-powers">${(family.abilities || []).map(ability => `
               <div class="blacklight-ranked-power">
                 <span class="blacklight-rank-badge">Rank ${escapeHtml(ability.rank)}</span>
@@ -141,25 +91,18 @@
     if (!entry || !archetype) {
       target.innerHTML = `
         <div class="blacklight-transition-hero">
-          <h3>Capability Is Explicit</h3>
-          <p>Q-MAP may have changed context, memory, ownership, and the laws surrounding familiar powers, but the rules only care about recorded capabilities. Select an archetype to see its integrated history and six complete power families.</p>
+          <h3>Capabilities Define the Archetype</h3>
+          <p>Select an Archetype to review its Resource, Pressure, weakness, innate abilities, and six complete power families. Crossing history and body reconstruction are not part of this rules record.</p>
         </div>`;
       return;
     }
 
-    const nonPowerTables = (entry.tables || []).filter(table => table.title !== 'Power Families' && table.title !== 'Six Power Families');
     target.innerHTML = `
       <div class="blacklight-transition-hero">
-        <p class="eyebrow">Integrated ${escapeHtml(entry.title)} entry</p>
+        <p class="eyebrow">${escapeHtml(entry.title)} capability entry</p>
         <h3>${escapeHtml(entry.summary)}</h3>
         ${(entry.body || []).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}
       </div>
-      ${(entry.keyFacts?.length || entry.playerFacing?.length) ? `
-        <div class="blacklight-continuity-facts">
-          ${entry.keyFacts?.length ? `<article><h4>Capability Facts</h4><ul>${entry.keyFacts.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>` : ''}
-          ${entry.playerFacing?.length ? `<article><h4>Character Questions</h4><ul>${entry.playerFacing.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>` : ''}
-        </div>` : ''}
-      ${nonPowerTables.map(renderTable).join('')}
       ${renderPowerFamilies(archetype)}`;
   }
 
@@ -186,7 +129,7 @@
       window.setTimeout(renderEntry, 500);
     } catch (error) {
       const target = document.getElementById('blacklight-transition-profile');
-      if (target) target.innerHTML = `<p class="helper-note">The integrated archetype record could not be loaded: ${escapeHtml(error.message)}</p>`;
+      if (target) target.innerHTML = `<p class="helper-note">The Archetype capability catalog could not be loaded: ${escapeHtml(error.message)}</p>`;
     }
   }
 
