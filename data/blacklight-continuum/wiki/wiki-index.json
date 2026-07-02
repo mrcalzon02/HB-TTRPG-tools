@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.7.0",
+  "schemaVersion": "0.8.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated lineage variants such as the thirteen Vampire Remainder Bloodlines.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated variants including thirteen Vampire Remainder Bloodlines, thirteen Shapechanger Lunar Nations, and ten other Changing Forms.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -16,6 +16,7 @@
   "characterSheet": "blacklight-character-sheet.html",
   "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
   "vampireLineages": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
+  "shapechangerVariants": "data/blacklight-continuum/rules/shapechanger-remainder-forms.json",
   "integratedArchetypeEntries": "data/blacklight-continuum/wiki/basic-archetypes.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
@@ -28,6 +29,9 @@
     "supernaturalArchetypes": 6,
     "integratedArchetypeRecords": 6,
     "vampireRemainderBloodlines": 13,
+    "shapechangerLunarNations": 13,
+    "shapechangerChangingForms": 10,
+    "shapechangerVariants": 23,
     "powerFamiliesPerArchetype": 6,
     "archetypePowerFamilies": 36,
     "rankedArchetypeAbilities": 180,
@@ -42,6 +46,7 @@
     "balance testing for all ranked powers",
     "starting power allocation rules",
     "Remainder Bloodline advancement and favored-family costs",
+    "Shapechanger variant advancement and favored-family costs",
     "capability prerequisites and cross-Archetype purchases",
     "condition and limitation rules",
     "expanded feeding rules",
