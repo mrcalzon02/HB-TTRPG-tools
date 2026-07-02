@@ -3,14 +3,40 @@
 
   const ENTRY_URL = 'data/blacklight-continuum/wiki/basic-archetypes.json';
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
+  const HUMAN_VARIANT_URL = 'data/blacklight-continuum/rules/human-vigil-practices.json';
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
   const HARMONIC_VARIANT_URL = 'data/blacklight-continuum/rules/harmonic-compact-remainders.json';
   const TECHNOMANCER_VARIANT_URL = 'data/blacklight-continuum/rules/technomancer-awakening-practices.json';
   const STORAGE_KEY = 'hb-ttrpg-tools-blacklight-basic-character-v1';
 
+  const PROFILE_FIELDS = [
+    {
+      archetypeId: 'human-investigator',
+      name: 'humanInvestigatorPractice',
+      title: 'Hunter Practice',
+      listId: 'blacklight-human-practice-options',
+      placeholder: 'Choose an advanced Hunter Practice or enter Undeclared…'
+    },
+    {
+      archetypeId: 'technomancer',
+      name: 'technomancerOrder',
+      title: 'Praxis Order',
+      listId: 'blacklight-technomancer-order-options',
+      placeholder: 'Choose a Praxis Order or enter Independent…'
+    },
+    {
+      archetypeId: 'technomancer',
+      name: 'technomancerCareer',
+      title: 'Career Practice',
+      listId: 'blacklight-technomancer-career-options',
+      placeholder: 'Choose an advanced Career Practice or enter Undeclared…'
+    }
+  ];
+
   let archetypeWiki = null;
   let rulesData = null;
+  let humanVariantData = null;
   let vampireLineageData = null;
   let shapechangerVariantData = null;
   let harmonicVariantData = null;
@@ -109,31 +135,29 @@
     }
   }
 
-  function ensureTechnomancerFields() {
+  function ensureDynamicProfileFields() {
     const primary = ensureLineageInput();
     const grid = primary?.closest('.blacklight-field-grid');
-    if (!primary || !grid) return [];
+    const primaryLabel = primary?.closest('label');
+    if (!primary || !grid || !primaryLabel) return [];
 
-    const definitions = [
-      ['technomancerOrder', 'Praxis Order', 'blacklight-technomancer-order-options', 'Choose a Praxis Order or enter Independent…'],
-      ['technomancerCareer', 'Career Practice', 'blacklight-technomancer-career-options', 'Choose an advanced Career Practice or enter Undeclared…']
-    ];
-
-    const fields = definitions.map(([name, title, listId, placeholder]) => {
-      let input = grid.querySelector(`[name="${name}"]`);
+    const insertionPoint = primaryLabel.nextSibling;
+    const fields = PROFILE_FIELDS.map(definition => {
+      let input = grid.querySelector(`[name="${definition.name}"]`);
       if (!input) {
         const label = document.createElement('label');
-        label.dataset.technomancerProfileField = 'true';
-        label.append(document.createTextNode(title));
+        label.dataset.blacklightProfileField = 'true';
+        label.dataset.profileArchetype = definition.archetypeId;
+        label.append(document.createTextNode(definition.title));
         input = document.createElement('input');
-        input.name = name;
+        input.name = definition.name;
         input.type = 'text';
-        input.placeholder = placeholder;
-        input.setAttribute('list', listId);
+        input.placeholder = definition.placeholder;
+        input.setAttribute('list', definition.listId);
         label.appendChild(input);
-        grid.insertBefore(label, primary.closest('label')?.nextSibling || null);
+        grid.insertBefore(label, insertionPoint);
       }
-      ensureDatalist(listId, input);
+      ensureDatalist(definition.listId, input);
       return input;
     });
 
@@ -142,6 +166,7 @@
   }
 
   function variantCatalogsFor(archetypeId) {
+    if (archetypeId === 'human-investigator' && humanVariantData?.catalogs?.length) return humanVariantData.catalogs;
     if (archetypeId === 'vampire' && vampireLineageData?.lineages?.length) {
       return [{
         id: 'remainder-bloodlines',
@@ -160,6 +185,7 @@
   }
 
   function variantFrameworkFor(archetypeId) {
+    if (archetypeId === 'human-investigator') return humanVariantData?.framework || '';
     if (archetypeId === 'vampire') return vampireLineageData?.framework || '';
     if (archetypeId === 'shapechanger') return shapechangerVariantData?.framework || '';
     if (archetypeId === 'harmonic-mutant') return harmonicVariantData?.framework || '';
@@ -206,14 +232,23 @@
 
   function populateVariantInputs(archetypeId) {
     const primary = ensureLineageInput();
-    const extraFields = ensureTechnomancerFields();
-    const extraLabels = [...document.querySelectorAll('[data-technomancer-profile-field]')];
+    const dynamicFields = ensureDynamicProfileFields();
+    const dynamicLabels = [...document.querySelectorAll('[data-blacklight-profile-field]')];
     const catalogs = variantCatalogsFor(archetypeId);
 
-    extraLabels.forEach(label => { label.hidden = archetypeId !== 'technomancer'; });
+    dynamicLabels.forEach(label => {
+      label.hidden = label.dataset.profileArchetype !== archetypeId;
+    });
 
     if (!primary) return;
-    if (archetypeId === 'technomancer') {
+    if (archetypeId === 'human-investigator') {
+      setPrimaryLabel('Vigil Conviction');
+      primary.placeholder = 'Choose a Vigil Conviction or enter Uncommitted…';
+      const conviction = catalogs.find(catalog => fieldForCatalog(catalog) === 'lineageVariant');
+      const practice = catalogs.find(catalog => fieldForCatalog(catalog) === 'humanInvestigatorPractice');
+      populateDatalist(document.getElementById('blacklight-lineage-options'), conviction?.variants);
+      populateDatalist(document.getElementById('blacklight-human-practice-options'), practice?.variants);
+    } else if (archetypeId === 'technomancer') {
       setPrimaryLabel('Awakening Paradigm');
       primary.placeholder = 'Choose an Awakening Paradigm…';
       const paradigm = catalogs.find(catalog => fieldForCatalog(catalog) === 'lineageVariant');
@@ -232,7 +267,7 @@
       else primary.placeholder = 'Bloodline, shifting tradition, patron, resonance school…';
     }
 
-    extraFields.forEach(field => {
+    dynamicFields.forEach(field => {
       field.oninput = renderEntry;
       field.onchange = renderEntry;
     });
@@ -269,7 +304,7 @@
       ${skillList.length ? `<p><strong>${variant.trainedSkills ? 'Order-trained fields' : 'Recommended Skills'}:</strong> ${skillList.map(escapeHtml).join(' · ')}</p>` : ''}
       ${variant.entryRequirement ? `<p><strong>Entry requirement:</strong> ${escapeHtml(variant.entryRequirement)}</p>` : ''}
       ${renderMethod('Ruling Practice', variant.practice)}
-      ${renderMethod('Order Method', variant.method)}
+      ${renderMethod(variant.trainedSkills ? 'Order Method' : 'Conviction Method', variant.method)}
       ${renderMethod('Lineage Gift', variant.gift)}
       ${renderMethod('Lineage Bane', variant.bane)}
       ${variant.progression?.length ? `<div class="blacklight-progression">${variant.progression.map(step => `
@@ -335,9 +370,10 @@
     if (!panel) return;
 
     try {
-      const [entryResponse, rulesResponse, vampireResponse, shapechangerResponse, harmonicResponse, technomancerResponse] = await Promise.all([
+      const [entryResponse, rulesResponse, humanResponse, vampireResponse, shapechangerResponse, harmonicResponse, technomancerResponse] = await Promise.all([
         fetch(ENTRY_URL, { cache: 'no-store' }),
         fetch(RULES_URL, { cache: 'no-store' }),
+        fetch(HUMAN_VARIANT_URL, { cache: 'no-store' }),
         fetch(VAMPIRE_LINEAGE_URL, { cache: 'no-store' }),
         fetch(SHAPECHANGER_VARIANT_URL, { cache: 'no-store' }),
         fetch(HARMONIC_VARIANT_URL, { cache: 'no-store' }),
@@ -345,12 +381,14 @@
       ]);
       if (!entryResponse.ok) throw new Error(`Archetype entry request failed with status ${entryResponse.status}.`);
       if (!rulesResponse.ok) throw new Error(`Power catalog request failed with status ${rulesResponse.status}.`);
+      if (!humanResponse.ok) throw new Error(`Human Vigil request failed with status ${humanResponse.status}.`);
       if (!vampireResponse.ok) throw new Error(`Vampire lineage request failed with status ${vampireResponse.status}.`);
       if (!shapechangerResponse.ok) throw new Error(`Shapechanger variant request failed with status ${shapechangerResponse.status}.`);
       if (!harmonicResponse.ok) throw new Error(`Harmonic variant request failed with status ${harmonicResponse.status}.`);
       if (!technomancerResponse.ok) throw new Error(`Technomancer practice request failed with status ${technomancerResponse.status}.`);
       archetypeWiki = await entryResponse.json();
       rulesData = await rulesResponse.json();
+      humanVariantData = await humanResponse.json();
       vampireLineageData = await vampireResponse.json();
       shapechangerVariantData = await shapechangerResponse.json();
       harmonicVariantData = await harmonicResponse.json();
