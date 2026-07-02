@@ -1,14 +1,14 @@
 {
   "setting": "Blacklight Continuum",
   "archetype": "Eldritch Binder",
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "framework": "An Eldritch Binder is bound to one of six vast predatory presences whose answer still reaches across the transition. The connection is diminished, but it is not broken. Select one Binding Source. The Source defines two favored power families, recommended Skills, one Temptation, one explicit Intrusion Breach, and a five-stage Depth of Binding progression. These options do not use Gifts or Banes. Every deeper stage grants a recorded capability while increasing the number of ways the presence can reach through the Binder. The entities are not misunderstood protectors or morally neutral cosmic principles. They are immense, vile, acquisitive intelligences that will consume identity, agency, memory, relationship, and soul whenever the pact gives them room.",
   "selectionRules": {
     "bindingSource": "Choose one Binding Source at character creation. The existing pact, prohibitions, permissions, and relationship remain valid between Binder and Source.",
     "temptation": "Each Source has one Temptation. The Binder may answer it once per scene, receiving the printed benefit, restoring 1 Pact, and gaining 1 Intrusion.",
     "depthOfBinding": "Depth abilities are purchased in order. Depth 1 requires Archetype Rating 1, Depth 2 requires Rating 2, and so on. A purchased Depth ability is a permanent recorded capability.",
     "intrusionBreach": "When Intrusion reaches its limit, resolve the Source's printed Intrusion Breach before reducing or resetting Intrusion through the campaign's normal Pressure procedure.",
-    "depthResolutionStandard": "Every Depth ability states its action, cost, range, test or resistance, duration, fixed outcome, and failure consequence where a roll is required. Information abilities use closed question menus. The Moderator supplies only facts already true in established play; if no valid fact exists, the ability returns None and refunds its Pact cost."
+    "depthResolutionStandard": "A Depth ability resolves when it is activated or when its printed trigger occurs. Activation may immediately create a condition, construct, field, mark, or suppression with a fixed duration, but it cannot create an unspent token, deferred choice, promised clue, future bonus, or free activation to be resolved later. All choices, tests, targets, and primary outcomes are determined during activation. The Moderator supplies only facts already true in established play; if an immediate information result has no valid fact, it returns None under the ability’s printed refund rule."
   },
   "catalogs": [
     {
@@ -46,7 +46,7 @@
             {
               "stage": "Depth 1",
               "name": "Secret Beneath the Surface",
-              "effect": "Action: one exchange. Cost: 1 Pact. Target: one person, object, record, or location you can directly examine within 5 meters. Choose exactly one question: What was intentionally concealed here? Which visible detail was added or altered most recently? What expected trace is missing? What single fact most directly contradicts the apparent explanation? Test Resolve + Investigation at difficulty 2, or opposed by Guile + Security when a sentient actor actively concealed the answer. Success: receive one specific fact answering the chosen question and gain one die on the first test that directly exploits it before scene end. Failure: receive no fact and gain 1 Intrusion. If established play contains no valid answer, receive None and refund the Pact cost."
+              "effect": "Action: one exchange. Cost: 1 Pact. Target: one person, object, record, or location you can directly examine within 5 meters. Choose exactly one question: What was intentionally concealed here? Which visible detail was added or altered most recently? What expected trace is missing? What single fact most directly contradicts the apparent explanation? Test Resolve + Investigation at difficulty 2, or opposed by Guile + Security when a sentient actor actively concealed the answer. Success: immediately receive one specific fact answering the chosen question. Failure: receive no fact and gain 1 Intrusion. If established play contains no valid answer, receive None and refund the Pact cost."
             },
             {
               "stage": "Depth 2",
@@ -56,17 +56,17 @@
             {
               "stage": "Depth 3",
               "name": "Contradiction Becomes a Door",
-              "effect": "Trigger: you possess two recorded statements, observations, memories, or records that cannot both be true. Cost: 1 Pact. Create one Contradiction token naming the two incompatible facts. Before scene end, spend the token on one test that directly determines which fact is false, who created the contradiction, or what event reconciles them. Add two dice and reroll one failed die after the roll. The token is consumed after the test. If the test still fails, gain 1 Intrusion."
+              "effect": "Action: one exchange. Cost: 1 Pact. Target: two recorded statements, observations, memories, or records that cannot both be true. Choose exactly one question: Which item is false? Who or what introduced the contradiction? What single event allows both items to be partially true? Test Resolve + Investigation at difficulty 3, or opposed by Guile + Security when a sentient actor deliberately created the contradiction. Success: immediately receive one specific fact answering the chosen question. Failure: the contradiction remains unresolved and you gain 1 Intrusion. If established play contains no valid answer to the selected question, receive None and refund the Pact cost."
             },
             {
               "stage": "Depth 4",
               "name": "Impossible Correlation",
-              "effect": "Action: ten uninterrupted minutes comparing at least three distinct pieces of evidence. Cost: 2 Pact. Test Resolve + Investigation at difficulty 3. Before rolling choose one output: the single event capable of producing all three pieces; the person or system with access to all three; the one missing record that would connect them; or which piece originated in another continuity. Success: receive one specific lead naming a person, place, record, system, or event and gain two dice on the first action that directly pursues it before operation end. Failure: identify one of the three pieces as unreliable, contaminated, or irrelevant and gain no lead. If no valid output exists in established play, receive None and refund the Pact cost."
+              "effect": "Action: ten uninterrupted minutes. Cost: 2 Pact. Target: at least three distinct pieces of evidence you can examine. Before rolling choose one output: the single event capable of producing all three pieces; the person or system with access to all three; the one missing record that directly connects them; or which piece originated in another continuity. Test Resolve + Investigation at difficulty 3. Success: immediately receive one specific answer and one supporting fact explaining the connection. Failure: immediately identify one examined piece as unreliable, contaminated, or irrelevant and receive no answer. If established play contains no valid output, receive None and refund the Pact cost."
             },
             {
               "stage": "Depth 5",
               "name": "Open the Black Archive",
-              "effect": "Action: one exchange. Cost: 2 Pact and 2 Intrusion. Duration: one scene. Set Reason to 5 for Investigation, Science, Noospherics, alien systems, anomalies, and pacts, and add two dice to those tests. During the scene you may use Secret Beneath the Surface up to three times without paying Pact. You cannot Push, restore Pact, or use this ability again while the Archive is open. Each failed affected test adds 1 Intrusion after resolution."
+              "effect": "Action: one exchange. Cost: 2 Pact and 2 Intrusion. Target: one person, object, record, location, active pact, or anomaly you can perceive within 10 meters. Choose three different questions: What was intentionally concealed? What was added or altered most recently? What expected trace is missing? What fact most directly contradicts its apparent nature? What entity, force, or system most recently influenced it? What immediate consequence is already in motion? Did it originate in this continuity? What name, identifier, or location most directly connects it to its source? Immediately receive one truthful sentence for each selected question. A question with no valid established answer returns None. If all three answers are None, refund the Pact cost; the Intrusion remains."
             }
           ]
         },
@@ -107,17 +107,17 @@
             {
               "stage": "Depth 3",
               "name": "Many-Handed Labor",
-              "effect": "Action: one standard action. Cost: 1 Pact. Duration: one scene. At the start of each of your turns choose two different simple interactions: draw or stow one item; reload one weapon; open or close one unsecured door; operate one adjacent control; carry one additional Carry 1 object without penalty; or provide one die of assistance to an adjacent Engineering, Medicine, Security, or Systems Intrusion test. These interactions require no separate action but cannot make attacks, activate powers, perform opposed tests, or repeat the same interaction twice in one turn."
+              "effect": "Action: one standard action. Cost: 1 Pact. Range: 10 meters and line of sight. Immediately perform up to three different operations: move one unattended Carry 1 object up to 5 meters; retrieve one unattended Carry 1 object to your hand; reload one weapon held by you or a willing adjacent ally; open or close one unsecured closure; operate one visible unsecured control; transfer one handheld item between two willing targets within range; or hold one Carry 1 object stationary against ordinary gravity until the start of your next turn. No object or mechanism may be selected more than once, and these operations cannot attack, pick locks, perform surgery, or activate powers."
             },
             {
               "stage": "Depth 4",
               "name": "Dream-Born Servitor",
-              "effect": "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Range: create within 5 meters. Duration: one scene. The servitor has Guard 4, durability 5, movement 8 meters, and acts immediately after you with a four-die pool. Choose one profile: Carrier moves Carry 4 and may transfer one carried object per turn; Attendant provides two assistance dice to one adjacent Medicine or Engineering test per turn; Warden makes one four-die restraint attack per turn with durability 4; Scout moves through 10-centimeter gaps, sees and hears normally, and reports through your pact. It cannot attack unless it is the Warden, use powers, spend resources, or act outside its selected profile. It collapses at zero durability."
+              "effect": "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Range: 15 meters. A dream-born servitor appears, immediately performs one selected profile, and then collapses: Carrier moves up to four unattended objects of Carry 2 or less up to 10 meters each; Attendant removes 2 Impact from one willing target or repairs 4 durability to one device or construct; Warden makes one Resolve + Archetype Rating restraint attack against up to two targets, compared separately to Guard, with durability 5 on each successful restraint; Scout immediately reveals the exact positions of all creatures, active sensors, exits, and unsecured controls within 15 meters that are not behind an active boundary. The servitor cannot perform any unprinted task."
             },
             {
               "stage": "Depth 5",
               "name": "The Thousand-Armed Scheme",
-              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Range: place a 10-meter-radius field within 20 meters. Duration: three rounds. At the start of each of your turns choose three different effects: move one unattended Carry 2 object up to 10 meters; grant one target Armor 2 until your next turn; make one restraint attack using Resolve + Archetype Rating against Guard with durability 5; operate one visible unsecured mechanism; move one willing target 3 meters without provoking reactions; or give two assistance dice to one visible ally's physical or technical test. No target may receive the same effect twice in one round, and each chosen effect resolves once."
+              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Range: 20 meters and line of sight. Immediately choose up to five different effects, resolving each once: move one unattended Carry 2 object up to 10 meters; grant one target Armor 2 until the start of your next turn; make one Resolve + Archetype Rating restraint attack against one target with durability 5; operate one visible unsecured mechanism; move one willing target up to 5 meters without provoking reactions; repair 3 durability to one device or construct; or remove 1 Impact from one willing living target. No target may receive more than one effect from this activation."
             }
           ]
         },
@@ -158,7 +158,7 @@
             {
               "stage": "Depth 3",
               "name": "Devour the Function",
-              "effect": "Action: one standard action. Cost: 1 Pact. Target: one unattended Serviceable handheld object within reach; the object is destroyed. Choose one function for the scene: Cutter grants two dice to one breach, repair, or sabotage test per round; Power Source supplies three charges to one held compatible device; Sensor grants thermal, vibration, or electromagnetic detection within 20 meters; Armor Component grants Armor 1; Mobility Component grants climbing at normal speed or one 10-meter assisted leap per round. Only one devoured function may be active; activating another ends the first."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: one unattended Serviceable handheld object within reach; destroy it and immediately choose one result: Cutter inflicts 5 structural damage to one adjacent object or barrier; Power Source restores three charges, ammunition units, or power points to one compatible held device; Sensor reveals the direction and distance of every active source of one chosen category—heat, electricity, vibration, or noospheric activity—within 20 meters; Armor Component grants Armor 2 for three rounds; Mobility Component immediately moves you up to 10 meters across climbable surfaces, gaps, or difficult terrain without a test. The destroyed object cannot be recovered."
             },
             {
               "stage": "Depth 4",
@@ -168,7 +168,7 @@
             {
               "stage": "Depth 5",
               "name": "Give Nothing Back",
-              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Duration: three rounds. The first time each round you inflict Trauma or destroy an object of Carry 2 or greater, choose either restore 1 Pact or remove 1 Impact. During the duration you cannot voluntarily transfer equipment, provide assistance dice, heal another target, or spend Pact on an effect whose only beneficiary is another character. If a round ends without a qualifying consumption, gain 1 Intrusion."
+              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Area: 5-meter radius centered on you. Exclude up to Archetype Rating visible targets. Make one Resolve + Close Combat test and compare it separately to every remaining target's Guard. Each successful living target suffers 2 Trauma; each successful object or barrier suffers 5 structural damage; unsecured Carry 1 objects are destroyed automatically. After all targets resolve, gain one recovery point for each successful target or destroyed qualifying object, to a maximum of 3. Immediately spend those points in any combination to restore Pact or remove Impact from yourself, one point per Pact or Impact."
             }
           ]
         },
@@ -204,7 +204,7 @@
             {
               "stage": "Depth 2",
               "name": "Witness Mark",
-              "effect": "Action: one standard action. Cost: 1 Pact. Target: one visible creature, autonomous system, or manifested entity within 20 meters. Duration: one scene. You know its direction, distance band, and whether it has changed physical form, identity credentials, or noospheric address. If it enters active concealment, test Resolve + Investigation opposed by Guile + Stealth or Reason + Security; success maintains the mark, failure suspends it until the target becomes directly visible again. A stronger active boundary also suspends the mark."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: one visible creature, autonomous system, or manifested entity within 20 meters. Immediately learn all five facts: its distance; whether it is uninjured, injured, critically injured, or incapacitated; whether its visible form is natural, transformed, projected, fabricated, or disguised; whether its identity credentials or noospheric address match its current body or system; and the direction of its strongest active remote connection, if any. Until the start of your next turn, that target gains no benefit from visual disguise, holographic substitution, or false identity credentials against you."
             },
             {
               "stage": "Depth 3",
