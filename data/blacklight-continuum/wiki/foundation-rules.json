@@ -1,0 +1,141 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "0.1.0",
+  "description": "Foundation rules entries for the custom Blacklight Continuum d10 dice-pool system.",
+  "entries": [
+    {
+      "id": "blacklight-d10-foundation",
+      "title": "Blacklight Original d10 System Foundation",
+      "category": "Rules",
+      "summary": "An original attribute-plus-skill d10 dice-pool framework supporting operatives, alien-derived bodies, Exposure, hybrid powers, equipment, and dangerous shipboard conflict.",
+      "body": [
+        "Build a test pool from Attribute + Skill + situational modifiers. Results of 6 through 9 produce one success. A 10 produces one success and may activate a specialization, equipment quality, or power rider. A failed roll containing one or more 1s creates a Complication.",
+        "Difficulty normally ranges from one to five successes. Characters may Push by rerolling failed dice up to Resolve, then gain Exposure representing physical instability, neural drift, noospheric bleed, and psychological pressure.",
+        "The current rules are an alpha foundation. Full combat, advancement, power trees, fabrication, equipment, and character-sheet interfaces remain active development areas."
+      ],
+      "tables": [
+        {
+          "title": "Attributes",
+          "columns": ["Approach", "Attributes"],
+          "rows": [
+            ["Physical", "Force, Finesse, Resilience"],
+            ["Social", "Presence, Guile, Composure"],
+            ["Cognitive", "Reason, Awareness, Resolve"]
+          ]
+        },
+        {
+          "title": "Skills",
+          "columns": ["Family", "Skills"],
+          "rows": [
+            ["Operational", "Athletics, Close Combat, Firearms, Heavy Weapons, Mobility, Stealth, Survival, Zero-G Operations"],
+            ["Technical", "Biofabrication, Engineering, Medicine, Noospherics, Piloting, Science, Security, Systems Intrusion"],
+            ["Human and Investigative", "Command, Deception, Empathy, Investigation, Negotiation, Performance, Streetwise, Xenoculture"]
+          ]
+        },
+        {
+          "title": "Operational Frames",
+          "columns": ["Frame", "Primary Function"],
+          "rows": [
+            ["Infiltrator", "Access, stealth, false identity, and evidence control"],
+            ["Breacher", "Barrier defeat, protection, and close danger"],
+            ["Systems Intrusion Specialist", "Alien networks and identity architecture"],
+            ["Field Medic and Biofabricator", "Trauma care and printed anatomy"],
+            ["Engineer and Salvager", "Repair, life support, and repurposing"],
+            ["Investigator and Analyst", "Evidence reconstruction and missing-pattern analysis"],
+            ["Envoy and Fixer", "Negotiation, contacts, resources, and legal cover"],
+            ["Pilot and Navigator", "Vehicles, spacecraft, drones, and transit"],
+            ["Tactical Coordinator", "Team timing, positioning, and command"],
+            ["Noospheric Adept", "Cognitive networks and identity concealment"],
+            ["Xenobiologist", "Alien life and environmental compatibility"],
+            ["Clone Warden", "Continuity integrity and duplicate protection"]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "Vitality = Resilience + 5.",
+        "Guard = Finesse + Awareness.",
+        "Initiative = Finesse + Composure.",
+        "Cohesion = Resolve + Composure + 3.",
+        "Exposure Limit = Resolve + Resilience."
+      ],
+      "tags": ["d10", "dice pool", "attributes", "skills", "jobs", "combat"],
+      "relatedEntries": ["hybrid-powers", "printed-operatives", "blacklight-continuum-overview"]
+    },
+    {
+      "id": "hybrid-powers",
+      "title": "Hybrid Powers and Q-MAP Abilities",
+      "category": "Rules",
+      "summary": "Power families arising from Ar'nock-derived biology, Q-MAP drift, bio-printer adaptation, noospheric irregularity, and connection to biological Charles.",
+      "body": [
+        "Hybrid powers are not conventional magic. They are capabilities emerging from the interaction of a human neural pattern with an alien-derived body and continued adaptation through biological fabrication systems.",
+        "Each family is intended to grow into a five-rank progression. The current foundation establishes themes and sample effects rather than final publication balance."
+      ],
+      "tables": [
+        {
+          "title": "Hybrid Power Families",
+          "columns": ["Family", "Function", "Examples"],
+          "rows": [
+            ["Adaptive Morphology", "Environmental and bodily adaptation", "Seal Wound, Pressure Tolerance, Internal Refit"],
+            ["Chitin Weave", "Hidden structural defense", "Brace, Edge Growth, Segmented Defense"],
+            ["Distributed Nerve Net", "Reflex and pain-resistant action", "Reflex Before Thought, Continue Function, Second Signal"],
+            ["Respiratory Forge", "Atmosphere survival and chemical sensing", "Filter Chamber, Stored Breath, Chemical Read"],
+            ["Flesh Memory", "Procedural recall and cross-imprinting", "Borrowed Motion, Echo Recall, Cross-Imprint"],
+            ["Noospheric Ghost", "Identity concealment and false traces", "Blank Signature, False Presence, Quiet Intrusion"],
+            ["Charles Link", "Deeper interface with biological Charles", "Narrow Channel, Shared Calculation, Emotional Feedback"],
+            ["Causal Reflex", "Sensitivity to unavailable action paths", "Wrong Future, Familiar Outcome, Contingency Echo"],
+            ["Bio-Printer Communion", "Direct biological manufacturing control", "Living Interface, Template Sense, Guided Growth"],
+            ["Neural Overclock", "Unsafe cognitive acceleration", "Accelerated Thought, Perfect Procedure, Burn Through"]
+          ]
+        }
+      ],
+      "tags": ["powers", "Q-MAP", "hybrid biology", "Exposure", "bio-printer"],
+      "relatedEntries": ["blacklight-d10-foundation", "printed-operatives", "biological-charles"]
+    },
+    {
+      "id": "blacklight-character-creation",
+      "title": "Character Creation Foundation",
+      "category": "Rules",
+      "summary": "Characters are built as Blacklight operatives with nine Attributes, twenty-four Skills, an Operational Frame, identity anchors, and an emerging hybrid body.",
+      "body": [
+        "Define the operative before Q-MAP, including their Blacklight role, one relationship, one mission memory, and one reason they accepted transmission.",
+        "Assign one Attribute at 4, three at 3, three at 2, and two at 1. Assign three Skills at 3, five at 2, five at 1, and the rest at 0. Choose three specializations.",
+        "Choose an Operational Frame, three Q-MAP identity anchors, one visible or sensory biological irregularity, one latent advantage, one rank-one hybrid power, and two statements defining the character's relationship with Charles."
+      ],
+      "keyFacts": [
+        "Identity anchors can be people, places, promises, habits, moral boundaries, sensory memories, fears, failures, or reasons for loyalty and distrust.",
+        "Each character begins with one memory of the final Q-MAP moments that contradicts another character's account.",
+        "Characters are adaptable biological approximations, not standard human clones."
+      ],
+      "tags": ["character creation", "attributes", "skills", "identity anchors", "Operational Frames"],
+      "relatedEntries": ["blacklight-d10-foundation", "hybrid-powers", "printed-operatives"]
+    },
+    {
+      "id": "blacklight-equipment-foundation",
+      "title": "Equipment and Salvage Foundation",
+      "category": "Rules",
+      "summary": "Equipment is defined by quality, function, and tags, with the opening inventory built from shipboard salvage and biological fabrication rather than a conventional armory.",
+      "body": [
+        "Equipment quality ranges from Improvised through Serviceable, Professional, Advanced, and Exceptional. Better quality improves reliability, adds dice in a defined role, or changes what actions are possible.",
+        "The team initially obtains equipment from maintenance tools, emergency stores, damaged compartments, printer output, remote manipulators, and incomplete neural memories of familiar devices.",
+        "Items should state a clear operating effect, quality, tags, limitations, and any dependence on Ar'nock biology or printer support."
+      ],
+      "tables": [
+        {
+          "title": "Opening Equipment Examples",
+          "columns": ["Item", "Purpose", "Tags"],
+          "rows": [
+            ["Ar'nock Tissue Cutter", "Medical separation and controlled cutting", "Cutting, Medical, Xenobiological, Limited Charge"],
+            ["Environmental Membrane", "Pressure, atmosphere, and temperature protection", "Vacuum-Rated, Integrated, Xenobiological"],
+            ["Printer-Born Restraint Filament", "Immobilization and climbing support", "Restraining, Concealable, Printer-Compatible"],
+            ["Resonance Probe", "Detect conduit flow, vibration, and hidden cavities", "Integrated, Xenobiological, Variable Geometry"],
+            ["Human-Pattern Sidearm", "Familiar compact weapon reconstructed from neural memory", "Concealable, Loud, Printer-Compatible, Unstable"],
+            ["Charles Nutrient Cassette", "Stabilize and feed biological Charles", "Medical, Integrated, Xenobiological"]
+          ]
+        }
+      ],
+      "tags": ["equipment", "salvage", "bio-printer", "quality", "tags"],
+      "relatedEntries": ["blacklight-d10-foundation", "arnock-derelict", "biological-charles"]
+    }
+  ]
+}
