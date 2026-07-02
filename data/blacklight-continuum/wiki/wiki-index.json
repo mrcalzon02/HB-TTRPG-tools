@@ -1,0 +1,37 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "0.1.0",
+  "status": "campaign-introduction-alpha",
+  "genre": "far-future mirror-universe science-fiction espionage and survival horror",
+  "description": "Player-facing and Game Moderator reference wiki for Blacklight Continuum: No Return Signal. The current foundation covers Blacklight Intelligence, Q-MAP, the Ar'nock derelict, the Infiltration Assault Algorithm, alien-derived printed bodies, biological Charles, campaign themes, and the original d10 system scaffold.",
+  "mechanicsPolicy": {
+    "system": "Blacklight Continuum original d10 dice-pool system",
+    "inspiration": "Broad attribute-plus-skill dice-pool structure",
+    "proprietaryText": "No proprietary rules text is copied",
+    "balanceStatus": "Alpha playtest foundation"
+  },
+  "campaignDocument": "docs/blacklight-continuum/campaign-introduction.md",
+  "packs": [
+    "data/blacklight-continuum/wiki/foundation-entries.json"
+  ],
+  "completedScope": {
+    "wikiEntries": 10,
+    "nativePacks": 1,
+    "operationalFrames": 12,
+    "coreSkills": 24,
+    "coreAttributes": 9,
+    "hybridPowerFamilies": 9,
+    "openingEquipmentExamples": 6
+  },
+  "nextDevelopmentAreas": [
+    "full d10 combat procedures",
+    "complete five-rank hybrid power trees",
+    "Ar'nock vessel room and hazard module",
+    "far-future factions and continuity law",
+    "equipment and biological fabrication catalogue",
+    "character sheet and JSON schema",
+    "mission and job generator",
+    "Charles embodiment decision arc"
+  ]
+}
