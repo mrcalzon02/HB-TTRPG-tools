@@ -1,37 +1,46 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.1.0",
-  "status": "campaign-introduction-alpha",
-  "genre": "far-future mirror-universe science-fiction espionage and survival horror",
-  "description": "Player-facing and Game Moderator reference wiki for Blacklight Continuum: No Return Signal. The current foundation covers Blacklight Intelligence, Q-MAP, the Ar'nock derelict, the Infiltration Assault Algorithm, alien-derived printed bodies, biological Charles, campaign themes, and the original d10 system scaffold.",
+  "schemaVersion": "0.2.0",
+  "status": "basic-character-system-alpha",
+  "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
+  "description": "Player-facing and Game Moderator reference wiki for Blacklight Continuum: No Return Signal. The current foundation covers Blacklight Intelligence, Q-MAP, the Ar'nock derelict, the Infiltration Assault Algorithm, alien-derived printed bodies, biological Charles, campaign themes, the Basic character sheet, six supernatural archetypes, and the original d10 system scaffold.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
-    "inspiration": "Broad attribute-plus-skill dice-pool structure",
+    "inspiration": "Broad attribute-plus-skill and supernatural-archetype structure",
     "proprietaryText": "No proprietary rules text is copied",
     "balanceStatus": "Alpha playtest foundation"
   },
   "campaignDocument": "docs/blacklight-continuum/campaign-introduction.md",
+  "characterSheet": "blacklight-character-sheet.html",
+  "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
-    "data/blacklight-continuum/wiki/foundation-rules.json"
+    "data/blacklight-continuum/wiki/foundation-rules.json",
+    "data/blacklight-continuum/wiki/basic-archetypes.json"
   ],
   "completedScope": {
-    "wikiEntries": 13,
-    "nativePacks": 2,
+    "wikiEntries": 21,
+    "nativePacks": 3,
+    "supernaturalArchetypes": 6,
     "operationalFrames": 12,
     "coreSkills": 24,
     "coreAttributes": 9,
     "hybridPowerFamilies": 10,
-    "openingEquipmentExamples": 6
+    "archetypePowerFamilies": 13,
+    "rankedArchetypeAbilities": 65,
+    "openingEquipmentExamples": 6,
+    "browserCharacterSheets": 1
   },
   "nextDevelopmentAreas": [
+    "balance pass for archetype resources and pressure tracks",
+    "expanded vampire bloodlines and feeding models",
+    "expanded shapechanger forms and pack bonds",
+    "Eldritch Binder patrons and intrusion events",
+    "Harmonic Mutant resonance adaptations",
+    "Technomancer noospheric constructs",
     "full d10 combat procedures",
-    "complete five-rank hybrid power trees",
     "Ar'nock vessel room and hazard module",
-    "far-future factions and continuity law",
-    "equipment and biological fabrication catalogue",
-    "character sheet and JSON schema",
     "mission and job generator",
     "Charles embodiment decision arc"
   ]
