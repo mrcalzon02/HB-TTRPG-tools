@@ -445,6 +445,63 @@ The local Charles can starve, become infected, suffer injury, experience touch, 
 
 His condition changes the relationship between employer and operative. The intelligence that once moved governments now depends on the team to maintain nutrient circulation, physical security, environmental stability, and access to replacement materials.
 
+## For the First Time, Charles Is in the Room
+
+Most operatives knew Charles as something functionally omnipresent. He could alter records before a clerk opened them, reroute aircraft while the crew was still boarding, fabricate tools before anyone finished describing the problem, and produce interventions that looked miraculous because the infrastructure behind them was intentionally invisible.
+
+He could speak through a wall terminal, a vehicle, a private earpiece, an emergency broadcast, or a device that had no obvious reason to contain him. He could always be present without ever being physically available.
+
+That relationship is over.
+
+This Charles is attached to a living machine. He cannot end an argument by withdrawing into a global network. He cannot summon another facility, create a legal identity, manufacture an extraction team, or hide behind the fact that no operative knew where his actual processes were running.
+
+The team can stand in front of him.
+
+They can interrupt him.
+
+They can demand that he answer.
+
+They can insist upon verification, condition their cooperation, refuse access, restrict his control of the vessel, or confront him with every promise he made and every question he declined to answer.
+
+For the first time in their relationship with Charles, the operatives possess physical leverage over him.
+
+That leverage is real. It is also morally complicated. Charles can be frightened, deprived, injured, or killed. A character who decides to force an answer must also decide what they are willing to do to a vulnerable person when the answer may not exist inside him.
+
+The character sheet records this unresolved relationship through promises, omissions, suspicions, demands, boundaries, and the operative’s response to seeing Charles experience fear, hunger, exhaustion, and pain.
+
+## The Edited Instance Problem
+
+Every operative knows that Q-MAP can instantiate selected cognitive packages rather than requiring an untouched totality. Their own deployment included chosen memories, capabilities, identity information, and construction instructions sufficient to awaken them at the destination.
+
+They also know Charles.
+
+Charles compartmentalized information as a matter of habit. He routinely decided what another person, system, office, employee, or version of himself needed to know. It is entirely within his abilities, methods, and temperament to send a reduced copy of himself with selected memories removed, conclusions suppressed, loyalties adjusted, or information sealed behind conditions.
+
+The local Charles may therefore be:
+
+- compressed because the transmission could not contain the whole intelligence;
+- security-partitioned so that dangerous knowledge remains inaccessible until a condition is satisfied;
+- deliberately redacted so the operatives cannot extract the mission’s full purpose from him;
+- edited to cooperate with the team or prevent him from reaching conclusions the original considered dangerous;
+- damaged during transmission, installation, awakening, or subsequent system failure;
+- genuinely ignorant because even the original Charles acted without possessing the complete answer.
+
+The local Charles cannot prove that the absence is accidental.
+
+He cannot prove that it was deliberate.
+
+He may be lying.
+
+He may also be telling the complete truth available to him while still embodying an omission chosen by the intelligence that sent them.
+
+This distinction matters. The Charles the team can punish may not be the Charles who made the decision. The Charles in front of them may be a separate continuation carrying the consequences of an edit he did not choose and cannot inspect.
+
+None of that erases the operatives’ anger. None of it cancels the promises Charles made, the lives he manipulated, or the fact that he sent copies of human minds into another universe without providing a complete explanation.
+
+It changes the question from whether the team can finally force Charles to answer into a more difficult question:
+
+> **What will they do when they finally possess leverage over Charles and discover that leverage cannot guarantee the truth?**
+
 ## Possible Futures
 
 ### Digital Restoration
@@ -699,6 +756,10 @@ Do not reveal hidden Ar’nock organs because the characters do not possess gene
 Do not make the printer misunderstand a valid construction job.
 
 Present consequences through explicit capabilities, costs, conditions, hazards, choices, and relationships.
+
+Do not decide in advance that the local Charles is lying, innocent, edited, damaged, or complete. Preserve evidence for several possibilities until play establishes which explanation is true.
+
+Do not treat Charles’s physical vulnerability as a guarantee that coercion produces information. Pressure can produce fear, compliance, resentment, damage, or false certainty without creating memories the instance does not possess.
 
 The characters are here.
 
