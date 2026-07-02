@@ -1,0 +1,298 @@
+{
+  "setting": "Blacklight Continuum",
+  "archetype": "Technomancer",
+  "schemaVersion": "1.0.0",
+  "framework": "Technomancer practices are the surviving structure of awakened reality-workers whose former magic has translated into direct interaction with information, identity, machinery, signal, fabrication, and autonomous systems. Select one Awakening Paradigm, one Praxis Order, and optionally one Career Practice. These selections do not use Gifts or Banes. A Paradigm defines the layer of reality first recognized by the character, an Order defines institutional training and doctrine, and a Career Practice defines a specialized advancement path. All remain part of the Technomancer Archetype and use its six shared power families.",
+  "selectionRules": {
+    "awakeningParadigm": "Choose one at character creation. It defines two favored power families and one Ruling Practice.",
+    "praxisOrder": "Choose one organization or remain Independent. It grants trained fields and one Order Method.",
+    "careerPractice": "Choose one as an intended advanced path or leave it Undeclared. Its attainments require later advancement and do not apply automatically at character creation."
+  },
+  "catalogs": [
+    {
+      "id": "awakening-paradigms",
+      "title": "Five Awakening Paradigms",
+      "eyebrow": "How reality first opened",
+      "code": "5 PARADIGMS",
+      "legacyLabel": "Former awakening vision",
+      "selectionField": "lineageVariant",
+      "variants": [
+        {
+          "id": "radiant-axiom",
+          "name": "The Radiant Axiom",
+          "legacy": "Awakened theorists who first perceived reality as light, force, symbol, and a universal source from which every supernatural operation drew authority.",
+          "continuum": "The higher source no longer answers as a realm beyond the world. Its remainder appears as executable energy, signal structure, authorization, and the ability to distinguish a true operating principle from an imitation.",
+          "favoredFamilies": ["Signal Warfare", "Fabrication Interface"],
+          "recommendedSkills": ["Science", "Noospherics", "Engineering"],
+          "practice": {
+            "name": "Read the Active Law",
+            "effect": "Once per scene after observing an active power, energy field, signal, or fabricated effect for one action, choose one question: What supplies its energy? What condition sustains it? What signal, material, or permission activates it? What specific interruption will end it for at least one round? Receive a truthful answer limited to the observed effect."
+          }
+        },
+        {
+          "id": "iron-sepulcher",
+          "name": "The Iron Sepulcher",
+          "legacy": "Awakened materialists and death scholars who understood form, decay, permanence, residue, and the boundary between functioning structure and abandoned matter.",
+          "continuum": "Matter and death no longer answer through familiar occult laws. They present as fabrication state, structural history, entropy, archived function, and the information left behind when a system or organism stops.",
+          "favoredFamilies": ["Construct Engineering", "Fabrication Interface"],
+          "recommendedSkills": ["Engineering", "Medicine", "Investigation"],
+          "practice": {
+            "name": "Forensic Matter",
+            "effect": "Once per scene, touch one object, corpse, machine, or damaged structure and choose two facts to learn: its primary material composition; the strongest force that damaged it; the most recent major alteration; whether any component was removed; or the direction from which its final damaging event arrived."
+          }
+        },
+        {
+          "id": "mirror-labyrinth",
+          "name": "The Mirror Labyrinth",
+          "legacy": "Awakened explorers of mind, identity, distance, sympathy, attention, and the hidden routes connecting one consciousness or location to another.",
+          "continuum": "Thought and distance have become noospheric address, identity routing, remote presence, credential inheritance, and the geometry of networks. The old symbolic roads persist as informational topology.",
+          "favoredFamilies": ["Noospheric Identity", "Network Dominion"],
+          "recommendedSkills": ["Noospherics", "Empathy", "Systems Intrusion"],
+          "practice": {
+            "name": "Thought Has an Address",
+            "effect": "Once per scene after communicating with or directly observing a person, intelligence, or active system, learn whether it is locally embodied, remotely projected, distributed across multiple sites, or operating through a borrowed identity. If it is remote or distributed, learn the direction of the strongest active connection."
+          }
+        },
+        {
+          "id": "verdant-threshold",
+          "name": "The Verdant Threshold",
+          "legacy": "Awakened vitalists and spirit negotiators who perceived organisms, ecosystems, instincts, souls, and unseen agencies as overlapping communities of need and exchange.",
+          "continuum": "Life and spirit now appear through biological templates, cultivated computation, autonomous machine personhood, ecological systems, and entities whose agency is carried through unfamiliar substrates.",
+          "favoredFamilies": ["Machine Communion", "Fabrication Interface"],
+          "recommendedSkills": ["Medicine", "Xenoculture", "Empathy"],
+          "practice": {
+            "name": "Recognize Living Agency",
+            "effect": "After one minute observing a biological organism, cultivated system, autonomous machine, habitat process, or nonmaterial presence, determine whether it experiences itself as a person, collective, tool, animal, environment, or divided identity. Also learn its strongest immediate need and whether that need is physical, informational, social, or existential."
+          }
+        },
+        {
+          "id": "causal-loom",
+          "name": "The Causal Loom",
+          "legacy": "Awakened readers of probability, sequence, obligation, timing, coincidence, and the branching consequences hidden inside apparently ordinary decisions.",
+          "continuum": "Fate and time no longer present as inherited cosmic destinies. They survive as predictive routing, event priority, causal dependency, scheduling authority, and the ability to recognize where a small intervention changes an entire process.",
+          "favoredFamilies": ["Network Dominion", "Signal Warfare"],
+          "recommendedSkills": ["Investigation", "Command", "Science"],
+          "practice": {
+            "name": "Critical Dependency",
+            "effect": "Once per scene before a test, identify one visible person, device, route, or action as the critical dependency. If the test directly protects, disables, reaches, or completes that dependency, reroll one failed die. If the dependency changes before the test resolves, the reroll is lost."
+          }
+        }
+      ]
+    },
+    {
+      "id": "praxis-orders",
+      "title": "Five Praxis Orders",
+      "eyebrow": "Institutions of awakened practice",
+      "code": "5 ORDERS",
+      "legacyLabel": "Former institutional doctrine",
+      "selectionField": "technomancerOrder",
+      "variants": [
+        {
+          "id": "aegis-praxis",
+          "name": "The Aegis Praxis",
+          "legacy": "Martial reality-workers who trained magic as disciplined defense, strategic pressure, and the capacity to remain operational when confronted by hostile supernatural power.",
+          "continuum": "Without old sanctums or ritual dueling laws, the Aegis becomes a school of counterintrusion, field command, hardened interfaces, and controlled escalation.",
+          "trainedSkills": ["Command", "Firearms", "Security"],
+          "method": {
+            "name": "Prepared Countermeasure",
+            "effect": "Once per scene after you or an ally successfully identifies a hostile power, signal, device, or supernatural effect, choose one participant. That participant gains two dice on the next defense test against the identified source before scene end."
+          }
+        },
+        {
+          "id": "veiled-custodians",
+          "name": "The Veiled Custodians",
+          "legacy": "Secret-keepers, infiltrators, moral censors, and hidden guardians who believed dangerous knowledge required active containment and selective revelation.",
+          "continuum": "Their inherited authority to decide what others may know has vanished. Their methods remain useful for compartmentalization, witness control, secure identity, and preventing hostile systems from learning too much.",
+          "trainedSkills": ["Stealth", "Investigation", "Noospherics"],
+          "method": {
+            "name": "Need-to-Know Partition",
+            "effect": "Once per scene, spend one minute separating a record, plan, or memory packet into a public portion and a protected portion. Routine searches and unsecured readers recover only the public portion. Accessing the protected portion requires a successful Reason + Security test against difficulty equal to your Archetype Rating. The partition lasts until the operation ends."
+          }
+        },
+        {
+          "id": "archive-first-principles",
+          "name": "The Archive of First Principles",
+          "legacy": "Researchers, relic scholars, occult historians, and explorers who treated every supernatural mystery as part of a recoverable body of knowledge.",
+          "continuum": "Their archives are unreachable, but the discipline of indexing anomalies, preserving evidence, and distinguishing precedent from speculation remains intact.",
+          "trainedSkills": ["Science", "Investigation", "Xenoculture"],
+          "method": {
+            "name": "Indexed Mystery",
+            "effect": "After ten minutes documenting an unfamiliar phenomenon, create one Research Index containing three observations and one unresolved question. Until the operation ends, you and allies who review the Index gain one die on Investigation, Science, or Xenoculture tests concerning that phenomenon. Only one Index may apply to a test."
+          }
+        },
+        {
+          "id": "civic-ascendancy",
+          "name": "The Civic Ascendancy",
+          "legacy": "Awakened organizers, judges, diplomats, and would-be philosopher-kings who believed extraordinary perception created an obligation to guide society.",
+          "continuum": "No local polity recognizes their mandate. They must replace inherited superiority with transparent coordination, negotiated authority, and institutions that can survive disagreement.",
+          "trainedSkills": ["Command", "Negotiation", "Noospherics"],
+          "method": {
+            "name": "Constructive Authority",
+            "effect": "Once per scene after succeeding on Command or Negotiation, state one immediate objective and choose up to Archetype Rating willing participants. Each gains one die on the first action directly supporting that objective before the end of your next turn."
+          }
+        },
+        {
+          "id": "open-circuit-assembly",
+          "name": "The Open Circuit Assembly",
+          "legacy": "Experimental practitioners, democratic cabals, technologists, artists, and reformers who treated contemporary culture and collaborative invention as valid sources of awakened technique.",
+          "continuum": "They adapt fastest because they never believed authority belonged exclusively to ancient institutions. Alien tools, synthetic citizens, and local practices become material for shared experimentation rather than evidence of impurity.",
+          "trainedSkills": ["Engineering", "Systems Intrusion", "Streetwise"],
+          "method": {
+            "name": "Peer Revision",
+            "effect": "Once per scene after an ally fails an Engineering, Noospherics, Science, or Systems Intrusion test, spend one action reviewing the failed method with them. The ally may repeat the test with one additional die and cannot Push that repeated test. A second failure creates the original failure consequence plus 1 Exposure."
+          }
+        }
+      ]
+    },
+    {
+      "id": "career-practices",
+      "title": "Ten Career Practices",
+      "eyebrow": "Advanced awakened professions",
+      "code": "10 CAREERS",
+      "legacyLabel": "Former advanced discipline",
+      "selectionField": "technomancerCareer",
+      "variants": [
+        {
+          "id": "probability-auditor",
+          "name": "Probability Auditor",
+          "legacy": "Specialists who studied chance, obligation, consequence, and the hidden leverage points where a minor decision redirected an entire future.",
+          "continuum": "They operate through predictive systems, dependency maps, risk models, and causal access rather than relying upon a universe that acknowledges destiny.",
+          "favoredFamilies": ["Network Dominion", "Noospheric Identity"],
+          "recommendedSkills": ["Investigation", "Command"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Network Dominion or Noospheric Identity.",
+          "progression": [
+            {"stage": "Initiate", "name": "Weighted Outcome", "effect": "Once per scene after any visible character rolls, change one failed die showing 5 into a success. Gain 1 Feedback."},
+            {"stage": "Adept", "name": "Obligation Map", "effect": "After ten minutes studying an organization, agreement, or operation, identify the one participant whose withdrawal would impose the largest immediate delay and the one resource whose loss would halt progress for at least one scene."},
+            {"stage": "Master", "name": "Branch Authority", "effect": "Once per operation before a declared action resolves, spend 2 Bandwidth and 1 Feedback to define two legal outcomes for your own action. Roll once, then choose which outcome the successes accomplish. Both outcomes must use the same target, range, and Resource cost."}
+          ]
+        },
+        {
+          "id": "chronometric-analyst",
+          "name": "Chronometric Analyst",
+          "legacy": "Practitioners who specialized in sequence, acceleration, delay, repetition, and the preservation of information across changing timelines.",
+          "continuum": "Time presents as process priority, synchronization, latency, system clocks, biological rhythm, and causal ordering rather than a familiar mystical current.",
+          "favoredFamilies": ["Signal Warfare", "Network Dominion"],
+          "recommendedSkills": ["Science", "Awareness"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Signal Warfare or Network Dominion.",
+          "progression": [
+            {"stage": "Initiate", "name": "Latency Window", "effect": "Spend 1 Bandwidth as a reaction to delay one incoming signal, remote command, triggered device, or automated attack until the start of the next round."},
+            {"stage": "Adept", "name": "Process Acceleration", "effect": "Spend 1 Bandwidth to reduce one noncombat task requiring no more than one hour to one-tenth its normal time. The task still consumes ordinary materials and requires its normal test."},
+            {"stage": "Master", "name": "Sequence Lock", "effect": "Spend 2 Bandwidth and 1 Feedback. Choose up to Archetype Rating targets within 20 meters. Until the end of the round, those targets act in an order you declare. Unwilling targets resist with Resolve + Awareness against your Reason + Noospherics."}
+          ]
+        },
+        {
+          "id": "threshold-cartographer",
+          "name": "Threshold Cartographer",
+          "legacy": "Explorers of distance, sympathy, folded routes, remote presence, and the hidden structure connecting locations.",
+          "continuum": "Their practice becomes network topology, transit permissions, sensor continuity, and the manipulation of spatial relationships through active infrastructure.",
+          "favoredFamilies": ["Network Dominion", "Construct Engineering"],
+          "recommendedSkills": ["Mobility", "Noospherics"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Network Dominion or Construct Engineering.",
+          "progression": [
+            {"stage": "Initiate", "name": "Route Trace", "effect": "Once per scene, identify the shortest traversable route to one visible or precisely mapped location within the same site and gain two dice on the first test made to follow it."},
+            {"stage": "Adept", "name": "Remote Hand", "effect": "Spend 1 Bandwidth to manipulate one unsecured control, tool, or object within 20 meters as though adjacent, using your normal action and relevant Skill."},
+            {"stage": "Master", "name": "Transit Fold", "effect": "Spend 2 Bandwidth and 1 Feedback to move yourself and up to Archetype Rating willing adjacent targets between two active network nodes, doors, or transit interfaces within 100 meters. Both endpoints must be mapped or visible through a sensor you control."}
+          ]
+        },
+        {
+          "id": "cognitive-architect",
+          "name": "Cognitive Architect",
+          "legacy": "Memory surgeons, dream interpreters, identity designers, telepaths, and specialists in attention, belief, and mental structure.",
+          "continuum": "Mind is approached through noospheric identity, stored memory, interface state, sensory routing, and consent-aware cognitive engineering.",
+          "favoredFamilies": ["Noospheric Identity", "Machine Communion"],
+          "recommendedSkills": ["Empathy", "Noospherics"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Noospheric Identity or Machine Communion.",
+          "progression": [
+            {"stage": "Initiate", "name": "Attention Channel", "effect": "Spend 1 Bandwidth and choose one willing target within 10 meters. For the scene, you may exchange silent messages of up to twenty-five words, and both participants gain one die to resist distraction or false sensory input."},
+            {"stage": "Adept", "name": "Memory Workspace", "effect": "With consent and ten minutes of contact, isolate one memory so the target can inspect it without suffering its ordinary fear, grief, or pain penalties for the scene. The memory is not altered or erased."},
+            {"stage": "Master", "name": "Identity Architecture", "effect": "Spend 2 Bandwidth and 1 Feedback with a willing target. Create one temporary Identity Anchor lasting for the operation: a chosen name, relationship, conviction, or memory. The target gains three Identity Defense against effects contradicting that Anchor."}
+          ]
+        },
+        {
+          "id": "vital-pattern-engineer",
+          "name": "Vital Pattern Engineer",
+          "legacy": "Healers, shapeworkers, biological researchers, and awakened practitioners who treated life as an editable pattern rather than a fixed body.",
+          "continuum": "The practice translates into template analysis, regenerative systems, cultivated organs, adaptive biochemistry, and negotiated modification of living structures.",
+          "favoredFamilies": ["Fabrication Interface", "Machine Communion"],
+          "recommendedSkills": ["Medicine", "Biofabrication"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Fabrication Interface or Machine Communion.",
+          "progression": [
+            {"stage": "Initiate", "name": "Pattern Diagnosis", "effect": "After one minute examining a biological target, learn its current Vitality, one active disease or toxin, one missing or failing organ function, and whether it is naturally born, printed, copied, or extensively engineered."},
+            {"stage": "Adept", "name": "Adaptive Therapy", "effect": "Spend 1 Bandwidth and ten minutes treating a willing biological target. Remove 2 Impact, suppress one disease or toxin for the scene, or grant two dice against one named environmental hazard for the scene."},
+            {"stage": "Master", "name": "Living Revision", "effect": "Spend 2 Bandwidth, 1 Feedback, and one hour using suitable biological equipment. Grant a willing target one adaptation for the operation: sealed breathing for one hour, thermal tolerance, low-light vision, toxin filtration, or climbing at normal speed. A target may carry one Living Revision at a time."}
+          ]
+        },
+        {
+          "id": "machine-spirit-envoy",
+          "name": "Machine-Spirit Envoy",
+          "legacy": "Negotiators with unseen agencies, animist scholars, exorcists, summoners, and practitioners who specialized in relationships between human intention and nonhuman minds.",
+          "continuum": "The category of spirit expands to include autonomous machines, habitat intelligences, cultivated processes, ecological collectives, and entities living through signals or infrastructure.",
+          "favoredFamilies": ["Machine Communion", "Network Dominion"],
+          "recommendedSkills": ["Empathy", "Xenoculture"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Machine Communion or Network Dominion.",
+          "progression": [
+            {"stage": "Initiate", "name": "Protocol of Respect", "effect": "When first communicating with a nonhuman intelligence, spend 1 Bandwidth to learn the form of address, exchange, permission, or proof it considers respectful. Gain two dice on the first social test that follows that protocol."},
+            {"stage": "Adept", "name": "Shared Interface", "effect": "Spend 1 Bandwidth and gain consent from one autonomous system. For the scene, either party may lend the other one sense, one routine permission, or one die on a relevant test once per round."},
+            {"stage": "Master", "name": "Embassy Process", "effect": "Spend 2 Bandwidth and 1 Feedback to establish a protected communication space among up to Archetype Rating + 2 intelligences for one scene. Participants understand translated intent, cannot impersonate another participant, and cannot secretly alter the shared record."}
+          ]
+        },
+        {
+          "id": "material-compiler",
+          "name": "Material Compiler",
+          "legacy": "Alchemists, transmuters, artificers, and structural specialists who understood matter as a set of temporary instructions rather than permanent substance.",
+          "continuum": "Transmutation becomes fabrication authority, molecular sorting, structural phase control, and the conversion of available matter into precisely specified function.",
+          "favoredFamilies": ["Construct Engineering", "Fabrication Interface"],
+          "recommendedSkills": ["Engineering", "Science"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Construct Engineering or Fabrication Interface.",
+          "progression": [
+            {"stage": "Initiate", "name": "Material Parse", "effect": "Touch one unattended object or material sample and learn its primary components, structural weaknesses, current temperature, and whether it contains concealed voids, mechanisms, or foreign inclusions."},
+            {"stage": "Adept", "name": "Functional Recompile", "effect": "Spend 1 Bandwidth and ten minutes to convert up to Carry 2 of common material into one Serviceable tool, barrier component, replacement part, or two common consumables. The result lasts until broken or consumed."},
+            {"stage": "Master", "name": "Phase Manufacture", "effect": "Spend 2 Bandwidth and 1 Feedback to reshape a 2-meter cube of unattended nonliving matter into a different solid configuration of equal mass. You may create openings, cover, stairs, restraints, or structural supports but not Advanced electronics, explosives, or autonomous systems."}
+          ]
+        },
+        {
+          "id": "entropy-custodian",
+          "name": "Entropy Custodian",
+          "legacy": "Death scholars, ghost interpreters, preservers, decay-workers, and specialists in the information carried by endings.",
+          "continuum": "Death appears as terminated process, archived state, abandoned identity, material decay, and the residue left when a biological or synthetic continuation can no longer answer.",
+          "favoredFamilies": ["Noospheric Identity", "Fabrication Interface"],
+          "recommendedSkills": ["Investigation", "Medicine"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Noospheric Identity or Fabrication Interface.",
+          "progression": [
+            {"stage": "Initiate", "name": "Termination Record", "effect": "Once per scene, examine a destroyed machine, dead organism, or terminated process and learn its final completed action, immediate cause of termination, and whether any identity, signal, or active copy departed before failure."},
+            {"stage": "Adept", "name": "Arrest Decay", "effect": "Spend 1 Bandwidth to preserve one corpse, damaged device, data store, or evidence site from ordinary decay, corruption, or contamination for twenty-four hours."},
+            {"stage": "Master", "name": "Last Process", "effect": "Spend 2 Bandwidth and 1 Feedback while touching a recently terminated target. Reconstruct one minute of its final sensory or operational record as an observable playback. The record cannot answer questions and contains only information the target actually perceived."
+          ]
+        },
+        {
+          "id": "energy-systems-theorist",
+          "name": "Energy Systems Theorist",
+          "legacy": "Masters of flame, motion, electricity, weather, radiation, sound, and the conversion of one energetic state into another.",
+          "continuum": "Their old elemental correspondences translate into field control, signal emission, power routing, environmental systems, and the measurable behavior of force.",
+          "favoredFamilies": ["Signal Warfare", "Construct Engineering"],
+          "recommendedSkills": ["Science", "Heavy Weapons"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Signal Warfare or Construct Engineering.",
+          "progression": [
+            {"stage": "Initiate", "name": "Field Spectrum", "effect": "Sense active heat, electricity, radiation, vibration, magnetic fields, and directed signals within 20 meters. Learn the direction and strongest category of each source."},
+            {"stage": "Adept", "name": "Energy Conversion", "effect": "Spend 1 Bandwidth as a reaction when you suffer heat, cold, electrical, radiation, sonic, or kinetic damage. Reduce the damage by 2 and restore one charge, ammunition unit, or point of power to a held device that can store energy."},
+            {"stage": "Master", "name": "Directed Field", "effect": "Spend 2 Bandwidth and 1 Feedback. Create a 5-meter-radius field within 20 meters for three rounds. Choose one effect: extinguish ordinary fire; impose two dice of interference on ranged attacks; push unsecured objects and creatures 3 meters each round; or provide light, heat, and power sufficient for a small field camp."}
+          ]
+        },
+        {
+          "id": "source-code-adept",
+          "name": "Source-Code Adept",
+          "legacy": "Metamagicians, ritual theorists, counterspell specialists, and awakened scholars who studied the common substrate beneath otherwise different supernatural practices.",
+          "continuum": "The old transcendent source is unavailable, but every capability still has structure, cost, permissions, and failure states that can be read as executable law.",
+          "favoredFamilies": ["Signal Warfare", "Noospheric Identity"],
+          "recommendedSkills": ["Noospherics", "Science"],
+          "entryRequirement": "Archetype Rating 2 and at least one rank-2 power from Signal Warfare or Noospheric Identity.",
+          "progression": [
+            {"stage": "Initiate", "name": "Capability Signature", "effect": "After observing a supernatural or technological ability activate, learn its Resource type, target, duration, and whether it can be resisted, dispelled, interrupted, or only endured."},
+            {"stage": "Adept", "name": "Counterstructure", "effect": "Spend 1 Bandwidth as a reaction when a power targets you or an ally within 10 meters. Add two dice to the target's resistance. If the effect has no resistance test, reduce its duration by one round, to a minimum of one round."},
+            {"stage": "Master", "name": "Rewrite Invocation", "effect": "Spend 2 Bandwidth and 1 Feedback after witnessing a rank-4-or-lower power used in the current scene. Until scene end, you may activate one bounded imitation using Reason + Noospherics, paying the original Resource cost in Bandwidth. The imitation uses the original range, target limit, duration, and resistance but cannot create permanent changes, summon unique entities, or grant another character's identity-dependent authority."
+          ]
+        }
+      ]
+    }
+  ]
+}
