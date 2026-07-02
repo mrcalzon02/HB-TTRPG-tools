@@ -1,0 +1,322 @@
+{
+  "system": "Blacklight Continuum Basic",
+  "schemaVersion": "0.1.0",
+  "status": "alpha-playtest",
+  "diceSystem": {
+    "pool": "Attribute + Skill + modifiers",
+    "successThreshold": 6,
+    "criticalFace": 10,
+    "complicationRule": "A failed roll containing one or more 1s creates a Complication.",
+    "difficultyRange": "1-5 successes"
+  },
+  "attributes": {
+    "Physical": ["Force", "Finesse", "Resilience"],
+    "Social": ["Presence", "Guile", "Composure"],
+    "Mental": ["Reason", "Awareness", "Resolve"]
+  },
+  "skills": {
+    "Operational": ["Athletics", "Close Combat", "Firearms", "Heavy Weapons", "Mobility", "Stealth", "Survival", "Zero-G Operations"],
+    "Technical": ["Biofabrication", "Engineering", "Medicine", "Noospherics", "Piloting", "Science", "Security", "Systems Intrusion"],
+    "Human and Investigative": ["Command", "Deception", "Empathy", "Investigation", "Negotiation", "Performance", "Streetwise", "Xenoculture"]
+  },
+  "archetypes": [
+    {
+      "id": "human-investigator",
+      "name": "Human Investigator",
+      "theme": "A trained but fundamentally mortal investigator who survives through preparation, evidence, trusted contacts, and refusal to look away.",
+      "resourceName": "Conviction",
+      "pressureName": "Strain",
+      "keyAttribute": "Resolve",
+      "resourceBase": 5,
+      "startingAbility": "Prepared Contingency",
+      "weakness": "Mortal Limits",
+      "weaknessText": "You possess no automatic supernatural resistance. Severe harm, age, deprivation, and fear affect you normally.",
+      "innateAbilities": [
+        {
+          "name": "Prepared Contingency",
+          "effect": "Once per operation, reveal a plausible item, contact, route, credential, or precaution prepared before the scene. It cannot solve the entire problem by itself."
+        },
+        {
+          "name": "Evidence Chain",
+          "effect": "When you preserve and compare evidence from at least two scenes, gain one bonus die on the next Investigation or Negotiation roll that uses the connection."
+        },
+        {
+          "name": "Hold the Human Line",
+          "effect": "Spend 1 Conviction to ignore one fear, coercion, or identity-disruption penalty for a scene."
+        }
+      ],
+      "powerFamilies": [
+        {
+          "name": "Casecraft",
+          "abilities": [
+            {"rank": 1, "name": "Read the Room", "effect": "Ask which person, object, or exit is receiving the most concealed attention."},
+            {"rank": 2, "name": "Pattern Board", "effect": "After ten minutes organizing evidence, convert one uncertain clue into two plausible explanations and learn which is better supported."},
+            {"rank": 3, "name": "Pressure Interview", "effect": "Spend 1 Conviction to force an evasive witness to reveal a useful truth, tell a direct lie, or end the conversation."},
+            {"rank": 4, "name": "Impossible Preparation", "effect": "Once per session, establish that you anticipated a narrow supernatural or technological threat and brought a credible countermeasure."},
+            {"rank": 5, "name": "The Case Will Break", "effect": "Name the central unanswered question of an operation. The Game Moderator must reveal a concrete route by which it can be answered, though the route may be dangerous."}
+          ]
+        },
+        {
+          "name": "Field Discipline",
+          "abilities": [
+            {"rank": 1, "name": "Steady Hands", "effect": "Ignore one die of injury, fear, or environmental penalty during a precise action."},
+            {"rank": 2, "name": "Covering Advance", "effect": "When you create a safe route, one ally may move with you without spending their immediate action."},
+            {"rank": 3, "name": "No One Left Behind", "effect": "Spend 1 Conviction to stabilize an ally or prevent separation during a crisis."},
+            {"rank": 4, "name": "Professional Violence", "effect": "Once per scene, turn one successful attack die into an additional success when acting to protect another person."},
+            {"rank": 5, "name": "Mortal Defiance", "effect": "When facing a clearly superior supernatural opponent, gain bonus dice equal to Resolve for one decisive action and take 1 Strain afterward."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vampire",
+      "name": "Vampire",
+      "theme": "An undead or blood-dependent predator balancing immense physical and social power against hunger, daylight, and the erosion of empathy.",
+      "resourceName": "Vitae",
+      "pressureName": "Hunger",
+      "keyAttribute": "Resilience",
+      "resourceBase": 5,
+      "startingAbility": "Predator's Blood",
+      "weakness": "Sun and Hunger",
+      "weaknessText": "Direct unfiltered sunlight causes severe harm. Hunger rises when Vitae is low and may distort choices, senses, and control.",
+      "innateAbilities": [
+        {
+          "name": "Predator's Blood",
+          "effect": "Spend 1 Vitae to add your Archetype rating to one Force, Finesse, Resilience, Presence, or Guile test."
+        },
+        {
+          "name": "Deathless Body",
+          "effect": "You do not breathe and resist poison, disease, vacuum exposure, and ordinary aging, but fire and sunlight remain especially dangerous."
+        },
+        {
+          "name": "Feeding",
+          "effect": "Taking blood or a compatible vital medium restores Vitae. Harmful or unwilling feeding risks Hunger, Cohesion loss, and social consequences."
+        }
+      ],
+      "powerFamilies": [
+        {
+          "name": "Crimson Velocity",
+          "abilities": [
+            {"rank": 1, "name": "Quickened Step", "effect": "Spend 1 Vitae to add two dice to Initiative or a sudden movement test."},
+            {"rank": 2, "name": "Blurred Passage", "effect": "Cross a nearby open space before ordinary observers can react clearly."},
+            {"rank": 3, "name": "Second Motion", "effect": "Spend 1 Vitae to perform a second minor action in the same turn."},
+            {"rank": 4, "name": "Red Interval", "effect": "For one round, active defenses against you lose two dice unless the defender has enhanced perception."},
+            {"rank": 5, "name": "Moment of Slaughter", "effect": "Spend 2 Vitae to take one complete turn before normal Initiative begins. Gain 1 Hunger afterward."}
+          ]
+        },
+        {
+          "name": "Grave Dominion",
+          "abilities": [
+            {"rank": 1, "name": "Weight of the Tomb", "effect": "Add one die when intimidating mortals or lesser predators through stillness and eye contact."},
+            {"rank": 2, "name": "Command the Pulse", "effect": "Spend 1 Vitae to issue a brief command to a target who can hear and understand you. Strong opposition may resist."},
+            {"rank": 3, "name": "Borrowed Devotion", "effect": "Create a temporary emotional fixation, loyalty, or aversion lasting one scene."},
+            {"rank": 4, "name": "Court of One", "effect": "Your Presence may affect a small group as though each member were addressed personally."},
+            {"rank": 5, "name": "Sovereign Silence", "effect": "Spend 2 Vitae to suppress panic, argument, or hostile action in a room for one exchange unless someone succeeds on Resolve + Composure at difficulty 4."}
+          ]
+        },
+        {
+          "name": "Veil of Night",
+          "abilities": [
+            {"rank": 1, "name": "Unremarked", "effect": "Remain difficult to remember while acting calmly and avoiding direct attention."},
+            {"rank": 2, "name": "Borrowed Face", "effect": "Spend 1 Vitae to alter superficial appearance, voice, and scent for a scene."},
+            {"rank": 3, "name": "Absent from the Lens", "effect": "Routine cameras and sensors fail to record useful identifying details."},
+            {"rank": 4, "name": "Living Shadow", "effect": "Blend into dim light and move through watched areas as a shifting absence."},
+            {"rank": 5, "name": "Erase the Witness", "effect": "Spend 2 Vitae to remove or replace a short recent memory in one target. The edit may fracture under contradictory evidence."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shapechanger",
+      "name": "Shapechanger",
+      "theme": "A living predator able to move between human, hunting, and war forms while balancing pack instinct, rage, territory, and spirit resonance.",
+      "resourceName": "Fury",
+      "pressureName": "Instinct",
+      "keyAttribute": "Force",
+      "resourceBase": 4,
+      "startingAbility": "Threefold Form",
+      "weakness": "Predatory Escalation",
+      "weaknessText": "High Instinct makes restraint, confinement, humiliation, and threats to pack or territory increasingly difficult to tolerate.",
+      "innateAbilities": [
+        {
+          "name": "Threefold Form",
+          "effect": "You possess a human form, a swift hunting form, and a powerful war form. Shifting normally costs 1 Fury unless done slowly outside danger."
+        },
+        {
+          "name": "Living Regeneration",
+          "effect": "Recover one Impact damage at the end of each scene. Spend 1 Fury to recover additional Impact during a brief pause."
+        },
+        {
+          "name": "Pack Sense",
+          "effect": "You can identify the direction and broad emotional condition of a bonded packmate within the same local area."
+        }
+      ],
+      "powerFamilies": [
+        {
+          "name": "Warform",
+          "abilities": [
+            {"rank": 1, "name": "Predator's Frame", "effect": "Your hunting form gains enhanced scent, speed, and low-light perception."},
+            {"rank": 2, "name": "Claws of Decision", "effect": "In war form, unarmed attacks inflict Trauma and gain the Cutting tag."},
+            {"rank": 3, "name": "Massive Shift", "effect": "Spend 1 Fury to add your Archetype rating to Force or Resilience for a scene."},
+            {"rank": 4, "name": "Unbroken Pursuit", "effect": "Ignore ordinary terrain penalties while chasing a marked target."},
+            {"rank": 5, "name": "Apex Shape", "effect": "Spend 2 Fury to assume a unique apex form for one scene, gaining armor, reach, and one chosen environmental adaptation. Gain 1 Instinct afterward."}
+          ]
+        },
+        {
+          "name": "Spirit Resonance",
+          "abilities": [
+            {"rank": 1, "name": "Scent the Unseen", "effect": "Detect nearby spirits, strong emotions, supernatural residue, or active noospheric presences."},
+            {"rank": 2, "name": "Threshold Step", "effect": "Spend 1 Fury to perceive or briefly interact with a neighboring spiritual or resonance layer."},
+            {"rank": 3, "name": "Totemic Accord", "effect": "Bind a temporary pact with a local spirit, machine-presence, or ecological intelligence."},
+            {"rank": 4, "name": "Walk the Other Side", "effect": "Cross fully into a nearby reflection-space with willing companions."},
+            {"rank": 5, "name": "Call the Territory", "effect": "Spend 2 Fury to awaken the local environment against an intruder through weather, animals, systems, or spirits."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eldritch-binder",
+      "name": "Eldritch Binder",
+      "theme": "A negotiator with impossible intelligences who survives by containing names, signs, fragments, and obligations that should never fit inside a human mind.",
+      "resourceName": "Pact",
+      "pressureName": "Intrusion",
+      "keyAttribute": "Resolve",
+      "resourceBase": 3,
+      "startingAbility": "Bound Fragment",
+      "weakness": "The Passenger Notices",
+      "weaknessText": "Using powers gives the bound presence more context, sensation, and opportunity. High Intrusion may create compulsions, sensory overlap, or independent manifestations.",
+      "innateAbilities": [
+        {
+          "name": "Bound Fragment",
+          "effect": "Choose an unknowable patron, remnant, or outside intelligence. It grants power through a sealed fragment carried in mind, body, or object."
+        },
+        {
+          "name": "Name and Boundary",
+          "effect": "Given time, you can establish a ward, invitation condition, or prohibition against a known entity or phenomenon."
+        },
+        {
+          "name": "Forbidden Comprehension",
+          "effect": "Spend 1 Pact to understand the function or intent of one alien symbol, ritual, anomaly, or impossible device without understanding its complete history."
+        }
+      ],
+      "powerFamilies": [
+        {
+          "name": "Sealcraft",
+          "abilities": [
+            {"rank": 1, "name": "Chalk Boundary", "effect": "Create a temporary line that a named lesser entity cannot cross without resistance."},
+            {"rank": 2, "name": "Closed Mouth", "effect": "Prevent one target from speaking a chosen name, command phrase, or secret for a scene."},
+            {"rank": 3, "name": "Anchor the Impossible", "effect": "Spend 1 Pact to keep a portal, manifestation, projection, or unstable object fixed in its current state."},
+            {"rank": 4, "name": "Prison of Meaning", "effect": "Bind an incorporeal or informational entity into a prepared object."},
+            {"rank": 5, "name": "Law of the Room", "effect": "Spend 2 Pact to impose one clear supernatural rule over a contained area for a scene. Gain 1 Intrusion afterward."}
+          ]
+        },
+        {
+          "name": "Borrowed Anatomy",
+          "abilities": [
+            {"rank": 1, "name": "Other Eye", "effect": "Manifest a sensory organ that perceives heat, resonance, memory residue, or dimensional stress."},
+            {"rank": 2, "name": "Hand Through the Gap", "effect": "Reach through a short impossible angle to touch or retrieve something nearby but obstructed."},
+            {"rank": 3, "name": "Mantle of the Guest", "effect": "Spend 1 Pact to gain temporary armor and an unsettling visible transformation."},
+            {"rank": 4, "name": "Unnatural Locomotion", "effect": "Move across walls, ceilings, liquid surfaces, or fractured geometry for a scene."},
+            {"rank": 5, "name": "Partial Arrival", "effect": "Allow a controlled portion of the bound entity to manifest, producing a major effect and increasing Intrusion by 2."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "harmonic-mutant",
+      "name": "Harmonic Mutant",
+      "theme": "A body altered by resonance, radiation, alien biology, or impossible frequency until flesh, emotion, and matter answer to harmonic relationships.",
+      "resourceName": "Resonance",
+      "pressureName": "Discord",
+      "keyAttribute": "Composure",
+      "resourceBase": 4,
+      "startingAbility": "Living Frequency",
+      "weakness": "Resonant Instability",
+      "weaknessText": "Strong opposing frequencies, emotional shocks, and repeated power use can produce Discord, uncontrolled mutation, feedback, or environmental damage.",
+      "innateAbilities": [
+        {
+          "name": "Living Frequency",
+          "effect": "You can sense strong vibration, structural stress, active energy fields, and emotional resonance through touch or focused attention."
+        },
+        {
+          "name": "Adaptive Tissue",
+          "effect": "Choose one persistent mutation such as vibration sense, pressure tolerance, resinous healing, phase-flexible joints, or luminous communication."
+        },
+        {
+          "name": "Tune the Self",
+          "effect": "Spend 1 Resonance to alter one bodily parameter for a scene: density, elasticity, thermal tolerance, electrical resistance, or sensory range."
+        }
+      ],
+      "powerFamilies": [
+        {
+          "name": "Harmonic Projection",
+          "abilities": [
+            {"rank": 1, "name": "Resonant Tap", "effect": "Read the broad composition, hollowness, stress, or damage of a touched object."},
+            {"rank": 2, "name": "Shatter Note", "effect": "Spend 1 Resonance to damage brittle material, disrupt a lock, or stagger a nearby target."},
+            {"rank": 3, "name": "Frequency Armor", "effect": "Create a vibrating field that reduces the first incoming physical harm each round."},
+            {"rank": 4, "name": "Phase Chorus", "effect": "Shift yourself and carried equipment partially out of phase to pass through a thin barrier or avoid one attack."},
+            {"rank": 5, "name": "Living Catastrophe", "effect": "Spend 2 Resonance to release a controlled wave affecting a large area. Choose rupture, silence, disorientation, or structural stabilization. Gain 1 Discord."}
+          ]
+        },
+        {
+          "name": "Echo Biology",
+          "abilities": [
+            {"rank": 1, "name": "Sympathetic Healing", "effect": "Match another living body's rhythm and convert one Trauma into Impact after a minute of contact."},
+            {"rank": 2, "name": "Echo Double", "effect": "Create a brief sensory afterimage that repeats your last movement and confuses targeting."},
+            {"rank": 3, "name": "Shared Frequency", "effect": "Link willing allies so they can communicate through vibration and sense one another's distress."},
+            {"rank": 4, "name": "Rewrite the Scar", "effect": "Spend 1 Resonance to permanently alter a minor bodily trait or remove one persistent injury complication."},
+            {"rank": 5, "name": "Chorus Body", "effect": "Split into several short-lived harmonic bodies sharing one mind. Recombining inflicts 1 Discord for each destroyed echo."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "technomancer",
+      "name": "Technomancer",
+      "theme": "A mind able to perceive code, machine intention, noospheric identity, and electronic systems as a manipulable extension of thought.",
+      "resourceName": "Bandwidth",
+      "pressureName": "Feedback",
+      "keyAttribute": "Reason",
+      "resourceBase": 4,
+      "startingAbility": "Ghost Interface",
+      "weakness": "Signal Vulnerability",
+      "weaknessText": "Powerful networks, hostile intelligences, isolation, and damaged hardware can produce Feedback, sensory contamination, false memories, or reciprocal intrusion.",
+      "innateAbilities": [
+        {
+          "name": "Ghost Interface",
+          "effect": "Interact with nearby compatible electronics and simple networks without a physical control surface. Secure or alien systems still require tests."
+        },
+        {
+          "name": "Machine Intuition",
+          "effect": "After brief observation, identify whether a machine is active, damaged, deceptive, autonomous, or externally controlled."
+        },
+        {
+          "name": "Personal Firewall",
+          "effect": "Spend 1 Bandwidth to gain bonus dice equal to Archetype rating against noospheric intrusion, surveillance, or identity capture for a scene."
+        }
+      ],
+      "powerFamilies": [
+        {
+          "name": "Network Dominion",
+          "abilities": [
+            {"rank": 1, "name": "Whisper to Device", "effect": "Issue a simple command to an unsecured nearby machine."},
+            {"rank": 2, "name": "Ghost Access", "effect": "Spend 1 Bandwidth to enter a network without presenting a normal identity credential."},
+            {"rank": 3, "name": "Machine Possession", "effect": "Control one drone, vehicle subsystem, weapon mount, or industrial device for a scene."},
+            {"rank": 4, "name": "Distributed Self", "effect": "Maintain awareness through several connected devices and act through one each turn."},
+            {"rank": 5, "name": "Local God Process", "effect": "Spend 2 Bandwidth to dominate an ordinary network for one scene, rewriting permissions and priorities. Gain 1 Feedback afterward."}
+          ]
+        },
+        {
+          "name": "Construct Engineering",
+          "abilities": [
+            {"rank": 1, "name": "Hardlight Tool", "effect": "Create a temporary interface, probe, cutting edge, or brace from projected energy and local fields."},
+            {"rank": 2, "name": "Helper Process", "effect": "Manifest a small digital or drone assistant that performs one narrow recurring task."},
+            {"rank": 3, "name": "Defensive Lattice", "effect": "Spend 1 Bandwidth to create temporary cover or a barrier against physical and noospheric attacks."},
+            {"rank": 4, "name": "Swarm Instruction", "effect": "Coordinate available drones, tools, or micro-machines as one collective actor."},
+            {"rank": 5, "name": "Emergency Fabricator", "effect": "Assemble a complex temporary device from available machinery and scrap. It functions for one operation before becoming unstable or exhausted."}
+          ]
+        }
+      ]
+    }
+  ]
+}
