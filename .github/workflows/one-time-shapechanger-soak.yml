@@ -1,0 +1,100 @@
+name: Add explicit Shapechanger Living Soak rules
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-shapechanger-soak.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Define Living Soak and damage order
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          basic_path = Path('data/blacklight-continuum/rules/basic-character-options.json')
+          basic = json.loads(basic_path.read_text(encoding='utf-8'))
+          basic['schemaVersion'] = '0.12.0'
+          shapechanger = next(item for item in basic['archetypes'] if item['id'] == 'shapechanger')
+          threefold = next(item for item in shapechanger['innateAbilities'] if item['name'] == 'Threefold Form')
+          threefold['effect'] = (
+              'You possess a social form, a hunting form, and a war form. Their appearance and origin are chosen by the player. '
+              'Shifting is a Minor Interaction. Shifting during danger costs 1 Fury unless a power says otherwise; shifting after one uninterrupted minute outside immediate danger costs no Fury.'
+          )
+          soak = {
+              'name': 'Living Soak',
+              'effect': (
+                  'After Protection and other fixed modifiers determine final damage, but before Vitality is lost, make one Soak Test for each damaging hit. '
+                  'In social form, roll Resilience against Impact damage only. In hunting or war form, roll Resilience + Archetype Rating against Impact or Trauma damage. '
+                  'Each success removes 1 final damage, and Living Soak may reduce a successful hit to 0 damage. It requires no action, Reaction, or Fury and can be used once per hit. '
+                  'Wounded and other penalties to Resilience tests reduce the Soak pool. Living Soak cannot reduce Disruption, Pressure, Exposure, Death Marks not created by damage, or an effect explicitly stating that it ignores Shapechanger Soak.'
+              )
+          }
+          shapechanger['innateAbilities'] = [item for item in shapechanger['innateAbilities'] if item['name'] != 'Living Soak']
+          regeneration_index = next(i for i, item in enumerate(shapechanger['innateAbilities']) if item['name'] == 'Regeneration')
+          shapechanger['innateAbilities'].insert(regeneration_index, soak)
+          basic_path.write_text(json.dumps(basic, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          combat_path = Path('data/blacklight-continuum/rules/combat-foundation.json')
+          combat = json.loads(combat_path.read_text(encoding='utf-8'))
+          combat['schemaVersion'] = '1.1.0'
+          combat['attackProcedure']['damageResolutionOrder'] = [
+              'Determine whether the attack hits and calculate Margin.',
+              'Calculate Raw Damage from Damage rating + Margin.',
+              'Apply Protection, Armor penetration, immunity, and other fixed modifiers. A normal successful Impact or Trauma hit has a minimum of 1 damage at this step unless a rule permits complete negation.',
+              'Resolve Living Soak or another printed post-Protection soak or resistance. A soak may reduce the remaining damage to 0.',
+              'Resolve reactive reductions such as Cohesion Brace against any damage still remaining.',
+              'Remove one Vitality per remaining damage point, record the damage type, and apply Downed or Death Mark rules when required.'
+          ]
+          combat['shapechangerSoak'] = {
+              'name': 'Living Soak',
+              'separationFromProtection': 'Protection is a fixed subtraction based on Resilience and Armor. Living Soak is a second Shapechanger-only roll made after Protection. Increasing Resilience can therefore improve both layers.',
+              'socialForm': 'After final Impact damage is determined, roll Resilience. Each success removes 1 damage.',
+              'huntingAndWarForms': 'After final Impact or Trauma damage is determined, roll Resilience + Archetype Rating. Each success removes 1 damage.',
+              'timing': 'Roll once per damaging hit after Protection and before Cohesion Brace or Vitality loss. Living Soak requires no action, Reaction, or Fury.',
+              'completeNegation': 'Living Soak may reduce the remaining damage to 0 even when the attack hit and the Protection step imposed a minimum of 1 damage.',
+              'woundedInteraction': 'Because Living Soak uses Resilience, the Wounded penalty and any other penalty applying to Resilience tests reduce the Soak pool.',
+              'excludedEffects': 'Living Soak does not reduce Disruption, Pressure, Exposure, Death Marks not created by damage, or an effect explicitly stating that it ignores Shapechanger Soak.'
+          }
+          combat['temporaryDerivedChanges'] = {
+              'rule': 'When an effect temporarily changes an Attribute, immediately recalculate every derived trait using that Attribute.',
+              'vitalityIncrease': 'When temporary Resilience raises Vitality Maximum, increase current Vitality by the same amount. This represents functional mass and endurance created by the form, not healing of recorded damage.',
+              'vitalityDecrease': 'When the increase ends, reduce Maximum normally and reduce current Vitality only when it exceeds the new Maximum. Existing recorded damage remains.',
+              'protectionAndPools': 'Protection, Exposure Limit, Soak pools, and other derived values change immediately for the duration of the Attribute change.'
+          }
+          combat_path.write_text(json.dumps(combat, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          Path('.github/workflows/one-time-shapechanger-soak.yml').unlink()
+          PY
+      - name: Validate and commit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          basic = json.loads(Path('data/blacklight-continuum/rules/basic-character-options.json').read_text())
+          combat = json.loads(Path('data/blacklight-continuum/rules/combat-foundation.json').read_text())
+          shapechanger = next(item for item in basic['archetypes'] if item['id'] == 'shapechanger')
+          soak = next(item for item in shapechanger['innateAbilities'] if item['name'] == 'Living Soak')
+          assert 'Resilience + Archetype Rating' in soak['effect']
+          assert 'reduce a successful hit to 0 damage' in soak['effect']
+          assert combat['shapechangerSoak']['name'] == 'Living Soak'
+          assert len(combat['attackProcedure']['damageResolutionOrder']) == 6
+          assert 'current Vitality by the same amount' in combat['temporaryDerivedChanges']['vitalityIncrease']
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Define Shapechanger Living Soak"
+          git push origin main
