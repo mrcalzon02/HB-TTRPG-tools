@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight Continuum Basic Character Sheet</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-character-sheet.css">
+</head>
+<body class="blacklight-sheet-page">
+  <header class="blacklight-sheet-header no-print">
+    <div>
+      <p class="eyebrow">Blacklight Continuum · No Return Signal</p>
+      <h1>Basic Character Sheet</h1>
+      <p class="subtitle">Original d10 dice-pool character record for investigators, vampires, shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers.</p>
+    </div>
+    <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+  </header>
+
+  <main class="blacklight-sheet-shell">
+    <aside class="blacklight-sheet-controls no-print" aria-label="Character sheet controls">
+      <h2>Sheet Controls</h2>
+      <button id="blacklight-print" class="primary-action" type="button">Print / Save as PDF</button>
+      <button id="blacklight-export" class="secondary-action" type="button">Export Character JSON</button>
+      <label class="secondary-action file-action" for="blacklight-import">Import Character JSON</label>
+      <input id="blacklight-import" type="file" accept="application/json" hidden>
+      <button id="blacklight-reset" class="danger-action" type="button">Clear Character</button>
+      <p id="blacklight-load-status" class="helper-note" role="status">Loading archetypes and powers…</p>
+      <div class="blacklight-quick-rules">
+        <h3>Basic Test</h3>
+        <p><strong>Attribute + Skill</strong> d10s. Results of 6–9 are successes. A 10 is a success and may activate a specialization or power rider.</p>
+        <p>A failed roll containing a 1 creates a Complication. Push by rerolling failed dice up to Resolve, then gain 1 Exposure.</p>
+      </div>
+    </aside>
+
+    <form id="blacklight-character-form" class="blacklight-character-sheet" autocomplete="off">
+      <header class="blacklight-print-banner">
+        <p>BLACKLIGHT CONTINUUM</p>
+        <h2 id="blacklight-sheet-character-title">Basic Operative Record</h2>
+        <span>No Return Signal · Original d10 Alpha</span>
+      </header>
+
+      <section class="blacklight-sheet-panel blacklight-identity-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Identity and continuity</p><h2>Operative Profile</h2></div>
+          <span class="blacklight-panel-code">BL-C01</span>
+        </div>
+        <div class="blacklight-field-grid blacklight-grid-4">
+          <label>Character Name<input name="characterName" type="text"></label>
+          <label>Player<input name="playerName" type="text"></label>
+          <label>Pronouns<input name="pronouns" type="text"></label>
+          <label>Campaign<input name="campaign" type="text" value="No Return Signal"></label>
+          <label>Concept<input name="concept" type="text" placeholder="Marooned analyst, blood-fed infiltrator…"></label>
+          <label>Archetype<select id="blacklight-archetype" name="archetype"><option value="">Loading…</option></select></label>
+          <label>Archetype Rating<input id="blacklight-archetype-rating" name="archetypeRating" type="number" min="1" max="5" value="1"></label>
+          <label>Operational Frame<input name="operationalFrame" type="text" placeholder="Infiltrator, Medic, Clone Warden…"></label>
+          <label>Lineage / Variant<input name="lineageVariant" type="text" placeholder="Bloodline, shifting form, patron, mutation…"></label>
+          <label>Origin World<input name="originWorld" type="text"></label>
+          <label>Current Identity Status<input name="identityStatus" type="text" value="Unregistered Q-MAP Continuation"></label>
+          <label>Experience / Advancement<input name="advancement" type="number" min="0" value="0"></label>
+        </div>
+        <div class="blacklight-field-grid blacklight-grid-2">
+          <label>Pre-Q-MAP Role<textarea name="preQmapRole" rows="3" placeholder="What did Charles employ you to do?"></textarea></label>
+          <label>Awakening Contradiction<textarea name="awakeningContradiction" rows="3" placeholder="What do you remember that another operative remembers differently?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Nine core traits</p><h2>Attributes</h2></div>
+          <span class="blacklight-panel-code">1–5</span>
+        </div>
+        <div class="blacklight-attribute-groups">
+          <fieldset>
+            <legend>Physical</legend>
+            <label>Force<input name="force" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+            <label>Finesse<input name="finesse" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+            <label>Resilience<input name="resilience" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+          </fieldset>
+          <fieldset>
+            <legend>Social</legend>
+            <label>Presence<input name="presence" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+            <label>Guile<input name="guile" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+            <label>Composure<input name="composure" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+          </fieldset>
+          <fieldset>
+            <legend>Mental</legend>
+            <label>Reason<input name="reason" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+            <label>Awareness<input name="awareness" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+            <label>Resolve<input name="resolve" class="blacklight-attribute" type="number" min="1" max="5" value="2"></label>
+          </fieldset>
+        </div>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Automatically calculated</p><h2>Derived Traits and Tracks</h2></div>
+          <span class="blacklight-panel-code">AUTO</span>
+        </div>
+        <div class="blacklight-derived-grid">
+          <label>Vitality Maximum<input id="blacklight-vitality-max" name="vitalityMax" readonly></label>
+          <label>Vitality Current<input name="vitalityCurrent" type="number" min="0"></label>
+          <label>Guard<input id="blacklight-guard" name="guard" readonly></label>
+          <label>Initiative<input id="blacklight-initiative" name="initiative" readonly></label>
+          <label>Cohesion Maximum<input id="blacklight-cohesion-max" name="cohesionMax" readonly></label>
+          <label>Cohesion Current<input name="cohesionCurrent" type="number" min="0"></label>
+          <label>Exposure Limit<input id="blacklight-exposure-limit" name="exposureLimit" readonly></label>
+          <label>Exposure Current<input name="exposureCurrent" type="number" min="0" value="0"></label>
+          <label>Carry<input id="blacklight-carry" name="carry" readonly></label>
+          <label>Identity Defense<input id="blacklight-identity-defense" name="identityDefense" readonly></label>
+          <label>Armor Rating<input name="armorRating" type="number" min="0" value="0"></label>
+          <label>Protection / Soak<input id="blacklight-protection" name="protection" readonly></label>
+        </div>
+        <div class="blacklight-resource-panel">
+          <div>
+            <p class="eyebrow">Archetype resource</p>
+            <h3 id="blacklight-resource-name">Resource</h3>
+            <p id="blacklight-resource-formula" class="helper-note">Select an archetype.</p>
+          </div>
+          <label>Maximum<input id="blacklight-resource-max" name="resourceMax" readonly></label>
+          <label>Current<input name="resourceCurrent" type="number" min="0"></label>
+          <div>
+            <p class="eyebrow">Archetype pressure</p>
+            <h3 id="blacklight-pressure-name">Pressure</h3>
+          </div>
+          <label>Limit<input id="blacklight-pressure-limit" name="pressureLimit" readonly></label>
+          <label>Current<input name="pressureCurrent" type="number" min="0" value="0"></label>
+          <label>Power Dice<input id="blacklight-power-dice" name="powerDice" readonly></label>
+          <label>Key Attribute<input id="blacklight-key-attribute" name="keyAttribute" readonly></label>
+        </div>
+        <div class="blacklight-damage-grid">
+          <label>Impact Damage<textarea name="impactDamage" rows="2" placeholder="Bruising, shock, exhaustion"></textarea></label>
+          <label>Trauma Damage<textarea name="traumaDamage" rows="2" placeholder="Penetration, burns, organ injury"></textarea></label>
+          <label>Disruption Damage<textarea name="disruptionDamage" rows="2" placeholder="Memory, noospheric, identity injury"></textarea></label>
+        </div>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Twenty-four trained fields</p><h2>Skills</h2></div>
+          <span class="blacklight-panel-code">0–5</span>
+        </div>
+        <div id="blacklight-skills" class="blacklight-skill-groups"></div>
+        <label class="blacklight-wide-label">Specializations<textarea name="specializations" rows="3" placeholder="Shipboard Firearms, Printed Anatomy, Identity Architecture…"></textarea></label>
+      </section>
+
+      <section class="blacklight-sheet-panel blacklight-archetype-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Supernatural or exceptional nature</p><h2>Archetype, Weakness, and Innate Abilities</h2></div>
+          <span class="blacklight-panel-code">CLASS</span>
+        </div>
+        <article id="blacklight-archetype-summary" class="blacklight-archetype-summary">
+          <p>Select an archetype to load its resource, pressure track, weakness, innate abilities, and power families.</p>
+        </article>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Ranked supernatural development</p><h2>Powers and Abilities</h2></div>
+          <span class="blacklight-panel-code">1–5</span>
+        </div>
+        <div id="blacklight-power-list" class="blacklight-power-list">
+          <p class="helper-note">Select an archetype to display power families.</p>
+        </div>
+        <label class="blacklight-wide-label">Custom or Cross-Archetype Abilities<textarea name="customAbilities" rows="5"></textarea></label>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Continuity protections</p><h2>Anchors, Bonds, and Convictions</h2></div>
+          <span class="blacklight-panel-code">SELF</span>
+        </div>
+        <div class="blacklight-field-grid blacklight-grid-3">
+          <label>Identity Anchor 1<textarea name="identityAnchor1" rows="3"></textarea></label>
+          <label>Identity Anchor 2<textarea name="identityAnchor2" rows="3"></textarea></label>
+          <label>Identity Anchor 3<textarea name="identityAnchor3" rows="3"></textarea></label>
+          <label>Conviction / Moral Boundary<textarea name="conviction" rows="3"></textarea></label>
+          <label>Touchstone / Important Person<textarea name="touchstone" rows="3"></textarea></label>
+          <label>Pack, Coterie, Cell, or Circle Bond<textarea name="groupBond" rows="3"></textarea></label>
+        </div>
+        <div class="blacklight-field-grid blacklight-grid-2">
+          <label>Charles once saved me by…<textarea name="charlesSavedMe" rows="3"></textarea></label>
+          <label>Charles never answered me about…<textarea name="charlesNeverAnswered" rows="3"></textarea></label>
+        </div>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Printed biology</p><h2>Body, Form, and Conditions</h2></div>
+          <span class="blacklight-panel-code">BIO</span>
+        </div>
+        <div class="blacklight-field-grid blacklight-grid-3">
+          <label>Visible Irregularity<textarea name="visibleIrregularity" rows="3" placeholder="Resinous wounds, reflective eyes, segmented joints…"></textarea></label>
+          <label>Latent Advantage<textarea name="latentAdvantage" rows="3"></textarea></label>
+          <label>Biological Need or Bane<textarea name="biologicalNeed" rows="3"></textarea></label>
+          <label>Current Form<textarea name="currentForm" rows="3"></textarea></label>
+          <label>Mutations / Adaptations<textarea name="mutations" rows="3"></textarea></label>
+          <label>Persistent Conditions<textarea name="conditions" rows="3"></textarea></label>
+        </div>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Field record</p><h2>Weapons, Protection, Equipment, and Contacts</h2></div>
+          <span class="blacklight-panel-code">GEAR</span>
+        </div>
+        <div class="blacklight-weapon-table">
+          <div class="blacklight-table-row blacklight-table-head"><span>Weapon / Power</span><span>Pool</span><span>Damage</span><span>Range</span><span>Tags / Notes</span></div>
+          <div class="blacklight-table-row"><input name="weapon1"><input name="weapon1Pool"><input name="weapon1Damage"><input name="weapon1Range"><input name="weapon1Notes"></div>
+          <div class="blacklight-table-row"><input name="weapon2"><input name="weapon2Pool"><input name="weapon2Damage"><input name="weapon2Range"><input name="weapon2Notes"></div>
+          <div class="blacklight-table-row"><input name="weapon3"><input name="weapon3Pool"><input name="weapon3Damage"><input name="weapon3Range"><input name="weapon3Notes"></div>
+          <div class="blacklight-table-row"><input name="weapon4"><input name="weapon4Pool"><input name="weapon4Damage"><input name="weapon4Range"><input name="weapon4Notes"></div>
+        </div>
+        <div class="blacklight-field-grid blacklight-grid-2">
+          <label>Armor and Protection<textarea name="armorAndProtection" rows="4"></textarea></label>
+          <label>Equipment and Salvage<textarea name="equipment" rows="4"></textarea></label>
+          <label>Contacts, Allies, and Debts<textarea name="contacts" rows="4"></textarea></label>
+          <label>Haven, Territory, Laboratory, or Safe Site<textarea name="safeSite" rows="4"></textarea></label>
+        </div>
+      </section>
+
+      <section class="blacklight-sheet-panel">
+        <div class="blacklight-section-heading">
+          <div><p class="eyebrow">Campaign record</p><h2>Notes, Secrets, and Advancement</h2></div>
+          <span class="blacklight-panel-code">LOG</span>
+        </div>
+        <div class="blacklight-field-grid blacklight-grid-2">
+          <label>Character Notes<textarea name="characterNotes" rows="7"></textarea></label>
+          <label>Secrets and Complications<textarea name="secrets" rows="7"></textarea></label>
+          <label>Advancement Purchases<textarea name="advancementPurchases" rows="5"></textarea></label>
+          <label>Mission Record<textarea name="missionRecord" rows="5"></textarea></label>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <script src="blacklight-character-sheet.js"></script>
+</body>
+</html>
