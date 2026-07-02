@@ -137,6 +137,7 @@
     sprawlToolPromise = (async () => {
       await loadScript('shadowrun-sprawl-discovery-engine.js', () => Boolean(window.ShadowrunSprawlDiscoveryEngine));
       await loadScript('shadowrun-sprawl-discovery.js', () => Boolean(window.ShadowrunSprawlDiscovery));
+      await loadScript('shadowrun-sprawl-scan-recovery.js', () => Boolean(window.__shadowrunSprawlScanRecoveryInstalled));
       await loadScript('shadowrun-danger-intensity-control.js', () => Boolean(window.ShadowrunDangerIntensity));
       await loadScript('spatial-submission-handoff.js', () => Boolean(window.HBSpatialSubmissionHandoff));
       await loadScript('shadowrun-sprawl-seed-workspace.js', () => Boolean(window.ShadowrunSprawlSeedWorkspace));
