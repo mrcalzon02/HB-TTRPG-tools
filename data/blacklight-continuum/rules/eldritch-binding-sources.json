@@ -1,13 +1,14 @@
 {
   "setting": "Blacklight Continuum",
   "archetype": "Eldritch Binder",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "framework": "An Eldritch Binder is bound to one of six vast predatory presences whose answer still reaches across the transition. The connection is diminished, but it is not broken. Select one Binding Source. The Source defines two favored power families, recommended Skills, one Temptation, one explicit Intrusion Breach, and a five-stage Depth of Binding progression. These options do not use Gifts or Banes. Every deeper stage grants a recorded capability while increasing the number of ways the presence can reach through the Binder. The entities are not misunderstood protectors or morally neutral cosmic principles. They are immense, vile, acquisitive intelligences that will consume identity, agency, memory, relationship, and soul whenever the pact gives them room.",
   "selectionRules": {
     "bindingSource": "Choose one Binding Source at character creation. The existing pact, prohibitions, permissions, and relationship remain valid between Binder and Source.",
     "temptation": "Each Source has one Temptation. The Binder may answer it once per scene, receiving the printed benefit, restoring 1 Pact, and gaining 1 Intrusion.",
     "depthOfBinding": "Depth abilities are purchased in order. Depth 1 requires Archetype Rating 1, Depth 2 requires Rating 2, and so on. A purchased Depth ability is a permanent recorded capability.",
-    "intrusionBreach": "When Intrusion reaches its limit, resolve the Source's printed Intrusion Breach before reducing or resetting Intrusion through the campaign's normal Pressure procedure."
+    "intrusionBreach": "When Intrusion reaches its limit, resolve the Source's printed Intrusion Breach before reducing or resetting Intrusion through the campaign's normal Pressure procedure.",
+    "depthResolutionStandard": "Every Depth ability states its action, cost, range, test or resistance, duration, fixed outcome, and failure consequence where a roll is required. Information abilities use closed question menus. The Moderator supplies only facts already true in established play; if no valid fact exists, the ability returns None and refunds its Pact cost."
   },
   "catalogs": [
     {
@@ -23,8 +24,15 @@
           "name": "The Void Mind",
           "legacy": "An endless black intelligence of unspeakable and unknowable knowledge. It contains the small secrets of unlived lives, impossible realities, abandoned histories, and answers that whisper in voices no living mind was built to contain.",
           "continuum": "The Void Mind still answers, but the distance between Binder and presence has become a sealed darkness carried inside the skull. Its knowledge arrives as memories without lives, conclusions without reasoning, and secrets that know the listener more completely than the listener knows themself.",
-          "favoredFamilies": ["Forbidden Cognition", "Sealcraft"],
-          "recommendedSkills": ["Investigation", "Noospherics", "Science"],
+          "favoredFamilies": [
+            "Forbidden Cognition",
+            "Sealcraft"
+          ],
+          "recommendedSkills": [
+            "Investigation",
+            "Noospherics",
+            "Science"
+          ],
           "temptation": {
             "name": "One Question Too Many",
             "effect": "Once per scene, immediately after an Investigation, Science, Noospherics, or Forbidden Cognition test resolves, ask one additional question from this list: What relevant fact was deliberately omitted? Which current assumption is false? What unseen participant affected the subject? What immediate consequence has not yet become visible? Receive one truthful sentence answering the selected question, restore 1 Pact, and gain 1 Intrusion."
@@ -38,27 +46,27 @@
             {
               "stage": "Depth 1",
               "name": "Secret Beneath the Surface",
-              "effect": "Cost: 1 Pact. After examining one person, object, record, or location for one exchange, choose one question: What was intentionally concealed here? Which visible detail was added later? What expected trace is missing? What fact would most directly contradict the apparent explanation? Receive one specific truthful answer."
+              "effect": "Action: one exchange. Cost: 1 Pact. Target: one person, object, record, or location you can directly examine within 5 meters. Choose exactly one question: What was intentionally concealed here? Which visible detail was added or altered most recently? What expected trace is missing? What single fact most directly contradicts the apparent explanation? Test Resolve + Investigation at difficulty 2, or opposed by Guile + Security when a sentient actor actively concealed the answer. Success: receive one specific fact answering the chosen question and gain one die on the first test that directly exploits it before scene end. Failure: receive no fact and gain 1 Intrusion. If established play contains no valid answer, receive None and refund the Pact cost."
             },
             {
               "stage": "Depth 2",
               "name": "Expertise From an Unlived Life",
-              "effect": "Cost: 1 Pact and 1 Intrusion. Choose one Skill currently rated 0 or 1. For one test, treat that Skill as rating 3. The borrowed expertise supplies technique but does not provide credentials, equipment, contacts, cultural authority, or a new specialization."
+              "effect": "Action: declare before rolling. Cost: 1 Pact and 1 Intrusion. Choose one Skill currently rated 0 or 1. For one test, treat that Skill as rating 3. You cannot Push this test, use the borrowed rating to satisfy a prerequisite, or gain credentials, equipment, contacts, cultural authority, or a specialization from it. After the test, the borrowed rating ends regardless of success or failure."
             },
             {
               "stage": "Depth 3",
               "name": "Contradiction Becomes a Door",
-              "effect": "Once per scene after you establish a documented contradiction between two records, statements, memories, or observed events, spend 1 Pact. On the next action that directly tests that contradiction, reroll up to Resolve failed dice. You must accept the second results."
+              "effect": "Trigger: you possess two recorded statements, observations, memories, or records that cannot both be true. Cost: 1 Pact. Create one Contradiction token naming the two incompatible facts. Before scene end, spend the token on one test that directly determines which fact is false, who created the contradiction, or what event reconciles them. Add two dice and reroll one failed die after the roll. The token is consumed after the test. If the test still fails, gain 1 Intrusion."
             },
             {
               "stage": "Depth 4",
               "name": "Impossible Correlation",
-              "effect": "Cost: 2 Pact and ten minutes comparing at least three distinct pieces of evidence. Choose one result: identify the single event that could have produced all three; identify the person or system that had access to all three; identify the one missing record that would connect them; or identify which piece originated in a different continuity. The team gains two dice on the first action directly pursuing the answer."
+              "effect": "Action: ten uninterrupted minutes comparing at least three distinct pieces of evidence. Cost: 2 Pact. Test Resolve + Investigation at difficulty 3. Before rolling choose one output: the single event capable of producing all three pieces; the person or system with access to all three; the one missing record that would connect them; or which piece originated in another continuity. Success: receive one specific lead naming a person, place, record, system, or event and gain two dice on the first action that directly pursues it before operation end. Failure: identify one of the three pieces as unreliable, contaminated, or irrelevant and gain no lead. If no valid output exists in established play, receive None and refund the Pact cost."
             },
             {
               "stage": "Depth 5",
               "name": "Open the Black Archive",
-              "effect": "Cost: 2 Pact and 2 Intrusion. For one scene, treat Reason as 5 for Investigation, Science, Noospherics, alien systems, anomalies, and pacts. During the scene ask up to three questions from the printed lists of Secret Beneath the Surface or One Question Too Many without further Pact cost. You cannot restore Pact while the Archive is open."
+              "effect": "Action: one exchange. Cost: 2 Pact and 2 Intrusion. Duration: one scene. Set Reason to 5 for Investigation, Science, Noospherics, alien systems, anomalies, and pacts, and add two dice to those tests. During the scene you may use Secret Beneath the Surface up to three times without paying Pact. You cannot Push, restore Pact, or use this ability again while the Archive is open. Each failed affected test adds 1 Intrusion after resolution."
             }
           ]
         },
@@ -67,8 +75,15 @@
           "name": "The Abyssal Womb",
           "legacy": "A vast scheming and dreaming thing whose thousand arms push, pull, cradle, steal, assemble, and place. Every apparent act is part of a design too large for any mortal participant to perceive.",
           "continuum": "Its arms still reach, but no longer through a familiar occult cosmos. They emerge through impossible angles, folded spaces, shadows, machinery gaps, and dreams carried inside the Binder. Every helpful hand may also be positioning a piece in a scheme that began before the Binder was born.",
-          "favoredFamilies": ["Borrowed Manifestation", "Invocation"],
-          "recommendedSkills": ["Noospherics", "Engineering", "Medicine"],
+          "favoredFamilies": [
+            "Borrowed Manifestation",
+            "Invocation"
+          ],
+          "recommendedSkills": [
+            "Noospherics",
+            "Engineering",
+            "Medicine"
+          ],
           "temptation": {
             "name": "Let Another Hand Do It",
             "effect": "Once per scene before a test involving lifting, carrying, manipulating, repairing, treating, restraining, or operating an object, receive two bonus dice as unseen arms assist you. Restore 1 Pact and gain 1 Intrusion after the test resolves. The arms cannot supply missing tools, materials, access, or knowledge."
@@ -82,27 +97,27 @@
             {
               "stage": "Depth 1",
               "name": "The Far Hand",
-              "effect": "Cost: 1 Pact. For one exchange, manipulate one unattended object within 10 meters as though using one hand. You may open an unsecured closure, press a control, retrieve an object of Carry 1 or less, pour a container, or move the object up to 5 meters. The hand cannot attack, pick locks, perform surgery, or cross an active boundary."
+              "effect": "Action: one standard action. Cost: 1 Pact. Range: 10 meters and line of sight. Choose one unattended or willing target object of Carry 1 or less. Perform exactly one operation: move it up to 5 meters; retrieve it to your hand; open or close one unsecured closure; press one visible control; pour or empty one container; or hold it stationary against ordinary gravity until your next turn. The hand cannot attack, pick locks, perform surgery, use a Skill, cross an active boundary, or affect a held or secured object."
             },
             {
               "stage": "Depth 2",
               "name": "Cradle of Black Arms",
-              "effect": "Cost: 1 Pact. Choose yourself or one willing target within 10 meters. For three rounds, unseen arms grant Armor 2 and two dice against forced movement, falling, separation, and restraint. The protected target moves at half speed while cradled."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: yourself or one willing target within 10 meters. Duration: three rounds. The target gains Armor 2 and two dice against forced movement, falling, separation, disarming, and restraint. Its movement is reduced by half. A target can benefit from only one Cradle at a time."
             },
             {
               "stage": "Depth 3",
               "name": "Many-Handed Labor",
-              "effect": "Cost: 1 Pact for one scene. Once per round, perform two additional simple interactions selected from draw or stow an item; reload a weapon; open or close an unsecured door; operate one adjacent control; carry one additional Carry 1 object; or provide one die of assistance to an adjacent Engineering, Fabrication, Medicine, or Security test. These interactions cannot activate powers or make attacks."
+              "effect": "Action: one standard action. Cost: 1 Pact. Duration: one scene. At the start of each of your turns choose two different simple interactions: draw or stow one item; reload one weapon; open or close one unsecured door; operate one adjacent control; carry one additional Carry 1 object without penalty; or provide one die of assistance to an adjacent Engineering, Medicine, Security, or Systems Intrusion test. These interactions require no separate action but cannot make attacks, activate powers, perform opposed tests, or repeat the same interaction twice in one turn."
             },
             {
               "stage": "Depth 4",
               "name": "Dream-Born Servitor",
-              "effect": "Cost: 2 Pact and 1 Intrusion. Create one Small temporary servitor within 5 meters for the scene. It has Guard 4, durability 5, movement 8 meters, and a four-die pool. Choose one task profile when created: Carrier can move Carry 4; Attendant can provide two dice of assistance to Medicine or Engineering; Warden can restrain with four dice and durability 4; Scout can see and hear through gaps and report what it perceives. The servitor cannot improvise outside its profile."
+              "effect": "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Range: create within 5 meters. Duration: one scene. The servitor has Guard 4, durability 5, movement 8 meters, and acts immediately after you with a four-die pool. Choose one profile: Carrier moves Carry 4 and may transfer one carried object per turn; Attendant provides two assistance dice to one adjacent Medicine or Engineering test per turn; Warden makes one four-die restraint attack per turn with durability 4; Scout moves through 10-centimeter gaps, sees and hears normally, and reports through your pact. It cannot attack unless it is the Warden, use powers, spend resources, or act outside its selected profile. It collapses at zero durability."
             },
             {
               "stage": "Depth 5",
               "name": "The Thousand-Armed Scheme",
-              "effect": "Cost: 2 Pact and 2 Intrusion. Create a 10-meter-radius field centered within 20 meters for three rounds. At the start of each of your turns choose three different actions: move one unattended Carry 2 object up to 10 meters; grant one target Armor 2 until your next turn; restrain one target with Resolve + Archetype Rating against Guard and durability 5; operate one visible unsecured mechanism; or give two dice of assistance to one visible ally's physical or technical test. No target may receive the same action twice in one round."
+              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Range: place a 10-meter-radius field within 20 meters. Duration: three rounds. At the start of each of your turns choose three different effects: move one unattended Carry 2 object up to 10 meters; grant one target Armor 2 until your next turn; make one restraint attack using Resolve + Archetype Rating against Guard with durability 5; operate one visible unsecured mechanism; move one willing target 3 meters without provoking reactions; or give two assistance dice to one visible ally's physical or technical test. No target may receive the same effect twice in one round, and each chosen effect resolves once."
             }
           ]
         },
@@ -111,8 +126,15 @@
           "name": "That Which Hungers",
           "legacy": "A great red madness of endless appetite. It seeks only to consume, accumulate, and take for itself while returning nothing. It grants power to whatever will feed it and calls every possession, relationship, memory, and living body an unfinished meal.",
           "continuum": "The Hunger remains vast beyond measurement. Local matter, energy, blood, identity, and information all register as food. The Binder can direct the appetite for a time, but every act of consumption teaches it a new category of thing that can be taken.",
-          "favoredFamilies": ["Borrowed Manifestation", "Pact Economy"],
-          "recommendedSkills": ["Survival", "Close Combat", "Negotiation"],
+          "favoredFamilies": [
+            "Borrowed Manifestation",
+            "Pact Economy"
+          ],
+          "recommendedSkills": [
+            "Survival",
+            "Close Combat",
+            "Negotiation"
+          ],
           "temptation": {
             "name": "Feed the Red Want",
             "effect": "Once per scene after you perform one qualifying act, restore 1 Pact and gain 1 Intrusion. Qualifying acts are: consume a full ration; completely drain one common power cell or ammunition supply; deliberately destroy one Serviceable object; or inflict at least 1 Trauma on a hostile target. The consumed or destroyed resource is gone normally."
@@ -126,27 +148,27 @@
             {
               "stage": "Depth 1",
               "name": "Scent the Full",
-              "effect": "Cost: none once per scene. Choose one category: biological vitality, stored electrical power, ammunition, food, active supernatural Resource, or valuable portable material. Learn the direction and approximate distance of the largest concentration of that category within 50 meters. The sense does not identify ownership, exact quantity, defenses, or a safe route."
+              "effect": "Action: one standard action. Cost: none, once per scene. Choose one category: biological vitality, stored electrical power, ammunition, food, active supernatural Resource, or portable valuables. Range: 50 meters. Learn the direction, distance band (within 10 meters, 11–25 meters, or 26–50 meters), and whether the largest concentration is stationary or moving. The sense does not identify ownership, exact quantity, defenses, identity, or a safe route. If no concentration exists, receive None."
             },
             {
               "stage": "Depth 2",
               "name": "Red Claim",
-              "effect": "Once per scene after you personally inflict damage on a hostile target or destroy an obstacle with an attack, choose one result: restore 1 Pact; remove 1 Impact from yourself; or gain Armor 1 until the start of your next turn."
+              "effect": "Trigger: once per scene after you personally inflict at least 1 Impact or Trauma on a hostile target, or destroy an obstacle with an attack. Choose one result immediately: restore 1 Pact; remove 1 Impact from yourself; or gain Armor 1 until the start of your next turn. Only one result can be gained from the triggering action, regardless of targets damaged."
             },
             {
               "stage": "Depth 3",
               "name": "Devour the Function",
-              "effect": "Cost: 1 Pact and one action. Destroy one unattended Serviceable handheld object and choose one function for the scene: cutting tool grants two dice to breach or repair; power source provides three charges to one held device; sensor grants thermal, vibration, or electromagnetic detection within 20 meters; armor component grants Armor 1; mobility component grants climbing at normal speed or one 10-meter assisted leap. Only one devoured function may be active at a time."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: one unattended Serviceable handheld object within reach; the object is destroyed. Choose one function for the scene: Cutter grants two dice to one breach, repair, or sabotage test per round; Power Source supplies three charges to one held compatible device; Sensor grants thermal, vibration, or electromagnetic detection within 20 meters; Armor Component grants Armor 1; Mobility Component grants climbing at normal speed or one 10-meter assisted leap per round. Only one devoured function may be active; activating another ends the first."
             },
             {
               "stage": "Depth 4",
               "name": "Maw Without Bottom",
-              "effect": "Cost: 2 Pact and 1 Intrusion. Make a Resolve + Close Combat attack against every target in a 5-meter cone. Each target compares the result to Guard separately. On success inflict 2 Trauma to living targets or 5 structural damage to objects and barriers. Unsecured Carry 1 objects in the cone are destroyed."
+              "effect": "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Area: 5-meter cone. Make one Resolve + Close Combat test and compare it separately to each target's Guard. Success against a living target inflicts 2 Trauma. Success against an object or barrier inflicts 5 structural damage. Unsecured Carry 1 objects in the cone are destroyed automatically. Failure against a target causes no damage to that target. Allies are affected unless excluded before rolling; you may exclude up to Archetype Rating targets."
             },
             {
               "stage": "Depth 5",
               "name": "Give Nothing Back",
-              "effect": "Cost: 2 Pact and 2 Intrusion. For three rounds, the first time each round you inflict Trauma or destroy an object of Carry 2 or greater, restore either 1 Pact or remove 1 Impact. During these rounds you cannot voluntarily transfer equipment, provide assistance dice, heal another target, or spend a Resource on another character. If a round ends without you inflicting Trauma or destroying a qualifying object, gain 1 additional Intrusion."
+              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Duration: three rounds. The first time each round you inflict Trauma or destroy an object of Carry 2 or greater, choose either restore 1 Pact or remove 1 Impact. During the duration you cannot voluntarily transfer equipment, provide assistance dice, heal another target, or spend Pact on an effect whose only beneficiary is another character. If a round ends without a qualifying consumption, gain 1 Intrusion."
             }
           ]
         },
@@ -155,8 +177,15 @@
           "name": "The Lidless Eye",
           "legacy": "An observer that pierces existence. Its horror is the certainty that no one has ever truly been alone: it has always seen you, you have always existed inside its sight, and the moment you notice it is only the moment observation becomes mutual.",
           "continuum": "The Eye's gaze still crosses worlds. It no longer arrives through familiar occult symbols, but through reflections, sensors, sight lines, copied images, remembered rooms, and the awful recognition that observation can precede the observer.",
-          "favoredFamilies": ["Forbidden Cognition", "Threshold Geometry"],
-          "recommendedSkills": ["Investigation", "Security", "Noospherics"],
+          "favoredFamilies": [
+            "Forbidden Cognition",
+            "Threshold Geometry"
+          ],
+          "recommendedSkills": [
+            "Investigation",
+            "Security",
+            "Noospherics"
+          ],
           "temptation": {
             "name": "Permit the Gaze",
             "effect": "Once per scene, choose one target you can currently see. Until scene end, you always know that target's direction and whether it is moving, stationary, injured, or incapacitated while it remains within the same site. Restore 1 Pact and gain 1 Intrusion. The target immediately knows that an unseen observer has fixed upon it."
@@ -170,27 +199,27 @@
             {
               "stage": "Depth 1",
               "name": "No Blind Angle",
-              "effect": "While conscious, you perceive visible movement in every direction. Enemies gain no bonus for flanking you, and you may test Awareness against an ambush even when the attacker approaches from behind. This does not see through cover, darkness, invisibility, or active concealment."
+              "effect": "Passive while conscious. You perceive visible movement in every direction. Enemies gain no flanking bonus against you, and you gain two dice on Awareness tests to detect an ambush by a visible attacker. This does not see through cover, darkness, invisibility, active concealment, or a barrier."
             },
             {
               "stage": "Depth 2",
               "name": "Witness Mark",
-              "effect": "Cost: 1 Pact. Mark one visible target for the scene. While it remains within the same site, know its direction, approximate distance, and whether it has changed physical form, identity credentials, or noospheric address. A stronger active boundary suspends the information while the target remains behind it."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: one visible creature, autonomous system, or manifested entity within 20 meters. Duration: one scene. You know its direction, distance band, and whether it has changed physical form, identity credentials, or noospheric address. If it enters active concealment, test Resolve + Investigation opposed by Guile + Stealth or Reason + Security; success maintains the mark, failure suspends it until the target becomes directly visible again. A stronger active boundary also suspends the mark."
             },
             {
               "stage": "Depth 3",
               "name": "Sight Through the Intervening World",
-              "effect": "Cost: 1 Pact. For one exchange, see through one nonliving barrier no thicker than 1 meter within 20 meters. Choose normal vision, thermal contrast, active energy, or noospheric activity. You perceive only the selected mode and cannot attack through the barrier without another capability permitting it."
+              "effect": "Action: one standard action. Cost: 1 Pact. Range: one nonliving barrier within 20 meters and no thicker than 1 meter. Duration: one exchange. Choose one mode: normal vision, thermal contrast, active energy, or noospheric activity. You perceive that mode through the barrier in a 5-meter-deep area. The ability cannot see through a second barrier, reveal thoughts or encrypted content, or permit an attack through the barrier without another capability."
             },
             {
               "stage": "Depth 4",
               "name": "Retrospective Gaze",
-              "effect": "Cost: 2 Pact and 1 Intrusion. Choose one point within 10 meters. Observe an exact visual and auditory replay of the final sixty seconds that occurred within 5 meters of that point. The replay includes only events physically visible or audible from the chosen point and cannot reveal thoughts, encrypted content, or events behind opaque barriers."
+              "effect": "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Choose one point within 10 meters. Observe an exact visual and auditory replay of the final sixty seconds that occurred within 5 meters of that point. The replay lasts one minute, may be paused once, and includes only events physically visible or audible from the chosen point. It never reveals thoughts, encrypted data, invisible entities, or events behind opaque cover. If nothing occurred, the replay shows an empty interval."
             },
             {
               "stage": "Depth 5",
               "name": "Always Already Seen",
-              "effect": "Cost: 2 Pact and 2 Intrusion. Create a 20-meter-radius observation field centered on yourself for three rounds. Inside the field, invisibility, visual disguise, holographic substitution, hidden weapons, and noospheric identity masking provide no concealment. Every participant knows every other participant's location and current visible form. Cover and physical barriers still function normally."
+              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Area: 20-meter radius centered on you. Duration: three rounds. Inside the field, invisibility, visual disguise, holographic substitution, hidden weapons, and noospheric identity masking provide no concealment. Every participant knows every other participant's exact location and current visible form. Cover, darkness created by a solid obstruction, and physical barriers still block attacks and line of effect."
             }
           ]
         },
@@ -199,8 +228,15 @@
           "name": "The Silence",
           "legacy": "The force of the end: quiet after presence, emptiness after meaning, and the anti-presence moving at the edge of perception. It is the thing glimpsed in an empty room that cannot contain anything and yet is not empty.",
           "continuum": "The Silence still erases distinction between absence and something that should not be there. It enters through dead channels, unoccupied compartments, forgotten names, unobserved corners, and the instant a witness looks away.",
-          "favoredFamilies": ["Sealcraft", "Threshold Geometry"],
-          "recommendedSkills": ["Stealth", "Security", "Deception"],
+          "favoredFamilies": [
+            "Sealcraft",
+            "Threshold Geometry"
+          ],
+          "recommendedSkills": [
+            "Stealth",
+            "Security",
+            "Deception"
+          ],
           "temptation": {
             "name": "Leave No Trace of Yourself",
             "effect": "Once per scene after completing one full round in which you do not speak, transmit, attack, activate a visible power, or enter another character's direct line of sight, restore 1 Pact and gain 1 Intrusion. Movement and nonviolent physical interaction do not prevent the Temptation."
@@ -214,27 +250,27 @@
             {
               "stage": "Depth 1",
               "name": "Hush",
-              "effect": "Cost: 1 Pact. Choose yourself, one object, or one 3-meter-radius area within 10 meters. For three rounds it produces no audible sound. Speech, alarms, impacts, machinery, and weapon noise inside the area cannot be heard outside it or by other occupants. Vibration, radio, noospheric signals, and visual cues remain unaffected."
+              "effect": "Action: one standard action. Cost: 1 Pact. Choose yourself, one object, or one 3-meter-radius area within 10 meters. Duration: three rounds. The target produces no audible sound. Speech, alarms, impacts, machinery, and weapon noise created inside the area cannot be heard by anyone, including occupants. Vibration, radio, noospheric signals, thermal effects, and visible cues remain unaffected."
             },
             {
               "stage": "Depth 2",
               "name": "The Empty Place",
-              "effect": "Cost: 1 Pact. Until you move more than 1 meter, attack, speak, transmit, or activate another power, observers treat your occupied space as empty unless they physically touch you or succeed on Awareness + Investigation opposed by Resolve + Stealth. Sensors using ordinary visible light follow the same rule; thermal, pressure, vibration, and noospheric sensors do not."
+              "effect": "Action: one standard action. Cost: 1 Pact. Duration: until broken or scene end. While you move no more than 1 meter per round and do not attack, speak, transmit, or activate another visible power, ordinary visual observers treat your occupied space as empty. A searching observer may detect you with Awareness + Investigation opposed by Resolve + Stealth. Success reveals you to that observer. Physical contact, thermal sensing, pressure sensing, vibration sensing, and noospheric sensing reveal you automatically."
             },
             {
               "stage": "Depth 3",
               "name": "Omitted Presence",
-              "effect": "Cost: 1 Pact. Test Resolve + Stealth opposed by Awareness + Investigation. On success, one target within 10 meters is removed from visual attention and ordinary camera tracking for three rounds. The target remains physically present, can be heard and touched, and becomes visible immediately after attacking or activating a visible power."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: one willing target or one unwilling target within 10 meters. Unwilling resistance: Resolve + Stealth opposed by Awareness + Investigation. Duration: three rounds. On success, the target is omitted from ordinary visual attention and visible-light camera tracking. It remains audible, tangible, thermally visible, and physically present. The effect ends immediately after the target attacks, inflicts damage, activates a visible power, or moves more than 10 meters in one round. Failure: Pact is spent and the target is immune to this ability until scene end."
             },
             {
               "stage": "Depth 4",
               "name": "Room Without a Witness",
-              "effect": "Cost: 2 Pact and 1 Intrusion. Create a 10-meter-radius field within 20 meters for three rounds. Inside it, audible sound, radio, noospheric messages, remote sensor feeds, and targeting locks cannot cross the boundary. Ranged attacks crossing the boundary lose two dice. Physical movement and line of sight remain possible."
+              "effect": "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Place a 10-meter-radius field within 20 meters. Duration: three rounds. Audible sound, radio, noospheric messages, remote sensor feeds, and targeting locks cannot cross the boundary in either direction. Ranged attacks crossing the boundary lose two dice. Direct line of sight, physical movement, thrown objects, and attacks made entirely inside or outside the field function normally."
             },
             {
               "stage": "Depth 5",
               "name": "The Final Quiet",
-              "effect": "Cost: 2 Pact and 2 Intrusion. Choose one active power, autonomous manifestation, signal field, portal, or noospheric process within 10 meters and test Resolve + Noospherics opposed by the controller's Resolve + relevant Archetype Attribute, or difficulty 4 if uncontrolled. On success suppress it for three rounds. It resumes afterward with its remaining duration unchanged. While suppression lasts, you cannot use Invocation powers."
+              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Target: one active power, autonomous manifestation, signal field, portal, or noospheric process within 10 meters. Test Resolve + Noospherics opposed by the controller's Resolve + relevant Archetype Attribute, or difficulty 4 if uncontrolled. Success: suppress the target for three rounds; its duration does not decrease while suppressed. Failure: the target remains active, Pact and Intrusion are spent, and you cannot target it again with The Final Quiet this scene. While any suppression from this ability lasts, you cannot use Invocation powers."
             }
           ]
         },
@@ -243,8 +279,15 @@
           "name": "The Noise",
           "legacy": "The screaming herald of an infinite white and gray abyss that swallows information and replaces distinction with madness. A thousand gibbering voices become static, hiss, hum, and finally the quiet fury of everything flattened into bland sameness while existence refuses to disappear.",
           "continuum": "The Noise now reaches through signal channels, sensory processing, machine communications, identity systems, and the background radiation of inhabited technology. It does not merely obscure meaning; it grinds differences down until every voice, warning, person, and command becomes one unending scream.",
-          "favoredFamilies": ["Invocation", "Forbidden Cognition"],
-          "recommendedSkills": ["Noospherics", "Systems Intrusion", "Performance"],
+          "favoredFamilies": [
+            "Invocation",
+            "Forbidden Cognition"
+          ],
+          "recommendedSkills": [
+            "Noospherics",
+            "Systems Intrusion",
+            "Performance"
+          ],
           "temptation": {
             "name": "Add Your Voice to the Static",
             "effect": "Once per scene before a Noospherics, Systems Intrusion, Performance, intimidation, jamming, or interruption test, add two dice. After the test, restore 1 Pact and gain 1 Intrusion. Every ally within 5 meters loses one die from the next test requiring speech, hearing, concentration, or signal clarity before the end of the round."
@@ -258,27 +301,27 @@
             {
               "stage": "Depth 1",
               "name": "White Hiss",
-              "effect": "Cost: 1 Pact. Choose one communication channel, sensor feed, targeting link, or remote-control connection within 20 meters. For three rounds, information passing through that connection is unreadable and commands fail. A controller may restore the connection with Reason + Systems Intrusion against difficulty equal to Archetype Rating."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: one communication channel, sensor feed, targeting link, or remote-control connection within 20 meters. If unattended, it is jammed automatically for three rounds. If controlled, test Resolve + Systems Intrusion opposed by Reason + Security. Success jams it for three rounds; commands fail and transmitted information is unreadable. The controller may spend an action each round to repeat the opposed test and end the jam on success. Failure: no jam occurs and you suffer 1 Disruption."
             },
             {
               "stage": "Depth 2",
               "name": "A Thousand Voices at Once",
-              "effect": "Cost: 1 Pact. Test Resolve + Performance or Noospherics opposed by Resolve + Composure. On success, one target within 10 meters loses reactions and two dice from its next Reason-, Awareness-, or Composure-based test before the end of its next turn. This does not control its actions or create false beliefs."
+              "effect": "Action: one standard action. Cost: 1 Pact. Target: one creature or autonomous intelligence within 10 meters. Test Resolve + Performance or Resolve + Noospherics opposed by Resolve + Composure. Success: until the end of the target's next turn it cannot take reactions and loses two dice from its next Reason-, Awareness-, or Composure-based test. Failure: the target is unaffected and gains two dice to resist this ability for the rest of the scene. The effect does not control actions or create beliefs."
             },
             {
               "stage": "Depth 3",
               "name": "Flatten the Signal",
-              "effect": "Cost: 1 Pact. Choose up to Archetype Rating visible targets or signals of the same broad category: people, machines, weapons, identity credentials, sensor returns, or spoken voices. For the scene, ordinary sensors and remote observers cannot distinguish among the selected subjects without succeeding on Awareness + Investigation or Reason + Security against difficulty equal to Archetype Rating. Direct physical inspection distinguishes them normally."
+              "effect": "Action: one standard action. Cost: 1 Pact. Choose up to Archetype Rating visible subjects of one category: people, machines, weapons, identity credentials, sensor returns, or spoken voices. Duration: one scene. Ordinary sensors and remote observers cannot distinguish among them without Awareness + Investigation or Reason + Security at difficulty equal to Archetype Rating. Direct physical inspection succeeds automatically. A successful distinction test identifies one selected subject and remains valid for that observer for the scene."
             },
             {
               "stage": "Depth 4",
               "name": "Screaming Field",
-              "effect": "Cost: 2 Pact and 1 Intrusion. Create a 10-meter-radius field within 20 meters for three rounds. Inside it, speech and electronic or noospheric communication fail; concentration tests lose two dice; reactions requiring a warning, command, targeting cue, or remote sensor are unavailable. Physical senses and direct attacks remain possible."
+              "effect": "Action: one standard action. Cost: 2 Pact and 1 Intrusion. Place a 10-meter-radius field within 20 meters. Duration: three rounds. Inside it, speech, radio, and noospheric communication fail; tests requiring sustained concentration lose two dice; and reactions requiring a warning, command, targeting cue, or remote sensor are unavailable. Direct physical senses, movement, melee attacks, and unguided ranged attacks remain possible."
             },
             {
               "stage": "Depth 5",
               "name": "The Gray Infinite",
-              "effect": "Cost: 2 Pact and 2 Intrusion. Create a 20-meter-radius informational whiteout centered within 30 meters for three rounds. Inside it, ranged attacks beyond 3 meters cannot lock onto a specific target; identity credentials, facial recognition, remote control, telepathy, radio, and noospheric messaging fail; and every character must use unmodified Awareness rather than sensor or informational bonuses to locate others. You perceive the position of every source of active noise in the field but cannot identify which source is which without direct contact."
+              "effect": "Action: one standard action. Cost: 2 Pact and 2 Intrusion. Place a 20-meter-radius field within 30 meters. Duration: three rounds. Inside it, ranged attacks beyond 3 meters cannot select a specific target; identity credentials, facial recognition, remote control, telepathy, radio, and noospheric messaging fail; and sensor or informational bonuses cannot add dice to locating a target. Characters locate others using unmodified Awareness against difficulty 2. You perceive the location of every source producing sound, signal, motion, or active power, but cannot identify which source is which without direct contact."
             }
           ]
         }
