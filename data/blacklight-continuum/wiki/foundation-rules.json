@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.4.0",
   "description": "Foundation entries for the capability-first Blacklight Continuum d10 system. The rules measure what a character can do, not what they are made of or how they arrived.",
   "entries": [
     {
@@ -18,57 +18,159 @@
       "tables": [
         {
           "title": "Attributes",
-          "columns": ["Approach", "Attributes"],
+          "columns": [
+            "Approach",
+            "Attributes"
+          ],
           "rows": [
-            ["Physical", "Force, Finesse, Resilience"],
-            ["Social", "Presence, Guile, Composure"],
-            ["Cognitive", "Reason, Awareness, Resolve"]
+            [
+              "Physical",
+              "Force, Finesse, Resilience"
+            ],
+            [
+              "Social",
+              "Presence, Guile, Composure"
+            ],
+            [
+              "Cognitive",
+              "Reason, Awareness, Resolve"
+            ]
           ]
         },
         {
           "title": "Derived Traits",
-          "columns": ["Trait", "Formula"],
+          "columns": [
+            "Trait",
+            "Formula"
+          ],
           "rows": [
-            ["Vitality", "Resilience + 5"],
-            ["Guard", "Finesse + Awareness"],
-            ["Initiative", "Finesse + Composure"],
-            ["Cohesion", "Resolve + Composure + 3"],
-            ["Exposure Limit", "Resolve + Resilience"],
-            ["Carry", "Force + Resilience"],
-            ["Identity Defense", "Resolve + Composure"],
-            ["Protection", "Resilience + Armor Rating"]
+            [
+              "Vitality",
+              "Resilience + 5"
+            ],
+            [
+              "Guard",
+              "Finesse + Awareness"
+            ],
+            [
+              "Initiative",
+              "Finesse + Composure"
+            ],
+            [
+              "Cohesion",
+              "Resolve + Composure + 3"
+            ],
+            [
+              "Exposure Limit",
+              "Resolve + Resilience"
+            ],
+            [
+              "Carry",
+              "Force + Resilience"
+            ],
+            [
+              "Identity Defense",
+              "Resolve + Composure"
+            ],
+            [
+              "Protection",
+              "Resilience + Armor Rating"
+            ]
           ]
         },
         {
           "title": "Skills",
-          "columns": ["Family", "Skills"],
+          "columns": [
+            "Family",
+            "Skills"
+          ],
           "rows": [
-            ["Operational", "Athletics, Close Combat, Firearms, Heavy Weapons, Mobility, Stealth, Survival, Zero-G Operations"],
-            ["Technical", "Engineering, Fabrication, Medicine, Noospherics, Piloting, Science, Security, Systems Intrusion"],
-            ["Human and Investigative", "Command, Deception, Empathy, Investigation, Negotiation, Performance, Streetwise, Xenoculture"]
+            [
+              "Operational",
+              "Athletics, Close Combat, Firearms, Heavy Weapons, Mobility, Stealth, Survival, Zero-G Operations"
+            ],
+            [
+              "Technical",
+              "Engineering, Fabrication, Medicine, Noospherics, Piloting, Science, Security, Systems Intrusion"
+            ],
+            [
+              "Human and Investigative",
+              "Command, Deception, Empathy, Investigation, Negotiation, Performance, Streetwise, Xenoculture"
+            ]
           ]
         },
         {
           "title": "Operational Frames",
-          "columns": ["Frame", "Primary Function"],
+          "columns": [
+            "Frame",
+            "Primary Function"
+          ],
           "rows": [
-            ["Infiltrator", "Access, stealth, false identity, and evidence control"],
-            ["Breacher", "Barrier defeat, protection, and close danger"],
-            ["Systems Intrusion Specialist", "Networks, security, and identity architecture"],
-            ["Field Medic and Fabricator", "Trauma care, restoration, and field production"],
-            ["Engineer and Salvager", "Repair, life support, and repurposing"],
-            ["Investigator and Analyst", "Evidence reconstruction and missing-pattern analysis"],
-            ["Envoy and Fixer", "Negotiation, contacts, resources, and legal cover"],
-            ["Pilot and Navigator", "Vehicles, spacecraft, drones, and transit"],
-            ["Tactical Coordinator", "Team timing, positioning, and command"],
-            ["Noospheric Adept", "Cognitive networks and identity concealment"],
-            ["Xenologist", "Alien cultures, environments, and technologies"],
-            ["Continuity Warden", "Identity integrity, duplicates, transfers, and personhood disputes"]
+            [
+              "Infiltrator",
+              "Access, stealth, false identity, and evidence control"
+            ],
+            [
+              "Breacher",
+              "Barrier defeat, protection, and close danger"
+            ],
+            [
+              "Systems Intrusion Specialist",
+              "Networks, security, and identity architecture"
+            ],
+            [
+              "Field Medic and Fabricator",
+              "Trauma care, restoration, and field production"
+            ],
+            [
+              "Engineer and Salvager",
+              "Repair, life support, and repurposing"
+            ],
+            [
+              "Investigator and Analyst",
+              "Evidence reconstruction and missing-pattern analysis"
+            ],
+            [
+              "Envoy and Fixer",
+              "Negotiation, contacts, resources, and legal cover"
+            ],
+            [
+              "Pilot and Navigator",
+              "Vehicles, spacecraft, drones, and transit"
+            ],
+            [
+              "Tactical Coordinator",
+              "Team timing, positioning, and command"
+            ],
+            [
+              "Noospheric Adept",
+              "Cognitive networks and identity concealment"
+            ],
+            [
+              "Xenologist",
+              "Alien cultures, environments, and technologies"
+            ],
+            [
+              "Continuity Warden",
+              "Identity integrity, duplicates, transfers, and personhood disputes"
+            ]
           ]
         }
       ],
-      "tags": ["d10", "dice pool", "attributes", "skills", "jobs", "combat", "capability first"],
-      "relatedEntries": ["capability-framework", "blacklight-character-creation", "blacklight-continuum-overview"]
+      "tags": [
+        "d10",
+        "dice pool",
+        "attributes",
+        "skills",
+        "jobs",
+        "combat",
+        "capability first"
+      ],
+      "relatedEntries": [
+        "capability-framework",
+        "blacklight-character-creation",
+        "blacklight-continuum-overview"
+      ]
     },
     {
       "id": "capability-framework",
@@ -79,38 +181,108 @@
         "A capability is anything a character can reliably attempt beyond ordinary untrained action: a supernatural power, professional technique, technological interface, ritual, transformation, resistance, special sense, movement mode, social authority, or other explicit permission.",
         "The rules ask what the capability does, what pool activates it, what it costs, how long it lasts, what resists it, and what happens on failure.",
         "Two characters may describe the same mechanical capability through different sources. Two characters with similar appearances or origins gain no shared mechanical benefit unless both possess the relevant capability.",
-        "Archetypes organize exceptional capability families. Operational Frames organize professional competence. Equipment supplies external functions. Conditions temporarily add, restrict, or alter capabilities."
+        "Archetypes organize exceptional capability families. Operational Frames organize professional competence. Equipment supplies external functions. Conditions temporarily add, restrict, or alter capabilities.",
+        "Ability descriptions use fixed outcomes or closed choice menus. The Game Moderator applies established targets, hazards, and world facts, but an activated ability does not require the moderator to invent its benefit, scope, duration, or ordinary failure consequence."
       ],
       "tables": [
         {
           "title": "Capability Record",
-          "columns": ["Field", "Required Definition"],
+          "columns": [
+            "Field",
+            "Required Definition"
+          ],
           "rows": [
-            ["Name", "The specific ability or permission being used"],
-            ["Activation", "Action, reaction, passive effect, preparation, or sustained state"],
-            ["Pool", "Attribute + Skill, fixed rating, or clearly defined automatic effect"],
-            ["Cost", "Resource, Pressure, Exposure, time, equipment, position, or obligation"],
-            ["Effect", "What changes when the capability succeeds"],
-            ["Limit", "Range, duration, target, frequency, prerequisite, or prohibited use"],
-            ["Resistance", "The opposing pool, defense, threshold, or condition"],
-            ["Failure", "Complication, partial effect, Exposure, cost, or lost opportunity"]
+            [
+              "Name",
+              "The specific ability or permission being used"
+            ],
+            [
+              "Activation",
+              "Action, reaction, passive effect, preparation, or sustained state"
+            ],
+            [
+              "Pool",
+              "Attribute + Skill, fixed rating, or clearly defined automatic effect"
+            ],
+            [
+              "Cost",
+              "Resource, Pressure, Exposure, time, equipment, position, or obligation"
+            ],
+            [
+              "Effect",
+              "What changes when the capability succeeds"
+            ],
+            [
+              "Limit",
+              "Range, duration, target, frequency, prerequisite, or prohibited use"
+            ],
+            [
+              "Resistance",
+              "The opposing pool, defense, threshold, or condition"
+            ],
+            [
+              "Failure",
+              "Complication, partial effect, Exposure, cost, or lost opportunity"
+            ],
+            [
+              "Choice Menu",
+              "A closed list when an ability permits selectable effects"
+            ],
+            [
+              "Duration",
+              "The exact event, interval, or condition that ends the effect"
+            ],
+            [
+              "Defined Outcome",
+              "The benefit produced without requiring improvised moderator assignment"
+            ]
           ]
         },
         {
           "title": "Capability Sources",
-          "columns": ["Source", "Rules Treatment"],
+          "columns": [
+            "Source",
+            "Rules Treatment"
+          ],
           "rows": [
-            ["Archetype", "Provides Resource, Pressure, weakness, innate abilities, and ranked power families"],
-            ["Operational Frame", "Provides professional role, trained procedures, and occupational permissions"],
-            ["Skill and Specialization", "Provides competence in broadly available actions"],
-            ["Equipment", "Provides external functions, qualities, tags, and limited resources"],
-            ["Condition", "Temporarily grants, modifies, suppresses, or complicates a capability"],
-            ["Narrative Permission", "Allows an action because established fiction makes it possible"]
+            [
+              "Archetype",
+              "Provides Resource, Pressure, weakness, innate abilities, and ranked power families"
+            ],
+            [
+              "Operational Frame",
+              "Provides professional role, trained procedures, and occupational permissions"
+            ],
+            [
+              "Skill and Specialization",
+              "Provides competence in broadly available actions"
+            ],
+            [
+              "Equipment",
+              "Provides external functions, qualities, tags, and limited resources"
+            ],
+            [
+              "Condition",
+              "Temporarily grants, modifies, suppresses, or complicates a capability"
+            ],
+            [
+              "Narrative Permission",
+              "Allows an action because established fiction makes it possible"
+            ]
           ]
         }
       ],
-      "tags": ["powers", "capabilities", "effects", "advancement"],
-      "relatedEntries": ["blacklight-d10-foundation", "blacklight-character-creation", "blacklight-basic-archetypes"]
+      "tags": [
+        "powers",
+        "capabilities",
+        "effects",
+        "advancement"
+      ],
+      "relatedEntries": [
+        "blacklight-d10-foundation",
+        "blacklight-character-creation",
+        "blacklight-basic-archetypes"
+      ]
     },
     {
       "id": "blacklight-character-creation",
@@ -127,21 +299,58 @@
       "tables": [
         {
           "title": "Character Creation Order",
-          "columns": ["Step", "Selection"],
+          "columns": [
+            "Step",
+            "Selection"
+          ],
           "rows": [
-            ["1", "Present concept and current function"],
-            ["2", "Attributes"],
-            ["3", "Skills and specializations"],
-            ["4", "Operational Frame"],
-            ["5", "Archetype and Rating"],
-            ["6", "Innate abilities and starting powers"],
-            ["7", "Capabilities, limitations, and conditions"],
-            ["8", "Equipment, relationships, commitments, and campaign ties"]
+            [
+              "1",
+              "Present concept and current function"
+            ],
+            [
+              "2",
+              "Attributes"
+            ],
+            [
+              "3",
+              "Skills and specializations"
+            ],
+            [
+              "4",
+              "Operational Frame"
+            ],
+            [
+              "5",
+              "Archetype and Rating"
+            ],
+            [
+              "6",
+              "Innate abilities and starting powers"
+            ],
+            [
+              "7",
+              "Capabilities, limitations, and conditions"
+            ],
+            [
+              "8",
+              "Equipment, relationships, commitments, and campaign ties"
+            ]
           ]
         }
       ],
-      "tags": ["character creation", "attributes", "skills", "Operational Frames", "capabilities"],
-      "relatedEntries": ["blacklight-d10-foundation", "capability-framework", "blacklight-basic-archetypes"]
+      "tags": [
+        "character creation",
+        "attributes",
+        "skills",
+        "Operational Frames",
+        "capabilities"
+      ],
+      "relatedEntries": [
+        "blacklight-d10-foundation",
+        "capability-framework",
+        "blacklight-basic-archetypes"
+      ]
     },
     {
       "id": "blacklight-equipment-foundation",
@@ -157,19 +366,58 @@
       "tables": [
         {
           "title": "Opening Equipment Examples",
-          "columns": ["Item", "Purpose", "Tags"],
+          "columns": [
+            "Item",
+            "Purpose",
+            "Tags"
+          ],
           "rows": [
-            ["Precision Cutter", "Medical separation, salvage, and controlled cutting", "Cutting, Medical, Limited Charge"],
-            ["Environmental Membrane", "Pressure, atmosphere, and temperature protection", "Vacuum-Rated, Sealed, Adjustable"],
-            ["Restraint Filament", "Immobilization, climbing support, and emergency tethering", "Restraining, Concealable, Reusable"],
-            ["Resonance Probe", "Detect conduit flow, vibration, active fields, and hidden cavities", "Sensor, Variable Geometry, Technical"],
-            ["Compact Sidearm", "Familiar close-range defensive weapon", "Concealable, Loud, Ammunition"],
-            ["Charles Support Cassette", "Maintain the local Charles instance's operating needs", "Specialized, Medical, Limited Supply"]
+            [
+              "Precision Cutter",
+              "Medical separation, salvage, and controlled cutting",
+              "Cutting, Medical, Limited Charge"
+            ],
+            [
+              "Environmental Membrane",
+              "Pressure, atmosphere, and temperature protection",
+              "Vacuum-Rated, Sealed, Adjustable"
+            ],
+            [
+              "Restraint Filament",
+              "Immobilization, climbing support, and emergency tethering",
+              "Restraining, Concealable, Reusable"
+            ],
+            [
+              "Resonance Probe",
+              "Detect conduit flow, vibration, active fields, and hidden cavities",
+              "Sensor, Variable Geometry, Technical"
+            ],
+            [
+              "Compact Sidearm",
+              "Familiar close-range defensive weapon",
+              "Concealable, Loud, Ammunition"
+            ],
+            [
+              "Charles Support Cassette",
+              "Maintain the local Charles instance's operating needs",
+              "Specialized, Medical, Limited Supply"
+            ]
           ]
         }
       ],
-      "tags": ["equipment", "salvage", "fabrication", "quality", "tags", "interfaces"],
-      "relatedEntries": ["blacklight-d10-foundation", "arnock-derelict", "biological-charles"]
+      "tags": [
+        "equipment",
+        "salvage",
+        "fabrication",
+        "quality",
+        "tags",
+        "interfaces"
+      ],
+      "relatedEntries": [
+        "blacklight-d10-foundation",
+        "arnock-derelict",
+        "biological-charles"
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.4.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -17,7 +17,15 @@
       "Equipment",
       "Condition",
       "Narrative Permission"
-    ]
+    ],
+    "abilityTextStandard": {
+      "fixedOutcome": "An ability states its mechanical result directly or supplies a closed menu of results.",
+      "boundedChoice": "Player choices are selected from printed options unless a later supplement explicitly expands the list.",
+      "definedDuration": "Persistent effects state when they end.",
+      "definedFailure": "A failed activation states its consequence.",
+      "constrainedInformation": "Information powers state the exact questions answered or facts revealed.",
+      "moderatorRole": "The Game Moderator applies established fiction, target statistics, and consequences but does not invent the core benefit of an activated ability."
+    }
   },
   "diceSystem": {
     "pool": "Attribute + Skill + modifiers",
@@ -114,7 +122,7 @@
             {
               "rank": 2,
               "name": "Contradiction Ledger",
-              "effect": "Cost: 1 Conviction or ten minutes of uninterrupted work. Record two statements, logs, memories, or traces that cannot all be true. Gain two dice when testing the contradiction, and the Game Moderator identifies the missing assumption that could reconcile them. Failure: the contradiction is real, but you misidentify the altered source."
+              "effect": "Cost: 1 Conviction or ten minutes of uninterrupted work. Record two statements, logs, memories, or traces that cannot all be true, then choose one question: Which source was altered? What fact do both sources omit? What third event makes both accounts possible? Receive a true answer containing one specific, testable detail and gain two dice on the first action that tests it. Failure: receive the answer, but one additional detail is a false lead that can be disproven through one further Investigation scene."
             },
             {
               "rank": 3,
@@ -124,12 +132,12 @@
             {
               "rank": 4,
               "name": "Cross-Continuity Indictment",
-              "effect": "Cost: 1 Conviction and one preserved piece of evidence. Test: Resolve + Investigation opposed by Guile + Noospherics or equivalent. Establish that a person, copy, institution, process, or legal identity remains responsible despite transfer, editing, subcontracting, or ownership change. Failure: your evidence chain becomes vulnerable to counterattack."
+              "effect": "Cost: 1 Conviction and one preserved piece of evidence. Test: Resolve + Investigation opposed by the target's Guile + Noospherics; use Guile + Security when the target has no Noospherics rating. On success, establish that the target remains responsible despite transfer, editing, subcontracting, duplication, or ownership change. For the rest of the operation, attempts to deny that responsibility lose two dice and cannot erase the preserved evidence. Failure: the evidence remains valid but becomes publicly linked to you."
             },
             {
               "rank": 5,
               "name": "The Case Will Break",
-              "effect": "Cost: 2 Conviction and 1 Strain. Name the operation's central unanswered question and summarize the evidence earned. The Game Moderator reveals a concrete, reachable route by which the truth can be proven. The route is not safe and may expose a campaign-changing fact."
+              "effect": "Cost: 2 Conviction and 1 Strain. Requirement: at least three distinct pieces of relevant evidence. Convert them into a Breakthrough Lead naming one specific person, place, record, or system containing conclusive proof and one concrete means of reaching or accessing it. The team gains two dice on actions directly pursuing the Lead, and the first successful access produces the proof. When the Lead is created, the investigated subject becomes aware that someone is closing in if it has any means of detection."
             }
           ]
         },
@@ -207,7 +215,7 @@
             {
               "rank": 2,
               "name": "Borrowed Credentials",
-              "effect": "Cost: 1 Conviction. Test: Guile + Security or Negotiation. Present as a plausible inspector, contractor, responder, inherited process, or provisional identity long enough to obtain one limited privilege. Failure: access is granted but flagged for review."
+              "effect": "Cost: 1 Conviction. Test: Guile + Security or Negotiation. Choose one privilege for the scene: cross one controlled checkpoint; inspect one routine record set; requisition one Serviceable item; delay one routine enforcement action for ten minutes; or obtain a private audience with a local supervisor. The credential grants only the chosen privilege. Failure: the privilege is granted once, then the identity is flagged for immediate review."
             },
             {
               "rank": 3,
@@ -253,7 +261,7 @@
             {
               "rank": 5,
               "name": "Everything Has a Failure Mode",
-              "effect": "Cost: 2 Conviction and 1 Strain. After studying a power, institution, machine, organism, or security system, declare the condition under which it can be interrupted, bypassed, overloaded, embarrassed, or forced between incompatible priorities. The Game Moderator defines setup and consequence."
+              "effect": "Cost: 2 Conviction and 1 Strain. Requirement: observe the target for three rounds or study it for ten minutes. Test: Reason + Investigation, difficulty 4. On success, place one Failure Mode on the target until the operation ends. After you or an ally succeeds against that target, consume the Failure Mode to choose one effect: ignore its defenses for one action; cancel one active effect it created; inflict 3 Trauma or 3 Disruption as appropriate to the target; grant all allies two dice against it until the end of the round; or force it to abandon one of two currently active objectives until its next turn. Failure: gain 1 additional Strain and the same target cannot be analyzed again this scene."
             }
           ]
         },
@@ -279,7 +287,7 @@
             {
               "rank": 4,
               "name": "Mutual Obligation",
-              "effect": "Cost: 1 Conviction and a genuine favor. Formalize a reciprocal commitment without compulsion. Each side gains two dice when honoring it and suffers appropriate Pressure when knowingly betraying it."
+              "effect": "Cost: 1 Conviction and a genuine favor. State one service each party owes, the completion condition, and the deadline. Each party gains two dice on actions directly fulfilling its service. A party that knowingly refuses or sabotages its service gains 2 Pressure, and the other party immediately knows the obligation was broken. The agreement ends when both services are completed or both parties release each other."
             },
             {
               "rank": 5,
@@ -416,7 +424,7 @@
             {
               "rank": 1,
               "name": "Cold Repair",
-              "effect": "Cost: 1 Vitae and one uninterrupted minute. Convert one Trauma into Impact or remove two Impact. Fire, radiation, and sunlight wounds require two Vitae. Failure: the injury closes but retains contamination or another Complication."
+              "effect": "Cost: 1 Vitae and one uninterrupted minute. Convert one Trauma into Impact or remove two Impact. Fire, radiation, and sunlight wounds require 2 Vitae. Failure: the damage is removed normally, but gain 1 Hunger and lose one die from Physical tests until you feed or complete a full rest."
             },
             {
               "rank": 2,
@@ -431,7 +439,7 @@
             {
               "rank": 4,
               "name": "Reassemble the Dead Shape",
-              "effect": "Cost: 2 Vitae. Reaction after catastrophic injury. Remain recoverable rather than destroyed and preserve continuity through dismemberment or equivalent harm. Full restoration requires time and suitable material or assistance."
+              "effect": "Cost: 2 Vitae. Reaction when damage at zero Vitality would destroy your body or make recovery impossible. You instead become inert at zero Vitality and remain recoverable. Restoration requires 4 Vitae, one uninterrupted hour, and either a successful Reason + Medicine test at difficulty 4 or enough compatible biomass to replace the lost mass. Until restored, you can perceive your immediate surroundings but cannot move, speak, or use powers."
             },
             {
               "rank": 5,
@@ -447,7 +455,7 @@
             {
               "rank": 1,
               "name": "Taste the Current",
-              "effect": "Cost: none. By sampling blood, vital medium, psychic residue, or another approved source, learn whether it can restore Vitae, quiet Hunger, carry contamination, or provoke a Complication."
+              "effect": "Cost: none. Sample blood, lymph, fresh vital fluid, psychic residue, active bioelectric charge, or living continuity substrate. Learn four facts: whether the sample can restore Vitae; the maximum Vitae it can restore, from 0 to 2; whether consuming it reduces Hunger; and whether it carries poison, infection, hostile code, compulsion, or identity contamination. The sample is consumed by the test only when its total volume is smaller than a mouthful."
             },
             {
               "rank": 2,
@@ -462,12 +470,12 @@
             {
               "rank": 4,
               "name": "Feed on Function",
-              "effect": "Cost: 1 Vitae. Drain one narrow capability from a willing, restrained, or defeated target: heat, regeneration, sensory acuity, stored charge, or processing priority. Gain a related temporary benefit while the target suffers a matching penalty."
+              "effect": "Cost: 1 Vitae. Requirement: a willing, restrained, or defeated target in direct contact. Choose one function for three rounds. Heat Exchange: ignore environmental heat and cold penalties while the target suffers two dice on Resilience against them. Regeneration: recover 1 Impact at the start of each round while the target cannot recover damage. Sensory Acuity: gain two dice to Awareness and one sense the target possesses while it loses two Awareness dice. Stored Charge: restore 2 Vitae while the target or device loses an equal amount of stored energy. Processing Priority: gain two dice to Initiative and active defense while the target loses two dice from both. A target can lose only one function to this power at a time."
             },
             {
               "rank": 5,
               "name": "Eclipse Feast",
-              "effect": "Cost: 2 Vitae and 1 Hunger. During direct contact with a powerful being or continuity engine, feed on the principle sustaining its active identity. Restore Vitae to maximum and borrow one defining resistance or sense for a scene."
+              "effect": "Cost: 2 Vitae and 1 Hunger. Requirement: direct contact with a powerful being or continuity engine for one complete action. Restore Vitae to maximum. Choose one resistance or sense explicitly listed on the target's record and copy its exact effect for the scene, with any numeric rating capped at 3. The target loses access to the copied capability until the end of its next turn. This power cannot copy attacks, resource generation, extra actions, or rank-five powers."
             }
           ]
         },
@@ -552,12 +560,12 @@
             {
               "rank": 4,
               "name": "Siege Form",
-              "effect": "Cost: 2 Fury. Configure against one obstacle class: sealed doors, powered armor, swarms, heavy recoil, radiation, or crushing pressure. Gain an appropriate defense or attack for one scene, sacrificing another capability such as speed, speech, or fine manipulation."
+              "effect": "Cost: 2 Fury. Choose one configuration for the scene. Breacher: gain three dice against barriers and ignore 2 Armor on structures. Bulwark: gain 2 Armor and halve movement speed. Swarmbreaker: one melee attack may affect up to Archetype Rating adjacent minor targets using one roll, but attacks against a single major target lose two dice. Heavy Frame: use heavy weapons without bracing and ignore recoil, but lose fine manipulation. Radiant Hide: reduce fire and radiation damage by 3 per round, but lose two Finesse dice. Pressure Form: ignore environmental pressure and crushing damage and gain two dice against grapples, but cannot speak. Only one Siege Form configuration may be active."
             },
             {
               "rank": 5,
               "name": "Apex Shape",
-              "effect": "Cost: 2 Fury and 1 Instinct. Assume a unique apex form built around one environment and predatory purpose. Gain Armor equal to half Archetype Rating, one extraordinary movement mode, and one severe weapon or control adaptation."
+              "effect": "Cost: 2 Fury and 1 Instinct. Assume an apex form for the scene and gain Armor equal to half Archetype Rating, rounded up. Choose one movement: flight 20 meters per exchange; burrowing 10 meters through soil or light structure; swimming 20 meters with unrestricted underwater breathing; wall and ceiling movement at normal speed; or zero-gravity movement 20 meters without a surface. Choose one offense: a natural weapon dealing Trauma with +2 damage; a crushing grapple with three bonus dice that restrains on two successes; a 10-meter roar requiring Resolve + Composure successes equal to Archetype Rating or the target loses its next minor action; a sweeping attack against up to Archetype Rating adjacent targets; or restraining tendrils with durability 5. Choose one limitation: no speech, no fine manipulation, unable to enter human-width passages, or gain 1 Instinct at the end of every round after the third."
             }
           ]
         },
@@ -630,7 +638,7 @@
             {
               "rank": 1,
               "name": "Utility Shift",
-              "effect": "Cost: 1 Fury or several minutes outside danger. Gain one limited adaptation for a scene: climbing, filtering, sealing, vibration sense, gripping, tool use, or similar function. Failure: the adaptation remains conspicuous until rest."
+              "effect": "Cost: 1 Fury, or five minutes outside danger with no Fury cost. Choose one adaptation for the scene. Climbing: move across walls and ceilings at normal speed. Filtration: ignore airborne toxins, smoke, dust, and spores. Sealing: survive without breathing and ignore vacuum exposure for Resilience minutes. Vibration Sense: detect movement through a connected surface within 20 meters. Gripping: gain two dice to climbing, holding, disarming, and resisting forced movement. Tool Limb: form a cutter, probe, brace, or precision manipulator granting one die to Engineering, Fabrication, or Medicine. Only one Utility Shift may be active at a time. Failure: the adaptation works, but cannot be dismissed until a full rest."
             },
             {
               "rank": 2,
@@ -650,7 +658,7 @@
             {
               "rank": 5,
               "name": "Species of One",
-              "effect": "Cost: 2 Fury and 1 Instinct. Design a new stable form with a defined role, movement method, sensory emphasis, and one extraordinary adaptation. It cannot combine every advantage and may develop distinct instincts."
+              "effect": "Cost: 2 Fury and 1 Instinct; requires one uninterrupted hour. Create a permanent additional form. Choose one locomotion: flight, burrowing, aquatic movement, wall movement, or zero-gravity movement. Choose one sense: thermal vision 30 meters, echolocation 20 meters, electromagnetic detection 20 meters, or vibration sense 30 meters through connected surfaces. Choose one adaptation: sealed vacuum survival for one hour, reduce radiation damage by 3 per round, Armor 2, immunity to ordinary toxins and disease, or recover one additional Impact at scene end. Choose one limitation: no speech, no fine manipulation, half ground speed, conspicuous Large size, or begin each scene in the form with 1 Instinct. The completed form becomes part of Threefold Form and may be assumed normally."
             }
           ]
         },
@@ -671,7 +679,7 @@
             {
               "rank": 3,
               "name": "Totemic Accord",
-              "effect": "Cost: 1 Fury and an offering, service, or constraint. Form a temporary pact with a local presence and gain one narrow favor consistent with its nature."
+              "effect": "Cost: 1 Fury and a meaningful offering accepted by a local presence. Test: Presence + Xenoculture, difficulty 2. Choose one favor lasting for the scene or until completed. Guide: reveal a safe route and grant two Survival dice while following it. Warn: the group cannot be surprised by a threat entering the presence's territory. Conceal: observers lose two dice to locate the group. Message: deliver up to twenty-five words to one named being within the territory. Watch: report the first creature or system crossing a named boundary. Borrow Sense: perceive through one sense possessed by the presence while remaining within the territory. Failure: the offering is consumed, but no favor is created."
             },
             {
               "rank": 4,
@@ -782,7 +790,7 @@
             {
               "rank": 1,
               "name": "Other Eye",
-              "effect": "Cost: 1 Pact. Gain one temporary sense able to perceive heat, resonance, dimensional stress, memory residue, noospheric attention, active lies, or another approved hidden quality for a scene."
+              "effect": "Cost: 1 Pact. Choose one sense for the scene, with a range of 20 meters unless stated otherwise. Heat: perceive temperature and living heat. Resonance: perceive vibration, active fields, and structural stress. Dimensional Stress: perceive portals, folds, and unstable space. Memory Residue: perceive the strongest recent emotional memory attached to a person, object, or place. Noospheric Attention: perceive active surveillance, targeting, and identity queries. Falsehood: recognize a spoken statement the speaker knowingly believes to be false. Only one Other Eye sense may be active at a time."
             },
             {
               "rank": 2,
@@ -792,7 +800,7 @@
             {
               "rank": 3,
               "name": "Mantle of the Guest",
-              "effect": "Cost: 1 Pact; add 1 Intrusion if maintained beyond one scene. Gain Armor equal to half Archetype Rating and one thematic resistance. The manifestation visibly marks the pact."
+              "effect": "Cost: 1 Pact; add 1 Intrusion if maintained beyond one scene. Gain Armor equal to half Archetype Rating, rounded up. Choose heat, cold, electricity, radiation, pressure, or psychic intrusion. Reduce the first damage, penalty, or Pressure caused by the chosen hazard each round by Archetype Rating. The manifestation remains visibly identifiable as part of the pact."
             },
             {
               "rank": 4,
@@ -802,7 +810,7 @@
             {
               "rank": 5,
               "name": "Embassy of the Guest",
-              "effect": "Cost: 2 Pact and 1 Intrusion. Enter a controlled hybrid state granting two borrowed manifestations, one extraordinary sense, and one major resistance for a scene. The presence may speak but cannot act independently unless a negotiated boundary is violated."
+              "effect": "Cost: 2 Pact and 1 Intrusion. For the scene, activate any two Borrowed Manifestation powers of ranks 1 through 4 that you know without paying their individual Pact costs. In addition, select one Other Eye sense and one Mantle of the Guest resistance from their printed lists, even if those powers were not among the two selected. The presence may speak through you but cannot take actions, spend your resources, or change your selections unless a stated pact boundary is violated."
             }
           ]
         },
@@ -813,7 +821,7 @@
             {
               "rank": 1,
               "name": "Name the Price",
-              "effect": "Cost: none. Before accepting a bargain, ask what the other party gains, what remains owed, and what unstated resource is risked. The Game Moderator answers broadly but truthfully."
+              "effect": "Cost: none. Before accepting a bargain, learn four exact facts: what payment or service is required; who receives it; the event or deadline that makes it due; and the consequence of nonpayment. Hidden terms, automatic renewals, inherited obligations, and third-party beneficiaries are included in these facts. If the other party cannot or will not establish all four facts, the bargain cannot bind you through this power."
             },
             {
               "rank": 2,
@@ -828,7 +836,7 @@
             {
               "rank": 4,
               "name": "Renegotiate the Impossible",
-              "effect": "Cost: 2 Pact. Reopen one term because circumstances, identity, universe, or capability materially changed. Exchange one obligation, prohibition, or reward for comparable weight."
+              "effect": "Cost: 2 Pact. Reopen one active agreement when circumstances, identity, universe, or capability materially changed. With the stated consent of every affected party, change exactly one term: responsible party; form of payment; due date; prohibited action; delivery method; or location of performance. The total Resource cost, Pressure cost, number of required services, and duration cannot increase or decrease. The revised term takes effect when every affected party states acceptance."
             },
             {
               "rank": 5,
@@ -1068,7 +1076,7 @@
             {
               "rank": 3,
               "name": "Tune the Crowd",
-              "effect": "Cost: 1 Resonance. Test: Presence + Performance opposed by the highest Composure. Shift emotional intensity one step toward caution, urgency, grief, solidarity, suspicion, or another broad state."
+              "effect": "Cost: 1 Resonance. Test: Presence + Performance opposed by the highest Composure in the group. Choose caution, urgency, grief, solidarity, or suspicion. On success, shift the group's dominant emotional intensity one step toward the chosen state for the scene. The power cannot create a belief, erase knowledge, force a specific action, or move the emotion more than one step with a single use."
             },
             {
               "rank": 4,
@@ -1215,7 +1223,7 @@
             {
               "rank": 2,
               "name": "Helper Process",
-              "effect": "Cost: 1 Bandwidth and available hardware or software. Assemble or awaken a small assistant performing one narrow recurring task with 4 dice."
+              "effect": "Cost: 1 Bandwidth and available hardware or software. Create a small assistant with a 4-die pool and choose one task: monitor a sensor or boundary; map explored space; translate one known language pair; sort and compare records; perform routine repairs; relay communications; carry and deliver objects up to Carry 2; or issue an alert when a stated condition occurs. It performs only that task, cannot attack, and cannot improvise beyond its instructions. It lasts until destroyed, dismissed, disconnected from required hardware, or the operation ends."
             },
             {
               "rank": 3,
@@ -1251,7 +1259,7 @@
             {
               "rank": 3,
               "name": "Borrowed Legal Self",
-              "effect": "Cost: 1 Bandwidth and a valid sample or consent. Assume one narrow privilege, account relationship, or legal role without copying the entire person."
+              "effect": "Cost: 1 Bandwidth and either a valid credential sample or the credential holder's consent. Choose one privilege for the scene: access one account without transferring funds; enter one controlled location; use one registered transit route; submit one routine service request; operate one registered asset; or act under one professional credential. The power copies only the selected privilege and does not copy memories, ownership, passwords unrelated to the privilege, biometric appearance, or authority over other people. Failure: the privilege works once, then both identities are flagged for audit."
             },
             {
               "rank": 4,
