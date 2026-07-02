@@ -1,20 +1,19 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.2.0",
-  "description": "Foundation entries for an embodiment-neutral Blacklight Continuum d10 system. The rules measure what a character can do, not what kind of body, substrate, species, or origin they possess.",
+  "schemaVersion": "0.3.0",
+  "description": "Foundation entries for the capability-first Blacklight Continuum d10 system. The rules measure what a character can do, not what they are made of or how they arrived.",
   "entries": [
     {
       "id": "blacklight-d10-foundation",
       "title": "Blacklight Original d10 System Foundation",
       "category": "Rules",
-      "summary": "An original Attribute-plus-Skill d10 framework supporting operatives, supernatural archetypes, advanced technology, Exposure, equipment, investigation, social conflict, and dangerous field operations without assigning mechanics by body type.",
+      "summary": "An original Attribute-plus-Skill d10 framework supporting operatives, supernatural Archetypes, advanced technology, Exposure, equipment, investigation, social conflict, and dangerous field operations.",
       "body": [
         "Build a test pool from Attribute + Skill + situational modifiers. Results of 6 through 9 produce one success. A 10 produces one success and may activate a specialization, equipment quality, or power rider. A failed roll containing one or more 1s creates a Complication.",
         "Difficulty normally ranges from one to five successes. Characters may Push by rerolling failed dice up to Resolve, then gain Exposure representing accumulated risk, cognitive strain, supernatural attention, operational instability, or psychological pressure according to the scene.",
-        "The core rules never grant or deny abilities because a character is biological, synthetic, transferred, copied, transformed, embodied, disembodied, or otherwise instantiated. A capability exists only when an Attribute, Skill, Archetype feature, power, equipment item, condition, or explicit narrative permission says it exists.",
-        "Appearance, physiology, species, substrate, and embodiment remain character and setting details. They do not create free armor, senses, immunity, movement, damage, healing, or access. Those benefits must be purchased or recorded as capabilities in the same way for every character.",
-        "The current rules remain an alpha foundation. Combat, advancement, power trees, equipment, and character-sheet interfaces are active development areas, but embodiment neutrality is a permanent system principle."
+        "The core rules never grant or deny abilities because of descriptive anatomy, species, substrate, printing material, appearance, or arrival history. A capability exists only when an Attribute, Skill, Archetype feature, power, equipment item, condition, or explicit narrative permission says it exists.",
+        "The current rules remain an alpha foundation. Combat, advancement, power trees, equipment, and character-sheet interfaces are active development areas, but capability-first design is a permanent system principle."
       ],
       "tables": [
         {
@@ -24,6 +23,20 @@
             ["Physical", "Force, Finesse, Resilience"],
             ["Social", "Presence, Guile, Composure"],
             ["Cognitive", "Reason, Awareness, Resolve"]
+          ]
+        },
+        {
+          "title": "Derived Traits",
+          "columns": ["Trait", "Formula"],
+          "rows": [
+            ["Vitality", "Resilience + 5"],
+            ["Guard", "Finesse + Awareness"],
+            ["Initiative", "Finesse + Composure"],
+            ["Cohesion", "Resolve + Composure + 3"],
+            ["Exposure Limit", "Resolve + Resilience"],
+            ["Carry", "Force + Resilience"],
+            ["Identity Defense", "Resolve + Composure"],
+            ["Protection", "Resilience + Armor Rating"]
           ]
         },
         {
@@ -54,27 +67,19 @@
           ]
         }
       ],
-      "keyFacts": [
-        "Vitality = Resilience + 5.",
-        "Guard = Finesse + Awareness.",
-        "Initiative = Finesse + Composure.",
-        "Cohesion = Resolve + Composure + 3.",
-        "Exposure Limit = Resolve + Resilience.",
-        "Embodiment never grants an unlisted capability."
-      ],
-      "tags": ["d10", "dice pool", "attributes", "skills", "jobs", "combat", "embodiment neutral"],
+      "tags": ["d10", "dice pool", "attributes", "skills", "jobs", "combat", "capability first"],
       "relatedEntries": ["capability-framework", "blacklight-character-creation", "blacklight-continuum-overview"]
     },
     {
       "id": "capability-framework",
       "title": "Capability Framework",
       "category": "Rules",
-      "summary": "All extraordinary effects are defined by capabilities, costs, limits, and outcomes rather than by body origin, species, substrate, or presumed anatomy.",
+      "summary": "All exceptional effects are defined by capabilities, costs, limits, resistance, and outcomes.",
       "body": [
         "A capability is anything a character can reliably attempt beyond ordinary untrained action: a supernatural power, professional technique, technological interface, ritual, transformation, resistance, special sense, movement mode, social authority, or other explicit permission.",
-        "The rules ask what the capability does, what pool activates it, what it costs, how long it lasts, what resists it, and what happens on failure. The rules do not ask whether the effect comes from blood, training, mutation, magic, machinery, spirit, faith, memory, code, or an unusual physical form unless the individual capability makes that source mechanically relevant.",
-        "Two characters may describe the same mechanical capability through entirely different origins. Conversely, two characters with similar appearances or origins gain no shared mechanical benefit unless both possess the appropriate capability.",
-        "Archetypes organize thematic capability families. Operational Frames organize learned professional competence. Equipment provides external capabilities. Conditions temporarily add, restrict, or alter capabilities. None of these require a universal theory of the character's body."
+        "The rules ask what the capability does, what pool activates it, what it costs, how long it lasts, what resists it, and what happens on failure.",
+        "Two characters may describe the same mechanical capability through different sources. Two characters with similar appearances or origins gain no shared mechanical benefit unless both possess the relevant capability.",
+        "Archetypes organize exceptional capability families. Operational Frames organize professional competence. Equipment supplies external functions. Conditions temporarily add, restrict, or alter capabilities."
       ],
       "tables": [
         {
@@ -88,55 +93,66 @@
             ["Effect", "What changes when the capability succeeds"],
             ["Limit", "Range, duration, target, frequency, prerequisite, or prohibited use"],
             ["Resistance", "The opposing pool, defense, threshold, or condition"],
-            ["Failure", "Complication, partial effect, exposure, cost, or lost opportunity"]
+            ["Failure", "Complication, partial effect, Exposure, cost, or lost opportunity"]
           ]
         },
         {
           "title": "Capability Sources",
           "columns": ["Source", "Rules Treatment"],
           "rows": [
-            ["Archetype", "Provides themed resources, pressures, innate abilities, and ranked power families"],
+            ["Archetype", "Provides Resource, Pressure, weakness, innate abilities, and ranked power families"],
             ["Operational Frame", "Provides professional role, trained procedures, and occupational permissions"],
             ["Skill and Specialization", "Provides competence in broadly available actions"],
             ["Equipment", "Provides external functions, qualities, tags, and limited resources"],
             ["Condition", "Temporarily grants, modifies, suppresses, or complicates a capability"],
-            ["Narrative Permission", "Allows an action because of established fiction without creating a universal body rule"]
+            ["Narrative Permission", "Allows an action because established fiction makes it possible"]
           ]
         }
       ],
-      "tags": ["powers", "capabilities", "effects", "embodiment neutral", "advancement"],
+      "tags": ["powers", "capabilities", "effects", "advancement"],
       "relatedEntries": ["blacklight-d10-foundation", "blacklight-character-creation", "blacklight-basic-archetypes"]
     },
     {
       "id": "blacklight-character-creation",
       "title": "Character Creation Foundation",
       "category": "Rules",
-      "summary": "Characters are built from identity, Attributes, Skills, Operational Frame, Archetype, powers, limitations, relationships, equipment, and explicit capabilities rather than an assumed physical template.",
+      "summary": "Characters are built from present identity, Attributes, Skills, Operational Frame, Archetype, powers, limitations, relationships, equipment, and explicit capabilities.",
       "body": [
-        "Define the operative before Q-MAP or before the campaign's inciting transition, including their Blacklight role, one relationship, one mission memory, and one reason they accepted transmission or displacement.",
+        "Define the character's present concept, current occupation or function, affiliation, defining conviction, important relationship, professional obligation, personal boundary, and one debt, promise, or contract.",
         "Assign one Attribute at 4, three at 3, three at 2, and two at 1. Assign three Skills at 3, five at 2, five at 1, and the rest at 0. Choose three specializations.",
-        "Choose an Operational Frame, an Archetype, three identity anchors, one defining capability, one meaningful limitation, starting powers according to the campaign's allocation rules, and two statements defining the character's relationship with Charles.",
-        "Describe the character's appearance, species, embodiment, transformations, or substrate freely, but record every rules-relevant benefit as an Attribute, Skill, power, equipment feature, innate ability, or condition. Description alone does not grant mechanics."
+        "Choose an Operational Frame, an Archetype, a Lineage or Variant when appropriate, starting powers according to the campaign's allocation rules, one signature capability, and one meaningful limitation or bane.",
+        "Record every rules-relevant benefit as an Attribute, Skill, specialization, innate ability, power, Operational Frame feature, equipment feature, condition, or explicit narrative permission.",
+        "No character-creation step asks what crossed through Q-MAP, what failed to cross, or what the printer could recognize. The printer produced the selected human or human-adjacent character from the supplied construction definition."
       ],
-      "keyFacts": [
-        "Identity anchors can be people, places, promises, habits, moral boundaries, sensory memories, fears, failures, or reasons for loyalty and distrust.",
-        "Each character begins with one memory of the final Q-MAP moments that contradicts another character's account.",
-        "The core system is compatible with biological, synthetic, supernatural, transferred, copied, transformed, and other forms of character embodiment.",
-        "What matters mechanically is the capability recorded on the sheet."
+      "tables": [
+        {
+          "title": "Character Creation Order",
+          "columns": ["Step", "Selection"],
+          "rows": [
+            ["1", "Present concept and current function"],
+            ["2", "Attributes"],
+            ["3", "Skills and specializations"],
+            ["4", "Operational Frame"],
+            ["5", "Archetype and Rating"],
+            ["6", "Innate abilities and starting powers"],
+            ["7", "Capabilities, limitations, and conditions"],
+            ["8", "Equipment, relationships, commitments, and campaign ties"]
+          ]
+        }
       ],
-      "tags": ["character creation", "attributes", "skills", "identity anchors", "Operational Frames", "capabilities"],
+      "tags": ["character creation", "attributes", "skills", "Operational Frames", "capabilities"],
       "relatedEntries": ["blacklight-d10-foundation", "capability-framework", "blacklight-basic-archetypes"]
     },
     {
       "id": "blacklight-equipment-foundation",
       "title": "Equipment and Salvage Foundation",
       "category": "Rules",
-      "summary": "Equipment is defined by quality, function, tags, limits, and access rather than by compatibility with a presumed body type.",
+      "summary": "Equipment is defined by quality, function, tags, limits, access, and interface requirements.",
       "body": [
         "Equipment quality ranges from Improvised through Serviceable, Professional, Advanced, and Exceptional. Better quality improves reliability, adds dice in a defined role, or changes what actions are possible.",
-        "The team initially obtains equipment from maintenance tools, emergency stores, damaged compartments, recovered technology, fabrication systems, remote manipulators, and incomplete memories of familiar devices.",
-        "Items must state a clear operating effect, quality, tags, limitations, interface requirements, and resource dependence. A character can use an item when they possess the required capability, training, access, or adaptation; the system does not assume compatibility from anatomy or species.",
-        "When equipment requires a particular interface, size, environment, authority, or support system, record that restriction explicitly as a tag instead of hiding it inside body lore."
+        "The team initially obtains equipment from maintenance tools, emergency stores, damaged compartments, recovered technology, fabrication systems, remote manipulators, and printed replacements.",
+        "Items must state a clear operating effect, quality, tags, limitations, interface requirements, and resource dependence. A character can use an item when they possess the required capability, training, access, or adapter.",
+        "When equipment requires a particular interface, scale, environment, authority, or support system, record that restriction explicitly as a tag."
       ],
       "tables": [
         {
