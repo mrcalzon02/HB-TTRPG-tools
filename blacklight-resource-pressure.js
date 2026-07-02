@@ -195,7 +195,6 @@
   }
 
   function installWikiMode() {
-    if (!document.getElementById('blacklight-browser')) return false;
     renderWikiEntry();
     new MutationObserver(renderWikiEntry).observe(document.documentElement, { childList: true, subtree: true });
     return true;
