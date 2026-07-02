@@ -1,0 +1,16 @@
+{
+  "archetype": {
+    "id": "eldritch-binder",
+    "name": "Eldritch Binder",
+    "theme": "A character whose exceptional capabilities arise through a structured relationship with an impossible presence.",
+    "resourceName": "Pact",
+    "pressureName": "Intrusion",
+    "keyAttribute": "Resolve",
+    "resourceBase": 3,
+    "startingAbility": "Chalk Boundary",
+    "weakness": "The Passenger Notices",
+    "weaknessText": "Repeated use gives the answering presence additional knowledge, influence, and opportunities to alter the relationship.",
+    "innateAbilities": [],
+    "powerFamilies": []
+  }
+}
