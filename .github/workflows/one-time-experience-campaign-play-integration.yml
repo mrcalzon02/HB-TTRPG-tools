@@ -1,0 +1,102 @@
+name: Integrate Experience and campaign-play rules
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-experience-campaign-play-integration.yml
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Register Experience UI and rules packs
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          sheet_path = Path('blacklight-character-sheet.html')
+          sheet = sheet_path.read_text(encoding='utf-8')
+          anchor = '  <script src="blacklight-resource-pressure.js"></script>\n'
+          addition = anchor + '  <script src="blacklight-experience.js"></script>\n'
+          if 'blacklight-experience.js' not in sheet:
+              if anchor not in sheet:
+                  raise SystemExit('Character sheet script anchor not found')
+              sheet = sheet.replace(anchor, addition, 1)
+          sheet_path.write_text(sheet, encoding='utf-8')
+
+          index_path = Path('data/blacklight-continuum/wiki/wiki-index.json')
+          index = json.loads(index_path.read_text(encoding='utf-8'))
+          index['schemaVersion'] = '0.14.0'
+          index['description'] = (
+              'Reference wiki for Blacklight Continuum: No Return Signal. The current campaign framework includes six complete Archetypes, '
+              'Resource and Pressure procedures, a flat Experience exchange economy, scene-based development awards, character-knowledge and '
+              'metagaming rules, and mandatory table-safety, consent, privacy, and authority boundaries.'
+          )
+          index['experienceAdvancementRules'] = 'data/blacklight-continuum/rules/experience-advancement-rules.json'
+          pack = 'data/blacklight-continuum/wiki/campaign-play-rules.json'
+          if pack not in index['packs']:
+              index['packs'].append(pack)
+          scope = index['completedScope']
+          scope['wikiEntries'] = 25
+          scope['nativePacks'] = 5
+          scope['experienceExchangeRates'] = 3
+          scope['campaignPlayRuleEntries'] = 3
+          scope['tableSafetyProcedures'] = 1
+          scope['metagamingProcedures'] = 1
+          combat = 'combat foundation: initiative, action economy, movement, attacks, defense, damage, cover, range, incapacitation, and recovery'
+          areas = [item for item in index['nextDevelopmentAreas'] if item != combat]
+          areas.insert(0, combat)
+          index['nextDevelopmentAreas'] = areas
+          index_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          Path('.github/workflows/one-time-experience-campaign-play-integration.yml').unlink()
+          PY
+      - name: Validate Experience and conduct framework
+        run: |
+          node --check blacklight-experience.js
+          node --check blacklight-character-sheet.js
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rules = json.loads(Path('data/blacklight-continuum/rules/experience-advancement-rules.json').read_text(encoding='utf-8'))
+          pack = json.loads(Path('data/blacklight-continuum/wiki/campaign-play-rules.json').read_text(encoding='utf-8'))
+          index = json.loads(Path('data/blacklight-continuum/wiki/wiki-index.json').read_text(encoding='utf-8'))
+          sheet = Path('blacklight-character-sheet.html').read_text(encoding='utf-8')
+
+          assert rules['earning']['sessionMinimum']['award'] == 1
+          assert rules['earning']['sceneAward']['award'] == 1
+          assert rules['earning']['sceneAward']['maximumPerCharacterPerScene'] == 1
+          rates = {item['purchase']: item['experienceCost'] for item in rules['exchangeRates']}
+          assert rates == {'Skill Point': 2, 'Attribute Point': 3, 'Power or Ability Point': 4}
+          assert len(pack['entries']) == 3
+          assert {entry['id'] for entry in pack['entries']} == {
+              'experience-and-advancement-exchange',
+              'character-knowledge-and-metagaming',
+              'table-safety-consent-and-authority',
+          }
+          assert sheet.count('blacklight-experience.js') == 1
+          assert index['completedScope']['wikiEntries'] == 25
+          assert index['completedScope']['nativePacks'] == 5
+          assert 'data/blacklight-continuum/wiki/campaign-play-rules.json' in index['packs']
+          PY
+      - name: Commit integrated campaign-play rules
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Integrate Experience and campaign-play rules"
+          git push origin main
