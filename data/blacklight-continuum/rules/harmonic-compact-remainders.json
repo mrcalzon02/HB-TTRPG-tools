@@ -1,0 +1,212 @@
+{
+  "setting": "Blacklight Continuum",
+  "archetype": "Harmonic Mutant",
+  "schemaVersion": "1.0.0",
+  "framework": "Compact Remainders are mortal inheritances of layered agreements once maintained by fae courts, household powers, revel societies, wandering storytellers, oath-keepers, predatory hosts, hidden peoples, and other intermediaries between mortal life and fundamental reality. They remain part of the Harmonic Mutant Archetype and use its six shared power families. Choose one Compact Remainder or remain Unaligned. Each Remainder grants one printed Gift, imposes one printed Bane, and identifies two favored power families for later advancement rules.",
+  "catalogs": [
+    {
+      "id": "compact-remainders",
+      "title": "Thirteen Compact Remainders",
+      "eyebrow": "Inherited fae agreements",
+      "code": "13 REMAINDERS",
+      "legacyLabel": "Former compact tradition",
+      "variants": [
+        {
+          "id": "hearthbound-hands",
+          "name": "The Hearthbound Hands",
+          "legacy": "Household helpers, communal craftspeople, quiet organizers, cooks, repairers, and practical fae whose power came from making shared life function.",
+          "continuum": "The old household spirits and reciprocal customs do not recognize them, but maintenance, hospitality, and useful labor still create stable resonance wherever people depend upon one another.",
+          "favoredFamilies": ["Echo Patterns", "Structural Resonance"],
+          "gift": {
+            "name": "Work Shared Is Work Halved",
+            "effect": "Once per scene after ten uninterrupted minutes spent cooking, repairing, cleaning, organizing, treating injuries, or preparing shelter for at least one other person, choose one result: remove 1 Impact from up to Archetype Rating willing participants; restore 1 spent common consumable to each participant; or grant every participant one die on the first test directly using the prepared meal, repaired space, organized equipment, or completed shelter before scene end."
+          },
+          "bane": {
+            "name": "Unanswered Need",
+            "effect": "When an ally within your immediate reach openly asks for food, first aid, shelter, or help with a routine task and you knowingly refuse despite having the time and necessary means, gain 1 Discord."
+          }
+        },
+        {
+          "id": "many-road-chorus",
+          "name": "The Many-Road Chorus",
+          "legacy": "Wandering storytellers, travelers, guides, messengers, and memory-bearers whose tales made distant places part of one living world.",
+          "continuum": "Their old roads end at a broken universe, but every station, vessel, threshold, and foreign settlement offers a new route whose story has not yet been claimed.",
+          "favoredFamilies": ["Memory Harmonics", "Phase Modulation"],
+          "gift": {
+            "name": "Story Finds the Road",
+            "effect": "Once per scene after entering an unfamiliar location, choose one question: Which visible route reaches the nearest inhabited area? Which visible route avoids the strongest immediate hazard? Which person or system here controls passage? What object or landmark has been moved most recently? Receive a truthful directional answer and gain two dice on the first action that follows it."
+          },
+          "bane": {
+            "name": "Road Refused",
+            "effect": "When you knowingly reject a safe opportunity to enter a genuinely unfamiliar place, hear a first-hand account from a new culture, or carry an urgent message for an ally solely because remaining where you are is more comfortable, gain 1 Discord. This Bane activates no more than once per scene."
+          }
+        },
+        {
+          "id": "brass-thornwrights",
+          "name": "The Brass Thornwrights",
+          "legacy": "Fae inventors, impossible engineers, irritable artisans, and makers whose creations were brilliant, temperamental, and never quite finished.",
+          "continuum": "Local machinery does not honor their inherited workshop compacts, forcing every miracle of craft to be retuned against unfamiliar material law.",
+          "favoredFamilies": ["Structural Resonance", "Harmonic Projection"],
+          "gift": {
+            "name": "Impossible Adjustment",
+            "effect": "Spend 1 Resonance and ten uninterrupted minutes working on one handheld tool, weapon, sensor, or Serviceable device. Choose one improvement for the scene: add one die to its primary use; increase its range by 50 percent; reduce its Resource or ammunition cost by 1 once per round; or allow it to function in vacuum, underwater, or one named environmental hazard. Only one device may carry this adjustment at a time."
+          },
+          "bane": {
+            "name": "Flaw Made Personal",
+            "effect": "When a device you built, repaired, or enhanced produces a Complication, suffer 1 Disruption and lose two dice on your next action unless that action directly diagnoses, repairs, or contains the failure."
+          }
+        },
+        {
+          "id": "laughing-masks",
+          "name": "The Laughing Masks",
+          "legacy": "Animal-hearted tricksters, affectionate deceivers, jesters, and social escape artists who taught truth by making literal certainty impossible.",
+          "continuum": "The old rules that protected sacred mischief no longer apply. Their deceptions still bend attention and emotion, but every joke now carries responsibility for its consequences.",
+          "favoredFamilies": ["Emotional Chord", "Phase Modulation"],
+          "gift": {
+            "name": "Truth in the Wrong Shape",
+            "effect": "Once per scene after speaking a deliberate falsehood that contains one discoverable clue to the truth, choose one listener. That listener tests Awareness + Empathy against difficulty equal to Archetype Rating. On failure, they accept the false statement until confronted with direct contradictory evidence or until scene end. On success, they recognize that the statement is deceptive but also identify the embedded clue."
+          },
+          "bane": {
+            "name": "Literal Tongue",
+            "effect": "The first time each scene that you answer a direct personal question with a completely literal statement containing no ambiguity, omission, metaphor, or playful redirection, gain 1 Discord."
+          }
+        },
+        {
+          "id": "red-maw-compact",
+          "name": "The Red Maw Compact",
+          "legacy": "Predatory goblins, battlefield scavengers, devourers of taboo things, and fae whose appetite converted fear, waste, and destruction into power.",
+          "continuum": "The old feast-laws are gone, but matter still contains rhythm. Their bodies remember how to turn almost anything into usable resonance, even when the local universe regards the act as impossible.",
+          "favoredFamilies": ["Harmonic Projection", "Echo Patterns"],
+          "gift": {
+            "name": "Devour the Unfit",
+            "effect": "Spend one full action consuming or breaking down a nonliving object no larger than your head. The object is destroyed. Choose one result: restore 1 Resonance; remove 1 Impact; or gain Armor 1 until the end of your next turn. Toxic, radioactive, superheated, or energized material inflicts its ordinary hazard before the benefit applies unless another capability protects you."
+          },
+          "bane": {
+            "name": "Gnawing Vacancy",
+            "effect": "After using two or more Resonance in one scene, if you end that scene without consuming at least one physical object or meaningful portion of food, gain 1 Discord."
+          }
+        },
+        {
+          "id": "revel-chorus",
+          "name": "The Revel Chorus",
+          "legacy": "Musicians, dancers, lovers, athletes, celebrants, and ecstatic fae who treated desire, movement, and shared sensation as sacred forms of truth.",
+          "continuum": "The old revel grounds and seasonal rites are absent, but emotion still synchronizes bodies. Their art now creates temporary community without cosmic permission.",
+          "favoredFamilies": ["Emotional Chord", "Echo Patterns"],
+          "gift": {
+            "name": "Shared Pulse",
+            "effect": "Once per scene after one uninterrupted minute of music, dance, athletic movement, storytelling, shared food, or another willing communal celebration, choose up to Archetype Rating + 2 participants. Each removes 1 Pressure and gains one die on Athletics, Performance, Empathy, and Composure tests until scene end."
+          },
+          "bane": {
+            "name": "Passion Denied",
+            "effect": "When you knowingly suppress a strong emotion solely to appear unaffected, lose two Composure dice until you honestly express that emotion to another person, act directly upon it without harming an uninvolved target, or the scene ends."
+          }
+        },
+        {
+          "id": "gilded-covenant",
+          "name": "The Gilded Covenant",
+          "legacy": "Fae nobles, courtly exemplars, oath-givers, patrons, judges, and rulers whose authority was reinforced by beauty, ceremony, and inherited cosmic rank.",
+          "continuum": "No local force recognizes their titles. Bearing, memory, and resonant command remain, while inherited privilege must be replaced by actual consent or demonstrated leadership.",
+          "favoredFamilies": ["Emotional Chord", "Memory Harmonics"],
+          "gift": {
+            "name": "Ceremonial Authority",
+            "effect": "Once per scene after stating a clear plan, judgment, invitation, or promise before at least two witnesses, choose up to Archetype Rating willing listeners. Until the end of your next turn, each gains one die on actions directly supporting the statement and two dice to resist fear or coercion that would force them to abandon it."
+          },
+          "bane": {
+            "name": "Dignity Fracture",
+            "effect": "When a Presence, Command, Negotiation, or Performance test produces a Complication, suffer 1 Disruption and lose access to Ceremonial Authority until the end of your next turn."
+          }
+        },
+        {
+          "id": "whisper-hollows",
+          "name": "The Whisper Hollows",
+          "legacy": "Secret-keepers, tunnel dwellers, quiet witnesses, contortionists, and hidden fae who survived by passing through spaces and conversations others ignored.",
+          "continuum": "Their old subterranean ways are gone, but every habitat and machine has maintenance gaps, private frequencies, and structural whispers that reveal what official channels conceal.",
+          "favoredFamilies": ["Phase Modulation", "Memory Harmonics"],
+          "gift": {
+            "name": "Between Wall and Word",
+            "effect": "You can pass through any opening at least 10 centimeters wide at half movement speed while carrying only worn equipment. You also hear whispered speech and mechanical vibration through connected solid surfaces within 10 meters as clearly as though standing beside the source."
+          },
+          "bane": {
+            "name": "Voice Above the Hollow",
+            "effect": "After speaking or shouting loudly enough to be heard clearly beyond 20 meters without technological amplification, lose one die from Guile, Stealth, and Memory Harmonics tests until scene end."
+          }
+        },
+        {
+          "id": "oathstone-giants",
+          "name": "The Oathstone Giants",
+          "legacy": "Towering guardians, champions, builders, bridge-keepers, and honorable fae whose strength was inseparable from promises freely given.",
+          "continuum": "The old courts cannot witness or enforce their vows. Their bodies and resonance still answer to an oath because the obligation now lives inside them rather than in the world.",
+          "favoredFamilies": ["Structural Resonance", "Harmonic Projection"],
+          "gift": {
+            "name": "Strength of the Spoken Oath",
+            "effect": "After freely stating one specific promise with a clear completion condition, gain one die on Force and Resilience tests directly required to fulfill it. Spend 1 Resonance to increase this bonus to two dice for one round. You may maintain one empowered oath at a time."
+          },
+          "bane": {
+            "name": "Stone Cracks",
+            "effect": "Knowingly breaking your empowered oath adds 2 Discord and removes the Gift's bonus. Discord cannot be reduced below 1 until you complete restitution accepted by the injured party or fulfill an equivalent obligation they specify."
+          }
+        },
+        {
+          "id": "tideskin-wanderers",
+          "name": "The Tideskin Wanderers",
+          "legacy": "Sea-bound fae, shore travelers, singers of distance, and people whose freedom depended upon a bonded skin, token, garment, or other vessel of transformation.",
+          "continuum": "Alien seas do not know their songs, but water still carries pressure, memory, and rhythm. The bonded vessel remains the surviving anchor of an agreement the local ocean never signed.",
+          "favoredFamilies": ["Phase Modulation", "Echo Patterns"],
+          "gift": {
+            "name": "Second Skin of the Tide",
+            "effect": "Choose one bonded wearable token at character creation. While carrying or wearing it, breathe water, swim 20 meters per exchange, ignore ordinary inhabited-depth pressure, and gain two dice on Mobility and Survival tests in water. Replacing a destroyed token requires 2 Resonance and one full rest beside a body of water or active fluid reservoir."
+          },
+          "bane": {
+            "name": "Skin Apart",
+            "effect": "While the bonded token is more than 100 meters away, reduce Resource Maximum by 1 and lose one die from Composure tests. These penalties end immediately when the token returns within range."
+          }
+        },
+        {
+          "id": "caskfire-brotherhood",
+          "name": "The Caskfire Brotherhood",
+          "legacy": "Tavern champions, brewers, boastful duelists, hospitality spirits, and fae who turned shared drink, insult, laughter, and friendly violence into binding community.",
+          "continuum": "The ingredients and customs have changed, but shared consumption remains a compact. Hospitality still creates a temporary law between host and guest even when no court recognizes it.",
+          "favoredFamilies": ["Emotional Chord", "Harmonic Projection"],
+          "gift": {
+            "name": "Cup Before Conflict",
+            "effect": "Once per scene after sharing a drink, ration, stimulant, or ceremonial taste with at least one willing person, choose one benefit for all participants until scene end: one die on social tests among participants; one die on Close Combat tests made while defending another participant; or two dice to resist fear."
+          },
+          "bane": {
+            "name": "Hospitality Betrayed",
+            "effect": "If you deliberately attack, rob, poison, or imprison a willing guest after personally sharing food or drink under an offer of hospitality, gain 2 Discord. This Bane does not apply after the guest attacks, steals from, or knowingly betrays you first."
+          }
+        },
+        {
+          "id": "greenwake-kindred",
+          "name": "The Greenwake Kindred",
+          "legacy": "Plant-bound fae, grove guardians, seasonal sleepers, gardeners, and living remainders of agreements between mortal settlements and growing things.",
+          "continuum": "Local flora and cultivated ecologies never joined the old compact. Growth still responds to resonance, but it answers as unfamiliar life rather than ancestral kin.",
+          "favoredFamilies": ["Echo Patterns", "Structural Resonance"],
+          "gift": {
+            "name": "Quickened Growth",
+            "effect": "Spend 1 Resonance and touch living plant matter, cultivated tissue, fungal growth, or a biological support medium. Choose one result: create a 3-meter zone of entangling growth that requires Force + Athletics against difficulty equal to Archetype Rating to cross; produce enough edible biomass for Archetype Rating people for one meal; repair 2 durability to a living structure; or remove 1 Impact from a willing biological target. Each target can receive the healing result once per scene."
+          },
+          "bane": {
+            "name": "Scorched Accord",
+            "effect": "The first time each scene that fire, radiation, poison, or deliberate destruction devastates a living habitat within 20 meters, gain 1 Discord. If you caused the devastation, gain 2 Discord instead."
+          }
+        },
+        {
+          "id": "quickbright-borrowers",
+          "name": "The Quickbright Borrowers",
+          "legacy": "Small wandering fae, charming borrowers, finders of lost things, nimble trespassers, and household visitors who treated possession as temporary and stories as currency.",
+          "continuum": "Local ownership systems are absolute, automated, and often hostile. Their old custom of borrowing without harm becomes a dangerous art of moving through spaces designed to record every hand.",
+          "favoredFamilies": ["Phase Modulation", "Memory Harmonics"],
+          "gift": {
+            "name": "Nothing Truly Lost",
+            "effect": "Once per scene, choose one object you personally handled earlier in the current operation and that remains within 100 meters. Learn its exact direction and distance. Spend 1 Resonance to move instantly to an unoccupied space within 2 meters of it, carrying worn equipment and one handheld item."
+          },
+          "bane": {
+            "name": "Borrowed Too Long",
+            "effect": "If a scene ends while you knowingly retain a portable object taken from a person who expects its return and you have neither returned it nor stated when it will be returned, gain 1 Discord."
+          }
+        }
+      ]
+    }
+  ]
+}
