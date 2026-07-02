@@ -5,10 +5,12 @@
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
+  const HARMONIC_VARIANT_URL = 'data/blacklight-continuum/rules/harmonic-compact-remainders.json';
   let archetypeWiki = null;
   let rulesData = null;
   let vampireLineageData = null;
   let shapechangerVariantData = null;
+  let harmonicVariantData = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -96,7 +98,17 @@
     if (archetypeId === 'shapechanger' && shapechangerVariantData?.catalogs?.length) {
       return shapechangerVariantData.catalogs;
     }
+    if (archetypeId === 'harmonic-mutant' && harmonicVariantData?.catalogs?.length) {
+      return harmonicVariantData.catalogs;
+    }
     return [];
+  }
+
+  function variantFrameworkFor(archetypeId) {
+    if (archetypeId === 'vampire') return vampireLineageData?.framework || '';
+    if (archetypeId === 'shapechanger') return shapechangerVariantData?.framework || '';
+    if (archetypeId === 'harmonic-mutant') return harmonicVariantData?.framework || '';
+    return '';
   }
 
   function allVariantsFor(archetypeId) {
@@ -117,6 +129,7 @@
     });
     if (archetypeId === 'vampire') input.placeholder = 'Choose a Remainder Bloodline or enter Unaligned…';
     else if (archetypeId === 'shapechanger') input.placeholder = 'Choose a Lunar Nation, Changing Form, or enter Unaligned…';
+    else if (archetypeId === 'harmonic-mutant') input.placeholder = 'Choose a Compact Remainder or enter Unaligned…';
     else input.placeholder = 'Bloodline, shifting tradition, patron, resonance school…';
   }
 
@@ -152,7 +165,7 @@
     const catalogs = variantCatalogsFor(archetypeId);
     if (!catalogs.length) return '';
     const chosen = selectedVariantId(archetypeId);
-    const framework = archetypeId === 'vampire' ? vampireLineageData.framework : shapechangerVariantData.framework;
+    const framework = variantFrameworkFor(archetypeId);
     return `
       <section>
         <p class="blacklight-callout">${escapeHtml(framework)}</p>
@@ -209,20 +222,23 @@
     if (!panel) return;
 
     try {
-      const [entryResponse, rulesResponse, vampireResponse, shapechangerResponse] = await Promise.all([
+      const [entryResponse, rulesResponse, vampireResponse, shapechangerResponse, harmonicResponse] = await Promise.all([
         fetch(ENTRY_URL, { cache: 'no-store' }),
         fetch(RULES_URL, { cache: 'no-store' }),
         fetch(VAMPIRE_LINEAGE_URL, { cache: 'no-store' }),
-        fetch(SHAPECHANGER_VARIANT_URL, { cache: 'no-store' })
+        fetch(SHAPECHANGER_VARIANT_URL, { cache: 'no-store' }),
+        fetch(HARMONIC_VARIANT_URL, { cache: 'no-store' })
       ]);
       if (!entryResponse.ok) throw new Error(`Archetype entry request failed with status ${entryResponse.status}.`);
       if (!rulesResponse.ok) throw new Error(`Power catalog request failed with status ${rulesResponse.status}.`);
       if (!vampireResponse.ok) throw new Error(`Vampire lineage request failed with status ${vampireResponse.status}.`);
       if (!shapechangerResponse.ok) throw new Error(`Shapechanger variant request failed with status ${shapechangerResponse.status}.`);
+      if (!harmonicResponse.ok) throw new Error(`Harmonic variant request failed with status ${harmonicResponse.status}.`);
       archetypeWiki = await entryResponse.json();
       rulesData = await rulesResponse.json();
       vampireLineageData = await vampireResponse.json();
       shapechangerVariantData = await shapechangerResponse.json();
+      harmonicVariantData = await harmonicResponse.json();
       renderEntry();
 
       const select = document.getElementById('blacklight-archetype');
