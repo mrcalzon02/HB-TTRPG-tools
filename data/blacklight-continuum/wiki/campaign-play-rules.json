@@ -1,0 +1,136 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "description": "Campaign-play procedures covering Experience advancement, character knowledge, metagaming, consent, privacy, personal space, and abuse of authority.",
+  "entries": [
+    {
+      "id": "experience-and-advancement-exchange",
+      "title": "Experience and Advancement Exchange",
+      "category": "Rules",
+      "summary": "Characters receive at least one standard Experience for meaningful participation in a completed session and may earn additional scene awards, then exchange Experience at fixed rates for Skill, Attribute, or Power and Ability Points.",
+      "body": [
+        "Every player character that meaningfully participates in a completed session should receive at least 1 Experience. Ending a session early because someone invoked a safety boundary does not by itself remove the baseline award.",
+        "A character may receive 1 additional Experience for each qualifying scene. Character development, story participation, courage, selflessness, accepting consequence, teamwork, useful problem solving, and strong portrayal of the established character may qualify. One character may receive no more than one bonus Experience from the same scene, but several characters may each qualify and there is no fixed session maximum.",
+        "Portrayal means making choices and reactions that meaningfully express the recorded character. It does not require acting talent, a character voice, emotional disclosure by the player, or agreement with the Moderator's personal morality.",
+        "The Moderator names the awarded character, the scene, and one printed criterion supporting the award. Experience already earned cannot be confiscated as punishment, leverage, retaliation, or a condition for accepting unwanted content.",
+        "Experience may be banked indefinitely. Purchases normally occur between sessions or during a declared advancement break. Costs must be paid in full and recorded before the rating or ability changes.",
+        "Experience cannot raise a Skill or Attribute above 5, cannot create Experience debt, and cannot waive an Archetype Rating gate, progression requirement, lineage, Source, practice, or other prerequisite. These rates do not directly increase Archetype Rating, Resource Maximum, or Pressure Limit."
+      ],
+      "tables": [
+        {
+          "title": "Experience Exchange Rates",
+          "columns": ["Experience Cost", "Purchase", "Result"],
+          "rows": [
+            ["2 Experience", "1 Skill Point", "Increase one Skill by 1, maximum 5"],
+            ["3 Experience", "1 Attribute Point", "Increase one Attribute by 1, maximum 5, then recalculate affected traits"],
+            ["4 Experience", "1 Power or Ability Point", "Purchase one eligible power, rank, Depth, attainment, practice ability, lineage ability, or other one-point ability"]
+          ]
+        },
+        {
+          "title": "Qualifying Scene Awards",
+          "columns": ["Criterion", "Required Substance"],
+          "rows": [
+            ["Character Development", "A meaningful change, revelation, acceptance, or conflict involving identity, belief, relationship, fear, duty, weakness, or objective"],
+            ["Story Participation", "Materially advances, complicates, clarifies, or resolves the scene"],
+            ["Bravery or Courage", "Accepts a meaningful risk, cost, or consequence for a character-grounded purpose"],
+            ["Selflessness or Protection", "Gives up a real advantage, resource, position, safety, or opportunity to support another person"],
+            ["Conviction and Consequence", "Follows a principle, promise, pact, bond, duty, or limitation when doing so creates a genuine cost"],
+            ["Teamwork or Problem Solving", "Enables another participant, combines capabilities, or creates a useful solution"],
+            ["Vulnerability or Portrayal", "Meaningfully expresses the character's uncertainty, desire, contradiction, perspective, or limitations"]
+          ]
+        }
+      ],
+      "tags": ["experience", "advancement", "skill points", "attribute points", "ability points", "session rewards"],
+      "relatedEntries": ["character-knowledge-and-metagaming", "table-safety-consent-and-authority", "blacklight-character-creation"]
+    },
+    {
+      "id": "character-knowledge-and-metagaming",
+      "title": "Character Knowledge and Metagaming",
+      "category": "Rules",
+      "summary": "Players may know the game, but characters may act only on information they have learned, inferred, remembered, or gained through an explicit capability.",
+      "body": [
+        "Player knowledge is everything the person at the table knows. Character knowledge is limited to what the character directly witnessed, was told through a valid channel, reasonably learned from their recorded history, successfully inferred through play, or received from an explicit capability.",
+        "Knowing a public rule, reading one's own character sheet, understanding ordinary genre conventions, or discussing tactics through an available in-character communication channel is not prohibited metagaming. The violation occurs when a player deliberately converts information unavailable to the character into an in-fiction advantage.",
+        "Examples include moving toward a hidden threat without an in-world reason, selecting a perfect counter from private or unpublished information, acting on another character's private scene, using a monster statistic the character has never learned, coordinating separated characters without communication, changing an action after hearing hidden resolution information, or reading files the table identified as private.",
+        "When knowledge is uncertain, the player asks: Does my character know this? The Moderator must answer Yes, No, Partially, or Test Required. A partial answer states exactly what portion is available. A test identifies the pool, difficulty, and immediate information produced.",
+        "Accidental crossover is corrected without humiliation. Pause, identify the unavailable fact, and revise the declaration or rewind the action when practical. Deliberate or repeated abuse may cause the metagame benefit to fail, hidden information to change, and the manipulated scene to become ineligible for bonus Experience.",
+        "Experience farming is metagame manipulation. A continuing situation cannot be split into artificial scenes, extended without purpose, repeated at low risk, or coordinated with another participant solely to produce additional awards.",
+        "Previously earned Experience is not confiscated as discipline. Repeated intentional abuse is handled as a table-conduct problem: clarify the rule, pause play, restrict access to private material, require transparent declarations, or remove the participant from the game when necessary.",
+        "The Moderator is also bound by the knowledge rules. The Moderator may not leak private information to favored players, selectively rewrite what a character knew after the fact, reward obedience to the Moderator as roleplay, or use hidden rules and undisclosed criteria to control advancement."
+      ],
+      "tables": [
+        {
+          "title": "Knowledge Sources",
+          "columns": ["Source", "Character May Use It When"],
+          "rows": [
+            ["Direct Observation", "The character perceived the event with an available sense or sensor"],
+            ["Communication", "A valid speaker, message, record, or network delivered the information"],
+            ["Background", "The fact is reasonably covered by recorded history, occupation, Skill, specialization, or culture"],
+            ["Investigation or Recall", "A successful test produced the fact or an explicit partial answer"],
+            ["Capability", "A recorded power, item, condition, or permission states that it reveals the fact"],
+            ["Player-Only Information", "Never by itself; an in-world source must first make it character knowledge"]
+          ]
+        },
+        {
+          "title": "Metagaming Correction",
+          "columns": ["Step", "Procedure"],
+          "rows": [
+            ["1. Pause", "Stop resolution before the unavailable information creates further effects"],
+            ["2. Identify", "State the exact player-only fact being used"],
+            ["3. Establish Knowledge", "Answer Yes, No, Partially, or Test Required"],
+            ["4. Correct", "Revise the declaration or rewind the action when practical"],
+            ["5. Remove Manipulated Reward", "The scene cannot grant bonus Experience for the manipulated moment"],
+            ["6. Address Repetition", "Treat deliberate repetition as conduct, not as an excuse for arbitrary character punishment"]
+          ]
+        }
+      ],
+      "tags": ["metagaming", "character knowledge", "player knowledge", "private information", "experience farming"],
+      "relatedEntries": ["experience-and-advancement-exchange", "table-safety-consent-and-authority", "capability-framework"]
+    },
+    {
+      "id": "table-safety-consent-and-authority",
+      "title": "Table Safety, Consent, and Abuse of Authority",
+      "category": "Table Conduct",
+      "summary": "Every physical or digital game space must protect personal boundaries, privacy, consent, and the right to stop play; fictional or Moderator authority never extends over real people.",
+      "body": [
+        "Every game space is treated as a safe space for the real people participating. This does not require safe or gentle fiction. It requires that real boundaries, bodies, privacy, property, identities, and rights remain more important than immersion, schedule, plot, secrecy, or Moderator authority.",
+        "Personal space is permission-based. Before touching another participant, their clothing, chair, mobility aid, phone, dice, notes, bag, costume, or other belongings, or before entering close personal space for a demonstration, ask and receive explicit permission. Silence, familiarity, prior permission, or participation in the game is not permission.",
+        "Consent is specific, informed, ongoing, and revocable. Any participant may say Pause, Stop, Back Up, Fade, Change the Scene, or Leave. Play stops immediately. No explanation, diagnosis, trauma history, or debate is required before the table changes or ends the content.",
+        "When asked to stop doing something, stop. Do not repeat it in another form, negotiate for access, demand justification, retaliate through the fiction, reduce rewards, isolate the participant, or pressure the person after the session.",
+        "Privacy applies to physical and digital play. Do not record, photograph, stream, screenshot, publish, forward private messages, reveal contact information, access a device or account, read private notes, or use another person's voice, image, identity, or creative work without clear permission for that specific use.",
+        "Moderator authority is limited to adjudicating the shared fiction and applying agreed game procedures. It does not grant authority over a participant's body, movement, exit, relationships, finances, employment, housing, medical information, religion, sexuality, identity, personal communications, or access to other people.",
+        "Using game authority to coerce romance, sexual content, physical contact, secrecy, gifts, labor, transportation, housing, employment access, personal information, or continued participation is prohibited. So are threats, blackmail, blocking an exit, confiscating a phone, doxxing, stalking, retaliation, and targeting a character because the player asserted a boundary.",
+        "Players may modify mechanics, setting, tone, content limits, advancement rates, and other game procedures by informed agreement. No house rule, character action, consent form, session-zero agreement, or Moderator ruling authorizes illegal conduct, waives another person's legal rights, or permits violation of privacy or bodily autonomy. Applicable law and venue or platform rules still control.",
+        "A safety request is not metagaming, poor roleplay, disruption, or failure to participate. Invoking a boundary cannot reduce Experience, remove earned advancement, create an in-fiction punishment, or become evidence that the participant is not committed to the game.",
+        "When a Moderator abuses authority, the table may pause or end the game, replace the Moderator, preserve campaign records, and continue under another facilitator. The title of Moderator or Game Master never shields real-world misconduct from ordinary accountability."
+      ],
+      "tables": [
+        {
+          "title": "Immediate Safety Commands",
+          "columns": ["Command", "Required Response"],
+          "rows": [
+            ["Pause", "Stop resolution and check what must change before continuing"],
+            ["Stop", "End the current content or interaction immediately"],
+            ["Back Up", "Rewind to before the boundary was crossed and choose another action"],
+            ["Fade", "End detailed portrayal and summarize or skip the remainder"],
+            ["Change the Scene", "Replace the subject, framing, location, or activity without requiring explanation"],
+            ["Leave", "The participant may exit the scene, call, room, server, or game without needing permission"]
+          ]
+        },
+        {
+          "title": "Authority Boundaries",
+          "columns": ["Game Authority May Cover", "Game Authority Never Controls"],
+          "rows": [
+            ["Fictional consequences and NPC actions", "A participant's body, physical space, or right to leave"],
+            ["Published and agreed procedures", "Private devices, accounts, messages, notes, images, or contact information"],
+            ["Scene framing and rules adjudication", "Relationships, employment, housing, finances, medical details, religion, sexuality, or identity"],
+            ["Experience awards using printed criteria", "Rewards or punishments based on obedience, favors, silence, intimacy, or waived boundaries"]
+          ]
+        }
+      ],
+      "tags": ["consent", "safe space", "personal space", "privacy", "Moderator conduct", "abuse of authority", "right to stop"],
+      "relatedEntries": ["experience-and-advancement-exchange", "character-knowledge-and-metagaming", "blacklight-continuum-overview"]
+    }
+  ]
+}
