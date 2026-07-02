@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.10.0",
+  "schemaVersion": "0.11.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated variants including thirteen Vampire Remainder Bloodlines, twenty-three Shapechanger traditions, thirteen Harmonic Compact Remainders, and twenty Technomancer awakening practices.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated advancement options including seven Human Vigil Convictions, ten Hunter Practices, thirteen Vampire Remainder Bloodlines, twenty-three Shapechanger traditions, thirteen Harmonic Compact Remainders, and twenty Technomancer awakening practices.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -15,6 +15,7 @@
   "campaignDocument": "blacklight-campaign-reader.html",
   "characterSheet": "blacklight-character-sheet.html",
   "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
+  "humanVigilPractices": "data/blacklight-continuum/rules/human-vigil-practices.json",
   "vampireLineages": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
   "shapechangerVariants": "data/blacklight-continuum/rules/shapechanger-remainder-forms.json",
   "harmonicVariants": "data/blacklight-continuum/rules/harmonic-compact-remainders.json",
@@ -28,8 +29,12 @@
   "completedScope": {
     "wikiEntries": 21,
     "nativePacks": 3,
-    "supernaturalArchetypes": 6,
+    "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
+    "humanVigilConvictions": 7,
+    "humanHunterPractices": 10,
+    "humanVigilOptions": 17,
+    "humanHunterAttainments": 30,
     "vampireRemainderBloodlines": 13,
     "shapechangerLunarNations": 13,
     "shapechangerChangingForms": 10,
@@ -53,6 +58,7 @@
   "nextDevelopmentAreas": [
     "balance testing for all ranked powers",
     "starting power allocation rules",
+    "Human Vigil Conviction and Hunter Practice advancement costs",
     "Remainder Bloodline advancement and favored-family costs",
     "Shapechanger variant advancement and favored-family costs",
     "Compact Remainder advancement and favored-family costs",
