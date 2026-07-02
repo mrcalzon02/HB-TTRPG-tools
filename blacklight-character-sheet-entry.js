@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  function installCard() {
+  function installCharacterCard() {
     const grid = document.querySelector('#blacklight-continuum .module-grid');
     if (!grid || grid.querySelector('[data-blacklight-basic-sheet-card]')) return false;
 
@@ -11,25 +11,44 @@
     card.innerHTML = `
       <div class="module-meta">
         <span class="badge status-active">basic character sheet</span>
-        <span class="badge">6 archetypes</span>
+        <span class="badge">6 integrated archetypes</span>
         <span class="badge">65 ranked abilities</span>
-        <span class="badge">6 transition profiles</span>
       </div>
       <h3>Blacklight Basic Operative Record</h3>
-      <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers whose old-world powers must be translated through imperfect Ar'nock-derived bodies, fragmented memories, and the altered laws of the far-future Continuum.</p>
+      <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers. Each original archetype entry now continues directly into its old-world history, Q-MAP damage, Ar'nock body reconstruction, altered powers, memory fractures, and distinct Continuum development.</p>
       <div class="blacklight-actions">
         <a class="primary-action" href="blacklight-character-sheet.html">Open Basic Character Sheet</a>
-        <a class="secondary-action" href="docs/blacklight-continuum/archetype-transition-guide.md" target="_blank" rel="noopener">Open Transition Guide</a>
-        <a class="secondary-action" href="data/blacklight-continuum/rules/archetype-transition-profiles.json" target="_blank" rel="noopener">Open Transition Data</a>
+        <a class="secondary-action" href="data/blacklight-continuum/wiki/basic-archetypes.json" target="_blank" rel="noopener">Open Integrated Archetype Data</a>
       </div>`;
 
     grid.insertBefore(card, grid.children[1] || null);
     return true;
   }
 
-  if (!installCard()) {
+  function installCampaignReaderLink() {
+    const workspace = document.getElementById('blacklight-continuum');
+    if (!workspace) return false;
+    const link = [...workspace.querySelectorAll('a')].find(anchor =>
+      anchor.getAttribute('href') === 'docs/blacklight-continuum/campaign-introduction.md'
+      || anchor.textContent.trim() === 'Open Campaign Document'
+    );
+    if (!link) return false;
+    link.href = 'blacklight-campaign-reader.html';
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'Open Formatted Campaign Document';
+    return true;
+  }
+
+  function install() {
+    const cardReady = installCharacterCard();
+    const readerReady = installCampaignReaderLink();
+    return cardReady && readerReady;
+  }
+
+  if (!install()) {
     const observer = new MutationObserver(() => {
-      if (installCard()) observer.disconnect();
+      if (install()) observer.disconnect();
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
