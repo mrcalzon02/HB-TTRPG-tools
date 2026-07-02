@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.13.0",
+  "schemaVersion": "0.14.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records now include explicit Resource spending, depletion, recovery, Pressure thresholds, Critical effects, recovery procedures, and fixed Crisis outcomes alongside their power families and advancement options.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The current campaign framework includes six complete Archetypes, Resource and Pressure procedures, a flat Experience exchange economy, scene-based development awards, character-knowledge and metagaming rules, and mandatory table-safety, consent, privacy, and authority boundaries.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -26,11 +26,12 @@
     "data/blacklight-continuum/wiki/foundation-lore.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
-    "data/blacklight-continuum/wiki/basic-archetypes.json"
+    "data/blacklight-continuum/wiki/basic-archetypes.json",
+    "data/blacklight-continuum/wiki/campaign-play-rules.json"
   ],
   "completedScope": {
-    "wikiEntries": 22,
-    "nativePacks": 4,
+    "wikiEntries": 25,
+    "nativePacks": 5,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
     "archetypeResourceProcedures": 6,
@@ -60,9 +61,14 @@
     "browserCharacterSheets": 1,
     "formattedCampaignReaders": 1,
     "eldritchBindingSources": 6,
-    "eldritchDepthAbilities": 30
+    "eldritchDepthAbilities": 30,
+    "experienceExchangeRates": 3,
+    "campaignPlayRuleEntries": 3,
+    "tableSafetyProcedures": 1,
+    "metagamingProcedures": 1
   },
   "nextDevelopmentAreas": [
+    "combat foundation: initiative, action economy, movement, attacks, defense, damage, cover, range, incapacitation, and recovery",
     "balance testing for all ranked powers",
     "balance testing for Resource recovery, Pressure thresholds, and Crisis severity",
     "starting power allocation rules",
@@ -84,5 +90,6 @@
     "mission and job generator",
     "Charles decision arc"
   ],
-  "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json"
+  "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json",
+  "experienceAdvancementRules": "data/blacklight-continuum/rules/experience-advancement-rules.json"
 }
