@@ -1,0 +1,64 @@
+name: One-time ability arbitration audit
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-ability-arbitration-report.yml
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Find arbitration-heavy ability text
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('data/blacklight-continuum/rules/basic-character-options.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          markers = [
+              'game moderator', 'approved', 'according to the campaign',
+              'campaign rules', 'campaign\'s', 'or equivalent', 'or similar',
+              'appropriate defense', 'appropriate pressure', 'appropriate benefit',
+              'the moderator', 'gm decides', 'defines setup', 'defines the consequence',
+              'another ', 'one thematic', 'one severe', 'one extraordinary',
+              'one major', 'one narrow', 'one limited', 'one defining',
+              'may develop', 'as appropriate', 'comparable weight'
+          ]
+          results = []
+          for archetype in data.get('archetypes', []):
+              for family in archetype.get('powerFamilies', []):
+                  for ability in family.get('abilities', []):
+                      effect = ability.get('effect', '')
+                      low = effect.lower()
+                      hits = [marker for marker in markers if marker in low]
+                      if hits:
+                          results.append({
+                              'archetype': archetype.get('name'),
+                              'family': family.get('name'),
+                              'rank': ability.get('rank'),
+                              'ability': ability.get('name'),
+                              'effect': effect,
+                              'markers': hits
+                          })
+          out = Path('data/blacklight-continuum/rules/ability-arbitration-report.json')
+          out.write_text(json.dumps({'count': len(results), 'abilities': results}, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          Path('.github/workflows/one-time-ability-arbitration-report.yml').unlink()
+          PY
+      - name: Commit audit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Audit ability text for moderator arbitration"
+          git push origin main
