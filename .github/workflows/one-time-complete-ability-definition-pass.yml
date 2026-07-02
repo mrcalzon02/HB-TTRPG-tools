@@ -1,0 +1,110 @@
+name: One-time complete ability definition pass
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-complete-ability-definition-pass.yml
+
+permissions:
+  contents: write
+
+jobs:
+  rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Rewrite remaining open ability text
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('data/blacklight-continuum/rules/basic-character-options.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+
+          innate = {
+              ('Human Investigator', 'Prepared Contingency'): "Once per operation, reveal one preparation made before the current scene and choose one result: produce one Serviceable handheld tool or consumable; present a routine credential valid for one checkpoint; reveal a hidden cache containing two common supplies; open a secure channel to one established contact; reveal a mapped escape route granting two dice to one escape test; or trigger one prearranged signal that causes an established ally to perform one previously agreed task. The contingency cannot create Advanced or Exceptional equipment, invent a new contact, bypass an active opposed test, or solve the operation's primary objective by itself.",
+              ('Vampire', 'Feeding'): "At character creation, record Blood or one alternate vital medium: living bioelectric charge, psychic emotion, stored memory, or thermal life-energy. Feeding requires direct contact and one full action per Vitae restored, up to Archetype Rating Vitae from one target or source per scene. Feeding from an unwilling target requires Finesse + Close Combat opposed by Finesse + Athletics. Blood feeding inflicts 1 Impact per Vitae restored. Alternate feeding suppresses the target's matching function for one round per Vitae restored. Restoring at least 2 Vitae during one scene reduces Hunger by 1. Feeding from a helpless unwilling person adds 1 Hunger at scene end.",
+              ('Shapechanger', 'Pack Sense'): "Sense every bonded packmate within 10 kilometers per Archetype Rating, or anywhere inside your claimed territory when that area is larger. You know each packmate's direction, approximate distance, and one current state: calm, afraid, injured, enraged, unconscious, restrained, or controlled. Disguise, ordinary identity changes, walls, and routine signal loss do not block the bond; dimensional separation and a complete noospheric quarantine do.",
+              ('Eldritch Binder', 'Forbidden Comprehension'): "Spend 1 Pact after observing an alien symbol, ritual, anomaly, or device for one exchange. Learn its immediate function, its normal activation method, and its most immediate hazard or prohibition. The ability does not provide history, cultural meaning, creator identity, hidden secondary functions, or instructions for safely reproducing it."
+          }
+
+          ranked = {
+              ('Human Investigator', 'Continuity Anchoring', 'Human Standard'): "Cost: 2 Conviction and 1 Strain. Choose one standard: informed consent; continuity of responsibility; bodily autonomy; or a copy's right to remain separate. Up to Archetype Rating willing allies who verbally accept the standard use your Resolve in place of their own for Identity Defense for the scene. Any attempt to compel a protected ally to violate the chosen standard must first achieve successes equal to Archetype Rating; failure cancels that attempt without consuming the ally's action.",
+              ('Human Investigator', 'Institutional Ghostcraft', 'Manufacture Jurisdiction'): "Cost: 1 Conviction. Choose emergency response, evacuation, criminal investigation, hazardous containment, or infrastructure repair. Test: Presence + Command opposed by the highest Presence + Command among active claimants, or difficulty 3 when none are present. On success, for the scene routine personnel and systems treat you as the operation lead for site access, briefings, traffic control, and requisition of Serviceable equipment. This authority cannot transfer property, imprison a person, compel self-harm, or overrule an existing claimant who wins a later opposed test. Each rival claimant may contest once per scene.",
+              ('Human Investigator', 'Institutional Ghostcraft', 'Found an Institution'): "Cost: 2 Conviction, 1 Strain, five willing members, a functioning site, and one week of work. Choose one institution. Mutual Aid: members recover one additional Impact after a full rest. Investigative Office: members gain one die on shared Investigation tests. Emergency Service: members gain one die to Initiative during disasters. Site Defense: members gain one Guard while protecting the site. Logistics Office: once per operation, the institution supplies one Serviceable item from its established inventory. Record one leader, one appeal procedure, and three rules binding every member. The institution persists while at least three members and its site remain active.",
+              ('Human Investigator', 'Contingency Engineering', 'Cached Countermeasure'): "Cost: 1 Conviction and access to a previously visited site, established contact, or prepared storage point. Choose one countermeasure against a threat already observed during the campaign: Filter, which ignores one exposure to a named gas, toxin, spore, or contaminant; Jammer, which grants two defense dice against one named signal or sensor type for a scene; Insulated Barrier, which provides Armor 3 against one named damage type for three rounds; Antidote, which removes one poison or disease condition; Decoy, which causes one named pursuer to spend its first action investigating the false target; or Override Key, which opens one previously studied lock or security system after a successful Reason + Security test at difficulty 2. Failure: the countermeasure functions once, then breaks and adds 1 Exposure.",
+              ('Human Investigator', 'Contingency Engineering', 'Everything Has a Failure Mode'): "Cost: 2 Conviction and 1 Strain. Requirement: observe the target for three rounds or study it for ten minutes. Test: Reason + Investigation, difficulty 4. On success, place one Failure Mode on the target until the operation ends. After you or an ally succeeds against that target, consume the Failure Mode to choose one effect: ignore its defenses for one action; cancel one active effect it created; inflict 3 Trauma on a physical organism or structure, or 3 Disruption on software, a noospheric entity, or an identity system; grant all allies two dice against it until the end of the round; or force it to abandon one of two currently active objectives until its next turn. Failure: gain 1 additional Strain and the same target cannot be analyzed again this scene.",
+              ('Vampire', 'Crimson Velocity', 'Red Interval'): "Cost: 2 Vitae. Choose one target you can perceive. Until the end of your next turn, that target loses two dice from Guard and cannot take reactions triggered by your movement, attacks, feeding, or withdrawal. Other reactions remain available. Failure: the target keeps its reactions, but still loses one Guard die until the end of your turn; you lose two dice from your next nonphysical action.",
+              ('Vampire', 'Grave Dominion', 'Court of One'): "Cost: 2 Vitae. Target up to Archetype Rating + 2 beings within 10 meters that can perceive you. Test: Presence + Empathy opposed by the highest Resolve + Composure among them. Choose one posture for the scene. Deference: targets lose two dice when directly opposing your stated instructions. Fear: targets lose two attack dice against you and cannot willingly approach within 2 meters. Devotion: targets gain two dice when defending or assisting you but will not accept obvious lethal harm. Hesitation: each target loses its first minor action. Failure: no posture takes hold and every target gains two dice to resist your Grave Dominion powers for the scene.",
+              ('Vampire', 'Grave Dominion', 'Sovereign Silence'): "Cost: 2 Vitae and 1 Hunger. Affect every chosen target within 10 meters or one local network containing no more than Archetype Rating × 3 active users. Each unwilling target tests Resolve + Composure against difficulty equal to Archetype Rating. A failed target cannot initiate an attack, move more than 2 meters, transmit a message, or speak except to answer a direct question until the end of the exchange. A successful target is unaffected and recognizes the attempted domination.",
+              ('Vampire', 'Veil of Night', 'Erase the Witness'): "Cost: 2 Vitae and 1 Hunger. Test: Guile + Empathy opposed by Resolve + Awareness. Choose one memory involving you from the previous ten minutes and choose one alteration: remove your presence from it; replace your face and voice with those of an unidentified stranger; or make the event feel routine and already resolved. The alteration lasts until the target reviews contradictory physical evidence or succeeds on a Resolve + Investigation test at difficulty equal to Archetype Rating. Failure: the memory remains intact and the target remembers the attempted intrusion.",
+              ('Shapechanger', 'Pack Continuity', 'Coordinated Instinct'): "Cost: 1 Fury. Choose up to Archetype Rating willing packmates within Pack Sense range. At activation, each chosen packmate either raises Initiative to your Initiative when theirs is lower, or gains one die on the first action each round that directly assists another chosen packmate. The selected benefit lasts for the scene and cannot be changed after activation. Failure: no benefit is gained and every chosen participant gains 1 Pressure.",
+              ('Shapechanger', 'Spirit Ecology', 'Scent the Unseen'): "Cost: none. Test: Awareness + Xenoculture. Detect every nonmaterial presence within 20 meters and classify each as one of six types: incorporeal spirit; noospheric intelligence; ecological collective; autonomous machine presence; emotional imprint; or reflection entity. For each detected presence, learn its direction, approximate distance, and whether it is dormant, observing, communicating, or acting. Failure: you detect the number and direction of presences but misclassify one type.",
+              ('Eldritch Binder', 'Borrowed Manifestation', 'Unnatural Locomotion'): "Cost: 2 Pact. Choose one mode for the scene. Clinging: move across walls and ceilings at normal speed. Compression: pass through openings at least 10 centimeters wide at half speed. Gap Step: cross an open gap up to 10 meters as though a solid path existed. Machinery Swim: move through occupied machinery spaces at half speed without becoming entangled or taking contact damage. Inversion: choose the direction of gravity affecting only you and move normally on the selected surface. Only one mode may be active at a time.",
+              ('Eldritch Binder', 'Forbidden Cognition', 'Remember What Never Happened'): "Cost: 2 Pact. Choose one failed or unattempted action from the current operation, then choose one answer to recover from an unrealized outcome: the target's strongest defense; one hidden cost of the action; one safer route to the same objective; or one tool, credential, or preparation that would have changed the result. Gain two dice on the next action that directly exploits the answer. Failure: receive the answer and gain the bonus, but also gain 1 Intrusion and treat the unrealized event as a real personal memory until the scene ends.",
+              ('Eldritch Binder', 'Invocation', 'Partial Arrival'): "Cost: 2 Pact and 1 Intrusion. Manifest the presence for one action and choose one effect. Breach: destroy one unattended barrier or structure within 20 meters with Armor no greater than Archetype Rating + 2. Suppress: enemies in a 10-meter radius lose two dice and cannot take reactions until your next turn. Protect: create a barrier with durability equal to Resolve + Archetype Rating covering up to Archetype Rating targets for three rounds. Translate: move yourself and up to Archetype Rating willing targets between two visible points within 30 meters. Reveal: expose every invisible, disguised, incorporeal, or noospherically concealed entity within 20 meters for the scene. Seize: restrain one target within 20 meters using Resolve + Archetype Rating against its Guard; the restraint has durability 5. The manifestation disappears after the selected effect resolves.",
+              ('Harmonic Mutant', 'Emotional Chord', 'Dampen Panic'): "Cost: 1 Resonance. Affect up to Archetype Rating + 2 willing targets within 10 meters. Remove one active fear penalty from each target and prevent the same hazard or source from imposing another fear penalty on them for the scene. The targets still perceive the danger, retain relevant memories, and can choose to retreat."
+          }
+
+          innate_found = set()
+          ranked_found = set()
+          for archetype in data.get('archetypes', []):
+              for ability in archetype.get('innateAbilities', []):
+                  key = (archetype.get('name'), ability.get('name'))
+                  if key in innate:
+                      ability['effect'] = innate[key]
+                      innate_found.add(key)
+              for family in archetype.get('powerFamilies', []):
+                  for ability in family.get('abilities', []):
+                      key = (archetype.get('name'), family.get('name'), ability.get('name'))
+                      if key in ranked:
+                          ability['effect'] = ranked[key]
+                          ranked_found.add(key)
+
+          missing_innate = sorted(set(innate) - innate_found)
+          missing_ranked = sorted(set(ranked) - ranked_found)
+          if missing_innate or missing_ranked:
+              raise SystemExit(f'Missing innate={missing_innate}; ranked={missing_ranked}')
+
+          banned = [
+              'game moderator define', 'according to the campaign', "campaign's feeding rules",
+              'one plausible', 'credible public objective', 'defined purpose and limits',
+              'known threat', 'one shared emotional posture', 'strong targets',
+              'short recent memory', "campaign's range limits", 'broad category',
+              'the immediate function or intent', 'one ordinary movement limitation',
+              'one plausible unrealized memory', 'one large effect consistent with its nature',
+              'small group for a scene'
+          ]
+          leftovers = []
+          for archetype in data.get('archetypes', []):
+              all_abilities = list(archetype.get('innateAbilities', []))
+              for family in archetype.get('powerFamilies', []):
+                  all_abilities.extend(family.get('abilities', []))
+              for ability in all_abilities:
+                  low = ability.get('effect', '').lower()
+                  for phrase in banned:
+                      if phrase in low:
+                          leftovers.append((archetype.get('name'), ability.get('name'), phrase))
+          if leftovers:
+              raise SystemExit(f'Open wording remains: {leftovers}')
+
+          path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          audit = Path('data/blacklight-continuum/rules/full-ability-definition-audit.json')
+          if audit.exists():
+              audit.unlink()
+          Path('.github/workflows/one-time-complete-ability-definition-pass.yml').unlink()
+          PY
+      - name: Commit complete ability definitions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Complete self-defining Blacklight ability text"
+          git push origin main
