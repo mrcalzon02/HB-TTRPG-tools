@@ -1,15 +1,23 @@
 (() => {
   'use strict';
 
-  const STORAGE_KEY = 'hb-shadowrun-danger-intensity-v1';
+  const STORAGE_KEY = 'hb-shadowrun-danger-intensity-v2';
+  const LEGACY_STORAGE_KEY = 'hb-shadowrun-danger-intensity-v1';
   const PROFILE_DEFAULTS = Object.freeze({ low: 25, standard: 50, high: 75, prime: 100 });
   const PROFILE_ORDER = Object.freeze(['low', 'standard', 'high', 'prime']);
   let values = readValues();
 
   function readValues() {
     try {
-      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+      const current = localStorage.getItem(STORAGE_KEY);
+      if (current) {
+        const parsed = JSON.parse(current);
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+      }
+      // The v1 controller could assign the currently active profile's value to
+      // another profile during initialization. Do not migrate that ambiguous state.
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+      return {};
     } catch (_) {
       return {};
     }
@@ -40,6 +48,13 @@
     values[resolved] = clamp(value);
     if (persist) writeValues();
     return values[resolved];
+  }
+
+  function resetValue(profile, persist = true) {
+    const resolved = PROFILE_ORDER.includes(profile) ? profile : 'standard';
+    delete values[resolved];
+    if (persist) writeValues();
+    return PROFILE_DEFAULTS[resolved];
   }
 
   function effectiveThreatForIntensity(value) {
@@ -105,6 +120,7 @@
     profiles: PROFILE_ORDER,
     getValue,
     setValue,
+    resetValue,
     effectiveThreatForIntensity,
     profileLabel,
     formatPercent,
