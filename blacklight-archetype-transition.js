@@ -1,9 +1,11 @@
 (() => {
   'use strict';
 
-  const DATA_URL = 'data/blacklight-continuum/wiki/basic-archetypes.json';
+  const ENTRY_URL = 'data/blacklight-continuum/wiki/basic-archetypes.json';
+  const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
   const STORAGE_KEY = 'hb-ttrpg-tools-blacklight-basic-character-v1';
   let archetypeWiki = null;
+  let rulesData = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -28,8 +30,20 @@
       .blacklight-transition-table th,.blacklight-transition-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top;line-height:1.45}
       .blacklight-transition-table th{color:var(--ink);background:rgba(200,138,53,.12)}
       .blacklight-transition-table tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
-      @media(max-width:900px){.blacklight-continuity-facts{grid-template-columns:1fr}}
-      @media print{.blacklight-transition-hero,.blacklight-continuity-facts article{background:#fff!important;border-color:#555!important}.blacklight-transition-hero p,.blacklight-continuity-facts li,.blacklight-transition-table{color:#222!important}.blacklight-continuity-facts h4,.blacklight-transition-table th{color:#000!important}.blacklight-transition-table th,.blacklight-transition-table td{border-color:#555!important}}
+      .blacklight-family-catalog{display:grid;gap:16px}
+      .blacklight-family-record{border:1px solid rgba(200,138,53,.34);border-radius:16px;padding:15px;background:rgba(255,255,255,.025)}
+      .blacklight-family-record h3{margin:0 0 7px;color:var(--accent)}
+      .blacklight-family-record>p{color:var(--muted);line-height:1.56;margin:7px 0}
+      .blacklight-family-roots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
+      .blacklight-family-roots div{border-left:3px solid var(--accent);padding:9px 11px;background:rgba(200,138,53,.07);color:var(--muted);line-height:1.48}
+      .blacklight-ranked-powers{display:grid;gap:8px}
+      .blacklight-ranked-power{display:grid;grid-template-columns:72px minmax(150px,.55fr) minmax(0,2fr);gap:10px;padding:10px;border-top:1px solid var(--line)}
+      .blacklight-ranked-power:first-child{border-top:0}
+      .blacklight-ranked-power strong{color:var(--ink)}
+      .blacklight-rank-badge{color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem}
+      .blacklight-ranked-power span:last-child{color:var(--muted);line-height:1.52}
+      @media(max-width:900px){.blacklight-continuity-facts,.blacklight-family-roots{grid-template-columns:1fr}.blacklight-ranked-power{grid-template-columns:1fr}}
+      @media print{.blacklight-transition-hero,.blacklight-continuity-facts article,.blacklight-family-record,.blacklight-family-roots div{background:#fff!important;border-color:#555!important}.blacklight-transition-hero p,.blacklight-continuity-facts li,.blacklight-transition-table,.blacklight-family-record>p,.blacklight-family-roots div,.blacklight-ranked-power span:last-child{color:#222!important}.blacklight-continuity-facts h4,.blacklight-transition-table th,.blacklight-family-record h3,.blacklight-ranked-power strong,.blacklight-rank-badge{color:#000!important}.blacklight-transition-table th,.blacklight-transition-table td{border-color:#555!important}}
     `;
     document.head.appendChild(style);
   }
@@ -45,11 +59,11 @@
     panel.className = 'blacklight-sheet-panel';
     panel.innerHTML = `
       <div class="blacklight-section-heading">
-        <div><p class="eyebrow">The same archetype entry, continued</p><h2>Old-World Identity and Continuum Translation</h2></div>
+        <div><p class="eyebrow">The same archetype entry, continued</p><h2>Old-World Identity, Continuum Translation, and Power Families</h2></div>
         <span class="blacklight-panel-code">CONTINUITY</span>
       </div>
       <div id="blacklight-transition-profile" class="blacklight-transition-profile">
-        <p class="helper-note">Select an archetype to load the complete existing archetype entry, including its old-world identity, Q-MAP damage, Ar'nock body construction, altered abilities, memory problems, and Continuum development.</p>
+        <p class="helper-note">Select an archetype to load its complete existing record and all six detailed power families.</p>
       </div>
       <div class="blacklight-field-grid blacklight-grid-2">
         <label>Old-World Identity<textarea name="oldWorldIdentity" rows="4" placeholder="Who were you, and what did this Archetype mean before Q-MAP?"></textarea></label>
@@ -90,6 +104,29 @@
       </section>`;
   }
 
+  function renderPowerFamilies(archetype) {
+    if (!archetype?.powerFamilies?.length) return '';
+    return `
+      <section>
+        <div class="blacklight-section-heading"><div><p class="eyebrow">Six distinct advancement paths</p><h2>Complete Power Families</h2></div><span class="blacklight-panel-code">${archetype.powerFamilies.length} × 5</span></div>
+        <div class="blacklight-family-catalog">${archetype.powerFamilies.map(family => `
+          <article class="blacklight-family-record">
+            <h3>${escapeHtml(family.name)}</h3>
+            <p>${escapeHtml(family.description)}</p>
+            <div class="blacklight-family-roots">
+              <div><strong>Old-world root:</strong> ${escapeHtml(family.oldWorldRoot)}</div>
+              <div><strong>Continuum translation:</strong> ${escapeHtml(family.continuumTranslation)}</div>
+            </div>
+            <div class="blacklight-ranked-powers">${(family.abilities || []).map(ability => `
+              <div class="blacklight-ranked-power">
+                <span class="blacklight-rank-badge">Rank ${escapeHtml(ability.rank)}</span>
+                <strong>${escapeHtml(ability.name)}</strong>
+                <span>${escapeHtml(ability.effect)}</span>
+              </div>`).join('')}</div>
+          </article>`).join('')}</div>
+      </section>`;
+  }
+
   function entryIdForArchetype(archetypeId) {
     return archetypeId ? `${archetypeId}-archetype` : '';
   }
@@ -97,19 +134,20 @@
   function renderEntry() {
     const target = document.getElementById('blacklight-transition-profile');
     const archetypeId = document.getElementById('blacklight-archetype')?.value;
-    if (!target || !archetypeWiki) return;
+    if (!target || !archetypeWiki || !rulesData) return;
 
-    const entryId = entryIdForArchetype(archetypeId);
-    const entry = (archetypeWiki.entries || []).find(item => item.id === entryId);
-    if (!entry) {
+    const entry = (archetypeWiki.entries || []).find(item => item.id === entryIdForArchetype(archetypeId));
+    const archetype = (rulesData.archetypes || []).find(item => item.id === archetypeId);
+    if (!entry || !archetype) {
       target.innerHTML = `
         <div class="blacklight-transition-hero">
           <h3>Power Did Not Cross Intact</h3>
-          <p>Q-MAP carried memory, instinct, procedure, and supernatural self-pattern. It did not carry the original body or the old universe's supporting laws and institutions. Select an archetype to see its complete integrated continuity record.</p>
+          <p>Q-MAP carried memory, instinct, procedure, and supernatural self-pattern. Select an archetype to see its integrated history and six complete power families.</p>
         </div>`;
       return;
     }
 
+    const nonPowerTables = (entry.tables || []).filter(table => table.title !== 'Power Families');
     target.innerHTML = `
       <div class="blacklight-transition-hero">
         <p class="eyebrow">Integrated ${escapeHtml(entry.title)} entry</p>
@@ -121,7 +159,8 @@
           ${entry.keyFacts?.length ? `<article><h4>Continuity Facts</h4><ul>${entry.keyFacts.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>` : ''}
           ${entry.playerFacing?.length ? `<article><h4>Character Questions</h4><ul>${entry.playerFacing.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>` : ''}
         </div>` : ''}
-      ${(entry.tables || []).map(renderTable).join('')}`;
+      ${nonPowerTables.map(renderTable).join('')}
+      ${renderPowerFamilies(archetype)}`;
   }
 
   async function initialize() {
@@ -130,21 +169,24 @@
     if (!panel) return;
 
     try {
-      const response = await fetch(DATA_URL, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`Archetype entry request failed with status ${response.status}.`);
-      archetypeWiki = await response.json();
+      const [entryResponse, rulesResponse] = await Promise.all([
+        fetch(ENTRY_URL, { cache: 'no-store' }),
+        fetch(RULES_URL, { cache: 'no-store' })
+      ]);
+      if (!entryResponse.ok) throw new Error(`Archetype entry request failed with status ${entryResponse.status}.`);
+      if (!rulesResponse.ok) throw new Error(`Power catalog request failed with status ${rulesResponse.status}.`);
+      archetypeWiki = await entryResponse.json();
+      rulesData = await rulesResponse.json();
       renderEntry();
 
       const select = document.getElementById('blacklight-archetype');
       select?.addEventListener('change', renderEntry);
-      if (select) {
-        new MutationObserver(() => queueMicrotask(renderEntry)).observe(select, { childList: true, subtree: true });
-      }
+      if (select) new MutationObserver(() => queueMicrotask(renderEntry)).observe(select, { childList: true, subtree: true });
       window.setTimeout(renderEntry, 100);
       window.setTimeout(renderEntry, 500);
     } catch (error) {
       const target = document.getElementById('blacklight-transition-profile');
-      if (target) target.innerHTML = `<p class="helper-note">The integrated archetype entry could not be loaded: ${escapeHtml(error.message)}</p>`;
+      if (target) target.innerHTML = `<p class="helper-note">The integrated archetype record could not be loaded: ${escapeHtml(error.message)}</p>`;
     }
   }
 
