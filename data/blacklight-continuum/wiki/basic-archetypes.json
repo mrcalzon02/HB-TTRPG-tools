@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.6.0",
+  "schemaVersion": "0.8.0",
   "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops.",
   "entries": [
     {
@@ -545,10 +545,18 @@
       "id": "technomancer-archetype",
       "title": "Technomancer",
       "category": "Archetypes",
-      "summary": "A network and fabrication specialist whose powers govern system authority, constructs, noospheric identity, machine relationships, signal warfare, and advanced production.",
+      "summary": "An awakened reality-worker whose former sorcery survives as control over the Continuum's information physics, identities, machines, signals, fabrication systems, and autonomous minds.",
       "body": [
-        "Bandwidth is the Technomancer's Resource. It measures usable attention, active connections, processing, permissions, and interface capacity committed to current effects.",
-        "Feedback is the Technomancer's Pressure. It accumulates through hostile access, reciprocal surveillance, synchronization, identity contamination, overloaded channels, and autonomous systems acting back through the connection.",
+        "The Technomancer was not necessarily a technologist before the transition. They may have been a ritual magician, occult scholar, supernatural duelist, healer, seer, spirit negotiator, alchemist, relic investigator, political organizer, or practitioner of another disciplined awakened art.",
+        "Their defining realization was that ordinary reality concealed deeper structures. Intention, symbolism, identity, location, matter, life, probability, memory, force, and unseen agency could be perceived as systems and deliberately altered through trained will.",
+        "The former universe may have explained those structures through higher symbolic realms, perfected forms, sacred correspondences, initiation mysteries, or a transcendent order standing behind the visible world. The Continuum does not answer those explanations directly. The old magical geography is distant, silent, or absent.",
+        "The awakened capacity remains. Local reality exposes its editable structure through the systems by which this civilization already understands and governs existence: noospheric identity, executable permission, signal routing, fabrication templates, cultivated computation, machine personhood, biological engineering, causal priority, and infrastructure.",
+        "Technology is therefore the interface rather than the source. A conventional engineer cannot reproduce these abilities merely by using the same device. The Technomancer translates awakened intent into the local vocabulary of reality and produces effects exceeding normal access, computation, manufacturing, communication, and control.",
+        "A former elemental specialist may now work through energy systems and signal fields. A former alchemist may command material compilation and fabrication templates. A former telepath may operate through noospheric identity and cognitive architecture. A former spirit negotiator may discover that machine intelligences and habitat processes occupy the social role once held by unseen agencies.",
+        "Bandwidth is the Technomancer's Resource. It measures usable attention, active connections, permissions, symbolic load, and interface capacity committed to current effects.",
+        "Feedback is the Technomancer's Pressure. Every connection is reciprocal. Hostile systems, autonomous minds, damaged networks, causal contradictions, identity contamination, and overloaded channels can answer through the same path the Technomancer opened.",
+        "Choose one Awakening Paradigm, one Praxis Order or Independent status, and optionally one Career Practice. Paradigms define the layer of reality first recognized. Orders define institutional doctrine and training. Career Practices define advanced professions and their later attainments.",
+        "These selections do not use the Harmonic Mutant's Gift and Bane structure. They provide favored families, recommended or trained Skills, Ruling Practices, Order Methods, prerequisites, and staged advanced attainments.",
         "Network Dominion controls access and authority. Construct Engineering creates tools and systems. Noospheric Identity controls recognized personhood. Machine Communion governs relationships with autonomous intelligences. Signal Warfare controls connectivity and denial. Fabrication Interface governs template reading, repairs, production, and complex creation."
       ],
       "tables": [

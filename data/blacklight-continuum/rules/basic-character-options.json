@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.6.0",
+  "schemaVersion": "0.8.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -1166,7 +1166,7 @@
     {
       "id": "technomancer",
       "name": "Technomancer",
-      "theme": "A network and fabrication specialist able to command systems, construct tools, manipulate identity, negotiate with machine minds, conduct signal warfare, and direct advanced fabrication.",
+      "theme": "An awakened reality-worker whose former sorcery has translated into direct interaction with information, identity, machinery, signal, fabrication, and autonomous systems. Before the transition, the Technomancer may have understood magic through higher symbolic realms, perfected forms, hidden laws, ritual correspondences, awakened will, or a disciplined school of supernatural practice. Here those old authorities no longer answer in the same language. The character still perceives that reality is structured and editable, but local reality exposes that structure through noospheric address, executable permissions, energy routing, machine personhood, biological templates, and causal infrastructure. The magic remains real; technology is now the interface through which the Continuum permits it to operate.",
       "resourceName": "Bandwidth",
       "pressureName": "Feedback",
       "keyAttribute": "Reason",
@@ -1375,6 +1375,16 @@
             }
           ]
         }
+      ],
+      "lore": [
+        "The Technomancer was not necessarily a programmer, engineer, or machine specialist before arrival. They may have been a ritualist, occult scholar, duelist, healer, spirit negotiator, seer, alchemist, political organizer, relic hunter, or specialist in one narrow discipline of awakened practice.",
+        "Their defining experience was the recognition that ordinary reality was incomplete. Symbols, intentions, names, places, objects, bodies, minds, probabilities, and natural forces possessed deeper structures that could be perceived and deliberately altered by trained will.",
+        "In the Continuum, the old transcendent geography is silent or unreachable. Familiar ritual correspondences no longer possess universal authority, and local reality does not recognize old orders, sanctums, titles, initiation lineages, or inherited claims of magical law.",
+        "The character's awakened perception nevertheless remains. What once appeared as spell, ritual, sympathy, spirit negotiation, alchemy, or direct command of hidden law now presents through systems the local universe already uses to describe itself: networks, identities, permissions, signals, fabrication templates, autonomous processes, biological computation, and infrastructure.",
+        "This does not mean the Technomancer's power became ordinary technology. A conventional engineer cannot produce these effects merely by owning the same equipment. The Technomancer uses technology as the local vocabulary of awakened causation, translating intent into changes that exceed normal access, manufacture, computation, or communication.",
+        "Bandwidth measures how much attention, authorization, symbolic structure, and active connection the Technomancer can maintain. Feedback measures the reciprocal pressure created when reality, machines, identities, and hostile systems answer back through those connections.",
+        "Choose one Awakening Paradigm to define what layer of reality first opened to the character. Choose one Praxis Order or remain Independent to define institutional training and doctrine. A Career Practice may be selected as an intended advanced discipline, but its attainments require later advancement and are not automatic starting abilities.",
+        "Technomancer Paradigms, Orders, and Career Practices do not use Gifts or Banes. They define affinity, training, method, prerequisites, and advanced attainments while the six Technomancer power families remain the shared mechanical foundation."
       ]
     }
   ]
