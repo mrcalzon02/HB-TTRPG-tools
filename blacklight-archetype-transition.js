@@ -92,7 +92,7 @@
       target.innerHTML = `
         <div class="blacklight-transition-hero">
           <h3>Capabilities Define the Archetype</h3>
-          <p>Select an Archetype to review its Resource, Pressure, weakness, innate abilities, and six complete power families. Crossing history and body reconstruction are not part of this rules record.</p>
+          <p>Select an Archetype to review its Resource, Pressure, weakness, innate abilities, and six complete power families.</p>
         </div>`;
       return;
     }
