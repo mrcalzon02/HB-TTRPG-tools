@@ -11,15 +11,42 @@
     "minorInteraction": "A Minor Interaction draws or stows one accessible item, opens or closes one unsecured adjacent closure, changes posture, speaks briefly, presses an adjacent control, or performs another equally small physical interaction."
   },
   "standardActions": [
-    {"name": "Attack", "effect": "Make one weapon, unarmed, or damaging capability attack."},
-    {"name": "Use Capability", "effect": "Activate one capability whose activation is a Standard Action."},
-    {"name": "Guard", "effect": "Increase Defense Difficulty by 1 until the start of your next turn."},
-    {"name": "Sprint", "effect": "Move an additional 8 meters. Difficult terrain halves both movement allowances."},
-    {"name": "Assist", "effect": "Choose one adjacent ally or one ally you can validly guide through communication. If you possess the relevant Skill at 1 or 2, grant one die to the ally's next matching test before your next turn. At Skill 3 or higher, grant two dice. A test receives no more than two assistance dice."},
-    {"name": "Break Free", "effect": "Test Force + Athletics or Finesse + Mobility against the restraint's printed difficulty. On success, end Restrained. On failure, remain Restrained."},
-    {"name": "Stabilize", "effect": "Attempt to stop a Downed character from gaining additional Death Marks."},
-    {"name": "Emergency Treatment", "effect": "Attempt to restore a Stable Downed character to 1 Vitality."},
-    {"name": "Complex Interaction", "effect": "Operate, repair, breach, retrieve, carry, or manipulate something requiring more than a Minor Interaction."}
+    {
+      "name": "Attack",
+      "effect": "Make one weapon, unarmed, or damaging capability attack."
+    },
+    {
+      "name": "Use Capability",
+      "effect": "Activate one capability whose activation is a Standard Action."
+    },
+    {
+      "name": "Guard",
+      "effect": "Increase Defense Difficulty by 1 until the start of your next turn."
+    },
+    {
+      "name": "Sprint",
+      "effect": "Move an additional 8 meters. Difficult terrain halves both movement allowances."
+    },
+    {
+      "name": "Assist",
+      "effect": "Choose one adjacent ally or one ally you can validly guide through communication. If you possess the relevant Skill at 1 or 2, grant one die to the ally's next matching test before your next turn. At Skill 3 or higher, grant two dice. A test receives no more than two assistance dice."
+    },
+    {
+      "name": "Break Free",
+      "effect": "Test Force + Athletics or Finesse + Mobility against the restraint's printed difficulty. When a restraint lists durability but no Break Free difficulty, use maximum 1, ceiling(durability / 2). On success, end Restrained. On failure, remain Restrained."
+    },
+    {
+      "name": "Stabilize",
+      "effect": "Attempt to stop a Downed character from gaining additional Death Marks."
+    },
+    {
+      "name": "Emergency Treatment",
+      "effect": "Attempt to restore a Stable Downed character to 1 Vitality."
+    },
+    {
+      "name": "Complex Interaction",
+      "effect": "Operate, repair, breach, retrieve, carry, or manipulate something requiring more than a Minor Interaction."
+    }
   ],
   "movement": {
     "normal": "Move up to 8 meters during the turn.",
@@ -56,12 +83,36 @@
     ]
   },
   "sampleDamageRatings": [
-    {"attack": "Unarmed strike", "damage": 2, "type": "Impact"},
-    {"attack": "Baton, club, or forceful tool", "damage": 3, "type": "Impact"},
-    {"attack": "Compact pistol", "damage": 4, "type": "Trauma"},
-    {"attack": "Rifle or heavy cutting weapon", "damage": 5, "type": "Trauma"},
-    {"attack": "Heavy firearm or anti-materiel weapon", "damage": 6, "type": "Trauma"},
-    {"attack": "Arc, identity, or noospheric weapon", "damage": 3, "type": "Disruption"}
+    {
+      "attack": "Unarmed strike",
+      "damage": 2,
+      "type": "Impact"
+    },
+    {
+      "attack": "Baton, club, or forceful tool",
+      "damage": 3,
+      "type": "Impact"
+    },
+    {
+      "attack": "Compact pistol",
+      "damage": 4,
+      "type": "Trauma"
+    },
+    {
+      "attack": "Rifle or heavy cutting weapon",
+      "damage": 5,
+      "type": "Trauma"
+    },
+    {
+      "attack": "Heavy firearm or anti-materiel weapon",
+      "damage": 6,
+      "type": "Trauma"
+    },
+    {
+      "attack": "Arc, identity, or noospheric weapon",
+      "damage": 3,
+      "type": "Disruption"
+    }
   ],
   "damageAndVitality": {
     "impact": "Impact represents bruising, blunt force, shock, fatigue, and nonpenetrating injury.",
@@ -92,10 +143,30 @@
     "meaning": "Cohesion is the character's remaining ability to hold identity, judgment, discipline, and connection together under immediate pressure. It is spent deliberately and is not lost merely because damage or Pressure increases.",
     "spendingLimit": "A character may use only one Cohesion option on the same trigger or test unless a capability explicitly says otherwise.",
     "options": [
-      {"name": "Commit", "cost": 1, "timing": "Before rolling a test", "effect": "Add two dice to that test."},
-      {"name": "Brace", "cost": 1, "timing": "After final damage is calculated", "effect": "Reduce Impact or Disruption from that hit by 1. Brace cannot reduce Trauma and cannot reduce damage below 0."},
-      {"name": "Anchor", "cost": 1, "timing": "Reaction when an ally within 10 meters or a functioning communication channel makes a Death Test or a test against fear, domination, identity alteration, or involuntary control", "effect": "The ally rerolls up to two failed dice and must keep the new results."},
-      {"name": "Refuse Collapse", "cost": 2, "timing": "Once per scene when damage would reduce the character from positive Vitality to 0", "effect": "Remain at 1 Vitality instead, become Staggered until the end of the next turn, and record the remaining damage normally. This cannot prevent an explicitly instant-death effect or be used while already Downed."}
+      {
+        "name": "Commit",
+        "cost": 1,
+        "timing": "Before rolling a test",
+        "effect": "Add two dice to that test."
+      },
+      {
+        "name": "Brace",
+        "cost": 1,
+        "timing": "After final damage is calculated",
+        "effect": "Reduce Impact or Disruption from that hit by 1. Brace cannot reduce Trauma and cannot reduce damage below 0."
+      },
+      {
+        "name": "Anchor",
+        "cost": 1,
+        "timing": "Reaction when an ally within 10 meters or a functioning communication channel makes a Death Test or a test against fear, domination, identity alteration, or involuntary control",
+        "effect": "The ally rerolls up to two failed dice and must keep the new results."
+      },
+      {
+        "name": "Refuse Collapse",
+        "cost": 2,
+        "timing": "Once per scene when damage would reduce the character from positive Vitality to 0",
+        "effect": "Remain at 1 Vitality instead, become Staggered until the end of the next turn, and record the remaining damage normally. This cannot prevent an explicitly instant-death effect or be used while already Downed."
+      }
     ],
     "recovery": [
       "Once per scene after combat or immediate danger ends, ten uninterrupted minutes regrouping with at least one willing ally restores 1 Cohesion.",
