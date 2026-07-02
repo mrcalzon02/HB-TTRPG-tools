@@ -1,0 +1,83 @@
+name: One-time mechanical Eldritch Depth validation
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-eldritch-depth-validation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate deterministic Depth language
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('data/blacklight-continuum/rules/eldritch-binding-sources.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          catalog = next(item for item in data['catalogs'] if item['id'] == 'binding-sources')
+          abilities = [step for source in catalog['variants'] for step in source['progression']]
+
+          assert data['schemaVersion'] == '1.1.0'
+          assert len(abilities) == 30
+          assert all(step.get('effect') for step in abilities)
+          assert all(
+              ('Action:' in step['effect'] or 'Trigger:' in step['effect'] or 'Passive while conscious.' in step['effect'])
+              for step in abilities
+          )
+          assert all(
+              ('Cost:' in step['effect'] or 'Passive while conscious.' in step['effect'])
+              for step in abilities
+          )
+
+          prohibited = [
+              'appropriate effect',
+              'major effect',
+              'significant effect',
+              'comparable effect',
+              'the moderator decides',
+              'at the moderator',
+              'one thematic',
+              'as appropriate',
+              'according to the campaign',
+          ]
+          combined = '\n'.join(step['effect'].lower() for step in abilities)
+          for phrase in prohibited:
+              assert phrase not in combined, phrase
+
+          information_steps = {
+              ('void-mind', 'Depth 1'),
+              ('void-mind', 'Depth 4'),
+              ('that-which-hungers', 'Depth 1'),
+              ('lidless-eye', 'Depth 4'),
+          }
+          for source in catalog['variants']:
+              for step in source['progression']:
+                  if (source['id'], step['stage']) in information_steps:
+                      assert ('Choose' in step['effect'] or 'replay' in step['effect'].lower())
+                      assert ('None' in step['effect'] or 'empty interval' in step['effect'])
+
+          standard = data['selectionRules']['depthResolutionStandard']
+          assert 'closed question menus' in standard
+          assert 'refunds its Pact cost' in standard
+          PY
+      - name: Remove validation workflow
+        run: rm .github/workflows/one-time-eldritch-depth-validation.yml
+      - name: Commit validation cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Validate mechanical Eldritch Depth abilities"
+          git push origin main
