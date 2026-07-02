@@ -1,0 +1,314 @@
+:root {
+  --reader-panel: rgba(7, 10, 16, 0.94);
+  --reader-soft: rgba(255, 255, 255, 0.035);
+  --reader-accent-soft: rgba(200, 138, 53, 0.11);
+}
+
+.blacklight-reader-page {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(81, 38, 114, 0.24), transparent 34rem),
+    radial-gradient(circle at 92% 8%, rgba(18, 92, 116, 0.16), transparent 30rem),
+    #080b11;
+  color: var(--ink);
+}
+
+.blacklight-reader-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 22px clamp(18px, 4vw, 52px);
+  background: rgba(4, 7, 12, 0.94);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+}
+
+.blacklight-reader-header h1 {
+  margin: 0;
+}
+
+.blacklight-reader-header .subtitle {
+  margin: 5px 0 0;
+  max-width: 900px;
+}
+
+.blacklight-reader-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.blacklight-reader-actions a {
+  text-decoration: none;
+}
+
+.blacklight-reader-shell {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 980px);
+  justify-content: center;
+  gap: 20px;
+  padding: 24px clamp(14px, 3vw, 42px) 60px;
+  align-items: start;
+}
+
+.blacklight-reader-nav {
+  position: sticky;
+  top: 132px;
+  max-height: calc(100vh - 154px);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  background: var(--reader-panel);
+}
+
+.blacklight-reader-nav h2 {
+  margin: 0 0 10px;
+}
+
+.blacklight-reader-nav a {
+  display: block;
+  padding: 7px 8px;
+  border-radius: 9px;
+  color: var(--muted);
+  text-decoration: none;
+  line-height: 1.35;
+}
+
+.blacklight-reader-nav a[data-level="1"] {
+  color: var(--ink);
+  font-weight: 900;
+  margin-top: 6px;
+}
+
+.blacklight-reader-nav a[data-level="2"] {
+  padding-left: 16px;
+  font-size: 0.91rem;
+}
+
+.blacklight-reader-nav a[data-level="3"] {
+  padding-left: 28px;
+  font-size: 0.84rem;
+}
+
+.blacklight-reader-nav a:hover,
+.blacklight-reader-nav a:focus {
+  color: var(--ink);
+  background: rgba(200, 138, 53, 0.1);
+}
+
+.blacklight-reader-document {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: clamp(20px, 4vw, 48px);
+  background: var(--reader-panel);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+}
+
+.blacklight-reader-document > h1:first-child {
+  margin-top: 0;
+  font-size: clamp(2.1rem, 5vw, 4rem);
+  line-height: 1.04;
+}
+
+.blacklight-reader-document h1,
+.blacklight-reader-document h2,
+.blacklight-reader-document h3,
+.blacklight-reader-document h4,
+.blacklight-reader-document h5,
+.blacklight-reader-document h6 {
+  scroll-margin-top: 132px;
+  line-height: 1.18;
+}
+
+.blacklight-reader-document h1 {
+  margin: 42px 0 16px;
+}
+
+.blacklight-reader-document h2 {
+  margin: 36px 0 13px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(200, 138, 53, 0.35);
+}
+
+.blacklight-reader-document h3 {
+  margin: 28px 0 10px;
+  color: var(--accent);
+}
+
+.blacklight-reader-document h4 {
+  margin: 22px 0 8px;
+}
+
+.blacklight-reader-document p,
+.blacklight-reader-document li,
+.blacklight-reader-document td {
+  color: var(--muted);
+  line-height: 1.68;
+}
+
+.blacklight-reader-document p {
+  margin: 0 0 14px;
+}
+
+.blacklight-reader-document strong {
+  color: var(--ink);
+}
+
+.blacklight-reader-document em {
+  color: var(--ink);
+}
+
+.blacklight-reader-document blockquote {
+  margin: 18px 0;
+  padding: 14px 17px;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  background: var(--reader-accent-soft);
+}
+
+.blacklight-reader-document blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.blacklight-reader-document ul,
+.blacklight-reader-document ol {
+  margin: 0 0 18px 24px;
+  padding: 0;
+}
+
+.blacklight-reader-document li {
+  margin: 5px 0;
+}
+
+.blacklight-reader-document hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 32px 0;
+}
+
+.blacklight-reader-document code {
+  padding: 2px 5px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #10131a;
+  color: var(--accent);
+}
+
+.blacklight-reader-table-wrap {
+  overflow-x: auto;
+  margin: 16px 0 24px;
+}
+
+.blacklight-reader-document table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 0.91rem;
+}
+
+.blacklight-reader-document th,
+.blacklight-reader-document td {
+  border: 1px solid var(--line);
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.blacklight-reader-document th {
+  color: var(--ink);
+  background: rgba(200, 138, 53, 0.13);
+}
+
+.blacklight-reader-document tbody tr:nth-child(even) {
+  background: var(--reader-soft);
+}
+
+.blacklight-reader-loading {
+  min-height: 50vh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+@media (max-width: 920px) {
+  .blacklight-reader-header {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .blacklight-reader-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .blacklight-reader-nav {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0.45in;
+  }
+
+  body.blacklight-reader-page {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .blacklight-reader-shell {
+    display: block;
+    padding: 0;
+  }
+
+  .blacklight-reader-document {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: #fff !important;
+    box-shadow: none;
+  }
+
+  .blacklight-reader-document p,
+  .blacklight-reader-document li,
+  .blacklight-reader-document td {
+    color: #222 !important;
+  }
+
+  .blacklight-reader-document h1,
+  .blacklight-reader-document h2,
+  .blacklight-reader-document h3,
+  .blacklight-reader-document h4,
+  .blacklight-reader-document strong,
+  .blacklight-reader-document em,
+  .blacklight-reader-document th {
+    color: #000 !important;
+  }
+
+  .blacklight-reader-document blockquote,
+  .blacklight-reader-document th,
+  .blacklight-reader-document tbody tr:nth-child(even) {
+    background: #fff !important;
+  }
+
+  .blacklight-reader-document h1,
+  .blacklight-reader-document h2,
+  .blacklight-reader-document h3,
+  .blacklight-reader-document blockquote,
+  .blacklight-reader-table-wrap {
+    break-inside: avoid;
+  }
+}
