@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.14.0",
+  "schemaVersion": "0.15.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The current campaign framework includes six complete Archetypes, Resource and Pressure procedures, a flat Experience exchange economy, scene-based development awards, character-knowledge and metagaming rules, and mandatory table-safety, consent, privacy, and authority boundaries.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The campaign framework now includes six complete Archetypes, Resource and Pressure procedures, Experience advancement, character-knowledge and table-safety rules, a mechanical combat foundation, and a complete worked three-character combat demonstrating Exposure, Cohesion, Pressure, Vitality, stabilization, revival, and death.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -14,8 +14,11 @@
   "campaignDocumentSource": "docs/blacklight-continuum/campaign-introduction.md",
   "campaignDocument": "blacklight-campaign-reader.html",
   "characterSheet": "blacklight-character-sheet.html",
+  "combatExampleModule": "blacklight-combat-example.html",
   "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
   "resourcePressureRules": "data/blacklight-continuum/rules/archetype-resource-pressure-rules.json",
+  "experienceAdvancementRules": "data/blacklight-continuum/rules/experience-advancement-rules.json",
+  "combatFoundationRules": "data/blacklight-continuum/rules/combat-foundation.json",
   "humanVigilPractices": "data/blacklight-continuum/rules/human-vigil-practices.json",
   "vampireLineages": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
   "shapechangerVariants": "data/blacklight-continuum/rules/shapechanger-remainder-forms.json",
@@ -27,11 +30,12 @@
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
-    "data/blacklight-continuum/wiki/campaign-play-rules.json"
+    "data/blacklight-continuum/wiki/campaign-play-rules.json",
+    "data/blacklight-continuum/wiki/combat-example-module.json"
   ],
   "completedScope": {
-    "wikiEntries": 25,
-    "nativePacks": 5,
+    "wikiEntries": 28,
+    "nativePacks": 6,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
     "archetypeResourceProcedures": 6,
@@ -65,10 +69,14 @@
     "experienceExchangeRates": 3,
     "campaignPlayRuleEntries": 3,
     "tableSafetyProcedures": 1,
-    "metagamingProcedures": 1
+    "metagamingProcedures": 1,
+    "combatFoundationProcedures": 1,
+    "combatTeachingEntries": 3,
+    "workedCombatModules": 1
   },
   "nextDevelopmentAreas": [
-    "combat foundation: initiative, action economy, movement, attacks, defense, damage, cover, range, incapacitation, and recovery",
+    "advanced combat procedures: area attacks, concealment, vehicles, environmental hazards, grappling, mounted weapons, and mass engagements",
+    "balance testing for combat damage, Protection, Exposure, Cohesion, Downed timing, and Death Marks",
     "balance testing for all ranked powers",
     "balance testing for Resource recovery, Pressure thresholds, and Crisis severity",
     "starting power allocation rules",
@@ -85,11 +93,9 @@
     "patron and contract templates",
     "resonance hazard procedures",
     "machine personhood and signal rules",
-    "full combat procedures",
     "Ar'nock vessel room and hazard module",
     "mission and job generator",
     "Charles decision arc"
   ],
-  "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json",
-  "experienceAdvancementRules": "data/blacklight-continuum/rules/experience-advancement-rules.json"
+  "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json"
 }
