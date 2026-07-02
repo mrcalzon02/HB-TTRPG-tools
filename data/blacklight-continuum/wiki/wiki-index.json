@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.6.0",
+  "schemaVersion": "0.7.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, and six five-rank power families.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated lineage variants such as the thirteen Vampire Remainder Bloodlines.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -15,6 +15,7 @@
   "campaignDocument": "blacklight-campaign-reader.html",
   "characterSheet": "blacklight-character-sheet.html",
   "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
+  "vampireLineages": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
   "integratedArchetypeEntries": "data/blacklight-continuum/wiki/basic-archetypes.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
@@ -26,6 +27,7 @@
     "nativePacks": 3,
     "supernaturalArchetypes": 6,
     "integratedArchetypeRecords": 6,
+    "vampireRemainderBloodlines": 13,
     "powerFamiliesPerArchetype": 6,
     "archetypePowerFamilies": 36,
     "rankedArchetypeAbilities": 180,
@@ -39,9 +41,9 @@
   "nextDevelopmentAreas": [
     "balance testing for all ranked powers",
     "starting power allocation rules",
+    "Remainder Bloodline advancement and favored-family costs",
     "capability prerequisites and cross-Archetype purchases",
     "condition and limitation rules",
-    "lineage-specific capability development",
     "expanded feeding rules",
     "expanded pack and territory rules",
     "patron and contract templates",
