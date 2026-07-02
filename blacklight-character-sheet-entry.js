@@ -48,7 +48,7 @@
         <span class="badge">180 ranked powers</span>
       </div>
       <h3>Blacklight Basic Operative Record</h3>
-      <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers. Every existing archetype now contains six distinct five-rank power families integrated with its old-world history, Q-MAP damage, Ar'nock body reconstruction, and Continuum adaptation.</p>
+      <p>Create Human Investigators, Vampires, Shapechangers, Eldritch Binders, Harmonic Mutants, and Technomancers. Every Archetype contains six five-rank capability families with explicit costs, effects, limits, resistance, and failure consequences. Appearance and embodiment do not grant unlisted mechanics.</p>
       <div class="blacklight-actions">
         <a class="primary-action" href="blacklight-character-sheet.html">Open Basic Character Sheet</a>
         <a class="secondary-action" href="data/blacklight-continuum/rules/basic-character-options.json" target="_blank" rel="noopener">Open Canonical Power Data</a>
@@ -93,7 +93,8 @@
 
   function removeLegacyPowerTable(entryTarget) {
     [...entryTarget.querySelectorAll('h4')].forEach(heading => {
-      if (heading.textContent.trim() !== 'Power Families') return;
+      const title = heading.textContent.trim();
+      if (title !== 'Power Families' && title !== 'Six Power Families') return;
       const next = heading.nextElementSibling;
       heading.remove();
       if (next?.classList.contains('blacklight-table-wrap')) next.remove();
@@ -107,7 +108,7 @@
         <p>${escapeHtml(family.description)}</p>
         <div class="blacklight-wiki-family-context">
           <div><strong>Old-world root:</strong> ${escapeHtml(family.oldWorldRoot)}</div>
-          <div><strong>Continuum translation:</strong> ${escapeHtml(family.continuumTranslation)}</div>
+          <div><strong>Continuum expression:</strong> ${escapeHtml(family.continuumTranslation)}</div>
         </div>
         <div>${(family.abilities || []).map(ability => `
           <div class="blacklight-wiki-rank">
@@ -135,7 +136,7 @@
       catalog.dataset.blacklightWikiPowerCatalog = 'true';
       catalog.innerHTML = `
         <h4>Complete Power Families</h4>
-        <p class="blacklight-callout"><strong>${archetype.powerFamilies.length} distinct families · ${archetype.powerFamilies.reduce((total, family) => total + (family.abilities?.length || 0), 0)} ranked powers.</strong> These paths are part of this same ${escapeHtml(archetype.name)} entry, not separate Wiki records.</p>
+        <p class="blacklight-callout"><strong>${archetype.powerFamilies.length} distinct families · ${archetype.powerFamilies.reduce((total, family) => total + (family.abilities?.length || 0), 0)} ranked powers.</strong> These capabilities are part of this same ${escapeHtml(archetype.name)} entry, not separate Wiki records.</p>
         <div class="blacklight-wiki-power-catalog">${archetype.powerFamilies.map(renderFamily).join('')}</div>`;
       entryTarget.appendChild(catalog);
     } catch (error) {
