@@ -1,34 +1,32 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.3.0",
-  "status": "archetype-transition-system-alpha",
+  "schemaVersion": "0.4.0",
+  "status": "integrated-archetype-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Player-facing and Game Moderator reference wiki for Blacklight Continuum: No Return Signal. The current foundation covers Blacklight Intelligence, Q-MAP, the Ar'nock derelict, the Infiltration Assault Algorithm, alien-derived printed bodies, biological Charles, campaign themes, the Basic character sheet, six supernatural archetypes, their old-world-to-Continuum transition profiles, and the original d10 system scaffold.",
+  "description": "Player-facing and Game Moderator reference wiki for Blacklight Continuum: No Return Signal. Each of the six original archetype entries now contains its own old-world identity, Q-MAP loss, Ar'nock body reconstruction, fragmented memories, power changes, and distinct Continuum development rather than linking to duplicate transition entries.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "inspiration": "Broad attribute-plus-skill and supernatural-archetype structure",
     "proprietaryText": "No proprietary rules text is copied",
     "balanceStatus": "Alpha playtest foundation"
   },
-  "campaignDocument": "docs/blacklight-continuum/campaign-introduction.md",
-  "transitionGuide": "docs/blacklight-continuum/archetype-transition-guide.md",
+  "campaignDocumentSource": "docs/blacklight-continuum/campaign-introduction.md",
+  "campaignDocument": "blacklight-campaign-reader.html",
   "characterSheet": "blacklight-character-sheet.html",
   "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
-  "transitionProfiles": "data/blacklight-continuum/rules/archetype-transition-profiles.json",
+  "integratedArchetypeEntries": "data/blacklight-continuum/wiki/basic-archetypes.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
-    "data/blacklight-continuum/wiki/basic-archetypes.json",
-    "data/blacklight-continuum/wiki/archetype-transitions.json"
+    "data/blacklight-continuum/wiki/basic-archetypes.json"
   ],
   "completedScope": {
-    "wikiEntries": 28,
-    "nativePacks": 4,
+    "wikiEntries": 21,
+    "nativePacks": 3,
     "supernaturalArchetypes": 6,
-    "archetypeTransitionProfiles": 6,
-    "universalTransitionLayers": 4,
-    "adaptationStages": 5,
+    "integratedArchetypeContinuityRecords": 6,
+    "adaptationStagesPerArchetype": 5,
     "operationalFrames": 12,
     "coreSkills": 24,
     "coreAttributes": 9,
@@ -36,10 +34,11 @@
     "archetypePowerFamilies": 13,
     "rankedArchetypeAbilities": 65,
     "openingEquipmentExamples": 6,
-    "browserCharacterSheets": 1
+    "browserCharacterSheets": 1,
+    "formattedCampaignReaders": 1
   },
   "nextDevelopmentAreas": [
-    "lineage-specific transition variants",
+    "lineage-specific development inside each existing archetype entry",
     "Translation Scar generator and mechanical consequences",
     "Memory Echo and Adaptation Mark tracking interface",
     "balance pass for archetype resources and pressure tracks",
