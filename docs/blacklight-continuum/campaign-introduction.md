@@ -20,7 +20,7 @@ The characters were printed by an Ar’nock biological printer from alien feedst
 
 They are not biological approximations assembled from Ar’nock anatomy. They are not accidental alien-human composites. The printer did not become confused by an unfamiliar species. It received a valid construction job and printed what it was instructed to print.
 
-The crossing itself is incidental to the characters’ current existence. The campaign does not require the table to determine what metaphysical component crossed, whether a soul moved, whether an original remained behind, or which philosophical label should be attached to the process. The characters who awaken are the player characters. Play begins with what they can do now.
+The characters who awaken are the player characters. Play begins with what they can do now.
 
 ---
 
@@ -96,17 +96,7 @@ The package did not need a waiting Blacklight facility. It needed fabrication ca
 
 The Ar’nock vessel provided all three.
 
-## What Matters at the Table
-
-The table does not need to decide what crossed.
-
-The table does not need to decide whether the process was transfer, copying, reconstruction, continuation, resurrection, or creation.
-
-Those questions may matter to individual characters if their players choose to care about them, but they do not define Attributes, Skills, Archetypes, powers, or character legitimacy.
-
 The people who awaken are present, conscious, capable of choice, and entitled to act as themselves.
-
-That is enough to begin play.
 
 ---
 
@@ -673,7 +663,7 @@ Each Archetype contains:
 - six power families;
 - five ranked powers in each family.
 
-Archetype descriptions explain present capabilities. They do not require a crossing history, body-reconstruction theory, or account of what may have accompanied the character through Q-MAP.
+Archetype descriptions explain present capabilities, costs, limits, and advancement.
 
 ## Operational Frames
 
@@ -707,8 +697,6 @@ Do not use alien feedstock as an excuse to impose surprise weaknesses.
 Do not reveal hidden Ar’nock organs because the characters do not possess generic Ar’nock anatomy.
 
 Do not make the printer misunderstand a valid construction job.
-
-Do not require players to explain what crossed before their characters are allowed to exist or use their powers.
 
 Present consequences through explicit capabilities, costs, conditions, hazards, choices, and relationships.
 

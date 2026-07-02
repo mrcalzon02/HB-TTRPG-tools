@@ -122,7 +122,7 @@
         "Assign one Attribute at 4, three at 3, three at 2, and two at 1. Assign three Skills at 3, five at 2, five at 1, and the rest at 0. Choose three specializations.",
         "Choose an Operational Frame, an Archetype, a Lineage or Variant when appropriate, starting powers according to the campaign's allocation rules, one signature capability, and one meaningful limitation or bane.",
         "Record every rules-relevant benefit as an Attribute, Skill, specialization, innate ability, power, Operational Frame feature, equipment feature, condition, or explicit narrative permission.",
-        "No character-creation step asks what crossed through Q-MAP, what failed to cross, or what the printer could recognize. The printer produced the selected human or human-adjacent character from the supplied construction definition."
+        "The printer produced the selected human or human-adjacent character from the supplied construction definition. Character creation begins with that character’s present capabilities."
       ],
       "tables": [
         {

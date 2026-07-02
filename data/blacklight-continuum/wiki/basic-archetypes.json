@@ -2,7 +2,7 @@
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
   "schemaVersion": "0.4.0",
-  "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops. Crossing history, body speculation, and origin reconstruction are intentionally excluded.",
+  "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops.",
   "entries": [
     {
       "id": "blacklight-basic-character-sheet",
@@ -12,7 +12,7 @@
       "body": [
         "The Basic sheet records the character's present identity, nine Attributes, twenty-four Skills, Operational Frame, Archetype, derived traits, Resource, Pressure, innate abilities, ranked powers, equipment, relationships, limitations, conditions, and advancement.",
         "The sheet follows a strict capability rule: appearance, species, physiology, substrate, origin, and descriptive transformation do not grant mechanics. A benefit exists only when recorded as an Attribute, Skill, specialization, innate ability, power, Operational Frame feature, equipment tag, condition, or explicit narrative permission.",
-        "Selecting an Archetype loads its Resource, Pressure, weakness, innate abilities, six power families, and thirty ranked powers. The sheet does not require a record of what crossed, what failed to cross, or how the character's powers were reconstructed.",
+        "Selecting an Archetype loads its Resource, Pressure, weakness, innate abilities, six power families, and thirty ranked powers. The sheet records present capabilities, costs, limits, and advancement.",
         "The sheet supports browser autosave, JSON import and export, clearing, and print-to-PDF output."
       ],
       "tables": [
