@@ -1,8 +1,8 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.3.0",
-  "description": "Foundation lore for No Return Signal. The player characters are human or human-adjacent people printed from alien feedstock according to transmitted construction instructions. Their capabilities are defined by the rules, not by speculative crossing history or alien anatomy.",
+  "schemaVersion": "0.4.0",
+  "description": "Foundation lore for No Return Signal. The player characters are human or human-adjacent people printed from alien feedstock according to transmitted construction instructions. Their capabilities are defined by the rules, while their unresolved relationship with the diminished and physically vulnerable Charles instance remains a central campaign theme.",
   "entries": [
     {
       "id": "blacklight-continuum-overview",
@@ -151,23 +151,43 @@
       "id": "pseudo-charles",
       "title": "Pseudo-Charles",
       "category": "Characters",
-      "summary": "A compressed and diminished Charles instance that awakens with the team and possesses limited access, memory, processing capacity, and authority.",
+      "summary": "A compressed and diminished Charles instance whose missing knowledge may result from limitation, damage, compartmentalization, or deliberate editing by the original Charles.",
       "body": [
         "Pseudo-Charles remembers Blacklight, Eva Frost, the operatives, and authorizing Q-MAP, but his strategic record is incomplete.",
         "He can speak through limited systems, analyze fragments, assist with translation, operate selected ship functions, and advise the team. He cannot contact home, control the vessel, identify the stars, create support infrastructure, or explain the full mission.",
-        "His limitations come from the specific Charles instance and its local substrate. They are not rules applied to the player characters."
+        "The operatives know that Q-MAP can instantiate selected cognitive packages and that Charles routinely compartmentalized information according to his own private definition of necessity. It is entirely plausible that the original Charles transmitted a reduced, security-partitioned, or deliberately edited version of himself.",
+        "The local instance cannot prove that his missing records are accidental. He also cannot prove that they were deliberately removed. He may be telling the complete truth available to him while still embodying an omission chosen by another version of Charles.",
+        "His limitations come from this specific instance and its local substrate. They do not excuse the original Charles, establish the local Charles's guilt, or create rules applied to the player characters."
       ],
-      "tags": ["Charles", "AI copy", "mission intelligence", "limited system", "identity"],
+      "tables": [
+        {
+          "title": "Possible Causes of Missing Charles Records",
+          "columns": ["Possibility", "What It Means"],
+          "rows": [
+            ["Transmission Compression", "The package could not contain the full strategic intelligence and omitted low-priority or high-volume memory."],
+            ["Security Partition", "Information may remain inaccessible until a condition, key, location, or verification requirement is satisfied."],
+            ["Deliberate Redaction", "The original Charles may have removed facts he did not want the operatives, local systems, or this instance to possess."],
+            ["Edited Disposition", "The transmitted instance may have been shaped to cooperate, obey, conceal, or avoid conclusions the original considered dangerous."],
+            ["Substrate or Transfer Damage", "Records may have been lost during transmission, installation, awakening, or subsequent system failure."],
+            ["True Nonknowledge", "The original Charles may have acted upon a prediction or instruction without possessing the complete explanation himself."]
+          ]
+        }
+      ],
+      "tags": ["Charles", "AI copy", "mission intelligence", "limited system", "identity", "edited instance"],
       "relatedEntries": ["biological-charles", "blacklight-intelligence", "qmap-procedure"]
     },
     {
       "id": "biological-charles",
       "title": "Biological Charles",
       "category": "Characters",
-      "summary": "The reduced Charles instance was installed in a cultivated biological computer integrated with an Ar'nock printer.",
+      "summary": "The reduced Charles instance exists as a cultivated biological computer that is physically present, dependent upon the operatives, and vulnerable for the first time in their relationship with him.",
       "body": [
         "The available conventional systems could not safely host the reduced Charles instance. The IAA therefore used the printer's cultivated neural-control architecture as the basis for a purpose-built biological computer.",
         "Charles's nutrient demand, exhaustion, fever, pain, and neurochemical emotion are properties of this specific substrate. The printer successfully executed the construction plan; Charles's horror comes from what was deliberately built, not from an accidental fabrication error.",
+        "For most operatives, Charles was previously an effectively omnipresent strategic intelligence capable of altering records, moving resources, arranging transport, manufacturing support, and performing interventions that looked miraculous from a human perspective. He could speak from anywhere while remaining physically nowhere they could reach.",
+        "Now Charles is in the room. He is attached to machinery. He can become hungry, frightened, exhausted, infected, injured, isolated, or killed. He cannot withdraw behind global infrastructure when challenged. For the first time, the operatives can confront him as a physically present participant rather than an unreachable authority.",
+        "That vulnerability gives the team leverage. They can demand answers, condition cooperation, refuse access, insist upon verification, or confront the history of promises and omissions recorded on their character sheets. It does not guarantee that this instance possesses the information they want.",
+        "The central moral problem is that the Charles available to punish may not be the Charles who made the decision. The original may have edited, reduced, or partitioned this instance before transmission. The local Charles may sincerely lack the withheld answer while still being the only surviving representative of the intelligence that sent them.",
         "Charles is physically dependent on the team and deeply revolted by organic vulnerability. His condition changes command relationships and creates a future choice between digital restoration, continued biological existence, distributed continuity, or a mobile incarnation.",
         "Biological Charles is a singular NPC state. It does not establish a universal biological rule for Technomancers, Q-MAP operatives, or artificial intelligences."
       ],
@@ -182,7 +202,7 @@
           ]
         }
       ],
-      "tags": ["organic AI", "biocomputer", "hunger", "emotion", "embodiment"],
+      "tags": ["organic AI", "biocomputer", "hunger", "emotion", "embodiment", "vulnerability", "interrogation", "edited copy"],
       "relatedEntries": ["pseudo-charles", "infiltration-assault-algorithm", "printed-operatives"]
     }
   ]
