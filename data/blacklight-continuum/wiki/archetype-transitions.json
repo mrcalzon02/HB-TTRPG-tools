@@ -1,0 +1,226 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "0.1.0",
+  "description": "Deep transition profiles describing what each archetype was in the old World of Darkness, what Q-MAP preserved, what the Ar'nock printers built, what was lost, and what each power family becomes in the Blacklight Continuum.",
+  "entries": [
+    {
+      "id": "archetype-transition-doctrine",
+      "title": "Archetype Transition Doctrine",
+      "category": "Character Creation",
+      "summary": "Every supernatural character is a translated continuation rather than a perfect restoration of the body, metaphysics, institutions, and powers they possessed before Q-MAP.",
+      "body": [
+        "Q-MAP carried neural, emotional, procedural, and metaphysical self-patterns. It did not carry original bodies, native soil, bloodline institutions, spirit territories, sanctums, patron shrines, familiar networks, or the old universe's complete supernatural infrastructure.",
+        "The Ar'nock bio-printers created the nearest viable organisms they could construct from alien biological libraries. Familiar powers begin as remembered procedures expressed through unfamiliar organs and then attach to local reflection spaces, noospheric systems, living technology, resonance, and causal structures.",
+        "The purpose of advancement is not to restore a perfect old-world character sheet. It is to develop Continuum Expressions that could not have existed in either universe alone."
+      ],
+      "tables": [
+        {
+          "title": "Four Layers of Power Translation",
+          "columns": ["Layer", "Meaning"],
+          "rows": [
+            ["Legacy Memory", "The character remembers what the power used to feel like, often without reliable context."],
+            ["Printed Interpretation", "The Ar'nock-derived body reproduces the remembered function with unfamiliar biology."],
+            ["Local Reality Coupling", "The effect attaches to a local spiritual, noospheric, biological, technological, or causal equivalent."],
+            ["Continuum Adaptation", "The character creates a stable derivative belonging to the present body and universe."]
+          ]
+        },
+        {
+          "title": "Adaptation Stages",
+          "columns": ["Archetype Rating", "Stage", "Meaning"],
+          "rows": [
+            ["1", "Residual Instinct", "Unstable echoes of remembered power."],
+            ["2", "Printed Translation", "Repeatable biological support develops."],
+            ["3", "Local Coupling", "The local reality system carrying the power becomes identifiable."],
+            ["4", "Hybrid Mastery", "Old supernatural identity and printed body function together."],
+            ["5", "Continuum Expression", "The power becomes native to neither old universe nor new one alone."]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "First uses may require a Translation Test using Archetype Key Attribute + Archetype Rating.",
+        "Failure may add Archetype Pressure or Exposure.",
+        "A Complication creates a persistent Translation Scar rather than merely cancelling the ability.",
+        "Memory Echoes grant a bonus die by spending Resource or accepting Pressure while revealing fragmented old-world context."
+      ],
+      "links": [{"label": "Open Full Transition Guide", "href": "docs/blacklight-continuum/archetype-transition-guide.md"}],
+      "tags": ["Q-MAP", "transition", "adaptation", "fragmented memory", "printed body"],
+      "relatedEntries": ["human-investigator-transition", "vampire-transition", "shapechanger-transition", "eldritch-binder-transition", "harmonic-mutant-transition", "technomancer-transition"]
+    },
+    {
+      "id": "human-investigator-transition",
+      "title": "Human Investigator Transition",
+      "category": "Archetype Transitions",
+      "summary": "The old world's mortal baseline becomes an alien-derived continuity anchor who can no longer prove that they were ever ordinary.",
+      "body": [
+        "The Human Investigator once relied on evidence, local institutions, legal identity, trusted contacts, familiar procedure, and the certainty that they remained the mortal observer in a supernatural world.",
+        "Q-MAP preserved procedural expertise, suspicion, promises, unfinished cases, guilt, and trained judgment. It did not preserve the institutions that made those skills legible or the external proof that the investigator's memories belong to the current body.",
+        "The printer created the least visibly specialized body because the Investigator's self-image contained fewer supernatural anatomical demands. Internally they still possess Ar'nock-derived tissue, unfamiliar organs, distributed reflex structures, resinous clotting, and unusually broad adaptive potential.",
+        "Conviction becomes continuity force. Casecraft expands into investigation across copied minds, biological printers, machine processes, and fragmented timelines. Field Discipline turns the Investigator into the team's human standard even after their humanity becomes biologically uncertain."
+      ],
+      "tables": [
+        {
+          "title": "Power Family Derivatives",
+          "columns": ["Family", "Old-World Basis", "Continuum Derivative", "Failure Signs"],
+          "rows": [
+            ["Casecraft", "Evidence, archives, witnesses, databases, street intuition", "Chemical, vibration, emotional, and noospheric evidence used to reconstruct responsibility across copies and systems", "Borrowed memories, obsessive pattern completion, bodily reactions mistaken for proof"],
+            ["Field Discipline", "Training, protective tactics, controlled violence, refusal to panic", "Distributed reflex tissues turn the Investigator into a living continuity and coordination anchor", "Automatic obedience, another iteration's reflexes, emotional suppression"]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "Their greatest loss is social context rather than a supernatural fuel source.",
+        "Their printed body may be the most generally adaptable because fewer organs were reserved for an inherited supernatural condition.",
+        "Their transition is from the normal person in a supernatural world to the person who defines what normal means next."
+      ],
+      "tags": ["Human Investigator", "Conviction", "continuity anchor", "forensics", "mortal"],
+      "relatedEntries": ["archetype-transition-doctrine", "human-investigator-archetype", "blacklight-basic-character-sheet"]
+    },
+    {
+      "id": "vampire-transition",
+      "title": "Vampire Transition",
+      "category": "Archetype Transitions",
+      "summary": "Metaphysical undeath is reprinted as an alien living organism forced to behave according to a remembered death-command.",
+      "body": [
+        "The Vampire once understood the body as dead matter moved by blood, will, curse, lineage, and predatory identity. Feeding, sunlight, hunger, bloodline, and night followed familiar rules even when those rules were hated.",
+        "Q-MAP preserved predatory reflexes, blood-memory, feeding compulsion, supernatural technique, emotional association, and the certainty that the body should not function like a living human organism. It preserved death and lineage only as fragmented and contradictory memory.",
+        "The Ar'nock printer could not manufacture metaphysical death. It built a living organism with extreme metabolic suppression, intermittent pulse, catalytic-fluid storage, deathlike dormancy, and tissues capable of obeying an undead self-model.",
+        "Vitae becomes a hybrid catalytic medium. Feeding becomes biological authorship. The Vampire must determine whether undeath is a metaphysical fact, a remembered identity, or a role the new body is learning to perform."
+      ],
+      "tables": [
+        {
+          "title": "Power Family Derivatives",
+          "columns": ["Family", "Printed Translation", "Continuum Expression", "Failure Signs"],
+          "rows": [
+            ["Crimson Velocity", "Vitae floods distributed nerves and elastic support plates", "Body regions act in overlapping temporal intervals", "Cancelled actions complete, afterimages persist, Vitae drains late"],
+            ["Grave Dominion", "Chemical, vocal, visual, and noospheric predatory cues synchronize", "Biological beings, copied minds, and machine intelligences classify the Vampire as priority authority", "Commands persist, allies submit, fear is mistaken for loyalty"],
+            ["Veil of Night", "Scent, heat, posture, skin, and identity signatures coordinate", "Continuity systems classify the Vampire as already resolved, archived, or forgotten", "Allies forget them, records retain false identities, reflections disagree"]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "The new body may breathe, pulse, digest, and feel warmth despite the Vampire's self-concept.",
+        "Alien blood or synthetic vital media may restore Vitae without satisfying Hunger or may change memory.",
+        "Sunlight remains dangerous, but different stars and artificial spectra make the exact threshold uncertain."
+      ],
+      "tags": ["Vampire", "Vitae", "Hunger", "living undeath", "blood"],
+      "relatedEntries": ["archetype-transition-doctrine", "vampire-archetype", "printed-operatives"]
+    },
+    {
+      "id": "shapechanger-transition",
+      "title": "Shapechanger Transition",
+      "category": "Archetype Transitions",
+      "summary": "Several bodily and spiritual selves are interpreted by the printer as conditional morphogenic templates inside one alien-derived organism.",
+      "body": [
+        "The Shapechanger was never one body. Human, hunting, and war forms each carried their own senses, instincts, social meaning, spiritual function, and territorial truth.",
+        "Q-MAP preserved several contradictory anatomical self-images, transformation procedure, Fury, pack bonds, territorial recognition, and spirit relationships. It did not preserve native totems, familiar moon authority, ancestral territory, or the old reflection realm exactly.",
+        "The printer distributed dormant organs, reversible muscle layers, folding structural plates, redundant circulation, and morphogenic tissues throughout the body. Human form is the lowest-energy configuration rather than the original body.",
+        "Fury becomes morphogenic pressure. Pack Sense expands into scent, vibration, chemistry, noospheric identity, and continuity bonds. Spirit Resonance now reaches machine presences, habitats, archives, swarms, and local reflection entities."
+      ],
+      "tables": [
+        {
+          "title": "Power Family Derivatives",
+          "columns": ["Family", "Printed Translation", "Continuum Expression", "Failure Signs"],
+          "rows": [
+            ["Warform", "Stored organs and structural systems unfold into alternate bodies", "Forms can adapt to vacuum, microgravity, toxins, industry, and alien opponents", "Transformation continues, incompatible forms merge, alien senses acquire animal instincts"],
+            ["Spirit Resonance", "Auxiliary nerves detect noospheric, ecological, emotional, and dimensional patterns", "Pacts form with ship minds, archive dead, swarms, habitats, and engineered ecosystems", "Machines are mistaken for spirits, old totem names summon new entities, alien instincts return"]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "The body contains all forms in compressed or chemically suppressed states.",
+        "The local reflection ecology is not automatically the same spiritual world the Shapechanger remembers.",
+        "The central risk is that one form or predatory truth claims to be the only honest self."
+      ],
+      "tags": ["Shapechanger", "Fury", "Instinct", "morphogenic body", "spirit ecology"],
+      "relatedEntries": ["archetype-transition-doctrine", "shapechanger-archetype", "arnock-species"]
+    },
+    {
+      "id": "eldritch-binder-transition",
+      "title": "Eldritch Binder Transition",
+      "category": "Archetype Transitions",
+      "summary": "Q-MAP copied the shape of a pact, but no one knows whether the original patron, a fragment, an address, or a local replacement now answers.",
+      "body": [
+        "The Eldritch Binder once relied on names, obligations, ritual context, invitation, boundaries, and symbolic authority to manage a relationship with an impossible presence.",
+        "Q-MAP preserved ritual memory, compulsions, sensory scars, symbolic associations, obligations, and the metaphysical shape of the relationship. It may also have copied a fragment, an address, or an empty place that can now be occupied.",
+        "The printer encountered a body map containing structures that had never been physically present and built biological support: patterned scar tissue, dormant senses, unknown glands, asymmetric nerve clusters, and cavities that do not scan consistently.",
+        "Pact becomes structured relationship. Intrusion measures how much the presence understands about the new universe. Sealcraft becomes negotiation over local rules, while Borrowed Anatomy turns the body into an embassy for the impossible."
+      ],
+      "tables": [
+        {
+          "title": "Power Family Derivatives",
+          "columns": ["Family", "Printed Translation", "Continuum Expression", "Failure Signs"],
+          "rows": [
+            ["Sealcraft", "Chemical traces, fields, noospheric markers, and biological geometry create boundaries", "Rules constrain spirits, aliens, machines, copies, portals, and autonomous processes by category", "The wrong category is bound, the Binder is included, the rule persists"],
+            ["Borrowed Anatomy", "Printer tissue grows organs from symbolic instructions and nonphysical memories", "New organs perceive causality, identity lineage, memory residue, and nonlocal attention", "Organs gain preferences, remain after dismissal, or act for the presence"]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "Old occult symbols may have no inherent authority in the new universe.",
+        "An answer in the patron's voice does not prove the same entity crossed.",
+        "The printed body may be constructing the patron biologically rather than merely hosting it metaphysically."
+      ],
+      "tags": ["Eldritch Binder", "Pact", "Intrusion", "patron", "translated seals"],
+      "relatedEntries": ["archetype-transition-doctrine", "eldritch-binder-archetype", "qmap-procedure"]
+    },
+    {
+      "id": "harmonic-mutant-transition",
+      "title": "Harmonic Mutant Transition",
+      "category": "Archetype Transitions",
+      "summary": "The Ar'nock printer understands resonance-based biology unusually well and may amplify the Mutant beyond the limits of their remembered body.",
+      "body": [
+        "The Harmonic Mutant was already a transitional organism who experienced matter as vibration, emotion as rhythm, structure as sustained frequency, and flesh as a pattern capable of slipping out of tune.",
+        "Q-MAP preserved altered sensory maps, involuntary adaptations, resonance associations, tuning procedures, and phantom frequencies linked to places and people that are no longer physically present.",
+        "Ar'nock medicine and fabrication already use vibration, distributed sensing, and structural harmonics. The printer therefore built dedicated resonance organs with alarming competence and may have integrated the Mutant into the ship as a tuning component.",
+        "Resonance becomes fuel and communication. Discord measures the difference between intended form and sustained pattern. Harmonic Projection negotiates with matter, while Echo Biology copies and coordinates living patterns."
+      ],
+      "tables": [
+        {
+          "title": "Power Family Derivatives",
+          "columns": ["Family", "Printed Translation", "Continuum Expression", "Failure Signs"],
+          "rows": [
+            ["Harmonic Projection", "Specialized tissues generate pressure, electromagnetic, chemical, and structural oscillation", "Alien material, ship systems, noospheric fields, causal substances, and biology can be tuned together", "Sympathetic vibration, emotional system contamination, feedback through allies"],
+            ["Echo Biology", "Distributed tissues copy and transmit temporary biological patterns", "Healing, duplication, and coordination can operate across bodies and continuity-linked injuries", "Wrong injuries copy, echoes retain memory, foreign emotions enter the body"]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "The Mutant lost the old definition of baseline human anatomy and safe resonance.",
+        "An old healing frequency may produce growth while a destructive frequency may stabilize Ar'nock material.",
+        "The ship may react to the Mutant as an organ rather than a passenger."
+      ],
+      "tags": ["Harmonic Mutant", "Resonance", "Discord", "Ar'nock biology", "frequency"],
+      "relatedEntries": ["archetype-transition-doctrine", "harmonic-mutant-archetype", "arnock-derelict"]
+    },
+    {
+      "id": "technomancer-transition",
+      "title": "Technomancer Transition",
+      "category": "Archetype Transitions",
+      "summary": "A powerful old-world machine mystic awakens inside technology centuries beyond their expertise while carrying possible residues of the IAA that created the team.",
+      "body": [
+        "The Technomancer once made networks, devices, code, and machine intention behave as though technology understood them. They were dangerous in the old world, though Charles remained the greater intelligence and emergency authority.",
+        "Q-MAP preserved technical memory, interface intuition, noospheric sensitivity, visualization habits, and the sensory model of machine thought. The same signal also carried the Infiltration Assault Algorithm, leaving open the possibility that weaponized procedures survive inside the Technomancer's pattern.",
+        "The printer interpreted noospheric expectations as biological interface requirements and built conductive nerves, field-sensitive tissues, interface filaments, electrochemical buffers, and structures able to synchronize with living or machine networks.",
+        "Bandwidth measures interface capacity. Feedback measures reciprocal access. Network Dominion becomes a struggle over legitimate authority, and Construct Engineering combines alien machinery, living tissue, hardlight, salvaged systems, and remembered human design."
+      ],
+      "tables": [
+        {
+          "title": "Power Family Derivatives",
+          "columns": ["Family", "Printed Translation", "Continuum Expression", "Failure Signs"],
+          "rows": [
+            ["Network Dominion", "The body emits identity-like signals, interface chemistry, and noospheric presence", "The Technomancer forms temporary political relationships with networks and rewrites permission or ownership", "Systems follow the link into memory, machine priorities overwrite the self, access identities persist"],
+            ["Construct Engineering", "Biological interfaces guide alien fabrication using human design memory", "Temporary tools combine living tissue, hardlight, salvage, printed organs, and noospheric logic", "Helpers become autonomous, constructs consume body tissue, last instructions continue indefinitely"]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "Local devices may possess rights, judgment tissue, identity, and political standing.",
+        "Pseudo-Charles can no longer guarantee rescue from a failed intrusion and may depend on the Technomancer for access.",
+        "Some remembered commands may belong to the IAA rather than the character."
+      ],
+      "tags": ["Technomancer", "Bandwidth", "Feedback", "IAA residue", "noosphere"],
+      "relatedEntries": ["archetype-transition-doctrine", "technomancer-archetype", "infiltration-assault-algorithm", "biological-charles"]
+    }
+  ]
+}
