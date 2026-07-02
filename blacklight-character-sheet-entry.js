@@ -2,6 +2,7 @@
   'use strict';
 
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
+  const HUMAN_VARIANT_URL = 'data/blacklight-continuum/rules/human-vigil-practices.json';
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
   const HARMONIC_VARIANT_URL = 'data/blacklight-continuum/rules/harmonic-compact-remainders.json';
@@ -55,6 +56,7 @@
       <div class="module-meta">
         <span class="badge status-active">basic character sheet</span>
         <span class="badge">6 integrated archetypes</span>
+        <span class="badge">17 Human Vigil options</span>
         <span class="badge">13 Vampire bloodlines</span>
         <span class="badge">23 Shapechanger variants</span>
         <span class="badge">13 Harmonic remainders</span>
@@ -106,6 +108,7 @@
   }
 
   function variantUrlFor(archetypeId) {
+    if (archetypeId === 'human-investigator') return HUMAN_VARIANT_URL;
     if (archetypeId === 'vampire') return VAMPIRE_LINEAGE_URL;
     if (archetypeId === 'shapechanger') return SHAPECHANGER_VARIANT_URL;
     if (archetypeId === 'harmonic-mutant') return HARMONIC_VARIANT_URL;
@@ -173,7 +176,7 @@
         ${skillList.length ? `<p><strong>${variant.trainedSkills ? 'Order-trained fields' : 'Recommended Skills'}:</strong> ${skillList.map(escapeHtml).join(' · ')}</p>` : ''}
         ${variant.entryRequirement ? `<p><strong>Entry requirement:</strong> ${escapeHtml(variant.entryRequirement)}</p>` : ''}
         ${renderMethod('Ruling Practice', variant.practice)}
-        ${renderMethod('Order Method', variant.method)}
+        ${renderMethod(variant.trainedSkills ? 'Order Method' : 'Conviction Method', variant.method)}
         ${renderMethod('Lineage Gift', variant.gift)}
         ${renderMethod('Lineage Bane', variant.bane)}
         ${variant.progression?.length ? `<div class="blacklight-wiki-progression">${variant.progression.map(step => `<div><strong>${escapeHtml(step.stage)} — ${escapeHtml(step.name)}:</strong> ${escapeHtml(step.effect)}</div>`).join('')}</div>` : ''}
@@ -188,7 +191,7 @@
         variants: data.lineages
       }];
     }
-    if ((archetypeId === 'shapechanger' || archetypeId === 'harmonic-mutant' || archetypeId === 'technomancer') && data?.catalogs?.length) {
+    if ((archetypeId === 'human-investigator' || archetypeId === 'shapechanger' || archetypeId === 'harmonic-mutant' || archetypeId === 'technomancer') && data?.catalogs?.length) {
       return data.catalogs;
     }
     return [];
