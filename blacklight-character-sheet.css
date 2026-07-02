@@ -1,0 +1,511 @@
+:root {
+  --blacklight-panel: rgba(6, 10, 16, 0.92);
+  --blacklight-panel-soft: rgba(255, 255, 255, 0.035);
+  --blacklight-accent-soft: rgba(200, 138, 53, 0.12);
+  --blacklight-danger: #d36b6b;
+}
+
+.blacklight-sheet-page {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(82, 32, 107, 0.24), transparent 34rem),
+    radial-gradient(circle at top right, rgba(22, 88, 112, 0.18), transparent 32rem),
+    #080b11;
+  color: var(--ink);
+}
+
+.blacklight-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 24px clamp(18px, 4vw, 54px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(4, 7, 12, 0.94);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(14px);
+}
+
+.blacklight-sheet-header h1,
+.blacklight-print-banner h2,
+.blacklight-section-heading h2,
+.blacklight-sheet-controls h2,
+.blacklight-sheet-controls h3,
+.blacklight-resource-panel h3 {
+  margin: 0;
+}
+
+.blacklight-sheet-header .subtitle {
+  max-width: 900px;
+  margin-bottom: 0;
+}
+
+.blacklight-sheet-shell {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 18px;
+  padding: 20px clamp(14px, 3vw, 38px) 46px;
+  align-items: start;
+}
+
+.blacklight-sheet-controls {
+  position: sticky;
+  top: 126px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 17px;
+  background: var(--blacklight-panel);
+}
+
+.blacklight-sheet-controls button,
+.blacklight-sheet-controls .file-action {
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+  text-align: center;
+}
+
+.blacklight-quick-rules {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.blacklight-quick-rules p {
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 0.88rem;
+}
+
+.blacklight-character-sheet {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.blacklight-print-banner {
+  border: 1px solid rgba(200, 138, 53, 0.45);
+  border-radius: 22px;
+  padding: 20px 24px;
+  background:
+    linear-gradient(120deg, rgba(200, 138, 53, 0.12), transparent 55%),
+    var(--blacklight-panel);
+}
+
+.blacklight-print-banner p,
+.blacklight-print-banner span {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.blacklight-print-banner h2 {
+  font-size: clamp(1.7rem, 4vw, 2.7rem);
+  margin: 4px 0 6px;
+}
+
+.blacklight-sheet-panel {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  background: var(--blacklight-panel);
+  min-width: 0;
+}
+
+.blacklight-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 14px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.blacklight-section-heading .eyebrow {
+  margin-bottom: 3px;
+}
+
+.blacklight-panel-code {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  border: 1px solid rgba(200, 138, 53, 0.4);
+  border-radius: 999px;
+  padding: 5px 9px;
+  white-space: nowrap;
+}
+
+.blacklight-field-grid,
+.blacklight-derived-grid,
+.blacklight-resource-panel,
+.blacklight-damage-grid {
+  display: grid;
+  gap: 11px;
+}
+
+.blacklight-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.blacklight-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.blacklight-grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.blacklight-derived-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.blacklight-resource-panel {
+  margin-top: 14px;
+  grid-template-columns: minmax(180px, 1.35fr) repeat(3, minmax(100px, 0.65fr));
+  align-items: end;
+  border: 1px solid rgba(200, 138, 53, 0.32);
+  border-radius: 15px;
+  padding: 13px;
+  background: var(--blacklight-accent-soft);
+}
+
+.blacklight-resource-panel .eyebrow {
+  margin-bottom: 3px;
+}
+
+.blacklight-damage-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.blacklight-character-sheet label,
+.blacklight-attribute-groups label,
+.blacklight-skill-group label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+}
+
+.blacklight-character-sheet input,
+.blacklight-character-sheet select,
+.blacklight-character-sheet textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 9px;
+  background: #10131a;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 500;
+}
+
+.blacklight-character-sheet textarea {
+  resize: vertical;
+  min-height: 58px;
+}
+
+.blacklight-character-sheet input:focus,
+.blacklight-character-sheet select:focus,
+.blacklight-character-sheet textarea:focus {
+  outline: 2px solid rgba(200, 138, 53, 0.38);
+  border-color: var(--accent);
+}
+
+.blacklight-character-sheet input[readonly] {
+  color: var(--accent);
+  font-weight: 900;
+  background: rgba(200, 138, 53, 0.07);
+}
+
+.blacklight-wide-label {
+  margin-top: 12px;
+}
+
+.blacklight-attribute-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.blacklight-attribute-groups fieldset,
+.blacklight-skill-group {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 13px;
+  background: var(--blacklight-panel-soft);
+}
+
+.blacklight-attribute-groups legend,
+.blacklight-skill-group h3 {
+  color: var(--accent);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.blacklight-attribute-groups label {
+  grid-template-columns: minmax(0, 1fr) 64px;
+  align-items: center;
+  margin: 7px 0;
+}
+
+.blacklight-attribute-groups input,
+.blacklight-skill-group input {
+  text-align: center;
+  font-weight: 900;
+}
+
+.blacklight-skill-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.blacklight-skill-group h3 {
+  margin: 0 0 8px;
+}
+
+.blacklight-skill-group label {
+  grid-template-columns: minmax(0, 1fr) 62px;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.blacklight-archetype-summary {
+  border: 1px solid rgba(200, 138, 53, 0.34);
+  border-radius: 16px;
+  padding: 15px;
+  background: linear-gradient(120deg, rgba(200, 138, 53, 0.1), rgba(255, 255, 255, 0.025));
+}
+
+.blacklight-archetype-summary h3,
+.blacklight-archetype-summary h4 {
+  margin: 0 0 7px;
+}
+
+.blacklight-archetype-summary h4 {
+  color: var(--accent);
+  margin-top: 15px;
+}
+
+.blacklight-archetype-summary p,
+.blacklight-archetype-summary li {
+  color: var(--muted);
+  line-height: 1.52;
+}
+
+.blacklight-archetype-summary ul {
+  margin: 7px 0 0 20px;
+  padding: 0;
+}
+
+.blacklight-weakness-box {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--blacklight-danger);
+  background: rgba(211, 107, 107, 0.08);
+}
+
+.blacklight-power-list {
+  display: grid;
+  gap: 13px;
+}
+
+.blacklight-power-family {
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 13px;
+  background: var(--blacklight-panel-soft);
+}
+
+.blacklight-power-family h3 {
+  margin: 0 0 10px;
+  color: var(--accent);
+}
+
+.blacklight-power-row {
+  display: grid;
+  grid-template-columns: 42px minmax(150px, 0.75fr) minmax(260px, 2fr);
+  gap: 10px;
+  align-items: start;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.blacklight-power-row:first-of-type {
+  border-top: 0;
+}
+
+.blacklight-power-row input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+}
+
+.blacklight-power-rank {
+  color: var(--accent);
+  font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.blacklight-power-name {
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.blacklight-power-effect {
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 0.9rem;
+}
+
+.blacklight-weapon-table {
+  display: grid;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 14px;
+}
+
+.blacklight-table-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.2fr) minmax(100px, 0.7fr) minmax(90px, 0.6fr) minmax(90px, 0.6fr) minmax(220px, 1.7fr);
+  gap: 6px;
+  min-width: 760px;
+}
+
+.blacklight-table-head {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0 5px;
+}
+
+@media (max-width: 1120px) {
+  .blacklight-grid-4,
+  .blacklight-derived-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .blacklight-grid-3,
+  .blacklight-skill-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .blacklight-resource-panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 820px) {
+  .blacklight-sheet-header {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .blacklight-sheet-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .blacklight-sheet-controls {
+    position: static;
+  }
+
+  .blacklight-attribute-groups,
+  .blacklight-grid-2,
+  .blacklight-grid-3,
+  .blacklight-grid-4,
+  .blacklight-derived-grid,
+  .blacklight-resource-panel,
+  .blacklight-damage-grid,
+  .blacklight-skill-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .blacklight-power-row {
+    grid-template-columns: 36px 1fr;
+  }
+
+  .blacklight-power-effect {
+    grid-column: 2;
+  }
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0.35in;
+  }
+
+  body.blacklight-sheet-page {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .blacklight-sheet-shell {
+    display: block;
+    padding: 0;
+  }
+
+  .blacklight-character-sheet {
+    display: block;
+  }
+
+  .blacklight-print-banner,
+  .blacklight-sheet-panel,
+  .blacklight-archetype-summary,
+  .blacklight-power-family,
+  .blacklight-attribute-groups fieldset,
+  .blacklight-skill-group,
+  .blacklight-resource-panel {
+    background: #fff !important;
+    color: #000 !important;
+    border-color: #555 !important;
+    box-shadow: none !important;
+  }
+
+  .blacklight-print-banner,
+  .blacklight-sheet-panel {
+    break-inside: avoid;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .blacklight-character-sheet input,
+  .blacklight-character-sheet select,
+  .blacklight-character-sheet textarea {
+    color: #000 !important;
+    background: transparent !important;
+    border-color: #777 !important;
+    padding: 4px;
+  }
+
+  .blacklight-character-sheet input[readonly],
+  .blacklight-panel-code,
+  .blacklight-section-heading .eyebrow,
+  .blacklight-print-banner p,
+  .blacklight-print-banner span,
+  .blacklight-attribute-groups legend,
+  .blacklight-skill-group h3,
+  .blacklight-power-family h3,
+  .blacklight-power-rank,
+  .blacklight-resource-panel h3,
+  .blacklight-archetype-summary h4 {
+    color: #000 !important;
+  }
+
+  .blacklight-archetype-summary p,
+  .blacklight-archetype-summary li,
+  .blacklight-power-effect,
+  .blacklight-character-sheet label {
+    color: #222 !important;
+  }
+}
