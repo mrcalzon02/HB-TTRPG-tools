@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.12.0",
+  "schemaVersion": "0.13.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records focus on current capabilities, Resources, Pressures, weaknesses, six five-rank power families, and integrated advancement options including seven Human Vigil Convictions, ten Hunter Practices, thirteen Vampire Remainder Bloodlines, twenty-three Shapechanger traditions, six Eldritch Binding Sources with thirty Depth abilities, thirteen Harmonic Compact Remainders, and twenty Technomancer awakening practices.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The six Archetype records now include explicit Resource spending, depletion, recovery, Pressure thresholds, Critical effects, recovery procedures, and fixed Crisis outcomes alongside their power families and advancement options.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -15,6 +15,7 @@
   "campaignDocument": "blacklight-campaign-reader.html",
   "characterSheet": "blacklight-character-sheet.html",
   "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
+  "resourcePressureRules": "data/blacklight-continuum/rules/archetype-resource-pressure-rules.json",
   "humanVigilPractices": "data/blacklight-continuum/rules/human-vigil-practices.json",
   "vampireLineages": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
   "shapechangerVariants": "data/blacklight-continuum/rules/shapechanger-remainder-forms.json",
@@ -24,13 +25,17 @@
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
+    "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json"
   ],
   "completedScope": {
-    "wikiEntries": 21,
-    "nativePacks": 3,
+    "wikiEntries": 22,
+    "nativePacks": 4,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
+    "archetypeResourceProcedures": 6,
+    "archetypePressureProcedures": 6,
+    "archetypeCrisisProcedures": 6,
     "humanVigilConvictions": 7,
     "humanHunterPractices": 10,
     "humanVigilOptions": 17,
@@ -59,6 +64,7 @@
   },
   "nextDevelopmentAreas": [
     "balance testing for all ranked powers",
+    "balance testing for Resource recovery, Pressure thresholds, and Crisis severity",
     "starting power allocation rules",
     "Human Vigil Conviction and Hunter Practice advancement costs",
     "Remainder Bloodline advancement and favored-family costs",
