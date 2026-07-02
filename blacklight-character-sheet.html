@@ -25,7 +25,7 @@
       <label class="secondary-action file-action" for="blacklight-import">Import Character JSON</label>
       <input id="blacklight-import" type="file" accept="application/json" hidden>
       <button id="blacklight-reset" class="danger-action" type="button">Clear Character</button>
-      <p id="blacklight-load-status" class="helper-note" role="status">Loading archetypes and powers…</p>
+      <p id="blacklight-load-status" class="helper-note" role="status">Loading Archetypes and powers…</p>
       <div class="blacklight-quick-rules">
         <h3>Basic Test</h3>
         <p><strong>Attribute + Skill</strong> d10s. Results of 6–9 are successes. A 10 is a success and may activate a specialization or power rider.</p>
@@ -43,7 +43,7 @@
 
       <section class="blacklight-sheet-panel blacklight-identity-panel">
         <div class="blacklight-section-heading">
-          <div><p class="eyebrow">Identity and continuity</p><h2>Operative Profile</h2></div>
+          <div><p class="eyebrow">Present identity and role</p><h2>Operative Profile</h2></div>
           <span class="blacklight-panel-code">BL-C01</span>
         </div>
         <div class="blacklight-field-grid blacklight-grid-4">
@@ -51,18 +51,14 @@
           <label>Player<input name="playerName" type="text"></label>
           <label>Pronouns<input name="pronouns" type="text"></label>
           <label>Campaign<input name="campaign" type="text" value="No Return Signal"></label>
-          <label>Concept<input name="concept" type="text" placeholder="Marooned analyst, blood-fed infiltrator…"></label>
+          <label>Concept<input name="concept" type="text" placeholder="Field analyst, blood-fed infiltrator, pact negotiator…"></label>
           <label>Archetype<select id="blacklight-archetype" name="archetype"><option value="">Loading…</option></select></label>
           <label>Archetype Rating<input id="blacklight-archetype-rating" name="archetypeRating" type="number" min="1" max="5" value="1"></label>
-          <label>Operational Frame<input name="operationalFrame" type="text" placeholder="Infiltrator, Medic, Continuity Warden…"></label>
+          <label>Operational Frame<input name="operationalFrame" type="text" placeholder="Infiltrator, Medic, Engineer, Envoy…"></label>
           <label>Lineage / Variant<input name="lineageVariant" type="text" placeholder="Bloodline, shifting tradition, patron, resonance school…"></label>
-          <label>Origin World<input name="originWorld" type="text"></label>
-          <label>Current Identity Status<input name="identityStatus" type="text" value="Unregistered Q-MAP Continuation"></label>
+          <label>Current Occupation or Function<input name="currentFunction" type="text" placeholder="What do you do for the team now?"></label>
+          <label>Affiliation / Cell<input name="affiliation" type="text"></label>
           <label>Experience / Advancement<input name="advancement" type="number" min="0" value="0"></label>
-        </div>
-        <div class="blacklight-field-grid blacklight-grid-2">
-          <label>Pre-Q-MAP Role<textarea name="preQmapRole" rows="3" placeholder="What did Charles employ you to do?"></textarea></label>
-          <label>Awakening Contradiction<textarea name="awakeningContradiction" rows="3" placeholder="What do you remember that another operative remembers differently?"></textarea></label>
         </div>
       </section>
 
@@ -114,14 +110,14 @@
         </div>
         <div class="blacklight-resource-panel">
           <div>
-            <p class="eyebrow">Archetype resource</p>
+            <p class="eyebrow">Archetype Resource</p>
             <h3 id="blacklight-resource-name">Resource</h3>
-            <p id="blacklight-resource-formula" class="helper-note">Select an archetype.</p>
+            <p id="blacklight-resource-formula" class="helper-note">Select an Archetype.</p>
           </div>
           <label>Maximum<input id="blacklight-resource-max" name="resourceMax" readonly></label>
           <label>Current<input name="resourceCurrent" type="number" min="0"></label>
           <div>
-            <p class="eyebrow">Archetype pressure</p>
+            <p class="eyebrow">Archetype Pressure</p>
             <h3 id="blacklight-pressure-name">Pressure</h3>
           </div>
           <label>Limit<input id="blacklight-pressure-limit" name="pressureLimit" readonly></label>
@@ -151,7 +147,7 @@
           <span class="blacklight-panel-code">CLASS</span>
         </div>
         <article id="blacklight-archetype-summary" class="blacklight-archetype-summary">
-          <p>Select an archetype to load its resource, pressure track, weakness, innate abilities, and power families.</p>
+          <p>Select an Archetype to load its Resource, Pressure, weakness, innate abilities, and power families.</p>
         </article>
       </section>
 
@@ -161,27 +157,23 @@
           <span class="blacklight-panel-code">1–5</span>
         </div>
         <div id="blacklight-power-list" class="blacklight-power-list">
-          <p class="helper-note">Select an archetype to display power families.</p>
+          <p class="helper-note">Select an Archetype to display power families.</p>
         </div>
         <label class="blacklight-wide-label">Custom or Cross-Archetype Abilities<textarea name="customAbilities" rows="5"></textarea></label>
       </section>
 
       <section class="blacklight-sheet-panel">
         <div class="blacklight-section-heading">
-          <div><p class="eyebrow">Continuity protections</p><h2>Anchors, Bonds, and Convictions</h2></div>
+          <div><p class="eyebrow">Relationships and principles</p><h2>Bonds, Convictions, and Commitments</h2></div>
           <span class="blacklight-panel-code">SELF</span>
         </div>
         <div class="blacklight-field-grid blacklight-grid-3">
-          <label>Identity Anchor 1<textarea name="identityAnchor1" rows="3"></textarea></label>
-          <label>Identity Anchor 2<textarea name="identityAnchor2" rows="3"></textarea></label>
-          <label>Identity Anchor 3<textarea name="identityAnchor3" rows="3"></textarea></label>
-          <label>Conviction / Moral Boundary<textarea name="conviction" rows="3"></textarea></label>
+          <label>Defining Conviction<textarea name="conviction" rows="3"></textarea></label>
           <label>Touchstone / Important Person<textarea name="touchstone" rows="3"></textarea></label>
           <label>Pack, Coterie, Cell, or Circle Bond<textarea name="groupBond" rows="3"></textarea></label>
-        </div>
-        <div class="blacklight-field-grid blacklight-grid-2">
-          <label>Charles once saved me by…<textarea name="charlesSavedMe" rows="3"></textarea></label>
-          <label>Charles never answered me about…<textarea name="charlesNeverAnswered" rows="3"></textarea></label>
+          <label>Professional Obligation<textarea name="professionalObligation" rows="3"></textarea></label>
+          <label>Personal Boundary<textarea name="personalBoundary" rows="3"></textarea></label>
+          <label>Debt, Promise, or Contract<textarea name="debtPromise" rows="3"></textarea></label>
         </div>
       </section>
 
@@ -190,13 +182,13 @@
           <div><p class="eyebrow">Explicit rules record</p><h2>Capabilities, Limits, and Conditions</h2></div>
           <span class="blacklight-panel-code">CAP</span>
         </div>
-        <p class="helper-note">Describe appearance and embodiment freely. Record every rules-relevant benefit or restriction here or in a power, item, condition, Attribute, Skill, or Archetype feature.</p>
+        <p class="helper-note">Record every rules-relevant benefit or restriction here or in a power, item, condition, Attribute, Skill, Operational Frame, or Archetype feature.</p>
         <div class="blacklight-field-grid blacklight-grid-3">
-          <label>Signature Capability<textarea name="visibleIrregularity" rows="3" placeholder="What can you explicitly do that ordinary characters cannot?"></textarea></label>
-          <label>Capability Source / Expression<textarea name="latentAdvantage" rows="3" placeholder="Training, blood, pact, technology, resonance, spirit, equipment…"></textarea></label>
-          <label>Meaningful Limitation or Bane<textarea name="biologicalNeed" rows="3" placeholder="What restricts, costs, or endangers the capability?"></textarea></label>
+          <label>Signature Capability<textarea name="signatureCapability" rows="3" placeholder="What can you explicitly do that ordinary characters cannot?"></textarea></label>
+          <label>Capability Source / Expression<textarea name="capabilityExpression" rows="3" placeholder="Training, blood, pact, technology, resonance, spirit, equipment…"></textarea></label>
+          <label>Meaningful Limitation or Bane<textarea name="capabilityLimitation" rows="3" placeholder="What restricts, costs, or endangers the capability?"></textarea></label>
           <label>Current State / Form<textarea name="currentForm" rows="3" placeholder="Only record a state when it changes available capabilities."></textarea></label>
-          <label>Adaptations / Upgrades<textarea name="mutations" rows="3" placeholder="Purchased or earned changes with explicit effects."></textarea></label>
+          <label>Adaptations / Upgrades<textarea name="adaptations" rows="3" placeholder="Purchased or earned changes with explicit effects."></textarea></label>
           <label>Persistent Conditions<textarea name="conditions" rows="3"></textarea></label>
         </div>
       </section>
