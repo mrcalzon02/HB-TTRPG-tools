@@ -1,0 +1,247 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "0.1.0",
+  "description": "Basic supernatural and exceptional archetypes for the Blacklight Continuum d10 alpha system.",
+  "entries": [
+    {
+      "id": "blacklight-basic-character-sheet",
+      "title": "Blacklight Basic Character Sheet",
+      "category": "Character Creation",
+      "summary": "A browser-editable, autosaving, printable character sheet for the Blacklight Continuum Basic d10 system.",
+      "body": [
+        "The Basic sheet records operative identity, nine Attributes, twenty-four Skills, derived traits, an archetype resource and pressure track, ranked powers, Q-MAP identity anchors, printed biology, equipment, contacts, conditions, and campaign advancement.",
+        "Selecting an archetype automatically loads its innate abilities, weakness, resource, pressure track, key Attribute, power families, and rank limits. Derived traits update whenever the linked Attributes or Archetype rating change.",
+        "The sheet supports browser autosave, JSON export and import, clearing, and print-to-PDF output."
+      ],
+      "tables": [
+        {
+          "title": "Derived Traits",
+          "columns": ["Trait", "Formula"],
+          "rows": [
+            ["Vitality", "Resilience + 5"],
+            ["Guard", "Finesse + Awareness"],
+            ["Initiative", "Finesse + Composure"],
+            ["Cohesion", "Resolve + Composure + 3"],
+            ["Exposure Limit", "Resolve + Resilience"],
+            ["Carry", "Force + Resilience"],
+            ["Identity Defense", "Resolve + Composure"],
+            ["Protection", "Resilience + Armor Rating"],
+            ["Power Dice", "Archetype Rating + Archetype Key Attribute"],
+            ["Resource Maximum", "Archetype Base + Archetype Rating + Key Attribute"]
+          ]
+        }
+      ],
+      "links": [{"label": "Open Basic Character Sheet", "href": "blacklight-character-sheet.html"}],
+      "tags": ["character sheet", "d10", "autosave", "JSON", "print"],
+      "relatedEntries": ["blacklight-basic-archetypes", "blacklight-d10-foundation", "blacklight-character-creation"]
+    },
+    {
+      "id": "blacklight-basic-archetypes",
+      "title": "Basic Archetypes",
+      "category": "Character Options",
+      "summary": "Six starting supernatural and exceptional character classes built for a shared d10 rules chassis without forcing every character to use the same power source.",
+      "body": [
+        "Archetypes define what exceptional condition the character carries, how power is fueled, what pressure threatens control, which Attribute governs power, and which innate abilities and ranked families are available.",
+        "Operational Frames remain separate. A vampire may still be an Investigator, Pilot, Medic, Infiltrator, or Clone Warden. Archetype describes nature; Operational Frame describes training and job."
+      ],
+      "tables": [
+        {
+          "title": "Archetype Summary",
+          "columns": ["Archetype", "Resource", "Pressure", "Key Attribute", "Central Risk"],
+          "rows": [
+            ["Human Investigator", "Conviction", "Strain", "Resolve", "Mortal limits and exhaustion"],
+            ["Vampire", "Vitae", "Hunger", "Resilience", "Sunlight, feeding, and predatory erosion"],
+            ["Shapechanger", "Fury", "Instinct", "Force", "Escalation, territory, and loss of restraint"],
+            ["Eldritch Binder", "Pact", "Intrusion", "Resolve", "The bound presence gains context and influence"],
+            ["Harmonic Mutant", "Resonance", "Discord", "Composure", "Feedback, mutation, and environmental damage"],
+            ["Technomancer", "Bandwidth", "Feedback", "Reason", "Reciprocal intrusion and signal contamination"]
+          ]
+        }
+      ],
+      "tags": ["classes", "archetypes", "resources", "pressure tracks", "supernatural characters"],
+      "relatedEntries": ["human-investigator-archetype", "vampire-archetype", "shapechanger-archetype", "eldritch-binder-archetype", "harmonic-mutant-archetype", "technomancer-archetype"]
+    },
+    {
+      "id": "human-investigator-archetype",
+      "title": "Human Investigator",
+      "category": "Archetypes",
+      "summary": "A mortal specialist who competes with supernatural beings through evidence, preparation, discipline, contacts, and conviction.",
+      "body": [
+        "Human Investigators are not weak placeholders. They are the archetype most able to establish plausible preparation, preserve evidence, resist fear through moral certainty, and turn a confused operation into a solvable case.",
+        "Their resource is Conviction and their pressure is Strain. Resolve governs their Power Dice and resource maximum. Their central limitation is that injury, age, fear, deprivation, and physical mortality remain fully relevant."
+      ],
+      "tables": [
+        {
+          "title": "Innate Abilities",
+          "columns": ["Ability", "Effect"],
+          "rows": [
+            ["Prepared Contingency", "Reveal one plausible item, contact, route, credential, or prior precaution once per operation."],
+            ["Evidence Chain", "Connected evidence grants a bonus die on the next test exploiting that connection."],
+            ["Hold the Human Line", "Spend Conviction to ignore one fear, coercion, or identity penalty for a scene."]
+          ]
+        },
+        {
+          "title": "Power Families",
+          "columns": ["Family", "Ranks 1-5"],
+          "rows": [
+            ["Casecraft", "Read the Room; Pattern Board; Pressure Interview; Impossible Preparation; The Case Will Break"],
+            ["Field Discipline", "Steady Hands; Covering Advance; No One Left Behind; Professional Violence; Mortal Defiance"]
+          ]
+        }
+      ],
+      "tags": ["human", "investigator", "Conviction", "Strain", "preparation"]
+    },
+    {
+      "id": "vampire-archetype",
+      "title": "Vampire",
+      "category": "Archetypes",
+      "summary": "A blood-dependent undead predator balancing supernatural speed, command, concealment, and endurance against hunger and sunlight.",
+      "body": [
+        "Vampires spend Vitae to intensify physical or social Attributes, recover power through feeding, and resist conditions that threaten living bodies. Their pressure track is Hunger, which increasingly distorts perception and decision when Vitae runs low.",
+        "The archetype deliberately supports multiple bloodlines and origins rather than assuming one universal vampire culture. Lineage, feeding medium, visible bane, and relationship to mortality remain character choices."
+      ],
+      "tables": [
+        {
+          "title": "Innate Abilities",
+          "columns": ["Ability", "Effect"],
+          "rows": [
+            ["Predator's Blood", "Spend Vitae to add Archetype rating to one physical or social test."],
+            ["Deathless Body", "Resist poison, disease, vacuum exposure, breathing requirements, and ordinary aging."],
+            ["Feeding", "Restore Vitae through blood or a compatible vital medium, with moral and social consequences."]
+          ]
+        },
+        {
+          "title": "Power Families",
+          "columns": ["Family", "Ranks 1-5"],
+          "rows": [
+            ["Crimson Velocity", "Quickened Step; Blurred Passage; Second Motion; Red Interval; Moment of Slaughter"],
+            ["Grave Dominion", "Weight of the Tomb; Command the Pulse; Borrowed Devotion; Court of One; Sovereign Silence"],
+            ["Veil of Night", "Unremarked; Borrowed Face; Absent from the Lens; Living Shadow; Erase the Witness"]
+          ]
+        }
+      ],
+      "tags": ["vampire", "Vitae", "Hunger", "blood", "undead"]
+    },
+    {
+      "id": "shapechanger-archetype",
+      "title": "Shapechanger",
+      "category": "Archetypes",
+      "summary": "A living predator able to move among human, hunting, and war forms while managing Fury, Instinct, pack bonds, and spirit resonance.",
+      "body": [
+        "Shapechangers possess three baseline forms, rapid healing, and a sense for bonded packmates. Fury fuels transformation and extraordinary physical or spiritual action. Instinct measures predatory escalation rather than simple anger.",
+        "The archetype can represent wolves, engineered predators, alien mimics, spirit-touched bloodlines, or other shifting creatures. The exact animal or war form is not fixed by the class."
+      ],
+      "tables": [
+        {
+          "title": "Innate Abilities",
+          "columns": ["Ability", "Effect"],
+          "rows": [
+            ["Threefold Form", "Move among human, hunting, and war forms."],
+            ["Living Regeneration", "Recover Impact naturally and spend Fury for faster recovery."],
+            ["Pack Sense", "Sense the direction and emotional condition of a bonded packmate nearby."]
+          ]
+        },
+        {
+          "title": "Power Families",
+          "columns": ["Family", "Ranks 1-5"],
+          "rows": [
+            ["Warform", "Predator's Frame; Claws of Decision; Massive Shift; Unbroken Pursuit; Apex Shape"],
+            ["Spirit Resonance", "Scent the Unseen; Threshold Step; Totemic Accord; Walk the Other Side; Call the Territory"]
+          ]
+        }
+      ],
+      "tags": ["shapechanger", "Fury", "Instinct", "forms", "pack"]
+    },
+    {
+      "id": "eldritch-binder-archetype",
+      "title": "Eldritch Binder",
+      "category": "Archetypes",
+      "summary": "A negotiator carrying a sealed fragment of an impossible intelligence and using names, boundaries, and borrowed anatomy to control it.",
+      "body": [
+        "Eldritch Binders draw on Pact while accumulating Intrusion. Every use gives the bound presence more context, sensation, opportunity, and leverage inside ordinary reality.",
+        "The class supports outside gods, extradimensional intelligences, sealed anomalies, alien machine remnants, living equations, and other patrons without requiring worship or obedience as the only relationship."
+      ],
+      "tables": [
+        {
+          "title": "Innate Abilities",
+          "columns": ["Ability", "Effect"],
+          "rows": [
+            ["Bound Fragment", "Carry a sealed portion of an impossible patron, remnant, or outside intelligence."],
+            ["Name and Boundary", "Prepare wards, invitation conditions, and prohibitions against known entities."],
+            ["Forbidden Comprehension", "Spend Pact to understand the function or intent of an impossible phenomenon."]
+          ]
+        },
+        {
+          "title": "Power Families",
+          "columns": ["Family", "Ranks 1-5"],
+          "rows": [
+            ["Sealcraft", "Chalk Boundary; Closed Mouth; Anchor the Impossible; Prison of Meaning; Law of the Room"],
+            ["Borrowed Anatomy", "Other Eye; Hand Through the Gap; Mantle of the Guest; Unnatural Locomotion; Partial Arrival"]
+          ]
+        }
+      ],
+      "tags": ["Eldritch Binder", "Pact", "Intrusion", "patron", "seals"]
+    },
+    {
+      "id": "harmonic-mutant-archetype",
+      "title": "Harmonic Mutant",
+      "category": "Archetypes",
+      "summary": "A resonant organism whose flesh and environment answer to frequency, vibration, phase, and sympathetic biological patterns.",
+      "body": [
+        "Harmonic Mutants spend Resonance and risk Discord. They can sense structural stress, retune their bodies, project disruptive frequencies, stabilize materials, share biological rhythms, and eventually exist through multiple harmonic echoes.",
+        "Their origin can be alien radiation, Ar'nock printing errors, engineered mutation, noospheric resonance, supernatural exposure, or a condition carried from the original world."
+      ],
+      "tables": [
+        {
+          "title": "Innate Abilities",
+          "columns": ["Ability", "Effect"],
+          "rows": [
+            ["Living Frequency", "Sense vibration, structural stress, energy fields, and emotional resonance."],
+            ["Adaptive Tissue", "Choose one persistent physical or sensory mutation."],
+            ["Tune the Self", "Spend Resonance to alter density, elasticity, tolerance, resistance, or sensory range."]
+          ]
+        },
+        {
+          "title": "Power Families",
+          "columns": ["Family", "Ranks 1-5"],
+          "rows": [
+            ["Harmonic Projection", "Resonant Tap; Shatter Note; Frequency Armor; Phase Chorus; Living Catastrophe"],
+            ["Echo Biology", "Sympathetic Healing; Echo Double; Shared Frequency; Rewrite the Scar; Chorus Body"]
+          ]
+        }
+      ],
+      "tags": ["Harmonic Mutant", "Resonance", "Discord", "frequency", "mutation"]
+    },
+    {
+      "id": "technomancer-archetype",
+      "title": "Technomancer",
+      "category": "Archetypes",
+      "summary": "A noospheric operator who experiences code, machinery, identity systems, and network intention as an extension of thought.",
+      "body": [
+        "Technomancers spend Bandwidth and risk Feedback. They can communicate with devices, enter networks without ordinary identity credentials, possess machines, distribute awareness, coordinate swarms, and build temporary constructs.",
+        "Their greatest danger is reciprocal access. Hostile systems and synthetic intelligences may follow the connection back into the Technomancer's senses, memories, body, or identity."
+      ],
+      "tables": [
+        {
+          "title": "Innate Abilities",
+          "columns": ["Ability", "Effect"],
+          "rows": [
+            ["Ghost Interface", "Interact with compatible electronics without a physical control surface."],
+            ["Machine Intuition", "Identify whether a machine is active, damaged, deceptive, autonomous, or controlled."],
+            ["Personal Firewall", "Spend Bandwidth to resist intrusion, surveillance, or identity capture."]
+          ]
+        },
+        {
+          "title": "Power Families",
+          "columns": ["Family", "Ranks 1-5"],
+          "rows": [
+            ["Network Dominion", "Whisper to Device; Ghost Access; Machine Possession; Distributed Self; Local God Process"],
+            ["Construct Engineering", "Hardlight Tool; Helper Process; Defensive Lattice; Swarm Instruction; Emergency Fabricator"]
+          ]
+        }
+      ],
+      "tags": ["Technomancer", "Bandwidth", "Feedback", "noosphere", "machines"]
+    }
+  ]
+}
