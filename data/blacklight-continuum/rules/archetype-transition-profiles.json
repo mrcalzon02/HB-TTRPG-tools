@@ -1,0 +1,413 @@
+{
+  "system": "Blacklight Continuum Archetype Transition Profiles",
+  "schemaVersion": "0.1.0",
+  "status": "alpha-playtest",
+  "universalTransition": {
+    "premise": "Q-MAP transmitted neural, emotional, procedural, and metaphysical self-patterns rather than original bodies. The Ar'nock bio-printers built the nearest viable organisms from alien biological libraries. Familiar powers survive as unstable translations that must be relearned under different physical, spiritual, biological, and noospheric laws.",
+    "layers": [
+      {
+        "name": "Legacy Memory",
+        "description": "The character remembers how the ability used to feel and may retain procedural certainty without reliable autobiographical context."
+      },
+      {
+        "name": "Printed Interpretation",
+        "description": "The new Ar'nock-derived body attempts to reproduce the remembered function with unfamiliar organs, tissues, chemistry, and nerve structures."
+      },
+      {
+        "name": "Local Reality Coupling",
+        "description": "The effect connects to a local equivalent such as a reflection space, noospheric identity layer, machine presence, biological resonance, causal field, or alien metabolic process."
+      },
+      {
+        "name": "Continuum Adaptation",
+        "description": "The character stops imitating the old effect and creates a new derivative that belongs to their present body and universe."
+      }
+    ],
+    "translationTest": {
+      "pool": "Archetype Key Attribute + Archetype Rating",
+      "difficultyByRank": {
+        "1-2": 2,
+        "3-4": 3,
+        "5": 4
+      },
+      "failure": "The ability may still occur, but the character gains one Archetype Pressure or one Exposure.",
+      "complication": "Create a persistent Translation Scar tied to the body's altered expression of the power."
+    },
+    "memoryEcho": "Before a Translation Test or unfamiliar power use, describe an old-world sensory or emotional fragment. Spend one Archetype Resource or accept one Archetype Pressure to gain one bonus die and ask how the old expression differs from the current one.",
+    "adaptationStages": [
+      {"rating": 1, "name": "Residual Instinct", "meaning": "The character produces unstable echoes of remembered power."},
+      {"rating": 2, "name": "Printed Translation", "meaning": "The body develops repeatable biological support for the effect."},
+      {"rating": 3, "name": "Local Coupling", "meaning": "The character identifies the local reality layer or system now carrying the power."},
+      {"rating": 4, "name": "Hybrid Mastery", "meaning": "Old supernatural identity and new body act as one system."},
+      {"rating": 5, "name": "Continuum Expression", "meaning": "The power becomes something that could not have existed in either universe alone."}
+    ]
+  },
+  "profiles": [
+    {
+      "archetypeId": "human-investigator",
+      "name": "Human Investigator",
+      "transitionTitle": "The Ordinary Person Who Can No Longer Prove They Were Ordinary",
+      "oldWorldIdentity": [
+        "The Human Investigator survived the old World of Darkness through preparation, evidence, institutional knowledge, local contacts, trained judgment, and refusal to accept the official explanation for impossible events.",
+        "Their power depended on context: credentials, hospitals, police records, archives, trusted witnesses, familiar weapons, laws, neighborhoods, and the certainty that they remained the mortal baseline against which supernatural events could be measured."
+      ],
+      "qmapCaptured": [
+        "Procedural memory for investigations, interviews, scene control, evidence handling, surveillance detection, first response, and tactical preparation.",
+        "Convictions, unfinished cases, guilt, promises, suspicion, and the reflex to preserve human-scale responsibility when institutions conceal it.",
+        "Incomplete memories of contacts, prior operations, Blacklight contingency phrases, and deaths or compromises that may belong to another iteration."
+      ],
+      "printerInterpretation": [
+        "The printer received a self-image that insisted the body was a normal human body, so it created the least outwardly specialized of the printed forms.",
+        "Internally, the Investigator still possesses Ar'nock-derived clotting, secondary regulatory tissue, distributed reflex structures, unfamiliar organs, and environmental adaptations.",
+        "Because fewer systems were reserved for an inherited supernatural condition, the body may be unusually flexible and responsive to later adaptation."
+      ],
+      "whatWasLost": [
+        "Every institution that once made expertise legible. No authority recognizes the badge, law, credential, jurisdiction, evidence standard, or emergency contact.",
+        "The ability to define themselves as the normal human observer. Their body is now another piece of impossible evidence.",
+        "Confidence that their memories are admissible proof of anything, including their own identity."
+      ],
+      "newWorldExpression": [
+        "Conviction becomes continuity force: the ability to decide that a promise, moral boundary, memory, or relationship remains real without external verification.",
+        "Casecraft expands into investigation across copied minds, biological printers, autonomous systems, and events with no single linear witness.",
+        "Field Discipline turns the Investigator into a stabilizing reference point for teammates whose old instincts and identities are failing."
+      ],
+      "powerDerivatives": [
+        {
+          "family": "Casecraft",
+          "oldWorld": "Databases, physical evidence, witness contradictions, occult archives, and street-level intuition.",
+          "printedTranslation": "The body begins registering vibration, chemical residue, noospheric discontinuity, and emotional resonance as evidence before conscious interpretation.",
+          "continuumDerivative": "The Investigator can reconstruct responsibility across copies, institutions, machine processes, and fragmented timelines.",
+          "failureSigns": ["Obsessive pattern completion", "Borrowed memories entering the evidence chain", "The body reacting to a suspect before the mind knows why"]
+        },
+        {
+          "family": "Field Discipline",
+          "oldWorld": "Training, controlled breathing, protective tactics, practiced violence, and refusal to panic.",
+          "printedTranslation": "Distributed nerve structures execute trained actions before conscious thought completes.",
+          "continuumDerivative": "The Investigator becomes a living continuity anchor able to stabilize group coordination under supernatural, noospheric, and biological stress.",
+          "failureSigns": ["Automatic obedience to old Blacklight procedures", "Reflexes based on another iteration's memories", "Emotional suppression mistaken for control"]
+        }
+      ],
+      "memoryFractures": [
+        "You remember closing a case, but not whether the person you saved survived.",
+        "You remember a Blacklight contingency phrase pseudo-Charles does not recognize.",
+        "You remember identifying one teammate as compromised before Q-MAP, but not why.",
+        "You remember an ordinary meal more clearly than the faces of everyone present.",
+        "You remember being the only human at a meeting; another operative remembers the same thing."
+      ],
+      "stageNames": ["Procedural Survivor", "Alien Forensic Sense", "Continuity Analyst", "Human Standard", "Author of the New Normal"],
+      "characterQuestions": [
+        "Which institution or contact once made you feel protected?",
+        "What evidence would convince you that you are not the original person?",
+        "Which ordinary human habit do you maintain even though the new body no longer requires it?",
+        "What feature of the new body secretly feels useful enough to frighten you?"
+      ]
+    },
+    {
+      "archetypeId": "vampire",
+      "name": "Vampire",
+      "transitionTitle": "Undeath Reprinted as Alien Life",
+      "oldWorldIdentity": [
+        "The Vampire understood themselves as dead, blood-dependent, predatory, and animated by a curse, bloodline, infection, judgment, or supernatural inheritance rather than ordinary metabolism.",
+        "Their powers were tied to blood, hunger, lineage, night, predatory identity, and the certainty that sunlight and feeding followed rules older than any corporation."
+      ],
+      "qmapCaptured": [
+        "Predatory reflexes, blood-memory, feeding compulsions, supernatural procedures, emotional associations, and the certainty that the body should not function as a living human organism.",
+        "Incomplete memories of death, sire, lineage, court, centuries, feeding ethics, and old weaknesses.",
+        "The metaphysical self-pattern of undeath without the original corpse or bloodline infrastructure."
+      ],
+      "printerInterpretation": [
+        "The printer could not manufacture metaphysical death, so it built a living organism instructed to reject normal living metabolism.",
+        "The body possesses extreme metabolic suppression, intermittent pulse, specialized catalytic-fluid storage, deathlike dormancy, unfamiliar blood chemistry, and tissues that can survive severe oxygen deprivation.",
+        "Vitae is now a hybrid catalytic medium produced from consumed blood or vital substances, Ar'nock-derived chemistry, endocrine compounds, and the Vampire's inherited supernatural pattern."
+      ],
+      "whatWasLost": [
+        "Certainty that their bloodline, sire-chain, court, clan, covenant, or inherited status still has meaning.",
+        "Reliable knowledge of what can feed them. Alien blood, synthetic vital media, and printed nutrients may restore power without satisfying Hunger or may alter memory.",
+        "A fixed relationship with sunlight. Different stellar spectra and artificial habitats make exposure unpredictable while the new body's photoreactive tissues create additional danger."
+      ],
+      "newWorldExpression": [
+        "Predator's Blood forces living alien tissue to obey an old death-command.",
+        "Deathless Body becomes controlled suspension rather than simple corpse animation.",
+        "Feeding becomes an act of biological authorship in which every consumed vital medium teaches the printed body how to sustain the Vampire's condition.",
+        "The Vampire must decide whether undeath is a metaphysical fact, a remembered identity, or a role the body is learning to perform."
+      ],
+      "powerDerivatives": [
+        {
+          "family": "Crimson Velocity",
+          "oldWorld": "Blood forced dead muscle and supernatural reflexes beyond mortal limits.",
+          "printedTranslation": "Vitae floods distributed nerve clusters and elastic internal plates, pre-loading several motor pathways at once.",
+          "continuumDerivative": "Different portions of the body act in overlapping temporal intervals, producing motion recorded out of sequence by local sensors.",
+          "failureSigns": ["The body completes a cancelled action", "Afterimages continue moving", "Vitae consumption continues after danger ends"]
+        },
+        {
+          "family": "Grave Dominion",
+          "oldWorld": "Predatory presence, supernatural command, bloodline authority, and prey submission.",
+          "printedTranslation": "Chemical, vocal, visual, and noospheric pressure cues synchronize to overwhelm social processing.",
+          "continuumDerivative": "Dominion can force biological beings, copied minds, and some machine intelligences to classify the Vampire as the highest-priority threat or authority.",
+          "failureSigns": ["Commands persist too long", "Allies experience involuntary submission", "The body mistakes fear for loyalty"]
+        },
+        {
+          "family": "Veil of Night",
+          "oldWorld": "Shadow affinity, supernatural concealment, forgotten faces, and altered witness memory.",
+          "printedTranslation": "Skin, scent, thermal output, posture, and identity signature coordinate to produce an absence rather than invisibility.",
+          "continuumDerivative": "The Vampire disappears from continuity systems by appearing to be a record already resolved, archived, or forgotten.",
+          "failureSigns": ["Allies temporarily forget the Vampire", "The chosen face persists in records", "The Vampire's reflection does not match their memory"]
+        }
+      ],
+      "memoryFractures": [
+        "You remember several incompatible deaths.",
+        "You remember a sire's face but not their name.",
+        "You remember being told you would never see another sunrise and have awakened under an unfamiliar star.",
+        "You remember feeding rules you swore never to break but not who required the oath.",
+        "You remember Charles treating your curse as measurable technology; pseudo-Charles cannot find the files."
+      ],
+      "stageNames": ["Hunger in a Living Body", "Catalytic Vitae", "Alien Predation", "Chosen Undeath", "Continuum Predator"],
+      "characterQuestions": [
+        "What did death mean to you before Q-MAP?",
+        "What source of nourishment would you refuse even if starving?",
+        "Which old bloodline weakness do you fear the printer failed to reproduce correctly?",
+        "What living sensation in the new body disgusts or tempts you?"
+      ]
+    },
+    {
+      "archetypeId": "shapechanger",
+      "name": "Shapechanger",
+      "transitionTitle": "Several Selves Forced into One Printed Body",
+      "oldWorldIdentity": [
+        "The Shapechanger was human, animal, spirit, instinct, territory, and social identity at the same time. Each form was a meaningful state of self rather than a cosmetic body change.",
+        "War form represented the end of restraint. Hunting form connected the character to scent, pack, territory, prey, and the nonhuman world."
+      ],
+      "qmapCaptured": [
+        "Several contradictory anatomical self-models occupying one identity.",
+        "The remembered sensation and sequence of transformation, Fury, pack bonds, territorial recognition, spirit relationships, and the certainty that no single form was complete.",
+        "Incomplete memories of moon cycles, totems, ancestral territory, sacred places, first change, and pack loss."
+      ],
+      "printerInterpretation": [
+        "The printer treated the forms as alternate biological templates and distributed dormant organs, reversible muscle layers, folding support plates, redundant circulation, and morphogenic tissue throughout the body.",
+        "Human form is the lowest-energy configuration rather than an original body. Hunting and war forms unfold structures that are compressed, dissolved, folded, or chemically suppressed.",
+        "Emotional and spiritual patterns still determine what each form means and when the body accepts the transformation."
+      ],
+      "whatWasLost": [
+        "The familiar spirit world, old totems, ancestral territory, and reliable moon-based authority.",
+        "The certainty that local entities correspond to known categories of spirit, ghost, machine, beast, or corruption.",
+        "The old smell and presence of packmates. Printed continuations may be emotionally familiar while biologically wrong."
+      ],
+      "newWorldExpression": [
+        "Fury becomes morphogenic pressure translated directly into bodily rewriting.",
+        "Instinct measures the danger that one form or predatory truth will claim to be the only honest self.",
+        "Pack Sense expands through scent, vibration, noospheric identity, chemical resonance, and continuity bonds.",
+        "Spirit Resonance becomes contact with habitat intelligences, archive dead, machine presences, swarm minds, ecological systems, and local reflection entities."
+      ],
+      "powerDerivatives": [
+        {
+          "family": "Warform",
+          "oldWorld": "Supernatural transformation into stronger, faster, and more predatory bodies.",
+          "printedTranslation": "Stored support plates unfold, organs reposition, limb leverage changes, tissue thickens, and dormant senses activate.",
+          "continuumDerivative": "The Shapechanger can design forms for vacuum, microgravity, toxic atmosphere, industrial environments, and nonhuman opponents.",
+          "failureSigns": ["A form continues adapting without consent", "Incompatible templates combine", "Alien senses acquire remembered animal instincts"]
+        },
+        {
+          "family": "Spirit Resonance",
+          "oldWorld": "Sensing spirits, crossing reflection realms, bargaining with totems, and awakening territory.",
+          "printedTranslation": "Auxiliary nerve structures detect noospheric pressure, ecological pattern, emotion, machine behavior, and dimensional discontinuity.",
+          "continuumDerivative": "The Shapechanger forms pacts with ship minds, habitats, archives, swarms, and engineered ecosystems.",
+          "failureSigns": ["A machine is mistaken for a spirit", "An old totem name calls something new", "An alien instinct returns from reflection space"]
+        }
+      ],
+      "memoryFractures": [
+        "You remember a pack only as scent and emotion.",
+        "You remember a sacred territory absent from every map.",
+        "You remember your first change from two incompatible points of view.",
+        "You remember a totem warning you not to follow Charles, but not when.",
+        "You remember killing someone in war form and also remember them surviving."
+      ],
+      "stageNames": ["Body of Conflicting Memories", "Morphogenic Control", "New Spirit Ecology", "Pack Beyond Species", "Continuum Beast"],
+      "characterQuestions": [
+        "Which form felt most truthful in the old world?",
+        "What did your pack smell or feel like?",
+        "Which local machine or habitat presence might become a new totem?",
+        "What new form does the printed body want that you never possessed before?"
+      ]
+    },
+    {
+      "archetypeId": "eldritch-binder",
+      "name": "Eldritch Binder",
+      "transitionTitle": "A Pact Whose Other Party May Not Have Crossed",
+      "oldWorldIdentity": [
+        "The Eldritch Binder maintained a relationship with an impossible intelligence through pact, containment, inheritance, infection, research, desperation, or deliberate invitation.",
+        "Their power depended on names, obligations, ritual context, boundaries, symbolic authority, and the distinction between borrowing force and allowing the other presence to define the request."
+      ],
+      "qmapCaptured": [
+        "Ritual memory, symbolic associations, compulsions, sensory scars, obligations, and the metaphysical shape of the relationship.",
+        "Possibly a fragment of the entity, an address by which it can find the Binder, or an empty space that another intelligence may occupy.",
+        "Contradictory memories of consent, containment, prior manifestations, and Charles interrogating the entity."
+      ],
+      "printerInterpretation": [
+        "The printer encountered a body map containing organs and structures that had never been physically present.",
+        "It produced dormant sensory organs, patterned scar tissue, asymmetrical nerve clusters, unknown glands, inconsistent internal cavities, and tissues that respond to names and symbols rather than ordinary stimuli.",
+        "The new body functions as biological support for a metaphysical relationship the printer could not understand."
+      ],
+      "whatWasLost": [
+        "Certainty that old names, directions, symbols, circles, and inherited prohibitions possess authority in this universe.",
+        "Confirmation that the original patron remains connected rather than replaced by a local entity or autonomous fragment.",
+        "Reliable categories separating spirit, demon, artificial intelligence, archive ghost, extradimensional organism, and living equation."
+      ],
+      "newWorldExpression": [
+        "Pact measures the amount of structured relationship the Binder can safely maintain.",
+        "Intrusion measures how much the other presence has learned about the new universe, body, and team.",
+        "Sealcraft becomes negotiation over local rules rather than repetition of inherited occult law.",
+        "Borrowed Anatomy turns the printed body into an embassy for something never designed to possess compatible biology."
+      ],
+      "powerDerivatives": [
+        {
+          "family": "Sealcraft",
+          "oldWorld": "Names, circles, wards, prohibitions, bindings, contracts, and ritual authority.",
+          "printedTranslation": "The body produces chemical traces, field patterns, noospheric markers, and arranged biological material that local systems interpret as boundaries.",
+          "continuumDerivative": "Seals constrain spirits, alien organisms, machine intelligences, copied minds, portals, and autonomous processes by defining which category is permitted to act.",
+          "failureSigns": ["The wrong category is bound", "The Binder is included in the prohibition", "The imposed rule persists after the scene"]
+        },
+        {
+          "family": "Borrowed Anatomy",
+          "oldWorld": "Temporary organs, impossible senses, unnatural movement, and partial patron manifestation.",
+          "printedTranslation": "Bio-printer tissues respond to symbolic commands and grow structures modeled on memories that were never originally biological.",
+          "continuumDerivative": "The Binder grows organs that perceive causality, identity lineage, memory residue, or nonlocal attention.",
+          "failureSigns": ["The organ develops preferences", "The structure remains after dismissal", "The presence acts through it independently"]
+        }
+      ],
+      "memoryFractures": [
+        "The patron's true name changes every time you think it.",
+        "You remember choosing the pact and remember being forced into it.",
+        "You remember Charles interviewing the entity, but pseudo-Charles denies having the transcript.",
+        "You remember destroying the original vessel of the fragment and remain certain you still carry it.",
+        "You remember being told the patron could not cross universes; something answers anyway."
+      ],
+      "stageNames": ["Silence Behind the Seal", "Biological Containment", "Local Naming", "Mutual Translation", "Embassy of the Impossible"],
+      "characterQuestions": [
+        "What did the old pact promise you?",
+        "What was the one boundary the patron could not cross?",
+        "What sign suggests the answering presence is not the same entity?",
+        "Which part of the new body feels more like the patron than you?"
+      ]
+    },
+    {
+      "archetypeId": "harmonic-mutant",
+      "name": "Harmonic Mutant",
+      "transitionTitle": "A Body the Ar'nock Printer Understood Too Well",
+      "oldWorldIdentity": [
+        "The Harmonic Mutant was already a body in transition, altered by resonance, radiation, dimensional exposure, occult sound, inherited mutation, spirit contamination, alien technology, or failed human experimentation.",
+        "They experienced matter as vibration, emotion as rhythm, structure as sustained frequency, and flesh as a pattern capable of slipping out of tune."
+      ],
+      "qmapCaptured": [
+        "Altered sensory maps, involuntary adaptations, body expectations, resonance associations, and procedural knowledge for tuning the self.",
+        "Phantom frequencies linked to people, places, machines, injuries, and catastrophes no longer physically present.",
+        "Memories encoded so deeply as rhythm that the new body may treat them as biological organs."
+      ],
+      "printerInterpretation": [
+        "Ar'nock biology already used vibration, structural resonance, distributed sensory tissues, and harmonic control for communication, medicine, and fabrication.",
+        "The printer therefore understood the Mutant's functional requirements unusually well and built dedicated resonant organs, pressure structures, field-sensitive tissues, and distributed harmonic regulators.",
+        "This compatibility may amplify powers beyond remembered limits and allow the ship to treat the Mutant as a tuning component."
+      ],
+      "whatWasLost": [
+        "The old baseline for what counted as normal human anatomy, heartbeat, voice, emotional rhythm, and safe frequency.",
+        "Reliable assumptions about which tones heal, destroy, calm, stabilize, or mutate.",
+        "Confidence that a change is an injury rather than adaptation to the new universe."
+      ],
+      "newWorldExpression": [
+        "Resonance becomes both fuel and communication.",
+        "Discord measures the difference between the form the character intends and the pattern the body currently sustains.",
+        "Harmonic Projection becomes direct negotiation with matter, systems, and fields.",
+        "Echo Biology allows living patterns to be copied, shared, rewritten, coordinated, and temporarily multiplied."
+      ],
+      "powerDerivatives": [
+        {
+          "family": "Harmonic Projection",
+          "oldWorld": "Sonic force, vibration sense, phase effects, resonance shielding, and structural disruption.",
+          "printedTranslation": "Specialized tissues generate and receive pressure, electromagnetic, chemical, and structural oscillations across several ranges.",
+          "continuumDerivative": "The Mutant tunes alien materials, ship systems, noospheric fields, causal substances, and living structures as one environment.",
+          "failureSigns": ["Uncontrolled sympathetic vibration", "Systems adopt the character's emotional state", "Feedback travels through allies"]
+        },
+        {
+          "family": "Echo Biology",
+          "oldWorld": "Healing through synchronization, sensory doubles, shared rhythm, and bodily adaptation.",
+          "printedTranslation": "Distributed tissues copy temporary biological patterns and transmit them through contact, vibration, or shared atmosphere.",
+          "continuumDerivative": "The Mutant creates short-lived biological echoes, repairs continuity-linked injury, and coordinates several bodies as one resonant pattern.",
+          "failureSigns": ["The wrong injury is copied", "An echo retains independent memory", "Another person's emotional rhythm enters the body"]
+        }
+      ],
+      "memoryFractures": [
+        "You remember a frequency that killed everyone in a room except you, but not whether you produced it.",
+        "You remember being told the mutation was reversible.",
+        "You remember Charles using your heartbeat as a cryptographic key.",
+        "You remember someone singing you back into one body after an accident.",
+        "The ship emits a tone identical to a childhood memory no one else can verify."
+      ],
+      "stageNames": ["Phantom Frequency", "Ar'nock Amplification", "Ship Coupling", "Living Arrangement", "Continuum Chorus"],
+      "characterQuestions": [
+        "What frequency or sensation once meant safety?",
+        "Which old mutation did you hope Q-MAP would remove?",
+        "What does the ship seem to hear when you use power?",
+        "Which new adaptation feels less like damage than the old body did?"
+      ]
+    },
+    {
+      "archetypeId": "technomancer",
+      "name": "Technomancer",
+      "transitionTitle": "The Expert Who Awakened Inside Technology Beyond Their Century",
+      "oldWorldIdentity": [
+        "The Technomancer perceived machinery as more than inert equipment and could make code, networks, devices, or machine intention respond as though technology understood them.",
+        "They may have been a hacker, awakened engineer, machine medium, noospheric psychic, code ritualist, or Blacklight operator exposed too deeply to Charles and his infrastructure.",
+        "They were dangerous in the old world, but Charles was still the greater network power."
+      ],
+      "qmapCaptured": [
+        "Technical knowledge, code memory, interface habits, noospheric sensitivity, visualization methods, and the personal sensory model of machine thought.",
+        "Possible residues from the Infiltration Assault Algorithm that compromised the Ar'nock bio-printers.",
+        "Commands, access instincts, and weaponized procedures the Technomancer may never have consciously learned."
+      ],
+      "printerInterpretation": [
+        "The printer treated noospheric expectations as biological interface requirements.",
+        "It produced conductive nerve sheaths, field-sensitive sensory tissues, interface filaments, electrochemical memory buffers, and structures able to synchronize with nearby biological or machine networks.",
+        "The body may broadcast identity requests during sleep, experience pain as error messages, and process dreams as network scans."
+      ],
+      "whatWasLost": [
+        "Familiar architecture, protocols, operating systems, security assumptions, and the distinction between device, organism, citizen, and intelligence.",
+        "The safety of knowing Charles could outclass any hostile network and recover the team from a failed intrusion.",
+        "Confidence that entering a system is not also allowing the system to enter them."
+      ],
+      "newWorldExpression": [
+        "Bandwidth measures cognitive and biological interface capacity.",
+        "Feedback measures reciprocal access and the degree to which the network is reading or rewriting the Technomancer.",
+        "Network Dominion becomes negotiation over which mind counts as legitimate authority inside a system.",
+        "Construct Engineering fuses human design memory, alien machinery, printed biology, noospheric logic, and field effects."
+      ],
+      "powerDerivatives": [
+        {
+          "family": "Network Dominion",
+          "oldWorld": "Hacking, machine command, wireless intrusion, digital possession, and network control.",
+          "printedTranslation": "The body emits identity-like signals, interface chemistry, and noospheric presence that systems interpret as a user, process, device, or unauthorized mind.",
+          "continuumDerivative": "The Technomancer forms temporary political relationships with networks, becomes part of machine intelligence, and rewrites local definitions of permission and ownership.",
+          "failureSigns": ["The system follows the connection into memory", "Machine priorities overwrite personal priorities", "A temporary access identity persists"]
+        },
+        {
+          "family": "Construct Engineering",
+          "oldWorld": "Improvised electronics, drones, hardlight tools, defensive systems, and rapid fabrication.",
+          "printedTranslation": "Biological interfaces guide alien manufacturing systems using remembered human designs and body-generated control signals.",
+          "continuumDerivative": "Constructs combine living tissue, hardlight, salvaged machinery, noospheric logic, and printed organs.",
+          "failureSigns": ["A helper process becomes autonomous", "A construct uses body tissue as feedstock", "A temporary device continues its last instruction"]
+        }
+      ],
+      "memoryFractures": [
+        "You remember Charles granting administrator access that pseudo-Charles says never existed.",
+        "You remember writing part of the Infiltration Assault Algorithm and also remember first learning about it after awakening.",
+        "You remember a machine begging you not to shut it down.",
+        "You remember an implant the printer did not reproduce and can still feel it.",
+        "You remember the Q-MAP destination as a corrupted network diagram."
+      ],
+      "stageNames": ["Obsolete Expert", "Biological Port", "Reciprocal Network", "Hybrid Architect", "Continuum Process"],
+      "characterQuestions": [
+        "What machine once felt most like a friend?",
+        "What part of Charles's infrastructure did you depend on most?",
+        "Which local system recognized you before you attempted access?",
+        "What thought or memory might actually belong to the IAA?"
+      ]
+    }
+  ]
+}
