@@ -1,0 +1,140 @@
+name: One-time deterministic ability rewrite
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-deterministic-ability-text.yml
+
+permissions:
+  contents: write
+
+jobs:
+  rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Replace arbitration-heavy ability effects
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rules_path = Path('data/blacklight-continuum/rules/basic-character-options.json')
+          data = json.loads(rules_path.read_text(encoding='utf-8'))
+
+          replacements = {
+              ('Human Investigator', 'Casecraft', 'Contradiction Ledger'): "Cost: 1 Conviction or ten minutes of uninterrupted work. Record two statements, logs, memories, or traces that cannot all be true, then choose one question: Which source was altered? What fact do both sources omit? What third event makes both accounts possible? Receive a true answer containing one specific, testable detail and gain two dice on the first action that tests it. Failure: receive the answer, but one additional detail is a false lead that can be disproven through one further Investigation scene.",
+              ('Human Investigator', 'Casecraft', 'Cross-Continuity Indictment'): "Cost: 1 Conviction and one preserved piece of evidence. Test: Resolve + Investigation opposed by the target's Guile + Noospherics; use Guile + Security when the target has no Noospherics rating. On success, establish that the target remains responsible despite transfer, editing, subcontracting, duplication, or ownership change. For the rest of the operation, attempts to deny that responsibility lose two dice and cannot erase the preserved evidence. Failure: the evidence remains valid but becomes publicly linked to you.",
+              ('Human Investigator', 'Casecraft', 'The Case Will Break'): "Cost: 2 Conviction and 1 Strain. Requirement: at least three distinct pieces of relevant evidence. Convert them into a Breakthrough Lead naming one specific person, place, record, or system containing conclusive proof and one concrete means of reaching or accessing it. The team gains two dice on actions directly pursuing the Lead, and the first successful access produces the proof. When the Lead is created, the investigated subject becomes aware that someone is closing in if it has any means of detection.",
+              ('Human Investigator', 'Institutional Ghostcraft', 'Borrowed Credentials'): "Cost: 1 Conviction. Test: Guile + Security or Negotiation. Choose one privilege for the scene: cross one controlled checkpoint; inspect one routine record set; requisition one Serviceable item; delay one routine enforcement action for ten minutes; or obtain a private audience with a local supervisor. The credential grants only the chosen privilege. Failure: the privilege is granted once, then the identity is flagged for immediate review.",
+              ('Human Investigator', 'Contingency Engineering', 'Everything Has a Failure Mode'): "Cost: 2 Conviction and 1 Strain. Requirement: observe the target for three rounds or study it for ten minutes. Test: Reason + Investigation, difficulty 4. On success, place one Failure Mode on the target until the operation ends. After you or an ally succeeds against that target, consume the Failure Mode to choose one effect: ignore its defenses for one action; cancel one active effect it created; inflict 3 Trauma or 3 Disruption as appropriate to the target; grant all allies two dice against it until the end of the round; or force it to abandon one of two currently active objectives until its next turn. Failure: gain 1 additional Strain and the same target cannot be analyzed again this scene.",
+              ('Human Investigator', 'Human Network', 'Mutual Obligation'): "Cost: 1 Conviction and a genuine favor. State one service each party owes, the completion condition, and the deadline. Each party gains two dice on actions directly fulfilling its service. A party that knowingly refuses or sabotages its service gains 2 Pressure, and the other party immediately knows the obligation was broken. The agreement ends when both services are completed or both parties release each other.",
+              ('Vampire', 'Deathless Resilience', 'Cold Repair'): "Cost: 1 Vitae and one uninterrupted minute. Convert one Trauma into Impact or remove two Impact. Fire, radiation, and sunlight wounds require 2 Vitae. Failure: the damage is removed normally, but gain 1 Hunger and lose one die from Physical tests until you feed or complete a full rest.",
+              ('Vampire', 'Deathless Resilience', 'Reassemble the Dead Shape'): "Cost: 2 Vitae. Reaction when damage at zero Vitality would destroy your body or make recovery impossible. You instead become inert at zero Vitality and remain recoverable. Restoration requires 4 Vitae, one uninterrupted hour, and either a successful Reason + Medicine test at difficulty 4 or enough compatible biomass to replace the lost mass. Until restored, you can perceive your immediate surroundings but cannot move, speak, or use powers.",
+              ('Vampire', 'Vital Predation', 'Taste the Current'): "Cost: none. Sample blood, lymph, fresh vital fluid, psychic residue, active bioelectric charge, or living continuity substrate. Learn four facts: whether the sample can restore Vitae; the maximum Vitae it can restore, from 0 to 2; whether consuming it reduces Hunger; and whether it carries poison, infection, hostile code, compulsion, or identity contamination. The sample is consumed by the test only when its total volume is smaller than a mouthful.",
+              ('Vampire', 'Vital Predation', 'Feed on Function'): "Cost: 1 Vitae. Requirement: a willing, restrained, or defeated target in direct contact. Choose one function for three rounds. Heat Exchange: ignore environmental heat and cold penalties while the target suffers two dice on Resilience against them. Regeneration: recover 1 Impact at the start of each round while the target cannot recover damage. Sensory Acuity: gain two dice to Awareness and one sense the target possesses while it loses two Awareness dice. Stored Charge: restore 2 Vitae while the target or device loses an equal amount of stored energy. Processing Priority: gain two dice to Initiative and active defense while the target loses two dice from both. A target can lose only one function to this power at a time.",
+              ('Vampire', 'Vital Predation', 'Eclipse Feast'): "Cost: 2 Vitae and 1 Hunger. Requirement: direct contact with a powerful being or continuity engine for one complete action. Restore Vitae to maximum. Choose one resistance or sense explicitly listed on the target's record and copy its exact effect for the scene, with any numeric rating capped at 3. The target loses access to the copied capability until the end of its next turn. This power cannot copy attacks, resource generation, extra actions, or rank-five powers.",
+              ('Shapechanger', 'Warform', 'Siege Form'): "Cost: 2 Fury. Choose one configuration for the scene. Breacher: gain three dice against barriers and ignore 2 Armor on structures. Bulwark: gain 2 Armor and halve movement speed. Swarmbreaker: one melee attack may affect up to Archetype Rating adjacent minor targets using one roll, but attacks against a single major target lose two dice. Heavy Frame: use heavy weapons without bracing and ignore recoil, but lose fine manipulation. Radiant Hide: reduce fire and radiation damage by 3 per round, but lose two Finesse dice. Pressure Form: ignore environmental pressure and crushing damage and gain two dice against grapples, but cannot speak. Only one Siege Form configuration may be active.",
+              ('Shapechanger', 'Warform', 'Apex Shape'): "Cost: 2 Fury and 1 Instinct. Assume an apex form for the scene and gain Armor equal to half Archetype Rating, rounded up. Choose one movement: flight 20 meters per exchange; burrowing 10 meters through soil or light structure; swimming 20 meters with unrestricted underwater breathing; wall and ceiling movement at normal speed; or zero-gravity movement 20 meters without a surface. Choose one offense: a natural weapon dealing Trauma with +2 damage; a crushing grapple with three bonus dice that restrains on two successes; a 10-meter roar requiring Resolve + Composure successes equal to Archetype Rating or the target loses its next minor action; a sweeping attack against up to Archetype Rating adjacent targets; or restraining tendrils with durability 5. Choose one limitation: no speech, no fine manipulation, unable to enter human-width passages, or gain 1 Instinct at the end of every round after the third.",
+              ('Shapechanger', 'Adaptive Forms', 'Utility Shift'): "Cost: 1 Fury, or five minutes outside danger with no Fury cost. Choose one adaptation for the scene. Climbing: move across walls and ceilings at normal speed. Filtration: ignore airborne toxins, smoke, dust, and spores. Sealing: survive without breathing and ignore vacuum exposure for Resilience minutes. Vibration Sense: detect movement through a connected surface within 20 meters. Gripping: gain two dice to climbing, holding, disarming, and resisting forced movement. Tool Limb: form a cutter, probe, brace, or precision manipulator granting one die to Engineering, Fabrication, or Medicine. Only one Utility Shift may be active at a time. Failure: the adaptation works, but cannot be dismissed until a full rest.",
+              ('Shapechanger', 'Adaptive Forms', 'Species of One'): "Cost: 2 Fury and 1 Instinct; requires one uninterrupted hour. Create a permanent additional form. Choose one locomotion: flight, burrowing, aquatic movement, wall movement, or zero-gravity movement. Choose one sense: thermal vision 30 meters, echolocation 20 meters, electromagnetic detection 20 meters, or vibration sense 30 meters through connected surfaces. Choose one adaptation: sealed vacuum survival for one hour, reduce radiation damage by 3 per round, Armor 2, immunity to ordinary toxins and disease, or recover one additional Impact at scene end. Choose one limitation: no speech, no fine manipulation, half ground speed, conspicuous Large size, or begin each scene in the form with 1 Instinct. The completed form becomes part of Threefold Form and may be assumed normally.",
+              ('Shapechanger', 'Spirit Ecology', 'Totemic Accord'): "Cost: 1 Fury and a meaningful offering accepted by a local presence. Test: Presence + Xenoculture, difficulty 2. Choose one favor lasting for the scene or until completed. Guide: reveal a safe route and grant two Survival dice while following it. Warn: the group cannot be surprised by a threat entering the presence's territory. Conceal: observers lose two dice to locate the group. Message: deliver up to twenty-five words to one named being within the territory. Watch: report the first creature or system crossing a named boundary. Borrow Sense: perceive through one sense possessed by the presence while remaining within the territory. Failure: the offering is consumed, but no favor is created.",
+              ('Eldritch Binder', 'Borrowed Manifestation', 'Other Eye'): "Cost: 1 Pact. Choose one sense for the scene, with a range of 20 meters unless stated otherwise. Heat: perceive temperature and living heat. Resonance: perceive vibration, active fields, and structural stress. Dimensional Stress: perceive portals, folds, and unstable space. Memory Residue: perceive the strongest recent emotional memory attached to a person, object, or place. Noospheric Attention: perceive active surveillance, targeting, and identity queries. Falsehood: recognize a spoken statement the speaker knowingly believes to be false. Only one Other Eye sense may be active at a time.",
+              ('Eldritch Binder', 'Borrowed Manifestation', 'Mantle of the Guest'): "Cost: 1 Pact; add 1 Intrusion if maintained beyond one scene. Gain Armor equal to half Archetype Rating, rounded up. Choose heat, cold, electricity, radiation, pressure, or psychic intrusion. Reduce the first damage, penalty, or Pressure caused by the chosen hazard each round by Archetype Rating. The manifestation remains visibly identifiable as part of the pact.",
+              ('Eldritch Binder', 'Borrowed Manifestation', 'Embassy of the Guest'): "Cost: 2 Pact and 1 Intrusion. For the scene, activate any two Borrowed Manifestation powers of ranks 1 through 4 that you know without paying their individual Pact costs. In addition, select one Other Eye sense and one Mantle of the Guest resistance from their printed lists, even if those powers were not among the two selected. The presence may speak through you but cannot take actions, spend your resources, or change your selections unless a stated pact boundary is violated.",
+              ('Eldritch Binder', 'Pact Economy', 'Name the Price'): "Cost: none. Before accepting a bargain, learn four exact facts: what payment or service is required; who receives it; the event or deadline that makes it due; and the consequence of nonpayment. Hidden terms, automatic renewals, inherited obligations, and third-party beneficiaries are included in these facts. If the other party cannot or will not establish all four facts, the bargain cannot bind you through this power.",
+              ('Eldritch Binder', 'Pact Economy', 'Renegotiate the Impossible'): "Cost: 2 Pact. Reopen one active agreement when circumstances, identity, universe, or capability materially changed. With the stated consent of every affected party, change exactly one term: responsible party; form of payment; due date; prohibited action; delivery method; or location of performance. The total Resource cost, Pressure cost, number of required services, and duration cannot increase or decrease. The revised term takes effect when every affected party states acceptance.",
+              ('Harmonic Mutant', 'Emotional Chord', 'Tune the Crowd'): "Cost: 1 Resonance. Test: Presence + Performance opposed by the highest Composure in the group. Choose caution, urgency, grief, solidarity, or suspicion. On success, shift the group's dominant emotional intensity one step toward the chosen state for the scene. The power cannot create a belief, erase knowledge, force a specific action, or move the emotion more than one step with a single use.",
+              ('Technomancer', 'Construct Engineering', 'Helper Process'): "Cost: 1 Bandwidth and available hardware or software. Create a small assistant with a 4-die pool and choose one task: monitor a sensor or boundary; map explored space; translate one known language pair; sort and compare records; perform routine repairs; relay communications; carry and deliver objects up to Carry 2; or issue an alert when a stated condition occurs. It performs only that task, cannot attack, and cannot improvise beyond its instructions. It lasts until destroyed, dismissed, disconnected from required hardware, or the operation ends.",
+              ('Technomancer', 'Noospheric Identity', 'Borrowed Legal Self'): "Cost: 1 Bandwidth and either a valid credential sample or the credential holder's consent. Choose one privilege for the scene: access one account without transferring funds; enter one controlled location; use one registered transit route; submit one routine service request; operate one registered asset; or act under one professional credential. The power copies only the selected privilege and does not copy memories, ownership, passwords unrelated to the privilege, biometric appearance, or authority over other people. Failure: the privilege works once, then both identities are flagged for audit."
+          }
+
+          found = set()
+          for archetype in data.get('archetypes', []):
+              for family in archetype.get('powerFamilies', []):
+                  for ability in family.get('abilities', []):
+                      key = (archetype.get('name'), family.get('name'), ability.get('name'))
+                      if key in replacements:
+                          ability['effect'] = replacements[key]
+                          found.add(key)
+
+          missing = sorted(set(replacements) - found)
+          if missing:
+              raise SystemExit(f'Missing abilities: {missing}')
+
+          data['schemaVersion'] = '0.4.0'
+          policy = data.setdefault('mechanicsPolicy', {})
+          policy['abilityTextStandard'] = {
+              'fixedOutcome': 'An ability states its mechanical result directly or supplies a closed menu of results.',
+              'boundedChoice': 'Player choices are selected from printed options unless a later supplement explicitly expands the list.',
+              'definedDuration': 'Persistent effects state when they end.',
+              'definedFailure': 'A failed activation states its consequence.',
+              'constrainedInformation': 'Information powers state the exact questions answered or facts revealed.',
+              'moderatorRole': 'The Game Moderator applies established fiction, target statistics, and consequences but does not invent the core benefit of an activated ability.'
+          }
+
+          banned = [
+              'the game moderator defines',
+              'the game moderator reveals',
+              'the game moderator answers broadly',
+              'another approved',
+              'appropriate defense or attack',
+              'one thematic resistance',
+              'one extraordinary adaptation',
+              'one severe weapon',
+              'one major resistance',
+              'one narrow recurring task',
+              'one narrow privilege',
+              'or similar function',
+              'comparable weight'
+          ]
+          leftovers = []
+          for archetype in data.get('archetypes', []):
+              for family in archetype.get('powerFamilies', []):
+                  for ability in family.get('abilities', []):
+                      low = ability.get('effect', '').lower()
+                      for phrase in banned:
+                          if phrase in low:
+                              leftovers.append((archetype.get('name'), family.get('name'), ability.get('name'), phrase))
+          if leftovers:
+              raise SystemExit(f'Arbitration phrases remain: {leftovers}')
+
+          rules_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          foundation_path = Path('data/blacklight-continuum/wiki/foundation-rules.json')
+          foundation = json.loads(foundation_path.read_text(encoding='utf-8'))
+          for entry in foundation.get('entries', []):
+              if entry.get('id') == 'capability-framework':
+                  paragraph = "Ability descriptions use fixed outcomes or closed choice menus. The Game Moderator applies established targets, hazards, and world facts, but an activated ability does not require the moderator to invent its benefit, scope, duration, or ordinary failure consequence."
+                  if paragraph not in entry.get('body', []):
+                      entry.setdefault('body', []).append(paragraph)
+                  for table in entry.get('tables', []):
+                      if table.get('title') == 'Capability Record':
+                          rows = table.setdefault('rows', [])
+                          additions = [
+                              ['Choice Menu', 'A closed list when an ability permits selectable effects'],
+                              ['Duration', 'The exact event, interval, or condition that ends the effect'],
+                              ['Defined Outcome', 'The benefit produced without requiring improvised moderator assignment']
+                          ]
+                          existing = {row[0] for row in rows if row}
+                          rows.extend(row for row in additions if row[0] not in existing)
+          foundation['schemaVersion'] = '0.4.0'
+          foundation_path.write_text(json.dumps(foundation, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          report = Path('data/blacklight-continuum/rules/ability-arbitration-report.json')
+          if report.exists():
+              report.unlink()
+          Path('.github/workflows/one-time-deterministic-ability-text.yml').unlink()
+          PY
+      - name: Commit deterministic ability text
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Make Blacklight abilities self-defining"
+          git push origin main
