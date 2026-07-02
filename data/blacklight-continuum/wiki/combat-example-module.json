@@ -1,0 +1,177 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "description": "A complete combat teaching module covering Initiative, turns, attacks, damage, Vitality, Exposure, Cohesion, Archetype Pressure, Downed characters, stabilization, revival, and death through one continuous three-character encounter.",
+  "entries": [
+    {
+      "id": "combat-foundation-procedure",
+      "title": "Combat Foundation Procedure",
+      "category": "Combat",
+      "summary": "Combat proceeds in Initiative order through rounds and turns, with one Standard Action, one Move, one Minor Interaction, and one Reaction per participant.",
+      "body": [
+        "Combat begins when opposed actions become time-sensitive enough that acting first can change the result. Before Initiative, establish where everyone is standing, visible cover, immediate hazards, current Vitality, Cohesion, Exposure, Resource, Pressure, and each participant's immediate objective.",
+        "Initiative equals Finesse + Composure. Act from highest Initiative to lowest. Break ties with Awareness, then Finesse, then an unmodified d10 roll between the tied participants.",
+        "Each round represents approximately six seconds. On a turn, a character receives one Standard Action, one Move of up to 8 meters, and one Minor Interaction. A character also has one Reaction per round, refreshed at the beginning of that character's turn.",
+        "To make a physical attack, roll the printed pool. Physical Defense Difficulty equals the ceiling of Guard divided by two, minimum 1. A mental, identity, noospheric, or direct Disruption attack normally uses the ceiling of Identity Defense divided by two.",
+        "An attack hits when successes equal or exceed Defense Difficulty. Margin equals successes beyond that difficulty. Raw Damage equals the weapon's Damage rating plus Margin. Impact and Trauma subtract Protection; a successful hit normally inflicts at least 1 point. Disruption ignores ordinary Protection unless a capability says otherwise.",
+        "Every final damage point removes one current Vitality. Damage is still recorded as Impact, Trauma, or Disruption because different healing, defenses, and consequences can affect those types differently."
+      ],
+      "tables": [
+        {
+          "title": "Turn Components",
+          "columns": ["Component", "Default Use"],
+          "rows": [
+            ["Standard Action", "Attack, capability, Guard, Sprint, Assist, Break Free, Stabilize, Emergency Treatment, or a complex interaction"],
+            ["Move", "Move up to 8 meters; difficult terrain costs 2 meters per meter crossed"],
+            ["Minor Interaction", "Draw or stow an item, open an unsecured closure, stand or change posture, speak briefly, or press an adjacent control"],
+            ["Reaction", "One response per round when a rule, capability, item, or Cohesion option permits it"]
+          ]
+        },
+        {
+          "title": "Attack Calculation",
+          "columns": ["Step", "Calculation"],
+          "rows": [
+            ["1. Build Pool", "Attribute + combat Skill + modifiers"],
+            ["2. Defense Difficulty", "ceiling(Guard / 2), minimum 1; use Identity Defense for direct Disruption attacks"],
+            ["3. Determine Hit", "Attack successes must equal or exceed Defense Difficulty"],
+            ["4. Margin", "Attack successes − Defense Difficulty"],
+            ["5. Raw Damage", "Weapon Damage + Margin"],
+            ["6. Final Damage", "Impact or Trauma: Raw Damage − Protection, minimum 1 on a hit; Disruption normally ignores Protection"],
+            ["7. Vitality", "Lose 1 current Vitality for each final damage point"]
+          ]
+        },
+        {
+          "title": "Common Combat Conditions",
+          "columns": ["Condition", "Effect"],
+          "rows": [
+            ["Wounded", "At half Vitality or less, lose 1 die from Force, Finesse, and Resilience tests"],
+            ["Prone", "Standing costs the Move; adjacent melee reduces Defense Difficulty by 1, ranged attacks beyond 3 meters increase it by 1"],
+            ["Restrained", "Movement 0, Physical Defense Difficulty −1, and most physical tests lose two dice"],
+            ["Staggered", "No Reaction and lose one die from all tests until the condition ends"],
+            ["Downed", "Vitality 0; Prone, no actions, movement, Minor Interactions, or Reactions"],
+            ["Stable", "Still Downed at 0 Vitality but no Death Tests until new damage makes the character Unstable"]
+          ]
+        }
+      ],
+      "tags": ["combat", "initiative", "turns", "attacks", "damage", "guard", "protection"],
+      "relatedEntries": ["combat-tracks-and-death", "worked-combat-cargo-gallery", "blacklight-d10-foundation"]
+    },
+    {
+      "id": "combat-tracks-and-death",
+      "title": "Exposure, Cohesion, Pressure, Vitality, and Death in Combat",
+      "category": "Combat",
+      "summary": "The five major combat tracks answer different questions: how injured the character is, how hard they are overcommitting, how much inner stability they can deliberately spend, and how close their Archetype is to a Crisis.",
+      "body": [
+        "Vitality measures remaining functional survival. Impact, Trauma, and Disruption all remove current Vitality one point for one point. At 0 Vitality, the character becomes Downed and Unstable. Damage left over after reaching 0 becomes Death Marks.",
+        "Exposure measures immediate operational overcommitment. A Push rerolls failed dice up to Resolve, then adds 1 Exposure after the final roll. At half the Exposure Limit, rounded up, the character becomes Exposed and may reroll one fewer die with future Pushes. At the Limit, the action still resolves, then Overexposure inflicts 1 Impact ignoring Protection, removes the Reaction, prevents another Push through the next turn, and resets Exposure to its Warning value before overflow is reapplied.",
+        "Cohesion is deliberately spent rather than automatically lost. Commit spends 1 before a roll for two bonus dice. Brace spends 1 after damage to reduce Impact or Disruption by 1, but never Trauma. Anchor spends 1 Reaction to let an ally reroll up to two failed dice on a Death Test or a qualifying control or identity test. Refuse Collapse spends 2 once per scene to remain at 1 Vitality when damage would otherwise reduce the character to 0.",
+        "Archetype Pressure is separate from Exposure. Resource is paid, printed Pressure is marked, and the ability resolves. Warning or Critical effects begin after the action crossing that threshold. When Pressure reaches its Limit, the action still resolves before the Archetype Crisis. Pressure remains after combat until an Archetype-specific recovery rule removes it.",
+        "A newly Downed character receives the rest of that round as a grace period. If still Unstable, the first Death Test occurs at the end of the following round. Roll Resilience + Composure against difficulty 2. Success adds no Death Mark. Failure adds 1. A failed test containing a 1 adds 2 instead. At 3 Death Marks, the character dies immediately.",
+        "Stabilize is an adjacent Standard Action using Reason + Medicine at difficulty 2 with a field medical kit or difficulty 3 without one. Success makes the target Stable and removes 1 Death Mark. Emergency Treatment is an adjacent Standard Action against difficulty 3, consumes one kit charge on success, restores a Stable target to 1 Vitality, removes one more Death Mark, and leaves the target Staggered through the end of their next turn.",
+        "Hostile and allied characters use the same death procedure. A defeated opponent does not die merely because the combat has been won. Someone must stabilize them, an explicit capability must preserve them, or their Death Marks may continue to accumulate."
+      ],
+      "tables": [
+        {
+          "title": "Cohesion Spend Menu",
+          "columns": ["Option", "Cost", "Timing", "Effect"],
+          "rows": [
+            ["Commit", "1", "Before a test", "+2 dice"],
+            ["Brace", "1", "After final damage", "Reduce Impact or Disruption by 1; cannot reduce Trauma"],
+            ["Anchor", "1 and Reaction", "Ally makes a qualifying test", "Ally rerolls up to two failed dice"],
+            ["Refuse Collapse", "2, once per scene", "Damage would reduce positive Vitality to 0", "Remain at 1 Vitality and become Staggered"]
+          ]
+        },
+        {
+          "title": "Death Procedure",
+          "columns": ["Event", "Result"],
+          "rows": [
+            ["Vitality reaches 0", "Become Downed and Unstable"],
+            ["Excess damage", "Each excess point becomes 1 Death Mark"],
+            ["End of following round while Unstable", "Make Resilience + Composure Death Test, difficulty 2"],
+            ["Failed Death Test", "+1 Death Mark; +2 instead if the failed roll contains a 1"],
+            ["New damage while Downed", "+1 Death Mark, or +2 if final damage is 3 or more"],
+            ["Successful Stabilize", "Become Stable and remove 1 Death Mark"],
+            ["Successful Emergency Treatment", "Restore 1 Vitality, remove 1 Death Mark, end Downed, become Staggered"],
+            ["3 Death Marks", "Death; ordinary medicine, healing, Cohesion, and retroactive declarations cannot reverse it"]
+          ]
+        }
+      ],
+      "tags": ["exposure", "cohesion", "pressure", "vitality", "downed", "death", "medicine"],
+      "relatedEntries": ["combat-foundation-procedure", "worked-combat-cargo-gallery", "archetype-resource-pressure-procedure"]
+    },
+    {
+      "id": "worked-combat-cargo-gallery",
+      "title": "Worked Combat Example: Three People in the Cargo Gallery",
+      "category": "Combat Example",
+      "summary": "Mara Vale and Ilyan Voss confront Kest Raal in a damaged cargo gallery. The example follows every roll and track change from roleplayed opening through Pressure Crisis, rescue from death, Overexposure, and a character's final Death Test.",
+      "body": [
+        "The encounter begins as roleplay rather than as an automatic attack. Mara Vale, a Human Investigator and field medic, asks Kest Raal to surrender a stolen biological access key. Ilyan Voss, an Eldritch Binder carrying the Abyssal Womb, remains several meters behind Mara. Kest refuses, drops into a predatory stance, and announces that he is crossing the gallery to tear the Binder apart. Because order now changes whether Mara can intervene, combat begins.",
+        "The gallery is twenty meters long. Mara begins twelve meters from Kest beside partial cover. Ilyan is eight meters behind Mara. A damaged conduit and a jammed emergency bulkhead are environmental problems but do not yet act on their own. Initiative is static: Mara 6, Kest 5, Ilyan 4. That order repeats each round unless a capability changes it.",
+        "Mara carries a Damage 4 Trauma compact pistol, light Armor 1, and a two-charge field medical kit. Ilyan carries a Damage 3 Disruption arc pistol, light Armor 1, 5 Pact, and 4 Intrusion against a Limit of 7. Kest uses Damage 4 Trauma claws, a Damage 3 Impact shoulder slam, and natural Armor 1.",
+        "Round 1, Mara: she uses her Standard Action to fire. Finesse 3 + Firearms 2 gives five dice: 10, 8, 6, 4, 2 for three successes. Kest's Guard 6 produces Physical Defense Difficulty 3. The attack hits with Margin 0. Raw Damage is 4. Kest's Protection 4 reduces it to the minimum 1 Trauma. Kest falls from 8 to 7 Vitality.",
+        "Round 1, Kest: he moves into reach of Ilyan and attacks with Force 4 + Close Combat 3. Four successes oppose Ilyan's Defense Difficulty 2, producing Margin 2. Claws deal Raw Damage 6. Ilyan's Protection 3 reduces this to 3 Trauma, dropping him from 7 to 4 Vitality.",
+        "Round 1, Ilyan: he activates Dream-Born Servitor as a Warden. The immediate ability costs 2 Pact and 1 Intrusion, changing Pact 5 to 3 and Intrusion 4 to 5. Resolve 4 + Archetype Rating 2 gives six dice and three successes against Kest's Defense Difficulty 3. Kest becomes Restrained by durability 5 arms. Because Ilyan crossed from Warning into Critical Intrusion, Partial Occupancy begins after this action.",
+        "Round 2, Mara: Restrained lowers Kest's Defense Difficulty from 3 to 2. Mara's first five-die attack roll produces only one success. She Pushes, rerolling three failed dice because Resolve is 3. The replacement dice produce two more successes, bringing the final total to three. She gains 1 Exposure after resolution. Margin 1 raises pistol Raw Damage to 5; Protection 4 leaves 1 Trauma. Kest moves from 7 to 6 Vitality, and Mara's Exposure becomes 1.",
+        "Round 2, Kest: Break Free uses Force 4 + Athletics 3 against difficulty 3, the ceiling of restraint durability 5 divided by two. Three successes end Restrained. The Standard Action is spent, so Kest cannot attack this turn.",
+        "Round 2, Ilyan: he activates The Thousand-Armed Scheme for 2 Pact and 2 Intrusion. Pact changes from 3 to 1. Intrusion changes from 5 to 7. He immediately moves Mara behind partial cover, grants her temporary Armor 2, closes one bulkhead, moves a cargo crate across Kest's route, and attempts one restraint attack. The restraint roll produces only two successes against difficulty 3 and fails, but the other four effects still resolve because each is a separate printed selection.",
+        "Ilyan was already Critical before spending Pact, so Partial Occupancy adds 1 more Intrusion after the action. Intrusion becomes 8 against Limit 7. The ability has already resolved; now Incursion occurs. The Abyssal Womb's printed Breach Restrains Ilyan through the end of his next turn and drags three unsecured objects from him. He suffers 1 Disruption and gains the Abyssal Source Mark, dropping from 4 to 3 Vitality and losing one die from Finesse and Guile tests. Pressure resets to Warning 3, then the single overflow point is reapplied, leaving Intrusion 4.",
+        "Round 3, Mara: she spends 1 Cohesion on Commit before firing, changing Cohesion 4 to 3 and increasing her pool from five to seven dice. Five successes against difficulty 3 produce Margin 2. Raw Damage 6 minus Protection 4 inflicts 2 Trauma. Kest falls from 6 to 4 Vitality.",
+        "Round 3, Kest: Ilyan is Restrained, reducing his Defense Difficulty from 2 to 1. Kest rolls five successes. Margin 4 raises claw Raw Damage to 8; Protection 3 leaves 5 Trauma. Ilyan had only 3 Vitality, so he reaches 0 with 2 damage remaining. He becomes Downed and Unstable with 2 Death Marks. His current Cohesion is only 1, so he cannot pay the 2 Cohesion required for Refuse Collapse. He takes no turn. His grace period prevents a Death Test during this round.",
+        "Round 4, Mara: she moves adjacent to Ilyan and uses Stabilize. Reason 4 + Medicine 3 gives seven dice against difficulty 2. The first roll has only one success. She Pushes three failed dice and gains 1 Exposure after final resolution. The replacements raise the total to four successes. Ilyan becomes Stable and loses one Death Mark, changing from 2 to 1. His Vitality remains 0. Mara's Exposure changes from 1 to 2.",
+        "Round 4, Kest: he uses a shoulder slam against Mara and scores five successes against difficulty 3. Margin 2 raises Impact Damage from 3 to 5. Mara's Protection 3 leaves 2 Impact. She spends 1 Cohesion on Brace, reducing final Impact to 1. Cohesion changes from 3 to 2 and Vitality from 7 to 6. Brace could reduce Impact but would not have reduced Trauma from Kest's claws.",
+        "Round 5, Mara: Emergency Treatment requires Ilyan to be Stable, adjacent, and at 0 Vitality. Mara spends 1 Cohesion on Commit, changing Cohesion 2 to 1, and rolls nine dice against difficulty 3. Four successes remove one recorded Trauma, restore Ilyan to 1 Vitality, remove his final Death Mark, end Downed, and apply Staggered through the end of his next turn. One field medical kit charge is consumed.",
+        "Round 5, Kest: his claw attack barely hits Mara and inflicts 1 Trauma after Protection, moving her from 6 to 5 Vitality.",
+        "Round 5, Ilyan: Staggered removes one die from his arc-pistol pool, leaving three dice. The initial roll produces one success against Kest's Identity Defense Difficulty 3. Ilyan Pushes the two failed dice and gains 1 Exposure. Both replacements succeed, raising the total to three. Damage 3 Disruption ignores ordinary Protection, moving Kest from 4 to 1 Vitality.",
+        "Round 6, Mara: her first pistol roll produces two successes against difficulty 3. She Pushes three failed dice and gains Exposure after resolution. The final total becomes four successes. Margin 1 produces Raw Damage 5, and Kest's Protection 4 leaves 1 Trauma. Kest falls from 1 to 0 Vitality with no excess damage, becoming Downed and Unstable with 0 Death Marks. Mara's Exposure rises from 2 to 3. Her Exposure Limit is 5, so Warning is 3; she is now Exposed and future Pushes reroll one fewer die.",
+        "Round 6 ends without a Death Test for Kest because this is the round in which he became Downed.",
+        "Round 7, Mara: the damaged conduit threatens to ignite the gallery. She uses a Standard Action to seal it with Reason 4 + Security 2 against difficulty 3. The first roll produces two successes. Because she is Exposed, her Resolve 3 permits only two Push rerolls instead of three. Both replacements succeed. The conduit is sealed and Exposure rises from 3 to 4.",
+        "At the end of Round 7, Kest remains Unstable. Resilience 3 + Composure 2 gives five Death Test dice against difficulty 2. The roll produces only one success and contains no 1, so Kest gains 1 Death Mark.",
+        "Round 8, Mara: she attempts to open the jammed emergency bulkhead with Reason 4 + Engineering 1 against difficulty 3. The first roll produces two successes. She Pushes two dice because she remains Exposed. Both succeed, opening the exit. Exposure rises from 4 to its Limit of 5. The action succeeds before Overexposure resolves. Mara then suffers 1 Impact ignoring Protection, loses her Reaction, cannot Push through the end of her next turn, and resets Exposure to Warning 3. Her Vitality changes from 5 to 4.",
+        "At the end of Round 8, Kest makes another Death Test. The roll has one success and a result of 1. Because the test failed and contains a 1, it adds 2 Death Marks instead of 1. Kest moves from 1 to 3 Death Marks and dies immediately. Stabilize, Emergency Treatment, ordinary healing, and retroactive Cohesion spending can no longer save him.",
+        "The rules did not require Kest to die because he was hostile. Mara or Ilyan could have attempted Stabilize during Round 7 or Round 8. They instead spent their actions containing the conduit and opening the only exit while Ilyan was barely mobile. The death follows from the same track and timing that endangered Ilyan earlier, not from a separate rule for defeated enemies.",
+        "The scene ends with Mara at 4 of 7 Vitality, 1 Cohesion, and 3 Exposure after Overexposure reset. Ilyan is conscious at 1 of 7 Vitality, has 1 Pact, 4 Intrusion, 1 Exposure, and an Abyssal Source Mark that remains until Intrusion falls below Warning. Kest is dead at 3 Death Marks. Neither Exposure nor Intrusion disappears merely because Initiative ends; Mara needs a safe ten-minute interval to clear Exposure, while Ilyan must use his Source-specific Intrusion recovery procedures."
+      ],
+      "tables": [
+        {
+          "title": "Starting Characters",
+          "columns": ["Character", "Vitality", "Defense", "Protection", "Cohesion", "Exposure", "Archetype Tracks"],
+          "rows": [
+            ["Mara Vale · Human Investigator", "7", "Guard 6 / Difficulty 3", "3", "4 current / 9 max", "0 / Limit 5", "Conviction 4; Strain 1 / Limit 8"],
+            ["Ilyan Voss · Eldritch Binder", "7", "Guard 4 / Difficulty 2", "3", "1 current / 9 max", "0 / Limit 6", "Pact 5; Intrusion 4 / Limit 7"],
+            ["Kest Raal · Shapechanger", "8", "Guard 6 / Difficulty 3", "4", "4 current / 8 max", "0 / Limit 6", "Fury 4; Instinct 3 / Limit 7"]
+          ]
+        },
+        {
+          "title": "Round-by-Round Track State",
+          "columns": ["End of Round", "Mara", "Ilyan", "Kest"],
+          "rows": [
+            ["1", "Vitality 7 · Cohesion 4 · Exposure 0", "Vitality 4 · Pact 3 · Intrusion 5", "Vitality 7 · Restrained"],
+            ["2", "Vitality 7 · Cohesion 4 · Exposure 1", "Vitality 3 · Pact 1 · Intrusion 4 after Incursion · Restrained · Source Mark", "Vitality 6"],
+            ["3", "Vitality 7 · Cohesion 3 · Exposure 1", "Vitality 0 · Unstable · 2 Death Marks", "Vitality 4"],
+            ["4", "Vitality 6 · Cohesion 2 · Exposure 2", "Vitality 0 · Stable · 1 Death Mark", "Vitality 4"],
+            ["5", "Vitality 5 · Cohesion 1 · Exposure 2", "Vitality 1 · 0 Death Marks · Exposure 1 · Staggered", "Vitality 1"],
+            ["6", "Vitality 5 · Cohesion 1 · Exposure 3 · Exposed", "Vitality 1", "Vitality 0 · Unstable · 0 Death Marks"],
+            ["7", "Vitality 5 · Exposure 4", "Vitality 1", "Vitality 0 · 1 Death Mark"],
+            ["8", "Vitality 4 · Exposure reset to 3 · no Reaction", "Vitality 1 · Pact 1 · Intrusion 4", "Dead · 3 Death Marks"]
+          ]
+        },
+        {
+          "title": "What the Example Demonstrates",
+          "columns": ["Mechanic", "Observed Result"],
+          "rows": [
+            ["Roleplay into Initiative", "Combat begins only when Kest's declared violence makes action order consequential"],
+            ["Protection and Vitality", "Weapon Damage plus Margin is reduced, then each final point removes one Vitality"],
+            ["Push and Exposure", "Mara and Ilyan improve failed rolls but accumulate Exposure; Mara eventually triggers Overexposure"],
+            ["Cohesion", "Mara uses Commit to add dice and Brace to reduce Impact; Ilyan cannot afford Refuse Collapse"],
+            ["Pressure", "Ilyan crosses Warning, Critical, and Limit; the ability resolves before Incursion and overflow is preserved"],
+            ["Saving a character", "Stabilize stops Ilyan's death clock; Emergency Treatment restores 1 Vitality and removes the remaining Death Mark"],
+            ["Character death", "Kest reaches 3 Death Marks through failed Death Tests and cannot be saved afterward"]
+          ]
+        }
+      ],
+      "tags": ["worked example", "combat example", "two versus one", "exposure", "cohesion", "pressure", "vitality", "death"],
+      "relatedEntries": ["combat-foundation-procedure", "combat-tracks-and-death", "archetype-resource-pressure-procedure"]
+    }
+  ]
+}
