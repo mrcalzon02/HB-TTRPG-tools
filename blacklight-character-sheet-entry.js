@@ -3,10 +3,11 @@
 
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
   const VAMPIRE_LINEAGE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
+  const SHAPECHANGER_VARIANT_URL = 'data/blacklight-continuum/rules/shapechanger-remainder-forms.json';
   let rulesData = null;
   let rulesPromise = null;
-  let lineageData = null;
-  let lineagePromise = null;
+  const variantCache = new Map();
+  const variantPromises = new Map();
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -50,6 +51,7 @@
         <span class="badge status-active">basic character sheet</span>
         <span class="badge">6 integrated archetypes</span>
         <span class="badge">13 Vampire bloodlines</span>
+        <span class="badge">23 Shapechanger variants</span>
         <span class="badge">36 power families</span>
         <span class="badge">180 ranked powers</span>
       </div>
@@ -96,20 +98,26 @@
     return rulesPromise;
   }
 
-  function loadLineages() {
-    if (lineageData) return Promise.resolve(lineageData);
-    if (!lineagePromise) {
-      lineagePromise = fetch(VAMPIRE_LINEAGE_URL, { cache: 'no-store' })
+  function loadVariantData(archetypeId) {
+    const url = archetypeId === 'vampire'
+      ? VAMPIRE_LINEAGE_URL
+      : archetypeId === 'shapechanger'
+        ? SHAPECHANGER_VARIANT_URL
+        : '';
+    if (!url) return Promise.resolve(null);
+    if (variantCache.has(archetypeId)) return Promise.resolve(variantCache.get(archetypeId));
+    if (!variantPromises.has(archetypeId)) {
+      variantPromises.set(archetypeId, fetch(url, { cache: 'no-store' })
         .then(response => {
-          if (!response.ok) throw new Error(`Vampire lineage request failed with status ${response.status}.`);
+          if (!response.ok) throw new Error(`${archetypeId} variant request failed with status ${response.status}.`);
           return response.json();
         })
         .then(data => {
-          lineageData = data;
+          variantCache.set(archetypeId, data);
           return data;
-        });
+        }));
     }
-    return lineagePromise;
+    return variantPromises.get(archetypeId);
   }
 
   function removeLegacyPowerTable(entryTarget) {
@@ -136,18 +144,30 @@
       </article>`;
   }
 
-  function renderLineage(lineage) {
+  function renderVariant(variant, legacyLabel) {
     return `
       <article class="blacklight-wiki-lineage">
-        <h4>${escapeHtml(lineage.name)}</h4>
+        <h4>${escapeHtml(variant.name)}</h4>
         <div class="blacklight-wiki-lineage-grid">
-          <div><strong>Society of Shadows legacy:</strong> ${escapeHtml(lineage.legacy)}</div>
-          <div><strong>Continuum translation:</strong> ${escapeHtml(lineage.continuum)}</div>
+          <div><strong>${escapeHtml(legacyLabel)}:</strong> ${escapeHtml(variant.legacy)}</div>
+          <div><strong>Continuum translation:</strong> ${escapeHtml(variant.continuum)}</div>
         </div>
-        <p><strong>Favored power families:</strong> ${(lineage.favoredFamilies || []).map(escapeHtml).join(' · ')}</p>
-        <div class="blacklight-wiki-lineage-effect"><strong>${escapeHtml(lineage.gift.name)}:</strong> ${escapeHtml(lineage.gift.effect)}</div>
-        <div class="blacklight-wiki-lineage-effect"><strong>${escapeHtml(lineage.bane.name)}:</strong> ${escapeHtml(lineage.bane.effect)}</div>
+        <p><strong>Favored power families:</strong> ${(variant.favoredFamilies || []).map(escapeHtml).join(' · ')}</p>
+        <div class="blacklight-wiki-lineage-effect"><strong>${escapeHtml(variant.gift.name)}:</strong> ${escapeHtml(variant.gift.effect)}</div>
+        <div class="blacklight-wiki-lineage-effect"><strong>${escapeHtml(variant.bane.name)}:</strong> ${escapeHtml(variant.bane.effect)}</div>
       </article>`;
+  }
+
+  function variantCatalogs(archetypeId, data) {
+    if (archetypeId === 'vampire' && data?.lineages?.length) {
+      return [{
+        title: 'Thirteen Remainder Bloodlines',
+        legacyLabel: 'Society of Shadows legacy',
+        variants: data.lineages
+      }];
+    }
+    if (archetypeId === 'shapechanger' && data?.catalogs?.length) return data.catalogs;
+    return [];
   }
 
   async function enrichActiveWikiEntry() {
@@ -157,23 +177,25 @@
     if (!entryId.endsWith('-archetype')) return;
 
     try {
-      const [data, lineages] = await Promise.all([
-        loadRules(),
-        entryId === 'vampire-archetype' ? loadLineages() : Promise.resolve(null)
-      ]);
       const archetypeId = entryId.replace(/-archetype$/, '');
+      const [data, variants] = await Promise.all([
+        loadRules(),
+        loadVariantData(archetypeId)
+      ]);
       const archetype = (data.archetypes || []).find(item => item.id === archetypeId);
       if (!archetype) return;
       removeLegacyPowerTable(entryTarget);
 
-      if (entryId === 'vampire-archetype' && lineages?.lineages?.length) {
-        const lineageCatalog = document.createElement('section');
-        lineageCatalog.dataset.blacklightWikiLineageCatalog = 'true';
-        lineageCatalog.innerHTML = `
-          <h4>Thirteen Remainder Bloodlines</h4>
-          <p class="blacklight-callout"><strong>These remain part of the Vampire Archetype.</strong> ${escapeHtml(lineages.framework)}</p>
-          <div class="blacklight-wiki-lineage-catalog">${lineages.lineages.map(renderLineage).join('')}</div>`;
-        entryTarget.appendChild(lineageCatalog);
+      const catalogs = variantCatalogs(archetypeId, variants);
+      if (catalogs.length) {
+        const variantSection = document.createElement('section');
+        variantSection.dataset.blacklightWikiLineageCatalog = 'true';
+        variantSection.innerHTML = `
+          <p class="blacklight-callout"><strong>These remain part of the ${escapeHtml(archetype.name)} Archetype.</strong> ${escapeHtml(variants.framework)}</p>
+          ${catalogs.map(catalog => `
+            <h4>${escapeHtml(catalog.title)}</h4>
+            <div class="blacklight-wiki-lineage-catalog">${(catalog.variants || []).map(variant => renderVariant(variant, catalog.legacyLabel || 'Inherited legacy')).join('')}</div>`).join('')}`;
+        entryTarget.appendChild(variantSection);
       }
 
       const catalog = document.createElement('section');
