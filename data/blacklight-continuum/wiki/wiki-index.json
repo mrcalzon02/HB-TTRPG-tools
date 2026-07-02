@@ -13,15 +13,16 @@
   },
   "campaignDocument": "docs/blacklight-continuum/campaign-introduction.md",
   "packs": [
-    "data/blacklight-continuum/wiki/foundation-entries.json"
+    "data/blacklight-continuum/wiki/foundation-lore.json",
+    "data/blacklight-continuum/wiki/foundation-rules.json"
   ],
   "completedScope": {
-    "wikiEntries": 10,
-    "nativePacks": 1,
+    "wikiEntries": 13,
+    "nativePacks": 2,
     "operationalFrames": 12,
     "coreSkills": 24,
     "coreAttributes": 9,
-    "hybridPowerFamilies": 9,
+    "hybridPowerFamilies": 10,
     "openingEquipmentExamples": 6
   },
   "nextDevelopmentAreas": [
