@@ -1,0 +1,87 @@
+name: One-time Human Vigil validation
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-human-vigil-validation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check JavaScript syntax
+        run: |
+          node --check blacklight-archetype-transition.js
+          node --check blacklight-character-sheet-entry.js
+          node --check blacklight-character-sheet.js
+      - name: Validate Human Vigil data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          paths = [
+              Path('data/blacklight-continuum/rules/basic-character-options.json'),
+              Path('data/blacklight-continuum/rules/human-vigil-practices.json'),
+              Path('data/blacklight-continuum/wiki/basic-archetypes.json'),
+              Path('data/blacklight-continuum/wiki/wiki-index.json'),
+          ]
+          parsed = {path: json.loads(path.read_text(encoding='utf-8')) for path in paths}
+
+          rules = parsed[paths[0]]
+          vigil = parsed[paths[1]]
+          wiki = parsed[paths[2]]
+          index = parsed[paths[3]]
+
+          human = next(item for item in rules['archetypes'] if item['id'] == 'human-investigator')
+          families = {family['name'] for family in human['powerFamilies']}
+          skills = {skill for group in rules['skills'].values() for skill in group}
+
+          catalogs = {catalog['id']: catalog for catalog in vigil['catalogs']}
+          convictions = catalogs['vigil-convictions']['variants']
+          practices = catalogs['hunter-practices']['variants']
+
+          assert len(convictions) == 7, len(convictions)
+          assert len(practices) == 10, len(practices)
+          assert sum(len(item.get('progression', [])) for item in practices) == 30
+          assert all(len(item.get('progression', [])) == 3 for item in practices)
+          assert all(not {'gift', 'bane'} & set(item) for item in convictions + practices)
+          assert all(set(item.get('favoredFamilies', [])) <= families for item in convictions + practices)
+          assert all(set(item.get('recommendedSkills', [])) <= skills for item in convictions + practices)
+          assert all(item.get('method') for item in convictions)
+          assert all(item.get('entryRequirement') for item in practices)
+          assert any(item['id'] == 'human-investigator-archetype' for item in wiki['entries'])
+          assert index['completedScope']['humanVigilConvictions'] == 7
+          assert index['completedScope']['humanHunterPractices'] == 10
+          assert index['completedScope']['humanHunterAttainments'] == 30
+
+          transition = Path('blacklight-archetype-transition.js').read_text(encoding='utf-8')
+          entry = Path('blacklight-character-sheet-entry.js').read_text(encoding='utf-8')
+          for source in (transition, entry):
+              assert 'human-vigil-practices.json' in source
+              assert 'human-investigator' in source
+          assert 'humanInvestigatorPractice' in transition
+          assert 'Vigil Conviction' in transition
+          assert 'Hunter Practice' in transition
+          PY
+      - name: Remove validation workflow
+        run: rm .github/workflows/one-time-human-vigil-validation.yml
+      - name: Commit validation cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Validate Human Vigil integration"
+          git push origin main
