@@ -1,0 +1,59 @@
+{
+  "receiptType": "shadowrunSprawlDiscoveryPhaseStatus",
+  "schemaVersion": "1.0.0",
+  "updatedDate": "2026-07-02",
+  "workspace": "Shadowrun",
+  "projectId": "street-view-sprawl-discovery",
+  "completedStages": [
+    "deterministic-local-generation-engine",
+    "nearby-coordinate-site-packages",
+    "maps-and-street-view-link-export",
+    "shadowrun-workspace-module-registration",
+    "lazy-browser-panel",
+    "json-geojson-kml-export-controls",
+    "static-validation",
+    "browser-verification-script"
+  ],
+  "operationalScope": {
+    "description": "Generate nearby Shadowrun-ready sites from one real-world origin without API keys or external data dependencies.",
+    "inputs": [
+      "seed",
+      "origin label",
+      "latitude",
+      "longitude",
+      "radius meters",
+      "site count",
+      "discovery focus",
+      "threat profile"
+    ],
+    "outputs": [
+      "deterministic site keys",
+      "nearby coordinates",
+      "Google Maps links",
+      "Street View links",
+      "public facade",
+      "shadow use",
+      "security posture",
+      "Matrix surface",
+      "magical surface",
+      "clues",
+      "legwork",
+      "related nearby sites",
+      "JSON",
+      "GeoJSON",
+      "KML"
+    ]
+  },
+  "verification": {
+    "staticValidator": "scripts/validate-shadowrun-sprawl-discovery.mjs",
+    "browserValidator": "scripts/run-shadowrun-sprawl-discovery-browser-verification.mjs",
+    "consolidatedGate": "scripts/validate-npc-all-phases.mjs",
+    "localStatus": "Static validation is dependency-free. Browser verification is available but requires the Playwright runtime."
+  },
+  "nextRecommendedStages": [
+    "Add optional OpenStreetMap named-place ingestion when online services are available.",
+    "Promote generated discovery sites into the Facility/Security planner module.",
+    "Connect selected discovery sites to Mission and Complication generation.",
+    "Add a campaign archive that stores generated packages by neighborhood and run."
+  ]
+}

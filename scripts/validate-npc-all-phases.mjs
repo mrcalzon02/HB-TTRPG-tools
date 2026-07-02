@@ -23,7 +23,8 @@ const VALIDATORS=[
 ];
 const PROJECT_VALIDATORS=[
   {id:'shadowrun-binary-cube',path:'scripts/validate-shadowrun-binary-cube.mjs'},
-  {id:'shadowrun-polyaminal-fold',path:'scripts/validate-shadowrun-polyaminal-fold.mjs'}
+  {id:'shadowrun-polyaminal-fold',path:'scripts/validate-shadowrun-polyaminal-fold.mjs'},
+  {id:'shadowrun-sprawl-discovery',path:'scripts/validate-shadowrun-sprawl-discovery.mjs'}
 ];
 
 function clone(value){return JSON.parse(JSON.stringify(value));}

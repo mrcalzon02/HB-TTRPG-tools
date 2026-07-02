@@ -250,6 +250,11 @@ function validateLegacyFixtureAndIntegration() {
   const entry = fs.readFileSync(path.join(root, 'shadowrun-entry.js'), 'utf8');
   check(ui.includes('window.ShadowrunBinaryCubeEngine'), 'The browser interface must consume the separated engine.');
   check(!ui.includes('function createKey('), 'The browser interface must not duplicate key-generation logic.');
+  check(ui.includes('Unencrypted File In -> Encrypted File Out'), 'The browser interface must label the unencrypted-file-in to encrypted-file-out lane.');
+  check(ui.includes('Encrypted File In -> Unencrypted File Out'), 'The browser interface must label the encrypted-file-in to unencrypted-file-out lane.');
+  check(ui.includes('cube-import-plain-file') && ui.includes('data-cube-download-encrypted-file'), 'The browser interface must expose the unencrypted file input and encrypted package output controls.');
+  check(ui.includes('cube-import-encrypted-file') && ui.includes('data-cube-download-plain-file'), 'The browser interface must expose the encrypted package input and unencrypted file output controls.');
+  check(ui.includes('bytesToBits') && ui.includes('bitsToBytes'), 'The browser interface must convert file bytes to bits and recovered bits back to bytes.');
   check(entry.includes('shadowrun-binary-cube-engine.js'), 'The Shadowrun loader must load the pure engine.');
   check(entry.includes('shadowrun-binary-cube-encryption.js'), 'The Shadowrun loader must load the laboratory interface.');
 }

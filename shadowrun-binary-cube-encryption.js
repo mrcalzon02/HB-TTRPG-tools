@@ -11,6 +11,7 @@
   const PANEL_ID = 'shadowrun-binary-cube-lab';
   const STORAGE_KEY = 'hb-ttrpg-shadowrun-binary-cube-v2';
   const { FACES, RECOMMENDED_GRID_SIZES, SCHEMA_VERSION } = Engine.constants;
+  let lastPlainFileName = 'binary-cube-output.bin';
 
   function fail(message) {
     throw new Error(message);
@@ -40,6 +41,15 @@
       #${PANEL_ID}[hidden]{display:none}
       .cube-lab-header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
       .cube-lab-warning{padding:12px 14px;border-left:4px solid #c88b2b;background:#c88b2b18;color:var(--ink);border-radius:6px}
+      .cube-transfer-lanes{display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:14px;margin:18px 0}
+      .cube-transfer-lane{display:grid;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#111923}
+      .cube-transfer-lane.encrypt{border-left:6px solid #5eb6ff}.cube-transfer-lane.decrypt{border-left:6px solid #b993ff}
+      .cube-transfer-lane h3{margin:0}.cube-transfer-lane p{margin:0;color:var(--muted);line-height:1.4}
+      .cube-transfer-flow{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+      .cube-transfer-box{min-height:92px;padding:11px;border:1px dashed var(--line);border-radius:11px;background:#0c1118;display:grid;gap:7px;align-content:start}
+      .cube-transfer-box strong{color:var(--ink)}.cube-transfer-arrow{font-weight:900;color:var(--accent)}
+      .cube-transfer-box .layout-button,.cube-transfer-box .link-button{width:100%;min-width:0}
+      .cube-file-note{font:700 .75rem ui-monospace,monospace;color:#d7e7ff;word-break:break-word}
       .cube-lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
       .cube-lab-field{display:grid;gap:6px}.cube-lab-field label{font-weight:700}.cube-lab-field small{color:var(--muted)}
       .cube-lab-field textarea{min-height:120px;resize:vertical}.cube-lab-field input,.cube-lab-field select,.cube-lab-field textarea{width:100%;box-sizing:border-box}
@@ -51,6 +61,7 @@
       .cube-bit{display:grid;place-items:center;aspect-ratio:1;border:1px solid #ffffff22;border-radius:3px;font:700 .75rem ui-monospace,monospace}.cube-bit-1{background:#7fc8ff33}.cube-bit-0{background:#ffffff08}
       .cube-preview-summary,.cube-diagnostics{display:grid;gap:5px;padding:10px;border:1px dashed var(--line);border-radius:8px;color:var(--muted)}
       .cube-diagnostics strong{color:var(--ink)}
+      @media(max-width:900px){.cube-transfer-lanes,.cube-transfer-flow{grid-template-columns:1fr}.cube-transfer-arrow{text-align:center}}
     `;
     document.head.appendChild(node);
   }
@@ -71,8 +82,44 @@
         <button type="button" class="layout-button" data-cube-close>Close Laboratory</button>
       </div>
       <p class="cube-lab-warning"><strong>Research and game-use warning:</strong> this is experimental permutation and obfuscation research. The checksum detects accidental changes but is not a cryptographic authenticator. Do not use this system to protect real credentials, financial records, private messages, or sensitive data.</p>
+      <div class="cube-transfer-lanes" aria-label="Binary Cube file transfer lanes">
+        <section class="cube-transfer-lane encrypt" aria-labelledby="cube-encrypt-file-lane-title">
+          <h3 id="cube-encrypt-file-lane-title">Unencrypted File In -> Encrypted File Out</h3>
+          <div class="cube-transfer-flow">
+            <div class="cube-transfer-box">
+              <strong>Unencrypted file goes in here</strong>
+              <label class="layout-button cube-file-button">Choose Unencrypted File<input id="cube-import-plain-file" type="file"></label>
+              <span id="cube-plain-file-note" class="cube-file-note">No unencrypted file loaded.</span>
+            </div>
+            <span class="cube-transfer-arrow" aria-hidden="true">-></span>
+            <div class="cube-transfer-box">
+              <strong>Encrypted package file comes out here</strong>
+              <button type="button" class="link-button" data-cube-encrypt-file>Encrypt Loaded File</button>
+              <button type="button" class="layout-button" data-cube-download-encrypted-file>Download Encrypted File</button>
+            </div>
+          </div>
+          <p>Use this lane when you start with a normal file and want a Binary Cube package JSON file.</p>
+        </section>
+        <section class="cube-transfer-lane decrypt" aria-labelledby="cube-decrypt-file-lane-title">
+          <h3 id="cube-decrypt-file-lane-title">Encrypted File In -> Unencrypted File Out</h3>
+          <div class="cube-transfer-flow">
+            <div class="cube-transfer-box">
+              <strong>Encrypted package file goes in here</strong>
+              <label class="layout-button cube-file-button">Choose Encrypted File<input id="cube-import-encrypted-file" type="file" accept="application/json,.json"></label>
+              <span id="cube-encrypted-file-note" class="cube-file-note">No encrypted package loaded.</span>
+            </div>
+            <span class="cube-transfer-arrow" aria-hidden="true">-></span>
+            <div class="cube-transfer-box">
+              <strong>Unencrypted file comes out here</strong>
+              <button type="button" class="link-button" data-cube-decrypt-file>Decrypt Loaded File</button>
+              <button type="button" class="layout-button" data-cube-download-plain-file>Download Unencrypted File</button>
+            </div>
+          </div>
+          <p>The matching key still goes in the Key JSON section below; without it, the encrypted package cannot be opened.</p>
+        </section>
+      </div>
       <div class="cube-lab-grid">
-        ${field('Binary input', '<textarea id="cube-input" spellcheck="false" placeholder="0100100001101001"></textarea>', 'Whitespace is ignored. All other characters are rejected.')}
+        ${field('Manual unencrypted bits', '<textarea id="cube-input" spellcheck="false" placeholder="0100100001101001"></textarea>', 'Whitespace is ignored. All other characters are rejected. File input above is converted into bits here.')}
         ${field('Grid size', `<select id="cube-size">${RECOMMENDED_GRID_SIZES.map(size => `<option value="${size}">${size} × ${size} face · ${size * size} cells</option>`).join('')}</select>`, 'The source recommends 4, 12, 20, 28, 36, 44, 52, and 60.')}
         ${field('Key seed', '<input id="cube-seed" type="text" value="shadowrun-matrix-demo">', 'The seed deterministically generates coordinate permutations, mask placement, and filler.')}
         ${field('Input face', `<select id="cube-input-face">${FACES.map(face => `<option value="${face}" ${face === 'top' ? 'selected' : ''}>${face}</option>`).join('')}</select>`)}
@@ -90,7 +137,7 @@
       </div>
       <p id="cube-status" class="cube-lab-status" role="status" aria-live="polite"></p>
       <div class="cube-lab-output">
-        ${field('Encrypted package JSON', '<textarea id="cube-package" spellcheck="false" placeholder="Generate a key, then encrypt binary data."></textarea>', 'Contains framing metadata, ciphertext, and a non-cryptographic corruption checksum; it does not contain coordinate permutations or the mask.')}
+        ${field('Encrypted package JSON (encrypted file)', '<textarea id="cube-package" spellcheck="false" placeholder="Generate a key, then encrypt binary data."></textarea>', 'This is the encrypted file content. It contains framing metadata, ciphertext, and a non-cryptographic corruption checksum; it does not contain coordinate permutations or the mask.')}
         <div class="cube-lab-actions">
           <button type="button" class="layout-button" data-cube-copy-package>Copy Package</button>
           <button type="button" class="layout-button" data-cube-download-package>Download Package</button>
@@ -102,7 +149,7 @@
           <button type="button" class="layout-button" data-cube-download-key>Download Key</button>
           <label class="layout-button cube-file-button">Import Key<input id="cube-import-key" type="file" accept="application/json,.json"></label>
         </div>
-        ${field('Decrypted binary', '<textarea id="cube-decrypted" spellcheck="false" readonly></textarea>')}
+        ${field('Recovered unencrypted bits', '<textarea id="cube-decrypted" spellcheck="false" readonly></textarea>', 'Download Unencrypted File converts these bits back into bytes when possible.')}
         <div id="cube-diagnostics" class="cube-diagnostics" hidden></div>
         <div id="cube-preview-row" class="cube-preview-row" aria-live="polite"></div>
       </div>
@@ -139,6 +186,38 @@
     } catch (error) {
       fail(`${label} is not valid JSON: ${error.message}`);
     }
+  }
+
+  function bytesToBits(bytes) {
+    return [...bytes].map(byte => byte.toString(2).padStart(8, '0')).join('');
+  }
+
+  function bitsToBytes(bits) {
+    const normalized = String(bits || '').replace(/\s+/g, '');
+    if (!/^[01]+$/.test(normalized)) fail('Recovered unencrypted bits contain characters other than 0 and 1.');
+    if (normalized.length % 8 !== 0) fail('Recovered unencrypted bits are not byte-aligned, so they cannot be downloaded as a normal file.');
+    return new Uint8Array(Array.from({ length: normalized.length / 8 }, (_, index) => Number.parseInt(normalized.slice(index * 8, index * 8 + 8), 2)));
+  }
+
+  function safeFileName(value, fallback = 'binary-cube-output.bin') {
+    const cleaned = String(value || '').replace(/[<>:"/\\|?*\u0000-\u001f]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 120);
+    return cleaned || fallback;
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = safeFileName(filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function setFileNote(panel, selector, message) {
+    const node = panel.querySelector(selector);
+    if (node) node.textContent = message;
   }
 
   function syncOptionsFromKey(panel, key) {
@@ -181,6 +260,7 @@
         package: panel.querySelector('#cube-package').value,
         key: panel.querySelector('#cube-key').value,
         decrypted: panel.querySelector('#cube-decrypted').value,
+        plainFileName: lastPlainFileName,
         options: values(panel)
       }));
     } catch (_) {
@@ -196,6 +276,8 @@
       panel.querySelector('#cube-package').value = saved.package || '';
       panel.querySelector('#cube-key').value = saved.key || '';
       panel.querySelector('#cube-decrypted').value = saved.decrypted || '';
+      lastPlainFileName = saved.plainFileName || lastPlainFileName;
+      setFileNote(panel, '#cube-plain-file-note', saved.plainFileName ? `Last unencrypted file: ${saved.plainFileName}` : 'No unencrypted file loaded.');
       const options = saved.options || {};
       for (const [selector, value] of [
         ['#cube-size', options.gridSize], ['#cube-seed', options.seed], ['#cube-input-face', options.inputFace],
@@ -246,8 +328,111 @@
     });
   }
 
+  async function importPlainFile(panel, file) {
+    if (!file) fail('Choose an unencrypted file first.');
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    if (!bytes.length) fail('The selected unencrypted file is empty.');
+    lastPlainFileName = file.name || 'binary-cube-output.bin';
+    panel.querySelector('#cube-input').value = bytesToBits(bytes);
+    panel.querySelector('#cube-package').value = '';
+    panel.querySelector('#cube-decrypted').value = '';
+    clearDiagnostics(panel);
+    setFileNote(panel, '#cube-plain-file-note', `${lastPlainFileName} loaded · ${bytes.length} bytes · ${bytes.length * 8} bits.`);
+    setStatus(panel, `Unencrypted file loaded into the input lane: ${lastPlainFileName}. Press Encrypt Loaded File, then Download Encrypted File.`, 'success');
+    save(panel);
+  }
+
+  async function importEncryptedFile(panel, file) {
+    const packageObject = await readJsonFile(file, 'Encrypted package file');
+    panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);
+    setFileNote(panel, '#cube-encrypted-file-note', `${file.name || 'encrypted package'} loaded.`);
+    const keyRaw = panel.querySelector('#cube-key').value.trim();
+    if (keyRaw) {
+      const key = Engine.validateKey(JSON.parse(keyRaw));
+      const validated = Engine.validatePackage(packageObject, key);
+      renderDiagnostics(panel, validated, key);
+      setStatus(panel, `Encrypted package file loaded and validated against key ${key.keyId}. Press Decrypt Loaded File, then Download Unencrypted File.`, 'success');
+    } else {
+      clearDiagnostics(panel);
+      setStatus(panel, 'Encrypted package file loaded. Put the matching key in Key JSON before decrypting.', 'success');
+    }
+    save(panel);
+  }
+
+  function encryptCurrentInput(panel) {
+    let key;
+    const keyField = panel.querySelector('#cube-key');
+    if (keyField.value.trim()) key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
+    else {
+      key = Engine.createKey(values(panel));
+      keyField.value = JSON.stringify(key, null, 2);
+    }
+    const packageObject = Engine.encryptBinary(panel.querySelector('#cube-input').value, key);
+    panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);
+    panel.querySelector('#cube-decrypted').value = '';
+    renderDiagnostics(panel, packageObject, key);
+    return { key, packageObject };
+  }
+
+  function decryptCurrentPackage(panel) {
+    const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
+    const packageObject = parseJsonField(panel, '#cube-package', 'Encrypted package JSON');
+    const plaintext = Engine.decryptBinary(packageObject, key);
+    panel.querySelector('#cube-decrypted').value = plaintext;
+    renderDiagnostics(panel, packageObject, key);
+    return { key, packageObject, plaintext };
+  }
+
   function bindPanel(panel) {
     panel.querySelector('[data-cube-close]').addEventListener('click', () => { panel.hidden = true; });
+
+    panel.querySelector('#cube-import-plain-file').addEventListener('change', async event => {
+      try {
+        await importPlainFile(panel, event.target.files?.[0]);
+      } catch (error) { setStatus(panel, error.message, 'error'); }
+      event.target.value = '';
+    });
+
+    panel.querySelector('#cube-import-encrypted-file').addEventListener('change', async event => {
+      try {
+        await importEncryptedFile(panel, event.target.files?.[0]);
+      } catch (error) { setStatus(panel, error.message, 'error'); }
+      event.target.value = '';
+    });
+
+    panel.querySelector('[data-cube-encrypt-file]').addEventListener('click', () => {
+      try {
+        const { key, packageObject } = encryptCurrentInput(panel);
+        setFileNote(panel, '#cube-encrypted-file-note', `Encrypted package ready for key ${packageObject.keyId}.`);
+        setStatus(panel, `Encrypted file out is ready: ${packageObject.blockCount} package block${packageObject.blockCount === 1 ? '' : 's'} using key ${key.keyId}.`, 'success');
+        save(panel);
+      } catch (error) { setStatus(panel, error.message, 'error'); }
+    });
+
+    panel.querySelector('[data-cube-decrypt-file]').addEventListener('click', () => {
+      try {
+        const { plaintext } = decryptCurrentPackage(panel);
+        setStatus(panel, `Unencrypted file out is ready: ${plaintext.length} recovered bit${plaintext.length === 1 ? '' : 's'}.`, 'success');
+        save(panel);
+      } catch (error) { setStatus(panel, error.message, 'error'); }
+    });
+
+    panel.querySelector('[data-cube-download-encrypted-file]').addEventListener('click', () => {
+      try {
+        const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
+        const packageObject = Engine.validatePackage(parseJsonField(panel, '#cube-package', 'Encrypted package JSON'), key);
+        downloadJson(packageObject, `encrypted-binary-cube-package-${packageObject.keyId}.json`);
+        setStatus(panel, `Encrypted package file for key ${packageObject.keyId} downloaded.`, 'success');
+      } catch (error) { setStatus(panel, error.message, 'error'); }
+    });
+
+    panel.querySelector('[data-cube-download-plain-file]').addEventListener('click', () => {
+      try {
+        const bytes = bitsToBytes(panel.querySelector('#cube-decrypted').value);
+        downloadBlob(new Blob([bytes], { type: 'application/octet-stream' }), `decrypted-${lastPlainFileName}`);
+        setStatus(panel, `Unencrypted file downloaded: decrypted-${lastPlainFileName}.`, 'success');
+      } catch (error) { setStatus(panel, error.message, 'error'); }
+    });
 
     panel.querySelector('[data-cube-generate]').addEventListener('click', () => {
       try {
@@ -266,17 +451,7 @@
 
     panel.querySelector('[data-cube-encrypt]').addEventListener('click', () => {
       try {
-        let key;
-        const keyField = panel.querySelector('#cube-key');
-        if (keyField.value.trim()) key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
-        else {
-          key = Engine.createKey(values(panel));
-          keyField.value = JSON.stringify(key, null, 2);
-        }
-        const packageObject = Engine.encryptBinary(panel.querySelector('#cube-input').value, key);
-        panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);
-        panel.querySelector('#cube-decrypted').value = '';
-        renderDiagnostics(panel, packageObject, key);
+        const { key, packageObject } = encryptCurrentInput(panel);
         setStatus(panel, `${packageObject.originalBitLength} input bits encrypted into ${packageObject.blockCount} validated cube block${packageObject.blockCount === 1 ? '' : 's'} using key ${key.keyId}.`, 'success');
         save(panel);
       } catch (error) {
@@ -286,11 +461,7 @@
 
     panel.querySelector('[data-cube-decrypt]').addEventListener('click', () => {
       try {
-        const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
-        const packageObject = parseJsonField(panel, '#cube-package', 'Encrypted package JSON');
-        const plaintext = Engine.decryptBinary(packageObject, key);
-        panel.querySelector('#cube-decrypted').value = plaintext;
-        renderDiagnostics(panel, packageObject, key);
+        const { plaintext } = decryptCurrentPackage(panel);
         setStatus(panel, `${plaintext.length} original bits recovered after key, framing, block, and checksum validation.`, 'success');
         save(panel);
       } catch (error) {
@@ -379,6 +550,9 @@
       panel.querySelector('#cube-input-turns').value = '0';
       panel.querySelector('#cube-output-turns').value = '0';
       panel.querySelector('#cube-mask-density').value = '1';
+      lastPlainFileName = 'binary-cube-output.bin';
+      setFileNote(panel, '#cube-plain-file-note', 'No unencrypted file loaded.');
+      setFileNote(panel, '#cube-encrypted-file-note', 'No encrypted package loaded.');
       clearDiagnostics(panel);
       setStatus(panel, 'Laboratory reset.', 'success');
     });

@@ -3,7 +3,7 @@
 
   const VIEW_ID = 'shadowrun';
   const modules = [
-    ['generators','Sprawl, District, and Neighborhood Generator','Create a metro sprawl, district identity, security tier, communities, corporate footprint, gangs, magical character, and street conflicts.'],
+    ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, run hooks, security posture, Matrix surfaces, magical texture, legwork, and export packages.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
     ['generators','Mr. Johnson and Employer Generator','Create an employer persona, public identity, real sponsor, negotiation posture, withheld information, leverage, and betrayal risk.'],
     ['tools','Fixer and Contact Network Editor','Track contacts, loyalty, connection, specialties, neighborhoods, favors, availability, and evolving risk.'],
@@ -21,11 +21,12 @@
     ['campaign','Campaign Clocks and Consequence Dashboard','Track corporate retaliation, police heat, gang hostility, contact strain, media exposure, magical fallout, and team debt.'],
     ['reference','Edition and House-Rule Profile','Record selected edition, terminology, dice assumptions, Matrix model, magic options, availability rules, and house conversions.'],
     ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.'],
-    ['tools','Binary Cube Encryption Laboratory','Develop and test a binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype'],
+    ['tools','Binary Cube Encryption Laboratory','Develop and test a binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype','Open Laboratory'],
     ['tools','Polyaminal Fold Ladder Compression Research','Investigate recursive anchor/swing folding, stage-gated codecs, deterministic binary packing, measurable compression behavior, and eventual handoff into the Binary Cube pipeline.',null,'research']
   ];
   let active = 'all';
   let cubeToolPromise = null;
+  let sprawlToolPromise = null;
   const loadedCubeScripts = new Map();
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const title = value => String(value).replace(/^./, character => character.toUpperCase());
@@ -116,14 +117,42 @@
     return cubeToolPromise;
   }
 
+  function loadSprawlTool() {
+    if (window.ShadowrunSprawlDiscoveryEngine && window.ShadowrunSprawlDiscovery) {
+      return Promise.resolve(window.ShadowrunSprawlDiscovery);
+    }
+    if (sprawlToolPromise) return sprawlToolPromise;
+    sprawlToolPromise = (async () => {
+      await loadCubeScript('shadowrun-sprawl-discovery-engine.js');
+      if (!window.ShadowrunSprawlDiscoveryEngine) throw new Error('The Sprawl Discovery engine loaded without exposing its API.');
+      await loadCubeScript('shadowrun-sprawl-discovery.js');
+      if (!window.ShadowrunSprawlDiscovery) throw new Error('The Sprawl Discovery panel loaded without exposing its interface.');
+      return window.ShadowrunSprawlDiscovery;
+    })();
+    sprawlToolPromise.catch(() => { sprawlToolPromise = null; });
+    return sprawlToolPromise;
+  }
+
+  function toolLabel(toolId) {
+    return toolId === 'shadowrun-sprawl-discovery' ? 'Discovery' : 'Laboratory';
+  }
+
+  function loadTool(toolId) {
+    if (toolId === 'shadowrun-sprawl-discovery') return loadSprawlTool();
+    if (toolId === 'shadowrun-binary-cube-encryption') return loadCubeTool();
+    return Promise.reject(new Error(`No loader is registered for ${toolId}.`));
+  }
+
   async function openTool(button) {
+    const toolId = button.dataset.shadowrunOpen;
     button.disabled = true;
     button.setAttribute('aria-busy', 'true');
     const original = button.textContent;
     button.textContent = 'Loading Laboratory…';
     try {
-      const api = await loadCubeTool();
-      if (!api?.openPanel) throw new Error('The Binary Cube Encryption Laboratory loaded without an open-panel interface.');
+      button.textContent = `Loading ${toolLabel(toolId)}...`;
+      const api = await loadTool(toolId);
+      if (!api?.openPanel) throw new Error(`${toolLabel(toolId)} loaded without an open-panel interface.`);
       api.openPanel();
     } catch (error) {
       alert(error.message);
@@ -144,7 +173,7 @@
     main.appendChild(section);
     section.querySelector('#shadowrun-search').addEventListener('input', render);
     section.querySelector('#shadowrun-grid').addEventListener('click', event => {
-      const button = event.target.closest('[data-shadowrun-open="shadowrun-binary-cube-encryption"]');
+      const button = event.target.closest('[data-shadowrun-open]');
       if (button) void openTool(button);
     });
     tabs(); render(); bind();
@@ -171,7 +200,7 @@
     const visible = modules.filter(module => (active === 'all' || module[0] === active) && module.join(' ').toLowerCase().includes(query));
     grid.innerHTML = visible.map((module,index) => {
       const status = module[4] || 'planned';
-      const action = module[3] ? `<button type="button" class="link-button shadowrun-module-action" data-shadowrun-open="${esc(module[3])}">Open Laboratory</button>` : '';
+      const action = module[3] ? `<button type="button" class="link-button shadowrun-module-action" data-shadowrun-open="${esc(module[3])}">${esc(module[5] || 'Open Tool')}</button>` : '';
       return `<article class="module-card"${module[3] ? ` data-shadowrun-module="${esc(module[3])}"` : ''}><div class="module-meta"><span class="badge section-${esc(module[0])}">${esc(title(module[0]))}</span><span class="badge status-${esc(status)}">${esc(title(status))}</span><span class="badge">priority ${index + 1}</span></div><h3>${esc(module[1])}</h3><p>${esc(module[2])}</p>${action}</article>`;
     }).join('') || '<div class="module-empty">No Shadowrun modules match the current filter.</div>';
     document.getElementById('shadowrun-count').textContent = `${visible.length} of ${modules.length} modules shown.`;

@@ -206,6 +206,10 @@ try {
 
   const transferControlCount = await page.locator('[data-cube-copy-key], [data-cube-copy-package], [data-cube-download-key], [data-cube-download-package], #cube-import-key, #cube-import-package').count();
   assert(transferControlCount === 6, `Expected six Binary Cube import, export, and copy controls but found ${transferControlCount}.`);
+  assert(await page.locator('text=Unencrypted File In -> Encrypted File Out').count() === 1, 'The file encryption lane was not labeled clearly.');
+  assert(await page.locator('text=Encrypted File In -> Unencrypted File Out').count() === 1, 'The file decryption lane was not labeled clearly.');
+  const fileLaneControlCount = await page.locator('#cube-import-plain-file, [data-cube-encrypt-file], [data-cube-download-encrypted-file], #cube-import-encrypted-file, [data-cube-decrypt-file], [data-cube-download-plain-file]').count();
+  assert(fileLaneControlCount === 6, `Expected six explicit file lane controls but found ${fileLaneControlCount}.`);
   const authControlCount = await page.locator('[data-cube-auth-seal], [data-cube-auth-open], [data-cube-auth-inspect], [data-cube-auth-copy], [data-cube-auth-download], #cube-auth-import, [data-cube-auth-clear]').count();
   assert(authControlCount === 7, `Expected seven authenticated-envelope controls but found ${authControlCount}.`);
   const editorControlCount = await page.locator('[data-cube-custom-load], [data-cube-custom-validate], [data-cube-custom-apply], [data-cube-custom-restore], [data-cube-custom-undo], [data-cube-custom-redo]').count();
