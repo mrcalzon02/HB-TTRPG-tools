@@ -166,10 +166,20 @@
       renderProfile();
 
       const select = document.getElementById('blacklight-archetype');
-      select?.addEventListener('change', () => renderProfile());
+      select?.addEventListener('change', renderProfile);
+      if (select) {
+        new MutationObserver(() => queueMicrotask(renderProfile)).observe(select, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['value']
+        });
+      }
       document.addEventListener('change', event => {
         if (event.target?.id === 'blacklight-archetype') renderProfile();
       });
+      window.setTimeout(renderProfile, 100);
+      window.setTimeout(renderProfile, 500);
     } catch (error) {
       const target = document.getElementById('blacklight-transition-profile');
       if (target) target.innerHTML = `<p class="helper-note">Transition profiles could not be loaded: ${escapeHtml(error.message)}</p>`;
