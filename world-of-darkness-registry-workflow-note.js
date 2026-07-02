@@ -1,6 +1,7 @@
 (() => {
   'use strict';
 
+  const ASSET_VERSION = '20260702-5';
   const SOURCES = [
     { src: 'world-of-darkness-intensity-control.js', ready: () => Boolean(window.WODSupernaturalIntensity) },
     { src: 'spatial-submission-handoff.js', ready: () => Boolean(window.HBSpatialSubmissionHandoff) }
@@ -18,7 +19,7 @@
       script.addEventListener('load', () => source.ready() ? resolve() : reject(new Error(`${source.src} loaded without exposing its expected API.`)), { once: true });
       script.addEventListener('error', () => reject(new Error(`${source.src} could not be loaded.`)), { once: true });
       if (!existing) {
-        script.src = source.src;
+        script.src = `${source.src}?v=${ASSET_VERSION}`;
         script.async = false;
         script.dataset.wodRegistryWorkflow = 'true';
         document.body.appendChild(script);
