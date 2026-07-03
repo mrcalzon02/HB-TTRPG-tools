@@ -61,18 +61,36 @@
     "bashing": {
       "name": "Bashing",
       "meaning": "Blunt force, punches, falls, fatigue, shock, and impacts that bruise or batter without primarily cutting or destroying tissue.",
-      "ordinaryExamples": ["Punch", "Club", "Short fall", "Nonpenetrating collision", "Concussive force"],
+      "ordinaryExamples": [
+        "Punch",
+        "Club",
+        "Short fall",
+        "Nonpenetrating collision",
+        "Concussive force"
+      ],
       "mortality": "Bashing can incapacitate and can eventually kill, but it is less immediately lethal than Lethal or Aggravated damage."
     },
     "lethal": {
       "name": "Lethal",
       "meaning": "Cutting, penetration, severe crushing, ordinary gunfire against living bodies, major falls, vehicle impact, and other injuries that tear or destroy essential tissue.",
-      "ordinaryExamples": ["Knife", "Ordinary firearm against a living target", "Chainsaw", "Major fall", "Vehicle strike"]
+      "ordinaryExamples": [
+        "Knife",
+        "Ordinary firearm against a living target",
+        "Chainsaw",
+        "Major fall",
+        "Vehicle strike"
+      ]
     },
     "aggravated": {
       "name": "Aggravated",
       "meaning": "Supernatural or catastrophically destructive harm that attacks the target on a fundamental level and can be soaked only by an explicit supernatural defense.",
-      "ordinaryExamples": ["Vampire-bane sunlight", "Supernatural fire", "Consecrated or cursed weapon", "Supernatural claws or teeth when the capability says Aggravated", "Reality-unmaking power"]
+      "ordinaryExamples": [
+        "Vampire-bane sunlight",
+        "Supernatural fire",
+        "Consecrated or cursed weapon",
+        "Supernatural claws or teeth when the capability says Aggravated",
+        "Reality-unmaking power"
+      ]
     },
     "disruption": {
       "name": "Disruption",
@@ -114,13 +132,41 @@
     "otherArchetypes": "Human Investigator, Eldritch Binder, Harmonic Mutant, and Technomancer use the ordinary mortal or human-adjacent permissions unless a power, form, item, or condition explicitly changes them."
   },
   "sampleDamageDice": [
-    {"attack": "Unarmed strike", "damageDice": "Force", "type": "Bashing"},
-    {"attack": "Baton or club", "damageDice": 3, "type": "Bashing"},
-    {"attack": "Compact pistol", "damageDice": 4, "type": "Lethal to living targets; normally Bashing to Vampires"},
-    {"attack": "Rifle", "damageDice": 5, "type": "Lethal to living targets; normally Bashing to Vampires"},
-    {"attack": "Heavy anti-materiel firearm", "damageDice": 7, "type": "Lethal or Aggravated when explicitly rated"},
-    {"attack": "Supernatural claws", "damageDice": "Printed capability", "type": "Lethal or Aggravated as printed"},
-    {"attack": "Arc or identity weapon", "damageDice": 3, "type": "Disruption"}
+    {
+      "attack": "Unarmed strike",
+      "damageDice": "Force",
+      "type": "Bashing"
+    },
+    {
+      "attack": "Baton or club",
+      "damageDice": 3,
+      "type": "Bashing"
+    },
+    {
+      "attack": "Compact pistol",
+      "damageDice": 4,
+      "type": "Lethal to living targets; normally Bashing to Vampires"
+    },
+    {
+      "attack": "Rifle",
+      "damageDice": 5,
+      "type": "Lethal to living targets; normally Bashing to Vampires"
+    },
+    {
+      "attack": "Heavy anti-materiel firearm",
+      "damageDice": 7,
+      "type": "Lethal or Aggravated when explicitly rated"
+    },
+    {
+      "attack": "Supernatural claws",
+      "damageDice": "Printed capability",
+      "type": "Lethal or Aggravated as printed"
+    },
+    {
+      "attack": "Arc or identity weapon",
+      "damageDice": 3,
+      "type": "Disruption"
+    }
   ],
   "damageAndVitality": {
     "sharedTrack": "Bashing, Lethal, Aggravated, and Disruption all remove current Vitality. Record each type separately because recovery and powers treat them differently.",
@@ -131,18 +177,44 @@
   },
   "exposure": {
     "meaning": "Exposure is how open, predictable, or easy to target the character has become.",
-    "gain": ["After a Push resolves, gain 1 Exposure.", "A hazard, capability, or Complication adds Exposure only when it explicitly says so."],
+    "gain": [
+      "After a Push resolves, gain 1 Exposure.",
+      "A hazard, capability, or Complication adds Exposure only when it explicitly says so."
+    ],
     "combatEffect": "Every Exposure point on a target adds one die to attacks against that target. Those extra attack dice can produce firearm critical successes. Exposure never adds damage dice directly.",
     "limit": "When Exposure reaches its Limit, finish the current action, suffer 1 Bashing that cannot be soaked, lose the current Reaction, and reset Exposure to 0.",
-    "recovery": ["Ten uninterrupted minutes free from combat, pursuit, and active hazards sets Exposure to 0.", "A Full Rest sets Exposure to 0."]
+    "recovery": [
+      "Ten uninterrupted minutes free from combat, pursuit, and active hazards sets Exposure to 0.",
+      "A Full Rest sets Exposure to 0."
+    ]
   },
   "cohesion": {
     "meaning": "Cohesion is deliberately spent to remain effective under immediate danger.",
     "options": [
-      {"name": "Commit", "cost": 1, "timing": "Before a test", "effect": "Add two dice to that test."},
-      {"name": "Brace", "cost": 1, "timing": "After soak", "effect": "Cancel one remaining Bashing or Disruption damage success. Brace cannot cancel Lethal or Aggravated damage."},
-      {"name": "Anchor", "cost": 1, "timing": "Reaction when an ally makes a Death Test or a test against involuntary control", "effect": "The ally rerolls up to two failed dice and keeps the new results."},
-      {"name": "Refuse Collapse", "cost": 2, "timing": "Once per scene when damage would reduce positive Vitality to 0", "effect": "Remain at 1 Vitality and become Staggered until the end of the next turn. It cannot stop explicit instant death or be used while Downed."}
+      {
+        "name": "Commit",
+        "cost": 1,
+        "timing": "Before a test",
+        "effect": "Add two dice to that test."
+      },
+      {
+        "name": "Brace",
+        "cost": 1,
+        "timing": "After soak",
+        "effect": "Cancel one remaining Bashing or Disruption damage success. Brace cannot cancel Lethal or Aggravated damage."
+      },
+      {
+        "name": "Anchor",
+        "cost": 1,
+        "timing": "Reaction when an ally makes a Death Test or a test against involuntary control",
+        "effect": "The ally rerolls up to two failed dice and keeps the new results."
+      },
+      {
+        "name": "Refuse Collapse",
+        "cost": 2,
+        "timing": "Once per scene when damage would reduce positive Vitality to 0",
+        "effect": "Remain at 1 Vitality and become Staggered until the end of the next turn. It cannot stop explicit instant death or be used while Downed."
+      }
     ]
   },
   "pressureInCombat": {
@@ -157,5 +229,9 @@
     "stabilize": "Standard Action, adjacent target. Test Reason + Medicine at difficulty 2 with a field medical kit or 3 without one. Success makes the target Stable and removes 1 Death Mark.",
     "emergencyTreatment": "Standard Action, adjacent Stable target at 0 Vitality, one field medical kit charge. Test Reason + Medicine at difficulty 3. Success removes one Bashing or Lethal damage, restores 1 Vitality, removes 1 Death Mark, ends Downed, and applies Staggered through the target's next turn.",
     "death": "At 3 Death Marks the character is dead. Ordinary healing, Cohesion, Stabilize, Emergency Treatment, and retroactive declarations cannot reverse death."
+  },
+  "legacyDamageTerms": {
+    "Impact": "Treat legacy references to Impact damage as Bashing damage.",
+    "Trauma": "Treat legacy references to Trauma damage as Lethal damage unless the effect has been explicitly revised to Aggravated."
   }
 }

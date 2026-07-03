@@ -334,7 +334,7 @@
         },
         {
           "name": "Feeding",
-          "effect": "At character creation, record Blood or one alternate vital medium: living bioelectric charge, psychic emotion, stored memory, or thermal life-energy. Feeding requires direct contact and one full action per Vitae restored, up to Archetype Rating Vitae from one target or source per scene. Feeding from an unwilling target requires Finesse + Close Combat opposed by Finesse + Athletics. Blood feeding inflicts 1 Impact per Vitae restored. Alternate feeding suppresses the target's matching function for one round per Vitae restored. Restoring at least 2 Vitae during one scene reduces Hunger by 1. Feeding from a helpless unwilling person adds 1 Hunger at scene end."
+          "effect": "At character creation, record Blood or one alternate vital medium: living bioelectric charge, psychic emotion, stored memory, or thermal life-energy. Feeding requires direct contact and one full action per Vitae restored, up to Archetype Rating Vitae from one target or source per scene. Feeding from an unwilling target requires Finesse + Close Combat opposed by Finesse + Athletics. Blood feeding inflicts 1 Bashing per Vitae restored. Alternate feeding suppresses the target's matching function for one round per Vitae restored. Restoring at least 2 Vitae during one scene reduces Hunger by 1. Feeding from a helpless unwilling person adds 1 Hunger at scene end."
         }
       ],
       "powerFamilies": [
@@ -365,7 +365,7 @@
             {
               "rank": 5,
               "name": "Moment of Slaughter",
-              "effect": "Cost: 2 Vitae and 1 Hunger. Take one complete turn before normal Initiative, then take the normal turn later with one fewer action. Afterward, feed, enter dormancy, or accept 1 Trauma from collapse."
+              "effect": "Cost: 2 Vitae and 1 Hunger. Take one complete turn before normal Initiative, then take the normal turn later with one fewer action. Afterward, feed, enter dormancy, or accept 1 Lethal damage from collapse."
             }
           ]
         },
@@ -558,7 +558,7 @@
         },
         {
           "name": "Regeneration",
-          "effect": "Recover one Impact at scene end. Spend 1 Fury during a brief pause to recover additional Impact equal to half Archetype Rating."
+          "effect": "Recover one Bashing at scene end. Spend 1 Fury during a brief pause to recover additional Bashing equal to half Archetype Rating."
         },
         {
           "name": "Pack Sense",
@@ -578,7 +578,7 @@
             {
               "rank": 2,
               "name": "Claws of Decision",
-              "effect": "Cost: 1 Fury. Manifest a natural or supernatural weapon with Cutting, Crushing, Piercing, or Grappling tags. Unarmed attacks inflict Trauma. Failure: retain damage but lose one die of Finesse."
+              "effect": "Cost: 1 Fury. Manifest a natural or supernatural weapon with Cutting, Crushing, Piercing, or Grappling tags. Unarmed attacks inflict Lethal damage. Failure: retain damage but lose one die of Finesse."
             },
             {
               "rank": 3,
@@ -593,7 +593,7 @@
             {
               "rank": 5,
               "name": "Apex Shape",
-              "effect": "Cost: 2 Fury and 1 Instinct. Assume an apex form for the scene and gain Armor equal to half Archetype Rating, rounded up. Choose one movement: flight 20 meters per exchange; burrowing 10 meters through soil or light structure; swimming 20 meters with unrestricted underwater breathing; wall and ceiling movement at normal speed; or zero-gravity movement 20 meters without a surface. Choose one offense: a natural weapon dealing Trauma with +2 damage; a crushing grapple with three bonus dice that restrains on two successes; a 10-meter roar requiring Resolve + Composure successes equal to Archetype Rating or the target loses its next minor action; a sweeping attack against up to Archetype Rating adjacent targets; or restraining tendrils with durability 5. Choose one limitation: no speech, no fine manipulation, unable to enter human-width passages, or gain 1 Instinct at the end of every round after the third."
+              "effect": "Cost: 2 Fury and 1 Instinct. Assume an apex form for the scene and gain Armor equal to half Archetype Rating, rounded up. Choose one movement: flight 20 meters per exchange; burrowing 10 meters through soil or light structure; swimming 20 meters with unrestricted underwater breathing; wall and ceiling movement at normal speed; or zero-gravity movement 20 meters without a surface. Choose one offense: a natural weapon dealing Lethal damage with +2 damage dice; a crushing grapple with three bonus dice that restrains on two successes; a 10-meter roar requiring Resolve + Composure successes equal to Archetype Rating or the target loses its next minor action; a sweeping attack against up to Archetype Rating adjacent targets; or restraining tendrils with durability 5. Choose one limitation: no speech, no fine manipulation, unable to enter human-width passages, or gain 1 Instinct at the end of every round after the third."
             }
           ]
         },
