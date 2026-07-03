@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const MODULE_URL = 'data/blacklight-continuum/wiki/combat-example-module.json';
+  const MODULE_URL = 'data/blacklight-continuum/wiki/combat-example-simple.json';
   let entries = [];
   let activeId = '';
 
