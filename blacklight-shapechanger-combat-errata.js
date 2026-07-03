@@ -1,9 +1,9 @@
 (() => {
   'use strict';
 
-  const SOAK_TEXT = 'Living Soak is a transformed-body soak permission. In social form, use the ordinary mortal rules: roll Resilience + eligible Armor against Bashing, Armor only against Lethal, and no Aggravated soak without an explicit capability. In hunting or war form, roll Resilience + eligible Armor + Archetype Rating against Bashing or Lethal damage. Each result of 6+ cancels one damage success. Living Soak does not apply to Aggravated damage, Disruption, Pressure, Exposure, or Death Marks unless another capability explicitly says otherwise.';
+  const SOAK_TEXT = 'Living Soak is a transformed-body soak permission. In social form, use ordinary mortal rules: roll Resilience + eligible Armor against Non-Lethal/Bashing damage, Armor only against Lethal damage, and no soak against Aggravated damage. In hunting or war form, roll Resilience + eligible Armor + Archetype Rating against Non-Lethal/Bashing or Lethal damage. Each result of 6+ cancels one damage success. Aggravated damage bypasses Living Soak unless a separate ability explicitly grants immunity or resistance to that exact damage.';
   const FRAME_TEXT = 'Cost: 1 Fury. Become Large for the scene. Add 2 damage dice to melee damage rolls, gain two dice to grapple or break barriers, and increase Carry by 3. You cannot benefit from human-sized cover, cannot pass through human-width openings without forcing them, and lose two dice from Stealth.';
-  const VAMPIRE_SOAK_TEXT = 'Against Bashing, roll Resilience + eligible Armor + Fortitude, then halve remaining damage and round down. Against Lethal, roll Resilience + eligible Armor + Fortitude. Against Aggravated, roll Fortitude plus only explicitly supernatural protection. Ordinary gunfire normally deals Bashing to Vampires. Fortitude equals the highest Deathless Resilience rank owned.';
+  const VAMPIRE_SOAK_TEXT = 'Against Non-Lethal/Bashing, roll Resilience + eligible Armor + Fortitude, then halve remaining damage and round down. Against Lethal, roll Resilience + eligible Armor + Fortitude. Aggravated bypasses Resilience, Armor, Fortitude, and Undead Soak unless a separate ability explicitly grants immunity or resistance to that exact damage. Ordinary gunfire normally deals Non-Lethal/Bashing to Vampires.';
 
   function replaceText(root) {
     if (!root) return;
@@ -17,6 +17,7 @@
       if (value.includes('Add Archetype Rating to Force or Resilience for a scene')) node.nodeValue = FRAME_TEXT;
       if (value.includes('make one Soak Test for each damaging hit')) node.nodeValue = SOAK_TEXT;
       if (value.includes('Living Soak changes your single Protection value')) node.nodeValue = SOAK_TEXT;
+      if (value.includes('Living Soak is a transformed-body soak permission')) node.nodeValue = SOAK_TEXT;
       if (value.includes('Wounded and other penalties to Resilience tests reduce the Soak pool')) node.nodeValue = SOAK_TEXT;
     });
   }
@@ -47,10 +48,10 @@
     if (!form || !protection) return;
 
     const protectionLabel = protection.closest('label');
-    setLabelText(protectionLabel, 'Base Bashing Soak Dice');
+    setLabelText(protectionLabel, 'Base Non-Lethal Soak Dice');
 
     const armor = form.elements.armorRating;
-    if (armor) setLabelText(armor.closest('label'), 'Armor Rating / Soak Dice');
+    if (armor) setLabelText(armor.closest('label'), 'Armor Rating / Lethal Soak Dice');
 
     if (!form.elements.fortitudeRating && protectionLabel) {
       const fortitudeLabel = document.createElement('label');
@@ -65,13 +66,13 @@
       const note = document.createElement('p');
       note.className = 'helper-note';
       note.dataset.blacklightSoakNote = 'true';
-      note.textContent = 'Base Bashing Soak equals Resilience + eligible Armor. Lethal, Aggravated, Vampire Fortitude, Shapechanger Living Soak, and Disruption use their printed permissions. Roll soak dice at 6+ after the damage roll.';
+      note.textContent = 'Mortals roll Resilience + eligible Armor against Non-Lethal/Bashing damage and Armor only against Lethal damage. Supernatural characters use only soak explicitly granted by their recorded Archetype or abilities. Aggravated damage bypasses all ordinary soak unless a specific ability names an exact immunity or resistance.';
       derivedGrid.insertAdjacentElement('afterend', note);
     }
 
     const impact = form.elements.impactDamage;
     if (impact) {
-      setLabelText(impact.closest('label'), 'Bashing Damage');
+      setLabelText(impact.closest('label'), 'Non-Lethal / Bashing Damage');
       impact.placeholder = 'Bruising, blunt force, falls, exhaustion';
     }
 
@@ -88,7 +89,7 @@
     if (damageGrid && !form.elements.aggravatedDamage) {
       const aggravated = document.createElement('label');
       aggravated.dataset.blacklightAggravatedField = 'true';
-      aggravated.innerHTML = 'Aggravated Damage<textarea name="aggravatedDamage" rows="2" placeholder="Supernatural fire, cursed attacks, fundamental destruction"></textarea>';
+      aggravated.innerHTML = 'Aggravated Damage<textarea name="aggravatedDamage" rows="2" placeholder="Bypasses ordinary soak; only exact immunity or resistance applies"></textarea>';
       trauma?.closest('label')?.insertAdjacentElement('afterend', aggravated);
     }
   }
@@ -102,7 +103,7 @@
       rule.dataset.simpleCombatRule = 'true';
       quickRules.appendChild(rule);
     }
-    rule.innerHTML = '<strong>Combat and Soak:</strong> Roll Attribute + Skill + target Exposure against half Guard. On a hit, roll damage dice; a Firearms attack adds one damage die per attack die showing 10. The defender rolls every soak die allowed by damage type, Armor, Archetype, form, and Fortitude. Each soak success cancels one damage success; mark the rest.';
+    rule.innerHTML = '<strong>Combat and Soak:</strong> Roll the attack, then damage on a hit. Mortals roll Resilience + Armor against Non-Lethal/Bashing and Armor only against Lethal. Supernatural characters use printed supernatural soak. Aggravated bypasses Resilience, Armor, Fortitude, Living Soak, and generic supernatural soak unless an exact ability says otherwise.';
   }
 
   function installVampireReminder() {
