@@ -1,8 +1,8 @@
 {
   "setting": "Blacklight Continuum",
-  "schemaVersion": "3.0.0",
+  "schemaVersion": "3.1.0",
   "name": "Simple Combat and Soak Foundation",
-  "designRule": "Combat uses one attack roll, one damage roll after a hit, one eligible soak roll, and Vitality loss. Firearm critical successes add damage dice; ordinary extra attack successes do not.",
+  "designRule": "Combat uses one attack roll, one damage roll after a hit, one eligible soak roll, and Vitality loss. Firearm critical successes add damage dice; ordinary extra attack successes do not. Non-Lethal damage can be resisted by mortal Resilience, Lethal damage limits mortals to Armor, and Aggravated damage bypasses every ordinary soak procedure.",
   "diceConventions": {
     "standardSuccess": "A result of 6 through 10 is one success unless a rule says otherwise.",
     "criticalSuccess": "A result of 10 on the final attack roll is one critical success and also one ordinary success.",
@@ -24,8 +24,9 @@
       "Roll against Defense Difficulty, equal to ceiling(Guard / 2), minimum 1.",
       "If the attack misses, stop. No damage roll or soak roll occurs.",
       "If the attack hits, build and roll the damage pool. Firearms add one damage die for every critical success on the final attack roll. Other ordinary extra attack successes add nothing.",
-      "The defender builds and rolls every soak die allowed by the damage type, Armor, Archetype, form, and explicit capabilities.",
-      "Each soak success cancels one damage success. Mark every uncancelled success as damage of the attack's type."
+      "If the damage is Non-Lethal, Lethal, or Disruption, the defender builds and rolls every soak die legally granted by mortal Resilience, Armor, a printed supernatural soak ability, or another explicit capability.",
+      "Aggravated damage receives no ordinary soak roll. Apply only an ability that explicitly grants immunity, resistance, reduction, or protection against that exact Aggravated damage.",
+      "Each legal soak success cancels one damage success. Mark every uncancelled success as damage of the attack's type."
     ],
     "attackPools": [
       "Unarmed or forceful melee: Force + Close Combat.",
@@ -50,8 +51,8 @@
     ]
   },
   "damageRolls": {
-    "rule": "A successful damaging attack rolls a damage pool. Every result of 6+ is one damage success before soak.",
-    "unarmed": "An ordinary unarmed strike rolls Force damage dice and normally deals Bashing.",
+    "rule": "A successful damaging attack rolls a damage pool. Every result of 6+ is one damage success before soak or explicit resistance.",
+    "unarmed": "An ordinary unarmed strike rolls Force damage dice and normally deals Non-Lethal/Bashing damage.",
     "weapons": "A weapon rolls its printed Damage Dice. A melee weapon may explicitly add Force; if it does not say so, use only its printed pool.",
     "firearms": "A firearm rolls printed Damage Dice plus one die for every critical success on the final Firearms attack roll.",
     "powers": "A damaging capability rolls the pool or fixed damage dice printed by that capability.",
@@ -59,8 +60,8 @@
   },
   "damageTypes": {
     "bashing": {
-      "name": "Bashing",
-      "meaning": "Blunt force, punches, falls, fatigue, shock, and impacts that bruise or batter without primarily cutting or destroying tissue.",
+      "name": "Non-Lethal / Bashing",
+      "meaning": "Blunt force, punches, falls, fatigue, shock, restraint trauma, and impacts that bruise or batter without primarily cutting or destroying essential tissue. Bashing is the system's Non-Lethal damage category.",
       "ordinaryExamples": [
         "Punch",
         "Club",
@@ -68,7 +69,7 @@
         "Nonpenetrating collision",
         "Concussive force"
       ],
-      "mortality": "Bashing can incapacitate and can eventually kill, but it is less immediately lethal than Lethal or Aggravated damage."
+      "mortality": "Non-Lethal/Bashing damage can incapacitate and can eventually kill, but mortal Resilience is allowed to resist it before damage is marked."
     },
     "lethal": {
       "name": "Lethal",
@@ -79,78 +80,89 @@
         "Chainsaw",
         "Major fall",
         "Vehicle strike"
-      ]
+      ],
+      "mortalRule": "Mortals cannot use Resilience to soak Lethal damage. They may roll eligible Armor only."
     },
     "aggravated": {
       "name": "Aggravated",
-      "meaning": "Supernatural or catastrophically destructive harm that attacks the target on a fundamental level and can be soaked only by an explicit supernatural defense.",
+      "meaning": "Supernatural, cursed, consecrated, reality-destroying, or utterly decimating harm that bypasses ordinary toughness, Armor, Fortitude, Living Soak, and every generic soak procedure.",
       "ordinaryExamples": [
         "Vampire-bane sunlight",
         "Supernatural fire",
         "Consecrated or cursed weapon",
         "Supernatural claws or teeth when the capability says Aggravated",
         "Reality-unmaking power"
-      ]
+      ],
+      "absoluteRule": "Do not build a normal soak pool against Aggravated damage. Only an ability that explicitly names immunity, resistance, reduction, or protection against that exact Aggravated damage can alter it."
     },
     "disruption": {
       "name": "Disruption",
-      "meaning": "Memory, identity, noospheric, continuity, and control-system damage. Disruption uses its own printed soak or resistance and is not Bashing, Lethal, or Aggravated physical damage."
+      "meaning": "Memory, identity, noospheric, continuity, and control-system damage. Disruption uses its own printed soak or resistance and is not Non-Lethal, Lethal, or Aggravated physical damage."
     }
   },
   "soakProcedure": {
     "meaning": "Soak represents the ability to absorb, ignore, disperse, or remain functional through damage after the damage roll succeeds.",
-    "timing": "Roll soak after the damage roll and before marking Vitality loss.",
+    "timing": "Roll soak after the damage roll and before marking Vitality loss, but only when the damage type and the character's recorded capabilities permit a soak roll.",
     "defaultThreshold": "Each soak die succeeds on 6+.",
     "cancellation": "Each soak success cancels one damage success. Soak cannot create healing or reduce damage below 0.",
-    "armor": "Eligible Armor adds its Armor Rating as soak dice. Armor does not automatically subtract damage. Armor must cover the struck area and be rated for the damage type. Ordinary Armor can add dice against Bashing and Lethal; it adds dice against Aggravated only when the item explicitly says so.",
-    "zeroDice": "A target with no legal soak dice takes every damage success unless another effect intervenes.",
+    "mortalNonLethal": "A mortal or human-adjacent character rolls Resilience + eligible Armor against Non-Lethal/Bashing damage.",
+    "mortalLethal": "A mortal or human-adjacent character rolls eligible Armor only against Lethal damage. Resilience cannot enter that soak pool.",
+    "supernaturalSoak": "A supernatural character uses the soak pool explicitly printed by its Archetype, form, power, item, or ability. Being supernatural by itself grants no universal soak dice. When no supernatural soak capability applies, use the ordinary mortal or human-adjacent permissions.",
+    "aggravatedBypass": "Aggravated damage bypasses Resilience, ordinary Armor, Fortitude, Living Soak, and generic supernatural soak. Apply only exact immunities or resistances printed by abilities.",
+    "armor": "Eligible Armor adds its Armor Rating as soak dice against Non-Lethal/Bashing or Lethal damage. Armor does not automatically subtract damage and never applies to Aggravated damage unless a specific ability explicitly converts that Armor into an exact Aggravated resistance.",
+    "zeroDice": "A target with no legal soak dice takes every damage success unless another explicit effect intervenes.",
     "oneRoll": "Combine all legal dice into one soak pool and roll once for that damaging hit."
   },
   "soakByCharacter": {
     "ordinaryMortalOrHumanAdjacent": {
-      "bashing": "Roll Resilience + eligible Armor.",
+      "bashing": "Roll Resilience + eligible Armor against Non-Lethal/Bashing damage.",
       "lethal": "Roll eligible Armor only. Ordinary biology does not add Resilience against Lethal damage.",
-      "aggravated": "No soak roll unless an explicit supernatural capability or specially rated protection grants dice.",
+      "aggravated": "No soak roll. Only an exact immunity or resistance explicitly naming the Aggravated damage can alter it.",
       "disruption": "Roll Resolve plus explicit continuity, noospheric, or identity protection when the attack permits a soak roll."
     },
+    "supernaturalGeneral": {
+      "rule": "Use the supernatural soak procedure explicitly recorded by the character's Archetype, form, power, item, or ability. Supernatural status alone is not a defense.",
+      "withoutPrintedSoak": "When no printed supernatural soak applies, use the ordinary mortal or human-adjacent permissions.",
+      "aggravated": "No generic supernatural soak applies. Aggravated damage requires an exact immunity or resistance written for that damage or source."
+    },
     "vampire": {
-      "fortitudeRating": "Fortitude equals the highest rank the Vampire owns in the Deathless Resilience power family, from 0 to 5. Fortitude is added to every Vampire soak roll that is allowed.",
-      "bashing": "Roll Resilience + eligible Armor + Fortitude. After soak, halve the remaining Bashing damage, rounding down.",
+      "fortitudeRating": "Fortitude equals the highest rank the Vampire owns in the Deathless Resilience power family, from 0 to 5. Fortitude is added to permitted Vampire soak rolls against Non-Lethal/Bashing, Lethal, and Disruption damage. Fortitude does not soak Aggravated damage by itself.",
+      "bashing": "Roll Resilience + eligible Armor + Fortitude. After soak, halve the remaining Non-Lethal/Bashing damage, rounding down.",
       "lethal": "Roll Resilience + eligible Armor + Fortitude. Take every damage success that remains after soak.",
-      "aggravated": "Roll Fortitude plus explicitly supernatural Armor or another capability that says it protects against Aggravated damage. Do not add ordinary Resilience or ordinary Armor.",
+      "aggravated": "No soak roll from Resilience, Armor, Fortitude, or Undead Soak. Apply only an exact Vampire ability that explicitly grants immunity or resistance to that Aggravated damage or source.",
       "disruption": "Roll Resolve + Fortitude + explicit continuity protection when the attack permits a soak roll.",
-      "gunfire": "Ordinary firearm damage is Bashing against a Vampire because puncturing dead organs is far less effective. Anti-materiel fire, vehicle-mounted weapons, explosive or incendiary ammunition, specialized anti-undead ammunition, and any attack explicitly labeled otherwise may deal Lethal or Aggravated damage.",
-      "halvingOrder": "For Vampire Bashing, roll soak first, subtract soak successes, then halve the remaining damage and round down."
+      "gunfire": "Ordinary firearm damage is Non-Lethal/Bashing against a Vampire because puncturing dead organs is far less effective. Anti-materiel fire, vehicle-mounted weapons, explosive or incendiary ammunition, specialized anti-undead ammunition, and any attack explicitly labeled otherwise may deal Lethal or Aggravated damage.",
+      "halvingOrder": "For Vampire Non-Lethal/Bashing damage, roll soak first, subtract soak successes, then halve the remaining damage and round down."
     },
     "shapechanger": {
-      "socialForm": "Use the ordinary mortal rules: Resilience + Armor against Bashing, Armor only against Lethal, and no Aggravated soak without an explicit capability.",
-      "huntingOrWarFormBashing": "Roll Resilience + eligible Armor + Archetype Rating.",
+      "socialForm": "Use the ordinary mortal rules: Resilience + Armor against Non-Lethal/Bashing, Armor only against Lethal, and no Aggravated soak.",
+      "huntingOrWarFormBashing": "Roll Resilience + eligible Armor + Archetype Rating against Non-Lethal/Bashing damage.",
       "huntingOrWarFormLethal": "Roll Resilience + eligible Armor + Archetype Rating. Living Soak explicitly allows Resilience against Lethal damage while transformed.",
-      "aggravated": "Roll only dice explicitly granted against Aggravated damage. Living Soak does not automatically soak Aggravated.",
+      "aggravated": "No soak roll from Resilience, Armor, Archetype Rating, or Living Soak. Apply only an exact ability that explicitly grants immunity or resistance to that Aggravated damage or source.",
       "disruption": "Use Resolve and explicit continuity protection. Living Soak does not apply."
     },
-    "otherArchetypes": "Human Investigator, Eldritch Binder, Harmonic Mutant, and Technomancer use the ordinary mortal or human-adjacent permissions unless a power, form, item, or condition explicitly changes them."
+    "otherArchetypes": "Human Investigator, Eldritch Binder, Harmonic Mutant, and Technomancer use ordinary mortal or human-adjacent permissions unless a recorded power, form, item, or ability explicitly supplies supernatural soak."
   },
   "sampleDamageDice": [
     {
       "attack": "Unarmed strike",
       "damageDice": "Force",
-      "type": "Bashing"
+      "type": "Non-Lethal / Bashing"
     },
     {
       "attack": "Baton or club",
       "damageDice": 3,
-      "type": "Bashing"
+      "type": "Non-Lethal / Bashing"
     },
     {
       "attack": "Compact pistol",
       "damageDice": 4,
-      "type": "Lethal to living targets; normally Bashing to Vampires"
+      "type": "Lethal to living targets; normally Non-Lethal/Bashing to Vampires"
     },
     {
       "attack": "Rifle",
       "damageDice": 5,
-      "type": "Lethal to living targets; normally Bashing to Vampires"
+      "type": "Lethal to living targets; normally Non-Lethal/Bashing to Vampires"
     },
     {
       "attack": "Heavy anti-materiel firearm",
@@ -169,11 +181,11 @@
     }
   ],
   "damageAndVitality": {
-    "sharedTrack": "Bashing, Lethal, Aggravated, and Disruption all remove current Vitality. Record each type separately because recovery and powers treat them differently.",
+    "sharedTrack": "Non-Lethal/Bashing, Lethal, Aggravated, and Disruption all remove current Vitality. Record each type separately because recovery and powers treat them differently.",
     "noWoundedBand": "At 1 or more Vitality, act normally unless a specific condition says otherwise. There is no universal Wounded state or penalty.",
-    "bashingAtZero": "When Bashing reduces Vitality to 0, become Downed and Unstable. Excess Bashing does not immediately create Death Marks unless the attack explicitly states lethal intent. Further Bashing against a Downed target adds 1 Death Mark per 2 uncancelled Bashing damage, rounding down.",
+    "bashingAtZero": "When Non-Lethal/Bashing damage reduces Vitality to 0, become Downed and Unstable. Excess Non-Lethal/Bashing does not immediately create Death Marks unless the attack explicitly states lethal intent. Further Non-Lethal/Bashing against a Downed target adds 1 Death Mark per 2 uncancelled damage, rounding down.",
     "lethalAtZero": "Every uncancelled Lethal, Aggravated, or Disruption damage success remaining after Vitality reaches 0 adds 1 Death Mark.",
-    "healing": "Removing one recorded damage point restores one current Vitality. Ordinary first aid can treat Bashing and Lethal as allowed by its procedure. Aggravated damage requires a capability or treatment explicitly able to remove it."
+    "healing": "Removing one recorded damage point restores one current Vitality. Ordinary first aid can treat Non-Lethal/Bashing and Lethal as allowed by its procedure. Aggravated damage requires a capability or treatment explicitly able to remove it."
   },
   "exposure": {
     "meaning": "Exposure is how open, predictable, or easy to target the character has become.",
@@ -182,7 +194,7 @@
       "A hazard, capability, or Complication adds Exposure only when it explicitly says so."
     ],
     "combatEffect": "Every Exposure point on a target adds one die to attacks against that target. Those extra attack dice can produce firearm critical successes. Exposure never adds damage dice directly.",
-    "limit": "When Exposure reaches its Limit, finish the current action, suffer 1 Bashing that cannot be soaked, lose the current Reaction, and reset Exposure to 0.",
+    "limit": "When Exposure reaches its Limit, finish the current action, suffer 1 Non-Lethal/Bashing damage that cannot be soaked, lose the current Reaction, and reset Exposure to 0.",
     "recovery": [
       "Ten uninterrupted minutes free from combat, pursuit, and active hazards sets Exposure to 0.",
       "A Full Rest sets Exposure to 0."
@@ -201,7 +213,7 @@
         "name": "Brace",
         "cost": 1,
         "timing": "After soak",
-        "effect": "Cancel one remaining Bashing or Disruption damage success. Brace cannot cancel Lethal or Aggravated damage."
+        "effect": "Cancel one remaining Non-Lethal/Bashing or Disruption damage success. Brace cannot cancel Lethal or Aggravated damage."
       },
       {
         "name": "Anchor",
@@ -227,11 +239,11 @@
     "gracePeriod": "A character reduced to 0 makes no Death Test during that round. If still Unstable, the first Death Test occurs at the end of the following round.",
     "deathTest": "Roll Resilience + Composure at difficulty 2 successes. Failure adds 1 Death Mark; a failed roll containing a 1 adds 2 instead.",
     "stabilize": "Standard Action, adjacent target. Test Reason + Medicine at difficulty 2 with a field medical kit or 3 without one. Success makes the target Stable and removes 1 Death Mark.",
-    "emergencyTreatment": "Standard Action, adjacent Stable target at 0 Vitality, one field medical kit charge. Test Reason + Medicine at difficulty 3. Success removes one Bashing or Lethal damage, restores 1 Vitality, removes 1 Death Mark, ends Downed, and applies Staggered through the target's next turn.",
+    "emergencyTreatment": "Standard Action, adjacent Stable target at 0 Vitality, one field medical kit charge. Test Reason + Medicine at difficulty 3. Success removes one Non-Lethal/Bashing or Lethal damage, restores 1 Vitality, removes 1 Death Mark, ends Downed, and applies Staggered through the target's next turn.",
     "death": "At 3 Death Marks the character is dead. Ordinary healing, Cohesion, Stabilize, Emergency Treatment, and retroactive declarations cannot reverse death."
   },
   "legacyDamageTerms": {
-    "Impact": "Treat legacy references to Impact damage as Bashing damage.",
+    "Impact": "Treat legacy references to Impact damage as Non-Lethal/Bashing damage.",
     "Trauma": "Treat legacy references to Trauma damage as Lethal damage unless the effect has been explicitly revised to Aggravated."
   }
 }
