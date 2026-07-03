@@ -1,0 +1,168 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "name": "Blacklight Standard Operative Creation",
+  "designRule": "Character creation records who the operative is, what they can reliably do, which exceptional capability framework they possess, what those capabilities cost, and what limits remain. Description supports identity and presentation but grants no unrecorded mechanics.",
+  "standardPackage": {
+    "attributes": {
+      "startingValue": 1,
+      "pointsToDistribute": 9,
+      "creationMaximum": 4,
+      "absoluteMaximum": 5,
+      "rule": "Set all nine Attributes to 1, then distribute 9 additional Attribute Points. No Attribute may exceed 4 during standard creation. This produces 18 total Attribute dots and an average of 2, matching the basic sheet baseline. Rating 5 is reserved for later advancement or an explicit campaign exception."
+    },
+    "skills": {
+      "startingValue": 0,
+      "pointsToDistribute": 24,
+      "creationMaximum": 3,
+      "signatureException": "Choose one Signature Skill. It may begin at 4 if at least 4 Skill Points are assigned to it.",
+      "absoluteMaximum": 5,
+      "rule": "Set all twenty-four Skills to 0, then distribute 24 Skill Points. No Skill may exceed 3 except the single Signature Skill, which may begin at 4. Rating 5 is reserved for later advancement or an explicit campaign exception."
+    },
+    "specializations": {
+      "count": 2,
+      "requirement": "Each specialization must belong to a Skill rated 2 or higher.",
+      "effect": "When the specialization directly and narrowly applies, add 1 die to the test. A test receives no more than 1 specialization die unless a capability explicitly says otherwise.",
+      "examples": [
+        "Firearms: Shipboard Pistols",
+        "Medicine: Printed-Body Trauma",
+        "Investigation: Altered Records",
+        "Engineering: Life-Support Systems",
+        "Negotiation: Administrative Hearings",
+        "Xenoculture: Ar'nock Interfaces"
+      ]
+    },
+    "operationalFrame": {
+      "count": 1,
+      "rule": "Choose one Operational Frame describing the job the operative is expected to perform for the team. The Frame grants routine narrative permission to perform ordinary professional procedures associated with that role when the character also possesses the necessary Skill, tools, access, and time. It grants no automatic dice, powers, equipment, authority, or immunity unless a later Frame capability explicitly says so.",
+      "options": [
+        "Infiltrator",
+        "Breacher",
+        "Systems Intrusion Specialist",
+        "Field Medic and Fabricator",
+        "Engineer and Salvager",
+        "Investigator and Analyst",
+        "Envoy and Fixer",
+        "Pilot and Navigator",
+        "Tactical Coordinator",
+        "Noospheric Adept",
+        "Xenologist",
+        "Continuity Warden"
+      ]
+    },
+    "archetype": {
+      "count": 1,
+      "startingRating": 1,
+      "rule": "Choose one Archetype based on the exceptional capability framework the character actually possesses. Archetype is not species, profession, appearance, anatomy, or moral alignment. At creation, record Archetype Rating 1, the printed Resource, Pressure, Key Attribute, weakness, innate abilities, and required or optional integrated variant choices.",
+      "options": [
+        "Human Investigator",
+        "Vampire",
+        "Shapechanger",
+        "Eldritch Binder",
+        "Harmonic Mutant",
+        "Technomancer"
+      ]
+    },
+    "integratedChoices": {
+      "rule": "Choose the integrated identity records appropriate to the selected Archetype. Making the choice costs no Ability Point. Apply only the Gift, Bane, Method, favored families, trained fields, Temptation, Breach, or other effect printed by that record. Career, Practice, Depth, and attainment abilities are not automatically granted unless the record explicitly says they are.",
+      "byArchetype": {
+        "Human Investigator": "Choose one Vigil Conviction or Uncommitted. Optionally record one Hunter Practice or Undeclared; its attainments must still be purchased.",
+        "Vampire": "Choose one Remainder Bloodline or Unaligned. Apply its printed Gift and Bane.",
+        "Shapechanger": "Choose one Lunar Nation, one Changing Form, or Unaligned. Apply its printed Gift and Bane.",
+        "Eldritch Binder": "Choose one Binding Source. Record its Temptation, Intrusion Breach, favored families, and Depth progression. Depth abilities must be purchased in order.",
+        "Harmonic Mutant": "Choose one Compact Remainder or Unaligned. Apply its printed Gift and Bane.",
+        "Technomancer": "Choose one Awakening Paradigm, one Praxis Order or Independent, and optionally one Career Practice or Undeclared. Career attainments must still be purchased."
+      }
+    },
+    "startingAbilities": {
+      "automatic": "Gain the Archetype's printed Starting Ability automatically. Record it as selected even when it appears inside a power family.",
+      "abilityPoints": 2,
+      "spending": "Spend 2 Starting Ability Points. Each point purchases one eligible Rank 1 power, Depth 1 ability, Initiate attainment, or other one-point ability available to the character. Meet all prerequisites. A character cannot buy Rank 2 or higher while Archetype Rating is 1. Required variant choices do not consume these points unless their own text explicitly assigns a cost.",
+      "unusedPoints": "Unspent Starting Ability Points may be retained only with Game Moderator approval and do not convert into Experience."
+    },
+    "equipmentProfile": {
+      "ordinaryCampaignPackage": [
+        "One Serviceable primary weapon or professional tool",
+        "One Serviceable protective item or suit",
+        "One role-appropriate field kit",
+        "Two common consumables or supplies",
+        "One personal object with no unrecorded mechanical benefit"
+      ],
+      "noReturnSignalOverride": "For No Return Signal, these choices describe training, preferred requisition, and what the operative expected Blacklight to provide. The campaign opening supersedes the ordinary package: the operatives awaken with minimal fabricated clothing or protection, no familiar weapons, no Blacklight credentials, and no guaranteed carried equipment unless the opening scene explicitly provides it."
+    },
+    "relationships": {
+      "requiredPrompts": [
+        "Defining Conviction",
+        "Touchstone or Important Person",
+        "Pack, Coterie, Cell, or Circle Bond",
+        "Professional Obligation",
+        "Personal Boundary",
+        "Debt, Promise, or Contract",
+        "Charles once saved me by…",
+        "Charles never answered me about…"
+      ],
+      "rule": "Write at least one complete sentence for each prompt. These answers create roleplaying commitments, possible Leverage, recovery context, and future story hooks. They do not grant automatic bonuses unless a capability or later rule invokes them."
+    },
+    "capabilityAudit": {
+      "requiredRecords": [
+        "Signature Capability",
+        "Capability Source or Expression",
+        "Meaningful Limitation or Bane",
+        "Current State or Form when mechanically relevant",
+        "Adaptations or Upgrades already purchased",
+        "Persistent Conditions"
+      ],
+      "rule": "Every exceptional benefit must be traceable to an Attribute, Skill, specialization, Operational Frame, Archetype feature, integrated choice, purchased ability, equipment item, condition, or explicit narrative permission. Remove or rewrite any claimed benefit that has no recorded source."
+    }
+  },
+  "derivedTraits": {
+    "Vitality Maximum": "Resilience + 5",
+    "Guard": "Finesse + Awareness",
+    "Initiative": "Finesse + Composure",
+    "Cohesion Maximum": "Resolve + Composure + 3",
+    "Exposure Limit": "Resolve + Resilience",
+    "Carry": "Force + Resilience",
+    "Identity Defense": "Resolve + Composure",
+    "Base Non-Lethal Soak": "Resilience + eligible Armor",
+    "Power Dice": "Archetype Rating + Archetype Key Attribute",
+    "Resource Maximum": "Archetype Resource Base + Archetype Rating + Key Attribute",
+    "Pressure Limit": "Composure + 5"
+  },
+  "startingTracks": {
+    "Vitality Current": "Set equal to Vitality Maximum.",
+    "Cohesion Current": "Set equal to Cohesion Maximum.",
+    "Exposure Current": 0,
+    "Resource Current": "Set equal to Resource Maximum.",
+    "Pressure Current": 0,
+    "damage": "Begin with no Non-Lethal/Bashing, Lethal, Aggravated, or Disruption damage unless the campaign explicitly begins after an injury.",
+    "conditions": "Begin with no temporary conditions. Persistent conditions chosen as part of the character concept must be recorded and approved before play."
+  },
+  "creationOrder": [
+    "Write the operative's present identity and concise concept.",
+    "Assign nine Attributes.",
+    "Assign twenty-four Skills and choose two specializations.",
+    "Choose one Operational Frame.",
+    "Choose one Archetype and record Archetype Rating 1.",
+    "Choose the Archetype's integrated identity records.",
+    "Record innate abilities, weakness, Resource, Pressure, and printed Starting Ability.",
+    "Spend two Starting Ability Points.",
+    "Calculate derived traits and set starting tracks.",
+    "Record the ordinary equipment profile and apply the campaign's actual opening inventory.",
+    "Complete bonds, convictions, obligations, boundaries, Charles prompts, and capability audit.",
+    "Perform the final legality, capability, and team-role review."
+  ],
+  "finalReview": {
+    "identity": "The character has a name, concept, present function, and reason to remain with the team.",
+    "numbers": "All Attribute, Skill, specialization, rating, ability, derived-trait, and starting-track values follow the standard package or a recorded campaign exception.",
+    "capabilities": "Every claimed exceptional effect has a recorded source and every purchased ability meets its prerequisites.",
+    "limits": "Weaknesses, Banes, Pressure, meaningful limitations, and persistent conditions are written rather than assumed.",
+    "team": "The character can explain what they contribute, what they need from others, and what line they will not cross.",
+    "campaign": "No Return Signal characters understand that Q-MAP preserves the registered character package but does not guarantee familiar equipment, credentials, infrastructure, money, legal identity, mission context, or a route home."
+  },
+  "moderatorOptions": {
+    "experiencedOperatives": "Increase Attribute, Skill, Archetype Rating, or Starting Ability allocations only as a declared campaign package applied consistently to every new character entering at the same experience tier.",
+    "replacementCharacters": "A replacement character should normally receive the same earned Experience total as the lowest active player character, then spend it under the advancement rules after completing the standard package.",
+    "exceptions": "Record every exception directly on the character sheet. An exception changes only what it explicitly names."
+  }
+}
