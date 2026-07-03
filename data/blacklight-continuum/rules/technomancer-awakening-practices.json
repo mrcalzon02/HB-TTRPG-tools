@@ -261,7 +261,7 @@
           "progression": [
             {"stage": "Initiate", "name": "Termination Record", "effect": "Once per scene, examine a destroyed machine, dead organism, or terminated process and learn its final completed action, immediate cause of termination, and whether any identity, signal, or active copy departed before failure."},
             {"stage": "Adept", "name": "Arrest Decay", "effect": "Spend 1 Bandwidth to preserve one corpse, damaged device, data store, or evidence site from ordinary decay, corruption, or contamination for twenty-four hours."},
-            {"stage": "Master", "name": "Last Process", "effect": "Spend 2 Bandwidth and 1 Feedback while touching a recently terminated target. Reconstruct one minute of its final sensory or operational record as an observable playback. The record cannot answer questions and contains only information the target actually perceived."
+            {"stage": "Master", "name": "Last Process", "effect": "Spend 2 Bandwidth and 1 Feedback while touching a recently terminated target. Reconstruct one minute of its final sensory or operational record as an observable playback. The record cannot answer questions and contains only information the target actually perceived."}
           ]
         },
         {
@@ -289,7 +289,7 @@
           "progression": [
             {"stage": "Initiate", "name": "Capability Signature", "effect": "After observing a supernatural or technological ability activate, learn its Resource type, target, duration, and whether it can be resisted, dispelled, interrupted, or only endured."},
             {"stage": "Adept", "name": "Counterstructure", "effect": "Spend 1 Bandwidth as a reaction when a power targets you or an ally within 10 meters. Add two dice to the target's resistance. If the effect has no resistance test, reduce its duration by one round, to a minimum of one round."},
-            {"stage": "Master", "name": "Rewrite Invocation", "effect": "Spend 2 Bandwidth and 1 Feedback after witnessing a rank-4-or-lower power used in the current scene. Until scene end, you may activate one bounded imitation using Reason + Noospherics, paying the original Resource cost in Bandwidth. The imitation uses the original range, target limit, duration, and resistance but cannot create permanent changes, summon unique entities, or grant another character's identity-dependent authority."
+            {"stage": "Master", "name": "Rewrite Invocation", "effect": "Spend 2 Bandwidth and 1 Feedback after witnessing a rank-4-or-lower power used in the current scene. Until scene end, you may activate one bounded imitation using Reason + Noospherics, paying the original Resource cost in Bandwidth. The imitation uses the original range, target limit, duration, and resistance but cannot create permanent changes, summon unique entities, or grant another character's identity-dependent authority."}
           ]
         }
       ]
