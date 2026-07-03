@@ -1,0 +1,87 @@
+name: Integrate Charles transcript into character data
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-charles-js-integration.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Patch induction scripts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('blacklight-character-creation.js')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace(
+              "    fields.customAbilities = selectedExternalText();\n",
+              "    fields.customAbilities = selectedExternalText();\n    fields.inductionTranscript = localStorage.getItem('hb-ttrpg-tools-blacklight-charles-induction-transcript-v1') || '';\n",
+              1
+          )
+          text = text.replace(
+              "    localStorage.removeItem(DRAFT_STORAGE_KEY);\n    renderEntry(state.entries[0].id);",
+              "    localStorage.removeItem(DRAFT_STORAGE_KEY);\n    localStorage.removeItem('hb-ttrpg-tools-blacklight-charles-induction-log-v1');\n    localStorage.removeItem('hb-ttrpg-tools-blacklight-charles-induction-transcript-v1');\n    renderEntry(state.entries[0].id);",
+              1
+          )
+          path.write_text(text, encoding='utf-8')
+
+          path = Path('blacklight-charles-induction.js')
+          text = path.read_text(encoding='utf-8')
+          anchor = "  function recordResponse(key, value, response) {\n    const answer = typeof value === 'boolean' ? (value ? 'Confirmed' : 'Not confirmed') : clean(value);"
+          replacement = """  function displayedAnswer(key, value) {
+    const data = draft();
+    if (typeof value === 'boolean') return value ? 'Confirmed' : 'Not confirmed';
+    if (key === 'attributes') return ATTRIBUTE_NAMES.map(name => `${titleCase(name)} ${data.fields?.[name] || 1}`).join(' · ');
+    if (key === 'skills' || key === 'signatureSkill' || key === 'specializations') {
+      const trained = Object.entries(data.fields || {})
+        .filter(([name, rating]) => name.startsWith('skill_') && Number(rating || 0) > 0)
+        .sort((a, b) => Number(b[1]) - Number(a[1]))
+        .map(([name, rating]) => `${titleCase(name.replace(/^skill_/, '').replaceAll('_', ' '))} ${rating}`);
+      const specs = (data.specializations || []).filter(item => clean(item?.skill) && clean(item?.name)).map(item => `${item.skill}: ${item.name}`);
+      return `${trained.join(' · ')}${data.signatureSkill ? ` · Signature: ${data.signatureSkill}` : ''}${specs.length ? ` · Specializations: ${specs.join('; ')}` : ''}`;
+    }
+    if (key === 'abilities') {
+      const chosen = [...document.querySelectorAll('[data-ability-id]:checked')].map(input => input.closest('.creation-ability-card')?.querySelector('strong')?.textContent?.trim()).filter(Boolean);
+      return chosen.length ? chosen.join(' · ') : 'No additional abilities selected';
+    }
+    return clean(value);
+  }
+
+  function recordResponse(key, value, response) {
+    const answer = displayedAnswer(key, value);"""
+          if anchor not in text:
+              raise SystemExit('Charles response anchor not found')
+          text = text.replace(anchor, replacement, 1)
+          text = text.replace(
+              "    updatePanel(latest?.response || stagePrompt(), latest?.field || 'stage');",
+              "    const belongsToStage = latest?.stage === currentStage();\n    updatePanel(belongsToStage ? latest.response : stagePrompt(), belongsToStage ? latest.field : 'stage');",
+              1
+          )
+          path.write_text(text, encoding='utf-8')
+          PY
+          node --check blacklight-character-creation.js
+          node --check blacklight-charles-induction.js
+          rm .github/workflows/one-time-charles-js-integration.yml
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Integrate Charles transcript with character data"
+          git push origin main
