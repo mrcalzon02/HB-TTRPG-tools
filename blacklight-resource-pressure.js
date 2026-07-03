@@ -20,6 +20,14 @@
     }[character]));
   }
 
+  function installCombatErrata() {
+    if (document.querySelector('script[data-blacklight-shapechanger-errata]')) return;
+    const script = document.createElement('script');
+    script.src = 'blacklight-shapechanger-combat-errata.js';
+    script.dataset.blacklightShapechangerErrata = 'true';
+    document.head.appendChild(script);
+  }
+
   function loadTracks() {
     if (trackData) return Promise.resolve(trackData);
     if (!trackPromise) {
@@ -201,6 +209,7 @@
   }
 
   async function initialize() {
+    installCombatErrata();
     installStyles();
     try {
       await loadTracks();
