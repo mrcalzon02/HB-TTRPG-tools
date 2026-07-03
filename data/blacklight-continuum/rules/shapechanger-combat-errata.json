@@ -1,0 +1,18 @@
+{
+  "setting": "Blacklight Continuum",
+  "schemaVersion": "1.0.0",
+  "archetype": "shapechanger",
+  "replacements": {
+    "Living Soak": "Living Soak changes your single Protection value instead of creating another roll. In social form, add Archetype Rating to Protection against Impact only. In hunting or war form, add Archetype Rating to Protection against Impact and Trauma. Use that one Protection value against fixed damage. Living Soak can reduce physical damage to 0. It does not protect against Disruption, Pressure, Exposure, Death Marks, or effects that explicitly ignore Shapechanger Soak.",
+    "Massive Shift": {
+      "newName": "Titanic Frame",
+      "effect": "Cost: 1 Fury. Become Large for the scene. Add 2 damage to melee attacks, gain two dice to grapple or break barriers, and increase Carry by 3. You cannot benefit from human-sized cover, cannot pass through human-width openings without forcing them, and lose two dice from Stealth."
+    }
+  },
+  "supersedes": [
+    "The older Living Soak roll procedure.",
+    "Any rule that reduces Living Soak because the character is Wounded.",
+    "The Resilience option of Massive Shift.",
+    "Any temporary recalculation of Vitality, Protection, Exposure Limit, or Soak from Massive Shift."
+  ]
+}
