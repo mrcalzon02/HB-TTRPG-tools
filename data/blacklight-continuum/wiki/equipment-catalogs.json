@@ -1,0 +1,269 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "description": "Searchable rules entries for ordinary, historical, supernatural, future, scavenged, survival, and alien equipment. Canonical item records remain in the linked rules catalogs.",
+  "entries": [
+    {
+      "id": "equipment-foundation",
+      "title": "Equipment Foundation",
+      "category": "Equipment",
+      "summary": "Equipment uses a compact record: attack or activation, damage or Armor Rating, range, Load, tags, uses, requirements, and limitations.",
+      "body": [
+        "Equipment is an external capability source. It grants only the function, protection, damage, range, tag, use, and permission printed in its record. A recognizable name, expensive construction, historical reputation, alien material, supernatural appearance, or improvised origin grants nothing beyond that record.",
+        "Weapons use the existing Simple Combat procedure. After a hit, roll printed Damage Dice; firearm critical successes add damage dice. Armor Rating adds eligible soak dice. Ordinary Armor never soaks Aggravated damage. Relics and alien systems follow the same capability-first requirement as Archetype abilities.",
+        "Load gives Carry a direct purpose without adding a second encumbrance subsystem. Carry total Load up to Carry normally. Each point above Carry subtracts one die from Athletics and Mobility, to a maximum of three dice, and prevents Sprinting.",
+        "Catalog statistics assume Serviceable condition. Damaged equipment creates an extra equipment Complication on its first failed use each scene, and Damaged armor loses one Armor Rating until repaired."
+      ],
+      "tables": [
+        {
+          "title": "Equipment Record",
+          "columns": ["Field", "Meaning"],
+          "rows": [
+            ["Attack or Activation", "The pool, action, preparation, or trigger used."],
+            ["Damage or Armor", "Printed Damage Dice and type, or Armor Rating and coverage."],
+            ["Range", "Adjacent, Short, Medium, Long, Thrown, or another exact limit."],
+            ["Load", "0 negligible, 1 light, 2 standard, 3 heavy, 4 crew-served or industrial."],
+            ["Tags", "Only the defined tags actually change operation."],
+            ["Uses or Power", "Ammunition abstraction, Limited uses, cell, fuel, or biological need."],
+            ["Requirement", "Skill, authorization, attunement, Archetype, identity, or equipment prerequisite."],
+            ["Limitation", "The exact condition under which the item loses or complicates its function."]
+          ]
+        },
+        {
+          "title": "Condition States",
+          "columns": ["Condition", "Rule"],
+          "rows": [
+            ["Ruined", "Cannot perform its primary function."],
+            ["Damaged", "First failed use each scene adds an equipment Complication; Armor loses 1 rating."],
+            ["Serviceable", "Use the printed record normally."],
+            ["Calibrated", "One recorded user may reroll one failed equipment die once per scene."],
+            ["Prototype", "One explicit added capability and one explicit instability."]
+          ]
+        }
+      ],
+      "tags": ["equipment", "load", "carry", "weapon tags", "armor tags", "condition", "serviceable", "damaged"],
+      "relatedEntries": ["modern-arms-and-armor", "supernatural-artifacts-and-relics", "alien-technology-templates"]
+    },
+    {
+      "id": "modern-arms-and-armor",
+      "title": "Modern Arms and Armor",
+      "category": "Equipment",
+      "summary": "Thirty-four modern weapons and twelve modern armor or protective systems using generic categories rather than brand-specific models.",
+      "body": [
+        "The modern catalog covers impact weapons, knives and breaching tools, less-lethal devices, pistols, compact automatic weapons, shotguns, carbines, rifles, machine guns, anti-materiel weapons, launchers, grenades, flamethrowers, bows, and crossbows.",
+        "The armor catalog includes reinforced clothing, soft and hard ballistic vests, plate carriers, riot armor, helmets, shields, bomb suits, fire-entry protection, hazardous-material suits, tactical environmental suits, and industrial powered exoskeletons.",
+        "The catalog deliberately uses role categories rather than commercial model names. A particular real-world model can normally use the nearest generic record unless a campaign needs a meaningful difference."
+      ],
+      "tables": [
+        {
+          "title": "Modern Weapon Baselines",
+          "columns": ["Item", "Damage", "Range", "Notable Tags"],
+          "rows": [
+            ["Collapsible Baton", "3 Non-Lethal", "Adjacent", "Concealable, Stunning"],
+            ["Combat Knife", "3 Lethal", "Adjacent", "Concealable"],
+            ["Compact Pistol", "4 Lethal", "Short", "Concealable"],
+            ["Service Pistol", "4 Lethal", "Short-Medium", "—"],
+            ["Pump Shotgun", "5 Lethal", "Short-Medium", "Spread, Two-Handed"],
+            ["Carbine", "5 Lethal", "Short-Long", "Two-Handed"],
+            ["Battle Rifle", "6 Lethal", "Short-Long", "Recoil, Two-Handed"],
+            ["Light Machine Gun", "6 Lethal", "Short-Long", "Automatic, Brace"],
+            ["Anti-Materiel Rifle", "7 Lethal", "Medium-Long", "Accurate, AP 2, Brace"],
+            ["Anti-Armor Rocket", "8 Lethal", "Medium-Long", "AP 2, Blast 5, Limited 1"]
+          ]
+        },
+        {
+          "title": "Modern Protection Baselines",
+          "columns": ["Item", "Armor", "Load", "Limitation"],
+          "rows": [
+            ["Reinforced Clothing", "1", "1", "Concealable"],
+            ["Soft Ballistic Vest", "2", "1", "Torso"],
+            ["Concealed Plate Vest", "3", "2", "Rigid"],
+            ["Plate Carrier", "4", "2", "Visible hard armor"],
+            ["Riot Armor", "3", "3", "Heavy and Rigid"],
+            ["Bomb-Disposal Suit", "5", "4", "Heavy and Rigid"],
+            ["Tactical Environmental Suit", "3", "3", "Sealed but not vacuum-rated"]
+          ]
+        }
+      ],
+      "tags": ["modern weapons", "firearms", "rifles", "pistols", "shotguns", "armor", "ballistic", "less lethal"],
+      "relatedEntries": ["equipment-foundation", "historical-arms-and-armor", "future-weapons-and-systems"]
+    },
+    {
+      "id": "historical-arms-and-armor",
+      "title": "World War and Medieval Equipment",
+      "category": "Equipment",
+      "summary": "Short, functional catalogs for World War I, World War II, and medieval arms and armor without replacing the modern baseline.",
+      "body": [
+        "World War I includes a service revolver, bolt-action rifle, trench shotgun, bayonet, trench club, early light machine gun, stick grenade, and steel helmet.",
+        "World War II includes a service pistol, semi-automatic rifle, sniper rifle, submachine gun, light and heavy machine guns, flamethrower, anti-tank launcher, fragmentation grenade, and flak vest.",
+        "The medieval catalog includes common one-handed and two-handed weapons, polearms, bows, crossbows, padded armor, leather, mail, brigandine, full plate, and shields. Historical armor remains ordinary Armor and never becomes supernatural protection through age or craftsmanship alone."
+      ],
+      "tables": [
+        {
+          "title": "Historical Catalog Scope",
+          "columns": ["Period", "Records", "Representative Items"],
+          "rows": [
+            ["World War I", "8", "Revolver, bolt rifle, trench shotgun, bayonet, light machine gun, grenade, helmet"],
+            ["World War II", "10", "Semi-auto rifle, submachine gun, sniper rifle, heavy machine gun, flamethrower, anti-tank launcher"],
+            ["Medieval", "23", "Swords, axes, polearms, bows, crossbows, padded armor, mail, plate, shields"]
+          ]
+        },
+        {
+          "title": "Medieval Protection",
+          "columns": ["Armor", "Rating", "Load", "Tags"],
+          "rows": [
+            ["Padded Armor", "1", "2", "—"],
+            ["Hardened Leather", "1", "2", "Rigid"],
+            ["Mail", "2", "3", "Heavy"],
+            ["Brigandine", "3", "3", "Rigid"],
+            ["Full Plate", "4", "4", "Heavy, Rigid"],
+            ["Tower Shield", "2 directional", "3", "Shield, Heavy; may provide Substantial Cover"]
+          ]
+        }
+      ],
+      "tags": ["world war one", "world war two", "wwi", "wwii", "medieval", "historical weapons", "plate armor", "crossbow"],
+      "relatedEntries": ["modern-arms-and-armor", "equipment-foundation"]
+    },
+    {
+      "id": "supernatural-artifacts-and-relics",
+      "title": "Supernatural Artifacts and Relics",
+      "category": "Equipment",
+      "summary": "Twenty-two original relics whose supernatural effects require exact wielders, Skills, attunement, costs, limits, and failures.",
+      "body": [
+        "Relics are not universal magic items. Anyone may carry, steal, hide, study, damage, or sell one, but its supernatural capability functions only for a character who meets every Wielder Requirement and Skill Requirement and completes its Attunement.",
+        "The catalog includes consecrated anti-undead instruments, vampiric blood-memory objects, lunar weapons and mantles, Eldritch Binder restraints, Harmonic resonance devices, Technomancer analytical lenses, identity defenses, memorial instruments, temporal devices, relationship relics, and survival sanctuaries.",
+        "Aggravated damage is always target-specific. The Ashen Sun Reliquary affects only blood-fed undead and exact cursed-solar vulnerabilities; the Moon-Silver Fang affects only its explicitly named corrupted or crisis targets; the Executioner's Mercy requires a separate recorded supernatural judgment capability."
+      ],
+      "tables": [
+        {
+          "title": "Relic Examples",
+          "columns": ["Relic", "Required Wielder", "Primary Effect"],
+          "rows": [
+            ["Ashen Sun Reliquary", "Conviction-bearing Investigator or explicit anti-undead consecrator", "4 Aggravated dice against exact blood-fed undead vulnerabilities"],
+            ["Chalice of Last Vitae", "Vampire with blood-memory access", "Healing, blood preservation, or final sensory memory"],
+            ["Moon-Silver Fang", "Shapechanger with lunar or spirit-hunting identity", "Aggravated damage against explicitly corrupted or crisis targets"],
+            ["Chain of Seven Names", "Eldritch Binder", "Prevent Intrusion or temporarily bar an extraplanar entity from a threshold"],
+            ["Choir Bell of the Drowned City", "Harmonic Mutant", "Area Disruption and Reaction denial"],
+            ["Brass Eye of the Radiant Axiom", "Technomancer or explicit capability analyst", "Immediate closed-menu facts about an active system"],
+            ["Mirror of Unlived Lives", "Stable identity and Investigation 3", "One truthful overlooked fact from established events"],
+            ["Red Thread of Return", "Two willing bonded characters", "Recognition and renewed resistance during identity alteration"]
+          ]
+        }
+      ],
+      "tags": ["artifact", "relic", "attunement", "supernatural equipment", "aggravated", "identity", "vampire", "shapechanger", "binder", "harmonic", "technomancer"],
+      "relatedEntries": ["equipment-foundation", "basic-archetypes", "alien-technology-templates"]
+    },
+    {
+      "id": "future-weapons-and-systems",
+      "title": "Future Weapons, Armor, and Systems",
+      "category": "Equipment",
+      "summary": "Sixteen human-compatible future weapons and eighteen armor, medical, sensor, fabrication, drone, and interface systems.",
+      "body": [
+        "Future technology remains ordinary equipment unless it explicitly invokes Disruption, identity control, phase behavior, or another defined capability. A plasma cutter is dangerous and technologically advanced but still deals ordinary Lethal damage unless a separate rule makes it Aggravated.",
+        "Weapons include coil and flechette systems, pulse rifles, arc projectors, plasma tools, particle lances, gravitic control weapons, monofilament and phase-edged melee systems, sonic disruptors, microdrone clouds, breach foam, and identity-scrambler darts.",
+        "Support equipment includes smartweave and powered armor, vacuum combat suits, kinetic shielding, identity firewalls, adaptive camouflage, field fabricators, med-gel, regeneration cocoons, repair swarms, drones, grav sleds, translation lattices, noospheric isolation, multispectrum scanning, and universal interface frames."
+      ],
+      "tables": [
+        {
+          "title": "Future Weapon Baselines",
+          "columns": ["Item", "Damage", "Range", "Function"],
+          "rows": [
+            ["Coil Pistol", "5 Lethal", "Short-Medium", "AP 1, Networked"],
+            ["Pulse Rifle", "5 Lethal or 3 Disruption control mode", "Short-Long", "Networked"],
+            ["Plasma Cutter", "6 Lethal", "Adjacent-Short", "AP 1, Breaching, Burning"],
+            ["Particle Lance", "7 Lethal", "Medium-Long", "AP 2, Brace, Limited 3"],
+            ["Monofilament Blade", "5 Lethal", "Adjacent", "AP 2; damages its housing on a Complication"],
+            ["Identity-Scrambler Dart", "3 Disruption", "Short", "Suppresses false credentials and remote identity access"]
+          ]
+        }
+      ],
+      "tags": ["science fiction equipment", "coil gun", "pulse rifle", "plasma", "powered armor", "vacuum suit", "drone", "fabricator", "medical technology"],
+      "relatedEntries": ["modern-arms-and-armor", "scavenged-and-improvised-equipment", "alien-technology-templates"]
+    },
+    {
+      "id": "scavenged-and-improvised-equipment",
+      "title": "Scavenged and Improvised Equipment",
+      "category": "Equipment",
+      "summary": "Twenty salvage and field-built records with useful functions and explicit breakdown, exposure, or maintenance consequences.",
+      "body": [
+        "Scavenged equipment is usually Damaged until repaired. Improvised construction grants a specific field function, not an open-ended permission to invent whatever is convenient during the scene.",
+        "The catalog includes pipe and scrap firearms, reclaimed energy weapons, scrap melee arms, shock prods, industrial nail drivers, cutting torches, improvised flame projectors and charges, salvage shields, patched pressure suits, respirators, jammers, alarms, barricades, cable launchers, utility drones, medical kits, battery banks, and sealant rigs.",
+        "Every dangerous improvised device has a bounded failure. The jury-rigged flame projector can rupture; the shock prod can discharge through its wielder; the reclaimed pulse weapon can inflict Disruption; the patched pressure suit loses its seal when penetrating damage gets through."
+      ],
+      "tables": [
+        {
+          "title": "Scavenged Gear Examples",
+          "columns": ["Item", "Use", "Failure or Limitation"],
+          "rows": [
+            ["Pipe Pistol", "4 Lethal at Short range", "Any attack die showing 1 empties it"],
+            ["Reclaimed Pulse Pistol", "4 Lethal or Disruption", "Complication damages user and empties weapon"],
+            ["Cutting Torch", "4 Lethal, Breaching, Burning", "Limited fuel"],
+            ["Patched Pressure Suit", "Armor 1 and thirty minutes pressure", "Penetrating Lethal damage breaks seal"],
+            ["Portable Signal Jammer", "-2 dice to unsecured wireless systems in 10 meters", "Location is obvious to spectrum sensors"],
+            ["Field Barricade", "Substantial Cover, durability 8", "Ten-minute deployment"],
+            ["Adhesive Sealant Rig", "Temporary suit, pipe, container, or hull seal", "Durability 4; not permanent"]
+          ]
+        }
+      ],
+      "tags": ["scavenged", "improvised", "salvage", "jury rigged", "damaged equipment", "field repair", "scrap weapon"],
+      "relatedEntries": ["equipment-foundation", "future-weapons-and-systems", "survival-and-expedition-gear"]
+    },
+    {
+      "id": "survival-and-expedition-gear",
+      "title": "Survival and Expedition Gear",
+      "category": "Equipment",
+      "summary": "Thirty-four practical medical, shelter, air, water, navigation, climbing, repair, evidence, sanitation, and recovery records.",
+      "body": [
+        "Survival gear establishes permission and bounded bonuses for field care, shelter, movement, contamination control, navigation, communication, repair, sample preservation, and sustained operation. It does not erase the need for Skills, time, supplies, or an environment containing the resource being sought.",
+        "The catalog includes first-aid, trauma, and surgery kits; rations, water purification, shelter, heat, respiratory and pressure protection; radiation detection and shielding; climbing, flotation, navigation, signals, optics, lights, repair supplies, power cells, foraging, evidence collection, body recovery, and sanitation.",
+        "Specialized biology, alien chemistry, supernatural contamination, and unknown radiation require an explicit compatible item or a successful test establishing that ordinary equipment applies."
+      ],
+      "tables": [
+        {
+          "title": "Expedition Packages",
+          "columns": ["Package", "Representative Components"],
+          "rows": [
+            ["Trauma Response", "First-aid kit, trauma kit, surgical kit, recovery bag"],
+            ["Environmental Survival", "Shelter, stove, thermal blanket, respirator, breathing apparatus, pressure suit"],
+            ["Movement and Rescue", "Climbing kit, rope, grapnel, flotation harness, navigation unit"],
+            ["Technical Sustainment", "Multitool, repair kit, spare cells, chemical lights, sample kit"],
+            ["Investigation and Recovery", "Field optics, scanner, evidence kit, sample kit, sealed recovery bag"],
+            ["Long-Term Camp", "Rations, water purifier, sanitation kit, sleeping system, foraging kit"]
+          ]
+        }
+      ],
+      "tags": ["survival gear", "medical kit", "shelter", "vacuum", "respirator", "radiation", "climbing", "navigation", "repair", "evidence"],
+      "relatedEntries": ["equipment-foundation", "scavenged-and-improvised-equipment", "alien-technology-templates"]
+    },
+    {
+      "id": "alien-technology-templates",
+      "title": "Alien Technology Templates",
+      "category": "Equipment",
+      "summary": "Sixteen overlays for converting a base weapon, armor item, tool, vehicle component, medical system, archive, or habitat into explicit alien technology.",
+      "body": [
+        "Alien technology templates answer five questions: what type of base item can carry the template, how the interface works, what translation is required, what bounded benefit it produces, and how it becomes unstable or fails.",
+        "The templates include Ar'nock biofabrication, noospheric credential locks, symbiotic organisms, gravitic inversion, phase displacement, crystalline resonance, null fields, memory-reactive material, modular swarms, probability bias, temporal latency, ecological integration, identity-responsive control, folded thresholds, archive organisms, and causal permission machines.",
+        "A template does not make an item generically superior. It changes only named fields and introduces a real interface or failure problem. Reverse engineering can reveal facts and reproduce bounded functions, but it cannot silently create unique materials, manufacturing infrastructure, living trust, alien authority, or supernatural personhood."
+      ],
+      "tables": [
+        {
+          "title": "Alien Template Examples",
+          "columns": ["Template", "Primary Benefit", "Instability"],
+          "rows": [
+            ["Ar'nock Biofabricated Matrix", "Self-seals and repairs from nutrients", "May interpret biological distress as a command"],
+            ["Credential-Locked Noospheric", "Smart operation for an authorized identity", "Copies and transferred minds may be treated as hostile"],
+            ["Symbiotic Living Tool", "Relationship-based reroll after its Need is met", "May refuse, seek food, or react visibly"],
+            ["Gravitic Inversion Array", "Changes load, movement, push, or recoil relationships", "Moves unsecured nearby objects on failure"],
+            ["Phase-Displaced Construction", "AP, Breaching, Reactive, or concealed storage", "Can become temporarily untouchable"],
+            ["Null-Field Architecture", "Blocks one exact signal or transfer category", "Suppresses friendly use equally"],
+            ["Probability-Biased Device", "Rerolls two failed dice under one Favor Condition", "Creates Exposure and can become Damaged"],
+            ["Threshold-Fold Aperture", "Transfers one fixed category between mapped endpoints", "Failure reveals both endpoints"]
+          ]
+        }
+      ],
+      "tags": ["alien technology", "template", "Ar'nock", "biofabrication", "noospheric", "symbiotic", "gravitic", "phase", "null field", "probability", "temporal"],
+      "relatedEntries": ["equipment-foundation", "future-weapons-and-systems", "supernatural-artifacts-and-relics"]
+    }
+  ]
+}
