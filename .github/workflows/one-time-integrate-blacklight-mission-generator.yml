@@ -1,29 +1,31 @@
-name: One-Time Integrate Blacklight Mission Generator
+name: One-Time Complete Blacklight Mission Generator Engine
 
 on:
   push:
-    paths:
-      - '.github/workflows/one-time-integrate-blacklight-mission-generator.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  integrate:
+  patch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - name: Patch derived text and navigation
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rebuild derived player constraints after sectional rerolls
         run: |
           python - <<'PY'
-          import json
-          import re
           from pathlib import Path
 
-          js_path = Path('blacklight-mission-generator.js')
-          js = js_path.read_text(encoding='utf-8')
+          path = Path('blacklight-mission-generator.js')
+          text = path.read_text(encoding='utf-8')
+
+          marker = "  function buildMission() {\n"
           helper = """  function buildPlayerConstraints(contract, site) {
             return [
               visibilityConstraint(contract.visibility),
@@ -35,110 +37,35 @@ jobs:
           }
 
 """
-          marker = '  function buildMission() {\n'
-          if 'function buildPlayerConstraints' not in js:
-              if marker not in js:
-                  raise SystemExit('Mission build marker missing')
-              js = js.replace(marker, helper + marker, 1)
+          if 'function buildPlayerConstraints' not in text:
+              if marker not in text:
+                  raise SystemExit('buildMission marker missing')
+              text = text.replace(marker, helper + marker, 1)
 
-          pattern = re.compile(r"      playerConstraints: \[\n        visibilityConstraint\(contract\.visibility\),\n        'The declared objective does not authorize unrelated theft, killing, coercion, memory alteration, supernatural binding, or destruction\.',\n        `Civilian baseline: \$\{contract\.target\.civilians\}`,\n        `Support limitation: \$\{site\.support\.limit\}`,\n        'If the target, location, client motive, identity risk, supernatural obligation, or return path changes materially, pause and renew consent\.'\n      \],")
-          js, count = pattern.subn('      playerConstraints: buildPlayerConstraints(contract, site),', js)
-          if count != 1 and 'playerConstraints: buildPlayerConstraints(contract, site)' not in js:
-              raise SystemExit(f'Expected one initial playerConstraints block, replaced {count}')
+          old_block = """      playerConstraints: [
+                visibilityConstraint(contract.visibility),
+                'The declared objective does not authorize unrelated theft, killing, coercion, memory alteration, supernatural binding, or destruction.',
+                `Civilian baseline: ${contract.target.civilians}`,
+                `Support limitation: ${site.support.limit}`,
+                'If the target, location, client motive, identity risk, supernatural obligation, or return path changes materially, pause and renew consent.'
+              ],"""
+          if old_block in text:
+              text = text.replace(old_block, '      playerConstraints: buildPlayerConstraints(contract, site),', 1)
+          elif 'playerConstraints: buildPlayerConstraints(contract, site)' not in text:
+              raise SystemExit('initial playerConstraints block missing')
 
-          target = '        resolution: buildResolution(contract, site, truth),\n        followUps:'
-          replacement = '        resolution: buildResolution(contract, site, truth),\n        playerConstraints: buildPlayerConstraints(contract, site),\n        followUps:'
-          if target in js:
-              js = js.replace(target, replacement)
-          js_path.write_text(js, encoding='utf-8')
+          old = "        resolution: buildResolution(contract, site, truth),\n        followUps:"
+          new = "        resolution: buildResolution(contract, site, truth),\n        playerConstraints: buildPlayerConstraints(contract, site),\n        followUps:"
+          text = text.replace(old, new)
 
-          index_path = Path('index.html')
-          index = index_path.read_text(encoding='utf-8')
-          marker = '  <script src="blacklight-veteran-reintroduction-entry.js"></script>\n'
-          addition = marker + '  <script src="blacklight-mission-generator-entry.js"></script>\n'
-          if 'blacklight-mission-generator-entry.js' not in index:
-              if marker not in index:
-                  raise SystemExit('Blacklight entry marker missing in index.html')
-              index = index.replace(marker, addition, 1)
-              index_path.write_text(index, encoding='utf-8')
-
-          page_updates = [
-              ('blacklight-character-creation.html',
-               '        <a class="secondary-action" href="blacklight-random-character.html">Open Random Character Generator</a>\n',
-               '        <a class="secondary-action" href="blacklight-random-character.html">Open Random Character Generator</a>\n        <a class="secondary-action" href="blacklight-mission-generator.html">Open Mission Generator</a>\n'),
-              ('blacklight-random-character.html',
-               '        <a class="secondary-action" href="blacklight-veteran-reintroduction.html">Veteran Reorientation</a>\n',
-               '        <a class="secondary-action" href="blacklight-veteran-reintroduction.html">Veteran Reorientation</a>\n        <a class="secondary-action" href="blacklight-mission-generator.html">Mission Generator</a>\n'),
-              ('blacklight-veteran-reintroduction.html',
-               '        <a class="secondary-action" href="blacklight-random-character.html">Random Character Generator</a>\n',
-               '        <a class="secondary-action" href="blacklight-random-character.html">Random Character Generator</a>\n        <a class="secondary-action" href="blacklight-mission-generator.html">Mission Generator</a>\n')
-          ]
-          for filename, old, new in page_updates:
-              path = Path(filename)
-              text = path.read_text(encoding='utf-8')
-              if 'blacklight-mission-generator.html' not in text:
-                  if old not in text:
-                      raise SystemExit(f'Navigation marker missing in {filename}')
-                  path.write_text(text.replace(old, new, 1), encoding='utf-8')
-
-          handoff_path = Path('blacklight-character-sheet-handoff.js')
-          handoff = handoff_path.read_text(encoding='utf-8')
-          nav_block = """    if (!actions.querySelector('[data-blacklight-mission-link]')) {
-              const link = document.createElement('a');
-              link.className = 'secondary-action';
-              link.href = 'blacklight-mission-generator.html';
-              link.dataset.blacklightMissionLink = 'true';
-              link.textContent = 'Mission Generator';
-              insertBeforeReturnLink(actions, link);
-            }
-
-"""
-          random_marker = "    if (!actions.querySelector('[data-blacklight-random-link]')) {\n"
-          if 'data-blacklight-mission-link' not in handoff:
-              if random_marker not in handoff:
-                  raise SystemExit('Character sheet navigation marker missing')
-              handoff = handoff.replace(random_marker, nav_block + random_marker, 1)
-              handoff_path.write_text(handoff, encoding='utf-8')
-
-          wiki_path = Path('data/blacklight-continuum/wiki/wiki-index.json')
-          wiki = json.loads(wiki_path.read_text(encoding='utf-8'))
-          wiki['schemaVersion'] = '0.26.0'
-          wiki['description'] = 'Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.'
-          wiki['missionGeneratorModule'] = 'blacklight-mission-generator.html'
-          wiki['missionGeneratorContent'] = 'data/blacklight-continuum/generators/mission-generator-content.json'
-          pack = 'data/blacklight-continuum/wiki/mission-generator.json'
-          packs = wiki.setdefault('packs', [])
-          if pack not in packs:
-              insertion = packs.index('data/blacklight-continuum/wiki/veteran-reintroduction.json') + 1 if 'data/blacklight-continuum/wiki/veteran-reintroduction.json' in packs else len(packs)
-              packs.insert(insertion, pack)
-          scope = wiki.setdefault('completedScope', {})
-          scope['wikiEntries'] = 82
-          scope['nativePacks'] = 12
-          scope['missionGenerators'] = 1
-          scope['legacyMissionPatterns'] = 12
-          scope['generatedOperationTypes'] = 8
-          scope['generatedClientCategories'] = 12
-          scope['generatedTargetProfiles'] = 12
-          scope['generatedGlobalLocations'] = 20
-          scope['generatedOppositionModels'] = 10
-          scope['generatedOperationalChallenges'] = 32
-          scope['generatedMissionTwists'] = 34
-          scope['generatedMissionDeadlines'] = 24
-          scope['generatedMissionScenes'] = 7
-          scope['generatedMissionResolutionLevels'] = 5
-          scope['playerMissionBriefingExports'] = 1
-          scope['moderatorMissionDossierExports'] = 1
-          next_areas = wiki.setdefault('nextDevelopmentAreas', [])
-          item = 'live browser playtest of seeded mission recreation, sectional rerolls, player-only printing, complete dossier printing, clipboard briefing, and JSON export'
-          if item not in next_areas:
-              next_areas.insert(0, item)
-          wiki_path.write_text(json.dumps(wiki, indent=2) + '\n', encoding='utf-8')
+          path.write_text(text, encoding='utf-8')
           PY
-      - name: Commit integration and remove one-time workflow
+          node --check blacklight-mission-generator.js
+      - name: Commit patch and remove one-time workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm .github/workflows/one-time-integrate-blacklight-mission-generator.yml
-          git add blacklight-mission-generator.js index.html blacklight-character-creation.html blacklight-random-character.html blacklight-veteran-reintroduction.html blacklight-character-sheet-handoff.js data/blacklight-continuum/wiki/wiki-index.json
-          git commit -m "Integrate Blacklight mission generator"
+          git add blacklight-mission-generator.js
+          git commit -m "Complete mission generator derived rerolls"
           git push origin main
