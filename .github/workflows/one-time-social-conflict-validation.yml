@@ -1,0 +1,120 @@
+name: Validate Blacklight social conflict module
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-social-conflict-validation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply final consistency corrections
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          module_path = Path('data/blacklight-continuum/wiki/social-conflict-example.json')
+          module = json.loads(module_path.read_text(encoding='utf-8'))
+          module['schemaVersion'] = '1.0.1'
+          worked = next(entry for entry in module['entries'] if entry['id'] == 'worked-social-conflict-richard')
+          old = (
+              "Mara uses Read the Hierarchy. Her Awareness 3 + Investigation 4 gives seven dice against difficulty 3 for the office's institutional complexity. "
+              "She rolls 10, 8, 7, 5, 4, 3, 1 for three successes and one critical. The ability answers directly: Richard can authorize a temporary hold; "
+              "berth revenue is the hidden resource driving his behavior; and a review clerk can countersign the filing. The critical creates Authority Leverage: Administrator Hold Authority."
+          )
+          new = (
+              "Mara uses Read the Hierarchy. Her Awareness 3 + Investigation 4 gives seven dice against difficulty 3 for the office's institutional complexity. "
+              "She rolls 10, 8, 7, 5, 4, 3, 1 for three successes and one critical. The ability answers directly: Richard can authorize a temporary hold; "
+              "berth revenue is the hidden resource driving his behavior; and the claim that registration must be completed before review is a ceremonial barrier rather than the actual controlling rule. "
+              "The critical creates Authority Leverage: Administrator Hold Authority."
+          )
+          worked['body'] = [new if paragraph == old else paragraph for paragraph in worked['body']]
+          module_path.write_text(json.dumps(module, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          index_path = Path('data/blacklight-continuum/wiki/wiki-index.json')
+          index = json.loads(index_path.read_text(encoding='utf-8'))
+          index['completedScope']['socialConflictActions'] = 10
+          index_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          Path('.github/workflows/one-time-social-conflict-validation.yml').unlink()
+          PY
+      - name: Validate files and integration
+        run: |
+          node --check blacklight-social-conflict.js
+          node --check blacklight-social-conflict-entry.js
+          node --check blacklight-combat-example.js
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rules = json.loads(Path('data/blacklight-continuum/rules/social-conflict-foundation.json').read_text(encoding='utf-8'))
+          module = json.loads(Path('data/blacklight-continuum/wiki/social-conflict-example.json').read_text(encoding='utf-8'))
+          index = json.loads(Path('data/blacklight-continuum/wiki/wiki-index.json').read_text(encoding='utf-8'))
+          homepage = Path('index.html').read_text(encoding='utf-8')
+          reader = Path('blacklight-social-conflict.html').read_text(encoding='utf-8')
+          card = Path('blacklight-social-conflict-entry.js').read_text(encoding='utf-8')
+
+          assert rules['schemaVersion'] == '1.0.0'
+          assert len(rules['coreActions']) == 10
+          assert len(rules['leverage']['types']) == 6
+          assert rules['socialDifficulty']['formula'].startswith('Social Difficulty equals ceiling')
+          assert 'social hit-point damage' in rules['designRule']
+          assert 'playerSafety' in rules['hardLimits']
+
+          assert module['schemaVersion'] == '1.0.1'
+          assert len(module['entries']) == 5
+          ids = {entry['id'] for entry in module['entries']}
+          assert ids == {
+              'social-conflict-core',
+              'social-actions-and-leverage',
+              'richard-scene-setup',
+              'worked-social-conflict-richard',
+              'social-conflict-alternate-results',
+          }
+          worked = next(entry for entry in module['entries'] if entry['id'] == 'worked-social-conflict-richard')
+          text = ' '.join(worked['body'])
+          for required in (
+              'Richard',
+              'Mara',
+              'Ilyan',
+              'Kest',
+              'Procedural Trap',
+              'Name the Price',
+              'Other Eye',
+              '3/4',
+              'no local currency or credit',
+              'ceremonial barrier',
+          ):
+              assert required in text
+          assert text.count('Exchange ') >= 6
+
+          assert index['schemaVersion'] == '0.20.0'
+          assert index['socialConflictRules'] == 'data/blacklight-continuum/rules/social-conflict-foundation.json'
+          assert index['socialConflictModule'] == 'blacklight-social-conflict.html'
+          assert index['completedScope']['socialConflictActions'] == 10
+          assert index['completedScope']['socialTeachingEntries'] == 5
+          assert 'data/blacklight-continuum/wiki/social-conflict-example.json' in index['packs']
+
+          assert '<script src="blacklight-social-conflict-entry.js"></script>' in homepage
+          assert 'blacklight-social-conflict.js' in reader
+          assert 'blacklight-social-conflict.html' in card
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Validate Blacklight social conflict module"
+          git push origin main
