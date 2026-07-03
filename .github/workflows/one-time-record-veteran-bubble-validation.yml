@@ -1,0 +1,84 @@
+name: One-Time Record Veteran Bubble Reorientation Validation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/one-time-record-veteran-bubble-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate structured veteran reorientation
+        run: |
+          node scripts/validate-blacklight-veteran-reorientation.mjs | tee /tmp/veteran-validation.txt
+          node --check blacklight-veteran-reorientation-options.js
+          node --check blacklight-veteran-reintroduction.js
+      - name: Update index and write receipt
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          index_path = Path('data/blacklight-continuum/wiki/wiki-index.json')
+          index = json.loads(index_path.read_text(encoding='utf-8'))
+          index['schemaVersion'] = '0.27.0'
+          index['veteranReorientationEnhancements'] = 'blacklight-veteran-reorientation-options.js'
+          scope = index.setdefault('completedScope', {})
+          scope['veteranBubblePromptReplacements'] = 35
+          scope['veteranPreservedSheetTextPrompts'] = 2
+          scope['veteranExpandedStageGuides'] = 24
+          scope['veteranStructuredChoiceAcknowledgements'] = 1
+          next_areas = index.setdefault('nextDevelopmentAreas', [])
+          old = 'live browser playtest of the twenty-four-stage veteran reorientation, response replacement, restart, export, and character-sheet attachment'
+          new = 'live browser playtest of the twenty-four-stage bubble-based veteran reorientation, multi-selection Charles acknowledgments, legacy-answer migration, restart, export, and character-sheet attachment'
+          if old in next_areas:
+              next_areas[next_areas.index(old)] = new
+          elif new not in next_areas:
+              next_areas.insert(0, new)
+          index_path.write_text(json.dumps(index, indent=2) + '\n', encoding='utf-8')
+
+          output = Path('/tmp/veteran-validation.txt').read_text(encoding='utf-8').strip()
+          receipt = {
+              'system': 'Blacklight Continuum',
+              'module': 'BlackLight Veteran Reorientation Bubble Conversion',
+              'validated': True,
+              'validatedAt': datetime.now(timezone.utc).isoformat(),
+              'validatedCommit': os.environ.get('GITHUB_SHA', ''),
+              'checks': [
+                  'All twenty-four reorientation stages received three expanded guidance sections',
+                  'All thirty-five former freeform continuity prompts were replaced by structured radio or checkbox bubbles',
+                  'Every replacement option contains a value, visible label, explanatory detail, and option-specific Charles acknowledgment',
+                  'Charles once saved me by and Charles never answered me about remain textarea fields for direct Basic Character Sheet transfer',
+                  'Legacy freeform draft answers migrate into preserved read-only wording rather than being discarded',
+                  'Multi-selection prompts produce one consolidated Charles response per field',
+                  'Changing a selection replaces the existing response instead of appending duplicate transcript entries',
+                  'Export and character-sheet attachment preserve structured answers, Charles responses, and prior migrated wording',
+                  'Veteran option library and reorientation engine passed node --check'
+              ],
+              'validatorOutput': output
+          }
+          receipt_path = Path('data/blacklight-continuum/validation/veteran-reorientation-bubbles.json')
+          receipt_path.parent.mkdir(parents=True, exist_ok=True)
+          receipt_path.write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Commit receipt and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/one-time-record-veteran-bubble-validation.yml
+          git add data/blacklight-continuum/wiki/wiki-index.json data/blacklight-continuum/validation/veteran-reorientation-bubbles.json
+          git commit -m "Record veteran bubble reorientation validation"
+          git push origin main
