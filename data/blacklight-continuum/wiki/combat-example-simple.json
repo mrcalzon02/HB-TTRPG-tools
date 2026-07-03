@@ -1,118 +1,200 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "2.0.2",
-  "description": "A worked example using one attack roll, fixed damage, one Protection value, Exposure as enemy attack dice, and no Margin or universal Wounded penalty.",
+  "schemaVersion": "3.0.0",
+  "description": "A combat teaching module using attack rolls, firearm critical damage dice, rolled damage, damage-type permissions, rolled soak, Exposure, Cohesion, Pressure, rescue, and death.",
   "entries": [
     {
       "id": "combat-foundation-procedure",
-      "title": "Simple Combat Procedure",
+      "title": "Simple Attack, Damage, and Soak Procedure",
       "category": "Combat",
-      "summary": "Roll to hit, apply fixed damage, subtract one Protection value, and remove Vitality.",
+      "summary": "Roll to hit, roll damage after a hit, roll every soak die the defender is legally allowed, and mark what remains.",
       "body": [
         "Build the attack pool from Attribute + Skill. Add the target's current Exposure as attack dice. Subtract range, cover, condition, and equipment penalties.",
-        "Roll against Defense Difficulty, equal to ceiling(Guard divided by two). Equal or greater successes hit. Additional successes do not change damage.",
-        "Use the attack's fixed Damage number. Subtract one applicable Protection value from Impact or Trauma. Disruption normally ignores Protection. Remove the remaining amount from Vitality.",
-        "That is the complete ordinary attack. Powers may explicitly add dice, add fixed damage, add Armor, ignore Protection, move targets, or impose conditions."
+        "Roll against Defense Difficulty, equal to ceiling(Guard divided by two). Results of 6 through 10 are successes. A 10 on the final attack roll is also a critical success.",
+        "If the attack misses, stop. If it hits, roll the attack's damage dice. A successful Firearms attack adds one damage die for every critical success on the final attack roll. Ordinary extra successes do not add damage dice.",
+        "Every result of 6 through 10 on the damage roll is one damage success. The defender then builds one legal soak pool and rolls it. Every result of 6 through 10 on the soak roll cancels one damage success.",
+        "Mark every uncancelled success as Bashing, Lethal, Aggravated, or Disruption damage. A 10 on a damage or soak roll is normally only one success."
       ],
       "tables": [
         {
-          "title": "Basic Attack in Five Steps",
+          "title": "Combat Resolution",
           "columns": ["Step", "Rule"],
           "rows": [
-            ["1", "Attribute + Skill + target Exposure - penalties"],
-            ["2", "Roll against ceiling(Guard / 2)"],
-            ["3", "On a hit, use fixed Damage"],
-            ["4", "Subtract one Protection value"],
-            ["5", "Lose the remaining Vitality"]
+            ["1. Attack", "Attribute + Skill + target Exposure - penalties"],
+            ["2. Hit", "Meet ceiling(Guard / 2); every attack die showing 10 is a critical success"],
+            ["3. Damage Pool", "Printed damage dice; Firearms adds one die per critical success"],
+            ["4. Damage Roll", "Each 6+ is one damage success"],
+            ["5. Soak Pool", "Use only Resilience, Armor, Fortitude, Archetype Rating, or other dice allowed for that damage type"],
+            ["6. Soak Roll", "Each 6+ cancels one damage success"],
+            ["7. Record", "Mark every uncancelled success on Vitality"]
+          ]
+        },
+        {
+          "title": "Firearm Critical Examples",
+          "columns": ["Final Attack Roll", "Damage Pool"],
+          "rows": [
+            ["Pistol hits with no 10s", "Base 4 damage dice"],
+            ["Pistol hits with one 10", "5 damage dice"],
+            ["Rifle hits with two 10s", "Base 5 + 2 = 7 damage dice"],
+            ["Rifle misses but contains a 10", "No damage roll because the attack missed"]
           ]
         }
       ],
-      "tags": ["simple combat", "fixed damage", "protection"],
-      "relatedEntries": ["shapechanger-living-soak", "combat-tracks-and-death", "worked-combat-cargo-gallery"]
+      "tags": ["combat", "damage roll", "soak", "firearm criticals"],
+      "relatedEntries": ["damage-types-and-soak", "vampire-soak-and-fortitude", "shapechanger-living-soak", "worked-combat-cargo-gallery"]
+    },
+    {
+      "id": "damage-types-and-soak",
+      "title": "Bashing, Lethal, Aggravated, and Disruption",
+      "category": "Combat",
+      "summary": "Damage type determines whether ordinary Resilience, Armor, or only an explicit supernatural defense may enter the soak pool.",
+      "body": [
+        "Bashing is blunt, concussive, exhausting, or bruising damage. An ordinary mortal or human-adjacent character rolls Resilience + eligible Armor to soak it.",
+        "Lethal damage cuts, penetrates, burns, crushes, or destroys essential living tissue. An ordinary mortal cannot add Resilience to a Lethal soak pool. They roll eligible Armor only. With no Armor, every Lethal damage success is marked.",
+        "Aggravated damage is supernatural, cursed, consecrated, reality-destroying, or otherwise fundamentally hostile to the target's nature. No ordinary Resilience or ordinary Armor applies. Only a capability or item explicitly rated against Aggravated damage grants soak dice.",
+        "Disruption damages memory, identity, noospheric continuity, or control. It uses Resolve and explicit continuity protection when its attack record allows soak. Physical Armor and physical soak permissions do not apply.",
+        "Armor contributes dice rather than subtracting damage. Armor must cover the struck area and be rated for the damage type. Ordinary Armor normally applies to Bashing and Lethal, but not Aggravated."
+      ],
+      "tables": [
+        {
+          "title": "Ordinary Mortal Soak",
+          "columns": ["Damage", "Soak Pool"],
+          "rows": [
+            ["Bashing", "Resilience + eligible Armor"],
+            ["Lethal", "Eligible Armor only"],
+            ["Aggravated", "No dice unless an explicit supernatural defense grants them"],
+            ["Disruption", "Resolve + explicit continuity protection when the attack allows soak"]
+          ]
+        },
+        {
+          "title": "Basic Bashing Example",
+          "columns": ["Stage", "Result"],
+          "rows": [
+            ["Damage Roll", "A punch rolls 5 damage dice and produces 3 successes"],
+            ["Soak Roll", "The target rolls Resilience 2 and produces 1 success"],
+            ["Damage Marked", "3 damage successes - 1 soak success = 2 Bashing"]
+          ]
+        }
+      ],
+      "tags": ["bashing", "lethal", "aggravated", "disruption", "armor"],
+      "relatedEntries": ["combat-foundation-procedure", "vampire-soak-and-fortitude", "shapechanger-living-soak"]
+    },
+    {
+      "id": "vampire-soak-and-fortitude",
+      "title": "Vampire Soak and Fortitude",
+      "category": "Combat",
+      "summary": "The dead body can soak injuries that living biology cannot, treats most gunfire as Bashing, halves Bashing after soak, and adds Fortitude to every permitted soak roll.",
+      "body": [
+        "A Vampire is not sustained by functioning mortal organs. Bruising, rupturing, or puncturing tissue is less decisive when cursed blood and deathless continuity move the body. This changes both soak permissions and the final treatment of Bashing damage.",
+        "Fortitude equals the highest Deathless Resilience rank the Vampire owns, from 0 to 5. Add that many dice to every Vampire soak roll that is permitted, including Aggravated soak. A Vampire with no Deathless Resilience powers has Fortitude 0.",
+        "Against Bashing, roll Resilience + eligible Armor + Fortitude. Cancel damage successes normally, then halve the remaining Bashing and round down.",
+        "Against Lethal, roll Resilience + eligible Armor + Fortitude. Unlike Bashing, do not halve what remains.",
+        "Against Aggravated, ordinary Resilience and ordinary Armor do not apply. Roll Fortitude plus only explicitly supernatural Armor or another defense that says it soaks Aggravated damage.",
+        "Ordinary firearms deal Bashing to Vampires because most bullets are designed to puncture organs the Vampire no longer needs. Anti-materiel fire, vehicle-mounted weapons, explosive or incendiary ammunition, specialized anti-undead ammunition, and attacks explicitly labeled otherwise may deal Lethal or Aggravated damage instead."
+      ],
+      "tables": [
+        {
+          "title": "Vampire Soak Pools",
+          "columns": ["Damage", "Soak Pool", "After Soak"],
+          "rows": [
+            ["Bashing", "Resilience + Armor + Fortitude", "Halve remaining damage, round down"],
+            ["Lethal", "Resilience + Armor + Fortitude", "Take all remaining damage"],
+            ["Aggravated", "Fortitude + explicitly supernatural protection", "Take all remaining damage"],
+            ["Disruption", "Resolve + Fortitude + explicit continuity protection", "Take all remaining damage"]
+          ]
+        },
+        {
+          "title": "Vampire Bashing Example",
+          "columns": ["Stage", "Result"],
+          "rows": [
+            ["Damage Roll", "A punch produces 3 Bashing successes"],
+            ["Soak Roll", "The Vampire rolls Resilience 2 + Fortitude 1 and produces 1 success"],
+            ["After Soak", "3 - 1 = 2 Bashing"],
+            ["Undead Halving", "2 is halved to 1 Bashing"]
+          ]
+        },
+        {
+          "title": "Vampire Aggravated Example",
+          "columns": ["Stage", "Result"],
+          "rows": [
+            ["Damage Roll", "Supernatural fire produces 3 Aggravated successes"],
+            ["Soak Pool", "Resilience and ordinary Armor are excluded; Fortitude 2 rolls two dice"],
+            ["Soak Result", "One success cancels one point"],
+            ["Damage Marked", "2 Aggravated"]
+          ]
+        }
+      ],
+      "tags": ["vampire", "fortitude", "gunfire", "undead", "soak"],
+      "relatedEntries": ["damage-types-and-soak", "combat-foundation-procedure", "vampire-archetype"]
     },
     {
       "id": "shapechanger-living-soak",
       "title": "Shapechanger Living Soak",
       "category": "Combat",
-      "summary": "Living Soak is a powerful increase to one Protection number, not another roll.",
+      "summary": "Living Soak allows a transformed Shapechanger to roll Resilience against Lethal damage and adds Archetype Rating to physical soak pools.",
       "body": [
-        "In social form, add Archetype Rating to Protection against Impact. In hunting or war form, add Archetype Rating against Impact and Trauma.",
-        "A Shapechanger with ordinary Protection 3 and Archetype Rating 3 has Protection 6 against eligible physical damage while transformed. A Damage 5 rifle may hit and still deal 0.",
-        "Living Soak does not spend Fury, does not roll, and is not weakened merely because Vitality is low.",
-        "Disruption bypasses it because Disruption attacks identity, memory, noospheric continuity, or control rather than the body."
+        "In social form, the Shapechanger uses ordinary mortal permissions: Resilience + Armor against Bashing, Armor only against Lethal, and no ordinary Aggravated soak.",
+        "In hunting or war form, Living Soak permits Resilience against both Bashing and Lethal damage. Roll Resilience + eligible Armor + Archetype Rating. Every success cancels one damage success.",
+        "Living Soak costs no Fury and requires no Reaction. The form itself grants the permission. Low Vitality does not automatically reduce the soak pool because there is no universal Wounded penalty.",
+        "Living Soak does not automatically soak Aggravated or Disruption damage. A separate capability must explicitly grant those dice."
       ],
       "tables": [
         {
-          "title": "Living Soak",
-          "columns": ["Form", "Protection"],
+          "title": "Shapechanger Soak",
+          "columns": ["State", "Bashing", "Lethal", "Aggravated"],
           "rows": [
-            ["Social", "Normal Protection + Archetype Rating against Impact only"],
-            ["Hunting or War", "Normal Protection + Archetype Rating against Impact and Trauma"],
-            ["Any Form vs Disruption", "No Living Soak bonus"]
+            ["Social form", "Resilience + Armor", "Armor only", "Explicit supernatural defense only"],
+            ["Hunting or war form", "Resilience + Armor + Archetype Rating", "Resilience + Armor + Archetype Rating", "Explicit supernatural defense only"]
           ]
         }
       ],
-      "tags": ["shapechanger", "living soak", "protection"],
-      "relatedEntries": ["combat-foundation-procedure", "worked-combat-cargo-gallery"]
-    },
-    {
-      "id": "combat-tracks-and-death",
-      "title": "Combat Tracks and Death",
-      "category": "Combat",
-      "summary": "Exposure helps enemies hit, Cohesion is spent by choice, Pressure risks Crisis, and Vitality determines whether the character stands.",
-      "body": [
-        "Each Exposure point gives enemies one die when attacking you. A Push gives 1 Exposure after it resolves. At the Limit, the action finishes, you suffer 1 Impact ignoring Protection, lose your Reaction, and reset Exposure to 0.",
-        "Cohesion is deliberately spent. Commit adds two dice. Brace removes one remaining Impact or Disruption. Anchor helps an ally's Death Test. Refuse Collapse may keep you at 1 Vitality once per scene.",
-        "Pressure remains Archetype-specific. Pay Resource, mark Pressure, resolve the power, then resolve Crisis if the Limit was reached.",
-        "There is no universal Wounded condition. Positive Vitality means the character acts normally unless a specific rule says otherwise. At 0 Vitality, the character is Downed and begins using Death Marks."
-      ],
-      "tables": [],
-      "tags": ["exposure", "cohesion", "pressure", "vitality", "death"],
-      "relatedEntries": ["combat-foundation-procedure", "worked-combat-cargo-gallery"]
+      "tags": ["shapechanger", "living soak", "resilience", "archetype rating"],
+      "relatedEntries": ["damage-types-and-soak", "combat-foundation-procedure", "worked-combat-cargo-gallery"]
     },
     {
       "id": "worked-combat-cargo-gallery",
       "title": "Worked Combat: Three People in the Cargo Gallery",
       "category": "Combat Example",
-      "summary": "An eleven-round two-against-one example using fixed damage, Exposure attack dice, Living Soak, Pressure, rescue, and death.",
+      "summary": "A continuous encounter demonstrating firearm critical damage dice, rolled damage, mortal and Shapechanger soak, Exposure, Pressure, rescue, and death.",
       "body": [
         "Mara Vale and Ilyan Voss confront Kest Raal over a stolen biological key. Kest declares that he is crossing the cargo gallery to kill Ilyan, so Initiative begins.",
-        "Mara has six Firearms dice, Defense Difficulty 3, Vitality 7, Protection 3, Cohesion 5, and Exposure 0. Her pistol deals fixed Damage 4 Trauma and her rifle deals fixed Damage 5 Trauma. Ilyan has Defense Difficulty 2, Vitality 7, Protection 3, Pact 6, Intrusion 4 of 8, and an arc pistol dealing fixed Damage 3 Disruption. Kest has Defense Difficulty 3, Vitality 8, ordinary Protection 3, Archetype Rating 3, Fury 9, Instinct 4 of 7, and Living Soak.",
-        "Round 1: Mara fires from Medium range at Kest behind Partial Cover. Six dice lose one for range and one for cover, leaving four. Three successes hit. Pistol Damage 4 minus social-form Protection 3 deals 1 Trauma, lowering Kest to 7 Vitality. Kest shifts to war form for 1 Fury, so Living Soak raises his physical Protection from 3 to 6.",
-        "Round 2: Mara switches to the rifle. Her first roll fails, so she Pushes and gains Exposure 1. The rifle hits, but fixed Damage 5 minus transformed Protection 6 is 0. Ilyan's arc pistol then hits for fixed 3 Disruption. Disruption ignores Protection, lowering Kest from 7 to 4.",
-        "Round 3: Kest activates Bulwark for 2 Fury. Armor 2 raises ordinary Protection from 3 to 5; Living Soak raises the single physical Protection value to 8. Ilyan's Dream-Born Servitor Restrains Kest. The restraint affects movement and grants attackers one die; it does not reduce Protection.",
-        "Round 4: Mara attacks with seven dice because Kest is Restrained. She hits, but rifle Damage 5 minus Protection 8 is 0. Kest spends his action breaking free. Ilyan hits with the arc pistol for 3 Disruption, reducing Kest from 4 to 1. Low Vitality does not reduce Living Soak.",
-        "Round 5: Ilyan uses The Thousand-Armed Scheme to move Mara behind cover, close a bulkhead, move cargo, and attempt another restraint. Pact falls and Intrusion reaches Critical. Kest uses his turn changing from Bulwark to Breacher, so Protection returns from 8 to 6.",
-        "Round 6: Kest tears open the bulkhead. Ilyan spends Pact while Critical, reaches the Intrusion Limit, resolves the ability, and then suffers Incursion. He is Restrained, loses his arc pistol, and suffers 1 Disruption.",
-        "Round 7: Mara's rifle hits Kest, but 5 minus Protection 6 remains 0. Kest attacks Ilyan with fixed Damage 6 claws. Protection 3 reduces the hit to 3 Trauma, lowering Ilyan from 6 to 3.",
-        "Round 8: Mara Pushes and gains Exposure 2. Her rifle still deals 0. Kest attacks Mara with his normal attack pool plus two dice from her Exposure. He hits with a Damage 4 Impact shoulder slam. Protection 3 leaves 1 Impact, which Mara removes by spending 1 Cohesion on Brace.",
-        "Round 8 continued: Ilyan retrieves the arc pistol and hits Kest for 3 Disruption. Kest would fall below 0, but spends 2 Cohesion on Refuse Collapse and remains at 1 Vitality.",
-        "Round 9: Kest attacks Ilyan again. Damage 6 minus Protection 3 deals 3 Trauma, reducing Ilyan from 3 to 0. Ilyan becomes Downed and Unstable. Mara moves adjacent, Pushes a Stabilize test, gains Exposure 3, and succeeds. Ilyan becomes Stable at 0 Vitality.",
-        "Round 10: Mara spends 1 Cohesion on Commit before attempting Emergency Treatment, adding two dice. Her initial roll still fails, so she Pushes, succeeds, raises Exposure from 3 to 4, consumes one medical-kit charge, and restores Ilyan to 1 Vitality. Kest then attacks Mara with four bonus dice from Exposure 4. The attack deals fixed Damage 4 minus Protection 3, lowering Mara by 1 Vitality. Exposure changed the chance to hit, not the damage.",
-        "Round 10 continued: Ilyan fires while Staggered, Pushes, gains Exposure 1, and hits. Damage 3 Disruption ignores Kest's Protection 6. Kest falls from 1 to 0 with two excess damage and gains 2 Death Marks.",
-        "Round 11: The plasma conduit ruptures. Mara repairs it, Pushes, and raises Exposure from 4 to its Limit of 5. The repair succeeds first. Overexposure then deals 1 Impact ignoring Protection, removes her Reaction, and resets Exposure to 0. Ilyan attempts to Stabilize Kest without a kit and fails.",
-        "At the end of Round 11, Kest fails a Death Test with a die showing 1, gains 2 more Death Marks, and dies. Living Soak cannot help because a Death Test is not physical damage.",
-        "The combat used the same short loop every time: attack dice, hit or miss, fixed damage, one Protection number, Vitality. Exposure changed attack dice. Powers changed positioning, Protection, or conditions. Pressure and Cohesion remained explicit exceptions rather than extra arithmetic inside every hit."
+        "Mara has six Firearms attack dice, Resilience 2, Armor 1, Vitality 7, Cohesion 5, and Exposure 0. Her pistol rolls 4 Lethal damage dice and her rifle rolls 5. Ilyan has Resilience 2, Armor 1, Resolve 3, Vitality 7, Pact 6, and Intrusion 4 of 8. His arc pistol rolls 3 Disruption damage dice. Kest has Resilience 3, Resolve 2, Archetype Rating 3, Vitality 8, Fury 9, Instinct 4 of 7, and no worn Armor.",
+        "Round 1: Mara fires from Medium range at Kest behind Partial Cover. Six attack dice lose one for range and one for cover, leaving four. The final roll is 10, 8, 7, and 3: three successes, including one critical. The pistol hits and rolls its base 4 damage dice plus 1 critical die, for 5 damage dice. The damage roll produces 3 Lethal successes. Kest is still in social form and has no Armor, so he has no legal Lethal soak dice. He marks all 3 Lethal and falls from 8 to 5 Vitality.",
+        "Kest shifts to war form for 1 Fury. Living Soak now permits Resilience against Lethal and adds Archetype Rating. His Bashing and Lethal soak pool becomes Resilience 3 + Rating 3 = 6 dice.",
+        "Round 2: Mara's rifle attack hits without a critical. She rolls 5 damage dice and produces 3 Lethal successes. Kest rolls 6 Living Soak dice and produces 3 soak successes. All damage is cancelled. Ilyan then hits with the arc pistol. Its 3 damage dice produce 2 Disruption successes. Living Soak does not apply. Kest rolls Resolve 2 and produces 1 soak success, so he marks 1 Disruption and falls from 5 to 4 Vitality.",
+        "Round 3: Kest activates Bulwark for 2 Fury. Armor 2 now adds two dice to eligible soak. His transformed Bashing and Lethal soak pool becomes Resilience 3 + Armor 2 + Rating 3 = 8 dice. Mara fires the rifle and rolls two critical successes on a successful attack. The rifle damage pool becomes base 5 + 2 critical dice = 7. The damage roll produces 5 Lethal successes. Kest's 8-die soak roll produces 3 successes, so he marks 2 Lethal and falls from 4 to 2 Vitality. The criticals mattered without reintroducing Margin: they added damage dice, and the damage and soak rolls determined the injury.",
+        "Ilyan uses Dream-Born Servitor and Restrains Kest. Restraint affects movement and gives attacks against him one die. It does not remove Armor or soak permissions.",
+        "Round 4: Mara attacks with one bonus die because Kest is Restrained. Her rifle hits with no criticals. Five damage dice produce 3 Lethal successes. Kest's 8-die soak produces 4 successes and cancels all damage. Kest spends his action breaking free. Ilyan's arc pistol then produces 2 Disruption successes; Kest's Resolve soak cancels 1, so he marks 1 Disruption and falls from 2 to 1 Vitality.",
+        "Round 5: Ilyan uses The Thousand-Armed Scheme to move Mara behind cover, close a bulkhead, move cargo, and attempt another restraint. Pact falls and Intrusion reaches Critical. Kest changes from Bulwark to Breacher, so Armor 2 ends and his transformed physical soak returns to 6 dice.",
+        "Round 6: Kest tears open the bulkhead and attacks Ilyan with supernatural claws rolling 6 Lethal damage dice. The damage roll produces 4 successes. Ilyan is human-adjacent and cannot add Resilience against Lethal; only Armor 1 rolls. The Armor die succeeds once, cancelling one. Ilyan marks 3 Lethal and falls from 7 to 4 Vitality.",
+        "Ilyan spends Pact while already at Critical Intrusion. His ability resolves, then Intrusion reaches its Limit and Incursion occurs. He is Restrained, loses the arc pistol, and suffers 1 Disruption, reducing him from 4 to 3 Vitality.",
+        "Round 7: Kest attacks Ilyan again. Six Lethal damage dice produce 4 successes. Ilyan's single Armor die produces no success. He marks 4 Lethal, reaches 0 Vitality with 1 excess Lethal, becomes Downed and Unstable, and gains 1 Death Mark.",
+        "Mara moves adjacent and uses Stabilize with her medical kit. Her first Medicine roll fails, so she Pushes, gains 1 Exposure, and succeeds. Ilyan becomes Stable and loses his Death Mark, but remains at 0 Vitality.",
+        "Round 8: Mara uses Emergency Treatment. She spends 1 Cohesion on Commit for two dice, succeeds, consumes one kit charge, removes one Lethal damage, and restores Ilyan to 1 Vitality. Kest attacks Mara with two extra attack dice because later Pushes have raised her Exposure to 2. His shoulder slam rolls 4 Bashing damage dice and produces 3 successes. Mara rolls Resilience 2 + Armor 1 and produces 2 soak successes. One Bashing remains, but Mara spends 1 Cohesion on Brace after soak and cancels it.",
+        "Ilyan retrieves the arc pistol and hits Kest. Three Disruption damage dice produce 2 successes. Kest's Resolve soak produces no successes. He would fall from 1 to 0 with 1 excess Disruption, but spends 2 Cohesion on Refuse Collapse and remains at 1 Vitality.",
+        "Round 9: Ilyan fires again while Staggered. He Pushes, gains 1 Exposure, and reaches the required attack successes. The arc pistol rolls 3 Disruption damage dice and produces 3 successes. Kest rolls Resolve 2 and produces 1 soak success. Two Disruption remain. He falls from 1 to 0 with 1 excess damage and gains 1 Death Mark. Refuse Collapse cannot be used again this scene.",
+        "Round 10: Mara must contain a rupturing plasma conduit. Ilyan tries to Stabilize Kest without a medical kit and fails. At the end of the round, Kest makes a Death Test, fails with a die showing 1, and gains 2 Death Marks. He reaches 3 and dies. Living Soak cannot help because a Death Test is not a Bashing or Lethal damage roll.",
+        "The same structure governed every attack: hit roll, damage roll, legal soak roll, uncancelled damage. The supernatural differences appeared in who could soak which damage, not in a different attack system for every creature."
       ],
       "tables": [
         {
-          "title": "What Each Mechanic Did",
-          "columns": ["Mechanic", "Result"],
+          "title": "What Changed the Outcome",
+          "columns": ["Mechanic", "Effect"],
           "rows": [
-            ["Exposure", "Added dice to attacks against Mara"],
-            ["Living Soak", "Raised Kest's one physical Protection value"],
-            ["Disruption", "Ignored physical Protection"],
-            ["Cohesion", "Created chosen exceptions such as Brace and Refuse Collapse"],
-            ["Pressure", "Triggered Ilyan's Incursion after his power resolved"],
-            ["Stabilize", "Stopped Ilyan's Death Tests"],
-            ["Emergency Treatment", "Restored Ilyan to 1 Vitality"],
-            ["Death Marks", "Killed Kest at 3 or more"]
+            ["Firearm critical success", "Added one damage die before the firearm damage roll"],
+            ["Mortal Lethal soak", "Allowed Armor dice but not Resilience"],
+            ["Shapechanger Living Soak", "Allowed Resilience + Armor + Archetype Rating against Lethal while transformed"],
+            ["Disruption", "Bypassed Living Soak and used Resolve-based continuity soak"],
+            ["Exposure", "Added attack dice against the exposed target and could create more firearm criticals"],
+            ["Stabilize", "Stopped Ilyan's death clock and removed his Death Mark"],
+            ["Emergency Treatment", "Removed one Lethal and restored Ilyan to 1 Vitality"],
+            ["Death Marks", "Killed Kest when the total reached 3"]
           ]
         }
       ],
-      "tags": ["worked combat", "fixed damage", "exposure", "living soak", "rescue", "death"],
-      "relatedEntries": ["combat-foundation-procedure", "shapechanger-living-soak", "combat-tracks-and-death"]
+      "tags": ["worked combat", "damage roll", "soak roll", "firearm critical", "shapechanger", "rescue", "death"],
+      "relatedEntries": ["combat-foundation-procedure", "damage-types-and-soak", "vampire-soak-and-fortitude", "shapechanger-living-soak"]
     }
   ]
 }
