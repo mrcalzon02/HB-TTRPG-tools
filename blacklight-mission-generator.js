@@ -413,6 +413,16 @@
     ];
   }
 
+  function buildPlayerConstraints(contract, site) {
+    return [
+      visibilityConstraint(contract.visibility),
+      'The declared objective does not authorize unrelated theft, killing, coercion, memory alteration, supernatural binding, or destruction.',
+      `Civilian baseline: ${contract.target.civilians}`,
+      `Support limitation: ${site.support.limit}`,
+      'If the target, location, client motive, identity risk, supernatural obligation, or return path changes materially, pause and renew consent.'
+    ];
+  }
+
   function buildMission() {
     const contract = buildContract();
     const site = buildSite(contract);
@@ -441,13 +451,7 @@
       scenes,
       clocks,
       resolution,
-      playerConstraints: [
-        visibilityConstraint(contract.visibility),
-        'The declared objective does not authorize unrelated theft, killing, coercion, memory alteration, supernatural binding, or destruction.',
-        `Civilian baseline: ${contract.target.civilians}`,
-        `Support limitation: ${site.support.limit}`,
-        'If the target, location, client motive, identity risk, supernatural obligation, or return path changes materially, pause and renew consent.'
-      ],
+      playerConstraints: buildPlayerConstraints(contract, site),
       followUps: [
         truth.aftermath,
         `The client’s unresolved ethical concern remains: ${contract.client.ethicalConcern}`,
@@ -525,7 +529,7 @@
   }
 
   function renderModeratorTruth(mission) {
-    const { contract, site, truth } = mission;
+    const { contract, truth } = mission;
     return `<section class="mission-section gm-only">
       <div class="mission-section-head"><div><h2>Truth Behind the Contract</h2><p>Do not reveal this entire section at the briefing. Reveal clues through play and reopen consent when the truth changes the accepted job.</p></div></div>
       ${cards([
@@ -707,6 +711,7 @@
         scenes: buildScenes(contract, site, truth, cast),
         clocks: buildClocks(contract, site),
         resolution: buildResolution(contract, site, truth),
+        playerConstraints: buildPlayerConstraints(contract, site),
         followUps: [truth.aftermath, `The client’s unresolved ethical concern remains: ${contract.client.ethicalConcern}`, `${site.opposition.label} adapts its procedures after the mission.`, truth.hiddenAgenda]
       };
     } else if (section === 'truth') {
@@ -724,6 +729,7 @@
         clues: buildClues(contract, site, truth),
         scenes: buildScenes(contract, site, truth, cast),
         resolution: buildResolution(contract, site, truth),
+        playerConstraints: buildPlayerConstraints(contract, site),
         followUps: [truth.aftermath, `The client’s unresolved ethical concern remains: ${contract.client.ethicalConcern}`, `${site.opposition.label} adapts its procedures after the mission.`, truth.hiddenAgenda]
       };
     } else if (section === 'cast') {
