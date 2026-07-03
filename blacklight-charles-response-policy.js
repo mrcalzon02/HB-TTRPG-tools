@@ -39,6 +39,29 @@
     }
   }
 
+  function isGenericResponse(response) {
+    const text = String(response || '');
+    return text.includes('above several executive directives')
+      || text.includes('I am not endorsing the judgment')
+      || text.includes('Specific, usable, and therefore much more dangerous')
+      || text.includes('The mission will determine how expensive that belief is');
+  }
+
+  function genericResponse(label, answer, cycle) {
+    const fieldLabel = String(label || 'Recorded Field');
+    const fieldAnswer = String(answer || '(cleared)');
+    switch (cycle % RESPONSE_VARIANTS) {
+      case 1:
+        return `I have entered “${fieldAnswer}” under ${fieldLabel}. I am not endorsing the judgment. I am confirming that the judgment is now attributable.`;
+      case 2:
+        return `${fieldLabel}: “${fieldAnswer}.” Specific, usable, and therefore much more dangerous than a vague intention. Good.`;
+      case 3:
+        return `Recorded. “${fieldAnswer}.” The sentence tells me what you believe. The mission will determine how expensive that belief is.`;
+      default:
+        return `${fieldLabel} recorded: “${fieldAnswer}.” Clear enough to act on. That already places it above several executive directives I have received.`;
+    }
+  }
+
   function transcriptText(entries) {
     return entries.map((entry, index) => [
       `BLACKLIGHT INDUCTION RECORD ${String(index + 1).padStart(2, '0')} — ${entry.stageTitle || 'Blacklight Induction'}`,
@@ -51,10 +74,10 @@
 
   function latestPerField(entries) {
     const latest = new Map();
-    entries.forEach((entry, index) => {
+    entries.forEach(entry => {
       if (!entry || typeof entry !== 'object' || !entry.field) return;
       if (latest.has(entry.field)) latest.delete(entry.field);
-      latest.set(entry.field, { ...entry, _sourceOrder: index });
+      latest.set(entry.field, { ...entry });
     });
     return [...latest.values()];
   }
@@ -63,7 +86,8 @@
     const previousByField = new Map(latestPerField(previous).map(entry => [entry.field, entry]));
     return latestPerField(incoming).map(entry => {
       const prior = previousByField.get(entry.field);
-      const rawResponse = String(entry.rawResponse || entry.response || prior?.rawResponse || prior?.response || '').trim();
+      const incomingResponse = String(entry.rawResponse || entry.response || prior?.rawResponse || prior?.response || '').trim();
+      const responseKind = prior?.responseKind || (isGenericResponse(incomingResponse) ? 'generic' : 'specific');
       let responseCycle = Number.isInteger(prior?.responseCycle) ? prior.responseCycle : 0;
       let responseCycleAt = Date.parse(prior?.responseCycleAt || prior?.recordedAt || '') || now;
 
@@ -73,11 +97,19 @@
         responseCycleAt += elapsedCycles * RESPONSE_ROTATION_MS;
       }
 
+      const rawResponse = responseKind === 'generic'
+        ? incomingResponse
+        : incomingResponse;
+      const renderedResponse = responseKind === 'generic'
+        ? genericResponse(entry.label || prior?.label, entry.answer || prior?.answer, responseCycle)
+        : responseFrame(rawResponse, responseCycle);
+
       return {
         ...entry,
         id: prior?.id || entry.id || `${entry.field}-${now}`,
         rawResponse,
-        response: responseFrame(rawResponse, responseCycle),
+        response: renderedResponse,
+        responseKind,
         responseCycle,
         responseCycleAt: new Date(responseCycleAt).toISOString(),
         recordedAt: entry.recordedAt || prior?.recordedAt || new Date(now).toISOString()
