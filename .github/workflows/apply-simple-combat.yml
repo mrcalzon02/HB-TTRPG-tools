@@ -1,0 +1,292 @@
+name: Apply simple Blacklight combat rules
+
+on:
+  push:
+    paths:
+      - .github/workflows/apply-simple-combat.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply simplified rules
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          basic_path = Path('data/blacklight-continuum/rules/basic-character-options.json')
+          basic = json.loads(basic_path.read_text(encoding='utf-8'))
+          basic['schemaVersion'] = '0.13.0'
+          shape = next(a for a in basic['archetypes'] if a['id'] == 'shapechanger')
+          living = next(a for a in shape['innateAbilities'] if a['name'] == 'Living Soak')
+          living['effect'] = (
+              'Living Soak changes your single Protection value instead of creating another roll. '
+              'In social form, add Archetype Rating to Protection against Impact only. In hunting or war form, add Archetype Rating to Protection against Impact and Trauma. '
+              'Use that one Protection value against fixed damage. Living Soak can reduce physical damage to 0. '
+              'It does not protect against Disruption, Pressure, Exposure, Death Marks, or effects that explicitly ignore Shapechanger Soak.'
+          )
+          warform = next(f for f in shape['powerFamilies'] if f['name'] == 'Warform')
+          old = next(a for a in warform['abilities'] if a['rank'] == 3)
+          old['name'] = 'Titanic Frame'
+          old['effect'] = (
+              'Cost: 1 Fury. Become Large for the scene. Add 2 damage to melee attacks, gain two dice to grapple or break barriers, and increase Carry by 3. '
+              'You cannot benefit from human-sized cover, cannot pass through human-width openings without forcing them, and lose two dice from Stealth.'
+          )
+          basic_path.write_text(json.dumps(basic, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          combat_path = Path('data/blacklight-continuum/rules/combat-foundation.json')
+          combat = json.loads(combat_path.read_text(encoding='utf-8'))
+          combat['schemaVersion'] = '2.0.0'
+          combat['name'] = 'Simple Combat Foundation'
+          combat['designRule'] = 'One attack roll, fixed damage, one Protection value, then Vitality loss. Extra successes never increase damage.'
+          combat['attackProcedure'] = {
+              'basicLoop': [
+                  'Build the attack pool from the printed Attribute and Skill.',
+                  'Add one die for every Exposure point currently carried by the target.',
+                  'Subtract dice for range, cover, conditions, and equipment.',
+                  'Roll against Defense Difficulty, which equals ceiling(Guard / 2), minimum 1.',
+                  'On a hit, use the attack’s fixed Damage rating. Extra successes add nothing.',
+                  'Subtract one applicable Protection value. Disruption normally ignores Protection.',
+                  'Remove one Vitality for each point remaining.'
+              ],
+              'pools': [
+                  'Unarmed or forceful melee: Force + Close Combat.',
+                  'Precise melee: Finesse + Close Combat.',
+                  'Ordinary ranged weapon: Finesse + Firearms.',
+                  'Heavy weapon: Force + Heavy Weapons unless the item states otherwise.',
+                  'Damaging capability: use the pool printed by the capability.'
+              ],
+              'defenseDifficulty': 'Defense Difficulty equals ceiling(Guard / 2), minimum 1.',
+              'hit': 'Successes equal to or above Defense Difficulty hit. Extra successes do not change damage.',
+              'fixedDamage': 'Every weapon and damaging ability has one fixed Damage rating.',
+              'protection': 'Impact and Trauma subtract one applicable Protection value from fixed Damage, minimum 0. Disruption ignores ordinary Protection unless a rule explicitly protects against it.',
+              'vitalityLoss': 'Every point remaining after Protection removes 1 current Vitality.',
+              'cover': [
+                  'Partial Cover: subtract 1 attack die.',
+                  'Substantial Cover: subtract 2 attack dice.',
+                  'Total Cover: no direct attack unless an effect crosses or destroys it.'
+              ],
+              'range': [
+                  'Adjacent: 0–2 meters; no penalty.',
+                  'Short: 3–20 meters; no penalty.',
+                  'Medium: 21–50 meters; subtract 1 attack die.',
+                  'Long: 51–100 meters; subtract 2 attack dice.',
+                  'Beyond Long: unavailable unless explicitly allowed.'
+              ]
+          }
+          combat['damageAndVitality']['noWoundedBand'] = 'At 1 or more Vitality, act normally unless a specific condition says otherwise. There is no universal Wounded state or penalty.'
+          combat['damageAndVitality'].pop('wounded', None)
+          combat['exposure'] = {
+              'meaning': 'Exposure is how open, predictable, or easy to target the character has become.',
+              'gain': [
+                  'After a Push resolves, gain 1 Exposure.',
+                  'A hazard, capability, or Complication adds Exposure only when it explicitly says so.'
+              ],
+              'combatEffect': 'Every Exposure point on a target adds one die to attacks against that target. Exposure affects accuracy only, never damage or Protection.',
+              'push': 'Reroll failed dice up to Resolve once. Keep the new results and gain 1 Exposure after resolution.',
+              'limit': 'When Exposure reaches its Limit, finish the action and resolve Overexposure.',
+              'overexposure': 'Suffer 1 Impact ignoring Protection, lose the current Reaction, and reset Exposure to 0. Exposure has no Warning or Critical band.',
+              'recovery': [
+                  'Ten uninterrupted minutes free from combat, pursuit, and active hazards sets Exposure to 0.',
+                  'A Full Rest sets Exposure to 0.'
+              ]
+          }
+          combat['conditions'].pop('wounded', None)
+          combat['conditions']['prone'] = 'Standing costs the Move. Adjacent melee attacks gain one die; ranged attacks from more than 3 meters lose one die.'
+          combat['conditions']['restrained'] = 'Movement is 0. Attacks against the target gain one die. Most physical tests lose two dice except Break Free.'
+          combat['shapechangerSoak'] = {
+              'name': 'Living Soak',
+              'singleDefenseRule': 'Living Soak modifies the Shapechanger’s one Protection value. It creates no second roll or second damage step.',
+              'socialForm': 'Add Archetype Rating to Protection against Impact only.',
+              'huntingAndWarForms': 'Add Archetype Rating to Protection against Impact and Trauma.',
+              'completeNegation': 'If fixed Damage does not exceed the resulting Protection, the hit deals 0 damage.',
+              'excludedEffects': 'Disruption, Pressure, Exposure, and Death Marks bypass Living Soak.'
+          }
+          combat.pop('temporaryDerivedChanges', None)
+          combat_path.write_text(json.dumps(combat, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          module_path = Path('data/blacklight-continuum/wiki/combat-example-module.json')
+          module = {
+              'setting': 'Blacklight Continuum',
+              'campaign': 'No Return Signal',
+              'schemaVersion': '2.0.0',
+              'description': 'A worked example using one attack roll, fixed damage, one Protection value, Exposure as enemy attack dice, and no Margin or universal Wounded penalty.',
+              'entries': [
+                  {
+                      'id': 'combat-foundation-procedure',
+                      'title': 'Simple Combat Procedure',
+                      'category': 'Combat',
+                      'summary': 'Roll to hit, apply fixed damage, subtract one Protection value, and remove Vitality.',
+                      'body': [
+                          'Build the attack pool from Attribute + Skill. Add the target’s current Exposure as attack dice. Subtract range, cover, condition, and equipment penalties.',
+                          'Roll against Defense Difficulty, equal to ceiling(Guard divided by two). Equal or greater successes hit. Additional successes do not change damage.',
+                          'Use the attack’s fixed Damage number. Subtract one applicable Protection value from Impact or Trauma. Disruption normally ignores Protection. Remove the remaining amount from Vitality.',
+                          'That is the complete ordinary attack. Powers may explicitly add dice, add fixed damage, add Armor, ignore Protection, move targets, or impose conditions.'
+                      ],
+                      'tables': [{
+                          'title': 'Basic Attack in Five Steps',
+                          'columns': ['Step', 'Rule'],
+                          'rows': [
+                              ['1', 'Attribute + Skill + target Exposure − penalties'],
+                              ['2', 'Roll against ceiling(Guard / 2)'],
+                              ['3', 'On a hit, use fixed Damage'],
+                              ['4', 'Subtract one Protection value'],
+                              ['5', 'Lose the remaining Vitality']
+                          ]
+                      }],
+                      'tags': ['simple combat', 'fixed damage', 'protection'],
+                      'relatedEntries': ['shapechanger-living-soak', 'combat-tracks-and-death', 'worked-combat-cargo-gallery']
+                  },
+                  {
+                      'id': 'shapechanger-living-soak',
+                      'title': 'Shapechanger Living Soak',
+                      'category': 'Combat',
+                      'summary': 'Living Soak is a powerful increase to one Protection number, not another roll.',
+                      'body': [
+                          'In social form, add Archetype Rating to Protection against Impact. In hunting or war form, add Archetype Rating against Impact and Trauma.',
+                          'A Shapechanger with ordinary Protection 3 and Archetype Rating 3 has Protection 6 against eligible physical damage while transformed. A Damage 5 rifle may hit and still deal 0.',
+                          'Living Soak does not spend Fury, does not roll, and is not weakened merely because Vitality is low.',
+                          'Disruption bypasses it because Disruption attacks identity, memory, noospheric continuity, or control rather than the body.'
+                      ],
+                      'tables': [{
+                          'title': 'Living Soak',
+                          'columns': ['Form', 'Protection'],
+                          'rows': [
+                              ['Social', 'Normal Protection + Archetype Rating against Impact only'],
+                              ['Hunting or War', 'Normal Protection + Archetype Rating against Impact and Trauma'],
+                              ['Any Form vs Disruption', 'Normal Disruption defense only; no Living Soak']
+                          ]
+                      }],
+                      'tags': ['shapechanger', 'living soak', 'protection'],
+                      'relatedEntries': ['combat-foundation-procedure', 'worked-combat-cargo-gallery']
+                  },
+                  {
+                      'id': 'combat-tracks-and-death',
+                      'title': 'Combat Tracks and Death',
+                      'category': 'Combat',
+                      'summary': 'Exposure helps enemies hit, Cohesion is spent by choice, Pressure risks Crisis, and Vitality determines whether the character stands.',
+                      'body': [
+                          'Each Exposure point gives enemies one die when attacking you. A Push gives 1 Exposure after it resolves. At the Limit, the action finishes, you suffer 1 Impact ignoring Protection, lose your Reaction, and reset Exposure to 0.',
+                          'Cohesion is deliberately spent. Commit adds two dice. Brace removes one remaining Impact or Disruption. Anchor helps an ally’s Death Test. Refuse Collapse may keep you at 1 Vitality once per scene.',
+                          'Pressure remains Archetype-specific. Pay Resource, mark Pressure, resolve the power, then resolve Crisis if the Limit was reached.',
+                          'There is no universal Wounded condition. Positive Vitality means the character acts normally unless a specific rule says otherwise. At 0 Vitality, the character is Downed and begins using Death Marks.'
+                      ],
+                      'tables': [],
+                      'tags': ['exposure', 'cohesion', 'pressure', 'vitality', 'death'],
+                      'relatedEntries': ['combat-foundation-procedure', 'worked-combat-cargo-gallery']
+                  },
+                  {
+                      'id': 'worked-combat-cargo-gallery',
+                      'title': 'Worked Combat: Three People in the Cargo Gallery',
+                      'category': 'Combat Example',
+                      'summary': 'An eleven-round two-against-one example using fixed damage, Exposure attack dice, Living Soak, Pressure, rescue, and death.',
+                      'body': [
+                          'Mara Vale and Ilyan Voss confront Kest Raal over a stolen biological key. Kest declares that he is crossing the cargo gallery to kill Ilyan, so Initiative begins.',
+                          'Mara has six Firearms dice, Defense Difficulty 3, Vitality 7, Protection 3, Cohesion 5, and Exposure 0. Her pistol deals fixed Damage 4 Trauma and her rifle deals fixed Damage 5 Trauma. Ilyan has Defense Difficulty 2, Vitality 7, Protection 3, Pact 6, Intrusion 4 of 8, and an arc pistol dealing fixed Damage 3 Disruption. Kest has Defense Difficulty 3, Vitality 8, ordinary Protection 3, Archetype Rating 3, Fury 9, Instinct 4 of 7, and Living Soak.',
+                          'Round 1: Mara fires from Medium range at Kest behind Partial Cover. Six dice lose one for range and one for cover, leaving four. Three successes hit. Pistol Damage 4 minus social-form Protection 3 deals 1 Trauma, lowering Kest to 7 Vitality. Kest shifts to war form for 1 Fury, so Living Soak raises his physical Protection from 3 to 6.',
+                          'Round 2: Mara switches to the rifle. Her first roll fails, so she Pushes and gains Exposure 1. The rifle hits, but fixed Damage 5 minus transformed Protection 6 is 0. Ilyan’s arc pistol then hits for fixed 3 Disruption. Disruption ignores Protection, lowering Kest from 7 to 4.',
+                          'Round 3: Kest activates Bulwark for 2 Fury. Armor 2 raises ordinary Protection from 3 to 5; Living Soak raises the single physical Protection value to 8. Ilyan’s Dream-Born Servitor Restrains Kest. The restraint affects movement and grants attackers one die; it does not reduce Protection.',
+                          'Round 4: Mara attacks with seven dice because Kest is Restrained. She hits, but rifle Damage 5 minus Protection 8 is 0. Kest spends his action breaking free. Ilyan hits with the arc pistol for 3 Disruption, reducing Kest from 4 to 1. Low Vitality does not reduce Living Soak.',
+                          'Round 5: Ilyan uses The Thousand-Armed Scheme to move Mara behind cover, close a bulkhead, move cargo, and attempt another restraint. Pact falls and Intrusion reaches Critical. Kest uses his turn changing from Bulwark to Breacher, so Protection returns from 8 to 6.',
+                          'Round 6: Kest tears open the bulkhead. Ilyan spends Pact while Critical, reaches the Intrusion Limit, resolves the ability, and then suffers Incursion. He is Restrained, loses his arc pistol, and suffers 1 Disruption.',
+                          'Round 7: Mara’s rifle hits Kest, but 5 minus Protection 6 remains 0. Kest attacks Ilyan with fixed Damage 6 claws. Protection 3 reduces the hit to 3 Trauma, lowering Ilyan from 6 to 3.',
+                          'Round 8: Mara Pushes and gains Exposure 2. Her rifle still deals 0. Kest attacks Mara with his normal attack pool plus two dice from her Exposure. He hits with a Damage 4 Impact shoulder slam. Protection 3 leaves 1 Impact, which Mara removes by spending 1 Cohesion on Brace.',
+                          'Round 8 continued: Ilyan retrieves the arc pistol and hits Kest for 3 Disruption. Kest would fall below 0, but spends 2 Cohesion on Refuse Collapse and remains at 1 Vitality.',
+                          'Round 9: Kest attacks Ilyan again. Damage 6 minus Protection 3 deals 3 Trauma, reducing Ilyan from 3 to 0. Ilyan becomes Downed and Unstable. Mara moves adjacent, Pushes a Stabilize test, gains Exposure 3, and succeeds. Ilyan becomes Stable at 0 Vitality.',
+                          'Round 10: Mara uses Emergency Treatment, spends 1 Cohesion on Commit, succeeds, consumes one medical-kit charge, and restores Ilyan to 1 Vitality. Kest attacks Mara with three bonus dice from Exposure 3. The attack deals fixed Damage 4 minus Protection 3, lowering Mara by 1 Vitality. Exposure changed the chance to hit, not the damage.',
+                          'Round 10 continued: Ilyan fires while Staggered, Pushes, gains Exposure 1, and hits. Damage 3 Disruption ignores Kest’s Protection 6. Kest falls from 1 to 0 with two excess damage and gains 2 Death Marks.',
+                          'Round 11: The plasma conduit ruptures. Mara repairs it, Pushes, and reaches Exposure Limit 5. The repair succeeds first. Overexposure then deals 1 Impact ignoring Protection, removes her Reaction, and resets Exposure to 0. Ilyan attempts to Stabilize Kest without a kit and fails.',
+                          'At the end of Round 11, Kest fails a Death Test with a die showing 1, gains 2 more Death Marks, and dies. Living Soak cannot help because a Death Test is not physical damage.',
+                          'The combat used the same short loop every time: attack dice, hit or miss, fixed damage, one Protection number, Vitality. Exposure changed attack dice. Powers changed positioning, Protection, or conditions. Pressure and Cohesion remained explicit exceptions rather than extra arithmetic inside every hit.'
+                      ],
+                      'tables': [{
+                          'title': 'What Each Mechanic Did',
+                          'columns': ['Mechanic', 'Result'],
+                          'rows': [
+                              ['Exposure', 'Added dice to attacks against Mara'],
+                              ['Living Soak', 'Raised Kest’s one physical Protection value'],
+                              ['Disruption', 'Ignored physical Protection'],
+                              ['Cohesion', 'Created chosen exceptions such as Brace and Refuse Collapse'],
+                              ['Pressure', 'Triggered Ilyan’s Incursion after his power resolved'],
+                              ['Stabilize', 'Stopped Ilyan’s Death Tests'],
+                              ['Emergency Treatment', 'Restored Ilyan to 1 Vitality'],
+                              ['Death Marks', 'Killed Kest at 3 or more']
+                          ]
+                      }],
+                      'tags': ['worked combat', 'fixed damage', 'exposure', 'living soak', 'rescue', 'death'],
+                      'relatedEntries': ['combat-foundation-procedure', 'shapechanger-living-soak', 'combat-tracks-and-death']
+                  }
+              ]
+          }
+          module_path.write_text(json.dumps(module, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          wiki_path = Path('data/blacklight-continuum/wiki/basic-archetypes.json')
+          wiki = json.loads(wiki_path.read_text(encoding='utf-8'))
+          wiki['schemaVersion'] = '0.12.0'
+          entry = next(e for e in wiki['entries'] if e['id'] == 'shapechanger-archetype')
+          entry['body'] = [p for p in entry['body'] if not p.startswith('Living Soak is')]
+          entry['body'].insert(1, 'Living Soak changes the Shapechanger’s one Protection value instead of adding another roll. Social form adds Archetype Rating against Impact; hunting and war forms add it against Impact and Trauma. Disruption, Pressure, Exposure, and Death Marks bypass it.')
+          wiki_path.write_text(json.dumps(wiki, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          index_path = Path('data/blacklight-continuum/wiki/wiki-index.json')
+          index = json.loads(index_path.read_text(encoding='utf-8'))
+          index['schemaVersion'] = '0.17.0'
+          index['description'] = 'Blacklight Continuum combat now uses one attack roll, fixed damage, one Protection value, Vitality loss, Exposure as bonus enemy attack dice, and explicit power exceptions. Margin, temporary Resilience inflation, Exposure bands, and the universal Wounded penalty are removed.'
+          index['nextDevelopmentAreas'] = ['balance testing for fixed damage, Protection, Living Soak, and Exposure attack-die scaling'] + [a for a in index['nextDevelopmentAreas'] if 'Living Soak' not in a and 'fixed damage' not in a]
+          index_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          card_path = Path('blacklight-combat-example-entry.js')
+          card = card_path.read_text(encoding='utf-8')
+          card = card.replace('expanded combat module', 'simplified combat module').replace('13 rounds', '11 rounds').replace('Shapechanger Living Soak', 'fixed damage + Living Soak')
+          card = card.replace('Follow one extended encounter through range, cover, equipment, Protection, Shapechanger Living Soak, transformations, Exposure, Cohesion, dual Pressure crises, stabilization, revival, Overexposure, an attempted enemy rescue, and death.', 'Follow one continuous encounter using one attack roll, fixed damage, one Protection value, Exposure as enemy attack dice, Pressure, Cohesion, stabilization, revival, and death.')
+          card = card.replace('Open Expanded Combat Module', 'Open Simplified Combat Module')
+          card_path.write_text(card, encoding='utf-8')
+
+          reader_path = Path('blacklight-combat-example.html')
+          reader = reader_path.read_text(encoding='utf-8')
+          reader = reader.replace('Expanded Combat Example', 'Simplified Combat Example').replace('Expanded combat teaching module', 'Simplified combat teaching module')
+          reader = reader.replace('A thirteen-round two-against-one encounter explaining range, cover, equipment, Protection, Shapechanger Living Soak, temporary forms, Exposure, Cohesion, Archetype Pressure, rescue from death, an attempted enemy rescue, and a final failed Death Test.', 'An eleven-round encounter using one attack roll, fixed damage, one Protection value, Exposure as enemy attack dice, Pressure, rescue, and death.')
+          reader_path.write_text(reader, encoding='utf-8')
+
+          Path('.github/workflows/apply-simple-combat.yml').unlink()
+          PY
+      - name: Validate and commit
+        run: |
+          node --check blacklight-combat-example.js
+          node --check blacklight-combat-example-entry.js
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          combat = json.loads(Path('data/blacklight-continuum/rules/combat-foundation.json').read_text())
+          module = json.loads(Path('data/blacklight-continuum/wiki/combat-example-module.json').read_text())
+          basic = json.loads(Path('data/blacklight-continuum/rules/basic-character-options.json').read_text())
+          assert combat['schemaVersion'] == '2.0.0'
+          assert 'margin' not in json.dumps(combat).lower()
+          assert 'warningthreshold' not in json.dumps(combat['exposure']).lower()
+          assert 'one die to attacks' in combat['exposure']['combatEffect']
+          assert 'universal Wounded' in combat['damageAndVitality']['noWoundedBand']
+          shape = next(a for a in basic['archetypes'] if a['id'] == 'shapechanger')
+          rank3 = next(a for f in shape['powerFamilies'] if f['name'] == 'Warform' for a in f['abilities'] if a['rank'] == 3)
+          assert rank3['name'] == 'Titanic Frame' and 'Resilience' not in rank3['effect']
+          text = json.dumps(module)
+          assert 'Margin' not in text and 'Massive Shift' not in text and 'Wounded' not in text
+          assert len(module['entries']) == 4
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Simplify Blacklight combat resolution"
+          git push origin main
