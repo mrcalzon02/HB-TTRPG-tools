@@ -11,16 +11,16 @@
     card.dataset.blacklightCharacterCreationCard = 'true';
     card.innerHTML = `
       <div class="module-meta">
-        <span class="badge status-active">character creation guide</span>
-        <span class="badge">14 induction chapters</span>
-        <span class="badge">Charles onboarding</span>
-        <span class="badge">standard creation package</span>
-        <span class="badge">Q-MAP ending</span>
+        <span class="badge status-active">interactive character creation</span>
+        <span class="badge">14 induction stages</span>
+        <span class="badge">1,600+ recognized names</span>
+        <span class="badge">contextual Charles responses</span>
+        <span class="badge">printable sheet handoff</span>
       </div>
       <h3>The Person We Are Sending</h3>
-      <p>Build a complete Blacklight operative through an in-universe induction interview conducted by Charles, then meet Mara, Ilyan, and Kest immediately before Q-MAP deployment.</p>
+      <p>Build a complete Blacklight operative through a recorded onboarding interview with the full operational Charles. He recognizes extensive public and popular-media name references, analyzes mechanical choices, preserves the exchange, and transfers the completed character to the printable sheet.</p>
       <div class="blacklight-actions">
-        <a class="primary-action" href="blacklight-character-creation.html" target="_blank" rel="noopener">Open Character Creation Guide</a>
+        <a class="primary-action" href="blacklight-character-creation.html" target="_blank" rel="noopener">Begin Interactive Induction</a>
         <a class="secondary-action" href="blacklight-character-sheet.html">Open Character Sheet</a>
       </div>`;
 
