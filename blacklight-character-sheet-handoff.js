@@ -4,6 +4,21 @@
   const fromInduction = query.get('from') === 'induction';
   const printRequested = query.get('print') === '1';
 
+  function ensureEquipmentLink() {
+    const actions = document.querySelector('.blacklight-sheet-header .blacklight-actions');
+    if (!actions || actions.querySelector('[data-blacklight-equipment-link]')) return;
+    const link = document.createElement('a');
+    link.className = 'secondary-action';
+    link.href = 'blacklight-equipment-catalog.html';
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.dataset.blacklightEquipmentLink = 'true';
+    link.textContent = 'Open Equipment Catalog';
+    const returnLink = actions.querySelector('a[href*="index.html"]');
+    if (returnLink) returnLink.insertAdjacentElement('beforebegin', link);
+    else actions.appendChild(link);
+  }
+
   function ensureTranscriptField() {
     const form = document.getElementById('blacklight-character-form');
     const grid = form?.elements.missionRecord?.closest('.blacklight-field-grid');
@@ -37,6 +52,7 @@
   }
 
   function initialize() {
+    ensureEquipmentLink();
     ensureTranscriptField();
     applyInductionTranscript(false);
     if (!fromInduction && !printRequested) return;
