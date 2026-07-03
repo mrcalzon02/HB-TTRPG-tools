@@ -1,0 +1,121 @@
+{
+  "setting": "Blacklight Continuum",
+  "schemaVersion": "1.0.0",
+  "name": "Equipment, Arms, Armor, Relics, and Technology Foundation",
+  "designRule": "Equipment grants only the capabilities, protection, damage, range, tags, uses, and permissions printed in its record. A familiar name, historical origin, supernatural appearance, alien material, or improvised construction grants no additional mechanical effect.",
+  "coreRules": {
+    "serviceableBaseline": "Catalog statistics assume a complete, maintained, Serviceable item. Damaged, unstable, incomplete, counterfeit, improvised, or alien items apply only their printed condition or template changes.",
+    "attackPool": "Use the pool printed by the item. Ordinary firearms use Finesse + Firearms, heavy weapons use Force + Heavy Weapons, and ordinary melee weapons use Force + Close Combat unless the item explicitly permits Finesse + Close Combat.",
+    "damage": "After a successful attack, roll the item's printed Damage Dice. Firearms add one damage die for every critical success on the final attack roll. Ordinary extra attack successes do not add damage.",
+    "damageType": "Non-Lethal/Bashing, Lethal, Aggravated, and Disruption follow the Simple Combat and Soak Foundation. Ordinary historical and modern weapons do not deal Aggravated damage unless a specific relic, ammunition, vulnerability, or capability explicitly says so.",
+    "armor": "Armor Rating adds that many soak dice when the armor is eligible against the attack. Armor applies only while worn, powered, deployed, or positioned as its record requires. Ordinary Armor never soaks Aggravated damage.",
+    "load": "Each carried item has Load 0 through 4. A character may carry total Load up to Carry without penalty. For every Load above Carry, subtract 1 die from Athletics and Mobility tests, to a maximum penalty of 3 dice, and the character cannot Sprint. Load 0 items are negligible unless carried in unreasonable quantities.",
+    "access": "Availability is a narrative and logistical category, not a price list. Common items are broadly obtainable; Controlled items require licensing, institutional access, or criminal sourcing; Military items require military, security, or equivalent access; Rare items require specialist recovery; Unique items normally cannot be purchased.",
+    "ammunition": "Ordinary ammunition is abstract during routine play. A weapon becomes Empty when a rule, Complication, Burst, Automatic use, or scene condition says it does. Reloading an Empty weapon normally requires one Minor Interaction when a ready magazine, cell, or loading unit is available; Slow Reload items require a Standard Action.",
+    "maintenance": "A character with the relevant Skill and tools can maintain Serviceable equipment during ordinary downtime. Repairing Damaged equipment normally requires Reason + Engineering or the Skill printed by the item, suitable parts, and ten minutes to one hour according to complexity.",
+    "stacking": "Use one worn armor record at a time. Shields, helmets, ablative panels, fields, relics, and cover add protection only when their own text explicitly says they stack. Multiple copies of the same equipment benefit do not stack unless stated.",
+    "ownership": "Possessing equipment does not automatically grant legal authority, credentials, ammunition supply, technical understanding, supernatural attunement, alien-interface permission, or safe long-term maintenance."
+  },
+  "loadScale": [
+    {"load": 0, "meaning": "Pocket-sized, worn, negligible, or a single small consumable."},
+    {"load": 1, "meaning": "One-handed weapon, compact kit, light armor component, or small field device."},
+    {"load": 2, "meaning": "Two-handed weapon, full field kit, ordinary armor, or packed survival system."},
+    {"load": 3, "meaning": "Heavy weapon, heavy armor, large powered device, or bulky salvage."},
+    {"load": 4, "meaning": "Crew-served, vehicle-mounted, industrial, or impractical for one person without assistance."}
+  ],
+  "conditionStates": [
+    {
+      "id": "ruined",
+      "name": "Ruined",
+      "effect": "The item cannot perform its primary function. It may provide salvage, evidence, cover, raw material, or a component if the Moderator confirms one remains."
+    },
+    {
+      "id": "damaged",
+      "name": "Damaged",
+      "effect": "The item functions, but the first failed test using it in each scene creates an equipment Complication in addition to ordinary failure. Armor loses 1 Armor Rating, minimum 0, until repaired."
+    },
+    {
+      "id": "serviceable",
+      "name": "Serviceable",
+      "effect": "Use the printed record without modification."
+    },
+    {
+      "id": "calibrated",
+      "name": "Calibrated",
+      "effect": "The item has been adjusted for one recorded user. Once per scene, that user may reroll one failed equipment die on a test using it. A different user treats it as Serviceable."
+    },
+    {
+      "id": "prototype",
+      "name": "Prototype",
+      "effect": "The item has one explicit additional capability and one explicit instability. A Prototype never gains an undefined bonus merely for being experimental."
+    }
+  ],
+  "weaponTags": [
+    {"tag": "Accurate", "effect": "When the user takes a Standard Action to Aim immediately before attacking, add 1 attack die. Moving after Aiming ends the benefit."},
+    {"tag": "Armor-Piercing 1", "effect": "Reduce eligible ordinary Armor dice against this attack by 1, minimum 0."},
+    {"tag": "Armor-Piercing 2", "effect": "Reduce eligible ordinary Armor dice against this attack by 2, minimum 0."},
+    {"tag": "Automatic", "effect": "Before rolling, the user may spend additional ammunition to add 1 attack die and attack one target, or attack two targets within 3 meters of each other with separate pools at -1 die each. After either use, the weapon becomes Empty on any attack die showing 1."},
+    {"tag": "Blast 2", "effect": "The attack affects the chosen point and every target within 2 meters. Roll one attack pool and one damage pool; each affected target resolves defense and soak separately."},
+    {"tag": "Blast 5", "effect": "The attack affects the chosen point and every target within 5 meters. Roll one attack pool and one damage pool; each affected target resolves defense and soak separately."},
+    {"tag": "Brace", "effect": "The weapon suffers -2 attack dice unless supported, mounted, or fired after the user spends a Minor Interaction to brace. The brace ends when the user moves."},
+    {"tag": "Breaching", "effect": "Add 2 damage dice against unattended doors, locks, barriers, vehicle panels, and structural targets at Short range or closer."},
+    {"tag": "Burning", "effect": "A target taking at least 1 uncancelled damage also gains Burning. At the end of its next turn it suffers 2 Lethal damage dice, then the condition ends if the flame was extinguished with a Minor Interaction or appropriate action."},
+    {"tag": "Concealable", "effect": "Routine observation does not reveal the item while it is properly concealed. A deliberate search can find it normally."},
+    {"tag": "Disarming", "effect": "Instead of rolling damage after a hit, the attacker may force the target to drop one held item unless the target succeeds on Force + Athletics against 2 successes."},
+    {"tag": "Incendiary", "effect": "The attack gains Burning. It remains ordinary Lethal damage unless a specific vulnerability or capability converts it to Aggravated damage."},
+    {"tag": "Limited 1", "effect": "The item has one use before it must be replaced, recovered, recharged, or rebuilt."},
+    {"tag": "Limited 3", "effect": "The item has three uses before it must be replaced, recovered, recharged, or rebuilt."},
+    {"tag": "Loud", "effect": "The use is immediately noticeable to ordinary hearing or sensors throughout the local scene and may create narrative Exposure when concealment matters."},
+    {"tag": "Networked", "effect": "The item can exchange targeting, status, or control data with compatible systems. It can also be detected or attacked through Systems Intrusion when connected."},
+    {"tag": "Non-Lethal", "effect": "The item normally deals Non-Lethal/Bashing damage. A deliberately lethal use requires an established method and may change the damage type only when the item record permits it."},
+    {"tag": "Reach", "effect": "The weapon can make melee attacks against targets up to 3 meters away but suffers -1 attack die inside a cramped space unless the user has room to maneuver."},
+    {"tag": "Recoil", "effect": "If fired without two hands or a brace, subtract 1 attack die."},
+    {"tag": "Slow Reload", "effect": "Reloading requires a Standard Action rather than a Minor Interaction."},
+    {"tag": "Smart", "effect": "A properly authorized user linked to compatible sensors ignores 1 die of range or concealment penalty. A Smart item is also Networked."},
+    {"tag": "Spread", "effect": "Add 1 attack die at Adjacent or Short range and subtract 1 attack die at Medium range. The weapon cannot attack at Long range unless using specialized ammunition."},
+    {"tag": "Stunning", "effect": "A target taking at least 1 uncancelled Non-Lethal or Disruption damage loses its Reaction until the start of its next turn."},
+    {"tag": "Thrown", "effect": "Use Finesse + Athletics. Short range is 3-10 meters; Medium is 11-20 meters; longer throws are unavailable without an explicit capability."},
+    {"tag": "Two-Handed", "effect": "The item requires two hands for ordinary use. Using it one-handed imposes -2 attack dice unless a capability says otherwise."},
+    {"tag": "Unwieldy", "effect": "The item cannot be used as a Reaction and suffers -1 attack die after the user moved more than 4 meters in the same turn."}
+  ],
+  "armorTags": [
+    {"tag": "Ablative", "effect": "After the armor cancels 3 or more damage successes from one hit, reduce its Armor Rating by 1 until repaired, minimum 0."},
+    {"tag": "Concealable", "effect": "The armor is not obvious under ordinary clothing without a deliberate search."},
+    {"tag": "Environmental", "effect": "The armor includes sealed or filtered protection against the specific environmental hazards printed by the item."},
+    {"tag": "Heavy", "effect": "Subtract 1 die from Stealth and Mobility while worn and reduce normal movement by 2 meters."},
+    {"tag": "Powered", "effect": "The armor requires an active power source. Without power it loses all powered features and gains Heavy if it did not already have it."},
+    {"tag": "Reactive", "effect": "Once per scene, after seeing damage results but before soak, add 2 Armor dice against that hit. The system must then be reset during a Minor Interaction."},
+    {"tag": "Rigid", "effect": "Subtract 1 die from tests requiring contortion, concealment in a tight space, or delicate whole-body movement."},
+    {"tag": "Shield", "effect": "While held and readied, add 1 Guard against attacks arriving from the protected direction. A shield does not add Armor unless its item record says so."},
+    {"tag": "Vacuum-Rated", "effect": "When sealed and supplied, the armor provides breathable pressure and thermal protection in vacuum for the printed duration."}
+  ],
+  "relicRules": {
+    "attunement": "A relic's supernatural capability functions only for a character meeting every printed Wielder Requirement and completing the printed Attunement. An unattuned relic retains only its ordinary material function.",
+    "rightPeople": "A requirement may name an Archetype, Conviction, bloodline, pact, form, resonance, awakened practice, relationship, vow, condition, or other recorded identity. A player cannot satisfy it through description alone.",
+    "rightSkills": "When a relic requires a Skill rating, the wielder must possess that actual rating. Temporary dice, equipment assistance, or an unrelated specialization do not satisfy the requirement.",
+    "activation": "Each relic defines action, pool, cost, range, duration, resistance, outcome, and failure. A relic never grants an undefined miracle because it is ancient or sacred.",
+    "misuse": "A character who does not meet the requirements may handle, carry, study, steal, damage, or sell a relic. They cannot activate its supernatural effect unless the relic explicitly defines a Forced Activation consequence.",
+    "aggravatedDamage": "A relic deals Aggravated damage only when its record explicitly says so and only against the target or source it names."
+  },
+  "alienTemplateRules": {
+    "templateUse": "Apply one alien technology template to a suitable base weapon, armor, tool, vehicle component, habitat system, medical device, sensor, or artifact. The template changes only the fields it names.",
+    "translation": "Understanding appearance or intended use does not grant safe operation. Apply the printed Interface, Translation Requirement, Benefit, Instability, and Failure.",
+    "stacking": "A single item normally carries one origin template and one condition. Multiple templates require an explicit Prototype record approved by the Moderator.",
+    "reverseEngineering": "A successful study can reveal printed facts, create a human-compatible control method, or reproduce a bounded function. It cannot silently duplicate unique materials, personhood, manufacturing infrastructure, or supernatural authority."
+  },
+  "recordFields": [
+    "Name",
+    "Category",
+    "Era or Origin",
+    "Availability",
+    "Load",
+    "Attack Pool or Activation",
+    "Damage Dice and Type or Armor Rating",
+    "Range",
+    "Tags",
+    "Uses or Power",
+    "Effect",
+    "Requirement",
+    "Failure or Limitation"
+  ]
+}
