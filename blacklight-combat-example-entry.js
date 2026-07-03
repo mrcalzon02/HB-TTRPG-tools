@@ -11,15 +11,16 @@
     card.dataset.blacklightCombatExampleCard = 'true';
     card.innerHTML = `
       <div class="module-meta">
-        <span class="badge status-active">worked combat module</span>
+        <span class="badge status-active">expanded combat module</span>
         <span class="badge">two against one</span>
-        <span class="badge">8 rounds</span>
+        <span class="badge">13 rounds</span>
+        <span class="badge">Shapechanger Living Soak</span>
         <span class="badge">death and rescue</span>
       </div>
       <h3>Three People in the Cargo Gallery</h3>
-      <p>Follow one complete encounter from roleplayed confrontation through Initiative, attacks, Protection, Vitality, Exposure, Cohesion, Archetype Pressure, Incursion, stabilization, revival, Overexposure, and death.</p>
+      <p>Follow one extended encounter through range, cover, equipment, Protection, Shapechanger Living Soak, transformations, Exposure, Cohesion, dual Pressure crises, stabilization, revival, Overexposure, an attempted enemy rescue, and death.</p>
       <div class="blacklight-actions">
-        <a class="primary-action" href="blacklight-combat-example.html" target="_blank" rel="noopener">Open Worked Combat Module</a>
+        <a class="primary-action" href="blacklight-combat-example.html" target="_blank" rel="noopener">Open Expanded Combat Module</a>
       </div>`;
 
     const wikiCard = grid.querySelector('#blacklight-open-wiki')?.closest('.module-card');
