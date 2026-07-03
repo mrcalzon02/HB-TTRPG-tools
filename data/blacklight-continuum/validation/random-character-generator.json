@@ -1,0 +1,17 @@
+{
+  "system": "Blacklight Continuum",
+  "module": "Random Character Generator",
+  "validated": true,
+  "validatedAt": "2026-07-03T15:44:44.020269+00:00",
+  "validatedCommit": "9a764bdf192ff19d79280dbc514400330be7e949",
+  "checks": [
+    "All generator JSON parsed successfully",
+    "3,600 simulated legal Attribute and Skill allocations passed",
+    "All six Archetypes have a legal automatic Starting Ability and at least two additional Rank 1 choices",
+    "All twelve Operational Frame profiles use valid Attributes and Skills",
+    "All five equipment-era modes contain weapons, protection, and field-kit candidates",
+    "Character Sheet field targets exist",
+    "Generator, entry, and handoff JavaScript passed node --check"
+  ],
+  "validatorOutput": "Validated 3600 legal Attribute/Skill allocations across 6 Archetypes and 12 Operational Frames."
+}
