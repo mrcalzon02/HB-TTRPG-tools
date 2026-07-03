@@ -82,12 +82,16 @@
     return [...latest.values()];
   }
 
+  function recognizeName(entry, cycle) {
+    if (!['playerName', 'characterName'].includes(entry.field)) return null;
+    return window.BlacklightNameRecognition?.recognize(entry.answer, entry.field, cycle) || null;
+  }
+
   function normalizeEntries(incoming, previous = readEntries(), now = Date.now()) {
     const previousByField = new Map(latestPerField(previous).map(entry => [entry.field, entry]));
     return latestPerField(incoming).map(entry => {
       const prior = previousByField.get(entry.field);
       const incomingResponse = String(entry.rawResponse || entry.response || prior?.rawResponse || prior?.response || '').trim();
-      const responseKind = prior?.responseKind || (isGenericResponse(incomingResponse) ? 'generic' : 'specific');
       let responseCycle = Number.isInteger(prior?.responseCycle) ? prior.responseCycle : 0;
       let responseCycleAt = Date.parse(prior?.responseCycleAt || prior?.recordedAt || '') || now;
 
@@ -97,19 +101,30 @@
         responseCycleAt += elapsedCycles * RESPONSE_ROTATION_MS;
       }
 
-      const rawResponse = responseKind === 'generic'
-        ? incomingResponse
-        : incomingResponse;
-      const renderedResponse = responseKind === 'generic'
-        ? genericResponse(entry.label || prior?.label, entry.answer || prior?.answer, responseCycle)
-        : responseFrame(rawResponse, responseCycle);
+      const recognizedName = recognizeName(entry, responseCycle);
+      const responseKind = recognizedName
+        ? 'recognized-name'
+        : isGenericResponse(incomingResponse)
+          ? 'generic'
+          : 'specific';
+      const renderedResponse = recognizedName
+        ? recognizedName.response
+        : responseKind === 'generic'
+          ? genericResponse(entry.label || prior?.label, entry.answer || prior?.answer, responseCycle)
+          : responseFrame(incomingResponse, responseCycle);
 
       return {
         ...entry,
         id: prior?.id || entry.id || `${entry.field}-${now}`,
-        rawResponse,
+        rawResponse: incomingResponse,
         response: renderedResponse,
         responseKind,
+        recognizedName: recognizedName ? {
+          canonical: recognizedName.canonical || null,
+          source: recognizedName.source || null,
+          ambiguous: Boolean(recognizedName.ambiguous),
+          matchCount: recognizedName.matches?.length || 1
+        } : null,
         responseCycle,
         responseCycleAt: new Date(responseCycleAt).toISOString(),
         recordedAt: entry.recordedAt || prior?.recordedAt || new Date(now).toISOString()
@@ -164,7 +179,8 @@
       quote.textContent = latest.response;
     }
     if (latest?.stage === currentStage() && context) {
-      const nextContext = `${latest.label || latest.field} updated in the operative induction record.`;
+      const recognitionText = latest.responseKind === 'recognized-name' ? ' recognized and updated' : ' updated';
+      const nextContext = `${latest.label || latest.field}${recognitionText} in the operative induction record.`;
       if (context.textContent !== nextContext) context.textContent = nextContext;
     }
     if (count) count.textContent = `(${entries.length})`;
