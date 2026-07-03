@@ -22,11 +22,6 @@
     }[character]));
   }
 
-  function clean(value) {
-    if (Array.isArray(value)) return value.map(item => String(item).trim()).filter(Boolean);
-    return String(value ?? '').trim();
-  }
-
   function answerText(value) {
     if (Array.isArray(value)) return value.join(', ');
     if (value === true) return 'Acknowledged';
@@ -34,7 +29,7 @@
     return String(value ?? '').trim();
   }
 
-  function clipped(value, limit = 240) {
+  function clipped(value, limit = 260) {
     const text = answerText(value).replace(/\s+/g, ' ').trim();
     return text.length > limit ? `${text.slice(0, limit - 1)}…` : text;
   }
@@ -47,10 +42,11 @@
 
   function defaultDraft() {
     return {
-      schemaVersion: '1.0.0',
+      schemaVersion: '2.0.0',
       activeId: 'returning-operative',
       answers: {},
       responses: {},
+      legacyAnswers: {},
       visited: [],
       savedAt: null
     };
@@ -70,20 +66,90 @@
     return {
       ...base,
       ...saved,
+      schemaVersion: '2.0.0',
       answers: saved.answers && typeof saved.answers === 'object' ? saved.answers : {},
       responses: saved.responses && typeof saved.responses === 'object' ? saved.responses : {},
+      legacyAnswers: saved.legacyAnswers && typeof saved.legacyAnswers === 'object' ? saved.legacyAnswers : {},
       visited: Array.isArray(saved.visited) ? [...new Set(saved.visited)] : []
     };
   }
 
   function saveDraft() {
+    if (!state.draft) return;
     state.draft.activeId = state.activeId;
     state.draft.savedAt = new Date().toISOString();
     try {
       localStorage.setItem(DRAFT_KEY, JSON.stringify(state.draft));
     } catch (_) {
-      // The reader remains usable without browser persistence.
+      // The module remains usable without browser persistence.
     }
+  }
+
+  function optionValue(option) {
+    return typeof option === 'string' ? option : String(option?.value ?? option?.label ?? '');
+  }
+
+  function optionLabel(option) {
+    return typeof option === 'string' ? option : String(option?.label ?? option?.value ?? '');
+  }
+
+  function optionDetail(option) {
+    return typeof option === 'string' ? '' : String(option?.detail ?? '');
+  }
+
+  function optionResponse(option) {
+    return typeof option === 'string' ? '' : String(option?.response ?? '');
+  }
+
+  function findOption(prompt, value) {
+    return (prompt.options || []).find(option => optionValue(option) === value) || null;
+  }
+
+  function applyEnhancements(source) {
+    const enhancements = globalThis.BLACKLIGHT_VETERAN_REORIENTATION_ENHANCEMENTS;
+    if (!enhancements || typeof enhancements !== 'object') return source;
+    source.interactionSchemaVersion = enhancements.schemaVersion || '2.0.0';
+    source.preservedTextPromptIds = Array.isArray(enhancements.preservedTextPromptIds) ? enhancements.preservedTextPromptIds : [];
+    const promptOverrides = enhancements.promptOverrides || {};
+    const stageExpansions = enhancements.stageExpansions || {};
+    for (const entry of source.entries || []) {
+      if (stageExpansions[entry.id]) entry.orientationExpansion = stageExpansions[entry.id];
+      for (const prompt of entry.prompts || []) {
+        const override = promptOverrides[prompt.id];
+        if (override) Object.assign(prompt, override);
+      }
+    }
+    return source;
+  }
+
+  function migrateLegacyAnswers() {
+    const preserved = new Set(state.source?.preservedTextPromptIds || []);
+    for (const entry of state.entries) {
+      for (const prompt of entry.prompts || []) {
+        if (preserved.has(prompt.id) || !['radio', 'checkboxes'].includes(prompt.type)) continue;
+        const allowed = new Set((prompt.options || []).map(optionValue));
+        const current = state.draft.answers[prompt.id];
+        if (prompt.type === 'radio' && typeof current === 'string' && current && !allowed.has(current)) {
+          state.draft.legacyAnswers[prompt.id] = current;
+          delete state.draft.answers[prompt.id];
+          delete state.draft.responses[prompt.id];
+        }
+        if (prompt.type === 'checkboxes') {
+          if (typeof current === 'string' && current) {
+            state.draft.legacyAnswers[prompt.id] = current;
+            delete state.draft.answers[prompt.id];
+            delete state.draft.responses[prompt.id];
+          } else if (Array.isArray(current)) {
+            const valid = current.filter(value => allowed.has(value));
+            const invalid = current.filter(value => !allowed.has(value));
+            if (invalid.length) state.draft.legacyAnswers[prompt.id] = invalid.join(', ');
+            state.draft.answers[prompt.id] = valid;
+            if (!valid.length) delete state.draft.responses[prompt.id];
+          }
+        }
+      }
+    }
+    saveDraft();
   }
 
   function activeIndex() {
@@ -111,8 +177,7 @@
   }
 
   function entryComplete(entry) {
-    const prompts = entry.prompts || [];
-    return prompts.every(promptComplete);
+    return (entry.prompts || []).every(promptComplete);
   }
 
   function completedCount() {
@@ -126,6 +191,18 @@
   function responseFor(prompt, value) {
     const normalized = value === true ? 'true' : value === false ? 'false' : answerText(value);
     if (prompt.responsesByValue && prompt.responsesByValue[normalized]) return prompt.responsesByValue[normalized];
+
+    if (Array.isArray(value)) {
+      const responses = value.map(selected => optionResponse(findOption(prompt, selected))).filter(Boolean);
+      if (responses.length) {
+        const lead = prompt.multiResponseLead || 'Those selections can coexist. They describe different parts of the same continuity record.';
+        return `${lead} ${responses.join(' ')}`;
+      }
+    } else if (typeof value === 'string') {
+      const response = optionResponse(findOption(prompt, value));
+      if (response) return response;
+    }
+
     const context = prompt.responseContext || 'This answer is now part of the operative continuity record.';
     const answer = clipped(value);
     return stablePick(`${prompt.id}:${answer}`, [
@@ -139,7 +216,7 @@
   function commitResponse(prompt) {
     const value = state.draft.answers[prompt.id];
     const text = answerText(value);
-    if (!text || (prompt.type === 'checkboxes' && !value.length) || (prompt.type === 'acknowledge' && value !== true)) {
+    if (!text || (prompt.type === 'checkboxes' && (!Array.isArray(value) || !value.length)) || (prompt.type === 'acknowledge' && value !== true)) {
       delete state.draft.responses[prompt.id];
       saveDraft();
       return;
@@ -167,29 +244,61 @@
       </table></div>`).join('');
   }
 
+  function renderOrientationExpansion(expansion) {
+    const sections = expansion?.sections;
+    if (!Array.isArray(sections) || !sections.length) return '';
+    return `<section class="veteran-orientation-expansion">
+      <header><p class="veteran-meta">Expanded continuity context</p><h2>What This Stage Means</h2></header>
+      <div class="veteran-orientation-grid">${sections.map(section => `<article><h3>${escapeHtml(section.title || 'Context')}</h3><p>${escapeHtml(section.text || '')}</p></article>`).join('')}</div>
+    </section>`;
+  }
+
+  function renderChoiceCopy(option) {
+    const detail = optionDetail(option);
+    return `<span class="veteran-choice-copy"><strong>${escapeHtml(optionLabel(option))}</strong>${detail ? `<small>${escapeHtml(detail)}</small>` : ''}</span>`;
+  }
+
+  function renderLegacyAnswer(prompt) {
+    const legacy = state.draft.legacyAnswers[prompt.id];
+    if (!legacy) return '';
+    return `<aside class="veteran-legacy-answer"><strong>Previous freeform answer preserved</strong><p>${escapeHtml(legacy)}</p><small>Select the bubbles that now best represent this answer. The older wording remains in the local continuity draft.</small></aside>`;
+  }
+
   function renderPrompt(prompt) {
     const value = state.draft.answers[prompt.id];
     const required = prompt.required ? '<em>Required continuity field</em>' : '<em>Optional continuity field</em>';
     const heading = `<span>${escapeHtml(prompt.label)}</span>${required}`;
+    const preserved = new Set(state.source?.preservedTextPromptIds || []);
 
-    if (prompt.type === 'textarea') {
-      return `<label class="veteran-prompt">${heading}<textarea data-answer-id="${escapeHtml(prompt.id)}" rows="4" placeholder="${escapeHtml(prompt.placeholder || '')}">${escapeHtml(value || '')}</textarea></label>`;
+    if (prompt.type === 'textarea' || prompt.type === 'text') {
+      if (!preserved.has(prompt.id)) {
+        return `<section class="veteran-prompt veteran-errors"><strong>Structured choice data is missing for ${escapeHtml(prompt.label)}.</strong></section>`;
+      }
+      const control = prompt.type === 'textarea'
+        ? `<textarea data-answer-id="${escapeHtml(prompt.id)}" rows="4" placeholder="${escapeHtml(prompt.placeholder || '')}">${escapeHtml(value || '')}</textarea>`
+        : `<input data-answer-id="${escapeHtml(prompt.id)}" type="text" value="${escapeHtml(value || '')}" placeholder="${escapeHtml(prompt.placeholder || '')}">`;
+      return `<label class="veteran-prompt veteran-preserved-text">${heading}${control}<small class="veteran-transfer-note">This statement transfers directly to the Basic Character Sheet and therefore remains a text entry.</small></label>`;
     }
-    if (prompt.type === 'text') {
-      return `<label class="veteran-prompt">${heading}<input data-answer-id="${escapeHtml(prompt.id)}" type="text" value="${escapeHtml(value || '')}" placeholder="${escapeHtml(prompt.placeholder || '')}"></label>`;
-    }
+
     if (prompt.type === 'radio') {
-      return `<section class="veteran-prompt">${heading}<div class="veteran-choice-grid">${(prompt.options || []).map(option => `
-        <label class="veteran-choice"><input type="radio" name="prompt-${escapeHtml(prompt.id)}" data-radio-id="${escapeHtml(prompt.id)}" value="${escapeHtml(option)}" ${value === option ? 'checked' : ''}><span>${escapeHtml(option)}</span></label>`).join('')}</div></section>`;
+      return `<section class="veteran-prompt veteran-bubble-prompt">${heading}<p class="veteran-choice-instruction">Choose the single response that most strongly defines the character’s position.</p><div class="veteran-choice-grid">${(prompt.options || []).map(option => {
+        const selectedValue = optionValue(option);
+        return `<label class="veteran-choice"><input type="radio" name="prompt-${escapeHtml(prompt.id)}" data-radio-id="${escapeHtml(prompt.id)}" value="${escapeHtml(selectedValue)}" ${value === selectedValue ? 'checked' : ''}>${renderChoiceCopy(option)}</label>`;
+      }).join('')}</div>${renderLegacyAnswer(prompt)}</section>`;
     }
+
     if (prompt.type === 'checkboxes') {
       const selected = Array.isArray(value) ? value : [];
-      return `<section class="veteran-prompt">${heading}<div class="veteran-choice-grid">${(prompt.options || []).map(option => `
-        <label class="veteran-choice"><input type="checkbox" data-checkbox-id="${escapeHtml(prompt.id)}" value="${escapeHtml(option)}" ${selected.includes(option) ? 'checked' : ''}><span>${escapeHtml(option)}</span></label>`).join('')}</div></section>`;
+      return `<section class="veteran-prompt veteran-bubble-prompt">${heading}<p class="veteran-choice-instruction">Select every response that remains true. Conflicting emotions, loyalties, and obligations may be selected together.</p><div class="veteran-choice-grid">${(prompt.options || []).map(option => {
+        const selectedValue = optionValue(option);
+        return `<label class="veteran-choice"><input type="checkbox" data-checkbox-id="${escapeHtml(prompt.id)}" value="${escapeHtml(selectedValue)}" ${selected.includes(selectedValue) ? 'checked' : ''}>${renderChoiceCopy(option)}</label>`;
+      }).join('')}</div>${renderLegacyAnswer(prompt)}</section>`;
     }
+
     if (prompt.type === 'acknowledge') {
-      return `<section class="veteran-prompt veteran-acknowledge"><label class="veteran-choice"><input type="checkbox" data-acknowledge-id="${escapeHtml(prompt.id)}" ${value === true ? 'checked' : ''}><span>${escapeHtml(prompt.label)}</span></label>${required}</section>`;
+      return `<section class="veteran-prompt veteran-acknowledge"><label class="veteran-choice"><input type="checkbox" data-acknowledge-id="${escapeHtml(prompt.id)}" ${value === true ? 'checked' : ''}><span class="veteran-choice-copy"><strong>${escapeHtml(prompt.label)}</strong></span></label>${required}</section>`;
     }
+
     return '';
   }
 
@@ -208,9 +317,9 @@
     const current = (entry.prompts || []).map(prompt => state.draft.responses[prompt.id]).filter(Boolean);
     const transcript = orderedResponses();
     return `<section class="veteran-charles">
-      <header class="veteran-charles-header"><div><span>BLACKLIGHT STRATEGIC INTELLIGENCE</span><strong>CHARLES // CONTINUITY REORIENTATION</strong></div><small>One current response per field · changed answers replace prior responses</small></header>
+      <header class="veteran-charles-header"><div><span>BLACKLIGHT STRATEGIC INTELLIGENCE</span><strong>CHARLES // CONTINUITY REORIENTATION</strong></div><small>One current response per field · changed selections replace prior responses</small></header>
       <blockquote>${escapeHtml(entry.charlesPrompt || 'Continue the record.')}</blockquote>
-      ${current.length ? `<div class="veteran-response-list">${current.map(record => `<article><span>${escapeHtml(record.label)}</span><p><strong>Operative:</strong> ${escapeHtml(answerText(record.answer))}</p><p><strong>Charles:</strong> ${escapeHtml(record.response)}</p></article>`).join('')}</div>` : '<p class="veteran-status">Charles will respond after a field is committed by leaving it, changing a selection, or acknowledging the term.</p>'}
+      ${current.length ? `<div class="veteran-response-list">${current.map(record => `<article><span>${escapeHtml(record.label)}</span><p><strong>Operative:</strong> ${escapeHtml(answerText(record.answer))}</p><p><strong>Charles:</strong> ${escapeHtml(record.response)}</p></article>`).join('')}</div>` : '<p class="veteran-status">Charles will respond after a bubble selection is changed or one of the two preserved character-sheet statements is committed.</p>'}
       <details class="veteran-transcript"><summary>Review current continuity transcript (${transcript.length})</summary><div>${transcript.map(record => `<article><span>${escapeHtml(record.stageTitle)}</span><p><strong>${escapeHtml(record.label)}</strong><br>Operative: ${escapeHtml(answerText(record.answer))}<br>Charles: ${escapeHtml(record.response)}</p></article>`).join('') || '<p class="veteran-status">No committed responses yet.</p>'}</div></details>
     </section>`;
   }
@@ -242,7 +351,7 @@
         <article><span>Charles's Remaining Authority</span><p>${escapeHtml(summaryValue('charlesAuthorityNow'))}</p></article>
         <article><span>Reason to Continue</span><p>${escapeHtml(summaryValue('reasonToContinue'))}</p></article>
       </div>
-      <p class="veteran-status">${complete ? 'All twenty-four stages are complete. The continuity record is ready to export or attach to the Basic Character Sheet.' : `${completedCount()} of ${state.entries.length} stages are complete. The record can be saved now, but missing required fields remain visible in the stage navigation.`}</p>
+      <p class="veteran-status">${complete ? 'All twenty-four stages are complete. The continuity record is ready to export or attach to the Basic Character Sheet.' : `${completedCount()} of ${state.entries.length} stages are complete. Missing required selections remain visible in the stage navigation.`}</p>
       <div class="veteran-final-actions no-print">
         <button id="veteran-attach" class="primary-action" type="button">Attach to Existing Character Sheet</button>
         <button id="veteran-export" class="secondary-action" type="button">Export Continuity JSON</button>
@@ -260,9 +369,10 @@
       <h2>${escapeHtml(entry.title)}</h2>
       <p class="veteran-summary">${escapeHtml(entry.summary || '')}</p>
       ${(entry.body || []).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}
+      ${renderOrientationExpansion(entry.orientationExpansion)}
       ${renderTables(entry.tables)}
       <section class="veteran-builder">
-        <header class="veteran-builder-heading"><p class="veteran-meta">Returning operative record</p><h2>Record What Remains True</h2><p>Answers are saved locally. Charles records one response per field; editing a field replaces that response rather than creating duplicate transcript entries.</p></header>
+        <header class="veteran-builder-heading"><p class="veteran-meta">Returning operative record</p><h2>Select What Remains True</h2><p>Use the bubbles to record emotions, judgments, boundaries, loyalties, roles, and preferences. Select several whenever the character holds conflicting or overlapping positions. Charles records one response per field; changing the selection replaces that response rather than creating a duplicate.</p></header>
         ${renderErrors()}
         ${(entry.prompts || []).map(renderPrompt).join('') || '<p class="veteran-status">This stage contains no required continuity fields.</p>'}
       </section>
@@ -286,6 +396,7 @@
       field.addEventListener('change', () => {
         const prompt = (entry.prompts || []).find(item => item.id === field.dataset.answerId);
         if (prompt) commitResponse(prompt);
+        state.errors = [];
         renderEntry();
       });
       field.addEventListener('blur', () => {
@@ -395,6 +506,12 @@
         if (response) lines.push(`Charles: ${response}`);
         lines.push('');
       });
+      const migrated = (entry.prompts || []).filter(prompt => state.draft.legacyAnswers[prompt.id]);
+      if (migrated.length) {
+        lines.push('Preserved prior freeform wording:');
+        migrated.forEach(prompt => lines.push(`${prompt.label}: ${state.draft.legacyAnswers[prompt.id]}`));
+        lines.push('');
+      }
     });
     return lines.join('\n');
   }
@@ -402,20 +519,21 @@
   function buildRecord() {
     return {
       schema: 'blacklight-veteran-reorientation',
-      schemaVersion: '1.0.0',
+      schemaVersion: '2.0.0',
       savedAt: new Date().toISOString(),
       title: state.source.title,
       completedStages: completedCount(),
       totalStages: state.entries.length,
       answers: state.draft.answers,
       responses: state.draft.responses,
+      legacyAnswers: state.draft.legacyAnswers,
       plainText: buildPlainRecord()
     };
   }
 
   function appendField(existing, addition, heading = '') {
     const first = String(existing || '').trim();
-    const second = String(addition || '').trim();
+    const second = answerText(addition).trim();
     if (!second) return first;
     const formatted = heading ? `${heading}: ${second}` : second;
     if (!first) return formatted;
@@ -466,7 +584,7 @@
   }
 
   function resetReorientation() {
-    if (!confirm('Clear the veteran reorientation, its answers, and Charles response record? The existing character sheet will not be deleted.')) return;
+    if (!confirm('Clear the veteran reorientation, its selections, preserved legacy answers, and Charles response record? The existing character sheet will not be deleted.')) return;
     localStorage.removeItem(DRAFT_KEY);
     localStorage.removeItem(RECORD_KEY);
     state.draft = defaultDraft();
@@ -487,10 +605,11 @@
     try {
       const response = await fetch(DATA_URL, { cache: 'no-store' });
       if (!response.ok) throw new Error(`Reorientation request failed with status ${response.status}.`);
-      state.source = await response.json();
+      state.source = applyEnhancements(await response.json());
       state.entries = Array.isArray(state.source.entries) ? state.source.entries : [];
       if (!state.entries.length) throw new Error('The reorientation contains no stages.');
       state.draft = mergeDraft(readJson(DRAFT_KEY, null));
+      migrateLegacyAnswers();
       state.activeId = state.entries.some(entry => entry.id === state.draft.activeId) ? state.draft.activeId : state.entries[0].id;
 
       renderNav();
