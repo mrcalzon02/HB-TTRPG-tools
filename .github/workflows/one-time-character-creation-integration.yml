@@ -1,0 +1,133 @@
+name: Integrate and validate character creation guide
+
+on:
+  push:
+    paths:
+      - .github/workflows/one-time-character-creation-integration.yml
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Connect guide to sheet and canonical Wiki entry
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          sheet_path = Path('blacklight-character-sheet.html')
+          sheet = sheet_path.read_text(encoding='utf-8')
+          old = '    <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>'
+          new = '''    <div class="blacklight-actions">
+      <a class="primary-action" href="blacklight-character-creation.html">Open Character Creation Guide</a>
+      <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+    </div>'''
+          if old not in sheet:
+              raise SystemExit('Character sheet header link target was not found.')
+          sheet_path.write_text(sheet.replace(old, new, 1), encoding='utf-8')
+
+          archetypes_path = Path('data/blacklight-continuum/wiki/basic-archetypes.json')
+          archetypes = json.loads(archetypes_path.read_text(encoding='utf-8'))
+          archetypes['schemaVersion'] = '0.15.0'
+          sheet_entry = next(entry for entry in archetypes['entries'] if entry['id'] == 'blacklight-basic-character-sheet')
+          creation_paragraph = (
+              'Use Blacklight Induction: The Person We Are Sending before completing the sheet. The standard package begins all Attributes at 1 and adds 9 points, '
+              'distributes 24 Skill Points, selects one Signature Skill and two specializations, chooses one Operational Frame and one Archetype at Rating 1, '
+              'grants the printed Starting Ability, and provides 2 Starting Ability Points.'
+          )
+          if creation_paragraph not in sheet_entry['body']:
+              sheet_entry['body'].insert(1, creation_paragraph)
+          links = sheet_entry.setdefault('links', [])
+          guide_link = {
+              'label': 'Open Character Creation Guide',
+              'href': 'blacklight-character-creation.html'
+          }
+          links[:] = [link for link in links if link.get('href') != guide_link['href']]
+          links.insert(0, guide_link)
+          archetypes_path.write_text(json.dumps(archetypes, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          Path('.github/workflows/one-time-character-creation-integration.yml').unlink()
+          PY
+      - name: Validate character creation system
+        run: |
+          node --check blacklight-character-creation.js
+          node --check blacklight-character-creation-entry.js
+          node --check blacklight-character-sheet.js
+          node --check blacklight-archetype-transition.js
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rules = json.loads(Path('data/blacklight-continuum/rules/character-creation-foundation.json').read_text(encoding='utf-8'))
+          guide = json.loads(Path('data/blacklight-continuum/wiki/character-creation-guide.json').read_text(encoding='utf-8'))
+          index = json.loads(Path('data/blacklight-continuum/wiki/wiki-index.json').read_text(encoding='utf-8'))
+          archetypes = json.loads(Path('data/blacklight-continuum/wiki/basic-archetypes.json').read_text(encoding='utf-8'))
+          homepage = Path('index.html').read_text(encoding='utf-8')
+          reader = Path('blacklight-character-creation.html').read_text(encoding='utf-8')
+          reader_js = Path('blacklight-character-creation.js').read_text(encoding='utf-8')
+          card = Path('blacklight-character-creation-entry.js').read_text(encoding='utf-8')
+          sheet = Path('blacklight-character-sheet.html').read_text(encoding='utf-8')
+
+          assert rules['schemaVersion'] == '1.0.0'
+          package = rules['standardPackage']
+          assert package['attributes']['pointsToDistribute'] == 9
+          assert package['attributes']['creationMaximum'] == 4
+          assert package['skills']['pointsToDistribute'] == 24
+          assert package['skills']['creationMaximum'] == 3
+          assert package['specializations']['count'] == 2
+          assert package['archetype']['startingRating'] == 1
+          assert package['startingAbilities']['abilityPoints'] == 2
+          assert len(package['operationalFrame']['options']) == 12
+          assert len(rules['creationOrder']) == 12
+
+          assert guide['schemaVersion'] == '1.0.0'
+          assert len(guide['entries']) == 14
+          ids = [entry['id'] for entry in guide['entries']]
+          assert len(ids) == len(set(ids))
+          assert ids[0] == 'induction-room'
+          assert ids[-1] == 'creation-team-arrival'
+          final_entry = guide['entries'][-1]
+          expected_final = '“Oh, hey. Perfect, you’re here just in time. You’re finished right on schedule. I need you guys to go down to the basement and get Q-mapped.”'
+          assert final_entry['body'][-1] == expected_final
+          assert final_entry['tables'] == []
+          full_text = json.dumps(guide, ensure_ascii=False)
+          for required in ('Charles once saved me by…', 'Charles never answered me about…', 'Mara Vale', 'Ilyan Voss', 'Kest Raal', 'DESCRIPTION IS NOT PERMISSION'):
+              assert required in full_text
+
+          assert index['schemaVersion'] == '0.21.0'
+          assert index['characterCreationModule'] == 'blacklight-character-creation.html'
+          assert index['characterCreationRules'] == 'data/blacklight-continuum/rules/character-creation-foundation.json'
+          assert 'data/blacklight-continuum/wiki/character-creation-guide.json' in index['packs']
+          assert index['completedScope']['characterCreationInductionEntries'] == 14
+          assert index['completedScope']['startingAbilityPoints'] == 2
+
+          sheet_entry = next(entry for entry in archetypes['entries'] if entry['id'] == 'blacklight-basic-character-sheet')
+          assert any(link.get('href') == 'blacklight-character-creation.html' for link in sheet_entry['links'])
+          assert any('distributes 24 Skill Points' in paragraph for paragraph in sheet_entry['body'])
+
+          assert '<script src="blacklight-character-creation-entry.js"></script>' in homepage
+          assert 'blacklight-character-creation.js' in reader
+          assert 'blacklight-character-sheet.html' in reader
+          assert 'GUIDE_URL' in reader_js
+          assert 'blacklight-character-creation.html' in card
+          assert 'Open Character Creation Guide' in sheet
+          PY
+      - name: Commit completed integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Integrate Blacklight character creation induction"
+          git push origin main
