@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.24.0",
+  "schemaVersion": "0.25.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum now includes guided and seeded random character creation, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation containing modern, historical, supernatural, future, scavenged, survival, and alien technology records.",
+  "description": "Blacklight Continuum now includes guided new-operative induction, seeded random creation, a twenty-four-stage returning-operative reorientation, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -46,13 +46,14 @@
     "data/blacklight-continuum/wiki/campaign-play-rules.json",
     "data/blacklight-continuum/wiki/character-creation-guide.json",
     "data/blacklight-continuum/wiki/random-character-generator.json",
+    "data/blacklight-continuum/wiki/veteran-reintroduction.json",
     "data/blacklight-continuum/wiki/combat-example-simple.json",
     "data/blacklight-continuum/wiki/social-conflict-example.json",
     "data/blacklight-continuum/wiki/equipment-catalogs.json"
   ],
   "completedScope": {
-    "wikiEntries": 57,
-    "nativePacks": 10,
+    "wikiEntries": 81,
+    "nativePacks": 11,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
     "archetypeResourceProcedures": 6,
@@ -126,9 +127,15 @@
     "socialConflictActions": 10,
     "socialLeverageTypes": 6,
     "socialTeachingEntries": 5,
-    "workedSocialConflictModules": 1
+    "workedSocialConflictModules": 1,
+    "veteranReintroductionModules": 1,
+    "veteranReintroductionStages": 24,
+    "blackLightCompanyStatusOptions": 6,
+    "lunarConvocationContinuityProcedures": 1,
+    "veteranContinuitySheetTransfers": 1
   },
   "nextDevelopmentAreas": [
+    "live browser playtest of the twenty-four-stage veteran reorientation, response replacement, restart, export, and character-sheet attachment",
     "balance testing and distribution analysis across thousands of generated standard characters",
     "equipment selection and automatic sheet insertion during guided character creation",
     "balance testing for modern, historical, future, improvised, relic, and alien equipment damage, Armor Ratings, Load, availability, and failure conditions",
@@ -157,5 +164,7 @@
     "mission and job generator",
     "Charles decision arc"
   ],
-  "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json"
+  "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json",
+  "veteranReintroductionModule": "blacklight-veteran-reintroduction.html",
+  "veteranReintroductionData": "data/blacklight-continuum/wiki/veteran-reintroduction.json"
 }
