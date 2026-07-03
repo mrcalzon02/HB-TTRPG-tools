@@ -48,7 +48,8 @@ jobs:
                   "‘BlackLight has chosen primary incorporation in England,’ Eva continued. ‘The American branch will incorporate through Delaware, because apparently every American corporate attorney is legally required to say Delaware within the first twelve minutes of a serious conversation. Operationally, that branch will function mainly out of California. Because we are international, because our members cross borders, because our work touches financial systems, medical systems, weapons law, data law, labor law, tax law, immigration law, export controls, supernatural jurisdiction, and ordinary criminal law, we will have a great many rules applying to us at the same time.’",
                   "The next screen showed a list long enough that several operatives laughed before realizing it was not a joke.",
                   "‘Yes,’ Eva said, ‘this means that most of the time you will go through customs again. You will use normal transportation whenever normal transportation can accomplish the mission without unacceptable loss of life. You will have manifests, visas, licenses, declarations, insurance, payroll records, and people whose entire job is telling Charles no before a treasury department, border authority, tax office, or central bank does it more expensively. We are bound once again by rules and laws. This should not come as a great surprise to many of you. Several of you were present for the actions that made it necessary.’",
-                  "That was the moment the Company stopped sounding like a supernatural response team with better paperwork and started sounding like an institution that could be sued, audited, sanctioned, fined, regulated, and forced to pay what it owed. The warehouse did not cheer. The warehouse understood."              ])
+                  "That was the moment the Company stopped sounding like a supernatural response team with better paperwork and started sounding like an institution that could be sued, audited, sanctioned, fined, regulated, and forced to pay what it owed. The warehouse did not cheer. The warehouse understood."
+              ])
 
           tables = entry.setdefault('tables', [])
           if not any(table.get('title') == speech_title for table in tables):
@@ -72,24 +73,16 @@ jobs:
 
           options_path = Path('blacklight-veteran-reorientation-options.js')
           options = options_path.read_text(encoding='utf-8')
-          old = "The Company formalizes a distinction that had never previously existed: the people, the corporate infrastructure, and Charles are related but not identical. Each can be questioned without dissolving the others."
-          new = "The Company formalizes a distinction that had never previously existed: the people, the corporate infrastructure, and Charles are related but not identical. Eva also makes the transition brutally material: Charles's old habit of making money, travel, debt relief, and logistics appear through digital-economy manipulation has created debts, government anger, compliance exposure, and ordinary legal obligations the Company must now inherit."
-          if old in options:
-              options = options.replace(old, new, 1)
-          elif new not in options:
-              raise SystemExit('company-introduction expansion text not found')
-          old2 = "The character is deciding whether formalization feels like protection, capture, legitimacy, delay, community, or a cosmetic rewrite of the old system."
-          new2 = "The character is deciding whether formalization feels like protection, capture, legitimacy, delay, community, fiscal reality, or a cosmetic rewrite of the old system. The speech also asks whether the character accepts that normal law, customs, incorporation, payroll, debts, and transportation rules are now part of the mission environment."
-          if old2 in options:
-              options = options.replace(old2, new2, 1)
-          elif new2 not in options:
-              raise SystemExit('company-introduction decision text not found')
-          old3 = "This reaction shapes how much institutional trust the character begins with and which structural promises they require proof of before accepting them."
-          new3 = "This reaction shapes how much institutional trust the character begins with, which structural promises they require proof of, and how they respond when BlackLight says that obeying ordinary fiscal and legal process is no longer optional."
-          if old3 in options:
-              options = options.replace(old3, new3, 1)
-          elif new3 not in options:
-              raise SystemExit('company-introduction carry-forward text not found')
+          replacements = {
+              "The Company formalizes a distinction that had never previously existed: the people, the corporate infrastructure, and Charles are related but not identical. Each can be questioned without dissolving the others.": "The Company formalizes a distinction that had never previously existed: the people, the corporate infrastructure, and Charles are related but not identical. Eva also makes the transition brutally material: Charles's old habit of making money, travel, debt relief, and logistics appear through digital-economy manipulation has created debts, government anger, compliance exposure, and ordinary legal obligations the Company must now inherit.",
+              "The character is deciding whether formalization feels like protection, capture, legitimacy, delay, community, or a cosmetic rewrite of the old system.": "The character is deciding whether formalization feels like protection, capture, legitimacy, delay, community, fiscal reality, or a cosmetic rewrite of the old system. The speech also asks whether the character accepts that normal law, customs, incorporation, payroll, debts, and transportation rules are now part of the mission environment.",
+              "This reaction shapes how much institutional trust the character begins with and which structural promises they require proof of before accepting them.": "This reaction shapes how much institutional trust the character begins with, which structural promises they require proof of, and how they respond when BlackLight says that obeying ordinary fiscal and legal process is no longer optional."
+          }
+          for old, new in replacements.items():
+              if old in options:
+                  options = options.replace(old, new, 1)
+              elif new not in options:
+                  raise SystemExit(f'Expected expansion text missing: {old[:60]}')
           options_path.write_text(options, encoding='utf-8')
 
           index_path = Path('data/blacklight-continuum/wiki/wiki-index.json')
