@@ -20,41 +20,112 @@
       "tables": [
         {
           "title": "Turn Components",
-          "columns": ["Component", "Default Use"],
+          "columns": [
+            "Component",
+            "Default Use"
+          ],
           "rows": [
-            ["Standard Action", "Attack, capability, Guard, Sprint, Assist, Break Free, Stabilize, Emergency Treatment, or complex interaction"],
-            ["Move", "Move up to 8 meters; difficult terrain costs 2 meters per meter crossed"],
-            ["Minor Interaction", "Shift form when permitted, draw or stow an item, open an unsecured closure, change posture, speak briefly, or press an adjacent control"],
-            ["Reaction", "One response per round when a rule, capability, item, or Cohesion option permits it"]
+            [
+              "Standard Action",
+              "Attack, capability, Guard, Sprint, Assist, Break Free, Stabilize, Emergency Treatment, or complex interaction"
+            ],
+            [
+              "Move",
+              "Move up to 8 meters; difficult terrain costs 2 meters per meter crossed"
+            ],
+            [
+              "Minor Interaction",
+              "Shift form when permitted, draw or stow an item, open an unsecured closure, change posture, speak briefly, or press an adjacent control"
+            ],
+            [
+              "Reaction",
+              "One response per round when a rule, capability, item, or Cohesion option permits it"
+            ]
           ]
         },
         {
           "title": "Damage Resolution Order",
-          "columns": ["Step", "Resolution"],
+          "columns": [
+            "Step",
+            "Resolution"
+          ],
           "rows": [
-            ["1. Hit and Margin", "Compare successes to Defense Difficulty and calculate excess successes"],
-            ["2. Raw Damage", "Weapon or ability Damage + Margin"],
-            ["3. Protection", "Subtract applicable Protection and resolve fixed modifiers; ordinary physical hits retain a minimum of 1 at this stage"],
-            ["4. Soak", "Resolve Living Soak or another printed post-Protection defense; this step may reduce damage to 0"],
-            ["5. Reactive Reduction", "Spend Cohesion Brace or resolve another legal reaction against remaining damage"],
-            ["6. Vitality", "Lose one current Vitality per remaining point and apply Wounded, Downed, or Death Mark rules"]
+            [
+              "1. Hit and Margin",
+              "Compare successes to Defense Difficulty and calculate excess successes"
+            ],
+            [
+              "2. Raw Damage",
+              "Weapon or ability Damage + Margin"
+            ],
+            [
+              "3. Protection",
+              "Subtract applicable Protection and resolve fixed modifiers; ordinary physical hits retain a minimum of 1 at this stage"
+            ],
+            [
+              "4. Soak",
+              "Resolve Living Soak or another printed post-Protection defense; this step may reduce damage to 0"
+            ],
+            [
+              "5. Reactive Reduction",
+              "Spend Cohesion Brace or resolve another legal reaction against remaining damage"
+            ],
+            [
+              "6. Vitality",
+              "Lose one current Vitality per remaining point and apply Wounded, Downed, or Death Mark rules"
+            ]
           ]
         },
         {
           "title": "Common Combat Conditions",
-          "columns": ["Condition", "Effect"],
+          "columns": [
+            "Condition",
+            "Effect"
+          ],
           "rows": [
-            ["Wounded", "At half Vitality or less, lose 1 die from Force, Finesse, and Resilience tests, including Shapechanger Soak"],
-            ["Prone", "Standing costs the Move; adjacent melee reduces Defense Difficulty by 1, ranged attacks beyond 3 meters increase it by 1"],
-            ["Restrained", "Movement 0, Physical Defense Difficulty −1, and most physical tests lose two dice"],
-            ["Staggered", "No Reaction and lose one die from all tests until the condition ends"],
-            ["Downed", "Vitality 0; Prone, no actions, movement, Minor Interactions, or Reactions"],
-            ["Stable", "Still Downed at 0 Vitality but no Death Tests until new damage makes the character Unstable"]
+            [
+              "Wounded",
+              "At half Vitality or less, lose 1 die from Force, Finesse, and Resilience tests, including Shapechanger Soak"
+            ],
+            [
+              "Prone",
+              "Standing costs the Move; adjacent melee reduces Defense Difficulty by 1, ranged attacks beyond 3 meters increase it by 1"
+            ],
+            [
+              "Restrained",
+              "Movement 0, Physical Defense Difficulty −1, and most physical tests lose two dice"
+            ],
+            [
+              "Staggered",
+              "No Reaction and lose one die from all tests until the condition ends"
+            ],
+            [
+              "Downed",
+              "Vitality 0; Prone, no actions, movement, Minor Interactions, or Reactions"
+            ],
+            [
+              "Stable",
+              "Still Downed at 0 Vitality but no Death Tests until new damage makes the character Unstable"
+            ]
           ]
         }
       ],
-      "tags": ["combat", "initiative", "turns", "attacks", "damage", "guard", "protection", "soak"],
-      "relatedEntries": ["shapechanger-living-soak", "combat-tracks-and-death", "worked-combat-cargo-gallery", "blacklight-d10-foundation"]
+      "tags": [
+        "combat",
+        "initiative",
+        "turns",
+        "attacks",
+        "damage",
+        "guard",
+        "protection",
+        "soak"
+      ],
+      "relatedEntries": [
+        "shapechanger-living-soak",
+        "combat-tracks-and-death",
+        "worked-combat-cargo-gallery",
+        "blacklight-d10-foundation"
+      ]
     },
     {
       "id": "shapechanger-living-soak",
@@ -74,28 +145,82 @@
       "tables": [
         {
           "title": "Living Soak by Form",
-          "columns": ["Form", "Pool", "Eligible Damage", "Can Reduce to Zero?"],
+          "columns": [
+            "Form",
+            "Pool",
+            "Eligible Damage",
+            "Can Reduce to Zero?"
+          ],
           "rows": [
-            ["Social", "Resilience", "Impact only", "Yes"],
-            ["Hunting", "Resilience + Archetype Rating", "Impact and Trauma", "Yes"],
-            ["War or Apex", "Resilience + Archetype Rating", "Impact and Trauma", "Yes"],
-            ["Any Form", "None", "Disruption, Pressure, Exposure, non-damage Death Marks", "No"]
+            [
+              "Social",
+              "Resilience",
+              "Impact only",
+              "Yes"
+            ],
+            [
+              "Hunting",
+              "Resilience + Archetype Rating",
+              "Impact and Trauma",
+              "Yes"
+            ],
+            [
+              "War or Apex",
+              "Resilience + Archetype Rating",
+              "Impact and Trauma",
+              "Yes"
+            ],
+            [
+              "Any Form",
+              "None",
+              "Disruption, Pressure, Exposure, non-damage Death Marks",
+              "No"
+            ]
           ]
         },
         {
           "title": "Example Physical Hit",
-          "columns": ["Stage", "Value"],
+          "columns": [
+            "Stage",
+            "Value"
+          ],
           "rows": [
-            ["Rifle Raw Damage", "7 Trauma"],
-            ["Shapechanger Protection", "7, leaving the physical-hit minimum of 1 Trauma"],
-            ["Living Soak Pool", "Resilience 7 + Archetype Rating 3 = 10 dice"],
-            ["Soak Result", "One or more successes remove the remaining point"],
-            ["Vitality Lost", "0, despite the attack hitting"]
+            [
+              "Rifle Raw Damage",
+              "7 Trauma"
+            ],
+            [
+              "Shapechanger Protection",
+              "7, leaving the physical-hit minimum of 1 Trauma"
+            ],
+            [
+              "Living Soak Pool",
+              "Resilience 7 + Archetype Rating 3 = 10 dice"
+            ],
+            [
+              "Soak Result",
+              "One or more successes remove the remaining point"
+            ],
+            [
+              "Vitality Lost",
+              "0, despite the attack hitting"
+            ]
           ]
         }
       ],
-      "tags": ["shapechanger", "living soak", "resilience", "armor", "massive shift", "disruption"],
-      "relatedEntries": ["combat-foundation-procedure", "worked-combat-cargo-gallery", "shapechanger-archetype"]
+      "tags": [
+        "shapechanger",
+        "living soak",
+        "resilience",
+        "armor",
+        "massive shift",
+        "disruption"
+      ],
+      "relatedEntries": [
+        "combat-foundation-procedure",
+        "worked-combat-cargo-gallery",
+        "shapechanger-archetype"
+      ]
     },
     {
       "id": "combat-tracks-and-death",
@@ -114,30 +239,93 @@
       "tables": [
         {
           "title": "Cohesion Spend Menu",
-          "columns": ["Option", "Cost", "Timing", "Effect"],
+          "columns": [
+            "Option",
+            "Cost",
+            "Timing",
+            "Effect"
+          ],
           "rows": [
-            ["Commit", "1", "Before a test", "+2 dice"],
-            ["Brace", "1", "After Soak and before Vitality loss", "Reduce remaining Impact or Disruption by 1; cannot reduce Trauma"],
-            ["Anchor", "1 and Reaction", "Ally makes a qualifying test", "Ally rerolls up to two failed dice"],
-            ["Refuse Collapse", "2, once per scene", "Damage would reduce positive Vitality to 0", "Remain at 1 Vitality and become Staggered"]
+            [
+              "Commit",
+              "1",
+              "Before a test",
+              "+2 dice"
+            ],
+            [
+              "Brace",
+              "1",
+              "After Soak and before Vitality loss",
+              "Reduce remaining Impact or Disruption by 1; cannot reduce Trauma"
+            ],
+            [
+              "Anchor",
+              "1 and Reaction",
+              "Ally makes a qualifying test",
+              "Ally rerolls up to two failed dice"
+            ],
+            [
+              "Refuse Collapse",
+              "2, once per scene",
+              "Damage would reduce positive Vitality to 0",
+              "Remain at 1 Vitality and become Staggered"
+            ]
           ]
         },
         {
           "title": "Death Procedure",
-          "columns": ["Event", "Result"],
+          "columns": [
+            "Event",
+            "Result"
+          ],
           "rows": [
-            ["Vitality reaches 0", "Become Downed and Unstable"],
-            ["Excess damage", "Each excess point becomes 1 Death Mark"],
-            ["End of following round while Unstable", "Make Resilience + Composure Death Test, difficulty 2"],
-            ["Failed Death Test", "+1 Death Mark; +2 instead if the failed roll contains a 1"],
-            ["Successful Stabilize", "Become Stable and remove 1 Death Mark"],
-            ["Successful Emergency Treatment", "Restore 1 Vitality, remove 1 Death Mark, end Downed, become Staggered"],
-            ["3 Death Marks", "Death; Living Soak, ordinary medicine, healing, and retroactive Cohesion cannot reverse it"]
+            [
+              "Vitality reaches 0",
+              "Become Downed and Unstable"
+            ],
+            [
+              "Excess damage",
+              "Each excess point becomes 1 Death Mark"
+            ],
+            [
+              "End of following round while Unstable",
+              "Make Resilience + Composure Death Test, difficulty 2"
+            ],
+            [
+              "Failed Death Test",
+              "+1 Death Mark; +2 instead if the failed roll contains a 1"
+            ],
+            [
+              "Successful Stabilize",
+              "Become Stable and remove 1 Death Mark"
+            ],
+            [
+              "Successful Emergency Treatment",
+              "Restore 1 Vitality, remove 1 Death Mark, end Downed, become Staggered"
+            ],
+            [
+              "3 Death Marks",
+              "Death; Living Soak, ordinary medicine, healing, and retroactive Cohesion cannot reverse it"
+            ]
           ]
         }
       ],
-      "tags": ["exposure", "cohesion", "pressure", "vitality", "downed", "death", "medicine", "soak"],
-      "relatedEntries": ["combat-foundation-procedure", "shapechanger-living-soak", "worked-combat-cargo-gallery", "archetype-resource-pressure-procedure"]
+      "tags": [
+        "exposure",
+        "cohesion",
+        "pressure",
+        "vitality",
+        "downed",
+        "death",
+        "medicine",
+        "soak"
+      ],
+      "relatedEntries": [
+        "combat-foundation-procedure",
+        "shapechanger-living-soak",
+        "worked-combat-cargo-gallery",
+        "archetype-resource-pressure-procedure"
+      ]
     },
     {
       "id": "worked-combat-cargo-gallery",
@@ -166,7 +354,7 @@
         "Round 5, Kest dismisses Bulwark as his Minor Interaction, returning movement to 8 meters and Protection to 7. He activates Pursuit Through Systems for 1 Fury and 1 Instinct. Fury falls from 6 to 5; Instinct rises from 4 to 5, crossing the Critical Threshold. The ability allows doors, machinery, crowds, and terrain to impose fewer delays while he follows Ilyan. Predatory Focus and Challenge Reflex now govern his choices after this action, but the ability itself resolves before those Critical effects begin.",
         "Round 5, Ilyan activates The Thousand-Armed Scheme. It costs 2 Pact and 2 Intrusion, changing Pact from 4 to 2 and Intrusion from 5 to 7. Five immediate effects resolve: unseen arms pull Mara behind Substantial Cover; close the emergency bulkhead between Kest and the eastern platform; move a cargo crate across the most direct path; grant Ilyan Armor 2 until his next turn; and attempt to Restrain Kest. The restraint roll fails, but the other four selected effects remain because each is an independent immediate effect. Intrusion 7 is Critical, but Ilyan was not Critical before spending Pact, so Partial Occupancy does not add another point to this activation.",
         "Stage Three — The Gallery Becomes a Weapon. Round 6, the closed emergency bulkhead gives Total Cover. Mara cannot simply fire through it. She instead uses Reason 4 + Security 2 to engage the damaged locking dogs. Her first roll produces two successes against difficulty 3. She Pushes three dice, succeeds, and raises Exposure from 2 to 3. Exposure Warning is 3, so Mara becomes Exposed and can reroll one fewer die on later Pushes. The reinforced lock will force Kest to break the bulkhead rather than open it normally.",
-        "Round 6, Kest changes Siege Form from Bulwark to Breacher, paying the 2 Fury cost again and reducing Fury from 5 to 3. Bulwark Armor ends, so Protection returns to 7. Breacher adds three dice against barriers and ignores 2 Armor on structures. Wounded reduces the Force-based pool by one, but Kest still attacks the bulkhead with nine dice. The first impact buckles it without opening a passage. Because an artificial enclosure has prevented Kest from moving more than 2 meters for a complete round, the First Fang Wilds Bane Cage Fury raises Instinct from 5 to 6.",
+        "Round 6, Kest changes Siege Form from Bulwark to Breacher, paying the 2 Fury cost again and reducing Fury from 5 to 3. Bulwark Armor ends immediately, so Protection returns to 7. Breacher adds three dice against barriers and ignores 2 Armor on structures, but changing the active configuration consumes Kest’s Standard Action. He cannot also attack the bulkhead this turn. He uses his Move to brace against the sealed door, but Total Cover prevents passage. Because the artificial enclosure has prevented Kest from moving more than 2 meters for one complete round, the First Fang Wilds Bane Cage Fury raises Instinct from 5 to 6 at the end of the turn.",
         "Round 6, Ilyan spends 1 Pact on Other Eye and chooses Resonance, reducing Pact from 2 to 1. The sense immediately reveals structural stress through the closed bulkhead, allowing him to tell Mara which seam will fail first. Ilyan was already at Critical Intrusion before spending Pact, so Partial Occupancy adds 1 Intrusion after the ability resolves. Intrusion reaches Limit 8. The Resonance information remains valid; then Incursion occurs. The Abyssal Womb's printed Breach Restrains Ilyan through the end of his next turn and pulls three unsecured objects, including the arc pistol, from his hands. He suffers 1 Disruption, falling from 7 to 6 Vitality, and gains the Abyssal Source Mark. Intrusion resets to Warning 3 with no overflow.",
         "Round 7, Mara follows Ilyan's warning. She moves behind a load-bearing cargo strut and uses Guard, increasing her Defense Difficulty by 1 until her next turn. This is not wasted inactivity: Total Cover prevents a useful shot, so Mara uses the turn to improve her position before the bulkhead fails.",
         "Round 7, Kest attacks the identified seam. Breacher ignores part of the bulkhead's structural Armor, and the second blow tears a human-width opening through it. Kest then uses his Move to cross the ruined threshold. Pursuit Through Systems explains why twisted machinery and the partly collapsed door do not consume the entire turn. The Standard Action was spent destroying the bulkhead, so he cannot also attack Mara or Ilyan.",
@@ -174,10 +362,10 @@
         "Round 8, Mara fires from Short range. Five successes produce Margin 2 and Rifle Raw Damage 7. Kest currently has Protection 7 because Breacher provides no Armor. Protection leaves the minimum 1 Trauma. Wounded Living Soak rolls nine dice and removes it. The round demonstrates why losing Bulwark does not make Kest fragile: Massive Shift still supports both Protection and Soak.",
         "Round 8, Kest ends Breacher and activates Apex Shape for 2 Fury and 1 Instinct, reducing Fury from 3 to 1 and raising Instinct from 6 to its Limit of 7. He chooses wall-and-ceiling movement, natural weapons with +2 Damage, and the limitation of no speech. Apex Armor 2 raises Protection from 7 to 9. The transformation resolves first: Kest becomes a low, broad organism gripping the overhead rails, and his claws now deal Damage 6 Trauma. Then Rampage occurs. Instinct resets to Warning 3. The activation turn counts as the first of the three Rampage rounds, even though Kest has already spent his Standard Action.",
         "Round 8, Ilyan fires the recovered arc pistol. The first roll produces one success, so he Pushes three failed dice. The final total reaches three successes, Exposure increases from 0 to 1, and the attack hits Identity Defense Difficulty 3. Disruption 3 ignores Apex Protection 9 and Living Soak, reducing Kest from 5 to 2 Vitality. Kest's body remains physically massive and plated, but the command structure animating it is beginning to fail.",
-        "Stage Four — Rescue Under a Rampaging Apex. Round 9, Mara spends 1 Cohesion on Commit, reducing Cohesion from 4 to 3, and fires eight rifle dice. Six successes against difficulty 3 create Margin 3 and Raw Damage 8. Apex Protection 9 leaves the minimum 1 Trauma. The Wounded nine-die Soak pool produces one success and removes it. This is the clearest demonstration of the advantage: Mara produces an exceptional rifle hit, yet the combination of fixed Protection and rolled Soak still prevents every point of Vitality loss.",
+        "Stage Four — Rescue Under a Rampaging Apex. Round 9, Mara spends 1 Cohesion on Commit, reducing Cohesion from 4 to 3, and fires eight rifle dice. Six successes against difficulty 3 create Margin 3 and Raw Damage 8. Apex Protection 9 leaves the minimum 1 Trauma. The Wounded nine-die Soak pool produces one success and removes it. This is the clearest demonstration of the advantage: Mara produces an exceptional rifle hit, yet the combination of fixed Protection and rolled Soak still prevents every point of Vitality loss. After firing, Mara uses her Move to close the distance and ends adjacent to Ilyan behind the same cargo strut, placing herself where she can attempt treatment if Kest reaches him.",
         "Round 9, Kest is in the second Rampage round and must pursue the marked quarry, Ilyan. Wall movement carries him over Mara's cover and directly above the Binder. Mark the Prey contributes one attack die. Force 4 + Close Combat 3 + one marked-quarry die − one Wounded die gives seven dice. Six successes against Ilyan's Defense Difficulty 2 create Margin 4. Apex claws deal base Damage 6, producing Raw Damage 10. Ilyan's Protection 3 leaves 7 Trauma. He had 6 Vitality after Incursion, so he falls to 0 with one damage remaining and gains 1 Death Mark. He becomes Downed and Unstable. The round in which he falls is his grace period, so he makes no Death Test yet.",
         "Round 10, Mara moves adjacent to Ilyan and uses Stabilize with the field medical kit. Reason 4 + Medicine 3 gives seven dice against difficulty 2. The first roll produces only one success. Because Mara is Exposed, Resolve 3 allows only two Push rerolls rather than three. The replacements succeed, Exposure rises from 3 to 4, and Ilyan becomes Stable. Stabilize removes his single Death Mark but does not restore Vitality; he remains Downed at 0.",
-        "Mara uses the rest of her Move to drag Ilyan four meters behind the cargo-loader housing. Dragging a willing, unconscious, or Downed character uses movement at half speed. The housing becomes Total Cover from Kest's present angle. This positioning is what keeps the rescue from being immediately undone.",
+        "Because Mara began the turn adjacent to Ilyan, she can use her full Move to drag him four meters behind the cargo-loader housing. Dragging a willing, unconscious, or Downed character costs 2 meters of movement for every meter crossed, so moving Ilyan four meters consumes all 8 meters of Mara’s movement. The housing becomes Total Cover from Kest’s present angle. This positioning is what keeps the rescue from being immediately undone.",
         "Round 10, the third and final Rampage round forces Kest to reach the marked quarry. Ilyan is behind Total Cover, so Kest attacks the cargo-loader housing blocking the route. The structure absorbs the attack but partially collapses. Kest does not receive a free attack on Ilyan merely because he destroyed the obstacle; the Standard Action is spent.",
         "Round 11, Mara performs Emergency Treatment. Ilyan is adjacent, Stable, and at 0 Vitality, satisfying the prerequisites. Mara spends 1 Cohesion on Commit, reducing Cohesion from 3 to 2, and rolls nine dice against difficulty 3. Four successes remove one recorded Trauma, restore Ilyan to 1 Vitality, remove any remaining Death Mark, end Downed, and apply Staggered through the end of his next turn. One medical-kit charge is consumed. Kest's Rampage restriction has ended before his Round 11 turn.",
         "Round 11, Kest shoulder-slams Mara away from Ilyan. The attack leaves 2 Impact after Protection. Mara spends 1 Cohesion on Brace, reducing Cohesion from 2 to 1 and the remaining Impact from 2 to 1. Brace functions because the damage is Impact; it could not reduce Kest's claw Trauma. Mara falls from 7 to 6 Vitality.",
@@ -194,61 +382,238 @@
       "tables": [
         {
           "title": "Starting Characters and Equipment",
-          "columns": ["Character", "Core Defenses", "Tracks", "Important Equipment and Capabilities"],
+          "columns": [
+            "Character",
+            "Core Defenses",
+            "Tracks",
+            "Important Equipment and Capabilities"
+          ],
           "rows": [
-            ["Mara Vale · Human Investigator", "Vitality 7 · Guard 6 / Difficulty 3 · Protection 3", "Cohesion 5 · Exposure 0/5 · Conviction 4 · Strain 1/8", "Damage 4 Trauma compact pistol; Damage 5 Trauma rifle; Armor 1; two-charge field medical kit"],
-            ["Ilyan Voss · Eldritch Binder", "Vitality 7 · Guard 4 / Difficulty 2 · Protection 3 · Identity Defense 7", "Cohesion 3 · Exposure 0/6 · Pact 6 · Intrusion 4/8", "Damage 3 Disruption arc pistol; Abyssal Womb Depth abilities; Resolve 4; Archetype Rating 2"],
-            ["Kest Raal · Shapechanger", "Vitality 9 · Guard 6 / Difficulty 3 · Protection 4 · Identity Defense 5", "Cohesion 4 · Exposure 0/7 · Fury 11 · Instinct 4/7", "Archetype Rating 3; Living Soak; Massive Shift; Siege Form; Apex Shape; Mark the Prey; First Fang Wilds Bane"]
+            [
+              "Mara Vale · Human Investigator",
+              "Vitality 7 · Guard 6 / Difficulty 3 · Protection 3",
+              "Cohesion 5 · Exposure 0/5 · Conviction 4 · Strain 1/8",
+              "Damage 4 Trauma compact pistol; Damage 5 Trauma rifle; Armor 1; two-charge field medical kit"
+            ],
+            [
+              "Ilyan Voss · Eldritch Binder",
+              "Vitality 7 · Guard 4 / Difficulty 2 · Protection 3 · Identity Defense 7",
+              "Cohesion 3 · Exposure 0/6 · Pact 6 · Intrusion 4/8",
+              "Damage 3 Disruption arc pistol; Abyssal Womb Depth abilities; Resolve 4; Archetype Rating 2"
+            ],
+            [
+              "Kest Raal · Shapechanger",
+              "Vitality 9 · Guard 6 / Difficulty 3 · Protection 4 · Identity Defense 5",
+              "Cohesion 4 · Exposure 0/7 · Fury 11 · Instinct 4/7",
+              "Archetype Rating 3; Living Soak; Massive Shift; Siege Form; Apex Shape; Mark the Prey; First Fang Wilds Bane"
+            ]
           ]
         },
         {
           "title": "Kest's Defensive Escalation",
-          "columns": ["State", "Vitality Maximum", "Protection", "Living Soak Pool", "Meaning"],
+          "columns": [
+            "State",
+            "Vitality Maximum",
+            "Protection",
+            "Living Soak Pool",
+            "Meaning"
+          ],
           "rows": [
-            ["Social form", "9", "4", "Resilience 4 against Impact only", "Mara's Trauma pistol cannot be Soaked"],
-            ["War form", "9", "4", "Resilience 4 + Rating 3 = 7", "Impact and Trauma can be reduced after Protection"],
-            ["Massive Shift: Resilience", "12", "7", "Resilience 7 + Rating 3 = 10", "Resilience strengthens both fixed Protection and rolled Soak"],
-            ["Siege Form: Bulwark", "12", "9", "10", "Armor rises by 2, but movement is halved"],
-            ["Wounded", "12", "Varies by form", "Normal pool −1", "Wounded penalizes the Resilience-based Soak test"],
-            ["Apex Shape", "12", "9", "9 while Wounded", "Armor 2 and Damage 6 claws; Disruption still bypasses both defenses"]
+            [
+              "Social form",
+              "9",
+              "4",
+              "Resilience 4 against Impact only",
+              "Mara's Trauma pistol cannot be Soaked"
+            ],
+            [
+              "War form",
+              "9",
+              "4",
+              "Resilience 4 + Rating 3 = 7",
+              "Impact and Trauma can be reduced after Protection"
+            ],
+            [
+              "Massive Shift: Resilience",
+              "12",
+              "7",
+              "Resilience 7 + Rating 3 = 10",
+              "Resilience strengthens both fixed Protection and rolled Soak"
+            ],
+            [
+              "Siege Form: Bulwark",
+              "12",
+              "9",
+              "10",
+              "Armor rises by 2, but movement is halved"
+            ],
+            [
+              "Wounded",
+              "12",
+              "Varies by form",
+              "Normal pool −1",
+              "Wounded penalizes the Resilience-based Soak test"
+            ],
+            [
+              "Apex Shape",
+              "12",
+              "9",
+              "9 while Wounded",
+              "Armor 2 and Damage 6 claws; Disruption still bypasses both defenses"
+            ]
           ]
         },
         {
           "title": "Round-by-Round Track State",
-          "columns": ["Round", "Mara", "Ilyan", "Kest"],
+          "columns": [
+            "Round",
+            "Mara",
+            "Ilyan",
+            "Kest"
+          ],
           "rows": [
-            ["1", "Vitality 7 · Exposure 0", "Vitality 7 · Pact 6 · Intrusion 4", "Vitality 8 · Fury 9 · war form"],
-            ["2", "Exposure 1", "Vitality 7", "Vitality 8/12 after Massive Shift and Disruption · Fury 8"],
-            ["3", "Cohesion 4", "Pact 4 · Intrusion 5", "Vitality 8 · Protection 9 · Restrained · Fury 6"],
-            ["4", "Exposure 2", "Pact 4 · Intrusion 5", "Vitality 5/12 · Wounded · free of restraint"],
-            ["5", "No Vitality loss inflicted", "Pact 2 · Intrusion 7", "Fury 5 · Instinct 5 Critical · behind bulkhead"],
-            ["6", "Exposure 3 · Exposed", "Vitality 6 · Pact 1 · Intrusion reset to 3 · Restrained · Source Mark", "Fury 3 · Instinct 6 · bulkhead damaged"],
-            ["7", "Guard action", "Pact 0 · arc pistol recovered", "Bulkhead breached · Protection 7"],
-            ["8", "Physical hit Soaked", "Exposure 1", "Vitality 2 · Fury 1 · Apex Shape · Rampage · Instinct reset 3"],
-            ["9", "Cohesion 3", "Vitality 0 · Unstable · 1 Death Mark", "Vitality 2 · exceptional rifle hit Soaked"],
-            ["10", "Exposure 4", "Stable at 0 · 0 Death Marks", "Rampage ends after attacking cover"],
-            ["11", "Vitality 6 · Cohesion 1", "Vitality 1 · Exposure 2 · Staggered", "Vitality 1 · Cohesion 2 · Staggered after Refuse Collapse"],
-            ["12", "Physical hit Soaked", "Exposure 3 · Exposed", "Vitality 0 · Unstable · 2 Death Marks"],
-            ["13", "Vitality 5 · Exposure reset 3 · no Reaction", "Exposure 4 after failed Stabilize", "Dead after failed Death Test reaches 3+ Death Marks"]
+            [
+              "1",
+              "Vitality 7 · Exposure 0",
+              "Vitality 7 · Pact 6 · Intrusion 4",
+              "Vitality 8 · Fury 9 · war form"
+            ],
+            [
+              "2",
+              "Exposure 1",
+              "Vitality 7",
+              "Vitality 8/12 after Massive Shift and Disruption · Fury 8"
+            ],
+            [
+              "3",
+              "Cohesion 4",
+              "Pact 4 · Intrusion 5",
+              "Vitality 8 · Protection 9 · Restrained · Fury 6"
+            ],
+            [
+              "4",
+              "Exposure 2",
+              "Pact 4 · Intrusion 5",
+              "Vitality 5/12 · Wounded · free of restraint"
+            ],
+            [
+              "5",
+              "No Vitality loss inflicted",
+              "Pact 2 · Intrusion 7",
+              "Fury 5 · Instinct 5 Critical · behind bulkhead"
+            ],
+            [
+              "6",
+              "Exposure 3 · Exposed",
+              "Vitality 6 · Pact 1 · Intrusion reset to 3 · Restrained · Source Mark",
+              "Fury 3 · Instinct 6 · Breacher configured · still behind Total Cover"
+            ],
+            [
+              "7",
+              "Guard action",
+              "Pact 0 · arc pistol recovered",
+              "Bulkhead breached · Protection 7"
+            ],
+            [
+              "8",
+              "Physical hit Soaked",
+              "Exposure 1",
+              "Vitality 2 · Fury 1 · Apex Shape · Rampage · Instinct reset 3"
+            ],
+            [
+              "9",
+              "Cohesion 3",
+              "Vitality 0 · Unstable · 1 Death Mark",
+              "Vitality 2 · exceptional rifle hit Soaked"
+            ],
+            [
+              "10",
+              "Exposure 4",
+              "Stable at 0 · 0 Death Marks",
+              "Rampage ends after attacking cover"
+            ],
+            [
+              "11",
+              "Vitality 6 · Cohesion 1",
+              "Vitality 1 · Exposure 2 · Staggered",
+              "Vitality 1 · Cohesion 2 · Staggered after Refuse Collapse"
+            ],
+            [
+              "12",
+              "Physical hit Soaked",
+              "Exposure 3 · Exposed",
+              "Vitality 0 · Unstable · 2 Death Marks"
+            ],
+            [
+              "13",
+              "Vitality 5 · Exposure reset 3 · no Reaction",
+              "Exposure 4 after failed Stabilize",
+              "Dead after failed Death Test reaches 3+ Death Marks"
+            ]
           ]
         },
         {
           "title": "Why Different Attacks Produce Different Results",
-          "columns": ["Attack or Effect", "Why It Works or Fails"],
+          "columns": [
+            "Attack or Effect",
+            "Why It Works or Fails"
+          ],
           "rows": [
-            ["Pistol against social form", "Trauma reaches the body; social-form Living Soak handles Impact only, so Kest loses 1 Vitality"],
-            ["Pistol and rifle against war form", "Protection reduces damage to 1, then Living Soak removes that remaining point"],
-            ["Rifle against Restrained Kest", "Restraint lowers Defense Difficulty but does not reduce Protection or Soak"],
-            ["Arc pistol", "Disruption ignores ordinary Protection and is excluded from Living Soak"],
-            ["Dream-Born Servitor", "Restraint controls movement and defense rather than trying to overcome physical durability"],
-            ["Bulkhead", "Total Cover prevents attacks and changes objectives from damage to access and positioning"],
-            ["Stabilize and Emergency Treatment", "One stops Death Tests and removes a Death Mark; the other restores 1 Vitality and returns the target to action"],
-            ["Failed Death Test", "Living Soak is irrelevant because Death Marks from the test are not incoming physical damage"]
+            [
+              "Pistol against social form",
+              "Trauma reaches the body; social-form Living Soak handles Impact only, so Kest loses 1 Vitality"
+            ],
+            [
+              "Pistol and rifle against war form",
+              "Protection reduces damage to 1, then Living Soak removes that remaining point"
+            ],
+            [
+              "Rifle against Restrained Kest",
+              "Restraint lowers Defense Difficulty but does not reduce Protection or Soak"
+            ],
+            [
+              "Arc pistol",
+              "Disruption ignores ordinary Protection and is excluded from Living Soak"
+            ],
+            [
+              "Dream-Born Servitor",
+              "Restraint controls movement and defense rather than trying to overcome physical durability"
+            ],
+            [
+              "Bulkhead",
+              "Total Cover prevents attacks and changes objectives from damage to access and positioning"
+            ],
+            [
+              "Stabilize and Emergency Treatment",
+              "One stops Death Tests and removes a Death Mark; the other restores 1 Vitality and returns the target to action"
+            ],
+            [
+              "Failed Death Test",
+              "Living Soak is irrelevant because Death Marks from the test are not incoming physical damage"
+            ]
           ]
         }
       ],
-      "tags": ["expanded worked example", "combat example", "two versus one", "shapechanger soak", "range", "cover", "equipment", "exposure", "cohesion", "pressure", "vitality", "death"],
-      "relatedEntries": ["combat-foundation-procedure", "shapechanger-living-soak", "combat-tracks-and-death", "archetype-resource-pressure-procedure"]
+      "tags": [
+        "expanded worked example",
+        "combat example",
+        "two versus one",
+        "shapechanger soak",
+        "range",
+        "cover",
+        "equipment",
+        "exposure",
+        "cohesion",
+        "pressure",
+        "vitality",
+        "death"
+      ],
+      "relatedEntries": [
+        "combat-foundation-procedure",
+        "shapechanger-living-soak",
+        "combat-tracks-and-death",
+        "archetype-resource-pressure-procedure"
+      ]
     }
   ]
 }

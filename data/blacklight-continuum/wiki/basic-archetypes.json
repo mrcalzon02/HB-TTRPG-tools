@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.10.0",
+  "schemaVersion": "0.11.0",
   "description": "Capability-only reference entries for the six Blacklight Continuum Archetypes. These records explain what each Archetype can do, how its Resource and Pressure operate, and which power families it develops.",
   "entries": [
     {
@@ -381,6 +381,7 @@
       "summary": "A supernatural transformer whose forms, pack bonds, spirit relations, and territorial instincts remain intact while Gaia's once-constant call reaches them only as a distant, partially obscured voice.",
       "body": [
         "The Shapechanger's powers still work. The character can assume recorded forms, pursue across impossible boundaries, sense and protect the pack, adopt explicit adaptations, interact with spirits, and establish territory according to the Archetype's abilities. Nothing about the transition silently removes those permissions.",
+        "Living Soak is an innate Shapechanger defense separate from Protection. After Protection determines remaining damage, social form rolls Resilience against Impact, while hunting and war forms roll Resilience + Archetype Rating against Impact or Trauma. Each success removes one damage and may reduce a successful hit to zero. Disruption, Pressure, Exposure, and non-damage Death Marks bypass Living Soak.",
         "What has faded is the immediate presence of the living spiritual order that once surrounded those powers. The call of Gaia may once have existed in every heartbeat, every root, every territorial trespass, every packmate's distress, and every surge of Fury. Here that call feels like a conversation half heard through a wall: recognizable, emotionally undeniable, but stripped of detail and immediate direction.",
         "The Shapechanger is not severed from Gaia so much as displaced beyond the cosmology in which that relationship was ordinary. The bond remains inside the character, but the stars, ecosystems, spirits, and local metaphysical structures do not automatically answer as parts of the same sacred body.",
         "Old spirit relationships may continue through established pacts and named bonds, yet unfamiliar local spirits have no inherited reason to recognize the Shapechanger's status, rites, renown, or territorial claims. The Shapechanger must establish those relationships through actual capabilities and actions rather than relying upon universal recognition.",

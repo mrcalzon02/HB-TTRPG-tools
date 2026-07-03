@@ -52,7 +52,8 @@
     "normal": "Move up to 8 meters during the turn.",
     "difficultTerrain": "Each meter costs 2 meters of movement.",
     "occupiedSpace": "A character cannot end movement inside another character's occupied space unless a capability explicitly permits it.",
-    "leavingReach": "Leaving an adjacent hostile character's reach does not automatically cause an attack. A reaction attack exists only when a capability or weapon explicitly provides one."
+    "leavingReach": "Leaving an adjacent hostile character's reach does not automatically cause an attack. A reaction attack exists only when a capability or weapon explicitly provides one.",
+    "dragging": "A character adjacent to a willing, unconscious, or Downed target may drag that target during the Move. Each meter dragged costs 2 meters of movement. The mover must have Carry at least equal to the target’s ordinary personal scale or receive sufficient assistance. Dragging does not restore the target’s actions, change Downed or Stable state, or protect against attacks unless the new position provides cover."
   },
   "attackProcedure": {
     "pools": [
