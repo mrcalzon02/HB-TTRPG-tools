@@ -39,6 +39,15 @@
       insertBeforeReturnLink(actions, link);
     }
 
+    if (!actions.querySelector('[data-blacklight-mission-link]')) {
+      const link = document.createElement('a');
+      link.className = 'secondary-action';
+      link.href = 'blacklight-mission-generator.html';
+      link.dataset.blacklightMissionLink = 'true';
+      link.textContent = 'Mission Generator';
+      insertBeforeReturnLink(actions, link);
+    }
+
     if (!actions.querySelector('[data-blacklight-random-link]')) {
       const link = document.createElement('a');
       link.className = 'secondary-action';
