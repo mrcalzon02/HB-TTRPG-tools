@@ -1,0 +1,19 @@
+{
+  "system": "Blacklight Continuum",
+  "module": "BlackLight Reorientation: The New Arrangement",
+  "validated": true,
+  "validatedAt": "2026-07-03T16:42:22.698563+00:00",
+  "validatedCommit": "0debf84769580e4eb83dc0b71f556a0d09078fff",
+  "checks": [
+    "Veteran reorientation JSON parsed successfully",
+    "Twenty-four ordered continuity stages validated",
+    "Guided prompt identifiers and required fields validated",
+    "Warehouse, embodiment, cube, lunar convocation, judgment, and Company continuity concepts validated",
+    "Six Company status choices validated",
+    "One-current-response-per-field replacement implementation validated",
+    "Character-sheet continuity attachment and dynamic-field persistence validated",
+    "Workspace, guided creation, random creation, and Wiki integration validated",
+    "Reorientation, workspace-entry, and character-sheet handoff JavaScript passed node --check"
+  ],
+  "validatorOutput": ""
+}
