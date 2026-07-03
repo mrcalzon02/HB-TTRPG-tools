@@ -1,0 +1,31 @@
+name: Validate Blacklight Veteran Reorientation
+
+on:
+  push:
+    paths:
+      - 'blacklight-veteran-reintroduction.html'
+      - 'blacklight-veteran-reintroduction.css'
+      - 'blacklight-veteran-reintroduction.js'
+      - 'blacklight-veteran-reorientation-options.js'
+      - 'data/blacklight-continuum/wiki/veteran-reintroduction.json'
+      - 'scripts/validate-blacklight-veteran-reorientation.mjs'
+      - '.github/workflows/validate-blacklight-veteran-reorientation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate veteran reorientation structure
+        run: node scripts/validate-blacklight-veteran-reorientation.mjs
+      - name: Validate JavaScript syntax
+        run: |
+          node --check blacklight-veteran-reorientation-options.js
+          node --check blacklight-veteran-reintroduction.js
