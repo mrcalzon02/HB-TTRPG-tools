@@ -263,8 +263,29 @@
     }
   }
 
+  function displayedAnswer(key, value) {
+    const data = draft();
+    if (typeof value === 'boolean') return value ? 'Confirmed' : 'Not confirmed';
+    if (key === 'attributes') return ATTRIBUTE_NAMES.map(name => `${titleCase(name)} ${data.fields?.[name] || 1}`).join(' · ');
+    if (key === 'skills' || key === 'signatureSkill' || key === 'specializations') {
+      const trained = Object.entries(data.fields || {})
+        .filter(([name, rating]) => name.startsWith('skill_') && Number(rating || 0) > 0)
+        .sort((a, b) => Number(b[1]) - Number(a[1]))
+        .map(([name, rating]) => `${titleCase(name.replace(/^skill_/, '').replaceAll('_', ' '))} ${rating}`);
+      const specs = (data.specializations || []).filter(item => clean(item?.skill) && clean(item?.name)).map(item => `${item.skill}: ${item.name}`);
+      return `${trained.join(' · ')}${data.signatureSkill ? ` · Signature: ${data.signatureSkill}` : ''}${specs.length ? ` · Specializations: ${specs.join('; ')}` : ''}`;
+    }
+    if (key === 'abilities') {
+      const chosen = [...document.querySelectorAll('[data-ability-id]:checked')]
+        .map(input => input.closest('.creation-ability-card')?.querySelector('strong')?.textContent?.trim())
+        .filter(Boolean);
+      return chosen.length ? chosen.join(' · ') : 'No additional abilities selected';
+    }
+    return clean(value);
+  }
+
   function recordResponse(key, value, response) {
-    const answer = typeof value === 'boolean' ? (value ? 'Confirmed' : 'Not confirmed') : clean(value);
+    const answer = displayedAnswer(key, value);
     const signature = `${key}::${answer}`;
     if (!response || lastValues.get(key) === signature) return;
     lastValues.set(key, signature);
@@ -279,7 +300,7 @@
       response,
       recordedAt: new Date().toISOString()
     });
-    saveLog(entries.slice(-250));
+    saveLog(entries);
     updatePanel(response, key);
   }
 
@@ -293,6 +314,13 @@
 
   function stagePrompt() {
     return stagePrompts[currentStage()] || 'Continue. I am listening, recording, and resisting the temptation to complete the form for you.';
+  }
+
+  function normalizeFinalActions() {
+    const button = document.querySelector('[data-download-character]');
+    if (!button) return;
+    button.textContent = 'Open Completed Sheet to Save JSON';
+    button.title = 'The completed Basic Character Sheet contains the canonical JSON export control and Charles transcript.';
   }
 
   function ensurePanel() {
@@ -314,9 +342,11 @@
         <details class="charles-transcript"><summary>Review recorded induction transcript <span id="charles-transcript-count"></span></summary><div id="charles-transcript-history"></div></details>`;
       builder.insertAdjacentElement('beforebegin', panel);
     }
+    normalizeFinalActions();
     const entries = logEntries();
     const latest = entries[entries.length - 1];
-    updatePanel(latest?.response || stagePrompt(), latest?.field || 'stage');
+    const belongsToStage = latest?.stage === currentStage();
+    updatePanel(belongsToStage ? latest.response : stagePrompt(), belongsToStage ? latest.field : 'stage');
     return panel;
   }
 
@@ -382,11 +412,22 @@
     else if (target.matches('[data-field]')) respond(target.dataset.field, target.value, 0);
   }
 
+  function handleCanonicalSave(event) {
+    const button = event.target.closest('[data-download-character]');
+    if (!button) return;
+    const openSheet = document.querySelector('[data-open-sheet]');
+    if (!openSheet || openSheet.disabled) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    openSheet.click();
+  }
+
   function initialize() {
     const root = document.getElementById('creation-reader-entry');
     if (!root) return;
     root.addEventListener('input', handleInput);
     root.addEventListener('change', handleChange);
+    document.addEventListener('click', handleCanonicalSave, true);
     new MutationObserver(schedulePanel).observe(root, { childList: true });
     schedulePanel();
   }
