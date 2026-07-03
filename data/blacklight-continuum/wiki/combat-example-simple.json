@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "2.0.1",
+  "schemaVersion": "2.0.2",
   "description": "A worked example using one attack roll, fixed damage, one Protection value, Exposure as enemy attack dice, and no Margin or universal Wounded penalty.",
   "entries": [
     {
@@ -89,7 +89,7 @@
         "Round 8: Mara Pushes and gains Exposure 2. Her rifle still deals 0. Kest attacks Mara with his normal attack pool plus two dice from her Exposure. He hits with a Damage 4 Impact shoulder slam. Protection 3 leaves 1 Impact, which Mara removes by spending 1 Cohesion on Brace.",
         "Round 8 continued: Ilyan retrieves the arc pistol and hits Kest for 3 Disruption. Kest would fall below 0, but spends 2 Cohesion on Refuse Collapse and remains at 1 Vitality.",
         "Round 9: Kest attacks Ilyan again. Damage 6 minus Protection 3 deals 3 Trauma, reducing Ilyan from 3 to 0. Ilyan becomes Downed and Unstable. Mara moves adjacent, Pushes a Stabilize test, gains Exposure 3, and succeeds. Ilyan becomes Stable at 0 Vitality.",
-        "Round 10: Mara uses Emergency Treatment. Her first roll fails, so she spends 1 Cohesion on Commit only if another attempt becomes available and instead Pushes the current roll. The Push succeeds, raises Exposure from 3 to 4, consumes one medical-kit charge, and restores Ilyan to 1 Vitality. Kest then attacks Mara with four bonus dice from Exposure 4. The attack deals fixed Damage 4 minus Protection 3, lowering Mara by 1 Vitality. Exposure changed the chance to hit, not the damage.",
+        "Round 10: Mara spends 1 Cohesion on Commit before attempting Emergency Treatment, adding two dice. Her initial roll still fails, so she Pushes, succeeds, raises Exposure from 3 to 4, consumes one medical-kit charge, and restores Ilyan to 1 Vitality. Kest then attacks Mara with four bonus dice from Exposure 4. The attack deals fixed Damage 4 minus Protection 3, lowering Mara by 1 Vitality. Exposure changed the chance to hit, not the damage.",
         "Round 10 continued: Ilyan fires while Staggered, Pushes, gains Exposure 1, and hits. Damage 3 Disruption ignores Kest's Protection 6. Kest falls from 1 to 0 with two excess damage and gains 2 Death Marks.",
         "Round 11: The plasma conduit ruptures. Mara repairs it, Pushes, and raises Exposure from 4 to its Limit of 5. The repair succeeds first. Overexposure then deals 1 Impact ignoring Protection, removes her Reaction, and resets Exposure to 0. Ilyan attempts to Stabilize Kest without a kit and fails.",
         "At the end of Round 11, Kest fails a Death Test with a die showing 1, gains 2 more Death Marks, and dies. Living Soak cannot help because a Death Test is not physical damage.",
