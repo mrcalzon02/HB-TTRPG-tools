@@ -5,6 +5,20 @@
   const fromRandom = query.get('from') === 'random';
   const fromVeteran = query.get('from') === 'veteran';
   const printRequested = query.get('print') === '1';
+  const SHEET_KEY = 'hb-ttrpg-tools-blacklight-basic-character-v1';
+
+  function readJson(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || 'null');
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function storedSheetField(name) {
+    const sheet = readJson(SHEET_KEY);
+    return sheet?.fields?.[name] || '';
+  }
 
   function insertBeforeReturnLink(actions, link) {
     const returnLink = actions.querySelector('a[href*="index.html"]');
@@ -78,9 +92,17 @@
     return ensureLongRecordField('veteranContinuityRecord', 'BlackLight Veteran Continuity Record', 18);
   }
 
+  function restoreStoredField(field, name) {
+    if (!field || field.value) return;
+    const value = storedSheetField(name);
+    if (value) field.value = value;
+  }
+
   function applyInductionTranscript(saveToSheet = false) {
     const field = ensureTranscriptField();
-    if (!field || !fromInduction) return;
+    if (!field) return;
+    restoreStoredField(field, 'inductionTranscript');
+    if (!fromInduction) return;
     const transcript = localStorage.getItem('hb-ttrpg-tools-blacklight-charles-induction-transcript-v1') || '';
     if (!transcript) return;
     field.value = transcript;
@@ -89,15 +111,17 @@
 
   function applyVeteranRecord(saveToSheet = false) {
     const field = ensureVeteranRecordField();
-    if (!field || !fromVeteran) return;
+    if (!field) return;
+    restoreStoredField(field, 'veteranContinuityRecord');
+    if (!fromVeteran) return;
     try {
-      const record = JSON.parse(localStorage.getItem('hb-ttrpg-tools-blacklight-veteran-reorientation-record-v1') || 'null');
+      const record = readJson('hb-ttrpg-tools-blacklight-veteran-reorientation-record-v1');
       const transcript = record?.plainText || '';
       if (!transcript) return;
       field.value = transcript;
       if (saveToSheet) field.dispatchEvent(new Event('input', { bubbles: true }));
     } catch (_) {
-      // The handoff summary already exists in the stored sheet even if the full record cannot be parsed.
+      // The handoff summary remains in the stored sheet if the standalone record cannot be parsed.
     }
   }
 
