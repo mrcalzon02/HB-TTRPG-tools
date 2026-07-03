@@ -1,0 +1,125 @@
+{
+  "setting": "Blacklight Continuum",
+  "schemaVersion": "2.0.0",
+  "name": "Simple Combat Foundation",
+  "designRule": "Basic combat uses one attack roll, fixed damage, one Protection value, and Vitality loss. Extra attack successes never increase damage.",
+  "coreProcedure": {
+    "start": "Combat begins when opposed actions become time-sensitive enough that acting first changes the result. Establish positions, cover, visible threats, current tracks, and immediate objectives before Initiative.",
+    "initiative": "Initiative equals Finesse + Composure. Act from highest Initiative to lowest. Break ties with higher Awareness, then higher Finesse, then one unmodified d10 roll.",
+    "round": "A round is approximately six seconds. Each participant receives one turn per round.",
+    "turn": "On a turn, take one Standard Action, move up to 8 meters, and perform one Minor Interaction in any order. A Standard Action may become another Move or Minor Interaction. Unused actions are lost.",
+    "reaction": "A character has one Reaction per round. It refreshes at the start of that character's turn and may be used only when a rule, capability, item, or Cohesion option allows it.",
+    "minorInteraction": "Draw or stow one accessible item, open or close one unsecured adjacent closure, change posture, shift form when permitted, speak briefly, or press one adjacent control."
+  },
+  "attackProcedure": {
+    "basicLoop": [
+      "Build the attack pool from the printed Attribute and Skill.",
+      "Add one die for every Exposure point currently carried by the target.",
+      "Subtract dice for range, cover, conditions, and equipment.",
+      "Roll against Defense Difficulty, which equals ceiling(Guard / 2), minimum 1.",
+      "On a hit, use the attack's fixed Damage rating. Extra successes add nothing.",
+      "Subtract one applicable Protection value. Disruption normally ignores Protection.",
+      "Remove one Vitality for each point remaining."
+    ],
+    "pools": [
+      "Unarmed or forceful melee: Force + Close Combat.",
+      "Precise melee: Finesse + Close Combat.",
+      "Ordinary ranged weapon: Finesse + Firearms.",
+      "Heavy weapon: Force + Heavy Weapons unless the item states otherwise.",
+      "Damaging capability: use the pool printed by the capability."
+    ],
+    "defenseDifficulty": "Defense Difficulty equals ceiling(Guard / 2), minimum 1.",
+    "hit": "Successes equal to or above Defense Difficulty hit. Extra successes do not change damage.",
+    "fixedDamage": "Every weapon and damaging ability has one fixed Damage rating.",
+    "protection": "Impact and Trauma subtract one applicable Protection value from fixed Damage, minimum 0. Disruption ignores ordinary Protection unless a rule explicitly protects against it.",
+    "vitalityLoss": "Every point remaining after Protection removes 1 current Vitality.",
+    "cover": [
+      "Partial Cover: subtract 1 attack die.",
+      "Substantial Cover: subtract 2 attack dice.",
+      "Total Cover: no direct attack unless an effect crosses or destroys it."
+    ],
+    "range": [
+      "Adjacent: 0-2 meters; no penalty.",
+      "Short: 3-20 meters; no penalty.",
+      "Medium: 21-50 meters; subtract 1 attack die.",
+      "Long: 51-100 meters; subtract 2 attack dice.",
+      "Beyond Long: unavailable unless explicitly allowed."
+    ]
+  },
+  "sampleDamageRatings": [
+    {"attack": "Unarmed strike", "damage": 2, "type": "Impact"},
+    {"attack": "Baton, club, or forceful tool", "damage": 3, "type": "Impact"},
+    {"attack": "Compact pistol", "damage": 4, "type": "Trauma"},
+    {"attack": "Rifle or heavy cutting weapon", "damage": 5, "type": "Trauma"},
+    {"attack": "Heavy firearm or anti-materiel weapon", "damage": 6, "type": "Trauma"},
+    {"attack": "Arc, identity, or noospheric weapon", "damage": 3, "type": "Disruption"}
+  ],
+  "damageAndVitality": {
+    "impact": "Impact represents bruising, blunt force, shock, fatigue, and nonpenetrating injury.",
+    "trauma": "Trauma represents penetration, severe laceration, burning, crushing, organ injury, and other dangerous bodily harm.",
+    "disruption": "Disruption represents memory damage, identity fracture, noospheric injury, hostile cognition, and damage to functional continuity.",
+    "sharedTrack": "All damage types remove points from the same current Vitality track. Record type separately because healing and defenses may treat them differently.",
+    "noWoundedBand": "At 1 or more Vitality, act normally unless a specific condition says otherwise. There is no universal Wounded state or penalty.",
+    "healing": "Removing one recorded damage point restores one current Vitality. Current Vitality cannot exceed Maximum."
+  },
+  "exposure": {
+    "meaning": "Exposure is how open, predictable, or easy to target the character has become.",
+    "gain": [
+      "After a Push resolves, gain 1 Exposure.",
+      "A hazard, capability, or Complication adds Exposure only when it explicitly says so."
+    ],
+    "combatEffect": "Every Exposure point on a target adds one die to attacks against that target. Exposure affects accuracy only, never damage or Protection.",
+    "push": "Reroll failed dice up to Resolve once. Keep the new results and gain 1 Exposure after resolution.",
+    "limit": "When Exposure reaches its Limit, finish the action and resolve Overexposure.",
+    "overexposure": "Suffer 1 Impact ignoring Protection, lose the current Reaction, and reset Exposure to 0. Exposure has no Warning or Critical band.",
+    "recovery": [
+      "Ten uninterrupted minutes free from combat, pursuit, and active hazards sets Exposure to 0.",
+      "A Full Rest sets Exposure to 0."
+    ]
+  },
+  "cohesion": {
+    "meaning": "Cohesion is deliberately spent to stay effective under immediate danger. It is not another automatic damage track.",
+    "spendingLimit": "Use only one Cohesion option on the same trigger or test unless a capability explicitly says otherwise.",
+    "options": [
+      {"name": "Commit", "cost": 1, "timing": "Before rolling a test", "effect": "Add two dice to that test."},
+      {"name": "Brace", "cost": 1, "timing": "After Protection", "effect": "Reduce remaining Impact or Disruption by 1. Brace cannot reduce Trauma."},
+      {"name": "Anchor", "cost": 1, "timing": "Reaction when an ally makes a Death Test or a test against involuntary control", "effect": "The ally rerolls up to two failed dice and keeps the new results."},
+      {"name": "Refuse Collapse", "cost": 2, "timing": "Once per scene when damage would reduce positive Vitality to 0", "effect": "Remain at 1 Vitality and become Staggered until the end of the next turn. It cannot stop explicit instant death or be used while Downed."}
+    ],
+    "recovery": [
+      "Once per scene after immediate danger ends, ten uninterrupted minutes regrouping with a willing ally restores 1 Cohesion.",
+      "A completed Full Rest restores Cohesion to Maximum."
+    ]
+  },
+  "pressureInCombat": {
+    "rule": "Pay Resource, mark printed Pressure, resolve the ability, then resolve a Crisis if Pressure reached its Limit.",
+    "thresholdTiming": "Warning or Critical effects begin after the action that crossed the threshold resolves. A Critical rule already active before the expenditure applies normally.",
+    "persistence": "Pressure remains after combat until the Archetype's printed recovery methods reduce it.",
+    "distinction": "Exposure makes enemies more accurate. Pressure creates the Archetype's specific loss of control, mutation, hunger, instability, or overload."
+  },
+  "shapechangerSoak": {
+    "name": "Living Soak",
+    "singleDefenseRule": "Living Soak modifies the Shapechanger's one Protection value. It creates no second roll or second damage step.",
+    "socialForm": "Add Archetype Rating to Protection against Impact only.",
+    "huntingAndWarForms": "Add Archetype Rating to Protection against Impact and Trauma.",
+    "completeNegation": "If fixed Damage does not exceed the resulting Protection, the hit deals 0 damage.",
+    "excludedEffects": "Disruption, Pressure, Exposure, and Death Marks bypass Living Soak."
+  },
+  "conditions": {
+    "prone": "Standing costs the Move. Adjacent melee attacks gain one die; ranged attacks from more than 3 meters lose one die.",
+    "restrained": "Movement is 0. Attacks against the target gain one die. Most physical tests lose two dice except Break Free.",
+    "staggered": "The character has no Reaction and loses one die from tests until the condition ends.",
+    "downed": "Current Vitality is 0. The character is Prone, cannot act or move, and is Unstable unless stabilized.",
+    "stable": "A Stable character remains Downed at 0 Vitality but makes no Death Tests. New damage makes the character Unstable again."
+  },
+  "downedDyingAndDeath": {
+    "reachingZero": "When damage reduces Vitality to 0, become Downed and Unstable. Every damage point remaining after Vitality reaches 0 adds 1 Death Mark. At 3 Death Marks, the character dies immediately.",
+    "gracePeriod": "A character reduced to 0 makes no Death Test during that round. If still Unstable, the first Death Test occurs at the end of the following round.",
+    "deathTest": "Roll Resilience + Composure at difficulty 2. Success adds no Death Mark. Failure adds 1. A failed roll containing a 1 adds 2 instead. The test may be Pushed or receive Anchor.",
+    "furtherDamage": "A new damaging hit against a Downed character adds 1 Death Mark, or 2 when the hit deals 3 or more damage.",
+    "stabilize": "Standard Action, adjacent target. Test Reason + Medicine at difficulty 2 with a field medical kit or 3 without one. Success makes the target Stable and removes 1 Death Mark.",
+    "emergencyTreatment": "Standard Action, adjacent Stable target at 0 Vitality, one field medical kit charge. Test Reason + Medicine at difficulty 3. Success removes one Impact or Trauma, restores 1 Vitality, removes 1 Death Mark, ends Downed, and applies Staggered through the target's next turn.",
+    "death": "At 3 Death Marks the character is dead. Ordinary healing, Cohesion, Stabilize, Emergency Treatment, and retroactive declarations cannot reverse death.",
+    "equalApplication": "Player characters, allies, neutral characters, and enemies use the same Downed and death rules unless a recorded capability says otherwise."
+  }
+}
