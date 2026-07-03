@@ -1,0 +1,214 @@
+{
+  "setting": "Blacklight Continuum",
+  "schemaVersion": "1.0.0",
+  "name": "Social Conflict Foundation",
+  "designRule": "Social conflict resolves opposed objectives through facts, leverage, credibility, bargains, pressure, and explicit consequences. It does not inflict social hit-point damage, rewrite beliefs, create consent, or force a character to perform an impossible or fundamentally prohibited act.",
+  "whenToUse": {
+    "ordinaryConversation": "Do not begin social conflict merely because characters are speaking or disagreeing. Ordinary roleplay, honest questions, routine purchases, friendly requests, and uncontested instructions require no conflict procedure.",
+    "socialConflict": "Use social conflict when at least two participants have incompatible objectives, withholding or delay has meaningful consequences, and success or failure will materially change access, information, obligations, reputation, resources, authority, or immediate danger.",
+    "endCondition": "End the procedure when the objective is granted, withdrawn, transferred, made impossible, openly escalated into another kind of conflict, or abandoned by the acting side."
+  },
+  "sceneSetup": {
+    "steps": [
+      "State each side's immediate objective in one sentence.",
+      "State what each side refuses to surrender voluntarily.",
+      "Name the concrete consequence of delay or failure.",
+      "Write one to three Objections protecting each major objective.",
+      "Record all starting Leverage that already exists in the fiction.",
+      "Create a Clock only when time itself produces a defined consequence."
+    ],
+    "objective": "An objective is an exact result such as obtain the tariff schedule, receive access to a record, secure a written delay, obtain a confession, prevent a signature, persuade a witness to testify, or transfer the matter to another authority. 'Make them agree with me' is not an adequate objective.",
+    "nonnegotiable": "A nonnegotiable is a defining conviction, legal incapacity, lack of authority, absence of knowledge, safety boundary, or other fact that ordinary social actions cannot erase. Only a capability explicitly able to alter that limitation may do so.",
+    "objections": "An Objection is a specific factual, emotional, procedural, financial, or political reason the target refuses a concession. Routine objectives normally have one Objection, significant objectives have two, and major objectives have three. The same Objection cannot be broken twice, and a broken Objection cannot be reused under different wording.",
+    "concessions": "A Concession is one exact thing a participant agrees to do, reveal, stop, sign, delay, permit, or transfer. A successful social action cannot secure more than the stated Concession unless a critical benefit explicitly adds a second narrow result.",
+    "clock": "A Clock has two to six segments. Every segment must correspond to a defined event such as another fee posting, security arrival, a witness leaving, a market closing, or a transmission completing. A Clock never advances merely because the Game Moderator wants more tension."
+  },
+  "socialDifficulty": {
+    "formula": "Social Difficulty equals ceiling((Resolve + Composure) / 2), minimum 1.",
+    "meaning": "Social Difficulty measures the target's ability to remain deliberate, recognize pressure, and avoid being moved merely because someone speaks forcefully.",
+    "groups": "When one action directly targets a group, use the highest Social Difficulty among members who can coordinate and understand the exchange. A divided group may be addressed as separate targets.",
+    "factsAreNotDefense": "Social Difficulty does not allow a character to deny a proven fact, invent authority they do not possess, or know information they have never learned."
+  },
+  "exchangeStructure": {
+    "exchange": "An exchange is enough conversation and action for each materially involved participant to take one significant social action. It may represent seconds during a confrontation or several minutes during a bureaucratic meeting.",
+    "order": "When exact order matters, use normal Initiative. Otherwise alternate sides and let each side choose its internal speaking order.",
+    "freeDialogue": "Players and the Game Moderator may speak freely around rolls. A roll resolves a declared action and consequence; it does not replace the words, evidence, offer, or threat used in the fiction.",
+    "repeatArguments": "Repeating the same argument without new Leverage, a different approach, or a changed situation cannot break another Objection and normally requires no roll."
+  },
+  "leverage": {
+    "definition": "Leverage is a concrete fact that makes a social approach more effective. It must be named and recorded. General confidence, attractiveness, volume, and supernatural appearance are not Leverage unless a capability explicitly makes them so.",
+    "types": [
+      {
+        "name": "Evidence",
+        "examples": "Records, timestamps, witnesses, physical proof, contradictory statements, sensor logs, or preserved communications."
+      },
+      {
+        "name": "Authority",
+        "examples": "Jurisdiction, credentials, a valid regulation, command responsibility, an appeal right, or another person's power to review the decision."
+      },
+      {
+        "name": "Interest",
+        "examples": "Money, reputation, workload, liability, safety, political survival, professional success, or another outcome the target values."
+      },
+      {
+        "name": "Relationship",
+        "examples": "Trust, loyalty, gratitude, shared history, mutual obligation, affection, or fear of harming a valued relationship."
+      },
+      {
+        "name": "Need",
+        "examples": "Information, medicine, transport, protection, time, repair, legitimacy, or another requirement the target cannot easily replace."
+      },
+      {
+        "name": "Alternative",
+        "examples": "A different buyer, route, authority, witness, service, legal process, escape, or credible ability to walk away."
+      }
+    ],
+    "creation": "A successful Read Motive, Establish Fact, Appeal, Bargain, or relevant capability may create one named Leverage. Evidence already established in play may begin the scene as Leverage without a roll.",
+    "use": "Each named Leverage may be invoked once per scene. Before a relevant roll, invoke it for two bonus dice. After a relevant successful roll, invoke it instead to break one related Objection or secure one narrow Concession that the success could plausibly produce.",
+    "limits": "A participant may hold any number of facts, but no test receives more than two bonus dice from Leverage. A fact cannot be invoked again merely by renaming it. False Leverage collapses when disproven and may make its user Discredited."
+  },
+  "coreActions": [
+    {
+      "name": "Read Motive",
+      "pool": "Awareness + Empathy or Awareness + Investigation",
+      "effect": "On success, learn one exact fact chosen from: the target's immediate objective; the target's strongest Objection; one interest the target is protecting; one false assumption guiding the target; whether the target expects violence; or what outcome the target fears most in the current scene. The answer must be useful and truthful.",
+      "critical": "Learn one additional fact or create one relevant Interest, Need, or Relationship Leverage.",
+      "failure": "Learn nothing certain. A Complication may cause one visible reaction to be misread until contradicted."
+    },
+    {
+      "name": "Establish Fact",
+      "pool": "Reason + Investigation, Xenoculture, Security, Noospherics, Science, or another directly relevant Skill",
+      "effect": "Present, locate, verify, or explain a fact. On success, create Evidence or Authority Leverage, remove a false assumption from the scene, or make one verified fact impossible to deny without becoming Discredited.",
+      "critical": "Create the Leverage and also learn who can formally act on it or what record proves its enforcement path.",
+      "failure": "The fact remains unproven in the current exchange. A Complication may expose the evidence source or reveal a gap that must be repaired."
+    },
+    {
+      "name": "Appeal",
+      "pool": "Presence + Empathy or Presence + Negotiation",
+      "effect": "Ask for cooperation based on values, relationship, fairness, shared risk, or mutual interest. On success, create Relationship, Need, or Interest Leverage, or secure one voluntary narrow Concession after its related Objection has been broken.",
+      "critical": "The target states one condition that would make a larger Concession possible, or grants a second closely related minor Concession.",
+      "failure": "The appeal does not move the target. A Complication may reveal the acting character's urgency or emotional stake."
+    },
+    {
+      "name": "Bargain",
+      "pool": "Presence + Negotiation",
+      "effect": "Offer a concrete exchange with stated performance, payment, deadline, and exit. On success, create Interest or Need Leverage, or secure one Concession after its Objection has been broken. The target cannot be bound to an unstated term.",
+      "critical": "Choose one: improve the offered term without increasing your cost; identify a hidden term before acceptance; or require the agreement to be recorded in a durable form.",
+      "failure": "The offer is rejected or countered. A Complication may reveal the maximum price or sacrifice you appeared willing to accept."
+    },
+    {
+      "name": "Mislead",
+      "pool": "Guile + Deception or Guile + Performance",
+      "effect": "On success, conceal one immediate objective, create one false assumption, or make one true detail appear irrelevant. Mislead cannot create physical evidence, legal authority, consent, knowledge the speaker does not possess, or belief in something immediately disproven by the target's direct senses.",
+      "critical": "The false assumption survives the first weak contradiction or creates one temporary Alternative Leverage while it remains credible.",
+      "failure": "The target does not accept the framing. A Complication makes the speaker Discredited or exposes the hidden objective."
+    },
+    {
+      "name": "Expose Contradiction",
+      "pool": "Reason + Investigation",
+      "requirement": "Name two statements, records, duties, or observable facts that cannot all remain true.",
+      "effect": "On success, break one related Objection. The target becomes Discredited when the contradiction concerns their truthfulness, authority, or stated procedure.",
+      "critical": "Also create Evidence or Authority Leverage and prevent the target from using Delay or Deflect during its next action.",
+      "failure": "The contradiction is incomplete or not yet attributable. A Complication may allow the target to reframe one source as unreliable."
+    },
+    {
+      "name": "Pressure",
+      "pool": "Presence + Command or Guile + Streetwise",
+      "requirement": "State the consequence you can actually cause and the exact Concession demanded. Empty threats provide no roll.",
+      "effect": "On success, the target must choose one: grant the Concession; withdraw or transfer authority and create a durable record of the refusal; or openly escalate through a lawful, political, supernatural, or physical action and reveal the objective driving that escalation. The acting character gains 1 Exposure after resolution because the pressure and stakes are now visible.",
+      "critical": "The target cannot choose a consequence it lacks the authority or means to perform, and any formal escalation immediately identifies the responsible decision-maker.",
+      "failure": "The target refuses without conceding. A Complication may let the target use the stated threat as Evidence or Authority Leverage."
+    },
+    {
+      "name": "Delay or Deflect",
+      "pool": "Guile + Deception or Presence + Command",
+      "effect": "On success, advance one relevant Clock by one segment, redirect one unanswered question to a later exchange, or force the other side to spend its next lead action identifying the correct authority. Delay cannot erase a filed request, broken Objection, durable record, or explicit deadline already established in the fiction.",
+      "critical": "Also create one temporary false assumption about who has authority or when action is required.",
+      "failure": "No time is gained. A Complication creates Evidence of obstruction or identifies the actual authority."
+    },
+    {
+      "name": "Assist",
+      "pool": "Use the Attribute + Skill that explains the assistance",
+      "effect": "On success, grant one die to an ally's next related social action before your next turn, or two dice when the assisting Skill is 3 or higher. A test receives no more than two assistance dice.",
+      "critical": "The assistance also supplies one specific fact, witness, translation, or demonstration needed to make the lead action possible.",
+      "failure": "No bonus is granted. A Complication may interrupt, contradict, or reveal disagreement within the group."
+    },
+    {
+      "name": "Withdraw or Transfer",
+      "pool": "Normally no roll",
+      "effect": "End personal participation, transfer the issue to another authority, request formal review, or leave the scene when physically and legally possible. Withdrawal does not erase records, obligations, concessions, clocks, or consequences already created."
+    }
+  ],
+  "securingConcessions": {
+    "procedure": [
+      "Name the exact Concession being requested.",
+      "Identify the Objection currently preventing it.",
+      "Use new Leverage, a different valid approach, or a changed situation to address that Objection.",
+      "Resolve the relevant social action against Social Difficulty.",
+      "On success, invoke related Leverage to break the Objection or secure the Concession.",
+      "When all related Objections are broken, a successful Appeal, Bargain, or Pressure must produce the stated choice or result."
+    ],
+    "noGrinding": "A participant cannot make the same roll repeatedly until enough successes appear. A failed approach may be attempted again only after new evidence, leverage, assistance, changed stakes, a different Skill, or a meaningful fictional change.",
+    "lackOfKnowledge": "A character cannot reveal information they genuinely do not possess. A successful action may instead force them to identify who has it, open the relevant record, submit a query, transfer authority, or create a formal admission that the information is unavailable.",
+    "lackOfAuthority": "A character cannot grant a Concession beyond their authority. A successful action may force a referral, documented refusal, identification of the responsible authority, or another result actually within reach."
+  },
+  "criticalBenefits": {
+    "rule": "When a successful social roll contains at least one final die showing 10, choose one critical benefit unless the selected action already provides a more specific critical result.",
+    "options": [
+      "Learn one additional exact fact directly relevant to the action.",
+      "Create one relevant Leverage without spending the success on it.",
+      "Prevent the target's immediate counteraction.",
+      "Reduce your current Exposure by 1 after the action resolves.",
+      "Require the result to be witnessed, logged, signed, or otherwise made durable when that is possible."
+    ]
+  },
+  "exposureAndCohesion": {
+    "socialExposure": "Every point of Exposure on a character adds one die to social actions made directly against that character. In a social scene, Exposure represents revealed urgency, ignorance, anger, contradiction, desperation, divided loyalties, or a visible need to succeed.",
+    "push": "A social test may be Pushed under the normal rules. Gain 1 Exposure after the final roll resolves whether the Push succeeds or fails.",
+    "limit": "Use the normal Exposure Limit and Overexposure procedure. In a purely social scene, any resulting Non-Lethal/Bashing damage represents stress, panic, exhaustion, or physiological overload rather than a physical strike.",
+    "commit": "Cohesion: Commit may add two dice before a social test.",
+    "anchor": "Cohesion: Anchor may support an ally resisting coercion, domination, involuntary agreement, or an attempt to erase their stated boundary when the underlying rule permits resistance.",
+    "brace": "Cohesion: Brace does not cancel reputational loss, a broken Objection, or a social Concession. It applies only to the damage types printed in its rule."
+  },
+  "conditions": {
+    "credible": "A Credible character gains one die on the next fact-based Establish Fact, Expose Contradiction, Bargain, or Pressure action. Credible ends after providing that die or when the character is caught knowingly presenting false evidence.",
+    "discredited": "A Discredited character loses one die from actions relying on personal truthfulness, procedural authority, or claimed expertise. The condition ends when the contradiction is corrected, responsibility is accepted, or an independent source verifies the claim.",
+    "committedRecord": "A Committed Record is a witnessed, signed, logged, or transmitted statement that cannot be casually withdrawn. Contradicting it later automatically supplies Evidence Leverage.",
+    "falseAssumption": "A false assumption changes decisions only while credible. Direct evidence, an applicable capability, or a successful Establish Fact action removes it immediately."
+  },
+  "resolutionChoices": {
+    "grant": "Grant the exact Concession and continue the scene with the new fact established.",
+    "withdraw": "End personal participation, transfer authority, or request review. This creates a record when procedure normally records the transfer or refusal.",
+    "escalate": "Take an overt action that changes the conflict: summon security, file a charge, expose a secret, call a superior, activate a supernatural power, end negotiations, or initiate physical conflict. The escalation must be within the character's actual capability and carries its normal consequences.",
+    "concedeIsNotConversion": "Granting a Concession does not require the target to like, trust, forgive, admire, or agree morally with the other side. It means the declared objective was made preferable, unavoidable, formally required, or less costly than resistance."
+  },
+  "hardLimits": {
+    "playerSafety": "Social conflict rules apply to characters, never to the real players at the table. They cannot be used to pressure a player into unwanted roleplay, disclosure, romance, humiliation, or continued participation. A request to stop, pause, fade out, or change subject overrides the scene procedure.",
+    "consent": "Ordinary social actions cannot create informed consent, romantic or sexual consent, surrender of bodily autonomy, or acceptance of an agreement whose material terms remain hidden.",
+    "mindControl": "Supernatural domination, memory editing, compulsion, and binding contracts use their own explicit ability rules. They are not ordinary social successes and do not become permissible merely because the speaker rolled well.",
+    "knowledge": "No social result creates knowledge the target does not possess. It can compel a search, referral, admission, record request, or identification of the knowledgeable party.",
+    "authority": "No social result grants authority the target does not possess. It can reveal the limit, force documentation, or identify the proper authority.",
+    "lawAndRights": "No rule authorizes real harassment, coercion, unlawful surveillance, privacy violation, fraud, threats, or abuse of authority by players or the Game Moderator."
+  },
+  "moderatorProcedure": {
+    "beforePlay": [
+      "Write each side's objective and consequence.",
+      "Assign Social Difficulty from recorded Resolve and Composure.",
+      "Write one to three exact Objections rather than a vague refusal.",
+      "Record what the target actually knows and can authorize.",
+      "Record the target's hidden objective, strongest interest, and false assumptions.",
+      "Define any Clock and what occurs when it fills."
+    ],
+    "duringPlay": [
+      "After a successful Read Motive or information capability, provide the exact printed fact immediately.",
+      "Do not replace a broken Objection with an improvised new objection merely to prolong the scene.",
+      "Do not make the same evidence prove itself repeatedly.",
+      "Apply Exposure to opposing social pools exactly as recorded.",
+      "When a participant lacks knowledge or authority, provide the strongest result they can actually produce: referral, record, search, transfer, admission, or escalation."
+    ],
+    "afterPlay": [
+      "Record Concessions, written agreements, damaged relationships, new contacts, exposed misconduct, formal charges, and unresolved clocks.",
+      "Award experience for meaningful character portrayal, risk, discovery, courage, restraint, sacrifice, or development under the campaign advancement rules. Do not award experience merely for dominating another player or extending an argument."
+    ]
+  }
+}
