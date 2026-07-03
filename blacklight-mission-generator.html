@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight Continuum Mission Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-mission-generator.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <header class="mission-header no-print">
+      <div>
+        <p class="eyebrow">Blacklight Continuum · Operational contract generator</p>
+        <h1>Generate the Mission Charles Should Have Explained</h1>
+        <p>Build a complete BlackLight operation with a player-facing disclosure, explicit consent risks, operational scenes, deadline and Exposure clocks, key personnel, hidden client motives, compromised intelligence, a meaningful twist, extraction pressure, consequences, and a Moderator-only truth packet.</p>
+      </div>
+      <div class="mission-actions">
+        <a class="secondary-action" href="blacklight-veteran-reintroduction.html">Veteran Reorientation</a>
+        <a class="secondary-action" href="blacklight-random-character.html">Random Character Generator</a>
+        <a class="secondary-action" href="blacklight-equipment-catalog.html">Equipment Catalog</a>
+        <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+      </div>
+    </header>
+
+    <section class="mission-controls no-print" aria-labelledby="mission-controls-title">
+      <div class="section-heading">
+        <p class="eyebrow">Generation controls</p>
+        <h2 id="mission-controls-title">Operation Parameters</h2>
+        <p>A repeated seed recreates the same mission when the same controls and reroll counters are used. Select one of the twelve legacy mission patterns to preserve its structure while changing the people, place, opposition, and truth behind the assignment.</p>
+      </div>
+      <div class="mission-control-grid">
+        <label>Mission DNA<select id="mission-pattern"><option value="random">Random Legacy Pattern</option></select></label>
+        <label>Operation Type<select id="mission-operation"><option value="random">Random Operation Type</option></select></label>
+        <label>Continuum Layer<select id="mission-layer"></select></label>
+        <label>Threat Tier<select id="mission-threat"></select></label>
+        <label>Team Scale<select id="mission-team"></select></label>
+        <label>Visibility Doctrine<select id="mission-visibility"></select></label>
+        <label class="mission-seed-field">Seed<input id="mission-seed" type="text" placeholder="Leave blank for a new mission seed"></label>
+      </div>
+      <div class="mission-checks">
+        <label><input id="mission-force-compromised" type="checkbox"> Force compromised, stale, or weaponized intelligence</label>
+        <label><input id="mission-force-public" type="checkbox"> Force a public-exposure complication</label>
+        <label><input id="mission-force-charles" type="checkbox"> Give Charles a concealed strategic interest</label>
+      </div>
+      <div class="mission-control-actions">
+        <button id="mission-generate" class="primary-action" type="button">Generate Complete Mission</button>
+        <button id="mission-reroll-contract" class="secondary-action" type="button" disabled>Reroll Contract</button>
+        <button id="mission-reroll-site" class="secondary-action" type="button" disabled>Reroll Site and Security</button>
+        <button id="mission-reroll-truth" class="secondary-action" type="button" disabled>Reroll Hidden Truth</button>
+        <button id="mission-reroll-cast" class="secondary-action" type="button" disabled>Reroll Cast</button>
+      </div>
+      <div class="mission-control-actions">
+        <button id="mission-copy" class="secondary-action" type="button" disabled>Copy Player Briefing</button>
+        <button id="mission-export" class="secondary-action" type="button" disabled>Export Mission JSON</button>
+        <button id="mission-print-player" class="secondary-action" type="button" disabled>Print Player Briefing</button>
+        <button id="mission-print-full" class="secondary-action" type="button" disabled>Print Full Moderator Dossier</button>
+      </div>
+      <p id="mission-status" class="mission-status" role="status">Loading mission patterns, clients, locations, opposition, complications, and BlackLight disclosure rules…</p>
+    </section>
+
+    <section id="mission-output" class="mission-output" aria-live="polite">
+      <div class="mission-empty">The operational generator is loading the BlackLight mission library.</div>
+    </section>
+  </main>
+
+  <script src="blacklight-mission-generator.js"></script>
+</body>
+</html>
