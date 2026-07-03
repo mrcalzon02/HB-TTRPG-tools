@@ -1,0 +1,59 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "description": "Rules and usage entry for the seeded BlackLight mission generator derived from the recurring structure of twelve established Charles-era example missions.",
+  "entries": [
+    {
+      "id": "blacklight-mission-generator",
+      "title": "BlackLight Mission Generator",
+      "category": "Moderator Tools",
+      "summary": "A seeded operation generator that produces a player-facing disclosure and a separate Moderator dossier containing the hidden client need, twist, clues, cast, clocks, scene structure, consequences, and continuation hooks.",
+      "body": [
+        "The mission generator does not merely combine a random client with a random building. It constructs a complete operational relationship: who wants the work, what they say they want, what the target actually contains, why the timing matters, what the opposition protects, which facts are unknown, which known facts have been declared redacted, what changes the mission, and how the team can leave afterward.",
+        "Its twelve Mission DNA patterns are abstracted from established example operations: a private archive about to be relocated, a magically reinforced communications relay, a military component missing because of bad intelligence, a compromised diplomatic cover, a biometric laboratory holding dangerous research, an industrial operation concealing a second enterprise, an air-gapped archive containing a targeted weapon, a decoy artwork connected to a larger project, a palace protected by an independent mercenary force, a subterranean technology vault, a collection containing multiple convincing fakes, and a server whose security functions as an evaluation rather than a lock.",
+        "The generated player briefing follows the BlackLight Company arrangement. It states the objective, target category, location, operating window, jurisdiction, identity or memory risk, supernatural obligation, no-return risk, civilian exposure, support, extraction, known unknowns, and declared redactions. Unknown information is labeled unknown. Known but withheld information is represented by a redaction category rather than silently omitted.",
+        "The Moderator dossier separately records the client’s actual need, ethical concern, Charles or strategic interest, primary twist, warning clues, additional complication, public-exposure event, cast, clocks, and aftermath. These truths are revealed through play rather than read aloud during the briefing.",
+        "When a twist changes the real target, location, client motive, supernatural obligation, identity risk, civilian exposure, or return path, the mission framework requires renewed consent. A principled refusal, negotiated alternative, or protective withdrawal is a valid result rather than an automatic campaign failure.",
+        "A repeated seed with unchanged controls recreates the same operation. Contract, site, hidden truth, and cast can be rerolled independently. Player-only printing and copying exclude Moderator material; full-dossier printing and JSON export preserve the complete mission."
+      ],
+      "tables": [
+        {
+          "title": "Generated Mission Structure",
+          "columns": ["Layer", "Generated Content"],
+          "rows": [
+            ["Contract", "Mission code, codename, client, stated objective, target, asset, operation type, Continuum layer, threat tier, team scale, and visibility doctrine"],
+            ["Disclosure", "Jurisdiction, identity and memory risk, supernatural obligations, no-return risk, civilian exposure, support, extraction, known unknowns, and declared redactions"],
+            ["Site", "Global location, specific facility type, environment, opposition, three operational barriers, insertion method, support package, and extraction method"],
+            ["Pressure", "Deadline clock, Exposure and response clock, scheduled reinforcement or public-exposure pressure"],
+            ["Hidden truth", "Client’s actual need, ethical concern, Charles interest, twist, warning clue, secondary complication, reward, and aftermath"],
+            ["Cast", "Client representative, site authority, civilian complication, opposition specialist, and uncertain third party"],
+            ["Play structure", "Seven functional scenes from disclosure and acceptance through extraction and aftermath"],
+            ["Resolution", "Full success, compromised success, partial success, principled refusal, and failure with continuity"],
+            ["Output", "Player briefing copy, player-only print, complete Moderator print, and full JSON export"]
+          ]
+        },
+        {
+          "title": "Mission DNA Patterns",
+          "columns": ["Pattern", "Core Structural Lesson"],
+          "rows": [
+            ["The Relocating Archive", "A quiet acquisition becomes urgent because armed movers will remove the objective."],
+            ["The Reinforced Relay", "A visible target is protected by supernatural security, scheduled reinforcements, and public witnesses."],
+            ["The Missing Component", "Bad intelligence places the real sabotage target in a different building beside greater danger."],
+            ["The Compromised Cover", "The opposition already knows enough about the cover identities to turn entry into a test."],
+            ["The Biometric Laboratory", "Security protects information or life that is more dangerous than the building itself."],
+            ["The Industrial Front", "The stated harmful operation conceals a second enterprise and creates conflicting priorities."],
+            ["The Air-Gapped Weapon Archive", "Physical isolation hides data intended to target a specific supernatural population or entity."],
+            ["The Decoy Artifact", "The requested object is false and the real asset is tied to the client’s larger hidden project."],
+            ["The Palace Mercenary Screen", "An independent armed faction creates a third political objective inside a household conflict."],
+            ["The Underground Technology Vault", "The public facility is only the outer shell and the security is evaluating potential users."],
+            ["The Counterfeit Masterpiece", "Several authentic-looking assets force the team to determine what quality actually matters."],
+            ["The Puzzle-Guarded Server", "The system’s barriers are an interview or coercion mechanism rather than a simple lock."]
+          ]
+        }
+      ],
+      "tags": ["mission generator", "Charles", "BlackLight Company", "briefing", "redactions", "twists", "clocks", "Moderator tools", "seeded generation"],
+      "relatedEntries": ["blacklight-veteran-reintroduction", "campaign-play-rules", "blacklight-random-character-generator"]
+    }
+  ]
+}
