@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# This validator is intentionally dependency-free so it can run in local development and GitHub Actions.
+
 import json
 from pathlib import Path
 
