@@ -1,0 +1,42 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "description": "Rules entry for the seeded legal-character generator and its relationship to standard character creation.",
+  "entries": [
+    {
+      "id": "blacklight-random-character-generator",
+      "title": "Random Operative Generator",
+      "category": "Character Creation",
+      "summary": "A seeded generator that creates complete Rating 1 operatives under the same standard package used by guided creation and transfers them directly into the Basic Character Sheet.",
+      "body": [
+        "The generator is an alternative interface for standard character creation, not a separate creation method. Every generated operative begins with all nine Attributes at 1 and distributes exactly nine additional Attribute Points, for eighteen total dots with no Attribute above 4.",
+        "Every generated operative receives exactly twenty-four Skill Points. One role-appropriate Signature Skill is set to 4, every other Skill remains at 3 or lower, and two specializations are selected only from Skills rated 2 or higher.",
+        "The generator chooses one Operational Frame, one Archetype at Rating 1, all required integrated variant records, the Archetype's automatic Starting Ability, and two additional eligible Rank 1 abilities purchased with the two Starting Ability Points.",
+        "Equipment is selected from the established modern, historical, future, scavenged, survival, relic, and alien-template catalogs. The No Return Signal opening override remains in effect: generated equipment represents training and preferred requisition unless the opening scene explicitly provides it.",
+        "A seed recreates the same complete operative when the same controls are used. Identity, statistics, purchased abilities, equipment, and relationships can also be rerolled independently without changing the other generated sections.",
+        "Transfer to Character Sheet writes the existing blacklight-continuum-basic-character schema to the same local record used by manual and guided creation. The resulting sheet remains editable, printable, and exportable."
+      ],
+      "tables": [
+        {
+          "title": "Generated Standard Package",
+          "columns": ["Component", "Generated Rule"],
+          "rows": [
+            ["Attributes", "18 total dots; ratings 1–4 at creation"],
+            ["Skills", "24 total points; one Signature Skill at 4; all others 0–3"],
+            ["Specializations", "Two, each attached to a Skill rated 2 or higher"],
+            ["Operational Frame", "One of twelve role profiles with weighted Attributes, Skills, function, and equipment"],
+            ["Archetype", "One of six at Rating 1 with Resource, Pressure, weakness, and innate abilities"],
+            ["Integrated Choices", "Required lineage, variant, Source, Conviction, Paradigm, Order, or other records"],
+            ["Starting Abilities", "One automatic ability plus two purchased Rank 1 abilities"],
+            ["Equipment", "Primary weapon or tool, protection, field kit, two supplies, and personal object"],
+            ["Relationships", "All eight required character-creation prompts plus affiliation, safe site, and complication"],
+            ["Output", "Printable preview, exportable JSON, or direct Basic Character Sheet transfer"]
+          ]
+        }
+      ],
+      "tags": ["random character", "generator", "seeded", "standard creation", "attributes", "skills", "archetype", "equipment", "character sheet"],
+      "relatedEntries": ["blacklight-character-creation", "equipment-foundation", "blacklight-basic-archetypes"]
+    }
+  ]
+}
