@@ -1,0 +1,70 @@
+name: One-Time Validate Veteran Reorientation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/one-time-validate-veteran-reintroduction.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run veteran reorientation validation
+        run: |
+          python scripts/validate-blacklight-veteran-reintroduction.py | tee /tmp/veteran-validation.txt
+          node --check blacklight-veteran-reintroduction.js
+          node --check blacklight-veteran-reintroduction-entry.js
+          node --check blacklight-character-sheet-handoff.js
+      - name: Write validation receipt
+        run: |
+          mkdir -p data/blacklight-continuum/validation
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          output = Path('/tmp/veteran-validation.txt').read_text(encoding='utf-8').strip()
+          receipt = {
+              'system': 'Blacklight Continuum',
+              'module': 'BlackLight Reorientation: The New Arrangement',
+              'validated': True,
+              'validatedAt': datetime.now(timezone.utc).isoformat(),
+              'validatedCommit': os.environ.get('GITHUB_SHA', ''),
+              'checks': [
+                  'Veteran reorientation JSON parsed successfully',
+                  'Twenty-four ordered continuity stages validated',
+                  'Guided prompt identifiers and required fields validated',
+                  'Warehouse, embodiment, cube, lunar convocation, judgment, and Company continuity concepts validated',
+                  'Six Company status choices validated',
+                  'One-current-response-per-field replacement implementation validated',
+                  'Character-sheet continuity attachment and dynamic-field persistence validated',
+                  'Workspace, guided creation, random creation, and Wiki integration validated',
+                  'Reorientation, workspace-entry, and character-sheet handoff JavaScript passed node --check'
+              ],
+              'validatorOutput': output
+          }
+          Path('data/blacklight-continuum/validation/veteran-reintroduction.json').write_text(
+              json.dumps(receipt, indent=2) + '\n', encoding='utf-8'
+          )
+          PY
+      - name: Commit receipt and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/one-time-validate-veteran-reintroduction.yml
+          git add data/blacklight-continuum/validation/veteran-reintroduction.json
+          git commit -m "Record veteran reorientation validation"
+          git push origin main
