@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight Continuum Social Conflict Guide</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root{color-scheme:dark}
+    body{margin:0;background:#090b10;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .social-reader-shell{width:min(1220px,calc(100% - 28px));margin:0 auto;padding:24px 0 60px}
+    .social-reader-header{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border:1px solid var(--line);border-radius:20px;padding:22px;background:rgba(0,0,0,.26);margin-bottom:16px}
+    .social-reader-header h1{margin:3px 0 8px;font-size:clamp(1.8rem,4vw,3rem)}
+    .social-reader-header p{color:var(--muted);line-height:1.55;max-width:790px}
+    .social-reader-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px}
+    .social-reader-nav{position:sticky;top:16px;align-self:start;display:grid;gap:8px;border:1px solid var(--line);border-radius:17px;padding:14px;background:rgba(0,0,0,.22)}
+    .social-reader-nav button{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:left;background:rgba(255,255,255,.025);color:var(--ink);cursor:pointer}
+    .social-reader-nav button.active,.social-reader-nav button:hover{border-color:var(--accent);background:rgba(200,138,53,.1)}
+    .social-reader-entry{border:1px solid rgba(200,138,53,.35);border-radius:18px;padding:20px;background:rgba(0,0,0,.2);min-width:0}
+    .social-reader-entry h2{margin:3px 0 8px}.social-reader-entry h3{color:var(--accent);margin:22px 0 9px}
+    .social-reader-entry p,.social-reader-entry li{color:var(--muted);line-height:1.64}
+    .social-reader-meta{color:var(--accent);text-transform:uppercase;letter-spacing:.08em;font-size:.76rem;font-weight:900}
+    .social-reader-summary{font-weight:800;color:var(--ink)!important}
+    .social-table-wrap{overflow-x:auto;margin:12px 0 20px}
+    .social-table{width:100%;min-width:760px;border-collapse:collapse;color:var(--muted);font-size:.9rem}
+    .social-table th,.social-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top}
+    .social-table th{color:var(--ink);background:rgba(200,138,53,.12)}
+    .social-table tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
+    .social-reader-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px}
+    .social-reader-actions a{text-decoration:none}
+    .social-reader-status{color:var(--muted);padding:18px}
+    @media(max-width:900px){.social-reader-header{display:block}.social-reader-layout{grid-template-columns:1fr}.social-reader-nav{position:static}}
+    @media print{body{background:#fff;color:#000}.no-print{display:none!important}.social-reader-shell{width:100%;padding:0}.social-reader-entry{border:0;background:#fff;padding:0}.social-reader-entry p,.social-reader-entry li,.social-table{color:#111}.social-table th{color:#000;background:#eee}}
+  </style>
+</head>
+<body>
+  <main class="social-reader-shell">
+    <header class="social-reader-header no-print">
+      <div>
+        <p class="eyebrow">Blacklight Continuum · Social conflict teaching module</p>
+        <h1>The Administrator's Clock</h1>
+        <p>A detailed guide and continuous encounter in which Mara, Ilyan, and Kest must obtain docking rules, appeal rights, and a written fee hold from Richard, a planetary administrator deliberately delaying disclosure for profit.</p>
+      </div>
+      <div class="social-reader-actions">
+        <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+        <button id="social-reader-print" class="primary-action" type="button">Print / Save as PDF</button>
+      </div>
+    </header>
+    <div class="social-reader-layout">
+      <nav id="social-reader-nav" class="social-reader-nav no-print" aria-label="Social conflict module sections">
+        <p class="social-reader-status">Loading social conflict module…</p>
+      </nav>
+      <article id="social-reader-entry" class="social-reader-entry">
+        <p class="social-reader-status">Loading social actions, leverage, objections, fee Clock, participant statistics, and the worked encounter…</p>
+      </article>
+    </div>
+  </main>
+  <script src="blacklight-social-conflict.js"></script>
+</body>
+</html>
