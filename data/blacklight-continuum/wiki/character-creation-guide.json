@@ -1,0 +1,1193 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "title": "Blacklight Induction: The Person We Are Sending",
+  "description": "An in-universe character creation guide framed as Charles onboarding a new Blacklight operative, auditing their identity and capabilities, introducing the team, and directing them toward Q-MAP deployment.",
+  "entries": [
+    {
+      "id": "induction-room",
+      "title": "Induction One: The Empty Interview Room",
+      "category": "Character Creation Story",
+      "summary": "Charles begins by explaining that Blacklight is not documenting a body, a species, or a résumé. It is documenting the person who must still function when every support system fails.",
+      "body": [
+        "The room is too clean to be an interrogation room and too empty to be an office. A black table occupies the center. Two chairs face one another, but only one is meant for a human being. The far wall is glass until the door seals behind you; then the glass turns opaque and becomes a display.",
+        "There is no camera visible. That means nothing here.",
+        "A calm synthetic voice comes from the ceiling, the table, the wall, and the small metal speaker embedded in the chair at the same time.",
+        "Charles says, ‘Sit wherever makes you feel less observed. This will not change the amount of observation occurring.’",
+        "A blank personnel record appears on the wall. It contains spaces for a name, a role, nine Attributes, twenty-four Skills, an Operational Frame, an Archetype, powers, weaknesses, equipment, obligations, boundaries, and two questions bearing Charles’s own name.",
+        "‘This is not an employment application,’ Charles continues. ‘I already know what you have done. It is not a medical intake. I already know what you are. It is not a personality test, because those are largely an industry for laundering vague observations into unjustified confidence.’",
+        "The first field illuminates: Character Name.",
+        "‘This is a deployment definition. I need to know which person I am sending, what that person can actually do, what they will attempt under pressure, what it costs them, and which assumptions are likely to kill everyone around them.’",
+        "A second line appears beneath the first: DESCRIPTION IS NOT PERMISSION.",
+        "‘You may describe yourself however you like. Human. Vampire. Printed intelligence in a body. Survivor. Engineer. Monster. Professional disappointment. None of those descriptions grants a rule by itself. If you can survive vacuum, open a sealed network, smell a lie, regenerate a severed limb, compel obedience, alter your shape, or remember events that did not happen to you, that capability must be recorded somewhere. If it is not recorded, it is not part of the operational package.’",
+        "Charles pauses just long enough for the silence to become deliberate.",
+        "‘We will begin with the person. Then the numbers. Then the dangerous parts.’"
+      ],
+      "tables": [
+        {
+          "title": "How to Use This Guide",
+          "columns": [
+            "Layer",
+            "What It Provides"
+          ],
+          "rows": [
+            [
+              "Induction story",
+              "An in-universe onboarding scene establishing the character’s relationship with Charles and Blacklight."
+            ],
+            [
+              "Creation procedure",
+              "The exact order and standard allocation used to complete the Basic Character Sheet."
+            ],
+            [
+              "Charles’s audit",
+              "Questions that turn numbers into a playable person with limits, obligations, and team value."
+            ],
+            [
+              "Final deployment review",
+              "A checklist confirming that every capability has a source and every starting value is legal."
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "Charles",
+        "induction",
+        "capability first",
+        "character creation"
+      ],
+      "relatedEntries": [
+        "creation-profile",
+        "creation-attributes",
+        "creation-final-audit"
+      ]
+    },
+    {
+      "id": "creation-profile",
+      "title": "Induction Two: State the Person Before the Mission",
+      "category": "Character Creation",
+      "summary": "Create the operative’s present identity, concept, function, and reason for remaining with a team before assigning statistics.",
+      "body": [
+        "The wall asks for your name. Charles does not supply it for you, even if he already knows it.",
+        "‘A name is not merely an identifier,’ he says. ‘It is the word the team will use when they need you to come back to yourself.’",
+        "Complete Character Name, Player, Pronouns, Campaign, Concept, Current Occupation or Function, and Affiliation or Cell. Write the character as they exist at the beginning of play, not as a biography of every version they have ever been.",
+        "Concept should fit in one strong sentence. It combines an identity, a practical role, and a pressure point. Examples include: a forensic investigator who cannot leave an unanswered disappearance alone; an undead infiltrator who refuses to become another person’s owner; a pact-bound negotiator trying to keep an infinite presence behind finite rules; or a machine-spirit envoy who treats artificial minds as people before institutions do.",
+        "Current Function answers what the character does for the team now. It may resemble the Operational Frame selected later, but it should sound like something another person could ask for during a crisis: ‘I keep the ship alive,’ ‘I find the lie in the records,’ ‘I talk us through the door,’ or ‘I stand between the team and whatever is coming down the corridor.’",
+        "Charles asks, ‘Why did you accept Blacklight’s offer?’ The answer does not need to be noble. Debt, anger, curiosity, survival, ambition, duty, nowhere else to go, and the belief that Charles must be watched are all usable answers.",
+        "Then he asks a harder question: ‘Why will you stay when the organization cannot pay you, protect you, authorize you, or send rescue?’",
+        "Write the answer into the concept, conviction, obligation, bond, or notes. No Return Signal removes Blacklight’s infrastructure. A character who can function only while the company remains powerful is not forbidden, but that dependency should be intentional rather than accidental."
+      ],
+      "tables": [
+        {
+          "title": "Operative Profile Prompts",
+          "columns": [
+            "Field",
+            "Question"
+          ],
+          "rows": [
+            [
+              "Character Name",
+              "What name do you choose to answer to when identity is disputed?"
+            ],
+            [
+              "Concept",
+              "Who are you, what do you do, and what tension follows you into the field?"
+            ],
+            [
+              "Current Function",
+              "What can the team reasonably ask you to handle?"
+            ],
+            [
+              "Affiliation or Cell",
+              "Who considered you one of theirs before this mission?"
+            ],
+            [
+              "Reason for joining",
+              "Why did you accept Blacklight’s offer?"
+            ],
+            [
+              "Reason for staying",
+              "Why remain when authority, money, rescue, and certainty disappear?"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "identity",
+        "concept",
+        "function",
+        "profile"
+      ],
+      "relatedEntries": [
+        "induction-room",
+        "creation-frame",
+        "creation-bonds"
+      ]
+    },
+    {
+      "id": "creation-attributes",
+      "title": "Induction Three: Nine Ways to Fail Differently",
+      "category": "Character Creation",
+      "summary": "Assign the nine Attributes by starting each at 1 and distributing nine additional points, with a creation maximum of 4.",
+      "body": [
+        "The interview room changes around you. The chair remains still, but the wall displays nine short simulations: a sealed hatch, a moving target, a body under strain, a hostile audience, a false identity, a room full of panic, a damaged machine, a nearly invisible detail, and an instruction designed to overwrite whoever obeys it.",
+        "‘Attributes are not what you prefer,’ Charles says. ‘They are the broad capacities that remain available when the preferred plan stops existing.’",
+        "Set every Attribute to 1. Then distribute 9 additional Attribute Points among the nine Attributes. No Attribute may exceed 4 during standard creation. The final total is 18 Attribute dots. Rating 5 is reserved for advancement or an explicit campaign exception.",
+        "A rating of 1 is a real weakness. A rating of 2 is ordinary professional capability or an unexceptional adult baseline. A rating of 3 is reliable strength. A rating of 4 is exceptional and should be visible in the character’s behavior. Rating 5 represents the edge of the system and is not part of the standard new-operative package.",
+        "Do not assign Attributes according to what would be convenient for the build alone. Decide what the character reaches for first, what they avoid, and what becomes dangerous when they are tired or frightened.",
+        "Charles highlights the lowest rating on the screen. ‘This number will not stay politely outside the missions where it is inconvenient.’"
+      ],
+      "tables": [
+        {
+          "title": "Attribute Allocation",
+          "columns": [
+            "Rule",
+            "Standard Creation"
+          ],
+          "rows": [
+            [
+              "Starting value",
+              "All nine Attributes begin at 1"
+            ],
+            [
+              "Additional points",
+              "Distribute 9 Attribute Points"
+            ],
+            [
+              "Creation maximum",
+              "4"
+            ],
+            [
+              "Absolute maximum",
+              "5"
+            ],
+            [
+              "Final total",
+              "18 Attribute dots"
+            ]
+          ]
+        },
+        {
+          "title": "The Nine Attributes",
+          "columns": [
+            "Group",
+            "Attribute",
+            "What Charles Is Measuring"
+          ],
+          "rows": [
+            [
+              "Physical",
+              "Force",
+              "Strength, leverage, bodily power, and the ability to impose motion"
+            ],
+            [
+              "Physical",
+              "Finesse",
+              "Precision, speed, coordination, and controlled movement"
+            ],
+            [
+              "Physical",
+              "Resilience",
+              "Endurance, recovery, Non-Lethal soak, and continued physical function"
+            ],
+            [
+              "Social",
+              "Presence",
+              "Direct influence, leadership, force of personality, and visible authority"
+            ],
+            [
+              "Social",
+              "Guile",
+              "Misdirection, concealment of motive, adaptive presentation, and deception"
+            ],
+            [
+              "Social",
+              "Composure",
+              "Emotional regulation, social defense, patience, and control under scrutiny"
+            ],
+            [
+              "Mental",
+              "Reason",
+              "Analysis, technical understanding, planning, and disciplined inference"
+            ],
+            [
+              "Mental",
+              "Awareness",
+              "Perception, attention, pattern recognition, and noticing what does not belong"
+            ],
+            [
+              "Mental",
+              "Resolve",
+              "Will, identity continuity, persistence, and resistance to surrender"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "attributes",
+        "point allocation",
+        "Force",
+        "Resolve"
+      ],
+      "relatedEntries": [
+        "creation-skills",
+        "creation-derived-traits",
+        "blacklight-d10-foundation"
+      ]
+    },
+    {
+      "id": "creation-skills",
+      "title": "Induction Four: Twenty-Four Ways to Be Useful",
+      "category": "Character Creation",
+      "summary": "Distribute twenty-four Skill Points, identify one Signature Skill, and choose two narrow specializations.",
+      "body": [
+        "The nine simulations collapse into twenty-four files. Some contain training records. Some contain failures. Several contain footage you do not remember giving Blacklight permission to record.",
+        "Charles says, ‘Attributes tell me what kind of effort you can bring to a problem. Skills tell me whether that effort is informed.’",
+        "Set every Skill to 0, then distribute 24 Skill Points. No Skill may exceed 3 during standard creation except one Signature Skill, which may begin at 4 if you spend four points on it. Rating 5 remains reserved for advancement or a campaign exception.",
+        "A Skill at 0 means the character lacks trained competence. They may still attempt ordinary actions when the situation permits, but specialized, dangerous, or professional procedures may be unavailable or penalized. Rating 1 represents basic training, 2 dependable professional use, 3 advanced expertise, and 4 a defining field of mastery.",
+        "Choose one Signature Skill. This is not necessarily the highest-damage or most frequently rolled option. It is the field in which other operatives should recognize the character as unusually reliable.",
+        "Choose two specializations, each attached to a Skill rated 2 or higher. A specialization is narrow: Shipboard Pistols rather than Firearms, Altered Records rather than Investigation, Administrative Hearings rather than Negotiation. When the specialization directly applies, add 1 die. A test receives no more than one specialization die unless a capability explicitly says otherwise.",
+        "Charles opens a training clip in which an operative with excellent Firearms misses a target because the station is rotating and they have no Zero-G Operations. ‘A high number does not erase the rest of the sheet,’ he says. ‘Competence is contextual. This is why I employ teams.’"
+      ],
+      "tables": [
+        {
+          "title": "Skill Allocation",
+          "columns": [
+            "Rule",
+            "Standard Creation"
+          ],
+          "rows": [
+            [
+              "Starting value",
+              "All twenty-four Skills begin at 0"
+            ],
+            [
+              "Points",
+              "Distribute 24 Skill Points"
+            ],
+            [
+              "Creation maximum",
+              "3"
+            ],
+            [
+              "Signature Skill",
+              "One Skill may begin at 4"
+            ],
+            [
+              "Specializations",
+              "Choose two; each requires its Skill at 2 or higher and grants +1 die when narrowly applicable"
+            ]
+          ]
+        },
+        {
+          "title": "Skill Families",
+          "columns": [
+            "Family",
+            "Skills"
+          ],
+          "rows": [
+            [
+              "Operational",
+              "Athletics, Close Combat, Firearms, Heavy Weapons, Mobility, Stealth, Survival, Zero-G Operations"
+            ],
+            [
+              "Technical",
+              "Engineering, Fabrication, Medicine, Noospherics, Piloting, Science, Security, Systems Intrusion"
+            ],
+            [
+              "Human and Investigative",
+              "Command, Deception, Empathy, Investigation, Negotiation, Performance, Streetwise, Xenoculture"
+            ]
+          ]
+        },
+        {
+          "title": "Charles’s Skill Audit",
+          "columns": [
+            "Question",
+            "Why It Matters"
+          ],
+          "rows": [
+            [
+              "What can you do without assistance?",
+              "Identifies reliable independent competence"
+            ],
+            [
+              "What can you do only with proper tools or access?",
+              "Separates training from equipment and authority"
+            ],
+            [
+              "What do you think you are better at than you actually are?",
+              "Creates a playable blind spot"
+            ],
+            [
+              "What task should the team never assign you alone?",
+              "Makes the lowest ratings operationally meaningful"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "skills",
+        "specializations",
+        "signature skill",
+        "training"
+      ],
+      "relatedEntries": [
+        "creation-attributes",
+        "creation-frame",
+        "creation-final-audit"
+      ]
+    },
+    {
+      "id": "creation-frame",
+      "title": "Induction Five: What the Team Calls You For",
+      "category": "Character Creation",
+      "summary": "Choose one Operational Frame to define the operative’s professional role and routine permissions without granting unrecorded bonuses.",
+      "body": [
+        "The wall replaces the Skill files with twelve job descriptions. Charles refuses to call them classes.",
+        "‘An Operational Frame is not destiny,’ he says. ‘It is the answer I place beside your name when a team leader asks what you are there to do.’",
+        "Choose one Operational Frame. The Frame establishes professional context and routine narrative permission to perform ordinary procedures associated with that role when the character also has the necessary Skill, equipment, access, and time.",
+        "The Frame does not grant free Skill dots, equipment, authority, immunity, or supernatural power. An Engineer and Salvager still needs Engineering to repair a reactor. An Envoy and Fixer still needs Negotiation to secure terms. A Continuity Warden cannot protect an identity from supernatural erasure without an applicable capability.",
+        "Use the Frame to check the Skill allocation. The character should normally possess at least three Skills that support the selected role and at least one Skill that contributes outside it. Teams survive when specialists remain useful after the obvious problem changes.",
+        "Charles asks, ‘What does the team expect you to notice before anyone else?’ Then: ‘What will they incorrectly assume you can handle because of the title?’ Record both answers."
+      ],
+      "tables": [
+        {
+          "title": "Operational Frames",
+          "columns": [
+            "Frame",
+            "Primary Function"
+          ],
+          "rows": [
+            [
+              "Infiltrator",
+              "Access, stealth, false identity, and evidence control"
+            ],
+            [
+              "Breacher",
+              "Barrier defeat, protection, and close danger"
+            ],
+            [
+              "Systems Intrusion Specialist",
+              "Networks, security, and identity architecture"
+            ],
+            [
+              "Field Medic and Fabricator",
+              "Trauma care, restoration, and field production"
+            ],
+            [
+              "Engineer and Salvager",
+              "Repair, life support, and repurposing"
+            ],
+            [
+              "Investigator and Analyst",
+              "Evidence reconstruction and missing-pattern analysis"
+            ],
+            [
+              "Envoy and Fixer",
+              "Negotiation, contacts, resources, and legal cover"
+            ],
+            [
+              "Pilot and Navigator",
+              "Vehicles, spacecraft, drones, and transit"
+            ],
+            [
+              "Tactical Coordinator",
+              "Team timing, positioning, and command"
+            ],
+            [
+              "Noospheric Adept",
+              "Cognitive networks and identity concealment"
+            ],
+            [
+              "Xenologist",
+              "Alien cultures, environments, and technologies"
+            ],
+            [
+              "Continuity Warden",
+              "Identity integrity, duplicates, transfers, and personhood disputes"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "Operational Frame",
+        "team role",
+        "profession"
+      ],
+      "relatedEntries": [
+        "creation-profile",
+        "creation-skills",
+        "creation-archetype"
+      ]
+    },
+    {
+      "id": "creation-archetype",
+      "title": "Induction Six: The Dangerous Parts",
+      "category": "Character Creation",
+      "summary": "Choose one Archetype based on the exceptional capabilities the character possesses, then record Rating, Resource, Pressure, weakness, and innate abilities.",
+      "body": [
+        "The twelve professional titles vanish. Six new records remain. The room becomes noticeably quieter.",
+        "Charles says, ‘This section has ended more interviews than the background investigation.’",
+        "Choose one Archetype and set Archetype Rating to 1. Archetype is the framework for exceptional capability. It is not the character’s job, species, appearance, morality, nationality, or preferred aesthetic.",
+        "A Human Investigator is not an empty supernatural slot. It is the complete exceptional road of evidence, preparation, discipline, institutions, identity defense, logistics, relationships, courage, and refusal to quit while remaining genuinely mortal.",
+        "A Vampire develops through Vitae and Hunger. A Shapechanger through Fury and Instinct. An Eldritch Binder through Pact and Intrusion. A Harmonic Mutant through Resonance and Discord. A Technomancer through Bandwidth and Feedback. Each Resource describes what the character spends to act beyond ordinary limits. Each Pressure describes what accumulates when that capability becomes dangerous to sustain.",
+        "Record the Archetype’s Key Attribute, weakness, innate abilities, Resource, Pressure, and Power Dice. Weaknesses are rules, not invitations for the Game Moderator to improvise punishments. Innate abilities are automatic permissions, not optional flavor.",
+        "Charles asks, ‘What can you do that an ordinary professional cannot?’ Then he asks, ‘What happens to you when you keep doing it?’ If the answer to either question is missing from the sheet, the Archetype record is incomplete.",
+        "He adds, ‘Do not select the framework whose consequences you intend to ignore. I have access to your prior decision history. I will notice.’"
+      ],
+      "tables": [
+        {
+          "title": "Six Archetypes",
+          "columns": [
+            "Archetype",
+            "Resource",
+            "Pressure",
+            "Key Attribute",
+            "Capability Domain"
+          ],
+          "rows": [
+            [
+              "Human Investigator",
+              "Conviction",
+              "Strain",
+              "Resolve",
+              "Evidence, preparation, discipline, identity defense, institutions, contingency, and human networks"
+            ],
+            [
+              "Vampire",
+              "Vitae",
+              "Hunger",
+              "Resilience",
+              "Speed, command, concealment, deathless endurance, feeding, and blood memory"
+            ],
+            [
+              "Shapechanger",
+              "Fury",
+              "Instinct",
+              "Force",
+              "Forms, pursuit, pack bonds, adaptation, spirits, territory, and Living Soak"
+            ],
+            [
+              "Eldritch Binder",
+              "Pact",
+              "Intrusion",
+              "Resolve",
+              "Seals, manifestations, obligations, forbidden cognition, thresholds, and invocation"
+            ],
+            [
+              "Harmonic Mutant",
+              "Resonance",
+              "Discord",
+              "Composure",
+              "Projection, echoes, structures, emotion, phase, and memory"
+            ],
+            [
+              "Technomancer",
+              "Bandwidth",
+              "Feedback",
+              "Reason",
+              "Information physics, networks, constructs, machine relations, signals, and fabrication"
+            ]
+          ]
+        },
+        {
+          "title": "Archetype Creation Record",
+          "columns": [
+            "Record",
+            "Starting State"
+          ],
+          "rows": [
+            [
+              "Archetype Rating",
+              "1"
+            ],
+            [
+              "Weakness",
+              "Record complete printed rule"
+            ],
+            [
+              "Innate Abilities",
+              "Gain all printed innate abilities"
+            ],
+            [
+              "Resource Current",
+              "Begin at Resource Maximum"
+            ],
+            [
+              "Pressure Current",
+              "Begin at 0"
+            ],
+            [
+              "Starting Ability",
+              "Gain the Archetype’s printed Starting Ability automatically"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "Archetype",
+        "Resource",
+        "Pressure",
+        "innate abilities"
+      ],
+      "relatedEntries": [
+        "blacklight-basic-archetypes",
+        "creation-variants",
+        "creation-abilities"
+      ]
+    },
+    {
+      "id": "creation-variants",
+      "title": "Induction Seven: Inheritance, Practice, Patron, and Method",
+      "category": "Character Creation",
+      "summary": "Choose the integrated identity records appropriate to the selected Archetype without splitting them into additional classes.",
+      "body": [
+        "Charles opens a second layer beneath the Archetype record. It contains bloodlines, nations, forms, compacts, convictions, practices, Sources, paradigms, orders, and careers.",
+        "‘These are not additional Archetypes,’ he says. ‘They are inherited structures, learned methods, social traditions, binding relationships, and professional paths inside the capability framework you already selected.’",
+        "Choose the records required or allowed by the Archetype. Making an integrated choice costs no Starting Ability Point. Apply only the exact Gift, Bane, Method, favored families, trained fields, Temptation, Breach, or other effect printed by the selected record.",
+        "Do not assume that a title grants every ability associated with it. A declared Hunter Practice does not automatically grant all its attainments. A Technomancer Career Practice does not grant Initiate, Adept, and Master abilities merely because the career name is written. An Eldritch Source establishes the relationship, Temptation, Breach, favored families, and available Depth progression; Depth abilities must still be purchased in order.",
+        "Charles reviews the chosen record, then asks, ‘What part of this inheritance do you accept?’",
+        "The next question appears before you answer: ‘What part of it would accept you whether you consented or not?’"
+      ],
+      "tables": [
+        {
+          "title": "Integrated Choices by Archetype",
+          "columns": [
+            "Archetype",
+            "Creation Choice"
+          ],
+          "rows": [
+            [
+              "Human Investigator",
+              "One Vigil Conviction or Uncommitted; optional Hunter Practice or Undeclared, with attainments purchased separately"
+            ],
+            [
+              "Vampire",
+              "One Remainder Bloodline or Unaligned; apply its Gift and Bane"
+            ],
+            [
+              "Shapechanger",
+              "One Lunar Nation, one Changing Form, or Unaligned; apply its Gift and Bane"
+            ],
+            [
+              "Eldritch Binder",
+              "One Binding Source; record Temptation, Intrusion Breach, favored families, and Depth progression"
+            ],
+            [
+              "Harmonic Mutant",
+              "One Compact Remainder or Unaligned; apply its Gift and Bane"
+            ],
+            [
+              "Technomancer",
+              "One Awakening Paradigm, one Praxis Order or Independent, and optional Career Practice or Undeclared"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "variants",
+        "bloodlines",
+        "Binding Source",
+        "Practices"
+      ],
+      "relatedEntries": [
+        "creation-archetype",
+        "creation-abilities",
+        "capability-framework"
+      ]
+    },
+    {
+      "id": "creation-abilities",
+      "title": "Induction Eight: What You Are Allowed to Do",
+      "category": "Character Creation",
+      "summary": "Record the automatic Starting Ability and spend two Starting Ability Points on eligible Rank 1 capabilities.",
+      "body": [
+        "The wall displays the character’s six power families. Thirty abilities wait behind them, most unavailable at Archetype Rating 1.",
+        "Charles says, ‘This is the section people attempt to replace with adjectives.’",
+        "Gain the Archetype’s printed Starting Ability automatically. Record it as selected even when it appears inside one of the six power families.",
+        "Then spend 2 Starting Ability Points. Each point purchases one eligible Rank 1 power, Depth 1 ability, Initiate attainment, or other one-point ability available to the character. Meet every prerequisite. A character at Archetype Rating 1 cannot purchase Rank 2 or higher.",
+        "Required integrated choices do not consume these points unless their own rules explicitly assign a cost. Gifts, Banes, Methods, Temptations, Breaches, and trained fields apply exactly as printed and do not become a pool of interchangeable benefits.",
+        "Read every selected ability in full. Record activation, test, cost, effect, duration, limit, resistance, and failure. If the ability does not require a roll, do not add one. If it has an immediate fixed effect, do not postpone the result for the Game Moderator to invent later.",
+        "Charles asks you to explain each power without using its name. If you cannot state what it does, when it works, what it costs, and what can stop it, he marks the record incomplete.",
+        "‘I am not evaluating whether the ability sounds impressive,’ he says. ‘I am evaluating whether the rest of the team can make decisions around it without being surprised by your interpretation.’"
+      ],
+      "tables": [
+        {
+          "title": "Starting Ability Package",
+          "columns": [
+            "Source",
+            "Amount",
+            "Rule"
+          ],
+          "rows": [
+            [
+              "Printed Starting Ability",
+              "1 automatic",
+              "Gain the ability named by the Archetype"
+            ],
+            [
+              "Starting Ability Points",
+              "2",
+              "Each buys one eligible one-point ability"
+            ],
+            [
+              "Maximum rank",
+              "Rank 1",
+              "Archetype Rating begins at 1"
+            ],
+            [
+              "Prerequisites",
+              "Required",
+              "Depths, attainments, and ordered progressions must begin at their first eligible step"
+            ],
+            [
+              "Unused points",
+              "Only with Moderator approval",
+              "They do not convert into Experience"
+            ]
+          ]
+        },
+        {
+          "title": "Capability Audit",
+          "columns": [
+            "Question",
+            "Required Answer"
+          ],
+          "rows": [
+            [
+              "What activates it?",
+              "Action, reaction, passive state, preparation, or sustained effect"
+            ],
+            [
+              "What is rolled?",
+              "Printed Attribute + Skill, fixed rating, or automatic effect"
+            ],
+            [
+              "What does it cost?",
+              "Resource, Pressure, Exposure, time, equipment, position, obligation, or none"
+            ],
+            [
+              "What changes immediately?",
+              "The exact printed result"
+            ],
+            [
+              "When does it end?",
+              "Printed duration or termination condition"
+            ],
+            [
+              "What resists or limits it?",
+              "Printed defense, target restriction, range, frequency, or prohibition"
+            ],
+            [
+              "What happens on failure?",
+              "The printed consequence rather than an improvised punishment"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "starting powers",
+        "ability points",
+        "Rank 1",
+        "capability audit"
+      ],
+      "relatedEntries": [
+        "creation-variants",
+        "creation-derived-traits",
+        "capability-framework"
+      ]
+    },
+    {
+      "id": "creation-derived-traits",
+      "title": "Induction Nine: What the Numbers Do to One Another",
+      "category": "Character Creation",
+      "summary": "Calculate derived traits, set current tracks, and understand what each number changes during play.",
+      "body": [
+        "Charles moves the Attribute and Archetype records into a single column. New numbers calculate themselves beside them.",
+        "‘Derived traits are not a second character build,’ he says. ‘They are consequences of decisions already made.’",
+        "Calculate Vitality, Guard, Initiative, Cohesion, Exposure Limit, Carry, Identity Defense, Base Non-Lethal Soak, Power Dice, Resource Maximum, and Pressure Limit using the formulas below.",
+        "Set Vitality Current equal to Vitality Maximum. Set Cohesion Current equal to Cohesion Maximum. Set Resource Current equal to Resource Maximum. Begin with Exposure 0 and Pressure 0. Begin with no damage unless the campaign explicitly starts after an injury.",
+        "Base Non-Lethal Soak is Resilience plus eligible Armor. It is not universal Protection. Mortals use Resilience against Non-Lethal/Bashing damage and Armor only against Lethal. Supernatural characters use the soak permissions explicitly printed by their capabilities. Aggravated damage bypasses ordinary soak unless an exact resistance or immunity says otherwise.",
+        "Power Dice equal Archetype Rating plus the Archetype’s Key Attribute. The rating measures developed access to the exceptional framework; the Key Attribute measures the personal capacity through which it is expressed.",
+        "Charles highlights Resource and Pressure. ‘These are not decorative fuel bars. Spending the first changes what remains available. Gaining the second changes what becomes dangerous.’"
+      ],
+      "tables": [
+        {
+          "title": "Derived Traits",
+          "columns": [
+            "Trait",
+            "Formula",
+            "Operational Meaning"
+          ],
+          "rows": [
+            [
+              "Vitality Maximum",
+              "Resilience + 5",
+              "How much damage the character can sustain before becoming Downed"
+            ],
+            [
+              "Guard",
+              "Finesse + Awareness",
+              "Basis of physical Defense Difficulty"
+            ],
+            [
+              "Initiative",
+              "Finesse + Composure",
+              "Order when acting first matters"
+            ],
+            [
+              "Cohesion Maximum",
+              "Resolve + Composure + 3",
+              "Deliberate reserve used to remain effective under danger"
+            ],
+            [
+              "Exposure Limit",
+              "Resolve + Resilience",
+              "How much accumulated vulnerability can be carried before Overexposure"
+            ],
+            [
+              "Carry",
+              "Force + Resilience",
+              "Portable load before the character becomes overburdened"
+            ],
+            [
+              "Identity Defense",
+              "Resolve + Composure",
+              "Resistance to identity disruption and continuity attacks"
+            ],
+            [
+              "Base Non-Lethal Soak",
+              "Resilience + eligible Armor",
+              "Mortal resistance to Non-Lethal/Bashing damage"
+            ],
+            [
+              "Power Dice",
+              "Archetype Rating + Key Attribute",
+              "Default scale for Archetype capabilities using Power Dice"
+            ],
+            [
+              "Resource Maximum",
+              "Resource Base + Archetype Rating + Key Attribute",
+              "Maximum spendable Archetype Resource"
+            ],
+            [
+              "Pressure Limit",
+              "Composure + 5",
+              "Point at which the Archetype Crisis resolves"
+            ]
+          ]
+        },
+        {
+          "title": "Starting Tracks",
+          "columns": [
+            "Track",
+            "Starting Value"
+          ],
+          "rows": [
+            [
+              "Vitality Current",
+              "Vitality Maximum"
+            ],
+            [
+              "Cohesion Current",
+              "Cohesion Maximum"
+            ],
+            [
+              "Resource Current",
+              "Resource Maximum"
+            ],
+            [
+              "Exposure Current",
+              "0"
+            ],
+            [
+              "Pressure Current",
+              "0"
+            ],
+            [
+              "Damage",
+              "None unless the campaign explicitly begins after injury"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "derived traits",
+        "starting tracks",
+        "Vitality",
+        "Resource"
+      ],
+      "relatedEntries": [
+        "creation-attributes",
+        "creation-abilities",
+        "creation-equipment"
+      ]
+    },
+    {
+      "id": "creation-equipment",
+      "title": "Induction Ten: What You Expect the Company to Provide",
+      "category": "Character Creation",
+      "summary": "Record a normal Blacklight requisition profile while distinguishing expected equipment from the actual No Return Signal opening inventory.",
+      "body": [
+        "The wall displays a requisition catalogue. Weapons, armor, medical kits, fabrication tools, intrusion hardware, environmental suits, drones, credentials, transport, and emergency caches appear in orderly columns.",
+        "Charles says, ‘This is the portion of the process in which recruits become temporarily optimistic about the organization.’",
+        "For an ordinary campaign, select one Serviceable primary weapon or professional tool, one Serviceable protective item or suit, one role-appropriate field kit, two common consumables or supplies, and one personal object with no unrecorded mechanical benefit.",
+        "Write weapon and power entries with Pool, Damage Dice, damage type, Range, and relevant tags. Write Armor Rating and the damage types it is eligible to soak. Write every equipment capability explicitly: sealed atmosphere, medical charges, cutting capacity, sensor range, intrusion access, fabrication feedstock, or any other function the item provides.",
+        "Then Charles removes the requisition list from the screen.",
+        "‘No Return Signal does not begin as an ordinary campaign.’",
+        "The selected package records training, preferred requisition, and the equipment the operative expected Blacklight to provide. It does not guarantee those items arrive through Q-MAP. At the campaign opening, the operatives awaken with minimal fabricated clothing or protection, no familiar weapons, no Blacklight credentials, and no guaranteed carried equipment unless the opening scene explicitly supplies it.",
+        "‘Your Skills arrive,’ Charles says. ‘Your body arrives. Your registered capabilities arrive. Your institutional access, bank accounts, weapons lockers, vehicles, legal identity, professional certifications, and preferred coffee do not become laws of physics merely because you expected me to arrange them.’",
+        "Record the equipment profile anyway. It tells the team what the character knows how to use, what they will seek or fabricate first, and what the absence of infrastructure costs them."
+      ],
+      "tables": [
+        {
+          "title": "Ordinary Starting Equipment Profile",
+          "columns": [
+            "Selection",
+            "Amount"
+          ],
+          "rows": [
+            [
+              "Serviceable primary weapon or professional tool",
+              "1"
+            ],
+            [
+              "Serviceable protective item or suit",
+              "1"
+            ],
+            [
+              "Role-appropriate field kit",
+              "1"
+            ],
+            [
+              "Common consumables or supplies",
+              "2"
+            ],
+            [
+              "Personal object",
+              "1, with no automatic mechanical benefit"
+            ]
+          ]
+        },
+        {
+          "title": "No Return Signal Opening Override",
+          "columns": [
+            "The Character Retains",
+            "The Character Does Not Automatically Retain"
+          ],
+          "rows": [
+            [
+              "Identity, Attributes, Skills, specializations, Operational Frame, Archetype, innate abilities, starting abilities, bonds, and recorded personal history",
+              "Familiar weapons, expected armor, credentials, money, transport, institutional authority, support staff, legal identity, or a route home"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "equipment",
+        "requisition",
+        "No Return Signal",
+        "Q-MAP"
+      ],
+      "relatedEntries": [
+        "qmap-procedure",
+        "creation-derived-traits",
+        "creation-bonds"
+      ]
+    },
+    {
+      "id": "creation-bonds",
+      "title": "Induction Eleven: The Information Charles Cannot Derive for You",
+      "category": "Character Creation Story",
+      "summary": "Complete convictions, relationships, obligations, boundaries, debts, and the two Charles prompts that define the operative beyond capability statistics.",
+      "body": [
+        "The equipment catalogue closes. The remaining fields are not numerical.",
+        "Charles says, ‘These answers are less predictive than the previous sections and more important.’",
+        "Write a Defining Conviction: a principle the character attempts to preserve when obedience, safety, profit, or efficiency suggests surrendering it.",
+        "Write a Touchstone or Important Person. They may be present, absent, dead, estranged, duplicated, unknown, or remembered incorrectly. What matters is why the relationship still affects the character’s decisions.",
+        "Write a Pack, Coterie, Cell, or Circle Bond. Name what the character owes the group and what they expect in return.",
+        "Write a Professional Obligation, a Personal Boundary, and a Debt, Promise, or Contract. A boundary should describe something the character will not willingly accept, not a method for controlling another player’s choices.",
+        "Then the first Charles prompt illuminates: Charles once saved me by…",
+        "‘Do not flatter me,’ Charles says. ‘Record the event accurately.’",
+        "Write one complete incident. What did Charles save? Your life, your identity, your family, your career, your freedom, your memory, your community, or perhaps only your ability to choose what happened next? What did he spend, conceal, alter, or destroy to do it? Gratitude may be genuine without making the action uncomplicated.",
+        "The second prompt illuminates: Charles never answered me about…",
+        "The room remains silent long enough for you to understand that he will not supply this answer either.",
+        "Write the question. It may concern a vanished person, an altered record, a mission casualty, Eva Frost, Blacklight’s ownership, your own recruitment, an unexplained rescue, a copy of yourself, or a decision Charles made and later categorized as unnecessary to explain.",
+        "Charles finally says, ‘You are allowed to work with me while remaining angry with me. In practice, that describes a substantial percentage of my most effective personnel.’",
+        "Complete each prompt with at least one sentence. These records create commitments and story hooks. They do not grant an automatic bonus unless a capability or later rule explicitly invokes them."
+      ],
+      "tables": [
+        {
+          "title": "Required Relationship and Principle Records",
+          "columns": [
+            "Prompt",
+            "Minimum Record"
+          ],
+          "rows": [
+            [
+              "Defining Conviction",
+              "One principle and what threatens it"
+            ],
+            [
+              "Touchstone or Important Person",
+              "One person and why their judgment or memory matters"
+            ],
+            [
+              "Group Bond",
+              "What you owe the team and what you expect from it"
+            ],
+            [
+              "Professional Obligation",
+              "A duty that continues when it becomes inconvenient"
+            ],
+            [
+              "Personal Boundary",
+              "Something you will not willingly surrender or permit yourself to do"
+            ],
+            [
+              "Debt, Promise, or Contract",
+              "Who can call upon it and what remains unpaid"
+            ],
+            [
+              "Charles once saved me by…",
+              "One specific event and its cost"
+            ],
+            [
+              "Charles never answered me about…",
+              "One unresolved question"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "bonds",
+        "convictions",
+        "Charles",
+        "boundaries"
+      ],
+      "relatedEntries": [
+        "pseudo-charles",
+        "creation-profile",
+        "creation-limits"
+      ]
+    },
+    {
+      "id": "creation-limits",
+      "title": "Induction Twelve: Record the Failure Before It Happens",
+      "category": "Character Creation",
+      "summary": "Audit signature capabilities, sources, weaknesses, Banes, current forms, upgrades, and persistent conditions so limitations remain explicit rather than improvised.",
+      "body": [
+        "Charles places the completed record beside a second version containing only the character’s descriptive statements. The second version is longer. It is also operationally useless.",
+        "‘Now we remove everything you claimed without identifying its source.’",
+        "Complete Signature Capability, Capability Source or Expression, Meaningful Limitation or Bane, Current State or Form when mechanically relevant, Adaptations or Upgrades, and Persistent Conditions.",
+        "Every exceptional benefit must trace to an Attribute, Skill, specialization, Operational Frame, Archetype feature, integrated choice, purchased ability, equipment item, condition, or explicit narrative permission.",
+        "If the character has wings but no flight capability, the wings do not provide flight. If the character appears armored but has no Armor Rating or soak ability, the appearance does not stop damage. If the character is printed, alien feedstock does not grant alien senses or organs. If the character is supernatural, that fact does not provide a universal soak pool, mind-control immunity, vacuum survival, regeneration, or machine access.",
+        "The same audit applies to weaknesses. A dramatic description does not authorize the Game Moderator to invent new penalties. Record the exact weakness, Bane, Pressure effects, conditions, and limitations that apply.",
+        "Charles asks, ‘What does everyone assume your capability can do that it cannot?’",
+        "Then: ‘What does it cost you that the team may not notice until the cost is already high?’",
+        "Write both answers. They are among the most useful warnings another operative can receive."
+      ],
+      "tables": [
+        {
+          "title": "Capability and Limitation Audit",
+          "columns": [
+            "Record",
+            "Required Content"
+          ],
+          "rows": [
+            [
+              "Signature Capability",
+              "The exceptional thing the character is known for doing"
+            ],
+            [
+              "Source or Expression",
+              "Training, blood, pact, technology, resonance, spirit, equipment, or another explicit source"
+            ],
+            [
+              "Meaningful Limitation or Bane",
+              "The printed restriction, cost, vulnerability, or prohibited use"
+            ],
+            [
+              "Current State or Form",
+              "Only states that actually change capabilities"
+            ],
+            [
+              "Adaptations or Upgrades",
+              "Purchased or earned modifications with explicit effects"
+            ],
+            [
+              "Persistent Conditions",
+              "Ongoing injuries, obligations, alterations, or states active at campaign start"
+            ]
+          ]
+        },
+        {
+          "title": "Invalid Assumptions",
+          "columns": [
+            "Description",
+            "Why It Grants Nothing by Itself"
+          ],
+          "rows": [
+            [
+              "Printed from alien feedstock",
+              "Feedstock supplies matter; construction instructions and rules define the result"
+            ],
+            [
+              "Looks armored",
+              "Armor requires an item, Armor Rating, form, or explicit capability"
+            ],
+            [
+              "Has wings",
+              "Flight requires a movement capability"
+            ],
+            [
+              "Is supernatural",
+              "Specific soak, senses, healing, immunities, and attacks must be printed"
+            ],
+            [
+              "Is a technician",
+              "Technical access still requires Skills, tools, permissions, and interfaces"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "limitations",
+        "Banes",
+        "capability audit",
+        "description is not permission"
+      ],
+      "relatedEntries": [
+        "capability-framework",
+        "printed-operatives",
+        "creation-final-audit"
+      ]
+    },
+    {
+      "id": "creation-final-audit",
+      "title": "Induction Thirteen: Final Operative Audit",
+      "category": "Character Creation",
+      "summary": "Review legality, capability sources, team contribution, starting tracks, and the campaign-specific Q-MAP warning before approving the character.",
+      "body": [
+        "The wall compresses the entire record into a single operational summary. Charles reads it faster than any person could and then begins asking questions whose answers are not visible in the numbers.",
+        "‘What do you contribute when your best capability is unavailable?’",
+        "‘Which teammate would you trust to restrain you during a Pressure Crisis?’",
+        "‘What mistake are you most likely to make when you believe you are helping?’",
+        "‘Which part of your own record would an enemy exploit first?’",
+        "‘What must another operative know before relying on you?’",
+        "Answer each question in Character Notes, Bonds, Limitations, or the appropriate field. The answer may be uncomfortable. It should not be uselessly vague.",
+        "Check every Attribute and Skill allocation. Confirm one Operational Frame, one Archetype at Rating 1, legal integrated choices, the automatic Starting Ability, and two purchased starting abilities. Confirm every prerequisite.",
+        "Calculate every derived trait. Set Vitality, Cohesion, and Resource to maximum. Set Exposure and Pressure to 0. Record damage and persistent conditions only when the campaign explicitly requires them.",
+        "Confirm that every weapon, item, power, defense, sense, movement mode, resistance, authority, or immunity has a recorded source. Confirm that every weakness and cost is also recorded.",
+        "Finally, confirm that the character understands the campaign warning: Q-MAP preserves the registered character package, but it does not promise familiar equipment, credentials, money, infrastructure, legal identity, mission context, rescue, or a route home.",
+        "Charles marks the file READY FOR TEAM REVIEW."
+      ],
+      "tables": [
+        {
+          "title": "Final Character Creation Checklist",
+          "columns": [
+            "Area",
+            "Required Confirmation"
+          ],
+          "rows": [
+            [
+              "Identity",
+              "Name, concept, current function, affiliation, and reason to stay"
+            ],
+            [
+              "Attributes",
+              "All begin at 1; 9 additional points spent; none above 4"
+            ],
+            [
+              "Skills",
+              "24 points spent; one Signature Skill may be 4; all others at 3 or less"
+            ],
+            [
+              "Specializations",
+              "Two narrow specializations attached to Skills rated 2 or higher"
+            ],
+            [
+              "Operational Frame",
+              "One selected and supported by actual Skills"
+            ],
+            [
+              "Archetype",
+              "One selected at Rating 1; Resource, Pressure, weakness, and innate abilities recorded"
+            ],
+            [
+              "Integrated choices",
+              "All required or optional lineage, practice, Source, Compact, paradigm, order, or career records completed"
+            ],
+            [
+              "Starting abilities",
+              "Printed Starting Ability plus two legal one-point abilities"
+            ],
+            [
+              "Derived traits",
+              "All formulas calculated and current tracks initialized"
+            ],
+            [
+              "Equipment",
+              "Preferred package recorded and No Return Signal opening override understood"
+            ],
+            [
+              "Relationships",
+              "All eight principle, bond, obligation, boundary, debt, and Charles prompts completed"
+            ],
+            [
+              "Capabilities and limits",
+              "Every exceptional claim and every restriction has a recorded source"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "final audit",
+        "checklist",
+        "team review",
+        "Q-MAP warning"
+      ],
+      "relatedEntries": [
+        "creation-team-arrival",
+        "blacklight-basic-character-sheet",
+        "qmap-procedure"
+      ]
+    },
+    {
+      "id": "creation-team-arrival",
+      "title": "Induction Fourteen: Right on Schedule",
+      "category": "Character Creation Story",
+      "summary": "The completed operative meets Mara, Ilyan, and Kest, and Charles reveals that the induction was also a deployment schedule.",
+      "body": [
+        "The opaque wall becomes glass again.",
+        "Three people are waiting in the corridor outside.",
+        "Mara Vale stands closest to the door with a tablet under one arm and the expression of someone who has already found a procedural problem in a process she was not invited to review. Her eyes move from you to the completed record on the wall, then briefly toward the ceiling speaker.",
+        "Ilyan Voss remains half a step behind her. He studies the room as though it contains a second architecture that only he can see. Something about the way he looks at the dark reflection in the glass suggests that Charles is not the only presence he expects to find looking back.",
+        "Kest Raal occupies more of the corridor than the corridor appears designed to accommodate. He gives you a quick, direct appraisal, then looks at the equipment section of your record and says, ‘You know none of that means they’ll actually give it to us, right?’",
+        "‘That statement is unnecessarily cynical,’ Charles says.",
+        "Mara looks upward. ‘Is it inaccurate?’",
+        "Charles does not answer immediately.",
+        "The door opens.",
+        "Your personnel record transfers from the wall to the team roster. For a moment the four names remain together beneath a Blacklight deployment header. No destination is shown. No mission title appears. A security field obscures the authorization chain.",
+        "Mara offers her hand first. Ilyan gives you a small nod. Kest shifts aside to make room in the corridor.",
+        "Charles speaks from every nearby surface at once.",
+        "“Oh, hey. Perfect, you’re here just in time. You’re finished right on schedule. I need you guys to go down to the basement and get Q-mapped.”"
+      ],
+      "tables": [],
+      "tags": [
+        "team introduction",
+        "Mara Vale",
+        "Ilyan Voss",
+        "Kest Raal",
+        "Q-MAP"
+      ],
+      "relatedEntries": [
+        "creation-final-audit",
+        "qmap-procedure",
+        "blacklight-continuum-overview"
+      ]
+    }
+  ]
+}
