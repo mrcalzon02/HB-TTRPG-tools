@@ -11,16 +11,16 @@
     card.dataset.blacklightCombatExampleCard = 'true';
     card.innerHTML = `
       <div class="module-meta">
-        <span class="badge status-active">simplified combat module</span>
-        <span class="badge">two against one</span>
-        <span class="badge">11 rounds</span>
-        <span class="badge">fixed damage + Living Soak</span>
-        <span class="badge">death and rescue</span>
+        <span class="badge status-active">combat and soak module</span>
+        <span class="badge">damage rolls</span>
+        <span class="badge">firearm criticals</span>
+        <span class="badge">Vampire Fortitude</span>
+        <span class="badge">Shapechanger Living Soak</span>
       </div>
       <h3>Three People in the Cargo Gallery</h3>
-      <p>Follow one continuous encounter using one attack roll, fixed damage, one Protection value, Exposure as enemy attack dice, Pressure, Cohesion, stabilization, revival, and death.</p>
+      <p>Follow one continuous encounter using attack rolls, firearm critical damage dice, rolled damage, damage-type soak permissions, Armor dice, Living Soak, Pressure, Cohesion, stabilization, and death.</p>
       <div class="blacklight-actions">
-        <a class="primary-action" href="blacklight-combat-example.html" target="_blank" rel="noopener">Open Simplified Combat Module</a>
+        <a class="primary-action" href="blacklight-combat-example.html" target="_blank" rel="noopener">Open Combat and Soak Module</a>
       </div>`;
 
     const wikiCard = grid.querySelector('#blacklight-open-wiki')?.closest('.module-card');
