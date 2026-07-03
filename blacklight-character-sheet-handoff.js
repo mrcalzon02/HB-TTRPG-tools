@@ -1,35 +1,44 @@
 (() => {
   'use strict';
+  const query = new URLSearchParams(location.search);
+  const fromInduction = query.get('from') === 'induction';
+  const printRequested = query.get('print') === '1';
 
-  const parameters = new URLSearchParams(window.location.search);
-  const fromInduction = parameters.get('from') === 'induction';
-  const printRequested = parameters.get('print') === '1';
-
-  function sheetReady() {
-    const status = document.getElementById('blacklight-load-status');
-    const archetype = document.getElementById('blacklight-archetype');
-    const skills = document.querySelectorAll('#blacklight-skills input');
-    return Boolean(status && archetype && archetype.options.length > 1 && skills.length === 24 && !status.textContent.includes('Loading'));
+  function addTranscript() {
+    const form = document.getElementById('blacklight-character-form');
+    const grid = form?.elements.missionRecord?.closest('.blacklight-field-grid');
+    if (!form || !grid) return;
+    let field = form.elements.inductionTranscript;
+    if (!field) {
+      const label = document.createElement('label');
+      label.className = 'blacklight-wide-label';
+      label.style.gridColumn = '1 / -1';
+      label.textContent = 'Charles Induction Transcript';
+      field = document.createElement('textarea');
+      field.name = 'inductionTranscript';
+      field.rows = 12;
+      label.appendChild(field);
+      grid.appendChild(label);
+    }
+    field.value = localStorage.getItem('hb-ttrpg-tools-blacklight-charles-induction-transcript-v1') || field.value;
   }
 
-  function finishHandoff() {
-    const status = document.getElementById('blacklight-load-status');
-    if (fromInduction && status) {
-      status.textContent = 'Character completed through Blacklight Induction and restored into the printable sheet.';
-    }
-    if (printRequested) {
-      window.setTimeout(() => window.print(), 700);
-    }
+  function ready() {
+    return document.querySelectorAll('#blacklight-skills input').length === 24 && document.getElementById('blacklight-archetype')?.options.length > 1;
   }
 
   function initialize() {
+    addTranscript();
     if (!fromInduction && !printRequested) return;
     let attempts = 0;
-    const timer = window.setInterval(() => {
+    const timer = setInterval(() => {
+      addTranscript();
       attempts += 1;
-      if (sheetReady() || attempts >= 40) {
-        window.clearInterval(timer);
-        finishHandoff();
+      if (ready() || attempts >= 40) {
+        clearInterval(timer);
+        const status = document.getElementById('blacklight-load-status');
+        if (fromInduction && status) status.textContent = 'Character restored with Charles’s induction transcript.';
+        if (printRequested) setTimeout(() => print(), 700);
       }
     }, 100);
   }
