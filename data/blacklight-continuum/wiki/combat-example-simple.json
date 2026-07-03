@@ -1,0 +1,118 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "2.0.0",
+  "description": "A worked example using one attack roll, fixed damage, one Protection value, Exposure as enemy attack dice, and no Margin or universal Wounded penalty.",
+  "entries": [
+    {
+      "id": "combat-foundation-procedure",
+      "title": "Simple Combat Procedure",
+      "category": "Combat",
+      "summary": "Roll to hit, apply fixed damage, subtract one Protection value, and remove Vitality.",
+      "body": [
+        "Build the attack pool from Attribute + Skill. Add the target's current Exposure as attack dice. Subtract range, cover, condition, and equipment penalties.",
+        "Roll against Defense Difficulty, equal to ceiling(Guard divided by two). Equal or greater successes hit. Additional successes do not change damage.",
+        "Use the attack's fixed Damage number. Subtract one applicable Protection value from Impact or Trauma. Disruption normally ignores Protection. Remove the remaining amount from Vitality.",
+        "That is the complete ordinary attack. Powers may explicitly add dice, add fixed damage, add Armor, ignore Protection, move targets, or impose conditions."
+      ],
+      "tables": [
+        {
+          "title": "Basic Attack in Five Steps",
+          "columns": ["Step", "Rule"],
+          "rows": [
+            ["1", "Attribute + Skill + target Exposure - penalties"],
+            ["2", "Roll against ceiling(Guard / 2)"],
+            ["3", "On a hit, use fixed Damage"],
+            ["4", "Subtract one Protection value"],
+            ["5", "Lose the remaining Vitality"]
+          ]
+        }
+      ],
+      "tags": ["simple combat", "fixed damage", "protection"],
+      "relatedEntries": ["shapechanger-living-soak", "combat-tracks-and-death", "worked-combat-cargo-gallery"]
+    },
+    {
+      "id": "shapechanger-living-soak",
+      "title": "Shapechanger Living Soak",
+      "category": "Combat",
+      "summary": "Living Soak is a powerful increase to one Protection number, not another roll.",
+      "body": [
+        "In social form, add Archetype Rating to Protection against Impact. In hunting or war form, add Archetype Rating against Impact and Trauma.",
+        "A Shapechanger with ordinary Protection 3 and Archetype Rating 3 has Protection 6 against eligible physical damage while transformed. A Damage 5 rifle may hit and still deal 0.",
+        "Living Soak does not spend Fury, does not roll, and is not weakened merely because Vitality is low.",
+        "Disruption bypasses it because Disruption attacks identity, memory, noospheric continuity, or control rather than the body."
+      ],
+      "tables": [
+        {
+          "title": "Living Soak",
+          "columns": ["Form", "Protection"],
+          "rows": [
+            ["Social", "Normal Protection + Archetype Rating against Impact only"],
+            ["Hunting or War", "Normal Protection + Archetype Rating against Impact and Trauma"],
+            ["Any Form vs Disruption", "No Living Soak bonus"]
+          ]
+        }
+      ],
+      "tags": ["shapechanger", "living soak", "protection"],
+      "relatedEntries": ["combat-foundation-procedure", "worked-combat-cargo-gallery"]
+    },
+    {
+      "id": "combat-tracks-and-death",
+      "title": "Combat Tracks and Death",
+      "category": "Combat",
+      "summary": "Exposure helps enemies hit, Cohesion is spent by choice, Pressure risks Crisis, and Vitality determines whether the character stands.",
+      "body": [
+        "Each Exposure point gives enemies one die when attacking you. A Push gives 1 Exposure after it resolves. At the Limit, the action finishes, you suffer 1 Impact ignoring Protection, lose your Reaction, and reset Exposure to 0.",
+        "Cohesion is deliberately spent. Commit adds two dice. Brace removes one remaining Impact or Disruption. Anchor helps an ally's Death Test. Refuse Collapse may keep you at 1 Vitality once per scene.",
+        "Pressure remains Archetype-specific. Pay Resource, mark Pressure, resolve the power, then resolve Crisis if the Limit was reached.",
+        "There is no universal Wounded condition. Positive Vitality means the character acts normally unless a specific rule says otherwise. At 0 Vitality, the character is Downed and begins using Death Marks."
+      ],
+      "tables": [],
+      "tags": ["exposure", "cohesion", "pressure", "vitality", "death"],
+      "relatedEntries": ["combat-foundation-procedure", "worked-combat-cargo-gallery"]
+    },
+    {
+      "id": "worked-combat-cargo-gallery",
+      "title": "Worked Combat: Three People in the Cargo Gallery",
+      "category": "Combat Example",
+      "summary": "An eleven-round two-against-one example using fixed damage, Exposure attack dice, Living Soak, Pressure, rescue, and death.",
+      "body": [
+        "Mara Vale and Ilyan Voss confront Kest Raal over a stolen biological key. Kest declares that he is crossing the cargo gallery to kill Ilyan, so Initiative begins.",
+        "Mara has six Firearms dice, Defense Difficulty 3, Vitality 7, Protection 3, Cohesion 5, and Exposure 0. Her pistol deals fixed Damage 4 Trauma and her rifle deals fixed Damage 5 Trauma. Ilyan has Defense Difficulty 2, Vitality 7, Protection 3, Pact 6, Intrusion 4 of 8, and an arc pistol dealing fixed Damage 3 Disruption. Kest has Defense Difficulty 3, Vitality 8, ordinary Protection 3, Archetype Rating 3, Fury 9, Instinct 4 of 7, and Living Soak.",
+        "Round 1: Mara fires from Medium range at Kest behind Partial Cover. Six dice lose one for range and one for cover, leaving four. Three successes hit. Pistol Damage 4 minus social-form Protection 3 deals 1 Trauma, lowering Kest to 7 Vitality. Kest shifts to war form for 1 Fury, so Living Soak raises his physical Protection from 3 to 6.",
+        "Round 2: Mara switches to the rifle. Her first roll fails, so she Pushes and gains Exposure 1. The rifle hits, but fixed Damage 5 minus transformed Protection 6 is 0. Ilyan's arc pistol then hits for fixed 3 Disruption. Disruption ignores Protection, lowering Kest from 7 to 4.",
+        "Round 3: Kest activates Bulwark for 2 Fury. Armor 2 raises ordinary Protection from 3 to 5; Living Soak raises the single physical Protection value to 8. Ilyan's Dream-Born Servitor Restrains Kest. The restraint affects movement and grants attackers one die; it does not reduce Protection.",
+        "Round 4: Mara attacks with seven dice because Kest is Restrained. She hits, but rifle Damage 5 minus Protection 8 is 0. Kest spends his action breaking free. Ilyan hits with the arc pistol for 3 Disruption, reducing Kest from 4 to 1. Low Vitality does not reduce Living Soak.",
+        "Round 5: Ilyan uses The Thousand-Armed Scheme to move Mara behind cover, close a bulkhead, move cargo, and attempt another restraint. Pact falls and Intrusion reaches Critical. Kest uses his turn changing from Bulwark to Breacher, so Protection returns from 8 to 6.",
+        "Round 6: Kest tears open the bulkhead. Ilyan spends Pact while Critical, reaches the Intrusion Limit, resolves the ability, and then suffers Incursion. He is Restrained, loses his arc pistol, and suffers 1 Disruption.",
+        "Round 7: Mara's rifle hits Kest, but 5 minus Protection 6 remains 0. Kest attacks Ilyan with fixed Damage 6 claws. Protection 3 reduces the hit to 3 Trauma, lowering Ilyan from 6 to 3.",
+        "Round 8: Mara Pushes and gains Exposure 2. Her rifle still deals 0. Kest attacks Mara with his normal attack pool plus two dice from her Exposure. He hits with a Damage 4 Impact shoulder slam. Protection 3 leaves 1 Impact, which Mara removes by spending 1 Cohesion on Brace.",
+        "Round 8 continued: Ilyan retrieves the arc pistol and hits Kest for 3 Disruption. Kest would fall below 0, but spends 2 Cohesion on Refuse Collapse and remains at 1 Vitality.",
+        "Round 9: Kest attacks Ilyan again. Damage 6 minus Protection 3 deals 3 Trauma, reducing Ilyan from 3 to 0. Ilyan becomes Downed and Unstable. Mara moves adjacent, Pushes a Stabilize test, gains Exposure 3, and succeeds. Ilyan becomes Stable at 0 Vitality.",
+        "Round 10: Mara uses Emergency Treatment, spends 1 Cohesion on Commit, succeeds, consumes one medical-kit charge, and restores Ilyan to 1 Vitality. Kest attacks Mara with three bonus dice from Exposure 3. The attack deals fixed Damage 4 minus Protection 3, lowering Mara by 1 Vitality. Exposure changed the chance to hit, not the damage.",
+        "Round 10 continued: Ilyan fires while Staggered, Pushes, gains Exposure 1, and hits. Damage 3 Disruption ignores Kest's Protection 6. Kest falls from 1 to 0 with two excess damage and gains 2 Death Marks.",
+        "Round 11: The plasma conduit ruptures. Mara repairs it, Pushes, and reaches Exposure Limit 5. The repair succeeds first. Overexposure then deals 1 Impact ignoring Protection, removes her Reaction, and resets Exposure to 0. Ilyan attempts to Stabilize Kest without a kit and fails.",
+        "At the end of Round 11, Kest fails a Death Test with a die showing 1, gains 2 more Death Marks, and dies. Living Soak cannot help because a Death Test is not physical damage.",
+        "The combat used the same short loop every time: attack dice, hit or miss, fixed damage, one Protection number, Vitality. Exposure changed attack dice. Powers changed positioning, Protection, or conditions. Pressure and Cohesion remained explicit exceptions rather than extra arithmetic inside every hit."
+      ],
+      "tables": [
+        {
+          "title": "What Each Mechanic Did",
+          "columns": ["Mechanic", "Result"],
+          "rows": [
+            ["Exposure", "Added dice to attacks against Mara"],
+            ["Living Soak", "Raised Kest's one physical Protection value"],
+            ["Disruption", "Ignored physical Protection"],
+            ["Cohesion", "Created chosen exceptions such as Brace and Refuse Collapse"],
+            ["Pressure", "Triggered Ilyan's Incursion after his power resolved"],
+            ["Stabilize", "Stopped Ilyan's Death Tests"],
+            ["Emergency Treatment", "Restored Ilyan to 1 Vitality"],
+            ["Death Marks", "Killed Kest at 3 or more"]
+          ]
+        }
+      ],
+      "tags": ["worked combat", "fixed damage", "exposure", "living soak", "rescue", "death"],
+      "relatedEntries": ["combat-foundation-procedure", "shapechanger-living-soak", "combat-tracks-and-death"]
+    }
+  ]
+}
