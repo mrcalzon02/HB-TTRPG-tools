@@ -3,11 +3,27 @@
   const query = new URLSearchParams(location.search);
   const fromInduction = query.get('from') === 'induction';
   const fromRandom = query.get('from') === 'random';
+  const fromVeteran = query.get('from') === 'veteran';
   const printRequested = query.get('print') === '1';
+
+  function insertBeforeReturnLink(actions, link) {
+    const returnLink = actions.querySelector('a[href*="index.html"]');
+    if (returnLink) returnLink.insertAdjacentElement('beforebegin', link);
+    else actions.appendChild(link);
+  }
 
   function ensureNavigationLinks() {
     const actions = document.querySelector('.blacklight-sheet-header .blacklight-actions');
     if (!actions) return;
+
+    if (!actions.querySelector('[data-blacklight-veteran-link]')) {
+      const link = document.createElement('a');
+      link.className = 'secondary-action';
+      link.href = 'blacklight-veteran-reintroduction.html';
+      link.dataset.blacklightVeteranLink = 'true';
+      link.textContent = 'Veteran Reorientation';
+      insertBeforeReturnLink(actions, link);
+    }
 
     if (!actions.querySelector('[data-blacklight-random-link]')) {
       const link = document.createElement('a');
@@ -15,9 +31,7 @@
       link.href = 'blacklight-random-character.html';
       link.dataset.blacklightRandomLink = 'true';
       link.textContent = 'Random Character Generator';
-      const returnLink = actions.querySelector('a[href*="index.html"]');
-      if (returnLink) returnLink.insertAdjacentElement('beforebegin', link);
-      else actions.appendChild(link);
+      insertBeforeReturnLink(actions, link);
     }
 
     if (!actions.querySelector('[data-blacklight-equipment-link]')) {
@@ -28,29 +42,40 @@
       link.rel = 'noopener';
       link.dataset.blacklightEquipmentLink = 'true';
       link.textContent = 'Open Equipment Catalog';
-      const returnLink = actions.querySelector('a[href*="index.html"]');
-      if (returnLink) returnLink.insertAdjacentElement('beforebegin', link);
-      else actions.appendChild(link);
+      insertBeforeReturnLink(actions, link);
     }
   }
 
-  function ensureTranscriptField() {
+  function campaignLogGrid() {
     const form = document.getElementById('blacklight-character-form');
-    const grid = form?.elements.missionRecord?.closest('.blacklight-field-grid');
+    return form?.elements.missionRecord?.closest('.blacklight-field-grid') || null;
+  }
+
+  function ensureLongRecordField(name, labelText, rows = 12) {
+    const form = document.getElementById('blacklight-character-form');
+    const grid = campaignLogGrid();
     if (!form || !grid) return null;
-    let field = form.elements.inductionTranscript;
+    let field = form.elements[name];
     if (!field) {
       const label = document.createElement('label');
       label.className = 'blacklight-wide-label';
       label.style.gridColumn = '1 / -1';
-      label.textContent = 'Charles Induction Transcript';
+      label.textContent = labelText;
       field = document.createElement('textarea');
-      field.name = 'inductionTranscript';
-      field.rows = 12;
+      field.name = name;
+      field.rows = rows;
       label.appendChild(field);
       grid.appendChild(label);
     }
     return field;
+  }
+
+  function ensureTranscriptField() {
+    return ensureLongRecordField('inductionTranscript', 'Charles Induction Transcript', 12);
+  }
+
+  function ensureVeteranRecordField() {
+    return ensureLongRecordField('veteranContinuityRecord', 'BlackLight Veteran Continuity Record', 18);
   }
 
   function applyInductionTranscript(saveToSheet = false) {
@@ -62,6 +87,20 @@
     if (saveToSheet) field.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
+  function applyVeteranRecord(saveToSheet = false) {
+    const field = ensureVeteranRecordField();
+    if (!field || !fromVeteran) return;
+    try {
+      const record = JSON.parse(localStorage.getItem('hb-ttrpg-tools-blacklight-veteran-reorientation-record-v1') || 'null');
+      const transcript = record?.plainText || '';
+      if (!transcript) return;
+      field.value = transcript;
+      if (saveToSheet) field.dispatchEvent(new Event('input', { bubbles: true }));
+    } catch (_) {
+      // The handoff summary already exists in the stored sheet even if the full record cannot be parsed.
+    }
+  }
+
   function ready() {
     return document.querySelectorAll('#blacklight-skills input').length === 24 && document.getElementById('blacklight-archetype')?.options.length > 1;
   }
@@ -69,17 +108,21 @@
   function initialize() {
     ensureNavigationLinks();
     ensureTranscriptField();
+    ensureVeteranRecordField();
     applyInductionTranscript(false);
-    if (!fromInduction && !fromRandom && !printRequested) return;
+    applyVeteranRecord(false);
+    if (!fromInduction && !fromRandom && !fromVeteran && !printRequested) return;
     let attempts = 0;
     const timer = setInterval(() => {
       attempts += 1;
       if (ready() || attempts >= 40) {
         clearInterval(timer);
         applyInductionTranscript(true);
+        applyVeteranRecord(true);
         const status = document.getElementById('blacklight-load-status');
         if (fromInduction && status) status.textContent = 'Character restored with Charles’s induction transcript.';
         if (fromRandom && status) status.textContent = 'Randomly generated operative transferred and restored. Review any fields you want to personalize.';
+        if (fromVeteran && status) status.textContent = 'Veteran continuity record attached without replacing existing statistics, powers, or equipment.';
         if (printRequested) setTimeout(() => print(), 700);
       }
     }, 100);
