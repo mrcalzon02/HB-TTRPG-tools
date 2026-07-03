@@ -15,6 +15,7 @@
         <span class="badge">legal standard package</span>
         <span class="badge">seeded rerolls</span>
         <span class="badge">sheet transfer</span>
+        <span class="badge">allocation audited</span>
       </div>
       <h3>Generate the Person We Are Sending</h3>
       <p>Create a complete Rating 1 operative with legal Attributes, Skills, specializations, Archetype variants, starting abilities, equipment, relationships, derived tracks, and one-click transfer into the Basic Character Sheet.</p>
