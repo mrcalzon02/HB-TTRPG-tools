@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.15.0",
+  "schemaVersion": "0.16.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The campaign framework now includes six complete Archetypes, Resource and Pressure procedures, Experience advancement, character-knowledge and table-safety rules, a mechanical combat foundation, and a complete worked three-character combat demonstrating Exposure, Cohesion, Pressure, Vitality, stabilization, revival, and death.",
+  "description": "Reference wiki for Blacklight Continuum: No Return Signal. The campaign framework now includes six complete Archetypes, Resource and Pressure procedures, Experience advancement, character-knowledge and table-safety rules, an explicit Shapechanger Living Soak mechanic, a mechanical combat foundation, and an expanded thirteen-round worked combat demonstrating range, cover, equipment, transformations, Exposure, Cohesion, dual Pressure crises, stabilization, revival, attempted enemy rescue, and death.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -34,7 +34,7 @@
     "data/blacklight-continuum/wiki/combat-example-module.json"
   ],
   "completedScope": {
-    "wikiEntries": 28,
+    "wikiEntries": 29,
     "nativePacks": 6,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
@@ -49,6 +49,7 @@
     "shapechangerLunarNations": 13,
     "shapechangerChangingForms": 10,
     "shapechangerVariants": 23,
+    "shapechangerLivingSoakProcedures": 1,
     "harmonicCompactRemainders": 13,
     "technomancerAwakeningParadigms": 5,
     "technomancerPraxisOrders": 5,
@@ -71,12 +72,12 @@
     "tableSafetyProcedures": 1,
     "metagamingProcedures": 1,
     "combatFoundationProcedures": 1,
-    "combatTeachingEntries": 3,
+    "combatTeachingEntries": 4,
     "workedCombatModules": 1
   },
   "nextDevelopmentAreas": [
     "advanced combat procedures: area attacks, concealment, vehicles, environmental hazards, grappling, mounted weapons, and mass engagements",
-    "balance testing for combat damage, Protection, Exposure, Cohesion, Downed timing, and Death Marks",
+    "balance testing for Living Soak, temporary Resilience, combat damage, Protection, Exposure, Cohesion, Downed timing, and Death Marks",
     "balance testing for all ranked powers",
     "balance testing for Resource recovery, Pressure thresholds, and Crisis severity",
     "starting power allocation rules",
