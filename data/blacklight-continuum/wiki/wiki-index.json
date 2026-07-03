@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.17.0",
+  "schemaVersion": "0.18.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum combat now uses one attack roll, fixed damage, one Protection value, Vitality loss, Exposure as bonus enemy attack dice, and explicit power exceptions. Margin, temporary Resilience inflation, Exposure warning bands, and the universal Wounded penalty are removed.",
+  "description": "Blacklight Continuum combat uses an attack roll, a damage roll after a hit, and one legal soak roll. Firearm critical successes add damage dice. Bashing, Lethal, Aggravated, and Disruption determine soak permissions; Vampires use Fortitude and deathless damage treatment, while transformed Shapechangers use Living Soak.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -73,11 +73,15 @@
     "tableSafetyProcedures": 1,
     "metagamingProcedures": 1,
     "combatFoundationProcedures": 1,
-    "combatTeachingEntries": 4,
-    "workedCombatModules": 1
+    "combatTeachingEntries": 5,
+    "workedCombatModules": 1,
+    "damageTypes": 4,
+    "vampireSoakProcedures": 1,
+    "fortitudeProcedures": 1,
+    "rolledSoakProcedures": 1
   },
   "nextDevelopmentAreas": [
-    "balance testing for fixed damage, Protection, Living Soak, and Exposure attack-die scaling",
+    "balance testing for damage dice, firearm criticals, soak pools, Vampire Bashing halving, Fortitude, and Shapechanger Living Soak",
     "advanced combat procedures: area attacks, concealment, vehicles, environmental hazards, grappling, mounted weapons, and mass engagements",
     "balance testing for all ranked powers",
     "balance testing for Resource recovery, Pressure thresholds, and Crisis severity",

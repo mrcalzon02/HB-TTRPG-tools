@@ -1,6 +1,6 @@
 {
   "system": "Blacklight Continuum Basic",
-  "schemaVersion": "0.12.0",
+  "schemaVersion": "0.14.0",
   "status": "alpha-playtest",
   "progressionNote": "Power costs, opposed pools, and numerical limits remain alpha playtest values. Archetypes define capability families, resources, pressures, and limits. No rule assumes a body type, species, substrate, or origin unless a specific capability explicitly says otherwise.",
   "mechanicsPolicy": {
@@ -318,7 +318,7 @@
       "resourceBase": 5,
       "startingAbility": "Quickened Step",
       "weakness": "The Old Sun and Distant Hunger",
-      "weaknessText": "Ordinary night starlight and direct light from foreign stars do not automatically harm you. The curse reacts only to direct light from the original Sun, artificial radiation specifically calibrated to reproduce that Sun's cursed signature, or a supernatural effect explicitly invoking the original solar curse upon Cain's bloodline. Such exposure inflicts 2 Trauma per round, ignores ordinary Armor, and prevents Cold Repair and other vampiric healing until the end of your next round after exposure ends. Hunger remains a Pressure track: it is quieter than in the former universe, but its printed penalties and consequences still apply when it rises.",
+      "weaknessText": "Ordinary night starlight and direct light from foreign stars do not automatically harm you. The curse reacts only to direct light from the original Sun, artificial radiation specifically calibrated to reproduce that Sun's cursed signature, or a supernatural effect explicitly invoking the original solar curse upon Cain's bloodline. Such exposure inflicts 2 Aggravated damage successes per round, permits soak only from Fortitude and protection explicitly rated against Aggravated damage, and prevents Cold Repair and other vampiric healing until the end of your next round after exposure ends. Hunger remains a Pressure track: it is quieter than in the former universe, but its printed penalties and consequences still apply when it rises.",
       "innateAbilities": [
         {
           "name": "Predator's Blood",
@@ -327,6 +327,10 @@
         {
           "name": "Deathless State",
           "effect": "You resist poison, disease, ordinary aging, suffocation, and many environmental effects as an explicit vampiric capability. Fire, intense radiation, and catastrophic harm remain dangerous."
+        },
+        {
+          "name": "Undead Soak",
+          "effect": "Against Bashing, roll Resilience + eligible Armor + Fortitude, cancel damage successes, then halve the remainder and round down. Against Lethal, roll Resilience + eligible Armor + Fortitude and take the full remainder. Against Aggravated, roll Fortitude plus only explicitly supernatural protection. Ordinary firearms normally deal Bashing to you; anti-materiel, incendiary, explosive, specialized anti-undead, or explicitly more destructive ammunition may deal Lethal or Aggravated damage."
         },
         {
           "name": "Feeding",
@@ -429,12 +433,12 @@
         },
         {
           "name": "Deathless Resilience",
-          "description": "Vampiric dormancy, healing, armor, recovery, and persistence after apparently fatal harm.",
+          "description": "Vampiric Fortitude, dormancy, healing, armor, recovery, and persistence after apparently fatal harm. Your Fortitude rating equals the highest rank owned in this family.",
           "abilities": [
             {
               "rank": 1,
               "name": "Cold Repair",
-              "effect": "Cost: 1 Vitae and one uninterrupted minute. Convert one Trauma into Impact or remove two Impact. Fire, radiation, and sunlight wounds require 2 Vitae. Failure: the damage is removed normally, but gain 1 Hunger and lose one die from Physical tests until you feed or complete a full rest."
+              "effect": "Cost: 1 Vitae and one uninterrupted minute. Convert one Lethal damage into Bashing or remove two Bashing. Aggravated wounds from fire, radiation, or the original solar curse require 2 Vitae and can be repaired only when the effect permits Aggravated recovery. Failure: the damage is removed normally, but gain 1 Hunger and lose one die from Physical tests until you feed or complete a full rest."
             },
             {
               "rank": 2,
@@ -529,7 +533,8 @@
         "The cursed essence nevertheless remains. Vitae still sustains the deathless state. Blood memory still carries skills, instincts, names, grief, and the accumulated weight of lineage. The character still possesses the capabilities recorded on the sheet. What has weakened is not the power but the feeling that every part of existence was built to reinforce it.",
         "Hunger remains, but it no longer occupies every waking thought. The Red Thirst feels like a distant migraine, a persistent electronic noise behind the mind, or a signal heard from several rooms away. It can intensify. It can become dangerous. It can still drive predation when neglected. Yet the Vampire is no longer required to spend every moment suppressing the image of the nearest mortal throat opening beneath their teeth. The rich scent of blood remains desirable without automatically becoming the center of the universe.",
         "This quiet does not make the Vampire humane, ethical, or safe. It makes choice harder to excuse. Predation can no longer be blamed entirely upon a curse that once felt indistinguishable from thought. The Vampire retains the habits, hierarchies, memories, and appetites of the old undead society while gaining an unfamiliar distance from them. A former tyrant may discover that command feels optional. A keeper of the Veil may realize that secrecy can be chosen for the team's survival rather than obeyed as sacred law. A newly turned Childe may encounter the first genuine silence they have known since death. An ancient elder may find the absence of constant bloodline pressure more frightening than Hunger itself."
-      ]
+      ],
+      "fortitudeRule": "Fortitude equals the highest rank owned in the Deathless Resilience power family, from 0 to 5. Add Fortitude to every Vampire soak roll that is permitted, including Aggravated and Disruption soak."
     },
     {
       "id": "shapechanger",
@@ -549,7 +554,7 @@
         },
         {
           "name": "Living Soak",
-          "effect": "After Protection and other fixed modifiers determine final damage, but before Vitality is lost, make one Soak Test for each damaging hit. In social form, roll Resilience against Impact damage only. In hunting or war form, roll Resilience + Archetype Rating against Impact or Trauma damage. Each success removes 1 final damage, and Living Soak may reduce a successful hit to 0 damage. It requires no action, Reaction, or Fury and can be used once per hit. Wounded and other penalties to Resilience tests reduce the Soak pool. Living Soak cannot reduce Disruption, Pressure, Exposure, Death Marks not created by damage, or an effect explicitly stating that it ignores Shapechanger Soak."
+          "effect": "In social form, use ordinary mortal soak: Resilience + eligible Armor against Bashing, Armor only against Lethal, and no ordinary Aggravated soak. In hunting or war form, roll Resilience + eligible Armor + Archetype Rating against Bashing or Lethal damage. Every result of 6+ cancels one damage success. Living Soak does not apply to Aggravated damage, Disruption, Pressure, Exposure, or Death Marks unless another capability explicitly says otherwise."
         },
         {
           "name": "Regeneration",
@@ -577,8 +582,8 @@
             },
             {
               "rank": 3,
-              "name": "Massive Shift",
-              "effect": "Cost: 1 Fury and enough space. Add Archetype Rating to Force or Resilience for a scene. Become difficult to conceal and vulnerable in confined areas. Failure: damage nearby equipment or terrain."
+              "name": "Titanic Frame",
+              "effect": "Cost: 1 Fury. Become Large for the scene. Add 2 damage dice to melee damage rolls, gain two dice to grapple or break barriers, and increase Carry by 3. You cannot benefit from human-sized cover, cannot pass through human-width openings without forcing them, and lose two dice from Stealth."
             },
             {
               "rank": 4,

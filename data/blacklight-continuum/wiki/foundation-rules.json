@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.4.0",
+  "schemaVersion": "0.5.0",
   "description": "Foundation entries for the capability-first Blacklight Continuum d10 system. The rules measure what a character can do, not what they are made of or how they arrived.",
   "entries": [
     {
@@ -10,7 +10,8 @@
       "category": "Rules",
       "summary": "An original Attribute-plus-Skill d10 framework supporting operatives, supernatural Archetypes, advanced technology, Exposure, equipment, investigation, social conflict, and dangerous field operations.",
       "body": [
-        "Build a test pool from Attribute + Skill + situational modifiers. Results of 6 through 9 produce one success. A 10 produces one success and may activate a specialization, equipment quality, or power rider. A failed roll containing one or more 1s creates a Complication.",
+        "Build a test pool from Attribute + Skill + situational modifiers. Results of 6 through 9 produce one success. A 10 produces one success and is a critical success on an attack. A failed roll containing one or more 1s creates a Complication. Damage and soak dice also succeed on 6+, but a 10 on those rolls is normally only one success.",
+        "After an attack hits, roll its damage dice. A Firearms attack adds one damage die for every critical success on the final attack roll. The defender then rolls every soak die allowed by damage type, Armor, Archetype, form, Fortitude, and explicit capabilities. Each soak success cancels one damage success.",
         "Difficulty normally ranges from one to five successes. Characters may Push by rerolling failed dice up to Resolve, then gain Exposure representing accumulated risk, cognitive strain, supernatural attention, operational instability, or psychological pressure according to the scene.",
         "The core rules never grant or deny abilities because of descriptive anatomy, species, substrate, printing material, appearance, or arrival history. A capability exists only when an Attribute, Skill, Archetype feature, power, equipment item, condition, or explicit narrative permission says it exists.",
         "The current rules remain an alpha foundation. Combat, advancement, power trees, equipment, and character-sheet interfaces are active development areas, but capability-first design is a permanent system principle."
@@ -73,8 +74,8 @@
               "Resolve + Composure"
             ],
             [
-              "Protection",
-              "Resilience + Armor Rating"
+              "Base Bashing Soak",
+              "Resilience + eligible Armor; special soak permissions add or replace dice"
             ]
           ]
         },
