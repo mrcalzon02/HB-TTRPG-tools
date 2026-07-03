@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetBasePath": "assets/blacklight/veteran-scenes/",
+  "description": "Stage-to-image listing for the BlackLight Veteran Reorientation illustrations. Each image is intended to render below the stage narrative body and above the operative record bubbles.",
+  "stages": {
+    "returning-operative": {
+      "stage": 1,
+      "src": "assets/blacklight/veteran-scenes/surveillance_in_a_neon_lit_room.png",
+      "alt": "BlackLight veteran reorientation illustration for Returning Operative"
+    },
+    "accelerating-missions": {
+      "stage": 2,
+      "src": "assets/blacklight/veteran-scenes/urban_espionage_at_nightfall.png",
+      "alt": "BlackLight veteran reorientation illustration for Accelerating Missions"
+    },
+    "warehouse-convergence": {
+      "stage": 3,
+      "src": "assets/blacklight/veteran-scenes/unusual_gathering_in_a_dim_industrial_hall.png",
+      "alt": "BlackLight veteran reorientation illustration for Warehouse Convergence"
+    },
+    "charles-embodied": {
+      "stage": 4,
+      "src": "assets/blacklight/veteran-scenes/metallic_figure_in_a_shadowed_assembly.png",
+      "alt": "BlackLight veteran reorientation illustration for Charles Embodied"
+    },
+    "containment-cube": {
+      "stage": 5,
+      "src": "assets/blacklight/veteran-scenes/floating_refuge_in_a_stormy_city.png",
+      "alt": "BlackLight veteran reorientation illustration for Containment Cube"
+    },
+    "leaving-earth": {
+      "stage": 6,
+      "src": "assets/blacklight/veteran-scenes/watching_the_world_from_afar.png",
+      "alt": "BlackLight veteran reorientation illustration for Leaving Earth"
+    },
+    "lunar-convocation": {
+      "stage": 7,
+      "src": "assets/blacklight/veteran-scenes/ceremonial_gathering_under_cosmic_sky.png",
+      "alt": "BlackLight veteran reorientation illustration for Lunar Convocation"
+    },
+    "look-repentant": {
+      "stage": 8,
+      "src": "assets/blacklight/veteran-scenes/a_solemn_assembly_in_golden_light.png",
+      "alt": "BlackLight veteran reorientation illustration for Look Repentant"
+    },
+    "five-blocs": {
+      "stage": 9,
+      "src": "assets/blacklight/veteran-scenes/grand_council_in_a_luminous_arena.png",
+      "alt": "BlackLight veteran reorientation illustration for Five Blocs"
+    },
+    "charges-against-charles": {
+      "stage": 10,
+      "src": "assets/blacklight/veteran-scenes/ceremonial_tribunal_in_a_cosmic_hall.png",
+      "alt": "BlackLight veteran reorientation illustration for Charges Against Charles"
+    },
+    "return-and-silence": {
+      "stage": 11,
+      "src": "assets/blacklight/veteran-scenes/refugees_in_the_industrial_shelter.png",
+      "alt": "BlackLight veteran reorientation illustration for Return and Silence"
+    },
+    "interim-days": {
+      "stage": 12,
+      "src": "assets/blacklight/veteran-scenes/a_bustling_aid_hub_in_a_warehouse.png",
+      "alt": "BlackLight veteran reorientation illustration for Interim Days"
+    },
+    "company-introduction": {
+      "stage": 13,
+      "src": "assets/blacklight/veteran-scenes/industrial_administration_hall_in_dystopian_future.png",
+      "alt": "BlackLight veteran reorientation illustration for Company Introduction"
+    },
+    "company-status": {
+      "stage": 14,
+      "src": "assets/blacklight/veteran-scenes/strategic_briefing_in_industrial_warehouse.png",
+      "alt": "BlackLight veteran reorientation illustration for Company Status"
+    },
+    "chain-of-command": {
+      "stage": 15,
+      "src": "assets/blacklight/veteran-scenes/tactical_briefing_in_an_industrial_war_room.png",
+      "alt": "BlackLight veteran reorientation illustration for Chain of Command"
+    },
+    "mission-consent": {
+      "stage": 16,
+      "src": "assets/blacklight/veteran-scenes/tense_strategy_briefing_in_a_glowing_war_room.png",
+      "alt": "BlackLight veteran reorientation illustration for Mission Consent"
+    },
+    "information-rights": {
+      "stage": 17,
+      "src": "assets/blacklight/veteran-scenes/high_security_debrief_in_dim_archives.png",
+      "alt": "BlackLight veteran reorientation illustration for Information Rights"
+    },
+    "personhood-property": {
+      "stage": 18,
+      "src": "assets/blacklight/veteran-scenes/futuristic_briefing_room_under_dim_lights.png",
+      "alt": "BlackLight veteran reorientation illustration for Personhood and Property"
+    },
+    "support-obligations": {
+      "stage": 19,
+      "src": "assets/blacklight/veteran-scenes/humanitarian_aid_and_ethereal_presence.png",
+      "alt": "BlackLight veteran reorientation illustration for Support Obligations"
+    },
+    "confidentiality-accountability": {
+      "stage": 20,
+      "src": "assets/blacklight/veteran-scenes/industrial_tribunal_in_a_dim_chamber.png",
+      "alt": "BlackLight veteran reorientation illustration for Confidentiality and Accountability"
+    },
+    "watcher-oversight": {
+      "stage": 21,
+      "src": "assets/blacklight/veteran-scenes/futuristic_tribunal_in_a_high_tech_chamber.png",
+      "alt": "BlackLight veteran reorientation illustration for Watcher Oversight"
+    },
+    "continuity-conversion": {
+      "stage": 22,
+      "src": "assets/blacklight/veteran-scenes/dim_lit_industrial_command_center_meeting.png",
+      "alt": "BlackLight veteran reorientation illustration for Continuity Conversion"
+    },
+    "charles-reckoning": {
+      "stage": 23,
+      "src": "assets/blacklight/veteran-scenes/relief_hub_in_industrial_command_center.png",
+      "alt": "BlackLight veteran reorientation illustration for Charles Reckoning"
+    },
+    "new-arrangement": {
+      "stage": 24,
+      "src": "assets/blacklight/veteran-scenes/squad_briefing_in_a_futuristic_hangar.png",
+      "alt": "BlackLight veteran reorientation illustration for New Arrangement"
+    }
+  },
+  "extras": [
+    {
+      "src": "assets/blacklight/veteran-scenes/imagegen.png",
+      "alt": "Alternate BlackLight veteran reorientation generated scene image"
+    }
+  ]
+}
