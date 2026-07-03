@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.19.0",
+  "schemaVersion": "0.20.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum combat uses an attack roll, a damage roll after a hit, and one legal soak roll. Mortals use Resilience against Non-Lethal/Bashing and Armor only against Lethal. Supernatural characters use only explicitly recorded soak. Aggravated damage bypasses Resilience, Armor, Fortitude, Living Soak, and generic supernatural soak unless an exact immunity or resistance says otherwise.",
+  "description": "Blacklight Continuum now includes explicit physical and social conflict procedures. Physical combat uses attack, damage, legal soak, and Vitality. Social conflict uses exact objectives, concrete Objections, recorded Leverage, Social Difficulty, Exposure, Concessions, transfer, and open escalation without social hit points or ordinary mind control.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -15,11 +15,13 @@
   "campaignDocument": "blacklight-campaign-reader.html",
   "characterSheet": "blacklight-character-sheet.html",
   "combatExampleModule": "blacklight-combat-example.html",
+  "socialConflictModule": "blacklight-social-conflict.html",
   "characterOptions": "data/blacklight-continuum/rules/basic-character-options.json",
   "shapechangerCombatErrata": "data/blacklight-continuum/rules/shapechanger-combat-errata.json",
   "resourcePressureRules": "data/blacklight-continuum/rules/archetype-resource-pressure-rules.json",
   "experienceAdvancementRules": "data/blacklight-continuum/rules/experience-advancement-rules.json",
   "combatFoundationRules": "data/blacklight-continuum/rules/combat-foundation-simple.json",
+  "socialConflictRules": "data/blacklight-continuum/rules/social-conflict-foundation.json",
   "humanVigilPractices": "data/blacklight-continuum/rules/human-vigil-practices.json",
   "vampireLineages": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
   "shapechangerVariants": "data/blacklight-continuum/rules/shapechanger-remainder-forms.json",
@@ -32,11 +34,12 @@
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
     "data/blacklight-continuum/wiki/campaign-play-rules.json",
-    "data/blacklight-continuum/wiki/combat-example-simple.json"
+    "data/blacklight-continuum/wiki/combat-example-simple.json",
+    "data/blacklight-continuum/wiki/social-conflict-example.json"
   ],
   "completedScope": {
-    "wikiEntries": 29,
-    "nativePacks": 6,
+    "wikiEntries": 34,
+    "nativePacks": 7,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
     "archetypeResourceProcedures": 6,
@@ -78,9 +81,15 @@
     "damageTypes": 4,
     "vampireSoakProcedures": 1,
     "fortitudeProcedures": 1,
-    "rolledSoakProcedures": 1
+    "rolledSoakProcedures": 1,
+    "socialConflictProcedures": 1,
+    "socialConflictActions": 9,
+    "socialLeverageTypes": 6,
+    "socialTeachingEntries": 5,
+    "workedSocialConflictModules": 1
   },
   "nextDevelopmentAreas": [
+    "balance testing for Social Difficulty, Leverage frequency, Objection counts, Exposure scaling, Delay clocks, and group social actions",
     "balance testing for mortal Non-Lethal soak, mortal Armor-only Lethal soak, Vampire Undead Soak, Shapechanger Living Soak, and absolute Aggravated bypass",
     "advanced combat procedures: area attacks, concealment, vehicles, environmental hazards, grappling, mounted weapons, and mass engagements",
     "balance testing for all ranked powers",
