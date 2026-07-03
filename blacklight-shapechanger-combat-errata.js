@@ -19,10 +19,20 @@
     });
   }
 
+  function installQuickRule() {
+    const quickRules = document.querySelector('.blacklight-quick-rules');
+    if (!quickRules || quickRules.querySelector('[data-simple-combat-rule]')) return;
+    const rule = document.createElement('p');
+    rule.dataset.simpleCombatRule = 'true';
+    rule.innerHTML = '<strong>Simple Combat:</strong> Attack dice = Attribute + Skill + target Exposure − range and cover. Meet half Guard to hit. Use fixed weapon Damage, subtract one Protection value, then lose the remaining Vitality. Extra successes never add damage.';
+    quickRules.appendChild(rule);
+  }
+
   function apply() {
     replaceText(document.getElementById('blacklight-power-list'));
     replaceText(document.getElementById('blacklight-archetype-summary'));
     replaceText(document.querySelector('#blacklight-browser #blacklight-entry'));
+    installQuickRule();
   }
 
   function initialize() {
