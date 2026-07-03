@@ -12,7 +12,7 @@
 
     nodes.forEach(node => {
       const value = node.nodeValue || '';
-      if (value.trim() === 'Massive Shift') node.nodeValue = value.replace('Massive Shift', 'Titanic Frame');
+      if (value.includes('Massive Shift')) node.nodeValue = value.replaceAll('Massive Shift', 'Titanic Frame');
       if (value.includes('Add Archetype Rating to Force or Resilience for a scene')) node.nodeValue = FRAME_TEXT;
       if (value.includes('make one Soak Test for each damaging hit')) node.nodeValue = SOAK_TEXT;
       if (value.includes('Wounded and other penalties to Resilience tests reduce the Soak pool')) node.nodeValue = SOAK_TEXT;
