@@ -3,7 +3,7 @@
 
   const SOAK_TEXT = 'Living Soak is a transformed-body soak permission. In social form, use the ordinary mortal rules: roll Resilience + eligible Armor against Bashing, Armor only against Lethal, and no Aggravated soak without an explicit capability. In hunting or war form, roll Resilience + eligible Armor + Archetype Rating against Bashing or Lethal damage. Each result of 6+ cancels one damage success. Living Soak does not apply to Aggravated damage, Disruption, Pressure, Exposure, or Death Marks unless another capability explicitly says otherwise.';
   const FRAME_TEXT = 'Cost: 1 Fury. Become Large for the scene. Add 2 damage dice to melee damage rolls, gain two dice to grapple or break barriers, and increase Carry by 3. You cannot benefit from human-sized cover, cannot pass through human-width openings without forcing them, and lose two dice from Stealth.';
-  const VAMPIRE_SOAK_TEXT = 'Undead Soak: Against Bashing, roll Resilience + eligible Armor + Fortitude, then halve remaining damage and round down. Against Lethal, roll Resilience + eligible Armor + Fortitude. Against Aggravated, roll Fortitude plus only explicitly supernatural protection. Ordinary gunfire normally deals Bashing to Vampires. Fortitude equals the highest Deathless Resilience rank owned.';
+  const VAMPIRE_SOAK_TEXT = 'Against Bashing, roll Resilience + eligible Armor + Fortitude, then halve remaining damage and round down. Against Lethal, roll Resilience + eligible Armor + Fortitude. Against Aggravated, roll Fortitude plus only explicitly supernatural protection. Ordinary gunfire normally deals Bashing to Vampires. Fortitude equals the highest Deathless Resilience rank owned.';
 
   function replaceText(root) {
     if (!root) return;
@@ -28,6 +28,19 @@
     else label.insertBefore(document.createTextNode(text), label.firstChild);
   }
 
+  function selectedFortitude() {
+    const archetype = document.getElementById('blacklight-archetype')?.value;
+    if (archetype !== 'vampire') return 0;
+    let highest = 0;
+    document.querySelectorAll('#blacklight-power-list input[data-power-id]:checked').forEach(input => {
+      const parts = String(input.dataset.powerId || '').split('::');
+      if (parts[0] !== 'vampire' || parts[1] !== 'deathless-resilience') return;
+      const rank = Number(parts[2]);
+      if (Number.isFinite(rank)) highest = Math.max(highest, rank);
+    });
+    return highest;
+  }
+
   function installSheetSoakFields() {
     const form = document.getElementById('blacklight-character-form');
     const protection = document.getElementById('blacklight-protection');
@@ -42,9 +55,10 @@
     if (!form.elements.fortitudeRating && protectionLabel) {
       const fortitudeLabel = document.createElement('label');
       fortitudeLabel.dataset.blacklightFortitudeField = 'true';
-      fortitudeLabel.innerHTML = 'Fortitude Rating (Vampire)<input name="fortitudeRating" type="number" min="0" max="5" value="0">';
+      fortitudeLabel.innerHTML = 'Fortitude Rating (Vampire)<input name="fortitudeRating" type="number" min="0" max="5" value="0" readonly>';
       protectionLabel.insertAdjacentElement('afterend', fortitudeLabel);
     }
+    if (form.elements.fortitudeRating) form.elements.fortitudeRating.value = String(selectedFortitude());
 
     const derivedGrid = protection.closest('.blacklight-derived-grid');
     if (derivedGrid && !derivedGrid.parentElement?.querySelector('[data-blacklight-soak-note]')) {
@@ -120,6 +134,8 @@
 
   function initialize() {
     apply();
+    document.addEventListener('change', apply);
+    document.addEventListener('input', apply);
     new MutationObserver(apply).observe(document.documentElement, { childList: true, subtree: true });
   }
 
