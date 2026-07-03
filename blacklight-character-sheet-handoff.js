@@ -2,21 +2,36 @@
   'use strict';
   const query = new URLSearchParams(location.search);
   const fromInduction = query.get('from') === 'induction';
+  const fromRandom = query.get('from') === 'random';
   const printRequested = query.get('print') === '1';
 
-  function ensureEquipmentLink() {
+  function ensureNavigationLinks() {
     const actions = document.querySelector('.blacklight-sheet-header .blacklight-actions');
-    if (!actions || actions.querySelector('[data-blacklight-equipment-link]')) return;
-    const link = document.createElement('a');
-    link.className = 'secondary-action';
-    link.href = 'blacklight-equipment-catalog.html';
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.dataset.blacklightEquipmentLink = 'true';
-    link.textContent = 'Open Equipment Catalog';
-    const returnLink = actions.querySelector('a[href*="index.html"]');
-    if (returnLink) returnLink.insertAdjacentElement('beforebegin', link);
-    else actions.appendChild(link);
+    if (!actions) return;
+
+    if (!actions.querySelector('[data-blacklight-random-link]')) {
+      const link = document.createElement('a');
+      link.className = 'secondary-action';
+      link.href = 'blacklight-random-character.html';
+      link.dataset.blacklightRandomLink = 'true';
+      link.textContent = 'Random Character Generator';
+      const returnLink = actions.querySelector('a[href*="index.html"]');
+      if (returnLink) returnLink.insertAdjacentElement('beforebegin', link);
+      else actions.appendChild(link);
+    }
+
+    if (!actions.querySelector('[data-blacklight-equipment-link]')) {
+      const link = document.createElement('a');
+      link.className = 'secondary-action';
+      link.href = 'blacklight-equipment-catalog.html';
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.dataset.blacklightEquipmentLink = 'true';
+      link.textContent = 'Open Equipment Catalog';
+      const returnLink = actions.querySelector('a[href*="index.html"]');
+      if (returnLink) returnLink.insertAdjacentElement('beforebegin', link);
+      else actions.appendChild(link);
+    }
   }
 
   function ensureTranscriptField() {
@@ -52,10 +67,10 @@
   }
 
   function initialize() {
-    ensureEquipmentLink();
+    ensureNavigationLinks();
     ensureTranscriptField();
     applyInductionTranscript(false);
-    if (!fromInduction && !printRequested) return;
+    if (!fromInduction && !fromRandom && !printRequested) return;
     let attempts = 0;
     const timer = setInterval(() => {
       attempts += 1;
@@ -64,6 +79,7 @@
         applyInductionTranscript(true);
         const status = document.getElementById('blacklight-load-status');
         if (fromInduction && status) status.textContent = 'Character restored with Charles’s induction transcript.';
+        if (fromRandom && status) status.textContent = 'Randomly generated operative transferred and restored. Review any fields you want to personalize.';
         if (printRequested) setTimeout(() => print(), 700);
       }
     }, 100);
