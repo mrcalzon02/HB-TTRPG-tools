@@ -1,0 +1,20 @@
+{
+  "system": "Blacklight Continuum",
+  "module": "BlackLight Mission Generator",
+  "validated": true,
+  "validatedAt": "2026-07-03T18:09:55.227045+00:00",
+  "validatedCommit": "48b4e256d041f8356382f7d5e9bd1ea89f691ace",
+  "checks": [
+    "Mission content library JSON parsed successfully",
+    "Twelve source-derived legacy mission patterns mapped once each to source missions 1 through 12",
+    "384 selectable pattern, operation, and Continuum-layer contract combinations retained compatible clients, targets, opposition, challenges, and deadlines",
+    "Eight operation types, twelve client categories, twelve target profiles, twenty locations, ten opposition models, thirty-two challenges, thirty-four twists, and twenty-four deadlines validated",
+    "Player briefing and Moderator-only dossier separation validated",
+    "Mandatory risk disclosure, declared redactions, known unknowns, and renewed-consent procedure validated",
+    "Seed recreation and independent contract, site, hidden-truth, and cast reroll controls validated",
+    "Seven-scene framework, two mission clocks, and five resolution levels validated",
+    "Workspace, character creation, veteran reorientation, random character, character sheet, and Wiki integration validated",
+    "Mission generator, workspace entry, and character-sheet handoff JavaScript passed node --check"
+  ],
+  "validatorOutput": "Validated 384 selectable pattern/operation/layer contracts, 34 twists, 32 challenges, and 20 locations."
+}
