@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.26.0",
+  "schemaVersion": "0.27.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
   "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
@@ -149,11 +149,15 @@
     "veteranReintroductionStages": 24,
     "blackLightCompanyStatusOptions": 6,
     "lunarConvocationContinuityProcedures": 1,
-    "veteranContinuitySheetTransfers": 1
+    "veteranContinuitySheetTransfers": 1,
+    "veteranBubblePromptReplacements": 35,
+    "veteranPreservedSheetTextPrompts": 2,
+    "veteranExpandedStageGuides": 24,
+    "veteranStructuredChoiceAcknowledgements": 1
   },
   "nextDevelopmentAreas": [
     "live browser playtest of seeded mission recreation, sectional rerolls, player-only printing, complete dossier printing, clipboard briefing, and JSON export",
-    "live browser playtest of the twenty-four-stage veteran reorientation, response replacement, restart, export, and character-sheet attachment",
+    "live browser playtest of the twenty-four-stage bubble-based veteran reorientation, multi-selection Charles acknowledgments, legacy-answer migration, restart, export, and character-sheet attachment",
     "balance testing and distribution analysis across thousands of generated standard characters",
     "equipment selection and automatic sheet insertion during guided character creation",
     "balance testing for modern, historical, future, improvised, relic, and alien equipment damage, Armor Ratings, Load, availability, and failure conditions",
@@ -184,5 +188,6 @@
   ],
   "eldritchBindingSources": "data/blacklight-continuum/rules/eldritch-binding-sources.json",
   "veteranReintroductionModule": "blacklight-veteran-reintroduction.html",
-  "veteranReintroductionData": "data/blacklight-continuum/wiki/veteran-reintroduction.json"
+  "veteranReintroductionData": "data/blacklight-continuum/wiki/veteran-reintroduction.json",
+  "veteranReorientationEnhancements": "blacklight-veteran-reorientation-options.js"
 }
