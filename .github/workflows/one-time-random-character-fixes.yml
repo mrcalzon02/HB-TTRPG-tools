@@ -1,0 +1,54 @@
+name: One-Time Random Character Fixes
+
+on:
+  push:
+    paths:
+      - '.github/workflows/one-time-random-character-fixes.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Patch generator completion edge cases
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('blacklight-random-character.js')
+          text = path.read_text(encoding='utf-8')
+
+          replacements = {
+            "return /armor|protective suit|shield|defensive field/i.test(item.category || '') && Number(item.armorRating || 0) >= 0;":
+            "return /armor|protective suit|shield|defensive field|defense|powered support/i.test(item.category || '') && Number(item.armorRating || 0) >= 0;",
+
+            "    const all = state.data.equipment.filter(item => equipmentAllowed(item, era));\n    const weapons = all.filter(isWeapon);\n    const armors = all.filter(isArmor);\n    const tools = all.filter(item => !isWeapon(item) && !isArmor(item));":
+            "    const eraItems = state.data.equipment.filter(item => equipmentAllowed(item, era));\n    const universalSupport = state.data.equipment.filter(item => item.catalogId === 'survival-and-field-equipment');\n    const weapons = eraItems.filter(isWeapon);\n    const armors = eraItems.filter(isArmor);\n    const tools = [...eraItems, ...universalSupport].filter((item, index, array) => !isWeapon(item) && !isArmor(item) && array.findIndex(other => other.id === item.id) === index);",
+
+            "    const details = [variant.catalog, variant.method?.name, variant.gift?.name, variant.bane?.name, variant.practice?.name].filter(Boolean);":
+            "    const details = [variant.catalog, variant.method?.name, variant.gift?.name, variant.bane?.name, variant.practice?.name, variant.temptation?.name, variant.intrusionBreach?.name].filter(Boolean);",
+
+            "        const feature = variant.method || variant.gift || variant.practice;\n        return feature ? `${variant.name} — ${feature.name}: ${feature.effect}` : variant.name;":
+            "        const feature = variant.method || variant.gift || variant.practice || variant.temptation;\n        const bane = variant.bane ? ` Bane — ${variant.bane.name}: ${variant.bane.effect}` : '';\n        const breach = variant.intrusionBreach ? ` Intrusion Breach — ${variant.intrusionBreach.name}: ${variant.intrusionBreach.effect}` : '';\n        return feature ? `${variant.name} — ${feature.name}: ${feature.effect}${bane}${breach}` : `${variant.name}${bane}${breach}`;"
+          }
+
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'Missing expected generator snippet: {old[:90]}')
+              text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit patch and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/one-time-random-character-fixes.yml
+          git add blacklight-random-character.js
+          git commit -m "Complete random character generation edge cases"
+          git push origin main
