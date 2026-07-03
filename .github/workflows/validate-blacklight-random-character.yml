@@ -1,0 +1,42 @@
+name: Validate Blacklight Random Character Generator
+
+on:
+  push:
+    paths:
+      - 'blacklight-random-character.html'
+      - 'blacklight-random-character.css'
+      - 'blacklight-random-character.js'
+      - 'blacklight-random-character-entry.js'
+      - 'blacklight-character-sheet-handoff.js'
+      - 'data/blacklight-continuum/generators/random-character-content.json'
+      - 'data/blacklight-continuum/wiki/random-character-generator.json'
+      - 'data/blacklight-continuum/wiki/wiki-index.json'
+      - 'data/blacklight-continuum/rules/basic-character-options.json'
+      - 'data/blacklight-continuum/rules/character-creation-foundation.json'
+      - 'data/blacklight-continuum/rules/modern-historical-equipment.json'
+      - 'data/blacklight-continuum/rules/future-scavenged-survival-equipment.json'
+      - 'scripts/validate-blacklight-random-character.py'
+      - '.github/workflows/validate-blacklight-random-character.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate character generation data and legal allocations
+        run: python scripts/validate-blacklight-random-character.py
+      - name: Validate generator JavaScript syntax
+        run: |
+          node --check blacklight-random-character.js
+          node --check blacklight-random-character-entry.js
+          node --check blacklight-character-sheet-handoff.js
