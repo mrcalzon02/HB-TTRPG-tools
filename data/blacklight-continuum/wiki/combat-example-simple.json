@@ -1,8 +1,8 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "3.0.0",
-  "description": "A combat teaching module using attack rolls, firearm critical damage dice, rolled damage, damage-type permissions, rolled soak, Exposure, Cohesion, Pressure, rescue, and death.",
+  "schemaVersion": "3.1.0",
+  "description": "A combat teaching module using attack rolls, firearm critical damage dice, mortal Resilience against Non-Lethal damage, Armor against mortal Lethal damage, explicit supernatural soak, Aggravated bypass, Exposure, Cohesion, Pressure, rescue, and death.",
   "entries": [
     {
       "id": "combat-foundation-procedure",
@@ -13,144 +13,319 @@
         "Build the attack pool from Attribute + Skill. Add the target's current Exposure as attack dice. Subtract range, cover, condition, and equipment penalties.",
         "Roll against Defense Difficulty, equal to ceiling(Guard divided by two). Results of 6 through 10 are successes. A 10 on the final attack roll is also a critical success.",
         "If the attack misses, stop. If it hits, roll the attack's damage dice. A successful Firearms attack adds one damage die for every critical success on the final attack roll. Ordinary extra successes do not add damage dice.",
-        "Every result of 6 through 10 on the damage roll is one damage success. The defender then builds one legal soak pool and rolls it. Every result of 6 through 10 on the soak roll cancels one damage success.",
-        "Mark every uncancelled success as Bashing, Lethal, Aggravated, or Disruption damage. A 10 on a damage or soak roll is normally only one success."
+        "Every result of 6 through 10 on the damage roll is one damage success. Against Non-Lethal/Bashing, mortals roll Resilience + eligible Armor. Against Lethal, mortals roll eligible Armor only. Supernatural characters use only soak explicitly printed by their Archetype or abilities.",
+        "Aggravated damage receives no ordinary soak roll. It bypasses Resilience, Armor, Fortitude, Living Soak, and generic supernatural soak. Only a specific ability explicitly naming an exact immunity or resistance can alter it.",
+        "Each legal soak success cancels one damage success. Mark every uncancelled success. A 10 on a damage or soak roll is normally only one success."
       ],
       "tables": [
         {
           "title": "Combat Resolution",
-          "columns": ["Step", "Rule"],
+          "columns": [
+            "Step",
+            "Rule"
+          ],
           "rows": [
-            ["1. Attack", "Attribute + Skill + target Exposure - penalties"],
-            ["2. Hit", "Meet ceiling(Guard / 2); every attack die showing 10 is a critical success"],
-            ["3. Damage Pool", "Printed damage dice; Firearms adds one die per critical success"],
-            ["4. Damage Roll", "Each 6+ is one damage success"],
-            ["5. Soak Pool", "Use only Resilience, Armor, Fortitude, Archetype Rating, or other dice allowed for that damage type"],
-            ["6. Soak Roll", "Each 6+ cancels one damage success"],
-            ["7. Record", "Mark every uncancelled success on Vitality"]
+            [
+              "1. Attack",
+              "Attribute + Skill + target Exposure - penalties"
+            ],
+            [
+              "2. Hit",
+              "Meet ceiling(Guard / 2); every attack die showing 10 is a critical success"
+            ],
+            [
+              "3. Damage Pool",
+              "Printed damage dice; Firearms adds one die per critical success"
+            ],
+            [
+              "4. Damage Roll",
+              "Each 6+ is one damage success"
+            ],
+            [
+              "5. Soak Permission",
+              "Non-Lethal: mortal Resilience + Armor; Lethal: mortal Armor only; supernatural: printed soak only"
+            ],
+            [
+              "6. Aggravated",
+              "No ordinary soak; only exact immunity or resistance applies"
+            ],
+            [
+              "7. Record",
+              "Each legal soak success cancels one damage success; mark the rest"
+            ]
           ]
         },
         {
           "title": "Firearm Critical Examples",
-          "columns": ["Final Attack Roll", "Damage Pool"],
+          "columns": [
+            "Final Attack Roll",
+            "Damage Pool"
+          ],
           "rows": [
-            ["Pistol hits with no 10s", "Base 4 damage dice"],
-            ["Pistol hits with one 10", "5 damage dice"],
-            ["Rifle hits with two 10s", "Base 5 + 2 = 7 damage dice"],
-            ["Rifle misses but contains a 10", "No damage roll because the attack missed"]
+            [
+              "Pistol hits with no 10s",
+              "Base 4 damage dice"
+            ],
+            [
+              "Pistol hits with one 10",
+              "5 damage dice"
+            ],
+            [
+              "Rifle hits with two 10s",
+              "Base 5 + 2 = 7 damage dice"
+            ],
+            [
+              "Rifle misses but contains a 10",
+              "No damage roll because the attack missed"
+            ]
           ]
         }
       ],
-      "tags": ["combat", "damage roll", "soak", "firearm criticals"],
-      "relatedEntries": ["damage-types-and-soak", "vampire-soak-and-fortitude", "shapechanger-living-soak", "worked-combat-cargo-gallery"]
+      "tags": [
+        "combat",
+        "damage roll",
+        "soak",
+        "firearm criticals"
+      ],
+      "relatedEntries": [
+        "damage-types-and-soak",
+        "vampire-soak-and-fortitude",
+        "shapechanger-living-soak",
+        "worked-combat-cargo-gallery"
+      ]
     },
     {
       "id": "damage-types-and-soak",
-      "title": "Bashing, Lethal, Aggravated, and Disruption",
+      "title": "Non-Lethal, Lethal, Aggravated, and Disruption",
       "category": "Combat",
-      "summary": "Damage type determines whether ordinary Resilience, Armor, or only an explicit supernatural defense may enter the soak pool.",
+      "summary": "Damage type determines whether mortal Resilience, Armor, a printed supernatural soak ability, or no ordinary soak can apply.",
       "body": [
-        "Bashing is blunt, concussive, exhausting, or bruising damage. An ordinary mortal or human-adjacent character rolls Resilience + eligible Armor to soak it.",
-        "Lethal damage cuts, penetrates, burns, crushes, or destroys essential living tissue. An ordinary mortal cannot add Resilience to a Lethal soak pool. They roll eligible Armor only. With no Armor, every Lethal damage success is marked.",
-        "Aggravated damage is supernatural, cursed, consecrated, reality-destroying, or otherwise fundamentally hostile to the target's nature. No ordinary Resilience or ordinary Armor applies. Only a capability or item explicitly rated against Aggravated damage grants soak dice.",
-        "Disruption damages memory, identity, noospheric continuity, or control. It uses Resolve and explicit continuity protection when its attack record allows soak. Physical Armor and physical soak permissions do not apply.",
-        "Armor contributes dice rather than subtracting damage. Armor must cover the struck area and be rated for the damage type. Ordinary Armor normally applies to Bashing and Lethal, but not Aggravated."
+        "Non-Lethal/Bashing is blunt, concussive, exhausting, or bruising damage. A mortal or human-adjacent character rolls Resilience + eligible Armor to soak it.",
+        "Lethal damage cuts, penetrates, burns, crushes, or destroys essential living tissue. A mortal cannot add Resilience to a Lethal soak pool and rolls eligible Armor only.",
+        "A supernatural character uses only the soak pool explicitly printed by its Archetype, form, power, item, or ability. Supernatural status alone grants no defense. When no supernatural soak applies, use ordinary mortal permissions.",
+        "Aggravated damage is supernatural, cursed, consecrated, reality-destroying, or otherwise fundamentally hostile. It bypasses Resilience, Armor, Fortitude, Living Soak, and generic supernatural soak. Only an ability explicitly naming resistance or immunity to that exact damage can alter it.",
+        "Disruption damages memory, identity, noospheric continuity, or control. It uses Resolve and explicit continuity protection when its attack record allows soak."
       ],
       "tables": [
         {
-          "title": "Ordinary Mortal Soak",
-          "columns": ["Damage", "Soak Pool"],
+          "title": "Mortal and General Soak Permissions",
+          "columns": [
+            "Damage",
+            "Soak Pool"
+          ],
           "rows": [
-            ["Bashing", "Resilience + eligible Armor"],
-            ["Lethal", "Eligible Armor only"],
-            ["Aggravated", "No dice unless an explicit supernatural defense grants them"],
-            ["Disruption", "Resolve + explicit continuity protection when the attack allows soak"]
+            [
+              "Non-Lethal / Bashing",
+              "Mortals: Resilience + eligible Armor"
+            ],
+            [
+              "Lethal",
+              "Mortals: eligible Armor only"
+            ],
+            [
+              "Supernatural Soak",
+              "Use only the exact pool printed by an Archetype or ability"
+            ],
+            [
+              "Aggravated",
+              "No ordinary soak; exact immunity or resistance only"
+            ],
+            [
+              "Disruption",
+              "Resolve + explicit continuity protection when permitted"
+            ]
           ]
         },
         {
           "title": "Basic Bashing Example",
-          "columns": ["Stage", "Result"],
+          "columns": [
+            "Stage",
+            "Result"
+          ],
           "rows": [
-            ["Damage Roll", "A punch rolls 5 damage dice and produces 3 successes"],
-            ["Soak Roll", "The target rolls Resilience 2 and produces 1 success"],
-            ["Damage Marked", "3 damage successes - 1 soak success = 2 Bashing"]
+            [
+              "Damage Roll",
+              "A punch rolls 5 damage dice and produces 3 successes"
+            ],
+            [
+              "Soak Roll",
+              "The target rolls Resilience 2 and produces 1 success"
+            ],
+            [
+              "Damage Marked",
+              "3 damage successes - 1 soak success = 2 Bashing"
+            ]
           ]
         }
       ],
-      "tags": ["bashing", "lethal", "aggravated", "disruption", "armor"],
-      "relatedEntries": ["combat-foundation-procedure", "vampire-soak-and-fortitude", "shapechanger-living-soak"]
+      "tags": [
+        "bashing",
+        "lethal",
+        "aggravated",
+        "disruption",
+        "armor"
+      ],
+      "relatedEntries": [
+        "combat-foundation-procedure",
+        "vampire-soak-and-fortitude",
+        "shapechanger-living-soak"
+      ]
     },
     {
       "id": "vampire-soak-and-fortitude",
       "title": "Vampire Soak and Fortitude",
       "category": "Combat",
-      "summary": "The dead body can soak injuries that living biology cannot, treats most gunfire as Bashing, halves Bashing after soak, and adds Fortitude to every permitted soak roll.",
+      "summary": "The dead body uses Undead Soak against Non-Lethal and Lethal damage, but Aggravated bypasses Fortitude unless an exact ability says otherwise.",
       "body": [
-        "A Vampire is not sustained by functioning mortal organs. Bruising, rupturing, or puncturing tissue is less decisive when cursed blood and deathless continuity move the body. This changes both soak permissions and the final treatment of Bashing damage.",
-        "Fortitude equals the highest Deathless Resilience rank the Vampire owns, from 0 to 5. Add that many dice to every Vampire soak roll that is permitted, including Aggravated soak. A Vampire with no Deathless Resilience powers has Fortitude 0.",
-        "Against Bashing, roll Resilience + eligible Armor + Fortitude. Cancel damage successes normally, then halve the remaining Bashing and round down.",
-        "Against Lethal, roll Resilience + eligible Armor + Fortitude. Unlike Bashing, do not halve what remains.",
-        "Against Aggravated, ordinary Resilience and ordinary Armor do not apply. Roll Fortitude plus only explicitly supernatural Armor or another defense that says it soaks Aggravated damage.",
-        "Ordinary firearms deal Bashing to Vampires because most bullets are designed to puncture organs the Vampire no longer needs. Anti-materiel fire, vehicle-mounted weapons, explosive or incendiary ammunition, specialized anti-undead ammunition, and attacks explicitly labeled otherwise may deal Lethal or Aggravated damage instead."
+        "A Vampire is not sustained by functioning mortal organs. Bruising, rupturing, or puncturing tissue is less decisive when cursed blood and deathless continuity move the body.",
+        "Fortitude equals the highest Deathless Resilience rank the Vampire owns, from 0 to 5. Add it to permitted Vampire soak rolls against Non-Lethal/Bashing, Lethal, and Disruption damage.",
+        "Against Non-Lethal/Bashing, roll Resilience + eligible Armor + Fortitude. Cancel damage successes normally, then halve the remainder and round down.",
+        "Against Lethal, roll Resilience + eligible Armor + Fortitude. Do not halve what remains.",
+        "Aggravated damage bypasses Resilience, Armor, Fortitude, and Undead Soak. The Vampire receives no normal soak roll. Only a separate ability explicitly granting immunity or resistance to that exact Aggravated damage can alter it.",
+        "Ordinary firearms deal Non-Lethal/Bashing to Vampires. Anti-materiel fire, vehicle-mounted weapons, explosive or incendiary ammunition, specialized anti-undead ammunition, and attacks explicitly labeled otherwise may deal Lethal or Aggravated damage."
       ],
       "tables": [
         {
           "title": "Vampire Soak Pools",
-          "columns": ["Damage", "Soak Pool", "After Soak"],
+          "columns": [
+            "Damage",
+            "Soak Pool",
+            "After Soak"
+          ],
           "rows": [
-            ["Bashing", "Resilience + Armor + Fortitude", "Halve remaining damage, round down"],
-            ["Lethal", "Resilience + Armor + Fortitude", "Take all remaining damage"],
-            ["Aggravated", "Fortitude + explicitly supernatural protection", "Take all remaining damage"],
-            ["Disruption", "Resolve + Fortitude + explicit continuity protection", "Take all remaining damage"]
+            [
+              "Non-Lethal / Bashing",
+              "Resilience + Armor + Fortitude",
+              "Halve remaining damage, round down"
+            ],
+            [
+              "Lethal",
+              "Resilience + Armor + Fortitude",
+              "Take all remaining damage"
+            ],
+            [
+              "Aggravated",
+              "No ordinary soak",
+              "Only exact immunity or resistance can alter damage"
+            ],
+            [
+              "Disruption",
+              "Resolve + Fortitude + explicit continuity protection",
+              "Take all remaining damage"
+            ]
           ]
         },
         {
           "title": "Vampire Bashing Example",
-          "columns": ["Stage", "Result"],
+          "columns": [
+            "Stage",
+            "Result"
+          ],
           "rows": [
-            ["Damage Roll", "A punch produces 3 Bashing successes"],
-            ["Soak Roll", "The Vampire rolls Resilience 2 + Fortitude 1 and produces 1 success"],
-            ["After Soak", "3 - 1 = 2 Bashing"],
-            ["Undead Halving", "2 is halved to 1 Bashing"]
+            [
+              "Damage Roll",
+              "A punch produces 3 Non-Lethal/Bashing successes"
+            ],
+            [
+              "Soak Roll",
+              "The Vampire rolls Resilience 2 + Fortitude 1 and produces 1 success"
+            ],
+            [
+              "After Soak",
+              "3 - 1 = 2 Non-Lethal/Bashing"
+            ],
+            [
+              "Undead Halving",
+              "2 is halved to 1 Non-Lethal/Bashing"
+            ]
           ]
         },
         {
           "title": "Vampire Aggravated Example",
-          "columns": ["Stage", "Result"],
+          "columns": [
+            "Stage",
+            "Result"
+          ],
           "rows": [
-            ["Damage Roll", "Supernatural fire produces 3 Aggravated successes"],
-            ["Soak Pool", "Resilience and ordinary Armor are excluded; Fortitude 2 rolls two dice"],
-            ["Soak Result", "One success cancels one point"],
-            ["Damage Marked", "2 Aggravated"]
+            [
+              "Damage Roll",
+              "Supernatural fire produces 3 Aggravated successes"
+            ],
+            [
+              "Ordinary Soak",
+              "None: Resilience, Armor, Fortitude, and Undead Soak are bypassed"
+            ],
+            [
+              "Exact Resistance",
+              "The character has no ability explicitly resisting this supernatural fire"
+            ],
+            [
+              "Damage Marked",
+              "3 Aggravated"
+            ]
           ]
         }
       ],
-      "tags": ["vampire", "fortitude", "gunfire", "undead", "soak"],
-      "relatedEntries": ["damage-types-and-soak", "combat-foundation-procedure", "vampire-archetype"]
+      "tags": [
+        "vampire",
+        "fortitude",
+        "gunfire",
+        "undead",
+        "soak"
+      ],
+      "relatedEntries": [
+        "damage-types-and-soak",
+        "combat-foundation-procedure",
+        "vampire-archetype"
+      ]
     },
     {
       "id": "shapechanger-living-soak",
       "title": "Shapechanger Living Soak",
       "category": "Combat",
-      "summary": "Living Soak allows a transformed Shapechanger to roll Resilience against Lethal damage and adds Archetype Rating to physical soak pools.",
+      "summary": "Living Soak provides an explicit supernatural soak pool against Non-Lethal and Lethal damage while transformed, but never against Aggravated by default.",
       "body": [
-        "In social form, the Shapechanger uses ordinary mortal permissions: Resilience + Armor against Bashing, Armor only against Lethal, and no ordinary Aggravated soak.",
-        "In hunting or war form, Living Soak permits Resilience against both Bashing and Lethal damage. Roll Resilience + eligible Armor + Archetype Rating. Every success cancels one damage success.",
-        "Living Soak costs no Fury and requires no Reaction. The form itself grants the permission. Low Vitality does not automatically reduce the soak pool because there is no universal Wounded penalty.",
-        "Living Soak does not automatically soak Aggravated or Disruption damage. A separate capability must explicitly grant those dice."
+        "In social form, the Shapechanger uses mortal permissions: Resilience + Armor against Non-Lethal/Bashing, Armor only against Lethal, and no ordinary soak against Aggravated.",
+        "In hunting or war form, Living Soak permits Resilience against both Non-Lethal/Bashing and Lethal damage. Roll Resilience + eligible Armor + Archetype Rating. Every success cancels one damage success.",
+        "Living Soak costs no Fury and requires no Reaction. Low Vitality does not automatically reduce the pool.",
+        "Aggravated damage bypasses Resilience, Armor, Archetype Rating, and Living Soak unless a separate ability explicitly grants resistance or immunity to that exact damage. Living Soak also does not apply to Disruption."
       ],
       "tables": [
         {
           "title": "Shapechanger Soak",
-          "columns": ["State", "Bashing", "Lethal", "Aggravated"],
+          "columns": [
+            "State",
+            "Non-Lethal / Bashing",
+            "Lethal",
+            "Aggravated"
+          ],
           "rows": [
-            ["Social form", "Resilience + Armor", "Armor only", "Explicit supernatural defense only"],
-            ["Hunting or war form", "Resilience + Armor + Archetype Rating", "Resilience + Armor + Archetype Rating", "Explicit supernatural defense only"]
+            [
+              "Social form",
+              "Resilience + Armor",
+              "Armor only",
+              "No ordinary soak"
+            ],
+            [
+              "Hunting or war form",
+              "Resilience + Armor + Archetype Rating",
+              "Resilience + Armor + Archetype Rating",
+              "No ordinary soak; exact immunity or resistance only"
+            ]
           ]
         }
       ],
-      "tags": ["shapechanger", "living soak", "resilience", "archetype rating"],
-      "relatedEntries": ["damage-types-and-soak", "combat-foundation-procedure", "worked-combat-cargo-gallery"]
+      "tags": [
+        "shapechanger",
+        "living soak",
+        "resilience",
+        "archetype rating"
+      ],
+      "relatedEntries": [
+        "damage-types-and-soak",
+        "combat-foundation-procedure",
+        "worked-combat-cargo-gallery"
+      ]
     },
     {
       "id": "worked-combat-cargo-gallery",
@@ -180,21 +355,61 @@
       "tables": [
         {
           "title": "What Changed the Outcome",
-          "columns": ["Mechanic", "Effect"],
+          "columns": [
+            "Mechanic",
+            "Effect"
+          ],
           "rows": [
-            ["Firearm critical success", "Added one damage die before the firearm damage roll"],
-            ["Mortal Lethal soak", "Allowed Armor dice but not Resilience"],
-            ["Shapechanger Living Soak", "Allowed Resilience + Armor + Archetype Rating against Lethal while transformed"],
-            ["Disruption", "Bypassed Living Soak and used Resolve-based continuity soak"],
-            ["Exposure", "Added attack dice against the exposed target and could create more firearm criticals"],
-            ["Stabilize", "Stopped Ilyan's death clock and removed his Death Mark"],
-            ["Emergency Treatment", "Removed one Lethal and restored Ilyan to 1 Vitality"],
-            ["Death Marks", "Killed Kest when the total reached 3"]
+            [
+              "Firearm critical success",
+              "Added one damage die before the firearm damage roll"
+            ],
+            [
+              "Mortal Lethal soak",
+              "Allowed Armor dice but not Resilience"
+            ],
+            [
+              "Shapechanger Living Soak",
+              "Allowed Resilience + Armor + Archetype Rating against Lethal while transformed"
+            ],
+            [
+              "Disruption",
+              "Bypassed Living Soak and used Resolve-based continuity soak"
+            ],
+            [
+              "Exposure",
+              "Added attack dice against the exposed target and could create more firearm criticals"
+            ],
+            [
+              "Stabilize",
+              "Stopped Ilyan's death clock and removed his Death Mark"
+            ],
+            [
+              "Emergency Treatment",
+              "Removed one Lethal and restored Ilyan to 1 Vitality"
+            ],
+            [
+              "Death Marks",
+              "Killed Kest when the total reached 3"
+            ]
           ]
         }
       ],
-      "tags": ["worked combat", "damage roll", "soak roll", "firearm critical", "shapechanger", "rescue", "death"],
-      "relatedEntries": ["combat-foundation-procedure", "damage-types-and-soak", "vampire-soak-and-fortitude", "shapechanger-living-soak"]
+      "tags": [
+        "worked combat",
+        "damage roll",
+        "soak roll",
+        "firearm critical",
+        "shapechanger",
+        "rescue",
+        "death"
+      ],
+      "relatedEntries": [
+        "combat-foundation-procedure",
+        "damage-types-and-soak",
+        "vampire-soak-and-fortitude",
+        "shapechanger-living-soak"
+      ]
     }
   ]
 }

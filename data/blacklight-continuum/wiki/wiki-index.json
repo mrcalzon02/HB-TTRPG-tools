@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.18.0",
+  "schemaVersion": "0.19.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum combat uses an attack roll, a damage roll after a hit, and one legal soak roll. Firearm critical successes add damage dice. Bashing, Lethal, Aggravated, and Disruption determine soak permissions; Vampires use Fortitude and deathless damage treatment, while transformed Shapechangers use Living Soak.",
+  "description": "Blacklight Continuum combat uses an attack roll, a damage roll after a hit, and one legal soak roll. Mortals use Resilience against Non-Lethal/Bashing and Armor only against Lethal. Supernatural characters use only explicitly recorded soak. Aggravated damage bypasses Resilience, Armor, Fortitude, Living Soak, and generic supernatural soak unless an exact immunity or resistance says otherwise.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -81,7 +81,7 @@
     "rolledSoakProcedures": 1
   },
   "nextDevelopmentAreas": [
-    "balance testing for damage dice, firearm criticals, soak pools, Vampire Bashing halving, Fortitude, and Shapechanger Living Soak",
+    "balance testing for mortal Non-Lethal soak, mortal Armor-only Lethal soak, Vampire Undead Soak, Shapechanger Living Soak, and absolute Aggravated bypass",
     "advanced combat procedures: area attacks, concealment, vehicles, environmental hazards, grappling, mounted weapons, and mass engagements",
     "balance testing for all ranked powers",
     "balance testing for Resource recovery, Pressure thresholds, and Crisis severity",

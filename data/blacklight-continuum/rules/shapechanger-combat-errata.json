@@ -1,9 +1,9 @@
 {
   "setting": "Blacklight Continuum",
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "archetype": "shapechanger",
   "replacements": {
-    "Living Soak": "Living Soak is a transformed-body soak permission. In social form, use the ordinary mortal rules: roll Resilience + eligible Armor against Bashing, Armor only against Lethal, and no Aggravated soak without an explicit capability. In hunting or war form, roll Resilience + eligible Armor + Archetype Rating against Bashing or Lethal damage. Each result of 6+ cancels one damage success. Living Soak does not apply to Aggravated damage, Disruption, Pressure, Exposure, or Death Marks unless another capability explicitly says otherwise.",
+    "Living Soak": "In social form, use ordinary mortal soak: Resilience + eligible Armor against Non-Lethal/Bashing, Armor only against Lethal, and no soak against Aggravated damage. In hunting or war form, roll Resilience + eligible Armor + Archetype Rating against Non-Lethal/Bashing or Lethal damage. Every result of 6+ cancels one damage success. Aggravated damage bypasses Resilience, Armor, Archetype Rating, and Living Soak unless a separate ability explicitly grants resistance or immunity to that exact damage. Living Soak does not apply to Disruption, Pressure, Exposure, or Death Marks.",
     "Massive Shift": {
       "newName": "Titanic Frame",
       "effect": "Cost: 1 Fury. Become Large for the scene. Add 2 damage dice to melee damage rolls, gain two dice to grapple or break barriers, and increase Carry by 3. You cannot benefit from human-sized cover, cannot pass through human-width openings without forcing them, and lose two dice from Stealth."
