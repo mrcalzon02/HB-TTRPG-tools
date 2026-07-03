@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight Continuum Equipment Catalog</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-equipment-catalog.css">
+</head>
+<body>
+  <main class="equipment-shell">
+    <header class="equipment-header no-print">
+      <div>
+        <p class="eyebrow">Blacklight Continuum · Capability-first equipment reference</p>
+        <h1>Arms, Armor, Relics, and Field Technology</h1>
+        <p>Search modern and historical weapons, protective equipment, supernatural relics, human-compatible future systems, scavenged gear, survival supplies, and alien technology templates. Every record uses the same simple combat, Armor, Load, capability, and failure language.</p>
+      </div>
+      <div class="equipment-actions">
+        <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+        <a class="secondary-action" href="blacklight-character-sheet.html">Open Character Sheet</a>
+        <button id="equipment-print" class="primary-action" type="button">Print Current Record</button>
+      </div>
+    </header>
+
+    <section class="equipment-browser" aria-labelledby="equipment-browser-title">
+      <div class="section-heading no-print">
+        <p class="eyebrow">Searchable catalog</p>
+        <h2 id="equipment-browser-title">Equipment Records</h2>
+        <p>Search by item name, category, era, damage type, Armor Rating, Skill, relic requirement, alien origin, tag, or effect.</p>
+      </div>
+
+      <div id="equipment-summary" class="equipment-summary no-print"></div>
+
+      <div class="equipment-controls no-print">
+        <input id="equipment-search" type="search" placeholder="Search pistol, plate, World War, relic, vacuum, Ar'nock, Disruption…">
+        <select id="equipment-group" aria-label="Filter by catalog"><option value="all">Loading catalogs…</option></select>
+        <select id="equipment-classification" aria-label="Filter by record type"><option value="all">Loading record types…</option></select>
+        <button id="equipment-reset" class="secondary-action" type="button">Reset Filters</button>
+      </div>
+
+      <p id="equipment-status" class="equipment-status">Loading equipment rules and catalogs…</p>
+
+      <div class="equipment-layout">
+        <nav id="equipment-list" class="equipment-list no-print" aria-label="Equipment records"></nav>
+        <article id="equipment-detail" class="equipment-detail">
+          <p class="equipment-status">Select an equipment record.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="blacklight-equipment-catalog.js"></script>
+</body>
+</html>
