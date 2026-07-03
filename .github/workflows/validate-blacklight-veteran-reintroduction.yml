@@ -1,0 +1,40 @@
+name: Validate BlackLight Veteran Reorientation
+
+on:
+  push:
+    paths:
+      - 'blacklight-veteran-reintroduction.html'
+      - 'blacklight-veteran-reintroduction.css'
+      - 'blacklight-veteran-reintroduction.js'
+      - 'blacklight-veteran-reintroduction-entry.js'
+      - 'blacklight-character-sheet-handoff.js'
+      - 'blacklight-character-creation.html'
+      - 'blacklight-random-character.html'
+      - 'index.html'
+      - 'data/blacklight-continuum/wiki/veteran-reintroduction.json'
+      - 'data/blacklight-continuum/wiki/wiki-index.json'
+      - 'scripts/validate-blacklight-veteran-reintroduction.py'
+      - '.github/workflows/validate-blacklight-veteran-reintroduction.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate reorientation data and integration
+        run: python scripts/validate-blacklight-veteran-reintroduction.py
+      - name: Validate JavaScript syntax
+        run: |
+          node --check blacklight-veteran-reintroduction.js
+          node --check blacklight-veteran-reintroduction-entry.js
+          node --check blacklight-character-sheet-handoff.js
