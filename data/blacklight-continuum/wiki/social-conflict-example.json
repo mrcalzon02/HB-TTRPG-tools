@@ -1,0 +1,551 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "No Return Signal",
+  "schemaVersion": "1.0.0",
+  "description": "A detailed social conflict guide and continuous worked encounter in which Mara Vale, Ilyan Voss, and Kest Raal must force planetary administrator Richard to disclose docking rules he is deliberately withholding so another fee interval can accrue.",
+  "entries": [
+    {
+      "id": "social-conflict-core",
+      "title": "Social Conflict Without Social Hit Points",
+      "category": "Social Conflict",
+      "summary": "Social conflict resolves exact objectives by breaking concrete objections and securing defined concessions through evidence, leverage, bargaining, pressure, and accountable escalation.",
+      "body": [
+        "Social conflict begins only when conversation contains incompatible objectives and a meaningful consequence. A disagreement by itself is not combat. A character asking an honest question, buying routine supplies, speaking with a friend, or requesting something no one opposes does not need this procedure.",
+        "Each side states one immediate objective. The objective must be an exact result: disclose a regulation, grant access, sign a delay, identify the responsible official, obtain testimony, stop an enforcement action, or transfer the matter to another authority. 'Make Richard agree with us' is not an objective because it does not say what Richard must actually do.",
+        "A social opponent is protected by one to three Objections. An Objection is a specific reason the opponent refuses the requested Concession. It may be factual, procedural, financial, political, emotional, or relational. It is not an invisible pool of social health.",
+        "Leverage is a concrete fact that makes an approach stronger. Records, authority, financial interest, trust, urgent need, and credible alternatives are Leverage. Confidence, attractiveness, shouting, and supernatural appearance are not Leverage unless a printed capability explicitly makes them so.",
+        "Social success does not rewrite beliefs or personality. Richard may comply while continuing to dislike the crew, resent the result, and look for a lawful opportunity to retaliate later. The result is a Concession, not conversion."
+      ],
+      "tables": [
+        {
+          "title": "The Social Conflict Loop",
+          "columns": [
+            "Step",
+            "Procedure"
+          ],
+          "rows": [
+            [
+              "1. State Objectives",
+              "Write the exact result each side wants."
+            ],
+            [
+              "2. Set Stakes",
+              "Name what happens if the objective fails or time runs out."
+            ],
+            [
+              "3. Record Objections",
+              "Write one to three exact reasons preventing each major Concession."
+            ],
+            [
+              "4. Find Leverage",
+              "Read motives, establish facts, identify authority, offer value, or expose need."
+            ],
+            [
+              "5. Break Objections",
+              "Use a relevant action and new Leverage; the same argument cannot be rolled repeatedly."
+            ],
+            [
+              "6. Secure Concession",
+              "Use Appeal, Bargain, or Pressure after the relevant Objections are broken."
+            ],
+            [
+              "7. Record Consequences",
+              "Write down agreements, refusals, transfers, escalations, damaged relationships, and remaining clocks."
+            ]
+          ]
+        },
+        {
+          "title": "Social Difficulty",
+          "columns": [
+            "Rule",
+            "Meaning"
+          ],
+          "rows": [
+            [
+              "ceiling((Resolve + Composure) / 2)",
+              "The successes normally required to move a deliberate target."
+            ],
+            [
+              "Facts are not defended by personality",
+              "High Social Difficulty cannot make a proven record false or grant authority the target lacks."
+            ],
+            [
+              "No repeated argument grinding",
+              "A failed approach requires new evidence, leverage, assistance, stakes, Skill, or circumstances before it can be tried again."
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "social conflict",
+        "objectives",
+        "objections",
+        "concessions",
+        "no social hit points"
+      ],
+      "relatedEntries": [
+        "social-actions-and-leverage",
+        "richard-scene-setup",
+        "worked-social-conflict-richard"
+      ]
+    },
+    {
+      "id": "social-actions-and-leverage",
+      "title": "Actions, Leverage, Exposure, and Critical Results",
+      "category": "Social Conflict",
+      "summary": "The active character chooses an approach that matches what is actually being said, offered, proved, concealed, or threatened.",
+      "body": [
+        "Read Motive uses Awareness + Empathy or Investigation to identify an objective, protected interest, strongest Objection, false assumption, fear, or expectation of violence. A successful result supplies the selected fact immediately; the Game Moderator does not replace it with vague atmosphere.",
+        "Establish Fact uses Reason with Investigation, Xenoculture, Security, Noospherics, Science, or another directly relevant Skill. It verifies records, identifies an applicable rule, removes a false assumption, or creates Evidence or Authority Leverage.",
+        "Appeal uses Presence + Empathy or Negotiation. Bargain uses Presence + Negotiation and requires an actual exchange with stated performance, deadline, and exit. Neither action creates consent to hidden terms.",
+        "Mislead uses Guile + Deception or Performance. It can conceal an objective or create a false assumption, but it cannot fabricate physical proof, legal authority, knowledge, or consent. Direct evidence immediately destroys a false assumption.",
+        "Expose Contradiction uses Reason + Investigation and requires two statements, records, duties, or observable facts that cannot all remain true. Success breaks a related Objection and may make the target Discredited.",
+        "Pressure uses Presence + Command or Guile + Streetwise. The speaker must state a consequence they can actually cause. On success, the target grants the Concession, withdraws or transfers authority with a record, or openly escalates and reveals the objective behind that escalation. Pressure always gives the acting character 1 Exposure after resolution.",
+        "Delay or Deflect uses Guile + Deception or Presence + Command. Success may advance one defined Clock or redirect one unanswered issue. It cannot erase a filed request, durable record, broken Objection, or deadline already established in the fiction.",
+        "A successful social roll containing a 10 receives its printed critical effect or one general critical benefit: learn another exact fact, create Leverage, prevent the immediate counteraction, reduce Exposure by 1, or require a durable record."
+      ],
+      "tables": [
+        {
+          "title": "Leverage Types",
+          "columns": [
+            "Leverage",
+            "Examples"
+          ],
+          "rows": [
+            [
+              "Evidence",
+              "Logs, timestamps, witnesses, recordings, invoices, contradictory statements"
+            ],
+            [
+              "Authority",
+              "Jurisdiction, credentials, regulation, appeal rights, responsible supervisor"
+            ],
+            [
+              "Interest",
+              "Money, liability, workload, reputation, safety, political survival"
+            ],
+            [
+              "Relationship",
+              "Trust, loyalty, gratitude, shared history, mutual obligation"
+            ],
+            [
+              "Need",
+              "Information, repair, transport, legitimacy, time, protection"
+            ],
+            [
+              "Alternative",
+              "Another route, buyer, authority, witness, service, or ability to walk away"
+            ]
+          ]
+        },
+        {
+          "title": "Using One Named Leverage",
+          "columns": [
+            "Timing",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "Before a relevant roll",
+              "Invoke it once for +2 dice."
+            ],
+            [
+              "After a relevant successful roll",
+              "Invoke it instead to break one related Objection or secure one narrow Concession."
+            ],
+            [
+              "False or disproven Leverage",
+              "It collapses and may make its user Discredited."
+            ],
+            [
+              "Repeated wording",
+              "The same fact cannot be invoked twice merely by renaming it."
+            ]
+          ]
+        },
+        {
+          "title": "Exposure in Social Conflict",
+          "columns": [
+            "Exposure",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "Each point carried by the target",
+              "+1 die to social actions directly against that target"
+            ],
+            [
+              "Push a social test",
+              "Reroll failed dice up to Resolve, then gain 1 Exposure"
+            ],
+            [
+              "What it represents",
+              "Visible urgency, ignorance, anger, contradiction, desperation, divided loyalty, or need"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "social actions",
+        "leverage",
+        "exposure",
+        "critical success",
+        "pressure"
+      ],
+      "relatedEntries": [
+        "social-conflict-core",
+        "richard-scene-setup",
+        "worked-social-conflict-richard"
+      ]
+    },
+    {
+      "id": "richard-scene-setup",
+      "title": "Scene Setup: Richard and the Docking-Fee Clock",
+      "category": "Social Conflict Example",
+      "summary": "Richard knows the docking rules, can pause the fee process, and intends to hide both facts until another charge posts because he assumes the crew can pay.",
+      "body": [
+        "Mara Vale, Ilyan Voss, and Kest Raal have arrived at a planetary orbital station aboard the only major asset they possess. The ship and everything inside it are their entire material position in this universe. They have no local currency reserve, no established credit, no outside guarantor, and no property they can liquidate without dismantling the means by which they survive.",
+        "They need three exact Concessions from Richard, the planetary administrator responsible for their berth. First, they need the complete docking tariff and the timestamp used to calculate new charges. Second, they need the grace-period, distressed-arrival, hardship-review, and appeal procedures. Third, they need a written hold preventing additional fees while their review is pending.",
+        "Richard's objective is not simply to be unhelpful. He wants the next station-day fee to post before the crew can file the correct review. He also wants them to sign a debt acknowledgment that turns a disputed administrative charge into an accepted obligation.",
+        "Richard knows the rules. He can access the tariff. He can issue a temporary administrative hold. His evasiveness is deliberate. He believes the crew has money somewhere aboard the ship and that sufficient delay will turn confusion into revenue.",
+        "Richard does not know that the crew has no liquid wealth at all. If the station impounds the ship, it will inherit a costly custody problem: security, life-support monitoring, hazardous-system inspection, alien-technology containment, inventory responsibility, and a debtor incapable of paying the accumulating bill. His plan is profitable only while he assumes collection is possible."
+      ],
+      "tables": [
+        {
+          "title": "Participants",
+          "columns": [
+            "Character",
+            "Relevant Statistics",
+            "Social Difficulty",
+            "Important Capabilities"
+          ],
+          "rows": [
+            [
+              "Mara Vale · Human Investigator",
+              "Presence 3, Composure 3, Reason 4, Awareness 3, Resolve 4; Investigation 4, Negotiation 3, Command 2, Empathy 2, Xenoculture 2",
+              "4",
+              "Read the Hierarchy, Evidence Chain, Procedural Trap"
+            ],
+            [
+              "Ilyan Voss · Eldritch Binder",
+              "Presence 2, Guile 3, Composure 2, Reason 3, Awareness 3, Resolve 4; Deception 2, Investigation 2, Negotiation 2, Noospherics 3, Xenoculture 3",
+              "3",
+              "Other Eye: Falsehood, Name the Price"
+            ],
+            [
+              "Kest Raal · Shapechanger",
+              "Presence 3, Composure 2, Awareness 4, Resolve 3; Command 2, Empathy 3, Negotiation 1, Xenoculture 2",
+              "3",
+              "Strong motive-reading pool, direct assistance, credible physical and financial testimony"
+            ],
+            [
+              "Richard · Planetary Administrator",
+              "Presence 3, Guile 4, Composure 4, Reason 3, Awareness 3, Resolve 3; Command 3, Deception 4, Investigation 2, Negotiation 4, Xenoculture 4",
+              "4",
+              "Station authority, tariff access, administrative hold authority, practiced procedural deception"
+            ]
+          ]
+        },
+        {
+          "title": "Crew Objective",
+          "columns": [
+            "Concession",
+            "Richard's Objection"
+          ],
+          "rows": [
+            [
+              "Complete tariff and fee timestamp",
+              "Objection 1: 'The tariff engine is automatic and I do not have access or authority to explain it.'"
+            ],
+            [
+              "Grace period, distressed-arrival review, and appeal procedure",
+              "Objection 2: 'Those procedures do not apply to an unregistered foreign vessel.'"
+            ],
+            [
+              "Written hold on additional fees",
+              "Objection 3: 'Fees continue until payment or impoundment regardless of review.'"
+            ]
+          ]
+        },
+        {
+          "title": "Richard's Position",
+          "columns": [
+            "Element",
+            "Record"
+          ],
+          "rows": [
+            [
+              "Objective",
+              "Delay disclosure until another berth fee posts and obtain a signed debt acknowledgment"
+            ],
+            [
+              "Starting Leverage",
+              "Authority: he controls the local office; Clock: the next station-day boundary"
+            ],
+            [
+              "False Assumption",
+              "The crew possesses liquid funds or accessible credit"
+            ],
+            [
+              "Protected Interest",
+              "Revenue without triggering a costly impoundment, audit, or custodial obligation"
+            ],
+            [
+              "What he fears",
+              "A written review record showing he delayed a distressed-arrival filing for revenue"
+            ]
+          ]
+        },
+        {
+          "title": "Fee Clock",
+          "columns": [
+            "Clock",
+            "Rule"
+          ],
+          "rows": [
+            [
+              "Four segments",
+              "The meeting begins at 1/4 because the crew has already been kept waiting."
+            ],
+            [
+              "Richard succeeds on Delay or Deflect",
+              "Advance the Clock by one segment."
+            ],
+            [
+              "Clock reaches 4/4",
+              "Another 600 station-credit berth fee posts."
+            ],
+            [
+              "A valid appeal is filed or Procedural Trap applies",
+              "Pause the Clock until responsibility for continued charging is formally accepted."
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "Richard",
+        "planetary administrator",
+        "docking fees",
+        "fee clock",
+        "false assumption"
+      ],
+      "relatedEntries": [
+        "social-conflict-core",
+        "worked-social-conflict-richard",
+        "social-conflict-alternate-results"
+      ]
+    },
+    {
+      "id": "worked-social-conflict-richard",
+      "title": "Worked Social Conflict: The Administrator's Clock",
+      "category": "Social Conflict Example",
+      "summary": "A continuous six-exchange encounter showing deliberate delay, motive reading, supernatural falsehood detection, evidence, financial leverage, broken objections, procedural intervention, and a final written concession.",
+      "body": [
+        "The meeting begins in Richard's berth administration office. A wall display shows the crew's ship, its arrival time, and a growing account balance, but the rule citation beneath the balance is collapsed behind an administrator-only control. The fee Clock begins at 1/4 because Richard has already made them wait through two routine identity scans and an unnecessary translation check.",
+        "The crew states its objective plainly. Mara asks for the tariff, the exact fee boundary, the distressed-arrival and appeal procedures, and a written pause while review is pending. Richard says he will 'see what the system permits' but immediately places a debt-acknowledgment form on the desk. No one signs it.",
+        "Exchange 1 — Richard delays. Richard rolls Guile 4 + Deception 4 for eight dice against the crew's highest coordinated Social Difficulty, Mara's 4. His final roll is 10, 9, 8, 6, 5, 4, 3, 2: four successes and one critical success. Delay or Deflect succeeds. The fee Clock advances from 1/4 to 2/4. His critical creates a temporary false assumption: the tariff archive cannot be accessed until the station's next accounting cycle.",
+        "Mara uses Read the Hierarchy. Her Awareness 3 + Investigation 4 gives seven dice against difficulty 3 for the office's institutional complexity. She rolls 10, 8, 7, 5, 4, 3, 1 for three successes and one critical. The ability answers directly: Richard can authorize a temporary hold; berth revenue is the hidden resource driving his behavior; and a review clerk can countersign the filing. The critical creates Authority Leverage: Administrator Hold Authority.",
+        "Ilyan spends 1 Pact to activate Other Eye and selects Falsehood. When Richard repeats that he lacks authority to pause charges, Ilyan recognizes that Richard knowingly believes his own statement to be false. The power does not create a court-admissible recording and does not make Richard confess. It gives Ilyan exact operational certainty that the crew is dealing with deliberate deception rather than confusion.",
+        "Kest uses Read Motive with Awareness 4 + Empathy 3 for seven dice against Richard's Social Difficulty 4. He rolls 10, 9, 7, 6, 4, 2, 1: four successes and one critical. He learns Richard's immediate objective is to keep them in the room until the next fee posts and that Richard's decisive false assumption is that the crew can pay. Kest uses the critical to create Interest Leverage: Uncollectible Debt Creates Custodial Liability.",
+        "Exchange 2 — Richard tries to secure the debt acknowledgment. He rolls Presence 3 + Command 3 for six dice against Mara's Social Difficulty 4. He produces only three successes, and the failed roll contains a 1. The Pressure action fails and produces a Complication. In his attempt to present the signature field as routine, Richard opens the underlying administrative draft. The terminal briefly displays tariff code 18.4 and the phrase 'distressed-arrival review.' The crew gains Evidence Leverage: Richard's Own Debt Form Cites Review Code 18.4.",
+        "Mara uses Establish Fact with Reason 4 + Investigation 4. She invokes the ship's arrival invoice, their starting Evidence Leverage, for two dice, rolling ten dice against Richard's Social Difficulty 4. She achieves four successes including a 10. She verifies that code 18.4 exists and applies to docking accounts created before local registration is complete. Her critical identifies Richard as the required receiving administrator. This creates new Evidence Leverage: Code 18.4 Applies Before Registration.",
+        "Ilyan uses Name the Price on the existing docking arrangement. The capability provides four exact facts without requiring Richard's cooperation: the charge is 600 station credits per station-day; the Port Authority receives it; the next station-day boundary makes the renewal due; and nonpayment begins an impoundment review. Hidden terms are included. Ilyan also learns that a distressed-arrival filing submitted before the boundary pauses new accrual until an administrator records a decision. The crew records Evidence Leverage: Timely Review Pauses Accrual.",
+        "Kest takes Assist rather than repeating Read Motive. He explains to Mara exactly when Richard looks toward the fee display, which questions make him defensive, and which references to impoundment make him hesitate. Awareness 4 + Empathy 3 succeeds, and because Empathy is 3 he grants Mara two assistance dice on her next related action.",
+        "Exchange 3 — Richard attempts another Delay or Deflect. His Guile 4 + Deception 4 again rolls against Social Difficulty 4. He succeeds and advances the fee Clock from 2/4 to 3/4, claiming that even if review code 18.4 exists, an unclassified vessel cannot use it.",
+        "Mara uses Expose Contradiction. Her Reason 4 + Investigation 4 gains Kest's two assistance dice for a ten-die pool against Richard's Social Difficulty 4. Her first roll produces only three successes, so she Pushes failed dice up to Resolve 4. The replacement dice produce two additional successes. The final result succeeds, and Mara gains 1 Exposure after resolution.",
+        "Mara names the contradiction: Richard says he lacks tariff authority, but his own debt form identifies him as the receiving administrator; he says the review is unavailable before registration, but code 18.4 explicitly governs accounts created before registration. She invokes Administrator Hold Authority to break Objection 1. Richard becomes Discredited because the contradiction concerns both his authority and truthfulness. The action's critical effect is unavailable because the final successful roll contains no 10, but the Objection is still broken and cannot be recycled under different wording.",
+        "Exchange 4 — Richard cannot simply repeat Objection 1. He tries to preserve Objection 2 by claiming that 'foreign autonomous property' is excluded from distressed-arrival status. Because he is Discredited, he loses one die from the authority claim. Ilyan does not argue about Richard's tone or intentions. He presents the exact hidden term identified by Name the Price and uses Establish Fact with Reason 3 + Xenoculture 3. He invokes Code 18.4 Applies Before Registration for two dice, giving him eight dice against Social Difficulty 4. He achieves four successes and invokes the Leverage after success to break Objection 2. The review applies.",
+        "Kest now makes the financial reality explicit. He does not threaten Richard and does not pretend the crew is wealthy. He states that the ship and its contents are everything they own, that they possess no local currency or credit, and that continued fees cannot create money where none exists. He then uses Appeal through Presence 3 + Empathy 3, invoking Uncollectible Debt Creates Custodial Liability for two dice. The eight-die pool succeeds against Richard's Social Difficulty 4 and contains a 10.",
+        "Kest's success does not force sympathy. It changes Richard's calculation. Impoundment would make the station responsible for guarding, powering, inspecting, and inventorying an alien vessel while holding a debt that cannot be collected. Kest uses the critical benefit to require the financial disclosure to be logged as part of the berth review. Richard's false assumption that delay will produce payment is removed. The crew gains Interest Leverage: Administrative Hold Is Cheaper Than Impoundment.",
+        "Exchange 5 — Only Objection 3 remains: Richard claims fees must continue during review. The Clock is already at 3/4, so another successful delay would post the new charge. Mara spends 1 Conviction and invokes Procedural Trap after five minutes of documented contradiction. The institution cannot continue charging while its responsible administrator refuses to provide the required review path without someone accepting responsibility for that contradiction. The hostile fee action pauses. The Clock remains at 3/4.",
+        "Richard responds with Pressure. He threatens immediate impoundment unless Mara signs the debt acknowledgment. His Presence 3 + Command 3 loses one die because he is Discredited but gains one die because Mara carries Exposure 1. He still rolls six dice against Mara's Social Difficulty 4 and produces only three successes. The threat fails to secure a signature. Because the ship is their only survival asset, Mara does not treat surrendering it as a routine Concession.",
+        "Ilyan applies Name the Price to the threatened impoundment process. He learns that the station would become responsible for minimum life-support, hazard containment, inventory preservation, and adjudication costs until lawful disposition. This confirms Kest's Interest Leverage and shows that Richard's threatened escalation is expensive rather than profitable.",
+        "Kest uses Assist again. He states the crew's actual offer in plain language: they will file the review immediately, disclose the ship's asset condition, and cooperate with lawful inspection, but they will not sign an admission that converts a disputed charge into accepted debt. His successful Command assistance grants Mara two dice on the final Bargain.",
+        "Exchange 6 — Mara states the exact Bargain. The crew will submit the distressed-arrival filing now, provide an accurate asset and hazard inventory, and cooperate with the station's review. Richard will provide the complete tariff and fee timestamp, identify the grace and appeal procedures, and issue a written hold on new fees while review is pending. The agreement will not acknowledge that the disputed balance is valid.",
+        "Mara rolls Presence 3 + Negotiation 3, gains two dice from Kest's Assist, and invokes Administrative Hold Is Cheaper Than Impoundment for two more dice. Her ten-die pool rolls 10, 9, 8, 7, 6, 5, 4, 3, 2, 1: five successes with one critical against Richard's Social Difficulty 4.",
+        "Mara then invokes Timely Review Pauses Accrual after the successful roll. This breaks Objection 3 and secures the narrow Concession the rule supports. All three Objections are now broken. Richard must grant the stated Concessions, transfer the matter with a durable record, or openly escalate and reveal why he is rejecting the required process.",
+        "Richard chooses to concede. Transfer would expose that he delayed a distressed-arrival filing while the fee Clock advanced. Impoundment would convert a hoped-for revenue stream into an expensive custodial problem. A direct refusal would create a reviewable record tied to his name. He provides the tariff schedule, confirms the station-day boundary, opens the distressed-arrival and hardship-review forms, identifies the appeal authority, and signs a temporary administrative hold retroactive to the crew's first recorded request.",
+        "Mara's critical benefit requires the result to be durable. The tariff, review instructions, hold, arrival timestamp, and Richard's receiving signature are copied to the crew and the station record. Richard reserves the right to argue about fees already assessed, so the crew has not won every future dispute. They have won the objective of this scene: no new fees accrue in ignorance, and the applicable process can no longer be hidden.",
+        "Ilyan uses Name the Price one final time on the written hold before anyone accepts it. He confirms the responsible parties, duration, filing requirement, exit condition, and consequence of noncompliance. There is no hidden debt acknowledgment or automatic waiver of appeal.",
+        "Kest leaves the office knowing Richard is not persuaded that the crew deserves mercy. Richard remains resentful and may become a procedural enemy. The social victory changed incentives, exposed contradictions, created a record, and obtained exact concessions. It did not change his personality."
+      ],
+      "tables": [
+        {
+          "title": "Exchange Summary",
+          "columns": [
+            "Exchange",
+            "Richard",
+            "Crew Response",
+            "Mechanical Result"
+          ],
+          "rows": [
+            [
+              "1",
+              "Feigns lack of access and advances the fee Clock",
+              "Mara reads hierarchy; Ilyan detects falsehood; Kest identifies motive and false assumption",
+              "Clock 2/4; Authority and Interest Leverage created"
+            ],
+            [
+              "2",
+              "Attempts to obtain debt acknowledgment",
+              "Mara verifies code 18.4; Ilyan names exact dockage terms; Kest assists",
+              "Richard's failed Pressure exposes Evidence"
+            ],
+            [
+              "3",
+              "Advances Clock and claims review does not apply",
+              "Mara Pushes Expose Contradiction",
+              "Clock 3/4; Objection 1 broken; Richard Discredited; Mara Exposure 1"
+            ],
+            [
+              "4",
+              "Tries to preserve the foreign-vessel exclusion",
+              "Ilyan proves applicability; Kest reveals zero liquidity and custodial cost",
+              "Objection 2 broken; Richard's false assumption removed"
+            ],
+            [
+              "5",
+              "Threatens impoundment and one more fee interval",
+              "Mara triggers Procedural Trap; Ilyan prices impoundment; Kest assists",
+              "Fee Clock frozen at 3/4; threat fails"
+            ],
+            [
+              "6",
+              "Must concede, transfer, or openly escalate",
+              "Mara makes recorded Bargain and invokes review rule",
+              "Objection 3 broken; tariff, procedure, and written hold secured"
+            ]
+          ]
+        },
+        {
+          "title": "Final Records",
+          "columns": [
+            "Record",
+            "Outcome"
+          ],
+          "rows": [
+            [
+              "Tariff schedule",
+              "Provided with exact 600-credit station-day fee and boundary timestamp"
+            ],
+            [
+              "Review rights",
+              "Distressed-arrival, hardship-review, and appeal procedures disclosed"
+            ],
+            [
+              "Fee accrual",
+              "Paused retroactive to the crew's first recorded request"
+            ],
+            [
+              "Debt acknowledgment",
+              "Not signed; existing balance remains disputed rather than admitted"
+            ],
+            [
+              "Crew finances",
+              "Zero local liquidity and sole ownership of ship assets entered into review record"
+            ],
+            [
+              "Relationship with Richard",
+              "Hostile and distrustful; he remains a possible future procedural adversary"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "worked example",
+        "Richard",
+        "Mara Vale",
+        "Ilyan Voss",
+        "Kest Raal",
+        "docking rules",
+        "bureaucratic conflict"
+      ],
+      "relatedEntries": [
+        "richard-scene-setup",
+        "social-actions-and-leverage",
+        "social-conflict-alternate-results"
+      ]
+    },
+    {
+      "id": "social-conflict-alternate-results",
+      "title": "Alternate Results, Failure, Escalation, and Moderator Guidance",
+      "category": "Social Conflict",
+      "summary": "The social system preserves failure and consequence without allowing the Moderator to invent endless objections or withhold successful results.",
+      "body": [
+        "If Richard fills the fee Clock before Mara pauses it, another 600-credit charge posts. That does not erase the appeal right. It changes the dispute by adding another assessed fee and gives Richard more apparent leverage until the crew proves the delay was deliberate.",
+        "If Mara fails to expose the contradiction, Objection 1 remains. The crew cannot simply repeat the same accusation. They must obtain a terminal record, witness, rule citation, supervisor, or other new Leverage before trying again.",
+        "If Ilyan never uses Other Eye, the crew may still prove Richard's deception through records. Other Eye supplies certainty about conscious falsehood; it does not replace documentary Evidence when the institution requires a record.",
+        "If Kest does not reveal the crew's financial reality, Richard continues to believe delay can produce payment. The crew may still win through authority and evidence, but Richard has less reason to prefer a hold over impoundment.",
+        "If the crew lies about having no money and Richard later proves the lie, the Interest Leverage collapses, the speaker becomes Discredited, and Richard gains Evidence Leverage for fraud or bad-faith filing. The system rewards strategically revealed truth here because the truth actually changes the economics of the dispute.",
+        "If Richard genuinely lacked the requested knowledge, a successful social action could not make him reveal it. It could force him to identify the responsible office, open a query, transfer the matter, provide a written admission of non-possession, or create a reviewable refusal.",
+        "If Richard lacked hold authority, the final success could require referral and a durable record rather than his signature. Social conflict cannot create authority that does not exist.",
+        "If Richard openly calls security, the scene changes. The social results remain recorded, but the next procedure may be another social scene with security, an escape, a legal hearing, supernatural coercion, or physical combat. Escalation is not a way to erase what was already established.",
+        "If a player invokes a domination, memory-editing, binding-contract, terror, or supernatural command power, resolve that printed ability separately. A social success cannot quietly become mind control.",
+        "At the table, these rules apply only to characters. No player may use Richard's tactics, Pressure, Delay, or alleged social victory to coerce another real participant into unwanted disclosure, humiliation, romance, or continued play. A real request to stop or change the scene ends the disputed content immediately."
+      ],
+      "tables": [
+        {
+          "title": "Moderator Checklist",
+          "columns": [
+            "Before the Scene",
+            "During the Scene",
+            "After the Scene"
+          ],
+          "rows": [
+            [
+              "Write objectives, actual knowledge, authority, protected interest, false assumptions, Objections, and any Clock",
+              "Give exact answers after successful information actions and do not replace broken Objections",
+              "Record Concessions, refusals, signed terms, damaged relationships, remaining Clocks, and new enemies or contacts"
+            ],
+            [
+              "Decide what evidence already exists and what Richard is deliberately hiding",
+              "Require new Leverage or a changed approach before repeating a failed argument",
+              "Award experience for meaningful portrayal, risk, restraint, discovery, courage, or development—not for dominating another player"
+            ]
+          ]
+        },
+        {
+          "title": "What Social Victory Cannot Do",
+          "columns": [
+            "Limit",
+            "Result"
+          ],
+          "rows": [
+            [
+              "Create missing knowledge",
+              "Force a search, referral, record request, or admission instead"
+            ],
+            [
+              "Create missing authority",
+              "Force transfer, documentation, or identification of the proper authority instead"
+            ],
+            [
+              "Create consent",
+              "Hidden or coercive terms remain invalid unless an explicit supernatural rule says otherwise"
+            ],
+            [
+              "Erase defining convictions",
+              "The target may concede for practical reasons without changing belief"
+            ],
+            [
+              "Control real players",
+              "Out-of-character boundaries always override character mechanics"
+            ]
+          ]
+        }
+      ],
+      "tags": [
+        "failure",
+        "escalation",
+        "moderator guidance",
+        "consent",
+        "table safety"
+      ],
+      "relatedEntries": [
+        "social-conflict-core",
+        "richard-scene-setup",
+        "worked-social-conflict-richard"
+      ]
+    }
+  ]
+}
