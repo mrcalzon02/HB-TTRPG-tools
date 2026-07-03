@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight Continuum Random Character Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-random-character.css">
+</head>
+<body>
+  <main class="random-shell">
+    <header class="random-header no-print">
+      <div>
+        <p class="eyebrow">Blacklight Continuum · Standard operative generator</p>
+        <h1>Generate the Person We Are Sending</h1>
+        <p>Create a complete legal Rating 1 operative with a present identity, Operational Frame, Archetype, integrated variants, Attributes, Skills, Signature Skill, specializations, starting abilities, derived traits, equipment profile, relationships, limitations, and a ready-to-transfer Basic Character Sheet record.</p>
+      </div>
+      <div class="random-actions">
+        <a class="secondary-action" href="blacklight-character-creation.html">Guided Character Creation</a>
+        <a class="secondary-action" href="blacklight-equipment-catalog.html">Equipment Catalog</a>
+        <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+      </div>
+    </header>
+
+    <section class="generator-controls no-print" aria-labelledby="random-controls-title">
+      <div class="section-heading">
+        <p class="eyebrow">Generation controls</p>
+        <h2 id="random-controls-title">Operative Parameters</h2>
+        <p>Leave a field on Random to allow the generator to choose it. A repeated seed recreates the same complete character when the same controls are used.</p>
+      </div>
+      <div class="control-grid">
+        <label>Player Name<input id="random-player-name" type="text" placeholder="Optional; never randomized"></label>
+        <label>Archetype<select id="random-archetype"><option value="random">Random Archetype</option></select></label>
+        <label>Operational Frame<select id="random-frame"><option value="random">Random Operational Frame</option></select></label>
+        <label>Pronouns<select id="random-pronouns"><option value="random">Random Pronouns</option></select></label>
+        <label>Equipment Era<select id="random-equipment-era"><option value="mixed">Mixed Appropriate Equipment</option><option value="modern">Modern</option><option value="historical">Historical</option><option value="future">Future Human-Compatible</option><option value="scavenged">Scavenged and Improvised</option></select></label>
+        <label>Seed<input id="random-seed" type="text" placeholder="Leave blank for a new seed"></label>
+      </div>
+      <div class="control-checks">
+        <label><input id="random-include-relic" type="checkbox"> Include one eligible supernatural relic</label>
+        <label><input id="random-include-alien" type="checkbox"> Apply one suitable alien-technology template</label>
+      </div>
+      <div class="control-actions">
+        <button id="random-generate" class="primary-action" type="button">Generate Complete Character</button>
+        <button id="random-transfer" class="secondary-action" type="button" disabled>Transfer to Character Sheet</button>
+        <button id="random-export" class="secondary-action" type="button" disabled>Export Character JSON</button>
+        <button id="random-print" class="secondary-action" type="button" disabled>Print Character</button>
+      </div>
+      <p id="random-status" class="generator-status" role="status">Loading character, Archetype, variant, and equipment records…</p>
+    </section>
+
+    <section id="random-output" class="random-output" aria-live="polite">
+      <div class="random-empty">The generator is loading the Blacklight rules and equipment catalogs.</div>
+    </section>
+  </main>
+
+  <script src="blacklight-random-character.js"></script>
+</body>
+</html>
