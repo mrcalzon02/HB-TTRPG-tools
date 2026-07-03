@@ -1,8 +1,8 @@
 {
   "setting": "Blacklight Continuum",
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "name": "Simple Combat Foundation",
-  "designRule": "Basic combat uses one attack roll, fixed damage, one Protection value, and Vitality loss. Extra attack successes never increase damage.",
+  "designRule": "Basic combat uses one attack roll, fixed damage, one Protection value, and Vitality loss. Ordinary extra successes never increase damage; successful attacks using the Firearms Skill add 1 Damage for each critical success rolled.",
   "coreProcedure": {
     "start": "Combat begins when opposed actions become time-sensitive enough that acting first changes the result. Establish positions, cover, visible threats, current tracks, and immediate objectives before Initiative.",
     "initiative": "Initiative equals Finesse + Composure. Act from highest Initiative to lowest. Break ties with higher Awareness, then higher Finesse, then one unmodified d10 roll.",
@@ -11,13 +11,20 @@
     "reaction": "A character has one Reaction per round. It refreshes at the start of that character's turn and may be used only when a rule, capability, item, or Cohesion option allows it.",
     "minorInteraction": "Draw or stow one accessible item, open or close one unsecured adjacent closure, change posture, shift form when permitted, speak briefly, or press one adjacent control."
   },
+  "criticalSuccesses": {
+    "definition": "Each die showing 10 on the final roll is one critical success. It also counts as one ordinary success when determining whether the test succeeds.",
+    "firearmsDamage": "When an attack using the Firearms Skill hits, add 1 Damage for every critical success on the final attack roll. Apply this bonus before Protection.",
+    "miss": "A missed Firearms attack deals no damage even when the roll contains one or more critical successes.",
+    "push": "When failed dice are rerolled through a Push, only the kept final dice count. A replacement die showing 10 is a critical success; a rerolled original result is discarded.",
+    "scope": "This automatic critical-damage rule applies to attacks using the Firearms Skill. Heavy Weapons, Close Combat, powers, and other attacks gain critical damage only when their own rule explicitly grants it."
+  },
   "attackProcedure": {
     "basicLoop": [
       "Build the attack pool from the printed Attribute and Skill.",
       "Add one die for every Exposure point currently carried by the target.",
       "Subtract dice for range, cover, conditions, and equipment.",
       "Roll against Defense Difficulty, which equals ceiling(Guard / 2), minimum 1.",
-      "On a hit, use the attack's fixed Damage rating. Extra successes add nothing.",
+      "On a hit, begin with the attack's fixed Damage rating. If the attack uses the Firearms Skill, add 1 Damage for every die showing 10 on the final roll. Other extra successes add nothing.",
       "Subtract one applicable Protection value. Disruption normally ignores Protection.",
       "Remove one Vitality for each point remaining."
     ],
@@ -29,9 +36,9 @@
       "Damaging capability: use the pool printed by the capability."
     ],
     "defenseDifficulty": "Defense Difficulty equals ceiling(Guard / 2), minimum 1.",
-    "hit": "Successes equal to or above Defense Difficulty hit. Extra successes do not change damage.",
-    "fixedDamage": "Every weapon and damaging ability has one fixed Damage rating.",
-    "protection": "Impact and Trauma subtract one applicable Protection value from fixed Damage, minimum 0. Disruption ignores ordinary Protection unless a rule explicitly protects against it.",
+    "hit": "Successes equal to or above Defense Difficulty hit. Ordinary extra successes do not change damage.",
+    "fixedDamage": "Every weapon and damaging ability has one fixed Damage rating. A successful Firearms attack adds 1 Damage for each critical success before Protection.",
+    "protection": "Impact and Trauma subtract one applicable Protection value from total Damage, minimum 0. Disruption ignores ordinary Protection unless a rule explicitly protects against it.",
     "vitalityLoss": "Every point remaining after Protection removes 1 current Vitality.",
     "cover": [
       "Partial Cover: subtract 1 attack die.",
@@ -102,7 +109,8 @@
     "singleDefenseRule": "Living Soak modifies the Shapechanger's one Protection value. It creates no second roll or second damage step.",
     "socialForm": "Add Archetype Rating to Protection against Impact only.",
     "huntingAndWarForms": "Add Archetype Rating to Protection against Impact and Trauma.",
-    "completeNegation": "If fixed Damage does not exceed the resulting Protection, the hit deals 0 damage.",
+    "completeNegation": "If total Damage does not exceed the resulting Protection, the hit deals 0 damage.",
+    "firearmsInteraction": "Critical successes can raise a Firearms attack above Living Soak because each 10 adds 1 Damage before Protection.",
     "excludedEffects": "Disruption, Pressure, Exposure, and Death Marks bypass Living Soak."
   },
   "conditions": {
