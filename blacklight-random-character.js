@@ -350,7 +350,7 @@
   }
 
   function isArmor(item) {
-    return /armor|protective suit|shield|defensive field/i.test(item.category || '') && Number(item.armorRating || 0) >= 0;
+    return /armor|protective suit|shield|defensive field|defense|powered support/i.test(item.category || '') && Number(item.armorRating || 0) >= 0;
   }
 
   function chooseByPreferredNames(items, preferredNames, rng) {
@@ -373,10 +373,11 @@
     const rng = partRng('gear');
     const era = ui.equipmentEra.value;
     const profile = state.data.content.frameProfiles[frame];
-    const all = state.data.equipment.filter(item => equipmentAllowed(item, era));
-    const weapons = all.filter(isWeapon);
-    const armors = all.filter(isArmor);
-    const tools = all.filter(item => !isWeapon(item) && !isArmor(item));
+    const eraItems = state.data.equipment.filter(item => equipmentAllowed(item, era));
+    const universalSupport = state.data.equipment.filter(item => item.catalogId === 'survival-and-field-equipment');
+    const weapons = eraItems.filter(isWeapon);
+    const armors = eraItems.filter(isArmor);
+    const tools = [...eraItems, ...universalSupport].filter((item, index, array) => !isWeapon(item) && !isArmor(item) && array.findIndex(other => other.id === item.id) === index);
 
     let primary = chooseByPreferredNames(weapons, profile.weaponKinds || [], rng);
     if (!primary) primary = choice(state.data.equipment.filter(isWeapon), rng);
@@ -481,7 +482,7 @@
 
   function variantSummary(variant) {
     if (!variant) return '';
-    const details = [variant.catalog, variant.method?.name, variant.gift?.name, variant.bane?.name, variant.practice?.name].filter(Boolean);
+    const details = [variant.catalog, variant.method?.name, variant.gift?.name, variant.bane?.name, variant.practice?.name, variant.temptation?.name, variant.intrusionBreach?.name].filter(Boolean);
     return `${variant.name}${details.length ? ` — ${details.join(' · ')}` : ''}`;
   }
 
@@ -664,8 +665,10 @@
       pressureCurrent: '0',
       specializations: statistics.specializations.map(spec => `${spec.skill}: ${spec.name}`).join('\n'),
       customAbilities: character.variants.map(variant => {
-        const feature = variant.method || variant.gift || variant.practice;
-        return feature ? `${variant.name} — ${feature.name}: ${feature.effect}` : variant.name;
+        const feature = variant.method || variant.gift || variant.practice || variant.temptation;
+        const bane = variant.bane ? ` Bane — ${variant.bane.name}: ${variant.bane.effect}` : '';
+        const breach = variant.intrusionBreach ? ` Intrusion Breach — ${variant.intrusionBreach.name}: ${variant.intrusionBreach.effect}` : '';
+        return feature ? `${variant.name} — ${feature.name}: ${feature.effect}${bane}${breach}` : `${variant.name}${bane}${breach}`;
       }).join('\n\n'),
       conviction: relationships.conviction,
       touchstone: relationships.touchstone,
