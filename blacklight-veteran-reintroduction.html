@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BlackLight Veteran Reorientation</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-veteran-reintroduction.css">
+</head>
+<body>
+  <main class="veteran-shell">
+    <header class="veteran-header no-print">
+      <div>
+        <p class="eyebrow">Blacklight Continuum · Returning operative continuity module</p>
+        <h1>BlackLight Reorientation: The New Arrangement</h1>
+        <p>Reconstruct the accelerating Charles-era missions, the warehouse convergence, the lunar convocation, the judgment imposed on Charles, and the voluntary operating compact that became the BlackLight Company. Record what your established character remembers, believes, resents, accepts, and intends to defend.</p>
+      </div>
+      <div class="veteran-actions">
+        <a class="secondary-action" href="blacklight-character-sheet.html">Open Character Sheet</a>
+        <a class="secondary-action" href="blacklight-character-creation.html">New Operative Induction</a>
+        <a class="secondary-action" href="blacklight-random-character.html">Random Character Generator</a>
+        <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+        <button id="veteran-reset" class="danger-action" type="button">Restart Reorientation</button>
+        <button id="veteran-print-stage" class="secondary-action" type="button">Print Current Stage</button>
+      </div>
+    </header>
+
+    <div class="veteran-layout">
+      <aside class="veteran-sidebar no-print">
+        <section class="veteran-progress">
+          <strong>Continuity Record Progress</strong>
+          <div class="veteran-progress-track"><div id="veteran-progress-bar" class="veteran-progress-bar"></div></div>
+          <span id="veteran-progress-text" class="veteran-progress-text">Loading reorientation…</span>
+        </section>
+        <nav id="veteran-nav" class="veteran-nav" aria-label="Veteran reorientation stages">
+          <p class="veteran-status">Loading continuity stages…</p>
+        </nav>
+      </aside>
+
+      <div>
+        <article id="veteran-entry" class="veteran-entry">
+          <p class="veteran-status">Loading veteran continuity module…</p>
+        </article>
+        <div class="veteran-footer no-print">
+          <button id="veteran-previous" class="secondary-action" type="button">Previous Reorientation</button>
+          <button id="veteran-next" class="primary-action" type="button">Save and Continue</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="blacklight-veteran-reintroduction.js"></script>
+</body>
+</html>
