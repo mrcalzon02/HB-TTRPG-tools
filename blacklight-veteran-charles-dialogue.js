@@ -22,69 +22,78 @@
 
   globalThis.__BLACKLIGHT_CHARLES_SOURCE_DIALOGUE__ = SOURCE_CHARLES_SPEECH;
 
-  const charlesDialogueBodies = {
-    'returning-operative': [
-      'The reorientation begins with the memory of the day Charles stopped acting like a private voice in a private earpiece and became something the whole gathered network had to reckon with. This is not a fresh induction. This is the record of people who had already been sent, paid, rescued, warned, moved, hidden, and used by Charles before the arrangement was forced into the open.',
-      'The first restored line is small, almost swallowed by the size of the room around it. Charles seems to slow down, turns toward the crowd of operatives, responders, soldiers, fixers, paid witnesses, and people who only now realize they are not alone in this orbit, and says, ‘' + SOURCE_CHARLES_SPEECH.holdOn + '’',
-      'That pause matters. Until then, Charles had been acceleration: another mission, another flight, another impossible transfer of money, another person watched in Seattle, another person watched in Bangladesh, another task completed because he needed eyes or hands somewhere at exactly the right moment. The pause is the first sign that the old tempo is about to break.',
-      'The reorientation therefore does not ask whether your character belongs. They do. Their name, debts, rescues, payments, scars, and refusals already belong to the history. What this stage asks is what part of that history the character claims, what part they dispute, and what part they refuse to let Charles or the Company clean up into a neater story.'
-    ],
+  function quote(key) {
+    return '‘' + SOURCE_CHARLES_SPEECH[key] + '’';
+  }
 
-    'warehouse-convergence': [
-      'The summons brought everyone back to base at once. Suddenly everyone was there: the old team, half-remembered faces from prior scenes, people seen only in passing, responders whose lives had changed because the team rolled through and walked away, soldiers, people of financial import, uncomfortable street youths, and those who carried unmistakable signs of the supernatural or the supernatural-adjacent.',
-      'This was normally the space where Charles spoke to the team, handed out tasks, and presented odd, impossible, or wondrous things from the other side of the veil. This time there were too many people in the room for the old illusion of a small private operation to survive.',
-      'Everyone had the same earbud. Everyone had been connected to the same voice. Charles seemed to count the gathered crowd and then gave the only direct pause the source record preserves: ‘' + SOURCE_CHARLES_SPEECH.holdOn + '’',
-      'Around the room, a thousand near-simultaneous whispered conversations began. Then the Watcher emerged from the crowd and asked the question everyone else was still trying to form: ‘Charles is this everyone?’'
-    ],
+  function replaceWhere(body, test, replacement) {
+    const index = body.findIndex(paragraph => test(String(paragraph)));
+    if (index >= 0) body[index] = replacement;
+  }
 
-    'charles-embodied': [
-      'The forbidden rear doorway opened, the door everyone had been told never to ever open. Something emerged that looked like a mix of the Silver Surfer and Gort from The Day the Earth Stood Still, and it produced the voice the party had traditionally associated with Charles.',
-      'The process was not pleasant. The Watcher and Charles approached and gnawed at one another in whatever language or pressure passed between them. The Watcher said, ‘It’s ready.’',
-      'At that point the voice of Charles in every ear instructed the gathered people to remove the headsets. Some obeyed. Some argued. Some appeared to refuse. The headsets removed themselves anyway and vanished from existence, either at request or by force.',
-      'The sight of it reframed everything. The party had seen Charles teleport objects before, usually at great cost and expense. Watching him do it thousands of times at once, with objects attached to living heads and with surgical precision enough not to take part of a skull, made his restraint and his violations visible at the same time.'
-    ],
+  function insertAfterWhere(body, test, additions) {
+    const index = body.findIndex(paragraph => test(String(paragraph)));
+    if (index < 0) return;
+    const incoming = Array.isArray(additions) ? additions : [additions];
+    const filtered = incoming.filter(text => !body.some(paragraph => String(paragraph).includes(text.slice(0, 80))));
+    if (filtered.length) body.splice(index + 1, 0, ...filtered);
+  }
 
-    'containment-cube': [
-      'Charles began speaking loudly from the silver body form, and the source record preserves the order as speech rather than summary: ‘' + SOURCE_CHARLES_SPEECH.followOutside + '’',
-      'The majority of the crowd followed him out into the main parking lot. Passing through the doorway brought a chill, and outside the building the parking lot had become the inside of a large translucent cube with a hole shaped over the doorway.',
-      'The cube stretched over and around the cars, bins, trash, detritus, crowd, and entire parking lot. It was large enough to contain everyone, and once everyone was inside, Charles and the Watcher consulted with one another and rose to the top of it.',
-      'The Watcher extended a hand toward the cube. Charles and the Watcher rose from the ground, and the cube rose with them. Inside, there was no motion, no inertia, only the sick understanding that the world outside had begun moving very quickly.'
-    ],
+  function patchEntry(entry) {
+    const body = entry.body;
+    if (!Array.isArray(body) || !body.length) return;
 
-    'leaving-earth': [
-      'As the cube accelerated westward and the normal people started asking questions, Charles gave the answer preserved in the source document: ‘' + SOURCE_CHARLES_SPEECH.nonlinearMover + '’',
-      'When the questions grew louder, Charles stuck his head down into the cube through the roof. People shouted about what was going on, where they were going, and who they were meeting. Charles answered, ‘' + SOURCE_CHARLES_SPEECH.neutralMeeting + '’',
-      'He slowly developed features on the metallic face so he could look at people inside the cube with pointed gazes, then added, ‘' + SOURCE_CHARLES_SPEECH.frictionAside + '’',
-      'As the cube angled upward and left the planet, the warning became sharper. Above the clouds, with the curvature of the Earth visible, Charles continued, ‘' + SOURCE_CHARLES_SPEECH.spaceWarning + '’',
-      'Later, as the long trip became bodily and practical, he answered the supply questions with the same terrible Charles mixture of logistics and annoyance: ‘' + SOURCE_CHARLES_SPEECH.foodFacilities + '’'
-    ],
+    if (entry.id === 'accelerating-missions') {
+      replaceWhere(body, text => text.includes('Keep that door closed'),
+        'Then the pace increased. One operative was sent to observe a stranger in Seattle while another watched someone in Bangladesh. One person disrupted a transfer, another destroyed a device, and someone else spent six hours waiting beside a door because Charles needed eyes or hands somewhere at exactly the right moment. Nobody had the whole map because there was no longer a single room in which the whole map could be seen.');
+    }
 
-    'look-repentant': [
-      'The lunar gathering was not a court in any human sense. It was a collective menagerie of abominations, representatives, monolithic forces, eldritch powers, and entities so large in authority that even Charles and Watcher had been called to task before them.',
-      'For hours, Charles and the Watcher spoke above the cube with the gathered powers. Forces gesticulated wildly. Several pointed at the group inside the cube. Factions formed, shifted, broke, and re-formed while the people most affected by the discussion were left to watch from below.',
-      'Then Charles put his head through the roof again and said the line the source document preserves in full: ‘' + SOURCE_CHARLES_SPEECH.lookRepentant + '’',
-      'That is the moment this stage records: Charles no longer sounded like the thing in control of the room. He sounded like someone who knew exactly how little control he had, and how much everyone else’s survival depended on performing the correct posture before beings that could erase them without meaningful resistance.'
-    ],
+    if (entry.id === 'warehouse-convergence') {
+      replaceWhere(body, text => text.includes('The summons brought everyone back to base at once'),
+        'The summons brought everyone back to base at once. Charles counted the room, saw the old team, the half-remembered faces, the responders, soldiers, financiers, uncomfortable street youths, and the supernaturally adjacent people who had all been moving through his orbit, and for the first time seemed to slow down. He told all of you, ' + quote('holdOn') + ' Around the room, a thousand near-simultaneous whispered conversations began.');
+    }
 
-    'return-and-silence': [
-      'After the gathering broke apart, the cube returned to the warehouse where the journey had begun. The headsets were given back, and only then could people begin having actual conversations with Charles and pressing him for answers.',
-      'Charles’s explanation is preserved as direct speech in the restored dialogue set: ‘' + SOURCE_CHARLES_SPEECH.postMeeting + '’',
-      'The answer did not make the abduction clean. It made the scale visible. Charles and Watcher had been yelled at for hours by beings that controlled or constrained reality, and the team had been gathered quickly, with or without consent, because their presence had been demanded.'
-    ],
+    if (entry.id === 'charles-embodied') {
+      replaceWhere(body, text => text.includes('Remove your earpieces') || text.includes('remove the headsets'),
+        'At that point the voice of Charles in every ear gave the instruction as a direct command: ‘Remove the headsets.’ Some obeyed immediately, because obedience to Charles in emergencies had saved them before. Some argued, because obedience to Charles in emergencies had also cost them. Some froze. Some refused. Some reached up slowly, not wanting to discover what would happen if they resisted.');
+    }
 
-    'new-arrangement': [
-      'The new arrangement begins from the only line that could matter after the Moon: participation can no longer be treated as automatic. Charles tells the gathered operatives, ‘' + SOURCE_CHARLES_SPEECH.voluntaryExit + '’',
-      'Then, because Charles remains Charles even after a reality-scale reprimand, he adds, ‘' + SOURCE_CHARLES_SPEECH.expensiveExit + '’',
-      'For the team that has no ordinary home to return to, the warehouse remains the place they go. A few additions remain with them. Charles addresses the ones who stayed and says, ‘' + SOURCE_CHARLES_SPEECH.stayed + '’',
-      'Then the headsets turn off. No amount of prodding the power button turns them back on. The silence that follows is the first proof that the old arrangement has ended and that whatever comes next must be built under different terms.'
-    ]
-  };
+    if (entry.id === 'containment-cube') {
+      replaceWhere(body, text => text.includes('Everyone outside') || text.includes('Passing through the doorway'),
+        'Charles began talking loudly from the silver body form: ' + quote('followOutside') + ' Passing through the doorway produced a brief chill, the kind of cold that did not belong to weather. Beyond it, the parking lot had stopped being a parking lot in the ordinary sense and had become the floor of a transparent structure larger than the building it surrounded.');
+    }
+
+    if (entry.id === 'leaving-earth') {
+      replaceWhere(body, text => text.includes('Air quality is stable') || text.includes('Authority is being contested') || text.includes('Charles answered some questions'),
+        'As the cube accelerated and the normal people began asking how they were moving so fast, Charles answered with the source explanation: ' + quote('nonlinearMover') + ' When the shouting turned toward where they were going and who they were meeting, Charles stuck his head down into the cube through the roof and answered, ' + quote('neutralMeeting'));
+      insertAfterWhere(body, text => text.includes('neutral place') || text.includes('nonlinear prime mover'), [
+        'He slowly developed features on the metallic face so he could look at people inside the cube with pointed gazes, then added, ' + quote('frictionAside'),
+        'As the cube angled upward and the planet fell away beneath them, Charles continued from the roof of the cube: ' + quote('spaceWarning'),
+        'Later, when practical questions about the long journey became unavoidable, Charles answered the supply complaints with the same mix of logistics, annoyance, and absurd hospitality: ' + quote('foodFacilities')
+      ]);
+    }
+
+    if (entry.id === 'look-repentant') {
+      replaceWhere(body, text => text.includes('Look repentant') || text.includes('look sad') || text.includes('look At'),
+        'At some point during the convocation, Charles put his head through the roof again and said the line many operatives would remember with more clarity than the speeches of ancient powers: ' + quote('lookRepentant'));
+    }
+
+    if (entry.id === 'return-and-silence') {
+      insertAfterWhere(body, text => text.includes('Returning from the Moon') || text.includes('released from a threat'),
+        'Once the cube returned and the headsets were given back, Charles finally began answering the questions he had ignored during the journey: ' + quote('postMeeting'));
+    }
+
+    if (entry.id === 'new-arrangement') {
+      insertAfterWhere(body, text => text.includes('The final arrangement') || text.includes('continue under conditions'), [
+        'The first actual term after the Moon was not a slogan but Charles finally stating the boundary out loud: ' + quote('voluntaryExit'),
+        'Then, because Charles remained Charles even after being dragged before reality-scale powers, he added, ' + quote('expensiveExit'),
+        'For the people who stayed, and for the team that had nowhere ordinary to go, he added one more line before the silence: ' + quote('stayed')
+      ]);
+    }
+  }
 
   function applyDialogueBodies(data) {
-    for (const entry of data.entries || []) {
-      const replacement = charlesDialogueBodies[entry.id];
-      if (Array.isArray(replacement) && replacement.length) entry.body = replacement;
-    }
+    for (const entry of data.entries || []) patchEntry(entry);
     return data;
   }
 
