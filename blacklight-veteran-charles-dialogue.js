@@ -76,6 +76,10 @@
     if (entry.id === 'look-repentant') {
       replaceWhere(body, text => /look repentant|look sad|look at the pulsing light|gave an instruction/i.test(text),
         'At some point during the convocation, Charles put his head through the roof again and said the line many operatives would remember with more clarity than the speeches of ancient powers: ' + quote('lookRepentant'));
+      insertAfterWhere(body, text => text.includes('could kill all of you right now') || text.includes('*Nothing*'), [
+        'Some people inside the cube had spines of steel. Some had survived horrors that would have folded ordinary witnesses in half. Some may even have looked at the deities, courts, sovereigns, monsters, and cosmic authorities outside the cube and briefly imagined themselves equals. They were wrong. The most dangerous part was that they did not yet understand how wrong.',
+        'The beings outside were not merely stronger fighters. They were entities that could crush continents with a thought, wink out the star they happened to be orbiting because they chose to, marshal forces of primal existence, or already live inside the heads of numerous people inside the cube with nothing anyone present could do about it. These were powers strong enough to make Charles flinch, second-guess himself, improvise, argue, plead, and beg for your existence in a meeting he had rushed all of you to attend. They were powerful enough to make Watcher nervous.'
+      ]);
     }
 
     if (entry.id === 'return-and-silence') {
