@@ -15,6 +15,9 @@
     foodFacilities: 'Yes, yes! I will be providing food and facilities inside the cube. You will be able to relieve yourselves and have access to food that I will provide. Yes, there will be barbecue. No, I\'m not making you jambalaya. You can make it yourself!',
     lookRepentant: 'Look at the pulsing light in the middle of the gathering and look sad and look repentant. No I\'m serious, look sad and repentant now. Your lives depend on it. The gathered beings here could kill all of you right now and there would be nothing I could do to stop them. *Nothing*.',
     postMeeting: 'The meeting you just attended was a meeting of Eternals, Solars, various Eldrich sources, and other immensely powerful beings. And yes one of them was indeed a dragon, and yes one of them was indeed a representative of the Eldershogoth known as Cthulhu, and yes that was Cain, and yes those were the kings and queens of the Seely and Unseely courts. Yes there are other entities like Watcher whose jobs are to watch other entities like yourselves. Many of these forces are immutable, permanent, distinct, with abilities to shape reality itself in ways that even Charles cannot comprehend.',
+    awayForAWhile: 'I am going to have to go away for a while. As soon as I am done talking to the people I have to talk to, I am going to have to handle some things. That means I am going to be busy for a time, and I would advise you to stay somewhere near the warehouse if you can.',
+    changesComing: 'The changes coming are large. They are difficult changes. They are things that are going to need handling, things that are going to need more effort than we are used to putting into them. None of the effort we have exerted to this point has been wasted. None of it was useless. Everything was valuable.',
+    makeRight: 'When I get back, I will do my best to make right on every promise I have made.',
     voluntaryExit: 'You may disperse and be called upon later. Your participation from this point forward is purely voluntary. You may leave or continue on as you desire. If you no longer wish to participate in my requests of you, I will honor that commitment and any previous promises I have made to pay you for your services provided to this point.',
     expensiveExit: 'Honestly feeding you buggers is all expensive, so get out of here. Go home!',
     stayed: 'Good, you stayed. Things have to change going forward. Give me a few days and I\'ll have some answers for you, but in the meantime get to know each other and good luck.'
@@ -83,8 +86,14 @@
     }
 
     if (entry.id === 'return-and-silence') {
-      insertAfterWhere(body, text => text.includes('Returning from the Moon') || text.includes('released from a threat'),
-        'Once the cube returned and the headsets were given back, Charles finally began answering the questions he had ignored during the journey: ' + quote('postMeeting'));
+      insertAfterWhere(body, text => text.includes('Returning from the Moon') || text.includes('released from a threat'), [
+        'Once the cube returned and the headsets were given back, Charles finally began answering the questions he had ignored during the journey: ' + quote('postMeeting'),
+        'Then he explained the absence that would follow. ' + quote('awayForAWhile'),
+        'The warning did not sound like a retreat. It sounded like triage after a reality-scale reprimand. Charles was not disappearing because the work was over. He was stepping away because the structure around the work had become too dangerous, too visible, and too tangled with powers that could no longer be treated as distant background noise.',
+        'Before the headsets went quiet, he added, ' + quote('changesComing'),
+        'That mattered because the warehouse was full of people trying to decide whether the last few weeks, months, or years had been manipulation, rescue, employment, debt, friendship, coercion, or some ugly mixture of all of them. Charles did not ask them to pretend the answer was simple. He did insist the labor had mattered: the missions, the rescues, the surveillance, the waiting, the injuries, the fear, the money spent, the lives moved out of danger, and the impossible choices made under bad conditions had all become part of the foundation for what had to come next.',
+        'Finally, he left them with the closest thing to a promise the restricted arrangement would allow: ' + quote('makeRight')
+      ]);
     }
 
     if (entry.id === 'new-arrangement') {
