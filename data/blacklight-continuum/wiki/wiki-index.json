@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.28.0",
+  "schemaVersion": "0.29.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
+  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -19,6 +19,8 @@
   "randomCharacterContent": "data/blacklight-continuum/generators/random-character-content.json",
   "missionGeneratorModule": "blacklight-mission-generator.html",
   "missionGeneratorContent": "data/blacklight-continuum/generators/mission-generator-content.json",
+  "npcEntityGeneratorModule": "blacklight-npc-generator.html",
+  "npcEntityGeneratorContent": "data/blacklight-continuum/generators/npc-generator-content.json",
   "combatExampleModule": "blacklight-combat-example.html",
   "socialConflictModule": "blacklight-social-conflict.html",
   "equipmentCatalogModule": "blacklight-equipment-catalog.html",
@@ -41,9 +43,11 @@
   "technomancerPractices": "data/blacklight-continuum/rules/technomancer-awakening-practices.json",
   "integratedArchetypeEntries": "data/blacklight-continuum/wiki/basic-archetypes.json",
   "blacklightEraCampaignIntroduction": "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
+  "entityCatalog": "data/blacklight-continuum/wiki/entity-catalog.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
     "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
+    "data/blacklight-continuum/wiki/entity-catalog.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
@@ -57,9 +61,11 @@
     "data/blacklight-continuum/wiki/equipment-catalogs.json"
   ],
   "completedScope": {
-    "wikiEntries": 88,
-    "nativePacks": 13,
+    "wikiEntries": 100,
+    "nativePacks": 14,
     "blacklightEraCampaignIntroductionEntries": 6,
+    "entityCatalogEntries": 12,
+    "npcEntityGenerators": 1,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
     "archetypeResourceProcedures": 6,
