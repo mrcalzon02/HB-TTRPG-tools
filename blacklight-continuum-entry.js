@@ -3,6 +3,10 @@
 
   const VIEW_ID = 'blacklight-continuum';
   const INDEX_URL = 'data/blacklight-continuum/wiki/wiki-index.json';
+  const EXTRA_PACK_URLS = [
+    'data/blacklight-continuum/wiki/blacklight-facility-scene-modes.json',
+    'data/blacklight-continuum/wiki/blacklight-foyer-attunement-antenna.json'
+  ];
   let wikiData = null;
   let activeCategory = 'all';
 
@@ -61,13 +65,14 @@
   async function loadWiki() {
     if (wikiData) return wikiData;
     const index = await fetchJson(INDEX_URL);
-    const packs = await Promise.all((index.packs || []).map(fetchJson));
+    const packUrls = Array.from(new Set([...(index.packs || []), ...EXTRA_PACK_URLS]));
+    const packs = await Promise.all(packUrls.map(fetchJson));
     const byId = new Map();
     packs.forEach(pack => (pack.entries || []).forEach(entry => {
       byId.set(entry.id, { ...(byId.get(entry.id) || {}), ...entry });
     }));
     wikiData = {
-      index,
+      index: { ...index, packs: packUrls },
       entries: Array.from(byId.values()).sort((left, right) =>
         (left.category || '').localeCompare(right.category || '') ||
         (left.title || '').localeCompare(right.title || '')
@@ -110,6 +115,12 @@
           <button id="blacklight-open-wiki" class="primary-action" type="button">Open Blacklight Continuum Wiki</button>
         </article>
         <article class="module-card">
+          <div class="module-meta"><span class="badge status-active">facility infrastructure</span><span class="badge">foyer antenna</span></div>
+          <h3>BlackLight Facility Systems</h3>
+          <p>Open the facility infrastructure records: sealed floor modes, reserve power, interstitial utility decks, pillar systems, and the ugly corporate artwork that is actually Charles's primary subspace attunement fork.</p>
+          <button id="blacklight-open-facility" class="secondary-action" type="button">Open Facility Systems</button>
+        </article>
+        <article class="module-card">
           <div class="module-meta"><span class="badge status-active">d10 alpha</span><span class="badge">capability first</span></div>
           <h3>System Foundation</h3>
           <p>Nine Attributes, twenty-four Skills, twelve Operational Frames, Exposure and Cohesion, explicit capability families, equipment, and dangerous opposed resolution. Form and origin grant no unlisted mechanics.</p>
@@ -126,6 +137,7 @@
 
     section.querySelector('#blacklight-open-era')?.addEventListener('click', () => openBrowser('blacklight-era-formation'));
     section.querySelector('#blacklight-open-wiki')?.addEventListener('click', () => openBrowser());
+    section.querySelector('#blacklight-open-facility')?.addEventListener('click', () => openBrowser('foyer-art-subspace-attunement-fork'));
     section.querySelector('#blacklight-open-rules')?.addEventListener('click', () => openBrowser('blacklight-d10-foundation'));
   }
 
