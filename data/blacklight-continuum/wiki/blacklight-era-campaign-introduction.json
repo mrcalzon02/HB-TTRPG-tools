@@ -1,0 +1,224 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Campaign-introduction lore for the BlackLight Era: the formation of Blacklight Intelligence after the lunar convocation, the public Charles secure voice operations product, the O-shaped corporate headquarters, the Faux Charles cover, and the new post-reorientation operating environment.",
+  "entries": [
+    {
+      "id": "blacklight-era-formation",
+      "title": "The Formation of the BlackLight Era",
+      "category": "Campaign Introduction",
+      "summary": "The BlackLight Era begins after the Moon, after Charles leaves to handle consequences, and after the people he entangled have to build an organization that can survive without simply becoming another version of his old unilateral system.",
+      "body": [
+        "The BlackLight Era does not begin with a heroic launch, a clean corporate founding, or a speech that makes everyone feel better about what happened. It begins after the lunar convocation, when the people Charles used, saved, paid, moved, concealed, endangered, and depended upon realize that the old private arrangement cannot continue.",
+        "Charles goes away for a time to handle consequences that cannot be solved by another mission in someone else's ear. That absence creates a vacuum. The people left behind have to build something with departments, records, salaries, security, legal exposure, public revenue, civilian staff, and enough genuine function to survive scrutiny.",
+        "Blacklight Intelligence becomes the public corporation and the infrastructure shell. The BlackLight Company becomes the voluntary field organization formed by people who choose to continue under new terms. Charles remains strategic intelligence and logistical engine, but he is no longer allowed to pretend that being right gives him ownership over every decision.",
+        "The campaign begins in the long, hard transition between miracle and institution. BlackLight has to inherit Charles's promises, debts, enemies, tools, clients, dependents, and secrets while proving that support does not automatically become control. That tension is the foundation of the BlackLight Era."
+      ],
+      "keyFacts": [
+        "The BlackLight Era follows the lunar convocation and Charles's restricted absence.",
+        "Blacklight Intelligence is the public corporation and operational front.",
+        "The BlackLight Company is the voluntary field company formed by continuing operatives.",
+        "The organization exists to preserve useful support without repeating Charles's old unilateral authority.",
+        "The transition is intentionally difficult, bureaucratic, morally messy, and campaign-relevant."
+      ],
+      "playerFacing": [
+        "Characters are not simply taking missions from Charles anymore; they are operating inside a living organization with staff, budgets, security, departments, and consequences.",
+        "Veterans remember the old arrangement and may distrust the new one even while relying on it.",
+        "New characters can enter through the corporation, the Company, protected civilian programs, client relationships, government liaison roles, or legacy promises Charles made before disappearing."
+      ],
+      "gmNotes": [
+        "Use the BlackLight Era to shift the campaign from private crisis response to institutional consequence.",
+        "Keep the organization useful but imperfect. It should be better than the old system without being clean, frictionless, or free from compromise.",
+        "Do not let the corporation become only scenery. Payroll, product contracts, civilian employees, security policy, and public obligations should affect play."
+      ],
+      "tags": ["BlackLight Era", "campaign introduction", "Charles", "Blacklight Intelligence", "lunar convocation", "new arrangement"],
+      "relatedEntries": ["blacklight-intelligence-public-front", "blacklight-offices", "faux-charles-product", "blacklight-era-operating-environment", "return-and-silence"]
+    },
+    {
+      "id": "blacklight-intelligence-public-front",
+      "title": "Blacklight Intelligence as Public Corporation",
+      "category": "Organizations",
+      "summary": "To the public, Blacklight Intelligence is a secure technology corporation selling localized voice operations systems to governments, military organizations, secure facilities, and confidential-adjacent clients.",
+      "body": [
+        "To the outside world, Blacklight Intelligence is a defense-adjacent secure technology corporation. It specializes in large secure voice operations interfaces, local artificial intelligence support, compartmentalized workflow systems, and high-trust facility automation.",
+        "That public story is not entirely false. The company has real offices, real staff, real contracts, real product development, real budgets, real security interests, real marketing, real compliance pressure, and real civilian-grade operators who build, maintain, sell, support, and improve the public Charles software suite.",
+        "The corporation is therefore not a hollow front. It is a full commercial organism with a hidden operational core. The public work gives auditors, clients, vendors, regulators, and employees something true to inspect. That truth protects the deeper truth by making Blacklight look like exactly what a successful secure-technology contractor would look like.",
+        "The cover is useful because it also makes money. The public product generates revenue, contracts, legitimacy, and reasons for important people around the world to speak to something called Charles without proving they have ever encountered the real Charles."
+      ],
+      "keyFacts": [
+        "Blacklight Intelligence is a real corporation and a front operation at the same time.",
+        "Most employees are not fake; many are ordinary civilian staff working on a real secure software product.",
+        "The company sells secure localized voice operations systems into confidential, military, and government-adjacent environments.",
+        "Public legitimacy helps conceal deeper BlackLight operations."
+      ],
+      "tables": [
+        {
+          "title": "Public Function vs Hidden Function",
+          "columns": ["Public Explanation", "Hidden Campaign Use"],
+          "rows": [
+            ["Secure voice operations company", "Explains why Charles is present in important rooms."],
+            ["Localized AI assistant for confidential facilities", "Provides a legal and technical cover for controlled Charles-like interfaces."],
+            ["Defense-adjacent government contractor", "Justifies security, secrecy, procurement, and restricted access."],
+            ["Large corporate employer", "Creates ordinary staff, payroll, budgets, and institutional friction."],
+            ["Commercial product revenue", "Funds infrastructure and masks extraordinary resource movement."]
+          ]
+        }
+      ],
+      "tags": ["Blacklight Intelligence", "front company", "secure technology", "corporation", "cover operation"],
+      "relatedEntries": ["blacklight-era-formation", "faux-charles-product", "blacklight-offices"]
+    },
+    {
+      "id": "faux-charles-product",
+      "title": "Faux Charles: The Secure Voice Operations Product",
+      "category": "Technology",
+      "summary": "The public Charles product is a localized secure voice assistant designed for environments where consumer assistants such as Siri are unacceptable.",
+      "body": [
+        "The public Charles product is deliberately positioned as the secure-environment counterpart to consumer voice assistants. Where a civilian household might use Siri, a confidential facility, military office, secure laboratory, intelligence-adjacent contractor, or critical infrastructure site can use Charles.",
+        "Faux Charles is self-contained. The software package uses a local language model, local speech recognition, local speech synthesis, access-control integration, workflow routing, logs, permissions, and secure facility interfaces. It is marketed as an assistant that does not need to leak sensitive voice traffic through a consumer cloud to understand a request.",
+        "Faux Charles can sound like Charles. It can carry the dry procedural tone, the clipped corrections, and the sense of being judged by an intelligence with better timing than tact. But it is not the real Charles. It does not possess his full awareness, strategic continuity, future-derived knowledge, covert priorities, or authority over the hidden BlackLight network.",
+        "The product works as camouflage because important people can be heard speaking to Charles without proving anything extraordinary. A general, minister, lab director, or secure-facility operator using Charles looks like a client using Blacklight's commercial system, just as an ordinary person might be seen using Siri. That public assumption gives the real Charles room to move when he needs it."
+      ],
+      "keyFacts": [
+        "Faux Charles is the public product, not the real Charles.",
+        "It is fully localized and self-contained for secure environments.",
+        "It gives Blacklight a profitable reason to install Charles-like voices in important facilities worldwide.",
+        "It lets observers explain away references to Charles as normal product use."
+      ],
+      "tables": [
+        {
+          "title": "Consumer Assistant vs Charles Product",
+          "columns": ["Consumer Assistant", "Public Charles Product"],
+          "rows": [
+            ["Built for homes and general convenience", "Built for secure, military, government, and confidential-adjacent facilities"],
+            ["Cloud-dependent consumer ecosystem", "Localized LLM and speech-processing suite"],
+            ["General public data assumptions", "Compartmentalized logs, permissions, and local data control"],
+            ["Casual voice automation", "Operations interface for controlled environments"],
+            ["Public brand convenience", "Public cover and revenue source for Blacklight Intelligence"]
+          ]
+        }
+      ],
+      "playerFacing": [
+        "Characters may encounter public Charles terminals in government, military, corporate, or secure facilities without immediately knowing whether the real Charles is present.",
+        "The product gives players plausible cover when outsiders hear them reference Charles.",
+        "Confusing Faux Charles with the real Charles can create social, operational, and security complications."
+      ],
+      "gmNotes": [
+        "Use Faux Charles as ambiguity, not as a universal deus ex machina. Most installations should be only the product.",
+        "The real Charles can occasionally exploit the cover, but doing so should create risk, audit trails, or political consequences.",
+        "Civilian staff working on Faux Charles may be entirely innocent and should not automatically know the deeper truth."
+      ],
+      "tags": ["Faux Charles", "voice assistant", "localized AI", "secure facility", "cover product"],
+      "relatedEntries": ["blacklight-intelligence-public-front", "blacklight-era-operating-environment", "blacklight-offices"]
+    },
+    {
+      "id": "blacklight-offices",
+      "title": "The Blacklight Offices",
+      "category": "Locations",
+      "summary": "Blacklight's primary offices form a large O-shaped corporate complex whose outer ring supports genuine commercial activity while inner layers protect restricted operations.",
+      "body": [
+        "Blacklight's primary office is a large circular, O-shaped building with many floors of genuine commercial activity. It is not a paper-thin shell around a secret bunker. It is a working corporate headquarters built to make public business, private security, and hidden operations coexist without constantly colliding.",
+        "The outer ring is consumer and client facing. Visitors can see reception, demonstration suites, meeting rooms, product teams, marketing, sales, legal, HR, budget offices, compliance staff, and secure-client onboarding areas. This is where Blacklight sells and supports the public Charles operations interface.",
+        "The middle layers become more controlled. Access badges matter more. Elevators stop going everywhere. Testing labs, secure server rooms, internal training areas, restricted development suites, facilities security, logistics, and special-contract offices create a transition zone between public company and hidden organization.",
+        "The inner core is where the lie thins. Restricted elevators, sealed briefing rooms, private medical support, tactical logistics, protected records, armories, crisis rooms, unusual containment-adjacent spaces, and offices for people who do not appear on normal org charts exist inside a building that can still pass as a very serious secure technology headquarters.",
+        "The circular design matters. It allows controlled circulation, separated visitor routes, compartmentalized departments, hidden inner access, secure movement of people and equipment, and enough architectural plausibility that the building can be intimidating without advertising itself as impossible."
+      ],
+      "keyFacts": [
+        "The building is a large O-shaped corporate headquarters.",
+        "Outer areas are public, commercial, and client-facing.",
+        "Middle areas contain secure development and operational support.",
+        "Inner areas support restricted BlackLight operations.",
+        "The building is a campaign space where ordinary corporate life and covert consequences overlap."
+      ],
+      "tables": [
+        {
+          "title": "Building Layers",
+          "columns": ["Layer", "Visible Function", "Campaign Function"],
+          "rows": [
+            ["Outer ring", "Reception, demos, sales, legal, HR, marketing, client onboarding", "Maintains the believable public corporation."],
+            ["Commercial floors", "Product engineering, voice testing, support, secure-client deployments", "Makes Faux Charles a real product with real staff."],
+            ["Controlled middle layers", "Secure labs, server spaces, training rooms, internal security", "Bridges legitimate work and restricted activity."],
+            ["Inner core", "Restricted infrastructure and executive access", "Briefings, logistics, protected records, medical support, crisis rooms, and covert coordination."],
+            ["Hidden circulation", "Service routes, selective elevators, controlled corridors", "Moves people and equipment without exposing the deeper operation."]
+          ]
+        }
+      ],
+      "playerFacing": [
+        "The building should feel like a real workplace, not only a secret base.",
+        "Characters can move from ordinary coffee-line corporate life into a sealed briefing room where impossible matters are discussed.",
+        "Civilian employees may be helpful, obstructive, curious, overworked, innocent, or endangered without being part of the hidden truth."
+      ],
+      "gmNotes": [
+        "Use the O-shaped layout to support controlled reveals: public ring, restricted middle, hidden inner core.",
+        "Let normal office problems collide with extraordinary operational problems.",
+        "The building should generate complications: visitor audits, client demos, security drills, employee rumors, restricted routes, and emergencies that threaten the cover."
+      ],
+      "tags": ["Blacklight offices", "O-shaped building", "headquarters", "secure facility", "campaign hub"],
+      "relatedEntries": ["blacklight-intelligence-public-front", "faux-charles-product", "blacklight-era-operating-environment"]
+    },
+    {
+      "id": "blacklight-era-operating-environment",
+      "title": "The New Operating Environment",
+      "category": "Campaign Introduction",
+      "summary": "After reorientation, play moves into a heavier institutional environment where field work, public corporate cover, civilian staff, government clients, supernatural oversight, and Charles's restricted return all collide.",
+      "body": [
+        "The BlackLight Era is not simply the old mission structure with offices attached. The old mode was fast, private, improvisational, and dependent on Charles choosing what each person needed to know. The new mode is slower, heavier, more visible, and more accountable, but still surrounded by emergencies that punish delay.",
+        "There are now departments, handlers, legal reviews, transport requests, budget constraints, medical records, payroll structures, security tiers, procurement rules, public clients, private clients, and people whose job is to tell operatives that being effective is not the same thing as being authorized.",
+        "At the same time, BlackLight cannot afford to become useless. Charles's old network saved people because it moved faster than ordinary systems. The new organization must preserve enough responsiveness to matter while preventing one intelligence from silently turning superior information into command authority.",
+        "The campaign environment therefore asks a recurring question: what does BlackLight become if it succeeds this way? Every mission, cover decision, rescue, contract, refusal, budget argument, and Charles intervention defines the organization that will exist afterward."
+      ],
+      "keyFacts": [
+        "The new campaign environment is institutional rather than purely Charles-directed.",
+        "Characters deal with departments, clients, audits, security, staff, legal exposure, and supernatural consequences.",
+        "Charles returns to an organization that has begun to exist without him.",
+        "The central campaign tension is support without ownership, speed without unilateral control, and secrecy without erasing consent."
+      ],
+      "playerFacing": [
+        "Player characters may be field operatives, protected civilians, consultants, corporate employees, government liaisons, technical staff, or veterans translating old history into new terms.",
+        "Working for BlackLight means navigating both missions and the institution that now surrounds those missions.",
+        "A character can distrust Charles, rely on BlackLight, resent the Company, protect civilian employees, and still choose to continue. Those tensions are expected."
+      ],
+      "gmNotes": [
+        "Frame missions around both objective success and organizational consequence.",
+        "Use Blacklight Intelligence's public contracts to create plausible access, political pressure, and cover risks.",
+        "Use Charles sparingly and deliberately. His return should create tension with the structure that formed in his absence."
+      ],
+      "tags": ["campaign structure", "operating environment", "new arrangement", "institutional play", "Charles return"],
+      "relatedEntries": ["blacklight-era-formation", "blacklight-intelligence-public-front", "blacklight-offices", "faux-charles-product"]
+    },
+    {
+      "id": "blacklight-era-campaign-use",
+      "title": "Using the BlackLight Era at the Table",
+      "category": "Game Moderator Guidance",
+      "summary": "The BlackLight Era should function as a campaign hub where corporate cover, field operations, civilian life, inherited promises, and impossible threats constantly pressure one another.",
+      "body": [
+        "Use the BlackLight Era as the campaign's new foundation after veteran onboarding. Reorientation explains what happened to returning operatives. The BlackLight Era explains where play happens afterward and what kind of organization now surrounds them.",
+        "The headquarters is a hub, but it is not a safe menu screen. Public clients visit it. Civilian staff work inside it. Security teams enforce rules. Hidden rooms hold dangerous records. Faux Charles demos run for customers while the real Charles may be constrained, absent, listening, or forced to ask permission before acting.",
+        "The best BlackLight Era sessions should make the players feel the cost of institution-building. Someone has to pay the debt Charles created. Someone has to decide which promise is honored first. Someone has to protect employees who were never briefed on what they almost saw. Someone has to tell a field team that the cleanest solution is unacceptable. Someone has to decide whether an emergency justifies bending the new rules.",
+        "The campaign is about whether a network born from crisis, manipulation, rescue, money, secrecy, and impossible timing can become something better without pretending its origins were clean."
+      ],
+      "keyFacts": [
+        "This primer belongs after veteran reorientation and before ongoing BlackLight Era missions.",
+        "The building, public product, and corporation should all matter in play.",
+        "The organization should create both support and friction.",
+        "The campaign should repeatedly test whether BlackLight's methods are becoming better or simply more official."
+      ],
+      "tables": [
+        {
+          "title": "BlackLight Era Session Pressures",
+          "columns": ["Pressure", "Example Use"],
+          "rows": [
+            ["Public cover", "A government client arrives for a Faux Charles demo while a covert crisis unfolds in a restricted area."],
+            ["Inherited promise", "A person Charles once guaranteed protection now needs resources the new budget has not approved."],
+            ["Civilian staff", "An ordinary employee notices a pattern, becomes endangered, or unknowingly blocks an urgent operation."],
+            ["Charles restriction", "Charles knows a faster solution but cannot act without authorization under the new arrangement."],
+            ["Institutional friction", "Legal, security, compliance, or accounting rules slow an operation that used to happen instantly."],
+            ["Moral continuity", "The team must decide whether repeating an old Charles method is justified by the emergency." ]
+          ]
+        }
+      ],
+      "tags": ["GM guidance", "campaign hub", "session structure", "BlackLight Era", "corporate cover"],
+      "relatedEntries": ["blacklight-era-formation", "blacklight-era-operating-environment", "blacklight-offices"]
+    }
+  ]
+}
