@@ -1,0 +1,109 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Fictional tabletop reference for BlackLight facility scene modes, layered building states, staff movement fiction, and multi-vector incident framing inside the O-shaped headquarters.",
+  "entries": [
+    {
+      "id": "blacklight-facility-scene-modes-overview",
+      "title": "BlackLight Facility Scene Modes",
+      "category": "BlackLight Facility Modes",
+      "summary": "A fictional tabletop framework for how the O-shaped Blacklight headquarters changes state during complicated incidents.",
+      "body": [
+        "Blacklight facility modes are campaign tools, not real-world instructions. They describe how the fictional O-shaped headquarters changes tone when a scene becomes dangerous, strange, politically sensitive, or hazardous to ordinary staff knowledge.",
+        "The building protects three overlapping truths: the public corporation, the hidden Company, and the ordinary people who work inside a place stranger than most of them are cleared to know. A facility mode is therefore a story state: doors, elevators, signs, staff routing, voice prompts, and room access begin communicating what kind of scene the players are in.",
+        "Modes can apply to one office, one ring, one floor, the inner core, a demonstration suite, a records room, or the whole facility. The goal is to create pressure and choices without turning the building into a simple bunker."
+      ],
+      "keyFacts": [
+        "Facility modes are fictional campaign-state tools.",
+        "Modes can be layered by public ring, controlled middle layers, inner core, department, or room.",
+        "The same incident may require public calm, staff shelter, information restraint, supernatural diplomacy, and machine isolation at the same time.",
+        "Every mode should create a question about consent, cover, safety, and accountability."
+      ],
+      "tags": ["facility modes", "Blacklight offices", "campaign states", "O-shaped headquarters"],
+      "relatedEntries": ["blacklight-offices", "facility-mode-index", "multi-vector-incident-framing"]
+    },
+    {
+      "id": "facility-mode-index",
+      "title": "Facility Mode Index",
+      "category": "BlackLight Facility Modes",
+      "summary": "A list of fictional facility modes used to frame different kinds of BlackLight headquarters scenes.",
+      "body": [
+        "Facility modes are modular. The outer ring may remain in Public Continuity while an inner meeting room enters Information Hold and a server floor enters Signal Quiet. This lets the building remain a workplace while parts of it become honest about the crisis.",
+        "Narrate modes through changed signage, shorter voice prompts, different elevator behavior, calmer staff language, rerouted hallways, and the sudden feeling that every badge reader is asking a more personal question than before."
+      ],
+      "tables": [
+        {
+          "title": "Primary Facility Modes",
+          "columns": ["Mode", "When It Appears", "Effect in Play"],
+          "rows": [
+            ["Public Continuity", "The outer corporation must remain calm.", "Commercial activity continues while restricted routes quietly change."],
+            ["Soft Seal", "An anomaly is unverified or sensitive movement is underway.", "Selective access changes without public alarm."],
+            ["Hard Seal", "A confirmed hazard affects controlled areas.", "Middle and inner layers compartmentalize; movement needs incident authorization."],
+            ["Deep Core Seal", "The inner core or protected records are at risk.", "Restricted spaces isolate from ordinary building flow."],
+            ["Staff Shelter", "Civilian safety becomes the immediate priority.", "Ordinary employees move to protected areas under cover-language instructions."],
+            ["Signal Quiet", "Local systems, records, or voices may not be trustworthy.", "Networked convenience gives way to local confirmation and minimal prompts."],
+            ["Guest-Law Hold", "Fae, spirit, court, or hospitality rules may apply.", "Movement and speech become formal; invitation status matters."],
+            ["Information Hold", "The dangerous thing may be a symbol, phrase, record, memory, or explanation.", "The building reduces unnecessary detail until cleared people can interpret safely."],
+            ["Continuity Exit", "Cover and occupancy cannot both be preserved.", "People leave through structured explanations while protected records remain accounted for."],
+            ["Null Rooming", "Charles-restricted material or an unexplainable pattern is present.", "Certain rooms become isolated from normal explanation until director or Charles review." ]
+          ]
+        }
+      ],
+      "tags": ["facility modes", "building states", "scene framing"],
+      "relatedEntries": ["multi-vector-incident-framing", "blacklight-facility-scene-modes-overview"]
+    },
+    {
+      "id": "multi-vector-incident-framing",
+      "title": "Multi-Vector Incident Framing",
+      "category": "BlackLight Facility Modes",
+      "summary": "A fictional matrix for scenes where several kinds of danger overlap inside the Blacklight headquarters.",
+      "body": [
+        "BlackLight incidents rarely fit one clean category. A public visitor may carry a fae invitation. A machine voice may sound like Charles without being Charles. A staff member may be physically safe but exposed to unsafe information. A supernatural guest may have legal standing in one jurisdiction and hostile intent in another.",
+        "The incident frame tells the GM what the building is trying to protect and what kind of pressure the players should feel. The frame is not a tactical manual. It is a narrative tool for deciding which truths the building reveals and which ones it hides temporarily."
+      ],
+      "tables": [
+        {
+          "title": "Incident Vectors",
+          "columns": ["Vector", "Scene Question", "Likely Mode"],
+          "rows": [
+            ["Physical Hazard", "Who needs shelter and who can still move?", "Hard Seal or Staff Shelter."],
+            ["Public Cover", "What can ordinary staff and clients safely be told?", "Public Continuity or Continuity Exit."],
+            ["Machine / Signal", "Can the building trust its own voices and records?", "Signal Quiet."],
+            ["Supernatural Guest", "Who has standing to speak and what rules apply?", "Guest-Law Hold or Soft Seal."],
+            ["Spirit or Territory", "What does the place itself recognize as harm?", "Guest-Law Hold or Hazard review."],
+            ["Information Hazard", "Is the explanation itself dangerous?", "Information Hold or Null Rooming."],
+            ["Charles-Specific", "Is the incident touching Charles's old promises, voice, or locks?", "Null Rooming and director review." ]
+          ]
+        }
+      ],
+      "tags": ["multi-vector incidents", "scene framing", "facility modes"],
+      "relatedEntries": ["facility-mode-index", "machine-intelligence-catalog", "fae-spirit-contracts"]
+    },
+    {
+      "id": "staff-continuity-and-accountability",
+      "title": "Staff Continuity and Accountability",
+      "category": "BlackLight Facility Modes",
+      "summary": "What BlackLight must account for after a facility mode ends: people, promises, records, cover stories, and consent.",
+      "body": [
+        "A facility mode is not over when doors open. BlackLight has to account for staff, visitors, protected people, field teams, records, promises, payments, medical needs, emotional consequences, and whether the response quietly recreated the old Charles system by hiding too much from the people affected by it.",
+        "Post-incident review should create campaign consequences. Someone may need therapy, hazard monitoring, apology, back pay, repaired records, a corrected explanation, or the right to refuse future involvement. The institution only becomes better than the old arrangement if it can admit what it did under pressure."
+      ],
+      "tables": [
+        {
+          "title": "Post-Mode Questions",
+          "columns": ["Question", "Campaign Use"],
+          "rows": [
+            ["Who was protected?", "Identifies success beyond tactical victory."],
+            ["Who was kept ignorant?", "Tests whether secrecy protected people or removed consent."],
+            ["What did the cover story cost?", "Creates public, legal, emotional, or supernatural consequences."],
+            ["Which promise became active?", "Connects incidents to Charles-era debts and BlackLight accountability."],
+            ["What changed in the building?", "Lets staff, machine systems, spirits, and departments remember the event." ]
+          ]
+        }
+      ],
+      "tags": ["accountability", "staff continuity", "BlackLight Era", "post incident"],
+      "relatedEntries": ["blacklight-era-operating-environment", "blacklight-facility-scene-modes-overview"]
+    }
+  ]
+}
