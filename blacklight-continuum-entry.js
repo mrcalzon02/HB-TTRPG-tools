@@ -5,7 +5,8 @@
   const INDEX_URL = 'data/blacklight-continuum/wiki/wiki-index.json';
   const EXTRA_PACK_URLS = [
     'data/blacklight-continuum/wiki/blacklight-facility-scene-modes.json',
-    'data/blacklight-continuum/wiki/blacklight-foyer-attunement-antenna.json'
+    'data/blacklight-continuum/wiki/blacklight-foyer-attunement-antenna.json',
+    'data/blacklight-continuum/wiki/blacklight-corporate-low-clearance.json'
   ];
   let wikiData = null;
   let activeCategory = 'all';
@@ -103,6 +104,16 @@
           <button id="blacklight-open-era" class="primary-action" type="button">Open BlackLight Era Primer</button>
         </article>
         <article class="module-card">
+          <div class="module-meta"><span class="badge status-active">public corporation</span><span class="badge">C-0 access</span></div>
+          <h3>Blacklight Corporate Site</h3>
+          <p>Open the stereotypical public-facing corporate landing page, or inspect the low-clearance corporate operations records for legitimate contracts, departments, HR, payroll, security procedures, and leadership portfolios.</p>
+          <div class="blacklight-actions">
+            <a class="primary-action" href="blacklight-corporate.html" target="_blank" rel="noopener">Open Corporate Homepage</a>
+            <button id="blacklight-open-corporate" class="secondary-action" type="button">Open Corporate Records</button>
+            <button id="blacklight-open-hr" class="secondary-action" type="button">Open HR Portfolios</button>
+          </div>
+        </article>
+        <article class="module-card">
           <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">player and GM sections</span></div>
           <h3>The Ar'nock Derelict</h3>
           <p>Read the campaign foundation: Q-MAP awakening, pseudo-Charles, the Ar'nock vessel, biological Charles, identity questions, jobs, skills, powers, equipment, and opening-session guidance.</p>
@@ -136,6 +147,8 @@
     main.appendChild(section);
 
     section.querySelector('#blacklight-open-era')?.addEventListener('click', () => openBrowser('blacklight-era-formation'));
+    section.querySelector('#blacklight-open-corporate')?.addEventListener('click', () => openBrowser('blacklight-public-corporate-overview'));
+    section.querySelector('#blacklight-open-hr')?.addEventListener('click', () => openBrowser('blacklight-public-leadership-portfolios'));
     section.querySelector('#blacklight-open-wiki')?.addEventListener('click', () => openBrowser());
     section.querySelector('#blacklight-open-facility')?.addEventListener('click', () => openBrowser('foyer-art-subspace-attunement-fork'));
     section.querySelector('#blacklight-open-rules')?.addEventListener('click', () => openBrowser('blacklight-d10-foundation'));
@@ -184,7 +197,7 @@
         <p>${escapeHtml(data.index?.description || 'No Return Signal foundation entries.')}</p>
       </div>
       <div class="blacklight-controls">
-        <input type="search" id="blacklight-search" placeholder="Search Q-MAP, Ar'nock, Charles, Archetypes, capabilities, jobs, equipment, or rules…">
+        <input type="search" id="blacklight-search" placeholder="Search Q-MAP, Ar'nock, Charles, corporate operations, leadership, facility systems, Archetypes, capabilities, equipment, or rules…">
         <button type="button" id="blacklight-reset" class="secondary-action">Reset</button>
         <div id="blacklight-categories" class="blacklight-categories"></div>
       </div>
