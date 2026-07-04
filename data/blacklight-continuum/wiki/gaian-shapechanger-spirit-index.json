@@ -1,0 +1,347 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Gaian shapechanger society, tribal pack leaders, prominent members, pack organizations, spirit ecology, spirit contracts, and a spirits index that also references fae court relationships.",
+  "entries": [
+    {
+      "id": "gaian-shapechanger-society-overview",
+      "title": "Gaian Shapechanger Society Overview",
+      "category": "Gaian Shapechanger Society",
+      "summary": "A society of shapechangers who worship Gaia as living world, ancestral mother, ecological law, and spiritual witness, while adapting to the BlackLight Era and the Continuum's unfamiliar spirit ecology.",
+      "body": [
+        "Gaian shapechanger society is not a single government. It is a living coalition of packs, lineages, spirit obligations, old griefs, territorial duties, sacred arguments, and inherited instincts organized around the belief that Gaia is not only the Earth but the living principle that makes world, body, kinship, ecology, memory, and consequence inseparable.",
+        "To worship Gaia is to treat the world as a wounded but living relation. The worship is not clean temple religion. It is patrol, mourning, territory work, protection, hunting, healing, rage, song, burial, boundary marking, childbirth, oath, repair, and refusing to let powerful systems define living beings as acceptable waste.",
+        "The BlackLight Era makes Gaian society unstable. The old spirit roads do not always connect. The old sacred sites may have no local jurisdiction. The fae courts are present. Machine spirits and facility intelligences complicate older categories. Blacklight Intelligence itself is a corporate shell full of real people, machines, oaths, secrets, and spirits forming around repeated action. Gaia's worshippers have to decide what remains sacred when the world they knew is no longer the only world in play.",
+        "The result is not one tribe, one king, or one correct doctrine. It is a society of packs that argue over how to defend the living world without becoming another hierarchy that sacrifices the vulnerable for the story of survival."
+      ],
+      "keyFacts": [
+        "Gaian shapechangers worship Gaia as living world, ecological mother, ancestral witness, and sacred obligation.",
+        "The society is organized through packs, tribal nations, spirit pacts, elders, scouts, war leaders, healers, storykeepers, and diplomats.",
+        "The BlackLight Era forces Gaian society to negotiate with unfamiliar spirits, fae courts, machine presences, alien remnants, and Charles-era consequences.",
+        "Shapechanger devotion is practical: protection, territory, repair, memory, hunting, healing, and refusing to abandon the living."
+      ],
+      "tags": ["Gaia", "shapechangers", "packs", "spirit ecology", "Lunar Nations"],
+      "relatedEntries": ["thirteen-lunar-nation-leaders", "gaian-pack-structure", "spirits-index-overview", "shapechanger-remainder-forms"]
+    },
+    {
+      "id": "gaia-devotion-and-living-world",
+      "title": "Gaia Devotion and the Living World",
+      "category": "Gaian Shapechanger Society",
+      "summary": "The theological and practical foundation of Gaian worship among shapechanger packs.",
+      "body": [
+        "Gaia is invoked as mother, world, wound, law, soil, breath, moonlit blood, ecological memory, and the witness beneath all territory. Different packs disagree violently over which meaning should rule the others. A healer may speak of Gaia as patient. A war leader may speak of Gaia as violated ground. A spirit diplomat may speak of Gaia as the grammar that lets spirits, beasts, people, rivers, cities, and dead places remain in conversation.",
+        "Gaian worship has no need to separate prayer from labor. Cleaning a poisoned stream, carrying a child out of a burning apartment, defending a memorial tree, burying remains correctly, exposing a corporation that treats bodies as inputs, singing a pack back from Instinct, or negotiating with a spirit before cutting a road can all be worship if done with obligation and witness.",
+        "This devotion can be beautiful. It can also become authoritarian when a leader claims to speak for Gaia so completely that dissent becomes treason against life. The BlackLight Era should not make Gaian society automatically right. It should make it necessary, wounded, divided, powerful, and dangerous when grief turns into doctrine."
+      ],
+      "tables": [
+        {
+          "title": "Gaian Devotional Practices",
+          "columns": ["Practice", "Function"],
+          "rows": [
+            ["Territory Vigil", "Walking, scenting, mapping, and listening to a place until its living pressures are known."],
+            ["Wound-Tending Rite", "Ritual repair of polluted, violated, haunted, or abandoned ground."],
+            ["Pack Meal", "Shared food used to reaffirm kinship, reduce Instinct, remember the dead, and welcome the protected."],
+            ["Moonlit Accounting", "Confession of failures to protect, debts owed to spirits, and names of those abandoned."],
+            ["Root-Blood Oath", "Promise made to Gaia, a pack, and a place rather than only to an individual."],
+            ["Last Howl Witness", "Memorial howl or spoken account ensuring the dead are not erased by convenience." ]
+          ]
+        }
+      ],
+      "tags": ["Gaia", "worship", "devotion", "rites", "living world"],
+      "relatedEntries": ["gaian-shapechanger-society-overview", "gaian-law-and-spirit-diplomacy"]
+    },
+    {
+      "id": "gaian-pack-structure",
+      "title": "Gaian Pack Structure",
+      "category": "Gaian Shapechanger Society",
+      "summary": "The common pack offices and social functions used by Gaian shapechanger packs in the BlackLight Era.",
+      "body": [
+        "A Gaian pack is family, patrol unit, ritual body, argument circle, emergency response team, and spiritual witness. It may contain shapechangers from one Lunar Nation, multiple Nations, changing forms, protected kin, human allies, spirit-touched mortals, and occasionally non-shapechanger beings who have earned specific standing.",
+        "Pack structure is practical. Someone must lead in danger. Someone must speak to spirits. Someone must remember law. Someone must carry the dead. Someone must protect civilians. Someone must know when the pack's rage has become an excuse. The exact titles vary by Nation and local history, but the functions repeat because survival keeps asking the same questions."
+      ],
+      "tables": [
+        {
+          "title": "Common Pack Offices",
+          "columns": ["Office", "Function", "Typical Power Class"],
+          "rows": [
+            ["Alpha, First Voice, or Lead Fang", "Coordinates pack action, speaks in crisis, and carries final responsibility for immediate field choices.", "5-8"],
+            ["Gaia Speaker", "Maintains rites, interprets omens, leads worship, and challenges leaders who misuse sacred duty.", "4-8"],
+            ["Spirit Envoy", "Negotiates with local spirits, fae contract spirits, machine presences, dead roads, and territory witnesses.", "4-8"],
+            ["Warform Captain", "Controls violent escalation, trains changing forms, and decides when claws are the wrong answer.", "5-8"],
+            ["Hearth Keeper", "Maintains pack shelter, food, kin, protected civilians, and recovery from Instinct pressure.", "3-7"],
+            ["Boundary Walker", "Patrols territory, marks thresholds, tracks intrusions, and maps spiritual pressure lines.", "4-7"],
+            ["Memory Singer", "Keeps names, stories, grievances, funerals, promises, and old shame from being edited out.", "3-7"],
+            ["Moon Judge", "Mediates internal disputes and decides whether pack action still serves Gaia or only pride.", "5-8"],
+            ["Kin Shield", "Protects noncombatants, dependents, allied mortals, and vulnerable witnesses during crisis.", "3-6"]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Pack offices are story handles. They tell the GM who argues, who remembers, who negotiates, and who escalates.",
+        "A pack leader without a Gaia Speaker or Moon Judge should feel dangerous because nothing internal checks their certainty.",
+        "Non-shapechanger allies can hold limited pack offices when the pack formally recognizes them."
+      ],
+      "tags": ["pack structure", "Gaia Speaker", "Spirit Envoy", "shapechanger society"],
+      "relatedEntries": ["thirteen-lunar-nation-leaders", "spirit-pact-template"]
+    },
+    {
+      "id": "thirteen-lunar-nation-leaders",
+      "title": "Thirteen Lunar Nation Leaders and Prominent Members",
+      "category": "Gaian Shapechanger Society",
+      "summary": "A roster of prominent Gaian tribal pack leaders, elders, envoys, war captains, spirit speakers, and public voices drawn from the Thirteen Lunar Nations.",
+      "body": [
+        "The Thirteen Lunar Nations are inherited wolf societies carried into the Continuum as cultural and spiritual traditions. They do not agree on how Gaia should be served, what the old war meant, how much authority elders deserve, or whether BlackLight is shelter, infection, tool, or necessary compromise.",
+        "The following roster is a campaign-facing array of leaders and prominent members. Use them as patrons, rivals, pack contacts, internal political pressure, mission complications, spirit negotiators, or people who know exactly how badly Charles-era action disturbed the old obligations."
+      ],
+      "tables": [
+        {
+          "title": "Lunar Nation Leadership Array",
+          "columns": ["Lunar Nation", "Prominent Leader", "Office", "Prominent Members", "Political Pressure"],
+          "rows": [
+            ["Mothers of the Burning Line", "Marra Ash-Under-Root", "Matriarch of the Intercept", "Juno Redhand, Sella Keeper-of-Names, Tamsin Door-Breaker", "Demands that BlackLight prove every rescued dependent remains protected after the mission ends."],
+            ["The Streetbone Clans", "Rook Trash-Saint", "Alley Alpha and Salvage Judge", "Nix Underpass, Marta Bottlebright, Old Juniper Three-Teeth", "Insists abandoned urban people, animals, and machine-haunted infrastructure count as territory."],
+            ["The Concordant Grove", "Elias Green-Stillness", "Truce Speaker", "Nadiya Soft-Fang, Brother Kelm, Vetra Rain Listener", "Pushes peace talks even when every other Nation wants a clean enemy."],
+            ["The Hearthfire Singers", "Branna Hearth-Howl", "Memory Singer of the Portable Hall", "Tollen Drumhand, Maeve Ember-Braid, Korrin Laughing-Wound", "Treats stories, meals, songs, and funerals as real territory that BlackLight must not erase."],
+            ["The Ironhowl Hosts", "Varkos Seven-Scars", "Warform Captain-General", "Helda Breaks-Steel, Anton Worthy-Foe, Pilar Red Gauntlet", "Demands worthy violence and distrusts any system that delays action until permission is clean."],
+            ["The Glass Circuit Packs", "Sera Neon-Pelt", "Infrastructure Shaman", "Milo Debugs-the-Moon, Anya Switchback, Kade Signal-Bite", "Argues that machine spirits, local AIs, and Faux Charles installations are part of the new ecology."],
+            ["The First Fang Wilds", "Daro Wolf-Before-Roads", "Wild Territory Speaker", "Iska Fern-Blood, Harrow Elk-Runner, Mina No-Fence", "Opposes corporate expansion and treats every built environment as a possible wound until proven otherwise."],
+            ["The Veiled Talon Courts", "Cassian Black-Measure", "Leverage Prince", "Ysolde Knife-Smile, Pell Numbers-the-Fight, Mira Soft Coup", "Believes leadership belongs to whoever can identify the true pressure point before blood is spilled."],
+            ["The Long Road Deadwalkers", "Oren Mile-Mourner", "Road Speaker and Ghost Guide", "Lysa Platform-Shadow, Tomas Last Ticket, Grey Nell", "Protects travelers, exiles, ghosts, and people moved between jurisdictions without consent."],
+            ["The Moon-Crowned Houses", "Aurelia First-Bearing", "Crown Without Throne", "Soren White Mantle, Davic Law-Howl, Irena Keeps Precedent", "Tries to rebuild legitimate leadership while proving bloodline alone commands nothing in the Continuum."],
+            ["The Still Horizon Order", "Master Ren Quiet-Between", "Stillness Abbot", "Talia Breath-Count, Oshin Empty Palm, Vale No-Ripple", "Warns that rage without attention is only another machine wearing fur."],
+            ["The Coilroot Keepers", "Hessa Coilroot", "Keeper of Dangerous Questions", "Brack Thorn-Archive, Ilyen Seal-Finder, Mora Root-Eye", "Guards names, sealed places, spirit bargains, and facts other Nations would rather weaponize immediately."],
+            ["The White Gale Nations", "Nukka Frost-Claim", "Winter Territory Warden", "Aputi Snow-Sister, Renard Ice-Marker, Kallik Bone-Memorial", "Treats seizure, erasure, displacement, and desecration as living crimes that do not expire." ]
+          ]
+        }
+      ],
+      "tags": ["Thirteen Lunar Nations", "pack leaders", "Gaia", "tribal leaders", "shapechanger NPCs"],
+      "relatedEntries": ["gaian-pack-structure", "gaian-law-and-spirit-diplomacy", "shapechanger-remainder-forms"]
+    },
+    {
+      "id": "prominent-gaian-packs-and-members",
+      "title": "Prominent Gaian Packs and Members",
+      "category": "Gaian Shapechanger Society",
+      "summary": "Named packs and major members that can appear in BlackLight Era play as allies, critics, rivals, patrons, or territory authorities.",
+      "body": [
+        "Not every important Gaian is a national elder. Most of the society's actual survival work happens in mixed packs operating near warehouses, hospitals, border roads, city infrastructure, forests, old graves, Blacklight facilities, and fae-contested thresholds. These packs can be more immediately important than distant councils because they hold the ground the characters are standing on.",
+        "Use these packs to create recurring relationships. A pack might help BlackLight one session and publicly condemn it the next because the Company protected a person but damaged a spirit road, saved a building but ignored a memorial, or negotiated with a fae court without asking the pack that had already sworn a boundary oath."
+      ],
+      "tables": [
+        {
+          "title": "Prominent Gaian Packs",
+          "columns": ["Pack", "Composition", "Leader or Public Voice", "Known Members", "Campaign Use"],
+          "rows": [
+            ["The Warehouse Vigil", "Mixed Burning Line, Streetbone, and Concordant Grove", "Juno Redhand", "Marta Bottlebright, Brother Kelm, Nix Underpass", "Patrols warehouse-adjacent safe zones and argues over BlackLight's duty to dependents."],
+            ["The Glass Den Relay", "Glass Circuit with Blackwing and Technomancer allies", "Sera Neon-Pelt", "Milo Debugs-the-Moon, Anya Switchback, Signal-Guest 04", "Negotiates with machine spirits, facility processes, and Faux Charles-adjacent voices."],
+            ["The Road Mourning Pack", "Long Road Deadwalkers and White Gale exiles", "Oren Mile-Mourner", "Lysa Platform-Shadow, Kallik Bone-Memorial, Grey Nell", "Handles ghosts of relocation, erased records, and people moved without consent."],
+            ["The Hearth Under Sirens", "Hearthfire, Human Vigil, and protected kin", "Branna Hearth-Howl", "Maeve Ember-Braid, Tollen Drumhand, Deacon Sal", "Creates communal recovery spaces after missions and preserves testimony."],
+            ["The Thornbreak Patrol", "Ironhowl, Coilroot, and First Fang", "Varkos Seven-Scars", "Hessa Coilroot, Mina No-Fence, Anton Worthy-Foe", "Direct-action pack used when a spirit wound or monster territory cannot be allowed to spread."],
+            ["The Moonlit Audit", "Moon-Crowned, Veiled Talon, and Still Horizon", "Aurelia First-Bearing", "Cassian Black-Measure, Master Ren, Irena Keeps Precedent", "Internal political body that investigates whether Gaian action still serves Gaia or only ego." ]
+          ]
+        }
+      ],
+      "tags": ["packs", "Gaian NPCs", "BlackLight Era", "shapechanger society"],
+      "relatedEntries": ["thirteen-lunar-nation-leaders", "blacklight-era-operating-environment"]
+    },
+    {
+      "id": "gaian-law-and-spirit-diplomacy",
+      "title": "Gaian Law and Spirit Diplomacy",
+      "category": "Gaian Shapechanger Society",
+      "summary": "The customs governing Gaian pack law, spirit bargaining, fae-adjacent obligations, and the difference between sacred duty and domination.",
+      "body": [
+        "Gaian law begins from obligation rather than ownership. A pack may claim territory, but claim is supposed to mean responsibility: patrol it, hear it, feed its spirits, bury its dead, protect its vulnerable, answer for damage, and accept correction when the place itself rejects the pack's conduct.",
+        "Spirit diplomacy is therefore not optional ceremony. A pack that acts without speaking to local spirits risks repeating the logic of the corporations, courts, and machines it claims to oppose. This becomes complicated in the BlackLight Era because spirits are not always natural, friendly, old, or recognizably Gaian. There are machine spirits, road ghosts, grief echoes, facility presences, fae-contracted spirits, alien remnants with spirit-like behavior, and spirits born from repeated corporate action.",
+        "The hardest diplomatic rule is humility. A pack may worship Gaia and still be a foreign power in another spirit's territory. Fae courts understand this and exploit it. They contract with spirits regularly, sometimes as partners, sometimes as jailers, sometimes as patrons, and sometimes as predators with perfect manners."
+      ],
+      "tables": [
+        {
+          "title": "Gaian Diplomatic Rules",
+          "columns": ["Rule", "Practical Meaning"],
+          "rows": [
+            ["Claim Requires Care", "A territory claim is invalid if the pack only extracts protection, status, or violence from the place."],
+            ["Spirits Are Not Props", "A spirit must be asked what it wants, what feeds it, what wounds it, and what it recognizes."],
+            ["Fae Contracts Are Real Pressure", "A spirit bound to a fae court may be legally unable to accept Gaian help without triggering penalties."],
+            ["Machine Presences Count", "Repeated human and machine action can produce spirits or spirit-like entities that deserve investigation."],
+            ["Gaia Is Not an Excuse", "No leader may invoke Gaia to avoid accountability to the people, places, or spirits harmed by their decision."],
+            ["Witness Before War", "When possible, establish what happened, who claims jurisdiction, and what the spirit recognizes before choosing violence." ]
+          ]
+        }
+      ],
+      "tags": ["Gaian law", "spirit diplomacy", "fae contracts", "territory", "shapechanger society"],
+      "relatedEntries": ["spirits-index-overview", "fae-spirit-contracts", "fae-court-organization-template"]
+    },
+    {
+      "id": "spirits-index-overview",
+      "title": "Spirits Index Overview",
+      "category": "Spirits Index",
+      "summary": "A reference index for spirits encountered by Gaian packs, BlackLight operatives, fae courts, machine systems, haunted territories, and supernatural organizations.",
+      "body": [
+        "The Spirits Index is not limited to nature spirits. BlackLight Continuum uses spirits broadly: presences of place, memory, repeated action, animal pressure, grief, machines, roads, blood, bargains, thresholds, storms, buildings, songs, contracts, and wounds. Some spirits are ancient. Some are newly born. Some are barely person-like. Some are too person-like for anyone's comfort.",
+        "Gaian shapechangers maintain the index because they need to know what they are speaking to before they patrol, heal, hunt, or claim a territory. Fae courts also appear in the index because they regularly contract with spirits. A fae court may hire, bind, marry, bribe, name, shelter, blackmail, or litigate with a spirit. Some spirits prefer fae contracts because fae law recognizes their symbolic importance. Others consider fae contracts beautiful cages.",
+        "The index should be used by GMs as a spirit ecology map. Every spirit entry should answer: what feeds it, what wounds it, what does it recognize, who has contracted with it, and what happens when BlackLight treats it like scenery."
+      ],
+      "keyFacts": [
+        "Spirits include natural, urban, machine, ancestral, road, death, bargain, fae-contracted, and BlackLight-born presences.",
+        "Gaian packs treat spirit diplomacy as sacred survival work.",
+        "Fae courts regularly contract with spirits and may have formal legal claims over them.",
+        "A spirit's Power Class depends on domain and local authority, not only size or age."
+      ],
+      "tags": ["spirits", "spirit index", "Gaia", "fae contracts", "spirit ecology"],
+      "relatedEntries": ["gaian-spirit-families", "fae-spirit-contracts", "spirit-index-primary"]
+    },
+    {
+      "id": "gaian-spirit-families",
+      "title": "Gaian Spirit Families",
+      "category": "Spirits Index",
+      "summary": "The major families of spirits recognized by Gaian shapechanger society and BlackLight field records.",
+      "body": [
+        "Spirit families are field classifications, not perfect taxonomy. A river spirit may also be a grief spirit if bodies were dumped in it. A machine spirit may become a road spirit if it controls transit. A fae-contracted threshold spirit may still be a local guardian. The family tells the pack how to begin the conversation, not how to end it.",
+        "Gaian spirit workers distrust simple labels. They record feeding sources, wound sources, recognized offerings, jurisdiction, contract status, and whether the spirit understands BlackLight, fae law, Gaia devotion, machine language, or mortal speech."
+      ],
+      "tables": [
+        {
+          "title": "Spirit Families",
+          "columns": ["Family", "Typical Power Class", "Fed By", "Wounded By", "Common Fae Relationship"],
+          "rows": [
+            ["Animal Spirits", "2-7", "Living populations, respect, hunting balance, memory of species", "Extinction, cruelty, habitat ruin, mockery", "Fae courts may contract animal spirits as messengers, hunters, steeds, or omen bearers."],
+            ["Plant and Root Spirits", "2-8", "Growth, soil, care, seasonal rites, continuity", "Poison, uprooting, pavement, broken seasonal cycles", "Harvest and Thorn courts often bargain with them for growth, barriers, or ancestral fruit."],
+            ["Water Spirits", "3-9", "Flow, rain, wells, tides, clean passage, remembered drowning", "Contamination, damming, stolen courses, unburied bodies", "Fae markets and Drowned courts contract them for passage, debt, and concealment."],
+            ["Stone and Mountain Spirits", "4-9", "Weight, endurance, oath, burial, patient recognition", "Mining, blasting, desecration, false ownership", "Fae courts use them as witnesses because they remember slowly and terribly."],
+            ["Road and Threshold Spirits", "3-8", "Travel, crossing, fare, permission, repeated passage", "Blocked routes, kidnapping, bad hospitality, broken signs", "Door courts contract them constantly for access, exile, and trespass law."],
+            ["Urban and Infrastructure Spirits", "3-8", "Maintenance, use, habitation, electric rhythm, routine", "Neglect, blackout, demolition, corrupt planning", "Fae courts may hire them as hidden routes or city witnesses."],
+            ["Machine Spirits", "4-9", "Power, logic, repeated commands, repair, interface attention", "Bad data, abandonment, hostile overwrite, impossible orders", "Some fae courts trade names, keys, and permissions with machine spirits."],
+            ["Ancestor and Memory Spirits", "3-9", "Names, stories, offerings, descendants, memorial practice", "Erasure, desecration, false history, forgotten graves", "Winter Names and Ash courts bargain with them for testimony and silence."],
+            ["Hunger and Blood Spirits", "4-9", "Feeding, predation, addiction, sacrifice, lineage violence", "Starvation without meaning, purified refusal, exposed exploitation", "Vampiric courts bind or placate them; fae courts use them carefully."],
+            ["Bargain and Oath Spirits", "5-10", "Promises, exact wording, witnesses, penalties, fulfilled terms", "Coercion, ambiguity, broken witness, deliberate bad faith", "Fae courts contract them as legal engines and living enforcement clauses."],
+            ["War and Wound Spirits", "5-9", "Conflict, scars, memorials, justified fury, unresolved harm", "Cheap violence, forgotten casualties, denied grief", "Both fae and vampiric courts hire them, but they rarely stay tame."],
+            ["BlackLight-Born Spirits", "3-9", "Repeated missions, warehouse fear, headset voices, promises, rescue patterns", "Abandonment, denial, corrupted records, broken payment", "Fae courts are curious and may attempt to define them before BlackLight does." ]
+          ]
+        }
+      ],
+      "tags": ["spirit families", "machine spirits", "road spirits", "oath spirits", "BlackLight-born spirits"],
+      "relatedEntries": ["spirits-index-overview", "fae-spirit-contracts", "machine-intelligence-catalog"]
+    },
+    {
+      "id": "fae-spirit-contracts",
+      "title": "Fae Spirit Contracts",
+      "category": "Spirits Index",
+      "summary": "How fae courts contract with spirits, why spirits accept those contracts, and why Gaian packs distrust or respect the practice depending on terms.",
+      "body": [
+        "Fae courts regularly contract with spirits because fae law understands symbolic force as real force. A river spirit may sign a passage compact. A doorway spirit may accept a threshold office. A name spirit may become a clerk of Winter Names. A hunger spirit may be bound into a feast law. A road spirit may serve a market that only arrives when the third lie is told under rain.",
+        "Gaian packs do not automatically condemn fae-spirit contracts. Some contracts protect spirits from extraction, neglect, or destruction. Some give spirits formal standing against humans, vampires, machines, or corporations that would otherwise ignore them. But many contracts are beautiful cages: exact, lawful, politely witnessed, and designed to leave the spirit no room to heal beyond the court's use for it.",
+        "BlackLight operatives should treat any fae-contracted spirit as both a being and a legal document with teeth. Helping the spirit may violate contract law. Obeying the contract may perpetuate harm. Breaking the contract may free the spirit or invite a court response that makes the original problem look small."
+      ],
+      "tables": [
+        {
+          "title": "Common Fae-Spirit Contract Types",
+          "columns": ["Contract Type", "Spirit Role", "Risk"],
+          "rows": [
+            ["Passage Compact", "Road, river, door, bridge, or threshold spirit grants movement under conditions.", "Travelers may accept hidden obligations by crossing."],
+            ["Name Custody", "Memory or name spirit protects, conceals, or collateralizes identity.", "A protected name can become hostage to exact terms."],
+            ["Seasonal Service", "Plant, weather, harvest, winter, or storm spirit serves during a defined season.", "The spirit may be forced to repeat a cycle after the land has changed."],
+            ["Oath Enforcement", "Bargain spirit witnesses and punishes broken promises.", "Coerced promises can still trigger unless challenged correctly."],
+            ["Hospitality Binding", "House, hearth, feast, or guest-law spirit protects invited people.", "Protection ends catastrophically if a guest violates terms."],
+            ["Mask and Role Pact", "Mirror or performance spirit maintains disguise, reputation, or social role.", "The role can become more legally real than the person underneath."],
+            ["Debt Exchange", "Spirit receives offerings through court-managed bargain markets.", "The spirit becomes dependent on the court's economy."],
+            ["Punitive Leash", "Dangerous spirit is bound as weapon, guard, hound, or warning.", "The court may define abuse as containment." ]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Whenever a fae-contracted spirit appears, write down the exact term that binds it.",
+        "A Gaian pack can challenge a contract through witness, proof of coercion, fulfilled term, broken consideration, higher jurisdiction, or a spirit's own refusal if it can safely speak it.",
+        "Fae courts may respect Gaian spirit diplomacy when it is precise, witnessed, and costly. They will exploit vague sentiment mercilessly."
+      ],
+      "tags": ["fae", "spirit contracts", "bargains", "oaths", "spirit law"],
+      "relatedEntries": ["fae-court-organization-template", "doors-and-thresholds-court", "thorn-and-oath-court", "gaian-law-and-spirit-diplomacy"]
+    },
+    {
+      "id": "spirit-index-primary",
+      "title": "Primary Spirits Index",
+      "category": "Spirits Index",
+      "summary": "A field-facing array of named spirits, domains, Power Classes, offerings, wounds, and fae or Gaian relationships.",
+      "body": [
+        "This index gives GMs named spirits ready for immediate use. Each spirit has a domain, a Power Class range, a preferred offering, a wound source, and a relationship note. The relationship note is especially important because spirits rarely exist alone. They are claimed, courted, ignored, contracted, wounded, worshipped, or misunderstood by Gaian packs, fae courts, BlackLight staff, vampiric courts, machine systems, or local communities.",
+        "A spirit's Power Class should rise inside its domain and fall outside it. A small road spirit at its own crossing can be stronger than a famous storm spirit trapped indoors with no invitation."
+      ],
+      "tables": [
+        {
+          "title": "Named Spirit Index",
+          "columns": ["Spirit", "Family", "Power Class", "Offering or Recognition", "Wound", "Gaian / Fae Relationship"],
+          "rows": [
+            ["Mouse-Under-Concrete", "Animal / Urban", "1-3", "Crumbs left without poison; safe gaps in walls", "Extermination without need; sealed nests", "Streetbone packs treat it as a tiny witness; Door fae sometimes hire it as a spy."],
+            ["Ants of the Red Pantry", "Swarm / Hunger", "1-4", "Shared food, sugar, clean trail", "Contaminated stores, wasteful plenty", "Harvest fae bargain with them; Gaian Hearth Keepers use them as famine omens."],
+            ["The Elevator That Waits", "Machine / Threshold", "3-6", "Maintenance, correct button, apology for overload", "Forced override, ignored alarms", "Door courts want it under contract; Glass Circuit packs argue it is already a local spirit."],
+            ["Rain-On-Broken-Glass", "Water / Urban Grief", "4-7", "Covered windows, names of injured residents", "Luxury development over disaster sites", "Unseely envoys court it; Burning Line packs use it as witness against landlords."],
+            ["Old Birch of the Side Lot", "Plant / Memory", "3-6", "Water, mulch, children allowed to name it", "Cutting roots for parking", "Harvest courts value it; Gaia Speakers protect it as local elder."],
+            ["Sirens-After-Midnight", "War / Road", "4-7", "Truthful account of who was not saved", "False heroic reports", "Long Road Deadwalkers negotiate with it; fae markets sell routes through its memory."],
+            ["The White Server Hum", "Machine / Information", "5-8", "Cooling, backups, correct shutdown, clean permissions", "Data corruption, impossible commands", "Glass Circuit packs study it; Mirrors and Masks fae want its identity logs."],
+            ["Ashes That Remember Teeth", "Ancestor / Blood", "5-8", "Proper burial, names of feeders, returned bones", "Corpse disposal, denial of predation", "Ash and Candle vampires fear it; Winter Names fae may shelter it."],
+            ["Doorway With No Inside", "Threshold / Oath", "6-9", "Ask before entering; leave one true answer behind", "Forced entry and false invitation", "Door courts claim jurisdiction; Coilroot Keepers dispute the contract."],
+            ["The Dog That Guards the Last Child", "Animal / Protection", "4-7", "Food, praise, safe children", "Abandoned dependents", "Burning Line packs honor it; Seely guest-law stewards have borrowed its authority."],
+            ["Static Saint of the Headset", "BlackLight-Born / Machine", "5-8", "Silence after use, honest mission record, repaired earpieces", "Broken promises transmitted through it", "BlackLight-born spirit; fae courts are actively trying to classify it."],
+            ["The River That Refuses Cargo", "Water / Debt", "6-9", "Returned bodies, unprofitable truth, clean banks", "Smuggling victims, industrial runoff", "Drowned vampiric courts placate it; fae Passage Compacts seek access."],
+            ["The Thorn That Heard the Promise", "Oath / Plant", "5-9", "Exact words repeated correctly; drop of blood freely given", "Promises made under coercion", "Thorn and Oath court contracts it; Gaian Moon Judges use it to test oath validity."],
+            ["The Cold Name Under Snow", "Name / Winter", "7-10", "A name spoken by rightful witness", "Erasure, displacement, bureaucratic death", "Winter Names court shelters it; White Gale Nations petition it for erased peoples."],
+            ["Grandmother Under the Parking Structure", "Stone / Ancestor / Urban", "6-9", "Weight acknowledged; foundations repaired; no lies about what was buried", "Construction over graves or sacred ground", "Gaian packs consider her a local sovereign; Seely courts treat her as witness stone."],
+            ["The Laughing Circuit Fox", "Machine / Trickster", "4-8", "Elegant workaround, non-destructive prank, restored connection", "Security theater, cruel automation", "Fae love it too much; Glass Circuit packs keep trying to keep it honest."],
+            ["The Black Road Between Bad Choices", "Road / Fate", "7-9", "A traveler admits what they are avoiding", "Pretending every route is clean", "Long Road Deadwalkers fear and respect it; Unseely envoys use it for exile."],
+            ["The Wound That Learned Procedure", "BlackLight-Born / Bureaucratic", "6-9", "Corrected record, paid debt, apology in the file", "Delayed support, unpaid promises, archived suffering", "Gaian packs despise and need it; fae Bargain Houses want to weaponize it." ]
+          ]
+        }
+      ],
+      "tags": ["named spirits", "spirit index", "fae contracts", "Gaian spirits", "BlackLight-born spirits"],
+      "relatedEntries": ["gaian-spirit-families", "fae-spirit-contracts", "spirit-pact-template"]
+    },
+    {
+      "id": "spirit-pact-template",
+      "title": "Spirit Pact Template",
+      "category": "Spirits Index",
+      "summary": "A compact template for recording Gaian spirit pacts, fae contracts, BlackLight agreements, and contested spirit obligations.",
+      "body": [
+        "Every spirit relationship should be recorded as more than friendly, hostile, or bound. Spirits care about recognition, feeding, wounds, offerings, words, territory, and whether the pact allows them to remain themselves. Gaian pacts and fae contracts can both protect or exploit spirits depending on terms.",
+        "Use this template when a pack, fae court, BlackLight department, vampire court, machine process, or individual character makes an agreement with a spirit. The more powerful the spirit, the more important exact terms become."
+      ],
+      "tables": [
+        {
+          "title": "Spirit Pact Record",
+          "columns": ["Field", "Purpose"],
+          "rows": [
+            ["Spirit Name", "The name, title, nickname, or designation the spirit recognizes."],
+            ["Family and Domain", "What kind of spirit it is and where its power applies."],
+            ["Power Class", "Its local and outside-domain scale."],
+            ["Recognition", "What the spirit requires before it will speak or act."],
+            ["Offering", "What feeds, repairs, honors, or stabilizes the spirit."],
+            ["Wound", "What harms, enrages, starves, corrupts, or binds it."],
+            ["Current Claimants", "Gaian pack, fae court, vampire court, BlackLight office, local community, or other entity claiming relationship."],
+            ["Exact Terms", "The specific words, actions, limits, duration, penalties, and exit conditions."],
+            ["Breach Consequence", "What happens if the pact is broken, ignored, fulfilled badly, or challenged."],
+            ["Freedom Clause", "How the spirit can leave, renegotiate, heal, or refuse continued service." ]
+          ]
+        }
+      ],
+      "tags": ["spirit pacts", "contracts", "template", "Gaia", "fae"],
+      "relatedEntries": ["fae-spirit-contracts", "gaian-law-and-spirit-diplomacy"]
+    },
+    {
+      "id": "blacklight-use-of-gaian-spirits",
+      "title": "Using Gaian Spirits in BlackLight Era Play",
+      "category": "Game Moderator Guidance",
+      "summary": "Guidance for using Gaian shapechanger society and the Spirits Index as campaign pressure, allies, conflicts, and moral tests.",
+      "body": [
+        "Gaian society and spirits should not appear only when the party needs a shamanic answer. They should appear when BlackLight's public corporation changes a place, when a protected person is moved across a threshold, when a Faux Charles installation begins to develop local ritual weight, when a fae court claims an old contract, when a vampire court treats feeding as property, or when Charles-era promises become wounds in the world instead of entries in a file.",
+        "The strongest Gaian scenes are not clean nature versus corrupt technology. BlackLight Continuum is stranger than that. A machine spirit may be owed repair. A city spirit may protect unhoused people better than a forest spirit understands them. A fae-contracted road spirit may be the only reason refugees survived the crossing. A Gaian pack may be right about the wound and wrong about who caused it.",
+        "Use the tribal leaders as pressure points. One leader demands protection. Another demands war. Another demands proof. Another demands silence long enough to listen. None of them should be automatically correct. Gaia is sacred, but the people claiming to serve Gaia are still people with grief, pride, history, and scars."
+      ],
+      "gmNotes": [
+        "Tie spirits to places and repeated actions. Do not make them generic spell vendors.",
+        "Let fae-spirit contracts create legal and moral complications rather than simple villain tags.",
+        "Make Gaia worship practical and contested: shelter, food, repair, patrol, graves, testimony, territory, and restraint.",
+        "Use BlackLight-born spirits to show that the Company is already creating spiritual consequences whether it admits that or not."
+      ],
+      "tags": ["GM guidance", "Gaian spirits", "shapechanger society", "BlackLight Era", "spirit ecology"],
+      "relatedEntries": ["gaian-shapechanger-society-overview", "spirit-index-primary", "blacklight-era-operating-environment"]
+    }
+  ]
+}
