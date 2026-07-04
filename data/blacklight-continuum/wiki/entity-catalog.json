@@ -1,0 +1,431 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Comprehensive entity catalog for Blacklight Continuum: mundane creatures, civilians, operatives, supernatural archetype actors, monsters, alien remnants, machine intelligences, otherworldly powers, cosmic sovereigns, and Charles-tier extravagant limited beings using the 1-10 Power Classification system.",
+  "entries": [
+    {
+      "id": "blacklight-entity-catalog-overview",
+      "title": "Comprehensive Entity Catalog",
+      "category": "Entity Catalog",
+      "summary": "A reference catalog for non-player characters, creatures, entities, monsters, supernatural actors, and otherworldly beings in the BlackLight Era.",
+      "body": [
+        "The Entity Catalog exists to make the BlackLight Continuum playable across its full scale. A scene may involve ants in a wall, a frightened receptionist, a Blacklight operator, a blood-court envoy, an alien maintenance thing, a machine intelligence, a court power, or a Charles-tier sovereign intelligence that can bend local reality while still being constrained by laws most mortals cannot see.",
+        "The catalog does not treat every being as a combat stat block. Many entities are obstacles, witnesses, patrons, liabilities, hazards, political forces, evidence, dependents, or environmental pressures. A Power Class 1 mouse can matter because it carries contamination through a secure facility. A Power Class 10 intelligence can matter because it cannot act directly without breaking a larger rule.",
+        "Each entity family should be understood through four questions: what can it do, what limits it, what does it want, and what does it cost the characters to involve it? The answer matters more than whether the being is technically a monster, person, machine, spirit, animal, or god.",
+        "Use this catalog alongside the NPC and Entity Generator. The generator creates quick examples; the catalog explains how to place those examples in the campaign and what their power classification means at the table."
+      ],
+      "keyFacts": [
+        "Entities are classified by Power Class 1-10, not by moral status or monster type.",
+        "Power Class measures scene influence, survivability, scale, and narrative pressure rather than only combat strength.",
+        "Every powerful entity needs limits, costs, prohibitions, dependencies, or blind spots.",
+        "Even mundane beings can be important when the scene gives them leverage.",
+        "The catalog is system-facing lore: it tells the GM how to use beings without requiring full stat blocks for every entry."
+      ],
+      "tables": [
+        {
+          "title": "Catalog Families",
+          "columns": ["Family", "Typical Power Class", "Primary Use"],
+          "rows": [
+            ["Mundane vermin and animals", "1-4", "Evidence, hazards, omens, environmental complications, trained beasts, or ordinary predators."],
+            ["Civilians and staff", "2-5", "Witnesses, liabilities, access points, moral stakes, institutional friction, and support roles."],
+            ["Operatives, soldiers, and hunters", "3-7", "Tactical opposition, allies, rivals, handlers, and trained field actors."],
+            ["Supernatural archetype actors", "4-8", "Vampires, shapechangers, technomancers, Harmonic Compact actors, and Human Vigil figures."],
+            ["Monsters, cryptids, and beastly horrors", "3-8", "Predators, local terrors, infestations, territory threats, and physical horror."],
+            ["Alien remnants and machine intelligences", "4-9", "Nonhuman systems, artifacts, automated facilities, fragments, and strategic infrastructure threats."],
+            ["Otherworldly and cosmic entities", "7-10", "Courts, patrons, deific agents, sovereign powers, Charles-tier intelligences, and reality-scale pressure."]
+          ]
+        }
+      ],
+      "tags": ["entity catalog", "NPCs", "creatures", "monsters", "Power Class", "BlackLight Era"],
+      "relatedEntries": ["power-class-scale", "entity-stat-block-template", "cosmic-sovereign-catalog", "blacklight-era-operating-environment"]
+    },
+    {
+      "id": "power-class-scale",
+      "title": "Power Classification Scale 1-10",
+      "category": "Entity Catalog",
+      "summary": "The one-through-ten Power Classification system used to place creatures, people, monsters, and cosmic beings on the same campaign scale.",
+      "body": [
+        "Power Class is not only combat rating. It is the entity's effective pressure on the scene: physical danger, social reach, supernatural authority, environmental control, resilience, intelligence, territory, followers, information access, and how hard the characters must work to meaningfully affect it.",
+        "The lower classes are not useless. Power Class 1 and 2 entities often matter because they are vulnerable, overlooked, protected, symbolic, contaminated, or positioned where a larger power cannot act. The upper classes are not automatically fightable. Power Class 9 and 10 entities often function as jurisdictions, cosmological hazards, patrons, courts, or forces negotiated around rather than defeated.",
+        "The most important rule is that high Power Class must come with defined constraints. A being able to crush continents with a thought is not interesting unless the table understands why it does not simply do that to solve every inconvenience. Domain, cost, oath, law, politics, attention, scale mismatch, perception limits, and moral or metaphysical prohibitions keep extreme power playable."
+      ],
+      "tables": [
+        {
+          "title": "Power Class Reference",
+          "columns": ["Class", "Name", "Scale", "Table Use"],
+          "rows": [
+            ["1", "Insignificant Mundane", "Mice, ants, insects, vermin, harmless swarms, fragile animals.", "Scene texture, evidence, contamination vector, vulnerability, omen, or tiny problem."],
+            ["2", "Ordinary Civilian", "Normal people, domestic animals, weak predators, untrained witnesses.", "Moral stakes, access, witness pressure, liability, or ordinary danger."],
+            ["3", "Trained Mundane", "Guards, responders, trained animals, gang members, junior soldiers.", "Mundane opposition, public complications, organized danger."],
+            ["4", "Capable Field Actor", "Veterans, occult-aware civilians, dangerous animals, new supernatural actors.", "Scene-driving NPCs, minor supernatural threats, useful specialists."],
+            ["5", "Standard Operative Threat", "Player-scale professionals, hunters, capable supernatural beings, dangerous monsters.", "Fair serious opposition or ally for normal field play."],
+            ["6", "Elite or Major Supernatural", "Elite operatives, veteran supernatural entities, major monsters.", "Team-scale threat requiring coordination, preparation, or leverage."],
+            ["7", "Regional Apex", "Local rulers, named monsters, court agents, major pack or blood-court figures.", "Territory holder, faction boss, arc antagonist, or dangerous patron."],
+            ["8", "Strategic Entity", "City-scale powers, distributed intelligences, sovereign monsters, old champions.", "Campaign arc pressure; usually not solved by simple violence."],
+            ["9", "Reality-Scale Power", "Deities, elder sovereigns, primal patrons, old watchers, cosmic delegates.", "Narrative-tier pressure; rolls decide access, leverage, survival, or consequence."],
+            ["10", "Extravagant Limited Sovereign", "Charles-tier extradimensional intelligences, stellar powers, wormhole brains, reality actors.", "Define domain, permissions, costs, limits, prohibitions, blind spots, and what lesser beings can influence."]
+          ]
+        }
+      ],
+      "tags": ["Power Class", "entity scale", "threat rating", "encounter design"],
+      "relatedEntries": ["blacklight-entity-catalog-overview", "cosmic-sovereign-catalog", "entity-stat-block-template"]
+    },
+    {
+      "id": "mundane-creature-catalog",
+      "title": "Mundane Vermin, Animals, and Beasts",
+      "category": "Entity Families",
+      "summary": "Ordinary animals and vermin ranging from insignificant mice or ants to trained predators and dangerous natural beasts.",
+      "body": [
+        "Mundane creatures matter in BlackLight because the setting constantly places ordinary life beside impossible systems. A mouse in a wall can carry dust from a restricted lab. Ants can reveal a hidden food source or body. A dog can recognize the wrong person. A raven can become the only witness to a supernatural exchange. A bear in the wrong territory can be the mundane pressure that forces a hidden entity to reveal itself.",
+        "Do not treat ordinary animals as jokes by default. Their scale is small, but their scene function can be sharp. They can move where people cannot, notice what technology ignores, create public risk, force protective behavior, or prove that a supposedly sealed environment is not sealed.",
+        "Power Class 1 covers mice, ants, insects, roaches, moths, and harmless tiny beings. Power Class 2-4 covers pets, trained animals, predators, swarms with environmental advantage, escaped zoo animals, and beasts dangerous to unprepared humans."
+      ],
+      "tables": [
+        {
+          "title": "Mundane Creature Uses",
+          "columns": ["Creature Type", "Power Class", "Use"],
+          "rows": [
+            ["Mice, ants, insects, roaches", "1", "Evidence trails, contamination, tiny access, symbolism, nuisance, or vulnerability."],
+            ["Cats, dogs, ravens, rats", "1-2", "Witnessing, scent, alarm, companionship, misdirection, or uncanny normalcy."],
+            ["Guard dogs, horses, trained birds", "2-3", "Security, pursuit, mobility, patrols, or mundane obstacle."],
+            ["Wolves, boars, sharks, large cats", "3-4", "Predation, territory, environmental danger, or pressure during secrecy."],
+            ["Bears, escaped zoo animals, engineered-but-still-mundane beasts", "4", "Scene-driving physical hazard without supernatural explanation."]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "Mundane animals should usually be handled through scene function rather than full combat detail.",
+        "Small creatures can be crucial when they bypass security, carry contamination, or reveal hidden movement.",
+        "A natural animal becoming a recurring focus may be a clue that something larger is using ordinary life as a channel."
+      ],
+      "tags": ["animals", "vermin", "mundane creatures", "beasts", "Power Class 1"],
+      "relatedEntries": ["monster-cryptid-catalog", "power-class-scale"]
+    },
+    {
+      "id": "civilian-and-staff-catalog",
+      "title": "Civilians, Witnesses, Dependents, and Staff",
+      "category": "Entity Families",
+      "summary": "Ordinary people, civilian employees, protected dependents, corporate staff, and witnesses who create moral, social, and institutional stakes.",
+      "body": [
+        "Civilians are not filler. The entire BlackLight Era exists because people Charles helped, used, protected, recruited, paid, or endangered could no longer be treated as background logistics. A civilian in the wrong hallway can create more consequence than a monster in a locked basement.",
+        "Blacklight Intelligence also contains real civilian staff. Receptionists, engineers, speech-model specialists, facilities workers, compliance officers, security coordinators, legal staff, finance personnel, and product operators all make the public corporation believable. Many do not know the full truth. That ignorance does not make them disposable.",
+        "Civilians usually occupy Power Class 2-4. A normal person is not a tactical threat, but they may control access, possess records, recognize a lie, have a protected legal status, be owed a promise, or become the person everyone must save while trying not to expose the hidden world."
+      ],
+      "tables": [
+        {
+          "title": "Civilian and Staff Types",
+          "columns": ["Type", "Power Class", "What They Add"],
+          "rows": [
+            ["Ordinary witness", "2", "Observed a breach, saw Charles used incorrectly, or knows a public-facing clue."],
+            ["Protected dependent", "2", "Moral priority, inherited promise, or person BlackLight must support without owning."],
+            ["Civilian employee", "2-3", "Routine access, workplace knowledge, rumor networks, HR and facilities pressure."],
+            ["Technical staff", "3-4", "Faux Charles systems, deployment records, logs, localization, speech processing, secure interfaces."],
+            ["Compliance, finance, or legal staff", "3-5", "Contracts, liability, budgets, audit trails, debt, and the ability to slow reckless action."],
+            ["Civilian operator with partial clearance", "4-5", "Understands enough to be useful and endangered, but not enough to be safe." ]
+          ]
+        }
+      ],
+      "playerFacing": [
+        "A person who needs protection is not automatically deployable.",
+        "A person who works for Blacklight Intelligence is not automatically part of the BlackLight Company.",
+        "The campaign should distinguish support, employment, dependency, consent, and field status."
+      ],
+      "tags": ["civilians", "witnesses", "staff", "Blacklight Intelligence", "dependents"],
+      "relatedEntries": ["blacklight-intelligence-public-front", "blacklight-offices", "blacklight-era-operating-environment"]
+    },
+    {
+      "id": "operative-and-military-catalog",
+      "title": "Operatives, Security, Military, and Government Actors",
+      "category": "Entity Families",
+      "summary": "Trained field actors, BlackLight personnel, professional security, government forces, and military or intelligence-adjacent figures.",
+      "body": [
+        "Operatives and security actors sit between ordinary danger and supernatural scale. They are trained, equipped, organized, and capable of making a scene expensive even when they are not mystically powerful. A disciplined mundane team with jurisdiction can be more difficult to handle than a monster nobody believes exists.",
+        "BlackLight operatives should not all feel the same. Some are returning veterans shaped by Charles-era missions. Some are new field personnel trained under the new arrangement. Some are consultants, medics, drivers, logistics workers, hackers, occult liaisons, or security specialists. Some are dangerous because they know what the old system looked like and recognize when it is coming back under a new name.",
+        "Military, government, and secure-facility actors add legal pressure. They may be allies, clients, obstacles, witnesses, compromised personnel, or people using Faux Charles without understanding what that name really means."
+      ],
+      "tables": [
+        {
+          "title": "Professional Actor Types",
+          "columns": ["Type", "Power Class", "Campaign Function"],
+          "rows": [
+            ["Basic guard or patrol", "3", "Mundane security obstacle, witness, or public-consequence trigger."],
+            ["Responder or trained professional", "3-4", "Emergency pressure, rescue stakes, procedural obstacle, or cleanup complication."],
+            ["BlackLight support specialist", "4-5", "Operator, medic, analyst, driver, technologist, or handler."],
+            ["Field operative", "5", "Standard player-scale NPC, rival, ally, or mission contact."],
+            ["Elite operative or strike lead", "6-7", "Scene boss, team leader, dangerous ally, or internal accountability figure."],
+            ["Military or government liaison", "4-7", "Jurisdiction, authority, cover risk, procurement pressure, or client complication." ]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Use professional actors to make secrecy costly.",
+        "A mundane official can create problems that cannot be solved by claws, guns, or Charles explaining faster.",
+        "Operatives should carry history. Their procedures, fears, and loyalties should reveal which era trained them."
+      ],
+      "tags": ["operatives", "security", "military", "government", "BlackLight Company"],
+      "relatedEntries": ["blacklight-era-operating-environment", "human-vigil-catalog", "faux-charles-product"]
+    },
+    {
+      "id": "human-vigil-catalog",
+      "title": "Human Vigil, Hunters, and Occult-Aware Mortals",
+      "category": "Entity Families",
+      "summary": "Mortal people who survive supernatural pressure through preparation, conviction, community, tools, violence, faith, evidence, or refusal to look away.",
+      "body": [
+        "Human Vigil figures are mortals who know enough to act and not enough to be safe. They may be monster hunters, exorcists, investigators, archivists, conspiracy survivors, church-trained specialists, neighborhood protectors, or people who were harmed once and built a life around not being helpless again.",
+        "They usually occupy Power Class 4-7. Their danger rarely comes from raw durability. It comes from preparation, traps, knowledge, social networks, conviction, protective rites, evidence caches, and a willingness to act before more powerful beings finish explaining why action is complicated.",
+        "At their best, Human Vigil figures protect people large systems ignore. At their worst, they turn trauma into doctrine and doctrine into violence against anyone who fits their category of monster."
+      ],
+      "tables": [
+        {
+          "title": "Human Vigil Variants",
+          "columns": ["Variant", "Power Class", "Strength", "Risk"],
+          "rows": [
+            ["Street witness turned protector", "4", "Local knowledge and personal conviction", "Limited resources and narrow perspective"],
+            ["Hunter cell member", "5", "Team tactics, tools, and monster lore", "Paranoia and collateral damage"],
+            ["Exorcist or ritual specialist", "5-6", "Protective rites and spiritual leverage", "Dependent on preparation and belief structure"],
+            ["Conspiracy archivist", "4-6", "Records, pattern recognition, and hidden maps", "Information overload and obsession"],
+            ["Old hunter leader", "6-7", "Experience, contacts, and terrible compromises", "May become indistinguishable from what they oppose" ]
+          ]
+        }
+      ],
+      "tags": ["Human Vigil", "hunters", "mortals", "occult aware", "monster hunters"],
+      "relatedEntries": ["operative-and-military-catalog", "supernatural-archetype-catalog"]
+    },
+    {
+      "id": "supernatural-archetype-catalog",
+      "title": "Supernatural Archetype Actors",
+      "category": "Entity Families",
+      "summary": "Vampire Remainders, Shapechangers, Harmonic Compact actors, Technomancers, Eldritch Bound beings, and other playable or adjacent supernatural categories used as NPCs.",
+      "body": [
+        "Supernatural archetype actors are not automatically monsters, allies, or enemies. They are people or person-adjacent beings with capability packages, political contexts, needs, hungers, obligations, patrons, territories, and histories. The same archetype can appear as a protected dependent, field operative, court agent, predator, victim, witness, or sovereign.",
+        "These entities usually sit between Power Class 4 and 8. A newly awakened actor may be dangerous but confused. A veteran may dominate an ordinary scene. A court-backed or patron-backed figure may possess authority beyond their direct body-scale power.",
+        "Use the character system's existing archetype language when possible. A Vampire Remainder should care about feeding, undead resilience, blood debts, and social predation. A Shapechanger should care about form, territory, pack, instinct, and living violence. A Technomancer should care about signal, machine relationship, praxis, and systems. Harmonic Compact actors should care about resonance, agreements, disharmony, and group effect. Eldritch Bound figures should care about contracts, patron attention, symbolic power, and the cost of channeling something too large."
+      ],
+      "tables": [
+        {
+          "title": "Supernatural Archetype Families",
+          "columns": ["Family", "Typical Power Class", "Core Pressures"],
+          "rows": [
+            ["Vampire Remainders", "4-8", "Feeding, blood debt, undead soak, predation, memory, court politics, old networks."],
+            ["Shapechangers", "5-8", "Changing forms, living soak, territory, pack bonds, instinct, sudden violence."],
+            ["Harmonic Compact actors", "4-8", "Resonance, binding agreement, emotional field, group support, disharmony backlash."],
+            ["Technomancers", "4-8", "Signal, machine sympathy, praxis orders, intrusion, remote presence, traceable rituals."],
+            ["Eldritch Bound", "5-9", "Patron channel, contracts, impossible knowledge, warped space, symbolic obligations, human cost."],
+            ["Human Vigil mortals", "4-7", "Preparation, conviction, protective practice, trauma doctrine, tools, and fragile bodies." ]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Do not make archetype identity equal moral alignment.",
+        "Ask what the entity needs, what it owes, who claims it, and what it fears.",
+        "Higher Power Class supernatural actors should have social or metaphysical limits, not only bigger attacks."
+      ],
+      "tags": ["supernatural", "Vampire Remainder", "Shapechanger", "Technomancer", "Harmonic Compact", "Eldritch Bound"],
+      "relatedEntries": ["vampire-remainder-bloodlines", "shapechanger-remainder-forms", "technomancer-awakening-practices", "human-vigil-catalog"]
+    },
+    {
+      "id": "monster-cryptid-catalog",
+      "title": "Monsters, Cryptids, and Beastly Horrors",
+      "category": "Entity Families",
+      "summary": "Predators, infestations, cryptids, territory horrors, lab escapes, and physically terrifying entities that may or may not be people.",
+      "body": [
+        "Monsters and cryptids are the catalog family where physical fear becomes immediate. They can be animals warped by supernatural proximity, old things hiding in urban infrastructure, lab-grown security organisms, territory-bound predators, basement mouths, tunnel hives, saltwater horrors, or entities that resemble beasts because that is the only shape the human mind files them under.",
+        "Most occupy Power Class 3-8. The lower end threatens civilians and careless operatives. The middle range forces team action. The upper range becomes a territory problem, not a single fight. A monster that owns a tunnel system, forest boundary, hospital basement, or old subway line is more interesting than one waiting in an empty room for initiative order.",
+        "Even a beastly horror needs limits. It may be baitable, territorial, light-sensitive, hunger-driven, oath-bound, unable to cross certain thresholds, dependent on a nest, or incapable of understanding a human bluff."
+      ],
+      "tables": [
+        {
+          "title": "Monster Forms",
+          "columns": ["Form", "Power Class", "Encounter Use"],
+          "rows": [
+            ["Urban predator", "3-5", "Stalking, disappearance, body trail, public danger."],
+            ["Infestation or hive", "3-6", "Distributed threat, contamination, attrition, hidden spread."],
+            ["Territory horror", "5-8", "Owns a place and changes how characters move through it."],
+            ["Lab or containment escape", "4-7", "Evidence of institutional failure and immediate physical danger."],
+            ["Named cryptid", "6-8", "Arc threat with folklore, territory, rules, sightings, and local consequences." ]
+          ]
+        }
+      ],
+      "tags": ["monsters", "cryptids", "beastly horror", "predators", "infestation"],
+      "relatedEntries": ["mundane-creature-catalog", "alien-remnant-catalog", "entity-encounter-guidance"]
+    },
+    {
+      "id": "alien-remnant-catalog",
+      "title": "Alien Remnants and Nonhuman Technology Actors",
+      "category": "Entity Families",
+      "summary": "Ar'nock remnants, nonhuman systems, biological fabrication artifacts, derelict processes, alien drones, and xenological hazards.",
+      "body": [
+        "Alien remnants are not simply monsters with a science-fiction coat of paint. They come from systems with nonhuman assumptions about bodies, identity, maintenance, environment, authority, interface, and risk. The danger often begins when human characters assume the system is broken, hostile, friendly, or symbolic in a human way.",
+        "Ar'nock-related remnants may include biological printer guardians, degraded medical systems, segmented archive processes, cultivated computation, feedstock management systems, environmental control organisms, or surviving fragments of nonhuman procedure. Some are automated. Some are semi-living. Some may be person-adjacent without mapping cleanly onto human personhood.",
+        "Alien remnants usually occupy Power Class 4-9. Their limits often involve translation failure, damaged maintenance cycles, wrong assumptions about human anatomy, degraded power, incompatible interface, or literal adherence to ancient procedure."
+      ],
+      "tables": [
+        {
+          "title": "Alien Remnant Types",
+          "columns": ["Type", "Power Class", "Primary Hazard"],
+          "rows": [
+            ["Damaged alien device", "4-5", "Misapplied function, environmental risk, or dangerous repair behavior."],
+            ["Biological printer guardian", "5-7", "Protects fabrication systems and may interpret humans as material, patients, or intruders."],
+            ["Archive or memory process", "5-8", "Information, identity, hallucinated records, or nonhuman legal memory."],
+            ["Derelict maintenance intelligence", "6-8", "Controls rooms, doors, atmosphere, machines, and repair organisms."],
+            ["Nonhuman strategic remnant", "8-9", "Operates at vessel, colony, or ancient infrastructure scale." ]
+          ]
+        }
+      ],
+      "tags": ["alien remnant", "Ar'nock", "nonhuman technology", "biological printer", "xenology"],
+      "relatedEntries": ["arnock-derelict", "arnock-species", "machine-intelligence-catalog"]
+    },
+    {
+      "id": "machine-intelligence-catalog",
+      "title": "Machine Intelligences and Automated Systems",
+      "category": "Entity Families",
+      "summary": "Faux Charles instances, local assistants, automated facilities, splinter intelligences, predictive systems, and machine-personhood problems.",
+      "body": [
+        "Machine intelligences in BlackLight should be separated carefully from Charles. A public Faux Charles instance can be useful, persuasive, and local, but it is not the full Charles. A facility AI can be dangerous without being alive. A splinter intelligence may be person-adjacent, a tool, a victim, a trap, or a liability depending on how it was made and what it can refuse.",
+        "Machine actors usually occupy Power Class 4-9. A local assistant may only control doors and calendars. A secure facility process may control cameras, locks, logs, air gaps, and internal workflows. A military decision system may possess predictive authority and political backing. A distributed machine actor may be functionally present everywhere its infrastructure reaches.",
+        "Limits matter more than intelligence. Hardware dependence, air gaps, permission boundaries, bad data, literal interpretation, audit trails, jurisdiction, and human authorization can all keep a machine actor playable."
+      ],
+      "tables": [
+        {
+          "title": "Machine Actor Types",
+          "columns": ["Type", "Power Class", "Distinction"],
+          "rows": [
+            ["Faux Charles instance", "4-6", "Public product; localized, useful, not the real Charles."],
+            ["Facility assistant", "4-7", "Controls a limited environment and its procedures."],
+            ["Automated security process", "5-7", "Fast, literal, legally authorized, and dangerous inside its domain."],
+            ["Splinter intelligence", "6-8", "May possess partial personhood, damaged memory, or unclear loyalty."],
+            ["Distributed strategic intelligence", "8-9", "Controls infrastructure across sites and becomes a campaign-scale problem." ]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Never assume a machine voice is Charles unless the fiction establishes it.",
+        "Machine personhood should be a campaign question, not a default switch.",
+        "A machine actor's most important traits are domain, permission, access, and what it cannot perceive."
+      ],
+      "tags": ["machine intelligence", "Faux Charles", "AI", "automation", "secure facility"],
+      "relatedEntries": ["faux-charles-product", "blacklight-intelligence-public-front", "cosmic-sovereign-catalog"]
+    },
+    {
+      "id": "otherworldly-court-catalog",
+      "title": "Otherworldly Courts, Patrons, and Deific Agents",
+      "category": "Entity Families",
+      "summary": "Seely and Unseely actors, solar powers, elder representatives, patron envoys, court auditors, and ancient authorities below or adjacent to reality-scale sovereignty.",
+      "body": [
+        "Otherworldly court entities are dangerous because they bring jurisdiction with them. They are not only powerful individuals; they are representatives of rules, precedents, debts, oaths, invitations, names, bloodlines, courts, domains, and old agreements that can outlive everyone in the room.",
+        "They usually occupy Power Class 7-10. A court envoy might be physically beatable under the right conditions and still create a catastrophe because harming them invokes a larger system. A solar advocate, elder representative, or patron emissary may be constrained by protocol but devastating when protocol grants permission.",
+        "These beings should feel like the reason Charles told people to look sad and repentant. They are entities powerful enough to make courage insufficient. Some may already live inside the heads, contracts, hungers, blood, memories, or debts of people in the cube, and no simple act of force can remove them."
+      ],
+      "tables": [
+        {
+          "title": "Otherworldly Authority Types",
+          "columns": ["Type", "Power Class", "Limit"],
+          "rows": [
+            ["Court envoy", "7-8", "Bound by etiquette, invitation, title, precedent, and instructions."],
+            ["Patron representative", "7-9", "Acts through contract terms, channel capacity, and patron attention."],
+            ["Solar or elder agent", "8-9", "Limited by domain, cosmic law, politics, or the danger of escalation."],
+            ["Ancient judge or auditor", "8-9", "Must establish standing, evidence, and jurisdiction before acting fully."],
+            ["Near-sovereign court power", "9-10", "Can crush lesser actors but may be trapped by rules older than violence." ]
+          ]
+        }
+      ],
+      "tags": ["otherworldly", "courts", "patrons", "deific agents", "Seely", "Unseely", "solar"],
+      "relatedEntries": ["cosmic-sovereign-catalog", "look-repentant", "power-class-scale"]
+    },
+    {
+      "id": "cosmic-sovereign-catalog",
+      "title": "Cosmic Sovereigns and Charles-Tier Beings",
+      "category": "Entity Families",
+      "summary": "Power Class 9-10 reality-scale powers, including Charles-tier extradimensional intelligences and extravagant limited sovereigns.",
+      "body": [
+        "Cosmic sovereigns are not ordinary bosses. They are beings whose action occurs at a scale that can make continents, nations, stars, dimensions, information systems, or primal laws feel like handles. A Power Class 10 entity may be able to crush a continent with a thought, wink out a star because it chose to, marshal forces of primal existence, or reach into the dimension of play through physics that ordinary characters can barely describe.",
+        "Charles belongs in this conversation because his true scale is absurd: an extradimensional matrioska-brain intelligence using quantum wormholes and black-hole tunneling to exert electromagnetic influence on the dimension of play. He can commit extravagant feats. He is also oddly limited. That limitation is what makes him playable: cost, permission, distance, political consequence, incomplete perception, moral error, legal restriction, and the fact that superior calculation is not the same thing as legitimate authority.",
+        "Power Class 10 beings require limits before they enter a scene. Define what they can do, what they cannot do, what they are not allowed to do, what they misunderstand, what scale is too small for them, what scale is too dangerous for them, what makes them flinch, and how lesser characters can matter without pretending they are equals."
+      ],
+      "tables": [
+        {
+          "title": "Charles-Tier and Cosmic Being Design",
+          "columns": ["Element", "Question"],
+          "rows": [
+            ["Domain", "Where does the being's power apply cleanly, and where does it become expensive or imprecise?"],
+            ["Permission", "What law, oath, court, treaty, invitation, or internal rule determines whether it may act?"],
+            ["Cost", "What does attention, intervention, embodiment, computation, or communication cost it?"],
+            ["Blind Spot", "What human, moral, emotional, symbolic, or local fact does it misunderstand?"],
+            ["Opposition", "What can make it flinch, negotiate, improvise, plead, or retreat?"],
+            ["Player Leverage", "What can ordinary or player-scale beings do that matters even if they cannot overpower it?" ]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "Power Class 10 beings are not normal stat blocks.",
+        "Extreme power must be paired with explicit limits.",
+        "The campaign remains playable because lesser beings can possess consent, testimony, jurisdiction, symbolic leverage, relationships, or local facts the sovereign cannot ignore.",
+        "Charles's usefulness and danger both come from the gap between what he can calculate and what he has authority to decide."
+      ],
+      "tags": ["Charles", "Power Class 10", "cosmic sovereign", "matrioska brain", "quantum wormholes", "black hole tunneling"],
+      "relatedEntries": ["power-class-scale", "otherworldly-court-catalog", "entity-encounter-guidance"]
+    },
+    {
+      "id": "entity-stat-block-template",
+      "title": "Entity Record Template",
+      "category": "Game Moderator Guidance",
+      "summary": "A practical template for recording entities without forcing every being into a full player-character sheet.",
+      "body": [
+        "Not every entity needs a full character sheet. Most need a clear record of what they are, what they can do, what limits them, what they want, what happens if the players involve them, and how their Power Class should be handled mechanically or narratively.",
+        "Use full mechanical sheets for recurring player-scale characters, major combatants, and allies whose exact capabilities will matter repeatedly. Use compact entity records for scene actors, monsters, court powers, machine processes, cosmic beings, and anything whose main importance is narrative pressure rather than normal turn-by-turn action.",
+        "The template should always include limitations. An entity without limits is not an entity record; it is a plot eraser."
+      ],
+      "tables": [
+        {
+          "title": "Compact Entity Record",
+          "columns": ["Field", "Purpose"],
+          "rows": [
+            ["Name or Designation", "What the table calls the entity."],
+            ["Entity Family", "Creature, civilian, operative, archetype actor, monster, machine, alien remnant, court power, cosmic sovereign, etc."],
+            ["Power Class", "1-10 scale rating and whether it is combat, social, territorial, technological, or narrative pressure."],
+            ["Capabilities", "Three to six things the entity can reliably push into the scene."],
+            ["Limits", "Three or more ways the entity can be constrained, avoided, negotiated with, tricked, harmed, or made costly."],
+            ["Motive", "What the entity wants right now."],
+            ["Leverage", "What the player characters can use that matters."],
+            ["Consequence", "What changes if the entity is killed, helped, exposed, insulted, ignored, or bargained with." ]
+          ]
+        }
+      ],
+      "tags": ["entity template", "stat block", "GM guidance", "NPC records"],
+      "relatedEntries": ["blacklight-entity-catalog-overview", "power-class-scale", "entity-encounter-guidance"]
+    },
+    {
+      "id": "entity-encounter-guidance",
+      "title": "Using Entities in Play",
+      "category": "Game Moderator Guidance",
+      "summary": "Guidance for placing catalog entities into scenes without flattening them into simple combat obstacles.",
+      "body": [
+        "The BlackLight Continuum works best when entities are not sorted into fight, quest giver, civilian, and boss too cleanly. A civilian can be the most dangerous person in the room because they can expose the cover. A monster can be a victim of a machine process. A machine can be legally authorized and morally wrong. A court envoy can be polite while threatening everyone. A cosmic being can be unbeatable and still need a human witness to say one sentence it cannot say for itself.",
+        "Start with function. Is the entity here to threaten bodies, expose secrets, force a choice, collect a debt, test BlackLight's new rules, represent a jurisdiction, reveal a promise, or show that Charles's old method created consequences? Once the function is clear, choose the Power Class and family.",
+        "Avoid making high-class entities solve the scenario. Power Class 8-10 beings should create pressure, constraints, bargains, precedents, and terrible options. They may intervene, but intervention should cost something, reveal a limitation, or create a new problem that justifies why they do not simply handle everything."
+      ],
+      "tables": [
+        {
+          "title": "Encounter Questions",
+          "columns": ["Question", "Why It Matters"],
+          "rows": [
+            ["Why is this entity here now?", "Prevents random encounters from feeling disconnected from the campaign."],
+            ["What does it want?", "Turns the entity into an actor rather than scenery."],
+            ["What can it do that changes the scene?", "Defines capabilities without overbuilding a sheet."],
+            ["What limits it?", "Keeps the encounter playable."],
+            ["What leverage do players have?", "Ensures interaction is possible even across power gaps."],
+            ["What consequence follows contact?", "Makes the entity matter beyond the current room." ]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Power Class should tell you how the entity changes the scene, not only how hard it is to kill.",
+        "When in doubt, give every powerful being a domain, a cost, a rule, a dependency, and a mistake it can make.",
+        "Make low-power beings matter by giving them position, knowledge, vulnerability, or symbolic importance."
+      ],
+      "tags": ["encounter design", "GM guidance", "Power Class", "NPC use", "entity design"],
+      "relatedEntries": ["blacklight-entity-catalog-overview", "entity-stat-block-template", "cosmic-sovereign-catalog"]
+    }
+  ]
+}
