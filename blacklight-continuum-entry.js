@@ -25,6 +25,16 @@
       .replace(/^./, character => character.toUpperCase());
   }
 
+  function hasCorporateAccess() {
+    const params = new URLSearchParams(window.location.search);
+    const access = params.get('blacklight_access');
+    if (access === 'corporate' || access === 'personnel' || access === 'internal') {
+      try { sessionStorage.setItem('blacklightCorporateInterfaceSeen', 'true'); } catch (_) {}
+      return true;
+    }
+    try { return sessionStorage.getItem('blacklightCorporateInterfaceSeen') === 'true'; } catch (_) { return false; }
+  }
+
   function injectStyles() {
     if (document.getElementById('blacklight-continuum-style')) return;
     const style = document.createElement('style');
@@ -53,6 +63,8 @@
       .blacklight-table tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
       .blacklight-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
       .blacklight-actions a{text-decoration:none}
+      .blacklight-public-front{border:1px solid rgba(121,242,255,.24);border-radius:22px;padding:22px;background:radial-gradient(circle at top left,rgba(121,242,255,.08),transparent 24rem),rgba(0,0,0,.18)}
+      .blacklight-public-front p{color:var(--muted);line-height:1.6}
       @media(max-width:900px){.blacklight-layout,.blacklight-controls{grid-template-columns:1fr}.blacklight-list{max-height:none}}
     `;
     document.head.appendChild(style);
@@ -91,11 +103,32 @@
     section.id = VIEW_ID;
     section.className = 'view';
     section.setAttribute('aria-labelledby', 'blacklight-continuum-title');
+
+    if (!hasCorporateAccess()) {
+      section.innerHTML = `
+        <div class="hero-card no-print">
+          <p class="eyebrow">Blacklight Intelligence public interface</p>
+          <h2 id="blacklight-continuum-title">Corporate Interface Required</h2>
+          <p>This archive is not presented as a tabletop utility from the public tool index. Blacklight records are staged behind the company's in-universe corporate presence so the experience reads like a fictional internal interface.</p>
+        </div>
+        <div class="module-grid no-print">
+          <article class="module-card blacklight-public-front">
+            <div class="module-meta"><span class="badge status-active">public corporation</span><span class="badge">in-universe front door</span></div>
+            <h3>Blacklight Intelligence</h3>
+            <p>Begin at the public corporate homepage. From there, employee resources, personnel pages, and internal records route back into the Blacklight Continuum archive through the staged corporate interface.</p>
+            <div class="blacklight-actions"><a class="primary-action" href="blacklight-corporate.html">Open Corporate Homepage</a><a class="secondary-action" href="blacklight-personnel.html">Open Personnel Page</a></div>
+          </article>
+        </div>
+        <section id="blacklight-browser" class="blacklight-browser no-print" hidden></section>`;
+      main.appendChild(section);
+      return;
+    }
+
     section.innerHTML = `
       <div class="hero-card no-print">
-        <p class="eyebrow">Blacklight Continuum campaign workspace</p>
+        <p class="eyebrow">Blacklight Intelligence internal archive</p>
         <h2 id="blacklight-continuum-title">No Return Signal</h2>
-        <p>Far-future mirror-universe science-fiction espionage, identity horror, supernatural capability development, advanced technology, the BlackLight Era operating environment, and an original d10 dice-pool system.</p>
+        <p>Internal records interface reached through the Blacklight corporate front. Campaign records, Company infrastructure, personnel portfolios, facility systems, and original d10 rules remain staged as in-universe archive material.</p>
       </div>
       <div class="module-grid no-print">
         <article class="module-card">
@@ -107,10 +140,10 @@
         <article class="module-card">
           <div class="module-meta"><span class="badge status-active">public corporation</span><span class="badge">C-0 access</span><span class="badge">personnel</span></div>
           <h3>Blacklight Corporate Site</h3>
-          <p>Open the stereotypical public-facing corporate landing page, the personnel portfolio page, or inspect low-clearance corporate records for legitimate contracts, departments, HR, payroll, security procedures, leadership portfolios, and board/director profiles.</p>
+          <p>Open the public-facing corporate landing page, the personnel portfolio page, or inspect low-clearance corporate records for legitimate contracts, departments, HR, payroll, security procedures, leadership portfolios, and board/director profiles.</p>
           <div class="blacklight-actions">
-            <a class="primary-action" href="blacklight-corporate.html" target="_blank" rel="noopener">Open Corporate Homepage</a>
-            <a class="secondary-action" href="blacklight-personnel.html" target="_blank" rel="noopener">Open Personnel Page</a>
+            <a class="primary-action" href="blacklight-corporate.html">Open Corporate Homepage</a>
+            <a class="secondary-action" href="blacklight-personnel.html">Open Personnel Page</a>
             <button id="blacklight-open-corporate" class="secondary-action" type="button">Open Corporate Records</button>
             <button id="blacklight-open-hr" class="secondary-action" type="button">Open HR Portfolios</button>
           </div>
@@ -119,7 +152,7 @@
           <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">player and GM sections</span></div>
           <h3>The Ar'nock Derelict</h3>
           <p>Read the campaign foundation: Q-MAP awakening, pseudo-Charles, the Ar'nock vessel, biological Charles, identity questions, jobs, skills, powers, equipment, and opening-session guidance.</p>
-          <div class="blacklight-actions"><a class="primary-action" href="blacklight-campaign-reader.html" target="_blank" rel="noopener">Open Formatted Campaign Document</a></div>
+          <div class="blacklight-actions"><a class="primary-action" href="blacklight-campaign-reader.html">Open Formatted Campaign Document</a></div>
         </article>
         <article class="module-card">
           <div class="module-meta"><span id="blacklight-pack-count" class="badge status-active">loading packs</span><span id="blacklight-entry-count" class="badge status-active">loading entries</span></div>
@@ -157,6 +190,7 @@
   }
 
   async function refreshWorkspaceSummary() {
+    if (!hasCorporateAccess()) return;
     try {
       const data = await loadWiki();
       const packCount = data.index.packs?.length || 0;
@@ -177,7 +211,7 @@
 
   async function openBrowser(preferredEntryId = '') {
     const browser = document.getElementById('blacklight-browser');
-    if (!browser) return;
+    if (!browser || !hasCorporateAccess()) return;
     browser.hidden = false;
     browser.innerHTML = '<p class="helper-note">Loading Blacklight Continuum records…</p>';
     try {
