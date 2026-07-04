@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight Continuum NPC and Entity Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-npc-generator.css">
+</head>
+<body>
+  <main class="npc-shell">
+    <header class="npc-header no-print">
+      <div>
+        <p class="eyebrow">Blacklight Continuum · NPC, creature, and entity generator</p>
+        <h1>Generate the Thing in the Room</h1>
+        <p>Create non-player characters, mundane creatures, BlackLight staff, field operatives, supernatural actors, monsters, machine intelligences, alien remnants, otherworldly powers, and Charles-tier reality actors using the 1-10 Power Classification system.</p>
+      </div>
+      <div class="npc-actions">
+        <a class="secondary-action" href="blacklight-mission-generator.html">Mission Generator</a>
+        <a class="secondary-action" href="blacklight-random-character.html">Random Character Generator</a>
+        <a class="secondary-action" href="blacklight-veteran-reintroduction.html">Veteran Reorientation</a>
+        <a class="secondary-action" href="index.html#blacklight-continuum">Return to Blacklight Continuum</a>
+      </div>
+    </header>
+
+    <section class="npc-controls no-print" aria-labelledby="npc-controls-title">
+      <div class="section-heading">
+        <p class="eyebrow">Generation controls</p>
+        <h2 id="npc-controls-title">Entity Parameters</h2>
+        <p>Use Power Class 1 for insects, vermin, mice, and ordinary scene-scale creatures. Use Power Class 10 for Charles-tier extradimensional matrioska intelligences, stellar sovereigns, reality-court powers, and beings that can perform extravagant feats while remaining oddly limited by domain, cost, law, politics, or blind spots.</p>
+      </div>
+      <div class="npc-control-grid">
+        <label>Power Class<select id="npc-power"><option value="random">Random Power Class</option></select></label>
+        <label>Entity Category<select id="npc-category"><option value="random">Random Category</option></select></label>
+        <label>Primary Role<select id="npc-role"><option value="random">Random Role</option></select></label>
+        <label>Operating Environment<select id="npc-environment"><option value="random">Random Environment</option></select></label>
+        <label class="npc-seed-field">Seed<input id="npc-seed" type="text" placeholder="Leave blank for a new NPC seed"></label>
+      </div>
+      <div class="npc-control-actions">
+        <button id="npc-generate" class="primary-action" type="button">Generate NPC / Entity</button>
+        <button id="npc-reroll-identity" class="secondary-action" type="button" disabled>Reroll Identity</button>
+        <button id="npc-reroll-role" class="secondary-action" type="button" disabled>Reroll Role and Motive</button>
+        <button id="npc-reroll-power" class="secondary-action" type="button" disabled>Reroll Power</button>
+      </div>
+      <div class="npc-control-actions">
+        <button id="npc-copy" class="secondary-action" type="button" disabled>Copy NPC Brief</button>
+        <button id="npc-export" class="secondary-action" type="button" disabled>Export NPC JSON</button>
+        <button id="npc-print" class="secondary-action" type="button" disabled>Print NPC</button>
+      </div>
+      <p id="npc-status" class="npc-status" role="status">Loading the BlackLight NPC and entity library…</p>
+    </section>
+
+    <section id="npc-output" class="npc-output" aria-live="polite">
+      <div class="npc-empty">The NPC generator is loading power classes, supernatural categories, beastly threats, entities, and otherworldly beings.</div>
+    </section>
+  </main>
+
+  <script src="blacklight-npc-generator.js"></script>
+</body>
+</html>
