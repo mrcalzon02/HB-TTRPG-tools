@@ -1,34 +1,63 @@
 (() => {
   'use strict';
 
+  const ASSET_BASE = 'assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/';
+
   const STAGE_ILLUSTRATIONS = {
-    'returning-operative': 'assets/blacklight/veteran-scenes/surveillance_in_a_neon_lit_room.svg',
-    'accelerating-missions': 'assets/blacklight/veteran-scenes/urban_espionage_at_nightfall.svg',
-    'warehouse-convergence': 'assets/blacklight/veteran-scenes/unusual_gathering_in_a_dim_industrial_hall.svg',
-    'charles-embodied': 'assets/blacklight/veteran-scenes/metallic_figure_in_a_shadowed_assembly.svg',
-    'containment-cube': 'assets/blacklight/veteran-scenes/floating_refuge_in_a_stormy_city.svg',
-    'leaving-earth': 'assets/blacklight/veteran-scenes/watching_the_world_from_afar.svg',
-    'lunar-convocation': 'assets/blacklight/veteran-scenes/ceremonial_gathering_under_cosmic_sky.svg',
-    'look-repentant': 'assets/blacklight/veteran-scenes/a_solemn_assembly_in_golden_light.svg',
-    'five-blocs': 'assets/blacklight/veteran-scenes/grand_council_in_a_luminous_arena.svg',
-    'charges-against-charles': 'assets/blacklight/veteran-scenes/ceremonial_tribunal_in_a_cosmic_hall.svg',
-    'return-and-silence': 'assets/blacklight/veteran-scenes/refugees_in_the_industrial_shelter.svg',
-    'interim-days': 'assets/blacklight/veteran-scenes/a_bustling_aid_hub_in_a_warehouse.svg',
-    'company-introduction': 'assets/blacklight/veteran-scenes/industrial_administration_hall_in_dystopian_future.svg',
-    'company-status': 'assets/blacklight/veteran-scenes/strategic_briefing_in_industrial_warehouse.svg',
-    'chain-of-command': 'assets/blacklight/veteran-scenes/tactical_briefing_in_an_industrial_war_room.svg',
-    'mission-consent': 'assets/blacklight/veteran-scenes/tense_strategy_briefing_in_a_glowing_war_room.svg',
-    'information-rights': 'assets/blacklight/veteran-scenes/high_security_debrief_in_dim_archives.svg',
-    'personhood-property': 'assets/blacklight/veteran-scenes/futuristic_briefing_room_under_dim_lights.svg',
-    'support-obligations': 'assets/blacklight/veteran-scenes/humanitarian_aid_and_ethereal_presence.svg',
-    'confidentiality-accountability': 'assets/blacklight/veteran-scenes/industrial_tribunal_in_a_dim_chamber.svg',
-    'watcher-oversight': 'assets/blacklight/veteran-scenes/futuristic_tribunal_in_a_high_tech_chamber.svg',
-    'continuity-conversion': 'assets/blacklight/veteran-scenes/dim_lit_industrial_command_center_meeting.svg',
-    'charles-reckoning': 'assets/blacklight/veteran-scenes/relief_hub_in_industrial_command_center.svg',
-    'new-arrangement': 'assets/blacklight/veteran-scenes/squad_briefing_in_a_futuristic_hangar.svg'
+    'returning-operative': `${ASSET_BASE}surveillance_in_a_neon_lit_room.png`,
+    'accelerating-missions': `${ASSET_BASE}urban_espionage_at_nightfall.png`,
+    'warehouse-convergence': `${ASSET_BASE}unusual_gathering_in_a_dim_industrial_hall.png`,
+    'charles-embodied': `${ASSET_BASE}metallic_figure_in_a_shadowed_assembly.png`,
+    'containment-cube': `${ASSET_BASE}floating_refuge_in_a_stormy_city.png`,
+    'leaving-earth': `${ASSET_BASE}watching_the_world_from_afar.png`,
+    'lunar-convocation': `${ASSET_BASE}ceremonial_gathering_under_cosmic_sky.png`,
+    'look-repentant': `${ASSET_BASE}a_solemn_assembly_in_golden_light.png`,
+    'five-blocs': `${ASSET_BASE}grand_council_in_a_luminous_arena.png`,
+    'charges-against-charles': `${ASSET_BASE}ceremonial_tribunal_in_a_cosmic_hall.png`,
+    'return-and-silence': `${ASSET_BASE}refugees_in_the_industrial_shelter.png`,
+    'interim-days': `${ASSET_BASE}a_bustling_aid_hub_in_a_warehouse.png`,
+    'company-introduction': `${ASSET_BASE}industrial_administration_hall_in_dystopian_future.png`,
+    'company-status': `${ASSET_BASE}strategic_briefing_in_industrial_warehouse.png`,
+    'chain-of-command': `${ASSET_BASE}tactical_briefing_in_an_industrial_war_room.png`,
+    'mission-consent': `${ASSET_BASE}tense_strategy_briefing_in_a_glowing_war_room.png`,
+    'information-rights': `${ASSET_BASE}high_security_debrief_in_dim_archives.png`,
+    'personhood-property': `${ASSET_BASE}futuristic_briefing_room_under_dim_lights.png`,
+    'support-obligations': `${ASSET_BASE}humanitarian_aid_and_ethereal_presence.png`,
+    'confidentiality-accountability': `${ASSET_BASE}industrial_tribunal_in_a_dim_chamber.png`,
+    'watcher-oversight': `${ASSET_BASE}futuristic_tribunal_in_a_high_tech_chamber.png`,
+    'continuity-conversion': `${ASSET_BASE}dim_lit_industrial_command_center_meeting.png`,
+    'charles-reckoning': `${ASSET_BASE}relief_hub_in_industrial_command_center.png`,
+    'new-arrangement': `${ASSET_BASE}squad_briefing_in_a_futuristic_hangar.png`
   };
 
-  const STAGE_ALT_TEXT = Object.fromEntries(Object.keys(STAGE_ILLUSTRATIONS).map(id => [id, `BlackLight veteran reorientation illustration for ${id.replace(/-/g, ' ')}`]));
+  const STAGE_LABELS = {
+    'returning-operative': 'Returning Operative',
+    'accelerating-missions': 'Accelerating Missions',
+    'warehouse-convergence': 'Warehouse Convergence',
+    'charles-embodied': 'Charles Embodied',
+    'containment-cube': 'Containment Cube',
+    'leaving-earth': 'Leaving Earth',
+    'lunar-convocation': 'Lunar Convocation',
+    'look-repentant': 'Look Repentant',
+    'five-blocs': 'Five Blocs',
+    'charges-against-charles': 'Charges Against Charles',
+    'return-and-silence': 'Return and Silence',
+    'interim-days': 'Interim Days',
+    'company-introduction': 'Company Introduction',
+    'company-status': 'Company Status',
+    'chain-of-command': 'Chain of Command',
+    'mission-consent': 'Mission Consent',
+    'information-rights': 'Information Rights',
+    'personhood-property': 'Personhood and Property',
+    'support-obligations': 'Support Obligations',
+    'confidentiality-accountability': 'Confidentiality and Accountability',
+    'watcher-oversight': 'Watcher Oversight',
+    'continuity-conversion': 'Continuity Conversion',
+    'charles-reckoning': 'Charles Reckoning',
+    'new-arrangement': 'New Arrangement'
+  };
+
+  let lastPlacedStage = '';
 
   function installStyles() {
     if (document.getElementById('blacklight-veteran-stage-illustration-style')) return;
@@ -43,26 +72,32 @@
     document.head.appendChild(style);
   }
 
-  function activeStageId() {
-    const activeButton = document.querySelector('#veteran-nav [data-entry-id].active');
-    if (activeButton?.dataset.entryId) return activeButton.dataset.entryId;
+  function readDraftActiveId() {
     try {
       const saved = JSON.parse(localStorage.getItem('hb-ttrpg-tools-blacklight-veteran-reorientation-v1') || '{}');
-      if (saved.activeId) return saved.activeId;
-    } catch (_) {}
-    return 'returning-operative';
+      return saved.activeId || '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  function activeStageId() {
+    return document.querySelector('#veteran-nav [data-entry-id].active')?.dataset.entryId || readDraftActiveId() || 'returning-operative';
   }
 
   function placeIllustration() {
     const entry = document.getElementById('veteran-entry');
-    if (!entry) return;
+    const builder = entry?.querySelector('.veteran-builder');
+    if (!entry || !builder) return;
+
     const stageId = activeStageId();
     const src = STAGE_ILLUSTRATIONS[stageId];
-    entry.querySelectorAll('[data-veteran-stage-illustration]').forEach(node => node.remove());
-    if (!src) return;
+    const current = entry.querySelector('[data-veteran-stage-illustration]');
+    if (current?.dataset.veteranStageIllustration === stageId) return;
 
-    const builder = entry.querySelector('.veteran-builder');
-    if (!builder) return;
+    current?.remove();
+    lastPlacedStage = stageId;
+    if (!src) return;
 
     const figure = document.createElement('figure');
     figure.className = 'veteran-scene-figure';
@@ -71,11 +106,11 @@
     const image = document.createElement('img');
     image.className = 'veteran-scene-image';
     image.src = src;
-    image.alt = STAGE_ALT_TEXT[stageId] || 'BlackLight veteran reorientation stage illustration';
+    image.alt = `BlackLight veteran reorientation illustration for ${STAGE_LABELS[stageId] || stageId}`;
     image.loading = 'lazy';
     image.decoding = 'async';
     image.addEventListener('error', () => {
-      figure.innerHTML = '<div class="veteran-scene-fallback">Scene illustration asset is missing from assets/blacklight/veteran-scenes/.</div>';
+      figure.innerHTML = `<div class="veteran-scene-fallback">Scene illustration missing: ${src}</div>`;
     }, { once: true });
 
     figure.appendChild(image);
@@ -85,10 +120,21 @@
   function initialize() {
     installStyles();
     placeIllustration();
-    const target = document.getElementById('veteran-entry');
-    if (!target) return;
-    const observer = new MutationObserver(() => placeIllustration());
-    observer.observe(target, { childList: true, subtree: false });
+    document.addEventListener('click', event => {
+      if (event.target.closest('#veteran-nav [data-entry-id], #veteran-previous, #veteran-next')) {
+        window.setTimeout(placeIllustration, 0);
+      }
+    });
+    document.addEventListener('change', event => {
+      if (event.target.closest('#veteran-entry input, #veteran-entry textarea')) {
+        window.setTimeout(placeIllustration, 0);
+      }
+    });
+    window.setInterval(() => {
+      if (activeStageId() !== lastPlacedStage || !document.querySelector('#veteran-entry [data-veteran-stage-illustration]')) {
+        placeIllustration();
+      }
+    }, 500);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize, { once: true });
