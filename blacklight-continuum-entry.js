@@ -18,13 +18,6 @@
     }[character]));
   }
 
-  function humanize(value) {
-    return String(value ?? '')
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      .replace(/[_-]/g, ' ')
-      .replace(/^./, character => character.toUpperCase());
-  }
-
   function hasCorporateAccess() {
     const params = new URLSearchParams(window.location.search);
     const access = params.get('blacklight_access');
@@ -172,11 +165,6 @@
           <p>Nine Attributes, twenty-four Skills, twelve Operational Frames, Exposure and Cohesion, explicit capability families, equipment, and dangerous opposed resolution. Form and origin grant no unlisted mechanics.</p>
           <button id="blacklight-open-rules" class="secondary-action" type="button">Open Rules Entries</button>
         </article>
-        <article class="module-card">
-          <div class="module-meta"><span class="badge status-planned">next development</span></div>
-          <h3>Expansion Roadmap</h3>
-          <p id="blacklight-next-development">Loading the current development areas…</p>
-        </article>
       </div>
       <section id="blacklight-browser" class="blacklight-browser no-print" hidden></section>`;
     main.appendChild(section);
@@ -198,11 +186,9 @@
       const packBadge = document.getElementById('blacklight-pack-count');
       const entryBadge = document.getElementById('blacklight-entry-count');
       const scope = document.getElementById('blacklight-scope-summary');
-      const next = document.getElementById('blacklight-next-development');
       if (packBadge) packBadge.textContent = `${packCount} pack${packCount === 1 ? '' : 's'}`;
       if (entryBadge) entryBadge.textContent = `${entryCount} entr${entryCount === 1 ? 'y' : 'ies'}`;
       if (scope) scope.textContent = data.index.description || 'Blacklight Continuum campaign wiki active.';
-      if (next) next.textContent = (data.index.nextDevelopmentAreas || []).map(humanize).join(', ') || 'Additional campaign and system development remains planned.';
     } catch (_) {
       const scope = document.getElementById('blacklight-scope-summary');
       if (scope) scope.textContent = 'The Blacklight Continuum wiki will load when the project is served through GitHub Pages or a local web server.';
