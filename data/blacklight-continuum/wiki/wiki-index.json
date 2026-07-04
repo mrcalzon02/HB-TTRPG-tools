@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.27.0",
+  "schemaVersion": "0.28.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
+  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -40,8 +40,10 @@
   "harmonicVariants": "data/blacklight-continuum/rules/harmonic-compact-remainders.json",
   "technomancerPractices": "data/blacklight-continuum/rules/technomancer-awakening-practices.json",
   "integratedArchetypeEntries": "data/blacklight-continuum/wiki/basic-archetypes.json",
+  "blacklightEraCampaignIntroduction": "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
+    "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
@@ -55,8 +57,9 @@
     "data/blacklight-continuum/wiki/equipment-catalogs.json"
   ],
   "completedScope": {
-    "wikiEntries": 82,
-    "nativePacks": 12,
+    "wikiEntries": 88,
+    "nativePacks": 13,
+    "blacklightEraCampaignIntroductionEntries": 6,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
     "archetypeResourceProcedures": 6,
