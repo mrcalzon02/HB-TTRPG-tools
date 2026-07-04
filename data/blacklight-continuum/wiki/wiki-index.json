@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.30.0",
+  "schemaVersion": "0.31.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, vampiric and fae court catalogs, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
+  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, vampiric and fae court catalogs, Gaian shapechanger society and spirits index material, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -45,11 +45,13 @@
   "blacklightEraCampaignIntroduction": "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
   "entityCatalog": "data/blacklight-continuum/wiki/entity-catalog.json",
   "courtCatalogs": "data/blacklight-continuum/wiki/court-catalogs.json",
+  "gaianShapechangerSpiritIndex": "data/blacklight-continuum/wiki/gaian-shapechanger-spirit-index.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
     "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
     "data/blacklight-continuum/wiki/entity-catalog.json",
     "data/blacklight-continuum/wiki/court-catalogs.json",
+    "data/blacklight-continuum/wiki/gaian-shapechanger-spirit-index.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
@@ -63,11 +65,12 @@
     "data/blacklight-continuum/wiki/equipment-catalogs.json"
   ],
   "completedScope": {
-    "wikiEntries": 120,
-    "nativePacks": 15,
+    "wikiEntries": 132,
+    "nativePacks": 16,
     "blacklightEraCampaignIntroductionEntries": 6,
     "entityCatalogEntries": 12,
     "courtCatalogEntries": 20,
+    "gaianShapechangerSpiritIndexEntries": 12,
     "npcEntityGenerators": 1,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
@@ -194,6 +197,7 @@
     "patron and contract templates",
     "resonance hazard procedures",
     "machine personhood and signal rules",
+    "Gaian spirit pact procedures, fae-spirit contract challenge rules, and BlackLight-born spirit mechanics",
     "Ar'nock vessel room and hazard module",
     "mission-to-campaign continuity linking and stored mission history",
     "Charles decision arc"
