@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.29.0",
+  "schemaVersion": "0.30.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
+  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, vampiric and fae court catalogs, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -44,10 +44,12 @@
   "integratedArchetypeEntries": "data/blacklight-continuum/wiki/basic-archetypes.json",
   "blacklightEraCampaignIntroduction": "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
   "entityCatalog": "data/blacklight-continuum/wiki/entity-catalog.json",
+  "courtCatalogs": "data/blacklight-continuum/wiki/court-catalogs.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
     "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
     "data/blacklight-continuum/wiki/entity-catalog.json",
+    "data/blacklight-continuum/wiki/court-catalogs.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
@@ -61,10 +63,11 @@
     "data/blacklight-continuum/wiki/equipment-catalogs.json"
   ],
   "completedScope": {
-    "wikiEntries": 100,
-    "nativePacks": 14,
+    "wikiEntries": 120,
+    "nativePacks": 15,
     "blacklightEraCampaignIntroductionEntries": 6,
     "entityCatalogEntries": 12,
+    "courtCatalogEntries": 20,
     "npcEntityGenerators": 1,
     "coreArchetypes": 6,
     "integratedArchetypeRecords": 6,
