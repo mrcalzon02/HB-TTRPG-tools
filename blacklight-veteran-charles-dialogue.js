@@ -74,7 +74,7 @@
     }
 
     if (entry.id === 'look-repentant') {
-      replaceWhere(body, text => text.includes('Look repentant') || text.includes('look sad') || text.includes('look At'),
+      replaceWhere(body, text => /look repentant|look sad|look at the pulsing light|gave an instruction/i.test(text),
         'At some point during the convocation, Charles put his head through the roof again and said the line many operatives would remember with more clarity than the speeches of ancient powers: ' + quote('lookRepentant'));
     }
 
