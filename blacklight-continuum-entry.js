@@ -3,6 +3,12 @@
 
   const VIEW_ID = 'blacklight-continuum';
   const INDEX_URL = 'data/blacklight-continuum/wiki/wiki-index.json';
+  const EXTRA_PACK_URLS = [
+    'data/blacklight-continuum/wiki/blacklight-facility-scene-modes.json',
+    'data/blacklight-continuum/wiki/blacklight-foyer-attunement-antenna.json',
+    'data/blacklight-continuum/wiki/blacklight-corporate-low-clearance.json',
+    'data/blacklight-continuum/wiki/blacklight-personnel-portfolios.json'
+  ];
   let wikiData = null;
   let activeCategory = 'all';
 
@@ -61,13 +67,14 @@
   async function loadWiki() {
     if (wikiData) return wikiData;
     const index = await fetchJson(INDEX_URL);
-    const packs = await Promise.all((index.packs || []).map(fetchJson));
+    const packUrls = Array.from(new Set([...(index.packs || []), ...EXTRA_PACK_URLS]));
+    const packs = await Promise.all(packUrls.map(fetchJson));
     const byId = new Map();
     packs.forEach(pack => (pack.entries || []).forEach(entry => {
       byId.set(entry.id, { ...(byId.get(entry.id) || {}), ...entry });
     }));
     wikiData = {
-      index,
+      index: { ...index, packs: packUrls },
       entries: Array.from(byId.values()).sort((left, right) =>
         (left.category || '').localeCompare(right.category || '') ||
         (left.title || '').localeCompare(right.title || '')
@@ -88,9 +95,26 @@
       <div class="hero-card no-print">
         <p class="eyebrow">Blacklight Continuum campaign workspace</p>
         <h2 id="blacklight-continuum-title">No Return Signal</h2>
-        <p>Far-future mirror-universe science-fiction espionage, identity horror, supernatural capability development, advanced technology, and an original d10 dice-pool system.</p>
+        <p>Far-future mirror-universe science-fiction espionage, identity horror, supernatural capability development, advanced technology, the BlackLight Era operating environment, and an original d10 dice-pool system.</p>
       </div>
       <div class="module-grid no-print">
+        <article class="module-card">
+          <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">BlackLight Era</span></div>
+          <h3>The BlackLight Era</h3>
+          <p>Open the post-reorientation campaign primer: Blacklight Intelligence as public corporation, Faux Charles as secure voice product, the O-shaped headquarters, and the new operating environment after Charles's absence and return.</p>
+          <button id="blacklight-open-era" class="primary-action" type="button">Open BlackLight Era Primer</button>
+        </article>
+        <article class="module-card">
+          <div class="module-meta"><span class="badge status-active">public corporation</span><span class="badge">C-0 access</span><span class="badge">personnel</span></div>
+          <h3>Blacklight Corporate Site</h3>
+          <p>Open the stereotypical public-facing corporate landing page, the personnel portfolio page, or inspect low-clearance corporate records for legitimate contracts, departments, HR, payroll, security procedures, leadership portfolios, and board/director profiles.</p>
+          <div class="blacklight-actions">
+            <a class="primary-action" href="blacklight-corporate.html" target="_blank" rel="noopener">Open Corporate Homepage</a>
+            <a class="secondary-action" href="blacklight-personnel.html" target="_blank" rel="noopener">Open Personnel Page</a>
+            <button id="blacklight-open-corporate" class="secondary-action" type="button">Open Corporate Records</button>
+            <button id="blacklight-open-hr" class="secondary-action" type="button">Open HR Portfolios</button>
+          </div>
+        </article>
         <article class="module-card">
           <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">player and GM sections</span></div>
           <h3>The Ar'nock Derelict</h3>
@@ -102,6 +126,12 @@
           <h3>Blacklight Continuum Wiki</h3>
           <p id="blacklight-scope-summary">Loading the current campaign and rules index…</p>
           <button id="blacklight-open-wiki" class="primary-action" type="button">Open Blacklight Continuum Wiki</button>
+        </article>
+        <article class="module-card">
+          <div class="module-meta"><span class="badge status-active">facility infrastructure</span><span class="badge">foyer antenna</span></div>
+          <h3>BlackLight Facility Systems</h3>
+          <p>Open the facility infrastructure records: sealed floor modes, reserve power, interstitial utility decks, pillar systems, and the ugly corporate artwork that is actually Charles's primary subspace attunement fork.</p>
+          <button id="blacklight-open-facility" class="secondary-action" type="button">Open Facility Systems</button>
         </article>
         <article class="module-card">
           <div class="module-meta"><span class="badge status-active">d10 alpha</span><span class="badge">capability first</span></div>
@@ -118,7 +148,11 @@
       <section id="blacklight-browser" class="blacklight-browser no-print" hidden></section>`;
     main.appendChild(section);
 
+    section.querySelector('#blacklight-open-era')?.addEventListener('click', () => openBrowser('blacklight-era-formation'));
+    section.querySelector('#blacklight-open-corporate')?.addEventListener('click', () => openBrowser('blacklight-public-corporate-overview'));
+    section.querySelector('#blacklight-open-hr')?.addEventListener('click', () => openBrowser('blacklight-personnel-portfolio-overview'));
     section.querySelector('#blacklight-open-wiki')?.addEventListener('click', () => openBrowser());
+    section.querySelector('#blacklight-open-facility')?.addEventListener('click', () => openBrowser('foyer-art-subspace-attunement-fork'));
     section.querySelector('#blacklight-open-rules')?.addEventListener('click', () => openBrowser('blacklight-d10-foundation'));
   }
 
@@ -165,7 +199,7 @@
         <p>${escapeHtml(data.index?.description || 'No Return Signal foundation entries.')}</p>
       </div>
       <div class="blacklight-controls">
-        <input type="search" id="blacklight-search" placeholder="Search Q-MAP, Ar'nock, Charles, Archetypes, capabilities, jobs, equipment, or rules…">
+        <input type="search" id="blacklight-search" placeholder="Search Q-MAP, Ar'nock, Charles, corporate operations, personnel, leadership, facility systems, Archetypes, capabilities, equipment, or rules…">
         <button type="button" id="blacklight-reset" class="secondary-action">Reset</button>
         <div id="blacklight-categories" class="blacklight-categories"></div>
       </div>
@@ -238,7 +272,7 @@
       button.innerHTML = `<strong>${escapeHtml(entry.title)}</strong><small>${escapeHtml(entry.category || 'Reference')}</small>`;
       button.addEventListener('click', () => {
         renderEntry(browser, entries, entry.id);
-        list.querySelectorAll('button').forEach(item => item.classList.toggle('active', item === button));
+        renderList(browser, entries, entry.id);
       });
       list.appendChild(button);
     });

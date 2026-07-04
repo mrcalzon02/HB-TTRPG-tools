@@ -1,0 +1,447 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Detailed public and internal-use personnel portfolios for publicly acknowledged Blacklight executives, board members, and departmental directors, including public biography, HR-facing profile, clearance posture, internal reputation, hidden complications, and crack-response behavior.",
+  "entries": [
+    {
+      "id": "blacklight-personnel-portfolio-overview",
+      "title": "Personnel Portfolio System Overview",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "Blacklight maintains public leadership profiles, HR-facing personnel records, and restricted internal notes that do not always agree with one another.",
+      "body": [
+        "Blacklight's personnel portfolio system exists because the company has to be believable from the outside and functional from the inside. Public-facing profiles make the company look like a serious secure-technology vendor. HR-facing profiles help employees understand reporting paths, escalation routes, and workplace authority. Restricted internal notes help higher-clearance personnel understand who actually knows what, who is reliable under pressure, who is politically dangerous, and who might break when the public corporate story starts cracking.",
+        "The public page is not fake in the cheap sense. These people really do hold their jobs. They sign contracts, approve budgets, run departments, attend board meetings, field client questions, and make ordinary corporate decisions. The hidden layer is not that the public company is imaginary. The hidden layer is that some executives know more than their biographies admit, some directors are deliberately kept clean, and some board members are useful precisely because they believe the public version of events hard enough to sell it convincingly.",
+        "Use these profiles as campaign levers. A payroll dispute can become a CFO scene. A workplace complaint can become an HR scene. A product anomaly can become a CTO scene. A building incident can become a CSO scene. A client scandal can become a CEO scene. The question is not only who has authority, but what kind of truth their authority is built to survive."
+      ],
+      "keyFacts": [
+        "Public leadership profiles are designed for procurement confidence and client trust.",
+        "HR-facing profiles provide ordinary escalation clarity for C-0 employees.",
+        "Restricted notes describe clearance posture, internal reputation, and behavior under corporate-story collapse.",
+        "Not all public leaders know the same amount about the true BlackLight Company."
+      ],
+      "tags": ["personnel", "leadership", "HR", "public profiles", "clearance"],
+      "relatedEntries": ["helena-marrow-ceo-profile", "blacklight-public-leadership-portfolios", "blacklight-hr-leadership-page"]
+    },
+    {
+      "id": "helena-marrow-ceo-profile",
+      "title": "Helena Marrow — Chief Executive Officer",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "Public CEO, procurement-safe face of Blacklight Intelligence, and one of the few executives capable of turning the public company into a shield instead of a costume.",
+      "body": [
+        "Public Biography: Helena Marrow is presented as a secure-infrastructure executive with a history of scaling confidential-systems vendors without turning them into reckless surveillance companies. Her public persona is disciplined, dry, and credible. Clients hear her talk about local control, auditability, procurement trust, and resilient interfaces. Investors hear a growth story. Employees hear someone who knows that a company dies when its paperwork stops matching its promises.",
+        "HR-Facing Profile: Helena is described internally as a high-accountability executive who expects clean reporting lines, documented decision-making, and managers who do not confuse confidentiality with personal authority. She is not warm in the theatrical sense, but she is known for remembering which departments were asked to absorb impossible deadlines and which directors tried to hide the damage under polished slide decks.",
+        "Clearance Posture: Helena has high corporate clearance and selective Company-facing clearance. She does not know everything Charles knows and does not want to. Her practical value is that she can translate pieces of the hidden reality into decisions a real corporation can execute without collapsing into cult behavior or total dependency on Charles.",
+        "Internal Reputation: Staff who like her call her the person who made the company real. Staff who fear her say she can turn a vague problem into a signed accountability memo before lunch. Restricted personnel describe her as dangerous in the useful way: she is willing to protect the public company from supernatural panic, but she is not willing to let that become an excuse to stop paying, stop documenting, or stop answering for decisions.",
+        "When the Corporate Story Cracks: Helena's first instinct is containment through legitimacy. She wants a lawful public explanation, protected staff, clean payroll, controlled disclosure, and a reason nobody can honestly call Blacklight a fake company. If forced to choose between preserving the cover and preserving the people, she will try to invent a third option, then make someone sign for it."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Procurement confidence, executive credibility, public-sector trust."],
+            ["Internal Strength", "Accountability, documentation, crisis discipline, refusal to let secrecy become managerial abuse."],
+            ["Weakness", "Can become too committed to making impossible situations administratively survivable."],
+            ["Hidden Complication", "Knows enough to understand that Charles is not a product, but not enough to safely improvise around every nonhuman jurisdiction."],
+            ["Player Use", "CEO meeting, crisis accountability scene, contract scandal, public disclosure pressure, payroll continuity fight." ]
+          ]
+        }
+      ],
+      "tags": ["Helena Marrow", "CEO", "executive", "clearance", "corporate legitimacy"],
+      "relatedEntries": ["blacklight-public-corporate-overview", "blacklight-payroll-and-employee-administration", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "marcus-venn-coo-profile",
+      "title": "Marcus Venn — Chief Operating Officer",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The COO responsible for turning Blacklight's public contracts, client deployments, building readiness, and crisis logistics into actual execution.",
+      "body": [
+        "Public Biography: Marcus Venn is publicly described as an operations executive with a background in high-availability service organizations, secure deployment programs, and continuity planning. He is the person Blacklight puts in front of clients when the question is not what Charles does, but whether Blacklight can deliver it on time, support it afterward, and keep the client from regretting procurement approval.",
+        "HR-Facing Profile: Marcus is a systems person. He understands departments as throughput, failure points, handoffs, and human fatigue. He is not sentimental about process, but he does not worship efficiency for its own sake. His best managers know that if they hide a staffing problem from Marcus, they have created a larger operations problem that will eventually find them.",
+        "Clearance Posture: Marcus has broad facility and continuity clearance. He is cleared on enough hidden infrastructure to coordinate sealed-building modes, reserve operations, staff shelter planning, and special client continuity without needing metaphysical explanations for every reason behind them. He knows the building is stranger than the public floor plan, but he prefers not to name every strangeness unless naming it improves the work.",
+        "Internal Reputation: Marcus is respected by deployment engineers, feared by schedule manipulators, and quietly appreciated by facilities staff because he understands that a building is not ready just because a spreadsheet says it is. He is most dangerous when someone tries to solve a supernatural problem by pretending it is only a ticketing backlog.",
+        "When the Corporate Story Cracks: Marcus asks what still has to function in the next ten minutes, the next hour, the next day, and the next payroll cycle. His instinct is triage by continuity: keep people moving, keep systems accountable, keep clients from being abandoned, and keep the building from becoming a sealed rumor factory."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Deployment reliability, client confidence, operational maturity."],
+            ["Internal Strength", "Continuity planning, cross-department execution, facility-mode coordination."],
+            ["Weakness", "May under-explain dangerous truths if he believes staff can function without them."],
+            ["Hidden Complication", "Knows enough about building autonomy to become a key decision-maker during prolonged isolation."],
+            ["Player Use", "Deployment crisis, lockdown logistics, client continuity scene, resource allocation dispute." ]
+          ]
+        }
+      ],
+      "tags": ["Marcus Venn", "COO", "operations", "facility readiness", "continuity"],
+      "relatedEntries": ["blacklight-contracting-and-client-operations", "reserve-power-and-autonomy", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "priya-sable-cto-profile",
+      "title": "Dr. Priya Sable — Chief Technology Officer",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The CTO publicly responsible for the Charles secure voice stack and privately responsible for not letting the product cover confuse staff about what the real Charles is.",
+      "body": [
+        "Public Biography: Dr. Priya Sable is introduced as Blacklight's chief technical architect for localized voice operations, secure language-model deployment, speech processing, and client-controlled assistant systems. Publicly, she speaks in careful terms: local inference, audit boundaries, model evaluation, incident review, retrieval controls, and resilient offline operation.",
+        "HR-Facing Profile: Priya is known as brilliant, impatient with product nonsense, and protective of engineers who are asked to turn executive metaphor into shippable systems. She insists that the Charles product be described as an interface, not as magic. Engineers who anthropomorphize the client instances too casually get corrected. Salespeople who imply unrestricted intelligence get corrected harder.",
+        "Clearance Posture: Priya has high technical clearance and partial direct awareness of the real Charles distinction. She knows that Faux Charles deployments are products, that the real Charles is not a product, and that confusing those facts is dangerous. She is not cleared on every cosmic explanation, but she understands enough to build technical doctrine around separation, proof, logging, and voice-source doubt.",
+        "Internal Reputation: Technical staff trust Priya because she refuses to let marketing promise miracles. Restricted staff trust her because she has the rare discipline to say, out loud, that a voice being useful does not make it authorized, truthful, or safe. She has a low tolerance for mysticism pretending to be architecture and for architecture pretending it can explain Charles completely.",
+        "When the Corporate Story Cracks: Priya looks for source integrity. Is this a client instance, a local model, a compromised deployment, a facility interface, the real Charles, something wearing the voice, or human error being hidden under awe? Her crisis behavior is diagnostic and skeptical, which makes her invaluable and occasionally maddening."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Secure product architecture, voice stack credibility, local model discipline."],
+            ["Internal Strength", "Separating Faux Charles, facility systems, real Charles contact, and compromised signals."],
+            ["Weakness", "Can sound dismissive when people are having real fear around impossible systems."],
+            ["Hidden Complication", "Her technical doctrine depends on boundaries that Charles himself can sometimes blur by existing."],
+            ["Player Use", "Product anomaly, false Charles incident, signal question, client deployment misbehavior, technical ethics scene." ]
+          ]
+        }
+      ],
+      "tags": ["Priya Sable", "CTO", "Charles product", "Faux Charles", "secure voice"],
+      "relatedEntries": ["charles-secure-voice-product", "machine-signal-facility-concerns", "foyer-art-subspace-attunement-fork"]
+    },
+    {
+      "id": "elian-cross-cso-profile",
+      "title": "Elian Cross — Chief Security Officer",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The CSO responsible for access culture, client-data safeguards, building security, and the uncomfortable line between employee safety and higher-clearance reality.",
+      "body": [
+        "Public Biography: Elian Cross is Blacklight's public security executive, responsible for corporate security, access policy, client-data protection, visitor controls, incident escalation, and secure workplace culture. Public clients see a controlled, professional security leader who can speak fluently about risk without sounding like he enjoys it.",
+        "HR-Facing Profile: Elian is internally known as the person who repeats that security is not a personality license. He trains managers and guards that a badge system does not make them feudal lords and that confidentiality does not excuse bullying. This makes him popular with employees who have seen security culture go bad and unpopular with people who expected secrecy to make them untouchable.",
+        "Clearance Posture: Elian has high facility clearance, high corporate security clearance, and selective supernatural/hazard awareness. He knows about facility modes, pillar systems, isolated HVAC, utility decks, staff shelter protocols, and enough nonhuman incident language to know when a gun-shaped answer is not the answer. He is not omniscient and does not want security staff pretending to be occult experts because they attended one briefing.",
+        "Internal Reputation: Security staff respect him because he can make hard calls. Ordinary employees respect him because he has fired people for using security as a threat posture against coworkers. Restricted personnel sometimes find him frustrating because he demands human accountability even when the incident is genuinely bizarre.",
+        "When the Corporate Story Cracks: Elian prioritizes staff survival and incident containment, then asks who abused authority during the confusion. He is highly likely to protect a scared C-0 employee from being punished for reacting normally to an abnormal event. He is equally likely to lock down a director who thinks rank outruns access boundaries."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Corporate security legitimacy, client-data protection, access culture."],
+            ["Internal Strength", "Facility modes, staff protection, authority discipline, escalation judgment."],
+            ["Weakness", "Can become overly suspicious when executives try to bypass process under crisis pressure."],
+            ["Hidden Complication", "Knows enough about the building's defensive infrastructure to become politically dangerous if ignored."],
+            ["Player Use", "Security complaint, facility incident, badge conflict, shelter scene, authority abuse investigation." ]
+          ]
+        }
+      ],
+      "tags": ["Elian Cross", "CSO", "security", "facility modes", "access culture"],
+      "relatedEntries": ["blacklight-standard-employee-security-procedures", "facility-mode-index", "pillar-defense-systems"]
+    },
+    {
+      "id": "marisol-keene-clco-profile",
+      "title": "Marisol Keene — Chief Legal and Compliance Officer",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The legal and compliance executive who makes Blacklight plausible, accountable, and painfully slow when someone wants to hand-wave consequences.",
+      "body": [
+        "Public Biography: Marisol Keene is presented as a privacy, procurement, audit, and confidential-systems attorney with the rare ability to make terrifying obligations sound like manageable paperwork. Her public speeches are not thrilling, which is part of why clients trust her. She makes Blacklight sound like a company that has read the contract before signing it.",
+        "HR-Facing Profile: Internally, Marisol is the department head people go to when they need a formal reason to say no. She trains staff that client data boundaries matter, audit records are business records, and sales promises are not authorized just because someone said them confidently in a meeting. She also reminds managers that employee rights do not disappear because a project has a security label attached.",
+        "Clearance Posture: Marisol has broad corporate legal clearance and narrowly tailored restricted awareness. She knows the public company is holding more than a normal secure-technology vendor should, but her access is compartmentalized by necessity. Her job is not to understand every impossible truth; her job is to make sure whatever truth Blacklight acts on can survive review, repair, apology, or public consequence if needed.",
+        "Internal Reputation: People who dislike Marisol call her an obstacle. People who understand Blacklight call her one of the few mundane forces capable of preventing the company from becoming a theological liability structure. She can make even supernatural departments produce an incident memo, and that makes certain people deeply uncomfortable.",
+        "When the Corporate Story Cracks: Marisol asks what was promised, who relied on it, who was harmed, who had authority, what was documented, and what must be corrected. She is not there to make the weirdness disappear. She is there to prevent the company from using weirdness as a legal acid bath."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Procurement confidence, privacy posture, compliance governance."],
+            ["Internal Strength", "Formal accountability, contract boundaries, employee rights, audit discipline."],
+            ["Weakness", "Can seem impossibly slow to people facing immediate impossible danger."],
+            ["Hidden Complication", "Her compartmentalized awareness means she sometimes has to rule on consequences without receiving the full cause."],
+            ["Player Use", "Contract dispute, cover-story cost, whistleblower scene, client breach, legal authority conflict." ]
+          ]
+        }
+      ],
+      "tags": ["Marisol Keene", "legal", "compliance", "privacy", "audit"],
+      "relatedEntries": ["blacklight-compliance-and-legal", "blacklight-contracting-and-client-operations", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "jonas-rill-cfo-profile",
+      "title": "Jonas Rill — Chief Financial Officer",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The CFO responsible for payroll continuity, reserve planning, procurement controls, client invoicing, and making impossible events survive ordinary accounting.",
+      "body": [
+        "Public Biography: Jonas Rill is Blacklight's public finance executive, known for conservative budget discipline, procurement controls, and making a fast-growing secure-technology company look less speculative than it actually is. He speaks in terms of reserves, burn rates, contract stability, recurring revenue, service obligations, and continuity liabilities.",
+        "HR-Facing Profile: Employees mostly know Jonas through policies: expense approval, payroll continuity, procurement review, travel reimbursement, department budgets, vendor controls, and the fact that finance will absolutely notice if a team tries to hide a crisis inside miscellaneous operations spend. He is more human than his memos suggest, but he has never met a surprise invoice he did not consider a moral failing by someone upstream.",
+        "Clearance Posture: Jonas has high continuity and financial clearance. He knows about reserve food, reserve power, emergency payroll, facility-mode cost accounting, and certain sealed-building requirements. He is not cleared on every supernatural reason behind those reserves, but he knows enough to understand that Blacklight can survive isolation only if someone has already paid for boring things in advance.",
+        "Internal Reputation: Finance staff call him relentless. Facilities staff call him annoying until they need the backup reserve he approved six quarters earlier. Restricted personnel sometimes underestimate him because he asks budget questions instead of cosmic questions. That is a mistake. Many hidden operations are only possible because Jonas made them look like continuity planning.",
+        "When the Corporate Story Cracks: Jonas asks what it costs, who is owed, how long reserves last, which contracts trigger penalties, which employees must be paid, and what cannot be allowed to become an unfunded promise. He is the executive most likely to say that if Blacklight cannot afford to protect people after using them, it cannot afford the operation at all."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Financial discipline, procurement legitimacy, continuity reserves."],
+            ["Internal Strength", "Payroll continuity, reserve planning, emergency cost accounting, hidden infrastructure funding."],
+            ["Weakness", "May reduce a morally urgent question to financial sustainability before people are ready to hear it."],
+            ["Hidden Complication", "Knows enough about long-duration facility autonomy to understand which lies have physical costs."],
+            ["Player Use", "Payroll dispute, reserve depletion, emergency procurement, contract penalty, continuity budget scene." ]
+          ]
+        }
+      ],
+      "tags": ["Jonas Rill", "CFO", "finance", "payroll", "reserves"],
+      "relatedEntries": ["blacklight-payroll-and-employee-administration", "reserve-power-and-autonomy", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "avery-thorne-board-profile",
+      "title": "Avery Thorne — Board Chair",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The board chair who gives Blacklight governance credibility while constantly testing whether the public company is still governable.",
+      "body": [
+        "Public Biography: Avery Thorne is Blacklight's board chair, publicly associated with enterprise security procurement, institutional risk oversight, and confidential-systems governance. Avery gives cautious clients the sense that Blacklight is not a founder-driven science project sprinting away from adult supervision.",
+        "HR-Facing Profile: Most employees know Avery only through board announcements, governance statements, and occasional all-hands remarks about accountability, growth, and client trust. Directors know Avery as a sharp questioner who can detect when an executive is hiding operational chaos under strategic language.",
+        "Clearance Posture: Avery has board-level public oversight and selective restricted briefing access. Avery is intentionally not given every operational detail because a board chair who knows everything becomes either a liability or a second hidden executive structure. The value of Avery's role is partly that they can ask legitimate governance questions from just outside the deepest compartment.",
+        "Internal Reputation: Executives respect Avery's ability to make a room stop performing confidence. Restricted personnel sometimes resent board oversight until they need someone with public governance authority to validate a hard decision without exposing the hidden cause.",
+        "When the Corporate Story Cracks: Avery asks whether the company remains governable, whether executives exceeded authority, whether the board has been materially misled, and whether public-facing legitimacy can survive the next audit, inquiry, or client review. Avery does not need to know every monster to know when a governance story smells wrong."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Governance credibility, procurement assurance, risk oversight."],
+            ["Internal Strength", "Can challenge executives without requiring full operational clearance."],
+            ["Weakness", "May mistake necessary compartmentalization for executive concealment."],
+            ["Hidden Complication", "Useful because they are not fully inside the secret, dangerous because they can still govern the public company."],
+            ["Player Use", "Board inquiry, executive discipline, client scandal, governance pressure scene." ]
+          ]
+        }
+      ],
+      "tags": ["Avery Thorne", "board chair", "governance", "risk oversight"],
+      "relatedEntries": ["blacklight-public-leadership-portfolios", "blacklight-compliance-and-legal"]
+    },
+    {
+      "id": "nadia-vale-board-profile",
+      "title": "Nadia Vale — Independent Board Member",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "Former emergency-management administrator focused on continuity, public trust, resilience contracts, and whether Blacklight's crisis plans protect ordinary people.",
+      "body": [
+        "Public Biography: Nadia Vale is a former emergency-management administrator and independent board member whose public value is obvious: Blacklight sells into emergency operations, public-sector resilience, and continuity environments, and Nadia knows what institutional trust sounds like when it is earned rather than claimed.",
+        "HR-Facing Profile: Employees see Nadia as the board member most likely to talk about preparedness, continuity, crisis communication, and the human side of emergency procedures. She is often cited in internal messaging around staff shelter drills, client continuity, and public-sector responsibility.",
+        "Clearance Posture: Nadia has public board access and limited continuity briefings. She does not know the full supernatural or Charles-level truth, but she knows enough to suspect that Blacklight's resilience language carries unusual weight. She is deliberately useful as a public-sector conscience who cannot be dismissed as an internal true believer.",
+        "Internal Reputation: Staff who care about safety like her. Executives who want fewer questions about employee impact find her inconvenient. She is one of the few board figures who will ask what a facility plan does to ordinary people instead of only asking whether it works on paper.",
+        "When the Corporate Story Cracks: Nadia asks who was warned, who was sheltered, who was left out, who was told a cover story, and whether the company can justify those choices to the people who lived through them. She is a natural ally for player characters trying to make Blacklight answer for the human cost of a successful response."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Emergency-management credibility, public-sector trust, continuity framing."],
+            ["Internal Strength", "Human-impact questions, shelter accountability, crisis communication."],
+            ["Weakness", "May underestimate the danger of information that cannot safely be shared."],
+            ["Hidden Complication", "Her limited clearance lets her ask humane questions without being fully captured by internal logic."],
+            ["Player Use", "Staff shelter review, emergency drill fallout, public-sector client pressure, employee harm inquiry." ]
+          ]
+        }
+      ],
+      "tags": ["Nadia Vale", "board member", "emergency management", "continuity", "staff safety"],
+      "relatedEntries": ["facility-mode-index", "staff-continuity-and-accountability", "blacklight-human-resources-initiatives"]
+    },
+    {
+      "id": "victor-halren-board-profile",
+      "title": "Victor Halren — Independent Board Member",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "Industrial systems investor and board member who supports ruggedized local deployments while misunderstanding some of the stranger reasons Blacklight needs them.",
+      "body": [
+        "Public Biography: Victor Halren is publicly known as an industrial systems investor with experience in critical infrastructure vendors, ruggedized facility technology, and long-cycle enterprise procurement. He is useful to Blacklight because he makes local, resilient, non-cloud deployments sound like sensible infrastructure rather than paranoia.",
+        "HR-Facing Profile: Employees mostly see Victor as a board-level business figure who cares about industrial clients, margins, durable hardware, and market expansion beyond flashy software deployments. He appears in investor-style language around infrastructure, resilience, and growth into hard environments.",
+        "Clearance Posture: Victor has limited board clearance and does not know the deepest truths. He understands Blacklight as a company with unusual clients, unusually high resilience needs, and unusually conservative deployment philosophy. He does not need to know why some facilities require more than ordinary resilience for his public role to be useful.",
+        "Internal Reputation: Some executives find Victor too financially aggressive. Others value that he can sell boring infrastructure to people who think software alone is the product. Restricted staff are cautious around him because he occasionally says something correct for completely incomplete reasons.",
+        "When the Corporate Story Cracks: Victor asks whether the crisis can be turned into proof of market need. This makes him useful, irritating, and potentially dangerous. He is not evil by default; he is the kind of board member who sees resilience failure and immediately asks how much larger the addressable market is now."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Infrastructure investment credibility, industrial client appeal, hardware resilience language."],
+            ["Internal Strength", "Understands physical systems, supply chains, reserve planning, and enterprise procurement cycles."],
+            ["Weakness", "May convert danger into market opportunity too quickly."],
+            ["Hidden Complication", "Can publicly justify infrastructure that was actually built for far stranger threats."],
+            ["Player Use", "Investor pressure, industrial client scene, ethics of monetizing crisis, reserve-infrastructure funding dispute." ]
+          ]
+        }
+      ],
+      "tags": ["Victor Halren", "board member", "industrial systems", "infrastructure", "resilience"],
+      "relatedEntries": ["blacklight-contracting-and-client-operations", "reserve-power-and-autonomy"]
+    },
+    {
+      "id": "sera-quill-hr-director-profile",
+      "title": "Sera Quill — Director of Human Resources",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The HR director responsible for employee relations, onboarding, reporting channels, manager accountability, and making sure secrecy does not become workplace abuse.",
+      "body": [
+        "Public Biography: Sera Quill is Blacklight's Director of Human Resources, responsible for onboarding, employee relations, benefits coordination, manager training, reporting channels, leave processes, and workplace policy. Publicly, she is the kind of HR leader who talks about trust, accountability, and culture without pretending a poster campaign can fix a bad manager.",
+        "HR-Facing Profile: Sera's internal reputation is unusually strong for an HR director because she is willing to say that security pressure does not excuse managerial misconduct. She built several of Blacklight's confidential reporting channels and post-incident decompression practices after recognizing that ordinary employees were being asked to process abnormal events with normal workplace language.",
+        "Clearance Posture: Sera has C-0 administrative scope plus selective welfare-related restricted briefings. She does not need to know every hidden truth to know when an employee has been harmed by one. Her clearance is designed around care obligations, not curiosity.",
+        "Internal Reputation: Employees see her as one of the few people who can translate 'something happened that I am not allowed to fully describe' into workplace support without immediately punishing the speaker for not having perfect language. Some managers fear her because she keeps receipts. Some restricted staff underestimate her because her power looks soft until it becomes documented action.",
+        "When the Corporate Story Cracks: Sera asks who needs support, who was coerced, who was retaliated against, who needs leave, who should not be sent back into a room, and which manager used confusion as leverage. She is one of the most important NPCs for making the company humane enough to be worth saving."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Employee trust, onboarding, reporting channels, manager training."],
+            ["Internal Strength", "Turning strange incidents into support, leave, documentation, and anti-retaliation action."],
+            ["Weakness", "May push for employee truth disclosure faster than Security or Legal believes safe."],
+            ["Hidden Complication", "Her welfare clearance often reveals harm before higher-clearance staff are ready to admit cause."],
+            ["Player Use", "Workplace complaint, post-incident support, bad manager exposure, employee refusal, HR interview." ]
+          ]
+        }
+      ],
+      "tags": ["Sera Quill", "HR", "employee relations", "manager accountability", "support"],
+      "relatedEntries": ["blacklight-human-resources-initiatives", "blacklight-hr-leadership-page", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "owen-pike-client-ops-profile",
+      "title": "Owen Pike — Director of Client Operations",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The client operations director who keeps onboarding, support queues, renewals, service levels, and customer trust moving without exposing the deeper reason some clients matter too much.",
+      "body": [
+        "Public Biography: Owen Pike runs Client Operations for Blacklight Intelligence. His public portfolio includes onboarding, client success, renewals, service-level coordination, support escalation, training schedules, and the human machinery that keeps a secure product from becoming an expensive paperweight after installation.",
+        "HR-Facing Profile: Owen is known as the director most likely to know which client is angry before the executive office does. He has a service-desk mind: tickets, patterns, repeat failures, quiet frustration, workarounds, and the exact moment a client stops asking for help because they have lost faith. He is not technical enough to debug every product problem, but he is very good at knowing when a technical explanation is being used to stall accountability.",
+        "Clearance Posture: Owen has broad client and contract visibility with limited restricted briefings when a client site overlaps with higher-clearance operations. He is not supposed to know the true significance of every important deployment, but he often knows which clients are receiving unusually careful handling because the support patterns are impossible to hide from operations data.",
+        "Internal Reputation: Client-support staff trust him because he understands call fatigue and does not treat angry clients as weather. Engineers sometimes resent him because he brings them problems that sound minor until the fourth repetition proves the problem is systemic. Restricted staff worry that Owen's operational pattern sense may eventually notice too much.",
+        "When the Corporate Story Cracks: Owen asks which client is affected, who has already called, what support promised, what the service level says, what the client actually experienced, and whether Blacklight is about to train a customer to distrust Charles in every form."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Client trust, service operations, onboarding, support escalation."],
+            ["Internal Strength", "Detecting operational pattern drift across supposedly unrelated deployments."],
+            ["Weakness", "May treat a restricted anomaly as a client-success failure until briefed otherwise."],
+            ["Hidden Complication", "Can infer sensitive truths from support patterns without formally being cleared for them."],
+            ["Player Use", "Angry client scene, support ticket anomaly, service-level dispute, deployment trust collapse." ]
+          ]
+        }
+      ],
+      "tags": ["Owen Pike", "client operations", "support", "contracts", "service levels"],
+      "relatedEntries": ["blacklight-contracting-and-client-operations", "charles-secure-voice-product"]
+    },
+    {
+      "id": "tessa-grane-pr-director-profile",
+      "title": "Tessa Grane — Director of Public Relations",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The PR director responsible for making Blacklight sound boring, secure, competent, and ordinary enough that nobody asks the correct impossible questions.",
+      "body": [
+        "Public Biography: Tessa Grane directs public relations and corporate communications for Blacklight. She controls launch language, press statements, internal newsletters, executive talking points, case studies, crisis language, brand discipline, and the public shape of the Charles product story.",
+        "HR-Facing Profile: Tessa is known internally as a ruthless editor. She can remove seven dangerous implications from one paragraph and make the result sound more confident than the original. She does not simply spin. She understands that enterprise trust is often built by refusing to say the exciting thing. Her best work makes Blacklight sound too responsible to be mysterious.",
+        "Clearance Posture: Tessa has public communications clearance plus carefully curated restricted context. She is not cleared to know every hidden truth, but she is cleared to know when not to use certain words, when a phrase will create dangerous curiosity, and when public language needs to be boring for reasons deeper than brand safety.",
+        "Internal Reputation: Executives rely on her to make impossible decisions sound like governance decisions. Engineers fear her edits until they realize she is preventing sales from promising nonsense. Restricted staff sometimes dislike her because she can make a cover story emotionally persuasive, which is useful and frightening at the same time.",
+        "When the Corporate Story Cracks: Tessa asks what can be said truthfully without saying too much, what must never be implied, what employees have already heard, what clients will repeat, and which phrase will become the headline if the story escapes. She is not the villain of truth; she is the person who knows truth has blast radius."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Brand discipline, press language, corporate tone, crisis messaging."],
+            ["Internal Strength", "Converting restricted complexity into safe public wording without obvious panic."],
+            ["Weakness", "May defend the cover story longer than affected staff can emotionally tolerate."],
+            ["Hidden Complication", "Understands some phrases are dangerous even when she does not know the full reason."],
+            ["Player Use", "Press leak, client statement, internal memo fight, public scandal, wording duel." ]
+          ]
+        }
+      ],
+      "tags": ["Tessa Grane", "PR", "communications", "public language", "cover story"],
+      "relatedEntries": ["blacklight-sales-and-pr-language", "blacklight-public-landing-page-record"]
+    },
+    {
+      "id": "dima-ro-deployment-profile",
+      "title": "Dima Ro — Director of Secure Deployment Engineering",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The deployment engineering director responsible for hardware images, client configurations, field installation readiness, and the practical difference between a product and a door.",
+      "body": [
+        "Public Biography: Dima Ro leads Secure Deployment Engineering, the department responsible for packaging client instances, hardware images, local environment assumptions, installation readiness, controlled update paths, and the awkward reality that no secure system survives first contact with a client site exactly as drawn.",
+        "HR-Facing Profile: Dima is a deployment realist. They do not believe in perfect client environments, perfect documentation, or executives who say the phrase 'just install it' as if that is a plan. They are highly respected by field engineers because they budget for adapters, contingencies, ugly racks, bad closets, strange procurement substitutions, and clients who swear the network diagram is current when it is not.",
+        "Clearance Posture: Dima has high technical deployment clearance and selective awareness of sites where Faux Charles and real Charles adjacency must remain separated. They know enough to insist on source validation, local fail-safes, clean rollback, and proof of what a deployed voice is actually connected to.",
+        "Internal Reputation: Engineers trust Dima because they defend reality against clean diagrams. Client operations trust Dima because they can tell the difference between a client being difficult and a deployment being wrong. Restricted personnel trust Dima because they understand that a misconfigured product can become a supernatural misunderstanding with a purchase order attached.",
+        "When the Corporate Story Cracks: Dima asks what is actually installed, what it thinks it is connected to, what changed since last known-good state, what local assumptions were false, and whether someone used the words 'temporary workaround' in a room where that phrase should be banned."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Deployment readiness, hardware images, client configuration, installation discipline."],
+            ["Internal Strength", "Separating real system state from diagrams, assumptions, and executive wishful thinking."],
+            ["Weakness", "Can become openly hostile to leadership optimism when field reality is bad."],
+            ["Hidden Complication", "Knows deployment mistakes can create cover breaches, false Charles events, or restricted contact confusion."],
+            ["Player Use", "Client-site installation, failed update, suspicious local connection, field engineer rescue, deployment autopsy." ]
+          ]
+        }
+      ],
+      "tags": ["Dima Ro", "deployment engineering", "client systems", "Faux Charles", "field installation"],
+      "relatedEntries": ["charles-secure-voice-product", "blacklight-contracting-and-client-operations", "machine-signal-facility-concerns"]
+    },
+    {
+      "id": "anika-shaw-facilities-profile",
+      "title": "Anika Shaw — Director of Facilities and Workplace Services",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The facilities director who keeps the O-shaped headquarters functioning as an office while quietly understanding that the building has deeper moods than most employees know.",
+      "body": [
+        "Public Biography: Anika Shaw is Director of Facilities and Workplace Services, responsible for maintenance, office moves, vendor coordination, supplies, badge-adjacent workplace processes, safety drills, space planning, and the ordinary labor that keeps a large corporate headquarters from becoming a very expensive maze.",
+        "HR-Facing Profile: Employees know Anika as the person whose department fixes lights, relocates teams, coordinates repairs, manages meeting room disasters, and somehow knows which elevator has been making a noise before anyone submits the ticket. Facilities staff under Anika are trained to notice the building as a living work environment, not just as square footage.",
+        "Clearance Posture: Anika has elevated facility clearance and selective awareness of interstitial utility decks, floor-isolated air systems, sealed mode language, reserve systems, and the fact that some maintenance questions are not safe for ordinary vendor access. She may not know every hidden function, but she knows the building well enough to recognize when it is behaving outside ordinary architecture.",
+        "Internal Reputation: Facilities staff respect her because she fights for maintenance time before emergencies punish everyone. Security respects her because she knows which doors people actually use rather than which doors policy says they use. Restricted personnel respect her because she understands that the headquarters is a workplace before it is a symbol.",
+        "When the Corporate Story Cracks: Anika asks which floor is affected, which utility deck is involved, whether the air changed, whether the work order history warned anyone, which staff are trapped by normal habits, and whether an outside vendor is about to walk into something that should have been isolated ten minutes ago."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Facilities reliability, vendor coordination, workplace services, building familiarity."],
+            ["Internal Strength", "Interpreting the headquarters as a layered environment with real staff habits."],
+            ["Weakness", "May prioritize building personnel and maintenance crews over executive optics."],
+            ["Hidden Complication", "Knows enough about facility systems to identify hidden risk before higher-clearance personnel admit it."],
+            ["Player Use", "Utility deck scene, HVAC anomaly, vendor incident, locked floor, building mood mystery." ]
+          ]
+        }
+      ],
+      "tags": ["Anika Shaw", "facilities", "workplace services", "utility decks", "building systems"],
+      "relatedEntries": ["interstitial-utility-decks", "floor-isolated-hvac", "blacklight-building-infrastructure-overview"]
+    },
+    {
+      "id": "caleb-orth-research-profile",
+      "title": "Caleb Orth — Director of Research Evaluation",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The research evaluation director responsible for product testing, retrieval quality, UX studies, future interface assessments, and knowing when a model result feels too correct.",
+      "body": [
+        "Public Biography: Caleb Orth directs Research Evaluation, overseeing product testing, secure retrieval quality, user experience studies, red-team behavior, speech interaction assessments, and future interface research. Publicly, he is the reason Blacklight can claim its product is evaluated rather than merely demonstrated.",
+        "HR-Facing Profile: Caleb is known as a methodical, slightly haunted evaluator who distrusts demos and asks what happens after the tenth hour, the third shift, the bored operator, the bad microphone, the frightened user, and the client who phrases the same request six different ways. He makes product teams prove the system works when people are tired, stressed, and imprecise.",
+        "Clearance Posture: Caleb has research and evaluation clearance with limited exposure to restricted anomalous-output categories. He is not given full entity-level files, but he is trained to flag response patterns that look too predictive, too personal, too symbolically dense, or too eager to cross from assistance into agency.",
+        "Internal Reputation: Engineers appreciate him when he catches problems before clients do and resent him when he catches problems before launch. Restricted personnel value him because he is one of the few public-product researchers capable of saying, with a straight face, that an output is not wrong but is still unsafe.",
+        "When the Corporate Story Cracks: Caleb asks what was tested, what was assumed, what changed in the prompt environment, what the model knew that it should not know, and whether the evaluation harness just became part of the phenomenon it was trying to measure."
+      ],
+      "tables": [
+        {
+          "title": "Profile Notes",
+          "columns": ["Field", "Detail"],
+          "rows": [
+            ["Public Strength", "Product evaluation, UX testing, retrieval quality, red-team methodology."],
+            ["Internal Strength", "Identifying unsafe correctness, over-personal output, and evaluation drift."],
+            ["Weakness", "Can become paralyzed when a result is not technically wrong but feels structurally dangerous."],
+            ["Hidden Complication", "His research instincts are useful near cognition hazards, which means his curiosity must be managed."],
+            ["Player Use", "Model anomaly, evaluation lab scene, unsafe output, product launch delay, test harness contamination." ]
+          ]
+        }
+      ],
+      "tags": ["Caleb Orth", "research evaluation", "model testing", "UX", "unsafe output"],
+      "relatedEntries": ["charles-secure-voice-product", "blacklight-compliance-and-legal", "machine-signal-facility-concerns"]
+    }
+  ]
+}

@@ -1,0 +1,553 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Catalogs for vampiric courts, fae courts, and their internal organizations in the BlackLight Era.",
+  "entries": [
+    {
+      "id": "court-catalogs-overview",
+      "title": "Court Catalogs: Vampiric and Fae Powers",
+      "category": "Court Catalogs",
+      "summary": "A combined reference for vampiric courts, fae courts, and the organizations that give those courts memory, law, debt, etiquette, violence, and reach.",
+      "body": [
+        "Courts are not just collections of powerful beings. In Blacklight Continuum, a court is a political machine, a memory structure, a patronage network, a social predator, a legal fiction, a supernatural jurisdiction, and a story people can be trapped inside. Vampiric courts and fae courts both understand this, but they organize power in different ways.",
+        "Vampiric courts tend to organize around blood, debt, feeding access, territory, secrecy, patronage, lineage, inheritance, and managed predation. They are concerned with continuity, memory, reputation, and the control of hunger through systems that make predation look like order.",
+        "Fae courts tend to organize around oaths, names, seasons, hospitality, bargains, performances, thresholds, masks, invitations, precedent, and story logic. They are not less political than vampires; they are political in a way that makes metaphor enforceable and etiquette lethal.",
+        "Both catalogs should be used as living reference standards. A court may appear as a patron, antagonist, witness, employer, embassy, hostile jurisdiction, old debt, social scene, supernatural law problem, or a power that can make Charles pause before he chooses a word."
+      ],
+      "tables": [
+        {
+          "title": "Court Logic Comparison",
+          "columns": ["Axis", "Vampiric Courts", "Fae Courts"],
+          "rows": [
+            ["Primary currency", "Blood, debt, feeding access, memory, territory, favors.", "Names, oaths, invitations, stories, gifts, hospitality, precedent."],
+            ["Primary danger", "Predation hidden inside hierarchy and obligation.", "Meaning weaponized through bargain, etiquette, and symbolic law."],
+            ["Primary defense", "Status, secrecy, patronage, ledgers, havens, enforcement cadres.", "Careful speech, refusal discipline, name protection, guest-law awareness."],
+            ["Common BlackLight problem", "A promise Charles made intersects with a feeding right or blood debt.", "A mission breaks an old rule the team did not know existed."],
+            ["Power Class range", "Usually 4-9, with sovereign elders possibly touching 10 by domain.", "Usually 5-10, especially where courts act as jurisdictions rather than individuals."]
+          ]
+        }
+      ],
+      "tags": ["courts", "vampiric courts", "fae courts", "organizations", "jurisdiction"],
+      "relatedEntries": ["vampiric-courts-overview", "fae-courts-overview", "otherworldly-court-catalog", "power-class-scale"]
+    },
+    {
+      "id": "vampiric-courts-overview",
+      "title": "Vampiric Courts Overview",
+      "category": "Vampiric Courts",
+      "summary": "The major vampiric court model: blood politics, feeding rights, debt ledgers, memory, havens, and carefully managed predation.",
+      "body": [
+        "Vampiric courts are institutions built to prevent hunger from becoming chaos while ensuring that predation remains profitable to those at the top. Their official language is order, stewardship, old blood, protection, restraint, continuity, and responsibility. Their hidden language is access, debt, silence, permission, blackmail, and the right to feed without being interrupted.",
+        "A vampiric court can be ancient and aristocratic, modern and corporate, feral and territorial, ritualistic and funerary, martial and expansionist, drowned and smuggling-fed, or half-collapsed into hunger cults. The important question is not whether the court is civilized. The question is what kind of predation it has learned to call civilization.",
+        "Most vampiric courts operate between Power Class 5 and 8 as organizations. Individual elders, sovereign blood figures, and court-bound horrors may rise to Power Class 9. A court rarely needs every member to be individually overwhelming. The danger is that the court has records, favors, havens, enforcers, disposable servants, legal masks, old memories, and enough time to punish mistakes later."
+      ],
+      "keyFacts": [
+        "Vampiric courts organize feeding access, memory, territory, debt, and secrecy.",
+        "The court is often more dangerous than any single vampire inside it.",
+        "Court status can protect a weak vampire or expose a powerful one.",
+        "BlackLight interactions with vampiric courts usually involve debt, rescue, feeding rights, witness protection, old promises, or jurisdictional trespass."
+      ],
+      "tags": ["vampires", "blood courts", "feeding rights", "debt", "Power Class"],
+      "relatedEntries": ["vampiric-court-organization-template", "crimson-ledger-court", "velvet-hunger-court", "vampire-remainder-bloodlines"]
+    },
+    {
+      "id": "vampiric-court-organization-template",
+      "title": "Vampiric Court Organization Template",
+      "category": "Vampiric Courts",
+      "summary": "Common offices, enforcement bodies, feeding structures, and hidden support systems used by vampiric courts.",
+      "body": [
+        "Vampiric courts survive because they are organized. They may cloak that organization in old titles, religious language, corporate records, street-level fear, or family obligation, but the functions remain recognizable: someone governs feeding, someone keeps ledgers, someone enforces silence, someone manages mortal assets, someone preserves memory, and someone disposes of mistakes.",
+        "Use this template to build or read any vampiric court. Not every court uses every office, and many rename these structures to fit local culture, but the underlying jobs explain how predation becomes stable enough to last centuries."
+      ],
+      "tables": [
+        {
+          "title": "Common Vampiric Court Offices",
+          "columns": ["Office or Body", "Function", "Typical Power Class"],
+          "rows": [
+            ["Crown, Prince, Matriarch, Regent, or First Throat", "Final authority over territory, feeding law, old debts, and court recognition.", "7-9"],
+            ["Seneschal or Night Chancellor", "Runs daily court business, schedules audiences, manages patronage, and controls access.", "5-8"],
+            ["Ledger Keeper", "Records debts, favors, feeding rights, blood obligations, inherited crimes, and promises.", "4-8"],
+            ["Haven Wardens", "Maintain secure shelters, sleeping places, transit caches, and emergency refuge.", "4-7"],
+            ["Red Marshals", "Enforce court rulings, silence breaches, and retrieve debtors or escaped assets.", "5-8"],
+            ["Vessel Stewards", "Manage mortal feeding pools, donors, clinics, clubs, charities, shelters, or coercive supply chains.", "3-7"],
+            ["Memory Choir", "Preserve oral histories, grudges, forbidden names, and old court precedents.", "5-8"],
+            ["Daylight Factors", "Mortal lawyers, bankers, drivers, physicians, fixers, and corporate agents who act during the day.", "2-5"],
+            ["Ash Court or Final Mercy", "Executes, exiles, immolates, or ritually erases vampires who threaten the court's survival.", "6-9"]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Court offices create targets other than the ruler.",
+        "A weak court official can be untouchable if their office protects them.",
+        "A court's feeding system tells the GM what kind of harm it normalizes."
+      ],
+      "tags": ["vampiric organizations", "court offices", "feeding law", "debt ledgers"],
+      "relatedEntries": ["vampiric-courts-overview", "civilian-and-staff-catalog"]
+    },
+    {
+      "id": "crimson-ledger-court",
+      "title": "The Crimson Ledger Court",
+      "category": "Vampiric Courts",
+      "summary": "A debt-centered vampiric court that turns every rescue, feeding, betrayal, and favor into an inheritable obligation.",
+      "body": [
+        "The Crimson Ledger Court is not the most violent vampiric court, which is exactly why it is so dangerous. Its power comes from records. It writes down who was fed, who was spared, who was rescued, who was protected, who broke silence, who accepted shelter, who received blood, and who owes the court for surviving one more night.",
+        "Its members prefer contracts, old favors, inherited guilt, medical debt, charitable fronts, legal captures, and mortal institutions that already know how to make desperation look voluntary. To the Ledger Court, a feeding right is not simply permission to drink. It is a line item in a balance sheet that may still be collectible after everyone involved has changed names twice.",
+        "BlackLight conflicts with this court often begin when Charles or the Company moves someone the Ledger Court believes is collateral. The court may not attack immediately. It may simply produce a record showing that the person, their parent, their bloodline, their shelter, or their rescue belongs to an unpaid column."
+      ],
+      "tables": [
+        {
+          "title": "Crimson Ledger Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Red Accountancy", "Auditors who track blood debt, feeding rights, favors, and inherited obligations."],
+            ["The Receivers", "Collectors who retrieve debtors, witnesses, property, and people classified as collateral."],
+            ["The Quiet Charities", "Shelters, clinics, recovery funds, and emergency grants that turn care into leverage."],
+            ["The Ink-Blood Notaries", "Ritual lawyers who validate promises made under fear, hunger, or blood exchange."],
+            ["The Closed Column", "A secret ledger for debts owed by court elders, hidden even from most of the court."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 5-8 as a court, 9 for elder auditors with ancient jurisdiction.", "Primary currency: debt.", "Primary weakness: records can expose them, bind them, or prove hypocrisy."],
+      "tags": ["vampiric court", "debt", "ledger", "blood law", "BlackLight promises"],
+      "relatedEntries": ["vampiric-courts-overview", "entity-encounter-guidance"]
+    },
+    {
+      "id": "velvet-hunger-court",
+      "title": "The Court of Velvet Hunger",
+      "category": "Vampiric Courts",
+      "summary": "A beautiful, public-facing vampiric court built around desire, celebrity, patronage, luxury, and soft coercion.",
+      "body": [
+        "The Court of Velvet Hunger makes predation feel like being chosen. It surrounds feeding with glamour, invitation, art, nightlife, elite parties, exclusive patronage, donor culture, private clubs, philanthropic galas, and the quiet destruction of people who confuse access with safety.",
+        "This court rarely needs chains. It uses addiction to attention, career advancement, romance, performance, aesthetic obsession, and the terror of being excluded from the room where power is happening. Mortal assets often insist they are volunteers because admitting otherwise would collapse the story that lets them stay close to beauty.",
+        "A BlackLight mission involving Velvet Hunger should feel socially dangerous before it feels physically dangerous. Extraction may require convincing someone that the court's affection is a feeding structure, not love."
+      ],
+      "tables": [
+        {
+          "title": "Velvet Hunger Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Invitation House", "Controls access to parties, salons, private performances, and feeding salons."],
+            ["The Velvet Choir", "Artists, influencers, musicians, and beautiful mortal advocates who recruit without admitting it."],
+            ["The Cupbearers", "Chosen vessels whose status masks dependency and feeding exploitation."],
+            ["The Mirror Patrons", "Elder sponsors who fund careers, erase scandals, and own the people they uplift."],
+            ["The Red Room Hosts", "Social enforcers who destroy reputation instead of bodies when possible."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 4-8.", "Primary currency: desire and access.", "Primary weakness: public scandal, sincere refusal, and protected testimony."],
+      "tags": ["vampiric court", "glamour", "nightlife", "patronage", "feeding"],
+      "relatedEntries": ["civilian-and-staff-catalog", "socialConflictRules"]
+    },
+    {
+      "id": "ash-and-candle-court",
+      "title": "The Court of Ash and Candle",
+      "category": "Vampiric Courts",
+      "summary": "A funerary vampiric court obsessed with death rites, remains, old grief, relics, and the legal memory of the dead.",
+      "body": [
+        "The Court of Ash and Candle treats undeath as a custodial office. Its members manage cemeteries, crematoria, old churches, funeral homes, mourning societies, death records, reliquaries, memorial funds, and the quiet traffic of bodies and belongings nobody living is supposed to notice.",
+        "It claims to honor the dead. Sometimes it does. Sometimes it uses grief as a doorway and death administration as cover for feeding, relic theft, identity laundering, corpse disposal, and the preservation of old vampires who should have been ash centuries ago.",
+        "This court is useful when the campaign needs old records, corpse politics, hidden lineage, ancestral debt, or a reminder that vampires are not only predators of blood. They are predators of memory."
+      ],
+      "tables": [
+        {
+          "title": "Ash and Candle Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Candle Registry", "Maintains death records, burial rights, false deaths, and hidden continuities."],
+            ["The Ash Priors", "Ritual authorities who decide what remains may be disturbed, moved, burned, or preserved."],
+            ["The Mourning Houses", "Funeral and grief institutions that serve as havens and recruitment sites."],
+            ["The Reliquary Guard", "Protects bones, ashes, heirlooms, blood relics, and dangerous memorial objects."],
+            ["The Last Witnesses", "Vampires and mortals who remember events no living witness should know."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 5-8.", "Primary currency: remains, grief, records, and old memory.", "Primary weakness: proper rites, exposed body traffic, and unresolved obligations to the dead."],
+      "tags": ["vampiric court", "death", "funerary", "relics", "memory"],
+      "relatedEntries": ["supernatural-artifacts-relics", "vampiric-court-organization-template"]
+    },
+    {
+      "id": "iron-chalice-court",
+      "title": "The Iron Chalice Court",
+      "category": "Vampiric Courts",
+      "summary": "A martial vampiric court that turns feeding territory into fortress doctrine, military patronage, and violent discipline.",
+      "body": [
+        "The Iron Chalice Court is what happens when vampiric restraint is defined by chain of command. It values territory, strength, oath, discipline, punishment, martial legitimacy, and the idea that feeding is a tax levied by those strong enough to hold ground.",
+        "The court builds influence through private security firms, veterans' associations, old mercenary networks, paramilitary clubs, fortified estates, black-market armorers, and legal relationships with people who already believe violence becomes clean when properly uniformed.",
+        "An Iron Chalice conflict should feel like dealing with a fortress that has learned to drink. It may be brutal, but it is not stupid. It studies logistics, routes, patrol schedules, weak points, daylight actors, and whether BlackLight's new rules make the Company hesitate before striking first."
+      ],
+      "tables": [
+        {
+          "title": "Iron Chalice Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Red Bastions", "Fortified havens and territorial strongpoints."],
+            ["The Chalice Guard", "Military-style vampire and mortal enforcers."],
+            ["The Day Arsenal", "Mortal armorers, logistics staff, drivers, and weapons brokers."],
+            ["The Oath Barracks", "Training and indoctrination sites for blood-bound soldiers."],
+            ["The Broken Shield Tribunal", "Internal court that judges cowardice, breach of discipline, and failed defense."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 5-8.", "Primary currency: territory and disciplined violence.", "Primary weakness: logistics, supply chains, command pride, and rules of engagement."],
+      "tags": ["vampiric court", "military", "territory", "discipline", "enforcers"],
+      "relatedEntries": ["operative-and-military-catalog", "combat-foundation-simple"]
+    },
+    {
+      "id": "glass-veins-court",
+      "title": "The Court of Glass Veins",
+      "category": "Vampiric Courts",
+      "summary": "A modern medical, corporate, surveillance, and data-driven vampiric court built around blood systems and institutional invisibility.",
+      "body": [
+        "The Court of Glass Veins does not need candlelit castles. It prefers hospitals, clinics, insurance networks, biotech firms, blood banks, wearable health data, secure labs, pharmaceutical trials, private ambulance services, elder-care facilities, and corporate wellness systems.",
+        "Its genius is that modern society already moves blood, consent forms, bodies, samples, medical debt, and intimate data through systems most people cannot inspect. The court does not have to invent the machinery of extraction. It only has to place mouths along existing tubes.",
+        "This court is especially dangerous near Blacklight Intelligence because both organizations understand secure systems, data compartmentalization, voice interfaces, and the value of being mistaken for a legitimate service provider."
+      ],
+      "tables": [
+        {
+          "title": "Glass Veins Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Hematic Board", "Corporate leadership controlling clinics, research fronts, and blood logistics."],
+            ["The White Coat Factors", "Doctors, lab managers, nurses, and administrators who know varying amounts of the truth."],
+            ["The Donor Algorithm", "Data system that identifies vulnerable, compatible, or politically useful feeding targets."],
+            ["The Refrigerated Vaults", "Blood stores, tissue archives, and illicit biological records."],
+            ["The Privacy Office", "Legal and technical unit that buries breaches as compliance complexity."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 4-8 as a network, 9 if its data systems gain supernatural predictive force.", "Primary currency: blood data and institutional access.", "Primary weakness: audits, whistleblowers, contaminated records, and incompatible jurisdictions."],
+      "tags": ["vampiric court", "medical", "corporate", "surveillance", "blood bank"],
+      "relatedEntries": ["blacklight-intelligence-public-front", "machine-intelligence-catalog"]
+    },
+    {
+      "id": "drowned-court",
+      "title": "The Drowned Court",
+      "category": "Vampiric Courts",
+      "summary": "A harbor, river, smuggling, and maritime vampiric court that treats tide, cargo, missing people, and old ship routes as feeding infrastructure.",
+      "body": [
+        "The Drowned Court operates where people and cargo vanish without the land asking too many questions. Harbors, ferries, fishing fleets, cruise terminals, derelict piers, river warehouses, storm drains, salvage yards, and old smuggling routes form its body.",
+        "Its vampires are patient and brine-cold. Some feed through dockside vice. Some own shipping companies. Some keep drowned servants. Some maintain agreements with things below the water that are not vampires at all. Its justice is often tidal: slow, regular, and impossible to appeal once the water has you.",
+        "Use the Drowned Court when a mission crosses ports, islands, coastal towns, missing-person cases, smuggling networks, old maritime ghosts, or the uncomfortable fact that water can carry bodies and secrets farther than roads."
+      ],
+      "tables": [
+        {
+          "title": "Drowned Court Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Tide Ledger", "Tracks debts attached to cargo, passage, drowning, and salvage."],
+            ["The Harbor Teeth", "Enforcers, divers, dockworkers, and drowned things used for retrieval."],
+            ["The Salt Houses", "Waterside havens, cold rooms, illegal clinics, and feeding dens."],
+            ["The Lantern Factors", "Mortal shipping agents, customs contacts, ferry staff, and lighthouse watchers."],
+            ["The Deep Compact", "Agreements with non-vampiric entities beneath harbors and channels."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 5-8.", "Primary currency: passage, cargo, disappearance, and drowned secrets.", "Primary weakness: harbor records, daylight maritime authorities, broken compacts, and landlocked exposure."],
+      "tags": ["vampiric court", "harbor", "smuggling", "drowned", "maritime"],
+      "relatedEntries": ["alien-remnant-catalog", "monster-cryptid-catalog"]
+    },
+    {
+      "id": "hollow-feast-court",
+      "title": "The Hollow Feast",
+      "category": "Vampiric Courts",
+      "summary": "A collapsed or semi-feral vampiric court where hunger has become religion, emergency, law, and excuse.",
+      "body": [
+        "The Hollow Feast is what a vampiric court becomes when the systems meant to manage hunger fail or were always lies. It may be a ruin of a court, a famine cult, a tunnel kingdom, an outbreak of feral remnants, or an intentional project by elders who discovered that desperate vampires are easier to aim than loyal ones.",
+        "The Hollow Feast has titles, but they may be screamed, eaten, inherited through violence, or forgotten by morning. It has law, but law may mean who gets fed first. It has priests, but the sermon is hunger. It has organization, but that organization may be a feeding line, a nest map, and a list of doors not to open.",
+        "This court is useful when the campaign needs to show what vampiric politics pretends it prevents. The horror is not only that the Feast is savage. The horror is that some other court may have created it, abandoned it, or used it as a disposal mechanism."
+      ],
+      "tables": [
+        {
+          "title": "Hollow Feast Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Empty Table", "Leadership circle or feeding hierarchy, often unstable and violent."],
+            ["The Starved Choir", "Hunger prophets who turn deprivation into doctrine."],
+            ["The Bone Routes", "Tunnels, basements, sewer paths, and derelict buildings used for movement."],
+            ["The Scraps", "Thin-blooded, abandoned, or damaged vampires used as disposable swarm pressure."],
+            ["The Locked Pantry", "Hidden cache of vessels, blood, prisoners, or old court supplies everyone wants."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 4-8.", "Primary currency: hunger and access to any blood at all.", "Primary weakness: supply manipulation, internal rivalry, daylight exposure, and evidence of who abandoned them."],
+      "tags": ["vampiric court", "feral", "hunger", "collapsed court", "remnants"],
+      "relatedEntries": ["monster-cryptid-catalog", "vampiric-courts-overview"]
+    },
+    {
+      "id": "fae-courts-overview",
+      "title": "Fae Courts Overview",
+      "category": "Fae Courts",
+      "summary": "The major fae court model: oaths, names, hospitality, thresholds, masks, seasons, stories, and lethal etiquette.",
+      "body": [
+        "Fae courts are jurisdictions of meaning. They make hospitality enforceable, invitations dangerous, gifts binding, names vulnerable, stories contractual, and etiquette sharp enough to cut. A fae court does not merely rule a place. It rules the terms by which certain actions can be understood inside that place.",
+        "The Seely and Unseely courts are the best-known high structures, but many lesser and sideways courts exist: thorn courts, mirror courts, harvest courts, winter courts, door courts, markets, embassies, knightly orders, heraldic bureaus, name keepers, bargain scribes, and hosts that form around a season, wound, route, oath, or story pattern.",
+        "Fae courts often occupy Power Class 6-10 as organizations. Even a minor court can become overwhelming inside its own rules. Their danger comes from the fact that a mortal may lose before realizing a contest began."
+      ],
+      "keyFacts": [
+        "Fae courts organize around oath, invitation, name, hospitality, precedent, and symbolic law.",
+        "A fae court's physical power may be less important than its jurisdiction.",
+        "Many fae conflicts are lost through careless speech before violence begins.",
+        "BlackLight must treat fae courts as legal and narrative environments, not only factions."
+      ],
+      "tags": ["fae", "courts", "Seely", "Unseely", "oaths", "names"],
+      "relatedEntries": ["fae-court-organization-template", "seely-high-court", "unseely-deep-court", "otherworldly-court-catalog"]
+    },
+    {
+      "id": "fae-court-organization-template",
+      "title": "Fae Court Organization Template",
+      "category": "Fae Courts",
+      "summary": "Common offices, orders, emissaries, bargain structures, and enforcement bodies used by fae courts.",
+      "body": [
+        "Fae organization often looks ceremonial because ceremony is how fae power moves. Titles are not decoration. A herald can open a jurisdiction. A host can make guest-law active. A name keeper can protect or expose identity. A fool can say truths nobody else may safely speak. A knight can enforce a metaphor as if it were a wall.",
+        "A fae court may appear chaotic to outsiders, but its offices usually reveal what it values. If a court has many heralds, it cares about recognition. If it has many stewards, it cares about hospitality. If it has many masked judges, it cares about precedent. If it has many collectors, everyone who enters should fear gifts."
+      ],
+      "tables": [
+        {
+          "title": "Common Fae Court Offices",
+          "columns": ["Office or Body", "Function", "Typical Power Class"],
+          "rows": [
+            ["Sovereign, Queen, King, Crown, or Seasonal Seat", "Embodies the court's highest jurisdiction and story authority.", "8-10"],
+            ["High Heralds", "Announce status, carry invitations, define formal standing, and open negotiations.", "5-8"],
+            ["Name Keepers", "Guard, trade, conceal, record, or weaponize true names and titles.", "6-9"],
+            ["Guest-Law Stewards", "Manage hospitality, threshold rights, protection, insults, and violations.", "4-8"],
+            ["Oath Scribes", "Record bargains, gifts, debts, promises, loopholes, and exact wording.", "5-8"],
+            ["Court Knights", "Enforce judgments, defend thresholds, duel champions, and pursue oathbreakers.", "6-9"],
+            ["Mask Bearers", "Control appearances, disguises, social roles, and permitted identities.", "5-8"],
+            ["Fools, Tellers, and Dangerous Children", "Speak protected truth, mock power, expose contradiction, and trigger narrative reversals.", "4-9"],
+            ["Market Factors", "Run bargains, exchanges, auctions, impossible prices, and traveling courts of trade.", "4-8"]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Fae titles should do something in play.",
+        "Do not let bargains become vague. The exact words matter.",
+        "A fae court's organization should show what kind of story it traps people inside."
+      ],
+      "tags": ["fae organizations", "court offices", "oaths", "names", "hospitality"],
+      "relatedEntries": ["fae-courts-overview", "fae-market-and-envoy-organizations"]
+    },
+    {
+      "id": "seely-high-court",
+      "title": "The Seely High Court",
+      "category": "Fae Courts",
+      "summary": "A radiant high fae jurisdiction of hospitality, beauty, oath, guest-right, public honor, and terrifyingly formal mercy.",
+      "body": [
+        "The Seely High Court is often mistaken for the safe fae court because it values beauty, hospitality, sunlight, art, oath, public honor, and formal mercy. This is a dangerous simplification. Seely mercy can be more binding than Unseely cruelty because it may require the recipient to become worthy of the story that saved them.",
+        "The Seely Court prefers open declarations, formal invitations, guest-right, witnessed bargains, ritual courtesy, noble obligation, and punishments that can be called just by everyone who matters. It can protect a guest with terrifying force. It can also decide that a guest has violated hospitality and strip protection with a smile.",
+        "BlackLight may find the Seely Court useful when seeking safe passage, testimony, formal recognition, or protection under ancient guest-law. The price is that every careless word may become part of the record."
+      ],
+      "tables": [
+        {
+          "title": "Seely Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Golden Host", "Courtly nobles, protectors, emissaries, and ceremonial enforcers."],
+            ["The Sunlit Heraldry", "Heralds who announce standing, invitations, insults, and protected status."],
+            ["The Guest-Rights Table", "Stewards who determine hospitality, sanctuary, and violations."],
+            ["The Mercy Choir", "Judges and singers who transform punishment into beautiful obligation."],
+            ["The Bright Lances", "Court knights who enforce public honor and defend sworn guests."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 7-10 as a court.", "Primary currency: honor, oath, hospitality, public beauty, witnessed promise.", "Primary weakness: formal contradiction, broken precedent, public hypocrisy, and obligations created by their own mercy."],
+      "tags": ["Seely", "fae court", "hospitality", "honor", "mercy"],
+      "relatedEntries": ["fae-courts-overview", "unseely-deep-court"]
+    },
+    {
+      "id": "unseely-deep-court",
+      "title": "The Unseely Deep Court",
+      "category": "Fae Courts",
+      "summary": "A shadowed fae jurisdiction of fear, wintered truth, ugly bargains, exile, predation, and the protection of things polite courts deny.",
+      "body": [
+        "The Unseely Deep Court is not simply evil, and that is why it is dangerous. It protects grudges, exiles, ugly truths, unwanted children, forbidden hungers, old insults, rejected names, and powers that the bright courts pretend are beneath notice. It is cruel, but its cruelty often begins from a refusal to lie about what the world does to the unwanted.",
+        "The Unseely Court prefers masks in darkness, bargains made at the edge of insult, punishments that reveal hypocrisy, fear used as instruction, and debts collected in forms no polite court would admit it understands. It can be monstrous. It can also shelter someone the Seely Court would save beautifully and then destroy with expectations.",
+        "BlackLight dealings with the Unseely should feel like negotiating with a knife that knows exactly where social virtue becomes self-deception."
+      ],
+      "tables": [
+        {
+          "title": "Unseely Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Black Host", "Nobles, hunters, exiles, and night-bound enforcers."],
+            ["The Ragged Heralds", "Messengers who carry insults, warnings, exile notices, and unwanted truths."],
+            ["The Thorn Bench", "Judges who hear grievances polite powers refuse to recognize."],
+            ["The Masked Hounds", "Pursuers of oathbreakers, escaped bargains, and stolen names."],
+            ["The Bitter Nursery", "A protected and terrifying structure for unwanted, changed, or dangerous children."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 7-10 as a court.", "Primary currency: fear, grievance, exile, hidden truth, insult, survival debt.", "Primary weakness: sincere recognition, satisfied grievance, exact wording, and obligations to the rejected."],
+      "tags": ["Unseely", "fae court", "exile", "fear", "hidden truth"],
+      "relatedEntries": ["seely-high-court", "thorn-and-oath-court"]
+    },
+    {
+      "id": "thorn-and-oath-court",
+      "title": "The Court of Thorn and Oath",
+      "category": "Fae Courts",
+      "summary": "A fae court of promises, boundaries, blood-pricked agreements, oathbreakers, and pain used as proof of seriousness.",
+      "body": [
+        "The Court of Thorn and Oath governs the painful edge where promise becomes law. It is obsessed with boundaries, vows, pricked fingers, sealed gates, blood on bramble, witness marks, and the idea that a promise without cost is only noise.",
+        "It is not inherently Seely or Unseely. Bright courts use it to sanctify noble vows. Dark courts use it to punish betrayal. Mortal petitioners use it when they need a promise no ordinary court can enforce. BlackLight may encounter it when an old Charles agreement crosses fae jurisdiction and someone asks whether a machine intelligence can swear an oath.",
+        "The court's danger is that it understands loopholes better than anyone who thinks honesty is enough."
+      ],
+      "tables": [
+        {
+          "title": "Thorn and Oath Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Bramble Notaries", "Write and witness binding promises with painful clarity."],
+            ["The Thorn Knights", "Hunt oathbreakers and defend sworn boundaries."],
+            ["The Red Gate Stewards", "Control threshold vows, guest promises, and entry conditions."],
+            ["The Wound Witnesses", "Remember the exact pain, wording, and context of old agreements."],
+            ["The Loophole Garden", "A terrifying archive of ways promises have been lawfully twisted."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 6-9.", "Primary currency: promises and pain-backed consent.", "Primary weakness: exact wording, fulfilled terms, invalid witnesses, and proof of coercion."],
+      "tags": ["fae court", "oaths", "thorns", "promises", "boundaries"],
+      "relatedEntries": ["fae-court-organization-template", "seely-high-court", "unseely-deep-court"]
+    },
+    {
+      "id": "mirrors-and-masks-court",
+      "title": "The Court of Mirrors and Masks",
+      "category": "Fae Courts",
+      "summary": "A fae court of identity, reflection, performance, disguise, role, reputation, and the lethal difference between face and name.",
+      "body": [
+        "The Court of Mirrors and Masks rules performance as reality's negotiation layer. It cares about faces, roles, reflections, doubles, disguises, rumors, stage names, formal titles, social masks, false confessions, and the difference between being seen and being known.",
+        "This court is extremely dangerous around Blacklight because Blacklight relies on cover identities, public fronts, Faux Charles, corporate masks, security clearances, and the difference between what a person is and what the record says they are. The court may admire the craft. It may also decide BlackLight has been wearing stolen masks without paying the appropriate fees.",
+        "A Mirrors and Masks encounter should make players question what is evidence, what is performance, and whether the identity they protected is the one that made the promise."
+      ],
+      "tables": [
+        {
+          "title": "Mirrors and Masks Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Silver Masquerade", "Public court gatherings where roles are chosen, traded, and weaponized."],
+            ["The Reflection Clerks", "Record appearances, aliases, disguises, and contradictory identities."],
+            ["The Maskwrights", "Craft social roles, false faces, glamour identities, and protective personas."],
+            ["The Broken Mirror Guard", "Hunts identity thieves, exposed doubles, and people who see what they should not."],
+            ["The Applause Tribunal", "Judges whether a performance has become true enough to bind reality."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 6-9.", "Primary currency: identity, reputation, reflection, and role.", "Primary weakness: true names, unmasked witnesses, broken performances, and sincere self-recognition."],
+      "tags": ["fae court", "masks", "identity", "glamour", "performance"],
+      "relatedEntries": ["faux-charles-product", "blacklight-intelligence-public-front"]
+    },
+    {
+      "id": "harvest-and-bone-court",
+      "title": "The Court of Harvest and Bone",
+      "category": "Fae Courts",
+      "summary": "A seasonal fae court of crops, bargains, fertility, graves, debt to the land, old feasts, and the cost of taking more than was given.",
+      "body": [
+        "The Court of Harvest and Bone governs what is grown, taken, eaten, buried, remembered, and owed back to the soil. It is warm and terrible. Its feasts can save starving villages. Its punishments can turn abundance into debt that lasts seven generations.",
+        "The court cares about farms, kitchens, markets, graveyards, seed banks, food distribution, famine memory, seasonal festivals, children promised at harvest, and the fact that every living body is borrowing from the dead. It is one of the courts most likely to seem rustic and harmless until someone asks who paid for the food.",
+        "BlackLight may encounter this court when food logistics, rural territory, famine relief, biological feedstock, old graves, or agricultural corporate activity crosses fae debt."
+      ],
+      "tables": [
+        {
+          "title": "Harvest and Bone Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Granary Mothers", "Stewards of food stores, famine memory, and seasonal mercy."],
+            ["The Bone Reapers", "Collectors of unpaid harvest debts and grave obligations."],
+            ["The Seed Tithe", "Record-keepers of what was planted, promised, and owed back."],
+            ["The Feast Hosts", "Hospitality powers who make eating legally dangerous."],
+            ["The Orchard Dead", "Ancestors, buried witnesses, and bone-rooted enforcers of land memory."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 6-9.", "Primary currency: food, fertility, land debt, and grave memory.", "Primary weakness: fair repayment, broken feast law, exposed famine hoarding, and debts paid in the right season."],
+      "tags": ["fae court", "harvest", "bone", "food", "seasonal"],
+      "relatedEntries": ["mundane-creature-catalog", "alien-remnant-catalog"]
+    },
+    {
+      "id": "winter-names-court",
+      "title": "The Court of Winter Names",
+      "category": "Fae Courts",
+      "summary": "A cold fae court of forgotten names, silence, exile, memory preservation, death by omission, and truths that survive because nobody speaks them carelessly.",
+      "body": [
+        "The Court of Winter Names governs what is kept when warmth, family, history, and speech fail. It collects names erased by exile, death, bureaucracy, abuse, migration, magic, or deliberate forgetting. It can preserve identity with terrifying tenderness. It can also freeze a person out of every record that once held them.",
+        "This court does not rush. It waits. It knows how long a promise can survive under snow. It knows that a missing name can be a murder weapon. It knows that silence can be sanctuary or execution depending on who controls it.",
+        "BlackLight may deal with Winter Names when trying to protect witnesses, restore erased people, hide vulnerable dependents, recover true names, or contest records that say someone never existed."
+      ],
+      "tables": [
+        {
+          "title": "Winter Names Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Frost Registry", "Stores forgotten, hidden, erased, protected, and forbidden names."],
+            ["The White Heralds", "Carry messages that may only be spoken once."],
+            ["The Snowbound Exiles", "Protected or punished beings removed from ordinary memory."],
+            ["The Silent Librarians", "Preserve records too dangerous to thaw."],
+            ["The Last Breath Court", "Judges names spoken at death, abandonment, or final witness."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 7-10.", "Primary currency: names, silence, memory, and erasure.", "Primary weakness: rightful witness, thawed record, chosen name, and promises spoken before silence."],
+      "tags": ["fae court", "winter", "names", "memory", "exile"],
+      "relatedEntries": ["mirrors-and-masks-court", "fae-court-organization-template"]
+    },
+    {
+      "id": "doors-and-thresholds-court",
+      "title": "The Court of Doors and Thresholds",
+      "category": "Fae Courts",
+      "summary": "A fae court of entrances, exits, invitations, keys, trespass, safe passage, impossible routes, and the law of crossing from one state into another.",
+      "body": [
+        "The Court of Doors and Thresholds rules the moment of crossing. Doorways, gates, windows, train platforms, elevator thresholds, emergency exits, border stations, hospital doors, wedding arches, server logins, invitation links, and ritual circles can all become part of its jurisdiction if the story agrees they are thresholds.",
+        "This court is invaluable and terrifying for BlackLight. It can grant passage where no route exists. It can deny exit from a room everyone has already left. It can decide that logging into a secure system was an invitation, that entering a warehouse was acceptance, or that stepping into Charles's cube made everyone a guest under rules they did not know.",
+        "Use this court whenever movement, access, consent, invitation, or boundary crossing matters more than distance."
+      ],
+      "tables": [
+        {
+          "title": "Doors and Thresholds Organizations",
+          "columns": ["Organization", "Purpose"],
+          "rows": [
+            ["The Key Parliament", "Authorities over keys, passes, credentials, invitations, and openings."],
+            ["The Door Wardens", "Guard thresholds, enforce trespass law, and decide whether passage was lawful."],
+            ["The Exit Choir", "Guides those leaving states of danger, life, oath, identity, or imprisonment."],
+            ["The Locksmith Saints", "Craft impossible keys, revoked access, and doors that remember who hurt them."],
+            ["The Red Welcome", "Hospitality enforcers who decide what invitation cost the guest already accepted."]
+          ]
+        }
+      ],
+      "keyFacts": ["Typical Power Class: 6-10.", "Primary currency: passage, invitation, keys, trespass, and consent to cross.", "Primary weakness: revoked invitation, rightful key, guest-law, public threshold, and completed departure."],
+      "tags": ["fae court", "doors", "thresholds", "keys", "passage"],
+      "relatedEntries": ["blacklight-offices", "containment-cube", "fae-market-and-envoy-organizations"]
+    },
+    {
+      "id": "fae-market-and-envoy-organizations",
+      "title": "Fae Markets, Envoys, and Cross-Court Organizations",
+      "category": "Fae Organizations",
+      "summary": "Organizations that operate across fae courts: markets, embassies, heraldic bodies, name banks, bargain houses, knightly orders, and neutral hospitality structures.",
+      "body": [
+        "Not every fae organization belongs cleanly to one court. Some exist between courts, across courts, or despite courts. Markets travel. Heralds carry recognition from hostile sovereigns. Name banks protect identities from multiple jurisdictions. Knightly orders sell enforcement under rules older than any single crown. Hospitality houses survive because even enemies need places to negotiate without immediately becoming stories of slaughter.",
+        "These organizations are useful for campaign play because they let BlackLight interact with fae politics without always entering a royal court. A market can sell the clue. An envoy can deliver the threat. A name bank can hide the witness. A hospitality house can host the meeting where everyone smiles and checks the exits.",
+        "Cross-court organizations are also dangerous because they often know the loopholes everyone else pretends not to use."
+      ],
+      "tables": [
+        {
+          "title": "Cross-Court Fae Organizations",
+          "columns": ["Organization", "Function", "Typical Power Class"],
+          "rows": [
+            ["The Traveling Market of Acceptable Prices", "Moves between jurisdictions selling bargains, memories, favors, keys, and consequences.", "6-9"],
+            ["The Neutral Table", "Hospitality structure where hostile courts can negotiate under strict guest-law.", "7-10"],
+            ["The Heraldic Exchange", "Recognizes titles, carries invitations, resolves standing, and prevents accidental war by insult.", "5-8"],
+            ["The Name Bank", "Stores, conceals, collateralizes, restores, or ransoms names.", "7-10"],
+            ["The Knightly Order of the Open Road", "Escorts travelers through dangerous jurisdictions for prices that may not be money.", "6-9"],
+            ["The Bargain House", "Drafts, audits, challenges, and weaponizes contracts between fae, mortals, and other powers.", "6-9"],
+            ["The Embassy of Last Resort", "Receives petitioners who cannot safely approach any single court directly.", "6-8"],
+            ["The Lost-and-Found Office", "Handles stolen children, misplaced identities, forgotten guests, and things returned in the wrong shape.", "6-9"]
+          ]
+        }
+      ],
+      "playerFacing": [
+        "A cross-court organization can be safer than a royal court but never consequence-free.",
+        "Neutral does not mean kind; it means the rules apply to everyone present.",
+        "The best protection against fae organizations is disciplined speech and knowing exactly what was offered, accepted, refused, and witnessed."
+      ],
+      "tags": ["fae organizations", "markets", "envoys", "name bank", "bargains", "hospitality"],
+      "relatedEntries": ["fae-courts-overview", "fae-court-organization-template", "doors-and-thresholds-court"]
+    }
+  ]
+}

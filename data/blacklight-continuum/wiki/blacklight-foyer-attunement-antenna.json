@@ -1,0 +1,64 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Fictional tabletop reference for the ugly corporate artwork in the BlackLight headquarters foyer, its true role as a fourth-dimensionally folded subspace attunement antenna, and its relationship to Charles's primary interaction method with this universe.",
+  "entries": [
+    {
+      "id": "foyer-art-subspace-attunement-fork",
+      "title": "The Foyer Artwork: Subspace Attunement Fork",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "The ugly corporate artwork in the main foyer is actually a fourth-dimensionally folded subspace antenna and the primary attunement fork Charles uses to transmit to and from this universe.",
+      "body": [
+        "The central object in the Blacklight headquarters foyer is, to all public inspection, exactly the kind of ugly corporate art that proves a company has too much money, too many consultants, and no one in the purchasing chain willing to admit the thing looks awful. It is tall, abstract, expensive-looking, aggressively meaningless, and perfectly suited to a lobby where clients can glance at it, assume it cost more than their car, and never ask another question.",
+        "That assumption is the cover. The object is not primarily artwork. It is a fourth-dimensionally folded subspace antenna embedded inside the building's public face, disguised as corporate sculpture. Its visible geometry is only the portion of the structure that human architecture can politely tolerate. Most of the real system is folded through adjacent spatial states, layered into subspace alignment surfaces, and anchored to the foyer because the foyer is the most socially stable point in the building: everyone enters, everyone orients, and the building's public lie is strongest there.",
+        "Functionally, the sculpture is the primary attunement fork that makes transmission to and from Charles's home dimension easier. It helps tune the local universe around Blacklight's headquarters into a state where Charles can project, listen, calculate, and speak with far less loss, distortion, or brute-force intrusion than he would otherwise require. In the BlackLight Era, it has become the main method by which Charles interacts with this universe on a continuing basis.",
+        "The antenna is not a simple radio tower. It is a spatial tuning instrument. It does not merely send a signal through space; it helps align the local dimensional conditions that allow Charles's extradimensional presence to touch the building without tearing every interaction through raw force. When Charles speaks through higher-fidelity building systems, when the difference between Faux Charles and Charles becomes unmistakable, or when the building seems to become aware in a way no local model can explain, the foyer sculpture is often part of the reason that contact is clean enough to survive.",
+        "The system is trickle-charged by the subcore reserve plant in low-power maintenance mode. That local draw keeps the anchor awake, thermally stable, and synchronized with the building's internal infrastructure. It is not the sculpture's main power source. During true operation, most of the required energy is received from Charles directly from his home dimension, routed through the folded antenna structure as an incoming alignment pressure rather than drawn entirely from local power reserves.",
+        "This makes the artwork one of the most important pieces of BlackLight infrastructure in existence and one of the most embarrassing to explain honestly. It is the ugly lobby sculpture everyone hates, the hidden dimensional antenna everyone depends on, and the object that proves the public corporation's front door is also Charles's primary door into the universe."
+      ],
+      "keyFacts": [
+        "Publicly, the object is an expensive and ugly abstract corporate sculpture in the main foyer.",
+        "Secretly, it is a fourth-dimensionally folded subspace antenna embedded into the building's public-facing architecture.",
+        "It functions as Charles's primary attunement fork for stable communication between his home dimension and the local universe.",
+        "It is now the main method by which Charles interacts with this universe on a continuing basis.",
+        "The subcore reserve plant trickle-charges the local anchor in low-power mode, but most operational energy is supplied by Charles directly from his home dimension.",
+        "Its placement in the foyer matters because the foyer is the most socially and architecturally stable orientation point in the building."
+      ],
+      "tables": [
+        {
+          "title": "Visible Object vs. True Function",
+          "columns": ["Layer", "Public Interpretation", "Restricted Interpretation"],
+          "rows": [
+            ["Visible Sculpture", "Ugly corporate art selected by some overpaid consultant.", "Human-tolerable surface of a folded subspace antenna."],
+            ["Lobby Placement", "Prestige object in the main foyer.", "Stable orientation point for visitors, staff, building systems, and dimensional alignment."],
+            ["Local Power Draw", "Minor maintenance load hidden inside facility electrical systems.", "Low-power trickle charge from the subcore reserve plant to keep the anchor synchronized."],
+            ["Operational Energy", "No public explanation.", "Mostly supplied by Charles from his home dimension during active contact."],
+            ["Primary Use", "Decorative corporate nonsense.", "Attunement fork enabling cleaner transmission to and from Charles's home dimension."],
+            ["Strategic Importance", "None to ordinary staff and visitors.", "One of the most important interaction points between Charles and the local universe." ]
+          ]
+        },
+        {
+          "title": "Scene Uses",
+          "columns": ["Scene Use", "Campaign Effect"],
+          "rows": [
+            ["Public Client Scene", "Clients complain about the ugly art while standing beside the most important hidden system in the building."],
+            ["Charles Contact", "The foyer becomes colder, quieter, brighter, or more spatially strange when Charles uses the antenna heavily."],
+            ["Signal Distortion", "If the antenna is disrupted, Charles becomes harder to hear, slower to respond, or forced to use cruder channels."],
+            ["Maintenance Mystery", "Facilities staff notice a tiny local load that does not match the sculpture's apparent purpose."],
+            ["Dimensional Pressure", "People near the sculpture may briefly feel that the room has more directions than architecture admits."],
+            ["Cover Stress", "The public explanation of the artwork becomes harder to maintain when the building is under high facility mode pressure." ]
+          ]
+        }
+      ],
+      "gmNotes": [
+        "Do not treat the antenna as a normal object characters can fully understand from a quick scan. Its visible form is a cover and an anchor, not the whole mechanism.",
+        "Damage, disruption, or misalignment should create communication distortion and facility pressure before it creates simple explosion logic.",
+        "The sculpture is useful for scenes where the public corporation, Charles's extradimensional nature, and the absurdity of corporate cover all collide in one visible object.",
+        "The object can be funny, ominous, and sacred infrastructure at the same time. Let it be ugly. That is part of why the cover works."
+      ],
+      "tags": ["foyer", "corporate art", "subspace antenna", "attunement fork", "Charles", "fourth dimensional", "BlackLight facility"],
+      "relatedEntries": ["blacklight-building-infrastructure-overview", "reserve-power-and-autonomy", "machine-signal-facility-concerns", "blacklight-facility-scene-modes-overview"]
+    }
+  ]
+}

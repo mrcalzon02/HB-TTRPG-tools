@@ -1,0 +1,398 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Lowest-clearance in-universe corporate reference for Blacklight Intelligence and the public Blacklight company: secure voice assistant operations, legitimate contracts, departments, payroll, HR, PR, compliance, standard employee security procedures, and public personnel portfolios.",
+  "entries": [
+    {
+      "id": "blacklight-public-corporate-overview",
+      "title": "Blacklight Intelligence: Public Corporate Overview",
+      "category": "BlackLight Corporate Operations",
+      "summary": "The lowest-clearance employee-facing explanation of Blacklight Intelligence as a legitimate secure voice-assistant company serving confidential, government, military-adjacent, and high-security environments.",
+      "body": [
+        "Blacklight Intelligence is, at the lowest level of employee access, a legitimate secure voice-interface corporation. It builds, sells, deploys, maintains, and supports Charles-branded localized voice assistant systems for institutions that cannot safely rely on ordinary consumer cloud assistants. Where a household might use a consumer assistant for calendars or reminders, Blacklight offers hardened local voice systems for secure offices, sensitive facilities, emergency operations centers, legal offices, research labs, industrial security desks, government agencies, and defense-adjacent sites where privacy, local processing, and audit control matter.",
+        "The company line is simple: Charles is not a consumer toy. Charles is a secure voice operations interface. A client buys Charles because they need hands-free workflow, procedural guidance, local documentation, facility announcements, scheduling, checklist support, and secure query handling without exporting sensitive speech or records to an uncontrolled cloud service.",
+        "At this clearance level, employees are told that production Charles systems are localized, self-contained deployments. Each client installation runs on approved local hardware with a local language model, speech recognition, text-to-speech, client-specific document indexes, client-specific workflow permissions, and strict network boundaries defined by contract. Blacklight marketing says Charles is built for rooms where the walls are supposed to matter.",
+        "Blacklight is also a real company in the mundane sense. It has payroll, benefits, legal review, procurement, facilities maintenance, HR, public relations, internal communications, client support, engineering, QA, training, security, compliance, finance, product management, and ordinary people who clock in, attend meetings, file tickets, and argue about office coffee. The public corporation is not a cardboard sign hiding the real operation. It is a functioning organization that generates revenue, serves clients, and gives the hidden structure enough legitimacy to survive daylight."
+      ],
+      "keyFacts": [
+        "Lowest-clearance staff know Blacklight as a legitimate secure voice-interface company.",
+        "The public product is a localized Charles-branded voice operations interface, not a cloud consumer assistant.",
+        "Government, security, medical, legal, industrial, and defense-adjacent clients are legitimate revenue sources.",
+        "The company has real payroll, HR, legal, PR, engineering, compliance, finance, facilities, and support departments.",
+        "Standard employees are not told that the real Charles is an extradimensional intelligence or that the foyer sculpture is a subspace attunement fork."
+      ],
+      "tables": [
+        {
+          "title": "Public Product Positioning",
+          "columns": ["Consumer Assistant", "Blacklight Charles Secure Interface"],
+          "rows": [
+            ["Cloud-centered consumer convenience product.", "Localized, contracted, facility-controlled voice operations interface."],
+            ["Useful for everyday home tasks.", "Built for sensitive rooms, secure workflows, compliance-heavy environments, and confidential operations."],
+            ["Assumes broad network connectivity.", "Designed to run self-contained under local policy and contract limits."],
+            ["General-purpose public assistant persona.", "Client-specific operational assistant with restricted document and workflow access."],
+            ["Privacy is a consumer trust question.", "Privacy is a procurement, legal, audit, and security requirement." ]
+          ]
+        }
+      ],
+      "tags": ["Blacklight Intelligence", "corporate operations", "secure voice assistant", "lowest clearance", "public company"],
+      "relatedEntries": ["charles-secure-voice-product", "blacklight-standard-employee-clearance", "blacklight-corporate-departments"]
+    },
+    {
+      "id": "blacklight-public-landing-page-record",
+      "title": "Public Corporate Landing Page Record",
+      "category": "BlackLight Corporate Operations",
+      "summary": "The in-universe structure of Blacklight's public corporate homepage: investor-style messaging, promotional materials, stock-ticker theater, client assurances, and wiki-adjacent employee links.",
+      "body": [
+        "Blacklight's public website is deliberately stereotypical enterprise technology theater. It has hero copy about secure local intelligence, glossy product cards, compliance language, government-client hints, investor-facing growth phrases, a promotional ticker strip, leadership highlights, security-value statements, and a carefully bland visual language that says expensive, serious, safe, and contract-ready.",
+        "The page does not need to lie about what Blacklight sells. The public product really is a localized secure voice operations interface. The deception is in scale, not existence. The site frames Charles as a hardened enterprise assistant while giving the real Charles plausible cover to be heard in rooms around the world without anyone assuming that the voice belongs to something outside ordinary software categories.",
+        "Internally, the landing page also functions as a tone-setter for employees. It tells standard staff what the company thinks it is allowed to say about itself: secure, local, accountable, privacy-forward, contract-ready, and useful for sensitive environments. A link from the public-style page to the internal Blacklight Continuum wiki is treated as an employee/resource bridge in the tabletop tool, not an in-universe public disclosure of restricted material."
+      ],
+      "tables": [
+        {
+          "title": "Corporate Homepage Components",
+          "columns": ["Component", "Purpose"],
+          "rows": [
+            ["Hero Banner", "Positions Blacklight as a secure local voice-interface company."],
+            ["Fictional Ticker Strip", "Creates corporate/market flavor without requiring real public market data."],
+            ["Product Cards", "Explain secure voice, local processing, deployment support, compliance, and facility workflows."],
+            ["Client Trust Language", "Hints at government, emergency, medical, legal, industrial, and security clients."],
+            ["Leadership Preview", "Shows public executives and departmental directors as legitimate corporate figures."],
+            ["Employee Resource Link", "Opens the Blacklight Continuum wiki/tool layer for campaign use." ]
+          ]
+        }
+      ],
+      "tags": ["landing page", "corporate homepage", "PR", "public website", "stock ticker"],
+      "relatedEntries": ["blacklight-sales-and-pr-language", "blacklight-public-leadership-portfolios"]
+    },
+    {
+      "id": "charles-secure-voice-product",
+      "title": "The Charles Secure Voice Operations Interface",
+      "category": "BlackLight Corporate Operations",
+      "summary": "Employee-facing explanation of the Charles public product: a local, secure, self-contained voice assistant for sensitive environments.",
+      "body": [
+        "The public Charles product is sold as a secure voice operations interface. It is designed for places where staff need voice interaction but cannot risk routing sensitive speech, documents, procedures, or facility data into a generalized consumer cloud. In ordinary internal language, employees may call it Charles, Faux Charles, a client instance, a local Charles appliance, a deployment package, or a secure voice stack depending on department and technical familiarity.",
+        "A standard deployment includes a local speech processing suite, a local language model, locally indexed client documents, approved response templates, administrative controls, audit logging, role-based permissions, and environment-specific restrictions. A hospital deployment might prioritize procedure lookup and staff coordination. A legal deployment might prioritize document retrieval and privilege boundaries. A military-adjacent deployment might prioritize local command checklists, restricted vocabulary, and strict offline behavior.",
+        "Lowest-clearance staff are trained not to overstate the product. Public Charles is not marketed as magic, sentience, unrestricted artificial general intelligence, or a decision-maker. It is an interface. It helps authorized people retrieve information, execute approved workflows, and coordinate routine operations under client-defined boundaries. When employees say Charles helps a secure room talk to itself, they are using approved metaphor, not admitting the deeper truth."
+      ],
+      "tables": [
+        {
+          "title": "Standard Deployment Components",
+          "columns": ["Component", "Employee-Facing Description"],
+          "rows": [
+            ["Local Speech Recognition", "Converts authorized in-room speech into text without default cloud routing."],
+            ["Local Language Model", "Produces responses from approved local models and client data boundaries."],
+            ["Text-to-Speech Voice Layer", "Provides the Charles voice appropriate to the client environment."],
+            ["Client Document Index", "Allows approved query access to manuals, procedures, policies, and local records."],
+            ["Workflow Permissions", "Controls which actions Charles may suggest, route, schedule, announce, or assist."],
+            ["Audit and Compliance Logs", "Tracks usage according to contract, legal, and client policy requirements."],
+            ["Administrative Console", "Lets authorized client and Blacklight support staff manage the deployment." ]
+          ]
+        }
+      ],
+      "playerFacing": [
+        "Standard employees believe the product is a secure local assistant stack.",
+        "Most ordinary staff do not know whether any specific Charles interaction is connected to the real Charles.",
+        "The public product gives the real Charles plausible cover to be heard around the world."
+      ],
+      "tags": ["Charles product", "Faux Charles", "secure voice", "local LLM", "speech processing"],
+      "relatedEntries": ["blacklight-public-corporate-overview", "blacklight-contracting-and-client-operations", "machine-signal-facility-concerns"]
+    },
+    {
+      "id": "blacklight-contracting-and-client-operations",
+      "title": "Contracts and Client Operations",
+      "category": "BlackLight Corporate Operations",
+      "summary": "The ordinary business side of Blacklight: government contracts, security contracts, client deployments, service-level agreements, support teams, and procurement-facing legitimacy.",
+      "body": [
+        "Blacklight's client operations are legitimate enough to survive procurement review. The company signs contracts, negotiates statements of work, undergoes vendor assessments, passes security questionnaires, schedules implementation windows, deploys hardware, trains client staff, supports service tickets, and invoices clients like any serious enterprise technology provider.",
+        "Government and security contracts are a major pillar of the public business. Blacklight does not need to claim that all clients are classified or dramatic. Many are ordinary sensitive institutions: emergency management offices, municipal command centers, court administration facilities, hospitals, defense contractors, laboratory complexes, private security firms, critical infrastructure vendors, secure corporate campuses, and agencies that need local voice tools without consumer-cloud exposure.",
+        "Employees at low clearance are taught to describe Blacklight as a confidential-systems vendor. That phrase is broad enough to be true, boring enough to be ignored, and professional enough to work in rooms where a more exciting answer would create more questions than sales."
+      ],
+      "tables": [
+        {
+          "title": "Common Contract Categories",
+          "columns": ["Category", "Public Description", "Internal Low-Clearance Work"],
+          "rows": [
+            ["Government Administration", "Local voice assistance for secure offices, records, and workflow guidance.", "Procurement support, deployment planning, compliance documentation, training."],
+            ["Emergency Operations", "Hands-free checklists, shift coordination, and local procedural lookup.", "Scenario templates, resilience testing, service readiness, support desks."],
+            ["Medical and Hospital Systems", "Local assistant support for non-diagnostic administrative and procedural workflows.", "Policy indexing, staff training, access configuration, uptime monitoring."],
+            ["Legal and Confidential Offices", "Privilege-aware document and scheduling assistance within local boundaries.", "Document ingestion controls, user roles, audit support, client onboarding."],
+            ["Security Contractors", "Local facility interface and operations checklist support.", "Hardware coordination, incident reporting templates, maintenance cycles."],
+            ["Industrial and Infrastructure Sites", "Voice access to manuals, safety procedures, shift logs, and equipment checklists.", "Field support, controlled vocabulary, ruggedized deployment planning."],
+            ["Military-Adjacent Clients", "Secure local assistant for approved administrative and operational support.", "Additional paperwork, stricter access rules, and more cautious support escalation." ]
+          ]
+        }
+      ],
+      "tags": ["contracts", "government clients", "security clients", "procurement", "service operations"],
+      "relatedEntries": ["blacklight-sales-and-pr-language", "blacklight-compliance-and-legal", "charles-secure-voice-product"]
+    },
+    {
+      "id": "blacklight-corporate-departments",
+      "title": "Corporate Department Structure",
+      "category": "BlackLight Corporate Operations",
+      "summary": "The employee-facing department map for Blacklight Intelligence at standard corporate access levels.",
+      "body": [
+        "Blacklight's ordinary department chart is intentionally believable because it is real. People work in these departments, receive paychecks from these departments, fight over budgets inside these departments, and build careers that have nothing to do with the hidden Company. Some departments brush against restricted work more often than others, but low-clearance staff are taught to think in terms of client confidentiality, not supernatural or extradimensional secrecy.",
+        "The company is structured to support a serious secure-technology product: product leadership decides what the Charles interface is supposed to be; engineering builds and maintains it; deployment teams install it; client operations support it; legal and compliance constrain it; finance pays for it; HR staffs it; PR sells the public story; security keeps the building and client data safe; facilities keeps the O-shaped headquarters operating."
+      ],
+      "tables": [
+        {
+          "title": "Department Map",
+          "columns": ["Department", "Employee-Facing Function"],
+          "rows": [
+            ["Executive Office", "Public strategy, major client relationships, board-facing planning, crisis messaging, and corporate priorities."],
+            ["Product Management", "Defines the Charles product roadmap, approved features, client profiles, and release priorities."],
+            ["Voice and Language Engineering", "Maintains local speech recognition, language model behavior, voice output, and model evaluation."],
+            ["Secure Deployment Engineering", "Packages client instances, hardware images, local network boundaries, and deployment configurations."],
+            ["Client Operations", "Handles onboarding, training, support queues, renewals, and day-to-day client success."],
+            ["Security Operations", "Manages employee access, visitor procedures, building security, client-data safeguards, and incident escalation."],
+            ["Legal and Compliance", "Reviews contracts, privacy obligations, procurement language, record retention, and regulatory issues."],
+            ["Finance and Payroll", "Handles salaries, vendor payments, invoicing, expense approvals, benefits cost tracking, and budget control."],
+            ["Human Resources", "Recruiting, onboarding, performance review, workplace policy, leave coordination, training, and employee relations."],
+            ["Public Relations and Communications", "Marketing language, press responses, client-facing materials, internal newsletters, and brand positioning."],
+            ["Facilities and Workplace Services", "Building maintenance, office moves, badge coordination, supplies, safety drills, and vendor access."],
+            ["Research and Evaluation", "Tests product quality, user experience, secure retrieval performance, red-team behavior, and future product options." ]
+          ]
+        }
+      ],
+      "tags": ["departments", "organization chart", "corporate structure", "employee handbook"],
+      "relatedEntries": ["blacklight-payroll-and-employee-administration", "blacklight-human-resources-initiatives", "blacklight-standard-employee-clearance"]
+    },
+    {
+      "id": "blacklight-payroll-and-employee-administration",
+      "title": "Payroll, Benefits, and Employee Administration",
+      "category": "BlackLight Corporate Operations",
+      "summary": "Lowest-clearance employee-facing information about payroll cycles, benefits, travel, expenses, employee records, and administrative continuity.",
+      "body": [
+        "Blacklight pays people like a real company because it is a real company. Payroll is one of the strongest public proofs that the corporation exists in daylight: salaries, contractor invoices, tax paperwork, benefits elections, leave balances, reimbursements, travel bookings, vendor records, equipment purchases, and ordinary employee documentation all create mundane gravity around the public operation.",
+        "Finance and payroll staff handle salary schedules, direct deposit, tax documents, benefits deductions, overtime rules where applicable, contractor payment, expense approvals, procurement cards, budget coding, travel reimbursement, and emergency continuity pay. Ordinary employees are not asked to understand the deeper BlackLight Company relationship. They are asked to submit time, protect client data, follow expense rules, and escalate irregular payroll questions through approved channels.",
+        "In the BlackLight Era, payroll continuity has become morally important. The company cannot claim to be better than Charles's old unilateral arrangements if workers, contractors, protected support personnel, or field-adjacent staff are left unpaid because an incident was too strange to code correctly. One of the Continuity Office's quiet duties is making sure impossible events still produce ordinary paychecks."
+      ],
+      "tables": [
+        {
+          "title": "Employee Administration Areas",
+          "columns": ["Area", "Low-Clearance Explanation"],
+          "rows": [
+            ["Payroll", "Regular salary, hourly, contractor, and emergency continuity payments."],
+            ["Benefits", "Health coverage, leave, retirement plans, employee assistance, and workplace wellness offerings."],
+            ["Time and Attendance", "Ordinary timekeeping, approved remote work, shift coverage, and incident-related adjustments."],
+            ["Expenses", "Travel, client-site costs, approved equipment, training, and business reimbursement."],
+            ["Employee Records", "Employment documents, training records, reviews, access forms, and policy acknowledgments."],
+            ["Emergency Pay Continuity", "Internal process for keeping staff whole during facility modes, client incidents, or extraordinary closures." ]
+          ]
+        }
+      ],
+      "tags": ["payroll", "benefits", "finance", "employee administration", "continuity pay"],
+      "relatedEntries": ["blacklight-corporate-departments", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "blacklight-human-resources-initiatives",
+      "title": "Human Resources and Internal People Programs",
+      "category": "BlackLight Corporate Operations",
+      "summary": "Standard employee-facing HR programs, internal culture initiatives, onboarding, training, workplace support, and employee-relations language.",
+      "body": [
+        "Human Resources at Blacklight has the same public responsibilities as HR at any large technology contractor: hire people, onboard them, explain benefits, document policy, manage performance cycles, coordinate leave, investigate workplace complaints, support training, and keep the company from destroying itself through preventable management stupidity. The difference is that Blacklight's ordinary HR language sits on top of a building where confidentiality, stress, strange incidents, and compartmentalized knowledge can quietly warp normal workplace life.",
+        "At lowest clearance, HR does not explain the hidden Company. It explains need-to-know culture, confidential client data, secure-room etiquette, workplace respect, reporting channels, wellness resources, safety drills, anti-harassment policy, leave processes, and the importance of not turning restricted-client language into office gossip. It also teaches managers that security does not give them permission to bully employees, demand personal medical details, or treat confusion as disloyalty.",
+        "Blacklight's post-reorientation HR initiatives are partly sincere and partly defensive. The company knows it is asking ordinary people to work inside an unusually high-pressure institution. It therefore invests in employee assistance, post-incident decompression, manager accountability training, confidential reporting channels, emergency shelter briefings, and policies meant to keep secrecy from becoming an excuse for abuse."
+      ],
+      "tables": [
+        {
+          "title": "HR Initiatives",
+          "columns": ["Initiative", "Employee-Facing Purpose"],
+          "rows": [
+            ["Secure Onboarding", "Teach confidentiality, badge use, client sensitivity, and escalation channels without exposing restricted truths."],
+            ["Manager Accountability Training", "Remind supervisors that security culture is not permission to intimidate, retaliate, or overreach."],
+            ["Post-Incident Decompression", "Provide support after facility modes, client crises, disturbing calls, or workplace emergencies."],
+            ["Employee Assistance Program", "Confidential counseling, stress support, family support, and crisis referrals."],
+            ["Respectful Workplace Program", "Anti-harassment, anti-retaliation, accommodation, conflict resolution, and complaint pathways."],
+            ["Confidential Reporting Channels", "Let employees report safety, ethics, payroll, discrimination, access, or management concerns."],
+            ["Emergency Shelter Familiarization", "Explain what staff may hear during drills or building modes without exposing restricted infrastructure."],
+            ["Internal Mobility and Training", "Help employees move between departments, learn secure-support skills, and avoid career dead ends." ]
+          ]
+        }
+      ],
+      "tags": ["HR", "human resources", "employee programs", "workplace culture", "internal initiatives"],
+      "relatedEntries": ["blacklight-payroll-and-employee-administration", "blacklight-standard-employee-clearance", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "blacklight-sales-and-pr-language",
+      "title": "Sales, Public Relations, and Corporate Language",
+      "category": "BlackLight Corporate Operations",
+      "summary": "Approved public-facing language for describing Blacklight's products, clients, values, and secure-technology identity.",
+      "body": [
+        "Blacklight's public language is deliberately boring in the way successful enterprise technology language is often boring. It talks about local control, confidentiality, compliance, operational efficiency, secure workflows, accountable automation, resilient interfaces, and reducing exposure to uncontrolled consumer-cloud systems. This language is not merely a lie. It accurately describes the public product while failing to mention everything that would get ordinary clients eaten by the real story.",
+        "Public Relations maintains press statements, internal newsletters, client case studies, executive talking points, product launch language, crisis statements, and employee-facing explanations for why some work must remain compartmentalized. Marketing makes Charles sound useful, reliable, professional, and secure rather than miraculous. Sales makes the product sound like a procurement-safe solution rather than the shadow of an extradimensional intelligence wearing enterprise software as a hat.",
+        "The company avoids claiming that Charles replaces human judgment. Approved language emphasizes assistance, retrieval, workflow support, local operation, auditability, and client-defined control. That is partly legal caution and partly philosophical necessity. Blacklight cannot publicly build legitimacy on the idea that a voice in the room should decide for everyone."
+      ],
+      "tables": [
+        {
+          "title": "Approved vs. Restricted Language",
+          "columns": ["Approved Public Language", "Restricted or Discouraged Language"],
+          "rows": [
+            ["Secure voice operations interface.", "The real Charles speaking through the system."],
+            ["Localized assistant deployment.", "Dimensional contact point."],
+            ["Client-defined workflow support.", "The voice that knows better than the staff."],
+            ["Audit-friendly local processing.", "Unexplainable intelligence in the room."],
+            ["Confidential-systems vendor.", "Cover company for supernatural operations."],
+            ["Resilient facility interface.", "Building mind or living headquarters." ]
+          ]
+        }
+      ],
+      "tags": ["PR", "marketing", "sales", "corporate language", "public messaging"],
+      "relatedEntries": ["charles-secure-voice-product", "blacklight-contracting-and-client-operations"]
+    },
+    {
+      "id": "blacklight-compliance-and-legal",
+      "title": "Legal, Compliance, Privacy, and Audit",
+      "category": "BlackLight Corporate Operations",
+      "summary": "The standard employee-facing legal and compliance structure behind Blacklight's secure voice product and client obligations.",
+      "body": [
+        "Legal and Compliance make Blacklight plausible. A company selling local voice systems into secure environments needs contracts, data-processing terms, privacy reviews, record-retention schedules, vendor assessments, training attestations, incident response language, export review, procurement certifications, accessibility statements, insurance coordination, and policies that sound exactly as dry as they should.",
+        "At lowest clearance, compliance is framed around ordinary enterprise obligations: protect client data, do not move client files into unauthorized tools, do not discuss client details in public spaces, follow retention rules, report suspected access mistakes, complete required training, and treat audit logs as business records rather than personal diaries.",
+        "This department also creates useful friction. It slows reckless product promises, forces sales to stop saying things engineering cannot support, makes security justify access, and gives ordinary employees a formal reason to refuse improper shortcuts. In a setting full of supernatural exceptions, compliance is one of the mundane powers that can still say no."
+      ],
+      "tables": [
+        {
+          "title": "Compliance Areas",
+          "columns": ["Area", "Employee-Facing Meaning"],
+          "rows": [
+            ["Client Confidentiality", "Do not reveal client identity, site details, documents, or deployment specifics without authorization."],
+            ["Local Data Boundaries", "Client data remains within approved deployment and support channels."],
+            ["Audit Records", "Usage, access, changes, and support actions may be logged and reviewed."],
+            ["Incident Reporting", "Report mistakes, suspected exposure, device loss, unusual access, or unsafe client behavior."],
+            ["Contract Boundaries", "Do not promise features, access, uptime, or integrations outside approved terms."],
+            ["Training Requirements", "Complete assigned security, privacy, workplace, and product support training." ]
+          ]
+        }
+      ],
+      "tags": ["legal", "compliance", "privacy", "audit", "client confidentiality"],
+      "relatedEntries": ["blacklight-standard-employee-security-procedures", "blacklight-contracting-and-client-operations"]
+    },
+    {
+      "id": "blacklight-standard-employee-clearance",
+      "title": "Standard Employee Clearance: Level C-0 / Corporate Baseline",
+      "category": "BlackLight Employee Access",
+      "summary": "The lowest internal access level for ordinary Blacklight employees: enough to work for the company without knowing the hidden Company-level truth.",
+      "body": [
+        "Most Blacklight employees operate at the corporate baseline clearance, informally called C-0 by security staff. C-0 does not mean untrusted. It means the employee has no need to know anything beyond the public corporation, their department, their clients if assigned, and ordinary secure-technology procedures. A receptionist, payroll specialist, HR coordinator, QA tester, facilities scheduler, junior engineer, marketing writer, or client-support associate can do real work at C-0.",
+        "C-0 employees know Blacklight handles confidential clients. They know Charles is a secure local voice product. They know some clients are government, security, legal, medical, industrial, or defense-adjacent. They know the building has secure areas. They know they should not tailgate, gossip about clients, photograph restricted spaces, plug in unknown devices, or assume every Charles voice they hear is meant for them.",
+        "They do not know about the true Charles, the foyer attunement antenna, supernatural courts, BlackLight Company operations, Q-MAP continuity, Eldritch hazards, hidden facility autonomy, or why some rooms seem to matter more than the floor plan says. When they encounter something they cannot explain, their approved instruction is to step away, document only ordinary observable facts, and contact Security Operations or their manager through approved channels."
+      ],
+      "tables": [
+        {
+          "title": "C-0 Access Boundaries",
+          "columns": ["Permitted Knowledge", "Not Included at C-0"],
+          "rows": [
+            ["Blacklight is a secure voice-interface company.", "The real Charles is an extradimensional intelligence."],
+            ["Charles deployments are local client systems.", "Some systems may be used as cover for direct Charles interaction."],
+            ["The company serves confidential clients.", "The hidden Company handles supernatural, cosmic, and continuity issues."],
+            ["The building has secure zones and emergency procedures.", "The building can sustain months-long sealed autonomy through hidden infrastructure."],
+            ["Some information is need-to-know.", "Some information is restricted because knowing it can be dangerous."],
+            ["Report unusual events through approved channels.", "Investigate restricted anomalies personally." ]
+          ]
+        }
+      ],
+      "tags": ["clearance", "C-0", "standard employee", "lowest security level", "employee access"],
+      "relatedEntries": ["blacklight-standard-employee-security-procedures", "blacklight-human-resources-initiatives", "blacklight-public-corporate-overview"]
+    },
+    {
+      "id": "blacklight-standard-employee-security-procedures",
+      "title": "Standard Employee Security Procedures",
+      "category": "BlackLight Employee Access",
+      "summary": "Ordinary security procedures taught to baseline Blacklight employees without exposing higher-clearance facility or Company secrets.",
+      "body": [
+        "Standard employee security at Blacklight is built around ordinary habits that remain useful even when the real reason for them is stranger than the employee knows. Badge use, visitor escort, clean-desk expectations, device control, conference-room discipline, client confidentiality, and incident reporting are all legitimate secure-company procedures. They also keep standard employees from walking into things they are not cleared to understand.",
+        "Security training is practical. Employees are not told to be heroes. They are told to avoid tailgating, challenge politely when safe, report lost badges, use approved devices, avoid discussing clients in public, stop work if a room or system behaves unusually, and leave restricted events to trained staff. The lowest-clearance rule is not cowardice. It is survival and consent: do not make yourself part of an incident you are not cleared or trained to handle.",
+        "The company also uses cover-language for building modes. Employees may hear terms like facility maintenance, access review, client privacy hold, network servicing, safety routing, internal drill, or executive continuity. The language is bland by design. It gives staff something to do without forcing them to learn unsafe or restricted details."
+      ],
+      "tables": [
+        {
+          "title": "Baseline Security Rules",
+          "columns": ["Rule", "Employee-Facing Reason"],
+          "rows": [
+            ["Wear and protect your badge.", "Badges confirm authorized movement and help account for staff during building events."],
+            ["Do not tailgate or wave people through secure doors.", "Every person entering controlled areas must have their own authorization."],
+            ["Escort visitors according to policy.", "Clients, vendors, applicants, and guests must remain in approved spaces."],
+            ["Do not photograph restricted areas.", "Client confidentiality and facility security require controlled visual records."],
+            ["Use approved devices and storage.", "Unauthorized devices can expose client data or compromise local deployments."],
+            ["Report unusual system behavior.", "Voice prompts, access logs, elevators, or room systems behaving oddly may indicate a support issue."],
+            ["Leave during safety routing instructions.", "Building movement instructions are designed to preserve staff safety without unnecessary alarm."],
+            ["Do not speculate publicly about clients or incidents.", "Rumor can damage client trust, employee safety, and legal obligations." ]
+          ]
+        }
+      ],
+      "tags": ["security procedures", "employee security", "badge policy", "visitor policy", "C-0"],
+      "relatedEntries": ["blacklight-standard-employee-clearance", "blacklight-public-corporate-overview", "facility-mode-index"]
+    },
+    {
+      "id": "blacklight-public-leadership-portfolios",
+      "title": "Public Leadership and Personnel Portfolios",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "Publicly acknowledged executives, board members, departmental directors, and senior managers used on Blacklight's corporate HR and leadership pages.",
+      "body": [
+        "Blacklight publishes a leadership page because serious clients expect to know who runs a company selling secure systems into sensitive environments. The profiles are written in respectable corporate language and focus on experience, accountability, compliance, product reliability, and public responsibility. They do not mention hidden Company duties unless a title is already explainable at low clearance.",
+        "The public leadership roster gives the company a face. It also creates useful fiction. When Charles is heard advising important people around the world, the public can assume those people are using Blacklight's Charles products under contract. When a senior executive appears at a procurement conference, nobody needs to assume anything stranger than a secure-technology vendor trying to win more business.",
+        "Not every powerful person in BlackLight is on the public page, and not every public executive understands the full truth. That asymmetry is intentional. The public corporation needs visible leaders; the hidden Company needs compartmentalization."
+      ],
+      "tables": [
+        {
+          "title": "Executive Leadership",
+          "columns": ["Name", "Public Role", "Public Portfolio"],
+          "rows": [
+            ["Helena Marrow", "Chief Executive Officer", "Former secure-infrastructure executive credited with turning Blacklight from a specialist deployment shop into a national confidential-systems vendor."],
+            ["Marcus Venn", "Chief Operating Officer", "Runs deployment operations, client continuity, facility readiness, and cross-department execution."],
+            ["Dr. Priya Sable", "Chief Technology Officer", "Leads local language-model engineering, speech processing, model evaluation, and secure product architecture."],
+            ["Elian Cross", "Chief Security Officer", "Responsible for corporate security, client-data safeguards, building access culture, and incident escalation policy."],
+            ["Marisol Keene", "Chief Legal and Compliance Officer", "Oversees contracts, privacy, audit obligations, procurement language, and compliance governance."],
+            ["Jonas Rill", "Chief Financial Officer", "Manages budget discipline, payroll continuity, client invoicing, procurement controls, and long-term reserve planning." ]
+          ]
+        },
+        {
+          "title": "Board and Senior Departmental Directors",
+          "columns": ["Name", "Public Role", "Public Portfolio"],
+          "rows": [
+            ["Avery Thorne", "Board Chair", "Public governance figure with a background in enterprise security procurement and risk oversight."],
+            ["Nadia Vale", "Independent Board Member", "Former emergency-management administrator focused on continuity, public-sector trust, and resilience contracts."],
+            ["Victor Halren", "Independent Board Member", "Industrial systems investor who supports ruggedized local deployments and infrastructure clients."],
+            ["Sera Quill", "Director of Human Resources", "Owns onboarding, benefits, employee relations, manager accountability, and internal reporting channels."],
+            ["Owen Pike", "Director of Client Operations", "Leads onboarding, client success, support queues, renewals, and service-level coordination."],
+            ["Tessa Grane", "Director of Public Relations", "Controls public messaging, press language, launch copy, client-facing statements, and brand discipline."],
+            ["Dima Ro", "Director of Secure Deployment Engineering", "Manages deployment packages, client hardware images, support configuration, and field installation readiness."],
+            ["Anika Shaw", "Director of Facilities and Workplace Services", "Keeps the O-shaped headquarters operating as a public corporate workplace while coordinating ordinary maintenance and staff services."],
+            ["Caleb Orth", "Director of Research Evaluation", "Runs product testing, secure retrieval evaluation, UX studies, and future interface assessments." ]
+          ]
+        }
+      ],
+      "tags": ["leadership", "personnel portfolios", "CEO", "board", "departmental directors", "HR page"],
+      "relatedEntries": ["blacklight-hr-leadership-page", "blacklight-corporate-departments"]
+    },
+    {
+      "id": "blacklight-hr-leadership-page",
+      "title": "Corporate HR Leadership Page",
+      "category": "BlackLight Personnel Portfolios",
+      "summary": "The HR-facing company directory view: executives, board members, department heads, reporting clarity, and ordinary organizational legitimacy.",
+      "body": [
+        "The HR leadership page is less glamorous than the public marketing page and more useful to employees. It tells staff who the CEO is, who sits on the board, who runs each major department, how reporting lines work, and where employees can escalate questions about payroll, workplace concerns, access, compliance, client operations, or facility services.",
+        "At C-0, the page is deliberately ordinary. It looks like the leadership page of a serious secure-technology company. The weirdness is not in what it says; the weirdness is in what it makes unnecessary to ask. A functional HR directory gives employees a mundane explanation for authority, budget, policy, access, discipline, and internal communications.",
+        "Campaign scenes can use the HR page when a player needs to identify who approved a policy, who controls payroll, who can answer a security complaint, who has public authority to speak to a client, or which director would be most embarrassed by a failure becoming visible."
+      ],
+      "tables": [
+        {
+          "title": "Employee Escalation Map",
+          "columns": ["Issue", "Public Escalation Path"],
+          "rows": [
+            ["Payroll or expense problem", "Finance and Payroll, then CFO office for unresolved continuity issues."],
+            ["Workplace complaint or manager misconduct", "Human Resources, confidential reporting channel, then HR Director."],
+            ["Client deployment issue", "Client Operations, Secure Deployment Engineering, then COO if business continuity is threatened."],
+            ["Privacy or contract concern", "Legal and Compliance, then Chief Legal and Compliance Officer."],
+            ["Building access or visitor issue", "Security Operations, Facilities, then Chief Security Officer for major incidents."],
+            ["Public statement or client-facing language", "Public Relations and Communications, then Executive Office."],
+            ["Product behavior concern", "Product Management, Research Evaluation, or Voice and Language Engineering depending on issue." ]
+          ]
+        }
+      ],
+      "tags": ["HR directory", "leadership page", "escalation map", "board members", "department heads"],
+      "relatedEntries": ["blacklight-public-leadership-portfolios", "blacklight-human-resources-initiatives"]
+    }
+  ]
+}
