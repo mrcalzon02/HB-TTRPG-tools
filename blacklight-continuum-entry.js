@@ -88,9 +88,15 @@
       <div class="hero-card no-print">
         <p class="eyebrow">Blacklight Continuum campaign workspace</p>
         <h2 id="blacklight-continuum-title">No Return Signal</h2>
-        <p>Far-future mirror-universe science-fiction espionage, identity horror, supernatural capability development, advanced technology, and an original d10 dice-pool system.</p>
+        <p>Far-future mirror-universe science-fiction espionage, identity horror, supernatural capability development, advanced technology, the BlackLight Era operating environment, and an original d10 dice-pool system.</p>
       </div>
       <div class="module-grid no-print">
+        <article class="module-card">
+          <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">BlackLight Era</span></div>
+          <h3>The BlackLight Era</h3>
+          <p>Open the post-reorientation campaign primer: Blacklight Intelligence as public corporation, Faux Charles as secure voice product, the O-shaped headquarters, and the new operating environment after Charles's absence and return.</p>
+          <button id="blacklight-open-era" class="primary-action" type="button">Open BlackLight Era Primer</button>
+        </article>
         <article class="module-card">
           <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">player and GM sections</span></div>
           <h3>The Ar'nock Derelict</h3>
@@ -118,6 +124,7 @@
       <section id="blacklight-browser" class="blacklight-browser no-print" hidden></section>`;
     main.appendChild(section);
 
+    section.querySelector('#blacklight-open-era')?.addEventListener('click', () => openBrowser('blacklight-era-formation'));
     section.querySelector('#blacklight-open-wiki')?.addEventListener('click', () => openBrowser());
     section.querySelector('#blacklight-open-rules')?.addEventListener('click', () => openBrowser('blacklight-d10-foundation'));
   }
@@ -238,7 +245,7 @@
       button.innerHTML = `<strong>${escapeHtml(entry.title)}</strong><small>${escapeHtml(entry.category || 'Reference')}</small>`;
       button.addEventListener('click', () => {
         renderEntry(browser, entries, entry.id);
-        list.querySelectorAll('button').forEach(item => item.classList.toggle('active', item === button));
+        renderList(browser, entries, entry.id);
       });
       list.appendChild(button);
     });
