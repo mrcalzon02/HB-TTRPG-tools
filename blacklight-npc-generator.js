@@ -116,12 +116,22 @@
     return pick(compatible.length ? compatible : state.data.categories, rng) || state.data.categories[0];
   }
 
+  function isEldritchCategory(category) {
+    return String(category?.id || '').startsWith('eldritch-') || category?.id === 'eldritch-bound';
+  }
+
   function namePoolFor(category, power) {
+    if (isEldritchCategory(category)) return state.data.names.eldritch || state.data.names.entity;
     if (power >= 9 || category.id === 'cosmic-sovereign') return state.data.names.cosmic;
     if (category.id === 'machine-intelligence') return state.data.names.machine;
-    if (['otherworldly-entity', 'eldritch-bound', 'monster-beast', 'alien-remnant'].includes(category.id) || power >= 7) return state.data.names.entity;
+    if (['otherworldly-entity', 'monster-beast', 'alien-remnant'].includes(category.id) || power >= 7) return state.data.names.entity;
     if (['mundane-vermin', 'mundane-animal'].includes(category.id)) return [];
     return state.data.names.human;
+  }
+
+  function lookupFor(category, rng) {
+    if (!isEldritchCategory(category)) return null;
+    return pick(state.data.eldritchCreatureLookupTables || [], rng);
   }
 
   function diceGuidance(power) {
@@ -134,15 +144,15 @@
     if (power === 7) return '11-14 dice or multiple scene tools; named regional threat.';
     if (power === 8) return '14-18 dice where dice still matter; usually an arc-scale problem.';
     if (power === 9) return 'Narrative-tier opposition; rolls decide survival, leverage, access, or consequence.';
-    return 'Do not use as a normal stat block. Define domain, permission, cost, limits, and what lesser beings can influence.';
+    return 'Do not use as a normal stat block. Define domain, permission, cost, limits, clearance restrictions, and what lesser beings can influence.';
   }
 
   function threatUse(power) {
     if (power <= 2) return 'Use as evidence, moral pressure, witness, dependency, omen, or vulnerable thing at risk.';
     if (power <= 4) return 'Use as complication, local obstacle, support contact, low-tier combatant, or public-facing liability.';
-    if (power <= 6) return 'Use as a serious scene threat, ally, handler, monster, operative rival, or specialist with leverage.';
-    if (power <= 8) return 'Use as a named antagonist, patron, court agent, territory holder, or operation-defining force.';
-    return 'Use as campaign structure, cosmic pressure, impossible authority, or a being negotiated around rather than simply attacked.';
+    if (power <= 6) return 'Use as a serious scene threat, ally, handler, monster, operative rival, cult operator, or restricted evidence source.';
+    if (power <= 8) return 'Use as a named antagonist, patron, court agent, territory holder, high-clearance containment hazard, or operation-defining force.';
+    return 'Use as campaign structure, cosmic pressure, impossible authority, sealed cognitohazard, or a being negotiated around rather than simply attacked.';
   }
 
   function buildProfile() {
@@ -185,6 +195,9 @@
       complication,
       capabilities,
       limitations,
+      clearanceLevels: category.clearanceLevels || [],
+      restrictedHandling: category.restrictedHandling || '',
+      eldritchLookup: lookupFor(category, identityRng),
       outOfBand,
       diceGuidance: diceGuidance(power),
       threatUse: threatUse(power)
@@ -199,6 +212,17 @@
     return `<ul class="npc-list">${(items || []).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
   }
 
+  function renderRestrictedCards(profile) {
+    const cards = [];
+    if (profile.clearanceLevels.length || profile.restrictedHandling) {
+      cards.push(`<article class="npc-card wide"><h3>Restricted Clearance Handling</h3><p><strong>${escapeHtml(profile.clearanceLevels.join(' / ') || 'Unlisted clearance')}</strong>${profile.restrictedHandling ? '\n' + escapeHtml(profile.restrictedHandling) : ''}</p></article>`);
+    }
+    if (profile.eldritchLookup) {
+      cards.push(`<article class="npc-card wide"><h3>Eldritch Lookup Table</h3><p><strong>${escapeHtml(profile.eldritchLookup.source)} — ${escapeHtml(profile.eldritchLookup.safeLabel)}</strong>\nMinimum file access: ${escapeHtml(profile.eldritchLookup.clearance)}\nPossible forms: ${escapeHtml((profile.eldritchLookup.creatureTypes || []).join(', '))}\nField signs: ${escapeHtml((profile.eldritchLookup.fieldSigns || []).join('; '))}</p></article>`);
+    }
+    return cards.join('');
+  }
+
   function renderProfile() {
     const profile = state.profile;
     if (!profile) return;
@@ -211,6 +235,7 @@
           <span>Power Class ${profile.power}</span>
           <span>${escapeHtml(profile.level.label)}</span>
           <span>${escapeHtml(profile.faction)}</span>
+          ${profile.clearanceLevels.length ? `<span>${escapeHtml(profile.clearanceLevels.join(' / '))}</span>` : ''}
           <span>Seed: ${escapeHtml(profile.seed)}</span>
         </div>
         ${meter(profile.power)}
@@ -228,6 +253,7 @@
           <article class="npc-card"><h3>Encounter Use</h3><p>${escapeHtml(profile.threatUse)}</p></article>
           <article class="npc-card"><h3>Motive</h3><p>${escapeHtml(profile.motive)}</p></article>
           <article class="npc-card wide"><h3>Power Class Note</h3><p>${escapeHtml(profile.level.narrative)}${profile.outOfBand ? '\n\nOut-of-band result: the selected category does not normally occupy this Power Class. Treat this as an exceptional specimen, joke of reality, artificial amplification, downgrade, or deliberate campaign anomaly.' : ''}</p></article>
+          ${renderRestrictedCards(profile)}
         </div>
       </section>
 
@@ -242,7 +268,7 @@
 
       <section class="npc-section">
         <h2>Power Scale Reference</h2>
-        <p class="npc-callout"><strong>Power Class 1</strong> starts at insignificant mundane creatures such as mice, ants, vermin, and fragile ordinary beings. <strong>Power Class 10</strong> reaches Charles-tier extravagant limited sovereigns: entities capable of continent, stellar, dimensional, or existential feats while still having strange prohibitions, costs, domains, blind spots, or political constraints.</p>
+        <p class="npc-callout"><strong>Power Class 1</strong> starts at insignificant mundane creatures such as mice, ants, vermin, and fragile ordinary beings. <strong>Power Class 10</strong> reaches Charles-tier extravagant limited sovereigns and E-8 sealed intrusion phenomena: entities capable of continent, stellar, dimensional, existential, or cognitohazardous feats while still having strange prohibitions, costs, domains, blind spots, political constraints, or Charles-only clearance restrictions.</p>
       </section>`;
   }
 
@@ -260,6 +286,9 @@
       `Environment: ${profile.environment}`,
       `Temperament: ${profile.temperament}`,
       `Motive: ${profile.motive}`,
+      profile.clearanceLevels.length ? `Restricted Clearance: ${profile.clearanceLevels.join(' / ')}` : '',
+      profile.restrictedHandling ? `Restricted Handling: ${profile.restrictedHandling}` : '',
+      profile.eldritchLookup ? `Eldritch Lookup: ${profile.eldritchLookup.source} — ${profile.eldritchLookup.safeLabel} (${profile.eldritchLookup.clearance})` : '',
       `Mechanical Handling: ${profile.diceGuidance}`,
       `Encounter Use: ${profile.threatUse}`,
       '',
@@ -270,7 +299,7 @@
       ...profile.limitations.map(item => `- ${item}`),
       '',
       `Complication: ${profile.complication}`
-    ].join('\n');
+    ].filter(Boolean).join('\n');
   }
 
   function generate() {
