@@ -1,8 +1,8 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "BlackLight Era",
-  "schemaVersion": "1.0.0",
-  "description": "Fictional tabletop reference for BlackLight facility scene modes, layered building states, staff movement fiction, and multi-vector incident framing inside the O-shaped headquarters.",
+  "schemaVersion": "1.1.0",
+  "description": "Fictional tabletop reference for BlackLight facility scene modes, layered building states, staff movement fiction, defensive infrastructure, environmental isolation, reserve power, and multi-vector incident framing inside the O-shaped headquarters.",
   "entries": [
     {
       "id": "blacklight-facility-scene-modes-overview",
@@ -10,18 +10,49 @@
       "category": "BlackLight Facility Modes",
       "summary": "A fictional tabletop framework for how the O-shaped Blacklight headquarters changes state during complicated incidents.",
       "body": [
-        "Blacklight facility modes are campaign tools, not real-world instructions. They describe how the fictional O-shaped headquarters changes tone when a scene becomes dangerous, strange, politically sensitive, or hazardous to ordinary staff knowledge.",
-        "The building protects three overlapping truths: the public corporation, the hidden Company, and the ordinary people who work inside a place stranger than most of them are cleared to know. A facility mode is therefore a story state: doors, elevators, signs, staff routing, voice prompts, and room access begin communicating what kind of scene the players are in.",
-        "Modes can apply to one office, one ring, one floor, the inner core, a demonstration suite, a records room, or the whole facility. The goal is to create pressure and choices without turning the building into a simple bunker."
+        "Blacklight facility modes are campaign tools, not real-world instructions. They describe how the fictional O-shaped headquarters changes tone when a scene becomes dangerous, strange, politically sensitive, environmentally hostile, or hazardous to ordinary staff knowledge.",
+        "The building protects three overlapping truths: the public corporation, the hidden Company, and the ordinary people who work inside a place stranger than most of them are cleared to know. A facility mode is therefore a story state: doors, elevators, signs, staff routing, voice prompts, air handling, reserve power, pillar systems, and room access begin communicating what kind of scene the players are in.",
+        "Modes can apply to one office, one ring, one floor, an interstitial utility deck, the inner core, a demonstration suite, a records room, a server section, or the whole facility. The goal is to create pressure and choices without turning the building into a simple bunker.",
+        "The BlackLight headquarters is designed to survive prolonged isolation. It can continue operating autonomously for months under sealed conditions if the emergency is severe enough, but every hour of sealed autonomy creates social, moral, logistical, psychological, and supernatural pressure that has to be paid for later."
       ],
       "keyFacts": [
         "Facility modes are fictional campaign-state tools.",
-        "Modes can be layered by public ring, controlled middle layers, inner core, department, or room.",
-        "The same incident may require public calm, staff shelter, information restraint, supernatural diplomacy, and machine isolation at the same time.",
-        "Every mode should create a question about consent, cover, safety, and accountability."
+        "Modes can be layered by public ring, controlled middle layers, inner core, department, floor, room, or interstitial utility deck.",
+        "Every occupied floor has an isolated positive-pressure air system capable of shifting into sealed internal recirculation when contamination is detected.",
+        "Every floor has an interstitial crawlspace utility layer for environmental routing, power controllers, sensor trunks, and service access.",
+        "The subcore reserve plant sits seven floors below the middle of the complex and can support the facility for approximately five months under controlled emergency load.",
+        "Distributed area batteries can carry local sections for roughly twenty-four hours after external power loss, while central reserve banks can maintain minimum emergency operation for roughly two months.",
+        "Every mode should create a question about consent, cover, safety, autonomy, and accountability."
       ],
-      "tags": ["facility modes", "Blacklight offices", "campaign states", "O-shaped headquarters"],
-      "relatedEntries": ["blacklight-offices", "facility-mode-index", "multi-vector-incident-framing"]
+      "tags": ["facility modes", "Blacklight offices", "campaign states", "O-shaped headquarters", "sealed autonomy"],
+      "relatedEntries": ["blacklight-offices", "facility-mode-index", "blacklight-building-infrastructure-overview", "multi-vector-incident-framing"]
+    },
+    {
+      "id": "blacklight-building-infrastructure-overview",
+      "title": "Building Infrastructure Overview",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "The headquarters is an O-shaped hardened corporate facility with public-facing operations wrapped around concealed autonomous survival, environmental, and compartment systems.",
+      "body": [
+        "The public explanation is that Blacklight operates a secure voice-interface company for confidential, military-adjacent, and high-security environments. The building supports that story with real offices, real marketing teams, real engineering floors, real staff support, real client demonstration spaces, and genuine commercial operations. Under that public face is a hardened continuity architecture built for scenarios where the building may need to protect itself, its staff, its records, and its hidden Company functions without immediate outside support.",
+        "The O-shaped layout matters. The outer ring can remain commercially legible while inner layers change mode. A visitor may see normal corporate corridors while a floor above has entered Staff Shelter, an inner record section has entered Deep Core Seal, and a server wedge has entered Signal Quiet. The building is not one door state; it is a layered organism of public space, controlled space, restricted space, utility space, and sealed space.",
+        "For campaign purposes, the building should feel less like a fortress and more like a corporate machine that can suddenly remember it was designed to endure a siege. The lights do not simply go red. The building becomes quieter, more deliberate, more partitioned, and more aware of who has standing to move."
+      ],
+      "tables": [
+        {
+          "title": "Major Infrastructure Layers",
+          "columns": ["Layer", "Fictional Function", "Scene Effect"],
+          "rows": [
+            ["Public Outer Ring", "Client areas, offices, product demonstrations, marketing, reception, and ordinary commercial presence.", "The cover story can continue while danger moves behind the skin of the building."],
+            ["Controlled Middle Layers", "Clearance-aware workspaces, staff routing, restricted elevators, security offices, and technical support sections.", "Characters encounter access friction, staff accountability, and partial information."],
+            ["Inner Core", "Protected records, high-clearance rooms, continuity offices, reserve controls, and Company-adjacent functions.", "The building becomes honest about what it is protecting."],
+            ["Interstitial Utility Decks", "Crawlspace floors between occupied levels carrying air controls, power controllers, sensor trunks, sealed routing, and service access.", "Threats may be heard above or below before they are seen; maintenance staff become crucial NPCs."],
+            ["Subcore Reserve Plant", "Central reserve generator and emergency infrastructure seven floors beneath the middle of the complex.", "A long siege becomes possible, but the building becomes socially and morally pressurized."],
+            ["High-Clearance Reserve Stores", "Food, water, essential supplies, protected records, and continuity caches for authorized personnel and sheltered dependents.", "Survival is possible, but rationing and consent become story questions." ]
+          ]
+        }
+      ],
+      "tags": ["building infrastructure", "O-shaped building", "inner core", "utility decks", "reserve plant"],
+      "relatedEntries": ["facility-mode-index", "reserve-power-and-autonomy", "interstitial-utility-decks"]
     },
     {
       "id": "facility-mode-index",
@@ -29,8 +60,8 @@
       "category": "BlackLight Facility Modes",
       "summary": "A list of fictional facility modes used to frame different kinds of BlackLight headquarters scenes.",
       "body": [
-        "Facility modes are modular. The outer ring may remain in Public Continuity while an inner meeting room enters Information Hold and a server floor enters Signal Quiet. This lets the building remain a workplace while parts of it become honest about the crisis.",
-        "Narrate modes through changed signage, shorter voice prompts, different elevator behavior, calmer staff language, rerouted hallways, and the sudden feeling that every badge reader is asking a more personal question than before."
+        "Facility modes are modular. The outer ring may remain in Public Continuity while an inner meeting room enters Information Hold, a server floor enters Signal Quiet, a floor air system enters Atmospheric Isolation, and a high-clearance section enters Deep Core Seal. This lets the building remain a workplace while parts of it become honest about the crisis.",
+        "Narrate modes through changed signage, shorter voice prompts, different elevator behavior, calmer staff language, rerouted hallways, closed bulkhead partitions, ceiling baffles, isolated air cycles, and the sudden feeling that every badge reader is asking a more personal question than before."
       ],
       "tables": [
         {
@@ -45,13 +76,201 @@
             ["Signal Quiet", "Local systems, records, or voices may not be trustworthy.", "Networked convenience gives way to local confirmation and minimal prompts."],
             ["Guest-Law Hold", "Fae, spirit, court, or hospitality rules may apply.", "Movement and speech become formal; invitation status matters."],
             ["Information Hold", "The dangerous thing may be a symbol, phrase, record, memory, or explanation.", "The building reduces unnecessary detail until cleared people can interpret safely."],
+            ["Atmospheric Isolation", "A floor detects airborne, chemical, supernatural, or unknown environmental contamination.", "The affected floor shifts toward sealed internal air while adjacent floors preserve pressure separation."],
+            ["Pillar Watch", "A serious physical, creature, or entity-body hazard threatens a controlled route.", "Pillar-mounted defense systems become visible as a scene threat and deterrent."],
             ["Continuity Exit", "Cover and occupancy cannot both be preserved.", "People leave through structured explanations while protected records remain accounted for."],
             ["Null Rooming", "Charles-restricted material or an unexplainable pattern is present.", "Certain rooms become isolated from normal explanation until director or Charles review." ]
           ]
         }
       ],
-      "tags": ["facility modes", "building states", "scene framing"],
-      "relatedEntries": ["multi-vector-incident-framing", "blacklight-facility-scene-modes-overview"]
+      "tags": ["facility modes", "building states", "scene framing", "atmospheric isolation", "pillar watch"],
+      "relatedEntries": ["multi-vector-incident-framing", "blacklight-facility-scene-modes-overview", "pillar-defense-systems", "floor-isolated-hvac"]
+    },
+    {
+      "id": "pillar-defense-systems",
+      "title": "Pillar Defense Systems",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "Automated defense systems are concealed within structural pillars across multiple floors and function as fictional scene-control assets during severe facility modes.",
+      "body": [
+        "Many visible pillars in the Blacklight headquarters are not only structural. On restricted floors and selected controlled routes, pillar housings conceal automated defense systems designed to make a corridor, lobby, lift landing, records approach, or inner-core threshold become dangerous to an entity attempting to force access.",
+        "The existence of these systems is itself restricted knowledge. Most public-facing staff know only that some areas have advanced emergency protection. High-clearance BlackLight personnel know that certain pillars can enter Pillar Watch, unfolding or exposing defensive hardware as part of the building's fictional siege-survival posture.",
+        "These systems should be used in play as tension and scene pressure, not as a replacement for characters. They can delay, deter, redirect, or threaten an attacker, but they also raise moral questions: who authorized activation, who might be in the line of danger, what if the target is a confused supernatural guest, and what if the building is being tricked into defending the wrong thing?",
+        "The systems are deliberately tied to facility modes rather than casual use. Public Continuity hides them. Soft Seal keeps them dormant. Hard Seal wakes their housings. Pillar Watch makes them visibly active. Null Rooming may hide whether they are active at all."
+      ],
+      "tables": [
+        {
+          "title": "Pillar Defense Scene Uses",
+          "columns": ["Use", "Tabletop Effect"],
+          "rows": [
+            ["Route Denial", "A corridor or lift landing becomes too dangerous to cross casually."],
+            ["Delay", "A hostile force is slowed long enough for staff shelter, record protection, or evacuation choices."],
+            ["Deterrent Reveal", "The building visibly stops pretending it is merely a corporate office."],
+            ["Authorization Conflict", "Characters must decide whether activating the system protects people or escalates the wrong incident."],
+            ["Compromised Trust", "If machine, fae, or information hazards are present, the characters may question whether the building is reading the scene correctly." ]
+          ]
+        }
+      ],
+      "tags": ["pillar systems", "facility defense", "Pillar Watch", "restricted infrastructure"],
+      "relatedEntries": ["facility-mode-index", "machine-signal-facility-concerns", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "door-bulkhead-and-ceiling-partitions",
+      "title": "Automated Doors, Bulkheads, and Ceiling Partitions",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "The building uses controlled doors, bulkhead partitions, ceiling baffles, and sealed section boundaries to change its internal shape during facility modes.",
+      "body": [
+        "The Blacklight building is designed so that a hallway is not always the same hallway in every mode. Automated door controls, bulkhead partitions, and ceiling-mounted partition systems allow a floor to become smaller, safer, stranger, or more difficult to traverse when a facility mode changes.",
+        "In ordinary operation, these boundaries disappear into commercial architecture. Under Soft Seal, they reroute without drama. Under Hard Seal, they become obvious. Under Deep Core Seal, the building can divide a floor into protected, contaminated, uncertain, and no-access sections. Under Information Hold, some doors may close simply because the conversation on the other side is no longer safe for uncleared staff to overhear.",
+        "These systems are not only physical barriers. They are story boundaries. A closed bulkhead can mean a staff shelter is safe, a record room is protected, a supernatural guest has not been invited past a threshold, or an information hazard has been kept from becoming a rumor."
+      ],
+      "tables": [
+        {
+          "title": "Partition Functions",
+          "columns": ["System", "Fictional Function", "Scene Question"],
+          "rows": [
+            ["Automated Door Controls", "Change access by mode, clearance, ring, room status, or staff safety priority.", "Who is allowed to move, and who decides?"],
+            ["Bulkhead Partitions", "Separate floor sections during confirmed hazards or protected movement.", "What is the building choosing to save first?"],
+            ["Ceiling Baffles", "Create temporary room boundaries, environmental separation, or route changes.", "Does the ceiling closing feel like protection or a cage?"],
+            ["Elevator State Changes", "Limit travel to approved rings, floors, or shelter routes.", "Who is stranded, and who has override standing?"],
+            ["Threshold Recognition", "Support fae, spirit, guest-law, or high-clearance boundary scenes.", "Is crossing a door also accepting a rule?" ]
+          ]
+        }
+      ],
+      "tags": ["doors", "bulkheads", "ceiling partitions", "thresholds", "facility modes"],
+      "relatedEntries": ["doors-and-thresholds-court", "facility-mode-index", "guest-law-hold"]
+    },
+    {
+      "id": "floor-isolated-hvac",
+      "title": "Floor-Isolated Positive-Pressure HVAC and Sealed Air Modes",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "Every occupied floor has isolated air handling with positive-pressure operation, contamination sensing, and sealed internal recirculation capability.",
+      "body": [
+        "Every floor of the Blacklight headquarters has its own isolated environmental system. In normal operation, each floor maintains carefully managed positive pressure and independent conditioning so that air, odor, smoke, spores, chemical traces, spirit-linked atmospheric changes, or other contamination cues do not casually migrate through the whole building.",
+        "If hostile contamination, unknown airborne material, supernatural atmospheric change, smoke, biological hazard, or signal-linked environmental anomaly is detected, the affected floor can shift toward sealed internal air. The floor stops behaving like part of one large building lung and becomes its own sealed breathing space, drawing on internal clean atmospheric reserves and recycling capacity while adjacent floors maintain separation.",
+        "This is not only a survival system. It is also a dramatic boundary. In play, a sealed floor means the team has time, but not unlimited time. People inside are protected, isolated, accountable, and forced to solve the local problem without assuming the rest of the building can simply breathe for them."
+      ],
+      "tables": [
+        {
+          "title": "Air System Scene States",
+          "columns": ["State", "Meaning", "Scene Effect"],
+          "rows": [
+            ["Normal Positive Pressure", "The floor is operating as a clean, controlled workspace.", "Air cues remain local and environmental continuity is stable."],
+            ["Heightened Sampling", "Sensors are checking unusual particulate, chemical, supernatural, heat, smoke, or pressure behavior.", "Characters may notice air pauses, quieter vents, or staff becoming attentive."],
+            ["Atmospheric Isolation", "The floor separates from shared building circulation.", "No one can assume the problem is contained or spread until checked."],
+            ["Internal Recirculation", "The floor relies on sealed clean-air reserves and recycling.", "Time pressure begins; panic, trust, and resource questions become important."],
+            ["Low-Power Breath", "Emergency minimum circulation preserves life while saving reserve power.", "The building feels still, cold, quiet, and watchful." ]
+          ]
+        }
+      ],
+      "tags": ["HVAC", "positive pressure", "sealed air", "atmospheric isolation", "contamination detection"],
+      "relatedEntries": ["atmospheric-detection-and-clean-air-reserves", "reserve-power-and-autonomy", "multi-vector-incident-framing"]
+    },
+    {
+      "id": "interstitial-utility-decks",
+      "title": "Interstitial Crawlspace Utility Decks",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "Every occupied floor is paired with an in-between crawlspace utility layer carrying air controls, power controllers, sensors, service routes, and emergency separation systems.",
+      "body": [
+        "Every occupied floor in the Blacklight headquarters has an in-between crawlspace utility deck associated with it. These interstitial levels carry air routing, atmospheric controls, section sensors, area power controllers, communications trunks, fire suppression routing, emergency service paths, and the strange amount of infrastructure required for a building that can pretend to be normal until it suddenly cannot.",
+        "For maintenance staff, the utility decks are where the building's real personality lives. For field teams, they are claustrophobic service spaces full of sound, vibration, airflow, heat, emergency lights, sealed hatches, machine spirits, and the possibility that something else learned the building has a second skin between floors.",
+        "The decks are not casual alternate hallways. They are restricted utility spaces that become important during facility scenes because they explain how the building changes state. If a floor seals, the utility deck above or below may remain the only place where someone can diagnose the problem without crossing the main occupied area."
+      ],
+      "tables": [
+        {
+          "title": "Utility Deck Functions",
+          "columns": ["Function", "Campaign Use"],
+          "rows": [
+            ["Air Routing", "Explains how a floor can isolate, recirculate, or preserve positive pressure."],
+            ["Area Power Control", "Allows sections to operate from local reserves or shed load during emergency modes."],
+            ["Sensor Trunks", "Provide clues when the occupied floor is unsafe to inspect directly."],
+            ["Service Movement", "Lets maintenance, hazard staff, or small teams reach a problem without using public corridors."],
+            ["Atmospheric Separation", "Creates an in-between space where contamination, spirits, machine presence, or intruders may be detected first."],
+            ["Fire Suppression Routing", "Allows section-by-section suppression states without treating a whole floor as one room." ]
+          ]
+        }
+      ],
+      "tags": ["crawlspace floors", "utility decks", "infrastructure", "air controls", "power controllers"],
+      "relatedEntries": ["floor-isolated-hvac", "reserve-power-and-autonomy", "machine-signal-facility-concerns"]
+    },
+    {
+      "id": "reserve-power-and-autonomy",
+      "title": "Reserve Power and Long-Term Autonomy",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "The Blacklight headquarters can survive extended isolation through layered power reserves, a subcore fission reserve plant, local batteries, central emergency banks, and high-clearance stores.",
+      "body": [
+        "The main reserve plant sits beneath the middle of the complex, seven floors down in the subcore. In campaign terms, it is the building's buried heart: the reason Blacklight can survive a prolonged siege, environmental isolation, external power failure, or supernatural disruption without immediately becoming a tomb.",
+        "The reserve plant can support the facility for approximately five months under controlled emergency load. That number assumes discipline: restricted lighting, managed elevators, reduced public functions, careful food allocation, sealed or semi-sealed atmospheric modes, and prioritization of critical systems over comfort.",
+        "Distributed area power controllers contain local battery backups capable of carrying disconnected sections for roughly twenty-four hours. Larger central reserve battery banks tied to major radio and continuity sections can maintain minimum emergency reserve mode for roughly two months: minimal power, minimal air circulation, sealed systems where necessary, and low-power life preservation rather than ordinary operations.",
+        "High-clearance BlackLight personnel maintain extensive food stores, protected water, medical reserves, emergency quarters, and continuity supplies. The uncomfortable truth is that the building can outlast many crises, but a building that survives months under seal becomes its own society, with all the pressure, authority disputes, ration arguments, consent questions, and spiritual consequences that implies."
+      ],
+      "tables": [
+        {
+          "title": "Reserve Power Layers",
+          "columns": ["Layer", "Approximate Fictional Endurance", "Use in Play"],
+          "rows": [
+            ["Distributed Area Batteries", "About twenty-four hours after section disconnection.", "Short-term isolation, local hazard scenes, and time pressure."],
+            ["Central Reserve Battery Banks", "About two months in minimum emergency reserve mode.", "Longer sealed survival with minimal power and minimal air circulation."],
+            ["Subcore Fission Reserve Plant", "About five months under controlled emergency load.", "Prolonged siege, deep isolation, and campaign-scale survival pressure."],
+            ["High-Clearance Stores", "Several months when rationed and protected.", "Food, water, medicine, staff continuity, and moral questions about who is sheltered."],
+            ["Low-Power Building Mode", "Variable depending on occupied zones.", "The building becomes quiet, dim, cold, efficient, and psychologically heavy." ]
+          ]
+        }
+      ],
+      "tags": ["reserve power", "fission generator", "battery backups", "autonomous building", "siege survival"],
+      "relatedEntries": ["blacklight-building-infrastructure-overview", "floor-isolated-hvac", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "atmospheric-detection-and-clean-air-reserves",
+      "title": "Atmospheric Detection and Clean-Air Reserves",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "Advanced atmospheric processing units monitor each floor and can shift affected sections into sealed clean-air operation when contamination is detected.",
+      "body": [
+        "BlackLight's atmospheric processing units are designed for more than ordinary office comfort. They watch for smoke, heat, particulate drift, chemical anomalies, oxygen irregularity, pressure changes, biological traces, supernatural atmosphere shifts, and unknown patterns that do not belong to normal building life.",
+        "When hostile contamination is suspected, the building does not immediately assume the entire complex is compromised. It compares floor data, utility-deck data, section data, and historical baselines. A single floor may shift into Atmospheric Isolation while neighboring floors maintain positive separation and staff are moved without being told more than they need to know.",
+        "Clean atmospheric reserves and internal recycling are designed to keep people alive while the incident is identified. In play, these systems make atmospheric threats frightening without making them instantly fatal. The scene becomes about diagnosis, trust, time, and whether the building is isolating the right place."
+      ],
+      "tables": [
+        {
+          "title": "Atmospheric Threat Scene Cues",
+          "columns": ["Cue", "Meaning in Play"],
+          "rows": [
+            ["Vent Tone Changes", "The floor has shifted sampling or circulation behavior."],
+            ["Pressure Door Behavior", "Adjacent sections are protecting separation."],
+            ["Short Voice Prompts", "The building is minimizing explanation until it knows what information is safe."],
+            ["Localized Shelter Routing", "Staff are being moved away from uncertain air without public panic."],
+            ["Silent Utility Alerts", "The crawlspace deck has detected something before the occupied floor sees it." ],
+            ["Clean-Air Clock", "Characters understand they have time, but not infinite time." ]
+          ]
+        }
+      ],
+      "tags": ["atmospheric sensors", "clean air", "sealed reserves", "contamination", "positive pressure"],
+      "relatedEntries": ["floor-isolated-hvac", "interstitial-utility-decks", "multi-vector-incident-framing"]
+    },
+    {
+      "id": "sectional-fire-suppression",
+      "title": "Sectional Fire Suppression and Environmental Intervention",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "The building's fire suppression system is electronically controlled by section, can be activated locally or remotely in fiction, and doubles as a scene tool for environmental containment.",
+      "body": [
+        "BlackLight's fire suppression system is electronically controlled by section rather than treating the entire building as a single blunt instrument. It can respond to a local fire, a server-room heat event, an interstitial utility-deck hazard, an artifact flare, a supernatural combustion effect, or a scene where smoke matters more than flame.",
+        "Activation can be framed through building systems, local manual action, remote authorized command, or emergency section response depending on the scene. The important tabletop point is that suppression is precise enough to save one area while complicating another. It can protect staff, preserve records, deny visibility, damage delicate evidence, reveal a hidden heat source, or force characters to choose between breathable air and immediate fire control.",
+        "Because the building's air systems are floor-isolated, suppression interacts with atmospheric modes. A floor in sealed recirculation cannot simply assume smoke, vapor, foam, heat, or supernatural residue will leave on its own. The environmental state becomes part of the encounter."
+      ],
+      "tables": [
+        {
+          "title": "Suppression Scene Uses",
+          "columns": ["Use", "Campaign Effect"],
+          "rows": [
+            ["Protective Activation", "Buys time for staff shelter or record protection."],
+            ["Evidence Complication", "Important traces may be obscured, displaced, or preserved in strange ways."],
+            ["Visibility Shift", "The room becomes harder to read, navigate, or identify safely."],
+            ["Thermal Reveal", "A hidden heat source, entity body, or equipment failure becomes obvious."],
+            ["Air-State Conflict", "Suppression interacts with sealed floor circulation and clean-air reserves." ]
+          ]
+        }
+      ],
+      "tags": ["fire suppression", "sectional control", "environmental response", "facility modes"],
+      "relatedEntries": ["floor-isolated-hvac", "interstitial-utility-decks", "facility-mode-index"]
     },
     {
       "id": "multi-vector-incident-framing",
@@ -59,35 +278,65 @@
       "category": "BlackLight Facility Modes",
       "summary": "A fictional matrix for scenes where several kinds of danger overlap inside the Blacklight headquarters.",
       "body": [
-        "BlackLight incidents rarely fit one clean category. A public visitor may carry a fae invitation. A machine voice may sound like Charles without being Charles. A staff member may be physically safe but exposed to unsafe information. A supernatural guest may have legal standing in one jurisdiction and hostile intent in another.",
-        "The incident frame tells the GM what the building is trying to protect and what kind of pressure the players should feel. The frame is not a tactical manual. It is a narrative tool for deciding which truths the building reveals and which ones it hides temporarily."
+        "BlackLight incidents rarely fit one clean category. A public visitor may carry a fae invitation. A machine voice may sound like Charles without being Charles. A staff member may be physically safe but exposed to unsafe information. A supernatural guest may have legal standing in one jurisdiction and hostile intent in another. A floor may be safe from violence but unsafe to breathe. A utility deck may be physically empty but full of machine-spirit pressure.",
+        "The incident frame tells the GM what the building is trying to protect and what kind of pressure the players should feel. The frame is not a tactical manual. It is a narrative tool for deciding which truths the building reveals and which ones it hides temporarily.",
+        "When a multi-vector incident is severe enough, BlackLight can combine Pillar Watch, Hard Seal, Atmospheric Isolation, Signal Quiet, Staff Shelter, and Deep Core Seal. That combination tells players the building is no longer managing an emergency; it is trying to survive a siege without abandoning its people."
       ],
       "tables": [
         {
           "title": "Incident Vectors",
           "columns": ["Vector", "Scene Question", "Likely Mode"],
           "rows": [
-            ["Physical Hazard", "Who needs shelter and who can still move?", "Hard Seal or Staff Shelter."],
+            ["Physical Hazard", "Who needs shelter and who can still move?", "Hard Seal, Staff Shelter, or Pillar Watch."],
             ["Public Cover", "What can ordinary staff and clients safely be told?", "Public Continuity or Continuity Exit."],
             ["Machine / Signal", "Can the building trust its own voices and records?", "Signal Quiet."],
             ["Supernatural Guest", "Who has standing to speak and what rules apply?", "Guest-Law Hold or Soft Seal."],
             ["Spirit or Territory", "What does the place itself recognize as harm?", "Guest-Law Hold or Hazard review."],
             ["Information Hazard", "Is the explanation itself dangerous?", "Information Hold or Null Rooming."],
+            ["Atmospheric Hazard", "Is the air itself part of the threat?", "Atmospheric Isolation and floor-specific sealed recirculation."],
+            ["Power Loss", "Which systems must remain alive, and which comforts can die first?", "Reserve Mode, Low-Power Breath, or Deep Core Seal."],
             ["Charles-Specific", "Is the incident touching Charles's old promises, voice, or locks?", "Null Rooming and director review." ]
           ]
         }
       ],
-      "tags": ["multi-vector incidents", "scene framing", "facility modes"],
-      "relatedEntries": ["facility-mode-index", "machine-intelligence-catalog", "fae-spirit-contracts"]
+      "tags": ["multi-vector incidents", "scene framing", "facility modes", "siege survival"],
+      "relatedEntries": ["facility-mode-index", "machine-intelligence-catalog", "fae-spirit-contracts", "reserve-power-and-autonomy"]
+    },
+    {
+      "id": "machine-signal-facility-concerns",
+      "title": "Machine, Signal, and Automation Concerns",
+      "category": "BlackLight Facility Infrastructure",
+      "summary": "Automation in the BlackLight building is useful, powerful, and dangerous when the scene includes compromised signals, machine spirits, false Charles voices, or unclear authorization.",
+      "body": [
+        "The building's automated features are not treated as morally neutral magic. Door states, pillar systems, atmospheric shifts, reserve-power behavior, elevator routing, and voice prompts all depend on trust. If the scene includes signal interference, machine intelligence, technomancer pressure, fae name-law, Eldritch information hazards, or a Faux Charles instance being mistaken for Charles, the building may be helpful and suspect at the same time.",
+        "Signal Quiet exists because BlackLight knows a secure building can become dangerous if every system accepts every command that sounds authorized. In this mode, the building becomes less convenient on purpose. It speaks less, routes less automatically, and forces more local confirmation by authorized characters and staff.",
+        "This should create drama, not a technical puzzle. The question is whether characters can trust what the building says, whether the building can trust what the characters say, and whether some third thing is trying to make both sides misrecognize one another."
+      ],
+      "tables": [
+        {
+          "title": "Automation Trust Questions",
+          "columns": ["Question", "Why It Matters"],
+          "rows": [
+            ["Is that voice Charles, Faux Charles, or something using the interface?", "Prevents the product cover from being mistaken for sovereign authority."],
+            ["Did the door close to protect staff or to isolate witnesses?", "Turns automation into moral pressure."],
+            ["Are pillar systems reading the right threat?", "Makes defensive infrastructure dramatic rather than automatic victory."],
+            ["Are air systems responding to contamination or to false sensor meaning?", "Keeps atmospheric scenes tense."],
+            ["Who has authority when machine confidence and human judgment disagree?", "Forces the new BlackLight Era to avoid becoming the old Charles system." ]
+          ]
+        }
+      ],
+      "tags": ["machine systems", "Signal Quiet", "automation", "Faux Charles", "facility trust"],
+      "relatedEntries": ["machine-intelligence-catalog", "faux-charles-product", "pillar-defense-systems"]
     },
     {
       "id": "staff-continuity-and-accountability",
       "title": "Staff Continuity and Accountability",
       "category": "BlackLight Facility Modes",
-      "summary": "What BlackLight must account for after a facility mode ends: people, promises, records, cover stories, and consent.",
+      "summary": "What BlackLight must account for after a facility mode ends: people, promises, records, cover stories, reserve consumption, environmental exposure, and consent.",
       "body": [
-        "A facility mode is not over when doors open. BlackLight has to account for staff, visitors, protected people, field teams, records, promises, payments, medical needs, emotional consequences, and whether the response quietly recreated the old Charles system by hiding too much from the people affected by it.",
-        "Post-incident review should create campaign consequences. Someone may need therapy, hazard monitoring, apology, back pay, repaired records, a corrected explanation, or the right to refuse future involvement. The institution only becomes better than the old arrangement if it can admit what it did under pressure."
+        "A facility mode is not over when doors open. BlackLight has to account for staff, visitors, protected people, field teams, records, promises, payments, medical needs, emotional consequences, spent supplies, sealed-air time, battery draw, food allocation, contaminated spaces, and whether the response quietly recreated the old Charles system by hiding too much from the people affected by it.",
+        "Post-incident review should create campaign consequences. Someone may need therapy, hazard monitoring, apology, back pay, repaired records, a corrected explanation, restored access, decompression from shelter conditions, or the right to refuse future involvement. The institution only becomes better than the old arrangement if it can admit what it did under pressure.",
+        "Long-duration facility modes are especially dangerous to BlackLight's legitimacy. A building that can survive for months can also become a sealed hierarchy if nobody asks who is in charge, who is being fed, who is being told the truth, and who is expected to endure quietly for the sake of continuity."
       ],
       "tables": [
         {
@@ -98,12 +347,13 @@
             ["Who was kept ignorant?", "Tests whether secrecy protected people or removed consent."],
             ["What did the cover story cost?", "Creates public, legal, emotional, or supernatural consequences."],
             ["Which promise became active?", "Connects incidents to Charles-era debts and BlackLight accountability."],
-            ["What changed in the building?", "Lets staff, machine systems, spirits, and departments remember the event." ]
+            ["What reserves were consumed?", "Tracks food, water, battery, air, medicine, and staff endurance."],
+            ["What changed in the building?", "Lets staff, machine systems, spirits, utility decks, and departments remember the event." ]
           ]
         }
       ],
-      "tags": ["accountability", "staff continuity", "BlackLight Era", "post incident"],
-      "relatedEntries": ["blacklight-era-operating-environment", "blacklight-facility-scene-modes-overview"]
+      "tags": ["accountability", "staff continuity", "BlackLight Era", "post incident", "reserve consumption"],
+      "relatedEntries": ["blacklight-era-operating-environment", "blacklight-facility-scene-modes-overview", "reserve-power-and-autonomy"]
     }
   ]
 }
