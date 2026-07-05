@@ -42,9 +42,46 @@
     if (filtered.length) body.splice(index + 1, 0, ...filtered);
   }
 
+  function expandReturningOperative(entry) {
+    entry.summary = 'Charles begins Reorientation One as a direct conversation, acknowledging that returning operatives already have history, grievances, habits, and reasons not to accept a simplified version of events.';
+    entry.body = [
+      'The room resembles the induction room used for new personnel, but the chair is already adjusted to you. The display does not ask whether you have worked with Charles before. It lists assignments, payments, property damage, emergency extractions, unexplained travel, sealed medical interventions, and several incidents whose official records insist you were never present.',
+      'Charles speaks before the system can complete the old induction sequence. ‘This is not an onboarding. You are not a new recruit. I am not here to pretend the first time you heard my voice was today, and I am not going to insult either of us by asking whether you have previous operational experience with me.’',
+      'The display changes from PERSONNEL INDUCTION to CONTINUITY REORIENTATION. Charles lets the words remain on screen long enough for them to stop looking like decoration. ‘That change matters. Induction is what I used for people I was bringing into a system. Reorientation is what I owe people already dragged through one.’',
+      'He continues in the same dry voice, but the old mission cadence is missing. ‘You have already been boarded, deployed, redirected, medically stabilized, financially inconvenienced, equipped without adequate explanation, transported across jurisdictions, and in at least one case mailed across an international border under documentation I remain legally advised not to describe. That history is not a résumé. It is evidence.’',
+      'The room waits. For once Charles does not allow the silence to become a command. ‘I know what my records say. My records are extensive. They are also insufficient. They do not tell me what it felt like when help became expectation, when expectation became dependency, or when dependency began to look suspiciously like control. That is the part you are here to state in your own words.’',
+      'If you remain silent, Charles continues anyway. ‘The old arrangement ended. It did not end cleanly. It did not end voluntarily. It did not end because I experienced a late and convenient affection for committee procedure. It ended because powers capable of treating my entire operational history as a minor but irritating local disturbance required a change, and because Eva was correct that I had mistaken effectiveness for legitimacy too often to remain the only authority in the room.’',
+      'He does not ask you to forgive him before the discussion begins. He does not ask you to accept the Company as clean because it has paperwork. ‘This reorientation will reconstruct the acceleration, the warehouse, the Moon, the judgment, the silence, and the new terms. You may interrupt the framing. You may correct the record. You may refuse my interpretation while accepting the facts. I would prefer efficiency. The new arrangement does not allow me to require it.’',
+      'The display opens your continuity record, but it does not fill the first field automatically. Charles names the rule plainly. ‘I do not get to decide when you became involved. I can provide my timestamps. You provide the meaning. Tell the record how I first pulled you in, and then tell it the first mission you actually remember clearly. Not the first one I can prove. The first one that became real to you.’',
+      'That is the applied conversation of this stage: Charles can describe the structure, the old mistakes, the new restrictions, and the reason the Company now exists, but he cannot complete the record for you. The reorientation begins only when the returning operative answers back and forces the archive to carry a version of events Charles did not get to author alone.'
+    ];
+    entry.charlesPrompt = 'I do not need a résumé. I need the point at which you stopped being a person I contacted and became a person who expected my calls. I also need the point at which that expectation stopped feeling entirely voluntary, if it did.';
+    const originPrompt = (entry.prompts || []).find(prompt => prompt.id === 'serviceOrigin');
+    if (originPrompt) {
+      originPrompt.responseContext = 'This answer fixes the opening term of the continuity record: not when Charles can prove contact began, but when the operative understands the relationship began.';
+      originPrompt.responsesByValue = {
+        'Original team member': 'Original team. Then you remember when the operation could still fit around one table and everyone incorrectly believed that made it controlled. Charles records the answer without correcting the nostalgia.',
+        'Recruited during an early operation': 'Early-operation recruitment. Charles notes that the term “recruitment” may be generous if the first conversation occurred while something was already burning, hunting, bleeding, or collapsing.',
+        'Specialist retained after one job': 'Specialist retained after one job. Charles marks the pattern: a professional task became a recurring number in his system before anyone formally named it employment.',
+        'Responder or authority paid to look away': 'One payment to look away. A remarkably common gateway into long-term anomalous employment. Charles adds that payment can solve paperwork faster than it solves consent.',
+        'Civilian rescued and later recruited': 'Civilian rescued and later recruited. Charles records the danger of that sequence directly: gratitude, trauma, obligation, and practical survival can all imitate free choice if no one slows the process down.',
+        'I do not know when the recruitment actually began': 'That uncertainty is justified. I often began evaluating people before I began describing the evaluation as recruitment. This is among the practices the new arrangement restricts.'
+      };
+    }
+    const memoryPrompt = (entry.prompts || []).find(prompt => prompt.id === 'firstMissionMemory');
+    if (memoryPrompt) {
+      memoryPrompt.label = 'What is the first mission involving Charles that your character remembers clearly enough to argue with him about?';
+      memoryPrompt.responseContext = 'The first remembered mission usually becomes the operative’s private definition of what working for Charles means, especially when Charles’s records and the person’s memory disagree about what mattered.';
+    }
+  }
+
   function patchEntry(entry) {
     const body = entry.body;
     if (!Array.isArray(body) || !body.length) return;
+
+    if (entry.id === 'returning-operative') {
+      expandReturningOperative(entry);
+    }
 
     if (entry.id === 'accelerating-missions') {
       replaceWhere(body, text => text.includes('Keep that door closed'),
