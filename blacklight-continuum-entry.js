@@ -5,6 +5,7 @@
   const INDEX_URL = 'data/blacklight-continuum/wiki/wiki-index.json';
   const EXTRA_PACK_URLS = [
     'data/blacklight-continuum/wiki/blacklight-facility-scene-modes.json',
+    'data/blacklight-continuum/wiki/blacklight-facility-layout-guide.json',
     'data/blacklight-continuum/wiki/blacklight-foyer-attunement-antenna.json',
     'data/blacklight-continuum/wiki/blacklight-corporate-low-clearance.json',
     'data/blacklight-continuum/wiki/blacklight-personnel-portfolios.json',
