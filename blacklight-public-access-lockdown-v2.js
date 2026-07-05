@@ -32,7 +32,7 @@
   }
 
   function corporateAccessUrl() {
-    return 'index.html?blacklight_access=corporate#blacklight-continuum';
+    return 'blacklight-corporate.html?blacklight_access=corporate#systems';
   }
 
   function ensureLoginGateScript() {
@@ -51,7 +51,7 @@
     }
     return new Promise(resolve => {
       const script = document.createElement('script');
-      script.src = `${LOGIN_SCRIPT}?v=4`;
+      script.src = `${LOGIN_SCRIPT}?v=5`;
       script.async = false;
       script.onload = resolve;
       script.onerror = resolve;
