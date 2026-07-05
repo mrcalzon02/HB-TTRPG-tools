@@ -7,7 +7,8 @@
     'data/blacklight-continuum/wiki/blacklight-facility-scene-modes.json',
     'data/blacklight-continuum/wiki/blacklight-foyer-attunement-antenna.json',
     'data/blacklight-continuum/wiki/blacklight-corporate-low-clearance.json',
-    'data/blacklight-continuum/wiki/blacklight-personnel-portfolios.json'
+    'data/blacklight-continuum/wiki/blacklight-personnel-portfolios.json',
+    'data/blacklight-continuum/wiki/blacklight-emergency-protocols.json'
   ];
   let wikiData = null;
   let activeCategory = 'all';
