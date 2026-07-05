@@ -19,9 +19,18 @@
     document.head.appendChild(style);
   }
 
+  function relabelArchiveHeadings(target) {
+    if (!target) return;
+    target.querySelectorAll('h4').forEach(heading => {
+      if (heading.textContent === 'Player-Facing Information') heading.textContent = 'Employee-Facing Briefing Notes';
+      if (heading.textContent === 'Game Moderator Notes') heading.textContent = 'Archive Custodian Notes';
+    });
+  }
+
   async function annotateCurrentEntry() {
     const target = document.querySelector('#blacklight-browser #blacklight-entry');
     const id = target?.dataset.entryId;
+    relabelArchiveHeadings(target);
     if (!target || !id || target.dataset.classificationRenderedFor === id) return;
     const loader = window.BlacklightContinuumWorkspace?.loadWiki;
     if (typeof loader !== 'function') return;
