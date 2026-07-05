@@ -1,0 +1,204 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Blacklight north shell restricted facilities records covering Black-level housing, operative and mercenary quarters, roof helicopter access, armory fabrication, supernatural containment, relic vault architecture, and B-series above-Black security levels.",
+  "entries": [
+    {
+      "id": "north-shell-restricted-facility-program",
+      "title": "North Shell Restricted Facility Program",
+      "category": "BlackLight Facility Layout",
+      "summary": "The north shell is a fully Black-level facility band containing long-term operative housing, mercenary support quarters, armory fabrication, containment cells, roof aviation access, and high-security vault architecture.",
+      "clearance": "BLACK CARD. Green access is task-scoped only; B-series compartments require above-Black authority.",
+      "informationRating": "IR-4: Black facility program with IR-5 attachments for vault, containment, Charles-sealed, and B-series material.",
+      "sourceCredibility": "CR-A: Security Operations access map corroborated by Black Archive custody records, Facilities route controls, and board-sealed infrastructure notes.",
+      "recordStatus": "Active north shell restricted facility scope record.",
+      "maintainedBy": "Black Archive Custodians, Security Operations, Facilities and Workplace Services, and Board Secretariat.",
+      "body": [
+        "The north side facilities are not partially restricted or merely executive secure. The north shell is completely blocked to Black-level access by default. It is the facility band where Blacklight stops pretending that high-security contracts are the whole reason for the building's unusual infrastructure. The public corporation remains visible elsewhere; the north shell concentrates the infrastructure that makes the hidden Company operationally survivable.",
+        "The north shell contains long-term mercenary and operative housing, long-term housing for at least a dozen operatives, armory fabrication areas, supernatural containment cells, roof helicopter access, an extensive armory, a high-security vault complex, and a relic vault capable of holding roughly one hundred individually contained and sectioned vault containers. This is not a decorative executive wing. It is a logistics, custody, containment, deployment, and survival machine built into the side of a corporate headquarters.",
+        "Green personnel may see parts of the north shell only through narrow support orders: a blocked elevator landing, a sealed work panel, a special procurement delivery, a maintenance corridor, an emergency air handler, a vault climate-control issue, or a roof access service call. They are not told the complete program unless Black authority decides the task cannot be performed safely without a narrow briefing."
+      ],
+      "keyFacts": [
+        "The north shell is Black-level access by default.",
+        "It contains long-term housing for operative and mercenary personnel.",
+        "It includes armory fabrication, an extensive armory, a vault complex, supernatural containment, and roof helicopter access.",
+        "The supernatural containment block has eight cells rated for entities up to approximately power level seven.",
+        "The relic vault has capacity for roughly one hundred individually contained vault containers, including twenty low-security lockers and ten highest-security Black-card vault-door chambers.",
+        "Above-Black B-series levels exist for intelligence and items that exceed ordinary Black-card handling."
+      ],
+      "tables": [
+        {
+          "title": "North Shell Major Functions",
+          "columns": ["Function", "Facility Meaning", "Access Note"],
+          "rows": [
+            ["Operative Housing", "Long-term housing for at least a dozen operatives and attached support personnel.", "Black by default; Green support only for scoped maintenance."],
+            ["Mercenary Housing", "Longer-duration housing for contracted force, protection, or deployment support that cannot use ordinary guest lodging.", "Black by default; HR and Legal see downgraded fragments only when required."],
+            ["Armory Fabrication", "Controlled fabrication, repair, customization, and containment-safe preparation of weapons and field equipment.", "Black; selected Green technical support may receive work-order access."],
+            ["Supernatural Containment", "Eight cells rated up to approximately power level seven entities.", "Black; B-series may apply if an entity, object, or attached intelligence exceeds normal handling."],
+            ["Roof Helicopter Access", "Secure arrival, extraction, medical movement, and time-sensitive deployment access.", "Black route control with aviation safety exceptions."],
+            ["Relic Vault", "Roughly one hundred individually contained vault containers with tiered isolation and lock authority.", "Black through B-series depending on container rating." ]
+          ]
+        }
+      ],
+      "tags": ["north shell", "restricted facilities", "Black Card", "operative housing", "armory", "containment", "relic vault"],
+      "relatedEntries": ["blacklight-facility-layout-guide-overview", "north-shell-and-inner-courtyard-ring-access", "above-black-b-series-security-levels"]
+    },
+    {
+      "id": "north-shell-operative-and-mercenary-housing",
+      "title": "North Shell Operative and Mercenary Housing",
+      "category": "BlackLight Facility Layout",
+      "summary": "The north shell contains long-term housing for at least a dozen operatives, with additional quarters for mercenary or contracted support personnel who cannot safely be placed in ordinary corporate lodging.",
+      "clearance": "BLACK CARD residential operations; Green access limited to escorted maintenance and life-support support.",
+      "informationRating": "IR-4: operative and contracted-force residential support.",
+      "sourceCredibility": "CR-B: Facilities housing map corroborated by Security Operations, HR fragments, and Black Archive deployment records.",
+      "recordStatus": "Active restricted housing record.",
+      "maintainedBy": "Security Operations, Facilities and Workplace Services, Human Resources under restricted handling, and Black Archive Custodians.",
+      "body": [
+        "North shell housing exists because Blacklight sometimes needs people on site who are not ordinary employees, visitors, or short-term guests. Some are operatives under long-term assignment. Some are contracted mercenary or protection personnel. Some are medically, politically, legally, or supernaturally complicated enough that normal hotels and ordinary corporate apartments would create more risk than comfort.",
+        "The housing block is designed for duration rather than prestige. It must support sleep, hygiene, personal storage, secure communications, medical observation, gear staging, psychological decompression, and quick movement toward armory, vault, roof access, or facility-response routes. Housing at this clearance level is not a perk. It is a containment-adjacent continuity tool for people Blacklight cannot easily send home.",
+        "At least a dozen operative beds or rooms are maintained as a standing capacity expectation. Additional mercenary or contracted-force housing may be activated as mission load, threat level, board action, or long-duration facility mode requires. Green staff may service air, water, locks, sanitation, supply routing, and emergency repairs, but should not be given resident identities unless the task requires it."
+      ],
+      "tables": [
+        {
+          "title": "Restricted Housing Support Areas",
+          "columns": ["Area", "Purpose", "Lower-Level Explanation"],
+          "rows": [
+            ["Operative Rooms", "Long-term placement for assigned personnel tied to Black operations.", "Executive continuity housing or secure on-call quarters."],
+            ["Mercenary / Contracted Support Quarters", "Housing for force-protection, escort, or deployment support personnel.", "High-security vendor lodging."],
+            ["Decompression Rooms", "Post-incident rest, observation, privacy, and psychological cooldown.", "Employee wellness or secure rest space."],
+            ["Gear Lockers", "Personal field equipment, armor, documents, and specialized kit staging.", "Secure equipment storage."],
+            ["Medical Observation Nook", "Restricted triage, exposure monitoring, medication management, and recovery check-in.", "Occupational health support."],
+            ["Rapid Route Access", "Movement toward roof, armory, containment, or emergency routes without public corridor exposure.", "Restricted security routing." ]
+          ]
+        }
+      ],
+      "tags": ["operative housing", "mercenary housing", "north shell", "long-term housing", "Black Card"],
+      "relatedEntries": ["north-shell-restricted-facility-program", "emergency-support-and-human-recovery", "blacklight-black-level-asset-personnel"]
+    },
+    {
+      "id": "north-shell-armory-fabrication-and-roof-access",
+      "title": "Armory Fabrication, Extensive Armory, and Roof Helicopter Access",
+      "category": "BlackLight Facility Layout",
+      "summary": "The north shell contains fabrication areas, an extensive armory, vault-linked equipment custody, and roof helicopter access for secure arrival, extraction, and rapid deployment.",
+      "clearance": "BLACK CARD; B-series compartments apply where items exceed standard Black-card custody. Green technical support is ticket-scoped only.",
+      "informationRating": "IR-4 with IR-5 attachments for restricted devices, sealed weapons, relic-adjacent equipment, and board-controlled aviation movements.",
+      "sourceCredibility": "CR-A: Security Operations armory record corroborated by Facilities, Finance procurement controls, and Black Archive custody logs.",
+      "recordStatus": "Active armory and deployment infrastructure record.",
+      "maintainedBy": "Security Operations, Black Archive Custodians, Facilities and Workplace Services, and Finance under restricted procurement coding.",
+      "body": [
+        "The north shell armory is not a single weapons room. It is an integrated armory, fabrication, repair, custody, and deployment support complex. It supports ordinary security equipment, operative field gear, specialized anti-entity tools, restricted ammunition, protective systems, containment-support devices, and relic-adjacent equipment that must not pass through ordinary procurement or maintenance channels without explanation.",
+        "Fabrication areas exist so Blacklight can repair, adapt, isolate, or produce mission-critical hardware without waiting for public vendors to understand the assignment. The visible explanation is secure client equipment support and high-trust prototype maintenance. The Black-level function is more direct: if an operation requires a weapon, bracket, cage component, warded case, signal isolator, armor patch, drone mount, helicopter-ready crate, or containment-rated tool by morning, the north shell is where the company tries to make that possible.",
+        "Roof helicopter access connects the north shell to movement the public building cannot absorb. It supports medical extraction, operative departure, secure delivery, high-risk arrival, weather-limited access, and emergency relocation. Roof access is physically tied to route discipline: if a person, item, or entity-adjacent container cannot move through the lobby, the roof and north shell become the cleaner path."
+      ],
+      "tables": [
+        {
+          "title": "Armory and Deployment Functions",
+          "columns": ["Area", "Function", "Access Boundary"],
+          "rows": [
+            ["Extensive Armory", "Weapons, protective systems, ammunition, field kits, and equipment ready storage.", "Black by default; selected items may require B-series."],
+            ["Fabrication Bays", "Repair, fabrication, fitting, containment-safe modification, and mission-specific adaptation.", "Black; Green technical assistance only under narrow work orders."],
+            ["Vault-Linked Equipment Custody", "Weapons, relic-adjacent tools, sealed cases, and evidence-adjacent field devices.", "Black or B-series depending on item."],
+            ["Roof Helicopter Access", "Arrival, extraction, medical movement, secure delivery, and rapid deployment.", "Black route control with aviation safety coordination."],
+            ["Secure Loading Route", "Movement between armory, vault, housing, containment, and roof without public exposure.", "Black; Green logistics only under escort or remote authorization." ]
+          ]
+        }
+      ],
+      "tags": ["armory", "fabrication", "roof helicopter access", "restricted equipment", "Black Card", "B-series"],
+      "relatedEntries": ["north-shell-restricted-facility-program", "relic-vault-tiered-custody-and-lockers", "large-scale-emergency-scale-integration"]
+    },
+    {
+      "id": "north-shell-supernatural-containment-cell-block",
+      "title": "Supernatural Containment Cell Block",
+      "category": "BlackLight Facility Layout",
+      "summary": "The north shell contains eight supernatural containment cells rated for entities up to approximately power level seven, with Black-level custody and B-series escalation where containment exceeds ordinary Black handling.",
+      "clearance": "BLACK CARD containment authority; B-series escalation required for intelligence, relics, or entities above ordinary Black-card control.",
+      "informationRating": "IR-4 containment infrastructure with IR-5 attachments for sealed entities, dangerous intelligence, or Charles/board-restricted cases.",
+      "sourceCredibility": "CR-A: Black Archive containment record with Security Operations, Facilities, and incident telemetry corroboration.",
+      "recordStatus": "Active containment block record.",
+      "maintainedBy": "Black Archive Custodians, Security Operations, Facilities and Workplace Services, and designated containment authorities.",
+      "body": [
+        "The north shell containment block contains eight supernatural containment cells. The standing design target is containment of entities up to approximately power level seven, assuming the entity class matches the cell's intended control profile and the facility has not been compromised by signal, invitation, atmospheric, or information-hazard failure. Power level seven is a planning ceiling, not a promise that every level-seven event can be solved by closing a door.",
+        "Each cell is treated as a layered system: physical wall, door, seal, observation limit, air and pressure behavior, power independence, communication restriction, emergency feed route, waste and evidence handling, and post-containment review. A cell may be technically capable of holding an entity and still be the wrong place to hold that entity if guest-law, spirit territory, fae invitation, machine influence, or relic interaction changes the rules.",
+        "Green support is dangerous around containment because Green personnel may be close enough to maintain air, power, water, doors, and sensor routes without understanding what is inside. Green work orders must never use cute language or vague hazard categories. They should specify panel, route, lock state, protective gear, remote check-in, stop condition, and whether the cell is occupied, dormant, empty, or status-withheld."
+      ],
+      "tables": [
+        {
+          "title": "Containment Cell Block Structure",
+          "columns": ["Feature", "Purpose", "Access Rule"],
+          "rows": [
+            ["Eight Containment Cells", "Standing supernatural holding capacity for up to approximately power level seven entities when profile-appropriate.", "Black by default."],
+            ["Independent Air and Pressure", "Prevents contamination, atmosphere shift, scent, smoke, spores, or supernatural residue from migrating casually.", "Green maintenance only under containment-safe procedure."],
+            ["Observation Control", "Limits visual, auditory, symbolic, and information-hazard exposure.", "Black interpretation required."],
+            ["Emergency Service Interface", "Allows limited maintenance without opening the cell or exposing support staff.", "Green under narrow stop-condition orders."],
+            ["B-Series Escalation", "Applies when the entity, attached intelligence, relic, or containment rule exceeds ordinary Black handling.", "B1 through B5 depending on case." ]
+          ]
+        }
+      ],
+      "tags": ["containment cells", "supernatural containment", "power level seven", "north shell", "Black Card", "B-series"],
+      "relatedEntries": ["north-shell-restricted-facility-program", "above-black-b-series-security-levels", "multi-vector-incident-framing"]
+    },
+    {
+      "id": "relic-vault-tiered-custody-and-lockers",
+      "title": "Relic Vault Tiered Custody and Lockers",
+      "category": "BlackLight Facility Layout",
+      "summary": "The relic vault holds roughly one hundred individually contained vault containers, beginning with twenty low-security lockers and rising through increasingly isolated vault chambers to ten highest-security Black-card sealed vault doors.",
+      "clearance": "BLACK CARD vault access with B-series escalation for sealed intelligence, dangerous relics, and Charles/board-controlled containers.",
+      "informationRating": "IR-4 vault architecture with IR-5 and B-series attachments for high-isolation containers.",
+      "sourceCredibility": "CR-A: Black Archive vault custody record with Security Operations lock telemetry and board-sealed annotations.",
+      "recordStatus": "Active relic vault custody architecture record.",
+      "maintainedBy": "Black Archive Custodians, Security Operations, Board Secretariat, and Charles-sealed access authority where applicable.",
+      "body": [
+        "The north shell relic vault is built around roughly one hundred individually contained and sectioned vault containers. The point of the design is not simply storage. It is separation. Items that share a room may still need separate air, signal silence, symbolic isolation, vibration control, observation limits, pressure rules, temperature bands, custody logs, and door authorities because the danger may be the item, the memory of the item, the thing attached to the item, or the idea that someone knows the item is present.",
+        "The first twenty containers are low-security lockers by vault standards. Low security does not mean harmless. It means Blacklight believes the object can be handled through ordinary Black-card chain of custody, standard isolation, and documented access. Above those lockers, the vault gradually increases in isolation, lock strength, access review, environmental separation, and remote seal authority.",
+        "At the high end, ten vault containers are high-security vault-door chambers with Black-card access only, electronic locks, and remotely sealed doors. Responsible opening authority for those highest-security doors rests with Charles or board members under recorded conditions. In practice, these chambers are where Blacklight admits that Black-card access is not always enough. Some items require B-series restriction above Black."
+      ],
+      "tables": [
+        {
+          "title": "Relic Vault Capacity Bands",
+          "columns": ["Band", "Approximate Capacity", "Security Meaning"],
+          "rows": [
+            ["Low-Security Lockers", "20", "Black-card chain of custody with standard isolation; still not public, Blue, or Green material."],
+            ["Standard Black Containers", "Variable majority of vault", "Individually sectioned containers with increasing record, seal, and environmental requirements."],
+            ["Enhanced Isolation Containers", "Variable", "Additional air, signal, symbolic, vibration, observation, or temperature controls."],
+            ["High-Security Vault-Door Chambers", "10", "Black-card access only, electronic locks, remote sealing, and opening authority limited to Charles or board members under responsible conditions."],
+            ["B-Series Restricted Containers", "As assigned", "Items or intelligence whose handling exceeds ordinary Black-card clearance and requires B1 through B5 classification." ]
+          ]
+        }
+      ],
+      "tags": ["relic vault", "vault lockers", "Black Card", "B-series", "Charles", "board authority"],
+      "relatedEntries": ["above-black-b-series-security-levels", "north-shell-armory-fabrication-and-roof-access", "black-card-emergency-command-and-interpretation"]
+    },
+    {
+      "id": "above-black-b-series-security-levels",
+      "title": "Above-Black B-Series Security Levels: B1 Through B5",
+      "category": "BlackLight Information Control",
+      "summary": "Above Black, Blacklight uses B1 through B5 restrictions for intelligence and items too dangerous for ordinary Black-card access, with B5 reserved for Eva Frost and Charles only.",
+      "clearance": "BLACK CARD notice permitted; B-series access only by level. B5 is Eva Frost and Charles only.",
+      "informationRating": "IR-5: Board/Charles-sealed security structure above ordinary Black-card handling.",
+      "sourceCredibility": "CR-A: Board Secretariat, Charles-sealed authority, and Black Archive custody rule.",
+      "recordStatus": "Active above-Black access standard.",
+      "maintainedBy": "Board Secretariat, Eva Frost, Charles, and Black Archive Custodians under sealed authority.",
+      "body": [
+        "Black-card access is the highest visible card level. It is not the highest security level Blacklight uses. Above Black, the B-series exists for intelligence, relics, entities, sealed records, and items that cannot be safely handled by ordinary Black-card personnel simply because they hold Black cards. These levels are not printed as ordinary badges. They are allowances, exceptions, sealed permissions, and active recognitions attached to a person, record, item, or incident.",
+        "The B-series runs from B1 through B5. B1 is the widest above-Black ring: selected Black-card personnel may receive narrow access to a specific item, chamber, record, or briefing. Each step inward becomes whiter, colder, and less populated: fewer people, fewer explanations, fewer assumptions that rank or bravery are enough. B5 is the innermost ring, reserved for Eva Frost and Charles only.",
+        "B-series restrictions may apply to relic vault containers, containment cases, Charles-specific records, board-sealed intelligence, active existential threats, items that alter memory or source credibility, and information that becomes dangerous merely by being fully understood. A B-series mark is a warning that normal Black-level confidence has reached its limit."
+      ],
+      "tables": [
+        {
+          "title": "B-Series Access Bands",
+          "columns": ["Level", "Access Shape", "Typical Use"],
+          "rows": [
+            ["B1", "Selected Black-card personnel with specific need, time limit, and custody record.", "Narrow access to one vault container, containment issue, sealed briefing, or restricted object."],
+            ["B2", "Small named cell of Black authorities, usually with board or Charles awareness.", "High-risk relics, sensitive intelligence, dangerous technical interpretation, or active containment support."],
+            ["B3", "Board-adjacent or Charles-adjacent authorization; access rarely portable between cases.", "Items or records that affect source credibility, memory, command authority, or facility trust."],
+            ["B4", "Near-core sealed authority with extremely limited human access.", "Board-sealed intelligence, existentially sensitive relics, high-consequence entity attachments, or catastrophic disclosure risk."],
+            ["B5", "Eva Frost and Charles only.", "Security-level intelligence and items that cannot be delegated without changing the threat itself." ]
+          ]
+        }
+      ],
+      "tags": ["B1", "B2", "B3", "B4", "B5", "above Black", "Eva Frost", "Charles", "IR-5"],
+      "relatedEntries": ["blacklight-card-level-clearance-system", "relic-vault-tiered-custody-and-lockers", "blacklight-black-level-asset-personnel"]
+    }
+  ]
+}
