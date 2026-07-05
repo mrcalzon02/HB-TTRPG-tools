@@ -3,9 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Blacklight Intelligence | Authorized Systems</title>
+  <title>Blacklight Intelligence | Authorized Systems Gateway</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .access-ladder{display:grid;gap:10px;margin-top:18px}.access-row{display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;align-items:center;border:1px solid rgba(217,168,79,.26);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.035)}.access-row span:first-child{font-size:.72rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#d9a84f}.access-row strong{font-size:1rem;color:#f4efe5}.gateway-note{border-left:3px solid rgba(217,168,79,.78);background:rgba(217,168,79,.08);padding:12px 14px;border-radius:12px;color:#d9d1c0;line-height:1.55;margin-top:18px}
+  </style>
 </head>
 <body class="blacklight-corp-body">
   <header class="bli-topbar">
@@ -15,80 +18,48 @@
     </a>
     <nav class="bli-nav" aria-label="Systems navigation">
       <a href="blacklight-corporate.html">Public Corporate</a>
-      <a href="blacklight-personnel.html">Personnel</a>
-      <a href="blacklight-brand-assets.html">Corporate Standards</a>
-      <a href="#white">White</a>
-      <a href="#blue">Blue</a>
-      <a href="#green">Green</a>
-      <a href="#black">Black</a>
+      <a href="blacklight-corporate-login.html">White Login</a>
+      <a href="blacklight-systems-blue-login.html">Blue Login</a>
+      <a href="blacklight-systems-green-login.html">Green Login</a>
+      <a href="blacklight-systems-black-login.html">Black Login</a>
     </nav>
   </header>
 
   <section class="bli-hero" aria-labelledby="systems-title">
     <div>
-      <p class="bli-eyebrow">Authorized systems directory</p>
-      <h1 id="systems-title">Static cleared systems route.</h1>
-      <p class="bli-lede">This page is static HTML. Public corporate information remains on the public site. Employee, client, restricted support, and Black Archive systems are grouped by clearance band without runtime page mutation.</p>
+      <p class="bli-eyebrow">Authorized systems gateway</p>
+      <h1 id="systems-title">Choose a clearance route.</h1>
+      <p class="bli-lede">This is a static access gateway. It does not expose every system on the same page. Each clearance band opens its own separate static page after its own static access screen.</p>
       <div class="bli-actions">
-        <a class="bli-action primary" href="#white">Start at White Card</a>
-        <a class="bli-action" href="#black">Jump to Black Archive band</a>
+        <a class="bli-action primary" href="blacklight-corporate-login.html">Start White Card Login</a>
+        <a class="bli-action" href="blacklight-corporate.html">Return to Public Corporate Page</a>
       </div>
+      <p class="gateway-note">Level 0 public information stays on the public corporate site. White, Blue, Green, and Black systems are separated into individual access pages so lower-level users are not shown higher-level system options on the same page.</p>
     </div>
     <aside class="bli-directory-panel" aria-label="Access ladder">
       <div class="bli-directory-title">Access Ladder</div>
-      <div class="bli-directory-list">
-        <div class="bli-directory-item"><strong>Level 0 Public</strong><span class="bli-arrow">public site</span></div>
-        <div class="bli-directory-item"><strong>White</strong><span class="bli-arrow">employee</span></div>
-        <div class="bli-directory-item"><strong>Blue</strong><span class="bli-arrow">client</span></div>
-        <div class="bli-directory-item"><strong>Green</strong><span class="bli-arrow">support</span></div>
-        <div class="bli-directory-item"><strong>Black</strong><span class="bli-arrow">archive</span></div>
+      <div class="access-ladder">
+        <div class="access-row"><span>Level 0</span><strong>Public corporate site</strong></div>
+        <div class="access-row"><span>White</span><strong>Employee baseline</strong></div>
+        <div class="access-row"><span>Blue</span><strong>Client operations</strong></div>
+        <div class="access-row"><span>Green</span><strong>Restricted support</strong></div>
+        <div class="access-row"><span>Black</span><strong>Black Archive</strong></div>
       </div>
     </aside>
   </section>
 
   <main class="bli-shell">
-    <section id="white" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Level 1 / White Card</p><h2>Employee baseline and ordinary internal systems.</h2><p>Username and password baseline access. These systems are ordinary employee-facing resources, records, and orientation routes.</p></div>
+    <section class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Separate access panels</p><h2>Access one tier at a time.</h2><p>Use the correct login panel for the access level you are entering. Each destination page contains only that clearance tier's systems.</p></div>
       <div class="bli-card-grid">
-        <article class="bli-card"><h3>Personnel Portfolios</h3><p>Publicly acknowledged leadership, board, and director profiles for ordinary employee orientation and procurement packets.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-personnel.html">Open Personnel</a></div></article>
-        <article class="bli-card"><h3>Corporate Standards</h3><p>Brand, language, market-strip, and public-facing corporate presentation standards.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-brand-assets.html">Open Corporate Standards</a></div></article>
-      </div>
-    </section>
-
-    <section id="blue" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Level 2 / Blue Card</p><h2>Corporate client operations and operative tools.</h2><p>Security card and PIN layer for client-facing operations, ordinary operative records, assignments, induction, and reorientation systems.</p></div>
-      <div class="bli-card-grid">
-        <article class="bli-card"><h3>Blacklight Basic Operative Record</h3><p>Create and maintain Human Investigator, Vampire, Shapechanger, Eldritch Binder, Harmonic Mutant, and Technomancer records with capability families, costs, effects, limits, resistance, and failure consequences.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-character-sheet.html">Open Basic Character Sheet</a></div></article>
-        <article class="bli-card"><h3>The Person We Are Sending</h3><p>Build a complete operative through a recorded onboarding interview with Charles, preserve the exchange, and transfer the completed record into the printable operative sheet.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-character-creation.html">Begin Interactive Induction</a></div></article>
-        <article class="bli-card"><h3>Generate the Person We Are Sending</h3><p>Create a complete Rating 1 operative with legal attributes, skills, specializations, archetype variants, starting abilities, equipment, relationships, derived tracks, and sheet transfer.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-random-character.html">Open Random Generator</a></div></article>
-        <article class="bli-card"><h3>BlackLight Reorientation: The New Arrangement</h3><p>Review accelerating Charles-era missions, warehouse convergence, lunar convocation, judgment, silent interim, and formation of the BlackLight Company before attaching a veteran continuity record.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-veteran-reintroduction.html">Open Veteran Reorientation</a></div></article>
-        <article class="bli-card"><h3>Generate the Mission Charles Should Have Explained</h3><p>Create complete BlackLight operations with clients, objectives, targets, sites, opposition, deadlines, compromised intelligence, clues, twists, disclosure notes, extraction plans, consequences, and sealed details.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-mission-generator.html">Open Mission Generator</a></div></article>
-      </div>
-    </section>
-
-    <section id="green" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Level 3 / Green Card</p><h2>Restricted support infrastructure.</h2><p>Fingerprint and route-authorization layer for support-visible restricted systems, training, equipment, facility work, emergency support, and implementation references.</p></div>
-      <div class="bli-card-grid">
-        <article class="bli-card"><h3>Arms, Armor, Relics, and Field Technology</h3><p>Browse modern and historical weapons, armor, supernatural artifacts, future systems, scavenged gear, survival equipment, and alien technology templates using Blacklight combat and capability rules.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-equipment-catalog.html">Open Equipment Catalog</a></div></article>
-        <article class="bli-card"><h3>Three People in the Cargo Gallery</h3><p>Review attack rolls, firearm critical damage dice, rolled damage, damage-type soak permissions, armor dice, living soak, pressure, cohesion, stabilization, and death through a continuous training incident.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-combat-example.html">Open Combat and Soak Module</a></div></article>
-        <article class="bli-card"><h3>The Administrator's Clock</h3><p>Review Mara, Ilyan, and Kest through a bureaucratic social conflict against Richard, a planetary administrator hiding docking rules so another fee can post.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-social-conflict.html">Open Social Conflict Guide</a></div></article>
-      </div>
-    </section>
-
-    <section id="black" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Level 4 / Black Card</p><h2>Black Archive, supernatural records, and operational truth.</h2><p>Retinal, voiceprint, Charles review, and board-sealed acknowledgement layer. Supernatural court records, vampire and fae material, Gaian spirit records, entity catalogs, relic records, containment material, and direct Black Archive routes belong here.</p></div>
-      <div class="bli-card-grid">
-        <article class="bli-card"><h3>Blacklight Continuum Internal Archive</h3><p>Open the internal record browser for corporate operations, personnel references, facility systems, continuity records, capabilities, entities, equipment, and restricted terminology.</p><div class="bli-actions"><a class="bli-action primary" href="index.html?blacklight_entry=blacklight-continuum-overview#blacklight-continuum">Open Internal Archive</a></div></article>
-        <article class="bli-card"><h3>Generate the Thing in the Room</h3><p>Create civilians, witnesses, operatives, supernatural archetype actors, cryptids, machine intelligences, alien remnants, otherworldly entities, and Charles-tier reality powers with capabilities, limits, motives, complications, and encounter guidance.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-npc-generator.html">Open NPC and Entity Generator</a></div></article>
-        <article class="bli-card"><h3>Comprehensive Entity Catalog</h3><p>Open the archive route for mundane creatures, civilians, operatives, supernatural actors, monsters, alien remnants, machine intelligences, otherworldly courts, cosmic sovereigns, and Charles-tier beings.</p><div class="bli-actions"><a class="bli-action primary" href="index.html?blacklight_entry=blacklight-entity-catalog-overview#blacklight-continuum">Open Entity Catalog</a></div></article>
-        <article class="bli-card"><h3>Vampiric and Fae Court Catalogs</h3><p>Open the archive route for blood courts, fae jurisdictions, court offices, feeding systems, oath structures, market organizations, envoys, heralds, and supernatural institutional power.</p><div class="bli-actions"><a class="bli-action primary" href="index.html?blacklight_entry=court-catalogs-overview#blacklight-continuum">Open Court Catalogs</a></div></article>
-        <article class="bli-card"><h3>Gaian Shapechangers and Spirits Index</h3><p>Open the archive route for Gaia-worshipping shapechanger society, tribal pack leaders, prominent members, pack offices, spirit ecology, named spirits, and fae-spirit contract relationships.</p><div class="bli-actions"><a class="bli-action primary" href="index.html?blacklight_entry=gaian-shapechanger-society-overview#blacklight-continuum">Open Gaian Society</a></div></article>
+        <article class="bli-card"><h3>White Card Login</h3><p>Username and password baseline for ordinary employee resources.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-corporate-login.html">Open White Login</a></div></article>
+        <article class="bli-card"><h3>Blue Card Login</h3><p>Security card and PIN route for corporate client operations and operative tools.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-systems-blue-login.html">Open Blue Login</a></div></article>
+        <article class="bli-card"><h3>Green Card Login</h3><p>Fingerprint and route authorization for restricted support infrastructure.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-systems-green-login.html">Open Green Login</a></div></article>
+        <article class="bli-card"><h3>Black Card Login</h3><p>Retinal, voiceprint, Charles review, and board-sealed acknowledgement for the Black Archive.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-systems-black-login.html">Open Black Login</a></div></article>
       </div>
     </section>
   </main>
 
-  <footer class="bli-footer">
-    <strong>Blacklight Intelligence</strong> · Static authorized systems directory.
-  </footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Static authorized systems gateway.</footer>
 </body>
 </html>
