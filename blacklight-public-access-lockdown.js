@@ -3,10 +3,19 @@
 
   const CORPORATE_ROUTE_PARAM = 'blacklight_access';
   const CORPORATE_ROUTE_VALUE = 'corporate';
+  const LOGIN_STORAGE_KEY = 'blacklight-wiki-stage-gate-complete';
 
   function isCorporateAccessRoute() {
     try {
       return new URLSearchParams(window.location.search).get(CORPORATE_ROUTE_PARAM) === CORPORATE_ROUTE_VALUE;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function loginComplete() {
+    try {
+      return sessionStorage.getItem(LOGIN_STORAGE_KEY) === 'true';
     } catch (_) {
       return false;
     }
@@ -17,7 +26,11 @@
   }
 
   function shouldLockPublicView() {
-    return isTopLevelToolsPage() && !isCorporateAccessRoute();
+    return isTopLevelToolsPage() && !isCorporateAccessRoute() && !loginComplete();
+  }
+
+  function corporateAccessUrl() {
+    return 'index.html?blacklight_access=corporate#blacklight-continuum';
   }
 
   function makeNotice() {
@@ -27,10 +40,10 @@
     notice.innerHTML = `
       <div class="bli-section-head">
         <p class="bli-eyebrow">Employee systems access required</p>
-        <h2>Authorized systems are not published from this page.</h2>
-        <p>The systems directory, internal archive, operative tools, assignment generators, personnel records, field catalogs, and training references are restricted to the corporate access route.</p>
+        <h2>Authorized systems are behind corporate login.</h2>
+        <p>The systems directory, internal archive, operative tools, assignment generators, personnel records, field catalogs, and training references are not published from the public top-level workspace.</p>
         <div class="bli-actions">
-          <a class="bli-action primary" href="blacklight-corporate.html">Open Blacklight Corporate Login</a>
+          <button id="blacklight-corporate-login" class="bli-action primary" type="button">Open Corporate Login</button>
         </div>
       </div>`;
     return notice;
@@ -90,10 +103,37 @@
     lockBrowser(view);
   }
 
+  async function routeThroughLoginGate() {
+    const view = document.getElementById('blacklight-continuum');
+    const browser = view?.querySelector('#blacklight-browser') || document.getElementById('blacklight-browser');
+    if (!browser) return;
+
+    browser.hidden = false;
+    browser.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const gate = window.BlacklightWikiLoginGate;
+    if (gate?.runGate) {
+      await gate.runGate(browser, { force: !gate.isUnlocked?.() });
+    }
+
+    if (loginComplete() || gate?.isUnlocked?.()) {
+      window.location.href = corporateAccessUrl();
+    }
+  }
+
   function interceptPublicAccess(event) {
-    if (!shouldLockPublicView()) return;
     const target = event.target.closest?.('button, a');
     if (!target) return;
+
+    if (target.matches('#blacklight-corporate-login')) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      void routeThroughLoginGate();
+      return;
+    }
+
+    if (!shouldLockPublicView()) return;
+
     const blocked = target.matches('#blacklight-open-wiki, #blacklight-open-corporate, #blacklight-open-facility, #blacklight-open-archive-card')
       || String(target.getAttribute('href') || '').includes('blacklight_entry=')
       || String(target.getAttribute('href') || '').includes('blacklight_search=')
@@ -102,6 +142,7 @@
     event.preventDefault();
     event.stopImmediatePropagation();
     lockSystemsDirectory();
+    void routeThroughLoginGate();
   }
 
   document.addEventListener('click', interceptPublicAccess, true);
