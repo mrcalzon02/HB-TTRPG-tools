@@ -1,0 +1,240 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Blacklight emergency protocols for White, Blue, Green, and Black card personnel across evacuation, shelter, emergency support, reporting, escalation, and large-scale incident integration.",
+  "entries": [
+    {
+      "id": "blacklight-emergency-protocols-overview",
+      "title": "Emergency Protocols Overview",
+      "category": "BlackLight Emergency Protocols",
+      "summary": "Blacklight emergency protocols separate public safety instructions, secure contract continuity, Green support responsibilities, and Black-level incident interpretation without abandoning the people inside the building.",
+      "clearance": "WHITE CARD summary / BLUE CARD department detail / GREEN CARD support operations / BLACK CARD full incident command interpretation.",
+      "informationRating": "IR-1 baseline staff safety with IR-2 secure-client continuity, IR-3 Green support, and IR-4 Black operational interpretation.",
+      "sourceCredibility": "CR-B: compiled from Security Operations, Facilities, HR, Legal, Green support logs, and Black Archive post-incident review.",
+      "recordStatus": "Active emergency protocol framework.",
+      "maintainedBy": "Security Operations, Facilities and Workplace Services, Human Resources, Continuity Office, and Information Control Office.",
+      "body": [
+        "Blacklight emergency protocols exist because the company cannot treat every emergency as the same kind of event. A kitchen fire, a client protest, a medical emergency, a network compromise, a court-linked visitor, an atmospheric anomaly, a false Charles voice, a sealed-floor event, and a Black-level operational breach all need different information handling. The first duty remains staff survival, but survival inside Blacklight also includes consent, cover, continuity, source credibility, and post-incident accountability.",
+        "White and Blue instructions must be short, safe, and ordinary enough to be followed under stress. Green instructions must give support staff enough information to keep restricted systems alive without forcing them into full exposure. Black instructions must preserve the truth, protect people, and prevent emergency authority from becoming another version of the old Charles arrangement where explanation was withheld simply because withholding was easier.",
+        "The emergency framework scales from a single room to a department, floor, ring, utility deck, whole headquarters, remote client site, regional disruption, national continuity event, or Company-scale incident. The larger the scale, the more important it becomes to distinguish what staff need to do, what staff are allowed to know, what Green support must maintain, and what Black authority must answer for afterward."
+      ],
+      "keyFacts": [
+        "White-card staff receive simple safety instructions, evacuation routes, assembly expectations, and ordinary reporting channels.",
+        "Blue-card staff receive department-specific continuity instructions, client-data protection duties, and secure-work shutdown or handoff procedures.",
+        "Green-card staff provide restricted emergency support for facility systems, utility decks, logistics, sealed rooms, continuity stores, and high-security contract operations.",
+        "Black-card personnel interpret the true cause, authorize restricted disclosure, direct operative or board-level action, and maintain the active top-secret record.",
+        "Emergency instructions must remain useful across room, floor, building, site, regional, and Company-scale incidents."
+      ],
+      "tables": [
+        {
+          "title": "Emergency Protocol Priorities",
+          "columns": ["Priority", "Meaning"],
+          "rows": [
+            ["Life Safety", "Move people out of immediate danger, shelter them when evacuation is unsafe, and account for missing persons."],
+            ["Access Discipline", "Do not let panic turn restricted doors, badges, or sealed routes into uncontrolled movement."],
+            ["Information Control", "Tell each clearance level enough to act safely without exposing dangerous or unnecessary truth."],
+            ["Continuity", "Keep payroll, medical support, client obligations, facility power, air, records, and communications from collapsing."],
+            ["Reporting", "Preserve ordinary observable facts, timestamps, witness reports, and restricted annotations by proper channel."],
+            ["Accountability", "After the incident, identify who was harmed, who was misled, what was consumed, what was promised, and what must be repaired." ]
+          ]
+        }
+      ],
+      "tags": ["emergency protocols", "evacuation", "staff safety", "Green Card", "Black Card", "incident scale"],
+      "relatedEntries": ["blacklight-card-level-clearance-system", "staff-continuity-and-accountability", "facility-mode-index"]
+    },
+    {
+      "id": "white-blue-emergency-evacuation-and-shelter",
+      "title": "White and Blue Card Evacuation and Shelter Instructions",
+      "category": "BlackLight Emergency Protocols",
+      "summary": "Standard civilian personnel receive ordinary, direct, and repeatable emergency instructions: evacuate when told, shelter when told, report observable facts, and do not self-investigate restricted events.",
+      "clearance": "WHITE CARD / BLUE CARD.",
+      "informationRating": "IR-1: baseline employee safety procedure with IR-2 secure-client continuity reminders.",
+      "sourceCredibility": "CR-A: Security Operations and Human Resources active staff-safety protocol.",
+      "recordStatus": "Active staff emergency instruction.",
+      "maintainedBy": "Security Operations, Human Resources, and Facilities and Workplace Services.",
+      "body": [
+        "White and Blue personnel are not expected to diagnose a Blacklight emergency. They are expected to survive it, avoid making it worse, preserve ordinary facts, and follow approved staff movement instructions. If a voice prompt, manager, security officer, badge reader, wall display, or emergency message instructs ordinary staff to evacuate, shelter, hold position, avoid a corridor, leave a floor, or stop using a system, the instruction should be followed unless doing so would create obvious immediate danger.",
+        "Employees are told that higher-security emergency language exists because Blacklight holds sensitive clients and secure contracts. That explanation is sufficient for standard personnel. A White or Blue employee who sees something strange is not failing the company by stepping away. The correct action is to leave the restricted event to trained responders, report ordinary observable facts, and avoid speculation in public channels.",
+        "Evacuation does not always mean leaving the building. In a fire, structural hazard, or public safety evacuation, staff may be routed outside to assembly points. In an atmospheric, security, or information-control event, staff may be moved deeper into shelter instead. Staff should not assume that outside is safer simply because ordinary office drills trained them that way. Blacklight emergency messaging distinguishes evacuation, relocation, shelter, continuity hold, and safety routing."
+      ],
+      "tables": [
+        {
+          "title": "White / Blue Employee Instructions",
+          "columns": ["Instruction", "Employee Meaning"],
+          "rows": [
+            ["Follow posted or announced routing", "Use the route provided by Security, Facilities, emergency signage, or approved voice prompt."],
+            ["Do not self-investigate", "Do not enter restricted rooms, utility spaces, sealed corridors, or unfamiliar stair routes to see what happened."],
+            ["Protect client material", "Close screens if safe, secure documents if nearby, but do not delay evacuation to save files."],
+            ["Take essentials only", "Badge, phone, coat, medication, and mobility devices matter; office property does not."],
+            ["Report observable facts", "What you saw, heard, smelled, touched, or were instructed to do; avoid theories."],
+            ["Avoid public speculation", "Do not post, stream, joke, or guess about clients, incidents, voices, alarms, or restricted areas."],
+            ["Check in after movement", "Use assembly, shelter, manager, or HR check-in so the company knows who is safe." ]
+          ]
+        }
+      ],
+      "tags": ["White Card", "Blue Card", "evacuation", "shelter", "employee instructions", "reporting"],
+      "relatedEntries": ["blacklight-standard-employee-security-procedures", "blacklight-standard-employee-clearance", "emergency-reporting-and-witness-protocols"]
+    },
+    {
+      "id": "green-card-emergency-support-protocols",
+      "title": "Green Card Emergency Support Protocols",
+      "category": "BlackLight Emergency Protocols",
+      "summary": "Green-card personnel keep the restricted support layer alive during emergency conditions without being granted full Black-level interpretation of the incident.",
+      "clearance": "GREEN CARD. Black oversight required for interpretation beyond assigned support lane.",
+      "informationRating": "IR-3: Green-restricted emergency support with possible IR-4 adjacency during Black-level incidents.",
+      "sourceCredibility": "CR-B: Green support desk procedures, Facilities records, Security Operations, and Black Archive after-action notes.",
+      "recordStatus": "Active Green support protocol.",
+      "maintainedBy": "Green Support Coordination Desk, Facilities and Workplace Services, Security Operations, and Continuity Office.",
+      "body": [
+        "Green personnel are the emergency support layer most likely to be close to the real problem without being given the real explanation. They may maintain air systems, power controllers, restricted communications, utility deck routes, sealed room access, continuity stores, emergency quarters, logistics, evidence custody, payroll continuity, special procurement, or government-facing contract records while being told only that a highest-security client condition is active.",
+        "The Green rule is controlled sufficiency. Green staff must receive enough detail to perform safe support work. They should not be forced to guess around hazards that could injure them, contaminate a record, collapse a seal, or expose ordinary staff. At the same time, Green staff are not automatically owed full Black interpretation. Their instructions should name the support task, boundary, hazard class, reporting channel, and stop condition.",
+        "A Green emergency order should never sound like magic. It should say which floor, which system, which panel, which access route, which check-in cadence, which safety equipment, which escalation authority, and which observations must be recorded. If the order cannot be made operationally clear without revealing a Black-level truth, a Black-card custodian or incident authority must either brief the Green worker narrowly or perform the task directly."
+      ],
+      "tables": [
+        {
+          "title": "Green Emergency Support Lanes",
+          "columns": ["Support Lane", "Green Instruction", "Black Boundary"],
+          "rows": [
+            ["Facilities", "Maintain doors, bulkheads, air, water, lighting, elevators, access panels, and utility deck status.", "Do not interpret why a room is Black-sealed unless briefed."],
+            ["Restricted IT", "Preserve local systems, isolate compromised devices, support Signal Quiet, and maintain approved logs.", "Do not treat an unknown voice or signal as authorized because it uses familiar credentials."],
+            ["Logistics", "Move supplies, cots, medical kits, sealed containers, protective equipment, and continuity materials.", "Do not open sealed cargo or infer client identity from unusual handling requirements."],
+            ["Finance and Payroll", "Keep emergency pay, reimbursements, vendor authorizations, and continuity cost codes functional.", "Do not expose Black-level operations through ordinary accounting language."],
+            ["Security Support", "Assist badge checks, shelter accountability, visitor control, and controlled route support.", "Do not override Black doors, operative holds, or board-level seals without authority."],
+            ["Records Support", "Preserve chain of custody, timestamps, observable facts, and restricted attachment routing.", "Do not summarize a Black-level record into Blue or public language without Information Control review." ]
+          ]
+        }
+      ],
+      "tags": ["Green Card", "emergency support", "maintenance", "restricted logistics", "continuity"],
+      "relatedEntries": ["blacklight-green-support-personnel", "interstitial-utility-decks", "reserve-power-and-autonomy"]
+    },
+    {
+      "id": "black-card-emergency-command-and-interpretation",
+      "title": "Black Card Emergency Command and Interpretation",
+      "category": "BlackLight Emergency Protocols",
+      "summary": "Black-card personnel are responsible for truth maintenance, sealed authorization, operative response, board-level action, and deciding what lower clearance levels must be told during major incidents.",
+      "clearance": "BLACK CARD only unless excerpts are downgraded by Information Control or board authority.",
+      "informationRating": "IR-4 / IR-5: Black operational and board/Charles-sealed emergency authority.",
+      "sourceCredibility": "CR-A: Black Archive, Security Operations, board authority, and active incident command records.",
+      "recordStatus": "Active Black-level emergency authority record.",
+      "maintainedBy": "Black Archive Custodians, Security Operations, Executive Office, and Board Secretariat.",
+      "body": [
+        "Black-card emergency authority begins where ordinary contract security stops explaining the event. Black personnel may be required to identify whether the incident is physical, contractual, atmospheric, machine-linked, supernatural, court-linked, spirit-territorial, Charles-specific, continuity-related, operative, board-level, or a combination of several vectors at once.",
+        "Black authority is not a license to hide everything. It is a duty to decide what truth is necessary at each lower level. White and Blue personnel need safe instructions. Green personnel need precise support instructions. Legal and HR need enough information to protect rights and repair harm. Finance needs enough information to pay people and preserve continuity. The Board may need enough information to govern without becoming a second incident.",
+        "Black personnel maintain the active top-secret record during the emergency. That record should distinguish direct observation, Charles statements, sensor logs, Green support reports, witness statements, external allegations, and contaminated or hostile sources. A major emergency without source credibility becomes a rumor with badge access."
+      ],
+      "tables": [
+        {
+          "title": "Black Emergency Responsibilities",
+          "columns": ["Responsibility", "Operational Meaning"],
+          "rows": [
+            ["Incident Interpretation", "Identify which vectors are active and which facility modes should combine."],
+            ["Disclosure Control", "Decide what White, Blue, Green, HR, Legal, Finance, and Board channels must know."],
+            ["Operative Response", "Authorize field personnel, internal responders, or protected assets where ordinary security cannot resolve the event."],
+            ["Record Integrity", "Maintain a live record with source credibility, timestamps, evidence custody, and restricted annotations."],
+            ["Green Boundary Protection", "Give support staff enough information to work safely without forcing unnecessary exposure."],
+            ["Post-Incident Accountability", "Ensure harm, pay, medical support, explanations, apologies, and repairs are not sacrificed to secrecy." ]
+          ]
+        }
+      ],
+      "tags": ["Black Card", "emergency command", "incident interpretation", "board authority", "Black Archive"],
+      "relatedEntries": ["blacklight-black-level-asset-personnel", "multi-vector-incident-framing", "staff-continuity-and-accountability"]
+    },
+    {
+      "id": "emergency-reporting-and-witness-protocols",
+      "title": "Emergency Reporting and Witness Protocols",
+      "category": "BlackLight Emergency Protocols",
+      "summary": "Personnel at every clearance level are instructed to report observable facts through the proper channel while avoiding rumor, unauthorized investigation, and unsafe interpretation.",
+      "clearance": "WHITE CARD / BLUE CARD reporting summary; GREEN CARD support reporting; BLACK CARD source credibility and restricted record integration.",
+      "informationRating": "IR-1 baseline reporting with IR-3 Green support and IR-4 restricted witness handling.",
+      "sourceCredibility": "CR-A: active Security Operations, HR, Legal, and Information Control reporting standard.",
+      "recordStatus": "Active reporting protocol.",
+      "maintainedBy": "Security Operations, Human Resources, Legal and Compliance, and Information Control Office.",
+      "body": [
+        "Emergency reporting begins with observable facts. What did you see, hear, smell, feel, receive, touch, carry, move, shut down, open, close, or report? Who gave the instruction? What time did it happen? Where were you? Who else was present? Which device, door, room, corridor, screen, voice, or system was involved? Ordinary staff are not asked to explain the impossible. They are asked to preserve reality before interpretation damages it.",
+        "White and Blue reports should avoid speculation. Green reports should include assigned task, route, system state, safety equipment, readings, logs, ticket numbers, and stop conditions. Black reports should attach source credibility and identify whether a source is direct, corroborated, departmental, preliminary, external, or compromised. HR and Legal reports should preserve employee impact, rights, leave needs, accommodations, retaliation risk, and client or public exposure.",
+        "Witnesses should not be punished for describing confusion honestly. A statement like 'the voice sounded like Charles but the prompt was wrong' may be more useful than a confident but false conclusion. Blacklight's reporting system is designed to make uncertain truth survivable until cleared personnel can interpret it."
+      ],
+      "tables": [
+        {
+          "title": "Reporting Channels by Clearance",
+          "columns": ["Clearance", "Primary Report", "Do Not Do"],
+          "rows": [
+            ["White", "Manager, Security Desk, HR, medical or evacuation check-in.", "Do not investigate restricted spaces, post publicly, or invent explanations."],
+            ["Blue", "Department lead, Security Operations, client operations channel, compliance report.", "Do not preserve client work at the cost of personal safety."],
+            ["Green", "Green Support Desk, Facilities/Security ticket, restricted maintenance log, continuity channel.", "Do not exceed assigned lane or open sealed material to satisfy curiosity."],
+            ["Black", "Black Archive live incident record, Security command, board or operative channel as required.", "Do not launder uncertain or contaminated sources into clean official truth."],
+            ["HR / Legal", "Employee-impact file, rights review, protected complaint, client or public exposure review.", "Do not let security language erase harm, pay, leave, or retaliation concerns." ]
+          ]
+        }
+      ],
+      "tags": ["reporting", "witness protocol", "source credibility", "incident records", "HR", "Legal"],
+      "relatedEntries": ["blacklight-information-ratings-and-credibility", "staff-continuity-and-accountability", "blacklight-compliance-and-legal"]
+    },
+    {
+      "id": "large-scale-emergency-scale-integration",
+      "title": "Large-Scale Emergency Scale Integration",
+      "category": "BlackLight Emergency Protocols",
+      "summary": "Blacklight classifies emergencies by scale so a single-room problem, a sealed-floor problem, a headquarters-wide event, and a Company-scale crisis do not receive the same response.",
+      "clearance": "BLUE CARD scale summary / GREEN CARD support-scale routing / BLACK CARD full scale integration and board-level consequence review.",
+      "informationRating": "IR-2 scale reference with IR-3 Green support and IR-4/IR-5 Black or board-level consequences.",
+      "sourceCredibility": "CR-B: Continuity Office, Security Operations, Facilities, Client Operations, and Black Archive scale review.",
+      "recordStatus": "Active emergency scale framework.",
+      "maintainedBy": "Continuity Office, Security Operations, Facilities, Board Secretariat, and Information Control Office.",
+      "body": [
+        "Scale is its own emergency fact. A wrong response at the wrong scale can be as dangerous as the original incident. A room problem treated like a building siege creates panic and needless exposure. A building siege treated like a maintenance ticket kills people. Blacklight therefore classifies emergencies by scope, affected clearance, continuity risk, public exposure, and whether the incident can be safely explained using ordinary secure-contract language.",
+        "At lower scales, White and Blue staff usually need movement instructions, reporting channels, and reassurance that ordinary safety rules still matter. At middle scales, Green support becomes critical because infrastructure, continuity, logistics, and sealed systems begin carrying the burden. At upper scales, Black authority must decide whether board action, operative response, restricted disclosure, Company-facing interpretation, or regional continuity protocols are active.",
+        "Scale can change. A suspicious prompt in one demonstration room may become a Signal Quiet event. A floor air anomaly may become a headquarters-wide atmospheric review. A staff shelter drill may become a real continuity hold. A client-site emergency may become a board-level Blacklight legitimacy problem. Emergency records should note when the scale changed and who authorized the change."
+      ],
+      "tables": [
+        {
+          "title": "Emergency Scale Bands",
+          "columns": ["Scale", "Scope", "Primary Concern", "Typical Clearance Lead"],
+          "rows": [
+            ["Scale 0", "Single person, single device, or single ordinary workplace hazard.", "Immediate aid, reporting, and normal supervisory response.", "White / Blue with Security or HR."],
+            ["Scale 1", "Room, meeting, lab, office, or client demonstration suite.", "Local evacuation, witness collection, access control, and safe shutdown.", "Blue with Security support."],
+            ["Scale 2", "Department, corridor, controlled route, or utility-adjacent support zone.", "Rerouting, containment, Green support dispatch, and client-data protection.", "Blue / Green."],
+            ["Scale 3", "Floor, ring segment, environmental zone, server wedge, or restricted facilities area.", "Facility mode activation, shelter routing, air/power support, and restricted reporting.", "Green with Black oversight if anomalous."],
+            ["Scale 4", "Multiple floors, inner core, headquarters-wide mode, or sealed-building preparation.", "Continuity, staff accountability, reserve systems, public cover, and board awareness.", "Black with Green support."],
+            ["Scale 5", "Remote client site, government-facing incident, public exposure, regional disruption, or multi-site Charles concern.", "External coordination, client trust, legal exposure, information control, and operative action.", "Black / Executive / Board."],
+            ["Scale 6", "Company-scale continuity, board-level survival, Charles-sealed matter, or existential exposure.", "Governance, truth maintenance, protected populations, and the cost of survival.", "Black Card / Board / Black Archive." ]
+          ]
+        }
+      ],
+      "tags": ["emergency scale", "continuity", "large-scale incident", "Scale 6", "board authority"],
+      "relatedEntries": ["multi-vector-incident-framing", "blacklight-black-level-asset-personnel", "reserve-power-and-autonomy"]
+    },
+    {
+      "id": "emergency-support-and-human-recovery",
+      "title": "Emergency Support and Human Recovery",
+      "category": "BlackLight Emergency Protocols",
+      "summary": "Emergency support continues after movement stops: medical aid, shelter supplies, pay continuity, leave, decompression, witness handling, repairs, and corrected explanations all matter.",
+      "clearance": "WHITE CARD / BLUE CARD support summary; GREEN CARD continuity support detail; BLACK CARD restricted harm review.",
+      "informationRating": "IR-1 employee support with IR-3 continuity support and IR-4 restricted harm context.",
+      "sourceCredibility": "CR-B: HR, Finance, Facilities, Medical Support, Legal, and post-incident review records.",
+      "recordStatus": "Active emergency recovery standard.",
+      "maintainedBy": "Human Resources, Finance and Payroll, Legal and Compliance, Facilities, and Continuity Office.",
+      "body": [
+        "Blacklight emergency support is not complete when the alarm ends. Personnel may need medical care, mobility assistance, medication access, food, water, warmth, sleep, shelter space, transportation, family contact, payroll correction, expense reimbursement, leave, counseling, protected reporting, replacement equipment, restored access, corrected records, or a plain-language explanation that does not insult their intelligence.",
+        "White and Blue employees should know where to check in, how to report injury or distress, how to request leave, and how to avoid retaliation after an incident. Green personnel may need additional decompression because they are often close enough to the restricted layer to see patterns they are not allowed to resolve. Black personnel are responsible for ensuring that secrecy does not become an excuse to deny care, pay, explanation, or accountability.",
+        "Long-duration shelter or sealed-building events create their own human recovery burden. Sleep, rationing, privacy, sanitation, disability support, family separation, conflict, fear, and unequal information access all become institutional responsibilities. If Blacklight survives an incident by consuming its people, the emergency did not end cleanly."
+      ],
+      "tables": [
+        {
+          "title": "Recovery Support Areas",
+          "columns": ["Area", "Support Requirement"],
+          "rows": [
+            ["Medical and Safety", "Injury care, exposure review, medication access, mobility support, and hazard monitoring."],
+            ["Shelter and Supplies", "Food, water, warmth, rest areas, sanitation, family contact, and accessibility needs."],
+            ["Payroll and Expenses", "Emergency pay, reimbursements, travel changes, vendor costs, and corrected timekeeping."],
+            ["HR and Leave", "Protected complaints, leave, accommodations, anti-retaliation review, and manager accountability."],
+            ["Legal and Compliance", "Client exposure, public statements, reporting obligations, evidence custody, and rights review."],
+            ["Information Repair", "Corrected explanations, revised records, downgraded briefings, and acknowledgments of harm." ]
+          ]
+        }
+      ],
+      "tags": ["emergency support", "human recovery", "pay continuity", "HR", "shelter", "accountability"],
+      "relatedEntries": ["blacklight-human-resources-initiatives", "blacklight-payroll-and-employee-administration", "staff-continuity-and-accountability"]
+    }
+  ]
+}
