@@ -1,7 +1,7 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.32.0",
+  "schemaVersion": "0.32.1",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
   "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, vampiric and fae court catalogs, Gaian shapechanger society and spirits index material, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, a searchable capability-first equipment foundation, and an internal information-control framework for clearance, source credibility, and diegetic archive audit work.",
@@ -54,6 +54,7 @@
     "data/blacklight-continuum/wiki/court-catalogs.json",
     "data/blacklight-continuum/wiki/gaian-shapechanger-spirit-index.json",
     "data/blacklight-continuum/wiki/blacklight-information-control.json",
+    "data/blacklight-continuum/wiki/blacklight-north-shell-restricted-facilities.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
