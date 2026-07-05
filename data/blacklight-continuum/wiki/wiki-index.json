@@ -1,10 +1,10 @@
 {
   "setting": "Blacklight Continuum",
   "campaign": "No Return Signal",
-  "schemaVersion": "0.31.0",
+  "schemaVersion": "0.32.0",
   "status": "capability-system-alpha",
   "genre": "far-future mirror-universe science-fiction espionage and supernatural survival horror",
-  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, vampiric and fae court catalogs, Gaian shapechanger society and spirits index material, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, and a searchable capability-first equipment foundation.",
+  "description": "Blacklight Continuum now includes guided and random character creation, returning-operative reorientation, a BlackLight Era campaign introduction, a comprehensive entity catalog, vampiric and fae court catalogs, Gaian shapechanger society and spirits index material, an NPC and entity generator, a seeded operational mission generator, explicit physical and social conflict procedures, a searchable capability-first equipment foundation, and an internal information-control framework for clearance, source credibility, and diegetic archive audit work.",
   "mechanicsPolicy": {
     "system": "Blacklight Continuum original d10 dice-pool system",
     "principle": "Recorded capabilities determine mechanical effects.",
@@ -46,12 +46,14 @@
   "entityCatalog": "data/blacklight-continuum/wiki/entity-catalog.json",
   "courtCatalogs": "data/blacklight-continuum/wiki/court-catalogs.json",
   "gaianShapechangerSpiritIndex": "data/blacklight-continuum/wiki/gaian-shapechanger-spirit-index.json",
+  "informationControl": "data/blacklight-continuum/wiki/blacklight-information-control.json",
   "packs": [
     "data/blacklight-continuum/wiki/foundation-lore.json",
     "data/blacklight-continuum/wiki/blacklight-era-campaign-introduction.json",
     "data/blacklight-continuum/wiki/entity-catalog.json",
     "data/blacklight-continuum/wiki/court-catalogs.json",
     "data/blacklight-continuum/wiki/gaian-shapechanger-spirit-index.json",
+    "data/blacklight-continuum/wiki/blacklight-information-control.json",
     "data/blacklight-continuum/wiki/foundation-rules.json",
     "data/blacklight-continuum/wiki/resource-pressure-rules.json",
     "data/blacklight-continuum/wiki/basic-archetypes.json",
@@ -65,8 +67,9 @@
     "data/blacklight-continuum/wiki/equipment-catalogs.json"
   ],
   "completedScope": {
-    "wikiEntries": 132,
-    "nativePacks": 16,
+    "wikiEntries": 137,
+    "nativePacks": 17,
+    "informationControlEntries": 5,
     "blacklightEraCampaignIntroductionEntries": 6,
     "entityCatalogEntries": 12,
     "courtCatalogEntries": 20,
@@ -171,6 +174,8 @@
     "veteranStructuredChoiceAcknowledgements": 1
   },
   "nextDevelopmentAreas": [
+    "continue the diegetic audit by assigning clearance color, information rating, source credibility, record status, and maintained-by fields to existing Blacklight wiki entries without compressing the lore body text",
+    "convert remaining outside-table language into Blacklight archive, training, support, personnel, and operations phrasing while preserving existing article density",
     "live browser playtest of seeded mission recreation, sectional rerolls, player-only printing, complete dossier printing, clipboard briefing, and JSON export",
     "live browser playtest of the twenty-four-stage bubble-based veteran reorientation, multi-selection Charles acknowledgments, legacy-answer migration, restart, export, and character-sheet attachment",
     "balance testing and distribution analysis across thousands of generated standard characters",
