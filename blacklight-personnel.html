@@ -5,23 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blacklight Intelligence | Personnel Portfolios</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    :root{--corp-cyan:#79f2ff;--corp-gold:#d9a84f;--corp-panel:rgba(8,14,25,.78)}
-    body{margin:0;background:radial-gradient(circle at top right,rgba(121,242,255,.18),transparent 32rem),#06080e;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    .top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px clamp(16px,4vw,48px);background:rgba(6,8,14,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
-    .brand{font-weight:900;letter-spacing:.08em;text-transform:uppercase}.brand span{color:var(--corp-cyan)}.nav{display:flex;flex-wrap:wrap;gap:10px}.nav a{color:var(--muted);text-decoration:none;font-weight:800;font-size:.9rem}.nav a:hover{color:var(--corp-cyan)}
-    main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:34px 0 70px}.hero{border:1px solid rgba(121,242,255,.25);border-radius:26px;background:var(--corp-panel);padding:clamp(20px,4vw,42px);box-shadow:0 22px 70px rgba(0,0,0,.28)}.hero h1{font-size:clamp(2rem,6vw,4.8rem);line-height:.98;margin:0 0 12px}.hero p{color:var(--muted);line-height:1.6;max-width:900px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.actions a{text-decoration:none}
-    .section-head{margin:34px 0 16px}.section-head h2{font-size:clamp(1.7rem,4vw,2.5rem);margin:4px 0}.section-head p{color:var(--muted);line-height:1.6;max-width:840px}.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.portfolio-card{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.035);padding:18px;overflow:hidden}.portfolio-card h3{margin:0}.role{color:var(--corp-cyan);font-weight:900;margin:4px 0 10px}.portfolio-card p,.portfolio-card li{color:var(--muted);line-height:1.55}.badge-row{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.badge{border:1px solid rgba(121,242,255,.35);border-radius:999px;padding:4px 8px;font-size:.72rem;color:var(--corp-cyan);font-weight:900;text-transform:uppercase;letter-spacing:.06em;background:rgba(121,242,255,.08)}.warning{border-left:3px solid var(--corp-gold);padding:12px 14px;background:rgba(217,168,79,.08);color:var(--muted);margin-top:16px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:18px}.hr-table{width:100%;min-width:760px;border-collapse:collapse}.hr-table th,.hr-table td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}.hr-table th{background:rgba(121,242,255,.1);color:var(--ink)}.hr-table td{color:var(--muted)}footer{border-top:1px solid var(--line);padding:22px clamp(16px,4vw,48px);color:var(--muted);background:rgba(0,0,0,.22)}
-    .portrait{width:100%;aspect-ratio:1/1;border-radius:16px;object-fit:cover;display:block;margin-bottom:14px;border:1px solid rgba(121,242,255,.24);background:#0c1119;box-shadow:0 18px 45px rgba(0,0,0,.25)}
-    .portrait-missing{width:100%;aspect-ratio:1/1;border-radius:16px;display:grid;place-items:center;margin-bottom:14px;border:1px dashed rgba(121,242,255,.22);background:linear-gradient(135deg,rgba(121,242,255,.08),rgba(255,255,255,.025));color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:12px;box-sizing:border-box}
-    @media(max-width:780px){.top{flex-direction:column;align-items:flex-start}}
-  </style>
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
 </head>
-<body>
-  <header class="top">
-    <div class="brand">BLACKLIGHT <span>PERSONNEL</span></div>
-    <nav class="nav" aria-label="Personnel navigation">
+<body class="blacklight-corp-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-corporate.html" aria-label="Blacklight Intelligence corporate homepage">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>Personnel</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="Personnel navigation">
       <a href="blacklight-corporate.html">Corporate Site</a>
+      <a href="blacklight-brand-assets.html">Brand Assets</a>
       <a href="index.html?blacklight_access=personnel#blacklight-continuum">Internal Wiki</a>
       <a href="#executives">Executives</a>
       <a href="#board">Board</a>
@@ -30,55 +24,67 @@
     </nav>
   </header>
 
-  <main>
-    <section class="hero">
-      <p class="eyebrow">Corporate HR and public leadership portfolio</p>
-      <h1>Leadership you can put on a procurement packet.</h1>
-      <p>Publicly acknowledged Blacklight personnel profiles for standard employee and client-facing use. These are the people ordinary staff are allowed to name when a contract, payroll issue, facility concern, product anomaly, workplace complaint, or leadership question needs a human owner.</p>
-      <div class="actions">
-        <a class="primary-action" href="blacklight-corporate.html">Open Corporate Homepage</a>
-        <a class="secondary-action" href="index.html?blacklight_access=personnel#blacklight-continuum">Open Internal Wiki</a>
+  <section class="bli-hero" aria-labelledby="personnel-title">
+    <div>
+      <p class="bli-eyebrow">Corporate HR and public leadership portfolio</p>
+      <h1 id="personnel-title">Leadership you can put on a procurement packet.</h1>
+      <p class="bli-lede">Publicly acknowledged Blacklight personnel profiles for standard employee and client-facing use. These are the people ordinary staff are allowed to name when a contract, payroll issue, facility concern, product anomaly, workplace complaint, or leadership question needs a human owner.</p>
+      <div class="bli-actions">
+        <a class="bli-action primary" href="blacklight-corporate.html">Open Corporate Homepage</a>
+        <a class="bli-action" href="index.html?blacklight_access=personnel#blacklight-continuum">Open Internal Wiki</a>
+        <a class="bli-action" href="blacklight-brand-assets.html">Open Brand Assets</a>
       </div>
-      <div class="warning"><strong>C-0 HR Note:</strong> This page is safe for ordinary employee orientation. Restricted internal notes, actual clearance boundaries, and hidden complications live in the Blacklight Continuum wiki records.</div>
-    </section>
-
-    <section id="executives">
-      <div class="section-head"><p class="eyebrow">Executive leadership</p><h2>Officers of the public company.</h2><p>These executives make Blacklight look and function like a serious secure-technology vendor while privately absorbing the strain of a company whose cover is also operational infrastructure.</p></div>
-      <div class="portfolio-grid">
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/helena-marrow.jpg" alt="Corporate portrait of Helena Marrow"><h3>Helena Marrow</h3><div class="role">Chief Executive Officer</div><div class="badge-row"><span class="badge">strategy</span><span class="badge">public trust</span><span class="badge">accountability</span></div><p>Procurement-safe face of Blacklight Intelligence and the executive most responsible for making the public company real enough to survive daylight.</p></article>
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marcus-venn.jpg" alt="Corporate portrait of Marcus Venn"><h3>Marcus Venn</h3><div class="role">Chief Operating Officer</div><div class="badge-row"><span class="badge">operations</span><span class="badge">continuity</span><span class="badge">deployment</span></div><p>Turns contracts, support obligations, facility readiness, and crisis logistics into actual executable work.</p></article>
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/priya-sable.jpg" alt="Corporate portrait of Dr. Priya Sable"><h3>Dr. Priya Sable</h3><div class="role">Chief Technology Officer</div><div class="badge-row"><span class="badge">voice stack</span><span class="badge">local AI</span><span class="badge">source integrity</span></div><p>Leads the Charles secure voice product architecture while insisting the public product not be confused with the real Charles.</p></article>
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/elian-cross.jpg" alt="Corporate portrait of Elian Cross"><h3>Elian Cross</h3><div class="role">Chief Security Officer</div><div class="badge-row"><span class="badge">access culture</span><span class="badge">facility modes</span><span class="badge">staff safety</span></div><p>Protects staff, clients, data, and facility boundaries while making sure security does not become a license for workplace abuse.</p></article>
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marisol-keene.jpg" alt="Corporate portrait of Marisol Keene"><h3>Marisol Keene</h3><div class="role">Chief Legal and Compliance Officer</div><div class="badge-row"><span class="badge">privacy</span><span class="badge">contracts</span><span class="badge">audit</span></div><p>Makes Blacklight plausible, accountable, procurement-ready, and painfully difficult to hand-wave when promises create consequences.</p></article>
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/jonas-rill.jpg" alt="Corporate portrait of Jonas Rill"><h3>Jonas Rill</h3><div class="role">Chief Financial Officer</div><div class="badge-row"><span class="badge">payroll</span><span class="badge">reserves</span><span class="badge">procurement</span></div><p>Funds the boring things that let the impossible things survive: payroll continuity, reserve planning, invoicing, and emergency cost accounting.</p></article>
+      <div class="bli-warning"><strong>C-0 HR Note:</strong> This page is safe for ordinary employee orientation. Restricted internal notes, actual clearance boundaries, and hidden complications live in the Blacklight Continuum wiki records.</div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Personnel directory wayfinding">
+      <div class="bli-directory-title">Personnel</div>
+      <div class="bli-directory-list">
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="ops"></span><strong>Executives</strong><span class="bli-arrow">→</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="audit"></span><strong>Board</strong><span class="bli-arrow">→</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="hr"></span><strong>Directors</strong><span class="bli-arrow">→</span></div>
       </div>
-    </section>
+      <div class="bli-brand"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Intelligence</span></span></div>
+    </aside>
+  </section>
 
-    <section id="board">
-      <div class="section-head"><p class="eyebrow">Board members</p><h2>Governance, public-sector trust, and infrastructure credibility.</h2></div>
-      <div class="portfolio-grid">
-        <article class="portfolio-card"><div class="portrait-missing">Portrait pending</div><h3>Avery Thorne</h3><div class="role">Board Chair</div><p>Governance figure with enterprise security and risk oversight credentials; useful because they can challenge executives without needing every hidden answer.</p></article>
-        <article class="portfolio-card"><div class="portrait-missing">Portrait pending</div><h3>Nadia Vale</h3><div class="role">Independent Board Member</div><p>Former emergency-management administrator focused on continuity, public-sector trust, staff shelter, and human-impact review.</p></article>
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/victor-halren.jpg" alt="Corporate portrait of Victor Halren"><h3>Victor Halren</h3><div class="role">Independent Board Member</div><p>Industrial systems investor who makes ruggedized local deployments sound like sober infrastructure instead of paranoia.</p></article>
-      </div>
-    </section>
-
-    <section id="directors">
-      <div class="section-head"><p class="eyebrow">Senior departmental directors</p><h2>The people employees actually need.</h2></div>
-      <div class="portfolio-grid">
-        <article class="portfolio-card"><img class="portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/sera-quill.jpg" alt="Corporate portrait of Sera Quill"><h3>Sera Quill</h3><div class="role">Director of Human Resources</div><p>Owns onboarding, benefits, employee relations, confidential reporting channels, manager accountability, and post-incident decompression.</p></article>
-        <article class="portfolio-card"><div class="portrait-missing">Portrait pending</div><h3>Owen Pike</h3><div class="role">Director of Client Operations</div><p>Leads client onboarding, support queues, renewals, service levels, and early detection of customer trust collapse.</p></article>
-        <article class="portfolio-card"><div class="portrait-missing">Portrait pending</div><h3>Tessa Grane</h3><div class="role">Director of Public Relations</div><p>Controls press language, internal memos, public statements, launch copy, and the art of making Blacklight sound boring on purpose.</p></article>
-        <article class="portfolio-card"><div class="portrait-missing">Portrait pending</div><h3>Dima Ro</h3><div class="role">Director of Secure Deployment Engineering</div><p>Manages client hardware images, deployment packages, field installation readiness, rollback discipline, and proof of what a voice system is connected to.</p></article>
-        <article class="portfolio-card"><div class="portrait-missing">Portrait pending</div><h3>Anika Shaw</h3><div class="role">Director of Facilities and Workplace Services</div><p>Keeps the O-shaped headquarters operating as a public corporate workplace while understanding that the building has deeper moods than the floor plan admits.</p></article>
-        <article class="portfolio-card"><div class="portrait-missing">Portrait pending</div><h3>Caleb Orth</h3><div class="role">Director of Research Evaluation</div><p>Runs model testing, retrieval quality, user experience studies, red-team behavior, and future interface assessment.</p></article>
+  <main class="bli-shell">
+    <section id="executives" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Executive leadership</p><h2>Officers of the public company.</h2><p>These executives make Blacklight look and function like a serious secure-technology vendor while privately absorbing the strain of a company whose cover is also operational infrastructure.</p></div>
+      <div class="bli-portfolio-grid">
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/helena-marrow.jpg" alt="Corporate portrait of Helena Marrow"><h3>Helena Marrow</h3><div class="bli-role">Chief Executive Officer</div><div class="bli-badge-row"><span class="bli-badge">strategy</span><span class="bli-badge">public trust</span><span class="bli-badge">accountability</span></div><p>Procurement-safe face of Blacklight Intelligence and the executive most responsible for making the public company real enough to survive daylight.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marcus-venn.jpg" alt="Corporate portrait of Marcus Venn"><h3>Marcus Venn</h3><div class="bli-role">Chief Operating Officer</div><div class="bli-badge-row"><span class="bli-badge">operations</span><span class="bli-badge">continuity</span><span class="bli-badge">deployment</span></div><p>Turns contracts, support obligations, facility readiness, and crisis logistics into actual executable work.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/priya-sable.jpg" alt="Corporate portrait of Dr. Priya Sable"><h3>Dr. Priya Sable</h3><div class="bli-role">Chief Technology Officer</div><div class="bli-badge-row"><span class="bli-badge">voice stack</span><span class="bli-badge">local AI</span><span class="bli-badge">source integrity</span></div><p>Leads the Charles secure voice product architecture while insisting the public product not be confused with the real Charles.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/elian-cross.jpg" alt="Corporate portrait of Elian Cross"><h3>Elian Cross</h3><div class="bli-role">Chief Security Officer</div><div class="bli-badge-row"><span class="bli-badge">access culture</span><span class="bli-badge">facility modes</span><span class="bli-badge">staff safety</span></div><p>Protects staff, clients, data, and facility boundaries while making sure security does not become a license for workplace abuse.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marisol-keene.jpg" alt="Corporate portrait of Marisol Keene"><h3>Marisol Keene</h3><div class="bli-role">Chief Legal and Compliance Officer</div><div class="bli-badge-row"><span class="bli-badge">privacy</span><span class="bli-badge">contracts</span><span class="bli-badge">audit</span></div><p>Makes Blacklight plausible, accountable, procurement-ready, and painfully difficult to hand-wave when promises create consequences.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/jonas-rill.jpg" alt="Corporate portrait of Jonas Rill"><h3>Jonas Rill</h3><div class="bli-role">Chief Financial Officer</div><div class="bli-badge-row"><span class="bli-badge">payroll</span><span class="bli-badge">reserves</span><span class="bli-badge">procurement</span></div><p>Funds the boring things that let the impossible things survive: payroll continuity, reserve planning, invoicing, and emergency cost accounting.</p></article>
       </div>
     </section>
 
-    <section id="escalation">
-      <div class="section-head"><p class="eyebrow">Employee escalation map</p><h2>Who owns the problem?</h2></div>
-      <div class="table-wrap">
-        <table class="hr-table">
+    <section id="board" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Board members</p><h2>Governance, public-sector trust, and infrastructure credibility.</h2></div>
+      <div class="bli-portfolio-grid">
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Avery Thorne</h3><div class="bli-role">Board Chair</div><p>Governance figure with enterprise security and risk oversight credentials; useful because they can challenge executives without needing every hidden answer.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Nadia Vale</h3><div class="bli-role">Independent Board Member</div><p>Former emergency-management administrator focused on continuity, public-sector trust, staff shelter, and human-impact review.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/victor-halren.jpg" alt="Corporate portrait of Victor Halren"><h3>Victor Halren</h3><div class="bli-role">Independent Board Member</div><p>Industrial systems investor who makes ruggedized local deployments sound like sober infrastructure instead of paranoia.</p></article>
+      </div>
+    </section>
+
+    <section id="directors" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Senior departmental directors</p><h2>The people employees actually need.</h2></div>
+      <div class="bli-portfolio-grid">
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/sera-quill.jpg" alt="Corporate portrait of Sera Quill"><h3>Sera Quill</h3><div class="bli-role">Director of Human Resources</div><p>Owns onboarding, benefits, employee relations, confidential reporting channels, manager accountability, and post-incident decompression.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Owen Pike</h3><div class="bli-role">Director of Client Operations</div><p>Leads client onboarding, support queues, renewals, service levels, and early detection of customer trust collapse.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Tessa Grane</h3><div class="bli-role">Director of Public Relations</div><p>Controls press language, internal memos, public statements, launch copy, and the art of making Blacklight sound boring on purpose.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Dima Ro</h3><div class="bli-role">Director of Secure Deployment Engineering</div><p>Manages client hardware images, deployment packages, field installation readiness, rollback discipline, and proof of what a voice system is connected to.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Anika Shaw</h3><div class="bli-role">Director of Facilities and Workplace Services</div><p>Keeps the O-shaped headquarters operating as a public corporate workplace while understanding that the building has deeper moods than the floor plan admits.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Caleb Orth</h3><div class="bli-role">Director of Research Evaluation</div><p>Runs model testing, retrieval quality, user experience studies, red-team behavior, and future interface assessment.</p></article>
+      </div>
+    </section>
+
+    <section id="escalation" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Employee escalation map</p><h2>Who owns the problem?</h2></div>
+      <div class="bli-table-wrap">
+        <table class="bli-table">
           <thead><tr><th>Issue</th><th>Public Escalation Path</th><th>Senior Owner</th></tr></thead>
           <tbody>
             <tr><td>Payroll or expense problem</td><td>Finance and Payroll, then CFO office for unresolved continuity issues.</td><td>Jonas Rill</td></tr>
@@ -94,6 +100,8 @@
     </section>
   </main>
 
-  <footer><strong>Blacklight Intelligence Personnel</strong> · Fictional HR/public leadership portfolio page for Blacklight Continuum campaign play.</footer>
+  <footer class="bli-footer">
+    <strong>Blacklight Intelligence</strong> · Fictional HR-safe personnel page for Blacklight Continuum campaign play.
+  </footer>
 </body>
 </html>
