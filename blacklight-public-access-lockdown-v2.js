@@ -5,6 +5,7 @@
   const CORPORATE_ROUTE_VALUE = 'corporate';
   const LOGIN_STORAGE_KEY = 'blacklight-wiki-stage-gate-complete';
   const LOGIN_SCRIPT = 'blacklight-wiki-login-gate.js';
+  let loginInProgress = false;
 
   function isCorporateAccessRoute() {
     try {
@@ -27,7 +28,7 @@
   }
 
   function shouldLockPublicView() {
-    return isTopLevelToolsPage() && !isCorporateAccessRoute() && !loginComplete();
+    return isTopLevelToolsPage() && !isCorporateAccessRoute() && !loginComplete() && !loginInProgress;
   }
 
   function corporateAccessUrl() {
@@ -50,7 +51,7 @@
     }
     return new Promise(resolve => {
       const script = document.createElement('script');
-      script.src = `${LOGIN_SCRIPT}?v=3`;
+      script.src = `${LOGIN_SCRIPT}?v=4`;
       script.async = false;
       script.onload = resolve;
       script.onerror = resolve;
@@ -115,7 +116,9 @@
   }
 
   function lockBrowser(view) {
+    if (loginInProgress) return;
     const browser = ensureBrowser(view);
+    if (browser.dataset.blacklightLoginActive === 'true') return;
     browser.hidden = true;
     browser.innerHTML = '';
   }
@@ -140,23 +143,32 @@
 
   async function routeThroughLoginGate() {
     const view = document.getElementById('blacklight-continuum');
-    if (!view) return;
+    if (!view || loginInProgress) return;
     const browser = ensureBrowser(view);
 
+    loginInProgress = true;
     browser.hidden = false;
+    browser.dataset.blacklightLoginActive = 'true';
     browser.innerHTML = '<p class="helper-note">Loading Blacklight corporate login…</p>';
     browser.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    await ensureLoginGateScript();
-
-    const gate = window.BlacklightWikiLoginGate;
-    if (gate?.runGate) {
-      await gate.runGate(browser, { force: true });
-    } else {
-      try { sessionStorage.setItem(LOGIN_STORAGE_KEY, 'true'); } catch (_) {}
+    try {
+      await ensureLoginGateScript();
+      const gate = window.BlacklightWikiLoginGate;
+      if (gate?.runGate) {
+        await gate.runGate(browser, { force: true });
+      } else {
+        try { sessionStorage.setItem(LOGIN_STORAGE_KEY, 'true'); } catch (_) {}
+      }
+      delete browser.dataset.blacklightLoginActive;
+      window.location.href = corporateAccessUrl();
+    } catch (error) {
+      loginInProgress = false;
+      delete browser.dataset.blacklightLoginActive;
+      browser.hidden = false;
+      browser.innerHTML = '<p class="helper-note">Corporate login failed to initialize. Refresh and try again.</p>';
+      throw error;
     }
-
-    window.location.href = corporateAccessUrl();
   }
 
   function interceptPublicAccess(event) {
