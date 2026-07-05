@@ -41,6 +41,7 @@
   }
 
   async function typeValue(input, text, speed) {
+    if (!input) return;
     input.value = '';
     for (const character of text) {
       input.value += character;
@@ -49,6 +50,7 @@
   }
 
   async function typeText(node, text, speed) {
+    if (!node) return;
     node.textContent = '';
     for (const character of text) {
       node.textContent += character;
@@ -57,12 +59,14 @@
   }
 
   async function runGate(browser, options = {}) {
+    if (!browser) return;
     if (isUnlocked() && !options.force) return;
     if (sequencePromise) return sequencePromise;
 
     sequencePromise = (async () => {
       injectGateStyles();
       browser.hidden = false;
+      browser.dataset.blacklightLoginActive = 'true';
       browser.innerHTML = `
         <section class="blacklight-login-gate" aria-label="Black Light Industries information database login">
           <div class="blacklight-login-shell">
@@ -88,63 +92,40 @@
       const bar = browser.querySelector('#blacklight-login-progress-bar');
       const message = browser.querySelector('#blacklight-login-message');
       const progress = value => { if (bar) bar.style.width = `${value}%`; };
+      const setStatus = value => { if (status) status.textContent = value; };
 
-      status.textContent = 'Locating cached operator route…';
+      setStatus('Locating cached operator route…');
       progress(8);
       await delay(450);
       await typeValue(user, 'C0-ARCHIVE-OPERATOR', 32);
-      status.textContent = 'Username field populated.\nClearance route: C-0 / Corporate Baseline.';
+      setStatus('Username field populated.\nClearance route: C-0 / Corporate Baseline.');
       progress(30);
       await delay(350);
       await typeValue(pass, 'charles//handled', 38);
-      status.textContent = 'Password field populated.\nPreparing fictional archive handoff.';
+      setStatus('Password field populated.\nPreparing fictional archive handoff.');
       progress(52);
       await delay(450);
-      status.textContent = 'Routing to Black Light Industries information database…';
+      setStatus('Routing to Black Light Industries information database…');
       progress(70);
       await delay(650);
-      status.textContent = 'Archive route accepted.\nPreparing internal records interface…';
+      setStatus('Archive route accepted.\nPreparing internal records interface…');
       progress(100);
       await delay(500);
-      message.classList.add('visible');
+      if (message) message.classList.add('visible');
       await typeText(message, "I see you. I'll handle this.\n— Charles", 26);
       await delay(950);
 
       markUnlocked();
+      delete browser.dataset.blacklightLoginActive;
       sequencePromise = null;
-    })();
+    })().catch(error => {
+      delete browser.dataset.blacklightLoginActive;
+      sequencePromise = null;
+      throw error;
+    });
 
     return sequencePromise;
   }
 
   window.BlacklightWikiLoginGate = Object.freeze({ runGate, isUnlocked, markUnlocked });
-
-  function shouldGateClick(event) {
-    if (isUnlocked()) return null;
-    const workspace = document.getElementById('blacklight-continuum');
-    if (!workspace) return null;
-    const button = event.target.closest?.('button');
-    if (!button || !workspace.contains(button)) return null;
-    if (button.dataset.blacklightGateReplay === 'true') return null;
-    if (button.closest('#blacklight-browser')) return null;
-    return button;
-  }
-
-  document.addEventListener('click', event => {
-    const button = shouldGateClick(event);
-    if (!button) return;
-    const browser = document.getElementById('blacklight-browser');
-    if (!browser) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    browser.hidden = false;
-    browser.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    void runGate(browser).then(() => {
-      button.dataset.blacklightGateReplay = 'true';
-      button.click();
-      delete button.dataset.blacklightGateReplay;
-    });
-  }, true);
 })();
