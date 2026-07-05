@@ -1,0 +1,141 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Blacklight facility layout guide for the O-shaped headquarters, Black-level north shell, inner courtyard access ring, subfloor classification, service infrastructure, and Green support implementation boundaries.",
+  "entries": [
+    {
+      "id": "blacklight-facility-layout-guide-overview",
+      "title": "Facility Layout Guide: Access Shells, Rings, and Subfloors",
+      "category": "BlackLight Facility Layout",
+      "summary": "The O-shaped headquarters uses public rings, controlled support layers, Black-level access regions, and subfloor boundaries to keep ordinary corporate operations, Green support work, and Black-level operational truth physically separated.",
+      "clearance": "BLUE CARD public-safe orientation / GREEN CARD support layout detail / BLACK CARD full access-map authority.",
+      "informationRating": "IR-2 facility orientation with IR-3 Green support routing and IR-4 Black access-region disclosure.",
+      "sourceCredibility": "CR-B: Facilities, Security Operations, Green support maps, and Black Archive infrastructure annotations.",
+      "recordStatus": "Active general facility layout guide.",
+      "maintainedBy": "Facilities and Workplace Services, Security Operations, Green Support Coordination Desk, and Information Control Office.",
+      "body": [
+        "The Blacklight headquarters is organized as an O-shaped corporate facility with public-facing operations around the outside, controlled internal support layers, an inner courtyard access ring, and a deliberately uneven security profile. From a visitor's perspective, the building reads as a serious secure-technology headquarters. From a Green support perspective, the building is a layered maintenance problem with unusual routing rules. From a Black perspective, the building is a shell around the records, people, rooms, and infrastructure that cannot be safely explained as ordinary secure contract work.",
+        "The most important layout note is scope: the entire north shell of the facility and the inner courtyard access ring are Black-level access areas. These are not merely executive-prestige zones or normal secure-client suites. They are Black-level routing, custody, coordination, and interpretive spaces where ordinary corporate explanations are no longer sufficient. Personnel without Black access should only enter those regions under escort, explicit incident authority, or narrowly scoped Green support orders.",
+        "Subfloor access follows a similar rule. Subfloor minus one is standard records keeping, server architecture, plumbing, controlled mechanical routing, ordinary utility support, and building service infrastructure. It is still secure and not public, but it is not automatically Black-level. All subfloors below minus one are Black-level unless a specific section is explicitly downgraded for Green support under controlled task authority.",
+        "This guide is the bridge between facility-mode records and practical infrastructure implementation. It gives the archive a general layout vocabulary before more specialized records discuss evacuation routing, emergency support, environmental isolation, reserve power, utility decks, courtyard access, and Black-area maintenance boundaries."
+      ],
+      "keyFacts": [
+        "The north shell of the facility is Black-level access.",
+        "The inner courtyard access ring is Black-level access.",
+        "Subfloor minus one is standard records, server architecture, plumbing, utility routing, and mechanical support rather than automatically Black-level.",
+        "All subfloors below minus one are Black-level unless explicitly downgraded under controlled Green support authority.",
+        "Green staff may receive support routing, maintenance tasks, and safety boundaries without receiving full Black interpretation of what the area supports."
+      ],
+      "tables": [
+        {
+          "title": "Primary Layout Zones",
+          "columns": ["Zone", "Default Access", "Facility Function"],
+          "rows": [
+            ["Public Outer Ring", "White / Blue", "Reception, public offices, visitor paths, client presentation areas, ordinary administrative work, and public corporate legitimacy."],
+            ["Controlled Middle Layers", "Blue / Green", "Departmental workspaces, secure contract handling, support offices, standard security routing, and access-aware operations."],
+            ["North Shell", "Black", "Black-level access region for restricted custody, operational coordination, sealed interpretation, and nonordinary facility support."],
+            ["Inner Courtyard Access Ring", "Black", "Black-level internal circulation, protected route control, courtyard-facing restricted access, and access to regions the public floor plan should not explain."],
+            ["Subfloor -1", "Blue / Green secure support", "Records keeping, server architecture, plumbing, standard mechanical routing, controlled utility access, and building service infrastructure."],
+            ["Subfloor -2 and Below", "Black", "Black-level infrastructure, continuity reserves, hidden operational rooms, deep custody spaces, and sealed systems below ordinary facility explanation." ]
+          ]
+        }
+      ],
+      "tags": ["facility layout", "north shell", "inner courtyard access ring", "subfloors", "Green Card", "Black Card"],
+      "relatedEntries": ["blacklight-building-infrastructure-overview", "interstitial-utility-decks", "reserve-power-and-autonomy", "blacklight-card-level-clearance-system"]
+    },
+    {
+      "id": "north-shell-and-inner-courtyard-ring-access",
+      "title": "North Shell and Inner Courtyard Access Ring",
+      "category": "BlackLight Facility Layout",
+      "summary": "The north shell and inner courtyard access ring are Black-level regions that physically concentrate restricted routing, high-level custody, and access-control truth inside the otherwise corporate-readable headquarters.",
+      "clearance": "BLACK CARD. Green support may access specific work orders under escort or remote authorization.",
+      "informationRating": "IR-4: Black access-region disclosure with IR-3 Green maintenance fragments.",
+      "sourceCredibility": "CR-A: Security Operations access map corroborated by Facilities route controls and Black Archive custody records.",
+      "recordStatus": "Active Black access-region record.",
+      "maintainedBy": "Security Operations, Black Archive Custodians, and Facilities and Workplace Services.",
+      "body": [
+        "The north shell is the part of the headquarters where the public building stops being a complete explanation. Its doors, elevators, meeting rooms, service corridors, and support spaces may still look like corporate architecture, but the access logic underneath them belongs to Black-level custody and interpretation. A person may cross from ordinary headquarters language into Black-level physical truth without the carpet, walls, or lights announcing the change.",
+        "The inner courtyard access ring serves a related purpose. Publicly, the courtyard reads as architectural prestige, staff wellness, daylighting, and controlled circulation around the center of the building. Black-level records treat the inner courtyard access ring as protected internal movement: a route structure that can connect restricted offices, sealed support zones, Black Archive access, courtyard-facing observation, and north-shell movement without exposing those connections to the public outer ring.",
+        "Green personnel are often told that the north shell and courtyard ring exist for highest-security clients, executive continuity, secure records, or maintenance-sensitive demonstration infrastructure. Those explanations may be true at the Blue or Green layer, but they are incomplete. Green support orders for these regions should be narrow, timed, logged, and attached to explicit stop conditions."
+      ],
+      "tables": [
+        {
+          "title": "Access Region Handling",
+          "columns": ["Region", "Lower-Level Explanation", "Black-Level Function"],
+          "rows": [
+            ["North Shell", "Highest-security client operations, executive continuity, secure records, and restricted demonstrations.", "Black-level custody, restricted routing, operative coordination, sealed interpretation, and Company-adjacent rooms."],
+            ["Inner Courtyard Access Ring", "Controlled internal circulation, secure executive movement, courtyard safety, and restricted maintenance access.", "Black-level internal route spine linking north-shell, courtyard, archive, and sealed access functions."],
+            ["Courtyard-Facing Doors", "Access-control and safety boundaries around a protected architectural feature.", "Threshold management where visibility, invitation, observation, and movement may carry restricted meaning."],
+            ["North-Shell Service Points", "Maintenance panels, security controls, and high-trust vendor routes.", "Green support interfaces wrapped around Black-level systems that cannot be fully described on the work order." ]
+          ]
+        }
+      ],
+      "tags": ["north shell", "inner courtyard", "access ring", "Black Card", "Green support"],
+      "relatedEntries": ["blacklight-facility-layout-guide-overview", "door-bulkhead-and-ceiling-partitions", "multi-vector-incident-framing"]
+    },
+    {
+      "id": "subfloor-classification-and-access-map",
+      "title": "Subfloor Classification and Access Map",
+      "category": "BlackLight Facility Layout",
+      "summary": "Subfloor minus one is secure support infrastructure; all lower subfloors are Black-level by default unless a specific section is downgraded for controlled Green support.",
+      "clearance": "GREEN CARD support summary for subfloor -1; BLACK CARD for subfloor -2 and below.",
+      "informationRating": "IR-3 for subfloor -1 support; IR-4 / IR-5 for deeper Black-level subfloors depending on active systems.",
+      "sourceCredibility": "CR-B: Facilities plans, Security Operations access records, Green maintenance logs, and Black Archive infrastructure annotations.",
+      "recordStatus": "Active subfloor classification guide.",
+      "maintainedBy": "Facilities and Workplace Services, Security Operations, Green Support Coordination Desk, and Black Archive Custodians.",
+      "body": [
+        "Subfloor minus one is the lowest layer of the building that can still be explained primarily through ordinary secure-facility infrastructure. It contains standard records keeping, server architecture, plumbing, water routing, mechanical support, controlled storage, maintenance access, and utility service functions that a serious secure-technology headquarters could plausibly maintain without requiring Black-level truth.",
+        "That does not make subfloor minus one public. It is controlled space. White-card employees generally have no reason to enter it. Blue personnel may have task-based access for records, IT, compliance, or secure support. Green personnel may maintain utility, server, mechanical, and environmental systems. Black personnel may use it as the last clean explanatory layer before deeper access becomes impossible to justify as ordinary infrastructure.",
+        "All subfloors below minus one are Black-level by default. Subfloor minus two and below may include deep reserve infrastructure, Black Archive support, sealed mechanical routes, emergency continuity rooms, protected stores, hidden access controls, specialized environmental systems, incident custody spaces, or operational infrastructure that cannot be safely described as plumbing, server architecture, or records keeping."
+      ],
+      "tables": [
+        {
+          "title": "Subfloor Access Bands",
+          "columns": ["Level", "Default Access", "Primary Interpretation"],
+          "rows": [
+            ["Subfloor -1", "Blue / Green controlled support", "Standard records keeping, server architecture, plumbing, controlled utility service, and mechanical support."],
+            ["Subfloor -2", "Black by default", "Transition into deep restricted infrastructure, sealed route control, hidden support, and continuity systems."],
+            ["Subfloor -3 and Below", "Black by default", "Black-level operational infrastructure, reserve systems, custody spaces, protected stores, and sealed archive-adjacent functions."],
+            ["Temporary Green Downgrade", "Green under work order", "Specific panel, route, system, or maintenance task temporarily exposed without full Black interpretation."],
+            ["Emergency Black Override", "Black", "All lower access rules may be superseded during facility mode, sealed autonomy, or active Black-level incident command." ]
+          ]
+        }
+      ],
+      "tags": ["subfloors", "subfloor -1", "server architecture", "plumbing", "Black-level infrastructure", "Green Card"],
+      "relatedEntries": ["interstitial-utility-decks", "reserve-power-and-autonomy", "green-card-emergency-support-protocols"]
+    },
+    {
+      "id": "general-facilities-layout-and-infrastructure-implementation",
+      "title": "General Facilities Layout and Infrastructure Implementation",
+      "category": "BlackLight Facility Layout",
+      "summary": "Facilities implementation uses ordinary building systems as the visible layer around Black-level routing, Green support work, emergency modes, and long-term continuity infrastructure.",
+      "clearance": "GREEN CARD implementation detail / BLACK CARD full facility-truth integration.",
+      "informationRating": "IR-3 Green support implementation with IR-4 Black-area routing and IR-5 continuity implications where board-level survival systems are involved.",
+      "sourceCredibility": "CR-B: Facilities implementation records, engineering support notes, Green logs, and Black Archive infrastructure review.",
+      "recordStatus": "Active infrastructure implementation guide.",
+      "maintainedBy": "Facilities and Workplace Services with Security Operations, Continuity Office, and Information Control Office review.",
+      "body": [
+        "Blacklight infrastructure implementation is built on dual readability. Every system should have an ordinary facilities meaning and, where required, a restricted operational meaning. A door is a door, but it is also access control. A ceiling baffle is architecture, but it can become section isolation. A utility deck is service access, but it can become a diagnostic route around a contaminated floor. A server room is records and compute, but it may also be the line between a product instance, a facility interface, and something wearing a familiar voice.",
+        "The north shell, inner courtyard access ring, and subfloors below minus one create the Black-level skeleton of the facility. Subfloor minus one creates the standard support membrane: records, servers, plumbing, mechanical service, and utility architecture that Green personnel can maintain under controlled conditions. The outer ring and middle layers preserve the public corporate workplace. The whole building therefore works as nested explanations rather than a single secret room behind a bookshelf.",
+        "Implementation records should always state the visible function, the support function, the clearance boundary, the emergency behavior, and the stop condition. Green personnel need to know what to maintain, where to stop, and who to call. Black personnel need to know what a system really supports, how it may fail under abnormal conditions, and what lower-clearance explanation is still honest enough to use."
+      ],
+      "tables": [
+        {
+          "title": "Infrastructure Implementation Principles",
+          "columns": ["Principle", "Implementation Requirement"],
+          "rows": [
+            ["Dual Readability", "Every restricted system should have an ordinary facilities explanation where possible without falsifying maintenance requirements."],
+            ["Green Sufficiency", "Green support orders must include system, location, route, safety boundary, reporting channel, and stop condition."],
+            ["Black Traceability", "Black-level systems must preserve custody, source credibility, access history, and incident interpretation."],
+            ["Emergency Reconfiguration", "Doors, elevators, air, power, lighting, communications, and signage must support facility modes without confusing staff into unsafe action."],
+            ["Subfloor Boundary Discipline", "Subfloor -1 may support ordinary secure infrastructure; subfloor -2 and below default to Black-level unless explicitly downgraded."],
+            ["Courtyard Ring Protection", "Inner courtyard routes must protect Black-level movement without turning the public courtyard into an unexplained forbidden symbol." ]
+          ]
+        }
+      ],
+      "tags": ["infrastructure implementation", "facilities", "dual readability", "Green support", "Black access", "subfloor boundary"],
+      "relatedEntries": ["blacklight-facility-layout-guide-overview", "north-shell-and-inner-courtyard-ring-access", "subfloor-classification-and-access-map", "blacklight-emergency-protocols-overview"]
+    }
+  ]
+}
