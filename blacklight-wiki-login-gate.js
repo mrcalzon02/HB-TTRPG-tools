@@ -56,8 +56,8 @@
     }
   }
 
-  async function runGate(browser) {
-    if (isUnlocked()) return;
+  async function runGate(browser, options = {}) {
+    if (isUnlocked() && !options.force) return;
     if (sequencePromise) return sequencePromise;
 
     sequencePromise = (async () => {
@@ -116,6 +116,8 @@
 
     return sequencePromise;
   }
+
+  window.BlacklightWikiLoginGate = Object.freeze({ runGate, isUnlocked, markUnlocked });
 
   function shouldGateClick(event) {
     if (isUnlocked()) return null;
