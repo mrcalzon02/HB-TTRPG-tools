@@ -18,9 +18,6 @@
     });
   }
 
-  void loadScript('blacklight-wiki-login-gate.js').catch(() => {});
-  void loadScript('blacklight-archive-classification-display.js').catch(() => {});
-
   async function prepareView(viewId) {
     if (viewId === 'utilities') {
       sheetPromise ||= loadScript('character-sheet-view.js');
