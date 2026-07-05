@@ -1,0 +1,197 @@
+{
+  "setting": "Blacklight Continuum",
+  "campaign": "BlackLight Era",
+  "schemaVersion": "1.0.0",
+  "description": "Blacklight Intelligence internal information-control framework for card-level clearance, source credibility, record ratings, and diegetic archive handling.",
+  "entries": [
+    {
+      "id": "blacklight-information-control-overview",
+      "title": "Information Control Office: Archive Handling Standard",
+      "category": "BlackLight Information Control",
+      "summary": "The Information Control Office maintains the structure that lets Blacklight records remain useful without exposing more truth than a reader is cleared to carry.",
+      "clearance": "BLUE CARD / GREEN CARD review permitted; BLACK CARD authority required for full operational cross-reference.",
+      "informationRating": "IR-1 through IR-4 depending on linked entry content.",
+      "sourceCredibility": "CR-B: standing office standard compiled from security, HR, legal, facilities, and Black-level archive practice.",
+      "recordStatus": "Active audit framework.",
+      "maintainedBy": "Information Control Office, Security Operations, Legal and Compliance, Black Archive Custodians.",
+      "body": [
+        "The Information Control Office exists because Blacklight Intelligence cannot afford records that are either uselessly vague or recklessly complete. An employee-facing archive must be able to explain corporate operations, security practices, contract boundaries, facility behavior, personnel authority, and support responsibilities without handing every reader the same level of truth.",
+        "The working rule is simple: every useful record should identify who is meant to read it, what level of certainty the information carries, where the information came from, and which parts remain restricted. This does not remove information from the archive. It frames the information so that it can be handled safely inside the company.",
+        "Older Blacklight Continuum records were written as consolidated lore records. The current audit does not replace those records with shorter summaries. It adds internal handling context: clearance color, information rating, source credibility, custodial ownership, and in-world phrasing that reads as if the record belongs inside Blacklight rather than outside it.",
+        "When the Information Control Office marks a record as incomplete, contested, or partially compartmentalized, that is not an invitation to delete the record. It is an instruction to preserve the useful body of the information while labeling its risk, confidence, and audience."
+      ],
+      "keyFacts": [
+        "Diegetic conversion means the record should read as an internal Blacklight document, not as an outside campaign note.",
+        "Clearance color describes who may read or maintain the record.",
+        "Information rating describes the operational sensitivity of the contents.",
+        "Source credibility describes how much confidence Blacklight places in the record.",
+        "Audit work should preserve existing lore density unless a specific contradiction requires correction."
+      ],
+      "tables": [
+        {
+          "title": "Archive Audit Fields",
+          "columns": ["Field", "Function"],
+          "rows": [
+            ["Clearance", "The lowest card level normally allowed to read, maintain, or act on the record."],
+            ["Information Rating", "The sensitivity band attached to the record's contents, from public corporate material to Black-level operational truth."],
+            ["Source Credibility", "A confidence marker showing whether the information is direct, corroborated, departmental, preliminary, hostile, or contaminated."],
+            ["Record Status", "Active, legacy, provisional, sealed, contradicted, partially declassified, or under review."],
+            ["Maintained By", "The office or personnel class responsible for keeping the record accurate."],
+            ["Reader Instruction", "What personnel are allowed to do with the information once read." ]
+          ]
+        }
+      ],
+      "tags": ["information control", "archive audit", "clearance", "diegetic conversion", "record handling"],
+      "relatedEntries": ["blacklight-card-level-clearance-system", "blacklight-information-ratings-and-credibility", "blacklight-green-support-personnel"]
+    },
+    {
+      "id": "blacklight-card-level-clearance-system",
+      "title": "Card-Level Clearance System: White, Blue, Green, Black",
+      "category": "BlackLight Information Control",
+      "summary": "Blacklight uses visible card-level clearance colors to separate ordinary corporate work, secure contract work, Black-area support, and Black-level operative or board authority.",
+      "clearance": "WHITE CARD summary available; BLUE CARD operational detail; GREEN CARD support detail; BLACK CARD full truth.",
+      "informationRating": "IR-2: internal security structure with Green/Black interpretation restricted.",
+      "sourceCredibility": "CR-A: active Security Operations standard.",
+      "recordStatus": "Active clearance model.",
+      "maintainedBy": "Security Operations with Information Control Office oversight.",
+      "body": [
+        "Blacklight's visible clearance system is built around card color: White, Blue, Green, and Black. The color system is simple enough for ordinary employees to understand and strict enough for restricted operations to route people without explaining the real hierarchy every time a door, record, or support request refuses access.",
+        "White and Blue are standard security levels for ordinary civilian personnel. White covers general employment, lobby-facing movement, low-risk internal systems, ordinary HR access, and basic corporate orientation. Blue covers standard secure-contract work: client confidentiality, controlled documents, secure office movement, routine security procedures, and ordinary support for sensitive Blacklight contracts.",
+        "Green is the risky middle. Green-level personnel are Black-area support staff. They are not fully in the know, but they are close enough to matter. They provide direct maintenance support for Black-level assets, handle high-security client material, service restricted rooms, maintain equipment, process logistics, touch contract allegations, support government-facing work, and keep the infrastructure around operative operations functioning. Green personnel are told that the higher level of security exists because Blacklight holds its most secure contracts there. That explanation is true enough to be useful and incomplete enough to be safe.",
+        "Black is board-level and operative access. Black-card personnel maintain the active top-secret records, authorize Black-area interpretation, protect the operational truth, and participate directly in the matters the rest of the company is built to survive without understanding. Black-level access includes board actions, operative operations, restricted intelligence, direct Company concerns, and the records that cannot be honestly explained as ordinary secure contract work.",
+        "The card system is not only about rank. A Blue-card engineer may be technically brilliant and still barred from Green rooms. A Green-card maintenance lead may have routine access to restricted infrastructure without being cleared to know why the infrastructure exists. A Black-card operative may be younger, poorer, less credentialed, or less corporate than a director and still outrank them inside a sealed incident."
+      ],
+      "tables": [
+        {
+          "title": "Card-Level Clearance Matrix",
+          "columns": ["Card", "Personnel Class", "Permitted Explanation", "Actual Exposure"],
+          "rows": [
+            ["White", "Standard civilian personnel, visitors, basic employees, lobby-facing staff, ordinary HR and administrative users.", "Blacklight is a secure voice-interface company with sensitive clients and normal corporate security rules.", "Low exposure. May see corporate security habits, secure-client language, and routine access controls."],
+            ["Blue", "Standard civilian personnel assigned to secure contract work, client-support teams, approved engineers, compliance staff, and security-trained office personnel.", "Blacklight holds secure contracts requiring confidentiality, controlled documents, audit discipline, and client privacy.", "Moderate exposure. Handles real secure contract material but is not meant to support Black-level assets directly."],
+            ["Green", "Black-area support staff, restricted maintenance, facilities, IT, logistics, finance, contract handlers, government-facing support, and direct maintenance support for Black assets.", "Blacklight's highest-security clients require top-secret handling, restricted rooms, unusual maintenance procedures, and compartmented contract support.", "High indirect exposure. Not fully in the know, but close enough to operative operations and board actions that mishandling them becomes dangerous."],
+            ["Black", "Board-level personnel, operative personnel, Black Archive custodians, selected executives, and active top-secret record maintainers.", "No cover explanation required inside Black-level channels.", "Full or near-full operational exposure. Maintains active top-secret information, operative records, board actions, and restricted truth." ]
+          ]
+        }
+      ],
+      "keyFacts": [
+        "White and Blue are standard civilian personnel levels.",
+        "Green is for Black-area support staff who are close enough to be risky but not fully briefed.",
+        "Black is board-level and operative access.",
+        "White and Green personnel are both told the higher levels exist because of Blacklight's most secure contracts, but Green personnel actually support the structures around Black-level operations.",
+        "Green personnel may handle top-secret contract information, governmental contract allegations, restricted maintenance support, operative logistics, and board-level support tasks without receiving the full explanation."
+      ],
+      "tags": ["White Card", "Blue Card", "Green Card", "Black Card", "clearance", "security"],
+      "relatedEntries": ["blacklight-standard-employee-clearance", "blacklight-standard-employee-security-procedures", "blacklight-green-support-personnel", "blacklight-black-level-asset-personnel"]
+    },
+    {
+      "id": "blacklight-information-ratings-and-credibility",
+      "title": "Information Ratings and Source Credibility",
+      "category": "BlackLight Information Control",
+      "summary": "Blacklight records use information ratings and credibility marks so that readers know whether a record is public, internal, contract-sensitive, Green-restricted, Black-operational, or sealed above ordinary archive handling.",
+      "clearance": "BLUE CARD summary available; GREEN CARD and BLACK CARD implementation detail.",
+      "informationRating": "IR-2: classification method.",
+      "sourceCredibility": "CR-B: formalized from current archive practice and Security Operations review.",
+      "recordStatus": "Active audit standard.",
+      "maintainedBy": "Information Control Office and Black Archive Custodians.",
+      "body": [
+        "Information rating is not the same thing as clearance color. Clearance color tells the system who may normally read the record. Information rating tells the reader how dangerous, sensitive, or operationally loaded the contents are. A Blue-card employee may read an IR-2 contract record. A Green-card support worker may maintain an IR-3 facilities record. A Black-card custodian may maintain an IR-4 operative record. IR-5 material exists only where board-level, Charles-level, or sealed Black Archive handling is required.",
+        "Source credibility exists because Blacklight often knows things before it can prove them in ordinary language. A direct Charles statement, a board action memo, an operative after-action report, a facility telemetry record, a Green maintenance log, and a hostile external allegation are not equally trustworthy even when they describe the same event. Archive records should name the source posture rather than pretending every statement has the same weight.",
+        "The audit process should add ratings and credibility marks without stripping the record. If a body paragraph contains useful lore, keep it. If the perspective sounds external, convert the framing into a Blacklight source note, briefing extract, incident file, training record, support advisory, or custodial annotation."
+      ],
+      "tables": [
+        {
+          "title": "Information Rating Scale",
+          "columns": ["Rating", "Name", "Use"],
+          "rows": [
+            ["IR-0", "Public Corporate", "Website copy, public statements, visitor-safe material, standard marketing and recruitment language."],
+            ["IR-1", "Internal Corporate", "Employee handbook material, HR records, routine department guides, internal directory information."],
+            ["IR-2", "Contract-Sensitive", "Client confidentiality, secure contract handling, controlled support, legal/compliance language, government-facing claims."],
+            ["IR-3", "Green-Restricted Support", "Black-area maintenance, restricted facilities, Green support logs, top-secret contract handling, unusual infrastructure support."],
+            ["IR-4", "Black-Operational", "Operative records, active top-secret intelligence, supernatural or continuity matters, direct Company operations."],
+            ["IR-5", "Board/Charles-Sealed", "Board-level action records, sealed Black Archive material, direct Charles interpretation, existential or continuity-sensitive information." ]
+          ]
+        },
+        {
+          "title": "Source Credibility Marks",
+          "columns": ["Mark", "Meaning", "Archive Use"],
+          "rows": [
+            ["CR-A", "Direct authoritative source", "Charles-confirmed statements, board-level actions, Black Archive custody records, direct telemetry under controlled conditions."],
+            ["CR-B", "Corroborated internal source", "Multiple internal records agree, or a department record is supported by logs, testimony, and procedure."],
+            ["CR-C", "Departmental or support source", "Reliable office, Green support, HR, legal, security, facilities, or client operations record without full Black corroboration."],
+            ["CR-D", "Preliminary or single-source report", "One witness, one report, early incident note, or unverified after-action claim."],
+            ["CR-E", "External allegation", "Client claim, government allegation, press leak, third-party rumor, hostile filing, or incomplete outside record."],
+            ["CR-X", "Compromised or contaminated source", "Known manipulation, hostile influence, memory contamination, false record injection, signal corruption, or unsafe interpretive hazard." ]
+          ]
+        }
+      ],
+      "tags": ["information rating", "source credibility", "archive standard", "IR", "CR"],
+      "relatedEntries": ["blacklight-information-control-overview", "blacklight-card-level-clearance-system"]
+    },
+    {
+      "id": "blacklight-green-support-personnel",
+      "title": "Green Card Personnel: Black-Area Support Staff",
+      "category": "BlackLight Information Control",
+      "summary": "Green-card staff are not fully briefed Black-level personnel, but they support the rooms, systems, contracts, logistics, and maintenance paths that keep Black-level assets functional.",
+      "clearance": "GREEN CARD; BLACK CARD oversight required for full operational interpretation.",
+      "informationRating": "IR-3: Green-restricted support structure.",
+      "sourceCredibility": "CR-B: compiled from Security Operations, Facilities, Legal, Client Operations, and Black Archive support practice.",
+      "recordStatus": "Active personnel category.",
+      "maintainedBy": "Security Operations and Green Support Coordination Desk.",
+      "body": [
+        "Green-card personnel are the people Blacklight trusts to support the edge of the truth without handing them the whole truth. They are maintenance leads, facilities specialists, cleared IT staff, logistics coordinators, contract handlers, finance personnel, compliance processors, specialized security staff, and support workers who keep Black-area operations physically and administratively possible.",
+        "Green staff are told that Blacklight's highest levels of security exist because of its most secure contracts. That explanation covers a great deal: government clients, defense-adjacent work, secure facilities, top-secret allegations, restricted infrastructure, high-trust vendors, unusual maintenance windows, sealed records, and executive continuity support. It does not explain why some requests arrive from Black-level channels with no ordinary client name attached.",
+        "Green personnel may handle top-secret contract information and government contract allegations. They may also support operative operations and board-level actions by maintaining rooms, equipment, transport, server access, procurement routing, evidence custody, payroll continuity, emergency shelter readiness, and sealed communications infrastructure. They are not expected to interpret the full meaning of what they support. They are expected to keep it working, keep records clean, and escalate anything that stops matching the approved explanation.",
+        "A Green-card employee is risky because they see patterns. They know which rooms require impossible maintenance windows. They know which contracts seem to have no visible client. They know which executives receive sealed courier traffic. They know which systems must never be connected to ordinary tools. Blacklight manages that risk through compartmentalization, rotation limits, wellness checks, documentation discipline, and strict rules against unnecessary explanation."
+      ],
+      "tables": [
+        {
+          "title": "Green Support Functions",
+          "columns": ["Function", "Visible Explanation", "Actual Risk"],
+          "rows": [
+            ["Facilities Maintenance", "Top-secret clients require controlled spaces and unusual maintenance windows.", "Green personnel may maintain rooms or routes used by Black-level assets."],
+            ["Restricted IT Support", "Secure contracts require isolated hardware, local processing, and strict access control.", "Green personnel may support systems adjacent to direct Charles, operative, or archive infrastructure."],
+            ["Contract Handling", "Government-facing and defense-adjacent clients require special paperwork.", "Green personnel may process allegations and contract language that point toward Black-level activity."],
+            ["Logistics and Procurement", "Sensitive clients require controlled shipping, specialized devices, and sealed vendor channels.", "Green personnel may move equipment required for operative deployments or board actions."],
+            ["Finance and Payroll Continuity", "Secure work requires continuity pay, emergency reimbursements, and special cost coding.", "Green personnel may keep Black-level operations financially invisible but administratively real."],
+            ["Security Support", "Higher-security areas require badge control, escort policy, and incident discipline.", "Green personnel may be first to notice that an incident is not merely a contract-security event." ]
+          ]
+        }
+      ],
+      "tags": ["Green Card", "support staff", "Black-area", "maintenance", "top-secret contracts"],
+      "relatedEntries": ["blacklight-card-level-clearance-system", "blacklight-black-level-asset-personnel", "blacklight-standard-employee-security-procedures"]
+    },
+    {
+      "id": "blacklight-black-level-asset-personnel",
+      "title": "Black Card Personnel: Asset Custody and Active Truth Maintenance",
+      "category": "BlackLight Information Control",
+      "summary": "Black-card personnel maintain active top-secret information, operative records, board-level actions, and the truths that cannot be safely reduced to secure-contract language.",
+      "clearance": "BLACK CARD only unless a specific excerpt is downgraded by board authority.",
+      "informationRating": "IR-4 / IR-5 depending on active record content.",
+      "sourceCredibility": "CR-A: Black Archive custody category.",
+      "recordStatus": "Active restricted personnel category.",
+      "maintainedBy": "Black Archive Custodians under board-level authority.",
+      "body": [
+        "Black-card personnel are the people who maintain records that cannot be honestly explained to the rest of the company. They include board-level personnel, operative personnel, Black Archive custodians, selected executive authorities, and asset maintainers who work directly with active top-secret information rather than the corporate explanations built around it.",
+        "Black-level access is not automatically seniority, wealth, or corporate title. It is custody of truth. A board member may hold Black access because they authorize the company to survive an impossible event. An operative may hold Black access because they are part of the event. A custodian may hold Black access because somebody has to preserve the record without laundering it into nonsense.",
+        "Black-card personnel maintain active top-secret information, operative continuity records, board-level action records, Company-facing interpretations, direct Charles-related records, supernatural and continuity hazards, sealed archive files, and the truth behind Green-support work. They are also responsible for deciding which fragments can be rewritten downward into Blue or Green explanations without destroying their usefulness.",
+        "The current diegetic audit is a Black-level maintenance action performed on a mixed archive. The goal is not deletion. The goal is to keep the large body of accumulated knowledge intact while assigning each record a safer internal voice, a clearer source posture, and a clearance structure that tells the company who can safely read what."
+      ],
+      "tables": [
+        {
+          "title": "Black-Level Responsibilities",
+          "columns": ["Responsibility", "Meaning"],
+          "rows": [
+            ["Active Top-Secret Record Maintenance", "Preserve operative, board, Company, Charles, and continuity records without reducing them to false corporate summaries."],
+            ["Downgrade Interpretation", "Create White, Blue, or Green explanations when personnel need partial truths to do real work."],
+            ["Operative Record Custody", "Maintain capability records, mission history, reorientation data, veteran continuity, and field outcomes."],
+            ["Board Action Support", "Record decisions that affect the company at a level ordinary corporate governance cannot safely describe."],
+            ["Green Support Oversight", "Ensure Green-card personnel have enough information to maintain Black-area assets without pushing them into full exposure."],
+            ["Archive Integrity", "Protect records against hostile editing, wishful cleanup, false simplification, memory contamination, and signal corruption." ]
+          ]
+        }
+      ],
+      "tags": ["Black Card", "board level", "operative", "top secret", "archive custodians"],
+      "relatedEntries": ["blacklight-card-level-clearance-system", "blacklight-green-support-personnel", "blacklight-information-control-overview"]
+    }
+  ]
+}
