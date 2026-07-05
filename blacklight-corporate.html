@@ -5,117 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blacklight Intelligence | Secure Local Voice Operations</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    :root{--corp-blue:#70a7ff;--corp-cyan:#79f2ff;--corp-green:#9ff7b1;--corp-panel:rgba(8,14,25,.76)}
-    body{margin:0;background:radial-gradient(circle at top left,rgba(64,110,180,.26),transparent 34rem),#05070c;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    .corp-topbar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px clamp(16px,4vw,48px);background:rgba(5,7,12,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-    .corp-logo{font-weight:900;letter-spacing:.08em;text-transform:uppercase}.corp-logo span{color:var(--corp-cyan)}
-    .corp-nav{display:flex;flex-wrap:wrap;gap:10px}.corp-nav a{color:var(--muted);text-decoration:none;font-weight:700;font-size:.9rem}.corp-nav a:hover{color:var(--corp-cyan)}
-    .corp-hero{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:72px 0 34px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:28px;align-items:center}
-    .corp-hero h1{font-size:clamp(2.4rem,7vw,5.8rem);line-height:.94;margin:0 0 16px}.corp-hero p{color:var(--muted);font-size:1.07rem;line-height:1.6}.corp-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.corp-actions a{text-decoration:none}
-    .corp-panel{border:1px solid rgba(112,167,255,.35);border-radius:24px;background:var(--corp-panel);box-shadow:0 22px 70px rgba(0,0,0,.32);padding:22px}.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.metric{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.035)}.metric strong{display:block;font-size:1.65rem;color:var(--corp-cyan)}.metric span{color:var(--muted);font-size:.85rem}
-    .ticker{border-block:1px solid rgba(112,167,255,.25);background:rgba(112,167,255,.08);overflow:hidden}.ticker-track{display:flex;gap:28px;white-space:nowrap;padding:10px 0;animation:scrollTicker 34s linear infinite}.ticker span{color:var(--muted);font-weight:800}.ticker b{color:var(--corp-green)}@keyframes scrollTicker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-    main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:30px 0 70px}.section-head{margin:32px 0 16px}.section-head h2{font-size:clamp(1.7rem,4vw,2.6rem);margin:4px 0}.section-head p{color:var(--muted);line-height:1.6;max-width:860px}.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.corp-card{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035);padding:18px}.corp-card h3{margin:0 0 8px}.corp-card p,.corp-card li{color:var(--muted);line-height:1.55}.badge-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}.corp-badge{border:1px solid rgba(112,167,255,.35);border-radius:999px;padding:4px 8px;font-size:.75rem;color:var(--corp-cyan);font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:rgba(112,167,255,.08)}
-    .leader-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.leader-card{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035);padding:16px}.leader-card h3{margin:0}.leader-role{color:var(--corp-cyan);font-weight:800;margin:4px 0 10px}.leader-card p{color:var(--muted);line-height:1.55}.hr-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:18px}.hr-table{width:100%;border-collapse:collapse;min-width:760px}.hr-table th,.hr-table td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}.hr-table th{color:var(--ink);background:rgba(112,167,255,.12)}.hr-table td{color:var(--muted)}
-    footer{border-top:1px solid var(--line);padding:22px clamp(16px,4vw,48px);color:var(--muted);background:rgba(0,0,0,.22)}
-    @media(max-width:820px){.corp-hero{grid-template-columns:1fr}.corp-topbar{align-items:flex-start;flex-direction:column}.metric-grid{grid-template-columns:1fr}}
-  </style>
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
 </head>
-<body>
-  <header class="corp-topbar">
-    <div class="corp-logo">BLACKLIGHT <span>INTELLIGENCE</span></div>
-    <nav class="corp-nav" aria-label="Corporate navigation">
+<body class="blacklight-corp-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-corporate.html" aria-label="Blacklight Intelligence corporate homepage">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>Intelligence</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="Corporate navigation">
       <a href="#product">Charles Interface</a>
       <a href="#contracts">Contracts</a>
       <a href="#departments">Departments</a>
       <a href="#leadership">Leadership</a>
       <a href="#hr">HR Directory</a>
       <a href="blacklight-personnel.html">Personnel</a>
-      <a href="index.html#blacklight-continuum">Internal Wiki</a>
+      <a href="blacklight-brand-assets.html">Brand Assets</a>
+      <a href="index.html?blacklight_access=corporate#blacklight-continuum">Internal Wiki</a>
     </nav>
   </header>
 
-  <section class="corp-hero">
+  <section class="bli-hero" aria-labelledby="corp-title">
     <div>
-      <p class="eyebrow">Secure local voice operations for rooms where the walls are supposed to matter.</p>
-      <h1>Confidential systems deserve local intelligence.</h1>
-      <p>Blacklight Intelligence deploys Charles-branded secure voice operations interfaces for government, emergency, legal, medical, industrial, and security-conscious organizations that require local processing, auditability, controlled workflows, and resilient facility support.</p>
-      <div class="corp-actions">
-        <a class="primary-action" href="index.html#blacklight-continuum">Open Blacklight Continuum Wiki</a>
-        <a class="secondary-action" href="blacklight-personnel.html">Open Personnel Portfolios</a>
-        <a class="secondary-action" href="#leadership">View Public Leadership</a>
-        <a class="secondary-action" href="#hr">Open HR Directory</a>
+      <p class="bli-eyebrow">Secure local voice operations for rooms where the walls are supposed to matter.</p>
+      <h1 id="corp-title">Confidential systems deserve local intelligence.</h1>
+      <p class="bli-lede">Blacklight Intelligence deploys Charles-branded secure voice operations interfaces for government, emergency, legal, medical, industrial, and security-conscious organizations that require local processing, auditability, controlled workflows, and resilient facility support.</p>
+      <div class="bli-actions">
+        <a class="bli-action primary" href="index.html?blacklight_access=corporate#blacklight-continuum">Open Blacklight Continuum Wiki</a>
+        <a class="bli-action" href="blacklight-personnel.html">Open Personnel Portfolios</a>
+        <a class="bli-action" href="blacklight-brand-assets.html">Open Brand Assets</a>
+        <a class="bli-action" href="#hr">Open HR Directory</a>
       </div>
     </div>
-    <aside class="corp-panel" aria-label="Corporate summary metrics">
-      <div class="badge-row"><span class="corp-badge">localized AI</span><span class="corp-badge">secure voice</span><span class="corp-badge">audit-ready</span></div>
-      <div class="metric-grid">
-        <div class="metric"><strong>100%</strong><span>localized processing deployments available</span></div>
-        <div class="metric"><strong>24/7</strong><span>client operations and support desk coverage</span></div>
-        <div class="metric"><strong>C-0</strong><span>standard corporate baseline access model</span></div>
-        <div class="metric"><strong>BLKI</strong><span>fictional internal market ticker for campaign use</span></div>
+    <aside class="bli-directory-panel" aria-label="Corporate lobby wayfinding">
+      <div class="bli-directory-title">Welcome</div>
+      <div class="bli-directory-list">
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="visitors"></span><strong>Visitors</strong><span class="bli-arrow">←</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="parking"></span><strong>Employee parking</strong><span class="bli-arrow">→</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="deliveries"></span><strong>Deliveries</strong><span class="bli-arrow">→</span></div>
+      </div>
+      <div>
+        <div class="bli-badge-row"><span class="bli-badge">localized AI</span><span class="bli-badge">secure voice</span><span class="bli-badge">audit-ready</span></div>
+        <div class="bli-metric-grid">
+          <div class="bli-stat"><strong>100%</strong><span>localized processing deployments available</span></div>
+          <div class="bli-stat"><strong>24/7</strong><span>client operations and support desk coverage</span></div>
+          <div class="bli-stat"><strong>C-0</strong><span>standard corporate baseline access model</span></div>
+          <div class="bli-stat"><strong>BLKI</strong><span>fictional internal market ticker for campaign use</span></div>
+        </div>
       </div>
     </aside>
   </section>
 
-  <div class="ticker" aria-label="Fictional promotional ticker">
-    <div class="ticker-track">
+  <div class="bli-ticker" aria-label="Fictional promotional ticker">
+    <div class="bli-ticker-track">
       <span>BLKI <b>▲ 2.4%</b> Secure Local Interface Growth</span><span>CHARLES EDGE SUITE <b>99.98%</b> Supported Uptime Window</span><span>PUBLIC SECTOR DEPLOYMENTS <b>EXPANDING</b></span><span>CONFIDENTIAL SYSTEMS VENDOR <b>AUDIT READY</b></span><span>LOCAL VOICE OPERATIONS <b>NO DEFAULT CLOUD ROUTING</b></span>
       <span>BLKI <b>▲ 2.4%</b> Secure Local Interface Growth</span><span>CHARLES EDGE SUITE <b>99.98%</b> Supported Uptime Window</span><span>PUBLIC SECTOR DEPLOYMENTS <b>EXPANDING</b></span><span>CONFIDENTIAL SYSTEMS VENDOR <b>AUDIT READY</b></span><span>LOCAL VOICE OPERATIONS <b>NO DEFAULT CLOUD ROUTING</b></span>
     </div>
   </div>
 
-  <main>
-    <section id="product">
-      <div class="section-head"><p class="eyebrow">Charles secure voice operations</p><h2>Not a consumer assistant. A controlled local interface.</h2><p>Charles deployments are built for sensitive rooms, secure workflows, policy-bound documents, and local operations that cannot safely route speech and records through consumer infrastructure.</p></div>
-      <div class="card-grid">
-        <article class="corp-card"><div class="badge-row"><span class="corp-badge">local LLM</span></div><h3>Localized Intelligence Stack</h3><p>Client-specific language models, speech recognition, text-to-speech, and document indexes run inside approved deployment boundaries.</p></article>
-        <article class="corp-card"><div class="badge-row"><span class="corp-badge">workflow</span></div><h3>Operations Interface</h3><p>Hands-free checklists, procedural lookups, scheduling prompts, and facility announcements stay inside client-defined permissions.</p></article>
-        <article class="corp-card"><div class="badge-row"><span class="corp-badge">audit</span></div><h3>Compliance Visibility</h3><p>Usage, support actions, permissions, and changes are logged according to contract, legal, and privacy requirements.</p></article>
-        <article class="corp-card"><div class="badge-row"><span class="corp-badge">support</span></div><h3>Deployment Support</h3><p>Blacklight teams coordinate hardware images, local configuration, training, maintenance windows, and client success operations.</p></article>
+  <main class="bli-shell">
+    <section id="product" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Charles secure voice operations</p><h2>Not a consumer assistant. A controlled local interface.</h2><p>Charles deployments are built for sensitive rooms, secure workflows, policy-bound documents, and local operations that cannot safely route speech and records through consumer infrastructure.</p></div>
+      <div class="bli-card-grid">
+        <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">local LLM</span></div><h3>Localized Intelligence Stack</h3><p>Client-specific language models, speech recognition, text-to-speech, and document indexes run inside approved deployment boundaries.</p></article>
+        <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">workflow</span></div><h3>Operations Interface</h3><p>Hands-free checklists, procedural lookups, and facility announcements stay inside client-defined permissions.</p></article>
+        <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">audit</span></div><h3>Compliance Visibility</h3><p>Usage, support actions, permissions, and changes are logged according to contract, legal, and privacy requirements.</p></article>
+        <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">support</span></div><h3>Deployment Support</h3><p>Blacklight teams coordinate hardware images, local configuration, training, maintenance windows, and client success operations.</p></article>
       </div>
     </section>
 
-    <section id="contracts">
-      <div class="section-head"><p class="eyebrow">Contract categories</p><h2>Legitimate public-sector, secure-facility, and enterprise work.</h2><p>Blacklight is a real procurement-facing business. Its public work includes ordinary sensitive institutions that need voice tools without uncontrolled cloud exposure.</p></div>
-      <div class="card-grid">
-        <article class="corp-card"><h3>Government Administration</h3><p>Secure office assistance, records workflow, scheduling support, and local document retrieval.</p></article>
-        <article class="corp-card"><h3>Emergency Operations</h3><p>Hands-free checklists, incident-room coordination, shift notes, and resilient local prompts.</p></article>
-        <article class="corp-card"><h3>Medical and Legal Environments</h3><p>Privilege-aware, policy-bound, non-diagnostic administrative and procedural support.</p></article>
-        <article class="corp-card"><h3>Security and Industrial Sites</h3><p>Local facility interface, safety procedures, manuals, shift logs, and controlled vocabulary support.</p></article>
+    <section id="contracts" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Contract categories</p><h2>Legitimate public-sector, secure-facility, and enterprise work.</h2><p>Blacklight is a real procurement-facing business. Its public work includes ordinary sensitive institutions that need voice tools without uncontrolled cloud exposure.</p></div>
+      <div class="bli-card-grid">
+        <article class="bli-card"><h3>Government Administration</h3><p>Secure office assistance, records workflow, scheduling support, and local document retrieval.</p></article>
+        <article class="bli-card"><h3>Emergency Operations</h3><p>Hands-free checklists, incident-room coordination, shift notes, and resilient local prompts.</p></article>
+        <article class="bli-card"><h3>Medical and Legal Environments</h3><p>Privilege-aware, policy-bound, non-diagnostic administrative and procedural support.</p></article>
+        <article class="bli-card"><h3>Security and Industrial Sites</h3><p>Local facility interface, safety procedures, manuals, shift logs, and controlled vocabulary support.</p></article>
       </div>
     </section>
 
-    <section id="departments">
-      <div class="section-head"><p class="eyebrow">Corporate organization</p><h2>Ordinary departments for an extraordinary company.</h2><p>At the lowest clearance level, employees see a serious secure-technology organization with real payroll, HR, engineering, compliance, finance, client operations, and facilities functions.</p></div>
-      <div class="card-grid">
-        <article class="corp-card"><h3>Product and Engineering</h3><p>Product Management, Voice and Language Engineering, Secure Deployment Engineering, and Research Evaluation maintain the public Charles stack.</p></article>
-        <article class="corp-card"><h3>Client and Commercial</h3><p>Client Operations, Sales, Public Relations, Communications, and Executive Office teams support customer trust and growth.</p></article>
-        <article class="corp-card"><h3>People and Administration</h3><p>Human Resources, Finance, Payroll, Legal, Compliance, and employee programs keep the company functional in daylight.</p></article>
-        <article class="corp-card"><h3>Security and Facilities</h3><p>Security Operations and Facilities keep employees, visitors, systems, and the O-shaped headquarters operating safely.</p></article>
+    <section id="departments" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Corporate organization</p><h2>Ordinary departments for an extraordinary company.</h2><p>At the lowest clearance level, employees see a serious secure-technology organization with real payroll, HR, engineering, compliance, finance, client operations, and facilities functions.</p></div>
+      <div class="bli-card-grid">
+        <article class="bli-card"><span class="bli-icon" data-icon="voice"></span><h3>Product and Engineering</h3><p>Product Management, Voice and Language Engineering, Secure Deployment Engineering, and Research Evaluation maintain the public Charles stack.</p></article>
+        <article class="bli-card"><span class="bli-icon" data-icon="ops"></span><h3>Client and Commercial</h3><p>Client Operations, Sales, Public Relations, Communications, and Executive Office teams support customer trust and growth.</p></article>
+        <article class="bli-card"><span class="bli-icon" data-icon="hr"></span><h3>People and Administration</h3><p>Human Resources, Finance, Payroll, Legal, Compliance, and employee programs keep the company functional in daylight.</p></article>
+        <article class="bli-card"><span class="bli-icon" data-icon="security"></span><h3>Security and Facilities</h3><p>Security Operations and Facilities keep employees, visitors, systems, and the O-shaped headquarters operating safely.</p></article>
       </div>
     </section>
 
-    <section id="leadership">
-      <div class="section-head"><p class="eyebrow">Public leadership</p><h2>Executive team and board profiles.</h2><p>Publicly acknowledged leaders give Blacklight a procurement-safe face and ordinary organizational authority.</p></div>
-      <div class="leader-grid">
-        <article class="leader-card"><h3>Helena Marrow</h3><div class="leader-role">Chief Executive Officer</div><p>Secure-infrastructure executive credited with turning Blacklight into a national confidential-systems vendor.</p></article>
-        <article class="leader-card"><h3>Marcus Venn</h3><div class="leader-role">Chief Operating Officer</div><p>Runs deployment operations, client continuity, facility readiness, and cross-department execution.</p></article>
-        <article class="leader-card"><h3>Dr. Priya Sable</h3><div class="leader-role">Chief Technology Officer</div><p>Leads speech processing, local model evaluation, secure product architecture, and Charles deployment engineering.</p></article>
-        <article class="leader-card"><h3>Elian Cross</h3><div class="leader-role">Chief Security Officer</div><p>Responsible for access culture, client-data safeguards, building security, and incident escalation policy.</p></article>
-        <article class="leader-card"><h3>Marisol Keene</h3><div class="leader-role">Chief Legal and Compliance Officer</div><p>Oversees contracts, privacy, audit obligations, procurement language, and compliance governance.</p></article>
-        <article class="leader-card"><h3>Jonas Rill</h3><div class="leader-role">Chief Financial Officer</div><p>Manages budget discipline, payroll continuity, client invoicing, procurement controls, and reserve planning.</p></article>
-        <article class="leader-card"><h3>Avery Thorne</h3><div class="leader-role">Board Chair</div><p>Governance figure with a background in enterprise security procurement and risk oversight.</p></article>
-        <article class="leader-card"><h3>Nadia Vale</h3><div class="leader-role">Independent Board Member</div><p>Former emergency-management administrator focused on public-sector trust and resilience contracts.</p></article>
-        <article class="leader-card"><h3>Victor Halren</h3><div class="leader-role">Independent Board Member</div><p>Industrial systems investor supporting ruggedized local deployments and infrastructure clients.</p></article>
+    <section id="leadership" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Public leadership</p><h2>Executive team and board profiles.</h2><p>Publicly acknowledged leaders give Blacklight a procurement-safe face and ordinary organizational authority.</p></div>
+      <div class="bli-leader-grid">
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/helena-marrow.jpg" alt="Corporate portrait of Helena Marrow"><h3>Helena Marrow</h3><div class="bli-role">Chief Executive Officer</div><p>Secure-infrastructure executive credited with turning Blacklight into a national confidential-systems vendor.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/marcus-venn.jpg" alt="Corporate portrait of Marcus Venn"><h3>Marcus Venn</h3><div class="bli-role">Chief Operating Officer</div><p>Runs deployment operations, client continuity, facility readiness, and cross-department execution.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/priya-sable.jpg" alt="Corporate portrait of Dr. Priya Sable"><h3>Dr. Priya Sable</h3><div class="bli-role">Chief Technology Officer</div><p>Leads speech processing, local model evaluation, secure product architecture, and Charles deployment engineering.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/elian-cross.jpg" alt="Corporate portrait of Elian Cross"><h3>Elian Cross</h3><div class="bli-role">Chief Security Officer</div><p>Responsible for access culture, client-data safeguards, building security, and incident escalation policy.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/marisol-keene.jpg" alt="Corporate portrait of Marisol Keene"><h3>Marisol Keene</h3><div class="bli-role">Chief Legal and Compliance Officer</div><p>Oversees contracts, privacy, audit obligations, procurement language, and compliance governance.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/jonas-rill.jpg" alt="Corporate portrait of Jonas Rill"><h3>Jonas Rill</h3><div class="bli-role">Chief Financial Officer</div><p>Manages budget discipline, payroll continuity, client invoicing, procurement controls, and reserve planning.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Avery Thorne</h3><div class="bli-role">Board Chair</div><p>Governance figure with a background in enterprise security procurement and risk oversight.</p></article>
+        <article class="bli-portrait-card"><div class="bli-portrait-missing">Portrait pending</div><h3>Nadia Vale</h3><div class="bli-role">Independent Board Member</div><p>Former emergency-management administrator focused on public-sector trust and resilience contracts.</p></article>
+        <article class="bli-portrait-card"><img class="bli-portrait" src="assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/victor-halren.jpg" alt="Corporate portrait of Victor Halren"><h3>Victor Halren</h3><div class="bli-role">Independent Board Member</div><p>Industrial systems investor supporting ruggedized local deployments and infrastructure clients.</p></article>
       </div>
-      <div class="corp-actions"><a class="secondary-action" href="blacklight-personnel.html">Open Full Personnel Portfolio Page</a></div>
+      <div class="bli-actions"><a class="bli-action" href="blacklight-personnel.html">Open Full Personnel Portfolio Page</a></div>
     </section>
 
-    <section id="hr">
-      <div class="section-head"><p class="eyebrow">Corporate HR directory</p><h2>Departmental directors and employee escalation map.</h2><p>The HR-facing directory gives employees a mundane explanation for authority, payroll, workplace support, access, compliance, public language, and client operations.</p></div>
-      <div class="hr-table-wrap">
-        <table class="hr-table">
+    <section id="hr" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Corporate HR directory</p><h2>Departmental directors and employee escalation map.</h2><p>The HR-facing directory gives employees a mundane explanation for authority, payroll, workplace support, access, compliance, public language, and client operations.</p></div>
+      <div class="bli-table-wrap">
+        <table class="bli-table">
           <thead><tr><th>Issue</th><th>Public Escalation Path</th><th>Senior Owner</th></tr></thead>
           <tbody>
             <tr><td>Payroll or expense problem</td><td>Finance and Payroll, then CFO office for unresolved continuity issues.</td><td>Jonas Rill, CFO</td></tr>
@@ -131,7 +129,7 @@
     </section>
   </main>
 
-  <footer>
+  <footer class="bli-footer">
     <strong>Blacklight Intelligence</strong> · Fictional in-universe corporate landing page for Blacklight Continuum campaign play. BLKI ticker values are promotional setting flavor, not real market data.
   </footer>
 </body>

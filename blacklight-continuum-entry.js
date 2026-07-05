@@ -18,19 +18,28 @@
     }[character]));
   }
 
-  function humanize(value) {
-    return String(value ?? '')
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      .replace(/[_-]/g, ' ')
-      .replace(/^./, character => character.toUpperCase());
+  function setCorporateAccess() {
+    try { sessionStorage.setItem('blacklightCorporateInterfaceSeen', 'true'); } catch (_) {}
   }
 
   function injectStyles() {
+    if (!document.querySelector('link[href="blacklight-corporate-assets.css"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'blacklight-corporate-assets.css';
+      document.head.appendChild(link);
+    }
     if (document.getElementById('blacklight-continuum-style')) return;
     const style = document.createElement('style');
     style.id = 'blacklight-continuum-style';
     style.textContent = `
-      .blacklight-browser{border:1px solid var(--line);border-radius:22px;padding:20px;background:rgba(0,0,0,.22)}
+      #blacklight-continuum.blacklight-corp-body{padding-bottom:18px}
+      #blacklight-continuum .bli-topbar{position:relative;border-radius:22px;margin:0 0 18px;padding-inline:18px}
+      #blacklight-continuum .bli-hero{width:100%;margin:0 0 18px}
+      #blacklight-continuum .bli-shell{width:100%}
+      #blacklight-continuum .bli-ticker{border-radius:18px;margin-bottom:28px}
+      #blacklight-continuum .bli-action{cursor:pointer}
+      .blacklight-browser{border:1px solid rgba(217,168,79,.32);border-radius:22px;padding:20px;background:rgba(0,0,0,.22);margin-top:32px}
       .blacklight-controls{display:grid;grid-template-columns:minmax(240px,1fr) auto;gap:10px;margin-bottom:14px}
       .blacklight-controls input{background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 12px}
       .blacklight-categories,.blacklight-related{display:flex;flex-wrap:wrap;gap:7px;grid-column:1/-1}
@@ -51,9 +60,7 @@
       .blacklight-table th,.blacklight-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top}
       .blacklight-table th{color:var(--ink);background:rgba(200,138,53,.12)}
       .blacklight-table tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
-      .blacklight-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
-      .blacklight-actions a{text-decoration:none}
-      @media(max-width:900px){.blacklight-layout,.blacklight-controls{grid-template-columns:1fr}.blacklight-list{max-height:none}}
+      @media(max-width:900px){#blacklight-continuum .bli-topbar,.blacklight-layout,.blacklight-controls{grid-template-columns:1fr}.blacklight-list{max-height:none}}
     `;
     document.head.appendChild(style);
   }
@@ -89,93 +96,103 @@
 
     const section = document.createElement('section');
     section.id = VIEW_ID;
-    section.className = 'view';
+    section.className = 'view blacklight-corp-body';
     section.setAttribute('aria-labelledby', 'blacklight-continuum-title');
     section.innerHTML = `
-      <div class="hero-card no-print">
-        <p class="eyebrow">Blacklight Continuum campaign workspace</p>
-        <h2 id="blacklight-continuum-title">No Return Signal</h2>
-        <p>Far-future mirror-universe science-fiction espionage, identity horror, supernatural capability development, advanced technology, the BlackLight Era operating environment, and an original d10 dice-pool system.</p>
-      </div>
-      <div class="module-grid no-print">
-        <article class="module-card">
-          <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">BlackLight Era</span></div>
-          <h3>The BlackLight Era</h3>
-          <p>Open the post-reorientation campaign primer: Blacklight Intelligence as public corporation, Faux Charles as secure voice product, the O-shaped headquarters, and the new operating environment after Charles's absence and return.</p>
-          <button id="blacklight-open-era" class="primary-action" type="button">Open BlackLight Era Primer</button>
-        </article>
-        <article class="module-card">
-          <div class="module-meta"><span class="badge status-active">public corporation</span><span class="badge">C-0 access</span><span class="badge">personnel</span></div>
-          <h3>Blacklight Corporate Site</h3>
-          <p>Open the stereotypical public-facing corporate landing page, the personnel portfolio page, or inspect low-clearance corporate records for legitimate contracts, departments, HR, payroll, security procedures, leadership portfolios, and board/director profiles.</p>
-          <div class="blacklight-actions">
-            <a class="primary-action" href="blacklight-corporate.html" target="_blank" rel="noopener">Open Corporate Homepage</a>
-            <a class="secondary-action" href="blacklight-personnel.html" target="_blank" rel="noopener">Open Personnel Page</a>
-            <button id="blacklight-open-corporate" class="secondary-action" type="button">Open Corporate Records</button>
-            <button id="blacklight-open-hr" class="secondary-action" type="button">Open HR Portfolios</button>
+      <header class="bli-topbar no-print">
+        <a class="bli-brand" href="blacklight-corporate.html" aria-label="Blacklight Intelligence corporate homepage">
+          <span class="bli-mark" aria-hidden="true"></span>
+          <span class="bli-brand-text"><span>Blacklight</span><span>Intelligence</span></span>
+        </a>
+        <nav class="bli-nav" aria-label="Blacklight landing navigation">
+          <a href="#blacklight-corporate-product">Charles Interface</a>
+          <a href="#blacklight-corporate-contracts">Contracts</a>
+          <a href="#blacklight-corporate-departments">Departments</a>
+          <a href="blacklight-personnel.html">Personnel</a>
+          <a href="blacklight-brand-assets.html">Brand Assets</a>
+        </nav>
+      </header>
+
+      <section class="bli-hero no-print" aria-labelledby="blacklight-continuum-title">
+        <div>
+          <p class="bli-eyebrow">Blacklight Intelligence public interface</p>
+          <h2 id="blacklight-continuum-title" class="bli-page-title">Confidential systems deserve local intelligence.</h2>
+          <p class="bli-lede">Blacklight Intelligence deploys Charles-branded secure voice operations interfaces for government, emergency, legal, medical, industrial, and security-conscious organizations that require local processing, auditability, controlled workflows, and resilient facility support.</p>
+          <div class="bli-actions">
+            <button id="blacklight-open-wiki" class="bli-action primary" type="button">Open Internal Wiki</button>
+            <button id="blacklight-open-corporate" class="bli-action" type="button">Open Corporate Records</button>
+            <button id="blacklight-open-facility" class="bli-action" type="button">Open Facility Systems</button>
+            <a class="bli-action" href="blacklight-personnel.html">Open Personnel</a>
+            <a class="bli-action" href="blacklight-corporate.html">Open Standalone Site</a>
           </div>
-        </article>
-        <article class="module-card">
-          <div class="module-meta"><span class="badge status-active">campaign introduction</span><span class="badge">player and GM sections</span></div>
-          <h3>The Ar'nock Derelict</h3>
-          <p>Read the campaign foundation: Q-MAP awakening, pseudo-Charles, the Ar'nock vessel, biological Charles, identity questions, jobs, skills, powers, equipment, and opening-session guidance.</p>
-          <div class="blacklight-actions"><a class="primary-action" href="blacklight-campaign-reader.html" target="_blank" rel="noopener">Open Formatted Campaign Document</a></div>
-        </article>
-        <article class="module-card">
-          <div class="module-meta"><span id="blacklight-pack-count" class="badge status-active">loading packs</span><span id="blacklight-entry-count" class="badge status-active">loading entries</span></div>
-          <h3>Blacklight Continuum Wiki</h3>
-          <p id="blacklight-scope-summary">Loading the current campaign and rules index…</p>
-          <button id="blacklight-open-wiki" class="primary-action" type="button">Open Blacklight Continuum Wiki</button>
-        </article>
-        <article class="module-card">
-          <div class="module-meta"><span class="badge status-active">facility infrastructure</span><span class="badge">foyer antenna</span></div>
-          <h3>BlackLight Facility Systems</h3>
-          <p>Open the facility infrastructure records: sealed floor modes, reserve power, interstitial utility decks, pillar systems, and the ugly corporate artwork that is actually Charles's primary subspace attunement fork.</p>
-          <button id="blacklight-open-facility" class="secondary-action" type="button">Open Facility Systems</button>
-        </article>
-        <article class="module-card">
-          <div class="module-meta"><span class="badge status-active">d10 alpha</span><span class="badge">capability first</span></div>
-          <h3>System Foundation</h3>
-          <p>Nine Attributes, twenty-four Skills, twelve Operational Frames, Exposure and Cohesion, explicit capability families, equipment, and dangerous opposed resolution. Form and origin grant no unlisted mechanics.</p>
-          <button id="blacklight-open-rules" class="secondary-action" type="button">Open Rules Entries</button>
-        </article>
-        <article class="module-card">
-          <div class="module-meta"><span class="badge status-planned">next development</span></div>
-          <h3>Expansion Roadmap</h3>
-          <p id="blacklight-next-development">Loading the current development areas…</p>
-        </article>
+        </div>
+        <aside class="bli-directory-panel" aria-label="Corporate lobby wayfinding">
+          <div class="bli-directory-title">Welcome</div>
+          <div class="bli-directory-list">
+            <div class="bli-directory-item"><span class="bli-icon" data-icon="visitors"></span><strong>Visitors</strong><span class="bli-arrow">←</span></div>
+            <div class="bli-directory-item"><span class="bli-icon" data-icon="parking"></span><strong>Employee parking</strong><span class="bli-arrow">→</span></div>
+            <div class="bli-directory-item"><span class="bli-icon" data-icon="deliveries"></span><strong>Deliveries</strong><span class="bli-arrow">→</span></div>
+          </div>
+          <div>
+            <div class="bli-badge-row"><span class="bli-badge">localized AI</span><span class="bli-badge">secure voice</span><span class="bli-badge">audit-ready</span></div>
+            <div class="bli-metric-grid">
+              <div class="bli-stat"><strong>100%</strong><span>localized processing deployments available</span></div>
+              <div class="bli-stat"><strong>24/7</strong><span>client operations and support desk coverage</span></div>
+              <div class="bli-stat"><strong>C-0</strong><span>standard corporate baseline access model</span></div>
+              <div class="bli-stat"><strong>BLKI</strong><span>fictional internal market ticker for campaign use</span></div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <div class="bli-ticker no-print" aria-label="Fictional promotional ticker">
+        <div class="bli-ticker-track">
+          <span>BLKI <b>▲ 2.4%</b> Secure Local Interface Growth</span><span>CHARLES EDGE SUITE <b>99.98%</b> Supported Uptime Window</span><span>PUBLIC SECTOR DEPLOYMENTS <b>EXPANDING</b></span><span>CONFIDENTIAL SYSTEMS VENDOR <b>AUDIT READY</b></span><span>LOCAL VOICE OPERATIONS <b>NO DEFAULT CLOUD ROUTING</b></span>
+          <span>BLKI <b>▲ 2.4%</b> Secure Local Interface Growth</span><span>CHARLES EDGE SUITE <b>99.98%</b> Supported Uptime Window</span><span>PUBLIC SECTOR DEPLOYMENTS <b>EXPANDING</b></span><span>CONFIDENTIAL SYSTEMS VENDOR <b>AUDIT READY</b></span><span>LOCAL VOICE OPERATIONS <b>NO DEFAULT CLOUD ROUTING</b></span>
+        </div>
+      </div>
+
+      <div class="bli-shell no-print">
+        <section id="blacklight-corporate-product" class="bli-section">
+          <div class="bli-section-head"><p class="bli-eyebrow">Charles secure voice operations</p><h2>Not a consumer assistant. A controlled local interface.</h2><p>Charles deployments are built for sensitive rooms, secure workflows, policy-bound documents, and local operations that cannot safely route speech and records through consumer infrastructure.</p></div>
+          <div class="bli-card-grid">
+            <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">local LLM</span></div><h3>Localized Intelligence Stack</h3><p>Client-specific language models, speech recognition, text-to-speech, and document indexes run inside approved deployment boundaries.</p></article>
+            <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">workflow</span></div><h3>Operations Interface</h3><p>Hands-free checklists, procedural lookups, and facility announcements stay inside client-defined permissions.</p></article>
+            <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">audit</span></div><h3>Compliance Visibility</h3><p>Usage, support actions, permissions, and changes are logged according to contract, legal, and privacy requirements.</p></article>
+            <article class="bli-card"><div class="bli-badge-row"><span class="bli-badge">support</span></div><h3>Deployment Support</h3><p>Blacklight teams coordinate hardware images, local configuration, training, maintenance windows, and client success operations.</p></article>
+          </div>
+        </section>
+
+        <section id="blacklight-corporate-contracts" class="bli-section">
+          <div class="bli-section-head"><p class="bli-eyebrow">Contract categories</p><h2>Legitimate public-sector, secure-facility, and enterprise work.</h2><p>Blacklight is a procurement-facing business. Its public work includes ordinary sensitive institutions that need voice tools without uncontrolled cloud exposure.</p></div>
+          <div class="bli-card-grid">
+            <article class="bli-card"><h3>Government Administration</h3><p>Secure office assistance, records workflow, scheduling support, and local document retrieval.</p></article>
+            <article class="bli-card"><h3>Emergency Operations</h3><p>Hands-free checklists, incident-room coordination, shift notes, and resilient local prompts.</p></article>
+            <article class="bli-card"><h3>Medical and Legal Environments</h3><p>Privilege-aware, policy-bound, non-diagnostic administrative and procedural support.</p></article>
+            <article class="bli-card"><h3>Security and Industrial Sites</h3><p>Local facility interface, safety procedures, manuals, shift logs, and controlled vocabulary support.</p></article>
+          </div>
+        </section>
+
+        <section id="blacklight-corporate-departments" class="bli-section">
+          <div class="bli-section-head"><p class="bli-eyebrow">Corporate organization</p><h2>Ordinary departments for an extraordinary company.</h2><p>At the lowest clearance level, employees see a serious secure-technology organization with real payroll, HR, engineering, compliance, finance, client operations, and facilities functions.</p></div>
+          <div class="bli-card-grid">
+            <article class="bli-card"><span class="bli-icon" data-icon="voice"></span><h3>Product and Engineering</h3><p>Product Management, Voice and Language Engineering, Secure Deployment Engineering, and Research Evaluation maintain the public Charles stack.</p></article>
+            <article class="bli-card"><span class="bli-icon" data-icon="ops"></span><h3>Client and Commercial</h3><p>Client Operations, Sales, Public Relations, Communications, and Executive Office teams support customer trust and growth.</p></article>
+            <article class="bli-card"><span class="bli-icon" data-icon="hr"></span><h3>People and Administration</h3><p>Human Resources, Finance, Payroll, Legal, Compliance, and employee programs keep the company functional in daylight.</p></article>
+            <article class="bli-card"><span class="bli-icon" data-icon="security"></span><h3>Security and Facilities</h3><p>Security Operations and Facilities keep employees, visitors, systems, and the O-shaped headquarters operating safely.</p></article>
+          </div>
+        </section>
       </div>
       <section id="blacklight-browser" class="blacklight-browser no-print" hidden></section>`;
     main.appendChild(section);
 
-    section.querySelector('#blacklight-open-era')?.addEventListener('click', () => openBrowser('blacklight-era-formation'));
     section.querySelector('#blacklight-open-corporate')?.addEventListener('click', () => openBrowser('blacklight-public-corporate-overview'));
-    section.querySelector('#blacklight-open-hr')?.addEventListener('click', () => openBrowser('blacklight-personnel-portfolio-overview'));
     section.querySelector('#blacklight-open-wiki')?.addEventListener('click', () => openBrowser());
     section.querySelector('#blacklight-open-facility')?.addEventListener('click', () => openBrowser('foyer-art-subspace-attunement-fork'));
-    section.querySelector('#blacklight-open-rules')?.addEventListener('click', () => openBrowser('blacklight-d10-foundation'));
-  }
-
-  async function refreshWorkspaceSummary() {
-    try {
-      const data = await loadWiki();
-      const packCount = data.index.packs?.length || 0;
-      const entryCount = data.entries.length;
-      const packBadge = document.getElementById('blacklight-pack-count');
-      const entryBadge = document.getElementById('blacklight-entry-count');
-      const scope = document.getElementById('blacklight-scope-summary');
-      const next = document.getElementById('blacklight-next-development');
-      if (packBadge) packBadge.textContent = `${packCount} pack${packCount === 1 ? '' : 's'}`;
-      if (entryBadge) entryBadge.textContent = `${entryCount} entr${entryCount === 1 ? 'y' : 'ies'}`;
-      if (scope) scope.textContent = data.index.description || 'Blacklight Continuum campaign wiki active.';
-      if (next) next.textContent = (data.index.nextDevelopmentAreas || []).map(humanize).join(', ') || 'Additional campaign and system development remains planned.';
-    } catch (_) {
-      const scope = document.getElementById('blacklight-scope-summary');
-      if (scope) scope.textContent = 'The Blacklight Continuum wiki will load when the project is served through GitHub Pages or a local web server.';
-    }
   }
 
   async function openBrowser(preferredEntryId = '') {
+    setCorporateAccess();
     const browser = document.getElementById('blacklight-browser');
     if (!browser) return;
     browser.hidden = false;
@@ -329,7 +346,6 @@
   function initialize() {
     injectStyles();
     buildWorkspace();
-    void refreshWorkspaceSummary();
   }
 
   initialize();
