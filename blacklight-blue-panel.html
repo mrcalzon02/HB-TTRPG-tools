@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-checkpoint-panels.css">
+  <script src="blacklight-checkpoint-panels.js" defer></script>
 </head>
 <body class="blacklight-corp-body blacklight-checkpoint-body">
   <header class="bli-topbar">
@@ -24,9 +25,9 @@
       <div>
         <p class="bli-eyebrow">Blue Card Checkpoint</p>
         <h1 id="blue-panel-title">Client operations checkpoint.</h1>
-        <p class="bli-lede">This static checkpoint represents the second clearance step before client operations systems.</p>
+        <p class="bli-lede">Client operations access requires a brief handoff before the blue systems directory opens.</p>
         <div class="bli-actions">
-          <a class="bli-action primary" href="blacklight-systems-blue.html">Continue to Blue Systems</a>
+          <a class="bli-action primary blacklight-checkpoint-continue" href="blacklight-systems-blue.html" data-security-tier="Blue" data-security-target="blacklight-systems-blue.html">Begin Blue Verification</a>
           <a class="bli-action" href="blacklight-corporate-systems.html">Return to Gateway</a>
         </div>
       </div>
@@ -36,6 +37,7 @@
           <div class="bli-directory-item" role="listitem"><strong>Identity</strong><span class="bli-arrow">checked</span></div>
           <div class="bli-directory-item" role="listitem"><strong>Card</strong><span class="bli-arrow">checked</span></div>
           <div class="bli-directory-item" role="listitem"><strong>Code</strong><span class="bli-arrow">checked</span></div>
+          <div class="bli-directory-item" role="listitem"><strong>Handoff</strong><span class="bli-arrow">pending</span></div>
         </div>
       </aside>
     </section>
