@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-checkpoint-panels.css">
+  <script src="blacklight-checkpoint-panels.js" defer></script>
 </head>
 <body class="blacklight-corp-body blacklight-checkpoint-body">
   <header class="bli-topbar">
@@ -24,9 +25,9 @@
       <div>
         <p class="bli-eyebrow">Green Card Checkpoint</p>
         <h1 id="green-panel-title">Support systems checkpoint.</h1>
-        <p class="bli-lede">This static checkpoint represents the green-tier step before support systems.</p>
+        <p class="bli-lede">Restricted support access requires a brief handoff before the green systems directory opens.</p>
         <div class="bli-actions">
-          <a class="bli-action primary" href="blacklight-systems-green.html">Continue to Green Systems</a>
+          <a class="bli-action primary blacklight-checkpoint-continue" href="blacklight-systems-green.html" data-security-tier="Green" data-security-target="blacklight-systems-green.html">Begin Green Verification</a>
           <a class="bli-action" href="blacklight-corporate-systems.html">Return to Gateway</a>
         </div>
       </div>
@@ -36,6 +37,7 @@
           <div class="bli-directory-item" role="listitem"><strong>Identity</strong><span class="bli-arrow">checked</span></div>
           <div class="bli-directory-item" role="listitem"><strong>Card</strong><span class="bli-arrow">checked</span></div>
           <div class="bli-directory-item" role="listitem"><strong>Route</strong><span class="bli-arrow">ready</span></div>
+          <div class="bli-directory-item" role="listitem"><strong>Handoff</strong><span class="bli-arrow">pending</span></div>
         </div>
       </aside>
     </section>
