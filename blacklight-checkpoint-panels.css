@@ -1,0 +1,61 @@
+/* Checkpoint panel layout overrides for Blacklight clearance pages.
+   These styles keep checkpoint labels and status text from colliding while preserving the shared corporate theme. */
+
+.blacklight-checkpoint-body .bli-hero {
+  align-items: stretch;
+}
+
+.blacklight-checkpoint-body .bli-directory-panel {
+  min-height: 360px;
+  align-content: start;
+  gap: 18px;
+}
+
+.blacklight-checkpoint-body .bli-directory-list {
+  align-self: start;
+  display: grid;
+  gap: 12px;
+}
+
+.blacklight-checkpoint-body .bli-directory-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(217, 168, 79, 0.26);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+}
+
+.blacklight-checkpoint-body .bli-directory-item strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--bli-ink);
+}
+
+.blacklight-checkpoint-body .bli-arrow {
+  justify-self: end;
+  color: var(--bli-gold);
+  font-size: 0.78rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.blacklight-checkpoint-body .bli-actions {
+  margin-top: 26px;
+}
+
+@media (max-width: 520px) {
+  .blacklight-checkpoint-body .bli-directory-item {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .blacklight-checkpoint-body .bli-arrow {
+    justify-self: start;
+  }
+}
