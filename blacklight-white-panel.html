@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-checkpoint-panels.css">
+  <script src="blacklight-checkpoint-panels.js" defer></script>
 </head>
 <body class="blacklight-corp-body blacklight-checkpoint-body">
   <header class="bli-topbar">
@@ -24,9 +25,9 @@
       <div>
         <p class="bli-eyebrow">White Card Checkpoint</p>
         <h1 id="white-panel-title">Employee systems checkpoint.</h1>
-        <p class="bli-lede">This static checkpoint represents the employee-tier step before baseline systems.</p>
+        <p class="bli-lede">Employee-tier access requires a brief handoff before the baseline systems directory opens.</p>
         <div class="bli-actions">
-          <a class="bli-action primary" href="blacklight-systems-white.html">Continue to White Systems</a>
+          <a class="bli-action primary blacklight-checkpoint-continue" href="blacklight-systems-white.html" data-security-tier="White" data-security-target="blacklight-systems-white.html">Begin White Verification</a>
           <a class="bli-action" href="blacklight-corporate-systems.html">Return to Gateway</a>
         </div>
       </div>
@@ -35,6 +36,7 @@
         <div class="bli-directory-list" role="list">
           <div class="bli-directory-item" role="listitem"><strong>Operator</strong><span class="bli-arrow">checked</span></div>
           <div class="bli-directory-item" role="listitem"><strong>Phrase</strong><span class="bli-arrow">checked</span></div>
+          <div class="bli-directory-item" role="listitem"><strong>Handoff</strong><span class="bli-arrow">pending</span></div>
         </div>
       </aside>
     </section>
