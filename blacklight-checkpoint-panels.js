@@ -1,6 +1,7 @@
 (() => {
   const STEP_DELAY = 760;
   const REDUCED_MOTION_DELAY = 520;
+  const KEY_SOUND = "assets/blacklight/keys.mp3";
 
   const copy = {
     White: {
@@ -40,6 +41,17 @@
       ]
     }
   };
+
+  function playKeySound() {
+    try {
+      const audio = new Audio(KEY_SOUND);
+      audio.volume = 0.48;
+      const request = audio.play();
+      if (request?.catch) request.catch(() => {});
+    } catch (_) {
+      // The handoff animation still runs if a browser blocks or fails the sound effect.
+    }
+  }
 
   function getOverlay() {
     let overlay = document.querySelector(".bli-security-loader");
@@ -88,6 +100,7 @@
     if (trigger.dataset.loading === "true") return;
     trigger.dataset.loading = "true";
     trigger.setAttribute("aria-disabled", "true");
+    playKeySound();
 
     const tier = trigger.dataset.securityTier || "White";
     const tierCopy = copy[tier] || copy.White;
