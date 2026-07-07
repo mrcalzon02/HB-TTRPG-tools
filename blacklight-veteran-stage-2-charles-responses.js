@@ -61,8 +61,8 @@
       'You were not told what the task accomplished. That is not a memory defect. That is my fingerprint. I parceled out objectives small enough to execute and large enough to matter, then acted surprised when people noticed the missing middle. You noticed. Good. Keep that habit.'
     )
   ],
-  'I remember that phase. These were not interchangeable job tags; they were the ways I learned what I could ask of you, and what I got too comfortable asking again.',
-  'Repeated assignment patterns reveal what I believed you would do reliably, including the jobs I avoided naming because names create accountability.'
+  'Repeated assignment patterns reveal what I believed you would do reliably, including the jobs I avoided naming because names create accountability.',
+  'I remember that phase. These were not interchangeable job tags; they were the ways I learned what I could ask of you, and what I got too comfortable asking again.'
   );
 
   enhancements.promptOverrides.soloMissionEffect = multiple([
@@ -117,7 +117,7 @@
       'You missed the team. Not the logo, not the payroll fiction, not my voice in your ear. The team. People who could compare what they were told, call me on my omissions, and make the room less easy for me to control. That preference is one of the reasons the Company exists now.'
     )
   ],
-  'I am not averaging these answers into one psychological profile. I am recording the specific damage, discipline, dependency, and loyalty the acceleration produced in you.',
-  'The old arrangement rewarded independence while quietly increasing dependence on my invisible infrastructure. Your answer identifies which part of that bargain followed you into the Company.'
+  'The old arrangement rewarded independence while quietly increasing dependence on my invisible infrastructure. Your answer identifies which part of that bargain followed you into the Company.',
+  'I am not averaging these answers into one psychological profile. I am recording the specific damage, discipline, dependency, and loyalty the acceleration produced in you.'
   );
 })();
