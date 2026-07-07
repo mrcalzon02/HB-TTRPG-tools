@@ -107,6 +107,24 @@
     if (value) field.value = value;
   }
 
+  function syncPortraitPreview(saveToSheet = false) {
+    const form = document.getElementById('blacklight-character-form');
+    const value = form?.elements?.portraitAsset?.value || storedSheetField('portraitAsset');
+    const module = document.querySelector('[data-blacklight-portrait-module]');
+    const select = module?.querySelector('[data-blacklight-portrait-select]');
+    const image = module?.querySelector('[data-blacklight-portrait-preview]');
+    if (!value || !select || !image) return;
+    if (![...select.options].some(option => option.value === value)) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = 'Imported / Saved Portrait';
+      select.prepend(option);
+    }
+    select.value = value;
+    image.src = value;
+    if (saveToSheet) form?.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
   function applyInductionTranscript(saveToSheet = false) {
     const field = ensureTranscriptField();
     if (!field) return;
@@ -144,7 +162,11 @@
     ensureVeteranRecordField();
     applyInductionTranscript(false);
     applyVeteranRecord(false);
-    if (!fromInduction && !fromRandom && !fromVeteran && !printRequested) return;
+    syncPortraitPreview(false);
+    if (!fromInduction && !fromRandom && !fromVeteran && !printRequested) {
+      window.setTimeout(() => syncPortraitPreview(false), 300);
+      return;
+    }
     let attempts = 0;
     const timer = setInterval(() => {
       attempts += 1;
@@ -152,6 +174,7 @@
         clearInterval(timer);
         applyInductionTranscript(true);
         applyVeteranRecord(true);
+        syncPortraitPreview(true);
         const status = document.getElementById('blacklight-load-status');
         if (fromInduction && status) status.textContent = 'Character restored with Charles’s induction transcript.';
         if (fromRandom && status) status.textContent = 'Randomly generated operative transferred and restored. Review any fields you want to personalize.';
