@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repo-asset-manifest-builder"
+version = "0.1.0"
+description = "Local repo asset indexer that writes JSON, Markdown, and JavaScript manifests."
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "HB TTRPG Tools" }]
+dependencies = []
+
+[project.scripts]
+asset-manifest = "asset_manifest_builder.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
