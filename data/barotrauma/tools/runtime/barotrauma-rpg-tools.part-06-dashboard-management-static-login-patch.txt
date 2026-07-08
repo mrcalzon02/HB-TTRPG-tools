@@ -1,0 +1,65 @@
+  function installDashboardManagementStaticLoginStyles(){
+    if(document.getElementById('dashboard-management-static-login-style'))return;
+    const style=document.createElement('style');
+    style.id='dashboard-management-static-login-style';
+    style.textContent=`
+      .dashboard-management-static-gate{grid-template-columns:minmax(0,1fr)!important;}
+      .dashboard-management-static-login{display:grid;gap:14px;border-color:rgba(111,143,214,.72)!important;}
+      .dashboard-management-login-header{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;}
+      .dashboard-management-login-header>div:first-child{max-width:980px;}
+      .dashboard-management-login-header .metric-row{min-width:min(480px,100%);}
+      .dashboard-management-static-row{display:grid;grid-template-columns:minmax(260px,2fr) minmax(180px,1fr) minmax(210px,1fr);gap:10px;align-items:end;}
+      .dashboard-management-auth-strip{display:grid;grid-template-columns:minmax(280px,1.25fr) minmax(220px,.8fr) minmax(200px,.75fr);gap:10px;align-items:end;}
+      .dashboard-management-claim-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;align-items:end;}
+      .dashboard-management-auxiliary-stack{display:grid;gap:10px;}
+      .dashboard-management-auxiliary-stack:empty{display:none;}
+      .dashboard-management-auxiliary-stack .tool-card,.dashboard-management-static-login .dashboard-management-claim-card{background:rgba(255,255,255,.025);}
+      .dashboard-management-auxiliary-stack .field-grid.four,.dashboard-management-static-login .field-grid.four{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));}
+      .dashboard-management-secondary-card>summary,.dashboard-management-claim-card>summary,.dashboard-management-security-note>summary{cursor:pointer;color:var(--accent);font-weight:900;letter-spacing:.03em;}
+      .dashboard-management-security-note{margin-top:0;}
+      .dashboard-management-security-note p{margin:.65rem 0 0;}
+      @media(max-width:980px){.dashboard-management-login-header{display:grid}.dashboard-management-static-row,.dashboard-management-auth-strip{grid-template-columns:1fr}.dashboard-management-login-header .metric-row{min-width:0}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function dashboardManagementRefreshStaticLoginCopy(){
+    const subtitle=document.querySelector('.ops-header .subtitle');
+    if(subtitle)subtitle.textContent='Operate one persistent master world where submitted player submarines, NPC freight vessels, station production, trade, and shipyard construction remain active across saves. The Active Submarine Dashboard uses a static per-vessel management login before local controls can edit that submarine’s campaign state.';
+  }
+
+  function dashboardManagementStaticAuxiliaryHtml(selected){
+    if(typeof dashboardManagementCreationAndRecoveryHtml!=='function')return '';
+    return dashboardManagementCreationAndRecoveryHtml(selected)
+      .replace(/<details class="tool-card"/g,'<details class="tool-card dashboard-management-secondary-card"')
+      .replace(/\sopen><summary>/g,'><summary>');
+  }
+
+  const dashboardManagementGateHtmlBeforeStaticLogin=dashboardManagementGateHtml;
+  dashboardManagementGateHtml=function dashboardManagementGateHtmlStaticHorizontal(){
+    installDashboardManagementStaticLoginStyles();
+    dashboardManagementRefreshStaticLoginCopy();
+    const hub=normalizeWorldHub();
+    const vessels=dashboardManagementVessels();
+    let selectedId=dashboardManagementSelectedVesselId();
+    if(!vessels.some(vessel=>vessel.vesselId===selectedId))selectedId=vessels[0]?.vesselId||'';
+    const selected=vessels.find(vessel=>vessel.vesselId===selectedId)||null;
+    if(dashboardManagementRuntime.status==='checking'){
+      return `<div class="tool-shell dashboard-management-static-gate"><section class="tool-panel dashboard-management-static-login"><div class="dashboard-management-login-header"><div><p class="eyebrow">Submarine management authorization</p><h2>Checking Local Management Session</h2><p class="rules-note">The dashboard is verifying the local session receipt against the selected world save. No password is stored in the browser state.</p></div><span class="status-pill warn">CHECKING</span></div></section></div>`;
+    }
+    const auxiliaryHtml=dashboardManagementStaticAuxiliaryHtml(selected);
+    return `<div class="tool-shell dashboard-management-static-gate">
+      <section class="tool-panel dashboard-management-static-login">
+        <div class="dashboard-management-login-header"><div><p class="eyebrow">Master-world submarine authorization</p><h2>Managed Submarine Login</h2><p class="rules-note">This is a static local login bar for the selected vessel. Choosing a submarine only sets the login target; it does not change campaign state until a valid management receipt unlocks that vessel.</p></div><div class="metric-row"><div class="metric"><span>World ID</span><strong>${escapeHtml(hub.worldId)}</strong></div><div class="metric"><span>Manageable submarines</span><strong>${vessels.length}</strong></div><div class="metric"><span>Login status</span><strong class="${selected?.claimed?'good':'warn'}">${selected?.claimed?'Protected':'Unclaimed'}</strong></div></div></div>
+        ${vessels.length?`<div class="dashboard-management-static-row"><label class="field">Submarine to manage<select id="dashboard-management-vessel">${vessels.map(vessel=>`<option value="${escapeHtml(vessel.vesselId)}" ${vessel.vesselId===selectedId?'selected':''}>${escapeHtml(vessel.name)} · ${escapeHtml(vessel.vesselId)}</option>`).join('')}</select></label><label class="field">Expedition group<input readonly value="${escapeHtml(selected?.groupName||'Unassigned expedition')}"></label><label class="field">World status<input readonly value="${escapeHtml(`${selected?.status||'unknown'} · ${selected?.model||'unknown model'}`)}"></label></div>`:'<div class="notice warn">No submitted player submarine exists in this world save yet.</div>'}
+        ${selected?selected.claimed?`<div class="dashboard-management-auth-strip"><label class="field">Management password<input id="dashboard-management-password" type="password" autocomplete="current-password"></label><label class="check-row"><input id="dashboard-management-remember" type="checkbox"><span>Remember this device for ${DASHBOARD_MANAGEMENT_REMEMBER_DAYS} days</span></label><div class="button-row"><button id="dashboard-management-login" class="primary-action" type="button">Log In and Manage</button></div></div>`:`<details class="tool-card dashboard-management-claim-card"><summary><strong>Claim This Submarine</strong></summary><p class="small-note">This vessel has no management credential. Open these controls only when you are ready to create the first password and bind future dashboard sessions to this vessel ID.</p><div class="dashboard-management-claim-row"><label class="field">Manager name<input id="dashboard-management-manager-name" value="${escapeHtml(state.character.player||'')}"></label><label class="field">New password<input id="dashboard-management-new-password" type="password" autocomplete="new-password"></label><label class="field">Confirm password<input id="dashboard-management-confirm-password" type="password" autocomplete="new-password"></label><label class="check-row"><input id="dashboard-management-remember" type="checkbox" checked><span>Remember this device</span></label><div class="button-row"><button id="dashboard-management-claim" class="primary-action" type="button">Set Password and Manage</button></div></div></details>`:''}
+        ${!vessels.length?'<div class="button-row"><button id="dashboard-management-register-current" class="primary-action" type="button">Register Current Local Submarine</button></div>':''}
+        <div class="dashboard-management-auxiliary-stack">${auxiliaryHtml}</div>
+        <div id="dashboard-management-message" class="notice ${/incorrect|expired|invalid|another world/i.test(dashboardManagementRuntime.message)?'bad':''}">${escapeHtml(dashboardManagementRuntime.message||'Choose a submarine to continue.')}</div>
+        <details class="notice dashboard-management-security-note"><summary>Security Boundary</summary><p class="small-note">This is a static GitHub Pages application. The credential prevents accidental or ordinary unauthorized dashboard use, but it is not server-enforced security: someone with full browser developer access or the ability to edit the world-save JSON can alter local campaign data. The implementation stores no plaintext password and treats cookies only as revocable local session receipts.</p></details>
+      </section>
+    </div>`;
+  };
+
+  installDashboardManagementStaticLoginStyles();
+  dashboardManagementRefreshStaticLoginCopy();
