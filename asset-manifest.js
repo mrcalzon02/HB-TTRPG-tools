@@ -1,0 +1,5275 @@
+window.REPO_ASSET_MANIFEST = {
+  "schema_version": 1,
+  "generated_at": "2026-07-08T22:46:55.842294+00:00",
+  "root": "C:/GITS/HB-TTRPG-tools",
+  "asset_roots": [
+    "assets"
+  ],
+  "missing_targets": [],
+  "scan_all": false,
+  "query": "",
+  "counts": {
+    "files": 182,
+    "images": 177,
+    "by_kind": {
+      "archive": 1,
+      "audio": 3,
+      "document": 1,
+      "image": 177
+    },
+    "by_extension": {
+      ".jpg": 40,
+      ".md": 1,
+      ".mp3": 3,
+      ".png": 113,
+      ".svg": 24,
+      ".zip": 1
+    },
+    "by_folder": {
+      "assets/blacklight": 3,
+      "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01": 10,
+      "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01": 10,
+      "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images": 4,
+      "assets/blacklight/blacklight_missing_personnel_portraits": 8,
+      "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads": 8,
+      "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128": 8,
+      "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160": 8,
+      "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256": 8,
+      "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384": 8,
+      "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01": 10,
+      "assets/blacklight/placeholder_character_portrait_set/placeholder_character_portrait_set": 1,
+      "assets/blacklight/sliced_web_asset_icons_25": 25,
+      "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01": 10,
+      "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01": 10,
+      "assets/blacklight/veteran-scenes": 26,
+      "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images": 25
+    }
+  },
+  "files": [
+    {
+      "repo_path": "assets/blacklight/The_speech.mp3",
+      "public_path": "assets/blacklight/The_speech.mp3",
+      "folder": "assets/blacklight",
+      "name": "The_speech.mp3",
+      "stem": "The_speech",
+      "extension": ".mp3",
+      "kind": "audio",
+      "mime_type": "audio/mpeg",
+      "size_bytes": 38262962,
+      "modified_time": "2026-07-07T02:08:47.051204+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "mp3",
+        "speech",
+        "the"
+      ]
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_01.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_01.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_01.png",
+      "stem": "human_investigator_01",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2003715,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_02.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_02.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_02.png",
+      "stem": "human_investigator_02",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2410459,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "02",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_03.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_03.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_03.png",
+      "stem": "human_investigator_03",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2081818,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "03",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_04.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_04.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_04.png",
+      "stem": "human_investigator_04",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1885735,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "04",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_05.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_05.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_05.png",
+      "stem": "human_investigator_05",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2038927,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "05",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_06.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_06.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_06.png",
+      "stem": "human_investigator_06",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2073015,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "06",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_07.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_07.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_07.png",
+      "stem": "human_investigator_07",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2169884,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "07",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_08.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_08.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_08.png",
+      "stem": "human_investigator_08",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2177036,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "08",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_09.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_09.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_09.png",
+      "stem": "human_investigator_09",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2023177,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "09",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_10.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01/human_investigator_10.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/human_investigator_portrait_set_01",
+      "name": "human_investigator_10.png",
+      "stem": "human_investigator_10",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2056993,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "10",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "human",
+        "investigator",
+        "png",
+        "portrait",
+        "set",
+        "sets"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_01.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_01.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_01.png",
+      "stem": "vampire_01",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1952810,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_02.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_02.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_02.png",
+      "stem": "vampire_02",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1755507,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "02",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_03.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_03.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_03.png",
+      "stem": "vampire_03",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1915199,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "03",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_04.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_04.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_04.png",
+      "stem": "vampire_04",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2082159,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "04",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_05.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_05.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_05.png",
+      "stem": "vampire_05",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1892811,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "05",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_06.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_06.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_06.png",
+      "stem": "vampire_06",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2006340,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "06",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_07.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_07.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_07.png",
+      "stem": "vampire_07",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1783238,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "07",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_08.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_08.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_08.png",
+      "stem": "vampire_08",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1836463,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "08",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_09.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_09.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_09.png",
+      "stem": "vampire_09",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2033077,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "09",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_10.png",
+      "public_path": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01/vampire_10.png",
+      "folder": "assets/blacklight/blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/vampire_portrait_set_01",
+      "name": "vampire_10.png",
+      "stem": "vampire_10",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2064820,
+      "modified_time": "2026-07-05T18:18:36+00:00",
+      "tokens": [
+        "01",
+        "10",
+        "assets",
+        "blacklight",
+        "bundle",
+        "character",
+        "png",
+        "portrait",
+        "set",
+        "sets",
+        "vampire"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-boardroom-presentation.png",
+      "public_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-boardroom-presentation.png",
+      "folder": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images",
+      "name": "blacklight-boardroom-presentation.png",
+      "stem": "blacklight-boardroom-presentation",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2122047,
+      "modified_time": "2026-07-05T07:16:24+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "boardroom",
+        "homepage",
+        "images",
+        "png",
+        "presentation",
+        "promotional"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-campus-aerial.png",
+      "public_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-campus-aerial.png",
+      "folder": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images",
+      "name": "blacklight-campus-aerial.png",
+      "stem": "blacklight-campus-aerial",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 3019816,
+      "modified_time": "2026-07-05T07:16:26+00:00",
+      "tokens": [
+        "aerial",
+        "assets",
+        "blacklight",
+        "campus",
+        "homepage",
+        "images",
+        "png",
+        "promotional"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-homepage-hero-exterior.png",
+      "public_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-homepage-hero-exterior.png",
+      "folder": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images",
+      "name": "blacklight-homepage-hero-exterior.png",
+      "stem": "blacklight-homepage-hero-exterior",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2503542,
+      "modified_time": "2026-07-05T07:14:32+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "exterior",
+        "hero",
+        "homepage",
+        "images",
+        "png",
+        "promotional"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-main-foyer-sculpture.png",
+      "public_path": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/blacklight-main-foyer-sculpture.png",
+      "folder": "assets/blacklight/blacklight_homepage_promotional_images/blacklight_homepage_promotional_images",
+      "name": "blacklight-main-foyer-sculpture.png",
+      "stem": "blacklight-main-foyer-sculpture",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2333748,
+      "modified_time": "2026-07-05T07:15:24+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "foyer",
+        "homepage",
+        "images",
+        "main",
+        "png",
+        "promotional",
+        "sculpture"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/anika-shaw-facilities-security-operations.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/anika-shaw-facilities-security-operations.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "anika-shaw-facilities-security-operations.png",
+      "stem": "anika-shaw-facilities-security-operations",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1890059,
+      "modified_time": "2026-07-05T13:13:20+00:00",
+      "tokens": [
+        "anika",
+        "assets",
+        "blacklight",
+        "facilities",
+        "missing",
+        "operations",
+        "personnel",
+        "png",
+        "portraits",
+        "security",
+        "shaw"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/avery-thorne-board-chair.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/avery-thorne-board-chair.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "avery-thorne-board-chair.png",
+      "stem": "avery-thorne-board-chair",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1960012,
+      "modified_time": "2026-07-05T13:13:20+00:00",
+      "tokens": [
+        "assets",
+        "avery",
+        "blacklight",
+        "board",
+        "chair",
+        "missing",
+        "personnel",
+        "png",
+        "portraits",
+        "thorne"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/caleb-orth-product-research-evaluation.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/caleb-orth-product-research-evaluation.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "caleb-orth-product-research-evaluation.png",
+      "stem": "caleb-orth-product-research-evaluation",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2033123,
+      "modified_time": "2026-07-05T13:13:24+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "caleb",
+        "evaluation",
+        "missing",
+        "orth",
+        "personnel",
+        "png",
+        "portraits",
+        "product",
+        "research"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/dima-ro-secure-deployment-engineering.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/dima-ro-secure-deployment-engineering.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "dima-ro-secure-deployment-engineering.png",
+      "stem": "dima-ro-secure-deployment-engineering",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2223335,
+      "modified_time": "2026-07-05T13:13:28+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "deployment",
+        "dima",
+        "engineering",
+        "missing",
+        "personnel",
+        "png",
+        "portraits",
+        "ro",
+        "secure"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/eva-frost-ceo.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/eva-frost-ceo.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "eva-frost-ceo.png",
+      "stem": "eva-frost-ceo",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2014059,
+      "modified_time": "2026-07-05T13:13:22+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "ceo",
+        "eva",
+        "frost",
+        "missing",
+        "personnel",
+        "png",
+        "portraits"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/nadia-vale-independent-board-member.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/nadia-vale-independent-board-member.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "nadia-vale-independent-board-member.png",
+      "stem": "nadia-vale-independent-board-member",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2013347,
+      "modified_time": "2026-07-05T13:13:20+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "board",
+        "independent",
+        "member",
+        "missing",
+        "nadia",
+        "personnel",
+        "png",
+        "portraits",
+        "vale"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/owen-pike-director-client-operations.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/owen-pike-director-client-operations.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "owen-pike-director-client-operations.png",
+      "stem": "owen-pike-director-client-operations",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2085743,
+      "modified_time": "2026-07-05T13:13:24+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "client",
+        "director",
+        "missing",
+        "operations",
+        "owen",
+        "personnel",
+        "pike",
+        "png",
+        "portraits"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_missing_personnel_portraits/tessa-grane-pr-communications-director.png",
+      "public_path": "assets/blacklight/blacklight_missing_personnel_portraits/tessa-grane-pr-communications-director.png",
+      "folder": "assets/blacklight/blacklight_missing_personnel_portraits",
+      "name": "tessa-grane-pr-communications-director.png",
+      "stem": "tessa-grane-pr-communications-director",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1896054,
+      "modified_time": "2026-07-05T13:13:24+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "communications",
+        "director",
+        "grane",
+        "missing",
+        "personnel",
+        "png",
+        "portraits",
+        "pr",
+        "tessa"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/elian-cross.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/elian-cross.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "elian-cross.jpg",
+      "stem": "elian-cross",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 51089,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "cross",
+        "elian",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/helena-marrow.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/helena-marrow.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "helena-marrow.jpg",
+      "stem": "helena-marrow",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 61209,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "helena",
+        "jpg",
+        "marrow",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/jonas-rill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/jonas-rill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "jonas-rill.jpg",
+      "stem": "jonas-rill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 62339,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "jonas",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "rill",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/marcus-venn.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/marcus-venn.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "marcus-venn.jpg",
+      "stem": "marcus-venn",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 49340,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "jpg",
+        "marcus",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "venn"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/marisol-keene.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/marisol-keene.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "marisol-keene.jpg",
+      "stem": "marisol-keene",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 53684,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "jpg",
+        "keene",
+        "marisol",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/priya-sable.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/priya-sable.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "priya-sable.jpg",
+      "stem": "priya-sable",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 55052,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "priya",
+        "profile",
+        "sable",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/sera-quill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/sera-quill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "sera-quill.jpg",
+      "stem": "sera-quill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 53684,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "quill",
+        "sera",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/victor-halren.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads/victor-halren.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads",
+      "name": "victor-halren.jpg",
+      "stem": "victor-halren",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 55618,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "halren",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "victor"
+      ],
+      "dimensions": {
+        "width": 640,
+        "height": 640
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/elian-cross.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/elian-cross.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "elian-cross.jpg",
+      "stem": "elian-cross",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 2949,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "cross",
+        "elian",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/helena-marrow.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/helena-marrow.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "helena-marrow.jpg",
+      "stem": "helena-marrow",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 3384,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "helena",
+        "jpg",
+        "marrow",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/jonas-rill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/jonas-rill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "jonas-rill.jpg",
+      "stem": "jonas-rill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 3082,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "jonas",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "rill",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/marcus-venn.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/marcus-venn.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "marcus-venn.jpg",
+      "stem": "marcus-venn",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 2783,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "jpg",
+        "marcus",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "venn"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/marisol-keene.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/marisol-keene.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "marisol-keene.jpg",
+      "stem": "marisol-keene",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 3291,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "jpg",
+        "keene",
+        "marisol",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/priya-sable.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/priya-sable.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "priya-sable.jpg",
+      "stem": "priya-sable",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 3283,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "priya",
+        "profile",
+        "sable",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/sera-quill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/sera-quill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "sera-quill.jpg",
+      "stem": "sera-quill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 3291,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "quill",
+        "sera",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/victor-halren.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128/victor-halren.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_128",
+      "name": "victor-halren.jpg",
+      "stem": "victor-halren",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 3179,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "128",
+        "assets",
+        "blacklight",
+        "halren",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "victor"
+      ],
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/elian-cross.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/elian-cross.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "elian-cross.jpg",
+      "stem": "elian-cross",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 4420,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "cross",
+        "elian",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/helena-marrow.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/helena-marrow.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "helena-marrow.jpg",
+      "stem": "helena-marrow",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 5221,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "helena",
+        "jpg",
+        "marrow",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/jonas-rill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/jonas-rill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "jonas-rill.jpg",
+      "stem": "jonas-rill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 4747,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "jonas",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "rill",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/marcus-venn.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/marcus-venn.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "marcus-venn.jpg",
+      "stem": "marcus-venn",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 4215,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "jpg",
+        "marcus",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "venn"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/marisol-keene.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/marisol-keene.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "marisol-keene.jpg",
+      "stem": "marisol-keene",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 5016,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "jpg",
+        "keene",
+        "marisol",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/priya-sable.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/priya-sable.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "priya-sable.jpg",
+      "stem": "priya-sable",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 5049,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "priya",
+        "profile",
+        "sable",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/sera-quill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/sera-quill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "sera-quill.jpg",
+      "stem": "sera-quill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 5016,
+      "modified_time": "2026-07-05T06:55:08+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "quill",
+        "sera",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/victor-halren.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160/victor-halren.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_160",
+      "name": "victor-halren.jpg",
+      "stem": "victor-halren",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 4871,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "160",
+        "assets",
+        "blacklight",
+        "halren",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "victor"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 160
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/elian-cross.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/elian-cross.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "elian-cross.jpg",
+      "stem": "elian-cross",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 8004,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "cross",
+        "elian",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/helena-marrow.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/helena-marrow.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "helena-marrow.jpg",
+      "stem": "helena-marrow",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 9613,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "helena",
+        "jpg",
+        "marrow",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/jonas-rill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/jonas-rill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "jonas-rill.jpg",
+      "stem": "jonas-rill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 9012,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "jonas",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "rill",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/marcus-venn.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/marcus-venn.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "marcus-venn.jpg",
+      "stem": "marcus-venn",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 7521,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "jpg",
+        "marcus",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "venn"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/marisol-keene.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/marisol-keene.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "marisol-keene.jpg",
+      "stem": "marisol-keene",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 9106,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "jpg",
+        "keene",
+        "marisol",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/priya-sable.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/priya-sable.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "priya-sable.jpg",
+      "stem": "priya-sable",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 9107,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "priya",
+        "profile",
+        "sable",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/sera-quill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/sera-quill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "sera-quill.jpg",
+      "stem": "sera-quill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 9106,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "quill",
+        "sera",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/victor-halren.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256/victor-halren.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_256",
+      "name": "victor-halren.jpg",
+      "stem": "victor-halren",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 8908,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "256",
+        "assets",
+        "blacklight",
+        "halren",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "victor"
+      ],
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/elian-cross.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/elian-cross.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "elian-cross.jpg",
+      "stem": "elian-cross",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 16951,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "cross",
+        "elian",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/helena-marrow.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/helena-marrow.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "helena-marrow.jpg",
+      "stem": "helena-marrow",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 20859,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "helena",
+        "jpg",
+        "marrow",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/jonas-rill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/jonas-rill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "jonas-rill.jpg",
+      "stem": "jonas-rill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 19950,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "jonas",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "rill",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marcus-venn.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marcus-venn.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "marcus-venn.jpg",
+      "stem": "marcus-venn",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 16069,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "jpg",
+        "marcus",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "venn"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marisol-keene.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/marisol-keene.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "marisol-keene.jpg",
+      "stem": "marisol-keene",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 19037,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "jpg",
+        "keene",
+        "marisol",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/priya-sable.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/priya-sable.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "priya-sable.jpg",
+      "stem": "priya-sable",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 19328,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "priya",
+        "profile",
+        "sable",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/sera-quill.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/sera-quill.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "sera-quill.jpg",
+      "stem": "sera-quill",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 19037,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "quill",
+        "sera",
+        "uploads"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/victor-halren.jpg",
+      "public_path": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384/victor-halren.jpg",
+      "folder": "assets/blacklight/blacklight_personnel_profile_pictures/blacklight_personnel_uploads_384",
+      "name": "victor-halren.jpg",
+      "stem": "victor-halren",
+      "extension": ".jpg",
+      "kind": "image",
+      "mime_type": "image/jpeg",
+      "size_bytes": 18851,
+      "modified_time": "2026-07-05T06:55:10+00:00",
+      "tokens": [
+        "384",
+        "assets",
+        "blacklight",
+        "halren",
+        "jpg",
+        "personnel",
+        "pictures",
+        "profile",
+        "uploads",
+        "victor"
+      ],
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_01.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_01.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_01.png",
+      "stem": "eldritch_binder_01",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1993021,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_02.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_02.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_02.png",
+      "stem": "eldritch_binder_02",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1895732,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "02",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_03.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_03.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_03.png",
+      "stem": "eldritch_binder_03",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1942082,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "03",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_04.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_04.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_04.png",
+      "stem": "eldritch_binder_04",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2057207,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "04",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_05.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_05.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_05.png",
+      "stem": "eldritch_binder_05",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1832360,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "05",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_06.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_06.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_06.png",
+      "stem": "eldritch_binder_06",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2053829,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "06",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_07.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_07.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_07.png",
+      "stem": "eldritch_binder_07",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2217684,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "07",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_08.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_08.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_08.png",
+      "stem": "eldritch_binder_08",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1907368,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "08",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_09.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_09.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_09.png",
+      "stem": "eldritch_binder_09",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1942573,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "09",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_10.png",
+      "public_path": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01/eldritch_binder_10.png",
+      "folder": "assets/blacklight/eldritch_binder_portrait_set_01/eldritch_binder_portrait_set_01",
+      "name": "eldritch_binder_10.png",
+      "stem": "eldritch_binder_10",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1974146,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "10",
+        "assets",
+        "binder",
+        "blacklight",
+        "eldritch",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/keys.mp3",
+      "public_path": "assets/blacklight/keys.mp3",
+      "folder": "assets/blacklight",
+      "name": "keys.mp3",
+      "stem": "keys",
+      "extension": ".mp3",
+      "kind": "audio",
+      "mime_type": "audio/mpeg",
+      "size_bytes": 97778,
+      "modified_time": "2026-07-07T02:45:27.705870+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "keys",
+        "mp3"
+      ]
+    },
+    {
+      "repo_path": "assets/blacklight/placeholder_character_portrait_set/placeholder_character_portrait_set/placeholder_character_portrait_01.png",
+      "public_path": "assets/blacklight/placeholder_character_portrait_set/placeholder_character_portrait_set/placeholder_character_portrait_01.png",
+      "folder": "assets/blacklight/placeholder_character_portrait_set/placeholder_character_portrait_set",
+      "name": "placeholder_character_portrait_01.png",
+      "stem": "placeholder_character_portrait_01",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1233550,
+      "modified_time": "2026-07-05T17:32:12+00:00",
+      "tokens": [
+        "01",
+        "assets",
+        "blacklight",
+        "character",
+        "placeholder",
+        "png",
+        "portrait",
+        "set"
+      ],
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/01_01_home.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/01_01_home.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "01_01_home.png",
+      "stem": "01_01_home",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 61839,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "home",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 172,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/01_02_search.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/01_02_search.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "01_02_search.png",
+      "stem": "01_02_search",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 56925,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "02",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "png",
+        "search",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 159,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/01_03_user.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/01_03_user.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "01_03_user.png",
+      "stem": "01_03_user",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 57276,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "03",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "png",
+        "sliced",
+        "user",
+        "web"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/01_04_heart.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/01_04_heart.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "01_04_heart.png",
+      "stem": "01_04_heart",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 57000,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "04",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "heart",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 161,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/01_05_cart.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/01_05_cart.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "01_05_cart.png",
+      "stem": "01_05_cart",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 59921,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "cart",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 168,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/02_01_settings.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/02_01_settings.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "02_01_settings.png",
+      "stem": "02_01_settings",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 63858,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "02",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "png",
+        "settings",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 172,
+        "height": 156
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/02_02_globe.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/02_02_globe.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "02_02_globe.png",
+      "stem": "02_02_globe",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 62790,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "02",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "globe",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 159,
+        "height": 156
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/02_03_email.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/02_03_email.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "02_03_email.png",
+      "stem": "02_03_email",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 56750,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "02",
+        "03",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "email",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 156
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/02_04_chat.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/02_04_chat.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "02_04_chat.png",
+      "stem": "02_04_chat",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 57532,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "02",
+        "04",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "chat",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 161,
+        "height": 156
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/02_05_bell.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/02_05_bell.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "02_05_bell.png",
+      "stem": "02_05_bell",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 62494,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "02",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "bell",
+        "blacklight",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 168,
+        "height": 156
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/03_01_laptop.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/03_01_laptop.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "03_01_laptop.png",
+      "stem": "03_01_laptop",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 56644,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "03",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "laptop",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 172,
+        "height": 154
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/03_02_image.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/03_02_image.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "03_02_image.png",
+      "stem": "03_02_image",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 55297,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "02",
+        "03",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "image",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 159,
+        "height": 154
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/03_03_play.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/03_03_play.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "03_03_play.png",
+      "stem": "03_03_play",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 63280,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "03",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "play",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 154
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/03_04_wifi.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/03_04_wifi.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "03_04_wifi.png",
+      "stem": "03_04_wifi",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 59808,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "03",
+        "04",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "png",
+        "sliced",
+        "web",
+        "wifi"
+      ],
+      "dimensions": {
+        "width": 161,
+        "height": 154
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/03_05_location.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/03_05_location.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "03_05_location.png",
+      "stem": "03_05_location",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 65492,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "03",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "location",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 168,
+        "height": 154
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/04_01_link.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/04_01_link.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "04_01_link.png",
+      "stem": "04_01_link",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 67616,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "04",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "link",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 172,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/04_02_analytics.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/04_02_analytics.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "04_02_analytics.png",
+      "stem": "04_02_analytics",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 57751,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "02",
+        "04",
+        "25",
+        "analytics",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 159,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/04_03_calendar.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/04_03_calendar.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "04_03_calendar.png",
+      "stem": "04_03_calendar",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 53998,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "03",
+        "04",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "calendar",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/04_04_lock.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/04_04_lock.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "04_04_lock.png",
+      "stem": "04_04_lock",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 58361,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "04",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "lock",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 161,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/04_05_download.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/04_05_download.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "04_05_download.png",
+      "stem": "04_05_download",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 62590,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "04",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "download",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 168,
+        "height": 155
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/05_01_like.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/05_01_like.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "05_01_like.png",
+      "stem": "05_01_like",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 68719,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "01",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "like",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 172,
+        "height": 172
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/05_02_speech_bubble.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/05_02_speech_bubble.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "05_02_speech_bubble.png",
+      "stem": "05_02_speech_bubble",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 61958,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "02",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "bubble",
+        "icons",
+        "png",
+        "sliced",
+        "speech",
+        "web"
+      ],
+      "dimensions": {
+        "width": 159,
+        "height": 172
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/05_03_clock.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/05_03_clock.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "05_03_clock.png",
+      "stem": "05_03_clock",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 62017,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "03",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "clock",
+        "icons",
+        "png",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 160,
+        "height": 172
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/05_04_star.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/05_04_star.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "05_04_star.png",
+      "stem": "05_04_star",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 63991,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "04",
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "png",
+        "sliced",
+        "star",
+        "web"
+      ],
+      "dimensions": {
+        "width": 161,
+        "height": 172
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/sliced_web_asset_icons_25/05_05_share.png",
+      "public_path": "assets/blacklight/sliced_web_asset_icons_25/05_05_share.png",
+      "folder": "assets/blacklight/sliced_web_asset_icons_25",
+      "name": "05_05_share.png",
+      "stem": "05_05_share",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 69264,
+      "modified_time": "2026-07-06T04:24:40+00:00",
+      "tokens": [
+        "05",
+        "25",
+        "asset",
+        "assets",
+        "blacklight",
+        "icons",
+        "png",
+        "share",
+        "sliced",
+        "web"
+      ],
+      "dimensions": {
+        "width": 168,
+        "height": 172
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_01.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_01.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_01.png",
+      "stem": "harmonic_mutant_01",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1946044,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_02.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_02.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_02.png",
+      "stem": "harmonic_mutant_02",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1963192,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "02",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_03.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_03.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_03.png",
+      "stem": "harmonic_mutant_03",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2007151,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "03",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_04.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_04.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_04.png",
+      "stem": "harmonic_mutant_04",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2193682,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "04",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_05.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_05.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_05.png",
+      "stem": "harmonic_mutant_05",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1915978,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "05",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_06.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_06.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_06.png",
+      "stem": "harmonic_mutant_06",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2014078,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "06",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_07.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_07.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_07.png",
+      "stem": "harmonic_mutant_07",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2011335,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "07",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_08.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_08.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_08.png",
+      "stem": "harmonic_mutant_08",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1873737,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "08",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_09.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_09.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_09.png",
+      "stem": "harmonic_mutant_09",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2003105,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "09",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_10.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01/harmonic_mutant_10.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/harmonic_mutant_portrait_set_01",
+      "name": "harmonic_mutant_10.png",
+      "stem": "harmonic_mutant_10",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2014036,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "10",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "mutant",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_01.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_01.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_01.png",
+      "stem": "technomancer_01",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2045701,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_02.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_02.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_02.png",
+      "stem": "technomancer_02",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1973880,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "02",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_03.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_03.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_03.png",
+      "stem": "technomancer_03",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2088981,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "03",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_04.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_04.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_04.png",
+      "stem": "technomancer_04",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2019942,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "04",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_05.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_05.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_05.png",
+      "stem": "technomancer_05",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2087607,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "05",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_06.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_06.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_06.png",
+      "stem": "technomancer_06",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2244690,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "06",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_07.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_07.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_07.png",
+      "stem": "technomancer_07",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2301737,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "07",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_08.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_08.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_08.png",
+      "stem": "technomancer_08",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1857910,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "08",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_09.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_09.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_09.png",
+      "stem": "technomancer_09",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2016483,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "09",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_10.png",
+      "public_path": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01/technomancer_10.png",
+      "folder": "assets/blacklight/technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/technomancer_portrait_set_01",
+      "name": "technomancer_10.png",
+      "stem": "technomancer_10",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 1943600,
+      "modified_time": "2026-07-05T18:52:50+00:00",
+      "tokens": [
+        "01",
+        "10",
+        "and",
+        "assets",
+        "blacklight",
+        "bundle",
+        "harmonic",
+        "png",
+        "portrait",
+        "set",
+        "technomancer"
+      ],
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/universfield-email-notification-143029.mp3",
+      "public_path": "assets/blacklight/universfield-email-notification-143029.mp3",
+      "folder": "assets/blacklight",
+      "name": "universfield-email-notification-143029.mp3",
+      "stem": "universfield-email-notification-143029",
+      "extension": ".mp3",
+      "kind": "audio",
+      "mime_type": "audio/mpeg",
+      "size_bytes": 27585,
+      "modified_time": "2026-07-07T02:41:27.712907+00:00",
+      "tokens": [
+        "143029",
+        "assets",
+        "blacklight",
+        "email",
+        "mp3",
+        "notification",
+        "universfield"
+      ]
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/README.md",
+      "public_path": "assets/blacklight/veteran-scenes/README.md",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "README.md",
+      "stem": "README",
+      "extension": ".md",
+      "kind": "document",
+      "mime_type": "text/markdown",
+      "size_bytes": 1541,
+      "modified_time": "2026-07-04T01:00:11.104243+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "md",
+        "readme",
+        "scenes",
+        "veteran"
+      ]
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/a_bustling_aid_hub_in_a_warehouse.svg",
+      "public_path": "assets/blacklight/veteran-scenes/a_bustling_aid_hub_in_a_warehouse.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "a_bustling_aid_hub_in_a_warehouse.svg",
+      "stem": "a_bustling_aid_hub_in_a_warehouse",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1131,
+      "modified_time": "2026-07-04T01:00:11.108243+00:00",
+      "tokens": [
+        "a",
+        "aid",
+        "assets",
+        "blacklight",
+        "bustling",
+        "hub",
+        "in",
+        "scenes",
+        "svg",
+        "veteran",
+        "warehouse"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/a_solemn_assembly_in_golden_light.svg",
+      "public_path": "assets/blacklight/veteran-scenes/a_solemn_assembly_in_golden_light.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "a_solemn_assembly_in_golden_light.svg",
+      "stem": "a_solemn_assembly_in_golden_light",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1071,
+      "modified_time": "2026-07-04T01:00:11.113257+00:00",
+      "tokens": [
+        "a",
+        "assembly",
+        "assets",
+        "blacklight",
+        "golden",
+        "in",
+        "light",
+        "scenes",
+        "solemn",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images.zip",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images.zip",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "blacklight_reorientation_generated_images.zip",
+      "stem": "blacklight_reorientation_generated_images",
+      "extension": ".zip",
+      "kind": "archive",
+      "mime_type": "application/x-zip-compressed",
+      "size_bytes": 62688343,
+      "modified_time": "2026-07-03T21:56:36.128451+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "generated",
+        "images",
+        "reorientation",
+        "scenes",
+        "veteran",
+        "zip"
+      ]
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/a_bustling_aid_hub_in_a_warehouse.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/a_bustling_aid_hub_in_a_warehouse.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "a_bustling_aid_hub_in_a_warehouse.png",
+      "stem": "a_bustling_aid_hub_in_a_warehouse",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2625018,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "aid",
+        "assets",
+        "blacklight",
+        "bustling",
+        "generated",
+        "hub",
+        "images",
+        "in",
+        "png",
+        "reorientation",
+        "scenes",
+        "veteran",
+        "warehouse"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/a_solemn_assembly_in_golden_light.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/a_solemn_assembly_in_golden_light.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "a_solemn_assembly_in_golden_light.png",
+      "stem": "a_solemn_assembly_in_golden_light",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2486632,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assembly",
+        "assets",
+        "blacklight",
+        "generated",
+        "golden",
+        "images",
+        "in",
+        "light",
+        "png",
+        "reorientation",
+        "scenes",
+        "solemn",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/ceremonial_gathering_under_cosmic_sky.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/ceremonial_gathering_under_cosmic_sky.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "ceremonial_gathering_under_cosmic_sky.png",
+      "stem": "ceremonial_gathering_under_cosmic_sky",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2451730,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "ceremonial",
+        "cosmic",
+        "gathering",
+        "generated",
+        "images",
+        "png",
+        "reorientation",
+        "scenes",
+        "sky",
+        "under",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/ceremonial_tribunal_in_a_cosmic_hall.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/ceremonial_tribunal_in_a_cosmic_hall.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "ceremonial_tribunal_in_a_cosmic_hall.png",
+      "stem": "ceremonial_tribunal_in_a_cosmic_hall",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2511221,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "ceremonial",
+        "cosmic",
+        "generated",
+        "hall",
+        "images",
+        "in",
+        "png",
+        "reorientation",
+        "scenes",
+        "tribunal",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/dim_lit_industrial_command_center_meeting.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/dim_lit_industrial_command_center_meeting.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "dim_lit_industrial_command_center_meeting.png",
+      "stem": "dim_lit_industrial_command_center_meeting",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2603221,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "center",
+        "command",
+        "dim",
+        "generated",
+        "images",
+        "industrial",
+        "lit",
+        "meeting",
+        "png",
+        "reorientation",
+        "scenes",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/floating_refuge_in_a_stormy_city.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/floating_refuge_in_a_stormy_city.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "floating_refuge_in_a_stormy_city.png",
+      "stem": "floating_refuge_in_a_stormy_city",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2596588,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "city",
+        "floating",
+        "generated",
+        "images",
+        "in",
+        "png",
+        "refuge",
+        "reorientation",
+        "scenes",
+        "stormy",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/futuristic_briefing_room_under_dim_lights.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/futuristic_briefing_room_under_dim_lights.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "futuristic_briefing_room_under_dim_lights.png",
+      "stem": "futuristic_briefing_room_under_dim_lights",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2602999,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "briefing",
+        "dim",
+        "futuristic",
+        "generated",
+        "images",
+        "lights",
+        "png",
+        "reorientation",
+        "room",
+        "scenes",
+        "under",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/futuristic_tribunal_in_a_high_tech_chamber.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/futuristic_tribunal_in_a_high_tech_chamber.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "futuristic_tribunal_in_a_high_tech_chamber.png",
+      "stem": "futuristic_tribunal_in_a_high_tech_chamber",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2553766,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "chamber",
+        "futuristic",
+        "generated",
+        "high",
+        "images",
+        "in",
+        "png",
+        "reorientation",
+        "scenes",
+        "tech",
+        "tribunal",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/grand_council_in_a_luminous_arena.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/grand_council_in_a_luminous_arena.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "grand_council_in_a_luminous_arena.png",
+      "stem": "grand_council_in_a_luminous_arena",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2407868,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "arena",
+        "assets",
+        "blacklight",
+        "council",
+        "generated",
+        "grand",
+        "images",
+        "in",
+        "luminous",
+        "png",
+        "reorientation",
+        "scenes",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/high_security_debrief_in_dim_archives.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/high_security_debrief_in_dim_archives.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "high_security_debrief_in_dim_archives.png",
+      "stem": "high_security_debrief_in_dim_archives",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2526764,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "archives",
+        "assets",
+        "blacklight",
+        "debrief",
+        "dim",
+        "generated",
+        "high",
+        "images",
+        "in",
+        "png",
+        "reorientation",
+        "scenes",
+        "security",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/humanitarian_aid_and_ethereal_presence.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/humanitarian_aid_and_ethereal_presence.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "humanitarian_aid_and_ethereal_presence.png",
+      "stem": "humanitarian_aid_and_ethereal_presence",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2595300,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "aid",
+        "and",
+        "assets",
+        "blacklight",
+        "ethereal",
+        "generated",
+        "humanitarian",
+        "images",
+        "png",
+        "presence",
+        "reorientation",
+        "scenes",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/imagegen.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/imagegen.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "imagegen.png",
+      "stem": "imagegen",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2429205,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "generated",
+        "imagegen",
+        "images",
+        "png",
+        "reorientation",
+        "scenes",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/industrial_administration_hall_in_dystopian_future.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/industrial_administration_hall_in_dystopian_future.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "industrial_administration_hall_in_dystopian_future.png",
+      "stem": "industrial_administration_hall_in_dystopian_future",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2643035,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "administration",
+        "assets",
+        "blacklight",
+        "dystopian",
+        "future",
+        "generated",
+        "hall",
+        "images",
+        "in",
+        "industrial",
+        "png",
+        "reorientation",
+        "scenes",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/industrial_tribunal_in_a_dim_chamber.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/industrial_tribunal_in_a_dim_chamber.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "industrial_tribunal_in_a_dim_chamber.png",
+      "stem": "industrial_tribunal_in_a_dim_chamber",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2429205,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "chamber",
+        "dim",
+        "generated",
+        "images",
+        "in",
+        "industrial",
+        "png",
+        "reorientation",
+        "scenes",
+        "tribunal",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/metallic_figure_in_a_shadowed_assembly.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/metallic_figure_in_a_shadowed_assembly.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "metallic_figure_in_a_shadowed_assembly.png",
+      "stem": "metallic_figure_in_a_shadowed_assembly",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2389583,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assembly",
+        "assets",
+        "blacklight",
+        "figure",
+        "generated",
+        "images",
+        "in",
+        "metallic",
+        "png",
+        "reorientation",
+        "scenes",
+        "shadowed",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/refugees_in_the_industrial_shelter.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/refugees_in_the_industrial_shelter.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "refugees_in_the_industrial_shelter.png",
+      "stem": "refugees_in_the_industrial_shelter",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2431774,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "generated",
+        "images",
+        "in",
+        "industrial",
+        "png",
+        "refugees",
+        "reorientation",
+        "scenes",
+        "shelter",
+        "the",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/relief_hub_in_industrial_command_center.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/relief_hub_in_industrial_command_center.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "relief_hub_in_industrial_command_center.png",
+      "stem": "relief_hub_in_industrial_command_center",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2703444,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "center",
+        "command",
+        "generated",
+        "hub",
+        "images",
+        "in",
+        "industrial",
+        "png",
+        "relief",
+        "reorientation",
+        "scenes",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/squad_briefing_in_a_futuristic_hangar.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/squad_briefing_in_a_futuristic_hangar.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "squad_briefing_in_a_futuristic_hangar.png",
+      "stem": "squad_briefing_in_a_futuristic_hangar",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2458646,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "briefing",
+        "futuristic",
+        "generated",
+        "hangar",
+        "images",
+        "in",
+        "png",
+        "reorientation",
+        "scenes",
+        "squad",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/strategic_briefing_in_industrial_warehouse.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/strategic_briefing_in_industrial_warehouse.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "strategic_briefing_in_industrial_warehouse.png",
+      "stem": "strategic_briefing_in_industrial_warehouse",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2688378,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "briefing",
+        "generated",
+        "images",
+        "in",
+        "industrial",
+        "png",
+        "reorientation",
+        "scenes",
+        "strategic",
+        "veteran",
+        "warehouse"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/surveillance_in_a_neon_lit_room.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/surveillance_in_a_neon_lit_room.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "surveillance_in_a_neon_lit_room.png",
+      "stem": "surveillance_in_a_neon_lit_room",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2344536,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "generated",
+        "images",
+        "in",
+        "lit",
+        "neon",
+        "png",
+        "reorientation",
+        "room",
+        "scenes",
+        "surveillance",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/tactical_briefing_in_an_industrial_war_room.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/tactical_briefing_in_an_industrial_war_room.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "tactical_briefing_in_an_industrial_war_room.png",
+      "stem": "tactical_briefing_in_an_industrial_war_room",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2413249,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "an",
+        "assets",
+        "blacklight",
+        "briefing",
+        "generated",
+        "images",
+        "in",
+        "industrial",
+        "png",
+        "reorientation",
+        "room",
+        "scenes",
+        "tactical",
+        "veteran",
+        "war"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/tense_strategy_briefing_in_a_glowing_war_room.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/tense_strategy_briefing_in_a_glowing_war_room.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "tense_strategy_briefing_in_a_glowing_war_room.png",
+      "stem": "tense_strategy_briefing_in_a_glowing_war_room",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2544554,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "briefing",
+        "generated",
+        "glowing",
+        "images",
+        "in",
+        "png",
+        "reorientation",
+        "room",
+        "scenes",
+        "strategy",
+        "tense",
+        "veteran",
+        "war"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/unusual_gathering_in_a_dim_industrial_hall.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/unusual_gathering_in_a_dim_industrial_hall.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "unusual_gathering_in_a_dim_industrial_hall.png",
+      "stem": "unusual_gathering_in_a_dim_industrial_hall",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2493599,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "dim",
+        "gathering",
+        "generated",
+        "hall",
+        "images",
+        "in",
+        "industrial",
+        "png",
+        "reorientation",
+        "scenes",
+        "unusual",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/urban_espionage_at_nightfall.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/urban_espionage_at_nightfall.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "urban_espionage_at_nightfall.png",
+      "stem": "urban_espionage_at_nightfall",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2677690,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "assets",
+        "at",
+        "blacklight",
+        "espionage",
+        "generated",
+        "images",
+        "nightfall",
+        "png",
+        "reorientation",
+        "scenes",
+        "urban",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/watching_the_world_from_afar.png",
+      "public_path": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/watching_the_world_from_afar.png",
+      "folder": "assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images",
+      "name": "watching_the_world_from_afar.png",
+      "stem": "watching_the_world_from_afar",
+      "extension": ".png",
+      "kind": "image",
+      "mime_type": "image/png",
+      "size_bytes": 2411556,
+      "modified_time": "2026-07-04T05:52:14+00:00",
+      "tokens": [
+        "afar",
+        "assets",
+        "blacklight",
+        "from",
+        "generated",
+        "images",
+        "png",
+        "reorientation",
+        "scenes",
+        "the",
+        "veteran",
+        "watching",
+        "world"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/ceremonial_gathering_under_cosmic_sky.svg",
+      "public_path": "assets/blacklight/veteran-scenes/ceremonial_gathering_under_cosmic_sky.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "ceremonial_gathering_under_cosmic_sky.svg",
+      "stem": "ceremonial_gathering_under_cosmic_sky",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1006,
+      "modified_time": "2026-07-04T01:00:11.117267+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "ceremonial",
+        "cosmic",
+        "gathering",
+        "scenes",
+        "sky",
+        "svg",
+        "under",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/ceremonial_tribunal_in_a_cosmic_hall.svg",
+      "public_path": "assets/blacklight/veteran-scenes/ceremonial_tribunal_in_a_cosmic_hall.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "ceremonial_tribunal_in_a_cosmic_hall.svg",
+      "stem": "ceremonial_tribunal_in_a_cosmic_hall",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1053,
+      "modified_time": "2026-07-04T01:00:11.121269+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "ceremonial",
+        "cosmic",
+        "hall",
+        "in",
+        "scenes",
+        "svg",
+        "tribunal",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/dim_lit_industrial_command_center_meeting.svg",
+      "public_path": "assets/blacklight/veteran-scenes/dim_lit_industrial_command_center_meeting.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "dim_lit_industrial_command_center_meeting.svg",
+      "stem": "dim_lit_industrial_command_center_meeting",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1016,
+      "modified_time": "2026-07-04T01:00:11.126267+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "center",
+        "command",
+        "dim",
+        "industrial",
+        "lit",
+        "meeting",
+        "scenes",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/floating_refuge_in_a_stormy_city.svg",
+      "public_path": "assets/blacklight/veteran-scenes/floating_refuge_in_a_stormy_city.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "floating_refuge_in_a_stormy_city.svg",
+      "stem": "floating_refuge_in_a_stormy_city",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1161,
+      "modified_time": "2026-07-04T01:00:11.130781+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "city",
+        "floating",
+        "in",
+        "refuge",
+        "scenes",
+        "stormy",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/futuristic_briefing_room_under_dim_lights.svg",
+      "public_path": "assets/blacklight/veteran-scenes/futuristic_briefing_room_under_dim_lights.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "futuristic_briefing_room_under_dim_lights.svg",
+      "stem": "futuristic_briefing_room_under_dim_lights",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1106,
+      "modified_time": "2026-07-04T01:00:11.134780+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "briefing",
+        "dim",
+        "futuristic",
+        "lights",
+        "room",
+        "scenes",
+        "svg",
+        "under",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/futuristic_tribunal_in_a_high_tech_chamber.svg",
+      "public_path": "assets/blacklight/veteran-scenes/futuristic_tribunal_in_a_high_tech_chamber.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "futuristic_tribunal_in_a_high_tech_chamber.svg",
+      "stem": "futuristic_tribunal_in_a_high_tech_chamber",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1084,
+      "modified_time": "2026-07-04T01:00:11.139289+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "chamber",
+        "futuristic",
+        "high",
+        "in",
+        "scenes",
+        "svg",
+        "tech",
+        "tribunal",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/grand_council_in_a_luminous_arena.svg",
+      "public_path": "assets/blacklight/veteran-scenes/grand_council_in_a_luminous_arena.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "grand_council_in_a_luminous_arena.svg",
+      "stem": "grand_council_in_a_luminous_arena",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1135,
+      "modified_time": "2026-07-04T01:00:11.143294+00:00",
+      "tokens": [
+        "a",
+        "arena",
+        "assets",
+        "blacklight",
+        "council",
+        "grand",
+        "in",
+        "luminous",
+        "scenes",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/high_security_debrief_in_dim_archives.svg",
+      "public_path": "assets/blacklight/veteran-scenes/high_security_debrief_in_dim_archives.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "high_security_debrief_in_dim_archives.svg",
+      "stem": "high_security_debrief_in_dim_archives",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1047,
+      "modified_time": "2026-07-04T01:00:11.146293+00:00",
+      "tokens": [
+        "archives",
+        "assets",
+        "blacklight",
+        "debrief",
+        "dim",
+        "high",
+        "in",
+        "scenes",
+        "security",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/humanitarian_aid_and_ethereal_presence.svg",
+      "public_path": "assets/blacklight/veteran-scenes/humanitarian_aid_and_ethereal_presence.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "humanitarian_aid_and_ethereal_presence.svg",
+      "stem": "humanitarian_aid_and_ethereal_presence",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1001,
+      "modified_time": "2026-07-04T01:00:11.150301+00:00",
+      "tokens": [
+        "aid",
+        "and",
+        "assets",
+        "blacklight",
+        "ethereal",
+        "humanitarian",
+        "presence",
+        "scenes",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/industrial_administration_hall_in_dystopian_future.svg",
+      "public_path": "assets/blacklight/veteran-scenes/industrial_administration_hall_in_dystopian_future.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "industrial_administration_hall_in_dystopian_future.svg",
+      "stem": "industrial_administration_hall_in_dystopian_future",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1185,
+      "modified_time": "2026-07-04T01:00:11.154298+00:00",
+      "tokens": [
+        "administration",
+        "assets",
+        "blacklight",
+        "dystopian",
+        "future",
+        "hall",
+        "in",
+        "industrial",
+        "scenes",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/industrial_tribunal_in_a_dim_chamber.svg",
+      "public_path": "assets/blacklight/veteran-scenes/industrial_tribunal_in_a_dim_chamber.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "industrial_tribunal_in_a_dim_chamber.svg",
+      "stem": "industrial_tribunal_in_a_dim_chamber",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 945,
+      "modified_time": "2026-07-04T01:00:11.177365+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "chamber",
+        "dim",
+        "in",
+        "industrial",
+        "scenes",
+        "svg",
+        "tribunal",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/metallic_figure_in_a_shadowed_assembly.svg",
+      "public_path": "assets/blacklight/veteran-scenes/metallic_figure_in_a_shadowed_assembly.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "metallic_figure_in_a_shadowed_assembly.svg",
+      "stem": "metallic_figure_in_a_shadowed_assembly",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1142,
+      "modified_time": "2026-07-04T01:00:11.181365+00:00",
+      "tokens": [
+        "a",
+        "assembly",
+        "assets",
+        "blacklight",
+        "figure",
+        "in",
+        "metallic",
+        "scenes",
+        "shadowed",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/refugees_in_the_industrial_shelter.svg",
+      "public_path": "assets/blacklight/veteran-scenes/refugees_in_the_industrial_shelter.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "refugees_in_the_industrial_shelter.svg",
+      "stem": "refugees_in_the_industrial_shelter",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1145,
+      "modified_time": "2026-07-04T01:00:11.185366+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "in",
+        "industrial",
+        "refugees",
+        "scenes",
+        "shelter",
+        "svg",
+        "the",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/relief_hub_in_industrial_command_center.svg",
+      "public_path": "assets/blacklight/veteran-scenes/relief_hub_in_industrial_command_center.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "relief_hub_in_industrial_command_center.svg",
+      "stem": "relief_hub_in_industrial_command_center",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1056,
+      "modified_time": "2026-07-04T01:00:11.185366+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "center",
+        "command",
+        "hub",
+        "in",
+        "industrial",
+        "relief",
+        "scenes",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/squad_briefing_in_a_futuristic_hangar.svg",
+      "public_path": "assets/blacklight/veteran-scenes/squad_briefing_in_a_futuristic_hangar.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "squad_briefing_in_a_futuristic_hangar.svg",
+      "stem": "squad_briefing_in_a_futuristic_hangar",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 989,
+      "modified_time": "2026-07-04T01:00:11.189871+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "briefing",
+        "futuristic",
+        "hangar",
+        "in",
+        "scenes",
+        "squad",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/strategic_briefing_in_industrial_warehouse.svg",
+      "public_path": "assets/blacklight/veteran-scenes/strategic_briefing_in_industrial_warehouse.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "strategic_briefing_in_industrial_warehouse.svg",
+      "stem": "strategic_briefing_in_industrial_warehouse",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1063,
+      "modified_time": "2026-07-04T01:00:11.194875+00:00",
+      "tokens": [
+        "assets",
+        "blacklight",
+        "briefing",
+        "in",
+        "industrial",
+        "scenes",
+        "strategic",
+        "svg",
+        "veteran",
+        "warehouse"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/surveillance_in_a_neon_lit_room.svg",
+      "public_path": "assets/blacklight/veteran-scenes/surveillance_in_a_neon_lit_room.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "surveillance_in_a_neon_lit_room.svg",
+      "stem": "surveillance_in_a_neon_lit_room",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 980,
+      "modified_time": "2026-07-04T01:00:11.198886+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "in",
+        "lit",
+        "neon",
+        "room",
+        "scenes",
+        "surveillance",
+        "svg",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/tactical_briefing_in_an_industrial_war_room.svg",
+      "public_path": "assets/blacklight/veteran-scenes/tactical_briefing_in_an_industrial_war_room.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "tactical_briefing_in_an_industrial_war_room.svg",
+      "stem": "tactical_briefing_in_an_industrial_war_room",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1055,
+      "modified_time": "2026-07-04T01:00:11.202888+00:00",
+      "tokens": [
+        "an",
+        "assets",
+        "blacklight",
+        "briefing",
+        "in",
+        "industrial",
+        "room",
+        "scenes",
+        "svg",
+        "tactical",
+        "veteran",
+        "war"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/tense_strategy_briefing_in_a_glowing_war_room.svg",
+      "public_path": "assets/blacklight/veteran-scenes/tense_strategy_briefing_in_a_glowing_war_room.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "tense_strategy_briefing_in_a_glowing_war_room.svg",
+      "stem": "tense_strategy_briefing_in_a_glowing_war_room",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1097,
+      "modified_time": "2026-07-04T01:00:11.206885+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "briefing",
+        "glowing",
+        "in",
+        "room",
+        "scenes",
+        "strategy",
+        "svg",
+        "tense",
+        "veteran",
+        "war"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/unusual_gathering_in_a_dim_industrial_hall.svg",
+      "public_path": "assets/blacklight/veteran-scenes/unusual_gathering_in_a_dim_industrial_hall.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "unusual_gathering_in_a_dim_industrial_hall.svg",
+      "stem": "unusual_gathering_in_a_dim_industrial_hall",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1193,
+      "modified_time": "2026-07-04T01:00:11.212397+00:00",
+      "tokens": [
+        "a",
+        "assets",
+        "blacklight",
+        "dim",
+        "gathering",
+        "hall",
+        "in",
+        "industrial",
+        "scenes",
+        "svg",
+        "unusual",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/urban_espionage_at_nightfall.svg",
+      "public_path": "assets/blacklight/veteran-scenes/urban_espionage_at_nightfall.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "urban_espionage_at_nightfall.svg",
+      "stem": "urban_espionage_at_nightfall",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1107,
+      "modified_time": "2026-07-04T01:00:11.215914+00:00",
+      "tokens": [
+        "assets",
+        "at",
+        "blacklight",
+        "espionage",
+        "nightfall",
+        "scenes",
+        "svg",
+        "urban",
+        "veteran"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    },
+    {
+      "repo_path": "assets/blacklight/veteran-scenes/watching_the_world_from_afar.svg",
+      "public_path": "assets/blacklight/veteran-scenes/watching_the_world_from_afar.svg",
+      "folder": "assets/blacklight/veteran-scenes",
+      "name": "watching_the_world_from_afar.svg",
+      "stem": "watching_the_world_from_afar",
+      "extension": ".svg",
+      "kind": "image",
+      "mime_type": "image/svg+xml",
+      "size_bytes": 1052,
+      "modified_time": "2026-07-04T01:00:11.219914+00:00",
+      "tokens": [
+        "afar",
+        "assets",
+        "blacklight",
+        "from",
+        "scenes",
+        "svg",
+        "the",
+        "veteran",
+        "watching",
+        "world"
+      ],
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
+    }
+  ]
+};
