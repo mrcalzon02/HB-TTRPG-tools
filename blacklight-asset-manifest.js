@@ -5,6 +5,7 @@
   const iconsRoot = `${root}sliced_web_asset_icons_25/`;
   const bundleRoot = `${root}blacklight_character_portrait_sets_bundle_01/blacklight_character_portrait_sets_bundle_01/`;
   const techRoot = `${root}technomancer_and_harmonic_bundle_01/technomancer_and_harmonic_bundle_01/`;
+  const promoRoot = `${root}blacklight_homepage_promotional_images/blacklight_homepage_promotional_images/`;
 
   const range = (count, factory) => Array.from({ length: count }, (_, index) => factory(index + 1));
   const pad = value => String(value).padStart(2, '0');
@@ -154,24 +155,22 @@
     notification: `${root}universfield-email-notification-143029.mp3`
   };
 
+  const homepagePromotionalImages = [
+    `${promoRoot}blacklight-homepage-hero-exterior.png`,
+    `${promoRoot}blacklight-campus-aerial.png`,
+    `${promoRoot}blacklight-main-foyer-sculpture.png`,
+    `${promoRoot}blacklight-boardroom-presentation.png`
+  ];
+
   const corporatePromos = {
-    homepageCandidates: [
-      `${root}blacklight_homepage_promotional_images/blacklight_homepage_promotional_01.png`,
-      `${root}blacklight_homepage_promotional_images/homepage_promotional_01.png`,
-      `${root}blacklight_homepage_promotional_images/corporate_homepage_01.png`,
-      `${root}blacklight_homepage_promotional_images/image_01.png`,
-      `${root}blacklight_homepage_promotional_images/imagegen.png`,
-      `${root}veteran-scenes/blacklight_reorientation_generated_images/strategic_briefing_in_industrial_warehouse.png`,
-      `${root}veteran-scenes/blacklight_reorientation_generated_images/futuristic_briefing_room_under_dim_lights.png`
-    ],
+    homepageCandidates: homepagePromotionalImages,
     systemsCandidates: [
-      `${root}blacklight_homepage_promotional_images/blacklight_homepage_promotional_02.png`,
-      `${root}blacklight_homepage_promotional_images/homepage_promotional_02.png`,
-      `${root}blacklight_homepage_promotional_images/corporate_systems_01.png`,
-      `${root}blacklight_homepage_promotional_images/image_02.png`,
-      `${root}veteran-scenes/blacklight_reorientation_generated_images/high_security_debrief_in_dim_archives.png`,
-      `${root}veteran-scenes/blacklight_reorientation_generated_images/surveillance_in_a_neon_lit_room.png`
-    ]
+      homepagePromotionalImages[1],
+      homepagePromotionalImages[3],
+      homepagePromotionalImages[2],
+      homepagePromotionalImages[0]
+    ],
+    homepagePromotionalImages
   };
 
   window.BLACKLIGHT_ASSETS = Object.freeze({
