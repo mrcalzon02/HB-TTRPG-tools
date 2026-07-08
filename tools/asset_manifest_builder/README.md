@@ -4,7 +4,28 @@ Small local Python utility for indexing the repo's asset folders and producing a
 
 The point of this tool is to stop guessing at asset paths. Run it from a local copy of the repo and it will generate manifests with normalized repo-relative paths that can be copied directly into HTML, CSS, and JavaScript.
 
-## Quick run from the repo root
+## One-command Windows CMD workflow
+
+From the base level of the repo in Windows CMD, run:
+
+```cmd
+scan-assets-and-push.cmd
+```
+
+That command performs the full workflow:
+
+1. Moves to the repo base directory.
+2. Confirms the folder is a Git repo.
+3. Confirms the active branch is `main`.
+4. Runs the asset scan.
+5. Writes `asset-manifest.json`, `asset-manifest.md`, and `asset-manifest.js`.
+6. Runs `git add -A`.
+7. Commits any changes with `Update generated asset manifest`.
+8. Pushes `main` to `origin`.
+
+No separate scan command and no separate upload command are required.
+
+## Manual scan only
 
 ```bash
 python tools/build_asset_manifest.py --root . --assets assets --out asset-manifest.json --markdown asset-manifest.md --js-out asset-manifest.js
