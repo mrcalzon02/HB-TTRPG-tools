@@ -152,6 +152,13 @@
   const audio = {
     keys: `${root}keys.mp3`,
     speech: `${root}The_speech.mp3`,
+    speech2: `${root}speech2.mp3`,
+    speech3: `${root}speech_3.mp3`,
+    speechTracks: [
+      `${root}The_speech.mp3`,
+      `${root}speech2.mp3`,
+      `${root}speech_3.mp3`
+    ],
     notification: `${root}universfield-email-notification-143029.mp3`
   };
 
