@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight | Technobabble Name Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .techgen{display:grid;gap:18px}.techgen-panel{border:1px solid rgba(217,168,79,.34);border-radius:22px;background:linear-gradient(135deg,rgba(18,16,13,.96),rgba(4,4,4,.98));box-shadow:0 22px 55px rgba(0,0,0,.34);padding:20px;display:grid;gap:14px}.techgen-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:end}.techgen-controls label{display:grid;gap:6px;color:#d9a84f;font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:.75rem}.techgen-controls select{border:1px solid rgba(217,168,79,.28);border-radius:999px;background:#080706;color:#f4efe5;padding:10px 12px;min-width:190px}.techgen-button{border:1px solid rgba(217,168,79,.64);border-radius:999px;background:rgba(217,168,79,.14);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer}.techgen-button:hover{background:rgba(217,168,79,.24)}.techgen-output{display:grid;gap:10px}.techgen-item{border:1px solid rgba(217,168,79,.2);border-radius:16px;background:rgba(0,0,0,.2);padding:13px}.techgen-item h3{margin:0 0 6px;color:#f4efe5}.techgen-item p{margin:0;color:#bdb4a4;line-height:1.45}.techgen-item strong{color:#d9a84f}.techgen-note{color:#bdb4a4;line-height:1.55}.techgen-name{font-size:1.1rem;color:#f4efe5;font-weight:900}.techgen-log{display:grid;gap:10px}.techgen-log article{border:1px solid rgba(217,168,79,.18);border-radius:16px;background:rgba(0,0,0,.18);padding:14px}.techgen-log p{margin:0;color:#f4efe5}.techgen-log small{display:block;color:#bdb4a4;margin-top:8px}
+  </style>
+</head>
+<body class="blacklight-corp-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-corporate.html"><span class="bli-mark"></span><span class="bli-brand-text"><span>Blacklight</span><span>Technobabble</span></span></a>
+    <nav class="bli-nav"><a href="blacklight-systems-black.html">Archive Systems</a><a href="blacklight-metaphysics-conversation-generator.html">Metaphysics</a><a href="blacklight-equipment-catalog.html">Equipment Catalog</a><a href="blacklight-npc-generator.html">Entity Generator</a></nav>
+  </header>
+
+  <section class="bli-hero" aria-labelledby="techgen-title">
+    <div>
+      <p class="bli-eyebrow">Black archive · sci-fi naming engine</p>
+      <h1 id="techgen-title">Technobabble name generator.</h1>
+      <p class="bli-lede">Generate vaguely interesting sci-fi names for weapons, ships, power generators, swords, guns, devices, engines, armor, and assorted impossible hardware. Complexity 1 stays almost usable. Complexity 10 becomes full archive-grade nonsense with dignity.</p>
+      <div class="bli-actions"><a class="bli-action primary" href="blacklight-systems-black.html">Return to Black Archive</a><a class="bli-action" href="blacklight-equipment-catalog.html">Open Equipment Catalog</a></div>
+    </div>
+  </section>
+
+  <main class="bli-shell techgen">
+    <section class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Name generator</p><h2>One through ten layers of sci-fi complexity.</h2><p>Pick a technology class and generate all ten complexity tiers at once, or lock the output to one tier for a focused list.</p></div>
+      <div class="techgen-panel">
+        <div class="techgen-controls">
+          <label>Technology class<select id="techgen-class"><option value="random">Random class</option><option value="weapon">Weapon</option><option value="gun">Gun</option><option value="sword">Sword</option><option value="ship">Ship</option><option value="power">Power Generator</option><option value="device">Device</option><option value="engine">Engine</option><option value="armor">Armor</option></select></label>
+          <label>Complexity<select id="techgen-complexity"><option value="all">All 10 tiers</option><option value="1">1 · clean</option><option value="2">2 · tuned</option><option value="3">3 · pulsed</option><option value="4">4 · exotic</option><option value="5">5 · unstable</option><option value="6">6 · dimensional</option><option value="7">7 · recursive</option><option value="8">8 · impossible</option><option value="9">9 · archive-grade</option><option value="10">10 · absurdly overbuilt</option></select></label>
+          <button class="techgen-button" type="button" data-generate>Generate Names</button>
+          <button class="techgen-button" type="button" data-copy>Copy Current Names</button>
+          <button class="techgen-button" type="button" data-clear>Clear Log</button>
+        </div>
+        <div id="techgen-output" class="techgen-output"><article class="techgen-item"><h3>Ready.</h3><p>Generate a batch to produce technobabble names.</p></article></div>
+        <p class="techgen-note">Naming rule: higher complexity adds more prefixes, field effects, impossible materials, control surfaces, containment language, and suspiciously confident adjectives.</p>
+      </div>
+    </section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Recent output</p><h2>Name log.</h2></div><div id="techgen-log" class="techgen-log"><article><p>No names generated yet.</p><small>Recent batches will appear here.</small></article></div></section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Technobabble names for suspiciously advanced equipment.</footer>
+
+  <script>
+    (() => {
+      'use strict';
+      const nouns={weapon:['Projector','Emitter','Disruptor','Lance','Ordnance Frame','Strike Array'],gun:['Carbine','Pistol','Rifle','Caster','Needle Gun','Coilgun'],sword:['Blade','Saber','Edge','Katar','Longknife','Cutter'],ship:['Frigate','Courier','Interceptor','Surveyor','Dreadnought','Archive Vessel'],power:['Reactor','Generator','Core','Accumulator','Dynamo','Power Loom'],device:['Key','Relay','Instrument','Console','Anchor','Scanner'],engine:['Drive','Thruster','Slip Engine','Motive Core','Transit Loom','Vector Engine'],armor:['Carapace','Harness','Aegis Suit','Exoshell','Ward Plate','Bulwark Rig']};
+      const simple=['Aegis','Vanta','Kestrel','Orion','Helix','Nova','Rook','Morrow','Peregrine','Cinder','Valence','Argent','Keystone','Obsidian','Harbor'];
+      const effects=['phase','ion','plasma','neutrino','gravity','tachyon','harmonic','radiant','null','quantum','magnetar','photonic','entropic','psionic','muon','zero-point'];
+      const materials=['adamant','ceramic diamond','graphene','strangelet','chronoglass','voidsteel','meta-ceramic','black sapphire','neutron-laminate','ferrofluidic','noospheric alloy','gravitic foam'];
+      const controls=['stabilized','bounded','adaptive','vectored','coherent','inverted','polarized','synchronized','overclocked','permission-locked','oracle-gated','self-correcting'];
+      const grand=['hyperdimensional','recursive','causality-limited','paracausal','non-Euclidean','horizon-folded','dream-indexed','black-archive','ontological','sub-reality','axiom-bent','continuity-sealed'];
+      const warnings=['Containment Pattern','Fail-Safe','Overwatch','Deadman Governor','Witness Lock','Ethics Collar','Thermal Psalm','Coffin Mode','Saintless Protocol','Boundary Cage'];
+      const notes=['field-stable commercial label','looks like a serious prototype','probably illegal outside a contractor lab','requires one ominous cooling unit','sounds like it needs a waiver','Black archive procurement will ask questions','too many syllables to be civilian','clearly named by engineers avoiding liability','cannot possibly be as safe as the brochure says','somehow both classified and on the invoice'];
+      const classes=Object.keys(nouns);
+      const output=document.getElementById('techgen-output');
+      const log=document.getElementById('techgen-log');
+      const current={text:''};
+      function pick(list){return list[Math.floor(Math.random()*list.length)];}
+      function title(value){return String(value).replace(/\b\w/g,c=>c.toUpperCase());}
+      function techClass(){const selected=document.getElementById('techgen-class').value;return selected==='random'?pick(classes):selected;}
+      function buildName(kind,level){const noun=pick(nouns[kind]);if(level===1)return `${pick(simple)} ${noun}`;if(level===2)return `${title(pick(effects))} ${noun}`;if(level===3)return `${pick(simple)} ${title(pick(effects))} ${noun}`;if(level===4)return `${title(pick(controls))} ${title(pick(effects))} ${noun}`;if(level===5)return `${pick(simple)} ${title(pick(materials))} ${title(pick(effects))} ${noun}`;if(level===6)return `${title(pick(controls))} ${title(pick(effects))}-${title(pick(effects))} ${noun}`;if(level===7)return `${pick(simple)} ${title(pick(grand))} ${title(pick(effects))} ${noun}`;if(level===8)return `${title(pick(controls))} ${title(pick(grand))} ${title(pick(materials))} ${noun}`;if(level===9)return `${pick(simple)} ${title(pick(grand))} ${title(pick(effects))}-${title(pick(materials))} ${noun} with ${pick(warnings)}`;return `${pick(simple)} ${title(pick(controls))} ${title(pick(grand))} ${title(pick(effects))}-${title(pick(effects))} ${title(pick(materials))} ${noun} with ${pick(warnings)}`;}
+      function buildBatch(){const selected=document.getElementById('techgen-complexity').value;const levels=selected==='all'?[1,2,3,4,5,6,7,8,9,10]:[Number(selected)];return levels.map(level=>{const kind=techClass();return{level,kind,name:buildName(kind,level),note:pick(notes)}});}
+      function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+      function render(){const batch=buildBatch();output.innerHTML=batch.map(item=>`<article class="techgen-item"><h3>Complexity ${item.level} · ${escapeHtml(title(item.kind))}</h3><p class="techgen-name">${escapeHtml(item.name)}</p><p><strong>Use:</strong> ${escapeHtml(item.note)}</p></article>`).join('');current.text=batch.map(item=>`Complexity ${item.level} · ${title(item.kind)}\n${item.name}\nUse: ${item.note}`).join('\n\n');if(log.querySelector('article')?.textContent.includes('No names generated yet'))log.innerHTML='';const article=document.createElement('article');article.innerHTML=`<p>Generated ${batch.length} technobabble name${batch.length===1?'':'s'}.</p><small>${escapeHtml(batch.map(item=>item.name).slice(0,3).join(' · '))}${batch.length>3?' · …':''}</small>`;log.prepend(article);}
+      document.querySelector('[data-generate]')?.addEventListener('click',render);
+      document.querySelector('[data-copy]')?.addEventListener('click',async()=>{if(!current.text)render();try{await navigator.clipboard.writeText(current.text);}catch(_){}});
+      document.querySelector('[data-clear]')?.addEventListener('click',()=>{current.text='';output.innerHTML='<article class="techgen-item"><h3>Ready.</h3><p>Generate a batch to produce technobabble names.</p></article>';log.innerHTML='<article><p>No names generated yet.</p><small>Recent batches will appear here.</small></article>';});
+    })();
+  </script>
+</body>
+</html>
