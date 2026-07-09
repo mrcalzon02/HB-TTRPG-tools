@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight | Metaphysics Conversation Starter Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .metaphysics-generator{display:grid;gap:18px}.metaphysics-output{border:1px solid rgba(217,168,79,.34);border-radius:22px;background:linear-gradient(135deg,rgba(18,16,13,.96),rgba(4,4,4,.98));box-shadow:0 22px 55px rgba(0,0,0,.34);padding:22px}.metaphysics-output h2{margin-top:0}.metaphysics-question{font-size:clamp(1.2rem,2vw,1.75rem);line-height:1.35;color:#f4efe5;font-weight:900;margin:10px 0 18px}.metaphysics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.metaphysics-chip{border:1px solid rgba(217,168,79,.22);border-radius:16px;background:rgba(0,0,0,.22);padding:12px}.metaphysics-chip strong{display:block;color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;margin-bottom:6px}.metaphysics-chip span{color:#f4efe5}.metaphysics-actions{display:flex;flex-wrap:wrap;gap:10px}.metaphysics-button{border:1px solid rgba(217,168,79,.64);border-radius:999px;background:rgba(217,168,79,.14);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer}.metaphysics-button:hover{background:rgba(217,168,79,.24)}.metaphysics-log{display:grid;gap:10px}.metaphysics-log article{border:1px solid rgba(217,168,79,.18);border-radius:16px;background:rgba(0,0,0,.18);padding:14px}.metaphysics-log p{margin:0;color:#f4efe5}.metaphysics-log small{display:block;color:#bdb4a4;margin-top:8px}.metaphysics-note{color:#bdb4a4;font-size:.92rem;line-height:1.55}
+  </style>
+</head>
+<body class="blacklight-corp-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-corporate.html"><span class="bli-mark"></span><span class="bli-brand-text"><span>Blacklight</span><span>Metaphysics</span></span></a>
+    <nav class="bli-nav"><a href="blacklight-systems-black.html">Archive Systems</a><a href="blacklight-internal-archive.html">Internal Archive</a><a href="blacklight-entity-catalog.html">Entity Catalog</a><a href="blacklight-npc-generator.html">NPC Generator</a></nav>
+  </header>
+
+  <section class="bli-hero" aria-labelledby="metaphysics-title">
+    <div>
+      <p class="bli-eyebrow">Black archive · conversation engine</p>
+      <h1 id="metaphysics-title">Metaphysics conversation starter generator.</h1>
+      <p class="bli-lede">Generate table-ready prompts that braid metaphysical concepts, scientific precedents, edge-of-physics speculation, and pop-media echoes that may or may not correspond to anything real.</p>
+      <div class="bli-actions"><a class="bli-action primary" href="blacklight-systems-black.html">Return to Black Archive</a><a class="bli-action" href="blacklight-entity-catalog.html">Open Entity Catalog</a></div>
+    </div>
+  </section>
+
+  <main class="bli-shell metaphysics-generator">
+    <section class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Prompt generator</p><h2>Ask the kind of question that makes the room go quiet.</h2><p>This is not a fact engine. It is a speculative tabletop prompt engine for philosophical hooks, strange-investigation openers, archive arguments, and Blacklight-style reality conversations.</p></div>
+      <div class="metaphysics-output" aria-live="polite">
+        <p class="bli-eyebrow" id="metaphysics-mode">Conversation seed</p>
+        <h2 id="metaphysics-headline">Ready to generate.</h2>
+        <p class="metaphysics-question" id="metaphysics-question">Press the generator button to assemble a metaphysics conversation starter.</p>
+        <div class="metaphysics-grid">
+          <div class="metaphysics-chip"><strong>Metaphysical concept</strong><span id="metaphysics-concept">—</span></div>
+          <div class="metaphysics-chip"><strong>Scientific precedent</strong><span id="metaphysics-precedent">—</span></div>
+          <div class="metaphysics-chip"><strong>Physics edge</strong><span id="metaphysics-edge">—</span></div>
+          <div class="metaphysics-chip"><strong>Media echo</strong><span id="metaphysics-media">—</span></div>
+        </div>
+      </div>
+      <div class="metaphysics-actions">
+        <button class="metaphysics-button" type="button" data-generate>Generate Conversation Starter</button>
+        <button class="metaphysics-button" type="button" data-copy>Copy Current Prompt</button>
+        <button class="metaphysics-button" type="button" data-clear>Clear Log</button>
+      </div>
+      <p class="metaphysics-note">Archive note: media references here are intentionally loose, half-remembered, or plausibly fictional. They are included as tonal anchors for Blacklight conversations, not as source claims.</p>
+    </section>
+
+    <section class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Recent output</p><h2>Conversation log.</h2></div>
+      <div class="metaphysics-log" id="metaphysics-log"><article><p>No prompts generated yet.</p><small>Generated prompts will appear here for quick table use.</small></article></div>
+    </section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Metaphysics conversation starter generator.</footer>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const concepts = [
+        'the soul as an information pattern rather than a substance',
+        'identity continuity across interrupted consciousness',
+        'memory as a negotiated contract between body and world',
+        'free will as a compression artifact inside causality',
+        'the observer as participant rather than witness',
+        'dreams as low-resolution contact with alternate priors',
+        'death as a change in address rather than an ending',
+        'time as a social agreement maintained by matter',
+        'personhood in systems that can copy themselves',
+        'the difference between prophecy and high-quality prediction',
+        'sacred space as an engineered cognitive boundary',
+        'names as handles for metaphysical permissions',
+        'memory palaces as partial extradimensional structures',
+        'guilt as evidence of cross-timeline moral residue',
+        'consciousness as a standing wave in biological noise',
+        'luck as the local perception of hidden selection pressure'
+      ];
+
+      const precedents = [
+        'the double-slit experiment and observer-dependent measurement language',
+        'quantum entanglement refusing ordinary distance intuition',
+        'neural plasticity rewriting personality through repeated experience',
+        'black hole information paradox arguments about whether information can be destroyed',
+        'general relativity treating gravity as geometry instead of force',
+        'placebo and nocebo effects showing belief altering bodily outcomes',
+        'split-brain studies complicating the idea of a single unified self',
+        'time dilation making simultaneity less universal than common sense suggests',
+        'emergence in complex systems where simple parts create surprising wholes',
+        'simulation models creating useful worlds that are not literally real',
+        'Boltzmann brain thought experiments about observers and probability',
+        'anthropic reasoning asking why this universe is observable by minds like ours',
+        'holographic principle arguments that volume may be encoded on boundaries',
+        'information theory treating signal, noise, compression, and meaning as measurable problems',
+        'evolutionary convergence suggesting forms repeat when pressures rhyme',
+        'cybernetics treating feedback loops as agency-like behavior'
+      ];
+
+      const edges = [
+        'what happens if a future measurement changes the story we tell about a past event',
+        'whether consciousness could be substrate-independent without becoming legally unrecognizable',
+        'whether causality is fundamental or merely the interface our minds can survive using',
+        'whether information has a moral weight when copied, deleted, or resurrected',
+        'whether a perfect prediction is different from a command',
+        'whether a universe can contain a true map of itself without contradiction',
+        'whether memory transfer creates survival, theft, inheritance, or fraud',
+        'whether a simulated pain has the same ethical status as biological pain',
+        'whether time travel is less about motion and more about record-edit permissions',
+        'whether ghosts would look more like thermodynamic leftovers than personalities',
+        'whether an afterlife could be a continuity protocol rather than a place',
+        'whether miracles are violations of law or law observed from the wrong scale',
+        'whether identity can survive branching timelines if every branch claims to be original',
+        'whether divination is just hostile analytics with better branding',
+        'whether a sufficiently exact ritual is indistinguishable from engineering',
+        'whether the universe can forget something that a living mind still remembers'
+      ];
+
+      const media = [
+        'a rumored late-night episode about a city that only exists when no one looks directly at it',
+        'a half-remembered science-fiction film where the protagonist sues their own clone for custody of a soul',
+        'that one cosmic horror podcast arc people insist was real but nobody can find again',
+        'a prestige television finale where the black box recording talks back in the wrong voice',
+        'an old forum creepypasta about a physics department that kept graduating the same student',
+        'a fictional anime OVA about angels as failed compression algorithms',
+        'a supposedly banned documentary about a room-temperature wormhole experiment in a suburban office park',
+        'a tabletop module where the dungeon is just an argument between two possible histories',
+        'a cult-classic videogame level where saving the game creates a second defendant in court',
+        'a mockumentary about a corporation selling reincarnation as disaster recovery',
+        'a lost radio drama about a town whose dead residents keep paying taxes',
+        'a noir comic where every witness remembers a different murder and all of them are correct',
+        'a space opera episode about priests who audit faster-than-light navigation logs',
+        'a fake streaming series where heaven is a server migration no one consented to',
+        'a children’s movie that becomes existentially horrifying if the talking objects are actually awake',
+        'a conspiracy show segment about a haunted particle accelerator that only produces legal documents'
+      ];
+
+      const frames = [
+        'If {concept}, and {precedent}, then how should Blacklight classify {edge}, especially when the only cultural reference anyone can explain is {media}?',
+        'What changes in a case file if {concept} is treated as operationally real, {precedent} is treated as precedent, and the field team compares the anomaly to {media}?',
+        'How would an investigator distinguish delusion, technology, ritual, and physics if the case combines {concept}, {precedent}, and {edge}?',
+        'At what point does a conversation stop being philosophy and become incident response when {concept} is placed next to {precedent} and {media}?',
+        'What would a cautious scientist, a frightened witness, and a corporate lawyer each say about {edge} if the background assumption is {concept}?',
+        'If {media} is the closest popular reference, what does that reveal about how badly normal language fails when discussing {concept} and {precedent}?'
+      ];
+
+      const headlineNouns = ['Boundary Problem', 'Continuity Question', 'Archive Dispute', 'Observer Hazard', 'Identity Case', 'Causality Incident', 'Ritual-Physics Mismatch', 'Witness Philosophy Problem'];
+      const log = document.getElementById('metaphysics-log');
+      const current = { text: '' };
+
+      function pick(list) {
+        return list[Math.floor(Math.random() * list.length)];
+      }
+
+      function sentenceCase(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      }
+
+      function buildPrompt() {
+        const concept = pick(concepts);
+        const precedent = pick(precedents);
+        const edge = pick(edges);
+        const media = pick(media);
+        const frame = pick(frames);
+        const question = frame.replace('{concept}', concept).replace('{precedent}', precedent).replace('{edge}', edge).replace('{media}', media);
+        const headline = `Black Archive ${pick(headlineNouns)}`;
+        return { concept, precedent, edge, media, question: sentenceCase(question), headline };
+      }
+
+      function render() {
+        const prompt = buildPrompt();
+        document.getElementById('metaphysics-headline').textContent = prompt.headline;
+        document.getElementById('metaphysics-question').textContent = prompt.question;
+        document.getElementById('metaphysics-concept').textContent = sentenceCase(prompt.concept);
+        document.getElementById('metaphysics-precedent').textContent = sentenceCase(prompt.precedent);
+        document.getElementById('metaphysics-edge').textContent = sentenceCase(prompt.edge);
+        document.getElementById('metaphysics-media').textContent = sentenceCase(prompt.media);
+        current.text = `${prompt.headline}\n\n${prompt.question}\n\nMetaphysical concept: ${sentenceCase(prompt.concept)}\nScientific precedent: ${sentenceCase(prompt.precedent)}\nPhysics edge: ${sentenceCase(prompt.edge)}\nMedia echo: ${sentenceCase(prompt.media)}`;
+        if (log.querySelector('article')?.textContent.includes('No prompts generated yet')) log.innerHTML = '';
+        const article = document.createElement('article');
+        article.innerHTML = `<p>${prompt.question}</p><small>${prompt.headline}</small>`;
+        log.prepend(article);
+      }
+
+      document.querySelector('[data-generate]')?.addEventListener('click', render);
+      document.querySelector('[data-copy]')?.addEventListener('click', async () => {
+        if (!current.text) render();
+        try { await navigator.clipboard.writeText(current.text); } catch (_) { /* clipboard can be unavailable */ }
+      });
+      document.querySelector('[data-clear]')?.addEventListener('click', () => {
+        log.innerHTML = '<article><p>No prompts generated yet.</p><small>Generated prompts will appear here for quick table use.</small></article>';
+      });
+    })();
+  </script>
+</body>
+</html>
