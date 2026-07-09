@@ -116,7 +116,7 @@
         'whether the universe can forget something that a living mind still remembers'
       ];
 
-      const media = [
+      const mediaEchoes = [
         'a rumored late-night episode about a city that only exists when no one looks directly at it',
         'a half-remembered science-fiction film where the protagonist sues their own clone for custody of a soul',
         'that one cosmic horror podcast arc people insist was real but nobody can find again',
@@ -160,11 +160,11 @@
         const concept = pick(concepts);
         const precedent = pick(precedents);
         const edge = pick(edges);
-        const media = pick(media);
+        const mediaEcho = pick(mediaEchoes);
         const frame = pick(frames);
-        const question = frame.replace('{concept}', concept).replace('{precedent}', precedent).replace('{edge}', edge).replace('{media}', media);
+        const question = frame.replace('{concept}', concept).replace('{precedent}', precedent).replace('{edge}', edge).replace('{media}', mediaEcho);
         const headline = `Black Archive ${pick(headlineNouns)}`;
-        return { concept, precedent, edge, media, question: sentenceCase(question), headline };
+        return { concept, precedent, edge, media: mediaEcho, question: sentenceCase(question), headline };
       }
 
       function render() {
