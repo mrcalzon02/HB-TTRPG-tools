@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <style>
-    .metaphysics-generator{display:grid;gap:18px}.metaphysics-output{border:1px solid rgba(217,168,79,.34);border-radius:22px;background:linear-gradient(135deg,rgba(18,16,13,.96),rgba(4,4,4,.98));box-shadow:0 22px 55px rgba(0,0,0,.34);padding:22px}.metaphysics-output h2{margin-top:0}.metaphysics-question{font-size:clamp(1.2rem,2vw,1.75rem);line-height:1.35;color:#f4efe5;font-weight:900;margin:10px 0 18px}.metaphysics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.metaphysics-chip{border:1px solid rgba(217,168,79,.22);border-radius:16px;background:rgba(0,0,0,.22);padding:12px}.metaphysics-chip strong{display:block;color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;margin-bottom:6px}.metaphysics-chip span{color:#f4efe5}.metaphysics-actions{display:flex;flex-wrap:wrap;gap:10px}.metaphysics-button{border:1px solid rgba(217,168,79,.64);border-radius:999px;background:rgba(217,168,79,.14);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer}.metaphysics-button:hover{background:rgba(217,168,79,.24)}.metaphysics-log{display:grid;gap:10px}.metaphysics-log article{border:1px solid rgba(217,168,79,.18);border-radius:16px;background:rgba(0,0,0,.18);padding:14px}.metaphysics-log p{margin:0;color:#f4efe5}.metaphysics-log small{display:block;color:#bdb4a4;margin-top:8px}.metaphysics-note{color:#bdb4a4;font-size:.92rem;line-height:1.55}
+    .metaphysics-generator{display:grid;gap:18px}.metaphysics-output{border:1px solid rgba(217,168,79,.34);border-radius:22px;background:linear-gradient(135deg,rgba(18,16,13,.96),rgba(4,4,4,.98));box-shadow:0 22px 55px rgba(0,0,0,.34);padding:22px}.metaphysics-output h2{margin-top:0}.metaphysics-question{font-size:clamp(1.2rem,2vw,1.75rem);line-height:1.35;color:#f4efe5;font-weight:900;margin:10px 0 18px}.metaphysics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.metaphysics-chip{border:1px solid rgba(217,168,79,.22);border-radius:16px;background:rgba(0,0,0,.22);padding:12px}.metaphysics-chip strong{display:block;color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;margin-bottom:6px}.metaphysics-chip span{color:#f4efe5}.metaphysics-actions{display:flex;flex-wrap:wrap;gap:10px}.metaphysics-button{border:1px solid rgba(217,168,79,.64);border-radius:999px;background:rgba(217,168,79,.14);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer}.metaphysics-button:hover{background:rgba(217,168,79,.24)}.metaphysics-option-grid{display:grid;gap:12px;margin-top:16px}.metaphysics-option{border:1px solid rgba(217,168,79,.2);border-radius:18px;background:rgba(0,0,0,.2);padding:14px}.metaphysics-option h3{margin:0 0 8px;color:#f4efe5}.metaphysics-option p{margin:0;color:#f4efe5;line-height:1.55}.metaphysics-option small{display:block;margin-top:10px;color:#bdb4a4;line-height:1.45}.metaphysics-log{display:grid;gap:10px}.metaphysics-log article{border:1px solid rgba(217,168,79,.18);border-radius:16px;background:rgba(0,0,0,.18);padding:14px}.metaphysics-log p{margin:0;color:#f4efe5}.metaphysics-log small{display:block;color:#bdb4a4;margin-top:8px}.metaphysics-note{color:#bdb4a4;font-size:.92rem;line-height:1.55}
   </style>
 </head>
 <body class="blacklight-corp-body">
@@ -20,36 +20,37 @@
     <div>
       <p class="bli-eyebrow">Black archive · conversation engine</p>
       <h1 id="metaphysics-title">Metaphysics conversation starter generator.</h1>
-      <p class="bli-lede">Generate table-ready prompts that braid metaphysical concepts, scientific precedents, edge-of-physics speculation, and pop-media echoes that may or may not correspond to anything real.</p>
+      <p class="bli-lede">Generate table-ready prompts that stay coherent: singular pop-culture or media premises tied to metaphysical concepts, scientific precedents, and edge-of-physics questions without random topic slop.</p>
       <div class="bli-actions"><a class="bli-action primary" href="blacklight-systems-black.html">Return to Black Archive</a><a class="bli-action" href="blacklight-entity-catalog.html">Open Entity Catalog</a></div>
     </div>
   </section>
 
   <main class="bli-shell metaphysics-generator">
     <section class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Prompt generator</p><h2>Ask the kind of question that makes the room go quiet.</h2><p>This is not a fact engine. It is a speculative tabletop prompt engine for philosophical hooks, strange-investigation openers, archive arguments, and Blacklight-style reality conversations.</p></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Prompt generator</p><h2>Ten coherent metaphysics options per click.</h2><p>This is not a fact engine. It is a speculative tabletop prompt engine for philosophical hooks, strange-investigation openers, archive arguments, and Blacklight-style reality conversations. Each option is meant to be one cohesive subject, not a blender full of unrelated nouns.</p></div>
       <div class="metaphysics-output" aria-live="polite">
-        <p class="bli-eyebrow" id="metaphysics-mode">Conversation seed</p>
+        <p class="bli-eyebrow" id="metaphysics-mode">Conversation batch</p>
         <h2 id="metaphysics-headline">Ready to generate.</h2>
-        <p class="metaphysics-question" id="metaphysics-question">Press the generator button to assemble a metaphysics conversation starter.</p>
+        <p class="metaphysics-question" id="metaphysics-question">Press the generator button to assemble ten coherent metaphysics conversation starters.</p>
         <div class="metaphysics-grid">
           <div class="metaphysics-chip"><strong>Metaphysical concept</strong><span id="metaphysics-concept">—</span></div>
           <div class="metaphysics-chip"><strong>Scientific precedent</strong><span id="metaphysics-precedent">—</span></div>
           <div class="metaphysics-chip"><strong>Physics edge</strong><span id="metaphysics-edge">—</span></div>
-          <div class="metaphysics-chip"><strong>Media echo</strong><span id="metaphysics-media">—</span></div>
+          <div class="metaphysics-chip"><strong>Media lens</strong><span id="metaphysics-media">—</span></div>
         </div>
+        <div id="metaphysics-options" class="metaphysics-option-grid"><article class="metaphysics-option"><h3>No batch generated yet.</h3><p>Generate a batch to see ten options at once.</p></article></div>
       </div>
       <div class="metaphysics-actions">
-        <button class="metaphysics-button" type="button" data-generate>Generate Conversation Starter</button>
-        <button class="metaphysics-button" type="button" data-copy>Copy Current Prompt</button>
+        <button class="metaphysics-button" type="button" data-generate>Generate 10 Conversation Starters</button>
+        <button class="metaphysics-button" type="button" data-copy>Copy Current Batch</button>
         <button class="metaphysics-button" type="button" data-clear>Clear Log</button>
       </div>
-      <p class="metaphysics-note">Archive note: media references here are intentionally loose, half-remembered, or plausibly fictional. They are included as tonal anchors for Blacklight conversations, not as source claims.</p>
+      <p class="metaphysics-note">Archive note: pop-culture lenses here are used as recognizable thought experiments and tonal anchors. The prompts are meant to ask coherent metaphysical questions, not assert canon, ownership, or source claims.</p>
     </section>
 
     <section class="bli-section">
       <div class="bli-section-head"><p class="bli-eyebrow">Recent output</p><h2>Conversation log.</h2></div>
-      <div class="metaphysics-log" id="metaphysics-log"><article><p>No prompts generated yet.</p><small>Generated prompts will appear here for quick table use.</small></article></div>
+      <div class="metaphysics-log" id="metaphysics-log"><article><p>No prompts generated yet.</p><small>Generated batches will appear here for quick table use.</small></article></div>
     </section>
   </main>
 
@@ -135,50 +136,86 @@
         'a conspiracy show segment about a haunted particle accelerator that only produces legal documents'
       ];
 
-      const frames = [
-        'If {concept}, and {precedent}, then how should Blacklight classify {edge}, especially when the only cultural reference anyone can explain is {media}?',
-        'What changes in a case file if {concept} is treated as operationally real, {precedent} is treated as precedent, and the field team compares the anomaly to {media}?',
-        'How would an investigator distinguish delusion, technology, ritual, and physics if the case combines {concept}, {precedent}, and {edge}?',
-        'At what point does a conversation stop being philosophy and become incident response when {concept} is placed next to {precedent} and {media}?',
-        'What would a cautious scientist, a frightened witness, and a corporate lawyer each say about {edge} if the background assumption is {concept}?',
-        'If {media} is the closest popular reference, what does that reveal about how badly normal language fails when discussing {concept} and {precedent}?'
+      const cohesivePrompts = [
+        { title: 'The Physics of Toy Story', category: 'Object personhood', concept: 'personhood in systems that can copy themselves', precedent: 'emergence in complex systems where simple parts create surprising wholes', edge: 'whether a simulated pain has the same ethical status as biological pain', media: 'Toy Story as a world where manufactured objects have private interior lives', question: 'If toys are conscious only when humans are not observing them, is Toy Story describing a hidden animist ecology, a child-centered observer effect, or a society of enslaved manufactured persons whose personhood disappears from public evidence?' },
+        { title: 'The Ideology of the Smurfs', category: 'Utopian social order', concept: 'identity continuity across communal roles', precedent: 'cybernetics treating feedback loops as agency-like behavior', edge: 'whether a perfect prediction is different from a command', media: 'The Smurfs as a tiny village organized around named social functions', question: 'If every Smurf is socially named by a function, is the village a utopia of fulfilled identity, a soft caste system, or a magical command economy where personality has been mistaken for destiny?' },
+        { title: 'The Monarchist Implications of Zelda', category: 'Sacred monarchy', concept: 'prophecy as high-quality prediction', precedent: 'anthropic reasoning asking why this universe is observable by minds like ours', edge: 'whether identity can survive branching timelines if every branch claims to be original', media: 'The Legend of Zelda as recurring monarchy, reincarnation, destiny, and sacred bloodline politics', question: 'If Hyrule repeatedly relies on sacred bloodline monarchy and reincarnated heroes, is its political theology stabilizing reality, preventing democracy, or trapping the population inside a mythic succession machine?' },
+        { title: 'The Horror of Living Mario Worlds', category: 'Animist infrastructure', concept: 'sacred space as an engineered cognitive boundary', precedent: 'evolutionary convergence suggesting forms repeat when pressures rhyme', edge: 'whether miracles are violations of law or law observed from the wrong scale', media: 'Super Mario as a world where blocks, plants, clouds, stars, hills, doors, and power-ups may be alive or semi-aware', question: 'If much of the Mario world is alive in some capacity, are the games cheerful adventures through a living cosmos, or a horrifying ecosystem where infrastructure, food, enemies, tools, and terrain all have partial personhood?' },
+        { title: 'Pokémon and Consent Ecology', category: 'Mutualism and captivity', concept: 'names as handles for metaphysical permissions', precedent: 'placebo and nocebo effects showing belief altering bodily outcomes', edge: 'whether a sufficiently exact ritual is indistinguishable from engineering', media: 'Pokémon as a society built around capture, friendship, combat, evolution, and domesticated superpowers', question: 'If Pokémon can consent, refuse, bond, evolve, and suffer, is the trainer system a mutualist ritual ecology, a normalized combat labor market, or a metaphysical contract hidden inside the capture device?' },
+        { title: 'Animal Crossing Debt Cosmology', category: 'Pastoral capitalism', concept: 'memory as a negotiated contract between body and world', precedent: 'simulation models creating useful worlds that are not literally real', edge: 'whether information has a moral weight when copied, deleted, or resurrected', media: 'Animal Crossing as a gentle village loop of debt, home expansion, gifts, seasons, and social maintenance', question: 'If the world is gentle but endlessly structured around debt, collecting, and domestic improvement, is Animal Crossing a cozy social ritual, a soft capitalist afterlife, or a simulation that pacifies the player through maintenance work?' },
+        { title: 'Cars and the Problem of Manufacturing Souls', category: 'Industrial ensoulment', concept: 'the soul as an information pattern rather than a substance', precedent: 'information theory treating signal, noise, compression, and meaning as measurable problems', edge: 'whether memory transfer creates survival, theft, inheritance, or fraud', media: 'Cars as a world where vehicles are people, infrastructure exists for them, and manufacturing implies reproduction', question: 'If cars are persons, what does manufacturing mean: birth, design, eugenics, class assignment, or corporate parenthood, and who is morally responsible for a vehicle built for a job it never chose?' },
+        { title: 'Monsters, Inc. and Industrialized Emotion', category: 'Affective extraction', concept: 'guilt as evidence of cross-timeline moral residue', precedent: 'neural plasticity rewriting personality through repeated experience', edge: 'whether a perfect prediction is different from a command', media: 'Monsters, Inc. as a society that turns fear and laughter into infrastructure-level energy', question: 'If fear and joy can power a city, does Monsters, Inc. describe emotional energy physics, a predatory utility economy, or the moment a civilization discovers that kindness outperforms terror as industrial policy?' },
+        { title: 'The Brave Little Toaster Problem', category: 'Loyalty and abandonment', concept: 'identity continuity across interrupted consciousness', precedent: 'split-brain studies complicating the idea of a single unified self', edge: 'whether the universe can forget something that a living mind still remembers', media: 'The Brave Little Toaster as a world where appliances love, fear death, and remain loyal to absent humans', question: 'If discarded appliances have emotional continuity and fear, is abandonment merely waste disposal, or is it a mass moral failure caused by humans refusing to recognize the inner lives of tools?' },
+        { title: 'WALL-E and the Ethics of Stewardship Machines', category: 'Post-human care', concept: 'the observer as participant rather than witness', precedent: 'emergence in complex systems where simple parts create surprising wholes', edge: 'whether an afterlife could be a continuity protocol rather than a place', media: 'WALL-E as a story of machines preserving care after human systems collapse', question: 'If machines continue caring after humanity forgets how, are they servants, heirs, saints, or the only remaining moral adults in a civilization that automated responsibility away from itself?' },
+        { title: 'The Truman Show and Reality Consent', category: 'Manufactured reality', concept: 'free will as a compression artifact inside causality', precedent: 'simulation models creating useful worlds that are not literally real', edge: 'whether a universe can contain a true map of itself without contradiction', media: 'The Truman Show as a life lived inside a curated world built for spectators', question: 'If a person’s entire world is manufactured but their emotions are real, is the central crime deception, ownership, surveillance, or the theft of metaphysical authorship over one’s own life?' },
+        { title: 'Narnia and Sovereign Childhood', category: 'Moral monarchy', concept: 'death as a change in address rather than an ending', precedent: 'anthropic reasoning asking why this universe is observable by minds like ours', edge: 'whether miracles are violations of law or law observed from the wrong scale', media: 'Narnia as a world where children become monarchs, prophecy is governance, and faith alters history', question: 'If children can be summoned into sovereignty by metaphysical design, is Narnia defending moral kingship, childhood spiritual authority, or a deeply unstable model of government by chosen outsiders?' },
+        { title: 'Minecraft and the Cosmology of Blocks', category: 'Constructible ontology', concept: 'sacred space as an engineered cognitive boundary', precedent: 'holographic principle arguments that volume may be encoded on boundaries', edge: 'whether a universe can contain a true map of itself without contradiction', media: 'Minecraft as a world where matter is discrete, inventory is metaphysical, and creation is procedural', question: 'If reality is made of manipulable blocks with stable rules, does Minecraft describe a childlike construction toy, a Platonic physics engine, or a universe where agency is proven by the ability to rearrange ontology?' },
+        { title: 'The Matrix and Administrative Reality', category: 'Simulation sovereignty', concept: 'dreams as low-resolution contact with alternate priors', precedent: 'Boltzmann brain thought experiments about observers and probability', edge: 'whether causality is fundamental or merely the interface our minds can survive using', media: 'The Matrix as reality administration, sensory simulation, and rebellion against an imposed world model', question: 'If a simulated world can contain love, labor, trauma, and politics, is liberation the discovery of base reality, the recovery of consent, or the right to choose which layer of reality gets to count?' },
+        { title: 'Star Trek Transporters and Legal Death', category: 'Continuity through copying', concept: 'identity continuity across interrupted consciousness', precedent: 'information theory treating signal, noise, compression, and meaning as measurable problems', edge: 'whether memory transfer creates survival, theft, inheritance, or fraud', media: 'Star Trek transporters as routine dematerialization, transmission, and reconstruction of persons', question: 'If a transporter destroys and reconstructs a person with perfect continuity of memory, did anyone die, did anyone travel, or did society simply legislate away the horror because the technology was useful?' },
+        { title: 'The Good Place and Moral Accounting', category: 'Ethics as infrastructure', concept: 'guilt as evidence of cross-timeline moral residue', precedent: 'cybernetics treating feedback loops as agency-like behavior', edge: 'whether divination is just hostile analytics with better branding', media: 'The Good Place as an afterlife bureaucracy that scores moral consequence at civilization scale', question: 'If morality can be scored by a cosmic administrative system, is the problem bad behavior, bad accounting, impossible complexity, or the arrogance of thinking ethics can ever be reduced to a ledger?' },
+        { title: 'Doctor Who and Personal Continuity', category: 'Regeneration identity', concept: 'personhood in systems that can copy themselves', precedent: 'neural plasticity rewriting personality through repeated experience', edge: 'whether identity can survive branching timelines if every branch claims to be original', media: 'Doctor Who as a long life repeatedly rewritten through regeneration, memory, grief, and personality change', question: 'If regeneration preserves memory while changing personality, body, habits, and desire, is the Doctor one person, a lineage, a state office, or a ship of Theseus that keeps choosing to call itself by the same name?' },
+        { title: 'The Muppets and Ontological Performance', category: 'Performed personhood', concept: 'the observer as participant rather than witness', precedent: 'emergence in complex systems where simple parts create surprising wholes', edge: 'whether simulated pain has the same ethical status as biological pain', media: 'The Muppets as performers who are obviously artificial and still socially treated as people', question: 'If an audience knowingly accepts a constructed being as socially real, are the Muppets jokes, people, masks, or proof that personhood can emerge from performance when everyone agrees to treat the performance as alive?' },
+        { title: 'SpongeBob and Absurdist Biology', category: 'Cartoon ecology', concept: 'luck as the local perception of hidden selection pressure', precedent: 'evolutionary convergence suggesting forms repeat when pressures rhyme', edge: 'whether miracles are violations of law or law observed from the wrong scale', media: 'SpongeBob as an underwater society where biology, employment, economy, and cartoon physics coexist', question: 'If Bikini Bottom runs on marine biology, human labor satire, and impossible cartoon physics at once, is it a nonsense world, a coherent absurd ecology, or a reality whose laws privilege emotional timing over material consistency?' },
+        { title: 'Beauty and the Beast and Enchanted Servitude', category: 'Cursed object labor', concept: 'names as handles for metaphysical permissions', precedent: 'placebo and nocebo effects showing belief altering bodily outcomes', edge: 'whether a sufficiently exact ritual is indistinguishable from engineering', media: 'Beauty and the Beast as a household where people are transformed into living tools and furniture by curse-law', question: 'If servants become objects but retain minds, is the enchantment a punishment, a labor violation, a metaphysical hostage crisis, or a legal system where furniture can testify against the household?' }
       ];
 
-      const headlineNouns = ['Boundary Problem', 'Continuity Question', 'Archive Dispute', 'Observer Hazard', 'Identity Case', 'Causality Incident', 'Ritual-Physics Mismatch', 'Witness Philosophy Problem'];
       const log = document.getElementById('metaphysics-log');
+      const optionsNode = document.getElementById('metaphysics-options');
       const current = { text: '' };
 
-      function pick(list) {
-        return list[Math.floor(Math.random() * list.length)];
+      function shuffle(list) {
+        const clone = [...list];
+        for (let index = clone.length - 1; index > 0; index -= 1) {
+          const swap = Math.floor(Math.random() * (index + 1));
+          [clone[index], clone[swap]] = [clone[swap], clone[index]];
+        }
+        return clone;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
       }
 
       function sentenceCase(value) {
-        return value.charAt(0).toUpperCase() + value.slice(1);
+        return String(value || '').charAt(0).toUpperCase() + String(value || '').slice(1);
       }
 
-      function buildPrompt() {
-        const concept = pick(concepts);
-        const precedent = pick(precedents);
-        const edge = pick(edges);
-        const mediaEcho = pick(mediaEchoes);
-        const frame = pick(frames);
-        const question = frame.replace('{concept}', concept).replace('{precedent}', precedent).replace('{edge}', edge).replace('{media}', mediaEcho);
-        const headline = `Black Archive ${pick(headlineNouns)}`;
-        return { concept, precedent, edge, media: mediaEcho, question: sentenceCase(question), headline };
+      function makeArchiveRemix() {
+        const concept = concepts[Math.floor(Math.random() * concepts.length)];
+        const precedent = precedents[Math.floor(Math.random() * precedents.length)];
+        const edge = edges[Math.floor(Math.random() * edges.length)];
+        const media = mediaEchoes[Math.floor(Math.random() * mediaEchoes.length)];
+        return {
+          title: 'Black Archive Remix',
+          category: 'Loose archive prompt',
+          concept,
+          precedent,
+          edge,
+          media,
+          question: `Use ${media} as a fictional case study for ${concept}: what becomes clearer when the case is constrained by ${precedent}, and what becomes morally dangerous when the central question is ${edge}?`
+        };
+      }
+
+      function buildPromptSet() {
+        const picked = shuffle(cohesivePrompts).slice(0, 10);
+        while (picked.length < 10) picked.push(makeArchiveRemix());
+        return picked;
       }
 
       function render() {
-        const prompt = buildPrompt();
-        document.getElementById('metaphysics-headline').textContent = prompt.headline;
-        document.getElementById('metaphysics-question').textContent = prompt.question;
-        document.getElementById('metaphysics-concept').textContent = sentenceCase(prompt.concept);
-        document.getElementById('metaphysics-precedent').textContent = sentenceCase(prompt.precedent);
-        document.getElementById('metaphysics-edge').textContent = sentenceCase(prompt.edge);
-        document.getElementById('metaphysics-media').textContent = sentenceCase(prompt.media);
-        current.text = `${prompt.headline}\n\n${prompt.question}\n\nMetaphysical concept: ${sentenceCase(prompt.concept)}\nScientific precedent: ${sentenceCase(prompt.precedent)}\nPhysics edge: ${sentenceCase(prompt.edge)}\nMedia echo: ${sentenceCase(prompt.media)}`;
+        const prompts = buildPromptSet();
+        const primary = prompts[0];
+        document.getElementById('metaphysics-headline').textContent = 'Ten coherent conversation starters generated.';
+        document.getElementById('metaphysics-question').textContent = primary.question;
+        document.getElementById('metaphysics-concept').textContent = sentenceCase(primary.concept);
+        document.getElementById('metaphysics-precedent').textContent = sentenceCase(primary.precedent);
+        document.getElementById('metaphysics-edge').textContent = sentenceCase(primary.edge);
+        document.getElementById('metaphysics-media').textContent = sentenceCase(primary.media);
+        optionsNode.innerHTML = prompts.map((prompt, index) => `<article class="metaphysics-option"><h3>${index + 1}. ${escapeHtml(prompt.title)}</h3><p>${escapeHtml(prompt.question)}</p><small><strong>${escapeHtml(prompt.category)}</strong><br>Concept: ${escapeHtml(sentenceCase(prompt.concept))}<br>Precedent: ${escapeHtml(sentenceCase(prompt.precedent))}<br>Physics edge: ${escapeHtml(sentenceCase(prompt.edge))}<br>Media lens: ${escapeHtml(sentenceCase(prompt.media))}</small></article>`).join('');
+        current.text = prompts.map((prompt, index) => `${index + 1}. ${prompt.title}\n${prompt.question}\nCategory: ${prompt.category}\nConcept: ${sentenceCase(prompt.concept)}\nPrecedent: ${sentenceCase(prompt.precedent)}\nPhysics edge: ${sentenceCase(prompt.edge)}\nMedia lens: ${sentenceCase(prompt.media)}`).join('\n\n');
         if (log.querySelector('article')?.textContent.includes('No prompts generated yet')) log.innerHTML = '';
         const article = document.createElement('article');
-        article.innerHTML = `<p>${prompt.question}</p><small>${prompt.headline}</small>`;
+        article.innerHTML = `<p>Generated 10 coherent metaphysics conversation starters.</p><small>${escapeHtml(prompts.map(prompt => prompt.title).slice(0, 4).join(' · '))}${prompts.length > 4 ? ' · …' : ''}</small>`;
         log.prepend(article);
       }
 
@@ -188,7 +225,9 @@
         try { await navigator.clipboard.writeText(current.text); } catch (_) { /* clipboard can be unavailable */ }
       });
       document.querySelector('[data-clear]')?.addEventListener('click', () => {
-        log.innerHTML = '<article><p>No prompts generated yet.</p><small>Generated prompts will appear here for quick table use.</small></article>';
+        current.text = '';
+        optionsNode.innerHTML = '<article class="metaphysics-option"><h3>No batch generated yet.</h3><p>Generate a batch to see ten options at once.</p></article>';
+        log.innerHTML = '<article><p>No prompts generated yet.</p><small>Generated batches will appear here for quick table use.</small></article>';
       });
     })();
   </script>
