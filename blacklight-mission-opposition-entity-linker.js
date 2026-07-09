@@ -4,10 +4,10 @@
   const oppositionProfiles = {
     'Blood Courts': { category: 'vampire-remainder', role: 'court envoy', power: '7', environment: 'court-controlled hotel' },
     'Fae Courts': { category: 'otherworldly-entity', role: 'court envoy', power: '8', environment: 'night market' },
-    'Gaian Spirits': { category: 'otherworldly-entity', role: 'guardian', power: '7', environment: 'rural territory boundary' },
+    'Gaian Spirit Pacts': { category: 'otherworldly-entity', role: 'guardian', power: '7', environment: 'rural territory boundary' },
     'Gaian Packs': { category: 'shapechanger', role: 'guardian', power: '6', environment: 'rural territory boundary' },
-    'Machine Saints': { category: 'machine-intelligence', role: 'black-box problem', power: '7', environment: 'server farm' },
-    'Charles-adjacent Systems': { category: 'machine-intelligence', role: 'black-box problem', power: '8', environment: 'client facility using Faux Charles' },
+    'Corrupted Shapechangers': { category: 'shapechanger', role: 'cognitohazard carrier', power: '7', environment: 'rural territory boundary' },
+    'Manufacturers and Extraction Interests': { category: 'security-military', role: 'rival', power: '5', environment: 'resource extraction front' },
     'Dream Cartels': { category: 'otherworldly-entity', role: 'hidden patron', power: '7', environment: 'night market' },
     'Hunter Orders': { category: 'human-vigil', role: 'rival', power: '5', environment: 'old church archive' },
     'Industrial Witches': { category: 'technomancer', role: 'ritual evidence source', power: '6', environment: 'resource extraction front' },
