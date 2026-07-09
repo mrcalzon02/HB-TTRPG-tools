@@ -2,13 +2,14 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260702-3';
+  const ASSET_VERSION = '20260709-1';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
     ['generators','Mr. Johnson and Employer Generator','Create an employer persona, public identity, real sponsor, negotiation posture, withheld information, leverage, and betrayal risk.'],
     ['tools','Fixer and Contact Network Editor','Track contacts, loyalty, connection, specialties, neighborhoods, favors, availability, and evolving risk.'],
     ['generators','Runner Team and Specialist NPC Generator','Create allied or rival runners with archetypes, capabilities, signature gear, reputations, motives, and tensions.'],
+    ['generators','Mid-Market Supplier Company Generator','Create volatile second-tier suppliers, component houses, contractors, firmware shops, warehousers, and desperate subcontractors that serve larger corporate procurement chains and may collapse between runs.','shadowrun-midmarket-company-generator','prototype','Open Generator'],
     ['generators','Megacorporation, Syndicate, and Faction Generator','Create a corporate division or faction, public business, hidden program, resources, rivals, local assets, and deniable operations.'],
     ['tools','Facility, Security, and Response Planner','Design physical, Matrix, magical, social, and emergency security layers with escalation procedures and exploitable gaps.'],
     ['generators','Matrix Host and Network Topology Generator','Create host purpose, architecture, personas, files, patrol patterns, IC posture, spiders, alarms, and offline dependencies.'],
@@ -29,6 +30,7 @@
   let active = 'all';
   let cubeToolPromise = null;
   let sprawlToolPromise = null;
+  let midmarketToolPromise = null;
   const scriptPromises = new Map();
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const title = value => String(value).replace(/^./, character => character.toUpperCase());
@@ -148,13 +150,27 @@
     return sprawlToolPromise;
   }
 
+  function loadMidmarketCompanyTool() {
+    if (window.ShadowrunMidmarketCompanyGenerator) return Promise.resolve(window.ShadowrunMidmarketCompanyGenerator);
+    if (midmarketToolPromise) return midmarketToolPromise;
+    midmarketToolPromise = (async () => {
+      await loadScript('shadowrun-midmarket-company-generator.js', () => Boolean(window.ShadowrunMidmarketCompanyGenerator));
+      return window.ShadowrunMidmarketCompanyGenerator;
+    })();
+    midmarketToolPromise.catch(() => { midmarketToolPromise = null; });
+    return midmarketToolPromise;
+  }
+
   function toolLabel(toolId) {
-    return toolId === 'shadowrun-sprawl-discovery' ? 'Discovery' : 'Laboratory';
+    if (toolId === 'shadowrun-sprawl-discovery') return 'Discovery';
+    if (toolId === 'shadowrun-midmarket-company-generator') return 'Generator';
+    return 'Laboratory';
   }
 
   function loadTool(toolId) {
     if (toolId === 'shadowrun-sprawl-discovery') return loadSprawlTool();
     if (toolId === 'shadowrun-binary-cube-encryption') return loadCubeTool();
+    if (toolId === 'shadowrun-midmarket-company-generator') return loadMidmarketCompanyTool();
     return Promise.reject(new Error(`No loader is registered for ${toolId}.`));
   }
 
