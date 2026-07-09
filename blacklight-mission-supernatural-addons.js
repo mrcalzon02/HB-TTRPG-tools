@@ -2,18 +2,17 @@
   'use strict';
 
   const rivalryWeb = {
-    'Blood Courts': ['Fae Courts', 'Hunter Orders', 'Machine Saints', 'Gaian Packs'],
-    'Fae Courts': ['Blood Courts', 'Gaian Spirits', 'Dream Cartels', 'Mirror Polities'],
-    'Gaian Packs and Spirit Courts': ['Blood Courts', 'Industrial Witches', 'Fae Courts', 'Hollow Choir'],
-    'Machine Saints and Digital Ghosts': ['Blood Courts', 'Memory Parasites', 'Mirror Polities', 'Corporate Necromancers'],
+    'Blood Courts': ['Fae Courts', 'Hunter Orders', 'Gaian Packs', 'Black Archive Custodians'],
+    'Fae Courts': ['Blood Courts', 'Gaian Spirit Pacts', 'Dream Cartels', 'Mirror Polities'],
+    'Gaian Packs and Spirit Courts': ['Corrupted Shapechangers', 'Manufacturers and Extraction Interests', 'Fae Courts', 'Blood Courts'],
     'Dream Cartels': ['Fae Courts', 'Hollow Choir', 'Memory Parasites', 'Oracle Houses'],
-    'Hunter Orders': ['Blood Courts', 'Fae Courts', 'Gaian Packs', 'Black Archive Custodians'],
-    'Industrial Witches and Contract Engineers': ['Gaian Spirits', 'Oracle Houses', 'Machine Saints', 'Fae Courts'],
-    'Memory Parasites': ['Machine Saints', 'Dream Cartels', 'Oracle Houses', 'Blacklight Continuity'],
-    'Mirror Polities': ['Fae Courts', 'Machine Saints', 'Blood Courts', 'Oracle Houses'],
+    'Hunter Orders': ['Blood Courts', 'Fae Courts', 'Gaian Packs', 'Corrupted Shapechangers'],
+    'Industrial Witches and Contract Engineers': ['Gaian Spirit Pacts', 'Oracle Houses', 'Manufacturers and Extraction Interests', 'Fae Courts'],
+    'Memory Parasites': ['Corrupted Shapechangers', 'Dream Cartels', 'Oracle Houses', 'Blacklight Continuity'],
+    'Mirror Polities': ['Fae Courts', 'Blood Courts', 'Oracle Houses', 'Black Archive Custodians'],
     'Oracle Houses': ['Dream Cartels', 'Industrial Witches', 'Memory Parasites', 'Mirror Polities'],
-    'Hollow Choir': ['Dream Cartels', 'Gaian Spirits', 'Hunter Orders', 'Charles-adjacent Systems'],
-    'Black Archive Custodians': ['Hunter Orders', 'Memory Parasites', 'Oracle Houses', 'Corporate Necromancers']
+    'Hollow Choir': ['Dream Cartels', 'Corrupted Shapechangers', 'Hunter Orders', 'Gaian Spirit Pacts'],
+    'Black Archive Custodians': ['Hunter Orders', 'Memory Parasites', 'Oracle Houses', 'Corrupted Shapechangers']
   };
 
   const supernaturalClients = [
@@ -21,10 +20,8 @@
     { family: 'Blood Courts', name: 'Exiled Crimson Herald', need: 'deliver terms to a hostile court without triggering open feeding reprisals', tell: 'They keep checking every reflective surface for a messenger following behind them.' },
     { family: 'Fae Courts', name: 'Winter Market Envoy', need: 'recover a stolen invitation before the wrong guest can use it', tell: 'Their smile is perfect, but none of their shadows agree where the light is.' },
     { family: 'Fae Courts', name: 'Unseelie Contract Auditor', need: 'locate a missing clause that changed ownership of a person, place, or memory', tell: 'They refuse to say please because the word has legal weight where they come from.' },
-    { family: 'Gaian Packs and Spirit Courts', name: 'Territory Warden of the Green Teeth', need: 'identify who poisoned a shrine and stop the retaliation from spreading', tell: 'Their phone case contains a tooth, a seed, and an old brass employee badge.' },
+    { family: 'Gaian Packs and Spirit Courts', name: 'Territory Warden of the Green Teeth', need: 'identify a corrupted shapechanger before the pack tears itself apart', tell: 'Their phone case contains a tooth, a seed, and an old brass employee badge.' },
     { family: 'Gaian Packs and Spirit Courts', name: 'Old Creek Spirit Advocate', need: 'force recognition of a violated boundary pact before the river takes witnesses', tell: 'Water beads on their skin even in dry rooms.' },
-    { family: 'Machine Saints and Digital Ghosts', name: 'Canonized Switchboard Ghost', need: 'prove it is the original dead operator before its server is wiped', tell: 'It speaks in service tones, prayer cadence, and obsolete customer-support language.' },
-    { family: 'Machine Saints and Digital Ghosts', name: 'Saint of Failed Backups', need: 'recover a corrupted confession log from a machine that now claims personhood', tell: 'Its preferred icon is a halo made of warning lights.' },
     { family: 'Dream Cartels', name: 'Somnolent Broker in Blue Silk', need: 'recover a nightmare shipment before it is resold to a political client', tell: 'They are awake, but their reflection is asleep in every window.' },
     { family: 'Dream Cartels', name: 'Night Auction Clerk', need: 'verify whether a prophecy being auctioned is authentic, stolen, or manufactured', tell: 'They carry a numbered paddle for an auction nobody remembers attending.' },
     { family: 'Hunter Orders', name: 'Penitent Hunter Captain', need: 'prove an extermination order was forged before a cell opens fire', tell: 'They know they are dangerous and keep asking for oversight anyway.' },
@@ -52,12 +49,14 @@
     { site: 'call center after closing', region: 'communications workplace', pressure: 'every abandoned headset answers the same emergency line', clue: 'the hold music contains a confession when played backward' },
     { site: 'law firm document vault', region: 'legal storage', pressure: 'a contract keeps rewriting itself in the blood type of the reader', clue: 'the witness signature is older than the paper' },
     { site: 'university physics annex', region: 'academic research site', pressure: 'a locked laboratory is still publishing observations from inside', clue: 'chalk dust falls upward under one door' },
-    { site: 'shopping mall aquarium court', region: 'public commercial liminal space', pressure: 'the koi pond receives diplomatic envoys at midnight', clue: 'the fish wear tiny tags naming dead monarchs' }
+    { site: 'shopping mall aquarium court', region: 'public commercial liminal space', pressure: 'the koi pond receives diplomatic envoys at midnight', clue: 'the fish wear tiny tags naming dead monarchs' },
+    { site: 'privately owned timber access road', region: 'manufacturer-controlled forest edge', pressure: 'the permit signs keep being clawed into warnings overnight', clue: 'a corrupted shapechanger has marked the boundary with symbols that make cameras misremember the road' },
+    { site: 'chemical plant retention pond', region: 'industrial runoff site', pressure: 'the pond spirit has accepted a Gaian pact and refuses to stay silent', clue: 'the water reflects a factory that has not been built yet' }
   ];
 
-  const motives = ['old debt', 'territory pressure', 'oath breach', 'resource theft', 'identity claim', 'jurisdictional insult', 'predation route', 'prophecy leverage', 'containment panic', 'commercial sabotage', 'spiritual contamination', 'database ownership dispute'];
-  const complications = ['the client is withholding the original sin of the conflict', 'the opposition may be technically correct under old law', 'a human employee is already compromised', 'the mission site is protected by a third faction', 'Charles records disagree with eyewitness memory', 'the obvious monster is a decoy', 'the client and opposition both hired Blacklight through proxies', 'the location itself is alive enough to object', 'the case must remain invisible to ordinary emergency services', 'the mission clock is tied to sunrise, tide, power reserve, or dream cycle'];
-  const concerns = ['avoid uncontrolled public exposure', 'preserve human ownership of final decisions', 'separate archive facts from supernatural claims', 'prevent a client from using Blacklight as a weapon', 'protect ordinary workers caught inside supernatural politics', 'keep Charles-adjacent systems read-only around dangerous controls', 'document source confidence before escalation', 'identify whether the rival faction is guilty or merely convenient'];
+  const motives = ['old debt', 'territory pressure', 'oath breach', 'resource theft', 'identity claim', 'jurisdictional insult', 'predation route', 'prophecy leverage', 'containment panic', 'commercial sabotage', 'spiritual contamination', 'database ownership dispute', 'cognitohazard corruption', 'manufacturing encroachment', 'broken spirit pact'];
+  const complications = ['the client is withholding the original sin of the conflict', 'the opposition may be technically correct under old law', 'a human employee is already compromised', 'the mission site is protected by a third faction', 'Charles records disagree with eyewitness memory', 'the obvious monster is a decoy', 'the client and opposition both hired Blacklight through proxies', 'the location itself is alive enough to object', 'the case must remain invisible to ordinary emergency services', 'the mission clock is tied to sunrise, tide, power reserve, or dream cycle', 'the corrupted shapechanger used to belong to the client pack', 'the manufacturer has legal paperwork and illegal metaphysical consequences', 'the spirit pact is real but badly worded'];
+  const concerns = ['avoid uncontrolled public exposure', 'preserve human ownership of final decisions', 'separate archive facts from supernatural claims', 'prevent a client from using Blacklight as a weapon', 'protect ordinary workers caught inside supernatural politics', 'keep Charles-adjacent systems read-only around dangerous controls', 'document source confidence before escalation', 'identify whether the rival faction is guilty or merely convenient', 'avoid treating the Gaian claim to guardianship as automatic legal authority', 'separate corrupted shapechanger infection from ordinary pack politics'];
   const codenames = ['ASH WINDOW', 'LOW TIDE', 'GLASS WARRANT', 'RIVER STATIC', 'HOLLOW DESK', 'BRASS MOON', 'SLEEPING LEDGER', 'BLACK KILN', 'MIRROR RAIN', 'COLD RECEIPT'];
 
   function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
