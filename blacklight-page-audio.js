@@ -4,7 +4,9 @@
   const ASSETS = window.BLACKLIGHT_ASSETS;
   const pageSpeeches = ASSETS?.audio?.pageSpeeches || {};
   const pageName = (window.location.pathname.split('/').pop() || 'blacklight-corporate.html').trim();
-  const speechSrc = pageSpeeches[pageName];
+  const speechSrc = pageName === 'blacklight-personnel.html'
+    ? 'assets/blacklight/speech_4.mp3'
+    : pageSpeeches[pageName];
   if (!speechSrc) return;
 
   const labels = {
