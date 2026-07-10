@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Master TTRPG Character Sheet PDF Index | Calzon’s TTRPG Foundry</title>
+  <meta name="description" content="Search official and authorized tabletop role-playing character sheet PDFs for Dungeons & Dragons, Shadowrun, Cyberpunk, World of Darkness, Traveller, GURPS, Call of Cthulhu, Eclipse Phase, Pathfinder, and many more systems.">
+  <meta name="keywords" content="TTRPG character sheets PDF, D&D character sheet, Shadowrun character sheet, Cyberpunk RED character sheet, Vampire the Masquerade sheet, World of Darkness sheets, Changing Breeds sheet, Traveller sheet, GURPS sheet">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/character-sheet-library.html">
+  <meta property="og:title" content="Master TTRPG Character Sheet PDF Index">
+  <meta property="og:description" content="A searchable directory of official, open-license, publisher-authorized, and clearly labeled community character sheets.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrcalzon02.github.io/HB-TTRPG-tools/character-sheet-library.html">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="workspace-landing.css">
+  <link rel="stylesheet" href="character-sheet-library.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Master TTRPG Character Sheet PDF Index",
+    "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/character-sheet-library.html",
+    "description": "Searchable directory of tabletop role-playing character sheets and publisher resource pages.",
+    "isPartOf": {"@type": "WebSite", "name": "Calzon’s TTRPG Foundry", "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/"}
+  }
+  </script>
+</head>
+<body class="workspace-landing-body sheet-library-body">
+  <header class="site-header no-print">
+    <div>
+      <p class="eyebrow">Utilities · document library</p>
+      <h1>Master Character Sheet Index</h1>
+      <p class="subtitle">Publisher PDFs, official download pages, open resources, and clearly identified community archives.</p>
+    </div>
+    <nav class="top-nav" aria-label="Character sheet library navigation">
+      <a class="nav-button" href="index.html">Foundry Home</a>
+      <a class="nav-button" href="utilities.html">Utilities</a>
+      <a class="nav-button" href="index.html?view=utilities">Live Utility Workspace</a>
+      <a class="nav-button" href="site-map.html">Site Map</a>
+    </nav>
+  </header>
+
+  <main class="sheet-library-shell">
+    <nav class="workspace-breadcrumbs" aria-label="Breadcrumb">
+      <a href="index.html">Calzon’s TTRPG Foundry</a><span>›</span><a href="utilities.html">Utilities</a><span>›</span><span>Character Sheet Index</span>
+    </nav>
+
+    <section class="sheet-library-hero" aria-labelledby="sheet-library-title">
+      <div>
+        <p class="eyebrow">Searchable PDF and resource directory</p>
+        <h1 id="sheet-library-title">Find the sheet. Check the edition. Open the source.</h1>
+        <p>This index collects character records from official publishers, openly licensed projects, authorized marketplaces, and established community sheet archives. It does not disguise a storefront as a free PDF and it does not mirror copyrighted files from unauthorized file-sharing sites.</p>
+        <div class="sheet-library-actions">
+          <a class="link-button primary-action" href="#sheet-library-controls">Search the Library</a>
+          <a class="link-button" href="#source-policy">Read the Source Policy</a>
+        </div>
+      </div>
+      <aside class="sheet-library-summary" aria-label="Library summary">
+        <div><strong id="sheet-total">0</strong><span>indexed records</span></div>
+        <div><strong id="sheet-direct">0</strong><span>direct PDF or PDF packages</span></div>
+        <div><strong id="sheet-systems">0</strong><span>distinct game systems</span></div>
+        <div><strong>July 2026</strong><span>source review date</span></div>
+      </aside>
+    </section>
+
+    <section id="source-policy" class="sheet-library-notice" aria-labelledby="source-policy-title">
+      <div>
+        <p class="eyebrow">Source and redistribution policy</p>
+        <h2 id="source-policy-title">Links are not the same thing as copied files.</h2>
+      </div>
+      <p><strong>Direct PDF</strong> means the link resolves to a PDF hosted by the publisher or sheet creator. <strong>Official download page</strong> means the publisher distributes the file through a resource page, ZIP package, account library, or free checkout. <strong>Community archive</strong> means the creator explicitly presents the sheets for personal use. The Foundry does not rehost third-party copyrighted PDFs unless redistribution permission is unambiguous.</p>
+    </section>
+
+    <section id="sheet-library-controls" class="sheet-library-controls" aria-labelledby="sheet-search-title">
+      <div class="sheet-library-section-head">
+        <p class="eyebrow">Filter the master index</p>
+        <h2 id="sheet-search-title">Search systems, editions, publishers, genres, and sheet names.</h2>
+      </div>
+      <div class="sheet-filter-grid">
+        <label class="sheet-search-field">
+          <span>Search</span>
+          <input id="sheet-search" type="search" placeholder="Try Changing Breeds, Traveller, rogue AI, fillable, D&D 2024…" autocomplete="off">
+        </label>
+        <label><span>Genre</span><select id="sheet-genre"><option value="">All genres</option></select></label>
+        <label><span>Source</span><select id="sheet-source"><option value="">All source types</option></select></label>
+        <label><span>Access</span><select id="sheet-access"><option value="">All access types</option></select></label>
+        <label><span>Publisher</span><select id="sheet-publisher"><option value="">All publishers</option></select></label>
+        <button id="sheet-clear" class="link-button" type="button">Clear Filters</button>
+      </div>
+      <div class="sheet-library-status-row">
+        <p id="sheet-status" role="status" aria-live="polite">Loading character sheet directory…</p>
+        <label class="sheet-sort-control"><span>Sort</span><select id="sheet-sort"><option value="system">System</option><option value="source">Official and direct first</option><option value="publisher">Publisher</option><option value="genre">Genre</option></select></label>
+      </div>
+    </section>
+
+    <section class="sheet-library-results" aria-labelledby="sheet-results-title">
+      <div class="sheet-library-section-head">
+        <p class="eyebrow">Available records</p>
+        <h2 id="sheet-results-title">Character sheets and source libraries</h2>
+      </div>
+      <div id="sheet-results" class="sheet-card-grid"></div>
+      <noscript>
+        <div class="sheet-library-notice">
+          <p>JavaScript is required for filtering. Major source libraries remain available directly:</p>
+          <p><a href="https://www.dndbeyond.com/resources/1779-d-d-character-sheets">D&amp;D Beyond</a> · <a href="https://rtalsoriangames.com/downloadable-content/">R. Talsorian Downloads</a> · <a href="https://www.mongoosepublishing.com/pages/downloads-htm">Mongoose Traveller Downloads</a> · <a href="https://www.chaosium.com/cthulhu-character-sheets/">Chaosium Character Sheets</a> · <a href="https://www.sjgames.com/gurps/resources/">GURPS Resources</a> · <a href="https://theonyxpath.com/character-sheets/">Onyx Path Character Sheets</a> · <a href="https://mrgone.rocksolidshells.com/">MrGone’s Character Sheets</a></p>
+        </div>
+      </noscript>
+    </section>
+
+    <section class="sheet-library-notice" aria-labelledby="maintenance-title">
+      <div><p class="eyebrow">Maintenance note</p><h2 id="maintenance-title">Publisher links move.</h2></div>
+      <p>This is an expandable index, not a claim that the tabletop hobby has a final finite catalog. Storefront URLs, account requirements, editions, and free-download policies can change. A broken-link report should identify the system, sheet name, and replacement publisher URL.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer no-print"><p>Calzon’s TTRPG Foundry · Master character sheet source index.</p></footer>
+  <script src="character-sheet-library.js"></script>
+</body>
+</html>
