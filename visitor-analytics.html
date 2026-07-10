@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calzon’s TTRPG Foundry | Visitor Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root{--analytics-good:#70d6a7;--analytics-warn:#efbf65;--analytics-muted:#98a2b3}
+    body{background:#0b0d12;color:var(--ink)}
+    .analytics-shell{width:min(1480px,calc(100% - 28px));margin:0 auto;padding:24px 0 56px;display:grid;gap:18px}
+    .analytics-hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.7fr);gap:18px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#151923,#0d1017);padding:clamp(22px,4vw,42px);box-shadow:0 24px 70px #0007}
+    .analytics-hero h1{margin:.2rem 0 .7rem;font-size:clamp(2.2rem,5vw,4.6rem);line-height:.96;max-width:12ch}
+    .analytics-hero p{max-width:780px;line-height:1.6}
+    .analytics-status-panel{border:1px solid var(--line);border-radius:16px;background:#0b0e14;padding:18px;display:grid;gap:12px;align-content:start}
+    .analytics-status-row{display:flex;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:1px solid #ffffff12}
+    .analytics-status-row:last-child{border-bottom:0;padding-bottom:0}.analytics-status-row span{color:var(--muted)}.analytics-status-row strong{color:var(--ink);text-align:right}
+    .analytics-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:14px;background:#11151d;padding:12px 14px}
+    .analytics-range{display:flex;flex-wrap:wrap;gap:8px}.analytics-range button,.analytics-action{border:1px solid var(--line);border-radius:999px;background:#171c26;color:var(--ink);padding:8px 12px;font-weight:800;cursor:pointer}.analytics-range button.active{background:var(--accent);color:#111}.analytics-action:hover,.analytics-range button:hover{border-color:var(--accent)}
+    .analytics-banner{border-left:4px solid var(--analytics-warn);border-radius:12px;background:#efbf6514;padding:14px 16px;line-height:1.55}.analytics-banner strong{color:#f7d99c}
+    .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.metric-card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#151923,#0d1017);padding:16px;min-height:126px}.metric-card span{display:block;color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;font-weight:900}.metric-card strong{display:block;font-size:clamp(1.8rem,3.4vw,3rem);line-height:1;margin:14px 0 8px}.metric-card small{color:var(--analytics-muted);line-height:1.35}
+    .analytics-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}.analytics-panel{grid-column:span 6;border:1px solid var(--line);border-radius:18px;background:#11151d;padding:18px;min-width:0}.analytics-panel.wide{grid-column:1/-1}.analytics-panel.third{grid-column:span 4}.analytics-panel h2{margin:0 0 6px}.analytics-panel>p{margin-top:0;color:var(--muted)}
+    .chart{display:flex;align-items:end;gap:8px;min-height:220px;padding:18px 6px 0;border-bottom:1px solid #ffffff24;overflow-x:auto}.chart-column{display:grid;grid-template-rows:1fr auto;gap:8px;align-items:end;min-width:44px;height:200px;flex:1}.chart-bar{width:100%;min-height:2px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--accent),#6d8fff);position:relative}.chart-bar span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:.72rem;font-weight:900}.chart-label{text-align:center;color:var(--muted);font-size:.68rem;white-space:nowrap}
+    .analytics-table-wrap{overflow:auto}.analytics-table{width:100%;border-collapse:collapse;min-width:620px}.analytics-table th,.analytics-table td{padding:11px 10px;text-align:left;border-bottom:1px solid #ffffff12;vertical-align:top}.analytics-table th{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.analytics-table td{color:var(--ink)}.analytics-table tr:last-child td{border-bottom:0}
+    .rank-list{display:grid;gap:10px}.rank-row{display:grid;grid-template-columns:minmax(110px,1fr) minmax(120px,2fr) auto;gap:10px;align-items:center}.rank-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rank-track{height:9px;border-radius:99px;background:#ffffff12;overflow:hidden}.rank-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),#6d8fff)}.rank-value{font-variant-numeric:tabular-nums;font-weight:900}
+    .split-stat{display:grid;grid-template-columns:1fr 1fr;gap:10px}.split-stat div{border:1px solid #ffffff14;border-radius:14px;padding:14px;background:#0d1118}.split-stat strong{display:block;font-size:1.8rem}.split-stat span{color:var(--muted);font-size:.8rem}
+    .empty-state{border:1px dashed var(--line);border-radius:14px;padding:24px;color:var(--muted);text-align:center;line-height:1.55}
+    .policy-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.policy-item{border:1px solid #ffffff14;border-radius:14px;padding:14px;background:#0d1118}.policy-item strong{display:block;margin-bottom:6px}.policy-item span{color:var(--muted);line-height:1.45}
+    .analytics-footer{color:var(--muted);font-size:.88rem;padding:8px 2px}
+    @media(max-width:980px){.analytics-hero{grid-template-columns:1fr}.analytics-panel,.analytics-panel.third{grid-column:1/-1}}
+    @media(max-width:620px){.analytics-shell{width:min(100% - 16px,1480px)}.analytics-toolbar{align-items:stretch}.analytics-range{width:100%}.analytics-range button{flex:1}.split-stat{grid-template-columns:1fr}.rank-row{grid-template-columns:1fr auto}.rank-track{grid-column:1/-1;grid-row:2}}
+  </style>
+</head>
+<body>
+  <header class="site-header no-print">
+    <div><p class="eyebrow">Foundry operations workspace</p><h1>Visitor Analytics</h1><p class="subtitle">Aggregate usage, engagement, workspace activity, and audience health for Calzon’s TTRPG Foundry.</p></div>
+    <nav class="top-nav" aria-label="Analytics navigation"><a class="nav-button" href="index.html">Return to Foundry</a><a class="nav-button" href="#privacy">Collection Boundaries</a></nav>
+  </header>
+
+  <main class="analytics-shell">
+    <section class="analytics-hero" aria-labelledby="analytics-title">
+      <div>
+        <p class="eyebrow">Visitor operations dashboard</p>
+        <h1 id="analytics-title">Know what gets used.</h1>
+        <p>Measure daily and weekly visitors, repeat use, popular workspaces, tool launches, generator actions, active reading time, traffic sources, devices, countries, errors, and other operational signals. This public dashboard is designed for aggregate information only.</p>
+      </div>
+      <aside class="analytics-status-panel" aria-label="Analytics status">
+        <div class="analytics-status-row"><span>Data source</span><strong id="analytics-source">Checking…</strong></div>
+        <div class="analytics-status-row"><span>Last refresh</span><strong id="analytics-refreshed">—</strong></div>
+        <div class="analytics-status-row"><span>Retention</span><strong id="analytics-retention">90 days</strong></div>
+        <div class="analytics-status-row"><span>Raw IP display</span><strong>Disabled</strong></div>
+        <div class="analytics-status-row"><span>Location detail</span><strong>Country only</strong></div>
+      </aside>
+    </section>
+
+    <div id="analytics-mode-banner" class="analytics-banner" role="status"><strong>Loading analytics status.</strong></div>
+
+    <section class="analytics-toolbar" aria-label="Dashboard controls">
+      <div class="analytics-range" role="group" aria-label="Date range">
+        <button type="button" data-range="1">Today</button>
+        <button type="button" data-range="7" class="active">7 days</button>
+        <button type="button" data-range="30">30 days</button>
+        <button type="button" data-range="90">90 days</button>
+      </div>
+      <div class="analytics-range"><button class="analytics-action" id="analytics-refresh" type="button">Refresh</button><button class="analytics-action" id="analytics-export" type="button">Export JSON</button></div>
+    </section>
+
+    <section class="metric-grid" aria-label="Headline visitor metrics">
+      <article class="metric-card"><span>Visitors today</span><strong id="metric-visitors-today">—</strong><small>Anonymous unique visitors recorded today.</small></article>
+      <article class="metric-card"><span>Visitors in range</span><strong id="metric-visitors-range">—</strong><small>Unique visitors during the selected period.</small></article>
+      <article class="metric-card"><span>Sessions</span><strong id="metric-sessions">—</strong><small>Distinct browsing sessions.</small></article>
+      <article class="metric-card"><span>Repeat visitors</span><strong id="metric-repeat">—</strong><small>Visitors with more than one recorded session.</small></article>
+      <article class="metric-card"><span>Workspace opens</span><strong id="metric-workspaces">—</strong><small>Top-level workspace activations.</small></article>
+      <article class="metric-card"><span>Tool launches</span><strong id="metric-tools">—</strong><small>Module, utility, and generator opens.</small></article>
+      <article class="metric-card"><span>Average active time</span><strong id="metric-active-time">—</strong><small>Visible, engaged time per session.</small></article>
+      <article class="metric-card"><span>Client errors</span><strong id="metric-errors">—</strong><small>Browser-side failures reported in range.</small></article>
+    </section>
+
+    <section class="analytics-grid">
+      <article class="analytics-panel wide">
+        <h2>Visitors by day</h2><p>Anonymous unique visitors and session volume across the selected range.</p>
+        <div id="visitor-trend" class="chart" aria-label="Visitor trend chart"></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Most-used workspaces</h2><p>Top-level areas opened from the foundry navigation.</p>
+        <div id="workspace-ranking" class="rank-list"></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Most-used tools</h2><p>Modules and cards ranked by launches and engaged time.</p>
+        <div class="analytics-table-wrap"><table class="analytics-table"><thead><tr><th>Tool</th><th>Opens</th><th>Unique users</th><th>Active time</th><th>Repeat use</th></tr></thead><tbody id="tool-table-body"></tbody></table></div>
+      </article>
+
+      <article class="analytics-panel third">
+        <h2>Visitor mix</h2><p>New and returning audience composition.</p>
+        <div class="split-stat"><div><strong id="new-visitors">—</strong><span>New visitors</span></div><div><strong id="returning-visitors">—</strong><span>Returning visitors</span></div></div>
+      </article>
+
+      <article class="analytics-panel third">
+        <h2>Engagement</h2><p>How long active sessions remain useful.</p>
+        <div id="engagement-ranking" class="rank-list"></div>
+      </article>
+
+      <article class="analytics-panel third">
+        <h2>Usage actions</h2><p>What people actually do after opening a workspace.</p>
+        <div id="action-ranking" class="rank-list"></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Countries of origin</h2><p>Country-level estimates supplied by the collector. Exact locations are not retained.</p>
+        <div id="country-ranking" class="rank-list"></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Devices and access environment</h2><p>Broad device classes, language, and viewport distribution.</p>
+        <div id="device-ranking" class="rank-list"></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Traffic sources</h2><p>Direct visits, internal navigation, search, social, and external referrals.</p>
+        <div id="referrer-ranking" class="rank-list"></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Operational health</h2><p>Errors, failed loads, and event-delivery coverage.</p>
+        <div class="analytics-table-wrap"><table class="analytics-table"><thead><tr><th>Signal</th><th>Count</th><th>Last seen</th></tr></thead><tbody id="health-table-body"></tbody></table></div>
+      </article>
+
+      <article class="analytics-panel wide" id="privacy">
+        <h2>Collection boundaries</h2><p>The dashboard is intentionally designed to provide useful site operations data without exposing individual visitors.</p>
+        <div class="policy-list">
+          <div class="policy-item"><strong>No public IP list</strong><span>A collector may use a source address to produce a rotating anonymous uniqueness estimate, then discard the raw address immediately.</span></div>
+          <div class="policy-item"><strong>Country-level geography</strong><span>No street, city, precise coordinate, or residential-location information is required.</span></div>
+          <div class="policy-item"><strong>No form contents</strong><span>Character names, campaign notes, search text, generated records, and user-entered values are excluded.</span></div>
+          <div class="policy-item"><strong>No cross-site advertising ID</strong><span>The tracker uses a first-party random identifier only for repeat-visitor and session estimates.</span></div>
+          <div class="policy-item"><strong>Privacy signals respected</strong><span>Global Privacy Control and browser Do Not Track disable the tracker when enabled.</span></div>
+          <div class="policy-item"><strong>Finite retention</strong><span>The intended aggregate-retention window is 90 days unless the configured collector establishes a shorter period.</span></div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="analytics-footer">Calzon’s TTRPG Foundry · Aggregate visitor operations workspace. Sitewide totals require a configured collector endpoint; local preview data represents only this browser.</footer>
+  </main>
+
+  <script src="site-analytics-config.js"></script>
+  <script src="visitor-analytics.js"></script>
+</body>
+</html>
