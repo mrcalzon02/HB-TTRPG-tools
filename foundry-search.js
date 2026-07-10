@@ -9,6 +9,18 @@
   const INDEX_URL = 'search-index.json';
   let entries = [];
 
+  function markStaticWorkspaceCards() {
+    const mappings = [
+      ['world-of-darkness', 'data-wod-card'],
+      ['shadowrun', 'data-shadowrun-card'],
+      ['solanum-umbra', 'data-solanum-card']
+    ];
+    for (const [viewId, attribute] of mappings) {
+      const card = document.querySelector(`#tools .menu-card [data-view="${viewId}"]`)?.closest('.menu-card');
+      card?.setAttribute(attribute, 'true');
+    }
+  }
+
   function normalize(value) {
     return String(value || '')
       .toLowerCase()
@@ -94,6 +106,7 @@
   }
 
   async function initialize() {
+    markStaticWorkspaceCards();
     if (status) status.textContent = 'Loading searchable tool directory…';
     const initialQuery = new URLSearchParams(location.search).get('search');
     if (initialQuery) input.value = initialQuery.slice(0, 160);
