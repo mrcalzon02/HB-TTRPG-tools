@@ -214,6 +214,7 @@
       status.textContent = `Ready. ${result.label} route selected.`;
       sendButton.disabled = false;
       activeTimer = null;
+      window.HBAnalytics?.track('charles_evaluation_route', { routeId: result.id });
     }, 420);
   }
 
@@ -228,4 +229,29 @@
   });
 
   window.BlacklightCharlesPseudoInterface = Object.freeze({ respond, selectRoute });
+})();
+
+(() => {
+  'use strict';
+
+  if (window.HBAnalytics || document.querySelector('script[src$="site-analytics.js"]')) return;
+  document.body.dataset.analyticsWorkspace ||= 'blacklight-charles-interface';
+  document.body.dataset.analyticsPageType ||= 'blacklight-page';
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = false;
+      script.addEventListener('load', resolve, { once: true });
+      script.addEventListener('error', reject, { once: true });
+      document.body.appendChild(script);
+    });
+  }
+
+  void loadScript('site-analytics-config.js')
+    .then(() => loadScript('site-analytics.js'))
+    .catch(() => {
+      // Analytics must never interrupt the Charles evaluation surface.
+    });
 })();
