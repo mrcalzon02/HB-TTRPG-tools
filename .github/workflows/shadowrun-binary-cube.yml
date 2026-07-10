@@ -10,9 +10,15 @@ on:
       - "shadowrun-binary-cube-editor.js"
       - "shadowrun-binary-cube-auth.js"
       - "shadowrun-binary-cube-auth-ui.js"
+      - "shadowrun-binary-cube-secure-export.js"
+      - "blacklight-binary-cube-storage-scope.js"
+      - "blacklight-binary-cube-encryption.html"
+      - "blacklight-systems-black.html"
+      - "app-lite-view-mounts.js"
       - "scripts/validate-shadowrun-binary-cube.mjs"
       - "scripts/validate-shadowrun-binary-cube-editor.mjs"
       - "scripts/validate-shadowrun-binary-cube-auth.mjs"
+      - "scripts/validate-shadowrun-binary-cube-secure-export.mjs"
       - "scripts/run-shadowrun-binary-cube-browser-verification.mjs"
       - "source-page-references/shadowrun-binary-cube-encryption.source.json"
       - "data/shadowrun/binary-cube/**"
@@ -48,9 +54,13 @@ jobs:
           node --check shadowrun-binary-cube-editor.js
           node --check shadowrun-binary-cube-auth.js
           node --check shadowrun-binary-cube-auth-ui.js
+          node --check shadowrun-binary-cube-secure-export.js
+          node --check blacklight-binary-cube-storage-scope.js
+          node --check app-lite-view-mounts.js
           node --check scripts/validate-shadowrun-binary-cube.mjs
           node --check scripts/validate-shadowrun-binary-cube-editor.mjs
           node --check scripts/validate-shadowrun-binary-cube-auth.mjs
+          node --check scripts/validate-shadowrun-binary-cube-secure-export.mjs
           node --check scripts/run-shadowrun-binary-cube-browser-verification.mjs
 
       - name: Run exhaustive engine validation
@@ -61,6 +71,9 @@ jobs:
 
       - name: Run authenticated-envelope validation
         run: node scripts/validate-shadowrun-binary-cube-auth.mjs artifacts/shadowrun-binary-cube-auth-verification.json
+
+      - name: Run metadata-minimized secure export validation
+        run: node scripts/validate-shadowrun-binary-cube-secure-export.mjs
 
       - name: Install browser verification runtime
         run: |
