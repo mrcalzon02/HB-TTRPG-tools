@@ -1,0 +1,328 @@
+.sheet-library-body {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(200, 138, 53, 0.18), transparent 30rem),
+    radial-gradient(circle at 92% 16%, rgba(82, 113, 167, 0.14), transparent 34rem),
+    var(--bg);
+}
+
+.sheet-library-shell {
+  width: min(1480px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 18px 0 58px;
+  display: grid;
+  gap: 22px;
+}
+
+.sheet-library-hero,
+.sheet-library-controls,
+.sheet-library-results,
+.sheet-library-notice {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+  box-shadow: var(--shadow);
+}
+
+.sheet-library-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+  gap: 24px;
+  padding: clamp(26px, 5vw, 54px);
+}
+
+.sheet-library-hero h1 {
+  max-width: 17ch;
+  margin-bottom: 16px;
+  font-size: clamp(2.3rem, 5vw, 5rem);
+  line-height: .98;
+  letter-spacing: -.04em;
+}
+
+.sheet-library-hero p:not(.eyebrow) {
+  max-width: 850px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.sheet-library-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.sheet-library-actions a {
+  text-decoration: none;
+}
+
+.sheet-library-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-content: start;
+}
+
+.sheet-library-summary div {
+  min-height: 112px;
+  border: 1px solid rgba(200, 138, 53, .28);
+  border-radius: 18px;
+  background: rgba(0,0,0,.22);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.sheet-library-summary strong,
+.sheet-library-summary span {
+  display: block;
+}
+
+.sheet-library-summary strong {
+  color: var(--accent);
+  font-size: clamp(1.35rem, 2.8vw, 2.25rem);
+}
+
+.sheet-library-summary span {
+  margin-top: 5px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.sheet-library-notice {
+  padding: clamp(20px, 3vw, 30px);
+  display: grid;
+  grid-template-columns: minmax(240px, .52fr) minmax(0, 1.48fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.sheet-library-notice h2,
+.sheet-library-notice p {
+  margin: 0;
+}
+
+.sheet-library-notice > p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.sheet-library-controls,
+.sheet-library-results {
+  padding: clamp(22px, 4vw, 38px);
+}
+
+.sheet-library-section-head {
+  max-width: 960px;
+  margin-bottom: 20px;
+}
+
+.sheet-library-section-head h2 {
+  margin-bottom: 8px;
+}
+
+.sheet-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 2fr) repeat(4, minmax(145px, 1fr)) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.sheet-filter-grid label,
+.sheet-sort-control {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.sheet-filter-grid input,
+.sheet-filter-grid select,
+.sheet-sort-control select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #10131a;
+  color: var(--ink);
+  padding: 10px 12px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.sheet-library-status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+  margin-top: 18px;
+}
+
+.sheet-library-status-row p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.sheet-sort-control {
+  min-width: 220px;
+}
+
+.sheet-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sheet-card {
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: rgba(255,255,255,.035);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-height: 300px;
+}
+
+.sheet-card:hover {
+  border-color: rgba(200,138,53,.5);
+  transform: translateY(-1px);
+}
+
+.sheet-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.sheet-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.sheet-card-edition {
+  margin: 2px 0 0;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.sheet-card-sheet {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.sheet-card-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 7px 10px;
+  margin: 0;
+  font-size: .84rem;
+}
+
+.sheet-card-meta dt {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.sheet-card-meta dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.sheet-card-notes {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: .9rem;
+}
+
+.sheet-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sheet-badge {
+  border: 1px solid rgba(200,138,53,.3);
+  border-radius: 999px;
+  background: rgba(200,138,53,.09);
+  color: #efd39d;
+  padding: 5px 8px;
+  font-size: .68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.sheet-badge.direct {
+  border-color: rgba(104,190,136,.42);
+  background: rgba(104,190,136,.1);
+  color: #bde6ca;
+}
+
+.sheet-badge.community {
+  border-color: rgba(150,130,210,.42);
+  background: rgba(150,130,210,.1);
+  color: #d7cbff;
+}
+
+.sheet-card-link {
+  margin-top: auto;
+  width: fit-content;
+  text-decoration: none;
+}
+
+.sheet-empty {
+  grid-column: 1 / -1;
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  padding: 32px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 1180px) {
+  .sheet-filter-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .sheet-search-field {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 980px) {
+  .sheet-library-hero,
+  .sheet-library-notice {
+    grid-template-columns: 1fr;
+  }
+  .sheet-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .sheet-library-shell {
+    width: min(100% - 16px, 1480px);
+  }
+  .sheet-filter-grid,
+  .sheet-card-grid,
+  .sheet-library-summary {
+    grid-template-columns: 1fr;
+  }
+  .sheet-search-field {
+    grid-column: auto;
+  }
+  .sheet-library-status-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .sheet-sort-control {
+    min-width: 0;
+  }
+}
