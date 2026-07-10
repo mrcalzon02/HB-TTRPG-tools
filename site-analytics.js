@@ -62,7 +62,12 @@
   }
 
   function currentView() {
-    return document.querySelector('.view.active')?.id || decodeURIComponent(location.hash.replace(/^#/, '')) || 'page';
+    const activeView = document.querySelector('.view.active')?.id || '';
+    if (activeView && activeView !== 'tools') return activeView;
+    return cleanText(document.body?.dataset.analyticsWorkspace, 80)
+      || activeView
+      || decodeURIComponent(location.hash.replace(/^#/, ''))
+      || 'page';
   }
 
   function deviceClass() {
@@ -104,6 +109,7 @@
       path: location.pathname,
       title: cleanText(document.title, 160),
       workspace: currentView(),
+      pageType: cleanText(document.body?.dataset.analyticsPageType || 'page', 60),
       referrer: referrerHost(),
       language: navigator.language || 'unknown',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown',
@@ -163,10 +169,16 @@
   }
 
   function nearestContext(control) {
-    const card = control.closest('.module-card,.menu-card,.bli-card,article');
+    const trackedTool = control.closest('[data-analytics-tool]');
+    const card = control.closest('.module-card,.menu-card,.workspace-tool-card,.search-result-card,.bli-card,article');
     return {
       sectionId: control.closest('section')?.id || '',
-      moduleId: card?.dataset.moduleId || '',
+      moduleId: cleanText(
+        control.dataset.analyticsTool ||
+        trackedTool?.dataset.analyticsTool ||
+        card?.dataset.moduleId || '',
+        100
+      ),
       cardTitle: cleanText(card?.querySelector('h2,h3,h4')?.textContent || ''),
       controlId: control.id || '',
       label: controlLabel(control)
@@ -193,6 +205,14 @@
 
     if (control.dataset.view) {
       track('workspace_open', { ...context, workspaceId: cleanText(control.dataset.view, 80) });
+      return;
+    }
+
+    if (context.moduleId) {
+      track('tool_open', {
+        ...context,
+        ...(control.tagName === 'A' ? safeDestination(control) : {})
+      });
       return;
     }
 
@@ -229,7 +249,7 @@
     if (!(input instanceof HTMLInputElement) || input.type !== 'search') return;
     clearTimeout(searchTimers.get(input));
     searchTimers.set(input, setTimeout(() => {
-      const visibleResults = [...document.querySelectorAll('.module-card,.menu-card')]
+      const visibleResults = [...document.querySelectorAll('.module-card,.menu-card,.workspace-tool-card,.search-result-card')]
         .filter(node => node.offsetParent !== null).length;
       track('search_used', {
         controlId: input.id || '',
@@ -308,7 +328,7 @@
   }, { once: true });
 
   if (newSession) track('session_start', { firstSeen: identity.firstSeen, visitCount: identity.visitCount });
-  track('page_view', {});
+  track('page_view', { pageType: document.body?.dataset.analyticsPageType || 'page' });
 
   window.HBAnalytics = Object.freeze({ track, config, localEventKey: EVENT_KEY });
 })();
