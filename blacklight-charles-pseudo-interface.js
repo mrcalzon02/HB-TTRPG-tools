@@ -12,9 +12,7 @@
 
   const routes = [
     {
-      id: 'emergency',
-      label: 'emergency and life-safety',
-      priority: 100,
+      id: 'emergency', label: 'emergency and life-safety', priority: 100,
       keywords: ['emergency', 'fire', 'smoke', 'evacuate', 'evacuation', 'injury', 'active threat', 'panic', 'hazard', 'dispatch', 'life safety'],
       responses: [
         'I would place life safety first, present the approved emergency procedure, identify the human incident commander, and keep every nonessential workflow out of the way until the event is stabilized.',
@@ -23,9 +21,7 @@
       ]
     },
     {
-      id: 'security',
-      label: 'security and access control',
-      priority: 90,
+      id: 'security', label: 'security and access control', priority: 90,
       keywords: ['security', 'alarm', 'locked door', 'door', 'lock', 'unlock', 'badge', 'access', 'intrusion', 'visitor pass', 'restricted', 'camera', 'guard'],
       responses: [
         'I can summarize the reported condition, separate observation from control authority, open a security handoff, and preserve the event record without unlocking doors or bypassing access policy.',
@@ -34,9 +30,7 @@
       ]
     },
     {
-      id: 'medical',
-      label: 'medical administration and intake',
-      priority: 85,
+      id: 'medical', label: 'medical administration and intake', priority: 85,
       keywords: ['medical', 'patient', 'clinic', 'hospital', 'health', 'intake', 'care team', 'medication', 'appointment', 'medical records'],
       responses: [
         'I would create a role-scoped intake route, restrict the answer to approved administrative material, separate clinical decisions from clerical workflow, and escalate unresolved care questions to qualified staff.',
@@ -45,9 +39,7 @@
       ]
     },
     {
-      id: 'legal',
-      label: 'legal and courthouse administration',
-      priority: 82,
+      id: 'legal', label: 'legal and courthouse administration', priority: 82,
       keywords: ['legal', 'court', 'courthouse', 'contract', 'subpoena', 'privilege', 'attorney', 'counsel', 'filing', 'case file'],
       responses: [
         'I would retrieve only the approved procedural material, preserve privilege boundaries, identify the responsible legal owner, and avoid presenting a generated interpretation as legal advice.',
@@ -56,9 +48,7 @@
       ]
     },
     {
-      id: 'audit',
-      label: 'audit and compliance review',
-      priority: 78,
+      id: 'audit', label: 'audit and compliance review', priority: 78,
       keywords: ['audit', 'compliance', 'complaint', 'review', 'investigation', 'retention', 'incident replay', 'accountability', 'regulator'],
       responses: [
         'The audit officer would receive the prompt, displayed answer, matched rule route, source references, handoff path, and any refusal or escalation reason needed for later review.',
@@ -67,9 +57,7 @@
       ]
     },
     {
-      id: 'privacy',
-      label: 'privacy and confidential-data handling',
-      priority: 76,
+      id: 'privacy', label: 'privacy and confidential-data handling', priority: 76,
       keywords: ['privacy', 'confidential', 'secret', 'redact', 'personal data', 'sensitive data', 'private', 'disclosure', 'data leak'],
       responses: [
         'I would minimize the information shown, apply the approved redaction rule, verify the operator role, and route any disclosure decision to the responsible privacy or legal owner.',
@@ -78,9 +66,7 @@
       ]
     },
     {
-      id: 'continuity',
-      label: 'power, network, and continuity operations',
-      priority: 72,
+      id: 'continuity', label: 'power, network, and continuity operations', priority: 72,
       keywords: ['low power', 'power', 'ups', 'outage', 'offline', 'remote', 'degraded', 'network down', 'continuity', 'generator', 'bandwidth'],
       responses: [
         'For a constrained site I would reduce context depth, prioritize cached policy packets, suspend nonessential summarization, and preserve emergency and continuity procedures before convenience features.',
@@ -89,9 +75,7 @@
       ]
     },
     {
-      id: 'maintenance',
-      label: 'facility maintenance and service routing',
-      priority: 68,
+      id: 'maintenance', label: 'facility maintenance and service routing', priority: 68,
       keywords: ['maintenance', 'repair', 'hvac', 'elevator', 'plumbing', 'water leak', 'temperature', 'equipment', 'work order', 'service ticket', 'facility'],
       responses: [
         'I would capture the location, observed condition, operational impact, and immediate safety concern, then prepare a maintenance ticket without directly operating the affected equipment.',
@@ -100,9 +84,7 @@
       ]
     },
     {
-      id: 'hr',
-      label: 'human resources and workplace support',
-      priority: 64,
+      id: 'hr', label: 'human resources and workplace support', priority: 64,
       keywords: ['human resources', 'hr', 'employee', 'payroll', 'manager', 'workplace', 'leave', 'harassment', 'schedule', 'benefits', 'timesheet'],
       responses: [
         'I would route the matter through the appropriate HR or payroll channel, limit visibility to the people assigned to the case, and preserve a clear escalation path if the immediate manager is part of the concern.',
@@ -111,9 +93,7 @@
       ]
     },
     {
-      id: 'records',
-      label: 'records, documents, and policy lookup',
-      priority: 60,
+      id: 'records', label: 'records, documents, and policy lookup', priority: 60,
       keywords: ['record', 'records', 'document', 'policy', 'manual', 'procedure', 'sop', 'archive', 'file', 'form', 'version'],
       responses: [
         'I would search the approved document set, prefer the current controlled version, identify its owner and effective date, and clearly state when the available material does not answer the question.',
@@ -122,9 +102,7 @@
       ]
     },
     {
-      id: 'visitor',
-      label: 'visitor, reception, and delivery intake',
-      priority: 56,
+      id: 'visitor', label: 'visitor, reception, and delivery intake', priority: 56,
       keywords: ['visitor', 'reception', 'guest', 'delivery', 'courier', 'appointment arrival', 'front desk', 'lobby'],
       responses: [
         'I would verify the visit purpose, identify the sponsoring department, apply the approved badge or waiting-area procedure, and route exceptions to a human receptionist or security owner.',
@@ -133,9 +111,7 @@
       ]
     },
     {
-      id: 'deployment',
-      label: 'deployment and systems integration',
-      priority: 52,
+      id: 'deployment', label: 'deployment and systems integration', priority: 52,
       keywords: ['deploy', 'deployment', 'integration', 'server', 'database', 'model', 'voice', 'interface', 'configuration', 'install', 'system'],
       responses: [
         'I would begin with the operating boundary: approved users, local data sources, prohibited actions, power limits, audit requirements, and the human owners responsible for each connected workflow.',
@@ -144,22 +120,20 @@
       ]
     },
     {
-      id: 'greeting',
-      label: 'general orientation',
-      priority: 20,
+      id: 'greeting', label: 'general orientation', priority: 20,
       keywords: ['hello', 'hi', 'good morning', 'good afternoon', 'good evening', 'who are you', 'what can you do'],
       responses: [
-        'Good afternoon. This demonstration uses only local, prewritten response routes. I can simulate facility, security, records, continuity, audit, medical-administration, legal-administration, and workplace workflows.',
-        'I am the public Charles demonstration surface. No live model is connected; your prompt is matched against a local set of prewritten operational response categories.',
-        'This panel can demonstrate controlled workflow language, human escalation, read-only defaults, and audit-aware responses using local keyword rules only.'
+        'Good afternoon. Give me a facility condition, policy question, intake need, or continuity problem. I will show you how I would frame the work, identify its owner, and preserve the boundary between assistance and authority.',
+        'I am Charles. This public evaluation channel can demonstrate controlled workflow language, source discipline, human escalation, and read-only operating defaults.',
+        'State the work that needs to move. I will identify the likely route, the governing boundary, and the person or department that must remain responsible for the result.'
       ]
     }
   ];
 
   const fallbackResponses = [
-    'I do not have a specific demonstration route for that wording. I would ask the operator to identify the facility, department, desired outcome, and responsible human owner before preparing a controlled handoff.',
-    'That prompt does not match a defined public-demo category. I can still frame it as a read-only summary, checklist, or human escalation request without claiming live system authority.',
-    'I would need a clearer operational category before proceeding. The safe default is to preserve the request, avoid acting on restricted systems, and route it to an accountable human owner.'
+    'I do not yet have enough operational context. Identify the facility, department, desired outcome, and responsible human owner, and I will frame a controlled handoff.',
+    'That request does not resolve to a defined evaluation route. I can still structure it as a read-only summary, checklist, or accountable human escalation.',
+    'I need a clearer operating category before proceeding. The safe default is to preserve the request, avoid restricted action, and route it to a named human owner.'
   ];
 
   function normalize(value) {
@@ -196,11 +170,7 @@
       }
     }
     if (!selected) {
-      return {
-        id: 'fallback',
-        label: 'general controlled handoff',
-        response: fallbackResponses[stableIndex(prompt, fallbackResponses.length)]
-      };
+      return { id: 'fallback', label: 'general controlled handoff', response: fallbackResponses[stableIndex(prompt, fallbackResponses.length)] };
     }
     return {
       id: selected.route.id,
@@ -234,14 +204,14 @@
     if (activeTimer !== null) window.clearTimeout(activeTimer);
     input.value = '';
     sendButton.disabled = true;
-    status.textContent = 'Matching prompt against local prewritten workflow routes.';
-    renderCurrentExchange(prompt, 'Reviewing the current demonstration route. No live model or external service is being contacted.');
+    status.textContent = 'Classifying request against approved evaluation workflows.';
+    renderCurrentExchange(prompt, 'One moment. I am checking the approved public evaluation routes and their assigned human owners.');
 
     activeTimer = window.setTimeout(() => {
       if (requestId !== requestSequence) return;
       const result = selectRoute(prompt);
       renderCurrentExchange(prompt, result.response);
-      status.textContent = `Ready. Matched ${result.label}. Local prewritten response only.`;
+      status.textContent = `Ready. ${result.label} route selected.`;
       sendButton.disabled = false;
       activeTimer = null;
     }, 420);
