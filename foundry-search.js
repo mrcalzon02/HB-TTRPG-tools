@@ -95,12 +95,16 @@
 
   async function initialize() {
     if (status) status.textContent = 'Loading searchable tool directory…';
+    const initialQuery = new URLSearchParams(location.search).get('search');
+    if (initialQuery) input.value = initialQuery.slice(0, 160);
+
     try {
       const response = await fetch(INDEX_URL, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
       const data = await response.json();
       entries = Array.isArray(data) ? data : [];
       render();
+      if (initialQuery) document.getElementById('foundry-search')?.scrollIntoView({ block: 'start' });
       input.addEventListener('input', render);
       document.getElementById('foundry-search-clear')?.addEventListener('click', () => {
         input.value = '';
