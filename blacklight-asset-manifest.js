@@ -153,10 +153,10 @@
     keys: `${root}keys.mp3`,
     speech: `${root}The_speech.mp3`,
     corporateLandingSpeech: `${root}speech2.mp3`,
-    personnelSpeech: `${root}speech_3.mp3`,
+    personnelSpeech: `${root}speech_4.mp3`,
     pageSpeeches: {
       'blacklight-corporate.html': `${root}speech2.mp3`,
-      'blacklight-personnel.html': `${root}speech_3.mp3`
+      'blacklight-personnel.html': `${root}speech_4.mp3`
     },
     notification: `${root}universfield-email-notification-143029.mp3`
   };
@@ -185,4 +185,45 @@
     audio: Object.freeze(audio),
     corporatePromos: Object.freeze(corporatePromos)
   });
+})();
+
+(() => {
+  'use strict';
+
+  if (window.HBAnalytics || document.querySelector('script[src$="site-analytics.js"]')) return;
+
+  const pageName = (location.pathname.split('/').pop() || 'blacklight-corporate.html').replace(/\.html$/i, '');
+  if (document.body) {
+    document.body.dataset.analyticsWorkspace ||= pageName;
+    document.body.dataset.analyticsPageType ||= 'blacklight-page';
+  }
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existing = [...document.scripts].find(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src));
+      if (existing) {
+        if (existing.dataset.loaded === 'true') resolve();
+        else {
+          existing.addEventListener('load', resolve, { once: true });
+          existing.addEventListener('error', reject, { once: true });
+        }
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = false;
+      script.addEventListener('load', () => {
+        script.dataset.loaded = 'true';
+        resolve();
+      }, { once: true });
+      script.addEventListener('error', reject, { once: true });
+      document.body.appendChild(script);
+    });
+  }
+
+  void loadScript('site-analytics-config.js')
+    .then(() => loadScript('site-analytics.js'))
+    .catch(() => {
+      // Analytics must never interrupt Blacklight pages.
+    });
 })();
