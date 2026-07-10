@@ -3,12 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calzon’s TTRPG Foundry</title>
+  <title>Free TTRPG Tools, Generators and Campaign Workspaces | Calzon’s TTRPG Foundry</title>
+  <meta name="description" content="Free browser-based tabletop role-playing tools, generators, editable character sheets, adventure module viewers, campaign workspaces, original systems, and game-master resources.">
+  <meta name="keywords" content="TTRPG tools, tabletop RPG generators, NPC generator, character sheet, campaign tools, adventure module viewer, Barotrauma, Kaysender, Shadowrun, World of Darkness, Solanum Umbra, Blacklight Continuum">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <meta property="og:title" content="Calzon’s TTRPG Foundry">
+  <meta property="og:description" content="Browser-based tabletop tools, generators, editable sheets, module viewers, and campaign workspaces.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrcalzon02.github.io/HB-TTRPG-tools/">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="character-sheet-layout.css">
   <link rel="stylesheet" href="medicinal-potions.css" data-potion-formulary-style="medicinal-potions.css">
+  <link rel="stylesheet" href="workspace-landing.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "Calzon’s TTRPG Foundry",
+        "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
+        "description": "A browser-based collection of tabletop role-playing tools, generators, campaign workspaces, editable sheets, and module viewers.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Calzon’s TTRPG Foundry",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any modern web browser",
+        "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
+        "description": "Free browser-based tabletop role-playing tools, generators, campaign workspaces, editable sheets, and module viewers.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+      },
+      {
+        "@type": "ItemList",
+        "name": "Foundry Workspaces",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/utilities.html", "name": "TTRPG Utilities"},
+          {"@type": "ListItem", "position": 2, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/generators.html", "name": "TTRPG Generators"},
+          {"@type": "ListItem", "position": 3, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/modules.html", "name": "Adventure Module Viewer"},
+          {"@type": "ListItem", "position": 4, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/barotrauma.html", "name": "Barotrauma Operations"},
+          {"@type": "ListItem", "position": 5, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/kaysender.html", "name": "Kaysender"},
+          {"@type": "ListItem", "position": 6, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/shadowrun.html", "name": "Shadowrun Workspace"},
+          {"@type": "ListItem", "position": 7, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/world-of-darkness.html", "name": "World of Darkness Workspace"},
+          {"@type": "ListItem", "position": 8, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/solanum-umbra.html", "name": "Solanum Umbra"},
+          {"@type": "ListItem", "position": 9, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight.html", "name": "Blacklight Continuum"}
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
-<body>
+<body data-analytics-workspace="foundry-home" data-analytics-page-type="homepage">
   <header class="site-header no-print">
     <div>
       <p class="eyebrow">Homebrew tabletop utility suite</p>
@@ -22,6 +74,8 @@
       <button class="nav-button" data-view="modules">Modules</button>
       <button class="nav-button" data-view="barotrauma">Barotrauma</button>
       <button class="nav-button" data-view="kaysender">Kaysender</button>
+      <a class="nav-button" href="#foundry-search">Search</a>
+      <a class="nav-button" href="site-map.html">Site Map</a>
       <a class="nav-button" href="visitor-analytics.html">Visitor Analytics</a>
       <a class="nav-button" href="blacklight-corporate.html">Blacklight Continuum</a>
     </nav>
@@ -32,14 +86,34 @@
       <div class="hero-card no-print">
         <p class="eyebrow">General menu page</p>
         <h2 id="tools-title">Tool Library</h2>
-        <p>This page is the central front door for the project. Workspaces now load only when opened, keeping the homepage lightweight.</p>
+        <p>This page is the central front door for the project. Workspaces load only when opened, while dedicated landing pages give search engines and visitors stable descriptions of the available tools.</p>
       </div>
+
+      <section id="foundry-search" class="foundry-search no-print" aria-labelledby="foundry-search-title">
+        <p class="eyebrow">Searchable tool directory</p>
+        <h2 id="foundry-search-title">Search every indexed workspace and major tool.</h2>
+        <p>Search NPCs, spells, potions, character sheets, modules, airships, settlements, corporations, Matrix hosts, Chronicle domains, cybernetics, Blacklight systems, and other foundry material.</p>
+        <div class="foundry-search-controls">
+          <label class="control-label" for="foundry-tool-search">Search the foundry</label>
+          <button id="foundry-search-clear" class="link-button" type="button">Clear Search</button>
+          <input id="foundry-tool-search" type="search" placeholder="Search tools, systems, settings, campaigns, generators, and keywords…" autocomplete="off">
+        </div>
+        <p id="foundry-search-status" class="helper-note" role="status" aria-live="polite">Loading searchable tool directory…</p>
+        <div id="foundry-search-results" class="search-result-grid">
+          <noscript>
+            <article class="search-result-card"><h3><a href="utilities.html">TTRPG Utilities</a></h3><p>Character sheets, printable pages, trackers, and table aids.</p></article>
+            <article class="search-result-card"><h3><a href="generators.html">TTRPG Generators</a></h3><p>NPCs, spells, potions, crafting, settlements, factions, and campaign assets.</p></article>
+            <article class="search-result-card"><h3><a href="site-map.html">Complete Site Map</a></h3><p>Browse every major workspace and searchable landing page.</p></article>
+          </noscript>
+        </div>
+      </section>
+
       <div class="menu-grid no-print">
-        <article class="menu-card"><h3>Utilities</h3><p>Printable pages, editable sheets, trackers, and table-side aids.</p><button class="link-button" data-view="utilities">Open Utilities</button></article>
-        <article class="menu-card"><h3>Generators</h3><p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, potions, and homebrew assets.</p><button class="link-button" data-view="generators">Open Generators</button></article>
-        <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, doors, traps, monsters, treasures, and source-backed notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button></article>
-        <article class="menu-card"><h3>Barotrauma Campaign Workspace</h3><p>Crew lore, submarine operations, missions, threats, investigations, wrecks, and campaign records.</p><button class="link-button" data-view="barotrauma">Open Barotrauma</button></article>
-        <article class="menu-card"><h3>Kaysender Campaign Workspace</h3><p>Registry-driven planning area for the Kaysender wiki, tools, utilities, generators, and editors.</p><button class="link-button" data-view="kaysender">Open Kaysender</button></article>
+        <article class="menu-card"><h3>Utilities</h3><p>Printable pages, editable sheets, trackers, and table-side aids.</p><button class="link-button" data-view="utilities">Open Utilities</button><p><a class="workspace-inline-link" href="utilities.html">Searchable utilities overview</a></p></article>
+        <article class="menu-card"><h3>Generators</h3><p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, potions, and homebrew assets.</p><button class="link-button" data-view="generators">Open Generators</button><p><a class="workspace-inline-link" href="generators.html">Searchable generator overview</a></p></article>
+        <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, doors, traps, monsters, treasures, and source-backed notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button><p><a class="workspace-inline-link" href="modules.html">Searchable module overview</a></p></article>
+        <article class="menu-card"><h3>Barotrauma Campaign Workspace</h3><p>Crew lore, submarine operations, missions, threats, investigations, wrecks, and campaign records.</p><button class="link-button" data-view="barotrauma">Open Barotrauma</button><p><a class="workspace-inline-link" href="barotrauma.html">Searchable Barotrauma overview</a></p></article>
+        <article class="menu-card"><h3>Kaysender Campaign Workspace</h3><p>Registry-driven planning area for the Kaysender wiki, tools, utilities, generators, and editors.</p><button class="link-button" data-view="kaysender">Open Kaysender</button><p><a class="workspace-inline-link" href="kaysender.html">Searchable Kaysender overview</a></p></article>
         <article class="menu-card" data-visitor-analytics-card="true">
           <h3>Visitor Analytics Workspace</h3>
           <p>Review aggregate visitors, sessions, repeat use, popular workspaces and tools, active time, actions, devices, referrers, countries, and operational errors.</p>
@@ -49,8 +123,11 @@
           <h3>Blacklight Continuum Workspace</h3>
           <p>No Return Signal campaign introduction, the Ar'nock derelict, Q-MAP continuations, biological Charles, and a capability-first original d10 system.</p>
           <a class="link-button" href="blacklight-corporate.html">Open Blacklight Corporate Site</a>
+          <p><a class="workspace-inline-link" href="blacklight.html">Searchable Blacklight overview</a></p>
         </article>
-        <article class="menu-card" data-solanum-card="true"><h3>Solanum Umbra Workspace</h3><p>Native-system wiki for characters, professions, cybernetics, crafting, equipment, combat, enemies, and entities.</p><button class="link-button" data-view="solanum-umbra">Open Solanum Umbra</button></article>
+        <article class="menu-card" data-solanum-card="true"><h3>Solanum Umbra Workspace</h3><p>Native-system wiki for characters, professions, cybernetics, crafting, equipment, combat, enemies, and entities.</p><button class="link-button" data-view="solanum-umbra">Open Solanum Umbra</button><p><a class="workspace-inline-link" href="solanum-umbra.html">Searchable Solanum Umbra overview</a></p></article>
+        <article class="menu-card"><h3>Shadowrun Workspace</h3><p>Middle-market corporations, runs, Johnsons, contacts, Matrix hosts, facilities, heat, and consequences.</p><button class="link-button" data-view="shadowrun">Open Shadowrun</button><p><a class="workspace-inline-link" href="shadowrun.html">Searchable Shadowrun overview</a></p></article>
+        <article class="menu-card"><h3>World of Darkness Workspace</h3><p>Chronicle locations, political domains, supernatural territories, inventories, and world seeds.</p><button class="link-button" data-view="world-of-darkness">Open World of Darkness</button><p><a class="workspace-inline-link" href="world-of-darkness.html">Searchable Chronicle overview</a></p></article>
       </div>
       <section class="registry-section no-print" aria-labelledby="kaysender-tool-framework-title">
         <div class="section-heading"><p class="eyebrow">Kaysender tools</p><h2 id="kaysender-tool-framework-title">Crafting and Operations Frameworks</h2><p>The registry remains dormant until Kaysender or Generators is opened.</p></div>
@@ -126,6 +203,7 @@
 
   <footer class="site-footer no-print">
     <p class="site-footer-branding">Calzon’s TTRPG Foundry · Browser-based homebrew utility suite.</p>
+    <p><a href="site-map.html">Human-readable site map</a> · <a href="sitemap.xml">XML sitemap</a></p>
     <section class="site-terms" aria-labelledby="site-terms-title">
       <p class="eyebrow">Terms of Service &amp; Usage Agreement</p>
       <h2 id="site-terms-title">Terms of Service &amp; Usage Agreement</h2>
@@ -164,6 +242,7 @@
   <script src="app-lite-view-mounts.js?v=2"></script>
   <script src="character-sheet-title.js"></script>
   <script src="medicinal-potions-entry.js"></script>
+  <script src="foundry-search.js"></script>
   <script src="site-analytics-config.js"></script>
   <script src="site-analytics.js"></script>
 </body>
