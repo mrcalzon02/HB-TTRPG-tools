@@ -16,27 +16,71 @@
     .charles-hero .bli-metric-grid{grid-template-columns:1fr 1fr}
     .charles-hero .bli-stat{min-height:94px}
     .charles-console{border:1px solid rgba(217,168,79,.34);border-radius:24px;background:radial-gradient(circle at 20% 0%,rgba(217,168,79,.11),transparent 32%),linear-gradient(135deg,rgba(18,16,13,.97),rgba(3,3,3,.99));box-shadow:0 28px 70px rgba(0,0,0,.38);padding:clamp(18px,3vw,28px);display:grid;gap:16px}
-    .charles-status{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.charles-orb{width:62px;height:62px;border-radius:999px;border:1px solid rgba(217,168,79,.55);background:radial-gradient(circle,rgba(217,168,79,.44),rgba(217,168,79,.08) 52%,rgba(0,0,0,.9));box-shadow:0 0 34px rgba(217,168,79,.24),inset 0 0 24px rgba(244,239,229,.1)}
-    .charles-status-text strong{display:block;color:#f4efe5;font-size:1.15rem}.charles-status-text span{color:#bdb4a4}.charles-transcript{display:grid;gap:12px;min-height:172px}.charles-line{border:1px solid rgba(217,168,79,.18);border-radius:18px;background:rgba(0,0,0,.22);padding:14px}.charles-line b{display:block;color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.76rem;margin-bottom:6px}.charles-line p{margin:0;color:#f4efe5;line-height:1.55}
-    .charles-command-row{display:grid;grid-template-columns:1fr auto;gap:10px}.charles-command-row input{border:1px solid rgba(217,168,79,.28);border-radius:999px;background:rgba(0,0,0,.3);color:#f4efe5;padding:12px 14px}.charles-button,.charles-pill{border:1px solid rgba(217,168,79,.62);border-radius:999px;background:rgba(217,168,79,.13);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer;text-decoration:none}.charles-button:hover,.charles-pill:hover{background:rgba(217,168,79,.23)}.charles-button:disabled{cursor:wait;opacity:.62}.charles-prompt-buttons{display:flex;flex-wrap:wrap;gap:9px}
-    .charles-seal{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;border-left:3px solid rgba(217,168,79,.62);background:rgba(217,168,79,.07);padding:14px 16px;border-radius:0 16px 16px 0}.charles-seal strong{color:#d9a84f}.charles-seal p{margin:0}
-    .charles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.charles-card{border:1px solid rgba(217,168,79,.2);border-radius:20px;background:linear-gradient(180deg,rgba(20,18,15,.92),rgba(4,4,4,.98));padding:18px;display:grid;gap:10px}.charles-card h3,.charles-card h4{margin:0}.charles-card p{margin:0}.charles-card .number{color:#d9a84f;font-size:1.9rem;font-weight:900;line-height:1}.charles-card ul{margin:0;padding-left:18px;color:#bdb4a4;line-height:1.55}
-    .charles-briefings{display:grid;grid-template-columns:1fr 1fr;gap:16px}.charles-briefing{position:relative;overflow:hidden;border:1px solid rgba(217,168,79,.25);border-radius:22px;background:linear-gradient(145deg,rgba(26,25,24,.95),rgba(4,4,3,.97));padding:clamp(20px,3vw,30px)}.charles-briefing::after{content:attr(data-number);position:absolute;right:14px;bottom:-22px;color:rgba(217,168,79,.08);font-size:8rem;font-weight:950;line-height:1}.charles-briefing blockquote{position:relative;z-index:1;margin:18px 0 0;color:#f4efe5;font-size:clamp(1.05rem,1.35vw,1.25rem);line-height:1.65}.charles-briefing footer{position:relative;z-index:1;margin-top:18px;color:#d9a84f;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
-    .charles-layer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.charles-layer{border:1px solid rgba(217,168,79,.22);border-radius:20px;background:linear-gradient(180deg,rgba(20,18,15,.92),rgba(4,4,4,.98));padding:16px;display:grid;gap:10px}.charles-layer h3{margin:0}.charles-layer ul{margin:0;padding-left:18px;color:#bdb4a4;line-height:1.55}.charles-layer .bli-badge-row{margin-top:0}
-    .charles-scenario{display:grid;gap:12px}.charles-scenario-head{display:flex;justify-content:space-between;gap:12px;align-items:start}.charles-scenario-tag{color:#d9a84f;text-transform:uppercase;font-size:.72rem;font-weight:900;letter-spacing:.12em}.charles-scenario strong{color:#f4efe5}.charles-scenario dl{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;margin:0}.charles-scenario dt{color:#d9a84f;font-weight:900}.charles-scenario dd{margin:0;color:#bdb4a4}
-    .charles-table-wrap{overflow:auto;border:1px solid rgba(217,168,79,.2);border-radius:20px;background:rgba(0,0,0,.18)}.charles-table{width:100%;border-collapse:collapse;min-width:780px}.charles-table th,.charles-table td{border-bottom:1px solid rgba(217,168,79,.16);padding:14px;text-align:left;vertical-align:top}.charles-table th{color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem}.charles-table td{color:#f4efe5}.charles-table tr:last-child td{border-bottom:0}
-    .charles-timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.charles-stage{position:relative;border-top:2px solid rgba(217,168,79,.45);padding:18px 14px 14px;background:rgba(0,0,0,.18);border-radius:0 0 16px 16px}.charles-stage::before{content:"";position:absolute;top:-7px;left:14px;width:12px;height:12px;border-radius:50%;background:#d9a84f;box-shadow:0 0 18px rgba(217,168,79,.48)}.charles-stage strong{display:block;color:#f4efe5}.charles-stage span{display:block;color:#bdb4a4;margin-top:6px;line-height:1.45}
-    .charles-faq{display:grid;gap:10px}.charles-faq details{border:1px solid rgba(217,168,79,.18);border-radius:16px;background:rgba(0,0,0,.2);padding:14px 16px}.charles-faq summary{cursor:pointer;color:#f4efe5;font-weight:900}.charles-faq p{margin:10px 0 0}
-    .charles-cta{display:grid;grid-template-columns:1.2fr auto;gap:24px;align-items:center;border:1px solid rgba(217,168,79,.3);border-radius:26px;padding:clamp(24px,4vw,42px);background:radial-gradient(circle at 85% 20%,rgba(217,168,79,.15),transparent 20rem),linear-gradient(130deg,rgba(26,25,24,.95),rgba(4,4,3,.98))}.charles-cta h2{margin:0 0 10px}.charles-cta p{margin:0}.charles-cta .bli-actions{margin:0;justify-content:flex-end}
-    .charles-note{color:#bdb4a4;font-size:.92rem;line-height:1.6}
-    @media(max-width:960px){.charles-hero{grid-template-columns:1fr}.charles-hero h1{max-width:16ch}.charles-briefings{grid-template-columns:1fr}.charles-timeline{grid-template-columns:1fr 1fr}.charles-cta{grid-template-columns:1fr}.charles-cta .bli-actions{justify-content:flex-start}}
+    .charles-status{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    .charles-orb{width:62px;height:62px;border-radius:999px;border:1px solid rgba(217,168,79,.55);background:radial-gradient(circle,rgba(217,168,79,.44),rgba(217,168,79,.08) 52%,rgba(0,0,0,.9));box-shadow:0 0 34px rgba(217,168,79,.24),inset 0 0 24px rgba(244,239,229,.1)}
+    .charles-status-text strong{display:block;color:#f4efe5;font-size:1.15rem}
+    .charles-status-text span{color:#bdb4a4}
+    .charles-transcript{display:grid;gap:12px;min-height:172px}
+    .charles-line{border:1px solid rgba(217,168,79,.18);border-radius:18px;background:rgba(0,0,0,.22);padding:14px}
+    .charles-line b{display:block;color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.76rem;margin-bottom:6px}
+    .charles-line p{margin:0;color:#f4efe5;line-height:1.55}
+    .charles-command-row{display:grid;grid-template-columns:1fr auto;gap:10px}
+    .charles-command-row input{border:1px solid rgba(217,168,79,.28);border-radius:999px;background:rgba(0,0,0,.3);color:#f4efe5;padding:12px 14px}
+    .charles-button,.charles-pill{border:1px solid rgba(217,168,79,.62);border-radius:999px;background:rgba(217,168,79,.13);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer;text-decoration:none}
+    .charles-button:hover,.charles-pill:hover{background:rgba(217,168,79,.23)}
+    .charles-button:disabled{cursor:wait;opacity:.62}
+    .charles-prompt-buttons{display:flex;flex-wrap:wrap;gap:9px}
+    .charles-seal{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;border-left:3px solid rgba(217,168,79,.62);background:rgba(217,168,79,.07);padding:14px 16px;border-radius:0 16px 16px 0}
+    .charles-seal strong{color:#d9a84f}
+    .charles-seal p{margin:0}
+    .charles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+    .charles-card{border:1px solid rgba(217,168,79,.2);border-radius:20px;background:linear-gradient(180deg,rgba(20,18,15,.92),rgba(4,4,4,.98));padding:18px;display:grid;gap:10px}
+    .charles-card h3,.charles-card h4{margin:0}
+    .charles-card p{margin:0}
+    .charles-card .number{color:#d9a84f;font-size:1.9rem;font-weight:900;line-height:1}
+    .charles-card ul{margin:0;padding-left:18px;color:#bdb4a4;line-height:1.55}
+    .charles-address{position:relative;overflow:hidden;border:1px solid rgba(217,168,79,.28);border-radius:24px;background:radial-gradient(circle at 85% 15%,rgba(217,168,79,.12),transparent 20rem),linear-gradient(145deg,rgba(26,25,24,.96),rgba(4,4,3,.98));padding:clamp(22px,4vw,38px)}
+    .charles-address::after{content:"03";position:absolute;right:18px;bottom:-34px;color:rgba(217,168,79,.07);font-size:11rem;font-weight:950;line-height:1}
+    .charles-address blockquote{position:relative;z-index:1;margin:18px 0 0;max-width:980px;color:#f4efe5;font-size:clamp(1.06rem,1.45vw,1.28rem);line-height:1.68}
+    .charles-address footer{position:relative;z-index:1;margin-top:18px;color:#d9a84f;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
+    .charles-layer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+    .charles-layer{border:1px solid rgba(217,168,79,.22);border-radius:20px;background:linear-gradient(180deg,rgba(20,18,15,.92),rgba(4,4,4,.98));padding:16px;display:grid;gap:10px}
+    .charles-layer h3{margin:0}
+    .charles-layer ul{margin:0;padding-left:18px;color:#bdb4a4;line-height:1.55}
+    .charles-layer .bli-badge-row{margin-top:0}
+    .charles-scenario{display:grid;gap:12px}
+    .charles-scenario-head{display:flex;justify-content:space-between;gap:12px;align-items:start}
+    .charles-scenario-tag{color:#d9a84f;text-transform:uppercase;font-size:.72rem;font-weight:900;letter-spacing:.12em}
+    .charles-scenario dl{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;margin:0}
+    .charles-scenario dt{color:#d9a84f;font-weight:900}
+    .charles-scenario dd{margin:0;color:#bdb4a4}
+    .charles-table-wrap{overflow:auto;border:1px solid rgba(217,168,79,.2);border-radius:20px;background:rgba(0,0,0,.18)}
+    .charles-table{width:100%;border-collapse:collapse;min-width:780px}
+    .charles-table th,.charles-table td{border-bottom:1px solid rgba(217,168,79,.16);padding:14px;text-align:left;vertical-align:top}
+    .charles-table th{color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem}
+    .charles-table td{color:#f4efe5}
+    .charles-table tr:last-child td{border-bottom:0}
+    .charles-timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .charles-stage{position:relative;border-top:2px solid rgba(217,168,79,.45);padding:18px 14px 14px;background:rgba(0,0,0,.18);border-radius:0 0 16px 16px}
+    .charles-stage::before{content:"";position:absolute;top:-7px;left:14px;width:12px;height:12px;border-radius:50%;background:#d9a84f;box-shadow:0 0 18px rgba(217,168,79,.48)}
+    .charles-stage strong{display:block;color:#f4efe5}
+    .charles-stage span{display:block;color:#bdb4a4;margin-top:6px;line-height:1.45}
+    .charles-faq{display:grid;gap:10px}
+    .charles-faq details{border:1px solid rgba(217,168,79,.18);border-radius:16px;background:rgba(0,0,0,.2);padding:14px 16px}
+    .charles-faq summary{cursor:pointer;color:#f4efe5;font-weight:900}
+    .charles-faq p{margin:10px 0 0}
+    .charles-cta{display:grid;grid-template-columns:1.2fr auto;gap:24px;align-items:center;border:1px solid rgba(217,168,79,.3);border-radius:26px;padding:clamp(24px,4vw,42px);background:radial-gradient(circle at 85% 20%,rgba(217,168,79,.15),transparent 20rem),linear-gradient(130deg,rgba(26,25,24,.95),rgba(4,4,3,.98))}
+    .charles-cta h2{margin:0 0 10px}
+    .charles-cta p{margin:0}
+    .charles-cta .bli-actions{margin:0;justify-content:flex-end}
+    @media(max-width:960px){.charles-hero{grid-template-columns:1fr}.charles-hero h1{max-width:16ch}.charles-timeline{grid-template-columns:1fr 1fr}.charles-cta{grid-template-columns:1fr}.charles-cta .bli-actions{justify-content:flex-start}}
     @media(max-width:680px){.charles-command-row{grid-template-columns:1fr}.charles-orb{width:52px;height:52px}.charles-hero .bli-metric-grid{grid-template-columns:1fr}.charles-timeline{grid-template-columns:1fr}.charles-hero h1{font-size:clamp(2.45rem,13vw,3.7rem)}}
   </style>
 </head>
 <body class="blacklight-corp-body">
   <header class="bli-topbar">
     <a class="bli-brand" href="blacklight-corporate.html" aria-label="Blacklight Intelligence corporate homepage"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Charles</span></span></a>
-    <nav class="bli-nav" aria-label="Charles navigation"><a href="#interface">Interface</a><a href="#capabilities">Capabilities</a><a href="#briefings">Briefings</a><a href="#layers">Architecture</a><a href="#deployments">Deployments</a><a href="#assurance">Assurance</a></nav>
+    <nav class="bli-nav" aria-label="Charles navigation"><a href="#interface">Interface</a><a href="#capabilities">Capabilities</a><a href="#support-address">Support Address</a><a href="#layers">Architecture</a><a href="#deployments">Deployments</a><a href="#assurance">Assurance</a></nav>
   </header>
 
   <section class="bli-hero charles-hero" aria-labelledby="charles-title">
@@ -44,7 +88,7 @@
       <p class="bli-eyebrow">Charles secure voice operations</p>
       <h1 id="charles-title">Local intelligence that stays inside your walls.</h1>
       <p class="bli-lede">Charles gives secure facilities a single operational voice for policy, records, logistics, maintenance, continuity, and controlled internal routing. It is installed around the institution you already operate, bounded by the authority you assign, and supported by Blacklight personnel who remain accountable after commissioning.</p>
-      <div class="bli-actions"><a class="bli-action primary" href="#interface">Enter Evaluation Console</a><a class="bli-action" href="#briefings">Hear From Charles</a><a class="bli-action" href="#deployments">Review Deployment Classes</a></div>
+      <div class="bli-actions"><a class="bli-action primary" href="#interface">Enter Evaluation Console</a><a class="bli-action" href="#support-address">Field Support Commitment</a><a class="bli-action" href="#deployments">Review Deployment Classes</a></div>
       <div class="bli-warning"><strong>Public evaluation channel:</strong> production credentials, client records, and live facility controls are not connected to this surface.</div>
     </div>
     <aside class="bli-directory-panel" aria-label="Charles Edge Suite operating posture">
@@ -95,22 +139,13 @@
       </div>
     </section>
 
-    <section id="briefings" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Proxy Charles address archive</p><h2>Briefings 02 and 03.</h2><p>These two addresses define the public promise behind every Charles engagement: the system remains with the client, and Blacklight remains responsible for supporting it.</p></div>
-      <div class="charles-briefings">
-        <article class="charles-briefing" data-number="02">
-          <div class="bli-badge-row"><span class="bli-badge">Speech 02</span><span class="bli-badge">local operations</span></div>
-          <h3>The system stays with you.</h3>
-          <blockquote>“A Charles installation is not a visitor passing through your building. It becomes part of the institution’s working environment. It speaks from your approved records, uses your operational vocabulary, and remains available when a consumer service or distant network does not. Give it the repetitive weight of logistics, accounting support, records, maintenance, scheduling, and routine internal questions. Keep judgment, policy ownership, and final authority where they belong: with your people.”</blockquote>
-          <footer>Proxy Charles · Public Address 02</footer>
-        </article>
-        <article class="charles-briefing" data-number="03">
-          <div class="bli-badge-row"><span class="bli-badge">Speech 03</span><span class="bli-badge">field support</span></div>
-          <h3>We do not abandon the installation.</h3>
-          <blockquote>“Charles does not arrive in a crate and ask your organization to rearrange itself around a machine. Blacklight assigns technical personnel to learn the site, map the approved workflows, identify escalation owners, and establish the operating boundary before the first production session. Your local technician remains connected to Blacklight headquarters for maintenance, controlled updates, audit assistance, and continuity support. The system is adapted to the institution. The institution is not handed over to the system.”</blockquote>
-          <footer>Proxy Charles · Public Address 03</footer>
-        </article>
-      </div>
+    <section id="support-address" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Proxy Charles public address 03</p><h2>We do not abandon the installation.</h2><p>Blacklight’s product commitment includes the people responsible for commissioning, maintaining, reviewing, and supporting the system after it enters service.</p></div>
+      <article class="charles-address">
+        <div class="bli-badge-row"><span class="bli-badge">Speech 03</span><span class="bli-badge">field support</span></div>
+        <blockquote>“Charles does not arrive in a crate and ask your organization to rearrange itself around a machine. Blacklight assigns technical personnel to learn the site, map the approved workflows, identify escalation owners, and establish the operating boundary before the first production session. Your local technician remains connected to Blacklight headquarters for maintenance, controlled updates, audit assistance, and continuity support. The system is adapted to the institution. The institution is not handed over to the system.”</blockquote>
+        <footer>Proxy Charles · Public Address 03</footer>
+      </article>
     </section>
 
     <section id="layers" class="bli-section">
