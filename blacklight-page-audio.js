@@ -43,11 +43,17 @@
   }
 
   function installPageSpeech() {
+    if (pageName === 'blacklight-personnel.html') {
+      const obsoleteStandaloneAddress = document.getElementById('address-04');
+      obsoleteStandaloneAddress?.remove();
+    }
+
     if (document.querySelector('.bli-speech-panel')) return;
     const hero = document.querySelector('.bli-hero > div') || document.querySelector('.bli-hero') || document.body;
     const anchor = hero.querySelector('.bli-actions');
     const panel = document.createElement('section');
     panel.className = 'bli-speech-panel';
+    if (pageName === 'blacklight-personnel.html') panel.id = 'address-04';
     panel.setAttribute('aria-label', copy.title);
     panel.innerHTML = `
       <div>
