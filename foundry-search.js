@@ -104,7 +104,7 @@
       const response = await fetch(INDEX_URL, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
       const data = await response.json();
-      entries = Array.isArray(data) ? data : [];
+      entries = Array.isArray(data) ? data.filter(entry => entry.id !== 'visitor-analytics' && entry.url !== 'visitor-analytics.html') : [];
       render();
       if (initialQuery) document.getElementById('foundry-search')?.scrollIntoView({ block: 'start' });
       input.addEventListener('input', render);
