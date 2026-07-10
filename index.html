@@ -22,6 +22,7 @@
       <button class="nav-button" data-view="modules">Modules</button>
       <button class="nav-button" data-view="barotrauma">Barotrauma</button>
       <button class="nav-button" data-view="kaysender">Kaysender</button>
+      <a class="nav-button" href="visitor-analytics.html">Visitor Analytics</a>
       <a class="nav-button" href="blacklight-corporate.html">Blacklight Continuum</a>
     </nav>
   </header>
@@ -39,6 +40,11 @@
         <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, doors, traps, monsters, treasures, and source-backed notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button></article>
         <article class="menu-card"><h3>Barotrauma Campaign Workspace</h3><p>Crew lore, submarine operations, missions, threats, investigations, wrecks, and campaign records.</p><button class="link-button" data-view="barotrauma">Open Barotrauma</button></article>
         <article class="menu-card"><h3>Kaysender Campaign Workspace</h3><p>Registry-driven planning area for the Kaysender wiki, tools, utilities, generators, and editors.</p><button class="link-button" data-view="kaysender">Open Kaysender</button></article>
+        <article class="menu-card" data-visitor-analytics-card="true">
+          <h3>Visitor Analytics Workspace</h3>
+          <p>Review aggregate visitors, sessions, repeat use, popular workspaces and tools, active time, actions, devices, referrers, countries, and operational errors.</p>
+          <a class="link-button" href="visitor-analytics.html">Open Visitor Analytics</a>
+        </article>
         <article class="menu-card" data-blacklight-continuum-card="true">
           <h3>Blacklight Continuum Workspace</h3>
           <p>No Return Signal campaign introduction, the Ar'nock derelict, Q-MAP continuations, biological Charles, and a capability-first original d10 system.</p>
@@ -123,7 +129,7 @@
     <section class="site-terms" aria-labelledby="site-terms-title">
       <p class="eyebrow">Terms of Service &amp; Usage Agreement</p>
       <h2 id="site-terms-title">Terms of Service &amp; Usage Agreement</h2>
-      <p><strong>Last Updated:</strong> July 7, 2026</p>
+      <p><strong>Last Updated:</strong> July 10, 2026</p>
 
       <h3>1. Nature of Service</h3>
       <p>This website (hereinafter referred to as the "Platform") serves as a private, non-commercial, fan-made utility suite intended exclusively for the facilitation of tabletop role-playing games (TTRPGs). The Platform is provided on an "as-is" and "as-available" basis. The developer makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, or availability of the tools, generators, or data contained herein.</p>
@@ -147,6 +153,10 @@
       <h3>5. Governance</h3>
       <p>By accessing this Platform, the user acknowledges that the Platform’s primary purpose is the advancement of the tabletop hobby. The developer reserves the right to modify these terms, deprecate tools, or restructure the Platform’s offerings at their sole discretion without prior notice to ensure the continued security and integrity of the project.</p>
       <p>For inquiries regarding the scope of these terms, please refer to the project repository metadata.</p>
+
+      <h3>6. Aggregate Analytics and Privacy</h3>
+      <p>When analytics are enabled, the Platform may record first-party aggregate signals such as page and workspace views, tool launches, generator actions, active session time, broad device class, language, referrer category, client-side errors, and country-level origin supplied by a configured collector. Character-sheet contents, campaign notes, search text, form values, generated records, and other user-authored material are excluded.</p>
+      <p>The public dashboard does not publish raw IP addresses or precise location information. A configured collector should use rotating anonymous identifiers for uniqueness estimates, discard source addresses after country-level processing, honor browser Do Not Track and Global Privacy Control signals, and apply finite retention.</p>
     </section>
   </footer>
 
@@ -154,5 +164,7 @@
   <script src="app-lite-view-mounts.js?v=2"></script>
   <script src="character-sheet-title.js"></script>
   <script src="medicinal-potions-entry.js"></script>
+  <script src="site-analytics-config.js"></script>
+  <script src="site-analytics.js"></script>
 </body>
 </html>
