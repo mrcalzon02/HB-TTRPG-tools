@@ -29,6 +29,25 @@
     "url": "utilities.html"
   },
   {
+    "id": "character-sheet-library",
+    "title": "Master TTRPG Character Sheet PDF Index",
+    "workspace": "Utilities",
+    "description": "Search 186 official, open-license, publisher-authorized, and clearly labeled community character sheet records across major tabletop systems and editions.",
+    "keywords": [
+      "character sheet pdf",
+      "D&D character sheet",
+      "Shadowrun sheet",
+      "Cyberpunk RED sheet",
+      "World of Darkness sheets",
+      "Changing Breeds sheet",
+      "Traveller sheet",
+      "GURPS sheet",
+      "Call of Cthulhu sheet",
+      "Eclipse Phase sheet"
+    ],
+    "url": "character-sheet-library.html"
+  },
+  {
     "id": "d20-character-sheet",
     "title": "AD and D 3.5 Hypertext Character Sheet",
     "workspace": "Utilities",
