@@ -1,0 +1,210 @@
+[
+  {
+    "id": "foundry-home",
+    "title": "Calzon’s TTRPG Foundry",
+    "workspace": "Foundry",
+    "description": "Central browser-based library for tabletop role-playing tools, generators, utilities, campaign workspaces, module viewers, and open d20-compatible resources.",
+    "keywords": ["ttrpg", "tabletop role-playing", "rpg tools", "game master tools", "browser tools", "homebrew"],
+    "url": "index.html"
+  },
+  {
+    "id": "utilities-workspace",
+    "title": "TTRPG Utilities Workspace",
+    "workspace": "Utilities",
+    "description": "Printable pages, editable character sheets, trackers, reference utilities, and table-side aids for tabletop campaigns.",
+    "keywords": ["character sheet", "printable rpg sheets", "campaign tracker", "table aid", "d20 utility"],
+    "url": "utilities.html"
+  },
+  {
+    "id": "d20-character-sheet",
+    "title": "AD and D 3.5 Hypertext Character Sheet",
+    "workspace": "Utilities",
+    "description": "Browser-based editable d20 character sheet with calculations, local saving, JSON export, import, printing, and flexible layouts.",
+    "keywords": ["dnd 3.5 character sheet", "d20 character sheet", "editable character sheet", "print character sheet", "json character sheet"],
+    "url": "index.html?view=utilities"
+  },
+  {
+    "id": "generators-workspace",
+    "title": "TTRPG Generator Bench",
+    "workspace": "Generators",
+    "description": "Random generators for NPCs, spells, settlements, treasure, factions, markets, potions, ships, libraries, realms, and campaign material.",
+    "keywords": ["ttrpg generator", "npc generator", "random encounter", "treasure generator", "settlement generator", "potion generator"],
+    "url": "generators.html"
+  },
+  {
+    "id": "npc-profile-generator",
+    "title": "NPC Profile Generator",
+    "workspace": "Generators",
+    "description": "Generate tabletop non-player character profiles, identities, traits, roles, and campaign-ready details.",
+    "keywords": ["npc generator", "character generator", "random npc", "game master npc"],
+    "url": "index.html?view=generators"
+  },
+  {
+    "id": "spell-creator",
+    "title": "Spell Creator and Academic Magic Generators",
+    "workspace": "Generators",
+    "description": "Create spells, eccentric magical effects, arcane academics, malefic academics, magical libraries, and elemental realms.",
+    "keywords": ["spell generator", "magic generator", "arcane generator", "magical library", "elemental realm"],
+    "url": "index.html?view=generators"
+  },
+  {
+    "id": "medicinal-potions",
+    "title": "Medicinal Potion Formulary",
+    "workspace": "Generators",
+    "description": "Generate medicinal, minor, medium, major, and elixir potion formulas for fantasy tabletop play.",
+    "keywords": ["potion generator", "alchemy generator", "healing potion", "fantasy medicine", "elixir"],
+    "url": "index.html?view=generators"
+  },
+  {
+    "id": "module-viewer",
+    "title": "Adventure Module Viewer",
+    "workspace": "Modules",
+    "description": "Browse extracted tabletop adventure modules with room numbers, doors, traps, monsters, treasure, and source-backed notes.",
+    "keywords": ["adventure module viewer", "dungeon room viewer", "rpg map notes", "monster treasure rooms", "module extraction"],
+    "url": "modules.html"
+  },
+  {
+    "id": "barotrauma-workspace",
+    "title": "Barotrauma Europa Operations Workspace",
+    "workspace": "Barotrauma",
+    "description": "Campaign dashboard for Europa submarine operations, crew lore, missions, threats, wrecks, investigations, and voyage records.",
+    "keywords": ["barotrauma campaign", "europa submarine", "crew operations", "barotrauma missions", "barotrauma lore"],
+    "url": "barotrauma.html"
+  },
+  {
+    "id": "barotrauma-primer",
+    "title": "Barotrauma Crew Primer",
+    "workspace": "Barotrauma",
+    "description": "Respectful crew reference covering security, medical triage, engineering, oxygen, shore leave, away missions, and command responsibilities.",
+    "keywords": ["barotrauma crew guide", "submarine crew primer", "barotrauma medical", "barotrauma engineering", "barotrauma captain"],
+    "url": "barotrauma-primer.html?mode=wiki"
+  },
+  {
+    "id": "kaysender-workspace",
+    "title": "Kaysender Open d20 Conversion Workspace",
+    "workspace": "Kaysender",
+    "description": "Wiki, generators, crafting systems, survival tools, settlements, airships, markets, NPCs, records, and campaign editors.",
+    "keywords": ["kaysender", "open d20 setting", "airship rpg", "settlement generator", "crafting system", "campaign editor"],
+    "url": "kaysender.html"
+  },
+  {
+    "id": "kaysender-settlement-editor",
+    "title": "Kaysender Settlement Editor",
+    "workspace": "Kaysender",
+    "description": "Create and maintain settlement records with inherited setting data, services, districts, markets, and campaign details.",
+    "keywords": ["settlement editor", "town generator", "city builder rpg", "campaign settlement"],
+    "url": "index.html?view=kaysender"
+  },
+  {
+    "id": "kaysender-airship-editor",
+    "title": "Kaysender Airship Editor",
+    "workspace": "Kaysender",
+    "description": "Build airship records, operational details, routes, crew roles, and setting-compatible campaign assets.",
+    "keywords": ["airship generator", "airship editor", "fantasy airship", "rpg vehicle editor"],
+    "url": "index.html?view=kaysender"
+  },
+  {
+    "id": "kaysender-crafting-generator",
+    "title": "Kaysender Crafting Generator",
+    "workspace": "Kaysender",
+    "description": "Generate crafting operations, materials, outputs, work requirements, and setting-compatible production records.",
+    "keywords": ["crafting generator", "rpg crafting", "fantasy materials", "production system"],
+    "url": "index.html?view=generators"
+  },
+  {
+    "id": "shadowrun-workspace",
+    "title": "Shadowrun Campaign Workspace",
+    "workspace": "Shadowrun",
+    "description": "Campaign tools for sprawls, runs, Johnsons, contacts, Matrix hosts, facilities, magic, equipment, heat, consequences, and corporate clients.",
+    "keywords": ["shadowrun generator", "shadowrun company generator", "shadowrun run generator", "johnson generator", "matrix host", "corporate campaign"],
+    "url": "shadowrun.html"
+  },
+  {
+    "id": "shadowrun-company-generator",
+    "title": "Shadowrun Middle-Market Company Generator",
+    "workspace": "Shadowrun",
+    "description": "Generate volatile supplier, contractor, assembly, logistics, service, and middle-market corporations for shadow operations.",
+    "keywords": ["shadowrun company generator", "corporate generator", "supplier generator", "megacorp contractor", "shadowrun mission client"],
+    "url": "index.html?view=shadowrun"
+  },
+  {
+    "id": "world-of-darkness-workspace",
+    "title": "World of Darkness Chronicle Workspace",
+    "workspace": "World of Darkness",
+    "description": "Locations, political domains, named-place generation, supernatural inventories, world seeds, and Chronicle overlays.",
+    "keywords": ["world of darkness tools", "chronicle generator", "vampire domain", "supernatural location", "named place generator"],
+    "url": "world-of-darkness.html"
+  },
+  {
+    "id": "world-of-darkness-locations",
+    "title": "World of Darkness Locations and Domains",
+    "workspace": "World of Darkness",
+    "description": "Develop named places, political domains, supernatural territories, local inventories, and Chronicle-ready location records.",
+    "keywords": ["vampire domain generator", "world of darkness location", "chronicle city", "supernatural territory"],
+    "url": "index.html?view=world-of-darkness"
+  },
+  {
+    "id": "solanum-umbra-workspace",
+    "title": "Solanum Umbra Native-System Workspace",
+    "workspace": "Solanum Umbra",
+    "description": "Original-system wiki and tools for characters, professions, cybernetics, crafting, equipment, combat, enemies, and entities.",
+    "keywords": ["solanum umbra", "original ttrpg system", "cybernetics rpg", "profession system", "crafting combat"],
+    "url": "solanum-umbra.html"
+  },
+  {
+    "id": "blacklight-workspace",
+    "title": "Blacklight Continuum Workspace",
+    "workspace": "Blacklight Continuum",
+    "description": "Original science-fiction corporate setting with No Return Signal, the Ar’nock derelict, Q-MAP continuations, Charles, and a capability-first d10 system.",
+    "keywords": ["blacklight continuum", "science fiction ttrpg", "original d10 system", "no return signal", "charles ai", "corporate horror"],
+    "url": "blacklight.html"
+  },
+  {
+    "id": "blacklight-corporate-site",
+    "title": "Blacklight Intelligence Corporate Site",
+    "workspace": "Blacklight Continuum",
+    "description": "Diegetic corporate front door for Blacklight Intelligence, public systems, personnel, products, facilities, and client operations.",
+    "keywords": ["blacklight intelligence", "diegetic corporate website", "science fiction company", "corporate setting"],
+    "url": "blacklight-corporate.html"
+  },
+  {
+    "id": "charles-interface",
+    "title": "Charles Local Voice Assistant Product Interface",
+    "workspace": "Blacklight Continuum",
+    "description": "In-universe product presentation and local evaluation interface for Charles secure facility voice operations.",
+    "keywords": ["charles voice assistant", "local ai fiction", "facility voice interface", "blacklight product"],
+    "url": "blacklight-charles-interface.html"
+  },
+  {
+    "id": "blacklight-personnel",
+    "title": "Blacklight Personnel and Leadership Directory",
+    "workspace": "Blacklight Continuum",
+    "description": "Public personnel profiles, executive leadership, board governance, departmental directors, and escalation routes.",
+    "keywords": ["blacklight personnel", "fictional corporate leadership", "executive directory", "governance"],
+    "url": "blacklight-personnel.html"
+  },
+  {
+    "id": "blacklight-systems",
+    "title": "Blacklight Authorized Systems Gateway",
+    "workspace": "Blacklight Continuum",
+    "description": "Public routing gateway for employee, client, Green, and Black authorized access relationships.",
+    "keywords": ["blacklight systems", "authorized access", "fictional security clearance", "corporate gateway"],
+    "url": "blacklight-corporate-systems.html"
+  },
+  {
+    "id": "visitor-analytics",
+    "title": "Visitor Analytics Workspace",
+    "workspace": "Foundry Operations",
+    "description": "Aggregate usage dashboard for visitors, sessions, repeat use, popular tools, active time, devices, referrers, countries, and client errors.",
+    "keywords": ["site analytics dashboard", "tool usage statistics", "visitor engagement", "popular tools"],
+    "url": "visitor-analytics.html"
+  },
+  {
+    "id": "html-site-map",
+    "title": "Foundry Site Map and Search Directory",
+    "workspace": "Foundry",
+    "description": "Human-readable directory of major workspaces, searchable pages, campaign systems, tools, and keyword topics.",
+    "keywords": ["site map", "tool directory", "ttrpg site index", "rpg tools search"],
+    "url": "site-map.html"
+  }
+]
