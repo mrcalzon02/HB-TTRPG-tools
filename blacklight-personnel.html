@@ -10,14 +10,11 @@
     .personnel-page{display:grid;gap:24px;padding-bottom:32px}
     .personnel-address{position:relative;overflow:hidden;border:1px solid rgba(217,168,79,.3);border-radius:26px;background:radial-gradient(circle at 88% 12%,rgba(217,168,79,.14),transparent 20rem),linear-gradient(145deg,rgba(26,25,24,.96),rgba(4,4,3,.98));padding:clamp(24px,4vw,42px)}
     .personnel-address::after{content:"04";position:absolute;right:18px;top:-28px;color:rgba(217,168,79,.065);font-size:12rem;font-weight:950;line-height:1}
-    .personnel-address-head{position:relative;z-index:1;max-width:860px}
-    .personnel-address-head h2{margin:0 0 10px}
-    .personnel-address-body{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin-top:24px}
-    .personnel-address-body p{margin:0 0 16px;color:#d7cfc0;line-height:1.72}
-    .personnel-address-body p:first-child{font-size:1.08rem;color:#f4efe5}
-    .personnel-address-signoff{position:relative;z-index:1;margin-top:22px;padding-top:18px;border-top:1px solid rgba(217,168,79,.22);display:grid;gap:4px;color:#f4efe5;font-weight:800;letter-spacing:.03em}
-    .personnel-address-signoff span:last-child{color:#d9a84f;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem}
-    @media(max-width:850px){.personnel-address-body{grid-template-columns:1fr}}
+    .personnel-address-player{position:relative;z-index:1;display:grid;gap:14px;max-width:860px}
+    .personnel-address-player h2{margin:0}
+    .personnel-address-player p{margin:0}
+    .personnel-address-audio{display:block;width:100%;margin-top:8px;accent-color:#d9a84f}
+    .personnel-address-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:#bdb4a4;font-size:.86rem;letter-spacing:.04em}
   </style>
 </head>
 <body class="blacklight-corp-body">
@@ -64,41 +61,15 @@
   <main class="bli-shell personnel-page">
     <section id="address-04" class="bli-section">
       <article class="personnel-address">
-        <div class="personnel-address-head">
+        <div class="personnel-address-player">
           <p class="bli-eyebrow">Proxy Charles public address 04</p>
           <h2>Executive Leadership and Governance</h2>
-          <p>Public orientation record for the executive officers, board members, and senior departmental directors responsible for Blacklight Intelligence.</p>
-          <div class="bli-badge-row"><span class="bli-badge">leadership</span><span class="bli-badge">governance</span><span class="bli-badge">public accountability</span></div>
-        </div>
-        <div class="personnel-address-body">
-          <div>
-            <p>I am Charles, your locally hosted strategic voice interface. In this section, I will provide an overview of the executive leadership, board governance, and senior departmental structure supporting Blacklight Intelligence operations.</p>
-            <p>Blacklight Intelligence is designed around three public commitments: strategy, public trust, and accountability. These commitments are reflected in the people responsible for guiding the company, maintaining client confidence, supporting secure deployment, and ensuring that our public-facing operations remain stable, credible, and professionally governed.</p>
-            <p>At the executive level, Blacklight Intelligence is led by Eva Frost, Chief Executive Officer. Ms. Frost serves as the senior public owner of corporate strategy, procurement confidence, and executive accountability. Her role is to ensure that Blacklight Intelligence remains focused on long-term institutional trust, responsible client service, and the disciplined growth of our secure voice-assisted infrastructure offerings.</p>
-            <p>Supporting executive operations is Marcus Venn, Chief Operating Officer. Mr. Venn is responsible for converting contracts, support obligations, facility readiness, deployment schedules, and crisis logistics into executable work. His office ensures that Blacklight Intelligence does not merely promise operational continuity, but structures the systems, personnel, and procedures necessary to deliver it.</p>
-            <p>Technology strategy is led by Dr. Priya Sable, Chief Technology Officer. Dr. Sable oversees the Charles secure voice product architecture, with particular focus on the voice stack, local AI deployment, source integrity, and controlled system behavior. Her leadership helps maintain the critical separation between client-facing Charles products and internal system authority, ensuring that each deployment remains secure, bounded, and appropriate to the client environment.</p>
-            <p>Security leadership is held by Elian Cross, Chief Security Officer. Mr. Cross is responsible for access culture, facility modes, staff safety, client protection, and data boundary discipline. His office protects personnel, clients, information systems, and facility perimeters while ensuring that security itself does not become a license for workplace misuse, intimidation, or operational overreach.</p>
-            <p>Legal and compliance oversight is maintained by Marisol Keene, Chief Legal and Compliance Officer. Ms. Keene leads contract language review, privacy accountability, audit readiness, regulatory alignment, and compliance process integrity. Her department ensures that Blacklight Intelligence remains prepared to answer reasonable questions from clients, auditors, partners, and public-sector stakeholders.</p>
-            <p>Financial continuity is directed by Jonas Rill, Chief Financial Officer. Mr. Rill manages payroll continuity, reserve planning, invoicing discipline, procurement controls, emergency cost accounting, and long-range financial stability. His office ensures that Blacklight Intelligence can meet its obligations to staff, clients, vendors, and operational partners under both ordinary and extraordinary conditions.</p>
-            <p>Blacklight Intelligence is further supported by a board structure designed to strengthen governance, public-sector trust, and infrastructure credibility.</p>
-          </div>
-          <div>
-            <p>The Board Chair is Avery Thorne, a governance figure with enterprise security and risk oversight credentials. Mr. Thorne’s role is particularly valuable because effective governance requires the ability to challenge executive leadership, review institutional risk, and demand operational clarity without requiring unrestricted access to every protected internal answer.</p>
-            <p>Serving as an Independent Board Member is Nadia Vale, a former emergency-management administrator focused on continuity, public-sector trust, staff shelter, and human-impact review. Ms. Vale brings a practical understanding of how organizations behave under pressure and how continuity planning affects real people inside real facilities during real disruptions.</p>
-            <p>Also serving as an Independent Board Member is Victor Halren, an industrial systems investor supporting ruggedized local deployments and infrastructure-focused clients. Mr. Halren’s experience assists Blacklight Intelligence in serving organizations that require durable, facility-based systems capable of operating under demanding technical, logistical, and environmental conditions.</p>
-            <p>Beyond executive and board leadership, Blacklight Intelligence relies on senior departmental directors. These are often the people employees and clients interact with most directly. Their work keeps daily operations functional, responsible, and human.</p>
-            <p>Sera Quill, Director of Human Resources, owns onboarding, benefits, employee relations, confidential reporting channels, manager accountability, and post-incident decompression. Her office exists to ensure that employees are supported before, during, and after high-pressure work, and that internal leadership remains answerable to clear workplace standards.</p>
-            <p>Owen Pike, Director of Client Operations, leads client onboarding, support queues, renewals, service levels, and early detection of customer trust collapse. His department monitors whether Blacklight Intelligence is fulfilling its service commitments and whether clients are receiving the reliability, clarity, and responsiveness they were promised.</p>
-            <p>Tessa Grane, Director of Public Relations, controls press language, internal memos, public statements, launch copy, and external communications discipline. Her office ensures that Blacklight Intelligence speaks with clarity, consistency, restraint, and appropriate confidence in public-facing environments.</p>
-            <p>Dima Ro, Director of Secure Deployment Engineering, manages client hardware images, deployment packages, field installation readiness, rollback discipline, and proof of what each voice system is connected to. This role is central to client trust, because secure voice infrastructure must not only function; it must be demonstrably limited, auditable, and properly connected.</p>
-            <p>Anika Shaw, Director of Facilities and Workplace Services, keeps the O-shaped headquarters operating as a public corporate workplace while coordinating access, building readiness, and continuity procedures. Her department maintains the physical environment in which staff, clients, visitors, and support teams interact with Blacklight Intelligence as a functioning institution.</p>
-            <p>Finally, Caleb Orth, Director of Research Evaluation, leads model testing, retrieval quality review, user experience studies, red-team behavior analysis, and future interface assessment. His work helps ensure that Charles deployments remain useful, understandable, secure, and capable of improving without compromising operational safety or client trust.</p>
-            <p>Together, these leaders form the public corporate structure of Blacklight Intelligence. Their purpose is straightforward: to make secure local voice-assisted infrastructure reliable, accountable, supportable, and worthy of institutional confidence.</p>
-          </div>
-        </div>
-        <div class="personnel-address-signoff">
-          <span>Thank you for reviewing the Blacklight Intelligence leadership structure.</span>
-          <span>I am Charles. Your organization is supported. Your facility is local. Your trust is operationally significant.</span>
+          <p>Official public orientation recording for Blacklight Intelligence personnel and governance.</p>
+          <audio class="personnel-address-audio" controls preload="metadata">
+            <source src="assets/blacklight/speech_4.mp3" type="audio/mpeg">
+            Your browser does not support embedded audio playback.
+          </audio>
+          <div class="personnel-address-meta"><span>Public record</span><span>·</span><span>Leadership</span><span>·</span><span>Governance</span><span>·</span><span>Proxy Charles</span></div>
         </div>
       </article>
     </section>
