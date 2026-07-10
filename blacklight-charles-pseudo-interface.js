@@ -214,8 +214,7 @@
       status.textContent = `Ready. ${result.label} route selected.`;
       sendButton.disabled = false;
       activeTimer = null;
-      window.HBAnalytics?.track('charles_evaluation_route', { routeId: result.id });
-    }, 420);
+}, 420);
   }
 
   sendButton.addEventListener('click', () => respond());

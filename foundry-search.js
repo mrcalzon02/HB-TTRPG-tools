@@ -1,8 +1,6 @@
 (() => {
   'use strict';
 
-  document.querySelectorAll('[data-visitor-analytics-card="true"], a[href="visitor-analytics.html"]').forEach(node => node.remove());
-
   const input = document.getElementById('foundry-tool-search');
   const results = document.getElementById('foundry-search-results');
   const status = document.getElementById('foundry-search-status');
@@ -63,8 +61,7 @@
     link.className = 'link-button';
     link.href = entry.url;
     link.textContent = 'Open';
-    link.dataset.analyticsTool = entry.id;
-    link.dataset.analyticsLabel = `Search result: ${entry.title}`;
+
 
     article.append(meta, title, description, link);
     return article;
@@ -104,7 +101,7 @@
       const response = await fetch(INDEX_URL, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
       const data = await response.json();
-      entries = Array.isArray(data) ? data.filter(entry => entry.id !== 'visitor-analytics' && entry.url !== 'visitor-analytics.html') : [];
+      entries = Array.isArray(data) ? data : [];
       render();
       if (initialQuery) document.getElementById('foundry-search')?.scrollIntoView({ block: 'start' });
       input.addEventListener('input', render);
