@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight | Binary Cube Encryption Laboratory</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .blacklight-cube-shell{padding-bottom:48px}.blacklight-cube-clearance{margin:20px 0;padding:14px 16px;border:1px solid rgba(217,168,79,.34);border-left:5px solid #d9a84f;border-radius:12px;background:rgba(217,168,79,.08);color:#d9d1c0;line-height:1.55}.blacklight-cube-clearance strong{color:#f4efe5}.blacklight-cube-host{margin-top:18px}.blacklight-cube-host #shadowrun-binary-cube-lab{margin-top:0}
+  </style>
+</head>
+<body class="blacklight-corp-body" data-binary-cube-brand="blacklight" data-binary-cube-storage-scope="blacklight">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-systems-black.html" aria-label="Return to Blacklight Black archive systems"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Black Archive</span></span></a>
+    <nav class="bli-nav" aria-label="Black archive navigation"><a href="blacklight-systems-black.html">Black Systems</a><a href="blacklight-internal-archive.html">Internal Archive</a><a href="blacklight-corporate-systems.html">Gateway</a></nav>
+  </header>
+
+  <section class="bli-hero" aria-labelledby="blacklight-cube-title">
+    <div>
+      <p class="bli-eyebrow">Black Card utility · restricted archive route</p>
+      <h1 id="blacklight-cube-title">Binary Cube Encryption Laboratory.</h1>
+      <p class="bli-lede">A Blacklight-universe copy of the Binary Cube research workspace for keyed face-projection encryption, secure package export, validation, authenticated transport, and controlled file recovery.</p>
+      <p class="blacklight-cube-clearance"><strong>Black-level handling:</strong> keys and encrypted packages remain separate. Secure package downloads omit key identifiers, cube geometry, face selection, orientation, payload capacity, block count, and plaintext bit length as exposed JSON fields.</p>
+    </div>
+  </section>
+
+  <main class="bli-shell blacklight-cube-shell">
+    <section id="shadowrun" class="bli-section blacklight-cube-host" aria-label="Blacklight Binary Cube laboratory host"></section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Black archive Binary Cube research utility.</footer>
+
+  <script src="blacklight-binary-cube-storage-scope.js"></script>
+  <script src="shadowrun-binary-cube-engine.js"></script>
+  <script src="shadowrun-binary-cube-auth.js"></script>
+  <script src="shadowrun-binary-cube-encryption.js"></script>
+  <script src="shadowrun-binary-cube-editor.js"></script>
+  <script src="shadowrun-binary-cube-auth-ui.js"></script>
+  <script src="shadowrun-binary-cube-secure-export.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.ShadowrunBinaryCubeEncryption?.openPanel();
+      const panel = document.getElementById('shadowrun-binary-cube-lab');
+      const close = panel?.querySelector('[data-cube-close]');
+      if (close) {
+        close.textContent = 'Return to Black Systems';
+        close.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          window.location.href = 'blacklight-systems-black.html';
+        }, true);
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
