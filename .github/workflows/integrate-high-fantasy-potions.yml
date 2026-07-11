@@ -1,3 +1,4 @@
+# Triggered after the workflow exists on main.
 name: Integrate high fantasy potion generator
 
 on:
