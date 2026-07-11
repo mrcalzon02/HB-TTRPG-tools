@@ -1,0 +1,14 @@
+.exo-moon-orbit{fill:none;stroke:rgba(120,177,191,.24);stroke-width:.8}
+.exo-moon-target,.exo-belt-target{cursor:pointer;outline:none}
+.exo-moon-body{stroke:rgba(255,255,255,.68);stroke-width:1}
+.exo-belt-hit{fill:none;stroke:transparent;stroke-width:18}
+.exo-belt-selection{fill:none;stroke:#f0bd58;stroke-width:4;stroke-dasharray:8 7;opacity:0;pointer-events:none}
+.exo-selected .exo-belt-selection{opacity:1}
+.exo-moon-target:focus-visible .exo-selection-ring,.exo-belt-target:focus-visible .exo-belt-selection{opacity:1;stroke:#fff}
+.exo-inspector-actions{display:grid;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(217,168,79,.16)}
+.exo-inspector-actions button{font:inherit;cursor:pointer}
+.exo-inspector-actions button[hidden]{display:none}
+.exo-inspector-actions p{margin:0;color:#9f9789;font-size:.78rem;line-height:1.45}
+.exo-source-context{border-color:rgba(94,171,187,.34);background:linear-gradient(145deg,rgba(16,28,31,.9),rgba(7,9,9,.96))}
+.exo-source-context[hidden]{display:none}
+.exo-source-context .bli-section-head p:last-child{max-width:90ch;color:#cfe1e4}
