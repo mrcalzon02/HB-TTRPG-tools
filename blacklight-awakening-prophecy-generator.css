@@ -29,7 +29,7 @@
 .intel-field p{margin:7px 0 0;color:#e2d9ca;line-height:1.58}
 .prophecy-major{margin-top:18px;border-left:4px solid #d9a84f;border-radius:0 18px 18px 0;padding:20px 22px;background:rgba(217,168,79,.075)}
 .prophecy-major span{display:block;color:#baae99;font-size:.7rem;font-weight:950;letter-spacing:.11em;text-transform:uppercase}
-.prophecy-major blockquote{margin:12px 0 0;color:#f0e7d7;font-size:clamp(1.05rem,2vw,1.25rem);font-style:italic;line-height:1.75}
+.prophecy-major blockquote{margin:12px 0 0;color:#f0e7d7;font-size:clamp(1.05rem,2vw,1.25rem);font-style:italic;line-height:1.75;white-space:pre-line}
 .stage-sequence{display:grid;gap:16px;margin-top:22px}
 .stage-pair{border:1px solid rgba(217,168,79,.18);border-radius:16px;padding:18px;background:rgba(0,0,0,.19)}
 .stage-pair>header{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;margin-bottom:13px}
@@ -43,7 +43,7 @@
 .fragment-heading span{color:#aebfd1;font-size:.69rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
 .major-fragment .fragment-heading span{color:#d8b66f}
 .fragment-heading strong{color:#f4efe5}
-.event-fragment blockquote{margin:14px 0 0;border-left:2px solid rgba(255,255,255,.13);padding-left:15px;color:#eee5d5;font-style:italic;line-height:1.65}
+.event-fragment blockquote{margin:14px 0 0;border-left:2px solid rgba(255,255,255,.13);padding-left:15px;color:#eee5d5;font-style:italic;line-height:1.68;white-space:pre-line}
 .event-correspondence{margin-top:14px;border:1px solid rgba(217,168,79,.12);border-radius:12px;padding:13px;background:rgba(0,0,0,.18)}
 .event-correspondence span{display:block;color:#b3a894;font-size:.69rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
 .event-correspondence p{margin:7px 0 0;color:#ded5c5;line-height:1.58}
