@@ -69,8 +69,6 @@
     [/\bworld\b/gi,['age','earth','common order']],
     [/\bdoor\b/gi,['threshold','entrance','hinged law']],
     [/\broad\b/gi,['path','route','remembered way']],
-    [/\bname\b/gi,['true word','designation','spoken inheritance']],
-    [/\bnames\b/gi,['true words','designations','spoken inheritances']],
     [/\bblood\b/gi,['lineage','red inheritance','living debt']],
     [/\bdead\b/gi,['unburied','departed','those beyond breath']],
     [/\bweapon\b/gi,['instrument of injury','armed relic','engine of harm']],
