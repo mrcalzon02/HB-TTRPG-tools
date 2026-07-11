@@ -1,0 +1,101 @@
+(() => {
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+  const SVG = 'http://www.w3.org/2000/svg';
+  const controls = { generate: $('exo-generate-system'), toggle: $('exo-toggle-orbits'), export: $('exo-export-system'), seed: $('exo-seed-input'), speed: $('exo-speed-select') };
+  if (!controls.generate || !$('exo-orbit-svg')) return;
+
+  const ui = {
+    name: $('exo-summary-name'), star: $('exo-summary-star'), planets: $('exo-summary-planets'), seed: $('exo-summary-seed'),
+    epoch: $('exo-epoch'), selection: $('exo-selection-name'), title: $('exo-orbit-title'), background: $('exo-orbit-background'),
+    objects: $('exo-orbit-objects'), empty: $('exo-orbit-empty'), inspectorTitle: $('exo-inspector-title'),
+    inspectorSummary: $('exo-inspector-summary'), badges: $('exo-inspector-badges'), data: $('exo-inspector-data'),
+    resources: $('exo-inspector-resources'), table: $('exo-orbital-table-body'), resourceIndex: $('exo-resource-index'),
+    features: $('exo-system-features')
+  };
+
+  const STARS = [
+    ['M','Red dwarf',48,.12,.55,.003,.09,2400,3900,'#ff7c5f'],
+    ['K','Orange dwarf',23,.55,.82,.10,.40,3900,5200,'#ffad6d'],
+    ['G','Yellow dwarf',14,.82,1.15,.45,1.65,5200,6100,'#ffd979'],
+    ['F','Yellow-white star',7,1.15,1.55,1.6,5.2,6100,7500,'#fff0bd'],
+    ['A','White star',3,1.55,2.5,5,45,7500,10000,'#eaf3ff'],
+    ['B','Blue-white star',1,2.5,8,50,3500,10000,26000,'#b9d5ff'],
+    ['WD','White dwarf',3,.48,1.15,.0002,.03,5000,28000,'#dcecff'],
+    ['SG','Evolved subgiant',2,.9,2.2,2,28,4200,6500,'#ffd18e']
+  ];
+  const PREFIX = ['Aster','Cael','Drax','Eri','Galen','Helio','Ilyr','Kest','Lumen','Mira','Nex','Orin','Prax','Quell','Rhea','Soren','Talon','Umbra','Vey','Warden','Xan','Yara','Zorin'];
+  const SUFFIX = ['ion','ara','os','ea','is','on',' Prime',' Reach',' Expanse',' Verge',' Ascendant',' Minor',' Major',' Gate'];
+  const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV'];
+  const COLORS = { Scorched:'#d36a3f', Volcanic:'#c64d2b', Barren:'#9b8a72', Temperate:'#5ea77b', Ocean:'#4d8fd1', 'Super-Earth':'#8eb397', 'Mini-Neptune':'#72a5b8', 'Gas giant':'#d6a86c', 'Ice giant':'#79a9d5', Frozen:'#b8d3de', Dwarf:'#a89d90' };
+  const ATMOS = {
+    Scorched:['None','Trace sodium vapor','Carbon dioxide and sulfur'], Volcanic:['Dense carbon dioxide','Sulfur dioxide and ash'],
+    Barren:['None','Trace carbon dioxide','Thin nitrogen and argon'], Temperate:['Nitrogen and oxygen','Nitrogen, carbon dioxide, water vapor'],
+    Ocean:['Nitrogen, oxygen, water vapor','Dense steam and nitrogen'], 'Super-Earth':['Dense nitrogen and carbon dioxide','High-pressure nitrogen and oxygen'],
+    'Mini-Neptune':['Hydrogen, helium, methane','Hydrogen and water vapor'], 'Gas giant':['Hydrogen and helium','Hydrogen, helium, methane'],
+    'Ice giant':['Hydrogen, helium, methane','Methane and hydrogen'], Frozen:['Thin nitrogen','Carbon dioxide frost atmosphere'], Dwarf:['None','Trace nitrogen']
+  };
+  const RESOURCE_POOLS = {
+    rock:['iron-nickel deposits','silicates','radioactives','rare-earth elements','subsurface volatiles','platinum-group metals'],
+    life:['accessible water','biosphere compounds','agricultural land','geothermal energy','complex organics'],
+    gas:['helium-3','hydrogen fuel','deuterium','ammonia','methane feedstock'],
+    ice:['water ice','methane ice','ammonia','deuterium','cryogenic volatiles']
+  };
+
+  let system = null;
+  let visuals = new Map();
+  let running = true;
+  let days = 0;
+  let previousFrame = performance.now();
+
+  function rngFor(seed) {
+    let state = 2166136261;
+    for (const char of seed) { state ^= char.charCodeAt(0); state = Math.imul(state, 16777619); }
+    return () => { state += 0x6D2B79F5; let value = state; value = Math.imul(value ^ value >>> 15, value | 1); value ^= value + Math.imul(value ^ value >>> 7, value | 61); return ((value ^ value >>> 14) >>> 0) / 4294967296; };
+  }
+  const number = (rng, min, max, digits = 2) => Number((min + (max - min) * rng()).toFixed(digits));
+  const integer = (rng, min, max) => Math.floor(min + rng() * (max - min + 1));
+  const pick = (rng, list) => list[Math.floor(rng() * list.length)];
+  function unique(rng, list, count) { const pool = [...list], out = []; while (pool.length && out.length < count) out.push(pool.splice(Math.floor(rng() * pool.length), 1)[0]); return out; }
+  function weightedStar(rng) { const total = STARS.reduce((sum, item) => sum + item[2], 0); let roll = rng() * total; for (const item of STARS) { roll -= item[2]; if (roll <= 0) return item; } return STARS[0]; }
+  function randomSeed() { if (globalThis.crypto?.getRandomValues) { const values = new Uint32Array(2); crypto.getRandomValues(values); return `${values[0].toString(36)}-${values[1].toString(36)}`; } return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`; }
+
+  function planetType(rng, distance, temp, snow, hzInner, hzOuter, rollMass) {
+    if (distance < .18 || temp > 620) return rng() < .5 ? 'Scorched' : 'Volcanic';
+    if (distance < snow * .75) {
+      if (distance >= hzInner * .82 && distance <= hzOuter * 1.12) return rollMass > 2.8 ? 'Super-Earth' : rng() < .34 ? 'Ocean' : 'Temperate';
+      return rollMass > 3.2 && rng() < .3 ? 'Super-Earth' : 'Barren';
+    }
+    if (rollMass > 20) return rng() < .68 ? 'Gas giant' : 'Ice giant';
+    if (rollMass > 5) return rng() < .58 ? 'Mini-Neptune' : 'Ice giant';
+    return rng() < .78 ? 'Frozen' : 'Dwarf';
+  }
+
+  function typeMass(rng, type) {
+    const ranges = { Scorched:[.08,2.2], Volcanic:[.3,3.8], Barren:[.05,2.5], Temperate:[.45,2.5], Ocean:[.6,3.8], 'Super-Earth':[2.5,9], 'Mini-Neptune':[5,18], 'Gas giant':[35,950], 'Ice giant':[12,80], Frozen:[.08,2.8], Dwarf:[.002,.12] };
+    const [min,max] = ranges[type]; return number(rng,min,max,max > 100 ? 1 : 2);
+  }
+
+  function typeRadius(rng, type, mass) {
+    if (type === 'Gas giant') return number(rng,7.5,15.8); if (type === 'Ice giant') return number(rng,3.2,6.8);
+    if (type === 'Mini-Neptune') return number(rng,2.1,4.6); if (type === 'Dwarf') return number(rng,.12,.52);
+    return Number(Math.max(.3, Math.pow(mass,.27) * number(rng,.88,1.12,3)).toFixed(2));
+  }
+
+  function planetResources(rng, type) {
+    let pool = RESOURCE_POOLS.rock;
+    if (['Temperate','Ocean','Super-Earth'].includes(type)) pool = [...RESOURCE_POOLS.rock,...RESOURCE_POOLS.life];
+    if (['Gas giant','Mini-Neptune'].includes(type)) pool = RESOURCE_POOLS.gas;
+    if (['Ice giant','Frozen','Dwarf'].includes(type)) pool = [...RESOURCE_POOLS.ice,...RESOURCE_POOLS.rock];
+    return unique(rng,pool,integer(rng,3,5));
+  }
+
+  function makePlanet(rng, systemName, index, distance, star, snow) {
+    const rollMass = distance > snow ? number(rng,1,800) : number(rng,.05,8);
+    const temperature = Math.max(20, Math.round(278 * Math.pow(Math.max(star.luminosity,.001),.25) / Math.sqrt(distance) * number(rng,.91,1.22,3)));
+    const type = planetType(rng,distance,temperature,snow,star.hzInner,star.hzOuter,rollMass);
+    const mass = typeMass(rng,type), radius = typeRadius(rng,type,mass), gravity = Number((mass / Math.max(.04,radius * radius)).toFixed(2));
+    const giant = ['Gas giant','Ice giant','Mini-Neptune'].includes(type);
+    const periodDays = Number((Math.sqrt(distance ** 3 / Math.max(.08,star.mass)) * 365.25).toFixed(2));
+    const hydrosphere = type === 'Ocean' ? integer(rng,78,100) : type === 'Temperate' ? integer(rng,18,82) : type === 'Frozen' ? integer(rng,12,64) : 0;
