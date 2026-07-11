@@ -1,0 +1,381 @@
+name: Complete EXO orbital integration
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/complete-exo-orbital-integration.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Expand orbital records and connect dossier handoff
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_between(text, start, end, replacement):
+              i = text.index(start)
+              j = text.index(end, i)
+              return text[:i] + replacement.rstrip() + "\n\n" + text[j:]
+
+          solar_path = Path('blacklight-exo-solar-system.js')
+          solar = solar_path.read_text()
+          solar = solar.replace("features: $('exo-system-features')", "features: $('exo-system-features'), develop: $('exo-develop-world')", 1)
+          solar = solar.replace("  let previousFrame = performance.now();", "  let previousFrame = performance.now();\n  let selectedObjectId = 'star';", 1)
+
+          marker = "  };\n\n  let system = null;"
+          addition = """  };
+
+  const MOON_TYPES = {
+    'Rocky moon': { color:'#938878', atmosphere:['None','Trace argon','Thin carbon dioxide'], resources:['iron-nickel mass','silicates','radioactives','platinum-group metals'] },
+    'Ice moon': { color:'#b7d4df', atmosphere:['None','Trace nitrogen','Water-vapor plumes'], resources:['water ice','ammonia','methane ice','deuterium'] },
+    'Ocean moon': { color:'#4d91c7', atmosphere:['Nitrogen and water vapor','Thin oxygen and nitrogen'], resources:['accessible water','complex organics','deuterium','biosphere compounds'] },
+    'Volcanic moon': { color:'#c95a32', atmosphere:['Sulfur dioxide','Trace sodium and sulfur'], resources:['sulfur compounds','radioactives','rare-earth elements','geothermal energy'] },
+    'Captured asteroid': { color:'#7f7569', atmosphere:['None'], resources:['iron-nickel mass','carbonaceous material','platinum-group metals','silicates'] }
+  };
+  const BELT_TYPES = {
+    asteroid: { label:'Asteroid belt', compositions:['metallic and silicate bodies','carbonaceous bodies','mixed differentiated fragments'], resources:['iron-nickel mass','platinum-group metals','rare-earth elements','radioactives','silicates'] },
+    cometary: { label:'Cometary belt', compositions:['water-rich comet nuclei','methane and ammonia ice bodies','mixed cryogenic volatiles'], resources:['water ice','methane ice','ammonia','deuterium','complex organics'] }
+  };
+  const HANDOFF_KEY = 'blacklight-exo-selected-world-v1';
+
+  let system = null;"""
+          assert marker in solar
+          solar = solar.replace(marker, addition, 1)
+
+          new_planet_block = r"""  function makePlanet(rng, systemName, index, distance, star, snow) {
+    const rollMass = distance > snow ? number(rng,1,800) : number(rng,.05,8);
+    const temperature = Math.max(20, Math.round(278 * Math.pow(Math.max(star.luminosity,.001),.25) / Math.sqrt(distance) * number(rng,.91,1.22,3)));
+    const type = planetType(rng,distance,temperature,snow,star.hzInner,star.hzOuter,rollMass);
+    const mass = typeMass(rng,type), radius = typeRadius(rng,type,mass), gravity = Number((mass / Math.max(.04,radius * radius)).toFixed(2));
+    const giant = ['Gas giant','Ice giant','Mini-Neptune'].includes(type);
+    const periodDays = Number((Math.sqrt(distance ** 3 / Math.max(.08,star.mass)) * 365.25).toFixed(2));
+    const hydrosphere = type === 'Ocean' ? integer(rng,78,100) : type === 'Temperate' ? integer(rng,18,82) : type === 'Frozen' ? integer(rng,12,64) : 0;
+    let habitability = 0;
+    if (temperature >= 245 && temperature <= 320) habitability += 42; else if (temperature >= 210 && temperature <= 360) habitability += 20;
+    if (['Temperate','Ocean'].includes(type)) habitability += 30; if (type === 'Super-Earth') habitability += 15;
+    const atmosphere = pick(rng,ATMOS[type]); if (/oxygen/i.test(atmosphere)) habitability += 18; if (gravity >= .65 && gravity <= 1.45) habitability += 10;
+    habitability = Math.min(100,habitability);
+    const moonMax = type === 'Gas giant' ? 22 : type === 'Ice giant' ? 14 : giant ? 8 : mass > 2 ? 4 : 2;
+    const moonCount = giant ? integer(rng,2,moonMax) : rng()<Math.min(.75,.16+mass*.17) ? integer(rng,1,moonMax) : 0;
+    return {
+      id:`planet-${index+1}`, kind:'planet', orbit:index+1, name:`${systemName} ${ROMAN[index] || index+1}`, type,
+      distance:Number(distance.toFixed(3)), mass, radius, gravity, temperature, atmosphere, hydrosphere, habitability,
+      periodDays, dayHours:number(rng,giant?7:9,giant?22:96,1), eccentricity:number(rng,.002,.19,3), inclination:number(rng,0,11,1),
+      moonCount, moons:[], rings:giant?rng()<.58:rng()<.04, phase:number(rng,0,Math.PI*2,4), color:COLORS[type], resources:planetResources(rng,type),
+      biosphere:habitability >= 70 && rng()<.58 ? pick(rng,['Complex native biosphere','Microbial-to-complex biosphere','Engineered biosphere signature']) : habitability >=45 && rng()<.4 ? 'Microbial biosphere candidate' : 'No confirmed biosphere',
+      civilization:habitability >=65 && rng()<.16 ? pick(rng,['Pre-industrial sapient culture','Industrial civilization','Orbital-capable civilization','Interstellar civilization holding']) : rng()<.025 ? 'Artificial or non-biological activity' : 'No confirmed civilization',
+      hazards:unique(rng,['extreme radiation','corrosive atmosphere','violent storms','tectonic instability','high-velocity debris','cryogenic surface','toxic chemistry','magnetic anomalies','severe gravity well'],integer(rng,1,3)),
+      summary:`${type} world at ${distance.toFixed(2)} AU with an estimated mean temperature of ${temperature} K.`
+    };
+  }
+
+  function makeMoon(rng, planet, index) {
+    const warm = planet.temperature >= 220 && planet.temperature <= 350;
+    let type;
+    if (warm && rng() < .22) type = 'Ocean moon';
+    else if (planet.type === 'Volcanic' || rng() < .12) type = 'Volcanic moon';
+    else if (['Gas giant','Ice giant','Mini-Neptune','Frozen'].includes(planet.type) && rng() < .58) type = 'Ice moon';
+    else type = rng() < .18 ? 'Captured asteroid' : 'Rocky moon';
+    const profile = MOON_TYPES[type];
+    const mass = number(rng,type==='Captured asteroid'?.00001:.0008,type==='Ocean moon'?.28:.18,5);
+    const radius = number(rng,type==='Captured asteroid'?.015:.04,type==='Ocean moon'?.72:.55,3);
+    const gravity = Number((mass / Math.max(.0004,radius*radius)).toFixed(3));
+    const temperature = Math.max(18,Math.round(planet.temperature * number(rng,.82,1.08,3)));
+    const atmosphere = pick(rng,profile.atmosphere);
+    const hydrosphere = type==='Ocean moon'?integer(rng,55,100):type==='Ice moon'?integer(rng,8,70):0;
+    let habitability = 0;
+    if (temperature>=240&&temperature<=325) habitability += 35;
+    if (type==='Ocean moon') habitability += 35;
+    if (/oxygen/i.test(atmosphere)) habitability += 18;
+    if (gravity>=.18&&gravity<=1.4) habitability += 12;
+    habitability = Math.min(100,habitability);
+    const letter = String.fromCharCode(97 + index);
+    const orbitalDistanceKm = integer(rng,45000 + index*18000,180000 + index*95000);
+    const periodDays = number(rng,.18 + index*.22,6 + index*4.8,2);
+    return {
+      id:`${planet.id}-moon-${index+1}`, kind:'moon', parentId:planet.id, parentName:planet.name, orbit:`${planet.orbit}.${index+1}`,
+      name:`${planet.name}-${letter}`, type, orbitalDistanceKm, periodDays, mass, radius, gravity, temperature, atmosphere, hydrosphere, habitability,
+      phase:number(rng,0,Math.PI*2,4), color:profile.color, resources:unique(rng,profile.resources,integer(rng,2,4)),
+      biosphere:habitability>=70&&rng()<.32?'Subsurface or oceanic biosphere':habitability>=45&&rng()<.3?'Microbial biosphere candidate':'No confirmed biosphere',
+      civilization:habitability>=65&&rng()<.07?pick(rng,['Native settlement network','Colonial habitat network','Orbital-support civilization holding']):'No confirmed civilization',
+      hazards:unique(rng,['tidal stress','radiation belts','cryovolcanic eruptions','unstable surface ice','micrometeorite exposure','severe eclipse cycles','electrostatic dust'],integer(rng,1,2)),
+      summary:`${type} orbiting ${planet.name} at approximately ${orbitalDistanceKm.toLocaleString()} km.`
+    };
+  }
+
+  function makeBelt(rng, name, distance, index, star, kind) {
+    const profile = BELT_TYPES[kind];
+    const periodDays = Number((Math.sqrt(distance ** 3 / Math.max(.08,star.mass)) * 365.25).toFixed(2));
+    return {
+      id:`belt-${index+1}`, kind:'belt', orbit:`B${index+1}`, name, type:profile.label, distance:Number(distance.toFixed(3)),
+      periodDays, widthAu:number(rng,Math.max(.02,distance*.035),Math.max(.08,distance*.22),3),
+      estimatedMass:number(rng,.0002,.18,5), density:pick(rng,['diffuse','moderate','dense','highly clustered']),
+      composition:pick(rng,profile.compositions), resources:unique(rng,profile.resources,integer(rng,3,5)),
+      operations:pick(rng,['unclaimed survey volume','automated prospecting zone','high-value extraction corridor','hazardous navigation exclusion','potential refinery feedstock reserve']),
+      hazards:unique(rng,['high-velocity collision risk','unmapped rotating bodies','electrostatic dust','volatile outgassing','claim-marker interference','radiation exposure'],integer(rng,1,3)),
+      habitability:0, summary:`${profile.label} centered at ${distance.toFixed(2)} AU with ${profile.compositions}.`
+    };
+  }
+"""
+          solar = replace_between(solar, "  function makePlanet(rng, systemName, index, distance, star, snow) {", "  function generateSystem(seed) {", new_planet_block)
+
+          new_generate = r"""  function generateSystem(seed) {
+    const rng = rngFor(seed), name = `${pick(rng,PREFIX)}${pick(rng,SUFFIX)}`.replace(/\s+/g,' ').trim(), type = weightedStar(rng);
+    const star = { id:'star', kind:'star', name, class:type[0], label:type[1], mass:number(rng,type[3],type[4],3), luminosity:number(rng,type[5],type[6],4), temperature:integer(rng,type[7],type[8]), color:type[9], age:number(rng,.05,type[0]==='B'?.08:type[0]==='A'?1.5:12), resources:['continuous fusion output','stellar-wind collection','magnetosphere research','gravitational reference mass'] };
+    star.hzInner = Number((Math.sqrt(Math.max(star.luminosity,.001))*.95).toFixed(2)); star.hzOuter = Number((Math.sqrt(Math.max(star.luminosity,.001))*1.67).toFixed(2)); star.summary = `${star.label} primary with ${star.mass} solar masses and ${star.luminosity} solar luminosities.`;
+    const count = integer(rng,type[0]==='B'?2:4,type[0]==='B'?6:12), snow = Math.max(.7,2.7*Math.sqrt(Math.max(star.luminosity,.002))), planets = [];
+    let distance = Math.max(.05,Math.sqrt(Math.max(star.luminosity,.002))*number(rng,.16,.42,3));
+    for (let i=0;i<count;i+=1) {
+      if (i) distance *= number(rng,1.42,2.05,3);
+      const planet = makePlanet(rng,name,i,distance,star,snow);
+      planet.moons = Array.from({length:planet.moonCount},(_,moonIndex)=>makeMoon(rng,planet,moonIndex));
+      planets.push(planet);
+    }
+    const belts = [];
+    const inside = planets.filter(p=>p.distance<snow), outside = planets.filter(p=>p.distance>=snow);
+    if (inside.length && outside.length && rng()<.82) {
+      const beltDistance = (inside.at(-1).distance+outside[0].distance)/2;
+      belts.push(makeBelt(rng,'Primary debris belt',beltDistance,belts.length,star,'asteroid'));
+    }
+    if (rng()<.48) belts.push(makeBelt(rng,'Outer cometary belt',planets.at(-1).distance*number(rng,1.45,2.7),belts.length,star,'cometary'));
+    const moons = planets.flatMap(planet=>planet.moons);
+    const worlds = [...planets,...moons];
+    const totals = {
+      metals:worlds.filter(p=>p.resources.some(r=>/iron|metal|rare|platinum/i.test(r))).length+belts.filter(b=>b.resources.some(r=>/iron|metal|rare|platinum/i.test(r))).length,
+      volatiles:worlds.filter(p=>p.resources.some(r=>/water|volatile|methane|ammonia/i.test(r))).length+belts.filter(b=>b.resources.some(r=>/water|volatile|methane|ammonia/i.test(r))).length,
+      fuel:worlds.filter(p=>p.resources.some(r=>/helium|hydrogen|deuterium/i.test(r))).length+belts.filter(b=>b.resources.some(r=>/deuterium/i.test(r))).length,
+      biospheres:worlds.filter(p=>!p.biosphere.startsWith('No')).length,
+      habitable:worlds.filter(p=>p.habitability>=65).length,
+      industrial:worlds.filter(p=>p.gravity<2.2).length+belts.length
+    };
+    const features = [`${moons.length} individually charted moon${moons.length===1?'':'s'}.`,`${belts.length} selectable debris field${belts.length===1?'':'s'} charted.`,`${totals.habitable} world${totals.habitable===1?'':'s'} meet the EXO habitability threshold.`];
+    if (worlds.some(p=>!p.civilization.startsWith('No'))) features.push('Non-natural activity or civilization signature requires review.');
+    if (['B','A'].includes(star.class)) features.push('Short-lived luminous primary compresses the biological-development window.');
+    return { version:2, seed, name, generatedAt:new Date().toISOString(), star, snowLine:Number(snow.toFixed(2)), planets, belts, resourceTotals:totals, features };
+  }
+"""
+          solar = replace_between(solar, "  function generateSystem(seed) {", "  function svg(tag, attrs={})", new_generate)
+
+          helper = r"""  function allObjects() {
+    if (!system) return [];
+    return [system.star,...system.planets,...system.planets.flatMap(planet=>planet.moons),...system.belts];
+  }
+  function objectById(id) { return allObjects().find(object=>object.id===id); }
+  function dossierEnvironment(object) {
+    if (object.type === 'Ocean' || object.type === 'Ocean moon') return 'global ocean';
+    if (object.type === 'Frozen' || object.type === 'Ice moon') return 'icebound cryosphere';
+    if (object.type === 'Volcanic' || object.type === 'Volcanic moon' || object.type === 'Scorched') return 'toxic-atmosphere world';
+    if (object.gravity > 1.35) return 'high-gravity terrestrial';
+    if (object.gravity < .45) return 'low-gravity archipelago';
+    return 'temperate terrestrial';
+  }
+"""
+          solar = solar.replace("  function inspect(object) {", helper + "\n  function inspect(object) {", 1)
+
+          new_inspect = r"""  function inspect(object) {
+    selectedObjectId = object.id;
+    ui.inspectorTitle.textContent=object.name; ui.inspectorSummary.textContent=object.summary; ui.selection.textContent=object.name;
+    ui.badges.replaceChildren(); ui.data.replaceChildren(); ui.resources.replaceChildren();
+    if (ui.develop) ui.develop.hidden = !(object.kind==='planet'||object.kind==='moon') || object.habitability<65;
+    let badges;
+    if (object.kind==='star') badges=[`${object.class} class`,object.label,`${object.age} Gyr`];
+    else if (object.kind==='belt') badges=[object.type,object.density,object.orbit];
+    else badges=[object.type,object.kind==='moon'?`Moon of ${object.parentName}`:`Orbit ${object.orbit}`,`${object.habitability}% habitability`];
+    for (const label of badges) { const span=document.createElement('span'); span.textContent=label; ui.badges.append(span); }
+    if (object.kind==='star') {
+      addData('Classification',`${object.class} · ${object.label}`); addData('Mass',`${object.mass} M☉`); addData('Luminosity',`${object.luminosity} L☉`); addData('Temperature',`${object.temperature.toLocaleString()} K`); addData('Habitable zone',`${object.hzInner}–${object.hzOuter} AU`); addData('Estimated age',`${object.age} billion years`);
+    } else if (object.kind==='planet') {
+      addData('Planet class',object.type); addData('Orbital distance',`${object.distance} AU`); addData('Orbital period',period(object.periodDays)); addData('Day length',`${object.dayHours} hours`); addData('Mass',`${object.mass} Earth masses`); addData('Radius',`${object.radius} Earth radii`); addData('Surface gravity',`${object.gravity} g`); addData('Mean temperature',`${object.temperature} K`); addData('Atmosphere',object.atmosphere); addData('Hydrosphere',`${object.hydrosphere}%`); addData('Moons / rings',`${object.moons.length} moon${object.moons.length===1?'':'s'} · ${object.rings?'rings present':'no major rings'}`); addData('Biosphere',object.biosphere); addData('Civilization',object.civilization);
+    } else if (object.kind==='moon') {
+      addData('Moon class',object.type); addData('Parent world',object.parentName); addData('Parent distance',`${object.orbitalDistanceKm.toLocaleString()} km`); addData('Orbital period',period(object.periodDays)); addData('Mass',`${object.mass} Earth masses`); addData('Radius',`${object.radius} Earth radii`); addData('Surface gravity',`${object.gravity} g`); addData('Mean temperature',`${object.temperature} K`); addData('Atmosphere',object.atmosphere); addData('Hydrosphere',`${object.hydrosphere}%`); addData('Biosphere',object.biosphere); addData('Civilization',object.civilization);
+    } else {
+      addData('Belt class',object.type); addData('Central distance',`${object.distance} AU`); addData('Approximate width',`${object.widthAu} AU`); addData('Orbital period',period(object.periodDays)); addData('Estimated mass',`${object.estimatedMass} lunar masses`); addData('Density',object.density); addData('Composition',object.composition); addData('Operational status',object.operations);
+    }
+    for (const hazard of object.hazards||[]) { const li=document.createElement('li'); li.textContent=`Hazard: ${hazard}`; ui.resources.append(li); }
+    for (const resource of object.resources||[]) { const li=document.createElement('li'); li.textContent=resource; ui.resources.append(li); }
+  }
+"""
+          solar = replace_between(solar, "  function inspect(object) {", "  function select(id) {", new_inspect)
+
+          solar = replace_between(solar, "  function select(id) {", "  function drawOrbits() {", r"""  function select(id) {
+    const object=objectById(id); if (!object) return;
+    for (const [key,visual] of visuals) visual.group.classList.toggle('exo-selected',key===id);
+    document.querySelectorAll('#exo-orbital-table-body tr').forEach(row=>row.setAttribute('aria-selected',String(row.dataset.objectId===id)));
+    inspect(object);
+  }
+""")
+
+          new_draw = r"""  function drawOrbits() {
+    visuals=new Map(); ui.background.replaceChildren(); ui.objects.replaceChildren(); ui.empty.hidden=true;
+    const distances=[...system.planets.map(p=>p.distance),...system.belts.map(b=>b.distance),system.star.hzInner,system.star.hzOuter], min=Math.min(...distances), max=Math.max(...distances);
+    const hz1=orbitRadius(system.star.hzInner,min,max),hz2=orbitRadius(system.star.hzOuter,min,max),hz=(hz1+hz2)/2;
+    ui.background.append(svg('ellipse',{cx:500,cy:500,rx:hz,ry:hz*.72,class:'exo-habitable-zone','stroke-width':Math.max(12,hz2-hz1)}));
+    for (const belt of system.belts) {
+      const r=orbitRadius(belt.distance,min,max);
+      ui.background.append(svg('ellipse',{cx:500,cy:500,rx:r,ry:r*.72,class:'exo-belt-path'}));
+      const group=svg('g',{class:'exo-belt-target',tabindex:'0',role:'button','aria-label':`Select ${belt.name}`});
+      group.append(svg('ellipse',{cx:500,cy:500,rx:r,ry:r*.72,class:'exo-belt-hit'}),svg('ellipse',{cx:500,cy:500,rx:r,ry:r*.72,class:'exo-belt-selection'}));
+      const label=svg('text',{x:500+r,y:495,class:'exo-object-label'}); label.textContent=belt.orbit; group.append(label);
+      group.addEventListener('click',()=>select(belt.id)); group.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();select(belt.id);}});
+      ui.objects.append(group); visuals.set(belt.id,{kind:'belt',group});
+    }
+    for (const planet of system.planets) {
+      const r=orbitRadius(planet.distance,min,max); ui.background.append(svg('ellipse',{cx:500,cy:500,rx:r,ry:r*.72,class:'exo-orbit-path'}));
+      const carrier=svg('g',{class:'exo-planet-carrier'});
+      const group=svg('g',{class:'exo-planet-target',tabindex:'0',role:'button','aria-label':`Select ${planet.name}`}), size=planet.type==='Gas giant'?15:planet.type==='Ice giant'?12:planet.type==='Mini-Neptune'?10:planet.type==='Dwarf'?5:Math.max(6,Math.min(10,planet.radius*3.4));
+      group.append(svg('circle',{r:size+7,class:'exo-selection-ring'}),svg('circle',{r:size,fill:planet.color,class:'exo-planet-body'})); const label=svg('text',{x:size+10,y:5,class:'exo-object-label'}); label.textContent=ROMAN[planet.orbit-1]; group.append(label);
+      group.addEventListener('click',event=>{event.stopPropagation();select(planet.id);}); group.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();select(planet.id);}}); carrier.append(group); visuals.set(planet.id,{kind:'planet',group,carrier,radius:r,period:planet.periodDays,phase:planet.phase});
+      planet.moons.forEach((moon,index)=>{
+        const moonOrbit=24+Math.min(index,12)*5+Math.floor(index/13)*3;
+        carrier.prepend(svg('ellipse',{cx:0,cy:0,rx:moonOrbit,ry:moonOrbit*.66,class:'exo-moon-orbit'}));
+        const moonGroup=svg('g',{class:'exo-moon-target',tabindex:'0',role:'button','aria-label':`Select ${moon.name}`});
+        const moonSize=Math.max(2.2,Math.min(4.8,moon.radius*8));
+        moonGroup.append(svg('circle',{r:moonSize+4,class:'exo-selection-ring'}),svg('circle',{r:moonSize,fill:moon.color,class:'exo-moon-body'}));
+        moonGroup.addEventListener('click',event=>{event.stopPropagation();select(moon.id);}); moonGroup.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();select(moon.id);}});
+        carrier.append(moonGroup); visuals.set(moon.id,{kind:'moon',group:moonGroup,radius:moonOrbit,period:moon.periodDays,phase:moon.phase,parentId:planet.id});
+      });
+      ui.objects.append(carrier);
+    }
+    const star=svg('g',{class:'exo-star-target',tabindex:'0',role:'button','aria-label':`Select star ${system.star.name}`}); star.append(svg('circle',{cx:500,cy:500,r:66,class:'exo-star-halo'}),svg('circle',{cx:500,cy:500,r:31,fill:system.star.color,class:'exo-star-core'}),svg('circle',{cx:500,cy:500,r:44,class:'exo-selection-ring'})); star.addEventListener('click',()=>select('star')); star.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();select('star');}}); ui.objects.append(star); visuals.set('star',{kind:'star',group:star});
+  }
+"""
+          solar = replace_between(solar, "  function drawOrbits() {", "  function renderTable() {", new_draw)
+
+          new_table = r"""  function renderTable() {
+    ui.table.replaceChildren();
+    const appendRow=(object,cells)=>{const row=document.createElement('tr');row.dataset.objectId=object.id;row.setAttribute('aria-selected','false');row.innerHTML=cells;row.querySelector('button').addEventListener('click',()=>select(object.id));row.addEventListener('click',event=>{if(event.target.tagName!=='BUTTON')select(object.id);});ui.table.append(row);};
+    for (const planet of system.planets) {
+      const level=planet.habitability>=65?'high':planet.habitability>=35?'medium':'low';
+      appendRow(planet,`<td>${planet.orbit}</td><td><button type="button">${planet.name}</button></td><td>${planet.type}</td><td>${planet.distance} AU</td><td>${period(planet.periodDays)}</td><td>${planet.moons.length}</td><td><span class="exo-habitability ${level}">${planet.habitability}%</span></td>`);
+      for(const moon of planet.moons){const moonLevel=moon.habitability>=65?'high':moon.habitability>=35?'medium':'low';appendRow(moon,`<td>${moon.orbit}</td><td><button type="button">↳ ${moon.name}</button></td><td>${moon.type}</td><td>${moon.orbitalDistanceKm.toLocaleString()} km from ${planet.name}</td><td>${period(moon.periodDays)}</td><td>—</td><td><span class="exo-habitability ${moonLevel}">${moon.habitability}%</span></td>`);}
+    }
+    for(const belt of system.belts) appendRow(belt,`<td>${belt.orbit}</td><td><button type="button">${belt.name}</button></td><td>${belt.type}</td><td>${belt.distance} AU</td><td>${period(belt.periodDays)}</td><td>—</td><td>—</td>`);
+  }
+"""
+          solar = replace_between(solar, "  function renderTable() {", "  function renderProfile() {", new_table)
+
+          solar = solar.replace("  function render() { ui.name.textContent=system.name;", "  function developSelectedWorld() {\n    const world=objectById(selectedObjectId);\n    if(!world||!['planet','moon'].includes(world.kind)||world.habitability<65)return;\n    const context={version:1,systemSeed:system.seed,dossierSeed:`${system.seed}:${world.id}`,systemName:system.name,system,selectedWorld:world,environment:dossierEnvironment(world),savedAt:new Date().toISOString()};\n    localStorage.setItem(HANDOFF_KEY,JSON.stringify(context));\n    const params=new URLSearchParams({source:'solar',systemSeed:system.seed,worldId:world.id,seed:context.dossierSeed});\n    window.location.href=`blacklight-exo-species-civilization.html?${params.toString()}`;\n  }\n\n  function render() { ui.name.textContent=system.name;", 1)
+          solar = solar.replace("controls.export.addEventListener('click',exportJson); controls.seed", "controls.export.addEventListener('click',exportJson); if(ui.develop)ui.develop.addEventListener('click',developSelectedWorld); controls.seed", 1)
+          old_animate = "for(const [id,visual] of visuals){if(id==='star')continue;const angle=visual.phase+days/visual.period*Math.PI*2,x=500+Math.cos(angle)*visual.radius,y=500+Math.sin(angle)*visual.radius*.72;visual.group.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)})`);}"
+          new_animate = "for(const [id,visual] of visuals){if(visual.kind==='planet'){const angle=visual.phase+days/visual.period*Math.PI*2,x=500+Math.cos(angle)*visual.radius,y=500+Math.sin(angle)*visual.radius*.72;visual.carrier.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)})`);}else if(visual.kind==='moon'){const angle=visual.phase+days/visual.period*Math.PI*2,x=Math.cos(angle)*visual.radius,y=Math.sin(angle)*visual.radius*.66;visual.group.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)})`);}}"
+          assert old_animate in solar
+          solar = solar.replace(old_animate,new_animate,1)
+          solar_path.write_text(solar)
+
+          solar_html_path=Path('blacklight-exo-solar-system.html')
+          solar_html=solar_html_path.read_text()
+          old="""        <section class="exo-inspector-section">
+          <h3>Resource and operational notes</h3>
+          <ul id="exo-inspector-resources"></ul>
+        </section>"""
+          new="""        <section class="exo-inspector-section">
+          <h3>Resource and operational notes</h3>
+          <ul id="exo-inspector-resources"></ul>
+        </section>
+        <div class="exo-inspector-actions">
+          <button id="exo-develop-world" class="bli-action primary" type="button" hidden>Develop Selected World in System Dossier</button>
+          <p>Available for planets and moons meeting the EXO habitability threshold. The physical system and selected world are preserved during handoff.</p>
+        </div>"""
+          assert old in solar_html
+          solar_html=solar_html.replace(old,new,1)
+          solar_html=solar_html.replace('A selectable accelerated projection of the generated star, planets, and debris belts.','A selectable accelerated projection of the generated star, planets, moons, and debris belts.',1)
+          solar_html_path.write_text(solar_html)
+
+          solar_css_path=Path('blacklight-exo-solar-system.css')
+          solar_css=solar_css_path.read_text()
+          solar_css += ".exo-moon-orbit{fill:none;stroke:rgba(120,177,191,.24);stroke-width:.8}.exo-moon-target,.exo-belt-target{cursor:pointer;outline:none}.exo-moon-body{stroke:rgba(255,255,255,.68);stroke-width:1}.exo-belt-hit{fill:none;stroke:transparent;stroke-width:18}.exo-belt-selection{fill:none;stroke:#f0bd58;stroke-width:4;stroke-dasharray:8 7;opacity:0;pointer-events:none}.exo-selected .exo-belt-selection{opacity:1}.exo-moon-target:focus-visible .exo-selection-ring,.exo-belt-target:focus-visible .exo-belt-selection{opacity:1;stroke:#fff}.exo-inspector-actions{display:grid;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(217,168,79,.16)}.exo-inspector-actions button{font:inherit;cursor:pointer}.exo-inspector-actions button[hidden]{display:none}.exo-inspector-actions p{margin:0;color:#9f9789;font-size:.78rem;line-height:1.45}"
+          solar_css_path.write_text(solar_css)
+
+          species_path=Path('blacklight-exo-species-civilization.js')
+          species=species_path.read_text()
+          species=species.replace("hazards: $('exo-operational-hazards')", "hazards: $('exo-operational-hazards'), sourcePanel: $('exo-source-context'), sourceTitle: $('exo-source-title'), sourceBody: $('exo-source-body')",1)
+          species=species.replace("  let dossier = null;", "  const HANDOFF_KEY = 'blacklight-exo-selected-world-v1';\n  let dossier = null;\n  let sourceContext = null;",1)
+          species=species.replace("const activeCivilization=['living','multispecies','occupied'].includes(life);", "const activeCivilization=['living','multispecies','occupied','native'].includes(life);",1)
+
+          source_helpers=r"""  function loadSourceContext() {
+    const params=new URLSearchParams(window.location.search);
+    if(params.get('source')!=='solar')return null;
+    try{
+      const stored=JSON.parse(localStorage.getItem(HANDOFF_KEY)||'null');
+      if(!stored||stored.version!==1||!stored.system||!stored.selectedWorld)return null;
+      if(params.get('systemSeed')&&params.get('systemSeed')!==stored.systemSeed)return null;
+      if(params.get('worldId')&&params.get('worldId')!==stored.selectedWorld.id)return null;
+      return stored;
+    }catch(error){console.warn('Unable to load EXO solar handoff.',error);return null;}
+  }
+  function sourceWorlds(context,state,development,rng) {
+    const physical=[...context.system.planets,...context.system.planets.flatMap(planet=>planet.moons||[])];
+    const occupiedTarget=state.key==='hub'?Math.max(3,Math.round(physical.length*.78)):state.key==='settled'||state.key==='contested'?Math.max(2,Math.round(physical.length*.52)):state.key==='extraction'?Math.max(1,Math.round(physical.length*.38)):state.key==='survey'?Math.max(1,Math.round(physical.length*.18)):state.key==='abandoned'||state.key==='ruin'||state.key==='sterilized'?Math.max(1,Math.round(physical.length*.48)):0;
+    return physical.map((body,index)=>{
+      let role='unoccupied reserve';
+      if(body.id===context.selectedWorld.id){
+        if(['abandoned','ruin','sterilized'].includes(state.key))role='archaeological ruin world';
+        else if(['hub','settled','contested'].includes(state.key))role='administrative capital';
+        else if(state.key==='extraction')role='active extraction world';
+        else role='automated survey site';
+      }else if(index<occupiedTarget){
+        if(['abandoned','ruin','sterilized'].includes(state.key))role=pick(rng,['archaeological ruin world','abandoned colony','quarantine world']);
+        else if(state.key==='hub')role=pick(rng,['dense inhabited world','industrial processing world','agricultural colony','military fortress world']);
+        else role=pick(rng,WORLD_ROLES.slice(1,9));
+      }else if(development>5&&rng()<.25)role='automated survey site';
+      const status=role.includes('ruin')||role.includes('abandoned')?'nonfunctional remains':role.includes('quarantine')?'sealed and restricted':role==='unoccupied reserve'?'no permanent presence':'active';
+      const population=role.includes('inhabited')||role.includes('capital')?integer(rng,1000000,9000000000):role.includes('colony')||role.includes('industrial')?integer(rng,10000,90000000):0;
+      return {name:body.name,type:body.type,role,status,population,resources:[...(body.resources||[])],sourceObjectId:body.id,habitability:body.habitability||0,physical:{kind:body.kind,parentName:body.parentName||null,distance:body.distance||null,orbitalDistanceKm:body.orbitalDistanceKm||null,gravity:body.gravity||null,temperature:body.temperature||null,atmosphere:body.atmosphere||null,biosphere:body.biosphere||null,civilization:body.civilization||null}};
+    });
+  }
+"""
+          species=species.replace("  function weightedState(rng) {", source_helpers+"\n  function weightedState(rng) {",1)
+          species=species.replace("    const name=`${pick(rng,PREFIX)}${pick(rng,SUFFIX)}`;", "    const name=sourceContext?.system?.name||`${pick(rng,PREFIX)}${pick(rng,SUFFIX)}`;",1)
+          species=species.replace("    const environment=controls.environment?.value&&controls.environment.value!=='random'?controls.environment.value:pick(rng,ENVIRONMENTS);", "    const environment=sourceContext?.environment||(controls.environment?.value&&controls.environment.value!=='random'?controls.environment.value:pick(rng,ENVIRONMENTS));",1)
+          species=species.replace("    const worldCount=integer(rng,3,13), beltCount=integer(rng,0,4);", "    const worldCount=sourceContext?sourceContext.system.planets.length+sourceContext.system.planets.reduce((sum,planet)=>sum+(planet.moons?.length||0),0):integer(rng,3,13), beltCount=sourceContext?sourceContext.system.belts.length:integer(rng,0,4);",1)
+          species=species.replace("    const worlds=makeWorlds(rng,state,development,worldCount);", "    const worlds=sourceContext?sourceWorlds(sourceContext,state,development,rng):makeWorlds(rng,state,development,worldCount);",1)
+          species=species.replace("    const system={name,state:state.label", "    const system={name,state:state.label",1)
+          old_system="const system={name,state:state.label,stateKey:state.key,development,life,worldCount,beltCount,occupiedWorlds,extractionSites,population,formerPopulation,economy,worlds,infrastructure,resources,traffic:development>80?'continuous interstellar traffic':development>50?'heavy scheduled traffic':development>20?'limited commercial traffic':development>5?'occasional survey traffic':'none detected'};"
+          new_system="const system={name,state:state.label,stateKey:state.key,development,life,worldCount,beltCount,occupiedWorlds,extractionSites,population,formerPopulation,economy,worlds,infrastructure,resources,traffic:development>80?'continuous interstellar traffic':development>50?'heavy scheduled traffic':development>20?'limited commercial traffic':development>5?'occasional survey traffic':'none detected',sourceSystemSeed:sourceContext?.systemSeed||null,selectedWorld:sourceContext?.selectedWorld||null,physicalSystem:sourceContext?.system||null};"
+          assert old_system in species
+          species=species.replace(old_system,new_system,1)
+          species=species.replace("const dossier={version:1,seed,generatedAt:new Date().toISOString(),system,species,civilization,collapse,tech,reach};", "const dossier={version:2,seed,generatedAt:new Date().toISOString(),system,species,civilization,collapse,tech,reach,source:sourceContext?{type:'solar-system-handoff',systemSeed:sourceContext.systemSeed,worldId:sourceContext.selectedWorld.id,worldName:sourceContext.selectedWorld.name}:null};",1)
+          species=species.replace("    const {system,species,civilization,collapse}=dossier;", "    const {system,species,civilization,collapse}=dossier;\n    if(ui.sourcePanel){ui.sourcePanel.hidden=!sourceContext;if(sourceContext){ui.sourceTitle.textContent=`Physical source: ${sourceContext.system.name} · ${sourceContext.selectedWorld.name}`;ui.sourceBody.textContent=`This dossier preserves the selected ${sourceContext.selectedWorld.kind}, its ${sourceContext.selectedWorld.habitability}% habitability rating, physical environment, parent system seed ${sourceContext.systemSeed}, moons, belts, and resource records.`;}}",1)
+          species=species.replace("addData('Traffic',system.traffic);", "addData('Traffic',system.traffic); if(system.selectedWorld)addData('Selected homeworld',system.selectedWorld.name);",1)
+          old_bottom="  controls.generate.addEventListener('click',generate);controls.export.addEventListener('click',exportJson);controls.seed.addEventListener('keydown',event=>{if(event.key==='Enter')generate();});\n  generate();"
+          new_bottom="  controls.generate.addEventListener('click',generate);controls.export.addEventListener('click',exportJson);controls.seed.addEventListener('keydown',event=>{if(event.key==='Enter')generate();});\n  sourceContext=loadSourceContext();\n  if(sourceContext){controls.seed.value=new URLSearchParams(window.location.search).get('seed')||sourceContext.dossierSeed;controls.environment.value=sourceContext.environment;const hasCivilization=!String(sourceContext.selectedWorld.civilization||'').startsWith('No');const hasBiosphere=!String(sourceContext.selectedWorld.biosphere||'').startsWith('No');controls.state.value=hasCivilization?'settled':'survey';controls.life.value=hasCivilization?'living':hasBiosphere?'native':'native';}\n  generate();"
+          assert old_bottom in species
+          species=species.replace(old_bottom,new_bottom,1)
+          species_path.write_text(species)
+
+          species_html_path=Path('blacklight-exo-species-civilization.html')
+          species_html=species_html_path.read_text()
+          species_html=species_html.replace('<option value="occupied">External occupation</option>','<option value="occupied">External occupation</option><option value="native">Native sapient development</option>',1)
+          insert_after='''    </section>\n\n    <section class="exo-species-overview" aria-label="Generated system and species overview">'''
+          source_section='''    </section>\n\n    <section id="exo-source-context" class="bli-section exo-source-context" hidden>\n      <div class="bli-section-head"><p class="bli-eyebrow">Solar cartography handoff</p><h2 id="exo-source-title">Imported physical system</h2><p id="exo-source-body"></p></div>\n      <div class="bli-actions"><a class="bli-action" href="blacklight-exo-solar-system.html">Return to Solar System Generator</a></div>\n    </section>\n\n    <section class="exo-species-overview" aria-label="Generated system and species overview">'''
+          assert insert_after in species_html
+          species_html=species_html.replace(insert_after,source_section,1)
+          species_html_path.write_text(species_html)
+
+          species_css_path=Path('blacklight-exo-species-civilization.css')
+          species_css=species_css_path.read_text()+".exo-source-context{border-color:rgba(94,171,187,.34);background:linear-gradient(145deg,rgba(16,28,31,.9),rgba(7,9,9,.96))}.exo-source-context[hidden]{display:none}.exo-source-context .bli-section-head p:last-child{max-width:90ch;color:#cfe1e4}"
+          species_css_path.write_text(species_css)
+          PY
+          node --check blacklight-exo-solar-system.js
+          node --check blacklight-exo-species-civilization.js
+          grep -q "function makeMoon" blacklight-exo-solar-system.js
+          grep -q "function makeBelt" blacklight-exo-solar-system.js
+          grep -q "blacklight-exo-selected-world-v1" blacklight-exo-species-civilization.js
+          grep -q "exo-develop-world" blacklight-exo-solar-system.html
+          grep -q "exo-source-context" blacklight-exo-species-civilization.html
+          git rm .github/workflows/complete-exo-orbital-integration.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add blacklight-exo-solar-system.js blacklight-exo-solar-system.html blacklight-exo-solar-system.css blacklight-exo-species-civilization.js blacklight-exo-species-civilization.html blacklight-exo-species-civilization.css
+          git commit -m 'Complete EXO moon belt and world dossier integration [skip ci]'
+          git push
