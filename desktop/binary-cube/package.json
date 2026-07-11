@@ -1,0 +1,51 @@
+{
+  "name": "hb-ttrpg-binary-cube-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline desktop wrapper for the HB TTRPG Binary Cube Encryption Laboratory.",
+  "main": "main.cjs",
+  "author": "Christopher Vardeman",
+  "license": "UNLICENSED",
+  "scripts": {
+    "prepare:app": "node scripts/prepare-app.mjs",
+    "start": "npm run prepare:app && electron .",
+    "test": "node tests/smoke.cjs",
+    "dist": "npm run prepare:app && npm test && electron-builder --publish never"
+  },
+  "devDependencies": {
+    "electron": "41.2.1",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "com.mrcalzon.binarycube",
+    "productName": "Binary Cube Laboratory",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.cjs",
+      "app/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "Binary-Cube-Laboratory-${version}-Windows-${arch}.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Game",
+      "artifactName": "Binary-Cube-Laboratory-${version}-Linux-${arch}.${ext}"
+    }
+  }
+}
