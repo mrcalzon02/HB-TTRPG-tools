@@ -7,6 +7,24 @@
   if (!input || !results) return;
 
   const INDEX_URL = 'search-index.json';
+  const BUILT_IN_ENTRIES = [
+    {
+      id: 'high-fantasy-potion-generator',
+      title: 'Generic High Fantasy Potion Generator',
+      workspace: 'Generators',
+      description: 'Generate complete generic d20-compatible potions with effects, rarity, price, taste, aroma, color, clarity, glow, bottle, seal, label, age, potency, ingredients, maker, provenance, side effects, quirks, appraisal, and counterfeit clues.',
+      keywords: ['high fantasy potion generator', 'D&D potion generator', 'random potion', 'potion taste', 'potion bottle', 'potion color', 'aged potion', 'magic item generator'],
+      url: 'index.html?view=generators&generator=high-fantasy-potions'
+    },
+    {
+      id: 'kaysender-potion-generator',
+      title: 'Kaysender Potion Generator',
+      workspace: 'Generators',
+      description: 'Generate Kaysender formula-first Medicinal, Minor, Medium, Major, Elixir, aged-batch, and standard open-d20 potion and oil records.',
+      keywords: ['Kaysender potion generator', 'medicinal potion formulary', 'potion aging', 'elixir generator', 'open d20 potion table'],
+      url: 'index.html?view=generators&generator=kaysender-potions'
+    }
+  ];
   let entries = [];
 
   function normalize(value) {
@@ -62,7 +80,6 @@
     link.href = entry.url;
     link.textContent = 'Open';
 
-
     article.append(meta, title, description, link);
     return article;
   }
@@ -101,7 +118,9 @@
       const response = await fetch(INDEX_URL, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
       const data = await response.json();
-      entries = Array.isArray(data) ? data : [];
+      const baseEntries = Array.isArray(data) ? data : [];
+      const builtInIds = new Set(BUILT_IN_ENTRIES.map(entry => entry.id));
+      entries = [...baseEntries.filter(entry => !builtInIds.has(entry.id)), ...BUILT_IN_ENTRIES];
       render();
       if (initialQuery) document.getElementById('foundry-search')?.scrollIntoView({ block: 'start' });
       input.addEventListener('input', render);
@@ -111,8 +130,9 @@
         render();
       });
     } catch (error) {
-      results.innerHTML = '<div class="search-empty">The searchable tool directory could not be loaded. Use the workspace cards or site map below.</div>';
-      if (status) status.textContent = error.message;
+      entries = [...BUILT_IN_ENTRIES];
+      render();
+      if (status) status.textContent = `${error.message}. Showing built-in generator entries.`;
     }
   }
 
