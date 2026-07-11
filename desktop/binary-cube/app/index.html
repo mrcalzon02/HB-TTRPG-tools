@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Binary Cube Laboratory</title>
   <link rel="stylesheet" href="vendor/styles.css">
   <link rel="stylesheet" href="desktop.css">
@@ -18,7 +18,7 @@
     <div class="desktop-header-badges" aria-label="Application characteristics">
       <span>Offline</span>
       <span>Local storage</span>
-      <span>Lossless PNG keys</span>
+      <span>Full-depth JSON keys</span>
       <span>1024 × 1024 grids</span>
     </div>
   </header>
@@ -28,9 +28,9 @@
       <div>
         <p class="eyebrow">Desktop edition</p>
         <h2 id="desktop-introduction-title">The same Binary Cube engine, without requiring the website.</h2>
-        <p>This application runs entirely on the local computer. Files, JSON keys, lossless PNG keys, packages, passphrases, and working data are not sent to a server by the application.</p>
+        <p>This application runs entirely on the local computer. Files, JSON keys, packages, passphrases, and working data are not sent to a server by the application.</p>
       </div>
-      <p class="desktop-warning"><strong>Important:</strong> the Binary Cube permutation remains experimental tabletop obfuscation. Authenticated envelopes use standard browser cryptography, but the Binary Cube algorithm itself must not be represented as production-grade encryption. Key images must remain untouched 16-bit PNG files.</p>
+      <p class="desktop-warning"><strong>Important:</strong> the Binary Cube permutation remains experimental tabletop obfuscation. Authenticated envelopes use standard browser cryptography, but the Binary Cube algorithm itself must not be represented as production-grade encryption. Key depth remains exact from 0 through gridSize−1 and is never reduced to an image color channel.</p>
     </section>
 
     <section id="shadowrun" class="desktop-laboratory-host" aria-label="Binary Cube laboratory host"></section>
@@ -42,13 +42,12 @@
 
   <script src="vendor/shadowrun-binary-cube-engine.js"></script>
   <script src="vendor/binary-cube-large-grid-engine.js"></script>
+  <script src="vendor/binary-cube-large-grid-ui.js"></script>
   <script src="vendor/shadowrun-binary-cube-auth.js"></script>
   <script src="vendor/shadowrun-binary-cube-encryption.js"></script>
   <script src="vendor/shadowrun-binary-cube-editor.js"></script>
   <script src="vendor/shadowrun-binary-cube-auth-ui.js"></script>
   <script src="vendor/shadowrun-binary-cube-secure-export.js"></script>
-  <script src="vendor/binary-cube-key-image.js"></script>
-  <script src="vendor/binary-cube-key-image-ui.js"></script>
   <script src="desktop.js"></script>
 </body>
 </html>
