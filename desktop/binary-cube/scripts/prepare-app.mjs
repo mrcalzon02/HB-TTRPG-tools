@@ -10,11 +10,14 @@ const vendorDirectory = path.join(desktopDirectory, 'app', 'vendor');
 const sharedAssets = [
   'styles.css',
   'shadowrun-binary-cube-engine.js',
+  'binary-cube-large-grid-engine.js',
   'shadowrun-binary-cube-auth.js',
   'shadowrun-binary-cube-encryption.js',
   'shadowrun-binary-cube-editor.js',
   'shadowrun-binary-cube-auth-ui.js',
-  'shadowrun-binary-cube-secure-export.js'
+  'shadowrun-binary-cube-secure-export.js',
+  'binary-cube-key-image.js',
+  'binary-cube-key-image-ui.js'
 ];
 
 await mkdir(vendorDirectory, { recursive: true });
