@@ -1,0 +1,106 @@
+name: Integrate high fantasy potion generator
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/integrate-high-fantasy-potions.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Add potion tabs and search entries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          index_path = Path('index.html')
+          text = index_path.read_text(encoding='utf-8')
+          old = '''      <div class="generator-subnav no-print" role="tablist" aria-label="Generator Bench sections">
+                <button id="generator-library-tab" class="generator-tab active" type="button" role="tab" aria-selected="true" aria-controls="generator-library-panel" data-generator-tab="library">Generator Library</button>
+                <button id="potion-formulary-tab" class="generator-tab" type="button" role="tab" aria-selected="false" aria-controls="potion-formulary-panel" data-generator-tab="potion-formulary">Potion Formulary</button>
+              </div>
+              <div id="generator-library-panel" class="generator-panel" role="tabpanel" aria-labelledby="generator-library-tab" data-generator-panel="library">
+                <div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div>
+              </div>
+              <div id="potion-formulary-panel" class="generator-panel" role="tabpanel" aria-labelledby="potion-formulary-tab" data-generator-panel="potion-formulary" hidden>
+                <div id="medicinal-potions-root"><div class="module-empty">Open the Potion Formulary tab to generate Medicinal, Minor, Medium, Major, and Elixir formulas.</div></div>
+              </div>'''
+          new = '''      <div class="generator-subnav no-print" role="tablist" aria-label="Generator Bench sections">
+                <button id="generator-library-tab" class="generator-tab active" type="button" role="tab" aria-selected="true" aria-controls="generator-library-panel" data-generator-tab="library">Generator Library</button>
+                <button id="high-fantasy-potions-tab" class="generator-tab" type="button" role="tab" aria-selected="false" aria-controls="high-fantasy-potions-panel" data-generator-tab="high-fantasy-potions">High Fantasy Potion Generator</button>
+                <button id="potion-formulary-tab" class="generator-tab" type="button" role="tab" aria-selected="false" aria-controls="potion-formulary-panel" data-generator-tab="potion-formulary">Kaysender Potion Generator</button>
+              </div>
+              <div id="generator-library-panel" class="generator-panel" role="tabpanel" aria-labelledby="generator-library-tab" data-generator-panel="library">
+                <div id="kaysender-generators-grid" class="module-grid no-print" data-registry-section="generators"></div>
+              </div>
+              <div id="high-fantasy-potions-panel" class="generator-panel" role="tabpanel" aria-labelledby="high-fantasy-potions-tab" data-generator-panel="high-fantasy-potions" hidden>
+                <div id="high-fantasy-potions-root"><div class="module-empty">Open the High Fantasy Potion Generator tab to create complete generic d20-compatible potion records and assortments.</div></div>
+              </div>
+              <div id="potion-formulary-panel" class="generator-panel" role="tabpanel" aria-labelledby="potion-formulary-tab" data-generator-panel="potion-formulary" hidden>
+                <div id="medicinal-potions-root"><div class="module-empty">Open the Kaysender Potion Generator tab to generate Medicinal, Minor, Medium, Major, Elixir, and standard open-d20 potion formulas.</div></div>
+              </div>'''
+
+          if 'data-generator-tab="high-fantasy-potions"' not in text:
+              if old not in text:
+                  raise SystemExit('Expected Generator Bench markup was not found.')
+              text = text.replace(old, new, 1)
+              index_path.write_text(text, encoding='utf-8')
+
+          search_path = Path('search-index.json')
+          entries = json.loads(search_path.read_text(encoding='utf-8'))
+          ids = {'high-fantasy-potion-generator', 'kaysender-potion-generator'}
+          entries = [entry for entry in entries if entry.get('id') not in ids]
+          additions = [
+              {
+                  'id': 'high-fantasy-potion-generator',
+                  'title': 'Generic High Fantasy Potion Generator',
+                  'workspace': 'Generators',
+                  'description': 'Generate complete generic d20-compatible potions with effects, rarity, price, taste, aroma, color, clarity, glow, bottle, seal, label, age, potency, ingredients, maker, provenance, side effects, quirks, appraisal, and counterfeit clues.',
+                  'keywords': ['high fantasy potion generator', 'D&D potion generator', 'random potion', 'potion taste', 'potion bottle', 'potion color', 'aged potion', 'magic item generator'],
+                  'url': 'index.html?view=generators&generator=high-fantasy-potions'
+              },
+              {
+                  'id': 'kaysender-potion-generator',
+                  'title': 'Kaysender Potion Generator',
+                  'workspace': 'Generators',
+                  'description': 'Generate Kaysender formula-first Medicinal, Minor, Medium, Major, Elixir, aged-batch, and standard open-d20 potion and oil records.',
+                  'keywords': ['Kaysender potion generator', 'medicinal potion formulary', 'potion aging', 'elixir generator', 'open d20 potion table'],
+                  'url': 'index.html?view=generators&generator=kaysender-potions'
+              }
+          ]
+          insert_at = next((i + 1 for i, entry in enumerate(entries) if entry.get('id') == 'generators-workspace'), 0)
+          entries[insert_at:insert_at] = additions
+          search_path.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          workflow = Path('.github/workflows/integrate-high-fantasy-potions.yml')
+          if workflow.exists():
+              workflow.unlink()
+          PY
+
+      - name: Validate generator scripts and JSON
+        run: |
+          node --check high-fantasy-potions.js
+          node --check medicinal-potions-entry.js
+          python -m json.tool search-index.json >/dev/null
+          grep -q 'data-generator-tab="high-fantasy-potions"' index.html
+          grep -q 'Kaysender Potion Generator' index.html
+
+      - name: Commit integrated generator bench
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html search-index.json .github/workflows/integrate-high-fantasy-potions.yml
+          git commit -m "Integrate generic and Kaysender potion generators [skip ci]"
+          git push origin main
