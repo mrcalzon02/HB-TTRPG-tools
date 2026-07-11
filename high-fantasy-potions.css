@@ -1,0 +1,43 @@
+.hf-potion-module{display:grid;gap:18px;padding:18px 0}
+.hf-potion-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:22px;border:1px solid rgba(200,138,53,.38);border-radius:18px;background:linear-gradient(145deg,rgba(26,25,24,.96),rgba(5,5,4,.98))}
+.hf-potion-heading h2{margin:.2rem 0 .5rem}
+.hf-potion-heading p{margin:.3rem 0;color:var(--muted)}
+.hf-potion-controls{display:grid;gap:14px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}
+.hf-potion-control-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.hf-potion-control-grid label{display:grid;gap:7px;color:var(--muted);font-size:.9rem}
+.hf-potion-control-grid label>span{font-weight:700;color:var(--ink)}
+.hf-potion-seed{grid-column:span 2;grid-template-columns:minmax(0,1fr) auto!important}
+.hf-potion-seed>span{grid-column:1/-1}
+.hf-potion-actions{display:flex;flex-wrap:wrap;gap:9px}
+.hf-potion-results{display:grid;gap:18px}
+.hf-potion-card{border:1px solid rgba(200,138,53,.34);border-radius:20px;overflow:hidden;background:linear-gradient(150deg,rgba(21,21,24,.98),rgba(7,7,9,.99));box-shadow:0 18px 48px rgba(0,0,0,.22)}
+.hf-potion-card-header{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:16px;align-items:center;padding:20px;border-bottom:1px solid var(--line);background:radial-gradient(circle at 15% 15%,color-mix(in srgb,var(--potion-liquid) 22%,transparent),transparent 22rem)}
+.hf-potion-card-header h3{margin:.15rem 0 .4rem;font-size:clamp(1.35rem,2.2vw,2rem)}
+.hf-potion-card-header p{margin:.2rem 0;color:var(--muted);line-height:1.55}
+.hf-potion-price{display:grid;justify-items:end;align-self:start}
+.hf-potion-price strong{font-size:1.7rem}
+.hf-potion-price span{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:.76rem}
+.hf-potion-bottle{position:relative;width:58px;height:76px;margin:auto}
+.hf-potion-cork{position:absolute;top:0;left:19px;width:20px;height:15px;border:1px solid rgba(255,255,255,.35);border-radius:4px 4px 2px 2px;background:#6b4b2f;z-index:2}
+.hf-potion-glass{position:absolute;left:6px;bottom:0;width:46px;height:63px;border:2px solid rgba(255,255,255,.44);border-radius:13px 13px 18px 18px;background:rgba(255,255,255,.08);overflow:hidden;box-shadow:inset 7px 0 10px rgba(255,255,255,.08)}
+.hf-potion-liquid{position:absolute;left:2px;right:2px;bottom:2px;height:72%;border-radius:7px 7px 15px 15px;background:linear-gradient(135deg,color-mix(in srgb,var(--potion-liquid) 70%,white),var(--potion-liquid));box-shadow:0 0 18px color-mix(in srgb,var(--potion-liquid) 65%,transparent)}
+.hf-potion-card>.module-meta{padding:12px 20px;border-bottom:1px solid var(--line)}
+.hf-potion-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+.hf-potion-summary>div{display:grid;gap:5px;padding:13px 16px;background:rgba(12,12,15,.98)}
+.hf-potion-summary span{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.hf-potion-summary strong{font-size:.95rem}
+.hf-potion-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line)}
+.hf-potion-detail-grid section{padding:18px;background:rgba(9,9,12,.985)}
+.hf-potion-detail-grid h4{margin:0 0 .75rem;color:var(--accent)}
+.hf-potion-detail-grid p{margin:.42rem 0;color:var(--muted);line-height:1.58}
+.hf-potion-detail-grid strong{color:var(--ink)}
+.hf-potion-card-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 18px;border-top:1px solid var(--line)}
+.hf-potion-card-footer code{color:var(--muted);font-size:.78rem}
+.hf-potion-saved-section{display:grid;gap:12px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02)}
+.hf-potion-shelf{display:grid;gap:9px}
+.hf-potion-shelf article{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.18)}
+.hf-potion-shelf h4,.hf-potion-shelf p{margin:.2rem 0}
+.hf-potion-shelf p,.hf-potion-shelf small{color:var(--muted)}
+.hf-potion-shelf-actions{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:960px){.hf-potion-control-grid,.hf-potion-summary,.hf-potion-detail-grid{grid-template-columns:1fr 1fr}.hf-potion-seed{grid-column:1/-1}}
+@media(max-width:680px){.hf-potion-heading,.hf-potion-card-header,.hf-potion-shelf article{display:grid;grid-template-columns:1fr}.hf-potion-control-grid,.hf-potion-summary,.hf-potion-detail-grid{grid-template-columns:1fr}.hf-potion-seed{grid-template-columns:1fr!important}.hf-potion-price{justify-items:start}.hf-potion-bottle{margin:0}.hf-potion-card-footer{align-items:flex-start;flex-direction:column}}
