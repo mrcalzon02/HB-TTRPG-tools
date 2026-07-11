@@ -4,10 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Recovered Awakening Prophecy Archive | Blacklight Continuum</title>
-  <meta name="description" content="Black-level custody terminal for ordered recovered prophecies concerning the six canonical Awakening triggers and the factions advancing them.">
+  <meta name="description" content="Black-level custody terminal for recovered prophecies concerning the six canonical Awakening triggers and the factions advancing them.">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-awakening-prophecy-generator.css">
+  <style>
+    .event-trigger-label{display:block;margin-top:14px;color:#b3a894;font-size:.69rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+    .event-trigger-label+blockquote{margin-top:7px}
+  </style>
 </head>
 <body class="blacklight-corp-body">
   <header class="bli-topbar no-print">
@@ -20,31 +24,31 @@
       <span class="prophecy-classification">Black clearance · recovered continuity intelligence</span>
       <p class="bli-eyebrow">Blacklight Continuum custody terminal</p>
       <h1 id="prophecy-title">Recovered Awakening Prophecy Archive</h1>
-      <p class="bli-lede">Charles has organized each recovered prophecy into a major overarching augury followed by six ordered fulfillment stages. Every stage contains one Minor Omen and one Major Threshold. The two events are paired, separately prophesied, and separately interpreted.</p>
+      <p class="bli-lede">Each recovered trigger file contains one overarching prophecy and six ordered stages. Every stage contains one Minor Event and one Major Event. Each event has exactly two primary records: an <strong>Event Trigger</strong>, which is the recovered prophecy itself, and an <strong>Event Correspondence</strong>, which is one plausible interpretation of what the prophecy may describe. Minor and Major Events are independently sourced and are not presumed to cause, complete, or explain one another.</p>
       <div class="bli-actions no-print"><a class="bli-action primary" href="#prophecy-controls">Mount a Prophecy File</a><a class="bli-action" href="blacklight-era-campaign.html">Return to Campaign Dossier</a></div>
     </div>
-    <aside class="bli-directory-panel" aria-label="Ordered prophecy file structure">
+    <aside class="bli-directory-panel" aria-label="Recovered prophecy file structure">
       <div class="bli-directory-title">File Structure</div>
       <div class="bli-directory-list" role="list">
         <div class="bli-directory-item" role="listitem"><strong>Overarching prophecy</strong><span class="bli-arrow">1</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Ordered stages</strong><span class="bli-arrow">1–6</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Minor/Major pairs</strong><span class="bli-arrow">6</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Event prophecies</strong><span class="bli-arrow">12</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Readings per event</strong><span class="bli-arrow">3</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Minor events</strong><span class="bli-arrow">6</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Major events</strong><span class="bli-arrow">6</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Readings per event</strong><span class="bli-arrow">5</span></div>
       </div>
     </aside>
   </section>
 
   <main class="prophecy-shell">
     <section class="prophecy-section">
-      <div class="archive-warning"><strong>CHARLES // ARCHIVE NOTICE:</strong> The numbered stages are a progression model, not a promise that events will occur neatly. Later thresholds can create earlier omens, multiple factions can occupy the same prophetic role, and a faction may deliberately imitate one stage to conceal another.</div>
+      <div class="archive-warning"><strong>CHARLES // ARCHIVE NOTICE:</strong> “Event Trigger” means the recovered prophetic language. “Event Correspondence” means one plausible field interpretation of that language. Correspondence is not certainty. The Minor and Major Events filed under a stage are separate records and may occur in different places, involve different factions, or have no direct causal relationship.</div>
     </section>
 
     <section id="prophecy-controls" class="prophecy-section">
       <div class="prophecy-card no-print">
         <p class="bli-eyebrow">Black archive retrieval parameters</p>
         <h2>Mount an ordered prophecy file.</h2>
-        <p class="prophecy-meta">Select the canonical Awakening trigger and the faction Charles suspects is advancing it. A repeated reconstruction key returns the same source, overarching augury, and ordered Stage 1–6 packet.</p>
+        <p class="prophecy-meta">Select the canonical Awakening trigger and the faction Charles suspects is advancing it. A repeated reconstruction key returns the same source, overarching augury, six Minor Event records, and six independently assigned Major Event records.</p>
         <div class="prophecy-controls">
           <label>Awakening trigger
             <select id="prophecy-trigger">
@@ -88,7 +92,7 @@
               <option value="random">Use the posture attached to the file</option>
               <option value="Veiled">Veiled · identities and timing disputed</option>
               <option value="Balanced">Balanced · mechanism probable</option>
-              <option value="Direct">Direct · operational thresholds assigned</option>
+              <option value="Direct">Direct · operational readings assigned</option>
             </select>
           </label>
           <label>Continuity reconstruction key
@@ -103,11 +107,12 @@
         </div>
         <p id="prophecy-status" class="prophecy-status" role="status">No ordered prophecy file is currently mounted.</p>
       </div>
-      <div id="prophecy-output" class="prophecy-output" aria-live="polite"><div class="empty-prophecy"><strong>ARCHIVE STATE:</strong> No recovered prophecy is mounted. Generate a file to retrieve the overarching augury and its six ordered Minor Omen / Major Threshold pairs.</div></div>
+      <div id="prophecy-output" class="prophecy-output" aria-live="polite"><div class="empty-prophecy"><strong>ARCHIVE STATE:</strong> No recovered prophecy is mounted. Generate a file to retrieve the overarching augury and its twelve Event Trigger / Event Correspondence records.</div></div>
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Recovered Awakening prophecies · Six ordered fulfillment pairs · Charles continuity analysis.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Recovered Awakening prophecies · Twelve independent event records · Charles continuity analysis.</footer>
   <script src="blacklight-awakening-prophecy-generator.js"></script>
+  <script src="blacklight-awakening-prophecy-semantics.js"></script>
 </body>
 </html>
