@@ -20,7 +20,7 @@
 
     const note = select.closest('.cube-lab-field')?.querySelector('small');
     if (note) {
-      note.textContent = `Grid sizes extend through ${engine.constants.MAX_GRID_SIZE} × ${engine.constants.MAX_GRID_SIZE}. Every key retains an exact depth permutation spanning 0 through gridSize−1; large grids require substantially more memory and processing time.`;
+      note.textContent = `Grid sizes extend through ${engine.constants.MAX_GRID_SIZE} × ${engine.constants.MAX_GRID_SIZE}. Every key retains the complete depth domain from 0 through gridSize−1 and must remain collision-free on all six face projections; large grids require substantially more memory and processing time.`;
     }
   }
 
@@ -53,7 +53,7 @@
     const notice = document.createElement('p');
     notice.className = 'cube-lab-warning';
     notice.dataset.cubeDepthInvariant = 'true';
-    notice.innerHTML = '<strong>Depth-domain invariant:</strong> an N-sized key uses every integer depth from 0 through N−1 exactly once in its depth permutation. Depth is never reduced to an image channel, rounded, bucketed, or approximated.';
+    notice.innerHTML = '<strong>Omnidirectional non-confliction invariant:</strong> an N-sized key uses every integer depth from 0 through N−1 exactly once in its depth permutation, while complete row and column permutations keep XY, XZ, and YZ projections bijective. Top, bottom, front, back, left, and right must each contain every point exactly once.';
     warning.insertAdjacentElement('afterend', notice);
   }
 
