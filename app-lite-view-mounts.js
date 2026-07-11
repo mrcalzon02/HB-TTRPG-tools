@@ -37,6 +37,10 @@
     prepareView
   });
 
+  void loadScript('binary-cube-desktop-link.js').catch(error => {
+    console.error('Binary Cube desktop download links could not be loaded.', error);
+  });
+
   void loadScript('shadowrun-binary-cube-secure-export.js').catch(error => {
     console.error('Binary Cube secure export controls could not be loaded.', error);
   });
