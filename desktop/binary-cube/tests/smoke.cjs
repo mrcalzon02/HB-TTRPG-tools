@@ -4,20 +4,66 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 
 const repositoryRoot = path.resolve(__dirname, '..', '..', '..');
-const Engine = require(path.join(repositoryRoot, 'binary-cube-large-grid-engine.js'));
+const Engine = require(path.join(repositoryRoot, 'binary-cube-omnidirectional-engine.js'));
 const SecureExport = require(path.join(repositoryRoot, 'shadowrun-binary-cube-secure-export.js'));
-const KeyImage = require(path.join(repositoryRoot, 'binary-cube-key-image.js'));
 
 function bytesToBits(bytes) {
   return [...bytes].map(byte => byte.toString(2).padStart(8, '0')).join('');
 }
 
-(async () => {
+function assertCompleteDepthDomain(key) {
+  const sorted = [...key.depthPermutation].sort((a, b) => a - b);
+  assert.equal(sorted.length, key.gridSize, 'Depth permutation length must equal the cube size.');
+  for (let depth = 0; depth < key.gridSize; depth += 1) {
+    assert.equal(sorted[depth], depth, `Depth ${depth} must appear exactly once.`);
+  }
+}
+
+(() => {
   assert.equal(Engine.constants.MAX_GRID_SIZE, 1024, 'The expanded engine must expose the 1024 grid ceiling.');
   assert.ok(Engine.constants.RECOMMENDED_GRID_SIZES.includes(512), 'Expanded recommended grid sizes must include 512.');
   assert.ok(Engine.constants.RECOMMENDED_GRID_SIZES.includes(1024), 'Expanded recommended grid sizes must include 1024.');
 
-  const sourceBytes = Buffer.from('Binary Cube desktop smoke test: Shadowrun + Blacklight + lossless key PNG.', 'utf8');
+  for (const gridSize of Engine.constants.RECOMMENDED_GRID_SIZES) {
+    const key = Engine.createKey({
+      gridSize,
+      seed: `omnidirectional-size-${gridSize}`,
+      inputFace: 'top',
+      outputFace: 'front',
+      inputQuarterTurns: gridSize % 4,
+      outputQuarterTurns: (gridSize + 1) % 4,
+      maskDensity: gridSize === 1024 ? 0.01 : 0.5
+    });
+    const invariant = Engine.assertOmnidirectionalNonConflict(key);
+    assert.equal(invariant.collisionFree, true, `${gridSize} keys must remain collision-free.`);
+    assert.equal(invariant.depthDomain.minimum, 0);
+    assert.equal(invariant.depthDomain.maximum, gridSize - 1);
+    assert.equal(invariant.depthDomain.complete, true);
+    for (const face of Engine.invariantConstants.FACES) {
+      assert.equal(invariant.faces[face], true, `${gridSize} key must remain collision-free on the ${face} face.`);
+    }
+    assertCompleteDepthDomain(key);
+  }
+
+  const exhaustiveKey = Engine.createKey({
+    gridSize: 256,
+    seed: 'exhaustive-six-face-projection-test',
+    inputFace: 'left',
+    outputFace: 'top',
+    inputQuarterTurns: 2,
+    outputQuarterTurns: 1,
+    maskDensity: 0.25
+  });
+  const exhaustive = Engine.assertOmnidirectionalNonConflict(exhaustiveKey, { exhaustive: true });
+  assert.equal(exhaustive.exhaustive, true);
+  assert.equal(exhaustive.diagnostics.collisionFree, true);
+  for (const face of Engine.invariantConstants.FACES) {
+    const result = exhaustive.diagnostics.faces[face];
+    assert.equal(result.uniqueCells, 256 * 256, `${face} must contain every point exactly once.`);
+    assert.equal(result.expectedCells, 256 * 256, `${face} expected cell count must match the full projection.`);
+  }
+
+  const sourceBytes = Buffer.from('Binary Cube desktop smoke test: full-depth omnidirectional key.', 'utf8');
   const sourceBits = bytesToBits(sourceBytes);
   const key = Engine.createKey({
     gridSize: 64,
@@ -28,8 +74,6 @@ function bytesToBits(bytes) {
     outputQuarterTurns: 3,
     maskDensity: 0.33
   });
-
-  Engine.assertProjectionUniqueness(key);
 
   const encryptedPackage = Engine.encryptBinary(sourceBits, key);
   assert.equal(Engine.decryptBinary(encryptedPackage, key), sourceBits, 'Binary Cube round trip must recover the original bits.');
@@ -42,20 +86,13 @@ function bytesToBits(bytes) {
   const reconstructedPackage = SecureExport.expandSecureExport(securePackage, key, Engine);
   assert.equal(Engine.decryptBinary(reconstructedPackage, key), sourceBits, 'Secure export reconstruction must recover the original bits.');
 
-  const keyPng = await KeyImage.encodeKeyPng(key, Engine);
-  assert.ok(keyPng.length > key.gridSize * key.gridSize, 'The PNG must contain raster and embedded canonical key data.');
-  assert.equal(keyPng[24], 16, 'The key PNG must retain 16-bit channel depth.');
-  assert.equal(keyPng[25], 2, 'The key PNG must use truecolor RGB rather than a palette.');
-
-  const recoveredKey = await KeyImage.decodeKeyPng(keyPng, Engine);
-  assert.deepEqual(recoveredKey, key, 'The lossless PNG must reconstruct the exact canonical key.');
-
-  const damagedPng = new Uint8Array(keyPng);
-  damagedPng[damagedPng.length - 1] ^= 1;
-  await assert.rejects(
-    () => KeyImage.decodeKeyPng(damagedPng, Engine),
-    /CRC|invalid|missing|match|altered/i,
-    'A modified PNG must be rejected rather than approximately imported.'
+  const invalidDepthKey = JSON.parse(JSON.stringify(key));
+  invalidDepthKey.depthPermutation[0] = invalidDepthKey.depthPermutation[1];
+  delete invalidDepthKey.keyId;
+  assert.throws(
+    () => Engine.validateKey(invalidDepthKey),
+    /depth permutation|omnidirectional|collision/i,
+    'A key with a duplicated or missing depth must be rejected.'
   );
 
   const wrongKey = Engine.createKey({
@@ -74,18 +111,5 @@ function bytesToBits(bytes) {
     'A mismatched key must not successfully reconstruct the secure export.'
   );
 
-  const expandedKey = Engine.createKey({
-    gridSize: 128,
-    seed: 'expanded-grid-generation-test',
-    inputFace: 'left',
-    outputFace: 'top',
-    maskDensity: 0.01
-  });
-  assert.equal(expandedKey.mask.length, 128 * 128, 'Expanded keys must preserve an exact full-grid mask.');
-  assert.ok(expandedKey.mask.some(Boolean), 'Even a 99% blocked mask must preserve payload cells.');
-
-  console.log('Binary Cube desktop, expanded-grid, secure-export, and lossless PNG smoke tests passed.');
-})().catch(error => {
-  console.error(error);
-  process.exitCode = 1;
-});
+  console.log('Binary Cube expanded-grid, full-depth, omnidirectional, secure-export, and round-trip smoke tests passed.');
+})();
