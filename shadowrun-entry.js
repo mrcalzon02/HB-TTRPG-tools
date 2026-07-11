@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260709-1';
+  const ASSET_VERSION = '20260711-2';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -23,7 +23,7 @@
     ['campaign','Campaign Clocks and Consequence Dashboard','Track corporate retaliation, police heat, gang hostility, contact strain, media exposure, magical fallout, and team debt.'],
     ['reference','Edition and House-Rule Profile','Record selected edition, terminology, dice assumptions, Matrix model, magic options, availability rules, and house conversions.'],
     ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.'],
-    ['tools','Binary Cube Encryption Laboratory','Develop and test a binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype','Open Laboratory'],
+    ['tools','Binary Cube Encryption Laboratory','Develop and test a full-depth, omnidirectionally collision-free binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype','Open Laboratory'],
     ['tools','Polyaminal Fold Ladder Compression Research','Investigate recursive anchor/swing folding, stage-gated codecs, deterministic binary packing, measurable compression behavior, and eventual handoff into the Binary Cube pipeline.',null,'research']
   ];
 
@@ -118,13 +118,24 @@
     return promise;
   }
 
+  function canonicalCubeEngineReady() {
+    return Boolean(
+      window.ShadowrunBinaryCubeEngine
+      && window.ShadowrunBinaryCubeEngine.constants?.MAX_GRID_SIZE === 1024
+      && typeof window.ShadowrunBinaryCubeEngine.assertOmnidirectionalNonConflict === 'function'
+    );
+  }
+
   function loadCubeTool() {
-    if (window.ShadowrunBinaryCubeEngine && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) {
+    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) {
       return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
     }
     if (cubeToolPromise) return cubeToolPromise;
     cubeToolPromise = (async () => {
       await loadScript('shadowrun-binary-cube-engine.js', () => Boolean(window.ShadowrunBinaryCubeEngine));
+      await loadScript('binary-cube-large-grid-engine.js', () => window.ShadowrunBinaryCubeEngine?.constants?.MAX_GRID_SIZE === 1024);
+      await loadScript('binary-cube-omnidirectional-engine.js', canonicalCubeEngineReady);
+      await loadScript('binary-cube-large-grid-ui.js', () => Boolean(window.BinaryCubeLargeGridUI));
       await loadScript('shadowrun-binary-cube-auth.js', () => Boolean(window.ShadowrunBinaryCubeAuth));
       await loadScript('shadowrun-binary-cube-encryption.js', () => Boolean(window.ShadowrunBinaryCubeEncryption));
       await loadScript('shadowrun-binary-cube-editor.js', () => Boolean(window.ShadowrunBinaryCubeEditor));
