@@ -19,6 +19,7 @@
       <span>Offline</span>
       <span>Local storage</span>
       <span>Full-depth JSON keys</span>
+      <span>Six-face collision-free</span>
       <span>1024 × 1024 grids</span>
     </div>
   </header>
@@ -30,7 +31,7 @@
         <h2 id="desktop-introduction-title">The same Binary Cube engine, without requiring the website.</h2>
         <p>This application runs entirely on the local computer. Files, JSON keys, packages, passphrases, and working data are not sent to a server by the application.</p>
       </div>
-      <p class="desktop-warning"><strong>Important:</strong> the Binary Cube permutation remains experimental tabletop obfuscation. Authenticated envelopes use standard browser cryptography, but the Binary Cube algorithm itself must not be represented as production-grade encryption. Key depth remains exact from 0 through gridSize−1 and is never reduced to an image color channel.</p>
+      <p class="desktop-warning"><strong>Important:</strong> the Binary Cube permutation remains experimental tabletop obfuscation. Authenticated envelopes use standard browser cryptography, but the Binary Cube algorithm itself must not be represented as production-grade encryption. Every accepted key retains exact depth values from 0 through gridSize−1 and must remain collision-free from all six cube directions.</p>
     </section>
 
     <section id="shadowrun" class="desktop-laboratory-host" aria-label="Binary Cube laboratory host"></section>
@@ -42,6 +43,7 @@
 
   <script src="vendor/shadowrun-binary-cube-engine.js"></script>
   <script src="vendor/binary-cube-large-grid-engine.js"></script>
+  <script src="vendor/binary-cube-omnidirectional-engine.js"></script>
   <script src="vendor/binary-cube-large-grid-ui.js"></script>
   <script src="vendor/shadowrun-binary-cube-auth.js"></script>
   <script src="vendor/shadowrun-binary-cube-encryption.js"></script>
