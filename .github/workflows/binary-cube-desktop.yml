@@ -1,0 +1,81 @@
+name: Binary Cube Desktop Builds
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'binary-cube-v*'
+    paths:
+      - 'shadowrun-binary-cube-*.js'
+      - 'styles.css'
+      - 'desktop/binary-cube/**'
+      - 'binary-cube-desktop.html'
+      - '.github/workflows/binary-cube-desktop.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: binary-cube-desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            label: Windows portable x64
+            artifact: binary-cube-windows-x64
+          - os: ubuntu-latest
+            label: Linux AppImage x64
+            artifact: binary-cube-linux-x64
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: desktop/binary-cube
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install desktop build dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build and verify desktop package
+        run: npm run dist
+
+      - name: Upload executable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: desktop/binary-cube/dist/*
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Publish tagged desktop release
+    if: startsWith(github.ref, 'refs/tags/binary-cube-v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download native build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: binary-cube-*
+          path: release-files
+          merge-multiple: true
+
+      - name: Publish GitHub release files
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release-files/*
