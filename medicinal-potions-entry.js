@@ -3,6 +3,7 @@
 
   const loaded = new Map();
   let bundlePromise = null;
+  let highFantasyPromise = null;
 
   function loadStyle(href) {
     if (document.querySelector(`link[data-potion-formulary-style="${href}"]`)) return;
@@ -63,6 +64,16 @@
     return bundlePromise;
   }
 
+  function loadHighFantasyBundle() {
+    if (highFantasyPromise) return highFantasyPromise;
+    highFantasyPromise = (async () => {
+      loadStyle('high-fantasy-potions.css');
+      await loadScript('high-fantasy-potions.js');
+      window.HBHighFantasyPotionGenerator?.mount();
+    })();
+    return highFantasyPromise;
+  }
+
   async function activateTab(button) {
     const selected = button.dataset.generatorTab;
     document.querySelectorAll('[data-generator-tab]').forEach(tab => {
@@ -74,13 +85,24 @@
     document.querySelectorAll('[data-generator-panel]').forEach(panel => {
       panel.hidden = panel.dataset.generatorPanel !== selected;
     });
+
+    if (selected === 'high-fantasy-potions') {
+      const root = document.getElementById('high-fantasy-potions-root');
+      if (root && root.dataset.mounted !== 'true') root.innerHTML = '<div class="module-empty">Loading High Fantasy Potion Generator…</div>';
+      try {
+        await loadHighFantasyBundle();
+      } catch (error) {
+        if (root) root.innerHTML = `<div class="module-empty">High Fantasy Potion Generator failed to load: ${String(error.message || error)}</div>`;
+      }
+    }
+
     if (selected === 'potion-formulary') {
       const root = document.getElementById('medicinal-potions-root');
-      if (root) root.innerHTML = '<div class="module-empty">Loading Potion Formulary…</div>';
+      if (root) root.innerHTML = '<div class="module-empty">Loading Kaysender Potion Generator…</div>';
       try {
         await loadBundle();
       } catch (error) {
-        if (root) root.innerHTML = `<div class="module-empty">Potion Formulary failed to load: ${String(error.message || error)}</div>`;
+        if (root) root.innerHTML = `<div class="module-empty">Kaysender Potion Generator failed to load: ${String(error.message || error)}</div>`;
       }
     }
   }
@@ -104,6 +126,14 @@
       next.focus();
       void activateTab(next);
     });
+
+    const requested = new URLSearchParams(location.search).get('generator');
+    const requestedTab = requested === 'high-fantasy-potions'
+      ? tablist.querySelector('[data-generator-tab="high-fantasy-potions"]')
+      : requested === 'kaysender-potions'
+        ? tablist.querySelector('[data-generator-tab="potion-formulary"]')
+        : null;
+    if (requestedTab) requestAnimationFrame(() => requestedTab.click());
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
