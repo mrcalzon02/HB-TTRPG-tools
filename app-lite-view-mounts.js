@@ -38,9 +38,10 @@
   });
 
   void loadScript('binary-cube-large-grid-engine.js')
+    .then(() => loadScript('binary-cube-omnidirectional-engine.js'))
     .then(() => loadScript('binary-cube-large-grid-ui.js'))
     .catch(error => {
-      console.error('Binary Cube large-grid support could not be loaded.', error);
+      console.error('Binary Cube large-grid or omnidirectional invariant support could not be loaded.', error);
     });
 
   void loadScript('binary-cube-desktop-link.js').catch(error => {
