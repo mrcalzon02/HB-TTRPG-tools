@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-exo-species-civilization.css">
+  <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-species-civilization.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-species-body">
@@ -54,11 +55,20 @@
       <div class="exo-species-control-grid">
         <label><span>Generation seed</span><input id="exo-species-seed" type="text" maxlength="80" placeholder="Random seed"></label>
         <label><span>System condition</span><select id="exo-species-system-state"><option value="random">Random condition</option><option value="pristine">Pristine lifeless system</option><option value="resource">Unoccupied resource system</option><option value="survey">Surveyed frontier system</option><option value="extraction">Active extraction system</option><option value="settled">Settled inhabited system</option><option value="hub">Dense interstellar hub system</option><option value="contested">Contested militarized system</option><option value="abandoned">Abandoned system</option><option value="ruin">Extinguished civilization system</option><option value="sterilized">Sterilized dead system</option></select></label>
-        <label><span>Life and occupancy</span><select id="exo-species-life-status"><option value="random">Random life status</option><option value="none">No life</option><option value="microbial">Microbial life only</option><option value="occupied">External occupation</option><option value="living">Living primary civilization</option><option value="multispecies">Multi-species population</option><option value="extinct">Extinct civilization</option><option value="departed">Civilization departed</option></select></label>
+        <label><span>Life and occupancy</span><select id="exo-species-life-status"><option value="random">Random life status</option><option value="none">No life</option><option value="microbial">Microbial life only</option><option value="occupied">External occupation</option><option value="native">Native sapient development</option><option value="living">Living primary civilization</option><option value="multispecies">Multi-species population</option><option value="extinct">Extinct civilization</option><option value="departed">Civilization departed</option></select></label>
         <label><span>Dominant environment</span><select id="exo-species-environment"><option value="random">Random environment</option><option value="temperate terrestrial">Temperate terrestrial</option><option value="global ocean">Global ocean</option><option value="arid desert">Arid or desert</option><option value="icebound cryosphere">Cryogenic or icebound</option><option value="high-gravity terrestrial">High gravity</option><option value="low-gravity archipelago">Low gravity</option><option value="toxic-atmosphere world">Toxic atmosphere</option><option value="gas-giant aerostat ecology">Gas-giant habitat</option><option value="artificial habitat network">Artificial habitat</option></select></label>
         <label><span>Civilization reach</span><select id="exo-species-reach"><option value="random">Random reach</option><option value="world">Single world</option><option value="planetary">Multi-world planetary system</option><option value="system">Full solar system</option><option value="cluster">Local star cluster</option><option value="multi-cluster">Multiple star clusters</option><option value="network">Distributed interstellar network</option></select></label>
         <label><span>Technological maturity</span><select id="exo-species-technology"><option value="random">Random maturity</option><option value="preindustrial">Pre-industrial</option><option value="industrial">Industrial</option><option value="orbital">Orbital-capable</option><option value="system">System-capable</option><option value="interstellar">Interstellar</option><option value="advanced">Advanced interstellar</option><option value="postmaterial">Post-material</option></select></label>
       </div>
+    </section>
+
+    <section id="exo-source-context" class="bli-section exo-source-context" hidden>
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Solar cartography handoff</p>
+        <h2 id="exo-source-title">Imported physical system</h2>
+        <p id="exo-source-body"></p>
+      </div>
+      <div class="bli-actions"><a class="bli-action" href="blacklight-exo-solar-system.html">Return to Solar System Generator</a></div>
     </section>
 
     <section class="exo-species-overview" aria-label="Generated system and species overview">
