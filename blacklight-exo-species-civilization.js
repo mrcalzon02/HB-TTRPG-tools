@@ -88,7 +88,7 @@
     ['Agricultural orbital rings','food production independent of planetary surfaces']
   ];
 
-  const RESOURCES = ['iron-nickel mass','platinum-group metals','rare-earth elements','radioactive isotopes','water ice','ammonia and methane volatiles','deuterium','helium-3','carbon feedstock','silicate construction mass','complex organics','fusion catalyst isotopes'];
+  const RESOURCES = ['stellar hydrogen and helium mass','stellar-wind plasma','iron-nickel mass','metallic asteroid mass','carbonaceous asteroid mass','platinum-group metals','rare-earth elements','radioactive isotopes','water ice','ammonia and methane volatiles','deuterium','helium-3','carbon feedstock','silicate construction mass','complex organics','fusion catalyst isotopes'];
   const WORLD_TYPES = ['barren terrestrial','volcanic world','temperate terrestrial','ocean world','super-Earth','gas giant','ice giant','frozen dwarf','metal-rich airless world','captured rogue planet'];
   const WORLD_ROLES = ['unoccupied reserve','automated survey site','active extraction world','industrial processing world','agricultural colony','dense inhabited world','administrative capital','military fortress world','quarantine world','archaeological ruin world','abandoned colony'];
 
@@ -184,9 +184,10 @@
     const environment=controls.environment?.value&&controls.environment.value!=='random'?controls.environment.value:pick(rng,ENVIRONMENTS);
     const worldCount=integer(rng,3,13), beltCount=integer(rng,0,4);
     const activeCivilization=['living','multispecies','occupied'].includes(life);
-    const extinctCivilization=['extinct','departed'].includes(life)||['abandoned','ruin','sterilized'].includes(state.key);
+    const extinctCivilization=!activeCivilization && (['extinct','departed'].includes(life)||['abandoned','ruin','sterilized'].includes(state.key));
     const species=(activeCivilization||extinctCivilization)?makeSpecies(rng,environment,extinctCivilization&&!activeCivilization):null;
-    const population=activeCivilization?Math.round(number(rng,Math.max(1,state.population[0]),Math.max(2,state.population[1]),0)):0;
+    const populationMin=state.population[1]>0?state.population[0]:1000000, populationMax=state.population[1]>0?state.population[1]:9000000000;
+    const population=activeCivilization?Math.round(number(rng,populationMin,populationMax,0)):0;
     const formerPopulation=extinctCivilization?Math.round(number(rng,1000000,9000000000000,0)):0;
     const worlds=makeWorlds(rng,state,development,worldCount);
     const infrastructure=makeInfrastructure(rng,state,development);
@@ -281,6 +282,7 @@
       ['World occupation',`${system.occupiedWorlds} active worlds`,system.worlds.map(w=>`${w.name}: ${w.role}`).join(' · ')],
       ['Resource geometry',`${system.resources.length} major resource classes`,`${system.beltCount} belts and system-wide planetary deposits define the local extraction economy.`]
     ]);
+    for(const world of system.worlds){ui.systemGrid.append(card(`${world.status} · ${world.type}`,world.name,`${world.role}; ${world.population?formatPopulation(world.population)+' residents; ':''}${world.resources.join(', ')}.`));}
     renderInfrastructure();
     renderCards(ui.resourceGrid,system.resources.map(resource=>['System resource',resource.name,`${resource.abundance} concentration; ${resource.access}.`]));
     renderCards(ui.collapseGrid,collapse?[
