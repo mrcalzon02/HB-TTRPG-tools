@@ -11,13 +11,12 @@ const sharedAssets = [
   'styles.css',
   'shadowrun-binary-cube-engine.js',
   'binary-cube-large-grid-engine.js',
+  'binary-cube-large-grid-ui.js',
   'shadowrun-binary-cube-auth.js',
   'shadowrun-binary-cube-encryption.js',
   'shadowrun-binary-cube-editor.js',
   'shadowrun-binary-cube-auth-ui.js',
-  'shadowrun-binary-cube-secure-export.js',
-  'binary-cube-key-image.js',
-  'binary-cube-key-image-ui.js'
+  'shadowrun-binary-cube-secure-export.js'
 ];
 
 await mkdir(vendorDirectory, { recursive: true });
