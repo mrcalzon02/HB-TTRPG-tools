@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | Solar System Generator</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="blacklight-exo-solar-system.css">
+  <script src="blacklight-exo-solar-system.js" defer></script>
+</head>
+<body class="blacklight-corp-body exo-system-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-exo-operations.html" aria-label="Return to EXO Operations">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>EXO Cartography</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="EXO solar-system navigation">
+      <a href="blacklight-exo-operations.html">EXO Operations</a>
+      <a href="blacklight-systems-black.html">Black Archive</a>
+    </nav>
+  </header>
+
+  <section class="bli-hero exo-system-hero" aria-labelledby="exo-system-title">
+    <div>
+      <p class="bli-eyebrow">Black compartment · Exosolar cartography</p>
+      <h1 id="exo-system-title">Solar System and Orbital Projection Generator.</h1>
+      <p class="bli-lede">Generate a complete random stellar system, run its planets on accelerated orbital rails, and select any object for a detailed planetary or stellar record.</p>
+      <div class="bli-actions exo-system-actions">
+        <button id="exo-generate-system" class="bli-action primary" type="button">Generate Random System</button>
+        <button id="exo-toggle-orbits" class="bli-action" type="button" aria-pressed="false">Pause Projection</button>
+        <button id="exo-export-system" class="bli-action" type="button">Export System JSON</button>
+      </div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Generated system summary">
+      <div class="bli-directory-title">Current System</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Designation</strong><span id="exo-summary-name" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Primary</strong><span id="exo-summary-star" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Planets</strong><span id="exo-summary-planets" class="bli-arrow">0</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Seed</strong><span id="exo-summary-seed" class="bli-arrow">pending</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="bli-shell exo-system-shell">
+    <section class="bli-section exo-control-section" aria-labelledby="exo-control-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Generation controls</p>
+        <h2 id="exo-control-title">Create, replay, and inspect a system.</h2>
+        <p>Enter a seed to reproduce a prior system or leave it blank for a new random designation. The projection uses accelerated orbital time rather than real-world scale.</p>
+      </div>
+      <div class="exo-control-grid">
+        <label>
+          <span>Generation seed</span>
+          <input id="exo-seed-input" type="text" maxlength="80" placeholder="Random seed">
+        </label>
+        <label>
+          <span>Projection speed</span>
+          <select id="exo-speed-select">
+            <option value="1">1 day / second</option>
+            <option value="10">10 days / second</option>
+            <option value="100" selected>100 days / second</option>
+            <option value="1000">1,000 days / second</option>
+            <option value="10000">10,000 days / second</option>
+          </select>
+        </label>
+        <div class="exo-control-readout">
+          <span>Projection epoch</span>
+          <strong id="exo-epoch">Day 0.0</strong>
+        </div>
+        <div class="exo-control-readout">
+          <span>Selection</span>
+          <strong id="exo-selection-name">Primary star</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="exo-system-workspace" aria-label="Orbital display and selected-object information">
+      <article class="exo-orbital-panel">
+        <header class="exo-panel-heading">
+          <div>
+            <p class="bli-eyebrow">On-rails orbital projection</p>
+            <h2 id="exo-orbit-title">Awaiting system generation</h2>
+          </div>
+          <div class="exo-legend" aria-label="Orbital display legend">
+            <span><i class="exo-legend-habitable"></i>Habitable zone</span>
+            <span><i class="exo-legend-orbit"></i>Planet orbit</span>
+            <span><i class="exo-legend-belt"></i>Debris belt</span>
+          </div>
+        </header>
+        <div class="exo-orbit-stage">
+          <svg id="exo-orbit-svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="exo-orbit-svg-title exo-orbit-svg-desc">
+            <title id="exo-orbit-svg-title">Generated solar-system orbital display</title>
+            <desc id="exo-orbit-svg-desc">A selectable accelerated projection of the generated star, planets, and debris belts.</desc>
+            <defs>
+              <radialGradient id="exo-star-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fff7d4" stop-opacity="1"></stop>
+                <stop offset="35%" stop-color="#ffd36b" stop-opacity=".92"></stop>
+                <stop offset="100%" stop-color="#d9a84f" stop-opacity="0"></stop>
+              </radialGradient>
+              <filter id="exo-soft-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="8" result="blur"></feGaussianBlur>
+                <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+              </filter>
+            </defs>
+            <g id="exo-orbit-background"></g>
+            <g id="exo-orbit-objects"></g>
+          </svg>
+          <div id="exo-orbit-empty" class="exo-orbit-empty">Generate a system to initialize the orbital projection.</div>
+        </div>
+        <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Planet radii and star size are enlarged for legibility; orbital periods and relative ordering remain tied to generated system data.</footer>
+      </article>
+
+      <aside id="exo-object-inspector" class="exo-object-inspector" aria-labelledby="exo-inspector-title" aria-live="polite">
+        <p class="bli-eyebrow">Selected record</p>
+        <h2 id="exo-inspector-title">No object selected</h2>
+        <p id="exo-inspector-summary">Generate a system, then select its star or any planet.</p>
+        <div id="exo-inspector-badges" class="exo-object-badges"></div>
+        <dl id="exo-inspector-data" class="exo-inspector-data"></dl>
+        <section class="exo-inspector-section">
+          <h3>Resource and operational notes</h3>
+          <ul id="exo-inspector-resources"></ul>
+        </section>
+      </aside>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-system-index-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Generated system index</p>
+        <h2 id="exo-system-index-title">Orbital bodies and resource profile.</h2>
+        <p>Selecting a row also selects the matching object in the orbital display.</p>
+      </div>
+      <div class="exo-index-layout">
+        <div class="exo-table-wrap">
+          <table class="bli-table exo-orbital-table">
+            <thead><tr><th>Orbit</th><th>Object</th><th>Class</th><th>Distance</th><th>Period</th><th>Moons</th><th>Habitability</th></tr></thead>
+            <tbody id="exo-orbital-table-body"></tbody>
+          </table>
+        </div>
+        <aside class="exo-system-profile">
+          <h3>System resource index</h3>
+          <div id="exo-resource-index" class="exo-resource-grid"></div>
+          <h3>Notable system features</h3>
+          <ul id="exo-system-features"></ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO cartography, orbital projection, and restricted exosolar planning.</footer>
+</body>
+</html>
