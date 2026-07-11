@@ -93,5 +93,19 @@
     [/\bvoices\b/gi,['speaking breaths','borrowed tongues','sounds with intention']]
   ];
 
-
+  function mountSourceDiegeticLayer(){
+    if(document.getElementById('bap-source-diegetic-data'))return;
+    const data=document.createElement('script');
+    data.id='bap-source-diegetic-data';
+    data.src='blacklight-awakening-prophecy-source-diegetic-data.js';
+    data.onload=()=>{
+      if(document.getElementById('bap-source-diegetic-engine'))return;
+      const engine=document.createElement('script');
+      engine.id='bap-source-diegetic-engine';
+      engine.src='blacklight-awakening-prophecy-source-diegetic-engine.js';
+      document.head.appendChild(engine);
+    };
+    document.head.appendChild(data);
+  }
+  mountSourceDiegeticLayer();
 })();
