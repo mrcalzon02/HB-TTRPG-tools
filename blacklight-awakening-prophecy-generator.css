@@ -1,0 +1,40 @@
+.prophecy-shell{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:28px 0 72px}
+.prophecy-section{margin-top:28px}
+.prophecy-card{border:1px solid rgba(217,168,79,.27);border-radius:20px;background:radial-gradient(circle at 90% 8%,rgba(217,168,79,.11),transparent 19rem),linear-gradient(145deg,rgba(26,25,23,.98),rgba(5,5,4,.99));padding:22px;box-shadow:0 20px 55px rgba(0,0,0,.24)}
+.prophecy-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.prophecy-controls label{display:grid;gap:7px;color:#d8cfbf;font-size:.8rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.prophecy-controls select,.prophecy-controls input{width:100%;border:1px solid rgba(217,168,79,.32);border-radius:11px;background:#11110f;color:#f4efe5;padding:11px 12px;font:inherit}
+.prophecy-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.prophecy-button{appearance:none;border:1px solid rgba(217,168,79,.44);border-radius:999px;background:rgba(217,168,79,.08);color:#f4efe5;padding:10px 15px;font:inherit;font-weight:900;cursor:pointer}
+.prophecy-button.primary{background:#d9a84f;color:#17130c;border-color:#d9a84f}
+.prophecy-button:disabled{opacity:.45;cursor:not-allowed}
+.prophecy-status{margin:12px 0 0;color:#bcb2a1;min-height:1.4em}
+.prophecy-output{display:grid;gap:20px;margin-top:20px}
+.prophecy-classification{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(217,168,79,.46);border-radius:999px;padding:6px 10px;color:#f1c66f;background:rgba(217,168,79,.08);font-size:.7rem;font-weight:950;letter-spacing:.11em;text-transform:uppercase}
+.prophecy-card h2,.prophecy-card h3,.prophecy-card h4{color:#f4efe5}
+.prophecy-card h2{margin:.45rem 0 .2rem}
+.prophecy-meta{color:#aaa08e;font-size:.84rem;line-height:1.55}
+.intel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:18px}
+.intel-field{border:1px solid rgba(217,168,79,.15);border-radius:13px;padding:14px;background:rgba(0,0,0,.2)}
+.intel-field span{display:block;color:#aa9f8c;font-size:.68rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+.intel-field p{margin:7px 0 0;color:#e2d9ca;line-height:1.58}
+.prophecy-major{margin-top:18px;border-left:4px solid #d9a84f;border-radius:0 18px 18px 0;padding:20px 22px;background:rgba(217,168,79,.075)}
+.prophecy-major span{display:block;color:#baae99;font-size:.7rem;font-weight:950;letter-spacing:.11em;text-transform:uppercase}
+.prophecy-major blockquote{margin:12px 0 0;color:#f0e7d7;font-size:clamp(1.05rem,2vw,1.28rem);font-style:italic;line-height:1.8;white-space:pre-line}
+.prophecy-translation{margin-top:14px;color:#d1c7b6;line-height:1.68}
+.seal-grid{display:grid;gap:14px;margin-top:20px}
+.seal{position:relative;overflow:hidden;border:1px solid rgba(217,168,79,.18);border-radius:16px;padding:18px;background:rgba(0,0,0,.2)}
+.seal-number{position:absolute;right:12px;top:-20px;color:rgba(217,168,79,.075);font-size:6rem;font-weight:950;line-height:1}
+.seal h3{position:relative;margin:0 0 12px;padding-right:52px}
+.seal-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;position:relative}
+.seal-state{border:1px solid rgba(217,168,79,.14);border-radius:13px;padding:14px;background:rgba(255,255,255,.018)}
+.seal-state span,.interpretation span{display:block;color:#b3a894;font-size:.69rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+.seal-state strong{display:block;margin-top:7px;color:#f1c66f}
+.seal-state p,.interpretation p{margin:7px 0 0;color:#ded5c5;line-height:1.62}
+.interpretation-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px;margin-top:12px}
+.interpretation{border:1px solid rgba(131,157,190,.17);border-radius:13px;padding:13px;background:rgba(57,78,104,.08)}
+.interpretation strong{display:block;margin-top:7px;color:#c8d7e9;font-size:.9rem}
+.seal-rule{margin:11px 0 0;color:#9f9583;font-size:.82rem;line-height:1.5}
+.archive-warning{border-left:4px solid rgba(177,64,64,.85);border-radius:0 15px 15px 0;padding:16px 18px;background:rgba(177,64,64,.08);color:#d8c9bf;line-height:1.65}
+.empty-prophecy{border-left:4px solid rgba(217,168,79,.7);border-radius:0 15px 15px 0;padding:18px;background:rgba(217,168,79,.07);color:#d5ccbc;line-height:1.65}
+@media print{.no-print{display:none!important}.blacklight-corp-body{background:#fff;color:#111}.prophecy-shell{width:100%;padding:0}.prophecy-card,.seal,.seal-state,.prophecy-major,.intel-field,.interpretation{background:#fff;box-shadow:none;border-color:#777}.prophecy-card h2,.prophecy-card h3,.prophecy-card h4,.prophecy-major blockquote,.seal-state p,.prophecy-translation,.intel-field p,.interpretation p{color:#111}}
