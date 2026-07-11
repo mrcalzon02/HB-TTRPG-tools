@@ -71,5 +71,6 @@
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 
+  window.BinaryCubeLargeGridUI = Object.freeze({ enhance, install });
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', install, { once: true }) : install();
 })();
