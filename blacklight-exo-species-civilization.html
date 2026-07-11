@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | Species and Civilization Generator</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="blacklight-exo-species-civilization.css">
+  <script src="blacklight-exo-species-civilization.js" defer></script>
+</head>
+<body class="blacklight-corp-body exo-species-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-exo-operations.html" aria-label="Return to EXO Operations">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>EXO Xenology</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="EXO species navigation">
+      <a href="blacklight-exo-operations.html">EXO Operations</a>
+      <a href="blacklight-exo-solar-system.html">Solar Systems</a>
+      <a href="blacklight-systems-black.html">Black Archive</a>
+    </nav>
+  </header>
+
+  <section class="bli-hero exo-species-hero" aria-labelledby="exo-species-title">
+    <div>
+      <p class="bli-eyebrow">Black compartment · Xenology and civilization analysis</p>
+      <h1 id="exo-species-title">Species and Civilization Generator.</h1>
+      <p class="bli-lede">Generate a complete nonhuman species and the civilization that emerged around it, from biochemistry and anatomy through government, technology, factional pressure, expansion doctrine, and first-contact risk.</p>
+      <div class="bli-actions">
+        <button id="exo-species-generate" class="bli-action primary" type="button">Generate Species and Civilization</button>
+        <button id="exo-species-export" class="bli-action" type="button">Export Dossier JSON</button>
+      </div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Current xenology dossier summary">
+      <div class="bli-directory-title">Current Dossier</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Species</strong><span id="exo-species-summary-name" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Homeworld</strong><span id="exo-species-summary-world" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Government</strong><span id="exo-species-summary-government" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Reach</strong><span id="exo-species-summary-reach" class="bli-arrow">pending</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="bli-shell exo-species-shell">
+    <section class="bli-section exo-species-controls" aria-labelledby="exo-species-control-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Generation parameters</p>
+        <h2 id="exo-species-control-title">Set the environmental and political envelope.</h2>
+        <p>Leave the selectors on random for broad generation, or constrain the civilization to a homeworld environment and level of interstellar reach. Reusing the same seed and options reproduces the same dossier.</p>
+      </div>
+      <div class="exo-species-control-grid">
+        <label><span>Generation seed</span><input id="exo-species-seed" type="text" maxlength="80" placeholder="Random seed"></label>
+        <label><span>Homeworld environment</span><select id="exo-species-environment"><option value="random">Random environment</option><option value="temperate">Temperate terrestrial</option><option value="ocean">Global ocean</option><option value="desert">Arid or desert</option><option value="ice">Cryogenic or icebound</option><option value="high-gravity">High gravity</option><option value="low-gravity">Low gravity</option><option value="toxic">Toxic atmosphere</option><option value="gas-habitat">Gas-giant habitat</option><option value="artificial">Artificial habitat</option></select></label>
+        <label><span>Civilization reach</span><select id="exo-species-reach"><option value="random">Random reach</option><option value="world">Single world</option><option value="planetary">Multi-world planetary system</option><option value="system">Full solar system</option><option value="cluster">Local star cluster</option><option value="multi-cluster">Multiple star clusters</option><option value="network">Distributed interstellar network</option></select></label>
+        <label><span>Technological maturity</span><select id="exo-species-technology"><option value="random">Random maturity</option><option value="preindustrial">Pre-industrial</option><option value="industrial">Industrial</option><option value="orbital">Orbital-capable</option><option value="system">System-capable</option><option value="interstellar">Interstellar</option><option value="advanced">Advanced interstellar</option><option value="postmaterial">Post-material</option></select></label>
+      </div>
+    </section>
+
+    <section class="exo-species-overview" aria-label="Generated species overview">
+      <article class="exo-species-visual-panel">
+        <header><p class="bli-eyebrow">Morphological reconstruction</p><h2 id="exo-species-name">Awaiting generation</h2><p id="exo-species-form-summary">Generate a dossier to create an abstract anatomical reconstruction.</p></header>
+        <svg id="exo-species-glyph" viewBox="0 0 600 440" role="img" aria-label="Abstract generated alien morphology"></svg>
+        <div id="exo-species-badges" class="exo-species-badges"></div>
+      </article>
+      <aside class="exo-species-contact-panel">
+        <p class="bli-eyebrow">EXO contact assessment</p>
+        <h2 id="exo-contact-rating">No assessment</h2>
+        <p id="exo-contact-summary">No species dossier has been generated.</p>
+        <div class="exo-contact-meter"><span id="exo-contact-meter-fill"></span></div>
+        <dl id="exo-contact-data" class="exo-species-data"></dl>
+      </aside>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-biology-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Biological dossier</p><h2 id="exo-biology-title">Body plan, lifecycle, senses, and environmental adaptation.</h2></div>
+      <div id="exo-biology-grid" class="exo-dossier-grid"></div>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-mind-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Cognition and culture</p><h2 id="exo-mind-title">How the species thinks, remembers, communicates, and defines itself.</h2></div>
+      <div id="exo-culture-grid" class="exo-dossier-grid"></div>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-civilization-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Civilization profile</p><h2 id="exo-civilization-title">Government, economy, technology, law, warfare, and territorial reach.</h2></div>
+      <div id="exo-civilization-grid" class="exo-dossier-grid"></div>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-factions-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Internal power map</p><h2 id="exo-factions-title">Major factions, institutional pressure, and political fault lines.</h2></div>
+      <div id="exo-faction-grid" class="exo-faction-grid"></div>
+    </section>
+
+    <section class="bli-section exo-operational-section" aria-labelledby="exo-operational-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Operational interpretation</p><h2 id="exo-operational-title">What EXO teams need to know before entering their territory.</h2></div>
+      <div class="exo-operational-grid">
+        <article><h3>Likely first-contact protocol</h3><ul id="exo-contact-protocol"></ul></article>
+        <article><h3>Primary misunderstandings</h3><ul id="exo-misunderstandings"></ul></article>
+        <article><h3>Strategic opportunities</h3><ul id="exo-opportunities"></ul></article>
+        <article><h3>Operational hazards</h3><ul id="exo-operational-hazards"></ul></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO xenology, civilization analysis, and restricted first-contact planning.</footer>
+</body>
+</html>
