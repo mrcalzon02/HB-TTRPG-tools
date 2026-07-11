@@ -74,6 +74,54 @@
     return highFantasyPromise;
   }
 
+  function ensurePotionTabs() {
+    const tablist = document.querySelector('.generator-subnav');
+    if (!tablist) return null;
+
+    const kaysenderTab = tablist.querySelector('[data-generator-tab="potion-formulary"]');
+    if (kaysenderTab) {
+      kaysenderTab.textContent = 'Kaysender Potion Generator';
+      kaysenderTab.setAttribute('aria-controls', 'potion-formulary-panel');
+    }
+
+    let highFantasyTab = tablist.querySelector('[data-generator-tab="high-fantasy-potions"]');
+    if (!highFantasyTab) {
+      highFantasyTab = document.createElement('button');
+      highFantasyTab.id = 'high-fantasy-potions-tab';
+      highFantasyTab.className = 'generator-tab';
+      highFantasyTab.type = 'button';
+      highFantasyTab.setAttribute('role', 'tab');
+      highFantasyTab.setAttribute('aria-selected', 'false');
+      highFantasyTab.setAttribute('aria-controls', 'high-fantasy-potions-panel');
+      highFantasyTab.dataset.generatorTab = 'high-fantasy-potions';
+      highFantasyTab.tabIndex = -1;
+      highFantasyTab.textContent = 'High Fantasy Potion Generator';
+      tablist.insertBefore(highFantasyTab, kaysenderTab || null);
+    }
+
+    let highFantasyPanel = document.getElementById('high-fantasy-potions-panel');
+    if (!highFantasyPanel) {
+      highFantasyPanel = document.createElement('div');
+      highFantasyPanel.id = 'high-fantasy-potions-panel';
+      highFantasyPanel.className = 'generator-panel';
+      highFantasyPanel.setAttribute('role', 'tabpanel');
+      highFantasyPanel.setAttribute('aria-labelledby', 'high-fantasy-potions-tab');
+      highFantasyPanel.dataset.generatorPanel = 'high-fantasy-potions';
+      highFantasyPanel.hidden = true;
+      highFantasyPanel.innerHTML = '<div id="high-fantasy-potions-root"><div class="module-empty">Open the High Fantasy Potion Generator tab to create complete generic d20-compatible potion records and assortments.</div></div>';
+      const kaysenderPanel = document.getElementById('potion-formulary-panel');
+      if (kaysenderPanel) kaysenderPanel.before(highFantasyPanel);
+      else document.getElementById('generator-library-panel')?.after(highFantasyPanel);
+    }
+
+    const kaysenderRoot = document.getElementById('medicinal-potions-root');
+    if (kaysenderRoot && kaysenderRoot.dataset.mounted !== 'true') {
+      kaysenderRoot.innerHTML = '<div class="module-empty">Open the Kaysender Potion Generator tab to generate Medicinal, Minor, Medium, Major, Elixir, and standard open-d20 potion formulas.</div>';
+    }
+
+    return tablist;
+  }
+
   async function activateTab(button) {
     const selected = button.dataset.generatorTab;
     document.querySelectorAll('[data-generator-tab]').forEach(tab => {
@@ -98,7 +146,7 @@
 
     if (selected === 'potion-formulary') {
       const root = document.getElementById('medicinal-potions-root');
-      if (root) root.innerHTML = '<div class="module-empty">Loading Kaysender Potion Generator…</div>';
+      if (root && root.dataset.mounted !== 'true') root.innerHTML = '<div class="module-empty">Loading Kaysender Potion Generator…</div>';
       try {
         await loadBundle();
       } catch (error) {
@@ -108,7 +156,7 @@
   }
 
   function install() {
-    const tablist = document.querySelector('.generator-subnav');
+    const tablist = ensurePotionTabs();
     if (!tablist || tablist.dataset.potionFormularyInstalled === 'true') return;
     tablist.dataset.potionFormularyInstalled = 'true';
     tablist.addEventListener('click', event => {
