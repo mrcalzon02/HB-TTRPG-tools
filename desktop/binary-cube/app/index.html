@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Binary Cube Laboratory</title>
+  <link rel="stylesheet" href="vendor/styles.css">
+  <link rel="stylesheet" href="desktop.css">
+</head>
+<body class="binary-cube-desktop-body" data-binary-cube-brand="standalone" data-binary-cube-storage-scope="desktop">
+  <header class="desktop-header">
+    <div>
+      <p class="eyebrow">Offline tabletop research utility</p>
+      <h1>Binary Cube Laboratory</h1>
+      <p class="desktop-subtitle">A locally executed copy of the shared Shadowrun and Blacklight Binary Cube workspace.</p>
+    </div>
+    <div class="desktop-header-badges" aria-label="Application characteristics">
+      <span>Offline</span>
+      <span>Local storage</span>
+      <span>Shared engine</span>
+    </div>
+  </header>
+
+  <main class="desktop-shell">
+    <section class="desktop-introduction" aria-labelledby="desktop-introduction-title">
+      <div>
+        <p class="eyebrow">Desktop edition</p>
+        <h2 id="desktop-introduction-title">The same Binary Cube engine, without requiring the website.</h2>
+        <p>This application runs entirely on the local computer. Files, keys, packages, passphrases, and working data are not sent to a server by the application.</p>
+      </div>
+      <p class="desktop-warning"><strong>Important:</strong> the Binary Cube permutation remains experimental tabletop obfuscation. Authenticated envelopes use standard browser cryptography, but the Binary Cube algorithm itself must not be represented as production-grade encryption.</p>
+    </section>
+
+    <section id="shadowrun" class="desktop-laboratory-host" aria-label="Binary Cube laboratory host"></section>
+  </main>
+
+  <footer class="desktop-footer">
+    <strong>HB TTRPG Tools</strong> · Binary Cube Laboratory desktop prototype 0.1.0
+  </footer>
+
+  <script src="vendor/shadowrun-binary-cube-engine.js"></script>
+  <script src="vendor/shadowrun-binary-cube-auth.js"></script>
+  <script src="vendor/shadowrun-binary-cube-encryption.js"></script>
+  <script src="vendor/shadowrun-binary-cube-editor.js"></script>
+  <script src="vendor/shadowrun-binary-cube-auth-ui.js"></script>
+  <script src="vendor/shadowrun-binary-cube-secure-export.js"></script>
+  <script src="desktop.js"></script>
+</body>
+</html>
