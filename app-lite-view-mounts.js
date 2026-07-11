@@ -37,9 +37,11 @@
     prepareView
   });
 
-  void loadScript('binary-cube-large-grid-engine.js').catch(error => {
-    console.error('Binary Cube large-grid support could not be loaded.', error);
-  });
+  void loadScript('binary-cube-large-grid-engine.js')
+    .then(() => loadScript('binary-cube-large-grid-ui.js'))
+    .catch(error => {
+      console.error('Binary Cube large-grid support could not be loaded.', error);
+    });
 
   void loadScript('binary-cube-desktop-link.js').catch(error => {
     console.error('Binary Cube desktop download links could not be loaded.', error);
