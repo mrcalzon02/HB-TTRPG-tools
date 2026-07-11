@@ -11,6 +11,7 @@
     .exo-status{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(217,168,79,.34);border-radius:999px;padding:6px 10px;background:rgba(217,168,79,.08);color:#d9d1c0;font-size:.72rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.exo-status::before{content:"";width:8px;height:8px;border-radius:50%;background:#d9a84f;box-shadow:0 0 14px rgba(217,168,79,.7)}
     .exo-framework-card{position:relative;overflow:hidden}.exo-framework-card::after{content:"FRAMEWORK";position:absolute;right:12px;top:10px;color:rgba(217,168,79,.13);font-size:1.2rem;font-weight:950;letter-spacing:.12em}.exo-framework-card p{max-width:62ch}.exo-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.exo-meta span{border:1px solid rgba(217,168,79,.22);border-radius:999px;padding:4px 8px;color:#cfc5b3;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.18)}
     .exo-notice{border-left:3px solid rgba(217,168,79,.76);background:rgba(217,168,79,.075);padding:14px 16px;border-radius:12px;color:#d9d1c0;line-height:1.6}
+    .exo-active-card::after{content:"ACTIVE";color:rgba(126,214,155,.32)}
   </style>
 </head>
 <body class="blacklight-corp-body">
@@ -30,17 +31,17 @@
       <p class="bli-eyebrow">Black compartment · Exosolar operations</p>
       <h1 id="exo-title">EXO Operations.</h1>
       <p class="bli-lede">Restricted planning workspace for generating exosolar systems, orbital environments, nonhuman civilizations, interstellar governments, faster-than-light infrastructure, vessels, stations, settlements, outposts, creatures, and vehicles.</p>
-      <div class="bli-actions"><a class="bli-action primary" href="#generator-framework">Open Generator Framework</a><a class="bli-action" href="blacklight-systems-black.html">Return to Black Archive</a></div>
+      <div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-solar-system.html">Open Solar System Generator</a><a class="bli-action" href="#generator-framework">Open Generator Framework</a><a class="bli-action" href="blacklight-systems-black.html">Return to Black Archive</a></div>
     </div>
     <aside class="bli-directory-panel" aria-label="EXO Operations status">
       <div class="bli-directory-title">Compartment Status</div>
       <div class="bli-directory-list" role="list">
         <div class="bli-directory-item" role="listitem"><strong>Clearance</strong><span class="bli-arrow">Black</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Compartment</strong><span class="bli-arrow">EXO</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Framework</strong><span class="bli-arrow">staged</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Generators</strong><span class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Framework</strong><span class="bli-arrow">active</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Generators</strong><span class="bli-arrow">1 active</span></div>
       </div>
-      <p><span class="exo-status">Framework initialized</span></p>
+      <p><span class="exo-status">Orbital generator active</span></p>
     </aside>
   </section>
 
@@ -56,7 +57,7 @@
         <p>These modules define the planned structure of the workspace. They are staging cards rather than completed generators and will be activated one system at a time.</p>
       </div>
       <div class="bli-card-grid">
-        <article class="bli-card exo-framework-card"><h3>Solar System Generator</h3><p>Star classification, planetary count, orbital architecture, resource index, orbital projection, selectable planetary records, moons, belts, hazards, and system-scale points of interest.</p><div class="exo-meta"><span>primary framework</span><span>orbital display</span><span>planet sidebar</span></div></article>
+        <article class="bli-card exo-framework-card exo-active-card"><h3>Solar System Generator</h3><p>Generate seeded random stellar systems with animated orbital rails, selectable star and planet records, planetary classes, moons, rings, atmospheres, biosphere and civilization signals, hazards, debris belts, and a system resource index.</p><div class="exo-meta"><span>active generator</span><span>orbital display</span><span>planet inspector</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-solar-system.html">Open Solar System Generator</a></div></article>
         <article class="bli-card exo-framework-card"><h3>Species and Civilization Generator</h3><p>Primary sapient species, biology, environmental adaptation, social organization, cultural priorities, technological assumptions, internal factions, and system-defining features.</p><div class="exo-meta"><span>species</span><span>culture</span><span>civilization</span></div></article>
         <article class="bli-card exo-framework-card"><h3>Alien Ecology Generator</h3><p>Native organisms, predators, symbiotes, megafauna, engineered life, environmental niches, food chains, hazards, domestication, and ecological relationships.</p><div class="exo-meta"><span>creatures</span><span>biosphere</span><span>hazards</span></div></article>
         <article class="bli-card exo-framework-card"><h3>Stellar Government Generator</h3><p>Single-system authorities, interstellar states, federations, empires, corporate domains, machine polities, treaty networks, and governments spanning neighboring star clusters.</p><div class="exo-meta"><span>government</span><span>factions</span><span>star clusters</span></div></article>
