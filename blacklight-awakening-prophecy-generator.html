@@ -3,302 +3,96 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Awakening Prophecy Generator | Blacklight Continuum</title>
-  <meta name="description" content="Seeded Blacklight Continuum prophecy generator for the six canonical Awakening triggers, producing one overarching prophecy and six escalating seals with minor and major fulfillments.">
+  <title>Recovered Awakening Augury Archive | Blacklight Continuum</title>
+  <meta name="description" content="Black-level custody terminal for recovered, stolen, purchased, intercepted, and reconstructed auguries concerning the six canonical Awakening triggers.">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
-  <style>
-    .prophecy-shell{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:28px 0 72px}
-    .prophecy-section{margin-top:28px}
-    .prophecy-card{border:1px solid rgba(217,168,79,.27);border-radius:20px;background:radial-gradient(circle at 90% 8%,rgba(217,168,79,.11),transparent 19rem),linear-gradient(145deg,rgba(26,25,23,.98),rgba(5,5,4,.99));padding:22px;box-shadow:0 20px 55px rgba(0,0,0,.24)}
-    .prophecy-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-    .prophecy-controls label{display:grid;gap:7px;color:#d8cfbf;font-size:.8rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
-    .prophecy-controls select,.prophecy-controls input{width:100%;border:1px solid rgba(217,168,79,.32);border-radius:11px;background:#11110f;color:#f4efe5;padding:11px 12px;font:inherit}
-    .prophecy-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-    .prophecy-button{appearance:none;border:1px solid rgba(217,168,79,.44);border-radius:999px;background:rgba(217,168,79,.08);color:#f4efe5;padding:10px 15px;font:inherit;font-weight:900;cursor:pointer}
-    .prophecy-button.primary{background:#d9a84f;color:#17130c;border-color:#d9a84f}
-    .prophecy-button:disabled{opacity:.45;cursor:not-allowed}
-    .prophecy-status{margin:12px 0 0;color:#bcb2a1;min-height:1.4em}
-    .prophecy-output{display:grid;gap:20px;margin-top:20px}
-    .prophecy-classification{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(217,168,79,.46);border-radius:999px;padding:6px 10px;color:#f1c66f;background:rgba(217,168,79,.08);font-size:.7rem;font-weight:950;letter-spacing:.11em;text-transform:uppercase}
-    .prophecy-card h2,.prophecy-card h3,.prophecy-card h4{color:#f4efe5}
-    .prophecy-card h2{margin:.45rem 0 .2rem}
-    .prophecy-meta{color:#aaa08e;font-size:.84rem;line-height:1.55}
-    .prophecy-major{margin-top:18px;border-left:4px solid #d9a84f;border-radius:0 18px 18px 0;padding:20px 22px;background:rgba(217,168,79,.075)}
-    .prophecy-major span{display:block;color:#baae99;font-size:.7rem;font-weight:950;letter-spacing:.11em;text-transform:uppercase}
-    .prophecy-major blockquote{margin:12px 0 0;color:#f0e7d7;font-size:clamp(1.05rem,2vw,1.28rem);font-style:italic;line-height:1.8;white-space:pre-line}
-    .prophecy-translation{margin-top:14px;color:#d1c7b6;line-height:1.68}
-    .seal-grid{display:grid;gap:14px;margin-top:20px}
-    .seal{position:relative;overflow:hidden;border:1px solid rgba(217,168,79,.18);border-radius:16px;padding:18px;background:rgba(0,0,0,.2)}
-    .seal-number{position:absolute;right:12px;top:-20px;color:rgba(217,168,79,.075);font-size:6rem;font-weight:950;line-height:1}
-    .seal h3{position:relative;margin:0 0 12px;padding-right:52px}
-    .seal-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;position:relative}
-    .seal-state{border:1px solid rgba(217,168,79,.14);border-radius:13px;padding:14px;background:rgba(255,255,255,.018)}
-    .seal-state span{display:block;color:#b3a894;font-size:.69rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
-    .seal-state strong{display:block;margin-top:7px;color:#f1c66f}
-    .seal-state p{margin:7px 0 0;color:#ded5c5;line-height:1.62}
-    .seal-rule{margin:11px 0 0;color:#9f9583;font-size:.82rem;line-height:1.5}
-    .empty-prophecy{border-left:4px solid rgba(217,168,79,.7);border-radius:0 15px 15px 0;padding:18px;background:rgba(217,168,79,.07);color:#d5ccbc;line-height:1.65}
-    @media print{.no-print{display:none!important}.blacklight-corp-body{background:#fff;color:#111}.prophecy-shell{width:100%;padding:0}.prophecy-card,.seal,.seal-state,.prophecy-major{background:#fff;box-shadow:none;border-color:#777}.prophecy-card h2,.prophecy-card h3,.prophecy-card h4,.prophecy-major blockquote,.seal-state p,.prophecy-translation{color:#111}}
-  </style>
+  <link rel="stylesheet" href="blacklight-awakening-prophecy-generator.css">
 </head>
 <body class="blacklight-corp-body">
   <header class="bli-topbar no-print">
-    <a class="bli-brand" href="blacklight-era-campaign.html" aria-label="Return to The Blacklight Era Campaign"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Prophecy Archive</span></span></a>
-    <nav class="bli-nav" aria-label="Awakening prophecy navigation"><a href="blacklight-era-campaign.html">Campaign Dossier</a><a href="blacklight-era-campaign.html#six-vectors">Six Triggers</a><a href="#prophecy-controls">Generator</a><a href="blacklight-systems-black.html">Black Archive</a></nav>
+    <a class="bli-brand" href="blacklight-era-campaign.html" aria-label="Return to The Blacklight Era Campaign"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Recovered Auguries</span></span></a>
+    <nav class="bli-nav" aria-label="Recovered augury archive navigation"><a href="blacklight-era-campaign.html">Campaign Dossier</a><a href="blacklight-era-campaign.html#six-vectors">Six Trigger Files</a><a href="#prophecy-controls">Mount Archive Record</a><a href="blacklight-systems-black.html">Black Archive</a></nav>
   </header>
 
   <section class="bli-hero" aria-labelledby="prophecy-title">
     <div>
-      <span class="prophecy-classification">Black clearance · prophetic continuity analysis</span>
-      <p class="bli-eyebrow">Blacklight Continuum campaign instrument</p>
-      <h1 id="prophecy-title">The Sixfold Awakening Prophecy Engine</h1>
-      <p class="bli-lede">Generate a major overarching prophecy for any canonical Awakening trigger, followed by six seals of completion. Every seal contains a minor fulfillment that can enter play as an omen and a major fulfillment showing that the campaign has materially advanced toward the Sixth World.</p>
-      <div class="bli-actions no-print"><a class="bli-action primary" href="#prophecy-controls">Generate a Prophecy</a><a class="bli-action" href="blacklight-era-campaign.html">Return to Campaign Dossier</a></div>
+      <span class="prophecy-classification">Black clearance · stolen and recovered continuity intelligence</span>
+      <p class="bli-eyebrow">Blacklight Continuum custody terminal</p>
+      <h1 id="prophecy-title">Recovered Awakening Augury Archive</h1>
+      <p class="bli-lede">Nothing displayed by this terminal is presented as newly invented prophecy. Each mounted result is a Blacklight custody reconstruction of intelligence Charles recovered, stole, purchased, intercepted, extracted from a dead reality, or assembled from versions of the future that disagree with one another.</p>
+      <div class="bli-actions no-print"><a class="bli-action primary" href="#prophecy-controls">Mount a Recovered File</a><a class="bli-action" href="blacklight-era-campaign.html">Return to Campaign Dossier</a></div>
     </div>
-    <aside class="bli-directory-panel" aria-label="Prophecy engine structure">
-      <div class="bli-directory-title">Prophecy Structure</div>
+    <aside class="bli-directory-panel" aria-label="Recovered augury archive handling rules">
+      <div class="bli-directory-title">Custody Requirements</div>
       <div class="bli-directory-list" role="list">
-        <div class="bli-directory-item" role="listitem"><strong>Canonical paths</strong><span class="bli-arrow">6</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Overarching prophecy</strong><span class="bli-arrow">1</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Seals of completion</strong><span class="bli-arrow">6</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Fulfillment states</strong><span class="bli-arrow">minor / major</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Primary source</strong><span class="bli-arrow">required</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Primary augury</strong><span class="bli-arrow">unaltered copy</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Fulfillment stages</strong><span class="bli-arrow">6</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Augury fragments</strong><span class="bli-arrow">12</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Readings per fragment</strong><span class="bli-arrow">5</span></div>
       </div>
     </aside>
   </section>
 
   <main class="prophecy-shell">
+    <section class="prophecy-section">
+      <div class="archive-warning"><strong>CHARLES // ARCHIVE NOTICE:</strong> A source can be authentic and still be manipulative. A prophecy can accurately describe an event while lying about its cause, beneficiary, sequence, or necessary response. Do not collapse the recovered wording into a single interpretation merely because one reading is operationally convenient.</div>
+    </section>
+
     <section id="prophecy-controls" class="prophecy-section">
       <div class="prophecy-card no-print">
+        <p class="bli-eyebrow">Black archive retrieval parameters</p>
+        <h2>Mount a recovered continuity file.</h2>
+        <p class="prophecy-meta">The reconstruction key selects one custody copy, one primary source record, one primary augury, six stage files, and twelve separately recovered omen and threshold fragments. Reusing the key remounts the same intelligence packet.</p>
         <div class="prophecy-controls">
-          <label>Awakening trigger
+          <label>Sealed trigger file
             <select id="prophecy-trigger">
-              <option value="random">Random canonical trigger</option>
-              <option value="0">1 · The War That Tears the Veil</option>
-              <option value="1">2 · The Human Counterstrike</option>
-              <option value="2">3 · The Rite of Returning Names</option>
-              <option value="3">4 · The Consensus Recognition Cascade</option>
-              <option value="4">5 · The Mana Reservoir Rupture</option>
-              <option value="5">6 · The Sovereign Ascension</option>
+              <option value="random">Allow Charles to select the file</option>
+              <option value="0">File 1 · The War That Tears the Veil</option>
+              <option value="1">File 2 · The Human Counterstrike</option>
+              <option value="2">File 3 · The Rite of Returning Names</option>
+              <option value="3">File 4 · The Consensus Recognition Cascade</option>
+              <option value="4">File 5 · The Mana Reservoir Rupture</option>
+              <option value="5">File 6 · The Sovereign Ascension</option>
             </select>
           </label>
-          <label>Prophetic source
+          <label>Recovered source family
             <select id="prophecy-source">
-              <option value="random">Random prophetic source</option>
-              <option value="Fae">Fae court augury</option>
-              <option value="Gaian">Gaian spirit vision</option>
-              <option value="Blood">Blood-oracle testament</option>
-              <option value="Dream">Collective dream fragment</option>
-              <option value="Dead Reality">Recovered dead-reality warning</option>
+              <option value="random">Use the source attached to the custody packet</option>
+              <option value="Fae">Fae oath archive</option>
+              <option value="Gaian">Gaian spirit testimony</option>
+              <option value="Blood">Blood-oracle record</option>
+              <option value="Dream">Collective dream evidence</option>
+              <option value="Dead Reality">Dead-reality warning</option>
               <option value="Charles">Charles continuity reconstruction</option>
             </select>
           </label>
-          <label>Interpretive clarity
+          <label>Charles analysis posture
             <select id="prophecy-clarity">
-              <option value="random">Random clarity</option>
-              <option value="Veiled">Veiled and symbolic</option>
-              <option value="Balanced">Balanced prophetic language</option>
-              <option value="Direct">Direct operational warning</option>
+              <option value="random">Use the posture attached to the file</option>
+              <option value="Veiled">Veiled · identities and timing disputed</option>
+              <option value="Balanced">Balanced · mechanism probable</option>
+              <option value="Direct">Direct · operational thresholds assigned</option>
             </select>
           </label>
-          <label>Continuity seed
-            <input id="prophecy-seed" type="text" placeholder="Leave blank for a new prophecy seed">
+          <label>Continuity reconstruction key
+            <input id="prophecy-seed" type="text" placeholder="Leave blank to mount an unreviewed custody copy">
           </label>
         </div>
         <div class="prophecy-actions">
-          <button id="prophecy-generate" class="prophecy-button primary" type="button">Generate One Prophecy</button>
-          <button id="prophecy-generate-six" class="prophecy-button" type="button">Generate All Six Prophecies</button>
-          <button id="prophecy-copy" class="prophecy-button" type="button" disabled>Copy Prophecy</button>
-          <button class="prophecy-button" type="button" onclick="window.print()">Print Prophecy Archive</button>
+          <button id="prophecy-generate" class="prophecy-button primary" type="button">Mount One Recovered File</button>
+          <button id="prophecy-generate-six" class="prophecy-button" type="button">Mount All Six Sealed Files</button>
+          <button id="prophecy-copy" class="prophecy-button" type="button" disabled>Copy Custody Packet</button>
+          <button class="prophecy-button" type="button" onclick="window.print()">Print Custody Packet</button>
         </div>
-        <p id="prophecy-status" class="prophecy-status" role="status">Awaiting a prophetic continuity query.</p>
+        <p id="prophecy-status" class="prophecy-status" role="status">No augury record is currently mounted.</p>
       </div>
-      <div id="prophecy-output" class="prophecy-output" aria-live="polite"><div class="empty-prophecy">No prophecy has been reconstructed. None of the six seals are presently confirmed.</div></div>
+      <div id="prophecy-output" class="prophecy-output" aria-live="polite"><div class="empty-prophecy"><strong>ARCHIVE STATE:</strong> No recovered continuity file is mounted. No omen or threshold correspondence should be treated as confirmed from this terminal state.</div></div>
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Sixfold Awakening prophecy archive · Black-level continuity analysis.</footer>
-
-  <script>
-  (()=>{
-    'use strict';
-
-    const sources={
-      Fae:['the Thorn Calendar of the Uncrowned Court','a winter herald speaking backward through an oath mirror','the last page of a treaty that has not yet been signed'],
-      Gaian:['a wounded city-spirit dreaming beneath concrete','the antlered keeper of an abandoned caern','a chorus carried through every root touching the same river'],
-      Blood:['the sealed testimony of an oracle who remembered her descendants','a chalice-script written by six incompatible bloodlines','the final confession of a sovereign executed before recorded history'],
-      Dream:['a recurring dream shared by strangers on six continents','the consensus nightmare recorded during one minute of global sleep','a child witness whose drawings appeared before the events they depict'],
-      'Dead Reality':['a warning recovered from a dimension where humanity no longer exists','the final emergency transmission of a world consumed by its own Awakening','a continuity fragment retrieved from a pristine Earth without human footprints'],
-      Charles:['Charles reconstructed from contradictory future records','a Blacklight continuity model Charles refuses to describe as prediction','six mutually impossible forecasts that Charles found sharing the same ending']
-    };
-
-    const clarityLead={
-      Veiled:'Archive interpretation remains intentionally uncertain. Symbols may refer to people, institutions, bloodlines, places, or entire factions.',
-      Balanced:'Archive interpretation identifies the probable mechanism while preserving symbolic ambiguity around actors and timing.',
-      Direct:'Archive interpretation treats the prophecy as an operational warning and assigns concrete fulfillment thresholds.'
-    };
-
-    const paths=[
-      {
-        name:'The War That Tears the Veil',category:'Conflict',
-        prophecies:[
-          'When hidden banners rise beneath a sky that remembers blood,\nthe old nations shall answer with weapons older than their names.\nSix wounds will open where the dead are counted but not mourned,\nand through the last unguarded silence the world behind the world shall march.',
-          'The first kingdom will strike in secret and the second will answer in daylight.\nThe third blow will kill those standing in neighboring worlds.\nWhen every sanctuary becomes a fortress and every truce becomes a weapon,\nthe Veil will mistake war for permission and remain open.',
-          'Beware the battle whose victors cannot agree which reality they saved.\nIts refugees will carry new blood, its graves will speak, and its weapons will remember.\nAt the sixth breach the enemy will no longer stand beyond the boundary,\nfor the boundary itself will have joined the war.'
-        ],
-        translation:'A supernatural conflict becomes sufficiently broad, lethal, and metaphysically entangled that repeated breaches normalize open magic. Once warfare depends on permanent access across the Veil, the Awakening sustains itself.',
-        seals:[
-          {title:'The First Broken Truce',minor:['A protected negotiation ends in an unexplained death blamed on a rival faction.','A sanctuary is violated without any faction accepting responsibility.'],major:['Two major supernatural powers formally abandon neutral-ground protections.','Retaliation is authorized against an entire bloodline, court, pack, or spirit nation.']},
-          {title:'The Arming of Old Names',minor:['Relics previously kept ceremonial are moved into operational vaults.','Bound spirits and ancestral weapons begin disappearing from sealed collections.'],major:['A faction deploys a weapon that affects bodies, souls, and adjacent realities at once.','Multiple factions openly arm their oldest patrons for battlefield use.']},
-          {title:'The Multiplication of Fronts',minor:['Unrelated local conflicts begin using identical symbols and tactics.','Small breaches appear near battle sites far from the original dispute.'],major:['The war spreads across at least three regions or dimensions under linked command.','Civilian territory becomes a permanent corridor for supernatural troop movement.']},
-          {title:'The Dead Refuse the Boundary',minor:['Battlefield dead appear in dreams, reflections, or radio traffic.','Casualties are found carrying memories from wars they never fought.'],major:['The dead begin returning as organized participants rather than isolated hauntings.','Mass death creates a stable crossing that remains open without ritual maintenance.']},
-          {title:'The Consensus of War',minor:['Human witnesses independently describe impossible weapons with matching detail.','Governments quietly rewrite emergency plans around supernatural attack.'],major:['A major public battle makes supernatural warfare globally undeniable.','Human institutions begin treating magical war as an ordinary strategic reality.']},
-          {title:'The Veil Enlists',minor:['Magic becomes easier in contested zones and harder in declared neutral ground.','New metahuman traits first appear among refugees and combat medics.'],major:['The boundary remains permanently open because every belligerent now depends on it.','Goblinization and spirit emergence spread from the war zones without further action.']}
-        ]
-      },
-      {
-        name:'The Human Counterstrike',category:'Conflict',
-        prophecies:[
-          'When the blind forge a spear from stolen sight,\nthey will name every shadow enemy and every difference contagion.\nThe first strike will be praised because the victims were hidden.\nThe final strike will teach the whole world what was hiding.',
-          'A ledger of monsters shall become a ledger of neighbors.\nMachines without fear will carry the judgment of frightened men.\nWhen five thrones authorize one cleansing beneath a single hour,\nthe hunted will answer with a sunrise no censor can conceal.',
-          'Humanity will build the gate while believing it builds a wall.\nEvery prison will become a school of resistance; every purge, a revelation.\nAt the sixth command the secret world will choose survival over secrecy,\nand disbelief will die before the first missile lands.'
-        ],
-        translation:'A mortal institution attempts coordinated eradication of the supernatural. The targets respond openly and at scale, turning a suppression campaign into the proof-event that makes magic permanent in consensus reality.',
-        seals:[
-          {title:'The Catalog of the Hidden',minor:['A mortal agency combines unrelated anomaly records into a single threat index.','Hospitals, schools, and border systems begin quietly flagging supernatural markers.'],major:['A transnational target registry identifies entire bloodlines and communities.','The hidden world is formally classified as an existential human security threat.']},
-          {title:'The Weapon Without Doubt',minor:['A prototype successfully suppresses one minor entity or magical effect.','Autonomous systems are trained on incomplete supernatural intelligence.'],major:['A scalable anti-supernatural weapon is approved for field deployment.','The weapon selects targets faster than human oversight can review them.']},
-          {title:'The Legal Cleansing',minor:['Emergency powers quietly remove due process from anomaly investigations.','Public-health or security language is used to justify secret detention.'],major:['Several governments authorize coordinated detention, sterilization, or extermination policy.','Corporate and state systems merge into a single suppression command.']},
-          {title:'The First Successful Purge',minor:['A hidden enclave disappears and the operation is recorded as a clean success.','Captured entities are displayed privately as proof that eradication is possible.'],major:['A supernatural population center is destroyed before it can warn its allies.','The success convinces leadership that simultaneous global strikes can win.']},
-          {title:'The Answer in Daylight',minor:['Rival supernatural factions begin sharing intelligence against human hunters.','Retaliatory attacks target command systems rather than remaining hidden.'],major:['The supernatural world forms a temporary united defense and abandons secrecy.','A response operation is deliberately staged where billions can witness it.']},
-          {title:'The Wall Becomes the Gate',minor:['Public fear begins producing spontaneous magical effects and transformations.','Human soldiers report abilities emerging among their own units.'],major:['The global counterstrike and retaliation make magic an accepted fact of life.','Metahumanity awakens inside a civilization already organized around extermination.']}
-        ]
-      },
-      {
-        name:'The Rite of Returning Names',category:'Ritual',
-        prophecies:[
-          'When the forgotten are named by mouths that never knew them,\nthe lost age will hear itself remembered and turn toward home.\nSix names shall be joined to one invitation.\nThe seventh name will be humanity, spoken without consent.',
-          'The crown, the root, the chalice, the road, the grave, and the star\nshall each surrender the syllable they were sworn to hide.\nThose who call only their ancestors will awaken every inheritance,\nfor blood does not remember the borders drawn by its descendants.',
-          'A ritual built for one people will find the whole world listening.\nThe chosen will rejoice at the first transformation and deny the second.\nAt the sixth returning, every dormant shape of humanity will answer,\nand no priest will possess enough names to send them back.'
-        ],
-        translation:'A faction attempts to restore a lost species, patron, territory, or magical age through a synchronized world-scale rite. The rite activates dormant metahuman patterns far beyond its intended beneficiaries.',
-        seals:[
-          {title:'The Recovery of the First Name',minor:['A fragment of a forbidden true name appears in an unrelated archive.','Several bloodlines begin dreaming the same untranslated syllable.'],major:['The initiating faction reconstructs the first complete ancestral name.','Speaking the name produces a repeatable physical transformation.']},
-          {title:'The Gathering of Correspondences',minor:['Relics from separate traditions begin resonating when brought near one another.','Sacred sites display matching astronomical or geometric changes.'],major:['Six required relics, sites, bloodlines, or offices are placed under one ritual authority.','Modern communications synchronize components once separated by continents.']},
-          {title:'The Choir Without Knowledge',minor:['Participants repeat ritual phrases disguised as entertainment, prayer, or software use.','Millions unknowingly contribute dreams, attention, blood, or biometric patterns.'],major:['A global population becomes an active ritual component without informed consent.','The rite can continue even if the original priesthood is destroyed.']},
-          {title:'The Return of the Intended',minor:['A handful of chosen descendants manifest controlled metahuman traits.','One lost spirit species or mythic ecology briefly reappears.'],major:['The targeted ancestors, patron, people, or territory return in stable form.','The initiating faction declares the rite successful and removes its safeguards.']},
-          {title:'The Answer of Every Bloodline',minor:['Unrelated families begin displaying transformations excluded from the ritual design.','Children with no ritual connection speak the returning names in their sleep.'],major:['Dormant metahuman patterns activate across multiple human populations.','Goblinization begins faster than the ritual authorities can classify or contain it.']},
-          {title:'The Name That Cannot Be Withdrawn',minor:['Attempts to reverse the rite awaken additional spirits and inherited forms.','Destroying a ritual site shifts its function to ordinary communities nearby.'],major:['Humanity itself becomes the final true name completing the rite.','The return becomes a permanent law of reality rather than an active spell.']}
-        ]
-      },
-      {
-        name:'The Consensus Recognition Cascade',category:'Ignorance',
-        prophecies:[
-          'When a billion witnesses agree upon the impossible,\nthe impossible will no longer require permission.\nSix proofs will pass from hand to hand without priest or censor.\nOn the seventh morning every mirror will show the world people expect to see.',
-          'The secret will not be revealed by wisdom but by repetition.\nA child, a camera, a corpse, a machine, a crowd, and a lie\nwill each confirm the same forbidden fact.\nThen belief will cease describing reality and begin commanding it.',
-          'Beware the evidence that survives every explanation.\nEvery denial will sharpen it; every erasure will multiply it.\nWhen strangers can reproduce the miracle at home,\nconsensus will open the door that ritual could not.'
-        ],
-        translation:'Irrefutable supernatural evidence reaches enough people, with enough emotional and social coherence, that collective belief changes the operating rules of reality. Recognition itself becomes the Awakening mechanism.',
-        seals:[
-          {title:'The Unignorable Incident',minor:['A supernatural event is recorded clearly by several unrelated witnesses.','A public figure experiences an impossible event that cannot be dismissed privately.'],major:['One incident survives professional forensic review across multiple institutions.','The event becomes a global reference point rather than a local curiosity.']},
-          {title:'The Failure of Explanations',minor:['Official explanations contradict observable details and one another.','Attempts to remove evidence create authenticated copies elsewhere.'],major:['Major scientific, religious, and governmental authorities publicly reject the same cover story.','Censorship itself becomes accepted proof that the supernatural evidence is genuine.']},
-          {title:'The Reproducible Wonder',minor:['Ordinary people repeat a minor effect by following leaked instructions.','Consumer devices begin detecting entities without specialized modification.'],major:['A supernatural effect becomes reproducible by millions under ordinary conditions.','The public no longer needs expert testimony to verify that magic works.']},
-          {title:'The Shared Vocabulary',minor:['Unrelated cultures adopt the same names for newly visible phenomena.','Schools, media, and emergency services create practical supernatural terminology.'],major:['A common global language for magic and metahumanity enters ordinary use.','Human consensus begins reinforcing supernatural categories instead of suppressing them.']},
-          {title:'The Expectation Effect',minor:['Places associated with legends begin producing matching anomalies.','Fear, hope, and local folklore measurably shape supernatural manifestations.'],major:['Communities generate stable magical rules simply by expecting them.','Different regions develop incompatible but self-consistent supernatural realities.']},
-          {title:'Belief Becomes Permission',minor:['Spirits and metahuman traits appear first where public expectation is strongest.','Disbelief stops weakening phenomena that have already been named and shared.'],major:['Collective recognition permanently rewrites the consensus boundary.','The Awakening proceeds through observation itself and can no longer be censored away.']}
-        ]
-      },
-      {
-        name:'The Mana Reservoir Rupture',category:'Accumulation of Power',
-        prophecies:[
-          'The world has swallowed every delayed dawn and called the silence safety.\nBeneath six locks the unused morning grows teeth.\nWhen one keeper sells the key and another refuses the valve,\nthe Sixth World will arrive as pressure seeking every wound at once.',
-          'Count not the years gained, but the power denied release.\nEvery sealed caern, dream, grave, gate, and blood-debt fills the same hidden sea.\nAt the sixth high-water mark the smallest cracked vessel will become an ocean,\nand no wall will know which side was meant to remain dry.',
-          'What Charles diverted was not destroyed. What the factions hoarded was not owned.\nThe buried current remembers the date it was promised.\nWhen six reservoirs answer one another beneath the skin of the world,\nthe rupture will call every sleeping form to the surface.'
-        ],
-        translation:'Magical pressure delayed since 2011 accumulates across seals, pocket dimensions, sacred sites, blood economies, dream channels, and spirit compacts. A failed valve or deliberate hoard causes a linked planetary rupture.',
-        seals:[
-          {title:'The Rising Measure',minor:['Instruments disagree because magical pressure exceeds their designed scales.','Minor release sites recharge faster after every controlled vent.'],major:['Independent Blacklight, spirit, and occult measurements confirm planetary accumulation.','The total stored pressure reaches a level no existing system can safely contain.']},
-          {title:'The Market of Scarcity',minor:['Factions begin trading access to mana vents, sacred sites, and dream channels.','Artificial shortages make released power politically and financially valuable.'],major:['A cartel or sovereign power controls several of the safest relief systems.','Release schedules are manipulated to increase leverage rather than reduce danger.']},
-          {title:'The Silencing of Valves',minor:['One relief site fails under circumstances made to look accidental.','Technicians disappear after reporting incompatible treaty controls.'],major:['Three major release systems are sabotaged, captured, or deliberately closed.','Remaining reservoirs begin transferring pressure into weaker neighboring sites.']},
-          {title:'The Weaponization Attempt',minor:['A faction tests a device that concentrates stored mana into a local effect.','A reservoir is redirected toward a military, political, or ecological target.'],major:['Accumulated pressure is moved into a weapon or ascension engine.','The transfer creates feedback linking previously separate reservoirs.']},
-          {title:'The First Rupture',minor:['A small breach causes temporary goblinization, spirit weather, or awakened wildlife.','Reality around one site develops persistent magical aftershocks.'],major:['A primary reservoir fails and cannot be resealed with its original mechanism.','The rupture forces every connected site toward critical pressure.']},
-          {title:'The World Finds Every Wound',minor:['Dormant fault lines, graves, dreams, and sacred places begin venting together.','People transform near sites that were never known to hold power.'],major:['The linked reservoir network ruptures across the planet.','The Awakening becomes the new equilibrium through which accumulated power escapes.']}
-        ]
-      },
-      {
-        name:'The Sovereign Ascension',category:'Accumulation of Power',
-        prophecies:[
-          'When one crown gathers every road, every name, and every hunger,\nthe world will remember that no single hand was meant to close around it.\nSix rivals shall kneel, vanish, bargain, sleep, serve, or be forgotten.\nThen reality will awaken a thousand heirs rather than accept one eternal sovereign.',
-          'The victor will mistake silence for consent and obedience for natural law.\nContracts will become borders; worship will become weather; memory will become taxation.\nAt the sixth submission the throne will touch the machinery of the world,\nand the world will answer by making rivals from every sleeping bloodline.',
-          'Beware the power that wins without revealing the war.\nIt will own the gate, the archive, the city, the dream, the grave, and the witness.\nWhen nothing remains outside its jurisdiction,\nAwakening will become reality’s act of rebellion.'
-        ],
-        translation:'One faction accumulates enough metaphysical authority to impose its order globally. Reality responds by awakening dormant metahumans, spirits, and rival powers as counterweights against permanent monopoly.',
-        seals:[
-          {title:'The Acquisition of Leverage',minor:['A faction quietly purchases, binds, or inherits several unrelated supernatural assets.','Rivals discover that their contracts, relics, or territories share the same hidden owner.'],major:['One power controls a decisive asset in every major supernatural sphere.','The faction can punish opponents across political, spiritual, financial, and dimensional systems.']},
-          {title:'The Reduction of Rivals',minor:['Independent courts and packs accept temporary protection or debt arrangements.','A prominent rival disappears without producing open resistance.'],major:['Several sovereign factions accept vassalage, merger, or permanent dependency.','Only a few credible counter-powers remain outside the ascending order.']},
-          {title:'The Capture of Institutions',minor:['Human governments and corporations unknowingly enforce supernatural contracts.','Public emergency systems begin routing authority through the same hidden network.'],major:['The ascending faction gains durable control over state, corporate, and occult institutions.','Human law and supernatural obligation become functionally indistinguishable.']},
-          {title:'The Ownership of Memory',minor:['Records of alternative powers disappear or rewrite themselves.','Witnesses remember the ascending faction as older and more legitimate than it is.'],major:['Collective history changes to present one sovereign order as inevitable.','Opposition becomes difficult to imagine, name, or transmit across generations.']},
-          {title:'The Sixth Submission',minor:['The final independent rival is isolated, discredited, or offered impossible terms.','A coronation, merger, contract, or emergency mandate is scheduled.'],major:['The last necessary counter-power kneels, vanishes, or is formally absorbed.','The sovereign gains enough authority for reality to recognize its monopoly.']},
-          {title:'Reality Creates Opposition',minor:['Dormant bloodlines and spirits awaken specifically where sovereignty is strongest.','Previously incompatible factions develop matching resistance prophecies.'],major:['Metahumanity and supernatural diversity erupt worldwide as automatic counterweights.','The Awakening becomes reality’s permanent refusal to permit a single owner.']}
-        ]
-      }
-    ];
-
-    const triggerControl=document.getElementById('prophecy-trigger');
-    const sourceControl=document.getElementById('prophecy-source');
-    const clarityControl=document.getElementById('prophecy-clarity');
-    const seedControl=document.getElementById('prophecy-seed');
-    const output=document.getElementById('prophecy-output');
-    const status=document.getElementById('prophecy-status');
-    const copyButton=document.getElementById('prophecy-copy');
-    let currentText='';
-
-    function hash(text){let h=2166136261>>>0;for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
-    function rng(seed){let x=hash(seed)||0x9e3779b9;return()=>{x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296}}
-    function pick(random,list){return list[Math.floor(random()*list.length)]}
-    function esc(value){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
-    function makeSeed(){return 'BAP-'+Date.now().toString(36).toUpperCase()+'-'+Math.floor(Math.random()*1679616).toString(36).padStart(4,'0').toUpperCase()}
-
-    function buildProphecy(index,seed){
-      const random=rng(seed+'|prophecy|'+index);
-      const path=paths[index];
-      const sourceType=sourceControl.value==='random'?pick(random,Object.keys(sources)):sourceControl.value;
-      const clarity=clarityControl.value==='random'?pick(random,Object.keys(clarityLead)):clarityControl.value;
-      const source=pick(random,sources[sourceType]);
-      const prophecy=pick(random,path.prophecies);
-      const seals=path.seals.map((seal,step)=>({step:step+1,title:seal.title,minor:pick(random,seal.minor),major:pick(random,seal.major)}));
-      return{index,path,seed,sourceType,source,clarity,prophecy,seals};
-    }
-
-    function renderProphecy(record){
-      return `<article class="prophecy-card"><span class="prophecy-classification">Vector ${record.index+1} · ${esc(record.path.category)} · ${esc(record.sourceType)} source</span><h2>${esc(record.path.name)}</h2><p class="prophecy-meta">Continuity seed: ${esc(record.seed)} · Reconstructed from ${esc(record.source)} · Interpretive clarity: ${esc(record.clarity)}</p><div class="prophecy-major"><span>Major overarching prophecy</span><blockquote>${esc(record.prophecy)}</blockquote></div><p class="prophecy-translation"><strong>Blacklight interpretation:</strong> ${esc(record.path.translation)} ${esc(clarityLead[record.clarity])}</p><div class="seal-grid">${record.seals.map(seal=>`<section class="seal"><span class="seal-number">${seal.step}</span><h3>Seal ${seal.step}: ${esc(seal.title)}</h3><div class="seal-pair"><div class="seal-state"><span>Minor fulfillment</span><strong>Omen or partial completion</strong><p>${esc(seal.minor)}</p></div><div class="seal-state"><span>Major fulfillment</span><strong>Campaign threshold crossed</strong><p>${esc(seal.major)}</p></div></div><p class="seal-rule">This seal is considered broken when its major fulfillment occurs. Minor fulfillment warns that the necessary conditions are assembling but may still be redirected.</p></section>`).join('')}</div></article>`;
-    }
-
-    function textProphecy(record){
-      const lines=[`AWAKENING PROPHECY — VECTOR ${record.index+1}: ${record.path.name}`,`Category: ${record.path.category}`,`Seed: ${record.seed}`,`Prophetic source: ${record.sourceType} — ${record.source}`,`Interpretive clarity: ${record.clarity}`,'','MAJOR OVERARCHING PROPHECY',record.prophecy,'',`BLACKLIGHT INTERPRETATION: ${record.path.translation} ${clarityLead[record.clarity]}`,'','SIX SEALS OF COMPLETION'];
-      for(const seal of record.seals){lines.push('',`SEAL ${seal.step}: ${seal.title}`,`Minor fulfillment: ${seal.minor}`,`Major fulfillment: ${seal.major}`)}
-      return lines.join('\n');
-    }
-
-    function generate(all){
-      const seed=seedControl.value.trim()||makeSeed();
-      seedControl.value=seed;
-      let records;
-      if(all){records=paths.map((_,index)=>buildProphecy(index,seed))}
-      else{
-        const selected=triggerControl.value==='random'?Math.floor(rng(seed+'|selection')()*paths.length):Number(triggerControl.value);
-        records=[buildProphecy(selected,seed)];
-      }
-      output.innerHTML=records.map(renderProphecy).join('');
-      currentText=records.map(textProphecy).join('\n\n============================================================\n\n');
-      copyButton.disabled=false;
-      status.textContent=all?`All six canonical prophecies reconstructed from continuity seed ${seed}.`:`Vector ${records[0].index+1} prophecy reconstructed from continuity seed ${seed}.`;
-      output.scrollIntoView({behavior:'smooth',block:'start'});
-    }
-
-    document.getElementById('prophecy-generate').addEventListener('click',()=>generate(false));
-    document.getElementById('prophecy-generate-six').addEventListener('click',()=>generate(true));
-    copyButton.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(currentText);status.textContent='Generated prophecy copied to the clipboard.'}catch(error){status.textContent='Clipboard access was blocked. Select the generated prophecy manually.'}});
-  })();
-  </script>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Recovered Awakening auguries · Black-level custody copies · Charles continuity analysis.</footer>
+  <script src="blacklight-awakening-prophecy-archive.js"></script>
 </body>
 </html>
