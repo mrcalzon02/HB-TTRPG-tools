@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Binary Cube Laboratory Desktop Download | Calzon’s TTRPG Foundry</title>
+  <meta name="description" content="Download or build the offline Windows and Linux desktop edition of the shared Shadowrun and Blacklight Binary Cube Encryption Laboratory.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/binary-cube-desktop.html">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="workspace-landing.css">
+</head>
+<body class="workspace-landing-body">
+  <header class="site-header no-print">
+    <div>
+      <p class="eyebrow">Local executable utility</p>
+      <h1>Binary Cube Laboratory Desktop</h1>
+      <p class="subtitle">The shared Shadowrun and Blacklight research tool packaged for offline Windows and Linux use.</p>
+    </div>
+    <nav class="top-nav" aria-label="Binary Cube desktop navigation">
+      <a class="nav-button" href="index.html">Foundry Home</a>
+      <a class="nav-button" href="index.html?view=shadowrun">Browser Laboratory</a>
+      <a class="nav-button" href="blacklight-binary-cube-encryption.html">Blacklight Laboratory</a>
+      <a class="nav-button" href="site-map.html">Site Map</a>
+    </nav>
+  </header>
+
+  <main class="workspace-landing-shell">
+    <nav class="workspace-breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Calzon’s TTRPG Foundry</a><span>›</span><span>Binary Cube Desktop</span></nav>
+
+    <section class="workspace-hero" data-workspace-code="CUBE" aria-labelledby="binary-cube-desktop-title">
+      <div class="workspace-hero-copy">
+        <p class="eyebrow">Desktop prototype 0.1.0</p>
+        <h1 id="binary-cube-desktop-title">Run the laboratory locally without opening the website.</h1>
+        <p>The desktop edition packages the existing Binary Cube engine, authenticated-envelope system, secure-export layer, file transfer controls, key handling, diagnostics, and recovery interface inside an offline application shell. It does not create a separate encryption implementation.</p>
+        <div class="workspace-actions">
+          <a class="link-button primary-action" href="https://github.com/mrcalzon02/HB-TTRPG-tools/releases/latest">Open Latest Desktop Release</a>
+          <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/binary-cube-desktop.yml">View Automated Builds</a>
+          <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/desktop/binary-cube">View Desktop Source</a>
+        </div>
+      </div>
+      <aside class="workspace-summary-panel" aria-label="Desktop build summary">
+        <h2>Current build targets</h2>
+        <div class="workspace-summary-list">
+          <div><strong>Windows</strong><span>Portable x64 executable.</span></div>
+          <div><strong>Linux</strong><span>Portable x64 AppImage.</span></div>
+          <div><strong>Offline operation</strong><span>No application network connection is required.</span></div>
+          <div><strong>Shared implementation</strong><span>Builds copy the current repository engine and interface before packaging.</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="workspace-section" aria-labelledby="binary-cube-desktop-status-title">
+      <div class="workspace-section-head">
+        <p class="eyebrow">Build and release status</p>
+        <h2 id="binary-cube-desktop-status-title">Executable packaging is automated through GitHub Actions.</h2>
+        <p>Pushes affecting the Binary Cube desktop package run its smoke test and create downloadable Windows and Linux workflow artifacts. Tags beginning with <code>binary-cube-v</code> publish the same artifacts as a GitHub release.</p>
+      </div>
+      <div class="workspace-card-grid">
+        <article class="workspace-tool-card"><h3>Round-trip verification</h3><p>The build must encrypt and decrypt a binary payload without alteration before packaging continues.</p></article>
+        <article class="workspace-tool-card"><h3>Secure-export verification</h3><p>The test confirms that external exports omit exposed key identifiers and plaintext-length metadata, then reconstruct correctly with the matching key.</p></article>
+        <article class="workspace-tool-card"><h3>Wrong-key rejection</h3><p>The release gate verifies that a mismatched key cannot successfully reconstruct the secure export.</p></article>
+        <article class="workspace-tool-card"><h3>Renderer isolation</h3><p>The Electron renderer runs without Node.js integration and without application network access.</p></article>
+      </div>
+    </section>
+
+    <section class="workspace-section" aria-labelledby="binary-cube-warning-title">
+      <div class="workspace-section-head">
+        <p class="eyebrow">Research classification</p>
+        <h2 id="binary-cube-warning-title">This remains experimental tabletop obfuscation.</h2>
+        <p>The downloadable format does not convert the Binary Cube permutation into production cryptography. Do not use it to protect credentials, financial records, private communications, medical information, or other sensitive real-world data.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer no-print"><p>Calzon’s TTRPG Foundry · Binary Cube Laboratory desktop distribution page.</p></footer>
+</body>
+</html>
