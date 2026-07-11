@@ -7,11 +7,17 @@
   function choose(seed,list){return list[hash(seed)%list.length]}
   function unique(list){return [...new Set(list.filter(Boolean))]}
   function cleanWord(word){return word.replace(/^[^A-Za-z0-9’']+|[^A-Za-z0-9’']+$/g,'')}
+  function titleCase(text){
+    const small=new Set(['the','a','an','and','or','of','to','in','on','at','beneath','before','after','without','with']);
+    return text.split(/\s+/).map((word,index)=>index&&small.has(word.toLowerCase())?word.toLowerCase():word.charAt(0).toUpperCase()+word.slice(1)).join(' ');
+  }
   function titleCore(title){
     const words=title.replace(/^The\s+/i,'').split(/\s+/).map(cleanWord).filter(Boolean);
     const stop=new Set(['of','the','a','an','and','at','under','beneath','before','after','without','with','to','from','in','on','when']);
     const content=words.filter(w=>!stop.has(w.toLowerCase()));
-    return {phrase:words.join(' '),lead:content[0]||words[0]||'Omen',root:content[content.length-1]||words[words.length-1]||'Omen'};
+    const rawLead=content[0]||words[0]||'Omen';
+    const lead=rawLead.replace(/[’']s$/i,'');
+    return {phrase:words.join(' '),lead,root:content[content.length-1]||words[words.length-1]||'Omen'};
   }
   function buildNames(baseTitle,triggerName,seed,kind,stageIndex){
     const lex=TITLE_LEXICON[triggerName]||Object.values(TITLE_LEXICON)[0];
@@ -24,13 +30,13 @@
     });
     lex.places.forEach(place=>{
       candidates.push(`${core.root} Beneath ${place.replace(/^the\s+/i,'')}`);
-      candidates.push(`The ${core.root} of ${place.replace(/^the\s+/i,'')}`);
-      candidates.push(`${core.lead} at ${place}`);
+      candidates.push(`The ${core.root} of ${place}`);
+      candidates.push(`The ${core.lead} at ${place}`);
     });
     lex.verbs.forEach(verb=>{
-      candidates.push(`When ${core.root} ${verb}`);
-      candidates.push(`${core.root} ${verb.charAt(0).toUpperCase()+verb.slice(1)}`);
-      candidates.push(`The ${core.lead} That ${verb.charAt(0).toUpperCase()+verb.slice(1)}`);
+      candidates.push(`When the ${core.root} ${titleCase(verb)}`);
+      candidates.push(`The ${core.root} ${titleCase(verb)}`);
+      candidates.push(`The ${core.lead} That ${titleCase(verb)}`);
     });
     candidates.push(`${kind==='minor'?'Lesser':'Greater'} Record ${stageIndex+1}: ${core.phrase}`);
     const pool=unique(candidates);
@@ -52,7 +58,7 @@
       if((hash(`${seed}|swap|${index}`)%7)<2){
         const replacement=choose(`${seed}|choice|${index}`,options);
         out=out.replace(pattern,match=>{
-          if(match[0]===match[0].toUpperCase())return replacement.toUpperCase();
+          if(match===match.toUpperCase())return replacement.toUpperCase();
           if(match.charAt(0)===match.charAt(0).toUpperCase()&&match.slice(1)===match.slice(1).toLowerCase())return replacement.charAt(0).toUpperCase()+replacement.slice(1);
           return replacement;
         });
