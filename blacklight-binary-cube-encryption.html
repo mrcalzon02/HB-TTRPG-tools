@@ -21,7 +21,7 @@
       <p class="bli-eyebrow">Black Card utility · restricted archive route</p>
       <h1 id="blacklight-cube-title">Binary Cube Encryption Laboratory.</h1>
       <p class="bli-lede">A Blacklight-universe copy of the Binary Cube research workspace for keyed face-projection encryption, secure package export, validation, authenticated transport, and controlled file recovery.</p>
-      <p class="blacklight-cube-clearance"><strong>Black-level handling:</strong> keys and encrypted packages remain separate. Secure package downloads omit key identifiers, cube geometry, face selection, orientation, payload capacity, block count, and plaintext bit length as exposed JSON fields. Keys remain canonical JSON documents so every depth from 0 through gridSize−1 remains exactly representable at the selected cube size.</p>
+      <p class="blacklight-cube-clearance"><strong>Black-level handling:</strong> keys and encrypted packages remain separate. Secure package downloads omit key identifiers, cube geometry, face selection, orientation, payload capacity, block count, and plaintext bit length as exposed JSON fields. Every accepted key must retain the complete depth domain from 0 through gridSize−1 and remain collision-free from top, bottom, front, back, left, and right projections.</p>
       <div class="bli-actions"><a class="bli-action" href="binary-cube-desktop.html">Open Desktop Download Page</a></div>
     </div>
   </section>
@@ -35,6 +35,7 @@
   <script src="blacklight-binary-cube-storage-scope.js"></script>
   <script src="shadowrun-binary-cube-engine.js"></script>
   <script src="binary-cube-large-grid-engine.js"></script>
+  <script src="binary-cube-omnidirectional-engine.js"></script>
   <script src="binary-cube-large-grid-ui.js"></script>
   <script src="shadowrun-binary-cube-auth.js"></script>
   <script src="shadowrun-binary-cube-encryption.js"></script>
