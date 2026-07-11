@@ -1,0 +1,71 @@
+name: Activate EXO system dossier generator
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/activate-exo-system-dossier.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Refine generator edge cases and activate route
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          js_path = Path('blacklight-exo-species-civilization.js')
+          js = js_path.read_text()
+
+          old = "const extinctCivilization=['extinct','departed'].includes(life)||['abandoned','ruin','sterilized'].includes(state.key);"
+          new = "const extinctCivilization=!activeCivilization && (['extinct','departed'].includes(life)||['abandoned','ruin','sterilized'].includes(state.key));"
+          assert old in js
+          js = js.replace(old, new, 1)
+
+          old = "const population=activeCivilization?Math.round(number(rng,Math.max(1,state.population[0]),Math.max(2,state.population[1]),0)):0;"
+          new = "const populationMin=state.population[1]>0?state.population[0]:1000000, populationMax=state.population[1]>0?state.population[1]:9000000000;\n    const population=activeCivilization?Math.round(number(rng,populationMin,populationMax,0)):0;"
+          assert old in js
+          js = js.replace(old, new, 1)
+
+          old = "const RESOURCES = ['iron-nickel mass','platinum-group metals','rare-earth elements','radioactive isotopes','water ice','ammonia and methane volatiles','deuterium','helium-3','carbon feedstock','silicate construction mass','complex organics','fusion catalyst isotopes'];"
+          new = "const RESOURCES = ['stellar hydrogen and helium mass','stellar-wind plasma','iron-nickel mass','metallic asteroid mass','carbonaceous asteroid mass','platinum-group metals','rare-earth elements','radioactive isotopes','water ice','ammonia and methane volatiles','deuterium','helium-3','carbon feedstock','silicate construction mass','complex organics','fusion catalyst isotopes'];"
+          assert old in js
+          js = js.replace(old, new, 1)
+
+          old = "    ]);\n    renderInfrastructure();"
+          new = "    ]);\n    for(const world of system.worlds){ui.systemGrid.append(card(`${world.status} · ${world.type}`,world.name,`${world.role}; ${world.population?formatPopulation(world.population)+' residents; ':''}${world.resources.join(', ')}.`));}\n    renderInfrastructure();"
+          assert old in js
+          js = js.replace(old, new, 1)
+          js_path.write_text(js)
+
+          page_path = Path('blacklight-exo-operations.html')
+          page = page_path.read_text()
+          old = '<div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-solar-system.html">Open Solar System Generator</a><a class="bli-action" href="#generator-framework">Open Generator Framework</a><a class="bli-action" href="blacklight-systems-black.html">Return to Black Archive</a></div>'
+          new = '<div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-solar-system.html">Open Solar System Generator</a><a class="bli-action primary" href="blacklight-exo-species-civilization.html">Open System Dossier Generator</a><a class="bli-action" href="#generator-framework">Open Generator Framework</a><a class="bli-action" href="blacklight-systems-black.html">Return to Black Archive</a></div>'
+          assert old in page
+          page = page.replace(old, new, 1)
+          page = page.replace('<strong>Generators</strong><span class="bli-arrow">1 active</span>', '<strong>Generators</strong><span class="bli-arrow">2 active</span>', 1)
+          page = page.replace('<span class="exo-status">Orbital generator active</span>', '<span class="exo-status">2 generators active</span>', 1)
+          old = '<article class="bli-card exo-framework-card"><h3>Species and Civilization Generator</h3><p>Primary sapient species, biology, environmental adaptation, social organization, cultural priorities, technological assumptions, internal factions, and system-defining features.</p><div class="exo-meta"><span>species</span><span>culture</span><span>civilization</span></div></article>'
+          new = '<article class="bli-card exo-framework-card exo-active-card"><h3>System Occupancy, Species and Civilization Generator</h3><p>Generate pristine empty systems, resource frontiers, extraction economies, inhabited hubs, militarized systems, abandoned infrastructure, and extinguished civilizations before developing any surviving or extinct species.</p><div class="exo-meta"><span>active generator</span><span>system economy</span><span>xenology</span><span>ruin states</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-species-civilization.html">Open System Dossier Generator</a></div></article>'
+          assert old in page
+          page = page.replace(old, new, 1)
+          page_path.write_text(page)
+          PY
+          node --check blacklight-exo-species-civilization.js
+          test -s blacklight-exo-species-civilization.html
+          test -s blacklight-exo-species-civilization.css
+          git rm .github/workflows/activate-exo-system-dossier.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add blacklight-exo-species-civilization.js blacklight-exo-operations.html
+          git commit -m 'Activate EXO system occupancy and civilization generator [skip ci]'
+          git push
