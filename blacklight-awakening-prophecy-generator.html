@@ -3,58 +3,73 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Recovered Awakening Augury Archive | Blacklight Continuum</title>
-  <meta name="description" content="Black-level custody terminal for recovered, stolen, purchased, intercepted, and reconstructed auguries concerning the six canonical Awakening triggers.">
+  <title>Recovered Awakening Prophecy Archive | Blacklight Continuum</title>
+  <meta name="description" content="Black-level custody terminal for ordered recovered prophecies concerning the six canonical Awakening triggers and the factions advancing them.">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-awakening-prophecy-generator.css">
 </head>
 <body class="blacklight-corp-body">
   <header class="bli-topbar no-print">
-    <a class="bli-brand" href="blacklight-era-campaign.html" aria-label="Return to The Blacklight Era Campaign"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Recovered Auguries</span></span></a>
-    <nav class="bli-nav" aria-label="Recovered augury archive navigation"><a href="blacklight-era-campaign.html">Campaign Dossier</a><a href="blacklight-era-campaign.html#six-vectors">Six Trigger Files</a><a href="#prophecy-controls">Mount Archive Record</a><a href="blacklight-systems-black.html">Black Archive</a></nav>
+    <a class="bli-brand" href="blacklight-era-campaign.html" aria-label="Return to The Blacklight Era Campaign"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Recovered Prophecies</span></span></a>
+    <nav class="bli-nav" aria-label="Recovered prophecy archive navigation"><a href="blacklight-era-campaign.html">Campaign Dossier</a><a href="blacklight-era-campaign.html#six-vectors">Six Trigger Files</a><a href="#prophecy-controls">Mount Prophecy</a><a href="blacklight-systems-black.html">Black Archive</a></nav>
   </header>
 
   <section class="bli-hero" aria-labelledby="prophecy-title">
     <div>
-      <span class="prophecy-classification">Black clearance · stolen and recovered continuity intelligence</span>
+      <span class="prophecy-classification">Black clearance · recovered continuity intelligence</span>
       <p class="bli-eyebrow">Blacklight Continuum custody terminal</p>
-      <h1 id="prophecy-title">Recovered Awakening Augury Archive</h1>
-      <p class="bli-lede">Nothing displayed by this terminal is presented as newly invented prophecy. Each mounted result is a Blacklight custody reconstruction of intelligence Charles recovered, stole, purchased, intercepted, extracted from a dead reality, or assembled from versions of the future that disagree with one another.</p>
-      <div class="bli-actions no-print"><a class="bli-action primary" href="#prophecy-controls">Mount a Recovered File</a><a class="bli-action" href="blacklight-era-campaign.html">Return to Campaign Dossier</a></div>
+      <h1 id="prophecy-title">Recovered Awakening Prophecy Archive</h1>
+      <p class="bli-lede">Charles has organized each recovered prophecy into a major overarching augury followed by six ordered fulfillment stages. Every stage contains one Minor Omen and one Major Threshold. The two events are paired, separately prophesied, and separately interpreted.</p>
+      <div class="bli-actions no-print"><a class="bli-action primary" href="#prophecy-controls">Mount a Prophecy File</a><a class="bli-action" href="blacklight-era-campaign.html">Return to Campaign Dossier</a></div>
     </div>
-    <aside class="bli-directory-panel" aria-label="Recovered augury archive handling rules">
-      <div class="bli-directory-title">Custody Requirements</div>
+    <aside class="bli-directory-panel" aria-label="Ordered prophecy file structure">
+      <div class="bli-directory-title">File Structure</div>
       <div class="bli-directory-list" role="list">
-        <div class="bli-directory-item" role="listitem"><strong>Primary source</strong><span class="bli-arrow">required</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Primary augury</strong><span class="bli-arrow">unaltered copy</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Fulfillment stages</strong><span class="bli-arrow">6</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Augury fragments</strong><span class="bli-arrow">12</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Readings per fragment</strong><span class="bli-arrow">5</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Overarching prophecy</strong><span class="bli-arrow">1</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Ordered stages</strong><span class="bli-arrow">1–6</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Minor/Major pairs</strong><span class="bli-arrow">6</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Event prophecies</strong><span class="bli-arrow">12</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Readings per event</strong><span class="bli-arrow">3</span></div>
       </div>
     </aside>
   </section>
 
   <main class="prophecy-shell">
     <section class="prophecy-section">
-      <div class="archive-warning"><strong>CHARLES // ARCHIVE NOTICE:</strong> A source can be authentic and still be manipulative. A prophecy can accurately describe an event while lying about its cause, beneficiary, sequence, or necessary response. Do not collapse the recovered wording into a single interpretation merely because one reading is operationally convenient.</div>
+      <div class="archive-warning"><strong>CHARLES // ARCHIVE NOTICE:</strong> The numbered stages are a progression model, not a promise that events will occur neatly. Later thresholds can create earlier omens, multiple factions can occupy the same prophetic role, and a faction may deliberately imitate one stage to conceal another.</div>
     </section>
 
     <section id="prophecy-controls" class="prophecy-section">
       <div class="prophecy-card no-print">
         <p class="bli-eyebrow">Black archive retrieval parameters</p>
-        <h2>Mount a recovered continuity file.</h2>
-        <p class="prophecy-meta">The reconstruction key selects one custody copy, one primary source record, one primary augury, six stage files, and twelve separately recovered omen and threshold fragments. Reusing the key remounts the same intelligence packet.</p>
+        <h2>Mount an ordered prophecy file.</h2>
+        <p class="prophecy-meta">Select the canonical Awakening trigger and the faction Charles suspects is advancing it. A repeated reconstruction key returns the same source, overarching augury, and ordered Stage 1–6 packet.</p>
         <div class="prophecy-controls">
-          <label>Sealed trigger file
+          <label>Awakening trigger
             <select id="prophecy-trigger">
-              <option value="random">Allow Charles to select the file</option>
-              <option value="0">File 1 · The War That Tears the Veil</option>
-              <option value="1">File 2 · The Human Counterstrike</option>
-              <option value="2">File 3 · The Rite of Returning Names</option>
-              <option value="3">File 4 · The Consensus Recognition Cascade</option>
-              <option value="4">File 5 · The Mana Reservoir Rupture</option>
-              <option value="5">File 6 · The Sovereign Ascension</option>
+              <option value="random">Allow Charles to select one of six triggers</option>
+              <option value="0">1 · The War That Tears the Veil</option>
+              <option value="1">2 · The Human Counterstrike</option>
+              <option value="2">3 · The Rite of Returning Names</option>
+              <option value="3">4 · The Consensus Recognition Cascade</option>
+              <option value="4">5 · The Mana Reservoir Rupture</option>
+              <option value="5">6 · The Sovereign Ascension</option>
+            </select>
+          </label>
+          <label>Suspected advancing faction
+            <select id="prophecy-faction">
+              <option value="random">Allow Charles to identify the suspected faction</option>
+              <option value="a high fae court">High fae court</option>
+              <option value="a blood-sovereign coalition">Blood-sovereign coalition</option>
+              <option value="a Gaian spirit confederacy">Gaian spirit confederacy</option>
+              <option value="a corrupted shapechanger alliance">Corrupted shapechanger alliance</option>
+              <option value="a multinational hunter directorate">Multinational hunter directorate</option>
+              <option value="an elder cult network">Elder cult network</option>
+              <option value="a dream-market cartel">Dream-market cartel</option>
+              <option value="a mortal occult corporation">Mortal occult corporation</option>
+              <option value="a state intelligence compact">State intelligence compact</option>
+              <option value="a disputed Blacklight splinter operation">Disputed Blacklight splinter operation</option>
             </select>
           </label>
           <label>Recovered source family
@@ -81,18 +96,18 @@
           </label>
         </div>
         <div class="prophecy-actions">
-          <button id="prophecy-generate" class="prophecy-button primary" type="button">Mount One Recovered File</button>
-          <button id="prophecy-generate-six" class="prophecy-button" type="button">Mount All Six Sealed Files</button>
-          <button id="prophecy-copy" class="prophecy-button" type="button" disabled>Copy Custody Packet</button>
-          <button class="prophecy-button" type="button" onclick="window.print()">Print Custody Packet</button>
+          <button id="prophecy-generate" class="prophecy-button primary" type="button">Generate One Ordered Prophecy</button>
+          <button id="prophecy-generate-six" class="prophecy-button" type="button">Generate All Six Trigger Prophecies</button>
+          <button id="prophecy-copy" class="prophecy-button" type="button" disabled>Copy Ordered Prophecy</button>
+          <button class="prophecy-button" type="button" onclick="window.print()">Print Prophecy File</button>
         </div>
-        <p id="prophecy-status" class="prophecy-status" role="status">No augury record is currently mounted.</p>
+        <p id="prophecy-status" class="prophecy-status" role="status">No ordered prophecy file is currently mounted.</p>
       </div>
-      <div id="prophecy-output" class="prophecy-output" aria-live="polite"><div class="empty-prophecy"><strong>ARCHIVE STATE:</strong> No recovered continuity file is mounted. No omen or threshold correspondence should be treated as confirmed from this terminal state.</div></div>
+      <div id="prophecy-output" class="prophecy-output" aria-live="polite"><div class="empty-prophecy"><strong>ARCHIVE STATE:</strong> No recovered prophecy is mounted. Generate a file to retrieve the overarching augury and its six ordered Minor Omen / Major Threshold pairs.</div></div>
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Recovered Awakening auguries · Black-level custody copies · Charles continuity analysis.</footer>
-  <script src="blacklight-awakening-prophecy-archive.js"></script>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Recovered Awakening prophecies · Six ordered fulfillment pairs · Charles continuity analysis.</footer>
+  <script src="blacklight-awakening-prophecy-generator.js"></script>
 </body>
 </html>
