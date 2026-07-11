@@ -9,6 +9,7 @@ on:
       - 'binary-cube-v*'
     paths:
       - 'shadowrun-binary-cube-*.js'
+      - 'binary-cube-*.js'
       - 'styles.css'
       - 'desktop/binary-cube/**'
       - 'binary-cube-desktop.html'
