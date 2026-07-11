@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Blacklight EXO | Species and Civilization Generator</title>
+  <title>Blacklight EXO | System Occupancy, Species and Civilization Generator</title>
   <meta name="robots" content="noindex,nofollow,noarchive">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
@@ -25,19 +25,19 @@
 
   <section class="bli-hero exo-species-hero" aria-labelledby="exo-species-title">
     <div>
-      <p class="bli-eyebrow">Black compartment · Xenology and civilization analysis</p>
-      <h1 id="exo-species-title">Species and Civilization Generator.</h1>
-      <p class="bli-lede">Generate a complete nonhuman species and the civilization that emerged around it, from biochemistry and anatomy through government, technology, factional pressure, expansion doctrine, and first-contact risk.</p>
+      <p class="bli-eyebrow">Black compartment · System occupancy, xenology, and civilization analysis</p>
+      <h1 id="exo-species-title">System Occupancy, Species and Civilization Generator.</h1>
+      <p class="bli-lede">Generate the social and industrial state of an entire solar system, from untouched stellar mass and unclaimed mineral inventories to crowded hub systems, active extraction economies, abandoned infrastructure, or the ruins of an extinguished civilization.</p>
       <div class="bli-actions">
-        <button id="exo-species-generate" class="bli-action primary" type="button">Generate Species and Civilization</button>
+        <button id="exo-species-generate" class="bli-action primary" type="button">Generate System Dossier</button>
         <button id="exo-species-export" class="bli-action" type="button">Export Dossier JSON</button>
       </div>
     </div>
-    <aside class="bli-directory-panel" aria-label="Current xenology dossier summary">
+    <aside class="bli-directory-panel" aria-label="Current EXO dossier summary">
       <div class="bli-directory-title">Current Dossier</div>
       <div class="bli-directory-list" role="list">
-        <div class="bli-directory-item" role="listitem"><strong>Species</strong><span id="exo-species-summary-name" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Homeworld</strong><span id="exo-species-summary-world" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>System</strong><span id="exo-species-summary-name" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Condition</strong><span id="exo-species-summary-world" class="bli-arrow">pending</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Government</strong><span id="exo-species-summary-government" class="bli-arrow">pending</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Reach</strong><span id="exo-species-summary-reach" class="bli-arrow">pending</span></div>
       </div>
@@ -48,34 +48,56 @@
     <section class="bli-section exo-species-controls" aria-labelledby="exo-species-control-title">
       <div class="bli-section-head">
         <p class="bli-eyebrow">Generation parameters</p>
-        <h2 id="exo-species-control-title">Set the environmental and political envelope.</h2>
-        <p>Leave the selectors on random for broad generation, or constrain the civilization to a homeworld environment and level of interstellar reach. Reusing the same seed and options reproduces the same dossier.</p>
+        <h2 id="exo-species-control-title">Set the system condition before asking who lives there.</h2>
+        <p>Leave every selector on random to permit completely empty systems, active industrial hubs, surviving civilizations, abandoned extraction zones, and terminal ruin systems. Reusing the same seed and options reproduces the same dossier.</p>
       </div>
       <div class="exo-species-control-grid">
         <label><span>Generation seed</span><input id="exo-species-seed" type="text" maxlength="80" placeholder="Random seed"></label>
-        <label><span>Homeworld environment</span><select id="exo-species-environment"><option value="random">Random environment</option><option value="temperate">Temperate terrestrial</option><option value="ocean">Global ocean</option><option value="desert">Arid or desert</option><option value="ice">Cryogenic or icebound</option><option value="high-gravity">High gravity</option><option value="low-gravity">Low gravity</option><option value="toxic">Toxic atmosphere</option><option value="gas-habitat">Gas-giant habitat</option><option value="artificial">Artificial habitat</option></select></label>
+        <label><span>System condition</span><select id="exo-species-system-state"><option value="random">Random condition</option><option value="pristine">Pristine lifeless system</option><option value="resource">Unoccupied resource system</option><option value="survey">Surveyed frontier system</option><option value="extraction">Active extraction system</option><option value="settled">Settled inhabited system</option><option value="hub">Dense interstellar hub system</option><option value="contested">Contested militarized system</option><option value="abandoned">Abandoned system</option><option value="ruin">Extinguished civilization system</option><option value="sterilized">Sterilized dead system</option></select></label>
+        <label><span>Life and occupancy</span><select id="exo-species-life-status"><option value="random">Random life status</option><option value="none">No life</option><option value="microbial">Microbial life only</option><option value="occupied">External occupation</option><option value="living">Living primary civilization</option><option value="multispecies">Multi-species population</option><option value="extinct">Extinct civilization</option><option value="departed">Civilization departed</option></select></label>
+        <label><span>Dominant environment</span><select id="exo-species-environment"><option value="random">Random environment</option><option value="temperate terrestrial">Temperate terrestrial</option><option value="global ocean">Global ocean</option><option value="arid desert">Arid or desert</option><option value="icebound cryosphere">Cryogenic or icebound</option><option value="high-gravity terrestrial">High gravity</option><option value="low-gravity archipelago">Low gravity</option><option value="toxic-atmosphere world">Toxic atmosphere</option><option value="gas-giant aerostat ecology">Gas-giant habitat</option><option value="artificial habitat network">Artificial habitat</option></select></label>
         <label><span>Civilization reach</span><select id="exo-species-reach"><option value="random">Random reach</option><option value="world">Single world</option><option value="planetary">Multi-world planetary system</option><option value="system">Full solar system</option><option value="cluster">Local star cluster</option><option value="multi-cluster">Multiple star clusters</option><option value="network">Distributed interstellar network</option></select></label>
         <label><span>Technological maturity</span><select id="exo-species-technology"><option value="random">Random maturity</option><option value="preindustrial">Pre-industrial</option><option value="industrial">Industrial</option><option value="orbital">Orbital-capable</option><option value="system">System-capable</option><option value="interstellar">Interstellar</option><option value="advanced">Advanced interstellar</option><option value="postmaterial">Post-material</option></select></label>
       </div>
     </section>
 
-    <section class="exo-species-overview" aria-label="Generated species overview">
+    <section class="exo-species-overview" aria-label="Generated system and species overview">
       <article class="exo-species-visual-panel">
-        <header><p class="bli-eyebrow">Morphological reconstruction</p><h2 id="exo-species-name">Awaiting generation</h2><p id="exo-species-form-summary">Generate a dossier to create an abstract anatomical reconstruction.</p></header>
-        <svg id="exo-species-glyph" viewBox="0 0 600 440" role="img" aria-label="Abstract generated alien morphology"></svg>
+        <header><p class="bli-eyebrow">EXO signature reconstruction</p><h2 id="exo-species-name">Awaiting generation</h2><p id="exo-species-form-summary">Generate a dossier to reconstruct the system’s biological or archaeological signature.</p></header>
+        <svg id="exo-species-glyph" viewBox="0 0 600 440" role="img" aria-label="Abstract generated alien or system signature"></svg>
         <div id="exo-species-badges" class="exo-species-badges"></div>
       </article>
       <aside class="exo-species-contact-panel">
-        <p class="bli-eyebrow">EXO contact assessment</p>
+        <p class="bli-eyebrow">EXO operational assessment</p>
         <h2 id="exo-contact-rating">No assessment</h2>
-        <p id="exo-contact-summary">No species dossier has been generated.</p>
+        <p id="exo-contact-summary">No system dossier has been generated.</p>
         <div class="exo-contact-meter"><span id="exo-contact-meter-fill"></span></div>
         <dl id="exo-contact-data" class="exo-species-data"></dl>
       </aside>
     </section>
 
+    <section class="bli-section" aria-labelledby="exo-system-state-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">System-wide condition</p><h2 id="exo-system-state-title">World occupation, traffic, development, and economic use.</h2></div>
+      <div id="exo-system-state-grid" class="exo-dossier-grid"></div>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-infrastructure-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Orbital and industrial infrastructure</p><h2 id="exo-infrastructure-title">Facilities, yards, habitats, refineries, smelters, extraction arrays, and defense systems.</h2></div>
+      <div id="exo-infrastructure-grid" class="exo-dossier-grid"></div>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-resource-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Whole-system resource inventory</p><h2 id="exo-resource-title">Minerals, chemicals, volatiles, fuels, isotopes, and accessible stellar mass.</h2></div>
+      <div id="exo-system-resource-grid" class="exo-dossier-grid"></div>
+    </section>
+
+    <section class="bli-section" aria-labelledby="exo-collapse-title">
+      <div class="bli-section-head"><p class="bli-eyebrow">Continuity or extinction record</p><h2 id="exo-collapse-title">Why the system remains alive—or why its civilization is gone.</h2></div>
+      <div id="exo-collapse-grid" class="exo-dossier-grid"></div>
+    </section>
+
     <section class="bli-section" aria-labelledby="exo-biology-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Biological dossier</p><h2 id="exo-biology-title">Body plan, lifecycle, senses, and environmental adaptation.</h2></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Biological dossier</p><h2 id="exo-biology-title">Body plan, lifecycle, senses, and environmental adaptation when sapient life exists or once existed.</h2></div>
       <div id="exo-biology-grid" class="exo-dossier-grid"></div>
     </section>
 
@@ -90,14 +112,14 @@
     </section>
 
     <section class="bli-section" aria-labelledby="exo-factions-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Internal power map</p><h2 id="exo-factions-title">Major factions, institutional pressure, and political fault lines.</h2></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Internal power map</p><h2 id="exo-factions-title">Major factions, institutional pressure, claim disputes, and political fault lines.</h2></div>
       <div id="exo-faction-grid" class="exo-faction-grid"></div>
     </section>
 
     <section class="bli-section exo-operational-section" aria-labelledby="exo-operational-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Operational interpretation</p><h2 id="exo-operational-title">What EXO teams need to know before entering their territory.</h2></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Operational interpretation</p><h2 id="exo-operational-title">What EXO teams need to know before entering the system.</h2></div>
       <div class="exo-operational-grid">
-        <article><h3>Likely first-contact protocol</h3><ul id="exo-contact-protocol"></ul></article>
+        <article><h3>Entry or first-contact protocol</h3><ul id="exo-contact-protocol"></ul></article>
         <article><h3>Primary misunderstandings</h3><ul id="exo-misunderstandings"></ul></article>
         <article><h3>Strategic opportunities</h3><ul id="exo-opportunities"></ul></article>
         <article><h3>Operational hazards</h3><ul id="exo-operational-hazards"></ul></article>
@@ -105,6 +127,6 @@
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO xenology, civilization analysis, and restricted first-contact planning.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO system occupancy, xenology, civilization analysis, and restricted contact planning.</footer>
 </body>
 </html>
