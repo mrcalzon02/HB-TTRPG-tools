@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-exo-solar-system.css">
+  <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-solar-system.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-system-body">
@@ -26,7 +27,7 @@
     <div>
       <p class="bli-eyebrow">Black compartment · Exosolar cartography</p>
       <h1 id="exo-system-title">Solar System and Orbital Projection Generator.</h1>
-      <p class="bli-lede">Generate a complete random stellar system, run its planets on accelerated orbital rails, and select any object for a detailed planetary or stellar record.</p>
+      <p class="bli-lede">Generate a complete random stellar system, run its planets and moons on accelerated orbital rails, and select stars, worlds, moons, or debris belts for detailed records.</p>
       <div class="bli-actions exo-system-actions">
         <button id="exo-generate-system" class="bli-action primary" type="button">Generate Random System</button>
         <button id="exo-toggle-orbits" class="bli-action" type="button" aria-pressed="false">Pause Projection</button>
@@ -93,7 +94,7 @@
         <div class="exo-orbit-stage">
           <svg id="exo-orbit-svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="exo-orbit-svg-title exo-orbit-svg-desc">
             <title id="exo-orbit-svg-title">Generated solar-system orbital display</title>
-            <desc id="exo-orbit-svg-desc">A selectable accelerated projection of the generated star, planets, and debris belts.</desc>
+            <desc id="exo-orbit-svg-desc">A selectable accelerated projection of the generated star, planets, moons, and debris belts.</desc>
             <defs>
               <radialGradient id="exo-star-glow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stop-color="#fff7d4" stop-opacity="1"></stop>
@@ -110,19 +111,23 @@
           </svg>
           <div id="exo-orbit-empty" class="exo-orbit-empty">Generate a system to initialize the orbital projection.</div>
         </div>
-        <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Planet radii and star size are enlarged for legibility; orbital periods and relative ordering remain tied to generated system data.</footer>
+        <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Planet, moon, and star sizes are enlarged for legibility; orbital periods and relative ordering remain tied to generated system data.</footer>
       </article>
 
       <aside id="exo-object-inspector" class="exo-object-inspector" aria-labelledby="exo-inspector-title" aria-live="polite">
         <p class="bli-eyebrow">Selected record</p>
         <h2 id="exo-inspector-title">No object selected</h2>
-        <p id="exo-inspector-summary">Generate a system, then select its star or any planet.</p>
+        <p id="exo-inspector-summary">Generate a system, then select its star, a planet, a moon, or a belt.</p>
         <div id="exo-inspector-badges" class="exo-object-badges"></div>
         <dl id="exo-inspector-data" class="exo-inspector-data"></dl>
         <section class="exo-inspector-section">
           <h3>Resource and operational notes</h3>
           <ul id="exo-inspector-resources"></ul>
         </section>
+        <div class="exo-inspector-actions">
+          <button id="exo-develop-world" class="bli-action primary" type="button" hidden>Develop Selected World in System Dossier</button>
+          <p>Available for planets and moons meeting the EXO habitability threshold. The physical system and selected world are preserved during handoff.</p>
+        </div>
       </aside>
     </section>
 
@@ -130,7 +135,7 @@
       <div class="bli-section-head">
         <p class="bli-eyebrow">Generated system index</p>
         <h2 id="exo-system-index-title">Orbital bodies and resource profile.</h2>
-        <p>Selecting a row also selects the matching object in the orbital display.</p>
+        <p>Selecting a row also selects the matching planet, moon, or debris belt in the orbital display.</p>
       </div>
       <div class="exo-index-layout">
         <div class="exo-table-wrap">
