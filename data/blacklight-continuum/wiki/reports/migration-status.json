@@ -1,0 +1,275 @@
+{
+  "setting": "Blacklight Continuum",
+  "document": "Charles Intelligence Record Migration Ledger",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-07-12",
+  "currentPhase": "Phase 1 · preservation inventory and style guide",
+  "migrationPolicy": {
+    "mode": "additive-overlay",
+    "replaceSourceData": false,
+    "rewriteMechanicalText": false,
+    "minimumReviewSequence": [
+      "inventory-complete",
+      "ready-for-draft",
+      "drafting",
+      "semantic-comparison",
+      "rendered-review",
+      "approved",
+      "committed"
+    ],
+    "largeReductionWarningPercent": 15,
+    "requiredPreservation": [
+      "all source fields",
+      "all source paragraphs and distinct claims",
+      "all protected mechanics",
+      "all faction subgroups",
+      "all rivals",
+      "all incident patterns",
+      "all archive links",
+      "all internal-adversary names, classifications, descriptions, methods, and personal conflicts",
+      "all unresolved or disputed information"
+    ]
+  },
+  "sourceManifest": [
+    {
+      "id": "basic-character-options",
+      "path": "data/blacklight-continuum/rules/basic-character-options.json",
+      "sha": "3610572fddf3ee9055c4514f4bc17942ce389b6e",
+      "contains": ["six Archetype overviews", "innate abilities", "power families", "class lore", "protected mechanics"]
+    },
+    {
+      "id": "human-vigil-practices",
+      "path": "data/blacklight-continuum/rules/human-vigil-practices.json",
+      "sha": "3e7ce08a60d19132300e266be40f54c3c76fe45e",
+      "contains": ["seven Vigil Convictions", "ten Hunter Practices"]
+    },
+    {
+      "id": "vampire-remainder-bloodlines",
+      "path": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
+      "sha": "87f0cc3a5dd50bbfd12769c1a417f10e131fe038",
+      "contains": ["thirteen Remainder Bloodlines"]
+    },
+    {
+      "id": "shapechanger-remainder-forms",
+      "path": "data/blacklight-continuum/rules/shapechanger-remainder-forms.json",
+      "sha": "5045c1b42509189ec0e61706d2c57d70e7407bf0",
+      "contains": ["thirteen Lunar Nations", "ten Changing Forms"]
+    },
+    {
+      "id": "eldritch-binding-sources",
+      "path": "data/blacklight-continuum/rules/eldritch-binding-sources.json",
+      "sha": "75d9217863d59ef321ed85405d6636b93a3681fd",
+      "contains": ["six Binding Sources", "thirty Depth abilities"]
+    },
+    {
+      "id": "harmonic-compact-remainders",
+      "path": "data/blacklight-continuum/rules/harmonic-compact-remainders.json",
+      "sha": "0c9cc30fb82b25eb11b633fe0674c01cd454638a",
+      "contains": ["thirteen Compact Remainders"]
+    },
+    {
+      "id": "technomancer-awakening-practices",
+      "path": "data/blacklight-continuum/rules/technomancer-awakening-practices.json",
+      "sha": "b7dd26af4fa0fa66c52818847c309264accedb4a",
+      "contains": ["five Awakening Paradigms", "five Praxis Orders", "ten Career Practices"]
+    },
+    {
+      "id": "supernatural-factions",
+      "path": "data/blacklight-continuum/wiki/supernatural-factions.json",
+      "sha": "743a7ddade199207bc8f5f508d418df8ca53b95a",
+      "contains": ["nineteen faction families", "faction subgroups", "rivals", "incident patterns", "archive links"]
+    },
+    {
+      "id": "internal-adversaries",
+      "path": "data/blacklight-continuum/wiki/internal-adversaries.json",
+      "sha": "05dc8559855d422a09f97d7ef75a0f5b9068b945",
+      "contains": ["forty-nine internal adversaries"]
+    },
+    {
+      "id": "continuum-induction",
+      "path": "blacklight-continuum-induction.html",
+      "sha": "ca98c5e144f40eca1a3ce85bc70d92727c7ccd51",
+      "contains": ["induction doctrine", "Veil", "Arrangement", "awareness", "Charles and Blacklight", "guiding principle"]
+    }
+  ],
+  "settingEntries": [
+    {"id":"continuum-induction","name":"Blacklight Continuum: A World of Transitions","status":"inventory-complete","source":"blacklight-continuum-induction.html"},
+    {"id":"veil","name":"The Veil","status":"inventory-complete","source":"blacklight-continuum-induction.html#veil"},
+    {"id":"arrangement","name":"The Arrangement","status":"inventory-complete","source":"blacklight-continuum-induction.html#arrangement"},
+    {"id":"delayed-awakening","name":"The Delayed Awakening","status":"inventory-complete","source":"blacklight-wiki-archive.html#continuum-overview"},
+    {"id":"consensus-reality","name":"Consensus Reality","status":"inventory-complete","source":"blacklight-wiki-archive.html#continuum-overview"},
+    {"id":"enemies-within","name":"Enemies Within","status":"inventory-complete","source":"blacklight-wiki-archive.html#continuum-overview"},
+    {"id":"hidden-societies","name":"Hidden Societies","status":"inventory-complete","source":"blacklight-wiki-archive.html#continuum-overview"},
+    {"id":"capability-first","name":"Capability-First Characters","status":"inventory-complete","source":"blacklight-wiki-archive.html#continuum-overview"}
+  ],
+  "classes": {
+    "human-investigator": {
+      "name": "Human Investigator",
+      "overviewStatus": "inventory-complete",
+      "source": "data/blacklight-continuum/rules/human-vigil-practices.json",
+      "subgroups": [
+        {"id":"red-line","name":"The Red Line","catalog":"vigil-convictions","status":"inventory-complete"},
+        {"id":"standing-wall","name":"The Standing Wall","catalog":"vigil-convictions","status":"inventory-complete"},
+        {"id":"clear-verdict","name":"The Clear Verdict","catalog":"vigil-convictions","status":"inventory-complete"},
+        {"id":"willing-burden","name":"The Willing Burden","catalog":"vigil-convictions","status":"inventory-complete"},
+        {"id":"open-door","name":"The Open Door","catalog":"vigil-convictions","status":"inventory-complete"},
+        {"id":"unbroken-witness","name":"The Unbroken Witness","catalog":"vigil-convictions","status":"inventory-complete"},
+        {"id":"far-horizon","name":"The Far Horizon","catalog":"vigil-convictions","status":"inventory-complete"},
+        {"id":"counterpredator","name":"Counterpredator","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"sanctuary-marshal","name":"Sanctuary Marshal","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"forensic-adversary","name":"Forensic Adversary","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"burden-carrier","name":"Burden Carrier","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"recovery-negotiator","name":"Recovery Negotiator","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"witness-advocate","name":"Witness Advocate","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"cell-architect","name":"Cell Architect","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"solitary-listener","name":"Solitary Listener","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"final-directive","name":"Final Directive","catalog":"hunter-practices","status":"inventory-complete"},
+        {"id":"containment-engineer","name":"Containment Engineer","catalog":"hunter-practices","status":"inventory-complete"}
+      ]
+    },
+    "vampire": {
+      "name": "Vampire",
+      "overviewStatus": "inventory-complete",
+      "source": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
+      "subgroups": [
+        {"id":"crowned-blood","name":"The Crowned Blood","catalog":"lineages","status":"ready-for-draft","internalAdversary":"The Crownless Regency"},
+        {"id":"ash-rebellion","name":"The Ash Rebellion","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Red Committee"},
+        {"id":"velvet-fixation","name":"The Velvet Fixation","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Pallid Salon"},
+        {"id":"fractured-moon","name":"The Fractured Moon","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Straight Line"},
+        {"id":"beast-remnant","name":"The Beast Remnant","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Kennel of Glass"},
+        {"id":"underveil-kin","name":"The Underveil Kin","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Lit Warrens"},
+        {"id":"crimson-calculists","name":"The Crimson Calculists","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Empty Formulae"},
+        {"id":"starless-court","name":"The Starless Court","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Noon Throne"},
+        {"id":"sepulcher-choir","name":"The Sepulcher Choir","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Borrowed Dead"},
+        {"id":"quiet-tribunal","name":"The Quiet Tribunal","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Red Appeal"},
+        {"id":"coil-testament","name":"The Coil Testament","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Mercy Serpents"},
+        {"id":"flesh-loom","name":"The Flesh Loom","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Ivory Pattern"},
+        {"id":"night-roads","name":"The Night Roads","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Tollbound"}
+      ]
+    },
+    "shapechanger": {
+      "name": "Shapechanger",
+      "overviewStatus": "inventory-complete",
+      "source": "data/blacklight-continuum/rules/shapechanger-remainder-forms.json",
+      "subgroups": [
+        {"id":"burning-line","name":"Mothers of the Burning Line","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Ash Mothers"},
+        {"id":"streetbone-clans","name":"The Streetbone Clans","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Clean Sweep"},
+        {"id":"concordant-grove","name":"The Concordant Grove","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Peace of Teeth"},
+        {"id":"hearthfire-singers","name":"The Hearthfire Singers","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Cold Tale"},
+        {"id":"ironhowl-hosts","name":"The Ironhowl Hosts","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Carrion Champions"},
+        {"id":"glass-circuit-packs","name":"The Glass Circuit Packs","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Static Brood"},
+        {"id":"first-fang-wilds","name":"The First Fang Wilds","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Empty Wild"},
+        {"id":"veiled-talon-courts","name":"The Veiled Talon Courts","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Hidden Crown"},
+        {"id":"long-road-deadwalkers","name":"The Long Road Deadwalkers","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Roadless Dead"},
+        {"id":"moon-crowned-houses","name":"The Moon-Crowned Houses","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Pale Regency"},
+        {"id":"still-horizon-order","name":"The Still Horizon Order","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Closed Eye"},
+        {"id":"coilroot-keepers","name":"The Coilroot Keepers","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Open Seal"},
+        {"id":"white-gale-nations","name":"The White Gale Nations","catalog":"lunar-nations","status":"inventory-complete","internalAdversary":"The Thawing Company"},
+        {"id":"pridebound-hunters","name":"The Pridebound Hunters","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Caged Pride"},
+        {"id":"blackwing-couriers","name":"The Blackwing Couriers","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The False Omen"},
+        {"id":"deep-sleep-wardens","name":"The Deep-Sleep Wardens","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Winter Maw"},
+        {"id":"elder-scale-keepers","name":"The Elder-Scale Keepers","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Fossil Court"},
+        {"id":"laughing-horizon","name":"The Laughing Horizon","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Joke Without Mercy"},
+        {"id":"underwarren-chorus","name":"The Underwarren Chorus","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Plague Crown"},
+        {"id":"abyssal-jaw","name":"The Abyssal Jaw","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Red Tide"},
+        {"id":"silk-covenant","name":"The Silk Covenant","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Widow Parliament"},
+        {"id":"lantern-foxes","name":"The Lantern Foxes","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Ninefold Lie"},
+        {"id":"verdict-coil","name":"The Verdict Coil","catalog":"changing-forms","status":"inventory-complete","internalAdversary":"The Unblinking Sentence"}
+      ]
+    },
+    "eldritch-binder": {
+      "name": "Eldritch Binder",
+      "overviewStatus": "inventory-complete",
+      "source": "data/blacklight-continuum/rules/eldritch-binding-sources.json",
+      "subgroups": [
+        {"id":"void-mind","name":"The Void Mind","catalog":"binding-sources","status":"inventory-complete"},
+        {"id":"abyssal-womb","name":"The Abyssal Womb","catalog":"binding-sources","status":"inventory-complete"},
+        {"id":"that-which-hungers","name":"That Which Hungers","catalog":"binding-sources","status":"inventory-complete"},
+        {"id":"lidless-eye","name":"The Lidless Eye","catalog":"binding-sources","status":"inventory-complete"},
+        {"id":"the-silence","name":"The Silence","catalog":"binding-sources","status":"inventory-complete"},
+        {"id":"the-noise","name":"The Noise","catalog":"binding-sources","status":"inventory-complete"}
+      ]
+    },
+    "harmonic-mutant": {
+      "name": "Harmonic Mutant",
+      "overviewStatus": "inventory-complete",
+      "source": "data/blacklight-continuum/rules/harmonic-compact-remainders.json",
+      "subgroups": [
+        {"id":"hearthbound-hands","name":"The Hearthbound Hands","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Ashen Hosts"},
+        {"id":"many-road-chorus","name":"The Many-Road Chorus","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Story Eaters"},
+        {"id":"brass-thornwrights","name":"The Brass Thornwrights","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Unfinished Court"},
+        {"id":"laughing-masks","name":"The Laughing Masks","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Grinning Stillness"},
+        {"id":"red-maw-compact","name":"The Red Maw Compact","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Hollow Feast"},
+        {"id":"revel-chorus","name":"The Revel Chorus","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Quiet Revel"},
+        {"id":"gilded-covenant","name":"The Gilded Covenant","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Tarnished Peerage"},
+        {"id":"whisper-hollows","name":"The Whisper Hollows","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Listening Wall"},
+        {"id":"oathstone-giants","name":"The Oathstone Giants","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Broken Pillars"},
+        {"id":"tideskin-wanderers","name":"The Tideskin Wanderers","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Dry Net"},
+        {"id":"caskfire-brotherhood","name":"The Caskfire Brotherhood","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Last Cup"},
+        {"id":"greenwake-kindred","name":"The Greenwake Kindred","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Blight Court"},
+        {"id":"quickbright-borrowers","name":"The Quickbright Borrowers","catalog":"compact-remainders","status":"inventory-complete","internalAdversary":"The Lost Property Office"}
+      ]
+    },
+    "technomancer": {
+      "name": "Technomancer",
+      "overviewStatus": "inventory-complete",
+      "source": "data/blacklight-continuum/rules/technomancer-awakening-practices.json",
+      "subgroups": [
+        {"id":"radiant-axiom","name":"The Radiant Axiom","catalog":"awakening-paradigms","status":"inventory-complete"},
+        {"id":"iron-sepulcher","name":"The Iron Sepulcher","catalog":"awakening-paradigms","status":"inventory-complete"},
+        {"id":"mirror-labyrinth","name":"The Mirror Labyrinth","catalog":"awakening-paradigms","status":"inventory-complete"},
+        {"id":"verdant-threshold","name":"The Verdant Threshold","catalog":"awakening-paradigms","status":"inventory-complete"},
+        {"id":"causal-loom","name":"The Causal Loom","catalog":"awakening-paradigms","status":"inventory-complete"},
+        {"id":"aegis-praxis","name":"The Aegis Praxis","catalog":"praxis-orders","status":"inventory-complete"},
+        {"id":"veiled-custodians","name":"The Veiled Custodians","catalog":"praxis-orders","status":"inventory-complete"},
+        {"id":"archive-first-principles","name":"The Archive of First Principles","catalog":"praxis-orders","status":"inventory-complete"},
+        {"id":"civic-ascendancy","name":"The Civic Ascendancy","catalog":"praxis-orders","status":"inventory-complete"},
+        {"id":"open-circuit-assembly","name":"The Open Circuit Assembly","catalog":"praxis-orders","status":"inventory-complete"},
+        {"id":"probability-auditor","name":"Probability Auditor","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"chronometric-analyst","name":"Chronometric Analyst","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"threshold-cartographer","name":"Threshold Cartographer","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"cognitive-architect","name":"Cognitive Architect","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"vital-pattern-engineer","name":"Vital Pattern Engineer","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"machine-spirit-envoy","name":"Machine-Spirit Envoy","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"material-compiler","name":"Material Compiler","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"entropy-custodian","name":"Entropy Custodian","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"energy-systems-theorist","name":"Energy Systems Theorist","catalog":"career-practices","status":"inventory-complete"},
+        {"id":"source-code-adept","name":"Source-Code Adept","catalog":"career-practices","status":"inventory-complete"}
+      ]
+    }
+  },
+  "factions": [
+    {"id":"blacklight-intelligence","name":"Blacklight Intelligence","status":"inventory-complete"},
+    {"id":"blood-courts","name":"Blood Courts","status":"inventory-complete"},
+    {"id":"fae-courts","name":"Fae Courts","status":"inventory-complete"},
+    {"id":"gaian-packs","name":"Gaian Packs and Spirit Courts","status":"inventory-complete"},
+    {"id":"corrupted-shapechangers","name":"Corrupted Shapechangers","status":"inventory-complete"},
+    {"id":"human-vigil","name":"Human Vigil Cells and Hunter Orders","status":"inventory-complete"},
+    {"id":"harmonic-compact","name":"The Harmonic Compact","status":"inventory-complete"},
+    {"id":"technomancer-orders","name":"Technomancer Praxis Orders","status":"inventory-complete"},
+    {"id":"eldritch-cults","name":"Eldritch Cult Networks and the Cold Directorate","status":"inventory-complete"},
+    {"id":"dream-cartels","name":"Dream Cartels","status":"inventory-complete"},
+    {"id":"oracle-houses","name":"Oracle Houses","status":"inventory-complete"},
+    {"id":"mirror-polities","name":"Mirror Polities","status":"inventory-complete"},
+    {"id":"memory-parasites","name":"Memory Parasites","status":"inventory-complete"},
+    {"id":"hollow-choir","name":"The Hollow Choir","status":"inventory-complete"},
+    {"id":"industrial-witches","name":"Industrial Witches and Contract Engineers","status":"inventory-complete"},
+    {"id":"manufacturers-extraction","name":"Manufacturers and Extraction Interests","status":"inventory-complete"},
+    {"id":"alien-remnants","name":"Alien Remnant Systems","status":"inventory-complete"},
+    {"id":"machine-intelligences","name":"Machine Intelligences","status":"inventory-complete"},
+    {"id":"outside-sovereigns","name":"Outside Patrons and Sovereign Powers","status":"inventory-complete"}
+  ],
+  "phaseStatus": [
+    {"phase":0,"name":"Preservation inventory","status":"implemented","notes":"Source manifest, explicit record ledger, source snapshots, and live inventory tooling established."},
+    {"phase":1,"name":"Charles intelligence style guide","status":"implemented","notes":"Voice, evidence language, confidence levels, prohibited patterns, protected mechanics, preservation checklist, and report schema established."},
+    {"phase":2,"name":"One-entry pilot","status":"ready","notes":"The Crowned Blood and Crownless Regency are designated as the pilot. No report overlay has yet replaced their current wiki presentation."},
+    {"phase":3,"name":"Vampire records","status":"blocked-by-pilot"},
+    {"phase":4,"name":"Fae-derived Compact Remainders","status":"blocked-by-pilot"},
+    {"phase":5,"name":"Lunar Nations","status":"blocked-by-pilot"},
+    {"phase":6,"name":"Changing Forms","status":"blocked-by-pilot"},
+    {"phase":7,"name":"Remaining player Archetypes","status":"blocked-by-prior-phases"},
+    {"phase":8,"name":"Supernatural faction families","status":"blocked-by-class-migration"},
+    {"phase":9,"name":"Setting-level entries","status":"blocked-by-faction-migration"},
+    {"phase":10,"name":"Cross-record verification","status":"blocked-by-migration"}
+  ]
+}
