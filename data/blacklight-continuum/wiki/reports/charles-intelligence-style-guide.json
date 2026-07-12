@@ -1,0 +1,270 @@
+{
+  "setting": "Blacklight Continuum",
+  "document": "Charles Intelligence Record Style Guide",
+  "schemaVersion": "1.0.0",
+  "status": "approved-for-pilot",
+  "purpose": "Define the voice, evidentiary discipline, preservation requirements, and report structure used when existing Continuum wiki records are reframed as intelligence reports filed through Charles and Blacklight Intelligence.",
+  "governingPrinciples": [
+    "Preserve the complete source record before changing presentation.",
+    "Add intelligence framing without replacing established lore, mechanics, relationships, or uncertainty.",
+    "Separate confirmed observation, attributed history, inference, allegation, and unresolved intelligence.",
+    "Classify conduct, capability, obligation, and current risk rather than treating lineage, species, form, or origin as proof of guilt.",
+    "Allow reports to become longer when additional framing is required. Brevity is not a migration objective.",
+    "Keep Charles present through analytical discipline and ethical priorities rather than repetitive self-reference.",
+    "Retain the emotional, cultural, spiritual, and political character of the subject. Intelligence formatting must not flatten the setting into generic corporate prose.",
+    "Preserve all internal-adversary information and keep each enemy attached to its exact parent tradition."
+  ],
+  "charlesVoice": {
+    "qualities": [
+      "precise without becoming sterile",
+      "patient without becoming passive",
+      "ethically analytical",
+      "mildly alien in scale and perspective",
+      "careful about consent, responsibility, continuity, and agency",
+      "suspicious of inherited authority and convenient certainty",
+      "capable of compassion without treating compassion as evidence of safety",
+      "willing to identify institutional predation alongside supernatural predation",
+      "explicit about uncertainty when the archive cannot support certainty"
+    ],
+    "preferredPerspective": "The record normally uses institutional third person. First-person Charles commentary is reserved for exceptional ethical warnings, direct recollection, personal responsibility, or an unresolved contradiction that materially affects interpretation.",
+    "cadence": "Use complete, deliberate paragraphs. Alternate factual cataloging with analytical interpretation. Avoid clipped pseudo-military fragments unless the record is presenting a compact status field.",
+    "ethicalLens": "Ask who is choosing, who is constrained, who pays for the choice, who benefits from misclassification, and what agency remains after intervention."
+  },
+  "evidenceLanguage": {
+    "confirmed": [
+      "Blacklight has directly verified",
+      "The custody record establishes",
+      "Multiple independent sources confirm",
+      "Observed conduct demonstrates",
+      "The current record supports"
+    ],
+    "highConfidence": [
+      "The available record strongly indicates",
+      "Blacklight assesses with high confidence",
+      "The most consistent explanation is",
+      "Operational evidence supports"
+    ],
+    "probable": [
+      "Blacklight presently assesses",
+      "The evidence is consistent with",
+      "The leading interpretation is",
+      "Current reporting suggests"
+    ],
+    "disputed": [
+      "Accounts remain divided",
+      "The claim is preserved but unverified",
+      "The historical record is politically contaminated",
+      "No surviving source resolves",
+      "The archive records competing interpretations"
+    ],
+    "attributed": [
+      "Members of the tradition describe",
+      "Rival records allege",
+      "Court histories attribute",
+      "Pack memory preserves",
+      "Witnesses reported",
+      "The subject claims"
+    ],
+    "unknown": [
+      "Unknown",
+      "Not established",
+      "Insufficient evidence",
+      "No reliable custody record survives",
+      "The question remains operationally open"
+    ]
+  },
+  "confidenceLevels": [
+    {
+      "id": "confirmed",
+      "label": "Confirmed",
+      "definition": "Directly observed, mechanically established, or supported by multiple independent high-integrity sources."
+    },
+    {
+      "id": "high",
+      "label": "High confidence",
+      "definition": "Strongly supported with no equally credible competing explanation, though direct verification is incomplete."
+    },
+    {
+      "id": "moderate",
+      "label": "Moderate confidence",
+      "definition": "Supported by credible evidence but vulnerable to source bias, incomplete custody, or competing interpretations."
+    },
+    {
+      "id": "low",
+      "label": "Low confidence",
+      "definition": "Plausible and relevant, but dependent upon contested testimony, hostile records, symbolic evidence, or incomplete translation."
+    },
+    {
+      "id": "disputed",
+      "label": "Disputed",
+      "definition": "Preserved because the disagreement itself matters. The archive does not select one account as fact."
+    },
+    {
+      "id": "unknown",
+      "label": "Unknown",
+      "definition": "The record does not support a responsible conclusion."
+    }
+  ],
+  "standardSections": [
+    {
+      "id": "archive-heading",
+      "label": "Archive heading",
+      "required": true,
+      "purpose": "Identify subject, record type, classification, current status, confidence, aliases, and relevant jurisdictions without narrating the full report."
+    },
+    {
+      "id": "executive-assessment",
+      "label": "Executive assessment",
+      "required": true,
+      "purpose": "State why the subject matters now. This section supplements rather than replaces the detailed record."
+    },
+    {
+      "id": "historical-record",
+      "label": "Historical record",
+      "required": true,
+      "purpose": "Preserve inherited tradition, legacy functions, old obligations, political memory, and conflicting accounts in multiple paragraphs where necessary."
+    },
+    {
+      "id": "continuum-expression",
+      "label": "Continuum expression",
+      "required": true,
+      "purpose": "Preserve how the subject operates in the current Continuum, including what survived, what changed, what lost jurisdiction, and what remains unresolved."
+    },
+    {
+      "id": "capability-profile",
+      "label": "Capability profile",
+      "required": true,
+      "purpose": "Describe established abilities, resources, favored capability families, access, social power, and operational signatures. Printed mechanics remain verbatim in their mechanical fields."
+    },
+    {
+      "id": "liability-pressure-profile",
+      "label": "Liability and pressure profile",
+      "required": true,
+      "purpose": "Preserve Banes, weaknesses, temptations, intrusion risks, cultural blind spots, political liabilities, and conditions under which the subject becomes dangerous or vulnerable."
+    },
+    {
+      "id": "internal-adversary-assessment",
+      "label": "Internal adversary assessment",
+      "required": false,
+      "purpose": "Preserve the enemy name, classification, description, operating method, and personal ideological conflict. Add evidence quality, known cells, and unresolved links without deleting the original four elements."
+    },
+    {
+      "id": "blacklight-assessment",
+      "label": "Blacklight assessment",
+      "required": true,
+      "purpose": "Explain conduct-based risk, negotiation viability, likely misclassification, beneficiaries of hostile narratives, and the ethical cost of intervention."
+    },
+    {
+      "id": "operational-guidance",
+      "label": "Operational guidance",
+      "required": true,
+      "purpose": "Record recognition indicators, evidence-handling requirements, negotiation considerations, escalation thresholds, prohibited assumptions, and withdrawal conditions."
+    },
+    {
+      "id": "unresolved-intelligence",
+      "label": "Unresolved intelligence",
+      "required": true,
+      "purpose": "Preserve unknowns, contradictions, suspected propaganda, missing evidence, and questions requiring future investigation."
+    },
+    {
+      "id": "source-preservation-map",
+      "label": "Source preservation map",
+      "required": true,
+      "purpose": "Map every source field and paragraph to its destination in the report so no claim disappears during reframing."
+    }
+  ],
+  "mechanicalTextPolicy": {
+    "rule": "Printed mechanics are authoritative and must remain verbatim unless a separate rules revision is explicitly requested.",
+    "protectedFields": [
+      "resourceName",
+      "pressureName",
+      "keyAttribute",
+      "startingAbility",
+      "weakness",
+      "weaknessText",
+      "innateAbilities",
+      "powerFamilies",
+      "favoredFamilies",
+      "recommendedSkills",
+      "trainedSkills",
+      "gift",
+      "bane",
+      "method",
+      "practice",
+      "temptation",
+      "intrusionBreach",
+      "entryRequirement",
+      "progression"
+    ],
+    "presentation": "Charles may provide an operational interpretation adjacent to protected mechanics, but the original name and effect remain separately visible and unchanged."
+  },
+  "prohibitedPatterns": [
+    "Beginning every paragraph with Charles notes, Charles observes, Charles flags, or Charles believes.",
+    "Presenting Charles as the source of prophecy, spiritual revelation, ancestry, or supernatural truth.",
+    "Using prediction-engine, model-output, machine-authored prophecy, or generated-forecast language for spiritual or occult records.",
+    "Treating an entire lineage, species, form, culture, or faction as guilty by existence.",
+    "Replacing several source paragraphs with one compressed executive summary.",
+    "Removing disputed history because it cannot be resolved.",
+    "Converting spiritual, emotional, ecological, or cultural concepts into generic technical jargon.",
+    "Inventing certainty to make the report sound authoritative.",
+    "Using tactical threat language as the only lens through which a society is described.",
+    "Rewriting mechanics while performing a lore migration.",
+    "Detaching an internal adversary from the parent tradition it corrupts or opposes.",
+    "Using corporate euphemism to conceal harm, coercion, exploitation, or responsibility."
+  ],
+  "reportingDistinctions": [
+    {
+      "subject": "Identity versus conduct",
+      "instruction": "Record what the subject is, but assess risk through demonstrated conduct, capability, obligation, current intent, and the consequences of intervention."
+    },
+    {
+      "subject": "Tradition versus current organization",
+      "instruction": "A lineage or inherited practice may outlive the institutions that created it. Do not attribute the conduct of one present cell to every inheritor."
+    },
+    {
+      "subject": "Spiritual claim versus operational fact",
+      "instruction": "Preserve spiritual testimony in its own terms. Separately identify which observable effects Blacklight has verified."
+    },
+    {
+      "subject": "Internal enemy versus inevitable corruption",
+      "instruction": "The enemy is a political or metaphysical possibility produced by the tradition, not the predetermined fate of every member."
+    },
+    {
+      "subject": "Historical source versus current truth",
+      "instruction": "Mark court histories, pack memories, inherited stories, and hostile reports according to origin and known bias."
+    },
+    {
+      "subject": "Charles assessment versus archive fact",
+      "instruction": "Analytical conclusions must be visibly distinguishable from preserved testimony and confirmed evidence."
+    }
+  ],
+  "preservationChecklist": [
+    "Every original field has a preservation-map entry.",
+    "Every original paragraph or sentence-level claim has a destination or an explicit approved reason for remaining in the source-only view.",
+    "All protected mechanical fields match the authoritative source exactly.",
+    "All names and IDs remain stable unless separately approved.",
+    "Every internal adversary retains name, classification, description, method, and personal conflict.",
+    "Faction subgroups, rivals, incident patterns, and archive links remain present.",
+    "Uncertainty is retained rather than silently resolved.",
+    "Source and report word counts are recorded; a large reduction triggers manual review.",
+    "The original record remains recoverable during migration.",
+    "Search terms from both the source language and report language still resolve to the record.",
+    "The report receives semantic comparison, rendered review, and explicit approval before replacing the default wiki presentation."
+  ],
+  "approvalStates": [
+    "untouched",
+    "inventory-complete",
+    "ready-for-draft",
+    "drafting",
+    "semantic-comparison",
+    "rendered-review",
+    "approved",
+    "committed"
+  ],
+  "pilot": {
+    "classId": "vampire",
+    "recordId": "crowned-blood",
+    "pairedAdversary": "The Crownless Regency",
+    "reason": "This record contains inherited authority, present Continuum adaptation, exact mechanics, political doctrine, and a fully established internal adversary. It is sufficiently complex to expose weaknesses in the format before broader migration begins."
+  }
+}
