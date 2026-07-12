@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/blacklight-continuum/wiki/reports/charles-intelligence-report.schema.json",
+  "title": "Blacklight Continuum Charles Intelligence Report",
+  "description": "Schema for additive, source-preserving intelligence-report overlays used by the Continuum wiki migration.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sourceRecordId",
+    "recordType",
+    "reportTitle",
+    "classification",
+    "archiveStatus",
+    "confidence",
+    "sourceSnapshot",
+    "executiveAssessment",
+    "historicalRecord",
+    "continuumExpression",
+    "capabilityProfile",
+    "liabilityPressureProfile",
+    "blacklightAssessment",
+    "operationalGuidance",
+    "unresolvedIntelligence",
+    "sourcePreservationMap",
+    "review"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "sourceRecordId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parentRecordId": {
+      "type": ["string", "null"]
+    },
+    "recordType": {
+      "type": "string",
+      "enum": [
+        "setting-entry",
+        "archetype-overview",
+        "class-subgroup",
+        "internal-adversary",
+        "faction-family",
+        "faction-subgroup"
+      ]
+    },
+    "reportTitle": {
+      "type": "string",
+      "minLength": 1
+    },
+    "classification": {
+      "type": "string",
+      "minLength": 1
+    },
+    "knownAliases": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "archiveStatus": {
+      "type": "string",
+      "minLength": 1
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["confirmed", "high", "moderate", "low", "disputed", "unknown"]
+    },
+    "relevantJurisdictions": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "sourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourcePath", "sourceSha", "capturedDate", "sourceWordCount", "sourceLeafFieldCount"],
+      "properties": {
+        "sourcePath": {"type": "string", "minLength": 1},
+        "sourceSha": {"type": "string", "minLength": 7},
+        "capturedDate": {"type": "string", "format": "date"},
+        "sourceWordCount": {"type": "integer", "minimum": 0},
+        "sourceLeafFieldCount": {"type": "integer", "minimum": 0},
+        "adversarySourcePath": {"type": ["string", "null"]},
+        "adversarySourceSha": {"type": ["string", "null"]}
+      }
+    },
+    "executiveAssessment": {"$ref": "#/$defs/paragraphs"},
+    "historicalRecord": {"$ref": "#/$defs/paragraphs"},
+    "continuumExpression": {"$ref": "#/$defs/paragraphs"},
+    "capabilityProfile": {"$ref": "#/$defs/paragraphs"},
+    "liabilityPressureProfile": {"$ref": "#/$defs/paragraphs"},
+    "internalAdversaryAssessment": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "classification", "description", "operatingMethod", "personalConflict", "assessment"],
+          "properties": {
+            "name": {"type": "string"},
+            "classification": {"type": "string"},
+            "description": {"$ref": "#/$defs/paragraphs"},
+            "operatingMethod": {"$ref": "#/$defs/paragraphs"},
+            "personalConflict": {"$ref": "#/$defs/paragraphs"},
+            "assessment": {"$ref": "#/$defs/paragraphs"},
+            "knownCells": {"type": "array", "items": {"type": "string"}},
+            "unresolvedLinks": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      ]
+    },
+    "blacklightAssessment": {"$ref": "#/$defs/paragraphs"},
+    "operationalGuidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recognitionIndicators", "negotiationConsiderations", "evidenceHandling", "escalationThresholds", "prohibitedAssumptions", "withdrawalConditions"],
+      "properties": {
+        "recognitionIndicators": {"type": "array", "items": {"type": "string"}},
+        "negotiationConsiderations": {"type": "array", "items": {"type": "string"}},
+        "evidenceHandling": {"type": "array", "items": {"type": "string"}},
+        "escalationThresholds": {"type": "array", "items": {"type": "string"}},
+        "prohibitedAssumptions": {"type": "array", "items": {"type": "string"}},
+        "withdrawalConditions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "unresolvedIntelligence": {"type": "array", "items": {"type": "string"}},
+    "protectedMechanics": {
+      "type": "object",
+      "description": "Verbatim copies or references to mechanical fields. These are not rewritten by the lore migration.",
+      "additionalProperties": true
+    },
+    "sourcePreservationMap": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourcePath", "destinationSection", "status"],
+        "properties": {
+          "sourcePath": {"type": "string", "minLength": 1},
+          "destinationSection": {"type": "string", "minLength": 1},
+          "status": {"type": "string", "enum": ["preserved", "preserved-verbatim", "expanded", "pending-review"]},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["migrationState", "sourceClaimCount", "mappedClaimCount", "mechanicsVerified", "adversaryVerified", "semanticComparisonComplete", "renderedReviewComplete", "approved"],
+      "properties": {
+        "migrationState": {
+          "type": "string",
+          "enum": ["untouched", "inventory-complete", "ready-for-draft", "drafting", "semantic-comparison", "rendered-review", "approved", "committed"]
+        },
+        "sourceClaimCount": {"type": "integer", "minimum": 0},
+        "mappedClaimCount": {"type": "integer", "minimum": 0},
+        "mechanicsVerified": {"type": "boolean"},
+        "adversaryVerified": {"type": "boolean"},
+        "semanticComparisonComplete": {"type": "boolean"},
+        "renderedReviewComplete": {"type": "boolean"},
+        "approved": {"type": "boolean"},
+        "reviewNotes": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "$defs": {
+    "paragraphs": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}
