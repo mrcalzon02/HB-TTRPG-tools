@@ -3,7 +3,7 @@
   "document": "Charles Intelligence Record Migration Ledger",
   "schemaVersion": "1.0.0",
   "lastUpdated": "2026-07-12",
-  "currentPhase": "Phase 1 · preservation inventory and style guide",
+  "currentPhase": "Phase 2 · one-entry pilot drafting",
   "migrationPolicy": {
     "mode": "additive-overlay",
     "replaceSourceData": false,
@@ -92,6 +92,18 @@
       "contains": ["induction doctrine", "Veil", "Arrangement", "awareness", "Charles and Blacklight", "guiding principle"]
     }
   ],
+  "pilotReports": [
+    {
+      "id": "vampire.crowned-blood",
+      "name": "The Crowned Blood and the Crownless Regency",
+      "status": "drafting",
+      "reportPath": "data/blacklight-continuum/wiki/reports/class-reports/vampire/crowned-blood.json",
+      "reviewPath": "blacklight-wiki-pilot-review.html",
+      "liveReplacementAuthorized": false,
+      "semanticComparisonComplete": false,
+      "renderedReviewComplete": false
+    }
+  ],
   "settingEntries": [
     {"id":"continuum-induction","name":"Blacklight Continuum: A World of Transitions","status":"inventory-complete","source":"blacklight-continuum-induction.html"},
     {"id":"veil","name":"The Veil","status":"inventory-complete","source":"blacklight-continuum-induction.html#veil"},
@@ -132,7 +144,7 @@
       "overviewStatus": "inventory-complete",
       "source": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json",
       "subgroups": [
-        {"id":"crowned-blood","name":"The Crowned Blood","catalog":"lineages","status":"ready-for-draft","internalAdversary":"The Crownless Regency"},
+        {"id":"crowned-blood","name":"The Crowned Blood","catalog":"lineages","status":"drafting","internalAdversary":"The Crownless Regency"},
         {"id":"ash-rebellion","name":"The Ash Rebellion","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Red Committee"},
         {"id":"velvet-fixation","name":"The Velvet Fixation","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Pallid Salon"},
         {"id":"fractured-moon","name":"The Fractured Moon","catalog":"lineages","status":"inventory-complete","internalAdversary":"The Straight Line"},
@@ -262,7 +274,7 @@
   "phaseStatus": [
     {"phase":0,"name":"Preservation inventory","status":"implemented","notes":"Source manifest, explicit record ledger, source snapshots, and live inventory tooling established."},
     {"phase":1,"name":"Charles intelligence style guide","status":"implemented","notes":"Voice, evidence language, confidence levels, prohibited patterns, protected mechanics, preservation checklist, and report schema established."},
-    {"phase":2,"name":"One-entry pilot","status":"ready","notes":"The Crowned Blood and Crownless Regency are designated as the pilot. No report overlay has yet replaced their current wiki presentation."},
+    {"phase":2,"name":"One-entry pilot","status":"drafting","notes":"The Crowned Blood and Crownless Regency report exists as an isolated draft with a field-by-field comparison page. Semantic comparison and rendered approval remain incomplete; live replacement is blocked."},
     {"phase":3,"name":"Vampire records","status":"blocked-by-pilot"},
     {"phase":4,"name":"Fae-derived Compact Remainders","status":"blocked-by-pilot"},
     {"phase":5,"name":"Lunar Nations","status":"blocked-by-pilot"},
