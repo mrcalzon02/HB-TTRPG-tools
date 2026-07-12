@@ -75,21 +75,46 @@
 .wiki-disclaimer{padding:20px}
 .wiki-disclaimer h2{margin-top:0;color:#f1c66f}
 .wiki-loading,.wiki-error,.wiki-empty{grid-column:1/-1;border:1px dashed rgba(217,168,79,.28);border-radius:16px;padding:20px;color:#bdb3a4;background:rgba(0,0,0,.18)}
+.wiki-induction-feature{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:22px;align-items:stretch;border:1px solid rgba(217,168,79,.38);border-radius:24px;padding:24px;background:
+  radial-gradient(circle at 88% 10%,rgba(217,168,79,.14),transparent 18rem),
+  linear-gradient(145deg,rgba(29,25,20,.98),rgba(5,5,5,.99));box-shadow:0 24px 70px rgba(0,0,0,.27)}
+.wiki-induction-copy h2{margin:.12rem 0 .8rem;color:#f4efe5;font-size:clamp(1.65rem,3.2vw,2.65rem)}
+.wiki-induction-copy p{color:#c9c0b0;line-height:1.72}
+.wiki-induction-feature blockquote{margin:0;border:1px solid rgba(217,168,79,.28);border-radius:20px;padding:24px;background:rgba(0,0,0,.32);display:flex;flex-direction:column;justify-content:center}
+.wiki-induction-feature blockquote p{margin:0;color:#f2dfb5;font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.25rem,2.4vw,1.8rem);line-height:1.48}
+.wiki-induction-feature blockquote footer{margin-top:18px;color:#9f9586;font-size:.78rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.induction-hero{min-height:520px}
+.induction-shell{max-width:1040px}
+.induction-principle{margin:6px 0 30px;border-left:5px solid #d9a84f;padding:18px 22px;background:linear-gradient(90deg,rgba(217,168,79,.1),rgba(217,168,79,0));color:#f2dfb5;font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.35rem,3vw,2.05rem);line-height:1.5}
+.induction-principle p{margin:0}
+.induction-article{border:1px solid rgba(217,168,79,.22);border-radius:26px;padding:clamp(22px,5vw,54px);background:linear-gradient(155deg,rgba(24,22,19,.97),rgba(5,5,5,.99));box-shadow:0 28px 80px rgba(0,0,0,.28)}
+.induction-section{scroll-margin-top:92px;padding:8px 0 30px}
+.induction-section+.induction-section{border-top:1px solid rgba(217,168,79,.15);padding-top:34px}
+.induction-section h2{margin:.15rem 0 1rem;color:#f4efe5;font-size:clamp(1.65rem,3vw,2.45rem)}
+.induction-section p{margin:0 0 1.15rem;color:#d0c6b6;line-height:1.82;font-size:1.02rem}
+.induction-section strong{color:#f1c66f}
+.induction-closing{border:1px solid rgba(217,168,79,.28);border-radius:20px;padding:26px!important;background:rgba(217,168,79,.055)}
+.induction-closing p:last-child{margin-bottom:0;color:#f2dfb5;font-size:1.15rem}
 [hidden]{display:none!important}
+@media(max-width:900px){
+  .wiki-induction-feature{grid-template-columns:1fr}
+}
 @media(max-width:720px){
   .wiki-shell{width:min(100% - 20px,1240px)}
   .wiki-search-panel{position:relative;top:auto}
   .wiki-record>summary{grid-template-columns:1fr}
   .wiki-record-code{justify-content:flex-start}
   .wiki-search-controls{grid-template-columns:1fr}
+  .wiki-induction-feature{padding:18px}
+  .induction-article{padding:22px}
 }
 @media print{
   .no-print{display:none!important}
   .blacklight-corp-body{background:#fff;color:#111}
   .wiki-shell{width:100%;padding:0}
-  .wiki-record,.wiki-faction-card,.wiki-overview-card,.wiki-disclaimer{box-shadow:none;background:#fff;border-color:#777}
+  .wiki-record,.wiki-faction-card,.wiki-overview-card,.wiki-disclaimer,.wiki-induction-feature,.induction-article{box-shadow:none;background:#fff;border-color:#777}
   .wiki-record>summary{display:block}
   .wiki-record-body,.wiki-subgroup-body{display:block!important}
   details:not([open])>*:not(summary){display:block}
-  .wiki-section-head p,.wiki-record p,.wiki-faction-card p,.wiki-overview-card p{color:#111}
+  .wiki-section-head p,.wiki-record p,.wiki-faction-card p,.wiki-overview-card p,.induction-section p{color:#111}
 }
