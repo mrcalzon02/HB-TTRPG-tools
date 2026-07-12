@@ -91,9 +91,7 @@
   function indexVariants(data) {
     const index = new Map();
     for (const catalog of collectCatalogs(data)) {
-      for (const variant of catalog.variants) {
-        index.set(variant.id, { variant, catalog });
-      }
+      for (const variant of catalog.variants) index.set(variant.id, { variant, catalog });
     }
     return index;
   }
@@ -175,17 +173,27 @@
       const source = classData[classId];
       const variants = indexVariants(source);
       const archetype = archetypeIndex.get(classId);
-      const ledgerIds = new Set(list(classLedger.subgroups).map(record => record.id));
+      const ledgerRecords = list(classLedger.subgroups);
+      const ledgerIds = new Set(ledgerRecords.map(record => record.id));
       const actualIds = new Set([...variants.keys()]);
+      const expectedAdversaryIds = new Set(ledgerRecords.filter(record => record.internalAdversary).map(record => record.id));
+      const actualAdversaryIds = new Set(Object.keys(adversaries?.[classId] || {}));
       const missingInSource = [...ledgerIds].filter(id => !actualIds.has(id));
       const missingInLedger = [...actualIds].filter(id => !ledgerIds.has(id));
-      mismatches += missingInSource.length + missingInLedger.length + (archetype ? 0 : 1);
+      const missingAdversaries = [...expectedAdversaryIds].filter(id => !actualAdversaryIds.has(id));
+      const orphanAdversaries = [...actualAdversaryIds].filter(id => !ledgerIds.has(id));
+      const adversaryNameMismatches = ledgerRecords.filter(record => {
+        if (!record.internalAdversary) return false;
+        const actualAdversary = adversaries?.[classId]?.[record.id];
+        return actualAdversary && actualAdversary.name !== record.internalAdversary;
+      });
+      mismatches += missingInSource.length + missingInLedger.length + missingAdversaries.length + orphanAdversaries.length + adversaryNameMismatches.length + (archetype ? 0 : 1);
       subgroupCount += actualIds.size;
 
-      const rows = list(classLedger.subgroups).map(record => {
+      const rows = ledgerRecords.map(record => {
         const match = variants.get(record.id);
         const adversary = adversaries?.[classId]?.[record.id] || null;
-        const missing = !match;
+        const missing = !match || Boolean(record.internalAdversary && !adversary) || Boolean(adversary && record.internalAdversary && adversary.name !== record.internalAdversary);
         return `
           <tr data-search="${escapeHtml([classLedger.name, record.name, record.id, record.catalog, record.status, record.internalAdversary, adversary?.classification, adversary?.description].filter(Boolean).join(' ').toLowerCase())}" data-missing="${missing}">
             <td><strong>${escapeHtml(record.name)}</strong><div class="migration-code">${escapeHtml(record.id)}</div></td>
@@ -198,21 +206,25 @@
           </tr>`;
       }).join('');
 
-      const warning = missingInSource.length || missingInLedger.length ? `
+      const hasWarnings = missingInSource.length || missingInLedger.length || missingAdversaries.length || orphanAdversaries.length || adversaryNameMismatches.length;
+      const warning = hasWarnings ? `
         <div class="migration-error">
           ${missingInSource.length ? `<p><strong>Ledger records missing from source:</strong> ${escapeHtml(missingInSource.join(', '))}</p>` : ''}
           ${missingInLedger.length ? `<p><strong>Source records missing from ledger:</strong> ${escapeHtml(missingInLedger.join(', '))}</p>` : ''}
+          ${missingAdversaries.length ? `<p><strong>Expected adversaries missing from source:</strong> ${escapeHtml(missingAdversaries.join(', '))}</p>` : ''}
+          ${orphanAdversaries.length ? `<p><strong>Adversaries without a ledgered parent record:</strong> ${escapeHtml(orphanAdversaries.join(', '))}</p>` : ''}
+          ${adversaryNameMismatches.length ? `<p><strong>Adversary names differing from ledger:</strong> ${escapeHtml(adversaryNameMismatches.map(record => record.id).join(', '))}</p>` : ''}
         </div>` : '';
 
       html.push(`
-        <details class="migration-class-block" open data-search="${escapeHtml(classLedger.name.toLowerCase())}">
+        <details class="migration-class-block" open data-class-search="${escapeHtml(classLedger.name.toLowerCase())}">
           <summary>
-            <div><strong>${escapeHtml(classLedger.name)}</strong><span>${actualIds.size} subgroup records · ${Object.keys(adversaries?.[classId] || {}).length} internal adversaries</span></div>
+            <div><strong>${escapeHtml(classLedger.name)}</strong><span>${actualIds.size} subgroup records · ${actualAdversaryIds.size} internal adversaries</span></div>
             ${badge(classLedger.overviewStatus)}
           </summary>
           <div class="migration-class-body">
             ${warning}
-            <div class="migration-card">
+            <div class="migration-card" data-search="${escapeHtml(`${classLedger.name} archetype overview ${classLedger.source}`.toLowerCase())}">
               <h4>Archetype overview baseline</h4>
               <p><strong>Source:</strong> <span class="migration-code">${escapeHtml(classLedger.source)}</span></p>
               <p><strong>Overview words:</strong> ${archetype ? wordCount(archetype) : 'missing'} · <strong>Leaf fields:</strong> ${archetype ? leafFieldCount(archetype) : 'missing'}</p>
@@ -290,9 +302,17 @@
   function bindSearch() {
     function apply() {
       const query = String(ui.search?.value || '').trim().toLowerCase();
-      document.querySelectorAll('[data-search]').forEach(node => {
+      const searchable = [...document.querySelectorAll('[data-search]')];
+      for (const node of searchable) {
         node.hidden = Boolean(query) && !String(node.dataset.search || '').includes(query);
-      });
+      }
+      for (const block of document.querySelectorAll('.migration-class-block')) {
+        const classMatch = !query || String(block.dataset.classSearch || '').includes(query);
+        const visibleRows = [...block.querySelectorAll('tbody tr')].some(row => !row.hidden);
+        const visibleCards = [...block.querySelectorAll('.migration-card[data-search]')].some(card => !card.hidden);
+        block.hidden = !(classMatch || visibleRows || visibleCards);
+        if (query && !block.hidden) block.open = true;
+      }
     }
     ui.search?.addEventListener('input', apply);
     ui.clear?.addEventListener('click', () => {
@@ -340,7 +360,7 @@
 
       bindSearch();
       ui.status.textContent = mismatchCount === 0
-        ? 'Preservation inventory loaded. Every ledgered class subgroup and faction family resolves to its current authoritative source record.'
+        ? 'Preservation inventory loaded. Every ledgered class subgroup, attached internal adversary, and faction family resolves to its current authoritative source record.'
         : `Preservation inventory loaded with ${mismatchCount} ledger/source mismatch${mismatchCount === 1 ? '' : 'es'} requiring review.`;
     } catch (error) {
       console.error(error);
