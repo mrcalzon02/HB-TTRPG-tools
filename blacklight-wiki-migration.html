@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Continuum Wiki Migration Control | Charles Intelligence Records</title>
+  <meta name="description" content="Preservation inventory, migration ledger, report schema, and Charles intelligence style guide for the Blacklight Continuum wiki conversion.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight-wiki-migration.html">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="blacklight-wiki-archive.css">
+  <link rel="stylesheet" href="blacklight-wiki-migration.css">
+</head>
+<body class="blacklight-corp-body">
+  <header class="bli-topbar no-print">
+    <a class="bli-brand" href="blacklight-wiki-archive.html" aria-label="Return to the Blacklight Continuum Wiki"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Migration Control</span></span></a>
+    <nav class="bli-nav" aria-label="Migration control navigation">
+      <a href="#migration-phases-section">Phases</a>
+      <a href="#style-guide">Style Guide</a>
+      <a href="#class-inventory">Classes</a>
+      <a href="#faction-inventory">Factions</a>
+      <a href="#source-manifest">Sources</a>
+      <a href="blacklight-wiki-archive.html">Continuum Wiki</a>
+    </nav>
+  </header>
+
+  <section class="bli-hero wiki-hero" aria-labelledby="migration-title">
+    <div>
+      <span class="wiki-classification">Black archive · controlled record migration</span>
+      <p class="bli-eyebrow">Charles intelligence-report conversion</p>
+      <h1 id="migration-title">Preserve first. Reframe second.</h1>
+      <p class="bli-lede">This control archive governs the slow conversion of the Continuum Wiki into diegetic intelligence reports filed through Charles. Existing lore, mechanics, political relationships, internal adversaries, rivalries, uncertainties, and source context remain authoritative until an individual replacement report survives semantic comparison and rendered review.</p>
+      <div class="bli-actions no-print">
+        <a class="bli-action primary" href="#class-inventory">Open Preservation Inventory</a>
+        <a class="bli-action" href="#style-guide">Read the Style Guide</a>
+        <a class="bli-action" href="blacklight-wiki-archive.html">Return to Wiki</a>
+      </div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Migration rules">
+      <div class="bli-directory-title">Migration Control Rules</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Source records replaced</strong><span class="bli-arrow">0</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Mechanical rewrites</strong><span class="bli-arrow">0</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Required review stages</strong><span class="bli-arrow">7</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Pilot record</strong><span class="bli-arrow">Crowned Blood</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="migration-shell">
+    <section class="migration-notice">
+      <strong>ARCHIVE DIRECTIVE:</strong> This page does not rewrite the wiki. It inventories what currently exists, records the exact sources from which later reports must be built, defines the voice and evidence standards, and exposes any mismatch between the migration ledger and the live source records.
+    </section>
+
+    <section class="migration-section" aria-labelledby="metrics-title">
+      <div class="migration-section-head">
+        <p class="bli-eyebrow">Live preservation baseline</p>
+        <h2 id="metrics-title">Current inventory coverage.</h2>
+        <p id="migration-status" role="status">Loading migration ledger and authoritative source records…</p>
+      </div>
+      <div id="migration-metrics" class="migration-metrics"></div>
+    </section>
+
+    <section id="migration-phases-section" class="migration-section">
+      <div class="migration-section-head">
+        <p class="bli-eyebrow">Controlled sequence</p>
+        <h2>Migration phases and current gates.</h2>
+        <p>No later phase becomes active merely because prose exists. Each gate requires the preceding preservation and review work to be complete.</p>
+      </div>
+      <div id="migration-phases" class="migration-grid"></div>
+    </section>
+
+    <section id="style-guide" class="migration-section">
+      <div class="migration-section-head">
+        <p class="bli-eyebrow">Charles archive voice</p>
+        <h2>Intelligence-report style and preservation doctrine.</h2>
+        <p>The style guide controls how reports distinguish evidence, attribution, analysis, uncertainty, and operational concern. It also defines the patterns that are prohibited because they would flatten the setting, imply false certainty, or erase source context.</p>
+      </div>
+      <div id="migration-style-guide" class="migration-panel"></div>
+    </section>
+
+    <section class="migration-section no-print" aria-labelledby="search-title">
+      <div class="migration-section-head">
+        <p class="bli-eyebrow">Inventory search</p>
+        <h2 id="search-title">Locate a source record, enemy, status, or migration phase.</h2>
+      </div>
+      <div class="migration-search">
+        <input id="migration-search" type="search" placeholder="Search Crowned Blood, Static Brood, inventory-complete, Veil, source path…" autocomplete="off">
+        <button id="migration-search-clear" type="button">Clear</button>
+      </div>
+    </section>
+
+    <section id="class-inventory" class="migration-section">
+      <div class="migration-section-head">
+        <p class="bli-eyebrow">Class and subgroup baseline</p>
+        <h2>Player Archetypes, subgroup records, and attached enemies.</h2>
+        <p>Word and leaf-field counts are calculated from the current authoritative JSON at page load. They are not targets for later prose; they are loss-warning baselines. A large reduction in a replacement report requires manual semantic review.</p>
+      </div>
+      <div id="migration-class-inventory"></div>
+    </section>
+
+    <section id="faction-inventory" class="migration-section">
+      <div class="migration-section-head">
+        <p class="bli-eyebrow">Faction baseline</p>
+        <h2>Faction families and preserved structural fields.</h2>
+        <p>Every faction migration must retain its summary, doctrine, named subgroups, rivals, incident patterns, and archive links. The live table exposes those counts before any report drafting begins.</p>
+      </div>
+      <div id="migration-faction-inventory"></div>
+    </section>
+
+    <section id="source-manifest" class="migration-section">
+      <div class="migration-section-head">
+        <p class="bli-eyebrow">Custody manifest</p>
+        <h2>Authoritative files and captured source snapshots.</h2>
+        <p>The manifest records the file and Git blob SHA used to establish the migration baseline. If a source changes before its report is approved, that record must be re-inventoried rather than silently migrated from an obsolete snapshot.</p>
+      </div>
+      <div id="migration-source-manifest" class="migration-panel"></div>
+    </section>
+
+    <section class="migration-section wiki-disclaimer">
+      <h2>Current implementation boundary</h2>
+      <p>Phases 0 and 1 are implemented. The existing Continuum Wiki still renders its original source data. The Crowned Blood and the Crownless Regency are marked ready for the one-entry pilot, but no Charles report overlay has yet replaced their current entry.</p>
+    </section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Continuum Wiki migration control · Source preservation before diegetic reframing.</footer>
+  <script src="blacklight-wiki-migration.js?v=20260712-1"></script>
+</body>
+</html>
