@@ -1,0 +1,95 @@
+.wiki-hero{background:
+  radial-gradient(circle at 78% 18%,rgba(217,168,79,.15),transparent 24rem),
+  radial-gradient(circle at 12% 70%,rgba(116,90,160,.12),transparent 28rem),
+  linear-gradient(145deg,rgba(21,20,18,.98),rgba(3,3,3,.99))}
+.wiki-classification{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(217,168,79,.46);border-radius:999px;padding:6px 10px;color:#f1c66f;background:rgba(217,168,79,.08);font-size:.72rem;font-weight:950;letter-spacing:.12em;text-transform:uppercase}
+.wiki-shell{width:min(1240px,calc(100% - 32px));margin:0 auto;padding:30px 0 76px}
+.wiki-section{margin-top:34px;scroll-margin-top:92px}
+.wiki-section-head{max-width:960px;margin-bottom:18px}
+.wiki-section-head h2{margin:.18rem 0 .55rem;color:#f4efe5;font-size:clamp(1.55rem,3vw,2.3rem)}
+.wiki-section-head p,.wiki-overview-card p,.wiki-record p,.wiki-subgroup p,.wiki-faction-card p{line-height:1.68;color:#c9c0b0}
+.wiki-search-panel{position:sticky;top:8px;z-index:8;border:1px solid rgba(217,168,79,.32);border-radius:22px;padding:18px;background:rgba(7,7,7,.94);backdrop-filter:blur(16px);box-shadow:0 18px 55px rgba(0,0,0,.34)}
+.wiki-search-panel h2{margin:.12rem 0 .75rem;color:#f4efe5;font-size:1.25rem}
+.wiki-search-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
+.wiki-search-controls input{width:100%;min-height:46px;border:1px solid rgba(217,168,79,.28);border-radius:14px;padding:10px 13px;background:#11100f;color:#f4efe5;font:inherit}
+.wiki-search-controls button,.wiki-filter{border:1px solid rgba(217,168,79,.34);border-radius:999px;padding:9px 14px;background:rgba(217,168,79,.07);color:#e8dfd0;font-weight:850;cursor:pointer}
+.wiki-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.wiki-filter.active{background:#d9a84f;color:#17130c;border-color:#d9a84f}
+.wiki-search-status{margin:12px 0 0;color:#aa9f8c;font-size:.88rem}
+.wiki-overview-grid,.wiki-record-grid,.wiki-route-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}
+.wiki-overview-card,.wiki-record,.wiki-faction-card,.wiki-route-card,.wiki-disclaimer{border:1px solid rgba(217,168,79,.22);border-radius:20px;background:linear-gradient(155deg,rgba(25,23,20,.96),rgba(5,5,5,.98));box-shadow:0 17px 46px rgba(0,0,0,.18)}
+.wiki-overview-card{padding:20px}
+.wiki-overview-card h3{margin:0 0 8px;color:#f1c66f}
+.wiki-record-stack{display:grid;gap:18px}
+.wiki-record{padding:0;overflow:hidden}
+.wiki-record>summary{list-style:none;cursor:pointer;padding:21px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:start}
+.wiki-record>summary::-webkit-details-marker,.wiki-subgroup>summary::-webkit-details-marker{display:none}
+.wiki-record>summary h3{margin:0;color:#f4efe5;font-size:1.45rem}
+.wiki-record>summary p{margin:7px 0 0}
+.wiki-record-code{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}
+.wiki-badge{display:inline-flex;border:1px solid rgba(217,168,79,.28);border-radius:999px;padding:4px 8px;background:rgba(217,168,79,.06);color:#d9c18d;font-size:.69rem;font-weight:900;letter-spacing:.065em;text-transform:uppercase}
+.wiki-record-body{padding:0 21px 22px;border-top:1px solid rgba(217,168,79,.14)}
+.wiki-class-lede{font-size:1.03rem}
+.wiki-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.wiki-stat{border:1px solid rgba(217,168,79,.16);border-radius:14px;padding:12px;background:rgba(0,0,0,.22)}
+.wiki-stat span{display:block;color:#9f9586;font-size:.68rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+.wiki-stat strong{display:block;margin-top:5px;color:#eee6d8}
+.wiki-record-section{margin-top:20px}
+.wiki-record-section h4{margin:0 0 10px;color:#f1c66f;font-size:1.05rem}
+.wiki-compact-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.wiki-compact-item{border-left:3px solid rgba(217,168,79,.55);border-radius:0 12px 12px 0;padding:11px 12px;background:rgba(217,168,79,.055)}
+.wiki-compact-item strong{display:block;color:#f0e7d8}
+.wiki-compact-item span{display:block;margin-top:4px;color:#bdb3a4;line-height:1.48;font-size:.9rem}
+.wiki-catalog{margin-top:18px}
+.wiki-catalog-header{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:10px}
+.wiki-catalog-header h4{margin:0;color:#f4efe5}
+.wiki-catalog-header span{color:#a99f90;font-size:.8rem}
+.wiki-subgroup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:11px}
+.wiki-subgroup{border:1px solid rgba(217,168,79,.16);border-radius:16px;background:rgba(0,0,0,.23);overflow:hidden}
+.wiki-subgroup>summary{list-style:none;cursor:pointer;padding:14px}
+.wiki-subgroup>summary strong{display:block;color:#eee6d8}
+.wiki-subgroup>summary span{display:block;margin-top:5px;color:#a99f90;font-size:.82rem}
+.wiki-subgroup-body{padding:0 14px 15px;border-top:1px solid rgba(217,168,79,.12)}
+.wiki-subgroup-body p{margin:.8rem 0}
+.wiki-subgroup-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.wiki-subgroup-feature{margin-top:10px;padding:10px 11px;border-radius:11px;background:rgba(217,168,79,.06)}
+.wiki-subgroup-feature strong{color:#f1c66f}
+.wiki-progression{margin:9px 0 0;padding-left:20px;color:#c9c0b0;line-height:1.55}
+.wiki-faction-card{padding:19px;scroll-margin-top:170px}
+.wiki-faction-card h3{margin:0;color:#f4efe5}
+.wiki-faction-family{display:inline-block;margin:8px 0;border-radius:999px;padding:4px 8px;background:rgba(217,168,79,.09);color:#f1c66f;font-size:.7rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
+.wiki-doctrine{border-left:3px solid rgba(217,168,79,.55);padding-left:12px}
+.wiki-faction-card h4{margin:17px 0 8px;color:#f1c66f}
+.wiki-faction-subgroups{display:grid;gap:8px}
+.wiki-faction-subgroup{border-radius:12px;padding:10px;background:rgba(0,0,0,.22)}
+.wiki-faction-subgroup strong{display:block;color:#e9e0d1}
+.wiki-faction-subgroup span{display:block;margin-top:4px;color:#bcb2a3;line-height:1.5;font-size:.9rem}
+.wiki-tag-row{display:flex;flex-wrap:wrap;gap:6px}
+.wiki-tag{border:1px solid rgba(217,168,79,.2);border-radius:999px;padding:4px 7px;color:#cfc4b2;font-size:.72rem}
+.wiki-link-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.wiki-link-row a{color:#f1c66f;text-decoration:none;font-weight:850}
+.wiki-route-card{display:block;padding:18px;text-decoration:none}
+.wiki-route-card strong{display:block;color:#f1c66f}
+.wiki-route-card span{display:block;margin-top:6px;color:#bdb3a4;line-height:1.55}
+.wiki-route-card:hover{border-color:rgba(217,168,79,.55);transform:translateY(-1px)}
+.wiki-disclaimer{padding:20px}
+.wiki-disclaimer h2{margin-top:0;color:#f1c66f}
+.wiki-loading,.wiki-error,.wiki-empty{grid-column:1/-1;border:1px dashed rgba(217,168,79,.28);border-radius:16px;padding:20px;color:#bdb3a4;background:rgba(0,0,0,.18)}
+[hidden]{display:none!important}
+@media(max-width:720px){
+  .wiki-shell{width:min(100% - 20px,1240px)}
+  .wiki-search-panel{position:relative;top:auto}
+  .wiki-record>summary{grid-template-columns:1fr}
+  .wiki-record-code{justify-content:flex-start}
+  .wiki-search-controls{grid-template-columns:1fr}
+}
+@media print{
+  .no-print{display:none!important}
+  .blacklight-corp-body{background:#fff;color:#111}
+  .wiki-shell{width:100%;padding:0}
+  .wiki-record,.wiki-faction-card,.wiki-overview-card,.wiki-disclaimer{box-shadow:none;background:#fff;border-color:#777}
+  .wiki-record>summary{display:block}
+  .wiki-record-body,.wiki-subgroup-body{display:block!important}
+  details:not([open])>*:not(summary){display:block}
+  .wiki-section-head p,.wiki-record p,.wiki-faction-card p,.wiki-overview-card p{color:#111}
+}
