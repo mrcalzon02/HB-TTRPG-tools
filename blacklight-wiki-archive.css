@@ -28,14 +28,19 @@
 .wiki-record>summary p{margin:7px 0 0}
 .wiki-record-code{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}
 .wiki-badge{display:inline-flex;border:1px solid rgba(217,168,79,.28);border-radius:999px;padding:4px 8px;background:rgba(217,168,79,.06);color:#d9c18d;font-size:.69rem;font-weight:900;letter-spacing:.065em;text-transform:uppercase}
+.wiki-badge-danger{border-color:rgba(190,73,66,.58);background:rgba(190,73,66,.12);color:#f2a29c}
 .wiki-record-body{padding:0 21px 22px;border-top:1px solid rgba(217,168,79,.14)}
 .wiki-class-lede{font-size:1.03rem}
 .wiki-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
 .wiki-stat{border:1px solid rgba(217,168,79,.16);border-radius:14px;padding:12px;background:rgba(0,0,0,.22)}
 .wiki-stat span{display:block;color:#9f9586;font-size:.68rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .wiki-stat strong{display:block;margin-top:5px;color:#eee6d8}
+.wiki-stat-danger{border-color:rgba(190,73,66,.38);background:rgba(116,29,25,.18)}
+.wiki-stat-danger span{color:#c78580}
+.wiki-stat-danger strong{color:#f2a29c}
 .wiki-record-section{margin-top:20px}
 .wiki-record-section h4{margin:0 0 10px;color:#f1c66f;font-size:1.05rem}
+.wiki-adversary-doctrine{border-left:3px solid rgba(190,73,66,.7);padding:13px 15px;background:rgba(116,29,25,.12);border-radius:0 14px 14px 0}
 .wiki-compact-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
 .wiki-compact-item{border-left:3px solid rgba(217,168,79,.55);border-radius:0 12px 12px 0;padding:11px 12px;background:rgba(217,168,79,.055)}
 .wiki-compact-item strong{display:block;color:#f0e7d8}
@@ -49,11 +54,19 @@
 .wiki-subgroup>summary{list-style:none;cursor:pointer;padding:14px}
 .wiki-subgroup>summary strong{display:block;color:#eee6d8}
 .wiki-subgroup>summary span{display:block;margin-top:5px;color:#a99f90;font-size:.82rem}
+.wiki-subgroup>summary .wiki-adversary-summary{color:#d98e88;font-weight:850;letter-spacing:.02em}
 .wiki-subgroup-body{padding:0 14px 15px;border-top:1px solid rgba(217,168,79,.12)}
 .wiki-subgroup-body p{margin:.8rem 0}
 .wiki-subgroup-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .wiki-subgroup-feature{margin-top:10px;padding:10px 11px;border-radius:11px;background:rgba(217,168,79,.06)}
 .wiki-subgroup-feature strong{color:#f1c66f}
+.wiki-internal-adversary{margin-top:14px;border:1px solid rgba(190,73,66,.38);border-radius:14px;padding:13px 14px;background:linear-gradient(145deg,rgba(99,24,21,.2),rgba(19,6,5,.34));box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+.wiki-adversary-heading{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.wiki-adversary-heading>strong{color:#f3b0aa;font-size:1rem}
+.wiki-adversary-heading>span:last-child{color:#bd8a85;font-size:.76rem;font-weight:800;letter-spacing:.04em}
+.wiki-internal-adversary p{color:#d1b9b6}
+.wiki-internal-adversary p strong{color:#f0a19a}
+.wiki-adversary-conflict{border-left:3px solid rgba(190,73,66,.62);padding-left:10px}
 .wiki-progression{margin:9px 0 0;padding-left:20px;color:#c9c0b0;line-height:1.55}
 .wiki-faction-card{padding:19px;scroll-margin-top:170px}
 .wiki-faction-card h3{margin:0;color:#f4efe5}
