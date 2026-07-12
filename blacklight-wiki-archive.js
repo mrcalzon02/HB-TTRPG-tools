@@ -11,12 +11,14 @@
   };
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
   const FACTIONS_URL = 'data/blacklight-continuum/wiki/supernatural-factions.json';
+  const ADVERSARIES_URL = 'data/blacklight-continuum/wiki/internal-adversaries.json';
 
   const state = {
     filter: 'all',
     query: '',
     classes: [],
-    factions: []
+    factions: [],
+    adversaries: {}
   };
 
   const ui = {
@@ -27,7 +29,8 @@
     status: document.getElementById('wiki-search-status'),
     classCount: document.getElementById('wiki-class-count'),
     subgroupCount: document.getElementById('wiki-subgroup-count'),
-    factionCount: document.getElementById('wiki-faction-count')
+    factionCount: document.getElementById('wiki-faction-count'),
+    adversaryCount: document.getElementById('wiki-adversary-count')
   };
 
   function escapeHtml(value) {
@@ -108,11 +111,32 @@
     return `<div class="wiki-subgroup-feature"><span class="wiki-badge">${escapeHtml(label)}</span>${name}${effect}</div>`;
   }
 
-  function subgroupSearchText(variant, catalog, className) {
+  function internalAdversaryFor(classId, variantId) {
+    return state.adversaries?.[classId]?.[variantId] || null;
+  }
+
+  function renderInternalAdversary(adversary) {
+    if (!adversary) return '';
+    return `
+      <section class="wiki-internal-adversary" aria-label="Internal adversary">
+        <div class="wiki-adversary-heading">
+          <span class="wiki-badge wiki-badge-danger">Internal adversary</span>
+          <strong>${escapeHtml(adversary.name)}</strong>
+          ${adversary.classification ? `<span>${escapeHtml(adversary.classification)}</span>` : ''}
+        </div>
+        <p>${escapeHtml(adversary.description)}</p>
+        ${adversary.method ? `<p><strong>Operating method:</strong> ${escapeHtml(adversary.method)}</p>` : ''}
+        ${adversary.conflict ? `<p class="wiki-adversary-conflict"><strong>Why the conflict is personal:</strong> ${escapeHtml(adversary.conflict)}</p>` : ''}
+      </section>`;
+  }
+
+  function subgroupSearchText(variant, catalog, className, adversary) {
     const parts = [
       className, catalog.title, variant.name, variant.legacy, variant.continuum,
       ...(variant.favoredFamilies || []), ...(variant.recommendedSkills || []),
-      ...(variant.trainedSkills || []), variant.entryRequirement
+      ...(variant.trainedSkills || []), variant.entryRequirement,
+      adversary?.name, adversary?.classification, adversary?.description,
+      adversary?.method, adversary?.conflict
     ];
     for (const key of ['gift', 'bane', 'method', 'practice', 'temptation', 'intrusionBreach']) {
       parts.push(variant[key]?.name, variant[key]?.effect);
@@ -121,7 +145,7 @@
     return parts.filter(Boolean).join(' ').toLowerCase();
   }
 
-  function renderSubgroup(variant, catalog, className) {
+  function renderSubgroup(variant, catalog, archetype) {
     const tags = [
       ...list(variant.favoredFamilies),
       ...list(variant.recommendedSkills),
@@ -129,6 +153,7 @@
     ];
     const intro = variant.continuum || variant.legacy || variant.description || '';
     const progression = list(variant.progression);
+    const adversary = internalAdversaryFor(archetype.id, variant.id);
     const detailFeatures = [
       feature('Gift', variant.gift),
       feature('Bane', variant.bane),
@@ -137,12 +162,13 @@
       feature('Temptation', variant.temptation),
       feature('Intrusion breach', variant.intrusionBreach)
     ].join('');
-    const searchText = subgroupSearchText(variant, catalog, className);
+    const searchText = subgroupSearchText(variant, catalog, archetype.name, adversary);
     return `
       <details class="wiki-subgroup" data-record-type="subgroup" data-search="${escapeHtml(searchText)}">
         <summary>
           <strong>${escapeHtml(variant.name || titleCase(variant.id))}</strong>
           <span>${escapeHtml(concise(intro, 150))}</span>
+          ${adversary ? `<span class="wiki-adversary-summary">Enemy within: ${escapeHtml(adversary.name)}</span>` : ''}
         </summary>
         <div class="wiki-subgroup-body">
           ${variant.legacy ? `<p><strong>Inherited tradition:</strong> ${escapeHtml(variant.legacy)}</p>` : ''}
@@ -150,6 +176,7 @@
           ${variant.description && !variant.continuum ? `<p>${escapeHtml(variant.description)}</p>` : ''}
           ${variant.entryRequirement ? `<p><strong>Entry requirement:</strong> ${escapeHtml(variant.entryRequirement)}</p>` : ''}
           ${tags.length ? `<div class="wiki-subgroup-meta">${[...new Set(tags)].map(tag => `<span class="wiki-tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+          ${renderInternalAdversary(adversary)}
           ${detailFeatures}
           ${progression.length ? `<div class="wiki-subgroup-feature"><span class="wiki-badge">Progression</span><ol class="wiki-progression">${progression.map(step => `<li><strong>${escapeHtml([step.stage, step.name].filter(Boolean).join(' · '))}</strong>${step.effect ? ` — ${escapeHtml(step.effect)}` : ''}</li>`).join('')}</ol></div>` : ''}
         </div>
@@ -159,6 +186,9 @@
   function renderClass(archetype, subgroupData) {
     const catalogs = collectCatalogs(subgroupData);
     const subgroupCount = catalogs.reduce((sum, catalog) => sum + catalog.variants.length, 0);
+    const adversaryCount = catalogs.reduce((sum, catalog) => (
+      sum + catalog.variants.filter(variant => internalAdversaryFor(archetype.id, variant.id)).length
+    ), 0);
     const innate = list(archetype.innateAbilities);
     const families = list(archetype.powerFamilies);
     const lore = list(archetype.lore);
@@ -167,10 +197,15 @@
       archetype.keyAttribute, archetype.startingAbility, archetype.weakness,
       ...innate.flatMap(item => [item.name, item.effect]),
       ...families.flatMap(item => [item.name, item.description]),
-      ...catalogs.flatMap(catalog => catalog.variants.flatMap(item => [
-        item.name, item.legacy, item.continuum, ...(item.favoredFamilies || []),
-        ...(item.recommendedSkills || []), ...(item.trainedSkills || [])
-      ]))
+      ...catalogs.flatMap(catalog => catalog.variants.flatMap(item => {
+        const adversary = internalAdversaryFor(archetype.id, item.id);
+        return [
+          item.name, item.legacy, item.continuum, ...(item.favoredFamilies || []),
+          ...(item.recommendedSkills || []), ...(item.trainedSkills || []),
+          adversary?.name, adversary?.classification, adversary?.description,
+          adversary?.method, adversary?.conflict
+        ];
+      }))
     ].filter(Boolean).join(' ').toLowerCase();
 
     return `
@@ -184,6 +219,7 @@
             <span class="wiki-badge">${escapeHtml(archetype.resourceName)} resource</span>
             <span class="wiki-badge">${escapeHtml(archetype.pressureName)} pressure</span>
             <span class="wiki-badge">${subgroupCount} subgroup entries</span>
+            ${adversaryCount ? `<span class="wiki-badge wiki-badge-danger">${adversaryCount} internal enemies</span>` : ''}
           </div>
         </summary>
         <div class="wiki-record-body">
@@ -195,15 +231,17 @@
             <div class="wiki-stat"><span>Starting Ability</span><strong>${escapeHtml(archetype.startingAbility)}</strong></div>
             <div class="wiki-stat"><span>Weakness</span><strong>${escapeHtml(archetype.weakness)}</strong></div>
             <div class="wiki-stat"><span>Subgroup records</span><strong>${subgroupCount}</strong></div>
+            ${adversaryCount ? `<div class="wiki-stat wiki-stat-danger"><span>Internal adversaries</span><strong>${adversaryCount}</strong></div>` : ''}
           </div>
           ${archetype.weaknessText ? `<div class="wiki-record-section"><h4>${escapeHtml(archetype.weakness)}</h4><p>${escapeHtml(archetype.weaknessText)}</p></div>` : ''}
           ${innate.length ? `<div class="wiki-record-section"><h4>Innate capabilities</h4><div class="wiki-compact-list">${innate.map(item => `<div class="wiki-compact-item"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.effect)}</span></div>`).join('')}</div></div>` : ''}
           ${families.length ? `<div class="wiki-record-section"><h4>Shared power families</h4><div class="wiki-compact-list">${families.map(item => `<div class="wiki-compact-item"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.description)}</span></div>`).join('')}</div></div>` : ''}
           ${subgroupData?.framework ? `<div class="wiki-record-section"><h4>Subgroup framework</h4><p>${escapeHtml(subgroupData.framework)}</p></div>` : ''}
+          ${adversaryCount ? `<div class="wiki-record-section wiki-adversary-doctrine"><h4>Enemies within the tradition</h4><p>These adversaries are not universal biological enemies. They are corrupted mirrors, predatory institutions, fallen houses, hostile offshoots, and ideological schisms produced by the same history and capabilities as the subgroup they oppose.</p></div>` : ''}
           ${catalogs.map(catalog => `
             <section class="wiki-catalog">
               <div class="wiki-catalog-header"><h4>${escapeHtml(catalog.title)}</h4><span>${escapeHtml(catalog.eyebrow || catalog.code)}</span><span class="wiki-badge">${catalog.variants.length} entries</span></div>
-              <div class="wiki-subgroup-grid">${catalog.variants.map(variant => renderSubgroup(variant, catalog, archetype.name)).join('')}</div>
+              <div class="wiki-subgroup-grid">${catalog.variants.map(variant => renderSubgroup(variant, catalog, archetype)).join('')}</div>
             </section>`).join('')}
           ${lore.length ? `<details class="wiki-subgroup wiki-record-section"><summary><strong>Full class setting notes</strong><span>${lore.length} archive paragraphs</span></summary><div class="wiki-subgroup-body">${lore.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}</div></details>` : ''}
         </div>
@@ -312,9 +350,10 @@
 
   async function initialize() {
     try {
-      const [rules, factionData, ...subgroupFiles] = await Promise.all([
+      const [rules, factionData, adversaryData, ...subgroupFiles] = await Promise.all([
         fetchJson(RULES_URL),
         fetchJson(FACTIONS_URL),
+        fetchJson(ADVERSARIES_URL),
         ...Object.values(CLASS_SOURCES).map(fetchJson)
       ]);
       const subgroupByClass = {};
@@ -322,6 +361,7 @@
 
       state.classes = list(rules.archetypes);
       state.factions = list(factionData.factions);
+      state.adversaries = adversaryData?.classes || {};
       ui.classRecords.innerHTML = state.classes.map(archetype => renderClass(archetype, subgroupByClass[archetype.id])).join('');
       ui.factionRecords.innerHTML = state.factions.map(renderFaction).join('');
 
@@ -329,9 +369,13 @@
         const catalogs = collectCatalogs(subgroupByClass[archetype.id]);
         return sum + catalogs.reduce((catalogSum, catalog) => catalogSum + catalog.variants.length, 0);
       }, 0);
+      const adversaryCount = Object.values(state.adversaries)
+        .reduce((sum, classAdversaries) => sum + Object.keys(classAdversaries || {}).length, 0);
+
       if (ui.classCount) ui.classCount.textContent = String(state.classes.length);
       if (ui.subgroupCount) ui.subgroupCount.textContent = String(subgroupCount);
       if (ui.factionCount) ui.factionCount.textContent = String(state.factions.length);
+      if (ui.adversaryCount) ui.adversaryCount.textContent = String(adversaryCount);
 
       bindSearch();
       applySearch();
