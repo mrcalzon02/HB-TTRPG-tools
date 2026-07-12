@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blacklight Continuum Wiki Archive | Classes, Factions and Setting Records</title>
-  <meta name="description" content="Unified Blacklight Continuum wiki archive for the induction doctrine, player character classes, supernatural factions, subgroups, setting principles, and existing Black archive records.">
-  <meta name="keywords" content="Blacklight Continuum wiki, induction article, the Veil, the Arrangement, player classes, supernatural factions, vampire bloodlines, shapechanger nations, eldritch binding sources, technomancer orders, harmonic compact">
+  <meta name="description" content="Unified Blacklight Continuum wiki archive for the induction doctrine, player character classes, internal adversaries, supernatural factions, subgroups, setting principles, and existing Black archive records.">
+  <meta name="keywords" content="Blacklight Continuum wiki, induction article, the Veil, the Arrangement, player classes, internal adversaries, supernatural factions, vampire bloodlines, shapechanger nations, eldritch binding sources, technomancer orders, harmonic compact">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight-wiki-archive.html">
   <link rel="stylesheet" href="styles.css">
@@ -30,7 +30,7 @@
       <span class="wiki-classification">Black archive · unified setting reference</span>
       <p class="bli-eyebrow">Blacklight Continuum knowledge archive</p>
       <h1 id="wiki-title">The Continuum, indexed in one place.</h1>
-      <p class="bli-lede">This archive surfaces the setting information previously divided among induction doctrine, character rules, court catalogs, Gaian records, entity files, rivalry maps, campaign dossiers, and restricted reference pages. It provides one route into the world’s governing principles, every established player Archetype, and the supernatural societies, factions, lineages, nations, orders, cults, courts, packs, and other powers surrounding them.</p>
+      <p class="bli-lede">This archive surfaces the setting information previously divided among induction doctrine, character rules, court catalogs, Gaian records, entity files, rivalry maps, campaign dossiers, and restricted reference pages. It provides one route into the world’s governing principles, every established player Archetype, their enemies within, and the supernatural societies, factions, lineages, nations, orders, cults, courts, packs, and other powers surrounding them.</p>
       <div class="bli-actions no-print">
         <a class="bli-action primary" href="blacklight-continuum-induction.html">Begin Continuum Induction</a>
         <a class="bli-action" href="#player-classes">Open Player Classes</a>
@@ -43,6 +43,7 @@
         <div class="bli-directory-item" role="listitem"><strong>Guiding induction</strong><span class="bli-arrow">1</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Player Archetypes</strong><span id="wiki-class-count" class="bli-arrow">6</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Class subgroup entries</strong><span id="wiki-subgroup-count" class="bli-arrow">loading</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Internal adversaries</strong><span id="wiki-adversary-count" class="bli-arrow">loading</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Faction families</strong><span id="wiki-faction-count" class="bli-arrow">loading</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Source architecture</strong><span class="bli-arrow">live JSON</span></div>
       </div>
@@ -67,10 +68,10 @@
     <section class="wiki-search-panel no-print" aria-labelledby="wiki-search-title">
       <div>
         <p class="bli-eyebrow">Unified archive search</p>
-        <h2 id="wiki-search-title">Search classes, lineages, nations, orders, factions, and terminology.</h2>
+        <h2 id="wiki-search-title">Search classes, lineages, nations, internal enemies, factions, and terminology.</h2>
       </div>
       <div class="wiki-search-controls">
-        <input id="wiki-search" type="search" placeholder="Search bloodlines, courts, packs, convictions, cults, paradigms, spirits…" autocomplete="off">
+        <input id="wiki-search" type="search" placeholder="Search bloodlines, courts, packs, adversaries, cults, paradigms, spirits…" autocomplete="off">
         <button id="wiki-search-clear" type="button">Clear</button>
       </div>
       <div class="wiki-filter-row" aria-label="Archive filters">
@@ -98,6 +99,10 @@
           <p>An unstable supernatural status quo produced by competing powers rather than a universal signed treaty. Courts, packs, hunters, spirits, awakened orders, institutions, and predators conceal one another because open collapse would produce a world none of them can control.</p>
         </article>
         <article class="wiki-overview-card">
+          <h3>Enemies Within</h3>
+          <p>Every supernatural tradition produces its own internal threat: corrupted mirrors, predatory offshoots, fallen houses, purity movements, compulsory protectors, manufactured prophecies, hostile courts, and institutions that turn a subgroup’s defining virtue into a weapon against its own people.</p>
+        </article>
+        <article class="wiki-overview-card">
           <h3>The Delayed Awakening</h3>
           <p>The Fifth World was expected to end on December 24, 2011. Blacklight delayed the transition but did not remove the pressure. The campaign concerns who survives, what returns, and whether the Sixth World arrives through war, purge, ritual, recognition, accumulated power, or sovereign monopoly.</p>
         </article>
@@ -120,10 +125,10 @@
       <div class="wiki-section-head">
         <p class="bli-eyebrow">Playable Archetypes</p>
         <h2>Player character class archive.</h2>
-        <p>The six Archetypes below are rendered from the same rule records used by character creation and the random character generator. Their subgroup catalogs are not copied into a second hand-maintained list; the wiki reads the authoritative JSON directly.</p>
+        <p>The six Archetypes below are rendered from the same rule records used by character creation and the random character generator. Their subgroup catalogs are not copied into a second hand-maintained list; the wiki reads the authoritative JSON directly. Vampire bloodlines, fae-derived Compact Remainders, Lunar Nations, and Changing Forms now also load a dedicated internal adversary describing the enemy that grew from their own history, virtues, failures, and political pressures.</p>
       </div>
       <div id="wiki-class-records" class="wiki-record-stack">
-        <div class="wiki-loading">Loading player classes and subgroup catalogs…</div>
+        <div class="wiki-loading">Loading player classes, subgroup catalogs, and internal adversaries…</div>
       </div>
     </section>
 
@@ -159,11 +164,11 @@
 
     <section class="wiki-section wiki-disclaimer">
       <h2>Continuity and source note</h2>
-      <p>Blacklight Continuum is a fan-made, non-commercial setting and rules project. It draws inspiration from broad gothic-horror, urban-fantasy, occult-conspiracy, and science-fiction role-playing traditions. References to third-party settings and concepts remain the property of their respective owners. The names, conversions, mechanical structures, and Continuum-specific organizations presented here are maintained as the project’s own campaign adaptation and reference material.</p>
+      <p>Blacklight Continuum is a fan-made, non-commercial setting and rules project. It draws inspiration from broad gothic-horror, urban-fantasy, occult-conspiracy, and science-fiction role-playing traditions. References to third-party settings and concepts remain the property of their respective owners. The names, conversions, internal adversaries, mechanical structures, and Continuum-specific organizations presented here are original campaign adaptations and do not reproduce proprietary faction names or published text.</p>
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Unified Continuum wiki archive · Induction, classes, subgroups, factions, and setting records.</footer>
-  <script src="blacklight-wiki-archive.js?v=20260712-1"></script>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Unified Continuum wiki archive · Induction, classes, subgroups, internal adversaries, factions, and setting records.</footer>
+  <script src="blacklight-wiki-archive.js?v=20260712-2"></script>
 </body>
 </html>
