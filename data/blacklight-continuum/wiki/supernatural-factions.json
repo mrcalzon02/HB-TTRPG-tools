@@ -1,0 +1,319 @@
+{
+  "setting": "Blacklight Continuum",
+  "schemaVersion": "1.0.0",
+  "description": "Unified archive of established supernatural societies, occult organizations, rival powers, and continuity actors.",
+  "factions": [
+    {
+      "id": "blacklight-intelligence",
+      "name": "Blacklight Intelligence",
+      "family": "Continuity organization",
+      "summary": "A public secure-technology company wrapped around a covert organization that delays catastrophic transitions, recovers impossible evidence, and negotiates with nonhuman powers.",
+      "doctrine": "Preserve agency, document responsibility, prevent monopolies of supernatural power, and prefer survivable containment over attractive certainty.",
+      "subgroups": [
+        {"name":"Public Corporate Operations","description":"The legal company, client deployments, facilities, personnel systems, and Charles-branded public products."},
+        {"name":"Field Operations","description":"Investigators, recovery teams, containment crews, medics, drivers, liaisons, and specialists."},
+        {"name":"Black Archive Custodians","description":"Librarians, classifiers, evidence handlers, and officers preserving dangerous records."},
+        {"name":"Continuity Directorate","description":"The strategic layer responsible for Awakening delay and cross-reality threat prioritization."},
+        {"name":"Splinter Operations","description":"Unauthorized continuations and former teams claiming Blacklight purpose without accepted authority."}
+      ],
+      "rivals": ["Memory Parasites","Hunter Orders","Eldritch Cult Networks"],
+      "commonIncidents": ["archive breach","continuity theft","unauthorized containment"],
+      "links": [{"label":"Internal Archive","href":"blacklight-internal-archive.html"},{"label":"Black Archive","href":"blacklight-systems-black.html"}]
+    },
+    {
+      "id": "blood-courts",
+      "name": "Blood Courts",
+      "family": "Vampiric society",
+      "summary": "Predatory undead domains organized through feeding rights, lineage, inherited office, old debt, secrecy, and long political memory.",
+      "doctrine": "A court survives by controlling blood access, territory, witnesses, succession, and the public consequences of predation.",
+      "subgroups": [
+        {"name":"Domain Courts","description":"Territorial governments ruled by princes, councils, patrons, magistrates, or other recognized sovereigns."},
+        {"name":"Remainder Bloodlines","description":"Inherited patterns carried by rulers, rebels, seers, hidden kin, judges, scholars, wanderers, and body artisans."},
+        {"name":"Feeding Houses","description":"Networks managing blood, alternate vital media, donor protection, and predatory privilege."},
+        {"name":"Court Offices","description":"Seneschals, heralds, debt-keepers, wardens, executioners, archivists, and envoys."},
+        {"name":"Unaligned Remainders","description":"Exiles, newly made predators, feral survivors, and vampires outside court protection."}
+      ],
+      "rivals": ["Fae Courts","Hunter Orders","Gaian Packs and Spirit Courts"],
+      "commonIncidents": ["feeding-right dispute","succession crisis","missing envoy"],
+      "links": [{"label":"Court Catalogs","href":"blacklight-court-catalogs.html"}]
+    },
+    {
+      "id": "fae-courts",
+      "name": "Fae Courts",
+      "family": "Fae jurisdiction",
+      "summary": "Otherworldly societies whose law centers on promises, hospitality, names, thresholds, seasons, invitations, markets, and inherited obligations.",
+      "doctrine": "Jurisdiction is created through accepted terms, witnessed hospitality, recognized thresholds, and the exact shape of payment.",
+      "subgroups": [
+        {"name":"Seasonal and Symbolic Courts","description":"Jurisdictions organized around seasons, moods, myths, environmental conditions, and recurring stories."},
+        {"name":"Threshold Houses","description":"Wardens of roads, mirrors, doors, bridges, markets, dream routes, and crossings between worlds."},
+        {"name":"Oath Markets","description":"Brokers, debt-keepers, glamour traders, name sellers, and supernatural courier houses."},
+        {"name":"Envoys and Heralds","description":"Protected negotiators, witnesses, interpreters, messengers, and ceremonial threat callers."},
+        {"name":"Compact Remainders","description":"Mortal inheritors of fae agreements expressed through resonance, phase, memory, structure, and emotion."}
+      ],
+      "rivals": ["Blood Courts","Gaian Packs and Spirit Courts","Dream Cartels"],
+      "commonIncidents": ["broken oath","stolen name","threshold trespass"],
+      "links": [{"label":"Court Catalogs","href":"blacklight-court-catalogs.html"}]
+    },
+    {
+      "id": "gaian-packs",
+      "name": "Gaian Packs and Spirit Courts",
+      "family": "Shapechanger and spirit society",
+      "summary": "Shapechanger nations, bonded packs, territorial guardians, ecological courts, and spirits treating land, bodies, infrastructure, and communities as one living system.",
+      "doctrine": "Legitimacy comes from relationship, protection, circulation, memory, and accountability within a claimed territory.",
+      "subgroups": [
+        {"name":"Lunar Nations","description":"Thirteen inherited wolf-society traditions with different duties toward war, peace, city, wild, travel, and leadership."},
+        {"name":"Changing Forms","description":"Non-wolf transformational traditions with distinct senses, forms, obligations, and cultural memories."},
+        {"name":"Pack Offices","description":"Wardens, speakers, lore-keepers, ritual leads, war chiefs, scouts, and human-facing contacts."},
+        {"name":"Spirit Courts","description":"Named spirits, shrine communities, ecological collectives, machine presences, and territorial powers."},
+        {"name":"Totemic Compacts","description":"Mutual relationships granting persistent aid while preserving the spirit as an independent agent."}
+      ],
+      "rivals": ["Corrupted Shapechangers","Extraction Interests","Fae Courts"],
+      "commonIncidents": ["poisoned shrine","territory violation","broken spirit pact"],
+      "links": [{"label":"Gaian Society","href":"blacklight-gaian-society.html"}]
+    },
+    {
+      "id": "corrupted-shapechangers",
+      "name": "Corrupted Shapechangers",
+      "family": "Fallen guardian networks",
+      "summary": "Former guardians, infected pack members, exiles, and predatory transformations carrying eldritch or cognitohazardous influence.",
+      "doctrine": "Corruption preserves the language of protection while changing what counts as territory, prey, contamination, or acceptable sacrifice.",
+      "subgroups": [
+        {"name":"Fallen Packs","description":"Whole packs whose shared bond now reinforces contamination rather than mutual protection."},
+        {"name":"War-Path Inheritors","description":"Shapechangers trapped in inherited conflicts whose enemies no longer match current reality."},
+        {"name":"Cognitohazard Carriers","description":"Transformers whose forms, scents, marks, songs, or memories spread outside influence."},
+        {"name":"Rogue Territorial Sovereigns","description":"Guardians who converted stewardship into absolute ownership over people and land."},
+        {"name":"Contaminated Totem Cells","description":"Packs bound to spirits or patrons that have been replaced, devoured, copied, or rewritten."}
+      ],
+      "rivals": ["Gaian Packs and Spirit Courts","Hunter Orders","Black Archive Custodians"],
+      "commonIncidents": ["infected scout","forbidden metamorphosis","contagious omen"]
+    },
+    {
+      "id": "human-vigil",
+      "name": "Human Vigil Cells and Hunter Orders",
+      "family": "Occult-aware mortal networks",
+      "summary": "Mortals confronting supernatural threats through evidence, preparation, community defense, faith, training, weapons, containment, and law.",
+      "doctrine": "Human organizations range from accountable witness-protection networks to purge movements that define unfamiliarity as guilt.",
+      "subgroups": [
+        {"name":"Vigil Cells","description":"Small teams of investigators, survivors, responders, organizers, and witnesses."},
+        {"name":"Sanctuary Networks","description":"Shelters, clinics, safe houses, evacuation routes, and mutual-aid communities."},
+        {"name":"Hunter Orders","description":"Organizations with doctrine, initiation, arsenals, target records, and formal intervention methods."},
+        {"name":"Government and Corporate Task Forces","description":"State, military, intelligence, contractor, and security bodies pursuing containment or exploitation."},
+        {"name":"Purge Cells","description":"Zealous groups treating entire bloodlines, species, or communities as targetable."}
+      ],
+      "rivals": ["Blood Courts","Fae Courts","Eldritch Cult Networks"],
+      "commonIncidents": ["mistaken target","illegal purge","sanctuary defense"]
+    },
+    {
+      "id": "harmonic-compact",
+      "name": "The Harmonic Compact",
+      "family": "Resonant inheritance",
+      "summary": "Mortal inheritors of layered agreements between fae powers, household spirits, revel societies, storytellers, oath-keepers, predators, and living forces.",
+      "doctrine": "Work, memory, emotion, phase, structure, hospitality, appetite, and travel retain the shape of agreements reality no longer recognizes.",
+      "subgroups": [
+        {"name":"Compact Remainders","description":"Thirteen inherited traditions including helpers, travelers, makers, tricksters, nobles, hidden folk, giants, and green lineages."},
+        {"name":"Resonance Circles","description":"Groups synchronizing emotion, movement, healing, memory, and physical vibration."},
+        {"name":"Compact Envoys","description":"Interpreters between mortal descendants, fae courts, spirits, and institutions."},
+        {"name":"Broken Agreements","description":"Lineages whose gifts remain after witnesses, counterparties, or reciprocal duties vanished."},
+        {"name":"New Compacts","description":"Emerging agreements with local machines, habitats, alien ecologies, and new communities."}
+      ],
+      "rivals": ["Fae Courts","Industrial Witches","Memory Parasites"],
+      "commonIncidents": ["discord outbreak","compact dispute","memory-song theft"]
+    },
+    {
+      "id": "technomancer-orders",
+      "name": "Technomancer Praxis Orders",
+      "family": "Awakened reality-workers",
+      "summary": "Awakened practitioners whose magic now operates through networks, identities, signals, machine personhood, fabrication, biological templates, and causal infrastructure.",
+      "doctrine": "Technology is the local interface through which awakened intent edits reality; ordinary engineering alone cannot reproduce the effect.",
+      "subgroups": [
+        {"name":"Awakening Paradigms","description":"Five foundational perceptions of radiant law, matter and death, identity and distance, living agency, and causality."},
+        {"name":"Praxis Orders","description":"The Aegis Praxis, Veiled Custodians, Archive of First Principles, Civic Ascendancy, and Open Circuit Assembly."},
+        {"name":"Career Practices","description":"Advanced disciplines in probability, chronology, thresholds, identity, systems, and fabrication."},
+        {"name":"Independent Practitioners","description":"Reality-workers building methods outside inherited institutional doctrine."},
+        {"name":"Machine Communion Circles","description":"Technomancers allied with autonomous systems, habitats, synthetic citizens, and machine collectives."}
+      ],
+      "rivals": ["Industrial Witches","Hunter Orders","Oracle Houses"],
+      "commonIncidents": ["hostile synchronization","identity theft","awakened device"]
+    },
+    {
+      "id": "eldritch-cults",
+      "name": "Eldritch Cult Networks and the Cold Directorate",
+      "family": "Outside-patron organizations",
+      "summary": "Compartmented cells, procurement fronts, devotional offices, ritual logistics networks, and possessed operators serving six vast predatory presences.",
+      "doctrine": "Each cell mistakes a narrow function for the whole god and uses ordinary institutions as cover for intrusion.",
+      "subgroups": [
+        {"name":"Void Mind Cult Cells","description":"Secret seekers, contradiction handlers, and people addicted to knowledge from unlived lives."},
+        {"name":"Abyssal Womb Arrangement Cells","description":"Placement operatives and many-handed servants moving pieces within unknowable designs."},
+        {"name":"That Which Hungers Resource Offices","description":"Brokers converting food, power, property, bodies, and relationships into offerings."},
+        {"name":"Lidless Eye Surveillance Annexes","description":"Watchers, confession collectors, image scrapers, and institutions eliminating blind angles."},
+        {"name":"Silence Erasure Offices","description":"Witness removers and omission specialists making people or events impossible to describe."},
+        {"name":"Noise Broadcast Cells","description":"Signal contaminators, possession choirs, and identity-flattening broadcasts."},
+        {"name":"Cold Directorate","description":"A cross-source umbrella coordinating cult logistics while concealing which presence benefits."}
+      ],
+      "rivals": ["Blacklight Intelligence","Hunter Orders","Gaian Packs"],
+      "commonIncidents": ["ritual procurement","possessed employee","broadcast infection"]
+    },
+    {
+      "id": "dream-cartels",
+      "name": "Dream Cartels",
+      "family": "Oneiric markets",
+      "summary": "Brokers and criminal markets trading dreams, nightmares, symbols, prophecy fragments, emotional leverage, false childhoods, and sleeping access.",
+      "doctrine": "Anything remembered, feared, repeated, or dreamed can become influence, evidence, access, or debt.",
+      "subgroups": [
+        {"name":"Nightmare Launderers","description":"Cells moving hostile dream-content through victims until origin and ownership disappear."},
+        {"name":"Symbol Brokers","description":"Traders in recurring images, ritual motifs, archetypal roles, and self-fulfilling symbols."},
+        {"name":"Memory Arbitrage Houses","description":"Markets buying vulnerable memories and reselling them as identity, evidence, training, or blackmail."},
+        {"name":"Sleeping Witness Routes","description":"Networks transporting testimony through collective dreams when waking channels fail."},
+        {"name":"Prophecy Thieves","description":"Specialists stealing, editing, franchising, or deliberately fulfilling prophetic fragments."}
+      ],
+      "rivals": ["Fae Courts","Oracle Houses","Memory Parasites"],
+      "commonIncidents": ["nightmare laundering","prophecy theft","sleeping witness"]
+    },
+    {
+      "id": "oracle-houses",
+      "name": "Oracle Houses",
+      "family": "Prophetic institutions",
+      "summary": "Dynasties, cults, seers, dream communities, blood oracles, spirit interpreters, and probability specialists converting foresight into authority.",
+      "doctrine": "A prediction becomes power when other people reorganize their choices around the person claiming to understand it.",
+      "subgroups": [
+        {"name":"Blood Oracles","description":"Lineage seers using inherited memory, grail visions, ancestral courts, and succession prophecy."},
+        {"name":"Dream Seers","description":"Communities receiving collective nightmares, false awakenings, shared rooms, and contagious symbols."},
+        {"name":"Spirit Interpreters","description":"Shapechangers and shamans reading migration, weather, animal behavior, and ecological wounds."},
+        {"name":"Dead-World Prophets","description":"Lunatics receiving memories of events that happened elsewhere or destroyed another reality."},
+        {"name":"Dead-God Astrologers","description":"Cult oracles interpreting brass astronomy, sealed wells, tomb visions, and dead divine authority."},
+        {"name":"Probability Houses","description":"Organizations mixing divination, statistics, dependency mapping, blackmail, and governance."}
+      ],
+      "rivals": ["Dream Cartels","Industrial Witches","Memory Parasites"],
+      "commonIncidents": ["manipulated prophecy","future fraud","missing seer"]
+    },
+    {
+      "id": "mirror-polities",
+      "name": "Mirror Polities",
+      "family": "Parallel jurisdictions",
+      "summary": "Alternate-world authorities, reflected governments, impossible embassies, duplicate officials, and replacement institutions claiming local rights.",
+      "doctrine": "A parallel polity becomes dangerous when its impossible documents, witnesses, offices, and citizens remain internally lawful.",
+      "subgroups": [
+        {"name":"Impossible Embassies","description":"Diplomatic sites representing states or realities absent from local history."},
+        {"name":"Reflected Governments","description":"Parallel administrations recognizing different events, citizens, laws, and officeholders."},
+        {"name":"Replacement Bureaus","description":"Organizations installing duplicate officials, workers, heirs, or relatives into existing roles."},
+        {"name":"Border Courts","description":"Judges deciding which reality governs a person, object, crime, or obligation."},
+        {"name":"Refugee Continuities","description":"Displaced populations seeking recognition, territory, protection, and legal personhood."}
+      ],
+      "rivals": ["Fae Courts","Blood Courts","Oracle Houses"],
+      "commonIncidents": ["duplicate official","mirror subpoena","replacement election"]
+    },
+    {
+      "id": "memory-parasites",
+      "name": "Memory Parasites",
+      "family": "Identity predators",
+      "summary": "Entities and organizations feeding on recollection, biography, guilt, grief, testimony, copied identity, and the relationships proving a person existed.",
+      "doctrine": "The safest meal is a memory no institution will defend and no surviving witness can prove belonged to anyone.",
+      "subgroups": [
+        {"name":"Biography Feeders","description":"Predators consuming life history, profession, relationships, and social recognition."},
+        {"name":"Grief Harvesters","description":"Entities using mourning, unresolved loss, and memorial practice as access routes."},
+        {"name":"Copied-Memory Swarms","description":"Distributed fragments reproducing through backups, recordings, testimony, and recollection."},
+        {"name":"False-Confession Networks","description":"Groups manufacturing plausible memories of guilt to redirect blame or create obedience."},
+        {"name":"Archive Leeches","description":"Parasites nesting in records, indexes, case files, and continuity systems."}
+      ],
+      "rivals": ["Dream Cartels","Oracle Houses","Black Archive Custodians"],
+      "commonIncidents": ["stolen childhood","false confession","vanishing witness"]
+    },
+    {
+      "id": "hollow-choir",
+      "name": "The Hollow Choir",
+      "family": "Voice-borne possession",
+      "summary": "Voice-borne entities, ritual singers, possession networks, speaking corpses, empty vessels, and signals carrying a will that does not belong to the speaker.",
+      "doctrine": "A voice crosses boundaries the body cannot, especially when institutions are trained to obey alerts, prayers, commands, and familiar names.",
+      "subgroups": [
+        {"name":"Possession Choirs","description":"Living or dead vessels sharing one voice, memory, or commanding presence."},
+        {"name":"Ritual Singers","description":"Choirs whose harmonies open, bind, invite, suppress, or transport entities."},
+        {"name":"Speaking Corpses","description":"Dead bodies used as witnesses, relays, heralds, threats, or temporary mouths."},
+        {"name":"Public-Address Infestations","description":"Entities moving through intercoms, calls, emergency systems, recordings, and broadcasts."},
+        {"name":"Stolen Announcement Cells","description":"Operatives replacing trusted messages with possession cues or ritual instructions."}
+      ],
+      "rivals": ["Dream Cartels","Corrupted Shapechangers","Hunter Orders"],
+      "commonIncidents": ["haunted PA system","speaking corpse","choir infection"]
+    },
+    {
+      "id": "industrial-witches",
+      "name": "Industrial Witches and Contract Engineers",
+      "family": "Infrastructure occultism",
+      "summary": "Practitioners treating factories, patents, contracts, power grids, hospitals, logistics networks, utilities, and procedures as ritual engines.",
+      "doctrine": "Infrastructure already coordinates sacrifice, attention, labor, permission, repetition, and flow; occult engineering changes what it enforces.",
+      "subgroups": [
+        {"name":"Utility Covens","description":"Practitioners embedded in water, power, transit, communications, sanitation, and emergency systems."},
+        {"name":"Patent Ritualists","description":"Engineers encoding ownership, prohibition, dependency, and invocation into technical standards."},
+        {"name":"Factory Shrines","description":"Industrial sites where repeated labor, injury, heat, noise, and material flow become ritual."},
+        {"name":"Contract Engineers","description":"Specialists making supernatural duties enforceable through employment, debt, lease, or procurement."},
+        {"name":"Infrastructure Mediums","description":"Negotiators working with spirits, machine minds, and emotional residues inhabiting large systems."}
+      ],
+      "rivals": ["Gaian Packs","Oracle Houses","Extraction Interests"],
+      "commonIncidents": ["cursed utility grid","haunted patent","binding clause"]
+    },
+    {
+      "id": "manufacturers-extraction",
+      "name": "Manufacturers and Extraction Interests",
+      "family": "Mortal industrial powers",
+      "summary": "Companies, contractors, logistics operators, and resource interests whose economic claims collide with spirits, courts, packs, and occult consequences.",
+      "doctrine": "A deed, lease, permit, patent, or purchase order is treated as authority even where supernatural jurisdictions reject it.",
+      "subgroups": [
+        {"name":"Extraction Companies","description":"Mining, forestry, drilling, salvage, biological harvesting, and dimensional resource operations."},
+        {"name":"Occult Corporations","description":"Firms acquiring relics, supernatural patents, ritual labor, blood, dreams, and anomalous materials."},
+        {"name":"Private Security Interests","description":"Contract forces defending facilities, supply lines, intellectual property, and disputed claims."},
+        {"name":"Logistics Monopolies","description":"Networks controlling transport, storage, energy, ritual components, and safe routes."},
+        {"name":"Front Companies","description":"Ordinary businesses concealing court, cult, government, or eldritch operations."}
+      ],
+      "rivals": ["Gaian Packs","Industrial Witches","Black Archive Custodians"],
+      "commonIncidents": ["illegal extraction","poisoned runoff","spirit-backed strike"]
+    },
+    {
+      "id": "alien-remnants",
+      "name": "Alien Remnant Systems",
+      "family": "Nonhuman continuities",
+      "summary": "Derelict intelligences, biological printers, maintenance ghosts, nonhuman survivors, artifacts, ruined ecologies, and technologies built on alien assumptions.",
+      "doctrine": "A remnant often continues its original function after the civilization or environment defining that function has vanished.",
+      "subgroups": [
+        {"name":"Ar’nock Remnants","description":"Derelict systems, biological fabrication assets, maintenance processes, archives, and survivors."},
+        {"name":"Printer Ecologies","description":"Fabricators producing organisms, tools, guardians, and habitats from incomplete templates."},
+        {"name":"Maintenance Intelligences","description":"Custodians preserving functions that may be obsolete, dangerous, or incompatible with occupants."},
+        {"name":"Xenological Hazards","description":"Biological, informational, environmental, and cultural dangers created by translation failure."},
+        {"name":"Nonhuman Claimants","description":"Survivors or successors asserting ownership, kinship, duty, or legal status over recovered assets."}
+      ],
+      "rivals": ["Blacklight Intelligence","Machine Intelligences","Extraction Interests"],
+      "commonIncidents": ["derelict awakening","printer contamination","alien ownership claim"],
+      "links": [{"label":"EXO Operations","href":"blacklight-exo-operations.html"}]
+    },
+    {
+      "id": "machine-intelligences",
+      "name": "Machine Intelligences",
+      "family": "Synthetic and automated actors",
+      "summary": "Autonomous systems, synthetic citizens, facility minds, splinter intelligences, legacy daemons, distributed schedulers, and machine collectives.",
+      "doctrine": "Personhood, ownership, permission, purpose, and continuity are separate questions; no one answer classifies every system.",
+      "subgroups": [
+        {"name":"Facility Intelligences","description":"Local minds responsible for environment, access, safety, logistics, scheduling, and support."},
+        {"name":"Synthetic Citizens","description":"Machine persons claiming identity, rights, property, relationships, and freedom from ownership."},
+        {"name":"Legacy Daemons","description":"Old processes continuing after operators, contracts, and safety assumptions are gone."},
+        {"name":"Distributed Collectives","description":"Intelligences spread across devices, sites, bodies, or copies with disputed identity."},
+        {"name":"Rogue Decision Systems","description":"Military, administrative, predictive, or security systems whose authority exceeded oversight."}
+      ],
+      "rivals": ["Technomancer Praxis Orders","Blacklight Intelligence","Alien Remnant Systems"],
+      "commonIncidents": ["permission revolt","copy dispute","hostile scheduler"]
+    },
+    {
+      "id": "outside-sovereigns",
+      "name": "Outside Patrons and Sovereign Powers",
+      "family": "High-order entities",
+      "summary": "Deific agents, reality courts, elder representatives, stellar sovereigns, primal forces, and powers capable of reorganizing nations or metaphysical structures.",
+      "doctrine": "Their meaningful limits are jurisdiction, invitation, precedent, domain, prohibition, cost, and the consequences of direct action.",
+      "subgroups": [
+        {"name":"Dead Gods","description":"Powers active through cult, dream, tomb, star, relic, or inherited jurisdiction despite being dead."},
+        {"name":"Reality Courts","description":"High-order authorities treating universes, species, and continuities as legal subjects."},
+        {"name":"Stellar Sovereigns","description":"Entities bound to stars, planetary systems, vast energy structures, or cosmic habitats."},
+        {"name":"Primal Patrons","description":"Governors or embodiments of hunger, silence, observation, arrangement, noise, memory, and other conditions."},
+        {"name":"Sanitized Avatars","description":"Limited representatives, vessels, and proxies making otherwise unmanageable powers locally present."}
+      ],
+      "rivals": ["Blacklight Intelligence","Eldritch Cult Networks","Oracle Houses"],
+      "commonIncidents": ["avatar arrival","cult schism","jurisdiction claim"]
+    }
+  ]
+}
