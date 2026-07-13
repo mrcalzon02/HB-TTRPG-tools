@@ -2,6 +2,7 @@
   'use strict';
 
   const LEDGER_URL = 'data/blacklight-continuum/wiki/reports/migration-status.json';
+  const ACTIVE_URL = 'data/blacklight-continuum/wiki/reports/active-vampire-revisions.json';
   const STYLE_URL = 'data/blacklight-continuum/wiki/reports/charles-intelligence-style-guide.json';
   const SCHEMA_URL = 'data/blacklight-continuum/wiki/reports/charles-intelligence-report.schema.json';
   const RULES_URL = 'data/blacklight-continuum/rules/basic-character-options.json';
@@ -101,6 +102,26 @@
     return `<span class="migration-badge ${escapeHtml(normalized)}">${escapeHtml(status || 'untouched')}</span>`;
   }
 
+  function applyActiveRevisionState(ledger, active) {
+    if (!active || typeof active !== 'object') return ledger;
+    if (active.currentPhase) ledger.currentPhase = active.currentPhase;
+    if (Array.isArray(active.reports)) {
+      ledger.pilotReports = active.reports;
+      const vampireRecords = ledger.classes?.vampire?.subgroups || [];
+      for (const report of active.reports) {
+        const record = vampireRecords.find(item => item.id === report.recordId);
+        if (record) record.status = report.status;
+      }
+    }
+    for (const override of list(active.phaseOverrides)) {
+      const phase = list(ledger.phaseStatus).find(item => item.phase === override.phase);
+      if (!phase) continue;
+      if (override.status) phase.status = override.status;
+      if (override.notes) phase.notes = override.notes;
+    }
+    return ledger;
+  }
+
   function renderMetrics(metrics) {
     const items = [
       ['Source files inventoried', metrics.sourceFiles],
@@ -118,13 +139,22 @@
   }
 
   function renderPhases(ledger) {
-    ui.phases.innerHTML = list(ledger.phaseStatus).map(phase => `
+    const phases = list(ledger.phaseStatus).map(phase => `
       <article class="migration-card migration-phase" data-search="phase ${escapeHtml(phase.phase)} ${escapeHtml(phase.name)} ${escapeHtml(phase.status)} ${escapeHtml(phase.notes || '')}">
         <span class="migration-phase-number">${escapeHtml(phase.phase)}</span>
         <div><strong>${escapeHtml(phase.name)}</strong>${phase.notes ? `<p>${escapeHtml(phase.notes)}</p>` : ''}</div>
         ${badge(phase.status)}
       </article>
     `).join('');
+    const active = list(ledger.pilotReports).map(report => `
+      <article class="migration-card" data-search="${escapeHtml([report.name, report.id, report.status].join(' ').toLowerCase())}">
+        <h3>${escapeHtml(report.name)}</h3>
+        <p>${badge(report.status)}</p>
+        <p>${report.encounterQuotes ? `${escapeHtml(report.encounterQuotes)} encounter quotations filed.` : 'No encounter quotations recorded.'}</p>
+        <p><a class="bli-action" href="${escapeHtml(report.reviewPath)}">Open review</a></p>
+      </article>
+    `).join('');
+    ui.phases.innerHTML = `${phases}${active ? `<div class="migration-section-head"><p class="bli-eyebrow">Active report files</p><h2>Current incremental revisions.</h2></div><div class="migration-grid">${active}</div>` : ''}`;
   }
 
   function renderStyleGuide(style, schema) {
@@ -140,6 +170,12 @@
           <p>${escapeHtml(style.charlesVoice?.preferredPerspective || '')}</p>
           <p>${escapeHtml(style.charlesVoice?.cadence || '')}</p>
           <p><strong>Ethical lens:</strong> ${escapeHtml(style.charlesVoice?.ethicalLens || '')}</p>
+        </article>
+        <article class="migration-card" data-search="encounter testimony quotes witness survivor custody confidence">
+          <h3>Encounter testimony</h3>
+          <p>${escapeHtml(style.encounterTestimonyPolicy?.purpose || '')}</p>
+          <p>${escapeHtml(style.encounterTestimonyPolicy?.placement || '')}</p>
+          <ul>${list(style.encounterTestimonyPolicy?.rules).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
         </article>
         <article class="migration-card" data-search="required report sections schema">
           <h3>Required report sections</h3>
@@ -325,8 +361,9 @@
   async function initialize() {
     try {
       ui.status.textContent = 'Loading authoritative records and comparing them against the migration ledger…';
-      const [ledger, style, schema, rules, factionData, adversaryData, ...classFiles] = await Promise.all([
+      const [ledgerBase, active, style, schema, rules, factionData, adversaryData, ...classFiles] = await Promise.all([
         fetchJson(LEDGER_URL),
+        fetchJson(ACTIVE_URL),
         fetchJson(STYLE_URL),
         fetchJson(SCHEMA_URL),
         fetchJson(RULES_URL),
@@ -335,6 +372,7 @@
         ...Object.values(CLASS_SOURCES).map(fetchJson)
       ]);
 
+      const ledger = applyActiveRevisionState(ledgerBase, active);
       const classData = {};
       Object.keys(CLASS_SOURCES).forEach((id, index) => { classData[id] = classFiles[index]; });
       const adversaries = adversaryData?.classes || {};
@@ -360,7 +398,7 @@
 
       bindSearch();
       ui.status.textContent = mismatchCount === 0
-        ? 'Preservation inventory loaded. Every ledgered class subgroup, attached internal adversary, and faction family resolves to its current authoritative source record.'
+        ? `${escapeHtml(active.currentPhase || ledger.currentPhase)}. Every ledgered class subgroup, attached internal adversary, and faction family resolves to its current authoritative source record.`
         : `Preservation inventory loaded with ${mismatchCount} ledger/source mismatch${mismatchCount === 1 ? '' : 'es'} requiring review.`;
     } catch (error) {
       console.error(error);
