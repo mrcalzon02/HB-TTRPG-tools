@@ -1,0 +1,172 @@
+#exo-cluster-spatial-map,
+#exo-cluster-connected-map,
+.exo-cluster-map-retired{
+  display:none!important;
+}
+.exo-cluster-volume-controls{
+  display:grid;
+  gap:11px;
+  margin-top:10px;
+  padding:12px;
+  border:1px solid rgba(217,168,79,.14);
+  border-radius:13px;
+  background:rgba(8,8,8,.72);
+}
+.exo-cluster-volume-mode{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.exo-cluster-volume-mode .bli-action.is-active{
+  color:#070706;
+  background:#d9a84f;
+  border-color:#f1cd83;
+  box-shadow:0 0 0 2px rgba(217,168,79,.16),0 8px 24px rgba(0,0,0,.25);
+}
+.exo-cluster-camera-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(130px,1fr)) auto;
+  gap:9px;
+  align-items:end;
+}
+.exo-cluster-camera-grid label{
+  display:grid;
+  gap:5px;
+}
+.exo-cluster-camera-grid label>span,
+.exo-light-gauge-heading span{
+  color:#a9a091;
+  font-size:.68rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.exo-cluster-camera-grid input{
+  width:100%;
+  accent-color:#d9a84f;
+}
+.exo-cluster-volume-key{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px 15px;
+  color:#aaa194;
+  font-size:.72rem;
+  font-weight:750;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.exo-cluster-volume-key span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.exo-cluster-volume-key i{
+  width:10px;
+  height:10px;
+  display:inline-block;
+  border-radius:999px;
+}
+.exo-cluster-volume-key .star{background:#d9a84f;box-shadow:0 0 6px rgba(217,168,79,.8)}
+.exo-cluster-volume-key .proto{background:#ff9d5d;box-shadow:0 0 6px rgba(255,157,93,.85)}
+.exo-cluster-volume-key .nebula{border-radius:3px;background:rgba(111,151,210,.5);box-shadow:0 0 8px rgba(111,151,210,.5)}
+.exo-cluster-volume-key .dark{background:#8aa0ad}
+.exo-cluster-volume-key .lens{background:#b885ff;box-shadow:0 0 7px rgba(184,133,255,.9)}
+.exo-cluster-volume-canvas{
+  display:block;
+  width:100%;
+  min-height:420px;
+  margin-top:10px;
+  border:1px solid rgba(217,168,79,.1);
+  border-radius:13px;
+  background:#020202;
+  cursor:grab;
+  touch-action:none;
+}
+.exo-cluster-volume-canvas:active{cursor:grabbing}
+.exo-cluster-volume-canvas:focus-visible{
+  outline:2px solid #d9a84f;
+  outline-offset:3px;
+}
+.exo-cluster-light-gauge{
+  display:grid;
+  gap:10px;
+  margin-top:12px;
+  padding:12px 14px;
+  border:1px solid rgba(126,179,207,.22);
+  border-radius:13px;
+  background:linear-gradient(90deg,rgba(49,89,108,.12),rgba(11,11,11,.76));
+}
+.exo-light-gauge-heading{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:end;
+}
+.exo-light-gauge-heading>div{display:grid;gap:2px}
+.exo-light-gauge-heading strong{color:#e7edf0}
+.exo-light-gauge-heading output{
+  color:#a9d8ec;
+  font-size:.78rem;
+  font-weight:800;
+  text-align:right;
+}
+.exo-light-gauge-track{
+  position:relative;
+  height:18px;
+  border:1px solid rgba(126,179,207,.24);
+  border-radius:999px;
+  background:rgba(0,0,0,.45);
+  overflow:hidden;
+}
+.exo-light-gauge-year{
+  position:absolute;
+  inset:0 auto 0 0;
+  min-width:2px;
+  background:linear-gradient(90deg,rgba(126,179,207,.15),rgba(126,179,207,.52));
+  border-right:2px solid #a9d8ec;
+}
+.exo-light-gauge-track i{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#dbe8ed;
+  font-size:.68rem;
+  font-style:normal;
+  font-weight:850;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  text-shadow:0 1px 3px #000;
+}
+.exo-light-gauge-readouts{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.exo-light-gauge-readouts span{
+  display:grid;
+  gap:2px;
+  color:#9e968a;
+  font-size:.72rem;
+}
+.exo-light-gauge-readouts strong{
+  color:#e8e1d7;
+  font-size:.82rem;
+}
+.exo-cluster-volume-status{
+  margin:10px 0 0;
+  color:#b8afa2;
+  font-size:.78rem;
+  line-height:1.55;
+}
+@media(max-width:950px){
+  .exo-cluster-camera-grid{grid-template-columns:1fr 1fr}
+  .exo-light-gauge-readouts{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .exo-cluster-camera-grid{grid-template-columns:1fr}
+  .exo-cluster-volume-mode .bli-action{flex:1 1 180px}
+  .exo-light-gauge-heading{display:grid}
+  .exo-light-gauge-heading output{text-align:left}
+  .exo-cluster-volume-canvas{min-height:340px}
+}
