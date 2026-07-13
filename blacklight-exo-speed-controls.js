@@ -35,20 +35,27 @@
     if (!isPaused()) toggle.click();
   }
 
-  function loadSpatialProjection() {
-    if (!document.querySelector('link[href="blacklight-exo-spatial.css"]')) {
-      const stylesheet = document.createElement('link');
-      stylesheet.rel = 'stylesheet';
-      stylesheet.href = 'blacklight-exo-spatial.css';
-      document.head.append(stylesheet);
-    }
+  function appendStylesheet(href) {
+    if (document.querySelector(`link[href="${href}"]`)) return;
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = href;
+    document.head.append(stylesheet);
+  }
 
-    if (!document.querySelector('script[src="blacklight-exo-spatial.js"]')) {
-      const script = document.createElement('script');
-      script.src = 'blacklight-exo-spatial.js';
-      script.async = false;
-      document.head.append(script);
-    }
+  function appendScript(src) {
+    if (document.querySelector(`script[src="${src}"]`)) return;
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = false;
+    document.head.append(script);
+  }
+
+  function loadSpatialProjection() {
+    appendStylesheet('blacklight-exo-spatial.css');
+    appendStylesheet('blacklight-exo-view-modes.css');
+    appendScript('blacklight-exo-spatial.js');
+    appendScript('blacklight-exo-view-modes.js');
   }
 
   speed.addEventListener('change', syncProjectionState);
