@@ -1,0 +1,149 @@
+/* Final system-view interaction layer: replaces the retired hard-limit and topology overlays. */
+#exo-topology-lensing-canvas,
+#exo-topology-flat-lensing-group,
+.exo-flat-limit-circle{
+  display:none!important;
+}
+.exo-orbit-stage{
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+}
+.exo-orbit-stage.exo-viewport-grabbing{
+  cursor:grabbing;
+}
+#exo-orbit-svg,
+#exo-flat-spatial-overlays,
+#exo-system-spatial-overlay-v2,
+#exo-exclusive-canvas-3d,
+#exo-topology-lensing-canvas,
+#exo-system-spatial-overlay-3d-v2{
+  transform-origin:center center;
+  will-change:transform;
+}
+#exo-system-spatial-overlay-v2,
+#exo-system-spatial-overlay-3d-v2{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+#exo-system-spatial-overlay-v2{
+  z-index:7;
+}
+#exo-system-spatial-overlay-3d-v2{
+  z-index:7;
+  display:none;
+}
+.exo-dz-falloff-inner{
+  fill:none;
+  stroke:rgba(142,213,231,.62);
+  stroke-width:1.8;
+  stroke-dasharray:8 7;
+}
+.exo-system-node-halo{
+  fill:rgba(184,133,255,.1);
+}
+.exo-system-node-halo.adjacent-system{
+  fill:rgba(195,154,255,.15);
+}
+.exo-system-node-halo.cluster-anomaly{
+  fill:rgba(255,127,168,.16);
+}
+.exo-system-node-core{
+  fill:#78b7dc;
+  filter:drop-shadow(0 0 7px rgba(120,183,220,.86));
+}
+.exo-system-node-core.adjacent-system{
+  fill:#c39aff;
+  filter:drop-shadow(0 0 11px rgba(195,154,255,.98));
+}
+.exo-system-node-core.cluster-aggregate{
+  fill:#a56ee8;
+  filter:drop-shadow(0 0 10px rgba(165,110,232,.95));
+}
+.exo-system-node-core.cluster-anomaly{
+  fill:#ff7fa8;
+  filter:drop-shadow(0 0 12px rgba(255,127,168,.98));
+}
+.exo-system-node-core.mirage{
+  fill:#f0c6ff;
+  filter:drop-shadow(0 0 10px rgba(240,198,255,.94));
+}
+.exo-system-node-label{
+  fill:#e1cbff;
+  font-size:13px;
+  font-weight:850;
+  paint-order:stroke;
+  stroke:#020202;
+  stroke-width:4px;
+  stroke-linejoin:round;
+}
+.exo-dz-falloff-readout{
+  display:inline-flex;
+  align-items:center;
+  margin-left:auto;
+  color:#9ed8e9;
+  font-size:.75rem;
+  font-weight:850;
+  letter-spacing:.025em;
+}
+.exo-system-lensing-inspector{
+  display:grid;
+  gap:12px;
+  padding:16px 18px;
+  border-top:1px solid rgba(184,133,255,.22);
+  border-bottom:1px solid rgba(184,133,255,.22);
+  background:linear-gradient(100deg,rgba(184,133,255,.065),rgba(87,184,214,.035));
+}
+.exo-system-lensing-inspector[hidden]{display:none}
+.exo-system-lensing-inspector-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+.exo-system-lensing-inspector-heading>div{display:grid;gap:3px}
+.exo-system-lensing-inspector-heading span{
+  color:#a9a091;
+  font-size:.68rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.exo-system-lensing-inspector-heading h3{
+  margin:0;
+  color:#e4ceff;
+  font-size:1rem;
+}
+.exo-system-lensing-inspector p{margin:0}
+.exo-system-lensing-inspector dl{
+  display:grid;
+  grid-template-columns:minmax(9rem,max-content) minmax(0,1fr);
+  gap:7px 14px;
+  margin:0;
+}
+.exo-system-lensing-inspector dt{
+  color:#a9a091;
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+.exo-system-lensing-inspector dd{
+  min-width:0;
+  margin:0;
+  color:#f0e8dc;
+  overflow-wrap:anywhere;
+}
+#exo-system-lensing-inspector-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+@media(max-width:620px){
+  .exo-system-lensing-inspector-heading{display:grid}
+  .exo-system-lensing-inspector dl{grid-template-columns:1fr;gap:3px}
+  .exo-dz-falloff-readout{width:100%;margin-left:0}
+}
