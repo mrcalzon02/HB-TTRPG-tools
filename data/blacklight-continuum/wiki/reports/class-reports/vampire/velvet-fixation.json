@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "1.1.0",
+  "sourceRecordId": "velvet-fixation",
+  "parentRecordId": "vampire",
+  "recordType": "class-subgroup",
+  "reportTitle": "Vampiric Remainder Lineage: The Velvet Fixation",
+  "classification": "Vampiric artistic and patronage lineage",
+  "knownAliases": [
+    "The Velvet",
+    "Velvet Remainders"
+  ],
+  "archiveStatus": "Active; commonly found among artists, patrons, performers, collectors, curators, and court tastemakers",
+  "confidence": "high",
+  "relevantJurisdictions": [
+    "Blood Courts",
+    "Fae and mortal artistic circles",
+    "Patronage houses",
+    "Blacklight cultural-contact operations"
+  ],
+  "sourceSnapshot": {
+    "sourcePath": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json#lineages[velvet-fixation]",
+    "sourceSha": "87f0cc3a5dd50bbfd12769c1a417f10e131fe038",
+    "capturedDate": "2026-07-13",
+    "sourceWordCount": 160,
+    "sourceLeafFieldCount": 10,
+    "adversarySourcePath": "data/blacklight-continuum/wiki/internal-adversaries.json#classes.vampire.velvet-fixation",
+    "adversarySourceSha": "05dc8559855d422a09f97d7ef75a0f5b9068b945"
+  },
+  "executiveAssessment": [
+    "The Velvet Fixation descends from artists, courtiers, patrons, performers, collectors, and predators who turned beauty and obsession into social power. They notice details other people miss and understand how taste can open a door that force cannot.",
+    "The Continuum has denied them a familiar standard of beauty. Alien senses, printed bodies, spirit-made art, machine aesthetics, and forms built for environments no human culture imagined have forced the Velvet to ask whether they loved beauty or merely loved being recognized as its judge.",
+    "Their internal enemy is the Pallid Salon. The Salon collects artists, audiences, lovers, careers, and memories until the work survives but the person who made it no longer owns a life outside the patron's approval."
+  ],
+  "historicalRecord": [
+    "Velvet histories preserve performers, poets, courtiers, designers, collectors, patrons, and predators. Some made courts bearable. Some gave unknown artists the money, safety, and audience required to work. Others learned that praise, access, and cultivated taste could bind a person more quietly than a threat.",
+    "Their old power depended upon deciding what deserved attention. A Velvet patron could raise a neglected work into fashion, make a performer indispensable to a court, or bury a rival by teaching the audience not to see them.",
+    "The lineage has always carried two appetites that are difficult to separate: the desire to encounter something beautiful and the desire to become necessary to its survival."
+  ],
+  "continuumExpression": [
+    "Alien aesthetics do not obey the standards the Velvet inherited. A voice may be beautiful only to a pressure-sensitive species. A machine may compose for senses a vampire does not possess. A spirit may consider decay, repetition, or terror a complete artistic form.",
+    "Some Velvet vampires have responded with curiosity. They study unfamiliar senses, ask what the maker intended, and accept that their own taste is provincial. Others retreat into old standards and punish anything that does not reward their expertise.",
+    "The useful distinction is whether the Velvet member helps a work reach an audience or makes the work, the artist, and the audience dependent upon the member's continued permission."
+  ],
+  "capabilityProfile": [
+    "The lineage favors Grave Dominion and Veil of Night. These affinities support social pressure, concealment, controlled attention, and the ability to shape how an audience experiences a person or performance.",
+    "Perfecting Gaze is tied to one chosen medium: voice, movement, visual design, scent and flavor, architecture, or ritual performance. It strengthens the Velvet member's ability to create, understand, or exploit that medium.",
+    "After an exceptional success, the same attention can leave an observer more vulnerable to the Velvet member's next use of Grave Dominion. Admiration, fascination, and social influence can therefore become the opening through which control enters."
+  ],
+  "liabilityPressureProfile": [
+    "The lineage Bane is Captive Attention. A sufficiently accomplished performance or work in the Velvet member's chosen medium can seize their focus at the wrong moment.",
+    "The fixation is brief but real. Their first nondefensive action suffers unless they spend time studying or engaging with the work.",
+    "This does not mean every Velvet member is helpless before beauty. It means that genuine excellence can interrupt training, duty, fear, and self-preservation long enough to matter.",
+    "Enemies have exploited Captive Attention with staged performances, planted objects, ritual displays, engineered scents, and works designed to hold the Velvet's eye while something else happens."
+  ],
+  "encounterTestimony": [
+    {
+      "quote": "She heard me sing once and told me exactly where my voice was lying. She was right. That was the first favor. The next year of my life was the price.",
+      "attribution": "Former vocalist under Velvet patronage",
+      "sourceType": "witness",
+      "custody": "Protected Blacklight interview after relocation from a court-owned performance house",
+      "confidence": "high",
+      "context": "Contracts, feeding records, and correspondence confirm increasing financial and supernatural dependence. The patron denies coercion."
+    },
+    {
+      "quote": "They never locked the gallery door. They bought the building, my agent, the apartment, and every invitation with my name on it. Leaving meant walking into a life they had already emptied.",
+      "attribution": "Survivor of Pallid Salon patronage",
+      "sourceType": "survivor",
+      "custody": "Medical and financial debrief following extraction; identity withheld",
+      "confidence": "moderate",
+      "context": "Ownership records support the witness's account. Memory alteration is suspected but has not been fully reconstructed."
+    }
+  ],
+  "internalAdversaryAssessment": {
+    "name": "The Pallid Salon",
+    "classification": "Predatory curators of exhausted beauty",
+    "description": [
+      "Collectors who no longer create, love, or even properly appreciate beauty. They drain inspiration from artists, preserve people as living exhibits, and destroy any work they cannot own, classify, or reproduce under their patronage.",
+      "The Salon does not merely hoard objects. It acquires the conditions under which art is made: the studio, the audience, the lover, the critic, the memory, the debt, and the permission to continue."
+    ],
+    "operatingMethod": [
+      "They acquire studios, careers, lovers, memories, and audiences until the artist remains alive but no longer possesses an independent desire.",
+      "Common methods include exclusive patronage, engineered scandal, controlled access to feeding and housing, enchanted contracts, curated dependency, memory editing, and the quiet destruction of work created outside Salon approval."
+    ],
+    "personalConflict": [
+      "The Velvet Fixation risks obsession in pursuit of beauty. The Pallid Salon believes beauty exists only after it has been deprived of freedom.",
+      "For the Velvet, the Salon is the point at which devotion becomes taxidermy: the artist remains visible, polished, and dead in every way that matters."
+    ],
+    "assessment": [
+      "Suspect Salon control when an artist's career grows while their choices narrow, every opportunity comes through one patron, and independent work disappears without a clear reason.",
+      "Do not mistake ordinary patronage, collaboration, or strong artistic influence for Salon activity. The warning sign is not dependence alone. It is dependence that has been deliberately expanded until refusal threatens housing, feeding, memory, reputation, audience, or identity."
+    ],
+    "knownCells": [],
+    "unresolvedLinks": [
+      "It is unknown whether the Pallid Salon is one court, several linked patronage houses, or a name applied to the same practice in different cities.",
+      "Several mortal galleries and entertainment firms show matching ownership patterns, but direct supernatural control has not been established in every case."
+    ]
+  },
+  "blacklightAssessment": [
+    "Judge a Velvet vampire by what happens after they recognize talent. Do they make room for the artist, or do they make themselves impossible to leave?",
+    "Do not treat taste as proof of wisdom. A Velvet member may understand one medium deeply and remain ignorant of the person creating it, the culture around it, or the harm done in its name.",
+    "Do not dismiss every intense attachment as predation. Artists, patrons, performers, and audiences can choose demanding relationships. The question is whether refusal remains possible without engineered ruin.",
+    "A Velvet member who can admire work they do not own, accept criticism from its maker, and allow a protected artist to leave is usually safer than one who speaks constantly of preservation."
+  ],
+  "operationalGuidance": {
+    "recognitionIndicators": [
+      "Unusually precise attention to voice, movement, design, scent, flavor, architecture, or ritual performance.",
+      "Rapid identification of an artist's strongest habit, weakness, audience, or unrecognized skill.",
+      "Patronage arrangements in which housing, feeding, employment, reputation, and artistic access all depend upon one person or house.",
+      "Visible distraction or fixation when exposed to exceptional work in the member's chosen medium.",
+      "Artists whose public success rises while their private choices, relationships, and independent work disappear."
+    ],
+    "negotiationConsiderations": [
+      "Ask whether the artist or subject can leave, refuse, publish elsewhere, change patrons, or retain unfinished work.",
+      "Keep artistic judgment separate from ownership, custody, and consent.",
+      "Do not accept exclusive access to a witness merely because the patron calls the arrangement protective.",
+      "When presenting exceptional work, account for Captive Attention and assign another team member to watch the room.",
+      "Translate the sensory and cultural assumptions behind unfamiliar art before treating a Velvet reaction as authoritative."
+    ],
+    "evidenceHandling": [
+      "Preserve contracts, ownership records, feeding arrangements, housing terms, correspondence, audience lists, and rights to unfinished work.",
+      "Record who controls access to the artist and who benefits when independent relationships end.",
+      "Keep original works and copies under separate custody when alteration, destruction, or memory editing is suspected.",
+      "Distinguish the artist's stated preference from statements made under enthrallment, deprivation, financial dependence, or fear of losing an audience."
+    ],
+    "escalationThresholds": [
+      "A patron uses feeding, housing, memory, supernatural pressure, or public ruin to prevent an artist from leaving.",
+      "A person is displayed, altered, confined, or preserved as a living work without continuing consent.",
+      "Independent work is destroyed because it cannot be owned or controlled.",
+      "A Velvet actor uses Perfecting Gaze and Grave Dominion to turn admiration into obedience without the target's informed agreement."
+    ],
+    "prohibitedAssumptions": [
+      "Artistic obsession is not automatically Pallid Salon control.",
+      "Patronage is not automatically exploitation.",
+      "Public success does not prove private freedom.",
+      "A Velvet member's taste is not a universal measure of beauty.",
+      "An artist's gratitude does not erase dependency or prove that refusal is safe."
+    ],
+    "withdrawalConditions": [
+      "The team cannot speak with the artist or subject outside the patron's presence.",
+      "Custody of the person, memories, or unfinished work cannot be separated from the alleged protector.",
+      "The encounter is being staged around exceptional work specifically to exploit Captive Attention.",
+      "Blacklight participation would validate an exclusive ownership claim over a person, identity, audience, or living body."
+    ]
+  },
+  "unresolvedIntelligence": [
+    "The extent to which Perfecting Gaze can interpret art made for nonhuman senses remains inconsistent between individuals.",
+    "Some Velvet members report that Captive Attention responds to technical excellence even when they dislike the work. Others insist emotional response is required.",
+    "No reliable count exists for Pallid Salon houses, and several accusations may be ordinary artistic feuds dressed in supernatural language.",
+    "The role of memory alteration in Salon patronage remains poorly documented because recovered witnesses often cannot distinguish edited memory from years of cultivated dependence.",
+    "It remains unknown whether the Salon has successfully preserved a person as a living exhibit across more than one body or identity."
+  ],
+  "protectedMechanics": {
+    "favoredFamilies": [
+      "Grave Dominion",
+      "Veil of Night"
+    ],
+    "gift": {
+      "name": "Perfecting Gaze",
+      "effect": "Choose voice, movement, visual design, scent and flavor, architecture, or ritual performance at character creation. Gain two dice on Performance or Empathy tests that create, analyze, or exploit the chosen medium. Once per scene after scoring at least three successes with that medium, one observing target loses one die against your next Grave Dominion power before scene end."
+    },
+    "bane": {
+      "name": "Captive Attention",
+      "effect": "When you directly perceive a Performance 4 or higher display or an Advanced or Exceptional work in your chosen medium, your first nondefensive action that neither studies nor interacts with it loses two dice. Spending one minor action studying the work ends the penalty."
+    }
+  },
+  "sourcePreservationMap": [
+    {"sourcePath":"lineages[velvet-fixation].id","destinationSection":"sourceRecordId","status":"preserved-verbatim","notes":"Stable record key."},
+    {"sourcePath":"lineages[velvet-fixation].name","destinationSection":"reportTitle and historicalRecord","status":"preserved-verbatim","notes":"Established lineage name retained."},
+    {"sourcePath":"lineages[velvet-fixation].legacy","destinationSection":"executiveAssessment and historicalRecord","status":"expanded","notes":"Artists, courtiers, patrons, performers, collectors, and predatory uses of beauty remain present."},
+    {"sourcePath":"lineages[velvet-fixation].continuum","destinationSection":"continuumExpression","status":"expanded","notes":"Alien aesthetics and the question of beauty versus rewarded taste remain explicit."},
+    {"sourcePath":"lineages[velvet-fixation].favoredFamilies[0]","destinationSection":"protectedMechanics.favoredFamilies[0] and capabilityProfile","status":"preserved-verbatim","notes":"Grave Dominion retained."},
+    {"sourcePath":"lineages[velvet-fixation].favoredFamilies[1]","destinationSection":"protectedMechanics.favoredFamilies[1] and capabilityProfile","status":"preserved-verbatim","notes":"Veil of Night retained."},
+    {"sourcePath":"lineages[velvet-fixation].gift.name","destinationSection":"protectedMechanics.gift.name and capabilityProfile","status":"preserved-verbatim","notes":"Gift name retained."},
+    {"sourcePath":"lineages[velvet-fixation].gift.effect","destinationSection":"protectedMechanics.gift.effect and capabilityProfile","status":"preserved-verbatim","notes":"Mechanical effect copied exactly."},
+    {"sourcePath":"lineages[velvet-fixation].bane.name","destinationSection":"protectedMechanics.bane.name and liabilityPressureProfile","status":"preserved-verbatim","notes":"Bane name retained."},
+    {"sourcePath":"lineages[velvet-fixation].bane.effect","destinationSection":"protectedMechanics.bane.effect and liabilityPressureProfile","status":"preserved-verbatim","notes":"Mechanical effect copied exactly."},
+    {"sourcePath":"classes.vampire.velvet-fixation.name","destinationSection":"internalAdversaryAssessment.name","status":"preserved-verbatim","notes":"Enemy name retained."},
+    {"sourcePath":"classes.vampire.velvet-fixation.classification","destinationSection":"internalAdversaryAssessment.classification","status":"preserved-verbatim","notes":"Enemy classification retained."},
+    {"sourcePath":"classes.vampire.velvet-fixation.description","destinationSection":"internalAdversaryAssessment.description[0]","status":"preserved-verbatim","notes":"Original enemy description retained as the first paragraph."},
+    {"sourcePath":"classes.vampire.velvet-fixation.method","destinationSection":"internalAdversaryAssessment.operatingMethod[0]","status":"preserved-verbatim","notes":"Original operating method retained as the first paragraph."},
+    {"sourcePath":"classes.vampire.velvet-fixation.conflict","destinationSection":"internalAdversaryAssessment.personalConflict[0]","status":"preserved-verbatim","notes":"Original personal conflict retained as the first paragraph."}
+  ],
+  "review": {
+    "migrationState": "drafting",
+    "sourceClaimCount": 15,
+    "mappedClaimCount": 15,
+    "mechanicsVerified": true,
+    "adversaryVerified": true,
+    "semanticComparisonComplete": false,
+    "renderedReviewComplete": false,
+    "approved": false,
+    "reviewNotes": [
+      "The report is a separate draft and does not replace the live wiki entry.",
+      "All source and adversary fields are mapped.",
+      "The report uses the direct prose and attributed-testimony standards established by the first two Vampire records.",
+      "Two encounter quotations were added with custody, confidence, and limiting context.",
+      "No named Pallid Salon house has yet been established."
+    ]
+  }
+}
