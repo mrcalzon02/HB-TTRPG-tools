@@ -15,7 +15,7 @@
     .pilot-shell{width:min(1380px,calc(100% - 32px));margin:0 auto;padding:30px 0 80px}.pilot-source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}.pilot-source-card,.pilot-report{border:1px solid rgba(217,168,79,.22);border-radius:22px;padding:22px;background:linear-gradient(155deg,rgba(24,22,19,.97),rgba(5,5,5,.99));box-shadow:0 20px 55px rgba(0,0,0,.22)}.pilot-source-card h2,.pilot-report h2{margin:.15rem 0 .9rem;color:#f4efe5}.pilot-source-card h3,.pilot-report-section h3{color:#f1c66f}.pilot-source-card p,.pilot-report p,.pilot-report li{color:#c9c0b0;line-height:1.72}.pilot-enemy-card{border-color:rgba(185,74,74,.33)}.pilot-report{max-width:1100px;margin:0 auto}.pilot-report-header{padding-bottom:22px;border-bottom:1px solid rgba(217,168,79,.18)}.pilot-report-meta{display:flex;flex-wrap:wrap;gap:7px}.pilot-report-section{padding:25px 0}.pilot-report-section+.pilot-report-section{border-top:1px solid rgba(217,168,79,.14)}.pilot-report-section h4{margin:18px 0 8px;color:#d9c18d}.pilot-adversary-report{border-left:4px solid rgba(185,74,74,.55);padding-left:20px}.pilot-report pre{white-space:pre-wrap;overflow:auto;border:1px solid rgba(217,168,79,.16);border-radius:14px;padding:14px;background:#090909;color:#dfd2bd;line-height:1.55}.pilot-warning{border:1px solid rgba(217,168,79,.35);border-radius:20px;padding:18px 20px;background:rgba(217,168,79,.065);color:#e5d7bd;line-height:1.7}@media(max-width:720px){.pilot-shell{width:min(100% - 20px,1380px)}.pilot-source-grid{grid-template-columns:1fr}.pilot-source-card,.pilot-report{padding:18px}}
   </style>
 </head>
-<body class="blacklight-corp-body">
+<body class="blacklight-corp-body" data-class-id="vampire" data-record-id="crowned-blood" data-report-url="data/blacklight-continuum/wiki/reports/class-reports/vampire/crowned-blood.json">
   <header class="bli-topbar no-print">
     <a class="bli-brand" href="blacklight-wiki-migration.html" aria-label="Return to Continuum Wiki migration control"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Pilot Review</span></span></a>
     <nav class="bli-nav" aria-label="Pilot review navigation">
@@ -30,22 +30,22 @@
 
   <section class="bli-hero wiki-hero" aria-labelledby="pilot-title">
     <div>
-      <span class="wiki-classification">Pilot record · drafting · not live</span>
+      <span class="wiki-classification">Pilot record · semantic comparison · not live</span>
       <p class="bli-eyebrow">One-entry intelligence migration test</p>
       <h1 id="pilot-title">The Crowned Blood and the Crownless Regency</h1>
-      <p class="bli-lede">This page compares the authoritative lineage and adversary records against the first Charles-filed intelligence overlay. It exists to detect loss, mechanical drift, false certainty, detached enemy context, and over-compression before any report is allowed to replace its source presentation in the live wiki.</p>
+      <p class="bli-lede">This page compares the authoritative lineage and adversary records against the first Charles-filed intelligence overlay. It exists to detect loss, mechanical drift, false certainty, detached enemy context, over-compression, and needless abstraction before any report is allowed to replace its source presentation in the live wiki.</p>
       <div class="bli-actions no-print">
         <a class="bli-action primary" href="#source-baseline">Review Source Baseline</a>
         <a class="bli-action" href="#draft-report">Review Draft Report</a>
-        <a class="bli-action" href="blacklight-wiki-migration.html">Migration Control</a>
+        <a class="bli-action" href="blacklight-wiki-ash-rebellion-review.html">Next Vampire Record</a>
       </div>
     </div>
     <aside class="bli-directory-panel" aria-label="Pilot gates">
       <div class="bli-directory-title">Pilot Approval Gates</div>
       <div class="bli-directory-list" role="list">
         <div class="bli-directory-item" role="listitem"><strong>Source inventory</strong><span class="bli-arrow">complete</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Draft overlay</strong><span class="bli-arrow">present</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Semantic comparison</strong><span class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Direct voice revision</strong><span class="bli-arrow">complete</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Encounter testimony</strong><span class="bli-arrow">review</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Live replacement</strong><span class="bli-arrow">blocked</span></div>
       </div>
     </aside>
@@ -53,7 +53,7 @@
 
   <main class="pilot-shell">
     <section class="pilot-warning">
-      <strong>REVIEW BOUNDARY:</strong> The live Continuum Wiki still renders the original Crowned Blood entry. This pilot page does not modify that output. Approval requires confirmation that every source claim, protected mechanic, and attached-adversary field survives in the report without being silently reinterpreted or compressed away.
+      <strong>REVIEW BOUNDARY:</strong> The live Continuum Wiki still renders the original Crowned Blood entry. This page does not modify that output. Approval requires confirmation that every source claim, protected mechanic, and attached-adversary field survives in the report and that the encounter testimony is clearly attributed rather than treated as universal proof.
     </section>
 
     <section class="migration-section">
@@ -78,7 +78,7 @@
       <div class="migration-section-head">
         <p class="bli-eyebrow">Draft intelligence overlay</p>
         <h2>The proposed Charles-filed record.</h2>
-        <p>This is the expanded diegetic report. It is intentionally longer than the source because it adds evidence language, ethical analysis, operational guidance, and unresolved questions while preserving the original material.</p>
+        <p>The report adds field judgment and properly sourced encounter testimony while keeping the original mechanics and adversary language separately visible.</p>
       </div>
       <article id="pilot-report" class="pilot-report"></article>
     </section>
@@ -102,6 +102,6 @@
   </main>
 
   <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Crowned Blood pilot review · No live record replacement authorized.</footer>
-  <script src="blacklight-wiki-pilot-review.js?v=20260712-1"></script>
+  <script src="blacklight-wiki-pilot-review.js?v=20260713-2"></script>
 </body>
 </html>
