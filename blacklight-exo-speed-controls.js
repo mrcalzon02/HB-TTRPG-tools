@@ -54,8 +54,10 @@
   function loadSpatialProjection() {
     appendStylesheet('blacklight-exo-spatial.css');
     appendStylesheet('blacklight-exo-view-modes.css');
+    appendStylesheet('blacklight-exo-cluster-volume.css');
     appendScript('blacklight-exo-spatial.js');
     appendScript('blacklight-exo-view-modes.js');
+    appendScript('blacklight-exo-cluster-volume.js');
   }
 
   speed.addEventListener('change', syncProjectionState);
