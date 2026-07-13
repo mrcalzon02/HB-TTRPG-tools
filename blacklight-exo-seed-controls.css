@@ -1,0 +1,1 @@
+.exo-seed-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}.exo-seed-controls .bli-action{white-space:nowrap;padding-inline:14px}@media(max-width:440px){.exo-seed-controls{grid-template-columns:1fr}.exo-seed-controls .bli-action{width:100%}}
