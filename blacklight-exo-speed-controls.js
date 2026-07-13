@@ -46,8 +46,7 @@
   if (randomSeed && seed) {
     randomSeed.addEventListener('click', () => {
       seed.value = createRandomSeed();
-      seed.focus();
-      seed.select();
+      if (generate) generate.click();
     });
   }
 
