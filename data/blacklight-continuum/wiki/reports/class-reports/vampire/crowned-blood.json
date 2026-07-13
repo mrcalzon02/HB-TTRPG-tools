@@ -52,6 +52,24 @@
     "A Crowned member can prevent the increase by explicitly releasing the refusing person from obligation. Those who can do this without retaliation are generally safer allies than those who treat every refusal as rebellion.",
     "Enemies know how to exploit this weakness. Staged humiliation, false demotion, contradictory orders, and public insubordination can push a Crowned member toward Hunger at exactly the wrong moment."
   ],
+  "encounterTestimony": [
+    {
+      "quote": "He did not raise his voice. He named the exits, put three people on the wounded, and everyone moved. Ten minutes later he called it his court.",
+      "attribution": "Blacklight field medic, evacuation of the Harrow Street shelter",
+      "sourceType": "blacklight-operative",
+      "custody": "Post-operation voice statement, cross-checked against body-camera footage",
+      "confidence": "confirmed",
+      "context": "The footage confirms the evacuation orders and the later use of the word court. It does not establish whether the speaker intended a formal claim."
+    },
+    {
+      "quote": "The prince changed twice. The same woman kept the keys, the feeding ledgers, and the emergency seal. We had been arguing with the wrong ruler.",
+      "attribution": "Former clerk of an unnamed river-domain court",
+      "sourceType": "witness",
+      "custody": "Protected interview; identity withheld because the witness remains inside the court's feeding territory",
+      "confidence": "moderate",
+      "context": "The account matches several succession records but the alleged regent has not been directly interviewed."
+    }
+  ],
   "internalAdversaryAssessment": {
     "name": "The Crownless Regency",
     "classification": "Puppet sovereigns and dispossessed court officers",
@@ -163,19 +181,19 @@
     {"sourcePath":"classes.vampire.crowned-blood.conflict","destinationSection":"internalAdversaryAssessment.personalConflict[0]","status":"preserved-verbatim","notes":"Original personal conflict retained as the first paragraph."}
   ],
   "review": {
-    "migrationState": "drafting",
+    "migrationState": "semantic-comparison",
     "sourceClaimCount": 15,
     "mappedClaimCount": 15,
     "mechanicsVerified": true,
     "adversaryVerified": true,
-    "semanticComparisonComplete": false,
+    "semanticComparisonComplete": true,
     "renderedReviewComplete": false,
     "approved": false,
     "reviewNotes": [
-      "The report remains a separate draft and does not replace the live wiki entry.",
+      "The report remains separate from the live wiki entry.",
       "All source and adversary fields remain mapped.",
-      "The prose was revised after the first draft became too abstract, repetitive, and managerial.",
-      "The next review must confirm both information preservation and natural reading cadence.",
+      "The revised direct voice was accepted as the reference tone for the next vampire entry.",
+      "Two encounter quotations were added under the new testimony policy and still require rendered review.",
       "KnownCells remains empty because no named cell has been established."
     ]
   }
