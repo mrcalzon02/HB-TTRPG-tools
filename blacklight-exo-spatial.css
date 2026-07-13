@@ -1,0 +1,197 @@
+.exo-source-svg-hidden{
+  position:absolute!important;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+}
+.exo-orbit-canvas-3d{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  cursor:crosshair;
+}
+.exo-spatial-controls{
+  display:grid;
+  gap:12px;
+  padding:14px 18px;
+  border-top:1px solid rgba(217,168,79,.14);
+  border-bottom:1px solid rgba(217,168,79,.14);
+  background:linear-gradient(90deg,rgba(217,168,79,.045),rgba(74,48,108,.055));
+}
+.exo-spatial-control-heading,
+.exo-cluster-map-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+}
+.exo-spatial-control-heading>div,
+.exo-cluster-map-heading>div{
+  display:grid;
+  gap:2px;
+}
+.exo-spatial-control-heading span,
+.exo-cluster-map-heading span,
+.exo-spatial-control-grid label>span{
+  color:#a9a091;
+  font-size:.68rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.exo-spatial-control-heading strong,
+.exo-cluster-map-heading strong{
+  color:#f4efe5;
+}
+.exo-spatial-control-heading output,
+.exo-cluster-map-heading output{
+  color:#d9c7ef;
+  font-size:.78rem;
+  font-weight:800;
+  text-align:right;
+}
+.exo-spatial-control-grid{
+  display:grid;
+  grid-template-columns:minmax(170px,1fr) minmax(180px,1fr) repeat(3,minmax(120px,.65fr));
+  gap:9px;
+  align-items:end;
+}
+.exo-spatial-control-grid label{
+  display:grid;
+  gap:6px;
+}
+.exo-spatial-control-grid select,
+.exo-spatial-control-grid input[type="range"]{
+  width:100%;
+}
+.exo-spatial-control-grid select{
+  border:1px solid rgba(217,168,79,.26);
+  border-radius:9px;
+  background:#090908;
+  color:#f4efe5;
+  padding:8px 9px;
+  font:inherit;
+}
+.exo-spatial-control-grid input[type="range"]{
+  accent-color:#d9a84f;
+}
+.exo-spatial-key{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  color:#a9a091;
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.exo-spatial-key span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.exo-spatial-key i{
+  width:18px;
+  height:8px;
+  display:inline-block;
+}
+.exo-spatial-key .orbit{
+  border-top:1px solid rgba(217,168,79,.65);
+}
+.exo-spatial-key .lensing{
+  border-radius:999px;
+  background:#b885ff;
+  box-shadow:0 0 8px #b885ff;
+}
+.exo-spatial-key .falloff{
+  border-top:2px dashed rgba(87,184,214,.7);
+}
+.exo-cluster-map-shell{
+  margin:15px 0 18px;
+  padding:15px;
+  border:1px solid rgba(217,168,79,.19);
+  border-radius:18px;
+  background:radial-gradient(circle at 50% 50%,rgba(217,168,79,.06),transparent 28%),#040404;
+  overflow:hidden;
+}
+#exo-cluster-spatial-map{
+  display:block;
+  width:100%;
+  min-height:360px;
+  margin-top:10px;
+  border:1px solid rgba(217,168,79,.1);
+  border-radius:13px;
+  background:
+    radial-gradient(circle at 20% 25%,rgba(255,255,255,.05) 0 1px,transparent 1.4px),
+    radial-gradient(circle at 70% 62%,rgba(255,255,255,.04) 0 1px,transparent 1.4px),
+    #020202;
+  background-size:110px 110px,170px 170px;
+}
+.exo-neighbor-line{
+  stroke:rgba(126,179,207,.42);
+  stroke-width:1.6;
+  stroke-dasharray:6 5;
+}
+.exo-neighbor-label{
+  fill:#a9d8ec;
+  font-size:12px;
+  font-weight:800;
+  paint-order:stroke;
+  stroke:#020202;
+  stroke-width:4px;
+  stroke-linejoin:round;
+}
+.exo-cluster-map-node{
+  cursor:pointer;
+  outline:none;
+}
+.exo-cluster-map-halo{
+  fill:rgba(217,168,79,.06);
+  stroke:rgba(217,168,79,.35);
+  stroke-width:1.5;
+}
+.exo-cluster-map-core{
+  fill:#d9a84f;
+  filter:drop-shadow(0 0 7px rgba(217,168,79,.85));
+}
+.exo-cluster-map-node.is-populated .exo-cluster-map-core{
+  fill:#72d69a;
+  filter:drop-shadow(0 0 8px rgba(114,214,154,.9));
+}
+.exo-cluster-map-node:focus-visible .exo-cluster-map-halo,
+.exo-cluster-map-node:hover .exo-cluster-map-halo{
+  stroke:#fff1c7;
+  stroke-width:2.5;
+}
+.exo-cluster-map-system-label{
+  fill:#e8dfd1;
+  font-size:13px;
+  font-weight:850;
+  paint-order:stroke;
+  stroke:#020202;
+  stroke-width:4px;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+@media(max-width:1050px){
+  .exo-spatial-control-grid{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+@media(max-width:700px){
+  .exo-spatial-control-heading,
+  .exo-cluster-map-heading{
+    display:grid;
+  }
+  .exo-spatial-control-heading output,
+  .exo-cluster-map-heading output{
+    text-align:left;
+  }
+  .exo-spatial-control-grid{
+    grid-template-columns:1fr;
+  }
+  #exo-cluster-spatial-map{
+    min-height:300px;
+  }
+}
