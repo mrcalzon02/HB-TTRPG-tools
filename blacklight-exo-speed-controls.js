@@ -61,6 +61,7 @@
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
     appendScript('blacklight-exo-lensing-model.js');
+    appendScript('blacklight-exo-lensing-volume-calibration.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-lensing-topology.js');
   }
