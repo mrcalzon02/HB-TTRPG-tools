@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "1.1.0",
+  "sourceRecordId": "ash-rebellion",
+  "parentRecordId": "vampire",
+  "recordType": "class-subgroup",
+  "reportTitle": "Vampiric Remainder Lineage: The Ash Rebellion",
+  "classification": "Vampiric insurgent lineage",
+  "knownAliases": [
+    "The Ash",
+    "Ash Rebels"
+  ],
+  "archiveStatus": "Active; commonly found in resistance cells, dispossessed communities, and anti-court movements",
+  "confidence": "high",
+  "relevantJurisdictions": [
+    "Blood Courts",
+    "Hunter and Vigil cells",
+    "Disputed feeding territories",
+    "Blacklight civil-protection operations"
+  ],
+  "sourceSnapshot": {
+    "sourcePath": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json#lineages[ash-rebellion]",
+    "sourceSha": "87f0cc3a5dd50bbfd12769c1a417f10e131fe038",
+    "capturedDate": "2026-07-13",
+    "sourceWordCount": 148,
+    "sourceLeafFieldCount": 10,
+    "adversarySourcePath": "data/blacklight-continuum/wiki/internal-adversaries.json#classes.vampire.ash-rebellion",
+    "adversarySourceSha": "05dc8559855d422a09f97d7ef75a0f5b9068b945"
+  },
+  "executiveAssessment": [
+    "The Ash Rebellion descends from warrior-philosophers, insurgents, agitators, defenders of the dispossessed, and vampires who regarded every throne as temporary. They are quick to recognize coercion and slow to forgive it.",
+    "That instinct can protect people whom courts, governments, employers, families, or supernatural patrons have decided are expendable. It can also make an Ash vampire see a chain in every agreement and a tyrant in anyone who gives an order.",
+    "Their internal enemy is the Red Committee. The Committee keeps revolution alive by ensuring that peace never becomes safe, compromise always looks like betrayal, and every victory produces another list of traitors."
+  ],
+  "historicalRecord": [
+    "Ash histories preserve fighters, teachers, street organizers, philosophers, saboteurs, and predators who fed upon the wars they claimed to serve. Some defended communities with no other protection. Some treated destruction as proof of sincerity and left other people to survive what came afterward.",
+    "They rarely agreed on what should replace the throne. Their unity came from the belief that no ruler was permanent and no command should be obeyed merely because it had survived long enough to call itself law.",
+    "The lineage therefore carries both courage and suspicion. It remembers that many stable orders were built by exhausting resistance until obedience looked reasonable. It also remembers revolutions that became excuses for feeding, revenge, and private power."
+  ],
+  "continuumExpression": [
+    "The old tyrants and revolutions are gone. The blood is not. Ash vampires still react strongly to threats, confinement, dispossession, deprivation, and rank used as a substitute for consent.",
+    "Their problem is no longer finding something to resist. The Continuum provides endless candidates. Their problem is deciding which orders are coercive, which limits protect other people, and what should exist after resistance succeeds.",
+    "A disciplined Ash vampire asks who is trapped and what choice can be restored. An undisciplined one decides that opposition itself proves virtue."
+  ],
+  "capabilityProfile": [
+    "The lineage favors Crimson Velocity and Deathless Resilience. Ash vampires are built to reach a stronger opponent, remain standing under retaliation, and help others press the same opening.",
+    "Against the Throne becomes stronger against a target that commands at least three active beings or holds higher formal rank in the scene. The lineage can also spend Vitae to share that advantage with allies for one round.",
+    "This makes the Ash dangerous to commanders who rely on position, guards, or obedient followers. It does not tell the Ash whether the commander deserves to fall."
+  ],
+  "liabilityPressureProfile": [
+    "The lineage Bane is Refusal of Chains. An Ash vampire gains Hunger after willingly obeying an order backed by a clear threat of injury, confinement, dispossession, or deprivation unless they first resist or state a negotiated condition.",
+    "The Bane does not require victory. A refusal, objection, demand, delay, or condition may be enough. What the blood rejects is silent submission under threat.",
+    "This can make an Ash vampire difficult to command during emergencies. A necessary evacuation order may still feel like a chain when backed by force. Clear reasons, genuine choices, and room to state conditions reduce the risk.",
+    "Enemies exploit the Bane by attaching threats to otherwise reasonable instructions, forcing the Ash to choose between Hunger, delay, or open resistance at the worst possible moment."
+  ],
+  "encounterTestimony": [
+    {
+      "quote": "You do not get to call it peace because the locks are clean and the guards use our first names.",
+      "attribution": "Ash Rebellion speaker during a shelter occupation",
+      "sourceType": "subject-member",
+      "custody": "Blacklight audio from negotiated entry; speaker identity confirmed",
+      "confidence": "confirmed",
+      "context": "The shelter residents were under an enforced debt contract and could not leave without forfeiting medicine."
+    },
+    {
+      "quote": "The prince was dead by morning. By evening they had found three traitors. By the end of the week, the traitor was anyone who asked when the emergency ended.",
+      "attribution": "Survivor of a Red Committee purge cell",
+      "sourceType": "survivor",
+      "custody": "Medical debrief following extraction; names and location withheld",
+      "confidence": "moderate",
+      "context": "Several deaths and detentions were independently confirmed. The Committee's internal charges were destroyed before recovery."
+    }
+  ],
+  "internalAdversaryAssessment": {
+    "name": "The Red Committee",
+    "classification": "Permanent-revolution purge cells",
+    "description": [
+      "Insurgent vampires who discovered that revolution can become its own throne. They maintain endless states of emergency, accuse every compromise of betrayal, and feed upon the fear generated by internal purges conducted in the name of liberation.",
+      "The Committee needs an enemy more than it needs a victory. When the old ruler falls, it turns on moderates, witnesses, organizers, and former allies who might make the emergency unnecessary."
+    ],
+    "operatingMethod": [
+      "They infiltrate resistance movements, manufacture traitors, and ensure no victory becomes stable enough to make their authority unnecessary.",
+      "Common signs include secret loyalty hearings, shifting accusations, missing supply officers, executions described as temporary measures, and leaders who remain indispensable because only they can identify the next betrayal."
+    ],
+    "personalConflict": [
+      "The Ash Rebellion fights hierarchy so people can choose. The Red Committee destroys choice to ensure the revolution never ends.",
+      "The Committee is the Ash fear made real: that rebellion may become another throne, with worse records and more graves."
+    ],
+    "assessment": [
+      "A movement is at high risk of Committee capture when criticism of leadership is treated as aid to the enemy, no one can define the end of emergency rule, and every peaceful outcome is dismissed as surrender before its terms are examined.",
+      "Do not assume every severe or secretive resistance cell belongs to the Committee. Occupied communities sometimes need secrecy and hard discipline to survive. The difference is whether those rules can be challenged, ended, and used to protect people other than the leaders."
+    ],
+    "knownCells": [],
+    "unresolvedLinks": [
+      "It is unknown whether the Red Committee has a central leadership or whether the name has spread among unrelated purge cells.",
+      "Several courts accuse Ash dissidents of Committee ties without evidence. Those accusations may be political cover for suppressing legitimate resistance."
+    ]
+  },
+  "blacklightAssessment": [
+    "Judge the Ash by what their resistance gives back. If the result is greater choice, safer exit, restored property, released captives, or an end to coercion, cooperation may be justified.",
+    "Be cautious when an Ash leader cannot say what victory looks like, who may disagree afterward, or when emergency powers end. Those omissions are where the Red Committee begins.",
+    "Do not confuse anger with corruption. Many Ash vampires are angry because someone is actually being harmed. Verify the harm before dismissing the warning or joining the fight.",
+    "Do not let the lineage's hatred of coercion hide coercion committed in the name of liberation. A victim does not become free because the person threatening them uses revolutionary language."
+  ],
+  "operationalGuidance": {
+    "recognitionIndicators": [
+      "Immediate attention to guards, locks, debt, rank, confinement, ration control, and who is allowed to leave.",
+      "Questions about who gave an order and what happens if it is refused.",
+      "A tendency to side with dispossessed people before all facts are known.",
+      "Unusual effectiveness when confronting commanders, officers, or leaders with active followers.",
+      "Resistance cells that discover new traitors whenever the original enemy weakens."
+    ],
+    "negotiationConsiderations": [
+      "Explain the reason for an order and what choices remain.",
+      "Allow the Ash member to state an objection or condition when time permits.",
+      "Do not attach unnecessary threats to routine cooperation.",
+      "Define what success ends, who gains freedom, and when emergency powers expire.",
+      "Never ask an Ash liaison to prove loyalty through unquestioning obedience."
+    ],
+    "evidenceHandling": [
+      "Preserve orders, threats, confinement terms, property seizures, ration restrictions, and records of who could leave.",
+      "Keep original accusation lists and compare how charges change over time.",
+      "Record who benefits from extending an emergency after the stated enemy is gone.",
+      "Separate evidence of actual betrayal from criticism, hesitation, negotiation, or refusal."
+    ],
+    "escalationThresholds": [
+      "An Ash actor attacks a person solely for holding rank without evidence of coercive conduct.",
+      "A resistance leader prevents civilians or members from leaving after claiming to liberate them.",
+      "Internal accusations are used to seize blood, property, weapons, or authority.",
+      "Emergency rule continues without a stated threat, review, or end condition."
+    ],
+    "prohibitedAssumptions": [
+      "Opposition to command is not proof of irrationality.",
+      "Formal rank is not proof of abuse.",
+      "Anger is not proof of Red Committee membership.",
+      "A revolutionary claim is not proof that the people affected consented.",
+      "Compromise is not automatically surrender, and refusal is not automatically wisdom."
+    ],
+    "withdrawalConditions": [
+      "The team is being asked to enforce a purge based on accusation alone.",
+      "No one can state when the emergency ends or who can challenge the leadership.",
+      "Civilians are being confined, deprived, or fed upon by the movement claiming to protect them.",
+      "Blacklight presence is being used to label internal rivals as confirmed traitors."
+    ]
+  },
+  "unresolvedIntelligence": [
+    "The blood's exact threshold for what counts as an explicit coercive threat remains inconsistent between individuals.",
+    "Some Ash courts teach formal methods for stating conditions without escalating conflict. Their spread and effectiveness are not known.",
+    "No reliable count exists for Red Committee cells, and several alleged cells may be inventions used by hostile courts.",
+    "It remains unclear whether Against the Throne responds to recognized rank, actual command, or the lineage member's perception of both when those facts conflict.",
+    "The extent to which the Committee deliberately provokes Refusal of Chains in recruits remains under investigation."
+  ],
+  "protectedMechanics": {
+    "favoredFamilies": [
+      "Crimson Velocity",
+      "Deathless Resilience"
+    ],
+    "gift": {
+      "name": "Against the Throne",
+      "effect": "Gain one die on Force and Resolve tests made directly against a target that commands at least three other active beings or holds a higher formal rank in the current scene. Once per scene, spend 1 Vitae to grant the same bonus to up to Archetype Rating allies until the end of the round."
+    },
+    "bane": {
+      "name": "Refusal of Chains",
+      "effect": "When you voluntarily obey an order backed by an explicit threat of injury, confinement, dispossession, or deprivation without first attempting resistance or stating a negotiated condition, gain 1 Hunger after completing the ordered action."
+    }
+  },
+  "sourcePreservationMap": [
+    {"sourcePath":"lineages[ash-rebellion].id","destinationSection":"sourceRecordId","status":"preserved-verbatim","notes":"Stable record key."},
+    {"sourcePath":"lineages[ash-rebellion].name","destinationSection":"reportTitle and historicalRecord","status":"preserved-verbatim","notes":"Established lineage name retained."},
+    {"sourcePath":"lineages[ash-rebellion].legacy","destinationSection":"executiveAssessment and historicalRecord","status":"expanded","notes":"Warrior-philosophers, insurgents, agitators, defenders, and predatory revolutionaries all remain present."},
+    {"sourcePath":"lineages[ash-rebellion].continuum","destinationSection":"continuumExpression","status":"expanded","notes":"The loss of old enemies and the need to choose which powers deserve resistance remain explicit."},
+    {"sourcePath":"lineages[ash-rebellion].favoredFamilies[0]","destinationSection":"protectedMechanics.favoredFamilies[0] and capabilityProfile","status":"preserved-verbatim","notes":"Crimson Velocity retained."},
+    {"sourcePath":"lineages[ash-rebellion].favoredFamilies[1]","destinationSection":"protectedMechanics.favoredFamilies[1] and capabilityProfile","status":"preserved-verbatim","notes":"Deathless Resilience retained."},
+    {"sourcePath":"lineages[ash-rebellion].gift.name","destinationSection":"protectedMechanics.gift.name and capabilityProfile","status":"preserved-verbatim","notes":"Gift name retained."},
+    {"sourcePath":"lineages[ash-rebellion].gift.effect","destinationSection":"protectedMechanics.gift.effect and capabilityProfile","status":"preserved-verbatim","notes":"Mechanical effect copied exactly."},
+    {"sourcePath":"lineages[ash-rebellion].bane.name","destinationSection":"protectedMechanics.bane.name and liabilityPressureProfile","status":"preserved-verbatim","notes":"Bane name retained."},
+    {"sourcePath":"lineages[ash-rebellion].bane.effect","destinationSection":"protectedMechanics.bane.effect and liabilityPressureProfile","status":"preserved-verbatim","notes":"Mechanical effect copied exactly."},
+    {"sourcePath":"classes.vampire.ash-rebellion.name","destinationSection":"internalAdversaryAssessment.name","status":"preserved-verbatim","notes":"Enemy name retained."},
+    {"sourcePath":"classes.vampire.ash-rebellion.classification","destinationSection":"internalAdversaryAssessment.classification","status":"preserved-verbatim","notes":"Enemy classification retained."},
+    {"sourcePath":"classes.vampire.ash-rebellion.description","destinationSection":"internalAdversaryAssessment.description[0]","status":"preserved-verbatim","notes":"Original enemy description retained as the first paragraph."},
+    {"sourcePath":"classes.vampire.ash-rebellion.method","destinationSection":"internalAdversaryAssessment.operatingMethod[0]","status":"preserved-verbatim","notes":"Original operating method retained as the first paragraph."},
+    {"sourcePath":"classes.vampire.ash-rebellion.conflict","destinationSection":"internalAdversaryAssessment.personalConflict[0]","status":"preserved-verbatim","notes":"Original personal conflict retained as the first paragraph."}
+  ],
+  "review": {
+    "migrationState": "drafting",
+    "sourceClaimCount": 15,
+    "mappedClaimCount": 15,
+    "mechanicsVerified": true,
+    "adversaryVerified": true,
+    "semanticComparisonComplete": false,
+    "renderedReviewComplete": false,
+    "approved": false,
+    "reviewNotes": [
+      "The report is a separate draft and does not replace the live wiki entry.",
+      "All source and adversary fields are mapped.",
+      "The Crowned Blood direct-voice standard was used as the prose baseline.",
+      "Two encounter quotations were added with source type, custody, confidence, and limiting context.",
+      "No named Red Committee cell has yet been established."
+    ]
+  }
+}
