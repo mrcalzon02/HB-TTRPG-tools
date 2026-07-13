@@ -3,15 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Blacklight EXO | Solar System Generator</title>
+  <title>Blacklight EXO | Solar System and Cluster Generator</title>
   <meta name="robots" content="noindex,nofollow,noarchive">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-exo-solar-system.css">
   <link rel="stylesheet" href="blacklight-exo-seed-controls.css">
+  <link rel="stylesheet" href="blacklight-exo-cluster.css">
   <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-solar-system.js" defer></script>
   <script src="blacklight-exo-speed-controls.js" defer></script>
+  <script src="blacklight-exo-cluster.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-system-body">
   <header class="bli-topbar">
@@ -28,10 +30,11 @@
   <section class="bli-hero exo-system-hero" aria-labelledby="exo-system-title">
     <div>
       <p class="bli-eyebrow">Black compartment · Exosolar cartography</p>
-      <h1 id="exo-system-title">Solar System and Orbital Projection Generator.</h1>
-      <p class="bli-lede">Generate a complete random stellar system, run its planets and moons on accelerated orbital rails, and select stars, worlds, moons, or debris belts for detailed records.</p>
+      <h1 id="exo-system-title">Solar Cluster, System, and Orbital Projection Generator.</h1>
+      <p class="bli-lede">Generate a selectable local cluster, expand any star system into a complete orbital projection, identify populated systems, and develop habitable worlds into full EXO dossiers.</p>
       <div class="bli-actions exo-system-actions">
         <button id="exo-generate-system" class="bli-action primary" type="button">Generate Random System</button>
+        <button id="exo-force-populated-hz" class="bli-action" type="button">Force Populated HZ System</button>
         <button id="exo-toggle-orbits" class="bli-action" type="button" aria-pressed="false">Pause Projection</button>
         <button id="exo-export-system" class="bli-action" type="button">Export System JSON</button>
       </div>
@@ -42,24 +45,61 @@
         <div class="bli-directory-item" role="listitem"><strong>Designation</strong><span id="exo-summary-name" class="bli-arrow">pending</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Primary</strong><span id="exo-summary-star" class="bli-arrow">pending</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Planets</strong><span id="exo-summary-planets" class="bli-arrow">0</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Population</strong><span id="exo-summary-population" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>HZ bodies</strong><span id="exo-summary-hz-bodies" class="bli-arrow">0</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Seed</strong><span id="exo-summary-seed" class="bli-arrow">pending</span></div>
       </div>
     </aside>
   </section>
 
   <main class="bli-shell exo-system-shell">
+    <section class="bli-section exo-cluster-section" aria-labelledby="exo-cluster-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Local stellar neighborhood</p>
+        <h2 id="exo-cluster-title">Generate a selectable solar cluster.</h2>
+        <p>Each cluster seed creates a repeatable set of star systems. Systems containing bodies inside their primary star’s habitable zone receive a direct expansion control, while population status is reported before you open the detailed orbital projection.</p>
+      </div>
+      <div class="exo-cluster-controls">
+        <label>
+          <span>Cluster seed</span>
+          <div class="exo-cluster-seed-controls">
+            <input id="exo-cluster-seed" type="text" maxlength="100" placeholder="Random cluster seed">
+            <button id="exo-random-cluster" class="bli-action" type="button">Random Cluster</button>
+          </div>
+        </label>
+        <label>
+          <span>Systems in cluster</span>
+          <select id="exo-cluster-count">
+            <option value="3">3 systems</option>
+            <option value="5">5 systems</option>
+            <option value="8" selected>8 systems</option>
+            <option value="12">12 systems</option>
+            <option value="20">20 systems</option>
+          </select>
+        </label>
+        <button id="exo-generate-cluster" class="bli-action primary" type="button">Generate Solar Cluster</button>
+      </div>
+      <div class="exo-cluster-summary" aria-label="Cluster summary">
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-systems">0</strong><span>Charted systems</span></div>
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-populated">0</strong><span>Populated systems</span></div>
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-habitable">0</strong><span>Systems with HZ bodies</span></div>
+      </div>
+      <p id="exo-cluster-status" class="exo-cluster-status" aria-live="polite">Preparing local cluster chart…</p>
+      <div id="exo-cluster-grid" class="exo-cluster-grid" aria-label="Selectable generated star systems"></div>
+    </section>
+
     <section class="bli-section exo-control-section" aria-labelledby="exo-control-title">
       <div class="bli-section-head">
-        <p class="bli-eyebrow">Generation controls</p>
-        <h2 id="exo-control-title">Create, replay, and inspect a system.</h2>
-        <p>Enter a seed to reproduce a prior system or leave it blank for a new random designation. Projection speed can be paused or scaled from real time through highly accelerated orbital time.</p>
+        <p class="bli-eyebrow">Expanded system controls</p>
+        <h2 id="exo-control-title">Create, replay, and inspect one system.</h2>
+        <p>Enter a seed to reproduce a prior system or use Random Seed for an immediate replacement. Force Populated HZ System deterministically searches for and opens a system containing at least one populated planet inside the primary star’s habitable zone.</p>
       </div>
       <div class="exo-control-grid">
         <label>
           <span>Generation seed</span>
           <div class="exo-seed-controls">
             <input id="exo-seed-input" type="text" maxlength="80" placeholder="Random seed">
-            <button id="exo-random-seed" class="bli-action" type="button" title="Create a new random seed and immediately regenerate the system">Random Seed</button>
+            <button id="exo-random-seed" class="bli-action" type="button" title="Create a new seed and immediately generate its system">Random Seed</button>
           </div>
         </label>
         <label>
@@ -166,6 +206,6 @@
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO cartography, orbital projection, and restricted exosolar planning.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO cluster cartography, orbital projection, and restricted exosolar planning.</footer>
 </body>
 </html>
