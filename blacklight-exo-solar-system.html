@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="blacklight-exo-solar-system.css">
   <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-solar-system.js" defer></script>
+  <script src="blacklight-exo-speed-controls.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-system-body">
   <header class="bli-topbar">
@@ -50,7 +51,7 @@
       <div class="bli-section-head">
         <p class="bli-eyebrow">Generation controls</p>
         <h2 id="exo-control-title">Create, replay, and inspect a system.</h2>
-        <p>Enter a seed to reproduce a prior system or leave it blank for a new random designation. The projection uses accelerated orbital time rather than real-world scale.</p>
+        <p>Enter a seed to reproduce a prior system or leave it blank for a new random designation. Projection speed can be paused or scaled from real time through highly accelerated orbital time.</p>
       </div>
       <div class="exo-control-grid">
         <label>
@@ -60,9 +61,16 @@
         <label>
           <span>Projection speed</span>
           <select id="exo-speed-select">
+            <option value="0">Paused</option>
+            <option value="0.0000115740740741">Real time</option>
+            <option value="0.000694444444444">1 minute / second</option>
+            <option value="0.00694444444444">10 minutes / second</option>
+            <option value="0.0416666666667" selected>1 hour / second</option>
+            <option value="0.25">6 hours / second</option>
+            <option value="0.5">12 hours / second</option>
             <option value="1">1 day / second</option>
             <option value="10">10 days / second</option>
-            <option value="100" selected>100 days / second</option>
+            <option value="100">100 days / second</option>
             <option value="1000">1,000 days / second</option>
             <option value="10000">10,000 days / second</option>
           </select>
