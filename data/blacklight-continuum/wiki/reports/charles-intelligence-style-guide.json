@@ -1,8 +1,8 @@
 {
   "setting": "Blacklight Continuum",
   "document": "Charles Intelligence Record Style Guide",
-  "schemaVersion": "1.1.0",
-  "status": "approved-for-pilot-revision",
+  "schemaVersion": "1.2.0",
+  "status": "approved-for-vampire-revision",
   "purpose": "Define the voice, evidence discipline, preservation rules, and report structure used when Continuum wiki records are reframed as intelligence reports filed through Charles and Blacklight Intelligence.",
   "governingPrinciples": [
     "Preserve the complete source record before changing its presentation.",
@@ -13,7 +13,8 @@
     "Length must follow the information. Do not add words merely to make a report appear thorough.",
     "Keep Charles present through judgment, restraint, and attention to consequences rather than repeated self-reference.",
     "Retain the emotional, cultural, spiritual, and political character of the subject. Intelligence formatting must not flatten the setting into corporate prose.",
-    "Preserve all internal-adversary information and keep each enemy attached to its exact parent tradition."
+    "Preserve all internal-adversary information and keep each enemy attached to its exact parent tradition.",
+    "Use encounter testimony to reveal lived experience, not to replace description or manufacture proof."
   ],
   "charlesVoice": {
     "qualities": [
@@ -82,6 +83,30 @@
       "The report sounds interchangeable with a corporate risk assessment from another setting.",
       "Charles appears to be explaining why his own writing is careful rather than simply writing carefully."
     ]
+  },
+  "encounterTestimonyPolicy": {
+    "purpose": "Use short in-world quotations to show how the subject feels to encounter, how members describe themselves, or how a conflict appears from inside it.",
+    "allowedSources": [
+      "Blacklight operatives",
+      "civilian witnesses",
+      "survivors",
+      "members of the subject group",
+      "rival sources",
+      "intercepted recordings",
+      "historical testimony"
+    ],
+    "rules": [
+      "Use no more than four quotations in one report and normally use one or two.",
+      "Every quotation must have an attribution, source type, confidence level, and enough custody context to show what kind of evidence it is.",
+      "A quotation may illustrate fear, pride, habit, prejudice, contradiction, or lived experience. It does not prove a broader claim by itself.",
+      "Do not write a quote that merely restates the paragraph above it in a more dramatic voice.",
+      "Do not make every witness eloquent. Vocabulary and rhythm should fit the speaker.",
+      "Do not use testimony as an excuse to insert exposition the speaker would not naturally know.",
+      "Hostile, frightened, compromised, or partisan witnesses remain visibly identified as such.",
+      "Quotes are original Continuum material and must not imitate or reproduce published third-party dialogue."
+    ],
+    "placement": "Place encounter testimony after the section it illuminates or in one dedicated testimony section. Do not scatter quotations between every paragraph.",
+    "charlesTreatment": "Charles may add one sentence of context when needed. He should not explain the quote until nothing remains for the reader to understand."
   },
   "evidenceLanguage": {
     "confirmed": [
@@ -190,6 +215,12 @@
       "purpose": "Preserve Banes, weaknesses, temptations, blind spots, and circumstances that make the subject dangerous or vulnerable."
     },
     {
+      "id": "encounter-testimony",
+      "label": "Encounter testimony",
+      "required": false,
+      "purpose": "Add one or two properly attributed voices that show the lived reality of the subject without substituting anecdote for evidence."
+    },
+    {
       "id": "internal-adversary-assessment",
       "label": "Internal adversary assessment",
       "required": false,
@@ -259,7 +290,9 @@
     "Rewriting mechanics while performing a lore migration.",
     "Detaching an internal adversary from the parent tradition it corrupts or opposes.",
     "Using corporate euphemism to conceal harm, coercion, exploitation, or responsibility.",
-    "Using systems, architecture, framework, structure, authority, jurisdiction, or legitimacy repeatedly when direct language would be clearer."
+    "Using systems, architecture, framework, structure, authority, jurisdiction, or legitimacy repeatedly when direct language would be clearer.",
+    "Inventing a quotation whose only purpose is to repeat the report in theatrical language.",
+    "Presenting one frightened or hostile witness as proof of how an entire people behave."
   ],
   "reportingDistinctions": [
     {
@@ -285,6 +318,10 @@
     {
       "subject": "Charles assessment versus archive fact",
       "instruction": "Keep Charles's judgment visibly separate from testimony and confirmed evidence."
+    },
+    {
+      "subject": "Testimony versus proof",
+      "instruction": "A quotation records what someone said or experienced. It proves only that the testimony exists unless other evidence confirms the underlying claim."
     }
   ],
   "preservationChecklist": [
@@ -298,7 +335,9 @@
     "The original record remains recoverable during migration.",
     "Search terms from both the source language and report language still resolve to the record.",
     "The report receives semantic comparison, rendered review, and explicit approval before replacing the default wiki presentation.",
-    "The reviewer checks for needless repetition and abstract jargon as carefully as for missing facts."
+    "The reviewer checks for needless repetition and abstract jargon as carefully as for missing facts.",
+    "Every encounter quote has a source type, attribution, confidence level, and custody context.",
+    "No encounter quote is treated as proof beyond what its source quality supports."
   ],
   "approvalStates": [
     "untouched",
@@ -314,6 +353,6 @@
     "classId": "vampire",
     "recordId": "crowned-blood",
     "pairedAdversary": "The Crownless Regency",
-    "reason": "This record contains inherited rule, present-day adaptation, exact mechanics, political conflict, and a complete internal enemy. It remains the pilot because its first draft exposed the danger of preserving facts while drowning them in abstract prose."
+    "reason": "This record contains inherited rule, present-day adaptation, exact mechanics, political conflict, and a complete internal enemy. It remains the voice reference because its first draft exposed the danger of preserving facts while drowning them in abstract prose."
   }
 }
