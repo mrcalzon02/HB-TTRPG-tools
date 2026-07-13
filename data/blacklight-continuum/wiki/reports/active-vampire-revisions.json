@@ -19,9 +19,21 @@
       "id": "vampire.ash-rebellion",
       "recordId": "ash-rebellion",
       "name": "The Ash Rebellion and the Red Committee",
-      "status": "drafting",
+      "status": "semantic-comparison",
       "reportPath": "data/blacklight-continuum/wiki/reports/class-reports/vampire/ash-rebellion.json",
       "reviewPath": "blacklight-wiki-ash-rebellion-review.html",
+      "encounterQuotes": 2,
+      "liveReplacementAuthorized": false,
+      "semanticComparisonComplete": true,
+      "renderedReviewComplete": false
+    },
+    {
+      "id": "vampire.velvet-fixation",
+      "recordId": "velvet-fixation",
+      "name": "The Velvet Fixation and the Pallid Salon",
+      "status": "drafting",
+      "reportPath": "data/blacklight-continuum/wiki/reports/class-reports/vampire/velvet-fixation.json",
+      "reviewPath": "blacklight-wiki-velvet-fixation-review.html",
       "encounterQuotes": 2,
       "liveReplacementAuthorized": false,
       "semanticComparisonComplete": false,
@@ -32,12 +44,12 @@
     {
       "phase": 2,
       "status": "semantic-comparison",
-      "notes": "The Crowned Blood report preserves all source fields, uses the accepted direct voice, and now includes attributed encounter testimony. Live replacement remains blocked pending rendered review."
+      "notes": "The Crowned Blood report preserves all source fields, uses the accepted direct voice, and includes attributed encounter testimony. Live replacement remains blocked pending rendered review."
     },
     {
       "phase": 3,
       "status": "active-incremental",
-      "notes": "The Ash Rebellion and Red Committee are the only active new draft. Later Vampire lineages remain untouched until this report is reviewed."
+      "notes": "The Crowned Blood and Ash Rebellion are in semantic comparison. The Velvet Fixation and Pallid Salon are the sole active new draft. Later Vampire lineages remain untouched until this report is reviewed."
     },
     {"phase": 4, "status": "blocked-by-vampire-phase"},
     {"phase": 5, "status": "blocked-by-vampire-phase"},
