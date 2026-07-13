@@ -26,6 +26,7 @@
       focusY: 0,
       pointer: null,
       lastSelectedPoint: null,
+      pendingCanvasFocus: null,
       animationTimer: null
     };
 
@@ -173,11 +174,32 @@
 
       const before = selectedSignature();
       const point = {x: event.clientX, y: event.clientY};
+      if (event.target === systemCanvas) {
+        const pending = {point, before, handled: false};
+        state.pendingCanvasFocus = pending;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (state.pendingCanvasFocus !== pending) return;
+          const after = selectedSignature();
+          if (!pending.handled && after !== before) {
+            focusAtClientPoint(point.x, point.y);
+          }
+          state.pendingCanvasFocus = null;
+        }));
+        return;
+      }
       requestAnimationFrame(() => requestAnimationFrame(() => {
         const after = selectedSignature();
         if (after !== before) focusAtClientPoint(point.x, point.y);
       }));
     }, true);
+
+    $('exo-orbital-table-body')?.addEventListener('click', event => {
+      const pending = state.pendingCanvasFocus;
+      if (!pending || !(event.target instanceof Element) || !event.target.closest('button')) return;
+      pending.handled = true;
+      focusAtClientPoint(pending.point.x, pending.point.y);
+      state.pendingCanvasFocus = null;
+    });
 
     document.addEventListener('wheel', event => {
       if (!stage.contains(event.target)) return;
