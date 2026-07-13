@@ -57,6 +57,7 @@
     appendStylesheet('blacklight-exo-cluster-volume.css');
     appendStylesheet('blacklight-exo-layout-lensing-fixes.css');
     appendStylesheet('blacklight-exo-cluster-volume-v2.css');
+    appendStylesheet('blacklight-exo-system-spatial-interactions.css');
     appendScript('blacklight-exo-spatial.js');
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
@@ -64,6 +65,7 @@
     appendScript('blacklight-exo-lensing-volume-calibration.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-lensing-topology.js');
+    appendScript('blacklight-exo-system-spatial-interactions.js');
   }
 
   speed.addEventListener('change', syncProjectionState);
