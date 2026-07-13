@@ -65,6 +65,7 @@
     appendScript('blacklight-exo-lensing-volume-calibration.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-lensing-topology.js');
+    appendScript('blacklight-exo-system-spatial-safety.js');
     appendScript('blacklight-exo-system-spatial-interactions.js');
   }
 
