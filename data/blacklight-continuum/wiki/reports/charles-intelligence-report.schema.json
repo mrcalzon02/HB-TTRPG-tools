@@ -28,7 +28,7 @@
   "properties": {
     "schemaVersion": {
       "type": "string",
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "sourceRecordId": {
       "type": "string",
@@ -92,6 +92,11 @@
     "continuumExpression": {"$ref": "#/$defs/paragraphs"},
     "capabilityProfile": {"$ref": "#/$defs/paragraphs"},
     "liabilityPressureProfile": {"$ref": "#/$defs/paragraphs"},
+    "encounterTestimony": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/testimony"}
+    },
     "internalAdversaryAssessment": {
       "oneOf": [
         {"type": "null"},
@@ -171,6 +176,22 @@
     "paragraphs": {
       "type": "array",
       "items": {"type": "string", "minLength": 1}
+    },
+    "testimony": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quote", "attribution", "sourceType", "confidence"],
+      "properties": {
+        "quote": {"type": "string", "minLength": 1},
+        "attribution": {"type": "string", "minLength": 1},
+        "sourceType": {
+          "type": "string",
+          "enum": ["blacklight-operative", "witness", "subject-member", "rival-source", "survivor", "intercepted-record", "historical-record"]
+        },
+        "custody": {"type": "string"},
+        "confidence": {"type": "string", "enum": ["confirmed", "high", "moderate", "low", "disputed", "unknown"]},
+        "context": {"type": "string"}
+      }
     }
   }
 }
