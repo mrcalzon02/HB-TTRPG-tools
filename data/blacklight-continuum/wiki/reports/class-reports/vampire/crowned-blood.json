@@ -1,21 +1,21 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "sourceRecordId": "crowned-blood",
   "parentRecordId": "vampire",
   "recordType": "class-subgroup",
   "reportTitle": "Vampiric Remainder Lineage: The Crowned Blood",
-  "classification": "Bloodline governance tradition and inherited command structure",
+  "classification": "Vampiric ruling lineage",
   "knownAliases": [
     "The Crowned",
     "Crowned Blood Remainders"
   ],
-  "archiveStatus": "Active lineage tradition; politically dispersed; court affiliation varies by individual and domain",
+  "archiveStatus": "Active and politically dispersed; individual court ties vary",
   "confidence": "high",
   "relevantJurisdictions": [
     "Blood Courts",
     "Domain Courts",
     "Court Offices",
-    "Blacklight liaison protocols"
+    "Blacklight liaison teams"
   ],
   "sourceSnapshot": {
     "sourcePath": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json#lineages[crowned-blood]",
@@ -27,110 +27,109 @@
     "adversarySourceSha": "05dc8559855d422a09f97d7ef75a0f5b9068b945"
   },
   "executiveAssessment": [
-    "The Crowned Blood is an inherited vampiric governance tradition whose members retain unusually durable instincts for hierarchy, court architecture, command, political memory, and the conversion of social uncertainty into organized authority. Those instincts survived the loss of the old domains that once treated their titles as self-justifying. The title may remain in a member's blood and memory; obedience does not.",
-    "Blacklight does not classify the lineage as inherently hostile. The relevant question is whether an individual Crowned member treats leadership as a responsibility that must be established in the present or as an ancestral entitlement that excuses coercion. The same lineage can produce a stabilizing negotiator, a competent emergency governor, a court architect, an authoritarian patron, or a ceremonial figure being used by someone else.",
-    "The principal internal adversary attached to this record is the Crownless Regency, a network of dispossessed court officers and hidden governors who avoid the risks of visible rule by installing replaceable sovereigns. The conflict is not simply between rival claimants. It concerns whether authority must remain answerable to the person publicly exercising it or may be separated from visibility, responsibility, and consequence."
+    "The Crowned Blood descends from vampires who ruled domains, built courts, advised princes, and taught others to obey. Their titles survived in blood and memory. Their legal force did not.",
+    "Most Crowned read a room quickly. They notice who actually decides, who is being ignored, which promise keeps the peace, and where a frightened group needs direction. This can make them excellent negotiators and crisis leaders. It can also make them assume that recognizing power gives them the right to wield it.",
+    "Their chief internal enemy is the Crownless Regency: former court officers who place disposable rulers on the throne and govern from behind them. The dispute is simple. The Crowned say a ruler must carry the burden of rule. The Regency makes someone else carry the blame."
   ],
   "historicalRecord": [
-    "Crowned Blood histories consistently place the lineage among domain rulers, court architects, inherited governors, senior advisers, and elders trained to make hierarchy appear natural. Their old political function was not limited to sitting upon a throne. They designed the offices, ceremonies, obligations, lines of succession, feeding jurisdictions, patronage relationships, and habits of deference through which a court reproduced itself.",
-    "The surviving tradition therefore carries more than an appetite for rank. It preserves institutional memory: how a room becomes a court, how a title acquires witnesses, how an emergency office becomes permanent, how a ruler distributes obligation, and how ceremony can persuade participants that a political arrangement existed before anyone chose it.",
-    "Lineage accounts often present this capacity as stewardship. Rival accounts describe the same history as the refinement of domination into etiquette. Both descriptions are supported by the archive. The historical Crowned did sometimes create continuity where open predation would otherwise have destroyed a domain. They also built systems in which the violence required to maintain that continuity became difficult to see and even more difficult to challenge."
+    "Old records place the Crowned among domain rulers, court builders, hereditary governors, senior advisers, and elders. They did more than occupy thrones. They created offices, ceremonies, feeding rights, lines of succession, patronage debts, and the habits that made a court feel permanent.",
+    "They understood how a gathering became a court and how an emergency appointment became a lifelong title. They knew how to make a new order look ancient by the time anyone thought to question it.",
+    "Crowned histories call this stewardship. Their rivals call it domination taught to speak politely. Both accounts contain truth. Some Crowned courts prevented open slaughter and held unstable domains together. Others made violence harder to see by placing it behind ritual, etiquette, and inherited duty."
   ],
   "continuumExpression": [
-    "Old titles command nobody in the current Continuum. No surviving court, state, spirit, machine polity, or Blacklight office is required to recognize an inherited Crowned rank merely because the blood remembers it. A Crowned member who expects automatic obedience will eventually encounter institutions and persons whose legitimacy derives from entirely different histories.",
-    "What survived is the instinctive understanding of command, precedent, political theater, and durable social structure. A capable Crowned member can recognize where authority actually resides, identify the unacknowledged office holding a group together, construct an effective chain of responsibility, or give frightened people enough coordinated purpose to survive a crisis.",
-    "What also survived is the temptation to confuse fluency in governance with a right to govern. Blacklight field teams should expect some Crowned members to experience refusal not merely as disagreement but as a wound to the ordering principle through which they understand themselves. This reaction is real, mechanically consequential, and politically exploitable; it does not make compliance obligatory.",
-    "Present authority must be established through capability, agreement, leverage, or force. Blacklight recognizes only the first three as possible foundations for durable cooperation. Force may establish immediate control, but it does not convert inherited status into legitimate jurisdiction."
+    "An old title commands no one by itself. A court, state, spirit, machine intelligence, or Blacklight team may recognize a Crowned member's experience without recognizing the rank they claim.",
+    "What remains useful is their instinct for command, precedent, ceremony, and political memory. A capable Crowned can find the person everyone quietly depends upon, organize a failing evacuation, settle a disputed succession, or give a terrified group a plan they can follow.",
+    "What remains dangerous is the belief that skill at ruling proves a right to rule. In the present Continuum, authority must be earned through ability, agreement, leverage, or force. Only the first three can support lasting cooperation."
   ],
   "capabilityProfile": [
-    "The lineage favors Grave Dominion and Blood Memory. Operationally, this combination supports command, political pressure, inherited recollection, court precedent, and the ability to turn remembered structures into present coordination. These affinities are tendencies within the lineage's established capability architecture, not proof that every Crowned member possesses the same developed powers.",
-    "The lineage Gift, Inherited Command, becomes active only after the Crowned member has already succeeded through Presence combined with Command or Negotiation. It then extends one die of support to willing allies or acknowledged subordinates carrying out the stated plan or order. The requirement for willingness or acknowledged subordination is material. The Gift coordinates an accepted relationship; it does not manufacture consent or create obedience where none exists.",
-    "Blacklight should nevertheless treat the Gift as politically significant. A Crowned leader who has secured recognition can translate one successful act of command into immediate group efficiency. In a frightened court, collapsing facility, contested evacuation, or coordinated defense, that reinforcement may be the difference between coherent action and cascading failure. The same capability can also make a dependent organization more effective at carrying out a harmful plan once its members have accepted the relevant hierarchy."
+    "The lineage favors Grave Dominion and Blood Memory. These affinities support command, political pressure, inherited recollection, and the use of old court knowledge in present disputes.",
+    "Inherited Command only assists willing allies or acknowledged subordinates, and only after the Crowned member has already succeeded through Command or Negotiation. It strengthens an accepted plan. It does not force acceptance.",
+    "In a crisis, that distinction matters. A trusted Crowned leader can make an organized group act with frightening speed. An abusive leader can make a willing but dependent group carry out harm just as efficiently."
   ],
   "liabilityPressureProfile": [
-    "The lineage Bane is Wounded Rank. The first public refusal of a directly issued order or public removal of an asserted title in a scene adds one Hunger unless the Crowned member explicitly releases the refusing person from obligation before the end of the member's next turn.",
-    "This pressure should not be misread as evidence that the refusing person owed obedience. The Bane records how the lineage reacts to public contradiction; it does not validate the authority being contradicted. Blacklight personnel are not to preserve an unsafe chain of command merely to avoid provoking Hunger in a Crowned liaison.",
-    "The release clause is operationally important. A Crowned member can prevent the increase by explicitly acknowledging that the other person is no longer bound to the asserted order. That act converts wounded hierarchy into a recognized boundary. Members capable of doing this under pressure are generally safer partners than those who treat every refusal as rebellion requiring punishment.",
-    "Hostile actors frequently exploit Wounded Rank by engineering public humiliation, contradictory orders, ceremonial demotion, or staged insubordination. A sudden Hunger increase may therefore indicate personal authoritarianism, deliberate provocation, or both. The surrounding evidence must be preserved before responsibility is assigned."
+    "The lineage Bane is Wounded Rank. Public refusal or public loss of an asserted title can provoke Hunger.",
+    "That reaction does not prove the Crowned member was owed obedience. It records the wound caused by refusal, not the justice of the order that was refused.",
+    "A Crowned member can prevent the increase by explicitly releasing the refusing person from obligation. Those who can do this without retaliation are generally safer allies than those who treat every refusal as rebellion.",
+    "Enemies know how to exploit this weakness. Staged humiliation, false demotion, contradictory orders, and public insubordination can push a Crowned member toward Hunger at exactly the wrong moment."
   ],
   "internalAdversaryAssessment": {
     "name": "The Crownless Regency",
     "classification": "Puppet sovereigns and dispossessed court officers",
     "description": [
       "Former seneschals, regents, hereditary advisers, and dethroned elders who concluded that visible rulers are liabilities. They govern through replaceable princes, enthralled boards, forged succession records, and crises designed to prove that every domain requires their hidden hand.",
-      "The Regency's members generally retain the administrative competence of the offices they abandoned. Their defining corruption is not incompetence but the deliberate separation of authority from visible responsibility. A public sovereign absorbs scrutiny, rebellion, negotiation, and blame while the actual decision-makers remain structurally difficult to remove."
+      "The Regency is not made dangerous by incompetence. Its members are often excellent administrators. They are dangerous because they place the risk of rule on a public figure while keeping the real decisions elsewhere."
     ],
     "operatingMethod": [
       "They undermine legitimate authority, install dependent figureheads, and preserve emergency powers long after the emergency has passed.",
-      "Known methods include controlled succession disputes, falsified genealogies, private feeding dependencies, enthralled advisory boards, selective disclosure of court precedent, the manufacture of emergencies, and the quiet removal of any ruler who becomes capable of acting without Regency mediation."
+      "They favor succession disputes, forged genealogies, controlled feeding access, enthralled advisers, selective court records, manufactured crises, and the quiet removal of rulers who learn to act without them."
     ],
     "personalConflict": [
       "The Crowned Blood sees rulership as a burden that must be justified. The Regency sees rulers as masks worn by whoever controls the room behind the throne.",
-      "This makes the conflict personal even when no direct blood feud exists. The Regency is the argument that the Crowned tradition's deepest knowledge was never leadership at all, only the ability to make other people carry the danger of being seen."
+      "For the Crowned, the Regency represents the ugliest possible answer to their own inheritance: keep the command, avoid the danger, and let someone else be hated for it."
     ],
     "assessment": [
-      "Regency influence should be suspected when a domain's visible ruler changes repeatedly while the same advisers, creditors, heralds, security officers, or emergency procedures remain untouched. Continuity alone is not proof; healthy institutions also preserve experienced staff. The critical indicator is whether responsibility can reach the people whose recommendations are consistently treated as commands.",
-      "The Regency may recruit disillusioned Crowned members by presenting hidden rule as protection from populism, assassination, court volatility, or the humiliation of public refusal. The offer is attractive because it promises authority without exposing the lineage Bane. It should be understood as a system for exporting Wounded Rank onto disposable sovereigns and dependent populations."
+      "Suspect Regency influence when rulers change but the same advisers, creditors, heralds, feeding officers, and emergency rules remain in place. Experienced staff are not proof by themselves. The question is whether the people giving the real orders can be named, challenged, and removed.",
+      "The Regency recruits Crowned vampires who are tired of assassination, public refusal, or court humiliation. It offers them power without exposure. In practice, it moves the cost of Wounded Rank onto a disposable prince and everyone beneath them."
     ],
     "knownCells": [],
     "unresolvedLinks": [
-      "No complete record establishes whether the Regency is one coordinated organization, several courts using the same doctrine, or a political method repeatedly reinvented by dispossessed Crowned officers.",
-      "The extent of Regency involvement in current emergency governments and corporate boards remains unresolved."
+      "It is not known whether the Crownless Regency is one organization, several related courts, or a method repeatedly rediscovered by dispossessed officers.",
+      "Its reach inside current emergency governments and corporate boards remains unconfirmed."
     ]
   },
   "blacklightAssessment": [
-    "Crowned Blood personnel should be evaluated according to present conduct, the transparency of their authority, and their response to refusal. Lineage membership alone is not grounds for containment. A Crowned member who states the limits of an office, accepts review, releases unwilling subordinates, and remains answerable for orders may be unusually valuable in complex negotiations or emergencies.",
-    "The most dangerous Crowned structures are those in which command remains effective while responsibility becomes ceremonial. Blacklight should trace who can issue exceptions, who controls feeding or resource access, who survives changes of leadership, and whose advice is treated as binding without appearing in the formal record.",
-    "External factions benefit from portraying every Crowned member as a tyrant. That simplification drives potentially cooperative lineage members toward courts promising protection and gives the Crownless Regency evidence that visible accountability is merely a mechanism for enemies to identify targets. Blacklight should not assist that recruitment strategy through careless classification.",
-    "The inverse error is equally dangerous. Competence, courtesy, historical knowledge, and a sincere sense of duty do not prove that the authority being exercised is legitimate. A beautifully administered coercive system remains coercive."
+    "Judge a Crowned vampire by what happens when someone says no. A member who states the limits of a role, accepts review, releases unwilling followers, and answers for their orders can be a valuable ally.",
+    "Trace who gives orders, who controls feeding and resources, who can make exceptions, and who remains after rulers change. The person on the throne may not be the person in command.",
+    "Do not call every Crowned vampire a tyrant. That drives useful allies toward courts that promise protection and helps the Regency argue that public responsibility is merely a way to identify targets.",
+    "Do not make the opposite mistake either. Courtesy, competence, old knowledge, and sincere duty do not make coercion acceptable."
   ],
   "operationalGuidance": {
     "recognitionIndicators": [
-      "Repeated use of inherited titles in situations where no present jurisdiction has been established.",
-      "Unusually precise awareness of hierarchy, ceremonial precedence, succession, and the people whose informal approval controls a formal office.",
-      "A tendency to convert crisis discussion into roles, obligations, chains of command, and witnessed plans.",
-      "Visible distress, anger, or Hunger escalation following public refusal or demotion.",
-      "Organizations in which visible rulers change but advisers, emergency powers, creditors, and enforcement offices remain constant may indicate Crownless Regency influence."
+      "Inherited titles used where no one has agreed to honor them.",
+      "Detailed knowledge of precedence, succession, ceremony, and the people whose private approval controls a public office.",
+      "A habit of turning a crisis into named roles, duties, and witnessed orders.",
+      "Visible anger, distress, or Hunger after public refusal or demotion.",
+      "Rulers change while advisers, creditors, feeding officers, and emergency powers remain untouched."
     ],
     "negotiationConsiderations": [
-      "State the jurisdiction being recognized and the limits of that recognition before accepting a Crowned command role.",
-      "Distinguish advice, coordination, delegated authority, and sovereign authority in explicit terms.",
-      "Provide a dignified method for releasing or revising an obligation; public ambiguity invites both Wounded Rank and later claims of consent.",
-      "Do not perform ceremonial deference whose legal or supernatural meaning has not been translated.",
-      "When possible, allow disagreement to be recorded without turning it into public humiliation. This is risk reduction, not submission."
+      "State exactly what role is being recognized and where that role ends.",
+      "Say whether the Crowned member is advising, coordinating, commanding by consent, or claiming sovereign power.",
+      "Provide a clear way to revise or end an obligation.",
+      "Do not offer ceremonial deference until its meaning has been translated.",
+      "Avoid needless public humiliation. This reduces risk; it does not concede obedience."
     ],
     "evidenceHandling": [
-      "Preserve orders, exceptions, succession records, emergency declarations, advisory minutes, feeding allocations, and the identities of persons who remained influential across leadership changes.",
-      "Separate the public ruler's decisions from recommendations or conditions imposed by hidden officers.",
-      "Record whether subordinates were willing, formally acknowledged, coerced, dependent, enthralled, or merely assumed to be bound.",
-      "Do not treat ceremonial language as decorative until its jurisdictional meaning has been examined."
+      "Preserve orders, exceptions, succession records, emergency declarations, advisory minutes, feeding allocations, and the names of people who remained powerful across several rulers.",
+      "Separate the public ruler's choices from conditions imposed by hidden advisers.",
+      "Record whether followers were willing, formally bound, coerced, dependent, enthralled, or simply assumed to obey.",
+      "Treat ceremonial wording as possible evidence until its meaning is known."
     ],
     "escalationThresholds": [
-      "A Crowned actor uses force, feeding control, supernatural domination, or deprivation to convert disputed authority into obedience.",
-      "A supposed adviser issues binding orders while using a visible sovereign to absorb responsibility.",
-      "Emergency powers continue after the stated emergency and no accountable process exists for ending them.",
-      "Public refusal triggers retaliation against the refusing person rather than release, review, or negotiated clarification."
+      "A Crowned actor uses force, feeding control, domination, or deprivation to turn a disputed claim into obedience.",
+      "An adviser gives binding orders while a public ruler carries the blame.",
+      "Emergency powers continue after the emergency with no clear way to end them.",
+      "Public refusal is answered with retaliation instead of release, review, or negotiation."
     ],
     "prohibitedAssumptions": [
-      "Do not assume inherited rank creates present jurisdiction.",
-      "Do not assume every Crowned member seeks rulership.",
-      "Do not assume a willing subordinate is enthralled merely because coordination is unusually effective.",
-      "Do not assume the visible sovereign is the actual decision-maker.",
-      "Do not classify lineage discomfort with refusal as proof that the refused order was legitimate."
+      "Inherited rank does not create present authority.",
+      "Not every Crowned vampire wants to rule.",
+      "Effective cooperation does not prove enthrallment.",
+      "The visible ruler may not be the real decision-maker.",
+      "Pain caused by refusal does not make the refused order rightful."
     ],
     "withdrawalConditions": [
-      "The team cannot determine who actually holds decision authority and continued negotiation would legitimize an unaccountable figurehead structure.",
-      "Ceremonial participation would create an obligation whose scope cannot be translated or limited.",
-      "A Crowned liaison refuses to recognize any right of release, appeal, or refusal while retaining access to coercive capability.",
-      "Evidence indicates the negotiation itself is being used to install or validate a Crownless Regency proxy."
+      "The team cannot identify who actually gives the orders.",
+      "A ceremony would create an obligation whose limits cannot be explained.",
+      "A Crowned liaison refuses any right of release, appeal, or refusal while retaining the power to punish.",
+      "The negotiation is being used to install or legitimize a Regency puppet."
     ]
   },
   "unresolvedIntelligence": [
-    "Whether Wounded Rank expresses one shared metaphysical inheritance or several culturally reinforced responses remains unresolved.",
-    "The archive does not establish how many active Blood Courts recognize Crowned titles, recognize only specific offices, or reject the lineage's historical claims entirely.",
-    "No reliable census distinguishes Crowned members exercising accountable present authority from those operating through Crownless Regency methods.",
-    "The origin of the first Crownless Regency doctrine is disputed among court histories and may have been independently developed more than once.",
-    "Further reporting is required on how Inherited Command interacts with synthetic persons, distributed intelligences, and organizations whose members acknowledge roles without acknowledging a single sovereign."
+    "It remains unclear whether Wounded Rank is one shared supernatural inheritance or several court habits reinforced over centuries.",
+    "The number of Blood Courts that still honor Crowned titles is unknown. Some recognize only specific offices; others reject the old claims entirely.",
+    "No reliable count separates accountable Crowned leaders from those using Crownless Regency methods.",
+    "Court histories disagree on where the first Regency began. The method may have arisen more than once.",
+    "Inherited Command has not been sufficiently tested with synthetic persons, distributed minds, or groups that recognize roles without recognizing a single ruler."
   ],
   "protectedMechanics": {
     "favoredFamilies": [
@@ -149,8 +148,8 @@
   "sourcePreservationMap": [
     {"sourcePath":"lineages[crowned-blood].id","destinationSection":"sourceRecordId","status":"preserved-verbatim","notes":"Stable record key."},
     {"sourcePath":"lineages[crowned-blood].name","destinationSection":"reportTitle and historicalRecord","status":"preserved-verbatim","notes":"Established lineage name retained."},
-    {"sourcePath":"lineages[crowned-blood].legacy","destinationSection":"historicalRecord","status":"expanded","notes":"Every listed historical role is retained and given additional institutional context."},
-    {"sourcePath":"lineages[crowned-blood].continuum","destinationSection":"continuumExpression","status":"expanded","notes":"Loss of automatic title authority and the four current foundations of authority are retained."},
+    {"sourcePath":"lineages[crowned-blood].legacy","destinationSection":"historicalRecord","status":"expanded","notes":"All listed historical roles remain present without repeated theoretical explanation."},
+    {"sourcePath":"lineages[crowned-blood].continuum","destinationSection":"continuumExpression","status":"expanded","notes":"Old titles no longer command automatically; capability, agreement, leverage, and force remain named."},
     {"sourcePath":"lineages[crowned-blood].favoredFamilies[0]","destinationSection":"protectedMechanics.favoredFamilies[0] and capabilityProfile","status":"preserved-verbatim","notes":"Grave Dominion retained."},
     {"sourcePath":"lineages[crowned-blood].favoredFamilies[1]","destinationSection":"protectedMechanics.favoredFamilies[1] and capabilityProfile","status":"preserved-verbatim","notes":"Blood Memory retained."},
     {"sourcePath":"lineages[crowned-blood].gift.name","destinationSection":"protectedMechanics.gift.name and capabilityProfile","status":"preserved-verbatim","notes":"Gift name retained."},
@@ -173,10 +172,11 @@
     "renderedReviewComplete": false,
     "approved": false,
     "reviewNotes": [
-      "The report remains a separate draft overlay and does not replace the live wiki entry.",
-      "Source leaf fields and attached adversary fields have all been mapped.",
-      "A claim-by-claim semantic comparison and rendered review are still required.",
-      "KnownCells remains intentionally empty because the current source contains no established named cells."
+      "The report remains a separate draft and does not replace the live wiki entry.",
+      "All source and adversary fields remain mapped.",
+      "The prose was revised after the first draft became too abstract, repetitive, and managerial.",
+      "The next review must confirm both information preservation and natural reading cadence.",
+      "KnownCells remains empty because no named cell has been established."
     ]
   }
 }
