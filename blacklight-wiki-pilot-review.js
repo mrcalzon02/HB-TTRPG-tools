@@ -1,9 +1,12 @@
 (() => {
   'use strict';
 
-  const SOURCE_URL = 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
-  const ADVERSARY_URL = 'data/blacklight-continuum/wiki/internal-adversaries.json';
-  const REPORT_URL = 'data/blacklight-continuum/wiki/reports/class-reports/vampire/crowned-blood.json';
+  const page = document.body.dataset;
+  const SOURCE_URL = page.sourceUrl || 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
+  const ADVERSARY_URL = page.adversaryUrl || 'data/blacklight-continuum/wiki/internal-adversaries.json';
+  const REPORT_URL = page.reportUrl || 'data/blacklight-continuum/wiki/reports/class-reports/vampire/crowned-blood.json';
+  const CLASS_ID = page.classId || 'vampire';
+  const RECORD_ID = page.recordId || 'crowned-blood';
 
   const ui = {
     status: document.getElementById('pilot-status'),
@@ -63,6 +66,24 @@
     return `<section class="pilot-report-section"><h3>${escapeHtml(title)}</h3>${paragraphs(items)}</section>`;
   }
 
+  function renderTestimony(items) {
+    const testimony = list(items);
+    if (!testimony.length) return '';
+    return `<section class="pilot-report-section">
+      <h3>Encounter testimony</h3>
+      <div class="pilot-testimony-grid">${testimony.map(item => `
+        <blockquote class="pilot-testimony">
+          <p>“${escapeHtml(item.quote)}”</p>
+          <footer><strong>${escapeHtml(item.attribution)}</strong><br>${escapeHtml(item.custody || '')}</footer>
+          <div class="pilot-testimony-meta">
+            <span class="migration-badge">${escapeHtml(item.sourceType)}</span>
+            <span class="migration-badge">${escapeHtml(item.confidence)} confidence</span>
+          </div>
+          ${item.context ? `<p class="pilot-testimony-context">${escapeHtml(item.context)}</p>` : ''}
+        </blockquote>`).join('')}</div>
+    </section>`;
+  }
+
   function renderSource(source, adversary) {
     ui.source.innerHTML = `
       <article class="pilot-source-card">
@@ -105,6 +126,7 @@
       ${reportSection('Continuum expression', report.continuumExpression)}
       ${reportSection('Capability profile', report.capabilityProfile)}
       ${reportSection('Liability and pressure profile', report.liabilityPressureProfile)}
+      ${renderTestimony(report.encounterTestimony)}
       <section class="pilot-report-section pilot-adversary-report">
         <h3>Internal adversary assessment: ${escapeHtml(adversary?.name)}</h3>
         <p><strong>Classification:</strong> ${escapeHtml(adversary?.classification)}</p>
@@ -150,6 +172,7 @@
         <article class="migration-card"><h3>Claim mapping</h3><p>${escapeHtml(review.mappedClaimCount)} of ${escapeHtml(review.sourceClaimCount)} source leaf claims mapped.</p></article>
         <article class="migration-card"><h3>Mechanics comparison</h3><p>${mechanicsMatch ? 'The protected mechanics match the source exactly.' : 'The protected mechanics differ from the source and block approval.'}</p></article>
         <article class="migration-card"><h3>Adversary comparison</h3><p>${adversaryMatch ? 'The original enemy name, classification, description, method, and personal conflict are retained.' : 'One or more original adversary fields differ and block approval.'}</p></article>
+        <article class="migration-card"><h3>Encounter testimony</h3><p>${list(report.encounterTestimony).length} attributed quotation${list(report.encounterTestimony).length === 1 ? '' : 's'} filed with source and confidence notes.</p></article>
         <article class="migration-card"><h3>Semantic comparison</h3><p>${review.semanticComparisonComplete ? 'Complete.' : 'Pending manual claim-by-claim review.'}</p></article>
         <article class="migration-card"><h3>Rendered review</h3><p>${review.renderedReviewComplete ? 'Complete.' : 'Pending.'}</p></article>
       </div>
@@ -158,15 +181,15 @@
 
   async function initialize() {
     try {
-      ui.status.textContent = 'Loading source records and pilot intelligence overlay…';
+      ui.status.textContent = 'Loading source records and intelligence overlay…';
       const [sourceData, adversaryData, report] = await Promise.all([
         fetchJson(SOURCE_URL),
         fetchJson(ADVERSARY_URL),
         fetchJson(REPORT_URL)
       ]);
-      const source = list(sourceData.lineages).find(item => item.id === 'crowned-blood');
-      const adversary = adversaryData?.classes?.vampire?.['crowned-blood'];
-      if (!source || !adversary) throw new Error('The Crowned Blood source record or Crownless Regency adversary is missing.');
+      const source = list(sourceData.lineages).find(item => item.id === RECORD_ID);
+      const adversary = adversaryData?.classes?.[CLASS_ID]?.[RECORD_ID];
+      if (!source || !adversary) throw new Error(`The ${RECORD_ID} source record or attached adversary is missing.`);
 
       const mechanicsMatch = same(report.protectedMechanics, {
         favoredFamilies: source.favoredFamilies,
@@ -191,16 +214,17 @@
         metric('Enemy words', wordCount(adversary)),
         metric('Enemy leaf fields', leafFieldCount(adversary)),
         metric('Draft report words', wordCount(report)),
+        metric('Encounter quotes', list(report.encounterTestimony).length),
         metric('Preservation rows', list(report.sourcePreservationMap).length),
         metric('Mechanics match', mechanicsMatch ? 'Yes' : 'No', mechanicsMatch ? 'implemented' : ''),
         metric('Enemy match', adversaryMatch ? 'Yes' : 'No', adversaryMatch ? 'implemented' : '')
       ].join('');
       ui.status.textContent = mechanicsMatch && adversaryMatch
-        ? 'Pilot loaded. Verbatim mechanics and all five established adversary fields match the authoritative sources; semantic and rendered approval remain pending.'
-        : 'Pilot loaded with a blocking source mismatch. The draft must not advance until corrected.';
+        ? 'Report loaded. Verbatim mechanics and all five established adversary fields match the authoritative sources; remaining review gates are shown below.'
+        : 'Report loaded with a blocking source mismatch. The draft must not advance until corrected.';
     } catch (error) {
       console.error(error);
-      ui.status.innerHTML = `<span class="migration-error">Pilot review could not load: ${escapeHtml(error.message)}</span>`;
+      ui.status.innerHTML = `<span class="migration-error">Report review could not load: ${escapeHtml(error.message)}</span>`;
     }
   }
 
