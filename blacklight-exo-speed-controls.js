@@ -35,6 +35,22 @@
     if (!isPaused()) toggle.click();
   }
 
+  function loadSpatialProjection() {
+    if (!document.querySelector('link[href="blacklight-exo-spatial.css"]')) {
+      const stylesheet = document.createElement('link');
+      stylesheet.rel = 'stylesheet';
+      stylesheet.href = 'blacklight-exo-spatial.css';
+      document.head.append(stylesheet);
+    }
+
+    if (!document.querySelector('script[src="blacklight-exo-spatial.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'blacklight-exo-spatial.js';
+      script.async = false;
+      document.head.append(script);
+    }
+  }
+
   speed.addEventListener('change', syncProjectionState);
 
   toggle.addEventListener('click', () => {
@@ -65,4 +81,5 @@
   }
 
   syncProjectionState();
+  loadSpatialProjection();
 })();
