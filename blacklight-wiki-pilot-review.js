@@ -5,6 +5,7 @@
   const SOURCE_URL = page.sourceUrl || 'data/blacklight-continuum/rules/vampire-remainder-bloodlines.json';
   const ADVERSARY_URL = page.adversaryUrl || 'data/blacklight-continuum/wiki/internal-adversaries.json';
   const REPORT_URL = page.reportUrl || 'data/blacklight-continuum/wiki/reports/class-reports/vampire/crowned-blood.json';
+  const ACTIVE_URL = 'data/blacklight-continuum/wiki/reports/active-vampire-revisions.json';
   const CLASS_ID = page.classId || 'vampire';
   const RECORD_ID = page.recordId || 'crowned-blood';
 
@@ -31,6 +32,15 @@
     const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) throw new Error(`${url} returned ${response.status}`);
     return response.json();
+  }
+
+  async function fetchOptionalJson(url) {
+    try {
+      return await fetchJson(url);
+    } catch (error) {
+      console.warn(`Optional record unavailable: ${url}`, error);
+      return null;
+    }
   }
 
   function stringsIn(value, output = []) {
@@ -109,11 +119,12 @@
       </article>`;
   }
 
-  function renderReport(report) {
+  function renderReport(report, activeRecord) {
     const adversary = report.internalAdversaryAssessment;
+    const status = activeRecord?.status || report.review?.migrationState || 'drafting';
     ui.report.innerHTML = `
       <header class="pilot-report-header">
-        <p class="bli-eyebrow">Draft intelligence overlay · not live</p>
+        <p class="bli-eyebrow">${escapeHtml(status)} intelligence overlay · not live</p>
         <h2>${escapeHtml(report.reportTitle)}</h2>
         <div class="pilot-report-meta">
           <span class="migration-badge">${escapeHtml(report.classification)}</span>
@@ -139,7 +150,7 @@
       ${reportSection('Blacklight assessment', report.blacklightAssessment)}
       <section class="pilot-report-section">
         <h3>Operational guidance</h3>
-        ${Object.entries(report.operationalGuidance || {}).map(([key, values]) => `<h4>${escapeHtml(key.replace(/([A-Z])/g, ' $1').replace(/^./, char => char.toUpperCase()))}</h4><ul>${list(values).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`).join('')}
+        ${Object.entries(report.operationalGuidance || {}).map(([key, values]) => `<h4>${escapeHtml(key.replace(/([A-Z])/g, ' $1').replace(/^./, character => character.toUpperCase()))}</h4><ul>${list(values).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`).join('')}
       </section>
       ${reportSection('Unresolved intelligence', report.unresolvedIntelligence)}
       <section class="pilot-report-section">
@@ -164,8 +175,15 @@
       </div>`;
   }
 
-  function renderReview(report, mechanicsMatch, adversaryMatch) {
-    const review = report.review || {};
+  function renderReview(report, mechanicsMatch, adversaryMatch, activeRecord) {
+    const review = {
+      ...(report.review || {}),
+      ...(activeRecord ? {
+        migrationState: activeRecord.status,
+        semanticComparisonComplete: activeRecord.semanticComparisonComplete,
+        renderedReviewComplete: activeRecord.renderedReviewComplete
+      } : {})
+    };
     ui.review.innerHTML = `
       <div class="migration-grid">
         <article class="migration-card"><h3>Migration state</h3><p><span class="migration-badge ${escapeHtml(review.migrationState)}">${escapeHtml(review.migrationState)}</span></p></article>
@@ -182,13 +200,15 @@
   async function initialize() {
     try {
       ui.status.textContent = 'Loading source records and intelligence overlay…';
-      const [sourceData, adversaryData, report] = await Promise.all([
+      const [sourceData, adversaryData, report, active] = await Promise.all([
         fetchJson(SOURCE_URL),
         fetchJson(ADVERSARY_URL),
-        fetchJson(REPORT_URL)
+        fetchJson(REPORT_URL),
+        fetchOptionalJson(ACTIVE_URL)
       ]);
       const source = list(sourceData.lineages).find(item => item.id === RECORD_ID);
       const adversary = adversaryData?.classes?.[CLASS_ID]?.[RECORD_ID];
+      const activeRecord = list(active?.reports).find(item => item.recordId === RECORD_ID) || null;
       if (!source || !adversary) throw new Error(`The ${RECORD_ID} source record or attached adversary is missing.`);
 
       const mechanicsMatch = same(report.protectedMechanics, {
@@ -205,15 +225,15 @@
         && reportAdversary.personalConflict?.[0] === adversary.conflict;
 
       renderSource(source, adversary);
-      renderReport(report);
+      renderReport(report, activeRecord);
       renderMap(report);
-      renderReview(report, mechanicsMatch, adversaryMatch);
+      renderReview(report, mechanicsMatch, adversaryMatch, activeRecord);
       ui.metrics.innerHTML = [
         metric('Source words', wordCount(source)),
         metric('Source leaf fields', leafFieldCount(source)),
         metric('Enemy words', wordCount(adversary)),
         metric('Enemy leaf fields', leafFieldCount(adversary)),
-        metric('Draft report words', wordCount(report)),
+        metric('Report words', wordCount(report)),
         metric('Encounter quotes', list(report.encounterTestimony).length),
         metric('Preservation rows', list(report.sourcePreservationMap).length),
         metric('Mechanics match', mechanicsMatch ? 'Yes' : 'No', mechanicsMatch ? 'implemented' : ''),
