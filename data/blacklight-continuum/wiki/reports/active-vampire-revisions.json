@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-07-13",
+  "currentPhase": "Phase 3 · Vampire records, one lineage at a time",
+  "reports": [
+    {
+      "id": "vampire.crowned-blood",
+      "recordId": "crowned-blood",
+      "name": "The Crowned Blood and the Crownless Regency",
+      "status": "semantic-comparison",
+      "reportPath": "data/blacklight-continuum/wiki/reports/class-reports/vampire/crowned-blood.json",
+      "reviewPath": "blacklight-wiki-pilot-review.html",
+      "encounterQuotes": 2,
+      "liveReplacementAuthorized": false,
+      "semanticComparisonComplete": true,
+      "renderedReviewComplete": false
+    },
+    {
+      "id": "vampire.ash-rebellion",
+      "recordId": "ash-rebellion",
+      "name": "The Ash Rebellion and the Red Committee",
+      "status": "drafting",
+      "reportPath": "data/blacklight-continuum/wiki/reports/class-reports/vampire/ash-rebellion.json",
+      "reviewPath": "blacklight-wiki-ash-rebellion-review.html",
+      "encounterQuotes": 2,
+      "liveReplacementAuthorized": false,
+      "semanticComparisonComplete": false,
+      "renderedReviewComplete": false
+    }
+  ],
+  "phaseOverrides": [
+    {
+      "phase": 2,
+      "status": "semantic-comparison",
+      "notes": "The Crowned Blood report preserves all source fields, uses the accepted direct voice, and now includes attributed encounter testimony. Live replacement remains blocked pending rendered review."
+    },
+    {
+      "phase": 3,
+      "status": "active-incremental",
+      "notes": "The Ash Rebellion and Red Committee are the only active new draft. Later Vampire lineages remain untouched until this report is reviewed."
+    },
+    {"phase": 4, "status": "blocked-by-vampire-phase"},
+    {"phase": 5, "status": "blocked-by-vampire-phase"},
+    {"phase": 6, "status": "blocked-by-vampire-phase"}
+  ]
+}
