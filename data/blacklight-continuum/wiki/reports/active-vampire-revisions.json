@@ -31,9 +31,21 @@
       "id": "vampire.velvet-fixation",
       "recordId": "velvet-fixation",
       "name": "The Velvet Fixation and the Pallid Salon",
-      "status": "drafting",
+      "status": "semantic-comparison",
       "reportPath": "data/blacklight-continuum/wiki/reports/class-reports/vampire/velvet-fixation.json",
       "reviewPath": "blacklight-wiki-velvet-fixation-review.html",
+      "encounterQuotes": 2,
+      "liveReplacementAuthorized": false,
+      "semanticComparisonComplete": true,
+      "renderedReviewComplete": false
+    },
+    {
+      "id": "vampire.fractured-moon",
+      "recordId": "fractured-moon",
+      "name": "The Fractured Moon and the Straight Line",
+      "status": "drafting",
+      "reportPath": "data/blacklight-continuum/wiki/reports/class-reports/vampire/fractured-moon.json",
+      "reviewPath": "blacklight-wiki-fractured-moon-review.html",
       "encounterQuotes": 2,
       "liveReplacementAuthorized": false,
       "semanticComparisonComplete": false,
@@ -49,7 +61,7 @@
     {
       "phase": 3,
       "status": "active-incremental",
-      "notes": "The Crowned Blood and Ash Rebellion are in semantic comparison. The Velvet Fixation and Pallid Salon are the sole active new draft. Later Vampire lineages remain untouched until this report is reviewed."
+      "notes": "The Crowned Blood, Ash Rebellion, and Velvet Fixation are in semantic comparison. The Fractured Moon and Straight Line are the sole active new draft. Later Vampire lineages remain untouched until this report is reviewed."
     },
     {"phase": 4, "status": "blocked-by-vampire-phase"},
     {"phase": 5, "status": "blocked-by-vampire-phase"},
