@@ -1,0 +1,201 @@
+{
+  "schemaVersion": "1.1.0",
+  "sourceRecordId": "fractured-moon",
+  "parentRecordId": "vampire",
+  "recordType": "class-subgroup",
+  "reportTitle": "Vampiric Remainder Lineage: The Fractured Moon",
+  "classification": "Vampiric prophetic lineage",
+  "knownAliases": [
+    "Moon-Fractured",
+    "Fractured Seers"
+  ],
+  "archiveStatus": "Active; commonly found among court advisers, occult witnesses, solitary prophets, and omen interpreters",
+  "confidence": "high",
+  "relevantJurisdictions": [
+    "Blood Courts",
+    "Oracle Houses",
+    "Dream and spirit investigations",
+    "Blacklight anomaly-response teams"
+  ],
+  "sourceSnapshot": {
+    "sourcePath": "data/blacklight-continuum/rules/vampire-remainder-bloodlines.json#lineages[fractured-moon]",
+    "sourceSha": "87f0cc3a5dd50bbfd12769c1a417f10e131fe038",
+    "capturedDate": "2026-07-13",
+    "sourceWordCount": 130,
+    "sourceLeafFieldCount": 10,
+    "adversarySourcePath": "data/blacklight-continuum/wiki/internal-adversaries.json#classes.vampire.fractured-moon",
+    "adversarySourceSha": "05dc8559855d422a09f97d7ef75a0f5b9068b945"
+  },
+  "executiveAssessment": [
+    "The Fractured Moon descends from oracles, ecstatic prophets, pattern-seers, cursed visionaries, and court advisers whose insight arrived tangled with impossible perception. Their visions are not harmless delusions. They often contain useful truth.",
+    "The difficulty is that the truth may arrive from the wrong angle. A warning may refer to a nearby future, a dead sequence of events, a symbolic relationship, or a causal order that does not fully match the present world.",
+    "Their internal enemy is the Straight Line. Its seers cannot tolerate uncertainty. They stage omens, remove witnesses, and force events into the shape they predicted until interpretation becomes authorship."
+  ],
+  "historicalRecord": [
+    "Fractured histories preserve court prophets, battlefield augurs, ecstatic saints, pattern readers, advisers, and prisoners kept alive because a ruler feared the next thing they might say. Some prevented massacres. Some caused them after a frightened court treated metaphor as an order.",
+    "Their place in old courts was rarely safe. A useful vision could earn influence for one night and blame for a decade. Many learned to speak indirectly because a precise warning gave ambitious listeners something precise to manipulate.",
+    "The lineage therefore inherited both insight and caution. Its members know that a true vision can still be misunderstood, mistranslated, politically edited, or made true by the people attempting to avoid it."
+  ],
+  "continuumExpression": [
+    "Their visions still function in the Continuum, but they refer to a causal order slightly misaligned with local reality. Prophecy arrives as useful truth surrounded by foreign static.",
+    "A Fractured seer may correctly identify danger while misplacing its cause, sequence, scale, or time. The safest members separate what they directly saw from what they believe it means.",
+    "The lineage is most useful when treated as a source of questions, warnings, and narrow observations. It becomes dangerous when a court demands certainty that the vision did not contain."
+  ],
+  "capabilityProfile": [
+    "The lineage favors Blood Memory and Veil of Night. These affinities support inherited recollection, hidden perception, symbolic association, and attention to patterns that ordinary witnesses miss.",
+    "Split Premonition answers one narrow question exactly: who acts first, which visible exit becomes unsafe, or whether one named action increases Hunger, Exposure, or Pressure. The answer also supports the first action that directly uses it.",
+    "The Gift is reliable because the question is tightly limited. It should not be treated as proof that every broader interpretation offered by the same seer is equally exact."
+  ],
+  "liabilityPressureProfile": [
+    "The lineage Bane is Signal Bleed. When Awareness, Reason, or Composure produces a Complication, the Fractured member suffers Disruption and impaired sensory tests for the rest of the scene.",
+    "Once perception slips, foreign signals, memories, symbols, and present sensory information become harder to separate. A seer may remain articulate while becoming less reliable about what is physically occurring around them.",
+    "Do not argue a Fractured member out of Signal Bleed in the middle of an incident. Reduce stimulation, assign a trusted witness, record exact statements, and postpone interpretation until the immediate danger has passed.",
+    "Hostile seers exploit this weakness with contradictory symbols, false omens, layered voices, staged coincidences, and repeated demands for immediate explanation."
+  ],
+  "encounterTestimony": [
+    {
+      "quote": "The west door is safe now. It becomes unsafe after I tell you to use it. Those are two different statements, and we do not have time for you to be angry about that.",
+      "attribution": "Fractured Moon liaison during the evacuation of a compromised archive",
+      "sourceType": "subject-member",
+      "custody": "Blacklight body-camera audio; speaker and sequence confirmed",
+      "confidence": "confirmed",
+      "context": "The west passage remained clear for forty-one seconds after the warning and then collapsed during the evacuation. The cause of the collapse remains disputed."
+    },
+    {
+      "quote": "They did not predict the coronation. They arranged the blood on the stairs until it matched the painting, then killed everyone who remembered the painting differently.",
+      "attribution": "Former attendant to a Straight Line court",
+      "sourceType": "survivor",
+      "custody": "Protected interview and recovered court images; witness identity withheld",
+      "confidence": "moderate",
+      "context": "The staged scene and three witness deaths were confirmed. The original prophetic image has not been recovered."
+    }
+  ],
+  "internalAdversaryAssessment": {
+    "name": "The Straight Line",
+    "classification": "Prophecy-enforcement conspiracy",
+    "description": [
+      "Seers who regard uncertainty as failure and contradiction as treason. Rather than interpret visions, they remove inconvenient witnesses, force symbolic events into literal form, and prune possible futures until their preferred prophecy appears inevitable.",
+      "The Straight Line does not need a prophecy to be false. It needs the prophecy to have only one permitted meaning, preferably one that leaves the seer indispensable."
+    ],
+    "operatingMethod": [
+      "They stage omens, manipulate succession, and kill alternate interpretations before those interpretations can gather believers.",
+      "Common methods include altered records, coached witnesses, arranged coincidences, selective rescue, ritual reenactment, and violence timed to make a symbolic image appear literal."
+    ],
+    "personalConflict": [
+      "The Fractured Moon survives by accepting useful truth inside uncertainty. The Straight Line turns foresight into a weapon against every future it did not predict.",
+      "For the Fractured, the conspiracy represents the betrayal of prophecy itself: seeing one possible truth and then murdering everything that proves the vision was larger than the seer."
+    ],
+    "assessment": [
+      "Suspect Straight Line influence when several independent witnesses begin using identical prophetic language, disputed details disappear from records, and events repeatedly occur in theatrical forms that benefit the interpreter.",
+      "Do not assume a fulfilled prophecy proves manipulation. Genuine foresight exists. The relevant evidence is whether someone altered witnesses, records, choices, or events to remove competing outcomes."
+    ],
+    "knownCells": [],
+    "unresolvedLinks": [
+      "It is unknown whether the Straight Line is one conspiracy or a doctrine independently adopted by several prophetic courts.",
+      "Several Oracle Houses accuse rivals of Straight Line methods. Some accusations may be attempts to discredit inconvenient but honest visions."
+    ]
+  },
+  "blacklightAssessment": [
+    "Judge a Fractured seer by how clearly they separate vision from interpretation. The most reliable members will tell you what they saw, what they inferred, and where the two no longer match.",
+    "Do not dismiss a warning because the speaker appears disordered. Verify the narrow claim before deciding whether the surrounding explanation is useful.",
+    "Do not grant a seer control over the people or evidence needed to prove the vision. Prophecy becomes coercive very quickly when the interpreter controls the witnesses, records, and response.",
+    "A contradiction is not automatically a failed prophecy. It may be bad interpretation, altered circumstances, foreign static, deliberate manipulation, or evidence that several futures remained possible."
+  ],
+  "operationalGuidance": {
+    "recognitionIndicators": [
+      "Statements that distinguish exact sensory fragments from later interpretation.",
+      "Accurate narrow warnings surrounded by symbolism, misplaced names, or events from an unfamiliar causal order.",
+      "Compulsive attention to patterns, repetitions, timing, thresholds, and changes in tense.",
+      "Sensory decline or Disruption after a complicated Awareness, Reason, or Composure test.",
+      "Prophetic circles that punish alternate readings or repeatedly stage events to match earlier images."
+    ],
+    "negotiationConsiderations": [
+      "Ask what was directly seen before asking what it means.",
+      "Use narrow questions with defined subjects, times, and visible choices.",
+      "Record the first account before the seer hears other interpretations.",
+      "Do not demand certainty the vision did not provide.",
+      "Keep the interpreter separate from decisions that could force the vision into one preferred outcome."
+    ],
+    "evidenceHandling": [
+      "Preserve original wording, tense, sequence, drawings, gestures, and sensory details.",
+      "Record later interpretations separately from the first account.",
+      "Retain contradictory witness statements instead of editing them into agreement.",
+      "Document any person who benefits when one interpretation becomes official.",
+      "Preserve evidence of staged omens, altered records, coached testimony, and ritual reenactment."
+    ],
+    "escalationThresholds": [
+      "A seer confines, threatens, alters, or kills a witness to protect one interpretation.",
+      "An event is deliberately staged to make a prophecy appear fulfilled.",
+      "A court uses disputed prophecy to justify succession, punishment, feeding rights, or execution without independent evidence.",
+      "Blacklight personnel are ordered to suppress alternate readings rather than investigate them."
+    ],
+    "prohibitedAssumptions": [
+      "Disordered speech does not prove the vision is false.",
+      "A correct narrow prediction does not validate every broader claim.",
+      "A contradiction does not prove deception.",
+      "A fulfilled prophecy does not prove it occurred without manipulation.",
+      "Fractured Moon membership does not imply Straight Line allegiance."
+    ],
+    "withdrawalConditions": [
+      "The team cannot preserve an unedited first account.",
+      "The interpreter controls all witnesses, records, and response options.",
+      "Continued participation would help stage an omen or force a predicted event.",
+      "Signal Bleed has made the seer unable to distinguish present danger from foreign perception and no trusted stabilizing witness is available."
+    ]
+  },
+  "unresolvedIntelligence": [
+    "The source of the foreign static remains unknown. It may reflect dead realities, nearby causal branches, inherited blood memory, or contact with an outside intelligence.",
+    "The archive does not establish whether different Fractured members perceive the same misaligned causal order.",
+    "It remains unclear whether Split Premonition selects one fixed future or identifies the most immediate outcome under present conditions.",
+    "No reliable count exists for Straight Line cells, and some alleged cells may be ordinary prophetic disputes given a conspiratorial name.",
+    "The degree to which observers can change a vision merely by hearing it remains unresolved."
+  ],
+  "protectedMechanics": {
+    "favoredFamilies": [
+      "Blood Memory",
+      "Veil of Night"
+    ],
+    "gift": {
+      "name": "Split Premonition",
+      "effect": "Once per scene before making a test, choose one question: Which visible target will act first next round? Which visible exit will become unsafe before your next turn? Will one named action increase your Hunger, Exposure, or Pressure? Receive the exact answer and gain one die on the first action that directly uses it."
+    },
+    "bane": {
+      "name": "Signal Bleed",
+      "effect": "Whenever an Awareness, Reason, or Composure test produces a Complication, suffer 1 Disruption and lose one die from sensory tests until scene end."
+    }
+  },
+  "sourcePreservationMap": [
+    {"sourcePath":"lineages[fractured-moon].id","destinationSection":"sourceRecordId","status":"preserved-verbatim","notes":"Stable record key."},
+    {"sourcePath":"lineages[fractured-moon].name","destinationSection":"reportTitle and historicalRecord","status":"preserved-verbatim","notes":"Established lineage name retained."},
+    {"sourcePath":"lineages[fractured-moon].legacy","destinationSection":"executiveAssessment and historicalRecord","status":"expanded","notes":"Oracles, ecstatic prophets, pattern-seers, cursed visionaries, and court advisers remain explicit."},
+    {"sourcePath":"lineages[fractured-moon].continuum","destinationSection":"continuumExpression","status":"expanded","notes":"Useful truth, causal misalignment, and foreign static remain explicit."},
+    {"sourcePath":"lineages[fractured-moon].favoredFamilies[0]","destinationSection":"protectedMechanics.favoredFamilies[0] and capabilityProfile","status":"preserved-verbatim","notes":"Blood Memory retained."},
+    {"sourcePath":"lineages[fractured-moon].favoredFamilies[1]","destinationSection":"protectedMechanics.favoredFamilies[1] and capabilityProfile","status":"preserved-verbatim","notes":"Veil of Night retained."},
+    {"sourcePath":"lineages[fractured-moon].gift.name","destinationSection":"protectedMechanics.gift.name and capabilityProfile","status":"preserved-verbatim","notes":"Gift name retained."},
+    {"sourcePath":"lineages[fractured-moon].gift.effect","destinationSection":"protectedMechanics.gift.effect and capabilityProfile","status":"preserved-verbatim","notes":"Mechanical effect copied exactly."},
+    {"sourcePath":"lineages[fractured-moon].bane.name","destinationSection":"protectedMechanics.bane.name and liabilityPressureProfile","status":"preserved-verbatim","notes":"Bane name retained."},
+    {"sourcePath":"lineages[fractured-moon].bane.effect","destinationSection":"protectedMechanics.bane.effect and liabilityPressureProfile","status":"preserved-verbatim","notes":"Mechanical effect copied exactly."},
+    {"sourcePath":"classes.vampire.fractured-moon.name","destinationSection":"internalAdversaryAssessment.name","status":"preserved-verbatim","notes":"Enemy name retained."},
+    {"sourcePath":"classes.vampire.fractured-moon.classification","destinationSection":"internalAdversaryAssessment.classification","status":"preserved-verbatim","notes":"Enemy classification retained."},
+    {"sourcePath":"classes.vampire.fractured-moon.description","destinationSection":"internalAdversaryAssessment.description[0]","status":"preserved-verbatim","notes":"Original enemy description retained as the first paragraph."},
+    {"sourcePath":"classes.vampire.fractured-moon.method","destinationSection":"internalAdversaryAssessment.operatingMethod[0]","status":"preserved-verbatim","notes":"Original operating method retained as the first paragraph."},
+    {"sourcePath":"classes.vampire.fractured-moon.conflict","destinationSection":"internalAdversaryAssessment.personalConflict[0]","status":"preserved-verbatim","notes":"Original personal conflict retained as the first paragraph."}
+  ],
+  "review": {
+    "migrationState": "drafting",
+    "sourceClaimCount": 15,
+    "mappedClaimCount": 15,
+    "mechanicsVerified": true,
+    "adversaryVerified": true,
+    "semanticComparisonComplete": false,
+    "renderedReviewComplete": false,
+    "approved": false,
+    "reviewNotes": [
+      "The report is a separate draft and does not replace the live wiki entry.",
+      "All source and adversary fields are mapped.",
+      "The report preserves the distinction between an accurate vision and a reliable interpretation.",
+      "Two encounter quotations were added with custody, confidence, and limiting context.",
+      "No named Straight Line cell has yet been established."
+    ]
+  }
+}
