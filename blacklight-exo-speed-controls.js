@@ -5,6 +5,7 @@
   const toggle = document.getElementById('exo-toggle-orbits');
   const generate = document.getElementById('exo-generate-system');
   const seed = document.getElementById('exo-seed-input');
+  const randomSeed = document.getElementById('exo-random-seed');
 
   if (!speed || !toggle) return;
 
@@ -13,6 +14,16 @@
 
   const isPaused = () =>
     toggle.getAttribute('aria-pressed') === 'true';
+
+  function createRandomSeed() {
+    if (globalThis.crypto?.getRandomValues) {
+      const values = new Uint32Array(2);
+      globalThis.crypto.getRandomValues(values);
+      return `${values[0].toString(36)}-${values[1].toString(36)}`;
+    }
+
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+  }
 
   function syncProjectionState() {
     if (Number(speed.value) > 0) {
@@ -31,6 +42,14 @@
       speed.value = lastActiveSpeed;
     }
   });
+
+  if (randomSeed && seed) {
+    randomSeed.addEventListener('click', () => {
+      seed.value = createRandomSeed();
+      seed.focus();
+      seed.select();
+    });
+  }
 
   if (generate) {
     generate.addEventListener('click', () => {
