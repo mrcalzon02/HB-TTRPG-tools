@@ -1,0 +1,91 @@
+#exo-spatial-controls,
+#exo-orbit-canvas-3d{
+  display:none!important;
+}
+.exo-exclusive-view-controls{
+  display:grid;
+  gap:12px;
+  padding:14px 18px;
+  border-top:1px solid rgba(217,168,79,.14);
+  border-bottom:1px solid rgba(217,168,79,.14);
+  background:linear-gradient(90deg,rgba(217,168,79,.045),rgba(74,48,108,.055));
+}
+.exo-view-control-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+}
+.exo-view-control-heading>div{display:grid;gap:2px}
+.exo-view-control-heading span,
+.exo-overlay-controls legend,
+.exo-camera-controls span{
+  color:#a9a091;
+  font-size:.68rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.exo-view-control-heading strong{color:#f4efe5}
+.exo-view-control-heading output{color:#d9c7ef;font-size:.78rem;font-weight:800;text-align:right}
+.exo-view-switch{display:flex;gap:8px;flex-wrap:wrap}
+.exo-view-switch .bli-action.is-active{
+  color:#070706;
+  background:#d9a84f;
+  border-color:#f1cd83;
+  box-shadow:0 0 0 2px rgba(217,168,79,.16),0 8px 24px rgba(0,0,0,.25);
+}
+.exo-overlay-controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 18px;
+  margin:0;
+  padding:10px 12px;
+  border:1px solid rgba(217,168,79,.18);
+  border-radius:12px;
+}
+.exo-overlay-controls legend{padding:0 6px}
+.exo-overlay-controls label{display:inline-flex;align-items:center;gap:7px;color:#ddd4c5;font-size:.82rem}
+.exo-overlay-controls input{accent-color:#d9a84f}
+.exo-camera-controls{display:grid;grid-template-columns:repeat(3,minmax(130px,1fr));gap:10px}
+.exo-camera-controls[hidden]{display:none}
+.exo-camera-controls label{display:grid;gap:5px}
+.exo-camera-controls input{width:100%;accent-color:#d9a84f}
+.exo-orbit-architecture-note{margin:0;color:#a9a091;font-size:.76rem;line-height:1.5}
+.exo-exclusive-canvas-3d,
+#exo-flat-spatial-overlays{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+.exo-exclusive-canvas-3d{display:none;cursor:crosshair}
+#exo-flat-spatial-overlays{display:none;pointer-events:none;z-index:4}
+.exo-orbit-stage.exo-exclusive-flat #exo-orbit-svg{
+  position:relative!important;
+  inset:auto!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  display:block!important;
+}
+.exo-orbit-stage.exo-exclusive-flat #exo-flat-spatial-overlays{display:block}
+.exo-orbit-stage.exo-exclusive-flat .exo-exclusive-canvas-3d{display:none}
+.exo-orbit-stage.exo-exclusive-3d #exo-orbit-svg{
+  position:absolute!important;
+  inset:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+.exo-orbit-stage.exo-exclusive-3d #exo-flat-spatial-overlays{display:none}
+.exo-orbit-stage.exo-exclusive-3d .exo-exclusive-canvas-3d{display:block;z-index:3}
+.exo-orbit-stage.exo-hide-habitable-overlay .exo-habitable-zone{display:none!important}
+.exo-flat-limit-circle{fill:none;stroke:rgba(87,184,214,.6);stroke-width:2;stroke-dasharray:10 8}
+.exo-flat-lensing-node{fill:#b885ff;filter:drop-shadow(0 0 8px rgba(184,133,255,.9))}
+.exo-flat-overlay-label{fill:#d9c7ef;font-size:15px;font-weight:800;paint-order:stroke;stroke:#020202;stroke-width:5px;stroke-linejoin:round}
+.exo-flat-limit-label{fill:#9ed8e9}
+@media(max-width:700px){
+  .exo-view-control-heading{display:grid}
+  .exo-view-control-heading output{text-align:left}
+  .exo-camera-controls{grid-template-columns:1fr}
+  .exo-view-switch .bli-action{flex:1 1 150px}
+}
