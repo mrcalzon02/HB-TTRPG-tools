@@ -1,0 +1,89 @@
+.exo-interaction-control{
+  margin:10px 0;
+  padding:11px 13px;
+  border:1px solid rgba(217,168,79,.3);
+  border-radius:12px;
+  background:rgba(9,11,12,.78);
+}
+.exo-interaction-heading{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:9px;
+}
+.exo-interaction-heading>div{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.exo-interaction-heading span{
+  color:#b9a98b;
+  font-size:.63rem;
+  font-weight:900;
+  letter-spacing:.075em;
+  text-transform:uppercase;
+}
+.exo-interaction-heading strong{
+  color:#f1eadf;
+  font-size:.88rem;
+  overflow-wrap:anywhere;
+}
+.exo-interaction-heading output{
+  max-width:42rem;
+  color:#9dcbd8;
+  font-size:.72rem;
+  line-height:1.4;
+  text-align:right;
+}
+.exo-interaction-switch{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+.exo-interaction-switch .bli-action{
+  min-height:36px;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.exo-interaction-switch .bli-action.is-active{
+  border-color:#f0bd58;
+  background:linear-gradient(180deg,rgba(240,189,88,.92),rgba(199,139,44,.9));
+  color:#070707;
+  box-shadow:0 0 0 1px rgba(255,224,146,.2),0 0 16px rgba(240,189,88,.16);
+}
+.exo-interaction-switch .bli-action:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+}
+.exo-orbit-stage[data-interaction-mode="select"] #exo-exclusive-canvas-3d,
+.exo-cluster-map-shell[data-interaction-mode="select"] canvas{
+  cursor:crosshair;
+}
+.exo-orbit-stage[data-interaction-mode="pan"] #exo-exclusive-canvas-3d,
+.exo-orbit-stage[data-interaction-mode="pan"] #exo-orbit-svg,
+.exo-cluster-map-shell[data-interaction-mode="pan"] canvas{
+  cursor:grab;
+}
+.exo-orbit-stage[data-interaction-mode="rotate"] #exo-exclusive-canvas-3d,
+.exo-cluster-map-shell[data-interaction-mode="rotate"] canvas{
+  cursor:alias;
+}
+.exo-orbit-stage.exo-viewport-grabbing #exo-exclusive-canvas-3d,
+.exo-orbit-stage.exo-viewport-grabbing #exo-orbit-svg,
+.exo-cluster-map-shell.exo-viewport-grabbing canvas{
+  cursor:grabbing!important;
+}
+.exo-cluster-interaction-control{
+  margin:8px 0 10px;
+}
+@media(max-width:760px){
+  .exo-interaction-heading{display:grid}
+  .exo-interaction-heading output{text-align:left}
+  .exo-interaction-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .exo-interaction-switch .bli-action{width:100%}
+}
+@media(max-width:460px){
+  .exo-interaction-switch{grid-template-columns:1fr}
+}
