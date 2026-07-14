@@ -40,3 +40,54 @@ body.exo-published-sol .exo-object-label{
 #exo-dz-volume-flat{z-index:11}
 .exo-orbit-stage.exo-exclusive-flat #exo-dz-volume-shell-canvas{display:none!important}
 .exo-orbit-stage.exo-exclusive-3d #exo-dz-volume-flat{display:none!important}
+
+/* Every cluster authority record must remain inside its own grid track. */
+.exo-cluster-grid{
+  min-width:0;
+}
+.exo-cluster-card{
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+  isolation:isolate;
+  contain:layout paint;
+  box-sizing:border-box;
+}
+.exo-cluster-card>*{
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.exo-cluster-card-heading{
+  min-width:0;
+  flex-wrap:wrap;
+}
+.exo-cluster-card h3,
+.exo-cluster-primary,
+.exo-authority-note,
+.exo-cluster-seed,
+.exo-cluster-metrics dt,
+.exo-cluster-metrics dd{
+  min-width:0;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.exo-cluster-metrics,
+.exo-cluster-metrics>div{
+  min-width:0;
+  max-width:100%;
+}
+.exo-cluster-metrics>div{
+  overflow:hidden;
+}
+.exo-cluster-open{
+  width:100%;
+  min-width:0!important;
+  max-width:100%;
+  white-space:normal!important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  line-height:1.28;
+  text-align:center;
+  box-sizing:border-box;
+}
