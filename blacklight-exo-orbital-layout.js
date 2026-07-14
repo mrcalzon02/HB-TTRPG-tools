@@ -36,11 +36,9 @@
       const overviewEnvelope = clamp(halfGap * .34, 5, 22);
       const parentFocused = focusedParentId === body.id;
       const zoom = zoomPercent / 100;
-      const focusExpansion = parentFocused
-        ? clamp(1.75 + Math.log2(Math.max(1, zoom)) * .85, 1.75, 6.2)
-        : 1;
+      const focusExpansion = clamp(28 + Math.max(0, Math.log2(Math.max(1, zoom))) * 11, 28, 108);
       const satelliteEnvelope = parentFocused
-        ? clamp(overviewEnvelope * focusExpansion, 14, 108)
+        ? Math.max(overviewEnvelope * 1.8, focusExpansion)
         : clamp(overviewEnvelope * (1 + Math.max(0, Math.log2(Math.max(1, zoom))) * .035), 5, halfGap * .38);
 
       const moonRange = distanceRange(body.moons || []);
@@ -52,7 +50,7 @@
         outerEdge,
         halfGap,
         overviewEnvelope,
-        satelliteEnvelope,
+        satelliteEnvelope:clamp(satelliteEnvelope, 3, 108),
         parentFocused,
         dense,
         moonCount:(body.moons || []).length
@@ -68,8 +66,8 @@
         const major = isMajorMoon(moon);
         const selected = moon.id === focusedId;
         const normalized = normalizedMoonDistance(moon, moonRange, moonIndex, sortedMoons.length);
-        const minimum = Math.min(4.5, satelliteEnvelope * .28);
-        const displayRadius = minimum + Math.pow(normalized, .78) * Math.max(0, satelliteEnvelope - minimum);
+        const minimum = Math.min(5.5, parentLayout.satelliteEnvelope * .24);
+        const displayRadius = minimum + Math.pow(normalized, .78) * Math.max(0, parentLayout.satelliteEnvelope - minimum);
         const showAllFocusedOrbits = parentFocused && zoomPercent >= 1200;
         const orbitVisible = major || selected || showAllFocusedOrbits;
         const labelVisible = selected || (major && (parentFocused || zoomPercent >= 220)) || (parentFocused && zoomPercent >= 2600);
