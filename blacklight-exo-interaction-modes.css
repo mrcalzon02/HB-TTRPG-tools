@@ -78,12 +78,94 @@
 .exo-cluster-interaction-control{
   margin:8px 0 10px;
 }
+
+/* Preview-local pointer controls */
+.exo-preview-dock-host{
+  position:relative;
+}
+.exo-preview-interaction-overlay{
+  position:absolute;
+  z-index:90;
+  width:min(244px,calc(100% - 24px));
+  max-height:calc(100% - 24px);
+  margin:0;
+  padding:10px;
+  overflow:auto;
+  border-color:rgba(240,189,88,.54);
+  background:linear-gradient(180deg,rgba(10,11,12,.96),rgba(5,7,8,.92));
+  box-shadow:0 12px 30px rgba(0,0,0,.48),0 0 0 1px rgba(255,221,142,.06);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  pointer-events:auto;
+  isolation:isolate;
+}
+.exo-preview-interaction-overlay.is-viewport-pinned{
+  position:fixed;
+  z-index:1200;
+  max-height:calc(100vh - 24px);
+}
+.exo-preview-interaction-overlay .exo-interaction-heading{
+  display:grid;
+  gap:4px;
+  margin-bottom:8px;
+}
+.exo-preview-interaction-overlay .exo-interaction-heading output{
+  max-width:none;
+  color:#9dcbd8;
+  font-size:.66rem;
+  line-height:1.32;
+  text-align:left;
+}
+.exo-preview-interaction-overlay .exo-interaction-switch{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+.exo-preview-interaction-overlay .exo-interaction-switch .bli-action{
+  width:100%;
+  min-height:33px;
+  padding:7px 8px;
+  font-size:.72rem;
+  line-height:1.15;
+}
+.exo-preview-interaction-overlay .exo-interaction-switch .bli-action:nth-child(3):last-child{
+  grid-column:1/-1;
+}
+.exo-system-preview-interaction-overlay .exo-interaction-switch .bli-action:nth-child(4),
+.exo-system-preview-interaction-overlay .exo-interaction-switch .bli-action:nth-child(5){
+  font-size:.67rem;
+}
+.exo-preview-interaction-overlay:focus-within,
+.exo-preview-interaction-overlay:hover{
+  border-color:rgba(240,189,88,.78);
+  background:linear-gradient(180deg,rgba(13,14,15,.985),rgba(5,7,8,.97));
+}
+
 @media(max-width:760px){
   .exo-interaction-heading{display:grid}
   .exo-interaction-heading output{text-align:left}
   .exo-interaction-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
   .exo-interaction-switch .bli-action{width:100%}
+  .exo-preview-interaction-overlay{
+    width:min(224px,calc(100% - 20px));
+    max-height:calc(100% - 20px);
+    padding:8px;
+  }
+  .exo-preview-interaction-overlay .exo-interaction-heading output{
+    display:none;
+  }
+  .exo-preview-interaction-overlay .exo-interaction-switch .bli-action{
+    min-height:31px;
+    padding:6px;
+    font-size:.68rem;
+  }
 }
 @media(max-width:460px){
   .exo-interaction-switch{grid-template-columns:1fr}
+  .exo-preview-interaction-overlay{
+    width:min(198px,calc(100% - 16px));
+  }
+  .exo-preview-interaction-overlay .exo-interaction-switch{
+    grid-template-columns:1fr;
+  }
 }
