@@ -12,15 +12,16 @@
     const systemPanel = document.querySelector('#exo-exclusive-view-controls > .exo-interaction-control') || $('exo-system-focus-controls');
     const clusterPanel = $('exo-cluster-interaction-control');
     const clusterCanvas = $('exo-cluster-volume-canvas-v2');
+    const clusterGradient = $('exo-cluster-gravity-band-canvas');
     const clusterShell = clusterCanvas?.closest('.exo-cluster-map-shell');
 
-    if (!systemStage || !systemPanel || !clusterPanel || !clusterCanvas || !clusterShell) {
+    if (!systemStage || !systemPanel || !clusterPanel || !clusterCanvas || !clusterGradient || !clusterShell) {
       if (attempt < 600) requestAnimationFrame(() => wait(attempt + 1));
       return;
     }
 
     initializeSystemDock(systemPanel, systemStage);
-    initializeClusterDock(clusterPanel, clusterShell, clusterCanvas);
+    initializeClusterDock(clusterPanel, clusterShell, clusterCanvas, clusterGradient);
     bindViewportUpdates();
     scheduleUpdate();
   }
@@ -32,23 +33,27 @@
     panel.classList.add('exo-preview-interaction-overlay', 'exo-system-preview-interaction-overlay');
     stage.classList.add('exo-preview-dock-host');
     stage.append(panel);
-    docks.push(createDockRecord(panel, stage, stage));
+    docks.push(createDockRecord(panel, stage, () => stage, [stage]));
   }
 
-  function initializeClusterDock(panel, shell, canvas) {
+  function initializeClusterDock(panel, shell, baseCanvas, gradientCanvas) {
     if (panel.dataset.previewDock === 'cluster') return;
     panel.dataset.previewDock = 'cluster';
     panel.classList.add('exo-preview-interaction-overlay', 'exo-cluster-preview-interaction-overlay');
     shell.classList.add('exo-preview-dock-host');
     shell.append(panel);
-    docks.push(createDockRecord(panel, shell, canvas));
+    docks.push(createDockRecord(
+      panel,
+      shell,
+      () => gradientCanvas.hidden ? baseCanvas : gradientCanvas,
+      [baseCanvas, gradientCanvas]
+    ));
   }
 
-  function createDockRecord(panel, home, preview) {
-    const record = {panel, home, preview, resizeObserver:null};
+  function createDockRecord(panel, home, getPreview, observedElements) {
+    const record = {panel, home, getPreview, resizeObserver:null};
     record.resizeObserver = new ResizeObserver(scheduleUpdate);
-    record.resizeObserver.observe(preview);
-    record.resizeObserver.observe(panel);
+    for (const element of [...observedElements, panel]) record.resizeObserver.observe(element);
     return record;
   }
 
@@ -76,14 +81,16 @@
   }
 
   function positionDock(dock) {
-    const {panel, home, preview} = dock;
+    const preview = dock.getPreview();
+    if (!preview) return;
+    const {panel} = dock;
     const previewRect = preview.getBoundingClientRect();
     const viewportHeight = window.visualViewport?.height || window.innerHeight;
     const viewportWidth = window.visualViewport?.width || window.innerWidth;
     const previewVisible = previewRect.bottom > MARGIN && previewRect.top < viewportHeight - MARGIN;
 
     if (!previewVisible || viewportWidth < DESKTOP_PIN_WIDTH) {
-      returnHome(dock, 'top');
+      returnHome(dock, preview, 'top');
       return;
     }
 
@@ -97,11 +104,11 @@
     }
 
     if (previewRect.bottom <= panelHeight + MARGIN && previewRect.bottom > MARGIN) {
-      returnHome(dock, 'bottom');
+      returnHome(dock, preview, 'bottom');
       return;
     }
 
-    returnHome(dock, 'top');
+    returnHome(dock, preview, 'top');
   }
 
   function pinToViewport(dock, previewRect, panelWidth, viewportWidth, viewportHeight) {
@@ -120,8 +127,8 @@
     panel.style.maxHeight = `${Math.max(150, viewportHeight - MARGIN * 2)}px`;
   }
 
-  function returnHome(dock, placement) {
-    const {panel, home, preview} = dock;
+  function returnHome(dock, preview, placement) {
+    const {panel, home} = dock;
     if (panel.parentElement !== home) home.append(panel);
     panel.classList.remove('is-viewport-pinned');
     panel.classList.toggle('is-preview-bottom', placement === 'bottom');
