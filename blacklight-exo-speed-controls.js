@@ -59,12 +59,16 @@
     appendStylesheet('blacklight-exo-cluster-volume-v2.css');
     appendStylesheet('blacklight-exo-system-spatial-interactions.css');
     appendStylesheet('blacklight-exo-object-focus.css');
+    appendStylesheet('blacklight-exo-example-neighborhood.css');
     appendScript('blacklight-exo-spatial.js');
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
+    appendScript('blacklight-exo-system-mass-calibration.js');
     appendScript('blacklight-exo-lensing-model.js');
     appendScript('blacklight-exo-lensing-volume-calibration.js');
     appendScript('blacklight-exo-lensing-midpoint-calibration.js');
+    appendScript('blacklight-exo-system-mass-model.js');
+    appendScript('blacklight-exo-example-neighborhood.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-lensing-topology.js');
     appendScript('blacklight-exo-system-spatial-safety.js');
