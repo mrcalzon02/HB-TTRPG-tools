@@ -19,7 +19,7 @@
       barnard.knownOrbitingMassEarth = BARNARD_PLANET_EARTH;
       barnard.confidence = '2025 published minimum-mass sum for four confirmed sub-Earth planets';
       barnard.material = 'Low minimum masses support rocky interiors. A 2026 composition study using host-star Fe/Mg/Si abundances favors ferropericlase-rich mantles, reduced water capacity, and comparatively low radiogenic heating; these remain interior-model inferences.';
-      barnard.note = 'All four known planets orbit inside the conventional habitable zone; the displayed mass is the summed radial-velocity minimum mass.';
+      barnard.note = 'All four known planets orbit interior to, and closer to the star than, the conventional habitable zone; the displayed mass is the summed radial-velocity minimum mass.';
     }
 
     const epsilon = publicItem('Epsilon Indi');
@@ -60,7 +60,10 @@
     if (!seed || !(masses instanceof Map)) return;
 
     const existing = masses.get(seed) || {};
-    const stellarMassSolar = stellarOverride ?? Number(card.dataset.stellarMass) ?? existing.stellarMassSolar ?? 1;
+    const cardMass = Number(card.dataset.stellarMass);
+    const stellarMassSolar = stellarOverride ?? (Number.isFinite(cardMass) && cardMass > 0
+      ? cardMass
+      : Number(existing.stellarMassSolar) || 1);
     const planetaryMassSolar = planetMassEarth / EARTHS_PER_SOLAR_MASS;
     const record = {
       ...existing,
