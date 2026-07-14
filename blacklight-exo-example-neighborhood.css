@@ -1,0 +1,19 @@
+.exo-cluster-card[data-real-neighborhood="true"]{
+  border-color:rgba(111,177,217,.34);
+  background:linear-gradient(145deg,rgba(20,31,39,.86),rgba(7,7,7,.94));
+}
+.exo-cluster-card[data-real-neighborhood="true"]::before{
+  content:"REAL-SPACE PRESET";
+  display:block;
+  margin-bottom:8px;
+  color:#9ed8e9;
+  font-size:.62rem;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.exo-real-neighborhood-note{
+  margin:2px 0 10px;
+  color:#9aa8ad;
+  font-size:.7rem;
+  line-height:1.45;
+}
