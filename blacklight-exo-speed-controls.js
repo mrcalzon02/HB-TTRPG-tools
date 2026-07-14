@@ -65,10 +65,11 @@
     appendStylesheet('blacklight-exo-gravity-bands.css');
     appendStylesheet('blacklight-exo-authority-render-fixes.css');
     appendStylesheet('blacklight-exo-imagery.css');
+    appendStylesheet('blacklight-exo-interaction-modes.css');
 
     appendScript('blacklight-exo-frame-scheduler.js');
     appendScript('blacklight-exo-spatial-bootstrap.js');
-    appendScript('blacklight-exo-view-modes-v2.js');
+    appendScript('blacklight-exo-view-modes-v3.js');
     appendScript('blacklight-exo-cluster-volume.js');
     appendScript('blacklight-exo-system-mass-calibration.js');
     appendScript('blacklight-exo-lensing-model.js');
@@ -77,16 +78,14 @@
     appendScript('blacklight-exo-system-mass-model.js');
     appendScript('blacklight-exo-source-authority-model.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
+    appendScript('blacklight-exo-cluster-interaction-modes.js');
     appendScript('blacklight-exo-cluster-field-clarity.js');
     appendScript('blacklight-exo-cluster-field-pan-sync.js');
     appendScript('blacklight-exo-cluster-gravity-bands.js');
     appendScript('blacklight-exo-lensing-topology.js');
     appendScript('blacklight-exo-system-spatial-safety.js');
-    appendScript('blacklight-exo-system-spatial-interactions.js');
     appendScript('blacklight-exo-dz-volume-shell-v2.js');
     appendScript('blacklight-exo-system-gravity-bands.js');
-    appendScript('blacklight-exo-object-focus.js');
-    appendScript('blacklight-exo-pointer-selection-repair.js');
     appendScript('blacklight-exo-3d-performance-governor.js');
   }
 
