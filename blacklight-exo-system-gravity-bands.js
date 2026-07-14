@@ -15,7 +15,8 @@
     const topologyCanvas = $('exo-topology-lensing-canvas');
     const table = $('exo-orbital-table-body');
     const grid = $('exo-cluster-grid');
-    if (!model || !stage || !toggle || !topologyCanvas || !table || !grid) {
+    const finalDzShell = $('exo-dz-volume-shell-canvas');
+    if (!model || !stage || !toggle || !topologyCanvas || !table || !grid || !finalDzShell) {
       if (attempt < 480) requestAnimationFrame(() => waitForDependencies(attempt + 1));
       return;
     }
