@@ -12,10 +12,10 @@
       if (attempt < 480) requestAnimationFrame(() => wait(attempt + 1));
       return;
     }
-    initialize({controls, shell, modeGroup, cameraGrid});
+    initialize({shell, modeGroup});
   }
 
-  function initialize({controls, shell, modeGroup}) {
+  function initialize({shell, modeGroup}) {
     if ($('exo-cluster-interaction-control')) return;
     let mode = 'select';
 
@@ -47,7 +47,10 @@
         return;
       }
       try {
-        Object.defineProperty(event, 'shiftKey', {configurable:true, value:mode === 'pan'});
+        Object.defineProperties(event, {
+          shiftKey:{configurable:true, value:mode === 'pan'},
+          button:{configurable:true, value:mode === 'pan' ? 1 : 0}
+        });
       } catch {
         if (mode === 'pan') {
           event.preventDefault();
