@@ -18,6 +18,7 @@
       if (!catalogue || catalogue.status !== 'ready' || Number(catalogue.moons) < 400) {
         throw new Error(catalogue?.error || `complete moon catalogue validation failed (${catalogue?.moons || 0} records)`);
       }
+      await load('blacklight-exo-imagery.js');
       await load('blacklight-exo-solar-system.js');
       await load('blacklight-exo-speed-controls.js');
       await load('blacklight-exo-cluster.js');
