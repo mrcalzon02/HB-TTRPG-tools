@@ -1,0 +1,58 @@
+.exo-example-provenance,
+.exo-real-reference-facts{
+  border:1px solid rgba(111,177,217,.25);
+  border-radius:12px;
+  background:rgba(10,18,23,.68);
+}
+.exo-example-provenance{
+  margin:12px 0 18px;
+  padding:12px 15px;
+}
+.exo-real-reference-facts{
+  margin:4px 0 12px;
+  padding:9px 11px;
+}
+.exo-example-provenance summary,
+.exo-real-reference-facts summary{
+  cursor:pointer;
+  color:#9ed8e9;
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+.exo-example-provenance p{
+  margin:9px 0 0;
+  color:#c4ced0;
+  font-size:.78rem;
+  line-height:1.55;
+}
+.exo-reference-source-line{
+  color:#92a2a7!important;
+  font-size:.7rem!important;
+}
+.exo-real-reference-facts dl{
+  display:grid;
+  grid-template-columns:minmax(8.5rem,max-content) minmax(0,1fr);
+  gap:6px 12px;
+  margin:10px 0 0;
+}
+.exo-real-reference-facts dt{
+  color:#8fa1a7;
+  font-size:.64rem;
+  font-weight:900;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+}
+.exo-real-reference-facts dd{
+  min-width:0;
+  margin:0;
+  color:#e5ecec;
+  font-size:.72rem;
+  line-height:1.42;
+  overflow-wrap:anywhere;
+}
+@media(max-width:620px){
+  .exo-real-reference-facts dl{grid-template-columns:1fr;gap:3px}
+  .exo-real-reference-facts dd{margin-bottom:6px}
+}
