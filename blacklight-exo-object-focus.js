@@ -85,6 +85,7 @@
     }
 
     function centerStar() {
+      globalThis.BlacklightExoSelectObject?.('star');
       clearFocus();
     }
 
