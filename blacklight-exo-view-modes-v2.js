@@ -106,7 +106,8 @@
         const y=(event.clientY-rect.top)*state.canvas.height/rect.height;
         const target=[...state.hitTargets].sort((a,b)=>a.depth-b.depth)
           .find(item=>Math.hypot(item.x-x,item.y-y)<=item.radius+7);
-        target?.row?.querySelector('button')?.click();
+        if (target?.id === 'star') document.querySelector('.exo-star-target')?.dispatchEvent(new MouseEvent('click',{bubbles:true}));
+        else rowFor(target?.id)?.querySelector('button')?.click();
       });
     }
 
@@ -179,7 +180,7 @@
         const model=orbitPoint(Number(body.distance)||0,elements,anomaly);
         const projected=project(model,width,height,scale);
         const parent={body,model,projected};
-        bodies.push({...projected,id:body.id,name:body.name,color:body.color||'#8eb397',size:bodySize(body,projected.perspective),kind:body.kind,row:rowFor(body.id)});
+        bodies.push({...projected,id:body.id,name:body.name,color:body.color||'#8eb397',size:bodySize(body,projected.perspective),kind:body.kind});
         const moonRange=distanceRange(body.moons);
         for(const moon of body.moons){
           const moonElements=elementsFor(moon);
@@ -189,7 +190,7 @@
           const moonModel={x:model.x+relative.x,y:model.y+relative.y,z:model.z+relative.z};
           const moonProjected=project(moonModel,width,height,scale);
           if(moon.id===state.selectedId) drawMoonOrbit(context,parent,visualRadius,moonElements,width,height,scale);
-          bodies.push({...moonProjected,id:moon.id,name:moon.name,color:moon.color||'#a7adb2',size:Math.max(1.4,2.8*moonProjected.perspective),kind:'moon',row:rowFor(moon.id)});
+          bodies.push({...moonProjected,id:moon.id,name:moon.name,color:moon.color||'#a7adb2',size:Math.max(1.4,2.8*moonProjected.perspective),kind:'moon'});
         }
       }
       bodies.sort((a,b)=>a.z-b.z);
@@ -199,7 +200,7 @@
         context.fillStyle=body.color;context.shadowColor=body.color;context.shadowBlur=body.kind==='moon'?2:8;context.fill();context.shadowBlur=0;
         if(body.id===state.selectedId){context.beginPath();context.arc(body.x,body.y,body.size+5,0,Math.PI*2);context.strokeStyle='#f0bd58';context.lineWidth=2;context.stroke();}
         if(body.kind!=='moon'||body.id===state.selectedId){context.fillStyle='rgba(244,239,229,.9)';context.font=`${Math.max(10,12*body.perspective)}px system-ui`;context.fillText(body.name,body.x+body.size+5,body.y-4);}
-        state.hitTargets.push({id:body.id,row:body.row,x:body.x,y:body.y,radius:Math.max(3,body.size),depth:body.z});
+        state.hitTargets.push({id:body.id,x:body.x,y:body.y,radius:Math.max(3,body.size),depth:body.z});
       }
       drawStar(context,width,height,scale);
     }
@@ -269,7 +270,7 @@
       gradient.addColorStop(0,'#fff8d9');gradient.addColorStop(.28,'#ffd36b');gradient.addColorStop(1,'rgba(217,168,79,0)');
       context.fillStyle=gradient;context.beginPath();context.arc(star.x,star.y,36,0,Math.PI*2);context.fill();
       context.fillStyle='#ffd36b';context.beginPath();context.arc(star.x,star.y,10,0,Math.PI*2);context.fill();
-      state.hitTargets.push({id:'star',row:null,x:star.x,y:star.y,radius:14,depth:star.z});
+      state.hitTargets.push({id:'star',x:star.x,y:star.y,radius:14,depth:star.z});
     }
 
     function drawStarfield(context,width,height,seed) {
