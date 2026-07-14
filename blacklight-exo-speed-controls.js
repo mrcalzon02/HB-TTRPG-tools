@@ -69,6 +69,7 @@
     appendScript('blacklight-exo-example-reference-data.js');
     appendScript('blacklight-exo-example-physics-2026.js');
     appendScript('blacklight-exo-example-reference-presentation.js');
+    appendScript('blacklight-exo-sol-published.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-cluster-field-clarity.js');
     appendScript('blacklight-exo-lensing-topology.js');
