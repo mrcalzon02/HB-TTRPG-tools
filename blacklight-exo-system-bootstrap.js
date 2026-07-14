@@ -32,9 +32,11 @@
         throw new Error(catalogue?.error || `complete moon catalogue validation failed (${catalogue?.moons || 0} records)`);
       }
       await loadStyle('blacklight-exo-orbital-layout.css');
+      await loadStyle('blacklight-exo-campaign-facilities.css');
       await load('blacklight-exo-imagery.js');
       await load('blacklight-exo-orbital-layout.js');
-      await load('blacklight-exo-solar-system-v5.js');
+      await load('blacklight-exo-sol-campaign-data.js');
+      await load('blacklight-exo-solar-system-v6.js');
       await load('blacklight-exo-speed-controls.js');
       await load('blacklight-exo-cluster.js');
     } catch (error) {
@@ -42,7 +44,7 @@
       const empty = document.getElementById('exo-orbit-empty');
       if (empty) empty.textContent = `The complete Solar System catalogue could not initialize: ${error.message}`;
       const status = document.getElementById('exo-cluster-status');
-      if (status) status.textContent = 'Complete published Solar System data is unavailable; rendering was stopped rather than showing a truncated record.';
+      if (status) status.textContent = 'Complete published Solar System and Blacklight campaign data are unavailable; rendering was stopped rather than showing a partial record.';
     } finally {
       if (generate) generate.disabled = false;
     }
