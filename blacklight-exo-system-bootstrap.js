@@ -10,6 +10,19 @@
     document.head.append(script);
   });
 
+  const loadStyle = href => new Promise((resolve, reject) => {
+    if (document.querySelector(`link[href="${href}"]`)) {
+      resolve();
+      return;
+    }
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.onload = resolve;
+    link.onerror = () => reject(new Error(`Unable to load ${href}`));
+    document.head.append(link);
+  });
+
   async function start() {
     const generate = document.getElementById('exo-generate-system');
     if (generate) generate.disabled = true;
@@ -18,8 +31,10 @@
       if (!catalogue || catalogue.status !== 'ready' || Number(catalogue.moons) < 400) {
         throw new Error(catalogue?.error || `complete moon catalogue validation failed (${catalogue?.moons || 0} records)`);
       }
+      await loadStyle('blacklight-exo-orbital-layout.css');
       await load('blacklight-exo-imagery.js');
-      await load('blacklight-exo-solar-system.js');
+      await load('blacklight-exo-orbital-layout.js');
+      await load('blacklight-exo-solar-system-v5.js');
       await load('blacklight-exo-speed-controls.js');
       await load('blacklight-exo-cluster.js');
     } catch (error) {
