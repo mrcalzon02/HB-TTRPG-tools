@@ -24,6 +24,10 @@
   font-size:.72rem;
   line-height:1.45;
 }
+.exo-cluster-map-shell:has(#exo-cluster-volume-gradient[aria-pressed="true"]) #exo-cluster-lensing-inspector,
+.exo-cluster-map-shell:has(#exo-cluster-volume-gradient[aria-pressed="true"]) #exo-cluster-field-key{
+  display:none!important;
+}
 .exo-system-gravity-display-switch{
   display:flex;
   flex-wrap:wrap;
@@ -54,7 +58,9 @@
 .exo-system-gravity-gradient-active #exo-topology-lensing-canvas,
 .exo-system-gravity-gradient-active #exo-system-spatial-overlay-v2,
 .exo-system-gravity-gradient-active #exo-system-spatial-overlay-3d-v2,
-.exo-system-gravity-gradient-active #exo-topology-flat-lensing-group{
+.exo-system-gravity-gradient-active #exo-topology-flat-lensing-group,
+.exo-system-gravity-gradient-active #exo-lensing-node-summary,
+.exo-system-gravity-gradient-active #exo-system-lensing-inspector{
   display:none!important;
 }
 @media(max-width:620px){
