@@ -17,16 +17,32 @@
   max-width:100%;
   max-height:100%;
 }
-body.exo-published-sol #exo-source-authority-banner{
-  display:none!important;
+body.exo-published-sol #exo-source-authority-banner{display:none!important}
+body.exo-published-sol #exo-orbit-title{overflow-wrap:anywhere}
+body.exo-published-sol .exo-object-label{font-size:12px;letter-spacing:.015em}
+
+/* The star is a navigation marker, not a screen-filling light source. */
+.exo-star-halo{
+  filter:none!important;
+  opacity:.42!important;
 }
-body.exo-published-sol #exo-orbit-title{
-  overflow-wrap:anywhere;
+.exo-star-core{
+  filter:none!important;
+  stroke-width:1.25!important;
 }
-body.exo-published-sol .exo-object-label{
-  font-size:12px;
-  letter-spacing:.015em;
+
+/* Focus changes and viewport transforms are tweened instead of snapping. */
+.exo-focus-animating #exo-orbit-svg,
+.exo-focus-animating #exo-flat-spatial-overlays,
+.exo-focus-animating #exo-system-spatial-overlay-v2,
+.exo-focus-animating #exo-exclusive-canvas-3d,
+.exo-focus-animating #exo-topology-lensing-canvas,
+.exo-focus-animating #exo-system-spatial-overlay-3d-v2,
+.exo-focus-animating #exo-dz-volume-shell-canvas,
+.exo-focus-animating #exo-dz-volume-flat{
+  transition:transform .44s cubic-bezier(.22,.8,.28,1),translate .44s cubic-bezier(.22,.8,.28,1);
 }
+
 #exo-dz-volume-shell-canvas,
 #exo-dz-volume-flat{
   position:absolute;
@@ -42,9 +58,7 @@ body.exo-published-sol .exo-object-label{
 .exo-orbit-stage.exo-exclusive-3d #exo-dz-volume-flat{display:none!important}
 
 /* Every cluster authority record must remain inside its own grid track. */
-.exo-cluster-grid{
-  min-width:0;
-}
+.exo-cluster-grid{min-width:0}
 .exo-cluster-card{
   min-width:0;
   max-width:100%;
@@ -53,15 +67,8 @@ body.exo-published-sol .exo-object-label{
   contain:layout paint;
   box-sizing:border-box;
 }
-.exo-cluster-card>*{
-  min-width:0;
-  max-width:100%;
-  box-sizing:border-box;
-}
-.exo-cluster-card-heading{
-  min-width:0;
-  flex-wrap:wrap;
-}
+.exo-cluster-card>*{min-width:0;max-width:100%;box-sizing:border-box}
+.exo-cluster-card-heading{min-width:0;flex-wrap:wrap}
 .exo-cluster-card h3,
 .exo-cluster-primary,
 .exo-authority-note,
@@ -73,13 +80,8 @@ body.exo-published-sol .exo-object-label{
   word-break:normal;
 }
 .exo-cluster-metrics,
-.exo-cluster-metrics>div{
-  min-width:0;
-  max-width:100%;
-}
-.exo-cluster-metrics>div{
-  overflow:hidden;
-}
+.exo-cluster-metrics>div{min-width:0;max-width:100%}
+.exo-cluster-metrics>div{overflow:hidden}
 .exo-cluster-open{
   width:100%;
   min-width:0!important;
