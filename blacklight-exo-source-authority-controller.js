@@ -47,13 +47,15 @@
     $('exo-summary-population')?.classList.toggle('is-unpopulated',!record.populated);
 
     removeLegacyReferencePanels();
-    renderPublishedInventory(record);
 
     if (record.detailProvider === 'published-sol') {
+      const inventory = $('exo-published-inventory');
+      if (inventory) inventory.hidden = true;
       clearSupplementLabels();
       return;
     }
 
+    renderPublishedInventory(record);
     setText($('exo-orbit-title'),`${record.name} published-first system record`);
     const note = document.querySelector('.exo-projection-note');
     if (note) {
@@ -91,10 +93,9 @@
       section.className = 'bli-section exo-published-inventory';
       document.querySelector('.exo-system-workspace')?.insertAdjacentElement('afterend',section);
     }
+    section.hidden = false;
 
-    const sourceLabels = record.sources
-      .map(id => authority.sources[id]?.label || id)
-      .join(' · ');
+    const sourceLabels = record.sources.map(id => authority.sources[id]?.label || id).join(' · ');
     section.innerHTML = '';
     const heading = document.createElement('div');
     heading.className = 'bli-section-head';
