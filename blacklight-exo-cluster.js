@@ -2,6 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
+  const authority = globalThis.BlacklightExoAuthority;
   const generateButton = $('exo-generate-system');
   const seedInput = $('exo-seed-input');
   const clusterSeedInput = $('exo-cluster-seed');
@@ -18,29 +19,6 @@
   const clusterHabitableSummary = $('exo-cluster-summary-habitable');
 
   if (!generateButton || !seedInput || !clusterGrid) return;
-
-  const EXAMPLE_SYSTEMS = [
-    ['Sol','G2V yellow dwarf',8,true,1,2,1],
-    ['Alpha Centauri','G2V + K1V + M5.5V triple',2,false,1,1,1],
-    ["Barnard's Star",'M4V red dwarf',4,false,0,0,0],
-    ['Luhman 16','L7.5 + T0.5 brown-dwarf binary',0,false,0,0,0],
-    ['Wolf 359','M6V red dwarf',0,false,0,0,0],
-    ['Lalande 21185','M2V red dwarf',2,false,0,0,0],
-    ['Sirius','A1V + DA2 binary',0,false,0,0,0],
-    ['Luyten 726-8','M5.5V + M6V binary',0,false,0,0,0],
-    ['Ross 154','M3.5V red dwarf',0,false,0,0,0],
-    ['Ross 248','M6V red dwarf',0,false,0,0,0],
-    ['Epsilon Eridani','K2V orange dwarf',1,false,0,0,0],
-    ['Lacaille 9352','M0.5V red dwarf',2,false,0,0,0],
-    ['Ross 128','M4V red dwarf',1,false,1,1,1],
-    ['EZ Aquarii','M-dwarf triple system',0,false,0,0,0],
-    ['61 Cygni','K5V + K7V binary',0,false,0,0,0],
-    ['Procyon','F5IV-V + DQZ white dwarf binary',0,false,0,0,0],
-    ['Struve 2398','M3V + M3.5V binary',0,false,0,0,0],
-    ['Groombridge 34','M1.5V + M3.5V binary',2,false,0,0,0],
-    ['Epsilon Indi','K5V + brown-dwarf pair',1,false,0,0,0],
-    ['Tau Ceti','G8V yellow dwarf',0,false,0,0,0]
-  ];
 
   let clusterSystems = [];
   let selectedClusterSeed = '';
@@ -79,21 +57,18 @@
     selectPrimaryStar();
     const text = readInspectorData()['Habitable zone'] || '';
     const values = text.match(/[\d.]+/g)?.map(Number) || [];
-    return values.length >= 2 ? {inner:values[0], outer:values[1]} : null;
+    return values.length >= 2 ? {inner:values[0],outer:values[1]} : null;
   }
 
   function systemRowsInHabitableZone(zone) {
-    const rows = [...document.querySelectorAll('#exo-orbital-table-body tr')];
     const planets = [];
     let parent = null;
-    for (const row of rows) {
-      const cells = row.cells;
-      if (!cells?.length) continue;
-      const orbit = cells[0].textContent.trim();
-      const distanceText = cells[3]?.textContent.trim() || '';
+    for (const row of document.querySelectorAll('#exo-orbital-table-body tr')) {
+      const orbit = row.cells?.[0]?.textContent.trim() || '';
+      const distanceText = row.cells?.[3]?.textContent.trim() || '';
       if (/^\d+$/.test(orbit) && / AU$/.test(distanceText)) {
         const distance = Number.parseFloat(distanceText);
-        parent = {row, orbit, distance, inZone:Boolean(zone && distance >= zone.inner && distance <= zone.outer), moonRows:[]};
+        parent = {row,distance,inZone:Boolean(zone && distance >= zone.inner && distance <= zone.outer),moonRows:[]};
         planets.push(parent);
       } else if (/^\d+\.\d+$/.test(orbit) && parent) {
         parent.moonRows.push(row);
@@ -104,18 +79,29 @@
     return planets.filter(planet => planet.inZone);
   }
 
-  function systemHasPopulationSignature() {
-    return /civilization signature|non-natural activity/i.test($('exo-system-features')?.textContent || '');
-  }
-
   function inspectPlanetPopulation(planet) {
     planet.row.querySelector('button')?.click();
     const civilization = readInspectorData().Civilization || '';
-    return {populated:Boolean(civilization && !/^No\b/i.test(civilization)), civilization};
+    return {populated:Boolean(civilization && !/^No\b/i.test(civilization)),civilization};
   }
 
   function readCurrentSystemMetadata(options = {}) {
     const seed = seedInput.value.trim();
+    const published = authority?.getSystem(seed);
+    if (published) {
+      return {
+        seed,
+        name:published.name,
+        star:published.star,
+        planetCount:published.confirmedPlanetCount,
+        populated:published.populated,
+        hzPlanetCount:published.confirmedHzPlanetCount,
+        hzBodyCount:published.confirmedHzBodyCount,
+        habitableWorlds:published.knownLifeWorlds,
+        publishedReference:true
+      };
+    }
+
     const zone = parseHabitableZone();
     const hzPlanets = systemRowsInHabitableZone(zone);
     let populatedHzPlanet = null;
@@ -131,15 +117,14 @@
         }
       }
     }
-    const hzBodyCount = hzPlanets.reduce((total, planet) => total + 1 + planet.moonRows.length, 0);
     const metadata = {
       seed,
       name:$('exo-summary-name')?.textContent.trim() || 'Unknown system',
       star:$('exo-summary-star')?.textContent.trim() || 'Unknown primary',
       planetCount:Number($('exo-summary-planets')?.textContent || 0),
-      populated:systemHasPopulationSignature(),
+      populated:/civilization signature|non-natural activity/i.test($('exo-system-features')?.textContent || ''),
       hzPlanetCount:hzPlanets.length,
-      hzBodyCount,
+      hzBodyCount:hzPlanets.reduce((total,planet) => total + 1 + planet.moonRows.length,0),
       populatedHzPlanet,
       habitableWorlds:Number(
         [...document.querySelectorAll('#exo-resource-index .exo-resource-item')]
@@ -152,101 +137,132 @@
   }
 
   function updateCurrentSummary(metadata = readCurrentSystemMetadata()) {
-    setText(populationSummary, metadata.populated ? 'Populated' : 'Unpopulated');
-    populationSummary?.classList.toggle('is-populated', metadata.populated);
-    populationSummary?.classList.toggle('is-unpopulated', !metadata.populated);
-    setText(hzBodiesSummary, metadata.hzBodyCount);
+    setText(populationSummary,metadata.populated ? 'Populated' : 'Unpopulated');
+    populationSummary?.classList.toggle('is-populated',metadata.populated);
+    populationSummary?.classList.toggle('is-unpopulated',!metadata.populated);
+    setText(hzBodiesSummary,metadata.hzBodyCount);
   }
 
-  function setClusterStatus(message, state = '') {
-    setText(clusterStatus, message);
+  function setClusterStatus(message,state = '') {
+    setText(clusterStatus,message);
     if (clusterStatus && clusterStatus.dataset.state !== state) clusterStatus.dataset.state = state;
   }
 
   function updateClusterTotals() {
-    setText(clusterSystemsSummary, clusterSystems.length);
-    setText(clusterPopulatedSummary, clusterSystems.filter(system => system.populated).length);
-    setText(clusterHabitableSummary, clusterSystems.filter(system => system.hzBodyCount > 0).length);
+    setText(clusterSystemsSummary,clusterSystems.length);
+    setText(clusterPopulatedSummary,clusterSystems.filter(system => system.populated).length);
+    setText(clusterHabitableSummary,clusterSystems.filter(system => system.hzBodyCount > 0).length);
   }
 
-  function loadClusterSystem(entry, scroll = true) {
+  function loadClusterSystem(entry,scroll = true) {
     selectedClusterSeed = entry.seed;
     seedInput.value = entry.seed;
     generateButton.click();
     renderClusterCards();
-    if (scroll) $('exo-control-title')?.scrollIntoView({behavior:'smooth', block:'start'});
+    if (scroll) $('exo-control-title')?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 
   function renderClusterCards() {
     const fragment = document.createDocumentFragment();
-    for (const entry of clusterSystems) {
-      const card = document.createElement('article');
-      card.className = 'exo-cluster-card';
-      card.classList.toggle('is-selected', entry.seed === selectedClusterSeed);
-      card.classList.toggle('is-populated', entry.populated);
-
-      const heading = document.createElement('div');
-      heading.className = 'exo-cluster-card-heading';
-      const title = document.createElement('h3');
-      title.textContent = entry.name;
-      const status = document.createElement('span');
-      status.className = `exo-population-badge ${entry.populated ? 'populated' : 'unpopulated'}`;
-      status.textContent = entry.populated ? 'Populated' : 'Unpopulated';
-      heading.append(title, status);
-
-      const primary = document.createElement('p');
-      primary.className = 'exo-cluster-primary';
-      primary.textContent = entry.star;
-
-      const metrics = document.createElement('dl');
-      metrics.className = 'exo-cluster-metrics';
-      for (const [label, value] of [
-        ['Planets', entry.planetCount],
-        ['HZ planets', entry.hzPlanetCount],
-        ['HZ bodies', entry.hzBodyCount],
-        ['Habitable worlds', entry.habitableWorlds]
-      ]) {
-        const wrapper = document.createElement('div');
-        const dt = document.createElement('dt');
-        const dd = document.createElement('dd');
-        dt.textContent = label;
-        dd.textContent = String(value);
-        wrapper.append(dt, dd);
-        metrics.append(wrapper);
-      }
-
-      const seed = document.createElement('code');
-      seed.className = 'exo-cluster-seed';
-      seed.textContent = entry.seed;
-
-      const open = document.createElement('button');
-      open.type = 'button';
-      open.className = 'bli-action exo-cluster-open';
-      open.textContent = entry.hzBodyCount > 0 ? 'Expand Habitable-Zone System' : 'Open System';
-      open.setAttribute('aria-pressed', String(entry.seed === selectedClusterSeed));
-      open.addEventListener('click', () => loadClusterSystem(entry));
-
-      card.addEventListener('dblclick', () => loadClusterSystem(entry));
-      card.append(heading, primary, metrics, seed, open);
-      fragment.append(card);
-    }
+    for (const entry of clusterSystems) fragment.append(createClusterCard(entry));
     clusterGrid.replaceChildren(fragment);
     updateClusterTotals();
   }
 
+  function createClusterCard(entry) {
+    const card = document.createElement('article');
+    card.className = 'exo-cluster-card';
+    card.classList.toggle('is-selected',entry.seed === selectedClusterSeed);
+    card.classList.toggle('is-populated',entry.populated);
+    card.dataset.authorityMode = entry.authorityMode || 'generated';
+
+    if (entry.publishedReference) {
+      card.dataset.realNeighborhood = 'true';
+      card.dataset.catalogName = entry.name;
+      card.dataset.stellarMass = String(entry.stellarMassSolar);
+      card.dataset.planetaryMass = String(entry.orbitingMassSolar);
+      card.dataset.systemMass = String(entry.totalMassSolar);
+      card.dataset.distanceLy = String(entry.distanceLy);
+    }
+
+    const heading = document.createElement('div');
+    heading.className = 'exo-cluster-card-heading';
+    const title = document.createElement('h3');
+    title.textContent = entry.name;
+    const status = document.createElement('span');
+    status.className = `exo-population-badge ${entry.populated ? 'populated' : 'unpopulated'}`;
+    status.textContent = entry.populated ? 'Known populated' : 'No confirmed population';
+    heading.append(title,status);
+
+    const primary = document.createElement('p');
+    primary.className = 'exo-cluster-primary';
+    primary.textContent = entry.star;
+
+    const metrics = document.createElement('dl');
+    metrics.className = 'exo-cluster-metrics';
+    const metricRows = entry.publishedReference ? [
+      ['Distance',entry.distanceLy ? `${entry.distanceLy.toFixed(3)} ly` : 'Origin'],
+      ['Stellar/system mass',`${formatSolarMass(entry.stellarMassSolar)} M☉`],
+      ['Confirmed planets',entry.confirmedPlanetCount],
+      ['Confirmed orbiting mass',`${formatEarthMass(entry.orbitingMassEarth)} M⊕`]
+    ] : [
+      ['Planets',entry.planetCount],
+      ['HZ planets',entry.hzPlanetCount],
+      ['HZ bodies',entry.hzBodyCount],
+      ['Habitable worlds',entry.habitableWorlds]
+    ];
+    for (const [label,value] of metricRows) metrics.append(metric(label,value));
+
+    if (entry.publishedReference) {
+      const note = document.createElement('p');
+      note.className = 'exo-authority-note';
+      const candidateText = entry.candidates?.length
+        ? ` ${entry.candidates.length} candidate/disputed record${entry.candidates.length === 1 ? '' : 's'} remain excluded from confirmed totals.`
+        : '';
+      note.textContent = `Published-first authority. RNG may supplement only unknown fields and must remain labeled hypothetical.${candidateText}`;
+      card.append(heading,primary,metrics,note);
+    } else {
+      card.append(heading,primary,metrics);
+    }
+
+    const seed = document.createElement('code');
+    seed.className = 'exo-cluster-seed';
+    seed.textContent = entry.seed;
+
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.className = 'bli-action exo-cluster-open';
+    if (entry.publishedReference) {
+      open.textContent = entry.detailProvider === 'published-sol'
+        ? 'Open Published Solar System'
+        : entry.confirmedPlanetCount
+          ? 'Open Published System Record'
+          : 'Open Published Star + RNG Supplement';
+      open.title = 'Published values remain authoritative. Generated content is limited to explicitly unknown supplemental fields.';
+    } else {
+      open.textContent = entry.hzBodyCount > 0 ? 'Expand Habitable-Zone System' : 'Open System';
+    }
+    open.setAttribute('aria-pressed',String(entry.seed === selectedClusterSeed));
+    open.addEventListener('click',() => loadClusterSystem(entry));
+
+    card.addEventListener('dblclick',() => loadClusterSystem(entry));
+    card.append(seed,open);
+    return card;
+  }
+
+  function metric(label,value) {
+    const wrapper = document.createElement('div');
+    const dt = document.createElement('dt');
+    const dd = document.createElement('dd');
+    dt.textContent = label;
+    dd.textContent = String(value);
+    wrapper.append(dt,dd);
+    return wrapper;
+  }
+
   function exampleSystems() {
-    return EXAMPLE_SYSTEMS.map(([name, star, planetCount, populated, hzPlanetCount, hzBodyCount, habitableWorlds], index) => ({
-      seed:`EXAMPLE:system:${index + 1}`,
-      clusterIndex:index + 1,
-      name,
-      star,
-      planetCount,
-      populated,
-      hzPlanetCount,
-      hzBodyCount,
-      habitableWorlds,
-      publishedReference:true
-    }));
+    if (!authority) throw new Error('Blacklight EXO source authority did not load before the cluster controller.');
+    return authority.getExampleClusterEntries();
   }
 
   async function generateCluster(randomize = false) {
@@ -259,40 +275,42 @@
       if (randomize || !clusterSeedInput.value.trim()) clusterSeedInput.value = createRandomSeed();
       const baseSeed = clusterSeedInput.value.trim();
 
-      if (baseSeed.toUpperCase() === 'EXAMPLE') {
-        if (clusterCount) clusterCount.value = '20';
+      if (authority?.isExampleSeed(baseSeed)) {
+        if (clusterCount) clusterCount.value = String(authority.getExampleClusterEntries().length);
         clusterSystems = exampleSystems();
         selectedClusterSeed = clusterSystems[0].seed;
-        setClusterStatus('Loading the fixed Sol-centered nearby-star reference cluster…', 'working');
+        setClusterStatus(`Loading published-first nearby-star authority v${authority.version}…`,'working');
         renderClusterCards();
-        loadClusterSystem(clusterSystems[0], false);
+        loadClusterSystem(clusterSystems[0],false);
         updateCurrentSummary(readCurrentSystemMetadata());
-        setClusterStatus('EXAMPLE preset loaded: 20 fixed nearby stellar systems. Open any card to generate its detailed EXO scenario.', 'ready');
+        setClusterStatus(
+          `EXAMPLE authority v${authority.version}: published astrometry, stellar properties, confirmed planets, and measured masses take precedence. RNG is restricted to labeled unknown supplements.`,
+          'ready'
+        );
         return;
       }
 
-      const count = Math.max(2, Math.min(20, Number(clusterCount?.value || 8)));
+      const count = Math.max(2,Math.min(20,Number(clusterCount?.value || 8)));
       const systems = [];
-      setClusterStatus(`Generating ${count} selectable star systems…`, 'working');
-      for (let index = 0; index < count; index += 1) {
+      setClusterStatus(`Generating ${count} selectable star systems…`,'working');
+      for (let index=0; index<count; index+=1) {
         const childSeed = `${baseSeed}:system:${index + 1}`;
         seedInput.value = childSeed;
         generateButton.click();
         const metadata = readCurrentSystemMetadata();
         metadata.clusterIndex = index + 1;
         systems.push(metadata);
-        setClusterStatus(`Charting system ${index + 1} of ${count}: ${metadata.name}`, 'working');
+        setClusterStatus(`Charting system ${index + 1} of ${count}: ${metadata.name}`,'working');
         if ((index + 1) % 2 === 0) await nextFrame();
       }
-
       clusterSystems = systems;
       selectedClusterSeed = systems[0]?.seed || '';
       renderClusterCards();
       if (systems[0]) {
-        loadClusterSystem(systems[0], false);
+        loadClusterSystem(systems[0],false);
         updateCurrentSummary(readCurrentSystemMetadata());
       }
-      setClusterStatus(`${count} systems charted. Select a system to expand it below.`, 'ready');
+      setClusterStatus(`${count} systems charted. Select a system to expand it below.`,'ready');
     } finally {
       buildingCluster = false;
       if (generateClusterButton) generateClusterButton.disabled = false;
@@ -310,14 +328,14 @@
     }
 
     try {
-      const baseSeed = seedInput.value.trim() || createRandomSeed();
+      const currentPublished = authority?.getSystem(seedInput.value.trim());
+      const baseSeed = currentPublished ? createRandomSeed() : seedInput.value.trim() || createRandomSeed();
       let found = null;
-      const maximumAttempts = 1200;
-      for (let attempt = 1; attempt <= maximumAttempts; attempt += 1) {
+      for (let attempt=1; attempt<=1200; attempt+=1) {
         const candidateSeed = `${baseSeed}:populated-hz:${attempt}`;
         seedInput.value = candidateSeed;
         generateButton.click();
-        const metadata = readCurrentSystemMetadata({inspectHabitablePopulation:true, keepSelection:true});
+        const metadata = readCurrentSystemMetadata({inspectHabitablePopulation:true,keepSelection:true});
         if (metadata.populatedHzPlanet) {
           metadata.forced = true;
           found = metadata;
@@ -327,7 +345,7 @@
         if (attempt % 20 === 0) await nextFrame();
       }
       if (!found) {
-        setClusterStatus('No populated habitable-zone planet was found within the safety limit. Try again with another seed.', 'error');
+        setClusterStatus('No populated habitable-zone planet was found within the safety limit. Try again with another seed.','error');
         return;
       }
       selectedClusterSeed = found.seed;
@@ -336,7 +354,7 @@
       else clusterSystems.unshift(found);
       renderClusterCards();
       updateCurrentSummary(found);
-      setClusterStatus(`${found.name} created with ${found.populatedHzPlanet.name} populated inside the habitable zone (${found.populatedHzPlanet.civilization}).`, 'ready');
+      setClusterStatus(`${found.name} created with ${found.populatedHzPlanet.name} populated inside the habitable zone (${found.populatedHzPlanet.civilization}).`,'ready');
     } finally {
       forcingPopulatedSystem = false;
       if (forcePopulatedButton) {
@@ -346,11 +364,26 @@
     }
   }
 
-  function setText(node, value) {
+  function formatSolarMass(value) {
+    const number = Number(value) || 0;
+    if (number >= 10) return number.toFixed(3);
+    if (number >= 1) return number.toFixed(5);
+    return number.toFixed(6);
+  }
+
+  function formatEarthMass(value) {
+    const number = Number(value) || 0;
+    if (!number) return '0 confirmed';
+    if (number >= 1000) return Math.round(number).toLocaleString();
+    if (number >= 10) return number.toFixed(2);
+    return number.toFixed(3);
+  }
+
+  function setText(node,value) {
     if (node && node.textContent !== String(value)) node.textContent = String(value);
   }
 
-  generateButton.addEventListener('click', () => {
+  generateButton.addEventListener('click',() => {
     if (buildingCluster || forcingPopulatedSystem) return;
     queueMicrotask(() => {
       const metadata = readCurrentSystemMetadata();
@@ -360,16 +393,15 @@
     });
   });
 
-  generateClusterButton?.addEventListener('click', () => generateCluster(false));
-  randomClusterButton?.addEventListener('click', () => generateCluster(true));
-  forcePopulatedButton?.addEventListener('click', forcePopulatedHabitableSystem);
-  clusterSeedInput?.addEventListener('keydown', event => {
+  generateClusterButton?.addEventListener('click',() => generateCluster(false));
+  randomClusterButton?.addEventListener('click',() => generateCluster(true));
+  forcePopulatedButton?.addEventListener('click',forcePopulatedHabitableSystem);
+  clusterSeedInput?.addEventListener('keydown',event => {
     if (event.key === 'Enter') generateCluster(false);
   });
 
-  const initialMetadata = readCurrentSystemMetadata();
-  updateCurrentSummary(initialMetadata);
-  clusterSeedInput.value = 'EXAMPLE';
-  if (clusterCount) clusterCount.value = '20';
+  updateCurrentSummary(readCurrentSystemMetadata());
+  clusterSeedInput.value = authority?.presetSeed || 'EXAMPLE';
+  if (clusterCount) clusterCount.value = String(authority?.getExampleClusterEntries().length || 20);
   requestAnimationFrame(() => generateCluster(false));
 })();
