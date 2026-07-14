@@ -93,5 +93,5 @@
   });
 
   syncProjectionState();
-  loadSpatialProjection();
+  setTimeout(loadSpatialProjection, 0);
 })();
