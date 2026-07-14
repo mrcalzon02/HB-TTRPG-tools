@@ -7,10 +7,18 @@
   border-color:rgba(126,210,232,.82);
   box-shadow:0 0 0 1px rgba(126,210,232,.2),0 0 18px rgba(62,162,194,.12);
 }
+.exo-cluster-volume-canvas-v2[hidden]{
+  display:none!important;
+  min-height:0!important;
+  height:0!important;
+  border:0!important;
+}
 .exo-cluster-gravity-band-canvas{
   display:block;
   width:100%;
+  max-width:100%;
   min-height:420px;
+  box-sizing:border-box;
   border:1px solid rgba(217,168,79,.22);
   border-radius:12px;
   background:#020202;
@@ -26,13 +34,17 @@
 .exo-cluster-gravity-band-canvas:active{cursor:grabbing}
 .exo-cluster-gradient-readout{
   margin:8px 0 14px;
+  padding:9px 11px;
+  border:1px solid rgba(126,210,232,.14);
+  border-radius:9px;
+  background:rgba(7,11,13,.72);
   color:#9fc8d3;
   font-size:.72rem;
   line-height:1.45;
+  overflow-wrap:anywhere;
 }
 .exo-cluster-gradient-readout[hidden]{display:none!important}
-.exo-cluster-map-shell:has(#exo-cluster-volume-gradient[aria-pressed="true"]) #exo-cluster-lensing-inspector,
-.exo-cluster-map-shell:has(#exo-cluster-volume-gradient[aria-pressed="true"]) #exo-cluster-field-key{
+.exo-cluster-map-shell:has(#exo-cluster-volume-gradient[aria-pressed="true"]) #exo-cluster-lensing-inspector{
   display:none!important;
 }
 .exo-system-gravity-display-switch{
