@@ -1,0 +1,55 @@
+.exo-facility-orbit{
+  fill:none;
+  stroke:rgba(97,216,208,.44);
+  stroke-width:1.15;
+  stroke-dasharray:7 5;
+  vector-effect:non-scaling-stroke;
+}
+.exo-facility-orbit.is-construction{
+  stroke:rgba(168,129,255,.5);
+  stroke-dasharray:2 6;
+}
+.exo-facility-target{
+  cursor:pointer;
+  outline:none;
+}
+.exo-facility-hit{
+  fill:transparent;
+  pointer-events:all;
+}
+.exo-facility-body{
+  stroke:rgba(255,255,255,.72);
+  stroke-width:1;
+  paint-order:stroke fill;
+  filter:drop-shadow(0 0 4px rgba(97,216,208,.55));
+}
+.exo-facility-target.is-construction .exo-facility-body{
+  filter:drop-shadow(0 0 5px rgba(168,129,255,.68));
+}
+.exo-facility-name{
+  fill:#dff8f5;
+  stroke:#020202;
+  stroke-width:3px;
+  paint-order:stroke fill;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.015em;
+  pointer-events:none;
+}
+.exo-facility-target:not(.exo-selected) .exo-selection-ring{
+  opacity:0;
+}
+.exo-facility-target:hover .exo-selection-ring,
+.exo-facility-target:focus-visible .exo-selection-ring,
+.exo-facility-target.exo-selected .exo-selection-ring{
+  opacity:1;
+}
+tr[data-body-kind="facility"]{
+  background:linear-gradient(90deg,rgba(97,216,208,.075),transparent 42%);
+}
+tr[data-body-kind="facility"] button{
+  color:#bff2ed;
+}
+@media(max-width:700px){
+  .exo-facility-name{font-size:9px}
+}
