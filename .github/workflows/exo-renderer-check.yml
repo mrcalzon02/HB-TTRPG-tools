@@ -1,0 +1,47 @@
+name: EXO Renderer Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blacklight-exo-*.js'
+      - 'blacklight-exo-*.css'
+      - '.github/workflows/exo-renderer-check.yml'
+  pull_request:
+    paths:
+      - 'blacklight-exo-*.js'
+      - 'blacklight-exo-*.css'
+      - '.github/workflows/exo-renderer-check.yml'
+
+jobs:
+  validate-renderers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check active JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            blacklight-exo-orbital-layout.js
+            blacklight-exo-solar-system-v5.js
+            blacklight-exo-system-bootstrap.js
+            blacklight-exo-view-modes-v2.js
+            blacklight-exo-object-focus.js
+            blacklight-exo-speed-controls.js
+            blacklight-exo-dz-volume-shell-v2.js
+          )
+          for file in "${files[@]}"; do
+            node --check "$file"
+          done
+      - name: Verify one active core renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e blacklight-exo-solar-system.js
+          grep -q "blacklight-exo-orbital-layout.js" blacklight-exo-system-bootstrap.js
+          grep -q "blacklight-exo-solar-system-v5.js" blacklight-exo-system-bootstrap.js
+          ! grep -q "blacklight-exo-solar-system.js" blacklight-exo-system-bootstrap.js
