@@ -54,9 +54,8 @@
     appendStylesheet('blacklight-exo-cluster-volume-v2.css');
     appendStylesheet('blacklight-exo-system-spatial-interactions.css');
     appendStylesheet('blacklight-exo-object-focus.css');
-    appendStylesheet('blacklight-exo-example-neighborhood.css');
-    appendStylesheet('blacklight-exo-example-reference-data.css');
     appendStylesheet('blacklight-exo-field-clarity.css');
+
     appendScript('blacklight-exo-spatial.js');
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
@@ -65,11 +64,12 @@
     appendScript('blacklight-exo-lensing-volume-calibration.js');
     appendScript('blacklight-exo-lensing-midpoint-calibration.js');
     appendScript('blacklight-exo-system-mass-model.js');
-    appendScript('blacklight-exo-example-neighborhood.js');
-    appendScript('blacklight-exo-example-reference-data.js');
-    appendScript('blacklight-exo-example-physics-2026.js');
-    appendScript('blacklight-exo-example-reference-presentation.js');
+
+    // One immutable authority, one cluster-physics adapter, one detail controller.
+    appendScript('blacklight-exo-source-authority-model.js');
+    appendScript('blacklight-exo-source-authority-controller.js');
     appendScript('blacklight-exo-sol-published.js');
+
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-cluster-field-clarity.js');
     appendScript('blacklight-exo-cluster-field-pan-sync.js');
@@ -80,23 +80,23 @@
     appendScript('blacklight-exo-object-focus.js');
   }
 
-  speed.addEventListener('change', syncProjectionState);
-  toggle.addEventListener('click', () => {
+  speed.addEventListener('change',syncProjectionState);
+  toggle.addEventListener('click',() => {
     if (!isPaused() && Number(speed.value) === 0) speed.value = lastActiveSpeed;
   });
 
   if (randomSeed && seed) {
-    randomSeed.addEventListener('click', () => {
+    randomSeed.addEventListener('click',() => {
       seed.value = createRandomSeed();
       generate?.click();
     });
   }
 
-  generate?.addEventListener('click', () => queueMicrotask(syncProjectionState));
-  seed?.addEventListener('keydown', event => {
+  generate?.addEventListener('click',() => queueMicrotask(syncProjectionState));
+  seed?.addEventListener('keydown',event => {
     if (event.key === 'Enter') queueMicrotask(syncProjectionState);
   });
 
   syncProjectionState();
-  setTimeout(loadSpatialProjection, 0);
+  setTimeout(loadSpatialProjection,0);
 })();
