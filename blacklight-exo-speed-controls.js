@@ -60,6 +60,7 @@
     appendStylesheet('blacklight-exo-system-spatial-interactions.css');
     appendStylesheet('blacklight-exo-object-focus.css');
     appendStylesheet('blacklight-exo-example-neighborhood.css');
+    appendStylesheet('blacklight-exo-example-reference-data.css');
     appendScript('blacklight-exo-spatial.js');
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
@@ -69,6 +70,7 @@
     appendScript('blacklight-exo-lensing-midpoint-calibration.js');
     appendScript('blacklight-exo-system-mass-model.js');
     appendScript('blacklight-exo-example-neighborhood.js');
+    appendScript('blacklight-exo-example-reference-data.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-lensing-topology.js');
     appendScript('blacklight-exo-system-spatial-safety.js');
@@ -104,6 +106,15 @@
       }
     });
   }
+
+  // Registered before blacklight-exo-cluster.js schedules its first frame.
+  // This makes the published Sol-neighborhood preset the actual startup cluster.
+  requestAnimationFrame(() => {
+    const clusterSeed = document.getElementById('exo-cluster-seed');
+    const clusterCount = document.getElementById('exo-cluster-count');
+    if (clusterSeed) clusterSeed.value = 'EXAMPLE';
+    if (clusterCount) clusterCount.value = '20';
+  });
 
   syncProjectionState();
   loadSpatialProjection();
