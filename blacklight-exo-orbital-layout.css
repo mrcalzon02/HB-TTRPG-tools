@@ -1,0 +1,70 @@
+.exo-orbit-path,
+.exo-moon-orbit,
+.exo-satellite-band{
+  transition:rx .42s cubic-bezier(.22,.8,.28,1),ry .42s cubic-bezier(.22,.8,.28,1),opacity .24s ease;
+}
+.exo-satellite-band{
+  fill:rgba(120,174,196,.035);
+  stroke:rgba(117,183,207,.16);
+  stroke-width:1;
+  stroke-dasharray:2 5;
+  pointer-events:none;
+}
+.exo-satellite-band.is-expanded{
+  fill:rgba(120,174,196,.055);
+  stroke:rgba(137,207,229,.25);
+}
+.exo-moon-orbit{
+  opacity:0;
+  pointer-events:none;
+  stroke-width:.7;
+}
+.exo-moon-orbit.is-orbit-visible{
+  opacity:.28;
+}
+.exo-irregular-moon-orbit.is-orbit-visible{
+  opacity:.22;
+  stroke-dasharray:2 4;
+}
+.exo-moon-target{
+  transition:opacity .2s ease;
+}
+.exo-moon-hit{
+  fill:transparent;
+  stroke:none;
+  pointer-events:all;
+}
+.exo-moon-name{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
+  paint-order:stroke;
+  stroke:#050505;
+  stroke-width:2.5px;
+  stroke-linejoin:round;
+}
+.exo-moon-name.is-label-visible{
+  opacity:1;
+}
+.exo-moon-target.is-major-moon .exo-moon-body{
+  stroke:rgba(225,238,242,.72);
+  stroke-width:.7;
+}
+.exo-moon-target.exo-selected{
+  opacity:1!important;
+}
+.exo-moon-target.exo-selected .exo-moon-name,
+.exo-moon-target:focus .exo-moon-name,
+.exo-moon-target:hover .exo-moon-name{
+  opacity:1;
+}
+body[data-orbital-lod="overview"] .exo-moon-target:not(.is-major-moon):not(.exo-selected) .exo-moon-body{
+  opacity:.72;
+}
+body[data-orbital-lod="focused"] .exo-satellite-band{
+  stroke-width:1.2;
+}
+.exo-planet-carrier,
+.exo-moon-target{
+  will-change:transform;
+}
