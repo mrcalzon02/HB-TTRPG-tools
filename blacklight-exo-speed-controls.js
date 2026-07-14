@@ -71,6 +71,7 @@
     appendScript('blacklight-exo-system-mass-model.js');
     appendScript('blacklight-exo-example-neighborhood.js');
     appendScript('blacklight-exo-example-reference-data.js');
+    appendScript('blacklight-exo-example-reference-2026.js');
     appendScript('blacklight-exo-example-reference-presentation.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-lensing-topology.js');
