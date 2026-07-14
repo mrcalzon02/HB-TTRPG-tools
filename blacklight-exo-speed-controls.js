@@ -88,6 +88,7 @@
     appendScript('blacklight-exo-dz-volume-shell-v2.js');
     appendScript('blacklight-exo-system-gravity-bands.js');
     appendScript('blacklight-exo-3d-performance-governor.js');
+    appendScript('blacklight-exo-preview-interaction-docks.js');
   }
 
   speed.addEventListener('change', syncProjectionState);
