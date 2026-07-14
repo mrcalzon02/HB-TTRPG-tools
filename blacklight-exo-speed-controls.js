@@ -72,6 +72,7 @@
     appendScript('blacklight-exo-sol-published.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-cluster-field-clarity.js');
+    appendScript('blacklight-exo-cluster-field-pan-sync.js');
     appendScript('blacklight-exo-lensing-topology.js');
     appendScript('blacklight-exo-system-spatial-safety.js');
     appendScript('blacklight-exo-system-spatial-interactions.js');
