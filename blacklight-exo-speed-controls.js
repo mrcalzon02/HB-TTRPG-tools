@@ -58,7 +58,8 @@
     appendStylesheet('blacklight-exo-gravity-bands.css');
     appendStylesheet('blacklight-exo-authority-render-fixes.css');
 
-    appendScript('blacklight-exo-spatial.js');
+    // Structural compatibility only. The retired duplicate renderer is not loaded.
+    appendScript('blacklight-exo-spatial-bootstrap.js');
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
     appendScript('blacklight-exo-system-mass-calibration.js');
@@ -86,8 +87,9 @@
     appendScript('blacklight-exo-sol-published.js');
     appendScript('blacklight-exo-sol-presentation-authority.js');
 
-    // Repair ordinary flat-view clicks after the drag layer has initialized.
+    // Interaction and performance guards run after every renderer exists.
     appendScript('blacklight-exo-pointer-selection-repair.js');
+    appendScript('blacklight-exo-3d-performance-governor.js');
   }
 
   speed.addEventListener('change',syncProjectionState);
