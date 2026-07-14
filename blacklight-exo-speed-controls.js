@@ -59,7 +59,6 @@
     appendStylesheet('blacklight-exo-view-modes.css');
     appendStylesheet('blacklight-exo-cluster-volume.css');
     appendStylesheet('blacklight-exo-layout-lensing-fixes.css');
-    appendStylesheet('blacklight-exo-cluster-volume-v2.css');
     appendStylesheet('blacklight-exo-system-spatial-interactions.css');
     appendStylesheet('blacklight-exo-object-focus.css');
     appendStylesheet('blacklight-exo-field-clarity.css');
@@ -71,17 +70,14 @@
     appendScript('blacklight-exo-frame-scheduler.js');
     appendScript('blacklight-exo-spatial-bootstrap.js');
     appendScript('blacklight-exo-view-modes-v3.js');
-    appendScript('blacklight-exo-cluster-volume.js');
     appendScript('blacklight-exo-system-mass-calibration.js');
     appendScript('blacklight-exo-lensing-model.js');
     appendScript('blacklight-exo-lensing-volume-calibration.js');
     appendScript('blacklight-exo-lensing-midpoint-calibration.js');
     appendScript('blacklight-exo-system-mass-model.js');
     appendScript('blacklight-exo-source-authority-model.js');
-    appendScript('blacklight-exo-cluster-volume-v2.js');
+    appendScript('blacklight-exo-cluster-view.js');
     appendScript('blacklight-exo-cluster-interaction-modes.js');
-    appendScript('blacklight-exo-cluster-field-clarity.js');
-    appendScript('blacklight-exo-cluster-field-pan-sync.js');
     appendScript('blacklight-exo-cluster-gravity-bands.js');
     appendScript('blacklight-exo-lensing-topology.js');
     appendScript('blacklight-exo-system-spatial-safety.js');
