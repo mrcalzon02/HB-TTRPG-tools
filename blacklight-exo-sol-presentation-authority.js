@@ -5,6 +5,7 @@
   const $ = id => document.getElementById(id);
   let reapplyQueued = false;
   let syncQueued = false;
+  let lastSyncedSignature = '';
 
   function isSol() {
     return $('exo-seed-input')?.value.trim().toUpperCase() === SOL_SEED.toUpperCase();
@@ -29,6 +30,12 @@
       first.cells?.[1]?.textContent.trim().replace(/^↳\s*/, '') === 'Mercury';
   }
 
+  function tableSignature(table) {
+    return [...table.querySelectorAll(':scope > tr')]
+      .map(row => `${row.dataset.objectId || ''}:${row.cells?.[1]?.textContent.trim() || ''}`)
+      .join('|');
+  }
+
   function labelPublishedPlanets() {
     for (const target of document.querySelectorAll('#exo-orbit-objects .exo-planet-target')) {
       const name = target.getAttribute('aria-label')?.replace(/^Select\s+/i, '').trim();
@@ -41,11 +48,15 @@
 
   function forceConsumersToRebuild() {
     if (syncQueued) return;
+    const table = $('exo-orbital-table-body');
+    if (!table || !isSol() || !publishedTableIsActive()) return;
+    const signature = tableSignature(table);
+    if (!signature || signature === lastSyncedSignature) return;
+    lastSyncedSignature = signature;
     syncQueued = true;
     requestAnimationFrame(() => {
       syncQueued = false;
-      const table = $('exo-orbital-table-body');
-      if (!table || !isSol() || !publishedTableIsActive()) return;
+      if (!isSol() || !publishedTableIsActive()) return;
       const marker = document.createComment('published-sol-authority-sync');
       table.append(marker);
       marker.remove();
@@ -70,6 +81,7 @@
     }
 
     if (!publishedTableIsActive()) {
+      lastSyncedSignature = '';
       requestPublishedRenderer();
       return;
     }
@@ -87,11 +99,18 @@
     }
 
     document.addEventListener('blacklight:published-sol-rendered', () => {
+      lastSyncedSignature = '';
       applyPresentation();
       requestAnimationFrame(applyPresentation);
     });
-    $('exo-generate-system')?.addEventListener('click', () => setTimeout(applyPresentation, 0));
-    seed.addEventListener('change', () => setTimeout(applyPresentation, 0));
+    $('exo-generate-system')?.addEventListener('click', () => {
+      lastSyncedSignature = '';
+      setTimeout(applyPresentation, 0);
+    });
+    seed.addEventListener('change', () => {
+      lastSyncedSignature = '';
+      setTimeout(applyPresentation, 0);
+    });
 
     new MutationObserver(() => {
       if (!isSol()) return;
