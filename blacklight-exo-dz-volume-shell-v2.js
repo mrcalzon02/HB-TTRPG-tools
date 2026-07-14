@@ -5,23 +5,22 @@
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const MIN_FALLOFF_AU = 0.5;
   const MAX_FALLOFF_AU = 2.5;
+  const TAU = Math.PI * 2;
 
-  function waitForDependencies(attempt = 0) {
+  function wait(attempt = 0) {
     const model = globalThis.BlacklightExoLensingModel;
     const stage = document.querySelector('.exo-orbit-stage');
-    const currentToggle = $('exo-overlay-limits');
-    const table = $('exo-orbital-table-body');
+    const toggle = $('exo-overlay-limits');
     const grid = $('exo-cluster-grid');
-    const transformReference = $('exo-system-spatial-overlay-3d-v2') || $('exo-topology-lensing-canvas');
-    const flatReference = $('exo-system-spatial-overlay-v2') || $('exo-flat-spatial-overlays');
-    if (!model || !stage || !currentToggle || !table || !grid || !transformReference || !flatReference) {
-      if (attempt < 480) requestAnimationFrame(() => waitForDependencies(attempt + 1));
+    const table = $('exo-orbital-table-body');
+    if (!model || !stage || !toggle || !grid || !table || !$('exo-exclusive-canvas-3d')) {
+      if (attempt < 480) requestAnimationFrame(() => wait(attempt + 1));
       return;
     }
-    initialize({model, stage, currentToggle, table, grid, transformReference, flatReference});
+    initialize({model, stage, toggle, grid, table});
   }
 
-  function initialize({model, stage, currentToggle, table, grid, transformReference, flatReference}) {
+  function initialize({model, stage, toggle:currentToggle, grid, table}) {
     if ($('exo-dz-volume-shell-canvas')) return;
 
     currentToggle.checked = false;
@@ -32,7 +31,7 @@
 
     const canvas = document.createElement('canvas');
     canvas.id = 'exo-dz-volume-shell-canvas';
-    canvas.setAttribute('aria-label', 'Spherical Dalton–Zirconf gravitational-density falloff volume');
+    canvas.setAttribute('aria-label', 'Three-dimensional Dalton–Zirconf density point cloud');
     canvas.setAttribute('aria-hidden', 'true');
     stage.append(canvas);
     const context = canvas.getContext('2d');
@@ -40,20 +39,14 @@
     const flat = document.createElementNS(SVG_NS, 'svg');
     flat.id = 'exo-dz-volume-flat';
     flat.setAttribute('viewBox', '0 0 1000 1000');
-    flat.setAttribute('aria-label', 'Orbital-plane cross-section of the Dalton–Zirconf falloff volume');
+    flat.setAttribute('aria-label', 'Orbital-plane cross-section of the Dalton–Zirconf density cloud');
     flat.setAttribute('aria-hidden', 'true');
     stage.append(flat);
 
     const state = {
-      enabled:false,
-      scene:null,
-      selected:null,
-      outermostAu:1,
-      radiusAu:1,
-      baseWidthAu:MAX_FALLOFF_AU,
-      fields:[],
-      rebuildQueued:false,
-      renderQueued:false
+      enabled:false, scene:null, selected:null, radiusAu:1, baseWidthAu:MAX_FALLOFF_AU,
+      externalFields:[], renderQueued:false, rebuildQueued:false, lastRender:0,
+      width:1, height:1, directions:fibonacciDirections(720), radialLayers:9
     };
 
     toggle.addEventListener('change', event => {
@@ -64,14 +57,15 @@
     });
 
     const resize = () => {
-      const ratio = Math.min(2, window.devicePixelRatio || 1);
+      const ratio = Math.min(1.25, window.devicePixelRatio || 1);
       const width = Math.max(480, stage.clientWidth);
       const height = Math.max(420, stage.clientHeight);
-      canvas.width = Math.round(width * ratio);
-      canvas.height = Math.round(height * ratio);
+      state.width = Math.round(width * ratio);
+      state.height = Math.round(height * ratio);
+      canvas.width = state.width;
+      canvas.height = state.height;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      syncTransforms();
       scheduleRender();
     };
     new ResizeObserver(resize).observe(stage);
@@ -79,28 +73,20 @@
     const scheduleRebuild = () => {
       if (state.rebuildQueued) return;
       state.rebuildQueued = true;
-      requestAnimationFrame(() => requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
         state.rebuildQueued = false;
         rebuild();
-      }));
+      });
     };
-    new MutationObserver(scheduleRebuild).observe(table, {childList:true});
     new MutationObserver(scheduleRebuild).observe(grid, {childList:true});
-    $('exo-seed-input')?.addEventListener('change', scheduleRebuild);
+    new MutationObserver(scheduleRebuild).observe(table, {childList:true});
+    document.addEventListener('blacklight:system-rendered', scheduleRebuild);
     $('exo-cluster-seed')?.addEventListener('change', scheduleRebuild);
-    $('exo-generate-system')?.addEventListener('click', scheduleRebuild);
-    $('exo-generate-cluster')?.addEventListener('click', scheduleRebuild);
-    $('exo-random-cluster')?.addEventListener('click', scheduleRebuild);
     $('exo-view-flat')?.addEventListener('click', () => requestAnimationFrame(updateVisibility));
     $('exo-view-3d')?.addEventListener('click', () => requestAnimationFrame(updateVisibility));
-    ['exo-exclusive-yaw','exo-exclusive-pitch','exo-exclusive-zoom']
-      .forEach(id => $(id)?.addEventListener('input', scheduleRender));
-    stage.addEventListener('pointermove', syncTransforms, true);
-    stage.addEventListener('wheel', syncTransforms, true);
-    $('exo-system-camera-reset')?.addEventListener('click', () => requestAnimationFrame(() => {
-      syncTransforms();
-      scheduleRender();
-    }));
+    ['exo-exclusive-yaw','exo-exclusive-pitch','exo-exclusive-zoom'].forEach(id => $(id)?.addEventListener('input', scheduleRender));
+    stage.addEventListener('pointermove', scheduleRender, {passive:true});
+    stage.addEventListener('wheel', scheduleRender, {passive:true});
 
     function rebuild() {
       const entries = [...grid.querySelectorAll('.exo-cluster-card')].map((card, index) => {
@@ -111,209 +97,109 @@
           seed:card.querySelector('.exo-cluster-seed')?.textContent.trim() || `system-${index + 1}`,
           name:card.dataset.catalogName || card.querySelector('h3')?.textContent.trim() || `System ${index + 1}`,
           star,
-          mass:Number.isFinite(fullMass) && fullMass > 0 ? fullMass :
-            Number.isFinite(stellarMass) && stellarMass > 0 ? stellarMass : model.stellarMass(star),
+          mass:Number.isFinite(fullMass) && fullMass > 0 ? fullMass : Number.isFinite(stellarMass) && stellarMass > 0 ? stellarMass : model.stellarMass(star),
           populated:card.classList.contains('is-populated')
         };
       });
-      state.scene = entries.length
-        ? model.buildScene(entries, $('exo-cluster-seed')?.value.trim() || 'cluster', {mergeRadiusAu:1000})
-        : null;
+      state.scene = entries.length ? model.buildScene(entries, $('exo-cluster-seed')?.value.trim() || 'cluster', {mergeRadiusAu:1000}) : null;
       const seed = $('exo-seed-input')?.value.trim();
       state.selected = state.scene?.entries.find(entry => entry.seed === seed) || state.scene?.entries[0] || null;
-      state.outermostAu = readOutermostAu(table);
+      buildExternalFields();
       calculateBoundary();
       updateReadout();
       renderFlat();
-      updateVisibility();
       scheduleRender();
     }
 
-    function calculateBoundary() {
-      const selectedMass = state.selected?.mass || 1;
-      const orbitBound = state.outermostAu * (10 + Math.sqrt(Math.max(0.08, selectedMass)) * 6);
-      const neighborBound = state.selected?.nearest?.distance ? state.selected.nearest.distance * 0.46 : Infinity;
-      state.radiusAu = Math.min(orbitBound, neighborBound);
+    function buildExternalFields() {
       const fields = [];
       if (state.scene && state.selected) {
         for (const edge of state.scene.edges || []) {
           if (edge.from !== state.selected && edge.to !== state.selected) continue;
           const other = edge.from === state.selected ? edge.to : edge.from;
-          fields.push({
-            direction:unit(subtract(other.position, state.selected.position)),
-            strength:connectionStrength(state.selected, other, edge.distance, state.scene.maxRadius)
-          });
+          fields.push({direction:unit(subtract(other.position, state.selected.position)), strength:connectionStrength(state.selected, other, edge.distance, state.scene.maxRadius), source:'adjacent-system'});
         }
-        const nearestDistance = state.selected.nearest?.distance || state.scene.maxRadius * 0.3;
-        const nearbyRadius = Math.max(1000, nearestDistance * 0.75);
+        const nearestDistance = state.selected.nearest?.distance || state.scene.maxRadius * .3;
+        const nearbyRadius = Math.max(1000, nearestDistance * .75);
         for (const node of state.scene.lensingNodes || []) {
           const offset = subtract(node.position, state.selected.position);
           const distance = magnitude(offset);
-          if (distance <= nearbyRadius) {
-            fields.push({direction:unit(offset), strength:Math.max(0.4, Number(node.strength) || 0.4)});
-          }
+          if (distance <= nearbyRadius) fields.push({direction:unit(offset), strength:Math.max(.4, Number(node.strength) || .4), source:node.anomaly ? 'anomaly' : 'aggregate'});
         }
       }
-      state.fields = fields;
-      const stacked = fields.reduce((sum, field) => sum + field.strength, 0);
-      const compression = 1 - Math.exp(-stacked / 4.2);
-      state.baseWidthAu = model.clamp(
-        MAX_FALLOFF_AU - (MAX_FALLOFF_AU - MIN_FALLOFF_AU) * compression,
-        MIN_FALLOFF_AU,
-        MAX_FALLOFF_AU
-      );
+      state.externalFields = fields;
     }
 
-    function directionalWidth(direction, index) {
+    function calculateBoundary() {
+      const active = globalThis.BlacklightExoGetActiveSystem?.();
+      const outermost = Math.max(1, ...(active?.planets || []).map(body => Number(body.distance) || 0));
+      const selectedMass = state.selected?.mass || Number(active?.star?.mass) || 1;
+      const orbitBound = outermost * (10 + Math.sqrt(Math.max(.08, selectedMass)) * 6);
+      const neighborBound = state.selected?.nearest?.distance ? state.selected.nearest.distance * .46 : Infinity;
+      state.radiusAu = Math.min(orbitBound, neighborBound);
+      const stacked = state.externalFields.reduce((sum, field) => sum + field.strength, 0);
+      const compression = 1 - Math.exp(-stacked / 4.2);
+      state.baseWidthAu = model.clamp(MAX_FALLOFF_AU - (MAX_FALLOFF_AU - MIN_FALLOFF_AU) * compression, MIN_FALLOFF_AU, MAX_FALLOFF_AU);
+    }
+
+    function activeBodyFields(epoch) {
+      const active = globalThis.BlacklightExoGetActiveSystem?.();
+      if (!active) return [];
+      const result = [];
+      for (const body of active.planets || []) {
+        const elements = elementsFor(body);
+        const angle = elements.phase + epoch / Math.max(.01, Number(body.periodDays) || 1) * TAU;
+        const direction = unit(orbitPoint(1, elements, angle));
+        const moonMass = (body.moons || []).reduce((sum, moon) => sum + Math.max(0, Number(moon.mass) || 0), 0);
+        const moonCount = (body.moons || []).length;
+        const bodyMass = Math.max(0, Number(body.mass) || 0);
+        const strength = .05 + Math.log10(1 + bodyMass + moonMass) * .34 + Math.log10(1 + moonCount) * .08;
+        result.push({direction, strength, source:body.name});
+      }
+      return result;
+    }
+
+    function directionalWidth(direction, bodyFields, index) {
       let field = 0;
-      for (const source of state.fields) {
+      for (const source of [...state.externalFields, ...bodyFields]) {
         const alignment = Math.max(0, dot(direction, source.direction));
-        field += source.strength * Math.pow(alignment, 6);
+        field += source.strength * Math.pow(alignment, 8);
       }
       const compression = field / (1 + field);
-      const irregularity = (hashUnit(`${$('exo-seed-input')?.value || 'system'}:dz-shell:${index}`) - 0.5) * 0.12;
-      return model.clamp(
-        state.baseWidthAu - (state.baseWidthAu - MIN_FALLOFF_AU) * compression * 0.82 + irregularity,
-        MIN_FALLOFF_AU,
-        MAX_FALLOFF_AU
-      );
+      const irregularity = (hashUnit(`${$('exo-seed-input')?.value || 'system'}:dz:${index}`) - .5) * .09;
+      return model.clamp(state.baseWidthAu - (state.baseWidthAu - MIN_FALLOFF_AU) * compression * .94 + irregularity, MIN_FALLOFF_AU, MAX_FALLOFF_AU);
     }
 
     function renderFlat() {
       flat.replaceChildren();
       if (!state.enabled) return;
-      const defs = document.createElementNS(SVG_NS, 'defs');
-      const gradient = document.createElementNS(SVG_NS, 'radialGradient');
-      gradient.id = 'exo-dz-shell-flat-gradient';
-      [['0%','0'],['72%','0'],['82%','.035'],['89%','.18'],['94%','.31'],['98%','.10'],['100%','0']]
-        .forEach(([offset, opacity]) => {
-          const stop = document.createElementNS(SVG_NS, 'stop');
-          stop.setAttribute('offset', offset);
-          stop.setAttribute('stop-color', '#7fd5e8');
-          stop.setAttribute('stop-opacity', opacity);
-          gradient.append(stop);
-        });
-      defs.append(gradient);
-      flat.append(defs);
-      const disc = document.createElementNS(SVG_NS, 'circle');
-      disc.setAttribute('cx','500');
-      disc.setAttribute('cy','500');
-      disc.setAttribute('r','468');
-      disc.setAttribute('fill','url(#exo-dz-shell-flat-gradient)');
-      flat.append(disc);
-
+      const epoch = Number(globalThis.BlacklightExoGetProjectionEpochDays?.() ?? 0);
+      const fields = activeBodyFields(epoch);
+      const group = document.createElementNS(SVG_NS, 'g');
       const segments = 180;
-      for (let index = 0; index < segments; index += 1) {
-        const angle = index / segments * Math.PI * 2;
-        const next = (index + 1) / segments * Math.PI * 2;
-        const direction = {x:Math.cos(angle), y:Math.sin(angle), z:0};
-        const width = directionalWidth(direction, index);
-        const thickness = 8 + width / MAX_FALLOFF_AU * 23;
-        const arc = document.createElementNS(SVG_NS, 'path');
-        arc.setAttribute('d', arcPath(500, 500, 443, angle, next));
-        arc.setAttribute('fill','none');
-        arc.setAttribute('stroke','rgba(135,218,236,.24)');
-        arc.setAttribute('stroke-width', thickness.toFixed(2));
-        flat.append(arc);
+      const layers = 13;
+      for (let layer = 0; layer < layers; layer += 1) {
+        const t = layer / (layers - 1) * 2 - 1;
+        const points = [];
+        for (let index = 0; index <= segments; index += 1) {
+          const angle = index / segments * TAU;
+          const direction = {x:Math.cos(angle), y:Math.sin(angle), z:0};
+          const widthAu = directionalWidth(direction, fields, index);
+          const visualThickness = 10 + (widthAu - MIN_FALLOFF_AU) / (MAX_FALLOFF_AU - MIN_FALLOFF_AU) * 55;
+          const radius = 445 + t * visualThickness * .5;
+          points.push(`${index ? 'L' : 'M'}${(500 + Math.cos(angle) * radius).toFixed(2)} ${(500 + Math.sin(angle) * radius).toFixed(2)}`);
+        }
+        const path = document.createElementNS(SVG_NS, 'path');
+        path.setAttribute('d', `${points.join(' ')} Z`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', `rgba(112,204,228,${(Math.exp(-t*t*2.2)*.09).toFixed(3)})`);
+        path.setAttribute('stroke-width', '1.2');
+        group.append(path);
       }
       const label = document.createElementNS(SVG_NS, 'text');
-      label.setAttribute('x','500');
-      label.setAttribute('y','968');
-      label.setAttribute('text-anchor','middle');
-      label.setAttribute('class','exo-dz-volume-label');
-      label.textContent = `Dalton–Zirconf spherical density transition · ${formatAu(state.radiusAu)} · ±${state.baseWidthAu.toFixed(2)} AU average falloff`;
-      flat.append(label);
-    }
-
-    function renderThree() {
-      state.renderQueued = false;
-      if (!context) return;
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      syncTransforms();
-      if (!state.enabled || !stage.classList.contains('exo-exclusive-3d')) return;
-
-      const width = canvas.width;
-      const height = canvas.height;
-      const ratio = deviceScale();
-      const zoom = Number($('exo-exclusive-zoom')?.value || 100) / 100;
-      const radius = Math.min(width, height) * model.clamp(0.40 * Math.sqrt(zoom), 0.34, 0.47);
-      const center = {x:width / 2, y:height / 2};
-
-      const glow = context.createRadialGradient(center.x, center.y, radius * 0.68, center.x, center.y, radius * 1.12);
-      glow.addColorStop(0,'rgba(74,170,201,0)');
-      glow.addColorStop(.62,'rgba(74,170,201,0)');
-      glow.addColorStop(.78,'rgba(91,194,220,.025)');
-      glow.addColorStop(.90,'rgba(123,216,236,.10)');
-      glow.addColorStop(.97,'rgba(104,201,224,.035)');
-      glow.addColorStop(1,'rgba(74,170,201,0)');
-      context.fillStyle = glow;
-      context.beginPath();
-      context.arc(center.x, center.y, radius * 1.12, 0, Math.PI * 2);
-      context.fill();
-
-      const camera = cameraState();
-      const segments = 240;
-      const layers = 11;
-      for (let index = 0; index < segments; index += 1) {
-        const angle = index / segments * Math.PI * 2;
-        const end = (index + 1.5) / segments * Math.PI * 2;
-        const screenDirection = {x:Math.cos(angle), y:Math.sin(angle), z:0};
-        const worldDirection = inverseRotate(screenDirection, camera.yaw, camera.pitch);
-        const widthAu = directionalWidth(worldDirection, index);
-        const thickness = radius * (0.025 + widthAu / MAX_FALLOFF_AU * 0.105);
-        const distortion = (hashUnit(`${index}:${$('exo-seed-input')?.value || 'system'}:radius`) - .5) * radius * .012;
-        for (let layer = 0; layer < layers; layer += 1) {
-          const t = layer / (layers - 1);
-          const offset = (t - .5) * thickness;
-          const alpha = Math.pow(Math.sin(Math.PI * t), 1.35) * 0.055;
-          context.beginPath();
-          context.arc(center.x, center.y, radius + distortion + offset, angle, end);
-          context.strokeStyle = `rgba(119,211,233,${alpha.toFixed(3)})`;
-          context.lineWidth = Math.max(1, 1.15 * ratio);
-          context.lineCap = 'round';
-          context.stroke();
-        }
-      }
-
-      context.save();
-      context.font = `800 ${12 * ratio}px system-ui`;
-      context.lineWidth = 4 * ratio;
-      context.strokeStyle = 'rgba(0,0,0,.9)';
-      context.fillStyle = 'rgba(164,226,240,.96)';
-      const text = `Dalton–Zirconf spherical density field · ${formatAu(state.radiusAu)} · ±${state.baseWidthAu.toFixed(2)} AU average transition`;
-      context.strokeText(text, 18 * ratio, height - 22 * ratio);
-      context.fillText(text, 18 * ratio, height - 22 * ratio);
-      context.restore();
-    }
-
-    function updateVisibility() {
-      const three = stage.classList.contains('exo-exclusive-3d');
-      canvas.setAttribute('aria-hidden', String(!state.enabled || !three));
-      flat.setAttribute('aria-hidden', String(!state.enabled || three));
-      canvas.style.display = state.enabled && three ? 'block' : 'none';
-      flat.style.display = state.enabled && !three ? 'block' : 'none';
-      syncTransforms();
-      renderFlat();
-      scheduleRender();
-    }
-
-    function updateReadout() {
-      let output = $('exo-dz-falloff-readout');
-      if (!output) {
-        output = document.createElement('span');
-        output.id = 'exo-dz-falloff-readout';
-        output.className = 'exo-dz-falloff-readout';
-        toggle.closest('fieldset')?.append(output);
-      }
-      output.textContent = `${formatAu(state.radiusAu)} radius · spherical ±${state.baseWidthAu.toFixed(2)} AU density falloff`;
-      output.title = 'A complete spherical transition volume. Stacked external fields compress local thickness toward ±0.5 AU; isolated directions widen toward ±2.5 AU.';
-    }
-
-    function syncTransforms() {
-      canvas.style.transform = transformReference.style.transform || '';
-      canvas.style.translate = transformReference.style.translate || '';
-      flat.style.transform = flatReference.style.transform || '';
-      flat.style.translate = flatReference.style.translate || '';
+      label.setAttribute('x', '500'); label.setAttribute('y', '968'); label.setAttribute('text-anchor', 'middle'); label.setAttribute('class', 'exo-dz-volume-label');
+      label.textContent = `Dalton–Zirconf 3D density shell cross-section · ${formatAu(state.radiusAu)} · ±${state.baseWidthAu.toFixed(2)} AU mean depth`;
+      group.append(label); flat.append(group);
     }
 
     function scheduleRender() {
@@ -322,67 +208,124 @@
       requestAnimationFrame(renderThree);
     }
 
+    function renderThree(timestamp) {
+      state.renderQueued = false;
+      if (!context) return;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      if (!state.enabled || !stage.classList.contains('exo-exclusive-3d')) return;
+      if (timestamp - state.lastRender < 80) { scheduleRender(); return; }
+      state.lastRender = timestamp;
+
+      const camera = globalThis.BlacklightExoCameraState || {
+        yaw:Number($('exo-exclusive-yaw')?.value || -24) * Math.PI / 180,
+        pitch:Number($('exo-exclusive-pitch')?.value || 58) * Math.PI / 180,
+        zoom:Number($('exo-exclusive-zoom')?.value || 100) / 100
+      };
+      const epoch = Number(globalThis.BlacklightExoGetProjectionEpochDays?.() ?? 0);
+      const bodyFields = activeBodyFields(epoch);
+      const width = canvas.width, height = canvas.height;
+      const baseRadius = Math.min(width, height) * .42 * Math.min(12, Math.max(.15, camera.zoom));
+      const points = [];
+      for (let index = 0; index < state.directions.length; index += 1) {
+        const direction = state.directions[index];
+        const localWidth = directionalWidth(direction, bodyFields, index);
+        const thickness = 7 + (localWidth - MIN_FALLOFF_AU) / (MAX_FALLOFF_AU - MIN_FALLOFF_AU) * 58;
+        const compression = 1 - (localWidth - MIN_FALLOFF_AU) / (MAX_FALLOFF_AU - MIN_FALLOFF_AU);
+        for (let layer = 0; layer < state.radialLayers; layer += 1) {
+          const t = layer / (state.radialLayers - 1) * 2 - 1;
+          const radius = baseRadius + t * thickness * .5;
+          const rotated = rotate(direction, camera.yaw, camera.pitch);
+          const depthNorm = rotated.z;
+          const perspective = .82 + (depthNorm + 1) * .12;
+          const jitter = (hashUnit(`${index}:${layer}:cloud`) - .5) * 1.6;
+          points.push({
+            x:width / 2 + rotated.x * radius * perspective + jitter,
+            y:height / 2 + rotated.y * radius * perspective + jitter,
+            z:depthNorm,
+            alpha:(.012 + Math.exp(-t*t*2.5) * (.035 + compression * .035)) * (.55 + (depthNorm + 1) * .32),
+            size:.55 + (depthNorm + 1) * .48 + compression * .22
+          });
+        }
+      }
+      points.sort((a, b) => a.z - b.z);
+      for (const point of points) {
+        if (point.x < -5 || point.y < -5 || point.x > width + 5 || point.y > height + 5) continue;
+        context.beginPath();
+        context.arc(point.x, point.y, point.size, 0, TAU);
+        context.fillStyle = `rgba(113,207,231,${point.alpha.toFixed(3)})`;
+        context.fill();
+      }
+      context.fillStyle = 'rgba(158,224,240,.94)';
+      context.font = `${12 * Math.min(1.25, window.devicePixelRatio || 1)}px system-ui`;
+      context.fillText(`Dalton–Zirconf volumetric point cloud · ${formatAu(state.radiusAu)} · local depth ±${MIN_FALLOFF_AU.toFixed(1)}–${MAX_FALLOFF_AU.toFixed(1)} AU`, 18, height - 22);
+      scheduleRender();
+    }
+
+    function updateVisibility() {
+      const three = stage.classList.contains('exo-exclusive-3d');
+      canvas.style.display = state.enabled && three ? 'block' : 'none';
+      flat.style.display = state.enabled && !three ? 'block' : 'none';
+      canvas.setAttribute('aria-hidden', String(!state.enabled || !three));
+      flat.setAttribute('aria-hidden', String(!state.enabled || three));
+      if (state.enabled) scheduleRender();
+    }
+
+    function updateReadout() {
+      let output = $('exo-dz-falloff-readout');
+      if (!output) {
+        output = document.createElement('span'); output.id = 'exo-dz-falloff-readout'; output.className = 'exo-dz-falloff-readout'; toggle.closest('fieldset')?.append(output);
+      }
+      output.textContent = `${formatAu(state.radiusAu)} radius · volumetric ±${state.baseWidthAu.toFixed(2)} AU mean depth`;
+      output.title = 'A three-dimensional point-cloud shell. Aligned external systems, anomaly fields, planets, and moon-system masses compress local shell depth toward ±0.5 AU; sparse directions expand toward ±2.5 AU.';
+    }
+
     resize();
     rebuild();
+    updateVisibility();
   }
 
-  function readOutermostAu(table) {
-    const values = [];
-    for (const row of table.querySelectorAll('tr')) {
-      const orbit = row.cells?.[0]?.textContent.trim() || '';
-      const distance = row.cells?.[3]?.textContent.trim() || '';
-      if (/^\d+$/.test(orbit) && / AU$/.test(distance)) values.push(Number.parseFloat(distance) || 0);
+  function fibonacciDirections(count) {
+    const points = [];
+    const golden = Math.PI * (3 - Math.sqrt(5));
+    for (let index = 0; index < count; index += 1) {
+      const y = 1 - index / (count - 1) * 2;
+      const radius = Math.sqrt(Math.max(0, 1 - y * y));
+      const angle = golden * index;
+      points.push({x:Math.cos(angle) * radius, y, z:Math.sin(angle) * radius});
     }
-    return Math.max(1, ...values);
+    return points;
   }
 
-  function cameraState() {
+  function elementsFor(object) {
     return {
-      yaw:Number($('exo-exclusive-yaw')?.value || -24) * Math.PI / 180,
-      pitch:Number($('exo-exclusive-pitch')?.value || 58) * Math.PI / 180
+      eccentricity:Math.min(.85, Math.abs(Number(object.eccentricity) || 0)),
+      inclination:(Number(object.inclination) || 0) * Math.PI / 180,
+      ascendingNode:(Number(object.ascendingNode) || 0) * Math.PI / 180,
+      periapsis:(Number(object.argumentOfPeriapsis) || 0) * Math.PI / 180,
+      phase:Number(object.phase) || 0
     };
   }
-
-  function inverseRotate(point, yaw, pitch) {
-    const y = point.y * Math.cos(pitch) + point.z * Math.sin(pitch);
-    const z1 = -point.y * Math.sin(pitch) + point.z * Math.cos(pitch);
-    return {
-      x:point.x * Math.cos(yaw) + z1 * Math.sin(yaw),
-      y,
-      z:-point.x * Math.sin(yaw) + z1 * Math.cos(yaw)
-    };
+  function orbitPoint(radius, elements, angle) {
+    const e = elements.eccentricity;
+    const r = radius * (1 - e * e) / Math.max(.15, 1 + e * Math.cos(angle));
+    const x = r * Math.cos(angle + elements.periapsis), y = r * Math.sin(angle + elements.periapsis);
+    const ci = Math.cos(elements.inclination), si = Math.sin(elements.inclination);
+    const y1 = y * ci, z1 = y * si;
+    const cn = Math.cos(elements.ascendingNode), sn = Math.sin(elements.ascendingNode);
+    return {x:x * cn - y1 * sn, y:x * sn + y1 * cn, z:z1};
   }
-
-  function arcPath(cx, cy, radius, start, end) {
-    const x1 = cx + Math.cos(start) * radius;
-    const y1 = cy + Math.sin(start) * radius;
-    const x2 = cx + Math.cos(end) * radius;
-    const y2 = cy + Math.sin(end) * radius;
-    return `M${x1.toFixed(2)} ${y1.toFixed(2)} A${radius} ${radius} 0 0 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+  function rotate(point, yaw, pitch) {
+    const x1 = point.x * Math.cos(yaw) - point.z * Math.sin(yaw);
+    const z1 = point.x * Math.sin(yaw) + point.z * Math.cos(yaw);
+    return {x:x1, y:point.y * Math.cos(pitch) - z1 * Math.sin(pitch), z:point.y * Math.sin(pitch) + z1 * Math.cos(pitch)};
   }
-
-  function connectionStrength(a, b, distance, maxRadius) {
-    const massTerm = Math.sqrt(Math.max(0.001, a.mass * b.mass));
-    const distanceTerm = 1 / Math.pow(0.08 + distance / Math.max(1, maxRadius), 0.8);
-    return 0.45 + Math.min(3.5, massTerm * distanceTerm);
-  }
-
-  function subtract(a, b) { return {x:a.x-b.x, y:a.y-b.y, z:a.z-b.z}; }
+  function connectionStrength(a, b, distance, maxRadius) { const massTerm = Math.sqrt(Math.max(.001, a.mass * b.mass)); const distanceTerm = 1 / Math.pow(.08 + distance / Math.max(1, maxRadius), .8); return .45 + Math.min(3.5, massTerm * distanceTerm); }
+  function subtract(a, b) { return {x:a.x - b.x, y:a.y - b.y, z:a.z - b.z}; }
   function magnitude(point) { return Math.hypot(point.x, point.y, point.z); }
-  function unit(point) { const length = magnitude(point) || 1; return {x:point.x/length,y:point.y/length,z:point.z/length}; }
-  function dot(a, b) { return a.x*b.x + a.y*b.y + a.z*b.z; }
-  function hashUnit(value) {
-    let hash = 2166136261;
-    for (const character of String(value)) { hash ^= character.charCodeAt(0); hash = Math.imul(hash, 16777619); }
-    return (hash >>> 0) / 4294967295;
-  }
-  function formatAu(value) {
-    if (!Number.isFinite(value)) return 'unknown';
-    if (value >= 1000000) return `${(value/1000000).toFixed(2)}M AU`;
-    if (value >= 1000) return `${Math.round(value).toLocaleString()} AU`;
-    return `${value.toFixed(2)} AU`;
-  }
-  function deviceScale() { return Math.min(2, window.devicePixelRatio || 1); }
+  function unit(point) { const length = magnitude(point) || 1; return {x:point.x / length, y:point.y / length, z:point.z / length}; }
+  function dot(a, b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
+  function hashUnit(value) { let hash = 2166136261; for (const character of String(value)) { hash ^= character.charCodeAt(0); hash = Math.imul(hash, 16777619); } return (hash >>> 0) / 4294967295; }
+  function formatAu(value) { if (!Number.isFinite(value)) return 'unknown'; if (value >= 1000000) return `${(value / 1000000).toFixed(2)}M AU`; if (value >= 1000) return `${Math.round(value).toLocaleString()} AU`; return `${value.toFixed(2)} AU`; }
 
-  waitForDependencies();
+  wait();
 })();
