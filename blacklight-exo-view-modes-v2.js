@@ -75,7 +75,7 @@
           <label><span>Camera pitch</span><input id="exo-exclusive-pitch" type="range" min="10" max="88" value="58"></label>
           <label><span>Spatial zoom</span><input id="exo-exclusive-zoom" type="range" min="${MIN_ZOOM}" max="${MAX_ZOOM}" step="1" value="100"></label>
         </div>
-        <p class="exo-orbit-architecture-note">Planetary corridors and parent-specific satellite envelopes are shared by Flat and 3D views. Physical source distances remain unchanged.</p>`;
+        <p class="exo-orbit-architecture-note">Planetary corridors and parent-specific satellite envelopes are shared by Flat and 3D views. The 3D map uses orthographic cartographic projection so published orbital geometry is not warped by camera depth.</p>`;
       document.querySelector('.exo-orbital-panel')?.insertBefore(panel, stage);
     }
 
@@ -84,7 +84,7 @@
       canvas.id = 'exo-exclusive-canvas-3d';
       canvas.className = 'exo-exclusive-canvas-3d';
       canvas.tabIndex = 0;
-      canvas.setAttribute('aria-label', 'Selectable three-dimensional orbital projection using shared planetary corridors');
+      canvas.setAttribute('aria-label', 'Selectable orthographic three-dimensional orbital projection using shared planetary corridors');
       stage.append(canvas);
       state.canvas = canvas;
       state.context = canvas.getContext('2d');
@@ -169,7 +169,7 @@
       $('exo-view-flat')?.setAttribute('aria-pressed', String(flat));
       $('exo-view-3d')?.setAttribute('aria-pressed', String(!flat));
       if ($('exo-camera-controls')) $('exo-camera-controls').hidden = flat;
-      if ($('exo-exclusive-view-readout')) $('exo-exclusive-view-readout').textContent = flat ? 'Flat orbital projection' : 'Three-dimensional orbital projection';
+      if ($('exo-exclusive-view-readout')) $('exo-exclusive-view-readout').textContent = flat ? 'Flat orbital projection' : 'Orthographic three-dimensional orbital projection';
     }
 
     function resetCamera() {
@@ -279,19 +279,21 @@
 
     function drawSatelliteBand(context,parentModel,radius,width,height,scale) {
       const points=[];
-      for(let step=0;step<64;step+=1){const angle=step/64*TAU,relative={x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,z:0};points.push(project({x:parentModel.x+relative.x,y:parentModel.y+relative.y,z:parentModel.z},width,height,scale));}
+      for(let step=0;step<96;step+=1){const angle=step/96*TAU,relative={x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,z:0};points.push(project({x:parentModel.x+relative.x,y:parentModel.y+relative.y,z:parentModel.z},width,height,scale));}
       path(context,points,'rgba(117,183,207,.14)',[2,5],2);
     }
 
     function drawOrbit(context,radius,elements,width,height,scale,dwarf=false,stroke=null,dash=null) {
+      const eccentricity = Math.abs(elements.eccentricity || 0);
+      const steps = eccentricity >= .25 ? 192 : 128;
       const points=[];
-      for(let step=0;step<96;step+=1)points.push(project(orbitPoint(radius,elements,step/96*TAU),width,height,scale));
+      for(let step=0;step<steps;step+=1)points.push(project(orbitPoint(radius,elements,step/steps*TAU),width,height,scale));
       path(context,points,stroke||(dwarf?'rgba(162,188,207,.28)':'rgba(217,168,79,.23)'),dash||(dwarf?[5,5]:[]),1);
     }
 
     function drawMoonOrbit(context,parentModel,radius,elements,width,height,scale,selected) {
       const points=[];
-      for(let step=0;step<48;step+=1){const relative=orbitPoint(radius,elements,step/48*TAU);points.push(project({x:parentModel.x+relative.x,y:parentModel.y+relative.y,z:parentModel.z+relative.z},width,height,scale));}
+      for(let step=0;step<72;step+=1){const relative=orbitPoint(radius,elements,step/72*TAU);points.push(project({x:parentModel.x+relative.x,y:parentModel.y+relative.y,z:parentModel.z+relative.z},width,height,scale));}
       path(context,points,selected?'rgba(239,190,88,.7)':'rgba(199,210,220,.28)',selected?[]:[3,4],selected?1.4:.7);
     }
 
@@ -317,9 +319,16 @@
 
     function project(point,width,height,scale) {
       const yaw=state.displayYaw*Math.PI/180,pitch=state.displayPitch*Math.PI/180;
-      const x1=point.x*Math.cos(yaw)-point.z*Math.sin(yaw),z1=point.x*Math.sin(yaw)+point.z*Math.cos(yaw),y2=point.y*Math.cos(pitch)-z1*Math.sin(pitch),z2=point.y*Math.sin(pitch)+z1*Math.cos(pitch);
-      const perspective=clamp(1+z2/(Math.max(1,Math.abs(z2))+120),.62,1.42);
-      return{x:width/2+x1*scale*perspective,y:height/2+y2*scale*perspective,z:z2,perspective};
+      const x1=point.x*Math.cos(yaw)-point.z*Math.sin(yaw);
+      const z1=point.x*Math.sin(yaw)+point.z*Math.cos(yaw);
+      const y2=point.y*Math.cos(pitch)-z1*Math.sin(pitch);
+      const z2=point.y*Math.sin(pitch)+z1*Math.cos(pitch);
+
+      // This is a cartographic system map, not a camera photograph. Orbit tracks
+      // use orthographic x/y projection so every published conic remains smooth.
+      // Depth is retained for draw order and a restrained marker-size cue only.
+      const depthCue=clamp(1+z2/2400,.88,1.12);
+      return{x:width/2+x1*scale,y:height/2+y2*scale,z:z2,perspective:depthCue};
     }
 
     function tweenScreen(id,target,elapsed) {
