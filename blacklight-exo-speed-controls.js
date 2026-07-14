@@ -58,10 +58,7 @@
     appendStylesheet('blacklight-exo-gravity-bands.css');
     appendStylesheet('blacklight-exo-authority-render-fixes.css');
 
-    // Cap the one surviving animated renderer before it is initialized.
     appendScript('blacklight-exo-frame-scheduler.js');
-
-    // Structural compatibility only. The retired duplicate renderer is not loaded.
     appendScript('blacklight-exo-spatial-bootstrap.js');
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
@@ -71,9 +68,9 @@
     appendScript('blacklight-exo-lensing-midpoint-calibration.js');
     appendScript('blacklight-exo-system-mass-model.js');
 
-    // One immutable source authority. All renderers below consume it.
+    // The source authority supplies cluster records and physics only.
+    // Detailed system data is resolved by the core system controller before rendering.
     appendScript('blacklight-exo-source-authority-model.js');
-    appendScript('blacklight-exo-source-authority-controller.js');
 
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-cluster-field-clarity.js');
@@ -85,12 +82,6 @@
     appendScript('blacklight-exo-dz-volume-shell-v2.js');
     appendScript('blacklight-exo-system-gravity-bands.js');
     appendScript('blacklight-exo-object-focus.js');
-
-    // Published Sol is deliberately last so no procedural renderer can overwrite it.
-    appendScript('blacklight-exo-sol-published.js');
-    appendScript('blacklight-exo-sol-presentation-authority.js');
-
-    // Interaction and backing-resolution guards run after every renderer exists.
     appendScript('blacklight-exo-pointer-selection-repair.js');
     appendScript('blacklight-exo-3d-performance-governor.js');
   }
