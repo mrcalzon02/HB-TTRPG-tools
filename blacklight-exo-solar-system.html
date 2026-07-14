@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="blacklight-exo-solar-system.css">
   <link rel="stylesheet" href="blacklight-exo-seed-controls.css">
   <link rel="stylesheet" href="blacklight-exo-cluster.css">
+  <link rel="stylesheet" href="blacklight-exo-source-authority.css">
   <link rel="stylesheet" href="blacklight-exo-integration.css">
+  <script src="blacklight-exo-source-authority.js" defer></script>
   <script src="blacklight-exo-solar-system.js" defer></script>
   <script src="blacklight-exo-speed-controls.js" defer></script>
   <script src="blacklight-exo-cluster.js" defer></script>
@@ -31,7 +33,7 @@
     <div>
       <p class="bli-eyebrow">Black compartment · Exosolar cartography</p>
       <h1 id="exo-system-title">Solar Cluster, System, and Orbital Projection Generator.</h1>
-      <p class="bli-lede">Generate a selectable local cluster, expand any star system into a complete orbital projection, identify populated systems, and develop habitable worlds into full EXO dossiers.</p>
+      <p class="bli-lede">The EXAMPLE sector is governed by a published-first source authority. Measured astronomy remains primary, while deterministic generation is restricted to clearly labeled unknown or fictional supplements.</p>
       <div class="bli-actions exo-system-actions">
         <button id="exo-generate-system" class="bli-action primary" type="button">Generate Random System</button>
         <button id="exo-force-populated-hz" class="bli-action" type="button">Force Populated HZ System</button>
@@ -56,8 +58,8 @@
     <section class="bli-section exo-cluster-section" aria-labelledby="exo-cluster-title">
       <div class="bli-section-head">
         <p class="bli-eyebrow">Local stellar neighborhood</p>
-        <h2 id="exo-cluster-title">Generate a selectable solar cluster.</h2>
-        <p>Each cluster seed creates a repeatable set of star systems. Systems containing bodies inside their primary star’s habitable zone receive a direct expansion control, while population status is reported before you open the detailed orbital projection.</p>
+        <h2 id="exo-cluster-title">Published-first sector authority and procedural cluster generation.</h2>
+        <p>EXAMPLE loads the fixed Sol-centered nearby-star record. Published positions, stellar properties, confirmed planets, measured masses, and population evidence take precedence. Other seeds remain fully procedural.</p>
       </div>
       <div class="exo-cluster-controls">
         <label>
@@ -81,18 +83,18 @@
       </div>
       <div class="exo-cluster-summary" aria-label="Cluster summary">
         <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-systems">0</strong><span>Charted systems</span></div>
-        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-populated">0</strong><span>Populated systems</span></div>
-        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-habitable">0</strong><span>Systems with HZ bodies</span></div>
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-populated">0</strong><span>Known populated systems</span></div>
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-habitable">0</strong><span>Systems with confirmed HZ bodies</span></div>
       </div>
-      <p id="exo-cluster-status" class="exo-cluster-status" aria-live="polite">Preparing local cluster chart…</p>
-      <div id="exo-cluster-grid" class="exo-cluster-grid" aria-label="Selectable generated star systems"></div>
+      <p id="exo-cluster-status" class="exo-cluster-status" aria-live="polite">Preparing source authority and local cluster chart…</p>
+      <div id="exo-cluster-grid" class="exo-cluster-grid" aria-label="Selectable star systems"></div>
     </section>
 
     <section class="bli-section exo-control-section" aria-labelledby="exo-control-title">
       <div class="bli-section-head">
         <p class="bli-eyebrow">Expanded system controls</p>
         <h2 id="exo-control-title">Create, replay, and inspect one system.</h2>
-        <p>Enter a seed to reproduce a prior system or use Random Seed for an immediate replacement. Force Populated HZ System deterministically searches for and opens a system containing at least one populated planet inside the primary star’s habitable zone.</p>
+        <p>Published EXAMPLE systems retain their source-authority records. For unknown fields, deterministic RNG supplements are permitted only when visibly labeled as hypothetical. Random seeds outside EXAMPLE remain fully generated systems.</p>
       </div>
       <div class="exo-control-grid">
         <label>
@@ -145,8 +147,8 @@
         </header>
         <div class="exo-orbit-stage">
           <svg id="exo-orbit-svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="exo-orbit-svg-title exo-orbit-svg-desc">
-            <title id="exo-orbit-svg-title">Generated solar-system orbital display</title>
-            <desc id="exo-orbit-svg-desc">A selectable accelerated projection of the generated star, planets, moons, and debris belts.</desc>
+            <title id="exo-orbit-svg-title">Solar-system orbital display</title>
+            <desc id="exo-orbit-svg-desc">A selectable accelerated projection using published values when available and clearly labeled generated supplements for unknown fields.</desc>
             <defs>
               <radialGradient id="exo-star-glow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stop-color="#fff7d4" stop-opacity="1"></stop>
@@ -161,15 +163,15 @@
             <g id="exo-orbit-background"></g>
             <g id="exo-orbit-objects"></g>
           </svg>
-          <div id="exo-orbit-empty" class="exo-orbit-empty">Generate a system to initialize the orbital projection.</div>
+          <div id="exo-orbit-empty" class="exo-orbit-empty">Generate or select a system to initialize the orbital projection.</div>
         </div>
-        <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Planet, moon, and star sizes are enlarged for legibility; orbital periods and relative ordering remain tied to generated system data.</footer>
+        <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Published measurements are authoritative when available; generated values must remain labeled supplements.</footer>
       </article>
 
       <aside id="exo-object-inspector" class="exo-object-inspector" aria-labelledby="exo-inspector-title" aria-live="polite">
         <p class="bli-eyebrow">Selected record</p>
         <h2 id="exo-inspector-title">No object selected</h2>
-        <p id="exo-inspector-summary">Generate a system, then select its star, a planet, a moon, or a belt.</p>
+        <p id="exo-inspector-summary">Generate or select a system, then select its star, planet, moon, or belt.</p>
         <div id="exo-inspector-badges" class="exo-object-badges"></div>
         <dl id="exo-inspector-data" class="exo-inspector-data"></dl>
         <section class="exo-inspector-section">
@@ -178,16 +180,16 @@
         </section>
         <div class="exo-inspector-actions">
           <button id="exo-develop-world" class="bli-action primary" type="button" hidden>Develop Selected World in System Dossier</button>
-          <p>Available for planets and moons meeting the EXO habitability threshold. The physical system and selected world are preserved during handoff.</p>
+          <p>Available for planets and moons meeting the EXO habitability threshold. Published and generated provenance remains attached during handoff.</p>
         </div>
       </aside>
     </section>
 
     <section class="bli-section" aria-labelledby="exo-system-index-title">
       <div class="bli-section-head">
-        <p class="bli-eyebrow">Generated system index</p>
-        <h2 id="exo-system-index-title">Orbital bodies and resource profile.</h2>
-        <p>Selecting a row also selects the matching planet, moon, or debris belt in the orbital display.</p>
+        <p class="bli-eyebrow">System index</p>
+        <h2 id="exo-system-index-title">Orbital bodies, source provenance, and resource profile.</h2>
+        <p>Selecting a row also selects the matching planet, moon, or debris belt in the orbital display. Generated EXAMPLE rows are explicitly marked as hypothetical supplements.</p>
       </div>
       <div class="exo-index-layout">
         <div class="exo-table-wrap">
