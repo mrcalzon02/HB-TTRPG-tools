@@ -11,12 +11,12 @@
   <link rel="stylesheet" href="blacklight-exo-seed-controls.css">
   <link rel="stylesheet" href="blacklight-exo-cluster.css">
   <link rel="stylesheet" href="blacklight-exo-source-authority.css">
+  <link rel="stylesheet" href="blacklight-exo-complete-sol.css">
   <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-source-authority.js" defer></script>
   <script src="blacklight-exo-fixed-system-data.js" defer></script>
-  <script src="blacklight-exo-solar-system.js" defer></script>
-  <script src="blacklight-exo-speed-controls.js" defer></script>
-  <script src="blacklight-exo-cluster.js" defer></script>
+  <script src="blacklight-exo-jpl-moon-catalog-loader.js" defer></script>
+  <script src="blacklight-exo-system-bootstrap.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-system-body">
   <header class="bli-topbar">
@@ -164,7 +164,7 @@
             <g id="exo-orbit-background"></g>
             <g id="exo-orbit-objects"></g>
           </svg>
-          <div id="exo-orbit-empty" class="exo-orbit-empty">Generate or select a system to initialize the orbital projection.</div>
+          <div id="exo-orbit-empty" class="exo-orbit-empty">Loading the complete Solar System satellite catalogue…</div>
         </div>
         <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Published measurements are authoritative when available; generated values must remain labeled supplements.</footer>
       </article>
@@ -190,7 +190,7 @@
       <div class="bli-section-head">
         <p class="bli-eyebrow">System index</p>
         <h2 id="exo-system-index-title">Orbital bodies, source provenance, and resource profile.</h2>
-        <p>Selecting a row also selects the matching planet, moon, or debris belt in the orbital display. Generated EXAMPLE rows are explicitly marked as hypothetical supplements.</p>
+        <p>Selecting a row also selects the matching planet, dwarf planet, moon, or debris belt in the orbital display. The fixed Sol record includes every catalogued satellite loaded from the pinned JPL-derived snapshot.</p>
       </div>
       <div class="exo-index-layout">
         <div class="exo-table-wrap">
