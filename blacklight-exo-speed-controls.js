@@ -58,6 +58,9 @@
     appendStylesheet('blacklight-exo-gravity-bands.css');
     appendStylesheet('blacklight-exo-authority-render-fixes.css');
 
+    // Cap the one surviving animated renderer before it is initialized.
+    appendScript('blacklight-exo-frame-scheduler.js');
+
     // Structural compatibility only. The retired duplicate renderer is not loaded.
     appendScript('blacklight-exo-spatial-bootstrap.js');
     appendScript('blacklight-exo-view-modes.js');
@@ -87,7 +90,7 @@
     appendScript('blacklight-exo-sol-published.js');
     appendScript('blacklight-exo-sol-presentation-authority.js');
 
-    // Interaction and performance guards run after every renderer exists.
+    // Interaction and backing-resolution guards run after every renderer exists.
     appendScript('blacklight-exo-pointer-selection-repair.js');
     appendScript('blacklight-exo-3d-performance-governor.js');
   }
