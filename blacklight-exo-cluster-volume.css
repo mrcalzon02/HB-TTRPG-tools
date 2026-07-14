@@ -1,7 +1,30 @@
 #exo-cluster-spatial-map,
 #exo-cluster-connected-map,
-.exo-cluster-map-retired{
+.exo-cluster-map-retired,
+#exo-cluster-volume-canvas,
+#exo-cluster-volume-canvas.exo-cluster-volume-canvas-retired{
   display:none!important;
+}
+.exo-cluster-map-shell{
+  position:relative;
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+  contain:layout paint;
+  isolation:isolate;
+}
+.exo-cluster-map-shell,
+.exo-cluster-map-shell *{
+  box-sizing:border-box;
+}
+.exo-cluster-volume-controls,
+.exo-cluster-volume-canvas-v2,
+.exo-cluster-light-gauge,
+.exo-cluster-volume-status,
+.exo-cluster-lensing-inspector{
+  width:100%;
+  min-width:0;
+  max-width:100%;
 }
 .exo-cluster-volume-controls{
   display:grid;
@@ -10,12 +33,19 @@
   padding:12px;
   border:1px solid rgba(217,168,79,.14);
   border-radius:13px;
-  background:rgba(8,8,8,.72);
+  background:rgba(8,8,8,.82);
+  overflow:hidden;
 }
 .exo-cluster-volume-mode{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
+  min-width:0;
+}
+.exo-cluster-volume-mode .bli-action{
+  min-width:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
 }
 .exo-cluster-volume-mode .bli-action.is-active{
   color:#070706;
@@ -28,10 +58,12 @@
   grid-template-columns:repeat(3,minmax(130px,1fr)) auto;
   gap:9px;
   align-items:end;
+  min-width:0;
 }
 .exo-cluster-camera-grid label{
   display:grid;
   gap:5px;
+  min-width:0;
 }
 .exo-cluster-camera-grid label>span,
 .exo-light-gauge-heading span{
@@ -43,6 +75,7 @@
 }
 .exo-cluster-camera-grid input{
   width:100%;
+  min-width:0;
   accent-color:#d9a84f;
 }
 .exo-cluster-volume-key{
@@ -59,33 +92,34 @@
   display:inline-flex;
   align-items:center;
   gap:6px;
+  min-width:0;
 }
 .exo-cluster-volume-key i{
   width:10px;
   height:10px;
   display:inline-block;
+  flex:0 0 auto;
   border-radius:999px;
 }
 .exo-cluster-volume-key .star{background:#d9a84f;box-shadow:0 0 6px rgba(217,168,79,.8)}
 .exo-cluster-volume-key .proto{background:#ff9d5d;box-shadow:0 0 6px rgba(255,157,93,.85)}
 .exo-cluster-volume-key .nebula{border-radius:3px;background:rgba(111,151,210,.5);box-shadow:0 0 8px rgba(111,151,210,.5)}
-.exo-cluster-volume-key .dark{background:#8aa0ad}
+.exo-cluster-volume-key .dark{background:#a7a39b}
 .exo-cluster-volume-key .lens{background:#b885ff;box-shadow:0 0 7px rgba(184,133,255,.9)}
-.exo-cluster-volume-canvas{
+.exo-cluster-volume-canvas-v2{
   display:block;
-  width:100%;
   min-height:420px;
   margin-top:10px;
-  border:1px solid rgba(217,168,79,.1);
+  border:1px solid rgba(217,168,79,.12);
   border-radius:13px;
   background:#020202;
-  cursor:grab;
+  cursor:crosshair;
   touch-action:none;
+  overflow:hidden;
 }
-.exo-cluster-volume-canvas:active{cursor:grabbing}
-.exo-cluster-volume-canvas:focus-visible{
+.exo-cluster-volume-canvas-v2:focus-visible{
   outline:2px solid #d9a84f;
-  outline-offset:3px;
+  outline-offset:-3px;
 }
 .exo-cluster-light-gauge{
   display:grid;
@@ -95,20 +129,24 @@
   border:1px solid rgba(126,179,207,.22);
   border-radius:13px;
   background:linear-gradient(90deg,rgba(49,89,108,.12),rgba(11,11,11,.76));
+  overflow:hidden;
 }
 .exo-light-gauge-heading{
   display:flex;
   justify-content:space-between;
   gap:18px;
   align-items:end;
+  min-width:0;
 }
-.exo-light-gauge-heading>div{display:grid;gap:2px}
-.exo-light-gauge-heading strong{color:#e7edf0}
+.exo-light-gauge-heading>div{display:grid;gap:2px;min-width:0}
+.exo-light-gauge-heading strong{color:#e7edf0;overflow-wrap:anywhere}
 .exo-light-gauge-heading output{
+  min-width:0;
   color:#a9d8ec;
   font-size:.78rem;
   font-weight:800;
   text-align:right;
+  overflow-wrap:anywhere;
 }
 .exo-light-gauge-track{
   position:relative;
@@ -146,27 +184,110 @@
 .exo-light-gauge-readouts span{
   display:grid;
   gap:2px;
+  min-width:0;
   color:#9e968a;
   font-size:.72rem;
 }
 .exo-light-gauge-readouts strong{
   color:#e8e1d7;
   font-size:.82rem;
+  overflow-wrap:anywhere;
 }
 .exo-cluster-volume-status{
   margin:10px 0 0;
-  color:#b8afa2;
+  padding:10px 12px;
+  border:1px solid rgba(126,179,207,.16);
+  border-radius:10px;
+  background:rgba(7,11,13,.72);
+  color:#b8cbd1;
   font-size:.78rem;
   line-height:1.55;
+  overflow-wrap:anywhere;
 }
+.exo-cluster-lensing-inspector{
+  margin-top:14px;
+  padding:16px;
+  border:1px solid rgba(184,133,255,.28);
+  border-radius:15px;
+  background:linear-gradient(145deg,rgba(184,133,255,.075),rgba(5,5,5,.96));
+  overflow:hidden;
+}
+.exo-cluster-lensing-inspector[hidden]{display:none}
+.exo-cluster-lensing-inspector-heading{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  min-width:0;
+}
+.exo-cluster-lensing-inspector-heading>div{display:grid;gap:3px;min-width:0}
+.exo-cluster-lensing-inspector-heading span{
+  color:#cbb1ec;
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.exo-cluster-lensing-inspector-heading h3{margin:0;color:#f2e9fb;overflow-wrap:anywhere}
+.exo-cluster-lensing-inspector>p{margin:10px 0;color:#b9ae9c;overflow-wrap:anywhere}
+.exo-cluster-lensing-inspector dl{
+  display:grid;
+  grid-template-columns:minmax(9rem,max-content) minmax(0,1fr);
+  gap:7px 16px;
+  margin:12px 0 16px;
+  min-width:0;
+}
+.exo-cluster-lensing-inspector dt{
+  color:#a9a091;
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.exo-cluster-lensing-inspector dd{
+  min-width:0;
+  margin:0;
+  color:#eee6da;
+  overflow-wrap:anywhere;
+}
+#exo-cluster-lensing-connection-section[hidden]{display:none}
+#exo-cluster-lensing-connection-section h4{
+  margin:0 0 8px;
+  color:#d9c7ef;
+}
+#exo-cluster-lensing-connections{
+  display:grid;
+  gap:8px;
+  max-height:280px;
+  margin:0;
+  padding:0 0 0 24px;
+  overflow:auto;
+}
+#exo-cluster-lensing-connections li{
+  min-width:0;
+  padding:8px 10px;
+  border:1px solid rgba(184,133,255,.14);
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+}
+#exo-cluster-lensing-connections strong,
+#exo-cluster-lensing-connections span{display:block;overflow-wrap:anywhere}
+#exo-cluster-lensing-connections strong{color:#f0e7f8}
+#exo-cluster-lensing-connections span{margin-top:3px;color:#a9a091;font-size:.78rem;line-height:1.45}
 @media(max-width:950px){
   .exo-cluster-camera-grid{grid-template-columns:1fr 1fr}
   .exo-light-gauge-readouts{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .exo-cluster-lensing-inspector-heading{display:grid}
+  .exo-cluster-lensing-inspector-heading .bli-action{justify-self:start}
+  .exo-cluster-lensing-inspector dl{grid-template-columns:1fr;gap:3px}
+  .exo-cluster-lensing-inspector dd{margin-bottom:7px}
 }
 @media(max-width:650px){
   .exo-cluster-camera-grid{grid-template-columns:1fr}
   .exo-cluster-volume-mode .bli-action{flex:1 1 180px}
   .exo-light-gauge-heading{display:grid}
   .exo-light-gauge-heading output{text-align:left}
-  .exo-cluster-volume-canvas{min-height:340px}
+  .exo-cluster-volume-canvas-v2{min-height:340px}
 }
