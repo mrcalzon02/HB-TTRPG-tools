@@ -25,6 +25,14 @@
     zoom.max = String(MAX_ZOOM);
     zoom.step = '1';
 
+    const layers = () => [sourceSvg, $('exo-flat-spatial-overlays'), $('exo-system-spatial-overlay-v2'), canvas, $('exo-topology-lensing-canvas'), $('exo-system-spatial-overlay-3d-v2'), $('exo-dz-volume-shell-canvas'), $('exo-dz-volume-flat')].filter(Boolean);
+    const is3d = () => stage.classList.contains('exo-exclusive-3d');
+    const currentZoom = () => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, Number(zoom.value) || 100));
+
+    function formatZoom(value) {
+      return value >= 1000 ? `${(value / 100).toFixed(value >= 10000 ? 0 : 1)}×` : `${Math.round(value)}%`;
+    }
+
     const controls = document.createElement('div');
     controls.id = 'exo-system-focus-controls';
     controls.className = 'exo-system-focus-controls';
@@ -35,14 +43,6 @@
       <button id="exo-system-zoom-in" class="bli-action exo-focus-icon" type="button" aria-label="Zoom in">+</button>
       <button id="exo-system-center-star" class="bli-action" type="button">Center on Star</button>`;
     stage.append(controls);
-
-    const layers = () => [sourceSvg, $('exo-flat-spatial-overlays'), $('exo-system-spatial-overlay-v2'), canvas, $('exo-topology-lensing-canvas'), $('exo-system-spatial-overlay-3d-v2'), $('exo-dz-volume-shell-canvas'), $('exo-dz-volume-flat')].filter(Boolean);
-    const is3d = () => stage.classList.contains('exo-exclusive-3d');
-    const currentZoom = () => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, Number(zoom.value) || 100));
-
-    function formatZoom(value) {
-      return value >= 1000 ? `${(value / 100).toFixed(value >= 10000 ? 0 : 1)}×` : `${Math.round(value)}%`;
-    }
 
     function setZoom(value) {
       const next = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, value));
