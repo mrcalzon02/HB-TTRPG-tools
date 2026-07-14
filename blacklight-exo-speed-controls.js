@@ -56,6 +56,7 @@
     appendStylesheet('blacklight-exo-object-focus.css');
     appendStylesheet('blacklight-exo-field-clarity.css');
     appendStylesheet('blacklight-exo-gravity-bands.css');
+    appendStylesheet('blacklight-exo-authority-render-fixes.css');
 
     appendScript('blacklight-exo-spatial.js');
     appendScript('blacklight-exo-view-modes.js');
@@ -66,10 +67,9 @@
     appendScript('blacklight-exo-lensing-midpoint-calibration.js');
     appendScript('blacklight-exo-system-mass-model.js');
 
-    // One immutable authority, one cluster-physics adapter, one detail controller.
+    // One immutable source authority. All renderers below consume it.
     appendScript('blacklight-exo-source-authority-model.js');
     appendScript('blacklight-exo-source-authority-controller.js');
-    appendScript('blacklight-exo-sol-published.js');
 
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-cluster-field-clarity.js');
@@ -78,9 +78,13 @@
     appendScript('blacklight-exo-lensing-topology.js');
     appendScript('blacklight-exo-system-spatial-safety.js');
     appendScript('blacklight-exo-system-spatial-interactions.js');
-    appendScript('blacklight-exo-dz-volume-shell.js');
+    appendScript('blacklight-exo-dz-volume-shell-v2.js');
     appendScript('blacklight-exo-system-gravity-bands.js');
     appendScript('blacklight-exo-object-focus.js');
+
+    // Published Sol is deliberately last so no procedural renderer can overwrite it.
+    appendScript('blacklight-exo-sol-published.js');
+    appendScript('blacklight-exo-sol-presentation-authority.js');
   }
 
   speed.addEventListener('change',syncProjectionState);
