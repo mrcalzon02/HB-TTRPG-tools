@@ -69,7 +69,7 @@
 
     appendScript('blacklight-exo-frame-scheduler.js');
     appendScript('blacklight-exo-spatial-bootstrap.js');
-    appendScript('blacklight-exo-view-modes-v3.js');
+    appendScript('blacklight-exo-view-modes-v4.js');
     appendScript('blacklight-exo-system-mass-calibration.js');
     appendScript('blacklight-exo-lensing-model.js');
     appendScript('blacklight-exo-lensing-volume-calibration.js');
