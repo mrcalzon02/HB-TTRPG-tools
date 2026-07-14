@@ -1,0 +1,10 @@
+body.exo-published-sol .exo-orbital-table tbody tr[data-body-kind="moon"] td{font-size:.72rem}
+body.exo-published-sol .exo-orbital-table tbody tr[data-body-kind="dwarf-planet"]{background:rgba(128,159,184,.055)}
+body.exo-published-sol .exo-table-wrap{max-height:76vh;overflow:auto;overscroll-behavior:contain}
+body.exo-published-sol .exo-moon-target .exo-moon-name{display:none;pointer-events:none;paint-order:stroke;stroke:#07090a;stroke-width:4px;stroke-linejoin:round}
+body.exo-published-sol .exo-moon-target.exo-selected .exo-moon-name{display:block}
+body.exo-published-sol .exo-moon-target{cursor:pointer}
+body.exo-published-sol .exo-moon-target .exo-moon-body{min-width:2px}
+body.exo-published-sol .exo-dwarf-target .exo-planet-body{stroke:#d6e2e8;stroke-width:1.2;stroke-dasharray:2 2}
+body.exo-published-sol .exo-dwarf-orbit{stroke-dasharray:6 5;opacity:.72}
+body.exo-published-sol #exo-orbit-objects .exo-object-label{paint-order:stroke;stroke:#060708;stroke-width:4px;stroke-linejoin:round}
