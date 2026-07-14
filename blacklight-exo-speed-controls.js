@@ -7,6 +7,7 @@
   const seed = document.getElementById('exo-seed-input');
   const randomSeed = document.getElementById('exo-random-seed');
   const MAX_SPEED = 0.25;
+  const REAL_TIME_SPEED = '0.0000115740740741';
 
   if (!speed || !toggle) return;
 
@@ -15,7 +16,7 @@
   }
   if (Number(speed.value) > MAX_SPEED) speed.value = String(MAX_SPEED);
 
-  let lastActiveSpeed = Number(speed.value) > 0 ? speed.value : '0.0416666666667';
+  let lastActiveSpeed = Number(speed.value) > 0 ? speed.value : REAL_TIME_SPEED;
   const isPaused = () => toggle.getAttribute('aria-pressed') === 'true';
 
   function createRandomSeed() {
