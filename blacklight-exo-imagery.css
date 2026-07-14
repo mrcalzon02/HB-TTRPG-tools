@@ -1,0 +1,25 @@
+.exo-inspector-image{
+  margin:14px 0 16px;
+  border:1px solid rgba(217,168,79,.2);
+  border-radius:14px;
+  overflow:hidden;
+  background:#020304;
+}
+.exo-inspector-image[hidden]{display:none}
+.exo-inspector-image img{
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:contain;
+  background:#020304;
+}
+.exo-inspector-image figcaption{
+  display:grid;
+  gap:7px;
+  padding:10px 12px 12px;
+  color:#bdb5a8;
+  font-size:.72rem;
+  line-height:1.45;
+}
+.exo-inspector-image a{color:#9ed8e9;font-weight:800}
+.exo-inspector-image[data-provenance="artistic-approximation"]{border-style:dashed}
