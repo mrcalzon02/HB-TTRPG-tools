@@ -34,7 +34,9 @@
   stroke:none;
   pointer-events:all;
 }
-.exo-moon-name{
+.exo-moon-name,
+body.exo-published-sol .exo-moon-target .exo-moon-name{
+  display:block;
   opacity:0;
   pointer-events:none;
   transition:opacity .18s ease;
@@ -43,7 +45,9 @@
   stroke-width:2.5px;
   stroke-linejoin:round;
 }
-.exo-moon-name.is-label-visible{
+.exo-moon-name.is-label-visible,
+body.exo-published-sol .exo-moon-target .exo-moon-name.is-label-visible{
+  display:block;
   opacity:1;
 }
 .exo-moon-target.is-major-moon .exo-moon-body{
@@ -55,7 +59,9 @@
 }
 .exo-moon-target.exo-selected .exo-moon-name,
 .exo-moon-target:focus .exo-moon-name,
-.exo-moon-target:hover .exo-moon-name{
+.exo-moon-target:hover .exo-moon-name,
+body.exo-published-sol .exo-moon-target.exo-selected .exo-moon-name{
+  display:block;
   opacity:1;
 }
 body[data-orbital-lod="overview"] .exo-moon-target:not(.is-major-moon):not(.exo-selected) .exo-moon-body{
