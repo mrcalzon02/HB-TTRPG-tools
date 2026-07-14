@@ -3,6 +3,16 @@
 
   const PRESET = 'EXAMPLE';
   const $ = id => document.getElementById(id);
+  let scheduled = false;
+
+  function scheduleApply() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      apply();
+    });
+  }
 
   function apply() {
     if ($('exo-cluster-seed')?.value.trim().toUpperCase() !== PRESET) return;
@@ -22,33 +32,36 @@
         const dt = wrapper.querySelector('dt');
         const dd = wrapper.querySelector('dd');
         if (!dt || !dd) continue;
-        if (/generated orbiting mass/i.test(dt.textContent)) {
-          dt.textContent = 'Confirmed orbiting mass';
-          dd.textContent = `${item.knownOrbitingMassEarth.toLocaleString(undefined, {maximumFractionDigits:2})} M⊕`;
-          wrapper.title = 'Confirmed or conservative published minimum mass. Candidates are excluded.';
-        } else if (/total modeled mass/i.test(dt.textContent)) {
-          dt.textContent = 'Gravity-source mass';
-          dd.textContent = `${mass.totalSolarMass.toFixed(mass.totalSolarMass >= 1 ? 6 : 7)} M☉`;
-          wrapper.title = 'Published stellar estimate plus confirmed or conservative minimum orbiting mass.';
+        if (/generated orbiting mass|confirmed orbiting mass/i.test(dt.textContent)) {
+          setText(dt, 'Confirmed orbiting mass');
+          setText(dd, `${item.knownOrbitingMassEarth.toLocaleString(undefined, {maximumFractionDigits:2})} M⊕`);
+          setTitle(wrapper, 'Confirmed or conservative published minimum mass. Candidates are excluded.');
+        } else if (/total modeled mass|gravity-source mass/i.test(dt.textContent)) {
+          setText(dt, 'Gravity-source mass');
+          setText(dd, `${mass.totalSolarMass.toFixed(mass.totalSolarMass >= 1 ? 6 : 7)} M☉`);
+          setTitle(wrapper, 'Published stellar estimate plus confirmed or conservative minimum orbiting mass.');
         }
       }
 
       const open = card.querySelector('.exo-cluster-open');
       if (open) {
-        open.textContent = name === 'Sol'
-          ? 'Open Generated Sol Scenario'
-          : `Open Generated ${name} Scenario`;
-        open.title = 'The cluster location and reference facts are observational; the detailed orbital system remains a deterministic EXO scenario.';
+        setText(open, name === 'Sol' ? 'Open Generated Sol Scenario' : `Open Generated ${name} Scenario`);
+        setTitle(open, 'The cluster location and reference facts are observational; the detailed orbital system remains a deterministic EXO scenario.');
       }
     }
 
     const hz = $('exo-cluster-summary-habitable');
-    if (hz) {
-      hz.textContent = '3';
-      hz.title = 'Sol, Proxima Centauri within the Alpha Centauri system, and Ross 128 have confirmed bodies commonly placed in or near conventional habitable zones. This is not a life claim.';
-    }
-    const populated = $('exo-cluster-summary-populated');
-    if (populated) populated.title = 'Only the Solar System is marked as known populated.';
+    setText(hz, '3');
+    setTitle(hz, 'Sol, Proxima Centauri within the Alpha Centauri system, and Ross 128 have confirmed bodies commonly placed in or near conventional habitable zones. This is not a life claim.');
+    setTitle($('exo-cluster-summary-populated'), 'Only the Solar System is marked as known populated.');
+  }
+
+  function setText(node, value) {
+    if (node && node.textContent !== String(value)) node.textContent = String(value);
+  }
+
+  function setTitle(node, value) {
+    if (node && node.title !== value) node.title = value;
   }
 
   function initialize() {
@@ -57,19 +70,10 @@
       requestAnimationFrame(initialize);
       return;
     }
-    let queued = false;
-    const schedule = () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
-        apply();
-      });
-    };
-    new MutationObserver(schedule).observe(grid, {childList:true, subtree:true});
-    document.addEventListener('blacklight:example-reference-applied', schedule);
-    document.addEventListener('blacklight:system-mass-measured', schedule);
-    schedule();
+    new MutationObserver(scheduleApply).observe(grid, {childList:true});
+    document.addEventListener('blacklight:example-reference-applied', scheduleApply);
+    document.addEventListener('blacklight:system-mass-measured', scheduleApply);
+    scheduleApply();
   }
 
   initialize();
