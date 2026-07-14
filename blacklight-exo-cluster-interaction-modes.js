@@ -88,8 +88,23 @@
       shell.dataset.interactionMode = mode;
       setText($('exo-cluster-interaction-heading'), labels[mode][0]);
       setText($('exo-cluster-interaction-readout'), labels[mode][1]);
+      if (mode === 'select') clearRendererDragFlags();
       globalThis.BlacklightExoClusterInteractionMode = mode;
       document.dispatchEvent(new CustomEvent('blacklight:cluster-interaction-mode', {detail:{mode}}));
+    }
+
+    function clearRendererDragFlags() {
+      for (const canvas of [
+        $('exo-cluster-volume-canvas-v2'),
+        $('exo-cluster-gravity-band-canvas')
+      ].filter(Boolean)) {
+        const rect = canvas.getBoundingClientRect();
+        canvas.dispatchEvent(new MouseEvent('click', {
+          bubbles:false,
+          clientX:rect.left - 100,
+          clientY:rect.top - 100
+        }));
+      }
     }
   }
 
