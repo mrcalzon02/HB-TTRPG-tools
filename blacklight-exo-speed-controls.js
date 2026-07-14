@@ -6,8 +6,14 @@
   const generate = document.getElementById('exo-generate-system');
   const seed = document.getElementById('exo-seed-input');
   const randomSeed = document.getElementById('exo-random-seed');
+  const MAX_SPEED = 0.25;
 
   if (!speed || !toggle) return;
+
+  for (const option of [...speed.options]) {
+    if (Number(option.value) > MAX_SPEED) option.remove();
+  }
+  if (Number(speed.value) > MAX_SPEED) speed.value = String(MAX_SPEED);
 
   let lastActiveSpeed = Number(speed.value) > 0 ? speed.value : '0.0416666666667';
   const isPaused = () => toggle.getAttribute('aria-pressed') === 'true';
@@ -22,6 +28,7 @@
   }
 
   function syncProjectionState() {
+    if (Number(speed.value) > MAX_SPEED) speed.value = String(MAX_SPEED);
     if (Number(speed.value) > 0) {
       lastActiveSpeed = speed.value;
       if (isPaused()) toggle.click();
@@ -57,6 +64,7 @@
     appendStylesheet('blacklight-exo-field-clarity.css');
     appendStylesheet('blacklight-exo-gravity-bands.css');
     appendStylesheet('blacklight-exo-authority-render-fixes.css');
+    appendStylesheet('blacklight-exo-imagery.css');
 
     appendScript('blacklight-exo-frame-scheduler.js');
     appendScript('blacklight-exo-spatial-bootstrap.js');
@@ -67,11 +75,7 @@
     appendScript('blacklight-exo-lensing-volume-calibration.js');
     appendScript('blacklight-exo-lensing-midpoint-calibration.js');
     appendScript('blacklight-exo-system-mass-model.js');
-
-    // The source authority supplies cluster records and physics only.
-    // Detailed system data is resolved by the core system controller before rendering.
     appendScript('blacklight-exo-source-authority-model.js');
-
     appendScript('blacklight-exo-cluster-volume-v2.js');
     appendScript('blacklight-exo-cluster-field-clarity.js');
     appendScript('blacklight-exo-cluster-field-pan-sync.js');
@@ -86,23 +90,23 @@
     appendScript('blacklight-exo-3d-performance-governor.js');
   }
 
-  speed.addEventListener('change',syncProjectionState);
-  toggle.addEventListener('click',() => {
+  speed.addEventListener('change', syncProjectionState);
+  toggle.addEventListener('click', () => {
     if (!isPaused() && Number(speed.value) === 0) speed.value = lastActiveSpeed;
   });
 
   if (randomSeed && seed) {
-    randomSeed.addEventListener('click',() => {
+    randomSeed.addEventListener('click', () => {
       seed.value = createRandomSeed();
       generate?.click();
     });
   }
 
-  generate?.addEventListener('click',() => queueMicrotask(syncProjectionState));
-  seed?.addEventListener('keydown',event => {
+  generate?.addEventListener('click', () => queueMicrotask(syncProjectionState));
+  seed?.addEventListener('keydown', event => {
     if (event.key === 'Enter') queueMicrotask(syncProjectionState);
   });
 
   syncProjectionState();
-  setTimeout(loadSpatialProjection,0);
+  setTimeout(loadSpatialProjection, 0);
 })();
