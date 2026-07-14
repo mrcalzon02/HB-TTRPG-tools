@@ -85,6 +85,9 @@
     // Published Sol is deliberately last so no procedural renderer can overwrite it.
     appendScript('blacklight-exo-sol-published.js');
     appendScript('blacklight-exo-sol-presentation-authority.js');
+
+    // Repair ordinary flat-view clicks after the drag layer has initialized.
+    appendScript('blacklight-exo-pointer-selection-repair.js');
   }
 
   speed.addEventListener('change',syncProjectionState);
