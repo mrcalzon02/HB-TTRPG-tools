@@ -9,11 +9,8 @@
 
   if (!speed || !toggle) return;
 
-  let lastActiveSpeed =
-    Number(speed.value) > 0 ? speed.value : '0.0416666666667';
-
-  const isPaused = () =>
-    toggle.getAttribute('aria-pressed') === 'true';
+  let lastActiveSpeed = Number(speed.value) > 0 ? speed.value : '0.0416666666667';
+  const isPaused = () => toggle.getAttribute('aria-pressed') === 'true';
 
   function createRandomSeed() {
     if (globalThis.crypto?.getRandomValues) {
@@ -21,7 +18,6 @@
       globalThis.crypto.getRandomValues(values);
       return `${values[0].toString(36)}-${values[1].toString(36)}`;
     }
-
     return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
   }
 
@@ -31,7 +27,6 @@
       if (isPaused()) toggle.click();
       return;
     }
-
     if (!isPaused()) toggle.click();
   }
 
@@ -71,7 +66,6 @@
     appendScript('blacklight-exo-system-mass-model.js');
     appendScript('blacklight-exo-example-neighborhood.js');
     appendScript('blacklight-exo-example-reference-data.js');
-    appendScript('blacklight-exo-example-reference-2026.js');
     appendScript('blacklight-exo-example-physics-2026.js');
     appendScript('blacklight-exo-example-reference-presentation.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
@@ -82,41 +76,20 @@
   }
 
   speed.addEventListener('change', syncProjectionState);
-
   toggle.addEventListener('click', () => {
-    if (!isPaused() && Number(speed.value) === 0) {
-      speed.value = lastActiveSpeed;
-    }
+    if (!isPaused() && Number(speed.value) === 0) speed.value = lastActiveSpeed;
   });
 
   if (randomSeed && seed) {
     randomSeed.addEventListener('click', () => {
       seed.value = createRandomSeed();
-      if (generate) generate.click();
+      generate?.click();
     });
   }
 
-  if (generate) {
-    generate.addEventListener('click', () => {
-      queueMicrotask(syncProjectionState);
-    });
-  }
-
-  if (seed) {
-    seed.addEventListener('keydown', event => {
-      if (event.key === 'Enter') {
-        queueMicrotask(syncProjectionState);
-      }
-    });
-  }
-
-  // Registered before blacklight-exo-cluster.js schedules its first frame.
-  // This makes the published Sol-neighborhood preset the actual startup cluster.
-  requestAnimationFrame(() => {
-    const clusterSeed = document.getElementById('exo-cluster-seed');
-    const clusterCount = document.getElementById('exo-cluster-count');
-    if (clusterSeed) clusterSeed.value = 'EXAMPLE';
-    if (clusterCount) clusterCount.value = '20';
+  generate?.addEventListener('click', () => queueMicrotask(syncProjectionState));
+  seed?.addEventListener('keydown', event => {
+    if (event.key === 'Enter') queueMicrotask(syncProjectionState);
   });
 
   syncProjectionState();
