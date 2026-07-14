@@ -56,6 +56,7 @@
     appendStylesheet('blacklight-exo-object-focus.css');
     appendStylesheet('blacklight-exo-example-neighborhood.css');
     appendStylesheet('blacklight-exo-example-reference-data.css');
+    appendStylesheet('blacklight-exo-field-clarity.css');
     appendScript('blacklight-exo-spatial.js');
     appendScript('blacklight-exo-view-modes.js');
     appendScript('blacklight-exo-cluster-volume.js');
@@ -69,9 +70,11 @@
     appendScript('blacklight-exo-example-physics-2026.js');
     appendScript('blacklight-exo-example-reference-presentation.js');
     appendScript('blacklight-exo-cluster-volume-v2.js');
+    appendScript('blacklight-exo-cluster-field-clarity.js');
     appendScript('blacklight-exo-lensing-topology.js');
     appendScript('blacklight-exo-system-spatial-safety.js');
     appendScript('blacklight-exo-system-spatial-interactions.js');
+    appendScript('blacklight-exo-dz-volume-shell.js');
     appendScript('blacklight-exo-object-focus.js');
   }
 
