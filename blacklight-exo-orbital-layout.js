@@ -164,9 +164,8 @@
 
   function interpolateDistance(distance, bodies, bodyRadii, innerRadius, outerRadius) {
     if (!bodies.length) return (innerRadius + outerRadius) / 2;
-    const sorted = bodies;
-    const first = sorted[0];
-    const last = sorted.at(-1);
+    const first = bodies[0];
+    const last = bodies.at(-1);
     if (distance <= finite(first.distance)) {
       const ratio = clamp(distance / Math.max(.0001, finite(first.distance)), 0, 1);
       return 25 + (bodyRadii.get(first.id) - 25) * Math.sqrt(ratio);
@@ -175,9 +174,9 @@
       const excess = Math.log10(1 + distance / Math.max(.0001, finite(last.distance)));
       return clamp(bodyRadii.get(last.id) + excess * 32, bodyRadii.get(last.id), 488);
     }
-    for (let index = 1; index < sorted.length; index += 1) {
-      const left = sorted[index - 1];
-      const right = sorted[index];
+    for (let index = 1; index < bodies.length; index += 1) {
+      const left = bodies[index - 1];
+      const right = bodies[index];
       if (distance > finite(right.distance)) continue;
       const low = Math.log(Math.max(.0001, finite(left.distance)));
       const high = Math.log(Math.max(.0002, finite(right.distance)));
@@ -197,8 +196,13 @@
   }
 
   function distanceRange(moons) {
-    const values = moons.map(moon => finite(moon.orbitalDistanceKm, NaN)).filter(Number.isFinite).filter(value => value > 0);
-    return {min:Math.min(...values, 1), max:Math.max(...values, 1)};
+    const values = moons
+      .map(moon => finite(moon.orbitalDistanceKm, NaN))
+      .filter(Number.isFinite)
+      .filter(value => value > 0);
+    return values.length
+      ? {min:Math.min(...values), max:Math.max(...values)}
+      : {min:1, max:1};
   }
 
   function normalizedMoonDistance(moon, range, index, count) {
