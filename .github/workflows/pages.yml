@@ -126,6 +126,9 @@ jobs:
         run: |
           find . -path './node_modules' -prune -o \( -name '*.js' -o -name '*.mjs' \) -print0 | xargs -0 -n1 node --check
 
+      - name: Validate EXO cluster jump calculator
+        run: node scripts/validate-exo-jump-calculator.mjs
+
       - name: Verify Phase 14 contracts
         run: |
           node -e "for(const path of ['data/npc-generator/phase-status.json','data/npc-generator/fixtures/phase-14-browser-matrix.json','data/schemas/npc-profile.schema.json','data/schemas/npc-group.schema.json'])JSON.parse(require('node:fs').readFileSync(path,'utf8'))"
