@@ -114,8 +114,17 @@
     }
   }
 
+  function loadVesselHandoff() {
+    if (document.querySelector('script[src="blacklight-exo-vessel-handoff.js"]')) return;
+    const script = document.createElement('script');
+    script.src = 'blacklight-exo-vessel-handoff.js';
+    script.defer = true;
+    document.head.append(script);
+  }
+
   $('exo-ftl-dossier-open-all')?.addEventListener('click', () => setAll(true));
   $('exo-ftl-dossier-close-annexes')?.addEventListener('click', () => setAll(false, true));
   document.addEventListener('blacklight:exo-ftl-generated', () => queueMicrotask(refresh));
   queueMicrotask(refresh);
+  loadVesselHandoff();
 })();
