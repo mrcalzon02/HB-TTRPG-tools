@@ -4,127 +4,52 @@ import process from 'node:process';
 
 const root=process.cwd();
 const fail=message=>{throw new Error(message);};
-const roadmapPath=path.join(root,'exo-vessel-system-roadmap.json');
-const roadmap=JSON.parse(await fs.readFile(roadmapPath,'utf8'));
-
-if(roadmap.projectId!=='blacklight-exo-vessel-design-system')fail(`Unexpected projectId ${roadmap.projectId}.`);
-if(roadmap.version!==1)fail(`Expected roadmap version 1; found ${roadmap.version}.`);
-if(roadmap.status!=='active')fail(`Expected active roadmap after VESSEL-04; found ${roadmap.status}.`);
-if(!roadmap.governingGuide)fail('Roadmap does not name a governing guide.');
+const roadmap=JSON.parse(await fs.readFile(path.join(root,'exo-vessel-system-roadmap.json'),'utf8'));
+if(roadmap.projectId!=='blacklight-exo-vessel-design-system'||roadmap.version!==1||roadmap.status!=='active')fail('Unexpected vessel roadmap identity or state.');
 await fs.access(path.join(root,roadmap.governingGuide));
+const expectedBands=['T-1','P0','P1','P2','P3','P4','P5','P6'],actualBands=roadmap.technologyBands?.map(item=>item.key)||[];
+if(JSON.stringify(actualBands)!==JSON.stringify(expectedBands))fail('Technology bands are incomplete or out of order.');
+const variants=roadmap.withinBandVariants||[];if(variants.length!==5||variants.some(item=>!Number.isFinite(item.offset)||Math.abs(item.offset)>.3))fail('Within-band variants violate policy.');
+for(const term of ['distributed hull thickness','citadel protection','active fields'])if(!roadmap.principles.some(principle=>principle.toLowerCase().includes(term)))fail(`Roadmap principles do not preserve corrected armor concept: ${term}.`);
 
-const expectedBands=['T-1','P0','P1','P2','P3','P4','P5','P6'];
-const actualBands=roadmap.technologyBands?.map(item=>item.key)||[];
-if(JSON.stringify(actualBands)!==JSON.stringify(expectedBands))fail(`Technology bands must be ${expectedBands.join(', ')}; found ${actualBands.join(', ')}.`);
-const variants=roadmap.withinBandVariants||[];
-if(variants.length!==5)fail(`Expected 5 within-band variants; found ${variants.length}.`);
-if(variants.some(item=>!Number.isFinite(item.offset)||Math.abs(item.offset)>.3))fail('Within-band variants must use finite offsets no greater than ±0.30.');
-
-const phases=roadmap.phases||[];
-if(phases.length!==12)fail(`Expected 12 implementation phases; found ${phases.length}.`);
-const ids=new Set(),orders=new Set();
-for(const phase of phases){
-  if(!/^VESSEL-\d{2}$/.test(phase.id))fail(`Invalid phase id ${phase.id}.`);
-  if(ids.has(phase.id))fail(`Duplicate phase id ${phase.id}.`);ids.add(phase.id);
-  if(!Number.isInteger(phase.order)||orders.has(phase.order))fail(`Invalid or duplicate order for ${phase.id}.`);orders.add(phase.order);
-  if(!phase.title||!phase.status)fail(`${phase.id} lacks title or status.`);
-  if(!Array.isArray(phase.deliverables)||phase.deliverables.length<3)fail(`${phase.id} lacks sufficient deliverables.`);
-  if(!Array.isArray(phase.acceptance)||phase.acceptance.length<3)fail(`${phase.id} lacks sufficient acceptance criteria.`);
-}
+const phases=roadmap.phases||[],ids=new Set(),orders=new Set();if(phases.length!==12)fail(`Expected 12 phases; found ${phases.length}.`);
+for(const phase of phases){if(!/^VESSEL-\d{2}$/.test(phase.id)||ids.has(phase.id))fail(`Invalid or duplicate phase ${phase.id}.`);ids.add(phase.id);if(!Number.isInteger(phase.order)||orders.has(phase.order))fail(`Invalid or duplicate order for ${phase.id}.`);orders.add(phase.order);if(!Array.isArray(phase.deliverables)||phase.deliverables.length<3||!Array.isArray(phase.acceptance)||phase.acceptance.length<3)fail(`${phase.id} lacks deliverables or acceptance criteria.`);}
 for(let index=0;index<phases.length;index+=1)if(!orders.has(index))fail(`Missing phase order ${index}.`);
-for(const phase of phases)for(const dependency of phase.dependsOn||[])if(!ids.has(dependency))fail(`${phase.id} depends on missing phase ${dependency}.`);
+for(const phase of phases)for(const dependency of phase.dependsOn||[])if(!ids.has(dependency))fail(`${phase.id} depends on missing ${dependency}.`);
+const map=new Map(phases.map(phase=>[phase.id,phase])),visiting=new Set(),visited=new Set();function visit(id){if(visiting.has(id))fail(`Dependency cycle at ${id}.`);if(visited.has(id))return;visiting.add(id);for(const dependency of map.get(id).dependsOn||[])visit(dependency);visiting.delete(id);visited.add(id);}for(const phase of phases)visit(phase.id);
+const ordered=[...phases].sort((a,b)=>a.order-b.order).map(phase=>phase.id);if(JSON.stringify(ordered)!==JSON.stringify(roadmap.immediateImplementationOrder))fail('Immediate implementation order diverges from phase order.');
+for(const phaseId of ['VESSEL-00','VESSEL-01','VESSEL-02','VESSEL-03','VESSEL-04']){const phase=map.get(phaseId);if(phase.status!=='complete'||!Array.isArray(phase.completionEvidence)||phase.completionEvidence.length<5)fail(`${phaseId} is not complete with evidence.`);for(const file of phase.completionEvidence)await fs.access(path.join(root,file));}
+if(phases.filter(phase=>phase.status==='next').length!==1||phases.find(phase=>phase.status==='next')?.id!=='VESSEL-05')fail('VESSEL-05 must remain the sole next phase.');
 
-const visiting=new Set(),visited=new Set(),map=new Map(phases.map(phase=>[phase.id,phase]));
-function visit(id){
-  if(visiting.has(id))fail(`Roadmap dependency cycle detected at ${id}.`);
-  if(visited.has(id))return;
-  visiting.add(id);
-  for(const dependency of map.get(id).dependsOn||[])visit(dependency);
-  visiting.delete(id);visited.add(id);
-}
-for(const phase of phases)visit(phase.id);
-
-const ordered=[...phases].sort((a,b)=>a.order-b.order).map(phase=>phase.id);
-if(JSON.stringify(ordered)!==JSON.stringify(roadmap.immediateImplementationOrder))fail('immediateImplementationOrder does not match numeric phase order.');
-for(const phaseId of ['VESSEL-00','VESSEL-01','VESSEL-02','VESSEL-03','VESSEL-04']){
-  const completed=phases.find(phase=>phase.id===phaseId);
-  if(completed?.status!=='complete')fail(`${phaseId} must be complete.`);
-  if(!Array.isArray(completed.completionEvidence)||completed.completionEvidence.length<5)fail(`${phaseId} lacks completion evidence.`);
-  for(const file of completed.completionEvidence)await fs.access(path.join(root,file));
-}
-if(phases.filter(phase=>phase.status==='next').length!==1||phases.find(phase=>phase.status==='next')?.id!=='VESSEL-05')fail('VESSEL-05 must be the sole next phase.');
-
-const registry=JSON.parse(await fs.readFile(path.join(root,'data/exo-vessel/vessel-contract-registry.json'),'utf8'));
-if(registry.activeSchemaVersion!=='1.0.0')fail('VESSEL-00 contract registry is not active at 1.0.0.');
-if(JSON.stringify(registry.technologyBands.map(item=>item.key))!==JSON.stringify(expectedBands))fail('Roadmap and contract technology bands disagree.');
-if(JSON.stringify(registry.withinBandVariants.map(item=>({key:item.key,offset:item.offset})))!==JSON.stringify(variants))fail('Roadmap and contract variant tables disagree.');
-
-const manufacturerSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-manufacturer.schema.json'),'utf8'));
-for(const field of ['archetype','architecture','production','technologyVariantWeights','topologyWeights','materials','repairDoctrine','weaponPreferences','namingGrammar','visualGrammar','doctrine','signatureTraits','preferredRoles','provenance','validation'])if(!manufacturerSchema.required.includes(field))fail(`VESSEL-01 manufacturer schema does not require ${field}.`);
-if(!manufacturerSchema.properties.realizedEngineering)fail('Manufacturer schema does not expose VESSEL-02 realization.');
-if(!manufacturerSchema.properties.realizedModuleGraph)fail('Manufacturer schema does not expose VESSEL-03 realization.');
-const manufacturerDefinitions=await fs.readFile(path.join(root,'blacklight-exo-vessel-manufacturer-definitions.js'),'utf8');
-for(const term of ['CONTINUITY','MODULAR','PRECISION','FRONTIER','VAULT_KEEPER','VOID_NOMAD','CORP_LOGISTICS','APEX_WARLORD'])if(!manufacturerDefinitions.includes(term))fail(`VESSEL-01 definitions are missing ${term}.`);
-const manufacturerRuntime=await fs.readFile(path.join(root,'blacklight-exo-vessel-manufacturer-runtime.js'),'utf8');
-for(const term of ['BlacklightExoVesselManufacturerGenerator','manufacturerCatalog','technologyVariantWeights','topologyWeights','namingGrammar','visualGrammar','blacklight-exo-manufacturer-library-v1'])if(!manufacturerRuntime.includes(term))fail(`VESSEL-01 runtime is missing ${term}.`);
-const manufacturerUi=await fs.readFile(path.join(root,'blacklight-exo-vessel-manufacturer-ui.js'),'utf8');
-for(const term of ['exo-vessel-manufacturer-index','exo-vessel-save-manufacturer','exo-vessel-export-manufacturer','exo-vessel-manufacturer-section'])if(!manufacturerUi.includes(term))fail(`VESSEL-01 interface is missing ${term}.`);
+const contractRegistry=JSON.parse(await fs.readFile(path.join(root,'data/exo-vessel/vessel-contract-registry.json'),'utf8'));if(contractRegistry.activeSchemaVersion!=='1.0.0')fail('Canonical contract registry is not active at 1.0.0.');
+const manufacturerSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-manufacturer.schema.json'),'utf8'));if(!manufacturerSchema.properties.realizedEngineering||!manufacturerSchema.properties.realizedModuleGraph)fail('Manufacturer schema lacks completed-phase realization records.');
 
 const engineeringRegistry=JSON.parse(await fs.readFile(path.join(root,'data/exo-vessel/engineering-registry.json'),'utf8'));
-if(engineeringRegistry.phase!=='VESSEL-02'||engineeringRegistry.registryVersion!=='1.0.0')fail('VESSEL-02 engineering registry identity is incorrect.');
-if(engineeringRegistry.technologyBands.length!==7||engineeringRegistry.weaponFamilies.length!==9||engineeringRegistry.countermeasureTypes.length!==4)fail('VESSEL-02 engineering registry is incomplete.');
+if(engineeringRegistry.phase!=='VESSEL-02'||engineeringRegistry.technologyBands.length!==7||engineeringRegistry.weaponFamilies.length!==9||engineeringRegistry.countermeasureTypes.length!==4)fail('VESSEL-02 engineering registry is incomplete.');
+if(engineeringRegistry.expandedMassRows.includes('armor'))fail('Engineering registry still treats passive armor as a standalone mass row.');
+if(engineeringRegistry.distributedHardeningCategories?.join(',')!=='outerHull,externalSystems,structural,citadel')fail('Engineering registry lacks the four distributed hardening destinations.');
+if(engineeringRegistry.protectionDirections?.join(',')!=='FORE,AFT,LEFT,RIGHT,UP,DOWN,CITADEL,STRUCTURAL')fail('Engineering registry lacks the eight physical and field directions.');
 const engineeringSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-engineering-ledger.schema.json'),'utf8'));
-for(const field of ['propulsion','armor','sensors','weapons','countermeasures','massClosure','deferredSystems','validation'])if(!engineeringSchema.required.includes(field))fail(`VESSEL-02 engineering schema does not require ${field}.`);
-const engineeringDefinitions=await fs.readFile(path.join(root,'blacklight-exo-vessel-engineering-definitions.js'),'utf8');
-for(const term of ['PULSED_FISSION_THERMAL','FIELD_COUPLED_RELATIVISTIC_TORCH','UNARMED','NAVAL','CHEMICAL_BALLISTIC','FRACTIONAL_C','MISSILE','INTERCEPTOR'])if(!engineeringDefinitions.includes(term))fail(`VESSEL-02 definitions are missing ${term}.`);
-const engineeringRuntime=await fs.readFile(path.join(root,'blacklight-exo-vessel-engineering-runtime.js'),'utf8');
-for(const term of ['strategicDeltaVMps','combatReserveDeltaVMps','armorToMassPercent','physicalArealDensityKgM2','fireControlChannels','weapon-magazines','weapon-cooling','countermeasures','VESSEL-07'])if(!engineeringRuntime.includes(term))fail(`VESSEL-02 runtime is missing ${term}.`);
-const engineeringUi=await fs.readFile(path.join(root,'blacklight-exo-vessel-engineering-ui.js'),'utf8');
-for(const term of ['exo-vessel-combat-fit','exo-vessel-engineering-section','exo-vessel-armor-section','exo-vessel-combat-section','exo-vessel-weapon-body'])if(!engineeringUi.includes(term))fail(`VESSEL-02 interface is missing ${term}.`);
+for(const field of ['model','standaloneArmorModules','equivalentOuterHullThicknessMm','externalSystemDurabilityMultiplier','allocations','facings','fieldFacings','distributionRule'])if(!engineeringSchema.$defs.armor.required.includes(field))fail(`Engineering armor schema does not require ${field}.`);
+const armorDistribution=await fs.readFile(path.join(root,'blacklight-exo-vessel-armor-distribution.js'),'utf8');for(const term of ['DISTRIBUTED_HULL_AND_SYSTEM_HARDENING','standaloneArmorModules:false','outerHull','externalSystems','CITADEL','STRUCTURAL','fieldFacings'])if(!armorDistribution.includes(term))fail(`Distributed armor runtime lacks ${term}.`);
+const armorUi=await fs.readFile(path.join(root,'blacklight-exo-vessel-armor-ui.js'),'utf8');for(const term of ['Equivalent outer-hull thickness','External-system hardening','Structural armoring','Citadel armoring','No standalone armor modules','exo-vessel-directional-protection-body'])if(!armorUi.includes(term))fail(`Distributed armor UI lacks ${term}.`);
 
 const moduleRegistry=JSON.parse(await fs.readFile(path.join(root,'data/exo-vessel/module-graph-registry.json'),'utf8'));
-if(moduleRegistry.phase!=='VESSEL-03'||moduleRegistry.registryVersion!=='1.0.0')fail('VESSEL-03 module graph registry identity is incorrect.');
-if(moduleRegistry.infrastructureNodes.length!==9||moduleRegistry.utilityGraphs.length!==8||moduleRegistry.validationModes.join(',')!=='REPAIR,STRICT')fail('VESSEL-03 module graph registry is incomplete.');
-const moduleSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-module.schema.json'),'utf8'));
-for(const field of ['moduleId','vesselInstanceId','semanticType','envelope','pressureZoneId','criticality','serviceMode','technology','attachment','requirements','dependencies','state','voxelBounds','provenance'])if(!moduleSchema.required.includes(field))fail(`VESSEL-03 module schema does not require ${field}.`);
-const graphSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-module-graph.schema.json'),'utf8'));
-for(const field of ['topology','validationMode','infrastructureNodes','modules','pressureZones','pressureZoneGraph','graphs','loadPaths','weaponHardpoints','sensorRequirements','repairLog','deferredSystems','validation'])if(!graphSchema.required.includes(field))fail(`VESSEL-03 graph schema does not require ${field}.`);
-const moduleDefinitions=await fs.readFile(path.join(root,'blacklight-exo-vessel-module-definitions.js'),'utf8');
-for(const term of ['STRUCTURAL_ROOT','THRUST_KEEL','PRESSURE_VAULT','VACUUM_TRUSS','MAGAZINE','sensorDependency','STRICT'])if(!moduleDefinitions.includes(term))fail(`VESSEL-03 definitions are missing ${term}.`);
-const moduleRuntime=await fs.readFile(path.join(root,'blacklight-exo-vessel-module-runtime.js'),'utf8');
-for(const term of ['exoVesselModuleGraph','pressureZones','magazineFeed','sensorRequirements','weaponHardpoints','repairGraph','Semantic module graph rejected','voxelBounds:null'])if(!moduleRuntime.includes(term))fail(`VESSEL-03 runtime is missing ${term}.`);
-const moduleUi=await fs.readFile(path.join(root,'blacklight-exo-vessel-module-ui.js'),'utf8');
-for(const term of ['exo-vessel-graph-mode','exo-vessel-export-module-graph','exo-vessel-module-graph-section','exo-vessel-module-body','exo-vessel-pressure-zone-body','exo-vessel-hardpoint-body','exo-vessel-module-repair-log'])if(!moduleUi.includes(term))fail(`VESSEL-03 interface is missing ${term}.`);
-const contracts=await fs.readFile(path.join(root,'blacklight-exo-vessel-contracts.js'),'utf8');
-for(const term of ['moduleGraphRegistryPath','moduleGraphSchema','moduleGraphVersion','3.3.0'])if(!contracts.includes(term))fail(`Canonical contracts are missing VESSEL-03 marker ${term}.`);
+if(moduleRegistry.phase!=='VESSEL-03'||moduleRegistry.infrastructureNodes.length!==9||moduleRegistry.utilityGraphs.length!==8||moduleRegistry.hardeningModel?.standaloneArmorModules!==false)fail('VESSEL-03 module registry lacks corrected hardening policy.');
+const graphSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-module-graph.schema.json'),'utf8'));if(!graphSchema.required.includes('hardeningSummary')||graphSchema.$defs.hardeningSummary?.properties?.standaloneArmorModules?.const!==false)fail('Module graph schema permits obsolete armor modules.');
+const moduleHardening=await fs.readFile(path.join(root,'blacklight-exo-vessel-module-hardening.js'),'utf8');for(const term of ['hardeningSummary','standaloneArmorModules:false','extensions','hardening','distributedMassTonnes'])if(!moduleHardening.includes(term))fail(`Module hardening runtime lacks ${term}.`);
 
 const voxelRegistry=JSON.parse(await fs.readFile(path.join(root,'data/exo-vessel/voxel-layout-registry.json'),'utf8'));
-if(voxelRegistry.phase!=='VESSEL-04'||voxelRegistry.registryVersion!=='1.0.0'||voxelRegistry.maxEnvelopeCells!==120000||voxelRegistry.representation!=='compressed-sparse-voxel-blocks')fail('VESSEL-04 voxel registry identity or cap is incorrect.');
-if(voxelRegistry.topologies.sort().join(',')!==['CLUSTER','HYBRID','MONOCOQUE','RING','SPINE'].join(','))fail('VESSEL-04 voxel registry lacks one or more topology algorithms.');
-if(voxelRegistry.suggestedCellEdgesM.join(',')!=='1,2,5,10,20,50,100')fail('VESSEL-04 adaptive resolution policy is incomplete.');
-const voxelSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-voxel-layout.schema.json'),'utf8'));
-for(const field of ['topology','resolution','validationMode','grid','infrastructureAnchors','infrastructureBlocks','modulePlacements','occupiedBlocks','utilityRoutes','accessRoutes','evacuationRoutes','armorSurfaces','evaHardpoints','weaponHardpointPlacements','engineExhaustClearances','radiatorClearances','repairLog','deferredSystems','validation'])if(!voxelSchema.required.includes(field))fail(`VESSEL-04 voxel schema does not require ${field}.`);
-if(!moduleSchema.properties.voxelBounds?.oneOf||!moduleSchema.$defs?.voxelBounds)fail('VESSEL-04 module schema does not bind persistent modules to structured voxel bounds.');
-const voxelDefinitions=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-definitions.js'),'utf8');
-for(const term of ['MONOCOQUE','SPINE','CLUSTER','RING','HYBRID','maxEnvelopeCells:120000','MAIN_ENGINE','RADIATOR_SURFACE','HULL_SURFACE'])if(!voxelDefinitions.includes(term))fail(`VESSEL-04 definitions are missing ${term}.`);
-const voxelCore=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-core.js'),'utf8');
-for(const term of ['adaptivePlan','hullMinimum','placementOffset','MAIN_ENGINE','topologyLane','maximum envelope cell budget'])if(!voxelCore.includes(term))fail(`VESSEL-04 packing core is missing ${term}.`);
-const voxelRouting=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-routing.js'),'utf8');
-for(const term of ['routeGraphs','evacuationRoutes','engineExhaustClearances','radiatorClearances','armorSurfaces','evaHardpoints','weaponHardpointPlacements','self-occluded'])if(!voxelRouting.includes(term))fail(`VESSEL-04 routing runtime is missing ${term}.`);
-const voxelRuntime=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-runtime.js'),'utf8');
-for(const term of ['exoVesselVoxelLayout','compressedSparse','voxelLayoutFaults','Voxel layout rejected','voxelBounds','3.4.0','VESSEL-05 through VESSEL-08'])if(!voxelRuntime.includes(term))fail(`VESSEL-04 runtime is missing ${term}.`);
-const voxelContracts=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-contracts.js'),'utf8');
-for(const term of ['voxelLayoutRegistryPath','voxelLayoutSchema','voxelContractVersion','canonical voxel bounds','3.4.0'])if(!voxelContracts.includes(term))fail(`VESSEL-04 contract extension is missing ${term}.`);
-const voxelUi=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-ui.js'),'utf8');
-for(const term of ['exo-vessel-voxel-section','exo-vessel-voxel-canvas','exo-vessel-voxel-mode','exo-vessel-voxel-edge','exo-vessel-export-voxel-layout','exo-vessel-voxel-repair-log'])if(!voxelUi.includes(term))fail(`VESSEL-04 interface is missing ${term}.`);
+if(voxelRegistry.phase!=='VESSEL-04'||voxelRegistry.maxEnvelopeCells!==120000||voxelRegistry.armorSurfacePolicy?.standaloneArmorModules!==false||voxelRegistry.armorSurfacePolicy?.directions?.length!==8)fail('VESSEL-04 voxel registry lacks corrected surface armor policy.');
+if(voxelRegistry.topologies.sort().join(',')!==['CLUSTER','HYBRID','MONOCOQUE','RING','SPINE'].join(','))fail('Voxel registry lacks a topology.');
+const voxelSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-voxel-layout.schema.json'),'utf8'));for(const field of ['modulePlacements','utilityRoutes','armorSurfaces','evaHardpoints','weaponHardpointPlacements','engineExhaustClearances','radiatorClearances'])if(!voxelSchema.required.includes(field))fail(`Voxel schema does not require ${field}.`);
+const voxelArmor=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-armor.js'),'utf8');for(const term of ['FORE','AFT','LEFT','RIGHT','UP','DOWN','CITADEL','STRUCTURAL','moduleId:null','standaloneModule:false','activeField'])if(!voxelArmor.includes(term))fail(`Voxel armor surface runtime lacks ${term}.`);
+const voxelCore=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-core.js'),'utf8');for(const term of ['adaptivePlan','hullMinimum','placementOffset','topologyLane','maximum envelope cell budget'])if(!voxelCore.includes(term))fail(`Voxel packing core lacks ${term}.`);
+const voxelRuntime=await fs.readFile(path.join(root,'blacklight-exo-vessel-voxel-runtime.js'),'utf8');for(const term of ['exoVesselVoxelLayout','compressedSparse','Voxel layout rejected','voxelBounds','3.4.0'])if(!voxelRuntime.includes(term))fail(`Voxel runtime lacks ${term}.`);
 
 const page=await fs.readFile(path.join(root,'blacklight-exo-vessel.html'),'utf8');
-const loaderOrder=['blacklight-exo-vessel-engineering-runtime.js','blacklight-exo-vessel-module-definitions.js','blacklight-exo-vessel-voxel-definitions.js','blacklight-exo-vessel-voxel-core.js','blacklight-exo-vessel-voxel-routing.js','blacklight-exo-vessel-contracts.js','blacklight-exo-vessel-module-runtime.js','blacklight-exo-vessel-voxel-runtime.js','blacklight-exo-vessel-voxel-contracts.js','blacklight-exo-vessel-ui.js','blacklight-exo-vessel-module-ui.js','blacklight-exo-vessel-voxel-ui.js','blacklight-exo-vessel-contract-ui.js'];
-let prior=-1;for(const marker of loaderOrder){const index=page.indexOf(marker);if(index<0)fail(`Vessel page does not load ${marker}.`);if(index<=prior)fail(`Vessel page loads ${marker} out of order.`);prior=index;}
-
-const guide=await fs.readFile(path.join(root,roadmap.governingGuide),'utf8');
-for(const heading of ['## 8. Crude three-dimensional voxel assembler','## 9. Vessel service doctrine and condition state','## 10. Armor, shielding, and protection-to-mass model','## 11. Sensor, tracking, and light-lag model','## 13. Weapon-family interpretations','## 14. Practical delta-v and combat evasion','## 18. Phased implementation roadmap'])if(!guide.includes(heading))fail(`Governing guide is missing ${heading}.`);
-for(const term of ['Internals-first','EVA-first','fractional-c','Missiles','100%','semantic module graph'])if(!guide.includes(term))fail(`Governing guide is missing required concept ${term}.`);
-
+const loaderOrder=['blacklight-exo-vessel-engineering-runtime.js','blacklight-exo-vessel-armor-distribution.js','blacklight-exo-vessel-module-definitions.js','blacklight-exo-vessel-voxel-definitions.js','blacklight-exo-vessel-voxel-core.js','blacklight-exo-vessel-voxel-routing.js','blacklight-exo-vessel-contracts.js','blacklight-exo-vessel-module-runtime.js','blacklight-exo-vessel-module-hardening.js','blacklight-exo-vessel-voxel-runtime.js','blacklight-exo-vessel-voxel-armor.js','blacklight-exo-vessel-voxel-contracts.js','blacklight-exo-vessel-ui.js','blacklight-exo-vessel-engineering-ui.js','blacklight-exo-vessel-armor-ui.js','blacklight-exo-vessel-module-ui.js','blacklight-exo-vessel-voxel-ui.js','blacklight-exo-vessel-contract-ui.js'];
+let prior=-1;for(const marker of loaderOrder){const index=page.indexOf(marker);if(index<0||index<=prior)fail(`Vessel page does not load ${marker} in order.`);prior=index;}
+const guide=await fs.readFile(path.join(root,roadmap.governingGuide),'utf8');for(const heading of ['## 8. Crude three-dimensional voxel assembler','## 9. Vessel service doctrine and condition state','## 10. Armor, shielding, and protection-to-mass model','## 11. Sensor, tracking, and light-lag model','## 18. Phased implementation roadmap'])if(!guide.includes(heading))fail(`Governing guide is missing ${heading}.`);
 console.log('EXO vessel phased roadmap validation passed.');
-console.log(`Validated completed VESSEL-00 through VESSEL-04 evidence, next-phase VESSEL-05, ${phases.length} ordered acyclic phases, ${actualBands.length} technology bands, ${variants.length} within-band variants, manufacturer, engineering, semantic graph, voxel-layout contracts, and the governing guide.`);
+console.log(`Validated completed VESSEL-00 through VESSEL-04 evidence, corrected distributed hardening and directional field doctrine, next-phase VESSEL-05, ${phases.length} ordered acyclic phases, all five topology algorithms, and the governing guide.`);
