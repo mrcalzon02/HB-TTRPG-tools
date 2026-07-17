@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-module.schema.json",
+  "title": "Blacklight EXO Vessel Module",
+  "description": "Phase-safe semantic module contract. VESSEL-03 will populate connectivity and VESSEL-04 will add voxel bounds without changing the module identity contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "recordType",
+    "schemaVersion",
+    "moduleId",
+    "vesselInstanceId",
+    "subsystemKey",
+    "label",
+    "envelope",
+    "massTonnes",
+    "volumeM3",
+    "technology",
+    "attachment",
+    "dependencies",
+    "state",
+    "provenance",
+    "extensions"
+  ],
+  "properties": {
+    "recordType": {"const": "exoVesselModule"},
+    "schemaVersion": {"const": "1.0.0"},
+    "moduleId": {"type": "string", "pattern": "^module-[a-z0-9][a-z0-9-]{5,95}$"},
+    "vesselInstanceId": {"type": "string", "pattern": "^vessel-[a-z0-9][a-z0-9-]{5,95}$"},
+    "subsystemKey": {"type": "string", "minLength": 1},
+    "label": {"type": "string", "minLength": 1},
+    "semanticType": {"type": "string", "minLength": 1},
+    "envelope": {"enum": ["INTERNAL", "EVA"]},
+    "massTonnes": {"type": "number", "minimum": 0},
+    "volumeM3": {"type": "number", "minimum": 0},
+    "technology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principalBand", "variant", "offset", "heritageBand"],
+      "properties": {
+        "principalBand": {"enum": ["T-1", "P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "variant": {"enum": ["LEGACY", "STANDARD", "REFINED", "ADVANCED", "PROTOTYPE"]},
+        "offset": {"type": "number", "minimum": -0.3, "maximum": 0.3},
+        "heritageBand": {"enum": ["T-1", "P0", "P1", "P2", "P3", "P4", "P5", "P6"]}
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parentId", "requiredProperty", "parentProperties", "valid"],
+      "properties": {
+        "parentId": {"type": ["string", "null"]},
+        "requiredProperty": {"enum": ["ATMOSPHERE_MANIFOLD", "VACUUM_EXPOSED"]},
+        "parentProperties": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "valid": {"type": "boolean"}
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structural", "power", "cooling", "data", "atmosphere", "access"],
+      "properties": {
+        "structural": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "power": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "cooling": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "data": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "atmosphere": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "access": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constructionPercent", "damagePercent", "salvageRemovalPercent", "operational"],
+      "properties": {
+        "constructionPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "damagePercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "salvageRemovalPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "operational": {"type": "boolean"}
+      }
+    },
+    "voxelBounds": {"type": ["object", "null"]},
+    "provenance": {"type": "object"},
+    "extensions": {"type": "object"}
+  }
+}
