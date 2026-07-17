@@ -9,7 +9,6 @@
     fuel:{semanticType:'ENERGY_STORAGE',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['FUEL','EXPLOSION'],zone:'MACHINERY'},
     thermal:{semanticType:'THERMAL_CONTROL',criticality:'CRITICAL',requires:{power:true,cooling:false,data:true,atmosphere:false,access:true},hazards:['HIGH_TEMPERATURE','COOLANT'],zone:'MACHINERY'},
     'life-support':{semanticType:'LIFE_SUPPORT',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:true,access:true},hazards:['BIOLOGICAL','PRESSURE'],zone:'HABITAT',crewDependent:true},
-    armor:{semanticType:'ARMOR',criticality:'PROTECTIVE',requires:{power:false,cooling:false,data:false,atmosphere:false,access:true},hazards:[],zone:'STRUCTURE'},
     'protection-fields':{semanticType:'ACTIVE_PROTECTION',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['HIGH_ENERGY'],zone:'MACHINERY'},
     navigation:{semanticType:'NAVIGATION',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:[],zone:'COMMAND'},
     sensors:{semanticType:'SENSOR',criticality:'MISSION',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['EMISSIONS'],zone:'COMMAND'},
@@ -47,7 +46,7 @@
     MACHINERY:{label:'Protected machinery zone',inhabited:false,isolated:true,environment:'CONTROLLED_MACHINERY'},
     CARGO:{label:'Mission cargo and staging zone',inhabited:false,isolated:true,environment:'VARIABLE'},
     COMBAT:{label:'Combat systems service zone',inhabited:false,isolated:true,environment:'CONTROLLED_MACHINERY'},
-    STRUCTURE:{label:'Structural and armor service zone',inhabited:false,isolated:true,environment:'UNPRESSURIZED_OR_BUFFER'},
+    STRUCTURE:{label:'Structural service and distributed-hardening zone',inhabited:false,isolated:true,environment:'UNPRESSURIZED_OR_BUFFER'},
     RESERVE:{label:'Reserved integration volume',inhabited:false,isolated:true,environment:'UNASSIGNED'}
   };
 
@@ -59,6 +58,7 @@
     schemaVersion:'1.0.0',
     graphVersion:1,
     moduleTypes,
+    forbiddenStandaloneSubsystems:['armor'],
     infrastructure,
     pressureZoneTemplates,
     utilityGraphs,
