@@ -63,6 +63,14 @@
     return{seed:document.getElementById('exo-cluster-seed')?.value.trim()||null,systems};
   }
 
+  function loadVesselHandoff(){
+    if(document.querySelector('script[src="blacklight-exo-vessel-handoff.js"]'))return;
+    const script=document.createElement('script');
+    script.src='blacklight-exo-vessel-handoff.js';
+    script.defer=true;
+    document.head.append(script);
+  }
+
   ensureLink();
 
   if(document.body.classList.contains('exo-government-body')){
@@ -80,4 +88,5 @@
   document.getElementById('exo-develop-dossier-ftl')?.addEventListener('click',()=>navigate('dossier',{dossier:globalThis.BlacklightExoGetActiveDossier?.()}));
   document.getElementById('exo-develop-system-ftl')?.addEventListener('click',()=>navigate('system',{system:globalThis.BlacklightExoActiveSystem||null}));
   document.getElementById('exo-develop-cluster-ftl')?.addEventListener('click',()=>navigate('cluster',{cluster:clusterFromPage()}));
+  loadVesselHandoff();
 })();
