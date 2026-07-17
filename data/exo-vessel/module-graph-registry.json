@@ -6,7 +6,8 @@
   "moduleSchema": "data/schemas/exo-vessel-module.schema.json",
   "graphSchema": "data/schemas/exo-vessel-module-graph.schema.json",
   "principles": [
-    "Every loaded tonne and cubic metre must belong to one or more persistent physical modules.",
+    "Every loaded tonne and cubic metre must belong to persistent physical modules or to distributed hardening contributions carried by those modules.",
+    "Passive armor must not generate standalone ARMOR modules; hull, structural, citadel, and external-system reinforcement is attached as provenance to the systems it physically strengthens.",
     "Massless infrastructure nodes represent structural and utility authority but may not conceal unbudgeted physical equipment.",
     "INTERNAL modules require an ATMOSPHERE_MANIFOLD attachment parent; EVA modules require a VACUUM_EXPOSED structural hardpoint.",
     "Every module must appear in the structural graph and every declared utility requirement must have an explicit edge.",
@@ -15,62 +16,17 @@
     "Invalid graphs are rejected in STRICT mode or repaired deterministically with a retained repair log in REPAIR mode.",
     "Voxel bounds remain null until VESSEL-04 and condition application remains deferred until VESSEL-05."
   ],
-  "infrastructureNodes": [
-    "STRUCTURAL_ROOT",
-    "THRUST_KEEL",
-    "PRESSURE_VAULT",
-    "VACUUM_TRUSS",
-    "POWER_TRUNK",
-    "COOLANT_TRUNK",
-    "DATA_TRUNK",
-    "ATMOSPHERE_MANIFOLD",
-    "SERVICE_ACCESS_ROOT"
-  ],
-  "utilityGraphs": [
-    "structural",
-    "power",
-    "cooling",
-    "data",
-    "atmosphere",
-    "access",
-    "magazineFeed",
-    "sensorDependency"
-  ],
-  "pressureZoneClasses": [
-    "HABITAT",
-    "COMMAND",
-    "SERVICE",
-    "MACHINERY",
-    "CARGO",
-    "COMBAT",
-    "STRUCTURE",
-    "RESERVE",
-    "MAGAZINE"
-  ],
-  "loadPathPurposes": [
-    "CONVENTIONAL_THRUST",
-    "FTL_FOUNDATION",
-    "WEAPON_RECOIL_OR_LAUNCH",
-    "PRIMARY_STRUCTURE"
-  ],
-  "validationModes": [
-    "REPAIR",
-    "STRICT"
-  ],
-  "repairableFaults": [
-    "INVALID_FIRST_ATTACHMENT",
-    "REMOVE_FIRST_POWER_EDGE",
-    "REMOVE_FIRST_COOLING_EDGE",
-    "REMOVE_FIRST_DATA_EDGE",
-    "REMOVE_FIRST_ACCESS_EDGE",
-    "REMOVE_FIRST_MAGAZINE_LINK",
-    "BREAK_FIRST_LOAD_PATH"
-  ],
-  "deferredSystems": {
-    "voxelBounds": "VESSEL-04",
-    "conditionApplication": "VESSEL-05",
-    "trackAndCombatGeometry": "VESSEL-06",
-    "weaponEngagementEnvelopes": "VESSEL-07",
-    "localDamageResolution": "VESSEL-08"
-  }
+  "hardeningModel": {
+    "model": "DISTRIBUTED_HULL_AND_SYSTEM_HARDENING",
+    "standaloneArmorModules": false,
+    "categories": ["outerHull", "externalSystems", "structural", "citadel"],
+    "directions": ["FORE", "AFT", "LEFT", "RIGHT", "UP", "DOWN", "CITADEL", "STRUCTURAL"]
+  },
+  "infrastructureNodes": ["STRUCTURAL_ROOT", "THRUST_KEEL", "PRESSURE_VAULT", "VACUUM_TRUSS", "POWER_TRUNK", "COOLANT_TRUNK", "DATA_TRUNK", "ATMOSPHERE_MANIFOLD", "SERVICE_ACCESS_ROOT"],
+  "utilityGraphs": ["structural", "power", "cooling", "data", "atmosphere", "access", "magazineFeed", "sensorDependency"],
+  "pressureZoneClasses": ["HABITAT", "COMMAND", "SERVICE", "MACHINERY", "CARGO", "COMBAT", "STRUCTURE", "RESERVE", "MAGAZINE"],
+  "loadPathPurposes": ["CONVENTIONAL_THRUST", "FTL_FOUNDATION", "WEAPON_RECOIL_OR_LAUNCH", "PRIMARY_STRUCTURE"],
+  "validationModes": ["REPAIR", "STRICT"],
+  "repairableFaults": ["INVALID_FIRST_ATTACHMENT", "REMOVE_FIRST_POWER_EDGE", "REMOVE_FIRST_COOLING_EDGE", "REMOVE_FIRST_DATA_EDGE", "REMOVE_FIRST_ACCESS_EDGE", "REMOVE_FIRST_MAGAZINE_LINK", "BREAK_FIRST_LOAD_PATH"],
+  "deferredSystems": {"voxelBounds":"VESSEL-04","conditionApplication":"VESSEL-05","trackAndCombatGeometry":"VESSEL-06","weaponEngagementEnvelopes":"VESSEL-07","localDamageResolution":"VESSEL-08"}
 }
