@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-manufacturer.schema.json",
   "title": "Blacklight EXO Vessel Manufacturer",
-  "description": "Persistent species- and organization-derived manufacturer contract with cultural ancestry, production doctrine, topology, technology quality, naming, and visual construction grammar.",
+  "description": "Persistent species- and organization-derived manufacturer contract with cultural ancestry, production doctrine, topology, technology quality, naming, visual construction grammar, and realized vessel outcomes.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -146,6 +146,24 @@
         "maintainabilityRating": {"type": "number", "minimum": 0, "maximum": 100},
         "thermalSignatureMultiplier": {"type": "number", "exclusiveMinimum": 0},
         "productionCostFactor": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "realizedEngineering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["technologyBand", "combatFit", "strategicDeltaVMps", "combatReserveDeltaVMps", "lateralCombatAccelerationMps2", "armorToMassPercent", "protectionToMassPercent", "sensorChannels", "fireControlChannels", "weaponFamilies", "countermeasureMassTonnes"],
+      "properties": {
+        "technologyBand": {"enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "combatFit": {"enum": ["UNARMED", "CIVILIAN", "DEFENSIVE", "SECURITY", "NAVAL"]},
+        "strategicDeltaVMps": {"type": "number", "minimum": 0},
+        "combatReserveDeltaVMps": {"type": "number", "minimum": 0},
+        "lateralCombatAccelerationMps2": {"type": "number", "minimum": 0},
+        "armorToMassPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "protectionToMassPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "sensorChannels": {"type": "integer", "minimum": 1},
+        "fireControlChannels": {"type": "integer", "minimum": 0},
+        "weaponFamilies": {"type": "array", "uniqueItems": true, "items": {"enum": ["CHEMICAL_BALLISTIC", "RAIL_GUN", "COIL_GUN", "BRUTE_MASS_THROWER", "SAND_GUN", "LASER", "PARTICLE_BEAM", "FRACTIONAL_C", "MISSILE"]}},
+        "countermeasureMassTonnes": {"type": "number", "minimum": 0}
       }
     }
   },
