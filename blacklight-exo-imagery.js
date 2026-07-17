@@ -1,132 +1,25 @@
 (() => {
   'use strict';
+  const cache=new Map(),NASA_SEARCH='https://images-api.nasa.gov/search';
+  const definitions=globalThis.BlacklightExoImageryDefinitions,R=globalThis.BlacklightExoImageryRuntime;
+  if(!definitions||!R)return;
+  const {hash,rngFor,pick,number,integer,escapeXml,shuffle,applyStoredColor,finite,facetPoints,renderStarfield,renderRings}=R;
 
-  const cache = new Map();
-  const NASA_SEARCH = 'https://images-api.nasa.gov/search';
+  async function resolve(object,system){const key=`${system?.seed||'system'}:${object?.id||object?.name||'object'}`;if(cache.has(key))return cache.get(key);const promise=resolveUncached(object,system);cache.set(key,promise);return promise;}
+  async function resolveUncached(object,system){if(!object)return null;const published=String(object.provenance||system?.provenance||'').startsWith('published');if(published&&object.kind!=='belt'){const result=await publishedImage(object).catch(()=>null);if(result)return result;}return artisticApproximation(object,system);}
+  async function publishedImage(object){const parent=object.parentName?` ${object.parentName}`:'',query=`${object.name}${parent}`.trim(),attempts=[`${NASA_SEARCH}?q=${encodeURIComponent(query)}&media_type=image&center=JPL&page_size=30`,`${NASA_SEARCH}?q=${encodeURIComponent(`${query} JPL`)}&media_type=image&page_size=30`];for(const url of attempts){const response=await fetch(url,{mode:'cors',cache:'force-cache'});if(!response.ok)continue;const payload=await response.json(),selected=chooseItem(payload?.collection?.items||[],object);if(!selected)continue;const data=selected.data?.[0]||{},image=selected.links?.find(link=>link.render==='image')?.href||selected.links?.[0]?.href;if(!image)continue;return{url:image,sourceUrl:data.nasa_id?`https://images.nasa.gov/details/${encodeURIComponent(data.nasa_id)}`:image,caption:`NASA/JPL published image · ${data.title||object.name}${data.date_created?` · ${String(data.date_created).slice(0,10)}`:''}`,alt:`NASA/JPL reference image of ${object.name}`,approximate:false};}return null;}
+  function chooseItem(items,object){const name=String(object.name||'').toLowerCase(),parent=String(object.parentName||'').toLowerCase();return items.map(item=>{const data=item.data?.[0]||{},haystack=`${data.title||''} ${data.description||''} ${(data.keywords||[]).join(' ')} ${data.center||''}`.toLowerCase();let score=0;if(haystack.includes(name))score+=10;if(parent&&haystack.includes(parent))score+=3;if(/jpl|jet propulsion laboratory/.test(haystack))score+=5;if(/planet|moon|satellite|solar system/.test(haystack))score+=2;if(/diagram|logo|poster|artist concept/.test(haystack))score-=4;return{item,score};}).filter(entry=>entry.score>=10).sort((a,b)=>b.score-a.score)[0]?.item||null;}
 
-  function hash(value) {
-    let state = 2166136261;
-    for (const char of String(value)) { state ^= char.charCodeAt(0); state = Math.imul(state, 16777619); }
-    return state >>> 0;
-  }
+  function bodyText(object){const ecology=object.ecology||{};return[object.kind,object.type,object.classification,object.atmosphere,object.biosphere,object.civilization,object.summary,(object.resources||[]).join(' '),(object.hazards||[]).join(' '),ecology.environment?.key,ecology.environment?.label,ecology.chemistry?.foundation,ecology.classification?.nativeClass,ecology.classification?.overlay].filter(Boolean).join(' ').toLowerCase();}
+  function profileFor(object){const byId=id=>definitions.profiles.find(item=>item.id===id)||definitions.profiles.at(-1),kind=String(object.kind||'').toLowerCase(),text=bodyText(object),temperature=finite(object.temperature,250),hydro=finite(object.hydrosphere,0),habitability=finite(object.habitability,0),atmosphere=String(object.atmosphere||'').toLowerCase();if(kind==='star')return byId('star');if(kind==='belt')return byId('belt');if(kind==='facility')return byId('facility');if(/artificial|machine world|megastructure|planetary shell|engineered world/.test(text))return byId('artificial');if(/gas giant/.test(text))return temperature>=500||/hot|metal vapor/.test(text)?byId('hot-gas-giant'):byId('gas-giant');if(/ice giant|mini-neptune|neptune|methane-rich giant/.test(text))return byId('ice-giant');if(/molten|magma ocean|lava ocean/.test(text)||temperature>=900)return byId('molten');if(/greenhouse|toxic atmosphere|sulfuric cloud|chlorine|acid cloud|venus/.test(text))return byId('greenhouse');if(/volcan|sulfur|basalt flood|caldera/.test(text)||temperature>=480)return byId('volcanic');if(/ocean world|global ocean|pelagic|water world/.test(text)||hydro>=82)return byId('ocean');if(kind==='dwarf-planet'||/dwarf planet|minor planet|plutoid/.test(text))return byId('dwarf');if(/frozen|icebound|cryogenic|nitrogen ice|methane frost|cryosphere/.test(text)||temperature<=165)return byId('frozen');if(/carbon-rich|graphite|diamond crust|tholins|hydrocarbon tar/.test(text))return byId('carbon');if(/metal-rich|iron-nickel|metallic world|metal world/.test(text))return byId('metallic');if(/super-earth|high-gravity/.test(text)||finite(object.gravity,1)>=1.55)return byId('super-earth');if(/temperate|garden|earthlike|biosphere|native life/.test(text)||(habitability>=58&&hydro>=8&&!/none|absent|vacuum/.test(atmosphere)))return byId('temperate');if(/desert|arid|dune|salt flat/.test(text)||(hydro<=4&&!/none|absent|vacuum/.test(atmosphere)))return byId('desert');if(kind==='moon'&&/none|absent|vacuum|trace/.test(atmosphere))return byId('airless');if(/barren|airless|regolith|cratered/.test(text))return byId(kind==='moon'?'airless':'rocky');return byId('rocky');}
+  function chooseDefinition(object,system){const seed=hash(`${system?.seed||''}:${object.id||object.name}`),rng=rngFor(seed),profile=profileFor(object),palette=applyStoredColor(pick(rng,profile.palettes),object.color),stateText=bodyText(object),ruined=/extinct|ruin|abandoned|destroyed/.test(stateText)||object.ecology?.classification?.overlay==='ruined',variants=profile.id==='artificial'?(ruined?profile.variants.filter(value=>/ruined/i.test(value)):profile.variants.filter(value=>!/ruined/i.test(value))):profile.variants,variant=pick(rng,variants.length?variants:profile.variants),features=shuffle(rng,[...(profile.features||[])]).slice(0,integer(rng,2,Math.min(5,(profile.features||[]).length||2))),ringStyle=object.rings&&definitions.ringStyles.length?pick(rng,definitions.ringStyles):null;return{seed,rng,profile,palette,variant,features,ringStyle};}
+  function atmosphereStrength(object,profile){if(['gas','ice-gas','haze','dense-terrestrial'].includes(profile.render))return.9;const text=String(object.atmosphere||'').toLowerCase();if(/none|absent|vacuum/.test(text))return 0;if(/trace|tenuous|thin/.test(text))return.18;if(/dense|thick|high pressure|supercritical/.test(text))return.82;return text?.48:0;}
 
-  async function resolve(object, system) {
-    const key = `${system?.seed || 'system'}:${object?.id || object?.name || 'object'}`;
-    if (cache.has(key)) return cache.get(key);
-    const promise = resolveUncached(object, system);
-    cache.set(key, promise);
-    return promise;
-  }
+  function renderBelt({rng,palette,variant,profile}){const stars=renderStarfield(rng,52);let rocks='';for(let i=0;i<integer(rng,55,95);i+=1){const angle=rng()*Math.PI*2,dist=number(rng,115,205),x=256+Math.cos(angle)*dist,y=230+Math.sin(angle)*dist*.42;rocks+=`<polygon points="${facetPoints(rng,x,y,number(rng,2,13))}" fill="${pick(rng,[palette.base,palette.light,palette.secondary,palette.dark])}" opacity="${number(rng,.32,.9)}" stroke="${palette.light}" stroke-opacity=".12"/>`;}return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><radialGradient id="bg"><stop stop-color="#101a22"/><stop offset="1" stop-color="#020304"/></radialGradient><filter id="glow"><feGaussianBlur stdDeviation="5"/></filter></defs><rect width="512" height="512" fill="url(#bg)"/>${stars}<ellipse cx="256" cy="230" rx="205" ry="86" fill="none" stroke="${palette.secondary}" stroke-opacity=".12" stroke-width="28" filter="url(#glow)"/>${rocks}<text x="256" y="475" text-anchor="middle" fill="#e2eaed" font-family="system-ui" font-size="13" font-weight="700">ARTISTIC APPROXIMATION</text><text x="256" y="495" text-anchor="middle" fill="#8fa2aa" font-family="system-ui" font-size="9.5">${profile.label.toUpperCase()} · ${variant.toUpperCase()}</text></svg>`;}
+  function renderFacility({rng,palette,variant,profile}){const stars=renderStarfield(rng,60),count=integer(rng,8,13);let modules='';for(let i=0;i<count;i+=1){const angle=i/count*Math.PI*2,x=256+Math.cos(angle)*number(rng,45,105),y=230+Math.sin(angle)*number(rng,25,60);modules+=`<rect x="${x-8}" y="${y-5}" width="16" height="10" rx="2" fill="${palette.base}" stroke="${palette.light}" stroke-opacity=".45"/><circle cx="${x}" cy="${y}" r="2" fill="${palette.accent}"/>`;}return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><radialGradient id="bg"><stop stop-color="#13212a"/><stop offset="1" stop-color="#020304"/></radialGradient></defs><rect width="512" height="512" fill="url(#bg)"/>${stars}<g transform="rotate(${integer(rng,-18,18)} 256 230)"><ellipse cx="256" cy="230" rx="132" ry="42" fill="none" stroke="${palette.light}" stroke-opacity=".62" stroke-width="12"/><ellipse cx="256" cy="230" rx="105" ry="31" fill="none" stroke="${palette.dark}" stroke-width="8"/><rect x="246" y="92" width="20" height="276" fill="${palette.base}" stroke="${palette.light}" stroke-opacity=".5"/><path d="M150 230 H362 M256 128 V332" stroke="${palette.secondary}" stroke-width="9"/>${modules}</g><text x="256" y="475" text-anchor="middle" fill="#e2eaed" font-family="system-ui" font-size="13" font-weight="700">ARTISTIC APPROXIMATION</text><text x="256" y="495" text-anchor="middle" fill="#8fa2aa" font-family="system-ui" font-size="9.5">${profile.label.toUpperCase()} · ${variant.toUpperCase()}</text></svg>`;}
+  function renderApproximation(object,definition){if(definition.profile.render==='star')return R.renderStar(object,definition);if(definition.profile.render==='belt')return renderBelt(definition);if(definition.profile.render==='facility')return renderFacility(definition);const{rng,palette,profile,ringStyle,seed}=definition,cx=256,cy=244,radius=174,atmosphere=atmosphereStrength(object,profile),stars=renderStarfield(rng,42),ringsBack=ringStyle?renderRings(ringStyle,palette,cx,cy,radius,'back'):'',ringsFront=ringStyle?renderRings(ringStyle,palette,cx,cy,radius,'front'):'',surface=(R.surfaces[profile.render]||R.surfaces.rocky)(object,definition,cx,cy,radius),overlay=R.renderCivilizationOverlay?.(object,definition,cx,cy,radius)||'',halo=atmosphere>0?`<circle cx="${cx}" cy="${cy}" r="${radius+4}" fill="none" stroke="${palette.cloud}" stroke-opacity="${(.14+atmosphere*.34).toFixed(2)}" stroke-width="${(3+atmosphere*10).toFixed(1)}" filter="url(#softGlow)"/>`:'',veil=atmosphere>.25?`<ellipse cx="234" cy="214" rx="135.72" ry="153.12" fill="url(#atmosphereVeil)" opacity="${(.07+atmosphere*.16).toFixed(2)}" clip-path="url(#planetClip)"/>`:'';return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="${escapeXml(profile.label)} artistic approximation"><defs><radialGradient id="spaceGlow"><stop stop-color="#10202a"/><stop offset="1" stop-color="#020304"/></radialGradient><radialGradient id="sphere" cx="31%" cy="25%"><stop stop-color="${palette.light}"/><stop offset=".43" stop-color="${palette.base}"/><stop offset=".78" stop-color="${palette.dark}"/><stop offset="1" stop-color="#050607"/></radialGradient><radialGradient id="atmosphereVeil"><stop stop-color="${palette.cloud}" stop-opacity=".88"/><stop offset=".62" stop-color="${palette.cloud}" stop-opacity=".08"/><stop offset="1" stop-color="${palette.cloud}" stop-opacity="0"/></radialGradient><linearGradient id="terminator"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".57" stop-color="#000" stop-opacity=".04"/><stop offset="1" stop-color="#000" stop-opacity=".76"/></linearGradient><filter id="surfaceNoise"><feTurbulence type="fractalNoise" baseFrequency="${number(rng,.012,.038,3)}" numOctaves="${integer(rng,2,5)}" seed="${seed%997}" result="noise"/><feBlend in="SourceGraphic" in2="noise" mode="soft-light"/></filter><filter id="roughNoise"><feTurbulence type="turbulence" baseFrequency="${number(rng,.025,.07,3)}" numOctaves="${integer(rng,1,3)}" seed="${(seed>>>5)%997}" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="${integer(rng,4,14)}"/></filter><filter id="cloudWarp"><feTurbulence type="fractalNoise" baseFrequency="${number(rng,.008,.022,3)}" numOctaves="3" seed="${(seed>>>9)%997}" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="${integer(rng,10,28)}"/></filter><filter id="softGlow"><feGaussianBlur stdDeviation="5"/></filter><clipPath id="planetClip"><circle cx="256" cy="244" r="174"/></clipPath></defs><rect width="512" height="512" fill="url(#spaceGlow)"/>${stars}${ringsBack}<circle cx="256" cy="244" r="174" fill="url(#sphere)" stroke="rgba(255,255,255,.34)" stroke-width="2"/><g clip-path="url(#planetClip)">${surface}${overlay}${veil}<circle cx="256" cy="244" r="174" fill="url(#terminator)"/></g>${halo}${ringsFront}<text x="256" y="475" text-anchor="middle" fill="#e2eaed" font-family="system-ui" font-size="13" font-weight="700">ARTISTIC APPROXIMATION</text><text x="256" y="495" text-anchor="middle" fill="#8fa2aa" font-family="system-ui" font-size="9.5">${escapeXml(`${profile.label.toUpperCase()} · ${definition.variant.toUpperCase()}`)}</text></svg>`;}
 
-  async function resolveUncached(object, system) {
-    if (!object) return null;
-    const published = String(object.provenance || system?.provenance || '').startsWith('published');
-    if (published && object.kind !== 'belt') {
-      const result = await publishedImage(object).catch(() => null);
-      if (result) return result;
-    }
-    return artisticApproximation(object, system);
-  }
-
-  async function publishedImage(object) {
-    const parent = object.parentName ? ` ${object.parentName}` : '';
-    const query = `${object.name}${parent}`.trim();
-    const attempts = [
-      `${NASA_SEARCH}?q=${encodeURIComponent(query)}&media_type=image&center=JPL&page_size=30`,
-      `${NASA_SEARCH}?q=${encodeURIComponent(`${query} JPL`)}&media_type=image&page_size=30`
-    ];
-    for (const url of attempts) {
-      const response = await fetch(url, {mode:'cors', cache:'force-cache'});
-      if (!response.ok) continue;
-      const payload = await response.json();
-      const items = payload?.collection?.items || [];
-      const selected = chooseItem(items, object);
-      if (!selected) continue;
-      const data = selected.data?.[0] || {};
-      const image = selected.links?.find(link => link.render === 'image')?.href || selected.links?.[0]?.href;
-      if (!image) continue;
-      return {
-        url:image,
-        sourceUrl:data.nasa_id ? `https://images.nasa.gov/details/${encodeURIComponent(data.nasa_id)}` : image,
-        caption:`NASA/JPL published image · ${data.title || object.name}${data.date_created ? ` · ${String(data.date_created).slice(0,10)}` : ''}`,
-        alt:`NASA/JPL reference image of ${object.name}`,
-        approximate:false
-      };
-    }
-    return null;
-  }
-
-  function chooseItem(items, object) {
-    const name = String(object.name || '').toLowerCase();
-    const parent = String(object.parentName || '').toLowerCase();
-    return items
-      .map(item => {
-        const data = item.data?.[0] || {};
-        const haystack = `${data.title || ''} ${data.description || ''} ${(data.keywords || []).join(' ')} ${data.center || ''}`.toLowerCase();
-        let score = 0;
-        if (haystack.includes(name)) score += 10;
-        if (parent && haystack.includes(parent)) score += 3;
-        if (/jpl|jet propulsion laboratory/.test(haystack)) score += 5;
-        if (/planet|moon|satellite|solar system/.test(haystack)) score += 2;
-        if (/diagram|logo|poster|artist concept/.test(haystack)) score -= 4;
-        return {item, score};
-      })
-      .filter(entry => entry.score >= 10)
-      .sort((a, b) => b.score - a.score)[0]?.item || null;
-  }
-
-  function artisticApproximation(object, system) {
-    const seed = hash(`${system?.seed || ''}:${object.id || object.name}`);
-    const color = normalizeColor(object.color || colorFor(object));
-    const dark = shade(color, -42);
-    const light = shade(color, 56);
-    const atmosphere = /gas|ice giant|atmosphere|cloud/i.test(`${object.type || ''} ${object.atmosphere || ''}`);
-    const cratered = /barren|rock|asteroid|dwarf|moon|airless|none/i.test(`${object.type || ''} ${object.atmosphere || ''}`);
-    const bands = atmosphere ? Array.from({length:7}, (_, index) => {
-      const y = 56 + index * 18 + ((seed >>> (index % 16)) & 7);
-      const opacity = .12 + ((seed >>> ((index + 5) % 16)) & 7) / 35;
-      return `<path d="M28 ${y} Q128 ${y - 14} 228 ${y} Q128 ${y + 15} 28 ${y}" fill="none" stroke="rgba(255,255,255,${opacity.toFixed(2)})" stroke-width="${4 + index % 3}"/>`;
-    }).join('') : '';
-    const craters = cratered ? Array.from({length:14}, (_, index) => {
-      const a = ((seed * (index + 3)) % 6283) / 1000;
-      const r = 16 + ((seed >>> (index % 24)) & 63);
-      const x = 128 + Math.cos(a) * r;
-      const y = 128 + Math.sin(a) * r;
-      const size = 2 + ((seed >>> ((index + 9) % 24)) & 7);
-      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size}" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.12)"/>`;
-    }).join('') : '';
-    const rings = object.rings ? `<ellipse cx="128" cy="128" rx="116" ry="32" fill="none" stroke="rgba(220,215,198,.55)" stroke-width="6" transform="rotate(-12 128 128)"/><ellipse cx="128" cy="128" rx="105" ry="27" fill="none" stroke="rgba(120,112,96,.55)" stroke-width="2" transform="rotate(-12 128 128)"/>` : '';
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><radialGradient id="g" cx="34%" cy="28%"><stop offset="0" stop-color="${light}"/><stop offset=".58" stop-color="${color}"/><stop offset="1" stop-color="${dark}"/></radialGradient><clipPath id="c"><circle cx="128" cy="128" r="92"/></clipPath></defs><rect width="256" height="256" fill="#020304"/>${rings}<circle cx="128" cy="128" r="92" fill="url(#g)" stroke="rgba(255,255,255,.35)" stroke-width="2"/><g clip-path="url(#c)">${bands}${craters}</g><text x="128" y="241" text-anchor="middle" fill="#dfe8eb" font-family="system-ui" font-size="11">ARTISTIC APPROXIMATION</text></svg>`;
-    return {
-      url:`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
-      sourceUrl:'https://ssd.jpl.nasa.gov/',
-      caption:`Artistic approximation generated from the stored ${object.type || object.kind || 'body'} classification, color, radius, atmosphere, and orbital record. No suitable NASA/JPL observational image was resolved.`,
-      alt:`Artistic approximation of ${object.name}`,
-      approximate:true
-    };
-  }
-
-  function colorFor(object) {
-    const text = `${object.type || ''} ${object.atmosphere || ''}`;
-    if (/gas giant/i.test(text)) return '#c89e67';
-    if (/ice giant|methane/i.test(text)) return '#68a9c7';
-    if (/ocean|water/i.test(text)) return '#3e78ad';
-    if (/volcan|sulfur/i.test(text)) return '#b76a3f';
-    if (/ice|frozen|cryogenic/i.test(text)) return '#b7cbd8';
-    return '#8f8578';
-  }
-
-  function normalizeColor(value) {
-    return /^#[0-9a-f]{6}$/i.test(String(value)) ? String(value) : '#8f8578';
-  }
-
-  function shade(hex, amount) {
-    const value = parseInt(hex.slice(1), 16);
-    const r = Math.max(0, Math.min(255, (value >> 16) + amount));
-    const g = Math.max(0, Math.min(255, ((value >> 8) & 255) + amount));
-    const b = Math.max(0, Math.min(255, (value & 255) + amount));
-    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-  }
-
-  globalThis.BlacklightExoImagery = Object.freeze({resolve});
+  function artisticApproximation(object,system){const definition=chooseDefinition(object,system),svg=renderApproximation(object,definition),featureText=definition.features.length?definition.features.join(', '):'deterministic surface variation';return{url:`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,sourceUrl:'https://ssd.jpl.nasa.gov/',caption:`Artistic approximation · ${definition.profile.label} · ${definition.variant}. Applied from the stored body class, atmosphere, temperature, hydrosphere, gravity, ecology, ring, population, and ruin records. Visible definition set: ${featureText}. This is not an observational image.`,alt:`Artistic approximation of ${object.name} as a ${definition.variant}`,approximate:true,visualDefinition:{version:definitions.version,profile:definition.profile.id,profileLabel:definition.profile.label,variant:definition.variant,palette:definition.palette.name,features:definition.features,ringStyle:definition.ringStyle?.label||null}};}
+  function describe(object,system){const definition=chooseDefinition(object,system);return{version:definitions.version,profile:definition.profile.id,label:definition.profile.label,renderer:definition.profile.render,variant:definition.variant,palette:definition.palette.name,features:[...definition.features],ringStyle:definition.ringStyle?.label||null};}
+  globalThis.BlacklightExoImagery=Object.freeze({resolve,describe,definitions});
 })();
