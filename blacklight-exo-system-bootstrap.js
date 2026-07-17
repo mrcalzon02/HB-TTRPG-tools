@@ -33,6 +33,7 @@
       }
       await loadStyle('blacklight-exo-orbital-layout.css');
       await loadStyle('blacklight-exo-campaign-facilities.css');
+      await loadStyle('blacklight-exo-jump-calculator.css');
       await load('blacklight-exo-ecology-core.js');
       await load('blacklight-exo-imagery-definitions.js');
       await load('blacklight-exo-imagery-runtime.js');
@@ -46,6 +47,23 @@
       await load('blacklight-exo-speed-controls.js');
       await load('blacklight-exo-cluster.js');
       await load('blacklight-exo-cluster-ecology-integration.js');
+
+      await load('blacklight-exo-ftl-physics-definitions.js');
+      await load('blacklight-exo-ftl-operational-definitions.js');
+      await load('blacklight-exo-ftl-runtime.js');
+      await load('blacklight-exo-ftl-core.js');
+      await load('blacklight-exo-ftl-engineering-extension.js');
+      await load('blacklight-exo-ftl-path-level-core.js');
+      await load('blacklight-exo-ftl-path-level-paths-physical.js');
+      await load('blacklight-exo-ftl-path-level-paths-dimensional.js');
+      await load('blacklight-exo-ftl-path-level-paths-discrete.js');
+      await load('blacklight-exo-ftl-path-level-runtime.js');
+      await load('blacklight-exo-ftl-path-level-engineering.js');
+      await load('blacklight-exo-ftl-path-level-controller.js');
+      await load('blacklight-exo-cluster-spatial.js');
+      await load('blacklight-exo-jump-calculator-core.js');
+      await load('blacklight-exo-jump-calculator-ui.js');
+
       await load('blacklight-exo-government-handoff.js');
       await load('blacklight-exo-ftl-handoff.js');
     } catch (error) {
