@@ -23,7 +23,7 @@
     DESTROYED:t({operationalReadinessPercent:0,structuralDamagePercent:100,systemDamagePercent:100,maintenanceDebtPercent:100,fuelLoadPercent:0,coolantLoadPercent:0,atmosphereIntegrityPercent:0,contaminationPercent:100,crewAvailabilityPercent:0,dataIntegrityPercent:0,destructionPercent:100})
   });
   const LAYERS=['engineeringBaseline','architectureAdjustedMassLedger','powerAndThermalLedger','armorAndProtectionLedger','sensorAndNavigationLedger','maneuverAndDeltaVLedger','weaponInventory','countermeasureInventory','moduleGraph','voxelLayout','damageTopology','combatEnvelope','gameplayStatBlock','actionSet'];
-  const LEGACY_OK=new Set(['structure','maneuver','maintenance','payload','shielding','navigation','thermal','life-support','power','fuel']);
+  const LEGACY_OK=new Set(['structure','maneuver','maintenance','payload','shielding','navigation','thermal','life-support','power','fuel','conventional-engine','conventional-propellant','armor','protection-fields','sensors','fire-control','electronic-warfare','weapon-mounts','weapon-support','weapon-magazines','weapon-cooling','countermeasures','margin']);
   const clone=value=>value==null?value:structuredClone(value);
   const dom=id=>globalThis.document?.getElementById?.(id)?.value||null;
   function hash(value){let h=2166136261;for(const c of String(value)){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
@@ -37,7 +37,7 @@
     CORP_LOGISTICS:{LEGACY:.08,STANDARD:.72,REFINED:.13,ADVANCED:.05,PROTOTYPE:.02},
     APEX_WARLORD:{LEGACY:.07,STANDARD:.52,REFINED:.16,ADVANCED:.20,PROTOTYPE:.05}
   }[key]||{LEGACY:.1,STANDARD:.62,REFINED:.15,ADVANCED:.09,PROTOTYPE:.04});
-  function choose(seed,table){let roll=unit(seed);for(const key of ['LEGACY','STANDARD','REFINED','ADVANCED','PROTOTYPE']){roll-=Number(table[key])||0;if(roll<=0)return key;}return'STANDARD';}
+  function choose(seed,table){let roll=unit(seed);for(const key of['LEGACY','STANDARD','REFINED','ADVANCED','PROTOTYPE']){roll-=Number(table[key])||0;if(roll<=0)return key;}return'STANDARD';}
 
   function technology(seed,input,result){
     const explicit=String(input.principalTechnologyBand||'').toUpperCase();
@@ -75,7 +75,10 @@
     const violations=[];if(axes.destructionPercent===100&&(axes.operationalReadinessPercent||axes.structuralDamagePercent<100||axes.systemDamagePercent<100))violations.push('A 100% destroyed vessel cannot remain operational or structurally coherent.');
     return{schemaVersion:SCHEMA,template,serviceDoctrine:doctrine(result),axes,coherentVesselGraph:axes.destructionPercent<100,applicationStatus:'schema-only',validation:{valid:!violations.length,violations}};
   }
-  const layers=()=>{const ready=new Set(LAYERS.slice(0,5));return LAYERS.map(key=>({key,status:ready.has(key)?'generated':'planned',version:ready.has(key)?'1.0.0':null,source:ready.has(key)?'current vessel engineering runtime':'EXO phased vessel roadmap',notes:ready.has(key)?'Available in the current record.':'Reserved for a later phase.'}));};
+  function layers(result){
+    const engineeringReady=Boolean(result.engineeringLedger?.validation?.valid),ready=new Set(engineeringReady?LAYERS.slice(0,8):LAYERS.slice(0,5));
+    return LAYERS.map(key=>({key,status:ready.has(key)?'generated':'planned',version:ready.has(key)?'1.0.0':null,source:ready.has(key)?(engineeringReady&&LAYERS.indexOf(key)>=5?'VESSEL-02 engineering ledger':'current vessel engineering runtime'):'EXO phased vessel roadmap',notes:ready.has(key)?'Available in the current record.':'Reserved for a later phase.'}));
+  }
 
   function validate(record){
     const c=record?.contract,violations=[];
@@ -88,6 +91,7 @@
       if(c?.identifiers?.manufacturerId!==record.manufacturer.manufacturerId)violations.push('Contract manufacturer identifier does not match the generated manufacturer.');
       if(c?.identifiers?.speciesId!==record.manufacturer.speciesId||c?.identifiers?.organizationId!==record.manufacturer.organizationId)violations.push('Manufacturer origin identifiers do not match the contract.');
     }
+    if(record?.engineeringLedger&&!record.engineeringLedger.validation?.valid)violations.push(...(record.engineeringLedger.validation?.violations||['VESSEL-02 engineering validation failed.']));
     if(!c?.technology?.validation?.valid)violations.push(...(c?.technology?.validation?.violations||[]));
     if(!c?.condition?.validation?.valid)violations.push(...(c?.condition?.validation?.violations||[]));
     if(c?.condition?.axes?.destructionPercent===100&&c?.condition?.coherentVesselGraph!==false)violations.push('Destroyed vessel retained coherent graph.');
@@ -99,7 +103,7 @@
     if(result.contract?.schemaVersion===SCHEMA&&result.version===3)return result;
     const sourceVersion=Number(result.version)||1,seeds=seedRecord(seed,result,source),ids=identifiers(seeds,result,source),tech=technology(seed,input,result),state=condition(input,result),time=result.generatedAt||new Date().toISOString();
     result.version=3;
-    result.contract={recordType:'exoVessel',schemaVersion:SCHEMA,contractVersion:1,revision:1,createdAt:time,updatedAt:time,identifiers:ids,seeds,technology:tech,condition:state,derivedLayers:layers(),provenance:{generatorId:'blacklight-exo-vessel-generator',generatorVersion:'3.1.0',sourceRecordVersion:sourceVersion,sourceType:source?.type||result.source?.type||'standalone',registry:'data/exo-vessel/vessel-contract-registry.json',governingGuide:'EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md',schema:'data/schemas/exo-vessel-record.schema.json',migrationRegistry:'data/exo-vessel/migrations.json',manufacturerGeneratorVersion:result.manufacturer?.provenance?.generatorVersion||null},migration:{policyVersion:SCHEMA,history:[{migrationId:`exo-vessel-v${sourceVersion}-to-contract-${SCHEMA}`,fromRecordVersion:sourceVersion,toRecordVersion:3,toSchemaVersion:SCHEMA,strategy:'append-only-envelope',preservedUnknownFields:true}]},validation:{valid:true,violations:[]},extensions:{}};
+    result.contract={recordType:'exoVessel',schemaVersion:SCHEMA,contractVersion:1,revision:1,createdAt:time,updatedAt:time,identifiers:ids,seeds,technology:tech,condition:state,derivedLayers:layers(result),provenance:{generatorId:'blacklight-exo-vessel-generator',generatorVersion:result.engineeringLedger?'3.2.0':'3.1.0',sourceRecordVersion:sourceVersion,sourceType:source?.type||result.source?.type||'standalone',registry:'data/exo-vessel/vessel-contract-registry.json',governingGuide:'EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md',schema:'data/schemas/exo-vessel-record.schema.json',migrationRegistry:'data/exo-vessel/migrations.json',manufacturerGeneratorVersion:result.manufacturer?.provenance?.generatorVersion||null,engineeringLedgerVersion:result.engineeringLedger?.schemaVersion||null,engineeringRegistry:result.engineeringLedger?'data/exo-vessel/engineering-registry.json':null},migration:{policyVersion:SCHEMA,history:[{migrationId:`exo-vessel-v${sourceVersion}-to-contract-${SCHEMA}`,fromRecordVersion:sourceVersion,toRecordVersion:3,toSchemaVersion:SCHEMA,strategy:'append-only-envelope',preservedUnknownFields:true}]},validation:{valid:true,violations:[]},extensions:{engineeringLedgerSchema:result.engineeringLedger?'data/schemas/exo-vessel-engineering-ledger.schema.json':null}};
     Object.assign(result.identity,ids,{technologyBand:tech.principalBand});
     if(result.manufacturer){result.manufacturer.speciesId=ids.speciesId;result.manufacturer.organizationId=ids.organizationId;result.manufacturer.manufacturerId=ids.manufacturerId;}
     result.condition=clone(state);
@@ -110,7 +114,7 @@
 
   const generate=(seed,input={},source=null)=>apply(String(seed||input.seed||'vessel'),input,source,base.generate(String(seed||input.seed||'vessel'),input,source));
   const migrate=(record,input={},source=null)=>{if(!record||typeof record!=='object')throw new Error('A vessel record is required.');const copy=clone(record);if(copy.contract?.schemaVersion===SCHEMA&&copy.version===3){copy.contract.validation=validate(copy);return copy;}return apply(String(copy.seed||input.seed||'migrated-vessel'),input,source,copy);};
-  const contracts=Object.freeze({schemaVersion:SCHEMA,contractVersion:1,technologyBands:BANDS,withinBandVariants:Object.entries(VARIANTS).map(([key,offset])=>({key,offset})),seedHierarchy:SEEDS,conditionAxes:Object.keys(AXES),conditionTemplates:CONDITIONS,serviceDoctrines:['CIVILIAN','MERCHANT','PASSENGER','INDUSTRIAL','SCIENTIFIC','COLONIAL','GOVERNMENT','PARAMILITARY','MILITARY','PIRATE_OR_IRREGULAR','ABANDONED_OR_UNKNOWN'],derivedLayers:LAYERS,registryPath:'data/exo-vessel/vessel-contract-registry.json',migrationRegistryPath:'data/exo-vessel/migrations.json',schemas:{record:'data/schemas/exo-vessel-record.schema.json',manufacturer:'data/schemas/exo-vessel-manufacturer.schema.json',condition:'data/schemas/exo-vessel-condition.schema.json',module:'data/schemas/exo-vessel-module.schema.json'},validate,migrate});
+  const contracts=Object.freeze({schemaVersion:SCHEMA,contractVersion:1,technologyBands:BANDS,withinBandVariants:Object.entries(VARIANTS).map(([key,offset])=>({key,offset})),seedHierarchy:SEEDS,conditionAxes:Object.keys(AXES),conditionTemplates:CONDITIONS,serviceDoctrines:['CIVILIAN','MERCHANT','PASSENGER','INDUSTRIAL','SCIENTIFIC','COLONIAL','GOVERNMENT','PARAMILITARY','MILITARY','PIRATE_OR_IRREGULAR','ABANDONED_OR_UNKNOWN'],derivedLayers:LAYERS,registryPath:'data/exo-vessel/vessel-contract-registry.json',migrationRegistryPath:'data/exo-vessel/migrations.json',engineeringRegistryPath:'data/exo-vessel/engineering-registry.json',schemas:{record:'data/schemas/exo-vessel-record.schema.json',manufacturer:'data/schemas/exo-vessel-manufacturer.schema.json',condition:'data/schemas/exo-vessel-condition.schema.json',module:'data/schemas/exo-vessel-module.schema.json',engineering:'data/schemas/exo-vessel-engineering-ledger.schema.json'},validate,migrate});
   globalThis.BlacklightExoVesselContracts=contracts;
   globalThis.BlacklightExoVessel=Object.freeze({...base,version:3,contractVersion:1,schemaVersion:SCHEMA,contracts,generate,migrateRecord:migrate,validateContract:validate});
 })();
