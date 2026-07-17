@@ -94,16 +94,28 @@
       "id":"VESSEL-03",
       "order":3,
       "title":"Semantic module graph",
-      "status":"next",
+      "status":"complete",
       "dependsOn":["VESSEL-02"],
       "deliverables":["Module inventory","Attachment graph","Pressure-zone graph","Structural graph","Utility graph","Weapon arcs and sensor requirements"],
-      "acceptance":["INTERNAL modules have valid protected parents","EVA modules have valid vacuum hardpoints","Critical dependencies are connected","Invalid graphs are rejected or visibly repaired"]
+      "acceptance":["INTERNAL modules have valid protected parents","EVA modules have valid vacuum hardpoints","Critical dependencies are connected","Invalid graphs are rejected or visibly repaired"],
+      "completionEvidence":[
+        "blacklight-exo-vessel-module-definitions.js",
+        "blacklight-exo-vessel-module-runtime.js",
+        "blacklight-exo-vessel-module-ui.js",
+        "data/exo-vessel/module-graph-registry.json",
+        "data/schemas/exo-vessel-module.schema.json",
+        "data/schemas/exo-vessel-module-graph.schema.json",
+        "data/schemas/exo-vessel-manufacturer.schema.json",
+        "blacklight-exo-vessel-contracts.js",
+        "scripts/validate-exo-vessel-modules.mjs",
+        "blacklight-exo-vessel.html"
+      ]
     },
     {
       "id":"VESSEL-04",
       "order":4,
       "title":"Crude three-dimensional voxel assembler",
-      "status":"planned",
+      "status":"next",
       "dependsOn":["VESSEL-03"],
       "deliverables":["Adaptive voxel scale","Monocoque, spine, cluster, ring, and hybrid algorithms","Module packing","Utility routing","Access paths","Armor and external module representation","Basic 3D viewer"],
       "acceptance":["All volumes fit","Load paths and clearances validate","Same seed reproduces same layout","Species and manufacturer visibly affect arrangement"]
