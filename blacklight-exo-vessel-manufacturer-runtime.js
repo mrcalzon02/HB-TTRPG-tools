@@ -42,10 +42,8 @@
     const speciesSeed=`${d?.seed||seed}:species:${slug(speciesName)}`,organizationSeed=`${speciesSeed}:organization:${slug(organizationName)}`;
     return{d,speciesName,speciesCommon,organizationName,speciesSeed,organizationSeed,speciesId:id('species',speciesName,speciesSeed),organizationId:id('org',organizationName,organizationSeed)};
   }
-  function technologyRank(result,source){
-    const path=finite(result.drive?.pathLevelRank,4),d=dossier(source),label=String(d?.civilization?.technology||'').toLowerCase();
-    const civilizationRank=/post-material/.test(label)?6:/advanced interstellar/.test(label)?5:/interstellar/.test(label)?4:/system-capable/.test(label)?3:/orbital-capable/.test(label)?2:/industrial/.test(label)?1:0;
-    return Math.max(0,Math.min(6,Math.round((path*2+civilizationRank)/3)));
+  function technologyRank(result){
+    return Math.max(0,Math.min(6,Math.round(finite(result.drive?.pathLevelRank,4))));
   }
   function sharedPressure(identity,source){
     const d=identity.d,species=d?.species||{},civilization=d?.civilization||{},system=d?.system||{};
@@ -72,7 +70,7 @@
   function generateManufacturer(seed,input,result,source,index){
     const identity=sourceIdentity(seed,result,source),inferred=inferArchetype(input,result,source),archetype=archetypes[inferred.key],matrix=D.archetypeMatrices[inferred.key],focus=focuses[index%focuses.length];
     const manufacturerSeed=`${identity.organizationSeed}:manufacturer:${index}:${focus.key}`,name=manufacturerName(manufacturerSeed,identity,focus,index),manufacturerId=id('mfr',name,manufacturerSeed);
-    const text=sharedPressure(identity,source),rank=technologyRank(result,source);
+    const text=sharedPressure(identity,source),rank=technologyRank(result);
     let internal=archetype.internalsBias+focus.architectureNudge+(unit(`${manufacturerSeed}:architecture`)-.5)*2*archetype.variance;
     if(/high-gravity|high-pressure|subterranean|ocean|cryosphere/i.test(text))internal+=.07;
     if(/distributed|collective|salvage|militia|low-gravity|artificial habitat/i.test(text))internal-=.06;
