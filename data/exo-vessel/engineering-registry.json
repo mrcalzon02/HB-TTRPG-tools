@@ -5,10 +5,12 @@
   "phase": "VESSEL-02",
   "schema": "data/schemas/exo-vessel-engineering-ledger.schema.json",
   "principles": [
-    "Only conventional reaction mass may increase the architecture-adjusted loaded mass during VESSEL-02.",
-    "Armor, active protection, sensors, fire control, electronic warfare, weapon support, magazines, cooling, and countermeasures must be reclassified from existing broad mass rows rather than duplicated.",
+    "Only conventional reaction mass may increase the architecture-adjusted loaded mass during VESSEL-02; passive armor mass is already part of the selected vessel protection doctrine and is redistributed rather than duplicated.",
+    "Passive armor is vessel-wide hull thickness, structural reinforcement, citadel reinforcement, and external-system hardening. It must not generate detachable armor modules.",
+    "Active protection fields remain discrete generation, projection, control, and isolation hardware with their own directional coverage map.",
+    "Fore, aft, left, right, up, down, citadel, and structural protection must be represented for both passive construction and active fields.",
     "Strategic delta-v and combat reserve delta-v must remain separate.",
-    "Passive armor mass must close against protected surface area, physical areal density, and coverage fraction.",
+    "Passive hardening mass must close against protected surface area, physical areal density, coverage fraction, and its four distributed construction allocations.",
     "Weapons must include mounts, structural support, power conditioning, magazines or emitter inventory, and cooling.",
     "Weapon performance, engagement envelopes, light-lag tracking, and local damage remain deferred to later roadmap phases."
   ],
@@ -25,7 +27,6 @@
   "expandedMassRows": [
     "conventional-engine",
     "conventional-propellant",
-    "armor",
     "protection-fields",
     "navigation",
     "sensors",
@@ -39,17 +40,9 @@
     "countermeasures",
     "margin"
   ],
-  "weaponFamilies": [
-    "CHEMICAL_BALLISTIC",
-    "RAIL_GUN",
-    "COIL_GUN",
-    "BRUTE_MASS_THROWER",
-    "SAND_GUN",
-    "LASER",
-    "PARTICLE_BEAM",
-    "FRACTIONAL_C",
-    "MISSILE"
-  ],
+  "distributedHardeningCategories": ["outerHull", "externalSystems", "structural", "citadel"],
+  "protectionDirections": ["FORE", "AFT", "LEFT", "RIGHT", "UP", "DOWN", "CITADEL", "STRUCTURAL"],
+  "weaponFamilies": ["CHEMICAL_BALLISTIC", "RAIL_GUN", "COIL_GUN", "BRUTE_MASS_THROWER", "SAND_GUN", "LASER", "PARTICLE_BEAM", "FRACTIONAL_C", "MISSILE"],
   "countermeasureTypes": ["INTERCEPTOR", "DECOY", "ELECTRONIC", "PARTICULATE"],
   "deferredSystems": {
     "sensorTrackAndLightLag": "VESSEL-06",
