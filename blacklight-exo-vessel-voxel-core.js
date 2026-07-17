@@ -12,6 +12,7 @@
   const pointInside=(point,grid)=>within(point.x,0,grid.size.x-1)&&within(point.y,0,grid.size.y-1)&&within(point.z,0,grid.size.z-1);
   const overlap=(a,b)=>a.min.x<=b.max.x&&a.max.x>=b.min.x&&a.min.y<=b.max.y&&a.max.y>=b.min.y&&a.min.z<=b.max.z&&a.max.z>=b.min.z;
   const boundsFrom=(min,size)=>({min:{...min},max:{x:min.x+size.x-1,y:min.y+size.y-1,z:min.z+size.z-1},size:{...size}});
+  const translateBounds=(bounds,delta)=>boundsFrom({x:bounds.min.x+delta.x,y:bounds.min.y+delta.y,z:bounds.min.z+delta.z},bounds.size);
   const suggestedCellEdge=lengthM=>D.suggestedResolution.find(item=>lengthM<item.maximumLengthM)?.cellEdgeM||100;
   const shapeFor=module=>D.semanticPlacement[module.semanticType]?.shape||'COMPACT';
   function dimensionsFor(module,cellEdgeM){
@@ -26,8 +27,15 @@
     while(x*y*z<required){if(x<=y&&x<=z)x+=1;else if(y<=z)y+=1;else z+=1;}
     return{x,y,z,requiredCells:required,capacityCells:x*y*z};
   }
-  const lanePatterns={MONOCOQUE:[{c:1,r:1},{c:1,r:0},{c:1,r:2}],SPINE:[{c:1,r:1},{c:1,r:0},{c:2,r:1},{c:1,r:2}],CLUSTER:[{c:0,r:0},{c:1,r:0},{c:2,r:0},{c:0,r:1},{c:1,r:1},{c:2,r:1}],RING:[{c:0,r:0},{c:1,r:0},{c:2,r:0},{c:2,r:1},{c:2,r:2},{c:1,r:2},{c:0,r:2},{c:0,r:1}],HYBRID:[{c:1,r:1},{c:1,r:0},{c:2,r:1},{c:1,r:2},{c:0,r:1}]};
+  const lanePatterns={
+    MONOCOQUE:[{c:1,r:1},{c:1,r:0},{c:2,r:1},{c:1,r:2},{c:0,r:1}],
+    SPINE:[{c:1,r:1},{c:1,r:0},{c:2,r:1},{c:1,r:2}],
+    CLUSTER:[{c:0,r:0},{c:1,r:0},{c:2,r:0},{c:0,r:1},{c:1,r:1},{c:2,r:1}],
+    RING:[{c:0,r:0},{c:1,r:0},{c:2,r:0},{c:2,r:1},{c:2,r:2},{c:1,r:2},{c:0,r:2},{c:0,r:1}],
+    HYBRID:[{c:1,r:1},{c:1,r:0},{c:2,r:1},{c:1,r:2},{c:0,r:1}]
+  };
   function laneFor(module,topology,laneCount){
+    if(module.semanticType==='MAIN_ENGINE')return finite(module.provenance?.splitIndex,0)%laneCount;
     if(topology==='MONOCOQUE')return module.envelope==='INTERNAL'?0:1+(hash(`${module.moduleId}:lane`)%Math.max(1,laneCount-1));
     if(topology==='SPINE')return module.envelope==='INTERNAL'?0:1+(hash(`${module.pressureZoneId||module.moduleId}:lane`)%Math.max(1,laneCount-1));
     if(topology==='HYBRID')return module.envelope==='INTERNAL'?0:1+(hash(`${module.moduleId}:rail`)%Math.max(1,laneCount-1));
@@ -43,10 +51,13 @@
     const columns=[...new Set(pattern.map(item=>item.c))].sort((a,b)=>a-b),rows=[...new Set(pattern.map(item=>item.r))].sort((a,b)=>a-b),gap=3;
     const colWidths=Object.fromEntries(columns.map(col=>[col,Math.max(1,...lanes.filter(lane=>lane.position.c===col).map(lane=>lane.width))]));
     const rowDepths=Object.fromEntries(rows.map(row=>[row,Math.max(1,...lanes.filter(lane=>lane.position.r===row).map(lane=>lane.depth))]));
-    const colStarts={},rowStarts={};let cursor=2;for(const col of columns){colStarts[col]=cursor;cursor+=colWidths[col]+gap;}const sizeY=cursor+1;cursor=2;for(const row of rows){rowStarts[row]=cursor;cursor+=rowDepths[row]+gap;}const sizeZ=cursor+1;
-    const sizeX=Math.max(6,...lanes.map(lane=>lane.length))+2,placements=[];
+    const colStarts={},rowStarts={};let cursor=2;for(const col of columns){colStarts[col]=cursor;cursor+=colWidths[col]+gap;}const packedY=cursor+1;cursor=2;for(const row of rows){rowStarts[row]=cursor;cursor+=rowDepths[row]+gap;}const packedZ=cursor+1;
+    const packedX=Math.max(6,...lanes.map(lane=>lane.length))+2,placements=[];
     for(const lane of lanes){let x=1;for(const entry of lane.entries){const min={x,y:colStarts[lane.position.c]+Math.floor((colWidths[lane.position.c]-entry.dims.y)/2),z:rowStarts[lane.position.r]+Math.floor((rowDepths[lane.position.r]-entry.dims.z)/2)},bounds=boundsFrom(min,{x:entry.dims.x,y:entry.dims.y,z:entry.dims.z});placements.push({module:entry.module,lane:lane.index,bounds,requiredCells:entry.dims.requiredCells,capacityCells:entry.dims.capacityCells});x=bounds.max.x+2;}}
-    return{topology,pattern,lanes,placements,gridSize:{x:sizeX,y:sizeY,z:sizeZ},cellEdgeM};
+    const hullMinimum={x:Math.max(1,Math.ceil(finite(result.hull?.lengthM,1)/cellEdgeM)+2),y:Math.max(1,Math.ceil(finite(result.hull?.beamM,1)/cellEdgeM)+2),z:Math.max(1,Math.ceil(finite(result.hull?.heightM,1)/cellEdgeM)+2)};
+    const gridSize={x:Math.max(packedX,hullMinimum.x),y:Math.max(packedY,hullMinimum.y),z:Math.max(packedZ,hullMinimum.z)},offset={x:0,y:Math.floor((gridSize.y-packedY)/2),z:Math.floor((gridSize.z-packedZ)/2)};
+    for(const placement of placements)placement.bounds=translateBounds(placement.bounds,offset);
+    return{topology,pattern,lanes,placements,gridSize,packedGridSize:{x:packedX,y:packedY,z:packedZ},hullMinimum,placementOffset:offset,cellEdgeM};
   }
   function adaptivePlan(result,input){
     const hullLength=Math.max(finite(result.hull.lengthM),finite(result.hull.beamM),finite(result.hull.heightM),1),forced=finite(input.voxelCellEdgeM,0);let edge=forced>0?forced:suggestedCellEdge(hullLength),plan=makePlan(result,edge),iterations=0;
