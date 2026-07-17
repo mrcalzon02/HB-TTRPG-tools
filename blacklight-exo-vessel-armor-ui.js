@@ -17,7 +17,7 @@
   }
   function render(event){
     const vessel=event?.detail?.vessel||globalThis.BlacklightExoGetActiveVessel?.(),armor=vessel?.armor;if(!armor||!$('exo-vessel-armor-grid'))return;
-    const allocations=armor.allocations||{};
+    const allocations=armor.allocations||{},navigation=vessel.navigation||{},hull=vessel.hull||{},protection=vessel.protection||{};
     $('exo-vessel-armor-grid').replaceChildren(
       card('Distributed passive hardening',mass(armor.passiveArmorMassTonnes),`${fmt(armor.armorToMassPercent,3)}% of loaded mass is integrated into the hull, structure, citadel, and hardened installed systems.`),
       card('Equivalent outer-hull thickness',`${fmt(armor.equivalentOuterHullThicknessMm,3)} mm`,`${fmt(armor.physicalArealDensityKgM2,2)} kg/m² reference physical areal density at ${fmt(armor.coverageFraction*100,1)}% modeled coverage.`),
@@ -27,6 +27,16 @@
       card('Citadel armoring',mass(allocations.citadel?.massTonnes),allocations.citadel?.label||'Localized protection around critical internal systems.'),
       card('Directional active protection',mass(armor.fieldProtectionMassTonnes),'Energy-based field generation, projection, isolation, and control hardware remains separate from passive construction mass.'),
       card('Armor-module policy','No standalone armor modules',armor.distributionRule)
+    );
+    const protectionGrid=$('exo-vessel-protection-grid');if(protectionGrid)protectionGrid.replaceChildren(
+      card('Protection doctrine',protection.doctrine||vessel.identity?.defense,protection.notes||armor.distributionRule),
+      card('Passive vessel hardening',mass(armor.passiveArmorMassTonnes),`${fmt(armor.equivalentOuterHullThicknessMm,3)} mm equivalent average outer-hull thickness plus structural, citadel, and exposed-system reinforcement.`),
+      card('Active energy protection',mass(armor.fieldProtectionMassTonnes),`${fmt(armor.protectionToMassPercent,3)}% combined passive-and-active protection ratio; field hardware remains independently damageable equipment.`),
+      card('Directional protection','Eight tracked regions','Fore, aft, left, right, up, down, citadel, and structural protection retain separate passive and active-field strengths.'),
+      card('Navigation architecture',navigation.sensorArchitecture||'Independent transit metrology',navigation.destinationVerification||'Independent destination confirmation required.'),
+      card('Sensor baseline',`${fmt(navigation.baselineM,1)} m`,`${mass(navigation.independentSensorMassTonnes)} independent navigation, clocks, and sensor plant.`),
+      card('Arrival solution',navigation.arrivalUncertainty||'not established',`Route solution refresh ${navigation.solutionRefresh||'not established'}; computational burden ${navigation.clockAndSolutionChannels||'not established'}.`),
+      card('Compartmentation',`${hull.decks||0} nominal decks`,`${fmt(hull.surfaceAreaM2,1)} m² modeled exterior and ${fmt(hull.averageDensityTonnesM3,3)} t/m³ loaded average density.`)
     );
     const body=$('exo-vessel-directional-protection-body');if(body){body.replaceChildren();for(const key of['FORE','AFT','LEFT','RIGHT','UP','DOWN','CITADEL','STRUCTURAL']){const passive=armor.facings?.[key],field=armor.fieldFacings?.[key],row=node('tr');for(const value of[passive?.label||key,mass(passive?.massTonnes),`${fmt(passive?.equivalentThicknessMm,3)} mm`,`${fmt(passive?.physicalArealDensityKgM2,2)} kg/m²`,mass(field?.massTonnes),`${fmt(field?.relativeFieldStrength,3)}×`])row.append(node('td','',value));body.append(row);}}
   }
