@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-condition.schema.json",
+  "title": "Blacklight EXO Vessel Condition",
+  "description": "Independent vessel lifecycle, readiness, damage, salvage, load, and integrity axes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "template",
+    "serviceDoctrine",
+    "axes",
+    "coherentVesselGraph",
+    "applicationStatus",
+    "validation"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "template": {
+      "enum": [
+        "NEWLY_MANUFACTURED",
+        "PARTIALLY_COMPLETED",
+        "COMMISSIONING",
+        "OPERATIONAL",
+        "WORN_SERVICE",
+        "PARTIALLY_TORN_DOWN",
+        "MOTHBALLED",
+        "ABANDONED",
+        "PARTIALLY_SALVAGED",
+        "DAMAGED",
+        "CRIPPLED",
+        "WRECKED",
+        "DESTROYED"
+      ]
+    },
+    "serviceDoctrine": {
+      "enum": [
+        "CIVILIAN",
+        "MERCHANT",
+        "PASSENGER",
+        "INDUSTRIAL",
+        "SCIENTIFIC",
+        "COLONIAL",
+        "GOVERNMENT",
+        "PARAMILITARY",
+        "MILITARY",
+        "PIRATE_OR_IRREGULAR",
+        "ABANDONED_OR_UNKNOWN"
+      ]
+    },
+    "axes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constructionCompletionPercent",
+        "commissioningCompletionPercent",
+        "operationalReadinessPercent",
+        "structuralDamagePercent",
+        "systemDamagePercent",
+        "salvageRemovalPercent",
+        "decommissioningPercent",
+        "maintenanceDebtPercent",
+        "fuelLoadPercent",
+        "coolantLoadPercent",
+        "atmosphereIntegrityPercent",
+        "contaminationPercent",
+        "crewAvailabilityPercent",
+        "dataIntegrityPercent",
+        "destructionPercent"
+      ],
+      "properties": {
+        "constructionCompletionPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "commissioningCompletionPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "operationalReadinessPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "structuralDamagePercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "systemDamagePercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "salvageRemovalPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "decommissioningPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "maintenanceDebtPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "fuelLoadPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "coolantLoadPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "atmosphereIntegrityPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "contaminationPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "crewAvailabilityPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "dataIntegrityPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "destructionPercent": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    },
+    "coherentVesselGraph": {
+      "type": "boolean"
+    },
+    "applicationStatus": {
+      "enum": [
+        "schema-only",
+        "not-applied",
+        "applied",
+        "recalculated"
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "valid",
+        "violations"
+      ],
+      "properties": {
+        "valid": {
+          "type": "boolean"
+        },
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
