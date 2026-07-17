@@ -74,16 +74,27 @@
       "id":"VESSEL-02",
       "order":2,
       "title":"Engineering ledger expansion",
-      "status":"next",
+      "status":"complete",
       "dependsOn":["VESSEL-00","VESSEL-01"],
       "deliverables":["Conventional propulsion and combat delta-v","Armor and shielding ledger","Sensor and fire-control ledger","Weapon support and magazine ledger","Countermeasure ledger","Subsystem technology variants"],
-      "acceptance":["Mass and volume close","Armor derives from area and areal density","Weapons include support and cooling","Combat delta-v is separated from strategic delta-v"]
+      "acceptance":["Mass and volume close","Armor derives from area and areal density","Weapons include support and cooling","Combat delta-v is separated from strategic delta-v"],
+      "completionEvidence":[
+        "blacklight-exo-vessel-engineering-definitions.js",
+        "blacklight-exo-vessel-engineering-runtime.js",
+        "blacklight-exo-vessel-engineering-ui.js",
+        "data/exo-vessel/engineering-registry.json",
+        "data/schemas/exo-vessel-engineering-ledger.schema.json",
+        "data/schemas/exo-vessel-manufacturer.schema.json",
+        "blacklight-exo-vessel-contracts.js",
+        "scripts/validate-exo-vessel-engineering.mjs",
+        "blacklight-exo-vessel.html"
+      ]
     },
     {
       "id":"VESSEL-03",
       "order":3,
       "title":"Semantic module graph",
-      "status":"planned",
+      "status":"next",
       "dependsOn":["VESSEL-02"],
       "deliverables":["Module inventory","Attachment graph","Pressure-zone graph","Structural graph","Utility graph","Weapon arcs and sensor requirements"],
       "acceptance":["INTERNAL modules have valid protected parents","EVA modules have valid vacuum hardpoints","Critical dependencies are connected","Invalid graphs are rejected or visibly repaired"]
