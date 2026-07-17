@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-exo-vessel.css">
+  <link rel="stylesheet" href="blacklight-exo-vessel-philosophy.css">
   <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-ftl-physics-definitions.js" defer></script>
   <script src="blacklight-exo-ftl-operational-definitions.js" defer></script>
@@ -45,7 +46,10 @@
   <script src="blacklight-exo-vessel-definitions.js" defer></script>
   <script src="blacklight-exo-vessel-biology.js" defer></script>
   <script src="blacklight-exo-vessel-core.js" defer></script>
+  <script src="blacklight-exo-vessel-philosophy-definitions.js" defer></script>
+  <script src="blacklight-exo-vessel-philosophy-runtime.js" defer></script>
   <script src="blacklight-exo-vessel-ui.js" defer></script>
+  <script src="blacklight-exo-vessel-philosophy-ui.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-vessel-body">
   <header class="bli-topbar">
@@ -66,7 +70,7 @@
     <div>
       <p class="bli-eyebrow">Black compartment · Charles-authored vessel engineering</p>
       <h1 id="exo-vessel-title">Transit-Capable Vessel Generator.</h1>
-      <p class="bli-lede">I will begin with the machinery that must physically fit inside the ship. The drive, power plant, energy medium, thermal debt, navigation baseline, shielding, biological environment, maintenance access, and mission reserves determine the hull before aesthetics are permitted to pretend otherwise.</p>
+      <p class="bli-lede">I will begin with the machinery that must physically fit inside the ship. The drive, power plant, energy medium, thermal debt, navigation baseline, shielding, biological environment, maintenance access, mission reserves, and originating design philosophy determine the hull before aesthetics are permitted to pretend otherwise.</p>
       <div class="bli-actions">
         <button id="exo-vessel-generate" class="bli-action primary" type="button">Generate Vessel Engineering Record</button>
         <button id="exo-vessel-export" class="bli-action" type="button">Export Vessel JSON</button>
@@ -93,8 +97,8 @@
     <section class="bli-section exo-vessel-controls" aria-labelledby="exo-vessel-controls-title">
       <div class="bli-section-head">
         <p class="bli-eyebrow">Charles // vessel design request</p>
-        <h2 id="exo-vessel-controls-title">Define the mission before asking how large the ship is.</h2>
-        <p>Blank payload uses the selected mission role to derive useful payload from the drive installation. Inherited FTL and biology records remain available, but each engineering assumption can be replaced explicitly.</p>
+        <h2 id="exo-vessel-controls-title">Define the mission and originating design doctrine before asking how large the ship is.</h2>
+        <p>Blank payload uses the selected mission role to derive useful payload from the drive installation. Inherited FTL and biology records remain available. The architectural seed then decides which systems belong inside the pressure-vault and which are maintained as vacuum-exposed modules.</p>
       </div>
       <div class="exo-vessel-control-grid">
         <label><span>Generation seed</span><input id="exo-vessel-seed" type="text" maxlength="120" placeholder="Random vessel seed"></label>
@@ -113,7 +117,7 @@
 
     <section class="exo-vessel-overview" aria-label="Generated vessel overview">
       <article class="exo-vessel-visual-panel">
-        <header><p class="bli-eyebrow">Charles // mass-derived hull reconstruction</p><h2 id="exo-vessel-name">Awaiting generation</h2><p id="exo-vessel-description">Generate a vessel to place the drive, habitat, power, shielding, navigation, and mission volume inside one accountable mass budget.</p></header>
+        <header><p class="bli-eyebrow">Charles // mass-derived hull reconstruction</p><h2 id="exo-vessel-name">Awaiting generation</h2><p id="exo-vessel-description">Generate a vessel to place the drive, habitat, power, shielding, navigation, mission volume, and architectural doctrine inside one accountable mass budget.</p></header>
         <svg id="exo-vessel-visual" class="exo-vessel-visual" viewBox="0 0 700 330" role="img" aria-label="Generated vessel side profile showing drive and habitat allocation"></svg>
         <div id="exo-vessel-badges" class="exo-vessel-badges"></div>
       </article>
@@ -135,6 +139,6 @@
     <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // retained cautions</p><h2>What I refuse to hide behind a clean silhouette.</h2></div><ul id="exo-vessel-warnings" class="exo-vessel-warning-list"></ul></section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO transit-capable vessel engineering, xenological life support, power, protection, and maintenance analysis.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO transit-capable vessel engineering, xenological life support, architectural germination, power, protection, and maintenance analysis.</footer>
 </body>
 </html>
