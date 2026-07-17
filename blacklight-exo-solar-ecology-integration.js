@@ -58,7 +58,9 @@
 
   function enrichActiveSystem() {
     const system=globalThis.BlacklightExoGetActiveSystem?.();if(!system)return null;
-    core.enrichSystem(system,{seed:system.seed});cache.set(system.seed,clone(system.ecologySummary));
+    core.enrichSystem(system,{seed:system.seed});
+    system.resourceTotals.biospheres=(system.ecologySummary.living||0)+(system.ecologySummary.pseudo||0);
+    cache.set(system.seed,clone(system.ecologySummary));
     updateResourceIndex(system);updateButton(system);decorateInspector(system);
     document.dispatchEvent(new CustomEvent('blacklight:ecology-system-enriched',{detail:{seed:system.seed,summary:clone(system.ecologySummary)}}));
     return system;
