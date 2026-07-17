@@ -115,16 +115,29 @@
       "id":"VESSEL-04",
       "order":4,
       "title":"Crude three-dimensional voxel assembler",
-      "status":"next",
+      "status":"complete",
       "dependsOn":["VESSEL-03"],
       "deliverables":["Adaptive voxel scale","Monocoque, spine, cluster, ring, and hybrid algorithms","Module packing","Utility routing","Access paths","Armor and external module representation","Basic 3D viewer"],
-      "acceptance":["All volumes fit","Load paths and clearances validate","Same seed reproduces same layout","Species and manufacturer visibly affect arrangement"]
+      "acceptance":["All volumes fit","Load paths and clearances validate","Same seed reproduces same layout","Species and manufacturer visibly affect arrangement"],
+      "completionEvidence":[
+        "blacklight-exo-vessel-voxel-definitions.js",
+        "blacklight-exo-vessel-voxel-core.js",
+        "blacklight-exo-vessel-voxel-routing.js",
+        "blacklight-exo-vessel-voxel-runtime.js",
+        "blacklight-exo-vessel-voxel-contracts.js",
+        "blacklight-exo-vessel-voxel-ui.js",
+        "data/exo-vessel/voxel-layout-registry.json",
+        "data/schemas/exo-vessel-voxel-layout.schema.json",
+        "data/schemas/exo-vessel-module.schema.json",
+        "scripts/validate-exo-vessel-voxels.mjs",
+        "blacklight-exo-vessel.html"
+      ]
     },
     {
       "id":"VESSEL-05",
       "order":5,
       "title":"Condition, history, salvage, and destruction",
-      "status":"planned",
+      "status":"next",
       "dependsOn":["VESSEL-04"],
       "deliverables":["Construction completion","Commissioning","Wear","Damage events","Secondary propagation","Teardown and mothballing","Abandonment and salvage","Wreck and total destruction","History log"],
       "acceptance":["Missing, removed, damaged, and salvaged remain distinct","Seventy-five percent destruction leaves coherent wreckage","One hundred percent destruction removes vessel coherence","Statistics recalculate from surviving graphs"]
