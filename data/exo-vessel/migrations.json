@@ -1,0 +1,65 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "migrationRegistryVersion": "1.0.0",
+  "canonicalSchemaVersion": "1.0.0",
+  "policy": {
+    "strategy": "append-only-envelope",
+    "preserveUnknownFields": true,
+    "preserveLegacyPayloadShape": true,
+    "destructiveMigrationAllowed": false,
+    "idempotent": true,
+    "deterministicOutsideTimestamps": true
+  },
+  "migrations": [
+    {
+      "id": "exo-vessel-v1-to-contract-1.0.0",
+      "from": {
+        "recordVersion": 1
+      },
+      "to": {
+        "recordVersion": 3,
+        "schemaVersion": "1.0.0"
+      },
+      "operations": [
+        "Preserve the complete version-1 vessel record.",
+        "Apply the version-2 architecture philosophy envelope when absent.",
+        "Append the canonical contract envelope.",
+        "Generate deterministic identifiers and seed lineage.",
+        "Assign principal technology band and bounded subsystem variants.",
+        "Create an initial condition record without removing engineering data."
+      ]
+    },
+    {
+      "id": "exo-vessel-v2-to-contract-1.0.0",
+      "from": {
+        "recordVersion": 2
+      },
+      "to": {
+        "recordVersion": 3,
+        "schemaVersion": "1.0.0"
+      },
+      "operations": [
+        "Preserve every version-2 engineering and design-philosophy field in place.",
+        "Append the canonical contract envelope.",
+        "Generate deterministic identifiers and seed lineage.",
+        "Assign principal technology band and bounded subsystem variants.",
+        "Create an initial condition record and derived-layer status ledger."
+      ]
+    },
+    {
+      "id": "exo-vessel-contract-1.0.0-normalize",
+      "from": {
+        "recordVersion": 3,
+        "schemaVersion": "1.0.0"
+      },
+      "to": {
+        "recordVersion": 3,
+        "schemaVersion": "1.0.0"
+      },
+      "operations": [
+        "Validate identifiers, technology variants, condition axes, provenance, and layer statuses.",
+        "Return the record unchanged when already canonical."
+      ]
+    }
+  ]
+}
