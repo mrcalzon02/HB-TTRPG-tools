@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-record.schema.json",
+  "title": "Blacklight EXO Vessel Record",
+  "description": "Canonical append-only vessel record. Existing engineering and design-philosophy fields remain in place while the contract envelope supplies versioned identifiers, technology discipline, condition axes, provenance, and migration history.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "version", "author", "seed", "generatedAt", "identity", "hull", "drive", "lifeSupport",
+    "power", "fuel", "thermal", "protection", "navigation", "maintenance", "warnings", "contract"
+  ],
+  "properties": {
+    "version": {"const": 3},
+    "author": {"const": "Charles"},
+    "seed": {"type": "string", "minLength": 1, "maxLength": 256},
+    "generatedAt": {"type": "string", "format": "date-time"},
+    "identity": {"type": "object"},
+    "hull": {
+      "type": "object",
+      "required": ["totalMassTonnes", "totalVolumeM3", "massBudget"],
+      "properties": {
+        "totalMassTonnes": {"type": "number", "exclusiveMinimum": 0},
+        "totalVolumeM3": {"type": "number", "exclusiveMinimum": 0},
+        "massBudget": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["key", "label", "massTonnes", "volumeM3"],
+            "properties": {
+              "key": {"type": "string", "minLength": 1},
+              "label": {"type": "string", "minLength": 1},
+              "massTonnes": {"type": "number", "minimum": 0},
+              "volumeM3": {"type": "number", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "drive": {"type": "object"},
+    "lifeSupport": {"type": "object"},
+    "power": {"type": "object"},
+    "fuel": {"type": "object"},
+    "thermal": {"type": "object"},
+    "protection": {"type": "object"},
+    "navigation": {"type": "object"},
+    "maintenance": {"type": "object"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "contract": {"$ref": "#/$defs/contractEnvelope"}
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^(species|org|mfr|hull|vessel)-[a-z0-9][a-z0-9-]{5,95}$"
+    },
+    "seedRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "speciesSeed", "organizationSeed", "manufacturerSeed", "hullFamilySeed", "vesselInstanceSeed",
+        "layoutSeed", "equipmentSeed", "conditionSeed", "historySeed"
+      ],
+      "properties": {
+        "speciesSeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "organizationSeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "manufacturerSeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "hullFamilySeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "vesselInstanceSeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "layoutSeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "equipmentSeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "conditionSeed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "historySeed": {"type": "string", "minLength": 1, "maxLength": 256}
+      }
+    },
+    "technologyVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subsystemKey", "label", "principalBand", "variant", "offset", "technologyIndex",
+        "heritageBand", "source", "rationale", "explicitOverride"
+      ],
+      "properties": {
+        "subsystemKey": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "principalBand": {"enum": ["T-1", "P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "variant": {"enum": ["LEGACY", "STANDARD", "REFINED", "ADVANCED", "PROTOTYPE"]},
+        "offset": {"type": "number", "minimum": -0.3, "maximum": 0.3},
+        "technologyIndex": {"type": "number", "minimum": -1.3, "maximum": 6.3},
+        "heritageBand": {"enum": ["T-1", "P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "source": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1},
+        "explicitOverride": {"type": "boolean"}
+      }
+    },
+    "technologyRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principalBand", "principalRank", "pathLevelKey", "policyVersion", "allowedOffsetMinimum",
+        "allowedOffsetMaximum", "subsystemVariants", "validation"
+      ],
+      "properties": {
+        "principalBand": {"enum": ["T-1", "P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "principalRank": {"type": "integer", "minimum": -1, "maximum": 6},
+        "pathLevelKey": {"type": ["string", "null"]},
+        "policyVersion": {"const": "1.0.0"},
+        "allowedOffsetMinimum": {"const": -0.3},
+        "allowedOffsetMaximum": {"const": 0.3},
+        "subsystemVariants": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/technologyVariant"}},
+        "validation": {"$ref": "#/$defs/validationRecord"}
+      }
+    },
+    "conditionAxes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constructionCompletionPercent", "commissioningCompletionPercent", "operationalReadinessPercent",
+        "structuralDamagePercent", "systemDamagePercent", "salvageRemovalPercent", "decommissioningPercent",
+        "maintenanceDebtPercent", "fuelLoadPercent", "coolantLoadPercent", "atmosphereIntegrityPercent",
+        "contaminationPercent", "crewAvailabilityPercent", "dataIntegrityPercent", "destructionPercent"
+      ],
+      "properties": {
+        "constructionCompletionPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "commissioningCompletionPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "operationalReadinessPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "structuralDamagePercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "systemDamagePercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "salvageRemovalPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "decommissioningPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "maintenanceDebtPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "fuelLoadPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "coolantLoadPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "atmosphereIntegrityPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "contaminationPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "crewAvailabilityPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "dataIntegrityPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "destructionPercent": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    },
+    "conditionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "template", "serviceDoctrine", "axes", "coherentVesselGraph", "applicationStatus", "validation"],
+      "properties": {
+        "schemaVersion": {"const": "1.0.0"},
+        "template": {"enum": [
+          "NEWLY_MANUFACTURED", "PARTIALLY_COMPLETED", "COMMISSIONING", "OPERATIONAL", "WORN_SERVICE",
+          "PARTIALLY_TORN_DOWN", "MOTHBALLED", "ABANDONED", "PARTIALLY_SALVAGED", "DAMAGED",
+          "CRIPPLED", "WRECKED", "DESTROYED"
+        ]},
+        "serviceDoctrine": {"enum": [
+          "CIVILIAN", "MERCHANT", "PASSENGER", "INDUSTRIAL", "SCIENTIFIC", "COLONIAL",
+          "GOVERNMENT", "PARAMILITARY", "MILITARY", "PIRATE_OR_IRREGULAR", "ABANDONED_OR_UNKNOWN"
+        ]},
+        "axes": {"$ref": "#/$defs/conditionAxes"},
+        "coherentVesselGraph": {"type": "boolean"},
+        "applicationStatus": {"enum": ["schema-only", "not-applied", "applied", "recalculated"]},
+        "validation": {"$ref": "#/$defs/validationRecord"}
+      }
+    },
+    "derivedLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "status", "version", "source"],
+      "properties": {
+        "key": {"enum": [
+          "engineeringBaseline", "architectureAdjustedMassLedger", "powerAndThermalLedger",
+          "armorAndProtectionLedger", "sensorAndNavigationLedger", "maneuverAndDeltaVLedger",
+          "weaponInventory", "countermeasureInventory", "moduleGraph", "voxelLayout",
+          "damageTopology", "combatEnvelope", "gameplayStatBlock", "actionSet"
+        ]},
+        "status": {"enum": ["unimplemented", "planned", "generated", "validated", "stale", "damaged"]},
+        "version": {"type": ["string", "null"]},
+        "source": {"type": "string", "minLength": 1},
+        "notes": {"type": "string"}
+      }
+    },
+    "migrationEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["migrationId", "fromRecordVersion", "toRecordVersion", "toSchemaVersion", "strategy", "preservedUnknownFields"],
+      "properties": {
+        "migrationId": {"type": "string", "minLength": 1},
+        "fromRecordVersion": {"type": "integer", "minimum": 1},
+        "toRecordVersion": {"const": 3},
+        "toSchemaVersion": {"const": "1.0.0"},
+        "strategy": {"const": "append-only-envelope"},
+        "preservedUnknownFields": {"const": true}
+      }
+    },
+    "validationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "violations"],
+      "properties": {
+        "valid": {"type": "boolean"},
+        "violations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "contractEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType", "schemaVersion", "contractVersion", "revision", "createdAt", "updatedAt",
+        "identifiers", "seeds", "technology", "condition", "derivedLayers", "provenance",
+        "migration", "validation", "extensions"
+      ],
+      "properties": {
+        "recordType": {"const": "exoVessel"},
+        "schemaVersion": {"const": "1.0.0"},
+        "contractVersion": {"const": 1},
+        "revision": {"type": "integer", "minimum": 1},
+        "createdAt": {"type": "string", "format": "date-time"},
+        "updatedAt": {"type": "string", "format": "date-time"},
+        "identifiers": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["speciesId", "organizationId", "manufacturerId", "hullFamilyId", "vesselInstanceId"],
+          "properties": {
+            "speciesId": {"$ref": "#/$defs/identifier"},
+            "organizationId": {"$ref": "#/$defs/identifier"},
+            "manufacturerId": {"$ref": "#/$defs/identifier"},
+            "hullFamilyId": {"$ref": "#/$defs/identifier"},
+            "vesselInstanceId": {"$ref": "#/$defs/identifier"}
+          }
+        },
+        "seeds": {"$ref": "#/$defs/seedRecord"},
+        "technology": {"$ref": "#/$defs/technologyRecord"},
+        "condition": {"$ref": "#/$defs/conditionRecord"},
+        "derivedLayers": {"type": "array", "minItems": 14, "maxItems": 14, "items": {"$ref": "#/$defs/derivedLayer"}},
+        "provenance": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["generatorId", "generatorVersion", "sourceRecordVersion", "sourceType", "registry", "governingGuide"],
+          "properties": {
+            "generatorId": {"const": "blacklight-exo-vessel-generator"},
+            "generatorVersion": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+            "sourceRecordVersion": {"type": "integer", "minimum": 1},
+            "sourceType": {"type": "string", "minLength": 1},
+            "registry": {"const": "data/exo-vessel/vessel-contract-registry.json"},
+            "governingGuide": {"const": "EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md"}
+          }
+        },
+        "migration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["policyVersion", "history"],
+          "properties": {
+            "policyVersion": {"const": "1.0.0"},
+            "history": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/migrationEvent"}}
+          }
+        },
+        "validation": {"$ref": "#/$defs/validationRecord"},
+        "extensions": {"type": "object"}
+      }
+    }
+  }
+}
