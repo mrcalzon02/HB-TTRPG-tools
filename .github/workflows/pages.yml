@@ -138,6 +138,9 @@ jobs:
       - name: Validate EXO species-specific manufacturers
         run: node scripts/validate-exo-vessel-manufacturers.mjs
 
+      - name: Validate EXO vessel expanded engineering ledger
+        run: node scripts/validate-exo-vessel-engineering.mjs
+
       - name: Validate phased EXO vessel system roadmap
         run: node scripts/validate-exo-vessel-roadmap.mjs
 
