@@ -26,16 +26,20 @@
     const explicit=input.manufacturerProfile||dom('exo-vessel-archetype');
     if(explicit&&explicit!=='inherit'&&archetypes[explicit])return{key:explicit,reason:'The cultural architecture family was selected explicitly.'};
     const d=dossier(source),species=d?.species||{},civilization=d?.civilization||{},system=d?.system||{},role=result.identity?.roleKey||input.role||'explorer';
-    const text=[species.environment,species.bodyPlan,species.chemistry,species.adaptation,species.cognition,civilization.government,civilization.economy,civilization.warfare,(civilization.values||[]).join(' '),system.state,system.economy,system.traffic,role].join(' ').toLowerCase();
+    const hasCulture=Boolean(d?.species||d?.civilization);
+    const text=[species.environment,species.bodyPlan,species.chemistry,species.adaptation,species.cognition,civilization.government,civilization.economy,civilization.warfare,(civilization.values||[]).join(' '),system.state,system.economy,system.traffic,hasCulture?'':role].join(' ').toLowerCase();
     const score={VAULT_KEEPER:0,VOID_NOMAD:0,CORP_LOGISTICS:0,APEX_WARLORD:0};
     const add=(key,pattern,value)=>{if(pattern.test(text))score[key]+=value;};
     add('VAULT_KEEPER',/subterranean|high-gravity|high-pressure|icebound|cryosphere|ocean|pressure|continuity|custodian|archive|colony|passenger/,4);
     add('VOID_NOMAD',/scaveng|salvage|relic|nomad|migrat|decentral|clan|distributed|collective|frontier|departed|militia/,4);
     add('CORP_LOGISTICS',/corporate|commercial|merchant|tanker|logistics|standardized|concession|export|traffic|transit-service|market/,4);
     add('APEX_WARLORD',/military|warship|fortress|siege|contested|orbital denial|fleet|warfare|stewardship/,4);
-    ({warship:'APEX_WARLORD',merchant:'CORP_LOGISTICS',tanker:'CORP_LOGISTICS',courier:'CORP_LOGISTICS',explorer:'VOID_NOMAD',science:'VAULT_KEEPER',passenger:'VAULT_KEEPER',colony:'VAULT_KEEPER'})[role]&&(score[({warship:'APEX_WARLORD',merchant:'CORP_LOGISTICS',tanker:'CORP_LOGISTICS',courier:'CORP_LOGISTICS',explorer:'VOID_NOMAD',science:'VAULT_KEEPER',passenger:'VAULT_KEEPER',colony:'VAULT_KEEPER'})[role]]+=2);
+    if(!hasCulture){
+      const fallback=({warship:'APEX_WARLORD',merchant:'CORP_LOGISTICS',tanker:'CORP_LOGISTICS',courier:'CORP_LOGISTICS',explorer:'VOID_NOMAD',science:'VAULT_KEEPER',passenger:'VAULT_KEEPER',colony:'VAULT_KEEPER'})[role];
+      if(fallback)score[fallback]+=2;
+    }
     const key=Object.entries(score).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0][0];
-    return{key,reason:`The ${archetypes[key].label} cultural baseline was inferred from biology, environment, government, economy, warfare, and ${result.identity?.role||role} mission pressures.`};
+    return{key,reason:`The ${archetypes[key].label} cultural baseline was inferred from the originating biology, environment, government, economy, and warfare doctrine${hasCulture?'':`, with ${result.identity?.role||role} used only because no originating culture was available`}.`};
   }
   function sourceIdentity(seed,result,source){
     const d=dossier(source),speciesName=d?.species?.name||result.lifeSupport?.profile?.sourceSpecies||'Reference Species',speciesCommon=d?.species?.commonName||String(speciesName).split(/\s+/)[0],organizationName=d?.civilization?.government||d?.civilization?.economy||'Independent Vessel Authority';
