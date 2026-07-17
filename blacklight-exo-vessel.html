@@ -50,10 +50,13 @@
   <script src="blacklight-exo-vessel-manufacturer-definitions.js" defer></script>
   <script src="blacklight-exo-vessel-manufacturer-runtime.js" defer></script>
   <script src="blacklight-exo-vessel-philosophy-runtime.js" defer></script>
+  <script src="blacklight-exo-vessel-engineering-definitions.js" defer></script>
+  <script src="blacklight-exo-vessel-engineering-runtime.js" defer></script>
   <script src="blacklight-exo-vessel-contracts.js" defer></script>
   <script src="blacklight-exo-vessel-ui.js" defer></script>
   <script src="blacklight-exo-vessel-philosophy-ui.js" defer></script>
   <script src="blacklight-exo-vessel-manufacturer-ui.js" defer></script>
+  <script src="blacklight-exo-vessel-engineering-ui.js" defer></script>
   <script src="blacklight-exo-vessel-contract-ui.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-vessel-body">
@@ -75,7 +78,7 @@
     <div>
       <p class="bli-eyebrow">Black compartment · Charles-authored vessel engineering</p>
       <h1 id="exo-vessel-title">Transit-Capable Vessel Generator.</h1>
-      <p class="bli-lede">I will begin with the machinery that must physically fit inside the ship. The drive, power plant, energy medium, thermal debt, navigation baseline, shielding, biological environment, maintenance access, mission reserves, and originating design philosophy determine the hull before aesthetics are permitted to pretend otherwise.</p>
+      <p class="bli-lede">I will begin with the machinery that must physically fit inside the ship. The drive, power plant, energy medium, conventional reaction mass, thermal debt, navigation baseline, armor, sensors, fire control, biological environment, maintenance access, mission reserves, manufacturer doctrine, and combat-support machinery determine the hull before aesthetics are permitted to pretend otherwise.</p>
       <div class="bli-actions">
         <button id="exo-vessel-generate" class="bli-action primary" type="button">Generate Vessel Engineering Record</button>
         <button id="exo-vessel-export" class="bli-action" type="button">Export Vessel JSON</button>
@@ -103,7 +106,7 @@
       <div class="bli-section-head">
         <p class="bli-eyebrow">Charles // vessel design request</p>
         <h2 id="exo-vessel-controls-title">Define the mission and originating design doctrine before asking how large the ship is.</h2>
-        <p>Blank payload uses the selected mission role to derive useful payload from the drive installation. Inherited FTL and biology records remain available. The architectural seed then decides which systems belong inside the pressure-vault and which are maintained as vacuum-exposed modules.</p>
+        <p>Blank payload uses the selected mission role to derive useful payload from the drive installation. Inherited FTL and biology records remain available. The architectural seed decides which systems belong inside the pressure-vault and which are maintained as vacuum-exposed modules; the selected combat fit then reclassifies part of the payload and growth allowance into complete installed weapon and countermeasure systems.</p>
       </div>
       <div class="exo-vessel-control-grid">
         <label><span>Generation seed</span><input id="exo-vessel-seed" type="text" maxlength="120" placeholder="Random vessel seed"></label>
@@ -122,7 +125,7 @@
 
     <section class="exo-vessel-overview" aria-label="Generated vessel overview">
       <article class="exo-vessel-visual-panel">
-        <header><p class="bli-eyebrow">Charles // mass-derived hull reconstruction</p><h2 id="exo-vessel-name">Awaiting generation</h2><p id="exo-vessel-description">Generate a vessel to place the drive, habitat, power, shielding, navigation, mission volume, and architectural doctrine inside one accountable mass budget.</p></header>
+        <header><p class="bli-eyebrow">Charles // mass-derived hull reconstruction</p><h2 id="exo-vessel-name">Awaiting generation</h2><p id="exo-vessel-description">Generate a vessel to place the drive, habitat, power, armor, sensors, reaction mass, mission volume, combat support, and architectural doctrine inside one accountable loaded-mass budget.</p></header>
         <svg id="exo-vessel-visual" class="exo-vessel-visual" viewBox="0 0 700 330" role="img" aria-label="Generated vessel side profile showing drive and habitat allocation"></svg>
         <div id="exo-vessel-badges" class="exo-vessel-badges"></div>
       </article>
@@ -135,7 +138,7 @@
       </aside>
     </section>
 
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // complete mass ledger</p><h2>Every major system must appear in the loaded mass.</h2><p>The ledger separates the active drive from its foundations and service access, then records the power plant, fuel containment, heat rejection, habitat, shielding, navigation, maintenance, structure, maneuver systems, payload, and unspent growth margin.</p></div><div class="exo-vessel-table-wrap"><table class="exo-vessel-table"><thead><tr><th>System</th><th>Mass</th><th>Loaded share</th><th>Volume</th><th>Engineering basis</th></tr></thead><tbody id="exo-vessel-mass-body"></tbody></table></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // complete mass ledger</p><h2>Every major system must appear in the loaded mass.</h2><p>The ledger separates the active FTL drive from its foundations and service access, then records ship power, FTL fuel containment, conventional engines and reaction mass, heat rejection, habitat, passive armor, active protection, sensors, fire control, electronic warfare, weapon machinery, magazines, countermeasures, maintenance, structure, payload, and remaining growth margin.</p></div><div class="exo-vessel-table-wrap"><table class="exo-vessel-table"><thead><tr><th>System</th><th>Mass</th><th>Loaded share</th><th>Volume</th><th>Engineering basis</th></tr></thead><tbody id="exo-vessel-mass-body"></tbody></table></div></section>
     <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // drive integration</p><h2>How the transit machine constitutes the ship.</h2></div><div id="exo-vessel-drive-grid" class="exo-vessel-grid"></div></section>
     <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // power, fuel, and heat</p><h2>What must be generated, stored, contained, and rejected.</h2></div><div id="exo-vessel-power-grid" class="exo-vessel-grid"></div></section>
     <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // biological accommodation</p><h2>What the crew must continuously breathe, inhabit, consume, and survive.</h2></div><div id="exo-vessel-life-grid" class="exo-vessel-grid"></div></section>
@@ -144,6 +147,6 @@
     <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // retained cautions</p><h2>What I refuse to hide behind a clean silhouette.</h2></div><ul id="exo-vessel-warnings" class="exo-vessel-warning-list"></ul></section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO transit-capable vessel engineering, xenological life support, architectural germination, power, protection, and maintenance analysis.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO transit-capable vessel engineering, xenological life support, manufacturer doctrine, architecture, propulsion, armor, sensors, power, combat support, protection, and maintenance analysis.</footer>
 </body>
 </html>
