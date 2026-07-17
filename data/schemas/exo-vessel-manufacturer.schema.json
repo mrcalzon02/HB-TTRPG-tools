@@ -165,6 +165,20 @@
         "weaponFamilies": {"type": "array", "uniqueItems": true, "items": {"enum": ["CHEMICAL_BALLISTIC", "RAIL_GUN", "COIL_GUN", "BRUTE_MASS_THROWER", "SAND_GUN", "LASER", "PARTICLE_BEAM", "FRACTIONAL_C", "MISSILE"]}},
         "countermeasureMassTonnes": {"type": "number", "minimum": 0}
       }
+    },
+    "realizedModuleGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topology", "moduleCount", "pressureZoneCount", "internalModuleCount", "evaModuleCount", "weaponHardpointCount", "repairCount"],
+      "properties": {
+        "topology": {"enum": ["MONOCOQUE", "SPINE", "CLUSTER", "RING", "HYBRID"]},
+        "moduleCount": {"type": "integer", "minimum": 1},
+        "pressureZoneCount": {"type": "integer", "minimum": 0},
+        "internalModuleCount": {"type": "integer", "minimum": 0},
+        "evaModuleCount": {"type": "integer", "minimum": 0},
+        "weaponHardpointCount": {"type": "integer", "minimum": 0},
+        "repairCount": {"type": "integer", "minimum": 0}
+      }
     }
   },
   "$defs": {
