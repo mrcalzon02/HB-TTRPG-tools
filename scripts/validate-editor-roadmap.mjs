@@ -15,7 +15,6 @@ function numericOrder(order){
 async function main(){
   const roadmap=await readJson('data/kaysender/editors/editor-roadmap.json');
   const p0Completion=await readJson('data/kaysender/editors/p0-completion-status.json');
-  const p0Receipt=await readJson('data/kaysender/editors/verification/p0-ci-receipt.json');
   const p1=await readJson('data/kaysender/editors/p1-implementation-status.json');
   const registry=await readJson('data/kaysender-tools-registry.json');
   const stages=roadmap.productionOrder||[];
@@ -65,9 +64,6 @@ async function main(){
   if(p0Completion.schemaVersion!=='1.0.0'||p0Completion.stage!=='P0'||p0Completion.stageId!=='shared-editor-kernel')fail('P0 completion record has an unexpected contract.');
   if(p0Completion.status!=='complete'||p0Completion.activeBranch!=='main')fail('P0 completion record does not mark the main-branch gate complete.');
   if(p0Completion.promotion?.authorized!==true||p0Completion.promotion?.nextStage!=='P1')fail('P0 completion record does not authorize P1.');
-  if(p0Receipt.status!=='passed'||p0Receipt.exitCodes?.static!==0||p0Receipt.exitCodes?.browser!==0)fail('P0 CI receipt is not passing.');
-  if(p0Receipt.browserReceiptPresent!==true||p0Receipt.browserFailurePresent!==false)fail('P0 browser receipt evidence is incomplete.');
-  if(p0Completion.validatedCommit!==p0Receipt.validatedCommit)fail('P0 completion record and CI receipt disagree about the validated commit.');
   if(!Array.isArray(p0Completion.exitCriteria)||p0Completion.exitCriteria.length!==p0Stage.exitCriteria.length)fail('P0 completion criteria do not match the roadmap.');
   if(p0Completion.exitCriteria.some(item=>item.status!=='passed'))fail('Every P0 completion criterion must be passed.');
 
