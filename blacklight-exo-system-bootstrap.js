@@ -33,12 +33,15 @@
       }
       await loadStyle('blacklight-exo-orbital-layout.css');
       await loadStyle('blacklight-exo-campaign-facilities.css');
+      await load('blacklight-exo-ecology-core.js');
       await load('blacklight-exo-imagery.js');
       await load('blacklight-exo-orbital-layout.js');
       await load('blacklight-exo-sol-campaign-data.js');
       await load('blacklight-exo-solar-system-v6.js');
+      await load('blacklight-exo-solar-ecology-integration.js');
       await load('blacklight-exo-speed-controls.js');
       await load('blacklight-exo-cluster.js');
+      await load('blacklight-exo-cluster-ecology-integration.js');
     } catch (error) {
       console.error('[Blacklight EXO] System bootstrap failed:', error);
       const empty = document.getElementById('exo-orbit-empty');
