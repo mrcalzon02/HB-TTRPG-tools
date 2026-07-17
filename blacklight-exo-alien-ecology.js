@@ -72,6 +72,16 @@
     return 'temperate terrestrial';
   }
 
+  function synchronizeSelectedWorld() {
+    if (!sourceContext?.system || !sourceContext.selectedWorld) return;
+    const replacement=clone(sourceContext.selectedWorld);
+    for (const planet of sourceContext.system.planets || []) {
+      if (planet.id===replacement.id) { Object.assign(planet,replacement); return; }
+      const moon=(planet.moons||[]).find(item=>item.id===replacement.id);
+      if (moon) { Object.assign(moon,replacement); return; }
+    }
+  }
+
   function card(label,title,text) {
     const article=document.createElement('article'),small=document.createElement('small'),heading=document.createElement('h3'),paragraph=document.createElement('p');
     article.className='exo-ecology-card';small.textContent=label;heading.textContent=title;paragraph.textContent=text;article.append(small,heading,paragraph);return article;
@@ -130,6 +140,7 @@
     if (ecology.classification.overlay==='populated' && /^No|^Unknown|^None/i.test(String(sourceContext.selectedWorld.civilization||''))) sourceContext.selectedWorld.civilization='Generated populated-world designation';
     if (ecology.classification.overlay==='ruined') sourceContext.selectedWorld.civilization='Extinct or ruined civilization record';
     sourceContext.environment=mapEnvironmentForDossier(ecology);sourceContext.dossierSeed=`${seed}:system-dossier`;sourceContext.ecology=clone(ecology);
+    synchronizeSelectedWorld();
     render();
   }
 
@@ -139,6 +150,7 @@
 
   function continueToDossier() {
     if (!ecology) generate();
+    synchronizeSelectedWorld();
     const payload={version:1,systemSeed:sourceContext.systemSeed||sourceContext.system.seed,dossierSeed:sourceContext.dossierSeed,environment:sourceContext.environment,system:clone(sourceContext.system),selectedWorld:clone(sourceContext.selectedWorld),ecology:clone(ecology),source:'ecology'};
     localStorage.setItem(SOURCE_KEY,JSON.stringify(payload));localStorage.setItem(ECOLOGY_KEY,JSON.stringify(payload));
     location.href=`blacklight-exo-species-civilization.html?source=solar&systemSeed=${encodeURIComponent(payload.systemSeed)}&worldId=${encodeURIComponent(payload.selectedWorld.id)}&seed=${encodeURIComponent(payload.dossierSeed)}`;
