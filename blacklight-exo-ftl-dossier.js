@@ -85,7 +85,7 @@
   }
 
   function allReportSections() {
-    return [...document.querySelectorAll('main > .bli-section, main > section.bli-section')];
+    return [...document.querySelectorAll('main > .bli-section, main > section.bli-section')].filter(section => !section.hidden);
   }
 
   function buildIndex(sections) {
