@@ -108,71 +108,8 @@ jobs:
         if: always() && (steps.p0_static.outputs.status != '0' || steps.p0_browser.outputs.status != '0')
         run: exit 1
 
-  p0-editor-receipt:
-    needs: p0-editor-gate
-    if: always() && github.actor != 'github-actions[bot]'
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download P0 evidence
-        uses: actions/download-artifact@v4
-        with:
-          name: p0-browser-verification
-          path: p0-evidence
-
-      - name: Record P0 CI result
-        env:
-          VALIDATED_SHA: ${{ github.sha }}
-          P0_JOB_RESULT: ${{ needs.p0-editor-gate.result }}
-        run: |
-          node - <<'NODE'
-          const fs=require('node:fs');
-          const path=require('node:path');
-          const root='p0-evidence';
-          const locate=name=>{
-            const direct=path.join(root,name);
-            if(fs.existsSync(direct))return direct;
-            const nested=path.join(root,'artifacts',name);
-            return fs.existsSync(nested)?nested:null;
-          };
-          const read=name=>{const file=locate(name);return file?fs.readFileSync(file,'utf8').trim():'';};
-          const lines=name=>read(name).split('\n').filter(Boolean).slice(-240);
-          const staticCode=Number(read('p0-static-status.txt')||1);
-          const browserCode=Number(read('p0-browser-status.txt')||1);
-          const receipt={
-            receiptType:'kaysenderP0CiReceipt',
-            setting:'Kaysender',
-            stage:'P0',
-            stageId:'shared-editor-kernel',
-            status:staticCode===0&&browserCode===0&&process.env.P0_JOB_RESULT==='success'?'passed':'failed',
-            validatedCommit:process.env.VALIDATED_SHA,
-            workflow:'.github/workflows/pages.yml',
-            validators:{static:'scripts/validate-editor-runtime-structure.mjs',browser:'scripts/run-p0-browser-verification.mjs',receipt:'scripts/validate-p0-browser-verification.mjs'},
-            exitCodes:{static:staticCode,browser:browserCode},
-            artifact:'p0-browser-verification',
-            browserReceiptPresent:Boolean(locate('p0-browser-verification.json')),
-            browserFailurePresent:Boolean(locate('p0-browser-verification-failure.json')),
-            staticOutput:lines('p0-static-output.txt'),
-            browserOutput:lines('p0-browser-output.txt'),
-            recordedAt:new Date().toISOString()
-          };
-          fs.mkdirSync('data/kaysender/editors/verification',{recursive:true});
-          fs.writeFileSync('data/kaysender/editors/verification/p0-ci-receipt.json',`${JSON.stringify(receipt,null,2)}\n`);
-          NODE
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/kaysender/editors/verification/p0-ci-receipt.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Record Kaysender P0 CI result [skip ci]"
-            git push
-          fi
-
   deploy:
-    needs: [p0-editor-gate, p0-editor-receipt]
+    needs: p0-editor-gate
     environment:
       name: github-pages
     runs-on: ubuntu-latest
