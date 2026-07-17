@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | FTL Technology Hierarchy</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="blacklight-exo-ftl.css">
+  <link rel="stylesheet" href="blacklight-exo-integration.css">
+  <script src="blacklight-exo-ftl-physics-definitions.js" defer></script>
+  <script src="blacklight-exo-ftl-operational-definitions.js" defer></script>
+  <script src="blacklight-exo-ftl-runtime.js" defer></script>
+  <script src="blacklight-exo-ftl-core.js" defer></script>
+  <script src="blacklight-exo-ftl.js" defer></script>
+</head>
+<body class="blacklight-corp-body exo-ftl-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-exo-operations.html" aria-label="Return to EXO Operations">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>EXO Transit Engineering</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="EXO FTL navigation">
+      <a href="blacklight-exo-operations.html">EXO Operations</a>
+      <a href="blacklight-exo-solar-system.html">Solar Systems</a>
+      <a href="blacklight-exo-species-civilization.html">System Dossiers</a>
+      <a href="blacklight-exo-stellar-government.html">Stellar Government</a>
+      <a href="blacklight-systems-black.html">Black Archive</a>
+    </nav>
+  </header>
+
+  <section class="bli-hero exo-ftl-hero" aria-labelledby="exo-ftl-title">
+    <div>
+      <p class="bli-eyebrow">Black compartment · Superluminal transit, dimensional mechanics, and strategic mobility</p>
+      <h1 id="exo-ftl-title">FTL Technology Hierarchy.</h1>
+      <p class="bli-lede">Generate technically differentiated sublight, near-light, and superluminal drive architectures. Every system is rated in effective light-time compression, AU traveled per second, minute, hour, and day, percentage of light speed or percentage beyond light speed, range, spool time, emergence accuracy, power demand, fuel mass, gravity-gradient limits, dimensional requirements, and edge-case operating hazards.</p>
+      <div class="bli-actions">
+        <button id="exo-ftl-generate" class="bli-action primary" type="button">Generate FTL Architecture</button>
+        <button id="exo-ftl-export" class="bli-action" type="button">Export FTL JSON</button>
+      </div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Current FTL architecture summary">
+      <div class="bli-directory-title">Current Transit System</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Architecture</strong><span id="exo-ftl-summary-name" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Tier</strong><span id="exo-ftl-summary-tier" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Effective speed</strong><span id="exo-ftl-summary-speed" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Risk</strong><span id="exo-ftl-summary-risk" class="bli-arrow">pending</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="bli-shell exo-ftl-shell">
+    <section class="bli-section exo-ftl-controls" aria-labelledby="exo-ftl-controls-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Engineering and route parameters</p>
+        <h2 id="exo-ftl-controls-title">Define the machine, its technological maturity, and the route being attempted.</h2>
+        <p>Clean-space drive ratings and route-degraded performance remain separate. A drive may possess an enormous theoretical compression factor while becoming slow, inaccurate, or prohibited near gravity wells, multiple-star barycenters, compact objects, magnetospheres, or disturbed Q/N-dimensional terrain.</p>
+      </div>
+      <div class="exo-ftl-control-grid">
+        <label><span>Generation seed</span><input id="exo-ftl-seed" type="text" maxlength="100" placeholder="Random seed"></label>
+        <label><span>Technology tier</span><select id="exo-ftl-tier">
+          <option value="random">Infer or randomize tier</option>
+          <option value="t0">Tier 0 · Relativistic precursor</option>
+          <option value="t1">Tier 1 · Near-light compression</option>
+          <option value="t2">Tier 2 · Supra-light prototype</option>
+          <option value="t3">Tier 3 · System-jump capability</option>
+          <option value="t4">Tier 4 · Operational interstellar</option>
+          <option value="t5">Tier 5 · Strategic corridor</option>
+          <option value="t6">Tier 6 · Deep-range manifold</option>
+          <option value="t7">Tier 7 · Compact multisystem</option>
+          <option value="t8">Tier 8 · Post-material transit</option>
+        </select></label>
+        <label><span>Drive family</span><select id="exo-ftl-family">
+          <option value="random">Tier-compatible drive family</option>
+          <option value="inertial-torch">Relativistic inertial torch</option>
+          <option value="metric-envelope">Metric compression envelope</option>
+          <option value="gravitic-plane">Gravitational-plane skimmer</option>
+          <option value="slipstream-shear">Hyperspatial slipstream shear</option>
+          <option value="q-lattice">Q-lattice phase translation</option>
+          <option value="n-manifold">N-dimensional manifold drive</option>
+          <option value="fold-jump">Discrete fold-jump drive</option>
+          <option value="wormhole-gate">Anchored wormhole or gate</option>
+          <option value="phase-displacement">Quantum phase displacement</option>
+        </select></label>
+        <label><span>Installation scale</span><select id="exo-ftl-scale">
+          <option value="random">Tier-compatible scale</option>
+          <option value="probe">Uncrewed probe</option>
+          <option value="fighter">Fighter or strike craft</option>
+          <option value="shuttle">Shuttle or courier</option>
+          <option value="corvette">Corvette</option>
+          <option value="frigate">Frigate or merchant hull</option>
+          <option value="cruiser">Cruiser</option>
+          <option value="capital">Capital ship or carrier</option>
+          <option value="megastructure">Gatework or megastructure</option>
+        </select></label>
+        <label><span>Infrastructure dependency</span><select id="exo-ftl-infrastructure">
+          <option value="random">Drive-compatible dependency</option>
+          <option value="self-contained">Self-contained ship drive</option>
+          <option value="beacon-assisted">Beacon-assisted navigation</option>
+          <option value="corridor">Prepared transit corridor</option>
+          <option value="paired-gate">Paired mobile or orbital gates</option>
+          <option value="fixed-gate">Fixed stellar gateworks</option>
+        </select></label>
+        <label><span>Reference route environment</span><select id="exo-ftl-route">
+          <option value="deep-space">Deep interstellar space</option>
+          <option value="planetary-well">Planetary gravity well</option>
+          <option value="gas-giant">Gas giant and magnetosphere</option>
+          <option value="binary">Binary or multiple-star system</option>
+          <option value="compact-object">Compact-object neighborhood</option>
+          <option value="nebula">Dense plasma or nebular region</option>
+          <option value="uncharted">Uncharted route</option>
+          <option value="q-disturbed">Q/N-dimensional disturbed region</option>
+        </select></label>
+        <label><span>Performance doctrine</span><select id="exo-ftl-doctrine">
+          <option value="balanced">Balanced fleet standard</option>
+          <option value="speed">Maximum transit speed</option>
+          <option value="range">Maximum single-transit range</option>
+          <option value="efficiency">Fuel and thermal efficiency</option>
+          <option value="precision">Precision emergence</option>
+          <option value="tactical">Rapid tactical cycling</option>
+        </select></label>
+        <label><span>Energy architecture</span><select id="exo-ftl-energy">
+          <option value="random">Tier-compatible energy system</option>
+          <option value="fusion-bank">Fusion pulse banks</option>
+          <option value="antimatter">Antimatter-catalyzed plant</option>
+          <option value="singularity">Contained micro-singularity</option>
+          <option value="vacuum-cell">Vacuum-polarization cells</option>
+          <option value="q-condensate">Q-state condensate reservoir</option>
+          <option value="star-fed">Direct stellar power and mass tap</option>
+        </select></label>
+        <label><span>Reference route distance</span><div class="exo-ftl-distance-control"><input id="exo-ftl-distance" type="number" min="0.000001" step="any" value="1"><select id="exo-ftl-distance-unit"><option value="AU">AU</option><option value="ly">light-years</option></select></div></label>
+      </div>
+    </section>
+
+    <section id="exo-ftl-source" class="bli-section exo-ftl-source" hidden>
+      <div class="bli-section-head"><p class="bli-eyebrow">Imported technological and political evidence</p><h2 id="exo-ftl-source-title">Source context</h2><p id="exo-ftl-source-body"></p></div>
+      <div class="bli-actions"><a id="exo-ftl-source-return" class="bli-action" href="blacklight-exo-stellar-government.html">Return to source generator</a></div>
+    </section>
+
+    <section class="exo-ftl-overview" aria-label="Generated drive overview">
+      <article class="exo-ftl-visual-panel">
+        <header><p class="bli-eyebrow">Transit field reconstruction</p><h2 id="exo-ftl-name">Awaiting generation</h2><p id="exo-ftl-description">Generate a drive architecture to establish its field geometry and performance envelope.</p></header>
+        <svg id="exo-ftl-visual" viewBox="0 0 700 430" role="img" aria-label="Generated FTL field and route diagram"></svg>
+        <div id="exo-ftl-badges" class="exo-ftl-badges"></div>
+      </article>
+      <aside class="exo-ftl-rating-panel">
+        <p class="bli-eyebrow">Compression and route rating</p>
+        <h2 id="exo-ftl-rating-title">No rating</h2>
+        <p id="exo-ftl-rating-summary">No transit architecture has been generated.</p>
+        <div class="exo-ftl-risk-meter"><span id="exo-ftl-risk-fill"></span></div>
+        <dl id="exo-ftl-rating-data" class="exo-ftl-data"></dl>
+      </aside>
+    </section>
+
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Performance standard</p><h2>AU transit rate, light-speed relationship, mission time, and certified range.</h2></div><div id="exo-ftl-performance" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Power and fuel architecture</p><h2>Activation energy, field power, storage, fuel mass, efficiency, recharge, and thermal debt.</h2></div><div id="exo-ftl-power" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Field and dimensional engineering</p><h2>Transit mechanism, Q-state, N-dimensional geometry, coherence, computation, and hull integration.</h2></div><div id="exo-ftl-dimensional" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Navigation and gravity envelope</p><h2>Emergence accuracy, mass shadows, gravitational planes, gradient interference, exclusion zones, and destination verification.</h2></div><div id="exo-ftl-navigation" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Technology hierarchy</p><h2>Development from relativistic precursors and fixed gateworks to compact multisystem drives.</h2></div><div id="exo-ftl-hierarchy" class="exo-ftl-hierarchy"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Engineering barriers</p><h2>The problems that must be solved before this drive can become routine.</h2></div><div class="exo-ftl-list-grid"><article><h3>Technological hurdles</h3><ul id="exo-ftl-hurdles"></ul></article><article><h3>Q/N-dimensional factors</h3><ul id="exo-ftl-qn"></ul></article><article><h3>Gravity and plane limitations</h3><ul id="exo-ftl-gravity"></ul></article></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Failure and edge-case analysis</p><h2>Situations in which the drive’s ordinary rating becomes misleading or unsafe.</h2></div><div class="exo-ftl-list-grid"><article><h3>Failure modes</h3><ul id="exo-ftl-failures"></ul></article><article><h3>Complicating use cases</h3><ul id="exo-ftl-edge"></ul></article><article><h3>Certified operating protocol</h3><ul id="exo-ftl-protocols"></ul></article></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Source-derived consequences</p><h2>How the imported civilization, government, economy, system, or cluster shaped the resulting technology.</h2></div><div id="exo-ftl-source-impact" class="exo-ftl-grid"></div></section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO superluminal mobility, dimensional engineering, route certification, and strategic transit analysis.</footer>
+</body>
+</html>
