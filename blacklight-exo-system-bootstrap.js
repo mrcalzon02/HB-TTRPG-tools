@@ -46,6 +46,7 @@
       await load('blacklight-exo-speed-controls.js');
       await load('blacklight-exo-cluster.js');
       await load('blacklight-exo-cluster-ecology-integration.js');
+      await load('blacklight-exo-government-handoff.js');
     } catch (error) {
       console.error('[Blacklight EXO] System bootstrap failed:', error);
       const empty = document.getElementById('exo-orbit-empty');
