@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | Stellar Government Generator</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="blacklight-exo-stellar-government.css">
+  <link rel="stylesheet" href="blacklight-exo-integration.css">
+  <script src="blacklight-exo-government-core.js" defer></script>
+  <script src="blacklight-exo-stellar-government.js" defer></script>
+</head>
+<body class="blacklight-corp-body exo-government-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-exo-operations.html" aria-label="Return to EXO Operations">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>EXO Governance</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="EXO government navigation">
+      <a href="blacklight-exo-operations.html">EXO Operations</a>
+      <a href="blacklight-exo-solar-system.html">Solar Systems</a>
+      <a href="blacklight-exo-species-civilization.html">System Dossiers</a>
+      <a href="blacklight-exo-alien-ecology.html">Alien Ecology</a>
+      <a href="blacklight-systems-black.html">Black Archive</a>
+    </nav>
+  </header>
+
+  <section class="bli-hero exo-government-hero" aria-labelledby="exo-government-title">
+    <div>
+      <p class="bli-eyebrow">Black compartment · Sovereignty, law, and interstellar political architecture</p>
+      <h1 id="exo-government-title">Stellar Government Generator.</h1>
+      <p class="bli-lede">Develop the political machinery above a populated world or solar-system dossier: sovereignty, constitutions, executive and legislative authority, jurisdiction, citizenship, personhood, law, economic ownership, diplomacy, military command, factions, succession, and the crises currently testing the state.</p>
+      <div class="bli-actions">
+        <button id="exo-government-generate" class="bli-action primary" type="button">Generate Stellar Government</button>
+        <button id="exo-government-export" class="bli-action" type="button">Export Government JSON</button>
+      </div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Current stellar government summary">
+      <div class="bli-directory-title">Current Polity</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Designation</strong><span id="exo-government-summary-name" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Model</strong><span id="exo-government-summary-model" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Reach</strong><span id="exo-government-summary-scale" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Political risk</strong><span id="exo-government-summary-risk" class="bli-arrow">pending</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="bli-shell exo-government-shell">
+    <section class="bli-section exo-government-controls" aria-labelledby="exo-government-controls-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Generation parameters</p>
+        <h2 id="exo-government-controls-title">Define the scale and pressure acting on the political order.</h2>
+        <p>Imported dossiers remain source evidence. Random controls elaborate them rather than erasing their species, population, technology, economy, collapse history, government description, or territorial reach.</p>
+      </div>
+      <div class="exo-government-control-grid">
+        <label><span>Generation seed</span><input id="exo-government-seed" type="text" maxlength="100" placeholder="Random seed"></label>
+        <label><span>Political scale</span><select id="exo-government-scale"><option value="random">Infer or randomize scale</option><option value="world">Single-world authority</option><option value="system">Single-system state</option><option value="cluster">Local star-cluster polity</option><option value="multi-cluster">Multi-cluster state</option><option value="network">Distributed interstellar network</option></select></label>
+        <label><span>Government model</span><select id="exo-government-model"><option value="random">Infer or randomize model</option><option value="republic">Federal representative republic</option><option value="compact">Sovereign systems compact</option><option value="confederation">Confederated league</option><option value="empire">Centralized stellar empire</option><option value="corporate">Corporate sovereign domain</option><option value="machine">Distributed machine consensus</option><option value="technocracy">Hereditary technocratic court</option><option value="protectorate">Military stewardship protectorate</option><option value="theocracy">Theocratic archive state</option><option value="ecological">Ecological custodianship network</option><option value="treaty">Treaty network without sovereign center</option><option value="fleet">Nomadic fleet commonwealth</option><option value="occupation">Occupation and reconstruction authority</option><option value="successor">Post-collapse successor coalition</option></select></label>
+        <label><span>Current condition</span><select id="exo-government-condition"><option value="random">Infer or randomize condition</option><option value="stable">Stable constitutional order</option><option value="reforming">Major constitutional reform</option><option value="expansion">Expansion and integration campaign</option><option value="cold-war">Internal cold war</option><option value="declining">Institutional decline</option><option value="fractured">Fractured sovereignty</option><option value="occupied">Foreign occupation</option><option value="successor">Post-collapse successor order</option><option value="new">Newly unified government</option></select></label>
+        <label><span>Centralization</span><select id="exo-government-centralization"><option value="random">Model-appropriate centralization</option><option value="local">Highly decentralized</option><option value="federal">Federal or shared sovereignty</option><option value="central">Strong central authority</option><option value="unitary">Near-unitary control</option></select></label>
+        <label><span>Legitimacy basis</span><select id="exo-government-legitimacy"><option value="random">Random legitimacy basis</option><option value="popular consent">Popular consent</option><option value="member-state consent">Member-state consent</option><option value="ancestral continuity">Ancestral continuity</option><option value="technical competence">Technical competence</option><option value="religious authority">Religious authority</option><option value="military protection">Military protection</option><option value="control of infrastructure">Control of infrastructure</option><option value="economic performance">Economic performance</option><option value="ecological stewardship">Ecological stewardship</option><option value="machine-verified optimization">Machine-verified optimization</option><option value="reconstruction necessity">Reconstruction necessity</option></select></label>
+        <label><span>Species composition</span><select id="exo-government-species"><option value="random">Infer or randomize population</option><option value="single-species">Single-species polity</option><option value="multi-species">Multi-species polity</option><option value="synthetic-mixed">Biological and synthetic polity</option><option value="external-administration">External administration</option></select></label>
+        <label><span>Diplomatic posture</span><select id="exo-government-posture"><option value="random">Random diplomatic posture</option><option value="open commercial diplomacy">Open commercial diplomacy</option><option value="defensive isolation">Defensive isolation</option><option value="missionary ideological expansion">Missionary ideological expansion</option><option value="transactional treaty bargaining">Transactional treaty bargaining</option><option value="scientific exchange first">Scientific exchange first</option><option value="security-dominated border control">Security-dominated border control</option><option value="client-state integration">Client-state integration</option><option value="noninterference backed by overwhelming deterrence">Deterrence and noninterference</option><option value="reconstruction and humanitarian legitimacy">Reconstruction diplomacy</option></select></label>
+      </div>
+    </section>
+
+    <section id="exo-government-source" class="bli-section exo-government-source" hidden>
+      <div class="bli-section-head"><p class="bli-eyebrow">Imported political evidence</p><h2 id="exo-government-source-title">Source context</h2><p id="exo-government-source-body"></p></div>
+      <div class="bli-actions"><a id="exo-government-source-return" class="bli-action" href="blacklight-exo-species-civilization.html">Return to source generator</a></div>
+    </section>
+
+    <section class="exo-government-overview" aria-label="Generated polity overview">
+      <article class="exo-government-seal-panel">
+        <header><p class="bli-eyebrow">Sovereign identity reconstruction</p><h2 id="exo-government-name">Awaiting generation</h2><p id="exo-government-summary">Generate a government to establish its constitutional and territorial structure.</p></header>
+        <svg id="exo-government-seal" viewBox="0 0 600 420" role="img" aria-label="Generated stellar government seal and jurisdiction map"></svg>
+        <div id="exo-government-badges" class="exo-government-badges"></div>
+      </article>
+      <aside class="exo-government-risk-panel">
+        <p class="bli-eyebrow">Political stability assessment</p>
+        <h2 id="exo-government-risk-title">No assessment</h2>
+        <p id="exo-government-risk-summary">No government has been generated.</p>
+        <div class="exo-government-risk-meter"><span id="exo-government-risk-fill"></span></div>
+        <dl id="exo-government-risk-data" class="exo-government-data"></dl>
+      </aside>
+    </section>
+
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Constitutional architecture</p><h2>Where sovereignty resides and how authority changes hands.</h2></div><div id="exo-government-constitution" class="exo-government-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Territorial jurisdiction</p><h2>Member systems, provinces, protectorates, associated territories, and disputed sovereignty.</h2></div><div id="exo-government-jurisdictions" class="exo-government-jurisdiction-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Representation and citizenship</p><h2>Who counts, who votes, and which minds possess legal personhood.</h2></div><div id="exo-government-citizenship" class="exo-government-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Law and political economy</p><h2>Property, transit, information, revenue, labor, ownership, and material inequality.</h2></div><div id="exo-government-law-economy" class="exo-government-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">State institutions</p><h2>The permanent organizations capable of turning constitutional language into policy.</h2></div><div id="exo-government-institutions" class="exo-government-institution-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">External power</p><h2>Diplomacy, borders, treaties, integration policy, military command, and strategic assets.</h2></div><div id="exo-government-external" class="exo-government-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Internal power map</p><h2>Coalitions, opposition blocs, administrative interests, militaries, corporations, movements, and secessionists.</h2></div><div id="exo-government-factions" class="exo-government-faction-grid"></div></section>
+    <section class="bli-section exo-government-pressure-section"><div class="bli-section-head"><p class="bli-eyebrow">Continuity pressure</p><h2>Political crises, historical turning points, and immediate EXO protocols.</h2></div><div class="exo-government-pressure-grid"><article><h3>Active crises</h3><ul id="exo-government-crises"></ul></article><article><h3>Political timeline</h3><ol id="exo-government-timeline"></ol></article><article><h3>Entry and diplomatic protocol</h3><ul id="exo-government-protocols"></ul></article></div></section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO sovereignty, constitutional analysis, jurisdiction mapping, and restricted diplomatic planning.</footer>
+</body>
+</html>
