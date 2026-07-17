@@ -3,6 +3,7 @@
 
   const SOURCE_KEY = 'blacklight-exo-selected-world-v1';
   const $ = id => document.getElementById(id);
+  const clone = value => JSON.parse(JSON.stringify(value));
   const controls = {
     generate:$('exo-species-generate'),
     seed:$('exo-species-seed'),
@@ -56,7 +57,7 @@
       controls.state.value='pristine';controls.life.value='none';
     }
     const environment=context.stored.environment;
-    if(environment&&controls.environment.querySelector(`option[value="${CSS.escape(environment)}"]`))controls.environment.value=environment;
+    if(environment&&[...controls.environment.options].some(option=>option.value===environment))controls.environment.value=environment;
   }
 
   function card(label,title,text) {
@@ -100,15 +101,80 @@
     }
   }
 
+  function defaultsForType(type) {
+    const value=String(type||'').toLowerCase();
+    if(/gas giant|ice giant/.test(value))return{temperature:155,gravity:2.1,atmosphere:'Hydrogen, helium, and trace volatile clouds',hydrosphere:0,habitability:12};
+    if(/ocean/.test(value))return{temperature:278,gravity:1.08,atmosphere:'Dense nitrogen and water-vapor atmosphere',hydrosphere:94,habitability:74};
+    if(/frozen|ice|cryogenic/.test(value))return{temperature:132,gravity:.55,atmosphere:'Trace nitrogen, methane, and cryovolcanic vapor',hydrosphere:58,habitability:20};
+    if(/volcanic/.test(value))return{temperature:635,gravity:1.2,atmosphere:'Dense sulfur dioxide atmosphere',hydrosphere:0,habitability:4};
+    if(/temperate|super-earth/.test(value))return{temperature:286,gravity:1.05,atmosphere:'Nitrogen-bearing atmosphere',hydrosphere:48,habitability:76};
+    if(/metal|airless|barren/.test(value))return{temperature:225,gravity:.68,atmosphere:'Thin or absent atmosphere',hydrosphere:0,habitability:6};
+    return{temperature:250,gravity:.9,atmosphere:'Thin or unknown atmosphere',hydrosphere:8,habitability:18};
+  }
+
+  function findStoredWorld(context,name) {
+    if(!context?.stored?.system)return null;
+    for(const planet of context.stored.system.planets||[]){
+      if(planet.name===name)return clone(planet);
+      const moon=(planet.moons||[]).find(item=>item.name===name);if(moon)return clone(moon);
+    }
+    if(context.stored.selectedWorld?.name===name)return clone(context.stored.selectedWorld);
+    return null;
+  }
+
+  function inferredBiosphere(life,ruined) {
+    if(ruined)return'Historical native biosphere';
+    if(['living','native','multispecies','biosphere'].includes(life))return'Confirmed native biosphere';
+    if(life==='microbial')return'Microbial biosphere';
+    if(life==='pseudo')return'Pseudo-life signature';
+    if(life==='chemical')return'Complex abiotic chemistry';
+    return'No confirmed biosphere';
+  }
+
+  function openWorldEcology(card,context) {
+    const label=card.querySelector('small')?.textContent.trim()||'';
+    const name=card.querySelector('h3')?.textContent.trim()||'Generated world';
+    const text=card.querySelector('p')?.textContent.trim()||'';
+    const split=label.split(' · '),status=(split[0]||'unknown').toLowerCase(),type=split.slice(1).join(' · ')||'generated world';
+    const role=(text.split(';')[0]||'unoccupied reserve').trim();
+    const stateKey=controls.state.value==='random'?'survey':controls.state.value;
+    const ruined=/ruin|abandoned|nonfunctional|extinct|sterilized/.test(`${status} ${role.toLowerCase()} ${stateKey}`);
+    const residentMatch=text.match(/([\d,.]+(?:\s+(?:thousand|million|billion|trillion))?) residents/i);
+    const populated=Boolean(residentMatch)||/inhabited|capital|colony|fortress|agricultural/.test(role.toLowerCase());
+    const life=controls.life.value;
+    const government=$('exo-species-summary-government')?.textContent.trim()||'Unknown authority';
+    const speciesName=$('exo-species-name')?.textContent.trim()||'Designated population';
+    const base=findStoredWorld(context,name)||{id:`dossier-${name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`,kind:'planet',name,type,resources:['silicates','metals','volatile compounds'],...defaultsForType(type)};
+    const habitability=text.match(/Habitability\s+(\d+)%/i);if(habitability)base.habitability=Number(habitability[1]);
+    base.role=role;base.status=status;base.biosphere=inferredBiosphere(life,ruined);
+    base.civilization=ruined?`Extinct civilization record: ${speciesName}`:populated?`Designated civilization: ${speciesName}; ${government}`:'No confirmed civilization';
+    const systemSeed=controls.seed.value.trim()||'EXO-DOSSIER';
+    const system=context?.stored?.system?clone(context.stored.system):{seed:systemSeed,name:$('exo-species-summary-name')?.textContent.trim()||'Generated dossier system',sourceMode:'procedural',planets:[base],belts:[]};
+    const payload={version:1,systemSeed,dossierSeed:`${systemSeed}:ecology:${base.id}`,environment:controls.environment.value==='random'?'temperate terrestrial':controls.environment.value,system,selectedWorld:base,systemState:stateKey,stateKey,worldRole:role,source:'system-dossier'};
+    localStorage.setItem(SOURCE_KEY,JSON.stringify(payload));
+    location.href=`blacklight-exo-alien-ecology.html?source=solar&systemSeed=${encodeURIComponent(systemSeed)}&worldId=${encodeURIComponent(base.id)}`;
+  }
+
+  function decorateWorldCards(context) {
+    const grid=$('exo-system-state-grid');if(!grid)return;
+    for(const worldCard of grid.querySelectorAll('.exo-dossier-card')){
+      const label=worldCard.querySelector('small')?.textContent||'';
+      if(!label.includes(' · ')||worldCard.dataset.importedEcology==='true'||worldCard.querySelector('[data-develop-ecology]'))continue;
+      const actions=document.createElement('div');actions.className='bli-actions';actions.dataset.developEcology='true';
+      const button=document.createElement('button');button.type='button';button.className='bli-action';button.textContent='Develop World Ecology';button.addEventListener('click',()=>openWorldEcology(worldCard,context));
+      actions.append(button);worldCard.append(actions);
+    }
+  }
+
   addOption('chemical','Complex abiotic chemistry');
   addOption('pseudo','Pseudo-life ecology');
   addOption('biosphere','Non-sapient native biosphere');
   addNavLink();
   const context=readContext();
-  if(!context)return;
-  applyEcologyControls(context);
-  controls.generate.addEventListener('click',()=>queueMicrotask(()=>patchRenderedDossier(context)));
-  controls.seed?.addEventListener('keydown',event=>{if(event.key==='Enter')queueMicrotask(()=>patchRenderedDossier(context));});
-  controls.generate.click();
-  queueMicrotask(()=>patchRenderedDossier(context));
+  if(context)applyEcologyControls(context);
+  const afterRender=()=>queueMicrotask(()=>{if(context)patchRenderedDossier(context);decorateWorldCards(context);});
+  controls.generate.addEventListener('click',afterRender);
+  controls.seed?.addEventListener('keydown',event=>{if(event.key==='Enter')afterRender();});
+  if(context)controls.generate.click();
+  else afterRender();
 })();
