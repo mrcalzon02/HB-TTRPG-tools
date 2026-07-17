@@ -75,6 +75,7 @@
 
   let dossier=null;
   let sourceContext=null;
+  globalThis.BlacklightExoGetActiveDossier=()=>dossier;
 
   function rngFor(seed){let state=2166136261;for(const char of seed){state^=char.charCodeAt(0);state=Math.imul(state,16777619);}return()=>{state+=0x6D2B79F5;let value=state;value=Math.imul(value^value>>>15,value|1);value^=value+Math.imul(value^value>>>7,value|61);return((value^value>>>14)>>>0)/4294967296;};}
   const integer=(rng,min,max)=>Math.floor(min+rng()*(max-min+1));
@@ -136,7 +137,7 @@
     return physical.map((body,index)=>{
       let role=occupancyRole(rng,state,index,target,body.id===sourceContext.selectedWorld.id);
       if(role==='unoccupied reserve'&&development>5&&rng()<.25)role='automated survey site';
-      return{name:body.name,type:body.type,role,status:roleStatus(role),population:rolePopulation(rng,role),resources:[...(body.resources||[])],sourceObjectId:body.id,habitability:body.habitability||0,physical:{kind:body.kind,parentName:body.parentName||null,distance:body.distance||null,orbitalDistanceKm:body.orbitalDistanceKm||null,gravity:body.gravity||null,temperature:body.temperature||null,atmosphere:body.atmosphere||null,biosphere:body.biosphere||null,civilization:body.civilization||null}};
+      return{name:body.name,type:body.type,role,status:roleStatus(role),population:rolePopulation(rng,role),resources:[...(body.resources||[])],sourceObjectId:body.id,habitability:body.habitability||0,ecology:body.ecology||null,collapse:body.collapse||null,physical:{kind:body.kind,parentName:body.parentName||null,distance:body.distance||null,orbitalDistanceKm:body.orbitalDistanceKm||null,gravity:body.gravity||null,temperature:body.temperature||null,atmosphere:body.atmosphere||null,biosphere:body.biosphere||null,civilization:body.civilization||null,ecology:body.ecology||null,collapse:body.collapse||null}};
     });
   }
 
@@ -145,7 +146,7 @@
     return Array.from({length:count},(_,index)=>{
       let role=occupancyRole(rng,state,index,target,false);
       if(role==='unoccupied reserve'&&development>5&&rng()<.25)role='automated survey site';
-      return{name:`World ${index+1}`,type:pick(rng,WORLD_TYPES),role,status:roleStatus(role),population:rolePopulation(rng,role),resources:unique(rng,RESOURCES,integer(rng,2,5)),habitability:0,physical:null};
+      return{name:`World ${index+1}`,type:pick(rng,WORLD_TYPES),role,status:roleStatus(role),population:rolePopulation(rng,role),resources:unique(rng,RESOURCES,integer(rng,2,5)),habitability:0,ecology:null,collapse:null,physical:null};
     });
   }
 
@@ -179,7 +180,8 @@
     const formerPopulation=extinctCivilization?Math.round(number(rng,1000000,9000000000000,0)):0;
     const worlds=sourceContext?sourceWorlds(rng,state,development):randomWorlds(rng,state,development,worldCount);
     const infrastructure=makeInfrastructure(rng,state,development);
-    const collapse=extinctCivilization?pick(rng,COLLAPSES):null;
+    const importedCollapse=sourceContext?.ecology?.collapse||sourceContext?.selectedWorld?.collapse||null;
+    const collapse=extinctCivilization?(importedCollapse||pick(rng,COLLAPSES)):null;
     const government=activeCivilization?pick(rng,GOVERNMENTS):extinctCivilization?`Former ${pick(rng,GOVERNMENTS)}`:'No government';
     const civilization=activeCivilization||extinctCivilization?{status:activeCivilization?'active':'extinct',government,economy:pick(rng,ECONOMIES),technology:tech.label,reach:reach.label,values:unique(rng,VALUES,3),law:pick(rng,['precedent-based civil code','algorithmic regulation','ritual oath law','local habitat autonomy','central decree and licensed exceptions','consensus arbitration']),warfare:pick(rng,['professional expeditionary fleets','defensive orbital denial','distributed militia flotillas','autonomous drone warfare','limited ritualized conflict','mass industrial fleet doctrine'])}:null;
     const occupiedWorlds=worlds.filter(world=>world.status==='active').length;
@@ -187,7 +189,7 @@
     const economy=state.key==='pristine'?'No economy':state.key==='resource'?'Unclaimed resource potential':civilization?.economy||'Automated extractive economy';
     const resources=unique(rng,RESOURCES,integer(rng,5,9)).map(resource=>({name:resource,abundance:pick(rng,['trace','limited','commercial','abundant','exceptional']),access:pick(rng,['surface-accessible','deep crustal','asteroid-belt concentrated','gas-giant atmospheric','cryogenic outer-system','requires advanced refining'])}));
     const system={name,state:state.label,stateKey:state.key,development,life,worldCount,beltCount,occupiedWorlds,extractionSites,population,formerPopulation,economy,worlds,infrastructure,resources,traffic:development>80?'continuous interstellar traffic':development>50?'heavy scheduled traffic':development>20?'limited commercial traffic':development>5?'occasional survey traffic':'none detected',sourceSystemSeed:sourceContext?.systemSeed||null,selectedWorld:sourceContext?.selectedWorld||null,physicalSystem:sourceContext?.system||null};
-    const current={version:2,seed,generatedAt:new Date().toISOString(),system,species,civilization,collapse,tech,reach,source:sourceContext?{type:'solar-system-handoff',systemSeed:sourceContext.systemSeed,worldId:sourceContext.selectedWorld.id,worldName:sourceContext.selectedWorld.name}:null};
+    const current={version:3,seed,generatedAt:new Date().toISOString(),system,species,civilization,collapse,ecology:sourceContext?.ecology||sourceContext?.selectedWorld?.ecology||null,tech,reach,source:sourceContext?{type:'solar-system-handoff',systemSeed:sourceContext.systemSeed,worldId:sourceContext.selectedWorld.id,worldName:sourceContext.selectedWorld.name}:null};
     current.factions=makeFactions(rng,current);
     let risk=integer(rng,8,35)+Math.round(development*.35);if(state.key==='contested')risk+=25;if(collapse)risk+=20;if(state.key==='pristine')risk-=12;current.risk=Math.max(3,Math.min(100,risk));
     current.protocol=activeCivilization?[`Establish contact through ${pick(rng,['commercial traffic control','a neutral habitat authority','the recognized diplomatic service','a low-risk scientific exchange channel'])}.`,`Do not approach strategic infrastructure without explicit clearance from the ${government}.`,`Lead with evidence of respect for ${civilization.values[0]} and ${civilization.values[1]}.`]:collapse?['Treat all ruins as active hazard sites until power, weapons, biological agents, and autonomous systems are cleared.',`Preserve orbital evidence related to ${collapse.cause.toLowerCase()} before salvage begins.`,'Use sealed teams and independent navigation references; do not trust surviving local beacons.']:['No contact protocol is required; conduct remote survey before inserting personnel.','Register resource claims only after confirming the absence of dormant habitats or machine custodians.','Protect pristine scientific sites from contamination.'];
@@ -229,7 +231,7 @@
     renderFactions();renderList(ui.protocol,dossier.protocol);renderList(ui.misunderstandings,dossier.misunderstandings);renderList(ui.opportunities,dossier.opportunities);renderList(ui.hazards,dossier.hazards);document.querySelectorAll('.exo-dossier-card,.exo-faction-card').forEach(node=>{node.classList.remove('exo-fade-in');void node.offsetWidth;node.classList.add('exo-fade-in');});
   }
 
-  function generate(){const seed=controls.seed.value.trim()||randomSeed();controls.seed.value=seed;dossier=generateDossier(seed);render();}
+  function generate(){const seed=controls.seed.value.trim()||randomSeed();controls.seed.value=seed;dossier=generateDossier(seed);render();document.dispatchEvent(new CustomEvent('blacklight:exo-dossier-generated',{detail:{seed,dossier}}));}
   function exportJson(){if(!dossier)return;const blob=new Blob([JSON.stringify(dossier,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`${dossier.system.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-exo-dossier.json`;document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);}
   controls.generate.addEventListener('click',generate);controls.export.addEventListener('click',exportJson);controls.seed.addEventListener('keydown',event=>{if(event.key==='Enter')generate();});
 
