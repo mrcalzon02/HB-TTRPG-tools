@@ -1,0 +1,12 @@
+.exo-ftl-charles-section{position:relative}
+.exo-ftl-charles-section::before{content:"CHARLES / SPECULATIVE CONTROL PHYSICS";display:block;font-size:.68rem;letter-spacing:.16em;opacity:.55;margin-bottom:.75rem}
+.exo-ftl-charles-card[data-charles-state="charles"]{border-left:4px solid currentColor}
+.exo-ftl-charles-card[data-charles-state="warning"]{border-style:dashed}
+.exo-ftl-charles-equations{display:grid;gap:1rem}
+.exo-ftl-charles-equation{border:1px solid rgba(255,255,255,.16);padding:1rem;background:rgba(0,0,0,.16)}
+.exo-ftl-charles-equation-head{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.exo-ftl-charles-equation code{display:block;white-space:pre-wrap;overflow-wrap:anywhere;font-size:1rem;padding:.8rem;margin:.75rem 0;background:rgba(0,0,0,.25);border-left:3px solid currentColor}
+.exo-ftl-charles-equation p{margin:.55rem 0}
+.exo-ftl-charles-list{border:1px solid rgba(255,255,255,.14);padding:1rem;background:rgba(0,0,0,.12)}
+.exo-ftl-charles-list li+li{margin-top:.6rem}
+@media (min-width:900px){.exo-ftl-charles-equations{grid-template-columns:repeat(2,minmax(0,1fr))}}
