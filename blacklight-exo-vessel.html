@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | Vessel Engineering Generator</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="blacklight-exo-vessel.css">
+  <link rel="stylesheet" href="blacklight-exo-integration.css">
+  <script src="blacklight-exo-ftl-physics-definitions.js" defer></script>
+  <script src="blacklight-exo-ftl-operational-definitions.js" defer></script>
+  <script src="blacklight-exo-ftl-runtime.js" defer></script>
+  <script src="blacklight-exo-ftl-core.js" defer></script>
+  <script src="blacklight-exo-ftl-engineering-extension.js" defer></script>
+  <script src="blacklight-exo-ftl-path-level-core.js" defer></script>
+  <script src="blacklight-exo-ftl-path-level-paths-physical.js" defer></script>
+  <script src="blacklight-exo-ftl-path-level-paths-dimensional.js" defer></script>
+  <script src="blacklight-exo-ftl-path-level-paths-discrete.js" defer></script>
+  <script src="blacklight-exo-ftl-path-level-runtime.js" defer></script>
+  <script src="blacklight-exo-ftl-path-level-engineering.js" defer></script>
+  <script src="blacklight-exo-ftl-path-level-controller.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-core.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-inertial-torch.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-metric-envelope.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-gravitic-plane.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-slipstream-shear.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-q-lattice.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-n-manifold.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-fold-jump.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-wormhole-gate.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-path-phase-displacement.js" defer></script>
+  <script src="blacklight-exo-ftl-mechanism-runtime.js" defer></script>
+  <script src="blacklight-exo-ftl-assembly-core.js" defer></script>
+  <script src="blacklight-exo-ftl-assembly-runtime.js" defer></script>
+  <script src="blacklight-exo-ftl-calculation-core.js" defer></script>
+  <script src="blacklight-exo-ftl-calculation-performance.js" defer></script>
+  <script src="blacklight-exo-ftl-calculation-energy.js" defer></script>
+  <script src="blacklight-exo-ftl-calculation-runtime.js" defer></script>
+  <script src="blacklight-exo-ftl-certification-core.js" defer></script>
+  <script src="blacklight-exo-ftl-certification-route.js" defer></script>
+  <script src="blacklight-exo-ftl-certification-reliability.js" defer></script>
+  <script src="blacklight-exo-ftl-certification-runtime.js" defer></script>
+  <script src="blacklight-exo-vessel-definitions.js" defer></script>
+  <script src="blacklight-exo-vessel-biology.js" defer></script>
+  <script src="blacklight-exo-vessel-core.js" defer></script>
+  <script src="blacklight-exo-vessel-ui.js" defer></script>
+</head>
+<body class="blacklight-corp-body exo-vessel-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-exo-operations.html" aria-label="Return to EXO Operations">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>EXO Vessel Engineering</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="EXO vessel navigation">
+      <a href="blacklight-exo-operations.html">EXO Operations</a>
+      <a href="blacklight-exo-solar-system.html">Cluster Cartography</a>
+      <a href="blacklight-exo-species-civilization.html">Xenology</a>
+      <a href="blacklight-exo-ftl.html">FTL Dossier</a>
+      <a href="blacklight-systems-black.html">Black Archive</a>
+    </nav>
+  </header>
+
+  <section class="bli-hero exo-vessel-hero" aria-labelledby="exo-vessel-title">
+    <div>
+      <p class="bli-eyebrow">Black compartment · Charles-authored vessel engineering</p>
+      <h1 id="exo-vessel-title">Transit-Capable Vessel Generator.</h1>
+      <p class="bli-lede">I will begin with the machinery that must physically fit inside the ship. The drive, power plant, energy medium, thermal debt, navigation baseline, shielding, biological environment, maintenance access, and mission reserves determine the hull before aesthetics are permitted to pretend otherwise.</p>
+      <div class="bli-actions">
+        <button id="exo-vessel-generate" class="bli-action primary" type="button">Generate Vessel Engineering Record</button>
+        <button id="exo-vessel-export" class="bli-action" type="button">Export Vessel JSON</button>
+      </div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Current vessel summary">
+      <div class="bli-directory-title">Current Vessel</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Designation</strong><span id="exo-vessel-summary-name" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Loaded mass</strong><span id="exo-vessel-summary-mass" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Drive</strong><span id="exo-vessel-summary-drive" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Crew / endurance</strong><span id="exo-vessel-summary-crew" class="bli-arrow">pending</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="bli-shell exo-vessel-shell">
+    <section id="exo-vessel-source" class="exo-vessel-source" hidden>
+      <p class="bli-eyebrow">Charles // inherited engineering source</p>
+      <h2 id="exo-vessel-source-title">Imported source</h2>
+      <p id="exo-vessel-source-body"></p>
+    </section>
+
+    <section class="bli-section exo-vessel-controls" aria-labelledby="exo-vessel-controls-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Charles // vessel design request</p>
+        <h2 id="exo-vessel-controls-title">Define the mission before asking how large the ship is.</h2>
+        <p>Blank payload uses the selected mission role to derive useful payload from the drive installation. Inherited FTL and biology records remain available, but each engineering assumption can be replaced explicitly.</p>
+      </div>
+      <div class="exo-vessel-control-grid">
+        <label><span>Generation seed</span><input id="exo-vessel-seed" type="text" maxlength="120" placeholder="Random vessel seed"></label>
+        <label><span>FTL method</span><select id="exo-vessel-family"></select></label>
+        <label><span>Drive Path level</span><select id="exo-vessel-path"></select></label>
+        <label><span>Mission role</span><select id="exo-vessel-role"></select></label>
+        <label><span>Crew biology</span><select id="exo-vessel-biology"></select></label>
+        <label><span>Protection doctrine</span><select id="exo-vessel-defense"></select></label>
+        <label><span>Crew or resident complement</span><input id="exo-vessel-crew" type="number" min="1" step="1" value="40"></label>
+        <label><span>Independent endurance (days)</span><input id="exo-vessel-endurance" type="number" min="1" step="1" value="180"></label>
+        <label><span>Carried FTL mission cycles</span><input id="exo-vessel-reserve" type="number" min="1" step="1" value="3"></label>
+        <label><span>Reference transit distance (ly)</span><input id="exo-vessel-distance" type="number" min="0.000001" step="any" value="4"></label>
+        <label><span>Mission payload tonnes</span><input id="exo-vessel-payload" type="number" min="0" step="any" placeholder="Automatic from role"></label>
+      </div>
+    </section>
+
+    <section class="exo-vessel-overview" aria-label="Generated vessel overview">
+      <article class="exo-vessel-visual-panel">
+        <header><p class="bli-eyebrow">Charles // mass-derived hull reconstruction</p><h2 id="exo-vessel-name">Awaiting generation</h2><p id="exo-vessel-description">Generate a vessel to place the drive, habitat, power, shielding, navigation, and mission volume inside one accountable mass budget.</p></header>
+        <svg id="exo-vessel-visual" class="exo-vessel-visual" viewBox="0 0 700 330" role="img" aria-label="Generated vessel side profile showing drive and habitat allocation"></svg>
+        <div id="exo-vessel-badges" class="exo-vessel-badges"></div>
+      </article>
+      <aside class="exo-vessel-rating-panel">
+        <p class="bli-eyebrow">Charles // integration finding</p>
+        <h2 id="exo-vessel-rating">No vessel assessment</h2>
+        <p id="exo-vessel-rating-summary">No engineering record has been generated.</p>
+        <div class="exo-vessel-drive-meter" title="Integrated drive share of loaded mass"><span id="exo-vessel-drive-fill"></span></div>
+        <dl id="exo-vessel-rating-data" class="exo-vessel-data"></dl>
+      </aside>
+    </section>
+
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // complete mass ledger</p><h2>Every major system must appear in the loaded mass.</h2><p>The ledger separates the active drive from its foundations and service access, then records the power plant, fuel containment, heat rejection, habitat, shielding, navigation, maintenance, structure, maneuver systems, payload, and unspent growth margin.</p></div><div class="exo-vessel-table-wrap"><table class="exo-vessel-table"><thead><tr><th>System</th><th>Mass</th><th>Loaded share</th><th>Volume</th><th>Engineering basis</th></tr></thead><tbody id="exo-vessel-mass-body"></tbody></table></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // drive integration</p><h2>How the transit machine constitutes the ship.</h2></div><div id="exo-vessel-drive-grid" class="exo-vessel-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // power, fuel, and heat</p><h2>What must be generated, stored, contained, and rejected.</h2></div><div id="exo-vessel-power-grid" class="exo-vessel-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // biological accommodation</p><h2>What the crew must continuously breathe, inhabit, consume, and survive.</h2></div><div id="exo-vessel-life-grid" class="exo-vessel-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // protection and navigation</p><h2>How the vessel remains intact and knows where it is going.</h2></div><div id="exo-vessel-protection-grid" class="exo-vessel-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // maintainability</p><h2>How the machine is inspected, repaired, recalibrated, and allowed to fly again.</h2></div><div id="exo-vessel-maintenance-grid" class="exo-vessel-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // retained cautions</p><h2>What I refuse to hide behind a clean silhouette.</h2></div><ul id="exo-vessel-warnings" class="exo-vessel-warning-list"></ul></section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO transit-capable vessel engineering, xenological life support, power, protection, and maintenance analysis.</footer>
+</body>
+</html>
