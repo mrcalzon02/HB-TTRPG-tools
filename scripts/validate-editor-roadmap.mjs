@@ -3,7 +3,8 @@ import path from 'node:path';
 import process from 'node:process';
 
 const root=process.cwd();
-const readJson=async relativePath=>JSON.parse(await fs.readFile(path.join(root,relativePath),'utf8'));
+const readText=relativePath=>fs.readFile(path.join(root,relativePath),'utf8');
+const readJson=async relativePath=>JSON.parse(await readText(relativePath));
 const fail=message=>{throw new Error(message);};
 
 function numericOrder(order){
@@ -17,12 +18,16 @@ async function main(){
   const p0Completion=await readJson('data/kaysender/editors/p0-completion-status.json');
   const p1=await readJson('data/kaysender/editors/p1-implementation-status.json');
   const registry=await readJson('data/kaysender-tools-registry.json');
+  const pagesWorkflow=await readText('.github/workflows/pages.yml');
   const stages=roadmap.productionOrder||[];
   const registryIds=new Set((registry.modules||[]).map(module=>module.id));
 
   if(!stages.length)fail('Editor roadmap contains no production stages.');
   if(roadmap.policy?.activeBranch!=='main')fail('Editor roadmap must preserve main as the only active branch.');
   if(roadmap.policy?.parallelMainLineEditors!==1)fail('Editor roadmap must allow exactly one active main-line editor.');
+  for(const forbidden of ['p0-editor-receipt','kaysenderP0CiReceipt','data/kaysender/editors/verification/p0-ci-receipt.json','Record P0 CI result']){
+    if(pagesWorkflow.includes(forbidden))fail(`Pages workflow restores forbidden automatic P0 receipt machinery: ${forbidden}`);
+  }
 
   const ids=new Set();
   const orders=new Set();
