@@ -27,8 +27,7 @@
     WEAPON_SUPPORT:{priority:78,region:'COMBAT_BRANCH',shape:'COMPACT'},
     WEAPON_COOLING:{priority:77,region:'COMBAT_BRANCH',shape:'SURFACE'},
     WEAPON:{priority:76,region:'WEAPON_SURFACE',shape:'SURFACE'},
-    ACTIVE_PROTECTION:{priority:74,region:'SURFACE',shape:'SURFACE'},
-    ARMOR:{priority:72,region:'HULL_SURFACE',shape:'SHELL'},
+    ACTIVE_PROTECTION:{priority:74,region:'FIELD_PROJECTOR_NETWORK',shape:'SURFACE'},
     THERMAL_CONTROL:{priority:70,region:'RADIATOR_SURFACE',shape:'PANEL'},
     COUNTERMEASURE:{priority:68,region:'SURFACE',shape:'SURFACE'},
     MAINTENANCE:{priority:62,region:'SERVICE_CORE',shape:'COMPACT'},
@@ -39,7 +38,7 @@
   const semanticColors = {
     DRIVE_APPARATUS:'#9b59b6',DRIVE_INTEGRATION:'#8e44ad',MAIN_ENGINE:'#e67e22',REACTOR:'#f1c40f',ENERGY_STORAGE:'#d35400',PROPELLANT_TANK:'#3498db',
     STRUCTURE:'#7f8c8d',LIFE_SUPPORT:'#2ecc71',NAVIGATION:'#1abc9c',FIRE_CONTROL:'#c0392b',ELECTRONIC_WARFARE:'#16a085',SENSOR:'#00bcd4',MAGAZINE:'#8b0000',
-    WEAPON_SUPPORT:'#a93226',WEAPON_COOLING:'#5dade2',WEAPON:'#e74c3c',ACTIVE_PROTECTION:'#5b2c6f',ARMOR:'#566573',THERMAL_CONTROL:'#85c1e9',COUNTERMEASURE:'#f39c12',
+    WEAPON_SUPPORT:'#a93226',WEAPON_COOLING:'#5dade2',WEAPON:'#e74c3c',ACTIVE_PROTECTION:'#5b2c6f',THERMAL_CONTROL:'#85c1e9',COUNTERMEASURE:'#f39c12',
     MAINTENANCE:'#27ae60',CARGO:'#a569bd',RESERVED_VOLUME:'#95a5a6'
   };
 
@@ -61,6 +60,7 @@
   globalThis.BlacklightExoVesselVoxelDefinitions = Object.freeze({
     schemaVersion:'1.0.0',layoutVersion:1,maxEnvelopeCells:120000,maxPlacementAttempts:900,
     topologyPolicies,semanticPlacement,semanticColors,infrastructureVoxelTypes,suggestedResolution,
+    forbiddenStandaloneSemanticTypes:['ARMOR'],
     deferredSystems:{conditionApplication:'VESSEL-05',trackAndCombatGeometry:'VESSEL-06',weaponEngagementEnvelopes:'VESSEL-07',localDamageResolution:'VESSEL-08'}
   });
 })();
