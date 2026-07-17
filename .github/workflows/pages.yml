@@ -132,6 +132,9 @@ jobs:
       - name: Validate EXO vessel engineering and design philosophy
         run: node scripts/validate-exo-vessel-generator-v2.mjs
 
+      - name: Validate EXO vessel canonical contracts
+        run: node scripts/validate-exo-vessel-contracts.mjs
+
       - name: Validate phased EXO vessel system roadmap
         run: node scripts/validate-exo-vessel-roadmap.mjs
 
