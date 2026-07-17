@@ -77,7 +77,7 @@
   }
 
   document.addEventListener('click',openEcology,true);
-  document.addEventListener('blacklight:system-rendered',()=>queueMicrotask(enrichActiveSystem));
+  document.addEventListener('blacklight:system-rendered',enrichActiveSystem);
   document.addEventListener('blacklight:object-selected',event=>queueMicrotask(()=>{const system=globalThis.BlacklightExoGetActiveSystem?.();updateButton(system,event.detail?.id);decorateInspector(system,event.detail?.id);}));
   addNavLink();enrichActiveSystem();
 })();
