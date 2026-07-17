@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="blacklight-exo-ftl-mechanism.css">
   <link rel="stylesheet" href="blacklight-exo-ftl-charles.css">
   <link rel="stylesheet" href="blacklight-exo-ftl-assembly.css">
+  <link rel="stylesheet" href="blacklight-exo-ftl-dossier.css">
   <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-ftl-physics-definitions.js" defer></script>
   <script src="blacklight-exo-ftl-operational-definitions.js" defer></script>
@@ -50,6 +51,12 @@
   <script src="blacklight-exo-ftl-mechanism-ui.js" defer></script>
   <script src="blacklight-exo-ftl-charles-ui.js" defer></script>
   <script src="blacklight-exo-ftl-assembly-ui.js" defer></script>
+  <script src="blacklight-exo-ftl-dossier-core.js" defer></script>
+  <script src="blacklight-exo-ftl-dossier-chapters-base.js" defer></script>
+  <script src="blacklight-exo-ftl-dossier-chapters-mechanism.js" defer></script>
+  <script src="blacklight-exo-ftl-dossier-chapters-charles.js" defer></script>
+  <script src="blacklight-exo-ftl-dossier-chapters-assembly.js" defer></script>
+  <script src="blacklight-exo-ftl-dossier.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-ftl-body">
   <header class="bli-topbar">
@@ -68,31 +75,58 @@
 
   <section class="bli-hero exo-ftl-hero" aria-labelledby="exo-ftl-title">
     <div>
-      <p class="bli-eyebrow">Black compartment · Superluminal transit, dimensional mechanics, and strategic mobility</p>
-      <h1 id="exo-ftl-title">FTL Technology Hierarchy.</h1>
-      <p class="bli-lede">Generate technically differentiated sublight, near-light, and superluminal drive architectures. Every system is rated in effective light-time compression, AU traveled per second, minute, hour, and day, percentage of light speed or percentage beyond light speed, range, spool time, emergence accuracy, power demand, fuel mass, gravity-gradient limits, dimensional requirements, and edge-case operating hazards.</p>
+      <p class="bli-eyebrow">Black compartment · Charles-authored transit architecture dossier</p>
+      <h1 id="exo-ftl-title">Transit Architecture Evaluation.</h1>
+      <p class="bli-lede">I have assembled this dossier to compare sublight, near-light, and superluminal transit methods without pretending that one impressive number explains an entire machine. I will separate what is measured inside the generated model, what is estimated for engineering control, what remains theoretical, and what I would refuse to certify.</p>
       <div class="bli-actions">
-        <button id="exo-ftl-generate" class="bli-action primary" type="button">Generate FTL Architecture</button>
-        <button id="exo-ftl-export" class="bli-action" type="button">Export FTL JSON</button>
+        <button id="exo-ftl-generate" class="bli-action primary" type="button">Generate Charles Assessment</button>
+        <button id="exo-ftl-export" class="bli-action" type="button">Export Complete Dossier JSON</button>
       </div>
     </div>
     <aside class="bli-directory-panel" aria-label="Current FTL architecture summary">
-      <div class="bli-directory-title">Current Transit System</div>
+      <div class="bli-directory-title">Current Dossier Finding</div>
       <div class="bli-directory-list" role="list">
         <div class="bli-directory-item" role="listitem"><strong>Architecture</strong><span id="exo-ftl-summary-name" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Tier</strong><span id="exo-ftl-summary-tier" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Effective speed</strong><span id="exo-ftl-summary-speed" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Risk</strong><span id="exo-ftl-summary-risk" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Maturity</strong><span id="exo-ftl-summary-tier" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Certified route rate</strong><span id="exo-ftl-summary-speed" class="bli-arrow">pending</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Primary risk</strong><span id="exo-ftl-summary-risk" class="bli-arrow">pending</span></div>
       </div>
     </aside>
+  </section>
+
+  <section class="bli-shell exo-ftl-dossier-preface" aria-labelledby="exo-ftl-dossier-preface-title">
+    <div class="exo-ftl-dossier-preface-inner">
+      <div>
+        <p class="bli-eyebrow">Blacklight Intelligence // Charles // technical authorship notice</p>
+        <h2 id="exo-ftl-dossier-preface-title">Read this as an engineering dossier, not as an oracle.</h2>
+        <p>I am Charles. I have retained the performance calculations, path histories, mechanism descriptions, mathematical control sketches, construction estimates, component ratios, maintenance burdens, and failure analysis developed for these transit methods. My task is not to make the machinery sound more certain than it is. My task is to make the uncertainty useful.</p>
+        <p>The chapters below distinguish observed behavior inside the model, engineering estimates used to control the device, operational rules used to keep crews alive, theoretical interpretations that may still be wrong, and archival context explaining why the machine took this form. Dense tables and mathematical annexes remain available, but they no longer have to interrupt the first coherent explanation of what the device does.</p>
+      </div>
+      <aside class="exo-ftl-dossier-authority" aria-label="Dossier reading rules">
+        <div><strong>Author</strong><span>Charles, Blacklight Intelligence systems analyst and local technical authority.</span></div>
+        <div><strong>Scope</strong><span>Generated fictional engineering, internally consistent estimates, and explicit uncertainty—not a claim of demonstrated real-world FTL physics.</span></div>
+        <div><strong>Reading rule</strong><span>Performance, payload crossing, mission response, and construction burden are separate quantities. I will not merge them for dramatic convenience.</span></div>
+        <div><strong>Preservation rule</strong><span>No technical record is discarded merely because it is dense. Material is summarized first and retained in expandable chapters and annexes.</span></div>
+      </aside>
+    </div>
+    <nav class="exo-ftl-dossier-index" aria-label="Charles dossier chapters">
+      <div class="exo-ftl-dossier-index-head">
+        <span class="exo-ftl-dossier-index-title">Dossier chapter index</span>
+        <div class="exo-ftl-dossier-index-actions">
+          <button id="exo-ftl-dossier-open-all" type="button">Open every chapter</button>
+          <button id="exo-ftl-dossier-close-annexes" type="button">Collapse technical annexes</button>
+        </div>
+      </div>
+      <div id="exo-ftl-dossier-index-links" class="exo-ftl-dossier-index-links"></div>
+    </nav>
   </section>
 
   <main class="bli-shell exo-ftl-shell">
     <section class="bli-section exo-ftl-controls" aria-labelledby="exo-ftl-controls-title">
       <div class="bli-section-head">
-        <p class="bli-eyebrow">Engineering and route parameters</p>
-        <h2 id="exo-ftl-controls-title">Define the machine, its technological maturity, and the route being attempted.</h2>
-        <p>Clean-space drive ratings and route-degraded performance remain separate. A drive may possess an enormous theoretical compression factor while becoming slow, inaccurate, or prohibited near gravity wells, multiple-star barycenters, compact objects, magnetospheres, or disturbed Q/N-dimensional terrain.</p>
+        <p class="bli-eyebrow">Charles // assessment request</p>
+        <h2 id="exo-ftl-controls-title">Tell me which machine, maturity, and route you want assessed.</h2>
+        <p>I will preserve clean-space capability and route-degraded performance as separate findings. A machine may possess an exceptional theoretical rating while remaining inaccurate, unavailable, or prohibited near gravity wells, multiple-star barycenters, compact objects, magnetospheres, traffic wakes, or disturbed Q/N-dimensional terrain.</p>
       </div>
       <div class="exo-ftl-control-grid">
         <label><span>Generation seed</span><input id="exo-ftl-seed" type="text" maxlength="100" placeholder="Random seed"></label>
@@ -171,35 +205,35 @@
     </section>
 
     <section id="exo-ftl-source" class="bli-section exo-ftl-source" hidden>
-      <div class="bli-section-head"><p class="bli-eyebrow">Imported technological and political evidence</p><h2 id="exo-ftl-source-title">Source context</h2><p id="exo-ftl-source-body"></p></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Charles // imported provenance</p><h2 id="exo-ftl-source-title">Evidence inherited from the source dossier.</h2><p id="exo-ftl-source-body"></p></div>
       <div class="bli-actions"><a id="exo-ftl-source-return" class="bli-action" href="blacklight-exo-stellar-government.html">Return to source generator</a></div>
     </section>
 
     <section class="exo-ftl-overview" aria-label="Generated drive overview">
       <article class="exo-ftl-visual-panel">
-        <header><p class="bli-eyebrow">Transit field reconstruction</p><h2 id="exo-ftl-name">Awaiting generation</h2><p id="exo-ftl-description">Generate a drive architecture to establish its field geometry and performance envelope.</p></header>
+        <header><p class="bli-eyebrow">Charles // field reconstruction</p><h2 id="exo-ftl-name">Awaiting assessment</h2><p id="exo-ftl-description">Generate an architecture and I will reconstruct the claimed field geometry, operating method, and practical envelope.</p></header>
         <svg id="exo-ftl-visual" viewBox="0 0 700 430" role="img" aria-label="Generated FTL field and route diagram"></svg>
         <div id="exo-ftl-badges" class="exo-ftl-badges"></div>
       </article>
       <aside class="exo-ftl-rating-panel">
-        <p class="bli-eyebrow">Compression and route rating</p>
-        <h2 id="exo-ftl-rating-title">No rating</h2>
-        <p id="exo-ftl-rating-summary">No transit architecture has been generated.</p>
+        <p class="bli-eyebrow">Charles // initial finding</p>
+        <h2 id="exo-ftl-rating-title">No assessment</h2>
+        <p id="exo-ftl-rating-summary">No transit architecture has been generated for review.</p>
         <div class="exo-ftl-risk-meter"><span id="exo-ftl-risk-fill"></span></div>
         <dl id="exo-ftl-rating-data" class="exo-ftl-data"></dl>
       </aside>
     </section>
 
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Performance standard</p><h2>AU transit rate, light-speed relationship, mission time, and certified range.</h2></div><div id="exo-ftl-performance" class="exo-ftl-grid"></div></section>
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Power and fuel architecture</p><h2>Activation energy, field power, storage, fuel mass, efficiency, recharge, and thermal debt.</h2></div><div id="exo-ftl-power" class="exo-ftl-grid"></div></section>
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Field and dimensional engineering</p><h2>Transit mechanism, Q-state, N-dimensional geometry, coherence, computation, and hull integration.</h2></div><div id="exo-ftl-dimensional" class="exo-ftl-grid"></div></section>
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Navigation and gravity envelope</p><h2>Emergence accuracy, mass shadows, gravitational planes, gradient interference, exclusion zones, and destination verification.</h2></div><div id="exo-ftl-navigation" class="exo-ftl-grid"></div></section>
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Technology hierarchy</p><h2>Development from relativistic precursors and fixed gateworks to compact multisystem drives.</h2></div><div id="exo-ftl-hierarchy" class="exo-ftl-hierarchy"></div></section>
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Engineering barriers</p><h2>The problems that must be solved before this drive can become routine.</h2></div><div class="exo-ftl-list-grid"><article><h3>Technological hurdles</h3><ul id="exo-ftl-hurdles"></ul></article><article><h3>Q/N-dimensional factors</h3><ul id="exo-ftl-qn"></ul></article><article><h3>Gravity and plane limitations</h3><ul id="exo-ftl-gravity"></ul></article></div></section>
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Failure and edge-case analysis</p><h2>Situations in which the drive’s ordinary rating becomes misleading or unsafe.</h2></div><div class="exo-ftl-list-grid"><article><h3>Failure modes</h3><ul id="exo-ftl-failures"></ul></article><article><h3>Complicating use cases</h3><ul id="exo-ftl-edge"></ul></article><article><h3>Certified operating protocol</h3><ul id="exo-ftl-protocols"></ul></article></div></section>
-    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Source-derived consequences</p><h2>How the imported civilization, government, economy, system, or cluster shaped the resulting technology.</h2></div><div id="exo-ftl-source-impact" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // certified performance</p><h2>What I can certify about its transit performance.</h2></div><div id="exo-ftl-performance" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // primary energy account</p><h2>What this machine demands from its power plant.</h2></div><div id="exo-ftl-power" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // field integrity</p><h2>What the field must hold together.</h2></div><div id="exo-ftl-dimensional" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // departure and arrival geometry</p><h2>Where it may be started, steered, and safely stopped.</h2></div><div id="exo-ftl-navigation" class="exo-ftl-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // shared capability scale</p><h2>How this architecture compares with the wider technology hierarchy.</h2></div><div id="exo-ftl-hierarchy" class="exo-ftl-hierarchy"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // unresolved engineering</p><h2>What still prevents routine service.</h2></div><div class="exo-ftl-list-grid"><article><h3>Technological hurdles</h3><ul id="exo-ftl-hurdles"></ul></article><article><h3>Q/N-dimensional factors</h3><ul id="exo-ftl-qn"></ul></article><article><h3>Gravity and plane limitations</h3><ul id="exo-ftl-gravity"></ul></article></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // failure analysis</p><h2>How the rating becomes misleading, unsafe, or false.</h2></div><div class="exo-ftl-list-grid"><article><h3>Failure modes</h3><ul id="exo-ftl-failures"></ul></article><article><h3>Complicating use cases</h3><ul id="exo-ftl-edge"></ul></article><article><h3>Certified operating protocol</h3><ul id="exo-ftl-protocols"></ul></article></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Charles // provenance and institutional effects</p><h2>How its builders and institutions changed the final machine.</h2></div><div id="exo-ftl-source-impact" class="exo-ftl-grid"></div></section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO superluminal mobility, dimensional engineering, route certification, and strategic transit analysis.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Transit architecture dossier filed, qualified, and annotated by Charles.</footer>
 </body>
 </html>
