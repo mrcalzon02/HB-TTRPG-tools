@@ -9,7 +9,7 @@ const roadmap=JSON.parse(await fs.readFile(roadmapPath,'utf8'));
 
 if(roadmap.projectId!=='blacklight-exo-vessel-design-system')fail(`Unexpected projectId ${roadmap.projectId}.`);
 if(roadmap.version!==1)fail(`Expected roadmap version 1; found ${roadmap.version}.`);
-if(roadmap.status!=='active')fail(`Expected active roadmap after VESSEL-00; found ${roadmap.status}.`);
+if(roadmap.status!=='active')fail(`Expected active roadmap after VESSEL-01; found ${roadmap.status}.`);
 if(!roadmap.governingGuide)fail('Roadmap does not name a governing guide.');
 await fs.access(path.join(root,roadmap.governingGuide));
 
@@ -46,20 +46,31 @@ for(const phase of phases)visit(phase.id);
 
 const ordered=[...phases].sort((a,b)=>a.order-b.order).map(phase=>phase.id);
 if(JSON.stringify(ordered)!==JSON.stringify(roadmap.immediateImplementationOrder))fail('immediateImplementationOrder does not match numeric phase order.');
-const completed=phases.find(phase=>phase.id==='VESSEL-00');
-if(completed?.status!=='complete')fail('VESSEL-00 must be complete.');
-if(!Array.isArray(completed.completionEvidence)||completed.completionEvidence.length<8)fail('VESSEL-00 lacks completion evidence.');
-for(const file of completed.completionEvidence)await fs.access(path.join(root,file));
-if(phases.filter(phase=>phase.status==='next').length!==1||phases.find(phase=>phase.status==='next')?.id!=='VESSEL-01')fail('VESSEL-01 must be the sole next phase.');
+for(const phaseId of ['VESSEL-00','VESSEL-01']){
+  const completed=phases.find(phase=>phase.id===phaseId);
+  if(completed?.status!=='complete')fail(`${phaseId} must be complete.`);
+  if(!Array.isArray(completed.completionEvidence)||completed.completionEvidence.length<5)fail(`${phaseId} lacks completion evidence.`);
+  for(const file of completed.completionEvidence)await fs.access(path.join(root,file));
+}
+if(phases.filter(phase=>phase.status==='next').length!==1||phases.find(phase=>phase.status==='next')?.id!=='VESSEL-02')fail('VESSEL-02 must be the sole next phase.');
 
 const registry=JSON.parse(await fs.readFile(path.join(root,'data/exo-vessel/vessel-contract-registry.json'),'utf8'));
 if(registry.activeSchemaVersion!=='1.0.0')fail('VESSEL-00 contract registry is not active at 1.0.0.');
 if(JSON.stringify(registry.technologyBands.map(item=>item.key))!==JSON.stringify(expectedBands))fail('Roadmap and contract technology bands disagree.');
 if(JSON.stringify(registry.withinBandVariants.map(item=>({key:item.key,offset:item.offset})))!==JSON.stringify(variants))fail('Roadmap and contract variant tables disagree.');
 
+const manufacturerSchema=JSON.parse(await fs.readFile(path.join(root,'data/schemas/exo-vessel-manufacturer.schema.json'),'utf8'));
+for(const field of ['archetype','architecture','production','technologyVariantWeights','topologyWeights','materials','repairDoctrine','weaponPreferences','namingGrammar','visualGrammar','doctrine','signatureTraits','preferredRoles','provenance','validation'])if(!manufacturerSchema.required.includes(field))fail(`VESSEL-01 manufacturer schema does not require ${field}.`);
+const manufacturerDefinitions=await fs.readFile(path.join(root,'blacklight-exo-vessel-manufacturer-definitions.js'),'utf8');
+for(const term of ['CONTINUITY','MODULAR','PRECISION','FRONTIER','VAULT_KEEPER','VOID_NOMAD','CORP_LOGISTICS','APEX_WARLORD'])if(!manufacturerDefinitions.includes(term))fail(`VESSEL-01 definitions are missing ${term}.`);
+const manufacturerRuntime=await fs.readFile(path.join(root,'blacklight-exo-vessel-manufacturer-runtime.js'),'utf8');
+for(const term of ['BlacklightExoVesselManufacturerGenerator','manufacturerCatalog','technologyVariantWeights','topologyWeights','namingGrammar','visualGrammar','blacklight-exo-manufacturer-library-v1'])if(!manufacturerRuntime.includes(term))fail(`VESSEL-01 runtime is missing ${term}.`);
+const manufacturerUi=await fs.readFile(path.join(root,'blacklight-exo-vessel-manufacturer-ui.js'),'utf8');
+for(const term of ['exo-vessel-manufacturer-index','exo-vessel-save-manufacturer','exo-vessel-export-manufacturer','exo-vessel-manufacturer-section'])if(!manufacturerUi.includes(term))fail(`VESSEL-01 interface is missing ${term}.`);
+
 const guide=await fs.readFile(path.join(root,roadmap.governingGuide),'utf8');
 for(const heading of ['## 8. Crude three-dimensional voxel assembler','## 9. Vessel service doctrine and condition state','## 11. Sensor, tracking, and light-lag model','## 13. Weapon-family interpretations','## 18. Phased implementation roadmap'])if(!guide.includes(heading))fail(`Governing guide is missing ${heading}.`);
 for(const term of ['Internals-first','EVA-first','fractional-c','Missiles','100%','semantic module graph'])if(!guide.includes(term))fail(`Governing guide is missing required concept ${term}.`);
 
 console.log('EXO vessel phased roadmap validation passed.');
-console.log(`Validated completed VESSEL-00 evidence, next-phase VESSEL-01, ${phases.length} ordered acyclic phases, ${actualBands.length} technology bands, ${variants.length} within-band variants, and the governing guide.`);
+console.log(`Validated completed VESSEL-00 and VESSEL-01 evidence, next-phase VESSEL-02, ${phases.length} ordered acyclic phases, ${actualBands.length} technology bands, ${variants.length} within-band variants, manufacturer contracts, and the governing guide.`);
