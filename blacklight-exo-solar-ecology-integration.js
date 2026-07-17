@@ -45,11 +45,15 @@
   function decorateInspector(system,id=currentSelectedId()) {
     const object=objectById(system,id);const data=document.getElementById('exo-inspector-data');if(!object||!data)return;
     data.querySelectorAll('[data-ecology-row]').forEach(node=>node.remove());
-    const profile=object.ecology;if(!profile)return;
+    const badges=document.getElementById('exo-inspector-badges');
+    let ecologyBadge=badges?.querySelector('[data-ecology-badge]');
+    const profile=object.ecology;
+    if(!profile){ecologyBadge?.remove();return;}
     for(const [label,value] of [
       ['Ecological state',profile.classification.finalLabel],['Native ecology',profile.classification.nativeLabel],['Civilizational overlay',profile.classification.overlayLabel],['Ecological complexity',`${profile.complexity.index}/100 · ${profile.complexity.stage}`],['Dominant environment',profile.environment.label]
     ]){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.dataset.ecologyRow='true';dd.dataset.ecologyRow='true';dt.textContent=label;dd.textContent=value;data.append(dt,dd);}
-    const badges=document.getElementById('exo-inspector-badges');if(badges&&!badges.querySelector('[data-ecology-badge]')){const span=document.createElement('span');span.dataset.ecologyBadge='true';span.textContent=profile.classification.finalLabel;badges.append(span);}
+    if(badges&&!ecologyBadge){ecologyBadge=document.createElement('span');ecologyBadge.dataset.ecologyBadge='true';badges.append(ecologyBadge);}
+    if(ecologyBadge)ecologyBadge.textContent=profile.classification.finalLabel;
   }
 
   function enrichActiveSystem() {
