@@ -132,6 +132,9 @@ jobs:
       - name: Validate EXO vessel engineering and design philosophy
         run: node scripts/validate-exo-vessel-generator-v2.mjs
 
+      - name: Validate phased EXO vessel system roadmap
+        run: node scripts/validate-exo-vessel-roadmap.mjs
+
       - name: Verify Phase 14 contracts
         run: |
           node -e "for(const path of ['data/npc-generator/phase-status.json','data/npc-generator/fixtures/phase-14-browser-matrix.json','data/schemas/npc-profile.schema.json','data/schemas/npc-group.schema.json'])JSON.parse(require('node:fs').readFileSync(path,'utf8'))"
