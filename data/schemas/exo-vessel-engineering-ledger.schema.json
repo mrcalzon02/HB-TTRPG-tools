@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-engineering-ledger.schema.json",
+  "title": "Blacklight EXO Vessel Engineering Ledger",
+  "description": "VESSEL-02 conventional propulsion, combat delta-v, armor, sensor, fire-control, weapon-support, magazine, cooling, and countermeasure engineering contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "recordType",
+    "schemaVersion",
+    "phase",
+    "technologyBand",
+    "manufacturerId",
+    "sourceMassTonnes",
+    "sourceVolumeM3",
+    "addedReactionMassTonnes",
+    "propulsion",
+    "armor",
+    "sensors",
+    "weapons",
+    "countermeasures",
+    "massClosure",
+    "deferredSystems",
+    "validation"
+  ],
+  "properties": {
+    "recordType": {"const": "exoVesselEngineeringLedger"},
+    "schemaVersion": {"const": "1.0.0"},
+    "phase": {"const": "VESSEL-02"},
+    "technologyBand": {"enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+    "manufacturerId": {"type": ["string", "null"], "pattern": "^mfr-[a-z0-9][a-z0-9-]{5,95}$"},
+    "sourceMassTonnes": {"type": "number", "exclusiveMinimum": 0},
+    "sourceVolumeM3": {"type": "number", "exclusiveMinimum": 0},
+    "addedReactionMassTonnes": {"type": "number", "minimum": 0},
+    "propulsion": {"$ref": "#/$defs/propulsion"},
+    "armor": {"$ref": "#/$defs/armor"},
+    "sensors": {"$ref": "#/$defs/sensors"},
+    "weapons": {"$ref": "#/$defs/weapons"},
+    "countermeasures": {"$ref": "#/$defs/countermeasures"},
+    "massClosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceMassTonnes", "addedMassTonnes", "expectedLoadedMassTonnes", "actualLoadedMassTonnes", "massErrorTonnes", "actualVolumeM3"],
+      "properties": {
+        "sourceMassTonnes": {"type": "number", "exclusiveMinimum": 0},
+        "addedMassTonnes": {"type": "number", "minimum": 0},
+        "expectedLoadedMassTonnes": {"type": "number", "exclusiveMinimum": 0},
+        "actualLoadedMassTonnes": {"type": "number", "exclusiveMinimum": 0},
+        "massErrorTonnes": {"type": "number"},
+        "actualVolumeM3": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "deferredSystems": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sensorTrackAndLightLag", "weaponPerformanceAndEngagementEnvelopes", "localDamageResolution"],
+      "properties": {
+        "sensorTrackAndLightLag": {"const": "VESSEL-06"},
+        "weaponPerformanceAndEngagementEnvelopes": {"const": "VESSEL-07"},
+        "localDamageResolution": {"const": "VESSEL-08"}
+      }
+    },
+    "validation": {"$ref": "#/$defs/validation"}
+  },
+  "$defs": {
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "violations"],
+      "properties": {
+        "valid": {"type": "boolean"},
+        "violations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "propulsion": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "recordType", "schemaVersion", "technologyBand", "technology", "engineHardwareMassTonnes",
+        "propellantMassTonnes", "dryBeforePropellantTonnes", "wetMassTonnes", "strategicDeltaVMps",
+        "cruiseDeltaVMps", "combatReserveDeltaVMps", "combatPropellantTonnes", "enginePowerW", "thrustN",
+        "longitudinalAccelerationMps2", "lateralCombatAccelerationMps2", "structuralAccelerationLimitG",
+        "crewAccelerationLimitG", "propellantFlowKgS", "propellantLimitedSeconds", "thermalLimitedSeconds",
+        "sustainedCombatDurationSeconds", "validation"
+      ],
+      "properties": {
+        "recordType": {"const": "exoVesselPropulsionLedger"},
+        "schemaVersion": {"const": "1.0.0"},
+        "technologyBand": {"enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "technology": {"type": "object"},
+        "engineHardwareMassTonnes": {"type": "number", "exclusiveMinimum": 0},
+        "propellantMassTonnes": {"type": "number", "minimum": 0},
+        "dryBeforePropellantTonnes": {"type": "number", "exclusiveMinimum": 0},
+        "wetMassTonnes": {"type": "number", "exclusiveMinimum": 0},
+        "strategicDeltaVMps": {"type": "number", "minimum": 0},
+        "cruiseDeltaVMps": {"type": "number", "minimum": 0},
+        "combatReserveDeltaVMps": {"type": "number", "minimum": 0},
+        "combatPropellantTonnes": {"type": "number", "minimum": 0},
+        "enginePowerW": {"type": "number", "exclusiveMinimum": 0},
+        "thrustN": {"type": "number", "exclusiveMinimum": 0},
+        "longitudinalAccelerationMps2": {"type": "number", "minimum": 0},
+        "lateralCombatAccelerationMps2": {"type": "number", "minimum": 0},
+        "structuralAccelerationLimitG": {"type": "number", "exclusiveMinimum": 0},
+        "crewAccelerationLimitG": {"type": "number", "exclusiveMinimum": 0},
+        "propellantFlowKgS": {"type": "number", "minimum": 0},
+        "propellantLimitedSeconds": {"type": "number", "minimum": 0},
+        "thermalLimitedSeconds": {"type": "number", "minimum": 0},
+        "sustainedCombatDurationSeconds": {"type": "number", "minimum": 0},
+        "validation": {"$ref": "#/$defs/validation"}
+      }
+    },
+    "armor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType", "schemaVersion", "doctrine", "architecture", "protectedSurfaceAreaM2", "coverageFraction",
+        "physicalArealDensityKgM2", "effectiveArealDensityKgM2", "architectureEfficiency", "passiveArmorMassTonnes",
+        "fieldProtectionMassTonnes", "totalProtectionMassTonnes", "armorToMassPercent", "protectionToMassPercent",
+        "equationMassTonnes", "layers", "facings", "relativisticBoundary", "validation"
+      ],
+      "properties": {
+        "recordType": {"const": "exoVesselArmorLedger"},
+        "schemaVersion": {"const": "1.0.0"},
+        "doctrine": {"enum": ["civilian", "hardened", "naval"]},
+        "architecture": {"enum": ["INTERNAL", "EVA", "HYBRID"]},
+        "protectedSurfaceAreaM2": {"type": "number", "exclusiveMinimum": 0},
+        "coverageFraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "physicalArealDensityKgM2": {"type": "number", "minimum": 0},
+        "effectiveArealDensityKgM2": {"type": "number", "minimum": 0},
+        "architectureEfficiency": {"type": "number", "exclusiveMinimum": 0},
+        "passiveArmorMassTonnes": {"type": "number", "minimum": 0},
+        "fieldProtectionMassTonnes": {"type": "number", "minimum": 0},
+        "totalProtectionMassTonnes": {"type": "number", "minimum": 0},
+        "armorToMassPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "protectionToMassPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "equationMassTonnes": {"type": "number", "minimum": 0},
+        "layers": {"type": "array", "minItems": 5, "items": {"type": "object"}},
+        "facings": {"type": "object"},
+        "relativisticBoundary": {"type": "string", "minLength": 1},
+        "validation": {"$ref": "#/$defs/validation"}
+      }
+    },
+    "sensors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType", "schemaVersion", "technologyBand", "technology", "totalMassTonnes", "masses", "shares",
+        "baselineM", "apertureAreaM2", "sensorChannels", "fireControlChannels", "navigationChannels",
+        "electronicWarfareChannels", "processingIndex", "stabilizationMicrorad", "sensorPowerW",
+        "fireControlPowerW", "electronicWarfarePowerW", "trackModelStatus", "validation"
+      ],
+      "properties": {
+        "recordType": {"const": "exoVesselSensorLedger"},
+        "schemaVersion": {"const": "1.0.0"},
+        "technologyBand": {"enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "technology": {"type": "object"},
+        "totalMassTonnes": {"type": "number", "minimum": 0},
+        "masses": {"type": "object"},
+        "shares": {"type": "object"},
+        "baselineM": {"type": "number", "exclusiveMinimum": 0},
+        "apertureAreaM2": {"type": "number", "minimum": 0},
+        "sensorChannels": {"type": "integer", "minimum": 1},
+        "fireControlChannels": {"type": "integer", "minimum": 0},
+        "navigationChannels": {"type": "integer", "minimum": 1},
+        "electronicWarfareChannels": {"type": "integer", "minimum": 1},
+        "processingIndex": {"type": "number", "exclusiveMinimum": 0},
+        "stabilizationMicrorad": {"type": "number", "exclusiveMinimum": 0},
+        "sensorPowerW": {"type": "number", "minimum": 0},
+        "fireControlPowerW": {"type": "number", "minimum": 0},
+        "electronicWarfarePowerW": {"type": "number", "minimum": 0},
+        "trackModelStatus": {"type": "string", "minLength": 1},
+        "validation": {"$ref": "#/$defs/validation"}
+      }
+    },
+    "weaponInstallation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "weaponFamily", "label", "technologyBand", "allocationMassTonnes", "mountMassTonnes", "supportMassTonnes",
+        "magazineMassTonnes", "coolingMassTonnes", "peakPowerW", "continuousPowerW", "wasteHeatW",
+        "unitRoundMassTonnes", "roundCount", "preferredTargets", "integrationStatus"
+      ],
+      "properties": {
+        "weaponFamily": {"enum": ["CHEMICAL_BALLISTIC", "RAIL_GUN", "COIL_GUN", "BRUTE_MASS_THROWER", "SAND_GUN", "LASER", "PARTICLE_BEAM", "FRACTIONAL_C", "MISSILE"]},
+        "label": {"type": "string", "minLength": 1},
+        "technologyBand": {"enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "allocationMassTonnes": {"type": "number", "minimum": 0},
+        "mountMassTonnes": {"type": "number", "minimum": 0},
+        "supportMassTonnes": {"type": "number", "minimum": 0},
+        "magazineMassTonnes": {"type": "number", "minimum": 0},
+        "coolingMassTonnes": {"type": "number", "minimum": 0},
+        "peakPowerW": {"type": "number", "minimum": 0},
+        "continuousPowerW": {"type": "number", "minimum": 0},
+        "wasteHeatW": {"type": "number", "minimum": 0},
+        "unitRoundMassTonnes": {"type": "number", "minimum": 0},
+        "roundCount": {"type": "integer", "minimum": 0},
+        "preferredTargets": {"type": "array", "items": {"type": "string"}},
+        "integrationStatus": {"type": "string", "minLength": 1}
+      }
+    },
+    "weapons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType", "schemaVersion", "combatFit", "totalCombatAllocationTonnes", "payloadContributionTonnes",
+        "marginContributionTonnes", "remainingPayloadTonnes", "remainingMarginTonnes", "offensiveMassTonnes",
+        "countermeasureMassTonnes", "installations", "totals", "countermeasures", "validation"
+      ],
+      "properties": {
+        "recordType": {"const": "exoVesselWeaponSupportLedger"},
+        "schemaVersion": {"const": "1.0.0"},
+        "combatFit": {"type": "object"},
+        "totalCombatAllocationTonnes": {"type": "number", "minimum": 0},
+        "payloadContributionTonnes": {"type": "number", "minimum": 0},
+        "marginContributionTonnes": {"type": "number", "minimum": 0},
+        "remainingPayloadTonnes": {"type": "number", "minimum": 0},
+        "remainingMarginTonnes": {"type": "number", "minimum": 0},
+        "offensiveMassTonnes": {"type": "number", "minimum": 0},
+        "countermeasureMassTonnes": {"type": "number", "minimum": 0},
+        "installations": {"type": "array", "items": {"$ref": "#/$defs/weaponInstallation"}},
+        "totals": {"type": "object"},
+        "countermeasures": {"$ref": "#/$defs/countermeasures"},
+        "validation": {"$ref": "#/$defs/validation"}
+      }
+    },
+    "countermeasures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recordType", "schemaVersion", "totalMassTonnes", "peakPowerW", "inventory", "engagementStatus"],
+      "properties": {
+        "recordType": {"const": "exoVesselCountermeasureLedger"},
+        "schemaVersion": {"const": "1.0.0"},
+        "totalMassTonnes": {"type": "number", "minimum": 0},
+        "peakPowerW": {"type": "number", "minimum": 0},
+        "inventory": {"type": "array", "items": {"type": "object"}},
+        "engagementStatus": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
