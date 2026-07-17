@@ -1,0 +1,59 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "registryType": "exoVesselEngineeringRegistry",
+  "registryVersion": "1.0.0",
+  "phase": "VESSEL-02",
+  "schema": "data/schemas/exo-vessel-engineering-ledger.schema.json",
+  "principles": [
+    "Only conventional reaction mass may increase the architecture-adjusted loaded mass during VESSEL-02.",
+    "Armor, active protection, sensors, fire control, electronic warfare, weapon support, magazines, cooling, and countermeasures must be reclassified from existing broad mass rows rather than duplicated.",
+    "Strategic delta-v and combat reserve delta-v must remain separate.",
+    "Passive armor mass must close against protected surface area, physical areal density, and coverage fraction.",
+    "Weapons must include mounts, structural support, power conditioning, magazines or emitter inventory, and cooling.",
+    "Weapon performance, engagement envelopes, light-lag tracking, and local damage remain deferred to later roadmap phases."
+  ],
+  "technologyBands": [
+    {"band":"P0","propulsion":"PULSED_FISSION_THERMAL","exhaustVelocityMps":25000,"baseStrategicDeltaVMps":6000},
+    {"band":"P1","propulsion":"FUSION_THERMAL","exhaustVelocityMps":80000,"baseStrategicDeltaVMps":18000},
+    {"band":"P2","propulsion":"FUSION_PLASMA","exhaustVelocityMps":250000,"baseStrategicDeltaVMps":50000},
+    {"band":"P3","propulsion":"ADVANCED_FUSION_TORCH","exhaustVelocityMps":900000,"baseStrategicDeltaVMps":140000},
+    {"band":"P4","propulsion":"ANEUTRONIC_FUSION_TORCH","exhaustVelocityMps":3000000,"baseStrategicDeltaVMps":400000},
+    {"band":"P5","propulsion":"ANTIMATTER_CATALYZED_PLASMA","exhaustVelocityMps":12000000,"baseStrategicDeltaVMps":1400000},
+    {"band":"P6","propulsion":"FIELD_COUPLED_RELATIVISTIC_TORCH","exhaustVelocityMps":45000000,"baseStrategicDeltaVMps":5000000}
+  ],
+  "combatFits": ["UNARMED", "CIVILIAN", "DEFENSIVE", "SECURITY", "NAVAL"],
+  "expandedMassRows": [
+    "conventional-engine",
+    "conventional-propellant",
+    "armor",
+    "protection-fields",
+    "navigation",
+    "sensors",
+    "fire-control",
+    "electronic-warfare",
+    "payload",
+    "weapon-mounts",
+    "weapon-support",
+    "weapon-magazines",
+    "weapon-cooling",
+    "countermeasures",
+    "margin"
+  ],
+  "weaponFamilies": [
+    "CHEMICAL_BALLISTIC",
+    "RAIL_GUN",
+    "COIL_GUN",
+    "BRUTE_MASS_THROWER",
+    "SAND_GUN",
+    "LASER",
+    "PARTICLE_BEAM",
+    "FRACTIONAL_C",
+    "MISSILE"
+  ],
+  "countermeasureTypes": ["INTERCEPTOR", "DECOY", "ELECTRONIC", "PARTICULATE"],
+  "deferredSystems": {
+    "sensorTrackAndLightLag": "VESSEL-06",
+    "weaponPerformanceAndEngagementEnvelopes": "VESSEL-07",
+    "localDamageResolution": "VESSEL-08"
+  }
+}
