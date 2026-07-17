@@ -11,9 +11,17 @@
   "suggestedCellEdgesM":[1,2,5,10,20,50,100],
   "axes":{"x":"aft-to-forward","y":"port-to-starboard","z":"ventral-to-dorsal"},
   "requiredSpatialOutputs":["modulePlacements","infrastructureBlocks","utilityRoutes","accessRoutes","evacuationRoutes","armorSurfaces","evaHardpoints","weaponHardpointPlacements","engineExhaustClearances","radiatorClearances"],
+  "armorSurfacePolicy":{
+    "standaloneArmorModules":false,
+    "source":"VESSEL_WIDE_DISTRIBUTED_ARMOR_LEDGER",
+    "directions":["FORE","AFT","LEFT","RIGHT","UP","DOWN","CITADEL","STRUCTURAL"],
+    "activeFieldOverlay":true
+  },
   "principles":[
     "Persistent VESSEL-03 module identifiers must not change when spatial bounds are assigned.",
     "Every module must fit inside one non-overlapping integer-cell bounding box.",
+    "Passive armor is represented as vessel-wide hull, citadel, structural, and external-system hardening surfaces rather than module placements.",
+    "Directional active shielding overlays the same fore, aft, left, right, up, down, citadel, and structural protection records.",
     "Adaptive cell size must keep the aggregate envelope at or below the configured cell cap.",
     "Utility and access routes must terminate at existing modules or infrastructure anchors.",
     "Main-engine exhaust, radiator view fields, and weapon sight lines must remain clear.",
