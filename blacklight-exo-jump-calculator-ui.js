@@ -187,7 +187,7 @@
         const target = document.getElementById(assignmentMode === 'start' ? 'exo-jump-start' : 'exo-jump-end');
         target.value = system.seed;
         setAssignment(assignmentMode === 'start' ? 'end' : 'start');
-        if (document.getElementById('exo-jump-start').value !== document.getElementById('exo-jump-end').value) calculate();
+        calculate();
         renderMap();
       };
       group.addEventListener('click', assign);
