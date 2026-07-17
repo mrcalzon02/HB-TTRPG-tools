@@ -3,7 +3,7 @@
   if (globalThis.BlacklightExoVesselVoxelDefinitions) return;
 
   const topologyPolicies = {
-    MONOCOQUE:{key:'MONOCOQUE',label:'Monocoque pressure hull',packingFraction:.46,internalBias:.78,radialBranches:2,description:'A compact pressure-bearing shell with machinery packed around one protected centerline.'},
+    MONOCOQUE:{key:'MONOCOQUE',label:'Monocoque pressure hull',packingFraction:.46,internalBias:.78,radialBranches:5,description:'A compact pressure-bearing shell with machinery packed around one protected centerline.'},
     SPINE:{key:'SPINE',label:'Long structural spine',packingFraction:.34,internalBias:.44,radialBranches:4,description:'A long thrust-aligned keel with modules attached along protected and vacuum-exposed branches.'},
     CLUSTER:{key:'CLUSTER',label:'Clustered pods and hub',packingFraction:.28,internalBias:.38,radialBranches:6,description:'Multiple isolated pods arranged around a central transfer, command, and structural hub.'},
     RING:{key:'RING',label:'Ring and central hub',packingFraction:.26,internalBias:.58,radialBranches:8,description:'A circular inhabited or industrial ring around a central thrust, utility, and docking hub.'},
@@ -11,9 +11,9 @@
   };
 
   const semanticPlacement = {
+    MAIN_ENGINE:{priority:110,region:'AFT_BOUNDARY',shape:'LONGITUDINAL'},
     DRIVE_APPARATUS:{priority:100,region:'AFT_CENTER',shape:'LONGITUDINAL'},
     DRIVE_INTEGRATION:{priority:98,region:'CENTERLINE',shape:'LONGITUDINAL'},
-    MAIN_ENGINE:{priority:97,region:'AFT_BOUNDARY',shape:'LONGITUDINAL'},
     REACTOR:{priority:95,region:'CENTER_AFT',shape:'COMPACT'},
     ENERGY_STORAGE:{priority:93,region:'CENTER_AFT',shape:'TANK'},
     PROPELLANT_TANK:{priority:92,region:'AFT_FLANK',shape:'TANK'},
