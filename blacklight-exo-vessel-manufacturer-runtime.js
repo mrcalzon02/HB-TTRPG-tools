@@ -39,7 +39,8 @@
   }
   function sourceIdentity(seed,result,source){
     const d=dossier(source),speciesName=d?.species?.name||result.lifeSupport?.profile?.sourceSpecies||'Reference Species',speciesCommon=d?.species?.commonName||String(speciesName).split(/\s+/)[0],organizationName=d?.civilization?.government||d?.civilization?.economy||'Independent Vessel Authority';
-    const speciesSeed=`${d?.seed||seed}:species:${slug(speciesName)}`,organizationSeed=`${speciesSeed}:organization:${slug(organizationName)}`;
+    const sourceRoot=d?.seed||`reference:${slug(speciesName)}`;
+    const speciesSeed=`${sourceRoot}:species:${slug(speciesName)}`,organizationSeed=`${speciesSeed}:organization:${slug(organizationName)}`;
     return{d,speciesName,speciesCommon,organizationName,speciesSeed,organizationSeed,speciesId:id('species',speciesName,speciesSeed),organizationId:id('org',organizationName,organizationSeed)};
   }
   function technologyRank(result){
