@@ -4,7 +4,7 @@
   "stage": "P0",
   "stageId": "shared-editor-kernel",
   "status": "failed",
-  "validatedCommit": "7a19f59bdeb651718d25308c9fe08f9145ec2ede",
+  "validatedCommit": "ba28452182b44f3e6d419d15a48d0ce2a54764f8",
   "workflow": ".github/workflows/pages.yml",
   "validators": {
     "static": "scripts/validate-editor-runtime-structure.mjs",
@@ -29,5 +29,5 @@
   "browserOutput": [
     "P0 browser verification was skipped because static validation failed."
   ],
-  "recordedAt": "2026-07-17T17:51:22.645Z"
+  "recordedAt": "2026-07-17T17:52:20.392Z"
 }
