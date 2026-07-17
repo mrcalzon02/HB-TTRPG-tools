@@ -4,6 +4,7 @@
   const $ = id => document.getElementById(id);
   const SOURCE_KEY = 'blacklight-exo-selected-world-v1';
   const ECOLOGY_KEY = 'blacklight-exo-ecology-handoff-v1';
+  const COLLAPSE_KEY = 'blacklight-exo-collapse-context-v1';
   const clone = value => JSON.parse(JSON.stringify(value));
   const controls = {
     generate:$('exo-ecology-generate'),export:$('exo-ecology-export'),continue:$('exo-ecology-continue'),seed:$('exo-ecology-seed'),
@@ -41,6 +42,18 @@
     } catch (error) {
       console.warn('[Blacklight EXO Ecology] Unable to read solar handoff.', error);
       return null;
+    }
+  }
+
+  function loadCollapseContext() {
+    try {
+      const record=JSON.parse(sessionStorage.getItem(COLLAPSE_KEY)||'null');
+      if(!record||record.version!==1||!sourceContext?.selectedWorld)return null;
+      if(record.worldName&&record.worldName!==sourceContext.selectedWorld.name)return null;
+      if(record.systemSeed&&sourceContext.systemSeed&&record.systemSeed!==sourceContext.systemSeed)return null;
+      return record;
+    } catch(error) {
+      console.warn('[Blacklight EXO Ecology] Unable to read collapse-history handoff.',error);return null;
     }
   }
 
@@ -132,6 +145,14 @@
     const seed=controls.seed.value.trim()||randomSeed();controls.seed.value=seed;
     if (!sourceContext) sourceContext=syntheticContext(seed);
     ecology=globalThis.BlacklightExoEcology.generate({seed,world:sourceContext.selectedWorld,system:sourceContext.system,context:{systemState:sourceContext.systemState,stateKey:sourceContext.stateKey,worldRole:sourceContext.worldRole},overrides:{classification:controls.classification.value,occupancy:controls.occupancy.value,environment:controls.environment.value,chemistry:controls.chemistry.value,complexity:controls.complexity.value}});
+    const collapse=loadCollapseContext();
+    if(collapse&&ecology.classification.overlay==='ruined'){
+      ecology.collapse=clone(collapse);
+      ecology.history.unshift(`${collapse.cause}: ${collapse.mechanism}`);
+      if(collapse.aftermath)ecology.history.push(`Recorded aftermath: ${collapse.aftermath}`);
+      if(collapse.hazard&&!ecology.hazards.includes(collapse.hazard))ecology.hazards.unshift(collapse.hazard);
+      sourceContext.selectedWorld.collapse=clone(collapse);
+    }
     sourceContext.selectedWorld.ecology=clone(ecology);sourceContext.selectedWorld.ecologyClass=ecology.classification.finalState;sourceContext.selectedWorld.ecologySummary=ecology.summary;
     if (ecology.classification.nativeClass==='living') sourceContext.selectedWorld.biosphere='Generated native biosphere';
     else if (ecology.classification.nativeClass==='pseudo') sourceContext.selectedWorld.biosphere='Generated pseudo-life signature';
