@@ -1,205 +1,40 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-module-graph.schema.json",
-  "title": "Blacklight EXO Vessel Semantic Module Graph",
-  "description": "VESSEL-03 graph connecting persistent physical modules through structural, pressure, utility, access, magazine-feed, sensor-dependency, hardpoint, and load-path records.",
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["recordType", "schemaVersion", "phase", "vesselInstanceId", "topology", "validationMode", "infrastructureNodes", "modules", "pressureZones", "pressureZoneGraph", "graphs", "loadPaths", "weaponHardpoints", "sensorRequirements", "repairLog", "deferredSystems", "validation"],
-  "properties": {
-    "recordType": {"const": "exoVesselModuleGraph"},
-    "schemaVersion": {"const": "1.0.0"},
-    "phase": {"const": "VESSEL-03"},
-    "vesselInstanceId": {"type": "string", "pattern": "^vessel-[a-z0-9][a-z0-9-]{5,95}$"},
-    "topology": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["key", "weights", "source", "architecture"],
-      "properties": {
-        "key": {"enum": ["MONOCOQUE", "SPINE", "CLUSTER", "RING", "HYBRID"]},
-        "weights": {"type": "object"},
-        "source": {"type": "string", "minLength": 1},
-        "architecture": {"enum": ["INTERNAL", "EVA", "HYBRID"]}
-      }
-    },
-    "validationMode": {"enum": ["REPAIR", "STRICT"]},
-    "infrastructureNodes": {"type": "array", "minItems": 9, "items": {"$ref": "#/$defs/infrastructureNode"}},
-    "modules": {"type": "array", "minItems": 1, "items": {"$ref": "exo-vessel-module.schema.json"}},
-    "pressureZones": {"type": "array", "items": {"$ref": "#/$defs/pressureZone"}},
-    "pressureZoneGraph": {"$ref": "#/$defs/network"},
-    "graphs": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["structural", "power", "cooling", "data", "atmosphere", "access", "magazineFeed", "sensorDependency"],
-      "properties": {
-        "structural": {"$ref": "#/$defs/network"},
-        "power": {"$ref": "#/$defs/network"},
-        "cooling": {"$ref": "#/$defs/network"},
-        "data": {"$ref": "#/$defs/network"},
-        "atmosphere": {"$ref": "#/$defs/network"},
-        "access": {"$ref": "#/$defs/network"},
-        "magazineFeed": {"$ref": "#/$defs/network"},
-        "sensorDependency": {"$ref": "#/$defs/network"}
-      }
-    },
-    "loadPaths": {"type": "array", "items": {"$ref": "#/$defs/loadPath"}},
-    "weaponHardpoints": {"type": "array", "items": {"$ref": "#/$defs/weaponHardpoint"}},
-    "sensorRequirements": {"type": "array", "items": {"$ref": "#/$defs/sensorRequirement"}},
-    "repairLog": {"type": "array", "items": {"$ref": "#/$defs/repair"}},
-    "deferredSystems": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["voxelBounds", "conditionApplication", "trackAndCombatGeometry", "weaponEngagementEnvelopes", "localDamageResolution"],
-      "properties": {
-        "voxelBounds": {"const": "VESSEL-04"},
-        "conditionApplication": {"const": "VESSEL-05"},
-        "trackAndCombatGeometry": {"const": "VESSEL-06"},
-        "weaponEngagementEnvelopes": {"const": "VESSEL-07"},
-        "localDamageResolution": {"const": "VESSEL-08"}
-      }
-    },
-    "validation": {"$ref": "#/$defs/validation"}
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-module-graph.schema.json",
+  "title":"Blacklight EXO Vessel Semantic Module Graph",
+  "description":"VESSEL-03 graph connecting persistent physical modules while retaining vessel-wide distributed hardening rather than generating detachable armor modules.",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["recordType","schemaVersion","phase","vesselInstanceId","topology","validationMode","infrastructureNodes","modules","hardeningSummary","pressureZones","pressureZoneGraph","graphs","loadPaths","weaponHardpoints","sensorRequirements","repairLog","deferredSystems","validation"],
+  "properties":{
+    "recordType":{"const":"exoVesselModuleGraph"},
+    "schemaVersion":{"const":"1.0.0"},
+    "phase":{"const":"VESSEL-03"},
+    "vesselInstanceId":{"type":"string","pattern":"^vessel-[a-z0-9][a-z0-9-]{5,95}$"},
+    "topology":{"type":"object","additionalProperties":false,"required":["key","weights","source","architecture"],"properties":{"key":{"enum":["MONOCOQUE","SPINE","CLUSTER","RING","HYBRID"]},"weights":{"type":"object"},"source":{"type":"string","minLength":1},"architecture":{"enum":["INTERNAL","EVA","HYBRID"]}}},
+    "validationMode":{"enum":["REPAIR","STRICT"]},
+    "infrastructureNodes":{"type":"array","minItems":9,"items":{"$ref":"#/$defs/infrastructureNode"}},
+    "modules":{"type":"array","minItems":1,"items":{"$ref":"exo-vessel-module.schema.json"}},
+    "hardeningSummary":{"$ref":"#/$defs/hardeningSummary"},
+    "pressureZones":{"type":"array","items":{"$ref":"#/$defs/pressureZone"}},
+    "pressureZoneGraph":{"$ref":"#/$defs/network"},
+    "graphs":{"type":"object","additionalProperties":false,"required":["structural","power","cooling","data","atmosphere","access","magazineFeed","sensorDependency"],"properties":{"structural":{"$ref":"#/$defs/network"},"power":{"$ref":"#/$defs/network"},"cooling":{"$ref":"#/$defs/network"},"data":{"$ref":"#/$defs/network"},"atmosphere":{"$ref":"#/$defs/network"},"access":{"$ref":"#/$defs/network"},"magazineFeed":{"$ref":"#/$defs/network"},"sensorDependency":{"$ref":"#/$defs/network"}}},
+    "loadPaths":{"type":"array","items":{"$ref":"#/$defs/loadPath"}},
+    "weaponHardpoints":{"type":"array","items":{"$ref":"#/$defs/weaponHardpoint"}},
+    "sensorRequirements":{"type":"array","items":{"$ref":"#/$defs/sensorRequirement"}},
+    "repairLog":{"type":"array","items":{"$ref":"#/$defs/repair"}},
+    "deferredSystems":{"type":"object","additionalProperties":false,"required":["voxelBounds","conditionApplication","trackAndCombatGeometry","weaponEngagementEnvelopes","localDamageResolution"],"properties":{"voxelBounds":{"const":"VESSEL-04"},"conditionApplication":{"const":"VESSEL-05"},"trackAndCombatGeometry":{"const":"VESSEL-06"},"weaponEngagementEnvelopes":{"const":"VESSEL-07"},"localDamageResolution":{"const":"VESSEL-08"}}},
+    "validation":{"$ref":"#/$defs/validation"}
   },
-  "$defs": {
-    "infrastructureNode": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["key", "nodeType", "label", "properties", "nodeId", "massTonnes", "volumeM3", "state"],
-      "properties": {
-        "key": {"type": "string", "minLength": 1},
-        "nodeType": {"type": "string", "minLength": 1},
-        "label": {"type": "string", "minLength": 1},
-        "properties": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "nodeId": {"type": "string", "minLength": 1},
-        "massTonnes": {"const": 0},
-        "volumeM3": {"const": 0},
-        "state": {"const": "ACTIVE"}
-      }
-    },
-    "edge": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["edgeId", "from", "to", "edgeType", "properties", "state"],
-      "properties": {
-        "edgeId": {"type": "string", "minLength": 1},
-        "from": {"type": "string", "minLength": 1},
-        "to": {"type": "string", "minLength": 1},
-        "edgeType": {"type": "string", "minLength": 1},
-        "properties": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "state": {"const": "ACTIVE"}
-      }
-    },
-    "network": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["graphType", "nodes", "edges"],
-      "properties": {
-        "graphType": {"type": "string", "minLength": 1},
-        "nodes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}}
-      }
-    },
-    "pressureZone": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["zoneId", "key", "label", "inhabited", "isolated", "environment", "moduleIds", "evacuationTargets", "state"],
-      "properties": {
-        "zoneId": {"type": "string", "minLength": 1},
-        "key": {"type": "string", "minLength": 1},
-        "label": {"type": "string", "minLength": 1},
-        "inhabited": {"type": "boolean"},
-        "isolated": {"type": "boolean"},
-        "environment": {"type": "string", "minLength": 1},
-        "moduleIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "evacuationTargets": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "state": {"const": "ACTIVE"}
-      }
-    },
-    "loadPath": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["loadPathId", "fromNodeId", "toNodeId", "throughNodeIds", "purpose", "continuous", "valid"],
-      "properties": {
-        "loadPathId": {"type": "string", "minLength": 1},
-        "fromNodeId": {"type": "string", "minLength": 1},
-        "toNodeId": {"type": "string", "minLength": 1},
-        "throughNodeIds": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
-        "purpose": {"enum": ["CONVENTIONAL_THRUST", "FTL_FOUNDATION", "WEAPON_RECOIL_OR_LAUNCH", "PRIMARY_STRUCTURE"]},
-        "continuous": {"type": "boolean"},
-        "valid": {"type": "boolean"}
-      }
-    },
-    "weaponHardpoint": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["hardpointId", "moduleId", "weaponFamily", "facing", "arc", "recoilPathId", "magazineModuleIds", "supportModuleIds", "coolingModuleIds", "sensorModuleIds", "fireControlModuleIds", "valid"],
-      "properties": {
-        "hardpointId": {"type": "string", "minLength": 1},
-        "moduleId": {"type": "string", "minLength": 1},
-        "weaponFamily": {"type": "string", "minLength": 1},
-        "facing": {"enum": ["FORWARD", "AFT", "PORT", "STARBOARD", "DORSAL", "VENTRAL"]},
-        "arc": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["azimuthCenterDeg", "elevationCenterDeg", "horizontalArcDeg", "verticalArcDeg", "occlusionPolicy"],
-          "properties": {
-            "azimuthCenterDeg": {"type": "number", "minimum": 0, "exclusiveMaximum": 360},
-            "elevationCenterDeg": {"type": "number", "minimum": -90, "maximum": 90},
-            "horizontalArcDeg": {"type": "number", "exclusiveMinimum": 0, "maximum": 360},
-            "verticalArcDeg": {"type": "number", "exclusiveMinimum": 0, "maximum": 180},
-            "occlusionPolicy": {"const": "MUST_NOT_INTERSECT_OWN_STRUCTURE"}
-          }
-        },
-        "recoilPathId": {"type": ["string", "null"]},
-        "magazineModuleIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "supportModuleIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "coolingModuleIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "sensorModuleIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "fireControlModuleIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "valid": {"type": "boolean"}
-      }
-    },
-    "sensorRequirement": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["requirementId", "consumerModuleId", "weaponFamily", "requiredSensorTypes", "minimumSensorChannels", "minimumFireControlChannels", "sourceModuleIds", "fireControlModuleIds", "valid"],
-      "properties": {
-        "requirementId": {"type": "string", "minLength": 1},
-        "consumerModuleId": {"type": "string", "minLength": 1},
-        "weaponFamily": {"type": "string", "minLength": 1},
-        "requiredSensorTypes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "minimumSensorChannels": {"type": "integer", "minimum": 1},
-        "minimumFireControlChannels": {"type": "integer", "minimum": 1},
-        "sourceModuleIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "fireControlModuleIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "valid": {"type": "boolean"}
-      }
-    },
-    "repair": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["repairId", "type", "targetId", "description", "deterministic"],
-      "properties": {
-        "repairId": {"type": "string", "minLength": 1},
-        "type": {"type": "string", "minLength": 1},
-        "targetId": {"type": "string", "minLength": 1},
-        "description": {"type": "string", "minLength": 1},
-        "deterministic": {"const": true}
-      }
-    },
-    "validation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["valid", "violations", "warnings", "moduleMassTonnes", "moduleVolumeM3", "repairCount"],
-      "properties": {
-        "valid": {"type": "boolean"},
-        "violations": {"type": "array", "items": {"type": "string"}},
-        "warnings": {"type": "array", "items": {"type": "string"}},
-        "moduleMassTonnes": {"type": "number", "minimum": 0},
-        "moduleVolumeM3": {"type": "number", "minimum": 0},
-        "repairCount": {"type": "integer", "minimum": 0},
-        "preRepairViolations": {"type": "array", "items": {"type": "string"}}
-      }
-    }
+  "$defs":{
+    "infrastructureNode":{"type":"object","additionalProperties":false,"required":["key","nodeType","label","properties","nodeId","massTonnes","volumeM3","state"],"properties":{"key":{"type":"string"},"nodeType":{"type":"string"},"label":{"type":"string"},"properties":{"type":"array","items":{"type":"string"}},"nodeId":{"type":"string"},"massTonnes":{"const":0},"volumeM3":{"const":0},"state":{"const":"ACTIVE"}}},
+    "network":{"type":"object","additionalProperties":false,"required":["graphType","nodes","edges"],"properties":{"graphType":{"type":"string"},"nodes":{"type":"array","items":{"type":"string"}},"edges":{"type":"array","items":{"type":"object"}}}},
+    "pressureZone":{"type":"object","additionalProperties":true,"required":["zoneId","key","label","inhabited","isolated","environment","moduleIds","evacuationTargets","state"]},
+    "loadPath":{"type":"object","additionalProperties":true,"required":["loadPathId","fromNodeId","toNodeId","throughNodeIds","purpose","continuous","valid"]},
+    "weaponHardpoint":{"type":"object","additionalProperties":true,"required":["hardpointId","moduleId","weaponFamily","facing","arc","recoilPathId","magazineModuleIds","supportModuleIds","coolingModuleIds","sensorModuleIds","fireControlModuleIds","valid"]},
+    "sensorRequirement":{"type":"object","additionalProperties":true,"required":["requirementId","consumerModuleId","weaponFamily","requiredSensorTypes","minimumSensorChannels","minimumFireControlChannels","sourceModuleIds","fireControlModuleIds","valid"]},
+    "repair":{"type":"object","additionalProperties":false,"required":["repairId","type","targetId","description","deterministic"],"properties":{"repairId":{"type":"string"},"type":{"type":"string"},"targetId":{"type":"string"},"description":{"type":"string"},"deterministic":{"const":true}}},
+    "hardeningSummary":{"type":"object","additionalProperties":false,"required":["model","standaloneArmorModules","distributedMassTonnes","distributedVolumeM3","moduleCount","allocations","directionalArmor","directionalFields"],"properties":{"model":{"const":"DISTRIBUTED_HULL_AND_SYSTEM_HARDENING"},"standaloneArmorModules":{"const":false},"distributedMassTonnes":{"type":"number","minimum":0},"distributedVolumeM3":{"type":"number","minimum":0},"moduleCount":{"type":"integer","minimum":0},"allocations":{"type":"object"},"directionalArmor":{"type":"object"},"directionalFields":{"type":"object"}}},
+    "validation":{"type":"object","additionalProperties":false,"required":["valid","violations","warnings","moduleMassTonnes","moduleVolumeM3","repairCount"],"properties":{"valid":{"type":"boolean"},"violations":{"type":"array","items":{"type":"string"}},"warnings":{"type":"array","items":{"type":"string"}},"moduleMassTonnes":{"type":"number","minimum":0},"moduleVolumeM3":{"type":"number","minimum":0},"repairCount":{"type":"integer","minimum":0},"preRepairViolations":{"type":"array","items":{"type":"string"}}}}
   }
 }
