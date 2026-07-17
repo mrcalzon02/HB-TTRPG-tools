@@ -1,0 +1,23 @@
+{
+  "projectId":"blacklight-exo-vessel-design-system",
+  "registryType":"exoVesselVoxelLayoutRegistry",
+  "registryVersion":"1.0.0",
+  "phase":"VESSEL-04",
+  "schema":"data/schemas/exo-vessel-voxel-layout.schema.json",
+  "moduleSchema":"data/schemas/exo-vessel-module.schema.json",
+  "representation":"compressed-sparse-voxel-blocks",
+  "maxEnvelopeCells":120000,
+  "topologies":["MONOCOQUE","SPINE","CLUSTER","RING","HYBRID"],
+  "suggestedCellEdgesM":[1,2,5,10,20,50,100],
+  "axes":{"x":"aft-to-forward","y":"port-to-starboard","z":"ventral-to-dorsal"},
+  "requiredSpatialOutputs":["modulePlacements","infrastructureBlocks","utilityRoutes","accessRoutes","evacuationRoutes","armorSurfaces","evaHardpoints","weaponHardpointPlacements","engineExhaustClearances","radiatorClearances"],
+  "principles":[
+    "Persistent VESSEL-03 module identifiers must not change when spatial bounds are assigned.",
+    "Every module must fit inside one non-overlapping integer-cell bounding box.",
+    "Adaptive cell size must keep the aggregate envelope at or below the configured cell cap.",
+    "Utility and access routes must terminate at existing modules or infrastructure anchors.",
+    "Main-engine exhaust, radiator view fields, and weapon sight lines must remain clear.",
+    "Condition, combat tracking, weapon performance, and local damage remain deferred."
+  ],
+  "deferredSystems":{"conditionApplication":"VESSEL-05","trackAndCombatGeometry":"VESSEL-06","weaponEngagementEnvelopes":"VESSEL-07","localDamageResolution":"VESSEL-08"}
+}
