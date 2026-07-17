@@ -34,6 +34,7 @@
       await loadStyle('blacklight-exo-orbital-layout.css');
       await loadStyle('blacklight-exo-campaign-facilities.css');
       await load('blacklight-exo-ecology-core.js');
+      await load('blacklight-exo-imagery-definitions.js');
       await load('blacklight-exo-imagery.js');
       await load('blacklight-exo-orbital-layout.js');
       await load('blacklight-exo-sol-campaign-data.js');
