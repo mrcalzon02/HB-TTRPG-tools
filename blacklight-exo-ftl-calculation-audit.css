@@ -1,0 +1,75 @@
+.exo-ftl-calculation-section {
+  scroll-margin-top: 1.25rem;
+}
+
+.exo-ftl-calculation-stack,
+.exo-ftl-calculation-checks {
+  display: grid;
+  gap: 1rem;
+}
+
+.exo-ftl-calculation-equations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.exo-ftl-calculation-equation {
+  border: 1px solid rgba(158, 188, 208, 0.2);
+  border-radius: 0.7rem;
+  background: rgba(7, 14, 20, 0.72);
+  padding: 1rem;
+  min-width: 0;
+}
+
+.exo-ftl-calculation-equation-head {
+  display: grid;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.exo-ftl-calculation-equation small,
+.exo-ftl-calculation-card small {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.exo-ftl-calculation-equation h3 {
+  margin: 0;
+}
+
+.exo-ftl-calculation-equation code {
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  border-left: 3px solid rgba(119, 181, 214, 0.7);
+  background: rgba(119, 181, 214, 0.08);
+  padding: 0.7rem 0.8rem;
+  margin: 0 0 0.85rem;
+  line-height: 1.55;
+}
+
+.exo-ftl-calculation-equation p,
+.exo-ftl-calculation-list li {
+  line-height: 1.62;
+}
+
+.exo-ftl-calculation-list {
+  min-width: 0;
+}
+
+.exo-ftl-calculation-card[data-calculation-state="ok"] {
+  border-color: rgba(111, 190, 146, 0.45);
+}
+
+.exo-ftl-calculation-card[data-calculation-state="warning"],
+.exo-ftl-calculation-equation[data-calculation-state="warning"] {
+  border-color: rgba(218, 170, 93, 0.55);
+}
+
+@media (max-width: 700px) {
+  .exo-ftl-calculation-equations {
+    grid-template-columns: 1fr;
+  }
+}
