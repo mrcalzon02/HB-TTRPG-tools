@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-module.schema.json",
-  "title": "Blacklight EXO Vessel Module",
-  "description": "Phase-safe semantic module contract. VESSEL-03 will populate connectivity and VESSEL-04 will add voxel bounds without changing the module identity contract.",
+  "title": "Blacklight EXO Vessel Semantic Module",
+  "description": "Persistent VESSEL-03 physical module identity. Connectivity is populated by the semantic graph; VESSEL-04 may append voxel bounds without replacing the module identity.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -12,13 +12,21 @@
     "vesselInstanceId",
     "subsystemKey",
     "label",
+    "semanticType",
     "envelope",
+    "pressureZoneId",
+    "criticality",
+    "serviceMode",
     "massTonnes",
     "volumeM3",
     "technology",
     "attachment",
+    "requirements",
     "dependencies",
+    "hazards",
+    "functions",
     "state",
+    "voxelBounds",
     "provenance",
     "extensions"
   ],
@@ -31,6 +39,9 @@
     "label": {"type": "string", "minLength": 1},
     "semanticType": {"type": "string", "minLength": 1},
     "envelope": {"enum": ["INTERNAL", "EVA"]},
+    "pressureZoneId": {"type": ["string", "null"]},
+    "criticality": {"enum": ["CRITICAL", "PROTECTIVE", "MISSION", "COMBAT", "RESERVE"]},
+    "serviceMode": {"enum": ["INTERNAL_CORRIDOR", "EVA_OR_REMOTE"]},
     "massTonnes": {"type": "number", "minimum": 0},
     "volumeM3": {"type": "number", "minimum": 0},
     "technology": {
@@ -49,38 +60,68 @@
       "additionalProperties": false,
       "required": ["parentId", "requiredProperty", "parentProperties", "valid"],
       "properties": {
-        "parentId": {"type": ["string", "null"]},
+        "parentId": {"type": "string", "minLength": 1},
         "requiredProperty": {"enum": ["ATMOSPHERE_MANIFOLD", "VACUUM_EXPOSED"]},
         "parentProperties": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
         "valid": {"type": "boolean"}
       }
     },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["power", "cooling", "data", "atmosphere", "access", "crewDependent"],
+      "properties": {
+        "power": {"type": "boolean"},
+        "cooling": {"type": "boolean"},
+        "data": {"type": "boolean"},
+        "atmosphere": {"type": "boolean"},
+        "access": {"type": "boolean"},
+        "crewDependent": {"type": "boolean"}
+      }
+    },
     "dependencies": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["structural", "power", "cooling", "data", "atmosphere", "access"],
+      "required": ["structural", "power", "cooling", "data", "atmosphere", "access", "magazine", "sensors"],
       "properties": {
         "structural": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
         "power": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
         "cooling": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
         "data": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
         "atmosphere": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "access": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        "access": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "magazine": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "sensors": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
       }
     },
+    "hazards": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "functions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
     "state": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["constructionPercent", "damagePercent", "salvageRemovalPercent", "operational"],
+      "required": ["constructionPercent", "damagePercent", "salvageRemovalPercent", "operational", "applicationStatus"],
       "properties": {
         "constructionPercent": {"type": "number", "minimum": 0, "maximum": 100},
         "damagePercent": {"type": "number", "minimum": 0, "maximum": 100},
         "salvageRemovalPercent": {"type": "number", "minimum": 0, "maximum": 100},
-        "operational": {"type": "boolean"}
+        "operational": {"type": "boolean"},
+        "applicationStatus": {"enum": ["INTACT_REFERENCE", "CONDITION_APPLIED", "DAMAGED", "REMOVED", "DESTROYED"]}
       }
     },
     "voxelBounds": {"type": ["object", "null"]},
-    "provenance": {"type": "object"},
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceEngineeringKey", "sourceEngineeringLabel", "splitIndex", "splitCount", "generatorId", "generatorVersion"],
+      "properties": {
+        "sourceEngineeringKey": {"type": "string", "minLength": 1},
+        "sourceEngineeringLabel": {"type": "string", "minLength": 1},
+        "splitIndex": {"type": "integer", "minimum": 0},
+        "splitCount": {"type": "integer", "minimum": 1},
+        "generatorId": {"const": "blacklight-exo-vessel-module-graph-generator"},
+        "generatorVersion": {"const": "1.0.0"}
+      }
+    },
     "extensions": {"type": "object"}
   }
 }
