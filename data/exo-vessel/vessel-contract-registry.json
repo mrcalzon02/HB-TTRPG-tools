@@ -1,0 +1,352 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "registryType": "exoVesselContractRegistry",
+  "registryVersion": "1.0.0",
+  "activeSchemaVersion": "1.0.0",
+  "governingGuide": "EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md",
+  "roadmap": "exo-vessel-system-roadmap.json",
+  "schemas": {
+    "record": "data/schemas/exo-vessel-record.schema.json",
+    "manufacturer": "data/schemas/exo-vessel-manufacturer.schema.json",
+    "condition": "data/schemas/exo-vessel-condition.schema.json",
+    "module": "data/schemas/exo-vessel-module.schema.json"
+  },
+  "technologyBands": [
+    {
+      "key": "T-1",
+      "rank": -1,
+      "label": "Sub-P0 early twenty-first-century-equivalent technology",
+      "ftlCapable": false
+    },
+    {
+      "key": "P0",
+      "rank": 0,
+      "label": "First experimental transit-era technology",
+      "ftlCapable": true
+    },
+    {
+      "key": "P1",
+      "rank": 1,
+      "label": "Repeatable experimental technology",
+      "ftlCapable": true
+    },
+    {
+      "key": "P2",
+      "rank": 2,
+      "label": "Early industrial implementation",
+      "ftlCapable": true
+    },
+    {
+      "key": "P3",
+      "rank": 3,
+      "label": "Capital-scale mobile prototype technology",
+      "ftlCapable": true
+    },
+    {
+      "key": "P4",
+      "rank": 4,
+      "label": "Fleet-operational standard",
+      "ftlCapable": true
+    },
+    {
+      "key": "P5",
+      "rank": 5,
+      "label": "Compact automated mature technology",
+      "ftlCapable": true
+    },
+    {
+      "key": "P6",
+      "rank": 6,
+      "label": "Adaptive advanced technology",
+      "ftlCapable": true
+    }
+  ],
+  "withinBandVariants": [
+    {
+      "key": "LEGACY",
+      "offset": -0.3,
+      "label": "Older compatible implementation"
+    },
+    {
+      "key": "STANDARD",
+      "offset": 0,
+      "label": "Normal implementation for principal band"
+    },
+    {
+      "key": "REFINED",
+      "offset": 0.12,
+      "label": "Improved manufacture, calibration, software, or materials"
+    },
+    {
+      "key": "ADVANCED",
+      "offset": 0.22,
+      "label": "High-end implementation near the top of the band"
+    },
+    {
+      "key": "PROTOTYPE",
+      "offset": 0.3,
+      "label": "Exceptional but expensive, uncertain, or difficult implementation"
+    }
+  ],
+  "seedHierarchy": [
+    "speciesSeed",
+    "organizationSeed",
+    "manufacturerSeed",
+    "hullFamilySeed",
+    "vesselInstanceSeed",
+    "layoutSeed",
+    "equipmentSeed",
+    "conditionSeed",
+    "historySeed"
+  ],
+  "identifierPrefixes": {
+    "species": "species",
+    "organization": "org",
+    "manufacturer": "mfr",
+    "hullFamily": "hull",
+    "vesselInstance": "vessel"
+  },
+  "serviceDoctrines": [
+    "CIVILIAN",
+    "MERCHANT",
+    "PASSENGER",
+    "INDUSTRIAL",
+    "SCIENTIFIC",
+    "COLONIAL",
+    "GOVERNMENT",
+    "PARAMILITARY",
+    "MILITARY",
+    "PIRATE_OR_IRREGULAR",
+    "ABANDONED_OR_UNKNOWN"
+  ],
+  "conditionAxes": [
+    {
+      "key": "constructionCompletionPercent",
+      "default": 100
+    },
+    {
+      "key": "commissioningCompletionPercent",
+      "default": 100
+    },
+    {
+      "key": "operationalReadinessPercent",
+      "default": 100
+    },
+    {
+      "key": "structuralDamagePercent",
+      "default": 0
+    },
+    {
+      "key": "systemDamagePercent",
+      "default": 0
+    },
+    {
+      "key": "salvageRemovalPercent",
+      "default": 0
+    },
+    {
+      "key": "decommissioningPercent",
+      "default": 0
+    },
+    {
+      "key": "maintenanceDebtPercent",
+      "default": 0
+    },
+    {
+      "key": "fuelLoadPercent",
+      "default": 100
+    },
+    {
+      "key": "coolantLoadPercent",
+      "default": 100
+    },
+    {
+      "key": "atmosphereIntegrityPercent",
+      "default": 100
+    },
+    {
+      "key": "contaminationPercent",
+      "default": 0
+    },
+    {
+      "key": "crewAvailabilityPercent",
+      "default": 100
+    },
+    {
+      "key": "dataIntegrityPercent",
+      "default": 100
+    },
+    {
+      "key": "destructionPercent",
+      "default": 0
+    }
+  ],
+  "conditionTemplates": {
+    "NEWLY_MANUFACTURED": {
+      "constructionCompletionPercent": 100,
+      "commissioningCompletionPercent": 30,
+      "operationalReadinessPercent": 25,
+      "fuelLoadPercent": 15,
+      "coolantLoadPercent": 70,
+      "crewAvailabilityPercent": 0
+    },
+    "PARTIALLY_COMPLETED": {
+      "constructionCompletionPercent": 68,
+      "commissioningCompletionPercent": 0,
+      "operationalReadinessPercent": 0,
+      "fuelLoadPercent": 0,
+      "coolantLoadPercent": 20,
+      "crewAvailabilityPercent": 0
+    },
+    "COMMISSIONING": {
+      "constructionCompletionPercent": 100,
+      "commissioningCompletionPercent": 72,
+      "operationalReadinessPercent": 55,
+      "fuelLoadPercent": 60,
+      "coolantLoadPercent": 90,
+      "crewAvailabilityPercent": 70
+    },
+    "OPERATIONAL": {
+      "constructionCompletionPercent": 100,
+      "commissioningCompletionPercent": 100,
+      "operationalReadinessPercent": 100
+    },
+    "WORN_SERVICE": {
+      "operationalReadinessPercent": 78,
+      "structuralDamagePercent": 4,
+      "systemDamagePercent": 9,
+      "maintenanceDebtPercent": 46,
+      "fuelLoadPercent": 72,
+      "coolantLoadPercent": 84,
+      "dataIntegrityPercent": 92
+    },
+    "PARTIALLY_TORN_DOWN": {
+      "operationalReadinessPercent": 12,
+      "salvageRemovalPercent": 18,
+      "decommissioningPercent": 52,
+      "fuelLoadPercent": 3,
+      "coolantLoadPercent": 22,
+      "crewAvailabilityPercent": 8
+    },
+    "MOTHBALLED": {
+      "operationalReadinessPercent": 20,
+      "maintenanceDebtPercent": 28,
+      "fuelLoadPercent": 0,
+      "coolantLoadPercent": 35,
+      "atmosphereIntegrityPercent": 65,
+      "crewAvailabilityPercent": 0
+    },
+    "ABANDONED": {
+      "operationalReadinessPercent": 18,
+      "structuralDamagePercent": 8,
+      "systemDamagePercent": 22,
+      "maintenanceDebtPercent": 72,
+      "fuelLoadPercent": 9,
+      "coolantLoadPercent": 31,
+      "atmosphereIntegrityPercent": 58,
+      "contaminationPercent": 14,
+      "crewAvailabilityPercent": 0,
+      "dataIntegrityPercent": 64
+    },
+    "PARTIALLY_SALVAGED": {
+      "operationalReadinessPercent": 8,
+      "structuralDamagePercent": 14,
+      "systemDamagePercent": 38,
+      "salvageRemovalPercent": 35,
+      "maintenanceDebtPercent": 80,
+      "fuelLoadPercent": 0,
+      "coolantLoadPercent": 14,
+      "atmosphereIntegrityPercent": 44,
+      "crewAvailabilityPercent": 0,
+      "dataIntegrityPercent": 42,
+      "destructionPercent": 22
+    },
+    "DAMAGED": {
+      "operationalReadinessPercent": 62,
+      "structuralDamagePercent": 18,
+      "systemDamagePercent": 24,
+      "maintenanceDebtPercent": 32,
+      "fuelLoadPercent": 61,
+      "coolantLoadPercent": 68,
+      "atmosphereIntegrityPercent": 78,
+      "crewAvailabilityPercent": 82,
+      "dataIntegrityPercent": 80,
+      "destructionPercent": 18
+    },
+    "CRIPPLED": {
+      "operationalReadinessPercent": 22,
+      "structuralDamagePercent": 56,
+      "systemDamagePercent": 63,
+      "maintenanceDebtPercent": 74,
+      "fuelLoadPercent": 28,
+      "coolantLoadPercent": 37,
+      "atmosphereIntegrityPercent": 42,
+      "crewAvailabilityPercent": 48,
+      "dataIntegrityPercent": 54,
+      "destructionPercent": 62
+    },
+    "WRECKED": {
+      "operationalReadinessPercent": 0,
+      "structuralDamagePercent": 82,
+      "systemDamagePercent": 90,
+      "maintenanceDebtPercent": 100,
+      "fuelLoadPercent": 5,
+      "coolantLoadPercent": 7,
+      "atmosphereIntegrityPercent": 8,
+      "contaminationPercent": 48,
+      "crewAvailabilityPercent": 0,
+      "dataIntegrityPercent": 22,
+      "destructionPercent": 82
+    },
+    "DESTROYED": {
+      "operationalReadinessPercent": 0,
+      "structuralDamagePercent": 100,
+      "systemDamagePercent": 100,
+      "salvageRemovalPercent": 0,
+      "maintenanceDebtPercent": 100,
+      "fuelLoadPercent": 0,
+      "coolantLoadPercent": 0,
+      "atmosphereIntegrityPercent": 0,
+      "contaminationPercent": 100,
+      "crewAvailabilityPercent": 0,
+      "dataIntegrityPercent": 0,
+      "destructionPercent": 100
+    }
+  },
+  "derivedLayers": [
+    "engineeringBaseline",
+    "architectureAdjustedMassLedger",
+    "powerAndThermalLedger",
+    "armorAndProtectionLedger",
+    "sensorAndNavigationLedger",
+    "maneuverAndDeltaVLedger",
+    "weaponInventory",
+    "countermeasureInventory",
+    "moduleGraph",
+    "voxelLayout",
+    "damageTopology",
+    "combatEnvelope",
+    "gameplayStatBlock",
+    "actionSet"
+  ],
+  "derivedLayerStatuses": [
+    "unimplemented",
+    "planned",
+    "generated",
+    "validated",
+    "stale",
+    "damaged"
+  ],
+  "migrationPolicy": {
+    "policyVersion": "1.0.0",
+    "canonicalSchemaVersion": "1.0.0",
+    "supportedLegacyRecordVersions": [
+      1,
+      2
+    ],
+    "strategy": "append-only-envelope",
+    "unknownFieldPolicy": "preserve",
+    "destructiveMigrationAllowed": false,
+    "migrationHistoryRequired": true
+  }
+}
