@@ -12,6 +12,7 @@
   <script src="blacklight-exo-species-civilization.js" defer></script>
   <script src="blacklight-exo-species-ecology-integration.js" defer></script>
   <script src="blacklight-exo-collapse-handoff.js" defer></script>
+  <script src="blacklight-exo-government-handoff.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-species-body">
   <header class="bli-topbar">
@@ -23,6 +24,7 @@
       <a href="blacklight-exo-operations.html">EXO Operations</a>
       <a href="blacklight-exo-solar-system.html">Solar Systems</a>
       <a href="blacklight-exo-alien-ecology.html">Alien Ecology</a>
+      <a href="blacklight-exo-stellar-government.html">Stellar Government</a>
       <a href="blacklight-systems-black.html">Black Archive</a>
     </nav>
   </header>
@@ -35,6 +37,7 @@
       <div class="bli-actions">
         <button id="exo-species-generate" class="bli-action primary" type="button">Generate System Dossier</button>
         <button id="exo-species-export" class="bli-action" type="button">Export Dossier JSON</button>
+        <button id="exo-develop-government" class="bli-action" type="button">Develop Stellar Government</button>
       </div>
     </div>
     <aside class="bli-directory-panel" aria-label="Current EXO dossier summary">
@@ -89,55 +92,15 @@
       </aside>
     </section>
 
-    <section class="bli-section" aria-labelledby="exo-system-state-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">System-wide condition</p><h2 id="exo-system-state-title">World occupation, traffic, development, and economic use.</h2></div>
-      <div id="exo-system-state-grid" class="exo-dossier-grid"></div>
-    </section>
-
-    <section class="bli-section" aria-labelledby="exo-infrastructure-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Orbital and industrial infrastructure</p><h2 id="exo-infrastructure-title">Facilities, yards, habitats, refineries, smelters, extraction arrays, and defense systems.</h2></div>
-      <div id="exo-infrastructure-grid" class="exo-dossier-grid"></div>
-    </section>
-
-    <section class="bli-section" aria-labelledby="exo-resource-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Whole-system resource inventory</p><h2 id="exo-resource-title">Minerals, chemicals, volatiles, fuels, isotopes, and accessible stellar mass.</h2></div>
-      <div id="exo-system-resource-grid" class="exo-dossier-grid"></div>
-    </section>
-
-    <section class="bli-section" aria-labelledby="exo-collapse-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Continuity or extinction record</p><h2 id="exo-collapse-title">Why the system remains alive—or why its civilization is gone.</h2></div>
-      <div id="exo-collapse-grid" class="exo-dossier-grid"></div>
-    </section>
-
-    <section class="bli-section" aria-labelledby="exo-biology-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Biological dossier</p><h2 id="exo-biology-title">Body plan, lifecycle, senses, and environmental adaptation when sapient life exists or once existed.</h2></div>
-      <div id="exo-biology-grid" class="exo-dossier-grid"></div>
-    </section>
-
-    <section class="bli-section" aria-labelledby="exo-mind-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Cognition and culture</p><h2 id="exo-mind-title">How the species thinks, remembers, communicates, and defines itself.</h2></div>
-      <div id="exo-culture-grid" class="exo-dossier-grid"></div>
-    </section>
-
-    <section class="bli-section" aria-labelledby="exo-civilization-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Civilization profile</p><h2 id="exo-civilization-title">Government, economy, technology, law, warfare, and territorial reach.</h2></div>
-      <div id="exo-civilization-grid" class="exo-dossier-grid"></div>
-    </section>
-
-    <section class="bli-section" aria-labelledby="exo-factions-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Internal power map</p><h2 id="exo-factions-title">Major factions, institutional pressure, claim disputes, and political fault lines.</h2></div>
-      <div id="exo-faction-grid" class="exo-faction-grid"></div>
-    </section>
-
-    <section class="bli-section exo-operational-section" aria-labelledby="exo-operational-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Operational interpretation</p><h2 id="exo-operational-title">What EXO teams need to know before entering the system.</h2></div>
-      <div class="exo-operational-grid">
-        <article><h3>Entry or first-contact protocol</h3><ul id="exo-contact-protocol"></ul></article>
-        <article><h3>Primary misunderstandings</h3><ul id="exo-misunderstandings"></ul></article>
-        <article><h3>Strategic opportunities</h3><ul id="exo-opportunities"></ul></article>
-        <article><h3>Operational hazards</h3><ul id="exo-operational-hazards"></ul></article>
-      </div>
-    </section>
+    <section class="bli-section" aria-labelledby="exo-system-state-title"><div class="bli-section-head"><p class="bli-eyebrow">System-wide condition</p><h2 id="exo-system-state-title">World occupation, traffic, development, and economic use.</h2></div><div id="exo-system-state-grid" class="exo-dossier-grid"></div></section>
+    <section class="bli-section" aria-labelledby="exo-infrastructure-title"><div class="bli-section-head"><p class="bli-eyebrow">Orbital and industrial infrastructure</p><h2 id="exo-infrastructure-title">Facilities, yards, habitats, refineries, smelters, extraction arrays, and defense systems.</h2></div><div id="exo-infrastructure-grid" class="exo-dossier-grid"></div></section>
+    <section class="bli-section" aria-labelledby="exo-resource-title"><div class="bli-section-head"><p class="bli-eyebrow">Whole-system resource inventory</p><h2 id="exo-resource-title">Minerals, chemicals, volatiles, fuels, isotopes, and accessible stellar mass.</h2></div><div id="exo-system-resource-grid" class="exo-dossier-grid"></div></section>
+    <section class="bli-section" aria-labelledby="exo-collapse-title"><div class="bli-section-head"><p class="bli-eyebrow">Continuity or extinction record</p><h2 id="exo-collapse-title">Why the system remains alive—or why its civilization is gone.</h2></div><div id="exo-collapse-grid" class="exo-dossier-grid"></div></section>
+    <section class="bli-section" aria-labelledby="exo-biology-title"><div class="bli-section-head"><p class="bli-eyebrow">Biological dossier</p><h2 id="exo-biology-title">Body plan, lifecycle, senses, and environmental adaptation when sapient life exists or once existed.</h2></div><div id="exo-biology-grid" class="exo-dossier-grid"></div></section>
+    <section class="bli-section" aria-labelledby="exo-mind-title"><div class="bli-section-head"><p class="bli-eyebrow">Cognition and culture</p><h2 id="exo-mind-title">How the species thinks, remembers, communicates, and defines itself.</h2></div><div id="exo-culture-grid" class="exo-dossier-grid"></div></section>
+    <section class="bli-section" aria-labelledby="exo-civilization-title"><div class="bli-section-head"><p class="bli-eyebrow">Civilization profile</p><h2 id="exo-civilization-title">Government, economy, technology, law, warfare, and territorial reach.</h2></div><div id="exo-civilization-grid" class="exo-dossier-grid"></div></section>
+    <section class="bli-section" aria-labelledby="exo-factions-title"><div class="bli-section-head"><p class="bli-eyebrow">Internal power map</p><h2 id="exo-factions-title">Major factions, institutional pressure, claim disputes, and political fault lines.</h2></div><div id="exo-faction-grid" class="exo-faction-grid"></div></section>
+    <section class="bli-section exo-operational-section" aria-labelledby="exo-operational-title"><div class="bli-section-head"><p class="bli-eyebrow">Operational interpretation</p><h2 id="exo-operational-title">What EXO teams need to know before entering the system.</h2></div><div class="exo-operational-grid"><article><h3>Entry or first-contact protocol</h3><ul id="exo-contact-protocol"></ul></article><article><h3>Primary misunderstandings</h3><ul id="exo-misunderstandings"></ul></article><article><h3>Strategic opportunities</h3><ul id="exo-opportunities"></ul></article><article><h3>Operational hazards</h3><ul id="exo-operational-hazards"></ul></article></div></section>
   </main>
 
   <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO system occupancy, xenology, civilization analysis, and restricted contact planning.</footer>
