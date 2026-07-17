@@ -60,7 +60,7 @@
   function manufacturerName(seed,identity,focus,index){
     const speciesToken=slug(identity.speciesCommon,'exo').replace(/(^|-)(\w)/g,(_,dash,char)=>`${dash}${char.toUpperCase()}`).replaceAll('-','');
     const root=index===0?speciesToken:pick(`${seed}:root`,D.nameRoots);
-    const middle=index===0?focus.label.split(' ')[0]:pick(`${seed}:middle`,D.nameMiddles);
+    const middle=focus.label.split(' ')[0];
     const end=pick(`${seed}:end`,D.nameEnds);
     return `${root} ${middle} ${end}`.replace(/\s+/g,' ').trim();
   }
@@ -93,7 +93,7 @@
       moduleRhythm:pick(`${manufacturerSeed}:rhythm`,D.visualAxes.rhythm),
       sensorPlacement:pick(`${manufacturerSeed}:sensor`,D.visualAxes.sensors),
       radiatorPlacement:pick(`${manufacturerSeed}:radiator`,D.visualAxes.radiators),
-      recognitionFeatures:[pick(`${manufacturerSeed}:v1`,matrix.visual),pick(`${manufacturerSeed}:v2`,matrix.visual),focus.label]
+      recognitionFeatures:[matrix.visual[index%matrix.visual.length],matrix.visual[(index+1)%matrix.visual.length],focus.label]
     };
     const prefix=designationPrefix(name,index),classRoots=[identity.speciesCommon,focus.key.toLowerCase(),['Aegis','Vector','Keel','Horizon','Reliant','Pioneer'][hash(`${manufacturerSeed}:class`)%6]];
     const record={
