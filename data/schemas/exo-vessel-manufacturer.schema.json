@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-manufacturer.schema.json",
+  "title": "Blacklight EXO Vessel Manufacturer",
+  "description": "Persistent species- and organization-derived manufacturer contract used by later vessel germination phases.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "recordType",
+    "schemaVersion",
+    "manufacturerId",
+    "name",
+    "speciesId",
+    "organizationId",
+    "baseTechnologyBand",
+    "architecture",
+    "production",
+    "technologyVariantWeights",
+    "topologyWeights",
+    "materials",
+    "repairDoctrine",
+    "weaponPreferences",
+    "namingGrammar",
+    "visualGrammar",
+    "provenance"
+  ],
+  "properties": {
+    "recordType": {"const": "exoVesselManufacturer"},
+    "schemaVersion": {"const": "1.0.0"},
+    "manufacturerId": {"type": "string", "pattern": "^mfr-[a-z0-9][a-z0-9-]{5,95}$"},
+    "name": {"type": "string", "minLength": 1},
+    "speciesId": {"type": "string", "pattern": "^species-[a-z0-9][a-z0-9-]{5,95}$"},
+    "organizationId": {"type": "string", "pattern": "^org-[a-z0-9][a-z0-9-]{5,95}$"},
+    "baseTechnologyBand": {"enum": ["T-1", "P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["internalsBias", "evaBias", "allowedDeviationVariance", "primaryStructuralMaterial"],
+      "properties": {
+        "internalsBias": {"type": "number", "minimum": 0, "maximum": 1},
+        "evaBias": {"type": "number", "minimum": 0, "maximum": 1},
+        "allowedDeviationVariance": {"type": "number", "minimum": 0, "maximum": 0.5},
+        "primaryStructuralMaterial": {"type": "string", "minLength": 1},
+        "preferredEnvelope": {"enum": ["INTERNAL", "EVA", "HYBRID"]}
+      }
+    },
+    "production": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["standardization", "modularity", "automation", "qualityControl", "plannedServiceLifeYears"],
+      "properties": {
+        "standardization": {"type": "number", "minimum": 0, "maximum": 1},
+        "modularity": {"type": "number", "minimum": 0, "maximum": 1},
+        "automation": {"type": "number", "minimum": 0, "maximum": 1},
+        "qualityControl": {"type": "number", "minimum": 0, "maximum": 1},
+        "plannedServiceLifeYears": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "technologyVariantWeights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["LEGACY", "STANDARD", "REFINED", "ADVANCED", "PROTOTYPE"],
+      "properties": {
+        "LEGACY": {"type": "number", "minimum": 0, "maximum": 1},
+        "STANDARD": {"type": "number", "minimum": 0, "maximum": 1},
+        "REFINED": {"type": "number", "minimum": 0, "maximum": 1},
+        "ADVANCED": {"type": "number", "minimum": 0, "maximum": 1},
+        "PROTOTYPE": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "topologyWeights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["MONOCOQUE", "SPINE", "CLUSTER", "RING", "HYBRID"],
+      "properties": {
+        "MONOCOQUE": {"type": "number", "minimum": 0, "maximum": 1},
+        "SPINE": {"type": "number", "minimum": 0, "maximum": 1},
+        "CLUSTER": {"type": "number", "minimum": 0, "maximum": 1},
+        "RING": {"type": "number", "minimum": 0, "maximum": 1},
+        "HYBRID": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "materials": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "repairDoctrine": {"type": "string", "minLength": 1},
+    "weaponPreferences": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "namingGrammar": {"type": "object"},
+    "visualGrammar": {"type": "object"},
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["speciesSeed", "organizationSeed", "manufacturerSeed"],
+      "properties": {
+        "speciesSeed": {"type": "string", "minLength": 1},
+        "organizationSeed": {"type": "string", "minLength": 1},
+        "manufacturerSeed": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
