@@ -1,0 +1,23 @@
+(() => {
+  'use strict';
+  const A=globalThis.BlacklightExoFTLCalculationAudit,base=globalThis.BlacklightExoFTL;
+  if(!A||!A.performanceLedger||!A.energyLedger||!base||base.calculationAuditVersion)return;
+  const {EPS,C_AU_S,clamp,finite,check,system,isDiscrete}=A;
+  function consistency(result){
+    const p=result.performance||{},k=result.kinematics||{},e=result.energyBudget||{},plant=system(result),checks=[];
+    checks.push(check('performance-au-rate','Route c converts to the reported AU/s rate',finite(p.practicalAuPerSecond),finite(p.practicalRouteC)*C_AU_S,1e-8,'This verifies the unit conversion behind the headline route rate.'));
+    if(!isDiscrete(result))checks.push(check('continuous-crossing','Continuous payload time matches distance divided by route rate',finite(k.payloadTransitSeconds,p.transitSeconds),finite(p.referenceDistanceAU)/Math.max(EPS,finite(p.practicalAuPerSecond)),1e-6,'Discrete systems are exempt because their crossing interval is family-specific.'));
+    checks.push(check('mission-time-sum','Complete mission time matches spool, crossing, and recovery',finite(k.completeMissionSeconds,p.missionSeconds),finite(p.spoolSeconds)+finite(k.payloadTransitSeconds,p.transitSeconds)+finite(p.cooldownSeconds),1e-6,'This ensures the mission figure has not silently omitted preparation or recovery.'));
+    checks.push(check('mission-energy-sum','Complete mission energy matches formation, transit, and termination',finite(e.missionJ),finite(e.activationJ)+finite(e.transitJ)+finite(e.collapseJ),1e-8,'This checks the principal energy ledger before fuel and heat are interpreted.'));
+    if(plant)checks.push(check('fuel-conversion','Fuel requirement matches specific energy and efficiency',finite(e.missionFuelKg),finite(e.missionJ)/Math.max(EPS,finite(plant.specific)*finite(plant.efficiency,1)),1e-8,'This verifies the active energy-medium mass against the selected power architecture.'));
+    const failed=checks.filter(x=>x.status!=='consistent');
+    return{status:failed.length?'review required':'internally consistent',summary:failed.length?`${failed.length} calculation relationship${failed.length===1?'':'s'} exceed tolerance. I retained the values but would not certify them without reviewing the generating formula.`:'The audited relationships reproduce the generated values within numerical tolerance. This confirms arithmetic consistency, not physical truth.',checks};
+  }
+  function build(result){
+    const rank=clamp(finite(result.pathLevel?.rank,result.identity?.pathLevelRank||0),0,6),routeAvailability=clamp(finite(result.routeEnvelope?.certifiedWindowAvailabilityPercent,100),0,100),reliability=clamp(finite(result.reliability?.certifiedSuccessPercent,50),0,100),context={rank,routeAvailability,reliability};
+    const performance=A.performanceLedger(result,context),energy=A.energyLedger(result,context),auditConsistency=consistency(result),overall=Math.min(performance.confidence.score,energy.confidence.score);
+    return{version:1,author:'Charles',purpose:'Preserve the generated performance and energy values while exposing assumptions, equations, sensitivity, interpretation, and certification limits.',pathLevelRank:rank,pathLevelLabel:result.pathLevel?.label||result.identity?.pathLevel||`Path ${rank}`,routeAvailabilityPercent:routeAvailability,reliabilityPercent:reliability,overallConfidencePercent:overall,overallConfidenceText:`${overall.toFixed(1)}% internal model confidence`,standingWarning:'These confidence values describe internal model coherence and operating-assumption stability. They do not imply that faster-than-light travel, exotic stress-energy, higher-dimensional translation, or macroscopic quantum displacement has been demonstrated in reality.',performance,energy,consistency:auditConsistency,preservationRecord:{rawPerformanceRetained:true,rawKinematicsRetained:true,rawEnergyBudgetRetained:true,rawPowerRecordRetained:true,method:'The audit is appended to the generated object. It does not replace or round away the original numerical records.'}};
+  }
+  function generate(seed,input={},source=null){const result=base.generate(seed,input,source);result.version=7;result.calculationAudit=build(result);result.summary+=` Charles audited the transit and energy arithmetic without replacing the original records. The numerical relationships are ${result.calculationAudit.consistency.status}, with ${result.calculationAudit.overallConfidenceText}.`;result.sourceImpact.push('Charles added a diegetic calculation ledger separating assumptions, equations, sensitivity envelopes, arithmetic consistency, operational interpretation, and certification limits.');return result;}
+  globalThis.BlacklightExoFTL=Object.freeze({...base,version:7,calculationAuditVersion:1,generate});
+})();
