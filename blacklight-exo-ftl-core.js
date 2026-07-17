@@ -4,7 +4,7 @@
   const R=globalThis.BlacklightExoFTLRuntime;
   if(!R)return;
   const {
-    P,O,LY_AU,C_KM_S,C_AU_S,TIERS,
+    P,O,LY_AU,C_KM_S,C_AU_S,TIERS,ROUTES,DOCTRINES,
     ROUTE_MAP,DOCTRINE_MAP,
     rngFor,pick,integer,number,logNumber,unique,clamp,medianRange,
     secondsToText,distanceText,energyText,powerText,massText,sourceFacts,
@@ -212,8 +212,8 @@
     const scale=chooseScale(rng,options,tier);
     const family=chooseFamily(rng,options,tier,scale,facts);
     const infrastructure=chooseInfrastructure(rng,options,family,scale);
-    const route=ROUTE_MAP[options.route]||pick(rng,R.routes);
-    const doctrine=DOCTRINE_MAP[options.doctrine]||pick(rng,R.doctrines);
+    const route=ROUTE_MAP[options.route]||pick(rng,ROUTES);
+    const doctrine=DOCTRINE_MAP[options.doctrine]||pick(rng,DOCTRINES);
     const energy=chooseEnergy(rng,options,family,tier,infrastructure);
     const distanceValue=Math.max(.000001,Number(options.distance)||1);
     const distanceAU=options.distanceUnit==='ly'?distanceValue*LY_AU:distanceValue;
