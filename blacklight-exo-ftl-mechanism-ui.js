@@ -48,14 +48,14 @@
   }
 
   function renderChain(mechanism){
-    const container=section('exo-ftl-device-chain','Prime mover and device train','Follow input energy through the actual machine until it produces the physical transit effect.','exo-ftl-path-overview');
+    const container=section('exo-ftl-device-chain','Prime mover and device train','Follow input energy through the actual machine until it produces the physical transit effect.','exo-ftl-mechanism-motivation');
     const rows=mechanism.machineChain.map((item,index)=>[`Device stage ${index+1}`,item.stage,item.function]);
     renderCards(container,rows);
   }
 
   function renderBenchmarks(rating){
     const mechanism=rating.mechanism;
-    const current=section('exo-ftl-mechanism-benchmarks','Current mechanical benchmarks','Measurements that improve as the original device becomes smaller, more efficient, more precise, and more reliable.','exo-ftl-device-chain');
+    const current=section('exo-ftl-mechanism-benchmarks','Current mechanical benchmarks','Measurements that improve as the original device becomes smaller, more efficient, more precise, and more reliable.','exo-ftl-mechanism-control');
     renderCards(current,mechanism.benchmarks.map(axis=>[
       axis.direction==='higher'?'Increasing capability':'Decreasing burden or error',
       axis.label,
