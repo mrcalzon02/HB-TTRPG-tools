@@ -55,16 +55,26 @@
       "id":"VESSEL-01",
       "order":1,
       "title":"Species-specific manufacturer generator",
-      "status":"next",
+      "status":"complete",
       "dependsOn":["VESSEL-00"],
       "deliverables":["Persistent manufacturer records","Topology weights","Material and repair doctrine","Technology variant distribution","Naming and visual grammar"],
-      "acceptance":["Manufacturers from one species are related but distinct","Ships from one manufacturer remain recognizable","Profiles materially affect engineering and layout"]
+      "acceptance":["Manufacturers from one species are related but distinct","Ships from one manufacturer remain recognizable","Profiles materially affect engineering and layout"],
+      "completionEvidence":[
+        "blacklight-exo-vessel-manufacturer-definitions.js",
+        "blacklight-exo-vessel-manufacturer-runtime.js",
+        "blacklight-exo-vessel-manufacturer-ui.js",
+        "data/schemas/exo-vessel-manufacturer.schema.json",
+        "scripts/validate-exo-vessel-manufacturers.mjs",
+        "blacklight-exo-vessel-philosophy-runtime.js",
+        "blacklight-exo-vessel-contracts.js",
+        "blacklight-exo-vessel.html"
+      ]
     },
     {
       "id":"VESSEL-02",
       "order":2,
       "title":"Engineering ledger expansion",
-      "status":"planned",
+      "status":"next",
       "dependsOn":["VESSEL-00","VESSEL-01"],
       "deliverables":["Conventional propulsion and combat delta-v","Armor and shielding ledger","Sensor and fire-control ledger","Weapon support and magazine ledger","Countermeasure ledger","Subsystem technology variants"],
       "acceptance":["Mass and volume close","Armor derives from area and areal density","Weapons include support and cooling","Combat delta-v is separated from strategic delta-v"]
