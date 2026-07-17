@@ -28,6 +28,8 @@
   const finite=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback;
   const clone=value=>value==null?value:structuredClone(value);
   const sum=(rows,field)=>rows.reduce((total,row)=>total+finite(row[field]),0);
+  const fmt=(value,digits=3)=>finite(value).toLocaleString(undefined,{maximumFractionDigits:digits});
+  function massText(tonnes){const value=Math.max(0,finite(tonnes));if(value>=1e12)return`${fmt(value/1e12)} trillion tonnes`;if(value>=1e9)return`${fmt(value/1e9)} billion tonnes`;if(value>=1e6)return`${fmt(value/1e6)} million tonnes`;if(value>=1e3)return`${fmt(value/1e3)} thousand tonnes`;if(value>=1)return`${fmt(value)} tonnes`;return`${fmt(value*1000)} kg`;}
   function normalized(table){const total=Object.values(table).reduce((a,b)=>a+finite(b),0)||1;return Object.fromEntries(Object.entries(table).map(([key,value])=>[key,finite(value)/total]));}
   function splitExact(total,targets,weightField='massTonnes'){
     const weights=targets.map(row=>Math.max(.000001,finite(row[weightField],1))),weightTotal=weights.reduce((a,b)=>a+b,0)||1,parts=[];let assigned=0;
@@ -51,8 +53,8 @@
       });
     }
     const totalMass=sum(rows,'massTonnes'),totalVolume=sum(rows,'volumeM3');
-    result.hull.massBudget=rows.map(row=>({...row,massPercent:row.massTonnes/Math.max(1e-12,totalMass)*100,massText:row.massText,volumeText:`${finite(row.volumeM3).toLocaleString(undefined,{maximumFractionDigits:1})} m³`}));
-    result.hull.totalMassTonnes=totalMass;result.hull.totalVolumeM3=totalVolume;result.hull.averageDensityTonnesM3=totalMass/Math.max(1e-12,totalVolume);result.hull.massBalanceErrorTonnes=totalMass-sum(result.hull.massBudget,'massTonnes');
+    result.hull.massBudget=rows.map(row=>({...row,massPercent:row.massTonnes/Math.max(1e-12,totalMass)*100,massText:massText(row.massTonnes),volumeText:`${fmt(row.volumeM3,1)} m³`}));
+    result.hull.totalMassTonnes=totalMass;result.hull.totalMassText=massText(totalMass);result.hull.totalVolumeM3=totalVolume;result.hull.averageDensityTonnesM3=totalMass/Math.max(1e-12,totalVolume);result.hull.massBalanceErrorTonnes=totalMass-sum(result.hull.massBudget,'massTonnes');
   }
   function correctedArmor(result){
     const source=result.armor,doctrine=source.doctrine||result.identity?.defenseKey||'hardened',allocationWeights=normalized(allocationProfiles[doctrine]||allocationProfiles.hardened),physicalWeights=normalized(physicalFacingProfiles[doctrine]||physicalFacingProfiles.hardened),fieldWeights=normalized(fieldFacingProfiles[doctrine]||fieldFacingProfiles.hardened),passive=finite(source.passiveArmorMassTonnes),active=finite(source.fieldProtectionMassTonnes),rowVolume=finite(result.hull.massBudget.find(row=>row.key==='armor')?.volumeM3,passive/7.4),referenceArmorDensityKgM3=7800,equivalentOuterHullThicknessMm=finite(source.physicalArealDensityKgM2)/referenceArmorDensityKgM3*1000;
