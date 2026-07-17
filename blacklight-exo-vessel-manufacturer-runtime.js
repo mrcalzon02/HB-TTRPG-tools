@@ -136,9 +136,9 @@
     result.manufacturerCatalog=records.map(item=>({manufacturerId:item.manufacturerId,name:item.name,archetypeKey:item.archetype.key,focusKey:item.archetype.focusKey,internalsBias:item.architecture.internalsBias,evaBias:item.architecture.evaBias,preferredEnvelope:item.architecture.preferredEnvelope,primaryStructuralMaterial:item.architecture.primaryStructuralMaterial,designationPrefix:item.namingGrammar.designationPrefix}));
     result.identity.manufacturerId=manufacturer.manufacturerId;
     result.identity.manufacturerName=manufacturer.name;
-    result.identity.hullFamilyName=manufacturer.namingGrammar.classPattern;
+    result.identity.hullFamilyName=`${manufacturer.namingGrammar.classPattern} ${result.identity.roleKey} variant`;
     result.identity.originalEngineeringName=result.identity.name;
-    result.identity.name=`${manufacturer.name} ${manufacturer.namingGrammar.classPattern} ${result.identity.role}`;
+    result.identity.name=`${manufacturer.name} ${result.identity.hullFamilyName} ${result.identity.role}`;
     result.warnings=[...(result.warnings||[]),`${manufacturer.name} is a persistent species- and organization-derived manufacturer, not one of the four cultural architecture baselines.`,`${manufacturer.archetype.focusLabel} changes architecture bias, topology, materials, standardization, repair doctrine, equipment-quality distribution, and visible construction grammar.`];
     return result;
   }
