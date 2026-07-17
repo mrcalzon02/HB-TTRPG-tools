@@ -1,0 +1,158 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "version": 1,
+  "authority": "Charles",
+  "status": "planned",
+  "governingGuide": "EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md",
+  "principles": [
+    "Every gameplay value must be traceable to a physical, technological, organizational, biological, architectural, or condition input.",
+    "The vessel Path level governs the complete technology context; only within-band variation is permitted without explicit exception.",
+    "Species and organizations generate persistent manufacturer profiles.",
+    "Internals-first and EVA-first are tradeoff doctrines rather than quality tiers.",
+    "Weapon usefulness is an engagement-solution envelope rather than a fixed physical range.",
+    "Damage is local and graph-based.",
+    "Incomplete, dismantled, damaged, abandoned, salvaged, wrecked, and destroyed are separate state axes.",
+    "A vessel at one hundred percent destruction no longer retains a coherent vessel graph."
+  ],
+  "technologyBands": [
+    {"key":"T-1","rank":-1,"label":"Sub-P0 early twenty-first-century-equivalent technology"},
+    {"key":"P0","rank":0,"label":"First experimental transit-era technology"},
+    {"key":"P1","rank":1,"label":"Repeatable experimental technology"},
+    {"key":"P2","rank":2,"label":"Early industrial implementation"},
+    {"key":"P3","rank":3,"label":"Capital-scale mobile prototype technology"},
+    {"key":"P4","rank":4,"label":"Fleet-operational standard"},
+    {"key":"P5","rank":5,"label":"Compact automated mature technology"},
+    {"key":"P6","rank":6,"label":"Adaptive advanced technology"}
+  ],
+  "withinBandVariants": [
+    {"key":"LEGACY","offset":-0.3},
+    {"key":"STANDARD","offset":0},
+    {"key":"REFINED","offset":0.12},
+    {"key":"ADVANCED","offset":0.22},
+    {"key":"PROTOTYPE","offset":0.3}
+  ],
+  "phases": [
+    {
+      "id":"VESSEL-00",
+      "order":0,
+      "title":"Governing schemas and technology discipline",
+      "status":"next",
+      "dependsOn":[],
+      "deliverables":["Versioned vessel schemas","Technology-band and within-band variant tables","Seed hierarchy","Condition-state axes","Migration policy"],
+      "acceptance":["Existing vessel output wraps without data loss","P0-P6 and T-1 are explicit","Subsystem variation remains within policy","Generation remains deterministic outside timestamps"]
+    },
+    {
+      "id":"VESSEL-01",
+      "order":1,
+      "title":"Species-specific manufacturer generator",
+      "status":"planned",
+      "dependsOn":["VESSEL-00"],
+      "deliverables":["Persistent manufacturer records","Topology weights","Material and repair doctrine","Technology variant distribution","Naming and visual grammar"],
+      "acceptance":["Manufacturers from one species are related but distinct","Ships from one manufacturer remain recognizable","Profiles materially affect engineering and layout"]
+    },
+    {
+      "id":"VESSEL-02",
+      "order":2,
+      "title":"Engineering ledger expansion",
+      "status":"planned",
+      "dependsOn":["VESSEL-00","VESSEL-01"],
+      "deliverables":["Conventional propulsion and combat delta-v","Armor and shielding ledger","Sensor and fire-control ledger","Weapon support and magazine ledger","Countermeasure ledger","Subsystem technology variants"],
+      "acceptance":["Mass and volume close","Armor derives from area and areal density","Weapons include support and cooling","Combat delta-v is separated from strategic delta-v"]
+    },
+    {
+      "id":"VESSEL-03",
+      "order":3,
+      "title":"Semantic module graph",
+      "status":"planned",
+      "dependsOn":["VESSEL-02"],
+      "deliverables":["Module inventory","Attachment graph","Pressure-zone graph","Structural graph","Utility graph","Weapon arcs and sensor requirements"],
+      "acceptance":["INTERNAL modules have valid protected parents","EVA modules have valid vacuum hardpoints","Critical dependencies are connected","Invalid graphs are rejected or visibly repaired"]
+    },
+    {
+      "id":"VESSEL-04",
+      "order":4,
+      "title":"Crude three-dimensional voxel assembler",
+      "status":"planned",
+      "dependsOn":["VESSEL-03"],
+      "deliverables":["Adaptive voxel scale","Monocoque, spine, cluster, ring, and hybrid algorithms","Module packing","Utility routing","Access paths","Armor and external module representation","Basic 3D viewer"],
+      "acceptance":["All volumes fit","Load paths and clearances validate","Same seed reproduces same layout","Species and manufacturer visibly affect arrangement"]
+    },
+    {
+      "id":"VESSEL-05",
+      "order":5,
+      "title":"Condition, history, salvage, and destruction",
+      "status":"planned",
+      "dependsOn":["VESSEL-04"],
+      "deliverables":["Construction completion","Commissioning","Wear","Damage events","Secondary propagation","Teardown and mothballing","Abandonment and salvage","Wreck and total destruction","History log"],
+      "acceptance":["Missing, removed, damaged, and salvaged remain distinct","Seventy-five percent destruction leaves coherent wreckage","One hundred percent destruction removes vessel coherence","Statistics recalculate from surviving graphs"]
+    },
+    {
+      "id":"VESSEL-06",
+      "order":6,
+      "title":"Sensors, tracks, and combat geometry",
+      "status":"planned",
+      "dependsOn":["VESSEL-02","VESSEL-03"],
+      "deliverables":["Light-lag calculations","Track uncertainty","Target maneuver envelope","Sensor confidence","Fire-control solution","Combat acceleration and delta-v"],
+      "acceptance":["Uncertainty grows with observation age and flight time","Evasion changes intercept through displacement","Range, signature, and emissions affect track quality","Conflicting tracks are representable"]
+    },
+    {
+      "id":"VESSEL-07",
+      "order":7,
+      "title":"Weapon-family engineering and engagement envelopes",
+      "status":"planned",
+      "dependsOn":["VESSEL-02","VESSEL-06"],
+      "deliverables":["Chemical ballistics","Rail guns","Coil guns","Brute mass throwers","Sand guns","Lasers","Particle and C-beams","Fractional-c kinetics","Missiles","Countermeasure missiles"],
+      "acceptance":["Every weapon reports point-defense, practical, harassment, and theoretical reach","Unguided weapons degrade with maneuver uncertainty","Beam effect degrades with divergence and dwell","Missiles update in flight and face active defense","Weapons occupy valid modules and arcs"]
+    },
+    {
+      "id":"VESSEL-08",
+      "order":8,
+      "title":"Local damage and combat resolution",
+      "status":"planned",
+      "dependsOn":["VESSEL-04","VESSEL-05","VESSEL-07"],
+      "deliverables":["Intercept resolution","Armor and thermal effects","Voxel damage","Secondary propagation","Utility severance","Crew and habitat effects","Detachable modules"],
+      "acceptance":["Hits affect actual local systems","Architecture changes damage outcome","Survival depends on connectivity","Destroyed modules leave usable statistics"]
+    },
+    {
+      "id":"VESSEL-09",
+      "order":9,
+      "title":"RPG statistics and action economy",
+      "status":"planned",
+      "dependsOn":["VESSEL-06","VESSEL-07","VESSEL-08"],
+      "deliverables":["Normalized vessel statistics","Navigation actions","Sensor and targeting actions","Offensive and defensive actions","Engineering and damage-control actions","Resource timing model"],
+      "acceptance":["Players can operate vessels without reading the full dossier","Every stat links to physical sources","Detailed and simplified resolution remain compatible"]
+    },
+    {
+      "id":"VESSEL-10",
+      "order":10,
+      "title":"Integrated UI, export, and campaign persistence",
+      "status":"planned",
+      "dependsOn":["VESSEL-09"],
+      "deliverables":["Manufacturer library","Hull-family library","Voxel viewer","Damage-state editor","Combat stat card","JSON import and export","Campaign persistence","Schema migrations"],
+      "acceptance":["Cluster route can germinate a persistent vessel","Exports reload without provenance loss","Earlier vessels migrate without destructive data loss"]
+    },
+    {
+      "id":"VESSEL-11",
+      "order":11,
+      "title":"Validation and balance matrix",
+      "status":"planned",
+      "dependsOn":["VESSEL-04","VESSEL-05","VESSEL-06","VESSEL-07","VESSEL-08","VESSEL-09","VESSEL-10"],
+      "deliverables":["Cross-product generation matrix","Monte Carlo engagement simulation","Mass and volume closure tests","Graph validation","Weapon-envelope regressions","Damage-state invariants","Balance reports"],
+      "acceptance":["All nine FTL families and seven Path levels remain generatable","Every manufacturer and topology produces valid ships","No weapon dominates every range and target state","Condition percentages remain coherent and distinct"]
+    }
+  ],
+  "immediateImplementationOrder": [
+    "VESSEL-00",
+    "VESSEL-01",
+    "VESSEL-02",
+    "VESSEL-03",
+    "VESSEL-04",
+    "VESSEL-05",
+    "VESSEL-06",
+    "VESSEL-07",
+    "VESSEL-08",
+    "VESSEL-09",
+    "VESSEL-10",
+    "VESSEL-11"
+  ]
+}
