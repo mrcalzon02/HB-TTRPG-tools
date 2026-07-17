@@ -2,7 +2,7 @@
   "projectId": "blacklight-exo-vessel-design-system",
   "version": 1,
   "authority": "Charles",
-  "status": "planned",
+  "status": "active",
   "governingGuide": "EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md",
   "principles": [
     "Every gameplay value must be traceable to a physical, technological, organizational, biological, architectural, or condition input.",
@@ -36,16 +36,26 @@
       "id":"VESSEL-00",
       "order":0,
       "title":"Governing schemas and technology discipline",
-      "status":"next",
+      "status":"complete",
       "dependsOn":[],
       "deliverables":["Versioned vessel schemas","Technology-band and within-band variant tables","Seed hierarchy","Condition-state axes","Migration policy"],
-      "acceptance":["Existing vessel output wraps without data loss","P0-P6 and T-1 are explicit","Subsystem variation remains within policy","Generation remains deterministic outside timestamps"]
+      "acceptance":["Existing vessel output wraps without data loss","P0-P6 and T-1 are explicit","Subsystem variation remains within policy","Generation remains deterministic outside timestamps"],
+      "completionEvidence":[
+        "data/exo-vessel/vessel-contract-registry.json",
+        "data/exo-vessel/migrations.json",
+        "data/schemas/exo-vessel-record.schema.json",
+        "data/schemas/exo-vessel-manufacturer.schema.json",
+        "data/schemas/exo-vessel-condition.schema.json",
+        "data/schemas/exo-vessel-module.schema.json",
+        "blacklight-exo-vessel-contracts.js",
+        "scripts/validate-exo-vessel-contracts.mjs"
+      ]
     },
     {
       "id":"VESSEL-01",
       "order":1,
       "title":"Species-specific manufacturer generator",
-      "status":"planned",
+      "status":"next",
       "dependsOn":["VESSEL-00"],
       "deliverables":["Persistent manufacturer records","Topology weights","Material and repair doctrine","Technology variant distribution","Naming and visual grammar"],
       "acceptance":["Manufacturers from one species are related but distinct","Ships from one manufacturer remain recognizable","Profiles materially affect engineering and layout"]
