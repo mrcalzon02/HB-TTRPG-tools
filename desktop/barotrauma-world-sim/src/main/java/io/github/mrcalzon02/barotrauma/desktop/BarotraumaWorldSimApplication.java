@@ -10,6 +10,7 @@ import io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindo
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
 import io.github.mrcalzon02.barotrauma.desktop.simulation.SimulationMonitorWindow;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
+import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -41,52 +42,47 @@ import java.util.Map;
 
 /** Primary Java 17 Swing shell for the Barotrauma World Simulation Toolbox. */
 public final class BarotraumaWorldSimApplication {
-
     private BarotraumaWorldSimApplication() { }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            installSystemLookAndFeel();
+            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+            catch (Exception exception) {
+                System.err.println("Could not activate the system look and feel: " + exception.getMessage());
+            }
             new MainWindow().setVisible(true);
         });
-    }
-
-    private static void installSystemLookAndFeel() {
-        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-        catch (Exception exception) {
-            System.err.println("Could not activate the system look and feel: " + exception.getMessage());
-        }
     }
 
     private static final class MainWindow extends JFrame {
         private static final Workspace[] WORKSPACES = {
                 new Workspace("overview", "Overview", "Master-world identity, health, time, and readiness."),
                 new Workspace("active-submarine", "Active Submarine", "Managed vessel status, crew, route, systems, and operations."),
-                new Workspace("world-map", "World Map", "Europa locations, routes, levels, stations, factions, and vessel markers."),
+                new Workspace("world-map", "World Map", "Live Europa stations, NPC voyages, routes, missions, research, and encounters."),
                 new Workspace("submarines", "Submarines", "Official definitions, physical vessel instances, and snapshot chronology."),
                 new Workspace("crew", "Crew", "Characters, submissions, assignments, conditions, inventories, and qualifications."),
-                new Workspace("stations-economy", "Stations and Economy", "Production, consumption, vendors, freight, markets, and treasuries."),
-                new Workspace("routes-jobs", "Routes and Jobs", "Voyage planning, contracts, transit, crossings, and event requirements."),
-                new Workspace("encounters", "Encounters", "Creature, maintenance, hazard, expedition, and general event resolution."),
+                new Workspace("stations-economy", "Stations and Economy", "Production, consumption, defense pressure, freight, markets, and station health."),
+                new Workspace("routes-jobs", "Routes and Jobs", "Voyage planning, contracts, transit, trade, mining, and fauna-clearing missions."),
+                new Workspace("encounters", "Encounters", "Shared player/NPC transit hazards, challenge resolution, and consequences."),
                 new Workspace("cargo-catalogue", "Cargo and Catalogue", "Items, recipes, compatibility, manifests, lots, and transactions."),
-                new Workspace("workshop-research", "Workshop and R&D", "Custom content, validation ceilings, research, and construction."),
+                new Workspace("workshop-research", "Workshop and R&D", "Station research, custom content, validation, and construction."),
                 new Workspace("factions", "Factions", "Organizations, relationships, influence, reputation, and hidden cells."),
                 new Workspace("reference-library", "Reference Library", "Crewman's Primer, RPG rules, catalogues, and source provenance."),
                 new Workspace("import-center", "Import Center", "Version-22 master-world and official .save/.sub compatibility."),
                 new Workspace("campaign-journal", "Campaign Journal", "Audit history, incidents, voyages, transactions, and decisions."),
-                new Workspace("simulation-monitor", "Simulation Monitor", "Clock, durable commands, catch-up, checkpoints, and diagnostics."),
+                new Workspace("simulation-monitor", "Simulation Monitor", "Durable manual clock controls and automatic passive world scheduling."),
                 new Workspace("settings-backups", "Settings and Backups", "World directories, checkpoints, backups, restore, and packaging data.")
         };
 
         private final DesktopWorldSession session = DesktopWorldSession.global();
-        private final CardLayout cardLayout = new CardLayout();
-        private final JPanel cardPanel = new JPanel(cardLayout);
+        private final CardLayout cards = new CardLayout();
+        private final JPanel cardPanel = new JPanel(cards);
         private final DefaultListModel<Workspace> navigationModel = new DefaultListModel<>();
-        private final JList<Workspace> navigationList = new JList<>(navigationModel);
-        private final Map<String, Workspace> workspacesById = new LinkedHashMap<>();
+        private final JList<Workspace> navigation = new JList<>(navigationModel);
+        private final Map<String, Workspace> byId = new LinkedHashMap<>();
         private final JLabel workspaceTitle = new JLabel("Overview");
         private final JLabel worldStatus = new JLabel("No desktop world open");
-        private final JLabel simulationStatus = new JLabel("Manual durable clock available · automatic scheduler disabled");
+        private final JLabel simulationStatus = new JLabel("Passive Mode available after master-world import");
         private final JLabel operationStatus = new JLabel("Desktop shell ready");
         private AutoCloseable sessionSubscription;
 
@@ -95,145 +91,138 @@ public final class BarotraumaWorldSimApplication {
             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             setMinimumSize(new Dimension(1100, 700));
             setSize(1440, 900);
-            setLocationByPlatform(true);
             setLocationRelativeTo(null);
             for (Workspace workspace : WORKSPACES) {
-                workspacesById.put(workspace.id(), workspace);
+                byId.put(workspace.id(), workspace);
                 navigationModel.addElement(workspace);
             }
             JPanel root = new JPanel(new BorderLayout());
             root.setBorder(new EmptyBorder(12, 12, 12, 12));
-            root.add(buildHeader(), BorderLayout.NORTH);
-            root.add(buildMainArea(), BorderLayout.CENTER);
-            root.add(buildStatusBar(), BorderLayout.SOUTH);
+            root.add(header(), BorderLayout.NORTH);
+            root.add(mainArea(), BorderLayout.CENTER);
+            root.add(statusBar(), BorderLayout.SOUTH);
             setContentPane(root);
-            navigationList.setSelectedIndex(0);
+            navigation.setSelectedIndex(0);
             sessionSubscription = session.addListener(this::showSharedWorld, true);
         }
 
-        private Component buildHeader() {
+        private Component header() {
             JPanel header = new JPanel(new BorderLayout(16, 8));
             header.setBorder(new EmptyBorder(4, 6, 12, 6));
-            JPanel titleBlock = new JPanel();
-            titleBlock.setLayout(new BoxLayout(titleBlock, BoxLayout.Y_AXIS));
-            JLabel applicationTitle = new JLabel("Barotrauma World Simulation Toolbox");
-            applicationTitle.setFont(applicationTitle.getFont().deriveFont(Font.BOLD, 22f));
+            JPanel titles = new JPanel();
+            titles.setLayout(new BoxLayout(titles, BoxLayout.Y_AXIS));
+            JLabel app = new JLabel("Barotrauma World Simulation Toolbox");
+            app.setFont(app.getFont().deriveFont(Font.BOLD, 22f));
             workspaceTitle.setFont(workspaceTitle.getFont().deriveFont(Font.BOLD, 16f));
-            titleBlock.add(applicationTitle);
-            titleBlock.add(Box.createVerticalStrut(4));
-            titleBlock.add(workspaceTitle);
-            JPanel stateBlock = new JPanel();
-            stateBlock.setLayout(new BoxLayout(stateBlock, BoxLayout.Y_AXIS));
+            titles.add(app);
+            titles.add(Box.createVerticalStrut(4));
+            titles.add(workspaceTitle);
+            JPanel state = new JPanel();
+            state.setLayout(new BoxLayout(state, BoxLayout.Y_AXIS));
             worldStatus.setHorizontalAlignment(SwingConstants.RIGHT);
             simulationStatus.setHorizontalAlignment(SwingConstants.RIGHT);
-            stateBlock.add(worldStatus);
-            stateBlock.add(Box.createVerticalStrut(4));
-            stateBlock.add(simulationStatus);
-            header.add(titleBlock, BorderLayout.WEST);
-            header.add(stateBlock, BorderLayout.EAST);
+            state.add(worldStatus);
+            state.add(Box.createVerticalStrut(4));
+            state.add(simulationStatus);
+            header.add(titles, BorderLayout.WEST);
+            header.add(state, BorderLayout.EAST);
             return header;
         }
 
-        private Component buildMainArea() {
-            navigationList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-            navigationList.setFixedCellHeight(34);
-            navigationList.setBorder(new EmptyBorder(4, 4, 4, 4));
-            navigationList.setCellRenderer(new WorkspaceCellRenderer());
-            navigationList.addListSelectionListener(event -> {
-                if (!event.getValueIsAdjusting()) {
-                    Workspace selected = navigationList.getSelectedValue();
-                    if (selected != null) showWorkspace(selected);
+        private Component mainArea() {
+            navigation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+            navigation.setFixedCellHeight(34);
+            navigation.setCellRenderer(new WorkspaceCellRenderer());
+            navigation.addListSelectionListener(event -> {
+                if (event.getValueIsAdjusting()) return;
+                Workspace workspace = navigation.getSelectedValue();
+                if (workspace != null) {
+                    cards.show(cardPanel, workspace.id());
+                    workspaceTitle.setText(workspace.label());
+                    operationStatus.setText("Viewing " + workspace.label());
                 }
             });
-            JScrollPane navigationScroll = new JScrollPane(navigationList);
-            navigationScroll.setMinimumSize(new Dimension(220, 400));
-            navigationScroll.setPreferredSize(new Dimension(250, 700));
             registerPanels();
-            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navigationScroll, cardPanel);
-            splitPane.setResizeWeight(0.0);
-            splitPane.setDividerLocation(250);
-            splitPane.setContinuousLayout(true);
-            return splitPane;
+            JScrollPane navScroll = new JScrollPane(navigation);
+            navScroll.setPreferredSize(new Dimension(250, 700));
+            JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navScroll, cardPanel);
+            split.setDividerLocation(250);
+            split.setResizeWeight(0.0);
+            return split;
         }
 
         private void registerPanels() {
-            cardPanel.add(buildOverviewPanel(), "overview");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("active-submarine")), "active-submarine");
-            cardPanel.add(buildWorldMapPanel(), "world-map");
-            cardPanel.add(buildSubmarinesPanel(), "submarines");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("crew")), "crew");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("stations-economy")), "stations-economy");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("routes-jobs")), "routes-jobs");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("encounters")), "encounters");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("cargo-catalogue")), "cargo-catalogue");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("workshop-research")), "workshop-research");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("factions")), "factions");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("reference-library")), "reference-library");
-            cardPanel.add(buildImportCenterPanel(), "import-center");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("campaign-journal")), "campaign-journal");
-            cardPanel.add(buildSimulationMonitorPanel(), "simulation-monitor");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("settings-backups")), "settings-backups");
+            cardPanel.add(overview(), "overview");
+            cardPanel.add(placeholder(byId.get("active-submarine")), "active-submarine");
+            cardPanel.add(worldMap(), "world-map");
+            cardPanel.add(submarines(), "submarines");
+            cardPanel.add(placeholder(byId.get("crew")), "crew");
+            cardPanel.add(workloadPanel(byId.get("stations-economy"),
+                    "Station ledgers now update in Passive Mode. Supplies, ore, industry, security, integrity, threat, and credits determine whether stations rise, remain stable, become strained, are besieged, or fall."), "stations-economy");
+            cardPanel.add(workloadPanel(byId.get("routes-jobs"),
+                    "NPC vessels accept deterministic trade, mining, fauna-clearing, defense, research, salvage, and transit missions. Route progress and hazards are visible in the World Map console."), "routes-jobs");
+            cardPanel.add(workloadPanel(byId.get("encounters"),
+                    "NPC voyages and future player transit call the same deterministic challenge resolver. Every hazard records challenge, roll, effective capability, margin, outcome, damage, delay, and narrative."), "encounters");
+            cardPanel.add(placeholder(byId.get("cargo-catalogue")), "cargo-catalogue");
+            cardPanel.add(workloadPanel(byId.get("workshop-research"),
+                    "Each simulated station maintains a research project. Progress responds to station supplies and siege state, and completed projects improve local defense against Europan threats."), "workshop-research");
+            cardPanel.add(placeholder(byId.get("factions")), "factions");
+            cardPanel.add(placeholder(byId.get("reference-library")), "reference-library");
+            cardPanel.add(importCenter(), "import-center");
+            cardPanel.add(placeholder(byId.get("campaign-journal")), "campaign-journal");
+            cardPanel.add(simulation(), "simulation-monitor");
+            cardPanel.add(placeholder(byId.get("settings-backups")), "settings-backups");
         }
 
-        private Component buildOverviewPanel() {
+        private Component overview() {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading("Desktop world operations"));
+            panel.add(heading("Desktop world operations"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("The Java desktop now supports shared world selection, schema-003 persistence, normalized version-22 master-world import, official vessel imports, durable deterministic clock commands, and reviewed checkpoints."));
+            panel.add(body("The Java desktop now supports schema-004 persistence, normalized version-22 worlds, official vessel imports, durable clock commands, and an explicitly enabled automatic Passive Mode for stations and NPC voyages."));
             panel.add(Box.createVerticalStrut(18));
             JPanel metrics = new JPanel(new GridLayout(2, 3, 12, 12));
-            metrics.add(metricCard("Voyage rings", "48", "Mandatory inward rings"));
-            metrics.add(metricCard("Locations", "960", "Normalized master-world nodes"));
-            metrics.add(metricCard("Stations", "180", "Normalized station records"));
-            metrics.add(metricCard("Web compatibility", "v22", "Explicit normalized import"));
-            metrics.add(metricCard("Simulation", "Durable manual", "Single writer, command receipts, and checkpoints"));
-            metrics.add(metricCard("Persistence", "Schema 003", "Atomic world, vessel, command, and checkpoint transactions"));
+            metrics.add(metric("World map", "Live", "Stations, NPC vessels, missions, research, and encounters"));
+            metrics.add(metric("Transit", "Shared", "The same deterministic resolver serves players and NPCs"));
+            metrics.add(metric("Stations", "Reactive", "Rise, strain, siege, fall, and dispatch responses"));
+            metrics.add(metric("Missions", "7 types", "Trade, mining, clearing, defense, research, salvage, transit"));
+            metrics.add(metric("Scheduling", "Passive Mode", "One process-wide scheduler per opened world"));
+            metrics.add(metric("Persistence", "Schema 004", "Atomic clock and workload cycles"));
             panel.add(metrics);
             panel.add(Box.createVerticalStrut(18));
             panel.add(new JSeparator());
             panel.add(Box.createVerticalStrut(12));
             JPanel actions = new JPanel();
+            actions.add(button("Open Live World Map", this::openWorldRegistry));
             actions.add(button("Import Version-22 World", this::openWebWorldImport));
-            actions.add(button("View Normalized World", this::openWorldRegistry));
             actions.add(button("Open Vessel Registry", this::openVesselRegistry));
-            actions.add(button("Open Simulation Monitor", this::openSimulationMonitor));
+            actions.add(button("Open Manual Clock", this::openSimulationMonitor));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
         }
 
-        private Component buildWorldMapPanel() {
+        private Component worldMap() {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading("Normalized Europa world"));
+            panel.add(heading("Live Europa world map"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("Version-22 exports can establish the desktop world's master-world identity, canonical clock, rings, locations, stations, component versions, and imported scheduler metadata. Import leaves the scheduler paused."));
+            panel.add(body("The World Map has its own Passive Mode. Enable it to watch stations produce, consume, defend themselves, commission missions, and dispatch NPC submarines whose transit hazards and voyage logs update while the application remains open."));
             panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Master world", "One per world", "Replacement is blocked to prevent silent world-state loss"));
+            panel.add(metric("NPC vessel records", "Clickable", "Pin a vessel and watch its voyage log update"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Location identity", "Source-backed", "Deterministic fallback IDs are used only when source IDs are absent"));
+            panel.add(metric("Station response", "Autonomous", "Threat creates defense and fauna-clearing work"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Simulation", "PAUSED", "Import never starts or advances the continuous writer"));
+            panel.add(metric("Automatic scheduling", "Enabled", "Only while Passive Mode is explicitly on"));
             panel.add(Box.createVerticalStrut(16));
-            JPanel actions = new JPanel();
-            actions.add(button("Open Master-World Import", this::openWebWorldImport));
-            actions.add(button("Open World Registry", this::openWorldRegistry));
-            actions.add(button("Open Durable Clock", this::openSimulationMonitor));
-            panel.add(actions);
+            panel.add(button("Open World Map and Passive Console", this::openWorldRegistry));
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
         }
 
-        private Component buildSubmarinesPanel() {
+        private Component submarines() {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading("Submarine and physical-vessel registry"));
+            panel.add(heading("Submarine and physical-vessel registry"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("Submarine definitions are deduplicated by canonical XML structure. Physical vessels retain separate world identities, and every accepted source creates an immutable current or historical snapshot."));
-            panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Definitions", "Reusable", "One canonical design may support many physical vessels"));
-            panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Vessels", "World-specific", "Names do not control identity or duplicate decisions"));
-            panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Snapshots", "Chronological", "Newer states promote; older states remain historical"));
+            panel.add(body("Imported player vessels retain definition, physical identity, and snapshot chronology. Passive NPC vessels use separate world-simulation identities and voyage histories."));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Open Vessel Registry", this::openVesselRegistry));
@@ -245,22 +234,15 @@ public final class BarotraumaWorldSimApplication {
             return new JScrollPane(panel);
         }
 
-        private Component buildImportCenterPanel() {
+        private Component importCenter() {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading("Import Center"));
+            panel.add(heading("Import Center"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("Sources are hashed, safely decoded, validated, compared with existing identities, and reviewed before any accepted transaction changes world or vessel records."));
-            panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Existing suite", "Version 22", "Normalized master-world import with paused scheduler metadata"));
-            panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Campaign saves", ".save", "Every submarine payload receives an explicit row mapping"));
-            panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Standalone vessels", ".sub", "Canonical definitions and immutable source snapshots"));
+            panel.add(body("Sources remain inspection-first and approval-gated. A normalized master world establishes the locations and stations Passive Mode reacts to."));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Read-Only Inspection", this::openInspection));
             actions.add(button("Version-22 World Approval", this::openWebWorldImport));
-            actions.add(button("View Normalized World", this::openWorldRegistry));
             actions.add(button("One-Vessel Approval", this::openImportApproval));
             actions.add(button("Campaign Mapping", this::openCampaignMapper));
             panel.add(actions);
@@ -268,36 +250,44 @@ public final class BarotraumaWorldSimApplication {
             return new JScrollPane(panel);
         }
 
-        private Component buildSimulationMonitorPanel() {
+        private Component simulation() {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading("Durable deterministic simulation clock"));
+            panel.add(heading("Durable simulation controls"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("Schema 003 stores immutable command receipts and reviewed checkpoints. Manual enable, disable, step, bounded catch-up, and checkpoint commands are available through a fault-contained single-writer session. Automatic timed Run remains unavailable until workload processors are implemented."));
+            panel.add(body("Manual clock operations remain available for reviewed stepping and catch-up. Automatic timed scheduling is now enabled through the World Map's explicit Passive Mode, with every cycle serialized and persisted before another begins."));
             panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Current state", "Durable manual", "Every accepted clock command is committed before another begins"));
+            panel.add(metric("Passive scheduler", "Available", "One scheduler per world; disabled or faulted explicitly"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Concurrency", "Single writer", "Stale before-state and duplicate execution sequences are rejected"));
+            panel.add(metric("Cycle scope", "Atomic", "Clock, stations, missions, voyages, research, and encounters"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Recovery", "Checkpointed", "Reopened sessions continue after the last durable command sequence"));
+            panel.add(metric("Recovery", "Durable", "Stale state is rejected and failures fault closed"));
             panel.add(Box.createVerticalStrut(16));
-            JPanel controls = new JPanel();
-            controls.add(button("Open Durable Simulation Monitor", this::openSimulationMonitor));
-            JButton automaticRun = new JButton("Automatic Run");
-            automaticRun.setEnabled(false);
-            automaticRun.setToolTipText("Automatic scheduling remains disabled until economy and NPC workload processors are transactional.");
-            controls.add(automaticRun);
-            panel.add(controls);
+            JPanel actions = new JPanel();
+            actions.add(button("Open World Map Passive Mode", this::openWorldRegistry));
+            actions.add(button("Open Manual Simulation Monitor", this::openSimulationMonitor));
+            panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
         }
 
-        private Component buildPlaceholderPanel(Workspace workspace) {
+        private Component workloadPanel(Workspace workspace, String description) {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading(workspace.label()));
+            panel.add(heading(workspace.label()));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel(workspace.description()));
+            panel.add(body(description));
             panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Migration state", "Reserved", "Stable navigation identity; application service not yet connected"));
+            panel.add(button("Open Live World Map", this::openWorldRegistry));
+            panel.add(Box.createVerticalGlue());
+            return new JScrollPane(panel);
+        }
+
+        private Component placeholder(Workspace workspace) {
+            JPanel panel = contentPanel();
+            panel.add(heading(workspace.label()));
+            panel.add(Box.createVerticalStrut(8));
+            panel.add(body(workspace.description()));
+            panel.add(Box.createVerticalStrut(16));
+            panel.add(metric("Migration state", "Reserved", "Stable navigation identity; application service not yet connected"));
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
         }
@@ -309,35 +299,35 @@ public final class BarotraumaWorldSimApplication {
             return panel;
         }
 
-        private JLabel sectionHeading(String text) {
+        private JLabel heading(String text) {
             JLabel label = new JLabel(text);
             label.setAlignmentX(Component.LEFT_ALIGNMENT);
             label.setFont(label.getFont().deriveFont(Font.BOLD, 20f));
             return label;
         }
 
-        private JLabel bodyLabel(String text) {
+        private JLabel body(String text) {
             JLabel label = new JLabel("<html><div style='width:760px'>" + escapeHtml(text) + "</div></html>");
             label.setAlignmentX(Component.LEFT_ALIGNMENT);
             return label;
         }
 
-        private JPanel metricCard(String label, String value, String note) {
+        private JPanel metric(String label, String value, String note) {
             JPanel card = new JPanel();
             card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
             card.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(),
                     new EmptyBorder(12, 12, 12, 12)));
             card.setAlignmentX(Component.LEFT_ALIGNMENT);
-            JLabel labelComponent = new JLabel(label);
-            labelComponent.setFont(labelComponent.getFont().deriveFont(Font.BOLD, 12f));
-            JLabel valueComponent = new JLabel(value);
-            valueComponent.setFont(valueComponent.getFont().deriveFont(Font.BOLD, 22f));
-            JLabel noteComponent = new JLabel("<html><div style='width:220px'>" + escapeHtml(note) + "</div></html>");
-            card.add(labelComponent);
+            JLabel heading = new JLabel(label);
+            heading.setFont(heading.getFont().deriveFont(Font.BOLD, 12f));
+            JLabel metric = new JLabel(value);
+            metric.setFont(metric.getFont().deriveFont(Font.BOLD, 22f));
+            JLabel detail = new JLabel("<html><div style='width:220px'>" + escapeHtml(note) + "</div></html>");
+            card.add(heading);
             card.add(Box.createVerticalStrut(6));
-            card.add(valueComponent);
+            card.add(metric);
             card.add(Box.createVerticalStrut(6));
-            card.add(noteComponent);
+            card.add(detail);
             return card;
         }
 
@@ -347,32 +337,35 @@ public final class BarotraumaWorldSimApplication {
             return button;
         }
 
-        private Component buildStatusBar() {
-            JPanel statusBar = new JPanel(new BorderLayout(12, 0));
-            statusBar.setBorder(new EmptyBorder(10, 6, 2, 6));
-            statusBar.add(operationStatus, BorderLayout.WEST);
-            statusBar.add(new JLabel("Java 17 Swing · schema 003 · durable manual simulation · automatic scheduler pending"), BorderLayout.EAST);
-            return statusBar;
-        }
-
-        private void showWorkspace(Workspace workspace) {
-            cardLayout.show(cardPanel, workspace.id());
-            workspaceTitle.setText(workspace.label());
-            operationStatus.setText("Viewing " + workspace.label());
+        private Component statusBar() {
+            JPanel status = new JPanel(new BorderLayout(12, 0));
+            status.setBorder(new EmptyBorder(10, 6, 2, 6));
+            status.add(operationStatus, BorderLayout.WEST);
+            status.add(new JLabel("Java 17 Swing · schema 004 · passive station/NPC simulation available"),
+                    BorderLayout.EAST);
+            return status;
         }
 
         private void showSharedWorld(WorldPaths world) {
             worldStatus.setText(world == null ? "No desktop world open" : "World: " + world.root().getFileName());
+            if (world == null) {
+                simulationStatus.setText("Passive Mode available after master-world import");
+                return;
+            }
+            PassiveWorldSimulationService active = PassiveWorldSimulationService.active(world);
+            if (active == null) simulationStatus.setText("Passive Mode off · enable from World Map");
+            else if (active.status().fault() != null) simulationStatus.setText("Passive Mode faulted · open World Map");
+            else simulationStatus.setText("Passive Mode on · automatic world cycles active");
         }
 
         private void openInspection() { showChild(new ImportInspectionWindow(), "Opened read-only source inspection"); }
         private void openWebWorldImport() { showChild(new WebWorldImportApprovalWindow(), "Opened version-22 world approval"); }
-        private void openWorldRegistry() { showChild(new WorldMapRegistryWindow(), "Opened normalized world registry"); }
+        private void openWorldRegistry() { showChild(new WorldMapRegistryWindow(), "Opened live world map and passive console"); }
         private void openImportApproval() { showChild(new WorldImportApprovalWindow(), "Opened vessel import approval"); }
         private void openCampaignMapper() { showChild(new CampaignVesselMappingWindow(), "Opened campaign vessel mapper"); }
         private void openVesselRegistry() { showChild(new WorldVesselRegistryWindow(), "Opened vessel registry"); }
         private void openSnapshotApproval() { showChild(new VesselSnapshotApprovalWindow(), "Opened snapshot approval"); }
-        private void openSimulationMonitor() { showChild(new SimulationMonitorWindow(), "Opened durable simulation monitor"); }
+        private void openSimulationMonitor() { showChild(new SimulationMonitorWindow(), "Opened manual durable simulation monitor"); }
 
         private void showChild(Window window, String status) {
             window.setLocationRelativeTo(this);
