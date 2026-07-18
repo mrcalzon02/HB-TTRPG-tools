@@ -75,7 +75,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
 
         summary.setEditable(false);
         summary.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
-        summary.setText("Open a schema-011 world to inspect fleet recovery and natural activity.\n");
+        summary.setText(schemaPrompt());
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Summary", new JScrollPane(summary));
@@ -120,7 +120,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         clear();
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
-            summary.setText("Open a schema-011 world to inspect fleet recovery and natural activity.\n");
+            summary.setText(schemaPrompt());
             refreshControls();
             return;
         }
@@ -163,6 +163,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         clear();
         var s = snapshot.summary();
         summary.setText("Passive fleet recovery and natural-world registry\n"
+                + "Database schema: " + WorldStorageContracts.DATABASE_SCHEMA_VERSION + "\n"
                 + "Locations with ecology: " + s.locations() + "\n"
                 + "Active algal blooms: " + s.activeBlooms() + "\n"
                 + "Predator migration zones: " + s.predatorMigrationZones() + "\n"
@@ -175,7 +176,8 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
                 + "change stress, hydrothermal activity, cave stability, sediment, and exposed resources.\n\n"
                 + "Disabled vessels and besieged stations create response operations. Qualified patrol, salvage, "
                 + "or courier vessels are assigned when available. Progress requires sufficient steel, fuel, "
-                + "ammunition, and medical stock at the origin station.\n");
+                + "ammunition, and medical stock at the origin station. Exposed resources and predator expansion "
+                + "feed mining, research, salvage, and fauna-clearing work into the shared NPC mission queue.\n");
 
         for (var row : snapshot.ecology()) ecologyModel.addRow(new Object[]{row.locationName(), row.ring(), row.level(),
                 row.primaryProducers(), row.algalBloom(), row.herbivores(), row.predators(), row.scavengers(),
@@ -242,6 +244,11 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         return new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int row, int column) { return false; }
         };
+    }
+
+    private static String schemaPrompt() {
+        return "Open a schema-" + WorldStorageContracts.DATABASE_SCHEMA_VERSION
+                + " world to inspect fleet recovery and natural activity.\n";
     }
 
     private static String blank(String value) { return value == null ? "" : value; }
