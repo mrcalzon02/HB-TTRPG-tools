@@ -10,15 +10,16 @@ The desktop project now includes:
 - Inspection-first version-22, `.save`, and `.sub` compatibility.
 - Duplicate-safe source, submarine-definition, physical-vessel, and snapshot identities.
 - Atomic vessel imports, campaign mapping, snapshot chronology, rollback, and read-only registries.
-- Sequential SQLite migrations through **schema 005** for fresh and existing desktop worlds.
+- Sequential SQLite migrations through **schema 007** for fresh and existing desktop worlds.
 - A deterministic canonical-time clock, one logical writer, immutable command receipts, reviewed checkpoints, stale-state rejection, and restart recovery.
 - A live Europa World Map with explicitly controlled **Passive Mode**.
-- Transactional station economy, NPC vessel, route, mission, research, transit-hazard, encounter, and voyage-log workloads.
+- Transactional station, NPC vessel, route, mission, research, encounter, item-production, freight, market, and treasury workloads.
+- Explicit imported-player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 - Automatic timed cycles while Passive Mode is enabled.
 
 No website behavior has been removed or redirected. The web suite remains the behavioral reference while desktop parity is developed.
 
-A normalized version-22 world still imports with simulation disabled and paused. Passive Mode begins only after the operator explicitly enables it from the World Map. Once enabled, one process-wide scheduler owns that world. Every cycle advances the deterministic clock and commits all workload changes together; a failed cycle rolls back and faults closed.
+A normalized version-22 world imports with simulation disabled and paused. Passive Mode begins only after the operator explicitly enables it from the World Map. Once enabled, one process-wide scheduler owns that world. Every cycle advances the deterministic clock and commits all passive workload changes together; a failed cycle rolls back and faults closed.
 
 ## Requirements
 
@@ -33,7 +34,7 @@ A Gradle wrapper will be added with release automation. Until then, run commands
 gradle run
 ```
 
-The primary shell launches world import and inspection, the live World Map, vessel workflows, registries, and the manual durable clock monitor. Opening a desktop world in one participating window updates the shared selection across the process.
+Opening a desktop world in one participating window updates the shared selection across the application process.
 
 ## Live World Map and Passive Mode
 
@@ -41,7 +42,7 @@ The primary shell launches world import and inspection, the live World Map, vess
 gradle runWorldRegistry
 ```
 
-The World Map is the passive simulation console. It provides:
+The World Map provides:
 
 - **World Summary** — canonical time, current tick, cadence, and last passive cycle.
 - **Locations** and **Normalized Stations** — imported Europa map evidence.
@@ -51,61 +52,86 @@ The World Map is the passive simulation console. It provides:
 - **Research** — station projects, progress, siege effects, and completion.
 - **Encounters** — transit hazards, challenge, roll, effective result margin, outcome, and narrative.
 
-Passive Mode controls let the operator select a real-time cadence from one second to one hour and one to 1,000 canonical ticks per cycle. Closing the World Map does not stop an enabled process-wide scheduler. Opening the World Map again resumes a configuration previously left enabled.
+Passive Mode controls allow a real-time cadence from one second to one hour and one to 1,000 canonical ticks per cycle. Closing the World Map does not stop an enabled process-wide scheduler. Reopening the World Map resumes a configuration previously left enabled.
 
 Only one passive scheduler is created for a world in the application process. The manual clock monitor becomes read-only while that scheduler owns the writer.
 
+## Station logistics, markets, and freight
+
+```text
+gradle runStationLogistics
+```
+
+Schema 006 introduced item-level logistics and schema 007 hardened freight behavior. The logistics console exposes:
+
+- Item catalogue definitions and base values.
+- Production recipes with declared inputs, outputs, cycle timing, and credit costs.
+- Per-station inventory, reservations, and reorder points.
+- Vendor buy and sell prices that react to local threat.
+- Production runs and their station treasury costs.
+- READY, IN_TRANSIT, DELIVERED, LOST, and cancelled freight lots.
+- Station treasury entries for production and freight movement.
+
+The initial catalogue contains Europan ore, fabricated steel, reactor fuel rods, medical supplies, rations, coilgun ammunition, research samples, and luxury goods. Initial recipes smelt steel, assemble fuel rods, prepare medical supplies, and fabricate ammunition.
+
+Each passive cycle:
+
+1. Produces raw ore and rations according to station capacity.
+2. Chooses at most one affordable recipe per station and tick so input inventory cannot be spent twice.
+3. Consumes recipe inputs and adds outputs.
+4. Deducts production costs from station credits and writes treasury evidence.
+5. Reprices vendor offers according to local threat and station condition.
+6. Creates READY freight opportunities where one station has a shortage and another has surplus stock.
+
+Completed NPC trade, mining, and salvage work can create freight lots. NPC return docking delivers those lots without depending on recursive SQLite triggers, updates inventory and station credits, and writes treasury history.
+
+## Imported player-vessel transit and freight
+
+```text
+gradle runPlayerTransit
+```
+
+An imported physical vessel can be enrolled at a normalized world location without changing its definition, physical identity, or snapshot chronology.
+
+The player transit console supports:
+
+- Selecting an active imported vessel.
+- Enrolling it at a start location.
+- Planning a destination and mission context.
+- Resolving one transit challenge at a time.
+- Accumulating route delay from costly setbacks.
+- Recording hull, supply, route, encounter, and narrative evidence.
+- Docking after arrival.
+- Loading READY freight only while docked at its source station.
+- Carrying freight through the same route system.
+- Delivering freight only after docking at its declared destination.
+
+Freight loading and delivery update station inventory, vessel cargo, station credits, treasury entries, freight state, player voyage logs, and audit history in one transaction.
+
+## Shared transit and encounter resolution
+
+Player and NPC voyages call the same dependency-free deterministic resolver. Given the same world, vessel, route, sequence, mission, and capability inputs, the result is identical.
+
+Current hazards include:
+
+- Thermal vent fields.
+- Ice shear.
+- Ballast-control failure.
+- Reactor instability.
+- Hostile fauna.
+- Abyssal predators.
+- Current reversal.
+- Navigation and instrument blackouts.
+
+Hazard selection is deterministic but varied across route sequences. Resolution records challenge, roll, effective capability, margin, outcome, hull and supply consequences, delay, and narrative.
+
 ## Passive world behavior
 
-### Stations and economy
+Stations remain `RISING`, `STABLE`, `STRAINED`, `BESIEGED`, or `FALLEN` according to credits, supplies, industry, security, integrity, and threat.
 
-Each imported station receives persistent simulation state. Production, consumption, ore availability, industry, security, integrity, threat, and completed missions determine whether it is:
+NPC roles include Trader, Miner, Hunter, Patrol, Research, Salvage, and Courier. Their mission set includes Trade, Mining, Fauna Clearing, Station Defense, Research, Salvage, and Transit.
 
-- `RISING`
-- `STABLE`
-- `STRAINED`
-- `BESIEGED`
-- `FALLEN`
-
-Threatened stations generate defense and fauna-clearing work. Supply shortages generate trade work. Ore shortages generate mining work. Successful NPC missions feed credits, supplies, ore, security, research, and threat reduction back into station state.
-
-### NPC vessels and routes
-
-Passive Mode creates persistent NPC submarines with role-specific capabilities:
-
-- Trader
-- Miner
-- Hunter
-- Patrol
-- Research
-- Salvage
-- Courier
-
-Each vessel retains its location, destination, route progress, hull, supplies, cargo, crew quality, navigation, engineering, combat, mining, and research capability. It moves through preparing, transit, mission work, return, docking, disablement, and loss states.
-
-### Missions
-
-The current deterministic mission set includes:
-
-- Trade
-- Mining
-- Fauna clearing
-- Station defense
-- Research
-- Salvage
-- Transit
-
-Mission creation, assignment, progress, completion, failure, rewards, and station effects are durable database records.
-
-### Shared transit and encounter resolution
-
-NPC voyages call the same dependency-free deterministic transit resolver intended for player transit. Given the same world, vessel, route, tick, mission, and capability inputs, player and NPC resolution is identical.
-
-Current hazards include thermal vents, ice shear, ballast failure, reactor instability, hostile fauna, abyssal predators, current reversal, and navigation/instrument blackouts. Resolution records the challenge, roll, effective capability, margin, outcome, hull and supply consequences, delay, and narrative.
-
-### Voyage logs
-
-Every NPC vessel accumulates a persistent voyage history containing mission assignment, departure, hazards, damage, mission progress, completion, distress, and return evidence. Selecting a vessel in the World Map pins that vessel while the table and log refresh around it.
+Each NPC retains its location, destination, route progress, hull, supplies, cargo, crew quality, navigation, engineering, combat, mining, and research capability. It moves through preparation, outbound transit, work, return, docking, disablement, and loss states while accumulating a persistent voyage history.
 
 ## Manual durable clock monitor
 
@@ -113,14 +139,9 @@ Every NPC vessel accumulates a persistent voyage history containing mission assi
 gradle runSimulationMonitor
 ```
 
-When Passive Mode is off, the manual monitor permits:
+When Passive Mode is off, the manual monitor permits enable, disable, explicit stepping, bounded catch-up, and explicit checkpoints.
 
-- Enable and disable.
-- Explicit deterministic stepping.
-- Bounded catch-up to an ISO-8601 canonical target.
-- Explicit checkpoints.
-
-When Passive Mode is active, the manual monitor loads the durable clock read-only and directs workload control back to the World Map. This prevents two user interfaces from producing competing command sequences.
+When Passive Mode is active, the monitor loads the durable clock read-only and directs workload control back to the World Map. This prevents two control surfaces from intentionally producing competing command sequences.
 
 ## Import and registry workflows
 
@@ -156,17 +177,17 @@ gradle runSnapshotApproval
 
 ## Persistence boundaries
 
-Schema 001 established source, definition, vessel, snapshot, warning, and audit identity.
+- **Schema 001** — source, definition, vessel, snapshot, warning, and audit identity.
+- **Schema 002** — normalized master-world, locations, stations, component versions, state families, and imported scheduler metadata.
+- **Schema 003** — durable clock receipts, checkpoints, current tick state, sequence continuation, and recovery pointers.
+- **Schema 004** — passive configuration, station state, missions, NPC vessels, voyage logs, encounters, and research.
+- **Schema 005** — research uniqueness and return-voyage docking safeguards.
+- **Schema 006** — item catalogue, recipes, inventory, vendors, production, freight, treasury, player-vessel state, player logs, and player encounters.
+- **Schema 007** — non-recursive NPC freight delivery and passive READY freight generation from station shortages.
 
-Schema 002 added normalized master-world, location, station, component-version, state-family, and imported scheduler metadata.
+A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station changes, mission changes, NPC movement, transit encounters, voyage logs, research progress, inventory production, market updates, freight generation, treasury evidence, and audit summary. Any invalid or stale before-state rejects the complete cycle.
 
-Schema 003 added durable clock command receipts, checkpoints, current tick state, sequence continuation, and recovery pointers.
-
-Schema 004 added passive configuration, station state, missions, NPC vessels, voyage logs, encounters, and station research.
-
-Schema 005 hardens research uniqueness and return-voyage docking/unloading for worlds created during schema-004 development.
-
-A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station changes, mission changes, NPC movement, transit encounters, voyage logs, research progress, and audit summary. Any invalid or stale before-state rejects the entire cycle.
+Player route and freight actions use the same exclusive world lock but do not advance the passive clock. Each explicit action commits or rolls back independently against the current durable world state.
 
 ## Build and verification
 
@@ -184,15 +205,18 @@ gradle verifyWorldStore
 
 The suite covers:
 
-- Fresh and legacy migration through schema 005.
+- Fresh and legacy migration through schema 007.
 - Official vessel imports, rollback, campaign mapping, and snapshot chronology.
 - Version-22 normalization and master-world replacement rejection.
 - Deterministic clock replay, command ordering, checkpoint persistence, and restart recovery.
-- Shared player/NPC transit resolution.
+- Shared player/NPC transit replay and hazard diversity.
 - Station economy initialization and updates.
-- Mission creation and role-aware assignment.
-- NPC departure, route advancement, hazards, encounters, and voyage logs.
+- Mission creation and role-aware NPC assignment.
+- NPC departure, route advancement, hazards, encounters, voyage logs, return, and docking.
 - Research persistence and station-defense effects.
+- Item catalogue, station inventory, vendor offers, production runs, and treasury entries.
+- Passive shortage detection and READY freight generation.
+- Player freight loading at source, route traversal, docking, delivery, inventory transfer, and treasury effects.
 - A real timed Passive Mode cycle.
 - Persistent disablement and fault-contained scheduler recovery.
 
@@ -202,9 +226,11 @@ The workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 an
 
 ```text
 io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication
-io.github.mrcalzon02.barotrauma.desktop.imports.WebWorldImportApprovalWindow
 io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow
+io.github.mrcalzon02.barotrauma.desktop.logistics.StationLogisticsWindow
+io.github.mrcalzon02.barotrauma.desktop.logistics.PlayerVesselTransitWindow
 io.github.mrcalzon02.barotrauma.desktop.simulation.SimulationMonitorWindow
+io.github.mrcalzon02.barotrauma.desktop.imports.WebWorldImportApprovalWindow
 io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow
 io.github.mrcalzon02.barotrauma.desktop.imports.CampaignVesselMappingWindow
 io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow
@@ -213,26 +239,23 @@ io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWindow
 
 ## Current implementation order
 
-Completed foundations:
+Completed:
 
 1. Desktop shell, architecture baseline, stable identities, and safe import inspection.
 2. Official vessel transactions, campaign mapping, snapshot chronology, and registries.
 3. Normalized version-22 master-world import and world registry.
 4. Deterministic clock, single-writer commands, receipts, checkpoints, and recovery.
-5. Schema-005 passive world persistence.
-6. Automatic Passive Mode scheduling.
-7. Station economy and station rise/fall state.
-8. NPC vessel creation, assignment, navigation, return, disablement, and loss.
-9. Routes and deterministic player/NPC transit resolution.
-10. Trade, mining, fauna-clearing, defense, research, salvage, and transit missions.
-11. Research projects, encounter records, and clickable NPC voyage logs.
+5. Automatic Passive Mode scheduling.
+6. Station rise/fall state, missions, NPC vessels, routes, research, encounters, and voyage logs.
+7. Item-level station catalogue, inventory, vendor, production, freight, and treasury state.
+8. Imported player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 
-Next phases:
+Next:
 
-1. Expand station markets into item-level production, consumption, vendor inventories, freight lots, and treasury transactions.
-2. Add player-facing transit submission to the shared resolver and connect active imported player vessels to map routes.
-3. Add rescue, repair, reinforcement, faction, and multi-vessel response behavior.
-4. Port the remaining cargo catalogue, workshop/R&D, faction, journal, and reference-library tools.
+1. Add rescue, towing, repair, refuel, rearm, and reinforcement operations for disabled player and NPC vessels.
+2. Add player mission acceptance, reward settlement, and faction consequences.
+3. Add equipment-level cargo manifests and capacity derived from imported submarine data.
+4. Port the remaining faction, campaign journal, reference-library, and workshop authoring tools.
 5. Add persistent recent-world reopening, backups, packaging, and release automation.
 
 ## Governing documents
