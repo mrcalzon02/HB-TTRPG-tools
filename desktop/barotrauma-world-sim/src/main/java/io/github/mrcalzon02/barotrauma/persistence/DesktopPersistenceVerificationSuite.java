@@ -11,6 +11,8 @@ public final class DesktopPersistenceVerificationSuite {
     private DesktopPersistenceVerificationSuite() { }
 
     public static void verifyContract() throws Exception {
+        WorldStorageContracts.verifyContract();
+        WorldDatabaseMigrations.verifyContract();
         AcceptedImportTransaction.verifyContract();
         VesselSnapshotTransaction.verifyContract();
         WorldMapRegistry.verifyContract();
@@ -20,12 +22,13 @@ public final class DesktopPersistenceVerificationSuite {
         PersistentSimulationSession.verifyContract();
         TransitResolutionEngine.verifyContract();
         PassiveWorldSimulationVerification.verifyContract();
+        StationLogisticsVerification.verifyContract();
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma persistence, passive-world, transit, station, mission, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma persistence, passive-world, logistics, player transit, station, mission, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
