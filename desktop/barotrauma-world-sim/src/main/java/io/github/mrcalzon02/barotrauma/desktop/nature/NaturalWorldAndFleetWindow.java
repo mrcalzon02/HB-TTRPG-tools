@@ -34,7 +34,7 @@ import java.awt.Font;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 
-/** Live read-only console for passive fleet recovery and natural-world activity. */
+/** Live read-only console for passive fleet recovery, extraction, and natural-world activity. */
 public final class NaturalWorldAndFleetWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final BarotraumaDonorAssets graphicalAssets = new BarotraumaDonorAssets();
@@ -48,8 +48,12 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
             "Herbivores", "Predators", "Scavengers", "Bioaccumulators", "Nutrients", "Habitat", "Migration", "Tick", "Location ID");
     private final DefaultTableModel geologyModel = model("Location", "Ring", "Level", "Stress", "Hydrothermal",
             "Mineral Exposure", "Instability", "Sediment", "Tick", "Location ID");
-    private final DefaultTableModel resourceModel = model("Status", "Type", "Location", "Richness",
-            "Accessibility", "Renewable", "Discovered", "Updated", "Site ID");
+    private final DefaultTableModel resourceModel = model("Status", "Type", "Location", "Remaining", "Capacity",
+            "Rate", "Richness", "Accessibility", "Renewable", "Recovery", "Extractions", "Last Harvest",
+            "Dormant Until", "Discovered", "Updated", "Site ID");
+    private final DefaultTableModel extractionModel = model("Tick", "Type", "Item", "Quantity", "Location",
+            "Station", "Vessel", "Reserve Before", "Reserve After", "Richness Before", "Richness After",
+            "Renewable", "Ecology Impact", "Geology Impact", "Credit Value", "Site ID", "Mission ID", "Freight Lot ID");
     private final DefaultTableModel eventModel = model("Tick", "Type", "Location", "Severity", "Summary", "Event ID");
     private final DefaultTableModel operationModel = model("Status", "Type", "Progress", "Difficulty", "Casualty",
             "Responder", "Origin", "Target Station", "Target Location", "Steel", "Fuel", "Ammo", "Medical",
@@ -64,7 +68,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
     private boolean busy;
 
     public NaturalWorldAndFleetWindow() {
-        super("Barotrauma Natural World and Fleet Response");
+        super("Barotrauma Natural World, Resources, and Fleet Response");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new Dimension(1100, 700));
         setSize(1550, 900);
@@ -88,6 +92,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         tabs.addTab("Ecology", assetIcon(AssetRole.FAUNA), scroll(ecologyModel));
         tabs.addTab("Geology", assetIcon(AssetRole.GEOLOGY), scroll(geologyModel));
         tabs.addTab("Resource Sites", assetIcon(AssetRole.GEOLOGY), scroll(resourceModel));
+        tabs.addTab("Extraction Ledger", assetIcon(AssetRole.VESSEL), scroll(extractionModel));
         tabs.addTab("Natural Events", assetIcon(AssetRole.FAUNA), scroll(eventModel));
         tabs.addTab("Fleet Responses", assetIcon(AssetRole.VESSEL), scroll(operationModel));
         tabs.addTab("Response Log", assetIcon(AssetRole.VESSEL), scroll(responseLogModel));
@@ -138,7 +143,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
     private void refresh() {
         WorldPaths selectedWorld = world;
         if (selectedWorld == null || busy) return;
-        setBusy(true, "Loading fleet and natural-world evidence…");
+        setBusy(true, "Loading fleet, extraction, and natural-world evidence…");
         new SwingWorker<Snapshot, Void>() {
             @Override protected Snapshot doInBackground() throws Exception {
                 return NaturalWorldAndFleetRegistry.load(selectedWorld);
@@ -171,23 +176,27 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         String assetSource = graphicalAssets.activeDonor()
                 .map(candidate -> "Donor installation: " + candidate.installationRoot())
                 .orElse("Packaged fallback PNGs");
-        summary.setText("Passive fleet recovery and natural-world registry\n"
+        summary.setText("Passive fleet recovery, extraction, and natural-world registry\n"
                 + "Database schema: " + WorldStorageContracts.DATABASE_SCHEMA_VERSION + "\n"
                 + "Graphical asset source: " + assetSource + "\n"
                 + "Locations with ecology: " + s.locations() + "\n"
                 + "Active algal blooms: " + s.activeBlooms() + "\n"
                 + "Predator migration zones: " + s.predatorMigrationZones() + "\n"
                 + "Geological hotspots: " + s.geologicalHotspots() + "\n"
-                + "Exposed resource sites: " + s.resourceSites() + "\n"
+                + "Known resource sites: " + s.resourceSites() + "\n"
+                + "Harvestable resource sites: " + s.harvestableSites() + "\n"
+                + "Dormant renewable sites: " + s.dormantSites() + "\n"
+                + "Depleted nonrenewable sites: " + s.depletedSites() + "\n"
+                + "Extraction batches: " + s.extractionBatches() + "\n"
+                + "Total extracted units: " + s.extractedUnits() + "\n"
                 + "Active fleet responses: " + s.activeResponses() + "\n"
                 + "Completed fleet responses: " + s.completedResponses() + "\n\n"
-                + "Ecological cycles connect producers, algal blooms, herbivores, predators, scavengers, "
-                + "bioaccumulators, nutrients, habitat integrity, and migration pressure. Geological cycles "
-                + "change stress, hydrothermal activity, cave stability, sediment, and exposed resources.\n\n"
-                + "Disabled vessels and besieged stations create response operations. Qualified patrol, salvage, "
-                + "or courier vessels are assigned when available. Progress requires sufficient steel, fuel, "
-                + "ammunition, and medical stock at the origin station. Exposed resources and predator expansion "
-                + "feed mining, research, salvage, and fauna-clearing work into the shared NPC mission queue.\n");
+                + "Resource missions now draw measured cargo from finite site reserves. Mineral extraction changes "
+                + "exposure and cave stability; biological harvesting reduces local biomass and habitat integrity. "
+                + "Nonrenewable sites remain depleted, while renewable algae and bioactive sites enter dormancy, "
+                + "recover behind habitat conditions, and return to the mission queue.\n\n"
+                + "Delivered extraction enters item-level station inventory, updates the abstract station economy, "
+                + "and creates treasury evidence tied to the originating resource site.\n");
 
         for (var row : snapshot.ecology()) ecologyModel.addRow(new Object[]{row.locationName(), row.ring(), row.level(),
                 row.primaryProducers(), row.algalBloom(), row.herbivores(), row.predators(), row.scavengers(),
@@ -196,8 +205,16 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
                 row.tectonicStress(), row.hydrothermalActivity(), row.mineralExposure(), row.caveInstability(),
                 row.sedimentFlux(), row.lastTick(), row.locationId()});
         for (var row : snapshot.resources()) resourceModel.addRow(new Object[]{row.status(), row.resourceType(),
-                row.locationName(), row.richness(), row.accessibility(), row.renewable(), row.discoveredTick(),
+                row.locationName(), row.remainingUnits(), row.carryingCapacity(), row.harvestRate(), row.richness(),
+                row.accessibility(), row.renewable(), row.recoveryProgress(), row.extractionCount(),
+                row.lastHarvestTick() == null ? "" : row.lastHarvestTick(),
+                row.dormantUntilTick() == null ? "" : row.dormantUntilTick(), row.discoveredTick(),
                 row.lastTick(), row.siteId()});
+        for (var row : snapshot.extractions()) extractionModel.addRow(new Object[]{row.tickSequence(),
+                row.resourceType(), row.itemId(), row.quantity(), row.locationName(), blank(row.stationName()),
+                blank(row.vesselName()), row.remainingBefore(), row.remainingAfter(), row.richnessBefore(),
+                row.richnessAfter(), row.renewable(), row.ecologicalImpact(), row.geologicalImpact(),
+                row.creditsValue(), row.siteId(), row.missionId(), row.freightLotId()});
         for (var row : snapshot.events()) eventModel.addRow(new Object[]{row.tickSequence(), row.eventType(),
                 row.locationName(), row.severity(), row.summary(), row.eventId()});
         for (var row : snapshot.operations()) operationModel.addRow(new Object[]{row.status(), row.operationType(),
@@ -217,7 +234,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
 
     private void clear() {
         for (DefaultTableModel model : new DefaultTableModel[]{ecologyModel, geologyModel, resourceModel,
-                eventModel, operationModel, responseLogModel}) model.setRowCount(0);
+                extractionModel, eventModel, operationModel, responseLogModel}) model.setRowCount(0);
     }
 
     private void setBusy(boolean value, String message) {
@@ -263,7 +280,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
 
     private static String schemaPrompt() {
         return "Open a schema-" + WorldStorageContracts.DATABASE_SCHEMA_VERSION
-                + " world to inspect fleet recovery and natural activity.\n";
+                + " world to inspect fleet recovery, resource extraction, and natural activity.\n";
     }
 
     private static String blank(String value) { return value == null ? "" : value; }
