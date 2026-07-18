@@ -9,7 +9,7 @@
   function synchronizeModules(result,history){const states=new Map(history.moduleStates.map(state=>[state.moduleId,state]));for(const module of result.moduleGraph.modules){const state=states.get(module.moduleId);if(state){const{moduleId,...moduleState}=state;module.state=clone(moduleState);}}result.modules=result.moduleGraph.modules;}
   function generatedLayer(layer){return layer.key==='damageTopology'?{...layer,status:'generated',version:'1.0.0',source:'VESSEL-05 condition history, residual voxel field, and surviving graphs',notes:'Condition, lifecycle history, removal provenance, residual material, voxel occupancy, and effective connectivity are applied without replacing the intact VESSEL-03 topology, saved module reference state, or VESSEL-04 placement authority.'}:layer;}
   function apply(input,result){
-    if(result?.conditionHistory?.phase==='VESSEL-05'&&result?.contract?.provenance?.generatorVersion==='3.5.0')return result;
+    if(result?.conditionHistory?.phase==='VESSEL-05'&&result?.contract?.provenance?.conditionHistoryVersion==='1.0.0')return result;
     preserveReferenceStates(result);
     const condition=clone(result.contract.condition),mode=validationMode(input),primary=C.applyPrimaryCondition(result,condition,result.contract.seeds.historySeed),history=P.build(result,condition,primary,{...input,conditionValidationMode:mode});history.validationMode=mode;synchronizeModules(result,history);
     result.conditionHistory=history;
