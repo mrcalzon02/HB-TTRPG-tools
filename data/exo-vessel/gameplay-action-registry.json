@@ -1,0 +1,17 @@
+{
+  "recordType":"blacklightExoVesselGameplayRegistry",
+  "registryVersion":"1.0.0",
+  "phase":"VESSEL-09",
+  "schema":"data/schemas/exo-vessel-gameplay.schema.json",
+  "normalization":{"minimum":0,"maximum":100,"sourcePolicy":"TRACEABLE_WEIGHTED_SOURCES","probabilityAuthority":"SHARED_PERCENTILE"},
+  "statistics":["MOBILITY","NAVIGATION","SENSORS","TARGETING","OFFENSE","DEFENSE","ENGINEERING","DAMAGE_CONTROL","ENDURANCE","COMMAND"],
+  "actionCategories":["NAVIGATION","SENSOR_TARGETING","OFFENSIVE","DEFENSIVE","ENGINEERING_DAMAGE_CONTROL"],
+  "tempos":[{"key":"REACTION","seconds":1},{"key":"TACTICAL","seconds":6},{"key":"OPERATIONAL","seconds":60},{"key":"DAMAGE_CONTROL","seconds":300},{"key":"WATCH","seconds":1800}],
+  "resourcePools":["command","reaction","power","thermal","combatDeltaV","ammunition","damageControlTeam","parts"],
+  "resolution":{"simplifiedRoll":"d100","detailedRoll":"d100","sameProbabilityAuthority":true,"sameRollForSameSeed":true,"sameOutcomeBandForSameRoll":true},
+  "outcomes":["UNAVAILABLE","CRITICAL_SUCCESS","SUCCESS","COMPLICATION","FAILURE","CRITICAL_FAILURE"],
+  "referenceAuthority":{"engineeringLedger":"VESSEL-02_PHYSICAL_PERFORMANCE_AND_RESOURCE_AUTHORITY","moduleGraph":"VESSEL-03_INSTALLED_SYSTEM_AND_ROUTE_AUTHORITY","conditionHistory":"VESSEL-05_SURVIVING_GRAPH_AND_RESOURCE_AUTHORITY","combatGeometry":"VESSEL-06_TRACK_AND_FIRE_CONTROL_AUTHORITY","weaponEngagement":"VESSEL-07_WEAPON_FAMILY_AND_ENVELOPE_AUTHORITY","combatResolution":"VESSEL-08_POST_IMPACT_STATE_AUTHORITY"},
+  "validationModes":["REPAIR","STRICT"],
+  "repairableFaults":["STAT_OUT_OF_RANGE","MISSING_SOURCE_LINK","UNAVAILABLE_ACTION_READY","RESOURCE_OVER_CAPACITY","SIMPLIFIED_DETAILED_DIVERGENCE"],
+  "deferredSystems":{"integratedUiAndCampaignPersistence":"VESSEL-10","validationAndBalanceMatrix":"VESSEL-11"}
+}
