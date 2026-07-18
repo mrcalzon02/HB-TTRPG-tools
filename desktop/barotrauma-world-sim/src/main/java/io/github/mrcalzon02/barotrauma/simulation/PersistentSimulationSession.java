@@ -3,6 +3,8 @@ package io.github.mrcalzon02.barotrauma.simulation;
 import io.github.mrcalzon02.barotrauma.persistence.SimulationCheckpointStore;
 import io.github.mrcalzon02.barotrauma.persistence.SimulationCheckpointStore.PersistResult;
 import io.github.mrcalzon02.barotrauma.persistence.SimulationCheckpointStore.RecoveryState;
+import io.github.mrcalzon02.barotrauma.persistence.SimulationEvidenceRegistry;
+import io.github.mrcalzon02.barotrauma.persistence.SimulationEvidenceRegistry.RegistrySnapshot;
 import io.github.mrcalzon02.barotrauma.persistence.SqliteWorldStore;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
@@ -17,7 +19,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Duration;
 import java.time.Instant;
@@ -57,7 +58,7 @@ public final class PersistentSimulationSession implements AutoCloseable {
     }
 
     public static PersistentSimulationSession open(WorldPaths world, Duration defaultTickSize)
-            throws IOException, SQLException {
+            throws IOException, java.sql.SQLException {
         Objects.requireNonNull(world, "world");
         Objects.requireNonNull(defaultTickSize, "defaultTickSize");
         RecoveryState recovery = SimulationCheckpointStore.load(world, defaultTickSize);
@@ -84,16 +85,11 @@ public final class PersistentSimulationSession implements AutoCloseable {
 
         return CompletableFuture.supplyAsync(() -> {
             requireHealthy();
-            CommandReceipt receipt;
-            try {
-                receipt = writer.submit(command, actor).join();
-            } catch (CompletionException exception) {
-                throw exception;
-            }
+            CommandReceipt receipt = writer.submit(command, actor).join();
             try {
                 PersistResult persisted = SimulationCheckpointStore.persist(world, receipt, checkpointReason);
                 return new DurableCommandResult(receipt, persisted);
-            } catch (IOException | SQLException | RuntimeException exception) {
+            } catch (IOException | java.sql.SQLException | RuntimeException exception) {
                 persistenceFault = exception;
                 throw new CompletionException(exception);
             }
@@ -109,21 +105,10 @@ public final class PersistentSimulationSession implements AutoCloseable {
         }, coordinator);
     }
 
-    public boolean persistenceFaulted() {
-        return persistenceFault != null;
-    }
-
-    public Throwable persistenceFault() {
-        return persistenceFault;
-    }
-
-    public WorldPaths world() {
-        return world;
-    }
-
-    public Duration tickSize() {
-        return tickSize;
-    }
+    public boolean persistenceFaulted() { return persistenceFault != null; }
+    public Throwable persistenceFault() { return persistenceFault; }
+    public WorldPaths world() { return world; }
+    public Duration tickSize() { return tickSize; }
 
     private void requireHealthy() {
         Throwable fault = persistenceFault;
@@ -203,6 +188,18 @@ public final class PersistentSimulationSession implements AutoCloseable {
                 require(commands.next() && commands.getInt(1) == 3,
                         "Persistent session did not retain all command receipts.");
             }
+
+            RegistrySnapshot evidence = SimulationEvidenceRegistry.load(paths);
+            require(evidence.summary().initialized()
+                            && evidence.summary().clock().tickSequence() == 23
+                            && evidence.summary().commandCount() == 3
+                            && evidence.summary().checkpointCount() == 2,
+                    "Read-only simulation evidence summary failed.");
+            require(evidence.commands().size() == 3 && evidence.commands().get(0).executionSequence() == 3,
+                    "Read-only command evidence ordering failed.");
+            require(evidence.checkpoints().size() == 2
+                            && evidence.summary().lastCheckpointId().equals(evidence.checkpoints().get(0).checkpointId()),
+                    "Read-only checkpoint evidence failed.");
         } finally {
             deleteTree(root);
         }
