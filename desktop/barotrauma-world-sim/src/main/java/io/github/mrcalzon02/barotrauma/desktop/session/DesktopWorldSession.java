@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 /**
@@ -17,20 +18,13 @@ import java.util.function.Consumer;
 public final class DesktopWorldSession {
 
     private static final DesktopWorldSession GLOBAL = new DesktopWorldSession();
-
     private final CopyOnWriteArrayList<Consumer<WorldPaths>> listeners = new CopyOnWriteArrayList<>();
     private volatile WorldPaths currentWorld;
 
-    private DesktopWorldSession() {
-    }
+    private DesktopWorldSession() { }
 
-    public static DesktopWorldSession global() {
-        return GLOBAL;
-    }
-
-    public Optional<WorldPaths> currentWorld() {
-        return Optional.ofNullable(currentWorld);
-    }
+    public static DesktopWorldSession global() { return GLOBAL; }
+    public Optional<WorldPaths> currentWorld() { return Optional.ofNullable(currentWorld); }
 
     public WorldPaths requireWorld() {
         WorldPaths world = currentWorld;
@@ -71,12 +65,20 @@ public final class DesktopWorldSession {
         WorldPaths first = new WorldPaths(root, root.resolve("world.db"), root.resolve("world.properties"),
                 root.resolve("world.lock"), root.resolve("imports"), root.resolve("attachments"),
                 root.resolve("backups"), root.resolve("exports"), root.resolve("logs"));
-        java.util.concurrent.atomic.AtomicReference<WorldPaths> observed = new java.util.concurrent.atomic.AtomicReference<>();
-        try (AutoCloseable ignored = session.addListener(observed::set, false)) {
-            session.activate(first);
-            if (!session.requireWorld().equals(first)) throw new IllegalStateException("Session activation failed.");
+        AtomicReference<WorldPaths> observed = new AtomicReference<>();
+        AutoCloseable subscription = session.addListener(observed::set, false);
+        SwingUtilities.invokeAndWait(() -> session.activate(first));
+        if (!session.requireWorld().equals(first) || !first.equals(observed.get())) {
+            throw new IllegalStateException("Session activation or listener delivery failed.");
         }
-        session.clear();
+        subscription.close();
+        SwingUtilities.invokeAndWait(session::clear);
         if (session.currentWorld().isPresent()) throw new IllegalStateException("Session clear failed.");
+        if (!first.equals(observed.get())) throw new IllegalStateException("Removed session listener received an update.");
+    }
+
+    public static void main(String[] args) throws Exception {
+        verifyContract();
+        System.out.println("Barotrauma shared desktop world session contract passed.");
     }
 }
