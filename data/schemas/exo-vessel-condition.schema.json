@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-condition.schema.json",
   "title": "Blacklight EXO Vessel Condition",
-  "description": "Independent vessel lifecycle, readiness, damage, salvage, load, integrity, destruction, and graph-coherence axes with VESSEL-05 application status.",
+  "description": "Independent vessel lifecycle, readiness, damage, salvage, load, integrity, destruction, graph coherence, and voxel occupancy axes with VESSEL-05 application status.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "template", "serviceDoctrine", "axes", "coherentVesselGraph", "applicationStatus", "validation"],
@@ -35,7 +35,7 @@
     "applicationStatus": {"enum": ["schema-only", "not-applied", "applied", "recalculated", "APPLIED_TO_MODULE_AND_VOXEL_GRAPHS"]},
     "validation": {
       "type": "object", "additionalProperties": false, "required": ["valid", "violations"],
-      "properties": {"valid": {"type": "boolean"}, "violations": {"type": "array", "items": {"type": "string"}}, "warnings": {"type": "array", "items": {"type": "string"}}, "moduleStateCount": {"type": "integer", "minimum": 0}, "eventCount": {"type": "integer", "minimum": 0}, "repairCount": {"type": "integer", "minimum": 0}, "preRepairViolations": {"type": "array", "items": {"type": "string"}}}
+      "properties": {"valid": {"type": "boolean"}, "violations": {"type": "array", "items": {"type": "string"}}, "warnings": {"type": "array", "items": {"type": "string"}}, "moduleStateCount": {"type": "integer", "minimum": 0}, "voxelStateCount": {"type": "integer", "minimum": 0}, "eventCount": {"type": "integer", "minimum": 0}, "repairCount": {"type": "integer", "minimum": 0}, "preRepairViolations": {"type": "array", "items": {"type": "string"}}}
     }
   }
 }
