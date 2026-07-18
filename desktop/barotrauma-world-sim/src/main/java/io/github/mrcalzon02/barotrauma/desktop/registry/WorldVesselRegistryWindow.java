@@ -1,6 +1,7 @@
 package io.github.mrcalzon02.barotrauma.desktop.registry;
 
 import io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow;
+import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 import io.github.mrcalzon02.barotrauma.persistence.WorldVesselRegistry;
@@ -34,6 +35,7 @@ import java.util.concurrent.ExecutionException;
 /** Read-only desktop view of submarine definitions, physical vessels, and snapshot chronology. */
 public final class WorldVesselRegistryWindow extends JFrame {
 
+    private final DesktopWorldSession session = DesktopWorldSession.global();
     private final JButton openWorldButton = new JButton("Open World");
     private final JButton refreshButton = new JButton("Refresh");
     private final JButton importButton = new JButton("Open Import Approval");
@@ -54,6 +56,7 @@ public final class WorldVesselRegistryWindow extends JFrame {
 
     private WorldPaths world;
     private Path lastDirectory;
+    private AutoCloseable sessionSubscription;
 
     public WorldVesselRegistryWindow() {
         super("Barotrauma Vessel Registry");
@@ -87,14 +90,14 @@ public final class WorldVesselRegistryWindow extends JFrame {
         add(footer, BorderLayout.SOUTH);
 
         refreshButton.setEnabled(false);
-        importButton.setEnabled(true);
-
         openWorldButton.addActionListener(event -> openWorld());
         refreshButton.addActionListener(event -> refreshRegistry());
         importButton.addActionListener(event -> {
             WorldImportApprovalWindow window = new WorldImportApprovalWindow();
+            window.setLocationRelativeTo(this);
             window.setVisible(true);
         });
+        sessionSubscription = session.addListener(this::activateSharedWorld, true);
     }
 
     private void openWorld() {
@@ -105,30 +108,46 @@ public final class WorldVesselRegistryWindow extends JFrame {
         if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
 
         try {
-            world = WorldStorageContracts.openWorld(chooser.getSelectedFile().toPath());
-            lastDirectory = world.root().getParent();
-            worldStatus.setText("World: " + world.root());
-            refreshButton.setEnabled(true);
-            refreshRegistry();
+            session.activate(WorldStorageContracts.openWorld(chooser.getSelectedFile().toPath()));
         } catch (Exception exception) {
             showFailure("World open failed", exception);
         }
     }
 
+    private void activateSharedWorld(WorldPaths sharedWorld) {
+        world = sharedWorld;
+        clear(definitionModel);
+        clear(vesselModel);
+        clear(snapshotModel);
+        if (sharedWorld == null) {
+            worldStatus.setText("No desktop world open");
+            summaryStatus.setText("Definitions 0 · Vessels 0 · Snapshots 0");
+            refreshButton.setEnabled(false);
+            operationStatus.setText("Ready");
+            return;
+        }
+        lastDirectory = sharedWorld.root().getParent();
+        worldStatus.setText("World: " + sharedWorld.root());
+        refreshButton.setEnabled(true);
+        refreshRegistry();
+    }
+
     private void refreshRegistry() {
-        if (world == null) return;
+        WorldPaths selectedWorld = world;
+        if (selectedWorld == null) return;
         setBusy(true, "Loading vessel registry…");
 
         new SwingWorker<RegistrySnapshot, Void>() {
             @Override
             protected RegistrySnapshot doInBackground() throws Exception {
-                return WorldVesselRegistry.load(world);
+                return WorldVesselRegistry.load(selectedWorld);
             }
 
             @Override
             protected void done() {
                 try {
                     RegistrySnapshot registry = get();
+                    if (!selectedWorld.equals(world)) return;
                     populate(registry);
                     operationStatus.setText("Registry loaded");
                 } catch (InterruptedException exception) {
@@ -150,39 +169,23 @@ public final class WorldVesselRegistryWindow extends JFrame {
 
         for (DefinitionRow definition : registry.definitions()) {
             definitionModel.addRow(new Object[]{
-                    blank(definition.displayName()),
-                    blank(definition.submarineClass()),
-                    nullable(definition.tier()),
-                    definition.vesselCount(),
-                    nullable(definition.officialCheckValue()),
-                    definition.definitionId(),
+                    blank(definition.displayName()), blank(definition.submarineClass()), nullable(definition.tier()),
+                    definition.vesselCount(), nullable(definition.officialCheckValue()), definition.definitionId(),
                     definition.canonicalXmlDigest().value()
             });
         }
-
         for (VesselRow vessel : registry.vessels()) {
             vesselModel.addRow(new Object[]{
-                    blank(vessel.displayName()),
-                    blank(vessel.submarineClass()),
-                    nullable(vessel.tier()),
-                    vessel.vesselId(),
-                    vessel.definitionId(),
-                    nullable(vessel.currentSnapshotId()),
-                    instant(vessel.currentSnapshotSourceTimestamp()),
-                    instant(vessel.currentSnapshotImportedAt())
+                    blank(vessel.displayName()), blank(vessel.submarineClass()), nullable(vessel.tier()),
+                    vessel.vesselId(), vessel.definitionId(), nullable(vessel.currentSnapshotId()),
+                    instant(vessel.currentSnapshotSourceTimestamp()), instant(vessel.currentSnapshotImportedAt())
             });
         }
-
         for (SnapshotRow snapshot : registry.snapshots()) {
             snapshotModel.addRow(new Object[]{
-                    snapshot.current() ? "Current" : "Historical",
-                    blank(snapshot.vesselDisplayName()),
-                    snapshot.vesselId(),
-                    snapshot.snapshotId(),
-                    instant(snapshot.sourceTimestamp()),
-                    instant(snapshot.importedAt()),
-                    snapshot.snapshotDigest().value(),
-                    snapshot.sourceArtifactId()
+                    snapshot.current() ? "Current" : "Historical", blank(snapshot.vesselDisplayName()),
+                    snapshot.vesselId(), snapshot.snapshotId(), instant(snapshot.sourceTimestamp()),
+                    instant(snapshot.importedAt()), snapshot.snapshotDigest().value(), snapshot.sourceArtifactId()
             });
         }
 
@@ -206,12 +209,18 @@ public final class WorldVesselRegistryWindow extends JFrame {
         JOptionPane.showMessageDialog(this, throwable.getMessage(), title, JOptionPane.ERROR_MESSAGE);
     }
 
+    @Override
+    public void dispose() {
+        if (sessionSubscription != null) {
+            try { sessionSubscription.close(); } catch (Exception ignored) { }
+            sessionSubscription = null;
+        }
+        super.dispose();
+    }
+
     private static DefaultTableModel model(String... columns) {
         return new DefaultTableModel(columns, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            @Override public boolean isCellEditable(int row, int column) { return false; }
         };
     }
 
@@ -223,22 +232,10 @@ public final class WorldVesselRegistryWindow extends JFrame {
         return table;
     }
 
-    private static void clear(DefaultTableModel model) {
-        model.setRowCount(0);
-    }
-
-    private static Object nullable(Object value) {
-        return value == null ? "" : value;
-    }
-
-    private static String blank(String value) {
-        return value == null || value.isBlank() ? "Unnamed" : value;
-    }
-
-    private static String instant(Instant value) {
-        return value == null ? "" : value.toString();
-    }
-
+    private static void clear(DefaultTableModel model) { model.setRowCount(0); }
+    private static Object nullable(Object value) { return value == null ? "" : value; }
+    private static String blank(String value) { return value == null || value.isBlank() ? "Unnamed" : value; }
+    private static String instant(Instant value) { return value == null ? "" : value.toString(); }
     private static Throwable cause(ExecutionException exception) {
         return exception.getCause() == null ? exception : exception.getCause();
     }
@@ -250,8 +247,7 @@ public final class WorldVesselRegistryWindow extends JFrame {
             } catch (Exception exception) {
                 System.err.println("Could not activate the system look and feel: " + exception.getMessage());
             }
-            WorldVesselRegistryWindow window = new WorldVesselRegistryWindow();
-            window.setVisible(true);
+            new WorldVesselRegistryWindow().setVisible(true);
         });
     }
 }
