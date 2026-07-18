@@ -82,7 +82,7 @@ public final class PassiveWorldSimulationVerification {
                         "Persisted encounter count does not match the passive result.");
                 require(count(paths, "world_mission") > 0 && count(paths, "station_research_project") == 4,
                         "Mission or research workload persistence failed.");
-                require(schemaVersion(paths) == 4, "Passive fixture was not stored under schema 004.");
+                require(schemaVersion(paths) == 5, "Passive fixture was not stored under schema 005.");
             }
 
             long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
