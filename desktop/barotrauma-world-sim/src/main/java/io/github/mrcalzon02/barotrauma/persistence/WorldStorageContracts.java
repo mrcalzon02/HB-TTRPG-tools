@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 7;
+    public static final int DATABASE_SCHEMA_VERSION = 8;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -170,6 +170,7 @@ public final class WorldStorageContracts {
     public static List<String> schema005Statements() { return PassiveWorldSchemaHardening.statements(); }
     public static List<String> schema006Statements() { return StationLogisticsSchema.statements(); }
     public static List<String> schema007Statements() { return StationLogisticsHardening.statements(); }
+    public static List<String> schema008Statements() { return StationConsumptionAndFrontierSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -250,7 +251,10 @@ public final class WorldStorageContracts {
             require(schema006Statements().stream().anyMatch(sql -> sql.contains("station_inventory")), "Station inventory schema is missing.");
             require(schema006Statements().stream().anyMatch(sql -> sql.contains("player_vessel_state")), "Player route schema is missing.");
             require(schema007Statements().stream().anyMatch(sql -> sql.contains("passive_freight_offers")), "Passive freight-offer hardening is missing.");
-            require(schema007Statements().stream().anyMatch(sql -> sql.contains("DROP TRIGGER IF EXISTS npc_return_arrival")), "Non-recursive NPC freight return migration is missing.");
+            require(schema008Statements().stream().anyMatch(sql -> sql.contains("station_consumption_log")), "Station consumption history is missing.");
+            require(schema008Statements().stream().anyMatch(sql -> sql.contains("station_passive_consumption")), "Passive station consumption trigger is missing.");
+            require(schema008Statements().stream().anyMatch(sql -> sql.contains("civilization_frontier_event")), "Civilization frontier evidence is missing.");
+            require(schema008Statements().stream().anyMatch(sql -> sql.contains("frontier_response_mission")), "Frontier response mission trigger is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
