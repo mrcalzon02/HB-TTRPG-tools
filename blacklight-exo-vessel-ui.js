@@ -195,11 +195,19 @@
     document.dispatchEvent(new CustomEvent('blacklight:exo-vessel-generated',{detail:{seed,vessel}}));
   }
 
+  function activate(event) {
+    const imported=event.detail?.vessel;
+    if(!imported||typeof imported!=='object')return;
+    vessel=structuredClone(imported);source=null;renderSource();render();
+    document.dispatchEvent(new CustomEvent('blacklight:exo-vessel-generated',{detail:{seed:vessel.seed,vessel,activation:'campaign-archive'}}));
+  }
+
   function exportJson() {
     if(!vessel)return;const blob=new Blob([JSON.stringify(vessel,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`${vessel.seed}-exo-vessel.json`;document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);
   }
 
   populateControls();applySourceDefaults();
   controls.generate.addEventListener('click',generate);controls.export.addEventListener('click',exportJson);controls.seed.addEventListener('keydown',event=>{if(event.key==='Enter')generate();});
+  document.addEventListener('blacklight:exo-vessel-activate',activate);
   generate();
 })();
