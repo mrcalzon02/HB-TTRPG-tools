@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | Vessel Command Deck</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    html,body{min-height:100%;margin:0;background:#05090d;color:#ddd4c3}.exo-command-deck{display:grid;grid-template-rows:auto auto minmax(760px,1fr);min-height:100vh}.exo-command-head{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:14px 20px;border-bottom:1px solid rgba(217,168,79,.22);background:rgba(5,9,13,.98);position:sticky;top:0;z-index:10}.exo-command-title{display:flex;align-items:center;gap:12px}.exo-command-title strong{display:block;color:#eee2cf}.exo-command-title span{display:block;color:#a8b4b8;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase}.exo-command-status{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.exo-command-status span{border:1px solid rgba(217,168,79,.24);border-radius:999px;padding:5px 9px;font-size:.68rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.exo-command-status span[data-state="ready"]{border-color:rgba(126,214,155,.4);color:#a7dfb7}.exo-command-status span[data-state="error"]{border-color:rgba(224,111,91,.5);color:#efab9e}.exo-command-actions{display:flex;flex-wrap:wrap;gap:7px}.exo-command-note{padding:9px 20px;border-bottom:1px solid rgba(116,177,201,.15);background:rgba(116,177,201,.055);color:#b8c5c8;font-size:.82rem}.exo-command-frame{width:100%;height:100%;min-height:760px;border:0;background:#05090d}.exo-command-log{position:fixed;right:14px;bottom:14px;z-index:20;width:min(520px,calc(100vw - 28px));max-height:44vh;overflow:auto;border:1px solid rgba(217,168,79,.35);border-radius:12px;background:rgba(4,7,10,.97);padding:12px;box-shadow:0 14px 40px rgba(0,0,0,.55)}.exo-command-log[hidden]{display:none}.exo-command-log pre{margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#c6d0d2;font-size:.72rem}@media(max-width:820px){.exo-command-head{align-items:flex-start;flex-direction:column}.exo-command-deck{grid-template-rows:auto auto minmax(680px,1fr)}}
+  </style>
+</head>
+<body>
+  <main class="exo-command-deck">
+    <header class="exo-command-head">
+      <div class="exo-command-title"><span class="bli-mark" aria-hidden="true"></span><div><strong>Blacklight EXO Vessel Command Deck</strong><span>VESSEL-09 operations · VESSEL-10 campaign authority</span></div></div>
+      <div class="exo-command-status"><span id="exo-command-page">vessel page pending</span><span id="exo-command-gameplay">gameplay pending</span><span id="exo-command-campaign">campaign pending</span><span id="exo-command-instruments">instruments pending</span><span id="exo-command-editor">editor pending</span><span id="exo-command-voxel">voxel pending</span></div>
+      <div class="exo-command-actions"><button id="exo-command-reload" class="bli-action" type="button">Reload Vessel Runtime</button><button id="exo-command-diagnostics" class="bli-action" type="button">Diagnostics</button><a class="bli-action" href="blacklight-exo-deployment-health.html">Deployment Health</a><a class="bli-action" href="blacklight-exo-operations.html">EXO Operations</a></div>
+    </header>
+    <div id="exo-command-note" class="exo-command-note" role="status" aria-live="polite">Loading the canonical vessel generator and attaching the complete VESSEL-10 operating layer.</div>
+    <iframe id="exo-command-frame" class="exo-command-frame" title="Blacklight EXO vessel generator with VESSEL-10 campaign layers" src="blacklight-exo-vessel.html?commandDeck=VESSEL-10"></iframe>
+  </main>
+  <aside id="exo-command-log" class="exo-command-log" hidden><strong>Command Deck Diagnostics</strong><button id="exo-command-log-close" class="bli-action" type="button">Close</button><pre id="exo-command-log-body"></pre></aside>
+  <script src="blacklight-exo-vessel-command-deck.js"></script>
+</body>
+</html>
