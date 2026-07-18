@@ -1,0 +1,32 @@
+(() => {
+  'use strict';
+  const base=globalThis.BlacklightExoVessel,prior=globalThis.BlacklightExoVesselContracts,D=globalThis.BlacklightExoVesselTechnologyBasisDefinitions;
+  if(!base?.moduleMethodologyVersion||!prior||!D||base.technologyBasisContractVersion)return;
+  const routeKeys=Object.keys(D.routeEffects).sort();
+  const edgeRoute=graphName=>({structural:'structural',power:'power',cooling:'cooling',data:'data',atmosphere:'atmosphere',access:'access',magazineFeed:'access',sensorDependency:'data'})[graphName]||null;
+  function validate(record){
+    const inherited=prior.validate(record),violations=[...(inherited.violations||[])],basis=record?.technologyBasis,manufacturer=record?.manufacturer,graph=record?.moduleGraph;
+    if(!basis){violations.push('Canonical vessel lacks species-derived operative technology basis.');return{valid:false,violations};}
+    if(!basis.validation?.valid)violations.push(...(basis.validation?.violations||['Operative technology basis validation failed.']);
+    if(basis.manufacturerId!==manufacturer?.manufacturerId||basis.speciesId!==manufacturer?.speciesId||basis.organizationId!==manufacturer?.organizationId)violations.push('Operative technology basis identity diverges from manufacturer authority.');
+    if(manufacturer?.technologyBasis?.basisId!==basis.basisId)violations.push('Manufacturer does not retain the canonical operative technology basis.');
+    if(Object.keys(basis.routeStandards||{}).sort().join(',')!==routeKeys.join(','))violations.push('Operative technology basis does not expose all invariant route semantics.');
+    for(const key of routeKeys){const route=basis.routeStandards?.[key];if(!route||route.routeKey!==key||route.endEffect!==D.routeEffects[key]||route.invariantRouteRequirement!==true||!route.carrier||!route.interface||!route.tolerance)violations.push(`${key} route lacks canonical end effect, carrier, interface, tolerance, or invariant authority.`);}
+    if(basis.primaryBasisKey!==D.humanBasisKey&&basis.interoperability?.humanInteroperability==='DIRECT')violations.push('Alien operative basis incorrectly claims direct terrestrial interoperability.');
+    const modules=graph?.modules||[];let interfaceCount=0;
+    for(const module of modules){const method=module.extensions?.operativeMethodology;if(!method||method.basisId!==basis.basisId||method.primaryBasisKey!==basis.primaryBasisKey||!method.endEffect||!method.operativeTheory){violations.push(`${module.moduleId} lacks canonical native operative methodology.`);continue;}const expected=['structural',...['power','cooling','data','atmosphere','access'].filter(key=>module.requirements?.[key])].sort(),actual=[...new Set((method.routeInterfaces||[]).map(item=>item.routeKey))].sort();if(expected.join(',')!==actual.join(','))violations.push(`${module.moduleId} native route interfaces diverge from module requirements.`);for(const route of method.routeInterfaces||[]){const standard=basis.routeStandards?.[route.routeKey];if(!standard||route.endEffect!==standard.endEffect||route.carrier!==standard.carrier||route.interface!==standard.interface||route.tolerance!==standard.tolerance||route.endEffectInvariant!==true)violations.push(`${module.moduleId}/${route.routeKey} diverges from manufacturer route authority.`);}if(module.semanticType==='LIFE_SUPPORT'&&method.operativeTheory!==basis.operativeTheories?.atmosphereRegulation)violations.push(`${module.moduleId} life support does not use the species-derived atmosphere-regulation theory.`);if((method.failureModes||[]).some(item=>typeof item!=='string'))violations.push(`${module.moduleId} contains non-string methodology failure modes.`);interfaceCount+=(method.routeInterfaces||[]).length;}
+    if(basis.moduleApplication?.moduleCount!==modules.length||basis.moduleApplication?.routeInterfaceCount!==interfaceCount||basis.moduleApplication?.methodologySpecificMassVolumeRecalculationStatus!=='DEFERRED_CLOSED_REFERENCE_RETAINED')violations.push('Operative methodology application counts or closed-ledger boundary do not close.');
+    for(const [graphName,network] of Object.entries(graph?.graphs||{})){const routeKey=edgeRoute(graphName),standard=basis.routeStandards?.[routeKey];for(const edge of network.edges||[]){const implementation=edge.implementation;if(!implementation||implementation.technologyBasisId!==basis.basisId||implementation.routeKey!==routeKey||implementation.endEffect!==standard?.endEffect||implementation.carrier!==standard?.carrier||implementation.interface!==standard?.interface||implementation.tolerance!==standard?.tolerance||implementation.endEffectInvariant!==true)violations.push(`${graphName}/${edge.edgeId} lacks canonical native route implementation.`);}}
+    for(const zone of graph?.pressureZones||[])if(zone.boundaryMethodology?.technologyBasisId!==basis.basisId||!zone.boundaryMethodology?.sealingMethod||!zone.boundaryMethodology?.atmosphereRegulation)violations.push(`${zone.zoneId} lacks canonical species-derived boundary methodology.`);
+    const mass=(record.hull?.massBudget||[]).reduce((sum,row)=>sum+Number(row.massTonnes||0),0);if(Math.abs(mass-Number(record.hull?.totalMassTonnes||0))>Math.max(1,mass)*1e-9)violations.push('Operative methodology altered or invalidated the closed vessel mass ledger.');
+    if(record.contract?.provenance?.technologyBasisVersion!=='1.0.0'||record.contract?.provenance?.moduleMethodologyVersion!=='1.0.0')violations.push('Canonical provenance does not identify operative technology basis and module methodology.');
+    if(record.contract?.extensions?.technologyBasisSchema!=='data/schemas/exo-vessel-technology-basis.schema.json')violations.push('Canonical contract does not expose the operative technology-basis schema.');
+    return{valid:!violations.length,violations};
+  }
+  const contracts=Object.freeze({...prior,technologyBasisRegistryPath:'data/exo-vessel/technology-basis-registry.json',schemas:Object.freeze({...prior.schemas,technologyBasis:'data/schemas/exo-vessel-technology-basis.schema.json'}),validate});
+  function finalize(result){if(result?.contract)result.contract.validation=validate(result);return result;}
+  function generate(seed,input={},source=null){return finalize(base.generate(seed,input,source));}
+  function migrateRecord(record,input={},source=null){return finalize(base.migrateRecord(record,input,source));}
+  globalThis.BlacklightExoVesselContracts=contracts;
+  globalThis.BlacklightExoVessel=Object.freeze({...base,technologyBasisContractVersion:1,contracts,validateContract:validate,generate,migrateRecord});
+})();
