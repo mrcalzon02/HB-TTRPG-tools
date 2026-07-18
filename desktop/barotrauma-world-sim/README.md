@@ -7,19 +7,22 @@ Independent Java 17 Swing migration of the Barotrauma RPG Operations Suite.
 The desktop project now includes:
 
 - The Java 17 Swing application shell and stable workspace navigation.
-- Duplicate-safe source, submarine-definition, vessel-instance, and snapshot identities.
+- A process-wide desktop-world session shared by the shell, import tools, vessel registry, and snapshot workflows.
+- Duplicate-safe source, submarine-definition, physical-vessel, and snapshot identities.
 - Read-only inspection of version-22 browser-suite exports.
 - Safe inspection of official Barotrauma `.save` campaign archives and standalone `.sub` files.
 - Desktop-world directories, exclusive writer locks, atomic metadata writes, and SQLite schema migration 001.
 - Transactional inspection recording and exact-source duplicate prevention.
 - Canonical submarine-definition reuse across renamed or repeated designs.
-- Explicitly accepted vessel imports that create world-specific vessel instances and immutable source snapshots.
-- Complete rollback when any part of a multi-vessel accepted import fails.
-- A standalone Swing approval window for creating or opening a world, inspecting a source, reviewing the plan, and confirming the import.
+- Explicit one-vessel imports with complete rollback.
+- Read-only definition, physical-vessel, and snapshot-chronology registries.
+- Newer-snapshot promotion and explicitly approved historical retention for older, equal-time, or timestamp-unknown sources.
+- An atomic campaign archive mapper where every submarine payload is reviewed and assigned either to a new physical vessel or one structurally matching existing vessel.
+- Complete rollback when any row in a multi-submarine campaign mapping fails.
 
 No website behavior has been removed or redirected. The web suite remains the behavioral reference while desktop parity is developed.
 
-Version-22 world exports remain inspection-only. The currently accepted import transaction is limited to official `.save` and `.sub` vessel sources. It does not yet create crew, economy, route, mission, or simulation-event state.
+Version-22 world exports remain inspection-only. The accepted official-file transactions do not yet create crew, economy, route, mission, or simulation-event state.
 
 ## Requirements
 
@@ -34,21 +37,46 @@ A Gradle wrapper will be added with release automation. Until then, run commands
 gradle run
 ```
 
-## Run the vessel import approval workflow
+The primary shell launches the inspection, import, campaign-mapping, vessel-registry, and snapshot-approval windows. Opening or creating a desktop world in one participating window updates the shared world selection across the application process.
+
+## Run individual workflows
+
+One-vessel inspection and approval:
 
 ```text
 gradle runImportApproval
 ```
 
-The approval workflow is intentionally inspection-first:
+Multi-submarine campaign archive mapping:
 
-1. Create or open a desktop world.
-2. Select a version-22 JSON export, official `.save`, or standalone `.sub` file.
-3. Review the stored source identity, warnings, and duplicate plan.
-4. For official vessel sources, explicitly confirm creation of the planned physical vessel instances and source snapshots.
-5. If any database operation fails, the complete accepted import is rolled back.
+```text
+gradle runCampaignMapping
+```
 
-An exact source file cannot be imported twice. A structurally identical submarine with another filename reuses its existing definition but can still create a separate physical vessel instance.
+Read-only definition, vessel, and snapshot registry:
+
+```text
+gradle runVesselRegistry
+```
+
+Existing-vessel snapshot chronology approval:
+
+```text
+gradle runSnapshotApproval
+```
+
+## Import boundaries
+
+The one-vessel approval workflow accepts standalone `.sub` files and campaign saves containing one submarine payload. Campaign archives containing multiple submarine payloads are redirected to the campaign mapper.
+
+The campaign mapper requires every row to be reviewed before commit. Each payload is assigned to one of two actions:
+
+- Create a new physical vessel while reusing or creating its canonical submarine definition.
+- Attach the payload to one explicitly selected existing vessel with the same canonical definition.
+
+An existing vessel may be targeted only once per archive. Newer source states may become current. Older, equal-time, and timestamp-unknown states require explicit historical retention. Any invalid row rolls back the entire campaign archive.
+
+An exact source file cannot be imported twice. A structurally identical submarine with another filename reuses its existing definition but may still create a separate physical vessel.
 
 ## Build and verification
 
@@ -58,26 +86,24 @@ Build the application:
 gradle build
 ```
 
-Run the SQLite planning and accepted-import verification suite:
+Run the complete persistence verification chain:
 
 ```text
 gradle verifyWorldStore
 ```
 
-The repository also contains `.github/workflows/barotrauma-desktop.yml`, which compiles the desktop application with Java 17 and runs the compatibility, identity, storage, SQLite, duplicate, rollback, and accepted-import checks for desktop-project changes.
+This verifies inspection planning, duplicate prevention, accepted imports, rollback, registry queries, snapshot chronology, and atomic campaign archive mapping.
+
+The repository workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 and runs identity, shared-session, compatibility, filesystem, SQLite, rollback, chronology, and campaign-mapping contracts for desktop-project changes.
 
 ## Entry points
 
-Main desktop shell:
-
 ```text
 io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication
-```
-
-Import approval workflow:
-
-```text
 io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow
+io.github.mrcalzon02.barotrauma.desktop.imports.CampaignVesselMappingWindow
+io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow
+io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWindow
 ```
 
 ## Governing documents
@@ -119,16 +145,19 @@ Completed foundations:
 3. Version-22 and official-file inspection.
 4. Filesystem storage, SQLite schema, and world locking.
 5. Inspection ledger and import planning.
-6. Accepted official-vessel transaction with rollback.
-7. Standalone Swing import approval workflow.
+6. Accepted official-vessel transactions with rollback.
+7. Shared desktop-world session and primary-shell integration.
+8. Definition, vessel, and snapshot registries.
+9. Snapshot chronology and current-state promotion rules.
+10. Explicit atomic multi-submarine campaign mapping.
 
 Next phases:
 
-1. Integrate world open/create and import approval into the main desktop shell.
-2. Add submarine, vessel, and snapshot registry queries and views.
-3. Add snapshot chronology and current-snapshot promotion rules.
-4. Import the version-22 master world into normalized desktop tables.
-5. Port stations, economy, routes, NPC vessels, research, and simulation scheduling.
+1. Import the version-22 master world into normalized desktop tables.
+2. Establish a persistent world-session summary and recent-world reopening.
+3. Add the deterministic simulation clock, command queue, and checkpoint transactions.
+4. Port stations, economy, routes, NPC vessels, research, and simulation scheduling.
+5. Add packaging and release automation.
 
 ## Local files
 
