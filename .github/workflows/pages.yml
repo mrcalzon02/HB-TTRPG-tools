@@ -102,6 +102,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Write deployment health manifest
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          cat > artifacts/exo-deployment-health.json <<EOF
+          {
+            "recordType": "blacklightExoDeploymentHealth",
+            "schemaVersion": "1.0.0",
+            "status": "validated-for-deployment",
+            "commit": "${GITHUB_SHA}",
+            "builtAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "workflow": "${GITHUB_WORKFLOW}",
+            "runId": "${GITHUB_RUN_ID}",
+            "runAttempt": "${GITHUB_RUN_ATTEMPT}",
+            "repository": "${GITHUB_REPOSITORY}",
+            "ref": "${GITHUB_REF}"
+          }
+          EOF
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
