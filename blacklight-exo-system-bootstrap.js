@@ -3,7 +3,7 @@
   const loaded=new Map();
   const styles=new Map();
   const buttonIds=['exo-generate-system','exo-force-populated-hz','exo-generate-cluster','exo-random-cluster'];
-  let clusterReady=false,clusterLoading=null,routeReady=false,imageryReady=false,supervisor=null;
+  let clusterReady=false,clusterLoading=null,routeReady=false,imageryReady=false,supervisor=globalThis.BlacklightExoRuntimeSupervisor||null;
 
   const status=(message,state='')=>{const target=document.getElementById('exo-cluster-status');if(target){target.textContent=message;target.dataset.state=state;}};
   const setDisabled=(ids,disabled)=>ids.forEach(id=>{const item=document.getElementById(id);if(item)item.disabled=disabled;});
@@ -120,7 +120,8 @@
 
   async function start(){
     try{
-      await load('blacklight-exo-runtime-supervisor.js');supervisor=globalThis.BlacklightExoRuntimeSupervisor;phase('solar-bootstrap');
+      if(!globalThis.BlacklightExoRuntimeSupervisor)await load('blacklight-exo-runtime-supervisor.js');
+      supervisor=globalThis.BlacklightExoRuntimeSupervisor;phase('solar-bootstrap');
       await loadCore();installLazyControls();monitorCatalogue();idle(optionalHandoffs);ready('solar-bootstrap');
     }catch(error){
       fail('solar-bootstrap',error);console.error('[Blacklight EXO] Core system bootstrap failed:',error);
