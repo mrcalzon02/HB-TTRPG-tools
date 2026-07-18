@@ -171,6 +171,10 @@ public final class SqliteWorldStore implements AutoCloseable {
             applyMigration(2, WorldStorageContracts.schema002Statements(), false);
             currentVersion = 2;
         }
+        if (currentVersion < 3) {
+            applyMigration(3, WorldStorageContracts.schema003Statements(), false);
+            currentVersion = 3;
+        }
         if (currentVersion != WorldStorageContracts.DATABASE_SCHEMA_VERSION) {
             throw new SQLException("No migration path is defined from schema " + currentVersion + ".");
         }
@@ -441,7 +445,10 @@ public final class SqliteWorldStore implements AutoCloseable {
                         "Inspection planning created vessel state.");
                 require(store.count("world_location") == 0 && store.count("world_station") == 0,
                         "Schema migration created normalized world data without an import.");
-                require(store.schemaVersion() == 2, "Schema 002 migration was not recorded.");
+                require(store.count("simulation_command_receipt") == 0
+                                && store.count("simulation_checkpoint") == 0,
+                        "Schema migration created simulation evidence without commands.");
+                require(store.schemaVersion() == 3, "Schema 003 migration was not recorded.");
             }
         } finally {
             deleteTree(root);
@@ -471,7 +478,8 @@ public final class SqliteWorldStore implements AutoCloseable {
 
     private long count(String table) throws SQLException {
         if (!List.of("import_artifact", "submarine_definition", "vessel_instance", "vessel_snapshot",
-                "import_warning", "world_location", "world_station", "world_import")
+                "import_warning", "world_location", "world_station", "world_import",
+                "simulation_command_receipt", "simulation_checkpoint")
                 .contains(table)) throw new IllegalArgumentException("Unsupported verification table.");
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM " + table)) {
