@@ -19,7 +19,7 @@ import java.time.Duration;
 import java.util.Comparator;
 import java.util.UUID;
 
-/** End-to-end schema-012 contract for fleet recovery and natural world activity. */
+/** End-to-end schema-014 contract for fleet response transit and natural world activity. */
 public final class FleetRecoveryAndNaturalWorldVerification {
     private FleetRecoveryAndNaturalWorldVerification() { }
 
@@ -60,27 +60,58 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                 String responder = operationResponder(paths);
                 require("ACTIVE".equals(operationStatus(paths)) && responder != null,
                         "A qualified docked patrol was not immediately assigned to the distress request.");
+                require("OUTBOUND".equals(operationPhase(paths)),
+                        "Immediate response assignment did not begin an outbound transit phase.");
+                require("PREPARING".equals(vesselStatus(paths, UUID.fromString(responder))),
+                        "The assigned responder did not enter departure preparation.");
                 require(vesselMission(paths, responder) == null,
                         "The response vessel began with an ordinary mission assignment.");
+                require(transitLegCount(paths, "OUTBOUND", null) == 1,
+                        "Response assignment did not create one outbound transit leg.");
 
                 raiseMaterialRequirementAndStarve(paths);
+                for (int cycle = 0; cycle < 50 && !"ON_SCENE".equals(operationPhase(paths)); cycle++) {
+                    step(paths, executor);
+                }
+                require("ON_SCENE".equals(operationPhase(paths)),
+                        "The responder did not survive shared transit and arrive on scene.");
+                require(transitLegCount(paths, "OUTBOUND", "ARRIVED") >= 1,
+                        "The outbound response leg did not record arrival.");
+                require("DISABLED".equals(vesselStatus(paths, distressed)),
+                        "The casualty was restored before on-scene work and return transit.");
+
                 int stalledProgress = operationProgress(paths);
                 step(paths, executor);
                 require(operationProgress(paths) == stalledProgress,
-                        "Fleet recovery advanced without the required station materials.");
+                        "Fleet recovery advanced on scene without the required station materials.");
                 require(vesselMission(paths, responder) == null,
                         "An active fleet responder was stolen by the ordinary mission dispatcher.");
 
                 replenishRecoveryMaterials(paths);
-                for (int cycle = 0; cycle < 30 && !"COMPLETE".equals(operationStatus(paths)); cycle++) {
+                boolean sawReturning = false;
+                for (int cycle = 0; cycle < 140 && !"COMPLETE".equals(operationStatus(paths)); cycle++) {
                     step(paths, executor);
+                    sawReturning |= "RETURNING".equals(operationPhase(paths));
+                    if (!"COMPLETE".equals(operationStatus(paths))) {
+                        require("DISABLED".equals(vesselStatus(paths, distressed)),
+                                "The casualty was restored before the towing or return leg reached home.");
+                    }
                 }
-                require("COMPLETE".equals(operationStatus(paths)),
-                        "The passive fleet response did not complete after resupply.");
+                require(sawReturning, "Fleet recovery never entered a physical return or towing phase.");
+                require("COMPLETE".equals(operationStatus(paths)) && "COMPLETE".equals(operationPhase(paths)),
+                        "The passive fleet response did not complete after return transit.");
+                require(operationMaterialsCommitted(paths) == 1,
+                        "Fleet response materials were not committed exactly once before return transit.");
+                require(transitLegCount(paths, "RETURN", "ARRIVED") >= 1,
+                        "The return or towing transit leg did not reach home.");
+                require(count(paths, "fleet_response_transit_encounter") > 0,
+                        "Shared transit hazards were not linked to fleet response legs.");
                 require("DOCKED".equals(vesselStatus(paths, distressed)) && vesselHull(paths, distressed) >= 35,
-                        "The disabled vessel was not recovered to a docked, serviceable state.");
-                require(count(paths, "fleet_response_log") >= 3,
-                        "Fleet response request, assignment, progress, or completion evidence is incomplete.");
+                        "The disabled vessel was not recovered to a docked, serviceable state after return transit.");
+                require("DOCKED".equals(vesselStatus(paths, UUID.fromString(responder))),
+                        "The response vessel did not return to a docked state.");
+                require(count(paths, "fleet_response_log") >= 4,
+                        "Fleet response request, assignment, arrival, return, or completion evidence is incomplete.");
 
                 primeNaturalActivity(paths, locationId);
                 int ecologyBefore = ecologyValue(paths, locationId, "primary_producers");
@@ -128,7 +159,8 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                     + "WHERE assigned_npc_vessel_id=(SELECT npc_vessel_id FROM npc_vessel WHERE role='PATROL' LIMIT 1) "
                     + "AND status IN ('ASSIGNED','ACTIVE')");
             statement.executeUpdate("UPDATE npc_vessel SET status='DOCKED',mission_id=NULL,destination_location_id=NULL,"
-                    + "route_progress=0,route_ticks_required=1 WHERE role='PATROL'");
+                    + "route_progress=0,route_ticks_required=1,hull=100,supplies=100,crew_quality=100,navigation=100,"
+                    + "engineering=100,combat=100 WHERE role='PATROL'");
         }
     }
 
@@ -204,6 +236,10 @@ public final class FleetRecoveryAndNaturalWorldVerification {
         return text(paths, "SELECT status FROM fleet_response_operation ORDER BY created_tick LIMIT 1");
     }
 
+    private static String operationPhase(WorldPaths paths) throws Exception {
+        return text(paths, "SELECT response_phase FROM fleet_response_operation ORDER BY created_tick LIMIT 1");
+    }
+
     private static int operationProgress(WorldPaths paths) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
              Statement statement = connection.createStatement();
@@ -214,8 +250,29 @@ public final class FleetRecoveryAndNaturalWorldVerification {
         }
     }
 
+    private static int operationMaterialsCommitted(WorldPaths paths) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(
+                     "SELECT materials_committed FROM fleet_response_operation ORDER BY created_tick LIMIT 1")) {
+            if (!result.next()) throw new IllegalStateException("Fleet response operation disappeared.");
+            return result.getInt(1);
+        }
+    }
+
     private static String operationResponder(WorldPaths paths) throws Exception {
         return text(paths, "SELECT assigned_npc_vessel_id FROM fleet_response_operation ORDER BY created_tick LIMIT 1");
+    }
+
+    private static long transitLegCount(WorldPaths paths, String legType, String status) throws Exception {
+        String sql = "SELECT COUNT(*) FROM fleet_response_transit_leg WHERE leg_type=?"
+                + (status == null ? "" : " AND status=?");
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, legType);
+            if (status != null) statement.setString(2, status);
+            try (ResultSet result = statement.executeQuery()) { return result.next() ? result.getLong(1) : 0; }
+        }
     }
 
     private static String vesselMission(WorldPaths paths, String vesselId) throws Exception {
@@ -315,7 +372,8 @@ public final class FleetRecoveryAndNaturalWorldVerification {
 
     private static long count(WorldPaths paths, String table) throws Exception {
         if (!java.util.Set.of("location_ecology_state", "location_geology_state", "natural_resource_site",
-                "natural_world_event", "fleet_response_operation", "fleet_response_log").contains(table)) {
+                "natural_world_event", "fleet_response_operation", "fleet_response_log",
+                "fleet_response_transit_leg", "fleet_response_transit_encounter").contains(table)) {
             throw new IllegalArgumentException("Unsupported natural-world verification table.");
         }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
@@ -365,6 +423,6 @@ public final class FleetRecoveryAndNaturalWorldVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma fleet recovery and natural-world contracts passed.");
+        System.out.println("Barotrauma fleet response transit and natural-world contracts passed.");
     }
 }
