@@ -1,18 +1,53 @@
-# Passive Fleet Recovery, Natural World, and Resource Extraction
+# Fleet Response Transit, Natural World, and Resource Extraction
 
-The desktop Barotrauma world database uses schema 013 for fleet recovery, ecological activity, geological activity, natural-resource exposure, finite extraction, freight settlement, and renewable recovery.
+The desktop Barotrauma world database uses schema 014 for fleet response travel, ecological activity, geological activity, natural-resource exposure, finite extraction, freight settlement, and renewable recovery.
 
-## Fleet response
+## Fleet response phase machine
 
 Disabled NPC vessels create durable rescue or towing operations. Besieged stations create reinforcement operations. The response queue supports rescue, towing, repair, refuel, rearm, and reinforcement categories.
 
 Qualified Salvage, Patrol, and Courier vessels receive priority for active response operations. A vessel already assigned to an active fleet response is protected from ordinary mission assignment.
 
-Response progress is material-gated. The origin station must retain the required fabricated steel, fuel, ammunition, and medical inventory. An undersupplied station cannot complete recovery by simulation fiat. Once the required material is available, Passive Mode advances the response until the casualty is recovered or the station is reinforced.
+Each operation now moves through explicit phases:
 
-Current recovery completion restores a disabled NPC vessel to its home station, clears its failed route and mission state, restores a serviceable amount of hull and supplies, consumes the declared station inventory, and writes response-history evidence.
+- `WAITING` — no responder is assigned.
+- `OUTBOUND` — a responder is preparing or travelling to the casualty or target station.
+- `ON_SCENE` — the responder has arrived and material-gated work may advance.
+- `RETURNING` — on-scene work is finished and the responder is returning or towing a casualty home.
+- `COMPLETE` — the return leg arrived and the casualty or station outcome was finalized.
+- `FAILED` or `CANCELLED` — the operation ended without ordinary completion.
 
-The present recovery movement is abstracted at the operation level. A later refinement will represent the responder's outbound and towing voyage through the shared transit resolver rather than only through operation progress.
+Assignment creates an outbound `fleet_response_transit_leg`. The responder enters the same `PREPARING` and `IN_TRANSIT` states used by ordinary NPC voyages. The existing deterministic transit resolver supplies hazards, outcomes, hull loss, supplies loss, delay, disabling, and loss. Every applicable `world_encounter` is linked to the active response leg.
+
+Fleet progress cannot advance while a responder is merely outbound. Arrival changes the operation to `ON_SCENE` and leaves the responder at the target location while work is performed.
+
+## Material-gated on-scene work
+
+The origin station must retain the required fabricated steel, fuel, ammunition, and medical inventory. An undersupplied station cannot complete recovery by simulation fiat. Once the responder is on scene and the declared material exists, Passive Mode advances the work.
+
+Materials are committed once. The operation records `materials_committed` before beginning its return leg. If the responder is later disabled or lost, the request returns to the queue with its completed on-scene work intact. A replacement responder can retrieve the casualty without charging the station a second time.
+
+Reinforcement effects are applied on scene. Rescue, towing, repair, refuel, and rearm casualties remain unresolved until the return or towing leg reaches home.
+
+## Return and towing transit
+
+On-scene completion does not teleport a casualty home. It creates a second transit leg and places the responder back into departure preparation.
+
+The return leg uses the responder's current location, home station, route length, vessel statistics, deterministic seed, and the shared transit challenge engine. Transit encounters are durable evidence linked to the operation and leg.
+
+Only when the return leg reaches the responder's home location does the operation become `COMPLETE`. At that point a distressed vessel is moved to its own home station, restored to a serviceable hull and supply state, and returned to `DOCKED`. The responder also returns to `DOCKED` and becomes eligible for ordinary missions or another response.
+
+A responder disabled or lost during either leg creates a failed leg record and returns the original operation to `WAITING`. Its attempt number increases when a replacement responder is assigned, preserving every outbound and return attempt rather than overwriting history.
+
+## Transit evidence
+
+Schema 014 adds:
+
+- `fleet_response_transit_leg` — outbound and return attempts, endpoints, route length, status, and timing.
+- `fleet_response_transit_encounter` — links shared world encounters to the operation and exact response leg.
+- Response phase, attempt number, material commitment, departure, arrival, return-start, and responder-return timestamps on each operation.
+
+The transit ledger distinguishes departure preparation, active transit, arrival, failure, and cancellation. A response can therefore be reconstructed from assignment through every hazard and retry to final recovery.
 
 ## Ecological cycle
 
@@ -31,7 +66,7 @@ Producer and algal growth support herbivore expansion. Herbivore concentrations 
 
 Biological accumulation can expose renewable Bioactive Accumulator sites. Large blooms can expose renewable Algae Harvest sites.
 
-Harvesting is no longer ecologically free. Algae extraction reduces primary producers and bloom mass. Bioactive extraction reduces accumulated biological material. Both can lower local habitat integrity, which in turn slows later renewable recovery.
+Harvesting is not ecologically free. Algae extraction reduces primary producers and bloom mass. Bioactive extraction reduces accumulated biological material. Both can lower local habitat integrity, which in turn slows later renewable recovery.
 
 ## Geological cycle
 
@@ -49,7 +84,7 @@ Mineral extraction reduces exposed material and increases cave instability. A ri
 
 ## Finite resource sites
 
-Each natural-resource site now records:
+Each natural-resource site records:
 
 - Remaining harvestable units.
 - Carrying capacity.
@@ -91,7 +126,7 @@ Extraction creates a typed in-transit freight lot:
 - Bioactive Accumulator → Bioactive Compounds.
 - Algae Harvest → Algae Biomass.
 
-The old passive rule that granted every functioning station free ore each cycle has been removed. Stations must now receive ore through deliveries, ordinary mission systems, imports, or future player-directed harvesting.
+The old passive rule that granted every functioning station free ore each cycle has been removed. Stations must receive ore through deliveries, ordinary mission systems, imports, or future player-directed harvesting.
 
 When the assigned NPC vessel docks, the existing freight pipeline:
 
@@ -115,18 +150,24 @@ Resource-linked missions are tracked separately from generic missions. A site ca
 
 ## Atomicity
 
-All extraction effects occur inside the existing passive-cycle SQLite transaction when a resource mission completes:
+All extraction and response effects remain inside existing SQLite writer boundaries.
 
+A passive cycle can include:
+
+- Clock receipt and checkpoint.
+- Response assignment or phase change.
+- NPC transit resolution and linked encounter evidence.
+- On-scene progress and one-time material commitment.
+- Return or towing departure.
 - Mission completion.
 - Extraction-batch evidence.
 - Site depletion and status transition.
 - Ecological or geological impact.
 - Freight creation.
-- Clock receipt, checkpoint, and passive-cycle evidence.
 
-A failure rolls the entire passive cycle back. No resource can be removed without its extraction batch and freight lot being committed with it.
+A failure rolls the entire passive cycle back. No resource can be removed without its extraction batch and freight lot. No response can advance, consume materials, or change phase without its vessel and transit evidence committing in the same cycle.
 
-NPC docking and freight delivery use the existing exclusive world writer and settle inventory, station state, credits, and treasury evidence together.
+NPC docking and freight delivery use the exclusive world writer and settle inventory, station state, credits, and treasury evidence together.
 
 ## Desktop console
 
@@ -138,7 +179,10 @@ gradle runNaturalWorld
 
 The console exposes:
 
-- Fleet response operations and response logs.
+- Fleet response status, phase, attempt, material commitment, responder state, and timing.
+- Outbound and return transit legs.
+- Response-linked hazards and deterministic outcomes.
+- Fleet response logs.
 - Ecological biomass and migration pressure.
 - Geological stress and exposed resources.
 - Site reserves, capacity, rate, recovery, dormancy, and extraction history.
@@ -149,15 +193,27 @@ The console shares the process-wide selected desktop world and refreshes while P
 
 ## Verification
 
-The complete verification task includes fleet recovery, natural-world activity, and schema-013 harvesting:
+The complete verification task includes schema-014 fleet transit, natural-world activity, and schema-013 harvesting:
 
 ```text
 gradle verifyWorldStore
 ```
 
+The fleet transit contract verifies:
+
+- Immediate dispatch into an outbound phase.
+- Shared deterministic transit before on-scene progress.
+- Response-linked transit encounters.
+- Material gating only after arrival.
+- One-time material commitment.
+- A second return or towing leg.
+- No casualty restoration before return arrival.
+- Final responder and casualty docking.
+- Retry-safe operation state after transit failure.
+
 The harvesting contract verifies:
 
-- Fresh and legacy migration to schema 013.
+- Fresh and legacy migration through schema 014.
 - Removal of passive free-ore generation.
 - Finite reserve initialization.
 - Bounded capability-sensitive extraction.
