@@ -8,24 +8,24 @@
   const ENERGY_MAP=Object.fromEntries(base.energySystems.map(item=>[item.key,item]));
   const STAGE_TO_TIER=[0,1,2,3,4,6,8];
   const DISCRETE_MODES=new Set(['discrete-translation','discrete-fold','gate-traversal','discrete-state-displacement']);
-  const OBSERVED_OVERSHOOT_AU_HOUR=4280265.90675;
-  const LEVEL5_BALANCE=Object.freeze({
-    nonWormholeCapAuPerHour:OBSERVED_OVERSHOOT_AU_HOUR/3,
-    wormholeCapAuPerHour:OBSERVED_OVERSHOOT_AU_HOUR/2,
-    nonWormholeCapC:(OBSERVED_OVERSHOOT_AU_HOUR/3)/(C_AU_S*3600),
-    wormholeCapC:(OBSERVED_OVERSHOOT_AU_HOUR/2)/(C_AU_S*3600)
+  const LEVEL5_PROFILES=Object.freeze({
+    'metric-envelope':Object.freeze({targetAuPerHour:150,variationAuPerHour:6,minAuPerHour:144,maxAuPerHour:156}),
+    'gravitic-plane':Object.freeze({targetAuPerHour:152,variationAuPerHour:6,minAuPerHour:146,maxAuPerHour:158}),
+    'slipstream-shear':Object.freeze({targetAuPerHour:160,variationAuPerHour:8,minAuPerHour:152,maxAuPerHour:168}),
+    'q-lattice':Object.freeze({targetAuPerHour:164,variationAuPerHour:8,minAuPerHour:156,maxAuPerHour:172}),
+    'n-manifold':Object.freeze({targetAuPerHour:169,variationAuPerHour:6,minAuPerHour:163,maxAuPerHour:175}),
+    'fold-jump':Object.freeze({targetAuPerHour:156,variationAuPerHour:12,minAuPerHour:144,maxAuPerHour:168}),
+    'phase-displacement':Object.freeze({targetAuPerHour:162,variationAuPerHour:10,minAuPerHour:152,maxAuPerHour:172}),
+    'wormhole-gate':Object.freeze({targetAuPerHour:194,variationAuPerHour:6,minAuPerHour:188,maxAuPerHour:200})
   });
-  const LEVEL5_RANGES={
-    'metric-envelope':[65000,150000],
-    'gravitic-plane':[50000,130000],
-    'slipstream-shear':[75000,165000],
-    'q-lattice':[95000,185000],
-    'n-manifold':[105000,LEVEL5_BALANCE.nonWormholeCapC],
-    'fold-jump':[100000,190000],
-    'phase-displacement':[90000,180000],
-    'wormhole-gate':[210000,LEVEL5_BALANCE.wormholeCapC]
-  };
-  for(const [familyKey,range] of Object.entries(LEVEL5_RANGES))if(D.paths[familyKey]?.speedC?.[5])D.paths[familyKey].speedC[5]=range;
+  const LEVEL5_BALANCE=Object.freeze({
+    nonWormholeMaximumBandAuPerHour:Object.freeze([150,175]),
+    wormholeMaximumAuPerHour:200,
+    permittedVariationAuPerHour:Object.freeze([6,12]),
+    profiles:LEVEL5_PROFILES
+  });
+  const LEVEL5_RANGES=Object.freeze(Object.fromEntries(Object.entries(LEVEL5_PROFILES).map(([familyKey,profile])=>[familyKey,Object.freeze([profile.minAuPerHour/(C_AU_S*3600),profile.maxAuPerHour/(C_AU_S*3600)])])));
+  for(const [familyKey,range] of Object.entries(LEVEL5_RANGES))if(D.paths[familyKey]?.speedC?.[5])D.paths[familyKey].speedC[5]=[...range];
   D.level5Balance=LEVEL5_BALANCE;
 
   function hash(value){let state=2166136261;for(const char of String(value)){state^=char.charCodeAt(0);state=Math.imul(state,16777619);}return state>>>0;}
@@ -71,11 +71,20 @@
   }
 
   function updatePerformance(result,stage,rng){
-    const p=result.performance,routeFactor=clamp(p.practicalRouteC/Math.max(1e-12,p.ratedCleanSpaceC),.015,1.35),usefulFloorC=D.chemicalBenchmarkKmS*5/C_KM_S;
-    const isLevel5=stage.rank===5,isWormhole=stage.familyKey==='wormhole-gate',capC=isLevel5?(isWormhole?LEVEL5_BALANCE.wormholeCapC:LEVEL5_BALANCE.nonWormholeCapC):Infinity,capAuPerHour=isLevel5?(isWormhole?LEVEL5_BALANCE.wormholeCapAuPerHour:LEVEL5_BALANCE.nonWormholeCapAuPerHour):Infinity;
-    const rawCleanC=logNumber(rng,stage.speedC[0],stage.speedC[1]),cleanC=Math.min(capC,Math.max(rawCleanC,usefulFloorC)),practicalC=Math.min(capC,Math.max(usefulFloorC,cleanC*routeFactor)),auSecond=practicalC*C_AU_S,distanceAU=p.referenceDistanceAU;
-    const transitSeconds=distanceAU/auSecond,spoolSeconds=logNumber(rng,stage.spoolSeconds[0],stage.spoolSeconds[1]),cooldownSeconds=logNumber(rng,stage.cooldownSeconds[0],stage.cooldownSeconds[1]),missionSeconds=spoolSeconds+transitSeconds+cooldownSeconds,status=cRelation(practicalC);
-    Object.assign(p,{minimumUsefulC:usefulFloorC,ratedCleanSpaceC:cleanC,practicalRouteC:practicalC,cStatus:status,standardizedRatingRelation:status,lightTimeCompression:practicalC,cleanSpaceAuPerSecond:cleanC*C_AU_S,practicalAuPerSecond:auSecond,practicalAuPerMinute:auSecond*60,practicalAuPerHour:auSecond*3600,practicalAuPerDay:auSecond*86400,practicalAuPerYear:auSecond*31557600,practicalKmPerSecond:practicalC*C_KM_S,transitSeconds,transitText:secondsText(transitSeconds),spoolSeconds,spoolText:secondsText(spoolSeconds),cooldownSeconds,cooldownText:secondsText(cooldownSeconds),missionSeconds,missionText:secondsText(missionSeconds),oneAuText:secondsText(1/auSecond),oneLightYearText:secondsText(LY_AU/auSecond),tenLightYearText:secondsText(10*LY_AU/auSecond),compressionReading:`${(auSecond*3600).toLocaleString(undefined,{maximumFractionDigits:5})} AU/hour · ${practicalC.toLocaleString(undefined,{maximumFractionDigits:5})}× standardized light-time compression`,pathLevelSpeedCeilingAuPerHour:Number.isFinite(capAuPerHour)?capAuPerHour:null,pathLevelSpeedCeilingC:Number.isFinite(capC)?capC:null,speedBalanceClass:isLevel5?(isWormhole?'PATH_5_WORMHOLE_APEX':'PATH_5_COMPETITIVE_NON_WORMHOLE'):'UNRESTRICTED_BY_PATH_5_RULE'});
+    const p=result.performance,routeFactor=clamp(p.practicalRouteC/Math.max(1e-12,p.ratedCleanSpaceC),.015,1.35),usefulFloorC=D.chemicalBenchmarkKmS*5/C_KM_S,isLevel5=stage.rank===5,profile=LEVEL5_PROFILES[stage.familyKey];
+    let cleanC,practicalC,capAuPerHour=null,floorAuPerHour=null;
+    if(isLevel5&&profile){
+      const nominalAuPerHour=number(rng,profile.targetAuPerHour-profile.variationAuPerHour/2,profile.targetAuPerHour+profile.variationAuPerHour/2,8);
+      const routeAdjustment=clamp((routeFactor-1)*profile.variationAuPerHour*2,-profile.variationAuPerHour,profile.variationAuPerHour);
+      const cleanAuPerHour=clamp(nominalAuPerHour,profile.minAuPerHour,profile.maxAuPerHour);
+      const practicalAuPerHour=clamp(cleanAuPerHour+routeAdjustment,profile.minAuPerHour,profile.maxAuPerHour);
+      cleanC=cleanAuPerHour/(C_AU_S*3600);practicalC=practicalAuPerHour/(C_AU_S*3600);capAuPerHour=profile.maxAuPerHour;floorAuPerHour=profile.minAuPerHour;
+    }else{
+      const rawCleanC=logNumber(rng,stage.speedC[0],stage.speedC[1]);
+      cleanC=Math.max(rawCleanC,usefulFloorC);practicalC=Math.max(usefulFloorC,cleanC*routeFactor);
+    }
+    const auSecond=practicalC*C_AU_S,distanceAU=p.referenceDistanceAU,transitSeconds=distanceAU/auSecond,spoolSeconds=logNumber(rng,stage.spoolSeconds[0],stage.spoolSeconds[1]),cooldownSeconds=logNumber(rng,stage.cooldownSeconds[0],stage.cooldownSeconds[1]),missionSeconds=spoolSeconds+transitSeconds+cooldownSeconds,status=cRelation(practicalC);
+    Object.assign(p,{minimumUsefulC:usefulFloorC,ratedCleanSpaceC:cleanC,practicalRouteC:practicalC,cStatus:status,standardizedRatingRelation:status,lightTimeCompression:practicalC,cleanSpaceAuPerSecond:cleanC*C_AU_S,practicalAuPerSecond:auSecond,practicalAuPerMinute:auSecond*60,practicalAuPerHour:auSecond*3600,practicalAuPerDay:auSecond*86400,practicalAuPerYear:auSecond*31557600,practicalKmPerSecond:practicalC*C_KM_S,transitSeconds,transitText:secondsText(transitSeconds),spoolSeconds,spoolText:secondsText(spoolSeconds),cooldownSeconds,cooldownText:secondsText(cooldownSeconds),missionSeconds,missionText:secondsText(missionSeconds),oneAuText:secondsText(1/auSecond),oneLightYearText:secondsText(LY_AU/auSecond),tenLightYearText:secondsText(10*LY_AU/auSecond),compressionReading:`${(auSecond*3600).toLocaleString(undefined,{maximumFractionDigits:5})} AU/hour · ${practicalC.toLocaleString(undefined,{maximumFractionDigits:5})}× standardized light-time compression`,pathLevelSpeedFloorAuPerHour:floorAuPerHour,pathLevelSpeedCeilingAuPerHour:capAuPerHour,pathLevelSpeedTargetAuPerHour:profile?.targetAuPerHour??null,pathLevelSpeedVariationAuPerHour:profile?.variationAuPerHour??null,speedBalanceClass:isLevel5?(stage.familyKey==='wormhole-gate'?'PATH_5_WORMHOLE_APEX':'PATH_5_COMPETITIVE_NON_WORMHOLE'):'UNRESTRICTED_BY_PATH_5_RULE'});
   }
 
   function updateRange(result,stage,rng){
@@ -91,7 +100,7 @@
   function updateKinematics(result,stage,rng){
     const k=result.kinematics,p=result.performance,distanceAU=p.referenceDistanceAU,referenceLightSeconds=distanceAU/C_AU_S,mode=k.mode;
     let payloadSeconds=p.transitSeconds;
-    if(DISCRETE_MODES.has(mode))payloadSeconds=logNumber(rng,stage.crossingSeconds[0],stage.crossingSeconds[1])*(1+Math.log10(Math.max(1,distanceAU))/24);
+    if(DISCRETE_MODES.has(mode)&&stage.rank!==5)payloadSeconds=logNumber(rng,stage.crossingSeconds[0],stage.crossingSeconds[1])*(1+Math.log10(Math.max(1,distanceAU))/24);
     const missionSeconds=p.spoolSeconds+payloadSeconds+p.cooldownSeconds,payloadC=referenceLightSeconds/Math.max(1e-12,payloadSeconds),missionC=referenceLightSeconds/Math.max(1e-12,missionSeconds);
     let crewSeconds=payloadSeconds,gamma=null;
     if(result.identity.familyKey==='inertial-torch'&&p.practicalRouteC<1){gamma=1/Math.sqrt(1-p.practicalRouteC**2);crewSeconds=payloadSeconds/gamma;}
@@ -101,5 +110,5 @@
     p.missionSeconds=missionSeconds;p.missionText=secondsText(missionSeconds);
   }
 
-  globalThis.BlacklightExoFTLPathRuntime=Object.freeze({base,D,C_AU_S,C_KM_S,LY_AU,LEVEL_MAP,FAMILY_MAP,ENERGY_MAP,STAGE_TO_TIER,DISCRETE_MODES,LEVEL5_BALANCE,LEVEL5_RANGES,rngFor,number,pick,clamp,logNumber,cRelation,secondsText,distanceText,energyText,powerText,massText,ensureControl,requestedLevel,inferLevel,composeLevel,updatePerformance,updateRange,updateNavigation,updateKinematics});
+  globalThis.BlacklightExoFTLPathRuntime=Object.freeze({base,D,C_AU_S,C_KM_S,LY_AU,LEVEL_MAP,FAMILY_MAP,ENERGY_MAP,STAGE_TO_TIER,DISCRETE_MODES,LEVEL5_BALANCE,LEVEL5_PROFILES,LEVEL5_RANGES,rngFor,number,pick,clamp,logNumber,cRelation,secondsText,distanceText,energyText,powerText,massText,ensureControl,requestedLevel,inferLevel,composeLevel,updatePerformance,updateRange,updateNavigation,updateKinematics});
 })();
