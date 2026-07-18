@@ -1,0 +1,30 @@
+{
+  "projectId":"blacklight-exo-vessel-design-system",
+  "registryType":"exoVesselTechnologyBasisRegistry",
+  "registryVersion":"1.0.0",
+  "authority":"species-organization-manufacturer",
+  "schema":"data/schemas/exo-vessel-technology-basis.schema.json",
+  "basisFamilies":[
+    "TERRESTRIAL_ELECTROMECHANICAL",
+    "AQUATIC_ELECTROCHEMICAL_HYDRAULIC",
+    "CRYOGENIC_AMMONIA_HALOCARBON",
+    "GAS_GIANT_FLUIDIC_ELECTROSTATIC",
+    "BIOLOGICAL_SYMBIOTIC",
+    "MINERAL_PIEZOELECTRIC_PHOTONIC",
+    "FIELD_MEDIATED_POSTMATERIAL"
+  ],
+  "invariantRouteSemantics":["structural","power","cooling","data","atmosphere","access"],
+  "operativeTheoryDomains":["energyGeneration","energyDistribution","actuation","control","atmosphereRegulation","thermalManagement","sensing","sealing","joining","insulation"],
+  "interoperabilityStates":["DIRECT","ADAPTER_REQUIRED","HOSTILE_WITHOUT_CONVERSION"],
+  "principles":[
+    "The required route end effects remain stable even when the physical carrier and machinery are not electrical or human-compatible.",
+    "Power means delivery of usable energy, not necessarily metallic electron conduction.",
+    "Data means transmission of sensing and control state, not necessarily terrestrial digital electronics.",
+    "Atmosphere means regulation of the inhabited working medium, which may be gas, liquid, cryogenic solvent, dense reactive atmosphere, or biological exchange medium.",
+    "Identical end effects do not imply compatible connectors, reference potentials, working fluids, control protocols, seal materials, maintenance environments, or safety assumptions.",
+    "Species environment supplies the primary technological pressure while organization, manufacturer focus, and Path level may produce bounded hybrid methods.",
+    "Module methodology records must preserve the closed VESSEL-02 mass and VESSEL-04 volume until a later methodology-aware engineering rebalance explicitly replaces those references."
+  ],
+  "moduleApplication":{"record":"extensions.operativeMethodology","graphEdges":"implementation","pressureZones":"boundaryMethodology"},
+  "validationModes":["REPAIR","STRICT"]
+}
