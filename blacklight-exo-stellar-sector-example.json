@@ -11,8 +11,10 @@
     "blacklight-exo-stellar-sector-generator.js",
     "blacklight-exo-stellar-sector-contracts.js",
     "blacklight-exo-stellar-sector-supervision.js",
-    "blacklight-exo-stellar-sector.js"
+    "blacklight-exo-stellar-sector.js",
+    "blacklight-exo-sector-archive-store.js"
   ],
   "archiveFormat": "blacklightExoStellarSectorArchive",
-  "note": "The fixed example and seeded procedural sectors are deterministic, supervised, validated, incrementally rendered, exportable, and locally recordable."
+  "archiveStorage": "IndexedDB with localStorage fallback and v2 migration",
+  "note": "The fixed example and seeded procedural sectors are deterministic, supervised, validated, incrementally rendered, exportable, hash-verifiable, importable, and durably recordable."
 }
