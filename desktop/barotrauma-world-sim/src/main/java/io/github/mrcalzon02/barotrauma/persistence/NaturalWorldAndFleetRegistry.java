@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Read-only evidence registry for fleet recovery, ecology, geology, resources, extraction, and natural events. */
+/** Read-only evidence registry for fleet response transit, ecology, geology, resources, extraction, and natural events. */
 public final class NaturalWorldAndFleetRegistry {
     private NaturalWorldAndFleetRegistry() { }
 
@@ -23,7 +23,8 @@ public final class NaturalWorldAndFleetRegistry {
             configureReadOnly(connection);
             verifySchema(connection);
             return new Snapshot(summary(connection), ecology(connection), geology(connection), resources(connection),
-                    extractions(connection), events(connection), operations(connection), responseLogs(connection));
+                    extractions(connection), events(connection), operations(connection), transitLegs(connection),
+                    transitEncounters(connection), responseLogs(connection));
         }
     }
 
@@ -39,7 +40,12 @@ public final class NaturalWorldAndFleetRegistry {
                 count(connection, "resource_extraction_batch"),
                 scalar(connection, "SELECT COALESCE(SUM(quantity),0) FROM resource_extraction_batch"),
                 scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status IN ('AVAILABLE','ACTIVE')"),
-                scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status='COMPLETE'"));
+                scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status='COMPLETE'"),
+                scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status='ACTIVE' AND response_phase='OUTBOUND'"),
+                scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status='ACTIVE' AND response_phase='ON_SCENE'"),
+                scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status='ACTIVE' AND response_phase='RETURNING'"),
+                count(connection, "fleet_response_transit_leg"),
+                count(connection, "fleet_response_transit_encounter"));
     }
 
     private static List<EcologyRow> ecology(Connection connection) throws SQLException {
@@ -130,25 +136,72 @@ public final class NaturalWorldAndFleetRegistry {
 
     private static List<OperationRow> operations(Connection connection) throws SQLException {
         List<OperationRow> rows = new ArrayList<>();
-        String sql = "SELECT o.operation_id,o.operation_type,o.status,o.progress,o.difficulty,o.spare_parts_required,"
-                + "o.fuel_required,o.ammunition_required,o.medical_required,o.created_tick,o.updated_tick,o.completed_tick,"
-                + "distressed.display_name distressed_name,responder.display_name responder_name,origin.display_name origin_name,"
-                + "target.display_name target_station_name,l.display_name target_location_name FROM fleet_response_operation o "
-                + "LEFT JOIN npc_vessel distressed ON distressed.npc_vessel_id=o.distressed_npc_vessel_id "
+        String sql = "SELECT o.operation_id,o.operation_type,o.status,o.response_phase,o.attempt_number,o.materials_committed,"
+                + "o.progress,o.difficulty,o.spare_parts_required,o.fuel_required,o.ammunition_required,o.medical_required,"
+                + "o.created_tick,o.updated_tick,o.outbound_started_tick,o.arrived_tick,o.return_started_tick,"
+                + "o.responder_returned_tick,o.completed_tick,distressed.display_name distressed_name,"
+                + "responder.display_name responder_name,responder.status responder_status,responder_location.display_name responder_location,"
+                + "origin.display_name origin_name,target.display_name target_station_name,l.display_name target_location_name "
+                + "FROM fleet_response_operation o LEFT JOIN npc_vessel distressed ON distressed.npc_vessel_id=o.distressed_npc_vessel_id "
                 + "LEFT JOIN npc_vessel responder ON responder.npc_vessel_id=o.assigned_npc_vessel_id "
+                + "LEFT JOIN world_location responder_location ON responder_location.location_id=responder.current_location_id "
                 + "LEFT JOIN world_station origin ON origin.station_id=o.origin_station_id "
                 + "LEFT JOIN world_station target ON target.station_id=o.target_station_id "
                 + "JOIN world_location l ON l.location_id=o.target_location_id "
                 + "ORDER BY CASE o.status WHEN 'ACTIVE' THEN 0 WHEN 'AVAILABLE' THEN 1 ELSE 2 END,o.updated_tick DESC";
         try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
             while (result.next()) rows.add(new OperationRow(result.getString("operation_id"),
-                    result.getString("operation_type"), result.getString("status"), result.getInt("progress"),
-                    result.getInt("difficulty"), result.getString("distressed_name"), result.getString("responder_name"),
-                    result.getString("origin_name"), result.getString("target_station_name"),
-                    result.getString("target_location_name"), result.getInt("spare_parts_required"),
-                    result.getInt("fuel_required"), result.getInt("ammunition_required"),
-                    result.getInt("medical_required"), result.getLong("created_tick"), result.getLong("updated_tick"),
+                    result.getString("operation_type"), result.getString("status"), result.getString("response_phase"),
+                    result.getInt("attempt_number"), result.getInt("materials_committed") == 1,
+                    result.getInt("progress"), result.getInt("difficulty"), result.getString("distressed_name"),
+                    result.getString("responder_name"), result.getString("responder_status"),
+                    result.getString("responder_location"), result.getString("origin_name"),
+                    result.getString("target_station_name"), result.getString("target_location_name"),
+                    result.getInt("spare_parts_required"), result.getInt("fuel_required"),
+                    result.getInt("ammunition_required"), result.getInt("medical_required"),
+                    result.getLong("created_tick"), result.getLong("updated_tick"),
+                    nullableLong(result, "outbound_started_tick"), nullableLong(result, "arrived_tick"),
+                    nullableLong(result, "return_started_tick"), nullableLong(result, "responder_returned_tick"),
                     nullableLong(result, "completed_tick")));
+        }
+        return List.copyOf(rows);
+    }
+
+    private static List<TransitLegRow> transitLegs(Connection connection) throws SQLException {
+        List<TransitLegRow> rows = new ArrayList<>();
+        String sql = "SELECT leg.leg_id,leg.operation_id,leg.attempt_number,leg.leg_type,leg.status,"
+                + "leg.route_ticks_required,leg.started_tick,leg.arrived_tick,leg.completed_tick,"
+                + "v.display_name responder_name,start.display_name start_name,end.display_name end_name "
+                + "FROM fleet_response_transit_leg leg JOIN npc_vessel v ON v.npc_vessel_id=leg.responder_npc_vessel_id "
+                + "JOIN world_location start ON start.location_id=leg.start_location_id "
+                + "JOIN world_location end ON end.location_id=leg.end_location_id "
+                + "ORDER BY leg.started_tick DESC,leg.leg_id DESC LIMIT 500";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new TransitLegRow(result.getString("leg_id"),
+                    result.getString("operation_id"), result.getInt("attempt_number"),
+                    result.getString("leg_type"), result.getString("status"),
+                    result.getString("responder_name"), result.getString("start_name"),
+                    result.getString("end_name"), result.getInt("route_ticks_required"),
+                    result.getLong("started_tick"), nullableLong(result, "arrived_tick"),
+                    nullableLong(result, "completed_tick")));
+        }
+        return List.copyOf(rows);
+    }
+
+    private static List<TransitEncounterRow> transitEncounters(Connection connection) throws SQLException {
+        List<TransitEncounterRow> rows = new ArrayList<>();
+        String sql = "SELECT link.encounter_id,link.operation_id,link.leg_id,link.tick_sequence,"
+                + "v.display_name responder_name,e.hazard_type,e.challenge,e.resolution_roll,e.margin,e.outcome,e.narrative "
+                + "FROM fleet_response_transit_encounter link JOIN world_encounter e ON e.encounter_id=link.encounter_id "
+                + "JOIN npc_vessel v ON v.npc_vessel_id=link.responder_npc_vessel_id "
+                + "ORDER BY link.tick_sequence DESC,link.encounter_id DESC LIMIT 500";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new TransitEncounterRow(result.getString("encounter_id"),
+                    result.getString("operation_id"), result.getString("leg_id"),
+                    result.getLong("tick_sequence"), result.getString("responder_name"),
+                    result.getString("hazard_type"), result.getInt("challenge"),
+                    result.getInt("resolution_roll"), result.getInt("margin"),
+                    result.getString("outcome"), result.getString("narrative")));
         }
         return List.copyOf(rows);
     }
@@ -167,7 +220,8 @@ public final class NaturalWorldAndFleetRegistry {
     }
 
     private static int count(Connection connection, String table) throws SQLException {
-        if (!List.of("location_ecology_state", "natural_resource_site", "resource_extraction_batch").contains(table)) {
+        if (!List.of("location_ecology_state", "natural_resource_site", "resource_extraction_batch",
+                "fleet_response_transit_leg", "fleet_response_transit_encounter").contains(table)) {
             throw new IllegalArgumentException("Unsupported natural-world registry table.");
         }
         return scalar(connection, "SELECT COUNT(*) FROM " + table);
@@ -208,6 +262,7 @@ public final class NaturalWorldAndFleetRegistry {
     public record Snapshot(Summary summary, List<EcologyRow> ecology, List<GeologyRow> geology,
                            List<ResourceRow> resources, List<ExtractionRow> extractions,
                            List<EventRow> events, List<OperationRow> operations,
+                           List<TransitLegRow> transitLegs, List<TransitEncounterRow> transitEncounters,
                            List<ResponseLogRow> responseLogs) {
         public Snapshot {
             ecology = List.copyOf(ecology);
@@ -216,6 +271,8 @@ public final class NaturalWorldAndFleetRegistry {
             extractions = List.copyOf(extractions);
             events = List.copyOf(events);
             operations = List.copyOf(operations);
+            transitLegs = List.copyOf(transitLegs);
+            transitEncounters = List.copyOf(transitEncounters);
             responseLogs = List.copyOf(responseLogs);
         }
     }
@@ -223,7 +280,9 @@ public final class NaturalWorldAndFleetRegistry {
     public record Summary(int locations, int activeBlooms, int predatorMigrationZones,
                           int geologicalHotspots, int resourceSites, int harvestableSites,
                           int dormantSites, int depletedSites, int extractionBatches,
-                          int extractedUnits, int activeResponses, int completedResponses) { }
+                          int extractedUnits, int activeResponses, int completedResponses,
+                          int outboundResponses, int onSceneResponses, int returningResponses,
+                          int transitLegs, int responseTransitEncounters) { }
 
     public record EcologyRow(String locationId, String locationName, int ring, int level,
                              int primaryProducers, int algalBloom, int herbivores, int predators,
@@ -251,10 +310,24 @@ public final class NaturalWorldAndFleetRegistry {
                            String eventType, int severity, String summary) { }
 
     public record OperationRow(String operationId, String operationType, String status,
+                               String responsePhase, int attemptNumber, boolean materialsCommitted,
                                int progress, int difficulty, String distressedVessel,
-                               String responderVessel, String originStation, String targetStation,
-                               String targetLocation, int spareParts, int fuel, int ammunition,
-                               int medical, long createdTick, long updatedTick, Long completedTick) { }
+                               String responderVessel, String responderStatus, String responderLocation,
+                               String originStation, String targetStation, String targetLocation,
+                               int spareParts, int fuel, int ammunition, int medical,
+                               long createdTick, long updatedTick, Long outboundStartedTick,
+                               Long arrivedTick, Long returnStartedTick, Long responderReturnedTick,
+                               Long completedTick) { }
+
+    public record TransitLegRow(String legId, String operationId, int attemptNumber,
+                                String legType, String status, String responderVessel,
+                                String startLocation, String endLocation, int routeTicksRequired,
+                                long startedTick, Long arrivedTick, Long completedTick) { }
+
+    public record TransitEncounterRow(String encounterId, String operationId, String legId,
+                                      long tickSequence, String responderVessel, String hazardType,
+                                      int challenge, int resolutionRoll, int margin,
+                                      String outcome, String narrative) { }
 
     public record ResponseLogRow(String logId, String operationId, long tickSequence,
                                  String operationType, String eventType, String summary) { }
