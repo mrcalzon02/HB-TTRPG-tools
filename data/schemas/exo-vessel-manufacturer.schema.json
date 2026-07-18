@@ -1,219 +1,37 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-manufacturer.schema.json",
-  "title": "Blacklight EXO Vessel Manufacturer",
-  "description": "Persistent species- and organization-derived manufacturer contract with cultural ancestry, production doctrine, topology, technology quality, naming, visual construction grammar, and realized vessel outcomes.",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "recordType",
-    "schemaVersion",
-    "manufacturerId",
-    "name",
-    "speciesId",
-    "organizationId",
-    "baseTechnologyBand",
-    "archetype",
-    "architecture",
-    "production",
-    "technologyVariantWeights",
-    "topologyWeights",
-    "materials",
-    "repairDoctrine",
-    "weaponPreferences",
-    "namingGrammar",
-    "visualGrammar",
-    "doctrine",
-    "signatureTraits",
-    "preferredRoles",
-    "provenance",
-    "validation"
-  ],
-  "properties": {
-    "recordType": {"const": "exoVesselManufacturer"},
-    "schemaVersion": {"const": "1.0.0"},
-    "manufacturerId": {"type": "string", "pattern": "^mfr-[a-z0-9][a-z0-9-]{5,95}$"},
-    "name": {"type": "string", "minLength": 1},
-    "speciesId": {"type": "string", "pattern": "^species-[a-z0-9][a-z0-9-]{5,95}$"},
-    "organizationId": {"type": "string", "pattern": "^org-[a-z0-9][a-z0-9-]{5,95}$"},
-    "baseTechnologyBand": {"enum": ["T-1", "P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
-    "archetype": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["key", "label", "inferenceReason", "focusKey", "focusLabel"],
-      "properties": {
-        "key": {"enum": ["VAULT_KEEPER", "VOID_NOMAD", "CORP_LOGISTICS", "APEX_WARLORD"]},
-        "label": {"type": "string", "minLength": 1},
-        "inferenceReason": {"type": "string", "minLength": 1},
-        "focusKey": {"enum": ["CONTINUITY", "MODULAR", "PRECISION", "FRONTIER"]},
-        "focusLabel": {"type": "string", "minLength": 1}
-      }
-    },
-    "architecture": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["internalsBias", "evaBias", "allowedDeviationVariance", "primaryStructuralMaterial", "preferredEnvelope"],
-      "properties": {
-        "internalsBias": {"type": "number", "minimum": 0, "maximum": 1},
-        "evaBias": {"type": "number", "minimum": 0, "maximum": 1},
-        "allowedDeviationVariance": {"type": "number", "minimum": 0, "maximum": 0.5},
-        "primaryStructuralMaterial": {"type": "string", "minLength": 1},
-        "preferredEnvelope": {"enum": ["INTERNAL", "EVA", "HYBRID"]}
-      }
-    },
-    "production": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["standardization", "modularity", "automation", "qualityControl", "plannedServiceLifeYears"],
-      "properties": {
-        "standardization": {"type": "number", "minimum": 0, "maximum": 1},
-        "modularity": {"type": "number", "minimum": 0, "maximum": 1},
-        "automation": {"type": "number", "minimum": 0, "maximum": 1},
-        "qualityControl": {"type": "number", "minimum": 0, "maximum": 1},
-        "plannedServiceLifeYears": {"type": "number", "exclusiveMinimum": 0}
-      }
-    },
-    "technologyVariantWeights": {"$ref": "#/$defs/variantWeights"},
-    "topologyWeights": {"$ref": "#/$defs/topologyWeights"},
-    "materials": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-    "repairDoctrine": {"type": "string", "minLength": 1},
-    "weaponPreferences": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-    "namingGrammar": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["designationPrefix", "classPattern", "serialPattern", "familyRoots", "manufacturerIndex"],
-      "properties": {
-        "designationPrefix": {"type": "string", "pattern": "^[A-Z0-9]{2,5}$"},
-        "classPattern": {"type": "string", "minLength": 1},
-        "serialPattern": {"type": "string", "minLength": 1},
-        "familyRoots": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}},
-        "manufacturerIndex": {"type": "integer", "minimum": 0, "maximum": 11}
-      }
-    },
-    "visualGrammar": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["silhouette", "symmetry", "surface", "moduleRhythm", "sensorPlacement", "radiatorPlacement", "recognitionFeatures"],
-      "properties": {
-        "silhouette": {"type": "string", "minLength": 1},
-        "symmetry": {"type": "string", "minLength": 1},
-        "surface": {"type": "string", "minLength": 1},
-        "moduleRhythm": {"type": "string", "minLength": 1},
-        "sensorPlacement": {"type": "string", "minLength": 1},
-        "radiatorPlacement": {"type": "string", "minLength": 1},
-        "recognitionFeatures": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
-      }
-    },
-    "doctrine": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["production", "maintenance", "architecture", "industrialContext"],
-      "properties": {
-        "production": {"type": "string", "minLength": 1},
-        "maintenance": {"type": "string", "minLength": 1},
-        "architecture": {"type": "string", "minLength": 1},
-        "industrialContext": {"type": "string", "minLength": 1}
-      }
-    },
-    "signatureTraits": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-    "preferredRoles": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["courier", "explorer", "merchant", "passenger", "colony", "science", "warship", "tanker"]}},
-    "provenance": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["speciesSeed", "organizationSeed", "manufacturerSeed", "sourceSpecies", "sourceOrganization", "sourceDossierSeed", "generatorId", "generatorVersion"],
-      "properties": {
-        "speciesSeed": {"type": "string", "minLength": 1},
-        "organizationSeed": {"type": "string", "minLength": 1},
-        "manufacturerSeed": {"type": "string", "minLength": 1},
-        "sourceSpecies": {"type": "string", "minLength": 1},
-        "sourceOrganization": {"type": "string", "minLength": 1},
-        "sourceDossierSeed": {"type": ["string", "null"]},
-        "generatorId": {"const": "blacklight-exo-vessel-manufacturer-generator"},
-        "generatorVersion": {"const": "1.0.0"}
-      }
-    },
-    "validation": {"$ref": "#/$defs/validation"},
-    "realizedArchitecture": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["classification", "internalsVolumePercent", "evaVolumePercent", "massFactor", "volumeFactor", "maintainabilityRating", "thermalSignatureMultiplier", "productionCostFactor"],
-      "properties": {
-        "classification": {"enum": ["INTERNAL", "EVA", "HYBRID"]},
-        "internalsVolumePercent": {"type": "number", "minimum": 0, "maximum": 100},
-        "evaVolumePercent": {"type": "number", "minimum": 0, "maximum": 100},
-        "massFactor": {"type": "number", "exclusiveMinimum": 0},
-        "volumeFactor": {"type": "number", "exclusiveMinimum": 0},
-        "maintainabilityRating": {"type": "number", "minimum": 0, "maximum": 100},
-        "thermalSignatureMultiplier": {"type": "number", "exclusiveMinimum": 0},
-        "productionCostFactor": {"type": "number", "exclusiveMinimum": 0}
-      }
-    },
-    "realizedEngineering": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["technologyBand", "combatFit", "strategicDeltaVMps", "combatReserveDeltaVMps", "lateralCombatAccelerationMps2", "armorToMassPercent", "protectionToMassPercent", "sensorChannels", "fireControlChannels", "weaponFamilies", "countermeasureMassTonnes"],
-      "properties": {
-        "technologyBand": {"enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
-        "combatFit": {"enum": ["UNARMED", "CIVILIAN", "DEFENSIVE", "SECURITY", "NAVAL"]},
-        "strategicDeltaVMps": {"type": "number", "minimum": 0},
-        "combatReserveDeltaVMps": {"type": "number", "minimum": 0},
-        "lateralCombatAccelerationMps2": {"type": "number", "minimum": 0},
-        "armorToMassPercent": {"type": "number", "minimum": 0, "maximum": 100},
-        "protectionToMassPercent": {"type": "number", "minimum": 0, "maximum": 100},
-        "sensorChannels": {"type": "integer", "minimum": 1},
-        "fireControlChannels": {"type": "integer", "minimum": 0},
-        "weaponFamilies": {"type": "array", "uniqueItems": true, "items": {"enum": ["CHEMICAL_BALLISTIC", "RAIL_GUN", "COIL_GUN", "BRUTE_MASS_THROWER", "SAND_GUN", "LASER", "PARTICLE_BEAM", "FRACTIONAL_C", "MISSILE"]}},
-        "countermeasureMassTonnes": {"type": "number", "minimum": 0}
-      }
-    },
-    "realizedModuleGraph": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["topology", "moduleCount", "pressureZoneCount", "internalModuleCount", "evaModuleCount", "weaponHardpointCount", "repairCount"],
-      "properties": {
-        "topology": {"enum": ["MONOCOQUE", "SPINE", "CLUSTER", "RING", "HYBRID"]},
-        "moduleCount": {"type": "integer", "minimum": 1},
-        "pressureZoneCount": {"type": "integer", "minimum": 0},
-        "internalModuleCount": {"type": "integer", "minimum": 0},
-        "evaModuleCount": {"type": "integer", "minimum": 0},
-        "weaponHardpointCount": {"type": "integer", "minimum": 0},
-        "repairCount": {"type": "integer", "minimum": 0}
-      }
-    }
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-manufacturer.schema.json",
+  "title":"Blacklight EXO Vessel Manufacturer",
+  "description":"Persistent species- and organization-derived manufacturer contract with cultural ancestry, production doctrine, topology, technology quality, nonhuman operative technology basis, naming, visual construction grammar, and realized vessel outcomes.",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["recordType","schemaVersion","manufacturerId","name","speciesId","organizationId","baseTechnologyBand","archetype","architecture","production","technologyVariantWeights","topologyWeights","materials","repairDoctrine","weaponPreferences","namingGrammar","visualGrammar","technologyBasis","doctrine","signatureTraits","preferredRoles","provenance","validation"],
+  "properties":{
+    "recordType":{"const":"exoVesselManufacturer"},"schemaVersion":{"const":"1.0.0"},
+    "manufacturerId":{"type":"string","pattern":"^mfr-[a-z0-9][a-z0-9-]{5,95}$"},"name":{"type":"string","minLength":1},
+    "speciesId":{"type":"string","pattern":"^species-[a-z0-9][a-z0-9-]{5,95}$"},"organizationId":{"type":"string","pattern":"^org-[a-z0-9][a-z0-9-]{5,95}$"},
+    "baseTechnologyBand":{"enum":["T-1","P0","P1","P2","P3","P4","P5","P6"]},
+    "archetype":{"type":"object","additionalProperties":false,"required":["key","label","inferenceReason","focusKey","focusLabel"],"properties":{"key":{"enum":["VAULT_KEEPER","VOID_NOMAD","CORP_LOGISTICS","APEX_WARLORD"]},"label":{"type":"string","minLength":1},"inferenceReason":{"type":"string","minLength":1},"focusKey":{"enum":["CONTINUITY","MODULAR","PRECISION","FRONTIER"]},"focusLabel":{"type":"string","minLength":1}}},
+    "architecture":{"type":"object","additionalProperties":false,"required":["internalsBias","evaBias","allowedDeviationVariance","primaryStructuralMaterial","preferredEnvelope"],"properties":{"internalsBias":{"type":"number","minimum":0,"maximum":1},"evaBias":{"type":"number","minimum":0,"maximum":1},"allowedDeviationVariance":{"type":"number","minimum":0,"maximum":0.5},"primaryStructuralMaterial":{"type":"string","minLength":1},"preferredEnvelope":{"enum":["INTERNAL","EVA","HYBRID"]}}},
+    "production":{"type":"object","additionalProperties":false,"required":["standardization","modularity","automation","qualityControl","plannedServiceLifeYears"],"properties":{"standardization":{"type":"number","minimum":0,"maximum":1},"modularity":{"type":"number","minimum":0,"maximum":1},"automation":{"type":"number","minimum":0,"maximum":1},"qualityControl":{"type":"number","minimum":0,"maximum":1},"plannedServiceLifeYears":{"type":"number","exclusiveMinimum":0}}},
+    "technologyVariantWeights":{"$ref":"#/$defs/variantWeights"},"topologyWeights":{"$ref":"#/$defs/topologyWeights"},
+    "materials":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string","minLength":1}},"repairDoctrine":{"type":"string","minLength":1},
+    "weaponPreferences":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string","minLength":1}},
+    "namingGrammar":{"type":"object","additionalProperties":false,"required":["designationPrefix","classPattern","serialPattern","familyRoots","manufacturerIndex"],"properties":{"designationPrefix":{"type":"string","pattern":"^[A-Z0-9]{2,5}$"},"classPattern":{"type":"string","minLength":1},"serialPattern":{"type":"string","minLength":1},"familyRoots":{"type":"array","minItems":3,"items":{"type":"string","minLength":1}},"manufacturerIndex":{"type":"integer","minimum":0,"maximum":11}}},
+    "visualGrammar":{"type":"object","additionalProperties":false,"required":["silhouette","symmetry","surface","moduleRhythm","sensorPlacement","radiatorPlacement","recognitionFeatures"],"properties":{"silhouette":{"type":"string","minLength":1},"symmetry":{"type":"string","minLength":1},"surface":{"type":"string","minLength":1},"moduleRhythm":{"type":"string","minLength":1},"sensorPlacement":{"type":"string","minLength":1},"radiatorPlacement":{"type":"string","minLength":1},"recognitionFeatures":{"type":"array","minItems":3,"uniqueItems":true,"items":{"type":"string","minLength":1}}}},
+    "technologyBasis":{"$ref":"exo-vessel-technology-basis.schema.json"},
+    "doctrine":{"type":"object","additionalProperties":false,"required":["production","maintenance","architecture","industrialContext","operativeTechnology"],"properties":{"production":{"type":"string","minLength":1},"maintenance":{"type":"string","minLength":1},"architecture":{"type":"string","minLength":1},"industrialContext":{"type":"string","minLength":1},"operativeTechnology":{"type":"string","minLength":1}}},
+    "signatureTraits":{"type":"array","minItems":3,"uniqueItems":true,"items":{"type":"string","minLength":1}},
+    "preferredRoles":{"type":"array","minItems":1,"uniqueItems":true,"items":{"enum":["courier","explorer","merchant","passenger","colony","science","warship","tanker"]}},
+    "provenance":{"type":"object","additionalProperties":false,"required":["speciesSeed","organizationSeed","manufacturerSeed","sourceSpecies","sourceOrganization","sourceDossierSeed","generatorId","generatorVersion"],"properties":{"speciesSeed":{"type":"string","minLength":1},"organizationSeed":{"type":"string","minLength":1},"manufacturerSeed":{"type":"string","minLength":1},"sourceSpecies":{"type":"string","minLength":1},"sourceOrganization":{"type":"string","minLength":1},"sourceDossierSeed":{"type":["string","null"]},"generatorId":{"const":"blacklight-exo-vessel-manufacturer-generator"},"generatorVersion":{"const":"1.0.0"}}},
+    "validation":{"$ref":"#/$defs/validation"},
+    "realizedArchitecture":{"type":"object","additionalProperties":false,"required":["classification","internalsVolumePercent","evaVolumePercent","massFactor","volumeFactor","maintainabilityRating","thermalSignatureMultiplier","productionCostFactor"],"properties":{"classification":{"enum":["INTERNAL","EVA","HYBRID"]},"internalsVolumePercent":{"type":"number","minimum":0,"maximum":100},"evaVolumePercent":{"type":"number","minimum":0,"maximum":100},"massFactor":{"type":"number","exclusiveMinimum":0},"volumeFactor":{"type":"number","exclusiveMinimum":0},"maintainabilityRating":{"type":"number","minimum":0,"maximum":100},"thermalSignatureMultiplier":{"type":"number","exclusiveMinimum":0},"productionCostFactor":{"type":"number","exclusiveMinimum":0}}},
+    "realizedEngineering":{"type":"object","additionalProperties":false,"required":["technologyBand","combatFit","strategicDeltaVMps","combatReserveDeltaVMps","lateralCombatAccelerationMps2","armorToMassPercent","protectionToMassPercent","sensorChannels","fireControlChannels","weaponFamilies","countermeasureMassTonnes"],"properties":{"technologyBand":{"enum":["P0","P1","P2","P3","P4","P5","P6"]},"combatFit":{"enum":["UNARMED","CIVILIAN","DEFENSIVE","SECURITY","NAVAL"]},"strategicDeltaVMps":{"type":"number","minimum":0},"combatReserveDeltaVMps":{"type":"number","minimum":0},"lateralCombatAccelerationMps2":{"type":"number","minimum":0},"armorToMassPercent":{"type":"number","minimum":0,"maximum":100},"protectionToMassPercent":{"type":"number","minimum":0,"maximum":100},"sensorChannels":{"type":"integer","minimum":1},"fireControlChannels":{"type":"integer","minimum":0},"weaponFamilies":{"type":"array","uniqueItems":true,"items":{"enum":["CHEMICAL_BALLISTIC","RAIL_GUN","COIL_GUN","BRUTE_MASS_THROWER","SAND_GUN","LASER","PARTICLE_BEAM","FRACTIONAL_C","MISSILE"]}},"countermeasureMassTonnes":{"type":"number","minimum":0}}},
+    "realizedModuleGraph":{"type":"object","additionalProperties":false,"required":["topology","moduleCount","pressureZoneCount","internalModuleCount","evaModuleCount","weaponHardpointCount","repairCount"],"properties":{"topology":{"enum":["MONOCOQUE","SPINE","CLUSTER","RING","HYBRID"]},"moduleCount":{"type":"integer","minimum":1},"pressureZoneCount":{"type":"integer","minimum":0},"internalModuleCount":{"type":"integer","minimum":0},"evaModuleCount":{"type":"integer","minimum":0},"weaponHardpointCount":{"type":"integer","minimum":0},"repairCount":{"type":"integer","minimum":0}}}
   },
-  "$defs": {
-    "variantWeights": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["LEGACY", "STANDARD", "REFINED", "ADVANCED", "PROTOTYPE"],
-      "properties": {
-        "LEGACY": {"type": "number", "minimum": 0, "maximum": 1},
-        "STANDARD": {"type": "number", "minimum": 0, "maximum": 1},
-        "REFINED": {"type": "number", "minimum": 0, "maximum": 1},
-        "ADVANCED": {"type": "number", "minimum": 0, "maximum": 1},
-        "PROTOTYPE": {"type": "number", "minimum": 0, "maximum": 1}
-      }
-    },
-    "topologyWeights": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["MONOCOQUE", "SPINE", "CLUSTER", "RING", "HYBRID"],
-      "properties": {
-        "MONOCOQUE": {"type": "number", "minimum": 0, "maximum": 1},
-        "SPINE": {"type": "number", "minimum": 0, "maximum": 1},
-        "CLUSTER": {"type": "number", "minimum": 0, "maximum": 1},
-        "RING": {"type": "number", "minimum": 0, "maximum": 1},
-        "HYBRID": {"type": "number", "minimum": 0, "maximum": 1}
-      }
-    },
-    "validation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["valid", "violations"],
-      "properties": {
-        "valid": {"type": "boolean"},
-        "violations": {"type": "array", "items": {"type": "string"}}
-      }
-    }
+  "$defs":{
+    "variantWeights":{"type":"object","additionalProperties":false,"required":["LEGACY","STANDARD","REFINED","ADVANCED","PROTOTYPE"],"properties":{"LEGACY":{"type":"number","minimum":0,"maximum":1},"STANDARD":{"type":"number","minimum":0,"maximum":1},"REFINED":{"type":"number","minimum":0,"maximum":1},"ADVANCED":{"type":"number","minimum":0,"maximum":1},"PROTOTYPE":{"type":"number","minimum":0,"maximum":1}}},
+    "topologyWeights":{"type":"object","additionalProperties":false,"required":["MONOCOQUE","SPINE","CLUSTER","RING","HYBRID"],"properties":{"MONOCOQUE":{"type":"number","minimum":0,"maximum":1},"SPINE":{"type":"number","minimum":0,"maximum":1},"CLUSTER":{"type":"number","minimum":0,"maximum":1},"RING":{"type":"number","minimum":0,"maximum":1},"HYBRID":{"type":"number","minimum":0,"maximum":1}}},
+    "validation":{"type":"object","additionalProperties":false,"required":["valid","violations"],"properties":{"valid":{"type":"boolean"},"violations":{"type":"array","items":{"type":"string"}}}}
   }
 }
