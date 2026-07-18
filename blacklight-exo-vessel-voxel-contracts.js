@@ -2,6 +2,10 @@
   'use strict';
   const base=globalThis.BlacklightExoVessel,prior=globalThis.BlacklightExoVesselContracts;
   if(!base?.voxelLayoutVersion||!prior||base.voxelContractVersion)return;
+  function hasVoxelPhaseAuthority(record){
+    const version=String(record.contract?.provenance?.generatorVersion||''),match=/^(\d+)\.(\d+)\.(\d+)$/.exec(version),atOrBeyondVoxel=Boolean(match)&&Number(match[1])===3&&Number(match[2])>=4;
+    return atOrBeyondVoxel&&record.contract?.provenance?.voxelLayoutVersion==='1.0.0';
+  }
   function validate(record){
     const inherited=prior.validate(record),violations=[...(inherited.violations||[])],layout=record?.voxelLayout;
     if(layout){
@@ -16,7 +20,7 @@
       }
       if(layout.grid?.envelopeCellCount>layout.resolution?.maxEnvelopeCells)violations.push('Voxel layout exceeds its declared envelope cell cap.');
       if(record.contract?.derivedLayers?.find(layer=>layer.key==='voxelLayout')?.status!=='generated')violations.push('Canonical contract did not mark voxelLayout as generated.');
-      if(record.contract?.provenance?.generatorVersion!=='3.4.0'||record.contract?.provenance?.voxelLayoutVersion!=='1.0.0')violations.push('Canonical provenance does not identify VESSEL-04.');
+      if(!hasVoxelPhaseAuthority(record))violations.push('Canonical provenance does not retain VESSEL-04 voxel authority.');
       if(record.contract?.extensions?.voxelLayoutSchema!=='data/schemas/exo-vessel-voxel-layout.schema.json')violations.push('Canonical contract does not expose the voxel layout schema.');
     }
     return{valid:!violations.length,violations};
