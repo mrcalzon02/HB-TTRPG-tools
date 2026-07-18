@@ -41,3 +41,10 @@ tasks.register<JavaExec>("verifyWorldStore") {
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.AcceptedImportTransaction")
     args("--verify")
 }
+
+tasks.register<JavaExec>("runImportApproval") {
+    group = "application"
+    description = "Runs the inspection-first Barotrauma world import approval window."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow")
+}
