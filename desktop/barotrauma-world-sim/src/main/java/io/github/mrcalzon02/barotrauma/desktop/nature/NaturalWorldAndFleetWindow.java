@@ -1,5 +1,7 @@
 package io.github.mrcalzon02.barotrauma.desktop.nature;
 
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets;
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.AssetRole;
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
 import io.github.mrcalzon02.barotrauma.persistence.NaturalWorldAndFleetRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.NaturalWorldAndFleetRegistry.Snapshot;
@@ -11,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,6 +37,7 @@ import java.util.concurrent.ExecutionException;
 /** Live read-only console for passive fleet recovery and natural-world activity. */
 public final class NaturalWorldAndFleetWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
+    private final BarotraumaDonorAssets graphicalAssets = new BarotraumaDonorAssets();
     private final JLabel worldStatus = new JLabel("No desktop world open");
     private final JLabel operationStatus = new JLabel("Ready");
     private final JButton openWorldButton = new JButton("Open World");
@@ -66,6 +70,8 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         setSize(1550, 900);
         setLocationByPlatform(true);
         setLayout(new BorderLayout(10, 10));
+        try { setIconImage(graphicalAssets.loadIcon(AssetRole.VESSEL, 32, 32).getImage()); }
+        catch (Exception ignored) { }
 
         JPanel header = new JPanel(new BorderLayout(12, 8));
         header.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));
@@ -78,13 +84,13 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         summary.setText(schemaPrompt());
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Summary", new JScrollPane(summary));
-        tabs.addTab("Ecology", scroll(ecologyModel));
-        tabs.addTab("Geology", scroll(geologyModel));
-        tabs.addTab("Resource Sites", scroll(resourceModel));
-        tabs.addTab("Natural Events", scroll(eventModel));
-        tabs.addTab("Fleet Responses", scroll(operationModel));
-        tabs.addTab("Response Log", scroll(responseLogModel));
+        tabs.addTab("Summary", assetIcon(AssetRole.STATION), new JScrollPane(summary));
+        tabs.addTab("Ecology", assetIcon(AssetRole.FAUNA), scroll(ecologyModel));
+        tabs.addTab("Geology", assetIcon(AssetRole.GEOLOGY), scroll(geologyModel));
+        tabs.addTab("Resource Sites", assetIcon(AssetRole.GEOLOGY), scroll(resourceModel));
+        tabs.addTab("Natural Events", assetIcon(AssetRole.FAUNA), scroll(eventModel));
+        tabs.addTab("Fleet Responses", assetIcon(AssetRole.VESSEL), scroll(operationModel));
+        tabs.addTab("Response Log", assetIcon(AssetRole.VESSEL), scroll(responseLogModel));
         tabs.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
         add(tabs, BorderLayout.CENTER);
 
@@ -162,8 +168,12 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
     private void populate(Snapshot snapshot) {
         clear();
         var s = snapshot.summary();
+        String assetSource = graphicalAssets.activeDonor()
+                .map(candidate -> "Donor installation: " + candidate.installationRoot())
+                .orElse("Packaged fallback PNGs");
         summary.setText("Passive fleet recovery and natural-world registry\n"
                 + "Database schema: " + WorldStorageContracts.DATABASE_SCHEMA_VERSION + "\n"
+                + "Graphical asset source: " + assetSource + "\n"
                 + "Locations with ecology: " + s.locations() + "\n"
                 + "Active algal blooms: " + s.activeBlooms() + "\n"
                 + "Predator migration zones: " + s.predatorMigrationZones() + "\n"
@@ -198,6 +208,11 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         for (var row : snapshot.responseLogs()) responseLogModel.addRow(new Object[]{row.tickSequence(),
                 row.operationType(), row.eventType(), row.summary(), row.operationId(), row.logId()});
         summary.setCaretPosition(0);
+    }
+
+    private Icon assetIcon(AssetRole role) {
+        try { return graphicalAssets.loadIcon(role, 20, 20); }
+        catch (Exception exception) { return null; }
     }
 
     private void clear() {
