@@ -1,6 +1,7 @@
 package io.github.mrcalzon02.barotrauma.desktop.logistics;
 
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
+import io.github.mrcalzon02.barotrauma.persistence.PlayerFreightTransaction;
 import io.github.mrcalzon02.barotrauma.persistence.PlayerVesselTransitTransaction;
 import io.github.mrcalzon02.barotrauma.persistence.StationLogisticsRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry;
@@ -31,7 +32,7 @@ import java.nio.file.Path;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-/** Explicit route and challenge console for imported physical player vessels. */
+/** Explicit routes, shared transit challenges, and freight for imported physical player vessels. */
 public final class PlayerVesselTransitWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final JLabel worldStatus = new JLabel("No desktop world open");
@@ -41,12 +42,15 @@ public final class PlayerVesselTransitWindow extends JFrame {
     private final JComboBox<LocationChoice> startChoice = new JComboBox<>();
     private final JComboBox<LocationChoice> destinationChoice = new JComboBox<>();
     private final JComboBox<MissionType> missionChoice = new JComboBox<>(MissionType.values());
+    private final JComboBox<FreightChoice> freightChoice = new JComboBox<>();
     private final JButton openWorldButton = new JButton("Open World");
     private final JButton refreshButton = new JButton("Refresh");
     private final JButton enrollButton = new JButton("Enroll at Start");
     private final JButton planButton = new JButton("Plan Route");
     private final JButton resolveButton = new JButton("Resolve Next Challenge");
     private final JButton dockButton = new JButton("Dock");
+    private final JButton loadFreightButton = new JButton("Load Freight");
+    private final JButton deliverFreightButton = new JButton("Deliver Freight");
     private final JTextArea voyage = new JTextArea();
 
     private WorldPaths world;
@@ -56,10 +60,10 @@ public final class PlayerVesselTransitWindow extends JFrame {
     private boolean busy;
 
     public PlayerVesselTransitWindow() {
-        super("Barotrauma Imported Player Vessel Transit");
+        super("Barotrauma Imported Player Vessel Transit and Freight");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new Dimension(1050, 680));
-        setSize(1350, 820);
+        setMinimumSize(new Dimension(1100, 720));
+        setSize(1500, 900);
         setLocationByPlatform(true);
         setLayout(new BorderLayout(10, 10));
 
@@ -75,7 +79,8 @@ public final class PlayerVesselTransitWindow extends JFrame {
         voyage.setEditable(false);
         voyage.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
         voyage.setText("Open a normalized world, select an imported physical vessel, and enroll it at a location.\n"
-                + "Player and NPC voyages call the same deterministic transit challenge resolver.\n");
+                + "Player and NPC voyages call the same deterministic transit challenge resolver.\n"
+                + "READY freight lots may be loaded only at their source and delivered only after docking at their destination.\n");
         add(new JScrollPane(voyage), BorderLayout.CENTER);
 
         JPanel route = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
@@ -90,6 +95,12 @@ public final class PlayerVesselTransitWindow extends JFrame {
         route.add(missionChoice);
         route.add(planButton);
 
+        JPanel freight = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        freight.add(new JLabel("Freight:"));
+        freight.add(freightChoice);
+        freight.add(loadFreightButton);
+        freight.add(deliverFreightButton);
+
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         actions.add(resolveButton);
         actions.add(dockButton);
@@ -99,6 +110,7 @@ public final class PlayerVesselTransitWindow extends JFrame {
         JPanel footer = new JPanel(new BorderLayout(8, 8));
         footer.setBorder(BorderFactory.createEmptyBorder(0, 12, 12, 12));
         footer.add(route, BorderLayout.NORTH);
+        footer.add(freight, BorderLayout.CENTER);
         footer.add(actions, BorderLayout.SOUTH);
         add(footer, BorderLayout.SOUTH);
 
@@ -108,7 +120,10 @@ public final class PlayerVesselTransitWindow extends JFrame {
         planButton.addActionListener(event -> planRoute());
         resolveButton.addActionListener(event -> resolveChallenge());
         dockButton.addActionListener(event -> dock());
+        loadFreightButton.addActionListener(event -> loadFreight());
+        deliverFreightButton.addActionListener(event -> deliverFreight());
         vesselChoice.addActionListener(event -> renderSelectedVessel());
+        freightChoice.addActionListener(event -> refreshControls());
         sessionSubscription = session.addListener(this::activateWorld, true);
         refreshControls();
     }
@@ -119,11 +134,8 @@ public final class PlayerVesselTransitWindow extends JFrame {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
-        try {
-            session.activate(WorldStorageContracts.openWorld(chooser.getSelectedFile().toPath()));
-        } catch (Exception exception) {
-            showFailure("World open failed", exception);
-        }
+        try { session.activate(WorldStorageContracts.openWorld(chooser.getSelectedFile().toPath())); }
+        catch (Exception exception) { showFailure("World open failed", exception); }
     }
 
     private void activateWorld(WorldPaths selectedWorld) {
@@ -132,6 +144,7 @@ public final class PlayerVesselTransitWindow extends JFrame {
         vesselChoice.removeAllItems();
         startChoice.removeAllItems();
         destinationChoice.removeAllItems();
+        freightChoice.removeAllItems();
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
             vesselStatus.setText("Select an imported vessel");
@@ -147,7 +160,8 @@ public final class PlayerVesselTransitWindow extends JFrame {
         WorldPaths selectedWorld = world;
         if (selectedWorld == null || busy) return;
         UUID selected = selectedVesselId();
-        setBusy(true, "Loading imported vessels and world routes…");
+        String selectedLot = selectedFreightLotId();
+        setBusy(true, "Loading imported vessels, freight, and world routes…");
         new SwingWorker<Loaded, Void>() {
             @Override protected Loaded doInBackground() throws Exception {
                 return new Loaded(WorldVesselRegistry.load(selectedWorld), WorldMapRegistry.load(selectedWorld),
@@ -157,21 +171,19 @@ public final class PlayerVesselTransitWindow extends JFrame {
                 try {
                     Loaded loaded = get();
                     if (!selectedWorld.equals(world)) return;
-                    populate(loaded, selected);
-                    operationStatus.setText("Player transit registry loaded");
+                    populate(loaded, selected, selectedLot);
+                    operationStatus.setText("Player transit and freight registry loaded");
                 } catch (InterruptedException exception) {
                     Thread.currentThread().interrupt();
                     showFailure("Transit refresh interrupted", exception);
                 } catch (ExecutionException exception) {
                     showFailure("Transit refresh failed", cause(exception));
-                } finally {
-                    setBusy(false, operationStatus.getText());
-                }
+                } finally { setBusy(false, operationStatus.getText()); }
             }
         }.execute();
     }
 
-    private void populate(Loaded loaded, UUID preserveVessel) {
+    private void populate(Loaded loaded, UUID preserveVessel, String preserveLot) {
         logistics = loaded.logistics();
         vesselChoice.removeAllItems();
         for (WorldVesselRegistry.VesselRow vessel : loaded.vessels().vessels()) {
@@ -186,7 +198,28 @@ public final class PlayerVesselTransitWindow extends JFrame {
             destinationChoice.addItem(choice);
         }
         if (preserveVessel != null) selectVessel(preserveVessel);
+        rebuildFreightChoices(preserveLot);
         renderSelectedVessel();
+    }
+
+    private void rebuildFreightChoices(String preserveLot) {
+        UUID vesselId = selectedVesselId();
+        freightChoice.removeAllItems();
+        if (logistics == null || vesselId == null) return;
+        for (StationLogisticsRegistry.FreightRow lot : logistics.freight()) {
+            boolean available = lot.status().equals("READY") && lot.npcVesselId() == null && lot.playerVesselId() == null;
+            boolean assigned = vesselId.equals(lot.playerVesselId()) && lot.status().equals("IN_TRANSIT");
+            if (available || assigned) freightChoice.addItem(new FreightChoice(lot.lotId(), lot.status(), lot.itemName(),
+                    lot.quantity(), lot.sourceStationName(), lot.destinationStationName(), assigned));
+        }
+        if (preserveLot != null) {
+            for (int index = 0; index < freightChoice.getItemCount(); index++) {
+                if (freightChoice.getItemAt(index).lotId().equals(preserveLot)) {
+                    freightChoice.setSelectedIndex(index);
+                    break;
+                }
+            }
+        }
     }
 
     private void enroll() {
@@ -220,6 +253,22 @@ public final class PlayerVesselTransitWindow extends JFrame {
                 PlayerVesselTransitTransaction.dock(world, vessel.id(), "desktop-user"));
     }
 
+    private void loadFreight() {
+        VesselChoice vessel = (VesselChoice) vesselChoice.getSelectedItem();
+        FreightChoice freight = (FreightChoice) freightChoice.getSelectedItem();
+        if (vessel == null || freight == null || world == null) return;
+        runMutation("Loading station freight…", () ->
+                PlayerFreightTransaction.load(world, vessel.id(), freight.lotId(), "desktop-user"));
+    }
+
+    private void deliverFreight() {
+        VesselChoice vessel = (VesselChoice) vesselChoice.getSelectedItem();
+        FreightChoice freight = (FreightChoice) freightChoice.getSelectedItem();
+        if (vessel == null || freight == null || world == null) return;
+        runMutation("Delivering station freight…", () ->
+                PlayerFreightTransaction.deliver(world, vessel.id(), freight.lotId(), "desktop-user"));
+    }
+
     private void runMutation(String message, CheckedAction action) {
         if (busy) return;
         setBusy(true, message);
@@ -228,9 +277,11 @@ public final class PlayerVesselTransitWindow extends JFrame {
             @Override protected void done() {
                 try {
                     Object result = get();
-                    operationStatus.setText(result instanceof PlayerVesselTransitTransaction.TransitResult transit
-                            ? "Transit resolved: " + transit.resolution().outcome()
-                            : "Player vessel operation committed");
+                    if (result instanceof PlayerVesselTransitTransaction.TransitResult transit) {
+                        operationStatus.setText("Transit resolved: " + transit.resolution().outcome());
+                    } else if (result instanceof PlayerFreightTransaction.FreightResult freight) {
+                        operationStatus.setText("Freight " + freight.status().toLowerCase() + ": " + freight.itemName());
+                    } else operationStatus.setText("Player vessel operation committed");
                 } catch (InterruptedException exception) {
                     Thread.currentThread().interrupt();
                     showFailure("Player vessel operation interrupted", exception);
@@ -252,6 +303,8 @@ public final class PlayerVesselTransitWindow extends JFrame {
             refreshControls();
             return;
         }
+        String preserveLot = selectedFreightLotId();
+        rebuildFreightChoices(preserveLot);
         StationLogisticsRegistry.PlayerVesselRow state = snapshot.playerVessels().stream()
                 .filter(row -> row.vesselId().equals(selected)).findFirst().orElse(null);
         StringBuilder text = new StringBuilder();
@@ -264,7 +317,7 @@ public final class PlayerVesselTransitWindow extends JFrame {
                     + (state.destinationLocationName() == null ? "" : " → " + state.destinationLocationName()));
             text.append(state.displayName()).append(" · ").append(state.status()).append('\n')
                     .append("Hull ").append(state.hull()).append("% · Supplies ").append(state.supplies())
-                    .append(" · Cargo ").append(state.cargo()).append('\n')
+                    .append(" · Cargo ").append(state.cargo()).append("/100\n")
                     .append("Current: ").append(state.currentLocationName()).append('\n')
                     .append("Destination: ").append(blank(state.destinationLocationName())).append('\n')
                     .append("Route: ").append(state.routeProgress()).append('/').append(state.routeTicksRequired())
@@ -273,6 +326,20 @@ public final class PlayerVesselTransitWindow extends JFrame {
                     .append("Crew/Nav/Eng/Combat: ").append(state.crewQuality()).append('/')
                     .append(state.navigation()).append('/').append(state.engineering()).append('/')
                     .append(state.combat()).append("\n\n");
+
+            text.append("Freight\n");
+            boolean freightFound = false;
+            for (StationLogisticsRegistry.FreightRow lot : snapshot.freight()) {
+                if (!selected.equals(lot.playerVesselId())) continue;
+                freightFound = true;
+                text.append(lot.status()).append(" · ").append(lot.itemName()).append(" x")
+                        .append(lot.quantity()).append(" · ").append(blank(lot.sourceStationName()))
+                        .append(" → ").append(blank(lot.destinationStationName())).append(" · ")
+                        .append(lot.lotId()).append('\n');
+            }
+            if (!freightFound) text.append("No freight assigned to this vessel.\n");
+            text.append('\n');
+
             for (StationLogisticsRegistry.PlayerLogRow log : snapshot.playerLogs()) {
                 if (!log.vesselId().equals(selected)) continue;
                 text.append('[').append(log.canonicalTime()).append(" · tick ").append(log.tickSequence())
@@ -303,6 +370,11 @@ public final class PlayerVesselTransitWindow extends JFrame {
         return selected == null ? null : selected.id();
     }
 
+    private String selectedFreightLotId() {
+        FreightChoice selected = (FreightChoice) freightChoice.getSelectedItem();
+        return selected == null ? null : selected.lotId();
+    }
+
     private void setBusy(boolean value, String message) {
         busy = value;
         operationStatus.setText(message);
@@ -314,6 +386,7 @@ public final class PlayerVesselTransitWindow extends JFrame {
         UUID selected = selectedVesselId();
         StationLogisticsRegistry.PlayerVesselRow state = logistics == null || selected == null ? null
                 : logistics.playerVessels().stream().filter(row -> row.vesselId().equals(selected)).findFirst().orElse(null);
+        FreightChoice freight = (FreightChoice) freightChoice.getSelectedItem();
         openWorldButton.setEnabled(!busy);
         refreshButton.setEnabled(!busy && world != null);
         vesselChoice.setEnabled(!busy && world != null);
@@ -325,6 +398,11 @@ public final class PlayerVesselTransitWindow extends JFrame {
         planButton.setEnabled(destinationChoice.isEnabled());
         resolveButton.setEnabled(ready && state != null && state.status().equals("IN_TRANSIT"));
         dockButton.setEnabled(ready && state != null && state.status().equals("ARRIVED"));
+        freightChoice.setEnabled(ready && state != null && state.status().equals("DOCKED"));
+        loadFreightButton.setEnabled(ready && state != null && state.status().equals("DOCKED")
+                && freight != null && freight.status().equals("READY") && !freight.assigned());
+        deliverFreightButton.setEnabled(ready && state != null && state.status().equals("DOCKED")
+                && freight != null && freight.status().equals("IN_TRANSIT") && freight.assigned());
     }
 
     private void showFailure(String title, Throwable throwable) {
@@ -353,6 +431,13 @@ public final class PlayerVesselTransitWindow extends JFrame {
     private record LocationChoice(UUID id, String name, int ring, int level, boolean station) {
         @Override public String toString() {
             return name + " · ring " + ring + " · level " + level + (station ? " · station" : "");
+        }
+    }
+    private record FreightChoice(String lotId, String status, String itemName, int quantity,
+                                 String source, String destination, boolean assigned) {
+        @Override public String toString() {
+            return status + " · " + itemName + " x" + quantity + " · " + blank(source) + " → "
+                    + blank(destination);
         }
     }
     private record Loaded(WorldVesselRegistry.RegistrySnapshot vessels,
