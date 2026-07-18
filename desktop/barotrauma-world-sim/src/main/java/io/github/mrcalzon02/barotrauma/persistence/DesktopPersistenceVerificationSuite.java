@@ -1,6 +1,8 @@
 package io.github.mrcalzon02.barotrauma.persistence;
 
-/** Runs the complete dependency-ordered desktop persistence verification chain. */
+import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock;
+
+/** Runs the complete dependency-ordered desktop persistence and clock verification chain. */
 public final class DesktopPersistenceVerificationSuite {
 
     private DesktopPersistenceVerificationSuite() { }
@@ -10,12 +12,13 @@ public final class DesktopPersistenceVerificationSuite {
         AcceptedImportTransaction.verifyContract();
         VesselSnapshotTransaction.verifyContract();
         WorldMapRegistry.verifyContract();
+        DeterministicSimulationClock.verifyContract();
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma desktop persistence contracts passed.");
+            System.out.println("Complete Barotrauma desktop persistence and deterministic clock contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
