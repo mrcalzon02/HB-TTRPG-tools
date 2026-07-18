@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs donor assets, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet recovery, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor assets, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -65,7 +65,7 @@ tasks.register<JavaExec>("runWebWorldImport") {
 
 tasks.register<JavaExec>("runWorldRegistry") {
     group = "application"
-    description = "Runs the live Europa world map with passive station, NPC, mission, research, and encounter simulation controls."
+    description = "Runs the live Europa world map with passive station, NPC, mission, research, encounter, and response-transit simulation controls."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow")
 }
@@ -86,7 +86,7 @@ tasks.register<JavaExec>("runCivilizationFrontier") {
 
 tasks.register<JavaExec>("runNaturalWorld") {
     group = "application"
-    description = "Runs the live ecology, geology, finite resources, extraction ledger, renewable recovery, and fleet-response console."
+    description = "Runs ecology, geology, finite resources, extraction, renewable recovery, fleet-response phases, transit legs, towing, and linked hazards."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.nature.NaturalWorldAndFleetWindow")
 }
