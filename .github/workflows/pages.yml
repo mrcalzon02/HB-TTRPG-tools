@@ -69,7 +69,8 @@ jobs:
         run: node scripts/validate-exo-vessel-damage.mjs
 
       - name: Validate phased EXO vessel system roadmap
-        run: node scripts/validate-exo-vessel-roadmap.mjs
+        # Legacy guarantees remain executed inside V2: node scripts/validate-exo-vessel-roadmap.mjs
+        run: node scripts/validate-exo-vessel-roadmap-v2.mjs
 
       - name: Check Barotrauma JavaScript
         shell: bash
