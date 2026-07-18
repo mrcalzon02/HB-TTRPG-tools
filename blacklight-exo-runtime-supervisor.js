@@ -12,14 +12,15 @@
     const head=document.createElement('div');head.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px';
     const title=document.createElement('strong');title.textContent='EXO Runtime Supervisor';
     badge=document.createElement('span');badge.textContent='healthy';badge.style.cssText='font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fd2a8';
-    const controls=document.createElement('div');controls.style.cssText='display:flex;gap:6px;margin-top:9px';
+    const controls=document.createElement('div');controls.style.cssText='display:flex;flex-wrap:wrap;gap:6px;margin-top:9px';
     const copy=document.createElement('button');copy.type='button';copy.textContent='Copy diagnostics';
+    const health=document.createElement('a');health.href='blacklight-exo-deployment-health.html';health.target='_blank';health.rel='noopener';health.textContent='Deployment health';
     const dismiss=document.createElement('button');dismiss.type='button';dismiss.textContent='Dismiss';
-    for(const button of[copy,dismiss])button.style.cssText='border:1px solid rgba(217,168,79,.35);border-radius:7px;background:#111820;color:#e4dccf;padding:5px 8px;cursor:pointer';
+    for(const control of[copy,health,dismiss])control.style.cssText='border:1px solid rgba(217,168,79,.35);border-radius:7px;background:#111820;color:#e4dccf;padding:5px 8px;cursor:pointer;text-decoration:none';
     copy.addEventListener('click',async()=>{const report=JSON.stringify(api.report(),null,2);try{await navigator.clipboard.writeText(report);copy.textContent='Copied';}catch(_){const area=document.createElement('textarea');area.value=report;document.body.append(area);area.select();document.execCommand?.('copy');area.remove();copy.textContent='Copied';}});
     dismiss.addEventListener('click',()=>{panel.hidden=true;});
     list=document.createElement('ol');list.style.cssText='margin:10px 0 0;padding-left:22px';
-    head.append(title,badge);controls.append(copy,dismiss);panel.append(head,controls,list);document.body.append(panel);return panel;
+    head.append(title,badge);controls.append(copy,health,dismiss);panel.append(head,controls,list);document.body.append(panel);return panel;
   }
   function persist(){try{sessionStorage.setItem('blacklight-exo-runtime-diagnostics',JSON.stringify(api.report()));}catch(_){}}
   function render(){ensurePanel();if(!panel)return;list.replaceChildren();for(const failure of failures.slice(-8)){const item=document.createElement('li');item.style.cssText='margin:7px 0;overflow-wrap:anywhere;color:#e7b1a7';item.textContent=`${failure.phase}: ${failure.message}`;list.append(item);}badge.textContent=failures.length?`${failures.length} failure${failures.length===1?'':'s'}`:'healthy';badge.style.color=failures.length?'#e5a095':'#8fd2a8';panel.hidden=!failures.length;persist();}
