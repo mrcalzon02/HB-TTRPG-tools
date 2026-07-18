@@ -1,0 +1,9 @@
+{
+  "recordType": "blacklightExoDeploymentHealth",
+  "schemaVersion": "1.0.0",
+  "status": "source-placeholder",
+  "commit": "source-tree",
+  "builtAt": null,
+  "workflow": ".github/workflows/pages.yml",
+  "note": "The Pages workflow replaces this placeholder inside the deployed artifact with the exact commit SHA and build timestamp."
+}
