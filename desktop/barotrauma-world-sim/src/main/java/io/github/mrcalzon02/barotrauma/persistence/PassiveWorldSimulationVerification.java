@@ -71,6 +71,10 @@ public final class PassiveWorldSimulationVerification {
                         "Passive mission creation or assignment failed.");
                 require(count(paths, "station_simulation_state") == 4,
                         "Passive station state initialization failed.");
+                require(count(paths, "station_civilization_state") == 4,
+                        "Passive civilization state initialization failed.");
+                require(count(paths, "station_consumption_log") == 4,
+                        "First passive tick did not consume station supplies.");
                 require(count(paths, "npc_vessel") >= 4, "Passive NPC vessel initialization failed.");
                 require(count(paths, "npc_voyage_log") > 0, "Passive voyage assignment/departure logs are missing.");
 
@@ -83,8 +87,10 @@ public final class PassiveWorldSimulationVerification {
                 require(count(paths, "world_mission") > 0 && count(paths, "station_research_project") == 4,
                         "Mission or research workload persistence failed.");
                 require(count(paths, "station_inventory") == 32,
-                        "Schema-007 station inventory did not follow the passive cycle.");
-                require(schemaVersion(paths) == 7, "Passive fixture was not stored under schema 007.");
+                        "Schema-008 station inventory did not follow the passive cycle.");
+                require(count(paths, "station_consumption_log") == 8,
+                        "Second passive tick did not append station consumption history.");
+                require(schemaVersion(paths) == 8, "Passive fixture was not stored under schema 008.");
             }
 
             long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
@@ -117,7 +123,8 @@ public final class PassiveWorldSimulationVerification {
     }
 
     private static long count(WorldPaths paths, String table) throws Exception {
-        if (!java.util.Set.of("station_simulation_state", "npc_vessel", "npc_voyage_log",
+        if (!java.util.Set.of("station_simulation_state", "station_civilization_state",
+                "station_consumption_log", "npc_vessel", "npc_voyage_log",
                 "world_encounter", "world_mission", "station_research_project", "station_inventory").contains(table)) {
             throw new IllegalArgumentException("Unsupported passive verification table.");
         }
@@ -142,6 +149,6 @@ public final class PassiveWorldSimulationVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma passive world simulation and automatic scheduler contracts passed.");
+        System.out.println("Barotrauma passive world simulation, station consumption, and automatic scheduler contracts passed.");
     }
 }
