@@ -36,9 +36,9 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Creates temporary SQLite worlds and verifies planning, duplicate, accepted-import, and rollback contracts."
+    description = "Creates temporary SQLite worlds and verifies planning, accepted imports, rollback, and registry queries."
     classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.AcceptedImportTransaction")
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.WorldVesselRegistry")
     args("--verify")
 }
 
@@ -47,4 +47,11 @@ tasks.register<JavaExec>("runImportApproval") {
     description = "Runs the inspection-first Barotrauma world import approval window."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow")
+}
+
+tasks.register<JavaExec>("runVesselRegistry") {
+    group = "application"
+    description = "Runs the read-only Barotrauma submarine, vessel, and snapshot registry."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow")
 }
