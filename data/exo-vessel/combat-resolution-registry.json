@@ -1,0 +1,25 @@
+{
+  "registryId":"blacklight-exo-vessel-combat-resolution",
+  "registryVersion":"1.0.0",
+  "phase":"VESSEL-08",
+  "authority":"Charles",
+  "facings":["FORE","AFT","LEFT","RIGHT","UP","DOWN"],
+  "interceptOutcomes":["NO_SOLUTION","INTERCEPTED","MISS","NEAR_MISS","IMPACT"],
+  "engagementBands":["pointDefense","practical","harassment","theoretical"],
+  "localEffectTypes":["PENETRATION","ABLATION","HEATING","FRAGMENTATION","RADIATION","IMPULSE"],
+  "referenceAuthority":{
+    "voxelLayout":"VESSEL-04_INTACT_PLACEMENT_AND_DIRECTIONAL_SURFACE_AUTHORITY",
+    "conditionHistory":"VESSEL-05_IMMUTABLE_PRE_IMPACT_AND_SURVIVING_GRAPH_AUTHORITY",
+    "combatGeometry":"VESSEL-06_TRACK_AND_TARGET_MANEUVER_AUTHORITY",
+    "weaponEngagement":"VESSEL-07_INSTALLED_WEAPON_AND_ENGAGEMENT_AUTHORITY"
+  },
+  "statePolicy":{
+    "preImpactConditionMutable":false,
+    "postImpactStateSeparate":true,
+    "globalHullPool":false,
+    "destroyedModulesRemainUsable":false,
+    "detachableModulesLeaveFunctionalGraphs":true
+  },
+  "repairableFaults":["IMPACT_WITHOUT_PLACEMENT","MISS_WITH_DAMAGE","DESTROYED_MODULE_ACTIVE","SEVERED_ROUTE_ACTIVE","RESIDUAL_MASS_INCREASE","REFERENCE_CONDITION_MUTATED"],
+  "deferredSystems":{"gameplayStatisticsAndActions":"VESSEL-09","campaignPersistence":"VESSEL-10"}
+}
