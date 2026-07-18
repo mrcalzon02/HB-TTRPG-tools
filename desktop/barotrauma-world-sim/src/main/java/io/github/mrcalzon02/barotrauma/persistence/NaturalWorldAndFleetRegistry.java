@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Read-only evidence registry for fleet recovery, ecology, geology, resources, and natural events. */
+/** Read-only evidence registry for fleet recovery, ecology, geology, resources, extraction, and natural events. */
 public final class NaturalWorldAndFleetRegistry {
     private NaturalWorldAndFleetRegistry() { }
 
@@ -23,7 +23,7 @@ public final class NaturalWorldAndFleetRegistry {
             configureReadOnly(connection);
             verifySchema(connection);
             return new Snapshot(summary(connection), ecology(connection), geology(connection), resources(connection),
-                    events(connection), operations(connection), responseLogs(connection));
+                    extractions(connection), events(connection), operations(connection), responseLogs(connection));
         }
     }
 
@@ -33,6 +33,11 @@ public final class NaturalWorldAndFleetRegistry {
                 scalar(connection, "SELECT COUNT(*) FROM location_ecology_state WHERE migration_pressure>=30"),
                 scalar(connection, "SELECT COUNT(*) FROM location_geology_state WHERE hydrothermal_activity>=65 OR cave_instability>=65"),
                 count(connection, "natural_resource_site"),
+                scalar(connection, "SELECT COUNT(*) FROM natural_resource_site WHERE remaining_units>0 AND status IN ('EXPOSED','SURVEYED','HARVESTING')"),
+                scalar(connection, "SELECT COUNT(*) FROM natural_resource_site WHERE status='DORMANT'"),
+                scalar(connection, "SELECT COUNT(*) FROM natural_resource_site WHERE status='DEPLETED'"),
+                count(connection, "resource_extraction_batch"),
+                scalar(connection, "SELECT COALESCE(SUM(quantity),0) FROM resource_extraction_batch"),
                 scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status IN ('AVAILABLE','ACTIVE')"),
                 scalar(connection, "SELECT COUNT(*) FROM fleet_response_operation WHERE status='COMPLETE'"));
     }
@@ -70,14 +75,42 @@ public final class NaturalWorldAndFleetRegistry {
 
     private static List<ResourceRow> resources(Connection connection) throws SQLException {
         List<ResourceRow> rows = new ArrayList<>();
-        String sql = "SELECT r.site_id,r.resource_type,r.richness,r.accessibility,r.renewable,r.status,r.discovered_tick,"
-                + "r.last_tick,l.display_name FROM natural_resource_site r JOIN world_location l ON l.location_id=r.location_id "
-                + "ORDER BY r.status,r.richness DESC,r.discovered_tick DESC";
+        String sql = "SELECT r.site_id,r.resource_type,r.richness,r.accessibility,r.renewable,r.status,r.remaining_units,"
+                + "r.carrying_capacity,r.harvest_rate,r.recovery_progress,r.dormant_until_tick,r.extraction_count,"
+                + "r.last_harvest_tick,r.discovered_tick,r.last_tick,l.display_name FROM natural_resource_site r "
+                + "JOIN world_location l ON l.location_id=r.location_id ORDER BY CASE r.status WHEN 'HARVESTING' THEN 0 "
+                + "WHEN 'SURVEYED' THEN 1 WHEN 'EXPOSED' THEN 2 WHEN 'DORMANT' THEN 3 ELSE 4 END,r.remaining_units DESC,r.richness DESC";
         try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
             while (result.next()) rows.add(new ResourceRow(result.getString("site_id"), result.getString("display_name"),
                     result.getString("resource_type"), result.getInt("richness"), result.getInt("accessibility"),
-                    result.getInt("renewable") == 1, result.getString("status"), result.getLong("discovered_tick"),
-                    result.getLong("last_tick")));
+                    result.getInt("renewable") == 1, result.getString("status"), result.getInt("remaining_units"),
+                    result.getInt("carrying_capacity"), result.getInt("harvest_rate"),
+                    result.getInt("recovery_progress"), nullableLong(result, "dormant_until_tick"),
+                    result.getInt("extraction_count"), nullableLong(result, "last_harvest_tick"),
+                    result.getLong("discovered_tick"), result.getLong("last_tick")));
+        }
+        return List.copyOf(rows);
+    }
+
+    private static List<ExtractionRow> extractions(Connection connection) throws SQLException {
+        List<ExtractionRow> rows = new ArrayList<>();
+        String sql = "SELECT b.extraction_id,b.tick_sequence,b.resource_type,b.item_id,b.quantity,b.remaining_before,"
+                + "b.remaining_after,b.richness_before,b.richness_after,b.renewable,b.ecological_impact,"
+                + "b.geological_impact,b.credits_value,b.site_id,b.mission_id,b.freight_lot_id,"
+                + "l.display_name location_name,s.display_name station_name,v.display_name vessel_name "
+                + "FROM resource_extraction_batch b JOIN natural_resource_site r ON r.site_id=b.site_id "
+                + "JOIN world_location l ON l.location_id=r.location_id LEFT JOIN world_station s ON s.station_id=b.station_id "
+                + "LEFT JOIN npc_vessel v ON v.npc_vessel_id=b.npc_vessel_id ORDER BY b.tick_sequence DESC,b.extraction_id DESC LIMIT 500";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new ExtractionRow(result.getString("extraction_id"),
+                    result.getLong("tick_sequence"), result.getString("location_name"),
+                    result.getString("station_name"), result.getString("vessel_name"),
+                    result.getString("resource_type"), result.getString("item_id"), result.getInt("quantity"),
+                    result.getInt("remaining_before"), result.getInt("remaining_after"),
+                    result.getInt("richness_before"), result.getInt("richness_after"),
+                    result.getInt("renewable") == 1, result.getInt("ecological_impact"),
+                    result.getInt("geological_impact"), result.getInt("credits_value"),
+                    result.getString("site_id"), result.getString("mission_id"), result.getString("freight_lot_id")));
         }
         return List.copyOf(rows);
     }
@@ -134,7 +167,7 @@ public final class NaturalWorldAndFleetRegistry {
     }
 
     private static int count(Connection connection, String table) throws SQLException {
-        if (!List.of("location_ecology_state", "natural_resource_site").contains(table)) {
+        if (!List.of("location_ecology_state", "natural_resource_site", "resource_extraction_batch").contains(table)) {
             throw new IllegalArgumentException("Unsupported natural-world registry table.");
         }
         return scalar(connection, "SELECT COUNT(*) FROM " + table);
@@ -173,12 +206,14 @@ public final class NaturalWorldAndFleetRegistry {
     }
 
     public record Snapshot(Summary summary, List<EcologyRow> ecology, List<GeologyRow> geology,
-                           List<ResourceRow> resources, List<EventRow> events,
-                           List<OperationRow> operations, List<ResponseLogRow> responseLogs) {
+                           List<ResourceRow> resources, List<ExtractionRow> extractions,
+                           List<EventRow> events, List<OperationRow> operations,
+                           List<ResponseLogRow> responseLogs) {
         public Snapshot {
             ecology = List.copyOf(ecology);
             geology = List.copyOf(geology);
             resources = List.copyOf(resources);
+            extractions = List.copyOf(extractions);
             events = List.copyOf(events);
             operations = List.copyOf(operations);
             responseLogs = List.copyOf(responseLogs);
@@ -186,8 +221,9 @@ public final class NaturalWorldAndFleetRegistry {
     }
 
     public record Summary(int locations, int activeBlooms, int predatorMigrationZones,
-                          int geologicalHotspots, int resourceSites, int activeResponses,
-                          int completedResponses) { }
+                          int geologicalHotspots, int resourceSites, int harvestableSites,
+                          int dormantSites, int depletedSites, int extractionBatches,
+                          int extractedUnits, int activeResponses, int completedResponses) { }
 
     public record EcologyRow(String locationId, String locationName, int ring, int level,
                              int primaryProducers, int algalBloom, int herbivores, int predators,
@@ -200,7 +236,16 @@ public final class NaturalWorldAndFleetRegistry {
 
     public record ResourceRow(String siteId, String locationName, String resourceType,
                               int richness, int accessibility, boolean renewable, String status,
-                              long discoveredTick, long lastTick) { }
+                              int remainingUnits, int carryingCapacity, int harvestRate,
+                              int recoveryProgress, Long dormantUntilTick, int extractionCount,
+                              Long lastHarvestTick, long discoveredTick, long lastTick) { }
+
+    public record ExtractionRow(String extractionId, long tickSequence, String locationName,
+                                String stationName, String vesselName, String resourceType,
+                                String itemId, int quantity, int remainingBefore, int remainingAfter,
+                                int richnessBefore, int richnessAfter, boolean renewable,
+                                int ecologicalImpact, int geologicalImpact, int creditsValue,
+                                String siteId, String missionId, String freightLotId) { }
 
     public record EventRow(String eventId, long tickSequence, String locationName,
                            String eventType, int severity, String summary) { }
