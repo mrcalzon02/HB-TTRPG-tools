@@ -15,6 +15,8 @@ const workflow=read('.github/workflows/pages.yml');
 const bootstrap=read('blacklight-exo-system-bootstrap.js');
 const jpl=read('blacklight-exo-jpl-moon-catalog-loader.js');
 const sectorRuntime=read('blacklight-exo-stellar-sector.js');
+const archiveStore=read('blacklight-exo-sector-archive-store.js');
+const sectorManifest=JSON.parse(read('blacklight-exo-stellar-sector-example.json'));
 const supervisor=read('blacklight-exo-runtime-supervisor.js');
 const sectorSupervision=read('blacklight-exo-stellar-sector-supervision.js');
 
@@ -24,8 +26,8 @@ for(const id of['exo-health-run','exo-health-copy','exo-health-commit','exo-heal
 
 const solarOrder=['blacklight-exo-source-authority.js','blacklight-exo-fixed-system-data.js','blacklight-exo-jpl-moon-catalog-loader.js','blacklight-exo-system-bootstrap.js'];
 for(let index=1;index<solarOrder.length;index++)if(solarHtml.indexOf(solarOrder[index-1])>=solarHtml.indexOf(solarOrder[index]))fail('Solar page script order is invalid.');
-const sectorOrder=['blacklight-exo-runtime-supervisor.js','blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-supervision.js','blacklight-exo-stellar-sector.js'];
-for(let index=1;index<sectorOrder.length;index++)if(sectorHtml.indexOf(sectorOrder[index-1])<0||sectorHtml.indexOf(sectorOrder[index-1])>=sectorHtml.indexOf(sectorOrder[index]))fail('Supervised sector page script order is invalid.');
+const sectorOrder=['blacklight-exo-runtime-supervisor.js','blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-supervision.js','blacklight-exo-stellar-sector.js','blacklight-exo-sector-archive-store.js'];
+for(let index=1;index<sectorOrder.length;index++)if(sectorHtml.indexOf(sectorOrder[index-1])<0||sectorHtml.indexOf(sectorOrder[index-1])>=sectorHtml.indexOf(sectorOrder[index]))fail('Supervised sector and archive script order is invalid.');
 
 const dynamicScripts=[...new Set([...bootstrap.matchAll(/['"](blacklight-exo-[^'"]+\.js)['"]/g)].map(match=>match[1]))];
 for(const script of dynamicScripts)if(!exists(script))fail(`Incremental bootstrap references missing script ${script}.`);
@@ -37,6 +39,8 @@ if(!supervisor.includes('unhandledrejection')||!supervisor.includes('blacklightE
 if(!supervisor.includes('blacklight-exo-deployment-health.html'))fail('Runtime supervisor does not link to deployed health verification.');
 if(!sectorSupervision.includes('blacklight:exo-sector-generated')||!sectorSupervision.includes('12 seconds'))fail('Sector startup is not supervised through successful generation and timeout failure.');
 if(!sectorRuntime.includes('requestIdleCallback')||!sectorRuntime.includes('IntersectionObserver')||!sectorRuntime.includes('loadSnapshot'))fail('Sector runtime lacks incremental rendering or archive replay.');
+for(const signature of['indexedDB','FALLBACK_KEY','LEGACY_KEY','validateEnvelope','hash mismatch','Import Sector Archive','Deterministic replay mismatch'])if(!archiveStore.includes(signature))fail(`Durable sector archive store lacks ${signature}.`);
+if(!sectorManifest.modules?.includes('blacklight-exo-sector-archive-store.js')||!sectorManifest.archiveStorage?.includes('IndexedDB'))fail('Sector manifest does not pin durable archive storage.');
 
 for(const signature of['artifacts/exo-deployment-health.json','verifySolar','verifySector','BlacklightExoRuntimeSupervisor','BlacklightExoGetActiveSector','BlacklightExoGetActiveSystem'])if(!healthRuntime.includes(signature))fail(`Deployment health runtime lacks ${signature}.`);
 if(healthManifest.recordType!=='blacklightExoDeploymentHealth'||healthManifest.schemaVersion!=='1.0.0')fail('Deployment health manifest placeholder has an invalid contract.');
@@ -57,4 +61,4 @@ const summary=await fallbackContext.BlacklightExoMoonCatalogReady;
 if(summary.status!=='error'||!fixedSystems.error)fail('Offline satellite catalogue did not degrade to the fixed-system fallback.');
 if(!failures.some(item=>item.phase==='satellite-catalogue'))fail('Offline catalogue failure was not reported to the browser supervisor.');
 
-console.log('EXO browser contract and deployment health validation passed.');
+console.log('EXO browser, deployment health, and durable archive validation passed.');
