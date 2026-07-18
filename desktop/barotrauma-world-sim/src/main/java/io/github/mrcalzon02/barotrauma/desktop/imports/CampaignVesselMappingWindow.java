@@ -11,7 +11,6 @@ import io.github.mrcalzon02.barotrauma.persistence.CampaignArchiveImportTransact
 import io.github.mrcalzon02.barotrauma.persistence.CampaignArchiveImportTransaction.CampaignMapping;
 import io.github.mrcalzon02.barotrauma.persistence.CampaignArchiveImportTransaction.MappingMode;
 import io.github.mrcalzon02.barotrauma.persistence.SqliteWorldStore;
-import io.github.mrcalzon02.barotrauma.persistence.SqliteWorldStore.ArtifactAction;
 import io.github.mrcalzon02.barotrauma.persistence.SqliteWorldStore.ImportPlan;
 import io.github.mrcalzon02.barotrauma.persistence.VesselSnapshotTransaction.NonNewerPolicy;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts;
@@ -45,7 +44,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -105,7 +106,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
         detail.setRows(8);
         detail.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         detail.setText("Open a desktop world, then inspect an official campaign .save archive.\n"
-                + "Every submarine payload defaults to CREATE_NEW_VESSEL until explicitly changed.\n");
+                + "Each row defaults to CREATE_NEW_VESSEL, but every row must be reviewed and applied before commit.\n");
 
         JPanel center = new JPanel(new BorderLayout(8, 8));
         center.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
@@ -121,12 +122,10 @@ public final class CampaignVesselMappingWindow extends JFrame {
         mappingControls.add(new JLabel("Non-newer policy:"));
         mappingControls.add(policyChoice);
         mappingControls.add(applyButton);
-
         JPanel commandControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         commandControls.add(openWorldButton);
         commandControls.add(inspectButton);
         commandControls.add(commitButton);
-
         JPanel footer = new JPanel(new BorderLayout(8, 8));
         footer.setBorder(BorderFactory.createEmptyBorder(0, 12, 12, 12));
         footer.add(mappingControls, BorderLayout.NORTH);
@@ -139,7 +138,6 @@ public final class CampaignVesselMappingWindow extends JFrame {
         modeChoice.setEnabled(false);
         vesselChoice.setEnabled(false);
         policyChoice.setEnabled(false);
-
         openWorldButton.addActionListener(event -> openWorld());
         inspectButton.addActionListener(event -> chooseAndInspect());
         applyButton.addActionListener(event -> applySelectedMapping());
@@ -154,11 +152,8 @@ public final class CampaignVesselMappingWindow extends JFrame {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
-        try {
-            session.activate(WorldStorageContracts.openWorld(chooser.getSelectedFile().toPath()));
-        } catch (Exception exception) {
-            showFailure("World open failed", exception);
-        }
+        try { session.activate(WorldStorageContracts.openWorld(chooser.getSelectedFile().toPath())); }
+        catch (Exception exception) { showFailure("World open failed", exception); }
     }
 
     private void activateSharedWorld(WorldPaths sharedWorld) {
@@ -175,7 +170,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
             return;
         }
         lastDirectory = sharedWorld.root().getParent();
-        worldStatus.setText("World: " + sharedWorld.root());
+        worldStatus.setText("Shared world: " + sharedWorld.root());
         mappingStatus.setText("World ready for campaign mapping");
         inspectButton.setEnabled(true);
         detail.setText("Shared desktop world active:\n" + sharedWorld.root()
@@ -200,10 +195,8 @@ public final class CampaignVesselMappingWindow extends JFrame {
         pending = null;
         tableModel.setRowCount(0);
         detail.setText("Inspecting " + source + "\nNo vessel state will change during this step.\n");
-
         new SwingWorker<PendingCampaign, Void>() {
-            @Override
-            protected PendingCampaign doInBackground() throws Exception {
+            @Override protected PendingCampaign doInBackground() throws Exception {
                 Inspection inspection = BarotraumaSaveInspector.inspect(source);
                 if (!(inspection instanceof CampaignInspection campaign)) {
                     throw new IOException("Campaign mapping requires an official .save archive.");
@@ -212,8 +205,8 @@ public final class CampaignVesselMappingWindow extends JFrame {
                 try (SqliteWorldStore store = SqliteWorldStore.open(selectedWorld)) {
                     plan = store.inspectAndPlan(campaign);
                 }
-                if (plan.artifactAction() == ArtifactAction.SKIP_EXACT_ARTIFACT || plan.artifact().importedAt() != null) {
-                    throw new IOException("This exact campaign source has already been inspected or imported.");
+                if (plan.artifact().importedAt() != null) {
+                    throw new IOException("This exact campaign source has already been imported.");
                 }
                 RegistrySnapshot registry = WorldVesselRegistry.load(selectedWorld);
                 List<RowMapping> rows = new ArrayList<>();
@@ -223,17 +216,15 @@ public final class CampaignVesselMappingWindow extends JFrame {
                 if (rows.isEmpty()) throw new IOException("The campaign archive contains no submarine payloads.");
                 return new PendingCampaign(source, campaign, plan, registry, rows);
             }
-
-            @Override
-            protected void done() {
+            @Override protected void done() {
                 try {
                     PendingCampaign loaded = get();
                     if (!selectedWorld.equals(world)) return;
                     pending = loaded;
                     populateRows();
                     table.setRowSelectionInterval(0, 0);
-                    mappingStatus.setText("Mapped 0/" + pending.rows().size() + " rows explicitly; defaults create new vessels");
-                    operationStatus.setText("Campaign mapping ready");
+                    mappingStatus.setText("Reviewed 0/" + pending.rows().size() + " rows");
+                    operationStatus.setText("Review and apply every row mapping");
                     validateCommit();
                 } catch (InterruptedException exception) {
                     Thread.currentThread().interrupt();
@@ -254,12 +245,10 @@ public final class CampaignVesselMappingWindow extends JFrame {
             tableModel.addRow(new Object[]{
                     row.ordinal() + 1,
                     blank(row.submarine().name(), "Unnamed submarine"),
-                    blank(row.submarine().submarineClass(), ""),
-                    nullable(row.submarine().tier()),
-                    row.mode(),
+                    blank(row.submarine().submarineClass(), ""), nullable(row.submarine().tier()),
+                    row.mode() + (row.explicitlyReviewed() ? "" : " · REVIEW REQUIRED"),
                     row.targetVesselId() == null ? "" : targetLabel(row.targetVesselId()),
-                    row.policy(),
-                    chronology(row),
+                    row.policy(), chronology(row),
                     row.submarine().definitionIdentity().canonicalXmlDigest().value()
             });
         }
@@ -292,8 +281,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
             return;
         }
         for (VesselRow vessel : pending.registry().vessels()) {
-            if (vessel.canonicalDefinitionDigest().equals(
-                    row.submarine().definitionIdentity().canonicalXmlDigest())) {
+            if (vessel.canonicalDefinitionDigest().equals(row.submarine().definitionIdentity().canonicalXmlDigest())) {
                 vesselChoice.addItem(new VesselChoice(vessel));
             }
         }
@@ -309,8 +297,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
         if (mode == MappingMode.ATTACH_EXISTING_VESSEL) {
             VesselChoice selected = (VesselChoice) vesselChoice.getSelectedItem();
             if (selected == null) {
-                JOptionPane.showMessageDialog(this,
-                        "No structurally matching physical vessel is selected for this row.",
+                JOptionPane.showMessageDialog(this, "No structurally matching physical vessel is selected for this row.",
                         "Mapping incomplete", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -319,30 +306,34 @@ public final class CampaignVesselMappingWindow extends JFrame {
         NonNewerPolicy policy = (NonNewerPolicy) policyChoice.getSelectedItem();
         row.apply(mode, target, policy == null ? NonNewerPolicy.REJECT : policy);
         populateRows();
-        table.setRowSelectionInterval(row.ordinal(), row.ordinal());
-        long explicit = pending.rows().stream().filter(RowMapping::explicitlyReviewed).count();
-        mappingStatus.setText("Mapped " + explicit + "/" + pending.rows().size()
-                + " rows explicitly; unreviewed rows still create new vessels");
+        int viewIndex = table.convertRowIndexToView(row.ordinal());
+        if (viewIndex >= 0) table.setRowSelectionInterval(viewIndex, viewIndex);
+        long reviewed = pending.rows().stream().filter(RowMapping::explicitlyReviewed).count();
+        mappingStatus.setText("Reviewed " + reviewed + "/" + pending.rows().size() + " rows");
         validateCommit();
     }
 
     private void validateCommit() {
         boolean valid = pending != null;
         String problem = null;
-        Set<UUID> usedTargets = new java.util.HashSet<>();
+        Set<UUID> usedTargets = new HashSet<>();
         if (pending != null) {
             for (RowMapping row : pending.rows()) {
+                if (!row.explicitlyReviewed()) {
+                    valid = false;
+                    problem = "Every campaign payload must be reviewed and applied before commit.";
+                    break;
+                }
                 if (row.mode() == MappingMode.ATTACH_EXISTING_VESSEL) {
                     VesselRow target = findVessel(row.targetVesselId());
                     if (target == null) { valid = false; problem = "An existing-vessel row has no target."; break; }
                     if (!usedTargets.add(target.vesselId())) {
                         valid = false; problem = "The same existing vessel is targeted more than once."; break;
                     }
-                    if (!target.canonicalDefinitionDigest().equals(
-                            row.submarine().definitionIdentity().canonicalXmlDigest())) {
+                    if (!target.canonicalDefinitionDigest().equals(row.submarine().definitionIdentity().canonicalXmlDigest())) {
                         valid = false; problem = "A target vessel no longer matches the source definition."; break;
                     }
-                    if (!isDemonstrablyNewer(row, target) && row.policy() != NonNewerPolicy.RETAIN_HISTORICAL) {
+                    if (!isDemonstrablyNewer(target) && row.policy() != NonNewerPolicy.RETAIN_HISTORICAL) {
                         valid = false; problem = "A non-newer existing-vessel row requires RETAIN_HISTORICAL."; break;
                     }
                 }
@@ -350,28 +341,24 @@ public final class CampaignVesselMappingWindow extends JFrame {
         }
         commitButton.setEnabled(valid);
         if (problem != null) operationStatus.setText(problem);
+        else if (valid) operationStatus.setText("All mappings reviewed; archive ready to commit");
     }
 
     private void commitMapping() {
         if (pending == null || !commitButton.isEnabled()) return;
-        int createCount = (int) pending.rows().stream()
-                .filter(row -> row.mode() == MappingMode.CREATE_NEW_VESSEL).count();
+        int createCount = (int) pending.rows().stream().filter(row -> row.mode() == MappingMode.CREATE_NEW_VESSEL).count();
         int attachCount = pending.rows().size() - createCount;
         int answer = JOptionPane.showConfirmDialog(this,
-                "Commit the complete campaign archive as one transaction?\n\n"
-                        + "Create new physical vessels: " + createCount + "\n"
-                        + "Attach to existing physical vessels: " + attachCount + "\n\n"
-                        + "Any invalid row will roll back the entire archive.",
-                "Commit campaign vessel mapping", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.WARNING_MESSAGE);
+                "Commit the complete campaign archive as one transaction?\n\nCreate new physical vessels: "
+                        + createCount + "\nAttach to existing physical vessels: " + attachCount
+                        + "\n\nAny invalid row will roll back the entire archive.",
+                "Commit campaign vessel mapping", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (answer != JOptionPane.OK_OPTION) return;
-
-        List<CampaignMapping> mappings = pending.rows().stream().map(this::toRequest).toList();
         ArchiveImportRequest request = new ArchiveImportRequest(pending.plan().artifactId(),
-                pending.plan().artifact().artifactIdentity().digest(), "desktop-user", mappings);
+                pending.plan().artifact().artifactIdentity().digest(), "desktop-user",
+                pending.rows().stream().map(this::toRequest).toList());
         WorldPaths selectedWorld = world;
         setBusy(true, "Committing complete campaign mapping…");
-
         new SwingWorker<ArchiveCommitResult, Void>() {
             @Override protected ArchiveCommitResult doInBackground() throws Exception {
                 return CampaignArchiveImportTransaction.commit(selectedWorld, request);
@@ -419,7 +406,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
         return "Older; historical approval required";
     }
 
-    private boolean isDemonstrablyNewer(RowMapping row, VesselRow target) {
+    private boolean isDemonstrablyNewer(VesselRow target) {
         if (target.currentSnapshotId() == null) return true;
         Instant incoming = pending.campaign().saveTime();
         Instant current = target.currentSnapshotSourceTimestamp();
@@ -428,16 +415,13 @@ public final class CampaignVesselMappingWindow extends JFrame {
 
     private void renderSelectedDetail(RowMapping row) {
         SubmarineInspection submarine = row.submarine();
-        detail.setText("Campaign source: " + pending.source() + "\n"
-                + "Save time: " + nullable(pending.campaign().saveTime()) + "\n"
-                + "Payload ordinal: " + (row.ordinal() + 1) + "\n"
-                + "Submarine: " + blank(submarine.name(), "Unnamed") + "\n"
-                + "Class / tier: " + blank(submarine.submarineClass(), "not declared") + " / "
-                + nullable(submarine.tier()) + "\n"
-                + "Canonical definition: " + submarine.definitionIdentity().canonicalXmlDigest().value() + "\n"
-                + "Snapshot identity: " + submarine.payloadIdentity().digest().value() + "\n"
-                + "Current mapping: " + row.mode() + "\n"
-                + "Chronology: " + chronology(row) + "\n");
+        detail.setText("Campaign source: " + pending.source() + "\nSave time: " + nullable(pending.campaign().saveTime())
+                + "\nPayload ordinal: " + (row.ordinal() + 1)
+                + "\nSubmarine: " + blank(submarine.name(), "Unnamed")
+                + "\nClass / tier: " + blank(submarine.submarineClass(), "not declared") + " / " + nullable(submarine.tier())
+                + "\nCanonical definition: " + submarine.definitionIdentity().canonicalXmlDigest().value()
+                + "\nSnapshot identity: " + submarine.payloadIdentity().digest().value()
+                + "\nCurrent mapping: " + row.mode() + "\nChronology: " + chronology(row) + "\n");
     }
 
     private String targetLabel(UUID vesselId) {
@@ -447,8 +431,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
 
     private VesselRow findVessel(UUID vesselId) {
         if (pending == null || vesselId == null) return null;
-        return pending.registry().vessels().stream().filter(vessel -> vessel.vesselId().equals(vesselId))
-                .findFirst().orElse(null);
+        return pending.registry().vessels().stream().filter(vessel -> vessel.vesselId().equals(vesselId)).findFirst().orElse(null);
     }
 
     private void selectVessel(UUID vesselId) {
@@ -464,8 +447,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
         if (pending == null) return null;
         int viewRow = table.getSelectedRow();
         if (viewRow < 0) return null;
-        int modelRow = table.convertRowIndexToModel(viewRow);
-        return pending.rows().get(modelRow);
+        return pending.rows().get(table.convertRowIndexToModel(viewRow));
     }
 
     private void setBusy(boolean busy, String message) {
@@ -488,8 +470,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
         commitButton.setEnabled(false);
         applyButton.setEnabled(false);
         operationStatus.setText(title);
-        detail.append("\n\n" + title + "\n" + throwable.getClass().getSimpleName() + ": "
-                + throwable.getMessage() + "\n");
+        detail.append("\n\n" + title + "\n" + throwable.getClass().getSimpleName() + ": " + throwable.getMessage() + "\n");
         JOptionPane.showMessageDialog(this, throwable.getMessage(), title, JOptionPane.ERROR_MESSAGE);
     }
 
@@ -502,28 +483,21 @@ public final class CampaignVesselMappingWindow extends JFrame {
     }
 
     private static String renderCommit(ArchiveCommitResult result) {
-        StringBuilder text = new StringBuilder("Campaign archive committed atomically\n")
-                .append("Committed at: ").append(result.committedAt()).append('\n')
-                .append("Definitions created / reused: ").append(result.definitionsCreated()).append(" / ")
-                .append(result.definitionsReused()).append('\n')
-                .append("New physical vessels: ").append(result.vesselsCreated()).append('\n')
-                .append("Snapshots promoted / historical / skipped: ").append(result.snapshotsPromoted())
-                .append(" / ").append(result.snapshotsHistorical()).append(" / ")
-                .append(result.snapshotsSkipped()).append('\n');
-        result.mappings().forEach(row -> text.append("  #").append(row.sourceOrdinal() + 1)
-                .append(" ").append(row.action()).append(" · ").append(row.displayName())
-                .append(" · vessel ").append(row.vesselId()).append(" · snapshot ").append(row.snapshotId())
-                .append('\n'));
+        StringBuilder text = new StringBuilder("Campaign archive committed atomically\nCommitted at: ")
+                .append(result.committedAt()).append("\nDefinitions created / reused: ")
+                .append(result.definitionsCreated()).append(" / ").append(result.definitionsReused())
+                .append("\nNew physical vessels: ").append(result.vesselsCreated())
+                .append("\nSnapshots promoted / historical / skipped: ").append(result.snapshotsPromoted())
+                .append(" / ").append(result.snapshotsHistorical()).append(" / ").append(result.snapshotsSkipped()).append('\n');
+        result.mappings().forEach(row -> text.append("  #").append(row.sourceOrdinal() + 1).append(" ")
+                .append(row.action()).append(" · ").append(row.displayName()).append(" · vessel ")
+                .append(row.vesselId()).append(" · snapshot ").append(row.snapshotId()).append('\n'));
         return text.toString();
     }
 
-    private static String blank(String value, String fallback) {
-        return value == null || value.isBlank() ? fallback : value;
-    }
+    private static String blank(String value, String fallback) { return value == null || value.isBlank() ? fallback : value; }
     private static Object nullable(Object value) { return value == null ? "" : value; }
-    private static Throwable cause(ExecutionException exception) {
-        return exception.getCause() == null ? exception : exception.getCause();
-    }
+    private static Throwable cause(ExecutionException exception) { return exception.getCause() == null ? exception : exception.getCause(); }
 
     private record PendingCampaign(Path source, CampaignInspection campaign, ImportPlan plan,
                                    RegistrySnapshot registry, List<RowMapping> rows) {
@@ -537,11 +511,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
         private UUID targetVesselId;
         private NonNewerPolicy policy = NonNewerPolicy.REJECT;
         private boolean explicitlyReviewed;
-
-        private RowMapping(int ordinal, SubmarineInspection submarine) {
-            this.ordinal = ordinal;
-            this.submarine = submarine;
-        }
+        private RowMapping(int ordinal, SubmarineInspection submarine) { this.ordinal = ordinal; this.submarine = submarine; }
         int ordinal() { return ordinal; }
         SubmarineInspection submarine() { return submarine; }
         MappingMode mode() { return mode; }
@@ -557,9 +527,7 @@ public final class CampaignVesselMappingWindow extends JFrame {
     }
 
     private record VesselChoice(VesselRow vessel) {
-        @Override public String toString() {
-            return blank(vessel.displayName(), "Unnamed") + " · " + vessel.vesselId();
-        }
+        @Override public String toString() { return blank(vessel.displayName(), "Unnamed") + " · " + vessel.vesselId(); }
     }
 
     public static void main(String[] args) {
