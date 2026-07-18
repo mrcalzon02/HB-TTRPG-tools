@@ -55,3 +55,10 @@ tasks.register<JavaExec>("runVesselRegistry") {
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow")
 }
+
+tasks.register<JavaExec>("runSnapshotApproval") {
+    group = "application"
+    description = "Runs the explicit existing-vessel snapshot chronology approval window."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWindow")
+}
