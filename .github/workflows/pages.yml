@@ -50,6 +50,9 @@ jobs:
       - name: Validate EXO vessel expanded engineering ledger
         run: node scripts/validate-exo-vessel-engineering.mjs
 
+      - name: Validate EXO vessel inertial-reference control
+        run: node scripts/validate-exo-vessel-inertial-control.mjs
+
       - name: Validate EXO vessel semantic module graph
         run: node scripts/validate-exo-vessel-modules.mjs
 
