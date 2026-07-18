@@ -6,27 +6,19 @@ Independent Java 17 Swing migration of the Barotrauma RPG Operations Suite.
 
 The desktop project now includes:
 
-- The Java 17 Swing application shell and stable workspace navigation.
-- A process-wide desktop-world session shared by the shell, import tools, registries, and simulation monitor.
+- The Java 17 Swing shell with stable workspace navigation and a process-wide selected-world session.
+- Inspection-first version-22, `.save`, and `.sub` compatibility.
 - Duplicate-safe source, submarine-definition, physical-vessel, and snapshot identities.
-- Strict inspection and normalization of version-22 browser-suite exports.
-- Safe inspection of official Barotrauma `.save` campaign archives and standalone `.sub` files.
-- Desktop-world directories, exclusive writer locks, atomic metadata writes, and sequential SQLite migrations through schema 003.
-- In-place migration of schema-001 and schema-002 worlds while preserving existing records.
-- Transactional inspection recording and exact-source duplicate prevention.
-- Canonical submarine-definition reuse across renamed or repeated designs.
-- Explicit one-vessel imports, snapshot chronology, and complete rollback.
-- Atomic multi-submarine campaign mapping with mandatory row review.
-- Explicit version-22 master-world acceptance into normalized location, station, component-version, state-family, and simulation-metadata tables.
-- Read-only normalized world, vessel, and simulation-evidence registries.
-- A deterministic canonical-time clock with immutable snapshots and replay verification.
-- A single-writer command executor with restart-safe execution sequence numbers.
-- Durable command receipts, reviewed checkpoints, stale-state rejection, and restart recovery.
-- A manual Swing simulation monitor for enable, disable, step, bounded catch-up, and checkpoint commands.
+- Atomic vessel imports, campaign mapping, snapshot chronology, rollback, and read-only registries.
+- Sequential SQLite migrations through **schema 005** for fresh and existing desktop worlds.
+- A deterministic canonical-time clock, one logical writer, immutable command receipts, reviewed checkpoints, stale-state rejection, and restart recovery.
+- A live Europa World Map with explicitly controlled **Passive Mode**.
+- Transactional station economy, NPC vessel, route, mission, research, transit-hazard, encounter, and voyage-log workloads.
+- Automatic timed cycles while Passive Mode is enabled.
 
 No website behavior has been removed or redirected. The web suite remains the behavioral reference while desktop parity is developed.
 
-Version-22 acceptance imports world identity and continuity metadata but does **not** automatically run simulation workloads. The imported scheduler begins `PAUSED` with `simulation_enabled = false`. Manual clock commands are available only through the durable single-writer session. Economy, NPC, route, research, mission, and event processors remain disabled.
+A normalized version-22 world still imports with simulation disabled and paused. Passive Mode begins only after the operator explicitly enables it from the World Map. Once enabled, one process-wide scheduler owns that world. Every cycle advances the deterministic clock and commits all workload changes together; a failed cycle rolls back and faults closed.
 
 ## Requirements
 
@@ -41,26 +33,101 @@ A Gradle wrapper will be added with release automation. Until then, run commands
 gradle run
 ```
 
-The primary shell launches world inspection and approval, normalized world registry, vessel import, campaign mapping, vessel registry, snapshot approval, and the durable simulation monitor. Opening or creating a desktop world in one participating window updates the shared world selection across the application process.
+The primary shell launches world import and inspection, the live World Map, vessel workflows, registries, and the manual durable clock monitor. Opening a desktop world in one participating window updates the shared selection across the process.
 
-## Run individual workflows
-
-Version-22 normalized master-world import:
-
-```text
-gradle runWebWorldImport
-```
-
-Read-only normalized world registry:
+## Live World Map and Passive Mode
 
 ```text
 gradle runWorldRegistry
 ```
 
-Manual durable simulation monitor:
+The World Map is the passive simulation console. It provides:
+
+- **World Summary** — canonical time, current tick, cadence, and last passive cycle.
+- **Locations** and **Normalized Stations** — imported Europa map evidence.
+- **Station Economy** — credits, supplies, ore, industry, security, integrity, threat, research, and station condition.
+- **NPC Voyages** — clickable NPC vessel records and a pinned, continuously refreshing voyage log.
+- **Missions and Routes** — origin, target, assigned vessel, route progress, difficulty, reward, and completion state.
+- **Research** — station projects, progress, siege effects, and completion.
+- **Encounters** — transit hazards, challenge, roll, effective result margin, outcome, and narrative.
+
+Passive Mode controls let the operator select a real-time cadence from one second to one hour and one to 1,000 canonical ticks per cycle. Closing the World Map does not stop an enabled process-wide scheduler. Opening the World Map again resumes a configuration previously left enabled.
+
+Only one passive scheduler is created for a world in the application process. The manual clock monitor becomes read-only while that scheduler owns the writer.
+
+## Passive world behavior
+
+### Stations and economy
+
+Each imported station receives persistent simulation state. Production, consumption, ore availability, industry, security, integrity, threat, and completed missions determine whether it is:
+
+- `RISING`
+- `STABLE`
+- `STRAINED`
+- `BESIEGED`
+- `FALLEN`
+
+Threatened stations generate defense and fauna-clearing work. Supply shortages generate trade work. Ore shortages generate mining work. Successful NPC missions feed credits, supplies, ore, security, research, and threat reduction back into station state.
+
+### NPC vessels and routes
+
+Passive Mode creates persistent NPC submarines with role-specific capabilities:
+
+- Trader
+- Miner
+- Hunter
+- Patrol
+- Research
+- Salvage
+- Courier
+
+Each vessel retains its location, destination, route progress, hull, supplies, cargo, crew quality, navigation, engineering, combat, mining, and research capability. It moves through preparing, transit, mission work, return, docking, disablement, and loss states.
+
+### Missions
+
+The current deterministic mission set includes:
+
+- Trade
+- Mining
+- Fauna clearing
+- Station defense
+- Research
+- Salvage
+- Transit
+
+Mission creation, assignment, progress, completion, failure, rewards, and station effects are durable database records.
+
+### Shared transit and encounter resolution
+
+NPC voyages call the same dependency-free deterministic transit resolver intended for player transit. Given the same world, vessel, route, tick, mission, and capability inputs, player and NPC resolution is identical.
+
+Current hazards include thermal vents, ice shear, ballast failure, reactor instability, hostile fauna, abyssal predators, current reversal, and navigation/instrument blackouts. Resolution records the challenge, roll, effective capability, margin, outcome, hull and supply consequences, delay, and narrative.
+
+### Voyage logs
+
+Every NPC vessel accumulates a persistent voyage history containing mission assignment, departure, hazards, damage, mission progress, completion, distress, and return evidence. Selecting a vessel in the World Map pins that vessel while the table and log refresh around it.
+
+## Manual durable clock monitor
 
 ```text
 gradle runSimulationMonitor
+```
+
+When Passive Mode is off, the manual monitor permits:
+
+- Enable and disable.
+- Explicit deterministic stepping.
+- Bounded catch-up to an ISO-8601 canonical target.
+- Explicit checkpoints.
+
+When Passive Mode is active, the manual monitor loads the durable clock read-only and directs workload control back to the World Map. This prevents two user interfaces from producing competing command sequences.
+
+## Import and registry workflows
+
+Version-22 normalized master-world import:
+
+```text
+gradle runWebWorldImport
 ```
 
 One-vessel inspection and approval:
@@ -75,7 +142,7 @@ Multi-submarine campaign archive mapping:
 gradle runCampaignMapping
 ```
 
-Read-only definition, vessel, and snapshot registry:
+Definition, physical-vessel, and snapshot registry:
 
 ```text
 gradle runVesselRegistry
@@ -87,50 +154,19 @@ Existing-vessel snapshot chronology approval:
 gradle runSnapshotApproval
 ```
 
-## Version-22 world boundary
+## Persistence boundaries
 
-A version-22 export is inspected and normalized before acceptance. The accepted transaction records:
+Schema 001 established source, definition, vessel, snapshot, warning, and audit identity.
 
-- The master-world ID and suite version.
-- Export and import timestamps.
-- Canonical world time, real epoch, source simulation time, and imported tick sequence.
-- Rings, shell radius, locations, levels, coordinates, biomes, factions, and station markers.
-- Stations and whether station-economy evidence was present.
-- Known component versions and top-level state families.
-- Active-submarine summary, crew-record count, and economy summary counts.
+Schema 002 added normalized master-world, location, station, component-version, state-family, and imported scheduler metadata.
 
-Source location IDs are retained when present. A deterministic fallback ID is generated only when the source omits one. One desktop world may accept only one master-world import; replacement requires creating another desktop world rather than silently overwriting normalized state.
+Schema 003 added durable clock command receipts, checkpoints, current tick state, sequence continuation, and recovery pointers.
 
-## Simulation boundary
+Schema 004 added passive configuration, station state, missions, NPC vessels, voyage logs, encounters, and station research.
 
-Schema 003 adds:
+Schema 005 hardens research uniqueness and return-voyage docking/unloading for worlds created during schema-004 development.
 
-- Immutable simulation command receipts.
-- Monotonic per-world execution sequence numbers.
-- Before and after clock snapshots for every command.
-- Durable reviewed checkpoints.
-- Current tick, tick-size, command, and checkpoint pointers.
-- Stale-before-state rejection.
-- Restart recovery from the last durable command sequence.
-
-The deterministic clock has no timer, Swing dependency, or database access. A single-writer executor owns it. The persistent session submits one command, writes its receipt and optional checkpoint to SQLite, and only then begins another command. Any persistence failure permanently faults that session until it is closed and reopened from durable state.
-
-The manual monitor currently permits:
-
-- Enable and disable.
-- Explicit deterministic stepping.
-- Bounded catch-up to an ISO-8601 canonical target without overshooting partial ticks.
-- Explicit checkpoints.
-
-Automatic timed Run remains disabled until economy and NPC workload processors can commit transactionally with the clock.
-
-## Official vessel boundaries
-
-The one-vessel approval workflow accepts standalone `.sub` files and campaign saves containing one submarine payload. Campaign archives containing multiple submarine payloads are redirected to the campaign mapper.
-
-The campaign mapper requires every row to be reviewed before commit. Each payload is assigned either to a new physical vessel or one explicitly selected structurally matching existing vessel. An existing vessel may be targeted only once per archive. Newer source states may become current; older, equal-time, and timestamp-unknown states require explicit historical retention. Any invalid row rolls back the entire campaign archive.
-
-An exact source file cannot be imported twice. A structurally identical submarine with another filename reuses its existing definition but may still create a separate physical vessel.
+A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station changes, mission changes, NPC movement, transit encounters, voyage logs, research progress, and audit summary. Any invalid or stale before-state rejects the entire cycle.
 
 ## Build and verification
 
@@ -140,32 +176,27 @@ Build the application:
 gradle build
 ```
 
-Run the complete persistence and deterministic simulation verification chain:
+Run the complete verification chain:
 
 ```text
 gradle verifyWorldStore
 ```
 
-The verification suite covers:
+The suite covers:
 
-- Fresh database migration through schemas 001, 002, and 003.
-- In-place schema-001 migration through schema 003 with record preservation.
-- Inspection planning and duplicate prevention.
-- Accepted vessel imports and rollback.
-- Snapshot chronology and current-state promotion.
-- Atomic campaign archive mapping.
-- Strict version-22 world normalization.
-- Atomic master-world import and replacement rejection.
-- Read-only normalized world and vessel registry queries.
-- Deterministic clock stepping, catch-up, replay, and checkpoint restore.
-- Single-writer command ordering and display-listener isolation.
-- Restart-safe execution sequence continuation.
-- Durable command receipts and checkpoint transactions.
-- Stale-state rejection and rollback.
-- Fault-contained persistent-session recovery.
-- Read-only simulation evidence reconstruction.
+- Fresh and legacy migration through schema 005.
+- Official vessel imports, rollback, campaign mapping, and snapshot chronology.
+- Version-22 normalization and master-world replacement rejection.
+- Deterministic clock replay, command ordering, checkpoint persistence, and restart recovery.
+- Shared player/NPC transit resolution.
+- Station economy initialization and updates.
+- Mission creation and role-aware assignment.
+- NPC departure, route advancement, hazards, encounters, and voyage logs.
+- Research persistence and station-defense effects.
+- A real timed Passive Mode cycle.
+- Persistent disablement and fault-contained scheduler recovery.
 
-The repository workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 and runs the complete verification chain for desktop-project changes.
+The workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 and runs this chain for desktop-project changes.
 
 ## Entry points
 
@@ -180,46 +211,37 @@ io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow
 io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWindow
 ```
 
+## Current implementation order
+
+Completed foundations:
+
+1. Desktop shell, architecture baseline, stable identities, and safe import inspection.
+2. Official vessel transactions, campaign mapping, snapshot chronology, and registries.
+3. Normalized version-22 master-world import and world registry.
+4. Deterministic clock, single-writer commands, receipts, checkpoints, and recovery.
+5. Schema-005 passive world persistence.
+6. Automatic Passive Mode scheduling.
+7. Station economy and station rise/fall state.
+8. NPC vessel creation, assignment, navigation, return, disablement, and loss.
+9. Routes and deterministic player/NPC transit resolution.
+10. Trade, mining, fauna-clearing, defense, research, salvage, and transit missions.
+11. Research projects, encounter records, and clickable NPC voyage logs.
+
+Next phases:
+
+1. Expand station markets into item-level production, consumption, vendor inventories, freight lots, and treasury transactions.
+2. Add player-facing transit submission to the shared resolver and connect active imported player vessels to map routes.
+3. Add rescue, repair, reinforcement, faction, and multi-vessel response behavior.
+4. Port the remaining cargo catalogue, workshop/R&D, faction, journal, and reference-library tools.
+5. Add persistent recent-world reopening, backups, packaging, and release automation.
+
 ## Governing documents
 
 - `../../docs/barotrauma-desktop-baseline.md`
 - `../../docs/barotrauma-desktop-architecture.md`
 
-The baseline fixes the compatibility and simulation requirements. The architecture document fixes dependency direction, identity boundaries, importer isolation, concurrency rules, and implementation order.
-
-## Stable navigation contract
-
-The desktop shell reserves workspaces for Overview, Active Submarine, World Map, Submarines, Crew, Stations and Economy, Routes and Jobs, Encounters, Cargo and Catalogue, Workshop and R&D, Factions, Reference Library, Import Center, Campaign Journal, Simulation Monitor, and Settings and Backups.
-
-Placeholder panels are intentional during phased migration. Each will be replaced by an application-backed view without changing its navigation identity.
-
-## Current implementation order
-
-Completed foundations:
-
-1. Desktop shell and architecture baseline.
-2. Stable identities and duplicate decisions.
-3. Version-22 and official-file inspection.
-4. Filesystem storage, SQLite locking, and schemas 001–003.
-5. Inspection ledger and import planning.
-6. Accepted official-vessel transactions with rollback.
-7. Shared desktop-world session and primary-shell integration.
-8. Definition, vessel, and snapshot registries.
-9. Snapshot chronology and current-state promotion rules.
-10. Explicit atomic multi-submarine campaign mapping.
-11. Normalized version-22 master-world import and read-only world registry.
-12. Deterministic clock and single-writer command executor.
-13. Durable command receipts, checkpoints, stale-state rejection, and recovery.
-14. Manual durable simulation monitor.
-
-Next phases:
-
-1. Add transactional station-economy workload records and processors.
-2. Add deterministic NPC-vessel workload records and processors.
-3. Add automatic timed scheduling only after workload rollback is proven.
-4. Port routes, research, missions, encounters, and remaining web-suite tools.
-5. Add persistent recent-world reopening, packaging, and release automation.
+The baseline fixes compatibility and simulation requirements. The architecture document fixes dependency direction, identity boundaries, importer isolation, concurrency rules, and implementation order.
 
 ## Local files
 
-World databases, logs, imported-source evidence, attachments, backups, and exports belong under local runtime directories and are ignored by Git. Sanitized test fixtures must be stored separately under `src/test/resources` and must not contain private player information.
+World databases, logs, imported-source evidence, attachments, backups, and exports belong under local runtime directories and are ignored by Git. Sanitized fixtures must remain separate and must not contain private player information.
