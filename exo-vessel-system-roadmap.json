@@ -18,6 +18,7 @@
     "Weapon usefulness is an engagement-solution envelope rather than a fixed physical range.",
     "Weapon-family envelopes must consume installed hardware, surviving support graphs, ammunition, native operative methodology, target maneuver, track age, divergence, dwell, guidance, and active defense without prematurely resolving local impacts.",
     "Damage is local and graph-based.",
+    "Combat resolution preserves the VESSEL-05 pre-impact condition as immutable authority and records a separate post-impact state derived from real placements, directional protection, modules, routes, zones, and surviving graphs.",
     "Incomplete, dismantled, damaged, abandoned, salvaged, wrecked, and destroyed are separate state axes.",
     "A vessel at one hundred percent destruction no longer retains a coherent vessel graph."
   ],
@@ -84,19 +85,20 @@
       "completionEvidence":["blacklight-exo-vessel-weapon-definitions.js","blacklight-exo-vessel-weapon-core.js","blacklight-exo-vessel-weapon-runtime.js","blacklight-exo-vessel-weapon-contracts.js","blacklight-exo-vessel-weapon-ui.js","data/exo-vessel/weapon-engagement-registry.json","data/schemas/exo-vessel-weapon-engagement.schema.json","data/schemas/exo-vessel-record.schema.json","scripts/validate-exo-vessel-weapons.mjs","blacklight-exo-vessel-track-contracts.js",".github/workflows/pages.yml","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-08","order":8,"title":"Local damage and combat resolution","status":"next","dependsOn":["VESSEL-04","VESSEL-05","VESSEL-07"],
-      "deliverables":["Intercept resolution","Directional hull, citadel, structural, external-system, field, and thermal effects","Voxel damage","Secondary propagation","Utility severance","Crew and habitat effects","Detachable modules"],
-      "acceptance":["Hits affect actual local systems and directional protection rather than fictitious armor modules","Architecture changes damage outcome","Survival depends on connectivity","Destroyed modules leave usable statistics"]
+      "id":"VESSEL-08","order":8,"title":"Local damage and combat resolution","status":"complete","dependsOn":["VESSEL-04","VESSEL-05","VESSEL-06","VESSEL-07"],
+      "deliverables":["Deterministic intercept, interception, miss, near-miss, and impact outcomes","Six-direction approach and occupied-placement selection","Directional active-field and distributed passive-protection interaction","Penetration, ablation, heating, fragmentation, radiation, and impulse allocation","Local module and voxel damage","Secondary propagation","Utility-route severance","Pressure-zone, atmosphere, contamination, crew, and habitat effects","Detachable and sacrificial modules","Immutable pre-impact condition authority and separate post-impact graph recalculation","Combat-resolution export, interface, schema, registry, contracts, repair mode, strict mode, and deployment validation"],
+      "acceptance":["Resolved impacts affect actual VESSEL-04 placements, VESSEL-03 modules, and directional protection rather than a fictitious global hull pool","The VESSEL-05 condition history remains byte-for-byte pre-impact authority while a separate VESSEL-08 state records combat consequences","Internals-first and EVA-first exposure and propagation produce different local consequences","Survival depends on remaining structural and utility connectivity","Destroyed or detached modules leave usable source statistics but disappear from usable post-impact graphs","Severed routes, compromised zones, crew exposure, and residual voxel state remain inspectable","Repair mode records deterministic correction and strict mode rejects the same invalid combat records"],
+      "completionEvidence":["blacklight-exo-vessel-damage-definitions.js","blacklight-exo-vessel-damage-core.js","blacklight-exo-vessel-damage-runtime.js","blacklight-exo-vessel-damage-contracts.js","blacklight-exo-vessel-damage-ui.js","data/exo-vessel/combat-resolution-registry.json","data/schemas/exo-vessel-combat-resolution.schema.json","data/schemas/exo-vessel-record.schema.json","scripts/validate-exo-vessel-damage.mjs",".github/workflows/pages.yml","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-09","order":9,"title":"RPG statistics and action economy","status":"planned","dependsOn":["VESSEL-06","VESSEL-07","VESSEL-08"],
+      "id":"VESSEL-09","order":9,"title":"RPG statistics and action economy","status":"next","dependsOn":["VESSEL-06","VESSEL-07","VESSEL-08"],
       "deliverables":["Normalized vessel statistics","Navigation actions","Sensor and targeting actions","Offensive and defensive actions","Engineering and damage-control actions","Resource timing model"],
       "acceptance":["Players can operate vessels without reading the full dossier","Every stat links to physical sources","Detailed and simplified resolution remain compatible"]
     },
     {
       "id":"VESSEL-10","order":10,"title":"Integrated UI, export, and campaign persistence","status":"planned","dependsOn":["VESSEL-09"],
-      "deliverables":["Manufacturer library","Hull-family library","Voxel viewer","Damage-state editor","Combat stat card","JSON import and export","Campaign persistence","Schema migrations"],
-      "acceptance":["Cluster route can germinate a persistent vessel","Exports reload without provenance loss","Earlier vessels migrate without destructive data loss"]
+      "deliverables":["Manufacturer library","Hull-family library","Voxel viewer","Damage-state editor","Combat stat card","JSON import and export","Campaign persistence","Schema migrations","Final diegetic interface pass replacing provisional dropdowns and number fields with visually interpretable sliders, instrument panels, and setting-appropriate control methods"],
+      "acceptance":["Cluster route can germinate a persistent vessel","Exports reload without provenance loss","Earlier vessels migrate without destructive data loss","Primary generator controls communicate state visually rather than depending only on generic browser form fields"]
     },
     {
       "id":"VESSEL-11","order":11,"title":"Validation and balance matrix","status":"planned","dependsOn":["VESSEL-04","VESSEL-05","VESSEL-06","VESSEL-07","VESSEL-08","VESSEL-09","VESSEL-10"],
