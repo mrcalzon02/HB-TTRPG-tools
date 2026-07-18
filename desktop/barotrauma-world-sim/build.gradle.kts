@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs the complete import, migration, registry, deterministic clock, command, checkpoint, and recovery contract chain."
+    description = "Runs imports, migrations, registries, clock, checkpoints, passive scheduling, station economy, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -58,7 +58,7 @@ tasks.register<JavaExec>("runWebWorldImport") {
 
 tasks.register<JavaExec>("runWorldRegistry") {
     group = "application"
-    description = "Runs the read-only normalized master-world, location, station, and scheduler registry."
+    description = "Runs the live Europa world map with passive station, NPC, mission, research, and encounter simulation controls."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow")
 }
