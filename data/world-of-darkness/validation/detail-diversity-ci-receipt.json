@@ -2,12 +2,12 @@
   "receiptType": "wodDetailDiversityValidation",
   "schemaVersion": "1.4.0",
   "status": "failed",
-  "validatedCommit": "f56e2a25f6d1099d0566620c305052e753c5ca89",
+  "validatedCommit": "a45afb6e48132565e40a08b80c071a06459dc502",
   "workflow": ".github/workflows/validate-wod-world-scan-overlay.yml",
-  "checkedAt": "2026-07-02T06:03:14.865Z",
+  "checkedAt": "2026-07-18T04:39:41.926Z",
   "totalChecks": 24,
-  "passedChecks": 23,
-  "failedChecks": 1,
+  "passedChecks": 22,
+  "failedChecks": 2,
   "results": [
     {
       "name": "syntax:spatial-loader",
@@ -179,11 +179,11 @@
     },
     {
       "name": "contract:unified-global-rescan",
-      "passed": true,
-      "exitCode": 0,
+      "passed": false,
+      "exitCode": 1,
       "signal": null,
-      "stdout": "{\n  \"unifiedStatusProfile\": [\n    5,\n    8,\n    5,\n    3\n  ],\n  \"vampireStatusProfile\": [\n    12,\n    6,\n    2,\n    1\n  ],\n  \"packageCount\": 24,\n  \"supernaturalOrAdjacentPackages\": 18,\n  \"mundanePackages\": 6,\n  \"unifiedCatalogsObserved\": [\n    \"breeds\",\n    \"changeling\",\n    \"hunter\",\n    \"mage\",\n    \"vampire\",\n    \"werewolf\"\n  ],\n  \"uniqueRegionalThemes\": 1,\n  \"uniqueSystemSiteCombinations\": 18,\n  \"persistedSystemSiteDimensions\": 8,\n  \"deterministicReplay\": true,\n  \"dedicatedVampireIsolation\": true,\n  \"packageSchemaVersion\": \"2.1.0\",\n  \"generatorVersion\": \"world-seeded-system-site-server-rescan-3.2.0\",\n  \"regionalThemeVersion\": \"3.2.0\",\n  \"systemSiteCatalogVersion\": \"1.0.0\"\n}",
-      "stderr": ""
+      "stdout": "",
+      "stderr": "node:fs:448\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\n                   ^\n\nError: ENOENT: no such file or directory, open '.github/workflows/ingest-wod-world-scan-batch.yml'\n    at Object.readFileSync (node:fs:448:20)\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-unified-global-rescan.mjs:11:27\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: '.github/workflows/ingest-wod-world-scan-batch.yml'\n}\n\nNode.js v20.20.2"
     },
     {
       "name": "contract:map-only-core",
@@ -199,7 +199,7 @@
       "exitCode": 1,
       "signal": null,
       "stdout": "{\n  \"mapOnlyCore\": [\n    \"world-of-darkness-lightweight-map-core.js\",\n    \"world-of-darkness-spatial-config-compat.js\",\n    \"world-of-darkness-system-site-catalog.js\",\n    \"world-of-darkness-detail-diversity-core.js\",\n    \"world-of-darkness-regional-theme-expansion.js\",\n    \"world-of-darkness-regional-legacy-qualifier.js\",\n    \"world-of-darkness-system-site-expansion.js\",\n    \"world-of-darkness-radial-location-loader.js\",\n    \"world-of-darkness-radial-scan-compat.js\"\n  ],\n  \"deferredTools\": [\n    \"world-of-darkness-location-package-bridge.js\",\n    \"world-of-darkness-world-scan-overlay.js\",\n    \"world-of-darkness-global-rescan-bridge.js\",\n    \"world-of-darkness-context-aware-core.js\",\n    \"world-of-darkness-context-output-normalizer.js\",\n    \"world-of-darkness-context-aware-variants.js\",\n    \"world-of-darkness-registry-workflow-note.js\"\n  ],\n  \"chronicleDataFetchesBeforeScan\": 0,\n  \"mapMutationObservers\": 0,\n  \"pureGeneratorNetworkRequests\": 0,\n  \"compatibilityVersion\": \"2.7.0\",\n  \"regionalThemeModelVersion\": \"3.2.0\",\n  \"regionalLegacyQualifierVersion\": \"1.0.0\",\n  \"regionalManifestationChannels\": 12,\n  \"systemSiteCatalogVersion\": \"1.0.0\",\n  \"systemSiteExpansionVersion\": \"1.0.0\",\n  \"systemSiteDimensions\": 8,\n  \"radialConcurrency\": 1,\n  \"radialVisibleCap\": 90\n}",
-      "stderr": "file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-world-scan-overlay.mjs:35\nif (receipt.regionalThemeGeneration?.version !== '3.2.0' || receipt.regionalThemeGeneration?.legacyQualifierVersion !== '1.0.0') throw new Error('Receipt does not record the regional model and qualifier versions.');\n                                                                                                                                       ^\n\nError: Receipt does not record the regional model and qualifier versions.\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-world-scan-overlay.mjs:35:136\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v20.20.2"
+      "stderr": "node:fs:448\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\n                   ^\n\nError: ENOENT: no such file or directory, open '.github/workflows/ingest-wod-world-scan-batch.yml'\n    at Object.readFileSync (node:fs:448:20)\n    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-wod-world-scan-overlay.mjs:9:27\n    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: '.github/workflows/ingest-wod-world-scan-batch.yml'\n}\n\nNode.js v20.20.2"
     }
   ]
 }
