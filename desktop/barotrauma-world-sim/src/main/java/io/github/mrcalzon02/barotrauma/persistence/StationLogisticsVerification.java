@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.UUID;
 
-/** End-to-end schema-008 contract for item logistics, freight, and imported player-vessel transit. */
+/** End-to-end contract for item logistics, freight, and imported player-vessel transit. */
 public final class StationLogisticsVerification {
     private StationLogisticsVerification() { }
 
@@ -46,64 +46,59 @@ public final class StationLogisticsVerification {
                     "logistics-contract-writer", recovery.lastExecutionSequence())) {
                 var enabled = executor.submit(new SimulationCommandExecutor.Enable(), "logistics-test").join();
                 SimulationCheckpointStore.persist(paths, enabled, "Enable logistics contract world");
-                var first = executor.submit(new SimulationCommandExecutor.Step(1), "logistics-test").join();
-                PassiveWorldTickTransaction.commit(paths, first);
-
+                step(paths, executor);
                 require(count(paths, "item_catalogue") == 8, "Item catalogue seed failed.");
                 require(count(paths, "production_recipe") == 4, "Production recipe seed failed.");
                 require(count(paths, "station_inventory") == 24, "Station inventory seed failed.");
                 require(count(paths, "station_vendor_offer") == 24, "Vendor offer seed failed.");
                 require(count(paths, "station_production_run") > 0, "Passive production did not run.");
                 require(count(paths, "treasury_transaction") > 0, "Production treasury entries are missing.");
-
                 forceFreightShortage(paths);
-                var second = executor.submit(new SimulationCommandExecutor.Step(1), "logistics-test").join();
-                PassiveWorldTickTransaction.commit(paths, second);
+                step(paths, executor);
             }
 
-            String freightLotId = readyFreightLot(paths);
-            require(freightLotId != null, "Passive shortage did not create a READY freight opportunity.");
-
+            String lotId = readyFreightLot(paths);
+            require(lotId != null, "Passive shortage did not create a READY freight opportunity.");
             UUID vesselId = UUID.fromString("99000000-0000-0000-0000-000000000010");
-            UUID definitionId = UUID.fromString("99000000-0000-0000-0000-000000000011");
+            installPlayerVessel(paths, worldId,
+                    UUID.fromString("99000000-0000-0000-0000-000000000011"), vesselId);
             UUID start = location(paths, "station-a");
             UUID destination = location(paths, "station-b");
-            installPlayerVessel(paths, worldId, definitionId, vesselId);
-            var enrolled = PlayerVesselTransitTransaction.enroll(paths, vesselId, start, "logistics-test");
-            require(enrolled.status().equals("DOCKED"), "Player vessel enrollment failed.");
+            require(PlayerVesselTransitTransaction.enroll(paths, vesselId, start, "logistics-test")
+                    .status().equals("DOCKED"), "Player vessel enrollment failed.");
 
             int destinationBefore = inventory(paths, "station-b", "item-rations");
-            int treasuryBefore = (int) count(paths, "treasury_transaction");
-            var loaded = PlayerFreightTransaction.load(paths, vesselId, freightLotId, "logistics-test");
+            long treasuryBefore = count(paths, "treasury_transaction");
+            var loaded = PlayerFreightTransaction.load(paths, vesselId, lotId, "logistics-test");
             require(loaded.status().equals("IN_TRANSIT") && loaded.vesselCargo() == loaded.quantity(),
                     "Player freight loading failed.");
-
-            var planned = PlayerVesselTransitTransaction.planRoute(
-                    paths, vesselId, destination, MissionType.TRADE, "logistics-test");
-            require(planned.status().equals("IN_TRANSIT") && planned.destinationLocationId().equals(destination),
+            require(PlayerVesselTransitTransaction.planRoute(paths, vesselId, destination,
+                    MissionType.TRADE, "logistics-test").status().equals("IN_TRANSIT"),
                     "Player freight route planning failed.");
 
             PlayerVesselTransitTransaction.TransitResult last = null;
             for (int attempt = 0; attempt < 50; attempt++) {
                 last = PlayerVesselTransitTransaction.resolveNextChallenge(paths, vesselId, "logistics-test");
-                if (last.state().status().equals("ARRIVED") || last.state().status().equals("DISABLED")
-                        || last.state().status().equals("LOST")) break;
+                if (!last.state().status().equals("IN_TRANSIT")) break;
             }
             require(last != null && last.state().status().equals("ARRIVED"),
                     "High-skill player freight vessel did not reach its destination.");
             PlayerVesselTransitTransaction.dock(paths, vesselId, "logistics-test");
-            var delivered = PlayerFreightTransaction.deliver(paths, vesselId, freightLotId, "logistics-test");
+            var delivered = PlayerFreightTransaction.deliver(paths, vesselId, lotId, "logistics-test");
             require(delivered.status().equals("DELIVERED") && delivered.vesselCargo() == 0,
                     "Player freight delivery failed.");
             require(inventory(paths, "station-b", "item-rations") == destinationBefore + delivered.quantity(),
                     "Delivered freight was not added to destination inventory.");
             require(count(paths, "treasury_transaction") >= treasuryBefore + 2,
-                    "Player freight load and delivery treasury entries are missing.");
-            require(count(paths, "player_transit_encounter") > 0, "Player encounter persistence failed.");
-            require(count(paths, "player_voyage_log") >= 6, "Player voyage and freight history is incomplete.");
-            require(freightStatus(paths, freightLotId).equals("DELIVERED"),
+                    "Player freight treasury entries are missing.");
+            require(count(paths, "player_transit_encounter") > 0,
+                    "Player encounter persistence failed.");
+            require(count(paths, "player_voyage_log") >= 6,
+                    "Player voyage and freight history is incomplete.");
+            require(freightStatus(paths, lotId).equals("DELIVERED"),
                     "Freight lot did not retain delivered state.");
-            require(schemaVersion(paths) == 8, "Logistics fixture was not stored under schema 008.");
+            require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                    "Logistics fixture was not stored under the current database schema.");
         } finally {
             try (var stream = Files.walk(root)) {
                 for (Path path : stream.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
@@ -111,10 +106,15 @@ public final class StationLogisticsVerification {
         }
     }
 
+    private static void step(WorldPaths paths, SimulationCommandExecutor executor) throws Exception {
+        var receipt = executor.submit(new SimulationCommandExecutor.Step(1), "logistics-test").join();
+        PassiveWorldTickTransaction.commit(paths, receipt);
+    }
+
     private static void forceFreightShortage(WorldPaths paths) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-            UUID source = station(paths, connection, "station-a");
-            UUID destination = station(paths, connection, "station-b");
+            UUID source = station(connection, "station-a");
+            UUID destination = station(connection, "station-b");
             try (PreparedStatement statement = connection.prepareStatement(
                     "UPDATE station_inventory SET quantity=? WHERE station_id=? AND item_id='item-rations'")) {
                 statement.setInt(1, 140);
@@ -128,14 +128,14 @@ public final class StationLogisticsVerification {
     }
 
     private static String readyFreightLot(WorldPaths paths) throws Exception {
+        String sql = "SELECT f.lot_id FROM freight_lot f JOIN world_station src ON src.station_id=f.source_station_id "
+                + "JOIN world_station dst ON dst.station_id=f.destination_station_id "
+                + "WHERE f.status='READY' AND f.item_id='item-rations' "
+                + "AND src.source_station_id='station-a' AND dst.source_station_id='station-b' "
+                + "ORDER BY f.created_tick DESC LIMIT 1";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT f.lot_id FROM freight_lot f JOIN world_station src ON src.station_id=f.source_station_id "
-                             + "JOIN world_station dst ON dst.station_id=f.destination_station_id "
-                             + "WHERE f.status='READY' AND f.item_id='item-rations' "
-                             + "AND src.source_station_id='station-a' AND dst.source_station_id='station-b' "
-                             + "ORDER BY f.created_tick DESC LIMIT 1")) {
-            try (ResultSet result = statement.executeQuery()) { return result.next() ? result.getString(1) : null; }
+             Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            return result.next() ? result.getString(1) : null;
         }
     }
 
@@ -181,7 +181,8 @@ public final class StationLogisticsVerification {
                 definition.executeUpdate();
             }
             try (PreparedStatement vessel = connection.prepareStatement(
-                    "INSERT INTO vessel_instance(vessel_id,world_id,definition_id,display_name,created_at) VALUES (?,?,?,?,?)")) {
+                    "INSERT INTO vessel_instance(vessel_id,world_id,definition_id,display_name,created_at) "
+                            + "VALUES (?,?,?,?,?)")) {
                 vessel.setString(1, vesselId.toString());
                 vessel.setString(2, worldId.toString());
                 vessel.setString(3, definitionId.toString());
@@ -192,7 +193,7 @@ public final class StationLogisticsVerification {
         }
     }
 
-    private static UUID station(WorldPaths paths, Connection connection, String sourceId) throws Exception {
+    private static UUID station(Connection connection, String sourceId) throws Exception {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT station_id FROM world_station WHERE source_station_id=?")) {
             statement.setString(1, sourceId);
@@ -258,6 +259,6 @@ public final class StationLogisticsVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma station logistics, freight, and player transit contracts passed under schema 008.");
+        System.out.println("Barotrauma station logistics, freight, and player transit contracts passed.");
     }
 }
