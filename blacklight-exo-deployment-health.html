@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | Deployment Health</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .exo-health-shell{display:grid;gap:20px}.exo-health-status{border:1px solid rgba(217,168,79,.28);border-radius:12px;padding:14px;background:rgba(0,0,0,.2)}.exo-health-status[data-state="pass"]{border-color:rgba(118,201,155,.55)}.exo-health-status[data-state="fail"]{border-color:rgba(206,111,97,.65)}.exo-health-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px}.exo-health-card{border:1px solid rgba(217,168,79,.2);border-radius:12px;padding:14px;background:rgba(7,10,14,.92)}.exo-health-card h3{margin:.2rem 0 .6rem;color:#f0dfbc}.exo-health-card dl{display:grid;grid-template-columns:minmax(100px,.8fr) 1fr;gap:6px 9px;font-size:.76rem}.exo-health-card dt{color:#988f82}.exo-health-card dd{margin:0;color:#d8d0c4;overflow-wrap:anywhere}.exo-health-log{max-height:52vh;overflow:auto;border:1px solid rgba(217,168,79,.18);border-radius:12px;background:#070a0e;padding:12px;white-space:pre-wrap;color:#cfc7bb;font:12px/1.5 ui-monospace,monospace}.exo-health-frame{position:absolute;width:1px;height:1px;opacity:.001;pointer-events:none;left:-10000px}.exo-health-pass{color:#8fd2a8}.exo-health-fail{color:#e5a095}
+  </style>
+  <script src="blacklight-exo-deployment-health.js" defer></script>
+</head>
+<body class="blacklight-corp-body">
+  <header class="bli-topbar"><a class="bli-brand" href="blacklight-exo-operations.html"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>EXO Deployment Health</span></span></a><nav class="bli-nav"><a href="blacklight-exo-solar-system.html">Solar Generator</a><a href="blacklight-exo-stellar-sector.html">Sector Generator</a><a href="blacklight-exo-operations.html">EXO Operations</a></nav></header>
+  <section class="bli-hero"><div><p class="bli-eyebrow">Black compartment · deployed browser verification</p><h1>EXO deployment health console.</h1><p class="bli-lede">Verifies the exact Pages artifact, required files, Solar System lightweight startup, Stellar Sector authority generation, and captured runtime diagnostics from the deployed origin.</p><div class="bli-actions"><button id="exo-health-run" class="bli-action primary" type="button">Run Deployment Verification</button><button id="exo-health-copy" class="bli-action" type="button" disabled>Copy Full Report</button></div></div><aside class="bli-directory-panel"><div class="bli-directory-title">Deployment Record</div><div class="bli-directory-list"><div class="bli-directory-item"><strong>Commit</strong><span id="exo-health-commit" class="bli-arrow">pending</span></div><div class="bli-directory-item"><strong>Built</strong><span id="exo-health-built" class="bli-arrow">pending</span></div><div class="bli-directory-item"><strong>Result</strong><span id="exo-health-result" class="bli-arrow">pending</span></div></div></aside></section>
+  <main class="bli-shell exo-health-shell">
+    <section class="bli-section"><div id="exo-health-status" class="exo-health-status" data-state="working" aria-live="polite">Waiting to run deployed verification.</div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Verification targets</p><h2>Artifact, Solar runtime, and sector runtime.</h2></div><div id="exo-health-grid" class="exo-health-grid"></div></section>
+    <section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Diagnostic report</p><h2>Machine-readable browser evidence.</h2></div><pre id="exo-health-log" class="exo-health-log">No report generated.</pre></section>
+  </main>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO deployment verification and runtime diagnostics.</footer>
+</body>
+</html>
