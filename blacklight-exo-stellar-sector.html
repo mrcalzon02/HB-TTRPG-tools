@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="blacklight-exo-stellar-sector.css">
   <link rel="stylesheet" href="blacklight-exo-integration.css">
   <script src="blacklight-exo-stellar-sector-data.js" defer></script>
+  <script src="blacklight-exo-stellar-sector-worlds.js" defer></script>
   <script src="blacklight-exo-stellar-sector.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-sector-body">
@@ -54,7 +55,7 @@
       <div class="bli-section-head">
         <p class="bli-eyebrow">Incremental authority loader</p>
         <h2 id="exo-sector-loader-title">Load the archive in independently schedulable layers.</h2>
-        <p>The fixed sector authority is initialized once. Summary statistics and the cluster map render first. Species, polities, fleets, organizations, ruins, and bestiary records begin only when their section approaches the viewport, then render in idle-time batches.</p>
+        <p>The fixed sector authority is initialized once. Summary statistics and the cluster map render first. Species, polities, fleets, organizations, named worlds, ruins, and bestiary records begin only when their section approaches the viewport, then render in idle-time batches.</p>
       </div>
       <div class="exo-sector-progress"><span id="exo-sector-progress-fill"></span></div>
       <p id="exo-sector-status" class="exo-sector-status" aria-live="polite">Initializing fixed sector authority…</p>
@@ -113,6 +114,6 @@
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO sector-scale campaign authority, cluster territories, species, civilizations, fleets, organizations, technologies, bestiary records, ruins, and versioned archives.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO sector-scale campaign authority, cluster territories, species, civilizations, fleets, organizations, technologies, named worlds, bestiary records, ruins, and versioned archives.</footer>
 </body>
 </html>
