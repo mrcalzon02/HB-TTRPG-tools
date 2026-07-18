@@ -20,9 +20,9 @@ import java.util.function.Consumer;
 /**
  * Single logical writer for deterministic simulation-clock commands.
  *
- * <p>Callers may submit concurrently, but all mutation occurs on one owned thread in accepted
- * sequence order. Swing views must consume immutable receipts or snapshots and never mutate the
- * clock directly.</p>
+ * <p>Callers may submit concurrently, but all mutation and execution-sequence assignment occurs on
+ * one owned thread. Swing views consume immutable receipts or snapshots and never mutate the clock
+ * directly.</p>
  */
 public final class SimulationCommandExecutor implements AutoCloseable {
     private final DeterministicSimulationClock clock;
@@ -49,12 +49,11 @@ public final class SimulationCommandExecutor implements AutoCloseable {
         Objects.requireNonNull(command, "command");
         if (closed.get()) return CompletableFuture.failedFuture(
                 new IllegalStateException("Simulation command executor is closed."));
-        long sequence = acceptedSequence.incrementAndGet();
         UUID commandId = UUID.randomUUID();
         Instant submittedAt = Instant.now();
         String effectiveActor = actor == null || actor.isBlank() ? "desktop-user" : actor.trim();
         return CompletableFuture.supplyAsync(
-                () -> execute(sequence, commandId, submittedAt, effectiveActor, command), executor);
+                () -> execute(commandId, submittedAt, effectiveActor, command), executor);
     }
 
     public CompletableFuture<ClockSnapshot> snapshot() {
@@ -70,13 +69,14 @@ public final class SimulationCommandExecutor implements AutoCloseable {
         Objects.requireNonNull(listener, "listener");
         if (closed.get()) throw new IllegalStateException("Simulation command executor is closed.");
         listeners.add(listener);
-        if (notifyImmediately) snapshot().thenAccept(listener);
+        if (notifyImmediately) snapshot().thenAccept(snapshot -> notifyListener(listener, snapshot));
         return () -> listeners.remove(listener);
     }
 
-    private CommandReceipt execute(long sequence, UUID commandId, Instant submittedAt,
+    private CommandReceipt execute(UUID commandId, Instant submittedAt,
                                    String actor, SimulationCommand command) {
         requireWriterThread();
+        long sequence = acceptedSequence.incrementAndGet();
         ClockSnapshot before = clock.snapshot();
         CatchUpResult catchUp = null;
         ClockSnapshot after;
@@ -93,12 +93,20 @@ public final class SimulationCommandExecutor implements AutoCloseable {
         else if (command instanceof Fault) after = clock.fault();
         else throw new IllegalArgumentException("Unsupported simulation command: " + command.getClass().getName());
 
-        for (Consumer<ClockSnapshot> listener : listeners) listener.accept(after);
+        for (Consumer<ClockSnapshot> listener : listeners) notifyListener(listener, after);
         return new CommandReceipt(sequence, commandId, actor, command.label(), submittedAt,
                 Instant.now(), writerThreadId, before, after,
                 catchUp == null ? null : catchUp.appliedTicks(),
                 catchUp == null ? null : catchUp.remainingTicks(),
                 catchUp == null ? null : catchUp.complete());
+    }
+
+    private static void notifyListener(Consumer<ClockSnapshot> listener, ClockSnapshot snapshot) {
+        try {
+            listener.accept(snapshot);
+        } catch (RuntimeException exception) {
+            System.err.println("Simulation snapshot listener failed: " + exception.getMessage());
+        }
     }
 
     private void requireWriterThread() {
@@ -193,8 +201,10 @@ public final class SimulationCommandExecutor implements AutoCloseable {
         AtomicLong listenerTicks = new AtomicLong(-1);
         List<CommandReceipt> receipts;
         SimulationCommandExecutor writer = new SimulationCommandExecutor(clock, "contract-simulation-writer");
-        try (AutoCloseable ignored = writer.addSnapshotListener(
-                snapshot -> listenerTicks.set(snapshot.tickSequence()), false)) {
+        try (AutoCloseable observed = writer.addSnapshotListener(
+                     snapshot -> listenerTicks.set(snapshot.tickSequence()), false);
+             AutoCloseable faulty = writer.addSnapshotListener(
+                     snapshot -> { throw new IllegalStateException("display listener fixture"); }, false)) {
             CompletableFuture<CommandReceipt> enable = writer.submit(new Enable(), "contract-test");
             CompletableFuture<CommandReceipt> firstStep = writer.submit(new Step(2), "contract-test");
             CompletableFuture<CommandReceipt> secondStep = writer.submit(new Step(3), "contract-test");
@@ -202,7 +212,7 @@ public final class SimulationCommandExecutor implements AutoCloseable {
             require(receipts.get(0).acceptedSequence() == 1
                             && receipts.get(1).acceptedSequence() == 2
                             && receipts.get(2).acceptedSequence() == 3,
-                    "Concurrent-facing commands were not serialized by accepted sequence.");
+                    "Commands were not sequenced by writer execution order.");
             long threadId = receipts.get(0).writerThreadId();
             require(threadId > 0 && receipts.stream().allMatch(receipt -> receipt.writerThreadId() == threadId),
                     "Commands did not remain on one writer thread.");
