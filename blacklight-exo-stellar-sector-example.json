@@ -5,12 +5,14 @@
   "seed": "EXAMPLE:SECTOR:HELIOS-VALE:001",
   "recordStatus": "fixed-deterministic-example",
   "modules": [
+    "blacklight-exo-runtime-supervisor.js",
     "blacklight-exo-stellar-sector-data.js",
     "blacklight-exo-stellar-sector-worlds.js",
     "blacklight-exo-stellar-sector-generator.js",
     "blacklight-exo-stellar-sector-contracts.js",
+    "blacklight-exo-stellar-sector-supervision.js",
     "blacklight-exo-stellar-sector.js"
   ],
   "archiveFormat": "blacklightExoStellarSectorArchive",
-  "note": "The fixed example and seeded procedural sectors are deterministic, validated, incrementally rendered, exportable, and locally recordable."
+  "note": "The fixed example and seeded procedural sectors are deterministic, supervised, validated, incrementally rendered, exportable, and locally recordable."
 }
