@@ -34,7 +34,7 @@ import java.awt.Font;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 
-/** Live read-only console for passive fleet recovery, extraction, and natural-world activity. */
+/** Live read-only console for response transit, recovery, extraction, and natural-world activity. */
 public final class NaturalWorldAndFleetWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final BarotraumaDonorAssets graphicalAssets = new BarotraumaDonorAssets();
@@ -55,9 +55,14 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
             "Station", "Vessel", "Reserve Before", "Reserve After", "Richness Before", "Richness After",
             "Renewable", "Ecology Impact", "Geology Impact", "Credit Value", "Site ID", "Mission ID", "Freight Lot ID");
     private final DefaultTableModel eventModel = model("Tick", "Type", "Location", "Severity", "Summary", "Event ID");
-    private final DefaultTableModel operationModel = model("Status", "Type", "Progress", "Difficulty", "Casualty",
-            "Responder", "Origin", "Target Station", "Target Location", "Steel", "Fuel", "Ammo", "Medical",
-            "Created", "Updated", "Completed", "Operation ID");
+    private final DefaultTableModel operationModel = model("Status", "Phase", "Attempt", "Materials", "Type",
+            "Progress", "Difficulty", "Casualty", "Responder", "Responder Status", "Responder Location", "Origin",
+            "Target Station", "Target Location", "Steel", "Fuel", "Ammo", "Medical", "Created", "Updated",
+            "Outbound", "Arrived", "Return Started", "Responder Returned", "Completed", "Operation ID");
+    private final DefaultTableModel transitLegModel = model("Status", "Leg", "Attempt", "Responder", "From", "To",
+            "Route Ticks", "Started", "Arrived", "Completed", "Operation ID", "Leg ID");
+    private final DefaultTableModel transitEncounterModel = model("Tick", "Leg", "Responder", "Hazard", "Challenge",
+            "Roll", "Margin", "Outcome", "Narrative", "Operation ID", "Encounter ID");
     private final DefaultTableModel responseLogModel = model("Tick", "Operation Type", "Event", "Summary",
             "Operation ID", "Log ID");
 
@@ -68,7 +73,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
     private boolean busy;
 
     public NaturalWorldAndFleetWindow() {
-        super("Barotrauma Natural World, Resources, and Fleet Response");
+        super("Barotrauma Natural World, Resources, and Fleet Response Transit");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new Dimension(1100, 700));
         setSize(1550, 900);
@@ -95,6 +100,8 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         tabs.addTab("Extraction Ledger", assetIcon(AssetRole.VESSEL), scroll(extractionModel));
         tabs.addTab("Natural Events", assetIcon(AssetRole.FAUNA), scroll(eventModel));
         tabs.addTab("Fleet Responses", assetIcon(AssetRole.VESSEL), scroll(operationModel));
+        tabs.addTab("Response Transit", assetIcon(AssetRole.VESSEL), scroll(transitLegModel));
+        tabs.addTab("Response Hazards", assetIcon(AssetRole.FAUNA), scroll(transitEncounterModel));
         tabs.addTab("Response Log", assetIcon(AssetRole.VESSEL), scroll(responseLogModel));
         tabs.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
         add(tabs, BorderLayout.CENTER);
@@ -143,7 +150,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
     private void refresh() {
         WorldPaths selectedWorld = world;
         if (selectedWorld == null || busy) return;
-        setBusy(true, "Loading fleet, extraction, and natural-world evidence…");
+        setBusy(true, "Loading response routes, fleet, extraction, and natural-world evidence…");
         new SwingWorker<Snapshot, Void>() {
             @Override protected Snapshot doInBackground() throws Exception {
                 return NaturalWorldAndFleetRegistry.load(selectedWorld);
@@ -176,7 +183,7 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
         String assetSource = graphicalAssets.activeDonor()
                 .map(candidate -> "Donor installation: " + candidate.installationRoot())
                 .orElse("Packaged fallback PNGs");
-        summary.setText("Passive fleet recovery, extraction, and natural-world registry\n"
+        summary.setText("Passive fleet response transit, extraction, and natural-world registry\n"
                 + "Database schema: " + WorldStorageContracts.DATABASE_SCHEMA_VERSION + "\n"
                 + "Graphical asset source: " + assetSource + "\n"
                 + "Locations with ecology: " + s.locations() + "\n"
@@ -190,13 +197,19 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
                 + "Extraction batches: " + s.extractionBatches() + "\n"
                 + "Total extracted units: " + s.extractedUnits() + "\n"
                 + "Active fleet responses: " + s.activeResponses() + "\n"
-                + "Completed fleet responses: " + s.completedResponses() + "\n\n"
-                + "Resource missions now draw measured cargo from finite site reserves. Mineral extraction changes "
-                + "exposure and cave stability; biological harvesting reduces local biomass and habitat integrity. "
-                + "Nonrenewable sites remain depleted, while renewable algae and bioactive sites enter dormancy, "
-                + "recover behind habitat conditions, and return to the mission queue.\n\n"
-                + "Delivered extraction enters item-level station inventory, updates the abstract station economy, "
-                + "and creates treasury evidence tied to the originating resource site.\n");
+                + "Completed fleet responses: " + s.completedResponses() + "\n"
+                + "Responders outbound: " + s.outboundResponses() + "\n"
+                + "Responders on scene: " + s.onSceneResponses() + "\n"
+                + "Responders returning or towing: " + s.returningResponses() + "\n"
+                + "Response transit legs: " + s.transitLegs() + "\n"
+                + "Response transit encounters: " + s.responseTransitEncounters() + "\n\n"
+                + "Fleet responders now use the shared deterministic NPC transit engine. Recovery progress cannot "
+                + "advance until the responder reaches the casualty or target station. Once materials are committed, "
+                + "the responder undertakes a second return or towing leg; the casualty is restored only after that "
+                + "leg reaches home. A failed leg returns the operation to the queue without charging materials twice.\n\n"
+                + "Resource missions draw measured cargo from finite reserves. Mineral extraction changes exposure "
+                + "and cave stability; biological harvesting reduces biomass and habitat integrity. Renewable sites "
+                + "recover through dormancy, while depleted nonrenewable sites remain exhausted.\n");
 
         for (var row : snapshot.ecology()) ecologyModel.addRow(new Object[]{row.locationName(), row.ring(), row.level(),
                 row.primaryProducers(), row.algalBloom(), row.herbivores(), row.predators(), row.scavengers(),
@@ -217,11 +230,21 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
                 row.creditsValue(), row.siteId(), row.missionId(), row.freightLotId()});
         for (var row : snapshot.events()) eventModel.addRow(new Object[]{row.tickSequence(), row.eventType(),
                 row.locationName(), row.severity(), row.summary(), row.eventId()});
-        for (var row : snapshot.operations()) operationModel.addRow(new Object[]{row.status(), row.operationType(),
-                row.progress(), row.difficulty(), blank(row.distressedVessel()), blank(row.responderVessel()),
-                blank(row.originStation()), blank(row.targetStation()), row.targetLocation(), row.spareParts(),
-                row.fuel(), row.ammunition(), row.medical(), row.createdTick(), row.updatedTick(),
-                row.completedTick() == null ? "" : row.completedTick(), row.operationId()});
+        for (var row : snapshot.operations()) operationModel.addRow(new Object[]{row.status(), row.responsePhase(),
+                row.attemptNumber(), row.materialsCommitted(), row.operationType(), row.progress(), row.difficulty(),
+                blank(row.distressedVessel()), blank(row.responderVessel()), blank(row.responderStatus()),
+                blank(row.responderLocation()), blank(row.originStation()), blank(row.targetStation()),
+                row.targetLocation(), row.spareParts(), row.fuel(), row.ammunition(), row.medical(), row.createdTick(),
+                row.updatedTick(), nullable(row.outboundStartedTick()), nullable(row.arrivedTick()),
+                nullable(row.returnStartedTick()), nullable(row.responderReturnedTick()), nullable(row.completedTick()),
+                row.operationId()});
+        for (var row : snapshot.transitLegs()) transitLegModel.addRow(new Object[]{row.status(), row.legType(),
+                row.attemptNumber(), row.responderVessel(), row.startLocation(), row.endLocation(),
+                row.routeTicksRequired(), row.startedTick(), nullable(row.arrivedTick()), nullable(row.completedTick()),
+                row.operationId(), row.legId()});
+        for (var row : snapshot.transitEncounters()) transitEncounterModel.addRow(new Object[]{row.tickSequence(),
+                row.legId(), row.responderVessel(), row.hazardType(), row.challenge(), row.resolutionRoll(),
+                row.margin(), row.outcome(), row.narrative(), row.operationId(), row.encounterId()});
         for (var row : snapshot.responseLogs()) responseLogModel.addRow(new Object[]{row.tickSequence(),
                 row.operationType(), row.eventType(), row.summary(), row.operationId(), row.logId()});
         summary.setCaretPosition(0);
@@ -234,7 +257,9 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
 
     private void clear() {
         for (DefaultTableModel model : new DefaultTableModel[]{ecologyModel, geologyModel, resourceModel,
-                extractionModel, eventModel, operationModel, responseLogModel}) model.setRowCount(0);
+                extractionModel, eventModel, operationModel, transitLegModel, transitEncounterModel, responseLogModel}) {
+            model.setRowCount(0);
+        }
     }
 
     private void setBusy(boolean value, String message) {
@@ -280,10 +305,11 @@ public final class NaturalWorldAndFleetWindow extends JFrame {
 
     private static String schemaPrompt() {
         return "Open a schema-" + WorldStorageContracts.DATABASE_SCHEMA_VERSION
-                + " world to inspect fleet recovery, resource extraction, and natural activity.\n";
+                + " world to inspect response transit, fleet recovery, resource extraction, and natural activity.\n";
     }
 
     private static String blank(String value) { return value == null ? "" : value; }
+    private static Object nullable(Long value) { return value == null ? "" : value; }
     private static Throwable cause(ExecutionException exception) {
         return exception.getCause() == null ? exception : exception.getCause();
     }
