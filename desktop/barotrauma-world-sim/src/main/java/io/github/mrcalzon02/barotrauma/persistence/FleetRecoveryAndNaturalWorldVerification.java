@@ -19,7 +19,7 @@ import java.time.Duration;
 import java.util.Comparator;
 import java.util.UUID;
 
-/** End-to-end schema-011 contract for fleet recovery and natural world activity. */
+/** End-to-end schema-012 contract for fleet recovery and natural world activity. */
 public final class FleetRecoveryAndNaturalWorldVerification {
     private FleetRecoveryAndNaturalWorldVerification() { }
 
@@ -57,14 +57,19 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                 UUID distressed = disableVessel(paths);
                 require(count(paths, "fleet_response_operation") == 1,
                         "A disabled NPC vessel did not create a fleet response operation.");
-                require("ACTIVE".equals(operationStatus(paths)) && operationResponder(paths) != null,
+                String responder = operationResponder(paths);
+                require("ACTIVE".equals(operationStatus(paths)) && responder != null,
                         "A qualified docked patrol was not immediately assigned to the distress request.");
+                require(vesselMission(paths, responder) == null,
+                        "The response vessel began with an ordinary mission assignment.");
 
                 raiseMaterialRequirementAndStarve(paths);
                 int stalledProgress = operationProgress(paths);
                 step(paths, executor);
                 require(operationProgress(paths) == stalledProgress,
                         "Fleet recovery advanced without the required station materials.");
+                require(vesselMission(paths, responder) == null,
+                        "An active fleet responder was stolen by the ordinary mission dispatcher.");
 
                 replenishRecoveryMaterials(paths);
                 for (int cycle = 0; cycle < 30 && !"COMPLETE".equals(operationStatus(paths)); cycle++) {
@@ -97,6 +102,10 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                         "Primed geological activity did not produce an environmental event.");
                 require(resourceTypeCount(paths, "BIOACTIVE_ACCUMULATOR") > 0,
                         "Natural bioactivity did not produce a renewable accumulator site.");
+                require(naturalResourceMissionCount(paths, locationId) > 0,
+                        "Exposed natural resources did not enter the mining, research, or salvage mission queue.");
+                require(missionTypeCount(paths, locationId, "FAUNA_CLEARING") > 0,
+                        "Predator feeding-ground expansion did not create fauna-clearing work.");
                 require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
                         "Natural-world fixture did not use the current schema.");
             }
@@ -209,6 +218,18 @@ public final class FleetRecoveryAndNaturalWorldVerification {
         return text(paths, "SELECT assigned_npc_vessel_id FROM fleet_response_operation ORDER BY created_tick LIMIT 1");
     }
 
+    private static String vesselMission(WorldPaths paths, String vesselId) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT mission_id FROM npc_vessel WHERE npc_vessel_id=?")) {
+            statement.setString(1, vesselId);
+            try (ResultSet result = statement.executeQuery()) {
+                if (!result.next()) throw new IllegalStateException("Response vessel disappeared.");
+                return result.getString(1);
+            }
+        }
+    }
+
     private static String vesselStatus(WorldPaths paths, UUID vesselId) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
              PreparedStatement statement = connection.prepareStatement(
@@ -262,6 +283,26 @@ public final class FleetRecoveryAndNaturalWorldVerification {
 
     private static long resourceTypeCount(WorldPaths paths, String type) throws Exception {
         return keyedCount(paths, "SELECT COUNT(*) FROM natural_resource_site WHERE resource_type=?", type);
+    }
+
+    private static long naturalResourceMissionCount(WorldPaths paths, UUID locationId) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT COUNT(*) FROM world_mission WHERE target_location_id=? "
+                             + "AND mission_type IN ('MINING','RESEARCH','SALVAGE')")) {
+            statement.setString(1, locationId.toString());
+            try (ResultSet result = statement.executeQuery()) { return result.next() ? result.getLong(1) : 0; }
+        }
+    }
+
+    private static long missionTypeCount(WorldPaths paths, UUID locationId, String missionType) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT COUNT(*) FROM world_mission WHERE target_location_id=? AND mission_type=?")) {
+            statement.setString(1, locationId.toString());
+            statement.setString(2, missionType);
+            try (ResultSet result = statement.executeQuery()) { return result.next() ? result.getLong(1) : 0; }
+        }
     }
 
     private static long keyedCount(WorldPaths paths, String sql, String key) throws Exception {
