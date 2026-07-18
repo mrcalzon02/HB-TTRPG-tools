@@ -87,10 +87,11 @@ public final class PassiveWorldSimulationVerification {
                 require(count(paths, "world_mission") > 0 && count(paths, "station_research_project") == 4,
                         "Mission or research workload persistence failed.");
                 require(count(paths, "station_inventory") == 32,
-                        "Schema-008 station inventory did not follow the passive cycle.");
+                        "Current-schema station inventory did not follow the passive cycle.");
                 require(count(paths, "station_consumption_log") == 8,
                         "Second passive tick did not append station consumption history.");
-                require(schemaVersion(paths) == 8, "Passive fixture was not stored under schema 008.");
+                require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                        "Passive fixture was not stored under the current database schema.");
             }
 
             long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
