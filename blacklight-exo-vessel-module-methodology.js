@@ -30,6 +30,7 @@
   function operativeMethodology(module,basis){
     const interfaces=routeKeys(module).map(key=>({routeKey:key,endEffect:basis.routeStandards[key].endEffect,endEffectInvariant:true,carrier:basis.routeStandards[key].carrier,interface:basis.routeStandards[key].interface,tolerance:basis.routeStandards[key].tolerance,secondaryInfluence:basis.routeStandards[key].secondaryInfluence}));
     const pressureBoundary=module.envelope==='INTERNAL'||module.requirements?.atmosphere;
+    const hazardFailureModes=(module.hazards||[]).map(item=>`hazard interaction: ${item.toLowerCase().replaceAll('_',' ')}`);
     return{
       recordType:'exoVesselModuleMethodology',schemaVersion:'1.0.0',methodologyId:`method-${slug(module.moduleId)}-${hash(`${module.moduleId}:${basis.basisId}`).toString(16).padStart(8,'0')}`,
       basisId:basis.basisId,primaryBasisKey:basis.primaryBasisKey,secondaryBasisKey:basis.secondaryBasisKey,hybridizationFraction:basis.hybridizationFraction,
@@ -37,7 +38,7 @@
       routeInterfaces:interfaces,
       installation:{serviceEnvironment:basis.standards.maintenanceEnvironment,commissioningEnvironment:basis.standards.commissioningEnvironment,connectorFamily:basis.standards.connectorFamily,orientationSensitivity:basis.standards.orientationSensitivity,pressureCompatibility:basis.standards.pressureCompatibility,immersionCompatibility:basis.standards.immersionCompatibility,serviceClearanceMultiplier:basis.standards.clearanceMultiplier,boundaryMethod:pressureBoundary?basis.operativeTheories.sealing:'No inhabited-medium boundary required beyond local equipment containment.',joiningMethod:basis.operativeTheories.joining,insulationOrIsolationMethod:basis.operativeTheories.insulation},
       materials:{preferred:basis.materials.preferred.slice(0,6),sealants:pressureBoundary?basis.materials.sealants.slice(0,4):[],forbidden:basis.materials.forbidden.slice(0,6)},
-      failureModes:unique([...basis.failureModes,module.hazards?.map(item=>`hazard interaction: ${item.toLowerCase().replaceAll('_',' ')}`)||[]]).slice(0,12),
+      failureModes:unique([...basis.failureModes,...hazardFailureModes]).slice(0,12),
       interoperability:{humanInteroperability:basis.interoperability.humanInteroperability,adapterPolicy:basis.interoperability.adapterPolicy,conversionInterfaces:clone(basis.interoperability.conversionInterfaces),sameEndEffectDoesNotImplyDirectCompatibility:true},
       layoutAssumptions:{methodologySpecificMassVolumeRecalculationStatus:'DERIVED_REQUIREMENTS_ONLY',note:'Existing VESSEL-02 mass and VESSEL-04 volume remain the current closed reference. This record supplies methodology-specific orientation, clearance, chemistry, carrier, boundary, and service constraints for later methodology-aware packing and balance passes.'},
       provenance:{sourceTechnologyBasisId:basis.basisId,sourceModuleId:module.moduleId,generatorId:'blacklight-exo-vessel-module-methodology-generator',generatorVersion:'1.0.0'}
