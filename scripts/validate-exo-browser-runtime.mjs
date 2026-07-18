@@ -24,13 +24,14 @@ for(const id of['exo-generate-system','exo-force-populated-hz','exo-generate-clu
 for(const id of['exo-sector-load-example','exo-sector-generate','exo-sector-random','exo-sector-export','exo-sector-save','exo-sector-map','exo-sector-worlds-body','exo-sector-relations-grid'])if(!sectorHtml.includes(`id="${id}"`))fail(`Sector page is missing browser control ${id}.`);
 for(const id of['exo-health-run','exo-health-copy','exo-health-commit','exo-health-built','exo-health-result','exo-health-grid','exo-health-log'])if(!healthHtml.includes(`id="${id}"`))fail(`Deployment health page is missing browser control ${id}.`);
 
-const solarOrder=['blacklight-exo-source-authority.js','blacklight-exo-fixed-system-data.js','blacklight-exo-jpl-moon-catalog-loader.js','blacklight-exo-system-bootstrap.js'];
-for(let index=1;index<solarOrder.length;index++)if(solarHtml.indexOf(solarOrder[index-1])>=solarHtml.indexOf(solarOrder[index]))fail('Solar page script order is invalid.');
+const solarOrder=['blacklight-exo-runtime-supervisor.js','blacklight-exo-source-authority.js','blacklight-exo-fixed-system-data.js','blacklight-exo-jpl-moon-catalog-loader.js','blacklight-exo-system-bootstrap.js'];
+for(let index=1;index<solarOrder.length;index++)if(solarHtml.indexOf(solarOrder[index-1])<0||solarHtml.indexOf(solarOrder[index-1])>=solarHtml.indexOf(solarOrder[index]))fail('First-script supervised Solar page order is invalid.');
 const sectorOrder=['blacklight-exo-runtime-supervisor.js','blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-supervision.js','blacklight-exo-stellar-sector.js','blacklight-exo-sector-archive-store.js'];
 for(let index=1;index<sectorOrder.length;index++)if(sectorHtml.indexOf(sectorOrder[index-1])<0||sectorHtml.indexOf(sectorOrder[index-1])>=sectorHtml.indexOf(sectorOrder[index]))fail('Supervised sector and archive script order is invalid.');
 
 const dynamicScripts=[...new Set([...bootstrap.matchAll(/['"](blacklight-exo-[^'"]+\.js)['"]/g)].map(match=>match[1]))];
 for(const script of dynamicScripts)if(!exists(script))fail(`Incremental bootstrap references missing script ${script}.`);
+if(!bootstrap.includes("if(!globalThis.BlacklightExoRuntimeSupervisor)await load('blacklight-exo-runtime-supervisor.js')"))fail('Solar bootstrap does not safely reuse first-script supervision.');
 if(bootstrap.indexOf("load('blacklight-exo-runtime-supervisor.js')")>bootstrap.indexOf('await loadCore()'))fail('Runtime supervisor loads after Solar core startup.');
 if(!bootstrap.includes('loadEcologyAndImagery')||!bootstrap.includes('loadCluster')||!bootstrap.includes('loadRoutes'))fail('Solar optional layers are not independently activated.');
 if(!jpl.includes('requestIdleCallback')||!jpl.includes('AbortController')||!jpl.includes('timeoutMs=8000'))fail('Satellite catalogue is not deferred and time-bounded.');
@@ -61,4 +62,4 @@ const summary=await fallbackContext.BlacklightExoMoonCatalogReady;
 if(summary.status!=='error'||!fixedSystems.error)fail('Offline satellite catalogue did not degrade to the fixed-system fallback.');
 if(!failures.some(item=>item.phase==='satellite-catalogue'))fail('Offline catalogue failure was not reported to the browser supervisor.');
 
-console.log('EXO browser, deployment health, and durable archive validation passed.');
+console.log('EXO browser, deployment health, durable archive, and first-script supervision validation passed.');
