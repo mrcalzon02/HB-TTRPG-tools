@@ -1,9 +1,11 @@
 package io.github.mrcalzon02.barotrauma.persistence;
 
+import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldLock;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.Comparator;
+import java.util.UUID;
 
 /** Applies forward-only migrations to an existing world database while its filesystem lock is held. */
 final class WorldDatabaseMigrations {
@@ -85,6 +89,14 @@ final class WorldDatabaseMigrations {
         }
     }
 
+    private static boolean columnExists(Connection connection, String table, String column) throws SQLException {
+        try (Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery("PRAGMA table_info(" + table + ")")) {
+            while (result.next()) if (column.equals(result.getString("name"))) return true;
+            return false;
+        }
+    }
+
     private static void configure(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.execute("PRAGMA foreign_keys = ON");
@@ -92,5 +104,76 @@ final class WorldDatabaseMigrations {
             statement.execute("PRAGMA journal_mode = WAL");
             statement.execute("PRAGMA synchronous = FULL");
         }
+    }
+
+    static void verifyContract() throws Exception {
+        Class.forName("org.sqlite.JDBC");
+        Path root = Files.createTempDirectory("barotrauma-schema-001-upgrade-");
+        try {
+            UUID worldId = UUID.fromString("93000000-0000-0000-0000-000000000001");
+            WorldPaths paths = WorldStorageContracts.createWorld(root, "Legacy Europa", worldId);
+            UUID artifactId = UUID.fromString("93000000-0000-0000-0000-000000000002");
+            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
+                configure(connection);
+                try (Statement statement = connection.createStatement()) {
+                    for (String sql : WorldStorageContracts.initialSchemaStatements()) {
+                        String normalized = sql.trim().toUpperCase();
+                        if (!normalized.startsWith("PRAGMA ")) statement.execute(sql);
+                    }
+                }
+                try (PreparedStatement version = connection.prepareStatement(
+                        "INSERT INTO schema_migration(version, applied_at) VALUES (1, ?)")) {
+                    version.setString(1, Instant.parse("2026-07-01T00:00:00Z").toString());
+                    version.executeUpdate();
+                }
+                try (PreparedStatement world = connection.prepareStatement(
+                        "INSERT INTO world_metadata(world_id, display_name, created_at) VALUES (?, ?, ?)")) {
+                    world.setString(1, worldId.toString());
+                    world.setString(2, "Legacy Europa");
+                    world.setString(3, Instant.parse("2026-07-01T00:00:00Z").toString());
+                    world.executeUpdate();
+                }
+                try (PreparedStatement artifact = connection.prepareStatement(
+                        "INSERT INTO import_artifact(artifact_id, sha256, byte_length, source_name, source_kind, inspected_at) "
+                                + "VALUES (?, ?, 7, 'legacy.sub', 'official-submarine', ?)")) {
+                    artifact.setString(1, artifactId.toString());
+                    artifact.setString(2, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                    artifact.setString(3, Instant.parse("2026-07-01T00:00:00Z").toString());
+                    artifact.executeUpdate();
+                }
+            }
+
+            try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) {
+                // Acquiring the lock performs the forward migration before returning.
+            }
+
+            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
+                require(currentVersion(connection) == 2, "Legacy world did not advance to schema 002.");
+                require(tableExists(connection, "world_location"), "Schema-002 world tables are missing.");
+                require(columnExists(connection, "world_metadata", "source_suite_version"),
+                        "Schema-002 world metadata columns are missing.");
+                try (PreparedStatement statement = connection.prepareStatement(
+                        "SELECT source_name FROM import_artifact WHERE artifact_id = ?")) {
+                    statement.setString(1, artifactId.toString());
+                    try (ResultSet result = statement.executeQuery()) {
+                        require(result.next() && result.getString(1).equals("legacy.sub"),
+                                "Schema migration did not preserve schema-001 records.");
+                    }
+                }
+            }
+        } finally {
+            deleteTree(root);
+        }
+    }
+
+    private static void deleteTree(Path root) throws IOException {
+        if (!Files.exists(root)) return;
+        try (var stream = Files.walk(root)) {
+            for (Path path : stream.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
+        }
+    }
+
+    private static void require(boolean condition, String message) {
+        if (!condition) throw new IllegalStateException(message);
     }
 }
