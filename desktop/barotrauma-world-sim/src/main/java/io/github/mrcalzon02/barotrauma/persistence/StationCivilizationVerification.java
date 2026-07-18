@@ -48,8 +48,8 @@ public final class StationCivilizationVerification {
 
                 UUID stationId = station(paths, "station-a");
                 long consumptionBefore = stationCount(paths, "station_consumption_log", stationId);
-                FrontierState initial = frontier(paths, stationId);
                 forceShortage(paths, stationId);
+                FrontierState shortageBaseline = frontier(paths, stationId);
                 step(paths, executor, 12);
 
                 FrontierState contracted = frontier(paths, stationId);
@@ -59,9 +59,9 @@ public final class StationCivilizationVerification {
                         "Station consumption did not vary over time.");
                 require(contracted.shortageTicks() >= 8,
                         "Sustained undersupply did not accumulate a shortage streak.");
-                require(contracted.frontierPosition() < initial.frontierPosition(),
+                require(contracted.frontierPosition() < shortageBaseline.frontierPosition(),
                         "Sustained undersupply did not contract the civilian frontier.");
-                require(contracted.populationIndex() <= initial.populationIndex(),
+                require(contracted.populationIndex() <= shortageBaseline.populationIndex(),
                         "Sustained undersupply unexpectedly increased population capacity.");
                 require(contracted.frontierState().equals("CONTRACTING")
                                 || contracted.frontierState().equals("CONTESTED")
@@ -123,24 +123,13 @@ public final class StationCivilizationVerification {
 
     private static void forceShortage(WorldPaths paths, UUID stationId) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-            try (PreparedStatement station = connection.prepareStatement(
-                    "UPDATE station_simulation_state SET supplies=18,industry=20,security=25,integrity=95,threat=45 "
-                            + "WHERE station_id=?")) {
-                station.setString(1, stationId.toString());
-                station.executeUpdate();
-            }
-            try (PreparedStatement inventory = connection.prepareStatement(
-                    "UPDATE station_inventory SET quantity=0,reserved=0 WHERE station_id=? AND item_id='item-rations'")) {
-                inventory.setString(1, stationId.toString());
-                inventory.executeUpdate();
-            }
-            try (PreparedStatement frontier = connection.prepareStatement(
-                    "UPDATE station_civilization_state SET population_index=70,civilization_strength=55,"
-                            + "fauna_pressure=40,shortage_ticks=0,surplus_ticks=0,frontier_position=60,"
-                            + "frontier_state='HOLDING' WHERE station_id=?")) {
-                frontier.setString(1, stationId.toString());
-                frontier.executeUpdate();
-            }
+            execute(connection, "UPDATE station_simulation_state SET supplies=18,industry=20,security=25,"
+                    + "integrity=95,threat=45 WHERE station_id=?", stationId);
+            execute(connection, "UPDATE station_inventory SET quantity=0,reserved=0 WHERE station_id=? "
+                    + "AND item_id='item-rations'", stationId);
+            execute(connection, "UPDATE station_civilization_state SET population_index=70,"
+                    + "civilization_strength=55,fauna_pressure=40,shortage_ticks=0,surplus_ticks=0,"
+                    + "frontier_position=60,frontier_state='HOLDING' WHERE station_id=?", stationId);
         }
     }
 
@@ -150,7 +139,8 @@ public final class StationCivilizationVerification {
             String worldId = worldId(connection);
             long tick = currentTick(connection);
             try (PreparedStatement stock = connection.prepareStatement(
-                    "UPDATE station_inventory SET quantity=quantity+?,last_tick=? WHERE station_id=? AND item_id='item-rations'")) {
+                    "UPDATE station_inventory SET quantity=quantity+?,last_tick=? WHERE station_id=? "
+                            + "AND item_id='item-rations'")) {
                 stock.setInt(1, quantity);
                 stock.setLong(2, tick);
                 stock.setString(3, destinationStationId.toString());
@@ -158,8 +148,8 @@ public final class StationCivilizationVerification {
             }
             String lotId = destinationStationId + ":recovery-delivery:" + tick;
             try (PreparedStatement lot = connection.prepareStatement(
-                    "INSERT INTO freight_lot(lot_id,world_id,source_station_id,destination_station_id,item_id,quantity,status,created_tick,updated_tick) "
-                            + "VALUES (?,?,?,?, 'item-rations',?,'IN_TRANSIT',?,?)")) {
+                    "INSERT INTO freight_lot(lot_id,world_id,source_station_id,destination_station_id,item_id,quantity,"
+                            + "status,created_tick,updated_tick) VALUES (?,?,?,?, 'item-rations',?,'IN_TRANSIT',?,?)")) {
                 lot.setString(1, lotId);
                 lot.setString(2, worldId);
                 lot.setString(3, sourceStationId.toString());
@@ -181,46 +171,32 @@ public final class StationCivilizationVerification {
 
     private static void prepareExpansion(WorldPaths paths, UUID stationId) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-            try (PreparedStatement station = connection.prepareStatement(
-                    "UPDATE station_simulation_state SET supplies=180,industry=80,security=90,integrity=95,threat=5 "
-                            + "WHERE station_id=?")) {
-                station.setString(1, stationId.toString());
-                station.executeUpdate();
-            }
-            try (PreparedStatement inventory = connection.prepareStatement(
-                    "UPDATE station_inventory SET quantity=120,reserved=0 WHERE station_id=? AND item_id='item-rations'")) {
-                inventory.setString(1, stationId.toString());
-                inventory.executeUpdate();
-            }
-            try (PreparedStatement frontier = connection.prepareStatement(
-                    "UPDATE station_civilization_state SET civilization_strength=80,fauna_pressure=5,"
-                            + "shortage_ticks=0,surplus_ticks=0,frontier_state='HOLDING' WHERE station_id=?")) {
-                frontier.setString(1, stationId.toString());
-                frontier.executeUpdate();
-            }
+            execute(connection, "UPDATE station_simulation_state SET supplies=180,industry=80,security=90,"
+                    + "integrity=95,threat=5 WHERE station_id=?", stationId);
+            execute(connection, "UPDATE station_inventory SET quantity=120,reserved=0 WHERE station_id=? "
+                    + "AND item_id='item-rations'", stationId);
+            execute(connection, "UPDATE station_civilization_state SET civilization_strength=80,"
+                    + "fauna_pressure=5,shortage_ticks=0,surplus_ticks=0,frontier_state='HOLDING' "
+                    + "WHERE station_id=?", stationId);
         }
     }
 
     private static void prepareMonsterAttack(WorldPaths paths, UUID stationId) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-            try (PreparedStatement station = connection.prepareStatement(
-                    "UPDATE station_simulation_state SET supplies=150,industry=55,security=0,integrity=90,threat=80 "
-                            + "WHERE station_id=?")) {
-                station.setString(1, stationId.toString());
-                station.executeUpdate();
-            }
-            try (PreparedStatement inventory = connection.prepareStatement(
-                    "UPDATE station_inventory SET quantity=100,reserved=0 WHERE station_id=? AND item_id='item-rations'")) {
-                inventory.setString(1, stationId.toString());
-                inventory.executeUpdate();
-            }
-            try (PreparedStatement frontier = connection.prepareStatement(
-                    "UPDATE station_civilization_state SET population_index=70,civilization_strength=20,"
-                            + "fauna_pressure=95,shortage_ticks=0,surplus_ticks=0,frontier_position=55,"
-                            + "frontier_state='HOLDING' WHERE station_id=?")) {
-                frontier.setString(1, stationId.toString());
-                frontier.executeUpdate();
-            }
+            execute(connection, "UPDATE station_simulation_state SET supplies=150,industry=55,security=0,"
+                    + "integrity=90,threat=80 WHERE station_id=?", stationId);
+            execute(connection, "UPDATE station_inventory SET quantity=100,reserved=0 WHERE station_id=? "
+                    + "AND item_id='item-rations'", stationId);
+            execute(connection, "UPDATE station_civilization_state SET population_index=70,"
+                    + "civilization_strength=20,fauna_pressure=95,shortage_ticks=0,surplus_ticks=0,"
+                    + "frontier_position=55,frontier_state='HOLDING' WHERE station_id=?", stationId);
+        }
+    }
+
+    private static void execute(Connection connection, String sql, UUID stationId) throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, stationId.toString());
+            statement.executeUpdate();
         }
     }
 
@@ -228,8 +204,8 @@ public final class StationCivilizationVerification {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
              PreparedStatement statement = connection.prepareStatement(
                      "SELECT population_index,civilization_strength,fauna_pressure,last_consumption,shortage_ticks,"
-                             + "surplus_ticks,frontier_position,frontier_state,last_tick FROM station_civilization_state "
-                             + "WHERE station_id=?")) {
+                             + "surplus_ticks,frontier_position,frontier_state,last_tick "
+                             + "FROM station_civilization_state WHERE station_id=?")) {
             statement.setString(1, stationId.toString());
             try (ResultSet result = statement.executeQuery()) {
                 if (!result.next()) throw new IllegalStateException("Station civilization state is missing.");
@@ -294,7 +270,8 @@ public final class StationCivilizationVerification {
             throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT 1 FROM civilization_frontier_event WHERE station_id=? AND event_type=? AND tick_sequence=?")) {
+                     "SELECT 1 FROM civilization_frontier_event WHERE station_id=? AND event_type=? "
+                             + "AND tick_sequence=?")) {
             statement.setString(1, stationId.toString());
             statement.setString(2, eventType);
             statement.setLong(3, tick);
@@ -333,7 +310,8 @@ public final class StationCivilizationVerification {
 
     private static long currentTick(Connection connection) throws Exception {
         try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(
-                "SELECT COALESCE(current_tick_sequence,imported_tick_sequence) FROM world_simulation_metadata LIMIT 1")) {
+                "SELECT COALESCE(current_tick_sequence,imported_tick_sequence) "
+                        + "FROM world_simulation_metadata LIMIT 1")) {
             if (!result.next()) throw new IllegalStateException("World clock is missing.");
             return result.getLong(1);
         }
