@@ -1,16 +1,18 @@
 package io.github.mrcalzon02.barotrauma.persistence;
 
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock;
 import io.github.mrcalzon02.barotrauma.simulation.PersistentSimulationSession;
 import io.github.mrcalzon02.barotrauma.simulation.SimulationCommandExecutor;
 import io.github.mrcalzon02.barotrauma.simulation.TransitResolutionEngine;
 
-/** Runs the complete dependency-ordered desktop persistence and simulation-contract chain. */
+/** Runs the complete dependency-ordered desktop persistence, installation, and simulation-contract chain. */
 public final class DesktopPersistenceVerificationSuite {
 
     private DesktopPersistenceVerificationSuite() { }
 
     public static void verifyContract() throws Exception {
+        BarotraumaDonorAssets.verifyContract();
         RecursiveSqliteDriver.verifyContract();
         WorldStorageContracts.verifyContract();
         WorldDatabaseMigrations.verifyContract();
@@ -31,7 +33,7 @@ public final class DesktopPersistenceVerificationSuite {
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma persistence, recursive SQLite triggers, passive-world, station consumption, civilization frontier, fleet recovery, ecology, geology, resources, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma donor-asset, fallback PNG, persistence, recursive SQLite trigger, passive-world, station consumption, civilization frontier, fleet recovery, ecology, geology, resources, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
