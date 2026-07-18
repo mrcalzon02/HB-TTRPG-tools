@@ -70,7 +70,11 @@ public final class PassiveWorldSimulationService implements AutoCloseable {
         }
         java.nio.file.Path key = world.root().toAbsolutePath().normalize();
         PassiveWorldSimulationService existing = ACTIVE.get(key);
-        if (existing != null && !existing.closed.get()) return existing;
+        if (existing != null && !existing.closed.get() && existing.fault == null) return existing;
+        if (existing != null) {
+            existing.closeInternal(false);
+            ACTIVE.remove(key, existing);
+        }
 
         RecoveryState recovery = SimulationCheckpointStore.load(world, DEFAULT_TICK_SIZE);
         DeterministicSimulationClock clock = DeterministicSimulationClock.restore(recovery.snapshot());
@@ -126,7 +130,7 @@ public final class PassiveWorldSimulationService implements AutoCloseable {
     }
 
     public Status status() {
-        return new Status(world, !closed.get(), cycleRunning, cadence, ticksPerCycle,
+        return new Status(world, !closed.get() && fault == null, cycleRunning, cadence, ticksPerCycle,
                 lastResult, fault, Instant.now());
     }
 
