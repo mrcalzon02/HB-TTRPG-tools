@@ -2,7 +2,7 @@
   'use strict';
   const R=globalThis.BlacklightExoFTLPathRuntime,E=globalThis.BlacklightExoFTLPathEngineering;
   if(!R||!E||R.base.pathLevelExtensionVersion)return;
-  const {base,D,LEVEL_MAP,FAMILY_MAP,STAGE_TO_TIER,rngFor,clamp,logNumber,ensureControl,requestedLevel,inferLevel,composeLevel,updatePerformance,updateRange,updateNavigation,updateKinematics,secondsText}=R;
+  const {base,D,LEVEL_MAP,FAMILY_MAP,STAGE_TO_TIER,LEVEL5_BALANCE,rngFor,clamp,logNumber,ensureControl,requestedLevel,inferLevel,composeLevel,updatePerformance,updateRange,updateNavigation,updateKinematics,secondsText}=R;
 
   function generate(seed,input={},source=null){
     ensureControl();
@@ -17,20 +17,38 @@
     if(!stage)return result;
 
     updatePerformance(result,stage,rng);updateRange(result,stage,rng);updateNavigation(result,stage,rng);updateKinematics(result,stage,rng);E.scaleEnergy(result,stage,rng);E.updateRouteAndReliability(result,stage,rng);
-    const facilityMass=logNumber(rng,stage.facilityMassTonnes[0],stage.facilityMassTonnes[1]),chemicalComparison=E.makeChemicalComparison(result,stage,rng),hierarchy=E.makeHierarchy(result.identity.familyKey,levelKey);
+    let facilityMass=logNumber(rng,stage.facilityMassTonnes[0],stage.facilityMassTonnes[1]);
+    const isLevel5=stage.rank===5,isWormhole=isLevel5&&result.identity.familyKey==='wormhole-gate';
+    if(isWormhole)facilityMass=Math.max(25000000,facilityMass*2500);
+    const chemicalComparison=E.makeChemicalComparison(result,stage,rng),hierarchy=E.makeHierarchy(result.identity.familyKey,levelKey);
 
     result.version=3;
     Object.assign(result.identity,{pathLevel:stage.label,pathLevelKey:stage.key,pathLevelRank:stage.rank,pathName:stage.pathLabel,pathArchitecture:stage.name});
-    result.pathLevel={key:stage.key,rank:stage.rank,label:stage.label,pathLabel:stage.pathLabel,architectureName:stage.name,developmentInstallation:stage.scaleDescription,facilityMassTonnes:facilityMass,facilityMassText:`${facilityMass.toLocaleString(undefined,{maximumFractionDigits:2})} tonnes`,speedRangeC:[...stage.speedC],rangeAU:[...stage.rangeAU],energyMultiplierRange:[...stage.energyMultiplier],recommendedEnergyKey:stage.recommendedEnergyKey,recommendedEnergy:stage.recommendedEnergy,chargeWindow:`${secondsText(stage.spoolSeconds[0])}–${secondsText(stage.spoolSeconds[1])}`,recoveryWindow:`${secondsText(stage.cooldownSeconds[0])}–${secondsText(stage.cooldownSeconds[1])}`,breakthrough:stage.breakthrough,utility:stage.utility,limitation:stage.limitation,commonUtility:stage.commonUtility,commonLimit:stage.commonLimit,chemicalComparison};
+    result.pathLevel={key:stage.key,rank:stage.rank,label:stage.label,pathLabel:stage.pathLabel,architectureName:stage.name,developmentInstallation:isWormhole?'paired fixed stellar or deep-space gate mouths with chronology control, route-defense, mass-flow balancing, and civilization-scale support industry':stage.scaleDescription,facilityMassTonnes:facilityMass,facilityMassText:`${facilityMass.toLocaleString(undefined,{maximumFractionDigits:2})} tonnes`,speedRangeC:[...stage.speedC],rangeAU:[...stage.rangeAU],energyMultiplierRange:[...stage.energyMultiplier],recommendedEnergyKey:stage.recommendedEnergyKey,recommendedEnergy:stage.recommendedEnergy,chargeWindow:`${secondsText(stage.spoolSeconds[0])}–${secondsText(stage.spoolSeconds[1])}`,recoveryWindow:`${secondsText(stage.cooldownSeconds[0])}–${secondsText(stage.cooldownSeconds[1])}`,breakthrough:stage.breakthrough,utility:stage.utility,limitation:stage.limitation,commonUtility:stage.commonUtility,commonLimit:stage.commonLimit,chemicalComparison};
+    if(isLevel5){
+      result.pathLevel.speedCeilingAuPerHour=result.performance.pathLevelSpeedCeilingAuPerHour;
+      result.pathLevel.speedCeilingC=result.performance.pathLevelSpeedCeilingC;
+      result.pathLevel.balanceAuthority='Path Level 5 AU-compression ceiling';
+      result.pathLevel.balanceNote=isWormhole?'Path 5 wormhole transit alone may approach 2,140,132.953375 AU/hour. This advantage is inseparable from paired fixed mouths, chronology control, exceptional scarcity, and civilization-scale cost.':'Path 5 non-wormhole transit may approach 1,426,755.30225 AU/hour. Family ranges remain close enough that route access, reliability, engineering doctrine, and operational burden still matter.';
+    }
+    if(isWormhole){
+      Object.assign(result.pathLevel,{rarityClass:'UNIVERSE_RAREST',capitalBurdenClass:'CIVILIZATION_SCALE_MAXIMUM',engineeringDifficultyClass:'EXTREME_TOPOLOGICAL',capitalCostIndex:100,engineeringDifficultyIndex:100,availabilityIndex:1,infrastructureRule:'Path 5 wormhole transit requires paired fixed mouths, chronology-safe synchronization, protected route governance, and exceptional exotic-state production.'});
+      result.engineeringMaturity.integrationComplexity=Math.max(97,result.engineeringMaturity.integrationComplexity);
+      result.risk.score=Math.max(94,result.risk.score);result.risk.label='Critical';
+      result.risk.drivers=[...new Set([...(result.risk.drivers||[]),'universe-rarest paired wormhole infrastructure','chronology-safe mouth synchronization','civilization-scale capital and exotic-state burden'])];
+      result.power.pathLevelCapitalBurdenClass='CIVILIZATION_SCALE_MAXIMUM';
+    }
     result.pathHierarchy=hierarchy;
     result.engineeringMaturity.maturityLabel=`${stage.label} · ${stage.name}`;result.engineeringMaturity.integrationComplexity=clamp(Math.round(result.engineeringMaturity.integrationComplexity+(6-stage.rank)*5),1,100);
     result.compatibility.requested.pathLevel=requested;result.compatibility.resolved.pathLevel=levelKey;
     if(requested!=='random'&&input.tier&&input.tier!=='random'&&input.tier!==result.identity.tierKey){result.compatibility.corrections.push(`Drive-path level ${stage.rank} controls the maturity baseline; shared hierarchy tier ${input.tier} resolved as ${result.identity.tierKey}.`);result.compatibility.fullyHonored=false;}
     result.sourceImpact.push(`${stage.pathLabel} is operating at Path ${stage.rank}: ${stage.name}.`);
-    result.summary+=` Within the ${stage.pathLabel.toLowerCase()}, this is Path ${stage.rank} (${stage.label.toLowerCase()}): ${stage.name}. The development installation is a ${stage.scaleDescription}, with a modeled mass of ${result.pathLevel.facilityMassText}, a ${result.pathLevel.chargeWindow} charge window, and a ${result.pathLevel.recoveryWindow} recovery window. ${chemicalComparison.conclusion}`;
+    if(isWormhole)result.sourceImpact.push('Path 5 wormhole transit is the rarest, most expensive, and most difficult transit technology in the setting; its superior AU-compression ceiling cannot be separated from its fixed infrastructure and civilization-scale burden.');
+    result.summary+=` Within the ${stage.pathLabel.toLowerCase()}, this is Path ${stage.rank} (${stage.label.toLowerCase()}): ${stage.name}. The development installation is a ${result.pathLevel.developmentInstallation}, with a modeled mass of ${result.pathLevel.facilityMassText}, a ${result.pathLevel.chargeWindow} charge window, and a ${result.pathLevel.recoveryWindow} recovery window. ${chemicalComparison.conclusion}`;
+    if(isWormhole)result.summary+=` Its Path 5 wormhole ceiling is ${LEVEL5_BALANCE.wormholeCapAuPerHour.toLocaleString(undefined,{maximumFractionDigits:6})} AU/hour, but this rating belongs to the universe's rarest and most expensive paired-gate infrastructure rather than an ordinary shipboard drive.`;
     return result;
   }
 
   ensureControl();
-  globalThis.BlacklightExoFTL=Object.freeze({...base,version:3,pathLevelExtensionVersion:1,pathLevels:D.levels,pathDefinitions:D.paths,generate});
+  globalThis.BlacklightExoFTL=Object.freeze({...base,version:3,pathLevelExtensionVersion:2,pathLevels:D.levels,pathDefinitions:D.paths,pathLevelBalance:LEVEL5_BALANCE,generate});
 })();
