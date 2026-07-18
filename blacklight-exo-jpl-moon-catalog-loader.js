@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const supervisor=globalThis.BlacklightExoRuntimeSupervisor;
+  const supervisor=()=>globalThis.BlacklightExoRuntimeSupervisor;
   const SOURCES=[
     'https://raw.githubusercontent.com/christoskaramou/PhasmaProjects/ae71047bd6e80054d64c7e6165c48e8d2a653886/PhasmaSpace/Assets/Scripts/solar/moon_catalog.lua',
     'https://cdn.jsdelivr.net/gh/christoskaramou/PhasmaProjects@ae71047bd6e80054d64c7e6165c48e8d2a653886/PhasmaSpace/Assets/Scripts/solar/moon_catalog.lua'
@@ -41,14 +41,14 @@
     const text=await fetchPinnedSource();try{localStorage.setItem(CACHE_KEY,text);}catch(_){}return text;
   }
   async function loadCatalogue(){
-    supervisor?.start('satellite-catalogue');
+    supervisor()?.start('satellite-catalogue');
     const fixed=globalThis.BlacklightExoFixedSystems;if(!fixed?.installMoonCatalog)throw new Error('Fixed Solar System registry was not initialized');
     const text=await sourceText(),catalog=parseLuaCatalog(text),total=Object.values(catalog).reduce((sum,rows)=>sum+rows.length,0);
     if(total<400||!catalog.Earth?.length||!catalog.Pluto?.length)throw new Error(`Parsed moon catalogue was incomplete (${total} records)`);
-    const summary=fixed.installMoonCatalog(catalog,{source:SOURCE_LABEL,version:SOURCE_VERSION});document.dispatchEvent(new CustomEvent('blacklight:moon-catalog-ready',{detail:summary}));supervisor?.ready('satellite-catalogue',{records:total});return summary;
+    const summary=fixed.installMoonCatalog(catalog,{source:SOURCE_LABEL,version:SOURCE_VERSION});document.dispatchEvent(new CustomEvent('blacklight:moon-catalog-ready',{detail:summary}));supervisor()?.ready('satellite-catalogue',{records:total});return summary;
   }
   function failCatalogue(error){
-    supervisor?.fail('satellite-catalogue',error);globalThis.BlacklightExoFixedSystems?.markCatalogFailure?.(error);
+    supervisor()?.fail('satellite-catalogue',error);globalThis.BlacklightExoFixedSystems?.markCatalogFailure?.(error);
     const summary=globalThis.BlacklightExoFixedSystems?.getCatalogSummary?.()||{status:'error',error:String(error)};document.dispatchEvent(new CustomEvent('blacklight:moon-catalog-error',{detail:summary}));return summary;
   }
   globalThis.BlacklightExoMoonCatalogReady=new Promise(resolve=>idle(()=>loadCatalogue().then(resolve).catch(error=>resolve(failCatalogue(error)))));
