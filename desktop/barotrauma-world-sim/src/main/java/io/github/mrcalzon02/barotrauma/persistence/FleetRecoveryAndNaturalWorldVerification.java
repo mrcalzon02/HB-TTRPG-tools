@@ -56,23 +56,25 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                 UUID distressed = disableVessel(paths);
                 require(count(paths, "fleet_response_operation") == 1,
                         "A disabled NPC vessel did not create a fleet response operation.");
-                require(operationStatus(paths).equals("AVAILABLE"),
+                require("AVAILABLE".equals(operationStatus(paths)),
                         "A new fleet response did not begin in AVAILABLE state.");
 
-                int ecologyBefore = ecologyValue(paths, locationId, "primary_producers");
-                int geologyBefore = geologyValue(paths, locationId, "mineral_exposure");
-                for (int cycle = 0; cycle < 30 && !operationStatus(paths).equals("COMPLETE"); cycle++) {
+                for (int cycle = 0; cycle < 30 && !"COMPLETE".equals(operationStatus(paths)); cycle++) {
                     step(paths, executor);
                 }
-
-                require(operationStatus(paths).equals("COMPLETE"),
+                require("COMPLETE".equals(operationStatus(paths)),
                         "The passive fleet response did not complete.");
                 require(operationResponder(paths) != null,
                         "No NPC responder was assigned to the recovery operation.");
-                require(vesselStatus(paths, distressed).equals("DOCKED") && vesselHull(paths, distressed) >= 35,
+                require("DOCKED".equals(vesselStatus(paths, distressed)) && vesselHull(paths, distressed) >= 35,
                         "The disabled vessel was not recovered to a docked, serviceable state.");
                 require(count(paths, "fleet_response_log") >= 3,
                         "Fleet response request, assignment, progress, or completion evidence is incomplete.");
+
+                primeNaturalActivity(paths, locationId);
+                int ecologyBefore = ecologyValue(paths, locationId, "primary_producers");
+                int geologyBefore = geologyValue(paths, locationId, "mineral_exposure");
+                for (int cycle = 0; cycle < 35; cycle++) step(paths, executor);
 
                 require(ecologyValue(paths, locationId, "primary_producers") != ecologyBefore
                                 || count(paths, "natural_world_event") > 0,
