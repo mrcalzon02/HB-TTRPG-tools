@@ -49,8 +49,9 @@ public final class PlayerVesselTransitTransaction {
                 try (PreparedStatement statement = connection.prepareStatement(
                         "INSERT INTO player_vessel_state(vessel_id,world_id,current_location_id,status,hull,supplies,"
                                 + "cargo,crew_quality,navigation,engineering,combat,route_progress,route_ticks_required,"
-                                + "route_action_sequence,mission_type,last_tick) VALUES (?,?,?,'DOCKED',100,100,0,?,?,?,?,”
-                                + "0,1,0,'TRANSIT',?) ON CONFLICT(vessel_id) DO NOTHING".replace('”', '?'))) {
+                                + "route_action_sequence,mission_type,last_tick) "
+                                + "VALUES (?,?,?,'DOCKED',100,100,0,?,?,?,?,0,1,0,'TRANSIT',?) "
+                                + "ON CONFLICT(vessel_id) DO NOTHING")) {
                     statement.setString(1, vesselId.toString());
                     statement.setString(2, world.worldId().toString());
                     statement.setString(3, locationId.toString());
@@ -235,31 +236,45 @@ public final class PlayerVesselTransitTransaction {
 
     public static PlayerState dock(WorldPaths paths, UUID vesselId, String actor)
             throws IOException, SQLException {
+        Objects.requireNonNull(paths, "paths");
+        Objects.requireNonNull(vesselId, "vesselId");
         requireDriver();
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths);
              Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
             verifySchema(connection);
-            WorldClock world = readWorldClock(connection);
-            PlayerState state = requireState(connection, vesselId);
-            if (!state.status().equals("ARRIVED")) throw new SQLException("Only an arrived player vessel can dock.");
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "UPDATE player_vessel_state SET status='DOCKED',route_progress=0,route_ticks_required=1,"
-                            + "route_action_sequence=0,last_tick=? WHERE vessel_id=?")) {
-                statement.setLong(1, world.tickSequence());
-                statement.setString(2, vesselId.toString());
-                statement.executeUpdate();
+            boolean original = connection.getAutoCommit();
+            connection.setAutoCommit(false);
+            try {
+                WorldClock world = readWorldClock(connection);
+                PlayerState state = requireState(connection, vesselId);
+                if (!state.status().equals("ARRIVED")) throw new SQLException("Only an arrived player vessel can dock.");
+                try (PreparedStatement statement = connection.prepareStatement(
+                        "UPDATE player_vessel_state SET status='DOCKED',route_progress=0,route_ticks_required=1,"
+                                + "route_action_sequence=0,last_tick=? WHERE vessel_id=?")) {
+                    statement.setLong(1, world.tickSequence());
+                    statement.setString(2, vesselId.toString());
+                    statement.executeUpdate();
+                }
+                PlayerState docked = requireState(connection, vesselId);
+                insertLog(connection, docked, world, 0, "DOCKED", 0, "Vessel docked",
+                        docked.displayName() + " completed docking procedures at " + docked.currentLocationName() + ".",
+                        "DOCKED", 0, 0);
+                insertAudit(connection, actor, "player_vessel_docked", vesselId, "{}");
+                connection.commit();
+                return docked;
+            } catch (SQLException | RuntimeException exception) {
+                try { connection.rollback(); } catch (SQLException rollback) { exception.addSuppressed(rollback); }
+                throw exception;
+            } finally {
+                connection.setAutoCommit(original);
             }
-            PlayerState docked = requireState(connection, vesselId);
-            insertLog(connection, docked, world, 0, "DOCKED", 0, "Vessel docked",
-                    docked.displayName() + " completed docking procedures at " + docked.currentLocationName() + ".",
-                    "DOCKED", 0, 0);
-            insertAudit(connection, actor, "player_vessel_docked", vesselId, "{}");
-            return docked;
         }
     }
 
     public static PlayerState load(WorldPaths paths, UUID vesselId) throws IOException, SQLException {
+        Objects.requireNonNull(paths, "paths");
+        Objects.requireNonNull(vesselId, "vesselId");
         requireDriver();
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configureReadOnly(connection);
