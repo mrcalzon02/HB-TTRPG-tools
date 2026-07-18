@@ -1,0 +1,24 @@
+{
+  "projectId":"blacklight-exo-vessel-design-system",
+  "registryType":"exoVesselCombatGeometryRegistry",
+  "registryVersion":"1.0.0",
+  "phase":"VESSEL-06",
+  "schema":"data/schemas/exo-vessel-combat-geometry.schema.json",
+  "validationModes":["REPAIR","STRICT"],
+  "targetClasses":["MISSILE","SMALL_CRAFT","VESSEL","CAPITAL","STATION","UNKNOWN"],
+  "signatureProfiles":["STEALTH","LOW","NORMAL","HIGH","BEACON"],
+  "conflictModes":["NONE","NOISY","DECOY","CONFLICTING"],
+  "trackStatuses":["NO_TRACK","DETECTION_ONLY","COARSE_TRACK","FIRM_TRACK","FIRE_CONTROL_TRACK"],
+  "solutionStatuses":["UNAVAILABLE","STALE","SEARCH_ONLY","TRACKING","FIRE_CONTROL_READY"],
+  "principles":[
+    "Observation age is the sum of source measurement age and one-way light delay.",
+    "Position uncertainty grows from angular and range error, velocity uncertainty, acceleration uncertainty, and target maneuver authority.",
+    "Target combat delta-v limits the duration of sustained maneuver but does not erase short-term lateral displacement.",
+    "Sensor agreement, identity confidence, signature confidence, deception probability, and competing hypotheses remain separate values.",
+    "Fire-control readiness requires surviving sensor, data, power, cooling, and fire-control channels from VESSEL-05 effective graphs.",
+    "A destroyed or incoherent observing vessel cannot retain a valid track or fire-control solution.",
+    "VESSEL-06 is weapon-independent and must not define weapon ranges, hit probability, projectile behavior, beam divergence, or local impact voxels."
+  ],
+  "repairableFaults":["NEGATIVE_LIGHT_LAG","CONFIDENCE_OUT_OF_RANGE","FIRE_CONTROL_WITHOUT_CHANNELS","ZERO_UNCERTAINTY_CONFLICT","MISSING_SENSOR_SOURCE","DESTROYED_OBSERVER_TRACKING"],
+  "deferredSystems":{"weaponPerformanceAndEngagementEnvelopes":"VESSEL-07","localDamageResolution":"VESSEL-08","gameplayActions":"VESSEL-09"}
+}
