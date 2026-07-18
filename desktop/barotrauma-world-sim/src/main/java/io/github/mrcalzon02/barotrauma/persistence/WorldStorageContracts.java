@@ -20,9 +20,9 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-/** Dependency-free filesystem, locking, atomic-write, and initial database-schema contracts. */
+/** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 1;
+    public static final int DATABASE_SCHEMA_VERSION = 2;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -107,6 +107,7 @@ public final class WorldStorageContracts {
         }
     }
 
+    /** Schema 001: import ledger and duplicate-safe vessel identity. */
     public static List<String> initialSchemaStatements() {
         return List.of(
                 "PRAGMA foreign_keys = ON",
@@ -120,6 +121,21 @@ public final class WorldStorageContracts {
                 "CREATE UNIQUE INDEX one_current_snapshot_per_vessel ON vessel_snapshot(vessel_id) WHERE is_current = 1",
                 "CREATE TABLE import_warning (warning_id TEXT PRIMARY KEY, artifact_id TEXT NOT NULL, warning_code TEXT NOT NULL, warning_text TEXT NOT NULL, acknowledged_at TEXT, FOREIGN KEY(artifact_id) REFERENCES import_artifact(artifact_id))",
                 "CREATE TABLE audit_entry (sequence INTEGER PRIMARY KEY AUTOINCREMENT, occurred_at TEXT NOT NULL, actor TEXT NOT NULL, action TEXT NOT NULL, entity_type TEXT, entity_id TEXT, details_json TEXT NOT NULL)"
+        );
+    }
+
+    /** Schema 002: normalized browser-suite master-world state. */
+    public static List<String> schema002Statements() {
+        return List.of(
+                "ALTER TABLE world_metadata ADD COLUMN source_suite_version INTEGER",
+                "ALTER TABLE world_metadata ADD COLUMN source_exported_at TEXT",
+                "CREATE TABLE world_import (import_id TEXT PRIMARY KEY, world_id TEXT NOT NULL UNIQUE, artifact_id TEXT NOT NULL UNIQUE, suite_version INTEGER NOT NULL, master_world_id TEXT NOT NULL, exported_at TEXT, imported_at TEXT NOT NULL, rings INTEGER NOT NULL CHECK(rings >= 0), location_count INTEGER NOT NULL CHECK(location_count >= 0), station_count INTEGER NOT NULL CHECK(station_count >= 0), shell_radius REAL, active_submarine_name TEXT, active_submarine_model TEXT, crew_records INTEGER NOT NULL DEFAULT 0 CHECK(crew_records >= 0), economy_vessels INTEGER NOT NULL DEFAULT 0 CHECK(economy_vessels >= 0), economy_stations INTEGER NOT NULL DEFAULT 0 CHECK(economy_stations >= 0), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id), FOREIGN KEY(artifact_id) REFERENCES import_artifact(artifact_id))",
+                "CREATE TABLE world_location (location_id TEXT PRIMARY KEY, world_id TEXT NOT NULL, source_location_id TEXT NOT NULL, source_ordinal INTEGER NOT NULL CHECK(source_ordinal >= 0), display_name TEXT NOT NULL, location_type TEXT, ring INTEGER NOT NULL DEFAULT 0 CHECK(ring >= 0), location_level INTEGER NOT NULL DEFAULT 0 CHECK(location_level >= 0), map_x REAL, map_y REAL, biome TEXT, faction TEXT, is_station INTEGER NOT NULL DEFAULT 0 CHECK(is_station IN (0,1)), UNIQUE(world_id, source_location_id), UNIQUE(world_id, source_ordinal), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id))",
+                "CREATE INDEX world_location_ring_index ON world_location(world_id, ring, source_ordinal)",
+                "CREATE TABLE world_station (station_id TEXT PRIMARY KEY, world_id TEXT NOT NULL, location_id TEXT NOT NULL UNIQUE, source_station_id TEXT NOT NULL, display_name TEXT NOT NULL, station_type TEXT, faction TEXT, has_economy INTEGER NOT NULL DEFAULT 0 CHECK(has_economy IN (0,1)), UNIQUE(world_id, source_station_id), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id), FOREIGN KEY(location_id) REFERENCES world_location(location_id))",
+                "CREATE TABLE world_component_version (world_id TEXT NOT NULL, component_key TEXT NOT NULL, component_version TEXT NOT NULL, PRIMARY KEY(world_id, component_key), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id))",
+                "CREATE TABLE world_state_family (world_id TEXT NOT NULL, family_key TEXT NOT NULL, PRIMARY KEY(world_id, family_key), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id))",
+                "CREATE TABLE world_simulation_metadata (world_id TEXT PRIMARY KEY, canonical_time TEXT, real_epoch TEXT, last_simulated_at TEXT, imported_tick_sequence INTEGER NOT NULL DEFAULT 0 CHECK(imported_tick_sequence >= 0), imported_at TEXT NOT NULL, source_artifact_id TEXT NOT NULL, simulation_enabled INTEGER NOT NULL DEFAULT 0 CHECK(simulation_enabled IN (0,1)), scheduler_state TEXT NOT NULL DEFAULT 'PAUSED' CHECK(scheduler_state IN ('PAUSED','RUNNING','CATCHING_UP','FAULTED')), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id), FOREIGN KEY(source_artifact_id) REFERENCES import_artifact(artifact_id))"
         );
     }
 
@@ -196,6 +212,8 @@ public final class WorldStorageContracts {
             require(slug("../A Dangerous World").equals("a-dangerous-world"), "World slug safety failed.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("UNIQUE(vessel_id, snapshot_sha256)")), "Snapshot duplicate constraint is missing.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("one_current_snapshot_per_vessel")), "Current-snapshot constraint is missing.");
+            require(schema002Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "World-location schema is missing.");
+            require(schema002Statements().stream().anyMatch(sql -> sql.contains("scheduler_state")), "Paused simulation metadata schema is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
