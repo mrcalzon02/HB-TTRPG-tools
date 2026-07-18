@@ -1,5 +1,9 @@
 package io.github.mrcalzon02.barotrauma.desktop;
 
+import io.github.mrcalzon02.barotrauma.desktop.imports.ImportInspectionWindow;
+import io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow;
+import io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,15 +28,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * First dependency-free Java 17 Swing shell for the Barotrauma World Simulation Toolbox.
- *
- * <p>The shell establishes stable workspace identities and Event Dispatch Thread ownership.
- * Persistence, import inspection, and simulation are deliberately not implemented here.</p>
- */
+/** Primary Java 17 Swing shell for the Barotrauma World Simulation Toolbox. */
 public final class BarotraumaWorldSimApplication {
 
     private BarotraumaWorldSimApplication() {
@@ -60,7 +60,7 @@ public final class BarotraumaWorldSimApplication {
                 new Workspace("overview", "Overview", "Master-world identity, health, time, and readiness."),
                 new Workspace("active-submarine", "Active Submarine", "Managed vessel status, crew, route, systems, and operations."),
                 new Workspace("world-map", "World Map", "Europa locations, routes, levels, stations, factions, and vessel markers."),
-                new Workspace("submarines", "Submarines", "Official definitions, custom designs, vessel instances, and snapshots."),
+                new Workspace("submarines", "Submarines", "Official definitions, physical vessel instances, and snapshot chronology."),
                 new Workspace("crew", "Crew", "Characters, submissions, assignments, conditions, inventories, and qualifications."),
                 new Workspace("stations-economy", "Stations and Economy", "Production, consumption, vendors, freight, markets, and treasuries."),
                 new Workspace("routes-jobs", "Routes and Jobs", "Voyage planning, contracts, transit, crossings, and event requirements."),
@@ -81,9 +81,9 @@ public final class BarotraumaWorldSimApplication {
         private final JList<Workspace> navigationList = new JList<>(navigationModel);
         private final Map<String, Workspace> workspacesById = new LinkedHashMap<>();
         private final JLabel workspaceTitle = new JLabel("Overview");
-        private final JLabel worldStatus = new JLabel("No desktop world is open");
-        private final JLabel simulationStatus = new JLabel("Simulation paused");
-        private final JLabel operationStatus = new JLabel("Shell ready");
+        private final JLabel worldStatus = new JLabel("Desktop world tools ready");
+        private final JLabel simulationStatus = new JLabel("Simulation engine not yet active");
+        private final JLabel operationStatus = new JLabel("Desktop shell ready");
 
         private MainWindow() {
             super("Barotrauma World Simulation Toolbox");
@@ -104,7 +104,6 @@ public final class BarotraumaWorldSimApplication {
             root.add(buildMainArea(), BorderLayout.CENTER);
             root.add(buildStatusBar(), BorderLayout.SOUTH);
             setContentPane(root);
-
             navigationList.setSelectedIndex(0);
         }
 
@@ -114,11 +113,9 @@ public final class BarotraumaWorldSimApplication {
 
             JPanel titleBlock = new JPanel();
             titleBlock.setLayout(new BoxLayout(titleBlock, BoxLayout.Y_AXIS));
-
             JLabel applicationTitle = new JLabel("Barotrauma World Simulation Toolbox");
             applicationTitle.setFont(applicationTitle.getFont().deriveFont(Font.BOLD, 22f));
             workspaceTitle.setFont(workspaceTitle.getFont().deriveFont(Font.BOLD, 16f));
-
             titleBlock.add(applicationTitle);
             titleBlock.add(Box.createVerticalStrut(4));
             titleBlock.add(workspaceTitle);
@@ -144,16 +141,13 @@ public final class BarotraumaWorldSimApplication {
             navigationList.addListSelectionListener(event -> {
                 if (!event.getValueIsAdjusting()) {
                     Workspace selected = navigationList.getSelectedValue();
-                    if (selected != null) {
-                        showWorkspace(selected);
-                    }
+                    if (selected != null) showWorkspace(selected);
                 }
             });
 
             JScrollPane navigationScroll = new JScrollPane(navigationList);
             navigationScroll.setMinimumSize(new Dimension(220, 400));
             navigationScroll.setPreferredSize(new Dimension(250, 700));
-
             registerPanels();
 
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navigationScroll, cardPanel);
@@ -167,7 +161,7 @@ public final class BarotraumaWorldSimApplication {
             cardPanel.add(buildOverviewPanel(), "overview");
             cardPanel.add(buildPlaceholderPanel(workspacesById.get("active-submarine")), "active-submarine");
             cardPanel.add(buildPlaceholderPanel(workspacesById.get("world-map")), "world-map");
-            cardPanel.add(buildPlaceholderPanel(workspacesById.get("submarines")), "submarines");
+            cardPanel.add(buildSubmarinesPanel(), "submarines");
             cardPanel.add(buildPlaceholderPanel(workspacesById.get("crew")), "crew");
             cardPanel.add(buildPlaceholderPanel(workspacesById.get("stations-economy")), "stations-economy");
             cardPanel.add(buildPlaceholderPanel(workspacesById.get("routes-jobs")), "routes-jobs");
@@ -184,41 +178,65 @@ public final class BarotraumaWorldSimApplication {
 
         private Component buildOverviewPanel() {
             JPanel panel = contentPanel();
-
-            JLabel heading = sectionHeading("Desktop migration baseline");
-            JLabel explanation = bodyLabel(
-                    "This dependency-free shell fixes the desktop workspace identities before persistence, "
-                            + "import, or simulation mutation is introduced. The existing web suite remains unchanged."
-            );
+            panel.add(sectionHeading("Desktop world operations"));
+            panel.add(Box.createVerticalStrut(8));
+            panel.add(bodyLabel(
+                    "The Java desktop now provides safe official save inspection, SQLite world creation, "
+                            + "explicit vessel-import approval, and read-only vessel and snapshot registries. "
+                            + "The existing web suite remains the compatibility reference."
+            ));
+            panel.add(Box.createVerticalStrut(18));
 
             JPanel metrics = new JPanel(new GridLayout(2, 3, 12, 12));
             metrics.add(metricCard("Voyage rings", "48", "Mandatory inward rings"));
             metrics.add(metricCard("Locations", "960", "Default master-world nodes"));
             metrics.add(metricCard("Stations", "180", "Guaranteed station target"));
-            metrics.add(metricCard("Location levels", "10", "Level 10 is the Eye of Europa"));
-            metrics.add(metricCard("Web compatibility", "v22", "Current full-suite export"));
-            metrics.add(metricCard("Runtime", "Java 17", "Swing desktop application"));
-
-            JPanel actions = new JPanel();
-            JButton importButton = new JButton("Open Import Center");
-            importButton.addActionListener(event -> selectWorkspace("import-center"));
-            JButton simulationButton = new JButton("Open Simulation Monitor");
-            simulationButton.addActionListener(event -> selectWorkspace("simulation-monitor"));
-            JButton openWorldButton = new JButton("Open Desktop World");
-            openWorldButton.setEnabled(false);
-            openWorldButton.setToolTipText("World persistence is introduced after the identity and importer contracts.");
-            actions.add(importButton);
-            actions.add(simulationButton);
-            actions.add(openWorldButton);
-
-            panel.add(heading);
-            panel.add(Box.createVerticalStrut(8));
-            panel.add(explanation);
-            panel.add(Box.createVerticalStrut(18));
+            metrics.add(metricCard("Web compatibility", "v22", "Strict read-only suite inspection"));
+            metrics.add(metricCard("Official saves", ".save/.sub", "Bounded decoding and canonical vessel identity"));
+            metrics.add(metricCard("Persistence", "SQLite", "Single-writer transactions with rollback"));
             panel.add(metrics);
             panel.add(Box.createVerticalStrut(18));
             panel.add(new JSeparator());
             panel.add(Box.createVerticalStrut(12));
+
+            JPanel actions = new JPanel();
+            JButton importButton = new JButton("Open Import Approval");
+            importButton.addActionListener(event -> openImportApproval());
+            JButton registryButton = new JButton("Open Vessel Registry");
+            registryButton.addActionListener(event -> openVesselRegistry());
+            JButton simulationButton = new JButton("Open Simulation Monitor");
+            simulationButton.addActionListener(event -> selectWorkspace("simulation-monitor"));
+            actions.add(importButton);
+            actions.add(registryButton);
+            actions.add(simulationButton);
+            panel.add(actions);
+            panel.add(Box.createVerticalGlue());
+            return new JScrollPane(panel);
+        }
+
+        private Component buildSubmarinesPanel() {
+            JPanel panel = contentPanel();
+            panel.add(sectionHeading("Submarine and physical-vessel registry"));
+            panel.add(Box.createVerticalStrut(8));
+            panel.add(bodyLabel(
+                    "Submarine definitions are deduplicated by canonical XML structure. Physical vessels retain "
+                            + "separate world identities, and every accepted source creates an immutable snapshot record."
+            ));
+            panel.add(Box.createVerticalStrut(16));
+            panel.add(metricCard("Definitions", "Reusable", "One canonical design may support many physical vessels"));
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(metricCard("Vessels", "World-specific", "Names do not control identity or duplicate decisions"));
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(metricCard("Snapshots", "Immutable", "Current and historical source states remain distinct"));
+            panel.add(Box.createVerticalStrut(16));
+
+            JPanel actions = new JPanel();
+            JButton registryButton = new JButton("Open Vessel Registry");
+            registryButton.addActionListener(event -> openVesselRegistry());
+            JButton importButton = new JButton("Import Official Vessel Data");
+            importButton.addActionListener(event -> openImportApproval());
+            actions.add(registryButton);
+            actions.add(importButton);
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
@@ -226,24 +244,28 @@ public final class BarotraumaWorldSimApplication {
 
         private Component buildImportCenterPanel() {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading("Import Center boundary established"));
+            panel.add(sectionHeading("Import Center"));
             panel.add(Box.createVerticalStrut(8));
             panel.add(bodyLabel(
-                    "Import is intentionally inspection-first. A source file will be hashed, safely decoded, "
-                            + "validated, compared with existing identities, and presented for review before any world mutation."
+                    "Sources are hashed, safely decoded, validated, compared with existing identities, and shown "
+                            + "for review before an accepted transaction can create vessel records."
             ));
             panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Existing suite", "Version 22", "Read-only inspector is the first compatibility implementation"));
+            panel.add(metricCard("Existing suite", "Version 22", "Inspection-only until normalized world import is implemented"));
             panel.add(Box.createVerticalStrut(10));
             panel.add(metricCard("Campaign saves", ".save", "Custom GZip archive containing gamesession.xml and .sub entries"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Standalone vessels", ".sub", "GZip-compressed submarine XML"));
+            panel.add(metricCard("Standalone vessels", ".sub", "GZip-compressed submarine XML with canonical hashing"));
             panel.add(Box.createVerticalStrut(16));
 
-            JButton inspectButton = new JButton("Inspect Source File");
-            inspectButton.setEnabled(false);
-            inspectButton.setToolTipText("Enabled after the compatibility inspection service is implemented.");
-            panel.add(inspectButton);
+            JPanel actions = new JPanel();
+            JButton inspectButton = new JButton("Read-Only Inspection");
+            inspectButton.addActionListener(event -> openInspection());
+            JButton approvalButton = new JButton("Open World Import Approval");
+            approvalButton.addActionListener(event -> openImportApproval());
+            actions.add(inspectButton);
+            actions.add(approvalButton);
+            panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
         }
@@ -257,7 +279,7 @@ public final class BarotraumaWorldSimApplication {
                             + "single logical writer. UI actions will submit commands and receive immutable display snapshots."
             ));
             panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Current state", "Paused", "No desktop world is open"));
+            panel.add(metricCard("Current state", "Paused", "No simulation writer has been activated"));
             panel.add(Box.createVerticalStrut(10));
             panel.add(metricCard("Clock source", "Canonical", "Independent of repaint frequency and timer drift"));
             panel.add(Box.createVerticalStrut(10));
@@ -320,7 +342,6 @@ public final class BarotraumaWorldSimApplication {
             JLabel valueComponent = new JLabel(value);
             valueComponent.setFont(valueComponent.getFont().deriveFont(Font.BOLD, 22f));
             JLabel noteComponent = new JLabel("<html><div style='width:220px'>" + escapeHtml(note) + "</div></html>");
-
             card.add(labelComponent);
             card.add(Box.createVerticalStrut(6));
             card.add(valueComponent);
@@ -333,7 +354,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel statusBar = new JPanel(new BorderLayout(12, 0));
             statusBar.setBorder(new EmptyBorder(10, 6, 2, 6));
             statusBar.add(operationStatus, BorderLayout.WEST);
-            statusBar.add(new JLabel("Java 17 Swing scaffold · persistence not yet enabled"), BorderLayout.EAST);
+            statusBar.add(new JLabel("Java 17 Swing · SQLite persistence enabled · simulation pending"), BorderLayout.EAST);
             return statusBar;
         }
 
@@ -351,6 +372,24 @@ public final class BarotraumaWorldSimApplication {
                     return;
                 }
             }
+        }
+
+        private void openInspection() {
+            showChild(new ImportInspectionWindow(), "Opened read-only source inspection");
+        }
+
+        private void openImportApproval() {
+            showChild(new WorldImportApprovalWindow(), "Opened world import approval");
+        }
+
+        private void openVesselRegistry() {
+            showChild(new WorldVesselRegistryWindow(), "Opened vessel registry");
+        }
+
+        private void showChild(Window window, String status) {
+            window.setLocationRelativeTo(this);
+            window.setVisible(true);
+            operationStatus.setText(status);
         }
 
         private String escapeHtml(String value) {
