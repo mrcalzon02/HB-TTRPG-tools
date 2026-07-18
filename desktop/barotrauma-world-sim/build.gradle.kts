@@ -36,9 +36,9 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Verifies planning, accepted imports, rollback, registry queries, and snapshot chronology."
+    description = "Verifies planning, accepted imports, rollback, registry queries, chronology, and atomic campaign mappings."
     classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.VesselSnapshotTransaction")
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.CampaignArchiveImportTransaction")
     args("--verify")
 }
 
@@ -47,6 +47,13 @@ tasks.register<JavaExec>("runImportApproval") {
     description = "Runs the inspection-first Barotrauma world import approval window."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow")
+}
+
+tasks.register<JavaExec>("runCampaignMapping") {
+    group = "application"
+    description = "Runs the explicit multi-submarine campaign archive mapping window."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.imports.CampaignVesselMappingWindow")
 }
 
 tasks.register<JavaExec>("runVesselRegistry") {
