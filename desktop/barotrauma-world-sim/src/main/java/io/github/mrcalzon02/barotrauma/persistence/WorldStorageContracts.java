@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 3;
+    public static final int DATABASE_SCHEMA_VERSION = 4;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -168,6 +168,11 @@ public final class WorldStorageContracts {
         );
     }
 
+    /** Forward migration from schema 003 to schema 004. */
+    public static List<String> schema004Statements() {
+        return PassiveWorldSchema.statements();
+    }
+
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
                 .replaceAll("[^a-z0-9]+", "-")
@@ -245,6 +250,9 @@ public final class WorldStorageContracts {
             require(schema002Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "World-location migration schema is missing.");
             require(schema003Statements().stream().anyMatch(sql -> sql.contains("simulation_command_receipt")), "Command-receipt schema is missing.");
             require(schema003Statements().stream().anyMatch(sql -> sql.contains("simulation_checkpoint")), "Checkpoint schema is missing.");
+            require(schema004Statements().stream().anyMatch(sql -> sql.contains("station_simulation_state")), "Station workload schema is missing.");
+            require(schema004Statements().stream().anyMatch(sql -> sql.contains("npc_voyage_log")), "NPC voyage log schema is missing.");
+            require(schema004Statements().stream().anyMatch(sql -> sql.contains("world_encounter")), "Encounter schema is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
