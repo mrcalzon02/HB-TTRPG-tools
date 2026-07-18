@@ -58,6 +58,7 @@
       }
     }
     if(axes.commissioningCompletionPercent<100){const targets=modules.filter(module=>isPhysical(states.get(module.moduleId)));if(targets.length)add(event('COMMISSIONING_PROGRESS','VESSEL',targets.map(item=>item.moduleId),axes.commissioningCompletionPercent,'Construction exists, but calibration, trials, stores, certification, or software commissioning remain incomplete.'));}
+    if(template==='WORN_SERVICE'){const targets=modules.filter(module=>isPhysical(states.get(module.moduleId)));if(targets.length)add(event('SERVICE_WEAR','MODULE',targets.map(item=>item.moduleId),Math.max(axes.maintenanceDebtPercent,100-axes.operationalReadinessPercent),'Accumulated service cycles, fatigue, calibration drift, seal wear, and consumable aging reduce condition without implying removal or destruction.'));}
     if(axes.decommissioningPercent>0){
       const selected=selectByMass(modules,axes.decommissioningPercent,`${historySeed}:teardown`,D.teardownPriority,module=>['INSTALLED','INCOMPLETE'].includes(states.get(module.moduleId).installationState));if(selected.length){const record=add(event('TEARDOWN_REMOVAL','MODULE',selected.map(item=>item.moduleId),axes.decommissioningPercent,'Systems were intentionally removed during decommissioning or refit.'));for(const module of selected)removeState(states.get(module.moduleId),'TEARDOWN',record);}
     }
