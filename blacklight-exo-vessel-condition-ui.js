@@ -13,7 +13,7 @@
   }
   function table(headers,bodyId){const wrap=node('div','exo-vessel-table-wrap'),table=node('table','exo-vessel-table'),thead=node('thead'),row=node('tr');for(const header of headers)row.append(node('th','',header));thead.append(row);const body=node('tbody');body.id=bodyId;table.append(thead,body);wrap.append(table);return wrap;}
   function build(){
-    const section=node('section','bli-section');section.id='exo-vessel-condition-history-section';const head=node('div','bli-section-head');head.append(node('p','bli-eyebrow','Charles // VESSEL-05 condition and history'),node('h2','','The intact design is not the vessel that remains.'),node('p','','Construction shortfall, commissioning, wear, teardown, mothballing, abandonment, salvage, damage, wreckage, and total destruction are applied to persistent module identities and surviving graphs without erasing the intact reference authority.'));
+    const section=node('section','bli-section');section.id='exo-vessel-condition-history-section';const head=node('div','bli-section-head');head.append(node('p','bli-eyebrow','Charles // VESSEL-05 condition and history'),node('h2','','The intact design is not the vessel that remains.'),node('p','','Construction shortfall, commissioning, wear, teardown, mothballing, abandonment, salvage, damage, wreckage, and total destruction are applied to persistent module identities, voxel placements, and surviving graphs without erasing the intact reference authority.'));
     const actions=node('div','bli-actions'),exportButton=node('button','bli-action','Export Condition History');exportButton.type='button';exportButton.id='exo-vessel-export-condition-history';actions.append(exportButton);head.append(actions);
     const grid=node('div','exo-vessel-grid');grid.id='exo-vessel-condition-history-grid';
     const capacity=node('div','exo-vessel-grid');capacity.id='exo-vessel-condition-capacity-grid';
@@ -30,14 +30,15 @@
   function exportHistory(){const vessel=globalThis.BlacklightExoGetActiveVessel?.(),history=vessel?.conditionHistory;if(!history)return;const blob=new Blob([JSON.stringify(history,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`${vessel.seed}-condition-history.json`;document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);}
   function replaceCards(id,rows){$(id)?.replaceChildren(...rows.map(row=>card(...row)));}
   function render(vessel){
-    const history=vessel?.conditionHistory;if(!history)return;const r=history.recalculated;
+    const history=vessel?.conditionHistory;if(!history)return;const r=history.recalculated,field=history.residualVoxelField;
     replaceCards('exo-vessel-condition-history-grid',[
       ['Lifecycle template',history.activeTemplate.replaceAll('_',' '),`${history.serviceDoctrine} service doctrine; ${history.events.length} deterministic history events.`],
       ['Vessel coherence',history.coherentVesselGraph?'Coherent vessel or wreck':'No coherent vessel graph',history.coherentVesselGraph?`${r.componentCount} structural component${r.componentCount===1?'':'s'}; largest surviving authority holds ${fmt(r.largestCoherentComponentFraction*100,1)}% of residual mass.`:'Material may remain as debris, but no effective vessel topology survives.',history.coherentVesselGraph?'ok':'warning'],
       ['Residual material',mass(r.residualMassTonnes),`${fmt(r.residualMassFraction*100,2)}% of reference mass remains; ${mass(r.salvageableMassTonnes)} is currently recoverable.`],
+      ['Residual voxel field',`${field.occupiedPlacementCount} / ${field.referencePlacementCount} occupied`,`${field.activePlacementCount} active placements, ${field.wreckagePlacementCount} damaged or wreckage placements, and ${field.absentPlacementCount} missing or removed placements.`],
       ['Module inventory',`${r.operationalModuleCount} operational`,`${r.installedModuleCount} physically installed or wrecked; ${r.missingModuleCount} missing, ${r.removedModuleCount} removed, ${r.damagedModuleCount} damaged, and ${r.destroyedModuleCount} destroyed.`],
       ['Effective routing',`${r.severedRouteCount} severed routes`,`${history.routeStates.filter(route=>route.functional).length} routes remain functionally connected.`],
-      ['Condition validation',history.validation.valid?'Valid':'Invalid',history.validation.valid?`${history.validation.repairCount} deterministic repair${history.validation.repairCount===1?'':'s'} retained in the record.`:history.validation.violations.join(' '),history.validation.valid?'ok':'warning']
+      ['Condition validation',history.validation.valid?'Valid':'Invalid',history.validation.valid?`${history.validation.repairCount} deterministic repair${history.validation.repairCount===1?'':'s'} retained in the record; ${history.validation.voxelStateCount} voxel states verified.`:history.validation.violations.join(' '),history.validation.valid?'ok':'warning']
     ]);
     replaceCards('exo-vessel-condition-capacity-grid',[
       ['Readiness',`${fmt(r.readinessScore,1)}%`,'Recalculated from surviving power, cooling, propulsion, sensors, atmosphere, data, and requested readiness.'],
