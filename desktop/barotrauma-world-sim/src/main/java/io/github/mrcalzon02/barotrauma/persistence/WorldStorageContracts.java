@@ -26,6 +26,10 @@ public final class WorldStorageContracts {
     public static final int DATABASE_SCHEMA_VERSION = 12;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
+    static {
+        RecursiveSqliteDriver.install();
+    }
+
     private WorldStorageContracts() {}
 
     public static Path defaultWorldRoot() {
