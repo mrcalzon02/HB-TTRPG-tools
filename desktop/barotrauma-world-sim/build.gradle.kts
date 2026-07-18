@@ -36,17 +36,24 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Verifies planning, accepted imports, rollback, registry queries, chronology, and atomic campaign mappings."
+    description = "Verifies vessel imports, chronology, campaign mapping, migration 002, and normalized web-world import."
     classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.CampaignArchiveImportTransaction")
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.WebWorldV22ImportTransaction")
     args("--verify")
 }
 
 tasks.register<JavaExec>("runImportApproval") {
     group = "application"
-    description = "Runs the inspection-first Barotrauma world import approval window."
+    description = "Runs the inspection-first Barotrauma vessel import approval window."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow")
+}
+
+tasks.register<JavaExec>("runWebWorldImport") {
+    group = "application"
+    description = "Runs the explicit version-22 normalized master-world import approval window."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.imports.WebWorldImportApprovalWindow")
 }
 
 tasks.register<JavaExec>("runCampaignMapping") {
