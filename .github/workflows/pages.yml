@@ -86,6 +86,9 @@ jobs:
       - name: Validate EXO vessel RPG statistics and action economy
         run: node scripts/validate-exo-vessel-gameplay.mjs
 
+      - name: Validate canonical VESSEL-09 weapon authority
+        run: node scripts/validate-exo-vessel-gameplay-weapon-authority.mjs
+
       - name: Validate phased EXO vessel system roadmap
         # Legacy guarantees remain executed inside V2: node scripts/validate-exo-vessel-roadmap.mjs
         run: node scripts/validate-exo-vessel-roadmap-v2.mjs
