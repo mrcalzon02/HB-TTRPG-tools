@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 4;
+    public static final int DATABASE_SCHEMA_VERSION = 5;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -173,6 +173,11 @@ public final class WorldStorageContracts {
         return PassiveWorldSchema.statements();
     }
 
+    /** Forward migration from schema 004 to schema 005. */
+    public static List<String> schema005Statements() {
+        return PassiveWorldSchemaHardening.statements();
+    }
+
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
                 .replaceAll("[^a-z0-9]+", "-")
@@ -253,6 +258,8 @@ public final class WorldStorageContracts {
             require(schema004Statements().stream().anyMatch(sql -> sql.contains("station_simulation_state")), "Station workload schema is missing.");
             require(schema004Statements().stream().anyMatch(sql -> sql.contains("npc_voyage_log")), "NPC voyage log schema is missing.");
             require(schema004Statements().stream().anyMatch(sql -> sql.contains("world_encounter")), "Encounter schema is missing.");
+            require(schema005Statements().stream().anyMatch(sql -> sql.contains("station_research_topic_unique")), "Passive research hardening is missing.");
+            require(schema005Statements().stream().anyMatch(sql -> sql.contains("npc_return_arrival")), "NPC return hardening is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
