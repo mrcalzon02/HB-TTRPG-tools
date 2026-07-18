@@ -4,7 +4,6 @@ import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.AssetRole;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.AssetSource;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.Mode;
 
-import java.nio.file.Comparator;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
