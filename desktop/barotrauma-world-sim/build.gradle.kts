@@ -36,9 +36,9 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Verifies vessel imports, chronology, campaign mapping, schema migration 002, normalized world import, and registry queries."
+    description = "Runs the complete vessel, chronology, campaign, migration, normalized-world, and registry contract chain."
     classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry")
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
 }
 
