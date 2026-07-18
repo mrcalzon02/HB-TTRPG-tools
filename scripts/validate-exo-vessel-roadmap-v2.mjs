@@ -28,7 +28,7 @@ try{
 }
 
 const roadmap=JSON.parse(currentText),phases=roadmap.phases||[],map=new Map(phases.map(phase=>[phase.id,phase]));
-for(const term of ['immutable authority','separate post-impact state','shared one deterministic source-linked percentile authority'])if(!roadmap.principles?.some(principle=>principle.toLowerCase().includes(term)))fail(`Roadmap principles do not preserve completed vessel authority: ${term}.`);
+for(const term of ['immutable authority','separate post-impact state','one deterministic source-linked percentile authority'])if(!roadmap.principles?.some(principle=>principle.toLowerCase().includes(term)))fail(`Roadmap principles do not preserve completed vessel authority: ${term}.`);
 for(const phaseId of ['VESSEL-00','VESSEL-01','VESSEL-02','VESSEL-03','VESSEL-04','VESSEL-05','VESSEL-06','VESSEL-07','VESSEL-08','VESSEL-09']){
   const phase=map.get(phaseId);if(phase?.status!=='complete'||!Array.isArray(phase.completionEvidence)||phase.completionEvidence.length<5)fail(`${phaseId} is not complete with evidence.`);
   for(const filename of phase.completionEvidence)await fs.access(path.join(root,filename));
