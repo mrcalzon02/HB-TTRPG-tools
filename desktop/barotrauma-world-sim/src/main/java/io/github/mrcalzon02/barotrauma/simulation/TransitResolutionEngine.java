@@ -4,10 +4,12 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
-/** Deterministic transit challenge resolver shared by NPC and future player voyages. */
+/** Deterministic transit challenge resolver shared by NPC and player voyages. */
 public final class TransitResolutionEngine {
     private TransitResolutionEngine() { }
 
@@ -15,7 +17,7 @@ public final class TransitResolutionEngine {
         Objects.requireNonNull(vessel, "vessel");
         Objects.requireNonNull(context, "context");
         long seed = seed(vessel.vesselId(), context);
-        Hazard hazard = Hazard.values()[bounded(seed, 0, Hazard.values().length)];
+        Hazard hazard = Hazard.values()[bounded(seed, 7, Hazard.values().length)];
         int challenge = clamp(18 + context.locationLevel() * 6 + context.stationThreat() / 3
                 + hazard.challengeModifier + context.missionType().challengeModifier, 1, 100);
         int skill = switch (hazard.skill) {
@@ -95,7 +97,9 @@ public final class TransitResolutionEngine {
     }
 
     private static int bounded(long seed, int shift, int bound) {
-        long mixed = seed ^ Long.rotateLeft(seed, shift) ^ 0x9E3779B97F4A7C15L;
+        if (bound <= 0) throw new IllegalArgumentException("Deterministic bound must be positive.");
+        int effectiveShift = Math.floorMod(shift, Long.SIZE);
+        long mixed = seed ^ Long.rotateLeft(seed, effectiveShift) ^ 0x9E3779B97F4A7C15L;
         return (int) Math.floorMod(mixed, bound);
     }
 
@@ -231,6 +235,14 @@ public final class TransitResolutionEngine {
                 vessel.engineering(), vessel.combat(), vessel.crewQuality(), vessel.hull(), vessel.supplies());
         require(resolve(player, context).equals(first),
                 "Player and NPC transit inputs did not use the same resolution system.");
+
+        Set<Hazard> observed = new HashSet<>();
+        for (long tick = 42; tick < 74; tick++) {
+            observed.add(resolve(vessel, new TransitContext(world, "alpha-to-beta", tick, 4, 35,
+                    MissionType.FAUNA_CLEARING)).hazard());
+        }
+        require(observed.size() >= 4,
+                "Deterministic transit sequence did not produce adequate hazard diversity: " + observed);
     }
 
     private static void require(boolean condition, String message) {
