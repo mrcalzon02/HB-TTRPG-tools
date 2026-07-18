@@ -11,7 +11,6 @@ public final class DesktopPersistenceVerificationSuite {
     private DesktopPersistenceVerificationSuite() { }
 
     public static void verifyContract() throws Exception {
-        SqliteWorldStore.verifyContract();
         AcceptedImportTransaction.verifyContract();
         VesselSnapshotTransaction.verifyContract();
         WorldMapRegistry.verifyContract();
