@@ -41,7 +41,21 @@ if(hashSector(parameterTamper)===proceduralArchive.archiveHash)fail('Archive has
 
 const archiveSource=read('blacklight-exo-sector-archive-store.js');
 for(const signature of['indexedDB.open','createObjectStore','archiveHash','validateEnvelope','migrateLegacy','Import Sector Archive','waitForSector','Deterministic replay mismatch'])if(!archiveSource.includes(signature))fail(`Archive runtime lacks ${signature}.`);
+
+const storage=new Map();
+const archiveContext={console,Math,Number,Object,Array,Set,Map,String,Date,JSON,Promise,Error,structuredClone,setTimeout,clearTimeout,queueMicrotask,BlacklightExoStellarSectorData:D,document:{readyState:'loading',addEventListener(){},removeEventListener(){},getElementById(){return null;},querySelector(){return null;}},localStorage:{getItem(key){return storage.has(key)?storage.get(key):null;},setItem(key,value){storage.set(key,String(value));},removeItem(key){storage.delete(key);}}};
+archiveContext.globalThis=archiveContext;vm.createContext(archiveContext);vm.runInContext(archiveSource,archiveContext,{filename:'blacklight-exo-sector-archive-store.js'});
+const archiveApi=archiveContext.BlacklightExoSectorArchiveStore;
+if(!archiveApi?.save||!archiveApi?.list||!archiveApi?.remove||!archiveApi?.validateEnvelope)fail('Archive browser API did not initialize in fallback mode.');
+const runtimeEnvelope=archiveApi.envelope(procedural,'runtime fallback validation');
+const runtimeValidation=archiveApi.validateEnvelope(roundTrip(runtimeEnvelope));
+if(runtimeValidation.archiveHash!==proceduralArchive.archiveHash)fail('Archive browser API calculated an unexpected procedural hash.');
+const storedIn=await archiveApi.save(runtimeEnvelope);if(storedIn!=='localStorage')fail('Archive browser API did not use localStorage when IndexedDB was unavailable.');
+const fallbackRows=await archiveApi.list();if(fallbackRows.length!==1||fallbackRows[0].archiveHash!==runtimeEnvelope.archiveHash)fail('Archive fallback save/list behavior is inconsistent.');
+let tamperRejected=false;try{archiveApi.validateEnvelope(tampered);}catch(error){tamperRejected=/hash mismatch/i.test(error.message);}if(!tamperRejected)fail('Archive browser API did not reject tampered content.');
+await archiveApi.remove(runtimeEnvelope.snapshotId);if((await archiveApi.list()).length!==0)fail('Archive fallback delete behavior is inconsistent.');
+
 const manifest=JSON.parse(read('blacklight-exo-stellar-sector-example.json'));
 if(!manifest.modules?.includes('blacklight-exo-sector-archive-store.js')||!manifest.archiveStorage?.includes('IndexedDB'))fail('Fixed sector manifest does not pin durable archive storage.');
 
-console.log(`EXO durable sector archive validation passed: fixed ${fixedArchive.archiveHash}; procedural ${proceduralArchive.archiveHash}.`);
+console.log(`EXO durable sector archive validation passed: fixed ${fixedArchive.archiveHash}; procedural ${proceduralArchive.archiveHash}; fallback save/list/delete verified.`);
