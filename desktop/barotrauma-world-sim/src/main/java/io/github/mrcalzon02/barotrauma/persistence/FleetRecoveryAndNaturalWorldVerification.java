@@ -19,7 +19,7 @@ import java.time.Duration;
 import java.util.Comparator;
 import java.util.UUID;
 
-/** End-to-end schema-010 contract for fleet recovery and natural world activity. */
+/** End-to-end schema-011 contract for fleet recovery and natural world activity. */
 public final class FleetRecoveryAndNaturalWorldVerification {
     private FleetRecoveryAndNaturalWorldVerification() { }
 
@@ -53,19 +53,25 @@ public final class FleetRecoveryAndNaturalWorldVerification {
 
                 UUID locationId = location(paths, "wild-bloom");
                 primeNaturalActivity(paths, locationId);
+                prepareResponder(paths);
                 UUID distressed = disableVessel(paths);
                 require(count(paths, "fleet_response_operation") == 1,
                         "A disabled NPC vessel did not create a fleet response operation.");
-                require("AVAILABLE".equals(operationStatus(paths)),
-                        "A new fleet response did not begin in AVAILABLE state.");
+                require("ACTIVE".equals(operationStatus(paths)) && operationResponder(paths) != null,
+                        "A qualified docked patrol was not immediately assigned to the distress request.");
 
+                raiseMaterialRequirementAndStarve(paths);
+                int stalledProgress = operationProgress(paths);
+                step(paths, executor);
+                require(operationProgress(paths) == stalledProgress,
+                        "Fleet recovery advanced without the required station materials.");
+
+                replenishRecoveryMaterials(paths);
                 for (int cycle = 0; cycle < 30 && !"COMPLETE".equals(operationStatus(paths)); cycle++) {
                     step(paths, executor);
                 }
                 require("COMPLETE".equals(operationStatus(paths)),
-                        "The passive fleet response did not complete.");
-                require(operationResponder(paths) != null,
-                        "No NPC responder was assigned to the recovery operation.");
+                        "The passive fleet response did not complete after resupply.");
                 require("DOCKED".equals(vesselStatus(paths, distressed)) && vesselHull(paths, distressed) >= 35,
                         "The disabled vessel was not recovered to a docked, serviceable state.");
                 require(count(paths, "fleet_response_log") >= 3,
@@ -106,12 +112,23 @@ public final class FleetRecoveryAndNaturalWorldVerification {
         PassiveWorldTickTransaction.commit(paths, receipt);
     }
 
+    private static void prepareResponder(WorldPaths paths) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE world_mission SET status='CANCELLED',assigned_npc_vessel_id=NULL "
+                    + "WHERE assigned_npc_vessel_id=(SELECT npc_vessel_id FROM npc_vessel WHERE role='PATROL' LIMIT 1) "
+                    + "AND status IN ('ASSIGNED','ACTIVE')");
+            statement.executeUpdate("UPDATE npc_vessel SET status='DOCKED',mission_id=NULL,destination_location_id=NULL,"
+                    + "route_progress=0,route_ticks_required=1 WHERE role='PATROL'");
+        }
+    }
+
     private static UUID disableVessel(WorldPaths paths) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             String vesselId;
             try (Statement statement = connection.createStatement();
                  ResultSet result = statement.executeQuery(
-                         "SELECT npc_vessel_id FROM npc_vessel WHERE status='DOCKED' AND role<>'PATROL' ORDER BY npc_vessel_id LIMIT 1")) {
+                         "SELECT npc_vessel_id FROM npc_vessel WHERE role<>'PATROL' ORDER BY npc_vessel_id LIMIT 1")) {
                 if (!result.next()) throw new IllegalStateException("Fixture has no NPC vessel available to disable.");
                 vesselId = result.getString(1);
             }
@@ -121,6 +138,26 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                 update.executeUpdate();
             }
             return UUID.fromString(vesselId);
+        }
+    }
+
+    private static void raiseMaterialRequirementAndStarve(WorldPaths paths) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE fleet_response_operation SET spare_parts_required=50,fuel_required=50,"
+                    + "ammunition_required=50,medical_required=50");
+            statement.executeUpdate("UPDATE station_inventory SET quantity=0 WHERE station_id="
+                    + "(SELECT origin_station_id FROM fleet_response_operation LIMIT 1) "
+                    + "AND item_id IN ('item-steel','item-fuel','item-ammunition','item-medical')");
+        }
+    }
+
+    private static void replenishRecoveryMaterials(WorldPaths paths) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE station_inventory SET quantity=200 WHERE station_id="
+                    + "(SELECT origin_station_id FROM fleet_response_operation LIMIT 1) "
+                    + "AND item_id IN ('item-steel','item-fuel','item-ammunition','item-medical')");
         }
     }
 
@@ -156,6 +193,16 @@ public final class FleetRecoveryAndNaturalWorldVerification {
 
     private static String operationStatus(WorldPaths paths) throws Exception {
         return text(paths, "SELECT status FROM fleet_response_operation ORDER BY created_tick LIMIT 1");
+    }
+
+    private static int operationProgress(WorldPaths paths) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(
+                     "SELECT progress FROM fleet_response_operation ORDER BY created_tick LIMIT 1")) {
+            if (!result.next()) throw new IllegalStateException("Fleet response operation disappeared.");
+            return result.getInt(1);
+        }
     }
 
     private static String operationResponder(WorldPaths paths) throws Exception {
