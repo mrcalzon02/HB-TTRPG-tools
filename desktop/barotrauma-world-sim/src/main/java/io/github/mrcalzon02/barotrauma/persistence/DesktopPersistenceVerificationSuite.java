@@ -24,12 +24,13 @@ public final class DesktopPersistenceVerificationSuite {
         PassiveWorldSimulationVerification.verifyContract();
         StationLogisticsVerification.verifyContract();
         StationCivilizationVerification.verifyContract();
+        FleetRecoveryAndNaturalWorldVerification.verifyContract();
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma persistence, passive-world, variable station consumption, civilization frontier, logistics, player transit, station, mission, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma persistence, passive-world, station consumption, civilization frontier, fleet recovery, ecology, geology, resources, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
