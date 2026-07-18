@@ -147,6 +147,9 @@ jobs:
       - name: Validate EXO vessel crude voxel assembler
         run: node scripts/validate-exo-vessel-voxels.mjs
 
+      - name: Validate EXO vessel condition, history, salvage, and destruction
+        run: node scripts/validate-exo-vessel-condition.mjs
+
       - name: Validate phased EXO vessel system roadmap
         run: node scripts/validate-exo-vessel-roadmap.mjs
 
