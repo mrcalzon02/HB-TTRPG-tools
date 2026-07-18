@@ -19,6 +19,7 @@
     "Weapon-family envelopes must consume installed hardware, surviving support graphs, ammunition, native operative methodology, target maneuver, track age, divergence, dwell, guidance, and active defense without prematurely resolving local impacts.",
     "Damage is local and graph-based.",
     "Combat resolution preserves the VESSEL-05 pre-impact condition as immutable authority and records a separate post-impact state derived from real placements, directional protection, modules, routes, zones, and surviving graphs.",
+    "Simplified and detailed vessel actions share one deterministic source-linked percentile authority; presentation depth cannot alter the underlying odds.",
     "Incomplete, dismantled, damaged, abandoned, salvaged, wrecked, and destroyed are separate state axes.",
     "A vessel at one hundred percent destruction no longer retains a coherent vessel graph."
   ],
@@ -91,12 +92,13 @@
       "completionEvidence":["blacklight-exo-vessel-damage-definitions.js","blacklight-exo-vessel-damage-core.js","blacklight-exo-vessel-damage-runtime.js","blacklight-exo-vessel-damage-contracts.js","blacklight-exo-vessel-damage-ui.js","data/exo-vessel/combat-resolution-registry.json","data/schemas/exo-vessel-combat-resolution.schema.json","data/schemas/exo-vessel-record.schema.json","scripts/validate-exo-vessel-damage.mjs",".github/workflows/pages.yml","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-09","order":9,"title":"RPG statistics and action economy","status":"next","dependsOn":["VESSEL-06","VESSEL-07","VESSEL-08"],
+      "id":"VESSEL-09","order":9,"title":"RPG statistics and action economy","status":"complete","dependsOn":["VESSEL-06","VESSEL-07","VESSEL-08"],
       "deliverables":["Normalized vessel statistics","Navigation actions","Sensor and targeting actions","Offensive and defensive actions","Engineering and damage-control actions","Resource timing model"],
-      "acceptance":["Players can operate vessels without reading the full dossier","Every stat links to physical sources","Detailed and simplified resolution remain compatible"]
+      "acceptance":["Players can operate vessels without reading the full dossier","Every stat links to physical sources","Detailed and simplified resolution remain compatible"],
+      "completionEvidence":["blacklight-exo-vessel-gameplay-definitions.js","blacklight-exo-vessel-gameplay-core.js","blacklight-exo-vessel-gameplay-runtime.js","blacklight-exo-vessel-gameplay-contracts.js","blacklight-exo-vessel-gameplay-ui.js","data/exo-vessel/gameplay-action-registry.json","data/schemas/exo-vessel-gameplay.schema.json","data/schemas/exo-vessel-record.schema.json","scripts/validate-exo-vessel-gameplay.mjs",".github/workflows/pages.yml","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-10","order":10,"title":"Integrated UI, export, and campaign persistence","status":"planned","dependsOn":["VESSEL-09"],
+      "id":"VESSEL-10","order":10,"title":"Integrated UI, export, and campaign persistence","status":"next","dependsOn":["VESSEL-09"],
       "deliverables":["Manufacturer library","Hull-family library","Voxel viewer","Damage-state editor","Combat stat card","JSON import and export","Campaign persistence","Schema migrations","Final diegetic interface pass replacing provisional dropdowns and number fields with visually interpretable sliders, instrument panels, and setting-appropriate control methods"],
       "acceptance":["Cluster route can germinate a persistent vessel","Exports reload without provenance loss","Earlier vessels migrate without destructive data loss","Primary generator controls communicate state visually rather than depending only on generic browser form fields"]
     },
