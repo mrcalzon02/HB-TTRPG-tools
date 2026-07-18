@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 9;
+    public static final int DATABASE_SCHEMA_VERSION = 10;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -172,6 +172,7 @@ public final class WorldStorageContracts {
     public static List<String> schema007Statements() { return StationLogisticsHardening.statements(); }
     public static List<String> schema008Statements() { return StationConsumptionAndFrontierSchema.statements(); }
     public static List<String> schema009Statements() { return StationFrontierHardening.statements(); }
+    public static List<String> schema010Statements() { return FleetRecoveryAndNaturalWorldSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -258,6 +259,10 @@ public final class WorldStorageContracts {
             require(schema009Statements().stream().anyMatch(sql -> sql.contains("printf('%012x'")), "UUID-safe frontier mission generation is missing.");
             require(schema009Statements().stream().anyMatch(sql -> sql.contains("frontier_recovery_event")), "Frontier recovery evidence is missing.");
             require(schema009Statements().stream().anyMatch(sql -> sql.contains("frontier_expansion_mission")), "Frontier expansion missions are missing.");
+            require(schema010Statements().stream().anyMatch(sql -> sql.contains("fleet_response_operation")), "Fleet recovery operations are missing.");
+            require(schema010Statements().stream().anyMatch(sql -> sql.contains("location_ecology_state")), "Natural ecology state is missing.");
+            require(schema010Statements().stream().anyMatch(sql -> sql.contains("location_geology_state")), "Natural geology state is missing.");
+            require(schema010Statements().stream().anyMatch(sql -> sql.contains("natural_resource_site")), "Natural resource exposure is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
