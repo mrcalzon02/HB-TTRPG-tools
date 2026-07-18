@@ -52,12 +52,12 @@ public final class BarotraumaDonorAssets {
     }
 
     public Configuration loadConfiguration() throws IOException {
-        if (!Files.isRegularFile(configurationFile)) return Configuration.fallback();
+        if (!Files.isRegularFile(configurationFile)) return Configuration.automatic();
         Properties properties = new Properties();
         try (InputStream input = Files.newInputStream(configurationFile)) { properties.load(input); }
         Mode mode;
-        try { mode = Mode.valueOf(properties.getProperty("mode", Mode.FALLBACK.name())); }
-        catch (IllegalArgumentException exception) { mode = Mode.FALLBACK; }
+        try { mode = Mode.valueOf(properties.getProperty("mode", Mode.AUTO.name())); }
+        catch (IllegalArgumentException exception) { mode = Mode.AUTO; }
         String path = properties.getProperty("donorRoot", "").trim();
         Path root = path.isBlank() ? null : Path.of(path).toAbsolutePath().normalize();
         Instant updated;
@@ -156,23 +156,33 @@ public final class BarotraumaDonorAssets {
                         donor.get().installationRoot());
             }
         }
-        return new ResolvedAsset(role, AssetSource.PACKAGED_FALLBACK, null, role.fallbackResource(), null);
+        return fallback(role);
     }
 
     public ImageIcon loadIcon(AssetRole role, int width, int height) throws IOException {
         ResolvedAsset resolved = resolve(role);
-        BufferedImage image;
+        BufferedImage image = null;
         if (resolved.file() != null) {
-            image = ImageIO.read(resolved.file().toFile());
-        } else {
-            try (InputStream input = BarotraumaDonorAssets.class.getResourceAsStream(resolved.classpathResource())) {
-                if (input == null) throw new IOException("Packaged fallback asset is missing: " + resolved.classpathResource());
-                image = ImageIO.read(input);
-            }
+            try { image = ImageIO.read(resolved.file().toFile()); }
+            catch (IOException | RuntimeException ignored) { }
         }
-        if (image == null) throw new IOException("Unsupported or unreadable image for " + role + ".");
+        if (image == null) image = readFallback(role);
         Image scaled = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(scaled);
+    }
+
+    private static BufferedImage readFallback(AssetRole role) throws IOException {
+        String resource = role.fallbackResource();
+        try (InputStream input = BarotraumaDonorAssets.class.getResourceAsStream(resource)) {
+            if (input == null) throw new IOException("Packaged fallback asset is missing: " + resource);
+            BufferedImage image = ImageIO.read(input);
+            if (image == null) throw new IOException("Packaged fallback asset is unreadable: " + resource);
+            return image;
+        }
+    }
+
+    private static ResolvedAsset fallback(AssetRole role) {
+        return new ResolvedAsset(role, AssetSource.PACKAGED_FALLBACK, null, role.fallbackResource(), null);
     }
 
     private Optional<Path> findDonorAsset(Path content, AssetRole role) {
@@ -282,8 +292,11 @@ public final class BarotraumaDonorAssets {
             for (String folder : List.of("UI", "Map", "Characters", "Items")) Files.createDirectories(content.resolve(folder));
             BufferedImage testImage = new BufferedImage(4, 4, BufferedImage.TYPE_INT_ARGB);
             ImageIO.write(testImage, "png", content.resolve("UI/station_test.png").toFile());
+            Files.writeString(content.resolve("Characters/fauna_broken.png"), "not an image", StandardCharsets.UTF_8);
 
             BarotraumaDonorAssets assets = new BarotraumaDonorAssets(root.resolve("config/assets.properties"));
+            require(assets.loadConfiguration().mode() == Mode.AUTO,
+                    "First-run asset configuration did not default to automatic discovery.");
             Candidate candidate = assets.inspectCandidate(installation, DiscoverySource.MANUAL_SELECTION);
             require(candidate.valid(), "A valid donor installation was rejected.");
             assets.saveConfiguration(Mode.MANUAL, installation);
@@ -291,6 +304,9 @@ public final class BarotraumaDonorAssets {
             ResolvedAsset donor = assets.resolve(AssetRole.STATION);
             require(donor.source() == AssetSource.DONOR_INSTALLATION && donor.file() != null,
                     "Donor-first asset resolution failed.");
+            ImageIcon recovered = assets.loadIcon(AssetRole.FAUNA, 32, 32);
+            require(recovered.getIconWidth() == 32 && recovered.getIconHeight() == 32,
+                    "Unreadable donor artwork did not fall back to the packaged PNG.");
             assets.saveConfiguration(Mode.AUTO, null);
             require(assets.loadConfiguration().mode() == Mode.AUTO
                             && assets.loadConfiguration().donorRoot() == null,
@@ -354,7 +370,7 @@ public final class BarotraumaDonorAssets {
             Objects.requireNonNull(mode, "mode");
             Objects.requireNonNull(updatedAt, "updatedAt");
         }
-        static Configuration fallback() { return new Configuration(Mode.FALLBACK, null, Instant.EPOCH); }
+        static Configuration automatic() { return new Configuration(Mode.AUTO, null, Instant.EPOCH); }
     }
 
     public record Candidate(Path installationRoot, Path contentRoot, DiscoverySource source,
