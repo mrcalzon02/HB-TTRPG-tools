@@ -82,6 +82,8 @@ public final class StationCivilizationVerification {
                         "Delivery support was not recorded in frontier history.");
 
                 prepareExpansion(paths, stationId);
+                require(eventCount(paths, stationId, "RECOVERY") > 0,
+                        "A contracting station did not record recovery after resupply and stabilization.");
                 int frontierBeforeRecovery = frontier(paths, stationId).frontierPosition();
                 step(paths, executor, 10);
                 FrontierState recovered = frontier(paths, stationId);
@@ -91,6 +93,8 @@ public final class StationCivilizationVerification {
                         "Stable supply and security did not preserve civilization strength.");
                 require(eventCount(paths, stationId, "EXPANSION") > 0,
                         "Civilization expansion was not recorded.");
+                require(openExpansionMission(paths, stationId),
+                        "Civilization expansion did not create outward NPC work.");
 
                 prepareMonsterAttack(paths, stationId);
                 long currentTick = currentTick(paths);
@@ -106,8 +110,10 @@ public final class StationCivilizationVerification {
                         "A successful monster attack did not force the civilian perimeter inward.");
                 require(openDefenseMission(paths, stationId),
                         "Frontier contraction did not create an NPC defense or fauna-clearing response.");
-                require(schemaVersion(paths) == 8,
-                        "Frontier fixture was not stored under schema 008.");
+                require(frontierMissionIdsAreUuids(paths, stationId),
+                        "A frontier-generated NPC mission did not retain UUID-compatible identity.");
+                require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                        "Frontier fixture was not stored under the current database schema.");
             }
         } finally {
             try (var stream = Files.walk(root)) {
@@ -280,13 +286,39 @@ public final class StationCivilizationVerification {
     }
 
     private static boolean openDefenseMission(WorldPaths paths, UUID stationId) throws Exception {
+        return openMission(paths, stationId, "'FAUNA_CLEARING','DEFENSE'");
+    }
+
+    private static boolean openExpansionMission(WorldPaths paths, UUID stationId) throws Exception {
+        return openMission(paths, stationId, "'TRANSIT','RESEARCH'");
+    }
+
+    private static boolean openMission(WorldPaths paths, UUID stationId, String types) throws Exception {
+        String sql = "SELECT 1 FROM world_mission WHERE origin_station_id=? AND mission_type IN (" + types + ") "
+                + "AND status IN ('AVAILABLE','ASSIGNED','ACTIVE') LIMIT 1";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT 1 FROM world_mission WHERE origin_station_id=? "
-                             + "AND mission_type IN ('FAUNA_CLEARING','DEFENSE') "
-                             + "AND status IN ('AVAILABLE','ASSIGNED','ACTIVE') LIMIT 1")) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, stationId.toString());
             try (ResultSet result = statement.executeQuery()) { return result.next(); }
+        }
+    }
+
+    private static boolean frontierMissionIdsAreUuids(WorldPaths paths, UUID stationId) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT mission_id FROM world_mission WHERE origin_station_id=? "
+                             + "AND mission_type IN ('FAUNA_CLEARING','DEFENSE','TRANSIT','RESEARCH')")) {
+            statement.setString(1, stationId.toString());
+            try (ResultSet result = statement.executeQuery()) {
+                boolean found = false;
+                while (result.next()) {
+                    UUID.fromString(result.getString(1));
+                    found = true;
+                }
+                return found;
+            }
+        } catch (IllegalArgumentException invalidUuid) {
+            return false;
         }
     }
 
