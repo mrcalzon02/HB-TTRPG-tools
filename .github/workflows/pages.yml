@@ -156,6 +156,9 @@ jobs:
       - name: Validate EXO vessel sensor tracks and combat geometry
         run: node scripts/validate-exo-vessel-tracks.mjs
 
+      - name: Validate EXO vessel weapon-family engagement envelopes
+        run: node scripts/validate-exo-vessel-weapons.mjs
+
       - name: Validate phased EXO vessel system roadmap
         run: node scripts/validate-exo-vessel-roadmap.mjs
 
